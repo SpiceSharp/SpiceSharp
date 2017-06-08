@@ -42,10 +42,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Circuits\Components.cs" />
+    <Compile Include="CircuitComponent.cs" />
+    <Compile Include="Components\ComponentModel.cs" />
+    <Compile Include="Circuit.cs" />
+    <Compile Include="CircuitModel.cs" />
+    <Compile Include="CircuitNode.cs" />
+    <Compile Include="Circuits\CircuitState.cs" />
+    <Compile Include="Circuits\CircuitStatistics.cs" />
+    <Compile Include="Circuits\Nodes.cs" />
+    <Compile Include="Components\Passive\Resistor.cs" />
+    <Compile Include="Components\Passive\ResistorModel.cs" />
+    <Compile Include="Components\Voltagesources\Voltagesource.cs" />
+    <Compile Include="Components\Waveform.cs" />
+    <Compile Include="Diagnostics\CircuitException.cs" />
+    <Compile Include="Diagnostics\CircuitWarning.cs" />
+    <Compile Include="Parameters\IParameter.cs" />
+    <Compile Include="Parameters\Parameter.cs" />
+    <Compile Include="IntegrationMethod.cs" />
+    <Compile Include="Parameters\Parameterized.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Simulation.cs" />
+    <Compile Include="Simulations\SimulationCircuit.cs" />
+    <Compile Include="Simulations\SimulationConfiguration.cs" />
+    <Compile Include="Simulations\SimulationIterate.cs" />
+    <Compile Include="Simulations\Transient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IntegrationMethods\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
