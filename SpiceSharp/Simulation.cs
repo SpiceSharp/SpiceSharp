@@ -21,15 +21,42 @@ namespace SpiceSharp
         public SimulationConfiguration Config { get; protected set; } = null;
 
         /// <summary>
+        /// Gets the name of the simulation
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Allow registering for exporting data
+        /// </summary>
+        public event ExportSimulationDataEventHandler ExportSimulationData;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="config">The configuration for this simulation</param>
-        public Simulation(SimulationConfiguration config = null)
+        public Simulation(string name, SimulationConfiguration config = null)
         {
             if (config == null)
                 Config = new SimulationConfiguration();
             else
                 Config = config;
+        }
+
+        /// <summary>
+        /// Execute the simulation
+        /// </summary>
+        /// <param name="ckt">The circuit to be used</param>
+        /// <param name="reset">Restart the simulation when true</param>
+        public abstract void Execute(Circuit ckt);
+
+        /// <summary>
+        /// Export the data
+        /// </summary>
+        /// <param name="ckt"></param>
+        public virtual void Export(Circuit ckt)
+        {
+            SimulationData data = new SimulationData(ckt);
+            ExportSimulationData?.Invoke(this, data);
         }
     }
 }

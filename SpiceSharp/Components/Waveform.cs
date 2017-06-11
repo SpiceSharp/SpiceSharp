@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// This class represents a waveform object
     /// </summary>
-    public abstract class Waveform
+    public abstract class Waveform : Parameterized
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public Waveform(string name) : base(name)
+        {
+        }
 
         /// <summary>
         /// Setup the waveform

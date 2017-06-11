@@ -44,6 +44,26 @@ namespace SpiceSharp.Parameters
         }
 
         /// <summary>
+        /// Copy the parameter from another parameter
+        /// </summary>
+        /// <param name="source"></param>
+        public void CopyFrom(Parameter<T> source)
+        {
+            Value = source.Value;
+            Given = source.Given;
+        }
+
+        /// <summary>
+        /// Copy the parameter to another parameter
+        /// </summary>
+        /// <param name="target"></param>
+        public void CopyTo(Parameter<T> target)
+        {
+            target.Value = Value;
+            target.Given = Given;
+        }
+
+        /// <summary>
         /// Specify the parameter
         /// </summary>
         /// <param name="value"></param>

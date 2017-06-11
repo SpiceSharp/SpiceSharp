@@ -95,6 +95,15 @@ namespace SpiceSharp.Simulations
             if (!ckt.State.Initialized)
                 ckt.State.Initialize(ckt);
 
+            // Ignore operating condition point, just use the solution as-is
+            if (ckt.State.UseIC && ckt.State.Domain == CircuitState.DomainTypes.Time)
+            {
+                // Store the current solution
+                ckt.State.StoreSolution();
+                ckt.Load();
+                return true;
+            }
+
             // Perform iteration
             while (true)
             {

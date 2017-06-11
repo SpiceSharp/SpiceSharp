@@ -40,29 +40,42 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Add a component
+        /// Add one or more components
         /// </summary>
         /// <param name="c"></param>
-        public void Add(CircuitComponent c)
+        public void Add(params CircuitComponent[] cs)
         {
-            if (c == null)
-                throw new ArgumentNullException(nameof(c));
-            if (components.ContainsKey(c.Name))
-                throw new CircuitException($"A component with the name {c.Name} already exists");
-            components.Add(c.Name, c);
+            foreach (var c in cs)
+            {
+                if (c == null)
+                    throw new ArgumentNullException(nameof(c));
+                if (components.ContainsKey(c.Name))
+                    throw new CircuitException($"A component with the name {c.Name} already exists");
+                components.Add(c.Name, c);
+            }
         }
 
         /// <summary>
         /// Remove a component
         /// </summary>
         /// <param name="name"></param>
-        public void Remove(string name)
+        public void Remove(params string[] names)
         {
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-            if (components.ContainsKey(name))
-                components.Remove(name);
+            foreach (var name in names)
+            {
+                if (name == null)
+                    throw new ArgumentNullException(nameof(name));
+                if (components.ContainsKey(name))
+                    components.Remove(name);
+            }
         }
+
+        /// <summary>
+        /// Check if a component exists
+        /// </summary>
+        /// <param name="name">The name of the component</param>
+        /// <returns></returns>
+        public bool Contains(string name) => components.ContainsKey(name);
 
         /// <summary>
         /// Get all components of a specific type

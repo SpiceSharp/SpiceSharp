@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,25 +15,26 @@ namespace SpiceSharp.Components
     public class Resistor : CircuitComponent
     {
         /// <summary>
-        /// Parameter table
+        /// Create a default resistor model
         /// </summary>
-        private static Dictionary<string, ParameterInfo> parameters = new Dictionary<string, ParameterInfo>()
-        {
-            { "resistance", new ParameterInfo(ParameterAccess.IOPP, typeof(double), "Resistance", "RESresist") },
-            { "temp", new ParameterInfo(ParameterAccess.IOPU, typeof(double), "Instance operating temperature (in Kelvin)", "REStemp") },
-            { "l", new ParameterInfo(ParameterAccess.IOPU, typeof(double), "Length", "RESlength") },
-            { "w", new ParameterInfo(ParameterAccess.IOPU, typeof(double), "Width", "RESwidth") },
-            { "i", new ParameterInfo(ParameterAccess.OP, typeof(double), "Current") },
-            { "p", new ParameterInfo(ParameterAccess.OP, typeof(double), "Power") },
-        };
+        private static ResistorModel DefaultModel = new ResistorModel(null);
 
         /// <summary>
         /// Parameters
         /// </summary>
+        [SpiceName("temp"), SpiceInfo("Instance operating temperature in Kelvin", Interesting = false)]
         public Parameter<double> REStemp { get; } = new Parameter<double>();
+        [SpiceName("resistance"), SpiceInfo("Resistance", IsPrincipal = true)]
         public Parameter<double> RESresist { get; } = new Parameter<double>();
+        [SpiceName("w"), SpiceInfo("Width", Interesting = false)]
         public Parameter<double> RESwidth { get; } = new Parameter<double>();
+        [SpiceName("l"), SpiceInfo("Length", Interesting = false)]
         public Parameter<double> RESlength { get; } = new Parameter<double>();
+        [SpiceName("i"), SpiceInfo("Current")]
+        public double GetCurrent(Circuit ckt) => (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) * RESconduct;
+        [SpiceName("p"), SpiceInfo("Power")]
+        public double GetPower(Circuit ckt) => (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) *
+            (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) * RESconduct;
 
         /// <summary>
         /// Nodes
@@ -52,36 +54,6 @@ namespace SpiceSharp.Components
         public Resistor(string name) : base(name, 2)
         {
         }
-
-        /// <summary>
-        /// Ask a parameter
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="ckt"></param>
-        /// <returns></returns>
-        public override object Ask(string name, Circuit ckt = null)
-        {
-            object result = base.Ask(name, ckt);
-            if (result != null)
-                return result;
-
-            switch (name)
-            {
-                case "i":
-                    return (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) * RESconduct;
-                case "p":
-                    return (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) * 
-                        (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) *
-                        RESconduct;
-                default:
-                    return null;
-            }
-        }
-
-        /// <summary>
-        /// Get the parameters
-        /// </summary>
-        public override Dictionary<string, ParameterInfo> Parameters => parameters;
 
         /// <summary>
         /// Load the resistor
@@ -115,7 +87,7 @@ namespace SpiceSharp.Components
         {
             double factor;
             double difference;
-            ResistorModel rmod = Model as ResistorModel;
+            ResistorModel rmod = Model as ResistorModel ?? DefaultModel;
 
             // Default Value Processing for Resistor Instance
             if (!REStemp.Given) REStemp.Value = ckt.State.Temperature;

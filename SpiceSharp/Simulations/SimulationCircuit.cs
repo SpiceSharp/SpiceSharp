@@ -40,6 +40,9 @@ namespace SpiceSharp.Simulations
                     for (int i = 0; i < ckt.Nodes.Count; i++)
                     {
                         var node = ckt.Nodes[i];
+                        if (node.Name == null)
+                            continue;
+
                         if (nodes.Nodeset.ContainsKey(node.Name))
                         {
                             double ns = nodes.Nodeset[node.Name];
@@ -63,6 +66,9 @@ namespace SpiceSharp.Simulations
                     for (int i = 0; i < ckt.Nodes.Count; i++)
                     {
                         var node = ckt.Nodes[i];
+                        if (node.Name == null)
+                            continue;
+
                         if (ckt.Nodes.IC.ContainsKey(node.Name))
                         {
                             double ic = ckt.Nodes.IC[node.Name];

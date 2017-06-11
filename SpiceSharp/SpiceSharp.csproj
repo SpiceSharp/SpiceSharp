@@ -42,15 +42,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Currentsources\Currentsource.cs" />
+    <Compile Include="Components\Waveforms\Pulse.cs" />
+    <Compile Include="Diagnostics\BadParameterException.cs" />
+    <Compile Include="Diagnostics\ParameterTypeException.cs" />
+    <Compile Include="IntegrationMethods\Breakpoints.cs" />
+    <Compile Include="IntegrationMethods\Trapezoidal.cs" />
+    <Compile Include="Parameters\SpiceMember.cs" />
+    <Compile Include="Parameters\SpiceInfo.cs" />
+    <Compile Include="Parameters\SpiceName.cs" />
     <Compile Include="Circuits\Components.cs" />
     <Compile Include="CircuitComponent.cs" />
-    <Compile Include="Components\ComponentModel.cs" />
     <Compile Include="Circuit.cs" />
     <Compile Include="CircuitModel.cs" />
     <Compile Include="CircuitNode.cs" />
     <Compile Include="Circuits\CircuitState.cs" />
     <Compile Include="Circuits\CircuitStatistics.cs" />
     <Compile Include="Circuits\Nodes.cs" />
+    <Compile Include="Components\Passive\Capacitor.cs" />
+    <Compile Include="Components\Passive\CapacitorModel.cs" />
     <Compile Include="Components\Passive\Resistor.cs" />
     <Compile Include="Components\Passive\ResistorModel.cs" />
     <Compile Include="Components\Voltagesources\Voltagesource.cs" />
@@ -63,16 +73,16 @@
     <Compile Include="Parameters\Parameterized.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulation.cs" />
+    <Compile Include="Simulations\DC.cs" />
     <Compile Include="Simulations\SimulationCircuit.cs" />
     <Compile Include="Simulations\SimulationConfiguration.cs" />
+    <Compile Include="Simulations\SimulationData.cs" />
     <Compile Include="Simulations\SimulationIterate.cs" />
     <Compile Include="Simulations\Transient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="IntegrationMethods\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

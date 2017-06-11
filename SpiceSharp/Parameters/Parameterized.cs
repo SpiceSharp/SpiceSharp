@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using SpiceSharp.Diagnostics;
+using System.Linq;
 
 namespace SpiceSharp.Parameters
 {
@@ -13,93 +14,19 @@ namespace SpiceSharp.Parameters
     public abstract class Parameterized
     {
         /// <summary>
-        /// An enumeration of possible access types for parameters
-        /// </summary>
-        public enum ParameterAccess
-        {
-            Required = 0x4000,
-            Set = 0x2000,
-            Ask = 0x1000,
-            Redundant = 0x0010000,
-            Principal = 0x0020000,
-            Ac = 0x0040000,
-            Ac_only = 0x0080000,
-            Noise = 0x0100000,
-            Nonsense = 0x0200000,
-
-            Uninteresting = 0x2000000, // For "show" command: do not print value in a table by default
-            IOP = Set | Ask,
-            IOPU = Set | Ask | Uninteresting,
-            IOPP = Set | Ask | Principal,
-            IOPA = Set | Ask | Ac,
-            IOPAU = Set | Ask | Ac | Uninteresting,
-            IOPAP = Set | Ask | Ac | Principal,
-            IOPAA = Set | Ask | Ac_only,
-            IOPAAU = Set | Ask | Ac_only | Uninteresting,
-            IOPPA = Set | Ask | Ac_only | Principal,
-            IOPN = Set | Ask | Noise,
-            IOPR = Set | Ask | Redundant,
-            IOPX = Set | Ask | Nonsense,
-            IOPXU = Set | Ask | Nonsense | Uninteresting,
-
-            IP = Set,
-            OP = Ask,
-            OPU = Ask | Uninteresting,
-            OPR = Ask | Redundant,
-            P = 0x00
-        }
-
-        /// <summary>
         /// Get the name of the object
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Get a list of all parameters
-        /// Big dictionaries can be stored statically to save memory
+        /// This dictionary contains all Spice keywords and their mapping
         /// </summary>
-        public abstract Dictionary<string, ParameterInfo> Parameters { get; }
-        
+        private static Dictionary<Type, Dictionary<string, SpiceMember>> members { get; } = new Dictionary<Type, Dictionary<string, SpiceMember>>();
+
         /// <summary>
-        /// This class completely describes a parameter
+        /// All parameters for this instance
         /// </summary>
-        public class ParameterInfo
-        {
-            /// <summary>
-            /// Get the access flags for this parameter
-            /// </summary>
-            public ParameterAccess Access { get; }
-
-            /// <summary>
-            /// Get the type of the parameter
-            /// </summary>
-            public Type Type { get; }
-
-            /// <summary>
-            /// Get the description of the parameter
-            /// </summary>
-            public string Description { get; }
-
-            /// <summary>
-            /// Usually, a Parameter(double) is linked
-            /// </summary>
-            public string Link = null;
-
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            /// <param name="access">The access flag</param>
-            /// <param name="id">A unique identifier</param>
-            /// <param name="type">The type of the value</param>
-            /// <param name="description">The description</param>
-            public ParameterInfo(ParameterAccess access, Type type, string description, string link = null)
-            {
-                Access = access;
-                Type = type;
-                Description = description;
-                Link = link;
-            }
-        }
+        private Dictionary<string, SpiceMember> parameters { get; } = new Dictionary<string, SpiceMember>();
 
         /// <summary>
         /// Constructor
@@ -108,6 +35,25 @@ namespace SpiceSharp.Parameters
         public Parameterized(string name)
         {
             Name = name;
+
+            // Build the parameters
+            if (!members.ContainsKey(GetType()))
+            {
+                var d = new Dictionary<string, SpiceMember>();
+                var tmembers = GetType().GetMembers(BindingFlags.Instance | BindingFlags.FlattenHierarchy | BindingFlags.Public).Where(p => p.GetCustomAttributes<SpiceName>().Any());
+                foreach (var m in tmembers)
+                {
+                    var nmember = new SpiceMember(m);
+
+                    var names = m.GetCustomAttributes<SpiceName>();
+                    foreach (var n in names)
+                        d.Add(n.Name, nmember);
+                }
+                members.Add(GetType(), d);
+                parameters = d;
+            }
+            else
+                parameters = members[GetType()];
         }
 
         /// <summary>
@@ -118,34 +64,14 @@ namespace SpiceSharp.Parameters
         /// <param name="ckt">The circuit if applicable</param>
         public virtual void Set(string name, object value, Circuit ckt = null)
         {
-            // Check existence of the parameter
-            if (Parameters == null || !Parameters.ContainsKey(name))
+            // Use reflection to find the member associated with the name
+            if (!parameters.ContainsKey(name))
             {
-                CircuitWarning.Warning(this, $"{Name}: Unrecognized parameter {name}");
+                CircuitWarning.Warning(this, $"{Name}: Parameter '{name}' does not exist");
                 return;
             }
 
-            // Check access flag of the parameter
-            var info = Parameters[name];
-            if (!info.Access.HasFlag(ParameterAccess.Set))
-            {
-                CircuitWarning.Warning(this, $"{Name}: Parameter {name} is not accessible");
-                return;
-            }
-
-            // We can treat this as a normal Parameter<> access
-            if (info.Link != null)
-            {
-                if (value.GetType() == info.Type)
-                {
-                    var a = GetType().GetProperties();
-                    object parameter = GetType().GetProperty(info.Link, BindingFlags.Instance | BindingFlags.Public).GetValue(this);
-                    if (parameter != null && parameter is IParameter)
-                        ((IParameter)parameter).Set(value);
-                }
-                else
-                    throw new CircuitException($"{Name}: Type mismatch for parameter {name}");
-            }
+            parameters[name].Set(this, value, ckt);
         }
 
         /// <summary>
@@ -156,32 +82,32 @@ namespace SpiceSharp.Parameters
         /// <returns></returns>
         public virtual object Ask(string name, Circuit ckt = null)
         {
-            // Check existence of the parameter
-            if (Parameters == null || !Parameters.ContainsKey(name))
-            {
-                CircuitWarning.Warning(this, $"{Name}: Unrecognized parameter {name}");
+            if (!parameters.ContainsKey(name))
+                throw new CircuitException($"{Name}: Parameter '{name}' does not exist");
+
+            return parameters[name].Get(this, ckt);
+        }
+
+        /// <summary>
+        /// Get a parameter from the object by name
+        /// The parameter must be defined as a property with a getter in order to 
+        /// be found by this method
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public virtual Parameter<T> GetParameter<T>(string name)
+        {
+            // Get the member with this name
+            var members = GetType().GetProperties()
+                .Where(p => p.PropertyType == typeof(Parameter<T>))
+                .Where(q => q.GetCustomAttributes<SpiceName>().Where(r => r.Name == name).Any());
+            if (members.Count() == 0)
                 return null;
-            }
 
-            // Check access flag of the parameter
-            var info = Parameters[name];
-            if (!info.Access.HasFlag(ParameterAccess.Ask))
-            {
-                CircuitWarning.Warning(this, $"{Name}: Parameter {name} is not accessible for reading");
-                return null;
-            }
-
-            // Pass through to main method
-            if (info.Link != null)
-            {
-                object parameter = GetType().GetProperty(info.Link).GetValue(this, null);
-                if (parameter != null && parameter is IParameter)
-                    return ((IParameter)parameter).Get();
-                else
-                    return parameter;
-            }
-
-            return null;
+            // We found a parameter
+            var member = members.First();
+            return (Parameter<T>)member.GetValue(this);
         }
     }
 }
