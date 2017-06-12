@@ -46,6 +46,7 @@
     <Compile Include="Components\RLC\Inductor.cs" />
     <Compile Include="Components\RLC\MutualInductance.cs" />
     <Compile Include="Components\Waveforms\Pulse.cs" />
+    <Compile Include="Components\Waveforms\Sine.cs" />
     <Compile Include="Diagnostics\BadParameterException.cs" />
     <Compile Include="Diagnostics\ParameterTypeException.cs" />
     <Compile Include="IntegrationMethods\Breakpoints.cs" />

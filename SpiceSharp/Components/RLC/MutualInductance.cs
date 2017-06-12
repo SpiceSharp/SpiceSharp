@@ -17,11 +17,11 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [SpiceName("k"), SpiceName("coefficient"), SpiceInfo("Mutual inductance", IsPrincipal = true)]
-        public Parameter<double> MUTcoupling { get; private set; } = new Parameter<double>();
+        public Parameter<double> MUTcoupling { get; } = new Parameter<double>();
         [SpiceName("inductor1"), SpiceInfo("First coupled inductor")]
-        public Parameter<string> MUTind1 { get; private set; } = new Parameter<string>();
+        public Parameter<string> MUTind1 { get; } = new Parameter<string>();
         [SpiceName("inductor2"), SpiceInfo("Second coupled inductor")]
-        public Parameter<string> MUTind2 { get; private set; } = new Parameter<string>();
+        public Parameter<string> MUTind2 { get; } = new Parameter<string>();
 
         /// <summary>
         /// The factor
