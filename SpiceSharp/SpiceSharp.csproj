@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\Currentsources\Currentsource.cs" />
+    <Compile Include="Components\RLC\Inductor.cs" />
+    <Compile Include="Components\RLC\MutualInductance.cs" />
     <Compile Include="Components\Waveforms\Pulse.cs" />
     <Compile Include="Diagnostics\BadParameterException.cs" />
     <Compile Include="Diagnostics\ParameterTypeException.cs" />
@@ -54,15 +56,14 @@
     <Compile Include="Circuits\Components.cs" />
     <Compile Include="CircuitComponent.cs" />
     <Compile Include="Circuit.cs" />
-    <Compile Include="CircuitModel.cs" />
     <Compile Include="CircuitNode.cs" />
     <Compile Include="Circuits\CircuitState.cs" />
     <Compile Include="Circuits\CircuitStatistics.cs" />
     <Compile Include="Circuits\Nodes.cs" />
-    <Compile Include="Components\Passive\Capacitor.cs" />
-    <Compile Include="Components\Passive\CapacitorModel.cs" />
-    <Compile Include="Components\Passive\Resistor.cs" />
-    <Compile Include="Components\Passive\ResistorModel.cs" />
+    <Compile Include="Components\RLC\Capacitor.cs" />
+    <Compile Include="Components\RLC\CapacitorModel.cs" />
+    <Compile Include="Components\RLC\Resistor.cs" />
+    <Compile Include="Components\RLC\ResistorModel.cs" />
     <Compile Include="Components\Voltagesources\Voltagesource.cs" />
     <Compile Include="Components\Waveform.cs" />
     <Compile Include="Diagnostics\CircuitException.cs" />

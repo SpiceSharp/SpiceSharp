@@ -34,6 +34,7 @@ namespace SpiceSharp.Components.Waveforms
         /// Private variables
         /// </summary>
         private double v1, v2, td, tr, tf, pw, per;
+        private double lastbasetime = double.NaN;
 
         /// <summary>
         /// Constructor
@@ -76,6 +77,7 @@ namespace SpiceSharp.Components.Waveforms
             tf = FallTime;
             pw = PulseWidth;
             per = Period;
+            lastbasetime = double.NaN;
         }
 
         /// <summary>
@@ -118,6 +120,7 @@ namespace SpiceSharp.Components.Waveforms
             IntegrationMethod method = ckt.Method;
             var breaks = method.Breaks;
 
+            // Find the time relative to the first period
             double time = method.Time - td;
             double basetime = 0.0;
             if (time >= per)
@@ -125,40 +128,25 @@ namespace SpiceSharp.Components.Waveforms
                 basetime = per * Math.Floor(time / per);
                 time -= basetime;
             }
+            if (basetime == lastbasetime)
+                return;
+            lastbasetime = basetime;
 
-            double tol = 1e-7 * pw;
-            if (time <= 0 || time >= tr + pw + tf)
-            {
-                if (method.Break && Math.Abs(time) < tol)
-                    breaks.SetBreakpoint(basetime + tr + td);
-                else if (method.Break && Math.Abs(time - tr - pw - tf) < tol)
-                    breaks.SetBreakpoint(basetime + per + td);
-                else if (method.Break && time == -td)
-                    breaks.SetBreakpoint(basetime + td);
-                else if (method.Break && Math.Abs(time - per) < tol)
-                    breaks.SetBreakpoint(basetime + td + tr + per);
-            }
-            else if (time >= tr && time <= tr + pw)
-            {
-                if (method.Break && Math.Abs(time - tr) < tol)
-                    breaks.SetBreakpoint(basetime + td + tr + pw);
-                else if (method.Break && Math.Abs(time - tr - pw) < tol)
-                    breaks.SetBreakpoint(basetime + td + tr + pw + tf);
-            }
-            else if (time > 0 && time < tr)
-            {
-                if (method.Break && Math.Abs(time) < tol)
-                    breaks.SetBreakpoint(basetime + td + tr);
-                else if (method.Break && Math.Abs(time - tr) < tol)
-                    breaks.SetBreakpoint(basetime + td + tr + pw);
-            }
-            else
-            {
-                if (method.Break && Math.Abs(time - tr - pw) < tol)
-                    breaks.SetBreakpoint(basetime + td + tr + pw + tf);
-                else if (method.Break && Math.Abs(time - tr - pw - tf) < tol)
-                    breaks.SetBreakpoint(basetime + td + per);
-            }
+            // Add all breakpoints for this period
+            breaks.SetBreakpoint(basetime + td);
+            breaks.SetBreakpoint(basetime + td + tr);
+            breaks.SetBreakpoint(basetime + td + tr + pw);
+            breaks.SetBreakpoint(basetime + td + tr + pw + tf);
+            breaks.SetBreakpoint(basetime + td + per); // Start of the next period
+
+            /*
+             * NOTE:
+             * Originally Spice only adds a breakpoint when the previous one has been reached.
+             * The problem is that if the next breakpoint is too close (< MinBreak), it will 
+             * not be added which means that any subsequent breakpoints will be lost too.
+             * 
+             * The same problem here will only occur if a whole period is < MinBreak.
+             */
         }
     }
 }

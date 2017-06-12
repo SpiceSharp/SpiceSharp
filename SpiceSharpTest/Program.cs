@@ -15,7 +15,6 @@ namespace SpiceSharpTest
         private static List<double> time = new List<double>();
         private static List<double> input = new List<double>();
         private static List<double> output = new List<double>();
-        private static List<int> orders = new List<int>();
 
         static void Main(string[] args)
         {
@@ -40,9 +39,8 @@ namespace SpiceSharpTest
                 c.Temperature(ckt);
 
             Transient.Configuration config = new Transient.Configuration();
-            config.FinalTime = 10e-3;
-            config.Step = 1e-6;
-            config.MaxStep = 10e-3;
+            config.FinalTime = 30e-3;
+            config.Step = 100e-6;
             Transient sim = new Transient("TRAN1", config);
             sim.ExportSimulationData += GetSimulation;
             sim.Execute(ckt);
@@ -51,9 +49,8 @@ namespace SpiceSharpTest
             using (StreamWriter writer = new StreamWriter("output.csv"))
             {
                 for (int i = 0; i < time.Count; i++)
-                    writer.WriteLine(time[i] + ";" + input[i] + ";" + output[i] + ";" + orders[i]);
+                    writer.WriteLine(time[i] + ";" + input[i] + ";" + output[i]);
             }
-            
 
             Console.ReadKey();
         }
@@ -63,7 +60,6 @@ namespace SpiceSharpTest
             time.Add(data.GetTime());
             input.Add(data.GetVoltage("IN"));
             output.Add(data.GetVoltage("OUT"));
-            orders.Add(data.Circuit.Method.Order);
         }
     }
 }

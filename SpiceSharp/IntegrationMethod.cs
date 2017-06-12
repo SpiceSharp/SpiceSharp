@@ -139,14 +139,18 @@ namespace SpiceSharp
             if (Solutions[0] == null)
             {
                 for (int i = 0; i < Solutions.Length; i++)
+                {
                     Solutions[i] = new DenseVector(solution.Count);
+                    solution.CopyTo(Solutions[i]);
+                }
             }
             else
             {
                 for (int i = Solutions.Length - 2; i >= 0; i--)
                     Solutions[i + 1] = Solutions[i];
+                solution.CopyTo(Solutions[0]);
             }
-            solution.CopyTo(Solutions[0]);
+            
         }
 
         /// <summary>
@@ -233,7 +237,7 @@ namespace SpiceSharp
             // Find the truncated value
             double newdelta = Truncate(ckt);
 
-            // We can only go up one order
+            // We can go up an order
             if (newdelta > 0.9 * Delta)
             {
                 if (Order < MaxOrder)

@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents a capacitor model
     /// </summary>
-    public class CapacitorModel : CircuitModel
+    public class CapacitorModel : Parameterized
     {
         /// <summary>
         /// Parameters

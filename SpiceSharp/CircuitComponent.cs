@@ -16,11 +16,6 @@ namespace SpiceSharp
     public abstract class CircuitComponent : Parameterized
     {
         /// <summary>
-        /// Gets or sets the model this component uses
-        /// </summary>
-        public CircuitModel Model { get; set; }
-
-        /// <summary>
         /// Private variables
         /// </summary>
         private string[] terminals;

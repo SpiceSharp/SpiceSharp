@@ -17,7 +17,12 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Create a default resistor model
         /// </summary>
-        private static ResistorModel DefaultModel = new ResistorModel(null);
+        private static ResistorModel defaultmodel = new ResistorModel(null);
+
+        /// <summary>
+        /// Gets or sets the model
+        /// </summary>
+        public ResistorModel Model { get; set; }
 
         /// <summary>
         /// Parameters
@@ -87,17 +92,17 @@ namespace SpiceSharp.Components
         {
             double factor;
             double difference;
-            ResistorModel rmod = Model as ResistorModel ?? DefaultModel;
+            ResistorModel model = Model as ResistorModel ?? defaultmodel;
 
             // Default Value Processing for Resistor Instance
             if (!REStemp.Given) REStemp.Value = ckt.State.Temperature;
-            if (!RESwidth.Given) RESwidth.Value = rmod?.RESdefWidth ?? 0.0;
+            if (!RESwidth.Given) RESwidth.Value = model?.RESdefWidth ?? 0.0;
             if (!RESlength.Given) RESlength.Value = 0;
             if (!RESresist.Given)
             {
-                if (rmod.RESsheetRes.Given && (rmod.RESsheetRes != 0) && (RESlength != 0))
+                if (model.RESsheetRes.Given && (model.RESsheetRes != 0) && (RESlength != 0))
                 {
-                    RESresist.Value = rmod.RESsheetRes * (RESlength - rmod.RESnarrow) / (RESwidth - rmod.RESnarrow);
+                    RESresist.Value = model.RESsheetRes * (RESlength - model.RESnarrow) / (RESwidth - model.RESnarrow);
                 }
                 else
                 {
@@ -106,10 +111,10 @@ namespace SpiceSharp.Components
                 }
             }
 
-            if (rmod != null)
+            if (model != null)
             {
-                difference = REStemp - rmod.REStnom;
-                factor = 1.0 + (rmod.REStempCoeff1) * difference + (rmod.REStempCoeff2) * difference * difference;
+                difference = REStemp - model.REStnom;
+                factor = 1.0 + (model.REStempCoeff1) * difference + (model.REStempCoeff2) * difference * difference;
             }
             else
             {

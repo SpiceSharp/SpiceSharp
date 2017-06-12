@@ -92,14 +92,16 @@ namespace SpiceSharp.Simulations
             int iterno = 0;
 
             // Initialize the state of the circuit
-            if (!ckt.State.Initialized)
-                ckt.State.Initialize(ckt);
+            if (!state.Initialized)
+                state.Initialize(ckt);
 
             // Ignore operating condition point, just use the solution as-is
             if (ckt.State.UseIC && ckt.State.Domain == CircuitState.DomainTypes.Time)
             {
-                // Store the current solution
-                ckt.State.StoreSolution();
+                state.StoreSolution();
+
+                // Voltages are set using IC statement on the nodes
+                // Internal initial conditions are calculated by the components
                 ckt.Load();
                 return true;
             }

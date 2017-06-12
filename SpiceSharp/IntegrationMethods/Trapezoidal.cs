@@ -100,6 +100,7 @@ namespace SpiceSharp.IntegrationMethods
 
         /// <summary>
         /// Truncate the timestep
+        /// Uses the Local Truncation Error
         /// </summary>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
@@ -120,15 +121,14 @@ namespace SpiceSharp.IntegrationMethods
                     {
                         var node = ckt.Nodes[i];
                         index = node.Index;
-                        tol = Math.Max(Math.Abs(state.OldSolution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
-                        if (node.Type != Circuits.CircuitNode.NodeType.Voltage)
+                        tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
+                        if (node.Type != CircuitNode.NodeType.Voltage)
                             continue;
                         diff = state.Solution[index] - Prediction[index];
                         if (diff != 0)
                         {
-                            // tmp = Config.TrTol * tol * 2 / diff;
-                            // tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(tmp));
-                            tmp = Math.Sqrt(Math.Abs(2.0 * Config.TrTol * tol * DeltaOld[0] * (DeltaOld[0] + DeltaOld[1]) / diff));
+                            tmp = 2.0 * Config.TrTol * tol / diff * DeltaOld[0] * (DeltaOld[0] + DeltaOld[1]);
+                            tmp = Math.Sqrt(Math.Abs(tmp));
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
@@ -138,14 +138,12 @@ namespace SpiceSharp.IntegrationMethods
                     {
                         var node = ckt.Nodes[i];
                         index = node.Index;
-                        tol = Math.Max(Math.Abs(state.OldSolution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
-                        if (node.Type != Circuits.CircuitNode.NodeType.Voltage)
+                        tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
+                        if (node.Type != CircuitNode.NodeType.Voltage)
                             continue;
                         diff = state.Solution[index] - Prediction[index];
                         if (diff != 0)
                         {
-                            // tmp = DeltaOld[0] * Config.TrTol * tol * 3 * (DeltaOld[0] + DeltaOld[1]) / diff;
-                            // tmp = Math.Abs(tmp);
                             tmp = 12.0 * Config.TrTol * tol / diff * DeltaOld[0] * (DeltaOld[0] + DeltaOld[1]) * (DeltaOld[0] + DeltaOld[1] + DeltaOld[2]);
                             tmp = Math.Pow(Math.Abs(tmp), 1.0 / 3.0);
                             timetemp = Math.Min(timetemp, tmp);

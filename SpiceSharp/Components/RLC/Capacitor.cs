@@ -18,6 +18,11 @@ namespace SpiceSharp.Components
         protected static CapacitorModel defaultmodel = new CapacitorModel(null);
 
         /// <summary>
+        /// Gets or sets the model used by this capacitor
+        /// </summary>
+        public CapacitorModel Model { get; set; }
+
+        /// <summary>
         /// Capacitance
         /// </summary>
         [SpiceName("capacitance"), SpiceInfo("Device capacitance", IsPrincipal = true)]
@@ -103,7 +108,7 @@ namespace SpiceSharp.Components
             double vcap;
             var state = ckt.State;
             
-            if (state.UseIC)
+            if (state.UseIC && CAPinitCond.Given)
             {
                 vcap = CAPinitCond;
             }
@@ -113,9 +118,11 @@ namespace SpiceSharp.Components
             }
 
             // Fill the matrix
+            state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
+
+            // Integrate
             if (ckt.Method != null)
             {
-                state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
                 var result = ckt.Method.Integrate(state, CAPstate + CAPqcap, CAPcapac);
 
                 state.Matrix[CAPposNode, CAPposNode] += result.Geq;

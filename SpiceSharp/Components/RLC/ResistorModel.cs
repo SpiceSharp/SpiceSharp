@@ -10,7 +10,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A class representing a resistor model
     /// </summary>
-    public class ResistorModel : CircuitModel
+    public class ResistorModel : Parameterized
     {
         /// <summary>
         /// Parameters

@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
             ckt.Statistics.LoadTime.Start();
 
             // Clear rhs and matrix
-            ckt.State.Clear();
+            state.Clear();
 
             // Load all devices
             // ckt.Load(this, state);
@@ -37,9 +37,9 @@ namespace SpiceSharp.Simulations
                 if ((state.Init & (CircuitState.InitFlags.InitJct | CircuitState.InitFlags.InitFix)) != 0)
                 {
                     // Do nodesets
-                    for (int i = 0; i < ckt.Nodes.Count; i++)
+                    for (int i = 0; i < nodes.Count; i++)
                     {
-                        var node = ckt.Nodes[i];
+                        var node = nodes[i];
                         if (node.Name == null)
                             continue;
 
@@ -61,27 +61,27 @@ namespace SpiceSharp.Simulations
                     }
                 }
 
-                if (state.UseIC)
+                if (state.Domain == CircuitState.DomainTypes.Time && !state.UseIC)
                 {
-                    for (int i = 0; i < ckt.Nodes.Count; i++)
+                    for (int i = 0; i < nodes.Count; i++)
                     {
-                        var node = ckt.Nodes[i];
+                        var node = nodes[i];
                         if (node.Name == null)
                             continue;
 
-                        if (ckt.Nodes.IC.ContainsKey(node.Name))
+                        if (nodes.IC.ContainsKey(node.Name))
                         {
-                            double ic = ckt.Nodes.IC[node.Name];
-                            if (ZeroNoncurRow(ckt.State.Matrix, ckt.Nodes, node.Index))
+                            double ic = nodes.IC[node.Name];
+                            if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
                             {
-                                ckt.State.Rhs[node.Index] = 1.0e10 * ic;
-                                ckt.State.Matrix[node.Index, node.Index] = 1.0e10;
+                                state.Rhs[node.Index] = 1.0e10 * ic;
+                                state.Matrix[node.Index, node.Index] = 1.0e10;
                             }
                             else
                             {
-                                ckt.State.Rhs[node.Index] = ic;
-                                ckt.State.Solution[node.Index] = ic;
-                                ckt.State.Matrix[node.Index, node.Index] = 1.0;
+                                state.Rhs[node.Index] = ic;
+                                state.Solution[node.Index] = ic;
+                                state.Matrix[node.Index, node.Index] = 1.0;
                             }
                         }
                     }

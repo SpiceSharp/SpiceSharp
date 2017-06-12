@@ -76,8 +76,7 @@ namespace SpiceSharp.Components
             VSRCbranch = nodes[2].Index;
 
             // Setup the waveform if specified
-            if (VSRCwaveform.Value != null)
-                VSRCwaveform.Value.Setup(ckt);
+            VSRCwaveform.Value?.Setup(ckt);
         }
 
         /// <summary>
