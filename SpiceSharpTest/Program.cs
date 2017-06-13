@@ -21,7 +21,7 @@ namespace SpiceSharpTest
             Circuit ckt = new Circuit();
             var vsrc = new Voltagesource("V1");
             vsrc.Connect("IN", "GND");
-            vsrc.Set("waveform", new SpiceSharp.Components.Waveforms.Pulse(0.0, 3.3, 1e-3, 1e-9, 1e-9, 4e-3, 10e-3));
+            vsrc.Set("waveform", new SpiceSharp.Components.Waveforms.Sine(0.0, 3.3, 100));
             ckt.Components.Add(vsrc);
 
             var res = new Resistor("R1");
@@ -29,10 +29,10 @@ namespace SpiceSharpTest
             res.Set("resistance", 1e3);
             ckt.Components.Add(res);
 
-            var cap = new Capacitor("C1");
-            cap.Connect("OUT", "GND");
-            cap.Set("capacitance", 1e-6);
-            ckt.Components.Add(cap);
+            var dio = new Diode("D1");
+            dio.Model = new DiodeModel("DM1");
+            dio.Connect("OUT", "GND");
+            ckt.Components.Add(dio);
 
             ckt.Setup();
             foreach (var c in ckt.Components)

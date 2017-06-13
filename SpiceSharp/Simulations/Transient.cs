@@ -94,9 +94,10 @@ namespace SpiceSharp.Simulations
             var state = ckt.State;
             var method = MyConfig.Method;
 
-            state.Domain = CircuitState.DomainTypes.Time;
-            state.IsDc = true;
+            // Initialize
             state.UseIC = MyConfig.UseIC;
+            state.IsDc = true;
+            state.Domain = CircuitState.DomainTypes.Time;
 
             // Initialize
             method.Initialize(MyConfig.FinalTime / 50.0);
@@ -111,10 +112,10 @@ namespace SpiceSharp.Simulations
             // Calculate the operating point
             this.Op(ckt, 0, MyConfig.DcMaxIterations);
             ckt.Statistics.TimePoints++;
-            state.IsDc = false;
-            state.UseIC = false; 
 
-            // Copy the states
+            // Stop calculating a DC solution
+            state.UseIC = false;
+            state.IsDc = false;
             state.States[0].CopyTo(state.States[1]);
 
             // Statistics

@@ -111,9 +111,10 @@ namespace SpiceSharp.Simulations
         public override void Execute(Circuit ckt)
         {
             // Setup the state
-            ckt.State.UseIC = Config.UseIC;
-            ckt.State.IsDc = true;
-            ckt.State.Domain = CircuitState.DomainTypes.None;
+            var state = ckt.State;
+            state.UseIC = false; // UseIC is only used in transient simulations
+            state.IsDc = true;
+            state.Domain = CircuitState.DomainTypes.None;
 
             // Initialize
             CircuitComponent[] components = new CircuitComponent[Sweeps.Count];

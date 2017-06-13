@@ -34,17 +34,5 @@ namespace SpiceSharp.Components
         public CapacitorModel(string name) : base(name)
         {
         }
-
-        /// <summary>
-        /// Load the data for this model
-        /// </summary>
-        /// <param name="ckt"></param>
-        /// <returns></returns>
-        public bool Load(Circuit ckt)
-        {
-            if (!ckt.State.IsDc)
-                return false;
-            return (ckt.State.IsDc && ckt.State.Init.HasFlag(CircuitState.InitFlags.InitJct)) || ckt.State.UseIC;
-        }
     }
 }
