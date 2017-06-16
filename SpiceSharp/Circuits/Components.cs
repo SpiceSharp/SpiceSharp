@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Circuits
@@ -14,18 +15,17 @@ namespace SpiceSharp.Circuits
         /// Private variables
         /// </summary>
         private Dictionary<string, CircuitComponent> components = new Dictionary<string, CircuitComponent>();
+        private List<CircuitComponent> ordered = new List<CircuitComponent>();
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CircuitComponents()
-        {
-        }
+        public CircuitComponents() { }
 
         /// <summary>
-        /// Gets or sets a component by name
+        /// Search for a circuit component with a specific priority
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">The name of the component</param>
         /// <returns></returns>
         public CircuitComponent this[string name]
         {
@@ -42,7 +42,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Add one or more components
         /// </summary>
-        /// <param name="c"></param>
+        /// <param name="cs">The components that need to be added</param>
         public void Add(params CircuitComponent[] cs)
         {
             foreach (var c in cs)
@@ -56,15 +56,16 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Remove a component
+        /// Remove a component from a specific priority
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="names">The names of the components that need to be deleted</param>
         public void Remove(params string[] names)
         {
             foreach (var name in names)
             {
                 if (name == null)
                     throw new ArgumentNullException(nameof(name));
+
                 if (components.ContainsKey(name))
                     components.Remove(name);
             }
@@ -80,7 +81,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Get all components of a specific type
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="type">The type of components you wish to find</param>
         /// <returns></returns>
         public CircuitComponent[] ByType(Type type)
         {
@@ -94,21 +95,45 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Get enumerator
+        /// This method will generate a list of circuit components with first all models, followed by all the components
         /// </summary>
-        /// <returns></returns>
-        public IEnumerator<CircuitComponent> GetEnumerator()
+        public void BuildOrderedComponentList()
         {
-            return components.Values.GetEnumerator();
+            // Initialize
+            ordered.Clear();
+            var mods = new HashSet<CircuitModel>();
+
+            // Build our list
+            foreach (var c in components.Values)
+            {
+                // Add models only once
+                var model = c.GetModel();
+                if (model != null && !mods.Contains(model))
+                {
+                    mods.Add(model);
+                    ordered.Add(model);
+                }
+
+                // Add the components
+                ordered.Add(c);
+            }
+
+            // Sort the list based on priority
+            ordered.Sort((CircuitComponent a, CircuitComponent b) => {
+                return b.Priority.CompareTo(a.Priority);
+            });
         }
 
         /// <summary>
         /// Get enumerator
         /// </summary>
         /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return components.Values.GetEnumerator();
-        }
+        public IEnumerator<CircuitComponent> GetEnumerator() => ordered.GetEnumerator();
+
+        /// <summary>
+        /// Get enumerator
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator IEnumerable.GetEnumerator() => ordered.GetEnumerator();
     }
 }

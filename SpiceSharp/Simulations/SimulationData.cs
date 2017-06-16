@@ -42,7 +42,7 @@ namespace SpiceSharp.Simulations
             if (Circuit.Nodes.Contains(node))
             {
                 int index = Circuit.Nodes[node].Index;
-                result = Circuit.State.Solution[index];
+                result = Circuit.State.Real.Solution[index];
             }
             else
                 throw new CircuitException($"Could not find node '{node}'");
@@ -53,7 +53,7 @@ namespace SpiceSharp.Simulations
                 if (Circuit.Nodes.Contains(reference))
                 {
                     int index = Circuit.Nodes[node].Index;
-                    result -= Circuit.State.Solution[index];
+                    result -= Circuit.State.Real.Solution[index];
                 }
                 else
                     throw new CircuitException($"Could not find node '{reference}'");
@@ -71,6 +71,18 @@ namespace SpiceSharp.Simulations
             if (Circuit.Method != null)
                 return Circuit.Method.Time;
             throw new CircuitException("Cannot get time without integration method");
+        }
+
+        /// <summary>
+        /// Get the current frequency
+        /// </summary>
+        /// <returns></returns>
+        public double GetFrequency()
+        {
+            var c = Circuit.State.Complex.Laplace;
+            if (c.Real != 0.0)
+                throw new CircuitException($"Cannot get the frequency of the complex number {c}");
+            return c.Imaginary / 2.0 / Circuit.CONSTPI;
         }
     }
 

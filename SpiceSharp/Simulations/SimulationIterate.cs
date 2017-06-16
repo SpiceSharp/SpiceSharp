@@ -14,16 +14,15 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Calculate the operating point of the circuit
         /// </summary>
+        /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
-        /// <param name="mode">The mode</param>
-        /// <param name="iterlim">Maximum number of iterations</param>
-        public static void Op(this Simulation sim, Circuit ckt, int mode, int maxiter)
+        /// <param name="maxiter">The maximum number of iterations</param>
+        public static void Op(this Simulation sim, Circuit ckt, int maxiter)
         {
             // Create the current SimulationState
             var state = ckt.State;
             state.Init = CircuitState.InitFlags.InitJct;
 
-            state.Mode = mode;
             if (!sim.Config.NoOpIter)
             {
                 if (sim.Iterate(ckt, maxiter))
@@ -81,13 +80,16 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Iterate the circuit and try to converge to a solution
+        /// Iterate to a solution
         /// </summary>
+        /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
+        /// <param name="maxiter">The maximum number of iterations</param>
         /// <returns></returns>
         public static bool Iterate(this Simulation sim, Circuit ckt, int maxiter)
         {
             var state = ckt.State;
+            var rstate = state.Real;
             bool pass = false;
             int iterno = 0;
 
@@ -98,7 +100,7 @@ namespace SpiceSharp.Simulations
             // Ignore operating condition point, just use the solution as-is
             if (ckt.State.UseIC && ckt.State.Domain == CircuitState.DomainTypes.Time)
             {
-                state.StoreSolution();
+                rstate.StoreSolution();
 
                 // Voltages are set using IC statement on the nodes
                 // Internal initial conditions are calculated by the components
@@ -128,7 +130,7 @@ namespace SpiceSharp.Simulations
 
                     // Solve the equation (thank you Math.NET)
                     ckt.Statistics.SolveTime.Start();
-                    ckt.State.Solve();
+                    rstate.Solve();
                     ckt.Statistics.SolveTime.Stop();
 
                     // Exceeded maximum number of iterations
@@ -147,7 +149,7 @@ namespace SpiceSharp.Simulations
                 switch (state.Init)
                 {
                     case CircuitState.InitFlags.InitFloat:
-                        if (state.IsDc && state.HadNodeset)
+                        if (state.UseDC && state.HadNodeset)
                         {
                             if (pass)
                                 state.IsCon = false;
@@ -181,23 +183,48 @@ namespace SpiceSharp.Simulations
                 }
 
                 // We need to do another iteration, swap solutions with the old solution
-                ckt.State.StoreSolution();
+                rstate.StoreSolution();
             }
         }
 
         /// <summary>
-        /// Check if the current iteration is converging
+        /// Calculate the solution for AC analysis
         /// </summary>
+        /// <param name="sim">The simulation</param>
+        /// <param name="ckt">The circuit</param>
+        public static void AcIterate(this Simulation sim, Circuit ckt)
+        {
+            // Initialize the circuit
+            if (!ckt.State.Initialized)
+                ckt.State.Initialize(ckt);
+
+            ckt.State.IsCon = true;
+
+            // Load AC
+            ckt.State.Complex.Clear();
+            foreach (var c in ckt.Components)
+                c.AcLoad(ckt);
+
+            // Solve
+            ckt.State.Complex.Solve();
+        }
+
+        /// <summary>
+        /// Check if we are converging during iterations
+        /// </summary>
+        /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
         private static bool IsConvergent(this Simulation sim, Circuit ckt)
         {
+            var rstate = ckt.State.Real;
+
             // Check convergence for each node
             for (int i = 0; i < ckt.Nodes.Count; i++)
             {
                 var node = ckt.Nodes[i];
-                double n = ckt.State.Solution[node.Index];
-                double o = ckt.State.OldSolution[node.Index];
+                double n = rstate.Solution[node.Index];
+                double o = rstate.OldSolution[node.Index];
                 if (node.Type == CircuitNode.NodeType.Voltage)
                 {
                     double tol = sim.Config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + sim.Config.VoltTol;

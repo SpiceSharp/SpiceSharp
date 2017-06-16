@@ -37,7 +37,7 @@ namespace SpiceSharp.Components
         [SpiceName("i"), SpiceInfo("Device current")]
         public double GetCurrent(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap];
         [SpiceName("p"), SpiceInfo("Instantaneous device power")]
-        public double GetPower(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap] * (ckt.State.Solution[CAPposNode] - ckt.State.Solution[CAPnegNode]);
+        public double GetPower(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap] * (ckt.State.Real.Solution[CAPposNode] - ckt.State.Real.Solution[CAPnegNode]);
 
         /// <summary>
         /// Nodes and states
@@ -57,9 +57,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Capacitor(string name) : base(name, 2)
-        {
-        }
+        public Capacitor(string name) : base(name, 2) { }
         
         /// <summary>
         /// Setup the capacitor
@@ -74,6 +72,12 @@ namespace SpiceSharp.Components
             // Create to states for integration
             CAPstate = ckt.State.GetState(2);
         }
+
+        /// <summary>
+        /// Get the model of the capacitor
+        /// </summary>
+        /// <returns></returns>
+        public override CircuitModel GetModel() => Model;
 
         /// <summary>
         /// Do temperature-dependent calculations
@@ -108,30 +112,27 @@ namespace SpiceSharp.Components
         {
             double vcap;
             var state = ckt.State;
-            
+            var rstate = state.Real;
+
             if (state.UseIC && CAPinitCond.Given)
-            {
                 vcap = CAPinitCond;
-            }
             else
-            {
-                vcap = state.OldSolution[CAPposNode] - state.OldSolution[CAPnegNode];
-            }
+                vcap = rstate.OldSolution[CAPposNode] - rstate.OldSolution[CAPnegNode];
 
             // Fill the matrix
             state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
 
-            // Integrate
+            // Without integration, a capacitor cannot do anything
             if (ckt.Method != null)
             {
                 var result = ckt.Method.Integrate(state, CAPstate + CAPqcap, CAPcapac);
 
-                state.Matrix[CAPposNode, CAPposNode] += result.Geq;
-                state.Matrix[CAPnegNode, CAPnegNode] += result.Geq;
-                state.Matrix[CAPposNode, CAPnegNode] -= result.Geq;
-                state.Matrix[CAPnegNode, CAPposNode] -= result.Geq;
-                state.Rhs[CAPposNode] -= result.Ceq;
-                state.Rhs[CAPnegNode] += result.Ceq;
+                rstate.Matrix[CAPposNode, CAPposNode] += result.Geq;
+                rstate.Matrix[CAPnegNode, CAPnegNode] += result.Geq;
+                rstate.Matrix[CAPposNode, CAPnegNode] -= result.Geq;
+                rstate.Matrix[CAPnegNode, CAPposNode] -= result.Geq;
+                rstate.Rhs[CAPposNode] -= result.Ceq;
+                rstate.Rhs[CAPnegNode] += result.Ceq;
             }
         }
     }

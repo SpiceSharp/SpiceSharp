@@ -21,6 +21,12 @@ namespace SpiceSharp
         private string[] terminals;
 
         /// <summary>
+        /// This parameter can change the order in which components are traversed
+        /// Components with a higher priority will get the first chance to execute their methods
+        /// </summary>
+        public int Priority { get; protected set; } = 0;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the component</param>
@@ -44,6 +50,12 @@ namespace SpiceSharp
                 terminals[i] = nodes[i];
             }
         }
+
+        /// <summary>
+        /// Get the model for this component
+        /// </summary>
+        /// <returns>Returns null if no model is available</returns>
+        public abstract CircuitModel GetModel();
 
         /// <summary>
         /// Helper function for binding nodes to the circuit
@@ -92,6 +104,15 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public abstract void Load(Circuit ckt);
+
+        /// <summary>
+        /// Load the component in the current circuit state for AC analysis
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public virtual void AcLoad(Circuit ckt)
+        {
+            // Do nothing
+        }
 
         /// <summary>
         /// Accept the current timepoint as the solution

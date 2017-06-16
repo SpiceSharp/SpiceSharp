@@ -37,9 +37,9 @@ namespace SpiceSharp.Components
         [SpiceName("acimag"), SpiceInfo("A.C. imaginary part")]
         public double GetAcImag(Circuit ckt) => ac.Imaginary;
         [SpiceName("i"), SpiceInfo("Voltage source current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Solution[VSRCbranch];
+        public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[VSRCbranch];
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Solution[VSRCposNode] - ckt.State.Solution[VSRCnegNode]) * -ckt.State.Solution[VSRCbranch];
+        public double GetPower(Circuit ckt) => (ckt.State.Real.Solution[VSRCposNode] - ckt.State.Real.Solution[VSRCnegNode]) * -ckt.State.Real.Solution[VSRCbranch];
         
         /// <summary>
         /// Nodes
@@ -80,6 +80,12 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
+        /// Get the model
+        /// </summary>
+        /// <returns></returns>
+        public override CircuitModel GetModel() => null;
+
+        /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
         /// <param name="ckt">The circuit</param>
@@ -105,17 +111,18 @@ namespace SpiceSharp.Components
         public override void Load(Circuit ckt)
         {
             var state = ckt.State;
+            var rstate = state.Real;
             double time = 0.0;
             double value = 0.0;
 
-            state.Matrix[VSRCposNode, VSRCbranch] += 1.0;
-            state.Matrix[VSRCbranch, VSRCposNode] += 1.0;
-            state.Matrix[VSRCnegNode, VSRCbranch] -= 1.0;
-            state.Matrix[VSRCbranch, VSRCnegNode] -= 1.0;
+            rstate.Matrix[VSRCposNode, VSRCbranch] += 1.0;
+            rstate.Matrix[VSRCbranch, VSRCposNode] += 1.0;
+            rstate.Matrix[VSRCnegNode, VSRCbranch] -= 1.0;
+            rstate.Matrix[VSRCbranch, VSRCnegNode] -= 1.0;
 
             if (state.Domain == CircuitState.DomainTypes.Time)
             {
-                if (!state.IsDc && ckt.Method != null)
+                if (ckt.Method != null)
                     time = ckt.Method.Time;
 
                 // Use the waveform if possible
@@ -128,7 +135,7 @@ namespace SpiceSharp.Components
             {
                 value = VSRCdcValue * state.SrcFact;
             }
-            state.Rhs[VSRCbranch] += value;
+            rstate.Rhs[VSRCbranch] += value;
         }
 
         /// <summary>

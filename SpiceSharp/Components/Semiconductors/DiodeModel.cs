@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents a model for a diode
     /// </summary>
-    public class DiodeModel : Parameterized
+    public class DiodeModel : CircuitModel
     {
         /// <summary>
         /// Parameters
@@ -69,7 +69,7 @@ namespace SpiceSharp.Components
         /// Do temperature-dependent calculations
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public void Temperature(Circuit ckt)
+        public override void Temperature(Circuit ckt)
         {
             var state = ckt.State;
             CurrentTemperature = state.Temperature;

@@ -38,7 +38,7 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Gets or sets the current initialization flag
+        /// Gets or sets the initialization flag
         /// </summary>
         public InitFlags Init { get; set; }
 
@@ -48,20 +48,23 @@ namespace SpiceSharp.Circuits
         public DomainTypes Domain { get; set; }
 
         /// <summary>
-        /// Gets or sets the current mode
-        /// This depends on the type of simulation currently performed
+        /// Gets or sets the flag for calculating small signal parameters
+        /// If false, small signal parameters are not calculated
         /// </summary>
-        public int Mode { get; set; } = 0;
+        public bool UseSmallSignal { get; set; }
 
         /// <summary>
-        /// True if the initial conditions should be used
+        /// Gets or sets the flag for ignoring time-related effects
+        /// If true, each device should assume the circuit is in rest
+        /// </summary>
+        public bool UseDC { get; set; }
+
+        /// <summary>
+        /// Gets or sets the flag for using initial conditions
+        /// If true, the operating point will not be calculated, and initial 
+        /// conditions will be used instead.
         /// </summary>
         public bool UseIC { get; set; } = false;
-
-        /// <summary>
-        /// True if the current simulation is solving a DC solution
-        /// </summary>
-        public bool IsDc { get; set; } = false;
 
         /// <summary>
         /// The current Gmin parameter
@@ -100,6 +103,16 @@ namespace SpiceSharp.Circuits
 
         #region Simulation solutions
         /// <summary>
+        /// The real state
+        /// </summary>
+        public CircuitStateReal Real { get; private set; } = null;
+
+        /// <summary>
+        /// The complex state
+        /// </summary>
+        public CircuitStateComplex Complex { get; private set; } = null;
+
+        /// <summary>
         /// Get the order of the matrix/vectors
         /// </summary>
         public int Order { get; private set; } = 0;
@@ -116,27 +129,6 @@ namespace SpiceSharp.Circuits
         public Vector<double>[] States { get; private set; } = null;
 
         /// <summary>
-        /// Get the equation matrix
-        /// </summary>
-        public Matrix<double> Matrix { get; private set; } = null;
-
-        /// <summary>
-        /// Get the right-hand side vector
-        /// </summary>
-        public Vector<double> Rhs { get; private set; } = null;
-
-        /// <summary>
-        /// Get the current solution
-        /// </summary>
-        public Vector<double> Solution { get; private set; } = null;
-
-        /// <summary>
-        /// Get the previous solution
-        /// Can be used for checking convergence
-        /// </summary>
-        public Vector<double> OldSolution { get; private set; } = null;
-
-        /// <summary>
         /// True if already initialized
         /// </summary>
         public bool Initialized { get; private set; } = false;
@@ -148,11 +140,9 @@ namespace SpiceSharp.Circuits
         public void Initialize(Circuit ckt)
         {
             // Initialize all matrices
-            Order = ckt.Nodes.Count;
-            Matrix = new SparseMatrix(Order + 1);
-            Rhs = new SparseVector(Order + 1);
-            Solution = new DenseVector(Order + 1);
-            OldSolution = new DenseVector(Order + 1);
+            Order = ckt.Nodes.Count + 1;
+            Real = new CircuitStateReal(Order);
+            Complex = new CircuitStateComplex(Order);
 
             // Allocate states
             if (ckt.Method != null)
@@ -175,11 +165,8 @@ namespace SpiceSharp.Circuits
             NumStates = 0;
             Initialized = false;
 
-            // Remove all matrices
-            Matrix = null;
-            Rhs = null;
-            Solution = null;
-            OldSolution = null;
+            Real.Destroy();
+            Complex.Destroy();
 
             // Remove states
             States = null;
@@ -209,45 +196,6 @@ namespace SpiceSharp.Circuits
             for (int i = States.Length - 2; i >= 0; i--)
                 States[i + 1] = States[i];
             States[0] = tmp;
-        }
-
-        /// <summary>
-        /// Solve the matrix equations
-        /// </summary>
-        public void Solve()
-        {
-            // All indices at 0 are the ground node
-            // We remove these rows/columns because they will lead to a singular matrix
-            var m = Matrix.RemoveRow(0).RemoveColumn(0);
-            var b = Rhs.SubVector(1, Rhs.Count - 1);
-
-            // Create a new solution vector of the original size
-            if (Solution == null)
-                Solution = new DenseVector(Rhs.Count);
-
-            // Fill the 1-N elements with the solution
-            var sol = m.Solve(b);
-            Solution[0] = 0.0;
-            Solution.SetSubVector(1, Solution.Count - 1, sol);
-        }
-
-        /// <summary>
-        /// Clear the Matrix and Rhs vector
-        /// </summary>
-        public void Clear()
-        {
-            Matrix.Clear();
-            Rhs.Clear();
-        }
-
-        /// <summary>
-        /// Store the current solution
-        /// </summary>
-        public void StoreSolution()
-        {
-            var tmp = OldSolution;
-            OldSolution = Solution;
-            Solution = tmp;
         }
         #endregion
     }

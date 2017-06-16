@@ -46,10 +46,5 @@ namespace SpiceSharp.Simulations
         /// Absolute tolerance
         /// </summary>
         public double AbsTol = 1e-12;
-
-        /// <summary>
-        /// Use the initial conditions if applicable
-        /// </summary>
-        public bool UseIC { get; set; } = false;
     }
 }

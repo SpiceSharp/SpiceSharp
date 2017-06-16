@@ -15,6 +15,18 @@ namespace SpiceSharp.Components
     public class Inductor : CircuitComponent
     {
         /// <summary>
+        /// Delegate for adding effects of a mutual inductance
+        /// </summary>
+        /// <param name="sender">The inductor that sends the request</param>
+        /// <param name="ckt">The circuit</param>
+        public delegate void UpdateMutualInductanceEventHandler(Inductor sender, Circuit ckt);
+
+        /// <summary>
+        /// An event that is called when mutual inductances need to be included
+        /// </summary>
+        public event UpdateMutualInductanceEventHandler UpdateMutualInductance;
+
+        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("inductance"), SpiceInfo("Inductance of the inductor", IsPrincipal = true)]
@@ -26,9 +38,9 @@ namespace SpiceSharp.Components
         [SpiceName("v"), SpiceName("volt"), SpiceInfo("Terminal voltage of the inductor")]
         public double GetVolt(Circuit ckt) => ckt.State.States[0][INDstate + INDvolt];
         [SpiceName("i"), SpiceName("current"), SpiceInfo("Current through the inductor")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Solution[INDbrEq];
+        public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[INDbrEq];
         [SpiceName("p"), SpiceInfo("Instantaneous power dissipated by the inductor")]
-        public double GetPower(Circuit ckt) => ckt.State.Solution[INDbrEq] * ckt.State.States[0][INDstate + INDvolt];
+        public double GetPower(Circuit ckt) => ckt.State.Real.Solution[INDbrEq] * ckt.State.States[0][INDstate + INDvolt];
 
         /// <summary>
         /// Nodes
@@ -63,7 +75,17 @@ namespace SpiceSharp.Components
 
             // Create 2 states
             INDstate = ckt.State.GetState(2);
+
+            // Clear all events
+            foreach (var inv in UpdateMutualInductance.GetInvocationList())
+                UpdateMutualInductance -= (UpdateMutualInductanceEventHandler)inv;
         }
+
+        /// <summary>
+        /// Get the model for the inductor
+        /// </summary>
+        /// <returns></returns>
+        public override CircuitModel GetModel() => null;
 
         /// <summary>
         /// Do temperature-dependent calculations
@@ -81,27 +103,30 @@ namespace SpiceSharp.Components
         public override void Load(Circuit ckt)
         {
             var state = ckt.State;
+            var rstate = state.Real;
 
             // Initialize
             if (state.UseIC && INDinitCond.Given)
                 state.States[0][INDstate + INDflux] = INDinduct * INDinitCond;
             else
-                state.States[0][INDstate + INDflux] = INDinduct * state.OldSolution[INDbrEq];
+                state.States[0][INDstate + INDflux] = INDinduct * rstate.OldSolution[INDbrEq];
 
-            // Load any mutual inductances that use this inductor
+            // Handle mutual inductances
+            UpdateMutualInductance?.Invoke(this, ckt);
 
             // Finally load the Y-matrix
+            // Note that without an integration method, the result will be a short circuit
             if (ckt.Method != null)
             {
                 var result = ckt.Method.Integrate(state, INDstate + INDflux, INDinduct);
-                state.Rhs[INDbrEq] += result.Ceq;
-                state.Matrix[INDbrEq, INDbrEq] -= result.Geq;
+                rstate.Rhs[INDbrEq] += result.Ceq;
+                rstate.Matrix[INDbrEq, INDbrEq] -= result.Geq;
             }
 
-            state.Matrix[INDposNode, INDbrEq] += 1;
-            state.Matrix[INDnegNode, INDbrEq] -= 1;
-            state.Matrix[INDbrEq, INDposNode] += 1;
-            state.Matrix[INDbrEq, INDnegNode] -= 1;
+            rstate.Matrix[INDposNode, INDbrEq] += 1;
+            rstate.Matrix[INDnegNode, INDbrEq] -= 1;
+            rstate.Matrix[INDbrEq, INDposNode] += 1;
+            rstate.Matrix[INDbrEq, INDnegNode] -= 1;
         }
     }
 }

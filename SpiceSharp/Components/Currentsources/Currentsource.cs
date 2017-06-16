@@ -27,9 +27,9 @@ namespace SpiceSharp.Components
         [SpiceName("acphase"), SpiceInfo("A.C. phase value")]
         public Parameter<double> ISRCacPhase { get; } = new Parameter<double>();
         [SpiceName("v"), SpiceInfo("Voltage accross the supply")]
-        public double GetV(Circuit ckt) => (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode]);
+        public double GetV(Circuit ckt) => (ckt.State.Real.Solution[ISRCposNode] - ckt.State.Real.Solution[ISRCnegNode]);
         [SpiceName("p"), SpiceInfo("Power supplied by the source")]
-        public double GetP(Circuit ckt) => (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCposNode]) * -ISRCdcValue;
+        public double GetP(Circuit ckt) => (ckt.State.Real.Solution[ISRCposNode] - ckt.State.Real.Solution[ISRCposNode]) * -ISRCdcValue;
         [SpiceName("ac"), SpiceInfo("A.C. magnitude, phase vector")]
         public void SetAc(Circuit ckt, double[] ac)
         {
@@ -72,6 +72,12 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
+        /// No model
+        /// </summary>
+        /// <returns></returns>
+        public override CircuitModel GetModel() => null;
+
+        /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
         /// <param name="ckt"></param>
@@ -96,13 +102,15 @@ namespace SpiceSharp.Components
         public override void Load(Circuit ckt)
         {
             var state = ckt.State;
+            var rstate = state.Real;
 
             double value = 0.0;
             double time = 0.0;
 
+            // Time domain analysis
             if (state.Domain == CircuitState.DomainTypes.Time)
             {
-                if (!state.IsDc && ckt.Method != null)
+                if (ckt.Method != null)
                     time = ckt.Method.Time;
 
                 // Use the waveform if possible
@@ -113,11 +121,12 @@ namespace SpiceSharp.Components
             }
             else
             {
+                // AC or DC analysis use the DC value
                 value = ISRCdcValue * state.SrcFact;
             }
 
-            state.Rhs[ISRCposNode] += value;
-            state.Rhs[ISRCnegNode] -= value;
+            rstate.Rhs[ISRCposNode] += value;
+            rstate.Rhs[ISRCnegNode] -= value;
         }
     }
 }

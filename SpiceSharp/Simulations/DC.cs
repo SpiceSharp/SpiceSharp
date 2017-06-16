@@ -18,7 +18,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Extended configuration for DC analysis
         /// </summary>
-        public class DCConfiguration : SimulationConfiguration
+        public class Configuration : SimulationConfiguration
         {
             /// <summary>
             /// The maximum number of iterations used each step
@@ -29,7 +29,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Easy access to the configuration
         /// </summary>
-        protected DCConfiguration MyConfig { get { return (DCConfiguration)Config; } }
+        protected Configuration MyConfig { get { return (Configuration)Config; } }
 
         /// <summary>
         /// A class that describes a job
@@ -98,8 +98,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
-        public DC(string name, DCConfiguration config = null)
-            : base(name, config ?? new DCConfiguration())
+        public DC(string name, Configuration config = null)
+            : base(name, config ?? new Configuration())
         {
         }
 
@@ -112,8 +112,9 @@ namespace SpiceSharp.Simulations
         {
             // Setup the state
             var state = ckt.State;
+            var rstate = state.Real;
             state.UseIC = false; // UseIC is only used in transient simulations
-            state.IsDc = true;
+            state.UseSmallSignal = false;
             state.Domain = CircuitState.DomainTypes.None;
 
             // Initialize
@@ -152,7 +153,7 @@ namespace SpiceSharp.Simulations
 
                 // Calculate the solution
                 if (!this.Iterate(ckt, MyConfig.MaxIterations))
-                    this.Op(ckt, 0, MyConfig.MaxIterations);
+                    this.Op(ckt, MyConfig.MaxIterations);
 
                 // Export data
                 Export(ckt);

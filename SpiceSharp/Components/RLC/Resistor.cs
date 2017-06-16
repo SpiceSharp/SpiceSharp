@@ -36,10 +36,10 @@ namespace SpiceSharp.Components
         [SpiceName("l"), SpiceInfo("Length", Interesting = false)]
         public Parameter<double> RESlength { get; } = new Parameter<double>();
         [SpiceName("i"), SpiceInfo("Current")]
-        public double GetCurrent(Circuit ckt) => (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) * RESconduct;
+        public double GetCurrent(Circuit ckt) => (ckt.State.Real.Solution[RESposNode] - ckt.State.Real.Solution[RESnegNode]) * RESconduct;
         [SpiceName("p"), SpiceInfo("Power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) *
-            (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) * RESconduct;
+        public double GetPower(Circuit ckt) => (ckt.State.Real.Solution[RESposNode] - ckt.State.Real.Solution[RESnegNode]) *
+            (ckt.State.Real.Solution[RESposNode] - ckt.State.Real.Solution[RESnegNode]) * RESconduct;
 
         /// <summary>
         /// Nodes
@@ -66,11 +66,11 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Load(Circuit ckt)
         {
-            var state = ckt.State;
-            state.Matrix[RESposNode, RESposNode] += RESconduct;
-            state.Matrix[RESnegNode, RESnegNode] += RESconduct;
-            state.Matrix[RESposNode, RESnegNode] -= RESconduct;
-            state.Matrix[RESnegNode, RESposNode] -= RESconduct;
+            var rstate = ckt.State.Real;
+            rstate.Matrix[RESposNode, RESposNode] += RESconduct;
+            rstate.Matrix[RESnegNode, RESnegNode] += RESconduct;
+            rstate.Matrix[RESposNode, RESnegNode] -= RESconduct;
+            rstate.Matrix[RESnegNode, RESposNode] -= RESconduct;
         }
 
         /// <summary>
@@ -83,6 +83,12 @@ namespace SpiceSharp.Components
             RESposNode = nodes[0].Index;
             RESnegNode = nodes[1].Index;
         }
+
+        /// <summary>
+        /// Get the model for this resistor
+        /// </summary>
+        /// <returns></returns>
+        public override CircuitModel GetModel() => Model;
 
         /// <summary>
         /// Do temperature-dependent calculations

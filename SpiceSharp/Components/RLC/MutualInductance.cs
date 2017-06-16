@@ -38,7 +38,11 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the mutual inductance</param>
-        public MutualInductance(string name) : base(name, 0) { }
+        public MutualInductance(string name) : base(name, 0)
+        {
+            // Make sure mutual inductances are evaluated AFTER inductors
+            Priority = -1;
+        }
 
         /// <summary>
         /// Setup the mutual inductance
@@ -53,7 +57,16 @@ namespace SpiceSharp.Components
                 throw new CircuitException($"{Name}: Could not find inductor '{MUTind1.Value}'");
             if (ind2 == null)
                 throw new CircuitException($"{Name}: Could not find inductor '{MUTind2.Value}'");
+
+            // Register our method for updating mutual inductance flux
+            ind1.UpdateMutualInductance += UpdateMutualInductance;
         }
+
+        /// <summary>
+        /// Get the model
+        /// </summary>
+        /// <returns></returns>
+        public override CircuitModel GetModel() => null;
 
         /// <summary>
         /// Do temperature-dependent calculations
@@ -65,20 +78,34 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
+        /// Update inductor 2
+        /// </summary>
+        /// <param name="sender">Inductor 2</param>
+        /// <param name="ckt">The circuit</param>
+        private void UpdateMutualInductance(Inductor sender, Circuit ckt)
+        {
+            var state = ckt.State;
+            var rstate = ckt.State.Real;
+
+            if (sender == ind1)
+            {
+                state.States[0][ind1.INDstate + INDflux] += MUTfactor * rstate.OldSolution[ind2.INDbrEq];
+                rstate.Matrix[ind1.INDbrEq, ind2.INDbrEq] -= MUTfactor * ckt.Method.Slope;
+            }
+            else
+            {
+                state.States[0][ind2.INDstate + INDflux] += MUTfactor * rstate.OldSolution[ind1.INDbrEq];
+                rstate.Matrix[ind2.INDbrEq, ind1.INDbrEq] -= MUTfactor * ckt.Method.Slope;
+            }
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)
         {
-            var state = ckt.State;
-
-            if (!state.IsDc)
-            {
-                state.States[0][ind1.INDstate + INDflux] += MUTfactor * state.OldSolution[ind2.INDbrEq];
-                state.States[0][ind2.INDstate + INDflux] += MUTfactor * state.OldSolution[ind1.INDbrEq];
-            }
-            state.Matrix[ind1.INDbrEq, ind2.INDbrEq] -= MUTfactor * ckt.Method.Slope;
-            state.Matrix[ind2.INDbrEq, ind1.INDbrEq] -= MUTfactor * ckt.Method.Slope;
+            // Don't need to do anything here
         }
     }
 }

@@ -65,6 +65,11 @@ namespace SpiceSharp.Simulations
             private double maxstep;
 
             /// <summary>
+            /// Gets or sets the flag for using initial conditions without operating point
+            /// </summary>
+            public bool UseIC { get; set; } = false;
+
+            /// <summary>
             /// Get the minimum timestep allowed
             /// </summary>
             public double DeltaMin { get { return 1e-9 * MaxStep; } }
@@ -92,11 +97,12 @@ namespace SpiceSharp.Simulations
         public override void Execute(Circuit ckt)
         {
             var state = ckt.State;
+            var rstate = state.Real;
             var method = MyConfig.Method;
 
             // Initialize
             state.UseIC = MyConfig.UseIC;
-            state.IsDc = true;
+            state.UseDC = true;
             state.Domain = CircuitState.DomainTypes.Time;
 
             // Initialize
@@ -110,12 +116,12 @@ namespace SpiceSharp.Simulations
                 method.DeltaOld[i] = MyConfig.MaxStep;
 
             // Calculate the operating point
-            this.Op(ckt, 0, MyConfig.DcMaxIterations);
+            this.Op(ckt, MyConfig.DcMaxIterations);
             ckt.Statistics.TimePoints++;
 
             // Stop calculating a DC solution
             state.UseIC = false;
-            state.IsDc = false;
+            state.UseDC = false;
             state.States[0].CopyTo(state.States[1]);
 
             // Statistics
@@ -131,7 +137,7 @@ namespace SpiceSharp.Simulations
                     // Accept the current timepoint
                     foreach (var c in ckt.Components)
                         c.Accept(ckt);
-                    method.SaveSolution(state.Solution);
+                    method.SaveSolution(rstate.Solution);
 
                     method.UpdateBreakpoints();
                     ckt.Statistics.Accepted++;

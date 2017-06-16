@@ -11,7 +11,6 @@ namespace SpiceSharp.Components.Semiconductors
     /// </summary>
     public static class Semiconductor
     {
-
         /// <summary>
         /// Limit the per-iteration change of PN junction voltages
         /// Defined as DEVpnjlim in devsup.c

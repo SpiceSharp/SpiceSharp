@@ -105,6 +105,12 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
+        /// Get the model
+        /// </summary>
+        /// <returns></returns>
+        public override CircuitModel GetModel() => Model;
+
+        /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
         /// <param name="ckt"></param>
@@ -112,8 +118,6 @@ namespace SpiceSharp.Components
         {
             // Update the Model with new values if necessary
             var state = ckt.State;
-            if (state.Temperature != Model.CurrentTemperature)
-                Model.Temperature(ckt);
 
             // NOTE: This is an almost exact replication of the original Spice diode model code
 
@@ -230,6 +234,7 @@ namespace SpiceSharp.Components
             bool Check;
 
             var state = ckt.State;
+            var rstate = state.Real;
 
             csat = DIOtSatCur * DIOarea;
             gspr = Model.DIOconductance * DIOarea;
@@ -250,7 +255,7 @@ namespace SpiceSharp.Components
                 vd = 0.0;
             else
             {
-                vd = state.OldSolution[DIOposPrimeNode] - state.OldSolution[DIOnegNode];
+                vd = rstate.OldSolution[DIOposPrimeNode] - rstate.OldSolution[DIOnegNode];
                 delvd = vd - state.States[0][DIOstate + DIOvoltage];
                 cdhat = state.States[0][DIOstate + DIOcurrent] + state.States[0][DIOstate + DIOconduct] * delvd;
 
@@ -347,17 +352,17 @@ namespace SpiceSharp.Components
 
             // load current vector
             cdeq = cd - gd * vd;
-            state.Rhs[DIOnegNode] += cdeq;
-            state.Rhs[DIOposPrimeNode] -= cdeq;
+            rstate.Rhs[DIOnegNode] += cdeq;
+            rstate.Rhs[DIOposPrimeNode] -= cdeq;
 
             // load matrix
-            state.Matrix[DIOposNode, DIOposNode] += gspr;
-            state.Matrix[DIOnegNode, DIOnegNode] += gd;
-            state.Matrix[DIOposPrimeNode, DIOposPrimeNode] += (gd + gspr);
-            state.Matrix[DIOposNode, DIOposPrimeNode] -= gspr;
-            state.Matrix[DIOnegNode, DIOposPrimeNode] -= gd;
-            state.Matrix[DIOposPrimeNode, DIOposNode] -= gspr;
-            state.Matrix[DIOposPrimeNode, DIOnegNode] -= gd;
+            rstate.Matrix[DIOposNode, DIOposNode] += gspr;
+            rstate.Matrix[DIOnegNode, DIOnegNode] += gd;
+            rstate.Matrix[DIOposPrimeNode, DIOposPrimeNode] += (gd + gspr);
+            rstate.Matrix[DIOposNode, DIOposPrimeNode] -= gspr;
+            rstate.Matrix[DIOnegNode, DIOposPrimeNode] -= gd;
+            rstate.Matrix[DIOposPrimeNode, DIOposNode] -= gspr;
+            rstate.Matrix[DIOposPrimeNode, DIOnegNode] -= gd;
         }
     }
 }

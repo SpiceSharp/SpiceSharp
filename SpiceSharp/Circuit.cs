@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Circuits;
+using System.Collections.Generic;
 
 namespace SpiceSharp
 {
@@ -59,9 +60,7 @@ namespace SpiceSharp
         /// <summary>
         /// Constructor
         /// </summary>
-        public Circuit()
-        {
-        }
+        public Circuit() { }
 
         /// <summary>
         /// Setup the circuit
@@ -71,6 +70,9 @@ namespace SpiceSharp
             if (IsSetup)
                 return;
             IsSetup = true;
+
+            // Rebuild the list of circuit components
+            Components.BuildOrderedComponentList();
 
             // Setup all devices
             foreach (var c in Components)

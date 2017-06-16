@@ -17,13 +17,14 @@ namespace SpiceSharp.Simulations
         public static void Load(this Circuit ckt)
         {
             var state = ckt.State;
+            var rstate = state.Real;
             var nodes = ckt.Nodes;
 
             // Start the stopwatch
             ckt.Statistics.LoadTime.Start();
 
             // Clear rhs and matrix
-            state.Clear();
+            rstate.Clear();
 
             // Load all devices
             // ckt.Load(this, state);
@@ -31,7 +32,7 @@ namespace SpiceSharp.Simulations
                 c.Load(ckt);
 
             // Check modes
-            if (state.IsDc)
+            if (state.UseDC)
             {
                 // Consider doing nodeset & ic assignments
                 if ((state.Init & (CircuitState.InitFlags.InitJct | CircuitState.InitFlags.InitFix)) != 0)
@@ -46,16 +47,16 @@ namespace SpiceSharp.Simulations
                         if (nodes.Nodeset.ContainsKey(node.Name))
                         {
                             double ns = nodes.Nodeset[node.Name];
-                            if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
+                            if (ZeroNoncurRow(rstate.Matrix, nodes, node.Index))
                             {
-                                state.Rhs[node.Index] = 1.0e10 * ns;
-                                state.Matrix[node.Index, node.Index] = 1.0e10;
+                                rstate.Rhs[node.Index] = 1.0e10 * ns;
+                                rstate.Matrix[node.Index, node.Index] = 1.0e10;
                             }
                             else
                             {
-                                state.Rhs[node.Index] = ns;
-                                state.Solution[node.Index] = ns;
-                                state.Matrix[node.Index, node.Index] = 1.0;
+                                rstate.Rhs[node.Index] = ns;
+                                rstate.Solution[node.Index] = ns;
+                                rstate.Matrix[node.Index, node.Index] = 1.0;
                             }
                         }
                     }
@@ -72,16 +73,16 @@ namespace SpiceSharp.Simulations
                         if (nodes.IC.ContainsKey(node.Name))
                         {
                             double ic = nodes.IC[node.Name];
-                            if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
+                            if (ZeroNoncurRow(rstate.Matrix, nodes, node.Index))
                             {
-                                state.Rhs[node.Index] = 1.0e10 * ic;
-                                state.Matrix[node.Index, node.Index] = 1.0e10;
+                                rstate.Rhs[node.Index] = 1.0e10 * ic;
+                                rstate.Matrix[node.Index, node.Index] = 1.0e10;
                             }
                             else
                             {
-                                state.Rhs[node.Index] = ic;
-                                state.Solution[node.Index] = ic;
-                                state.Matrix[node.Index, node.Index] = 1.0;
+                                rstate.Rhs[node.Index] = ic;
+                                rstate.Solution[node.Index] = ic;
+                                rstate.Matrix[node.Index, node.Index] = 1.0;
                             }
                         }
                     }
@@ -99,10 +100,11 @@ namespace SpiceSharp.Simulations
         public static void Ic(this Circuit ckt)
         {
             var state = ckt.State;
+            var rstate = state.Real;
             var nodes = ckt.Nodes;
 
             // Clear the current solution
-            state.Solution.Clear();
+            rstate.Solution.Clear();
 
             // Go over all nodes
             for (int i = 0; i < nodes.Count; i++)
@@ -111,11 +113,11 @@ namespace SpiceSharp.Simulations
                 if (nodes.Nodeset.ContainsKey(node.Name))
                 {
                     state.HadNodeset = true;
-                    state.Solution[node.Index] = nodes.Nodeset[node.Name];
+                    rstate.Solution[node.Index] = nodes.Nodeset[node.Name];
                 }
                 if (nodes.IC.ContainsKey(node.Name))
                 {
-                    state.Solution[node.Index] = nodes.IC[node.Name];
+                    rstate.Solution[node.Index] = nodes.IC[node.Name];
                 }
             }
 
