@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Components.Semiconductors;
 
-namespace SpiceSharp.Components.Semiconductors
+namespace SpiceSharp.Components
 {
     /// <summary>
     /// This class describes a bipolar transistor
@@ -22,7 +21,7 @@ namespace SpiceSharp.Components.Semiconductors
         /// Parameters
         /// </summary>
         [SpiceName("area"), SpiceInfo("Area factor")]
-        public Parameter<double> BJTarea { get; } = new Parameter<double>();
+        public Parameter<double> BJTarea { get; } = new Parameter<double>(1.0);
         [SpiceName("temp"), SpiceInfo("Instance temperature")]
         public Parameter<double> BJTtemp { get; } = new Parameter<double>();
         [SpiceName("off"), SpiceInfo("Device initially off")]
@@ -99,7 +98,6 @@ namespace SpiceSharp.Components.Semiconductors
             value += tmp * ckt.State.Real.Solution[BJTemitNode];
             return value;
         }
-
         [SpiceName("cpi"), SpiceInfo("Internal base to emitter capactance")]
         public double BJTcapbe { get; private set; }
         [SpiceName("cmu"), SpiceInfo("Internal base to collector capactiance")]
@@ -285,103 +283,11 @@ namespace SpiceSharp.Components.Semiconductors
             var rstate = state.Real;
             var method = ckt.Method;
 
-            double arg1;
-            double arg2;
-            double arg3;
-            double arg;
-            double argtf;
-            double c2;
-            double c4;
-            double capbc;
-            double capbe;
-            double cb;
-            double cbc;
-            double cbcn;
-            double cbe;
-            double cben;
-            double cbhat;
-            double cc;
-            double cchat;
-            double cdis;
-            double ceq;
-            double ceqbc;
-            double ceqbe;
-            double ceqbx;
-            double ceqcs;
-            double cex;
-            double csat;
-            double ctot;
-            double czbc;
-            double czbcf2;
-            double czbe;
-            double czbef2;
-            double czbx;
-            double czbxf2;
-            double czcs;
-            double delvbc;
-            double delvbe;
-            double denom;
-            double dqbdvc;
-            double dqbdve;
-            double evbc;
-            double evbcn;
-            double evbe;
-            double evben;
-            double f1;
-            double f2;
-            double f3;
-            double fcpc;
-            double fcpe;
-            double gbc;
-            double gbcn;
-            double gbe;
-            double gben;
-            double gccs;
-            double gcpr;
-            double gepr;
-            double geq;
-            double geqbx;
-            double geqcb;
-            double gex;
-            double gm;
-            double gmu;
-            double go;
-            double gpi;
-            double gx;
-            double oik;
-            double oikr;
-            double ovtf;
-            double pc;
-            double pe;
-            double ps;
-            double q1;
-            double q2;
-            double qb;
-            double rbpi;
-            double rbpr;
-            double sarg;
-            double sqarg;
-            double td;
-            double temp;
-            double tf;
-            double tr;
-            double vbc;
-            double vbe;
-            double vbx;
-            double vce;
-            double vcs;
-            double vt;
-            double vtc;
-            double vte;
-            double vtn;
-            double xjrb;
-            double xjtf;
-            double xmc;
-            double xme;
-            double xms;
-            double xtf;
-            double capbx = 0;
-            double capcs = 0;
+            double arg1, arg2, arg3, arg, argtf, c2, c4, capbc, capbe, cb, cbc, cbcn, cbe, cben, cbhat, cc, cchat, cdis, ceq, ceqbc, 
+                ceqbe, ceqbx, ceqcs, cex, csat, ctot, czbc, czbcf2, czbe, czbef2, czbx, czbxf2, czcs, delvbc, delvbe, denom, dqbdvc, 
+                dqbdve, evbc, evbcn, evbe, evben, f1, f2, f3, fcpc, fcpe, gbc, gbcn, gbe, gben, gccs, gcpr, gepr, geq, geqbx, geqcb, 
+                gex, gm, gmu, go, gpi, gx, oik, oikr, ovtf, pc, pe, ps, q1, q2, qb, rbpi, rbpr, sarg, sqarg, td, temp, tf, tr, vbc, 
+                vbe, vbx, vce, vcs, vt, vtc, vte, vtn, xjrb, xjtf, xmc, xme, xms, xtf, capbx = 0, capcs = 0;
             bool icheck, ichk1;
 
             vt = BJTtemp * Circuit.CONSTKoverQ;
@@ -408,8 +314,10 @@ namespace SpiceSharp.Components.Semiconductors
             xjrb = Model.BJTbaseCurrentHalfResist * BJTarea;
 
             // initialization
+            // I have to admit I don't really understand all these modes for initialization
+            // Will look into this later
             icheck = true;
-            if (state.Domain == CircuitState.DomainTypes.Frequency)
+            if (state.UseSmallSignal)
             {
                 vbe = state.States[0][BJTstate + BJTvbe];
                 vbc = state.States[0][BJTstate + BJTvbc];
@@ -523,9 +431,8 @@ namespace SpiceSharp.Components.Semiconductors
                 gbcn = -c4 / vbc;
                 cbcn = gbcn * vbc;
             }
-            /*
-             *   determine base charge terms
-             */
+
+            // determine base charge terms
             q1 = 1 / (1 - Model.BJTinvEarlyVoltF * vbc - Model.BJTinvEarlyVoltR * vbe);
             if (oik == 0 && oikr == 0)
             {
@@ -544,10 +451,8 @@ namespace SpiceSharp.Components.Semiconductors
                 dqbdvc = q1 * (qb * Model.BJTinvEarlyVoltF + oikr * gbc / sqarg);
             }
 
-            /*
-             *   weil's approx. for excess phase applied with backward-
-             *   euler integration
-             */
+            // weil's approx. for excess phase applied with backward-
+            // euler integration
             cc = 0;
             cex = cbe;
             gex = gbe;
@@ -701,7 +606,7 @@ namespace SpiceSharp.Components.Semiconductors
                 BJTcapbx = capbx;
 
                 // store small-signal parameters
-                if (state.Domain == CircuitState.DomainTypes.Frequency)
+                if (state.UseSmallSignal)
                 {
                     state.States[0][BJTstate + BJTcqbe] = capbe;
                     state.States[0][BJTstate + BJTcqbc] = capbc;
@@ -803,6 +708,63 @@ namespace SpiceSharp.Components.Semiconductors
             rstate.Matrix[BJTsubstNode, BJTcolPrimeNode] += (-gccs);
             rstate.Matrix[BJTbaseNode, BJTcolPrimeNode] += (-geqbx);
             rstate.Matrix[BJTcolPrimeNode, BJTbaseNode] += (-geqbx);
+        }
+
+        /// <summary>
+        /// Load the bipolar transistor for AC analysis
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void AcLoad(Circuit ckt)
+        {
+            var state = ckt.State;
+            var cstate = state.Complex;
+
+            double gcpr, gepr;
+            Complex gpi, gmu, gm;
+            double go, td, gx;
+            Complex xcbx, xccs, xcmcb;
+
+            gcpr = Model.BJTcollectorConduct * BJTarea; // [EDIT] Changed model.BJTcollectorResist to model.BJTcollectorConduct
+            gepr = Model.BJTemitterConduct * BJTarea; // [EDIT] Changed model.BJTemitterResist to model.BJTemitterConduct
+
+            gpi = state.States[0][BJTstate + BJTgpi] + state.States[0][BJTstate + BJTcqbe] * cstate.Laplace;
+            gmu = state.States[0][BJTstate + BJTgmu] + state.States[0][BJTstate + BJTcqbc] * cstate.Laplace;
+            gm = state.States[0][BJTstate + BJTgm];
+            go = state.States[0][BJTstate + BJTgo];
+            td = Model.BJTexcessPhaseFactor;
+            if (td != 0.0)
+            {
+                gm = gm + go;
+                gm = gm * Complex.Exp(-cstate.Laplace) - go;
+            }
+            gx = state.States[0][BJTstate + BJTgx];
+            xcbx = state.States[0][BJTstate + BJTcqbx] * cstate.Laplace;
+            xccs = state.States[0][BJTstate + BJTcqcs] * cstate.Laplace;
+            xcmcb = state.States[0][BJTstate + BJTcexbc] * cstate.Laplace;
+
+            cstate.Matrix[BJTcolNode, BJTcolNode] += gcpr;
+            cstate.Matrix[BJTbaseNode, BJTbaseNode] += gx + xcbx;
+            cstate.Matrix[BJTemitNode, BJTemitNode] += gepr;
+            cstate.Matrix[BJTcolPrimeNode, BJTcolPrimeNode] += gmu + go + gcpr + xcbx + xccs;
+            cstate.Matrix[BJTbasePrimeNode, BJTbasePrimeNode] += gx + gpi + gmu + xcmcb;
+            cstate.Matrix[BJTemitPrimeNode, BJTemitPrimeNode] += gpi + gepr + gm + go;
+            cstate.Matrix[BJTcolNode, BJTcolPrimeNode] -= gcpr;
+            cstate.Matrix[BJTbaseNode, BJTbasePrimeNode] -= gx;
+            cstate.Matrix[BJTemitNode, BJTemitPrimeNode] -= gepr;
+            cstate.Matrix[BJTcolNode, BJTcolPrimeNode] -= gcpr;
+            cstate.Matrix[BJTcolPrimeNode, BJTbasePrimeNode] += -gmu + gm;
+            cstate.Matrix[BJTcolPrimeNode, BJTemitPrimeNode] -= gm + go;
+            cstate.Matrix[BJTbasePrimeNode, BJTbaseNode] -= gx;
+            cstate.Matrix[BJTbasePrimeNode, BJTcolPrimeNode] -= gmu + xcmcb;
+            cstate.Matrix[BJTbasePrimeNode, BJTemitPrimeNode] -= gpi;
+            cstate.Matrix[BJTemitPrimeNode, BJTemitNode] -= gepr;
+            cstate.Matrix[BJTemitPrimeNode, BJTcolPrimeNode] += -go + xcmcb;
+            cstate.Matrix[BJTemitPrimeNode, BJTbasePrimeNode] -= gpi + gm + xcmcb;
+            cstate.Matrix[BJTsubstNode, BJTsubstNode] += xccs;
+            cstate.Matrix[BJTcolPrimeNode, BJTsubstNode] -= xccs;
+            cstate.Matrix[BJTsubstNode, BJTcolPrimeNode] -= xccs;
+            cstate.Matrix[BJTbaseNode, BJTcolPrimeNode] -= xcbx;
+            cstate.Matrix[BJTcolPrimeNode, BJTbaseNode] -= xcbx;
         }
     }
 }

@@ -63,6 +63,19 @@ namespace SpiceSharp.Components
         public Inductor(string name) : base(name, 2) { }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">The name of the inductor</param>
+        /// <param name="pos">The positive node</param>
+        /// <param name="neg">The negative node</param>
+        /// <param name="ind">The inductor</param>
+        public Inductor(string name, string pos, string neg, double ind) : base(name, 2)
+        {
+            Connect(pos, neg);
+            INDinduct.Set(ind);
+        }
+
+        /// <summary>
         /// Setup the inductor
         /// </summary>
         /// <param name="ckt">The circuit</param>

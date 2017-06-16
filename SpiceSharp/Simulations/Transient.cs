@@ -122,9 +122,10 @@ namespace SpiceSharp.Simulations
             // Stop calculating a DC solution
             state.UseIC = false;
             state.UseDC = false;
-            state.States[0].CopyTo(state.States[1]);
+            for (int i = 1; i < state.States.Length; i++)
+                state.States[0].CopyTo(state.States[i]);
 
-            // Statistics
+            // Start our statistics
             ckt.Statistics.TransientTime.Start();
             int startIters = ckt.Statistics.NumIter;
             var startselapsed = ckt.Statistics.SolveTime.Elapsed;
@@ -147,8 +148,9 @@ namespace SpiceSharp.Simulations
                         Export(ckt);
 
                     // Detect the end of the simulation
-                    if (Math.Abs(method.Time - MyConfig.FinalTime) <= method.Breaks.MinBreak)
+                    if (method.Time >= MyConfig.FinalTime)
                     {
+                        // Keep our statistics
                         ckt.Statistics.TransientTime.Stop();
                         ckt.Statistics.TranIter += ckt.Statistics.NumIter - startIters;
                         ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
@@ -158,8 +160,6 @@ namespace SpiceSharp.Simulations
                     // Advance time
                     delta = Math.Min(delta, MyConfig.MaxStep);
                     method.Advance(delta);
-
-                    // Shift states
                     state.ShiftStates();
 
                     // Calculate a new solution
@@ -175,7 +175,9 @@ namespace SpiceSharp.Simulations
                         bool converged = this.Iterate(ckt, MyConfig.TranMaxIterations);
                         ckt.Statistics.TimePoints++;
 
-                        // First time: Copy states
+                        // Spice copies the states the first time, we're not
+                        // I believe this is because Spice treats the first timepoint after the OP as special (MODEINITTRAN)
+                        // We don't treat it special (we just assume it started from rest)
 
                         if (!converged)
                         {
@@ -185,14 +187,14 @@ namespace SpiceSharp.Simulations
                         }
                         else
                         {
-                            // First time no checking
+                            // Spice does not check the first timepoint (it deliberately makes it small)
+                            // We just check the first timepoint just like any other, and assume the circuit
+                            // has always been at that voltage.
 
                             // Calculate a new value based on the local truncation error
-                            delta = method.NewDelta(ckt);
-
-                            // Reject the timepoint if the calculated timestep shrinks too fast
-                            if (delta <= method.Delta * 0.9)
+                            if (!method.NewDelta(ckt, out delta))
                             {
+                                // Reject the timepoint if the calculated timestep shrinks too fast
                                 ckt.Statistics.Rejected++;
                                 method.Retry(delta);
                             }
@@ -203,7 +205,7 @@ namespace SpiceSharp.Simulations
                             }
                         }
 
-                        // Check for timesteps that are too small
+                        // Stop simulation if timesteps are consistently too small
                         if (delta <= MyConfig.DeltaMin)
                         {
                             if (olddelta <= MyConfig.DeltaMin)
@@ -216,6 +218,7 @@ namespace SpiceSharp.Simulations
             }
             catch (CircuitException)
             {
+                // Keep our statistics
                 ckt.Statistics.TransientTime.Stop();
                 ckt.Statistics.TranIter += ckt.Statistics.NumIter - startIters;
                 ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;

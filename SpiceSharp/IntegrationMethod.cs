@@ -191,6 +191,8 @@ namespace SpiceSharp
                 double mt = Math.Min(savedelta, Breaks.Delta);
                 delta = Math.Min(delta, 0.1 * mt);
 
+                // Spice will divide the delta by 10 in the first step, we don't
+
                 // But we don't want to go below delmin for no reason
                 delta = Math.Max(delta, DeltaMin * 2.0);
             }
@@ -223,6 +225,7 @@ namespace SpiceSharp
                 throw new CircuitException("The timestep can only shrink when retrying a timestep");
 
             Delta = delta;
+            DeltaOld[0] = delta;
             Time = savetime + delta;
             Order = 1;
         }
@@ -232,32 +235,32 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="ckt">The circuit</param>
         /// <returns>The calculated new timestep</returns>
-        public double NewDelta(Circuit ckt)
+        public bool NewDelta(Circuit ckt, out double newdelta)
         {
             // Find the truncated value
-            double newdelta = Truncate(ckt);
+            newdelta = Truncate(ckt);
 
-            // We can go up an order
+            // We can go up an order if the timestep did not shrink too much
             if (newdelta > 0.9 * Delta)
             {
                 if (Order < MaxOrder)
                 {
+                    // Increase the order and guess a new timepoint
                     Order++;
                     newdelta = Truncate(ckt);
 
-                    // Not worth the effort
+                    // Not worth the computational effort
                     if (newdelta <= 1.05 * Delta)
                         Order--;
                 }
             }
             else
             {
-                // Cut the order, there might be something going wrong
+                // Cut the order and try again, there might be something happening
                 Order = 1;
+                return false;
             }
-
-            // Return the calculated timepoint
-            return newdelta;
+            return true;
         }
 
         /// <summary>

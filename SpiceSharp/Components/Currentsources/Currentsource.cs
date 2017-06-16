@@ -52,8 +52,32 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current source</param>
-        public Currentsource(string name) : base(name, 2)
+        public Currentsource(string name) : base(name, 2) { }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">The name of the current source</param>
+        /// <param name="pos">The positive node</param>
+        /// <param name="neg">The negative node</param>
+        /// <param name="dc">The DC value</param>
+        public Currentsource(string name, string pos, string neg, double dc) : base(name, 2)
         {
+            Connect(pos, neg);
+            ISRCwaveform.Set(dc);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">The name of the current source</param>
+        /// <param name="pos">The positive node</param>
+        /// <param name="neg">The negative node</param>
+        /// <param name="w">The waveform</param>
+        public Currentsource(string name, string pos, string neg, Waveform w) : base(name, 2)
+        {
+            Connect(pos, neg);
+            ISRCwaveform.Set(w);
         }
 
         /// <summary>

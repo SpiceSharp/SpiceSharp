@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.Waveforms
             time -= td;
             double result = 0.0;
             if (time <= 0.0)
-                result = 0.0;
+                result = vo;
             else
                 result = vo + va * Math.Sin(freq * time * 2.0 * Circuit.CONSTPI);
             return result;

@@ -58,6 +58,19 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="name"></param>
         public Capacitor(string name) : base(name, 2) { }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">The name of the capacitor</param>
+        /// <param name="pos">The positive node</param>
+        /// <param name="neg">The negative node</param>
+        /// <param name="cap">The capacitance</param>
+        public Capacitor(string name, string pos, string neg, double cap) : base(name, 2)
+        {
+            Connect(pos, neg);
+            CAPcapac.Set(cap);
+        }
         
         /// <summary>
         /// Setup the capacitor

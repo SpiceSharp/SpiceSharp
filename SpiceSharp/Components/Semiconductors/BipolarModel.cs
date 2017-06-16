@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [SpiceName("type"), SpiceInfo("NPN or PNP")]
-        public int BJTtype { get; private set; }
+        public int BJTtype { get; private set; } = NPN;
         [SpiceName("npn"), SpiceInfo("NPN type device")]
         public void BJTSetNPN(Circuit ckt) { BJTtype = NPN; }
         [SpiceName("pnp"), SpiceInfo("PNP type device")]
