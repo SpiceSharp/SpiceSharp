@@ -317,8 +317,18 @@ namespace SpiceSharp.Components
             // I have to admit I don't really understand all these modes for initialization
             // Will look into this later
             icheck = true;
-            if (state.UseSmallSignal)
+            if (state.UseIC)
             {
+                // Use initial conditions
+                vbe = Model.BJTtype * BJTicVBE;
+                vce = Model.BJTtype * BJTicVCE;
+                vbc = vbe - vce;
+                vbx = vbc;
+                vcs = 0;
+            }
+            else if (state.UseSmallSignal)
+            {
+                // Use our stored state and corresponding bias voltages
                 vbe = state.States[0][BJTstate + BJTvbe];
                 vbc = state.States[0][BJTstate + BJTvbc];
                 vbx = Model.BJTtype * (
@@ -328,22 +338,17 @@ namespace SpiceSharp.Components
                     rstate.OldSolution[BJTsubstNode] -
                     rstate.OldSolution[BJTcolPrimeNode]);
             }
-            else if (state.Init == CircuitState.InitFlags.InitJct && state.UseIC)
+            else if (state.Init == CircuitState.InitFlags.InitJct)
             {
-                vbe = Model.BJTtype * BJTicVBE;
-                vce = Model.BJTtype * BJTicVCE;
-                vbc = vbe - vce;
-                vbx = vbc;
-                vcs = 0;
-            }
-            else if (state.Init == CircuitState.InitFlags.InitJct && !BJToff)
-            {
-                vbe = BJTtVcrit;
+                // Initialize junctions
+                if (!BJToff)
+                    vbe = 0;
+                else
+                    vbe = BJTtVcrit;
                 vbc = 0;
                 vcs = vbx = 0;
             }
-            else if (state.Init == CircuitState.InitFlags.InitJct ||
-                (state.Init == CircuitState.InitFlags.InitFix && BJToff))
+            else if (state.Init == CircuitState.InitFlags.InitFix && BJToff)
             {
                 vbe = 0;
                 vbc = 0;
@@ -489,6 +494,7 @@ namespace SpiceSharp.Components
             go = (gbc + (cex - cbc) * dqbdvc / qb) / qb;
             gm = (gex - (cex - cbc) * dqbdve / qb) / qb - go;
 
+            if (state.Domain == CircuitState.DomainTypes.Time || state.UseSmallSignal)
             {
                 // charge storage elements
                 tf = Model.BJTtransitTimeF;
@@ -635,7 +641,7 @@ namespace SpiceSharp.Components
             }
 
             // check convergence
-            if (state.Init != CircuitState.InitFlags.InitFix || (!BJToff))
+            if (state.Init != CircuitState.InitFlags.InitFix || !BJToff)
             {
                 if (icheck)
                     state.IsCon = false;
@@ -652,7 +658,7 @@ namespace SpiceSharp.Components
                 ceq = result.Ceq;
             }
 
-            // next2:
+            // Store all states
             state.States[0][BJTstate + BJTvbe] = vbe;
             state.States[0][BJTstate + BJTvbc] = vbc;
             state.States[0][BJTstate + BJTcc] = cc;
@@ -682,9 +688,8 @@ namespace SpiceSharp.Components
                     (-ceqbe - ceqbc);
             rstate.Rhs[BJTemitPrimeNode] += (ceqbe);
             rstate.Rhs[BJTsubstNode] += (-ceqcs);
-            /*
-             *  load y matrix
-             */
+
+            // load y matrix
             rstate.Matrix[BJTcolNode, BJTcolNode] += (gcpr);
             rstate.Matrix[BJTbaseNode, BJTbaseNode] += (gx + geqbx);
             rstate.Matrix[BJTemitNode, BJTemitNode] += (gepr);

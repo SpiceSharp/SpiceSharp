@@ -227,10 +227,14 @@ namespace SpiceSharp.Components
                 vd = DIOinitCond;
             else if (state.UseSmallSignal) // Calculate small-signal parameters
                 vd = state.States[0][DIOstate + DIOvoltage];
-            else if (state.Init == CircuitState.InitFlags.InitJct && DIOoff)
-                vd = 0.0;
             else if (state.Init == CircuitState.InitFlags.InitJct)
-                vd = DIOtVcrit;
+            {
+                // Initialize the junction
+                if (DIOoff)
+                    vd = 0.0;
+                else
+                    vd = DIOtVcrit;
+            }
             else if (state.Init == CircuitState.InitFlags.InitFix && DIOoff)
                 vd = 0.0;
             else
@@ -244,13 +248,13 @@ namespace SpiceSharp.Components
                 if ((Model.DIObreakdownVoltage.Given) && (vd < Math.Min(0, -DIOtBrkdwnV + 10 * vte)))
                 {
                     vdtemp = -(vd + DIOtBrkdwnV);
-                    vdtemp = Semiconductor.pnjlim(vdtemp, -(state.States[0][DIOstate + DIOvoltage] + DIOtBrkdwnV), 
+                    vdtemp = Semiconductor.pnjlim(vdtemp, -(state.States[0][DIOstate + DIOvoltage] + DIOtBrkdwnV),
                         vte, DIOtVcrit, ref Check);
                     vd = -(vdtemp + DIOtBrkdwnV);
                 }
                 else
                 {
-                    vd = Semiconductor.pnjlim(vd, state.States[0][DIOstate + DIOvoltage], 
+                    vd = Semiconductor.pnjlim(vd, state.States[0][DIOstate + DIOvoltage],
                         vte, DIOtVcrit, ref Check);
                 }
             }
