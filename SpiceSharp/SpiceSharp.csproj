@@ -45,7 +45,9 @@
     <Compile Include="Circuits\CircuitStateComplex.cs" />
     <Compile Include="Circuits\CircuitStateReal.cs" />
     <Compile Include="Components\CircuitModel.cs" />
+    <Compile Include="Components\Currentsources\CurrentControlledCurrentsource.cs" />
     <Compile Include="Components\Currentsources\Currentsource.cs" />
+    <Compile Include="Components\Currentsources\VoltageControlledCurrentsource.cs" />
     <Compile Include="Components\RLC\Inductor.cs" />
     <Compile Include="Components\RLC\MutualInductance.cs" />
     <Compile Include="Components\Semiconductors\Bipolar.cs" />
@@ -53,6 +55,8 @@
     <Compile Include="Components\Semiconductors\Diode.cs" />
     <Compile Include="Components\Semiconductors\DiodeModel.cs" />
     <Compile Include="Components\Semiconductors\Semiconductor.cs" />
+    <Compile Include="Components\Voltagesources\CurrentControlledVoltagesource.cs" />
+    <Compile Include="Components\Voltagesources\VoltageControlledVoltagesource.cs" />
     <Compile Include="Components\Waveforms\Pulse.cs" />
     <Compile Include="Components\Waveforms\Sine.cs" />
     <Compile Include="Diagnostics\BadParameterException.cs" />
