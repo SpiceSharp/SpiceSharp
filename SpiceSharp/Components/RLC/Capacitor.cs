@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpiceSharp.Circuits;
+﻿using System.Numerics;
 using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
@@ -147,6 +142,22 @@ namespace SpiceSharp.Components
                 rstate.Rhs[CAPposNode] -= result.Ceq;
                 rstate.Rhs[CAPnegNode] += result.Ceq;
             }
+        }
+
+        /// <summary>
+        /// Load the capacitance for AC analysis
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void AcLoad(Circuit ckt)
+        {
+            var cstate = ckt.State.Complex;
+            Complex val = cstate.Laplace * CAPcapac.Value;
+
+            // Load the matrix
+            cstate.Matrix[CAPposNode, CAPposNode] += val;
+            cstate.Matrix[CAPposNode, CAPnegNode] -= val;
+            cstate.Matrix[CAPnegNode, CAPposNode] -= val;
+            cstate.Matrix[CAPnegNode, CAPnegNode] += val;
         }
     }
 }

@@ -205,6 +205,9 @@ namespace SpiceSharp.Simulations
             foreach (var c in ckt.Components)
                 c.AcLoad(ckt);
 
+            Console.WriteLine("Matrix " + ckt.State.Complex.Matrix);
+            Console.WriteLine("Rhs " + ckt.State.Complex.Rhs);
+
             // Solve
             ckt.State.Complex.Solve();
         }

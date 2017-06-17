@@ -152,5 +152,16 @@ namespace SpiceSharp.Components
             rstate.Rhs[ISRCposNode] += value;
             rstate.Rhs[ISRCnegNode] -= value;
         }
+
+        /// <summary>
+        /// Load the current source in the circuit for AC analysis
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void AcLoad(Circuit ckt)
+        {
+            var cstate = ckt.State.Complex;
+            cstate.Rhs[ISRCposNode] += ISRCac;
+            cstate.Rhs[ISRCnegNode] -= ISRCac;
+        }
     }
 }

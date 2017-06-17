@@ -63,6 +63,23 @@ namespace SpiceSharp
         public Circuit() { }
 
         /// <summary>
+        /// Simulate the circuit
+        /// </summary>
+        /// <param name="sim">The simulation that needs to be executed</param>
+        public void Simulate(Simulation sim)
+        {
+            // Setup the circuit
+            Setup();
+
+            // Do temperature-dependent calculations
+            foreach (var c in Components)
+                c.Temperature(this);
+
+            // Execute the simulation
+            sim.Execute(this);
+        }
+
+        /// <summary>
         /// Setup the circuit
         /// </summary>
         public void Setup()

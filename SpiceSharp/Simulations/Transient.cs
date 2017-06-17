@@ -73,6 +73,22 @@ namespace SpiceSharp.Simulations
             /// Get the minimum timestep allowed
             /// </summary>
             public double DeltaMin { get { return 1e-9 * MaxStep; } }
+
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            public Configuration() { }
+
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="step">The time step</param>
+            /// <param name="final">The final time</param>
+            public Configuration(double step, double final)
+            {
+                Step = step;
+                FinalTime = final;
+            }
         }
 
         /// <summary>
@@ -87,6 +103,17 @@ namespace SpiceSharp.Simulations
         /// <param name="config">The configuration</param>
         public Transient(string name, Configuration config = null)
             : base(name, config ?? new Configuration())
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">The name of the simulation</param>
+        /// <param name="step">The timestep</param>
+        /// <param name="final">The final time</param>
+        public Transient(string name, double step, double final)
+            : base(name, new Configuration(step, final))
         {
         }
 

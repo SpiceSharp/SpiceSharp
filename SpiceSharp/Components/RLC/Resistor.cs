@@ -141,5 +141,18 @@ namespace SpiceSharp.Components
 
             RESconduct = 1.0 / (RESresist * factor);
         }
+
+        /// <summary>
+        /// Load the resistor for AC anlalysis
+        /// </summary>
+        /// <param name="ckt"></param>
+        public override void AcLoad(Circuit ckt)
+        {
+            var cstate = ckt.State.Complex;
+            cstate.Matrix[RESposNode, RESposNode] += RESconduct;
+            cstate.Matrix[RESposNode, RESnegNode] -= RESconduct;
+            cstate.Matrix[RESnegNode, RESposNode] -= RESconduct;
+            cstate.Matrix[RESnegNode, RESnegNode] += RESconduct;
+        }
     }
 }

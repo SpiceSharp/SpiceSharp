@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
@@ -363,6 +364,28 @@ namespace SpiceSharp.Components
             rstate.Matrix[DIOnegNode, DIOposPrimeNode] -= gd;
             rstate.Matrix[DIOposPrimeNode, DIOposNode] -= gspr;
             rstate.Matrix[DIOposPrimeNode, DIOnegNode] -= gd;
+        }
+
+        /// <summary>
+        /// Load the diode for AC analysis
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void AcLoad(Circuit ckt)
+        {
+            var state = ckt.State;
+            var cstate = state.Complex;
+
+            double gspr = Model.DIOconductance * DIOarea;
+            Complex geq = state.States[0][DIOstate + DIOconduct] + state.States[0][DIOstate + DIOcapCurrent] * cstate.Laplace;
+
+            // Load matrix
+            cstate.Matrix[DIOposNode, DIOposNode] += gspr;
+            cstate.Matrix[DIOnegNode, DIOnegNode] += geq;
+            cstate.Matrix[DIOposPrimeNode, DIOposPrimeNode] += geq + gspr;
+            cstate.Matrix[DIOposNode, DIOposPrimeNode] -= gspr;
+            cstate.Matrix[DIOnegNode, DIOposPrimeNode] -= geq;
+            cstate.Matrix[DIOposPrimeNode, DIOposNode] -= gspr;
+            cstate.Matrix[DIOposPrimeNode, DIOnegNode] -= geq;
         }
     }
 }

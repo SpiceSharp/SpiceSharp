@@ -19,28 +19,17 @@ namespace SpiceSharpTest
 
         static void Main(string[] args)
         {
+            // Build the circuit
             Circuit ckt = new Circuit();
-
             ckt.Components.Add(
-                new Voltagesource("V1", "in", "GND", new Sine(1.0, 0.2, 100)),
-                new Voltagesource("Vdd", "vdd", "GND", 3.3),
-                new Resistor("Rb", "in", "b", 1e3),
-                new Resistor("Re", "vdd", "out", 1e3));
-            var bip = new Bipolar("B1");
-            bip.Connect("out", "b", "GND", "GND");
-            bip.Model = new BipolarModel("BM1");
-            ckt.Components.Add(bip);
+                new Voltagesource("V1", "in", "GND", 0.0),
+                new Resistor("R", "in", "out", 1e3),
+                new Capacitor("C", "out", "GND", 1e-6 / 2.0 / Math.PI));
+            ckt.Components["V1"].Set("acmag", 1.0);
 
-            ckt.Setup();
-            foreach (var c in ckt.Components)
-                c.Temperature(ckt);
-
-            Transient.Configuration config = new Transient.Configuration();
-            config.FinalTime = 30e-3;
-            config.Step = 100e-6;
-            Transient sim = new Transient("TRAN1", config);
+            AC sim = new AC("ac1", AC.StepTypes.Decade, 1024, 1, 1e6);
             sim.ExportSimulationData += GetSimulation;
-            sim.Execute(ckt);
+            ckt.Simulate(sim);
 
             // Display all the values
             using (StreamWriter writer = new StreamWriter("output.csv"))
@@ -54,9 +43,9 @@ namespace SpiceSharpTest
 
         private static void GetSimulation(object sim, SimulationData data)
         {
-            time.Add(data.GetTime());
-            input.Add(data.GetVoltage("in"));
-            output.Add(data.GetVoltage("out"));
+            time.Add(Math.Log10(data.GetFrequency()));
+            input.Add(data.GetDb("in"));
+            output.Add(data.GetDb("out"));
         }
     }
 }

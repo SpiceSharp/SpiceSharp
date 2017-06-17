@@ -59,11 +59,28 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="name">The name of the circuit</param>
+        /// <param name="name">The name of the simulation</param>
         /// <param name="config">The configuration</param>
         public AC(string name, Configuration config = null) 
             : base(name, config ?? new Configuration())
         {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">The name of the simulation</param>
+        /// <param name="type">The step type</param>
+        /// <param name="num">The number of frequency points</param>
+        /// <param name="start">The first frequency point</param>
+        /// <param name="stop">The last frequency point</param>
+        public AC(string name, StepTypes type, int num, double start, double stop)
+            : base(name, new Configuration())
+        {
+            StartFreq = start;
+            StopFreq = stop;
+            NumberSteps = num;
+            StepType = type;
         }
 
         /// <summary>
@@ -76,23 +93,32 @@ namespace SpiceSharp.Simulations
             var cstate = state.Complex;
 
             double freq = 0.0, freqdelta = 0.0;
+            int n = 0;
 
             // Calculate the step
             switch (StepType)
             {
                 case StepTypes.Decade:
                     freqdelta = Math.Exp(Math.Log(10.0) / NumberSteps);
+                    n = (int)Math.Floor(Math.Log(StopFreq / StartFreq) / Math.Log(freqdelta));
                     break;
 
                 case StepTypes.Octave:
                     freqdelta = Math.Exp(Math.Log(2.0) / NumberSteps);
+                    n = (int)Math.Floor(Math.Log(StopFreq / StartFreq) / Math.Log(freqdelta));
                     break;
 
                 case StepTypes.Linear:
                     if (NumberSteps > 1)
+                    {
                         freqdelta = (StopFreq - StartFreq) / (NumberSteps - 1);
+                        n = NumberSteps;
+                    }
                     else
+                    {
                         freqdelta = double.PositiveInfinity;
+                        n = 1;
+                    }
                     break;
 
                 default:
@@ -121,7 +147,7 @@ namespace SpiceSharp.Simulations
             freq = StartFreq;
 
             // Sweep the frequency
-            for (int i = 0; i < NumberSteps; i++)
+            for (int i = 0; i < n; i++)
             {
                 // Calculate the current frequency
                 state.Complex.Laplace = new Complex(0.0, 2.0 * Circuit.CONSTPI * freq);

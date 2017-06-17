@@ -33,9 +33,9 @@ namespace SpiceSharp.Components
             }
         }
         [SpiceName("acreal"), SpiceInfo("A.C. real part")]
-        public double GetAcReal(Circuit ckt) => ac.Real;
+        public double GetAcReal(Circuit ckt) => VSRCac.Real;
         [SpiceName("acimag"), SpiceInfo("A.C. imaginary part")]
-        public double GetAcImag(Circuit ckt) => ac.Imaginary;
+        public double GetAcImag(Circuit ckt) => VSRCac.Imaginary;
         [SpiceName("i"), SpiceInfo("Voltage source current")]
         public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[VSRCbranch];
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
@@ -53,7 +53,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        private Complex ac;
+        private Complex VSRCac;
 
         /// <summary>
         /// Constructor
@@ -125,7 +125,7 @@ namespace SpiceSharp.Components
                     CircuitWarning.Warning(this, $"{Name}: No value, DC 0 assumed");
             }
             double radians = VSRCacPhase * Circuit.CONSTPI / 180.0;
-            ac = new Complex(VSRCacMag * Math.Cos(radians), VSRCacMag * Math.Sin(radians));
+            VSRCac = new Complex(VSRCacMag * Math.Cos(radians), VSRCacMag * Math.Sin(radians));
         }
 
         /// <summary>
@@ -160,6 +160,20 @@ namespace SpiceSharp.Components
                 value = VSRCdcValue * state.SrcFact;
             }
             rstate.Rhs[VSRCbranch] += value;
+        }
+
+        /// <summary>
+        /// Load the voltage source for AC analysis
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void AcLoad(Circuit ckt)
+        {
+            var cstate = ckt.State.Complex;
+            cstate.Matrix[VSRCposNode, VSRCbranch] += 1.0;
+            cstate.Matrix[VSRCnegNode, VSRCbranch] -= 1.0;
+            cstate.Matrix[VSRCbranch, VSRCnegNode] -= 1.0;
+            cstate.Matrix[VSRCbranch, VSRCposNode] += 1.0;
+            cstate.Rhs[VSRCbranch] += VSRCac;
         }
 
         /// <summary>

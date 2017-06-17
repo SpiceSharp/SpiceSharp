@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
+using System.Numerics;
 
 namespace SpiceSharp.Components
 {
@@ -140,6 +141,22 @@ namespace SpiceSharp.Components
             rstate.Matrix[INDnegNode, INDbrEq] -= 1;
             rstate.Matrix[INDbrEq, INDposNode] += 1;
             rstate.Matrix[INDbrEq, INDnegNode] -= 1;
+        }
+
+        /// <summary>
+        /// Load the inductor for AC analysis
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void AcLoad(Circuit ckt)
+        {
+            var cstate = ckt.State.Complex;
+            Complex val = cstate.Laplace * INDinduct.Value;
+
+            cstate.Matrix[INDposNode, INDbrEq] += 1.0;
+            cstate.Matrix[INDnegNode, INDbrEq] -= 1.0;
+            cstate.Matrix[INDbrEq, INDnegNode] -= 1.0;
+            cstate.Matrix[INDbrEq, INDposNode] += 1.0;
+            cstate.Matrix[INDbrEq, INDbrEq] -= val;
         }
     }
 }
