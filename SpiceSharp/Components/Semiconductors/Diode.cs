@@ -122,12 +122,7 @@ namespace SpiceSharp.Components
 
             // NOTE: This is an almost exact replication of the original Spice diode model code
 
-            double vte;
-            double cbv;
-            double xbv;
-            double xcbv = 0.0;
-            double tol;
-            double vt;
+            double vte, cbv, xbv, xcbv = 0.0, tol, vt;
             double egfet1, arg1, fact1, pbfact1, pbo, gmaold;
             double fact2, pbfact, arg, egfet, gmanew;
             int iter;
@@ -214,24 +209,8 @@ namespace SpiceSharp.Components
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)
         {
-            double arg;
-            double capd;
-            double cd;
-            double cdeq;
-            double cdhat;
-            double csat; // area-scaled saturation current
-            double czero;
-            double czof2;
-            double delvd; // change in diode voltage temporary
-            double evd;
-            double evrev;
-            double gd;
-            double gspr; // area-scaled conductance
-            double sarg;
-            double vd; // current diode voltage
-            double vdtemp;
-            double vt; // K t / Q
-            double vte;
+            double arg, capd, cd, cdeq, cdhat, csat, czero, czof2, delvd, evd, evrev, gd, gspr, sarg, 
+                vd, vdtemp, vt, vte;
             bool Check;
 
             var state = ckt.State;
@@ -244,9 +223,9 @@ namespace SpiceSharp.Components
 
             // initialization 
             Check = true;
-            if (state.UseIC && DIOinitCond.Given)
+            if (state.UseIC && DIOinitCond.Given) // Use initial conditions
                 vd = DIOinitCond;
-            else if (state.Domain == CircuitState.DomainTypes.Frequency)
+            else if (state.UseSmallSignal) // Calculate small-signal parameters
                 vd = state.States[0][DIOstate + DIOvoltage];
             else if (state.Init == CircuitState.InitFlags.InitJct && DIOoff)
                 vd = 0.0;
@@ -256,6 +235,7 @@ namespace SpiceSharp.Components
                 vd = 0.0;
             else
             {
+                // Default initialization: use the previous iteration
                 vd = rstate.OldSolution[DIOposPrimeNode] - rstate.OldSolution[DIOnegNode];
                 delvd = vd - state.States[0][DIOstate + DIOvoltage];
                 cdhat = state.States[0][DIOstate + DIOcurrent] + state.States[0][DIOstate + DIOconduct] * delvd;
@@ -264,16 +244,14 @@ namespace SpiceSharp.Components
                 if ((Model.DIObreakdownVoltage.Given) && (vd < Math.Min(0, -DIOtBrkdwnV + 10 * vte)))
                 {
                     vdtemp = -(vd + DIOtBrkdwnV);
-                    vdtemp = Semiconductor.pnjlim(vdtemp,
-                            -(state.States[0][DIOstate + DIOvoltage] +
-                            DIOtBrkdwnV), vte,
-                            DIOtVcrit, ref Check);
+                    vdtemp = Semiconductor.pnjlim(vdtemp, -(state.States[0][DIOstate + DIOvoltage] + DIOtBrkdwnV), 
+                        vte, DIOtVcrit, ref Check);
                     vd = -(vdtemp + DIOtBrkdwnV);
                 }
                 else
                 {
-                    vd = Semiconductor.pnjlim(vd, state.States[0][DIOstate + DIOvoltage],
-                            vte, DIOtVcrit, ref Check);
+                    vd = Semiconductor.pnjlim(vd, state.States[0][DIOstate + DIOvoltage], 
+                        vte, DIOtVcrit, ref Check);
                 }
             }
 
@@ -297,9 +275,11 @@ namespace SpiceSharp.Components
                 cd = -csat * evrev + state.Gmin * vd;
                 gd = csat * evrev / vte + state.Gmin;
             }
-            if (state.Domain == CircuitState.DomainTypes.Time || state.Domain == CircuitState.DomainTypes.Frequency)
+
+            // Calculate the charge of the junction capacitance if we're going to need it
+            if (state.Domain == CircuitState.DomainTypes.Time || state.UseSmallSignal)
             {
-                // charge storage elements
+                // Charge storage elements and junction capacitance
                 czero = DIOtJctCap * DIOarea;
                 if (vd < DIOtDepCap)
                 {
@@ -324,8 +304,8 @@ namespace SpiceSharp.Components
                 }
                 DIOcap = capd;
 
-                // store small-signal parameters
-                if (state.Domain == CircuitState.DomainTypes.Frequency)
+                // Store small-signal parameters
+                if (state.UseSmallSignal)
                 {
                     state.States[0][DIOstate + DIOcapCurrent] = capd;
                     return;

@@ -130,6 +130,7 @@ namespace SpiceSharp.Simulations
             // Initialize
             state.UseIC = MyConfig.UseIC;
             state.UseDC = true;
+            state.UseSmallSignal = false;
             state.Domain = CircuitState.DomainTypes.Time;
 
             // Initialize
