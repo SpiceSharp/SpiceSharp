@@ -53,7 +53,7 @@ namespace SpiceSharp.Simulations
             {
                 if (Circuit.Nodes.Contains(reference))
                 {
-                    int index = Circuit.Nodes[node].Index;
+                    int index = Circuit.Nodes[reference].Index;
                     result -= Circuit.State.Real.Solution[index];
                 }
                 else
@@ -101,7 +101,7 @@ namespace SpiceSharp.Simulations
             {
                 if (Circuit.Nodes.Contains(reference))
                 {
-                    int index = Circuit.Nodes[node].Index;
+                    int index = Circuit.Nodes[reference].Index;
                     result -= Circuit.State.Complex.Solution[index];
                 }
                 else

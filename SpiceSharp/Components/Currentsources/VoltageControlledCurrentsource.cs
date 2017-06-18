@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.Currentsources
+namespace SpiceSharp.Components
 {
     /// <summary>
     /// This class describes a voltage-controlled current source

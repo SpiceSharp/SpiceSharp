@@ -23,11 +23,17 @@ namespace SpiceSharpTest
             Circuit ckt = new Circuit();
             ckt.Components.Add(
                 new Voltagesource("V1", "in", "GND", 0.0),
-                new Resistor("R", "in", "out", 1e3),
-                new Capacitor("C", "out", "GND", 1e-6 / 2.0 / Math.PI));
-            ckt.Components["V1"].Set("acmag", 1.0);
+                new Resistor("R1", "in", "GND", 1e3),
+                new VoltageControlledVoltagesource("A1", "vcvs", "GND", "in", "GND", 0.75),
+                new CurrentControlledVoltagesource("B1", "ccvs", "vcvs", "V1", 0.25),
+                new VoltageControlledCurrentsource("C1", "vccs", "GND", "in", "GND", 0.2),
+                new Resistor("R2", "vccs", "GND", 1e3),
+                new CurrentControlledCurrentsource("D1", "cccs", "GND", "V1", 0.9),
+                new Resistor("R3", "cccs", "GND", 1e3));
 
-            AC sim = new AC("ac1", AC.StepTypes.Decade, 1024, 1, 1e6);
+            DC sim = new DC("DC1");
+            DC.Sweep sweep = new DC.Sweep("V1", 0.0, 1.0, 1e-3);
+            sim.Sweeps.Add(sweep);
             sim.ExportSimulationData += GetSimulation;
             ckt.Simulate(sim);
 
@@ -43,9 +49,9 @@ namespace SpiceSharpTest
 
         private static void GetSimulation(object sim, SimulationData data)
         {
-            time.Add(Math.Log10(data.GetFrequency()));
-            input.Add(data.GetDb("in"));
-            output.Add(data.GetDb("out"));
+            time.Add(data.GetVoltage("in"));
+            input.Add(data.GetVoltage("vccs"));
+            output.Add(data.GetVoltage("cccs"));
         }
     }
 }
