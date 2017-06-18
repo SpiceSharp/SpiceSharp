@@ -55,6 +55,8 @@
     <Compile Include="Components\Semiconductors\Diode.cs" />
     <Compile Include="Components\Semiconductors\DiodeModel.cs" />
     <Compile Include="Components\Semiconductors\Semiconductor.cs" />
+    <Compile Include="Components\Switches\CurrentSwitch.cs" />
+    <Compile Include="Components\Switches\CurrentSwitchModel.cs" />
     <Compile Include="Components\Voltagesources\CurrentControlledVoltagesource.cs" />
     <Compile Include="Components\Voltagesources\VoltageControlledVoltagesource.cs" />
     <Compile Include="Components\Waveforms\Pulse.cs" />

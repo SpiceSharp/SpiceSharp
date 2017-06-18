@@ -49,6 +49,11 @@ namespace SpiceSharp.Parameters
         public bool IsParameter { get; }
 
         /// <summary>
+        /// The number of parameters when the member is a method
+        /// </summary>
+        private int Parameters = 0;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="info">The member information</param>
@@ -110,19 +115,47 @@ namespace SpiceSharp.Parameters
 
                     MethodInfo mi = info as MethodInfo;
                     var parameters = mi.GetParameters();
+                    Parameters = parameters.Length;
 
-                    switch (parameters.Length)
+                    switch (Parameters)
                     {
+                        case 0:
+                            if (mi.ReturnType != typeof(void))
+                            {
+                                // val = Method()
+                                Access = AccessFlags.Ask;
+                                ValueType = mi.ReturnType;
+                            }
+                            else
+                            {
+                                // void Method()
+                                Access = AccessFlags.Set;
+                                ValueType = typeof(void);
+                            }
+                            break;
+
                         case 1:
-                            if (parameters[0].ParameterType != typeof(Circuit))
+                            if (parameters[0].ParameterType != typeof(Circuit) && mi.ReturnType == typeof(void))
+                            {
+                                // void Method(val)
+                                Access = AccessFlags.Set;
+                                ValueType = parameters[0].ParameterType;
+                            }
+                            else if (mi.ReturnType != typeof(void))
+                            {
+                                // val = Method(ckt)
+                                Access = AccessFlags.Ask;
+                                ValueType = mi.ReturnType;
+                            }
+                            else
                                 throw new CircuitException($"Invalid method {mi.Name} for class {info.Name}");
-                            Access = AccessFlags.Ask;
-                            ValueType = mi.ReturnType;
                             break;
 
                         case 2:
-                            if (parameters[0].ParameterType != typeof(Circuit))
+                            if (parameters[0].ParameterType != typeof(Circuit) || mi.ReturnType != typeof(void))
                                 throw new CircuitException($"Invalid method {mi.Name} for class {info.Name}");
+
+                            // void Method(ckt, val)
                             Access = AccessFlags.Set;
                             ValueType = parameters[1].ParameterType;
                             break;
@@ -141,11 +174,13 @@ namespace SpiceSharp.Parameters
         /// <param name="obj">The parameterized object</param>
         /// <param name="value">The parameter value</param>
         /// <param name="ckt">The circuit if applicable</param>
-        public void Set(Parameterized obj, object value, Circuit ckt = null)
+        public void Set(Parameterized obj, object value = null, Circuit ckt = null)
         {
             if (!Access.HasFlag(AccessFlags.Set))
                 throw new CircuitException($"Cannot set parameter");
-            if (!ValueType.IsAssignableFrom(value.GetType()))
+            if (ValueType == typeof(void) && value != null)
+                throw new ParameterTypeException(obj, typeof(void));
+            else if (value != null && !ValueType.IsAssignableFrom(value.GetType()))
                 throw new ParameterTypeException(obj, ValueType);
 
             switch (MemberType)
@@ -167,7 +202,13 @@ namespace SpiceSharp.Parameters
                     break;
 
                 case MemberTypes.Method:
-                    ((MethodInfo)Info).Invoke(this, new object[] { ckt, value });
+                    MethodInfo mi = Info as MethodInfo;
+                    switch (Parameters)
+                    {
+                        case 0: mi.Invoke(obj, null); break;
+                        case 1: mi.Invoke(obj, new object[] { value }); break;
+                        case 2: mi.Invoke(obj, new object[] { ckt, value }); break;
+                    }
                     break;
 
                 default:
@@ -203,7 +244,11 @@ namespace SpiceSharp.Parameters
                         return fi.GetValue(obj);
 
                 case MemberTypes.Method:
-                    return ((MethodInfo)Info).Invoke(obj, new object[] { ckt });
+                    MethodInfo mi = Info as MethodInfo;
+                    if (Parameters == 0)
+                        return mi.Invoke(obj, null);
+                    else
+                        return mi.Invoke(obj, new object[] { ckt });
 
                 default:
                     throw new CircuitException($"Invalid type for {Info.Name}");

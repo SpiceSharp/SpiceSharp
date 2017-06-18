@@ -21,19 +21,18 @@ namespace SpiceSharpTest
         {
             // Build the circuit
             Circuit ckt = new Circuit();
+            CurrentSwitchModel csm = new CurrentSwitchModel("M1");
+            csm.CSWhyst.Set(0.5e-3);
+            csm.CSWthresh.Set(0.0);
             ckt.Components.Add(
-                new Voltagesource("V1", "in", "GND", 0.0),
+                new Voltagesource("V1", "in", "GND", new Sine(0.0, 1.0, 100)),
                 new Resistor("R1", "in", "GND", 1e3),
-                new VoltageControlledVoltagesource("A1", "vcvs", "GND", "in", "GND", 0.75),
-                new CurrentControlledVoltagesource("B1", "ccvs", "vcvs", "V1", 0.25),
-                new VoltageControlledCurrentsource("C1", "vccs", "GND", "in", "GND", 0.2),
-                new Resistor("R2", "vccs", "GND", 1e3),
-                new CurrentControlledCurrentsource("D1", "cccs", "GND", "V1", 0.9),
-                new Resistor("R3", "cccs", "GND", 1e3));
+                new CurrentSwitch("CS1", "out", "GND", "V1") { Model = csm },
+                new Resistor("RL", "vdd", "out", 1e3),
+                new Voltagesource("VDD", "vdd", "GND", 3.3));
+            ckt.Components["CS1"].Set("off");
 
-            DC sim = new DC("DC1");
-            DC.Sweep sweep = new DC.Sweep("V1", 0.0, 1.0, 1e-3);
-            sim.Sweeps.Add(sweep);
+            var sim = new Transient("Tran1", 1e-3, 10e-3);
             sim.ExportSimulationData += GetSimulation;
             ckt.Simulate(sim);
 
@@ -49,9 +48,9 @@ namespace SpiceSharpTest
 
         private static void GetSimulation(object sim, SimulationData data)
         {
-            time.Add(data.GetVoltage("in"));
-            input.Add(data.GetVoltage("vccs"));
-            output.Add(data.GetVoltage("cccs"));
+            time.Add(data.GetTime());
+            input.Add(data.GetVoltage("in"));
+            output.Add(data.GetVoltage("out"));
         }
     }
 }

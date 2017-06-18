@@ -62,7 +62,7 @@ namespace SpiceSharp.Parameters
         /// <param name="id">The parameter identifier</param>
         /// <param name="value">The value</param>
         /// <param name="ckt">The circuit if applicable</param>
-        public virtual void Set(string name, object value, Circuit ckt = null)
+        public virtual void Set(string name, object value = null, Circuit ckt = null)
         {
             // Use reflection to find the member associated with the name
             if (!parameters.ContainsKey(name))
