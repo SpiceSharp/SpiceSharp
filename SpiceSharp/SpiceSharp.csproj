@@ -57,6 +57,8 @@
     <Compile Include="Components\Semiconductors\Semiconductor.cs" />
     <Compile Include="Components\Switches\CurrentSwitch.cs" />
     <Compile Include="Components\Switches\CurrentSwitchModel.cs" />
+    <Compile Include="Components\Switches\VoltageSwitch.cs" />
+    <Compile Include="Components\Switches\VoltageSwitchModel.cs" />
     <Compile Include="Components\Voltagesources\CurrentControlledVoltagesource.cs" />
     <Compile Include="Components\Voltagesources\VoltageControlledVoltagesource.cs" />
     <Compile Include="Components\Waveforms\Pulse.cs" />

@@ -45,11 +45,16 @@ namespace SpiceSharp.Components
                 CSWon.Value = 1.0;
                 CSWonConduct = 1.0;
             }
+            else
+                CSWonConduct = 1.0 / CSWon.Value;
+
             if (!CSWoff.Given)
             {
                 CSWoffConduct = ckt.State.Gmin;
                 CSWoff.Value = 1.0 / CSWoffConduct;
             }
+            else
+                CSWoffConduct = 1.0 / CSWoff.Value;
         }
     }
 }

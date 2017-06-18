@@ -21,13 +21,12 @@ namespace SpiceSharpTest
         {
             // Build the circuit
             Circuit ckt = new Circuit();
-            CurrentSwitchModel csm = new CurrentSwitchModel("M1");
-            csm.CSWhyst.Set(0.5e-3);
-            csm.CSWthresh.Set(0.0);
+            var vsm = new VoltageSwitchModel("M1");
+            vsm.VSWhyst.Set(0.5);
+            vsm.VSWthresh.Set(0.0);
             ckt.Components.Add(
                 new Voltagesource("V1", "in", "GND", new Sine(0.0, 1.0, 100)),
-                new Resistor("R1", "in", "GND", 1e3),
-                new CurrentSwitch("CS1", "out", "GND", "V1") { Model = csm },
+                new VoltageSwitch("CS1", "out", "GND", "in", "GND") { Model = vsm },
                 new Resistor("RL", "vdd", "out", 1e3),
                 new Voltagesource("VDD", "vdd", "GND", 3.3));
             ckt.Components["CS1"].Set("off");
