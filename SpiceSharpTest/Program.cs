@@ -25,14 +25,15 @@ namespace SpiceSharpTest
             vsm.VSWhyst.Set(0.5);
             vsm.VSWthresh.Set(0.0);
             ckt.Components.Add(
-                new Voltagesource("V1", "in", "GND", new Sine(0.0, 1.0, 100)),
-                new VoltageSwitch("CS1", "out", "GND", "in", "GND") { Model = vsm },
-                new Resistor("RL", "vdd", "out", 1e3),
-                new Voltagesource("VDD", "vdd", "GND", 3.3));
-            ckt.Components["CS1"].Set("off");
+                new Voltagesource("V1", "in", "GND", new Pulse(0.0, 3.3, 1e-3, 1e-6, 1e-6, 10e-3, 30e-3)),
+                new Resistor("R1", "in", "out", 1e3),
+                new Capacitor("C1", "out", "GND", 1e-6));
+                
+            // ckt.Components["CS1"].Set("off");
 
-            var sim = new Transient("Tran1", 1e-3, 10e-3);
+            var sim = new Transient("Tran1", 0.01e-3, 30e-3);
             sim.ExportSimulationData += GetSimulation;
+            sim.TimestepCut += Sim_TimestepCut;
             ckt.Simulate(sim);
 
             // Display all the values
@@ -45,11 +46,19 @@ namespace SpiceSharpTest
             Console.ReadKey();
         }
 
+        private static void Sim_TimestepCut(object sender, TimestepCutData data)
+        {
+            // Console.WriteLine($"Rejected at time {data.Circuit.Method.Time - data.Circuit.Method.Delta}");
+            // Console.WriteLine($"Cutting timestep from {data.Circuit.Method.Delta} to {data.NewDelta}. Reason: {data.Reason}");
+            // Console.WriteLine($"We predicted {data.Circuit.Method.Prediction} but got {data.Circuit.State.Real.Solution}");
+        }
+
         private static void GetSimulation(object sim, SimulationData data)
         {
             time.Add(data.GetTime());
             input.Add(data.GetVoltage("in"));
             output.Add(data.GetVoltage("out"));
+            Console.WriteLine(data.GetTime());
         }
     }
 }

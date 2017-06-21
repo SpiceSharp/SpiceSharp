@@ -17,12 +17,12 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Private variables
         /// </summary>
-        private double h = 0.0;
+        private double[] ag = new double[2];
 
         /// <summary>
         /// Get the maximum order for the trapezoidal rule
         /// </summary>
-        public override int MaxOrder => 2;
+        public override int MaxOrder => 1;
 
         /// <summary>
         /// Constructor
@@ -44,11 +44,11 @@ namespace SpiceSharp.IntegrationMethods
             switch (Order)
             {
                 case 1:
-                    state.States[0][index + 1] = h * (state.States[0][index] - state.States[1][index]);
+                    state.States[0][index + 1] = ag[0] * state.States[0][index] + ag[1] * state.States[1][index];
                     break;
 
                 case 2:
-                    state.States[0][index + 1] = h * (state.States[0][index] - state.States[1][index]) - state.States[1][index + 1];
+                    state.States[0][index + 1] = -state.States[1][index + 1] * ag[1] + ag[0] * (state.States[0][index] - state.States[1][index]);
                     break;
 
                 default:
@@ -57,8 +57,8 @@ namespace SpiceSharp.IntegrationMethods
 
             // Create the returned object
             Result result = new Result();
-            result.Ceq = state.States[0][index + 1] - h * state.States[0][index];
-            result.Geq = h * cap;
+            result.Ceq = state.States[0][index + 1] - ag[0] * state.States[0][index];
+            result.Geq = ag[0] * cap;
             return result;
         }
 
@@ -79,18 +79,16 @@ namespace SpiceSharp.IntegrationMethods
                 case 1:
                     dd0 = (Solutions[0] - Solutions[1]) / DeltaOld[1];
                     Prediction = Solutions[0] + DeltaOld[0] * dd0;
-                    Prediction.CopyTo(state.Solution);
+                    Prediction.CopyTo(state.OldSolution);
                     break;
 
                 case 2:
-                    // b = -DeltaOld[0] / (2.0 * DeltaOld[1]);
-                    b = (DeltaOld[0] + DeltaOld[1]) / (DeltaOld[1] + DeltaOld[2]);
-                    // a = 1 - b;
-                    a = 1 + b;
+                    b = -DeltaOld[0] / (2.0 * DeltaOld[1]);
+                    a = 1 - b;
                     dd0 = (Solutions[0] - Solutions[1]) / DeltaOld[1];
                     dd1 = (Solutions[1] - Solutions[2]) / DeltaOld[2];
-                    Prediction = Solutions[0] + (a * dd0 - b * dd1) * DeltaOld[0];
-                    Prediction.CopyTo(state.Solution);
+                    Prediction = Solutions[0] + (b * dd1 + a * dd0) * DeltaOld[0];
+                    Prediction.CopyTo(state.OldSolution);
                     break;
 
                 default:
@@ -114,6 +112,7 @@ namespace SpiceSharp.IntegrationMethods
             int rows = ckt.Nodes.Count;
             int index = 0;
 
+            // In my opinion, the original Spice method is kind of bugged and can be much better...
             switch (Order)
             {
                 case 1:
@@ -124,11 +123,12 @@ namespace SpiceSharp.IntegrationMethods
                         tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
                         if (node.Type != CircuitNode.NodeType.Voltage)
                             continue;
+
                         diff = state.Solution[index] - Prediction[index];
-                        if (diff != 0)
+                        if (diff != 0.0)
                         {
-                            tmp = 2.0 * Config.TrTol * tol / diff * DeltaOld[0] * (DeltaOld[0] + DeltaOld[1]);
-                            tmp = Math.Sqrt(Math.Abs(tmp));
+                            tmp = Config.TrTol * tol * 2.0 / diff;
+                            tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(tmp));
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
@@ -144,8 +144,8 @@ namespace SpiceSharp.IntegrationMethods
                         diff = state.Solution[index] - Prediction[index];
                         if (diff != 0)
                         {
-                            tmp = 12.0 * Config.TrTol * tol / diff * DeltaOld[0] * (DeltaOld[0] + DeltaOld[1]) * (DeltaOld[0] + DeltaOld[1] + DeltaOld[2]);
-                            tmp = Math.Pow(Math.Abs(tmp), 1.0 / 3.0);
+                            tmp = DeltaOld[0] * Config.TrTol * tol * 3 * (DeltaOld[0] + DeltaOld[1]) / diff;
+                            tmp = Math.Abs(tmp);
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
@@ -164,19 +164,25 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="ckt">The circuit</param>
         public override void ComputeCoefficients(Circuit ckt)
         {
+            // Integration constants
             switch (Order)
             {
                 case 1:
-                    h = 1.0 / Delta;
+                    ag[0] = 1.0 / Delta;
+                    ag[1] = -1.0 / Delta;
                     break;
 
                 case 2:
-                    h = 2.0 / Delta;
+                    ag[0] = 1.0 / Delta / (1.0 - 0.5);
+                    ag[1] = 0.5 / (1.0 - 0.5);
                     break;
+
+                default:
+                    throw new CircuitException($"Invalid order {Order}");
             }
 
             // Store the derivation
-            Slope = h;
+            Slope = ag[0];
         }
     }
 }

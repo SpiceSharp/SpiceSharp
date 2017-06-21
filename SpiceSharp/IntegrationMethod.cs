@@ -126,7 +126,7 @@ namespace SpiceSharp
             else
                 Config = config;
 
-            DeltaOld = new double[MaxOrder + 1];
+            DeltaOld = new double[MaxOrder + 2];
             Solutions = new Vector<double>[MaxOrder + 1];
         }
 
@@ -146,11 +146,13 @@ namespace SpiceSharp
             }
             else
             {
+                // Cycle through solutions
+                var tmp = Solutions[Solutions.Length - 1];
                 for (int i = Solutions.Length - 2; i >= 0; i--)
                     Solutions[i + 1] = Solutions[i];
+                Solutions[0] = tmp;
                 solution.CopyTo(Solutions[0]);
             }
-            
         }
 
         /// <summary>
@@ -163,7 +165,7 @@ namespace SpiceSharp
             Prediction = null;
             Order = 1;
             Delta = double.NaN;
-            DeltaOld = new double[MaxOrder + 1];
+            DeltaOld = new double[MaxOrder + 2];
             Solutions = new Vector<double>[MaxOrder + 1];
             Break = true;
 
@@ -223,6 +225,8 @@ namespace SpiceSharp
         {
             if (delta > Delta)
                 throw new CircuitException("The timestep can only shrink when retrying a timestep");
+            if (delta < DeltaMin)
+                delta = DeltaMin;
 
             Delta = delta;
             DeltaOld[0] = delta;

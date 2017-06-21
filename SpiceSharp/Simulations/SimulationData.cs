@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Numerics;
 using SpiceSharp.Diagnostics;
 
@@ -138,7 +134,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Delegate for exporting simulation data
     /// </summary>
-    /// <param name="sender">The sender of the simulation</param>
+    /// <param name="sender">The simulation sending the event</param>
     /// <param name="data">The simulation data</param>
     public delegate void ExportSimulationDataEventHandler(object sender, SimulationData data);
 }

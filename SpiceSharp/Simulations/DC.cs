@@ -27,6 +27,18 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// A delegate for
+        /// </summary>
+        /// <param name="sender">The object sending the event</param>
+        /// <param name="ckt">The circuit</param>
+        public delegate void IterationFailedEventHandler(object sender, Circuit ckt);
+
+        /// <summary>
+        /// Event that is called when normal iteration failed
+        /// </summary>
+        public event IterationFailedEventHandler IterationFailed;
+
+        /// <summary>
         /// Easy access to the configuration
         /// </summary>
         protected Configuration MyConfig { get { return (Configuration)Config; } }
@@ -153,7 +165,10 @@ namespace SpiceSharp.Simulations
 
                 // Calculate the solution
                 if (!this.Iterate(ckt, MyConfig.MaxIterations))
+                {
+                    IterationFailed?.Invoke(this, ckt);
                     this.Op(ckt, MyConfig.MaxIterations);
+                }
 
                 // Export data
                 Export(ckt);

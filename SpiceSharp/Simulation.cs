@@ -26,7 +26,7 @@ namespace SpiceSharp
         public string Name { get; }
 
         /// <summary>
-        /// Allow registering for exporting data
+        /// Event that is called when new simulation data is available
         /// </summary>
         public event ExportSimulationDataEventHandler ExportSimulationData;
 

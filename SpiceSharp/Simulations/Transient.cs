@@ -97,6 +97,19 @@ namespace SpiceSharp.Simulations
         protected Configuration MyConfig { get { return (Configuration)Config;  } }
 
         /// <summary>
+        /// An event handler for when the timestep has been cut
+        /// </summary>
+        /// <param name="sender">The simulation that sends the event</param>
+        /// <param name="ckt">The circuit</param>
+        /// <param name="newstep">The timestep that will be tried next</param>
+        public delegate void TimestepCutEventHandler(object sender, TimestepCutData data);
+
+        /// <summary>
+        /// Event that is called when the timestep has been cut due to convergence problems
+        /// </summary>
+        public event TimestepCutEventHandler TimestepCut;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
@@ -120,7 +133,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Execute the transient simulation
         /// </summary>
-        /// <param name="ckt"></param>
+        /// <param name="ckt">The circuit</param>
         public override void Execute(Circuit ckt)
         {
             var state = ckt.State;
@@ -211,6 +224,8 @@ namespace SpiceSharp.Simulations
                         {
                             // Failed to converge, let's try again with a smaller timestep
                             ckt.Statistics.Rejected++;
+                            var data = new TimestepCutData(ckt, method.Delta / 8.0, TimestepCutData.TimestepCutReason.Convergence);
+                            TimestepCut?.Invoke(this, data);
                             method.Retry(method.Delta / 8.0);
                         }
                         else
@@ -224,6 +239,8 @@ namespace SpiceSharp.Simulations
                             {
                                 // Reject the timepoint if the calculated timestep shrinks too fast
                                 ckt.Statistics.Rejected++;
+                                var data = new TimestepCutData(ckt, delta, TimestepCutData.TimestepCutReason.Truncation);
+                                TimestepCut?.Invoke(this, data);
                                 method.Retry(delta);
                             }
                             else
@@ -234,7 +251,7 @@ namespace SpiceSharp.Simulations
                         }
 
                         // Stop simulation if timesteps are consistently too small
-                        if (delta <= MyConfig.DeltaMin)
+                        if (method.Delta <= MyConfig.DeltaMin)
                         {
                             if (olddelta <= MyConfig.DeltaMin)
                             {
@@ -252,6 +269,48 @@ namespace SpiceSharp.Simulations
                 ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
                 throw;
             }
+        }
+    }
+
+    /// <summary>
+    /// This class contains all data when a timestep cut event is triggered
+    /// </summary>
+    public class TimestepCutData
+    {
+        /// <summary>
+        /// Enumerations
+        /// </summary>
+        public enum TimestepCutReason
+        {
+            Convergence, // Cut due to convergence
+            Truncation // Cut due to the local truncation error
+        }
+
+        /// <summary>
+        /// Get the circuit
+        /// </summary>
+        public Circuit Circuit { get; }
+
+        /// <summary>
+        /// The new timestep that will be tried
+        /// </summary>
+        public double NewDelta { get; }
+
+        /// <summary>
+        /// Gets the reason for cutting the timestep
+        /// </summary>
+        public TimestepCutReason Reason { get; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="ckt"></param>
+        /// <param name="newdelta"></param>
+        public TimestepCutData(Circuit ckt, double newdelta, TimestepCutReason reason)
+        {
+            Circuit = ckt;
+            NewDelta = newdelta;
+            Reason = reason;
         }
     }
 }
