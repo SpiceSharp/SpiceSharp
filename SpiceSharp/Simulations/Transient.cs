@@ -72,7 +72,7 @@ namespace SpiceSharp.Simulations
             /// <summary>
             /// Get the minimum timestep allowed
             /// </summary>
-            public double DeltaMin { get { return 1e-9 * MaxStep; } }
+            public double DeltaMin { get { return 1e-13 * MaxStep; } }
 
             /// <summary>
             /// Constructor
@@ -132,6 +132,7 @@ namespace SpiceSharp.Simulations
 
         /// <summary>
         /// Execute the transient simulation
+        /// The timesteps are always too small... I can't find what it is, must have checked almost 10 times now.
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public override void Execute(Circuit ckt)
@@ -146,15 +147,17 @@ namespace SpiceSharp.Simulations
             state.UseSmallSignal = false;
             state.Domain = CircuitState.DomainTypes.Time;
 
-            // Initialize
-            method.Initialize(MyConfig.FinalTime / 50.0);
+            // Setup breakpoints
             method.Breaks.SetBreakpoint(MyConfig.InitTime);
             method.Breaks.SetBreakpoint(MyConfig.FinalTime);
             if (method.Breaks.MinBreak == 0.0)
                 method.Breaks.MinBreak = 5e-5 * MyConfig.MaxStep;
-            ckt.Method = MyConfig.Method;
-            for (int i = 0; i < method.DeltaOld.Length; i++)
-                method.DeltaOld[i] = MyConfig.MaxStep;
+
+            // Initialize the method
+            ckt.Method = method;
+            method.Initialize();
+            method.DeltaMin = MyConfig.DeltaMin;
+            method.FillOldDeltas(MyConfig.MaxStep);
 
             // Calculate the operating point
             this.Op(ckt, MyConfig.DcMaxIterations);
@@ -170,8 +173,7 @@ namespace SpiceSharp.Simulations
             ckt.Statistics.TransientTime.Start();
             int startIters = ckt.Statistics.NumIter;
             var startselapsed = ckt.Statistics.SolveTime.Elapsed;
-            
-            double delta = Math.Min(MyConfig.FinalTime / 50.0, MyConfig.Step) / 10.0;
+
             try
             {
                 while (true)
@@ -195,18 +197,24 @@ namespace SpiceSharp.Simulations
                         ckt.Statistics.TransientTime.Stop();
                         ckt.Statistics.TranIter += ckt.Statistics.NumIter - startIters;
                         ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
+
+                        // Finished!
                         break;
                     }
 
                     // Advance time
-                    delta = Math.Min(delta, MyConfig.MaxStep);
-                    method.Advance(delta);
+                    double delta = method.Time > 0.0 ? method.Delta : Math.Min(MyConfig.FinalTime / 50, MyConfig.Step) / 10.0;
+                    method.Advance(Math.Min(delta, MyConfig.MaxStep));
                     state.ShiftStates();
 
                     // Calculate a new solution
                     while (true)
                     {
                         double olddelta = method.Delta;
+
+                        // Check validity of the delta
+                        if (double.IsNaN(olddelta))
+                            throw new CircuitException("Invalid timestep");
 
                         // Compute coefficients and predict a solution
                         method.ComputeCoefficients(ckt);
@@ -235,19 +243,15 @@ namespace SpiceSharp.Simulations
                             // has always been at that voltage.
 
                             // Calculate a new value based on the local truncation error
-                            if (!method.NewDelta(ckt, out delta))
+                            if (!method.NewDelta(ckt))
                             {
                                 // Reject the timepoint if the calculated timestep shrinks too fast
                                 ckt.Statistics.Rejected++;
-                                var data = new TimestepCutData(ckt, delta, TimestepCutData.TimestepCutReason.Truncation);
+                                var data = new TimestepCutData(ckt, method.Delta, TimestepCutData.TimestepCutReason.Truncation);
                                 TimestepCut?.Invoke(this, data);
-                                method.Retry(delta);
                             }
                             else
-                            {
-                                // Everything went fine, we have a solution!
                                 break;
-                            }
                         }
 
                         // Stop simulation if timesteps are consistently too small

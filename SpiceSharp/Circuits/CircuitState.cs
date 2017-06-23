@@ -192,10 +192,11 @@ namespace SpiceSharp.Circuits
         public void ShiftStates()
         {
             // Reuse the last state vector to save memory and speed (garbage collection)
-            Vector<double> tmp = States[States.Length - 1];
-            for (int i = States.Length - 2; i >= 0; i--)
-                States[i + 1] = States[i];
-            States[0] = tmp;
+            var tmp = States[States.Length - 1];
+            for (int i = States.Length - 1; i > 0; i--)
+                States[i] = States[i - 1];
+            // States[0] = tmp;
+            States[0] = new DenseVector(States[1].Count);
         }
         #endregion
     }

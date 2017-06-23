@@ -22,7 +22,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Get the maximum order for the trapezoidal rule
         /// </summary>
-        public override int MaxOrder => 1;
+        public override int MaxOrder => 2;
 
         /// <summary>
         /// Constructor
@@ -33,22 +33,36 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
+        /// Initialize
+        /// </summary>
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            ag = new double[MaxOrder];
+            for (int i = 0; i < MaxOrder; i++)
+                ag[i] = 0.0;
+        }
+
+        /// <summary>
         /// Integrate a state variable
         /// </summary>
         /// <param name="ckt">The circuit</param>
         /// <param name="index">The state index to integrate</param>
         /// <param name="cap">The capacitance</param>
         /// <returns></returns>
-        public override Result Integrate(CircuitState state, int index, double cap)
+        public override Result Integrate(CircuitState state, int qcap, double cap)
         {
+            int ccap = qcap + 1;
+
             switch (Order)
             {
                 case 1:
-                    state.States[0][index + 1] = ag[0] * state.States[0][index] + ag[1] * state.States[1][index];
+                    state.States[0][ccap] = ag[0] * state.States[0][qcap] + ag[1] * state.States[1][qcap];
                     break;
 
                 case 2:
-                    state.States[0][index + 1] = -state.States[1][index + 1] * ag[1] + ag[0] * (state.States[0][index] - state.States[1][index]);
+                    state.States[0][ccap] = -state.States[1][ccap] * ag[1] + ag[0] * (state.States[0][qcap] - state.States[1][qcap]);
                     break;
 
                 default:
@@ -57,7 +71,7 @@ namespace SpiceSharp.IntegrationMethods
 
             // Create the returned object
             Result result = new Result();
-            result.Ceq = state.States[0][index + 1] - ag[0] * state.States[0][index];
+            result.Ceq = state.States[0][ccap] - ag[0] * state.States[0][qcap];
             result.Geq = ag[0] * cap;
             return result;
         }
@@ -77,12 +91,14 @@ namespace SpiceSharp.IntegrationMethods
             switch (Order)
             {
                 case 1:
+                    // Divided difference approach
                     dd0 = (Solutions[0] - Solutions[1]) / DeltaOld[1];
                     Prediction = Solutions[0] + DeltaOld[0] * dd0;
                     Prediction.CopyTo(state.OldSolution);
                     break;
 
                 case 2:
+                    // Adams-Bashforth method (second order for variable timesteps)
                     b = -DeltaOld[0] / (2.0 * DeltaOld[1]);
                     a = 1 - b;
                     dd0 = (Solutions[0] - Solutions[1]) / DeltaOld[1];
@@ -124,15 +140,17 @@ namespace SpiceSharp.IntegrationMethods
                         if (node.Type != CircuitNode.NodeType.Voltage)
                             continue;
 
+                        // Milne's estimate for the second-order derivative using a Forward Euler predictor and Backward Euler corrector
                         diff = state.Solution[index] - Prediction[index];
+
                         if (diff != 0.0)
                         {
-                            tmp = Config.TrTol * tol * 2.0 / diff;
-                            tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(tmp));
+                            tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(2.0 * Config.TrTol * tol / diff));
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
                     break;
+
                 case 2:
                     for (int i = 0; i < ckt.Nodes.Count; i++)
                     {
@@ -141,11 +159,15 @@ namespace SpiceSharp.IntegrationMethods
                         tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
                         if (node.Type != CircuitNode.NodeType.Voltage)
                             continue;
+
+                        // Milne's estimate for the third-order derivative using an Adams-Bashforth predictor and Trapezoidal corrector
                         diff = state.Solution[index] - Prediction[index];
-                        if (diff != 0)
+                        double deriv = DeltaOld[1] / DeltaOld[0];
+                        deriv = diff * 4.0 / (1 + deriv * deriv);
+
+                        if (deriv != 0.0)
                         {
-                            tmp = DeltaOld[0] * Config.TrTol * tol * 3 * (DeltaOld[0] + DeltaOld[1]) / diff;
-                            tmp = Math.Abs(tmp);
+                            tmp = DeltaOld[0] * Math.Pow(Math.Abs(12.0 * Config.TrTol * tol / deriv), 1.0 / 3.0);
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
@@ -181,7 +203,7 @@ namespace SpiceSharp.IntegrationMethods
                     throw new CircuitException($"Invalid order {Order}");
             }
 
-            // Store the derivation
+            // Store the derivative w.r.t. the current timestep
             Slope = ag[0];
         }
     }

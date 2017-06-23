@@ -32,6 +32,7 @@ namespace SpiceSharpTest
             // ckt.Components["CS1"].Set("off");
 
             var sim = new Transient("Tran1", 0.01e-3, 30e-3);
+            // ((Transient.Configuration)sim.Config).MaxStep = 10e-3;
             sim.ExportSimulationData += GetSimulation;
             sim.TimestepCut += Sim_TimestepCut;
             ckt.Simulate(sim);
@@ -58,7 +59,7 @@ namespace SpiceSharpTest
             time.Add(data.GetTime());
             input.Add(data.GetVoltage("in"));
             output.Add(data.GetVoltage("out"));
-            Console.WriteLine(data.GetTime());
+            // Console.WriteLine(data.GetTime());
         }
     }
 }

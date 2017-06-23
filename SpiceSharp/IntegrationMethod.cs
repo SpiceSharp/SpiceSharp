@@ -113,7 +113,7 @@ namespace SpiceSharp
         /// <summary>
         /// Private variables
         /// </summary>
-        private double savetime = 0.0, savedelta = 0.0;
+        private double savetime = 0.0, savedelta = double.NaN;
 
         /// <summary>
         /// Constructor
@@ -138,6 +138,7 @@ namespace SpiceSharp
         {
             if (Solutions[0] == null)
             {
+                // No solutions yet, so allocate vectors
                 for (int i = 0; i < Solutions.Length; i++)
                 {
                     Solutions[i] = new DenseVector(solution.Count);
@@ -148,40 +149,50 @@ namespace SpiceSharp
             {
                 // Cycle through solutions
                 var tmp = Solutions[Solutions.Length - 1];
-                for (int i = Solutions.Length - 2; i >= 0; i--)
-                    Solutions[i + 1] = Solutions[i];
+                for (int i = Solutions.Length - 1; i > 0; i--)
+                    Solutions[i] = Solutions[i - 1];
                 Solutions[0] = tmp;
                 solution.CopyTo(Solutions[0]);
             }
         }
 
         /// <summary>
-        /// Reset the integration method
+        /// Initialize/reset the integration method
         /// </summary>
-        public virtual void Initialize(double savedelta)
+        public virtual void Initialize()
         {
+            // Initialize variables
             Time = 0.0;
             Breaks.Clear();
-            Prediction = null;
             Order = 1;
             Delta = double.NaN;
-            DeltaOld = new double[MaxOrder + 2];
+            Prediction = null;
+            DeltaOld = new double[MaxOrder + 1];
             Solutions = new Vector<double>[MaxOrder + 1];
+            savedelta = double.NaN;
+
+            // Last point was START so the current point is the point after a breakpoint (start)
             Break = true;
 
+            // Initialize the old timesteps - none
             for (int i = 0; i < DeltaOld.Length; i++)
                 DeltaOld[i] = double.NaN;
-            this.savedelta = savedelta;
         }
 
         /// <summary>
-        /// Advance the time with the specified timestep
-        /// Breakpoints will cut the timestep.
+        /// Advance the time with the specified timestep for the first time
+        /// The actual timestep may be smaller due to breakpoints
         /// </summary>
         /// <param name="delta">The timestep</param>
         public void Advance(double delta)
         {
+            // Init
             Break = false;
+            savetime = Time;
+
+            // First time advancing? Save it!
+            if (double.IsNaN(savedelta))
+                savedelta = delta;
 
             // Are we at a breakpoint, or indistinguishably close?
             if ((Time == Breaks.First) || (Breaks.First - Time) <= DeltaMin)
@@ -189,21 +200,32 @@ namespace SpiceSharp
                 // First timepoint after a breakpoint: cut integration order
                 Order = 1;
 
-                // Limit the next timestep
+                // Limit the next timestep if there is a breakpoint
                 double mt = Math.Min(savedelta, Breaks.Delta);
                 delta = Math.Min(delta, 0.1 * mt);
 
-                // Spice will divide the delta by 10 in the first step, we don't
+                // Spice will divide the delta by 10 in the first step
+                if (Time == 0.0)
+                    delta /= 10.0;
 
                 // But we don't want to go below delmin for no reason
                 delta = Math.Max(delta, DeltaMin * 2.0);
+
+                Time += delta;
             }
             else if (Time + delta >= Breaks.First)
             {
                 // Breakpoint reached
                 savedelta = delta;
                 delta = Breaks.First - Time;
+
+                // We reached a breakpoint!
                 Break = true;
+                Time = Breaks.First;
+            }
+            else
+            {
+                Time += delta;
             }
 
             // Update with the current delta
@@ -211,60 +233,73 @@ namespace SpiceSharp
             for (int i = DeltaOld.Length - 2; i >= 0; i--)
                 DeltaOld[i + 1] = DeltaOld[i];
             DeltaOld[0] = Delta;
-            savetime = Time;
-
-            // Advance time with the new delta
-            Time += Delta;
         }
 
         /// <summary>
-        /// Roll back and try advancing again with a smaller delta
+        /// Retry a new timestep after the current one failed
+        /// Will cut the order and cut the timestep
         /// </summary>
         /// <param name="delta">The new timestep</param>
         public void Retry(double delta)
         {
             if (delta > Delta)
-                throw new CircuitException("The timestep can only shrink when retrying a timestep");
+                throw new CircuitException("The timestep can only shrink when retrying a new timestep");
             if (delta < DeltaMin)
                 delta = DeltaMin;
 
+            // Update all the variables
             Delta = delta;
             DeltaOld[0] = delta;
             Time = savetime + delta;
+
+            // Cut the integration order
             Order = 1;
         }
 
         /// <summary>
-        /// Calculate a new timestep
+        /// Calculate a new step
+        /// The result is stored in Delta
+        /// Note: This method does not advance time!
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        /// <returns>The calculated new timestep</returns>
-        public bool NewDelta(Circuit ckt, out double newdelta)
+        /// <returns>True if the timestep isn't cut</returns>
+        public bool NewDelta(Circuit ckt)
         {
             // Find the truncated value
-            newdelta = Truncate(ckt);
+            double olddelta = Delta;
+            double newdelta = Truncate(ckt);
+            bool result = true;
 
             // We can go up an order if the timestep did not shrink too much
             if (newdelta > 0.9 * Delta)
             {
-                if (Order < MaxOrder)
+                if (Order == 1)
                 {
                     // Increase the order and guess a new timepoint
-                    Order++;
+                    Delta = olddelta;
+                    Order = 2;
                     newdelta = Truncate(ckt);
 
                     // Not worth the computational effort
                     if (newdelta <= 1.05 * Delta)
-                        Order--;
+                        Order = 1;
                 }
+                newdelta = Math.Max(newdelta, DeltaMin);
+                result = true;
             }
             else
             {
-                // Cut the order and try again, there might be something happening
-                Order = 1;
-                return false;
+
+                // Rewind the time
+                newdelta = Math.Max(newdelta, DeltaMin);
+                Time = savetime + newdelta;
+                result = false;
             }
-            return true;
+
+            // Return the result
+            Delta = newdelta;
+            DeltaOld[0] = newdelta;
+            return result;
         }
 
         /// <summary>
@@ -274,6 +309,16 @@ namespace SpiceSharp
         {
             while (Time > Breaks.First)
                 Breaks.ClearBreakpoint();
+        }
+
+        /// <summary>
+        /// Reset all old timesteps to a fixed value
+        /// </summary>
+        /// <param name="delta">The timestep</param>
+        public void FillOldDeltas(double delta)
+        {
+            for (int i = 0; i < DeltaOld.Length; i++)
+                DeltaOld[i] = delta;
         }
 
         /// <summary>
