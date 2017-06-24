@@ -226,7 +226,7 @@ namespace SpiceSharp.Simulations
 
                         // Spice copies the states the first time, we're not
                         // I believe this is because Spice treats the first timepoint after the OP as special (MODEINITTRAN)
-                        // We don't treat it special (we just assume it started from rest)
+                        // We don't treat it special (we just assume it started from a circuit in rest)
 
                         if (!converged)
                         {
@@ -238,7 +238,7 @@ namespace SpiceSharp.Simulations
                         }
                         else
                         {
-                            // Spice does not check the first timepoint (it deliberately makes it small)
+                            // Spice does not truncate the first timepoint (it deliberately makes it small)
                             // We just check the first timepoint just like any other, and assume the circuit
                             // has always been at that voltage.
 
@@ -286,7 +286,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public enum TimestepCutReason
         {
-            Convergence, // Cut due to convergence
+            Convergence, // Cut due to convergence problems
             Truncation // Cut due to the local truncation error
         }
 

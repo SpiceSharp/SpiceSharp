@@ -56,10 +56,13 @@ namespace SpiceSharpTest
 
         private static void GetSimulation(object sim, SimulationData data)
         {
-            time.Add(data.GetTime());
-            input.Add(data.GetVoltage("in"));
+            double t = data.GetTime();
+            time.Add(t);
+            if (t < 1e-3)
+                input.Add(0.0);
+            else
+                input.Add(3.3 * (1 - Math.Exp(-(t - 1e-3) / 1e-3)));
             output.Add(data.GetVoltage("out"));
-            // Console.WriteLine(data.GetTime());
         }
     }
 }

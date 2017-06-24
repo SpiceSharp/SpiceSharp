@@ -135,16 +135,15 @@ namespace SpiceSharp.IntegrationMethods
                     for (int i = 0; i < ckt.Nodes.Count; i++)
                     {
                         var node = ckt.Nodes[i];
-                        index = node.Index;
-                        tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
                         if (node.Type != CircuitNode.NodeType.Voltage)
                             continue;
 
                         // Milne's estimate for the second-order derivative using a Forward Euler predictor and Backward Euler corrector
                         diff = state.Solution[index] - Prediction[index];
-
                         if (diff != 0.0)
                         {
+                            index = node.Index;
+                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
                             tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(2.0 * Config.TrTol * tol / diff));
                             timetemp = Math.Min(timetemp, tmp);
                         }
@@ -155,8 +154,6 @@ namespace SpiceSharp.IntegrationMethods
                     for (int i = 0; i < ckt.Nodes.Count; i++)
                     {
                         var node = ckt.Nodes[i];
-                        index = node.Index;
-                        tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
                         if (node.Type != CircuitNode.NodeType.Voltage)
                             continue;
 
@@ -167,11 +164,14 @@ namespace SpiceSharp.IntegrationMethods
 
                         if (deriv != 0.0)
                         {
+                            index = node.Index;
+                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
                             tmp = DeltaOld[0] * Math.Pow(Math.Abs(12.0 * Config.TrTol * tol / deriv), 1.0 / 3.0);
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
                     break;
+
                 default:
                     throw new CircuitException("Invalid order");
             }
