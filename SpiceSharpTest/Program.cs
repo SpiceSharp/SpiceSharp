@@ -8,6 +8,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Components.Waveforms;
 using SpiceSharp.Simulations;
 using System.IO;
+using Spice2SpiceSharp;
 
 namespace SpiceSharpTest
 {
@@ -19,50 +20,47 @@ namespace SpiceSharpTest
 
         static void Main(string[] args)
         {
-            // Build the circuit
             Circuit ckt = new Circuit();
-            var vsm = new VoltageSwitchModel("M1");
-            vsm.VSWhyst.Set(0.5);
-            vsm.VSWthresh.Set(0.0);
+
             ckt.Components.Add(
-                new Voltagesource("V1", "in", "GND", new Pulse(0.0, 3.3, 1e-3, 1e-6, 1e-6, 10e-3, 30e-3)),
-                new Resistor("R1", "in", "out", 1e3),
-                new Capacitor("C1", "out", "GND", 1e-6));
-                
-            // ckt.Components["CS1"].Set("off");
+                new Voltagesource("V1", "IN", "GND", new Pulse(0.0, 5.0, 0, 1e-3, 1e-3, 10e-3, 30e-3)),
+                new Voltagesource("Vsupply", "VDD", "GND", 5.0),
+                new Resistor("R1", "VDD", "OUT", 10e3));
 
-            var sim = new Transient("Tran1", 0.01e-3, 30e-3);
-            // ((Transient.Configuration)sim.Config).MaxStep = 10e-3;
-            sim.ExportSimulationData += GetSimulation;
-            sim.TimestepCut += Sim_TimestepCut;
-            ckt.Simulate(sim);
+            MOS1Model mod = new MOS1Model("M1");
+            MOS1 m = new MOS1("M1");
+            m.Model = mod;
+            m.MOS1w.Set(1e-6);
+            m.MOS1l.Set(1e-6);
+            m.MOS1drainArea.Set(1e-12);
+            m.MOS1sourceArea.Set(1e-12);
+            m.Connect("OUT", "IN", "GND", "GND");
+            ckt.Components.Add(m);
 
-            // Display all the values
-            using (StreamWriter writer = new StreamWriter("output.csv"))
+            Transient.Configuration config = new Transient.Configuration();
+            config.Step = 1e-6;
+            config.FinalTime = 100e-3;
+            Transient t = new Transient("TRAN1", config);
+            t.ExportSimulationData += T_ExportSimulationData;
+            ckt.Simulate(t);
+
+            using (StreamWriter sw = new StreamWriter("output.csv"))
             {
+                sw.WriteLine("sep=;");
                 for (int i = 0; i < time.Count; i++)
-                    writer.WriteLine(time[i] + ";" + input[i] + ";" + output[i]);
+                {
+                    sw.WriteLine(string.Join(";", time[i].ToString(), input[i].ToString(), output[i].ToString()));
+                }
             }
 
             Console.ReadKey();
         }
 
-        private static void Sim_TimestepCut(object sender, TimestepCutData data)
+        private static void T_ExportSimulationData(object sender, SimulationData data)
         {
-            // Console.WriteLine($"Rejected at time {data.Circuit.Method.Time - data.Circuit.Method.Delta}");
-            // Console.WriteLine($"Cutting timestep from {data.Circuit.Method.Delta} to {data.NewDelta}. Reason: {data.Reason}");
-            // Console.WriteLine($"We predicted {data.Circuit.Method.Prediction} but got {data.Circuit.State.Real.Solution}");
-        }
-
-        private static void GetSimulation(object sim, SimulationData data)
-        {
-            double t = data.GetTime();
-            time.Add(t);
-            if (t < 1e-3)
-                input.Add(0.0);
-            else
-                input.Add(3.3 * (1 - Math.Exp(-(t - 1e-3) / 1e-3)));
-            output.Add(data.GetVoltage("out"));
+            time.Add(data.GetTime());
+            input.Add(data.GetVoltage("IN"));
+            output.Add(data.GetVoltage("OUT"));
         }
     }
 }

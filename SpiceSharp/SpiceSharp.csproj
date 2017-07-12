@@ -82,7 +82,7 @@
     <Compile Include="Components\RLC\Resistor.cs" />
     <Compile Include="Components\RLC\ResistorModel.cs" />
     <Compile Include="Components\Voltagesources\Voltagesource.cs" />
-    <Compile Include="Components\Waveform.cs" />
+    <Compile Include="Components\Waveforms\Waveform.cs" />
     <Compile Include="Diagnostics\CircuitException.cs" />
     <Compile Include="Diagnostics\CircuitWarning.cs" />
     <Compile Include="Parameters\IParameter.cs" />

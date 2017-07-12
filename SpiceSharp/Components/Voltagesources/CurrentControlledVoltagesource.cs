@@ -71,10 +71,10 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            var nodes = BindNodes(ckt, CircuitNode.NodeType.Current);
+            var nodes = BindNodes(ckt);
             CCVSposNode = nodes[0].Index;
             CCVSnegNode = nodes[1].Index;
-            CCVSbranch = nodes[2].Index;
+            CCVSbranch = CreateNode(ckt, CircuitNode.NodeType.Current).Index;
 
             // Find the voltage source
             var vsource = ckt.Components[CCVScontName];

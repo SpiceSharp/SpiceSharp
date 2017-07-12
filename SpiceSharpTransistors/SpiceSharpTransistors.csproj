@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{460A65A4-482F-48C8-B7CB-BA42CF83DE20}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>SpiceSharpTest</RootNamespace>
-    <AssemblyName>SpiceSharpTest</AssemblyName>
+    <ProjectGuid>{104C054B-EA2F-4647-B19B-21502F88EA8C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SpiceSharpTransistors</RootNamespace>
+    <AssemblyName>SpiceSharpTransistors</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -45,26 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="MOS1.cs" />
+    <Compile Include="MOS1Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transistor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Spice2SpiceSharp\Spice2SpiceSharp.csproj">
-      <Project>{c351cba3-7b96-42f7-9d71-f9ae5e773149}</Project>
-      <Name>Spice2SpiceSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SpiceSharpTransistors\SpiceSharpTransistors.csproj">
-      <Project>{104c054b-ea2f-4647-b19b-21502f88ea8c}</Project>
-      <Name>SpiceSharpTransistors</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SpiceSharp\SpiceSharp.csproj">
       <Project>{080d88db-051e-499b-a02b-eaa36de52853}</Project>
       <Name>SpiceSharp</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

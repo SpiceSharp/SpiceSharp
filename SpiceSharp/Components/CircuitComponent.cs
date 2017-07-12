@@ -63,19 +63,27 @@ namespace SpiceSharp
         /// <param name="ckt"></param>
         /// <param name="extra"></param>
         /// <returns></returns>
-        protected CircuitNode[] BindNodes(Circuit ckt, params CircuitNode.NodeType[] extra)
+        protected CircuitNode[] BindNodes(Circuit ckt)
         {
             // Map connected nodes
-            CircuitNode[] nodes = new CircuitNode[terminals.Length + extra.Length];
+            CircuitNode[] nodes = new CircuitNode[terminals.Length];
             for (int i = 0; i < terminals.Length; i++)
                 nodes[i] = ckt.Nodes.Map(terminals[i]);
 
-            // Map extra equations
-            for (int i = 0; i < extra.Length; i++)
-                nodes[i + terminals.Length] = ckt.Nodes.Map(null, extra[i]);
-
             // Return all nodes
             return nodes;
+        }
+
+        /// <summary>
+        /// Helper function for binding an extra equation
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        /// <param name="type">The type</param>
+        /// <returns></returns>
+        protected CircuitNode CreateNode(Circuit ckt, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
+        {
+            // Map the extra equations
+            return ckt.Nodes.Map(null, type);
         }
 
         /// <summary>

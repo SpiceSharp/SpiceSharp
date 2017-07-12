@@ -94,10 +94,10 @@ namespace SpiceSharp.Components
         public override void Setup(Circuit ckt)
         {
             // Bind the nodes
-            var nodes = BindNodes(ckt, CircuitNode.NodeType.Current);
+            var nodes = BindNodes(ckt);
             VSRCposNode = nodes[0].Index;
             VSRCnegNode = nodes[1].Index;
-            VSRCbranch = nodes[2].Index;
+            VSRCbranch = CreateNode(ckt, CircuitNode.NodeType.Current).Index;
 
             // Setup the waveform if specified
             VSRCwaveform.Value?.Setup(ckt);

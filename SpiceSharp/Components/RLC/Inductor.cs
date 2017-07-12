@@ -82,10 +82,10 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            var nodes = BindNodes(ckt, CircuitNode.NodeType.Current);
+            var nodes = BindNodes(ckt);
             INDposNode = nodes[0].Index;
             INDnegNode = nodes[1].Index;
-            INDbrEq = nodes[2].Index;
+            INDbrEq = CreateNode(ckt, CircuitNode.NodeType.Current).Index;
 
             // Create 2 states
             INDstate = ckt.State.GetState(2);

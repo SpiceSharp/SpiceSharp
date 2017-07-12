@@ -71,12 +71,12 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            var nodes = BindNodes(ckt, CircuitNode.NodeType.Current);
+            var nodes = BindNodes(ckt);
             VCVSposNode = nodes[0].Index;
             VCVSnegNode = nodes[1].Index;
             VCVScontPosNode = nodes[2].Index;
             VCVScontNegNode = nodes[3].Index;
-            VCVSbranch = nodes[4].Index;
+            VCVSbranch = CreateNode(ckt, CircuitNode.NodeType.Current).Index;
         }
 
         /// <summary>

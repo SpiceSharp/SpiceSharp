@@ -70,6 +70,7 @@ namespace SpiceSharp
         {
             // Setup the circuit
             Setup();
+            Simulation = sim;
 
             // Do temperature-dependent calculations
             foreach (var c in Components)

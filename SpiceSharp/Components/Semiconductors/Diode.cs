@@ -87,19 +87,15 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            CircuitNode[] nodes = null;
-            if (Model.DIOresist == 0.0)
-            {
-                nodes = BindNodes(ckt);
-                DIOposPrimeNode = nodes[0].Index;
-            }
-            else
-            {
-                nodes = BindNodes(ckt, CircuitNode.NodeType.Voltage);
-                DIOposPrimeNode = nodes[2].Index;
-            }
+            var nodes = BindNodes(ckt);
             DIOposNode = nodes[0].Index;
             DIOnegNode = nodes[1].Index;
+
+            // Add the extra node
+            if (Model.DIOresist == 0.0)
+                DIOposPrimeNode = DIOposNode;
+            else
+                DIOposPrimeNode = CreateNode(ckt).Index;
 
             // Allocate states
             DIOstate = ckt.State.GetState(5);

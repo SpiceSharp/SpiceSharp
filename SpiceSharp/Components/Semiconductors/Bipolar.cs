@@ -168,25 +168,16 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            // Add extra nodes if the bipolar transistor has conductances at the collector or emitter
-            List<CircuitNode.NodeType> extra = new List<CircuitNode.NodeType>();
-            if (Model.BJTcollectorResist > 0.0)
-                extra.Add(CircuitNode.NodeType.Voltage);
-            if (Model.BJTemitterResist > 0.0)
-                extra.Add(CircuitNode.NodeType.Voltage);
-            if (Model.BJTbaseResist > 0.0)
-                extra.Add(CircuitNode.NodeType.Voltage);
-
             // Bind the nodes
-            CircuitNode[] nodes = BindNodes(ckt, extra.ToArray());
-            int index = 4;
+            var nodes = BindNodes(ckt);
             BJTcolNode = nodes[0].Index;
             BJTbaseNode = nodes[1].Index;
             BJTemitNode = nodes[2].Index;
             BJTsubstNode = nodes[3].Index;
-            BJTcolPrimeNode = Model.BJTcollectorResist == 0.0 ? BJTcolNode : nodes[index++].Index;
-            BJTbasePrimeNode = Model.BJTbaseResist == 0.0 ? BJTbaseNode : nodes[index++].Index;
-            BJTemitPrimeNode = Model.BJTemitterResist == 0.0 ? BJTemitNode : nodes[index++].Index;
+
+            BJTcolPrimeNode = Model.BJTcollectorResist == 0.0 ? BJTcolNode : CreateNode(ckt).Index;
+            BJTbasePrimeNode = Model.BJTbaseResist == 0.0 ? BJTbaseNode : CreateNode(ckt).Index;
+            BJTemitPrimeNode = Model.BJTemitterResist == 0.0 ? BJTemitNode : CreateNode(ckt).Index;
 
             // Reserve states
             BJTstate = ckt.State.GetState(21);
