@@ -65,7 +65,11 @@ namespace SpiceSharp.Components
         [SpiceName("nsub"), SpiceInfo("Substrate doping")]
         public Parameter<double> MOS1substrateDoping { get; } = new Parameter<double>();
         [SpiceName("tpg"), SpiceInfo("Gate type")]
-        public Parameter<int> MOS1type { get; } = new Parameter<int>(NMOS);
+        public int MOS1type { get; private set; } = NMOS;
+        [SpiceName("nmos"), SpiceInfo("NMOS type")]
+        public void SetNMOS() { MOS1type = NMOS; }
+        [SpiceName("pmos"), SpiceInfo("PMOS type")]
+        public void SetPMOS() { MOS1type = PMOS; }
         [SpiceName("kf"), SpiceInfo("Flicker noise coefficient")]
         public Parameter<double> MOS1fNcoef { get; } = new Parameter<double>();
         [SpiceName("af"), SpiceInfo("Flicker noise exponent")]
@@ -155,8 +159,6 @@ namespace SpiceSharp.Components
                         }
                         fermis = MOS1type * .5 * MOS1phi;
                         wkfng = 3.2;
-                        if (!MOS1type.Given)
-                            MOS1type.Value = NMOS;
                         if (MOS1type != 0)
                         {
                             fermig = MOS1type * MOS1type * .5 * egfet1;

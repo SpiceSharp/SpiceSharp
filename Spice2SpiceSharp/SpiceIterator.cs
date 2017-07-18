@@ -73,7 +73,12 @@ namespace Spice2SpiceSharp
             { "MAX", "Math.Max" },
             { "MIN", "Math.Min" },
             { "sqrt", "Math.Sqrt" },
-            { "pow", "Math.Pow" }
+            { "pow", "Math.Pow" },
+            { "sin", "Math.Sin" },
+            { "cos", "Math.Cos" },
+            { "tan", "Math.Tan" },
+            { "atan", "Math.Atan" },
+            { "atan2", "Math.Atan2" }
         };
         private static Dictionary<string, string> replaceCircuitConstants = new Dictionary<string, string>()
         {

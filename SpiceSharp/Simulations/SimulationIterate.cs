@@ -114,37 +114,34 @@ namespace SpiceSharp.Simulations
                 // Reset convergence flag
                 state.IsCon = true;
 
-                if (state.Init != CircuitState.InitFlags.InitPred)
+                try
                 {
-                    try
-                    {
-                        ckt.Load();
-                        iterno++;
-                    }
-                    catch (CircuitException)
-                    {
-                        iterno++;
-                        ckt.Statistics.NumIter = iterno;
-                        throw;
-                    }
-
-                    // Solve the equation (thank you Math.NET)
-                    ckt.Statistics.SolveTime.Start();
-                    rstate.Solve();
-                    ckt.Statistics.SolveTime.Stop();
-
-                    // Exceeded maximum number of iterations
-                    if (iterno > maxiter)
-                    {
-                        ckt.Statistics.NumIter += iterno;
-                        return false;
-                    }
-
-                    if (state.IsCon && iterno != 1)
-                        state.IsCon = sim.IsConvergent(ckt);
-                    else
-                        state.IsCon = false;
+                    ckt.Load();
+                    iterno++;
                 }
+                catch (CircuitException)
+                {
+                    iterno++;
+                    ckt.Statistics.NumIter = iterno;
+                    throw;
+                }
+
+                // Solve the equation (thank you Math.NET)
+                ckt.Statistics.SolveTime.Start();
+                rstate.Solve();
+                ckt.Statistics.SolveTime.Stop();
+
+                // Exceeded maximum number of iterations
+                if (iterno > maxiter)
+                {
+                    ckt.Statistics.NumIter += iterno;
+                    return false;
+                }
+
+                if (state.IsCon && iterno != 1)
+                    state.IsCon = sim.IsConvergent(ckt);
+                else
+                    state.IsCon = false;
 
                 switch (state.Init)
                 {
@@ -173,7 +170,6 @@ namespace SpiceSharp.Simulations
                         break;
 
                     case CircuitState.InitFlags.Init:
-                    case CircuitState.InitFlags.InitPred:
                         state.Init = CircuitState.InitFlags.InitFloat;
                         break;
 

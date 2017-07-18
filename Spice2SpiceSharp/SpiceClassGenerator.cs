@@ -199,6 +199,15 @@ namespace Spice2SpiceSharp
                 foreach (var v in deviceextra)
                     WriteCode(sw, $"public double {v} {{ get; private set; }}");
 
+                // Write nodes not yet defined
+                foreach (var v in setup.Nodes)
+                {
+                    if (!paramDev.Variables.Contains(v))
+                        WriteCode(sw, $"public int {v} {{ get; private set; }}");
+                }
+                if (!paramDev.Variables.Contains(setup.StatesVariable))
+                    WriteCode(sw, $"public int {setup.StatesVariable} {{ get; private set; }}");
+
                 // Write device constants
                 WriteCode(sw, "", "/// <summary>", "/// Constants", "/// </summary>");
                 for (int i = 0; i < definitions.States.Length; i++)
@@ -206,12 +215,6 @@ namespace Spice2SpiceSharp
                     if (!string.IsNullOrEmpty(definitions.States[i]))
                         WriteCode(sw, $"private const int {definitions.States[i]} = {i};");
                 }
-
-                // Write nodes
-                WriteCode(sw, "", "/// <summary>", "/// Nodes", "/// </summary>");
-                foreach (var v in setup.Nodes)
-                    WriteCode(sw, $"public int {v} {{ get; private set; }}");
-                WriteCode(sw, $"public int {setup.StatesVariable} {{ get; private set; }}");
 
                 // Write the constructor
                 WriteCode(sw, "", "/// <summary>", "/// Constructor", "/// </summary>", "/// <param name=\"name\">The name of the device</param>");

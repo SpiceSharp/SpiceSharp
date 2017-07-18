@@ -216,9 +216,10 @@ namespace SpiceSharp.Simulations
                         if (double.IsNaN(olddelta))
                             throw new CircuitException("Invalid timestep");
 
-                        // Compute coefficients and predict a solution
+                        // Compute coefficients and predict a solution and reset states to our previous solution
                         method.ComputeCoefficients(ckt);
                         method.Predict(ckt);
+                        state.States[1].CopyTo(state.States[0]);
 
                         // Try to solve the new point
                         bool converged = this.Iterate(ckt, MyConfig.TranMaxIterations);

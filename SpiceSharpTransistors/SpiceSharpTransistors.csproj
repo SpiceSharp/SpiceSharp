@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="MOS1.cs" />
     <Compile Include="MOS1Model.cs" />
+    <Compile Include="MOS2.cs" />
+    <Compile Include="MOS2Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transistor.cs" />
   </ItemGroup>

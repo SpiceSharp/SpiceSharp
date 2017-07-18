@@ -20,6 +20,18 @@ namespace SpiceSharpTest
 
         static void Main(string[] args)
         {
+            /* SpiceDevice dev = new SpiceDevice();
+            dev.Defined.AddRange(new string[] { "DEV_mos2", "AN_pz", "NEWCONV", "AN_disto", "AN_noise", "NOBYPASS", "PREDICTOR" });
+            dev.Folder = @"D:\Visual Studio\Info\SpiceSharp\spice3f5\src\lib\dev\mos2";
+            dev.ITF = "mos2itf.h";
+            dev.Def = "mos2defs.h";
+            SpiceClassGenerator scg = new SpiceClassGenerator(dev);
+            scg.ExportModel("model.cs");
+            scg.ExportDevice("device.cs");
+
+            foreach (string msg in ConverterWarnings.Warnings)
+                Console.WriteLine(msg); */
+
             Circuit ckt = new Circuit();
 
             ckt.Components.Add(

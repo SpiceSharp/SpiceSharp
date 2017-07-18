@@ -134,6 +134,7 @@ namespace SpiceSharp.Simulations
             this.Op(ckt, MyConfig.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
+            state.UseDC = false;
             state.UseSmallSignal = true;
             foreach (var c in ckt.Components)
                 c.Load(ckt);

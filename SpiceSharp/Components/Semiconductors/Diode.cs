@@ -211,6 +211,7 @@ namespace SpiceSharp.Components
 
             var state = ckt.State;
             var rstate = state.Real;
+            var method = ckt.Method;
 
             csat = DIOtSatCur * DIOarea;
             gspr = Model.DIOconductance * DIOarea;
@@ -219,18 +220,16 @@ namespace SpiceSharp.Components
 
             // initialization 
             Check = true;
-            if (state.UseIC && DIOinitCond.Given) // Use initial conditions
-                vd = DIOinitCond;
-            else if (state.UseSmallSignal) // Calculate small-signal parameters
+            if (state.UseSmallSignal)
                 vd = state.States[0][DIOstate + DIOvoltage];
+            else if (method != null && method.SavedTime == 0.0)
+                vd = state.States[1][DIOstate + DIOvoltage];
+            else if ((state.Init == CircuitState.InitFlags.InitJct) && (state.Domain == CircuitState.DomainTypes.Time && state.UseDC && state.UseIC))
+                vd = DIOinitCond;
+            else if (state.Init == CircuitState.InitFlags.InitJct && DIOoff)
+                vd = 0.0;
             else if (state.Init == CircuitState.InitFlags.InitJct)
-            {
-                // Initialize the junction
-                if (DIOoff)
-                    vd = 0.0;
-                else
-                    vd = DIOtVcrit;
-            }
+                vd = DIOtVcrit;
             else if (state.Init == CircuitState.InitFlags.InitFix && DIOoff)
                 vd = 0.0;
             else
@@ -244,14 +243,12 @@ namespace SpiceSharp.Components
                 if ((Model.DIObreakdownVoltage.Given) && (vd < Math.Min(0, -DIOtBrkdwnV + 10 * vte)))
                 {
                     vdtemp = -(vd + DIOtBrkdwnV);
-                    vdtemp = Semiconductor.pnjlim(vdtemp, -(state.States[0][DIOstate + DIOvoltage] + DIOtBrkdwnV),
-                        vte, DIOtVcrit, ref Check);
+                    vdtemp = Semiconductor.pnjlim(vdtemp, -(state.States[0][DIOstate + DIOvoltage] + DIOtBrkdwnV), vte, DIOtVcrit, ref Check);
                     vd = -(vdtemp + DIOtBrkdwnV);
                 }
                 else
                 {
-                    vd = Semiconductor.pnjlim(vd, state.States[0][DIOstate + DIOvoltage],
-                        vte, DIOtVcrit, ref Check);
+                    vd = Semiconductor.pnjlim(vd, state.States[0][DIOstate + DIOvoltage], vte, DIOtVcrit, ref Check);
                 }
             }
 
@@ -277,7 +274,7 @@ namespace SpiceSharp.Components
             }
 
             // Calculate the charge of the junction capacitance if we're going to need it
-            if (state.Domain == CircuitState.DomainTypes.Time || state.UseSmallSignal)
+            if (method != null || state.UseSmallSignal || state.UseIC)
             {
                 // Charge storage elements and junction capacitance
                 czero = DIOtJctCap * DIOarea;
@@ -285,22 +282,15 @@ namespace SpiceSharp.Components
                 {
                     arg = 1 - vd / Model.DIOjunctionPot;
                     sarg = Math.Exp(-Model.DIOgradingCoeff * Math.Log(arg));
-                    state.States[0][DIOstate + DIOcapCharge] =
-                            Model.DIOtransitTime * cd + Model.DIOjunctionPot *
-                            czero * (1 - arg * sarg) / (1 - Model.DIOgradingCoeff);
+                    state.States[0][DIOstate + DIOcapCharge] = Model.DIOtransitTime * cd + Model.DIOjunctionPot * czero * (1 - arg * sarg) / (1 - Model.DIOgradingCoeff);
                     capd = Model.DIOtransitTime * gd + czero * sarg;
                 }
                 else
                 {
                     czof2 = czero / Model.DIOf2;
-                    state.States[0][DIOstate + DIOcapCharge] =
-                            Model.DIOtransitTime * cd + czero * DIOtF1 + czof2 *
-                            (Model.DIOf3 * (vd - DIOtDepCap) +
-                            (Model.DIOgradingCoeff / (Model.DIOjunctionPot +
-                            Model.DIOjunctionPot)) * (vd * vd - DIOtDepCap *
-                            DIOtDepCap));
-                    capd = Model.DIOtransitTime * gd + czof2 * (Model.DIOf3 +
-                            Model.DIOgradingCoeff * vd / Model.DIOjunctionPot);
+                    state.States[0][DIOstate + DIOcapCharge] = Model.DIOtransitTime * cd + czero * DIOtF1 + czof2 * (Model.DIOf3 * (vd - DIOtDepCap) +
+                        (Model.DIOgradingCoeff / (Model.DIOjunctionPot + Model.DIOjunctionPot)) * (vd * vd - DIOtDepCap * DIOtDepCap));
+                    capd = Model.DIOtransitTime * gd + czof2 * (Model.DIOf3 + Model.DIOgradingCoeff * vd / Model.DIOjunctionPot);
                 }
                 DIOcap = capd;
 
@@ -311,10 +301,13 @@ namespace SpiceSharp.Components
                     return;
                 }
 
+                if (method != null && method.SavedTime == 0.0)
+                    state.CopyDC(DIOstate + DIOcapCharge);
+
                 // Time-domain analysis
-                if (ckt.Method != null)
+                if (method != null)
                 {
-                    var result = ckt.Method.Integrate(state, DIOstate + DIOcapCharge, capd);
+                    var result = method.Integrate(state, DIOstate + DIOcapCharge, capd);
                     gd = gd + result.Geq;
                     cd = cd + state.States[0][DIOstate + DIOcapCurrent];
                 }
@@ -344,6 +337,21 @@ namespace SpiceSharp.Components
             rstate.Matrix[DIOnegNode, DIOposPrimeNode] -= gd;
             rstate.Matrix[DIOposPrimeNode, DIOposNode] -= gspr;
             rstate.Matrix[DIOposPrimeNode, DIOnegNode] -= gd;
+        }
+
+        /// <summary>
+        /// Accept the current timepoint
+        /// </summary>
+        /// <param name="ckt"></param>
+        public override void Accept(Circuit ckt)
+        {
+            var method = ckt.Method;
+            var state = ckt.State;
+            if (method != null && method.SavedTime == 0.0)
+            {
+                state.CopyDC(DIOstate + DIOcapCharge);
+                state.CopyDC(DIOstate + DIOcapCurrent);
+            }
         }
 
         /// <summary>

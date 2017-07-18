@@ -121,8 +121,11 @@ namespace SpiceSharp.Components
             double vcap;
             var state = ckt.State;
             var rstate = state.Real;
+            var method = ckt.Method;
 
-            if (state.UseIC && CAPinitCond.Given)
+            bool cond1 = (state.UseDC && state.Init == Circuits.CircuitState.InitFlags.InitJct) || state.UseIC;
+
+            if (cond1)
                 vcap = CAPinitCond;
             else
                 vcap = rstate.OldSolution[CAPposNode] - rstate.OldSolution[CAPnegNode];
@@ -131,7 +134,7 @@ namespace SpiceSharp.Components
             state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
 
             // Without integration, a capacitor cannot do anything
-            if (ckt.Method != null)
+            if (method != null)
             {
                 var result = ckt.Method.Integrate(state, CAPstate + CAPqcap, CAPcapac);
 
@@ -158,6 +161,20 @@ namespace SpiceSharp.Components
             cstate.Matrix[CAPposNode, CAPnegNode] -= val;
             cstate.Matrix[CAPnegNode, CAPposNode] -= val;
             cstate.Matrix[CAPnegNode, CAPnegNode] += val;
+        }
+
+        /// <summary>
+        /// Accept a timepoint
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Accept(Circuit ckt)
+        {
+            // Copy DC states when accepting the first timepoint
+            var method = ckt.Method;
+            if (method != null && method.SavedTime == 0.0)
+            {
+                ckt.State.CopyDC(CAPstate + CAPqcap);
+            }
         }
     }
 }

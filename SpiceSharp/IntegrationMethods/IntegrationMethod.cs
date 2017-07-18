@@ -111,9 +111,14 @@ namespace SpiceSharp
         public double Slope { get; protected set; } = 0.0;
 
         /// <summary>
+        /// Get the last time point that was accepted
+        /// </summary>
+        public double SavedTime { get { return savetime; } }
+
+        /// <summary>
         /// Private variables
         /// </summary>
-        private double savetime = 0.0, savedelta = double.NaN;
+        private double savetime = double.NaN, savedelta = double.NaN;
 
         /// <summary>
         /// Constructor
@@ -169,6 +174,7 @@ namespace SpiceSharp
             Prediction = null;
             DeltaOld = new double[MaxOrder + 1];
             Solutions = new Vector<double>[MaxOrder + 1];
+            savetime = double.NaN;
             savedelta = double.NaN;
 
             // Last point was START so the current point is the point after a breakpoint (start)
@@ -330,6 +336,22 @@ namespace SpiceSharp
         /// <param name="cap">The capacitance</param>
         /// <returns></returns>
         public abstract Result Integrate(CircuitState state, int index, double cap);
+
+        /// <summary>
+        /// Integrate a state variable
+        /// Note that the integrated quantity will/should be stored at the next index!
+        /// </summary>
+        /// <param name="state">The state of the circuit</param>
+        /// <param name="geq">The Geq parameter</param>
+        /// <param name="ceq">The Ceq parameter</param>
+        /// <param name="index">The index of the variable to be integrated</param>
+        /// <param name="cap">The capacitance</param>
+        public void Integrate(CircuitState state, ref double geq, ref double ceq, int index, double cap)
+        {
+            var result = Integrate(state, index, cap);
+            geq = result.Geq;
+            ceq = result.Ceq;
+        }
 
         /// <summary>
         /// Truncate to relax timestep if possible

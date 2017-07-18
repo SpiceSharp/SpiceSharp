@@ -22,8 +22,7 @@ namespace SpiceSharp.Circuits
             Init,
             InitFloat,
             InitJct,
-            InitFix,
-            InitPred
+            InitFix
         }
 
         /// <summary>
@@ -197,6 +196,16 @@ namespace SpiceSharp.Circuits
                 States[i] = States[i - 1];
             // States[0] = tmp;
             States[0] = new DenseVector(States[1].Count);
+        }
+
+        /// <summary>
+        /// Copy state 0 to all other states
+        /// </summary>
+        /// <param name="index"></param>
+        public void CopyDC(int index)
+        {
+            for (int i = 1; i < States.Length; i++)
+                States[i][index] = States[0][index];
         }
         #endregion
     }

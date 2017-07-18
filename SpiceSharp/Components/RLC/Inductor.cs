@@ -158,5 +158,16 @@ namespace SpiceSharp.Components
             cstate.Matrix[INDbrEq, INDposNode] += 1.0;
             cstate.Matrix[INDbrEq, INDbrEq] -= val;
         }
+
+        /// <summary>
+        /// Accept the current timepoint
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Accept(Circuit ckt)
+        {
+            var method = ckt.Method;
+            if (method != null && method.SavedTime == 0.0)
+                ckt.State.CopyDC(INDstate + INDflux);
+        }
     }
 }
