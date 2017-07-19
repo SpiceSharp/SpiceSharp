@@ -43,6 +43,7 @@
     <Compile Include="Code.cs" />
     <Compile Include="ConverterWarnings.cs" />
     <Compile Include="ParameterExtractor.cs" />
+    <Compile Include="SpiceAcLoad.cs" />
     <Compile Include="SpiceClassGenerator.cs" />
     <Compile Include="SpiceDefinitions.cs" />
     <Compile Include="SpiceDevice.cs" />

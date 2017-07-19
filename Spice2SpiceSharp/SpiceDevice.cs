@@ -131,6 +131,9 @@ namespace Spice2SpiceSharp
         /// <returns></returns>
         public string GetMethod(Methods method)
         {
+            if (!methods.ContainsKey(method))
+                throw new Exception($"Cannot find method {method}");
+
             string content = null;
             Regex func = new Regex(@"(\w+\*?)\s*" + methods[method] + @"\s*\([^\)]*\)[^\{]+\{");
 

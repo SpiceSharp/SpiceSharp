@@ -21,11 +21,11 @@ namespace SpiceSharpTest
         static void Main(string[] args)
         {
             /* SpiceDevice dev = new SpiceDevice();
-            dev.Defined.AddRange(new string[] { "DEV_mos2", "AN_pz", "NEWCONV", "AN_disto", "AN_noise", "NOBYPASS", "PREDICTOR" });
-            dev.Folder = @"D:\Visual Studio\Info\SpiceSharp\spice3f5\src\lib\dev\mos2";
-            dev.ITF = "mos2itf.h";
-            dev.Def = "mos2defs.h";
-            SpiceClassGenerator scg = new SpiceClassGenerator(dev);
+            dev.Defined.AddRange(new string[] { "DEV_mos6", "AN_pz", "NEWCONV", "AN_disto", "AN_noise", "NOBYPASS", "PREDICTOR" });
+            dev.Folder = @"D:\Visual Studio\Info\SpiceSharp\spice3f5\src\lib\dev\mos6";
+            dev.ITF = "mos6itf.h";
+            dev.Def = "mos6defs.h";
+            SpiceClassGenerator scg = new SpiceClassGenerator(dev, SpiceClassGenerator.Methods.All & ~SpiceClassGenerator.Methods.AcLoad);
             scg.ExportModel("model.cs");
             scg.ExportDevice("device.cs");
 
@@ -39,13 +39,13 @@ namespace SpiceSharpTest
                 new Voltagesource("Vsupply", "VDD", "GND", 5.0),
                 new Resistor("R1", "VDD", "OUT", 10e3));
 
-            MOS1Model mod = new MOS1Model("M1");
-            MOS1 m = new MOS1("M1");
+            MOS6Model mod = new MOS6Model("M1");
+            MOS6 m = new MOS6("M1");
             m.Model = mod;
-            m.MOS1w.Set(1e-6);
-            m.MOS1l.Set(1e-6);
-            m.MOS1drainArea.Set(1e-12);
-            m.MOS1sourceArea.Set(1e-12);
+            m.Set("w", 1e-6);
+            m.Set("l", 1e-6);
+            m.Set("ad", 1e-12);
+            m.Set("as", 1e-12);
             m.Connect("OUT", "IN", "GND", "GND");
             ckt.Components.Add(m);
 

@@ -3,6 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Components.Transistors;
+using System.Numerics;
 
 namespace SpiceSharp.Components
 {
@@ -153,7 +154,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS2(string name) : base(name, 2)
+        public MOS2(string name) : base(name, 4)
         {
         }
 
@@ -1539,7 +1540,7 @@ namespace SpiceSharp.Components
                 else
                 {
                     double icapgs, icapgd, icapgb;
-                    Transistor.DEVqmeyer(vgd, vgs, vgb, von, vdsat, out icapgs, out icapgd, out icapgb, MOS2tPhi, OxideCap);
+                    Transistor.DEVqmeyer(vgd, vgs, vgb, von, vdsat, out icapgd, out icapgs, out icapgb, MOS2tPhi, OxideCap);
                     state.States[0][MOS2states + MOS2capgs] = icapgs;
                     state.States[0][MOS2states + MOS2capgd] = icapgd;
                     state.States[0][MOS2states + MOS2capgb] = icapgb;
@@ -1678,6 +1679,96 @@ namespace SpiceSharp.Components
             rstate.Matrix[MOS2sNodePrime, MOS2sNode] -= MOS2sourceConductance;
             rstate.Matrix[MOS2sNodePrime, MOS2bNode] -= MOS2gbs + (xnrm - xrev) * MOS2gmbs;
             rstate.Matrix[MOS2sNodePrime, MOS2dNodePrime] -= MOS2gds + xrev * (MOS2gm + MOS2gmbs);
+        }
+
+        /// <summary>
+        /// Load the device for AC simulation
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void AcLoad(Circuit ckt)
+        {
+            var state = ckt.State;
+            var cstate = state.Complex;
+            int xnrm;
+            int xrev;
+            double EffectiveLength;
+            double GateSourceOverlapCap;
+            double GateDrainOverlapCap;
+            double GateBulkOverlapCap;
+            double capgs;
+            double capgd;
+            double capgb;
+            Complex xgs, xgd, xgb, xbd, xbs;
+
+            if (MOS2mode < 0)
+            {
+                xnrm = 0;
+                xrev = 1;
+            }
+            else
+            {
+                xnrm = 1;
+                xrev = 0;
+            }
+            /*
+			*     meyer's model parameters
+			*/
+            EffectiveLength = MOS2l - 2 * Model.MOS2latDiff;
+            GateSourceOverlapCap = Model.MOS2gateSourceOverlapCapFactor *
+            MOS2w;
+            GateDrainOverlapCap = Model.MOS2gateDrainOverlapCapFactor *
+            MOS2w;
+            GateBulkOverlapCap = Model.MOS2gateBulkOverlapCapFactor *
+            EffectiveLength;
+            capgs = (state.States[0][MOS2states + MOS2capgs] +
+            state.States[0][MOS2states + MOS2capgs] +
+            GateSourceOverlapCap);
+            capgd = (state.States[0][MOS2states + MOS2capgd] +
+            state.States[0][MOS2states + MOS2capgd] +
+            GateDrainOverlapCap);
+            capgb = (state.States[0][MOS2states + MOS2capgb] +
+            state.States[0][MOS2states + MOS2capgb] +
+            GateBulkOverlapCap);
+            xgs = capgs * cstate.Laplace;
+            xgd = capgd * cstate.Laplace;
+            xgb = capgb * cstate.Laplace;
+            xbd = MOS2capbd * cstate.Laplace;
+            xbs = MOS2capbs * cstate.Laplace;
+
+            /*
+			*    load matrix
+			*/
+            cstate.Matrix[MOS2gNode, MOS2gNode] += xgd + xgs + xgb;
+            cstate.Matrix[MOS2bNode, MOS2bNode] += xgb + xbd + xbs;
+            cstate.Matrix[MOS2dNodePrime, MOS2dNodePrime] += xgd + xbd;
+            cstate.Matrix[MOS2sNodePrime, MOS2sNodePrime] += xgs + xbs;
+            cstate.Matrix[MOS2gNode, MOS2bNode] -= xgb;
+            cstate.Matrix[MOS2gNode, MOS2dNodePrime] -= xgd;
+            cstate.Matrix[MOS2gNode, MOS2sNodePrime] -= xgs;
+            cstate.Matrix[MOS2bNode, MOS2gNode] -= xgb;
+            cstate.Matrix[MOS2bNode, MOS2dNodePrime] -= xbd;
+            cstate.Matrix[MOS2bNode, MOS2sNodePrime] -= xbs;
+            cstate.Matrix[MOS2dNodePrime, MOS2gNode] -= xgd;
+            cstate.Matrix[MOS2dNodePrime, MOS2bNode] -= xbd;
+            cstate.Matrix[MOS2sNodePrime, MOS2gNode] -= xgs;
+            cstate.Matrix[MOS2sNodePrime, MOS2bNode] -= xbs;
+            cstate.Matrix[MOS2dNode, MOS2dNode] += MOS2drainConductance;
+            cstate.Matrix[MOS2sNode, MOS2sNode] += MOS2sourceConductance;
+            cstate.Matrix[MOS2bNode, MOS2bNode] += MOS2gbd + MOS2gbs + xgb + xbd + xbs;
+            cstate.Matrix[MOS2dNodePrime, MOS2dNodePrime] += MOS2drainConductance + MOS2gds + MOS2gbd + xrev * (MOS2gm + MOS2gmbs) + xgd + xbd;
+            cstate.Matrix[MOS2sNodePrime, MOS2sNodePrime] += MOS2sourceConductance + MOS2gds + MOS2gbs + xnrm * (MOS2gm + MOS2gmbs) + xgs + xbs;
+            cstate.Matrix[MOS2dNode, MOS2dNodePrime] -= MOS2drainConductance;
+            cstate.Matrix[MOS2sNode, MOS2sNodePrime] -= MOS2sourceConductance;
+            cstate.Matrix[MOS2bNode, MOS2dNodePrime] -= MOS2gbd + xbd;
+            cstate.Matrix[MOS2bNode, MOS2sNodePrime] -= MOS2gbs + xbs;
+            cstate.Matrix[MOS2dNodePrime, MOS2dNode] -= MOS2drainConductance;
+            cstate.Matrix[MOS2dNodePrime, MOS2gNode] += (xnrm - xrev) * MOS2gm - xgd;
+            cstate.Matrix[MOS2dNodePrime, MOS2bNode] += -MOS2gbd + (xnrm - xrev) * MOS2gmbs - xbd;
+            cstate.Matrix[MOS2dNodePrime, MOS2sNodePrime] -= MOS2gds + xnrm * (MOS2gm + MOS2gmbs);
+            cstate.Matrix[MOS2sNodePrime, MOS2gNode] -= (xnrm - xrev) * MOS2gm + xgs;
+            cstate.Matrix[MOS2sNodePrime, MOS2sNode] -= MOS2sourceConductance;
+            cstate.Matrix[MOS2sNodePrime, MOS2bNode] -= MOS2gbs + (xnrm - xrev) * MOS2gmbs + xbs;
+            cstate.Matrix[MOS2sNodePrime, MOS2dNodePrime] -= MOS2gds + xrev * (MOS2gm + MOS2gmbs);
         }
     }
 }

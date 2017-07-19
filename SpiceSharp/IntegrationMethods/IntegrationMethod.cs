@@ -346,7 +346,7 @@ namespace SpiceSharp
         /// <param name="ceq">The Ceq parameter</param>
         /// <param name="index">The index of the variable to be integrated</param>
         /// <param name="cap">The capacitance</param>
-        public void Integrate(CircuitState state, ref double geq, ref double ceq, int index, double cap)
+        public void Integrate(CircuitState state, out double geq, out double ceq, int index, double cap)
         {
             var result = Integrate(state, index, cap);
             geq = result.Geq;

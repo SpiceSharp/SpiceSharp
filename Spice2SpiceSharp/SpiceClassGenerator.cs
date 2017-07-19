@@ -13,12 +13,25 @@ namespace Spice2SpiceSharp
     /// </summary>
     public class SpiceClassGenerator
     {
+        [Flags]
+        public enum Methods
+        {
+            Setup = 0x01,
+            Temperature = 0x02,
+            Load = 0x04,
+            AcLoad = 0x08,
+
+            None = 0x00,
+            All = 0x0F
+        }
+
         /// <summary>
         /// Private variables
         /// </summary>
         private string setupDev, setupMod;
         private string tempDev, tempMod;
         private string loadDev, loadMod;
+        private string acloadDev, acloadMod;
         private SpiceParam paramDev, paramMod;
         private ParameterExtractor paramExtr;
         private string name;
@@ -27,6 +40,7 @@ namespace Spice2SpiceSharp
         private SpiceDefinitions definitions;
         private SpiceTemperature temp;
         private SpiceLoad load;
+        private SpiceAcLoad acload;
 
         private string offset = "";
         private Dictionary<string, string> shared = new Dictionary<string, string>();
@@ -37,7 +51,7 @@ namespace Spice2SpiceSharp
         /// Read a device
         /// </summary>
         /// <param name="dev"></param>
-        public SpiceClassGenerator(SpiceDevice dev)
+        public SpiceClassGenerator(SpiceDevice dev, Methods export = Methods.All)
         {
             // Get all model and device methods
             dev.BuildMethodTable();
@@ -52,50 +66,80 @@ namespace Spice2SpiceSharp
             paramDev = new SpiceParam(dev, paramExtr.Device, SpiceDevice.Methods.Param, SpiceDevice.Methods.Ask);
 
             // Extract the setup
-            setup = new SpiceSetup(dev);
-            setupDev = setup.ExportDevice(paramMod, paramDev);
-            setupMod = setup.ExportModel(paramMod);
-            foreach (var v in setup.SharedLocalVariables)
-                shared.Add(v.Key, v.Value);
-            foreach (var v in setup.ModelVariablesExtra)
-                modelextra.Add(v);
-            foreach (var v in setup.DeviceVariablesExtra)
-                deviceextra.Add(v);
+            if (export.HasFlag(Methods.Setup))
+            {
+                setup = new SpiceSetup(dev);
+                setupDev = setup.ExportDevice(paramMod, paramDev);
+                setupMod = setup.ExportModel(paramMod);
+                foreach (var v in setup.SharedLocalVariables)
+                    shared.Add(v.Key, v.Value);
+                foreach (var v in setup.ModelVariablesExtra)
+                    modelextra.Add(v);
+                foreach (var v in setup.DeviceVariablesExtra)
+                    deviceextra.Add(v);
+            }
 
             // Extract the state definitions
-            definitions = new SpiceDefinitions(dev, setup);
-            foreach (var v in definitions.StateNames)
-                paramDev.Variables.Add(v);
+            if (setup != null)
+            {
+                definitions = new SpiceDefinitions(dev, setup);
+                foreach (var v in definitions.StateNames)
+                    paramDev.Variables.Add(v);
+            }
 
             // Temperature-dependent calculations
-            temp = new SpiceTemperature(dev);
-            tempDev = temp.ExportDevice(paramMod, paramDev);
-            tempMod = temp.ExportModel(paramMod);
-            foreach (var v in temp.SharedLocalVariables)
+            if (export.HasFlag(Methods.Temperature))
             {
-                if (shared.ContainsKey(v.Key) && shared[v.Key] != v.Value)
-                    throw new Exception($"Cannot share variable {v.Key}");
-                shared.Add(v.Key, v.Value);
+                temp = new SpiceTemperature(dev);
+                tempDev = temp.ExportDevice(paramMod, paramDev);
+                tempMod = temp.ExportModel(paramMod);
+                foreach (var v in temp.SharedLocalVariables)
+                {
+                    if (shared.ContainsKey(v.Key) && shared[v.Key] != v.Value)
+                        throw new Exception($"Cannot share variable {v.Key}");
+                    shared.Add(v.Key, v.Value);
+                }
+                foreach (var v in temp.ModelVariablesExtra)
+                    modelextra.Add(v);
+                foreach (var v in temp.DeviceVariablesExtra)
+                    deviceextra.Add(v);
             }
-            foreach (var v in temp.ModelVariablesExtra)
-                modelextra.Add(v);
-            foreach (var v in temp.DeviceVariablesExtra)
-                deviceextra.Add(v);
 
             // Loading
-            load = new SpiceLoad(dev, setup);
-            loadDev = load.ExportDevice(paramMod, paramDev);
-            loadMod = load.ExportModel(paramMod);
-            foreach (var v in load.SharedLocalVariables)
+            if (export.HasFlag(Methods.Load) && setup != null)
             {
-                if (shared.ContainsKey(v.Key) && shared[v.Key] != v.Value)
-                    throw new Exception($"Cannot share variable {v.Key}");
-                shared.Add(v.Key, v.Value);
+                load = new SpiceLoad(dev, setup);
+                loadDev = load.ExportDevice(paramMod, paramDev);
+                loadMod = load.ExportModel(paramMod);
+                foreach (var v in load.SharedLocalVariables)
+                {
+                    if (shared.ContainsKey(v.Key) && shared[v.Key] != v.Value)
+                        throw new Exception($"Cannot share variable {v.Key}");
+                    shared.Add(v.Key, v.Value);
+                }
+                foreach (var v in load.ModelVariablesExtra)
+                    modelextra.Add(v);
+                foreach (var v in load.DeviceVariablesExtra)
+                    deviceextra.Add(v);
             }
-            foreach (var v in load.ModelVariablesExtra)
-                modelextra.Add(v);
-            foreach (var v in load.DeviceVariablesExtra)
-                deviceextra.Add(v);
+
+            // AC loading
+            if (export.HasFlag(Methods.AcLoad) && setup != null)
+            {
+                acload = new SpiceAcLoad(dev, setup);
+                acloadDev = acload.ExportDevice(paramMod, paramDev);
+                acloadMod = acload.ExportModel(paramMod);
+                foreach (var v in acload.SharedLocalVariables)
+                {
+                    if (shared.ContainsKey(v.Key) && shared[v.Key] != v.Value)
+                        throw new Exception($"Cannot share variable {v.Key}");
+                    shared.Add(v.Key, v.Value);
+                }
+                foreach (var v in acload.ModelVariablesExtra)
+                    modelextra.Add(v);
+                foreach (var v in acload.DeviceVariablesExtra)
+                    deviceextra.Add(v);
+            }
 
             // Apply default values!
             string[] names = paramMod.Declarations.Keys.ToArray();
@@ -179,7 +223,7 @@ namespace Spice2SpiceSharp
             using (StreamWriter sw = new StreamWriter(filename))
             {
                 // Write dependencies
-                WriteCode(sw, "using System;", "using SpiceSharp.Circuits;", "using SpiceSharp.Diagnostics;", "using SpiceSharp.Parameters;");
+                WriteCode(sw, "using System;", "using SpiceSharp.Circuits;", "using SpiceSharp.Diagnostics;", "using SpiceSharp.Parameters;", "using System.Numerics;");
 
                 // Write namespace and class
                 WriteCode(sw, "", "namespace SpiceSharp.Components", "{");
@@ -225,32 +269,52 @@ namespace Spice2SpiceSharp
                 WriteCode(sw, "public override CircuitModel GetModel() => Model;");
 
                 // Setup method
-                WriteCode(sw, "", "/// <summary>", "/// Setup the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
-                WriteCode(sw, "public override void Setup(Circuit ckt)", "{");
-                foreach (string var in setup.DeviceVariables.Keys)
-                    WriteCode(sw, $"{setup.DeviceVariables[var]} {var};");
-                WriteCode(sw, "", "// Allocate nodes");
-                WriteCode(sw, "var nodes = BindNodes(ckt);");
-                int index = 0;
-                foreach (var n in setup.Nodes)
-                    WriteCode(sw, $"{n} = nodes[{index++}].Index;");
-                WriteCode(sw, "", "// Allocate states", $"{setup.StatesVariable} = ckt.State.GetState();");
-                WriteCode(sw, "", setupDev, "}");
+                if (setup != null)
+                {
+                    WriteCode(sw, "", "/// <summary>", "/// Setup the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
+                    WriteCode(sw, "public override void Setup(Circuit ckt)", "{");
+                    foreach (string var in setup.DeviceVariables.Keys)
+                        WriteCode(sw, $"{setup.DeviceVariables[var]} {var};");
+                    WriteCode(sw, "", "// Allocate nodes");
+                    WriteCode(sw, "var nodes = BindNodes(ckt);");
+                    int index = 0;
+                    foreach (var n in setup.Nodes)
+                        WriteCode(sw, $"{n} = nodes[{index++}].Index;");
+                    WriteCode(sw, "", "// Allocate states", $"{setup.StatesVariable} = ckt.State.GetState();");
+                    WriteCode(sw, "", setupDev, "}");
+                }
 
                 // Temperature method
-                WriteCode(sw, "", "/// <summary>", "/// Do temperature-dependent calculations", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
-                WriteCode(sw, "public override void Temperature(Circuit ckt)", "{");
-                foreach (string var in temp.DeviceVariables.Keys)
-                    WriteCode(sw, $"{temp.DeviceVariables[var]} {var};");
-                WriteCode(sw, "", tempDev, "}");
+                if (temp != null)
+                {
+                    WriteCode(sw, "", "/// <summary>", "/// Do temperature-dependent calculations", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
+                    WriteCode(sw, "public override void Temperature(Circuit ckt)", "{");
+                    foreach (string var in temp.DeviceVariables.Keys)
+                        WriteCode(sw, $"{temp.DeviceVariables[var]} {var};");
+                    WriteCode(sw, "", tempDev, "}");
+                }
 
                 // Load method
-                WriteCode(sw, "", "/// <summary>", "/// Load the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
-                WriteCode(sw, "public override void Load(Circuit ckt)", "{");
-                WriteCode(sw, "var state = ckt.State;", "var rstate = state.Real;");
-                foreach (string var in load.DeviceVariables.Keys)
-                    WriteCode(sw, $"{load.DeviceVariables[var]} {var};");
-                WriteCode(sw, "", loadDev, "}");
+                if (load != null)
+                {
+                    WriteCode(sw, "", "/// <summary>", "/// Load the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
+                    WriteCode(sw, "public override void Load(Circuit ckt)", "{");
+                    WriteCode(sw, "var state = ckt.State;", "var rstate = state.Real;");
+                    foreach (string var in load.DeviceVariables.Keys)
+                        WriteCode(sw, $"{load.DeviceVariables[var]} {var};");
+                    WriteCode(sw, "", loadDev, "}");
+                }
+
+                // AcLoad method
+                if (acload != null)
+                {
+                    WriteCode(sw, "", "/// <summary>", "/// Load the device for AC simulation", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
+                    WriteCode(sw, "public override void AcLoad(Circuit ckt)", "{");
+                    WriteCode(sw, "var state = ckt.State;", "var cstate = state.Complex;");
+                    foreach (string var in acload.DeviceVariables.Keys)
+                        WriteCode(sw, $"{acload.DeviceVariables[var]} {var};");
+                    WriteCode(sw, "", acloadDev, "}");
+                }
 
                 // End class and namespace
                 WriteCode(sw, "}", "}");

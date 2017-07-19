@@ -102,7 +102,6 @@ namespace SpiceSharp.Components
         /// </summary>
         public double MOS2oxideCapFactor { get; private set; }
         public double MOS2xd { get; private set; }
-        public double MOS2modName { get; private set; }
 
         private const int NMOS = 1;
         private const int PMOS = -1;
