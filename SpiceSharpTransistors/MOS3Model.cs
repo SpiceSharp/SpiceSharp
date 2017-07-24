@@ -1,12 +1,11 @@
 ﻿using System;
+using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
+using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    /// <summary>
-    /// This class represents a MOSFET
-    /// </summary>
     public class MOS3Model : CircuitModel
     {
         /// <summary>
@@ -61,7 +60,7 @@ namespace SpiceSharp.Components
         [SpiceName("nsub"), SpiceInfo("Substrate doping")]
         public Parameter<double> MOS3substrateDoping { get; } = new Parameter<double>();
         [SpiceName("tpg"), SpiceInfo("Gate type")]
-        public int MOS3type { get; private set; } = NMOS;
+        public Parameter<int> MOS3gateType { get; } = new Parameter<int>();
         [SpiceName("nss"), SpiceInfo("Surface state density")]
         public Parameter<double> MOS3surfaceStateDensity { get; } = new Parameter<double>();
         [SpiceName("eta"), SpiceInfo("Vds dependence of threshold voltage")]
@@ -76,7 +75,7 @@ namespace SpiceSharp.Components
         public Parameter<double> MOS3kappa { get; } = new Parameter<double>(.2);
         [SpiceName("xj"), SpiceInfo("Junction depth")]
         public Parameter<double> MOS3junctionDepth { get; } = new Parameter<double>();
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature (in Kelvin)")]
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
         public Parameter<double> MOS3tnom { get; } = new Parameter<double>();
         [SpiceName("kf"), SpiceInfo("Flicker noise coefficient")]
         public Parameter<double> MOS3fNcoef { get; } = new Parameter<double>();
@@ -85,13 +84,32 @@ namespace SpiceSharp.Components
         [SpiceName("xd"), SpiceInfo("Depletion layer width")]
         public double MOS3coeffDepLayWidth { get; private set; }
         [SpiceName("input_delta"), SpiceInfo("")]
-        public double MOS3delta { get; private set; }
+        public Parameter<double> MOS3delta { get; } = new Parameter<double>();
         [SpiceName("alpha"), SpiceInfo("Alpha")]
         public double MOS3alpha { get; private set; }
-        [SpiceName("nmos"), SpiceInfo("NMOS type")]
-        public void SetNMOS() { MOS3type = NMOS; }
-        [SpiceName("pmos"), SpiceInfo("PMOS type")]
-        public void SetPMOS() { MOS3type = PMOS; }
+        public int MOS3type { get; private set; } = 1;
+
+        /// <summary>
+        /// Methods
+        /// </summary>
+        [SpiceName("delta"), SpiceInfo("Width effect on threshold")]
+        public double MOD_DELTA
+        {
+            get => MOS3narrowFactor;
+            set { MOS3delta.Set(value); }
+        }
+        [SpiceName("nmos"), SpiceInfo("N type MOSfet model")]
+        public void SetNMOS(bool value) { MOS3type = 1; }
+        [SpiceName("pmos"), SpiceInfo("P type MOSfet model")]
+        public void SetPMOS(bool value) { MOS3type = -1; }
+        [SpiceName("type"), SpiceInfo("N-channel or P-channel MOS")]
+        public string GetTYPE(Circuit ckt)
+        {
+            if (MOS3type > 0)
+                return "nmos";
+            else
+                return "pmos";
+        }
 
         /// <summary>
         /// Shared parameters
@@ -106,13 +124,6 @@ namespace SpiceSharp.Components
         /// </summary>
         public double MOS3oxideCapFactor { get; private set; }
         public double MOS3narrowFactor { get; private set; }
-
-        /// <summary>
-        /// Constants
-        /// </summary>
-        private const int NMOS = 1;
-        private const int PMOS = -1;
-        private const double EPSSIL = 11.7 * 8.854214871e-12;
 
         /// <summary>
         /// Constructor
@@ -141,11 +152,13 @@ namespace SpiceSharp.Components
             fact1 = MOS3tnom / Circuit.CONSTRefTemp;
             vtnom = MOS3tnom * Circuit.CONSTKoverQ;
             kt1 = Circuit.CONSTBoltz * MOS3tnom;
-            egfet1 = 1.16 - (7.02e-4 * MOS3tnom * MOS3tnom) / (MOS3tnom + 1108);
+            egfet1 = 1.16 - (7.02e-4 * MOS3tnom * MOS3tnom) /
+            (MOS3tnom + 1108);
             arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
             pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Circuit.CHARGE * arg1);
 
-            MOS3oxideCapFactor = 3.9 * 8.854214871e-12 / MOS3oxideThickness;
+            MOS3oxideCapFactor = 3.9 * 8.854214871e-12 /
+            MOS3oxideThickness;
             if (!MOS3surfaceMobility.Given)
                 MOS3surfaceMobility.Value = 600;
             if (!MOS3transconductance.Given)
@@ -161,15 +174,18 @@ namespace SpiceSharp.Components
                     }
                     fermis = MOS3type * .5 * MOS3phi;
                     wkfng = 3.2;
-                    if (MOS3type != 0)
+                    if (!MOS3gateType.Given)
+                        MOS3gateType.Value = 1;
+                    if (MOS3gateType != 0)
                     {
-                        fermig = MOS3type * MOS3type * .5 * egfet1;
+                        fermig = MOS3type * MOS3gateType * .5 * egfet1;
                         wkfng = 3.25 + .5 * egfet1 - fermig;
                     }
                     wkfngs = wkfng - (3.25 + .5 * egfet1 + fermis);
                     if (!MOS3gamma.Given)
                     {
-                        MOS3gamma.Value = Math.Sqrt(2 * EPSSIL * Circuit.CHARGE * MOS3substrateDoping * 1e6 /*(cm**3/m**3)*/ ) / MOS3oxideCapFactor;
+                        MOS3gamma.Value = Math.Sqrt(2 * Transistor.EPSSIL * Circuit.CHARGE * MOS3substrateDoping *
+                            1e6 /*(cm**3/m**3)*/ ) / MOS3oxideCapFactor;
                     }
                     if (!MOS3vt0.Given)
                     {
@@ -182,7 +198,7 @@ namespace SpiceSharp.Components
                     {
                         vfb = MOS3vt0 - MOS3type * (MOS3gamma * Math.Sqrt(MOS3phi) + MOS3phi);
                     }
-                    MOS3alpha = (EPSSIL + EPSSIL) / (Circuit.CHARGE * MOS3substrateDoping * 1e6 /*(cm**3/m**3)*/ );
+                    MOS3alpha = (Transistor.EPSSIL + Transistor.EPSSIL) / (Circuit.CHARGE * MOS3substrateDoping * 1e6 /*(cm**3/m**3)*/ );
                     MOS3coeffDepLayWidth = Math.Sqrt(MOS3alpha);
                 }
                 else
@@ -192,10 +208,7 @@ namespace SpiceSharp.Components
                 }
             }
             /* now model parameter preprocessing */
-            MOS3narrowFactor = MOS3delta * 0.5 * Circuit.CONSTPI * EPSSIL / MOS3oxideCapFactor;
-
-            /* loop through all instances of the model */
+            MOS3narrowFactor = MOS3delta * 0.5 * Circuit.CONSTPI * Transistor.EPSSIL / MOS3oxideCapFactor;
         }
     }
 }
-

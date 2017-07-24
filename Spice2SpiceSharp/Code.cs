@@ -141,27 +141,35 @@ namespace Spice2SpiceSharp
 
             // Get all case statements
             var ca = new Regex(@"case\s*(?<id>\w+)\s*:");
-            var br = new Regex(@"break\s*;|return\s*\(\s*OK\s*\)\s*;");
+            var de = new Regex(@"default\s*:", RegexOptions.RightToLeft);
             var cm = ca.Match(code);
             while (cm.Success)
             {
                 // We found a case statement! process it
                 sm = sw.Match(code, cm.Index + 1);
-                var brm = br.Match(code, cm.Index + 1);
+                Match ncm = ca.Match(code, cm.Index + 1);
 
-                // If there is another switch statement before our break, find a new break after the switch statement
-                while (sm.Success && sm.Index < brm.Index)
+                // Find the first switch statement which could interfere
+                while (sm.Success && ncm.Success && sm.Index < ncm.Index)
                 {
                     int e = GetMatchingParenthesis(code, sm.Index + sm.Length - 1);
-                    brm = br.Match(code, e + 1);
+                    ncm = ca.Match(code, e + 1);
                     sm = sw.Match(code, e + 1);
                 }
 
                 // Store the case statement
                 int cs = cm.Index + cm.Length;
-                int ce = brm.Index;
+                int ce = code.Length;
+                if (ncm.Success)
+                    ce = ncm.Index;
+                else
+                {
+                    var dm = de.Match(code);
+                    if (dm.Success && dm.Index > cm.Index)
+                        ce = dm.Index;
+                }
                 cases.Add(cm.Groups["id"].Value, code.Substring(cs, ce - cs));
-                cm = ca.Match(code, brm.Index + 1);
+                cm = ncm;
             }
         }
 
@@ -190,6 +198,7 @@ namespace Spice2SpiceSharp
         public static string Format(string code)
         {
             // Format newlines
+            code = code.Trim();
             code = Regex.Replace(code, @"(?<!\r)\n", "\r\n");
             code = Regex.Replace(code, @"\r(?!\n)", "\r\n");
 
@@ -199,8 +208,41 @@ namespace Spice2SpiceSharp
             // Newlines when doing else
             code = Regex.Replace(code, @"\}\s*else\s*\{", "}" + Environment.NewLine + "else" + Environment.NewLine + "{");
 
-            // Remove more than 2 lines
+            // Remove more than 2 empty lines
             code = Regex.Replace(code, @"([ \t]*\r\n){3,}", Environment.NewLine + Environment.NewLine).Trim();
+
+            // Format long formula's
+            code = Regex.Replace(code, @"^[ \t]*[^\=\r\n\{\}]+\=[^;\{\}]+;", (Match m) =>
+            {
+                // Remove all newlines
+                return Regex.Replace(m.Value, @"\s*[\r\n]+\s*", " ");
+            }, RegexOptions.Multiline);
+
+            // Format operators (one space before, one space after)
+            code = Regex.Replace(code, @"[ \t]*(\/\*|\*\/|\-\>|\+\=|\-\=|\!\=|\/\=|\*\=|\&\=|\|\=|\<\=|\>=|\=\=|\&\&|\|\||\*|\/|\+|\-|\=)[ \t]*", (Match m) => " " + m.Value.Trim() + " ");
+            code = Regex.Replace(code, @"[ \t]+\)", ")");
+            code = Regex.Replace(code, @"\([ \t]+", "(");
+            code = Regex.Replace(code, @"(?<=[\=,])[ \t]*-[ \t]*", " -");
+            code = Regex.Replace(code, @"(?<=\()[ \t]*-[ \t]*", "-");
+            code = Regex.Replace(code, @"[ \t]*,[ \t]*", ", ");
+            code = Regex.Replace(code, @"\d+e - \d+", (Match m) => m.Value.Replace(" ", ""));
+            code = code.Replace(" -> ", "->");
+
+            // Make single line conditional statements
+            Regex condr = new Regex(@"if[ \t]*\(", RegexOptions.RightToLeft);
+            Match match = condr.Match(code);
+            while (match.Success)
+            {
+                int start = match.Index + match.Length - 1;
+                string pre = code.Substring(0, match.Index);
+                int e = Code.GetMatchingParenthesis(code, start);
+                string post = code.Substring(e + 1);
+                string cond = code.Substring(start, e - start + 1);
+                cond = Regex.Replace(cond, @"\s*[\r\n]\s*", " ");
+                code = pre + "if " + cond + post;
+
+                match = match.NextMatch();
+            }
 
             return code;
         }

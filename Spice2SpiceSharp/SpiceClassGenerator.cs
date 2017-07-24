@@ -47,6 +47,8 @@ namespace Spice2SpiceSharp
         private HashSet<string> modelextra = new HashSet<string>();
         private HashSet<string> deviceextra = new HashSet<string>();
 
+        private const int MaxLineLength = 128;
+
         /// <summary>
         /// Read a device
         /// </summary>
@@ -77,6 +79,10 @@ namespace Spice2SpiceSharp
                     modelextra.Add(v);
                 foreach (var v in setup.DeviceVariablesExtra)
                     deviceextra.Add(v);
+
+                // Update the methods
+                paramMod.UpdateMethods(dev, setup);
+                paramDev.UpdateMethods(dev, setup);
             }
 
             // Extract the state definitions
@@ -147,10 +153,14 @@ namespace Spice2SpiceSharp
             {
                 // Find out if the name of the variable with this ID
                 if (setup.ModelDefaultValues.ContainsKey(n))
-                {
-                    // Replace the declaration
                     paramMod.Declarations[n] = Regex.Replace(paramMod.Declarations[n], @"\(\);", $"({setup.ModelDefaultValues[n]});");
-                }
+            }
+            names = paramDev.Declarations.Keys.ToArray();
+            foreach (string n in names)
+            {
+                // Find out if the name of the variable with this ID
+                if (setup.DeviceDefaultValues.ContainsKey(n))
+                    paramDev.Declarations[n] = Regex.Replace(paramDev.Declarations[n], @"\(\);", $"({setup.DeviceDefaultValues[n]});");
             }
         }
 
@@ -173,6 +183,14 @@ namespace Spice2SpiceSharp
                 WriteCode(sw, "/// <summary>", "/// Parameters", "/// </summary>");
                 foreach (string decl in paramMod.Declarations.Values)
                     WriteCode(sw, decl);
+
+                // Write the model methods
+                if (paramMod.Methods.Count > 0)
+                {
+                    WriteCode(sw, "", "/// <summary>", "/// Methods", "/// </summary>");
+                    foreach (string method in paramMod.Methods)
+                        WriteCode(sw, method);
+                }
 
                 // Shared variables
                 WriteCode(sw, "", "/// <summary>", "/// Shared parameters", "/// </summary>");
@@ -238,10 +256,27 @@ namespace Spice2SpiceSharp
                 foreach (string decl in paramDev.Declarations.Values)
                     WriteCode(sw, decl);
 
+                // Write the device methods
+                if (paramDev.Methods.Count > 0)
+                {
+                    WriteCode(sw, "", "/// <summary>", "/// Methods", "/// </summary>");
+                    foreach (string method in paramDev.Methods)
+                        WriteCode(sw, method);
+                }
+
                 // Write extra device parameters
                 WriteCode(sw, "", "/// <summary>", "/// Extra variables", "/// </summary>");
                 foreach (var v in deviceextra)
+                {
+                    if (setup != null)
+                    {
+                        if (setup.Nodes.Contains(v))
+                            continue;
+                        if (setup.StatesVariable == v)
+                            continue;
+                    }
                     WriteCode(sw, $"public double {v} {{ get; private set; }}");
+                }
 
                 // Write nodes not yet defined
                 foreach (var v in setup.Nodes)
@@ -254,11 +289,8 @@ namespace Spice2SpiceSharp
 
                 // Write device constants
                 WriteCode(sw, "", "/// <summary>", "/// Constants", "/// </summary>");
-                for (int i = 0; i < definitions.States.Length; i++)
-                {
-                    if (!string.IsNullOrEmpty(definitions.States[i]))
-                        WriteCode(sw, $"private const int {definitions.States[i]} = {i};");
-                }
+                foreach (var state in definitions.States)
+                    WriteCode(sw, $"private const int {state.Item2} = {state.Item1};");
 
                 // Write the constructor
                 WriteCode(sw, "", "/// <summary>", "/// Constructor", "/// </summary>", "/// <param name=\"name\">The name of the device</param>");
@@ -280,7 +312,7 @@ namespace Spice2SpiceSharp
                     int index = 0;
                     foreach (var n in setup.Nodes)
                         WriteCode(sw, $"{n} = nodes[{index++}].Index;");
-                    WriteCode(sw, "", "// Allocate states", $"{setup.StatesVariable} = ckt.State.GetState();");
+                    WriteCode(sw, "", "// Allocate states", $"{setup.StatesVariable} = ckt.State.GetState({definitions?.Count.ToString() ?? ""});");
                     WriteCode(sw, "", setupDev, "}");
                 }
 
@@ -299,7 +331,7 @@ namespace Spice2SpiceSharp
                 {
                     WriteCode(sw, "", "/// <summary>", "/// Load the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void Load(Circuit ckt)", "{");
-                    WriteCode(sw, "var state = ckt.State;", "var rstate = state.Real;");
+                    WriteCode(sw, "var state = ckt.State;", "var rstate = state.Real;", "var method = ckt.Method;");
                     foreach (string var in load.DeviceVariables.Keys)
                         WriteCode(sw, $"{load.DeviceVariables[var]} {var};");
                     WriteCode(sw, "", loadDev, "}");
@@ -362,32 +394,55 @@ namespace Spice2SpiceSharp
                     offset = offset.Substring(0, Math.Max(0, offset.Length - closing));
 
                 // Write the line
-                sw.WriteLine(offset + lines[i]);
+                sw.WriteLine(offset + multiline(lines[i]));
 
                 // Add offsets
                 if (opening > 0 && closing == 0)
                     offset = offset + new string('\t', opening);
             }
+        }
 
-            // Indent from scratch
-            /* int index = code.IndexOf('{');
-            while (index >= 0)
+        /// <summary>
+        /// Turn long lines into multiple lines
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        private string multiline(string line)
+        {
+            // Don't process short lines
+            if (line.Length < MaxLineLength)
+                return line;
+
+            // Allowed newline placement
+            Regex opr = new Regex(@"\&\&|\|\||\*|\/|\+|\-|,");
+            var ms = opr.Matches(line);
+            List<int> ss = new List<int>();
+            foreach (Match m in ms)
+                ss.Add(m.Index + m.Length);
+
+            // Divide the lines in smaller lines
+            List<string> result = new List<string>();
+            int r = 0;
+            while (line.Length > MaxLineLength && ss.Count > 0)
             {
-                int end = Code.GetMatchingParenthesis(code, index);
+                // Find the index where we have to 
+                int index = 0;
+                while (ss.Count > 0)
+                {
+                    index = ss[0] - r;
+                    ss.RemoveAt(0);
+                    if (ss.Count == 0 || ss[0] - r > MaxLineLength)
+                        break;
+                }
 
-                // Single out the piece of codes
-                string before = code.Substring(0, index + 1);
-                string after = code.Substring(end);
-                string indent = code.Substring(index + 1, end - index - 1);
-                indent = Regex.Replace(indent, @"\r\n(?!\t*$)", "\r\n\t");
-
-                code = before + indent + after;
-
-                index = code.IndexOf('{', index + 1);
+                // Split the line and start again
+                result.Add(line.Substring(0, index));
+                line = line.Substring(index);
+                r += index;
             }
+            result.Add(line);
 
-            // Add the final offset
-            code = offset + Regex.Replace(code, @"\r\n", "\r\n" + offset); */
+            return string.Join(Environment.NewLine + offset + "\t", result);
         }
     }
 }

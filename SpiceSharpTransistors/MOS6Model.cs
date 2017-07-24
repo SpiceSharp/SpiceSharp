@@ -2,6 +2,7 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
+using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
@@ -10,7 +11,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature (in Kelvin)")]
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
         public Parameter<double> MOS6tnom { get; } = new Parameter<double>();
         [SpiceName("vto"), SpiceName("vt0"), SpiceInfo("Threshold voltage")]
         public Parameter<double> MOS6vt0 { get; } = new Parameter<double>();
@@ -83,11 +84,23 @@ namespace SpiceSharp.Components
         [SpiceName("nsub"), SpiceInfo("Substrate doping")]
         public Parameter<double> MOS6substrateDoping { get; } = new Parameter<double>();
         [SpiceName("tpg"), SpiceInfo("Gate type")]
-        public int MOS6type { get; private set; } = NMOS;
-        [SpiceName("nmos"), SpiceInfo("NMOS type")]
-        public void SetNMOS() { MOS6type = NMOS; }
-        [SpiceName("pmos"), SpiceInfo("PMOS type")]
-        public void SetPMOS() { MOS6type = PMOS; }
+        public Parameter<int> MOS6gateType { get; } = new Parameter<int>();
+
+        /// <summary>
+        /// Methods
+        /// </summary>
+        [SpiceName("nmos"), SpiceInfo("N type MOSfet model")]
+        public void SetNMOS(bool value) { MOS6type = 1; }
+        [SpiceName("pmos"), SpiceInfo("P type MOSfet model")]
+        public void SetPMOS(bool value) { MOS6type = -1; }
+        [SpiceName("type"), SpiceInfo("N-channel or P-channel MOS")]
+        public string GetTYPE(Circuit ckt)
+        {
+            if (MOS6type > 0)
+                return "nmos";
+            else
+                return "pmos";
+        }
 
         /// <summary>
         /// Shared parameters
@@ -100,13 +113,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Extra variables
         /// </summary>
+        public int MOS6type { get; private set; } = 1;
         public double MOS6oxideCapFactor { get; private set; }
-
-        /// <summary>
-        /// Constants
-        /// </summary>
-        private const int NMOS = 1;
-        private const int PMOS = -1;
 
         /// <summary>
         /// Constructor
@@ -140,13 +148,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            double kt1;
-            double arg1;
-            double fermis;
-            double wkfng;
-            double fermig;
-            double wkfngs;
-            double vfb;
+            double kt1, arg1, fermis, wkfng, fermig, wkfngs, vfb;
 
             /* perform model defaulting */
             if (!MOS6tnom.Given)
@@ -167,16 +169,14 @@ namespace SpiceSharp.Components
             }
             else
             {
-                MOS6oxideCapFactor = 3.9 * 8.854214871e-12 /
-                MOS6oxideThickness;
+                MOS6oxideCapFactor = 3.9 * 8.854214871e-12 / MOS6oxideThickness;
                 if (!MOS6kc.Given)
                 {
                     if (!MOS6surfaceMobility.Given)
                     {
                         MOS6surfaceMobility.Value = 600;
                     }
-                    MOS6kc.Value = 0.5 * MOS6surfaceMobility *
-                    MOS6oxideCapFactor * 1e-4 /*(m**2/cm**2)*/;
+                    MOS6kc.Value = 0.5 * MOS6surfaceMobility * MOS6oxideCapFactor * 1e-4 /*(m**2/cm**2)*/;
                 }
                 if (MOS6substrateDoping.Given)
                 {
@@ -189,31 +189,26 @@ namespace SpiceSharp.Components
                         }
                         fermis = MOS6type * .5 * MOS6phi;
                         wkfng = 3.2;
-                        if (MOS6type != 0)
+                        if (!MOS6gateType.Given)
+                            MOS6gateType.Value = 1;
+                        if (MOS6gateType != 0)
                         {
-                            fermig = MOS6type * MOS6type * .5 * egfet1;
+                            fermig = MOS6type * MOS6gateType * .5 * egfet1;
                             wkfng = 3.25 + .5 * egfet1 - fermig;
                         }
                         wkfngs = wkfng - (3.25 + .5 * egfet1 + fermis);
                         if (!MOS6gamma.Given)
                         {
-                            MOS6gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 *
-                            Circuit.CHARGE * MOS6substrateDoping *
-                            1e6/*(cm**3/m**3)*/) /
-                            MOS6oxideCapFactor;
+                            MOS6gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.CHARGE * MOS6substrateDoping * 1e6/*(cm**3/m**3)*/) / MOS6oxideCapFactor;
                         }
                         if (!MOS6gamma1.Given)
-                        {
                             MOS6gamma1.Value = 0.0;
-                        }
                         if (!MOS6vt0.Given)
                         {
                             if (!MOS6surfaceStateDensity.Given)
                                 MOS6surfaceStateDensity.Value = 0;
                             vfb = wkfngs - MOS6surfaceStateDensity * 1e4 /*(cm**2/m**2)*/ * Circuit.CHARGE / MOS6oxideCapFactor;
-                            MOS6vt0.Value = vfb + MOS6type *
-                            (MOS6gamma * Math.Sqrt(MOS6phi) +
-                            MOS6phi);
+                            MOS6vt0.Value = vfb + MOS6type * (MOS6gamma * Math.Sqrt(MOS6phi) + MOS6phi);
                         }
                     }
                     else
@@ -223,8 +218,6 @@ namespace SpiceSharp.Components
                     }
                 }
             }
-
-            /* loop through all instances of the model */
         }
     }
 }

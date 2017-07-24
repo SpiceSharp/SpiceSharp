@@ -9,6 +9,12 @@ namespace SpiceSharp.Components.Transistors
     public static class Transistor
     {
         /// <summary>
+        /// Static variables
+        /// </summary>
+        public static double MAX_EXP_ARG = 709.0;
+        public static double EPSSIL = 11.7 * 8.854214871e-12;
+
+        /// <summary>
         /// Limiting function FET
         /// </summary>
         /// <param name="vnew">New voltage</param>

@@ -2,8 +2,8 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.Transistors;
 using System.Numerics;
+using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
@@ -30,9 +30,9 @@ namespace SpiceSharp.Components
         [SpiceName("pd"), SpiceInfo("Drain perimeter")]
         public Parameter<double> MOS3drainPerimiter { get; } = new Parameter<double>();
         [SpiceName("nrs"), SpiceInfo("Source squares")]
-        public Parameter<double> MOS3sourceSquares { get; } = new Parameter<double>();
+        public Parameter<double> MOS3sourceSquares { get; } = new Parameter<double>(1);
         [SpiceName("nrd"), SpiceInfo("Drain squares")]
-        public Parameter<double> MOS3drainSquares { get; } = new Parameter<double>();
+        public Parameter<double> MOS3drainSquares { get; } = new Parameter<double>(1);
         [SpiceName("off"), SpiceInfo("Device initially off")]
         public bool MOS3off { get; set; }
         [SpiceName("icvbs"), SpiceInfo("Initial B-S voltage")]
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components
         public Parameter<double> MOS3icVDS { get; } = new Parameter<double>();
         [SpiceName("icvgs"), SpiceInfo("Initial G-S voltage")]
         public Parameter<double> MOS3icVGS { get; } = new Parameter<double>();
-        [SpiceName("temp"), SpiceInfo("Instance operating temperature (in Kelvin)")]
+        [SpiceName("temp"), SpiceInfo("Instance operating temperature")]
         public Parameter<double> MOS3temp { get; } = new Parameter<double>();
         [SpiceName("dnode"), SpiceInfo("Number of drain node")]
         public int MOS3dNode { get; private set; }
@@ -97,13 +97,116 @@ namespace SpiceSharp.Components
         public double MOS3Cbssw { get; private set; }
 
         /// <summary>
+        /// Methods
+        /// </summary>
+        [SpiceName("ic"), SpiceInfo("Vector of D-S, G-S, B-S voltages")]
+        public void SetIC(double[] value)
+        {
+            switch (value.Length)
+            {
+                case 3: MOS3icVBS.Set(value[2]); goto case 2;
+                case 2: MOS3icVGS.Set(value[1]); goto case 1;
+                case 1: MOS3icVDS.Set(value[0]); break;
+                default:
+                    throw new CircuitException("Bad parameter");
+            }
+        }
+        [SpiceName("rs"), SpiceInfo("Source resistance")]
+        public double GetSOURCERESIST(Circuit ckt)
+        {
+            if (MOS3sNodePrime != MOS3sNode)
+                return 1.0 / MOS3sourceConductance;
+            else
+                return 0.0;
+        }
+        [SpiceName("rd"), SpiceInfo("Drain resistance")]
+        public double GetDRAINRESIST(Circuit ckt)
+        {
+            if (MOS3dNodePrime != MOS3dNode)
+                return 1.0 / MOS3drainConductance;
+            else
+                return 0.0;
+        }
+        [SpiceName("vbd"), SpiceInfo("Bulk-Drain voltage")]
+        public double GetVBD(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3vbd];
+        [SpiceName("vbs"), SpiceInfo("Bulk-Source voltage")]
+        public double GetVBS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3vbs];
+        [SpiceName("vgs"), SpiceInfo("Gate-Source voltage")]
+        public double GetVGS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3vgs];
+        [SpiceName("vds"), SpiceInfo("Drain-Source voltage")]
+        public double GetVDS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3vds];
+        [SpiceName("cgs"), SpiceInfo("Gate-Source capacitance")]
+        public double GetCAPGS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3capgs];
+        [SpiceName("qgs"), SpiceInfo("Gate-Source charge storage")]
+        public double GetQGS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3qgs];
+        [SpiceName("cqgs"), SpiceInfo("Capacitance due to gate-source charge storage")]
+        public double GetCQGS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3cqgs];
+        [SpiceName("cgd"), SpiceInfo("Gate-Drain capacitance")]
+        public double GetCAPGD(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3capgd];
+        [SpiceName("qgd"), SpiceInfo("Gate-Drain charge storage")]
+        public double GetQGD(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3qgd];
+        [SpiceName("cqgd"), SpiceInfo("Capacitance due to gate-drain charge storage")]
+        public double GetCQGD(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3cqgd];
+        [SpiceName("cgb"), SpiceInfo("Gate-Bulk capacitance")]
+        public double GetCAPGB(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3capgb];
+        [SpiceName("qgb"), SpiceInfo("Gate-Bulk charge storage")]
+        public double GetQGB(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3qgb];
+        [SpiceName("cqgb"), SpiceInfo("Capacitance due to gate-bulk charge storage")]
+        public double GetCQGB(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3cqgb];
+        [SpiceName("qbd"), SpiceInfo("Bulk-Drain charge storage")]
+        public double GetQBD(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3qbd];
+        [SpiceName("cqbd"), SpiceInfo("Capacitance due to bulk-drain charge storage")]
+        public double GetCQBD(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3cqbd];
+        [SpiceName("qbs"), SpiceInfo("Bulk-Source charge storage")]
+        public double GetQBS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3qbs];
+        [SpiceName("cqbs"), SpiceInfo("Capacitance due to bulk-source charge storage")]
+        public double GetCQBS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3cqbs];
+        [SpiceName("ib"), SpiceInfo("Bulk current")]
+        public double GetCB(Circuit ckt) => MOS3cbd + MOS3cbs - ckt.State.States[0][MOS3states + MOS3cqgb];
+        [SpiceName("ig"), SpiceInfo("Gate current")]
+        public double GetCG(Circuit ckt)
+        {
+            if (ckt.Method == null)
+                return 0.0;
+            else
+                return ckt.State.States[0][MOS3states + MOS3cqgb] + ckt.State.States[0][MOS3states + MOS3cqgd] + ckt.State.States[0][MOS3states + MOS3cqgs];
+        }
+        [SpiceName("is"), SpiceInfo("Source current")]
+        public double GetCS(Circuit ckt)
+        {
+            double value = -MOS3cd;
+            value -= MOS3cbd + MOS3cbs - ckt.State.States[0][MOS3states + MOS3cqgb];
+            if (ckt.Method != null)
+                value -= ckt.State.States[0][MOS3states + MOS3cqgb] + ckt.State.States[0][MOS3states + MOS3cqgd] + ckt.State.States[0][MOS3states + MOS3cqgs];
+            return value;
+        }
+        [SpiceName("p"), SpiceInfo("Instantaneous power")]
+        public double GetPOWER(Circuit ckt)
+        {
+            double temp;
+            double value = MOS3cd * ckt.State.Real.Solution[MOS3dNode];
+            value += (MOS3cbd + MOS3cbs -
+            ckt.State.States[0][MOS3states + MOS3cqgb]) * ckt.State.Real.Solution[MOS3bNode];
+            if (ckt.Method != null)
+            {
+                value += (ckt.State.States[0][MOS3states + MOS3cqgb] + ckt.State.States[0][MOS3states + MOS3cqgd] +
+                    ckt.State.States[0][MOS3states + MOS3cqgs]) * ckt.State.Real.Solution[MOS3gNode];
+            }
+            temp = -MOS3cd;
+            temp -= MOS3cbd + MOS3cbs;
+            if (ckt.Method != null)
+            {
+                temp -= ckt.State.States[0][MOS3states + MOS3cqgb] + ckt.State.States[0][MOS3states + MOS3cqgd] +
+                    ckt.State.States[0][MOS3states + MOS3cqgs];
+            }
+            value += temp * ckt.State.Real.Solution[MOS3sNode];
+            return value;
+        }
+
+        /// <summary>
         /// Extra variables
         /// </summary>
-        public double MOS3vdsatGiven { get; private set; }
-        public double MOS3vonGiven { get; private set; }
-        public double MOS3modeGiven { get; private set; }
         public double MOS3mode { get; private set; }
-        public double MOS3name { get; private set; }
         public double MOS3tTransconductance { get; private set; }
         public double MOS3tSurfMob { get; private set; }
         public double MOS3tPhi { get; private set; }
@@ -149,7 +252,6 @@ namespace SpiceSharp.Components
         private const int MOS3cqbd = 14;
         private const int MOS3qbs = 15;
         private const int MOS3cqbs = 16;
-        private const double MAX_EXP_ARG = 709.0;
 
         /// <summary>
         /// Constructor
@@ -182,35 +284,19 @@ namespace SpiceSharp.Components
             MOS3states = ckt.State.GetState(17);
 
             /* allocate a chunk of the state vector */
-            MOS3vdsat = 0.0;
-            MOS3von = 0.0;
+            MOS3vdsat = 0;
+            MOS3von = 0;
             MOS3mode = 1;
 
-            if ((Model.MOS3drainResistance != 0 ||
-                (Model.MOS3sheetResistance != 0 &&
-                MOS3drainSquares != 0)) &&
-                MOS3dNodePrime == 0)
-            {
+            if ((Model.MOS3drainResistance != 0 || (Model.MOS3sheetResistance != 0 && MOS3drainSquares != 0)) && MOS3dNodePrime == 0)
                 MOS3dNodePrime = CreateNode(ckt).Index;
-            }
             else
-            {
                 MOS3dNodePrime = MOS3dNode;
-            }
 
-            if ((Model.MOS3sourceResistance != 0 ||
-                (Model.MOS3sheetResistance != 0 &&
-                MOS3sourceSquares != 0)) &&
-                MOS3sNodePrime == 0)
-            {
+            if ((Model.MOS3sourceResistance != 0 || (Model.MOS3sheetResistance != 0 && MOS3sourceSquares != 0)) && MOS3sNodePrime == 0)
                 MOS3sNodePrime = CreateNode(ckt).Index;
-            }
             else
-            {
                 MOS3sNodePrime = MOS3sNode;
-            }
-
-            /* macro to make elements with built in test for out of memory */
         }
 
         /// <summary>
@@ -219,25 +305,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            double vt;
-            double ratio;
-            double fact2;
-            double kt;
-            double egfet;
-            double arg;
-            double pbfact;
-            double ratio4;
-            double phio;
-            double pbo;
-            double gmaold;
-            double capfact;
-            double gmanew;
-            double czbd;
-            double czbdsw;
-            double sarg;
-            double sargsw;
-            double czbs;
-            double czbssw;
+            double vt, ratio, fact2, kt, egfet, arg, pbfact, ratio4, phio, pbo, gmaold, capfact, gmanew, czbd, czbdsw, sarg, sargsw, czbs, czbssw;
 
             /* perform the parameter defaulting */
 
@@ -267,8 +335,7 @@ namespace SpiceSharp.Components
             {
                 if (Model.MOS3sheetResistance != 0)
                 {
-                    MOS3drainConductance =
-                    1 / (Model.MOS3sheetResistance * MOS3drainSquares);
+                    MOS3drainConductance = 1 / (Model.MOS3sheetResistance * MOS3drainSquares);
                 }
                 else
                 {
@@ -309,7 +376,6 @@ namespace SpiceSharp.Components
 
             if (MOS3l - 2 * Model.MOS3latDiff <= 0)
                 throw new CircuitException($"{Name}: effective channel length less than zero");
-
             ratio4 = ratio * Math.Sqrt(ratio);
             MOS3tTransconductance = Model.MOS3transconductance / ratio4;
             MOS3tSurfMob = Model.MOS3surfaceMobility / ratio4;
@@ -317,7 +383,8 @@ namespace SpiceSharp.Components
             MOS3tPhi = fact2 * phio + pbfact;
             MOS3tVbi = Model.MOS3vt0 - Model.MOS3type * (Model.MOS3gamma * Math.Sqrt(Model.MOS3phi))
                 + .5 * (Model.egfet1 - egfet) + Model.MOS3type * .5 * (MOS3tPhi - Model.MOS3phi);
-            MOS3tVto = MOS3tVbi + Model.MOS3type * Model.MOS3gamma * Math.Sqrt(MOS3tPhi);
+            MOS3tVto = MOS3tVbi + Model.MOS3type *
+            Model.MOS3gamma * Math.Sqrt(MOS3tPhi);
             MOS3tSatCur = Model.MOS3jctSatCur * Math.Exp(-egfet / vt + Model.egfet1 / Model.vtnom);
             MOS3tSatCurDens = Model.MOS3jctSatCurDensity * Math.Exp(-egfet / vt + Model.egfet1 / Model.vtnom);
             pbo = (Model.MOS3bulkJctPotential - Model.pbfact1) / Model.fact1;
@@ -410,8 +477,11 @@ namespace SpiceSharp.Components
             sargsw = Math.Exp((-Model.MOS3bulkJctSideGradingCoeff) * Math.Log(arg));
             MOS3Cbs = czbs;
             MOS3Cbssw = czbssw;
-            MOS3f2s = czbs * (1 - Model.MOS3fwdCapDepCoeff * (1 + Model.MOS3bulkJctBotGradingCoeff)) * sarg / arg
-                + czbssw * (1 - Model.MOS3fwdCapDepCoeff * (1 + Model.MOS3bulkJctSideGradingCoeff)) * sargsw / arg;
+            MOS3f2s = czbs * (1 - Model.MOS3fwdCapDepCoeff *
+            (1 + Model.MOS3bulkJctBotGradingCoeff)) * sarg / arg
+            + czbssw * (1 - Model.MOS3fwdCapDepCoeff *
+            (1 + Model.MOS3bulkJctSideGradingCoeff)) *
+            sargsw / arg;
             MOS3f3s = czbs * Model.MOS3bulkJctBotGradingCoeff * sarg / arg / Model.MOS3bulkJctPotential
                 + czbssw * Model.MOS3bulkJctSideGradingCoeff * sargsw / arg / Model.MOS3bulkJctPotential;
             MOS3f4s = czbs * Model.MOS3bulkJctPotential * (1 - arg * sarg) / (1 - Model.MOS3bulkJctBotGradingCoeff)
@@ -430,50 +500,9 @@ namespace SpiceSharp.Components
             var method = ckt.Method;
             double vt;
             int Check;
-            double EffectiveLength;
-            double DrainSatCur;
-            double SourceSatCur;
-            double GateSourceOverlapCap;
-            double GateDrainOverlapCap;
-            double GateBulkOverlapCap;
-            double Beta;
-            double OxideCap;
-            double vgs;
-            double vds;
-            double vbs;
-            double vbd;
-            double vgb;
-            double vgd;
-            double vgdo;
-            double delvbs;
-            double delvbd;
-            double delvgs;
-            double delvds;
-            double delvgd;
-            double cdhat;
-            double cbhat;
-            double von;
-            double evbs;
-            double evbd;
-            double vdsat;
-            double cdrain;
-            double arg;
-            double sarg;
-            double sargsw;
-            double vgs1;
-            double vgd1;
-            double vgb1;
-            double capgs = 0.0;
-            double capgd = 0.0;
-            double capgb = 0.0;
-            double gcgs = 0.0;
-            double ceqgs = 0.0;
-            double gcgd = 0.0;
-            double ceqgd = 0.0;
-            double gcgb = 0.0;
-            double ceqgb = 0.0;
-            double ceqbs = 0.0;
-            double ceqbd = 0.0;
+            double EffectiveLength, DrainSatCur, SourceSatCur, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta, OxideCap, vgs, vds, 
+                vbs, vbd, vgb, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat, von, evbs, evbd, vdsat, cdrain, arg, sarg, sargsw;
+            double vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs, ceqbd;
             int xnrm;
             int xrev;
             double cdreq;
@@ -516,6 +545,7 @@ namespace SpiceSharp.Components
 			* step or the general iteration step and they
 			* share some code, so we put them first - others later on
 			*/
+
             if (state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (method != null && method.SavedTime == 0.0) || (state.Init == CircuitState.InitFlags.InitFix && !MOS3off))
             {
                 /*PREDICTOR*/
@@ -542,13 +572,9 @@ namespace SpiceSharp.Components
                 /* these are needed for convergence testing */
 
                 if (MOS3mode >= 0)
-                {
                     cdhat = MOS3cd - MOS3gbd * delvbd + MOS3gmbs * delvbs + MOS3gm * delvgs + MOS3gds * delvds;
-                }
                 else
-                {
                     cdhat = MOS3cd - (MOS3gbd - MOS3gmbs) * delvbd - MOS3gm * delvgd + MOS3gds * delvds;
-                }
                 cbhat = MOS3cbs + MOS3cbd + MOS3gbd * delvbd + MOS3gbs * delvbs;
 
                 /* DETAILPROF */
@@ -568,7 +594,7 @@ namespace SpiceSharp.Components
 
                 if (state.States[0][MOS3states + MOS3vds] >= 0)
                 {
-                    vgs = Transistor.DEVfetlim(vgs, state.States[0][MOS3states + MOS3vgs], von);
+                    vgs = Transistor.DEVfetlim(vgs, state.States[0][MOS3states + MOS3vgs] , von);
                     vds = vgs - vgd;
                     vds = Transistor.DEVlimvds(vds, state.States[0][MOS3states + MOS3vds]);
                     vgd = vgs - vds;
@@ -601,6 +627,7 @@ namespace SpiceSharp.Components
 				* look at all of the possibilities for why we were
 				* called.  We still just initialize the three voltages
 				*/
+
                 if (state.Init == CircuitState.InitFlags.InitJct && !MOS3off)
                 {
                     vds = Model.MOS3type * MOS3icVDS;
@@ -642,7 +669,7 @@ namespace SpiceSharp.Components
             }
             else
             {
-                evbs = Math.Exp(Math.Min(MAX_EXP_ARG, vbs / vt));
+                evbs = Math.Exp(Math.Min(Transistor.MAX_EXP_ARG, vbs / vt));
                 MOS3gbs = SourceSatCur * evbs / vt + state.Gmin;
                 MOS3cbs = SourceSatCur * (evbs - 1);
             }
@@ -654,7 +681,7 @@ namespace SpiceSharp.Components
             }
             else
             {
-                evbd = Math.Exp(Math.Min(MAX_EXP_ARG, vbd / vt));
+                evbd = Math.Exp(Math.Min(Transistor.MAX_EXP_ARG, vbd / vt));
                 MOS3gbd = DrainSatCur * evbd / vt + state.Gmin;
                 MOS3cbd = DrainSatCur * (evbd - 1);
             }
@@ -713,86 +740,11 @@ namespace SpiceSharp.Components
                 double wps;
                 double oneoverxj;   /* 1/junction depth */
                 double xjonxl;  /* junction depth/effective length */
-                double djonxj;
-                double wponxj;
-                double arga;
-                double argb;
-                double argc;
-                double dwpdvb;
-                double dadvb;
-                double dbdvb;
-                double gammas;
-                double fbodys;
-                double fbody;
-                double onfbdy;
-                double qbonco;
-                double vbix;
-                double wconxj;
-                double dfsdvb;
-                double dfbdvb;
-                double dqbdvb;
-                double vth;
-                double dvtdvb;
-                double csonco;
-                double cdonco;
-                double dxndvb = 0.0;
-                double dvodvb = 0.0;
-                double dvodvd = 0.0;
-                double vgsx;
-                double dvtdvd;
-                double onfg;
-                double fgate;
-                double us;
-                double dfgdvg;
-                double dfgdvd;
-                double dfgdvb;
-                double dvsdvg;
-                double dvsdvb;
-                double dvsdvd;
-                double xn = 0.0;
-                double vdsc;
-                double onvdsc = 0.0;
-                double dvsdga;
-                double vdsx;
-                double dcodvb;
-                double cdnorm;
-                double cdo;
-                double cd1;
-                double fdrain = 0.0;
-                double fd2;
-                double dfddvg = 0.0;
-                double dfddvb = 0.0;
-                double dfddvd = 0.0;
-                double gdsat;
-                double cdsat;
-                double gdoncd;
-                double gdonfd;
-                double gdonfg;
-                double dgdvg;
-                double dgdvd;
-                double dgdvb;
-                double emax;
-                double emongd;
-                double demdvg;
-                double demdvd;
-                double demdvb;
-                double delxl;
-                double dldvd;
-                double dldem;
-                double ddldvg;
-                double ddldvd;
-                double ddldvb;
-                double dlonxl;
-                double xlfact;
-                double diddl;
-                double gds0 = 0.0;
-                double emoncd;
-                double ondvt;
-                double onxn;
-                double wfact;
-                double gms;
-                double gmw;
-                double fshort;
+                double djonxj, wponxj, arga, argb, argc, dwpdvb, dadvb, dbdvb, gammas, fbodys, fbody, onfbdy, qbonco, vbix, wconxj, dfsdvb, dfbdvb, dqbdvb, vth,
+                    dvtdvb, csonco, cdonco, dxndvb = 0.0, dvodvb = 0.0, dvodvd = 0.0, vgsx, dvtdvd, onfg, fgate, us, dfgdvg, dfgdvd, dfgdvb, dvsdvg, dvsdvb, dvsdvd, xn = 0.0, vdsc,
+                    onvdsc = 0.0, dvsdga, vdsx, dcodvb, cdnorm, cdo, cd1, fdrain = 0.0, fd2, dfddvg = 0.0, dfddvb = 0.0, dfddvd = 0.0, gdsat, cdsat, gdoncd, gdonfd, gdonfg, dgdvg, dgdvd,
+                    dgdvb, emax, emongd, demdvg, demdvd, demdvb, delxl, dldvd, dldem, ddldvg, ddldvd, ddldvb, dlonxl, xlfact, diddl, gds0 = 0.0, emoncd, ondvt, onxn,
+                    wfact, gms, gmw, fshort;
 
                 /*
 				*     bypasses the computation of charges
@@ -804,8 +756,8 @@ namespace SpiceSharp.Components
 				*/
                 vdsat = 0.0;
                 oneoverxl = 1.0 / EffectiveLength;
-                eta = Model.MOS3eta * 8.15e-22 / (Model.MOS3oxideCapFactor *
-                EffectiveLength * EffectiveLength * EffectiveLength);
+                eta = Model.MOS3eta * 8.15e-22 / (Model.MOS3oxideCapFactor * EffectiveLength * EffectiveLength * EffectiveLength);
+
                 /*
 				*.....square root term
 				*/
@@ -819,16 +771,14 @@ namespace SpiceSharp.Components
                 {
                     sqphis = Math.Sqrt(MOS3tPhi);
                     sqphs3 = MOS3tPhi * sqphis;
-                    sqphbs = sqphis / (1.0 + (MOS3mode == 1 ? vbs : vbd) /
-                    (MOS3tPhi + MOS3tPhi));
+                    sqphbs = sqphis / (1.0 + (MOS3mode == 1 ? vbs : vbd) / (MOS3tPhi + MOS3tPhi));
                     phibs = sqphbs * sqphbs;
                     dsqdvb = -phibs / (sqphs3 + sqphs3);
                 }
                 /*
 				*.....short channel effect factor
 				*/
-                if ((Model.MOS3junctionDepth != 0.0) &&
-                (Model.MOS3coeffDepLayWidth != 0.0))
+                if ((Model.MOS3junctionDepth != 0.0) && (Model.MOS3coeffDepLayWidth != 0.0))
                 {
                     wps = Model.MOS3coeffDepLayWidth * sqphbs;
                     oneoverxj = 1.0 / Model.MOS3junctionDepth;
@@ -850,9 +800,10 @@ namespace SpiceSharp.Components
                     fshort = 1.0;
                     dfsdvb = 0.0;
                 }
+
                 /*
-				*.....body effect
-				*/
+				 *.....body effect
+				 */
                 gammas = Model.MOS3gamma * fshort;
                 fbodys = 0.5 * gammas / (sqphbs + sqphbs);
                 fbody = fbodys + Model.MOS3narrowFactor / MOS3w;
@@ -861,24 +812,26 @@ namespace SpiceSharp.Components
                 qbonco = gammas * sqphbs + Model.MOS3narrowFactor * phibs / MOS3w;
                 dqbdvb = gammas * dsqdvb + Model.MOS3gamma * dfsdvb * sqphbs -
                 Model.MOS3narrowFactor / MOS3w;
+
                 /*
-				*.....static feedback effect
-				*/
+				 *.....static feedback effect
+				 */
                 vbix = MOS3tVbi * Model.MOS3type - eta * (MOS3mode * vds);
+
                 /*
-				*.....threshold voltage
-				*/
+				 *.....threshold voltage
+				 */
                 vth = vbix + qbonco;
                 dvtdvd = -eta;
                 dvtdvb = dqbdvb;
+
                 /*
-				*.....joint weak inversion and strong inversion
-				*/
+				 *.....joint weak inversion and strong inversion
+				 */
                 von = vth;
                 if (Model.MOS3fastSurfaceStateDensity != 0.0)
                 {
-                    csonco = Circuit.CHARGE * Model.MOS3fastSurfaceStateDensity *
-                    1e4 /*(cm**2/m**2)*/ * EffectiveLength * MOS3w / OxideCap;
+                    csonco = Circuit.CHARGE * Model.MOS3fastSurfaceStateDensity * 1e4 /*(cm**2/m**2)*/ * EffectiveLength * MOS3w / OxideCap;
                     cdonco = qbonco / (phibs + phibs);
                     xn = 1.0 + csonco + cdonco;
                     von = vth + vt * xn;
@@ -889,8 +842,8 @@ namespace SpiceSharp.Components
                 else
                 {
                     /*
-					*.....cutoff region
-					*/
+					 *.....cutoff region
+					 */
                     if ((MOS3mode == 1 ? vgs : vgd) <= von)
                     {
                         cdrain = 0.0;
@@ -901,21 +854,23 @@ namespace SpiceSharp.Components
                     }
                 }
                 /*
-				*.....device is on
-				*/
+				 *.....device is on
+				 */
                 vgsx = Math.Max((MOS3mode == 1 ? vgs : vgd), von);
+
                 /*
-				*.....mobility modulation by gate voltage
-				*/
+				 *.....mobility modulation by gate voltage
+				 */
                 onfg = 1.0 + Model.MOS3theta * (vgsx - vth);
                 fgate = 1.0 / onfg;
                 us = MOS3tSurfMob * 1e-4 /*(m**2/cm**2)*/ * fgate;
                 dfgdvg = -Model.MOS3theta * fgate * fgate;
                 dfgdvd = -dfgdvg * dvtdvd;
                 dfgdvb = -dfgdvg * dvtdvb;
+
                 /*
-				*.....saturation voltage
-				*/
+				 *.....saturation voltage
+				 */
                 vdsat = (vgsx - vth) * onfbdy;
                 if (Model.MOS3maxDriftVel <= 0.0)
                 {
@@ -935,32 +890,36 @@ namespace SpiceSharp.Components
                     dvsdvd = -dvsdvg * dvtdvd;
                     dvsdvb = -dvsdvg * dvtdvb - arga * dvsdga * dfbdvb;
                 }
+
                 /*
-				*.....current factors in linear region
-				*/
+				 *.....current factors in linear region
+				 */
                 vdsx = Math.Min((MOS3mode * vds), vdsat);
                 if (vdsx == 0.0) goto line900;
                 cdo = vgsx - vth - 0.5 * (1.0 + fbody) * vdsx;
                 dcodvb = -dvtdvb - 0.5 * dfbdvb * vdsx;
+
                 /* 
-				*.....normalized drain current
-				*/
+				 *.....normalized drain current
+				 */
                 cdnorm = cdo * vdsx;
                 MOS3gm = vdsx;
                 MOS3gds = vgsx - vth - (1.0 + fbody + dvtdvd) * vdsx;
                 MOS3gmbs = dcodvb * vdsx;
+
                 /* 
-				*.....drain current without velocity saturation effect
-				*/
+				 *.....drain current without velocity saturation effect
+				 */
                 cd1 = Beta * cdnorm;
                 Beta = Beta * fgate;
                 cdrain = Beta * cdnorm;
                 MOS3gm = Beta * MOS3gm + dfgdvg * cd1;
                 MOS3gds = Beta * MOS3gds + dfgdvd * cd1;
                 MOS3gmbs = Beta * MOS3gmbs;
+
                 /*
-				*.....velocity saturation factor
-				*/
+				 *.....velocity saturation factor
+				 */
                 if (Model.MOS3maxDriftVel != 0.0)
                 {
                     fdrain = 1.0 / (1.0 + vdsx * onvdsc);
@@ -978,9 +937,10 @@ namespace SpiceSharp.Components
                     cdrain = fdrain * cdrain;
                     Beta = Beta * fdrain;
                 }
+
                 /*
-				*.....channel length modulation
-				*/
+				 *.....channel length modulation
+				 */
                 if ((MOS3mode * vds) <= vdsat) goto line700;
                 if (Model.MOS3maxDriftVel <= 0.0) goto line510;
                 if (Model.MOS3alpha == 0.0) goto line700;
@@ -996,9 +956,8 @@ namespace SpiceSharp.Components
 
                 /* if (ckt->CKTbadMos3)
                     emax = cdsat * oneoverxl / gdsat;
-                else
-                    emax = Model.MOS3kappa * cdsat * oneoverxl / gdsat; */
-                emax = Model.MOS3kappa * cdsat * oneoverxl / gdsat; // Default CKTbadMos3 = 0
+                else */
+                emax = Model.MOS3kappa * cdsat * oneoverxl / gdsat;
                 emoncd = emax / cdsat;
                 emongd = emax / gdsat;
                 demdvg = emoncd * MOS3gm - emongd * dgdvg;
@@ -1022,9 +981,10 @@ namespace SpiceSharp.Components
                 ddldvg = 0.0;
                 ddldvd = -dldvd;
                 ddldvb = 0.0;
+
                 /*
-				*.....punch through approximation
-				*/
+				 *.....punch through approximation
+				 */
                 line520:
                 if (delxl > (0.5 * EffectiveLength))
                 {
@@ -1037,9 +997,10 @@ namespace SpiceSharp.Components
                     ddldvb = ddldvb * arga;
                     dldvd = dldvd * arga;
                 }
+                
                 /*
-				*.....saturation region
-				*/
+				 *.....saturation region
+				 */
                 dlonxl = delxl * oneoverxl;
                 xlfact = 1.0 / (1.0 - dlonxl);
                 cdrain = cdrain * xlfact;
@@ -1050,9 +1011,10 @@ namespace SpiceSharp.Components
                 MOS3gm = MOS3gm + gds0 * dvsdvg;
                 MOS3gmbs = MOS3gmbs + gds0 * dvsdvb;
                 MOS3gds = gds0 * dvsdvd + diddl * dldvd;
+
                 /*
-				*.....finish strong inversion case
-				*/
+				 *.....finish strong inversion case
+				 */
                 line700:
                 if ((MOS3mode == 1 ? vgs : vgd) < von)
                 {
@@ -1074,28 +1036,27 @@ namespace SpiceSharp.Components
                     MOS3gmbs = MOS3gmbs * wfact + (gms - gmw) * dvodvb - gmw *
                     ((MOS3mode == 1 ? vgs : vgd) - von) * onxn * dxndvb;
                 }
+
                 /*
-				*.....charge computation
-				*/
+				 *.....charge computation
+				 */
                 goto innerline1000;
+
                 /*
-				*.....special case of vds = 0.0d0
-				*/
+				 *.....special case of vds = 0.0d0
+				 */
                 line900:
                 Beta = Beta * fgate;
                 cdrain = 0.0;
                 MOS3gm = 0.0;
                 MOS3gds = Beta * (vgsx - vth);
                 MOS3gmbs = 0.0;
-                if ((Model.MOS3fastSurfaceStateDensity != 0.0) &&
-                ((MOS3mode == 1 ? vgs : vgd) < von))
-                {
+                if ((Model.MOS3fastSurfaceStateDensity != 0.0) && ((MOS3mode == 1 ? vgs : vgd) < von))
                     MOS3gds *= Math.Exp(((MOS3mode == 1 ? vgs : vgd) - von) / (vt * xn));
-                }
                 innerline1000:;
                 /* 
-				*.....done
-				*/
+				 *.....done
+				 */
             }
 
             /* DETAILPROF */
@@ -1277,20 +1238,17 @@ namespace SpiceSharp.Components
                     result = method.Integrate(state, MOS3states + MOS3qbs, MOS3capbs);
                     MOS3gbs += result.Geq;
                     MOS3cbs += state.States[0][MOS3states + MOS3cqbs];
-                    
                 }
             }
             /* DETAILPROF */
 
             /*
-			*  check convergence
-			*/
-            if (!MOS3off || (state.Init != CircuitState.InitFlags.InitFix || !state.UseSmallSignal))
+			 *  check convergence
+			 */
+             if (!MOS3off || !(state.Init == CircuitState.InitFlags.InitFix || state.UseSmallSignal))
             {
                 if (Check == 1)
-                {
                     state.IsCon = false;
-                }
             }
 
             /* DETAILPROF */
@@ -1305,8 +1263,8 @@ namespace SpiceSharp.Components
             /* DETAILPROF */
 
             /*
-			*     meyer's capacitor model
-			*/
+			 *     meyer's capacitor model
+			 */
             if (state.Domain == CircuitState.DomainTypes.Time || state.UseSmallSignal)
             {
                 /*
@@ -1319,22 +1277,14 @@ namespace SpiceSharp.Components
 				* you must add in the other half from previous time
 				* and the constant part
 				*/
+                double icapgs, icapgd, icapgb;
                 if (MOS3mode > 0)
-                {
-                    double icapgs, icapgd, icapgb;
                     Transistor.DEVqmeyer(vgs, vgd, vgb, von, vdsat, out icapgs, out icapgd, out icapgb, MOS3tPhi, OxideCap);
-                    state.States[0][MOS3states + MOS3capgs] = icapgs;
-                    state.States[0][MOS3states + MOS3capgd] = icapgd;
-                    state.States[0][MOS3states + MOS3capgb] = icapgb;
-                }
                 else
-                {
-                    double icapgs, icapgd, icapgb;
                     Transistor.DEVqmeyer(vgd, vgs, vgb, von, vdsat, out icapgd, out icapgs, out icapgb, MOS3tPhi, OxideCap);
-                    state.States[0][MOS3states + MOS3capgs] = icapgs;
-                    state.States[0][MOS3states + MOS3capgd] = icapgd;
-                    state.States[0][MOS3states + MOS3capgb] = icapgb;
-                }
+                state.States[0][MOS3states + MOS3capgs] = icapgs;
+                state.States[0][MOS3states + MOS3capgd] = icapgd;
+                state.States[0][MOS3states + MOS3capgb] = icapgb;
                 vgs1 = state.States[1][MOS3states + MOS3vgs];
                 vgd1 = vgs1 - state.States[1][MOS3states + MOS3vds];
                 vgb1 = vgs1 - state.States[1][MOS3states + MOS3vbs];
@@ -1346,9 +1296,15 @@ namespace SpiceSharp.Components
                 }
                 else
                 {
-                    capgs = (state.States[0][MOS3states + MOS3capgs] + state.States[1][MOS3states + MOS3capgs] + GateSourceOverlapCap);
-                    capgd = (state.States[0][MOS3states + MOS3capgd] + state.States[1][MOS3states + MOS3capgd] + GateDrainOverlapCap);
-                    capgb = (state.States[0][MOS3states + MOS3capgb] + state.States[1][MOS3states + MOS3capgb] + GateBulkOverlapCap);
+                    capgs = (state.States[0][MOS3states + MOS3capgs] +
+                    state.States[1][MOS3states + MOS3capgs] +
+                    GateSourceOverlapCap);
+                    capgd = (state.States[0][MOS3states + MOS3capgd] +
+                    state.States[1][MOS3states + MOS3capgd] +
+                    GateDrainOverlapCap);
+                    capgb = (state.States[0][MOS3states + MOS3capgb] +
+                    state.States[1][MOS3states + MOS3capgb] +
+                    GateBulkOverlapCap);
                 }
 
                 /* DETAILPROF */
@@ -1360,12 +1316,9 @@ namespace SpiceSharp.Components
                 /*PREDICTOR*/
                 if (method != null)
                 {
-                    state.States[0][MOS3states + MOS3qgs] = (vgs - vgs1) * capgs +
-                    state.States[1][MOS3states + MOS3qgs];
-                    state.States[0][MOS3states + MOS3qgd] = (vgd - vgd1) * capgd +
-                    state.States[1][MOS3states + MOS3qgd];
-                    state.States[0][MOS3states + MOS3qgb] = (vgb - vgb1) * capgb +
-                    state.States[1][MOS3states + MOS3qgb];
+                    state.States[0][MOS3states + MOS3qgs] = (vgs - vgs1) * capgs + state.States[1][MOS3states + MOS3qgs];
+                    state.States[0][MOS3states + MOS3qgd] = (vgd - vgd1) * capgd + state.States[1][MOS3states + MOS3qgd];
+                    state.States[0][MOS3states + MOS3qgb] = (vgb - vgb1) * capgb + state.States[1][MOS3states + MOS3qgb];
                 }
                 else
                 {
@@ -1377,7 +1330,8 @@ namespace SpiceSharp.Components
                 /*PREDICTOR*/
             }
             /* DETAILPROF */
-            if (method == null || method.SavedTime == 0.0)
+
+            if ((method != null && method.SavedTime == 0.0) || method == null)
             {
                 /*
 				*  initialize to zero charge conductances 
@@ -1399,51 +1353,50 @@ namespace SpiceSharp.Components
                 if (capgb == 0)
                     state.States[0][MOS3states + MOS3cqgb] = 0;
                 /*
-				*    calculate equivalent conductances and currents for
-				*    meyer"s capacitors
-				*/
-                method.Integrate(state, out gcgs, out ceqgs, MOS3states + MOS3qgs, MOS3capgs);
-                method.Integrate(state, out gcgd, out ceqgd, MOS3states + MOS3qgd, MOS3capgd);
-                method.Integrate(state, out gcgb, out ceqgb, MOS3states + MOS3qgb, MOS3capgb);
+				 *    calculate equivalent conductances and currents for
+				 *    meyer"s capacitors
+				 */
+                method.Integrate(state, out gcgs, out ceqgs, MOS3states + MOS3qgs, capgs);
+                method.Integrate(state, out gcgd, out ceqgd, MOS3states + MOS3qgd, capgd);
+                method.Integrate(state, out gcgb, out ceqgb, MOS3states + MOS3qgb, capgb);
                 ceqgs = ceqgs - gcgs * vgs + method.Slope * state.States[0][MOS3states + MOS3qgs];
                 ceqgd = ceqgd - gcgd * vgd + method.Slope * state.States[0][MOS3states + MOS3qgd];
                 ceqgb = ceqgb - gcgb * vgb + method.Slope * state.States[0][MOS3states + MOS3qgb];
             }
             /*
-			*     store charge storage info for meyer's cap in lx table
-			*/
+			 *     store charge storage info for meyer's cap in lx table
+			 */
 
             /* DETAILPROF */
             /*
-			*  load current vector
-			*/
-            ceqbs = Model.MOS3type *
-            (MOS3cbs - (MOS3gbs - state.Gmin) * vbs);
-            ceqbd = Model.MOS3type *
-            (MOS3cbd - (MOS3gbd - state.Gmin) * vbd);
+			 *  load current vector
+			 */
+            ceqbs = Model.MOS3type * (MOS3cbs - (MOS3gbs - state.Gmin) * vbs);
+            ceqbd = Model.MOS3type * (MOS3cbd - (MOS3gbd - state.Gmin) * vbd);
             if (MOS3mode >= 0)
             {
                 xnrm = 1;
                 xrev = 0;
-                cdreq = Model.MOS3type * (cdrain - MOS3gds * vds -
-                MOS3gm * vgs - MOS3gmbs * vbs);
+                cdreq = Model.MOS3type * (cdrain - MOS3gds * vds - MOS3gm * vgs - MOS3gmbs * vbs);
             }
             else
             {
                 xnrm = 0;
                 xrev = 1;
-                cdreq = -(Model.MOS3type) * (cdrain - MOS3gds * (-vds) -
-                MOS3gm * vgd - MOS3gmbs * vbd);
+                cdreq = -(Model.MOS3type) * (cdrain - MOS3gds * (-vds) - MOS3gm * vgd - MOS3gmbs * vbd);
             }
 
-            rstate.Solution[MOS3gNode] -= (Model.MOS3type * (ceqgs + ceqgb + ceqgd));
-            rstate.Solution[MOS3bNode] -= (ceqbs + ceqbd - Model.MOS3type * ceqgb);
-            rstate.Solution[MOS3dNodePrime] += (ceqbd - cdreq + Model.MOS3type * ceqgd);
-            rstate.Solution[MOS3sNodePrime] += cdreq + ceqbs + Model.MOS3type * ceqgs;
+            /*
+             * load rhs vector
+             */
+            rstate.Rhs[MOS3gNode] -= (Model.MOS3type * (ceqgs + ceqgb + ceqgd));
+            rstate.Rhs[MOS3bNode] -= (ceqbs + ceqbd - Model.MOS3type * ceqgb);
+            rstate.Rhs[MOS3dNodePrime] += (ceqbd - cdreq + Model.MOS3type * ceqgd);
+            rstate.Rhs[MOS3sNodePrime] += cdreq + ceqbs + Model.MOS3type * ceqgs;
 
             /*
-			*  load y matrix
-			*/
+			 *  load y matrix
+			 */
             rstate.Matrix[MOS3dNode, MOS3dNode] += (MOS3drainConductance);
             rstate.Matrix[MOS3gNode, MOS3gNode] += ((gcgd + gcgs + gcgb));
             rstate.Matrix[MOS3sNode, MOS3sNode] += (MOS3sourceConductance);
@@ -1485,7 +1438,11 @@ namespace SpiceSharp.Components
             double capgs;
             double capgd;
             double capgb;
-            Complex xgs, xgd, xgb, xbd, xbs;
+            Complex xgs;
+            Complex xgd;
+            Complex xgb;
+            Complex xbd;
+            Complex xbs;
 
             if (MOS3mode < 0)
             {
@@ -1497,17 +1454,18 @@ namespace SpiceSharp.Components
                 xnrm = 1;
                 xrev = 0;
             }
+
             /*
-			*    charge oriented model parameters
-			*/
+			 *    charge oriented model parameters
+			 */
             EffectiveLength = MOS3l - 2 * Model.MOS3latDiff;
             GateSourceOverlapCap = Model.MOS3gateSourceOverlapCapFactor * MOS3w;
             GateDrainOverlapCap = Model.MOS3gateDrainOverlapCapFactor * MOS3w;
             GateBulkOverlapCap = Model.MOS3gateBulkOverlapCapFactor * EffectiveLength;
 
             /*
-			*     meyer"s model parameters
-			*/
+			 *     meyer"s model parameters
+			 */
             capgs = (state.States[0][MOS3states + MOS3capgs] + state.States[0][MOS3states + MOS3capgs] + GateSourceOverlapCap);
             capgd = (state.States[0][MOS3states + MOS3capgd] + state.States[0][MOS3states + MOS3capgd] + GateDrainOverlapCap);
             capgb = (state.States[0][MOS3states + MOS3capgb] + state.States[0][MOS3states + MOS3capgb] + GateBulkOverlapCap);

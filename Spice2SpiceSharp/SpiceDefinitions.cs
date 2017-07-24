@@ -13,7 +13,12 @@ namespace Spice2SpiceSharp
         /// <summary>
         /// Gets the state names (ordered)
         /// </summary>
-        public string[] States { get; private set; } = null;
+        public List<Tuple<int, string>> States { get; } = new List<Tuple<int, string>>();
+
+        /// <summary>
+        /// Gets the number of states
+        /// </summary>
+        public int Count { get; private set; }
 
         /// <summary>
         /// Gets the state names
@@ -29,28 +34,22 @@ namespace Spice2SpiceSharp
             // Get the variable
             string var = setup.StatesVariable;
             string code;
+            Count = 0;
 
             // Open the definitions file
             using (StreamReader sr = new StreamReader(Path.Combine(dev.Folder, dev.Def)))
                 code = sr.ReadToEnd();
 
             // Find all the states
-            Dictionary<string, int> list = new Dictionary<string, int>();
             Regex r = new Regex($@"#define\s*(?<name>\w+)\s*{setup.StatesVariable}\s*\+\s*(?<offset>\d+)");
             var ms = r.Matches(code);
-            int max = 0;
             foreach (Match m in ms)
             {
                 int offset = Convert.ToInt32(m.Groups["offset"].Value);
-                list.Add(m.Groups["name"].Value, offset);
-                max = Math.Max(offset + 1, max);
+                States.Add(new Tuple<int, string>(offset, m.Groups["name"].Value));
                 StateNames.Add(m.Groups["name"].Value);
+                Count = Math.Max(Count, offset + 1);
             }
-
-            // Store the ordered states
-            States = new string[max];
-            foreach (var s in list)
-                States[s.Value] = s.Key;
         }
     }
 }

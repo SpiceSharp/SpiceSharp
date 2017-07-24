@@ -209,7 +209,7 @@ namespace Spice2SpiceSharp
         private string ApplyParameters(string code, string obj, SpiceParam sp, HashSet<string> leftover, string prefix = "")
         {
             // The model parameters can be replaced by just their name
-            Regex mv = new Regex($@"{obj}\s*\-\>\s*(?<var>\w+)");
+            Regex mv = new Regex($@"{obj}\s*\-\>\s*(?<var>\w+)\s*(?<assignment>\=)?");
             return mv.Replace(code, (Match m) =>
             {
                 // Check if the model variable exists
@@ -218,6 +218,11 @@ namespace Spice2SpiceSharp
                     return prefix + sp.GivenVariable[var] + ".Given";
                 if (!sp.Variables.Contains(var))
                     leftover.Add(var);
+                else if (m.Groups["assignment"].Success)
+                    var += ".Value";
+
+                if (m.Groups["assignment"].Success)
+                    return prefix + var + " =";
                 return prefix + var;
             });
         }
@@ -266,6 +271,39 @@ namespace Spice2SpiceSharp
         /// <returns></returns>
         private string ApplyGeneral(string code, string ckt = "ckt")
         {
+            // Format long formula's
+            code = Regex.Replace(code, @"^[ \t]*[^\=\r\n\{\}]+\=[^;\{\}]+;", (Match m) =>
+            {
+                // Remove all newlines
+                return Regex.Replace(m.Value, @"\s*[\r\n]+\s*", " ");
+            }, RegexOptions.Multiline);
+
+            // Format operators (one space before, one space after)
+            code = Regex.Replace(code, @"[ \t]*(\/\*|\*\/|\-\>|\!\=|\+\=|\-\=|\/\=|\*\=|\&\=|\|\=|\<\=|\>=|\=\=|\&\&|\|\||\*|\/|\+|\-|\=)[ \t]*", (Match m) => " " + m.Value.Trim() + " ");
+            code = Regex.Replace(code, @"[ \t]+\)", ")");
+            code = Regex.Replace(code, @"\([ \t]+", "(");
+            code = Regex.Replace(code, @"(?<=[\=,])[ \t]*-[ \t]*", " -");
+            code = Regex.Replace(code, @"(?<=\()[ \t]*-[ \t]*", "-");
+            code = Regex.Replace(code, @"[ \t]*,[ \t]*", ", ");
+            code = Regex.Replace(code, @"\d+e - \d+", (Match m) => m.Value.Replace(" ", ""));
+            code = code.Replace(" -> ", "->");
+
+            // Make single line conditional statements
+            Regex condr = new Regex(@"if[ \t]*\(", RegexOptions.RightToLeft);
+            Match match = condr.Match(code);
+            while (match.Success)
+            {
+                int start = match.Index + match.Length - 1;
+                string pre = code.Substring(0, match.Index);
+                int e = Code.GetMatchingParenthesis(code, start);
+                string post = code.Substring(e + 1);
+                string cond = code.Substring(start, e - start + 1);
+                cond = Regex.Replace(cond, @"\s*[\r\n]\s*", " ");
+                code = pre + "if " + cond + post;
+
+                match = match.NextMatch();
+            }
+
             foreach (string m in replaceMethods.Keys)
                 code = Regex.Replace(code, $@"(?<!\w){m}\s*\(", replaceMethods[m] + "(");
 

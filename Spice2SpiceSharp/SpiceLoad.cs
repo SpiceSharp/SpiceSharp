@@ -71,8 +71,11 @@ namespace Spice2SpiceSharp
             Regex sr = new Regex($@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTstate(?<state>\d+)\s*\+\s*(?<var>\w+)\s*\)");
             code = sr.Replace(code, (Match m) => $"{state}.States[{m.Groups["state"].Value}][{states} + {m.Groups["var"].Value}]");
 
-            Regex oldsol = new Regex($@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTrhs(?<old>(Old)?)\s*\+\s*(?<node>\w+)\s*\)");
-            code = oldsol.Replace(code, (Match m) => $"{rstate}.{m.Groups["old"].Value}Solution[{m.Groups["node"].Value}]");
+            Regex oldsol = new Regex($@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTrhsOld\s*\+\s*(?<node>\w+)\s*\)");
+            code = oldsol.Replace(code, (Match m) => $"{rstate}.OldSolution[{m.Groups["node"].Value}]");
+
+            Regex rhs = new Regex($@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTrhs\s*\+\s*(?<node>\w+)\s*\)");
+            code = rhs.Replace(code, (Match m) => $"{rstate}.Rhs[{m.Groups["node"].Value}]");
 
             // Nodes
             foreach (string n in matrixnodes.Keys)

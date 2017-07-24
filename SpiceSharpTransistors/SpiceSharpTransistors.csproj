@@ -44,6 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BSIM1.cs" />
+    <Compile Include="BSIM1Model.cs" />
+    <Compile Include="BSIM2.cs" />
+    <Compile Include="BSIM2Model.cs" />
+    <Compile Include="BSIM2SizeDependParam.cs" />
     <Compile Include="MOS1.cs" />
     <Compile Include="MOS1Model.cs" />
     <Compile Include="MOS2.cs" />

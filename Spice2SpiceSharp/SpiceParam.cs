@@ -136,10 +136,11 @@ namespace Spice2SpiceSharp
                         decl.Add($"public {type} {name} {{ get; set; }}");
                     else if (AnySet(param_decl, out multiS) && AnyGet(ask_decl, out multiG))
                     {
+                        
                         decl.AddRange(new string[] { $"public {type} {id}",
                             "{",
-                            "get", "{", Code.Format(ask_decl), "}",
-                            "set", "{", Code.Format(param_decl), "}",
+                            "get", "{", fmtMethod(ask_decl), "}",
+                            "set", "{", fmtMethod(param_decl), "}",
                             "}" });
 
                         // Find the first common one
@@ -167,14 +168,14 @@ namespace Spice2SpiceSharp
                     else if (IsDefaultSet(param_decl, out name))
                         decl.Add($"public {type} {name} {{ get; set; }}");
                     else
-                        decl.AddRange(new string[] { $"public void Set{id}({type} value)", "{", param_decl, "}" });
+                        decl.AddRange(new string[] { $"public void Set{id}({type} value)", "{", fmtMethod(param_decl), "}" });
                 }
                 else if (ask_decl != null)
                 {
                     if (IsDefaultGet(ask_decl, out name))
                         decl.Add($"public {type} {name} {{ get; private set; }}");
                     else
-                        decl.AddRange(new string[] { $"public {type} Get{id}(Circuit ckt)", "{", ask_decl, "}" });
+                        decl.AddRange(new string[] { $"public {type} Get{id}(Circuit ckt)", "{", fmtMethod(ask_decl), "}" });
                 }
                 else
                     throw new Exception("Invalid declaration(?)");
@@ -199,7 +200,7 @@ namespace Spice2SpiceSharp
         /// <returns></returns>
         private bool IsDefaultParameterSet(string code, out string param, out string given)
         {
-            Regex psr = new Regex($@"^{par_here}\s*\-\>\s*(?<var>\w+)\s*\=\s*{par_value}\s*\-\>\s*[ris]Value\s*;\s*{par_here}\s*\-\>\s*(?<given>\w+Given)\s*\=\s*TRUE\s*;$");
+            Regex psr = new Regex($@"^{par_here}\s*\-\>\s*(?<var>\w+)\s*\=\s*{par_value}\s*\-\>\s*[ris]Value\s*;\s*{par_here}\s*\-\>\s*(?<given>\w+Given)\s*\=\s*TRUE\s*;\s*(return\s*\(\s*OK\s*\);|break\s*;)\s*$");
             param = null;
             given = null;
 
@@ -224,7 +225,7 @@ namespace Spice2SpiceSharp
         /// <returns></returns>
         private bool IsDefaultSet(string code, out string param)
         {
-            Regex sr = new Regex($@"^{par_here}\s*\-\>(?<var>\w+)\s*\=\s*{par_value}\s*\-\>\s*[ris]Value\s*;$");
+            Regex sr = new Regex($@"^{par_here}\s*\-\>(?<var>\w+)\s*\=\s*{par_value}\s*\-\>\s*[ris]Value\s*;\s*(return\s*\(\s*OK\s*\);|break\s*;)\s*$");
             param = null;
 
             code = code.Trim();
@@ -279,7 +280,7 @@ namespace Spice2SpiceSharp
         /// <returns></returns>
         private bool IsDefaultGet(string code, out string param)
         {
-            Regex sar = new Regex($@"^{ask_value}\s*\-\>\s*([ris]Value)\s*\=\s*{ask_here}\s*\-\>\s*(?<var>\w+);$");
+            Regex sar = new Regex($@"^{ask_value}\s*\-\>\s*([ris]Value)\s*\=\s*{ask_here}\s*\-\>\s*(?<var>\w+);\s*(return\s*\(\s*OK\s*\);|break\s*;)\s*$");
             param = null;
 
             code = code.Trim();
@@ -328,8 +329,50 @@ namespace Spice2SpiceSharp
                 case "IF_STRING": return "string";
                 case "IF_REALVEC": return "double[]";
                 case "IF_INTEGER": return "int";
+                case "IF_VECTOR": return "double[]";
                 default:
                     throw new Exception($"Could not recognized type flag '{flagtype}'");
+            }
+        }
+
+        /// <summary>
+        /// Format ask and 
+        /// </summary>
+        /// <param name="ask"></param>
+        /// <param name="par"></param>
+        private string fmtMethod(string decl)
+        {
+            decl = Regex.Replace(decl, $@"{par_here}\s*\-\>\s*", "");
+            decl = Regex.Replace(decl, $@"{par_value}\s*\-\>\s*[irs]Value", "value");
+
+            // Remove the last break/return statements
+            decl = Regex.Replace(decl, @"break\s*;\s*$", "", RegexOptions.IgnoreCase);
+            decl = Regex.Replace(decl, @"return\s*\(\s*ok\s*\)\s*;\s*$", "", RegexOptions.IgnoreCase);
+
+            return Code.Format(decl);
+        }
+
+        /// <summary>
+        /// Update methods
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        /// <param name="setup"></param>
+        public void UpdateMethods(SpiceDevice dev, SpiceSetup setup, string ckt = "ckt")
+        {
+            // States
+            for (int i = 0; i < Methods.Count; i++)
+            {
+                string code = Regex.Replace(Methods[i], 
+                    $@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTstate(?<state>\d+)\s*\+\s*(?<node>\w+)\s*\)",
+                    (Match m) => $"ckt.State.States[{m.Groups["state"].Value}][{setup.StatesVariable} + {m.Groups["node"].Value}]");
+                code = Regex.Replace(code, dev.DeviceName + "_", "", RegexOptions.IgnoreCase);
+                code = Regex.Replace(code, $@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTrhsOld\s*\+\s*(?<node>\w+)\s*\)", (Match m) => $"ckt.State.Real.Solution[{m.Groups["node"].Value}]");
+
+                // If it just a simple setter, then use the shorthand notation
+                Regex simpleset = new Regex(@"\s*\{\s*value\s*\=\s*(?<value>[^;]+);(\s*return\s*\(\s*OK\s*\)\s*;)?\s*\}\s*$");
+                code = simpleset.Replace(code, (Match m) => $" => {m.Groups["value"].Value};");
+
+                Methods[i] = code;
             }
         }
     }
