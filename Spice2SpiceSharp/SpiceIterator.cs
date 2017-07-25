@@ -271,6 +271,9 @@ namespace Spice2SpiceSharp
         /// <returns></returns>
         private string ApplyGeneral(string code, string ckt = "ckt")
         {
+            // Format accolades: { is always followed by a newline
+            code = Regex.Replace(code, @"{\s*", "{" + Environment.NewLine);
+
             // Format long formula's
             code = Regex.Replace(code, @"^[ \t]*[^\=\r\n\{\}]+\=[^;\{\}]+;", (Match m) =>
             {
@@ -285,7 +288,9 @@ namespace Spice2SpiceSharp
             code = Regex.Replace(code, @"(?<=[\=,])[ \t]*-[ \t]*", " -");
             code = Regex.Replace(code, @"(?<=\()[ \t]*-[ \t]*", "-");
             code = Regex.Replace(code, @"[ \t]*,[ \t]*", ", ");
-            code = Regex.Replace(code, @"\d+e - \d+", (Match m) => m.Value.Replace(" ", ""));
+
+            // Fixes
+            code = Regex.Replace(code, @"\d+[eE] - \d+", (Match m) => m.Value.Replace(" ", ""));
             code = code.Replace(" -> ", "->");
 
             // Make single line conditional statements
@@ -299,7 +304,7 @@ namespace Spice2SpiceSharp
                 string post = code.Substring(e + 1);
                 string cond = code.Substring(start, e - start + 1);
                 cond = Regex.Replace(cond, @"\s*[\r\n]\s*", " ");
-                code = pre + "if " + cond + post;
+                code = pre + "if " + cond + Environment.NewLine + post.TrimStart();
 
                 match = match.NextMatch();
             }

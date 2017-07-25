@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpiceSharp.Components.Transistors
 {
@@ -13,6 +9,21 @@ namespace SpiceSharp.Components.Transistors
         /// </summary>
         public static double MAX_EXP_ARG = 709.0;
         public static double EPSSIL = 11.7 * 8.854214871e-12;
+        public static double MAX_EXP = 5.834617425e14;
+        public static double MIN_EXP = 1.713908431e-15;
+        public static double EXP_THRESHOLD = 34.0;
+        public static double SMOOTHFACTOR = 0.1;
+        public static double EPSOX = 3.453133e-11;
+        public static double EPSSI = 1.03594e-10;
+        public static double PI = 3.141592654;
+        public static double Charge_q = 1.60219e-19;
+        public static double Meter2Micron = 1.0e6;
+        public static double Kb = 1.3806226e-23;
+        public static double KboQ = 8.617087e-5;  /* Kb / q  where q = 1.60219e-19 */
+        public static double DELTA_1 = 0.02;
+        public static double DELTA_2 = 0.02;
+        public static double DELTA_3 = 0.02;
+        public static double DELTA_4 = 0.02;
 
         /// <summary>
         /// Limiting function FET

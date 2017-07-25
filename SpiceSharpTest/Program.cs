@@ -21,10 +21,10 @@ namespace SpiceSharpTest
         static void Main(string[] args)
         {
             SpiceDevice dev = new SpiceDevice();
-            dev.Defined.AddRange(new string[] { "DEV_bsim2", "AN_pz", "NEWCONV", "AN_disto", "AN_noise", "NOBYPASS", "PREDICTOR" });
-            dev.Folder = @"D:\Visual Studio\Info\SpiceSharp\spice3f5\src\lib\dev\bsim2";
-            dev.ITF = "bsim2itf.h";
-            dev.Def = "bsim2def.h";
+            dev.Defined.AddRange(new string[] { "DEV_bsim3", "AN_pz", "NEWCONV", "AN_disto", "AN_noise", "NOBYPASS", "PREDICTOR" });
+            dev.Folder = @"D:\Visual Studio\Info\SpiceSharp\ftpv330\ftpv330\src";
+            dev.ITF = "bsim3itf.h";
+            dev.Def = "bsim3def.h";
             SpiceClassGenerator scg = new SpiceClassGenerator(dev);
             scg.ExportModel("model.cs");
             scg.ExportDevice("device.cs");

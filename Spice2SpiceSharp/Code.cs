@@ -212,7 +212,7 @@ namespace Spice2SpiceSharp
             code = Regex.Replace(code, @"([ \t]*\r\n){3,}", Environment.NewLine + Environment.NewLine).Trim();
 
             // Format long formula's
-            code = Regex.Replace(code, @"^[ \t]*[^\=\r\n\{\}]+\=[^;\{\}]+;", (Match m) =>
+            code = Regex.Replace(code, @"^[ \t]*[^\=\r\n\{\}]+\=[^\=;\{\}]+;", (Match m) =>
             {
                 // Remove all newlines
                 return Regex.Replace(m.Value, @"\s*[\r\n]+\s*", " ");
@@ -235,7 +235,7 @@ namespace Spice2SpiceSharp
             {
                 int start = match.Index + match.Length - 1;
                 string pre = code.Substring(0, match.Index);
-                int e = Code.GetMatchingParenthesis(code, start);
+                int e = GetMatchingParenthesis(code, start);
                 string post = code.Substring(e + 1);
                 string cond = code.Substring(start, e - start + 1);
                 cond = Regex.Replace(cond, @"\s*[\r\n]\s*", " ");

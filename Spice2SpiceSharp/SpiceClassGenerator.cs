@@ -200,7 +200,12 @@ namespace Spice2SpiceSharp
                 // Extra variables
                 WriteCode(sw, "", "/// <summary>", "/// Extra variables", "/// </summary>");
                 foreach (var v in modelextra)
-                    WriteCode(sw, $"public double {v} {{ get; private set; }}");
+                {
+                    if (paramMod.GivenVariable.ContainsValue(v))
+                        WriteCode(sw, $"public Parameter<double> {v} {{ get; }} = new Parameter<double>();");
+                    else
+                        WriteCode(sw, $"public double {v} {{ get; private set; }}");
+                }
 
                 // Write the constructor
                 WriteCode(sw, "", "/// <summary>", "/// Constructor", "/// </summary>", "/// <param name=\"name\">The name of the device</param>");
@@ -275,7 +280,10 @@ namespace Spice2SpiceSharp
                         if (setup.StatesVariable == v)
                             continue;
                     }
-                    WriteCode(sw, $"public double {v} {{ get; private set; }}");
+                    if (paramDev.GivenVariable.ContainsValue(v))
+                        WriteCode(sw, $"public Parameter<double> {v} {{ get; }} = new Parameter<double>();");
+                    else
+                        WriteCode(sw, $"public double {v} {{ get; private set; }}");
                 }
 
                 // Write nodes not yet defined

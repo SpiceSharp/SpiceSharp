@@ -98,8 +98,8 @@ namespace Spice2SpiceSharp
             foreach (var id in ids)
             {
                 // Get the declarations
-                string param_decl = param.ContainsKey(id) ? param[id].Trim() : null;
-                string ask_decl = ask.ContainsKey(id) ? ask[id].Trim() : null;
+                string param_decl = param.ContainsKey(id) ? Code.RemoveComments(param[id]).Trim() : null;
+                string ask_decl = ask.ContainsKey(id) ? Code.RemoveComments(ask[id]).Trim() : null;
                 if (!ps.ContainsKey(id))
                 {
                     // Warning!
@@ -134,9 +134,8 @@ namespace Spice2SpiceSharp
                     }
                     else if (IsDefaultSet(param_decl, out name) && defGet && name == paramGet)
                         decl.Add($"public {type} {name} {{ get; set; }}");
-                    else if (AnySet(param_decl, out multiS) && AnyGet(ask_decl, out multiG))
+                    else if (AnySet(ref param_decl, out multiS) && AnyGet(ask_decl, out multiG))
                     {
-                        
                         decl.AddRange(new string[] { $"public {type} {id}",
                             "{",
                             "get", "{", fmtMethod(ask_decl), "}",
@@ -147,7 +146,10 @@ namespace Spice2SpiceSharp
                         if (multiS[0] == multiG[0])
                         {
                             name = multiS[0];
-                            decl.Add($"private {type} {name};");
+                            if (GivenVariable.ContainsValue(name))
+                                decl.Add($"private Parameter<{type}> {name} = new Parameter<{type}>();");
+                            else
+                                decl.Add($"private {type} {name};");
                         }
                     }
                     else
@@ -168,7 +170,11 @@ namespace Spice2SpiceSharp
                     else if (IsDefaultSet(param_decl, out name))
                         decl.Add($"public {type} {name} {{ get; set; }}");
                     else
+                    {
+                        string[] names;
+                        AnySet(ref param_decl, out names);
                         decl.AddRange(new string[] { $"public void Set{id}({type} value)", "{", fmtMethod(param_decl), "}" });
+                    }
                 }
                 else if (ask_decl != null)
                 {
@@ -204,7 +210,6 @@ namespace Spice2SpiceSharp
             param = null;
             given = null;
 
-            code = code.Trim();
             var m = psr.Match(code);
             if (m.Success)
             {
@@ -228,7 +233,6 @@ namespace Spice2SpiceSharp
             Regex sr = new Regex($@"^{par_here}\s*\-\>(?<var>\w+)\s*\=\s*{par_value}\s*\-\>\s*[ris]Value\s*;\s*(return\s*\(\s*OK\s*\);|break\s*;)\s*$");
             param = null;
 
-            code = code.Trim();
             var m = sr.Match(code);
             if (m.Success)
             {
@@ -244,23 +248,23 @@ namespace Spice2SpiceSharp
         /// <param name="code"></param>
         /// <param name="p"></param>
         /// <returns></returns>
-        private bool AnySet(string code, out string[] p)
+        private bool AnySet(ref string code, out string[] p)
         {
-            Regex psr = new Regex($@"{par_here}\s*\-\>\s*(?<var>\w+)\s*\=\s*[^;]+;\s*{par_here}\s*\-\>\s*(?<given>\w+Given)\s*\=\s*TRUE\s*;");
+            Regex psr = new Regex($@"{par_here}\s*\-\>\s*(?<var>\w+)\s*\=\s*(?<value>[^;]+);\s*{par_here}\s*\-\>\s*(?<given>\w+Given)\s*\=\s*TRUE\s*;", RegexOptions.Multiline);
             Regex asr = new Regex($@"{par_here}\s*\-\>\s*(?<var>\w+)\s*\=\s*[^;]+;");
             HashSet<string> vars = new HashSet<string>();
 
             // Find any variable assignments
-            var ms = psr.Matches(code);
-            foreach (Match m in ms)
+            code = psr.Replace(code, (Match m) =>
             {
                 vars.Add(m.Groups["var"].Value);
                 if (!GivenVariable.ContainsKey(m.Groups["given"].Value))
                     GivenVariable.Add(m.Groups["given"].Value, m.Groups["var"].Value);
-            }
+                return $"{m.Groups["var"].Value}.Set({m.Groups["value"].Value});";
+            });
 
             // Find any loose variables
-            ms = asr.Matches(code);
+            var ms = asr.Matches(code);
             foreach (Match m in ms)
             {
                 if (!GivenVariable.ContainsKey(m.Groups["var"].Value))
@@ -283,7 +287,6 @@ namespace Spice2SpiceSharp
             Regex sar = new Regex($@"^{ask_value}\s*\-\>\s*([ris]Value)\s*\=\s*{ask_here}\s*\-\>\s*(?<var>\w+);\s*(return\s*\(\s*OK\s*\);|break\s*;)\s*$");
             param = null;
 
-            code = code.Trim();
             var m = sar.Match(code);
             if (m.Success)
             {
@@ -359,7 +362,15 @@ namespace Spice2SpiceSharp
         /// <param name="setup"></param>
         public void UpdateMethods(SpiceDevice dev, SpiceSetup setup, string ckt = "ckt")
         {
-            // States
+            // Get-set
+            string[] keys = Declarations.Keys.ToArray();
+            foreach (var key in keys)
+            {
+                string code = Regex.Replace(Declarations[key], $@"get\s*\{{\s*value\s*\=\s*\w+\s*\-\>\s*(?<var>\w+)\s*;\s*\}}", (Match m) => $"get => {m.Groups["var"].Value};", RegexOptions.Multiline);
+                Declarations[key] = code;
+            }
+
+            // Methods
             for (int i = 0; i < Methods.Count; i++)
             {
                 string code = Regex.Replace(Methods[i], 
