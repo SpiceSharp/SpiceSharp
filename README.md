@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using System.IO;
 
 namespace SpiceSharpTest
 {
