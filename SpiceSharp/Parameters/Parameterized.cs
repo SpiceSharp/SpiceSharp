@@ -123,7 +123,7 @@ namespace SpiceSharp.Parameters
         /// </summary>
         /// <param name="parameter">The parameter name</param>
         /// <returns></returns>
-        public Type GetParameterType(Parameterized p, string parameter)
+        public static Type GetParameterType(Parameterized p, string parameter)
         {
             var ms = members[p.GetType()];
             if (!ms.ContainsKey(parameter))
