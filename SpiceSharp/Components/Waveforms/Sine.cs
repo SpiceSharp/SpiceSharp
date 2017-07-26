@@ -44,13 +44,15 @@ namespace SpiceSharp.Components.Waveforms
         /// <param name="freq">The frequency in Hz</param>
         /// <param name="td">The delay in seconds</param>
         /// <param name="theta">The damping factor</param>
-        public Sine(double vo, double va, double freq, double td = 0.0, double theta = 0.0) : base("SINE")
+        public Sine(object vo, object va, object freq, object td = null, object theta = null) : base("SINE")
         {
-            VO.Set(vo);
-            VA.Set(va);
-            Freq.Set(freq);
-            Delay.Set(td);
-            Theta.Set(theta);
+            Set("vo", vo);
+            Set("va", va);
+            Set("freq", freq);
+            if (td != null)
+                Set("td", td);
+            if (theta != null)
+                Set("theta", theta);
         }
 
         /// <summary>

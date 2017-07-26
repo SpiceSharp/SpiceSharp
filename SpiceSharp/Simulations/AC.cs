@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using System.Numerics;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Simulations
 {
@@ -39,17 +40,49 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the number of steps
         /// </summary>
+        [SpiceName("steps"), SpiceName("n"), SpiceInfo("The number of steps")]
         public int NumberSteps { get; set; } = 10;
 
         /// <summary>
         /// Gets or sets the starting frequency
         /// </summary>
+        [SpiceName("start"), SpiceInfo("Starting frequency")]
         public double StartFreq { get; set; } = 1.0;
 
         /// <summary>
         /// Gets or sets the stopping frequency
         /// </summary>
+        [SpiceName("stop"), SpiceInfo("Stopping frequency")]
         public double StopFreq { get; set; } = 1.0e3;
+
+        /// <summary>
+        /// Gets or sets the step type (string version)
+        /// </summary>
+        [SpiceName("type"), SpiceInfo("The step type")]
+        public string _StepType
+        {
+            get
+            {
+                switch (StepType)
+                {
+                    case StepTypes.Linear: return "lin";
+                    case StepTypes.Octave: return "oct";
+                    case StepTypes.Decade: return "dec";
+                }
+                return null;
+            }
+            set
+            {
+                switch (value.ToLower())
+                {
+                    case "lin": StepType = StepTypes.Linear; break;
+                    case "oct": StepType = StepTypes.Octave; break;
+                    case "dec": StepType = StepTypes.Decade; break;
+                    default:
+                        throw new CircuitException($"Invalid step type {value}");
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the type of step used
@@ -70,17 +103,17 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
-        /// <param name="type">The step type</param>
-        /// <param name="num">The number of frequency points</param>
-        /// <param name="start">The first frequency point</param>
-        /// <param name="stop">The last frequency point</param>
-        public AC(string name, StepTypes type, int num, double start, double stop)
+        /// <param name="type">The simulation type: lin, oct or dec</param>
+        /// <param name="n">The number of steps</param>
+        /// <param name="start">The starting frequency</param>
+        /// <param name="stop">The stopping frequency</param>
+        public AC(string name, string type, object n, object start, object stop)
             : base(name, new Configuration())
         {
-            StartFreq = start;
-            StopFreq = stop;
-            NumberSteps = num;
-            StepType = type;
+            Set("type", type);
+            Set("n", n);
+            Set("start", start);
+            Set("stop", stop);
         }
 
         /// <summary>
@@ -100,12 +133,12 @@ namespace SpiceSharp.Simulations
             {
                 case StepTypes.Decade:
                     freqdelta = Math.Exp(Math.Log(10.0) / NumberSteps);
-                    n = (int)Math.Floor(Math.Log(StopFreq / StartFreq) / Math.Log(freqdelta));
+                    n = (int)Math.Floor(Math.Log(StopFreq / StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
                     break;
 
                 case StepTypes.Octave:
                     freqdelta = Math.Exp(Math.Log(2.0) / NumberSteps);
-                    n = (int)Math.Floor(Math.Log(StopFreq / StartFreq) / Math.Log(freqdelta));
+                    n = (int)Math.Floor(Math.Log(StopFreq / StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
                     break;
 
                 case StepTypes.Linear:

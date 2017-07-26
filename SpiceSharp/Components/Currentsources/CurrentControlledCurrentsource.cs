@@ -55,10 +55,10 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
-        public CurrentControlledCurrentsource(string name, string pos, string neg, string vsource, double gain) : base(name, 2)
+        public CurrentControlledCurrentsource(string name, string pos, string neg, string vsource, object gain) : base(name, 2)
         {
             Connect(pos, neg);
-            CCCScoeff.Set(gain);
+            Set("gain", gain);
             CCCScontName = vsource;
         }
 

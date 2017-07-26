@@ -70,10 +70,10 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="ind">The inductor</param>
-        public Inductor(string name, string pos, string neg, double ind) : base(name, 2)
+        public Inductor(string name, string pos, string neg, object ind) : base(name, 2)
         {
             Connect(pos, neg);
-            INDinduct.Set(ind);
+            Set("inductance", ind);
         }
 
         /// <summary>

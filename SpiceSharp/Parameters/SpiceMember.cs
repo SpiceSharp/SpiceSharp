@@ -8,8 +8,14 @@ using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Parameters
 {
+    /// <summary>
+    /// This class represents a class member that can be accessed using the Set or Ask methods
+    /// </summary>
     public class SpiceMember
     {
+        /// <summary>
+        /// Access flags
+        /// </summary>
         [Flags]
         public enum AccessFlags
         {
@@ -47,6 +53,11 @@ namespace SpiceSharp.Parameters
         /// Is the member a Parameter object?
         /// </summary>
         public bool IsParameter { get; }
+
+        /// <summary>
+        /// The event that is raised when a parameter is not the right type
+        /// </summary>
+        public static event SpiceMemberConvertEventHandler SpiceMemberConvert;
 
         /// <summary>
         /// The number of parameters when the member is a method
@@ -181,7 +192,10 @@ namespace SpiceSharp.Parameters
             if (ValueType == typeof(void) && value != null)
                 throw new ParameterTypeException(obj, typeof(void));
             else if (value != null && !ValueType.IsAssignableFrom(value.GetType()))
-                throw new ParameterTypeException(obj, ValueType);
+            {
+                // Try converting the value to the right type anyway
+                value = ConvertType(value, ValueType);
+            }
 
             switch (MemberType)
             {
@@ -268,5 +282,98 @@ namespace SpiceSharp.Parameters
                 throw new ParameterTypeException(obj, ValueType);
             return (T)Get(obj, ckt);
         }
+
+        /// <summary>
+        /// Try converting an object to a certain type
+        /// </summary>
+        /// <param name="value">The value</param>
+        /// <param name="type">The type</param>
+        /// <returns></returns>
+        public object ConvertType(object value, Type type)
+        {
+            // First try to convert using the event
+            var data = new SpiceMemberConvertData(value, type);
+            SpiceMemberConvert?.Invoke(this, data);
+
+            // Let's see if the data is of the right type
+            if (data.Result != null)
+            {
+                if (data.GetType() == type)
+                    return data.Result;
+                else
+                    value = data.Result;
+            }
+
+            // We can still try to convert the original
+            try
+            {
+                if (type == typeof(double))
+                    return Convert.ToDouble(value);
+                if (type == typeof(string))
+                    return Convert.ToString(value);
+                if (type == typeof(int))
+                    return Convert.ToInt32(value);
+                if (type == typeof(bool))
+                    return Convert.ToBoolean(value);
+                if (type.IsArray && value.GetType().IsArray)
+                {
+                    object[] array = (value as Array).Cast<object>().ToArray();
+                    if (type == typeof(double[]))
+                        return Array.ConvertAll(array, item => Convert.ToDouble(item));
+                    if (type == typeof(string[]))
+                        return Array.ConvertAll(array, item => Convert.ToString(item));
+                    if (type == typeof(int[]))
+                        return Array.ConvertAll(array, item => Convert.ToInt32(item));
+                    if (type == typeof(bool[]))
+                        return Array.ConvertAll(array, item => Convert.ToBoolean(item));
+                }
+            }
+            catch (Exception)
+            {
+                throw new CircuitException($"Invalid parameter value {value.ToString()}, {type.ToString()} expected.");
+            }
+
+            throw new CircuitException("Invalid parameter type");
+        }
     }
+
+    /// <summary>
+    /// Spice Member conversion data
+    /// </summary>
+    public class SpiceMemberConvertData
+    {
+        /// <summary>
+        /// The value that needs to be converted
+        /// </summary>
+        public object Value { get; }
+
+        /// <summary>
+        /// The target type
+        /// </summary>
+        public Type TargetType { get; }
+
+        /// <summary>
+        /// The converted value
+        /// </summary>
+        public object Result { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="value">The value that needs converting</param>
+        /// <param name="target">The target value</param>
+        public SpiceMemberConvertData(object value, Type target)
+        {
+            Value = value;
+            TargetType = target;
+            Result = null;
+        }
+    }
+
+    /// <summary>
+    /// An event handler for converting data
+    /// </summary>
+    /// <param name="sender">The SpiceMember sending the event</param>
+    /// <param name="data">The data</param>
+    public delegate void SpiceMemberConvertEventHandler(object sender, SpiceMemberConvertData data);
 }

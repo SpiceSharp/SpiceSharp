@@ -7,23 +7,19 @@ using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 using MathNet.Numerics.LinearAlgebra;
 using SpiceSharp.Circuits;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp
 {
     /// <summary>
     /// A class with everything needed to do a simulation
     /// </summary>
-    public abstract class Simulation
+    public abstract class Simulation : Parameterized
     {
         /// <summary>
         /// The configuration
         /// </summary>
         public SimulationConfiguration Config { get; protected set; } = null;
-
-        /// <summary>
-        /// Gets the name of the simulation
-        /// </summary>
-        public string Name { get; }
 
         /// <summary>
         /// Event that is called when new simulation data is available
@@ -35,6 +31,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="config">The configuration for this simulation</param>
         public Simulation(string name, SimulationConfiguration config = null)
+            : base(name)
         {
             if (config == null)
                 Config = new SimulationConfiguration();

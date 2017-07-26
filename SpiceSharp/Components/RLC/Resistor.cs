@@ -65,10 +65,10 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="res">The resistance</param>
-        public Resistor(string name, string pos, string neg, double res) : base(name, 2)
+        public Resistor(string name, string pos, string neg, object res) : base(name, 2)
         {
             Connect(pos, neg);
-            RESresist.Set(res);
+            Set("resistance", res);
         }
 
         /// <summary>

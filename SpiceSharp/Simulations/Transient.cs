@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Simulations
 {
@@ -25,16 +22,6 @@ namespace SpiceSharp.Simulations
             public IntegrationMethod Method { get; set; } = new Trapezoidal();
 
             /// <summary>
-            /// Gets or sets the initial timepoint that should be exported
-            /// </summary>
-            public double InitTime { get; set; } = 0.0;
-
-            /// <summary>
-            /// Gets or sets the final simulation timepoint
-            /// </summary>
-            public double FinalTime { get; set; } = double.NaN;
-
-            /// <summary>
             /// Gets or sets the maximum number of iterations when solving the operating point
             /// </summary>
             public int DcMaxIterations { get; set; } = 100;
@@ -45,51 +32,55 @@ namespace SpiceSharp.Simulations
             public int TranMaxIterations { get; set; } = 100;
 
             /// <summary>
-            /// Gets or sets the step
-            /// </summary>
-            public double Step { get; set; } = double.NaN;
-
-            /// <summary>
-            /// Gets or sets the maximum timestep
-            /// </summary>
-            public double MaxStep
-            {
-                get
-                {
-                    if (maxstep == 0.0 && !double.IsNaN(maxstep))
-                        return (FinalTime - InitTime) / 50.0;
-                    return maxstep;
-                }
-                set { maxstep = value; }
-            }
-            private double maxstep;
-
-            /// <summary>
             /// Gets or sets the flag for using initial conditions without operating point
             /// </summary>
             public bool UseIC { get; set; } = false;
 
             /// <summary>
-            /// Get the minimum timestep allowed
-            /// </summary>
-            public double DeltaMin { get { return 1e-13 * MaxStep; } }
-
-            /// <summary>
             /// Constructor
             /// </summary>
             public Configuration() { }
-
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            /// <param name="step">The time step</param>
-            /// <param name="final">The final time</param>
-            public Configuration(double step, double final)
-            {
-                Step = step;
-                FinalTime = final;
-            }
         }
+
+        /// <summary>
+        /// Gets or sets the initial timepoint that should be exported
+        /// </summary>
+        [SpiceName("init"), SpiceName("start"), SpiceInfo("The starting timepoint")]
+        public double InitTime { get; set; } = 0.0;
+
+        /// <summary>
+        /// Gets or sets the final simulation timepoint
+        /// </summary>
+        [SpiceName("final"), SpiceName("stop"), SpiceInfo("The final timepoint")]
+        public double FinalTime { get; set; } = double.NaN;
+
+        /// <summary>
+        /// Gets or sets the step
+        /// </summary>
+        [SpiceName("step"), SpiceInfo("The timestep")]
+        public double Step { get; set; } = double.NaN;
+
+        /// <summary>
+        /// Gets or sets the maximum timestep
+        /// </summary>
+        [SpiceName("maxstep"), SpiceInfo("The maximum allowed timestep")]
+        public double MaxStep
+        {
+            get
+            {
+                if (maxstep == 0.0 && !double.IsNaN(maxstep))
+                    return (FinalTime - InitTime) / 50.0;
+                return maxstep;
+            }
+            set { maxstep = value; }
+        }
+        private double maxstep;
+
+        /// <summary>
+        /// Get the minimum timestep allowed
+        /// </summary>
+        [SpiceName("deltamin"), SpiceInfo("The minimum delta for breakpoints")]
+        public double DeltaMin { get { return 1e-13 * MaxStep; } }
 
         /// <summary>
         /// Get the current configuration
@@ -125,9 +116,11 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The name of the simulation</param>
         /// <param name="step">The timestep</param>
         /// <param name="final">The final time</param>
-        public Transient(string name, double step, double final)
-            : base(name, new Configuration(step, final))
+        public Transient(string name, object step, object stop)
+            : base(name, new Configuration())
         {
+            Set("step", step);
+            Set("stop", stop);
         }
 
         /// <summary>
@@ -148,16 +141,16 @@ namespace SpiceSharp.Simulations
             state.Domain = CircuitState.DomainTypes.Time;
 
             // Setup breakpoints
-            method.Breaks.SetBreakpoint(MyConfig.InitTime);
-            method.Breaks.SetBreakpoint(MyConfig.FinalTime);
+            method.Breaks.SetBreakpoint(InitTime);
+            method.Breaks.SetBreakpoint(FinalTime);
             if (method.Breaks.MinBreak == 0.0)
-                method.Breaks.MinBreak = 5e-5 * MyConfig.MaxStep;
+                method.Breaks.MinBreak = 5e-5 * MaxStep;
 
             // Initialize the method
             ckt.Method = method;
             method.Initialize();
-            method.DeltaMin = MyConfig.DeltaMin;
-            method.FillOldDeltas(MyConfig.MaxStep);
+            method.DeltaMin = DeltaMin;
+            method.FillOldDeltas(MaxStep);
 
             // Calculate the operating point
             this.Op(ckt, MyConfig.DcMaxIterations);
@@ -187,11 +180,11 @@ namespace SpiceSharp.Simulations
                     ckt.Statistics.Accepted++;
 
                     // Export the current timepoint
-                    if (method.Time >= MyConfig.InitTime)
+                    if (method.Time >= InitTime)
                         Export(ckt);
 
                     // Detect the end of the simulation
-                    if (method.Time >= MyConfig.FinalTime)
+                    if (method.Time >= FinalTime)
                     {
                         // Keep our statistics
                         ckt.Statistics.TransientTime.Stop();
@@ -203,8 +196,8 @@ namespace SpiceSharp.Simulations
                     }
 
                     // Advance time
-                    double delta = method.Time > 0.0 ? method.Delta : Math.Min(MyConfig.FinalTime / 50, MyConfig.Step) / 10.0;
-                    method.Advance(Math.Min(delta, MyConfig.MaxStep));
+                    double delta = method.Time > 0.0 ? method.Delta : Math.Min(FinalTime / 50, Step) / 10.0;
+                    method.Advance(Math.Min(delta, MaxStep));
                     state.ShiftStates();
 
                     // Calculate a new solution
@@ -256,9 +249,9 @@ namespace SpiceSharp.Simulations
                         }
 
                         // Stop simulation if timesteps are consistently too small
-                        if (method.Delta <= MyConfig.DeltaMin)
+                        if (method.Delta <= DeltaMin)
                         {
-                            if (olddelta <= MyConfig.DeltaMin)
+                            if (olddelta <= DeltaMin)
                             {
                                 throw new CircuitException($"Timestep too small: {method.Delta}");
                             }

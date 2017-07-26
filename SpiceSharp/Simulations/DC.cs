@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Simulations
 {
@@ -46,31 +42,36 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// A class that describes a job
         /// </summary>
-        public class Sweep
+        public class Sweep : Parameterized
         {
             /// <summary>
             /// Starting value
             /// </summary>
+            [SpiceName("start"), SpiceInfo("The starting value")]
             public double Start { get; private set; }
 
             /// <summary>
             /// Ending value
             /// </summary>
+            [SpiceName("stop"), SpiceInfo("The stopping value")]
             public double Stop { get; private set; }
 
             /// <summary>
             /// Value step
             /// </summary>
+            [SpiceName("step"), SpiceInfo("The step")]
             public double Step { get; private set; }
 
             /// <summary>
             /// The number of steps
             /// </summary>
+            [SpiceName("steps"), SpiceName("n"), SpiceInfo("The number of steps")]
             public int Limit { get; private set; }
 
             /// <summary>
             /// The name of the source being varied
             /// </summary>
+            [SpiceName("source"), SpiceInfo("The name of the swept source")]
             public string ComponentName { get; private set; }
 
             /// <summary>
@@ -80,25 +81,22 @@ namespace SpiceSharp.Simulations
             /// <param name="start">The starting value</param>
             /// <param name="stop">The stopping value</param>
             /// <param name="step">The step value</param>
-            public Sweep(string name, double start, double stop, double step)
+            public Sweep(string name, object start, object stop, object step)
+                : base(null)
             {
+                Set("start", start);
+                Set("stop", stop);
+                Set("step", step);
+
                 ComponentName = name;
-                if (Math.Sign(step) * (stop - start) < 0)
+                if (Math.Sign(Step) * (Stop - Start) < 0)
                 {
                     // Only do single point
                     Limit = 0;
-                    Start = start;
-                    Stop = start;
-                    Step = step;
+                    Stop = Start;
                 }
                 else
-                {
-                    // Do multiple points
-                    Limit = (int)Math.Floor((stop - start) / step);
-                    Start = start;
-                    Stop = stop;
-                    Step = step;
-                }
+                    Limit = (int)Math.Floor((Stop - Start) / Step + 0.25);
             }
         }
 
@@ -110,9 +108,26 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="name">The simulation name</param>
+        /// <param name="config">The configuration</param>
         public DC(string name, Configuration config = null)
             : base(name, config ?? new Configuration())
         {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">The name of the simulation</param>
+        /// <param name="source">The name of the swept source</param>
+        /// <param name="start">The starting value</param>
+        /// <param name="stop">The stopping value</param>
+        /// <param name="step">The step value</param>
+        public DC(string name, string source, object start, object stop, object step)
+            : base(name, new Configuration())
+        {
+            Sweep s = new Sweep(source, start, stop, step);
+            Sweeps.Add(s);
         }
 
         /// <summary>
@@ -174,7 +189,7 @@ namespace SpiceSharp.Simulations
                 // Export data
                 Export(ckt);
 
-                // Remove all values that are equal to the maximum value
+                // Remove all values that are greater or equal to the maximum value
                 while (level >= 0 && values[level] >= Sweeps[level].Limit)
                     level--;
 

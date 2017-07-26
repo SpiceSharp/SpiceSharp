@@ -67,24 +67,14 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the voltage source</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="dc">The DC value of the source</param>
-        public Voltagesource(string name, string pos, string neg, double dc) : base(name, 2)
+        /// <param name="v">The DC value or Waveform-object</param>
+        public Voltagesource(string name, string pos, string neg, object v) : base(name, 2)
         {
             Connect(pos, neg);
-            VSRCdcValue.Set(dc);
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="name">The name of the voltage source</param>
-        /// <param name="pos">The positive node</param>
-        /// <param name="neg">The negative node</param>
-        /// <param name="w">The waveform</param>
-        public Voltagesource(string name, string pos, string neg, Waveform w) : base(name, 2)
-        {
-            Connect(pos, neg);
-            VSRCwaveform.Set(w);
+            if (v is Waveform)
+                Set("waveform", v);
+            else
+                Set("dc", v);
         }
 
         /// <summary>

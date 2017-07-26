@@ -51,11 +51,11 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source name</param>
-        /// <param name="coeff">The transresistance (gain)</param>
-        public CurrentControlledVoltagesource(string name, string pos, string neg, string vsource, double coeff) : base(name, 2)
+        /// <param name="gain">The transresistance (gain)</param>
+        public CurrentControlledVoltagesource(string name, string pos, string neg, string vsource, object gain) : base(name, 2)
         {
             Connect(pos, neg);
-            CCVScoeff.Set(coeff);
+            Set("gain", gain);
             CCVScontName = vsource;
         }
 

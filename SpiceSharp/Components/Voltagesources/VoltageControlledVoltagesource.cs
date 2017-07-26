@@ -52,11 +52,11 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
-        /// <param name="coeff">The voltage gain</param>
-        public VoltageControlledVoltagesource(string name, string pos, string neg, string cont_pos, string cont_neg, double coeff) : base(name, 4)
+        /// <param name="gain">The voltage gain</param>
+        public VoltageControlledVoltagesource(string name, string pos, string neg, string cont_pos, string cont_neg, object gain) : base(name, 4)
         {
             Connect(pos, neg, cont_pos, cont_neg);
-            VCVScoeff.Set(coeff);
+            Set("gain", gain);
         }
 
         /// <summary>

@@ -53,15 +53,15 @@ namespace SpiceSharp.Components.Waveforms
         /// <param name="tf">The fall time in seconds</param>
         /// <param name="pw">The pulse width in seconds</param>
         /// <param name="per">The period in seconds</param>
-        public Pulse(double v1, double v2, double td, double tr, double tf, double pw, double per) : base("PULSE")
+        public Pulse(object v1, object v2, object td, object tr, object tf, object pw, object per) : base("PULSE")
         {
-            V1.Set(v1);
-            V2.Set(v2);
-            Delay.Set(td);
-            RiseTime.Set(tr);
-            FallTime.Set(tf);
-            PulseWidth.Set(pw);
-            Period.Set(per);
+            Set("v1", v1);
+            Set("v2", v2);
+            Set("td", td);
+            Set("tr", tr);
+            Set("tf", tf);
+            Set("pw", pw);
+            Set("per", per);
         }
 
         /// <summary>

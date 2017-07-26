@@ -31,9 +31,9 @@ namespace SpiceSharp.Components
         [SpiceName("p"), SpiceInfo("Power supplied by the source")]
         public double GetP(Circuit ckt) => (ckt.State.Real.Solution[ISRCposNode] - ckt.State.Real.Solution[ISRCposNode]) * -ISRCdcValue;
         [SpiceName("ac"), SpiceInfo("A.C. magnitude, phase vector")]
-        public void SetAc(Circuit ckt, double[] ac)
+        public void SetAc(double[] ac)
         {
-            switch (ac?.Length ?? -1)
+            switch (ac.Length)
             {
                 case 2: ISRCacPhase.Set(ac[1]); goto case 1;
                 case 1: ISRCacMag.Set(ac[0]); break;
@@ -60,24 +60,14 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the current source</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="dc">The DC value</param>
-        public Currentsource(string name, string pos, string neg, double dc) : base(name, 2)
+        /// <param name="v">The DC value or Waveform-object</param>
+        public Currentsource(string name, string pos, string neg, object v) : base(name, 2)
         {
             Connect(pos, neg);
-            ISRCwaveform.Set(dc);
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="name">The name of the current source</param>
-        /// <param name="pos">The positive node</param>
-        /// <param name="neg">The negative node</param>
-        /// <param name="w">The waveform</param>
-        public Currentsource(string name, string pos, string neg, Waveform w) : base(name, 2)
-        {
-            Connect(pos, neg);
-            ISRCwaveform.Set(w);
+            if (v is Waveform)
+                Set("waveform", v);
+            else
+                Set("dc", v);
         }
 
         /// <summary>

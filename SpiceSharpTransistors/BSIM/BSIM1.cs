@@ -63,7 +63,6 @@ namespace SpiceSharp.Components
         /// </summary>
         public double B1vdsat { get; private set; }
         public double B1von { get; private set; }
-        public double B1name { get; private set; }
         public double B1GDoverlapCap { get; private set; }
         public double B1GSoverlapCap { get; private set; }
         public double B1GBoverlapCap { get; private set; }

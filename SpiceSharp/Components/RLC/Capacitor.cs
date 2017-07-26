@@ -46,7 +46,6 @@ namespace SpiceSharp.Components
         /// </summary>
         private const int CAPqcap = 0;
         private const int CAPccap = 1;
-        private const int CAPsensxp = 2;
 
         /// <summary>
         /// Constructor
@@ -61,10 +60,10 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="cap">The capacitance</param>
-        public Capacitor(string name, string pos, string neg, double cap) : base(name, 2)
+        public Capacitor(string name, string pos, string neg, object cap) : base(name, 2)
         {
             Connect(pos, neg);
-            CAPcapac.Set(cap);
+            Set("capacitance", cap);
         }
         
         /// <summary>
