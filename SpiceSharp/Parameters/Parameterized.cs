@@ -89,6 +89,49 @@ namespace SpiceSharp.Parameters
         }
 
         /// <summary>
+        /// Get a list of all parameters
+        /// </summary>
+        /// <returns></returns>
+        public static string[] GetParameterNames(Parameterized p)
+        {
+            var ms = members[p.GetType()];
+            string[] parameters = new string[ms.Count];
+            int index = 0;
+            foreach (var m in ms.Keys)
+                parameters[index++] = m;
+            return parameters;
+        }
+
+        /// <summary>
+        /// Get the description for a parameter
+        /// </summary>
+        /// <param name="parameter">The parameter name</param>
+        /// <returns></returns>
+        public static string GetParameterDescription(Parameterized p, string parameter)
+        {
+            var ms = members[p.GetType()];
+            if (!ms.ContainsKey(parameter))
+                throw new CircuitException($"Parameter {parameter} does not exist");
+            var si = ms[parameter].Info.GetCustomAttribute<SpiceInfo>();
+            if (si != null)
+                return si.Description;
+            return "";
+        }
+
+        /// <summary>
+        /// Get the type of the parameter
+        /// </summary>
+        /// <param name="parameter">The parameter name</param>
+        /// <returns></returns>
+        public Type GetParameterType(Parameterized p, string parameter)
+        {
+            var ms = members[p.GetType()];
+            if (!ms.ContainsKey(parameter))
+                throw new CircuitException($"Parameter {parameter} does not exist");
+            return ms[parameter].ValueType;
+        }
+
+        /// <summary>
         /// Get a parameter from the object by name
         /// The parameter must be defined as a property with a getter in order to 
         /// be found by this method
