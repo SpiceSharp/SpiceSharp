@@ -1,6 +1,29 @@
 # SpiceSharp
 A Spice-based circuit simulator written in C#. It uses Math.NET to solve matrix equations.
 
+The main project is SpiceSharp. It currently supports AC, DC and Transient simulations. It has the following models implemented:
+* Voltage sources (Voltagesource, VoltageControlledVoltagesource, CurrentControlledVoltagesource)
+* Current sources (Currentsource, VoltageControlledCurrentsource, CurrentControlledCurrentsource)
+* Resistors (Resistor, ResistorModel)
+* Capacitors (Capacitor, CapacitorModel)
+* Inductors (Inductor, MutualInductance)
+* Switches (VoltageSwitch, VoltageSwitchModel, CurrentSwitch, CurrentSwitchModel)
+* BJT (Bipolar, BipolarModel)
+* Diodes (Diode, DiodeModel)
+
+The project SpiceSharpTransistors project contains additional transistor models:
+* MOS1 (LEVEL 1)
+* MOS2 (LEVEL 2)
+* MOS3 (LEVEL 3)
+* (MOS6, seemed to be incomplete)
+* BSIM1
+* BSIM2
+* BSIM3 (3.3.0)
+
+The project Spice2SpiceSharp contains a tool that I use to convert Spice models to the SpiceSharp framework (C and C# are not that different when it comes to model calculations). This minimizes the error I make when porting the model to this framework. Some manual work is still necessary though, and errors can still sneak in. Use the models at your own risk.
+
+Although many features have been copied or integrated from Spice 3f5, this is not an exact copy. It might behave slightly different from other Spice simulators (eg. timestep control for transient simulations).
+
 ## Example
 ```C#
 using System;
