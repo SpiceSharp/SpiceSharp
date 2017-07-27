@@ -68,6 +68,7 @@
     <Compile Include="IntegrationMethods\Breakpoints.cs" />
     <Compile Include="IntegrationMethods\Trapezoidal.cs" />
     <Compile Include="Parameters\Converter.cs" />
+    <Compile Include="Parameters\ParameterMethod.cs" />
     <Compile Include="Parameters\SpiceMember.cs" />
     <Compile Include="Parameters\SpiceInfo.cs" />
     <Compile Include="Parameters\SpiceName.cs" />

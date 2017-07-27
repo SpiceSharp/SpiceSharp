@@ -20,9 +20,10 @@ namespace Spice2SpiceSharp
             Temperature = 0x02,
             Load = 0x04,
             AcLoad = 0x08,
+            PzLoad = 0x10,
 
             None = 0x00,
-            All = 0x0F
+            All = 0x1F
         }
 
         /// <summary>
@@ -32,6 +33,7 @@ namespace Spice2SpiceSharp
         private string tempDev, tempMod;
         private string loadDev, loadMod;
         private string acloadDev, acloadMod;
+        private string pzloadDev, pzloadMod;
         private SpiceParam paramDev, paramMod;
         private ParameterExtractor paramExtr;
         private string name;
@@ -41,6 +43,7 @@ namespace Spice2SpiceSharp
         private SpiceTemperature temp;
         private SpiceLoad load;
         private SpiceAcLoad acload;
+        private SpicePzLoad pzload;
 
         private string offset = "";
         private Dictionary<string, string> shared = new Dictionary<string, string>();
@@ -48,6 +51,11 @@ namespace Spice2SpiceSharp
         private HashSet<string> deviceextra = new HashSet<string>();
 
         private const int MaxLineLength = 128;
+
+        /// <summary>
+        /// Use the PzLoad function instead of the AcLoad analysis
+        /// </summary>
+        public bool UsePzForAc { get; set; } = true;
 
         /// <summary>
         /// Read a device
@@ -147,6 +155,24 @@ namespace Spice2SpiceSharp
                     deviceextra.Add(v);
             }
 
+            // PZ loading
+            if (export.HasFlag(Methods.PzLoad))
+            {
+                pzload = new SpicePzLoad(dev, setup);
+                pzloadDev = pzload.ExportDevice(paramMod, paramDev);
+                pzloadMod = pzload.ExportModel(paramMod);
+                foreach (var v in pzload.SharedLocalVariables)
+                {
+                    if (shared.ContainsKey(v.Key) && shared[v.Key] != v.Value)
+                        throw new Exception($"Cannot share variable {v.Key}");
+                    shared.Add(v.Key, v.Value);
+                }
+                foreach (var v in pzload.ModelVariablesExtra)
+                    modelextra.Add(v);
+                foreach (var v in pzload.DeviceVariablesExtra)
+                    deviceextra.Add(v);
+            }
+
             // Apply default values!
             string[] names = paramMod.Declarations.Keys.ToArray();
             foreach (string n in names)
@@ -170,6 +196,7 @@ namespace Spice2SpiceSharp
         /// <param name="filename"></param>
         public void ExportModel(string filename)
         {
+            offset = "";
             using (StreamWriter sw = new StreamWriter(filename))
             {
                 // Write dependencies
@@ -243,6 +270,7 @@ namespace Spice2SpiceSharp
         /// <param name="filename">The filename</param>
         public void ExportDevice(string filename)
         {
+            offset = "";
             using (StreamWriter sw = new StreamWriter(filename))
             {
                 // Write dependencies
@@ -346,7 +374,7 @@ namespace Spice2SpiceSharp
                 }
 
                 // AcLoad method
-                if (acload != null)
+                if (acload != null && !UsePzForAc)
                 {
                     WriteCode(sw, "", "/// <summary>", "/// Load the device for AC simulation", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void AcLoad(Circuit ckt)", "{");
@@ -354,6 +382,17 @@ namespace Spice2SpiceSharp
                     foreach (string var in acload.DeviceVariables.Keys)
                         WriteCode(sw, $"{acload.DeviceVariables[var]} {var};");
                     WriteCode(sw, "", acloadDev, "}");
+                }
+                
+                // PzLoad method
+                if (pzload != null && UsePzForAc)
+                {
+                    WriteCode(sw, "", "/// <summary>", "/// Load the device for AC simulation", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
+                    WriteCode(sw, "public override void AcLoad(Circuit ckt)", "{");
+                    WriteCode(sw, "var state = ckt.State;", "var cstate = state.Complex;");
+                    foreach (string var in pzload.DeviceVariables.Keys)
+                        WriteCode(sw, $"{pzload.DeviceVariables[var]} {var};");
+                    WriteCode(sw, "", pzloadDev, "}");
                 }
 
                 // End class and namespace

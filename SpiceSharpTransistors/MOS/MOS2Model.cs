@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
-        public Parameter<double> MOS2tnom { get; } = new Parameter<double>();
+        public ParameterMethod<double> MOS2tnom { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
         [SpiceName("vto"), SpiceName("vt0"), SpiceInfo("Threshold voltage")]
         public Parameter<double> MOS2vt0 { get; } = new Parameter<double>();
         [SpiceName("kp"), SpiceInfo("Transconductance parameter")]

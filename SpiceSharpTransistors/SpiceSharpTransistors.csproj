@@ -52,6 +52,7 @@
     <Compile Include="BSIM\BSIM3.cs" />
     <Compile Include="BSIM\BSIM3Model.cs" />
     <Compile Include="BSIM\BSIM3SizeDependParam.cs" />
+    <Compile Include="BSIM\BSIM4Model.cs" />
     <Compile Include="MOS\MOS1.cs" />
     <Compile Include="MOS\MOS1Model.cs" />
     <Compile Include="MOS\MOS2.cs" />

@@ -51,6 +51,7 @@
     <Compile Include="SpiceIterator.cs" />
     <Compile Include="SpiceLoad.cs" />
     <Compile Include="SpiceParam.cs" />
+    <Compile Include="SpicePzLoad.cs" />
     <Compile Include="SpiceSetup.cs" />
     <Compile Include="SpiceTemperature.cs" />
   </ItemGroup>

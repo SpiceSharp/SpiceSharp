@@ -284,7 +284,7 @@ namespace Spice2SpiceSharp
         /// <returns></returns>
         private bool IsDefaultGet(string code, out string param)
         {
-            Regex sar = new Regex($@"^{ask_value}\s*\-\>\s*([ris]Value)\s*\=\s*{ask_here}\s*\-\>\s*(?<var>\w+);\s*(return\s*\(\s*OK\s*\);|break\s*;)\s*$");
+            Regex sar = new Regex($@"^{ask_value}\s*\-\>\s*([ris]Value)\s*\=\s*{ask_here}\s*\-\>\s*(?<var>\w+)\s*;\s*(return\s*\(\s*OK\s*\);|break\s*;)\s*$");
             param = null;
 
             var m = sar.Match(code);

@@ -27,8 +27,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("temp"), SpiceInfo("Instance operating temperature in Kelvin", Interesting = false)]
-        public Parameter<double> REStemp { get; } = new Parameter<double>();
+        [SpiceName("temp"), SpiceInfo("Instance operating temperature", Interesting = false)]
+        public ParameterMethod<double> REStemp { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
         [SpiceName("resistance"), SpiceInfo("Resistance", IsPrincipal = true)]
         public Parameter<double> RESresist { get; } = new Parameter<double>();
         [SpiceName("w"), SpiceInfo("Width", Interesting = false)]

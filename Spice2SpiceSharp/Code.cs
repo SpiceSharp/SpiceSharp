@@ -134,6 +134,9 @@ namespace Spice2SpiceSharp
         /// <param name="cases">The dictionary that will contain them</param>
         public static void GetSwitchCases(string content, Dictionary<string, string> cases, int startat = 0)
         {
+            // Remove comments
+            content = Code.RemoveComments(content);
+
             // Extract the first switch statement
             var sw = new Regex(@"switch\s*\(.*?\)\s*\{");
             var sm = sw.Match(content, startat);

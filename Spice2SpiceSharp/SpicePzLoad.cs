@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Spice2SpiceSharp
 {
-    public class SpiceAcLoad : SpiceIterator
+    public class SpicePzLoad : SpiceIterator
     {
         /// <summary>
         /// Private variables
@@ -18,10 +18,11 @@ namespace Spice2SpiceSharp
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="dev">The Spice device</param>
-        public SpiceAcLoad(SpiceDevice dev, SpiceSetup setup)
+        /// <param name="dev">The spice device</param>
+        /// <param name="setup"></param>
+        public SpicePzLoad(SpiceDevice dev, SpiceSetup setup)
         {
-            string content = dev.GetMethod(SpiceDevice.Methods.AcLoad);
+            string content = dev.GetMethod(SpiceDevice.Methods.PzLoad);
             ReadMethod(content);
 
             // Copy the matrix nodes
@@ -87,42 +88,21 @@ namespace Spice2SpiceSharp
         }
 
         /// <summary>
-        /// Group the assignments
+        /// Group complex assignments
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
         private string ComplexAssignments(string code)
         {
+            code = Regex.Replace(code, @"\(\s*(?<orig>cstate\.Matrix[^;]+)\);", (Match m) => m.Groups["orig"].Value);
 
-            /* Regex rm = new Regex(@"(?<matrix>cstate\.[^\+\-\.]+)\s*(?<sign>[\+\-]\=)(?<value>[^;]+);");
-            Regex im = new Regex(@"(?<matrix>cstate\.[^\+\-\.]+)\.Imag\s*(?<sign>[\+\-]\=)(?<value>[^;]+);");
-            var ims = im.Matches(code);
-
-            Dictionary<string, List<string>> imagAsgn = new Dictionary<string, List<string>>();
-            HashSet<string> truecomplex = new HashSet<string>();
-            foreach (Match m in ims)
-            {
-                var key = m.Groups["matrix"].Value;
-                if (!imagAsgn.ContainsKey(key))
-                    imagAsgn.Add(key, new List<string>());
-                imagAsgn[key].Add(m.Value);
-            }
-
+            // In a PzLoad function, if a variable is multiplied by s->real, we can be sure there will be a s->imag too.
+            Regex rm = new Regex(@"(?<mat>cstate\.Matrix\[\w+, \w+]) (?<sgn>[\+\-]\=) (?<value>[^;]+)\s*\*\s*s\-\>real\s*;\s*\k<mat>\.Imag \k<sgn> \k<value>\s*\*\s*s\-\>imag\s*;");
             code = rm.Replace(code, (Match m) =>
             {
-                string res = m.Value;
-                string mat = m.Groups["matrix"].Value.Trim();
-                if (imagAsgn.ContainsKey(mat))
-                {
-                    res += Environment.NewLine + String.Join(Environment.NewLine, imagAsgn[mat]);
-                    truecomplex.Add(m.Groups["matrix"].Value);
-                }
-                return res;
+                return m.Groups["mat"].Value + " " + m.Groups["sgn"].Value + " " + m.Groups["value"] + " * cstate.Laplace";
             });
 
-            // Remove all true complex lines
-            code = im.Replace(code, (Match m) => truecomplex.Contains(m.Groups["matrix"].Value) ? "" : m.Value);
-             */
             return code;
         }
     }

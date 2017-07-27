@@ -134,7 +134,7 @@ namespace SpiceSharp.Components
         [SpiceName("tox"), SpiceInfo("Gate oxide thickness in um")]
         public Parameter<double> B1oxideThickness { get; } = new Parameter<double>();
         [SpiceName("temp"), SpiceInfo("Temperature in degree Celcius")]
-        public Parameter<double> B1temp { get; } = new Parameter<double>();
+        public ParameterMethod<double> B1temp { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
         [SpiceName("vdd"), SpiceInfo("Supply voltage to specify mus")]
         public Parameter<double> B1vdd { get; } = new Parameter<double>();
         [SpiceName("cgso"), SpiceInfo("Gate source overlap capacitance per unit channel width(m)")]

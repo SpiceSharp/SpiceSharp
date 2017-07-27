@@ -242,7 +242,7 @@ namespace SpiceSharp.Components
         [SpiceName("tox"), SpiceInfo("Gate oxide thickness in um")]
         public Parameter<double> B2tox { get; } = new Parameter<double>(0.03);
         [SpiceName("temp"), SpiceInfo("Temperature in degree Celcius")]
-        public Parameter<double> B2temp { get; } = new Parameter<double>();
+        public ParameterMethod<double> B2temp { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
         [SpiceName("vdd"), SpiceInfo("Maximum Vds ")]
         public Parameter<double> B2vdd { get; } = new Parameter<double>();
         [SpiceName("vgg"), SpiceInfo("Maximum Vgs ")]

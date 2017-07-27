@@ -24,6 +24,7 @@ namespace SpiceSharp.Components.Transistors
         public static double DELTA_2 = 0.02;
         public static double DELTA_3 = 0.02;
         public static double DELTA_4 = 0.02;
+        public static double EPS0 = 8.85418e-12;
 
         /// <summary>
         /// Limiting function FET

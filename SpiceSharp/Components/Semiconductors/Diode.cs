@@ -26,8 +26,8 @@ namespace SpiceSharp.Components
         /// </summary>
         [SpiceName("off"), SpiceInfo("Initially off", Interesting = false)]
         public bool DIOoff { get; set; } = false;
-        [SpiceName("temp"), SpiceInfo("Instance temperature in Kelvin", Interesting = false)]
-        public Parameter<double> DIOtemp { get; } = new Parameter<double>(300.15);
+        [SpiceName("temp"), SpiceInfo("Instance temperature", Interesting = false)]
+        public ParameterMethod<double> DIOtemp { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
         [SpiceName("ic"), SpiceInfo("Initial device voltage", Interesting = false)]
         public Parameter<double> DIOinitCond { get; } = new Parameter<double>();
         [SpiceName("area"), SpiceInfo("Area factor", Interesting = false)]

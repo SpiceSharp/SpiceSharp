@@ -19,7 +19,7 @@ namespace SpiceSharp.Components
         [SpiceName("is"), SpiceInfo("Saturation current")]
         public Parameter<double> DIOsatCur { get; } = new Parameter<double>(1.0e-14);
         [SpiceName("tnom"), SpiceInfo("Parameer measurement temperature", Interesting = false)]
-        public Parameter<double> DIOnomTemp { get; } = new Parameter<double>(300.15);
+        public ParameterMethod<double> DIOnomTemp { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
         [SpiceName("rs"), SpiceInfo("Ohmic resistance")]
         public Parameter<double> DIOresist { get; } = new Parameter<double>();
         [SpiceName("n"), SpiceInfo("Emission Coefficient")]
@@ -105,8 +105,7 @@ namespace SpiceSharp.Components
             xfc = Math.Log(1.0 - DIOdepletionCapCoeff);
 
             DIOf2 = Math.Exp((1.0 + DIOgradingCoeff) * xfc);
-            DIOf3 = 1.0 - DIOdepletionCapCoeff *
-                    (1.0 + DIOgradingCoeff);
+            DIOf3 = 1.0 - DIOdepletionCapCoeff * (1.0 + DIOgradingCoeff);
         }
     }
 }

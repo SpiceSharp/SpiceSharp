@@ -91,7 +91,7 @@ namespace SpiceSharp.Parameters
 
                     PropertyInfo pi = info as PropertyInfo;
 
-                    if (pi.PropertyType.Name == typeof(Parameter<>).Name)
+                    if (pi.PropertyType.GetInterface("IParameter") != null)
                     {
                         IsParameter = true;
                         ValueType = pi.PropertyType.GenericTypeArguments[0];
@@ -112,7 +112,7 @@ namespace SpiceSharp.Parameters
 
                     FieldInfo fi = info as FieldInfo;
 
-                    if (fi.FieldType.Name == typeof(Parameter<>).Name)
+                    if (fi.FieldType.GetInterface("IParameter") != null)
                     {
                         IsParameter = true;
                         ValueType = fi.FieldType.GenericTypeArguments[0];

@@ -15,8 +15,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature (in Kelvin)", Interesting = false)]
-        public Parameter<double> REStnom { get; } = new Parameter<double>();
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature", Interesting = false)]
+        public ParameterMethod<double> REStnom { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
         [SpiceName("tc1"), SpiceInfo("First order temperature coefficient")]
         public Parameter<double> REStempCoeff1 { get; } = new Parameter<double>();
         [SpiceName("tc2"), SpiceInfo("Second order temperature oefficient")]

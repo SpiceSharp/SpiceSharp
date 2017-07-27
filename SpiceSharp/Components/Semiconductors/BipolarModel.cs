@@ -91,8 +91,8 @@ namespace SpiceSharp.Components
         public Parameter<double> BJTtransitTimeFVBC { get; } = new Parameter<double>();
         [SpiceName("isc"), SpiceInfo("B-C leakage saturation current")]
         public Parameter<double> BJTleakBCcurrent { get; } = new Parameter<double>();
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature in Kelvin")]
-        public Parameter<double> BJTtnom { get; } = new Parameter<double>();
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
+        public ParameterMethod<double> BJTtnom { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
         [SpiceName("ikf"), SpiceName("ik"), SpiceInfo("Forward beta roll-off corner current")]
         public Parameter<double> BJTrollOffF { get; } = new Parameter<double>();
         [SpiceName("vaf"), SpiceName("va"), SpiceInfo("Forward Early voltage")]

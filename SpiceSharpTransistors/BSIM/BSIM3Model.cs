@@ -58,29 +58,9 @@ namespace SpiceSharp.Components
         [SpiceName("nsub"), SpiceInfo("Substrate doping concentration")]
         public Parameter<double> BSIM3nsub { get; } = new Parameter<double>(6.0e16);
         [SpiceName("nch"), SpiceInfo("Channel doping concentration")]
-        public double BSIM3_MOD_NPEAK
-        {
-            get => BSIM3npeak;
-            set
-            {
-                BSIM3npeak.Set(value);
-                if (BSIM3npeak > 1.0e20)
-                    BSIM3npeak.Value *= 1.0e-6;
-            }
-        }
-        public Parameter<double> BSIM3npeak = new Parameter<double>(1.7e17);
+        public ParameterMethod<double> BSIM3npeak { get; } = new ParameterMethod<double>(1.7e17, (double v) => v > 1.0e20 ? v * 1e-6 : v, null);
         [SpiceName("ngate"), SpiceInfo("Poly-gate doping concentration")]
-        public double BSIM3_MOD_NGATE
-        {
-            get => BSIM3ngate;
-            set
-            {
-                BSIM3ngate.Set(value);
-                if (BSIM3ngate > 1.0e23)
-                    BSIM3ngate.Value *= 1.0e-6;
-            }
-        }
-        public Parameter<double> BSIM3ngate = new Parameter<double>();
+        public ParameterMethod<double> BSIM3ngate { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e23 ? v * 1e-6 : v, null);
         [SpiceName("gamma1"), SpiceInfo("Vth body coefficient")]
         public Parameter<double> BSIM3gamma1 { get; } = new Parameter<double>();
         [SpiceName("gamma2"), SpiceInfo("Vth body coefficient")]
@@ -262,29 +242,9 @@ namespace SpiceSharp.Components
         [SpiceName("lnsub"), SpiceInfo("Length dependence of nsub")]
         public Parameter<double> BSIM3lnsub { get; } = new Parameter<double>();
         [SpiceName("lnch"), SpiceInfo("Length dependence of nch")]
-        public double BSIM3_MOD_LNPEAK
-        {
-            get => BSIM3lnpeak;
-            set
-            {
-                BSIM3lnpeak.Set(value);
-                if (BSIM3lnpeak > 1.0e20)
-                    BSIM3lnpeak.Value *= 1.0e-6;
-            }
-        }
-        public Parameter<double> BSIM3lnpeak = new Parameter<double>();
+        public ParameterMethod<double> BSIM3lnpeak { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e20 ? v * 1e-6 : v, null);
         [SpiceName("lngate"), SpiceInfo("Length dependence of ngate")]
-        public double BSIM3_MOD_LNGATE
-        {
-            get => BSIM3lngate;
-            set
-            {
-                BSIM3lngate.Set(value);
-                if (BSIM3lngate > 1.0e23)
-                    BSIM3lngate.Value *= 1.0e-6;
-            }
-        }
-        public Parameter<double> BSIM3lngate = new Parameter<double>();
+        public ParameterMethod<double> BSIM3lngate { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e23 ? v * 1e-6 : v, null);
         [SpiceName("lgamma1"), SpiceInfo("Length dependence of gamma1")]
         public Parameter<double> BSIM3lgamma1 { get; } = new Parameter<double>();
         [SpiceName("lgamma2"), SpiceInfo("Length dependence of gamma2")]
@@ -448,29 +408,9 @@ namespace SpiceSharp.Components
         [SpiceName("wnsub"), SpiceInfo("Width dependence of nsub")]
         public Parameter<double> BSIM3wnsub { get; } = new Parameter<double>();
         [SpiceName("wnch"), SpiceInfo("Width dependence of nch")]
-        public double BSIM3_MOD_WNPEAK
-        {
-            get => BSIM3wnpeak;
-            set
-            {
-                BSIM3wnpeak.Set(value);
-                if (BSIM3wnpeak > 1.0e20)
-                    BSIM3wnpeak.Value *= 1.0e-6;
-            }
-        }
-        public Parameter<double> BSIM3wnpeak = new Parameter<double>();
+        public ParameterMethod<double> BSIM3wnpeak { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e20 ? v * 1e-6 : v, null);
         [SpiceName("wngate"), SpiceInfo("Width dependence of ngate")]
-        public double BSIM3_MOD_WNGATE
-        {
-            get => BSIM3wngate;
-            set
-            {
-                BSIM3wngate.Set(value);
-                if (BSIM3wngate > 1.0e23)
-                    BSIM3wngate.Value *= 1.0e-6;
-            }
-        }
-        public Parameter<double> BSIM3wngate = new Parameter<double>();
+        public ParameterMethod<double> BSIM3wngate { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e23 ? v * 1e-6 : v, null);
         [SpiceName("wgamma1"), SpiceInfo("Width dependence of gamma1")]
         public Parameter<double> BSIM3wgamma1 { get; } = new Parameter<double>();
         [SpiceName("wgamma2"), SpiceInfo("Width dependence of gamma2")]
@@ -634,29 +574,9 @@ namespace SpiceSharp.Components
         [SpiceName("pnsub"), SpiceInfo("Cross-term dependence of nsub")]
         public Parameter<double> BSIM3pnsub { get; } = new Parameter<double>();
         [SpiceName("pnch"), SpiceInfo("Cross-term dependence of nch")]
-        public double BSIM3_MOD_PNPEAK
-        {
-            get => BSIM3pnpeak;
-            set
-            {
-                BSIM3pnpeak.Set(value);
-                if (BSIM3pnpeak > 1.0e20)
-                    BSIM3pnpeak.Value *= 1.0e-6;
-            }
-        }
-        public Parameter<double> BSIM3pnpeak = new Parameter<double>();
+        public ParameterMethod<double> BSIM3pnpeak { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e20 ? v * 1e-6 : v, null);
         [SpiceName("pngate"), SpiceInfo("Cross-term dependence of ngate")]
-        public double BSIM3_MOD_PNGATE
-        {
-            get => BSIM3pngate;
-            set
-            {
-                BSIM3pngate.Set(value);
-                if (BSIM3pngate > 1.0e23)
-                    BSIM3pngate.Value *= 1.0e-6;
-            }
-        }
-        public Parameter<double> BSIM3pngate = new Parameter<double>();
+        public ParameterMethod<double> BSIM3pngate { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e23 ? v * 1e-6 : v, null);
         [SpiceName("pgamma1"), SpiceInfo("Cross-term dependence of gamma1")]
         public Parameter<double> BSIM3pgamma1 { get; } = new Parameter<double>();
         [SpiceName("pgamma2"), SpiceInfo("Cross-term dependence of gamma2")]
@@ -792,7 +712,7 @@ namespace SpiceSharp.Components
         [SpiceName("pvoffcv"), SpiceInfo("Cross-term dependence of voffcv")]
         public Parameter<double> BSIM3pvoffcv { get; } = new Parameter<double>();
         [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
-        public Parameter<double> BSIM3tnom { get; } = new Parameter<double>();
+        public ParameterMethod<double> BSIM3tnom { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
         [SpiceName("cgso"), SpiceInfo("Gate-source overlap capacitance per width")]
         public Parameter<double> BSIM3cgso { get; } = new Parameter<double>();
         [SpiceName("cgdo"), SpiceInfo("Gate-drain overlap capacitance per width")]
@@ -1037,8 +957,6 @@ namespace SpiceSharp.Components
                     BSIM3oxideTrapDensityC.Value = 1.4e-12;
 
             }
-            /* V / m */
-            /* loop through all the instances of the model */
         }
 
         /// <summary>
@@ -1047,14 +965,9 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            double Temp;
-            double Tnom;
-            double Eg0;
-            double Eg;
-            double delTemp;
-            double T0, T1;
+            double Temp, Tnom, Eg0, Eg, delTemp, T0, T1;
 
-            Temp = ckt.State.Temperature; ;
+            Temp = ckt.State.Temperature;
             if (BSIM3bulkJctPotential < 0.1)
             {
                 BSIM3bulkJctPotential.Value = 0.1;
@@ -1152,10 +1065,6 @@ namespace SpiceSharp.Components
                 BSIM3PhiBSWG = 0.01;
                 CircuitWarning.Warning(this, "Temperature effect has caused pbswg to be less than 0.01. Pbswg is clamped to 0.01.\n");
             }
-            /* End of junction capacitance */
-
-            /* loop through all the instances of the model */
-            /* MCJ: Length and Width not initialized */
         }
     }
 }

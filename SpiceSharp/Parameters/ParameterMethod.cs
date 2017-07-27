@@ -3,13 +3,25 @@ using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Parameters
 {
-    /// <summary>
-    /// This class describes a parameter that is optional. Whether or not it is specified can be
-    /// found using the Given variable.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class Parameter<T> : ICloneable, IParameter
+    public class ParameterMethod<T> : IParameter, ICloneable
     {
+        /// <summary>
+        /// A method that can transform an input if necessary
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public delegate T TransformMethod(T input);
+
+        /// <summary>
+        /// A transformation that is applied before returning the value using Get()
+        /// </summary>
+        public TransformMethod TransformGet = null;
+
+        /// <summary>
+        /// A transformation that is applied when setting the value using Set()
+        /// </summary>
+        public TransformMethod TransformSet = null;
+
         /// <summary>
         /// Gets or sets the raw value of the parameter without changing the Given parameter
         /// </summary>
@@ -21,12 +33,16 @@ namespace SpiceSharp.Parameters
         public bool Given { get; private set; } = false;
 
         /// <summary>
-        /// Constructor
+        /// Constructor with extra methods
         /// </summary>
         /// <param name="defvalue">The default value</param>
-        public Parameter(T defvalue = default(T))
+        /// <param name="set">The method used to convert the value when setting the parameter</param>
+        /// <param name="get">The method used to convert the value when getting the parameter</param>
+        public ParameterMethod(T defvalue, TransformMethod set, TransformMethod get)
         {
             Value = defvalue;
+            TransformSet = set;
+            TransformGet = get;
         }
 
         /// <summary>
@@ -35,10 +51,9 @@ namespace SpiceSharp.Parameters
         /// <returns></returns>
         public object Clone()
         {
-            var clone = new Parameter<T>()
+            var clone = new ParameterMethod<T>(Value, TransformSet, TransformGet)
             {
-                Given = Given,
-                Value = Value
+                Given = Given               
             };
             return clone;
         }
@@ -47,7 +62,7 @@ namespace SpiceSharp.Parameters
         /// Copy the parameter from another parameter
         /// </summary>
         /// <param name="source"></param>
-        public void CopyFrom(Parameter<T> source)
+        public void CopyFrom(ParameterMethod<T> source)
         {
             Value = source.Value;
             Given = source.Given;
@@ -57,7 +72,7 @@ namespace SpiceSharp.Parameters
         /// Copy the parameter to another parameter
         /// </summary>
         /// <param name="target"></param>
-        public void CopyTo(Parameter<T> target)
+        public void CopyTo(ParameterMethod<T> target)
         {
             target.Value = Value;
             target.Given = Given;
@@ -69,7 +84,10 @@ namespace SpiceSharp.Parameters
         /// <param name="value"></param>
         public void Set(T value)
         {
-            Value = value;
+            if (TransformSet != null)
+                Value = TransformSet(value);
+            else
+                Value = value;
             Given = true;
         }
 
@@ -79,6 +97,8 @@ namespace SpiceSharp.Parameters
         /// <returns></returns>
         public object Get()
         {
+            if (TransformGet != null)
+                return TransformGet(Value);
             return Value;
         }
 
@@ -90,7 +110,10 @@ namespace SpiceSharp.Parameters
         {
             if (value is T)
             {
-                Value = (T)value;
+                if (TransformSet != null)
+                    Value = TransformSet((T)value);
+                else
+                    Value = (T)value;
                 Given = true;
             }
             else
@@ -101,7 +124,7 @@ namespace SpiceSharp.Parameters
         /// Parameters can be implicitly converted to their base type
         /// </summary>
         /// <param name="p"></param>
-        public static implicit operator T(Parameter<T> p)
+        public static implicit operator T(ParameterMethod<T> p)
         {
             return p.Value;
         }

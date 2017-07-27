@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [SpiceName("temp"), SpiceInfo("Instance temperature")]
-        public Parameter<double> MOS1temp { get; } = new Parameter<double>();
+        public ParameterMethod<double> MOS1temp { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
         [SpiceName("w"), SpiceInfo("Width")]
         public Parameter<double> MOS1w { get; } = new Parameter<double>();
         [SpiceName("l"), SpiceInfo("Length")]
