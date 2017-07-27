@@ -19,6 +19,7 @@ The project SpiceSharpTransistors project contains additional transistor models:
 * BSIM1
 * BSIM2
 * BSIM3 (3.3.0)
+* BSIM4 (4.8.0)
 
 The project Spice2SpiceSharp contains a tool that I use to convert Spice models to the SpiceSharp framework (C and C# are not that different when it comes to model calculations). This minimizes the error I make when porting the model to this framework. Some manual work is still necessary though, and errors can still sneak in. Use the models at your own risk.
 
