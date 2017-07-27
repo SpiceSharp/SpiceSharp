@@ -20,11 +20,17 @@ namespace SpiceSharp.Components.Transistors
         public static double Meter2Micron = 1.0e6;
         public static double Kb = 1.3806226e-23;
         public static double KboQ = 8.617087e-5;  /* Kb / q  where q = 1.60219e-19 */
+        public static double DELTA = 1.0E-9;
         public static double DELTA_1 = 0.02;
         public static double DELTA_2 = 0.02;
         public static double DELTA_3 = 0.02;
         public static double DELTA_4 = 0.02;
         public static double EPS0 = 8.85418e-12;
+        public static double MM = 3;
+
+        public static double MAX_EXPL = 2.688117142e+43;
+        public static double MIN_EXPL = 3.720075976e-44;
+        public static double EXPL_THRESHOLD = 100.0;
 
         /// <summary>
         /// Limiting function FET

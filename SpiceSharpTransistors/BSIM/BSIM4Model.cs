@@ -1788,7 +1788,6 @@ namespace SpiceSharp.Components
         public double DMCIeff { get; private set; }
         public double DMDGeff { get; private set; }
         public double Temp { get; private set; }
-        public double T0 { get; private set; }
         public double epsrox { get; private set; }
         public double toxe { get; private set; }
         public double epssub { get; private set; }
@@ -1798,9 +1797,6 @@ namespace SpiceSharp.Components
         public double Vtm0 { get; private set; }
         public double Eg0 { get; private set; }
         public double ni { get; private set; }
-        public double T1 { get; private set; }
-        public double T2 { get; private set; }
-        public double T3 { get; private set; }
         public double delTemp { get; private set; }
 
         /// <summary>
@@ -2495,6 +2491,7 @@ namespace SpiceSharp.Components
         public override void Temperature(Circuit ckt)
         {
             double Eg;
+            double T0, T1, T2, T3;
 
             Temp = ckt.State.Temperature;
             if (BSIM4SbulkJctPotential < 0.1)
@@ -2659,6 +2656,14 @@ namespace SpiceSharp.Components
                 BSIM4DjctSidewallTempSatCurDensity = 0.0;
             if (BSIM4DjctGateSidewallTempSatCurDensity < 0.0)
                 BSIM4DjctGateSidewallTempSatCurDensity = 0.0;
+
+            T0 = (TRatio - 1.0);
+            BSIM4njtsstemp = BSIM4njts * (1.0 + BSIM4tnjts * T0);
+            BSIM4njtsswstemp = BSIM4njtssw * (1.0 + BSIM4tnjtssw * T0);
+            BSIM4njtsswgstemp = BSIM4njtsswg * (1.0 + BSIM4tnjtsswg * T0);
+            BSIM4njtsdtemp = BSIM4njtsd * (1.0 + BSIM4tnjtsd * T0);
+            BSIM4njtsswdtemp = BSIM4njtsswd * (1.0 + BSIM4tnjtsswd * T0);
+            BSIM4njtsswgdtemp = BSIM4njtsswgd * (1.0 + BSIM4tnjtsswgd * T0);
 
             /* Temperature dependence of D / B and S / B diode capacitance begins */
             delTemp = ckt.State.Temperature - BSIM4tnom;
