@@ -10,7 +10,7 @@ namespace SpiceSharp.Parameters
 {
     public static class Converter
     {
-        private static Regex spiceValue = new Regex(@"^(?<value>\d+(\.\d+)?)(e(?<exp>[\+\-]?\d+)|(?<mod>(meg|mil|[tgkmunpf]))\w*)?$", RegexOptions.IgnoreCase);
+        private static Regex spiceValue = new Regex(@"^(?<value>[\+\-]?\d+(\.\d+)?)(e(?<exp>[\+\-]?\d+)|(?<mod>(meg|mil|[tgkmunpf]))\w*)?$", RegexOptions.IgnoreCase);
 
         /// <summary>
         /// Default implementation for converting Spice-style values to doubles

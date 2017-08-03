@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiceSharpTransistors", "Sp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice2SpiceSharp", "Spice2SpiceSharp\Spice2SpiceSharp.csproj", "{C351CBA3-7B96-42F7-9D71-F9AE5E773149}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiceSharpParser", "SpiceSharpParser\SpiceSharpParser.csproj", "{FDB9A121-DFF2-403B-9430-D128A2A2794F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C351CBA3-7B96-42F7-9D71-F9AE5E773149}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C351CBA3-7B96-42F7-9D71-F9AE5E773149}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C351CBA3-7B96-42F7-9D71-F9AE5E773149}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDB9A121-DFF2-403B-9430-D128A2A2794F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDB9A121-DFF2-403B-9430-D128A2A2794F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDB9A121-DFF2-403B-9430-D128A2A2794F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDB9A121-DFF2-403B-9430-D128A2A2794F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

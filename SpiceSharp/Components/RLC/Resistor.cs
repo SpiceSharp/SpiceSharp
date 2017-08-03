@@ -114,7 +114,6 @@ namespace SpiceSharp.Components
             // Default Value Processing for Resistor Instance
             if (!REStemp.Given) REStemp.Value = ckt.State.Temperature;
             if (!RESwidth.Given) RESwidth.Value = model?.RESdefWidth ?? 0.0;
-            if (!RESlength.Given) RESlength.Value = 0;
             if (!RESresist.Given)
             {
                 if (model.RESsheetRes.Given && (model.RESsheetRes != 0) && (RESlength != 0))

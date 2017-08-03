@@ -5,11 +5,15 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System.IO;
 using Spice2SpiceSharp;
+using SpiceSharp.Parser;
+using SpiceSharp.Parser.Readers;
 
 namespace SpiceSharpTest
 {
     class Program
     {
+        private static List<double> time, output;
+
         /// <summary>
         /// Main method
         /// </summary>
@@ -30,7 +34,34 @@ namespace SpiceSharpTest
             foreach (string msg in ConverterWarnings.Warnings)
                 Console.WriteLine(msg); */
 
+            NetlistReader parser = new NetlistReader(new FileStream("test.net", FileMode.Open));
+            SpiceSharp.Parameters.SpiceMember.SpiceMemberConvert += SpiceSharp.Parameters.Converter.SpiceConvert;
+            parser.Parse();
+
+            time = new List<double>();
+            output = new List<double>();
+            Transient t = new Transient("TRAN 1");
+            t.Set("stop", "5m");
+            t.Set("step", "1n");
+            t.ExportSimulationData += T_ExportSimulationData;
+            parser.Netlist.Circuit.Simulate(t);
+
+            foreach (string msg in SpiceSharp.Diagnostics.CircuitWarning.Warnings)
+                Console.WriteLine(msg);
+
+            using (StreamWriter sw = new StreamWriter("output.csv"))
+            {
+                for (int i = 0; i < time.Count; i++)
+                    sw.WriteLine(string.Join(";", time[i], output[i]));
+            }
+
             Console.ReadKey();
+        }
+
+        private static void T_ExportSimulationData(object sender, SimulationData data)
+        {
+            time.Add(data.GetTime());
+            output.Add(data.GetVoltage("2"));
         }
     }
 }

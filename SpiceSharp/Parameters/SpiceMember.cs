@@ -328,9 +328,9 @@ namespace SpiceSharp.Parameters
                         return Array.ConvertAll(array, item => Convert.ToBoolean(item));
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new CircuitException($"Invalid parameter value {value.ToString()}, {type.ToString()} expected.");
+                throw new CircuitException($"Invalid parameter value {value.ToString()}: {ex.Message}");
             }
 
             throw new CircuitException("Invalid parameter type");
