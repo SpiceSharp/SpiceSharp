@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SpiceSharp.Components;
 using SpiceSharp.Parameters;
 
@@ -338,6 +336,12 @@ namespace SpiceSharp.Parser.Readers
         {
             if (o is Token)
                 return (o as Token).beginLine;
+            if (o is Token[])
+            {
+                Token[] ts = (Token[])o;
+                if (ts != null && ts.Length > 0)
+                    return ts[0].beginLine;
+            }
             if (o is SpiceSharpParser.Named)
                 return GetBeginLine((o as SpiceSharpParser.Named).Name);
             if (o is SpiceSharpParser.Bracketed)
@@ -348,6 +352,12 @@ namespace SpiceSharp.Parser.Readers
         {
             if (o is Token)
                 return (o as Token).endLine;
+            if (o is Token[])
+            {
+                Token[] ts = (Token[])o;
+                if (ts != null && ts.Length > 0)
+                    return ts[ts.Length - 1].endLine;
+            }
             if (o is SpiceSharpParser.Named)
                 return GetEndLine((o as SpiceSharpParser.Named).Value);
             if (o is SpiceSharpParser.Bracketed)
@@ -364,6 +374,12 @@ namespace SpiceSharp.Parser.Readers
         {
             if (o is Token)
                 return (o as Token).beginColumn;
+            if (o is Token[])
+            {
+                Token[] ts = (Token[])o;
+                if (ts != null && ts.Length > 0)
+                    return ts[0].beginColumn;
+            }
             if (o is SpiceSharpParser.Named)
                 return GetBeginColumn((o as SpiceSharpParser.Named).Name);
             if (o is SpiceSharpParser.Bracketed)
@@ -374,6 +390,12 @@ namespace SpiceSharp.Parser.Readers
         {
             if (o is Token)
                 return (o as Token).endColumn;
+            if (o is Token[])
+            {
+                Token[] ts = (Token[])o;
+                if (ts != null && ts.Length > 0)
+                    return ts[ts.Length - 1].endColumn;
+            }
             if (o is SpiceSharpParser.Named)
                 return GetEndColumn((o as SpiceSharpParser.Named).Value);
             if (o is SpiceSharpParser.Bracketed)
@@ -404,6 +426,26 @@ namespace SpiceSharp.Parser.Readers
         }
 
         /// <summary>
+        /// Throw an exception for after a parameter
+        /// </summary>
+        /// <param name="parameter">The parameter</param>
+        /// <param name="message">The message</param>
+        protected void ThrowBefore(object parameter, string message)
+        {
+            throw new ParseException($"Error at line {GetBeginLine(parameter)}, column {GetBeginColumn(parameter)}: {message}");
+        }
+
+        /// <summary>
+        /// Throw an exception for before a parameter
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="message"></param>
+        protected void ThrowAfter(object parameter, string message)
+        {
+            throw new ParseException($"Error at line {GetEndLine(parameter)}, column {GetEndColumn(parameter)}: {message}");
+        }
+
+        /// <summary>
         /// Read parameters until the end and assign them to obj
         /// </summary>
         /// <param name="obj">The parameterized object</param>
@@ -414,9 +456,13 @@ namespace SpiceSharp.Parser.Readers
             for (int i = start; i < parameters.Count; i++)
             {
                 string pname, pvalue;
-                ReadNamed(parameters[i], out pname, out pvalue);
-                pname = pname.ToLower();
-                obj.Set(pname, pvalue);
+                if (TryReadNamed(parameters[i], out pname, out pvalue))
+                {
+                    pname = pname.ToLower();
+                    obj.Set(pname, pvalue);
+                }
+                else
+                    obj.Set(ReadWord(parameters[i]));
             }
         }
     }

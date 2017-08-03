@@ -34,7 +34,7 @@ namespace SpiceSharp.Parser.Readers
                 r.Model = ReadModel<ResistorModel>(parameters[2], netlist);
                 ReadParameters(r, parameters, 3);
                 if (!r.RESlength.Given)
-                    throw new ParseException($"Error at line {GetBeginLine(name)}: L needs to be specified for resistor {GetImage(name)}");
+                    ThrowBefore(name, "L needs to be specified");
             }
 
             // Add the component

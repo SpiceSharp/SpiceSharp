@@ -4,21 +4,20 @@ using SpiceSharp.Components;
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class that can read a resistor model
+    /// A class that can read diode models
     /// </summary>
-    public class ResistorModelReader : Reader
+    public class DiodeModelReader : Reader
     {
         /// <summary>
-        /// Read a resistor model
+        /// Read
         /// </summary>
-        /// <param name="name">The name of the control model</param>
-        /// <param name="parameters">The parameters</param>
-        /// <param name="netlist">The netlist</param>
+        /// <param name="name">Name</param>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="netlist">Netlist</param>
         /// <returns></returns>
         public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
-            // Create the model
-            ResistorModel model = new ResistorModel(ReadIdentifier(name));
+            DiodeModel model = new DiodeModel(ReadIdentifier(name));
             ReadParameters(model, parameters);
             netlist.Circuit.Components.Add(model);
             return true;

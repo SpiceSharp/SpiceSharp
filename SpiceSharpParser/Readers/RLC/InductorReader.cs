@@ -26,7 +26,7 @@ namespace SpiceSharp.Parser.Readers
 
             // Read the value
             if (parameters.Count < 3)
-                throw new ParseException($"Error on line {GetBeginLine(name)}: Inductance expected");
+                ThrowAfter(parameters[1], "Inductance expected");
             ind.Set("inductance", ReadValue(parameters[2]));
 
             // Read initial conditions

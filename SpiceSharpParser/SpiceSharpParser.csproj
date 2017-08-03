@@ -41,6 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NetlistReader.cs" />
+    <Compile Include="Readers\Currentsources\CurrentControlledCurrentsourceReader.cs" />
+    <Compile Include="Readers\Currentsources\CurrentsourceReader.cs" />
+    <Compile Include="Readers\Currentsources\VoltageControlledCurrentsourceReader.cs" />
     <Compile Include="Readers\ModelReader.cs" />
     <Compile Include="Readers\Reader.cs" />
     <Compile Include="Netlist.cs" />
@@ -52,6 +55,14 @@
     <Compile Include="Readers\RLC\MutualInductanceReader.cs" />
     <Compile Include="Readers\RLC\ResistorModelReader.cs" />
     <Compile Include="Readers\RLC\ResistorReader.cs" />
+    <Compile Include="Readers\Semiconductors\BipolarModelReader.cs" />
+    <Compile Include="Readers\Semiconductors\BipolarReader.cs" />
+    <Compile Include="Readers\Semiconductors\DiodeModelReader.cs" />
+    <Compile Include="Readers\Semiconductors\DiodeReader.cs" />
+    <Compile Include="Readers\Switches\CurrentSwitchModelReader.cs" />
+    <Compile Include="Readers\Switches\CurrentSwitchReader.cs" />
+    <Compile Include="Readers\Switches\VoltageSwitchModelReader.cs" />
+    <Compile Include="Readers\Switches\VoltageSwitchReader.cs" />
     <Compile Include="Readers\Voltagesources\CurrentControlledVoltagesourceReader.cs" />
     <Compile Include="Readers\Voltagesources\VoltageControlledVoltagesourceReader.cs" />
     <Compile Include="Readers\Voltagesources\VoltagesourceReader.cs" />

@@ -44,18 +44,9 @@ namespace SpiceSharp.Parser.Readers
             else
             {
                 cap.Model = ReadModel<CapacitorModel>(parameters[2], netlist);
-
-                // Only parameters left
-                bool hasL = false;
-                for (int i = 3; i < parameters.Count; i++)
-                {
-                    string pname, pvalue;
-                    ReadNamed(parameters[i], out pname, out pvalue);
-                    cap.Set(pname.ToLower(), pvalue);
-                    hasL |= pname.ToLower() == "l";
-                }
-                if (!hasL)
-                    throw new ParseException($"Error at line {GetBeginLine(name)}: L needs to be specified for capacitor {GetImage(name)}");
+                ReadParameters(cap, parameters, 2);
+                if (!cap.CAPlength.Given)
+                    ThrowBefore(name, "L needs to be specified");
             }
 
             netlist.Circuit.Components.Add(cap);

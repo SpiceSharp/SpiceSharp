@@ -4,24 +4,24 @@ using SpiceSharp.Components;
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// This class can read a voltage source
+    /// This class can read current sources
     /// </summary>
-    public class VoltagesourceReader : Reader
+    public class CurrentsourceReader : Reader
     {
         /// <summary>
         /// Read
         /// </summary>
-        /// <param name="name">The name</param>
+        /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
         public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
-            if (name.image[0] != 'v' && name.image[0] != 'V')
+            if (name.image[0] != 'i' && name.image[0] != 'I')
                 return false;
 
-            Voltagesource vsrc = new Voltagesource(name.image);
-            ReadNodes(vsrc, parameters, 2);
+            Currentsource isrc = new Currentsource(name.image);
+            ReadNodes(isrc, parameters, 2);
 
             // We can have a value or just DC
             string pvalue;
@@ -33,23 +33,23 @@ namespace SpiceSharp.Parser.Readers
                     if (TryReadLiteral(parameters[i], "dc"))
                     {
                         i++;
-                        vsrc.Set("dc", ReadValue(parameters[i]));
+                        isrc.Set("dc", ReadValue(parameters[i]));
                     }
                     else if (TryReadValue(parameters[i], out pvalue))
-                        vsrc.Set("dc", pvalue);
+                        isrc.Set("dc", pvalue);
                 }
 
                 // AC specification
                 if (TryReadLiteral(parameters[i], "ac"))
                 {
                     i++;
-                    vsrc.Set("acmag", ReadValue(parameters[i]));
+                    isrc.Set("acmag", ReadValue(parameters[i]));
 
                     // Look forward for one more value
                     if (i + 1 < parameters.Count && TryReadValue(parameters[i + 1], out pvalue))
                     {
                         i++;
-                        vsrc.Set("acphase", pvalue);
+                        isrc.Set("acphase", pvalue);
                     }
                 }
 
@@ -63,7 +63,7 @@ namespace SpiceSharp.Parser.Readers
                     {
                         if (r.Read(b.Name, b.Parameters, netlist))
                         {
-                            vsrc.Set("waveform", r.Current);
+                            isrc.Set("waveform", r.Current);
                             found = true;
                             break;
                         }
@@ -73,7 +73,7 @@ namespace SpiceSharp.Parser.Readers
                 }
             }
 
-            netlist.Circuit.Components.Add(vsrc);
+            netlist.Circuit.Components.Add(isrc);
             return true;
         }
     }

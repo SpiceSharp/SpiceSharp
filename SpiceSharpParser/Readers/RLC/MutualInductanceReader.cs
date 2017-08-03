@@ -21,12 +21,11 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             MutualInductance mut = new MutualInductance(name.image);
-
             switch (parameters.Count)
             {
-                case 1: throw new ParseException($"Error on line {name.endLine}, column {name.endColumn}: Inductor name expected");
-                case 2: throw new ParseException($"Error on line {GetEndLine(parameters[0])}, column {GetEndColumn(parameters[0])}: Inductor name expected");
-                case 3: throw new ParseException($"Error on line {GetEndLine(parameters[0])}, column {GetEndColumn(parameters[0])}: Coupling factor expected");
+                case 1: ThrowAfter(name, "Inductor name expected"); break;
+                case 2: ThrowAfter(parameters[0], "Inductor name expected"); break;
+                case 3: ThrowAfter(parameters[1], "Coupling factor expected"); break;
             }
 
             // Read two inductors

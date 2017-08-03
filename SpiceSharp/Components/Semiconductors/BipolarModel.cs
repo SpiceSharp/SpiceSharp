@@ -20,9 +20,9 @@ namespace SpiceSharp.Components
         [SpiceName("type"), SpiceInfo("NPN or PNP")]
         public int BJTtype { get; private set; } = NPN;
         [SpiceName("npn"), SpiceInfo("NPN type device")]
-        public void BJTSetNPN(Circuit ckt) { BJTtype = NPN; }
+        public void BJTSetNPN() { BJTtype = NPN; }
         [SpiceName("pnp"), SpiceInfo("PNP type device")]
-        public void BJTSetPNP(Circuit ckt) { BJTtype = PNP; }
+        public void BJTSetPNP() { BJTtype = PNP; }
         [SpiceName("is"), SpiceInfo("Saturation Current")]
         public Parameter<double> BJTsatCur { get; } = new Parameter<double>(1e-16);
         [SpiceName("bf"), SpiceInfo("Ideal forward beta")]

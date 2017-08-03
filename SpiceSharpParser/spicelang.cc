@@ -25,14 +25,14 @@ public class SpiceSharpParser
 		/// <summary>
 		/// The value of the parameter
 		/// </summary>
-		public Token Value { get; }
+		public Object Value { get; }
 		
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		/// <param name="name">The name of the parameter</param>
 		/// <param name="value">The value of the parameter</param>
-		public Named(Token name, Token value)
+		public Named(Token name, Object value)
 		{
 			Name = name;
 			Value = value;
@@ -128,11 +128,13 @@ Object ParseParameter() :
 	Token a, b;
 	Object o = null;
 	Bracketed br = null;
+	List<Token> l = new List<Token>();
 }
 {
-	LOOKAHEAD(2) a = <WORD> "=" b = <VALUE> { return new Named(a, b); }
+	LOOKAHEAD(2) a = <WORD> "=" o = ParseParameter() { return new Named(a, o); }
 	| LOOKAHEAD(2) a = <WORD> { br = new Bracketed(a); } "(" (o = ParseParameter() { br.Parameters.Add(o); })* ")" { return br; }
 	| a = <WORD> { return a; }
+	| LOOKAHEAD(2) a = <VALUE>{ l.Add(a); } (<COMMA> a = <VALUE>{ l.Add(a); }) + { return (Token[])l.ToArray(); }
 	| a = <VALUE> { return a; }
 	| a = <IDENTIFIER>{ return a; }
 	| a = <DELIMITER> { return a; }
@@ -145,6 +147,7 @@ TOKEN :
 	<PLUS : "+">
 	| <ASTERISK : "*">
 	| <DOT : ".">
+	| <COMMA : ",">
 	| <DELIMITER : "=" | "(" | ")">
 	| <NEWLINE : "\r" | "\n" | "\r\n">
 	| <VALUE : (["+","-"])? (<DIGIT>)+ ("." (<DIGIT>)*)? ("e" ("+" | "-")? (<DIGIT>)+ | ["t","g","m","k","u","n","p","f"] (<LETTER>)*)?>

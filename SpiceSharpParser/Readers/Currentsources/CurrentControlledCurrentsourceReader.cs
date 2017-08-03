@@ -4,9 +4,9 @@ using SpiceSharp.Components;
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class that can read current-controlled voltage sources
+    /// This class can read current-controlled current sources
     /// </summary>
-    public class CurrentControlledVoltagesourceReader : Reader
+    public class CurrentControlledCurrentsourceReader : Reader
     {
         /// <summary>
         /// Read
@@ -17,21 +17,21 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
-            if (name.image[0] != 'h' && name.image[0] != 'H')
+            if (name.image[0] != 'f' && name.image[0] != 'F')
                 return false;
 
-            CurrentControlledVoltagesource ccvs = new CurrentControlledVoltagesource(name.image);
-            ReadNodes(ccvs, parameters, 2);
+            CurrentControlledCurrentsource cccs = new CurrentControlledCurrentsource(name.image);
+            ReadNodes(cccs, parameters, 2);
             switch (parameters.Count)
             {
                 case 2: ThrowAfter(parameters[1], "Voltage source expected"); break;
                 case 3: ThrowAfter(parameters[2], "Value expected"); break;
             }
 
-            ccvs.Set("control", ReadWord(parameters[2]));
-            ccvs.Set("gain", ReadValue(parameters[2]));
+            cccs.Set("control", ReadWord(parameters[2]));
+            cccs.Set("gain", ReadValue(parameters[3]));
 
-            netlist.Circuit.Components.Add(ccvs);
+            netlist.Circuit.Components.Add(cccs);
             return true;
         }
     }
