@@ -22,15 +22,15 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             Inductor ind = new Inductor(name.image);
-            ReadNodes(ind, parameters, 2);
+            ind.ReadNodes(parameters, 2);
 
             // Read the value
             if (parameters.Count < 3)
-                ThrowAfter(parameters[1], "Inductance expected");
-            ind.Set("inductance", ReadValue(parameters[2]));
+                throw new ParseException(parameters[1], "Inductance expected", false);
+            ind.Set("inductance", parameters[2].ReadValue());
 
             // Read initial conditions
-            ReadParameters(ind, parameters, 3);
+            ind.ReadParameters(parameters, 3);
 
             // Success
             netlist.Circuit.Components.Add(ind);

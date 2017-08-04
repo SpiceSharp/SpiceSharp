@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reflection;
 using SpiceSharp.Diagnostics;
 
@@ -194,7 +191,7 @@ namespace SpiceSharp.Parameters
             else if (value != null && !ValueType.IsAssignableFrom(value.GetType()))
             {
                 // Try converting the value to the right type anyway
-                value = ConvertType(value, ValueType);
+                value = ConvertType(this, value, ValueType);
             }
 
             switch (MemberType)
@@ -289,11 +286,11 @@ namespace SpiceSharp.Parameters
         /// <param name="value">The value</param>
         /// <param name="type">The type</param>
         /// <returns></returns>
-        public object ConvertType(object value, Type type)
+        public static object ConvertType(object sender, object value, Type type)
         {
             // First try to convert using the event
             var data = new SpiceMemberConvertData(value, type);
-            SpiceMemberConvert?.Invoke(this, data);
+            SpiceMemberConvert?.Invoke(sender, data);
 
             // Let's see if the data is of the right type
             if (data.Result != null)

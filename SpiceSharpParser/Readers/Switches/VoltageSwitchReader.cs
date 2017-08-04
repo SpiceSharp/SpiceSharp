@@ -21,22 +21,22 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             VoltageSwitch vsw = new VoltageSwitch(name.image);
-            ReadNodes(vsw, parameters, 4);
+            vsw.ReadNodes(parameters, 4);
 
             // Read the model
             if (parameters.Count < 5)
-                ThrowAfter(parameters[3], "Model expected");
-            vsw.Model = ReadModel<VoltageSwitchModel>(parameters[4], netlist);
+                throw new ParseException(parameters[3], "Model expected", false);
+            vsw.Model = parameters[4].ReadModel<VoltageSwitchModel>(netlist);
 
             // Optional ON or OFF
             if (parameters.Count == 6)
             {
-                string state = ReadWord(parameters[5]).ToLower();
+                string state = parameters[5].ReadWord().ToLower();
                 switch (state)
                 {
                     case "on": vsw.SetOn(); break;
                     case "off": vsw.SetOff(); break;
-                    default: ThrowBefore(parameters[5], "On or off expected"); break;
+                    default: throw new ParseException(parameters[5], "ON or OFF expected");
                 }
             }
 

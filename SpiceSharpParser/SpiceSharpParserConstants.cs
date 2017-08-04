@@ -21,9 +21,9 @@ public  class SpiceSharpParserConstants {
 
   public readonly string[] tokenImage = {
     "<EOF>",
-    "\"=\"",
     "\"(\"",
     "\")\"",
+    "\"=\"",
     "\" \"",
     "\"\\t\"",
     "<token of kind 6>",

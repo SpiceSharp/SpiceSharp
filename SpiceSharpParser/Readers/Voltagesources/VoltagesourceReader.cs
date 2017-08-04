@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             Voltagesource vsrc = new Voltagesource(name.image);
-            ReadNodes(vsrc, parameters, 2);
+            vsrc.ReadNodes(parameters, 2);
 
             // We can have a value or just DC
             string pvalue;
@@ -30,23 +30,23 @@ namespace SpiceSharp.Parser.Readers
                 if (i == 2)
                 {
                     // DC specification
-                    if (TryReadLiteral(parameters[i], "dc"))
+                    if (parameters[i].TryReadLiteral("dc"))
                     {
                         i++;
-                        vsrc.Set("dc", ReadValue(parameters[i]));
+                        vsrc.Set("dc", parameters[i].ReadValue());
                     }
-                    else if (TryReadValue(parameters[i], out pvalue))
+                    else if (parameters[i].TryReadValue(out pvalue))
                         vsrc.Set("dc", pvalue);
                 }
 
                 // AC specification
-                if (TryReadLiteral(parameters[i], "ac"))
+                if (parameters[i].TryReadLiteral("ac"))
                 {
                     i++;
-                    vsrc.Set("acmag", ReadValue(parameters[i]));
+                    vsrc.Set("acmag", parameters[i].ReadValue());
 
                     // Look forward for one more value
-                    if (i + 1 < parameters.Count && TryReadValue(parameters[i + 1], out pvalue))
+                    if (i + 1 < parameters.Count && parameters[i + 1].TryReadValue(out pvalue))
                     {
                         i++;
                         vsrc.Set("acphase", pvalue);
@@ -54,14 +54,16 @@ namespace SpiceSharp.Parser.Readers
                 }
 
                 // Waveforms
-                if (parameters[i] is SpiceSharpParser.Bracketed)
+                if (parameters[i] is BracketToken)
                 {
                     // Find the reader
-                    var b = parameters[i] as SpiceSharpParser.Bracketed;
+                    var b = parameters[i] as BracketToken;
                     bool found = false;
+                    if (!(b.Name is Token))
+                        throw new ParseException(b.Name, "Waveform expected");
                     foreach (WaveformReader r in netlist.WaveformReaders)
                     {
-                        if (r.Read(b.Name, b.Parameters, netlist))
+                        if (r.Read(b.Name as Token, b.Parameters, netlist))
                         {
                             vsrc.Set("waveform", r.Current);
                             found = true;
@@ -69,7 +71,7 @@ namespace SpiceSharp.Parser.Readers
                         }
                     }
                     if (!found)
-                        ThrowBefore(b.Name, $"Unrecognized waveform \"{b.Name.image}\"");
+                        throw new ParseException(b.Name, $"Unrecognized waveform \"{b.Name.Image()}\"");
                 }
             }
 

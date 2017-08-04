@@ -21,34 +21,34 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             Diode dio = new Diode(name.image);
-            ReadNodes(dio, parameters, 2);
+            dio.ReadNodes(parameters, 2);
 
             if (parameters.Count < 3)
-                ThrowAfter(parameters[1], "Model expected");
-            dio.Model = ReadModel<DiodeModel>(parameters[2], netlist);
+                throw new ParseException(parameters[1], "Model expected", false);
+            dio.Model = parameters[2].ReadModel<DiodeModel>(netlist);
 
             // Optional: Area
             if (parameters.Count > 3)
-                dio.Set("area", ReadValue(parameters[3]));
+                dio.Set("area", parameters[3].ReadValue());
 
             // Read the rest of the parameters
             for (int i = 4; i < parameters.Count; i++)
             {
                 string pname, pvalue;
-                if (TryReadLiteral(parameters[i], "on"))
+                if (parameters[i].TryReadLiteral("on"))
                     dio.Set("off", false);
-                else if (TryReadLiteral(parameters[i], "off"))
+                else if (parameters[i].TryReadLiteral("off"))
                     dio.Set("on", true);
-                else if (TryReadNamed(parameters[i], out pname, out pvalue))
+                else if (parameters[i].TryReadAssignment(out pname, out pvalue))
                 {
                     if (pname.ToLower() != "ic")
-                        ThrowBefore(parameters[i], "IC expected");
+                        throw new ParseException(parameters[i], "IC expected");
                     dio.Set("ic", pvalue);
                 }
-                else if (TryReadValue(parameters[i], out pvalue))
+                else if (parameters[i].TryReadValue(out pvalue))
                     dio.Set("temp", pvalue);
                 else
-                    ThrowBefore(parameters[i], "Uncrecognized parameter");
+                    throw new ParseException(parameters[i], "Unrecognized parameter");
             }
 
             netlist.Circuit.Components.Add(dio);

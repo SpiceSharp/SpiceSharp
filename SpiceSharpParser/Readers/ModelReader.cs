@@ -28,17 +28,14 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
-            // Model declaration?
-            if (name.kind != WORD)
-                return false;
-            if (name.image.ToLower() != "model")
+            if (!name.TryReadLiteral("model"))
                 return false;
 
             // Extract the name of the model
             if (parameters.Count < 2)
-                throw new ParseException($"Error at line {GetBeginLine(name)}, invalid model declaration");
+                throw new ParseException(name, "Invalid model declaration");
             if (!(parameters[0] is Token))
-                throw new ParseException($"Error at line {GetBeginLine(name)}, invalid model name");
+                throw new ParseException(name, "Invalid model name");
             Token modelname = parameters[0] as Token;
             parameters.RemoveAt(0);
 
@@ -48,21 +45,21 @@ namespace SpiceSharp.Parser.Readers
             string modeltype;
             if (parameters[0] is Token)
             {
-                modeltype = ReadWord(parameters[0]).ToLower();
+                modeltype = parameters[0].ReadWord().ToLower();
                 parameters.RemoveAt(0);
             }
-            else if (parameters[0] is SpiceSharpParser.Bracketed)
+            else if (parameters[0] is BracketToken)
             {
-                SpiceSharpParser.Bracketed b = parameters[0] as SpiceSharpParser.Bracketed;
-                modeltype = ReadWord(b.Name).ToLower();
+                var b = parameters[0] as BracketToken;
+                modeltype = parameters[0].ReadWord().ToLower();
                 parameters = b.Parameters;
             }
             else
-                throw new ParseException($"Error at line {GetBeginLine(parameters[1])}, invalid model declaration");
+                throw new ParseException(parameters[0], "Invalid model declaration");
 
             // Find the right type in our
             if (!ModelReaders.ContainsKey(modeltype))
-                throw new ParseException($"Error at line {GetBeginLine(parameters[1])}, column {GetBeginColumn(parameters[1])}, unrecognized model type");
+                throw new ParseException(parameters[0], "Unrecognized model type");
             return ModelReaders[modeltype].Read(modelname, parameters, netlist);
         }
     }

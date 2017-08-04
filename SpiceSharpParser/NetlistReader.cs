@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.IO;
 using SpiceSharp.Parser.Readers;
 using SpiceSharp.Parser.Readers.Waveforms;
 
@@ -44,8 +39,6 @@ namespace SpiceSharp.Parser
 
         /// <summary>
         /// Create a standard netlist, which includes the following:
-        /// - RLCM components and models
-        /// - Voltagesource and currentsource components, with pulse and sine waveforms
         /// </summary>
         /// <returns></returns>
         public Netlist StandardNetlist()
@@ -75,6 +68,14 @@ namespace SpiceSharp.Parser
             // Standard control statement readers
             ModelReader mr = new ModelReader();
             netlist.ControlReaders.Add(mr);
+
+            netlist.ControlReaders.Add(new DCReader());
+            netlist.ControlReaders.Add(new ACReader());
+            netlist.ControlReaders.Add(new TransientReader());
+
+            netlist.ControlReaders.Add(new ICReader());
+            netlist.ControlReaders.Add(new NodesetReader());
+            netlist.ControlReaders.Add(new OptionReader());
 
             // Add models
             mr.ModelReaders.Add("r", new ResistorModelReader());

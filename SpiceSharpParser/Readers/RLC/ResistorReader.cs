@@ -21,24 +21,24 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'r' && name.image[0] != 'R')
                 return false;
 
-            Resistor r = new Resistor(name.image);
-            ReadNodes(r, parameters, 2);
+            Resistor res = new Resistor(name.image);
+            res.ReadNodes(parameters, 2);
 
             // We have two possible formats:
             // Normal: RXXXXXXX N1 N2 VALUE
             if (parameters.Count == 3)
-                r.Set("resistance", ReadValue(parameters[2]));
+                res.Set("resistance", parameters[2].ReadValue());
             else
             {
                 // Read the model
-                r.Model = ReadModel<ResistorModel>(parameters[2], netlist);
-                ReadParameters(r, parameters, 3);
-                if (!r.RESlength.Given)
-                    ThrowBefore(name, "L needs to be specified");
+                res.Model = parameters[2].ReadModel<ResistorModel>(netlist);
+                res.ReadParameters(parameters, 3);
+                if (!res.RESlength.Given)
+                    throw new ParseException(name, "L needs to be specified");
             }
 
             // Add the component
-            netlist.Circuit.Components.Add(r);
+            netlist.Circuit.Components.Add(res);
             return true;
         }
     }

@@ -40,11 +40,8 @@ namespace SpiceSharpTest
 
             time = new List<double>();
             output = new List<double>();
-            Transient t = new Transient("TRAN 1");
-            t.Set("stop", "5m");
-            t.Set("step", "1n");
-            t.ExportSimulationData += T_ExportSimulationData;
-            parser.Netlist.Circuit.Simulate(t);
+            parser.Netlist.Simulations[0].ExportSimulationData += T_ExportSimulationData;
+            parser.Netlist.Circuit.Simulate(parser.Netlist.Simulations[0]);
 
             foreach (string msg in SpiceSharp.Diagnostics.CircuitWarning.Warnings)
                 Console.WriteLine(msg);

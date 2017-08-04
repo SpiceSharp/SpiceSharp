@@ -17,8 +17,8 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
-            CapacitorModel model = new CapacitorModel(ReadIdentifier(name));
-            ReadParameters(model, parameters);
+            CapacitorModel model = new CapacitorModel(name.ReadIdentifier());
+            model.ReadParameters(parameters);
             netlist.Circuit.Components.Add(model);
             return true;
         }

@@ -40,7 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssignmentToken.cs" />
+    <Compile Include="BracketToken.cs" />
     <Compile Include="NetlistReader.cs" />
+    <Compile Include="Readers\Controls\ICReader.cs" />
+    <Compile Include="Readers\Controls\NodesetReader.cs" />
+    <Compile Include="Readers\Controls\OptionReader.cs" />
+    <Compile Include="Readers\ReaderExtension.cs" />
     <Compile Include="Readers\Currentsources\CurrentControlledCurrentsourceReader.cs" />
     <Compile Include="Readers\Currentsources\CurrentsourceReader.cs" />
     <Compile Include="Readers\Currentsources\VoltageControlledCurrentsourceReader.cs" />
@@ -59,6 +65,9 @@
     <Compile Include="Readers\Semiconductors\BipolarReader.cs" />
     <Compile Include="Readers\Semiconductors\DiodeModelReader.cs" />
     <Compile Include="Readers\Semiconductors\DiodeReader.cs" />
+    <Compile Include="Readers\Simulations\ACReader.cs" />
+    <Compile Include="Readers\Simulations\DCReader.cs" />
+    <Compile Include="Readers\Simulations\TransientReader.cs" />
     <Compile Include="Readers\Switches\CurrentSwitchModelReader.cs" />
     <Compile Include="Readers\Switches\CurrentSwitchReader.cs" />
     <Compile Include="Readers\Switches\VoltageSwitchModelReader.cs" />

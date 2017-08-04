@@ -12,58 +12,6 @@ using SpiceSharp;
 using SpiceSharp.Parser.Readers;
 public class SpiceSharpParser
 {
-	/// <summary>
-	/// Named parameter
-	/// </summary>
-	public class Named
-	{
-		/// <summary>
-		/// The name of the parameter
-		/// </summary>
-		public Token Name { get; }
-		
-		/// <summary>
-		/// The value of the parameter
-		/// </summary>
-		public Object Value { get; }
-		
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="name">The name of the parameter</param>
-		/// <param name="value">The value of the parameter</param>
-		public Named(Token name, Object value)
-		{
-			Name = name;
-			Value = value;
-		}
-	}
-	
-	/// <summary>
-	/// A bracketed parameter
-	/// </summary>
-	public class Bracketed
-	{
-		/// <summary>
-		/// The before the bracket
-		/// </summary>
-		public Token Name { get; }
-		
-		/// <summary>
-		/// The parameters between brackets
-		/// </summary>
-		public List<Object> Parameters { get; }
-		
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		public Bracketed(Token name)
-		{
-			Name = name;
-			Parameters = new List<Object>();
-		}
-	}
-
 }
 PARSER_END( SpiceSharpParser )
 
@@ -92,10 +40,7 @@ void ParseSpiceLine(Netlist netlist) :
 			foreach(Reader r in netlist.ComponentReaders)
 			{
 				if (r.Read(t, parameters, netlist))
-				{
 					found = true;
-					break;
-				}
 			}
 			if (!found)
 				throw new ParseException("Error at line " + t.beginLine + ": Unrecognized component " + t.image);
@@ -111,10 +56,7 @@ void ParseSpiceLine(Netlist netlist) :
 			foreach(Reader r in netlist.ControlReaders)
 			{
 				if (r.Read(t, parameters, netlist))
-				{
 					found = true;
-					break;
-				}
 			}
 			if (!found)
 				throw new ParseException("Error at line " + t.beginLine + ": Unrecognized control statement " + t.image);
@@ -125,19 +67,43 @@ void ParseSpiceLine(Netlist netlist) :
 
 Object ParseParameter() :
 {
-	Token a, b;
-	Object o = null;
-	Bracketed br = null;
-	List<Token> l = new List<Token>();
+	Object oa = null, ob = null;
+	BracketToken br = null;
 }
 {
-	LOOKAHEAD(2) a = <WORD> "=" o = ParseParameter() { return new Named(a, o); }
-	| LOOKAHEAD(2) a = <WORD> { br = new Bracketed(a); } "(" (o = ParseParameter() { br.Parameters.Add(o); })* ")" { return br; }
-	| a = <WORD> { return a; }
-	| LOOKAHEAD(2) a = <VALUE>{ l.Add(a); } (<COMMA> a = <VALUE>{ l.Add(a); }) + { return (Token[])l.ToArray(); }
-	| a = <VALUE> { return a; }
-	| a = <IDENTIFIER>{ return a; }
-	| a = <DELIMITER> { return a; }
+	// Bracketted
+	LOOKAHEAD(2) oa = ParseSingle() { br = new BracketToken(oa); } "(" (oa = ParseSingle() { br.Parameters.Add(oa); })* ")" ("=" ob = ParseSingle())?
+	{
+		if (ob != null)
+			return new AssignmentToken(br, ob);
+		return br; 
+	}
+	| LOOKAHEAD(2) oa = ParseSingle() "=" ob = ParseSingle()
+	{
+		return new AssignmentToken(oa, ob);
+	}
+	| oa = ParseSingle()
+	{ 
+		return oa; 
+	}
+}
+
+Object ParseSingle() :
+{
+	Token t;
+	List<Token> ts = new List<Token>();
+}
+{
+	(t = <WORD> | t = <VALUE> | t = <STRING> | t = <IDENTIFIER>)
+		{ ts.Add(t); }
+	(<COMMA> (t = <WORD> | t = <VALUE> | t = <STRING> | t = <IDENTIFIER>) 
+		{ ts.Add(t); })*
+	{
+		if (ts.Count > 1)
+			return (Token[])(ts.ToArray());
+		else
+			return ts[0];
+	}
 }
 
 SKIP : { " " | "\t" }

@@ -21,25 +21,25 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             CurrentSwitch csw = new CurrentSwitch(name.image);
-            ReadNodes(csw, parameters, 2);
+            csw.ReadNodes(parameters, 2);
             switch (parameters.Count)
             {
-                case 2: ThrowAfter(parameters[1], "Voltage source expected"); break;
-                case 3: ThrowAfter(parameters[2], "Model expected"); break;
+                case 2: throw new ParseException(parameters[1], "Voltage source expected", false);
+                case 3: throw new ParseException(parameters[2], "Model expected", false);
             }
 
-            csw.Set("control", ReadWord(parameters[2]));
-            csw.Model = ReadModel<CurrentSwitchModel>(parameters[3], netlist);
+            csw.Set("control", parameters[2].ReadWord());
+            csw.Model = parameters[3].ReadModel<CurrentSwitchModel>(netlist);
 
             // Optional on or off
             if (parameters.Count > 4)
             {
-                string state = ReadWord(parameters[4]).ToLower();
+                string state = parameters[4].ReadWord().ToLower();
                 switch (state)
                 {
                     case "on": csw.SetOn(); break;
                     case "off": csw.SetOff(); break;
-                    default: ThrowBefore(parameters[4], "On or Off expected"); break;
+                    default: throw new ParseException(parameters[4], "ON or OFF expected");
                 }
             }
 

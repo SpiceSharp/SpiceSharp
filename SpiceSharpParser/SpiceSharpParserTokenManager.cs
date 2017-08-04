@@ -38,9 +38,9 @@ private int mccMoveStringLiteralDfa0_0()
 {
    switch((int)curChar) {
       case 40:
-         return mccStopAtPos(0, 2);
+         return mccStopAtPos(0, 1);
       case 41:
-         return mccStopAtPos(0, 3);
+         return mccStopAtPos(0, 2);
       case 42:
          return mccStartNfaWithStates_0(0, 8, 29);
       case 43:
@@ -50,7 +50,7 @@ private int mccMoveStringLiteralDfa0_0()
       case 46:
          return mccStopAtPos(0, 9);
       case 61:
-         return mccStopAtPos(0, 1);
+         return mccStopAtPos(0, 3);
       default :
          return mccMoveNfa_0(0, 0);
    }
@@ -387,7 +387,7 @@ static readonly int[] mccnextStates = {
    24, 
 };
 public static readonly string[] mccstrLiteralImages = {
-"", "=", "(", ")", null, null, null, "+", "*", ".", ",", null, null, null, 
+"", "(", ")", "=", null, null, null, "+", "*", ".", ",", null, null, null, 
 null, null, null, null, null, null, };
 public static readonly string[] lexStateNames = {
    "DEFAULT", 

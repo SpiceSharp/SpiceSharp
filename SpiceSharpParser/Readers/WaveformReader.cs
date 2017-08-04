@@ -51,7 +51,7 @@ namespace SpiceSharp.Parser.Readers
             if (parameters.Count > keys.Length)
                 throw new ParseException($"Error on line {name.beginLine}, column {name.beginColumn}: Too many parameters for waveform \"{name.image}\"");
             for (int i = 0; i < parameters.Count; i++)
-                Current.Set(keys[i], ReadValue(parameters[i]));
+                Current.Set(keys[i], parameters[i].ReadValue());
 
             return true;
         }

@@ -16,6 +16,11 @@ namespace SpiceSharp.Simulations
     public class AC : Simulation
     {
         /// <summary>
+        /// Default configuration for AC simulations
+        /// </summary>
+        public static Configuration Default { get; } = new Configuration();
+
+        /// <summary>
         /// Enumerations
         /// </summary>
         public enum StepTypes { Decade, Octave, Linear };
@@ -28,14 +33,14 @@ namespace SpiceSharp.Simulations
             /// <summary>
             /// Gets or sets the maximum number of iterations for calculating the operating point
             /// </summary>
-            public int DcMaxIterations { get; set; } = 50;
+            public int DcMaxIterations = 50;
 
             /// <summary>
             /// Gets or sets the flag for keeping the operating point information
             /// </summary>
-            public bool KeepOpInfo { get; set; } = false;
+            public bool KeepOpInfo = false;
         }
-        protected Configuration MyConfig { get { return (Configuration)Config; } }
+        protected Configuration MyConfig { get { return (Configuration)Config ?? Default; } }
 
         /// <summary>
         /// Gets or sets the number of steps

@@ -18,8 +18,8 @@ namespace SpiceSharp.Parser.Readers
         public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             // Create the model
-            ResistorModel model = new ResistorModel(ReadIdentifier(name));
-            ReadParameters(model, parameters);
+            ResistorModel model = new ResistorModel(name.ReadIdentifier());
+            model.ReadParameters(parameters);
             netlist.Circuit.Components.Add(model);
             return true;
         }

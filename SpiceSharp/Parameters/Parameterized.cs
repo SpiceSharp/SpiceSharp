@@ -103,6 +103,18 @@ namespace SpiceSharp.Parameters
         }
 
         /// <summary>
+        /// Check if an object has a parameter
+        /// </summary>
+        /// <param name="p">The parameterized object</param>
+        /// <param name="name">The name</param>
+        /// <returns></returns>
+        public static bool HasParameter(Parameterized p, string name)
+        {
+            var ms = members[p.GetType()];
+            return ms.ContainsKey(name);
+        }
+
+        /// <summary>
         /// Get the description for a parameter
         /// </summary>
         /// <param name="parameter">The parameter name</param>

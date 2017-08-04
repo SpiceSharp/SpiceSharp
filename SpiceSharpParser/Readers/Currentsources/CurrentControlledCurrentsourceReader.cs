@@ -21,15 +21,15 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             CurrentControlledCurrentsource cccs = new CurrentControlledCurrentsource(name.image);
-            ReadNodes(cccs, parameters, 2);
+            cccs.ReadNodes(parameters, 2);
             switch (parameters.Count)
             {
-                case 2: ThrowAfter(parameters[1], "Voltage source expected"); break;
-                case 3: ThrowAfter(parameters[2], "Value expected"); break;
+                case 2: throw new ParseException(parameters[1], "Voltage source expected");
+                case 3: throw new ParseException(parameters[2], "Value expected");
             }
 
-            cccs.Set("control", ReadWord(parameters[2]));
-            cccs.Set("gain", ReadValue(parameters[3]));
+            cccs.Set("control", parameters[2].ReadWord());
+            cccs.Set("gain", parameters[3].ReadValue());
 
             netlist.Circuit.Components.Add(cccs);
             return true;

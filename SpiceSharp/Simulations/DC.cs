@@ -12,6 +12,11 @@ namespace SpiceSharp.Simulations
     public class DC : Simulation
     {
         /// <summary>
+        /// The default configuration for all DC simulations
+        /// </summary>
+        public static Configuration Default { get; } = new Configuration();
+
+        /// <summary>
         /// Extended configuration for DC analysis
         /// </summary>
         public class Configuration : SimulationConfiguration
@@ -21,6 +26,7 @@ namespace SpiceSharp.Simulations
             /// </summary>
             public int MaxIterations = 50;
         }
+        protected Configuration MyConfig { get { return (Configuration)Config ?? Default; } }
 
         /// <summary>
         /// A delegate for
@@ -33,11 +39,6 @@ namespace SpiceSharp.Simulations
         /// Event that is called when normal iteration failed
         /// </summary>
         public event IterationFailedEventHandler IterationFailed;
-
-        /// <summary>
-        /// Easy access to the configuration
-        /// </summary>
-        protected Configuration MyConfig { get { return (Configuration)Config; } }
 
         /// <summary>
         /// A class that describes a job

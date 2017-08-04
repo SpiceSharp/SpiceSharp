@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpiceSharp.Diagnostics;
-using SpiceSharp.Simulations;
-using MathNet.Numerics.LinearAlgebra;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Simulations;
 using SpiceSharp.Parameters;
 
 namespace SpiceSharp
@@ -19,7 +11,7 @@ namespace SpiceSharp
         /// <summary>
         /// The configuration
         /// </summary>
-        public SimulationConfiguration Config { get; protected set; } = null;
+        public SimulationConfiguration Config { get; set; } = null;
 
         /// <summary>
         /// Event that is called when new simulation data is available
@@ -33,10 +25,7 @@ namespace SpiceSharp
         public Simulation(string name, SimulationConfiguration config = null)
             : base(name)
         {
-            if (config == null)
-                Config = new SimulationConfiguration();
-            else
-                Config = config;
+            Config = config;
         }
 
         /// <summary>

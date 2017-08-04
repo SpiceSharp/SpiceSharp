@@ -23,15 +23,15 @@ namespace SpiceSharp.Parser.Readers
             MutualInductance mut = new MutualInductance(name.image);
             switch (parameters.Count)
             {
-                case 1: ThrowAfter(name, "Inductor name expected"); break;
-                case 2: ThrowAfter(parameters[0], "Inductor name expected"); break;
-                case 3: ThrowAfter(parameters[1], "Coupling factor expected"); break;
+                case 1: throw new ParseException(name, "Inductor name expected", false);
+                case 2: throw new ParseException(parameters[0], "Inductor name expected", false);
+                case 3: throw new ParseException(parameters[1], "Coupling factor expected", false);
             }
 
             // Read two inductors
-            mut.Set("inductor1", ReadWord(parameters[0]));
-            mut.Set("inductor2", ReadWord(parameters[1]));
-            mut.Set("k", ReadValue(parameters[2]));
+            mut.Set("inductor1", parameters[0].ReadWord());
+            mut.Set("inductor2", parameters[1].ReadWord());
+            mut.Set("k", parameters[2].ReadValue());
 
             netlist.Circuit.Components.Add(mut);
             return true;

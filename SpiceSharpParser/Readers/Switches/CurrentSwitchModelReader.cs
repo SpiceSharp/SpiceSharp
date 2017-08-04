@@ -17,8 +17,8 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
-            CurrentSwitchModel model = new CurrentSwitchModel(ReadIdentifier(name));
-            ReadParameters(model, parameters);
+            CurrentSwitchModel model = new CurrentSwitchModel(name.ReadIdentifier());
+            model.ReadParameters(parameters);
             netlist.Circuit.Components.Add(model);
             return true;
         }

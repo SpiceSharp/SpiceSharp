@@ -12,6 +12,11 @@ namespace SpiceSharp.Simulations
     public class Transient : Simulation
     {
         /// <summary>
+        /// Default configuration for transient simulations
+        /// </summary>
+        public static Configuration Default { get; } = new Configuration();
+
+        /// <summary>
         /// A class that executes a transient simulation
         /// </summary>
         public class Configuration : SimulationConfiguration
@@ -41,6 +46,7 @@ namespace SpiceSharp.Simulations
             /// </summary>
             public Configuration() { }
         }
+        protected Configuration MyConfig { get { return (Configuration)Config ?? Default; } }
 
         /// <summary>
         /// Gets or sets the initial timepoint that should be exported
@@ -81,11 +87,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         [SpiceName("deltamin"), SpiceInfo("The minimum delta for breakpoints")]
         public double DeltaMin { get { return 1e-13 * MaxStep; } }
-
-        /// <summary>
-        /// Get the current configuration
-        /// </summary>
-        protected Configuration MyConfig { get { return (Configuration)Config;  } }
 
         /// <summary>
         /// An event handler for when the timestep has been cut
