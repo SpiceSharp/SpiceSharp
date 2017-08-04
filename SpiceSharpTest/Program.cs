@@ -12,7 +12,7 @@ namespace SpiceSharpTest
 {
     class Program
     {
-        private static List<double> time, input, output, count;
+        private static List<double> time, input, output;
 
         /// <summary>
         /// Main method
@@ -41,7 +41,6 @@ namespace SpiceSharpTest
             time = new List<double>();
             input = new List<double>();
             output = new List<double>();
-            count = new List<double>();
             parser.Netlist.Simulations[0].ExportSimulationData += T_ExportSimulationData;
             parser.Netlist.Circuit.Simulate(parser.Netlist.Simulations[0]);
 
@@ -52,7 +51,7 @@ namespace SpiceSharpTest
             {
                 sw.WriteLine("Time;Output");
                 for (int i = 0; i < time.Count; i++)
-                    sw.WriteLine(string.Join(";", time[i], output[i], count[i]));
+                    sw.WriteLine(string.Join(";", time[i], output[i]));
             }
 
             Console.ReadKey();
@@ -63,7 +62,6 @@ namespace SpiceSharpTest
             time.Add(data.GetTime());
             input.Add(data.GetVoltage("IN"));
             output.Add(data.GetVoltage("OUT"));
-            count.Add(data.Circuit.Statistics.TimePoints);
         }
     }
 }

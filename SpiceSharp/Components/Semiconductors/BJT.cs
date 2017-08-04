@@ -374,8 +374,8 @@ namespace SpiceSharp.Components
             else
             {
                 /* 
-                * compute new nonlinear branch voltages
-                */
+                 * compute new nonlinear branch voltages
+                 */
                 vbe = Model.BJTtype * (rstate.OldSolution[BJTbasePrimeNode] - rstate.OldSolution[BJTemitPrimeNode]);
                 vbc = Model.BJTtype * (rstate.OldSolution[BJTbasePrimeNode] - rstate.OldSolution[BJTcolPrimeNode]);
 
@@ -649,8 +649,8 @@ namespace SpiceSharp.Components
                         return; /* go to 1000 */
                     }
                     /* 
-					* transient analysis
-					*/
+					 * transient analysis
+					 */
 
                     if (method != null && method.SavedTime == 0.0)
                     {
@@ -681,8 +681,8 @@ namespace SpiceSharp.Components
             }
 
             /* 
-			* check convergence
-			*/
+			 * check convergence
+			 */
             if (state.Init != CircuitState.InitFlags.InitFix || !BJToff)
             {
                 if (icheck)
@@ -690,8 +690,8 @@ namespace SpiceSharp.Components
             }
 
             /* 
-			* charge storage for c - s and b - x junctions
-			*/
+			 * charge storage for c - s and b - x junctions
+			 */
             if (method != null)
             {
                 method.Integrate(state, out gccs, out ceq, BJTstate + BJTqcs, capcs);
@@ -717,7 +717,7 @@ namespace SpiceSharp.Components
             state.States[0][BJTstate + BJTgeqbx] = geqbx;
 
             /* Do not load the Jacobian and the rhs if
-			perturbation is being carried out */
+			   perturbation is being carried out */
 
             /* 
 			 * load current excitation vector
@@ -768,19 +768,7 @@ namespace SpiceSharp.Components
         {
             var state = ckt.State;
             var cstate = state.Complex;
-            double gcpr;
-            double gepr;
-            double gpi;
-            double gmu;
-            double gm;
-            double go;
-            double xgm;
-            double gx;
-            double xcpi;
-            double xcmu;
-            double xcbx;
-            double xccs;
-            double xcmcb;
+            double gcpr, gepr, gpi, gmu, gm, go, xgm, gx, xcpi, xcmu, xcbx, xccs, xcmcb;
 
             gcpr = Model.BJTcollectorResist * BJTarea;
             gepr = Model.BJTemitterResist * BJTarea;

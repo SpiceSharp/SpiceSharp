@@ -118,7 +118,6 @@ namespace SpiceSharp.IntegrationMethods
         {
             // Get the state
             var state = ckt.State.Real;
-
             double tol, diff, tmp;
             double timetemp = Double.PositiveInfinity;
             int rows = ckt.Nodes.Count;
