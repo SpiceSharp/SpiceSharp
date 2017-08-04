@@ -226,8 +226,8 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           mcc_la1[12] = mcc_gen;
           goto label_8;
         }
-        oa = ParseSingle();
-                                                                                                 br.Parameters.Add(oa);
+        oa = ParseParameter();
+                                                                                                    br.Parameters.Add(oa);
       }label_8: ;
       
       mcc_consume_token(2);

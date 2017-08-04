@@ -22,12 +22,12 @@ namespace SpiceSharp.Parser.Readers
 
             // I think the BJT definition is ambiguous (eg. QXXXX NC NB NE MNAME OFF can be either substrate = MNAME, model = OFF or model name = MNAME and transistor is OFF
             // I will force a 4-terminal device, which is much easier to implement here
-            Bipolar bjt = new Bipolar(name.image);
+            BJT bjt = new BJT(name.image);
             bjt.ReadNodes(parameters, 4);
 
             if (parameters.Count <= 4)
                 throw new ParseException(parameters[3], "Model name expected", false);
-            bjt.Model = parameters[4].ReadModel<BipolarModel>(netlist);
+            bjt.Model = parameters[4].ReadModel<BJTModel>(netlist);
 
             // Area
             if (parameters.Count > 5)

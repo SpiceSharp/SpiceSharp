@@ -72,7 +72,7 @@ Object ParseParameter() :
 }
 {
 	// Bracketted
-	LOOKAHEAD(2) oa = ParseSingle() { br = new BracketToken(oa); } "(" (oa = ParseSingle() { br.Parameters.Add(oa); })* ")" ("=" ob = ParseSingle())?
+	LOOKAHEAD(2) oa = ParseSingle() { br = new BracketToken(oa); } "(" (oa = ParseParameter() { br.Parameters.Add(oa); })* ")" ("=" ob = ParseSingle())?
 	{
 		if (ob != null)
 			return new AssignmentToken(br, ob);
@@ -116,7 +116,7 @@ TOKEN :
 	| <COMMA : ",">
 	| <DELIMITER : "=" | "(" | ")">
 	| <NEWLINE : "\r" | "\n" | "\r\n">
-	| <VALUE : (["+","-"])? (<DIGIT>)+ ("." (<DIGIT>)*)? ("e" ("+" | "-")? (<DIGIT>)+ | ["t","g","m","k","u","n","p","f"] (<LETTER>)*)?>
+	| <VALUE : (["+","-"])? ((<DIGIT>)+ ("." (<DIGIT>)*)? | "." (<DIGIT>)+) ("e" ("+" | "-")? (<DIGIT>)+ | ["t","g","m","k","u","n","p","f"] (<LETTER>)*)?>
 	| <STRING : "\"" ( ~["\"","\\","\n","\r"] | "\\" ( ["n","t","b","r","f","\\","\'","\""] | (["\n","\r"] | "\r\n")))* "\"">
 	| <WORD : <LETTER> (<CHARACTER> | "_" | ".")*>
 	| <IDENTIFIER : (<CHARACTER> | "_") (<CHARACTER> | "_" | ".")*>

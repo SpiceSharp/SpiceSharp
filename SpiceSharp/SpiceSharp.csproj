@@ -50,8 +50,8 @@
     <Compile Include="Components\Currentsources\VoltageControlledCurrentsource.cs" />
     <Compile Include="Components\RLC\Inductor.cs" />
     <Compile Include="Components\RLC\MutualInductance.cs" />
-    <Compile Include="Components\Semiconductors\Bipolar.cs" />
-    <Compile Include="Components\Semiconductors\BipolarModel.cs" />
+    <Compile Include="Components\Semiconductors\BJT.cs" />
+    <Compile Include="Components\Semiconductors\BJTModel.cs" />
     <Compile Include="Components\Semiconductors\Diode.cs" />
     <Compile Include="Components\Semiconductors\DiodeModel.cs" />
     <Compile Include="Components\Semiconductors\Semiconductor.cs" />

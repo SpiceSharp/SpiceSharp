@@ -147,15 +147,15 @@ namespace SpiceSharp.Simulations
             if (method.Breaks.MinBreak == 0.0)
                 method.Breaks.MinBreak = 5e-5 * MaxStep;
 
+            // Calculate the operating point
+            this.Op(ckt, MyConfig.DcMaxIterations);
+            ckt.Statistics.TimePoints++;
+
             // Initialize the method
             ckt.Method = method;
             method.Initialize();
             method.DeltaMin = DeltaMin;
             method.FillOldDeltas(MaxStep);
-
-            // Calculate the operating point
-            this.Op(ckt, MyConfig.DcMaxIterations);
-            ckt.Statistics.TimePoints++;
 
             // Stop calculating a DC solution
             state.UseIC = false;

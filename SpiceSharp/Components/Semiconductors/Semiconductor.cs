@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.Semiconductors
         /// <param name="vt">Vt</param>
         /// <param name="vcrit">The critical voltage</param>
         /// <returns></returns>
-        public static double pnjlim(double vnew, double vold, double vt, double vcrit, ref bool limited)
+        public static double DEVpnjlim(double vnew, double vold, double vt, double vcrit, ref bool limited)
         {
             double arg;
             if ((vnew > vcrit) && (Math.Abs(vnew - vold) > (vt + vt)))

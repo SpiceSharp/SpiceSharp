@@ -79,7 +79,7 @@ namespace SpiceSharp.Parser.Readers
             if (o is AssignmentToken)
                 return (o as AssignmentToken).Name.BeginColumn();
             if (o is BracketToken)
-                return (o as AssignmentToken).Name.BeginColumn();
+                return (o as BracketToken).Name.BeginColumn();
             return -1;
         }
 
@@ -182,6 +182,10 @@ namespace SpiceSharp.Parser.Readers
                 if (t.kind == VALUE)
                 {
                     value = t.image;
+
+                    // Our converters don't allow .5 as an input, so prepend a 0 in such cases
+                    if (value[0] == '.')
+                        value = "0" + value;
                     return true;
                 }
             }
@@ -258,8 +262,12 @@ namespace SpiceSharp.Parser.Readers
             if (o is AssignmentToken)
             {
                 var p = o as AssignmentToken;
-                if (p.Name.TryReadWord(out name) && p.Value.TryReadValue(out value))
+                if (p.Name.TryReadWord(out name))
+                {
+                    if (!p.Value.TryReadValue(out value))
+                        value = p.Value.Image();
                     return true;
+                }
             }
 
             // Failed
@@ -457,7 +465,7 @@ namespace SpiceSharp.Parser.Readers
                     obj.Set(pname, pvalue);
                 }
                 else
-                    obj.Set(ReadWord(parameters[i]));
+                    obj.Set(parameters[i].ReadWord());
             }
         }
 

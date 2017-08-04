@@ -212,7 +212,6 @@ namespace SpiceSharp
 
                 // But we don't want to go below delmin for no reason
                 delta = Math.Max(delta, DeltaMin * 2.0);
-
                 Time += delta;
             }
             else if (Time + delta >= Breaks.First)

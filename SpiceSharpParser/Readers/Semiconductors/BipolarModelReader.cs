@@ -29,11 +29,11 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
-            BipolarModel model = new BipolarModel(name.ReadIdentifier());
+            BJTModel model = new BJTModel(name.ReadIdentifier());
             if (npn)
-                model.BJTSetNPN();
+                model.SetNPN(true);
             else
-                model.BJTSetPNP();
+                model.SetPNP(true);
             model.ReadParameters(parameters);
             netlist.Circuit.Components.Add(model);
             return true;

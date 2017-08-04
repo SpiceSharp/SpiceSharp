@@ -12,7 +12,7 @@ namespace SpiceSharpTest
 {
     class Program
     {
-        private static List<double> time, output;
+        private static List<double> time, input, output, count;
 
         /// <summary>
         /// Main method
@@ -21,10 +21,10 @@ namespace SpiceSharpTest
         static void Main(string[] args)
         {
             /* SpiceDevice dev = new SpiceDevice();
-            dev.Defined.AddRange(new string[] { "DEV_bsim4", "AN_pz", "AN_noise", "NOBYPASS" });
-            dev.Folder = @"D:\Visual Studio\Info\SpiceSharp\BSIM480\BSIM480_Code";
-            dev.ITF = @"bsim4itf.h";
-            dev.Def = @"bsim4def.h";
+            dev.Defined.AddRange(new string[] { "DEV_bjt", "AN_pz", "AN_noise", "NOBYPASS", "NEWTRUNC", "PREDICTOR" });
+            dev.Folder = @"D:\Visual Studio\Info\SpiceSharp\spice3f5\src\lib\dev\bjt";
+            dev.ITF = @"bjtitf.h";
+            dev.Def = @"bjtdefs.h";
             SpiceClassGenerator scg = new SpiceClassGenerator(dev);
             scg.ExportModel("model.cs");
             scg.ExportDevice("device.cs");
@@ -39,7 +39,9 @@ namespace SpiceSharpTest
             parser.Parse();
 
             time = new List<double>();
+            input = new List<double>();
             output = new List<double>();
+            count = new List<double>();
             parser.Netlist.Simulations[0].ExportSimulationData += T_ExportSimulationData;
             parser.Netlist.Circuit.Simulate(parser.Netlist.Simulations[0]);
 
@@ -48,8 +50,9 @@ namespace SpiceSharpTest
 
             using (StreamWriter sw = new StreamWriter("output.csv"))
             {
+                sw.WriteLine("Time;Output");
                 for (int i = 0; i < time.Count; i++)
-                    sw.WriteLine(string.Join(";", time[i], output[i]));
+                    sw.WriteLine(string.Join(";", time[i], output[i], count[i]));
             }
 
             Console.ReadKey();
@@ -58,7 +61,9 @@ namespace SpiceSharpTest
         private static void T_ExportSimulationData(object sender, SimulationData data)
         {
             time.Add(data.GetTime());
-            output.Add(data.GetVoltage("2"));
+            input.Add(data.GetVoltage("IN"));
+            output.Add(data.GetVoltage("OUT"));
+            count.Add(data.Circuit.Statistics.TimePoints);
         }
     }
 }

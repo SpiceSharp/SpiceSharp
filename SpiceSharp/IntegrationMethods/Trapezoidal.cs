@@ -133,12 +133,12 @@ namespace SpiceSharp.IntegrationMethods
                         var node = ckt.Nodes[i];
                         if (node.Type != CircuitNode.NodeType.Voltage)
                             continue;
+                        index = node.Index;
 
                         // Milne's estimate for the second-order derivative using a Forward Euler predictor and Backward Euler corrector
                         diff = state.Solution[index] - Prediction[index];
                         if (diff != 0.0)
                         {
-                            index = node.Index;
                             tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
                             tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(2.0 * Config.TrTol * tol / diff));
                             timetemp = Math.Min(timetemp, tmp);
@@ -152,6 +152,7 @@ namespace SpiceSharp.IntegrationMethods
                         var node = ckt.Nodes[i];
                         if (node.Type != CircuitNode.NodeType.Voltage)
                             continue;
+                        index = node.Index;
 
                         // Milne's estimate for the third-order derivative using an Adams-Bashforth predictor and Trapezoidal corrector
                         diff = state.Solution[index] - Prediction[index];
@@ -160,7 +161,6 @@ namespace SpiceSharp.IntegrationMethods
 
                         if (deriv != 0.0)
                         {
-                            index = node.Index;
                             tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
                             tmp = DeltaOld[0] * Math.Pow(Math.Abs(12.0 * Config.TrTol * tol / deriv), 1.0 / 3.0);
                             timetemp = Math.Min(timetemp, tmp);
