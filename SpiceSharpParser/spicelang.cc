@@ -27,7 +27,7 @@ void ParseSpiceLine(Netlist netlist) :
 	Token t;
 	List<Object> parameters = new List<Object>();
 	Object o = null;
-	Reader reader = null;
+	IReader reader = null;
 }
 {
 	t = <WORD> (o = ParseParameter()  { parameters.Add(o); })* (<NEWLINE> | <EOF>)
@@ -37,7 +37,7 @@ void ParseSpiceLine(Netlist netlist) :
 		if ((netlist.Parse & Netlist.ParseTypes.Component) != 0)
 		{
 			bool found = false;
-			foreach(Reader r in netlist.ComponentReaders)
+			foreach(IReader r in netlist.ComponentReaders)
 			{
 				if (r.Read(t, parameters, netlist))
 					found = true;
@@ -53,7 +53,7 @@ void ParseSpiceLine(Netlist netlist) :
 		if ((netlist.Parse & Netlist.ParseTypes.Control) != 0)
 		{
 			bool found = false;
-			foreach(Reader r in netlist.ControlReaders)
+			foreach(IReader r in netlist.ControlReaders)
 			{
 				if (r.Read(t, parameters, netlist))
 					found = true;

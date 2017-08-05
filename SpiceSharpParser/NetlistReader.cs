@@ -12,7 +12,7 @@ namespace SpiceSharp.Parser
         /// <summary>
         /// Private variables
         /// </summary>
-        public SpiceSharpParser parser { get; }
+        public SpiceSharpParser Parser { get; }
 
         /// <summary>
         /// The netlist
@@ -31,7 +31,7 @@ namespace SpiceSharp.Parser
         public NetlistReader(Stream stream, Netlist netlist = null)
         {
             this.stream = stream;
-            parser = new SpiceSharpParser(stream);
+            Parser = new SpiceSharpParser(stream);
 
             // Make a new netlist
             Netlist = netlist ?? StandardNetlist();
@@ -105,13 +105,13 @@ namespace SpiceSharp.Parser
             // Parse the netlist for control statements first
             Netlist.Parse = Netlist.ParseTypes.Control;
             stream.Seek(0, SeekOrigin.Begin);
-            parser.ReInit(stream);
-            parser.ParseNetlist(Netlist);
+            Parser.ReInit(stream);
+            Parser.ParseNetlist(Netlist);
 
             Netlist.Parse = Netlist.ParseTypes.Component;
             stream.Seek(0, SeekOrigin.Begin);
-            parser.ReInit(stream);
-            parser.ParseNetlist(Netlist);
+            Parser.ReInit(stream);
+            Parser.ParseNetlist(Netlist);
         }
     }
 }

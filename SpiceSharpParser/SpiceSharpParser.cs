@@ -28,7 +28,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         Token t;
         List<Object> parameters = new List<Object>();
         Object o = null;
-        Reader reader = null;
+        IReader reader = null;
     switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
     case WORD:
       t = mcc_consume_token(WORD);
@@ -104,7 +104,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                 if ((netlist.Parse & Netlist.ParseTypes.Component) != 0)
                 {
                         bool found = false;
-                        foreach(Reader r in netlist.ComponentReaders)
+                        foreach(IReader r in netlist.ComponentReaders)
                         {
                                 if (r.Read(t, parameters, netlist))
                                         found = true;
@@ -188,7 +188,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                 if ((netlist.Parse & Netlist.ParseTypes.Control) != 0)
                 {
                         bool found = false;
-                        foreach(Reader r in netlist.ControlReaders)
+                        foreach(IReader r in netlist.ControlReaders)
                         {
                                 if (r.Read(t, parameters, netlist))
                                         found = true;

@@ -6,7 +6,7 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read current-controlled current sources
     /// </summary>
-    public class CurrentControlledCurrentsourceReader : Reader
+    public class CurrentControlledCurrentsourceReader : IReader
     {
         /// <summary>
         /// Read
@@ -15,7 +15,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (name.image[0] != 'f' && name.image[0] != 'F')
                 return false;

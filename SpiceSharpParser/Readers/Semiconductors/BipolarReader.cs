@@ -6,7 +6,7 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read bipolar transistors
     /// </summary>
-    public class BipolarReader : Reader
+    public class BipolarReader : IReader
     {
         /// <summary>
         /// Read
@@ -15,7 +15,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (name.image[0] != 'q' && name.image[0] != 'Q')
                 return false;

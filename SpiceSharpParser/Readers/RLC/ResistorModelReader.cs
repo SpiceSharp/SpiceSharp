@@ -6,7 +6,7 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read a resistor model
     /// </summary>
-    public class ResistorModelReader : Reader
+    public class ResistorModelReader : IReader
     {
         /// <summary>
         /// Read a resistor model
@@ -15,7 +15,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">The parameters</param>
         /// <param name="netlist">The netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             // Create the model
             ResistorModel model = new ResistorModel(name.ReadIdentifier());

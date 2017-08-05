@@ -12,12 +12,12 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class capable of reading models
     /// </summary>
-    public class ModelReader : Reader
+    public class ModelReader : IReader
     {
         /// <summary>
         /// A list of model readers
         /// </summary>
-        public Dictionary<string, Reader> ModelReaders { get; } = new Dictionary<string, Reader>();
+        public Dictionary<string, IReader> ModelReaders { get; } = new Dictionary<string, IReader>();
 
         /// <summary>
         /// Read
@@ -26,7 +26,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters"></param>
         /// <param name="netlist"></param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (!name.TryReadLiteral("model"))
                 return false;

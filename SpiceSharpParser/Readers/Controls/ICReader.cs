@@ -5,7 +5,7 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read initial conditions
     /// </summary>
-    public class ICReader : Reader
+    public class ICReader : IReader
     {
         /// <summary>
         /// Read
@@ -14,7 +14,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (!name.TryReadLiteral("ic"))
                 return false;

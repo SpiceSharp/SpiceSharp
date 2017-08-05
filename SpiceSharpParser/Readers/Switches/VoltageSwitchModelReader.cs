@@ -6,7 +6,7 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read voltage switch models
     /// </summary>
-    public class VoltageSwitchModelReader : Reader
+    public class VoltageSwitchModelReader : IReader
     {
         /// <summary>
         /// Read
@@ -15,7 +15,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             VoltageSwitchModel model = new VoltageSwitchModel(name.ReadIdentifier());
             model.ReadParameters(parameters);

@@ -10,7 +10,7 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read all options
     /// </summary>
-    public class OptionReader : Reader
+    public class OptionReader : IReader
     {
         /// <summary>
         /// Read
@@ -19,7 +19,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (!name.TryReadLiteral("options"))
                 return false;

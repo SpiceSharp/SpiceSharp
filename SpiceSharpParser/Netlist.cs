@@ -8,17 +8,12 @@ namespace SpiceSharp.Parser
         /// <summary>
         /// Available classes for reading components
         /// </summary>
-        public List<Reader> ComponentReaders { get; } = new List<Reader>();
+        public List<IReader> ComponentReaders { get; } = new List<IReader>();
 
         /// <summary>
         /// Available classes for reading control statements
         /// </summary>
-        public List<Reader> ControlReaders { get; } = new List<Reader>();
-
-        /// <summary>
-        /// Available classes for reading models
-        /// </summary>
-        public List<Reader> ModelReaders { get; } = new List<Reader>();
+        public List<IReader> ControlReaders { get; } = new List<IReader>();
 
         /// <summary>
         /// Available classes for reading waveforms

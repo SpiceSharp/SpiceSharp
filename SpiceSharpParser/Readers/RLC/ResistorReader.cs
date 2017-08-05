@@ -6,7 +6,7 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read a resistor
     /// </summary>
-    public class ResistorReader : Reader
+    public class ResistorReader : IReader
     {
         /// <summary>
         /// Read a resistor
@@ -15,7 +15,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">The resistor parameters</param>
         /// <param name="netlist">The netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             // Test if we can read a resistor here
             if (name.image[0] != 'r' && name.image[0] != 'R')

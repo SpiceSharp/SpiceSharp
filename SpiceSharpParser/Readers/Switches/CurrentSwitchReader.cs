@@ -6,7 +6,7 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read current switches
     /// </summary>
-    public class CurrentSwitchReader : Reader
+    public class CurrentSwitchReader : IReader
     {
         /// <summary>
         /// Read
@@ -15,7 +15,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (name.image[0] != 'w' && name.image[0] != 'W')
                 return false;

@@ -7,7 +7,7 @@ using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
 {
-    public class InductorReader : Reader
+    public class InductorReader : IReader
     {
         /// <summary>
         /// Read
@@ -16,7 +16,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">The netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (name.image[0] != 'l' && name.image[0] != 'L')
                 return false;

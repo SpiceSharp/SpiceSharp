@@ -6,7 +6,7 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read models for current switches
     /// </summary>
-    public class CurrentSwitchModelReader : Reader
+    public class CurrentSwitchModelReader : IReader
     {
         /// <summary>
         /// Read
@@ -15,7 +15,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             CurrentSwitchModel model = new CurrentSwitchModel(name.ReadIdentifier());
             model.ReadParameters(parameters);
