@@ -23,6 +23,8 @@ The project SpiceSharpTransistors project contains additional transistor models:
 
 The project Spice2SpiceSharp contains a tool that I use to convert Spice models to the SpiceSharp framework (C and C# are not that different when it comes to model calculations). This minimizes the error I make when porting the model to this framework. Some manual work is still necessary though, and errors can still sneak in. Use the models at your own risk.
 
+The project SpiceSharpParser contains a netlist parser. It uses a tool CSharpCC (which is a port from JavaCC) to generate the parser. The file spicelang.cc contains the grammar. You can use the class NetlistReader to parse netlists from a stream.
+
 Although many features have been copied or integrated from Spice 3f5, this is not an exact copy. It might behave slightly different from other Spice simulators (eg. timestep control for transient simulations).
 
 ## Example
@@ -125,3 +127,18 @@ private static void Ac_ExportSimulationData(object sender, SimulationData data)
 }
 ```
 Note that the circuit will contain all simulation data, so the circuit needs to be passed to the Ask-method in order to extract the current.
+
+### Parsing netlists
+The netlist parser makes it easier to read netlists. The following illustrates reading a netlist file "test.net".
+```C#
+NetlistReader parser = new NetlistReader(new FileStream("test.net", FileMode.Open));
+SpiceSharp.Parameters.SpiceMember.SpiceMemberConvert += SpiceSharp.Parameters.Converter.SpiceConvert;
+parser.Parse();
+```
+Note that the second line allows reading values of the type "10u" instead of only "10e-6".
+The NetlistReader class contains a Netlist object that contains all the IReader interfaces for parsing the netlist.
+- ComponentReaders: A list of component readers (eg. "DiodeReader()" reads "D1_b IN OUT dmod1").
+- ControlReaders: A list of control statement readers (eg. "TransientReader()" reads ".tran 1n 10p").
+The parsed results are stored in the Circuit and Simulations properties.
+
+There is a special ControlReaders class called ModelReader. This class reads ".model" statements and passes the name and parameters to another list of readers.
