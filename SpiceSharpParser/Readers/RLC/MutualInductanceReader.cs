@@ -20,7 +20,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'k' && name.image[0] != 'K')
                 return false;
 
-            MutualInductance mut = new MutualInductance(name.image);
+            MutualInductance mut = new MutualInductance(name.ReadWord());
             switch (parameters.Count)
             {
                 case 1: throw new ParseException(name, "Inductor name expected", false);

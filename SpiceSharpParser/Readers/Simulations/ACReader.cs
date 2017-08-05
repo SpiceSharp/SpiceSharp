@@ -30,7 +30,7 @@ namespace SpiceSharp.Parser.Readers
             }
 
             // Standard parameters
-            string type = parameters[0].ReadWord().ToLower();
+            string type = parameters[0].ReadWord();
             switch (type)
             {
                 case "lin":

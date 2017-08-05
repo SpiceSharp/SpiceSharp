@@ -20,7 +20,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'i' && name.image[0] != 'I')
                 return false;
 
-            Currentsource isrc = new Currentsource(name.image);
+            Currentsource isrc = new Currentsource(name.ReadWord());
             isrc.ReadNodes(parameters, 2);
 
             // We can have a value or just DC

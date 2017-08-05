@@ -44,12 +44,12 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
-            if (name.image.ToLower() != id)
+            if (name.ReadWord() != id)
                 return false;
             Current = Generate();
 
             if (parameters.Count > keys.Length)
-                throw new ParseException($"Error on line {name.beginLine}, column {name.beginColumn}: Too many parameters for waveform \"{name.image}\"");
+                throw new ParseException($"Error on line {name.beginLine}, column {name.beginColumn}: Too many parameters for waveform \"{name.Image()}\"");
             for (int i = 0; i < parameters.Count; i++)
                 Current.Set(keys[i], parameters[i].ReadValue());
 

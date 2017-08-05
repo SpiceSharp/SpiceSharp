@@ -156,7 +156,7 @@ namespace SpiceSharp.Parser.Readers
                 // Read a word
                 if (t.kind == WORD)
                 {
-                    value = t.image;
+                    value = t.image.ToLower();
                     return true;
                 }
             }
@@ -181,7 +181,7 @@ namespace SpiceSharp.Parser.Readers
                 // Read a value
                 if (t.kind == VALUE)
                 {
-                    value = t.image;
+                    value = t.image.ToLower();
 
                     // Our converters don't allow .5 as an input, so prepend a 0 in such cases
                     if (value[0] == '.')
@@ -210,14 +210,14 @@ namespace SpiceSharp.Parser.Readers
                 // Read a word or identifier
                 if (t.kind == WORD || t.kind == IDENTIFIER)
                 {
-                    value = t.image;
+                    value = t.image.ToLower();
                     return true;
                 }
 
                 // Read a value if it is pure digits
                 if (t.kind == VALUE && IsNumber(t.image))
                 {
-                    value = t.image;
+                    value = t.image; // .ToLower(); Not necessary here
                     return true;
                 }
             }
@@ -265,7 +265,7 @@ namespace SpiceSharp.Parser.Readers
                 if (p.Name.TryReadWord(out name))
                 {
                     if (!p.Value.TryReadValue(out value))
-                        value = p.Value.Image();
+                        value = p.Value.Image().ToLower();
                     return true;
                 }
             }
@@ -290,7 +290,7 @@ namespace SpiceSharp.Parser.Readers
 
                 if (t.kind == STRING)
                 {
-                    value = t.image;
+                    value = t.image; // We'll keep this case sensitive, you never know what it's used for
                     return true;
                 }
             }
@@ -309,6 +309,27 @@ namespace SpiceSharp.Parser.Readers
         {
             if (o is Token)
                 return lit.ToLower() == (o as Token).image.ToLower();
+            if (o is Token[])
+            {
+                Token[] ts = o as Token[];
+                string[] tokens = new string[ts.Length];
+                for (int i = 0; i < ts.Length; i++)
+                    tokens[i] = ts[i].Image().ToLower();
+                return lit.ToLower() == string.Join(",", tokens);
+            }
+            if (o is AssignmentToken)
+            {
+                AssignmentToken at = o as AssignmentToken;
+                return lit.ToLower() == at.Name.Image().ToLower() + "=" + at.Value.Image().ToLower();
+            }
+            if (o is BracketToken)
+            {
+                BracketToken bt = o as BracketToken;
+                string[] tokens = new string[bt.Parameters.Count];
+                for (int i = 0; i < bt.Parameters.Count; i++)
+                    tokens[i] = bt.Parameters[i].Image().ToLower();
+                return lit.ToLower() == bt.Name.Image().ToLower() + "(" + string.Join(" ", tokens) + ")";
+            }
             return false;
         }
 
@@ -350,7 +371,7 @@ namespace SpiceSharp.Parser.Readers
 
             // Get the model name
             string name;
-            if (!TryReadIdentifier(o, out name))
+            if (!o.TryReadIdentifier(out name))
                 return false;
 
             // Find the model in the circuit
@@ -460,10 +481,7 @@ namespace SpiceSharp.Parser.Readers
             {
                 string pname, pvalue;
                 if (parameters[i].TryReadAssignment(out pname, out pvalue))
-                {
-                    pname = pname.ToLower();
                     obj.Set(pname, pvalue);
-                }
                 else
                     obj.Set(parameters[i].ReadWord());
             }
@@ -488,7 +506,7 @@ namespace SpiceSharp.Parser.Readers
             // Extract the nodes
             string[] nodes = new string[count];
             for (int i = index; i < index + count; i++)
-                nodes[i] = ReadIdentifier(parameters[i]);
+                nodes[i] = parameters[i].ReadIdentifier();
 
             // Succeeded
             c.Connect(nodes);
@@ -504,7 +522,7 @@ namespace SpiceSharp.Parser.Readers
         public static T ReadModel<T>(this object o, Netlist netlist) where T : CircuitModel
         {
             // Get the model name
-            string name = ReadIdentifier(o);
+            string name = o.ReadIdentifier();
 
             // Find the model in the circuit
             if (!netlist.Circuit.Components.Contains(name))

@@ -20,7 +20,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'h' && name.image[0] != 'H')
                 return false;
 
-            CurrentControlledVoltagesource ccvs = new CurrentControlledVoltagesource(name.image);
+            CurrentControlledVoltagesource ccvs = new CurrentControlledVoltagesource(name.ReadWord());
             ccvs.ReadNodes(parameters, 2);
             switch (parameters.Count)
             {

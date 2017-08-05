@@ -20,7 +20,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'v' && name.image[0] != 'V')
                 return false;
 
-            Voltagesource vsrc = new Voltagesource(name.image);
+            Voltagesource vsrc = new Voltagesource(name.ReadWord());
             vsrc.ReadNodes(parameters, 2);
 
             // We can have a value or just DC

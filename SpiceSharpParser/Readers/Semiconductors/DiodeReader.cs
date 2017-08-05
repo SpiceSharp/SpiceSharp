@@ -20,7 +20,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'd' && name.image[0] != 'D')
                 return false;
 
-            Diode dio = new Diode(name.image);
+            Diode dio = new Diode(name.ReadWord());
             dio.ReadNodes(parameters, 2);
 
             if (parameters.Count < 3)
@@ -41,7 +41,7 @@ namespace SpiceSharp.Parser.Readers
                     dio.Set("on", true);
                 else if (parameters[i].TryReadAssignment(out pname, out pvalue))
                 {
-                    if (pname.ToLower() != "ic")
+                    if (pname != "ic")
                         throw new ParseException(parameters[i], "IC expected");
                     dio.Set("ic", pvalue);
                 }

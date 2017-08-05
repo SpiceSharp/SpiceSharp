@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'r' && name.image[0] != 'R')
                 return false;
 
-            Resistor res = new Resistor(name.image);
+            Resistor res = new Resistor(name.ReadWord());
             res.ReadNodes(parameters, 2);
 
             // We have two possible formats:

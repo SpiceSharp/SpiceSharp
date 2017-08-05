@@ -20,7 +20,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'f' && name.image[0] != 'F')
                 return false;
 
-            CurrentControlledCurrentsource cccs = new CurrentControlledCurrentsource(name.image);
+            CurrentControlledCurrentsource cccs = new CurrentControlledCurrentsource(name.ReadWord());
             cccs.ReadNodes(parameters, 2);
             switch (parameters.Count)
             {

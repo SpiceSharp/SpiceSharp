@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'l' && name.image[0] != 'L')
                 return false;
 
-            Inductor ind = new Inductor(name.image);
+            Inductor ind = new Inductor(name.ReadWord());
             ind.ReadNodes(parameters, 2);
 
             // Read the value

@@ -20,7 +20,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'w' && name.image[0] != 'W')
                 return false;
 
-            CurrentSwitch csw = new CurrentSwitch(name.image);
+            CurrentSwitch csw = new CurrentSwitch(name.ReadWord());
             csw.ReadNodes(parameters, 2);
             switch (parameters.Count)
             {
@@ -34,7 +34,7 @@ namespace SpiceSharp.Parser.Readers
             // Optional on or off
             if (parameters.Count > 4)
             {
-                string state = parameters[4].ReadWord().ToLower();
+                string state = parameters[4].ReadWord();
                 switch (state)
                 {
                     case "on": csw.SetOn(); break;

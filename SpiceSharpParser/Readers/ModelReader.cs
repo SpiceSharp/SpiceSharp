@@ -45,13 +45,13 @@ namespace SpiceSharp.Parser.Readers
             string modeltype;
             if (parameters[0] is Token)
             {
-                modeltype = parameters[0].ReadWord().ToLower();
+                modeltype = parameters[0].ReadWord();
                 parameters.RemoveAt(0);
             }
             else if (parameters[0] is BracketToken)
             {
                 var b = parameters[0] as BracketToken;
-                modeltype = b.Name.ReadWord().ToLower();
+                modeltype = b.Name.ReadWord();
                 parameters = b.Parameters;
             }
             else

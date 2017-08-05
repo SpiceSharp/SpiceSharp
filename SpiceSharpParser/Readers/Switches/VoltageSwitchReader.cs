@@ -20,7 +20,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 's' && name.image[0] != 'S')
                 return false;
 
-            VoltageSwitch vsw = new VoltageSwitch(name.image);
+            VoltageSwitch vsw = new VoltageSwitch(name.ReadWord());
             vsw.ReadNodes(parameters, 4);
 
             // Read the model
@@ -31,7 +31,7 @@ namespace SpiceSharp.Parser.Readers
             // Optional ON or OFF
             if (parameters.Count == 6)
             {
-                string state = parameters[5].ReadWord().ToLower();
+                string state = parameters[5].ReadWord();
                 switch (state)
                 {
                     case "on": vsw.SetOn(); break;

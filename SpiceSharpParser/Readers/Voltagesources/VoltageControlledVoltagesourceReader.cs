@@ -20,7 +20,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'e' && name.image[0] != 'E')
                 return false;
 
-            VoltageControlledVoltagesource vcvs = new VoltageControlledVoltagesource(name.image);
+            VoltageControlledVoltagesource vcvs = new VoltageControlledVoltagesource(name.ReadWord());
             vcvs.ReadNodes(parameters, 4);
 
             if (parameters.Count < 5)

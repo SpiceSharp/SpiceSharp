@@ -20,7 +20,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'c' && name.image[0] != 'C')
                 return false;
 
-            Capacitor cap = new Capacitor(name.image);
+            Capacitor cap = new Capacitor(name.ReadWord());
             cap.ReadNodes(parameters, 2);
 
             // Search for a parameter IC, which is common for both types of capacitors
@@ -29,7 +29,7 @@ namespace SpiceSharp.Parser.Readers
                 string nn, nv;
                 if (parameters[i].TryReadAssignment(out nn, out nv))
                 {
-                    if (nn.ToLower() == "ic")
+                    if (nn == "ic")
                     {
                         cap.Set("ic", nv);
                         parameters.RemoveAt(i);

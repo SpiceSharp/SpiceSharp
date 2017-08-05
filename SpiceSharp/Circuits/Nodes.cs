@@ -9,6 +9,11 @@ namespace SpiceSharp.Circuits
     public class Nodes
     {
         /// <summary>
+        /// Make nodes case-insensitive
+        /// </summary>
+        public bool CaseInsensitive = true;
+
+        /// <summary>
         /// Private variables
         /// </summary>
         private List<CircuitNode> nodes = new List<CircuitNode>();
@@ -38,7 +43,7 @@ namespace SpiceSharp.Circuits
         public Nodes()
         {
             Ground = new CircuitNode(CircuitNode.NodeType.Voltage);
-            Ground.Name = "GND";
+            Ground.Name = "gnd";
             map.Add(Ground.Name, Ground);
             map.Add("0", Ground);
         }
@@ -52,6 +57,8 @@ namespace SpiceSharp.Circuits
         {
             get
             {
+                if (CaseInsensitive)
+                    node = node.ToLower();
                 if (map.ContainsKey(node))
                     return map[node];
                 return null;
@@ -82,8 +89,13 @@ namespace SpiceSharp.Circuits
                 throw new CircuitException($"Nodes locked, mapping is not allowed");
 
             // Check for an existing node
-            if (name != null && map.ContainsKey(name))
-                return map[name];
+            if (name != null)
+            {
+                if (CaseInsensitive)
+                    name = name.ToLower();
+                if (map.ContainsKey(name))
+                    return map[name];
+            }
 
             // Create a new node
             var node = new CircuitNode(type, nodes.Count + 1);
@@ -105,6 +117,8 @@ namespace SpiceSharp.Circuits
         {
             if (node == null)
                 return false;
+            if (CaseInsensitive)
+                node = node.ToLower();
             return map.ContainsKey(node);
         }
 

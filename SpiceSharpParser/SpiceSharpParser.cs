@@ -110,7 +110,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                                         found = true;
                         }
                         if (!found)
-                                {throw new ParseException("Error at line " + t.beginLine + ": Unrecognized component " + t.image);}
+                                {throw new ParseException(t, "Unrecognized component \"" + t.image + "\"");}
                 }
       break;
     case DOT:
@@ -194,7 +194,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                                         found = true;
                         }
                         if (!found)
-                                {throw new ParseException("Error at line " + t.beginLine + ": Unrecognized control statement " + t.image);}
+                                {throw new ParseException(t, "Unrecognized control statement \"" + t.image + "\"");}
                 }
       break;
     case NEWLINE:

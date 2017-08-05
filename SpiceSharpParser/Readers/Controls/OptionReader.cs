@@ -33,7 +33,7 @@ namespace SpiceSharp.Parser.Readers
                     if (pvalue.TryReadValue(out pvalue))
                     {
                         double v = (double)Parameters.SpiceMember.ConvertType(this, pvalue, typeof(double));
-                        switch (pname.ToLower())
+                        switch (pname)
                         {
                             case "abstol":
                                 DC.Default.AbsTol = v;
@@ -78,10 +78,10 @@ namespace SpiceSharp.Parser.Readers
                     }
                     else if (pvalue.TryReadWord(out pvalue))
                     {
-                        switch (pname.ToLower())
+                        switch (pname)
                         {
                             case "method":
-                                switch (pvalue.ToLower())
+                                switch (pvalue)
                                 {
                                     case "trap":
                                     case "trapezoidal":
@@ -96,7 +96,7 @@ namespace SpiceSharp.Parser.Readers
                 }
                 else if (parameters[i].TryReadWord(out pname))
                 {
-                    switch (pname.ToLower())
+                    switch (pname)
                     {
                         case "keepopinfo": AC.Default.KeepOpInfo = true; break;
                     }

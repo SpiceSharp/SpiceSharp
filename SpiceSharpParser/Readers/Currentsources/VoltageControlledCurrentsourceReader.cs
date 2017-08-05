@@ -20,7 +20,7 @@ namespace SpiceSharp.Parser.Readers
             if (name.image[0] != 'g' && name.image[0] != 'G')
                 return false;
 
-            VoltageControlledCurrentsource vccs = new VoltageControlledCurrentsource(name.image);
+            VoltageControlledCurrentsource vccs = new VoltageControlledCurrentsource(name.ReadWord());
             vccs.ReadNodes(parameters, 4);
 
             if (parameters.Count < 5)

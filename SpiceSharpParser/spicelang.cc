@@ -43,7 +43,7 @@ void ParseSpiceLine(Netlist netlist) :
 					found = true;
 			}
 			if (!found)
-				throw new ParseException("Error at line " + t.beginLine + ": Unrecognized component " + t.image);
+				throw new ParseException(t, "Unrecognized component \"" + t.image + "\"");
 		}
 	}
 	| <DOT> t = <WORD> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>)
@@ -59,7 +59,7 @@ void ParseSpiceLine(Netlist netlist) :
 					found = true;
 			}
 			if (!found)
-				throw new ParseException("Error at line " + t.beginLine + ": Unrecognized control statement " + t.image);
+				throw new ParseException(t, "Unrecognized control statement \"" + t.image + "\"");
 		}
 	}
 	| <NEWLINE>
