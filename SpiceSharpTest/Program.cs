@@ -34,9 +34,9 @@ namespace SpiceSharpTest
             foreach (string msg in ConverterWarnings.Warnings)
                 Console.WriteLine(msg); */
 
-            NetlistReader parser = new NetlistReader(new FileStream("test.net", FileMode.Open));
+            NetlistReader parser = new NetlistReader();
             SpiceSharp.Parameters.SpiceMember.SpiceMemberConvert += SpiceSharp.Parameters.Converter.SpiceConvert;
-            parser.Parse();
+            parser.Parse("test.net");
 
             time = new List<double>();
             input = new List<double>();

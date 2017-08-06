@@ -12,7 +12,7 @@ namespace SpiceSharp.Parser
         /// <summary>
         /// Private variables
         /// </summary>
-        public SpiceSharpParser Parser { get; }
+        public SpiceSharpParser Parser { get; private set; }
 
         /// <summary>
         /// The netlist
@@ -20,21 +20,16 @@ namespace SpiceSharp.Parser
         public Netlist Netlist { get; set; }
 
         /// <summary>
-        /// Private variables
-        /// </summary>
-        private Stream stream;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="stream">The stream</param>
-        public NetlistReader(Stream stream, Netlist netlist = null)
+        public NetlistReader(Netlist netlist = null)
         {
-            this.stream = stream;
-            Parser = new SpiceSharpParser(stream);
+            Parser = null;
 
             // Make a new netlist
             Netlist = netlist ?? StandardNetlist();
+            Netlist.Filename = "Unknown";
         }
 
         /// <summary>
@@ -96,11 +91,26 @@ namespace SpiceSharp.Parser
         /// <summary>
         /// Parse the netlist
         /// </summary>
-        public void Parse()
+        public void Parse(string filename)
         {
-            // Initialize if necessary
+            using (FileStream stream = new FileStream(filename, FileMode.Open))
+            {
+                // Parse the stream
+                Parse(stream, filename);
+            }
+        }
+
+        /// <summary>
+        /// Parse a stream
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="filename"></param>
+        public void Parse(Stream stream, string filename = "Unknown")
+        {
             if (Netlist == null)
                 Netlist = StandardNetlist();
+            Netlist.Filename = filename;
+            Parser = new SpiceSharpParser(stream);
 
             // Parse the netlist for control statements first
             Netlist.Parse = Netlist.ParseTypes.Control;

@@ -6,6 +6,11 @@ namespace SpiceSharp.Parser
     public class Netlist
     {
         /// <summary>
+        /// Sets or gets the current filename
+        /// </summary>
+        public string Filename { get; set; }
+
+        /// <summary>
         /// Available classes for reading components
         /// </summary>
         public List<IReader> ComponentReaders { get; } = new List<IReader>();
