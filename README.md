@@ -131,9 +131,9 @@ Note that the circuit will contain all simulation data, so the circuit needs to 
 ### Parsing netlists
 The netlist parser makes it easier to read netlists. The following illustrates reading a netlist file "test.net".
 ```C#
-NetlistReader parser = new NetlistReader(new FileStream("test.net", FileMode.Open));
+NetlistReader parser = new NetlistReader();
 SpiceSharp.Parameters.SpiceMember.SpiceMemberConvert += SpiceSharp.Parameters.Converter.SpiceConvert;
-parser.Parse();
+parser.Parse("test.net");
 ```
 Note that the second line allows reading values of the type "10u" instead of only "10e-6".
 The NetlistReader class contains a Netlist object that contains all the IReader interfaces for parsing the netlist.
