@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Parser.Readers
@@ -12,6 +8,11 @@ namespace SpiceSharp.Parser.Readers
     /// </summary>
     public class OptionReader : IReader
     {
+        /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; } = null;
+
         /// <summary>
         /// Read
         /// </summary>
@@ -27,8 +28,7 @@ namespace SpiceSharp.Parser.Readers
             // Read all options
             for (int i = 0; i < parameters.Count; i++)
             {
-                string pname, pvalue;
-                if (parameters[i].TryReadAssignment(out pname, out pvalue))
+                if (parameters[i].TryReadAssignment(out string pname, out string pvalue))
                 {
                     if (pvalue.TryReadValue(out pvalue))
                     {

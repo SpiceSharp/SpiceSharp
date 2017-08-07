@@ -9,6 +9,11 @@ namespace SpiceSharp.Parser.Readers
     public class CurrentControlledCurrentsourceReader : IReader
     {
         /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
@@ -31,6 +36,7 @@ namespace SpiceSharp.Parser.Readers
             cccs.Set("control", parameters[2].ReadWord());
             cccs.Set("gain", parameters[3].ReadValue());
 
+            Generated = cccs;
             netlist.Circuit.Components.Add(cccs);
             return true;
         }

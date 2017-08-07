@@ -9,6 +9,11 @@ namespace SpiceSharp.Parser.Readers
     public class MutualInductanceReader : IReader
     {
         /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">The name</param>
@@ -34,6 +39,7 @@ namespace SpiceSharp.Parser.Readers
             mut.Set("k", parameters[2].ReadValue());
 
             netlist.Circuit.Components.Add(mut);
+            Generated = mut;
             return true;
         }
     }

@@ -9,6 +9,11 @@ namespace SpiceSharp.Parser.Readers
     public class ResistorModelReader : IReader
     {
         /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
+        /// <summary>
         /// Read a resistor model
         /// </summary>
         /// <param name="name">The name of the control model</param>
@@ -21,6 +26,7 @@ namespace SpiceSharp.Parser.Readers
             ResistorModel model = new ResistorModel(name.ReadIdentifier());
             model.ReadParameters(parameters);
             netlist.Circuit.Components.Add(model);
+            Generated = model;
             return true;
         }
     }

@@ -11,9 +11,11 @@
 /// mechanisms so long as you retain the public fields.
 /// </para>
 /// </remarks>
+using System;
 using SpiceSharp.Parser.Readers;
 namespace SpiceSharp.Parser
 {
+    [Serializable]
     public class ParseException : System.Exception {
 
         /**

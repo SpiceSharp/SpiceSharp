@@ -9,6 +9,14 @@ namespace SpiceSharp.Parser.Readers
     /// </summary>
     public class BipolarModelReader : IReader
     {
+        /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
+        /// <summary>
+        /// Private variables
+        /// </summary>
         private bool npn = true;
 
         /// <summary>
@@ -36,6 +44,7 @@ namespace SpiceSharp.Parser.Readers
                 model.SetPNP(true);
             model.ReadParameters(parameters);
             netlist.Circuit.Components.Add(model);
+            Generated = model;
             return true;
         }
     }

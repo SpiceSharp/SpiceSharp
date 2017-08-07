@@ -12,6 +12,8 @@ using SpiceSharp;
 using SpiceSharp.Parser.Readers;
 public class SpiceSharpParser
 {
+	public Boolean ParseComponents = true;
+	public Boolean ParseControlStatements = true;
 }
 PARSER_END( SpiceSharpParser )
 
@@ -30,37 +32,17 @@ void ParseSpiceLine(Netlist netlist) :
 	IReader reader = null;
 }
 {
-	t = <WORD> (o = ParseParameter()  { parameters.Add(o); })* (<NEWLINE> | <EOF>)
+	t = <WORD> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>)
 		(<PLUS> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>))*
 	{
-		// Find a reader that reads this line
-		if ((netlist.Parse & Netlist.ParseTypes.Component) != 0)
-		{
-			bool found = false;
-			foreach(IReader r in netlist.ComponentReaders)
-			{
-				if (r.Read(t, parameters, netlist))
-					found = true;
-			}
-			if (!found)
-				throw new ParseException(t, "Unrecognized component \"" + t.image + "\"");
-		}
+		if (ParseComponents)
+			netlist.Readers.Read("component", t, parameters, netlist);
 	}
 	| <DOT> t = <WORD> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>)
 		(<PLUS> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>))*
 	{
-		// Find a control statement reader
-		if ((netlist.Parse & Netlist.ParseTypes.Control) != 0)
-		{
-			bool found = false;
-			foreach(IReader r in netlist.ControlReaders)
-			{
-				if (r.Read(t, parameters, netlist))
-					found = true;
-			}
-			if (!found)
-				throw new ParseException(t, "Unrecognized control statement \"" + t.image + "\"");
-		}
+		if (ParseControlStatements)
+			netlist.Readers.Read("control", t, parameters, netlist);
 	}
 	| <NEWLINE>
 }
@@ -78,6 +60,12 @@ Object ParseParameter() :
 			return new AssignmentToken(br, ob);
 		return br; 
 	}
+	| LOOKAHEAD(2) oa = ParseSingle() { br = new BracketToken(oa, '['); } "[" (oa = ParseParameter() { br.Parameters.Add(oa); })* "]" ("=" ob = ParseSingle()) ?
+	{
+		if (ob != null)
+			return new AssignmentToken(br, ob);
+		return br;
+	}
 	| LOOKAHEAD(2) oa = ParseSingle() "=" ob = ParseSingle()
 	{
 		return new AssignmentToken(oa, ob);
@@ -94,9 +82,9 @@ Object ParseSingle() :
 	List<Token> ts = new List<Token>();
 }
 {
-	(t = <WORD> | t = <VALUE> | t = <STRING> | t = <IDENTIFIER>)
+	(t = <WORD> | t = <VALUE> | t = <STRING> | t = <IDENTIFIER> | t = <REFERENCE>)
 		{ ts.Add(t); }
-	(<COMMA> (t = <WORD> | t = <VALUE> | t = <STRING> | t = <IDENTIFIER>) 
+	(<COMMA> (t = <WORD> | t = <VALUE> | t = <STRING> | t = <IDENTIFIER> | t = <REFERENCE>) 
 		{ ts.Add(t); })*
 	{
 		if (ts.Count > 1)
@@ -114,10 +102,11 @@ TOKEN :
 	| <ASTERISK : "*">
 	| <DOT : ".">
 	| <COMMA : ",">
-	| <DELIMITER : "=" | "(" | ")">
+	| <DELIMITER : "=" | "(" | ")" | "[" | "]">
 	| <NEWLINE : "\r" | "\n" | "\r\n">
 	| <VALUE : (["+","-"])? ((<DIGIT>)+ ("." (<DIGIT>)*)? | "." (<DIGIT>)+) ("e" ("+" | "-")? (<DIGIT>)+ | ["t","g","m","k","u","n","p","f"] (<LETTER>)*)?>
 	| <STRING : "\"" ( ~["\"","\\","\n","\r"] | "\\" ( ["n","t","b","r","f","\\","\'","\""] | (["\n","\r"] | "\r\n")))* "\"">
+	| <REFERENCE : "@" <WORD>>
 	| <WORD : <LETTER> (<CHARACTER> | "_" | ".")*>
 	| <IDENTIFIER : (<CHARACTER> | "_") (<CHARACTER> | "_" | ".")*>
 	| <#DIGIT : ["0"-"9"]>

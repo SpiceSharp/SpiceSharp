@@ -9,6 +9,11 @@ namespace SpiceSharp.Parser.Readers
     public class CapacitorModelReader : IReader
     {
         /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name"></param>
@@ -20,6 +25,7 @@ namespace SpiceSharp.Parser.Readers
             CapacitorModel model = new CapacitorModel(name.ReadIdentifier());
             model.ReadParameters(parameters);
             netlist.Circuit.Components.Add(model);
+            Generated = model;
             return true;
         }
     }

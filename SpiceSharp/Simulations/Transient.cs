@@ -148,6 +148,7 @@ namespace SpiceSharp.Simulations
                 method.Breaks.MinBreak = 5e-5 * MaxStep;
 
             // Calculate the operating point
+            Initialize(ckt);
             this.Op(ckt, MyConfig.DcMaxIterations);
             ckt.Statistics.TimePoints++;
 
@@ -268,6 +269,8 @@ namespace SpiceSharp.Simulations
                 ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
                 throw;
             }
+
+            Finalize(ckt);
         }
     }
 

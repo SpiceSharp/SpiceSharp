@@ -9,6 +9,11 @@ namespace SpiceSharp.Parser.Readers
     public class CurrentControlledVoltagesourceReader : IReader
     {
         /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
@@ -32,6 +37,7 @@ namespace SpiceSharp.Parser.Readers
             ccvs.Set("gain", parameters[2].ReadValue());
 
             netlist.Circuit.Components.Add(ccvs);
+            Generated = ccvs;
             return true;
         }
     }

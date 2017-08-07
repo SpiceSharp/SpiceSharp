@@ -8,6 +8,11 @@ namespace SpiceSharp.Parser.Readers
     public class ICReader : IReader
     {
         /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; } = null;
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
@@ -22,15 +27,9 @@ namespace SpiceSharp.Parser.Readers
             // Only assignments are possible
             for (int i = 0; i < parameters.Count; i++)
             {
-                object pname, pvalue;
-                parameters[i].ReadAssignment(out pname, out pvalue);
-
-                // The first needs to be a bracketed
-                if (!(pname is BracketToken))
-                    throw new ParseException(pname, "V() expected");
-                var bt = pname as BracketToken;
-
-                if (bt.Name.TryReadLiteral("v"))
+                // .IC parameters are of the form V(node) = value
+                parameters[i].ReadAssignment(out object pname, out object pvalue);
+                if (pname.TryReadBracket(out BracketToken bt) && bt.Name.TryReadLiteral("v"))
                 {
                     if (bt.Parameters.Count != 1)
                         throw new ParseException(pname, "One node expected");

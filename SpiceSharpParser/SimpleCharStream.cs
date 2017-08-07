@@ -95,12 +95,12 @@ public  class SimpleCharStream {
         } else
            maxNextCharInd += i;
         return;
-     } catch(System.IO.IOException e) {
+     } catch(System.IO.IOException) {
         --bufpos;
         Backup(0);
         if (tokenBegin == -1)
            tokenBegin = bufpos;
-        throw e;
+        throw;
      }
   }
 
@@ -110,10 +110,10 @@ public  class SimpleCharStream {
          char c = ReadChar();
          tokenBegin = bufpos;
          return c;
-     } catch (System.IO.EndOfStreamException e) {
+     } catch (System.IO.EndOfStreamException) {
          if (tokenBegin == -1)
              tokenBegin = bufpos;
-         throw e;
+         throw;
      }
   }
 

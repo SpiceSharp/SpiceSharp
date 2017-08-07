@@ -30,6 +30,8 @@ namespace SpiceSharp.Parser.Readers
                 return (o as AssignmentToken).Name.BeginLine();
             if (o is BracketToken)
                 return (o as BracketToken).Name.BeginLine();
+            if (o is AtToken)
+                return (o as AtToken).Name.BeginLine();
             return -1;
         }
 
@@ -58,6 +60,8 @@ namespace SpiceSharp.Parser.Readers
                 else
                     return b.Parameters.Last().EndLine();
             }
+            if (o is AtToken)
+                return (o as AtToken).Parameter.EndLine();
             return -1;
         }
 
@@ -80,6 +84,8 @@ namespace SpiceSharp.Parser.Readers
                 return (o as AssignmentToken).Name.BeginColumn();
             if (o is BracketToken)
                 return (o as BracketToken).Name.BeginColumn();
+            if (o is AtToken)
+                return (o as AtToken).Name.BeginColumn();
             return -1;
         }
 
@@ -108,6 +114,8 @@ namespace SpiceSharp.Parser.Readers
                 else
                     return b.Parameters.Last().EndColumn();
             }
+            if (o is AtToken)
+                return (o as AtToken).Parameter.EndColumn();
             return -1;
         }
 
@@ -137,6 +145,11 @@ namespace SpiceSharp.Parser.Readers
             {
                 var b = o as BracketToken;
                 return b.Name.Image() + "()";
+            }
+            if (o is AtToken)
+            {
+                var at = o as AtToken;
+                return "@" + at.Name.Image() + "[" + at.Parameter.Image() + "]";
             }
             return "";
         }
@@ -300,6 +313,27 @@ namespace SpiceSharp.Parser.Readers
         }
 
         /// <summary>
+        /// Try to read a reference name from a Token-related object
+        /// </summary>
+        /// <param name="o">The object</param>
+        /// <param name="value">The value</param>
+        /// <returns></returns>
+        public static bool TryReadReference(this object o, out string name)
+        {
+            name = null;
+            if (o is Token)
+            {
+                Token t = o as Token;
+                if (t.kind == REFERENCE)
+                {
+                    name = t.image.Substring(1).ToLower();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Read a literal (case insensitive)
         /// </summary>
         /// <param name="o"></param>
@@ -389,6 +423,29 @@ namespace SpiceSharp.Parser.Readers
             }
             else
                 return false;
+        }
+
+        /// <summary>
+        /// Try reading a bracket
+        /// </summary>
+        /// <param name="o">The object</param>
+        /// <param name="bt">The bracket token</param>
+        /// <param name="bracket">The type of bracket (default is '(', '?' for any bracket)</param>
+        /// <returns></returns>
+        public static bool TryReadBracket(this object o, out BracketToken bt, char bracket = '(')
+        {
+            bt = null;
+            if (!(o is BracketToken))
+                return false;
+            bt = o as BracketToken;
+            if (bracket == '?')
+                return true;
+            if (bt.Bracket != bracket)
+            {
+                bt = null;
+                return false;
+            }
+            return true;
         }
 
         /// <summary>

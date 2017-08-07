@@ -14,9 +14,19 @@ namespace SpiceSharp
         public SimulationConfiguration Config { get; set; } = null;
 
         /// <summary>
+        /// Event that is called for initializing simulation data exports
+        /// </summary>
+        public event InitializeSimulationExportEventHandler InitializeSimulationExport;
+
+        /// <summary>
         /// Event that is called when new simulation data is available
         /// </summary>
         public event ExportSimulationDataEventHandler ExportSimulationData;
+
+        /// <summary>
+        /// Event that is called for finalizing simulation data exports
+        /// </summary>
+        public event FinalizeSimulationExportEventHandler FinalizeSimulationExport;
 
         /// <summary>
         /// Constructor
@@ -36,6 +46,15 @@ namespace SpiceSharp
         public abstract void Execute(Circuit ckt);
 
         /// <summary>
+        /// Initialize the simulation
+        /// </summary>
+        /// <param name="ckt"></param>
+        public virtual void Initialize(Circuit ckt)
+        {
+            InitializeSimulationExport?.Invoke(this, ckt);
+        }
+
+        /// <summary>
         /// Export the data
         /// </summary>
         /// <param name="ckt"></param>
@@ -43,6 +62,15 @@ namespace SpiceSharp
         {
             SimulationData data = new SimulationData(ckt);
             ExportSimulationData?.Invoke(this, data);
+        }
+
+        /// <summary>
+        /// Finalize the simulation
+        /// </summary>
+        /// <param name="ckt"></param>
+        public virtual void Finalize(Circuit ckt)
+        {
+            FinalizeSimulationExport?.Invoke(this, ckt);
         }
     }
 }

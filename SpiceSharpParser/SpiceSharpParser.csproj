@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,18 +41,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssignmentToken.cs" />
-    <Compile Include="BracketToken.cs" />
+    <Compile Include="Readers\Exporters\Exports\ParameterReader.cs" />
+    <Compile Include="Tokens\AssignmentToken.cs" />
+    <Compile Include="Tokens\AtToken.cs" />
+    <Compile Include="Tokens\BracketToken.cs" />
     <Compile Include="NetlistReader.cs" />
     <Compile Include="Readers\Controls\ICReader.cs" />
     <Compile Include="Readers\Controls\NodesetReader.cs" />
     <Compile Include="Readers\Controls\OptionReader.cs" />
+    <Compile Include="Readers\Exporters\Exports\CurrentComplexReader.cs" />
+    <Compile Include="Readers\Exporters\Exports\CurrentReader.cs" />
+    <Compile Include="Readers\Exporters\Exports\Export.cs" />
+    <Compile Include="Readers\Exporters\Exports\VoltageComplexReader.cs" />
+    <Compile Include="Readers\Exporters\Exports\VoltageReader.cs" />
+    <Compile Include="Readers\Exporters\SaveReader.cs" />
     <Compile Include="Readers\ReaderExtension.cs" />
     <Compile Include="Readers\Currentsources\CurrentControlledCurrentsourceReader.cs" />
     <Compile Include="Readers\Currentsources\CurrentsourceReader.cs" />
     <Compile Include="Readers\Currentsources\VoltageControlledCurrentsourceReader.cs" />
-    <Compile Include="Readers\ModelReader.cs" />
-    <Compile Include="Readers\Reader.cs" />
+    <Compile Include="Readers\Controls\ModelReader.cs" />
+    <Compile Include="Readers\IReader.cs" />
     <Compile Include="Netlist.cs" />
     <Compile Include="ParseException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,10 +81,11 @@
     <Compile Include="Readers\Switches\CurrentSwitchReader.cs" />
     <Compile Include="Readers\Switches\VoltageSwitchModelReader.cs" />
     <Compile Include="Readers\Switches\VoltageSwitchReader.cs" />
+    <Compile Include="Readers\TokenReaders.cs" />
     <Compile Include="Readers\Voltagesources\CurrentControlledVoltagesourceReader.cs" />
     <Compile Include="Readers\Voltagesources\VoltageControlledVoltagesourceReader.cs" />
     <Compile Include="Readers\Voltagesources\VoltagesourceReader.cs" />
-    <Compile Include="Readers\WaveformReader.cs" />
+    <Compile Include="Readers\Waveforms\WaveformReader.cs" />
     <Compile Include="Readers\Waveforms\PulseReader.cs" />
     <Compile Include="Readers\Waveforms\SineReader.cs" />
     <Compile Include="SimpleCharStream.cs" />

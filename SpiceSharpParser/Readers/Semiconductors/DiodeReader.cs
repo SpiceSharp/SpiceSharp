@@ -9,6 +9,11 @@ namespace SpiceSharp.Parser.Readers
     public class DiodeReader : IReader
     {
         /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
@@ -34,12 +39,11 @@ namespace SpiceSharp.Parser.Readers
             // Read the rest of the parameters
             for (int i = 4; i < parameters.Count; i++)
             {
-                string pname, pvalue;
                 if (parameters[i].TryReadLiteral("on"))
                     dio.Set("off", false);
                 else if (parameters[i].TryReadLiteral("off"))
                     dio.Set("on", true);
-                else if (parameters[i].TryReadAssignment(out pname, out pvalue))
+                else if (parameters[i].TryReadAssignment(out string pname, out string pvalue))
                 {
                     if (pname != "ic")
                         throw new ParseException(parameters[i], "IC expected");
@@ -52,6 +56,7 @@ namespace SpiceSharp.Parser.Readers
             }
 
             netlist.Circuit.Components.Add(dio);
+            Generated = dio;
             return true;
         }
     }

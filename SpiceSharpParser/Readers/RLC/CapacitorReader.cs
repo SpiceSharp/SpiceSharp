@@ -9,6 +9,11 @@ namespace SpiceSharp.Parser.Readers
     public class CapacitorReader : IReader
     {
         /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">The name</param>
@@ -26,8 +31,7 @@ namespace SpiceSharp.Parser.Readers
             // Search for a parameter IC, which is common for both types of capacitors
             for (int i = 3; i < parameters.Count; i++)
             {
-                string nn, nv;
-                if (parameters[i].TryReadAssignment(out nn, out nv))
+                if (parameters[i].TryReadAssignment(out string nn, out string nv))
                 {
                     if (nn == "ic")
                     {
@@ -49,6 +53,7 @@ namespace SpiceSharp.Parser.Readers
                     throw new ParseException(name, "L needs to be specified");
             }
 
+            Generated = cap;
             netlist.Circuit.Components.Add(cap);
             return true;
         }

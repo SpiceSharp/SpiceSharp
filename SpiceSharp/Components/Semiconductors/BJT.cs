@@ -768,44 +768,57 @@ namespace SpiceSharp.Components
         {
             var state = ckt.State;
             var cstate = state.Complex;
-            double gcpr, gepr, gpi, gmu, gm, go, xgm, gx, xcpi, xcmu, xcbx, xccs, xcmcb;
+            double gcpr, gepr, gpi, gmu, go, td, gx;
+            Complex gm, xcpi, xcmu, xcbx, xccs, xcmcb;
 
-            gcpr = Model.BJTcollectorResist * BJTarea;
-            gepr = Model.BJTemitterResist * BJTarea;
+            gcpr = Model.BJTcollectorConduct * BJTarea;
+            gepr = Model.BJTemitterConduct * BJTarea;
             gpi = state.States[0][BJTstate + BJTgpi];
             gmu = state.States[0][BJTstate + BJTgmu];
             gm = state.States[0][BJTstate + BJTgm];
             go = state.States[0][BJTstate + BJTgo];
-            xgm = 0;
+            td = Model.BJTexcessPhaseFactor;
+            if (td != 0)
+            {
+                Complex arg = td * cstate.Laplace;
+
+                gm = gm + go;
+                gm = gm * Complex.Exp(-arg);
+                gm = gm - go;
+            }
             gx = state.States[0][BJTstate + BJTgx];
-            xcpi = state.States[0][BJTstate + BJTcqbe];
-            xcmu = state.States[0][BJTstate + BJTcqbc];
-            xcbx = state.States[0][BJTstate + BJTcqbx];
-            xccs = state.States[0][BJTstate + BJTcqcs];
-            xcmcb = state.States[0][BJTstate + BJTcexbc];
-            cstate.Matrix[BJTcolNode, BJTcolNode] += (gcpr);
-            cstate.Matrix[BJTbaseNode, BJTbaseNode] += (gx) + (xcbx) * cstate.Laplace;
-            cstate.Matrix[BJTemitNode, BJTemitNode] += (gepr);
-            cstate.Matrix[BJTcolPrimeNode, BJTcolPrimeNode] += (gmu + go + gcpr) + (xcmu + xccs + xcbx) * cstate.Laplace;
-            cstate.Matrix[BJTbasePrimeNode, BJTbasePrimeNode] += (gx + gpi + gmu) + (xcpi + xcmu + xcmcb) * cstate.Laplace;
-            cstate.Matrix[BJTemitPrimeNode, BJTemitPrimeNode] += (gpi + gepr + gm + go) + (xcpi + xgm) * cstate.Laplace;
-            cstate.Matrix[BJTcolNode, BJTcolPrimeNode] += (-gcpr);
-            cstate.Matrix[BJTbaseNode, BJTbasePrimeNode] += (-gx);
-            cstate.Matrix[BJTemitNode, BJTemitPrimeNode] += (-gepr);
-            cstate.Matrix[BJTcolPrimeNode, BJTcolNode] += (-gcpr);
-            cstate.Matrix[BJTcolPrimeNode, BJTbasePrimeNode] += (-gmu + gm) + (-xcmu + xgm) * cstate.Laplace;
-            cstate.Matrix[BJTcolPrimeNode, BJTemitPrimeNode] += (-gm - go) + (-xgm) * cstate.Laplace;
-            cstate.Matrix[BJTbasePrimeNode, BJTbaseNode] += (-gx);
-            cstate.Matrix[BJTbasePrimeNode, BJTcolPrimeNode] += (-gmu) + (-xcmu - xcmcb) * cstate.Laplace;
-            cstate.Matrix[BJTbasePrimeNode, BJTemitPrimeNode] += (-gpi) + (-xcpi) * cstate.Laplace;
-            cstate.Matrix[BJTemitPrimeNode, BJTemitNode] += (-gepr);
-            cstate.Matrix[BJTemitPrimeNode, BJTcolPrimeNode] += (-go) + (xcmcb) * cstate.Laplace;
-            cstate.Matrix[BJTemitPrimeNode, BJTbasePrimeNode] += (-gpi - gm) + (-xcpi - xgm - xcmcb) * cstate.Laplace;
-            cstate.Matrix[BJTsubstNode, BJTsubstNode] += (xccs) * cstate.Laplace;
-            cstate.Matrix[BJTcolPrimeNode, BJTsubstNode] += (-xccs) * cstate.Laplace;
-            cstate.Matrix[BJTsubstNode, BJTcolPrimeNode] += (-xccs) * cstate.Laplace;
-            cstate.Matrix[BJTbaseNode, BJTcolPrimeNode] += (-xcbx) * cstate.Laplace;
-            cstate.Matrix[BJTcolPrimeNode, BJTbaseNode] += (-xcbx) * cstate.Laplace;
+            xcpi = state.States[0][BJTstate + BJTcqbe] * cstate.Laplace;
+            xcmu = state.States[0][BJTstate + BJTcqbc] * cstate.Laplace;
+            xcbx = state.States[0][BJTstate + BJTcqbx] * cstate.Laplace;
+            xccs = state.States[0][BJTstate + BJTcqcs] * cstate.Laplace;
+            xcmcb = state.States[0][BJTstate + BJTcexbc] * cstate.Laplace;
+
+            cstate.Matrix[BJTcolNode, BJTcolNode] += gcpr;
+            cstate.Matrix[BJTbaseNode, BJTbaseNode] += gx + xcbx;
+            cstate.Matrix[BJTemitNode, BJTemitNode] += gepr;
+            cstate.Matrix[BJTcolPrimeNode, BJTcolPrimeNode] += (gmu + go + gcpr) + (xcmu + xccs + xcbx);
+            cstate.Matrix[BJTbasePrimeNode, BJTbasePrimeNode] += (gx + gpi + gmu) + (xcpi + xcmu + xcmcb);
+            cstate.Matrix[BJTemitPrimeNode, BJTemitPrimeNode] += (gpi + gepr + gm + go) + xcpi;
+
+            cstate.Matrix[BJTcolNode, BJTcolPrimeNode] -= gcpr;
+            cstate.Matrix[BJTbaseNode, BJTbasePrimeNode] -= gx;
+            cstate.Matrix[BJTemitNode, BJTemitPrimeNode] -= gepr;
+
+            cstate.Matrix[BJTcolPrimeNode, BJTcolNode] -= gcpr;
+            cstate.Matrix[BJTcolPrimeNode, BJTbasePrimeNode] += (-gmu + gm) + (-xcmu);
+            cstate.Matrix[BJTcolPrimeNode, BJTemitPrimeNode] += (-gm - go);
+            cstate.Matrix[BJTbasePrimeNode, BJTbaseNode] -= gx;
+            cstate.Matrix[BJTbasePrimeNode, BJTcolPrimeNode] -= gmu + xcmu + xcmcb;
+            cstate.Matrix[BJTbasePrimeNode, BJTemitPrimeNode] -= gpi + xcpi;
+            cstate.Matrix[BJTemitPrimeNode, BJTemitNode] -= gepr;
+            cstate.Matrix[BJTemitPrimeNode, BJTcolPrimeNode] += -go + xcmcb;
+            cstate.Matrix[BJTemitPrimeNode, BJTbasePrimeNode] -= (gpi + gm) + (xcpi + xcmcb);
+
+            cstate.Matrix[BJTsubstNode, BJTsubstNode] += xccs;
+            cstate.Matrix[BJTcolPrimeNode, BJTsubstNode] -= xccs;
+            cstate.Matrix[BJTsubstNode, BJTcolPrimeNode] -= xccs;
+            cstate.Matrix[BJTbaseNode, BJTcolPrimeNode] -= xcbx;
+            cstate.Matrix[BJTcolPrimeNode, BJTbaseNode] -= xcbx;
         }
     }
 }

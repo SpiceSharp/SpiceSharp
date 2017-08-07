@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
 {
+    /// <summary>
+    /// This class can read inductors
+    /// </summary>
     public class InductorReader : IReader
     {
+        /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
         /// <summary>
         /// Read
         /// </summary>
@@ -34,6 +38,7 @@ namespace SpiceSharp.Parser.Readers
 
             // Success
             netlist.Circuit.Components.Add(ind);
+            Generated = ind;
             return true;
         }
     }

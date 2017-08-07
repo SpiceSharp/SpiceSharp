@@ -22,12 +22,18 @@ namespace SpiceSharp.Parser
         public List<object> Parameters { get; } = new List<object>();
 
         /// <summary>
+        /// Get the type of bracket used (default '(')
+        /// </summary>
+        public char Bracket { get; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name-token</param>
-        public BracketToken(object name)
+        public BracketToken(object name, char bracket = '(')
         {
             Name = name;
+            Bracket = '(';
         }
     }
 }

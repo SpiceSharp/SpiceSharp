@@ -169,6 +169,7 @@ namespace SpiceSharp.Simulations
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;
+            Initialize(ckt);
             this.Op(ckt, MyConfig.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
@@ -210,6 +211,9 @@ namespace SpiceSharp.Simulations
                         break;
                 }
             }
+
+            // Finalize the export
+            Finalize(ckt);
         }
     }
 }

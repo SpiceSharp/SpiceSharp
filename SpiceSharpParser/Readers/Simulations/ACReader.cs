@@ -9,6 +9,11 @@ namespace SpiceSharp.Parser.Readers
     public class ACReader : IReader
     {
         /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
@@ -45,6 +50,7 @@ namespace SpiceSharp.Parser.Readers
             ac.Set("start", parameters[2].ReadValue());
             ac.Set("stop", parameters[3].ReadValue());
 
+            Generated = ac;
             netlist.Simulations.Add(ac);
             return true;
         }

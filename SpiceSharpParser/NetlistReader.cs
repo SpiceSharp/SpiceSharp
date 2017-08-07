@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using SpiceSharp.Parser.Readers;
+using SpiceSharp.Parser.Readers.Exports;
 using SpiceSharp.Parser.Readers.Waveforms;
 
 namespace SpiceSharp.Parser
@@ -12,7 +13,7 @@ namespace SpiceSharp.Parser
         /// <summary>
         /// Private variables
         /// </summary>
-        public SpiceSharpParser Parser { get; private set; }
+        public SpiceSharpParser Parser { get; private set; } = null;
 
         /// <summary>
         /// The netlist
@@ -25,11 +26,7 @@ namespace SpiceSharp.Parser
         /// <param name="stream">The stream</param>
         public NetlistReader(Netlist netlist = null)
         {
-            Parser = null;
-
-            // Make a new netlist
-            Netlist = netlist ?? StandardNetlist();
-            Netlist.Filename = "Unknown";
+            Netlist = netlist;
         }
 
         /// <summary>
@@ -41,36 +38,41 @@ namespace SpiceSharp.Parser
             Netlist netlist = new Netlist(new Circuit());
 
             // Standard component readers
-            netlist.ComponentReaders.Add(new ResistorReader());
-            netlist.ComponentReaders.Add(new CapacitorReader());
-            netlist.ComponentReaders.Add(new InductorReader());
-            netlist.ComponentReaders.Add(new MutualInductanceReader());
-
-            netlist.ComponentReaders.Add(new VoltagesourceReader());
-            netlist.ComponentReaders.Add(new VoltageControlledVoltagesourceReader());
-            netlist.ComponentReaders.Add(new CurrentControlledVoltagesourceReader());
-
-            netlist.ComponentReaders.Add(new CurrentsourceReader());
-            netlist.ComponentReaders.Add(new VoltageControlledCurrentsourceReader());
-            netlist.ComponentReaders.Add(new CurrentControlledCurrentsourceReader());
-
-            netlist.ComponentReaders.Add(new VoltageSwitchReader());
-            netlist.ComponentReaders.Add(new CurrentSwitchReader());
-
-            netlist.ComponentReaders.Add(new BipolarReader());
-            netlist.ComponentReaders.Add(new DiodeReader());
+            netlist.Readers.Register("component",
+                new ResistorReader(),
+                new CapacitorReader(),
+                new InductorReader(),
+                new MutualInductanceReader(),
+                new VoltagesourceReader(),
+                new VoltageControlledVoltagesourceReader(),
+                new CurrentControlledVoltagesourceReader(),
+                new CurrentsourceReader(),
+                new VoltageControlledCurrentsourceReader(),
+                new CurrentControlledCurrentsourceReader(),
+                new VoltageSwitchReader(),
+                new CurrentSwitchReader(),
+                new BipolarReader(),
+                new DiodeReader());
 
             // Standard control statement readers
             ModelReader mr = new ModelReader();
-            netlist.ControlReaders.Add(mr);
+            netlist.Readers.Register("control",
+                mr,
+                new DCReader(),
+                new ACReader(),
+                new TransientReader(),
+                new ICReader(),
+                new NodesetReader(),
+                new OptionReader(),
+                new SaveReader());
 
-            netlist.ControlReaders.Add(new DCReader());
-            netlist.ControlReaders.Add(new ACReader());
-            netlist.ControlReaders.Add(new TransientReader());
-
-            netlist.ControlReaders.Add(new ICReader());
-            netlist.ControlReaders.Add(new NodesetReader());
-            netlist.ControlReaders.Add(new OptionReader());
+            // Standard export types
+            netlist.Readers.Register("exporter",
+                new VoltageReader(),
+                new CurrentReader(),
+                new VoltageComplexReader(),
+                new CurrentComplexReader(),
+                new ParameterReader());
 
             // Add models
             mr.ModelReaders.Add("r", new ResistorModelReader());
@@ -82,8 +84,9 @@ namespace SpiceSharp.Parser
             mr.ModelReaders.Add("d", new DiodeModelReader());
 
             // Add waveforms
-            netlist.WaveformReaders.Add(new PulseReader());
-            netlist.WaveformReaders.Add(new SineReader());
+            netlist.Readers.Register("waveform",
+                new PulseReader(),
+                new SineReader());
 
             return netlist;
         }
@@ -96,29 +99,32 @@ namespace SpiceSharp.Parser
             using (FileStream stream = new FileStream(filename, FileMode.Open))
             {
                 // Parse the stream
-                Parse(stream, filename);
+                Parse(stream);
             }
         }
 
         /// <summary>
         /// Parse a stream
+        /// Seeking must be possible, as the netlist needs to be parsed in multiple passes.
         /// </summary>
-        /// <param name="stream"></param>
-        /// <param name="filename"></param>
-        public void Parse(Stream stream, string filename = "Unknown")
+        /// <param name="stream">The stream</param>
+        /// <param name="source">The source</param>
+        public void Parse(Stream stream)
         {
             if (Netlist == null)
                 Netlist = StandardNetlist();
-            Netlist.Filename = filename;
             Parser = new SpiceSharpParser(stream);
 
             // Parse the netlist for control statements first
-            Netlist.Parse = Netlist.ParseTypes.Control;
+            Parser.ParseComponents = false;
+            Parser.ParseControlStatements = true;
             stream.Seek(0, SeekOrigin.Begin);
             Parser.ReInit(stream);
             Parser.ParseNetlist(Netlist);
 
-            Netlist.Parse = Netlist.ParseTypes.Component;
+            // Parse the netlist for components next
+            Parser.ParseComponents = true;
+            Parser.ParseControlStatements = false;
             stream.Seek(0, SeekOrigin.Begin);
             Parser.ReInit(stream);
             Parser.ParseNetlist(Netlist);

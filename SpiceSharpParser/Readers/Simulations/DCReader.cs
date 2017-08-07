@@ -9,6 +9,11 @@ namespace SpiceSharp.Parser.Readers
     public class DCReader : IReader
     {
         /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
@@ -25,7 +30,7 @@ namespace SpiceSharp.Parser.Readers
             switch (parameters.Count - 4 * count)
             {
                 case 0:
-                    if (parameters.Count > 0)
+                    if (parameters.Count == 0)
                         throw new ParseException(name, "Source name expected");
                     break;
                 case 1: throw new ParseException(parameters[count * 4], "Start value expected");
@@ -37,14 +42,15 @@ namespace SpiceSharp.Parser.Readers
             for (int i = 0; i < count; i++)
             {
                 DC.Sweep sweep = new DC.Sweep(
-                    parameters[count * 4].ReadWord(),
-                    parameters[count * 4 + 1].ReadValue(),
-                    parameters[count * 4 + 2].ReadValue(),
-                    parameters[count * 4 + 3].ReadValue());
+                    parameters[i * 4].ReadWord(),
+                    parameters[i * 4 + 1].ReadValue(),
+                    parameters[i * 4 + 2].ReadValue(),
+                    parameters[i * 4 + 3].ReadValue());
                 dc.Sweeps.Add(sweep);
             }
 
             netlist.Simulations.Add(dc);
+            Generated = dc;
             return true;
         }
     }

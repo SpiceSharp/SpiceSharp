@@ -11,7 +11,7 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// The exported waveform
         /// </summary>
-        public Waveform Current { get; private set; } = null;
+        public object Generated { get; private set; } = null;
 
         /// <summary>
         /// Private variables
@@ -46,13 +46,14 @@ namespace SpiceSharp.Parser.Readers
         {
             if (name.ReadWord() != id)
                 return false;
-            Current = Generate();
+            Waveform w = Generate();
 
             if (parameters.Count > keys.Length)
                 throw new ParseException($"Error on line {name.beginLine}, column {name.beginColumn}: Too many parameters for waveform \"{name.Image()}\"");
             for (int i = 0; i < parameters.Count; i++)
-                Current.Set(keys[i], parameters[i].ReadValue());
+                w.Set(keys[i], parameters[i].ReadValue());
 
+            Generated = w;
             return true;
         }
     }

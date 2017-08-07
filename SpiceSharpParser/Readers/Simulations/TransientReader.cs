@@ -9,6 +9,11 @@ namespace SpiceSharp.Parser.Readers
     public class TransientReader : IReader
     {
         /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
@@ -38,6 +43,7 @@ namespace SpiceSharp.Parser.Readers
                 tran.Set("maxstep", parameters[1].ReadValue());
 
             netlist.Simulations.Add(tran);
+            Generated = tran;
             return true;
         }
     }

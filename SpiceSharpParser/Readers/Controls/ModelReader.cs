@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpiceSharp.Components;
-
-using static SpiceSharp.Parser.SpiceSharpParserConstants;
+﻿using System.Collections.Generic;
 
 namespace SpiceSharp.Parser.Readers
 {
@@ -14,6 +7,11 @@ namespace SpiceSharp.Parser.Readers
     /// </summary>
     public class ModelReader : IReader
     {
+        /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
         /// <summary>
         /// A list of model readers
         /// </summary>
@@ -48,7 +46,7 @@ namespace SpiceSharp.Parser.Readers
                 modeltype = parameters[0].ReadWord();
                 parameters.RemoveAt(0);
             }
-            else if (parameters[0] is BracketToken)
+            else if (parameters[0] is BracketToken && (parameters[0] as BracketToken).Bracket == '(')
             {
                 var b = parameters[0] as BracketToken;
                 modeltype = b.Name.ReadWord();
@@ -60,7 +58,12 @@ namespace SpiceSharp.Parser.Readers
             // Find the right type in our
             if (!ModelReaders.ContainsKey(modeltype))
                 throw new ParseException(parameters[0], "Unrecognized model type");
-            return ModelReaders[modeltype].Read(modelname, parameters, netlist);
+            if (ModelReaders[modeltype].Read(modelname, parameters, netlist))
+            {
+                Generated = ModelReaders[modeltype].Generated;
+                return true;
+            }
+            return false;
         }
     }
 }

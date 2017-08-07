@@ -49,6 +49,13 @@ namespace SpiceSharp.Components
         private Complex ISRCac;
 
         /// <summary>
+        /// Get the complex voltage across the current source
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public Complex GetComplexVoltage(Circuit ckt) => ckt.State.Complex.Solution[ISRCposNode] - ckt.State.Complex.Solution[ISRCnegNode];
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current source</param>

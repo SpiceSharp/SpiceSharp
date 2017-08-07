@@ -49,31 +49,40 @@ namespace SpiceSharp.Simulations
             /// Starting value
             /// </summary>
             [SpiceName("start"), SpiceInfo("The starting value")]
-            public double Start { get; private set; }
+            public double Start { get; set; }
 
             /// <summary>
             /// Ending value
             /// </summary>
             [SpiceName("stop"), SpiceInfo("The stopping value")]
-            public double Stop { get; private set; }
+            public double Stop { get; set; }
 
             /// <summary>
             /// Value step
             /// </summary>
             [SpiceName("step"), SpiceInfo("The step")]
-            public double Step { get; private set; }
+            public double Step { get; set; }
 
             /// <summary>
             /// The number of steps
             /// </summary>
             [SpiceName("steps"), SpiceName("n"), SpiceInfo("The number of steps")]
-            public int Limit { get; private set; }
+            public int Limit
+            {
+                get
+                {
+                    if (Math.Sign(Step) * (Stop - Start) < 0)
+                        return 0;
+                    else
+                        return (int)Math.Floor((Stop - Start) / Step + 0.25);
+                }
+            }
 
             /// <summary>
             /// The name of the source being varied
             /// </summary>
             [SpiceName("source"), SpiceInfo("The name of the swept source")]
-            public string ComponentName { get; private set; }
+            public string ComponentName { get; set; }
 
             /// <summary>
             /// Constructor
@@ -85,19 +94,10 @@ namespace SpiceSharp.Simulations
             public Sweep(string name, object start, object stop, object step)
                 : base(null)
             {
+                ComponentName = name;
                 Set("start", start);
                 Set("stop", stop);
                 Set("step", step);
-
-                ComponentName = name;
-                if (Math.Sign(Step) * (Stop - Start) < 0)
-                {
-                    // Only do single point
-                    Limit = 0;
-                    Stop = Start;
-                }
-                else
-                    Limit = (int)Math.Floor((Stop - Start) / Step + 0.25);
             }
         }
 
@@ -168,6 +168,8 @@ namespace SpiceSharp.Simulations
                 values[i] = 0;
             }
 
+            Initialize(ckt);
+
             // Execute the sweeps
             int level = Sweeps.Count - 1;
             while (level >= 0)
@@ -208,6 +210,8 @@ namespace SpiceSharp.Simulations
             {
                 components[i].GetParameter<double>("dc").CopyFrom(parameters[i]);
             }
+
+            Finalize(ckt);
         }
     }
 }

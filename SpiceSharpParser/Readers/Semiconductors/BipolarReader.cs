@@ -9,6 +9,11 @@ namespace SpiceSharp.Parser.Readers
     public class BipolarReader : IReader
     {
         /// <summary>
+        /// The last generated object
+        /// </summary>
+        public object Generated { get; private set; }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
@@ -54,11 +59,11 @@ namespace SpiceSharp.Parser.Readers
             // The rest are named parameters
             for (int i = 7; i < parameters.Count; i++)
             {
-                string pname, pvalue;
-                parameters[i].ReadAssignment(out pname, out pvalue);
+                parameters[i].ReadAssignment(out string pname, out string pvalue);
                 bjt.Set(pname, pvalue);
             }
 
+            Generated = bjt;
             netlist.Circuit.Components.Add(bjt);
             return true;
         }
