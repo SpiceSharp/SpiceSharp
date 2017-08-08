@@ -10,13 +10,8 @@ namespace SpiceSharp.Parser.Readers.Exports
     /// <summary>
     /// This class can read device parameters (eg. "@M1[gm]")
     /// </summary>
-    public class ParameterReader : IReader
+    public class ParameterReader : Reader
     {
-        /// <summary>
-        /// Get the last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Read
         /// </summary>
@@ -24,7 +19,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             string component;
             if (!name.TryReadReference(out component) || parameters.Count != 1)

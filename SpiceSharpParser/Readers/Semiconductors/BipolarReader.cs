@@ -6,13 +6,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read bipolar transistors
     /// </summary>
-    public class BipolarReader : IReader
+    public class BipolarReader : Reader
     {
-        /// <summary>
-        /// The last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Read
         /// </summary>
@@ -20,7 +15,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (name.image[0] != 'q' && name.image[0] != 'Q')
                 return false;
@@ -29,9 +24,9 @@ namespace SpiceSharp.Parser.Readers
             // We will only allow 3 terminals if there are only 4 parameters
             BJT bjt = new BJT(name.ReadWord());
             if (parameters.Count <= 4)
-                bjt.ReadNodes(parameters, 3);
+                bjt.ReadNodes(netlist, parameters, 3);
             else
-                bjt.ReadNodes(parameters, 4);
+                bjt.ReadNodes(netlist, parameters, 4);
 
             if (parameters.Count == 3)
                 throw new ParseException(parameters[2], "Model expected", false);

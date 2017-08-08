@@ -17,6 +17,7 @@ public  class SpiceSharpParserConstants {
   public const int DIGIT = 20;
   public const int LETTER = 21;
   public const int CHARACTER = 22;
+  public const int SPECIAL = 23;
 
   public const int DEFAULT = 0;
 
@@ -44,6 +45,7 @@ public  class SpiceSharpParserConstants {
     "<DIGIT>",
     "<LETTER>",
     "<CHARACTER>",
+    "<SPECIAL>",
   };
 
 }

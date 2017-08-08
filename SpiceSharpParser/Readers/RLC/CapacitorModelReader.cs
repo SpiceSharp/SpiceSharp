@@ -6,13 +6,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class capable of reading capacitor models
     /// </summary>
-    public class CapacitorModelReader : IReader
+    public class CapacitorModelReader : Reader
     {
-        /// <summary>
-        /// The last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Read
         /// </summary>
@@ -20,7 +15,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters"></param>
         /// <param name="netlist"></param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             CapacitorModel model = new CapacitorModel(name.ReadIdentifier());
             model.ReadParameters(parameters);

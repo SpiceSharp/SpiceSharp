@@ -6,13 +6,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read AC analysis
     /// </summary>
-    public class ACReader : IReader
+    public class ACReader : Reader
     {
-        /// <summary>
-        /// The last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Read
         /// </summary>
@@ -20,7 +15,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (!name.TryReadLiteral("ac"))
                 return false;

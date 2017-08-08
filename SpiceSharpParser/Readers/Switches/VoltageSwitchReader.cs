@@ -6,13 +6,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read voltage switches
     /// </summary>
-    public class VoltageSwitchReader : IReader
+    public class VoltageSwitchReader : Reader
     {
-        /// <summary>
-        /// The last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Read
         /// </summary>
@@ -20,13 +15,13 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (name.image[0] != 's' && name.image[0] != 'S')
                 return false;
 
             VoltageSwitch vsw = new VoltageSwitch(name.ReadWord());
-            vsw.ReadNodes(parameters, 4);
+            vsw.ReadNodes(netlist, parameters, 4);
 
             // Read the model
             if (parameters.Count < 5)

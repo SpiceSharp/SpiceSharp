@@ -6,13 +6,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read a voltage source
     /// </summary>
-    public class VoltagesourceReader : IReader
+    public class VoltagesourceReader : Reader
     {
-        /// <summary>
-        /// Get the last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Read
         /// </summary>
@@ -20,13 +15,13 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (name.image[0] != 'v' && name.image[0] != 'V')
                 return false;
 
             Voltagesource vsrc = new Voltagesource(name.ReadWord());
-            vsrc.ReadNodes(parameters, 2);
+            vsrc.ReadNodes(netlist, parameters, 2);
 
             // We can have a value or just DC
             for (int i = 2; i < parameters.Count; i++)

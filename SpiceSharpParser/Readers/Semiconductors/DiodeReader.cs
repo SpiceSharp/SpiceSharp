@@ -6,13 +6,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read a diode model
     /// </summary>
-    public class DiodeReader : IReader
+    public class DiodeReader : Reader
     {
-        /// <summary>
-        /// The last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Read
         /// </summary>
@@ -20,13 +15,13 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (name.image[0] != 'd' && name.image[0] != 'D')
                 return false;
 
             Diode dio = new Diode(name.ReadWord());
-            dio.ReadNodes(parameters, 2);
+            dio.ReadNodes(netlist, parameters, 2);
 
             if (parameters.Count < 3)
                 throw new ParseException(parameters[1], "Model expected", false);

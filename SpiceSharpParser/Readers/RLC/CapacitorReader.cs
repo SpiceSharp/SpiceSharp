@@ -6,13 +6,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read a capacitor
     /// </summary>
-    public class CapacitorReader : IReader
+    public class CapacitorReader : Reader
     {
-        /// <summary>
-        /// The last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Read
         /// </summary>
@@ -20,13 +15,13 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">The parameters</param>
         /// <param name="netlist">The netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (name.image[0] != 'c' && name.image[0] != 'C')
                 return false;
 
             Capacitor cap = new Capacitor(name.ReadWord());
-            cap.ReadNodes(parameters, 2);
+            cap.ReadNodes(netlist, parameters, 2);
 
             // Search for a parameter IC, which is common for both types of capacitors
             for (int i = 3; i < parameters.Count; i++)

@@ -60,7 +60,7 @@
     <Compile Include="Readers\Currentsources\CurrentsourceReader.cs" />
     <Compile Include="Readers\Currentsources\VoltageControlledCurrentsourceReader.cs" />
     <Compile Include="Readers\Controls\ModelReader.cs" />
-    <Compile Include="Readers\IReader.cs" />
+    <Compile Include="Readers\Reader.cs" />
     <Compile Include="Netlist.cs" />
     <Compile Include="ParseException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

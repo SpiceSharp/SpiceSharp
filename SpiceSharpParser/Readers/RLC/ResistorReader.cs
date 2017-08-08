@@ -6,13 +6,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read a resistor
     /// </summary>
-    public class ResistorReader : IReader
+    public class ResistorReader : Reader
     {
-        /// <summary>
-        /// The last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Read a resistor
         /// </summary>
@@ -20,14 +15,14 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">The resistor parameters</param>
         /// <param name="netlist">The netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             // Test if we can read a resistor here
             if (name.image[0] != 'r' && name.image[0] != 'R')
                 return false;
 
             Resistor res = new Resistor(name.ReadWord());
-            res.ReadNodes(parameters, 2);
+            res.ReadNodes(netlist, parameters, 2);
 
             // We have two possible formats:
             // Normal: RXXXXXXX N1 N2 VALUE

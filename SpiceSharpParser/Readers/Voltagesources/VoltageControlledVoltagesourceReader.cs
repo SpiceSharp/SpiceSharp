@@ -6,13 +6,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read voltage controlled voltage sources
     /// </summary>
-    public class VoltageControlledVoltagesourceReader : IReader
+    public class VoltageControlledVoltagesourceReader : Reader
     {
-        /// <summary>
-        /// The last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Read
         /// </summary>
@@ -20,13 +15,13 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (name.image[0] != 'e' && name.image[0] != 'E')
                 return false;
 
             VoltageControlledVoltagesource vcvs = new VoltageControlledVoltagesource(name.ReadWord());
-            vcvs.ReadNodes(parameters, 4);
+            vcvs.ReadNodes(netlist, parameters, 4);
 
             if (parameters.Count < 5)
                 throw new ParseException(parameters[3], "Value expected");

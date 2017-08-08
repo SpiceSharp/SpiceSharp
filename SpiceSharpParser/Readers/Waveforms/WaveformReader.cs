@@ -6,13 +6,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read a waveform
     /// </summary>
-    public abstract class WaveformReader : IReader
+    public abstract class WaveformReader : Reader
     {
-        /// <summary>
-        /// The exported waveform
-        /// </summary>
-        public object Generated { get; private set; } = null;
-
         /// <summary>
         /// Private variables
         /// </summary>
@@ -42,7 +37,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">The netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (name.ReadWord() != id)
                 return false;

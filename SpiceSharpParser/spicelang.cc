@@ -29,7 +29,7 @@ void ParseSpiceLine(Netlist netlist) :
 	Token t;
 	List<Object> parameters = new List<Object>();
 	Object o = null;
-	IReader reader = null;
+	Reader reader = null;
 }
 {
 	t = <WORD> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>)
@@ -107,9 +107,10 @@ TOKEN :
 	| <VALUE : (["+","-"])? ((<DIGIT>)+ ("." (<DIGIT>)*)? | "." (<DIGIT>)+) ("e" ("+" | "-")? (<DIGIT>)+ | ["t","g","m","k","u","n","p","f"] (<LETTER>)*)?>
 	| <STRING : "\"" ( ~["\"","\\","\n","\r"] | "\\" ( ["n","t","b","r","f","\\","\'","\""] | (["\n","\r"] | "\r\n")))* "\"">
 	| <REFERENCE : "@" <WORD>>
-	| <WORD : <LETTER> (<CHARACTER> | "_" | ".")*>
-	| <IDENTIFIER : (<CHARACTER> | "_") (<CHARACTER> | "_" | ".")*>
+	| <WORD : <LETTER> (<CHARACTER> | <SPECIAL>)*>
+	| <IDENTIFIER : (<CHARACTER> | "_") (<CHARACTER> | <SPECIAL>)*>
 	| <#DIGIT : ["0"-"9"]>
 	| <#LETTER : ["a"-"z"]>
 	| <#CHARACTER : ["a"-"z","0"-"9"]>
+	| <#SPECIAL : ["_",".",":","!","%","#","-"]>
 }

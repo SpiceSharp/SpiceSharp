@@ -7,13 +7,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read bipolar transistor models
     /// </summary>
-    public class BipolarModelReader : IReader
+    public class BipolarModelReader : Reader
     {
-        /// <summary>
-        /// The last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Private variables
         /// </summary>
@@ -35,7 +30,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             BJTModel model = new BJTModel(name.ReadIdentifier());
             if (npn)

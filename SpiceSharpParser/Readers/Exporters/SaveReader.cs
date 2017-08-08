@@ -13,13 +13,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// An exporter that can read .save statements
     /// </summary>
-    public class SaveReader : IReader
+    public class SaveReader : Reader
     {
-        /// <summary>
-        /// Generated objects
-        /// </summary>
-        public object Generated { get; private set; } = null;
-
         /// <summary>
         /// Read
         /// This class will export 
@@ -28,7 +23,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (!name.TryReadLiteral("save"))
                 return false;

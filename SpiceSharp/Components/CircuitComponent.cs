@@ -52,6 +52,18 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Get the connection of the component
+        /// </summary>
+        /// <param name="i">The index</param>
+        /// <returns></returns>
+        public string GetNode(int i)
+        {
+            if (i < 0 || i >= terminals.Length)
+                throw new IndexOutOfRangeException();
+            return terminals[i];
+        }
+
+        /// <summary>
         /// Get the model for this component
         /// </summary>
         /// <returns>Returns null if no model is available</returns>

@@ -10,7 +10,17 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Private variables
         /// </summary>
-        private Dictionary<string, List<IReader>> Readers = new Dictionary<string, List<IReader>>();
+        private Dictionary<string, List<Reader>> Readers = new Dictionary<string, List<Reader>>();
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public TokenReaders()
+        {
+            // component and control are always present
+            Readers.Add("component", new List<Reader>());
+            Readers.Add("control", new List<Reader>());
+        }
 
         /// <summary>
         /// Read tokens
@@ -47,20 +57,20 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="caller">The calling object</param>
         /// <param name="type">The type</param>
         /// <param name="readers">The readers</param>
-        public void Register(string type, params IReader[] readers)
+        public void Register(string type, params Reader[] readers)
         {
             type = type?.ToLower();
             if (!Readers.ContainsKey(type))
-                Readers.Add(type, new List<IReader>());
+                Readers.Add(type, new List<Reader>());
             Readers[type].AddRange(readers);
         }
 
         /// <summary>
-        /// Get a list of IReaders by their type
+        /// Get a list of Readers by their type
         /// </summary>
         /// <param name="t">The parse type</param>
         /// <returns></returns>
-        public List<IReader> this[string type]
+        public List<Reader> this[string type]
         {
             get
             {

@@ -5,17 +5,12 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class capable of reading models
     /// </summary>
-    public class ModelReader : IReader
+    public class ModelReader : Reader
     {
-        /// <summary>
-        /// The last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// A list of model readers
         /// </summary>
-        public Dictionary<string, IReader> ModelReaders { get; } = new Dictionary<string, IReader>();
+        public Dictionary<string, Reader> ModelReaders { get; } = new Dictionary<string, Reader>();
 
         /// <summary>
         /// Read
@@ -24,7 +19,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters"></param>
         /// <param name="netlist"></param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (!name.TryReadLiteral("model"))
                 return false;

@@ -6,13 +6,8 @@ namespace SpiceSharp.Parser.Readers.Exports
     /// <summary>
     /// Read an output
     /// </summary>
-    public class VoltageReader : IReader
+    public class VoltageReader : Reader
     {
-        /// <summary>
-        /// The last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Read
         /// </summary>
@@ -20,7 +15,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (!name.TryReadLiteral("v"))
                 return false;

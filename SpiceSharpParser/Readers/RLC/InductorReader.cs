@@ -6,13 +6,8 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read inductors
     /// </summary>
-    public class InductorReader : IReader
+    public class InductorReader : Reader
     {
-        /// <summary>
-        /// The last generated object
-        /// </summary>
-        public object Generated { get; private set; }
-
         /// <summary>
         /// Read
         /// </summary>
@@ -20,13 +15,13 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">The netlist</param>
         /// <returns></returns>
-        public bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Token name, List<object> parameters, Netlist netlist)
         {
             if (name.image[0] != 'l' && name.image[0] != 'L')
                 return false;
 
             Inductor ind = new Inductor(name.ReadWord());
-            ind.ReadNodes(parameters, 2);
+            ind.ReadNodes(netlist, parameters, 2);
 
             // Read the value
             if (parameters.Count < 3)

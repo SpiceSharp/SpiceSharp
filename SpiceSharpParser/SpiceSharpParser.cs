@@ -30,7 +30,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         Token t;
         List<Object> parameters = new List<Object>();
         Object o = null;
-        IReader reader = null;
+        Reader reader = null;
     switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
     case WORD:
       t = mcc_consume_token(WORD);
@@ -609,8 +609,8 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
 
   public ParseException GenerateParseException() {
     mcc_expentries.Clear();
-    bool[] la1tokens = new bool[23];
-    for (int i = 0; i < 23; i++) {
+    bool[] la1tokens = new bool[24];
+    for (int i = 0; i < 24; i++) {
       la1tokens[i] = false;
     }
     if (mcc_kind >= 0) {
@@ -626,7 +626,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         }
       }
     }
-    for (int i = 0; i < 23; i++) {
+    for (int i = 0; i < 24; i++) {
       if (la1tokens[i]) {
         mcc_expentry = new int[1];
         mcc_expentry[0] = i;
