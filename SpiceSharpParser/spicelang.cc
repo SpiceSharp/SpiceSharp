@@ -4,47 +4,76 @@ options
 	STATIC = false;
 }
 
-PARSER_BEGIN( SpiceSharpParser )
+PARSER_BEGIN(SpiceSharpParser)
 namespace SpiceSharp.Parser;
 using System;
 using System.Collections.Generic;
-using SpiceSharp;
 using SpiceSharp.Parser.Readers;
+using SpiceSharp.Parser.Subcircuits;
 public class SpiceSharpParser
 {
-	public Boolean ParseComponents = true;
-	public Boolean ParseControlStatements = true;
+	private Stack<SubcircuitDefinition> definitions = new Stack<SubcircuitDefinition>();
 }
-PARSER_END( SpiceSharpParser )
+PARSER_END(SpiceSharpParser)
 
 void ParseNetlist(Netlist netlist) :
 {
+	Statement st;
 }
 {
-	(ParseSpiceLine(netlist))*
+	(st = ParseSpiceLine()
+	{
+		if (st != null)
+			netlist.Readers.Read(st, netlist);
+	})* (<END> | <EOF>)
 }
 
-void ParseSpiceLine(Netlist netlist) :
+Statement ParseSpiceLine() :
 {
+	Statement st;
 	Token t;
 	List<Object> parameters = new List<Object>();
+	List<Statement> body = new List<Statement>();
 	Object o = null;
-	Reader reader = null;
 }
 {
+	// Component definitions
 	t = <WORD> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>)
 		(<PLUS> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>))*
 	{
-		if (ParseComponents)
-			netlist.Readers.Read("component", t, parameters, netlist);
+		return new Statement(StatementType.Component, t, parameters);
 	}
+
+	// Subcircuit declaration
+	| LOOKAHEAD(2) <DOT> t = "SUBCKT" (o = ParseParameter() { parameters.Add(o); })* <NEWLINE>
+		(<PLUS> (o = ParseParameter() { parameters.Add(o); })* <NEWLINE>)*
+	{
+		st = new Statement(StatementType.Subcircuit, t, parameters);
+	}
+		// Read the body of the subcircuit
+		(st = ParseSpiceLine() { if (st != null) body.Add(st); })*
+		<ENDS> (<NEWLINE> | <EOF>)
+	{
+		parameters.Add(body);
+		return new Statement(StatementType.Subcircuit, t, parameters);
+	}
+
+	// Model definitions
+	| LOOKAHEAD(2) <DOT> t = "MODEL" (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>)
+		(<PLUS> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>))*
+	{
+		return new Statement(StatementType.Model, t, parameters);
+	}
+
+	// Control statements
 	| <DOT> t = <WORD> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>)
 		(<PLUS> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>))*
 	{
-		if (ParseControlStatements)
-			netlist.Readers.Read("control", t, parameters, netlist);
+		return new Statement(StatementType.Control, t, parameters);
 	}
-	| <NEWLINE>
+
+	// Other
+	| <NEWLINE> { return null; }
 }
 
 Object ParseParameter() :
@@ -104,6 +133,8 @@ TOKEN :
 	| <COMMA : ",">
 	| <DELIMITER : "=" | "(" | ")" | "[" | "]">
 	| <NEWLINE : "\r" | "\n" | "\r\n">
+	| <ENDS : ".ends">
+	| <END : ".end">
 	| <VALUE : (["+","-"])? ((<DIGIT>)+ ("." (<DIGIT>)*)? | "." (<DIGIT>)+) ("e" ("+" | "-")? (<DIGIT>)+ | ["t","g","m","k","u","n","p","f"] (<LETTER>)*)?>
 	| <STRING : "\"" ( ~["\"","\\","\n","\r"] | "\\" ( ["n","t","b","r","f","\\","\'","\""] | (["\n","\r"] | "\r\n")))* "\"">
 	| <REFERENCE : "@" <WORD>>

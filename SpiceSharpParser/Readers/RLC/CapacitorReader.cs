@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
@@ -6,21 +7,23 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read a capacitor
     /// </summary>
-    public class CapacitorReader : Reader
+    public class CapacitorReader : ComponentReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
         /// </summary>
-        /// <param name="name">The name</param>
-        /// <param name="parameters">The parameters</param>
-        /// <param name="netlist">The netlist</param>
-        /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
-        {
-            if (name.image[0] != 'c' && name.image[0] != 'C')
-                return false;
+        public CapacitorReader() : base('c') { }
 
-            Capacitor cap = new Capacitor(name.ReadWord());
+        /// <summary>
+        /// Generate a capacitor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="netlist">Netlist</param>
+        /// <returns></returns>
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        {
+            Capacitor cap = new Capacitor(name);
             cap.ReadNodes(parameters, 2);
 
             // Search for a parameter IC, which is common for both types of capacitors
@@ -48,9 +51,7 @@ namespace SpiceSharp.Parser.Readers
                     throw new ParseException(name, "L needs to be specified");
             }
 
-            Generated = cap;
-            netlist.Circuit.Components.Add(cap);
-            return true;
+            return cap;
         }
     }
 }

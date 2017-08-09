@@ -3,26 +3,30 @@ namespace SpiceSharp.Parser{
 public  class SpiceSharpParserConstants {
 
   public const int EOF = 0;
-  public const int PLUS = 9;
-  public const int ASTERISK = 10;
-  public const int DOT = 11;
-  public const int COMMA = 12;
-  public const int DELIMITER = 13;
-  public const int NEWLINE = 14;
-  public const int VALUE = 15;
-  public const int STRING = 16;
-  public const int REFERENCE = 17;
-  public const int WORD = 18;
-  public const int IDENTIFIER = 19;
-  public const int DIGIT = 20;
-  public const int LETTER = 21;
-  public const int CHARACTER = 22;
-  public const int SPECIAL = 23;
+  public const int PLUS = 11;
+  public const int ASTERISK = 12;
+  public const int DOT = 13;
+  public const int COMMA = 14;
+  public const int DELIMITER = 15;
+  public const int NEWLINE = 16;
+  public const int ENDS = 17;
+  public const int END = 18;
+  public const int VALUE = 19;
+  public const int STRING = 20;
+  public const int REFERENCE = 21;
+  public const int WORD = 22;
+  public const int IDENTIFIER = 23;
+  public const int DIGIT = 24;
+  public const int LETTER = 25;
+  public const int CHARACTER = 26;
+  public const int SPECIAL = 27;
 
   public const int DEFAULT = 0;
 
   public readonly string[] tokenImage = {
     "<EOF>",
+    "\"SUBCKT\"",
+    "\"MODEL\"",
     "\"(\"",
     "\")\"",
     "\"=\"",
@@ -30,13 +34,15 @@ public  class SpiceSharpParserConstants {
     "\"]\"",
     "\" \"",
     "\"\\t\"",
-    "<token of kind 8>",
+    "<token of kind 10>",
     "\"+\"",
     "\"*\"",
     "\".\"",
     "\",\"",
     "<DELIMITER>",
     "<NEWLINE>",
+    "\".ends\"",
+    "\".end\"",
     "<VALUE>",
     "<STRING>",
     "<REFERENCE>",

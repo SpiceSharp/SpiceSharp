@@ -41,7 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Readers\ComponentReader.cs" />
+    <Compile Include="Subcircuits\SubcircuitDefinition.cs" />
+    <Compile Include="Readers\Subcircuits\SubcircuitDefinitionReader.cs" />
+    <Compile Include="Subcircuits\SubcircuitPath.cs" />
+    <Compile Include="Readers\Subcircuits\SubcircuitReader.cs" />
     <Compile Include="Readers\Exporters\Exports\ParameterReader.cs" />
+    <Compile Include="Readers\Statement.cs" />
     <Compile Include="Tokens\AssignmentToken.cs" />
     <Compile Include="Tokens\AtToken.cs" />
     <Compile Include="Tokens\BracketToken.cs" />
@@ -59,7 +65,7 @@
     <Compile Include="Readers\Currentsources\CurrentControlledCurrentsourceReader.cs" />
     <Compile Include="Readers\Currentsources\CurrentsourceReader.cs" />
     <Compile Include="Readers\Currentsources\VoltageControlledCurrentsourceReader.cs" />
-    <Compile Include="Readers\Controls\ModelReader.cs" />
+    <Compile Include="Readers\ModelReader.cs" />
     <Compile Include="Readers\Reader.cs" />
     <Compile Include="Netlist.cs" />
     <Compile Include="ParseException.cs" />

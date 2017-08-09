@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
@@ -6,23 +7,27 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read bipolar transistors
     /// </summary>
-    public class BipolarReader : Reader
+    public class BipolarReader : ComponentReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
+        /// </summary>
+        public BipolarReader() : base('q') { }
+
+        /// <summary>
+        /// Generate the bipolar transistor
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
         {
-            if (name.image[0] != 'q' && name.image[0] != 'Q')
-                return false;
-
             // I think the BJT definition is ambiguous (eg. QXXXX NC NB NE MNAME OFF can be either substrate = MNAME, model = OFF or model name = MNAME and transistor is OFF
             // We will only allow 3 terminals if there are only 4 parameters
-            BJT bjt = new BJT(name.ReadWord());
+            BJT bjt = new BJT(name);
+
+            // Read the nodes
             if (parameters.Count <= 4)
                 bjt.ReadNodes(parameters, 3);
             else
@@ -58,9 +63,7 @@ namespace SpiceSharp.Parser.Readers
                 bjt.Set(pname, pvalue);
             }
 
-            Generated = bjt;
-            netlist.Circuit.Components.Add(bjt);
-            return true;
+            return bjt;
         }
     }
 }

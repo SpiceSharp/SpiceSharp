@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Parser.Readers
 {
@@ -8,9 +9,14 @@ namespace SpiceSharp.Parser.Readers
     public class TokenReaders
     {
         /// <summary>
+        /// Currently active readers
+        /// </summary>
+        public StatementType Active { get; set; } = StatementType.All;
+
+        /// <summary>
         /// Private variables
         /// </summary>
-        private Dictionary<string, List<Reader>> Readers = new Dictionary<string, List<Reader>>();
+        private Dictionary<StatementType, List<Reader>> Readers = new Dictionary<StatementType, List<Reader>>();
 
         /// <summary>
         /// Constructor
@@ -18,8 +24,8 @@ namespace SpiceSharp.Parser.Readers
         public TokenReaders()
         {
             // component and control are always present
-            Readers.Add("component", new List<Reader>());
-            Readers.Add("control", new List<Reader>());
+            Readers.Add(StatementType.Control, new List<Reader>());
+            Readers.Add(StatementType.Component, new List<Reader>());
         }
 
         /// <summary>
@@ -29,25 +35,30 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="name">The name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
-        /// <returns></returns>
-        public object Read(string type, Token name, List<object> parameters, Netlist netlist)
+        /// <returns>Returns the last generated object by a reader</returns>
+        public object Read(Statement st, Netlist netlist)
         {
+            // Check if the type exists
+            if (!Readers.ContainsKey(st.Type))
+                throw new ParseException(st.Name, "Unrecognized command type");
+
+            // Ignore without warning if the reader is not active
+            if ((st.Type & Active) == StatementType.None)
+                return null;
+
+            // Go through all readers
             object result = null;
-            type = type?.ToLower();
-            if (Readers.ContainsKey(type))
+            bool found = false;
+            foreach (var r in Readers[st.Type])
             {
-                bool found = false;
-                foreach (var r in Readers[type])
+                if (r.Read(st, netlist))
                 {
-                    if (r.Read(name, parameters, netlist))
-                    {
-                        found = true;
-                        result = r.Generated;
-                    }
+                    found = true;
+                    result = r.Generated;
                 }
-                if (!found)
-                    throw new ParseException(name, "Unrecognized syntax");
             }
+            if (!found)
+                throw new ParseException(st.Name, "Unrecognized syntax");
             return result;
         }
 
@@ -57,12 +68,14 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="caller">The calling object</param>
         /// <param name="type">The type</param>
         /// <param name="readers">The readers</param>
-        public void Register(string type, params Reader[] readers)
+        public void Register(params Reader[] readers)
         {
-            type = type?.ToLower();
-            if (!Readers.ContainsKey(type))
-                Readers.Add(type, new List<Reader>());
-            Readers[type].AddRange(readers);
+            for (int i = 0; i < readers.Length; i++)
+            {
+                if (!Readers.ContainsKey(readers[i].Type))
+                    Readers.Add(readers[i].Type, new List<Reader>());
+                Readers[readers[i].Type].Add(readers[i]);
+            }
         }
 
         /// <summary>
@@ -70,11 +83,10 @@ namespace SpiceSharp.Parser.Readers
         /// </summary>
         /// <param name="t">The parse type</param>
         /// <returns></returns>
-        public List<Reader> this[string type]
+        public List<Reader> this[StatementType type]
         {
             get
             {
-                type = type?.ToLower();
                 if (Readers.ContainsKey(type))
                     return Readers[type];
                 return null;

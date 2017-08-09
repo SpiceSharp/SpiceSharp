@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Components;
+﻿using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
 {
@@ -19,6 +18,7 @@ namespace SpiceSharp.Parser.Readers
         /// </summary>
         /// <param name="keys">The keys</param>
         public WaveformReader(string id, string[] keys)
+            : base(StatementType.Waveform)
         {
             this.id = id;
             this.keys = keys;
@@ -37,16 +37,16 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">The netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Statement st, Netlist netlist)
         {
-            if (name.ReadWord() != id)
+            if (st.Name.ReadWord() != id)
                 return false;
             Waveform w = Generate();
 
-            if (parameters.Count > keys.Length)
-                throw new ParseException($"Error on line {name.beginLine}, column {name.beginColumn}: Too many parameters for waveform \"{name.Image()}\"");
-            for (int i = 0; i < parameters.Count; i++)
-                w.Set(keys[i], parameters[i].ReadValue());
+            if (st.Parameters.Count > keys.Length)
+                throw new ParseException(st.Name, $"Too many arguments for waveform \"{st.Name.Image()}\"");
+            for (int i = 0; i < st.Parameters.Count; i++)
+                w.Set(keys[i], st.Parameters[i].ReadValue());
 
             Generated = w;
             return true;

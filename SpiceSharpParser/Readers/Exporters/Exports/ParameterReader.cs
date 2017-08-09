@@ -13,20 +13,25 @@ namespace SpiceSharp.Parser.Readers.Exports
     public class ParameterReader : Reader
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public ParameterReader() : base(StatementType.Export) { }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Statement st, Netlist netlist)
         {
             string component;
-            if (!name.TryReadReference(out component) || parameters.Count != 1)
+            if (!st.Name.TryReadReference(out component) || st.Parameters.Count != 1)
                 return false;
 
             // Get the name of the component
-            string parameter = parameters[0].ReadIdentifier();
+            string parameter = st.Parameters[0].ReadIdentifier();
 
             var pe = new ParameterExport(component, parameter);
             netlist.Exports.Add(pe);

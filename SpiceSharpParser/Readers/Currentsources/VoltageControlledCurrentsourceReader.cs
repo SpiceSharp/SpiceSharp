@@ -6,30 +6,29 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read voltage-controlled current sources
     /// </summary>
-    public class VoltageControlledCurrentsourceReader : Reader
+    public class VoltageControlledCurrentsourceReader : ComponentReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
+        /// </summary>
+        public VoltageControlledCurrentsourceReader() : base('g') { }
+
+        /// <summary>
+        /// Generate
         /// </summary>
         /// <param name="name">Name</param>
-        /// <param name="parameters">Parameter</param>
+        /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
         {
-            if (name.image[0] != 'g' && name.image[0] != 'G')
-                return false;
-
-            VoltageControlledCurrentsource vccs = new VoltageControlledCurrentsource(name.ReadWord());
+            VoltageControlledCurrentsource vccs = new VoltageControlledCurrentsource(name);
             vccs.ReadNodes(parameters, 4);
 
             if (parameters.Count < 5)
                 throw new ParseException(parameters[3], "Value expected", false);
             vccs.Set("gain", parameters[4].ReadValue());
-
-            netlist.Circuit.Components.Add(vccs);
-            Generated = vccs;
-            return true;
+            return vccs;
         }
     }
 }

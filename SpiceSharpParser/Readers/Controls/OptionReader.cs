@@ -9,21 +9,26 @@ namespace SpiceSharp.Parser.Readers
     public class OptionReader : Reader
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public OptionReader() : base(StatementType.Control) { }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Statement st, Netlist netlist)
         {
-            if (!name.TryReadLiteral("options"))
+            if (!st.Name.TryReadLiteral("options"))
                 return false;
 
             // Read all options
-            for (int i = 0; i < parameters.Count; i++)
+            for (int i = 0; i < st.Parameters.Count; i++)
             {
-                if (parameters[i].TryReadAssignment(out string pname, out string pvalue))
+                if (st.Parameters[i].TryReadAssignment(out string pname, out string pvalue))
                 {
                     if (pvalue.TryReadValue(out pvalue))
                     {
@@ -83,13 +88,13 @@ namespace SpiceSharp.Parser.Readers
                                         Transient.Default.Method = new IntegrationMethods.Trapezoidal();
                                         break;
                                     default:
-                                        throw new ParseException(parameters[i], $"Invalid integration method {pvalue}");
+                                        throw new ParseException(st.Parameters[i], $"Invalid integration method {pvalue}");
                                 }
                                 break;
                         }
                     }
                 }
-                else if (parameters[i].TryReadWord(out pname))
+                else if (st.Parameters[i].TryReadWord(out pname))
                 {
                     switch (pname)
                     {
@@ -97,7 +102,7 @@ namespace SpiceSharp.Parser.Readers
                     }
                 }
                 else
-                    throw new ParseException(parameters[i], $"Unrecognized option " + parameters[i].Image());
+                    throw new ParseException(st.Parameters[i], $"Unrecognized option " + st.Parameters[i].Image());
             }
 
             return true;

@@ -6,21 +6,23 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read current sources
     /// </summary>
-    public class CurrentsourceReader : Reader
+    public class CurrentsourceReader : ComponentReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
+        /// </summary>
+        public CurrentsourceReader() : base('i') { }
+
+        /// <summary>
+        /// Generate a current source
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
         {
-            if (name.image[0] != 'i' && name.image[0] != 'I')
-                return false;
-
-            Currentsource isrc = new Currentsource(name.ReadWord());
+            Currentsource isrc = new Currentsource(name);
             isrc.ReadNodes(parameters, 2);
 
             // We can have a value or just DC
@@ -55,16 +57,15 @@ namespace SpiceSharp.Parser.Readers
                     // Find the reader
                     if (!(b.Name is Token))
                         throw new ParseException(b.Name, "Waveform expected");
-                    object w = netlist.Readers.Read("waveform", b.Name as Token, b.Parameters, netlist);
+                    Statement st = new Statement(StatementType.Waveform, b.Name as Token, b.Parameters);
+                    object w = netlist.Readers.Read(st, netlist);
                     isrc.Set("waveform", w);
                 }
                 else
                     throw new ParseException(parameters[i], "Unrecognized parameter");
             }
 
-            netlist.Circuit.Components.Add(isrc);
-            Generated = isrc;
-            return true;
+            return isrc;
         }
     }
 }

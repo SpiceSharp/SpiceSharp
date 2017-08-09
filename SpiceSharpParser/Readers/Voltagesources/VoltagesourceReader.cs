@@ -6,21 +6,23 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read a voltage source
     /// </summary>
-    public class VoltagesourceReader : Reader
+    public class VoltagesourceReader : ComponentReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
         /// </summary>
-        /// <param name="name">The name</param>
+        public VoltagesourceReader() : base('v') { }
+
+        /// <summary>
+        /// Generate
+        /// </summary>
+        /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
         {
-            if (name.image[0] != 'v' && name.image[0] != 'V')
-                return false;
-
-            Voltagesource vsrc = new Voltagesource(name.ReadWord());
+            Voltagesource vsrc = new Voltagesource(name);
             vsrc.ReadNodes(parameters, 2);
 
             // We can have a value or just DC
@@ -56,16 +58,14 @@ namespace SpiceSharp.Parser.Readers
                     var b = parameters[i] as BracketToken;
                     if (!(b.Name is Token))
                         throw new ParseException(b.Name, "Waveform expected");
-                    object w = netlist.Readers.Read("waveform", b.Name as Token, b.Parameters, netlist);
+                    Statement st = new Statement(StatementType.Waveform, b.Name as Token, b.Parameters);
+                    object w = netlist.Readers.Read(st, netlist);
                     vsrc.Set("waveform", w);
                 }
                 else
                     throw new ParseException(parameters[i], "Unrecognized parameter");
             }
-
-            Generated = vsrc;
-            netlist.Circuit.Components.Add(vsrc);
-            return true;
+            return vsrc;
         }
     }
 }

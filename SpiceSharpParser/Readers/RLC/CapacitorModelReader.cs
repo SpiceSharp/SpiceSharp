@@ -1,27 +1,22 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Components;
+﻿using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
     /// A class capable of reading capacitor models
     /// </summary>
-    public class CapacitorModelReader : Reader
+    public class CapacitorModelReader : ModelReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="parameters"></param>
-        /// <param name="netlist"></param>
+        public CapacitorModelReader() : base("c") { }
+
+        /// <summary>
+        /// Create a capacitor model
+        /// </summary>
+        /// <param name="name">Name</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
-        {
-            CapacitorModel model = new CapacitorModel(name.ReadIdentifier());
-            model.ReadParameters(parameters);
-            netlist.Circuit.Components.Add(model);
-            Generated = model;
-            return true;
-        }
+        protected override CircuitModel GenerateModel(string name) => new CapacitorModel(name);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Parser.Readers.Exports
@@ -10,26 +9,31 @@ namespace SpiceSharp.Parser.Readers.Exports
     public class VoltageComplexReader : Reader
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public VoltageComplexReader() : base(StatementType.Export) { }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Statement st, Netlist netlist)
         {
             string node, reference = null;
-            switch (parameters.Count)
+            switch (st.Parameters.Count)
             {
-                case 0: throw new ParseException(name, "Node expected", false);
-                case 2: reference = parameters[1].ReadIdentifier(); goto case 1;
-                case 1: node = parameters[0].ReadIdentifier(); break;
-                default: throw new ParseException(name, "Too many parameters");
+                case 0: throw new ParseException(st.Name, "Node expected", false);
+                case 2: reference = st.Parameters[1].ReadIdentifier(); goto case 1;
+                case 1: node = st.Parameters[0].ReadIdentifier(); break;
+                default: throw new ParseException(st.Name, "Too many st.Parameters");
             }
 
             Export e = null;
             string type;
-            if (name.TryReadWord(out type))
+            if (st.Name.TryReadWord(out type))
             {
                 switch (type)
                 {

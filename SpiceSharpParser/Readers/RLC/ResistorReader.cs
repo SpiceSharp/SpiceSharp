@@ -6,22 +6,23 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read a resistor
     /// </summary>
-    public class ResistorReader : Reader
+    public class ResistorReader : ComponentReader
     {
         /// <summary>
-        /// Read a resistor
+        /// Constructor
         /// </summary>
-        /// <param name="name">The name of the resistor</param>
-        /// <param name="parameters">The resistor parameters</param>
-        /// <param name="netlist">The netlist</param>
-        /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
-        {
-            // Test if we can read a resistor here
-            if (name.image[0] != 'r' && name.image[0] != 'R')
-                return false;
+        public ResistorReader() : base('r') { }
 
-            Resistor res = new Resistor(name.ReadWord());
+        /// <summary>
+        /// Generate a resistor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="netlist">Netlist</param>
+        /// <returns></returns>
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        {
+            Resistor res = new Resistor(name);
             res.ReadNodes(parameters, 2);
 
             // We have two possible formats:
@@ -36,11 +37,7 @@ namespace SpiceSharp.Parser.Readers
                 if (!res.RESlength.Given)
                     throw new ParseException(name, "L needs to be specified");
             }
-
-            // Add the component
-            netlist.Circuit.Components.Add(res);
-            Generated = res;
-            return true;
+            return res;
         }
     }
 }

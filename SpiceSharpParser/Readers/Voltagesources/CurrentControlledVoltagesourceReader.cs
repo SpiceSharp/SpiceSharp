@@ -6,21 +6,23 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read current-controlled voltage sources
     /// </summary>
-    public class CurrentControlledVoltagesourceReader : Reader
+    public class CurrentControlledVoltagesourceReader : ComponentReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
+        /// </summary>
+        public CurrentControlledVoltagesourceReader() : base('h') { }
+
+        /// <summary>
+        /// Generate a CCVS
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
         {
-            if (name.image[0] != 'h' && name.image[0] != 'H')
-                return false;
-
-            CurrentControlledVoltagesource ccvs = new CurrentControlledVoltagesource(name.ReadWord());
+            CurrentControlledVoltagesource ccvs = new CurrentControlledVoltagesource(name);
             ccvs.ReadNodes(parameters, 2);
             switch (parameters.Count)
             {
@@ -30,10 +32,7 @@ namespace SpiceSharp.Parser.Readers
 
             ccvs.Set("control", parameters[2].ReadWord());
             ccvs.Set("gain", parameters[2].ReadValue());
-
-            netlist.Circuit.Components.Add(ccvs);
-            Generated = ccvs;
-            return true;
+            return ccvs;
         }
     }
 }

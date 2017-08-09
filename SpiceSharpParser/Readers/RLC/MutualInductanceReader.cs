@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
@@ -6,21 +7,23 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// Constructor
     /// </summary>
-    public class MutualInductanceReader : Reader
+    public class MutualInductanceReader : ComponentReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
         /// </summary>
-        /// <param name="name">The name</param>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="netlist">The netlist</param>
-        /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
-        {
-            if (name.image[0] != 'k' && name.image[0] != 'K')
-                return false;
+        public MutualInductanceReader() : base('k') { }
 
-            MutualInductance mut = new MutualInductance(name.ReadWord());
+        /// <summary>
+        /// Generate a mutual inductance
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="netlist">Netlist</param>
+        /// <returns></returns>
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        {
+            MutualInductance mut = new MutualInductance(name);
             switch (parameters.Count)
             {
                 case 1: throw new ParseException(name, "Inductor name expected", false);
@@ -32,10 +35,7 @@ namespace SpiceSharp.Parser.Readers
             mut.Set("inductor1", parameters[0].ReadWord());
             mut.Set("inductor2", parameters[1].ReadWord());
             mut.Set("k", parameters[2].ReadValue());
-
-            netlist.Circuit.Components.Add(mut);
-            Generated = mut;
-            return true;
+            return mut;
         }
     }
 }

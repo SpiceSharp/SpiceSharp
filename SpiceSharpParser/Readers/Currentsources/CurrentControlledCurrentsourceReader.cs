@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
@@ -6,21 +7,23 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read current-controlled current sources
     /// </summary>
-    public class CurrentControlledCurrentsourceReader : Reader
+    public class CurrentControlledCurrentsourceReader : ComponentReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
+        /// </summary>
+        public CurrentControlledCurrentsourceReader() : base('f') { }
+
+        /// <summary>
+        /// Generate a CCCS
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
         {
-            if (name.image[0] != 'f' && name.image[0] != 'F')
-                return false;
-
-            CurrentControlledCurrentsource cccs = new CurrentControlledCurrentsource(name.ReadWord());
+            CurrentControlledCurrentsource cccs = new CurrentControlledCurrentsource(name);
             cccs.ReadNodes(parameters, 2);
             switch (parameters.Count)
             {
@@ -30,10 +33,7 @@ namespace SpiceSharp.Parser.Readers
 
             cccs.Set("control", parameters[2].ReadWord());
             cccs.Set("gain", parameters[3].ReadValue());
-
-            Generated = cccs;
-            netlist.Circuit.Components.Add(cccs);
-            return true;
+            return cccs;
         }
     }
 }

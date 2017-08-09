@@ -9,6 +9,20 @@ namespace SpiceSharp.Parser.Readers
     public abstract class Reader
     {
         /// <summary>
+        /// The reader type
+        /// </summary>
+        public StatementType Type { get; private set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="type">The type of reader</param>
+        protected Reader(StatementType type)
+        {
+            Type = type;
+        }
+
+        /// <summary>
         /// Get the generated object by the reader
         /// </summary>
         public object Generated { get; protected set; } = null;
@@ -20,6 +34,6 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">The following parameters</param>
         /// <param name="netlist">The resulting netlist</param>
         /// <returns></returns>
-        public abstract bool Read(Token name, List<Object> parameters, Netlist netlist);
+        public abstract bool Read(Statement st, Netlist netlist);
     }
 }

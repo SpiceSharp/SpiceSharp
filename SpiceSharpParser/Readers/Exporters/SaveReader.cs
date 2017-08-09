@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using SpiceSharp.Circuits;
-using SpiceSharp.Simulations;
-using System.Numerics;
-
-namespace SpiceSharp.Parser.Readers
+﻿namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
     /// An exporter that can read .save statements
     /// </summary>
     public class SaveReader : Reader
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SaveReader() : base(StatementType.Control) { }
+
         /// <summary>
         /// Read
         /// This class will export 
@@ -23,18 +18,19 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Statement st, Netlist netlist)
         {
-            if (!name.TryReadLiteral("save"))
+            if (!st.Name.TryReadLiteral("save"))
                 return false;
 
-            for (int i = 0; i < parameters.Count; i++)
+            for (int i = 0; i < st.Parameters.Count; i++)
             {
-                if (parameters[i].TryReadBracket(out BracketToken bt, '?'))
+                if (st.Parameters[i].TryReadBracket(out BracketToken bt, '?'))
                 {
                     if (!(bt.Name is Token))
                         throw new ParseException(bt, "Export type expected");
-                    Generated = netlist.Readers.Read("exporter", bt.Name as Token, bt.Parameters, netlist);
+                    Statement s = new Statement(StatementType.Export, bt.Name as Token, bt.Parameters);
+                    Generated = netlist.Readers.Read(s, netlist);
                 }
             }
             return true;

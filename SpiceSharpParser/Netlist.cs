@@ -1,9 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Parser.Readers;
+using SpiceSharp.Parser.Subcircuits;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
+using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser
 {
+    /// <summary>
+    /// This class represents the netlist data for parsing
+    /// </summary>
     public class Netlist
     {
         /// <summary>
@@ -28,6 +35,11 @@ namespace SpiceSharp.Parser
         public List<Export> Exports { get; } = new List<Export>();
 
         /// <summary>
+        /// The current path
+        /// </summary>
+        public SubcircuitPath Path { get; }
+
+        /// <summary>
         /// The event that is fired before a new simulation is started
         /// </summary>
         public event NetlistSimulationEventHandler BeforeSimulationInitialized;
@@ -49,6 +61,7 @@ namespace SpiceSharp.Parser
         public Netlist(Circuit ckt)
         {
             Circuit = ckt;
+            Path = new SubcircuitPath(this);
         }
 
         /// <summary>

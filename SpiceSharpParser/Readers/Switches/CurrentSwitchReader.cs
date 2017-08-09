@@ -6,21 +6,16 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read current switches
     /// </summary>
-    public class CurrentSwitchReader : Reader
+    public class CurrentSwitchReader : ComponentReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="netlist">Netlist</param>
-        /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
-        {
-            if (name.image[0] != 'w' && name.image[0] != 'W')
-                return false;
+        public CurrentSwitchReader() : base('w') { }
 
-            CurrentSwitch csw = new CurrentSwitch(name.ReadWord());
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        {
+            CurrentSwitch csw = new CurrentSwitch(name);
             csw.ReadNodes(parameters, 2);
             switch (parameters.Count)
             {
@@ -42,10 +37,7 @@ namespace SpiceSharp.Parser.Readers
                     default: throw new ParseException(parameters[4], "ON or OFF expected");
                 }
             }
-
-            netlist.Circuit.Components.Add(csw);
-            Generated = csw;
-            return true;
+            return csw;
         }
     }
 }

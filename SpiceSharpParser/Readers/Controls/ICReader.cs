@@ -8,22 +8,27 @@ namespace SpiceSharp.Parser.Readers
     public class ICReader : Reader
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public ICReader() : base(StatementType.Control) { }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Statement st, Netlist netlist)
         {
-            if (!name.TryReadLiteral("ic"))
+            if (!st.Name.TryReadLiteral("ic"))
                 return false;
 
             // Only assignments are possible
-            for (int i = 0; i < parameters.Count; i++)
+            for (int i = 0; i < st.Parameters.Count; i++)
             {
-                // .IC parameters are of the form V(node) = value
-                parameters[i].ReadAssignment(out object pname, out object pvalue);
+                // .IC st.Parameters are of the form V(node) = value
+                st.Parameters[i].ReadAssignment(out object pname, out object pvalue);
                 if (pname.TryReadBracket(out BracketToken bt) && bt.Name.TryReadLiteral("v"))
                 {
                     if (bt.Parameters.Count != 1)

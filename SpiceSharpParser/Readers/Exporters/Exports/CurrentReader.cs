@@ -9,23 +9,28 @@ namespace SpiceSharp.Parser.Readers.Exports
     public class CurrentReader : Reader
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public CurrentReader() : base(StatementType.Export) { }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Statement st, Netlist netlist)
         {
-            if (!name.TryReadLiteral("i"))
+            if (!st.Name.TryReadLiteral("i"))
                 return false;
 
             string source;
-            switch (parameters.Count)
+            switch (st.Parameters.Count)
             {
-                case 0: throw new ParseException(name, "Voltage source expected", false);
-                case 1: source = parameters[0].ReadIdentifier(); break;
-                default: throw new ParseException(name, "Too many nodes specified", false);
+                case 0: throw new ParseException(st.Name, "Voltage source expected", false);
+                case 1: source = st.Parameters[0].ReadIdentifier(); break;
+                default: throw new ParseException(st.Name, "Too many nodes specified", false);
             }
 
             // Add to the exports

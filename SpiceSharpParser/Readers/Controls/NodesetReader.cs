@@ -8,22 +8,27 @@ namespace SpiceSharp.Parser.Readers
     public class NodesetReader : Reader
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public NodesetReader() : base(StatementType.Control) { }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Statement st, Netlist netlist)
         {
-            if (!name.TryReadLiteral("nodeset"))
+            if (!st.Name.TryReadLiteral("nodeset"))
                 return false;
 
             // Only assignments are possible
-            for (int i = 0; i < parameters.Count; i++)
+            for (int i = 0; i < st.Parameters.Count; i++)
             {
-                // .NODESET parameters are of the form V(name) = value
-                parameters[i].ReadAssignment(out object pname, out object pvalue);
+                // .NODESET st.Parameters are of the form V(st.Name) = value
+                st.Parameters[i].ReadAssignment(out object pname, out object pvalue);
                 if (pname.TryReadBracket(out BracketToken bt) && bt.Name.TryReadLiteral("v"))
                 {
                     if (bt.Parameters.Count != 1)

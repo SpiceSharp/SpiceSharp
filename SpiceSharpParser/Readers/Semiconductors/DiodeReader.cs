@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
@@ -6,21 +7,23 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// A class that can read a diode model
     /// </summary>
-    public class DiodeReader : Reader
+    public class DiodeReader : ComponentReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
+        /// </summary>
+        public DiodeReader() : base('d') { }
+
+        /// <summary>
+        /// Generate a diode
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
         {
-            if (name.image[0] != 'd' && name.image[0] != 'D')
-                return false;
-
-            Diode dio = new Diode(name.ReadWord());
+            Diode dio = new Diode(name);
             dio.ReadNodes(parameters, 2);
 
             if (parameters.Count < 3)
@@ -50,9 +53,7 @@ namespace SpiceSharp.Parser.Readers
                     throw new ParseException(parameters[i], "Unrecognized parameter");
             }
 
-            netlist.Circuit.Components.Add(dio);
-            Generated = dio;
-            return true;
+            return dio;
         }
     }
 }

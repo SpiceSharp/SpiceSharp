@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
@@ -6,21 +7,23 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read inductors
     /// </summary>
-    public class InductorReader : Reader
+    public class InductorReader : ComponentReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
         /// </summary>
-        /// <param name="name">The name</param>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="netlist">The netlist</param>
-        /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
-        {
-            if (name.image[0] != 'l' && name.image[0] != 'L')
-                return false;
+        public InductorReader() : base('l') { }
 
-            Inductor ind = new Inductor(name.ReadWord());
+        /// <summary>
+        /// Generate an inductor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="netlist">Netlist</param>
+        /// <returns></returns>
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        {
+            Inductor ind = new Inductor(name);
             ind.ReadNodes(parameters, 2);
 
             // Read the value
@@ -30,11 +33,7 @@ namespace SpiceSharp.Parser.Readers
 
             // Read initial conditions
             ind.ReadParameters(parameters, 3);
-
-            // Success
-            netlist.Circuit.Components.Add(ind);
-            Generated = ind;
-            return true;
+            return ind;
         }
     }
 }

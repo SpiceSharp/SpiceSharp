@@ -6,21 +6,23 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read voltage switches
     /// </summary>
-    public class VoltageSwitchReader : Reader
+    public class VoltageSwitchReader : ComponentReader
     {
         /// <summary>
-        /// Read
+        /// Constructor
+        /// </summary>
+        public VoltageSwitchReader() : base('s') { }
+
+        /// <summary>
+        /// Generate
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
         {
-            if (name.image[0] != 's' && name.image[0] != 'S')
-                return false;
-
-            VoltageSwitch vsw = new VoltageSwitch(name.ReadWord());
+            VoltageSwitch vsw = new VoltageSwitch(name);
             vsw.ReadNodes(parameters, 4);
 
             // Read the model
@@ -39,10 +41,7 @@ namespace SpiceSharp.Parser.Readers
                     default: throw new ParseException(parameters[5], "ON or OFF expected");
                 }
             }
-
-            netlist.Circuit.Components.Add(vsw);
-            Generated = vsw;
-            return true;
+            return vsw;
         }
     }
 }

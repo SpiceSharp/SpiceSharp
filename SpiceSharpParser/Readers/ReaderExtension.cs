@@ -582,11 +582,7 @@ namespace SpiceSharp.Parser.Readers
             string name = o.ReadIdentifier();
 
             // Find the model in the circuit
-            if (!netlist.Circuit.Components.Contains(name))
-                throw new ParseException(o, $"Cannot find model {o.Image()}");
-            CircuitModel m = netlist.Circuit.Components[name] as CircuitModel;
-            if (m == null)
-                throw new ParseException(o, $"{o.Image()} is not a model");
+            CircuitModel m = netlist.Path.FindModel(name);
 
             // Cast the model
             if (m is T)

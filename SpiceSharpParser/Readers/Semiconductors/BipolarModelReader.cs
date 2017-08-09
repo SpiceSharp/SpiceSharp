@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
@@ -7,7 +6,7 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// This class can read bipolar transistor models
     /// </summary>
-    public class BipolarModelReader : Reader
+    public class BipolarModelReader : ModelReader
     {
         /// <summary>
         /// Private variables
@@ -19,28 +18,24 @@ namespace SpiceSharp.Parser.Readers
         /// </summary>
         /// <param name="isNpn">True if it is parsing npn transistor, false for pnp transistors</param>
         public BipolarModelReader(bool isNpn)
+            : base(isNpn ? "npn" : "pnp")
         {
             npn = isNpn;
         }
 
         /// <summary>
-        /// Read
+        /// Generate a new model
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="netlist">Netlist</param>
+        /// <param name="name"></param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        protected override CircuitModel GenerateModel(string name)
         {
-            BJTModel model = new BJTModel(name.ReadIdentifier());
+            BJTModel model = new BJTModel(name);
             if (npn)
                 model.SetNPN(true);
             else
                 model.SetPNP(true);
-            model.ReadParameters(parameters);
-            netlist.Circuit.Components.Add(model);
-            Generated = model;
-            return true;
+            return model;
         }
     }
 }

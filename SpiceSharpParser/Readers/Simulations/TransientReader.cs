@@ -9,33 +9,38 @@ namespace SpiceSharp.Parser.Readers
     public class TransientReader : Reader
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public TransientReader() : base(StatementType.Control) { }
+
+        /// <summary>
         /// Read
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Token name, List<object> parameters, Netlist netlist)
+        public override bool Read(Statement st, Netlist netlist)
         {
-            if (!name.TryReadLiteral("tran"))
+            if (!st.Name.TryReadLiteral("tran"))
                 return false;
 
             Transient tran = new Transient("Transient " + (netlist.Simulations.Count + 1));
-            switch (parameters.Count)
+            switch (st.Parameters.Count)
             {
-                case 0: throw new ParseException(name, "Step expected", false);
-                case 1: throw new ParseException(parameters[0], "Maximum time expected", false);
+                case 0: throw new ParseException(st.Name, "Step expected", false);
+                case 1: throw new ParseException(st.Parameters[0], "Maximum time expected", false);
             }
 
-            // Standard parameters
-            tran.Set("step", parameters[0].ReadValue());
-            tran.Set("stop", parameters[1].ReadValue());
+            // Standard st.Parameters
+            tran.Set("step", st.Parameters[0].ReadValue());
+            tran.Set("stop", st.Parameters[1].ReadValue());
 
-            // Optional parameters
-            if (parameters.Count > 2)
-                tran.Set("start", parameters[2].ReadValue());
-            if (parameters.Count > 3)
-                tran.Set("maxstep", parameters[1].ReadValue());
+            // Optional st.Parameters
+            if (st.Parameters.Count > 2)
+                tran.Set("start", st.Parameters[2].ReadValue());
+            if (st.Parameters.Count > 3)
+                tran.Set("maxstep", st.Parameters[1].ReadValue());
 
             netlist.Simulations.Add(tran);
             Generated = tran;
