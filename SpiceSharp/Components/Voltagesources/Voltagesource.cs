@@ -66,7 +66,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Voltagesource(string name) : base(name, 2) { }
+        public Voltagesource(string name) : base(name, "V+", "V-") { }
 
         /// <summary>
         /// Constructor
@@ -75,7 +75,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="v">The DC value or Waveform-object</param>
-        public Voltagesource(string name, string pos, string neg, object v) : base(name, 2)
+        public Voltagesource(string name, string pos, string neg, object v) : base(name, "V+", "V-")
         {
             Connect(pos, neg);
             if (v is Waveform)

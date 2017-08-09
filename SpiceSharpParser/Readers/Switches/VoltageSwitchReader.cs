@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             VoltageSwitch vsw = new VoltageSwitch(name.ReadWord());
-            vsw.ReadNodes(netlist, parameters, 4);
+            vsw.ReadNodes(parameters, 4);
 
             // Read the model
             if (parameters.Count < 5)

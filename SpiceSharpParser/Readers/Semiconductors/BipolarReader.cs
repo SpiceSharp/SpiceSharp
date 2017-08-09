@@ -24,9 +24,9 @@ namespace SpiceSharp.Parser.Readers
             // We will only allow 3 terminals if there are only 4 parameters
             BJT bjt = new BJT(name.ReadWord());
             if (parameters.Count <= 4)
-                bjt.ReadNodes(netlist, parameters, 3);
+                bjt.ReadNodes(parameters, 3);
             else
-                bjt.ReadNodes(netlist, parameters, 4);
+                bjt.ReadNodes(parameters, 4);
 
             if (parameters.Count == 3)
                 throw new ParseException(parameters[2], "Model expected", false);

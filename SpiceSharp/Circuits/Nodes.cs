@@ -14,11 +14,19 @@ namespace SpiceSharp.Circuits
         public bool CaseInsensitive = true;
 
         /// <summary>
+        /// Global nodes that escape prefixes
+        /// </summary>
+        public HashSet<string> Globals { get; } = new HashSet<string>();
+
+        /// <summary>
         /// Private variables
         /// </summary>
         private List<CircuitNode> nodes = new List<CircuitNode>();
         private Dictionary<string, CircuitNode> map = new Dictionary<string, CircuitNode>();
         private bool locked = false;
+
+        private Stack<Dictionary<string, CircuitNode>> pinmap = new Stack<Dictionary<string, CircuitNode>>();
+        private Stack<string> prefix = new Stack<string>();
 
         /// <summary>
         /// The initial conditions
@@ -43,9 +51,12 @@ namespace SpiceSharp.Circuits
         public Nodes()
         {
             Ground = new CircuitNode(CircuitNode.NodeType.Voltage);
-            Ground.Name = "gnd";
+            Ground.Name = "0";
             map.Add(Ground.Name, Ground);
-            map.Add("0", Ground);
+
+            // Add a few alias
+            map.Add("gnd", Ground);
+            Globals.Add("gnd");
         }
 
         /// <summary>
@@ -86,13 +97,24 @@ namespace SpiceSharp.Circuits
         public CircuitNode Map(string name, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
         {
             if (locked)
-                throw new CircuitException($"Nodes locked, mapping is not allowed");
+                throw new CircuitException("Nodes locked, mapping is not allowed");
 
             // Check for an existing node
             if (name != null)
             {
                 if (CaseInsensitive)
                     name = name.ToLower();
+
+                // Transform the name if necessary
+                if (prefix.Count > 0)
+                {
+                    if (pinmap.Peek().ContainsKey(name))
+                        return pinmap.Peek()[name];
+                    else if (name != Ground.Name && !Globals.Contains(name))
+                        name = prefix.Peek() + name;
+                }
+
+                // Check the node
                 if (map.ContainsKey(name))
                     return map[name];
             }
@@ -106,6 +128,41 @@ namespace SpiceSharp.Circuits
             if (name != null)
                 map.Add(name, node);
             return node;
+        }
+
+        /// <summary>
+        /// Push a new (temporary) pin map of nodes
+        /// This can be used to temporarely map certain nodes to possibly already existing nodes
+        /// </summary>
+        /// <param name="map">A dictionary of nodes that should be mapped to other nodes</param>
+        public void PushPinMap(string addprefix, Dictionary<string, string> map)
+        {
+            // Find the new prefix
+            if (CaseInsensitive)
+                addprefix = addprefix.ToLower();
+            addprefix = (prefix.Count > 0 ? prefix.Peek() : "") + addprefix;
+
+            var nmap = new Dictionary<string, CircuitNode>();
+            foreach (var item in map)
+            {
+                string node = item.Key;
+                if (CaseInsensitive)
+                    node = node.ToLower();
+                nmap.Add(node, Map(item.Value));
+            }
+
+            prefix.Push(addprefix);
+            pinmap.Push(nmap);
+        }
+
+        /// <summary>
+        /// Remove the last (temporary) pin map and go back to the previous pin map
+        /// </summary>
+        public void PopPinMap()
+        {
+            // Restore to previous pin map state
+            prefix.Pop();
+            pinmap.Pop();
         }
 
         /// <summary>

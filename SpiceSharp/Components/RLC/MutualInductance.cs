@@ -38,7 +38,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the mutual inductance</param>
-        public MutualInductance(string name) : base(name, 0)
+        public MutualInductance(string name) : base(name)
         {
             // Make sure mutual inductances are evaluated AFTER inductors
             Priority = -1;

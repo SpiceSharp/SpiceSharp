@@ -16,7 +16,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the model</param>
-        public CircuitModel(string name) : base(name, 0)
+        public CircuitModel(string name) : base(name)
         {
             // Make sure the models are evaluated before the actual components
             Priority = 1;

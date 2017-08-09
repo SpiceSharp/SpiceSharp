@@ -18,6 +18,11 @@ namespace SpiceSharp.Circuits
         private List<CircuitComponent> ordered = new List<CircuitComponent>();
 
         /// <summary>
+        /// Gets whether or not the list is already ordered
+        /// </summary>
+        private bool isordered = false;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public CircuitComponents() { }
@@ -52,6 +57,7 @@ namespace SpiceSharp.Circuits
                 if (components.ContainsKey(c.Name))
                     throw new CircuitException($"A component with the name {c.Name} already exists");
                 components.Add(c.Name, c);
+                isordered = false;
             }
         }
 
@@ -68,6 +74,7 @@ namespace SpiceSharp.Circuits
 
                 if (components.ContainsKey(name))
                     components.Remove(name);
+                isordered = false;
             }
         }
 
@@ -99,6 +106,9 @@ namespace SpiceSharp.Circuits
         /// </summary>
         public void BuildOrderedComponentList()
         {
+            if (isordered)
+                return;
+
             // Initialize
             ordered.Clear();
             var mods = new HashSet<CircuitModel>();
@@ -122,6 +132,7 @@ namespace SpiceSharp.Circuits
             ordered.Sort((CircuitComponent a, CircuitComponent b) => {
                 return b.Priority.CompareTo(a.Priority);
             });
+            isordered = true;
         }
 
         /// <summary>

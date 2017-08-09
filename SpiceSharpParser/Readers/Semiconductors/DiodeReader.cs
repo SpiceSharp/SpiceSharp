@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             Diode dio = new Diode(name.ReadWord());
-            dio.ReadNodes(netlist, parameters, 2);
+            dio.ReadNodes(parameters, 2);
 
             if (parameters.Count < 3)
                 throw new ParseException(parameters[1], "Model expected", false);

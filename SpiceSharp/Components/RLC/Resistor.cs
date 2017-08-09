@@ -56,7 +56,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the resistor</param>
-        public Resistor(string name) : base(name, 2) { }
+        public Resistor(string name) : base(name, "R+", "R-") { }
 
         /// <summary>
         /// Constructor
@@ -65,7 +65,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="res">The resistance</param>
-        public Resistor(string name, string pos, string neg, object res) : base(name, 2)
+        public Resistor(string name, string pos, string neg, object res) : base(name, "R+", "R-")
         {
             Connect(pos, neg);
             Set("resistance", res);

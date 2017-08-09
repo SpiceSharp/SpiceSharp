@@ -45,5 +45,17 @@ namespace SpiceSharp.Circuits
             Type = type;
             Index = index;
         }
+
+        /// <summary>
+        /// Nice display
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            if (Name != null)
+                return "Node (" + Name + ")";
+            else
+                return "Created node (" + Type.ToString() + ")";
+        }
     }
 }

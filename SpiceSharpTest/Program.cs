@@ -12,7 +12,7 @@ namespace SpiceSharpTest
 {
     class Program
     {
-        private static List<double>[] exports = null;
+        private static List<double> dbamp = new List<double>();
         private static List<double> freq = new List<double>();
 
         /// <summary>
@@ -35,41 +35,45 @@ namespace SpiceSharpTest
             foreach (string msg in ConverterWarnings.Warnings)
                 Console.WriteLine(msg); */
 
-            NetlistReader parser = new NetlistReader();
-            SpiceSharp.Parameters.SpiceMember.SpiceMemberConvert += SpiceSharp.Parameters.Converter.SpiceConvert;
-            parser.Parse("test.net");
+            Circuit ckt = new Circuit();
+            ckt.Components.Add(
+                new Voltagesource("V1", "1", "0", 1.0));
+            ckt.Components["V1"].Set("acmag", 1.0);
+
+            var sub = new Subcircuit("X1", "IN", "OUT");
+            sub.Components.Add(
+                new Resistor("R1", "IN", "OUT", 10e3),
+                new Capacitor("C1", "OUT", "0", 1e-9));
+            sub.Connect("1", "2");
+            ckt.Components.Add(sub);
+
+            AC ac = new AC("AC 1");
+            ac.StartFreq = 100;
+            ac.NumberSteps = 100;
+            ac.StopFreq = 10e9;
+            ac.StepType = AC.StepTypes.Decade;
+            ac.ExportSimulationData += Ac_ExportSimulationData;
+
+            ckt.Simulate(ac);
 
             foreach (string msg in SpiceSharp.Diagnostics.CircuitWarning.Warnings)
                 Console.WriteLine(msg);
 
-            parser.Netlist.OnExportSimulationData += Netlist_OnExportSimulationData;
-            exports = new List<double>[parser.Netlist.Exports.Count];
-            for (int i = 0; i < exports.Length; i++)
-                exports[i] = new List<double>();
-            parser.Netlist.Simulate();
-
             using (StreamWriter sw = new StreamWriter("output.csv"))
             {
-                string[] e = new string[exports.Length + 1];
-                for (int k = 0; k < exports[0].Count; k++)
+                for (int i = 0; i < freq.Count; i++)
                 {
-                    e[0] = freq[k].ToString();
-                    for (int i = 0; i < exports.Length; i++)
-                        e[i + 1] = exports[i][k].ToString();
-                    sw.WriteLine(string.Join(";", e));
+                    sw.WriteLine(string.Join(";", freq[i], dbamp[i]));
                 }
             }
 
             Console.ReadKey();
         }
 
-        private static void Netlist_OnExportSimulationData(object sender, SimulationData data)
+        private static void Ac_ExportSimulationData(object sender, SimulationData data)
         {
-            Netlist n = sender as Netlist;
-            // exports[0].Add(data.GetTime());
             freq.Add(data.GetFrequency());
-            for (int i = 0; i < n.Exports.Count; i++)
-                exports[i].Add((double)n.Exports[i].Extract(data));
+            dbamp.Add(data.GetDb("2"));
         }
     }
 }

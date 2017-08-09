@@ -18,7 +18,8 @@ namespace SpiceSharp
         /// <summary>
         /// Private variables
         /// </summary>
-        private string[] terminals;
+        private string[] connections;
+        protected string[] terminals;
 
         /// <summary>
         /// This parameter can change the order in which components are traversed
@@ -30,24 +31,28 @@ namespace SpiceSharp
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the component</param>
-        public CircuitComponent(string name, int pins) : base(name)
+        public CircuitComponent(string name, params string[] terminals) : base(name)
         {
-            terminals = new string[pins];
+            this.terminals = terminals;
+            connections = new string[terminals.Length];
         }
 
         /// <summary>
         /// Connect the component in the circuit
         /// </summary>
         /// <param name="nodes"></param>
-        public void Connect(params string[] nodes)
+        public virtual void Connect(params string[] nodes)
         {
-            if (nodes.Length != terminals.Length)
-                throw new CircuitException($"{Name}: Node count mismatch. {nodes.Length} given, {terminals.Length} expected.");
+            if (terminals.Length != connections.Length)
+                connections = new string[terminals.Length];
+
+            if (nodes.Length != connections.Length)
+                throw new CircuitException($"{Name}: Node count mismatch. {nodes.Length} given, {connections.Length} expected.");
             for (int i = 0; i < nodes.Length; i++)
             {
                 if (nodes[i] == null)
                     throw new ArgumentNullException("node " + (i + 1));
-                terminals[i] = nodes[i];
+                connections[i] = nodes[i];
             }
         }
 
@@ -58,9 +63,9 @@ namespace SpiceSharp
         /// <returns></returns>
         public string GetNode(int i)
         {
-            if (i < 0 || i >= terminals.Length)
+            if (i < 0 || i >= connections.Length)
                 throw new IndexOutOfRangeException();
-            return terminals[i];
+            return connections[i];
         }
 
         /// <summary>
@@ -78,9 +83,9 @@ namespace SpiceSharp
         protected CircuitNode[] BindNodes(Circuit ckt)
         {
             // Map connected nodes
-            CircuitNode[] nodes = new CircuitNode[terminals.Length];
-            for (int i = 0; i < terminals.Length; i++)
-                nodes[i] = ckt.Nodes.Map(terminals[i]);
+            CircuitNode[] nodes = new CircuitNode[connections.Length];
+            for (int i = 0; i < connections.Length; i++)
+                nodes[i] = ckt.Nodes.Map(connections[i]);
 
             // Return all nodes
             return nodes;
@@ -137,7 +142,7 @@ namespace SpiceSharp
         /// <summary>
         /// Accept the current timepoint as the solution
         /// </summary>
-        /// <param name="ckt"></param>
+        /// <param name="ckt">The circuit</param>
         public virtual void Accept(Circuit ckt)
         {
             // Do nothing
@@ -150,16 +155,6 @@ namespace SpiceSharp
         public virtual void Unsetup(Circuit ckt)
         {
             // Do nothing
-        }
-
-        /// <summary>
-        /// Check convergence for this component
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <returns>True if converges</returns>
-        public virtual bool IsConvergent(Circuit ckt)
-        {
-            return true;
         }
     }
 }

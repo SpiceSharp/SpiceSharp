@@ -53,7 +53,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled switch</param>
-        public CurrentSwitch(string name) : base(name, 2)
+        public CurrentSwitch(string name) : base(name, "W+", "W-")
         {
             // Make sure the current switch is processed after voltage sources
             Priority = -1;
@@ -66,7 +66,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source</param>
-        public CurrentSwitch(string name, string pos, string neg, string vsource) : base(name, 2)
+        public CurrentSwitch(string name, string pos, string neg, string vsource) : base(name, "W+", "W-")
         {
             Connect(pos, neg);
             CSWcontName = vsource;

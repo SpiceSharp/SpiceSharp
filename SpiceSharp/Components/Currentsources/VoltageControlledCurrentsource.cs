@@ -41,7 +41,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled current source</param>
-        public VoltageControlledCurrentsource(string name) : base(name, 4) { }
+        public VoltageControlledCurrentsource(string name) : base(name, "V+", "V-", "VC+", "VC-") { }
 
         /// <summary>
         /// Constructor
@@ -52,7 +52,7 @@ namespace SpiceSharp.Components
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
         /// <param name="coeff"></param>
-        public VoltageControlledCurrentsource(string name, string pos, string neg, string cont_pos, string cont_neg, object gain) : base(name, 4)
+        public VoltageControlledCurrentsource(string name, string pos, string neg, string cont_pos, string cont_neg, object gain) : base(name, "V+", "V-", "VC+", "VC-")
         {
             Connect(pos, neg, cont_pos, cont_neg);
             Set("gain", gain);

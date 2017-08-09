@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             Currentsource isrc = new Currentsource(name.ReadWord());
-            isrc.ReadNodes(netlist, parameters, 2);
+            isrc.ReadNodes(parameters, 2);
 
             // We can have a value or just DC
             for (int i = 2; i < parameters.Count; i++)

@@ -267,7 +267,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS6(string name) : base(name, 4)
+        public MOS6(string name) : base(name, "Drain", "Gate", "Source", "Bulk")
         {
         }
 

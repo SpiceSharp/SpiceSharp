@@ -79,7 +79,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Diode(string name) : base(name, 2) { }
+        public Diode(string name) : base(name, "D+", "D-") { }
 
         /// <summary>
         /// Setup the diode

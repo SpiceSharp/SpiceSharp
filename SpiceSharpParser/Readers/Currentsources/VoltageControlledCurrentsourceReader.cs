@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             VoltageControlledCurrentsource vccs = new VoltageControlledCurrentsource(name.ReadWord());
-            vccs.ReadNodes(netlist, parameters, 4);
+            vccs.ReadNodes(parameters, 4);
 
             if (parameters.Count < 5)
                 throw new ParseException(parameters[3], "Value expected", false);

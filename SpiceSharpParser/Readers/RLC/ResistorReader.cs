@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             Resistor res = new Resistor(name.ReadWord());
-            res.ReadNodes(netlist, parameters, 2);
+            res.ReadNodes(parameters, 2);
 
             // We have two possible formats:
             // Normal: RXXXXXXX N1 N2 VALUE

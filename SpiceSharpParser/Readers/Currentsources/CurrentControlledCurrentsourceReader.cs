@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             CurrentControlledCurrentsource cccs = new CurrentControlledCurrentsource(name.ReadWord());
-            cccs.ReadNodes(netlist, parameters, 2);
+            cccs.ReadNodes(parameters, 2);
             switch (parameters.Count)
             {
                 case 2: throw new ParseException(parameters[1], "Voltage source expected");

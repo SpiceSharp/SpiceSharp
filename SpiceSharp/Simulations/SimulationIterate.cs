@@ -241,13 +241,6 @@ namespace SpiceSharp.Simulations
                 }
             }
 
-            // Give each component the chance to check convergence
-            foreach (var c in ckt.Components)
-            {
-                if (!c.IsConvergent(ckt))
-                    return false;
-            }
-
             // Convergence succeeded
             return true;
         }

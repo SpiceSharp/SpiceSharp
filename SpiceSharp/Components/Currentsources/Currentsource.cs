@@ -59,7 +59,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current source</param>
-        public Currentsource(string name) : base(name, 2) { }
+        public Currentsource(string name) : base(name, "I+", "I-") { }
 
         /// <summary>
         /// Constructor
@@ -68,7 +68,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="v">The DC value or Waveform-object</param>
-        public Currentsource(string name, string pos, string neg, object v) : base(name, 2)
+        public Currentsource(string name, string pos, string neg, object v) : base(name, "I+", "I-")
         {
             Connect(pos, neg);
             if (v is Waveform)

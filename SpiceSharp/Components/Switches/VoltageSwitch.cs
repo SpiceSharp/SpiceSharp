@@ -45,7 +45,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled switch</param>
-        public VoltageSwitch(string name) : base(name, 4) { }
+        public VoltageSwitch(string name) : base(name, "S+", "S-", "SC+", "SC-") { }
 
         /// <summary>
         /// Constructor
@@ -55,7 +55,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
-        public VoltageSwitch(string name, string pos, string neg, string cont_pos, string cont_neg) : base(name, 4)
+        public VoltageSwitch(string name, string pos, string neg, string cont_pos, string cont_neg) : base(name, "S+", "S-", "SC+", "SC-")
         {
             Connect(pos, neg, cont_pos, cont_neg);
         }

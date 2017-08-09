@@ -41,7 +41,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current controlled current source</param>
-        public CurrentControlledCurrentsource(string name) : base(name, 2)
+        public CurrentControlledCurrentsource(string name) : base(name, "F+", "F-")
         {
             // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
@@ -55,7 +55,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
-        public CurrentControlledCurrentsource(string name, string pos, string neg, string vsource, object gain) : base(name, 2)
+        public CurrentControlledCurrentsource(string name, string pos, string neg, string vsource, object gain) : base(name, "F+", "F-")
         {
             Connect(pos, neg);
             Set("gain", gain);

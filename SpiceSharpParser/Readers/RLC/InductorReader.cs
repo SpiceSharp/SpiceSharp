@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             Inductor ind = new Inductor(name.ReadWord());
-            ind.ReadNodes(netlist, parameters, 2);
+            ind.ReadNodes(parameters, 2);
 
             // Read the value
             if (parameters.Count < 3)

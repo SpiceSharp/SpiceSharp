@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             Voltagesource vsrc = new Voltagesource(name.ReadWord());
-            vsrc.ReadNodes(netlist, parameters, 2);
+            vsrc.ReadNodes(parameters, 2);
 
             // We can have a value or just DC
             for (int i = 2; i < parameters.Count; i++)

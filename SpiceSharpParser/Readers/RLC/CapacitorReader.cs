@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
                 return false;
 
             Capacitor cap = new Capacitor(name.ReadWord());
-            cap.ReadNodes(netlist, parameters, 2);
+            cap.ReadNodes(parameters, 2);
 
             // Search for a parameter IC, which is common for both types of capacitors
             for (int i = 3; i < parameters.Count; i++)

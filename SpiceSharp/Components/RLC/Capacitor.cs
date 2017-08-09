@@ -51,7 +51,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Capacitor(string name) : base(name, 2) { }
+        public Capacitor(string name) : base(name, "C+", "C-") { }
 
         /// <summary>
         /// Constructor
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="cap">The capacitance</param>
-        public Capacitor(string name, string pos, string neg, object cap) : base(name, 2)
+        public Capacitor(string name, string pos, string neg, object cap) : base(name, "C+", "C-")
         {
             Connect(pos, neg);
             Set("capacitance", cap);

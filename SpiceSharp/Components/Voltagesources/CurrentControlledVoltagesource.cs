@@ -42,7 +42,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled current source</param>
-        public CurrentControlledVoltagesource(string name) : base(name, 2) { }
+        public CurrentControlledVoltagesource(string name) : base(name, "H+", "H-") { }
 
         /// <summary>
         /// Constructor
@@ -52,7 +52,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source name</param>
         /// <param name="gain">The transresistance (gain)</param>
-        public CurrentControlledVoltagesource(string name, string pos, string neg, string vsource, object gain) : base(name, 2)
+        public CurrentControlledVoltagesource(string name, string pos, string neg, string vsource, object gain) : base(name, "H+", "H-")
         {
             Connect(pos, neg);
             Set("gain", gain);
