@@ -258,7 +258,8 @@ namespace SpiceSharp.Parser.Readers.Exports
             switch (data.Circuit.State.Domain)
             {
                 case Circuits.CircuitState.DomainTypes.Frequency:
-                case Circuits.CircuitState.DomainTypes.Laplace: return data.GetPhase(Node, Reference);
+                case Circuits.CircuitState.DomainTypes.Laplace:
+                    return data.GetPhase(Node, Reference);
                 default: return 0.0;
             }
         }

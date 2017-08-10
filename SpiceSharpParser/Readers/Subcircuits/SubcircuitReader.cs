@@ -37,8 +37,8 @@ namespace SpiceSharp.Parser.Readers
             {
                 if (mode)
                 {
-                    if (parameters[i].TryReadIdentifier(out subcktname))
-                        pins.Add(subcktname);
+                    if (parameters[i].TryReadIdentifier(out string node))
+                        pins.Add(subcktname = node);
                     else
                     {
                         // Parameter found, which means our last pin was actually our subcircuit name

@@ -4,14 +4,14 @@ using SpiceSharp.Simulations;
 using System.IO;
 using SpiceSharp.Parser;
 using SpiceSharp.Parameters;
+using SpiceSharp.Parser.Subcircuits;
 
 namespace SpiceSharpTest
 {
     class Program
     {
-        private static List<double> dbamp = new List<double>();
-        private static List<double> freq = new List<double>();
         private static Dictionary<string, string> parameters = null;
+        private static StreamWriter sw = null;
 
         /// <summary>
         /// Main method
@@ -29,22 +29,22 @@ namespace SpiceSharpTest
             foreach (string msg in SpiceSharp.Diagnostics.CircuitWarning.Warnings)
                 Console.WriteLine(msg);
 
-            nr.Netlist.Simulate();
-
-            using (StreamWriter sw = new StreamWriter("output.csv"))
+            using (sw = new StreamWriter("output.csv"))
             {
-                for (int i = 0; i < freq.Count; i++)
-                {
-                    sw.WriteLine(string.Join(";", freq[i], dbamp[i]));
-                }
+                nr.Netlist.Simulate();
             }
 
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Convert a Spice value from string to double
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="data"></param>
         private static void SpiceMember_SpiceMemberConvert(object sender, SpiceMemberConvertData data)
         {
-            if (data.Value is string)
+            if (data.Value is string && data.TargetType == typeof(double))
             {
                 if (parameters != null && parameters.ContainsKey((string)data.Value))
                 {
@@ -56,17 +56,38 @@ namespace SpiceSharpTest
             }
         }
 
-        private static void Path_OnSubcircuitPathChanged(object sender, SpiceSharp.Parser.Subcircuits.SubcircuitPathChangedEventArgs e)
+        /// <summary>
+        /// Called when a subcircuit is invoked
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">Event data</param>
+        private static void Path_OnSubcircuitPathChanged(object sender, SubcircuitPathChangedEventArgs e)
         {
             parameters = e.Parameters;
         }
 
+        /// <summary>
+        /// Write to a CSV file
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="data">The simulation data</param>
         private static void Netlist_OnExportSimulationData(object sender, SimulationData data)
         {
             Netlist n = sender as Netlist;
-            freq.Add(data.GetFrequency());
-            double d = data.GetDb("OUT");
-            dbamp.Add((double)n.Exports[0].Extract(data));
+            var state = n.Circuit.State;
+
+            // Depending on the simulation type, let's write some information
+            if (state.Domain == SpiceSharp.Circuits.CircuitState.DomainTypes.Frequency)
+                sw.Write(data.GetFrequency().ToString());
+            else if (state.Domain == SpiceSharp.Circuits.CircuitState.DomainTypes.Time)
+                sw.Write(data.GetTime().ToString());
+
+            for (int i = 0; i < n.Exports.Count; i++)
+            {
+                sw.Write(";");
+                sw.Write(n.Exports[i].Extract(data).ToString());
+            }
+            sw.Write(Environment.NewLine);
         }
     }
 }
