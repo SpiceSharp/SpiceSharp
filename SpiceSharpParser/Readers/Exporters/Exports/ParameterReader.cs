@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Simulations;
+using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers.Exports
 {

@@ -32,15 +32,37 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="name">The name of the component</param>
         /// <returns></returns>
-        public CircuitComponent this[string name]
+        public CircuitComponent this[params string[] name]
         {
             get
             {
                 if (name == null)
                     throw new ArgumentNullException(nameof(name));
-                if (components.ContainsKey(name))
-                    return components[name];
-                throw new CircuitException($"Could not find {name}");
+                if (name.Length == 0)
+                    throw new ArgumentException("At least one name expected", nameof(name));
+
+                if (!components.ContainsKey(name[0]))
+                    throw new CircuitException($"Component \"{name[0]}\" does not exist");
+
+                CircuitComponent c = components[name[0]];
+                if (c is Subcircuit)
+                {
+                    if (name.Length > 1)
+                    {
+                        string[] nn = new string[name.Length - 1];
+                        for (int i = 1; i < name.Length; i++)
+                            nn[i - 1] = name[i];
+                        return (c as Subcircuit).Components[nn];
+                    }
+                    else
+                        throw new CircuitException($"Component \"{name[0]}\" does not exist");
+                }
+                else
+                {
+                    if (name.Length > 1)
+                        throw new CircuitException($"Component \"{name[0]}\" is not a subcircuit");
+                    return c;
+                }
             }
         }
 
@@ -78,12 +100,40 @@ namespace SpiceSharp.Circuits
             }
         }
 
-        /// <summary>
+         /// <summary>
         /// Check if a component exists
+        /// Multiple names can be specified, in which case the first names will refer to subcircuits
         /// </summary>
-        /// <param name="name">The name of the component</param>
+        /// <param name="name">A list of names. If there are multiple names, the first names will refer to a subcircuit</param>
         /// <returns></returns>
-        public bool Contains(string name) => components.ContainsKey(name);
+        public bool Contains(params string[] name)
+        {
+            if (name.Length == 0)
+                throw new ArgumentException("At least one name expected", nameof(name));
+
+            if (!components.ContainsKey(name[0]))
+                return false;
+
+            CircuitComponent c = components[name[0]];
+            if (c is Subcircuit)
+            {
+                if (name.Length > 1)
+                {
+                    string[] nn = new string[name.Length - 1];
+                    for (int i = 1; i < name.Length; i++)
+                        nn[i - 1] = name[i];
+                    return (c as Subcircuit).Components.Contains(nn);
+                }
+                else
+                    return true;
+            }
+            else
+            {
+                if (name.Length > 1)
+                    return false;
+                return true;
+            }
+        }
 
         /// <summary>
         /// Get all components of a specific type

@@ -20,6 +20,11 @@ namespace SpiceSharp.Parser.Subcircuits
         public List<string> Pins { get; } = new List<string>();
 
         /// <summary>
+        /// The default parameters for this subcircuit definition
+        /// </summary>
+        public Dictionary<string, string> Defaults { get; } = new Dictionary<string, string>();
+
+        /// <summary>
         /// Private variables
         /// </summary>
         private Dictionary<StatementType, List<Statement>> statements { get; } = new Dictionary<StatementType, List<Statement>>();
@@ -29,36 +34,17 @@ namespace SpiceSharp.Parser.Subcircuits
         /// Constructor
         /// </summary>
         /// <param name="name">The name</param>
-        public SubcircuitDefinition(Statement st)
+        public SubcircuitDefinition(string name, List<Statement> body)
         {
-            // Parse the name
-            if (st == null || st.Parameters == null)
-            {
-                Name = null;
-                return;
-            }
-            if (st.Parameters.Count > 0)
-                Name = st.Parameters[0].ReadIdentifier();
+            Name = name;
 
+            // Basic statements so later checks aren't needed
             statements.Add(StatementType.Model, new List<Statement>());
             statements.Add(StatementType.Control, new List<Statement>());
 
-            // Get the body
-            if (st.Parameters.Count > 1)
-            {
-                object body = st.Parameters.Last();
-                if (!(body is List<Statement>))
-                    throw new ParseException(st.Name, "Invalid subcircuit definition");
-                List<Statement> stbody = body as List<Statement>;
-
-                // Parse nodes
-                for (int i = 1; i < st.Parameters.Count - 1; i++)
-                    Pins.Add(st.Parameters[i].ReadIdentifier());
-
-                // Parse the body statements
-                foreach (Statement s in stbody)
-                    AddStatement(s);
-            }
+            // Parse the body statements
+            foreach (Statement s in body)
+                AddStatement(s);
         }
 
         /// <summary>
@@ -67,34 +53,23 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <param name="st">The statement</param>
         private void AddStatement(Statement st)
         {
-            if (st.Type == StatementType.Subcircuit)
-            {
-                SubcircuitDefinition ndef = new SubcircuitDefinition(st);
-                definitions.Add(ndef.Name, ndef);
-            }
-            else
-            {
-                if (!statements.ContainsKey(st.Type))
-                    statements.Add(st.Type, new List<Statement>());
-                statements[st.Type].Add(st);
-            }
+            if (!statements.ContainsKey(st.Type))
+                statements.Add(st.Type, new List<Statement>());
+            statements[st.Type].Add(st);
         }
 
         /// <summary>
-        /// Read all the statements of the subcircuit definition
-        /// Only models and components are read!
+        /// Read the statements in the subcircuit definition
         /// </summary>
-        /// <param name="r">The token readers that are active</param>
+        /// <param name="type">The type of the statements</param>
         /// <param name="netlist">The netlist</param>
-        public void ReadStatements(Netlist netlist)
+        public void Read(StatementType type, Netlist netlist)
         {
-            // Read all models
-            foreach (var s in statements[StatementType.Model])
-                netlist.Readers.Read(s, netlist);
-
-            // Read all components
-            foreach (var s in statements[StatementType.Component])
-                netlist.Readers.Read(s, netlist);
+            if (statements.ContainsKey(type))
+            {
+                foreach (var st in statements[type])
+                    netlist.Readers.Read(st, netlist);
+            }
         }
 
         /// <summary>

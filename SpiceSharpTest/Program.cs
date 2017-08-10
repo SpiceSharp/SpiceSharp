@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp;
-using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System.IO;
-using Spice2SpiceSharp;
 using SpiceSharp.Parser;
-using SpiceSharp.Parser.Readers;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharpTest
 {
@@ -14,6 +11,7 @@ namespace SpiceSharpTest
     {
         private static List<double> dbamp = new List<double>();
         private static List<double> freq = new List<double>();
+        private static Dictionary<string, string> parameters = null;
 
         /// <summary>
         /// Main method
@@ -21,28 +19,16 @@ namespace SpiceSharpTest
         /// <param name="args">Input arguments</param>
         static void Main(string[] args)
         {
-            /* SpiceDevice dev = new SpiceDevice();
-            dev.Defined.AddRange(new string[] { "DEV_bjt", "AN_pz", "AN_noise", "NOBYPASS", "NEWTRUNC", "PREDICTOR" });
-            dev.Folder = @"D:\Visual Studio\Info\SpiceSharp\spice3f5\src\lib\dev\bjt";
-            dev.ITF = @"bjtitf.h";
-            dev.Def = @"bjtdefs.h";
-            SpiceClassGenerator scg = new SpiceClassGenerator(dev);
-            scg.ExportModel("model.cs");
-            scg.ExportDevice("device.cs");
+            SpiceMember.SpiceMemberConvert += SpiceMember_SpiceMemberConvert;
 
-            // Show all the warnings
-            Console.WriteLine("Warnings:");
-            foreach (string msg in ConverterWarnings.Warnings)
-                Console.WriteLine(msg); */
-
-            SpiceSharp.Parameters.SpiceMember.SpiceMemberConvert += SpiceSharp.Parameters.Converter.SpiceConvert;
             NetlistReader nr = new NetlistReader();
+            nr.Netlist.OnExportSimulationData += Netlist_OnExportSimulationData;
+            nr.Netlist.Path.OnSubcircuitPathChanged += Path_OnSubcircuitPathChanged;
             nr.Parse("test.net");
 
             foreach (string msg in SpiceSharp.Diagnostics.CircuitWarning.Warnings)
                 Console.WriteLine(msg);
 
-            nr.Netlist.OnExportSimulationData += Netlist_OnExportSimulationData;
             nr.Netlist.Simulate();
 
             using (StreamWriter sw = new StreamWriter("output.csv"))
@@ -54,6 +40,25 @@ namespace SpiceSharpTest
             }
 
             Console.ReadKey();
+        }
+
+        private static void SpiceMember_SpiceMemberConvert(object sender, SpiceMemberConvertData data)
+        {
+            if (data.Value is string)
+            {
+                if (parameters != null && parameters.ContainsKey((string)data.Value))
+                {
+                    string result = parameters[(string)data.Value];
+                    data.Result = SpiceConvert.ToDouble(result);
+                }
+                else
+                    data.Result = SpiceConvert.ToDouble((string)data.Value);
+            }
+        }
+
+        private static void Path_OnSubcircuitPathChanged(object sender, SpiceSharp.Parser.Subcircuits.SubcircuitPathChangedEventArgs e)
+        {
+            parameters = e.Parameters;
         }
 
         private static void Netlist_OnExportSimulationData(object sender, SimulationData data)

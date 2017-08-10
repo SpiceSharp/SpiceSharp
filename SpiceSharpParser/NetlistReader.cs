@@ -26,69 +26,10 @@ namespace SpiceSharp.Parser
         /// <param name="stream">The stream</param>
         public NetlistReader(Netlist netlist = null)
         {
-            Netlist = netlist;
-        }
-
-        /// <summary>
-        /// Create a standard netlist, which includes the following:
-        /// </summary>
-        /// <returns></returns>
-        public Netlist StandardNetlist()
-        {
-            Netlist netlist = new Netlist(new Circuit());
-
-            // Register standard readers
-            netlist.Readers.Register(
-                // Subcircuit readers
-                new SubcircuitReader(),
-                new SubcircuitDefinitionReader(),
-
-                // Component readers
-                new ResistorReader(),
-                new CapacitorReader(),
-                new InductorReader(),
-                new MutualInductanceReader(),
-                new VoltagesourceReader(),
-                new VoltageControlledVoltagesourceReader(),
-                new CurrentControlledVoltagesourceReader(),
-                new CurrentsourceReader(),
-                new VoltageControlledCurrentsourceReader(),
-                new CurrentControlledCurrentsourceReader(),
-                new VoltageSwitchReader(),
-                new CurrentSwitchReader(),
-                new BipolarReader(),
-                new DiodeReader(),
-
-                // Control readers
-                new DCReader(),
-                new ACReader(),
-                new TransientReader(),
-                new ICReader(),
-                new NodesetReader(),
-                new OptionReader(),
-                new SaveReader(),
-
-                // Standard export types
-                new VoltageReader(),
-                new CurrentReader(),
-                new VoltageComplexReader(),
-                new CurrentComplexReader(),
-                new ParameterReader(),
-                
-                // Standard waveform types
-                new PulseReader(),
-                new SineReader(),
-                
-                // Add model types
-                new ResistorModelReader(),
-                new CapacitorModelReader(),
-                new VoltageSwitchModelReader(),
-                new CurrentSwitchReader(),
-                new BipolarModelReader(true),
-                new BipolarModelReader(false),
-                new DiodeModelReader());
-
-            return netlist;
+            if (netlist == null)
+                Netlist = Netlist.StandardNetlist();
+            else
+                Netlist = netlist;
         }
 
         /// <summary>
@@ -112,7 +53,7 @@ namespace SpiceSharp.Parser
         public void Parse(Stream stream)
         {
             if (Netlist == null)
-                Netlist = StandardNetlist();
+                throw new ParseException("No netlist specified");
             Parser = new SpiceSharpParser(stream);
 
             // Parse the netlist for control statements and subcircuit definitions

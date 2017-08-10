@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SpiceSharp.Circuits;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using System.Numerics;
 

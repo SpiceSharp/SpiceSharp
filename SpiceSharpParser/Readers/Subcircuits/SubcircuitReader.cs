@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Parser.Subcircuits;
+using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
@@ -26,11 +27,35 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
         {
-            // First get the number of terminals
-            string[] pins = new string[parameters.Count - 1];
-            for (int i = 0; i < parameters.Count - 1; i++)
-                pins[i] = parameters[i].ReadIdentifier();
-            string subcktname = parameters[parameters.Count - 1].ReadIdentifier();
+            List<string> pins = new List<string>();
+            Dictionary<string, string> pars = new Dictionary<string, string>();
+            string subcktname = null;
+
+            // Format: <NAME> <NODES>* <SUBCKT> <PAR1>=<VAL1> ...
+            bool mode = true; // true = nodes, false = parameters
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                if (mode)
+                {
+                    if (parameters[i].TryReadIdentifier(out subcktname))
+                        pins.Add(subcktname);
+                    else
+                    {
+                        // Parameter found, which means our last pin was actually our subcircuit name
+                        pins.RemoveAt(pins.Count - 1);
+                        mode = false;
+                    }
+                }
+
+                // Reading parameters
+                if (!mode)
+                {
+                    parameters[i].ReadAssignment(out string pname, out string pvalue);
+                    pars.Add(pname, pvalue);
+                }
+            }
+            if (mode)
+                pins.RemoveAt(pins.Count - 1);
 
             // Find the subcircuit definition
             SubcircuitDefinition definition = netlist.Path.FindDefinition(subcktname);
@@ -39,11 +64,12 @@ namespace SpiceSharp.Parser.Readers
 
             // Create the subcircuit
             Subcircuit subckt = new Subcircuit(name, definition.Pins.ToArray());
-            subckt.Connect(pins);
+            subckt.Connect(pins.ToArray());
 
-            // Read the subcircuit definition in the subcircuit
-            netlist.Path.Descend(subckt, definition);
-            definition.ReadStatements(netlist);
+            // Apply models and components
+            netlist.Path.Descend(subckt, definition, pars);
+            definition.Read(StatementType.Model, netlist);
+            definition.Read(StatementType.Component, netlist);
             netlist.Path.Ascend();
 
             // Return the subcircuit

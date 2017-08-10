@@ -12,11 +12,12 @@
 /// </para>
 /// </remarks>
 using System;
-using SpiceSharp.Parser.Readers;
+using SpiceSharp.Parser.Readers.Extensions;
+
 namespace SpiceSharp.Parser
 {
     [Serializable]
-    public class ParseException : System.Exception {
+    public class ParseException : Exception {
 
         /**
          * This constructor is used by the method "GenerateParseException"

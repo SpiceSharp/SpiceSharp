@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers.Exports
 {

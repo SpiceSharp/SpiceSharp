@@ -61,7 +61,7 @@
     <Compile Include="Readers\Exporters\Exports\VoltageComplexReader.cs" />
     <Compile Include="Readers\Exporters\Exports\VoltageReader.cs" />
     <Compile Include="Readers\Exporters\SaveReader.cs" />
-    <Compile Include="Readers\ReaderExtension.cs" />
+    <Compile Include="Readers\Extensions\ReaderExtension.cs" />
     <Compile Include="Readers\Currentsources\CurrentControlledCurrentsourceReader.cs" />
     <Compile Include="Readers\Currentsources\CurrentsourceReader.cs" />
     <Compile Include="Readers\Currentsources\VoltageControlledCurrentsourceReader.cs" />

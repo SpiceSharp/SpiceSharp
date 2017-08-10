@@ -54,6 +54,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
         case VALUE:
         case STRING:
+        case EXPRESSION:
         case REFERENCE:
         case WORD:
         case IDENTIFIER:
@@ -93,6 +94,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
           case VALUE:
           case STRING:
+          case EXPRESSION:
           case REFERENCE:
           case WORD:
           case IDENTIFIER:
@@ -131,6 +133,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
           case VALUE:
           case STRING:
+          case EXPRESSION:
           case REFERENCE:
           case WORD:
           case IDENTIFIER:
@@ -159,6 +162,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
             switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
             case VALUE:
             case STRING:
+            case EXPRESSION:
             case REFERENCE:
             case WORD:
             case IDENTIFIER:
@@ -213,6 +217,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
           case VALUE:
           case STRING:
+          case EXPRESSION:
           case REFERENCE:
           case WORD:
           case IDENTIFIER:
@@ -252,6 +257,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
             switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
             case VALUE:
             case STRING:
+            case EXPRESSION:
             case REFERENCE:
             case WORD:
             case IDENTIFIER:
@@ -289,6 +295,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
             switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
             case VALUE:
             case STRING:
+            case EXPRESSION:
             case REFERENCE:
             case WORD:
             case IDENTIFIER:
@@ -328,6 +335,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
               switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
               case VALUE:
               case STRING:
+              case EXPRESSION:
               case REFERENCE:
               case WORD:
               case IDENTIFIER:
@@ -383,6 +391,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
         case VALUE:
         case STRING:
+        case EXPRESSION:
         case REFERENCE:
         case WORD:
         case IDENTIFIER:
@@ -418,6 +427,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
         case VALUE:
         case STRING:
+        case EXPRESSION:
         case REFERENCE:
         case WORD:
         case IDENTIFIER:
@@ -454,6 +464,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
       switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
       case VALUE:
       case STRING:
+      case EXPRESSION:
       case REFERENCE:
       case WORD:
       case IDENTIFIER:
@@ -488,6 +499,9 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     case REFERENCE:
       t = mcc_consume_token(REFERENCE);
       break;
+    case EXPRESSION:
+      t = mcc_consume_token(EXPRESSION);
+      break;
     default:
       mcc_la1[29] = mcc_gen;
       mcc_consume_token(-1);
@@ -519,6 +533,9 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         break;
       case REFERENCE:
         t = mcc_consume_token(REFERENCE);
+        break;
+      case EXPRESSION:
+        t = mcc_consume_token(EXPRESSION);
         break;
       default:
         mcc_la1[31] = mcc_gen;
@@ -608,15 +625,18 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
   private bool mcc_3R_18() {
     Token xsp;
     xsp = mcc_scanpos;
+    if (mcc_scan_token(25)) {
+    mcc_scanpos = xsp;
+    if (mcc_scan_token(21)) {
+    mcc_scanpos = xsp;
     if (mcc_scan_token(22)) {
     mcc_scanpos = xsp;
-    if (mcc_scan_token(19)) {
+    if (mcc_scan_token(26)) {
     mcc_scanpos = xsp;
-    if (mcc_scan_token(20)) {
+    if (mcc_scan_token(24)) {
     mcc_scanpos = xsp;
-    if (mcc_scan_token(23)) {
-    mcc_scanpos = xsp;
-    if (mcc_scan_token(21)) return true;
+    if (mcc_scan_token(23)) return true;
+    }
     }
     }
     }
@@ -643,7 +663,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
       mcc_gla1_0();
    }
    private static void mcc_gla1_0() {
-      mcc_la1_0 = new int[] {4268032,262145,16252928,65537,2048,16252928,65537,16252928,2048,16252928,4268032,65537,16252928,65537,2048,16252928,65537,16252928,65537,2048,16252928,65537,4194304,73728,16252928,32,16252928,32,16252928,16252928,16384,16252928,};
+      mcc_la1_0 = new int[] {33849344,1048577,132120576,262145,2048,132120576,262145,132120576,2048,132120576,33849344,262145,132120576,262145,2048,132120576,262145,132120576,262145,2048,132120576,262145,33554432,294912,132120576,32,132120576,32,132120576,132120576,65536,132120576,};
    }
   private MccCalls[] mcc_2_rtns = new MccCalls[5];
   private bool mcc_rescan = false;
@@ -814,8 +834,8 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
 
   public ParseException GenerateParseException() {
     mcc_expentries.Clear();
-    bool[] la1tokens = new bool[28];
-    for (int i = 0; i < 28; i++) {
+    bool[] la1tokens = new bool[31];
+    for (int i = 0; i < 31; i++) {
       la1tokens[i] = false;
     }
     if (mcc_kind >= 0) {
@@ -831,7 +851,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         }
       }
     }
-    for (int i = 0; i < 28; i++) {
+    for (int i = 0; i < 31; i++) {
       if (la1tokens[i]) {
         mcc_expentry = new int[1];
         mcc_expentry[0] = i;

@@ -111,9 +111,9 @@ Object ParseSingle() :
 	List<Token> ts = new List<Token>();
 }
 {
-	(t = <WORD> | t = <VALUE> | t = <STRING> | t = <IDENTIFIER> | t = <REFERENCE>)
+	(t = <WORD> | t = <VALUE> | t = <STRING> | t = <IDENTIFIER> | t = <REFERENCE> | t = <EXPRESSION>)
 		{ ts.Add(t); }
-	(<COMMA> (t = <WORD> | t = <VALUE> | t = <STRING> | t = <IDENTIFIER> | t = <REFERENCE>) 
+	(<COMMA> (t = <WORD> | t = <VALUE> | t = <STRING> | t = <IDENTIFIER> | t = <REFERENCE> | t = <EXPRESSION>) 
 		{ ts.Add(t); })*
 	{
 		if (ts.Count > 1)
@@ -124,11 +124,13 @@ Object ParseSingle() :
 }
 
 SKIP : { " " | "\t" }
-SKIP : { <"*" (~["\r","\n"])* ("\n" | "\r" | "\r\n")> }
+SKIP : { <("\n" | "\r" | "\r\n") "*" (~["\r","\n"])* > }
 TOKEN :
 { 
 	<PLUS : "+">
 	| <ASTERISK : "*">
+	| <MINUS : "-">
+	| <DIVIDE : "/">
 	| <DOT : ".">
 	| <COMMA : ",">
 	| <DELIMITER : "=" | "(" | ")" | "[" | "]">
@@ -137,6 +139,7 @@ TOKEN :
 	| <END : ".end">
 	| <VALUE : (["+","-"])? ((<DIGIT>)+ ("." (<DIGIT>)*)? | "." (<DIGIT>)+) ("e" ("+" | "-")? (<DIGIT>)+ | ["t","g","m","k","u","n","p","f"] (<LETTER>)*)?>
 	| <STRING : "\"" ( ~["\"","\\","\n","\r"] | "\\" ( ["n","t","b","r","f","\\","\'","\""] | (["\n","\r"] | "\r\n")))* "\"">
+	| <EXPRESSION : "{" (~["{","}"])+ "}">
 	| <REFERENCE : "@" <WORD>>
 	| <WORD : <LETTER> (<CHARACTER> | <SPECIAL>)*>
 	| <IDENTIFIER : (<CHARACTER> | "_") (<CHARACTER> | <SPECIAL>)*>

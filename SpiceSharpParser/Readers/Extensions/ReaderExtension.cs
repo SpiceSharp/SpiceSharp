@@ -4,7 +4,7 @@ using SpiceSharp.Parameters;
 using SpiceSharp.Components;
 using static SpiceSharp.Parser.SpiceSharpParserConstants;
 
-namespace SpiceSharp.Parser.Readers
+namespace SpiceSharp.Parser.Readers.Extensions
 {
     /// <summary>
     /// Some extension methods for Token-related objects
@@ -187,18 +187,22 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public static bool TryReadValue(this object o, out string value)
         {
+            // Standard input as a token
             if (o is Token)
             {
                 Token t = o as Token;
 
-                // Read a value
+                // Read a simple value
                 if (t.kind == VALUE)
                 {
                     value = t.image.ToLower();
+                    return true;
+                }
 
-                    // Our converters don't allow .5 as an input, so prepend a 0 in such cases
-                    if (value[0] == '.')
-                        value = "0" + value;
+                // Read an expression
+                if (t.kind == EXPRESSION)
+                {
+                    value = t.image.Substring(1, t.image.Length - 2).ToLower();
                     return true;
                 }
             }

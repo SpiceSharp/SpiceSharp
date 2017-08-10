@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpiceSharp.Parameters
+﻿namespace SpiceSharp.Parameters
 {
     /// <summary>
     /// An interface that can be used to set or get a parameter

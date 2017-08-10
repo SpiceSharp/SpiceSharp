@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Parser.Readers
+﻿using SpiceSharp.Parser.Readers.Extensions;
+
+namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
     /// An exporter that can read .save statements

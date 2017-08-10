@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SpiceSharp.Parser.Readers;
+using SpiceSharp.Parser.Readers.Exports;
+using SpiceSharp.Parser.Readers.Waveforms;
 using SpiceSharp.Parser.Subcircuits;
-using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
-using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser
 {
@@ -92,6 +91,68 @@ namespace SpiceSharp.Parser
         private void ExportSimulationData(object sender, SimulationData data)
         {
             OnExportSimulationData?.Invoke(this, data);
+        }
+
+        /// <summary>
+        /// Create a standard netlist, which includes the following:
+        /// </summary>
+        /// <returns></returns>
+        public static Netlist StandardNetlist()
+        {
+            Netlist netlist = new Netlist(new Circuit());
+
+            // Register standard readers
+            netlist.Readers.Register(
+                // Subcircuit readers
+                new SubcircuitReader(),
+                new SubcircuitDefinitionReader(),
+
+                // Component readers
+                new ResistorReader(),
+                new CapacitorReader(),
+                new InductorReader(),
+                new MutualInductanceReader(),
+                new VoltagesourceReader(),
+                new VoltageControlledVoltagesourceReader(),
+                new CurrentControlledVoltagesourceReader(),
+                new CurrentsourceReader(),
+                new VoltageControlledCurrentsourceReader(),
+                new CurrentControlledCurrentsourceReader(),
+                new VoltageSwitchReader(),
+                new CurrentSwitchReader(),
+                new BipolarReader(),
+                new DiodeReader(),
+
+                // Control readers
+                new DCReader(),
+                new ACReader(),
+                new TransientReader(),
+                new ICReader(),
+                new NodesetReader(),
+                new OptionReader(),
+                new SaveReader(),
+
+                // Standard export types
+                new VoltageReader(),
+                new CurrentReader(),
+                new VoltageComplexReader(),
+                new CurrentComplexReader(),
+                new ParameterReader(),
+
+                // Standard waveform types
+                new PulseReader(),
+                new SineReader(),
+
+                // Add model types
+                new ResistorModelReader(),
+                new CapacitorModelReader(),
+                new VoltageSwitchModelReader(),
+                new CurrentSwitchReader(),
+                new BipolarModelReader(true),
+                new BipolarModelReader(false),
+                new DiodeModelReader());
+
+            return netlist;
         }
     }
 

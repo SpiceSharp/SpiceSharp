@@ -337,7 +337,7 @@ namespace SpiceSharp.Parameters
     /// <summary>
     /// Spice Member conversion data
     /// </summary>
-    public class SpiceMemberConvertData
+    public class SpiceMemberConvertData : EventArgs
     {
         /// <summary>
         /// The value that needs to be converted

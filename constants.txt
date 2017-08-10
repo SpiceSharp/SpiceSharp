@@ -1,3 +1,16 @@
+*** CONVERTING USING SPICE2SPICESHARP ***
+1) Use the following preprocessor defines for a SpiceDevice object
+	- The device definition (eg. bjt has DEV_bjt)
+	- AN_pz
+	- AN_noise
+	- NOBYPASS
+	- NEWTRUNC
+	- PREDICTOR
+2) Specify the ITF file (eg. bjt has bjtitf.h)
+3) Specify the definitions file (eg. bjt has bjtdefs.h)
+4) Specify the device code folder
+5) Create the SpiceClassGenerator using the SpiceDevice object
+
 *** TRANSIENT SIMULATIONS ***
 1) Calculate OP with MODETRANOP | MODEINITJCT -> MODETRANOP | MODEINITFLOAT
 	1') UseDC = true, UseSmallSignal = false, Domain = Time, InitJct -> InitFloat, UseIC = ?
@@ -47,3 +60,4 @@ MODEDCTRANCURVE = Domain == None
 MODEINITJCT = Init == InitJct
 MODEINITFLOAT = Init == InitFloat
 MODEINITPRED = used in transient simulations, if it is just copying state1 in state0 you can ignore it
+

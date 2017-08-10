@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {

@@ -14,6 +14,11 @@ namespace SpiceSharp.Parser.Readers
         public StatementType Active { get; set; } = StatementType.All;
 
         /// <summary>
+        /// The event that is fired when an expression needs to be parsed
+        /// </summary>
+        public event ParseNetlistExpressionEventHandler OnParseExpression;
+
+        /// <summary>
         /// Private variables
         /// </summary>
         private Dictionary<StatementType, List<Reader>> Readers = new Dictionary<StatementType, List<Reader>>();
@@ -63,6 +68,18 @@ namespace SpiceSharp.Parser.Readers
         }
 
         /// <summary>
+        /// Parse an expression
+        /// </summary>
+        /// <param name="input">The input</param>
+        /// <returns></returns>
+        public object Parse(string input)
+        {
+            ExpressionData data = new ExpressionData(input);
+            OnParseExpression?.Invoke(this, data);
+            return data.Output;
+        }
+
+        /// <summary>
         /// Register (multiple) token readers
         /// </summary>
         /// <param name="caller">The calling object</param>
@@ -93,4 +110,36 @@ namespace SpiceSharp.Parser.Readers
             }
         }
     }
+
+    /// <summary>
+    /// Expression data
+    /// </summary>
+    public class ExpressionData
+    {
+        /// <summary>
+        /// The input expression
+        /// </summary>
+        public string Input { get; }
+
+        /// <summary>
+        /// The output expression
+        /// </summary>
+        public object Output { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="input"></param>
+        public ExpressionData(string input)
+        {
+            Input = input;
+        }
+    }
+
+    /// <summary>
+    /// An event handler for parsing a netlist expression
+    /// </summary>
+    /// <param name="sender">The TokenReaders object sending the event</param>
+    /// <param name="data">The expression data</param>
+    public delegate void ParseNetlistExpressionEventHandler(object sender, ExpressionData data);
 }
