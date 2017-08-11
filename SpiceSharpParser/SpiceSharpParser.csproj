@@ -110,5 +110,8 @@
   <ItemGroup>
     <None Include="spicelang.cc" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Expressions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
