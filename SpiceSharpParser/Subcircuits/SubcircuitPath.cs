@@ -43,9 +43,9 @@ namespace SpiceSharp.Parser.Subcircuits
         private Netlist netlist;
         private Stack<Subcircuit> csubckt = new Stack<Subcircuit>();
         private Stack<SubcircuitDefinition> csubcktdef = new Stack<SubcircuitDefinition>();
-        private Stack<Dictionary<string, string>> cparams = new Stack<Dictionary<string, string>>();
+        private Stack<Dictionary<string, double>> cparams = new Stack<Dictionary<string, double>>();
         private Dictionary<string, SubcircuitDefinition> definitions = new Dictionary<string, SubcircuitDefinition>();
-        private Dictionary<string, string> globalparameters = new Dictionary<string, string>();
+        private Dictionary<string, double> globalparameters = new Dictionary<string, double>();
 
         /// <summary>
         /// Event that is triggered when the netlist descends into a subcircuit
@@ -60,7 +60,7 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <summary>
         /// The global parameters
         /// </summary>
-        public Dictionary<string, string> Parameters { get; private set; }
+        public Dictionary<string, double> Parameters { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -93,23 +93,21 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <param name="pars">Parameters passed to the subcircuit</param>
         public void Descend(Subcircuit subckt, SubcircuitDefinition def, Dictionary<string, string> parameters)
         {
-            // Merge parameters
-            if (parameters != null)
-                MergeParameters(def, parameters);
+            var nparameters = parameters != null ? MergeParameters(def, parameters) : null;
 
             // Push
             csubckt.Push(subckt);
             csubcktdef.Push(def);
-            cparams.Push(parameters);
+            cparams.Push(nparameters);
 
             // Update the currently active components
             if (subckt != null)
                 Components = subckt.Components;
             if (parameters != null)
-            Parameters = parameters;
+            Parameters = nparameters;
 
             // Call the event
-            SubcircuitPathChangedEventArgs args = new SubcircuitPathChangedEventArgs(subckt, def, SubcircuitPathChangedEventArgs.ChangeType.Descend, parameters);
+            SubcircuitPathChangedEventArgs args = new SubcircuitPathChangedEventArgs(subckt, def, SubcircuitPathChangedEventArgs.ChangeType.Descend, nparameters);
             OnSubcircuitPathChanged?.Invoke(this, args);
         }
 
@@ -136,7 +134,7 @@ namespace SpiceSharp.Parser.Subcircuits
             // Event arguments
             Subcircuit subckt = csubckt.Count > 0 ? csubckt.Peek() : null;
             SubcircuitDefinition def = csubcktdef.Count > 0 ? csubcktdef.Peek() : null;
-            Dictionary<string, string> pars = cparams.Count > 0 ? cparams.Peek() : Parameters;
+            Dictionary<string, double> pars = cparams.Count > 0 ? cparams.Peek() : Parameters;
 
             // Call the event
             SubcircuitPathChangedEventArgs args = new SubcircuitPathChangedEventArgs(subckt, def, SubcircuitPathChangedEventArgs.ChangeType.Ascend, pars);
@@ -236,13 +234,19 @@ namespace SpiceSharp.Parser.Subcircuits
         /// </summary>
         /// <param name="def">The circuit definition containing the default parameters</param>
         /// <param name="parameters">The parameters</param>
-        private void MergeParameters(SubcircuitDefinition def, Dictionary<string, string> parameters)
+        private Dictionary<string, double> MergeParameters(SubcircuitDefinition def, Dictionary<string, string> parameters)
         {
+            Dictionary<string, double> nparameters = new Dictionary<string, double>();
+
+            // Convert all parameters now
+            foreach (var item in parameters)
+                nparameters.Add(item.Key, ConvertDouble(item.Value));
+
             // Add definition defaults
             foreach (var item in def.Defaults)
             {
-                if (!parameters.ContainsKey(item.Key))
-                    parameters.Add(item.Key, item.Value);
+                if (!nparameters.ContainsKey(item.Key))
+                    nparameters.Add(item.Key, ConvertDouble(item.Value));
             }
 
             // Merge the parameters depending on the scope rules
@@ -250,11 +254,11 @@ namespace SpiceSharp.Parser.Subcircuits
             {
                 case ScopeRule.Descend:
 
-                    // Add all previous parameters if they aren't yet added
+                    // Add all previous parameters that aren't overwritten if they aren't yet added
                     foreach (var item in Parameters)
                     {
-                        if (!parameters.ContainsKey(item.Key))
-                            parameters.Add(item.Key, item.Value);
+                        if (!nparameters.ContainsKey(item.Key))
+                            nparameters.Add(item.Key, item.Value);
                     }
                     break;
 
@@ -263,11 +267,23 @@ namespace SpiceSharp.Parser.Subcircuits
                     // Only add the global parameters
                     foreach (var item in globalparameters)
                     {
-                        if (!parameters.ContainsKey(item.Key))
-                            parameters.Add(item.Key, item.Value);
+                        if (!nparameters.ContainsKey(item.Key))
+                            nparameters.Add(item.Key, item.Value);
                     }
                     break;
             }
+
+            return nparameters;
+        }
+
+        /// <summary>
+        /// Convert an expression to a double
+        /// </summary>
+        /// <param name="value">Value</param>
+        /// <returns></returns>
+        private double ConvertDouble(string value)
+        {
+            return (double)SpiceSharp.Parameters.SpiceMember.ConvertType(this, value, typeof(double));
         }
     }
 
@@ -298,7 +314,7 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <summary>
         /// The parameters for the new path
         /// </summary>
-        public Dictionary<string, string> Parameters { get; }
+        public Dictionary<string, double> Parameters { get; }
 
         /// <summary>
         /// The type of path change
@@ -310,7 +326,7 @@ namespace SpiceSharp.Parser.Subcircuits
         /// </summary>
         /// <param name="subckt">The subcircuit</param>
         /// <param name="def">The definition</param>
-        public SubcircuitPathChangedEventArgs(Subcircuit subckt, SubcircuitDefinition def, ChangeType type, Dictionary<string, string> parameters)
+        public SubcircuitPathChangedEventArgs(Subcircuit subckt, SubcircuitDefinition def, ChangeType type, Dictionary<string, double> parameters)
         {
             Subcircuit = subckt;
             Definition = def;

@@ -11,6 +11,11 @@ namespace SpiceSharp.Parameters
     public class SpiceMember
     {
         /// <summary>
+        /// The event that is raised when a parameter is not the right type
+        /// </summary>
+        public static event SpiceMemberConvertEventHandler OnSpiceMemberConvert;
+
+        /// <summary>
         /// Access flags
         /// </summary>
         [Flags]
@@ -50,11 +55,6 @@ namespace SpiceSharp.Parameters
         /// Is the member a Parameter object?
         /// </summary>
         public bool IsParameter { get; }
-
-        /// <summary>
-        /// The event that is raised when a parameter is not the right type
-        /// </summary>
-        public static event SpiceMemberConvertEventHandler SpiceMemberConvert;
 
         /// <summary>
         /// The number of parameters when the member is a method
@@ -290,7 +290,7 @@ namespace SpiceSharp.Parameters
         {
             // First try to convert using the event
             var data = new SpiceMemberConvertData(value, type);
-            SpiceMemberConvert?.Invoke(sender, data);
+            OnSpiceMemberConvert?.Invoke(sender, data);
 
             // Let's see if the data is of the right type
             if (data.Result != null)

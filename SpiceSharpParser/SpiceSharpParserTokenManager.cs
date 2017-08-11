@@ -16,10 +16,10 @@ private int mccStopStringLiteralDfa_0(int pos, long active0)
       case 0:
          if ((active0 & 6L) != 0L)
          {
-            mccmatchedKind = 25;
+            mccmatchedKind = 24;
             return 35;
          }
-         if ((active0 & 1605632L) != 0L)
+         if ((active0 & 802816L) != 0L)
             return 11;
          if ((active0 & 10240L) != 0L)
             return 36;
@@ -27,7 +27,7 @@ private int mccStopStringLiteralDfa_0(int pos, long active0)
       case 1:
          if ((active0 & 6L) != 0L)
          {
-            mccmatchedKind = 25;
+            mccmatchedKind = 24;
             mccmatchedPos = 1;
             return 35;
          }
@@ -35,7 +35,7 @@ private int mccStopStringLiteralDfa_0(int pos, long active0)
       case 2:
          if ((active0 & 6L) != 0L)
          {
-            mccmatchedKind = 25;
+            mccmatchedKind = 24;
             mccmatchedPos = 2;
             return 35;
          }
@@ -44,7 +44,7 @@ private int mccStopStringLiteralDfa_0(int pos, long active0)
          if ((active0 & 6L) != 0L)
          {
             if (mccmatchedPos != 3) {
-               mccmatchedKind = 25;
+               mccmatchedKind = 24;
                mccmatchedPos = 3;
             }
             return 35;
@@ -53,7 +53,7 @@ private int mccStopStringLiteralDfa_0(int pos, long active0)
       case 4:
          if ((active0 & 2L) != 0L)
          {
-            mccmatchedKind = 25;
+            mccmatchedKind = 24;
             mccmatchedPos = 4;
             return 35;
          }
@@ -93,14 +93,12 @@ private int mccMoveStringLiteralDfa0_0()
       case 43:
          return mccStartNfaWithStates_0(0, 11, 36);
       case 44:
-         return mccStopAtPos(0, 16);
+         return mccStopAtPos(0, 15);
       case 45:
          return mccStartNfaWithStates_0(0, 13, 36);
       case 46:
-         mccmatchedKind = 15;
-         return mccMoveStringLiteralDfa1_0(1572864L);
-      case 47:
-         return mccStopAtPos(0, 14);
+         mccmatchedKind = 14;
+         return mccMoveStringLiteralDfa1_0(786432L);
       case 61:
          return mccStopAtPos(0, 5);
       case 91:
@@ -127,7 +125,7 @@ private int mccMoveStringLiteralDfa1_0(long active0)
    switch((int)curChar) {
       case 69:
       case 101:
-         return mccMoveStringLiteralDfa2_0(active0, 1572864L);
+         return mccMoveStringLiteralDfa2_0(active0, 786432L);
       case 79:
       case 111:
          return mccMoveStringLiteralDfa2_0(active0, 4L);
@@ -157,7 +155,7 @@ private int mccMoveStringLiteralDfa2_0(long old0, long active0)
          return mccMoveStringLiteralDfa3_0(active0, 4L);
       case 78:
       case 110:
-         return mccMoveStringLiteralDfa3_0(active0, 1572864L);
+         return mccMoveStringLiteralDfa3_0(active0, 786432L);
       default :
          break;
    }
@@ -178,12 +176,12 @@ private int mccMoveStringLiteralDfa3_0(long old0, long active0)
          return mccMoveStringLiteralDfa4_0(active0, 2L);
       case 68:
       case 100:
-         if ((active0 & 1048576L) != 0L)
+         if ((active0 & 524288L) != 0L)
          {
-            mccmatchedKind = 20;
+            mccmatchedKind = 19;
             mccmatchedPos = 3;
          }
-         return mccMoveStringLiteralDfa4_0(active0, 524288L);
+         return mccMoveStringLiteralDfa4_0(active0, 262144L);
       case 69:
       case 101:
          return mccMoveStringLiteralDfa4_0(active0, 4L);
@@ -212,8 +210,8 @@ private int mccMoveStringLiteralDfa4_0(long old0, long active0)
          break;
       case 83:
       case 115:
-         if ((active0 & 524288L) != 0L)
-            return mccStopAtPos(4, 19);
+         if ((active0 & 262144L) != 0L)
+            return mccStopAtPos(4, 18);
          break;
       default :
          break;
@@ -295,19 +293,19 @@ private int mccMoveNfa_0(int startState, int curPos)
                case 0:
                   if ((287948901175001088 & l) != 0L)
                   {
-                     if (kind > 26)
-                        kind = 26;
+                     if (kind > 25)
+                        kind = 25;
                      mccCheckNAdd(28);
                   }
                   else if ((2305846307748577280 & l) != 0L)
                   {
-                     if (kind > 17)
-                        kind = 17;
+                     if (kind > 16)
+                        kind = 16;
                   }
                   else if ((9216 & l) != 0L)
                   {
-                     if (kind > 18)
-                        kind = 18;
+                     if (kind > 17)
+                        kind = 17;
                      mccCheckNAdd(30);
                   }
                   else if ((43980465111040 & l) != 0L)
@@ -318,8 +316,8 @@ private int mccMoveNfa_0(int startState, int curPos)
                      mccCheckNAdd(11);
                   if ((287948901175001088 & l) != 0L)
                   {
-                     if (kind > 21)
-                        kind = 21;
+                     if (kind > 20)
+                        kind = 20;
                      mccCheckNAddStates(3, 6);
                   }
                   else if (curChar == 13)
@@ -328,8 +326,8 @@ private int mccMoveNfa_0(int startState, int curPos)
                case 36:
                   if ((287948901175001088 & l) != 0L)
                   {
-                     if (kind > 21)
-                        kind = 21;
+                     if (kind > 20)
+                        kind = 20;
                      mccCheckNAddStates(3, 6);
                   }
                   else if (curChar == 46)
@@ -338,14 +336,14 @@ private int mccMoveNfa_0(int startState, int curPos)
                case 35:
                   if ((576285010831605760 & l) != 0L)
                   {
-                     if (kind > 26)
-                        kind = 26;
+                     if (kind > 25)
+                        kind = 25;
                      mccCheckNAdd(28);
                   }
                   if ((576285010831605760 & l) != 0L)
                   {
-                     if (kind > 25)
-                        kind = 25;
+                     if (kind > 24)
+                        kind = 24;
                      mccCheckNAdd(26);
                   }
                   break;
@@ -356,22 +354,22 @@ private int mccMoveNfa_0(int startState, int curPos)
                case 2:
                   if ((287948901175001088 & l) == 0L)
                      break;
-                  if (kind > 21)
-                     kind = 21;
+                  if (kind > 20)
+                     kind = 20;
                   mccCheckNAddStates(3, 6);
                   break;
                case 3:
                   if (curChar != 46)
                      break;
-                  if (kind > 21)
-                     kind = 21;
+                  if (kind > 20)
+                     kind = 20;
                   mccCheckNAddStates(9, 11);
                   break;
                case 4:
                   if ((287948901175001088 & l) == 0L)
                      break;
-                  if (kind > 21)
-                     kind = 21;
+                  if (kind > 20)
+                     kind = 20;
                   mccCheckNAddStates(9, 11);
                   break;
                case 6:
@@ -381,8 +379,8 @@ private int mccMoveNfa_0(int startState, int curPos)
                case 7:
                   if ((287948901175001088 & l) == 0L)
                      break;
-                  if (kind > 21)
-                     kind = 21;
+                  if (kind > 20)
+                     kind = 20;
                   mccCheckNAdd(7);
                   break;
                case 10:
@@ -392,8 +390,8 @@ private int mccMoveNfa_0(int startState, int curPos)
                case 11:
                   if ((287948901175001088 & l) == 0L)
                      break;
-                  if (kind > 21)
-                     kind = 21;
+                  if (kind > 20)
+                     kind = 20;
                   mccCheckNAddStates(12, 14);
                   break;
                case 12:
@@ -409,8 +407,8 @@ private int mccMoveNfa_0(int startState, int curPos)
                      mccCheckNAddStates(0, 2);
                   break;
                case 16:
-                  if (curChar == 34 && kind > 22)
-                     kind = 22;
+                  if (curChar == 34 && kind > 21)
+                     kind = 21;
                   break;
                case 17:
                   if (curChar == 10)
@@ -426,36 +424,36 @@ private int mccMoveNfa_0(int startState, int curPos)
                case 24:
                   if ((576285010831605760 & l) == 0L)
                      break;
-                  if (kind > 24)
-                     kind = 24;
+                  if (kind > 23)
+                     kind = 23;
                   mccstateSet[mccnewStateCnt++] = 24;
                   break;
                case 26:
                   if ((576285010831605760 & l) == 0L)
                      break;
-                  if (kind > 25)
-                     kind = 25;
+                  if (kind > 24)
+                     kind = 24;
                   mccCheckNAdd(26);
                   break;
                case 27:
                   if ((287948901175001088 & l) == 0L)
                      break;
-                  if (kind > 26)
-                     kind = 26;
+                  if (kind > 25)
+                     kind = 25;
                   mccCheckNAdd(28);
                   break;
                case 28:
                   if ((576285010831605760 & l) == 0L)
                      break;
-                  if (kind > 26)
-                     kind = 26;
+                  if (kind > 25)
+                     kind = 25;
                   mccCheckNAdd(28);
                   break;
                case 29:
                   if ((9216 & l) == 0L)
                      break;
-                  if (kind > 18)
-                     kind = 18;
+                  if (kind > 17)
+                     kind = 17;
                   mccCheckNAdd(30);
                   break;
                case 30:
@@ -481,8 +479,8 @@ private int mccMoveNfa_0(int startState, int curPos)
                      mccCheckNAdd(30);
                   break;
                case 34:
-                  if (curChar == 10 && kind > 18)
-                     kind = 18;
+                  if (curChar == 10 && kind > 17)
+                     kind = 17;
                   break;
                default : break;
             }
@@ -498,14 +496,14 @@ private int mccMoveNfa_0(int startState, int curPos)
                case 0:
                   if ((576460745995190270 & l) != 0L)
                   {
-                     if (kind > 26)
-                        kind = 26;
+                     if (kind > 25)
+                        kind = 25;
                      mccCheckNAdd(28);
                   }
                   else if ((671088640 & l) != 0L)
                   {
-                     if (kind > 17)
-                        kind = 17;
+                     if (kind > 16)
+                        kind = 16;
                   }
                   else if (curChar == 64)
                      mccstateSet[mccnewStateCnt++] = 23;
@@ -513,22 +511,22 @@ private int mccMoveNfa_0(int startState, int curPos)
                      mccCheckNAdd(20);
                   if ((576460743847706622 & l) != 0L)
                   {
-                     if (kind > 25)
-                        kind = 25;
+                     if (kind > 24)
+                        kind = 24;
                      mccCheckNAdd(26);
                   }
                   break;
                case 35:
                   if ((576460745995190270 & l) != 0L)
                   {
-                     if (kind > 26)
-                        kind = 26;
+                     if (kind > 25)
+                        kind = 25;
                      mccCheckNAdd(28);
                   }
                   if ((576460745995190270 & l) != 0L)
                   {
-                     if (kind > 25)
-                        kind = 25;
+                     if (kind > 24)
+                        kind = 24;
                      mccCheckNAdd(26);
                   }
                   break;
@@ -539,15 +537,15 @@ private int mccMoveNfa_0(int startState, int curPos)
                case 8:
                   if ((13907447705069760 & l) == 0L)
                      break;
-                  if (kind > 21)
-                     kind = 21;
+                  if (kind > 20)
+                     kind = 20;
                   mccCheckNAdd(9);
                   break;
                case 9:
                   if ((576460743847706622 & l) == 0L)
                      break;
-                  if (kind > 21)
-                     kind = 21;
+                  if (kind > 20)
+                     kind = 20;
                   mccCheckNAdd(9);
                   break;
                case 13:
@@ -571,8 +569,8 @@ private int mccMoveNfa_0(int startState, int curPos)
                      mccCheckNAddTwoStates(20, 21);
                   break;
                case 21:
-                  if (curChar == 125 && kind > 23)
-                     kind = 23;
+                  if (curChar == 125 && kind > 22)
+                     kind = 22;
                   break;
                case 22:
                   if (curChar == 64)
@@ -581,43 +579,43 @@ private int mccMoveNfa_0(int startState, int curPos)
                case 23:
                   if ((576460743847706622 & l) == 0L)
                      break;
-                  if (kind > 24)
-                     kind = 24;
+                  if (kind > 23)
+                     kind = 23;
                   mccCheckNAdd(24);
                   break;
                case 24:
                   if ((576460745995190270 & l) == 0L)
                      break;
-                  if (kind > 24)
-                     kind = 24;
+                  if (kind > 23)
+                     kind = 23;
                   mccCheckNAdd(24);
                   break;
                case 25:
                   if ((576460743847706622 & l) == 0L)
                      break;
-                  if (kind > 25)
-                     kind = 25;
+                  if (kind > 24)
+                     kind = 24;
                   mccCheckNAdd(26);
                   break;
                case 26:
                   if ((576460745995190270 & l) == 0L)
                      break;
-                  if (kind > 25)
-                     kind = 25;
+                  if (kind > 24)
+                     kind = 24;
                   mccCheckNAdd(26);
                   break;
                case 27:
                   if ((576460745995190270 & l) == 0L)
                      break;
-                  if (kind > 26)
-                     kind = 26;
+                  if (kind > 25)
+                     kind = 25;
                   mccCheckNAdd(28);
                   break;
                case 28:
                   if ((576460745995190270 & l) == 0L)
                      break;
-                  if (kind > 26)
-                     kind = 26;
+                  if (kind > 25)
+                     kind = 25;
                   mccCheckNAdd(28);
                   break;
                case 31:
@@ -674,14 +672,14 @@ static readonly int[] mccnextStates = {
    21, 6, 7, 15, 18, 
 };
 public static readonly string[] mccstrLiteralImages = {
-"", null, null, "(", ")", "=", "[", "]", null, null, null, "+", "*", "-", "/", 
-".", ",", null, null, null, null, null, null, null, null, null, null, null, null, 
-null, null, };
+"", null, null, "(", ")", "=", "[", "]", null, null, null, "+", "*", "-", ".", 
+",", null, null, null, null, null, null, null, null, null, null, null, null, null, 
+null, };
 public static readonly string[] lexStateNames = {
    "DEFAULT", 
 };
 static readonly long[] mcctoToken = {
-   134215935, 
+   67107071, 
 };
 static readonly long[] mcctoSkip = {
    1792, 

@@ -41,6 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Expressions\ParseException.cs" />
+    <Compile Include="Expressions\SimpleCharStream.cs" />
+    <Compile Include="Expressions\SpiceExpression.cs" />
+    <Compile Include="Expressions\SpiceSharpExpressionParser.cs" />
+    <Compile Include="Expressions\SpiceSharpExpressionParserConstants.cs" />
+    <Compile Include="Expressions\SpiceSharpExpressionParserTokenManager.cs" />
+    <Compile Include="Expressions\Token.cs" />
+    <Compile Include="Expressions\TokenMgrError.cs" />
     <Compile Include="Readers\ComponentReader.cs" />
     <Compile Include="Subcircuits\SubcircuitDefinition.cs" />
     <Compile Include="Readers\Subcircuits\SubcircuitDefinitionReader.cs" />
@@ -111,7 +119,7 @@
     <None Include="spicelang.cc" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Expressions\" />
+    <None Include="Expressions\spiceexpression.cc" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -12,7 +12,6 @@ using SpiceSharp.Parser.Readers;
 using SpiceSharp.Parser.Subcircuits;
 public class SpiceSharpParser
 {
-	private Stack<SubcircuitDefinition> definitions = new Stack<SubcircuitDefinition>();
 }
 PARSER_END(SpiceSharpParser)
 
@@ -130,7 +129,6 @@ TOKEN :
 	<PLUS : "+">
 	| <ASTERISK : "*">
 	| <MINUS : "-">
-	| <DIVIDE : "/">
 	| <DOT : ".">
 	| <COMMA : ",">
 	| <DELIMITER : "=" | "(" | ")" | "[" | "]">

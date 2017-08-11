@@ -2,6 +2,7 @@
 using SpiceSharp.Parser.Readers;
 using SpiceSharp.Parser.Readers.Exports;
 using SpiceSharp.Parser.Readers.Waveforms;
+using System;
 
 namespace SpiceSharp.Parser
 {
@@ -11,20 +12,24 @@ namespace SpiceSharp.Parser
     public class NetlistReader
     {
         /// <summary>
-        /// Private variables
-        /// </summary>
-        public SpiceSharpParser Parser { get; private set; } = null;
-
-        /// <summary>
         /// The netlist
         /// </summary>
-        public Netlist Netlist { get; set; }
+        public Netlist Netlist { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="stream">The stream</param>
-        public NetlistReader(Netlist netlist = null)
+        public NetlistReader()
+        {
+            Netlist = Netlist.StandardNetlist();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// If netlist is null, a standard netlist is generated
+        /// </summary>
+        /// <param name="netlist">The netlist</param>
+        public NetlistReader(Netlist netlist)
         {
             if (netlist == null)
                 Netlist = Netlist.StandardNetlist();
@@ -54,22 +59,35 @@ namespace SpiceSharp.Parser
         {
             if (Netlist == null)
                 throw new ParseException("No netlist specified");
-            Parser = new SpiceSharpParser(stream);
+            SpiceSharpParser parser = new SpiceSharpParser(stream);
 
             // Parse the netlist for control statements and subcircuit definitions
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
             Netlist.Readers.Active = StatementType.Control | StatementType.Subcircuit | StatementType.Export;
             stream.Seek(0, SeekOrigin.Begin);
-            Parser.ReInit(stream);
-            Parser.ParseNetlist(Netlist);
+            parser.ReInit(stream);
+            sw.Stop();
+            Console.WriteLine("Setting up stream: " + sw.ElapsedMilliseconds);
+            sw.Restart();
+            parser.ParseNetlist(Netlist);
+            sw.Stop();
+            Console.WriteLine("Parsing definitions: " + sw.ElapsedMilliseconds);
 
             // Parse the netlist for components while ignoring subcircuit definitions
+            sw.Restart();
             Netlist.Readers.Active = StatementType.All 
                 & ~StatementType.Subcircuit 
                 & ~StatementType.Control
                 & ~StatementType.Export;
             stream.Seek(0, SeekOrigin.Begin);
-            Parser.ReInit(stream);
-            Parser.ParseNetlist(Netlist);
+            parser.ReInit(stream);
+            sw.Stop();
+            Console.WriteLine("Restarting stream " + sw.ElapsedMilliseconds);
+            sw.Restart();
+            parser.ParseNetlist(Netlist);
+            sw.Stop();
+            Console.WriteLine("Parsing components: " + sw.ElapsedMilliseconds);
         }
     }
 }

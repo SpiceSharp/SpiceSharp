@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using SpiceSharp.Parser.Readers;
 using SpiceSharp.Parser.Subcircuits;
 public class SpiceSharpParser : SpiceSharpParserConstants {
-        private Stack<SubcircuitDefinition> definitions = new Stack<SubcircuitDefinition>();
 
   public void ParseNetlist(Netlist netlist) {
         Statement st;
@@ -625,17 +624,17 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
   private bool mcc_3R_18() {
     Token xsp;
     xsp = mcc_scanpos;
-    if (mcc_scan_token(25)) {
+    if (mcc_scan_token(24)) {
+    mcc_scanpos = xsp;
+    if (mcc_scan_token(20)) {
     mcc_scanpos = xsp;
     if (mcc_scan_token(21)) {
     mcc_scanpos = xsp;
-    if (mcc_scan_token(22)) {
+    if (mcc_scan_token(25)) {
     mcc_scanpos = xsp;
-    if (mcc_scan_token(26)) {
+    if (mcc_scan_token(23)) {
     mcc_scanpos = xsp;
-    if (mcc_scan_token(24)) {
-    mcc_scanpos = xsp;
-    if (mcc_scan_token(23)) return true;
+    if (mcc_scan_token(22)) return true;
     }
     }
     }
@@ -663,7 +662,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
       mcc_gla1_0();
    }
    private static void mcc_gla1_0() {
-      mcc_la1_0 = new int[] {33849344,1048577,132120576,262145,2048,132120576,262145,132120576,2048,132120576,33849344,262145,132120576,262145,2048,132120576,262145,132120576,262145,2048,132120576,262145,33554432,294912,132120576,32,132120576,32,132120576,132120576,65536,132120576,};
+      mcc_la1_0 = new int[] {16924672,524289,66060288,131073,2048,66060288,131073,66060288,2048,66060288,16924672,131073,66060288,131073,2048,66060288,131073,66060288,131073,2048,66060288,131073,16777216,147456,66060288,32,66060288,32,66060288,66060288,32768,66060288,};
    }
   private MccCalls[] mcc_2_rtns = new MccCalls[5];
   private bool mcc_rescan = false;
@@ -834,8 +833,8 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
 
   public ParseException GenerateParseException() {
     mcc_expentries.Clear();
-    bool[] la1tokens = new bool[31];
-    for (int i = 0; i < 31; i++) {
+    bool[] la1tokens = new bool[30];
+    for (int i = 0; i < 30; i++) {
       la1tokens[i] = false;
     }
     if (mcc_kind >= 0) {
@@ -851,7 +850,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         }
       }
     }
-    for (int i = 0; i < 31; i++) {
+    for (int i = 0; i < 30; i++) {
       if (la1tokens[i]) {
         mcc_expentry = new int[1];
         mcc_expentry[0] = i;

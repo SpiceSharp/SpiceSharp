@@ -6,23 +6,22 @@ public  class SpiceSharpParserConstants {
   public const int PLUS = 11;
   public const int ASTERISK = 12;
   public const int MINUS = 13;
-  public const int DIVIDE = 14;
-  public const int DOT = 15;
-  public const int COMMA = 16;
-  public const int DELIMITER = 17;
-  public const int NEWLINE = 18;
-  public const int ENDS = 19;
-  public const int END = 20;
-  public const int VALUE = 21;
-  public const int STRING = 22;
-  public const int EXPRESSION = 23;
-  public const int REFERENCE = 24;
-  public const int WORD = 25;
-  public const int IDENTIFIER = 26;
-  public const int DIGIT = 27;
-  public const int LETTER = 28;
-  public const int CHARACTER = 29;
-  public const int SPECIAL = 30;
+  public const int DOT = 14;
+  public const int COMMA = 15;
+  public const int DELIMITER = 16;
+  public const int NEWLINE = 17;
+  public const int ENDS = 18;
+  public const int END = 19;
+  public const int VALUE = 20;
+  public const int STRING = 21;
+  public const int EXPRESSION = 22;
+  public const int REFERENCE = 23;
+  public const int WORD = 24;
+  public const int IDENTIFIER = 25;
+  public const int DIGIT = 26;
+  public const int LETTER = 27;
+  public const int CHARACTER = 28;
+  public const int SPECIAL = 29;
 
   public const int DEFAULT = 0;
 
@@ -41,7 +40,6 @@ public  class SpiceSharpParserConstants {
     "\"+\"",
     "\"*\"",
     "\"-\"",
-    "\"/\"",
     "\".\"",
     "\",\"",
     "<DELIMITER>",

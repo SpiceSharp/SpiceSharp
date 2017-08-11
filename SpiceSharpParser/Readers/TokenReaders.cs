@@ -59,7 +59,7 @@ namespace SpiceSharp.Parser.Readers
                 if (r.Read(st, netlist))
                 {
                     found = true;
-                    result = r.Generated;
+                    return r.Generated;
                 }
             }
             if (!found)
