@@ -23,8 +23,11 @@ namespace SpiceSharpTest
         {
             Stopwatch sw = new Stopwatch();
 
-            // NetlistReader nr = new NetlistReader();
-            // nr.Parse("test.net");
+            NetlistReader nr = new NetlistReader();
+            sw.Start();
+            nr.Parse("test.net");
+            sw.Stop();
+            Console.WriteLine("Time taken to parse: " + sw.ElapsedMilliseconds + " ms");
 
             Console.ReadKey();
         }

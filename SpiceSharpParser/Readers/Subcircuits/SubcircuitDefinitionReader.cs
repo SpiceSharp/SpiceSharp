@@ -16,9 +16,9 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Read subcircuit definitions
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="parameters"></param>
-        /// <param name="netlist"></param>
+        /// <param name="name">Name</param>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="netlist">Netlist</param>
         /// <returns></returns>
         public override bool Read(Statement st, Netlist netlist)
         {

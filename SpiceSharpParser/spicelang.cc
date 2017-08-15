@@ -47,15 +47,14 @@ Statement ParseSpiceLine() :
 	| LOOKAHEAD(2) <DOT> tn = "SUBCKT" (t = ParseParameter() { parameters.Add(t); })* <NEWLINE>
 		(<PLUS> (t = ParseParameter() { parameters.Add(t); })* <NEWLINE>)*
 	{
-		st = new Statement(StatementType.Subcircuit, tn, parameters);
 		statements = new List<Statement>();
 	}
 		// Read the body of the subcircuit
 		(st = ParseSpiceLine() { if (st != null) statements.Add(st); })*
 		<ENDS> (<NEWLINE> | <EOF>)
 	{
-		st.Parameters.Add(new StatementsToken(statements.ToArray()));
-		return st;
+		parameters.Add(new StatementsToken(statements.ToArray()));
+		return new Statement(StatementType.Subcircuit, tn, parameters);
 	}
 
 	// Model definitions

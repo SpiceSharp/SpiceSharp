@@ -80,8 +80,11 @@ namespace SpiceSharp.Parser.Readers
 
             // Apply models and components
             netlist.Path.Descend(subckt, definition, pars);
+            var oldactive = netlist.Readers.Active;
+            netlist.Readers.Active = StatementType.All;
             definition.Read(StatementType.Model, netlist);
             definition.Read(StatementType.Component, netlist);
+            netlist.Readers.Active = oldactive;
             netlist.Path.Ascend();
 
             // Return the subcircuit

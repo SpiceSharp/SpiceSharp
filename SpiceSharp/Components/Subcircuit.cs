@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Circuits;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components
 {
@@ -41,7 +42,8 @@ namespace SpiceSharp.Components
         /// <param name="nodes"></param>
         public override void Connect(params string[] nodes)
         {
-            base.Connect(nodes);
+            if (Pins.Length != nodes.Length)
+                throw new CircuitException($"{Name}: Node count mismatch. {nodes.Length} given, {Pins.Length} expected.");
 
             // Keep a map for the setup
             map.Clear();

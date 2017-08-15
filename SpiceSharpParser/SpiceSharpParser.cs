@@ -178,7 +178,6 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           mcc_consume_token(NEWLINE);
         }label_6: ;
         
-                st = new Statement(StatementType.Subcircuit, tn, parameters);
                 statements = new List<Statement>();
         while (true) {
           switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
@@ -208,8 +207,8 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           mcc_consume_token(-1);
           throw new ParseException();
         }
-                st.Parameters.Add(new StatementsToken(statements.ToArray()));
-                {return st;}
+                parameters.Add(new StatementsToken(statements.ToArray()));
+                {return new Statement(StatementType.Subcircuit, tn, parameters);}
       } else if (mcc_2_2(2)) {
         mcc_consume_token(DOT);
         tn = mcc_consume_token(2);
@@ -589,6 +588,12 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     finally { mcc_save(4, xla); }
   }
 
+  private bool mcc_3_3() {
+    if (mcc_3R_18()) return true;
+    if (mcc_scan_token(3)) return true;
+    return false;
+  }
+
   private bool mcc_3R_19() {
     if (mcc_scan_token(COMMA)) return true;
     return false;
@@ -641,12 +646,6 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
   private bool mcc_3_1() {
     if (mcc_scan_token(DOT)) return true;
     if (mcc_scan_token(1)) return true;
-    return false;
-  }
-
-  private bool mcc_3_3() {
-    if (mcc_3R_18()) return true;
-    if (mcc_scan_token(3)) return true;
     return false;
   }
 
