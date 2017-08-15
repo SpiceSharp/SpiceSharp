@@ -6,29 +6,34 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class describes a capacitor
     /// </summary>
-    public class Capacitor : CircuitComponent
+    public class Capacitor : CircuitComponent<Capacitor>
     {
         /// <summary>
-        /// A standard model if no model is given
+        /// Register our parameters
         /// </summary>
-        protected static CapacitorModel defaultmodel = new CapacitorModel(null);
+        static Capacitor()
+        {
+            Register();
+            terminals = new string[] { "C+", "C-" };
+        }
 
         /// <summary>
-        /// Gets or sets the model used by this capacitor
+        /// Set the model for the capacitor
         /// </summary>
-        public CapacitorModel Model { get; set; }
+        /// <param name="model"></param>
+        public void SetModel(CapacitorModel model) => Model = (ICircuitObject)model;
 
         /// <summary>
         /// Capacitance
         /// </summary>
         [SpiceName("capacitance"), SpiceInfo("Device capacitance", IsPrincipal = true)]
-        public Parameter<double> CAPcapac { get; } = new Parameter<double>();
+        public Parameter CAPcapac { get; } = new Parameter();
         [SpiceName("ic"), SpiceInfo("Initial capacitor voltage", Interesting = false)]
-        public Parameter<double> CAPinitCond { get; } = new Parameter<double>();
+        public Parameter CAPinitCond { get; } = new Parameter();
         [SpiceName("w"), SpiceInfo("Device width", Interesting = false)]
-        public Parameter<double> CAPwidth { get; } = new Parameter<double>();
+        public Parameter CAPwidth { get; } = new Parameter();
         [SpiceName("l"), SpiceInfo("Device length", Interesting = false)]
-        public Parameter<double> CAPlength { get; } = new Parameter<double>();
+        public Parameter CAPlength { get; } = new Parameter();
         [SpiceName("i"), SpiceInfo("Device current")]
         public double GetCurrent(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap];
         [SpiceName("p"), SpiceInfo("Instantaneous device power")]
@@ -51,7 +56,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Capacitor(string name) : base(name, "C+", "C-") { }
+        public Capacitor(string name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -60,10 +65,10 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="cap">The capacitance</param>
-        public Capacitor(string name, string pos, string neg, object cap) : base(name, "C+", "C-")
+        public Capacitor(string name, string pos, string neg, double cap) : base(name)
         {
             Connect(pos, neg);
-            Set("capacitance", cap);
+            CAPcapac.Set(cap);
         }
         
         /// <summary>
@@ -81,24 +86,18 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Get the model of the capacitor
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => Model;
-
-        /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
         /// <param name="ckt"></param>
         public override void Temperature(Circuit ckt)
         {
-            CapacitorModel model = Model as CapacitorModel ?? defaultmodel;
+            CapacitorModel model = Model as CapacitorModel;
+            if (model == null)
+                return;
 
             /* Default Value Processing for Capacitor Instance */
             if (!CAPwidth.Given)
-            {
                 CAPwidth.Value = model.CAPdefWidth;
-            }
             if (!CAPcapac.Given)
             {
                 CAPcapac.Value =

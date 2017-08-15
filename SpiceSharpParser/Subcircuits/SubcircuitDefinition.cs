@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <summary>
         /// The default parameters for this subcircuit definition
         /// </summary>
-        public Dictionary<string, string> Defaults { get; } = new Dictionary<string, string>();
+        public Dictionary<string, Token> Defaults { get; } = new Dictionary<string, Token>();
 
         /// <summary>
         /// Private variables
@@ -33,8 +33,9 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="name">The name</param>
-        public SubcircuitDefinition(string name, List<Statement> body)
+        /// <param name="name">Name of the subcircuit definition</param>
+        /// <param name="body">The statements</param>
+        public SubcircuitDefinition(string name, IEnumerable<Statement> body)
         {
             Name = name;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Components;
 
 namespace SpiceSharp.Simulations
 {
@@ -158,30 +159,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Get a parameter from a circuit component
+        /// Get an object
         /// </summary>
-        /// <typeparam name="T">The type</typeparam>
-        /// <param name="component">The component</param>
-        /// <param name="parameter">The parameter</param>
+        /// <param name="name">The name</param>
         /// <returns></returns>
-        public T GetParameter<T>(string component, string parameter)
+        public ICircuitObject GetObject(string name)
         {
-            if (!Circuit.Components.Contains(component))
-                throw new CircuitException($"Cannot find component {component}");
-            CircuitComponent c = Circuit.Components[component];
-            return (T)c.Ask(parameter, Circuit);
-        }
-
-        /// <summary>
-        /// Get a component by name
-        /// </summary>
-        /// <param name="component">The component</param>
-        /// <returns></returns>
-        public CircuitComponent GetComponent(string component)
-        {
-            if (!Circuit.Components.Contains(component))
-                throw new CircuitException($"Cannot find component {component}");
-            return Circuit.Components[component];
+            return Circuit.Objects[name];
         }
     }
 

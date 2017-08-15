@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Simulations;
 using SpiceSharp.Parser.Readers.Extensions;
+using SpiceSharp.Parser.Readers.Simulations;
 
 namespace SpiceSharp.Parser.Readers
 {
@@ -11,7 +12,10 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Constructor
         /// </summary>
-        public OptionReader() : base(StatementType.Control) { }
+        public OptionReader() : base(StatementType.Control)
+        {
+            Identifier = "options";
+        }
 
         /// <summary>
         /// Read
@@ -22,87 +26,54 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(Statement st, Netlist netlist)
         {
-            if (!st.Name.TryReadLiteral("options"))
-                return false;
-
             // Read all options
             for (int i = 0; i < st.Parameters.Count; i++)
             {
-                if (st.Parameters[i].TryReadAssignment(out string pname, out string pvalue))
+                switch (st.Parameters[i].kind)
                 {
-                    if (pvalue.TryReadValue(out pvalue))
-                    {
-                        double v = (double)Parameters.SpiceMember.ConvertType(this, pvalue, typeof(double));
-                        switch (pname)
+                    case TokenConstants.ASSIGNMENT:
+                        AssignmentToken at = st.Parameters[i] as AssignmentToken;
+                        string key = at.Name.image.ToLower();
+                        switch (key)
                         {
                             case "abstol":
-                                DC.Default.AbsTol = v;
-                                AC.Default.AbsTol = v;
-                                Transient.Default.AbsTol = v;
-                                break;
-                            case "gmin":
-                                DC.Default.Gmin = v;
-                                AC.Default.Gmin = v;
-                                Transient.Default.Gmin = v;
-                                break;
-                            case "itl1":
-                                AC.Default.DcMaxIterations = (int)v;
-                                Transient.Default.DcMaxIterations = (int)v;
-                                break;
-                            case "itl2":
-                                DC.Default.MaxIterations = (int)v;
-                                break;
-                            case "itl4":
-                                Transient.Default.TranMaxIterations = (int)v;
-                                break;
                             case "reltol":
-                                DC.Default.RelTol = v;
-                                AC.Default.RelTol = v;
-                                Transient.Default.RelTol = v;
-                                break;
+                            case "gmin":
+                            case "itl1":
+                            case "itl2":
+                            case "itl4":
                             case "temp":
-                                netlist.Circuit.State.Temperature = v + Circuit.CONSTCtoK;
-                                break;
                             case "tnom":
-                                netlist.Circuit.State.NominalTemperature = v + Circuit.CONSTCtoK;
+                                double v = netlist.ParseDouble(at.Value);
+                                Configuration.Defaults[at.Name.image.ToLower()] = v;
                                 break;
-                            case "vntol":
-                                DC.Default.VoltTol = v;
-                                AC.Default.VoltTol = v;
-                                Transient.Default.VoltTol = v;
-                                break;
-                            default:
-                                Diagnostics.CircuitWarning.Warning(this, $"Unrecognized option {pname}");
-                                break;
-                        }
-                    }
-                    else if (pvalue.TryReadWord(out pvalue))
-                    {
-                        switch (pname)
-                        {
+
                             case "method":
-                                switch (pvalue)
-                                {
-                                    case "trap":
-                                    case "trapezoidal":
-                                        Transient.Default.Method = new IntegrationMethods.Trapezoidal();
-                                        break;
-                                    default:
-                                        throw new ParseException(st.Parameters[i], $"Invalid integration method {pvalue}");
-                                }
+                                string s = at.Value.image.ToLower();
+                                Configuration.StringDefaults[key] = s;
                                 break;
+
+                            default:
+                                throw new ParseException(st.Parameters[i], "Unrecognized option");
                         }
-                    }
+                        break;
+
+                    case SpiceSharpParserConstants.WORD:
+                        key = st.Parameters[i].image.ToLower();
+                        switch (key)
+                        {
+                            case "keepopinfo":
+                                Configuration.FlagDefaults.Add(key);
+                                break;
+
+                            default:
+                                throw new ParseException(st.Parameters[i], "Unrecognized option");
+                        }
+                        break;
+
+                    default:
+                        throw new ParseException(st.Parameters[i], "Unrecognized option");
                 }
-                else if (st.Parameters[i].TryReadWord(out pname))
-                {
-                    switch (pname)
-                    {
-                        case "keepopinfo": AC.Default.KeepOpInfo = true; break;
-                    }
-                }
-                else
-                    throw new ParseException(st.Parameters[i], $"Unrecognized option " + st.Parameters[i].Image());
             }
 
             return true;

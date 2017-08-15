@@ -22,14 +22,14 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <returns></returns>
         public override bool Read(Statement st, Netlist netlist)
         {
-            if (!st.Name.TryReadLiteral("i"))
+            if (st.Name.image.ToLower() != "i")
                 return false;
 
             string source;
             switch (st.Parameters.Count)
             {
                 case 0: throw new ParseException(st.Name, "Voltage source expected", false);
-                case 1: source = st.Parameters[0].ReadIdentifier(); break;
+                case 1: source = st.Parameters[0].image.ToLower(); break;
                 default: throw new ParseException(st.Name, "Too many nodes specified", false);
             }
 
@@ -78,13 +78,13 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <param name="data">Simulation data</param>
         public override object Extract(SimulationData data)
         {
+            var cc = (Components.Voltagesource)data.GetObject(Source);
             if (data.Circuit.State.Domain == Circuits.CircuitState.DomainTypes.Frequency || data.Circuit.State.Domain == Circuits.CircuitState.DomainTypes.Laplace)
             {
-                var cc = (Components.Voltagesource)data.GetComponent(Source);
-                return cc.GetComplexCurrent(data.Circuit);
+                return cc?.GetComplexCurrent(data.Circuit) ?? double.NaN;
             }
             else
-                return data.GetParameter<double>(Source, "i");
+                return cc?.GetCurrent(data.Circuit) ?? double.NaN;
         }
     }
 }

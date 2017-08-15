@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Simulations;
-using SpiceSharp.Parser.Readers.Extensions;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Parser.Readers.Exports
 {
@@ -22,12 +22,12 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <returns></returns>
         public override bool Read(Statement st, Netlist netlist)
         {
-            string component;
-            if (!st.Name.TryReadReference(out component) || st.Parameters.Count != 1)
+            if (st.Name.kind != TokenConstants.REFERENCE)
                 return false;
-
-            // Get the name of the component
-            string parameter = st.Parameters[0].ReadIdentifier();
+            if (st.Parameters.Count != 1 || (st.Parameters[0].kind != SpiceSharpParserConstants.WORD && st.Parameters[0].kind != SpiceSharpParserConstants.IDENTIFIER))
+                return false;
+            string component = st.Name.image.Substring(1).ToLower();
+            string parameter = st.Parameters[0].image.ToLower();
 
             var pe = new ParameterExport(component, parameter);
             netlist.Exports.Add(pe);
@@ -79,7 +79,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <returns></returns>
         public override object Extract(SimulationData data)
         {
-            var c = data.GetComponent(Component);
+            var c = (IParameterized)data.GetObject(Component);
             return c?.Ask(Parameter, data.Circuit);
         }
     }

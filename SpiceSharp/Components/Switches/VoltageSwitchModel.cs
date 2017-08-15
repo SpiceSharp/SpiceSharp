@@ -5,19 +5,27 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class describes a model for a voltage-controlled switch
     /// </summary>
-    public class VoltageSwitchModel : CircuitModel
+    public class VoltageSwitchModel : CircuitModel<VoltageSwitchModel>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static VoltageSwitchModel()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("ron"), SpiceInfo("Resistance when closed")]
-        public Parameter<double> VSWon { get; } = new Parameter<double>();
+        public Parameter VSWon { get; } = new Parameter();
         [SpiceName("roff"), SpiceInfo("Resistance when off")]
-        public Parameter<double> VSWoff { get; } = new Parameter<double>();
+        public Parameter VSWoff { get; } = new Parameter();
         [SpiceName("vt"), SpiceInfo("Threshold voltage")]
-        public Parameter<double> VSWthresh { get; } = new Parameter<double>();
+        public Parameter VSWthresh { get; } = new Parameter();
         [SpiceName("vh"), SpiceInfo("Hysteresis voltage")]
-        public Parameter<double> VSWhyst { get; } = new Parameter<double>();
+        public Parameter VSWhyst { get; } = new Parameter();
         [SpiceName("gon"), SpiceInfo("Conductance when closed")]
         public double VSWonConduct { get; private set; }
         [SpiceName("goff"), SpiceInfo("Conductance when closed")]

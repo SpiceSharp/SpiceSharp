@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
         {
             // I think the BJT definition is ambiguous (eg. QXXXX NC NB NE MNAME OFF can be either substrate = MNAME, model = OFF or model name = MNAME and transistor is OFF
             // We will only allow 3 terminals if there are only 4 parameters
@@ -37,34 +37,27 @@ namespace SpiceSharp.Parser.Readers
             if (parameters.Count == 3)
                 throw new ParseException(parameters[2], "Model expected", false);
             if (parameters.Count == 4)
-                bjt.Model = parameters[3].ReadModel<BJTModel>(netlist);
+                bjt.SetModel(netlist.FindModel<BJTModel>(parameters[3]));
             else
-                bjt.Model = parameters[4].ReadModel<BJTModel>(netlist);
+                bjt.SetModel(netlist.FindModel<BJTModel>(parameters[4]));
 
             // Area
             if (parameters.Count > 5)
-                bjt.Set("area", parameters[5].ReadValue());
+                bjt.BJTarea.Set(netlist.ParseDouble(parameters[5]));
 
             // ON/OFF
             if (parameters.Count > 6)
             {
-                string state = parameters[6].ReadWord();
-                switch (state)
+                switch (parameters[6].image.ToLower())
                 {
-                    case "on": bjt.Set("off", false); break;
-                    case "off": bjt.Set("off", true); break;
+                    case "on": bjt.BJToff = false; break;
+                    case "off": bjt.BJToff = true; break;
                     default: throw new ParseException(parameters[6], "ON or OFF expected");
                 }
             }
 
-            // The rest are named parameters
-            for (int i = 7; i < parameters.Count; i++)
-            {
-                parameters[i].ReadAssignment(out string pname, out string pvalue);
-                bjt.Set(pname, pvalue);
-            }
-
-            return bjt;
+            netlist.ReadParameters(bjt, parameters, 7);
+            return (ICircuitObject)bjt;
         }
     }
 }

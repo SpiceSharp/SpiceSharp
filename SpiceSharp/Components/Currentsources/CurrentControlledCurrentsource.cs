@@ -6,13 +6,22 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class describes a current-controlled current source
     /// </summary>
-    public class CurrentControlledCurrentsource : CircuitComponent
+    public class CurrentControlledCurrentsource : CircuitComponent<CurrentControlledCurrentsource>
     {
+        /// <summary>
+        /// Static constructor
+        /// </summary>
+        static CurrentControlledCurrentsource()
+        {
+            Register();
+            terminals = new string[] { "F+", "F-" };
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("gain"), SpiceInfo("Gain of the source")]
-        public Parameter<double> CCCScoeff { get; } = new Parameter<double>();
+        public Parameter CCCScoeff { get; } = new Parameter();
         [SpiceName("control"), SpiceInfo("Name of the controlling source")]
         public string CCCScontName { get; set; }
         [SpiceName("i"), SpiceInfo("CCCS output current")]
@@ -36,7 +45,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current controlled current source</param>
-        public CurrentControlledCurrentsource(string name) : base(name, "F+", "F-")
+        public CurrentControlledCurrentsource(string name) : base(name)
         {
             // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
@@ -50,18 +59,13 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
-        public CurrentControlledCurrentsource(string name, string pos, string neg, string vsource, object gain) : base(name, "F+", "F-")
+        public CurrentControlledCurrentsource(string name, string pos, string neg, string vsource, double gain) : base(name)
         {
+            Priority = -1;
             Connect(pos, neg);
-            Set("gain", gain);
+            CCCScoeff.Set(gain);
             CCCScontName = vsource;
         }
-
-        /// <summary>
-        /// No model
-        /// </summary>
-        /// <returns>Returns null</returns>
-        public override CircuitModel GetModel() => null;
 
         /// <summary>
         /// Setup the current controlled current source
@@ -74,7 +78,7 @@ namespace SpiceSharp.Components
             CCCSnegNode = nodes[1].Index;
 
             // Find the voltage source for which the current is being measured
-            var vsrc = ckt.Components[CCCScontName];
+            var vsrc = ckt.Objects[CCCScontName];
             if (vsrc is Voltagesource)
                 CCCScontBranch = ((Voltagesource)vsrc).VSRCbranch;
             else

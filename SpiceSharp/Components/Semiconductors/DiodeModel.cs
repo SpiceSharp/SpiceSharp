@@ -7,41 +7,49 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents a model for a diode
     /// </summary>
-    public class DiodeModel : CircuitModel
+    public class DiodeModel : CircuitModel<DiodeModel>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static DiodeModel()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("is"), SpiceInfo("Saturation current")]
-        public Parameter<double> DIOsatCur { get; } = new Parameter<double>(1.0e-14);
-        [SpiceName("tnom"), SpiceInfo("Parameer measurement temperature", Interesting = false)]
-        public ParameterMethod<double> DIOnomTemp { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
+        public Parameter DIOsatCur { get; } = new Parameter(1.0e-14);
+        [SpiceName("tnom"), SpiceInfo("Parameer measurement temperature in Kelvin", Interesting = false)]
+        public Parameter DIOnomTemp { get; } = new Parameter(300.15);
         [SpiceName("rs"), SpiceInfo("Ohmic resistance")]
-        public Parameter<double> DIOresist { get; } = new Parameter<double>();
+        public Parameter DIOresist { get; } = new Parameter();
         [SpiceName("n"), SpiceInfo("Emission Coefficient")]
-        public Parameter<double> DIOemissionCoeff { get; } = new Parameter<double>(1.0);
+        public Parameter DIOemissionCoeff { get; } = new Parameter(1.0);
         [SpiceName("tt"), SpiceInfo("Transit Time")]
-        public Parameter<double> DIOtransitTime { get; } = new Parameter<double>();
+        public Parameter DIOtransitTime { get; } = new Parameter();
         [SpiceName("cjo"), SpiceName("cj0"), SpiceInfo("Junction capacitance")]
-        public Parameter<double> DIOjunctionCap { get; } = new Parameter<double>();
+        public Parameter DIOjunctionCap { get; } = new Parameter();
         [SpiceName("vj"), SpiceInfo("Junction potential")]
-        public Parameter<double> DIOjunctionPot { get; } = new Parameter<double>(1.0);
+        public Parameter DIOjunctionPot { get; } = new Parameter(1.0);
         [SpiceName("m"), SpiceInfo("Grading coefficient")]
-        public Parameter<double> DIOgradingCoeff { get; } = new Parameter<double>(0.5);
+        public Parameter DIOgradingCoeff { get; } = new Parameter(0.5);
         [SpiceName("eg"), SpiceInfo("Activation energy")]
-        public Parameter<double> DIOactivationEnergy { get; } = new Parameter<double>(1.11);
+        public Parameter DIOactivationEnergy { get; } = new Parameter(1.11);
         [SpiceName("xti"), SpiceInfo("Saturation current temperature exp.")]
-        public Parameter<double> DIOsaturationCurrentExp { get; } = new Parameter<double>(3.0);
+        public Parameter DIOsaturationCurrentExp { get; } = new Parameter(3.0);
         [SpiceName("kf"), SpiceInfo("Flicker noise coefficnet")]
-        public Parameter<double> DIOfNcoef { get; } = new Parameter<double>();
+        public Parameter DIOfNcoef { get; } = new Parameter();
         [SpiceName("af"), SpiceInfo("Flicker noise exponent")]
-        public Parameter<double> DIOfNexp { get; } = new Parameter<double>(1.0);
+        public Parameter DIOfNexp { get; } = new Parameter(1.0);
         [SpiceName("fc"), SpiceInfo("Forward bias junction fit parameter")]
-        public Parameter<double> DIOdepletionCapCoeff { get; } = new Parameter<double>(0.5);
+        public Parameter DIOdepletionCapCoeff { get; } = new Parameter(0.5);
         [SpiceName("bv"), SpiceInfo("Reverse breakdown voltage")]
-        public Parameter<double> DIObreakdownVoltage { get; } = new Parameter<double>();
+        public Parameter DIObreakdownVoltage { get; } = new Parameter();
         [SpiceName("ibv"), SpiceInfo("Current at reverse breakdown voltage")]
-        public Parameter<double> DIObreakdownCurrent { get; } = new Parameter<double>(1e-3);
+        public Parameter DIObreakdownCurrent { get; } = new Parameter(1e-3);
 
         [SpiceName("cond"), SpiceInfo("Ohmic conductance", Interesting = false)]
         public double DIOconductance { get; private set; }

@@ -9,6 +9,7 @@ namespace SpiceSharp.Parser;
 using System;
 using System.Collections.Generic;
 using SpiceSharp.Parser.Readers;
+using SpiceSharp.Parser.Readers.Extensions;
 using SpiceSharp.Parser.Subcircuits;
 public class SpiceSharpParser
 {
@@ -30,81 +31,73 @@ void ParseNetlist(Netlist netlist) :
 Statement ParseSpiceLine() :
 {
 	Statement st;
-	Token t;
-	List<Object> parameters = new List<Object>();
-	List<Statement> body = new List<Statement>();
-	Object o = null;
+	Token t, tn;
+	List<Token> parameters = new List<Token>();
+	List<Statement> statements = new List<Statement>();
 }
 {
 	// Component definitions
-	t = <WORD> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>)
-		(<PLUS> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>))*
+	tn = <WORD> (t = ParseParameter() { parameters.Add(t); })* (<NEWLINE> | <EOF>)
+		(<PLUS> (t = ParseParameter() { parameters.Add(t); })* (<NEWLINE> | <EOF>))*
 	{
-		return new Statement(StatementType.Component, t, parameters);
+		return new Statement(StatementType.Component, tn, parameters);
 	}
 
 	// Subcircuit declaration
-	| LOOKAHEAD(2) <DOT> t = "SUBCKT" (o = ParseParameter() { parameters.Add(o); })* <NEWLINE>
-		(<PLUS> (o = ParseParameter() { parameters.Add(o); })* <NEWLINE>)*
+	| LOOKAHEAD(2) <DOT> tn = "SUBCKT" (t = ParseParameter() { parameters.Add(t); })* <NEWLINE>
+		(<PLUS> (t = ParseParameter() { parameters.Add(t); })* <NEWLINE>)*
 	{
-		st = new Statement(StatementType.Subcircuit, t, parameters);
+		st = new Statement(StatementType.Subcircuit, tn, parameters);
+		statements = new List<Statement>();
 	}
 		// Read the body of the subcircuit
-		(st = ParseSpiceLine() { if (st != null) body.Add(st); })*
+		(st = ParseSpiceLine() { if (st != null) statements.Add(st); })*
 		<ENDS> (<NEWLINE> | <EOF>)
 	{
-		parameters.Add(body);
-		return new Statement(StatementType.Subcircuit, t, parameters);
+		st.Parameters.Add(new StatementsToken(statements.ToArray()));
+		return st;
 	}
 
 	// Model definitions
-	| LOOKAHEAD(2) <DOT> t = "MODEL" (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>)
-		(<PLUS> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>))*
+	| LOOKAHEAD(2) <DOT> tn = "MODEL" (t = ParseParameter() { parameters.Add(t); })* (<NEWLINE> | <EOF>)
+		(<PLUS> (t = ParseParameter() { parameters.Add(t); })* (<NEWLINE> | <EOF>))*
 	{
-		return new Statement(StatementType.Model, t, parameters);
+		if (parameters.Count < 2)
+			throw new ParseException(tn, "At least a name and model type expected", false);
+		tn = parameters[0];
+		parameters.RemoveAt(0);
+		return new Statement(StatementType.Model, tn, parameters);
 	}
 
 	// Control statements
-	| <DOT> t = <WORD> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>)
-		(<PLUS> (o = ParseParameter() { parameters.Add(o); })* (<NEWLINE> | <EOF>))*
+	| <DOT> tn = <WORD> (t = ParseParameter() { parameters.Add(t); })* (<NEWLINE> | <EOF>)
+		(<PLUS> (t = ParseParameter() { parameters.Add(t); })* (<NEWLINE> | <EOF>))*
 	{
-		return new Statement(StatementType.Control, t, parameters);
+		return new Statement(StatementType.Control, tn, parameters);
 	}
 
 	// Other
 	| <NEWLINE> { return null; }
 }
 
-Object ParseParameter() :
+Token ParseParameter() :
 {
-	Object oa = null, ob = null;
-	BracketToken br = null;
+	Token ta, tb;
+	List<Token> tokens = new List<Token>();
 }
 {
 	// Bracketted
-	LOOKAHEAD(2) oa = ParseSingle() { br = new BracketToken(oa); } "(" (oa = ParseParameter() { br.Parameters.Add(oa); })* ")" ("=" ob = ParseSingle())?
-	{
-		if (ob != null)
-			return new AssignmentToken(br, ob);
-		return br; 
-	}
-	| LOOKAHEAD(2) oa = ParseSingle() { br = new BracketToken(oa, '['); } "[" (oa = ParseParameter() { br.Parameters.Add(oa); })* "]" ("=" ob = ParseSingle()) ?
-	{
-		if (ob != null)
-			return new AssignmentToken(br, ob);
-		return br;
-	}
-	| LOOKAHEAD(2) oa = ParseSingle() "=" ob = ParseSingle()
-	{
-		return new AssignmentToken(oa, ob);
-	}
-	| oa = ParseSingle()
-	{ 
-		return oa; 
-	}
+	LOOKAHEAD(2) ta = ParseSingle() "(" (tb = ParseParameter() { tokens.Add(tb); })* ")" { ta = new BracketToken(ta, '(', tokens.ToArray()); }
+	("=" tb = ParseSingle() { return new AssignmentToken(ta, tb); })?
+	{ return ta; }
+	| LOOKAHEAD(2) ta = ParseSingle() "[" (tb = ParseParameter() { tokens.Add(tb); })* "]" { ta = new BracketToken(ta, '[', tokens.ToArray()); }
+	("=" tb = ParseSingle() { return new AssignmentToken(ta, tb); })?
+	{ return ta; }
+	| LOOKAHEAD(2) ta = ParseSingle() "=" tb = ParseSingle() { return new AssignmentToken(ta, tb); }
+	| ta = ParseSingle() { return ta;  }
 }
 
-Object ParseSingle() :
+Token ParseSingle() :
 {
 	Token t;
 	List<Token> ts = new List<Token>();
@@ -116,7 +109,7 @@ Object ParseSingle() :
 		{ ts.Add(t); })*
 	{
 		if (ts.Count > 1)
-			return (Token[])(ts.ToArray());
+			return new VectorToken(ts.ToArray());
 		else
 			return ts[0];
 	}

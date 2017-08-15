@@ -5,6 +5,9 @@ using System.Text;
 using SpiceSharp.Parser;
 using SpiceSharp.Parameters;
 using System.Collections.Generic;
+using SpiceSharp.Components;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace SpiceSharpTest
 {
@@ -20,20 +23,8 @@ namespace SpiceSharpTest
         {
             Stopwatch sw = new Stopwatch();
 
-            sw.Start();
-            NetlistReader nr = new NetlistReader();
-            sw.Stop();
-            Console.WriteLine("Initialization: " + sw.ElapsedMilliseconds);
-
-            SpiceMember.OnSpiceMemberConvert += expr.OnSpiceConvert;
-            nr.Netlist.Path.OnSubcircuitPathChanged += Path_OnSubcircuitPathChanged;
-
-            sw.Restart();
-            nr.Parse("test.net");
-            sw.Stop();
-            Console.WriteLine("Parsing: " + sw.ElapsedMilliseconds);
-
-            Console.WriteLine();
+            // NetlistReader nr = new NetlistReader();
+            // nr.Parse("test.net");
 
             Console.ReadKey();
         }

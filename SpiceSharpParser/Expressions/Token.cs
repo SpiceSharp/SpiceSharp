@@ -5,7 +5,6 @@ namespace SpiceSharp.Parser.Expressions
     /// <summary>
     /// Describes the input token stream.
     /// </summary>
-
     public class Token
     {
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SpiceSharp.Parser.Readers.Extensions;
+using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
 {
@@ -9,11 +9,6 @@ namespace SpiceSharp.Parser.Readers
     public abstract class ComponentReader : Reader
     {
         /// <summary>
-        /// The identifier for the component
-        /// </summary>
-        protected char id = '\0', ID = '\0';
-
-        /// <summary>
         /// Constructor
         /// In order for a component to be detected, the name needs to start with the id-character
         /// </summary>
@@ -21,8 +16,7 @@ namespace SpiceSharp.Parser.Readers
         protected ComponentReader(char cid)
             : base(StatementType.Component)
         {
-            id = char.ToLower(cid);
-            ID = char.ToUpper(cid);
+            Identifier = cid.ToString().ToLower();
         }
 
         /// <summary>
@@ -34,18 +28,13 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(Statement st, Netlist netlist)
         {
-            // Find the name
-            string n = st.Name.ReadWord();
-            if (n[0] != id && n[0] != ID)
-                return false;
-
             // Apply the change to the circuit
-            CircuitComponent result = Generate(n, st.Parameters, netlist);
+            ICircuitObject result = Generate(st.Name.image, st.Parameters, netlist);
             Generated = result;
             if (result != null)
             {
                 // Add the circuit component
-                netlist.Path.Components.Add(result);
+                netlist.Path.Objects.Add(result);
                 return true;
             }
             else
@@ -59,6 +48,6 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters"></param>
         /// <param name="netlist"></param>
         /// <returns></returns>
-        protected abstract CircuitComponent Generate(string name, List<object> parameters, Netlist netlist);
+        protected abstract ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist);
     }
 }

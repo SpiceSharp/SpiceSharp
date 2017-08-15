@@ -64,7 +64,10 @@ namespace SpiceSharp.Parser
             // Parse the netlist for control statements and subcircuit definitions
             var sw = new System.Diagnostics.Stopwatch();
             sw.Start();
-            Netlist.Readers.Active = StatementType.Control | StatementType.Subcircuit | StatementType.Export;
+            Netlist.Readers.Active = StatementType.Control 
+                | StatementType.Model
+                | StatementType.Subcircuit 
+                | StatementType.Export;
             stream.Seek(0, SeekOrigin.Begin);
             parser.ReInit(stream);
             sw.Stop();
@@ -77,6 +80,7 @@ namespace SpiceSharp.Parser
             // Parse the netlist for components while ignoring subcircuit definitions
             sw.Restart();
             Netlist.Readers.Active = StatementType.All 
+                & ~StatementType.Model
                 & ~StatementType.Subcircuit 
                 & ~StatementType.Control
                 & ~StatementType.Export;

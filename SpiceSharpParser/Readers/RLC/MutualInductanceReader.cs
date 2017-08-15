@@ -21,21 +21,21 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
         {
             MutualInductance mut = new MutualInductance(name);
             switch (parameters.Count)
             {
-                case 1: throw new ParseException(name, "Inductor name expected", false);
-                case 2: throw new ParseException(parameters[0], "Inductor name expected", false);
-                case 3: throw new ParseException(parameters[1], "Coupling factor expected", false);
+                case 0: throw new ParseException($"Inductor name expected for mutual inductance \"{name}\"");
+                case 1: throw new ParseException(parameters[0], "Inductor name expected", false);
+                case 2: throw new ParseException(parameters[1], "Coupling factor expected", false);
             }
 
             // Read two inductors
-            mut.Set("inductor1", parameters[0].ReadWord());
-            mut.Set("inductor2", parameters[1].ReadWord());
-            mut.Set("k", parameters[2].ReadValue());
-            return mut;
+            mut.MUTind1 = parameters[0].image.ToLower();
+            mut.MUTind2 = parameters[1].image.ToLower();
+            mut.MUTcoupling.Set(netlist.ParseDouble(parameters[2]));
+            return (ICircuitObject)mut;
         }
     }
 }

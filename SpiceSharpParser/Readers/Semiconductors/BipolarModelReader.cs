@@ -28,14 +28,14 @@ namespace SpiceSharp.Parser.Readers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        protected override CircuitModel GenerateModel(string name)
+        protected override ICircuitObject GenerateModel(string name)
         {
             BJTModel model = new BJTModel(name);
             if (npn)
                 model.SetNPN(true);
             else
                 model.SetPNP(true);
-            return model;
+            return (ICircuitObject)model;
         }
     }
 }

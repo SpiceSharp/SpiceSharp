@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Components;
+using static SpiceSharp.Simulations.SimulationIterate;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Describes a DC simulation
     /// </summary>
-    public class DC : Simulation
+    public class DC : Simulation<DC>
     {
         /// <summary>
         /// The default configuration for all DC simulations
@@ -43,8 +45,16 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// A class that describes a job
         /// </summary>
-        public class Sweep : Parameterized
+        public class Sweep : Parameterized<Sweep>
         {
+            /// <summary>
+            /// Register our parameters
+            /// </summary>
+            static Sweep()
+            {
+                Register();
+            }
+
             /// <summary>
             /// Starting value
             /// </summary>
@@ -91,13 +101,12 @@ namespace SpiceSharp.Simulations
             /// <param name="start">The starting value</param>
             /// <param name="stop">The stopping value</param>
             /// <param name="step">The step value</param>
-            public Sweep(string name, object start, object stop, object step)
-                : base(null)
+            public Sweep(string name, double start, double stop, double step) : base()
             {
                 ComponentName = name;
-                Set("start", start);
-                Set("stop", stop);
-                Set("step", step);
+                Start = start;
+                Stop = stop;
+                Step = step;
             }
         }
 
@@ -124,7 +133,7 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The starting value</param>
         /// <param name="stop">The stopping value</param>
         /// <param name="step">The step value</param>
-        public DC(string name, string source, object start, object stop, object step)
+        public DC(string name, string source, double start, double stop, double step)
             : base(name, new Configuration())
         {
             Sweep s = new Sweep(source, start, stop, step);
@@ -147,8 +156,8 @@ namespace SpiceSharp.Simulations
             state.Domain = CircuitState.DomainTypes.None;
 
             // Initialize
-            CircuitComponent[] components = new CircuitComponent[Sweeps.Count];
-            Parameter<double>[] parameters = new Parameter<double>[Sweeps.Count];
+            IParameterized[] components = new IParameterized[Sweeps.Count];
+            Parameter[] parameters = new Parameter[Sweeps.Count];
             int[] values = new int[Sweeps.Count];
 
             // Initialize first time
@@ -156,12 +165,12 @@ namespace SpiceSharp.Simulations
             {
                 // Get the component to be swept
                 var sweep = Sweeps[i];
-                if (!ckt.Components.Contains(sweep.ComponentName))
+                if (!ckt.Objects.Contains(sweep.ComponentName))
                     throw new CircuitException($"Could not find source {sweep.ComponentName}");
-                components[i] = ckt.Components[sweep.ComponentName];
+                components[i] = (IParameterized)ckt.Objects[sweep.ComponentName];
 
                 // Get the parameter and save it for restoring later
-                parameters[i] = (Parameter<double>)components[i].GetParameter<double>("dc").Clone();
+                parameters[i] = (Parameter)GetDcParameter(components[i]).Clone();
 
                 // Start with the original values
                 components[i].Set("dc", sweep.Start);
@@ -183,10 +192,10 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Calculate the solution
-                if (!this.Iterate(ckt, MyConfig.MaxIterations))
+                if (!Iterate(Config, ckt, MyConfig.MaxIterations))
                 {
                     IterationFailed?.Invoke(this, ckt);
-                    this.Op(ckt, MyConfig.MaxIterations);
+                    Op(Config, ckt, MyConfig.MaxIterations);
                 }
 
                 // Export data
@@ -204,14 +213,39 @@ namespace SpiceSharp.Simulations
                     components[level].Set("dc", newvalue);
                 }
             }
-            
+
             // Restore all the parameters of the swept components
             for (int i = 0; i < Sweeps.Count; i++)
-            {
-                components[i].GetParameter<double>("dc").CopyFrom(parameters[i]);
-            }
+                SetDcParameter(components[i], parameters[i]);
 
             Finalize(ckt);
+        }
+
+        /// <summary>
+        /// Get the DC parameter
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private Parameter GetDcParameter(IParameterized obj)
+        {
+            if (obj is Voltagesource)
+                return (obj as Voltagesource).VSRCdcValue;
+            if (obj is Currentsource)
+                return (obj as Currentsource).ISRCdcValue;
+            return null;
+        }
+
+        /// <summary>
+        /// Copy the DC parameter back to the object
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="par"></param>
+        private void SetDcParameter(IParameterized obj, Parameter par)
+        {
+            if (obj is Voltagesource)
+                (obj as Voltagesource).VSRCdcValue.CopyFrom(par);
+            if (obj is Currentsource)
+                (obj as Currentsource).ISRCdcValue.CopyFrom(par);
         }
     }
 }

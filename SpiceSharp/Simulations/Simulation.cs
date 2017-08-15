@@ -6,7 +6,7 @@ namespace SpiceSharp
     /// <summary>
     /// A class with everything needed to do a simulation
     /// </summary>
-    public abstract class Simulation : Parameterized
+    public abstract class Simulation<T> : Parameterized<T>, ISimulation
     {
         /// <summary>
         /// The configuration
@@ -21,7 +21,7 @@ namespace SpiceSharp
         /// <summary>
         /// Event that is called when new simulation data is available
         /// </summary>
-        public event ExportSimulationDataEventHandler ExportSimulationData;
+        public event ExportSimulationDataEventHandler OnExportSimulationData;
 
         /// <summary>
         /// Event that is called for finalizing simulation data exports
@@ -29,13 +29,19 @@ namespace SpiceSharp
         public event FinalizeSimulationExportEventHandler FinalizeSimulationExport;
 
         /// <summary>
+        /// Get the name of the simulation
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="config">The configuration for this simulation</param>
         public Simulation(string name, SimulationConfiguration config = null)
-            : base(name)
+            : base()
         {
             Config = config;
+            Name = name;
         }
 
         /// <summary>
@@ -61,7 +67,7 @@ namespace SpiceSharp
         public virtual void Export(Circuit ckt)
         {
             SimulationData data = new SimulationData(ckt);
-            ExportSimulationData?.Invoke(this, data);
+            OnExportSimulationData?.Invoke(this, data);
         }
 
         /// <summary>

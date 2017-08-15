@@ -6,12 +6,21 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents a current-controlled switch
     /// </summary>
-    public class CurrentSwitch : CircuitComponent
+    public class CurrentSwitch : CircuitComponent<CurrentSwitch>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static CurrentSwitch()
+        {
+            Register();
+            terminals = new string[] { "W+", "W-" };
+        }
+
         /// <summary>
         /// Gets or sets the model for the current-controlled switch
         /// </summary>
-        public CurrentSwitchModel Model { get; set; }
+        public void SetModel(CurrentSwitchModel model) => Model = (ICircuitObject)model;
 
         /// <summary>
         /// Parameters
@@ -48,7 +57,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled switch</param>
-        public CurrentSwitch(string name) : base(name, "W+", "W-")
+        public CurrentSwitch(string name) : base(name)
         {
             // Make sure the current switch is processed after voltage sources
             Priority = -1;
@@ -61,18 +70,12 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source</param>
-        public CurrentSwitch(string name, string pos, string neg, string vsource) : base(name, "W+", "W-")
+        public CurrentSwitch(string name, string pos, string neg, string vsource) : base(name)
         {
             Connect(pos, neg);
             CSWcontName = vsource;
             Priority = -1;
         }
-
-        /// <summary>
-        /// Get the model for the current-controlled switch
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => Model;
 
         /// <summary>
         /// Setup the current-controlled switch
@@ -85,7 +88,7 @@ namespace SpiceSharp.Components
             CSWnegNode = nodes[1].Index;
 
             // Find the voltage source
-            var vsource = ckt.Components[CSWcontName];
+            var vsource = ckt.Objects[CSWcontName];
             if (vsource is Voltagesource)
                 CSWcontBranch = ((Voltagesource)vsource).VSRCbranch;
 
@@ -104,6 +107,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Load(Circuit ckt)
         {
+            CurrentSwitchModel model = Model as CurrentSwitchModel;
             double g_now;
             double i_ctrl;
             double previous_state;
@@ -137,9 +141,9 @@ namespace SpiceSharp.Components
                 // No time-dependence, so use current state instead
                 previous_state = state.States[0][CSWstate];
                 i_ctrl = rstate.OldSolution[CSWcontBranch];
-                if (i_ctrl > (Model.CSWthresh + Model.CSWhyst))
+                if (i_ctrl > (model.CSWthresh + model.CSWhyst))
                     current_state = 1.0;
-                else if (i_ctrl < (Model.CSWthresh - Model.CSWhyst))
+                else if (i_ctrl < (model.CSWthresh - model.CSWhyst))
                     current_state = 0.0;
                 else
                     current_state = previous_state;
@@ -161,9 +165,9 @@ namespace SpiceSharp.Components
                 i_ctrl = rstate.OldSolution[CSWcontBranch];
 
                 // Calculate the current state
-                if (i_ctrl > (Model.CSWthresh + Model.CSWhyst))
+                if (i_ctrl > (model.CSWthresh + model.CSWhyst))
                     current_state = 1;
-                else if (i_ctrl < (Model.CSWthresh - Model.CSWhyst))
+                else if (i_ctrl < (model.CSWthresh - model.CSWhyst))
                     current_state = 0;
                 else
                     current_state = previous_state;
@@ -176,7 +180,7 @@ namespace SpiceSharp.Components
             }
 
             // Get the current conduction
-            g_now = current_state != 0.0 ? (Model.CSWonConduct) : (Model.CSWoffConduct);
+            g_now = current_state != 0.0 ? (model.CSWonConduct) : (model.CSWoffConduct);
             CSWcond = g_now;
 
             // Load the Y-matrix
@@ -192,6 +196,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void AcLoad(Circuit ckt)
         {
+            CurrentSwitchModel model = Model as CurrentSwitchModel;
             double current_state;
             double g_now;
             var state = ckt.State;
@@ -199,7 +204,7 @@ namespace SpiceSharp.Components
 
             // Get the current state
             current_state = state.States[0][CSWstate];
-            g_now = current_state > 0.0 ? Model.CSWonConduct : Model.CSWoffConduct;
+            g_now = current_state > 0.0 ? model.CSWonConduct : model.CSWoffConduct;
 
             // Load the Y-matrix
             cstate.Matrix[CSWposNode, CSWposNode] += g_now;

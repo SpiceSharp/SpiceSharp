@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
+using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Subcircuits
 {
@@ -55,7 +56,7 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <summary>
         /// Get the current components
         /// </summary>
-        public CircuitComponents Components { get; private set; }
+        public CircuitObjects Objects { get; private set; }
 
         /// <summary>
         /// The global parameters
@@ -69,7 +70,7 @@ namespace SpiceSharp.Parser.Subcircuits
         public SubcircuitPath(Netlist netlist)
         {
             this.netlist = netlist;
-            Components = netlist.Circuit.Components;
+            Objects = netlist.Circuit.Objects;
             Parameters = globalparameters;
         }
 
@@ -91,7 +92,7 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <param name="subckt">The subcircuit</param>
         /// <param name="def">Its matching definition</param>
         /// <param name="pars">Parameters passed to the subcircuit</param>
-        public void Descend(Subcircuit subckt, SubcircuitDefinition def, Dictionary<string, string> parameters)
+        public void Descend(Subcircuit subckt, SubcircuitDefinition def, Dictionary<string, Token> parameters)
         {
             var nparameters = parameters != null ? MergeParameters(def, parameters) : null;
 
@@ -102,7 +103,7 @@ namespace SpiceSharp.Parser.Subcircuits
 
             // Update the currently active components
             if (subckt != null)
-                Components = subckt.Components;
+                Objects = subckt.Objects;
             if (parameters != null)
             Parameters = nparameters;
 
@@ -123,9 +124,9 @@ namespace SpiceSharp.Parser.Subcircuits
 
             // Restore the previous state
             if (csubckt.Count > 0 && csubckt.Peek() != null)
-                Components = csubckt.Peek().Components;
+                Objects = csubckt.Peek().Objects;
             else
-                Components = netlist.Circuit.Components;
+                Objects = netlist.Circuit.Objects;
             if (cparams.Count > 0 && cparams.Peek() != null)
                 Parameters = cparams.Peek();
             else
@@ -146,7 +147,7 @@ namespace SpiceSharp.Parser.Subcircuits
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public CircuitModel FindModel(string name)
+        public T FindModel<T>(string name)
         {
             switch (ModelScope)
             {
@@ -155,38 +156,38 @@ namespace SpiceSharp.Parser.Subcircuits
                     foreach (Subcircuit subckt in csubckt)
                     {
                         // Try to find it in this subcircuit
-                        if (subckt.Components.Contains(name))
+                        if (subckt.Objects.Contains(name))
                         {
-                            CircuitComponent c = subckt.Components[name];
-                            if (c is CircuitModel)
-                                return c as CircuitModel;
+                            ICircuitObject c = subckt.Objects[name];
+                            if (c is T)
+                                return (T)c;
                         }
                     }
 
                     // Finally try to find it in the circuit
-                    if (netlist.Circuit.Components.Contains(name))
+                    if (netlist.Circuit.Objects.Contains(name))
                     {
-                        CircuitComponent c = netlist.Circuit.Components[name];
-                        if (c is CircuitModel)
-                            return c as CircuitModel;
+                        ICircuitObject c = netlist.Circuit.Objects[name];
+                        if (c is T)
+                            return (T)c;
                     }
                     break;
 
                 case ScopeRule.GlobalLocal:
                     // Find the model locally
-                    if (Components.Contains(name))
+                    if (Objects.Contains(name))
                     {
-                        CircuitComponent c = Components[name];
-                        if (c is CircuitModel)
-                            return c as CircuitModel;
+                        ICircuitObject c = Objects[name];
+                        if (c is T)
+                            return (T)c;
                     }
 
                     // Find the model globally
-                    if (netlist.Circuit.Components.Contains(name))
+                    if (netlist.Circuit.Objects.Contains(name))
                     {
-                        CircuitComponent c = netlist.Circuit.Components[name];
-                        if (c is CircuitModel)
-                            return c as CircuitModel;
+                        ICircuitObject c = netlist.Circuit.Objects[name];
+                        if (c is T)
+                            return (T)c;
                     }
                     break;
             }
@@ -234,19 +235,19 @@ namespace SpiceSharp.Parser.Subcircuits
         /// </summary>
         /// <param name="def">The circuit definition containing the default parameters</param>
         /// <param name="parameters">The parameters</param>
-        private Dictionary<string, double> MergeParameters(SubcircuitDefinition def, Dictionary<string, string> parameters)
+        private Dictionary<string, double> MergeParameters(SubcircuitDefinition def, Dictionary<string, Token> parameters)
         {
             Dictionary<string, double> nparameters = new Dictionary<string, double>();
 
             // Convert all parameters now
             foreach (var item in parameters)
-                nparameters.Add(item.Key, ConvertDouble(item.Value));
+                nparameters.Add(item.Key, netlist.ParseDouble(item.Value));
 
             // Add definition defaults
             foreach (var item in def.Defaults)
             {
                 if (!nparameters.ContainsKey(item.Key))
-                    nparameters.Add(item.Key, ConvertDouble(item.Value));
+                    nparameters.Add(item.Key, netlist.ParseDouble(item.Value));
             }
 
             // Merge the parameters depending on the scope rules
@@ -274,16 +275,6 @@ namespace SpiceSharp.Parser.Subcircuits
             }
 
             return nparameters;
-        }
-
-        /// <summary>
-        /// Convert an expression to a double
-        /// </summary>
-        /// <param name="value">Value</param>
-        /// <returns></returns>
-        private double ConvertDouble(string value)
-        {
-            return (double)SpiceSharp.Parameters.SpiceMember.ConvertType(this, value, typeof(double));
         }
     }
 

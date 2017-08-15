@@ -6,85 +6,93 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    public class MOS6Model : CircuitModel
+    public class MOS6Model : CircuitModel<MOS6Model>
     {
+        /// <summary>
+        /// Register our par
+        /// </summary>
+        static MOS6Model()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
-        public ParameterMethod<double> MOS6tnom { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature in Kelvin")]
+        public Parameter MOS6tnom { get; } = new Parameter(300.15);
         [SpiceName("vto"), SpiceName("vt0"), SpiceInfo("Threshold voltage")]
-        public Parameter<double> MOS6vt0 { get; } = new Parameter<double>();
+        public Parameter MOS6vt0 { get; } = new Parameter();
         [SpiceName("kv"), SpiceInfo("Saturation voltage factor")]
-        public Parameter<double> MOS6kv { get; } = new Parameter<double>(2);
+        public Parameter MOS6kv { get; } = new Parameter(2);
         [SpiceName("nv"), SpiceInfo("Saturation voltage coeff.")]
-        public Parameter<double> MOS6nv { get; } = new Parameter<double>();
+        public Parameter MOS6nv { get; } = new Parameter();
         [SpiceName("kc"), SpiceInfo("Saturation current factor")]
-        public Parameter<double> MOS6kc { get; } = new Parameter<double>(5e-5);
+        public Parameter MOS6kc { get; } = new Parameter(5e-5);
         [SpiceName("nc"), SpiceInfo("Saturation current coeff.")]
-        public Parameter<double> MOS6nc { get; } = new Parameter<double>(1);
+        public Parameter MOS6nc { get; } = new Parameter(1);
         [SpiceName("nvth"), SpiceInfo("Threshold voltage coeff.")]
-        public Parameter<double> MOS6nvth { get; } = new Parameter<double>();
+        public Parameter MOS6nvth { get; } = new Parameter();
         [SpiceName("ps"), SpiceInfo("Sat. current modification  par.")]
-        public Parameter<double> MOS6ps { get; } = new Parameter<double>();
+        public Parameter MOS6ps { get; } = new Parameter();
         [SpiceName("gamma"), SpiceInfo("Bulk threshold parameter")]
-        public Parameter<double> MOS6gamma { get; } = new Parameter<double>();
+        public Parameter MOS6gamma { get; } = new Parameter();
         [SpiceName("gamma1"), SpiceInfo("Bulk threshold parameter 1")]
-        public Parameter<double> MOS6gamma1 { get; } = new Parameter<double>();
+        public Parameter MOS6gamma1 { get; } = new Parameter();
         [SpiceName("sigma"), SpiceInfo("Static feedback effect par.")]
-        public Parameter<double> MOS6sigma { get; } = new Parameter<double>();
+        public Parameter MOS6sigma { get; } = new Parameter();
         [SpiceName("phi"), SpiceInfo("Surface potential")]
-        public Parameter<double> MOS6phi { get; } = new Parameter<double>(.6);
+        public Parameter MOS6phi { get; } = new Parameter(.6);
         [SpiceName("lambda"), SpiceInfo("Channel length modulation param.")]
-        public Parameter<double> MOS6lambda { get; } = new Parameter<double>();
+        public Parameter MOS6lambda { get; } = new Parameter();
         [SpiceName("lambda0"), SpiceInfo("Channel length modulation param. 0")]
-        public Parameter<double> MOS6lamda0 { get; } = new Parameter<double>();
+        public Parameter MOS6lamda0 { get; } = new Parameter();
         [SpiceName("lambda1"), SpiceInfo("Channel length modulation param. 1")]
-        public Parameter<double> MOS6lamda1 { get; } = new Parameter<double>();
+        public Parameter MOS6lamda1 { get; } = new Parameter();
         [SpiceName("rd"), SpiceInfo("Drain ohmic resistance")]
-        public Parameter<double> MOS6drainResistance { get; } = new Parameter<double>();
+        public Parameter MOS6drainResistance { get; } = new Parameter();
         [SpiceName("rs"), SpiceInfo("Source ohmic resistance")]
-        public Parameter<double> MOS6sourceResistance { get; } = new Parameter<double>();
+        public Parameter MOS6sourceResistance { get; } = new Parameter();
         [SpiceName("cbd"), SpiceInfo("B-D junction capacitance")]
-        public Parameter<double> MOS6capBD { get; } = new Parameter<double>();
+        public Parameter MOS6capBD { get; } = new Parameter();
         [SpiceName("cbs"), SpiceInfo("B-S junction capacitance")]
-        public Parameter<double> MOS6capBS { get; } = new Parameter<double>();
+        public Parameter MOS6capBS { get; } = new Parameter();
         [SpiceName("is"), SpiceInfo("Bulk junction sat. current")]
-        public Parameter<double> MOS6jctSatCur { get; } = new Parameter<double>(1e-14);
+        public Parameter MOS6jctSatCur { get; } = new Parameter(1e-14);
         [SpiceName("pb"), SpiceInfo("Bulk junction potential")]
-        public Parameter<double> MOS6bulkJctPotential { get; } = new Parameter<double>(.8);
+        public Parameter MOS6bulkJctPotential { get; } = new Parameter(.8);
         [SpiceName("cgso"), SpiceInfo("Gate-source overlap cap.")]
-        public Parameter<double> MOS6gateSourceOverlapCapFactor { get; } = new Parameter<double>();
+        public Parameter MOS6gateSourceOverlapCapFactor { get; } = new Parameter();
         [SpiceName("cgdo"), SpiceInfo("Gate-drain overlap cap.")]
-        public Parameter<double> MOS6gateDrainOverlapCapFactor { get; } = new Parameter<double>();
+        public Parameter MOS6gateDrainOverlapCapFactor { get; } = new Parameter();
         [SpiceName("cgbo"), SpiceInfo("Gate-bulk overlap cap.")]
-        public Parameter<double> MOS6gateBulkOverlapCapFactor { get; } = new Parameter<double>();
+        public Parameter MOS6gateBulkOverlapCapFactor { get; } = new Parameter();
         [SpiceName("cj"), SpiceInfo("Bottom junction cap per area")]
-        public Parameter<double> MOS6bulkCapFactor { get; } = new Parameter<double>();
+        public Parameter MOS6bulkCapFactor { get; } = new Parameter();
         [SpiceName("mj"), SpiceInfo("Bottom grading coefficient")]
-        public Parameter<double> MOS6bulkJctBotGradingCoeff { get; } = new Parameter<double>(.5);
+        public Parameter MOS6bulkJctBotGradingCoeff { get; } = new Parameter(.5);
         [SpiceName("cjsw"), SpiceInfo("Side junction cap per area")]
-        public Parameter<double> MOS6sideWallCapFactor { get; } = new Parameter<double>();
+        public Parameter MOS6sideWallCapFactor { get; } = new Parameter();
         [SpiceName("mjsw"), SpiceInfo("Side grading coefficient")]
-        public Parameter<double> MOS6bulkJctSideGradingCoeff { get; } = new Parameter<double>(.5);
+        public Parameter MOS6bulkJctSideGradingCoeff { get; } = new Parameter(.5);
         [SpiceName("js"), SpiceInfo("Bulk jct. sat. current density")]
-        public Parameter<double> MOS6jctSatCurDensity { get; } = new Parameter<double>();
+        public Parameter MOS6jctSatCurDensity { get; } = new Parameter();
         [SpiceName("tox"), SpiceInfo("Oxide thickness")]
-        public Parameter<double> MOS6oxideThickness { get; } = new Parameter<double>();
+        public Parameter MOS6oxideThickness { get; } = new Parameter();
         [SpiceName("ld"), SpiceInfo("Lateral diffusion")]
-        public Parameter<double> MOS6latDiff { get; } = new Parameter<double>();
+        public Parameter MOS6latDiff { get; } = new Parameter();
         [SpiceName("rsh"), SpiceInfo("Sheet resistance")]
-        public Parameter<double> MOS6sheetResistance { get; } = new Parameter<double>();
+        public Parameter MOS6sheetResistance { get; } = new Parameter();
         [SpiceName("u0"), SpiceName("uo"), SpiceInfo("Surface mobility")]
-        public Parameter<double> MOS6surfaceMobility { get; } = new Parameter<double>();
+        public Parameter MOS6surfaceMobility { get; } = new Parameter();
         [SpiceName("fc"), SpiceInfo("Forward bias jct. fit parm.")]
-        public Parameter<double> MOS6fwdCapDepCoeff { get; } = new Parameter<double>(.5);
+        public Parameter MOS6fwdCapDepCoeff { get; } = new Parameter(.5);
         [SpiceName("nss"), SpiceInfo("Surface state density")]
-        public Parameter<double> MOS6surfaceStateDensity { get; } = new Parameter<double>();
+        public Parameter MOS6surfaceStateDensity { get; } = new Parameter();
         [SpiceName("nsub"), SpiceInfo("Substrate doping")]
-        public Parameter<double> MOS6substrateDoping { get; } = new Parameter<double>();
+        public Parameter MOS6substrateDoping { get; } = new Parameter();
         [SpiceName("tpg"), SpiceInfo("Gate type")]
-        public Parameter<int> MOS6gateType { get; } = new Parameter<int>();
+        public Parameter MOS6gateType { get; } = new Parameter();
 
         /// <summary>
         /// Methods

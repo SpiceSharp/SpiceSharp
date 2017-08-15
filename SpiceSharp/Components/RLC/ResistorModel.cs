@@ -5,23 +5,31 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A class representing a resistor model
     /// </summary>
-    public class ResistorModel : CircuitModel
+    public class ResistorModel : CircuitModel<ResistorModel>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static ResistorModel()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature", Interesting = false)]
-        public ParameterMethod<double> REStnom { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature in Kelvin", Interesting = false)]
+        public Parameter REStnom { get; } = new Parameter(300.15);
         [SpiceName("tc1"), SpiceInfo("First order temperature coefficient")]
-        public Parameter<double> REStempCoeff1 { get; } = new Parameter<double>();
+        public Parameter REStempCoeff1 { get; } = new Parameter();
         [SpiceName("tc2"), SpiceInfo("Second order temperature oefficient")]
-        public Parameter<double> REStempCoeff2 { get; } = new Parameter<double>();
+        public Parameter REStempCoeff2 { get; } = new Parameter();
         [SpiceName("rsh"), SpiceInfo("Sheet resistance")]
-        public Parameter<double> RESsheetRes { get; } = new Parameter<double>();
+        public Parameter RESsheetRes { get; } = new Parameter();
         [SpiceName("defw"), SpiceInfo("Default device width")]
-        public Parameter<double> RESdefWidth { get; } = new Parameter<double>(10.0e-6);
+        public Parameter RESdefWidth { get; } = new Parameter(10.0e-6);
         [SpiceName("narrow"), SpiceInfo("Narrowing of resistor")]
-        public Parameter<double> RESnarrow { get; } = new Parameter<double>();
+        public Parameter RESnarrow { get; } = new Parameter();
 
         /// <summary>
         /// Constructor

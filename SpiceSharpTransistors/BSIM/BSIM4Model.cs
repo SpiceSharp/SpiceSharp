@@ -6,1759 +6,1767 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    public class BSIM4Model : CircuitModel
+    public class BSIM4Model : CircuitModel<BSIM4Model>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static BSIM4Model()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("mobmod"), SpiceInfo("Mobility model selector")]
-        public Parameter<int> BSIM4mobMod { get; } = new Parameter<int>();
+        public Parameter BSIM4mobMod { get; } = new Parameter();
         [SpiceName("binunit"), SpiceInfo("Bin  unit  selector")]
-        public Parameter<int> BSIM4binUnit { get; } = new Parameter<int>(1);
+        public Parameter BSIM4binUnit { get; } = new Parameter(1);
         [SpiceName("paramchk"), SpiceInfo("Model parameter checking selector")]
-        public Parameter<int> BSIM4paramChk { get; } = new Parameter<int>(1);
+        public Parameter BSIM4paramChk { get; } = new Parameter(1);
         [SpiceName("cvchargemod"), SpiceInfo("Capacitance Charge model selector")]
-        public Parameter<int> BSIM4cvchargeMod { get; } = new Parameter<int>();
+        public Parameter BSIM4cvchargeMod { get; } = new Parameter();
         [SpiceName("capmod"), SpiceInfo("Capacitance model selector")]
-        public Parameter<int> BSIM4capMod { get; } = new Parameter<int>(2);
+        public Parameter BSIM4capMod { get; } = new Parameter(2);
         [SpiceName("diomod"), SpiceInfo("Diode IV model selector")]
-        public Parameter<int> BSIM4dioMod { get; } = new Parameter<int>(1);
+        public Parameter BSIM4dioMod { get; } = new Parameter(1);
         [SpiceName("rdsmod"), SpiceInfo("Bias-dependent S/D resistance model selector")]
-        public Parameter<int> BSIM4rdsMod { get; } = new Parameter<int>();
+        public Parameter BSIM4rdsMod { get; } = new Parameter();
         [SpiceName("trnqsmod"), SpiceInfo("Transient NQS model selector")]
-        public Parameter<int> BSIM4trnqsMod { get; } = new Parameter<int>();
+        public Parameter BSIM4trnqsMod { get; } = new Parameter();
         [SpiceName("acnqsmod"), SpiceInfo("AC NQS model selector")]
-        public Parameter<int> BSIM4acnqsMod { get; } = new Parameter<int>();
+        public Parameter BSIM4acnqsMod { get; } = new Parameter();
         [SpiceName("rbodymod"), SpiceInfo("Distributed body R model selector")]
-        public Parameter<int> BSIM4rbodyMod { get; } = new Parameter<int>();
+        public Parameter BSIM4rbodyMod { get; } = new Parameter();
         [SpiceName("rgatemod"), SpiceInfo("Gate R model selector")]
-        public Parameter<int> BSIM4rgateMod { get; } = new Parameter<int>();
+        public Parameter BSIM4rgateMod { get; } = new Parameter();
         [SpiceName("permod"), SpiceInfo("Pd and Ps model selector")]
-        public Parameter<int> BSIM4perMod { get; } = new Parameter<int>(1);
+        public Parameter BSIM4perMod { get; } = new Parameter(1);
         [SpiceName("geomod"), SpiceInfo("Geometry dependent parasitics model selector")]
-        public Parameter<int> BSIM4geoMod { get; } = new Parameter<int>();
+        public Parameter BSIM4geoMod { get; } = new Parameter();
         [SpiceName("fnoimod"), SpiceInfo("Flicker noise model selector")]
-        public Parameter<int> BSIM4fnoiMod { get; } = new Parameter<int>(1);
+        public Parameter BSIM4fnoiMod { get; } = new Parameter(1);
         [SpiceName("tnoimod"), SpiceInfo("Thermal noise model selector")]
-        public Parameter<int> BSIM4tnoiMod { get; } = new Parameter<int>();
+        public Parameter BSIM4tnoiMod { get; } = new Parameter();
         [SpiceName("mtrlmod"), SpiceInfo("parameter for non-silicon substrate or metal gate selector")]
-        public Parameter<int> BSIM4mtrlMod { get; } = new Parameter<int>();
+        public Parameter BSIM4mtrlMod { get; } = new Parameter();
         [SpiceName("mtrlcompatmod"), SpiceInfo("New Material Mod backward compatibility selector")]
-        public Parameter<int> BSIM4mtrlCompatMod { get; } = new Parameter<int>();
+        public Parameter BSIM4mtrlCompatMod { get; } = new Parameter();
         [SpiceName("gidlmod"), SpiceInfo("parameter for GIDL selector")]
-        public Parameter<int> BSIM4gidlMod { get; } = new Parameter<int>();
+        public Parameter BSIM4gidlMod { get; } = new Parameter();
         [SpiceName("igcmod"), SpiceInfo("Gate-to-channel Ig model selector")]
-        public Parameter<int> BSIM4igcMod { get; } = new Parameter<int>();
+        public Parameter BSIM4igcMod { get; } = new Parameter();
         [SpiceName("igbmod"), SpiceInfo("Gate-to-body Ig model selector")]
-        public Parameter<int> BSIM4igbMod { get; } = new Parameter<int>();
+        public Parameter BSIM4igbMod { get; } = new Parameter();
         [SpiceName("tempmod"), SpiceInfo("Temperature model selector")]
-        public Parameter<int> BSIM4tempMod { get; } = new Parameter<int>();
+        public Parameter BSIM4tempMod { get; } = new Parameter();
         [SpiceName("version"), SpiceInfo("parameter for model version")]
-        public Parameter<double> BSIM4version { get; } = new Parameter<double>(4.80);
+        public Parameter BSIM4version { get; } = new Parameter(4.80);
         [SpiceName("toxref"), SpiceInfo("Target tox value")]
-        public Parameter<double> BSIM4toxref { get; } = new Parameter<double>(30.0e-10);
+        public Parameter BSIM4toxref { get; } = new Parameter(30.0e-10);
         [SpiceName("eot"), SpiceInfo("Equivalent gate oxide thickness in meters")]
-        public Parameter<double> BSIM4eot { get; } = new Parameter<double>(15.0e-10);
+        public Parameter BSIM4eot { get; } = new Parameter(15.0e-10);
         [SpiceName("vddeot"), SpiceInfo("Voltage for extraction of Equivalent gate oxide thickness")]
-        public Parameter<double> BSIM4vddeot { get; } = new Parameter<double>();
+        public Parameter BSIM4vddeot { get; } = new Parameter();
         [SpiceName("tempeot"), SpiceInfo(" Temperature for extraction of EOT")]
-        public Parameter<double> BSIM4tempeot { get; } = new Parameter<double>(300.15);
+        public Parameter BSIM4tempeot { get; } = new Parameter(300.15);
         [SpiceName("leffeot"), SpiceInfo(" Effective length for extraction of EOT")]
-        public Parameter<double> BSIM4leffeot { get; } = new Parameter<double>(1);
+        public Parameter BSIM4leffeot { get; } = new Parameter(1);
         [SpiceName("weffeot"), SpiceInfo("Effective width for extraction of EOT")]
-        public Parameter<double> BSIM4weffeot { get; } = new Parameter<double>(10);
+        public Parameter BSIM4weffeot { get; } = new Parameter(10);
         [SpiceName("ados"), SpiceInfo("Charge centroid parameter")]
-        public Parameter<double> BSIM4ados { get; } = new Parameter<double>();
+        public Parameter BSIM4ados { get; } = new Parameter();
         [SpiceName("bdos"), SpiceInfo("Charge centroid parameter")]
-        public Parameter<double> BSIM4bdos { get; } = new Parameter<double>();
+        public Parameter BSIM4bdos { get; } = new Parameter();
         [SpiceName("toxe"), SpiceInfo("Electrical gate oxide thickness in meters")]
-        public Parameter<double> BSIM4toxe { get; } = new Parameter<double>(30.0e-10);
+        public Parameter BSIM4toxe { get; } = new Parameter(30.0e-10);
         [SpiceName("toxp"), SpiceInfo("Physical gate oxide thickness in meters")]
-        public Parameter<double> BSIM4toxp { get; } = new Parameter<double>();
+        public Parameter BSIM4toxp { get; } = new Parameter();
         [SpiceName("toxm"), SpiceInfo("Gate oxide thickness at which parameters are extracted")]
-        public Parameter<double> BSIM4toxm { get; } = new Parameter<double>();
+        public Parameter BSIM4toxm { get; } = new Parameter();
         [SpiceName("dtox"), SpiceInfo("Defined as (toxe - toxp) ")]
-        public Parameter<double> BSIM4dtox { get; } = new Parameter<double>();
+        public Parameter BSIM4dtox { get; } = new Parameter();
         [SpiceName("epsrox"), SpiceInfo("Dielectric constant of the gate oxide relative to vacuum")]
-        public Parameter<double> BSIM4epsrox { get; } = new Parameter<double>(3.9);
+        public Parameter BSIM4epsrox { get; } = new Parameter(3.9);
         [SpiceName("cdsc"), SpiceInfo("Drain/Source and channel coupling capacitance")]
-        public Parameter<double> BSIM4cdsc { get; } = new Parameter<double>(2.4e-4);
+        public Parameter BSIM4cdsc { get; } = new Parameter(2.4e-4);
         [SpiceName("cdscb"), SpiceInfo("Body-bias dependence of cdsc")]
-        public Parameter<double> BSIM4cdscb { get; } = new Parameter<double>();
+        public Parameter BSIM4cdscb { get; } = new Parameter();
         [SpiceName("cdscd"), SpiceInfo("Drain-bias dependence of cdsc")]
-        public Parameter<double> BSIM4cdscd { get; } = new Parameter<double>();
+        public Parameter BSIM4cdscd { get; } = new Parameter();
         [SpiceName("cit"), SpiceInfo("Interface state capacitance")]
-        public Parameter<double> BSIM4cit { get; } = new Parameter<double>();
+        public Parameter BSIM4cit { get; } = new Parameter();
         [SpiceName("nfactor"), SpiceInfo("Subthreshold swing Coefficient")]
-        public Parameter<double> BSIM4nfactor { get; } = new Parameter<double>();
+        public Parameter BSIM4nfactor { get; } = new Parameter();
         [SpiceName("xj"), SpiceInfo("Junction depth in meters")]
-        public Parameter<double> BSIM4xj { get; } = new Parameter<double>(.15e-6);
+        public Parameter BSIM4xj { get; } = new Parameter(.15e-6);
         [SpiceName("vsat"), SpiceInfo("Saturation velocity at tnom")]
-        public Parameter<double> BSIM4vsat { get; } = new Parameter<double>(8.0e4);
+        public Parameter BSIM4vsat { get; } = new Parameter(8.0e4);
         [SpiceName("a0"), SpiceInfo("Non-uniform depletion width effect coefficient.")]
-        public Parameter<double> BSIM4a0 { get; } = new Parameter<double>();
+        public Parameter BSIM4a0 { get; } = new Parameter();
         [SpiceName("ags"), SpiceInfo("Gate bias  coefficient of Abulk.")]
-        public Parameter<double> BSIM4ags { get; } = new Parameter<double>();
+        public Parameter BSIM4ags { get; } = new Parameter();
         [SpiceName("a1"), SpiceInfo("Non-saturation effect coefficient")]
-        public Parameter<double> BSIM4a1 { get; } = new Parameter<double>();
+        public Parameter BSIM4a1 { get; } = new Parameter();
         [SpiceName("a2"), SpiceInfo("Non-saturation effect coefficient")]
-        public Parameter<double> BSIM4a2 { get; } = new Parameter<double>();
+        public Parameter BSIM4a2 { get; } = new Parameter();
         [SpiceName("at"), SpiceInfo("Temperature coefficient of vsat")]
-        public Parameter<double> BSIM4at { get; } = new Parameter<double>(3.3e4);
+        public Parameter BSIM4at { get; } = new Parameter(3.3e4);
         [SpiceName("keta"), SpiceInfo("Body-bias coefficient of non-uniform depletion width effect.")]
-        public Parameter<double> BSIM4keta { get; } = new Parameter<double>(-0.047);
+        public Parameter BSIM4keta { get; } = new Parameter(-0.047);
         [SpiceName("nsub"), SpiceInfo("Substrate doping concentration")]
-        public Parameter<double> BSIM4nsub { get; } = new Parameter<double>(6.0e16);
+        public Parameter BSIM4nsub { get; } = new Parameter(6.0e16);
         [SpiceName("phig"), SpiceInfo("Work function of gate")]
-        public Parameter<double> BSIM4phig { get; } = new Parameter<double>(4.05);
+        public Parameter BSIM4phig { get; } = new Parameter(4.05);
         [SpiceName("epsrgate"), SpiceInfo("Dielectric constant of gate relative to vacuum")]
-        public Parameter<double> BSIM4epsrgate { get; } = new Parameter<double>(11.7);
+        public Parameter BSIM4epsrgate { get; } = new Parameter(11.7);
         [SpiceName("easub"), SpiceInfo("Electron affinity of substrate")]
-        public Parameter<double> BSIM4easub { get; } = new Parameter<double>(4.05);
+        public Parameter BSIM4easub { get; } = new Parameter(4.05);
         [SpiceName("epsrsub"), SpiceInfo("Dielectric constant of substrate relative to vacuum")]
-        public Parameter<double> BSIM4epsrsub { get; } = new Parameter<double>(11.7);
+        public Parameter BSIM4epsrsub { get; } = new Parameter(11.7);
         [SpiceName("ni0sub"), SpiceInfo("Intrinsic carrier concentration of substrate at 300.15K")]
-        public Parameter<double> BSIM4ni0sub { get; } = new Parameter<double>(1.45e10);
+        public Parameter BSIM4ni0sub { get; } = new Parameter(1.45e10);
         [SpiceName("bg0sub"), SpiceInfo("Band-gap of substrate at T=0K")]
-        public Parameter<double> BSIM4bg0sub { get; } = new Parameter<double>(1.16);
+        public Parameter BSIM4bg0sub { get; } = new Parameter(1.16);
         [SpiceName("tbgasub"), SpiceInfo("First parameter of band-gap change due to temperature")]
-        public Parameter<double> BSIM4tbgasub { get; } = new Parameter<double>(7.02e-4);
+        public Parameter BSIM4tbgasub { get; } = new Parameter(7.02e-4);
         [SpiceName("tbgbsub"), SpiceInfo("Second parameter of band-gap change due to temperature")]
-        public Parameter<double> BSIM4tbgbsub { get; } = new Parameter<double>();
+        public Parameter BSIM4tbgbsub { get; } = new Parameter();
         [SpiceName("ndep"), SpiceInfo("Channel doping concentration at the depletion edge")]
-        public ParameterMethod<double> BSIM4ndep { get; } = new ParameterMethod<double>(1.7e17, (double v) => v > 1.0e20 ? v * 1e-6 : v, null);
+        public Parameter BSIM4ndep { get; } = new Parameter(1.7e17);
         [SpiceName("nsd"), SpiceInfo("S/D doping concentration")]
-        public ParameterMethod<double> BSIM4nsd { get; } = new ParameterMethod<double>(1.0e20, (double v) => v > 1.0e20 ? v * 1e-6 : v, null);
+        public Parameter BSIM4nsd { get; } = new Parameter(1.0e20);
         [SpiceName("ngate"), SpiceInfo("Poly-gate doping concentration")]
-        public ParameterMethod<double> BSIM4ngate { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e23 ? v * 1e-6 : v, null);
+        public Parameter BSIM4ngate { get; } = new Parameter(0.0);
         [SpiceName("gamma1"), SpiceInfo("Vth body coefficient")]
-        public Parameter<double> BSIM4gamma1 { get; } = new Parameter<double>();
+        public Parameter BSIM4gamma1 { get; } = new Parameter();
         [SpiceName("gamma2"), SpiceInfo("Vth body coefficient")]
-        public Parameter<double> BSIM4gamma2 { get; } = new Parameter<double>();
+        public Parameter BSIM4gamma2 { get; } = new Parameter();
         [SpiceName("vbx"), SpiceInfo("Vth transition body Voltage")]
-        public Parameter<double> BSIM4vbx { get; } = new Parameter<double>();
+        public Parameter BSIM4vbx { get; } = new Parameter();
         [SpiceName("vbm"), SpiceInfo("Maximum body voltage")]
-        public Parameter<double> BSIM4vbm { get; } = new Parameter<double>();
+        public Parameter BSIM4vbm { get; } = new Parameter();
         [SpiceName("xt"), SpiceInfo("Doping depth")]
-        public Parameter<double> BSIM4xt { get; } = new Parameter<double>(1.55e-7);
+        public Parameter BSIM4xt { get; } = new Parameter(1.55e-7);
         [SpiceName("k1"), SpiceInfo("Bulk effect coefficient 1")]
-        public Parameter<double> BSIM4k1 { get; } = new Parameter<double>();
+        public Parameter BSIM4k1 { get; } = new Parameter();
         [SpiceName("kt1"), SpiceInfo("Temperature coefficient of Vth")]
-        public Parameter<double> BSIM4kt1 { get; } = new Parameter<double>(-0.11);
+        public Parameter BSIM4kt1 { get; } = new Parameter(-0.11);
         [SpiceName("kt1l"), SpiceInfo("Temperature coefficient of Vth")]
-        public Parameter<double> BSIM4kt1l { get; } = new Parameter<double>();
+        public Parameter BSIM4kt1l { get; } = new Parameter();
         [SpiceName("kt2"), SpiceInfo("Body-coefficient of kt1")]
-        public Parameter<double> BSIM4kt2 { get; } = new Parameter<double>();
+        public Parameter BSIM4kt2 { get; } = new Parameter();
         [SpiceName("k2"), SpiceInfo("Bulk effect coefficient 2")]
-        public Parameter<double> BSIM4k2 { get; } = new Parameter<double>();
+        public Parameter BSIM4k2 { get; } = new Parameter();
         [SpiceName("k3"), SpiceInfo("Narrow width effect coefficient")]
-        public Parameter<double> BSIM4k3 { get; } = new Parameter<double>();
+        public Parameter BSIM4k3 { get; } = new Parameter();
         [SpiceName("k3b"), SpiceInfo("Body effect coefficient of k3")]
-        public Parameter<double> BSIM4k3b { get; } = new Parameter<double>();
+        public Parameter BSIM4k3b { get; } = new Parameter();
         [SpiceName("lpe0"), SpiceInfo("Equivalent length of pocket region at zero bias")]
-        public Parameter<double> BSIM4lpe0 { get; } = new Parameter<double>(1.74e-7);
+        public Parameter BSIM4lpe0 { get; } = new Parameter(1.74e-7);
         [SpiceName("lpeb"), SpiceInfo("Equivalent length of pocket region accounting for body bias")]
-        public Parameter<double> BSIM4lpeb { get; } = new Parameter<double>();
+        public Parameter BSIM4lpeb { get; } = new Parameter();
         [SpiceName("dvtp0"), SpiceInfo("First parameter for Vth shift due to pocket")]
-        public Parameter<double> BSIM4dvtp0 { get; } = new Parameter<double>();
+        public Parameter BSIM4dvtp0 { get; } = new Parameter();
         [SpiceName("dvtp1"), SpiceInfo("Second parameter for Vth shift due to pocket")]
-        public Parameter<double> BSIM4dvtp1 { get; } = new Parameter<double>();
+        public Parameter BSIM4dvtp1 { get; } = new Parameter();
         [SpiceName("dvtp2"), SpiceInfo("3rd parameter for Vth shift due to pocket")]
-        public Parameter<double> BSIM4dvtp2 { get; } = new Parameter<double>();
+        public Parameter BSIM4dvtp2 { get; } = new Parameter();
         [SpiceName("dvtp3"), SpiceInfo("4th parameter for Vth shift due to pocket")]
-        public Parameter<double> BSIM4dvtp3 { get; } = new Parameter<double>();
+        public Parameter BSIM4dvtp3 { get; } = new Parameter();
         [SpiceName("dvtp4"), SpiceInfo("5th parameter for Vth shift due to pocket")]
-        public Parameter<double> BSIM4dvtp4 { get; } = new Parameter<double>();
+        public Parameter BSIM4dvtp4 { get; } = new Parameter();
         [SpiceName("dvtp5"), SpiceInfo("6th parameter for Vth shift due to pocket")]
-        public Parameter<double> BSIM4dvtp5 { get; } = new Parameter<double>();
+        public Parameter BSIM4dvtp5 { get; } = new Parameter();
         [SpiceName("w0"), SpiceInfo("Narrow width effect parameter")]
-        public Parameter<double> BSIM4w0 { get; } = new Parameter<double>(2.5e-6);
+        public Parameter BSIM4w0 { get; } = new Parameter(2.5e-6);
         [SpiceName("dvt0"), SpiceInfo("Short channel effect coeff. 0")]
-        public Parameter<double> BSIM4dvt0 { get; } = new Parameter<double>(2.2);
+        public Parameter BSIM4dvt0 { get; } = new Parameter(2.2);
         [SpiceName("dvt1"), SpiceInfo("Short channel effect coeff. 1")]
-        public Parameter<double> BSIM4dvt1 { get; } = new Parameter<double>();
+        public Parameter BSIM4dvt1 { get; } = new Parameter();
         [SpiceName("dvt2"), SpiceInfo("Short channel effect coeff. 2")]
-        public Parameter<double> BSIM4dvt2 { get; } = new Parameter<double>(-0.032);
+        public Parameter BSIM4dvt2 { get; } = new Parameter(-0.032);
         [SpiceName("dvt0w"), SpiceInfo("Narrow Width coeff. 0")]
-        public Parameter<double> BSIM4dvt0w { get; } = new Parameter<double>();
+        public Parameter BSIM4dvt0w { get; } = new Parameter();
         [SpiceName("dvt1w"), SpiceInfo("Narrow Width effect coeff. 1")]
-        public Parameter<double> BSIM4dvt1w { get; } = new Parameter<double>(5.3e6);
+        public Parameter BSIM4dvt1w { get; } = new Parameter(5.3e6);
         [SpiceName("dvt2w"), SpiceInfo("Narrow Width effect coeff. 2")]
-        public Parameter<double> BSIM4dvt2w { get; } = new Parameter<double>(-0.032);
+        public Parameter BSIM4dvt2w { get; } = new Parameter(-0.032);
         [SpiceName("drout"), SpiceInfo("DIBL coefficient of output resistance")]
-        public Parameter<double> BSIM4drout { get; } = new Parameter<double>();
+        public Parameter BSIM4drout { get; } = new Parameter();
         [SpiceName("dsub"), SpiceInfo("DIBL coefficient in the subthreshold region")]
-        public Parameter<double> BSIM4dsub { get; } = new Parameter<double>();
+        public Parameter BSIM4dsub { get; } = new Parameter();
         [SpiceName("vth0"), SpiceName("vtho"), SpiceInfo("Threshold voltage")]
-        public Parameter<double> BSIM4vth0 { get; } = new Parameter<double>();
+        public Parameter BSIM4vth0 { get; } = new Parameter();
         [SpiceName("eu"), SpiceInfo("Mobility exponent")]
-        public Parameter<double> BSIM4eu { get; } = new Parameter<double>();
+        public Parameter BSIM4eu { get; } = new Parameter();
         [SpiceName("ucs"), SpiceInfo("Colombic scattering exponent")]
-        public Parameter<double> BSIM4ucs { get; } = new Parameter<double>();
+        public Parameter BSIM4ucs { get; } = new Parameter();
         [SpiceName("ua"), SpiceInfo("Linear gate dependence of mobility")]
-        public Parameter<double> BSIM4ua { get; } = new Parameter<double>();
+        public Parameter BSIM4ua { get; } = new Parameter();
         [SpiceName("ua1"), SpiceInfo("Temperature coefficient of ua")]
-        public Parameter<double> BSIM4ua1 { get; } = new Parameter<double>(1.0e-9);
+        public Parameter BSIM4ua1 { get; } = new Parameter(1.0e-9);
         [SpiceName("ub"), SpiceInfo("Quadratic gate dependence of mobility")]
-        public Parameter<double> BSIM4ub { get; } = new Parameter<double>(1.0e-19);
+        public Parameter BSIM4ub { get; } = new Parameter(1.0e-19);
         [SpiceName("ub1"), SpiceInfo("Temperature coefficient of ub")]
-        public Parameter<double> BSIM4ub1 { get; } = new Parameter<double>(-1.0e-18);
+        public Parameter BSIM4ub1 { get; } = new Parameter(-1.0e-18);
         [SpiceName("uc"), SpiceInfo("Body-bias dependence of mobility")]
-        public Parameter<double> BSIM4uc { get; } = new Parameter<double>();
+        public Parameter BSIM4uc { get; } = new Parameter();
         [SpiceName("uc1"), SpiceInfo("Temperature coefficient of uc")]
-        public Parameter<double> BSIM4uc1 { get; } = new Parameter<double>();
+        public Parameter BSIM4uc1 { get; } = new Parameter();
         [SpiceName("u0"), SpiceInfo("Low-field mobility at Tnom")]
-        public Parameter<double> BSIM4u0 { get; } = new Parameter<double>();
+        public Parameter BSIM4u0 { get; } = new Parameter();
         [SpiceName("ute"), SpiceInfo("Temperature coefficient of mobility")]
-        public Parameter<double> BSIM4ute { get; } = new Parameter<double>(-1.5);
+        public Parameter BSIM4ute { get; } = new Parameter(-1.5);
         [SpiceName("ucste"), SpiceInfo("Temperature coefficient of colombic mobility")]
-        public Parameter<double> BSIM4ucste { get; } = new Parameter<double>(-4.775e-3);
+        public Parameter BSIM4ucste { get; } = new Parameter(-4.775e-3);
         [SpiceName("ud"), SpiceInfo("Coulomb scattering factor of mobility")]
-        public Parameter<double> BSIM4ud { get; } = new Parameter<double>();
+        public Parameter BSIM4ud { get; } = new Parameter();
         [SpiceName("ud1"), SpiceInfo("Temperature coefficient of ud")]
-        public Parameter<double> BSIM4ud1 { get; } = new Parameter<double>();
+        public Parameter BSIM4ud1 { get; } = new Parameter();
         [SpiceName("up"), SpiceInfo("Channel length linear factor of mobility")]
-        public Parameter<double> BSIM4up { get; } = new Parameter<double>();
+        public Parameter BSIM4up { get; } = new Parameter();
         [SpiceName("lp"), SpiceInfo("Channel length exponential factor of mobility")]
-        public Parameter<double> BSIM4lp { get; } = new Parameter<double>(1.0e-8);
+        public Parameter BSIM4lp { get; } = new Parameter(1.0e-8);
         [SpiceName("lud"), SpiceInfo("Length dependence of ud")]
-        public Parameter<double> BSIM4lud { get; } = new Parameter<double>();
+        public Parameter BSIM4lud { get; } = new Parameter();
         [SpiceName("lud1"), SpiceInfo("Length dependence of ud1")]
-        public Parameter<double> BSIM4lud1 { get; } = new Parameter<double>();
+        public Parameter BSIM4lud1 { get; } = new Parameter();
         [SpiceName("lup"), SpiceInfo("Length dependence of up")]
-        public Parameter<double> BSIM4lup { get; } = new Parameter<double>();
+        public Parameter BSIM4lup { get; } = new Parameter();
         [SpiceName("llp"), SpiceInfo("Length dependence of lp")]
-        public Parameter<double> BSIM4llp { get; } = new Parameter<double>();
+        public Parameter BSIM4llp { get; } = new Parameter();
         [SpiceName("wud"), SpiceInfo("Width dependence of ud")]
-        public Parameter<double> BSIM4wud { get; } = new Parameter<double>();
+        public Parameter BSIM4wud { get; } = new Parameter();
         [SpiceName("wud1"), SpiceInfo("Width dependence of ud1")]
-        public Parameter<double> BSIM4wud1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wud1 { get; } = new Parameter();
         [SpiceName("wup"), SpiceInfo("Width dependence of up")]
-        public Parameter<double> BSIM4wup { get; } = new Parameter<double>();
+        public Parameter BSIM4wup { get; } = new Parameter();
         [SpiceName("wlp"), SpiceInfo("Width dependence of lp")]
-        public Parameter<double> BSIM4wlp { get; } = new Parameter<double>();
+        public Parameter BSIM4wlp { get; } = new Parameter();
         [SpiceName("pud"), SpiceInfo("Cross-term dependence of ud")]
-        public Parameter<double> BSIM4pud { get; } = new Parameter<double>();
+        public Parameter BSIM4pud { get; } = new Parameter();
         [SpiceName("pud1"), SpiceInfo("Cross-term dependence of ud1")]
-        public Parameter<double> BSIM4pud1 { get; } = new Parameter<double>();
+        public Parameter BSIM4pud1 { get; } = new Parameter();
         [SpiceName("pup"), SpiceInfo("Cross-term dependence of up")]
-        public Parameter<double> BSIM4pup { get; } = new Parameter<double>();
+        public Parameter BSIM4pup { get; } = new Parameter();
         [SpiceName("plp"), SpiceInfo("Cross-term dependence of lp")]
-        public Parameter<double> BSIM4plp { get; } = new Parameter<double>();
+        public Parameter BSIM4plp { get; } = new Parameter();
         [SpiceName("voff"), SpiceInfo("Threshold voltage offset")]
-        public Parameter<double> BSIM4voff { get; } = new Parameter<double>(-0.08);
+        public Parameter BSIM4voff { get; } = new Parameter(-0.08);
         [SpiceName("tvoff"), SpiceInfo("Temperature parameter for voff")]
-        public Parameter<double> BSIM4tvoff { get; } = new Parameter<double>();
+        public Parameter BSIM4tvoff { get; } = new Parameter();
         [SpiceName("tnfactor"), SpiceInfo("Temperature parameter for nfactor")]
-        public Parameter<double> BSIM4tnfactor { get; } = new Parameter<double>();
+        public Parameter BSIM4tnfactor { get; } = new Parameter();
         [SpiceName("teta0"), SpiceInfo("Temperature parameter for eta0")]
-        public Parameter<double> BSIM4teta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4teta0 { get; } = new Parameter();
         [SpiceName("tvoffcv"), SpiceInfo("Temperature parameter for tvoffcv")]
-        public Parameter<double> BSIM4tvoffcv { get; } = new Parameter<double>();
+        public Parameter BSIM4tvoffcv { get; } = new Parameter();
         [SpiceName("voffl"), SpiceInfo("Length dependence parameter for Vth offset")]
-        public Parameter<double> BSIM4voffl { get; } = new Parameter<double>();
+        public Parameter BSIM4voffl { get; } = new Parameter();
         [SpiceName("voffcvl"), SpiceInfo("Length dependence parameter for Vth offset in CV")]
-        public Parameter<double> BSIM4voffcvl { get; } = new Parameter<double>();
+        public Parameter BSIM4voffcvl { get; } = new Parameter();
         [SpiceName("minv"), SpiceInfo("Fitting parameter for moderate inversion in Vgsteff")]
-        public Parameter<double> BSIM4minv { get; } = new Parameter<double>();
+        public Parameter BSIM4minv { get; } = new Parameter();
         [SpiceName("minvcv"), SpiceInfo("Fitting parameter for moderate inversion in Vgsteffcv")]
-        public Parameter<double> BSIM4minvcv { get; } = new Parameter<double>();
+        public Parameter BSIM4minvcv { get; } = new Parameter();
         [SpiceName("fprout"), SpiceInfo("Rout degradation coefficient for pocket devices")]
-        public Parameter<double> BSIM4fprout { get; } = new Parameter<double>();
+        public Parameter BSIM4fprout { get; } = new Parameter();
         [SpiceName("pdits"), SpiceInfo("Coefficient for drain-induced Vth shifts")]
-        public Parameter<double> BSIM4pdits { get; } = new Parameter<double>();
+        public Parameter BSIM4pdits { get; } = new Parameter();
         [SpiceName("pditsd"), SpiceInfo("Vds dependence of drain-induced Vth shifts")]
-        public Parameter<double> BSIM4pditsd { get; } = new Parameter<double>();
+        public Parameter BSIM4pditsd { get; } = new Parameter();
         [SpiceName("pditsl"), SpiceInfo("Length dependence of drain-induced Vth shifts")]
-        public Parameter<double> BSIM4pditsl { get; } = new Parameter<double>();
+        public Parameter BSIM4pditsl { get; } = new Parameter();
         [SpiceName("delta"), SpiceInfo("Effective Vds parameter")]
-        public Parameter<double> BSIM4delta { get; } = new Parameter<double>();
+        public Parameter BSIM4delta { get; } = new Parameter();
         [SpiceName("rdsw"), SpiceInfo("Source-drain resistance per width")]
-        public Parameter<double> BSIM4rdsw { get; } = new Parameter<double>();
+        public Parameter BSIM4rdsw { get; } = new Parameter();
         [SpiceName("rdswmin"), SpiceInfo("Source-drain resistance per width at high Vg")]
-        public Parameter<double> BSIM4rdswmin { get; } = new Parameter<double>();
+        public Parameter BSIM4rdswmin { get; } = new Parameter();
         [SpiceName("rdwmin"), SpiceInfo("Drain resistance per width at high Vg")]
-        public Parameter<double> BSIM4rdwmin { get; } = new Parameter<double>();
+        public Parameter BSIM4rdwmin { get; } = new Parameter();
         [SpiceName("rswmin"), SpiceInfo("Source resistance per width at high Vg")]
-        public Parameter<double> BSIM4rswmin { get; } = new Parameter<double>();
+        public Parameter BSIM4rswmin { get; } = new Parameter();
         [SpiceName("rdw"), SpiceInfo("Drain resistance per width")]
-        public Parameter<double> BSIM4rdw { get; } = new Parameter<double>();
+        public Parameter BSIM4rdw { get; } = new Parameter();
         [SpiceName("rsw"), SpiceInfo("Source resistance per width")]
-        public Parameter<double> BSIM4rsw { get; } = new Parameter<double>();
+        public Parameter BSIM4rsw { get; } = new Parameter();
         [SpiceName("prwg"), SpiceInfo("Gate-bias effect on parasitic resistance ")]
-        public Parameter<double> BSIM4prwg { get; } = new Parameter<double>();
+        public Parameter BSIM4prwg { get; } = new Parameter();
         [SpiceName("prwb"), SpiceInfo("Body-effect on parasitic resistance ")]
-        public Parameter<double> BSIM4prwb { get; } = new Parameter<double>();
+        public Parameter BSIM4prwb { get; } = new Parameter();
         [SpiceName("prt"), SpiceInfo("Temperature coefficient of parasitic resistance ")]
-        public Parameter<double> BSIM4prt { get; } = new Parameter<double>();
+        public Parameter BSIM4prt { get; } = new Parameter();
         [SpiceName("eta0"), SpiceInfo("Subthreshold region DIBL coefficient")]
-        public Parameter<double> BSIM4eta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4eta0 { get; } = new Parameter();
         [SpiceName("etab"), SpiceInfo("Subthreshold region DIBL coefficient")]
-        public Parameter<double> BSIM4etab { get; } = new Parameter<double>(-0.07);
+        public Parameter BSIM4etab { get; } = new Parameter(-0.07);
         [SpiceName("pclm"), SpiceInfo("Channel length modulation Coefficient")]
-        public Parameter<double> BSIM4pclm { get; } = new Parameter<double>(1.3);
+        public Parameter BSIM4pclm { get; } = new Parameter(1.3);
         [SpiceName("pdiblc1"), SpiceInfo("Drain-induced barrier lowering coefficient")]
-        public Parameter<double> BSIM4pdibl1 { get; } = new Parameter<double>();
+        public Parameter BSIM4pdibl1 { get; } = new Parameter();
         [SpiceName("pdiblc2"), SpiceInfo("Drain-induced barrier lowering coefficient")]
-        public Parameter<double> BSIM4pdibl2 { get; } = new Parameter<double>();
+        public Parameter BSIM4pdibl2 { get; } = new Parameter();
         [SpiceName("pdiblcb"), SpiceInfo("Body-effect on drain-induced barrier lowering")]
-        public Parameter<double> BSIM4pdiblb { get; } = new Parameter<double>();
+        public Parameter BSIM4pdiblb { get; } = new Parameter();
         [SpiceName("pscbe1"), SpiceInfo("Substrate current body-effect coefficient")]
-        public Parameter<double> BSIM4pscbe1 { get; } = new Parameter<double>(4.24e8);
+        public Parameter BSIM4pscbe1 { get; } = new Parameter(4.24e8);
         [SpiceName("pscbe2"), SpiceInfo("Substrate current body-effect coefficient")]
-        public Parameter<double> BSIM4pscbe2 { get; } = new Parameter<double>(1.0e-5);
+        public Parameter BSIM4pscbe2 { get; } = new Parameter(1.0e-5);
         [SpiceName("pvag"), SpiceInfo("Gate dependence of output resistance parameter")]
-        public Parameter<double> BSIM4pvag { get; } = new Parameter<double>();
+        public Parameter BSIM4pvag { get; } = new Parameter();
         [SpiceName("wr"), SpiceInfo("Width dependence of rds")]
-        public Parameter<double> BSIM4wr { get; } = new Parameter<double>();
+        public Parameter BSIM4wr { get; } = new Parameter();
         [SpiceName("dwg"), SpiceInfo("Width reduction parameter")]
-        public Parameter<double> BSIM4dwg { get; } = new Parameter<double>();
+        public Parameter BSIM4dwg { get; } = new Parameter();
         [SpiceName("dwb"), SpiceInfo("Width reduction parameter")]
-        public Parameter<double> BSIM4dwb { get; } = new Parameter<double>();
+        public Parameter BSIM4dwb { get; } = new Parameter();
         [SpiceName("b0"), SpiceInfo("Abulk narrow width parameter")]
-        public Parameter<double> BSIM4b0 { get; } = new Parameter<double>();
+        public Parameter BSIM4b0 { get; } = new Parameter();
         [SpiceName("b1"), SpiceInfo("Abulk narrow width parameter")]
-        public Parameter<double> BSIM4b1 { get; } = new Parameter<double>();
+        public Parameter BSIM4b1 { get; } = new Parameter();
         [SpiceName("alpha0"), SpiceInfo("substrate current model parameter")]
-        public Parameter<double> BSIM4alpha0 { get; } = new Parameter<double>();
+        public Parameter BSIM4alpha0 { get; } = new Parameter();
         [SpiceName("alpha1"), SpiceInfo("substrate current model parameter")]
-        public Parameter<double> BSIM4alpha1 { get; } = new Parameter<double>();
+        public Parameter BSIM4alpha1 { get; } = new Parameter();
         [SpiceName("phin"), SpiceInfo("Adjusting parameter for surface potential due to non-uniform vertical doping")]
-        public Parameter<double> BSIM4phin { get; } = new Parameter<double>();
+        public Parameter BSIM4phin { get; } = new Parameter();
         [SpiceName("agidl"), SpiceInfo("Pre-exponential constant for GIDL")]
-        public Parameter<double> BSIM4agidl { get; } = new Parameter<double>();
+        public Parameter BSIM4agidl { get; } = new Parameter();
         [SpiceName("bgidl"), SpiceInfo("Exponential constant for GIDL")]
-        public Parameter<double> BSIM4bgidl { get; } = new Parameter<double>(2.3e9);
+        public Parameter BSIM4bgidl { get; } = new Parameter(2.3e9);
         [SpiceName("cgidl"), SpiceInfo("Parameter for body-bias dependence of GIDL")]
-        public Parameter<double> BSIM4cgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4cgidl { get; } = new Parameter();
         [SpiceName("egidl"), SpiceInfo("Fitting parameter for Bandbending")]
-        public Parameter<double> BSIM4egidl { get; } = new Parameter<double>();
+        public Parameter BSIM4egidl { get; } = new Parameter();
         [SpiceName("fgidl"), SpiceInfo("GIDL vb parameter")]
-        public Parameter<double> BSIM4fgidl { get; } = new Parameter<double>(1.0);
+        public Parameter BSIM4fgidl { get; } = new Parameter(1.0);
         [SpiceName("kgidl"), SpiceInfo("GIDL vb parameter")]
-        public Parameter<double> BSIM4kgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4kgidl { get; } = new Parameter();
         [SpiceName("rgidl"), SpiceInfo("GIDL vg parameter")]
-        public Parameter<double> BSIM4rgidl { get; } = new Parameter<double>(1.0);
+        public Parameter BSIM4rgidl { get; } = new Parameter(1.0);
         [SpiceName("agisl"), SpiceInfo("Pre-exponential constant for GISL")]
-        public Parameter<double> BSIM4agisl { get; } = new Parameter<double>();
+        public Parameter BSIM4agisl { get; } = new Parameter();
         [SpiceName("bgisl"), SpiceInfo("Exponential constant for GISL")]
-        public Parameter<double> BSIM4bgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4bgisl { get; } = new Parameter();
         [SpiceName("cgisl"), SpiceInfo("Parameter for body-bias dependence of GISL")]
-        public Parameter<double> BSIM4cgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4cgisl { get; } = new Parameter();
         [SpiceName("egisl"), SpiceInfo("Fitting parameter for Bandbending")]
-        public Parameter<double> BSIM4egisl { get; } = new Parameter<double>();
+        public Parameter BSIM4egisl { get; } = new Parameter();
         [SpiceName("fgisl"), SpiceInfo("GISL vb parameter")]
-        public Parameter<double> BSIM4fgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4fgisl { get; } = new Parameter();
         [SpiceName("kgisl"), SpiceInfo("GISL vb parameter")]
-        public Parameter<double> BSIM4kgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4kgisl { get; } = new Parameter();
         [SpiceName("rgisl"), SpiceInfo("GISL vg parameter")]
-        public Parameter<double> BSIM4rgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4rgisl { get; } = new Parameter();
         [SpiceName("aigc"), SpiceInfo("Parameter for Igc")]
-        public Parameter<double> BSIM4aigc { get; } = new Parameter<double>();
+        public Parameter BSIM4aigc { get; } = new Parameter();
         [SpiceName("bigc"), SpiceInfo("Parameter for Igc")]
-        public Parameter<double> BSIM4bigc { get; } = new Parameter<double>();
+        public Parameter BSIM4bigc { get; } = new Parameter();
         [SpiceName("cigc"), SpiceInfo("Parameter for Igc")]
-        public Parameter<double> BSIM4cigc { get; } = new Parameter<double>();
+        public Parameter BSIM4cigc { get; } = new Parameter();
         [SpiceName("aigsd"), SpiceInfo("Parameter for Igs,d")]
-        public Parameter<double> BSIM4aigsd { get; } = new Parameter<double>();
+        public Parameter BSIM4aigsd { get; } = new Parameter();
         [SpiceName("bigsd"), SpiceInfo("Parameter for Igs,d")]
-        public Parameter<double> BSIM4bigsd { get; } = new Parameter<double>();
+        public Parameter BSIM4bigsd { get; } = new Parameter();
         [SpiceName("cigsd"), SpiceInfo("Parameter for Igs,d")]
-        public Parameter<double> BSIM4cigsd { get; } = new Parameter<double>();
+        public Parameter BSIM4cigsd { get; } = new Parameter();
         [SpiceName("aigs"), SpiceInfo("Parameter for Igs")]
-        public Parameter<double> BSIM4aigs { get; } = new Parameter<double>();
+        public Parameter BSIM4aigs { get; } = new Parameter();
         [SpiceName("bigs"), SpiceInfo("Parameter for Igs")]
-        public Parameter<double> BSIM4bigs { get; } = new Parameter<double>();
+        public Parameter BSIM4bigs { get; } = new Parameter();
         [SpiceName("cigs"), SpiceInfo("Parameter for Igs")]
-        public Parameter<double> BSIM4cigs { get; } = new Parameter<double>();
+        public Parameter BSIM4cigs { get; } = new Parameter();
         [SpiceName("aigd"), SpiceInfo("Parameter for Igd")]
-        public Parameter<double> BSIM4aigd { get; } = new Parameter<double>();
+        public Parameter BSIM4aigd { get; } = new Parameter();
         [SpiceName("bigd"), SpiceInfo("Parameter for Igd")]
-        public Parameter<double> BSIM4bigd { get; } = new Parameter<double>();
+        public Parameter BSIM4bigd { get; } = new Parameter();
         [SpiceName("cigd"), SpiceInfo("Parameter for Igd")]
-        public Parameter<double> BSIM4cigd { get; } = new Parameter<double>();
+        public Parameter BSIM4cigd { get; } = new Parameter();
         [SpiceName("aigbacc"), SpiceInfo("Parameter for Igb")]
-        public Parameter<double> BSIM4aigbacc { get; } = new Parameter<double>(1.36e-2);
+        public Parameter BSIM4aigbacc { get; } = new Parameter(1.36e-2);
         [SpiceName("bigbacc"), SpiceInfo("Parameter for Igb")]
-        public Parameter<double> BSIM4bigbacc { get; } = new Parameter<double>(1.71e-3);
+        public Parameter BSIM4bigbacc { get; } = new Parameter(1.71e-3);
         [SpiceName("cigbacc"), SpiceInfo("Parameter for Igb")]
-        public Parameter<double> BSIM4cigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4cigbacc { get; } = new Parameter();
         [SpiceName("aigbinv"), SpiceInfo("Parameter for Igb")]
-        public Parameter<double> BSIM4aigbinv { get; } = new Parameter<double>(1.11e-2);
+        public Parameter BSIM4aigbinv { get; } = new Parameter(1.11e-2);
         [SpiceName("bigbinv"), SpiceInfo("Parameter for Igb")]
-        public Parameter<double> BSIM4bigbinv { get; } = new Parameter<double>(9.49e-4);
+        public Parameter BSIM4bigbinv { get; } = new Parameter(9.49e-4);
         [SpiceName("cigbinv"), SpiceInfo("Parameter for Igb")]
-        public Parameter<double> BSIM4cigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4cigbinv { get; } = new Parameter();
         [SpiceName("nigc"), SpiceInfo("Parameter for Igc slope")]
-        public Parameter<double> BSIM4nigc { get; } = new Parameter<double>();
+        public Parameter BSIM4nigc { get; } = new Parameter();
         [SpiceName("nigbinv"), SpiceInfo("Parameter for Igbinv slope")]
-        public Parameter<double> BSIM4nigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4nigbinv { get; } = new Parameter();
         [SpiceName("nigbacc"), SpiceInfo("Parameter for Igbacc slope")]
-        public Parameter<double> BSIM4nigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4nigbacc { get; } = new Parameter();
         [SpiceName("ntox"), SpiceInfo("Exponent for Tox ratio")]
-        public Parameter<double> BSIM4ntox { get; } = new Parameter<double>();
+        public Parameter BSIM4ntox { get; } = new Parameter();
         [SpiceName("eigbinv"), SpiceInfo("Parameter for the Si bandgap for Igbinv")]
-        public Parameter<double> BSIM4eigbinv { get; } = new Parameter<double>(1.1);
+        public Parameter BSIM4eigbinv { get; } = new Parameter(1.1);
         [SpiceName("pigcd"), SpiceInfo("Parameter for Igc partition")]
-        public Parameter<double> BSIM4pigcd { get; } = new Parameter<double>();
+        public Parameter BSIM4pigcd { get; } = new Parameter();
         [SpiceName("poxedge"), SpiceInfo("Factor for the gate edge Tox")]
-        public Parameter<double> BSIM4poxedge { get; } = new Parameter<double>();
+        public Parameter BSIM4poxedge { get; } = new Parameter();
         [SpiceName("xrcrg1"), SpiceInfo("First fitting parameter the bias-dependent Rg")]
-        public Parameter<double> BSIM4xrcrg1 { get; } = new Parameter<double>();
+        public Parameter BSIM4xrcrg1 { get; } = new Parameter();
         [SpiceName("xrcrg2"), SpiceInfo("Second fitting parameter the bias-dependent Rg")]
-        public Parameter<double> BSIM4xrcrg2 { get; } = new Parameter<double>();
+        public Parameter BSIM4xrcrg2 { get; } = new Parameter();
         [SpiceName("lambda"), SpiceInfo(" Velocity overshoot parameter")]
-        public Parameter<double> BSIM4lambda { get; } = new Parameter<double>();
+        public Parameter BSIM4lambda { get; } = new Parameter();
         [SpiceName("vtl"), SpiceInfo(" thermal velocity")]
-        public Parameter<double> BSIM4vtl { get; } = new Parameter<double>(2.0e5);
+        public Parameter BSIM4vtl { get; } = new Parameter(2.0e5);
         [SpiceName("xn"), SpiceInfo(" back scattering parameter")]
-        public Parameter<double> BSIM4xn { get; } = new Parameter<double>();
+        public Parameter BSIM4xn { get; } = new Parameter();
         [SpiceName("lc"), SpiceInfo(" back scattering parameter")]
-        public Parameter<double> BSIM4lc { get; } = new Parameter<double>(5.0e-9);
+        public Parameter BSIM4lc { get; } = new Parameter(5.0e-9);
         [SpiceName("tnoia"), SpiceInfo("Thermal noise parameter")]
-        public Parameter<double> BSIM4tnoia { get; } = new Parameter<double>(1.5);
+        public Parameter BSIM4tnoia { get; } = new Parameter(1.5);
         [SpiceName("tnoib"), SpiceInfo("Thermal noise parameter")]
-        public Parameter<double> BSIM4tnoib { get; } = new Parameter<double>(3.5);
+        public Parameter BSIM4tnoib { get; } = new Parameter(3.5);
         [SpiceName("tnoic"), SpiceInfo("Thermal noise parameter")]
-        public Parameter<double> BSIM4tnoic { get; } = new Parameter<double>();
+        public Parameter BSIM4tnoic { get; } = new Parameter();
         [SpiceName("rnoia"), SpiceInfo("Thermal noise coefficient")]
-        public Parameter<double> BSIM4rnoia { get; } = new Parameter<double>();
+        public Parameter BSIM4rnoia { get; } = new Parameter();
         [SpiceName("rnoib"), SpiceInfo("Thermal noise coefficient")]
-        public Parameter<double> BSIM4rnoib { get; } = new Parameter<double>();
+        public Parameter BSIM4rnoib { get; } = new Parameter();
         [SpiceName("rnoic"), SpiceInfo("Thermal noise coefficient")]
-        public Parameter<double> BSIM4rnoic { get; } = new Parameter<double>();
+        public Parameter BSIM4rnoic { get; } = new Parameter();
         [SpiceName("ntnoi"), SpiceInfo("Thermal noise parameter")]
-        public Parameter<double> BSIM4ntnoi { get; } = new Parameter<double>();
+        public Parameter BSIM4ntnoi { get; } = new Parameter();
         [SpiceName("vfbsdoff"), SpiceInfo("S/D flatband voltage offset")]
-        public Parameter<double> BSIM4vfbsdoff { get; } = new Parameter<double>();
+        public Parameter BSIM4vfbsdoff { get; } = new Parameter();
         [SpiceName("tvfbsdoff"), SpiceInfo("Temperature parameter for vfbsdoff")]
-        public Parameter<double> BSIM4tvfbsdoff { get; } = new Parameter<double>();
+        public Parameter BSIM4tvfbsdoff { get; } = new Parameter();
         [SpiceName("lintnoi"), SpiceInfo("lint offset for noise calculation")]
-        public Parameter<double> BSIM4lintnoi { get; } = new Parameter<double>();
+        public Parameter BSIM4lintnoi { get; } = new Parameter();
         [SpiceName("saref"), SpiceInfo("Reference distance between OD edge to poly of one side")]
-        public Parameter<double> BSIM4saref { get; } = new Parameter<double>(1e-6);
+        public Parameter BSIM4saref { get; } = new Parameter(1e-6);
         [SpiceName("sbref"), SpiceInfo("Reference distance between OD edge to poly of the other side")]
-        public Parameter<double> BSIM4sbref { get; } = new Parameter<double>(1e-6);
+        public Parameter BSIM4sbref { get; } = new Parameter(1e-6);
         [SpiceName("wlod"), SpiceInfo("Width parameter for stress effect")]
-        public Parameter<double> BSIM4wlod { get; } = new Parameter<double>();
+        public Parameter BSIM4wlod { get; } = new Parameter();
         [SpiceName("ku0"), SpiceInfo("Mobility degradation/enhancement coefficient for LOD")]
-        public Parameter<double> BSIM4ku0 { get; } = new Parameter<double>();
+        public Parameter BSIM4ku0 { get; } = new Parameter();
         [SpiceName("kvsat"), SpiceInfo("Saturation velocity degradation/enhancement parameter for LOD")]
-        public Parameter<double> BSIM4kvsat { get; } = new Parameter<double>();
+        public Parameter BSIM4kvsat { get; } = new Parameter();
         [SpiceName("kvth0"), SpiceInfo("Threshold degradation/enhancement parameter for LOD")]
-        public Parameter<double> BSIM4kvth0 { get; } = new Parameter<double>();
+        public Parameter BSIM4kvth0 { get; } = new Parameter();
         [SpiceName("tku0"), SpiceInfo("Temperature coefficient of KU0")]
-        public Parameter<double> BSIM4tku0 { get; } = new Parameter<double>();
+        public Parameter BSIM4tku0 { get; } = new Parameter();
         [SpiceName("llodku0"), SpiceInfo("Length parameter for u0 LOD effect")]
-        public Parameter<double> BSIM4llodku0 { get; } = new Parameter<double>();
+        public Parameter BSIM4llodku0 { get; } = new Parameter();
         [SpiceName("wlodku0"), SpiceInfo("Width parameter for u0 LOD effect")]
-        public Parameter<double> BSIM4wlodku0 { get; } = new Parameter<double>();
+        public Parameter BSIM4wlodku0 { get; } = new Parameter();
         [SpiceName("llodvth"), SpiceInfo("Length parameter for vth LOD effect")]
-        public Parameter<double> BSIM4llodvth { get; } = new Parameter<double>();
+        public Parameter BSIM4llodvth { get; } = new Parameter();
         [SpiceName("wlodvth"), SpiceInfo("Width parameter for vth LOD effect")]
-        public Parameter<double> BSIM4wlodvth { get; } = new Parameter<double>();
+        public Parameter BSIM4wlodvth { get; } = new Parameter();
         [SpiceName("lku0"), SpiceInfo("Length dependence of ku0")]
-        public Parameter<double> BSIM4lku0 { get; } = new Parameter<double>();
+        public Parameter BSIM4lku0 { get; } = new Parameter();
         [SpiceName("wku0"), SpiceInfo("Width dependence of ku0")]
-        public Parameter<double> BSIM4wku0 { get; } = new Parameter<double>();
+        public Parameter BSIM4wku0 { get; } = new Parameter();
         [SpiceName("pku0"), SpiceInfo("Cross-term dependence of ku0")]
-        public Parameter<double> BSIM4pku0 { get; } = new Parameter<double>();
+        public Parameter BSIM4pku0 { get; } = new Parameter();
         [SpiceName("lkvth0"), SpiceInfo("Length dependence of kvth0")]
-        public Parameter<double> BSIM4lkvth0 { get; } = new Parameter<double>();
+        public Parameter BSIM4lkvth0 { get; } = new Parameter();
         [SpiceName("wkvth0"), SpiceInfo("Width dependence of kvth0")]
-        public Parameter<double> BSIM4wkvth0 { get; } = new Parameter<double>();
+        public Parameter BSIM4wkvth0 { get; } = new Parameter();
         [SpiceName("pkvth0"), SpiceInfo("Cross-term dependence of kvth0")]
-        public Parameter<double> BSIM4pkvth0 { get; } = new Parameter<double>();
+        public Parameter BSIM4pkvth0 { get; } = new Parameter();
         [SpiceName("stk2"), SpiceInfo("K2 shift factor related to stress effect on vth")]
-        public Parameter<double> BSIM4stk2 { get; } = new Parameter<double>();
+        public Parameter BSIM4stk2 { get; } = new Parameter();
         [SpiceName("lodk2"), SpiceInfo("K2 shift modification factor for stress effect")]
-        public Parameter<double> BSIM4lodk2 { get; } = new Parameter<double>();
+        public Parameter BSIM4lodk2 { get; } = new Parameter();
         [SpiceName("steta0"), SpiceInfo("eta0 shift factor related to stress effect on vth")]
-        public Parameter<double> BSIM4steta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4steta0 { get; } = new Parameter();
         [SpiceName("lodeta0"), SpiceInfo("eta0 shift modification factor for stress effect")]
-        public Parameter<double> BSIM4lodeta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4lodeta0 { get; } = new Parameter();
         [SpiceName("web"), SpiceInfo("Coefficient for SCB")]
-        public Parameter<double> BSIM4web { get; } = new Parameter<double>();
+        public Parameter BSIM4web { get; } = new Parameter();
         [SpiceName("wec"), SpiceInfo("Coefficient for SCC")]
-        public Parameter<double> BSIM4wec { get; } = new Parameter<double>();
+        public Parameter BSIM4wec { get; } = new Parameter();
         [SpiceName("kvth0we"), SpiceInfo("Threshold shift factor for well proximity effect")]
-        public Parameter<double> BSIM4kvth0we { get; } = new Parameter<double>();
+        public Parameter BSIM4kvth0we { get; } = new Parameter();
         [SpiceName("k2we"), SpiceInfo(" K2 shift factor for well proximity effect ")]
-        public Parameter<double> BSIM4k2we { get; } = new Parameter<double>();
+        public Parameter BSIM4k2we { get; } = new Parameter();
         [SpiceName("ku0we"), SpiceInfo(" Mobility degradation factor for well proximity effect ")]
-        public Parameter<double> BSIM4ku0we { get; } = new Parameter<double>();
+        public Parameter BSIM4ku0we { get; } = new Parameter();
         [SpiceName("scref"), SpiceInfo(" Reference distance to calculate SCA, SCB and SCC")]
-        public Parameter<double> BSIM4scref { get; } = new Parameter<double>(1.0E-6);
+        public Parameter BSIM4scref { get; } = new Parameter(1.0E-6);
         [SpiceName("wpemod"), SpiceInfo(" Flag for WPE model (WPEMOD=1 to activate this model) ")]
-        public Parameter<double> BSIM4wpemod { get; } = new Parameter<double>();
+        public Parameter BSIM4wpemod { get; } = new Parameter();
         [SpiceName("lkvth0we"), SpiceInfo("Length dependence of kvth0we")]
-        public Parameter<double> BSIM4lkvth0we { get; } = new Parameter<double>();
+        public Parameter BSIM4lkvth0we { get; } = new Parameter();
         [SpiceName("lk2we"), SpiceInfo(" Length dependence of k2we ")]
-        public Parameter<double> BSIM4lk2we { get; } = new Parameter<double>();
+        public Parameter BSIM4lk2we { get; } = new Parameter();
         [SpiceName("lku0we"), SpiceInfo(" Length dependence of ku0we ")]
-        public Parameter<double> BSIM4lku0we { get; } = new Parameter<double>();
+        public Parameter BSIM4lku0we { get; } = new Parameter();
         [SpiceName("wkvth0we"), SpiceInfo("Width dependence of kvth0we")]
-        public Parameter<double> BSIM4wkvth0we { get; } = new Parameter<double>();
+        public Parameter BSIM4wkvth0we { get; } = new Parameter();
         [SpiceName("wk2we"), SpiceInfo(" Width dependence of k2we ")]
-        public Parameter<double> BSIM4wk2we { get; } = new Parameter<double>();
+        public Parameter BSIM4wk2we { get; } = new Parameter();
         [SpiceName("wku0we"), SpiceInfo(" Width dependence of ku0we ")]
-        public Parameter<double> BSIM4wku0we { get; } = new Parameter<double>();
+        public Parameter BSIM4wku0we { get; } = new Parameter();
         [SpiceName("pkvth0we"), SpiceInfo("Cross-term dependence of kvth0we")]
-        public Parameter<double> BSIM4pkvth0we { get; } = new Parameter<double>();
+        public Parameter BSIM4pkvth0we { get; } = new Parameter();
         [SpiceName("pk2we"), SpiceInfo(" Cross-term dependence of k2we ")]
-        public Parameter<double> BSIM4pk2we { get; } = new Parameter<double>();
+        public Parameter BSIM4pk2we { get; } = new Parameter();
         [SpiceName("pku0we"), SpiceInfo(" Cross-term dependence of ku0we ")]
-        public Parameter<double> BSIM4pku0we { get; } = new Parameter<double>();
+        public Parameter BSIM4pku0we { get; } = new Parameter();
         [SpiceName("beta0"), SpiceInfo("substrate current model parameter")]
-        public Parameter<double> BSIM4beta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4beta0 { get; } = new Parameter();
         [SpiceName("ijthdfwd"), SpiceInfo("Forward drain diode forward limiting current")]
-        public Parameter<double> BSIM4ijthdfwd { get; } = new Parameter<double>();
+        public Parameter BSIM4ijthdfwd { get; } = new Parameter();
         [SpiceName("ijthsfwd"), SpiceInfo("Forward source diode forward limiting current")]
-        public Parameter<double> BSIM4ijthsfwd { get; } = new Parameter<double>();
+        public Parameter BSIM4ijthsfwd { get; } = new Parameter();
         [SpiceName("ijthdrev"), SpiceInfo("Reverse drain diode forward limiting current")]
-        public Parameter<double> BSIM4ijthdrev { get; } = new Parameter<double>();
+        public Parameter BSIM4ijthdrev { get; } = new Parameter();
         [SpiceName("ijthsrev"), SpiceInfo("Reverse source diode forward limiting current")]
-        public Parameter<double> BSIM4ijthsrev { get; } = new Parameter<double>();
+        public Parameter BSIM4ijthsrev { get; } = new Parameter();
         [SpiceName("xjbvd"), SpiceInfo("Fitting parameter for drain diode breakdown current")]
-        public Parameter<double> BSIM4xjbvd { get; } = new Parameter<double>();
+        public Parameter BSIM4xjbvd { get; } = new Parameter();
         [SpiceName("xjbvs"), SpiceInfo("Fitting parameter for source diode breakdown current")]
-        public Parameter<double> BSIM4xjbvs { get; } = new Parameter<double>();
+        public Parameter BSIM4xjbvs { get; } = new Parameter();
         [SpiceName("bvd"), SpiceInfo("Drain diode breakdown voltage")]
-        public Parameter<double> BSIM4bvd { get; } = new Parameter<double>();
+        public Parameter BSIM4bvd { get; } = new Parameter();
         [SpiceName("bvs"), SpiceInfo("Source diode breakdown voltage")]
-        public Parameter<double> BSIM4bvs { get; } = new Parameter<double>();
+        public Parameter BSIM4bvs { get; } = new Parameter();
         [SpiceName("jtss"), SpiceInfo("Source bottom trap-assisted saturation current density")]
-        public Parameter<double> BSIM4jtss { get; } = new Parameter<double>();
+        public Parameter BSIM4jtss { get; } = new Parameter();
         [SpiceName("jtsd"), SpiceInfo("Drain bottom trap-assisted saturation current density")]
-        public Parameter<double> BSIM4jtsd { get; } = new Parameter<double>();
+        public Parameter BSIM4jtsd { get; } = new Parameter();
         [SpiceName("jtssws"), SpiceInfo("Source STI sidewall trap-assisted saturation current density")]
-        public Parameter<double> BSIM4jtssws { get; } = new Parameter<double>();
+        public Parameter BSIM4jtssws { get; } = new Parameter();
         [SpiceName("jtsswd"), SpiceInfo("Drain STI sidewall trap-assisted saturation current density")]
-        public Parameter<double> BSIM4jtsswd { get; } = new Parameter<double>();
+        public Parameter BSIM4jtsswd { get; } = new Parameter();
         [SpiceName("jtsswgs"), SpiceInfo("Source gate-edge sidewall trap-assisted saturation current density")]
-        public Parameter<double> BSIM4jtsswgs { get; } = new Parameter<double>();
+        public Parameter BSIM4jtsswgs { get; } = new Parameter();
         [SpiceName("jtsswgd"), SpiceInfo("Drain gate-edge sidewall trap-assisted saturation current density")]
-        public Parameter<double> BSIM4jtsswgd { get; } = new Parameter<double>();
+        public Parameter BSIM4jtsswgd { get; } = new Parameter();
         [SpiceName("jtweff"), SpiceInfo("TAT current width dependance")]
-        public Parameter<double> BSIM4jtweff { get; } = new Parameter<double>();
+        public Parameter BSIM4jtweff { get; } = new Parameter();
         [SpiceName("njts"), SpiceInfo("Non-ideality factor for bottom junction")]
-        public Parameter<double> BSIM4njts { get; } = new Parameter<double>();
+        public Parameter BSIM4njts { get; } = new Parameter();
         [SpiceName("njtssw"), SpiceInfo("Non-ideality factor for STI sidewall junction")]
-        public Parameter<double> BSIM4njtssw { get; } = new Parameter<double>();
+        public Parameter BSIM4njtssw { get; } = new Parameter();
         [SpiceName("njtsswg"), SpiceInfo("Non-ideality factor for gate-edge sidewall junction")]
-        public Parameter<double> BSIM4njtsswg { get; } = new Parameter<double>();
+        public Parameter BSIM4njtsswg { get; } = new Parameter();
         [SpiceName("njtsd"), SpiceInfo("Non-ideality factor for bottom junction drain side")]
-        public Parameter<double> BSIM4njtsd { get; } = new Parameter<double>();
+        public Parameter BSIM4njtsd { get; } = new Parameter();
         [SpiceName("njtsswd"), SpiceInfo("Non-ideality factor for STI sidewall junction drain side")]
-        public Parameter<double> BSIM4njtsswd { get; } = new Parameter<double>();
+        public Parameter BSIM4njtsswd { get; } = new Parameter();
         [SpiceName("njtsswgd"), SpiceInfo("Non-ideality factor for gate-edge sidewall junction drain side")]
-        public Parameter<double> BSIM4njtsswgd { get; } = new Parameter<double>();
+        public Parameter BSIM4njtsswgd { get; } = new Parameter();
         [SpiceName("xtss"), SpiceInfo("Power dependence of JTSS on temperature")]
-        public Parameter<double> BSIM4xtss { get; } = new Parameter<double>();
+        public Parameter BSIM4xtss { get; } = new Parameter();
         [SpiceName("xtsd"), SpiceInfo("Power dependence of JTSD on temperature")]
-        public Parameter<double> BSIM4xtsd { get; } = new Parameter<double>();
+        public Parameter BSIM4xtsd { get; } = new Parameter();
         [SpiceName("xtssws"), SpiceInfo("Power dependence of JTSSWS on temperature")]
-        public Parameter<double> BSIM4xtssws { get; } = new Parameter<double>();
+        public Parameter BSIM4xtssws { get; } = new Parameter();
         [SpiceName("xtsswd"), SpiceInfo("Power dependence of JTSSWD on temperature")]
-        public Parameter<double> BSIM4xtsswd { get; } = new Parameter<double>();
+        public Parameter BSIM4xtsswd { get; } = new Parameter();
         [SpiceName("xtsswgs"), SpiceInfo("Power dependence of JTSSWGS on temperature")]
-        public Parameter<double> BSIM4xtsswgs { get; } = new Parameter<double>();
+        public Parameter BSIM4xtsswgs { get; } = new Parameter();
         [SpiceName("xtsswgd"), SpiceInfo("Power dependence of JTSSWGD on temperature")]
-        public Parameter<double> BSIM4xtsswgd { get; } = new Parameter<double>();
+        public Parameter BSIM4xtsswgd { get; } = new Parameter();
         [SpiceName("tnjts"), SpiceInfo("Temperature coefficient for NJTS")]
-        public Parameter<double> BSIM4tnjts { get; } = new Parameter<double>();
+        public Parameter BSIM4tnjts { get; } = new Parameter();
         [SpiceName("tnjtssw"), SpiceInfo("Temperature coefficient for NJTSSW")]
-        public Parameter<double> BSIM4tnjtssw { get; } = new Parameter<double>();
+        public Parameter BSIM4tnjtssw { get; } = new Parameter();
         [SpiceName("tnjtsswg"), SpiceInfo("Temperature coefficient for NJTSSWG")]
-        public Parameter<double> BSIM4tnjtsswg { get; } = new Parameter<double>();
+        public Parameter BSIM4tnjtsswg { get; } = new Parameter();
         [SpiceName("tnjtsd"), SpiceInfo("Temperature coefficient for NJTSD")]
-        public Parameter<double> BSIM4tnjtsd { get; } = new Parameter<double>();
+        public Parameter BSIM4tnjtsd { get; } = new Parameter();
         [SpiceName("tnjtsswd"), SpiceInfo("Temperature coefficient for NJTSSWD")]
-        public Parameter<double> BSIM4tnjtsswd { get; } = new Parameter<double>();
+        public Parameter BSIM4tnjtsswd { get; } = new Parameter();
         [SpiceName("tnjtsswgd"), SpiceInfo("Temperature coefficient for NJTSSWGD")]
-        public Parameter<double> BSIM4tnjtsswgd { get; } = new Parameter<double>();
+        public Parameter BSIM4tnjtsswgd { get; } = new Parameter();
         [SpiceName("vtss"), SpiceInfo("Source bottom trap-assisted voltage dependent parameter")]
-        public Parameter<double> BSIM4vtss { get; } = new Parameter<double>();
+        public Parameter BSIM4vtss { get; } = new Parameter();
         [SpiceName("vtsd"), SpiceInfo("Drain bottom trap-assisted voltage dependent parameter")]
-        public Parameter<double> BSIM4vtsd { get; } = new Parameter<double>();
+        public Parameter BSIM4vtsd { get; } = new Parameter();
         [SpiceName("vtssws"), SpiceInfo("Source STI sidewall trap-assisted voltage dependent parameter")]
-        public Parameter<double> BSIM4vtssws { get; } = new Parameter<double>();
+        public Parameter BSIM4vtssws { get; } = new Parameter();
         [SpiceName("vtsswd"), SpiceInfo("Drain STI sidewall trap-assisted voltage dependent parameter")]
-        public Parameter<double> BSIM4vtsswd { get; } = new Parameter<double>();
+        public Parameter BSIM4vtsswd { get; } = new Parameter();
         [SpiceName("vtsswgs"), SpiceInfo("Source gate-edge sidewall trap-assisted voltage dependent parameter")]
-        public Parameter<double> BSIM4vtsswgs { get; } = new Parameter<double>();
+        public Parameter BSIM4vtsswgs { get; } = new Parameter();
         [SpiceName("vtsswgd"), SpiceInfo("Drain gate-edge sidewall trap-assisted voltage dependent parameter")]
-        public Parameter<double> BSIM4vtsswgd { get; } = new Parameter<double>();
+        public Parameter BSIM4vtsswgd { get; } = new Parameter();
         [SpiceName("vfb"), SpiceInfo("Flat Band Voltage")]
-        public Parameter<double> BSIM4vfb { get; } = new Parameter<double>();
+        public Parameter BSIM4vfb { get; } = new Parameter();
         [SpiceName("gbmin"), SpiceInfo("Minimum body conductance")]
-        public Parameter<double> BSIM4gbmin { get; } = new Parameter<double>(1.0e-12);
+        public Parameter BSIM4gbmin { get; } = new Parameter(1.0e-12);
         [SpiceName("rbdb"), SpiceInfo("Resistance between bNode and dbNode")]
-        public Parameter<double> BSIM4rbdb { get; } = new Parameter<double>();
+        public Parameter BSIM4rbdb { get; } = new Parameter();
         [SpiceName("rbpb"), SpiceInfo("Resistance between bNodePrime and bNode")]
-        public Parameter<double> BSIM4rbpb { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpb { get; } = new Parameter();
         [SpiceName("rbsb"), SpiceInfo("Resistance between bNode and sbNode")]
-        public Parameter<double> BSIM4rbsb { get; } = new Parameter<double>();
+        public Parameter BSIM4rbsb { get; } = new Parameter();
         [SpiceName("rbps"), SpiceInfo("Resistance between bNodePrime and sbNode")]
-        public Parameter<double> BSIM4rbps { get; } = new Parameter<double>();
+        public Parameter BSIM4rbps { get; } = new Parameter();
         [SpiceName("rbpd"), SpiceInfo("Resistance between bNodePrime and bNode")]
-        public Parameter<double> BSIM4rbpd { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpd { get; } = new Parameter();
         [SpiceName("rbps0"), SpiceInfo("Body resistance RBPS scaling")]
-        public Parameter<double> BSIM4rbps0 { get; } = new Parameter<double>();
+        public Parameter BSIM4rbps0 { get; } = new Parameter();
         [SpiceName("rbpsl"), SpiceInfo("Body resistance RBPS L scaling")]
-        public Parameter<double> BSIM4rbpsl { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpsl { get; } = new Parameter();
         [SpiceName("rbpsw"), SpiceInfo("Body resistance RBPS W scaling")]
-        public Parameter<double> BSIM4rbpsw { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpsw { get; } = new Parameter();
         [SpiceName("rbpsnf"), SpiceInfo("Body resistance RBPS NF scaling")]
-        public Parameter<double> BSIM4rbpsnf { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpsnf { get; } = new Parameter();
         [SpiceName("rbpd0"), SpiceInfo("Body resistance RBPD scaling")]
-        public Parameter<double> BSIM4rbpd0 { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpd0 { get; } = new Parameter();
         [SpiceName("rbpdl"), SpiceInfo("Body resistance RBPD L scaling")]
-        public Parameter<double> BSIM4rbpdl { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpdl { get; } = new Parameter();
         [SpiceName("rbpdw"), SpiceInfo("Body resistance RBPD W scaling")]
-        public Parameter<double> BSIM4rbpdw { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpdw { get; } = new Parameter();
         [SpiceName("rbpdnf"), SpiceInfo("Body resistance RBPD NF scaling")]
-        public Parameter<double> BSIM4rbpdnf { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpdnf { get; } = new Parameter();
         [SpiceName("rbpbx0"), SpiceInfo("Body resistance RBPBX  scaling")]
-        public Parameter<double> BSIM4rbpbx0 { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpbx0 { get; } = new Parameter();
         [SpiceName("rbpbxl"), SpiceInfo("Body resistance RBPBX L scaling")]
-        public Parameter<double> BSIM4rbpbxl { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpbxl { get; } = new Parameter();
         [SpiceName("rbpbxw"), SpiceInfo("Body resistance RBPBX W scaling")]
-        public Parameter<double> BSIM4rbpbxw { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpbxw { get; } = new Parameter();
         [SpiceName("rbpbxnf"), SpiceInfo("Body resistance RBPBX NF scaling")]
-        public Parameter<double> BSIM4rbpbxnf { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpbxnf { get; } = new Parameter();
         [SpiceName("rbpby0"), SpiceInfo("Body resistance RBPBY  scaling")]
-        public Parameter<double> BSIM4rbpby0 { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpby0 { get; } = new Parameter();
         [SpiceName("rbpbyl"), SpiceInfo("Body resistance RBPBY L scaling")]
-        public Parameter<double> BSIM4rbpbyl { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpbyl { get; } = new Parameter();
         [SpiceName("rbpbyw"), SpiceInfo("Body resistance RBPBY W scaling")]
-        public Parameter<double> BSIM4rbpbyw { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpbyw { get; } = new Parameter();
         [SpiceName("rbpbynf"), SpiceInfo("Body resistance RBPBY NF scaling")]
-        public Parameter<double> BSIM4rbpbynf { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpbynf { get; } = new Parameter();
         [SpiceName("rbsbx0"), SpiceInfo("Body resistance RBSBX  scaling")]
-        public Parameter<double> BSIM4rbsbx0 { get; } = new Parameter<double>();
+        public Parameter BSIM4rbsbx0 { get; } = new Parameter();
         [SpiceName("rbsby0"), SpiceInfo("Body resistance RBSBY  scaling")]
-        public Parameter<double> BSIM4rbsby0 { get; } = new Parameter<double>();
+        public Parameter BSIM4rbsby0 { get; } = new Parameter();
         [SpiceName("rbdbx0"), SpiceInfo("Body resistance RBDBX  scaling")]
-        public Parameter<double> BSIM4rbdbx0 { get; } = new Parameter<double>();
+        public Parameter BSIM4rbdbx0 { get; } = new Parameter();
         [SpiceName("rbdby0"), SpiceInfo("Body resistance RBDBY  scaling")]
-        public Parameter<double> BSIM4rbdby0 { get; } = new Parameter<double>();
+        public Parameter BSIM4rbdby0 { get; } = new Parameter();
         [SpiceName("rbsdbxl"), SpiceInfo("Body resistance RBSDBX L scaling")]
-        public Parameter<double> BSIM4rbsdbxl { get; } = new Parameter<double>();
+        public Parameter BSIM4rbsdbxl { get; } = new Parameter();
         [SpiceName("rbsdbxw"), SpiceInfo("Body resistance RBSDBX W scaling")]
-        public Parameter<double> BSIM4rbsdbxw { get; } = new Parameter<double>();
+        public Parameter BSIM4rbsdbxw { get; } = new Parameter();
         [SpiceName("rbsdbxnf"), SpiceInfo("Body resistance RBSDBX NF scaling")]
-        public Parameter<double> BSIM4rbsdbxnf { get; } = new Parameter<double>();
+        public Parameter BSIM4rbsdbxnf { get; } = new Parameter();
         [SpiceName("rbsdbyl"), SpiceInfo("Body resistance RBSDBY L scaling")]
-        public Parameter<double> BSIM4rbsdbyl { get; } = new Parameter<double>();
+        public Parameter BSIM4rbsdbyl { get; } = new Parameter();
         [SpiceName("rbsdbyw"), SpiceInfo("Body resistance RBSDBY W scaling")]
-        public Parameter<double> BSIM4rbsdbyw { get; } = new Parameter<double>();
+        public Parameter BSIM4rbsdbyw { get; } = new Parameter();
         [SpiceName("rbsdbynf"), SpiceInfo("Body resistance RBSDBY NF scaling")]
-        public Parameter<double> BSIM4rbsdbynf { get; } = new Parameter<double>();
+        public Parameter BSIM4rbsdbynf { get; } = new Parameter();
         [SpiceName("cgsl"), SpiceInfo("New C-V model parameter")]
-        public Parameter<double> BSIM4cgsl { get; } = new Parameter<double>();
+        public Parameter BSIM4cgsl { get; } = new Parameter();
         [SpiceName("cgdl"), SpiceInfo("New C-V model parameter")]
-        public Parameter<double> BSIM4cgdl { get; } = new Parameter<double>();
+        public Parameter BSIM4cgdl { get; } = new Parameter();
         [SpiceName("ckappas"), SpiceInfo("S/G overlap C-V parameter ")]
-        public Parameter<double> BSIM4ckappas { get; } = new Parameter<double>();
+        public Parameter BSIM4ckappas { get; } = new Parameter();
         [SpiceName("ckappad"), SpiceInfo("D/G overlap C-V parameter")]
-        public Parameter<double> BSIM4ckappad { get; } = new Parameter<double>();
+        public Parameter BSIM4ckappad { get; } = new Parameter();
         [SpiceName("cf"), SpiceInfo("Fringe capacitance parameter")]
-        public Parameter<double> BSIM4cf { get; } = new Parameter<double>();
+        public Parameter BSIM4cf { get; } = new Parameter();
         [SpiceName("clc"), SpiceInfo("Vdsat parameter for C-V model")]
-        public Parameter<double> BSIM4clc { get; } = new Parameter<double>();
+        public Parameter BSIM4clc { get; } = new Parameter();
         [SpiceName("cle"), SpiceInfo("Vdsat parameter for C-V model")]
-        public Parameter<double> BSIM4cle { get; } = new Parameter<double>();
+        public Parameter BSIM4cle { get; } = new Parameter();
         [SpiceName("dwc"), SpiceInfo("Delta W for C-V model")]
-        public Parameter<double> BSIM4dwc { get; } = new Parameter<double>();
+        public Parameter BSIM4dwc { get; } = new Parameter();
         [SpiceName("dlc"), SpiceInfo("Delta L for C-V model")]
-        public Parameter<double> BSIM4dlc { get; } = new Parameter<double>();
+        public Parameter BSIM4dlc { get; } = new Parameter();
         [SpiceName("xw"), SpiceInfo("W offset for channel width due to mask/etch effect")]
-        public Parameter<double> BSIM4xw { get; } = new Parameter<double>();
+        public Parameter BSIM4xw { get; } = new Parameter();
         [SpiceName("xl"), SpiceInfo("L offset for channel length due to mask/etch effect")]
-        public Parameter<double> BSIM4xl { get; } = new Parameter<double>();
+        public Parameter BSIM4xl { get; } = new Parameter();
         [SpiceName("dlcig"), SpiceInfo("Delta L for Ig model")]
-        public Parameter<double> BSIM4dlcig { get; } = new Parameter<double>();
+        public Parameter BSIM4dlcig { get; } = new Parameter();
         [SpiceName("dlcigd"), SpiceInfo("Delta L for Ig model drain side")]
-        public Parameter<double> BSIM4dlcigd { get; } = new Parameter<double>();
+        public Parameter BSIM4dlcigd { get; } = new Parameter();
         [SpiceName("dwj"), SpiceInfo("Delta W for S/D junctions")]
-        public Parameter<double> BSIM4dwj { get; } = new Parameter<double>();
+        public Parameter BSIM4dwj { get; } = new Parameter();
         [SpiceName("vfbcv"), SpiceInfo("Flat Band Voltage parameter for capmod=0 only")]
-        public Parameter<double> BSIM4vfbcv { get; } = new Parameter<double>();
+        public Parameter BSIM4vfbcv { get; } = new Parameter();
         [SpiceName("acde"), SpiceInfo("Exponential coefficient for finite charge thickness")]
-        public Parameter<double> BSIM4acde { get; } = new Parameter<double>();
+        public Parameter BSIM4acde { get; } = new Parameter();
         [SpiceName("moin"), SpiceInfo("Coefficient for gate-bias dependent surface potential")]
-        public Parameter<double> BSIM4moin { get; } = new Parameter<double>();
+        public Parameter BSIM4moin { get; } = new Parameter();
         [SpiceName("noff"), SpiceInfo("C-V turn-on/off parameter")]
-        public Parameter<double> BSIM4noff { get; } = new Parameter<double>();
+        public Parameter BSIM4noff { get; } = new Parameter();
         [SpiceName("voffcv"), SpiceInfo("C-V lateral-shift parameter")]
-        public Parameter<double> BSIM4voffcv { get; } = new Parameter<double>();
+        public Parameter BSIM4voffcv { get; } = new Parameter();
         [SpiceName("dmcg"), SpiceInfo("Distance of Mid-Contact to Gate edge")]
-        public Parameter<double> BSIM4dmcg { get; } = new Parameter<double>();
+        public Parameter BSIM4dmcg { get; } = new Parameter();
         [SpiceName("dmci"), SpiceInfo("Distance of Mid-Contact to Isolation")]
-        public Parameter<double> BSIM4dmci { get; } = new Parameter<double>();
+        public Parameter BSIM4dmci { get; } = new Parameter();
         [SpiceName("dmdg"), SpiceInfo("Distance of Mid-Diffusion to Gate edge")]
-        public Parameter<double> BSIM4dmdg { get; } = new Parameter<double>();
+        public Parameter BSIM4dmdg { get; } = new Parameter();
         [SpiceName("dmcgt"), SpiceInfo("Distance of Mid-Contact to Gate edge in Test structures")]
-        public Parameter<double> BSIM4dmcgt { get; } = new Parameter<double>();
+        public Parameter BSIM4dmcgt { get; } = new Parameter();
         [SpiceName("xgw"), SpiceInfo("Distance from gate contact center to device edge")]
-        public Parameter<double> BSIM4xgw { get; } = new Parameter<double>();
+        public Parameter BSIM4xgw { get; } = new Parameter();
         [SpiceName("xgl"), SpiceInfo("Variation in Ldrawn")]
-        public Parameter<double> BSIM4xgl { get; } = new Parameter<double>();
+        public Parameter BSIM4xgl { get; } = new Parameter();
         [SpiceName("rshg"), SpiceInfo("Gate sheet resistance")]
-        public Parameter<double> BSIM4rshg { get; } = new Parameter<double>();
+        public Parameter BSIM4rshg { get; } = new Parameter();
         [SpiceName("ngcon"), SpiceInfo("Number of gate contacts")]
-        public Parameter<double> BSIM4ngcon { get; } = new Parameter<double>();
+        public Parameter BSIM4ngcon { get; } = new Parameter();
         [SpiceName("tcj"), SpiceInfo("Temperature coefficient of cj")]
-        public Parameter<double> BSIM4tcj { get; } = new Parameter<double>();
+        public Parameter BSIM4tcj { get; } = new Parameter();
         [SpiceName("tpb"), SpiceInfo("Temperature coefficient of pb")]
-        public Parameter<double> BSIM4tpb { get; } = new Parameter<double>();
+        public Parameter BSIM4tpb { get; } = new Parameter();
         [SpiceName("tcjsw"), SpiceInfo("Temperature coefficient of cjsw")]
-        public Parameter<double> BSIM4tcjsw { get; } = new Parameter<double>();
+        public Parameter BSIM4tcjsw { get; } = new Parameter();
         [SpiceName("tpbsw"), SpiceInfo("Temperature coefficient of pbsw")]
-        public Parameter<double> BSIM4tpbsw { get; } = new Parameter<double>();
+        public Parameter BSIM4tpbsw { get; } = new Parameter();
         [SpiceName("tcjswg"), SpiceInfo("Temperature coefficient of cjswg")]
-        public Parameter<double> BSIM4tcjswg { get; } = new Parameter<double>();
+        public Parameter BSIM4tcjswg { get; } = new Parameter();
         [SpiceName("tpbswg"), SpiceInfo("Temperature coefficient of pbswg")]
-        public Parameter<double> BSIM4tpbswg { get; } = new Parameter<double>();
+        public Parameter BSIM4tpbswg { get; } = new Parameter();
         [SpiceName("lcdsc"), SpiceInfo("Length dependence of cdsc")]
-        public Parameter<double> BSIM4lcdsc { get; } = new Parameter<double>();
+        public Parameter BSIM4lcdsc { get; } = new Parameter();
         [SpiceName("lcdscb"), SpiceInfo("Length dependence of cdscb")]
-        public Parameter<double> BSIM4lcdscb { get; } = new Parameter<double>();
+        public Parameter BSIM4lcdscb { get; } = new Parameter();
         [SpiceName("lcdscd"), SpiceInfo("Length dependence of cdscd")]
-        public Parameter<double> BSIM4lcdscd { get; } = new Parameter<double>();
+        public Parameter BSIM4lcdscd { get; } = new Parameter();
         [SpiceName("lcit"), SpiceInfo("Length dependence of cit")]
-        public Parameter<double> BSIM4lcit { get; } = new Parameter<double>();
+        public Parameter BSIM4lcit { get; } = new Parameter();
         [SpiceName("lnfactor"), SpiceInfo("Length dependence of nfactor")]
-        public Parameter<double> BSIM4lnfactor { get; } = new Parameter<double>();
+        public Parameter BSIM4lnfactor { get; } = new Parameter();
         [SpiceName("lxj"), SpiceInfo("Length dependence of xj")]
-        public Parameter<double> BSIM4lxj { get; } = new Parameter<double>();
+        public Parameter BSIM4lxj { get; } = new Parameter();
         [SpiceName("lvsat"), SpiceInfo("Length dependence of vsat")]
-        public Parameter<double> BSIM4lvsat { get; } = new Parameter<double>();
+        public Parameter BSIM4lvsat { get; } = new Parameter();
         [SpiceName("la0"), SpiceInfo("Length dependence of a0")]
-        public Parameter<double> BSIM4la0 { get; } = new Parameter<double>();
+        public Parameter BSIM4la0 { get; } = new Parameter();
         [SpiceName("lags"), SpiceInfo("Length dependence of ags")]
-        public Parameter<double> BSIM4lags { get; } = new Parameter<double>();
+        public Parameter BSIM4lags { get; } = new Parameter();
         [SpiceName("la1"), SpiceInfo("Length dependence of a1")]
-        public Parameter<double> BSIM4la1 { get; } = new Parameter<double>();
+        public Parameter BSIM4la1 { get; } = new Parameter();
         [SpiceName("la2"), SpiceInfo("Length dependence of a2")]
-        public Parameter<double> BSIM4la2 { get; } = new Parameter<double>();
+        public Parameter BSIM4la2 { get; } = new Parameter();
         [SpiceName("lat"), SpiceInfo("Length dependence of at")]
-        public Parameter<double> BSIM4lat { get; } = new Parameter<double>();
+        public Parameter BSIM4lat { get; } = new Parameter();
         [SpiceName("lketa"), SpiceInfo("Length dependence of keta")]
-        public Parameter<double> BSIM4lketa { get; } = new Parameter<double>();
+        public Parameter BSIM4lketa { get; } = new Parameter();
         [SpiceName("lnsub"), SpiceInfo("Length dependence of nsub")]
-        public Parameter<double> BSIM4lnsub { get; } = new Parameter<double>();
+        public Parameter BSIM4lnsub { get; } = new Parameter();
         [SpiceName("lndep"), SpiceInfo("Length dependence of ndep")]
-        public ParameterMethod<double> BSIM4lndep { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e20 ? v * 1e-6 : v, null);
+        public Parameter BSIM4lndep { get; } = new Parameter(0.0);
         [SpiceName("lnsd"), SpiceInfo("Length dependence of nsd")]
-        public ParameterMethod<double> BSIM4lnsd { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e23 ? v * 1e-6 : v, null);
+        public Parameter BSIM4lnsd { get; } = new Parameter(0.0);
         [SpiceName("lngate"), SpiceInfo("Length dependence of ngate")]
-        public ParameterMethod<double> BSIM4lngate { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e23 ? v * 1e-6 : v, null);
+        public Parameter BSIM4lngate { get; } = new Parameter(0.0);
         [SpiceName("lgamma1"), SpiceInfo("Length dependence of gamma1")]
-        public Parameter<double> BSIM4lgamma1 { get; } = new Parameter<double>();
+        public Parameter BSIM4lgamma1 { get; } = new Parameter();
         [SpiceName("lgamma2"), SpiceInfo("Length dependence of gamma2")]
-        public Parameter<double> BSIM4lgamma2 { get; } = new Parameter<double>();
+        public Parameter BSIM4lgamma2 { get; } = new Parameter();
         [SpiceName("lvbx"), SpiceInfo("Length dependence of vbx")]
-        public Parameter<double> BSIM4lvbx { get; } = new Parameter<double>();
+        public Parameter BSIM4lvbx { get; } = new Parameter();
         [SpiceName("lvbm"), SpiceInfo("Length dependence of vbm")]
-        public Parameter<double> BSIM4lvbm { get; } = new Parameter<double>();
+        public Parameter BSIM4lvbm { get; } = new Parameter();
         [SpiceName("lxt"), SpiceInfo("Length dependence of xt")]
-        public Parameter<double> BSIM4lxt { get; } = new Parameter<double>();
+        public Parameter BSIM4lxt { get; } = new Parameter();
         [SpiceName("lk1"), SpiceInfo("Length dependence of k1")]
-        public Parameter<double> BSIM4lk1 { get; } = new Parameter<double>();
+        public Parameter BSIM4lk1 { get; } = new Parameter();
         [SpiceName("lkt1"), SpiceInfo("Length dependence of kt1")]
-        public Parameter<double> BSIM4lkt1 { get; } = new Parameter<double>();
+        public Parameter BSIM4lkt1 { get; } = new Parameter();
         [SpiceName("lkt1l"), SpiceInfo("Length dependence of kt1l")]
-        public Parameter<double> BSIM4lkt1l { get; } = new Parameter<double>();
+        public Parameter BSIM4lkt1l { get; } = new Parameter();
         [SpiceName("lkt2"), SpiceInfo("Length dependence of kt2")]
-        public Parameter<double> BSIM4lkt2 { get; } = new Parameter<double>();
+        public Parameter BSIM4lkt2 { get; } = new Parameter();
         [SpiceName("lk2"), SpiceInfo("Length dependence of k2")]
-        public Parameter<double> BSIM4lk2 { get; } = new Parameter<double>();
+        public Parameter BSIM4lk2 { get; } = new Parameter();
         [SpiceName("lk3"), SpiceInfo("Length dependence of k3")]
-        public Parameter<double> BSIM4lk3 { get; } = new Parameter<double>();
+        public Parameter BSIM4lk3 { get; } = new Parameter();
         [SpiceName("lk3b"), SpiceInfo("Length dependence of k3b")]
-        public Parameter<double> BSIM4lk3b { get; } = new Parameter<double>();
+        public Parameter BSIM4lk3b { get; } = new Parameter();
         [SpiceName("llpe0"), SpiceInfo("Length dependence of lpe0")]
-        public Parameter<double> BSIM4llpe0 { get; } = new Parameter<double>();
+        public Parameter BSIM4llpe0 { get; } = new Parameter();
         [SpiceName("llpeb"), SpiceInfo("Length dependence of lpeb")]
-        public Parameter<double> BSIM4llpeb { get; } = new Parameter<double>();
+        public Parameter BSIM4llpeb { get; } = new Parameter();
         [SpiceName("ldvtp0"), SpiceInfo("Length dependence of dvtp0")]
-        public Parameter<double> BSIM4ldvtp0 { get; } = new Parameter<double>();
+        public Parameter BSIM4ldvtp0 { get; } = new Parameter();
         [SpiceName("ldvtp1"), SpiceInfo("Length dependence of dvtp1")]
-        public Parameter<double> BSIM4ldvtp1 { get; } = new Parameter<double>();
+        public Parameter BSIM4ldvtp1 { get; } = new Parameter();
         [SpiceName("ldvtp2"), SpiceInfo("Length dependence of dvtp2")]
-        public Parameter<double> BSIM4ldvtp2 { get; } = new Parameter<double>();
+        public Parameter BSIM4ldvtp2 { get; } = new Parameter();
         [SpiceName("ldvtp3"), SpiceInfo("Length dependence of dvtp3")]
-        public Parameter<double> BSIM4ldvtp3 { get; } = new Parameter<double>();
+        public Parameter BSIM4ldvtp3 { get; } = new Parameter();
         [SpiceName("ldvtp4"), SpiceInfo("Length dependence of dvtp4")]
-        public Parameter<double> BSIM4ldvtp4 { get; } = new Parameter<double>();
+        public Parameter BSIM4ldvtp4 { get; } = new Parameter();
         [SpiceName("ldvtp5"), SpiceInfo("Length dependence of dvtp5")]
-        public Parameter<double> BSIM4ldvtp5 { get; } = new Parameter<double>();
+        public Parameter BSIM4ldvtp5 { get; } = new Parameter();
         [SpiceName("lw0"), SpiceInfo("Length dependence of w0")]
-        public Parameter<double> BSIM4lw0 { get; } = new Parameter<double>();
+        public Parameter BSIM4lw0 { get; } = new Parameter();
         [SpiceName("ldvt0"), SpiceInfo("Length dependence of dvt0")]
-        public Parameter<double> BSIM4ldvt0 { get; } = new Parameter<double>();
+        public Parameter BSIM4ldvt0 { get; } = new Parameter();
         [SpiceName("ldvt1"), SpiceInfo("Length dependence of dvt1")]
-        public Parameter<double> BSIM4ldvt1 { get; } = new Parameter<double>();
+        public Parameter BSIM4ldvt1 { get; } = new Parameter();
         [SpiceName("ldvt2"), SpiceInfo("Length dependence of dvt2")]
-        public Parameter<double> BSIM4ldvt2 { get; } = new Parameter<double>();
+        public Parameter BSIM4ldvt2 { get; } = new Parameter();
         [SpiceName("ldvt0w"), SpiceInfo("Length dependence of dvt0w")]
-        public Parameter<double> BSIM4ldvt0w { get; } = new Parameter<double>();
+        public Parameter BSIM4ldvt0w { get; } = new Parameter();
         [SpiceName("ldvt1w"), SpiceInfo("Length dependence of dvt1w")]
-        public Parameter<double> BSIM4ldvt1w { get; } = new Parameter<double>();
+        public Parameter BSIM4ldvt1w { get; } = new Parameter();
         [SpiceName("ldvt2w"), SpiceInfo("Length dependence of dvt2w")]
-        public Parameter<double> BSIM4ldvt2w { get; } = new Parameter<double>();
+        public Parameter BSIM4ldvt2w { get; } = new Parameter();
         [SpiceName("ldrout"), SpiceInfo("Length dependence of drout")]
-        public Parameter<double> BSIM4ldrout { get; } = new Parameter<double>();
+        public Parameter BSIM4ldrout { get; } = new Parameter();
         [SpiceName("ldsub"), SpiceInfo("Length dependence of dsub")]
-        public Parameter<double> BSIM4ldsub { get; } = new Parameter<double>();
+        public Parameter BSIM4ldsub { get; } = new Parameter();
         [SpiceName("lvth0"), SpiceName("lvtho"), SpiceInfo("Length dependence of vto")]
-        public Parameter<double> BSIM4lvth0 { get; } = new Parameter<double>();
+        public Parameter BSIM4lvth0 { get; } = new Parameter();
         [SpiceName("lua"), SpiceInfo("Length dependence of ua")]
-        public Parameter<double> BSIM4lua { get; } = new Parameter<double>();
+        public Parameter BSIM4lua { get; } = new Parameter();
         [SpiceName("lua1"), SpiceInfo("Length dependence of ua1")]
-        public Parameter<double> BSIM4lua1 { get; } = new Parameter<double>();
+        public Parameter BSIM4lua1 { get; } = new Parameter();
         [SpiceName("lub"), SpiceInfo("Length dependence of ub")]
-        public Parameter<double> BSIM4lub { get; } = new Parameter<double>();
+        public Parameter BSIM4lub { get; } = new Parameter();
         [SpiceName("lub1"), SpiceInfo("Length dependence of ub1")]
-        public Parameter<double> BSIM4lub1 { get; } = new Parameter<double>();
+        public Parameter BSIM4lub1 { get; } = new Parameter();
         [SpiceName("luc"), SpiceInfo("Length dependence of uc")]
-        public Parameter<double> BSIM4luc { get; } = new Parameter<double>();
+        public Parameter BSIM4luc { get; } = new Parameter();
         [SpiceName("luc1"), SpiceInfo("Length dependence of uc1")]
-        public Parameter<double> BSIM4luc1 { get; } = new Parameter<double>();
+        public Parameter BSIM4luc1 { get; } = new Parameter();
         [SpiceName("lu0"), SpiceInfo("Length dependence of u0")]
-        public Parameter<double> BSIM4lu0 { get; } = new Parameter<double>();
+        public Parameter BSIM4lu0 { get; } = new Parameter();
         [SpiceName("lute"), SpiceInfo("Length dependence of ute")]
-        public Parameter<double> BSIM4lute { get; } = new Parameter<double>();
+        public Parameter BSIM4lute { get; } = new Parameter();
         [SpiceName("lucste"), SpiceInfo("Length dependence of ucste")]
-        public Parameter<double> BSIM4lucste { get; } = new Parameter<double>();
+        public Parameter BSIM4lucste { get; } = new Parameter();
         [SpiceName("lvoff"), SpiceInfo("Length dependence of voff")]
-        public Parameter<double> BSIM4lvoff { get; } = new Parameter<double>();
+        public Parameter BSIM4lvoff { get; } = new Parameter();
         [SpiceName("ltvoff"), SpiceInfo("Length dependence of tvoff")]
-        public Parameter<double> BSIM4ltvoff { get; } = new Parameter<double>();
+        public Parameter BSIM4ltvoff { get; } = new Parameter();
         [SpiceName("ltnfactor"), SpiceInfo("Length dependence of tnfactor")]
-        public Parameter<double> BSIM4ltnfactor { get; } = new Parameter<double>();
+        public Parameter BSIM4ltnfactor { get; } = new Parameter();
         [SpiceName("lteta0"), SpiceInfo("Length dependence of teta0")]
-        public Parameter<double> BSIM4lteta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4lteta0 { get; } = new Parameter();
         [SpiceName("ltvoffcv"), SpiceInfo("Length dependence of tvoffcv")]
-        public Parameter<double> BSIM4ltvoffcv { get; } = new Parameter<double>();
+        public Parameter BSIM4ltvoffcv { get; } = new Parameter();
         [SpiceName("lminv"), SpiceInfo("Length dependence of minv")]
-        public Parameter<double> BSIM4lminv { get; } = new Parameter<double>();
+        public Parameter BSIM4lminv { get; } = new Parameter();
         [SpiceName("lminvcv"), SpiceInfo("Length dependence of minvcv")]
-        public Parameter<double> BSIM4lminvcv { get; } = new Parameter<double>();
+        public Parameter BSIM4lminvcv { get; } = new Parameter();
         [SpiceName("lfprout"), SpiceInfo("Length dependence of pdiblcb")]
-        public Parameter<double> BSIM4lfprout { get; } = new Parameter<double>();
+        public Parameter BSIM4lfprout { get; } = new Parameter();
         [SpiceName("lpdits"), SpiceInfo("Length dependence of pdits")]
-        public Parameter<double> BSIM4lpdits { get; } = new Parameter<double>();
+        public Parameter BSIM4lpdits { get; } = new Parameter();
         [SpiceName("lpditsd"), SpiceInfo("Length dependence of pditsd")]
-        public Parameter<double> BSIM4lpditsd { get; } = new Parameter<double>();
+        public Parameter BSIM4lpditsd { get; } = new Parameter();
         [SpiceName("ldelta"), SpiceInfo("Length dependence of delta")]
-        public Parameter<double> BSIM4ldelta { get; } = new Parameter<double>();
+        public Parameter BSIM4ldelta { get; } = new Parameter();
         [SpiceName("lrdsw"), SpiceInfo("Length dependence of rdsw ")]
-        public Parameter<double> BSIM4lrdsw { get; } = new Parameter<double>();
+        public Parameter BSIM4lrdsw { get; } = new Parameter();
         [SpiceName("lrdw"), SpiceInfo("Length dependence of rdw")]
-        public Parameter<double> BSIM4lrdw { get; } = new Parameter<double>();
+        public Parameter BSIM4lrdw { get; } = new Parameter();
         [SpiceName("lrsw"), SpiceInfo("Length dependence of rsw")]
-        public Parameter<double> BSIM4lrsw { get; } = new Parameter<double>();
+        public Parameter BSIM4lrsw { get; } = new Parameter();
         [SpiceName("lprwb"), SpiceInfo("Length dependence of prwb ")]
-        public Parameter<double> BSIM4lprwb { get; } = new Parameter<double>();
+        public Parameter BSIM4lprwb { get; } = new Parameter();
         [SpiceName("lprwg"), SpiceInfo("Length dependence of prwg ")]
-        public Parameter<double> BSIM4lprwg { get; } = new Parameter<double>();
+        public Parameter BSIM4lprwg { get; } = new Parameter();
         [SpiceName("lprt"), SpiceInfo("Length dependence of prt ")]
-        public Parameter<double> BSIM4lprt { get; } = new Parameter<double>();
+        public Parameter BSIM4lprt { get; } = new Parameter();
         [SpiceName("leta0"), SpiceInfo("Length dependence of eta0")]
-        public Parameter<double> BSIM4leta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4leta0 { get; } = new Parameter();
         [SpiceName("letab"), SpiceInfo("Length dependence of etab")]
-        public Parameter<double> BSIM4letab { get; } = new Parameter<double>();
+        public Parameter BSIM4letab { get; } = new Parameter();
         [SpiceName("lpclm"), SpiceInfo("Length dependence of pclm")]
-        public Parameter<double> BSIM4lpclm { get; } = new Parameter<double>();
+        public Parameter BSIM4lpclm { get; } = new Parameter();
         [SpiceName("lpdiblc1"), SpiceInfo("Length dependence of pdiblc1")]
-        public Parameter<double> BSIM4lpdibl1 { get; } = new Parameter<double>();
+        public Parameter BSIM4lpdibl1 { get; } = new Parameter();
         [SpiceName("lpdiblc2"), SpiceInfo("Length dependence of pdiblc2")]
-        public Parameter<double> BSIM4lpdibl2 { get; } = new Parameter<double>();
+        public Parameter BSIM4lpdibl2 { get; } = new Parameter();
         [SpiceName("lpdiblcb"), SpiceInfo("Length dependence of pdiblcb")]
-        public Parameter<double> BSIM4lpdiblb { get; } = new Parameter<double>();
+        public Parameter BSIM4lpdiblb { get; } = new Parameter();
         [SpiceName("lpscbe1"), SpiceInfo("Length dependence of pscbe1")]
-        public Parameter<double> BSIM4lpscbe1 { get; } = new Parameter<double>();
+        public Parameter BSIM4lpscbe1 { get; } = new Parameter();
         [SpiceName("lpscbe2"), SpiceInfo("Length dependence of pscbe2")]
-        public Parameter<double> BSIM4lpscbe2 { get; } = new Parameter<double>();
+        public Parameter BSIM4lpscbe2 { get; } = new Parameter();
         [SpiceName("lpvag"), SpiceInfo("Length dependence of pvag")]
-        public Parameter<double> BSIM4lpvag { get; } = new Parameter<double>();
+        public Parameter BSIM4lpvag { get; } = new Parameter();
         [SpiceName("lwr"), SpiceInfo("Length dependence of wr")]
-        public Parameter<double> BSIM4lwr { get; } = new Parameter<double>();
+        public Parameter BSIM4lwr { get; } = new Parameter();
         [SpiceName("ldwg"), SpiceInfo("Length dependence of dwg")]
-        public Parameter<double> BSIM4ldwg { get; } = new Parameter<double>();
+        public Parameter BSIM4ldwg { get; } = new Parameter();
         [SpiceName("ldwb"), SpiceInfo("Length dependence of dwb")]
-        public Parameter<double> BSIM4ldwb { get; } = new Parameter<double>();
+        public Parameter BSIM4ldwb { get; } = new Parameter();
         [SpiceName("lb0"), SpiceInfo("Length dependence of b0")]
-        public Parameter<double> BSIM4lb0 { get; } = new Parameter<double>();
+        public Parameter BSIM4lb0 { get; } = new Parameter();
         [SpiceName("lb1"), SpiceInfo("Length dependence of b1")]
-        public Parameter<double> BSIM4lb1 { get; } = new Parameter<double>();
+        public Parameter BSIM4lb1 { get; } = new Parameter();
         [SpiceName("lalpha0"), SpiceInfo("Length dependence of alpha0")]
-        public Parameter<double> BSIM4lalpha0 { get; } = new Parameter<double>();
+        public Parameter BSIM4lalpha0 { get; } = new Parameter();
         [SpiceName("lalpha1"), SpiceInfo("Length dependence of alpha1")]
-        public Parameter<double> BSIM4lalpha1 { get; } = new Parameter<double>();
+        public Parameter BSIM4lalpha1 { get; } = new Parameter();
         [SpiceName("lbeta0"), SpiceInfo("Length dependence of beta0")]
-        public Parameter<double> BSIM4lbeta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4lbeta0 { get; } = new Parameter();
         [SpiceName("lphin"), SpiceInfo("Length dependence of phin")]
-        public Parameter<double> BSIM4lphin { get; } = new Parameter<double>();
+        public Parameter BSIM4lphin { get; } = new Parameter();
         [SpiceName("lagidl"), SpiceInfo("Length dependence of agidl")]
-        public Parameter<double> BSIM4lagidl { get; } = new Parameter<double>();
+        public Parameter BSIM4lagidl { get; } = new Parameter();
         [SpiceName("lbgidl"), SpiceInfo("Length dependence of bgidl")]
-        public Parameter<double> BSIM4lbgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4lbgidl { get; } = new Parameter();
         [SpiceName("lcgidl"), SpiceInfo("Length dependence of cgidl")]
-        public Parameter<double> BSIM4lcgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4lcgidl { get; } = new Parameter();
         [SpiceName("legidl"), SpiceInfo("Length dependence of egidl")]
-        public Parameter<double> BSIM4legidl { get; } = new Parameter<double>();
+        public Parameter BSIM4legidl { get; } = new Parameter();
         [SpiceName("lfgidl"), SpiceInfo("Length dependence of fgidl")]
-        public Parameter<double> BSIM4lfgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4lfgidl { get; } = new Parameter();
         [SpiceName("lkgidl"), SpiceInfo("Length dependence of kgidl")]
-        public Parameter<double> BSIM4lkgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4lkgidl { get; } = new Parameter();
         [SpiceName("lrgidl"), SpiceInfo("Length dependence of rgidl")]
-        public Parameter<double> BSIM4lrgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4lrgidl { get; } = new Parameter();
         [SpiceName("lagisl"), SpiceInfo("Length dependence of agisl")]
-        public Parameter<double> BSIM4lagisl { get; } = new Parameter<double>();
+        public Parameter BSIM4lagisl { get; } = new Parameter();
         [SpiceName("lbgisl"), SpiceInfo("Length dependence of bgisl")]
-        public Parameter<double> BSIM4lbgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4lbgisl { get; } = new Parameter();
         [SpiceName("lcgisl"), SpiceInfo("Length dependence of cgisl")]
-        public Parameter<double> BSIM4lcgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4lcgisl { get; } = new Parameter();
         [SpiceName("legisl"), SpiceInfo("Length dependence of egisl")]
-        public Parameter<double> BSIM4legisl { get; } = new Parameter<double>();
+        public Parameter BSIM4legisl { get; } = new Parameter();
         [SpiceName("lfgisl"), SpiceInfo("Length dependence of fgisl")]
-        public Parameter<double> BSIM4lfgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4lfgisl { get; } = new Parameter();
         [SpiceName("lkgisl"), SpiceInfo("Length dependence of kgisl")]
-        public Parameter<double> BSIM4lkgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4lkgisl { get; } = new Parameter();
         [SpiceName("lrgisl"), SpiceInfo("Length dependence of rgisl")]
-        public Parameter<double> BSIM4lrgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4lrgisl { get; } = new Parameter();
         [SpiceName("laigc"), SpiceInfo("Length dependence of aigc")]
-        public Parameter<double> BSIM4laigc { get; } = new Parameter<double>();
+        public Parameter BSIM4laigc { get; } = new Parameter();
         [SpiceName("lbigc"), SpiceInfo("Length dependence of bigc")]
-        public Parameter<double> BSIM4lbigc { get; } = new Parameter<double>();
+        public Parameter BSIM4lbigc { get; } = new Parameter();
         [SpiceName("lcigc"), SpiceInfo("Length dependence of cigc")]
-        public Parameter<double> BSIM4lcigc { get; } = new Parameter<double>();
+        public Parameter BSIM4lcigc { get; } = new Parameter();
         [SpiceName("laigsd"), SpiceInfo("Length dependence of aigsd")]
-        public Parameter<double> BSIM4laigsd { get; } = new Parameter<double>();
+        public Parameter BSIM4laigsd { get; } = new Parameter();
         [SpiceName("lbigsd"), SpiceInfo("Length dependence of bigsd")]
-        public Parameter<double> BSIM4lbigsd { get; } = new Parameter<double>();
+        public Parameter BSIM4lbigsd { get; } = new Parameter();
         [SpiceName("lcigsd"), SpiceInfo("Length dependence of cigsd")]
-        public Parameter<double> BSIM4lcigsd { get; } = new Parameter<double>();
+        public Parameter BSIM4lcigsd { get; } = new Parameter();
         [SpiceName("laigs"), SpiceInfo("Length dependence of aigs")]
-        public Parameter<double> BSIM4laigs { get; } = new Parameter<double>();
+        public Parameter BSIM4laigs { get; } = new Parameter();
         [SpiceName("lbigs"), SpiceInfo("Length dependence of bigs")]
-        public Parameter<double> BSIM4lbigs { get; } = new Parameter<double>();
+        public Parameter BSIM4lbigs { get; } = new Parameter();
         [SpiceName("lcigs"), SpiceInfo("Length dependence of cigs")]
-        public Parameter<double> BSIM4lcigs { get; } = new Parameter<double>();
+        public Parameter BSIM4lcigs { get; } = new Parameter();
         [SpiceName("laigd"), SpiceInfo("Length dependence of aigd")]
-        public Parameter<double> BSIM4laigd { get; } = new Parameter<double>();
+        public Parameter BSIM4laigd { get; } = new Parameter();
         [SpiceName("lbigd"), SpiceInfo("Length dependence of bigd")]
-        public Parameter<double> BSIM4lbigd { get; } = new Parameter<double>();
+        public Parameter BSIM4lbigd { get; } = new Parameter();
         [SpiceName("lcigd"), SpiceInfo("Length dependence of cigd")]
-        public Parameter<double> BSIM4lcigd { get; } = new Parameter<double>();
+        public Parameter BSIM4lcigd { get; } = new Parameter();
         [SpiceName("laigbacc"), SpiceInfo("Length dependence of aigbacc")]
-        public Parameter<double> BSIM4laigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4laigbacc { get; } = new Parameter();
         [SpiceName("lbigbacc"), SpiceInfo("Length dependence of bigbacc")]
-        public Parameter<double> BSIM4lbigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4lbigbacc { get; } = new Parameter();
         [SpiceName("lcigbacc"), SpiceInfo("Length dependence of cigbacc")]
-        public Parameter<double> BSIM4lcigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4lcigbacc { get; } = new Parameter();
         [SpiceName("laigbinv"), SpiceInfo("Length dependence of aigbinv")]
-        public Parameter<double> BSIM4laigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4laigbinv { get; } = new Parameter();
         [SpiceName("lbigbinv"), SpiceInfo("Length dependence of bigbinv")]
-        public Parameter<double> BSIM4lbigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4lbigbinv { get; } = new Parameter();
         [SpiceName("lcigbinv"), SpiceInfo("Length dependence of cigbinv")]
-        public Parameter<double> BSIM4lcigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4lcigbinv { get; } = new Parameter();
         [SpiceName("lnigc"), SpiceInfo("Length dependence of nigc")]
-        public Parameter<double> BSIM4lnigc { get; } = new Parameter<double>();
+        public Parameter BSIM4lnigc { get; } = new Parameter();
         [SpiceName("lnigbinv"), SpiceInfo("Length dependence of nigbinv")]
-        public Parameter<double> BSIM4lnigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4lnigbinv { get; } = new Parameter();
         [SpiceName("lnigbacc"), SpiceInfo("Length dependence of nigbacc")]
-        public Parameter<double> BSIM4lnigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4lnigbacc { get; } = new Parameter();
         [SpiceName("lntox"), SpiceInfo("Length dependence of ntox")]
-        public Parameter<double> BSIM4lntox { get; } = new Parameter<double>();
+        public Parameter BSIM4lntox { get; } = new Parameter();
         [SpiceName("leigbinv"), SpiceInfo("Length dependence for eigbinv")]
-        public Parameter<double> BSIM4leigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4leigbinv { get; } = new Parameter();
         [SpiceName("lpigcd"), SpiceInfo("Length dependence for pigcd")]
-        public Parameter<double> BSIM4lpigcd { get; } = new Parameter<double>();
+        public Parameter BSIM4lpigcd { get; } = new Parameter();
         [SpiceName("lpoxedge"), SpiceInfo("Length dependence for poxedge")]
-        public Parameter<double> BSIM4lpoxedge { get; } = new Parameter<double>();
+        public Parameter BSIM4lpoxedge { get; } = new Parameter();
         [SpiceName("lxrcrg1"), SpiceInfo("Length dependence of xrcrg1")]
-        public Parameter<double> BSIM4lxrcrg1 { get; } = new Parameter<double>();
+        public Parameter BSIM4lxrcrg1 { get; } = new Parameter();
         [SpiceName("lxrcrg2"), SpiceInfo("Length dependence of xrcrg2")]
-        public Parameter<double> BSIM4lxrcrg2 { get; } = new Parameter<double>();
+        public Parameter BSIM4lxrcrg2 { get; } = new Parameter();
         [SpiceName("llambda"), SpiceInfo("Length dependence of lambda")]
-        public Parameter<double> BSIM4llambda { get; } = new Parameter<double>();
+        public Parameter BSIM4llambda { get; } = new Parameter();
         [SpiceName("lvtl"), SpiceInfo(" Length dependence of vtl")]
-        public Parameter<double> BSIM4lvtl { get; } = new Parameter<double>();
+        public Parameter BSIM4lvtl { get; } = new Parameter();
         [SpiceName("lxn"), SpiceInfo(" Length dependence of xn")]
-        public Parameter<double> BSIM4lxn { get; } = new Parameter<double>();
+        public Parameter BSIM4lxn { get; } = new Parameter();
         [SpiceName("lvfbsdoff"), SpiceInfo("Length dependence of vfbsdoff")]
-        public Parameter<double> BSIM4lvfbsdoff { get; } = new Parameter<double>();
+        public Parameter BSIM4lvfbsdoff { get; } = new Parameter();
         [SpiceName("ltvfbsdoff"), SpiceInfo("Length dependence of tvfbsdoff")]
-        public Parameter<double> BSIM4ltvfbsdoff { get; } = new Parameter<double>();
+        public Parameter BSIM4ltvfbsdoff { get; } = new Parameter();
         [SpiceName("leu"), SpiceInfo(" Length dependence of eu")]
-        public Parameter<double> BSIM4leu { get; } = new Parameter<double>();
+        public Parameter BSIM4leu { get; } = new Parameter();
         [SpiceName("lucs"), SpiceInfo("Length dependence of lucs")]
-        public Parameter<double> BSIM4lucs { get; } = new Parameter<double>();
+        public Parameter BSIM4lucs { get; } = new Parameter();
         [SpiceName("lvfb"), SpiceInfo("Length dependence of vfb")]
-        public Parameter<double> BSIM4lvfb { get; } = new Parameter<double>();
+        public Parameter BSIM4lvfb { get; } = new Parameter();
         [SpiceName("lcgsl"), SpiceInfo("Length dependence of cgsl")]
-        public Parameter<double> BSIM4lcgsl { get; } = new Parameter<double>();
+        public Parameter BSIM4lcgsl { get; } = new Parameter();
         [SpiceName("lcgdl"), SpiceInfo("Length dependence of cgdl")]
-        public Parameter<double> BSIM4lcgdl { get; } = new Parameter<double>();
+        public Parameter BSIM4lcgdl { get; } = new Parameter();
         [SpiceName("lckappas"), SpiceInfo("Length dependence of ckappas")]
-        public Parameter<double> BSIM4lckappas { get; } = new Parameter<double>();
+        public Parameter BSIM4lckappas { get; } = new Parameter();
         [SpiceName("lckappad"), SpiceInfo("Length dependence of ckappad")]
-        public Parameter<double> BSIM4lckappad { get; } = new Parameter<double>();
+        public Parameter BSIM4lckappad { get; } = new Parameter();
         [SpiceName("lcf"), SpiceInfo("Length dependence of cf")]
-        public Parameter<double> BSIM4lcf { get; } = new Parameter<double>();
+        public Parameter BSIM4lcf { get; } = new Parameter();
         [SpiceName("lclc"), SpiceInfo("Length dependence of clc")]
-        public Parameter<double> BSIM4lclc { get; } = new Parameter<double>();
+        public Parameter BSIM4lclc { get; } = new Parameter();
         [SpiceName("lcle"), SpiceInfo("Length dependence of cle")]
-        public Parameter<double> BSIM4lcle { get; } = new Parameter<double>();
+        public Parameter BSIM4lcle { get; } = new Parameter();
         [SpiceName("lvfbcv"), SpiceInfo("Length dependence of vfbcv")]
-        public Parameter<double> BSIM4lvfbcv { get; } = new Parameter<double>();
+        public Parameter BSIM4lvfbcv { get; } = new Parameter();
         [SpiceName("lacde"), SpiceInfo("Length dependence of acde")]
-        public Parameter<double> BSIM4lacde { get; } = new Parameter<double>();
+        public Parameter BSIM4lacde { get; } = new Parameter();
         [SpiceName("lmoin"), SpiceInfo("Length dependence of moin")]
-        public Parameter<double> BSIM4lmoin { get; } = new Parameter<double>();
+        public Parameter BSIM4lmoin { get; } = new Parameter();
         [SpiceName("lnoff"), SpiceInfo("Length dependence of noff")]
-        public Parameter<double> BSIM4lnoff { get; } = new Parameter<double>();
+        public Parameter BSIM4lnoff { get; } = new Parameter();
         [SpiceName("lvoffcv"), SpiceInfo("Length dependence of voffcv")]
-        public Parameter<double> BSIM4lvoffcv { get; } = new Parameter<double>();
+        public Parameter BSIM4lvoffcv { get; } = new Parameter();
         [SpiceName("wcdsc"), SpiceInfo("Width dependence of cdsc")]
-        public Parameter<double> BSIM4wcdsc { get; } = new Parameter<double>();
+        public Parameter BSIM4wcdsc { get; } = new Parameter();
         [SpiceName("wcdscb"), SpiceInfo("Width dependence of cdscb")]
-        public Parameter<double> BSIM4wcdscb { get; } = new Parameter<double>();
+        public Parameter BSIM4wcdscb { get; } = new Parameter();
         [SpiceName("wcdscd"), SpiceInfo("Width dependence of cdscd")]
-        public Parameter<double> BSIM4wcdscd { get; } = new Parameter<double>();
+        public Parameter BSIM4wcdscd { get; } = new Parameter();
         [SpiceName("wcit"), SpiceInfo("Width dependence of cit")]
-        public Parameter<double> BSIM4wcit { get; } = new Parameter<double>();
+        public Parameter BSIM4wcit { get; } = new Parameter();
         [SpiceName("wnfactor"), SpiceInfo("Width dependence of nfactor")]
-        public Parameter<double> BSIM4wnfactor { get; } = new Parameter<double>();
+        public Parameter BSIM4wnfactor { get; } = new Parameter();
         [SpiceName("wxj"), SpiceInfo("Width dependence of xj")]
-        public Parameter<double> BSIM4wxj { get; } = new Parameter<double>();
+        public Parameter BSIM4wxj { get; } = new Parameter();
         [SpiceName("wvsat"), SpiceInfo("Width dependence of vsat")]
-        public Parameter<double> BSIM4wvsat { get; } = new Parameter<double>();
+        public Parameter BSIM4wvsat { get; } = new Parameter();
         [SpiceName("wa0"), SpiceInfo("Width dependence of a0")]
-        public Parameter<double> BSIM4wa0 { get; } = new Parameter<double>();
+        public Parameter BSIM4wa0 { get; } = new Parameter();
         [SpiceName("wags"), SpiceInfo("Width dependence of ags")]
-        public Parameter<double> BSIM4wags { get; } = new Parameter<double>();
+        public Parameter BSIM4wags { get; } = new Parameter();
         [SpiceName("wa1"), SpiceInfo("Width dependence of a1")]
-        public Parameter<double> BSIM4wa1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wa1 { get; } = new Parameter();
         [SpiceName("wa2"), SpiceInfo("Width dependence of a2")]
-        public Parameter<double> BSIM4wa2 { get; } = new Parameter<double>();
+        public Parameter BSIM4wa2 { get; } = new Parameter();
         [SpiceName("wat"), SpiceInfo("Width dependence of at")]
-        public Parameter<double> BSIM4wat { get; } = new Parameter<double>();
+        public Parameter BSIM4wat { get; } = new Parameter();
         [SpiceName("wketa"), SpiceInfo("Width dependence of keta")]
-        public Parameter<double> BSIM4wketa { get; } = new Parameter<double>();
+        public Parameter BSIM4wketa { get; } = new Parameter();
         [SpiceName("wnsub"), SpiceInfo("Width dependence of nsub")]
-        public Parameter<double> BSIM4wnsub { get; } = new Parameter<double>();
+        public Parameter BSIM4wnsub { get; } = new Parameter();
         [SpiceName("wndep"), SpiceInfo("Width dependence of ndep")]
-        public ParameterMethod<double> BSIM4wndep { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e20 ? v * 1e-6 : v, null);
+        public Parameter BSIM4wndep { get; } = new Parameter(0.0);
         [SpiceName("wnsd"), SpiceInfo("Width dependence of nsd")]
-        public ParameterMethod<double> BSIM4wnsd { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e23 ? v * 1e-6 : v, null);
+        public Parameter BSIM4wnsd { get; } = new Parameter(0.0);
         [SpiceName("wngate"), SpiceInfo("Width dependence of ngate")]
-        public ParameterMethod<double> BSIM4wngate { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e23 ? v * 1e-6 : v, null);
+        public Parameter BSIM4wngate { get; } = new Parameter(0.0);
         [SpiceName("wgamma1"), SpiceInfo("Width dependence of gamma1")]
-        public Parameter<double> BSIM4wgamma1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wgamma1 { get; } = new Parameter();
         [SpiceName("wgamma2"), SpiceInfo("Width dependence of gamma2")]
-        public Parameter<double> BSIM4wgamma2 { get; } = new Parameter<double>();
+        public Parameter BSIM4wgamma2 { get; } = new Parameter();
         [SpiceName("wvbx"), SpiceInfo("Width dependence of vbx")]
-        public Parameter<double> BSIM4wvbx { get; } = new Parameter<double>();
+        public Parameter BSIM4wvbx { get; } = new Parameter();
         [SpiceName("wvbm"), SpiceInfo("Width dependence of vbm")]
-        public Parameter<double> BSIM4wvbm { get; } = new Parameter<double>();
+        public Parameter BSIM4wvbm { get; } = new Parameter();
         [SpiceName("wxt"), SpiceInfo("Width dependence of xt")]
-        public Parameter<double> BSIM4wxt { get; } = new Parameter<double>();
+        public Parameter BSIM4wxt { get; } = new Parameter();
         [SpiceName("wk1"), SpiceInfo("Width dependence of k1")]
-        public Parameter<double> BSIM4wk1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wk1 { get; } = new Parameter();
         [SpiceName("wkt1"), SpiceInfo("Width dependence of kt1")]
-        public Parameter<double> BSIM4wkt1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wkt1 { get; } = new Parameter();
         [SpiceName("wkt1l"), SpiceInfo("Width dependence of kt1l")]
-        public Parameter<double> BSIM4wkt1l { get; } = new Parameter<double>();
+        public Parameter BSIM4wkt1l { get; } = new Parameter();
         [SpiceName("wkt2"), SpiceInfo("Width dependence of kt2")]
-        public Parameter<double> BSIM4wkt2 { get; } = new Parameter<double>();
+        public Parameter BSIM4wkt2 { get; } = new Parameter();
         [SpiceName("wk2"), SpiceInfo("Width dependence of k2")]
-        public Parameter<double> BSIM4wk2 { get; } = new Parameter<double>();
+        public Parameter BSIM4wk2 { get; } = new Parameter();
         [SpiceName("wk3"), SpiceInfo("Width dependence of k3")]
-        public Parameter<double> BSIM4wk3 { get; } = new Parameter<double>();
+        public Parameter BSIM4wk3 { get; } = new Parameter();
         [SpiceName("wk3b"), SpiceInfo("Width dependence of k3b")]
-        public Parameter<double> BSIM4wk3b { get; } = new Parameter<double>();
+        public Parameter BSIM4wk3b { get; } = new Parameter();
         [SpiceName("wlpe0"), SpiceInfo("Width dependence of lpe0")]
-        public Parameter<double> BSIM4wlpe0 { get; } = new Parameter<double>();
+        public Parameter BSIM4wlpe0 { get; } = new Parameter();
         [SpiceName("wlpeb"), SpiceInfo("Width dependence of lpeb")]
-        public Parameter<double> BSIM4wlpeb { get; } = new Parameter<double>();
+        public Parameter BSIM4wlpeb { get; } = new Parameter();
         [SpiceName("wdvtp0"), SpiceInfo("Width dependence of dvtp0")]
-        public Parameter<double> BSIM4wdvtp0 { get; } = new Parameter<double>();
+        public Parameter BSIM4wdvtp0 { get; } = new Parameter();
         [SpiceName("wdvtp1"), SpiceInfo("Width dependence of dvtp1")]
-        public Parameter<double> BSIM4wdvtp1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wdvtp1 { get; } = new Parameter();
         [SpiceName("wdvtp2"), SpiceInfo("Width dependence of dvtp2")]
-        public Parameter<double> BSIM4wdvtp2 { get; } = new Parameter<double>();
+        public Parameter BSIM4wdvtp2 { get; } = new Parameter();
         [SpiceName("wdvtp3"), SpiceInfo("Width dependence of dvtp3")]
-        public Parameter<double> BSIM4wdvtp3 { get; } = new Parameter<double>();
+        public Parameter BSIM4wdvtp3 { get; } = new Parameter();
         [SpiceName("wdvtp4"), SpiceInfo("Width dependence of dvtp4")]
-        public Parameter<double> BSIM4wdvtp4 { get; } = new Parameter<double>();
+        public Parameter BSIM4wdvtp4 { get; } = new Parameter();
         [SpiceName("wdvtp5"), SpiceInfo("Width dependence of dvtp5")]
-        public Parameter<double> BSIM4wdvtp5 { get; } = new Parameter<double>();
+        public Parameter BSIM4wdvtp5 { get; } = new Parameter();
         [SpiceName("ww0"), SpiceInfo("Width dependence of w0")]
-        public Parameter<double> BSIM4ww0 { get; } = new Parameter<double>();
+        public Parameter BSIM4ww0 { get; } = new Parameter();
         [SpiceName("wdvt0"), SpiceInfo("Width dependence of dvt0")]
-        public Parameter<double> BSIM4wdvt0 { get; } = new Parameter<double>();
+        public Parameter BSIM4wdvt0 { get; } = new Parameter();
         [SpiceName("wdvt1"), SpiceInfo("Width dependence of dvt1")]
-        public Parameter<double> BSIM4wdvt1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wdvt1 { get; } = new Parameter();
         [SpiceName("wdvt2"), SpiceInfo("Width dependence of dvt2")]
-        public Parameter<double> BSIM4wdvt2 { get; } = new Parameter<double>();
+        public Parameter BSIM4wdvt2 { get; } = new Parameter();
         [SpiceName("wdvt0w"), SpiceInfo("Width dependence of dvt0w")]
-        public Parameter<double> BSIM4wdvt0w { get; } = new Parameter<double>();
+        public Parameter BSIM4wdvt0w { get; } = new Parameter();
         [SpiceName("wdvt1w"), SpiceInfo("Width dependence of dvt1w")]
-        public Parameter<double> BSIM4wdvt1w { get; } = new Parameter<double>();
+        public Parameter BSIM4wdvt1w { get; } = new Parameter();
         [SpiceName("wdvt2w"), SpiceInfo("Width dependence of dvt2w")]
-        public Parameter<double> BSIM4wdvt2w { get; } = new Parameter<double>();
+        public Parameter BSIM4wdvt2w { get; } = new Parameter();
         [SpiceName("wdrout"), SpiceInfo("Width dependence of drout")]
-        public Parameter<double> BSIM4wdrout { get; } = new Parameter<double>();
+        public Parameter BSIM4wdrout { get; } = new Parameter();
         [SpiceName("wdsub"), SpiceInfo("Width dependence of dsub")]
-        public Parameter<double> BSIM4wdsub { get; } = new Parameter<double>();
+        public Parameter BSIM4wdsub { get; } = new Parameter();
         [SpiceName("wvth0"), SpiceName("wvtho"), SpiceInfo("Width dependence of vto")]
-        public Parameter<double> BSIM4wvth0 { get; } = new Parameter<double>();
+        public Parameter BSIM4wvth0 { get; } = new Parameter();
         [SpiceName("wua"), SpiceInfo("Width dependence of ua")]
-        public Parameter<double> BSIM4wua { get; } = new Parameter<double>();
+        public Parameter BSIM4wua { get; } = new Parameter();
         [SpiceName("wua1"), SpiceInfo("Width dependence of ua1")]
-        public Parameter<double> BSIM4wua1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wua1 { get; } = new Parameter();
         [SpiceName("wub"), SpiceInfo("Width dependence of ub")]
-        public Parameter<double> BSIM4wub { get; } = new Parameter<double>();
+        public Parameter BSIM4wub { get; } = new Parameter();
         [SpiceName("wub1"), SpiceInfo("Width dependence of ub1")]
-        public Parameter<double> BSIM4wub1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wub1 { get; } = new Parameter();
         [SpiceName("wuc"), SpiceInfo("Width dependence of uc")]
-        public Parameter<double> BSIM4wuc { get; } = new Parameter<double>();
+        public Parameter BSIM4wuc { get; } = new Parameter();
         [SpiceName("wuc1"), SpiceInfo("Width dependence of uc1")]
-        public Parameter<double> BSIM4wuc1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wuc1 { get; } = new Parameter();
         [SpiceName("wu0"), SpiceInfo("Width dependence of u0")]
-        public Parameter<double> BSIM4wu0 { get; } = new Parameter<double>();
+        public Parameter BSIM4wu0 { get; } = new Parameter();
         [SpiceName("wute"), SpiceInfo("Width dependence of ute")]
-        public Parameter<double> BSIM4wute { get; } = new Parameter<double>();
+        public Parameter BSIM4wute { get; } = new Parameter();
         [SpiceName("wucste"), SpiceInfo("Width dependence of ucste")]
-        public Parameter<double> BSIM4wucste { get; } = new Parameter<double>();
+        public Parameter BSIM4wucste { get; } = new Parameter();
         [SpiceName("wvoff"), SpiceInfo("Width dependence of voff")]
-        public Parameter<double> BSIM4wvoff { get; } = new Parameter<double>();
+        public Parameter BSIM4wvoff { get; } = new Parameter();
         [SpiceName("wtvoff"), SpiceInfo("Width dependence of tvoff")]
-        public Parameter<double> BSIM4wtvoff { get; } = new Parameter<double>();
+        public Parameter BSIM4wtvoff { get; } = new Parameter();
         [SpiceName("wtnfactor"), SpiceInfo("Width dependence of tnfactor")]
-        public Parameter<double> BSIM4wtnfactor { get; } = new Parameter<double>();
+        public Parameter BSIM4wtnfactor { get; } = new Parameter();
         [SpiceName("wteta0"), SpiceInfo("Width dependence of teta0")]
-        public Parameter<double> BSIM4wteta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4wteta0 { get; } = new Parameter();
         [SpiceName("wtvoffcv"), SpiceInfo("Width dependence of tvoffcv")]
-        public Parameter<double> BSIM4wtvoffcv { get; } = new Parameter<double>();
+        public Parameter BSIM4wtvoffcv { get; } = new Parameter();
         [SpiceName("wminv"), SpiceInfo("Width dependence of minv")]
-        public Parameter<double> BSIM4wminv { get; } = new Parameter<double>();
+        public Parameter BSIM4wminv { get; } = new Parameter();
         [SpiceName("wminvcv"), SpiceInfo("Width dependence of minvcv")]
-        public Parameter<double> BSIM4wminvcv { get; } = new Parameter<double>();
+        public Parameter BSIM4wminvcv { get; } = new Parameter();
         [SpiceName("wfprout"), SpiceInfo("Width dependence of pdiblcb")]
-        public Parameter<double> BSIM4wfprout { get; } = new Parameter<double>();
+        public Parameter BSIM4wfprout { get; } = new Parameter();
         [SpiceName("wpdits"), SpiceInfo("Width dependence of pdits")]
-        public Parameter<double> BSIM4wpdits { get; } = new Parameter<double>();
+        public Parameter BSIM4wpdits { get; } = new Parameter();
         [SpiceName("wpditsd"), SpiceInfo("Width dependence of pditsd")]
-        public Parameter<double> BSIM4wpditsd { get; } = new Parameter<double>();
+        public Parameter BSIM4wpditsd { get; } = new Parameter();
         [SpiceName("wdelta"), SpiceInfo("Width dependence of delta")]
-        public Parameter<double> BSIM4wdelta { get; } = new Parameter<double>();
+        public Parameter BSIM4wdelta { get; } = new Parameter();
         [SpiceName("wrdsw"), SpiceInfo("Width dependence of rdsw ")]
-        public Parameter<double> BSIM4wrdsw { get; } = new Parameter<double>();
+        public Parameter BSIM4wrdsw { get; } = new Parameter();
         [SpiceName("wrdw"), SpiceInfo("Width dependence of rdw")]
-        public Parameter<double> BSIM4wrdw { get; } = new Parameter<double>();
+        public Parameter BSIM4wrdw { get; } = new Parameter();
         [SpiceName("wrsw"), SpiceInfo("Width dependence of rsw")]
-        public Parameter<double> BSIM4wrsw { get; } = new Parameter<double>();
+        public Parameter BSIM4wrsw { get; } = new Parameter();
         [SpiceName("wprwb"), SpiceInfo("Width dependence of prwb ")]
-        public Parameter<double> BSIM4wprwb { get; } = new Parameter<double>();
+        public Parameter BSIM4wprwb { get; } = new Parameter();
         [SpiceName("wprwg"), SpiceInfo("Width dependence of prwg ")]
-        public Parameter<double> BSIM4wprwg { get; } = new Parameter<double>();
+        public Parameter BSIM4wprwg { get; } = new Parameter();
         [SpiceName("wprt"), SpiceInfo("Width dependence of prt")]
-        public Parameter<double> BSIM4wprt { get; } = new Parameter<double>();
+        public Parameter BSIM4wprt { get; } = new Parameter();
         [SpiceName("weta0"), SpiceInfo("Width dependence of eta0")]
-        public Parameter<double> BSIM4weta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4weta0 { get; } = new Parameter();
         [SpiceName("wetab"), SpiceInfo("Width dependence of etab")]
-        public Parameter<double> BSIM4wetab { get; } = new Parameter<double>();
+        public Parameter BSIM4wetab { get; } = new Parameter();
         [SpiceName("wpclm"), SpiceInfo("Width dependence of pclm")]
-        public Parameter<double> BSIM4wpclm { get; } = new Parameter<double>();
+        public Parameter BSIM4wpclm { get; } = new Parameter();
         [SpiceName("wpdiblc1"), SpiceInfo("Width dependence of pdiblc1")]
-        public Parameter<double> BSIM4wpdibl1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wpdibl1 { get; } = new Parameter();
         [SpiceName("wpdiblc2"), SpiceInfo("Width dependence of pdiblc2")]
-        public Parameter<double> BSIM4wpdibl2 { get; } = new Parameter<double>();
+        public Parameter BSIM4wpdibl2 { get; } = new Parameter();
         [SpiceName("wpdiblcb"), SpiceInfo("Width dependence of pdiblcb")]
-        public Parameter<double> BSIM4wpdiblb { get; } = new Parameter<double>();
+        public Parameter BSIM4wpdiblb { get; } = new Parameter();
         [SpiceName("wpscbe1"), SpiceInfo("Width dependence of pscbe1")]
-        public Parameter<double> BSIM4wpscbe1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wpscbe1 { get; } = new Parameter();
         [SpiceName("wpscbe2"), SpiceInfo("Width dependence of pscbe2")]
-        public Parameter<double> BSIM4wpscbe2 { get; } = new Parameter<double>();
+        public Parameter BSIM4wpscbe2 { get; } = new Parameter();
         [SpiceName("wpvag"), SpiceInfo("Width dependence of pvag")]
-        public Parameter<double> BSIM4wpvag { get; } = new Parameter<double>();
+        public Parameter BSIM4wpvag { get; } = new Parameter();
         [SpiceName("wwr"), SpiceInfo("Width dependence of wr")]
-        public Parameter<double> BSIM4wwr { get; } = new Parameter<double>();
+        public Parameter BSIM4wwr { get; } = new Parameter();
         [SpiceName("wdwg"), SpiceInfo("Width dependence of dwg")]
-        public Parameter<double> BSIM4wdwg { get; } = new Parameter<double>();
+        public Parameter BSIM4wdwg { get; } = new Parameter();
         [SpiceName("wdwb"), SpiceInfo("Width dependence of dwb")]
-        public Parameter<double> BSIM4wdwb { get; } = new Parameter<double>();
+        public Parameter BSIM4wdwb { get; } = new Parameter();
         [SpiceName("wb0"), SpiceInfo("Width dependence of b0")]
-        public Parameter<double> BSIM4wb0 { get; } = new Parameter<double>();
+        public Parameter BSIM4wb0 { get; } = new Parameter();
         [SpiceName("wb1"), SpiceInfo("Width dependence of b1")]
-        public Parameter<double> BSIM4wb1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wb1 { get; } = new Parameter();
         [SpiceName("walpha0"), SpiceInfo("Width dependence of alpha0")]
-        public Parameter<double> BSIM4walpha0 { get; } = new Parameter<double>();
+        public Parameter BSIM4walpha0 { get; } = new Parameter();
         [SpiceName("walpha1"), SpiceInfo("Width dependence of alpha1")]
-        public Parameter<double> BSIM4walpha1 { get; } = new Parameter<double>();
+        public Parameter BSIM4walpha1 { get; } = new Parameter();
         [SpiceName("wbeta0"), SpiceInfo("Width dependence of beta0")]
-        public Parameter<double> BSIM4wbeta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4wbeta0 { get; } = new Parameter();
         [SpiceName("wphin"), SpiceInfo("Width dependence of phin")]
-        public Parameter<double> BSIM4wphin { get; } = new Parameter<double>();
+        public Parameter BSIM4wphin { get; } = new Parameter();
         [SpiceName("wagidl"), SpiceInfo("Width dependence of agidl")]
-        public Parameter<double> BSIM4wagidl { get; } = new Parameter<double>();
+        public Parameter BSIM4wagidl { get; } = new Parameter();
         [SpiceName("wbgidl"), SpiceInfo("Width dependence of bgidl")]
-        public Parameter<double> BSIM4wbgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4wbgidl { get; } = new Parameter();
         [SpiceName("wcgidl"), SpiceInfo("Width dependence of cgidl")]
-        public Parameter<double> BSIM4wcgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4wcgidl { get; } = new Parameter();
         [SpiceName("wegidl"), SpiceInfo("Width dependence of egidl")]
-        public Parameter<double> BSIM4wegidl { get; } = new Parameter<double>();
+        public Parameter BSIM4wegidl { get; } = new Parameter();
         [SpiceName("wfgidl"), SpiceInfo("Width dependence of fgidl")]
-        public Parameter<double> BSIM4wfgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4wfgidl { get; } = new Parameter();
         [SpiceName("wkgidl"), SpiceInfo("Width dependence of kgidl")]
-        public Parameter<double> BSIM4wkgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4wkgidl { get; } = new Parameter();
         [SpiceName("wrgidl"), SpiceInfo("Width dependence of rgidl")]
-        public Parameter<double> BSIM4wrgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4wrgidl { get; } = new Parameter();
         [SpiceName("wagisl"), SpiceInfo("Width dependence of agisl")]
-        public Parameter<double> BSIM4wagisl { get; } = new Parameter<double>();
+        public Parameter BSIM4wagisl { get; } = new Parameter();
         [SpiceName("wbgisl"), SpiceInfo("Width dependence of bgisl")]
-        public Parameter<double> BSIM4wbgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4wbgisl { get; } = new Parameter();
         [SpiceName("wcgisl"), SpiceInfo("Width dependence of cgisl")]
-        public Parameter<double> BSIM4wcgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4wcgisl { get; } = new Parameter();
         [SpiceName("wegisl"), SpiceInfo("Width dependence of egisl")]
-        public Parameter<double> BSIM4wegisl { get; } = new Parameter<double>();
+        public Parameter BSIM4wegisl { get; } = new Parameter();
         [SpiceName("wfgisl"), SpiceInfo("Width dependence of fgisl")]
-        public Parameter<double> BSIM4wfgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4wfgisl { get; } = new Parameter();
         [SpiceName("wkgisl"), SpiceInfo("Width dependence of kgisl")]
-        public Parameter<double> BSIM4wkgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4wkgisl { get; } = new Parameter();
         [SpiceName("wrgisl"), SpiceInfo("Width dependence of rgisl")]
-        public Parameter<double> BSIM4wrgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4wrgisl { get; } = new Parameter();
         [SpiceName("waigc"), SpiceInfo("Width dependence of aigc")]
-        public Parameter<double> BSIM4waigc { get; } = new Parameter<double>();
+        public Parameter BSIM4waigc { get; } = new Parameter();
         [SpiceName("wbigc"), SpiceInfo("Width dependence of bigc")]
-        public Parameter<double> BSIM4wbigc { get; } = new Parameter<double>();
+        public Parameter BSIM4wbigc { get; } = new Parameter();
         [SpiceName("wcigc"), SpiceInfo("Width dependence of cigc")]
-        public Parameter<double> BSIM4wcigc { get; } = new Parameter<double>();
+        public Parameter BSIM4wcigc { get; } = new Parameter();
         [SpiceName("waigsd"), SpiceInfo("Width dependence of aigsd")]
-        public Parameter<double> BSIM4waigsd { get; } = new Parameter<double>();
+        public Parameter BSIM4waigsd { get; } = new Parameter();
         [SpiceName("wbigsd"), SpiceInfo("Width dependence of bigsd")]
-        public Parameter<double> BSIM4wbigsd { get; } = new Parameter<double>();
+        public Parameter BSIM4wbigsd { get; } = new Parameter();
         [SpiceName("wcigsd"), SpiceInfo("Width dependence of cigsd")]
-        public Parameter<double> BSIM4wcigsd { get; } = new Parameter<double>();
+        public Parameter BSIM4wcigsd { get; } = new Parameter();
         [SpiceName("waigs"), SpiceInfo("Width dependence of aigs")]
-        public Parameter<double> BSIM4waigs { get; } = new Parameter<double>();
+        public Parameter BSIM4waigs { get; } = new Parameter();
         [SpiceName("wbigs"), SpiceInfo("Width dependence of bigs")]
-        public Parameter<double> BSIM4wbigs { get; } = new Parameter<double>();
+        public Parameter BSIM4wbigs { get; } = new Parameter();
         [SpiceName("wcigs"), SpiceInfo("Width dependence of cigs")]
-        public Parameter<double> BSIM4wcigs { get; } = new Parameter<double>();
+        public Parameter BSIM4wcigs { get; } = new Parameter();
         [SpiceName("waigd"), SpiceInfo("Width dependence of aigd")]
-        public Parameter<double> BSIM4waigd { get; } = new Parameter<double>();
+        public Parameter BSIM4waigd { get; } = new Parameter();
         [SpiceName("wbigd"), SpiceInfo("Width dependence of bigd")]
-        public Parameter<double> BSIM4wbigd { get; } = new Parameter<double>();
+        public Parameter BSIM4wbigd { get; } = new Parameter();
         [SpiceName("wcigd"), SpiceInfo("Width dependence of cigd")]
-        public Parameter<double> BSIM4wcigd { get; } = new Parameter<double>();
+        public Parameter BSIM4wcigd { get; } = new Parameter();
         [SpiceName("waigbacc"), SpiceInfo("Width dependence of aigbacc")]
-        public Parameter<double> BSIM4waigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4waigbacc { get; } = new Parameter();
         [SpiceName("wbigbacc"), SpiceInfo("Width dependence of bigbacc")]
-        public Parameter<double> BSIM4wbigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4wbigbacc { get; } = new Parameter();
         [SpiceName("wcigbacc"), SpiceInfo("Width dependence of cigbacc")]
-        public Parameter<double> BSIM4wcigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4wcigbacc { get; } = new Parameter();
         [SpiceName("waigbinv"), SpiceInfo("Width dependence of aigbinv")]
-        public Parameter<double> BSIM4waigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4waigbinv { get; } = new Parameter();
         [SpiceName("wbigbinv"), SpiceInfo("Width dependence of bigbinv")]
-        public Parameter<double> BSIM4wbigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4wbigbinv { get; } = new Parameter();
         [SpiceName("wcigbinv"), SpiceInfo("Width dependence of cigbinv")]
-        public Parameter<double> BSIM4wcigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4wcigbinv { get; } = new Parameter();
         [SpiceName("wnigc"), SpiceInfo("Width dependence of nigc")]
-        public Parameter<double> BSIM4wnigc { get; } = new Parameter<double>();
+        public Parameter BSIM4wnigc { get; } = new Parameter();
         [SpiceName("wnigbinv"), SpiceInfo("Width dependence of nigbinv")]
-        public Parameter<double> BSIM4wnigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4wnigbinv { get; } = new Parameter();
         [SpiceName("wnigbacc"), SpiceInfo("Width dependence of nigbacc")]
-        public Parameter<double> BSIM4wnigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4wnigbacc { get; } = new Parameter();
         [SpiceName("wntox"), SpiceInfo("Width dependence of ntox")]
-        public Parameter<double> BSIM4wntox { get; } = new Parameter<double>();
+        public Parameter BSIM4wntox { get; } = new Parameter();
         [SpiceName("weigbinv"), SpiceInfo("Width dependence for eigbinv")]
-        public Parameter<double> BSIM4weigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4weigbinv { get; } = new Parameter();
         [SpiceName("wpigcd"), SpiceInfo("Width dependence for pigcd")]
-        public Parameter<double> BSIM4wpigcd { get; } = new Parameter<double>();
+        public Parameter BSIM4wpigcd { get; } = new Parameter();
         [SpiceName("wpoxedge"), SpiceInfo("Width dependence for poxedge")]
-        public Parameter<double> BSIM4wpoxedge { get; } = new Parameter<double>();
+        public Parameter BSIM4wpoxedge { get; } = new Parameter();
         [SpiceName("wxrcrg1"), SpiceInfo("Width dependence of xrcrg1")]
-        public Parameter<double> BSIM4wxrcrg1 { get; } = new Parameter<double>();
+        public Parameter BSIM4wxrcrg1 { get; } = new Parameter();
         [SpiceName("wxrcrg2"), SpiceInfo("Width dependence of xrcrg2")]
-        public Parameter<double> BSIM4wxrcrg2 { get; } = new Parameter<double>();
+        public Parameter BSIM4wxrcrg2 { get; } = new Parameter();
         [SpiceName("wlambda"), SpiceInfo("Width dependence of lambda")]
-        public Parameter<double> BSIM4wlambda { get; } = new Parameter<double>();
+        public Parameter BSIM4wlambda { get; } = new Parameter();
         [SpiceName("wvtl"), SpiceInfo("Width dependence of vtl")]
-        public Parameter<double> BSIM4wvtl { get; } = new Parameter<double>();
+        public Parameter BSIM4wvtl { get; } = new Parameter();
         [SpiceName("wxn"), SpiceInfo("Width dependence of xn")]
-        public Parameter<double> BSIM4wxn { get; } = new Parameter<double>();
+        public Parameter BSIM4wxn { get; } = new Parameter();
         [SpiceName("wvfbsdoff"), SpiceInfo("Width dependence of vfbsdoff")]
-        public Parameter<double> BSIM4wvfbsdoff { get; } = new Parameter<double>();
+        public Parameter BSIM4wvfbsdoff { get; } = new Parameter();
         [SpiceName("wtvfbsdoff"), SpiceInfo("Width dependence of tvfbsdoff")]
-        public Parameter<double> BSIM4wtvfbsdoff { get; } = new Parameter<double>();
+        public Parameter BSIM4wtvfbsdoff { get; } = new Parameter();
         [SpiceName("weu"), SpiceInfo("Width dependence of eu")]
-        public Parameter<double> BSIM4weu { get; } = new Parameter<double>();
+        public Parameter BSIM4weu { get; } = new Parameter();
         [SpiceName("wucs"), SpiceInfo("Width dependence of ucs")]
-        public Parameter<double> BSIM4wucs { get; } = new Parameter<double>();
+        public Parameter BSIM4wucs { get; } = new Parameter();
         [SpiceName("wvfb"), SpiceInfo("Width dependence of vfb")]
-        public Parameter<double> BSIM4wvfb { get; } = new Parameter<double>();
+        public Parameter BSIM4wvfb { get; } = new Parameter();
         [SpiceName("wcgsl"), SpiceInfo("Width dependence of cgsl")]
-        public Parameter<double> BSIM4wcgsl { get; } = new Parameter<double>();
+        public Parameter BSIM4wcgsl { get; } = new Parameter();
         [SpiceName("wcgdl"), SpiceInfo("Width dependence of cgdl")]
-        public Parameter<double> BSIM4wcgdl { get; } = new Parameter<double>();
+        public Parameter BSIM4wcgdl { get; } = new Parameter();
         [SpiceName("wckappas"), SpiceInfo("Width dependence of ckappas")]
-        public Parameter<double> BSIM4wckappas { get; } = new Parameter<double>();
+        public Parameter BSIM4wckappas { get; } = new Parameter();
         [SpiceName("wckappad"), SpiceInfo("Width dependence of ckappad")]
-        public Parameter<double> BSIM4wckappad { get; } = new Parameter<double>();
+        public Parameter BSIM4wckappad { get; } = new Parameter();
         [SpiceName("wcf"), SpiceInfo("Width dependence of cf")]
-        public Parameter<double> BSIM4wcf { get; } = new Parameter<double>();
+        public Parameter BSIM4wcf { get; } = new Parameter();
         [SpiceName("wclc"), SpiceInfo("Width dependence of clc")]
-        public Parameter<double> BSIM4wclc { get; } = new Parameter<double>();
+        public Parameter BSIM4wclc { get; } = new Parameter();
         [SpiceName("wcle"), SpiceInfo("Width dependence of cle")]
-        public Parameter<double> BSIM4wcle { get; } = new Parameter<double>();
+        public Parameter BSIM4wcle { get; } = new Parameter();
         [SpiceName("wvfbcv"), SpiceInfo("Width dependence of vfbcv")]
-        public Parameter<double> BSIM4wvfbcv { get; } = new Parameter<double>();
+        public Parameter BSIM4wvfbcv { get; } = new Parameter();
         [SpiceName("wacde"), SpiceInfo("Width dependence of acde")]
-        public Parameter<double> BSIM4wacde { get; } = new Parameter<double>();
+        public Parameter BSIM4wacde { get; } = new Parameter();
         [SpiceName("wmoin"), SpiceInfo("Width dependence of moin")]
-        public Parameter<double> BSIM4wmoin { get; } = new Parameter<double>();
+        public Parameter BSIM4wmoin { get; } = new Parameter();
         [SpiceName("wnoff"), SpiceInfo("Width dependence of noff")]
-        public Parameter<double> BSIM4wnoff { get; } = new Parameter<double>();
+        public Parameter BSIM4wnoff { get; } = new Parameter();
         [SpiceName("wvoffcv"), SpiceInfo("Width dependence of voffcv")]
-        public Parameter<double> BSIM4wvoffcv { get; } = new Parameter<double>();
+        public Parameter BSIM4wvoffcv { get; } = new Parameter();
         [SpiceName("pcdsc"), SpiceInfo("Cross-term dependence of cdsc")]
-        public Parameter<double> BSIM4pcdsc { get; } = new Parameter<double>();
+        public Parameter BSIM4pcdsc { get; } = new Parameter();
         [SpiceName("pcdscb"), SpiceInfo("Cross-term dependence of cdscb")]
-        public Parameter<double> BSIM4pcdscb { get; } = new Parameter<double>();
+        public Parameter BSIM4pcdscb { get; } = new Parameter();
         [SpiceName("pcdscd"), SpiceInfo("Cross-term dependence of cdscd")]
-        public Parameter<double> BSIM4pcdscd { get; } = new Parameter<double>();
+        public Parameter BSIM4pcdscd { get; } = new Parameter();
         [SpiceName("pcit"), SpiceInfo("Cross-term dependence of cit")]
-        public Parameter<double> BSIM4pcit { get; } = new Parameter<double>();
+        public Parameter BSIM4pcit { get; } = new Parameter();
         [SpiceName("pnfactor"), SpiceInfo("Cross-term dependence of nfactor")]
-        public Parameter<double> BSIM4pnfactor { get; } = new Parameter<double>();
+        public Parameter BSIM4pnfactor { get; } = new Parameter();
         [SpiceName("pxj"), SpiceInfo("Cross-term dependence of xj")]
-        public Parameter<double> BSIM4pxj { get; } = new Parameter<double>();
+        public Parameter BSIM4pxj { get; } = new Parameter();
         [SpiceName("pvsat"), SpiceInfo("Cross-term dependence of vsat")]
-        public Parameter<double> BSIM4pvsat { get; } = new Parameter<double>();
+        public Parameter BSIM4pvsat { get; } = new Parameter();
         [SpiceName("pa0"), SpiceInfo("Cross-term dependence of a0")]
-        public Parameter<double> BSIM4pa0 { get; } = new Parameter<double>();
+        public Parameter BSIM4pa0 { get; } = new Parameter();
         [SpiceName("pags"), SpiceInfo("Cross-term dependence of ags")]
-        public Parameter<double> BSIM4pags { get; } = new Parameter<double>();
+        public Parameter BSIM4pags { get; } = new Parameter();
         [SpiceName("pa1"), SpiceInfo("Cross-term dependence of a1")]
-        public Parameter<double> BSIM4pa1 { get; } = new Parameter<double>();
+        public Parameter BSIM4pa1 { get; } = new Parameter();
         [SpiceName("pa2"), SpiceInfo("Cross-term dependence of a2")]
-        public Parameter<double> BSIM4pa2 { get; } = new Parameter<double>();
+        public Parameter BSIM4pa2 { get; } = new Parameter();
         [SpiceName("pat"), SpiceInfo("Cross-term dependence of at")]
-        public Parameter<double> BSIM4pat { get; } = new Parameter<double>();
+        public Parameter BSIM4pat { get; } = new Parameter();
         [SpiceName("pketa"), SpiceInfo("Cross-term dependence of keta")]
-        public Parameter<double> BSIM4pketa { get; } = new Parameter<double>();
+        public Parameter BSIM4pketa { get; } = new Parameter();
         [SpiceName("pnsub"), SpiceInfo("Cross-term dependence of nsub")]
-        public Parameter<double> BSIM4pnsub { get; } = new Parameter<double>();
+        public Parameter BSIM4pnsub { get; } = new Parameter();
         [SpiceName("pndep"), SpiceInfo("Cross-term dependence of ndep")]
-        public ParameterMethod<double> BSIM4pndep { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e20 ? v * 1e-6 : v, null);
+        public Parameter BSIM4pndep { get; } = new Parameter(0.0);
         [SpiceName("pnsd"), SpiceInfo("Cross-term dependence of nsd")]
-        public ParameterMethod<double> BSIM4pnsd { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e23 ? v * 1e-6 : v, null);
+        public Parameter BSIM4pnsd { get; } = new Parameter(0.0);
         [SpiceName("pngate"), SpiceInfo("Cross-term dependence of ngate")]
-        public ParameterMethod<double> BSIM4pngate { get; } = new ParameterMethod<double>(0.0, (double v) => v > 1.0e23 ? v * 1e-6 : v, null);
+        public Parameter BSIM4pngate { get; } = new Parameter(0.0);
         [SpiceName("pgamma1"), SpiceInfo("Cross-term dependence of gamma1")]
-        public Parameter<double> BSIM4pgamma1 { get; } = new Parameter<double>();
+        public Parameter BSIM4pgamma1 { get; } = new Parameter();
         [SpiceName("pgamma2"), SpiceInfo("Cross-term dependence of gamma2")]
-        public Parameter<double> BSIM4pgamma2 { get; } = new Parameter<double>();
+        public Parameter BSIM4pgamma2 { get; } = new Parameter();
         [SpiceName("pvbx"), SpiceInfo("Cross-term dependence of vbx")]
-        public Parameter<double> BSIM4pvbx { get; } = new Parameter<double>();
+        public Parameter BSIM4pvbx { get; } = new Parameter();
         [SpiceName("pvbm"), SpiceInfo("Cross-term dependence of vbm")]
-        public Parameter<double> BSIM4pvbm { get; } = new Parameter<double>();
+        public Parameter BSIM4pvbm { get; } = new Parameter();
         [SpiceName("pxt"), SpiceInfo("Cross-term dependence of xt")]
-        public Parameter<double> BSIM4pxt { get; } = new Parameter<double>();
+        public Parameter BSIM4pxt { get; } = new Parameter();
         [SpiceName("pk1"), SpiceInfo("Cross-term dependence of k1")]
-        public Parameter<double> BSIM4pk1 { get; } = new Parameter<double>();
+        public Parameter BSIM4pk1 { get; } = new Parameter();
         [SpiceName("pkt1"), SpiceInfo("Cross-term dependence of kt1")]
-        public Parameter<double> BSIM4pkt1 { get; } = new Parameter<double>();
+        public Parameter BSIM4pkt1 { get; } = new Parameter();
         [SpiceName("pkt1l"), SpiceInfo("Cross-term dependence of kt1l")]
-        public Parameter<double> BSIM4pkt1l { get; } = new Parameter<double>();
+        public Parameter BSIM4pkt1l { get; } = new Parameter();
         [SpiceName("pkt2"), SpiceInfo("Cross-term dependence of kt2")]
-        public Parameter<double> BSIM4pkt2 { get; } = new Parameter<double>();
+        public Parameter BSIM4pkt2 { get; } = new Parameter();
         [SpiceName("pk2"), SpiceInfo("Cross-term dependence of k2")]
-        public Parameter<double> BSIM4pk2 { get; } = new Parameter<double>();
+        public Parameter BSIM4pk2 { get; } = new Parameter();
         [SpiceName("pk3"), SpiceInfo("Cross-term dependence of k3")]
-        public Parameter<double> BSIM4pk3 { get; } = new Parameter<double>();
+        public Parameter BSIM4pk3 { get; } = new Parameter();
         [SpiceName("pk3b"), SpiceInfo("Cross-term dependence of k3b")]
-        public Parameter<double> BSIM4pk3b { get; } = new Parameter<double>();
+        public Parameter BSIM4pk3b { get; } = new Parameter();
         [SpiceName("plpe0"), SpiceInfo("Cross-term dependence of lpe0")]
-        public Parameter<double> BSIM4plpe0 { get; } = new Parameter<double>();
+        public Parameter BSIM4plpe0 { get; } = new Parameter();
         [SpiceName("plpeb"), SpiceInfo("Cross-term dependence of lpeb")]
-        public Parameter<double> BSIM4plpeb { get; } = new Parameter<double>();
+        public Parameter BSIM4plpeb { get; } = new Parameter();
         [SpiceName("pdvtp0"), SpiceInfo("Cross-term dependence of dvtp0")]
-        public Parameter<double> BSIM4pdvtp0 { get; } = new Parameter<double>();
+        public Parameter BSIM4pdvtp0 { get; } = new Parameter();
         [SpiceName("pdvtp1"), SpiceInfo("Cross-term dependence of dvtp1")]
-        public Parameter<double> BSIM4pdvtp1 { get; } = new Parameter<double>();
+        public Parameter BSIM4pdvtp1 { get; } = new Parameter();
         [SpiceName("pdvtp2"), SpiceInfo("Cross-term dependence of dvtp2")]
-        public Parameter<double> BSIM4pdvtp2 { get; } = new Parameter<double>();
+        public Parameter BSIM4pdvtp2 { get; } = new Parameter();
         [SpiceName("pdvtp3"), SpiceInfo("Cross-term dependence of dvtp3")]
-        public Parameter<double> BSIM4pdvtp3 { get; } = new Parameter<double>();
+        public Parameter BSIM4pdvtp3 { get; } = new Parameter();
         [SpiceName("pdvtp4"), SpiceInfo("Cross-term dependence of dvtp4")]
-        public Parameter<double> BSIM4pdvtp4 { get; } = new Parameter<double>();
+        public Parameter BSIM4pdvtp4 { get; } = new Parameter();
         [SpiceName("pdvtp5"), SpiceInfo("Cross-term dependence of dvtp5")]
-        public Parameter<double> BSIM4pdvtp5 { get; } = new Parameter<double>();
+        public Parameter BSIM4pdvtp5 { get; } = new Parameter();
         [SpiceName("pw0"), SpiceInfo("Cross-term dependence of w0")]
-        public Parameter<double> BSIM4pw0 { get; } = new Parameter<double>();
+        public Parameter BSIM4pw0 { get; } = new Parameter();
         [SpiceName("pdvt0"), SpiceInfo("Cross-term dependence of dvt0")]
-        public Parameter<double> BSIM4pdvt0 { get; } = new Parameter<double>();
+        public Parameter BSIM4pdvt0 { get; } = new Parameter();
         [SpiceName("pdvt1"), SpiceInfo("Cross-term dependence of dvt1")]
-        public Parameter<double> BSIM4pdvt1 { get; } = new Parameter<double>();
+        public Parameter BSIM4pdvt1 { get; } = new Parameter();
         [SpiceName("pdvt2"), SpiceInfo("Cross-term dependence of dvt2")]
-        public Parameter<double> BSIM4pdvt2 { get; } = new Parameter<double>();
+        public Parameter BSIM4pdvt2 { get; } = new Parameter();
         [SpiceName("pdvt0w"), SpiceInfo("Cross-term dependence of dvt0w")]
-        public Parameter<double> BSIM4pdvt0w { get; } = new Parameter<double>();
+        public Parameter BSIM4pdvt0w { get; } = new Parameter();
         [SpiceName("pdvt1w"), SpiceInfo("Cross-term dependence of dvt1w")]
-        public Parameter<double> BSIM4pdvt1w { get; } = new Parameter<double>();
+        public Parameter BSIM4pdvt1w { get; } = new Parameter();
         [SpiceName("pdvt2w"), SpiceInfo("Cross-term dependence of dvt2w")]
-        public Parameter<double> BSIM4pdvt2w { get; } = new Parameter<double>();
+        public Parameter BSIM4pdvt2w { get; } = new Parameter();
         [SpiceName("pdrout"), SpiceInfo("Cross-term dependence of drout")]
-        public Parameter<double> BSIM4pdrout { get; } = new Parameter<double>();
+        public Parameter BSIM4pdrout { get; } = new Parameter();
         [SpiceName("pdsub"), SpiceInfo("Cross-term dependence of dsub")]
-        public Parameter<double> BSIM4pdsub { get; } = new Parameter<double>();
+        public Parameter BSIM4pdsub { get; } = new Parameter();
         [SpiceName("pvth0"), SpiceName("pvtho"), SpiceInfo("Cross-term dependence of vto")]
-        public Parameter<double> BSIM4pvth0 { get; } = new Parameter<double>();
+        public Parameter BSIM4pvth0 { get; } = new Parameter();
         [SpiceName("pua"), SpiceInfo("Cross-term dependence of ua")]
-        public Parameter<double> BSIM4pua { get; } = new Parameter<double>();
+        public Parameter BSIM4pua { get; } = new Parameter();
         [SpiceName("pua1"), SpiceInfo("Cross-term dependence of ua1")]
-        public Parameter<double> BSIM4pua1 { get; } = new Parameter<double>();
+        public Parameter BSIM4pua1 { get; } = new Parameter();
         [SpiceName("pub"), SpiceInfo("Cross-term dependence of ub")]
-        public Parameter<double> BSIM4pub { get; } = new Parameter<double>();
+        public Parameter BSIM4pub { get; } = new Parameter();
         [SpiceName("pub1"), SpiceInfo("Cross-term dependence of ub1")]
-        public Parameter<double> BSIM4pub1 { get; } = new Parameter<double>();
+        public Parameter BSIM4pub1 { get; } = new Parameter();
         [SpiceName("puc"), SpiceInfo("Cross-term dependence of uc")]
-        public Parameter<double> BSIM4puc { get; } = new Parameter<double>();
+        public Parameter BSIM4puc { get; } = new Parameter();
         [SpiceName("puc1"), SpiceInfo("Cross-term dependence of uc1")]
-        public Parameter<double> BSIM4puc1 { get; } = new Parameter<double>();
+        public Parameter BSIM4puc1 { get; } = new Parameter();
         [SpiceName("pu0"), SpiceInfo("Cross-term dependence of u0")]
-        public Parameter<double> BSIM4pu0 { get; } = new Parameter<double>();
+        public Parameter BSIM4pu0 { get; } = new Parameter();
         [SpiceName("pute"), SpiceInfo("Cross-term dependence of ute")]
-        public Parameter<double> BSIM4pute { get; } = new Parameter<double>();
+        public Parameter BSIM4pute { get; } = new Parameter();
         [SpiceName("pucste"), SpiceInfo("Cross-term dependence of ucste")]
-        public Parameter<double> BSIM4pucste { get; } = new Parameter<double>();
+        public Parameter BSIM4pucste { get; } = new Parameter();
         [SpiceName("pvoff"), SpiceInfo("Cross-term dependence of voff")]
-        public Parameter<double> BSIM4pvoff { get; } = new Parameter<double>();
+        public Parameter BSIM4pvoff { get; } = new Parameter();
         [SpiceName("ptvoff"), SpiceInfo("Cross-term dependence of tvoff")]
-        public Parameter<double> BSIM4ptvoff { get; } = new Parameter<double>();
+        public Parameter BSIM4ptvoff { get; } = new Parameter();
         [SpiceName("ptnfactor"), SpiceInfo("Cross-term dependence of tnfactor")]
-        public Parameter<double> BSIM4ptnfactor { get; } = new Parameter<double>();
+        public Parameter BSIM4ptnfactor { get; } = new Parameter();
         [SpiceName("pteta0"), SpiceInfo("Cross-term dependence of teta0")]
-        public Parameter<double> BSIM4pteta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4pteta0 { get; } = new Parameter();
         [SpiceName("ptvoffcv"), SpiceInfo("Cross-term dependence of tvoffcv")]
-        public Parameter<double> BSIM4ptvoffcv { get; } = new Parameter<double>();
+        public Parameter BSIM4ptvoffcv { get; } = new Parameter();
         [SpiceName("pminv"), SpiceInfo("Cross-term dependence of minv")]
-        public Parameter<double> BSIM4pminv { get; } = new Parameter<double>();
+        public Parameter BSIM4pminv { get; } = new Parameter();
         [SpiceName("pminvcv"), SpiceInfo("Cross-term dependence of minvcv")]
-        public Parameter<double> BSIM4pminvcv { get; } = new Parameter<double>();
+        public Parameter BSIM4pminvcv { get; } = new Parameter();
         [SpiceName("pfprout"), SpiceInfo("Cross-term dependence of pdiblcb")]
-        public Parameter<double> BSIM4pfprout { get; } = new Parameter<double>();
+        public Parameter BSIM4pfprout { get; } = new Parameter();
         [SpiceName("ppdits"), SpiceInfo("Cross-term dependence of pdits")]
-        public Parameter<double> BSIM4ppdits { get; } = new Parameter<double>();
+        public Parameter BSIM4ppdits { get; } = new Parameter();
         [SpiceName("ppditsd"), SpiceInfo("Cross-term dependence of pditsd")]
-        public Parameter<double> BSIM4ppditsd { get; } = new Parameter<double>();
+        public Parameter BSIM4ppditsd { get; } = new Parameter();
         [SpiceName("pdelta"), SpiceInfo("Cross-term dependence of delta")]
-        public Parameter<double> BSIM4pdelta { get; } = new Parameter<double>();
+        public Parameter BSIM4pdelta { get; } = new Parameter();
         [SpiceName("prdsw"), SpiceInfo("Cross-term dependence of rdsw ")]
-        public Parameter<double> BSIM4prdsw { get; } = new Parameter<double>();
+        public Parameter BSIM4prdsw { get; } = new Parameter();
         [SpiceName("prdw"), SpiceInfo("Cross-term dependence of rdw")]
-        public Parameter<double> BSIM4prdw { get; } = new Parameter<double>();
+        public Parameter BSIM4prdw { get; } = new Parameter();
         [SpiceName("prsw"), SpiceInfo("Cross-term dependence of rsw")]
-        public Parameter<double> BSIM4prsw { get; } = new Parameter<double>();
+        public Parameter BSIM4prsw { get; } = new Parameter();
         [SpiceName("pprwb"), SpiceInfo("Cross-term dependence of prwb ")]
-        public Parameter<double> BSIM4pprwb { get; } = new Parameter<double>();
+        public Parameter BSIM4pprwb { get; } = new Parameter();
         [SpiceName("pprwg"), SpiceInfo("Cross-term dependence of prwg ")]
-        public Parameter<double> BSIM4pprwg { get; } = new Parameter<double>();
+        public Parameter BSIM4pprwg { get; } = new Parameter();
         [SpiceName("pprt"), SpiceInfo("Cross-term dependence of prt ")]
-        public Parameter<double> BSIM4pprt { get; } = new Parameter<double>();
+        public Parameter BSIM4pprt { get; } = new Parameter();
         [SpiceName("peta0"), SpiceInfo("Cross-term dependence of eta0")]
-        public Parameter<double> BSIM4peta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4peta0 { get; } = new Parameter();
         [SpiceName("petab"), SpiceInfo("Cross-term dependence of etab")]
-        public Parameter<double> BSIM4petab { get; } = new Parameter<double>();
+        public Parameter BSIM4petab { get; } = new Parameter();
         [SpiceName("ppclm"), SpiceInfo("Cross-term dependence of pclm")]
-        public Parameter<double> BSIM4ppclm { get; } = new Parameter<double>();
+        public Parameter BSIM4ppclm { get; } = new Parameter();
         [SpiceName("ppdiblc1"), SpiceInfo("Cross-term dependence of pdiblc1")]
-        public Parameter<double> BSIM4ppdibl1 { get; } = new Parameter<double>();
+        public Parameter BSIM4ppdibl1 { get; } = new Parameter();
         [SpiceName("ppdiblc2"), SpiceInfo("Cross-term dependence of pdiblc2")]
-        public Parameter<double> BSIM4ppdibl2 { get; } = new Parameter<double>();
+        public Parameter BSIM4ppdibl2 { get; } = new Parameter();
         [SpiceName("ppdiblcb"), SpiceInfo("Cross-term dependence of pdiblcb")]
-        public Parameter<double> BSIM4ppdiblb { get; } = new Parameter<double>();
+        public Parameter BSIM4ppdiblb { get; } = new Parameter();
         [SpiceName("ppscbe1"), SpiceInfo("Cross-term dependence of pscbe1")]
-        public Parameter<double> BSIM4ppscbe1 { get; } = new Parameter<double>();
+        public Parameter BSIM4ppscbe1 { get; } = new Parameter();
         [SpiceName("ppscbe2"), SpiceInfo("Cross-term dependence of pscbe2")]
-        public Parameter<double> BSIM4ppscbe2 { get; } = new Parameter<double>();
+        public Parameter BSIM4ppscbe2 { get; } = new Parameter();
         [SpiceName("ppvag"), SpiceInfo("Cross-term dependence of pvag")]
-        public Parameter<double> BSIM4ppvag { get; } = new Parameter<double>();
+        public Parameter BSIM4ppvag { get; } = new Parameter();
         [SpiceName("pwr"), SpiceInfo("Cross-term dependence of wr")]
-        public Parameter<double> BSIM4pwr { get; } = new Parameter<double>();
+        public Parameter BSIM4pwr { get; } = new Parameter();
         [SpiceName("pdwg"), SpiceInfo("Cross-term dependence of dwg")]
-        public Parameter<double> BSIM4pdwg { get; } = new Parameter<double>();
+        public Parameter BSIM4pdwg { get; } = new Parameter();
         [SpiceName("pdwb"), SpiceInfo("Cross-term dependence of dwb")]
-        public Parameter<double> BSIM4pdwb { get; } = new Parameter<double>();
+        public Parameter BSIM4pdwb { get; } = new Parameter();
         [SpiceName("pb0"), SpiceInfo("Cross-term dependence of b0")]
-        public Parameter<double> BSIM4pb0 { get; } = new Parameter<double>();
+        public Parameter BSIM4pb0 { get; } = new Parameter();
         [SpiceName("pb1"), SpiceInfo("Cross-term dependence of b1")]
-        public Parameter<double> BSIM4pb1 { get; } = new Parameter<double>();
+        public Parameter BSIM4pb1 { get; } = new Parameter();
         [SpiceName("palpha0"), SpiceInfo("Cross-term dependence of alpha0")]
-        public Parameter<double> BSIM4palpha0 { get; } = new Parameter<double>();
+        public Parameter BSIM4palpha0 { get; } = new Parameter();
         [SpiceName("palpha1"), SpiceInfo("Cross-term dependence of alpha1")]
-        public Parameter<double> BSIM4palpha1 { get; } = new Parameter<double>();
+        public Parameter BSIM4palpha1 { get; } = new Parameter();
         [SpiceName("pbeta0"), SpiceInfo("Cross-term dependence of beta0")]
-        public Parameter<double> BSIM4pbeta0 { get; } = new Parameter<double>();
+        public Parameter BSIM4pbeta0 { get; } = new Parameter();
         [SpiceName("pphin"), SpiceInfo("Cross-term dependence of phin")]
-        public Parameter<double> BSIM4pphin { get; } = new Parameter<double>();
+        public Parameter BSIM4pphin { get; } = new Parameter();
         [SpiceName("pagidl"), SpiceInfo("Cross-term dependence of agidl")]
-        public Parameter<double> BSIM4pagidl { get; } = new Parameter<double>();
+        public Parameter BSIM4pagidl { get; } = new Parameter();
         [SpiceName("pbgidl"), SpiceInfo("Cross-term dependence of bgidl")]
-        public Parameter<double> BSIM4pbgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4pbgidl { get; } = new Parameter();
         [SpiceName("pcgidl"), SpiceInfo("Cross-term dependence of cgidl")]
-        public Parameter<double> BSIM4pcgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4pcgidl { get; } = new Parameter();
         [SpiceName("pegidl"), SpiceInfo("Cross-term dependence of egidl")]
-        public Parameter<double> BSIM4pegidl { get; } = new Parameter<double>();
+        public Parameter BSIM4pegidl { get; } = new Parameter();
         [SpiceName("pfgidl"), SpiceInfo("Cross-term dependence of fgidl")]
-        public Parameter<double> BSIM4pfgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4pfgidl { get; } = new Parameter();
         [SpiceName("pkgidl"), SpiceInfo("Cross-term dependence of kgidl")]
-        public Parameter<double> BSIM4pkgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4pkgidl { get; } = new Parameter();
         [SpiceName("prgidl"), SpiceInfo("Cross-term dependence of rgidl")]
-        public Parameter<double> BSIM4prgidl { get; } = new Parameter<double>();
+        public Parameter BSIM4prgidl { get; } = new Parameter();
         [SpiceName("pagisl"), SpiceInfo("Cross-term dependence of agisl")]
-        public Parameter<double> BSIM4pagisl { get; } = new Parameter<double>();
+        public Parameter BSIM4pagisl { get; } = new Parameter();
         [SpiceName("pbgisl"), SpiceInfo("Cross-term dependence of bgisl")]
-        public Parameter<double> BSIM4pbgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4pbgisl { get; } = new Parameter();
         [SpiceName("pcgisl"), SpiceInfo("Cross-term dependence of cgisl")]
-        public Parameter<double> BSIM4pcgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4pcgisl { get; } = new Parameter();
         [SpiceName("pegisl"), SpiceInfo("Cross-term dependence of egisl")]
-        public Parameter<double> BSIM4pegisl { get; } = new Parameter<double>();
+        public Parameter BSIM4pegisl { get; } = new Parameter();
         [SpiceName("pfgisl"), SpiceInfo("Cross-term dependence of fgisl")]
-        public Parameter<double> BSIM4pfgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4pfgisl { get; } = new Parameter();
         [SpiceName("pkgisl"), SpiceInfo("Cross-term dependence of kgisl")]
-        public Parameter<double> BSIM4pkgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4pkgisl { get; } = new Parameter();
         [SpiceName("prgisl"), SpiceInfo("Cross-term dependence of rgisl")]
-        public Parameter<double> BSIM4prgisl { get; } = new Parameter<double>();
+        public Parameter BSIM4prgisl { get; } = new Parameter();
         [SpiceName("paigc"), SpiceInfo("Cross-term dependence of aigc")]
-        public Parameter<double> BSIM4paigc { get; } = new Parameter<double>();
+        public Parameter BSIM4paigc { get; } = new Parameter();
         [SpiceName("pbigc"), SpiceInfo("Cross-term dependence of bigc")]
-        public Parameter<double> BSIM4pbigc { get; } = new Parameter<double>();
+        public Parameter BSIM4pbigc { get; } = new Parameter();
         [SpiceName("pcigc"), SpiceInfo("Cross-term dependence of cigc")]
-        public Parameter<double> BSIM4pcigc { get; } = new Parameter<double>();
+        public Parameter BSIM4pcigc { get; } = new Parameter();
         [SpiceName("paigsd"), SpiceInfo("Cross-term dependence of aigsd")]
-        public Parameter<double> BSIM4paigsd { get; } = new Parameter<double>();
+        public Parameter BSIM4paigsd { get; } = new Parameter();
         [SpiceName("pbigsd"), SpiceInfo("Cross-term dependence of bigsd")]
-        public Parameter<double> BSIM4pbigsd { get; } = new Parameter<double>();
+        public Parameter BSIM4pbigsd { get; } = new Parameter();
         [SpiceName("pcigsd"), SpiceInfo("Cross-term dependence of cigsd")]
-        public Parameter<double> BSIM4pcigsd { get; } = new Parameter<double>();
+        public Parameter BSIM4pcigsd { get; } = new Parameter();
         [SpiceName("paigs"), SpiceInfo("Cross-term dependence of aigs")]
-        public Parameter<double> BSIM4paigs { get; } = new Parameter<double>();
+        public Parameter BSIM4paigs { get; } = new Parameter();
         [SpiceName("pbigs"), SpiceInfo("Cross-term dependence of bigs")]
-        public Parameter<double> BSIM4pbigs { get; } = new Parameter<double>();
+        public Parameter BSIM4pbigs { get; } = new Parameter();
         [SpiceName("pcigs"), SpiceInfo("Cross-term dependence of cigs")]
-        public Parameter<double> BSIM4pcigs { get; } = new Parameter<double>();
+        public Parameter BSIM4pcigs { get; } = new Parameter();
         [SpiceName("paigd"), SpiceInfo("Cross-term dependence of aigd")]
-        public Parameter<double> BSIM4paigd { get; } = new Parameter<double>();
+        public Parameter BSIM4paigd { get; } = new Parameter();
         [SpiceName("pbigd"), SpiceInfo("Cross-term dependence of bigd")]
-        public Parameter<double> BSIM4pbigd { get; } = new Parameter<double>();
+        public Parameter BSIM4pbigd { get; } = new Parameter();
         [SpiceName("pcigd"), SpiceInfo("Cross-term dependence of cigd")]
-        public Parameter<double> BSIM4pcigd { get; } = new Parameter<double>();
+        public Parameter BSIM4pcigd { get; } = new Parameter();
         [SpiceName("paigbacc"), SpiceInfo("Cross-term dependence of aigbacc")]
-        public Parameter<double> BSIM4paigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4paigbacc { get; } = new Parameter();
         [SpiceName("pbigbacc"), SpiceInfo("Cross-term dependence of bigbacc")]
-        public Parameter<double> BSIM4pbigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4pbigbacc { get; } = new Parameter();
         [SpiceName("pcigbacc"), SpiceInfo("Cross-term dependence of cigbacc")]
-        public Parameter<double> BSIM4pcigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4pcigbacc { get; } = new Parameter();
         [SpiceName("paigbinv"), SpiceInfo("Cross-term dependence of aigbinv")]
-        public Parameter<double> BSIM4paigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4paigbinv { get; } = new Parameter();
         [SpiceName("pbigbinv"), SpiceInfo("Cross-term dependence of bigbinv")]
-        public Parameter<double> BSIM4pbigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4pbigbinv { get; } = new Parameter();
         [SpiceName("pcigbinv"), SpiceInfo("Cross-term dependence of cigbinv")]
-        public Parameter<double> BSIM4pcigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4pcigbinv { get; } = new Parameter();
         [SpiceName("pnigc"), SpiceInfo("Cross-term dependence of nigc")]
-        public Parameter<double> BSIM4pnigc { get; } = new Parameter<double>();
+        public Parameter BSIM4pnigc { get; } = new Parameter();
         [SpiceName("pnigbinv"), SpiceInfo("Cross-term dependence of nigbinv")]
-        public Parameter<double> BSIM4pnigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4pnigbinv { get; } = new Parameter();
         [SpiceName("pnigbacc"), SpiceInfo("Cross-term dependence of nigbacc")]
-        public Parameter<double> BSIM4pnigbacc { get; } = new Parameter<double>();
+        public Parameter BSIM4pnigbacc { get; } = new Parameter();
         [SpiceName("pntox"), SpiceInfo("Cross-term dependence of ntox")]
-        public Parameter<double> BSIM4pntox { get; } = new Parameter<double>();
+        public Parameter BSIM4pntox { get; } = new Parameter();
         [SpiceName("peigbinv"), SpiceInfo("Cross-term dependence for eigbinv")]
-        public Parameter<double> BSIM4peigbinv { get; } = new Parameter<double>();
+        public Parameter BSIM4peigbinv { get; } = new Parameter();
         [SpiceName("ppigcd"), SpiceInfo("Cross-term dependence for pigcd")]
-        public Parameter<double> BSIM4ppigcd { get; } = new Parameter<double>();
+        public Parameter BSIM4ppigcd { get; } = new Parameter();
         [SpiceName("ppoxedge"), SpiceInfo("Cross-term dependence for poxedge")]
-        public Parameter<double> BSIM4ppoxedge { get; } = new Parameter<double>();
+        public Parameter BSIM4ppoxedge { get; } = new Parameter();
         [SpiceName("pxrcrg1"), SpiceInfo("Cross-term dependence of xrcrg1")]
-        public Parameter<double> BSIM4pxrcrg1 { get; } = new Parameter<double>();
+        public Parameter BSIM4pxrcrg1 { get; } = new Parameter();
         [SpiceName("pxrcrg2"), SpiceInfo("Cross-term dependence of xrcrg2")]
-        public Parameter<double> BSIM4pxrcrg2 { get; } = new Parameter<double>();
+        public Parameter BSIM4pxrcrg2 { get; } = new Parameter();
         [SpiceName("plambda"), SpiceInfo("Cross-term dependence of lambda")]
-        public Parameter<double> BSIM4plambda { get; } = new Parameter<double>();
+        public Parameter BSIM4plambda { get; } = new Parameter();
         [SpiceName("pvtl"), SpiceInfo("Cross-term dependence of vtl")]
-        public Parameter<double> BSIM4pvtl { get; } = new Parameter<double>();
+        public Parameter BSIM4pvtl { get; } = new Parameter();
         [SpiceName("pxn"), SpiceInfo("Cross-term dependence of xn")]
-        public Parameter<double> BSIM4pxn { get; } = new Parameter<double>();
+        public Parameter BSIM4pxn { get; } = new Parameter();
         [SpiceName("pvfbsdoff"), SpiceInfo("Cross-term dependence of vfbsdoff")]
-        public Parameter<double> BSIM4pvfbsdoff { get; } = new Parameter<double>();
+        public Parameter BSIM4pvfbsdoff { get; } = new Parameter();
         [SpiceName("ptvfbsdoff"), SpiceInfo("Cross-term dependence of tvfbsdoff")]
-        public Parameter<double> BSIM4ptvfbsdoff { get; } = new Parameter<double>();
+        public Parameter BSIM4ptvfbsdoff { get; } = new Parameter();
         [SpiceName("peu"), SpiceInfo("Cross-term dependence of eu")]
-        public Parameter<double> BSIM4peu { get; } = new Parameter<double>();
+        public Parameter BSIM4peu { get; } = new Parameter();
         [SpiceName("pucs"), SpiceInfo("Cross-term dependence of ucs")]
-        public Parameter<double> BSIM4pucs { get; } = new Parameter<double>();
+        public Parameter BSIM4pucs { get; } = new Parameter();
         [SpiceName("pvfb"), SpiceInfo("Cross-term dependence of vfb")]
-        public Parameter<double> BSIM4pvfb { get; } = new Parameter<double>();
+        public Parameter BSIM4pvfb { get; } = new Parameter();
         [SpiceName("pcgsl"), SpiceInfo("Cross-term dependence of cgsl")]
-        public Parameter<double> BSIM4pcgsl { get; } = new Parameter<double>();
+        public Parameter BSIM4pcgsl { get; } = new Parameter();
         [SpiceName("pcgdl"), SpiceInfo("Cross-term dependence of cgdl")]
-        public Parameter<double> BSIM4pcgdl { get; } = new Parameter<double>();
+        public Parameter BSIM4pcgdl { get; } = new Parameter();
         [SpiceName("pckappas"), SpiceInfo("Cross-term dependence of ckappas")]
-        public Parameter<double> BSIM4pckappas { get; } = new Parameter<double>();
+        public Parameter BSIM4pckappas { get; } = new Parameter();
         [SpiceName("pckappad"), SpiceInfo("Cross-term dependence of ckappad")]
-        public Parameter<double> BSIM4pckappad { get; } = new Parameter<double>();
+        public Parameter BSIM4pckappad { get; } = new Parameter();
         [SpiceName("pcf"), SpiceInfo("Cross-term dependence of cf")]
-        public Parameter<double> BSIM4pcf { get; } = new Parameter<double>();
+        public Parameter BSIM4pcf { get; } = new Parameter();
         [SpiceName("pclc"), SpiceInfo("Cross-term dependence of clc")]
-        public Parameter<double> BSIM4pclc { get; } = new Parameter<double>();
+        public Parameter BSIM4pclc { get; } = new Parameter();
         [SpiceName("pcle"), SpiceInfo("Cross-term dependence of cle")]
-        public Parameter<double> BSIM4pcle { get; } = new Parameter<double>();
+        public Parameter BSIM4pcle { get; } = new Parameter();
         [SpiceName("pvfbcv"), SpiceInfo("Cross-term dependence of vfbcv")]
-        public Parameter<double> BSIM4pvfbcv { get; } = new Parameter<double>();
+        public Parameter BSIM4pvfbcv { get; } = new Parameter();
         [SpiceName("pacde"), SpiceInfo("Cross-term dependence of acde")]
-        public Parameter<double> BSIM4pacde { get; } = new Parameter<double>();
+        public Parameter BSIM4pacde { get; } = new Parameter();
         [SpiceName("pmoin"), SpiceInfo("Cross-term dependence of moin")]
-        public Parameter<double> BSIM4pmoin { get; } = new Parameter<double>();
+        public Parameter BSIM4pmoin { get; } = new Parameter();
         [SpiceName("pnoff"), SpiceInfo("Cross-term dependence of noff")]
-        public Parameter<double> BSIM4pnoff { get; } = new Parameter<double>();
+        public Parameter BSIM4pnoff { get; } = new Parameter();
         [SpiceName("pvoffcv"), SpiceInfo("Cross-term dependence of voffcv")]
-        public Parameter<double> BSIM4pvoffcv { get; } = new Parameter<double>();
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
-        public ParameterMethod<double> BSIM4tnom { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
+        public Parameter BSIM4pvoffcv { get; } = new Parameter();
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature in Kelvin")]
+        public Parameter BSIM4tnom { get; } = new Parameter(300.15);
         [SpiceName("cgso"), SpiceInfo("Gate-source overlap capacitance per width")]
-        public Parameter<double> BSIM4cgso { get; } = new Parameter<double>();
+        public Parameter BSIM4cgso { get; } = new Parameter();
         [SpiceName("cgdo"), SpiceInfo("Gate-drain overlap capacitance per width")]
-        public Parameter<double> BSIM4cgdo { get; } = new Parameter<double>();
+        public Parameter BSIM4cgdo { get; } = new Parameter();
         [SpiceName("cgbo"), SpiceInfo("Gate-bulk overlap capacitance per length")]
-        public Parameter<double> BSIM4cgbo { get; } = new Parameter<double>();
+        public Parameter BSIM4cgbo { get; } = new Parameter();
         [SpiceName("xpart"), SpiceInfo("Channel charge partitioning")]
-        public Parameter<double> BSIM4xpart { get; } = new Parameter<double>();
+        public Parameter BSIM4xpart { get; } = new Parameter();
         [SpiceName("rsh"), SpiceInfo("Source-drain sheet resistance")]
-        public Parameter<double> BSIM4sheetResistance { get; } = new Parameter<double>();
+        public Parameter BSIM4sheetResistance { get; } = new Parameter();
         [SpiceName("jss"), SpiceInfo("Bottom source junction reverse saturation current density")]
-        public Parameter<double> BSIM4SjctSatCurDensity { get; } = new Parameter<double>(1.0E-4);
+        public Parameter BSIM4SjctSatCurDensity { get; } = new Parameter(1.0E-4);
         [SpiceName("jsws"), SpiceInfo("Isolation edge sidewall source junction reverse saturation current density")]
-        public Parameter<double> BSIM4SjctSidewallSatCurDensity { get; } = new Parameter<double>();
+        public Parameter BSIM4SjctSidewallSatCurDensity { get; } = new Parameter();
         [SpiceName("jswgs"), SpiceInfo("Gate edge source junction reverse saturation current density")]
-        public Parameter<double> BSIM4SjctGateSidewallSatCurDensity { get; } = new Parameter<double>();
+        public Parameter BSIM4SjctGateSidewallSatCurDensity { get; } = new Parameter();
         [SpiceName("pbs"), SpiceInfo("Source junction built-in potential")]
-        public Parameter<double> BSIM4SbulkJctPotential { get; } = new Parameter<double>();
+        public Parameter BSIM4SbulkJctPotential { get; } = new Parameter();
         [SpiceName("mjs"), SpiceInfo("Source bottom junction capacitance grading coefficient")]
-        public Parameter<double> BSIM4SbulkJctBotGradingCoeff { get; } = new Parameter<double>();
+        public Parameter BSIM4SbulkJctBotGradingCoeff { get; } = new Parameter();
         [SpiceName("pbsws"), SpiceInfo("Source sidewall junction capacitance built in potential")]
-        public Parameter<double> BSIM4SsidewallJctPotential { get; } = new Parameter<double>();
+        public Parameter BSIM4SsidewallJctPotential { get; } = new Parameter();
         [SpiceName("mjsws"), SpiceInfo("Source sidewall junction capacitance grading coefficient")]
-        public Parameter<double> BSIM4SbulkJctSideGradingCoeff { get; } = new Parameter<double>();
+        public Parameter BSIM4SbulkJctSideGradingCoeff { get; } = new Parameter();
         [SpiceName("cjs"), SpiceInfo("Source bottom junction capacitance per unit area")]
-        public Parameter<double> BSIM4SunitAreaJctCap { get; } = new Parameter<double>(5.0E-4);
+        public Parameter BSIM4SunitAreaJctCap { get; } = new Parameter(5.0E-4);
         [SpiceName("cjsws"), SpiceInfo("Source sidewall junction capacitance per unit periphery")]
-        public Parameter<double> BSIM4SunitLengthSidewallJctCap { get; } = new Parameter<double>(5.0E-10);
+        public Parameter BSIM4SunitLengthSidewallJctCap { get; } = new Parameter(5.0E-10);
         [SpiceName("njs"), SpiceInfo("Source junction emission coefficient")]
-        public Parameter<double> BSIM4SjctEmissionCoeff { get; } = new Parameter<double>();
+        public Parameter BSIM4SjctEmissionCoeff { get; } = new Parameter();
         [SpiceName("pbswgs"), SpiceInfo("Source (gate side) sidewall junction capacitance built in potential")]
-        public Parameter<double> BSIM4SGatesidewallJctPotential { get; } = new Parameter<double>();
+        public Parameter BSIM4SGatesidewallJctPotential { get; } = new Parameter();
         [SpiceName("mjswgs"), SpiceInfo("Source (gate side) sidewall junction capacitance grading coefficient")]
-        public Parameter<double> BSIM4SbulkJctGateSideGradingCoeff { get; } = new Parameter<double>();
+        public Parameter BSIM4SbulkJctGateSideGradingCoeff { get; } = new Parameter();
         [SpiceName("cjswgs"), SpiceInfo("Source (gate side) sidewall junction capacitance per unit width")]
-        public Parameter<double> BSIM4SunitLengthGateSidewallJctCap { get; } = new Parameter<double>();
+        public Parameter BSIM4SunitLengthGateSidewallJctCap { get; } = new Parameter();
         [SpiceName("xtis"), SpiceInfo("Source junction current temperature exponent")]
-        public Parameter<double> BSIM4SjctTempExponent { get; } = new Parameter<double>();
+        public Parameter BSIM4SjctTempExponent { get; } = new Parameter();
         [SpiceName("jsd"), SpiceInfo("Bottom drain junction reverse saturation current density")]
-        public Parameter<double> BSIM4DjctSatCurDensity { get; } = new Parameter<double>();
+        public Parameter BSIM4DjctSatCurDensity { get; } = new Parameter();
         [SpiceName("jswd"), SpiceInfo("Isolation edge sidewall drain junction reverse saturation current density")]
-        public Parameter<double> BSIM4DjctSidewallSatCurDensity { get; } = new Parameter<double>();
+        public Parameter BSIM4DjctSidewallSatCurDensity { get; } = new Parameter();
         [SpiceName("jswgd"), SpiceInfo("Gate edge drain junction reverse saturation current density")]
-        public Parameter<double> BSIM4DjctGateSidewallSatCurDensity { get; } = new Parameter<double>();
+        public Parameter BSIM4DjctGateSidewallSatCurDensity { get; } = new Parameter();
         [SpiceName("pbd"), SpiceInfo("Drain junction built-in potential")]
-        public Parameter<double> BSIM4DbulkJctPotential { get; } = new Parameter<double>();
+        public Parameter BSIM4DbulkJctPotential { get; } = new Parameter();
         [SpiceName("mjd"), SpiceInfo("Drain bottom junction capacitance grading coefficient")]
-        public Parameter<double> BSIM4DbulkJctBotGradingCoeff { get; } = new Parameter<double>();
+        public Parameter BSIM4DbulkJctBotGradingCoeff { get; } = new Parameter();
         [SpiceName("pbswd"), SpiceInfo("Drain sidewall junction capacitance built in potential")]
-        public Parameter<double> BSIM4DsidewallJctPotential { get; } = new Parameter<double>();
+        public Parameter BSIM4DsidewallJctPotential { get; } = new Parameter();
         [SpiceName("mjswd"), SpiceInfo("Drain sidewall junction capacitance grading coefficient")]
-        public Parameter<double> BSIM4DbulkJctSideGradingCoeff { get; } = new Parameter<double>();
+        public Parameter BSIM4DbulkJctSideGradingCoeff { get; } = new Parameter();
         [SpiceName("cjd"), SpiceInfo("Drain bottom junction capacitance per unit area")]
-        public Parameter<double> BSIM4DunitAreaJctCap { get; } = new Parameter<double>();
+        public Parameter BSIM4DunitAreaJctCap { get; } = new Parameter();
         [SpiceName("cjswd"), SpiceInfo("Drain sidewall junction capacitance per unit periphery")]
-        public Parameter<double> BSIM4DunitLengthSidewallJctCap { get; } = new Parameter<double>();
+        public Parameter BSIM4DunitLengthSidewallJctCap { get; } = new Parameter();
         [SpiceName("njd"), SpiceInfo("Drain junction emission coefficient")]
-        public Parameter<double> BSIM4DjctEmissionCoeff { get; } = new Parameter<double>();
+        public Parameter BSIM4DjctEmissionCoeff { get; } = new Parameter();
         [SpiceName("pbswgd"), SpiceInfo("Drain (gate side) sidewall junction capacitance built in potential")]
-        public Parameter<double> BSIM4DGatesidewallJctPotential { get; } = new Parameter<double>();
+        public Parameter BSIM4DGatesidewallJctPotential { get; } = new Parameter();
         [SpiceName("mjswgd"), SpiceInfo("Drain (gate side) sidewall junction capacitance grading coefficient")]
-        public Parameter<double> BSIM4DbulkJctGateSideGradingCoeff { get; } = new Parameter<double>();
+        public Parameter BSIM4DbulkJctGateSideGradingCoeff { get; } = new Parameter();
         [SpiceName("cjswgd"), SpiceInfo("Drain (gate side) sidewall junction capacitance per unit width")]
-        public Parameter<double> BSIM4DunitLengthGateSidewallJctCap { get; } = new Parameter<double>();
+        public Parameter BSIM4DunitLengthGateSidewallJctCap { get; } = new Parameter();
         [SpiceName("xtid"), SpiceInfo("Drainjunction current temperature exponent")]
-        public Parameter<double> BSIM4DjctTempExponent { get; } = new Parameter<double>();
+        public Parameter BSIM4DjctTempExponent { get; } = new Parameter();
         [SpiceName("lint"), SpiceInfo("Length reduction parameter")]
-        public Parameter<double> BSIM4Lint { get; } = new Parameter<double>();
+        public Parameter BSIM4Lint { get; } = new Parameter();
         [SpiceName("ll"), SpiceInfo("Length reduction parameter")]
-        public Parameter<double> BSIM4Ll { get; } = new Parameter<double>();
+        public Parameter BSIM4Ll { get; } = new Parameter();
         [SpiceName("llc"), SpiceInfo("Length reduction parameter for CV")]
-        public Parameter<double> BSIM4Llc { get; } = new Parameter<double>();
+        public Parameter BSIM4Llc { get; } = new Parameter();
         [SpiceName("lln"), SpiceInfo("Length reduction parameter")]
-        public Parameter<double> BSIM4Lln { get; } = new Parameter<double>();
+        public Parameter BSIM4Lln { get; } = new Parameter();
         [SpiceName("lw"), SpiceInfo("Length reduction parameter")]
-        public Parameter<double> BSIM4Lw { get; } = new Parameter<double>();
+        public Parameter BSIM4Lw { get; } = new Parameter();
         [SpiceName("lwc"), SpiceInfo("Length reduction parameter for CV")]
-        public Parameter<double> BSIM4Lwc { get; } = new Parameter<double>();
+        public Parameter BSIM4Lwc { get; } = new Parameter();
         [SpiceName("lwn"), SpiceInfo("Length reduction parameter")]
-        public Parameter<double> BSIM4Lwn { get; } = new Parameter<double>();
+        public Parameter BSIM4Lwn { get; } = new Parameter();
         [SpiceName("lwl"), SpiceInfo("Length reduction parameter")]
-        public Parameter<double> BSIM4Lwl { get; } = new Parameter<double>();
+        public Parameter BSIM4Lwl { get; } = new Parameter();
         [SpiceName("lwlc"), SpiceInfo("Length reduction parameter for CV")]
-        public Parameter<double> BSIM4Lwlc { get; } = new Parameter<double>();
+        public Parameter BSIM4Lwlc { get; } = new Parameter();
         [SpiceName("lmin"), SpiceInfo("Minimum length for the model")]
-        public Parameter<double> BSIM4Lmin { get; } = new Parameter<double>();
+        public Parameter BSIM4Lmin { get; } = new Parameter();
         [SpiceName("lmax"), SpiceInfo("Maximum length for the model")]
-        public Parameter<double> BSIM4Lmax { get; } = new Parameter<double>();
+        public Parameter BSIM4Lmax { get; } = new Parameter();
         [SpiceName("wint"), SpiceInfo("Width reduction parameter")]
-        public Parameter<double> BSIM4Wint { get; } = new Parameter<double>();
+        public Parameter BSIM4Wint { get; } = new Parameter();
         [SpiceName("wl"), SpiceInfo("Width reduction parameter")]
-        public Parameter<double> BSIM4Wl { get; } = new Parameter<double>();
+        public Parameter BSIM4Wl { get; } = new Parameter();
         [SpiceName("wlc"), SpiceInfo("Width reduction parameter for CV")]
-        public Parameter<double> BSIM4Wlc { get; } = new Parameter<double>();
+        public Parameter BSIM4Wlc { get; } = new Parameter();
         [SpiceName("wln"), SpiceInfo("Width reduction parameter")]
-        public Parameter<double> BSIM4Wln { get; } = new Parameter<double>();
+        public Parameter BSIM4Wln { get; } = new Parameter();
         [SpiceName("ww"), SpiceInfo("Width reduction parameter")]
-        public Parameter<double> BSIM4Ww { get; } = new Parameter<double>();
+        public Parameter BSIM4Ww { get; } = new Parameter();
         [SpiceName("wwc"), SpiceInfo("Width reduction parameter for CV")]
-        public Parameter<double> BSIM4Wwc { get; } = new Parameter<double>();
+        public Parameter BSIM4Wwc { get; } = new Parameter();
         [SpiceName("wwn"), SpiceInfo("Width reduction parameter")]
-        public Parameter<double> BSIM4Wwn { get; } = new Parameter<double>();
+        public Parameter BSIM4Wwn { get; } = new Parameter();
         [SpiceName("wwl"), SpiceInfo("Width reduction parameter")]
-        public Parameter<double> BSIM4Wwl { get; } = new Parameter<double>();
+        public Parameter BSIM4Wwl { get; } = new Parameter();
         [SpiceName("wwlc"), SpiceInfo("Width reduction parameter for CV")]
-        public Parameter<double> BSIM4Wwlc { get; } = new Parameter<double>();
+        public Parameter BSIM4Wwlc { get; } = new Parameter();
         [SpiceName("wmin"), SpiceInfo("Minimum width for the model")]
-        public Parameter<double> BSIM4Wmin { get; } = new Parameter<double>();
+        public Parameter BSIM4Wmin { get; } = new Parameter();
         [SpiceName("wmax"), SpiceInfo("Maximum width for the model")]
-        public Parameter<double> BSIM4Wmax { get; } = new Parameter<double>();
+        public Parameter BSIM4Wmax { get; } = new Parameter();
         [SpiceName("noia"), SpiceInfo("Flicker noise parameter")]
-        public Parameter<double> BSIM4oxideTrapDensityA { get; } = new Parameter<double>();
+        public Parameter BSIM4oxideTrapDensityA { get; } = new Parameter();
         [SpiceName("noib"), SpiceInfo("Flicker noise parameter")]
-        public Parameter<double> BSIM4oxideTrapDensityB { get; } = new Parameter<double>();
+        public Parameter BSIM4oxideTrapDensityB { get; } = new Parameter();
         [SpiceName("noic"), SpiceInfo("Flicker noise parameter")]
-        public Parameter<double> BSIM4oxideTrapDensityC { get; } = new Parameter<double>(8.75e9);
+        public Parameter BSIM4oxideTrapDensityC { get; } = new Parameter(8.75e9);
         [SpiceName("em"), SpiceInfo("Flicker noise parameter")]
-        public Parameter<double> BSIM4em { get; } = new Parameter<double>(4.1e7);
+        public Parameter BSIM4em { get; } = new Parameter(4.1e7);
         [SpiceName("ef"), SpiceInfo("Flicker noise frequency exponent")]
-        public Parameter<double> BSIM4ef { get; } = new Parameter<double>();
+        public Parameter BSIM4ef { get; } = new Parameter();
         [SpiceName("af"), SpiceInfo("Flicker noise exponent")]
-        public Parameter<double> BSIM4af { get; } = new Parameter<double>();
+        public Parameter BSIM4af { get; } = new Parameter();
         [SpiceName("kf"), SpiceInfo("Flicker noise coefficient")]
-        public Parameter<double> BSIM4kf { get; } = new Parameter<double>();
+        public Parameter BSIM4kf { get; } = new Parameter();
 
         /// <summary>
         /// Methods
@@ -1852,6 +1860,30 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
+            if (BSIM4ndep > 1.0e20)
+                BSIM4ndep.Value *= 1e-6;
+            if (BSIM4nsd > 1.0e23)
+                BSIM4nsd.Value *= 1e-6;
+            if (BSIM4ngate > 1.0e23)
+                BSIM4ngate.Value *= 1e-6;
+            if (BSIM4lndep > 1.0e20)
+                BSIM4lndep.Value *= 1e-6;
+            if (BSIM4lnsd > 1.0e23)
+                BSIM4lnsd.Value *= 1e-6;
+            if (BSIM4lngate > 1.0e23)
+                BSIM4lngate.Value *= 1e-6;
+            if (BSIM4wndep > 1.0e20)
+                BSIM4wndep.Value *= 1e-6;
+            if (BSIM4wnsd > 1.0e23)
+                BSIM4wnsd.Value *= 1e-6;
+            if (BSIM4wngate > 1.0e23)
+                BSIM4wngate.Value *= 1e-6;
+            if (BSIM4pndep > 1.0e20)
+                BSIM4pndep.Value *= 1e-6;
+            if (BSIM4pnsd > 1.0e23)
+                BSIM4pnsd.Value *= 1e-6;
+            if (BSIM4pngate > 1.0e23)
+                BSIM4pngate.Value *= 1e-6;
 
             /* process defaults of model parameters */
             if (!BSIM4mobMod.Given)

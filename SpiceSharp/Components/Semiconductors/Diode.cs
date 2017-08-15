@@ -10,12 +10,21 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents a diode
     /// </summary>
-    public class Diode : CircuitComponent
+    public class Diode : CircuitComponent<Diode>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static Diode()
+        {
+            Register();
+            terminals = new string[] { "D+", "D-" };
+        }
+
         /// <summary>
         /// Gets or sets the diode model
         /// </summary>
-        public DiodeModel Model { get; set; }
+        public void SetModel(DiodeModel model) => Model = (ICircuitObject)model;
 
         /// <summary>
         /// Parameters
@@ -23,11 +32,11 @@ namespace SpiceSharp.Components
         [SpiceName("off"), SpiceInfo("Initially off", Interesting = false)]
         public bool DIOoff { get; set; } = false;
         [SpiceName("temp"), SpiceInfo("Instance temperature", Interesting = false)]
-        public ParameterMethod<double> DIOtemp { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
+        public Parameter DIOtemp { get; } = new Parameter(300.15);
         [SpiceName("ic"), SpiceInfo("Initial device voltage", Interesting = false)]
-        public Parameter<double> DIOinitCond { get; } = new Parameter<double>();
+        public Parameter DIOinitCond { get; } = new Parameter();
         [SpiceName("area"), SpiceInfo("Area factor", Interesting = false)]
-        public Parameter<double> DIOarea { get; } = new Parameter<double>(1.0);
+        public Parameter DIOarea { get; } = new Parameter(1.0);
         [SpiceName("vd"), SpiceInfo("Diode voltage")]
         public double GetVoltage(Circuit ckt) => ckt.State.States[0][DIOstate + DIOvoltage];
         [SpiceName("id"), SpiceName("c"), SpiceInfo("Diode current")]
@@ -75,7 +84,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Diode(string name) : base(name, "D+", "D-") { }
+        public Diode(string name) : base(name) { }
 
         /// <summary>
         /// Setup the diode
@@ -83,12 +92,13 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
+            DiodeModel model = Model as DiodeModel;
             var nodes = BindNodes(ckt);
             DIOposNode = nodes[0].Index;
             DIOnegNode = nodes[1].Index;
 
             // Add the extra node
-            if (Model.DIOresist == 0.0)
+            if (model.DIOresist == 0.0)
                 DIOposPrimeNode = DIOposNode;
             else
                 DIOposPrimeNode = CreateNode(ckt).Index;
@@ -98,18 +108,13 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Get the model
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => Model;
-
-        /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
         /// <param name="ckt"></param>
         public override void Temperature(Circuit ckt)
         {
-            // Update the Model with new values if necessary
+            // Update the model with new values if necessary
+            DiodeModel model = Model as DiodeModel;
             var state = ckt.State;
 
             // NOTE: This is an almost exact replication of the original Spice diode model code
@@ -131,64 +136,64 @@ namespace SpiceSharp.Components
             arg = -egfet / (2 * Circuit.CONSTBoltz * DIOtemp) +
                     1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
             pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
-            egfet1 = 1.16 - (7.02e-4 * Model.DIOnomTemp * Model.DIOnomTemp) /
-                    (Model.DIOnomTemp + 1108);
-            arg1 = -egfet1 / (Circuit.CONSTBoltz * 2 * Model.DIOnomTemp) +
+            egfet1 = 1.16 - (7.02e-4 * model.DIOnomTemp * model.DIOnomTemp) /
+                    (model.DIOnomTemp + 1108);
+            arg1 = -egfet1 / (Circuit.CONSTBoltz * 2 * model.DIOnomTemp) +
                     1.1150877 / (2 * Circuit.CONSTBoltz * Circuit.CONSTRefTemp);
-            fact1 = Model.DIOnomTemp / Circuit.CONSTRefTemp;
-            pbfact1 = -2 * Model.vtnom * (1.5 * Math.Log(fact1) + Circuit.CHARGE * arg1);
-            pbo = (Model.DIOjunctionPot - pbfact1) / fact1;
-            gmaold = (Model.DIOjunctionPot - pbo) / pbo;
-            DIOtJctCap = Model.DIOjunctionCap /
-                    (1 + Model.DIOgradingCoeff *
-                    (400e-6 * (Model.DIOnomTemp - Circuit.CONSTRefTemp) - gmaold));
+            fact1 = model.DIOnomTemp / Circuit.CONSTRefTemp;
+            pbfact1 = -2 * model.vtnom * (1.5 * Math.Log(fact1) + Circuit.CHARGE * arg1);
+            pbo = (model.DIOjunctionPot - pbfact1) / fact1;
+            gmaold = (model.DIOjunctionPot - pbo) / pbo;
+            DIOtJctCap = model.DIOjunctionCap /
+                    (1 + model.DIOgradingCoeff *
+                    (400e-6 * (model.DIOnomTemp - Circuit.CONSTRefTemp) - gmaold));
             DIOtJctPot = pbfact + fact2 * pbo;
             gmanew = (DIOtJctPot - pbo) / pbo;
-            DIOtJctCap *= 1 + Model.DIOgradingCoeff *
+            DIOtJctCap *= 1 + model.DIOgradingCoeff *
                     (400e-6 * (DIOtemp - Circuit.CONSTRefTemp) - gmanew);
 
-            DIOtSatCur = Model.DIOsatCur * Math.Exp(
-                    ((DIOtemp / Model.DIOnomTemp) - 1) *
-                    Model.DIOactivationEnergy / (Model.DIOemissionCoeff * vt) +
-                    Model.DIOsaturationCurrentExp / Model.DIOemissionCoeff *
-                    Math.Log(DIOtemp / Model.DIOnomTemp));
+            DIOtSatCur = model.DIOsatCur * Math.Exp(
+                    ((DIOtemp / model.DIOnomTemp) - 1) *
+                    model.DIOactivationEnergy / (model.DIOemissionCoeff * vt) +
+                    model.DIOsaturationCurrentExp / model.DIOemissionCoeff *
+                    Math.Log(DIOtemp / model.DIOnomTemp));
 
             // the defintion of f1, just recompute after temperature adjusting all the variables used in it
             DIOtF1 = DIOtJctPot *
-                    (1 - Math.Exp((1 - Model.DIOgradingCoeff) * Model.xfc)) /
-                    (1 - Model.DIOgradingCoeff);
+                    (1 - Math.Exp((1 - model.DIOgradingCoeff) * model.xfc)) /
+                    (1 - model.DIOgradingCoeff);
             // same for Depletion Capacitance
-            DIOtDepCap = Model.DIOdepletionCapCoeff *
+            DIOtDepCap = model.DIOdepletionCapCoeff *
                     DIOtJctPot;
             // and Vcrit
-            vte = Model.DIOemissionCoeff * vt;
+            vte = model.DIOemissionCoeff * vt;
             DIOtVcrit = vte * Math.Log(vte / (Circuit.CONSTroot2 * DIOtSatCur));
 
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
-            if (Model.DIObreakdownVoltage.Given)
+            if (model.DIObreakdownVoltage.Given)
             {
-                cbv = Model.DIObreakdownCurrent;
-                if (cbv < DIOtSatCur * Model.DIObreakdownVoltage / vt)
+                cbv = model.DIObreakdownCurrent;
+                if (cbv < DIOtSatCur * model.DIObreakdownVoltage / vt)
                 {
-                    cbv = DIOtSatCur * Model.DIObreakdownVoltage / vt;
-                    CircuitWarning.Warning(this, string.Format("Diode {0}, Model {1}: Breakdown current increased to {2} to resolve incompatibility with specified saturation current", Name, Model.Name, cbv));
-                    xbv = Model.DIObreakdownVoltage;
+                    cbv = DIOtSatCur * model.DIObreakdownVoltage / vt;
+                    CircuitWarning.Warning(this, string.Format("Diode {0}, model {1}: Breakdown current increased to {2} to resolve incompatibility with specified saturation current", Name, model.Name, cbv));
+                    xbv = model.DIObreakdownVoltage;
                 }
                 else
                 {
                     tol = ckt.Simulation.Config.RelTol * cbv;
-                    xbv = Model.DIObreakdownVoltage - vt * Math.Log(1 + cbv /
+                    xbv = model.DIObreakdownVoltage - vt * Math.Log(1 + cbv /
                             DIOtSatCur);
                     iter = 0;
                     for (iter = 0; iter < 25; iter++)
                     {
-                        xbv = Model.DIObreakdownVoltage - vt * Math.Log(cbv /
+                        xbv = model.DIObreakdownVoltage - vt * Math.Log(cbv /
                                 DIOtSatCur + 1 - xbv / vt);
-                        xcbv = DIOtSatCur * (Math.Exp((Model.DIObreakdownVoltage
+                        xcbv = DIOtSatCur * (Math.Exp((model.DIObreakdownVoltage
                                 - xbv) / vt) - 1 + xbv / vt);
                         if (Math.Abs(xcbv - cbv) <= tol) goto matched;
                     }
-                    CircuitWarning.Warning(this, string.Format("Diode {0}, Model {1}: Unable to match forward and reverse diode regions: bv = {2}, ibv = {3}", Name, Model.Name, xbv, xcbv));
+                    CircuitWarning.Warning(this, string.Format("Diode {0}, model {1}: Unable to match forward and reverse diode regions: bv = {2}, ibv = {3}", Name, model.Name, xbv, xcbv));
                 }
                 matched:
                 DIOtBrkdwnV = xbv;
@@ -201,6 +206,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)
         {
+            DiodeModel model = Model as DiodeModel;
             double arg, capd, cd, cdeq, cdhat, csat, czero, czof2, delvd, evd, evrev, gd, gspr, sarg, 
                 vd, vdtemp, vt, vte;
             bool Check;
@@ -210,9 +216,9 @@ namespace SpiceSharp.Components
             var method = ckt.Method;
 
             csat = DIOtSatCur * DIOarea;
-            gspr = Model.DIOconductance * DIOarea;
+            gspr = model.DIOconductance * DIOarea;
             vt = Circuit.CONSTKoverQ * DIOtemp;
-            vte = Model.DIOemissionCoeff * vt;
+            vte = model.DIOemissionCoeff * vt;
 
             // initialization 
             Check = true;
@@ -236,7 +242,7 @@ namespace SpiceSharp.Components
                 cdhat = state.States[0][DIOstate + DIOcurrent] + state.States[0][DIOstate + DIOconduct] * delvd;
 
                 // limit new junction voltage
-                if ((Model.DIObreakdownVoltage.Given) && (vd < Math.Min(0, -DIOtBrkdwnV + 10 * vte)))
+                if ((model.DIObreakdownVoltage.Given) && (vd < Math.Min(0, -DIOtBrkdwnV + 10 * vte)))
                 {
                     vdtemp = -(vd + DIOtBrkdwnV);
                     vdtemp = Semiconductor.DEVpnjlim(vdtemp, -(state.States[0][DIOstate + DIOvoltage] + DIOtBrkdwnV), vte, DIOtVcrit, ref Check);
@@ -276,17 +282,17 @@ namespace SpiceSharp.Components
                 czero = DIOtJctCap * DIOarea;
                 if (vd < DIOtDepCap)
                 {
-                    arg = 1 - vd / Model.DIOjunctionPot;
-                    sarg = Math.Exp(-Model.DIOgradingCoeff * Math.Log(arg));
-                    state.States[0][DIOstate + DIOcapCharge] = Model.DIOtransitTime * cd + Model.DIOjunctionPot * czero * (1 - arg * sarg) / (1 - Model.DIOgradingCoeff);
-                    capd = Model.DIOtransitTime * gd + czero * sarg;
+                    arg = 1 - vd / model.DIOjunctionPot;
+                    sarg = Math.Exp(-model.DIOgradingCoeff * Math.Log(arg));
+                    state.States[0][DIOstate + DIOcapCharge] = model.DIOtransitTime * cd + model.DIOjunctionPot * czero * (1 - arg * sarg) / (1 - model.DIOgradingCoeff);
+                    capd = model.DIOtransitTime * gd + czero * sarg;
                 }
                 else
                 {
-                    czof2 = czero / Model.DIOf2;
-                    state.States[0][DIOstate + DIOcapCharge] = Model.DIOtransitTime * cd + czero * DIOtF1 + czof2 * (Model.DIOf3 * (vd - DIOtDepCap) +
-                        (Model.DIOgradingCoeff / (Model.DIOjunctionPot + Model.DIOjunctionPot)) * (vd * vd - DIOtDepCap * DIOtDepCap));
-                    capd = Model.DIOtransitTime * gd + czof2 * (Model.DIOf3 + Model.DIOgradingCoeff * vd / Model.DIOjunctionPot);
+                    czof2 = czero / model.DIOf2;
+                    state.States[0][DIOstate + DIOcapCharge] = model.DIOtransitTime * cd + czero * DIOtF1 + czof2 * (model.DIOf3 * (vd - DIOtDepCap) +
+                        (model.DIOgradingCoeff / (model.DIOjunctionPot + model.DIOjunctionPot)) * (vd * vd - DIOtDepCap * DIOtDepCap));
+                    capd = model.DIOtransitTime * gd + czof2 * (model.DIOf3 + model.DIOgradingCoeff * vd / model.DIOjunctionPot);
                 }
                 DIOcap = capd;
 
@@ -356,10 +362,11 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void AcLoad(Circuit ckt)
         {
+            DiodeModel model = Model as DiodeModel;
             var state = ckt.State;
             var cstate = state.Complex;
 
-            double gspr = Model.DIOconductance * DIOarea;
+            double gspr = model.DIOconductance * DIOarea;
             Complex geq = state.States[0][DIOstate + DIOconduct] + state.States[0][DIOstate + DIOcapCurrent] * cstate.Laplace;
 
             // Load matrix

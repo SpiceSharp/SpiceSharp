@@ -7,13 +7,22 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class describes a current-controlled voltage source
     /// </summary>
-    public class CurrentControlledVoltagesource : CircuitComponent
+    public class CurrentControlledVoltagesource : CircuitComponent<CurrentControlledVoltagesource>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static CurrentControlledVoltagesource()
+        {
+            Register();
+            terminals = new string[] { "H+", "H-" };
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("gain"), SpiceInfo("Transresistance (gain)")]
-        public Parameter<double> CCVScoeff { get; } = new Parameter<double>();
+        public Parameter CCVScoeff { get; } = new Parameter();
         [SpiceName("control"), SpiceInfo("Controlling voltage source")]
         public string CCVScontName { get; set; }
         [SpiceName("i"), SpiceInfo("Output current")]
@@ -37,7 +46,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled current source</param>
-        public CurrentControlledVoltagesource(string name) : base(name, "H+", "H-") { }
+        public CurrentControlledVoltagesource(string name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -47,18 +56,12 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source name</param>
         /// <param name="gain">The transresistance (gain)</param>
-        public CurrentControlledVoltagesource(string name, string pos, string neg, string vsource, object gain) : base(name, "H+", "H-")
+        public CurrentControlledVoltagesource(string name, string pos, string neg, string vsource, double gain) : base(name)
         {
             Connect(pos, neg);
-            Set("gain", gain);
+            CCVScoeff.Set(gain);
             CCVScontName = vsource;
         }
-
-        /// <summary>
-        /// No model
-        /// </summary>
-        /// <returns>null</returns>
-        public override CircuitModel GetModel() => null;
 
         /// <summary>
         /// Setup the current-controlled voltage source
@@ -72,7 +75,7 @@ namespace SpiceSharp.Components
             CCVSbranch = CreateNode(ckt, CircuitNode.NodeType.Current).Index;
 
             // Find the voltage source
-            var vsource = ckt.Components[CCVScontName];
+            var vsource = ckt.Objects[CCVScontName];
             if (vsource is Voltagesource)
                 CCVScontBranch = ((Voltagesource)vsource).VSRCbranch;
             else

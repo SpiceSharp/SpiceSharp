@@ -21,39 +21,47 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
         {
             Diode dio = new Diode(name);
             dio.ReadNodes(parameters, 2);
 
             if (parameters.Count < 3)
                 throw new ParseException(parameters[1], "Model expected", false);
-            dio.Model = parameters[2].ReadModel<DiodeModel>(netlist);
+            dio.SetModel(netlist.FindModel<DiodeModel>(parameters[2]));
 
             // Optional: Area
             if (parameters.Count > 3)
-                dio.Set("area", parameters[3].ReadValue());
+                dio.DIOarea.Set(netlist.ParseDouble(parameters[3]));
 
             // Read the rest of the parameters
             for (int i = 4; i < parameters.Count; i++)
             {
-                if (parameters[i].TryReadLiteral("on"))
-                    dio.Set("off", false);
-                else if (parameters[i].TryReadLiteral("off"))
-                    dio.Set("on", true);
-                else if (parameters[i].TryReadAssignment(out string pname, out string pvalue))
+                switch (parameters[i].kind)
                 {
-                    if (pname != "ic")
-                        throw new ParseException(parameters[i], "IC expected");
-                    dio.Set("ic", pvalue);
+                    case SpiceSharpParserConstants.WORD:
+                        switch (parameters[i].image.ToLower())
+                        {
+                            case "on": dio.DIOoff = false; break;
+                            case "off": dio.DIOoff = true; break;
+                            default: throw new ParseException("ON or OFF expected");
+                        }
+                        break;
+                    case TokenConstants.ASSIGNMENT:
+                        AssignmentToken at = parameters[i] as AssignmentToken;
+                        if (at.Name.image.ToLower() != "ic")
+                            dio.DIOinitCond.Set(netlist.ParseDouble(at.Value));
+                        break;
+                    case SpiceSharpParserConstants.VALUE:
+                    case SpiceSharpParserConstants.EXPRESSION:
+                        dio.DIOtemp.Set(netlist.ParseDouble(parameters[i]));
+                        break;
+                    default:
+                        throw new ParseException(parameters[i], "Unrecognized parameter");
                 }
-                else if (parameters[i].TryReadValue(out pvalue))
-                    dio.Set("temp", pvalue);
-                else
-                    throw new ParseException(parameters[i], "Unrecognized parameter");
             }
 
-            return dio;
+            return (ICircuitObject)dio;
         }
     }
 }

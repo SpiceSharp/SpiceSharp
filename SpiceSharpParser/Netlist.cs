@@ -3,6 +3,7 @@ using SpiceSharp.Parser.Readers;
 using SpiceSharp.Parser.Readers.Exports;
 using SpiceSharp.Parser.Readers.Waveforms;
 using SpiceSharp.Parser.Subcircuits;
+using SpiceSharp.Parser.Readers.Collections;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Parser
@@ -25,7 +26,7 @@ namespace SpiceSharp.Parser
         /// <summary>
         /// Gets the list of simulations to be performed
         /// </summary>
-        public List<Simulation> Simulations { get; } = new List<Simulation>();
+        public List<ISimulation> Simulations { get; } = new List<ISimulation>();
 
         /// <summary>
         /// Exports for the netlist
@@ -73,11 +74,11 @@ namespace SpiceSharp.Parser
                 BeforeSimulationInitialized?.Invoke(this, Simulations[i]);
 
                 // Register our event for catching data
-                Simulations[i].ExportSimulationData += ExportSimulationData;
+                Simulations[i].OnExportSimulationData += ExportSimulationData;
                 Circuit.Simulate(Simulations[i]);
 
                 // Unregister
-                Simulations[i].ExportSimulationData -= ExportSimulationData;
+                Simulations[i].OnExportSimulationData -= ExportSimulationData;
 
                 AfterSimulationFinished?.Invoke(this, Simulations[i]);
             }
@@ -100,6 +101,16 @@ namespace SpiceSharp.Parser
         public static Netlist StandardNetlist()
         {
             Netlist netlist = new Netlist(new Circuit());
+
+            // Register standard reader collections
+            netlist.Readers.Register(
+                new ComponentReaderCollection(),
+                new ModelReaderCollection(),
+                new GenericReaderCollection(StatementType.Subcircuit),
+                new GenericReaderCollection(StatementType.Waveform),
+                new DictionaryReaderCollection(StatementType.Control),
+                new GenericReaderCollection(StatementType.Export)
+                );
 
             // Register standard readers
             netlist.Readers.Register(
@@ -147,7 +158,7 @@ namespace SpiceSharp.Parser
                 new ResistorModelReader(),
                 new CapacitorModelReader(),
                 new VoltageSwitchModelReader(),
-                new CurrentSwitchReader(),
+                new CurrentSwitchModelReader(),
                 new BipolarModelReader(true),
                 new BipolarModelReader(false),
                 new DiodeModelReader());
@@ -161,7 +172,7 @@ namespace SpiceSharp.Parser
     /// </summary>
     /// <param name="sender">The netlist sending the event</param>
     /// <param name="sim">The simulation</param>
-    public delegate void NetlistSimulationEventHandler(object sender, Simulation sim);
+    public delegate void NetlistSimulationEventHandler(object sender, ISimulation sim);
 
     /// <summary>
     /// An event handler for exporting simulation data through a netlist

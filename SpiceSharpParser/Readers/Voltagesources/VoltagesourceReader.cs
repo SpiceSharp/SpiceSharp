@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
         {
             Voltagesource vsrc = new Voltagesource(name);
             vsrc.ReadNodes(parameters, 2);
@@ -30,43 +30,41 @@ namespace SpiceSharp.Parser.Readers
             for (int i = 2; i < parameters.Count; i++)
             {
                 // DC specification
-                if (i == 2 && parameters[i].TryReadLiteral("dc"))
+                if (i == 2 && parameters[i].image.ToLower() == "dc")
                 {
                     i++;
-                    vsrc.Set("dc", parameters[i].ReadValue());
+                    vsrc.VSRCdcValue.Set(netlist.ParseDouble(parameters[i]));
                 }
-                else if (i == 2 && parameters[i].TryReadValue(out string pvalue))
-                    vsrc.Set("dc", pvalue);
+                else if (i == 2 && (parameters[i].kind == SpiceSharpParserConstants.VALUE || parameters[i].kind == SpiceSharpParserConstants.EXPRESSION))
+                    vsrc.VSRCdcValue.Set(netlist.ParseDouble(parameters[i]));
 
                 // AC specification
-                else if (parameters[i].TryReadLiteral("ac"))
+                else if (parameters[i].image.ToLower() == "ac")
                 {
                     i++;
-                    vsrc.Set("acmag", parameters[i].ReadValue());
+                    vsrc.VSRCacMag.Set(netlist.ParseDouble(parameters[i]));
 
                     // Look forward for one more value
-                    if (i + 1 < parameters.Count && parameters[i + 1].TryReadValue(out pvalue))
+                    if (i + 1 < parameters.Count && (parameters[i + 1].kind == SpiceSharpParserConstants.VALUE || parameters[i + 1].kind == SpiceSharpParserConstants.EXPRESSION))
                     {
                         i++;
-                        vsrc.Set("acphase", pvalue);
+                        vsrc.VSRCacPhase.Set(netlist.ParseDouble(parameters[i]));
                     }
                 }
 
                 // Waveforms
-                else if (parameters[i].TryReadBracket(out BracketToken bt))
+                else if (parameters[i].kind == TokenConstants.BRACKET)
                 {
                     // Find the reader
-                    var b = parameters[i] as BracketToken;
-                    if (!(b.Name is Token))
-                        throw new ParseException(b.Name, "Waveform expected");
-                    Statement st = new Statement(StatementType.Waveform, b.Name as Token, b.Parameters);
+                    var bt = parameters[i] as BracketToken;
+                    Statement st = new Statement(StatementType.Waveform, bt.Name, bt.Parameters);
                     object w = netlist.Readers.Read(st, netlist);
-                    vsrc.Set("waveform", w);
+                    vsrc.VSRCwaveform = (IWaveform)w;
                 }
                 else
                     throw new ParseException(parameters[i], "Unrecognized parameter");
             }
-            return vsrc;
+            return (ICircuitObject)vsrc;
         }
     }
 }

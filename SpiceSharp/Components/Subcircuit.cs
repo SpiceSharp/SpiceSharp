@@ -4,29 +4,35 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class logically groups components together
+    /// This class logically groups objects together
     /// </summary>
-    public class Subcircuit : CircuitComponent
+    public class Subcircuit : CircuitComponent<Subcircuit>
     {
         /// <summary>
-        /// The components in the subcircuit
+        /// The objects in the subcircuit
         /// </summary>
-        public CircuitComponents Components { get; } = new CircuitComponents();
+        public CircuitObjects Objects { get; } = new CircuitObjects();
 
         /// <summary>
         /// Gets or sets the delimiter nodes in subcircuits
         /// </summary>
         public static string Delimiter { get; set; } = ".";
 
+        /// <summary>
+        /// Private variables
+        /// </summary>
         private Dictionary<string, string> map = new Dictionary<string, string>();
+
+        public string[] Pins { get; set; } = null;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the subcircuit</param>
-        public Subcircuit(string name, params string[] terminals)
-            : base(name, terminals)
+        public Subcircuit(string name, params string[] pins)
+            : base(name)
         {
+            Pins = pins;
         }
 
         /// <summary>
@@ -39,30 +45,24 @@ namespace SpiceSharp.Components
 
             // Keep a map for the setup
             map.Clear();
-            for (int i = 0; i < terminals.Length; i++)
-                map.Add(terminals[i], nodes[i]);
+            for (int i = 0; i < Pins.Length; i++)
+                map.Add(Pins[i], nodes[i]);
         }
 
         /// <summary>
-        /// No model
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => null;
-
-        /// <summary>
-        /// Setup all components in the subcircuit
+        /// Setup all objects in the subcircuit
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            // Order the components
-            Components.BuildOrderedComponentList();
+            // Order the objects
+            Objects.BuildOrderedComponentList();
 
             // Introduce a pin new map
             ckt.Nodes.PushPinMap(Name + Delimiter, map);
 
-            // Setup all the components
-            foreach (var c in Components)
+            // Setup all the objects
+            foreach (var c in Objects)
                 c.Setup(ckt);
 
             // Restore the previous pin map
@@ -70,42 +70,42 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Set the IC of all components in the subcircuit
+        /// Set the IC of all objects in the subcircuit
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public override void SetIc(Circuit ckt)
         {
-            foreach (var c in Components)
+            foreach (var c in Objects)
                 c.SetIc(ckt);
         }
 
         /// <summary>
-        /// Do temperature-dependent calculations for all components in the subcircuit
+        /// Do temperature-dependent calculations for all objects in the subcircuit
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            foreach (var c in Components)
+            foreach (var c in Objects)
                 c.Temperature(ckt);
         }
 
         /// <summary>
-        /// Load all components in the subcircuit
+        /// Load all objects in the subcircuit
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public override void Load(Circuit ckt)
         {
-            foreach (var c in Components)
+            foreach (var c in Objects)
                 c.Load(ckt);
         }
 
         /// <summary>
-        /// Load all components in the subcircuit for AC analysis
+        /// Load all objects in the subcircuit for AC analysis
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public override void AcLoad(Circuit ckt)
         {
-            foreach (var c in Components)
+            foreach (var c in Objects)
                 c.AcLoad(ckt);
         }
 
@@ -115,17 +115,17 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Accept(Circuit ckt)
         {
-            foreach (var c in Components)
+            foreach (var c in Objects)
                 c.Accept(ckt);
         }
 
         /// <summary>
-        /// Unsetup/destroy all components in the subcircuit
+        /// Unsetup/destroy all objects in the subcircuit
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public override void Unsetup(Circuit ckt)
         {
-            foreach (var c in Components)
+            foreach (var c in Objects)
                 c.Unsetup(ckt);
         }
     }

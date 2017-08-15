@@ -7,17 +7,26 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents the mutual inductance
     /// </summary>
-    public class MutualInductance : CircuitComponent
+    public class MutualInductance : CircuitComponent<MutualInductance>
     {
+        /// <summary>
+        /// Register parameters
+        /// </summary>
+        static MutualInductance()
+        {
+            Register();
+            terminals = new string[] { };
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("k"), SpiceName("coefficient"), SpiceInfo("Mutual inductance", IsPrincipal = true)]
-        public Parameter<double> MUTcoupling { get; } = new Parameter<double>();
+        public Parameter MUTcoupling { get; } = new Parameter();
         [SpiceName("inductor1"), SpiceInfo("First coupled inductor")]
-        public Parameter<string> MUTind1 { get; } = new Parameter<string>();
+        public string MUTind1;
         [SpiceName("inductor2"), SpiceInfo("Second coupled inductor")]
-        public Parameter<string> MUTind2 { get; } = new Parameter<string>();
+        public string MUTind2;
 
         /// <summary>
         /// The factor
@@ -47,22 +56,16 @@ namespace SpiceSharp.Components
         public override void Setup(Circuit ckt)
         {
             // Find the inductors
-            ind1 = ckt.Components[MUTind1] as Inductor;
-            ind2 = ckt.Components[MUTind2] as Inductor;
+            ind1 = ckt.Objects[MUTind1] as Inductor;
+            ind2 = ckt.Objects[MUTind2] as Inductor;
             if (ind1 == null)
-                throw new CircuitException($"{Name}: Could not find inductor '{MUTind1.Value}'");
+                throw new CircuitException($"{Name}: Could not find inductor '{MUTind1}'");
             if (ind2 == null)
-                throw new CircuitException($"{Name}: Could not find inductor '{MUTind2.Value}'");
+                throw new CircuitException($"{Name}: Could not find inductor '{MUTind2}'");
 
             // Register our method for updating mutual inductance flux
             ind1.UpdateMutualInductance += UpdateMutualInductance;
         }
-
-        /// <summary>
-        /// Get the model
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => null;
 
         /// <summary>
         /// Do temperature-dependent calculations

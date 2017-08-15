@@ -6,25 +6,33 @@ namespace SpiceSharp.Components.Waveforms
     /// <summary>
     /// A class that represents a pulsed waveform
     /// </summary>
-    public class Pulse : Waveform
+    public class Pulse : Waveform<Pulse>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static Pulse()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("v1"), SpiceInfo("The initial value")]
-        public Parameter<double> V1 { get; } = new Parameter<double>();
+        public Parameter V1 { get; } = new Parameter();
         [SpiceName("v2"), SpiceInfo("The peak value")]
-        public Parameter<double> V2 { get; } = new Parameter<double>();
+        public Parameter V2 { get; } = new Parameter();
         [SpiceName("td"), SpiceInfo("The initial delay time in seconds")]
-        public Parameter<double> Delay { get; } = new Parameter<double>();
+        public Parameter Delay { get; } = new Parameter();
         [SpiceName("tr"), SpiceInfo("The rise time in seconds")]
-        public Parameter<double> RiseTime { get; } = new Parameter<double>();
+        public Parameter RiseTime { get; } = new Parameter();
         [SpiceName("tf"), SpiceInfo("The fall time in seconds")]
-        public Parameter<double> FallTime { get; } = new Parameter<double>();
+        public Parameter FallTime { get; } = new Parameter();
         [SpiceName("pw"), SpiceInfo("The pulse width in seconds")]
-        public Parameter<double> PulseWidth { get; } = new Parameter<double>();
+        public Parameter PulseWidth { get; } = new Parameter();
         [SpiceName("per"), SpiceInfo("The period in seconds")]
-        public Parameter<double> Period { get; } = new Parameter<double>();
+        public Parameter Period { get; } = new Parameter();
 
         /// <summary>
         /// Private variables
@@ -35,7 +43,7 @@ namespace SpiceSharp.Components.Waveforms
         /// <summary>
         /// Constructor
         /// </summary>
-        public Pulse() : base("PULSE")
+        public Pulse() : base()
         {
         }
 
@@ -49,15 +57,15 @@ namespace SpiceSharp.Components.Waveforms
         /// <param name="tf">The fall time in seconds</param>
         /// <param name="pw">The pulse width in seconds</param>
         /// <param name="per">The period in seconds</param>
-        public Pulse(object v1, object v2, object td, object tr, object tf, object pw, object per) : base("PULSE")
+        public Pulse(double v1, double v2, double td, double tr, double tf, double pw, double per) : base()
         {
-            Set("v1", v1);
-            Set("v2", v2);
-            Set("td", td);
-            Set("tr", tr);
-            Set("tf", tf);
-            Set("pw", pw);
-            Set("per", per);
+            V1.Set(v1);
+            V2.Set(v2);
+            Delay.Set(td);
+            RiseTime.Set(tr);
+            FallTime.Set(tf);
+            PulseWidth.Set(pw);
+            Period.Set(per);
         }
 
         /// <summary>

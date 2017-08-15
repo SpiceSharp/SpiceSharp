@@ -21,16 +21,13 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Private variables
         /// </summary>
-        private Dictionary<StatementType, List<Reader>> Readers = new Dictionary<StatementType, List<Reader>>();
+        private Dictionary<StatementType, ReaderCollection> Readers = new Dictionary<StatementType, ReaderCollection>();
 
         /// <summary>
         /// Constructor
         /// </summary>
         public TokenReaders()
         {
-            // component and control are always present
-            Readers.Add(StatementType.Control, new List<Reader>());
-            Readers.Add(StatementType.Component, new List<Reader>());
         }
 
         /// <summary>
@@ -50,29 +47,15 @@ namespace SpiceSharp.Parser.Readers
             // Ignore without warning if the reader is not active
             if ((st.Type & Active) == StatementType.None)
                 return null;
-
-            // Go through all readers
-            object result = null;
-            bool found = false;
-            foreach (var r in Readers[st.Type])
-            {
-                if (r.Read(st, netlist))
-                {
-                    found = true;
-                    return r.Generated;
-                }
-            }
-            if (!found)
-                throw new ParseException(st.Name, "Unrecognized syntax");
-            return result;
+            return Readers[st.Type].Read(st, netlist);
         }
 
         /// <summary>
-        /// Parse an expression
+        /// Parse a value or expression
         /// </summary>
         /// <param name="input">The input</param>
         /// <returns></returns>
-        public object Parse(string input)
+        public double ParseDouble(string input)
         {
             ExpressionData data = new ExpressionData(input);
             OnParseExpression?.Invoke(this, data);
@@ -90,9 +73,32 @@ namespace SpiceSharp.Parser.Readers
             for (int i = 0; i < readers.Length; i++)
             {
                 if (!Readers.ContainsKey(readers[i].Type))
-                    Readers.Add(readers[i].Type, new List<Reader>());
+                    throw new ParseException("No suitable reader collection");
                 Readers[readers[i].Type].Add(readers[i]);
             }
+        }
+
+        /// <summary>
+        /// Register (multiple) token reader collections
+        /// </summary>
+        /// <param name="collections"></param>
+        public void Register(params ReaderCollection[] collections)
+        {
+            for (int i = 0; i < collections.Length; i++)
+            {
+                if (Readers.ContainsKey(collections[i].Type))
+                    throw new ParseException("There already is a reader collection for this type");
+                Readers.Add(collections[i].Type, collections[i]);
+            }
+        }
+
+        /// <summary>
+        /// Unregister a token reader collection of a certain type
+        /// </summary>
+        /// <param name="type"></param>
+        public void Unregister(StatementType type)
+        {
+            Readers.Remove(type);
         }
 
         /// <summary>
@@ -100,7 +106,7 @@ namespace SpiceSharp.Parser.Readers
         /// </summary>
         /// <param name="t">The parse type</param>
         /// <returns></returns>
-        public List<Reader> this[StatementType type]
+        public ReaderCollection this[StatementType type]
         {
             get
             {
@@ -124,7 +130,7 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// The output expression
         /// </summary>
-        public object Output { get; set; }
+        public double Output { get; set; }
 
         /// <summary>
         /// Constructor

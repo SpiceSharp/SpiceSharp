@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
         {
             Inductor ind = new Inductor(name);
             ind.ReadNodes(parameters, 2);
@@ -29,11 +29,11 @@ namespace SpiceSharp.Parser.Readers
             // Read the value
             if (parameters.Count < 3)
                 throw new ParseException(parameters[1], "Inductance expected", false);
-            ind.Set("inductance", parameters[2].ReadValue());
+            ind.INDinduct.Set(netlist.ParseDouble(parameters[2]));
 
             // Read initial conditions
-            ind.ReadParameters(parameters, 3);
-            return ind;
+            netlist.ReadParameters(ind, parameters, 3);
+            return (ICircuitObject)ind;
         }
     }
 }

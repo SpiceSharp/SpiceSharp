@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp
 {
@@ -34,7 +35,7 @@ namespace SpiceSharp
         /// <summary>
         /// Get the current simulation that is being run
         /// </summary>
-        public Simulation Simulation { get; private set; } = null;
+        public ISimulation Simulation { get; private set; } = null;
 
         /// <summary>
         /// Get the circuit state
@@ -49,7 +50,7 @@ namespace SpiceSharp
         /// <summary>
         /// Get the circuit components
         /// </summary>
-        public CircuitComponents Components { get; } = new CircuitComponents();
+        public CircuitObjects Objects { get; } = new CircuitObjects();
 
         /// <summary>
         /// Private variables
@@ -65,14 +66,14 @@ namespace SpiceSharp
         /// Simulate the circuit
         /// </summary>
         /// <param name="sim">The simulation that needs to be executed</param>
-        public void Simulate(Simulation sim)
+        public void Simulate(ISimulation sim)
         {
             // Setup the circuit
             Setup();
             Simulation = sim;
 
             // Do temperature-dependent calculations
-            foreach (var c in Components)
+            foreach (var c in Objects)
                 c.Temperature(this);
 
             // Execute the simulation
@@ -89,10 +90,10 @@ namespace SpiceSharp
             IsSetup = true;
 
             // Rebuild the list of circuit components
-            Components.BuildOrderedComponentList();
+            Objects.BuildOrderedComponentList();
 
             // Setup all devices
-            foreach (var c in Components)
+            foreach (var c in Objects)
                 c.Setup(this);
 
             // Initialize the state
@@ -109,7 +110,7 @@ namespace SpiceSharp
             IsSetup = false;
 
             // Unsetup devices
-            foreach (var c in Components)
+            foreach (var c in Objects)
                 c.Unsetup(this);
 
             // Destroy state

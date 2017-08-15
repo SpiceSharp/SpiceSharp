@@ -5,12 +5,12 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents a waveform object
     /// </summary>
-    public abstract class Waveform : Parameterized
+    public abstract class Waveform<T> : Parameterized<T>, IWaveform
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public Waveform(string name) : base(name)
+        public Waveform() : base()
         {
         }
 

@@ -2,7 +2,6 @@
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System.Numerics;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers.Exports
 {
@@ -32,31 +31,29 @@ namespace SpiceSharp.Parser.Readers.Exports
             switch (st.Parameters.Count)
             {
                 case 0: throw new ParseException(st.Name, "Node expected", false);
-                case 1: source = st.Parameters[0].ReadIdentifier(); break;
+                case 1:
+                    if (st.Parameters[0].kind != SpiceSharpParserConstants.WORD)
+                        throw new ParseException(st.Parameters[0], "Source expected");
+                    source = st.Parameters[0].image.ToLower(); break;
                 default: throw new ParseException(st.Name, "Too many st.Parameters");
             }
 
             Export e = null;
-            string type;
-            if (st.Name.TryReadWord(out type))
+            string type = st.Name.image.ToLower();
+            switch (type)
             {
-                switch (type)
-                {
-                    case "ir": e = new CurrentRealExport(source); break;
-                    case "ii": e = new CurrentImaginaryExport(source); break;
-                    case "im": e = new CurrentMagnitudeExport(source); break;
-                    case "ip": e = new CurrentPhaseExport(source); break;
-                    case "idb": e = new CurrentDecibelExport(source); break;
-                    default:
-                        return false;
-                }
-
-                Generated = e;
-                netlist.Exports.Add(e);
-                return true;
+                case "ir": e = new CurrentRealExport(source); break;
+                case "ii": e = new CurrentImaginaryExport(source); break;
+                case "im": e = new CurrentMagnitudeExport(source); break;
+                case "ip": e = new CurrentPhaseExport(source); break;
+                case "idb": e = new CurrentDecibelExport(source); break;
+                default:
+                    return false;
             }
-            else
-                return false;
+
+            Generated = e;
+            netlist.Exports.Add(e);
+            return true;
         }
     }
 
@@ -97,7 +94,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <returns></returns>
         public override object Extract(SimulationData data)
         {
-            var vsrc = data.GetComponent(Source) as Voltagesource;
+            var vsrc = data.GetObject(Source) as Voltagesource;
             switch (data.Circuit.State.Domain)
             {
                 case Circuits.CircuitState.DomainTypes.Frequency:
@@ -146,7 +143,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <returns></returns>
         public override object Extract(SimulationData data)
         {
-            var vsrc = data.GetComponent(Source) as Voltagesource;
+            var vsrc = data.GetObject(Source) as Voltagesource;
             switch (data.Circuit.State.Domain)
             {
                 case Circuits.CircuitState.DomainTypes.Frequency:
@@ -195,7 +192,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <returns></returns>
         public override object Extract(SimulationData data)
         {
-            var vsrc = data.GetComponent(Source) as Voltagesource;
+            var vsrc = data.GetObject(Source) as Voltagesource;
             switch (data.Circuit.State.Domain)
             {
                 case Circuits.CircuitState.DomainTypes.Frequency:
@@ -244,7 +241,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <returns></returns>
         public override object Extract(SimulationData data)
         {
-            var vsrc = data.GetComponent(Source) as Voltagesource;
+            var vsrc = data.GetObject(Source) as Voltagesource;
             switch (data.Circuit.State.Domain)
             {
                 case Circuits.CircuitState.DomainTypes.Frequency:
@@ -294,7 +291,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <returns></returns>
         public override object Extract(SimulationData data)
         {
-            var vsrc = data.GetComponent(Source) as Voltagesource;
+            var vsrc = data.GetObject(Source) as Voltagesource;
             switch (data.Circuit.State.Domain)
             {
                 case Circuits.CircuitState.DomainTypes.Frequency:

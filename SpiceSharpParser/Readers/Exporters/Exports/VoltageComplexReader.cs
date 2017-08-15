@@ -27,32 +27,35 @@ namespace SpiceSharp.Parser.Readers.Exports
             switch (st.Parameters.Count)
             {
                 case 0: throw new ParseException(st.Name, "Node expected", false);
-                case 2: reference = st.Parameters[1].ReadIdentifier(); goto case 1;
-                case 1: node = st.Parameters[0].ReadIdentifier(); break;
+                case 2:
+                    if (!ReaderExtension.IsNode(st.Parameters[1]))
+                        throw new ParseException(st.Parameters[1], "Node expected");
+                    reference = st.Parameters[1].image.ToLower();
+                    goto case 1;
+                case 1:
+                    if (!ReaderExtension.IsNode(st.Parameters[0]))
+                        throw new ParseException(st.Parameters[0], "Node expected");
+                    node = st.Parameters[0].image.ToLower();
+                    break;
                 default: throw new ParseException(st.Name, "Too many st.Parameters");
             }
 
             Export e = null;
-            string type;
-            if (st.Name.TryReadWord(out type))
+            string type = st.Name.image.ToLower();
+            switch (type)
             {
-                switch (type)
-                {
-                    case "vr": e = new VoltageRealExport(node, reference); break;
-                    case "vi": e = new VoltageImaginaryExport(node, reference); break;
-                    case "vm": e = new VoltageMagnitudeExport(node, reference); break;
-                    case "vp": e = new VoltagePhaseExport(node, reference); break;
-                    case "vdb": e = new VoltageDecibelExport(node, reference); break;
-                    default:
-                        return false;
-                }
-
-                Generated = e;
-                netlist.Exports.Add(e);
-                return true;
+                case "vr": e = new VoltageRealExport(node, reference); break;
+                case "vi": e = new VoltageImaginaryExport(node, reference); break;
+                case "vm": e = new VoltageMagnitudeExport(node, reference); break;
+                case "vp": e = new VoltagePhaseExport(node, reference); break;
+                case "vdb": e = new VoltageDecibelExport(node, reference); break;
+                default:
+                    return false;
             }
-            else
-                return false;
+
+            Generated = e;
+            netlist.Exports.Add(e);
+            return true;
         }
     }
 

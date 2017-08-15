@@ -4,93 +4,101 @@ using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
-    public class BJTModel : CircuitModel
+    public class BJTModel : CircuitModel<BJTModel>
     {
+        /// <summary>
+        /// Register parameters
+        /// </summary>
+        static BJTModel()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
-        public ParameterMethod<double> BJTtnom { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature in Kelvin")]
+        public Parameter BJTtnom { get; } = new Parameter(300.15);
         [SpiceName("is"), SpiceInfo("Saturation Current")]
-        public Parameter<double> BJTsatCur { get; } = new Parameter<double>(1e-16);
+        public Parameter BJTsatCur { get; } = new Parameter(1e-16);
         [SpiceName("bf"), SpiceInfo("Ideal forward beta")]
-        public Parameter<double> BJTbetaF { get; } = new Parameter<double>(100);
+        public Parameter BJTbetaF { get; } = new Parameter(100);
         [SpiceName("nf"), SpiceInfo("Forward emission coefficient")]
-        public Parameter<double> BJTemissionCoeffF { get; } = new Parameter<double>(1);
+        public Parameter BJTemissionCoeffF { get; } = new Parameter(1);
         [SpiceName("vaf"), SpiceName("va"), SpiceInfo("Forward Early voltage")]
-        public Parameter<double> BJTearlyVoltF { get; } = new Parameter<double>();
+        public Parameter BJTearlyVoltF { get; } = new Parameter();
         [SpiceName("ikf"), SpiceName("ik"), SpiceInfo("Forward beta roll-off corner current")]
-        public Parameter<double> BJTrollOffF { get; } = new Parameter<double>();
+        public Parameter BJTrollOffF { get; } = new Parameter();
         [SpiceName("ise"), SpiceInfo("B-E leakage saturation current")]
-        public Parameter<double> BJTleakBEcurrent { get; } = new Parameter<double>();
+        public Parameter BJTleakBEcurrent { get; } = new Parameter();
         [SpiceName("ne"), SpiceInfo("B-E leakage emission coefficient")]
-        public Parameter<double> BJTleakBEemissionCoeff { get; } = new Parameter<double>(1.5);
+        public Parameter BJTleakBEemissionCoeff { get; } = new Parameter(1.5);
         [SpiceName("br"), SpiceInfo("Ideal reverse beta")]
-        public Parameter<double> BJTbetaR { get; } = new Parameter<double>(1);
+        public Parameter BJTbetaR { get; } = new Parameter(1);
         [SpiceName("nr"), SpiceInfo("Reverse emission coefficient")]
-        public Parameter<double> BJTemissionCoeffR { get; } = new Parameter<double>(1);
+        public Parameter BJTemissionCoeffR { get; } = new Parameter(1);
         [SpiceName("var"), SpiceName("vb"), SpiceInfo("Reverse Early voltage")]
-        public Parameter<double> BJTearlyVoltR { get; } = new Parameter<double>();
+        public Parameter BJTearlyVoltR { get; } = new Parameter();
         [SpiceName("ikr"), SpiceInfo("reverse beta roll-off corner current")]
-        public Parameter<double> BJTrollOffR { get; } = new Parameter<double>();
+        public Parameter BJTrollOffR { get; } = new Parameter();
         [SpiceName("isc"), SpiceInfo("B-C leakage saturation current")]
-        public Parameter<double> BJTleakBCcurrent { get; } = new Parameter<double>();
+        public Parameter BJTleakBCcurrent { get; } = new Parameter();
         [SpiceName("nc"), SpiceInfo("B-C leakage emission coefficient")]
-        public Parameter<double> BJTleakBCemissionCoeff { get; } = new Parameter<double>(2);
+        public Parameter BJTleakBCemissionCoeff { get; } = new Parameter(2);
         [SpiceName("rb"), SpiceInfo("Zero bias base resistance")]
-        public Parameter<double> BJTbaseResist { get; } = new Parameter<double>();
+        public Parameter BJTbaseResist { get; } = new Parameter();
         [SpiceName("irb"), SpiceInfo("Current for base resistance=(rb+rbm)/2")]
-        public Parameter<double> BJTbaseCurrentHalfResist { get; } = new Parameter<double>();
+        public Parameter BJTbaseCurrentHalfResist { get; } = new Parameter();
         [SpiceName("rbm"), SpiceInfo("Minimum base resistance")]
-        public Parameter<double> BJTminBaseResist { get; } = new Parameter<double>();
+        public Parameter BJTminBaseResist { get; } = new Parameter();
         [SpiceName("re"), SpiceInfo("Emitter resistance")]
-        public Parameter<double> BJTemitterResist { get; } = new Parameter<double>();
+        public Parameter BJTemitterResist { get; } = new Parameter();
         [SpiceName("rc"), SpiceInfo("Collector resistance")]
-        public Parameter<double> BJTcollectorResist { get; } = new Parameter<double>();
+        public Parameter BJTcollectorResist { get; } = new Parameter();
         [SpiceName("cje"), SpiceInfo("Zero bias B-E depletion capacitance")]
-        public Parameter<double> BJTdepletionCapBE { get; } = new Parameter<double>();
+        public Parameter BJTdepletionCapBE { get; } = new Parameter();
         [SpiceName("vje"), SpiceName("pe"), SpiceInfo("B-E built in potential")]
-        public Parameter<double> BJTpotentialBE { get; } = new Parameter<double>(.75);
+        public Parameter BJTpotentialBE { get; } = new Parameter(.75);
         [SpiceName("mje"), SpiceName("me"), SpiceInfo("B-E junction grading coefficient")]
-        public Parameter<double> BJTjunctionExpBE { get; } = new Parameter<double>(.33);
+        public Parameter BJTjunctionExpBE { get; } = new Parameter(.33);
         [SpiceName("tf"), SpiceInfo("Ideal forward transit time")]
-        public Parameter<double> BJTtransitTimeF { get; } = new Parameter<double>();
+        public Parameter BJTtransitTimeF { get; } = new Parameter();
         [SpiceName("xtf"), SpiceInfo("Coefficient for bias dependence of TF")]
-        public Parameter<double> BJTtransitTimeBiasCoeffF { get; } = new Parameter<double>();
+        public Parameter BJTtransitTimeBiasCoeffF { get; } = new Parameter();
         [SpiceName("vtf"), SpiceInfo("Voltage giving VBC dependence of TF")]
-        public Parameter<double> BJTtransitTimeFVBC { get; } = new Parameter<double>();
+        public Parameter BJTtransitTimeFVBC { get; } = new Parameter();
         [SpiceName("itf"), SpiceInfo("High current dependence of TF")]
-        public Parameter<double> BJTtransitTimeHighCurrentF { get; } = new Parameter<double>();
+        public Parameter BJTtransitTimeHighCurrentF { get; } = new Parameter();
         [SpiceName("ptf"), SpiceInfo("Excess phase")]
-        public Parameter<double> BJTexcessPhase { get; } = new Parameter<double>();
+        public Parameter BJTexcessPhase { get; } = new Parameter();
         [SpiceName("cjc"), SpiceInfo("Zero bias B-C depletion capacitance")]
-        public Parameter<double> BJTdepletionCapBC { get; } = new Parameter<double>();
+        public Parameter BJTdepletionCapBC { get; } = new Parameter();
         [SpiceName("vjc"), SpiceName("pc"), SpiceInfo("B-C built in potential")]
-        public Parameter<double> BJTpotentialBC { get; } = new Parameter<double>(.75);
+        public Parameter BJTpotentialBC { get; } = new Parameter(.75);
         [SpiceName("mjc"), SpiceName("mc"), SpiceInfo("B-C junction grading coefficient")]
-        public Parameter<double> BJTjunctionExpBC { get; } = new Parameter<double>(.33);
+        public Parameter BJTjunctionExpBC { get; } = new Parameter(.33);
         [SpiceName("xcjc"), SpiceInfo("Fraction of B-C cap to internal base")]
-        public Parameter<double> BJTbaseFractionBCcap { get; } = new Parameter<double>(1);
+        public Parameter BJTbaseFractionBCcap { get; } = new Parameter(1);
         [SpiceName("tr"), SpiceInfo("Ideal reverse transit time")]
-        public Parameter<double> BJTtransitTimeR { get; } = new Parameter<double>();
+        public Parameter BJTtransitTimeR { get; } = new Parameter();
         [SpiceName("cjs"), SpiceName("ccs"), SpiceInfo("Zero bias C-S capacitance")]
-        public Parameter<double> BJTcapCS { get; } = new Parameter<double>();
+        public Parameter BJTcapCS { get; } = new Parameter();
         [SpiceName("vjs"), SpiceName("ps"), SpiceInfo("Substrate junction built in potential")]
-        public Parameter<double> BJTpotentialSubstrate { get; } = new Parameter<double>(.75);
+        public Parameter BJTpotentialSubstrate { get; } = new Parameter(.75);
         [SpiceName("mjs"), SpiceName("ms"), SpiceInfo("Substrate junction grading coefficient")]
-        public Parameter<double> BJTexponentialSubstrate { get; } = new Parameter<double>();
+        public Parameter BJTexponentialSubstrate { get; } = new Parameter();
         [SpiceName("xtb"), SpiceInfo("Forward and reverse beta temp. exp.")]
-        public Parameter<double> BJTbetaExp { get; } = new Parameter<double>();
+        public Parameter BJTbetaExp { get; } = new Parameter();
         [SpiceName("eg"), SpiceInfo("Energy gap for IS temp. dependency")]
-        public Parameter<double> BJTenergyGap { get; } = new Parameter<double>(1.11);
+        public Parameter BJTenergyGap { get; } = new Parameter(1.11);
         [SpiceName("xti"), SpiceInfo("Temp. exponent for IS")]
-        public Parameter<double> BJTtempExpIS { get; } = new Parameter<double>(3);
+        public Parameter BJTtempExpIS { get; } = new Parameter(3);
         [SpiceName("fc"), SpiceInfo("Forward bias junction fit parameter")]
-        public Parameter<double> BJTdepletionCapCoeff { get; } = new Parameter<double>();
+        public Parameter BJTdepletionCapCoeff { get; } = new Parameter();
         [SpiceName("kf"), SpiceInfo("Flicker Noise Coefficient")]
-        public Parameter<double> BJTfNcoef = new Parameter<double>();
+        public Parameter BJTfNcoef = new Parameter();
         [SpiceName("af"), SpiceInfo("Flicker Noise Exponent")]
-        public Parameter<double> BJTfNexp = new Parameter<double>(1);
+        public Parameter BJTfNexp = new Parameter(1);
         [SpiceName("invearlyvoltf"), SpiceInfo("Inverse early voltage:forward")]
         public double BJTinvEarlyVoltF { get; private set; }
         [SpiceName("invearlyvoltr"), SpiceInfo("Inverse early voltage:reverse")]
@@ -142,8 +150,8 @@ namespace SpiceSharp.Components
         /// Extra variables
         /// </summary>
         public double BJTtype { get; private set; }
-        public Parameter<double> BJTc2 { get; } = new Parameter<double>();
-        public Parameter<double> BJTc4 { get; } = new Parameter<double>();
+        public Parameter BJTc2 { get; } = new Parameter();
+        public Parameter BJTc4 { get; } = new Parameter();
         public double BJTf2 { get; private set; }
         public double BJTf3 { get; private set; }
         public double BJTf6 { get; private set; }

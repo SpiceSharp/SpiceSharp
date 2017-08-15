@@ -10,7 +10,10 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Constructor
         /// </summary>
-        public SaveReader() : base(StatementType.Control) { }
+        public SaveReader() : base(StatementType.Control)
+        {
+            Identifier = "save";
+        }
 
         /// <summary>
         /// Read
@@ -22,16 +25,12 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(Statement st, Netlist netlist)
         {
-            if (!st.Name.TryReadLiteral("save"))
-                return false;
-
             for (int i = 0; i < st.Parameters.Count; i++)
             {
-                if (st.Parameters[i].TryReadBracket(out BracketToken bt, '?'))
+                if (st.Parameters[i].kind == TokenConstants.BRACKET)
                 {
-                    if (!(bt.Name is Token))
-                        throw new ParseException(bt, "Export type expected");
-                    Statement s = new Statement(StatementType.Export, bt.Name as Token, bt.Parameters);
+                    BracketToken bt = st.Parameters[i] as BracketToken;
+                    Statement s = new Statement(StatementType.Export, bt.Name, bt.Parameters);
                     Generated = netlist.Readers.Read(s, netlist);
                 }
             }

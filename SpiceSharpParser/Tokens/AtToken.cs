@@ -3,7 +3,7 @@
     /// <summary>
     /// An @-token (eg. "@M1[gm]")
     /// </summary>
-    public class AtToken
+    public class AtToken : Token
     {
         /// <summary>
         /// Gets the name of the At-token (M1 in "@M1[gm]")
@@ -20,10 +20,16 @@
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="parameter">Parameter</param>
-        public AtToken(object name, object parameter)
+        public AtToken(Token name, Token parameter)
         {
             Name = name;
             Parameter = parameter;
+            beginLine = name.beginLine;
+            beginColumn = name.beginColumn;
+            endLine = parameter.endLine;
+            endColumn = parameter.endColumn;
+            kind = TokenConstants.AT;
+            image = name.image + "[" + parameter.image + "]";
         }
     }
 }

@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
 
             // Load all devices
             // ckt.Load(this, state);
-            foreach (var c in ckt.Components)
+            foreach (var c in ckt.Objects)
                 c.Load(ckt);
 
             // Check modes
@@ -119,7 +119,7 @@ namespace SpiceSharp.Simulations
             // Use initial conditions
             if (state.UseIC)
             {
-                foreach (var c in ckt.Components)
+                foreach (var c in ckt.Objects)
                     c.SetIc(ckt);
             }
         }

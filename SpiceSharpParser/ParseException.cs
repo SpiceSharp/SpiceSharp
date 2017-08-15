@@ -61,8 +61,8 @@ namespace SpiceSharp.Parser
             specialConstructor = false;
         }
 
-        public ParseException(object token, string message, bool before = true)
-            : base($"Error at line {(before ? token.BeginLine() : token.EndLine())}, column {(before ? token.BeginColumn() : token.EndColumn())}: {message}")
+        public ParseException(Token token, string message, bool before = true)
+            : base($"Error at line {(before ? token.beginLine : token.endLine)}, column {(before ? token.beginColumn : token.endColumn)}: {message}")
         {
         }
 

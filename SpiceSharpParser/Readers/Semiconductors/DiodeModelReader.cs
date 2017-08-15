@@ -17,6 +17,6 @@ namespace SpiceSharp.Parser.Readers
         /// </summary>
         /// <param name="name">Name</param>
         /// <returns></returns>
-        protected override CircuitModel GenerateModel(string name) => new DiodeModel(name);
+        protected override ICircuitObject GenerateModel(string name) => (ICircuitObject)new DiodeModel(name);
     }
 }

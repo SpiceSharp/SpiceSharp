@@ -3,7 +3,7 @@
     /// <summary>
     /// This model represents a component model
     /// </summary>
-    public abstract class CircuitModel : CircuitComponent
+    public abstract class CircuitModel<T> : CircuitComponent<T>
     {
         /// <summary>
         /// Constructor
@@ -13,13 +13,8 @@
         {
             // Make sure the models are evaluated before the actual components
             Priority = 1;
+            Model = null;
         }
-
-        /// <summary>
-        /// A model has no submodel
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => null;
 
         /// <summary>
         /// Setup the model

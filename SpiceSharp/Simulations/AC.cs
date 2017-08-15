@@ -3,14 +3,23 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using System.Numerics;
 using SpiceSharp.Parameters;
+using static SpiceSharp.Simulations.SimulationIterate;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// This 
     /// </summary>
-    public class AC : Simulation
+    public class AC : Simulation<AC>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static AC()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Default configuration for AC simulations
         /// </summary>
@@ -108,13 +117,18 @@ namespace SpiceSharp.Simulations
         /// <param name="n">The number of steps</param>
         /// <param name="start">The starting frequency</param>
         /// <param name="stop">The stopping frequency</param>
-        public AC(string name, string type, object n, object start, object stop)
+        public AC(string name, string type, int n, double start, double stop)
             : base(name, new Configuration())
         {
-            Set("type", type);
-            Set("n", n);
-            Set("start", start);
-            Set("stop", stop);
+            switch (type.ToLower())
+            {
+                case "dec": StepType = StepTypes.Decade; break;
+                case "oct": StepType = StepTypes.Octave; break;
+                case "lin": StepType = StepTypes.Linear; break;
+            }
+            NumberSteps = n;
+            StartFreq = start;
+            StopFreq = stop;
         }
 
         /// <summary>
@@ -166,12 +180,12 @@ namespace SpiceSharp.Simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
             Initialize(ckt);
-            this.Op(ckt, MyConfig.DcMaxIterations);
+            Op(Config, ckt, MyConfig.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             state.UseDC = false;
             state.UseSmallSignal = true;
-            foreach (var c in ckt.Components)
+            foreach (var c in ckt.Objects)
                 c.Load(ckt);
 
             // Export operating point if requested
@@ -189,7 +203,7 @@ namespace SpiceSharp.Simulations
                 state.Complex.Laplace = new Complex(0.0, 2.0 * Circuit.CONSTPI * freq);
 
                 // Solve
-                this.AcIterate(ckt);
+                AcIterate(Config, ckt);
 
                 // Export the timepoint
                 Export(ckt);

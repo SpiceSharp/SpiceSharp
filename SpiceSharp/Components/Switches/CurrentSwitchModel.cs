@@ -5,19 +5,27 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents a model for a current-controlled switch
     /// </summary>
-    public class CurrentSwitchModel : CircuitModel
+    public class CurrentSwitchModel : CircuitModel<CurrentSwitchModel>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static CurrentSwitchModel()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("ron"), SpiceInfo("Closed resistance")]
-        public Parameter<double> CSWon { get; } = new Parameter<double>();
+        public Parameter CSWon { get; } = new Parameter();
         [SpiceName("roff"), SpiceInfo("Open resistance")]
-        public Parameter<double> CSWoff { get; } = new Parameter<double>();
+        public Parameter CSWoff { get; } = new Parameter();
         [SpiceName("it"), SpiceInfo("Threshold current")]
-        public Parameter<double> CSWthresh { get; } = new Parameter<double>();
+        public Parameter CSWthresh { get; } = new Parameter();
         [SpiceName("ih"), SpiceInfo("Hysteresis current")]
-        public Parameter<double> CSWhyst { get; } = new Parameter<double>();
+        public Parameter CSWhyst { get; } = new Parameter();
         [SpiceName("gon"), SpiceInfo("Closed conductance")]
         public double CSWonConduct { get; private set; }
         [SpiceName("goff"), SpiceInfo("Open conductance")]
@@ -27,7 +35,11 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the model</param>
-        public CurrentSwitchModel(string name) : base(name) { }
+        public CurrentSwitchModel(string name) : base(name)
+        {
+            // CurrentSwitch has a priority of -1, so this needs to be even earlier
+            Priority = -2;
+        }
 
         /// <summary>
         /// Setup the model

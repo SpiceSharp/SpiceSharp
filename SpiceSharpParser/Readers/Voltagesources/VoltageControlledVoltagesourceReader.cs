@@ -21,15 +21,15 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
         {
             VoltageControlledVoltagesource vcvs = new VoltageControlledVoltagesource(name);
             vcvs.ReadNodes(parameters, 4);
 
             if (parameters.Count < 5)
                 throw new ParseException(parameters[3], "Value expected");
-            vcvs.Set("gain", parameters[4].ReadValue());
-            return vcvs;
+            vcvs.Set("gain", netlist.ParseDouble(parameters[4]));
+            return (ICircuitObject)vcvs;
         }
     }
 }

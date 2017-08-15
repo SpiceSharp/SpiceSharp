@@ -14,7 +14,7 @@ namespace SpiceSharp.Parser.Readers
         /// </summary>
         public CurrentSwitchReader() : base('w') { }
 
-        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
         {
             CurrentSwitch csw = new CurrentSwitch(name);
             csw.ReadNodes(parameters, 2);
@@ -24,21 +24,23 @@ namespace SpiceSharp.Parser.Readers
                 case 3: throw new ParseException(parameters[2], "Model expected", false);
             }
 
-            csw.Set("control", parameters[2].ReadWord());
-            csw.Model = parameters[3].ReadModel<CurrentSwitchModel>(netlist);
-
+            switch (parameters[2].kind)
+            {
+                case SpiceSharpParserConstants.WORD: csw.CSWcontName = parameters[2].image.ToLower(); break;
+                default: throw new ParseException(parameters[2], "Voltage source name expected");
+            }
+            csw.SetModel(netlist.FindModel<CurrentSwitchModel>(parameters[3]));
             // Optional on or off
             if (parameters.Count > 4)
             {
-                string state = parameters[4].ReadWord();
-                switch (state)
+                switch (parameters[4].image.ToLower())
                 {
                     case "on": csw.SetOn(); break;
                     case "off": csw.SetOff(); break;
                     default: throw new ParseException(parameters[4], "ON or OFF expected");
                 }
             }
-            return csw;
+            return (ICircuitObject)csw;
         }
     }
 }

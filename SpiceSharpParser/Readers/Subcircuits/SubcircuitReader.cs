@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Parser.Subcircuits;
+using static SpiceSharp.Parser.SpiceSharpParserConstants;
 using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
@@ -25,10 +26,10 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
         {
             List<string> pins = new List<string>();
-            Dictionary<string, string> pars = new Dictionary<string, string>();
+            Dictionary<string, Token> pars = new Dictionary<string, Token>();
             string subcktname = null;
 
             // Format: <NAME> <NODES>* <SUBCKT> <PAR1>=<VAL1> ...
@@ -37,11 +38,10 @@ namespace SpiceSharp.Parser.Readers
             {
                 if (mode)
                 {
-                    if (parameters[i].TryReadIdentifier(out string node))
-                        pins.Add(subcktname = node);
+                    if (ReaderExtension.IsNode(parameters[i]))
+                        pins.Add(subcktname = parameters[i].image.ToLower());
                     else
                     {
-                        // Parameter found, which means our last pin was actually our subcircuit name
                         pins.RemoveAt(pins.Count - 1);
                         mode = false;
                     }
@@ -50,8 +50,20 @@ namespace SpiceSharp.Parser.Readers
                 // Reading parameters
                 if (!mode)
                 {
-                    parameters[i].ReadAssignment(out string pname, out string pvalue);
-                    pars.Add(pname, pvalue);
+                    if (parameters[i].kind == TokenConstants.ASSIGNMENT)
+                    {
+                        AssignmentToken at = parameters[i] as AssignmentToken;
+                        switch (at.Name.kind)
+                        {
+                            case WORD:
+                            case IDENTIFIER:
+                                pars.Add(at.Name.image.ToLower(), at.Value);
+                                break;
+
+                            default:
+                                throw new ParseException(at.Name, "Parameter name expected");
+                        }
+                    }
                 }
             }
             if (mode)
@@ -73,7 +85,7 @@ namespace SpiceSharp.Parser.Readers
             netlist.Path.Ascend();
 
             // Return the subcircuit
-            return subckt;
+            return (ICircuitObject)subckt;
         }
     }
 }

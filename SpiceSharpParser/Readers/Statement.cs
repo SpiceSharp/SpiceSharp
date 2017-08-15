@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
@@ -14,7 +13,7 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// The parameters
         /// </summary>
-        public List<object> Parameters { get; }
+        public List<Token> Parameters { get; }
 
         /// <summary>
         /// The type
@@ -24,14 +23,29 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="type">The type of the parameter</param>
-        /// <param name="name"></param>
-        /// <param name="parameters"></param>
-        public Statement(StatementType type, Token name, List<object> parameters)
+        /// <param name="type">The type of the statement</param>
+        /// <param name="name">The name</param>
+        /// <param name="parameters">Parameters</param>
+        public Statement(StatementType type, Token name, List<Token> parameters)
         {
             Type = type;
             Name = name;
             Parameters = parameters;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="type">The type of the statement</param>
+        /// <param name="name">The name</param>
+        /// <param name="parameters">parameters</param>
+        public Statement(StatementType type, Token name, params Token[] parameters)
+        {
+            Type = type;
+            Name = name;
+            Parameters = new List<Token>();
+            foreach (var t in parameters)
+                Parameters.Add(t);
         }
 
         /// <summary>
@@ -40,14 +54,9 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override string ToString()
         {
-            string result = Name.Image();
+            string result = Name.image;
             for (int i = 0; i < Parameters.Count; i++)
-            {
-                if (Parameters[i] is List<Statement>)
-                    result += " body";
-                else
-                    result += " " + Parameters[i].Image();
-            }
+                result += " " + Parameters[i].image;
             return result;
         }
     }

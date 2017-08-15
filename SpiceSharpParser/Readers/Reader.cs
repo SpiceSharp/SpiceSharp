@@ -14,6 +14,12 @@ namespace SpiceSharp.Parser.Readers
         public StatementType Type { get; private set; }
 
         /// <summary>
+        /// An optional identifier that can be used by the ReaderCollection
+        /// to find the right reader
+        /// </summary>
+        public string Identifier { get; protected set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="type">The type of reader</param>

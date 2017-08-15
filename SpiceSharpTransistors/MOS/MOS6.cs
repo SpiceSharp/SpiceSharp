@@ -7,42 +7,51 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    public class MOS6 : CircuitComponent
+    public class MOS6 : CircuitComponent<MOS6>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static MOS6()
+        {
+            Register();
+            terminals = new string[] { "Drain", "Gate", "Source", "Bulk" };
+        }
+
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public MOS6Model Model { get; set; }
+        public void SetModel(MOS6Model model) => Model = (ICircuitObject)model;
 
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("temp"), SpiceInfo("Instance temperature")]
-        public ParameterMethod<double> MOS6temp { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
+        public Parameter MOS6temp { get; } = new Parameter(300.15);
         [SpiceName("w"), SpiceInfo("Width")]
-        public Parameter<double> MOS6w { get; } = new Parameter<double>();
+        public Parameter MOS6w { get; } = new Parameter();
         [SpiceName("l"), SpiceInfo("Length")]
-        public Parameter<double> MOS6l { get; } = new Parameter<double>();
+        public Parameter MOS6l { get; } = new Parameter();
         [SpiceName("as"), SpiceInfo("Source area")]
-        public Parameter<double> MOS6sourceArea { get; } = new Parameter<double>();
+        public Parameter MOS6sourceArea { get; } = new Parameter();
         [SpiceName("ad"), SpiceInfo("Drain area")]
-        public Parameter<double> MOS6drainArea { get; } = new Parameter<double>();
+        public Parameter MOS6drainArea { get; } = new Parameter();
         [SpiceName("ps"), SpiceInfo("Source perimeter")]
-        public Parameter<double> MOS6sourcePerimiter { get; } = new Parameter<double>();
+        public Parameter MOS6sourcePerimiter { get; } = new Parameter();
         [SpiceName("pd"), SpiceInfo("Drain perimeter")]
-        public Parameter<double> MOS6drainPerimiter { get; } = new Parameter<double>();
+        public Parameter MOS6drainPerimiter { get; } = new Parameter();
         [SpiceName("nrs"), SpiceInfo("Source squares")]
-        public Parameter<double> MOS6sourceSquares { get; } = new Parameter<double>();
+        public Parameter MOS6sourceSquares { get; } = new Parameter();
         [SpiceName("nrd"), SpiceInfo("Drain squares")]
-        public Parameter<double> MOS6drainSquares { get; } = new Parameter<double>();
+        public Parameter MOS6drainSquares { get; } = new Parameter();
         [SpiceName("off"), SpiceInfo("Device initially off")]
         public bool MOS6off { get; set; }
         [SpiceName("icvbs"), SpiceInfo("Initial B-S voltage")]
-        public Parameter<double> MOS6icVBS { get; } = new Parameter<double>();
+        public Parameter MOS6icVBS { get; } = new Parameter();
         [SpiceName("icvds"), SpiceInfo("Initial D-S voltage")]
-        public Parameter<double> MOS6icVDS { get; } = new Parameter<double>();
+        public Parameter MOS6icVDS { get; } = new Parameter();
         [SpiceName("icvgs"), SpiceInfo("Initial G-S voltage")]
-        public Parameter<double> MOS6icVGS { get; } = new Parameter<double>();
+        public Parameter MOS6icVGS { get; } = new Parameter();
         [SpiceName("dnode"), SpiceInfo("Number of the drain node ")]
         public int MOS6dNode { get; private set; }
         [SpiceName("gnode"), SpiceInfo("Number of the gate node ")]
@@ -267,15 +276,9 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS6(string name) : base(name, "Drain", "Gate", "Source", "Bulk")
+        public MOS6(string name) : base(name)
         {
         }
-
-        /// <summary>
-        /// Get the model
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => Model;
 
         /// <summary>
         /// Setup the device
@@ -283,6 +286,8 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
+            var model = Model as MOS6Model;
+
             // Allocate nodes
             var nodes = BindNodes(ckt);
             MOS6dNode = nodes[0].Index;
@@ -298,12 +303,12 @@ namespace SpiceSharp.Components
 
             /* allocate a chunk of the state vector */
 
-            if ((Model.MOS6drainResistance != 0 || (Model.MOS6sheetResistance != 0 && MOS6drainSquares != 0)) && MOS6dNodePrime == 0)
+            if ((model.MOS6drainResistance != 0 || (model.MOS6sheetResistance != 0 && MOS6drainSquares != 0)) && MOS6dNodePrime == 0)
                 MOS6dNodePrime = CreateNode(ckt).Index;
             else
                 MOS6dNodePrime = MOS6dNode;
 
-            if ((Model.MOS6sourceResistance != 0 || (Model.MOS6sheetResistance != 0 && MOS6sourceSquares != 0)) && MOS6sNodePrime == 0)
+            if ((model.MOS6sourceResistance != 0 || (model.MOS6sheetResistance != 0 && MOS6sourceSquares != 0)) && MOS6sNodePrime == 0)
                 MOS6sNodePrime = CreateNode(ckt).Index;
             else
                 MOS6sNodePrime = MOS6sNode;
@@ -315,13 +320,14 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
+            var model = Model as MOS6Model;
             double vt, ratio, fact2, kt, egfet, arg, pbfact, ratio4, phio, pbo, gmaold, capfact, gmanew, czbd, czbdsw, sarg, sargsw, czbs, czbssw;
 
             /* perform the parameter defaulting */
             if (!MOS6temp.Given)
                 MOS6temp.Value = ckt.State.Temperature;
             vt = MOS6temp * Circuit.CONSTKoverQ;
-            ratio = MOS6temp / Model.MOS6tnom;
+            ratio = MOS6temp / model.MOS6tnom;
             fact2 = MOS6temp / Circuit.CONSTRefTemp;
             kt = MOS6temp * Circuit.CONSTBoltz;
             egfet = 1.16 - (7.02e-4 * MOS6temp * MOS6temp) /
@@ -329,36 +335,36 @@ namespace SpiceSharp.Components
             arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
             pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
 
-            if (MOS6l - 2 * Model.MOS6latDiff <= 0)
+            if (MOS6l - 2 * model.MOS6latDiff <= 0)
                 CircuitWarning.Warning(this, $"{Name}: effective channel length less than zero");
             ratio4 = ratio * Math.Sqrt(ratio);
-            MOS6tKv = Model.MOS6kv;
-            MOS6tKc = Model.MOS6kc / ratio4;
-            MOS6tSurfMob = Model.MOS6surfaceMobility / ratio4;
-            phio = (Model.MOS6phi - Model.pbfact1) / Model.fact1;
+            MOS6tKv = model.MOS6kv;
+            MOS6tKc = model.MOS6kc / ratio4;
+            MOS6tSurfMob = model.MOS6surfaceMobility / ratio4;
+            phio = (model.MOS6phi - model.pbfact1) / model.fact1;
             MOS6tPhi = fact2 * phio + pbfact;
-            MOS6tVbi = Model.MOS6vt0 - Model.MOS6type * (Model.MOS6gamma * Math.Sqrt(Model.MOS6phi))
-                + .5 * (Model.egfet1 - egfet) + Model.MOS6type * .5 * (MOS6tPhi - Model.MOS6phi);
-            MOS6tVto = MOS6tVbi + Model.MOS6type * Model.MOS6gamma * Math.Sqrt(MOS6tPhi);
-            MOS6tSatCur = Model.MOS6jctSatCur * Math.Exp(-egfet / vt + Model.egfet1 / Model.vtnom);
-            MOS6tSatCurDens = Model.MOS6jctSatCurDensity * Math.Exp(-egfet / vt + Model.egfet1 / Model.vtnom);
-            pbo = (Model.MOS6bulkJctPotential - Model.pbfact1) / Model.fact1;
-            gmaold = (Model.MOS6bulkJctPotential - pbo) / pbo;
-            capfact = 1 / (1 + Model.MOS6bulkJctBotGradingCoeff * (4e-4 * (Model.MOS6tnom - Circuit.CONSTRefTemp) - gmaold));
-            MOS6tCbd = Model.MOS6capBD * capfact;
-            MOS6tCbs = Model.MOS6capBS * capfact;
-            MOS6tCj = Model.MOS6bulkCapFactor * capfact;
-            capfact = 1 / (1 + Model.MOS6bulkJctSideGradingCoeff * (4e-4 * (Model.MOS6tnom - Circuit.CONSTRefTemp) - gmaold));
-            MOS6tCjsw = Model.MOS6sideWallCapFactor * capfact;
+            MOS6tVbi = model.MOS6vt0 - model.MOS6type * (model.MOS6gamma * Math.Sqrt(model.MOS6phi))
+                + .5 * (model.egfet1 - egfet) + model.MOS6type * .5 * (MOS6tPhi - model.MOS6phi);
+            MOS6tVto = MOS6tVbi + model.MOS6type * model.MOS6gamma * Math.Sqrt(MOS6tPhi);
+            MOS6tSatCur = model.MOS6jctSatCur * Math.Exp(-egfet / vt + model.egfet1 / model.vtnom);
+            MOS6tSatCurDens = model.MOS6jctSatCurDensity * Math.Exp(-egfet / vt + model.egfet1 / model.vtnom);
+            pbo = (model.MOS6bulkJctPotential - model.pbfact1) / model.fact1;
+            gmaold = (model.MOS6bulkJctPotential - pbo) / pbo;
+            capfact = 1 / (1 + model.MOS6bulkJctBotGradingCoeff * (4e-4 * (model.MOS6tnom - Circuit.CONSTRefTemp) - gmaold));
+            MOS6tCbd = model.MOS6capBD * capfact;
+            MOS6tCbs = model.MOS6capBS * capfact;
+            MOS6tCj = model.MOS6bulkCapFactor * capfact;
+            capfact = 1 / (1 + model.MOS6bulkJctSideGradingCoeff * (4e-4 * (model.MOS6tnom - Circuit.CONSTRefTemp) - gmaold));
+            MOS6tCjsw = model.MOS6sideWallCapFactor * capfact;
             MOS6tBulkPot = fact2 * pbo + pbfact;
             gmanew = (MOS6tBulkPot - pbo) / pbo;
-            capfact = (1 + Model.MOS6bulkJctBotGradingCoeff * (4e-4 * (MOS6temp - Circuit.CONSTRefTemp) - gmanew));
+            capfact = (1 + model.MOS6bulkJctBotGradingCoeff * (4e-4 * (MOS6temp - Circuit.CONSTRefTemp) - gmanew));
             MOS6tCbd *= capfact;
             MOS6tCbs *= capfact;
             MOS6tCj *= capfact;
-            capfact = (1 + Model.MOS6bulkJctSideGradingCoeff * (4e-4 * (MOS6temp - Circuit.CONSTRefTemp) - gmanew));
+            capfact = (1 + model.MOS6bulkJctSideGradingCoeff * (4e-4 * (MOS6temp - Circuit.CONSTRefTemp) - gmanew));
             MOS6tCjsw *= capfact;
-            MOS6tDepCap = Model.MOS6fwdCapDepCoeff * MOS6tBulkPot;
+            MOS6tDepCap = model.MOS6fwdCapDepCoeff * MOS6tBulkPot;
             if ((MOS6tSatCurDens == 0) || (MOS6drainArea == 0) || (MOS6sourceArea == 0))
             {
                 MOS6sourceVcrit = MOS6drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS6tSatCur));
@@ -369,13 +375,13 @@ namespace SpiceSharp.Components
                 MOS6sourceVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS6tSatCurDens * MOS6sourceArea));
             }
 
-            if (Model.MOS6capBD.Given)
+            if (model.MOS6capBD.Given)
             {
                 czbd = MOS6tCbd;
             }
             else
             {
-                if (Model.MOS6bulkCapFactor.Given)
+                if (model.MOS6bulkCapFactor.Given)
                 {
                     czbd = MOS6tCj * MOS6drainArea;
                 }
@@ -384,7 +390,7 @@ namespace SpiceSharp.Components
                     czbd = 0;
                 }
             }
-            if (Model.MOS6sideWallCapFactor.Given)
+            if (model.MOS6sideWallCapFactor.Given)
             {
                 czbdsw = MOS6tCjsw * MOS6drainPerimiter;
             }
@@ -392,25 +398,25 @@ namespace SpiceSharp.Components
             {
                 czbdsw = 0;
             }
-            arg = 1 - Model.MOS6fwdCapDepCoeff;
-            sarg = Math.Exp((-Model.MOS6bulkJctBotGradingCoeff) * Math.Log(arg));
-            sargsw = Math.Exp((-Model.MOS6bulkJctSideGradingCoeff) * Math.Log(arg));
+            arg = 1 - model.MOS6fwdCapDepCoeff;
+            sarg = Math.Exp((-model.MOS6bulkJctBotGradingCoeff) * Math.Log(arg));
+            sargsw = Math.Exp((-model.MOS6bulkJctSideGradingCoeff) * Math.Log(arg));
             MOS6Cbd = czbd;
             MOS6Cbdsw = czbdsw;
-            MOS6f2d = czbd * (1 - Model.MOS6fwdCapDepCoeff * (1 + Model.MOS6bulkJctBotGradingCoeff)) * sarg / arg
-                + czbdsw * (1 - Model.MOS6fwdCapDepCoeff * (1 + Model.MOS6bulkJctSideGradingCoeff)) * sargsw / arg;
-            MOS6f3d = czbd * Model.MOS6bulkJctBotGradingCoeff * sarg / arg / MOS6tBulkPot
-                + czbdsw * Model.MOS6bulkJctSideGradingCoeff * sargsw / arg / MOS6tBulkPot;
-            MOS6f4d = czbd * MOS6tBulkPot * (1 - arg * sarg) / (1 - Model.MOS6bulkJctBotGradingCoeff)
-                + czbdsw * MOS6tBulkPot * (1 - arg * sargsw) / (1 - Model.MOS6bulkJctSideGradingCoeff)
+            MOS6f2d = czbd * (1 - model.MOS6fwdCapDepCoeff * (1 + model.MOS6bulkJctBotGradingCoeff)) * sarg / arg
+                + czbdsw * (1 - model.MOS6fwdCapDepCoeff * (1 + model.MOS6bulkJctSideGradingCoeff)) * sargsw / arg;
+            MOS6f3d = czbd * model.MOS6bulkJctBotGradingCoeff * sarg / arg / MOS6tBulkPot
+                + czbdsw * model.MOS6bulkJctSideGradingCoeff * sargsw / arg / MOS6tBulkPot;
+            MOS6f4d = czbd * MOS6tBulkPot * (1 - arg * sarg) / (1 - model.MOS6bulkJctBotGradingCoeff)
+                + czbdsw * MOS6tBulkPot * (1 - arg * sargsw) / (1 - model.MOS6bulkJctSideGradingCoeff)
                 - MOS6f3d / 2 * (MOS6tDepCap * MOS6tDepCap) - MOS6tDepCap * MOS6f2d;
-            if (Model.MOS6capBS.Given)
+            if (model.MOS6capBS.Given)
             {
                 czbs = MOS6tCbs;
             }
             else
             {
-                if (Model.MOS6bulkCapFactor.Given)
+                if (model.MOS6bulkCapFactor.Given)
                 {
                     czbs = MOS6tCj * MOS6sourceArea;
                 }
@@ -419,7 +425,7 @@ namespace SpiceSharp.Components
                     czbs = 0;
                 }
             }
-            if (Model.MOS6sideWallCapFactor.Given)
+            if (model.MOS6sideWallCapFactor.Given)
             {
                 czbssw = MOS6tCjsw * MOS6sourcePerimiter;
             }
@@ -427,40 +433,40 @@ namespace SpiceSharp.Components
             {
                 czbssw = 0;
             }
-            arg = 1 - Model.MOS6fwdCapDepCoeff;
-            sarg = Math.Exp((-Model.MOS6bulkJctBotGradingCoeff) * Math.Log(arg));
-            sargsw = Math.Exp((-Model.MOS6bulkJctSideGradingCoeff) * Math.Log(arg));
+            arg = 1 - model.MOS6fwdCapDepCoeff;
+            sarg = Math.Exp((-model.MOS6bulkJctBotGradingCoeff) * Math.Log(arg));
+            sargsw = Math.Exp((-model.MOS6bulkJctSideGradingCoeff) * Math.Log(arg));
             MOS6Cbs = czbs;
             MOS6Cbssw = czbssw;
-            MOS6f2s = czbs * (1 - Model.MOS6fwdCapDepCoeff * (1 + Model.MOS6bulkJctBotGradingCoeff)) * sarg / arg
-                + czbssw * (1 - Model.MOS6fwdCapDepCoeff * (1 + Model.MOS6bulkJctSideGradingCoeff)) * sargsw / arg;
-            MOS6f3s = czbs * Model.MOS6bulkJctBotGradingCoeff * sarg / arg / MOS6tBulkPot
-                + czbssw * Model.MOS6bulkJctSideGradingCoeff * sargsw / arg / MOS6tBulkPot;
-            MOS6f4s = czbs * MOS6tBulkPot * (1 - arg * sarg) / (1 - Model.MOS6bulkJctBotGradingCoeff)
-                + czbssw * MOS6tBulkPot * (1 - arg * sargsw) / (1 - Model.MOS6bulkJctSideGradingCoeff)
+            MOS6f2s = czbs * (1 - model.MOS6fwdCapDepCoeff * (1 + model.MOS6bulkJctBotGradingCoeff)) * sarg / arg
+                + czbssw * (1 - model.MOS6fwdCapDepCoeff * (1 + model.MOS6bulkJctSideGradingCoeff)) * sargsw / arg;
+            MOS6f3s = czbs * model.MOS6bulkJctBotGradingCoeff * sarg / arg / MOS6tBulkPot
+                + czbssw * model.MOS6bulkJctSideGradingCoeff * sargsw / arg / MOS6tBulkPot;
+            MOS6f4s = czbs * MOS6tBulkPot * (1 - arg * sarg) / (1 - model.MOS6bulkJctBotGradingCoeff)
+                + czbssw * MOS6tBulkPot * (1 - arg * sargsw) / (1 - model.MOS6bulkJctSideGradingCoeff)
                 - MOS6f3s / 2 * (MOS6tDepCap * MOS6tDepCap) - MOS6tDepCap * MOS6f2s;
 
-            if (Model.MOS6drainResistance.Given)
+            if (model.MOS6drainResistance.Given)
             {
-                if (Model.MOS6drainResistance != 0)
+                if (model.MOS6drainResistance != 0)
                 {
-                    MOS6drainConductance = 1 / Model.MOS6drainResistance;
+                    MOS6drainConductance = 1 / model.MOS6drainResistance;
                 }
                 else
                 {
                     MOS6drainConductance = 0;
                 }
             }
-            else if (Model.MOS6sheetResistance.Given)
+            else if (model.MOS6sheetResistance.Given)
             {
                 if ((!MOS6drainSquares.Given) ||
                 (MOS6drainSquares == 0))
                 {
                     MOS6drainSquares.Value = 1;
                 }
-                if (Model.MOS6sheetResistance != 0)
+                if (model.MOS6sheetResistance != 0)
                 {
-                    MOS6drainConductance = 1 / (Model.MOS6sheetResistance * MOS6drainSquares);
+                    MOS6drainConductance = 1 / (model.MOS6sheetResistance * MOS6drainSquares);
                 }
                 else
                 {
@@ -471,27 +477,27 @@ namespace SpiceSharp.Components
             {
                 MOS6drainConductance = 0;
             }
-            if (Model.MOS6sourceResistance.Given)
+            if (model.MOS6sourceResistance.Given)
             {
-                if (Model.MOS6sourceResistance != 0)
+                if (model.MOS6sourceResistance != 0)
                 {
-                    MOS6sourceConductance = 1 / Model.MOS6sourceResistance;
+                    MOS6sourceConductance = 1 / model.MOS6sourceResistance;
                 }
                 else
                 {
                     MOS6sourceConductance = 0;
                 }
             }
-            else if (Model.MOS6sheetResistance.Given)
+            else if (model.MOS6sheetResistance.Given)
             {
                 if ((!MOS6sourceSquares.Given) || (MOS6sourceSquares == 0))
                 {
                     MOS6sourceSquares.Value = 1;
                 }
-                if (Model.MOS6sheetResistance != 0)
+                if (model.MOS6sheetResistance != 0)
                 {
                     MOS6sourceConductance =
-                    1 / (Model.MOS6sheetResistance * MOS6sourceSquares);
+                    1 / (model.MOS6sheetResistance * MOS6sourceSquares);
                 }
                 else
                 {
@@ -510,6 +516,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Load(Circuit ckt)
         {
+            var model = Model as MOS6Model;
             var state = ckt.State;
             var rstate = state.Real;
             var method = ckt.Method;
@@ -532,7 +539,7 @@ namespace SpiceSharp.Components
 			* here.  They may be moved at the expense of instance size
 			*/
 
-            EffectiveLength = MOS6l - 2 * Model.MOS6latDiff;
+            EffectiveLength = MOS6l - 2 * model.MOS6latDiff;
             if ((MOS6tSatCurDens == 0) || (MOS6drainArea == 0) || (MOS6sourceArea == 0))
             {
                 DrainSatCur = MOS6tSatCur;
@@ -543,11 +550,11 @@ namespace SpiceSharp.Components
                 DrainSatCur = MOS6tSatCurDens * MOS6drainArea;
                 SourceSatCur = MOS6tSatCurDens * MOS6sourceArea;
             }
-            GateSourceOverlapCap = Model.MOS6gateSourceOverlapCapFactor * MOS6w;
-            GateDrainOverlapCap = Model.MOS6gateDrainOverlapCapFactor * MOS6w;
-            GateBulkOverlapCap = Model.MOS6gateBulkOverlapCapFactor * EffectiveLength;
+            GateSourceOverlapCap = model.MOS6gateSourceOverlapCapFactor * MOS6w;
+            GateDrainOverlapCap = model.MOS6gateDrainOverlapCapFactor * MOS6w;
+            GateBulkOverlapCap = model.MOS6gateBulkOverlapCapFactor * EffectiveLength;
             betac = MOS6tKc * MOS6w / EffectiveLength;
-            OxideCap = Model.MOS6oxideCapFactor * EffectiveLength * MOS6w;
+            OxideCap = model.MOS6oxideCapFactor * EffectiveLength * MOS6w;
             /* 
 			* ok - now to do the start - up operations
 			* 
@@ -565,9 +572,9 @@ namespace SpiceSharp.Components
 
                 /* general iteration */
 
-                vbs = Model.MOS6type * (rstate.OldSolution[MOS6bNode] - rstate.OldSolution[MOS6sNodePrime]);
-                vgs = Model.MOS6type * (rstate.OldSolution[MOS6gNode] - rstate.OldSolution[MOS6sNodePrime]);
-                vds = Model.MOS6type * (rstate.OldSolution[MOS6dNodePrime] - rstate.OldSolution[MOS6sNodePrime]);
+                vbs = model.MOS6type * (rstate.OldSolution[MOS6bNode] - rstate.OldSolution[MOS6sNodePrime]);
+                vgs = model.MOS6type * (rstate.OldSolution[MOS6gNode] - rstate.OldSolution[MOS6sNodePrime]);
+                vds = model.MOS6type * (rstate.OldSolution[MOS6dNodePrime] - rstate.OldSolution[MOS6sNodePrime]);
                 /* PREDICTOR */
 
                 /* now some common crunching for some more useful quantities */
@@ -596,7 +603,7 @@ namespace SpiceSharp.Components
                 /* DETAILPROF */
                 /* ok - bypass is out, do it the hard way */
 
-                von = Model.MOS6type * MOS6von;
+                von = model.MOS6type * MOS6von;
 
                 /* 
 				* limiting
@@ -643,14 +650,14 @@ namespace SpiceSharp.Components
 
                 if (state.Init == CircuitState.InitFlags.InitJct && !MOS6off)
                 {
-                    vds = Model.MOS6type * MOS6icVDS;
-                    vgs = Model.MOS6type * MOS6icVGS;
-                    vbs = Model.MOS6type * MOS6icVBS;
+                    vds = model.MOS6type * MOS6icVDS;
+                    vgs = model.MOS6type * MOS6icVGS;
+                    vbs = model.MOS6type * MOS6icVBS;
                     if ((vds == 0) && (vgs == 0) && (vbs == 0) &&
                         (method != null || state.UseDC || state.Domain == CircuitState.DomainTypes.None || !state.UseIC))
                     {
                         vbs = -1;
-                        vgs = Model.MOS6type * MOS6tVto;
+                        vgs = model.MOS6type * MOS6tVto;
                         vds = 0;
                     }
                 }
@@ -744,8 +751,8 @@ namespace SpiceSharp.Components
                     sarg = Math.Max(0, sarg);
                 }
                 vdshere = vds * MOS6mode;
-                von = (MOS6tVbi * Model.MOS6type) + Model.MOS6gamma * sarg - Model.MOS6gamma1 * vbsvbd;
-                // -Model.MOS6sigma * vdshere; Error...
+                von = (MOS6tVbi * model.MOS6type) + model.MOS6gamma * sarg - model.MOS6gamma1 * vbsvbd;
+                // -model.MOS6sigma * vdshere; Error...
                 vgon = (MOS6mode == 1 ? vgs : vgd) - von;
 
                 if (vgon <= 0)
@@ -770,24 +777,24 @@ namespace SpiceSharp.Components
                     {
                         if ((MOS6mode == 1 ? vbs : vbd) <= 0)
                         {
-                            vonbm = Model.MOS6gamma1 + Model.MOS6gamma / (sarg + sarg);
+                            vonbm = model.MOS6gamma1 + model.MOS6gamma / (sarg + sarg);
                         }
                         else
                         {
-                            vonbm = Model.MOS6gamma1 + Model.MOS6gamma / 2 / Math.Sqrt(MOS6tPhi);
+                            vonbm = model.MOS6gamma1 + model.MOS6gamma / 2 / Math.Sqrt(MOS6tPhi);
                         }
                     }
                     sarg = Math.Log(vgon);
-                    vdsat = Model.MOS6kv * Math.Exp(sarg * Model.MOS6nv);
-                    idsat = betac * Math.Exp(sarg * Model.MOS6nc);
-                    lambda = Model.MOS6lamda0 - Model.MOS6lamda1 * vbsvbd;
+                    vdsat = model.MOS6kv * Math.Exp(sarg * model.MOS6nv);
+                    idsat = betac * Math.Exp(sarg * model.MOS6nc);
+                    lambda = model.MOS6lamda0 - model.MOS6lamda1 * vbsvbd;
                     /* 
 					* saturation region
 					*/
                     cdrain = idsat * (1 + lambda * vdshere);
-                    MOS6gm = cdrain * Model.MOS6nc / vgon;
-                    MOS6gds = MOS6gm * Model.MOS6sigma + idsat * lambda;
-                    MOS6gmbs = MOS6gm * vonbm - idsat * Model.MOS6lamda1 * vdshere;
+                    MOS6gm = cdrain * model.MOS6nc / vgon;
+                    MOS6gds = MOS6gm * model.MOS6sigma + idsat * lambda;
+                    MOS6gmbs = MOS6gm * vonbm - idsat * model.MOS6lamda1 * vdshere;
                     if (vdsat > vdshere)
                     {
                         /* 
@@ -795,11 +802,11 @@ namespace SpiceSharp.Components
 						*/
                         vdst = vdshere / vdsat;
                         vdst2 = (2 - vdst) * vdst;
-                        vdstg = -vdst * Model.MOS6nv / vgon;
+                        vdstg = -vdst * model.MOS6nv / vgon;
                         ivdst1 = cdrain * (2 - vdst - vdst);
                         cdrain = cdrain * vdst2;
                         MOS6gm = MOS6gm * vdst2 + ivdst1 * vdstg;
-                        MOS6gds = MOS6gds * vdst2 + ivdst1 * (1 / vdsat + vdstg * Model.MOS6sigma);
+                        MOS6gds = MOS6gds * vdst2 + ivdst1 * (1 / vdsat + vdstg * model.MOS6sigma);
                         MOS6gmbs = MOS6gmbs * vdst2 + ivdst1 * vdstg * vonbm;
                     }
                 }
@@ -812,8 +819,8 @@ namespace SpiceSharp.Components
 
             /* now deal with n vs p polarity */
 
-            MOS6von = Model.MOS6type * von;
-            MOS6vdsat = Model.MOS6type * vdsat;
+            MOS6von = model.MOS6type * von;
+            MOS6vdsat = model.MOS6type * vdsat;
             /* line 490 */
             /* 
 			* COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
@@ -850,41 +857,41 @@ namespace SpiceSharp.Components
 						* Math.Exp(Math.Log()) we use this special case code to buy time.
 						* (as much as 10% of total job time!)
 						*/
-                        if (Model.MOS6bulkJctBotGradingCoeff == Model.MOS6bulkJctSideGradingCoeff)
+                        if (model.MOS6bulkJctBotGradingCoeff == model.MOS6bulkJctSideGradingCoeff)
                         {
-                            if (Model.MOS6bulkJctBotGradingCoeff == .5)
+                            if (model.MOS6bulkJctBotGradingCoeff == .5)
                             {
                                 sarg = sargsw = 1 / Math.Sqrt(arg);
                             }
                             else
                             {
-                                sarg = sargsw = Math.Exp(-Model.MOS6bulkJctBotGradingCoeff * Math.Log(arg));
+                                sarg = sargsw = Math.Exp(-model.MOS6bulkJctBotGradingCoeff * Math.Log(arg));
                             }
                         }
                         else
                         {
-                            if (Model.MOS6bulkJctBotGradingCoeff == .5)
+                            if (model.MOS6bulkJctBotGradingCoeff == .5)
                             {
                                 sarg = 1 / Math.Sqrt(arg);
                             }
                             else
                             {
                                 /* NOSQRT */
-                                sarg = Math.Exp(-Model.MOS6bulkJctBotGradingCoeff * Math.Log(arg));
+                                sarg = Math.Exp(-model.MOS6bulkJctBotGradingCoeff * Math.Log(arg));
                             }
-                            if (Model.MOS6bulkJctSideGradingCoeff == .5)
+                            if (model.MOS6bulkJctSideGradingCoeff == .5)
                             {
                                 sargsw = 1 / Math.Sqrt(arg);
                             }
                             else
                             {
                                 /* NOSQRT */
-                                sargsw = Math.Exp(-Model.MOS6bulkJctSideGradingCoeff * Math.Log(arg));
+                                sargsw = Math.Exp(-model.MOS6bulkJctSideGradingCoeff * Math.Log(arg));
                             }
                         }
                         /* NOSQRT */
-                        state.States[0][MOS6states + MOS6qbs] = MOS6tBulkPot * (MOS6Cbs * (1 - arg * sarg) / (1 - Model.MOS6bulkJctBotGradingCoeff) +
-                             MOS6Cbssw * (1 - arg * sargsw) / (1 - Model.MOS6bulkJctSideGradingCoeff));
+                        state.States[0][MOS6states + MOS6qbs] = MOS6tBulkPot * (MOS6Cbs * (1 - arg * sarg) / (1 - model.MOS6bulkJctBotGradingCoeff) +
+                             MOS6Cbssw * (1 - arg * sargsw) / (1 - model.MOS6bulkJctSideGradingCoeff));
                         MOS6capbs = MOS6Cbs * sarg + MOS6Cbssw * sargsw;
                     }
                     else
@@ -908,34 +915,34 @@ namespace SpiceSharp.Components
 						* Math.Exp(Math.Log()) we use this special case code to buy time.
 						* (as much as 10% of total job time!)
 						*/
-                        if (Model.MOS6bulkJctBotGradingCoeff == .5 && Model.MOS6bulkJctSideGradingCoeff == .5)
+                        if (model.MOS6bulkJctBotGradingCoeff == .5 && model.MOS6bulkJctSideGradingCoeff == .5)
                         {
                             sarg = sargsw = 1 / Math.Sqrt(arg);
                         }
                         else
                         {
-                            if (Model.MOS6bulkJctBotGradingCoeff == .5)
+                            if (model.MOS6bulkJctBotGradingCoeff == .5)
                             {
                                 sarg = 1 / Math.Sqrt(arg);
                             }
                             else
                             {
                                 /* NOSQRT */
-                                sarg = Math.Exp(-Model.MOS6bulkJctBotGradingCoeff * Math.Log(arg));
+                                sarg = Math.Exp(-model.MOS6bulkJctBotGradingCoeff * Math.Log(arg));
                             }
-                            if (Model.MOS6bulkJctSideGradingCoeff == .5)
+                            if (model.MOS6bulkJctSideGradingCoeff == .5)
                             {
                                 sargsw = 1 / Math.Sqrt(arg);
                             }
                             else
                             {
                                 /* NOSQRT */
-                                sargsw = Math.Exp(-Model.MOS6bulkJctSideGradingCoeff * Math.Log(arg));
+                                sargsw = Math.Exp(-model.MOS6bulkJctSideGradingCoeff * Math.Log(arg));
                             }
                         }
                         /* NOSQRT */
-                        state.States[0][MOS6states + MOS6qbd] = MOS6tBulkPot * (MOS6Cbd * (1 - arg * sarg) / (1 - Model.MOS6bulkJctBotGradingCoeff) +
-                             MOS6Cbdsw * (1 - arg * sargsw) / (1 - Model.MOS6bulkJctSideGradingCoeff));
+                        state.States[0][MOS6states + MOS6qbd] = MOS6tBulkPot * (MOS6Cbd * (1 - arg * sarg) / (1 - model.MOS6bulkJctBotGradingCoeff) +
+                             MOS6Cbdsw * (1 - arg * sargsw) / (1 - model.MOS6bulkJctSideGradingCoeff));
                         MOS6capbd = MOS6Cbd * sarg + MOS6Cbdsw * sargsw;
                     }
                     else
@@ -1100,28 +1107,28 @@ namespace SpiceSharp.Components
             /* 
 			 * load current vector
 			 */
-            ceqbs = Model.MOS6type * (MOS6cbs - (MOS6gbs - state.Gmin) * vbs);
-            ceqbd = Model.MOS6type * (MOS6cbd - (MOS6gbd - state.Gmin) * vbd);
+            ceqbs = model.MOS6type * (MOS6cbs - (MOS6gbs - state.Gmin) * vbs);
+            ceqbd = model.MOS6type * (MOS6cbd - (MOS6gbd - state.Gmin) * vbd);
             if (MOS6mode >= 0)
             {
                 xnrm = 1;
                 xrev = 0;
-                cdreq = Model.MOS6type * (cdrain - MOS6gds * vds - MOS6gm * vgs - MOS6gmbs * vbs);
+                cdreq = model.MOS6type * (cdrain - MOS6gds * vds - MOS6gm * vgs - MOS6gmbs * vbs);
             }
             else
             {
                 xnrm = 0;
                 xrev = 1;
-                cdreq = -(Model.MOS6type) * (cdrain - MOS6gds * (-vds) - MOS6gm * vgd - MOS6gmbs * vbd);
+                cdreq = -(model.MOS6type) * (cdrain - MOS6gds * (-vds) - MOS6gm * vgd - MOS6gmbs * vbd);
             }
 
             /*
              * load rhs vector
              */
-            rstate.Rhs[MOS6gNode] -= (Model.MOS6type * (ceqgs + ceqgb + ceqgd));
-            rstate.Rhs[MOS6bNode] -= (ceqbs + ceqbd - Model.MOS6type * ceqgb);
-            rstate.Rhs[MOS6dNodePrime] += (ceqbd - cdreq + Model.MOS6type * ceqgd);
-            rstate.Rhs[MOS6sNodePrime] += cdreq + ceqbs + Model.MOS6type * ceqgs;
+            rstate.Rhs[MOS6gNode] -= (model.MOS6type * (ceqgs + ceqgb + ceqgd));
+            rstate.Rhs[MOS6bNode] -= (ceqbs + ceqbd - model.MOS6type * ceqgb);
+            rstate.Rhs[MOS6dNodePrime] += (ceqbd - cdreq + model.MOS6type * ceqgd);
+            rstate.Rhs[MOS6sNodePrime] += cdreq + ceqbs + model.MOS6type * ceqgs;
 
             /* 
 			 * load y matrix

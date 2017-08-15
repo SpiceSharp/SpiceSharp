@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SpiceSharp.Components;
+using SpiceSharp.Parameters;
 using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
         {
             Capacitor cap = new Capacitor(name);
             cap.ReadNodes(parameters, 2);
@@ -30,11 +30,13 @@ namespace SpiceSharp.Parser.Readers
             // Search for a parameter IC, which is common for both types of capacitors
             for (int i = 3; i < parameters.Count; i++)
             {
-                if (parameters[i].TryReadAssignment(out string nn, out string nv))
+                if (parameters[i].kind == TokenConstants.ASSIGNMENT)
                 {
-                    if (nn == "ic")
+                    AssignmentToken at = parameters[i] as AssignmentToken;
+                    if (at.Name.image.ToLower() == "ic")
                     {
-                        cap.Set("ic", nv);
+                        double ic = netlist.ParseDouble(at.Value);
+                        cap.CAPinitCond.Set(ic);
                         parameters.RemoveAt(i);
                         break;
                     }
@@ -43,16 +45,25 @@ namespace SpiceSharp.Parser.Readers
 
             // The rest is just dependent on the number of parameters
             if (parameters.Count == 3)
-                cap.Set("capacitance", parameters[2].ReadValue());
+                cap.CAPcapac.Set(netlist.ParseDouble(parameters[2]));
             else
             {
-                cap.Model = parameters[2].ReadModel<CapacitorModel>(netlist);
-                cap.ReadParameters(parameters, 2);
+                cap.SetModel(netlist.FindModel<CapacitorModel>(parameters[2]));
+                switch (parameters[2].kind)
+                {
+                    case SpiceSharpParserConstants.WORD:
+                    case SpiceSharpParserConstants.IDENTIFIER:
+                        cap.SetModel(netlist.Path.FindModel<CapacitorModel>(parameters[2].image.ToLower()));
+                        break;
+                    default:
+                        throw new ParseException(parameters[2], "Model name expected");
+                }
+                netlist.ReadParameters(cap, parameters, 2);
                 if (!cap.CAPlength.Given)
-                    throw new ParseException(name, "L needs to be specified");
+                    throw new ParseException(parameters[1], "L needs to be specified", false);
             }
 
-            return cap;
+            return (ICircuitObject)cap;
         }
     }
 }

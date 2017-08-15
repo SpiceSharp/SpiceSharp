@@ -8,12 +8,21 @@ using System.IO;
 
 namespace SpiceSharp.Components
 {
-    public class BSIM4 : CircuitComponent
+    public class BSIM4 : CircuitComponent<BSIM4>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static BSIM4()
+        {
+            Register();
+            terminals = new string[] { "Drain", "Gate", "Source", "Bulk" };
+        }
+
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public BSIM4Model Model { get; set; }
+        public void SetModel(BSIM4Model model) => Model = (ICircuitObject)model;
 
         /// <summary>
         /// The sizes
@@ -24,69 +33,69 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [SpiceName("w"), SpiceInfo("Width")]
-        public Parameter<double> BSIM4w { get; } = new Parameter<double>(5.0e-6);
+        public Parameter BSIM4w { get; } = new Parameter(5.0e-6);
         [SpiceName("l"), SpiceInfo("Length")]
-        public Parameter<double> BSIM4l { get; } = new Parameter<double>(5.0e-6);
+        public Parameter BSIM4l { get; } = new Parameter(5.0e-6);
         [SpiceName("nf"), SpiceInfo("Number of fingers")]
-        public Parameter<double> BSIM4nf { get; } = new Parameter<double>();
+        public Parameter BSIM4nf { get; } = new Parameter();
         [SpiceName("min"), SpiceInfo("Minimize either D or S")]
-        public Parameter<int> BSIM4min { get; } = new Parameter<int>();
+        public Parameter BSIM4min { get; } = new Parameter();
         [SpiceName("as"), SpiceInfo("Source area")]
-        public Parameter<double> BSIM4sourceArea { get; } = new Parameter<double>();
+        public Parameter BSIM4sourceArea { get; } = new Parameter();
         [SpiceName("ad"), SpiceInfo("Drain area")]
-        public Parameter<double> BSIM4drainArea { get; } = new Parameter<double>();
+        public Parameter BSIM4drainArea { get; } = new Parameter();
         [SpiceName("ps"), SpiceInfo("Source perimeter")]
-        public Parameter<double> BSIM4sourcePerimeter { get; } = new Parameter<double>();
+        public Parameter BSIM4sourcePerimeter { get; } = new Parameter();
         [SpiceName("pd"), SpiceInfo("Drain perimeter")]
-        public Parameter<double> BSIM4drainPerimeter { get; } = new Parameter<double>();
+        public Parameter BSIM4drainPerimeter { get; } = new Parameter();
         [SpiceName("nrs"), SpiceInfo("Number of squares in source")]
-        public Parameter<double> BSIM4sourceSquares { get; } = new Parameter<double>();
+        public Parameter BSIM4sourceSquares { get; } = new Parameter();
         [SpiceName("nrd"), SpiceInfo("Number of squares in drain")]
-        public Parameter<double> BSIM4drainSquares { get; } = new Parameter<double>();
+        public Parameter BSIM4drainSquares { get; } = new Parameter();
         [SpiceName("off"), SpiceInfo("Device is initially off")]
         public bool BSIM4off { get; set; }
         [SpiceName("sa"), SpiceInfo("distance between  OD edge to poly of one side ")]
-        public Parameter<double> BSIM4sa { get; } = new Parameter<double>();
+        public Parameter BSIM4sa { get; } = new Parameter();
         [SpiceName("sb"), SpiceInfo("distance between  OD edge to poly of the other side")]
-        public Parameter<double> BSIM4sb { get; } = new Parameter<double>();
+        public Parameter BSIM4sb { get; } = new Parameter();
         [SpiceName("sd"), SpiceInfo("distance between neighbour fingers")]
-        public Parameter<double> BSIM4sd { get; } = new Parameter<double>();
+        public Parameter BSIM4sd { get; } = new Parameter();
         [SpiceName("sca"), SpiceInfo("Integral of the first distribution function for scattered well dopant")]
-        public Parameter<double> BSIM4sca { get; } = new Parameter<double>();
+        public Parameter BSIM4sca { get; } = new Parameter();
         [SpiceName("scb"), SpiceInfo("Integral of the second distribution function for scattered well dopant")]
-        public Parameter<double> BSIM4scb { get; } = new Parameter<double>();
+        public Parameter BSIM4scb { get; } = new Parameter();
         [SpiceName("scc"), SpiceInfo("Integral of the third distribution function for scattered well dopant")]
-        public Parameter<double> BSIM4scc { get; } = new Parameter<double>();
+        public Parameter BSIM4scc { get; } = new Parameter();
         [SpiceName("sc"), SpiceInfo("Distance to a single well edge ")]
-        public Parameter<double> BSIM4sc { get; } = new Parameter<double>();
+        public Parameter BSIM4sc { get; } = new Parameter();
         [SpiceName("rbsb"), SpiceInfo("Body resistance")]
-        public Parameter<double> BSIM4rbsb { get; } = new Parameter<double>();
+        public Parameter BSIM4rbsb { get; } = new Parameter();
         [SpiceName("rbdb"), SpiceInfo("Body resistance")]
-        public Parameter<double> BSIM4rbdb { get; } = new Parameter<double>();
+        public Parameter BSIM4rbdb { get; } = new Parameter();
         [SpiceName("rbpb"), SpiceInfo("Body resistance")]
-        public Parameter<double> BSIM4rbpb { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpb { get; } = new Parameter();
         [SpiceName("rbps"), SpiceInfo("Body resistance")]
-        public Parameter<double> BSIM4rbps { get; } = new Parameter<double>();
+        public Parameter BSIM4rbps { get; } = new Parameter();
         [SpiceName("rbpd"), SpiceInfo("Body resistance")]
-        public Parameter<double> BSIM4rbpd { get; } = new Parameter<double>();
+        public Parameter BSIM4rbpd { get; } = new Parameter();
         [SpiceName("delvto"), SpiceInfo("Zero bias threshold voltage variation")]
-        public Parameter<double> BSIM4delvto { get; } = new Parameter<double>();
+        public Parameter BSIM4delvto { get; } = new Parameter();
         [SpiceName("xgw"), SpiceInfo("Distance from gate contact center to device edge")]
-        public Parameter<double> BSIM4xgw { get; } = new Parameter<double>();
+        public Parameter BSIM4xgw { get; } = new Parameter();
         [SpiceName("ngcon"), SpiceInfo("Number of gate contacts")]
-        public Parameter<double> BSIM4ngcon { get; } = new Parameter<double>();
+        public Parameter BSIM4ngcon { get; } = new Parameter();
         [SpiceName("trnqsmod"), SpiceInfo("Transient NQS model selector")]
-        public Parameter<int> BSIM4trnqsMod { get; } = new Parameter<int>();
+        public Parameter BSIM4trnqsMod { get; } = new Parameter();
         [SpiceName("acnqsmod"), SpiceInfo("AC NQS model selector")]
-        public Parameter<int> BSIM4acnqsMod { get; } = new Parameter<int>();
+        public Parameter BSIM4acnqsMod { get; } = new Parameter();
         [SpiceName("rbodymod"), SpiceInfo("Distributed body R model selector")]
-        public Parameter<int> BSIM4rbodyMod { get; } = new Parameter<int>();
+        public Parameter BSIM4rbodyMod { get; } = new Parameter();
         [SpiceName("rgatemod"), SpiceInfo("Gate resistance model selector")]
-        public Parameter<int> BSIM4rgateMod { get; } = new Parameter<int>();
+        public Parameter BSIM4rgateMod { get; } = new Parameter();
         [SpiceName("geomod"), SpiceInfo("Geometry dependent parasitics model selector")]
-        public Parameter<int> BSIM4geoMod { get; } = new Parameter<int>();
+        public Parameter BSIM4geoMod { get; } = new Parameter();
         [SpiceName("rgeomod"), SpiceInfo("S/D resistance and contact model selector")]
-        public Parameter<int> BSIM4rgeoMod { get; } = new Parameter<int>();
+        public Parameter BSIM4rgeoMod { get; } = new Parameter();
         [SpiceName("id"), SpiceInfo("Ids")]
         public double BSIM4cd { get; private set; }
         [SpiceName("ibs"), SpiceInfo("Ibs")]
@@ -199,9 +208,9 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Extra variables
         /// </summary>
-        public Parameter<double> BSIM4icVDS { get; } = new Parameter<double>();
-        public Parameter<double> BSIM4icVGS { get; } = new Parameter<double>();
-        public Parameter<double> BSIM4icVBS { get; } = new Parameter<double>();
+        public Parameter BSIM4icVDS { get; } = new Parameter();
+        public Parameter BSIM4icVGS { get; } = new Parameter();
+        public Parameter BSIM4icVBS { get; } = new Parameter();
         private BSIM4SizeDependParam pParam = null;
         public double BSIM4u0temp { get; private set; }
         public double BSIM4vsattemp { get; private set; }
@@ -376,15 +385,9 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM4(string name) : base(name, "Drain", "Gate", "Source", "Bulk")
+        public BSIM4(string name) : base(name)
         {
         }
-
-        /// <summary>
-        /// Get the model
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => Model;
 
         /// <summary>
         /// Setup the device
@@ -392,6 +395,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
+            var model = Model as BSIM4Model;
             int createNode;
             double Rtot;
 
@@ -410,70 +414,70 @@ namespace SpiceSharp.Components
             /* perform the parameter defaulting */
             /* integer */
             if (!BSIM4rbdb.Given)
-                BSIM4rbdb.Value = Model.BSIM4rbdb; /* in ohm */
+                BSIM4rbdb.Value = model.BSIM4rbdb; /* in ohm */
             if (!BSIM4rbsb.Given)
-                BSIM4rbsb.Value = Model.BSIM4rbsb;
+                BSIM4rbsb.Value = model.BSIM4rbsb;
             if (!BSIM4rbpb.Given)
-                BSIM4rbpb.Value = Model.BSIM4rbpb;
+                BSIM4rbpb.Value = model.BSIM4rbpb;
             if (!BSIM4rbps.Given)
-                BSIM4rbps.Value = Model.BSIM4rbps;
+                BSIM4rbps.Value = model.BSIM4rbps;
             if (!BSIM4rbpd.Given)
-                BSIM4rbpd.Value = Model.BSIM4rbpd;
+                BSIM4rbpd.Value = model.BSIM4rbpd;
             if (!BSIM4xgw.Given)
-                BSIM4xgw.Value = Model.BSIM4xgw;
+                BSIM4xgw.Value = model.BSIM4xgw;
             if (!BSIM4ngcon.Given)
-                BSIM4ngcon.Value = Model.BSIM4ngcon;
+                BSIM4ngcon.Value = model.BSIM4ngcon;
 
             /* Process instance model selectors, some
 			* may override their global counterparts
 			*/
             if (!BSIM4rbodyMod.Given)
-                BSIM4rbodyMod.Value = Model.BSIM4rbodyMod;
+                BSIM4rbodyMod.Value = model.BSIM4rbodyMod;
             else if ((BSIM4rbodyMod != 0) && (BSIM4rbodyMod != 1) && (BSIM4rbodyMod != 2))
             {
-                BSIM4rbodyMod.Value = Model.BSIM4rbodyMod;
-                CircuitWarning.Warning(this, $"Warning: rbodyMod has been set to its global value {Model.BSIM4rbodyMod}.");
+                BSIM4rbodyMod.Value = model.BSIM4rbodyMod;
+                CircuitWarning.Warning(this, $"Warning: rbodyMod has been set to its global value {model.BSIM4rbodyMod}.");
             }
 
             if (!BSIM4rgateMod.Given)
-                BSIM4rgateMod.Value = Model.BSIM4rgateMod;
+                BSIM4rgateMod.Value = model.BSIM4rgateMod;
             else if ((BSIM4rgateMod != 0) && (BSIM4rgateMod != 1) && (BSIM4rgateMod != 2) && (BSIM4rgateMod != 3))
             {
-                BSIM4rgateMod.Value = Model.BSIM4rgateMod;
-                CircuitWarning.Warning(this, $"Warning: rgateMod has been set to its global value {Model.BSIM4rgateMod}.");
+                BSIM4rgateMod.Value = model.BSIM4rgateMod;
+                CircuitWarning.Warning(this, $"Warning: rgateMod has been set to its global value {model.BSIM4rgateMod}.");
             }
 
             if (!BSIM4geoMod.Given)
-                BSIM4geoMod.Value = Model.BSIM4geoMod;
+                BSIM4geoMod.Value = model.BSIM4geoMod;
             if (!BSIM4trnqsMod.Given)
-                BSIM4trnqsMod.Value = Model.BSIM4trnqsMod;
+                BSIM4trnqsMod.Value = model.BSIM4trnqsMod;
             else if ((BSIM4trnqsMod != 0) && (BSIM4trnqsMod != 1))
             {
-                BSIM4trnqsMod.Value = Model.BSIM4trnqsMod;
-                CircuitWarning.Warning(this, $"Warning: trnqsMod has been set to its global value {Model.BSIM4trnqsMod}.");
+                BSIM4trnqsMod.Value = model.BSIM4trnqsMod;
+                CircuitWarning.Warning(this, $"Warning: trnqsMod has been set to its global value {model.BSIM4trnqsMod}.");
             }
 
             if (!BSIM4acnqsMod.Given)
-                BSIM4acnqsMod.Value = Model.BSIM4acnqsMod;
+                BSIM4acnqsMod.Value = model.BSIM4acnqsMod;
             else if ((BSIM4acnqsMod != 0) && (BSIM4acnqsMod != 1))
             {
-                BSIM4acnqsMod.Value = Model.BSIM4acnqsMod;
-                CircuitWarning.Warning(this, $"Warning: acnqsMod has been set to its global value {Model.BSIM4acnqsMod}.");
+                BSIM4acnqsMod.Value = model.BSIM4acnqsMod;
+                CircuitWarning.Warning(this, $"Warning: acnqsMod has been set to its global value {model.BSIM4acnqsMod}.");
             }
 
             /* stress effect */
             if (!BSIM4sd.Given)
-                BSIM4sd.Value = 2 * Model.BSIM4dmcg;
+                BSIM4sd.Value = 2 * model.BSIM4dmcg;
             /* Well Proximity Effect */
             /* m */
 
             /* process drain series resistance */
             createNode = 0;
-            if ((Model.BSIM4rdsMod != 0) || (Model.BSIM4tnoiMod.Value == 1)) // && noiseAnalGiven - CHANGE IF NOISE CALCULATIONS ARE AVAILABLE!
+            if ((model.BSIM4rdsMod != 0) || (model.BSIM4tnoiMod.Value == 1)) // && noiseAnalGiven - CHANGE IF NOISE CALCULATIONS ARE AVAILABLE!
             {
                 createNode = 1;
             }
-            else if (Model.BSIM4sheetResistance > 0)
+            else if (model.BSIM4sheetResistance > 0)
             {
                 if (BSIM4drainSquares.Given && BSIM4drainSquares > 0)
                 {
@@ -482,7 +486,7 @@ namespace SpiceSharp.Components
                 else if (!BSIM4drainSquares.Given && (BSIM4rgeoMod != 0))
                 {
                     BSIM4RdseffGeo(BSIM4nf, BSIM4geoMod, BSIM4rgeoMod, BSIM4min,
-                        BSIM4w, Model.BSIM4sheetResistance, Model.DMCGeff, Model.DMCIeff, Model.DMDGeff, 0, out Rtot);
+                        BSIM4w, model.BSIM4sheetResistance, model.DMCGeff, model.DMCIeff, model.DMDGeff, 0, out Rtot);
                     if (Rtot > 0)
                         createNode = 1;
                 }
@@ -498,11 +502,11 @@ namespace SpiceSharp.Components
 
             /* process source series resistance */
             createNode = 0;
-            if ((Model.BSIM4rdsMod != 0) || (Model.BSIM4tnoiMod.Value == 1)) // && noiseAnalGiven)) - NOISE ANALYSIS!
+            if ((model.BSIM4rdsMod != 0) || (model.BSIM4tnoiMod.Value == 1)) // && noiseAnalGiven)) - NOISE ANALYSIS!
             {
                 createNode = 1;
             }
-            else if (Model.BSIM4sheetResistance > 0)
+            else if (model.BSIM4sheetResistance > 0)
             {
                 if (BSIM4sourceSquares.Given && BSIM4sourceSquares > 0)
                 {
@@ -511,7 +515,7 @@ namespace SpiceSharp.Components
                 else if (!BSIM4sourceSquares.Given && (BSIM4rgeoMod != 0))
                 {
                     BSIM4RdseffGeo(BSIM4nf, BSIM4geoMod, BSIM4rgeoMod, BSIM4min,
-                        BSIM4w, Model.BSIM4sheetResistance, Model.DMCGeff, Model.DMCIeff, Model.DMDGeff, 1, out Rtot);
+                        BSIM4w, model.BSIM4sheetResistance, model.DMCGeff, model.DMCIeff, model.DMDGeff, 1, out Rtot);
                     if (Rtot > 0)
                         createNode = 1;
                 }
@@ -578,6 +582,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
+            var model = Model as BSIM4Model;
             double Ldrn, Wdrn, Lnew = 0.0, Wnew, T0, T1, tmp1, tmp2, T2, T3, Inv_L, Inv_W, Inv_LW, PowWeffWr, T10, T4, T5, tmp, T8, T9, wlod, W_tmp, Inv_saref, 
                 Inv_sbref, Theta0, tmp3, n0, Inv_sa, Inv_sb, kvsat, i, Inv_ODeff, rho, OD_offset, dvth0_lod, dk2_lod, deta0_lod, sceff, lnl, lnw, lnnf, 
                 bodymode, rbsby, rbsbx, rbdbx, rbdby, rbpbx, rbpby, DMCGeff, DMCIeff, DMDGeff, Nvtms, SourceSatCurrent, Nvtmd, DrainSatCurrent, T7, T11,
@@ -599,45 +604,45 @@ namespace SpiceSharp.Components
                 sizes.Add(mysize, pParam);
 
                 pParam.NFinger = BSIM4nf;
-                Lnew = BSIM4l + Model.BSIM4xl;
-                Wnew = BSIM4w / BSIM4nf + Model.BSIM4xw;
+                Lnew = BSIM4l + model.BSIM4xl;
+                Wnew = BSIM4w / BSIM4nf + model.BSIM4xw;
 
-                T0 = Math.Pow(Lnew, Model.BSIM4Lln);
-                T1 = Math.Pow(Wnew, Model.BSIM4Lwn);
-                tmp1 = Model.BSIM4Ll / T0 + Model.BSIM4Lw / T1 + Model.BSIM4Lwl / (T0 * T1);
-                pParam.BSIM4dl = Model.BSIM4Lint + tmp1;
-                tmp2 = Model.BSIM4Llc / T0 + Model.BSIM4Lwc / T1 + Model.BSIM4Lwlc / (T0 * T1);
-                pParam.BSIM4dlc = Model.BSIM4dlc + tmp2;
+                T0 = Math.Pow(Lnew, model.BSIM4Lln);
+                T1 = Math.Pow(Wnew, model.BSIM4Lwn);
+                tmp1 = model.BSIM4Ll / T0 + model.BSIM4Lw / T1 + model.BSIM4Lwl / (T0 * T1);
+                pParam.BSIM4dl = model.BSIM4Lint + tmp1;
+                tmp2 = model.BSIM4Llc / T0 + model.BSIM4Lwc / T1 + model.BSIM4Lwlc / (T0 * T1);
+                pParam.BSIM4dlc = model.BSIM4dlc + tmp2;
 
-                T2 = Math.Pow(Lnew, Model.BSIM4Wln);
-                T3 = Math.Pow(Wnew, Model.BSIM4Wwn);
-                tmp1 = Model.BSIM4Wl / T2 + Model.BSIM4Ww / T3 + Model.BSIM4Wwl / (T2 * T3);
-                pParam.BSIM4dw = Model.BSIM4Wint + tmp1;
-                tmp2 = Model.BSIM4Wlc / T2 + Model.BSIM4Wwc / T3 + Model.BSIM4Wwlc / (T2 * T3);
-                pParam.BSIM4dwc = Model.BSIM4dwc + tmp2;
-                pParam.BSIM4dwj = Model.BSIM4dwj + tmp2;
+                T2 = Math.Pow(Lnew, model.BSIM4Wln);
+                T3 = Math.Pow(Wnew, model.BSIM4Wwn);
+                tmp1 = model.BSIM4Wl / T2 + model.BSIM4Ww / T3 + model.BSIM4Wwl / (T2 * T3);
+                pParam.BSIM4dw = model.BSIM4Wint + tmp1;
+                tmp2 = model.BSIM4Wlc / T2 + model.BSIM4Wwc / T3 + model.BSIM4Wwlc / (T2 * T3);
+                pParam.BSIM4dwc = model.BSIM4dwc + tmp2;
+                pParam.BSIM4dwj = model.BSIM4dwj + tmp2;
 
                 pParam.BSIM4leff = Lnew - 2.0 * pParam.BSIM4dl;
                 if (pParam.BSIM4leff <= 0.0)
-                    throw new CircuitException($"BSIM4: mosfet {Name}, model {Model.Name}: Effective channel length <= 0");
+                    throw new CircuitException($"BSIM4: mosfet {Name}, model {model.Name}: Effective channel length <= 0");
 
                 pParam.BSIM4weff = Wnew - 2.0 * pParam.BSIM4dw;
                 if (pParam.BSIM4weff <= 0.0)
-                    throw new CircuitException($"BSIM4: mosfet {Name}, model {Model.Name}: Effective channel width <= 0");
+                    throw new CircuitException($"BSIM4: mosfet {Name}, model {model.Name}: Effective channel width <= 0");
 
                 pParam.BSIM4leffCV = Lnew - 2.0 * pParam.BSIM4dlc;
                 if (pParam.BSIM4leffCV <= 0.0)
-                    throw new CircuitException($"BSIM4: mosfet {Name}, model {Model.Name}: Effective channel length for C-V <= 0");
+                    throw new CircuitException($"BSIM4: mosfet {Name}, model {model.Name}: Effective channel length for C-V <= 0");
 
                 pParam.BSIM4weffCV = Wnew - 2.0 * pParam.BSIM4dwc;
                 if (pParam.BSIM4weffCV <= 0.0)
-                    throw new CircuitException($"BSIM4: mosfet {Name}, model {Model.Name}: Effective channel width for C-V <= 0");
+                    throw new CircuitException($"BSIM4: mosfet {Name}, model {model.Name}: Effective channel width for C-V <= 0");
 
                 pParam.BSIM4weffCJ = Wnew - 2.0 * pParam.BSIM4dwj;
                 if (pParam.BSIM4weffCJ <= 0.0)
-                    throw new CircuitException($"BSIM4: mosfet {Name}, model {Model.Name}: Effective channel width for S/D junctions <= 0");
+                    throw new CircuitException($"BSIM4: mosfet {Name}, model {model.Name}: Effective channel width for S/D junctions <= 0");
 
-                if (Model.BSIM4binUnit.Value == 1)
+                if (model.BSIM4binUnit.Value == 1)
                 {
                     Inv_L = 1.0e-6 / pParam.BSIM4leff;
                     Inv_W = 1.0e-6 / pParam.BSIM4weff;
@@ -650,211 +655,211 @@ namespace SpiceSharp.Components
                     Inv_LW = 1.0 / (pParam.BSIM4leff * pParam.BSIM4weff);
                 }
 
-                pParam.BSIM4cdsc = Model.BSIM4cdsc + Model.BSIM4lcdsc * Inv_L + Model.BSIM4wcdsc * Inv_W + Model.BSIM4pcdsc * Inv_LW;
-                pParam.BSIM4cdscb = Model.BSIM4cdscb + Model.BSIM4lcdscb * Inv_L + Model.BSIM4wcdscb * Inv_W + Model.BSIM4pcdscb * Inv_LW;
+                pParam.BSIM4cdsc = model.BSIM4cdsc + model.BSIM4lcdsc * Inv_L + model.BSIM4wcdsc * Inv_W + model.BSIM4pcdsc * Inv_LW;
+                pParam.BSIM4cdscb = model.BSIM4cdscb + model.BSIM4lcdscb * Inv_L + model.BSIM4wcdscb * Inv_W + model.BSIM4pcdscb * Inv_LW;
 
-                pParam.BSIM4cdscd = Model.BSIM4cdscd + Model.BSIM4lcdscd * Inv_L + Model.BSIM4wcdscd * Inv_W + Model.BSIM4pcdscd * Inv_LW;
+                pParam.BSIM4cdscd = model.BSIM4cdscd + model.BSIM4lcdscd * Inv_L + model.BSIM4wcdscd * Inv_W + model.BSIM4pcdscd * Inv_LW;
 
-                pParam.BSIM4cit = Model.BSIM4cit + Model.BSIM4lcit * Inv_L + Model.BSIM4wcit * Inv_W + Model.BSIM4pcit * Inv_LW;
-                pParam.BSIM4nfactor = Model.BSIM4nfactor + Model.BSIM4lnfactor * Inv_L + Model.BSIM4wnfactor * Inv_W + Model.BSIM4pnfactor *
+                pParam.BSIM4cit = model.BSIM4cit + model.BSIM4lcit * Inv_L + model.BSIM4wcit * Inv_W + model.BSIM4pcit * Inv_LW;
+                pParam.BSIM4nfactor = model.BSIM4nfactor + model.BSIM4lnfactor * Inv_L + model.BSIM4wnfactor * Inv_W + model.BSIM4pnfactor *
                    Inv_LW;
-                pParam.BSIM4tnfactor = Model.BSIM4tnfactor /* v4.7 */  + Model.BSIM4ltnfactor * Inv_L + Model.BSIM4wtnfactor * Inv_W +
-                                     Model.BSIM4ptnfactor * Inv_LW;
-                pParam.BSIM4xj = Model.BSIM4xj + Model.BSIM4lxj * Inv_L + Model.BSIM4wxj * Inv_W + Model.BSIM4pxj * Inv_LW;
-                pParam.BSIM4vsat = Model.BSIM4vsat + Model.BSIM4lvsat * Inv_L + Model.BSIM4wvsat * Inv_W + Model.BSIM4pvsat * Inv_LW;
-                pParam.BSIM4at = Model.BSIM4at + Model.BSIM4lat * Inv_L + Model.BSIM4wat * Inv_W + Model.BSIM4pat * Inv_LW;
-                pParam.BSIM4a0 = Model.BSIM4a0 + Model.BSIM4la0 * Inv_L + Model.BSIM4wa0 * Inv_W + Model.BSIM4pa0 * Inv_LW;
+                pParam.BSIM4tnfactor = model.BSIM4tnfactor /* v4.7 */  + model.BSIM4ltnfactor * Inv_L + model.BSIM4wtnfactor * Inv_W +
+                                     model.BSIM4ptnfactor * Inv_LW;
+                pParam.BSIM4xj = model.BSIM4xj + model.BSIM4lxj * Inv_L + model.BSIM4wxj * Inv_W + model.BSIM4pxj * Inv_LW;
+                pParam.BSIM4vsat = model.BSIM4vsat + model.BSIM4lvsat * Inv_L + model.BSIM4wvsat * Inv_W + model.BSIM4pvsat * Inv_LW;
+                pParam.BSIM4at = model.BSIM4at + model.BSIM4lat * Inv_L + model.BSIM4wat * Inv_W + model.BSIM4pat * Inv_LW;
+                pParam.BSIM4a0 = model.BSIM4a0 + model.BSIM4la0 * Inv_L + model.BSIM4wa0 * Inv_W + model.BSIM4pa0 * Inv_LW;
 
-                pParam.BSIM4ags = Model.BSIM4ags + Model.BSIM4lags * Inv_L + Model.BSIM4wags * Inv_W + Model.BSIM4pags * Inv_LW;
+                pParam.BSIM4ags = model.BSIM4ags + model.BSIM4lags * Inv_L + model.BSIM4wags * Inv_W + model.BSIM4pags * Inv_LW;
 
-                pParam.BSIM4a1 = Model.BSIM4a1 + Model.BSIM4la1 * Inv_L + Model.BSIM4wa1 * Inv_W + Model.BSIM4pa1 * Inv_LW;
-                pParam.BSIM4a2 = Model.BSIM4a2 + Model.BSIM4la2 * Inv_L + Model.BSIM4wa2 * Inv_W + Model.BSIM4pa2 * Inv_LW;
-                pParam.BSIM4keta = Model.BSIM4keta + Model.BSIM4lketa * Inv_L + Model.BSIM4wketa * Inv_W + Model.BSIM4pketa * Inv_LW;
-                pParam.BSIM4nsub = Model.BSIM4nsub + Model.BSIM4lnsub * Inv_L + Model.BSIM4wnsub * Inv_W + Model.BSIM4pnsub * Inv_LW;
-                pParam.BSIM4ndep = Model.BSIM4ndep + Model.BSIM4lndep * Inv_L + Model.BSIM4wndep * Inv_W + Model.BSIM4pndep * Inv_LW;
-                pParam.BSIM4nsd = Model.BSIM4nsd + Model.BSIM4lnsd * Inv_L + Model.BSIM4wnsd * Inv_W + Model.BSIM4pnsd * Inv_LW;
-                pParam.BSIM4phin = Model.BSIM4phin + Model.BSIM4lphin * Inv_L + Model.BSIM4wphin * Inv_W + Model.BSIM4pphin * Inv_LW;
-                pParam.BSIM4ngate = Model.BSIM4ngate + Model.BSIM4lngate * Inv_L + Model.BSIM4wngate * Inv_W + Model.BSIM4pngate * Inv_LW;
-                pParam.BSIM4gamma1 = Model.BSIM4gamma1 + Model.BSIM4lgamma1 * Inv_L + Model.BSIM4wgamma1 * Inv_W + Model.BSIM4pgamma1 * Inv_LW;
-                pParam.BSIM4gamma2 = Model.BSIM4gamma2 + Model.BSIM4lgamma2 * Inv_L + Model.BSIM4wgamma2 * Inv_W + Model.BSIM4pgamma2 * Inv_LW;
-                pParam.BSIM4vbx = Model.BSIM4vbx + Model.BSIM4lvbx * Inv_L + Model.BSIM4wvbx * Inv_W + Model.BSIM4pvbx * Inv_LW;
-                pParam.BSIM4vbm = Model.BSIM4vbm + Model.BSIM4lvbm * Inv_L + Model.BSIM4wvbm * Inv_W + Model.BSIM4pvbm * Inv_LW;
-                pParam.BSIM4xt = Model.BSIM4xt + Model.BSIM4lxt * Inv_L + Model.BSIM4wxt * Inv_W + Model.BSIM4pxt * Inv_LW;
-                pParam.BSIM4vfb = Model.BSIM4vfb + Model.BSIM4lvfb * Inv_L + Model.BSIM4wvfb * Inv_W + Model.BSIM4pvfb * Inv_LW;
-                pParam.BSIM4k1 = Model.BSIM4k1 + Model.BSIM4lk1 * Inv_L + Model.BSIM4wk1 * Inv_W + Model.BSIM4pk1 * Inv_LW;
-                pParam.BSIM4kt1 = Model.BSIM4kt1 + Model.BSIM4lkt1 * Inv_L + Model.BSIM4wkt1 * Inv_W + Model.BSIM4pkt1 * Inv_LW;
-                pParam.BSIM4kt1l = Model.BSIM4kt1l + Model.BSIM4lkt1l * Inv_L + Model.BSIM4wkt1l * Inv_W + Model.BSIM4pkt1l * Inv_LW;
-                pParam.BSIM4k2 = Model.BSIM4k2 + Model.BSIM4lk2 * Inv_L + Model.BSIM4wk2 * Inv_W + Model.BSIM4pk2 * Inv_LW;
-                pParam.BSIM4kt2 = Model.BSIM4kt2 + Model.BSIM4lkt2 * Inv_L + Model.BSIM4wkt2 * Inv_W + Model.BSIM4pkt2 * Inv_LW;
-                pParam.BSIM4k3 = Model.BSIM4k3 + Model.BSIM4lk3 * Inv_L + Model.BSIM4wk3 * Inv_W + Model.BSIM4pk3 * Inv_LW;
-                pParam.BSIM4k3b = Model.BSIM4k3b + Model.BSIM4lk3b * Inv_L + Model.BSIM4wk3b * Inv_W + Model.BSIM4pk3b * Inv_LW;
-                pParam.BSIM4w0 = Model.BSIM4w0 + Model.BSIM4lw0 * Inv_L + Model.BSIM4ww0 * Inv_W + Model.BSIM4pw0 * Inv_LW;
-                pParam.BSIM4lpe0 = Model.BSIM4lpe0 + Model.BSIM4llpe0 * Inv_L + Model.BSIM4wlpe0 * Inv_W + Model.BSIM4plpe0 * Inv_LW;
-                pParam.BSIM4lpeb = Model.BSIM4lpeb + Model.BSIM4llpeb * Inv_L + Model.BSIM4wlpeb * Inv_W + Model.BSIM4plpeb * Inv_LW;
-                pParam.BSIM4dvtp0 = Model.BSIM4dvtp0 + Model.BSIM4ldvtp0 * Inv_L + Model.BSIM4wdvtp0 * Inv_W + Model.BSIM4pdvtp0 * Inv_LW;
-                pParam.BSIM4dvtp1 = Model.BSIM4dvtp1 + Model.BSIM4ldvtp1 * Inv_L + Model.BSIM4wdvtp1 * Inv_W + Model.BSIM4pdvtp1 * Inv_LW;
-                pParam.BSIM4dvtp2 = Model.BSIM4dvtp2 /* v4.7 */  + Model.BSIM4ldvtp2 * Inv_L + Model.BSIM4wdvtp2 * Inv_W + Model.BSIM4pdvtp2 *
+                pParam.BSIM4a1 = model.BSIM4a1 + model.BSIM4la1 * Inv_L + model.BSIM4wa1 * Inv_W + model.BSIM4pa1 * Inv_LW;
+                pParam.BSIM4a2 = model.BSIM4a2 + model.BSIM4la2 * Inv_L + model.BSIM4wa2 * Inv_W + model.BSIM4pa2 * Inv_LW;
+                pParam.BSIM4keta = model.BSIM4keta + model.BSIM4lketa * Inv_L + model.BSIM4wketa * Inv_W + model.BSIM4pketa * Inv_LW;
+                pParam.BSIM4nsub = model.BSIM4nsub + model.BSIM4lnsub * Inv_L + model.BSIM4wnsub * Inv_W + model.BSIM4pnsub * Inv_LW;
+                pParam.BSIM4ndep = model.BSIM4ndep + model.BSIM4lndep * Inv_L + model.BSIM4wndep * Inv_W + model.BSIM4pndep * Inv_LW;
+                pParam.BSIM4nsd = model.BSIM4nsd + model.BSIM4lnsd * Inv_L + model.BSIM4wnsd * Inv_W + model.BSIM4pnsd * Inv_LW;
+                pParam.BSIM4phin = model.BSIM4phin + model.BSIM4lphin * Inv_L + model.BSIM4wphin * Inv_W + model.BSIM4pphin * Inv_LW;
+                pParam.BSIM4ngate = model.BSIM4ngate + model.BSIM4lngate * Inv_L + model.BSIM4wngate * Inv_W + model.BSIM4pngate * Inv_LW;
+                pParam.BSIM4gamma1 = model.BSIM4gamma1 + model.BSIM4lgamma1 * Inv_L + model.BSIM4wgamma1 * Inv_W + model.BSIM4pgamma1 * Inv_LW;
+                pParam.BSIM4gamma2 = model.BSIM4gamma2 + model.BSIM4lgamma2 * Inv_L + model.BSIM4wgamma2 * Inv_W + model.BSIM4pgamma2 * Inv_LW;
+                pParam.BSIM4vbx = model.BSIM4vbx + model.BSIM4lvbx * Inv_L + model.BSIM4wvbx * Inv_W + model.BSIM4pvbx * Inv_LW;
+                pParam.BSIM4vbm = model.BSIM4vbm + model.BSIM4lvbm * Inv_L + model.BSIM4wvbm * Inv_W + model.BSIM4pvbm * Inv_LW;
+                pParam.BSIM4xt = model.BSIM4xt + model.BSIM4lxt * Inv_L + model.BSIM4wxt * Inv_W + model.BSIM4pxt * Inv_LW;
+                pParam.BSIM4vfb = model.BSIM4vfb + model.BSIM4lvfb * Inv_L + model.BSIM4wvfb * Inv_W + model.BSIM4pvfb * Inv_LW;
+                pParam.BSIM4k1 = model.BSIM4k1 + model.BSIM4lk1 * Inv_L + model.BSIM4wk1 * Inv_W + model.BSIM4pk1 * Inv_LW;
+                pParam.BSIM4kt1 = model.BSIM4kt1 + model.BSIM4lkt1 * Inv_L + model.BSIM4wkt1 * Inv_W + model.BSIM4pkt1 * Inv_LW;
+                pParam.BSIM4kt1l = model.BSIM4kt1l + model.BSIM4lkt1l * Inv_L + model.BSIM4wkt1l * Inv_W + model.BSIM4pkt1l * Inv_LW;
+                pParam.BSIM4k2 = model.BSIM4k2 + model.BSIM4lk2 * Inv_L + model.BSIM4wk2 * Inv_W + model.BSIM4pk2 * Inv_LW;
+                pParam.BSIM4kt2 = model.BSIM4kt2 + model.BSIM4lkt2 * Inv_L + model.BSIM4wkt2 * Inv_W + model.BSIM4pkt2 * Inv_LW;
+                pParam.BSIM4k3 = model.BSIM4k3 + model.BSIM4lk3 * Inv_L + model.BSIM4wk3 * Inv_W + model.BSIM4pk3 * Inv_LW;
+                pParam.BSIM4k3b = model.BSIM4k3b + model.BSIM4lk3b * Inv_L + model.BSIM4wk3b * Inv_W + model.BSIM4pk3b * Inv_LW;
+                pParam.BSIM4w0 = model.BSIM4w0 + model.BSIM4lw0 * Inv_L + model.BSIM4ww0 * Inv_W + model.BSIM4pw0 * Inv_LW;
+                pParam.BSIM4lpe0 = model.BSIM4lpe0 + model.BSIM4llpe0 * Inv_L + model.BSIM4wlpe0 * Inv_W + model.BSIM4plpe0 * Inv_LW;
+                pParam.BSIM4lpeb = model.BSIM4lpeb + model.BSIM4llpeb * Inv_L + model.BSIM4wlpeb * Inv_W + model.BSIM4plpeb * Inv_LW;
+                pParam.BSIM4dvtp0 = model.BSIM4dvtp0 + model.BSIM4ldvtp0 * Inv_L + model.BSIM4wdvtp0 * Inv_W + model.BSIM4pdvtp0 * Inv_LW;
+                pParam.BSIM4dvtp1 = model.BSIM4dvtp1 + model.BSIM4ldvtp1 * Inv_L + model.BSIM4wdvtp1 * Inv_W + model.BSIM4pdvtp1 * Inv_LW;
+                pParam.BSIM4dvtp2 = model.BSIM4dvtp2 /* v4.7 */  + model.BSIM4ldvtp2 * Inv_L + model.BSIM4wdvtp2 * Inv_W + model.BSIM4pdvtp2 *
                    Inv_LW;
-                pParam.BSIM4dvtp3 = Model.BSIM4dvtp3 /* v4.7 */  + Model.BSIM4ldvtp3 * Inv_L + Model.BSIM4wdvtp3 * Inv_W + Model.BSIM4pdvtp3 *
+                pParam.BSIM4dvtp3 = model.BSIM4dvtp3 /* v4.7 */  + model.BSIM4ldvtp3 * Inv_L + model.BSIM4wdvtp3 * Inv_W + model.BSIM4pdvtp3 *
                    Inv_LW;
-                pParam.BSIM4dvtp4 = Model.BSIM4dvtp4 /* v4.7 */  + Model.BSIM4ldvtp4 * Inv_L + Model.BSIM4wdvtp4 * Inv_W + Model.BSIM4pdvtp4 *
+                pParam.BSIM4dvtp4 = model.BSIM4dvtp4 /* v4.7 */  + model.BSIM4ldvtp4 * Inv_L + model.BSIM4wdvtp4 * Inv_W + model.BSIM4pdvtp4 *
                    Inv_LW;
-                pParam.BSIM4dvtp5 = Model.BSIM4dvtp5 /* v4.7 */  + Model.BSIM4ldvtp5 * Inv_L + Model.BSIM4wdvtp5 * Inv_W + Model.BSIM4pdvtp5 *
+                pParam.BSIM4dvtp5 = model.BSIM4dvtp5 /* v4.7 */  + model.BSIM4ldvtp5 * Inv_L + model.BSIM4wdvtp5 * Inv_W + model.BSIM4pdvtp5 *
                    Inv_LW;
-                pParam.BSIM4dvt0 = Model.BSIM4dvt0 + Model.BSIM4ldvt0 * Inv_L + Model.BSIM4wdvt0 * Inv_W + Model.BSIM4pdvt0 * Inv_LW;
-                pParam.BSIM4dvt1 = Model.BSIM4dvt1 + Model.BSIM4ldvt1 * Inv_L + Model.BSIM4wdvt1 * Inv_W + Model.BSIM4pdvt1 * Inv_LW;
-                pParam.BSIM4dvt2 = Model.BSIM4dvt2 + Model.BSIM4ldvt2 * Inv_L + Model.BSIM4wdvt2 * Inv_W + Model.BSIM4pdvt2 * Inv_LW;
-                pParam.BSIM4dvt0w = Model.BSIM4dvt0w + Model.BSIM4ldvt0w * Inv_L + Model.BSIM4wdvt0w * Inv_W + Model.BSIM4pdvt0w * Inv_LW;
-                pParam.BSIM4dvt1w = Model.BSIM4dvt1w + Model.BSIM4ldvt1w * Inv_L + Model.BSIM4wdvt1w * Inv_W + Model.BSIM4pdvt1w * Inv_LW;
-                pParam.BSIM4dvt2w = Model.BSIM4dvt2w + Model.BSIM4ldvt2w * Inv_L + Model.BSIM4wdvt2w * Inv_W + Model.BSIM4pdvt2w * Inv_LW;
-                pParam.BSIM4drout = Model.BSIM4drout + Model.BSIM4ldrout * Inv_L + Model.BSIM4wdrout * Inv_W + Model.BSIM4pdrout * Inv_LW;
-                pParam.BSIM4dsub = Model.BSIM4dsub + Model.BSIM4ldsub * Inv_L + Model.BSIM4wdsub * Inv_W + Model.BSIM4pdsub * Inv_LW;
-                pParam.BSIM4vth0 = Model.BSIM4vth0 + Model.BSIM4lvth0 * Inv_L + Model.BSIM4wvth0 * Inv_W + Model.BSIM4pvth0 * Inv_LW;
-                pParam.BSIM4ua = Model.BSIM4ua + Model.BSIM4lua * Inv_L + Model.BSIM4wua * Inv_W + Model.BSIM4pua * Inv_LW;
-                pParam.BSIM4ua1 = Model.BSIM4ua1 + Model.BSIM4lua1 * Inv_L + Model.BSIM4wua1 * Inv_W + Model.BSIM4pua1 * Inv_LW;
-                pParam.BSIM4ub = Model.BSIM4ub + Model.BSIM4lub * Inv_L + Model.BSIM4wub * Inv_W + Model.BSIM4pub * Inv_LW;
-                pParam.BSIM4ub1 = Model.BSIM4ub1 + Model.BSIM4lub1 * Inv_L + Model.BSIM4wub1 * Inv_W + Model.BSIM4pub1 * Inv_LW;
-                pParam.BSIM4uc = Model.BSIM4uc + Model.BSIM4luc * Inv_L + Model.BSIM4wuc * Inv_W + Model.BSIM4puc * Inv_LW;
-                pParam.BSIM4uc1 = Model.BSIM4uc1 + Model.BSIM4luc1 * Inv_L + Model.BSIM4wuc1 * Inv_W + Model.BSIM4puc1 * Inv_LW;
-                pParam.BSIM4ud = Model.BSIM4ud + Model.BSIM4lud * Inv_L + Model.BSIM4wud * Inv_W + Model.BSIM4pud * Inv_LW;
-                pParam.BSIM4ud1 = Model.BSIM4ud1 + Model.BSIM4lud1 * Inv_L + Model.BSIM4wud1 * Inv_W + Model.BSIM4pud1 * Inv_LW;
-                pParam.BSIM4up = Model.BSIM4up + Model.BSIM4lup * Inv_L + Model.BSIM4wup * Inv_W + Model.BSIM4pup * Inv_LW;
-                pParam.BSIM4lp = Model.BSIM4lp + Model.BSIM4llp * Inv_L + Model.BSIM4wlp * Inv_W + Model.BSIM4plp * Inv_LW;
-                pParam.BSIM4eu = Model.BSIM4eu + Model.BSIM4leu * Inv_L + Model.BSIM4weu * Inv_W + Model.BSIM4peu * Inv_LW;
-                pParam.BSIM4u0 = Model.BSIM4u0 + Model.BSIM4lu0 * Inv_L + Model.BSIM4wu0 * Inv_W + Model.BSIM4pu0 * Inv_LW;
-                pParam.BSIM4ute = Model.BSIM4ute + Model.BSIM4lute * Inv_L + Model.BSIM4wute * Inv_W + Model.BSIM4pute * Inv_LW;
+                pParam.BSIM4dvt0 = model.BSIM4dvt0 + model.BSIM4ldvt0 * Inv_L + model.BSIM4wdvt0 * Inv_W + model.BSIM4pdvt0 * Inv_LW;
+                pParam.BSIM4dvt1 = model.BSIM4dvt1 + model.BSIM4ldvt1 * Inv_L + model.BSIM4wdvt1 * Inv_W + model.BSIM4pdvt1 * Inv_LW;
+                pParam.BSIM4dvt2 = model.BSIM4dvt2 + model.BSIM4ldvt2 * Inv_L + model.BSIM4wdvt2 * Inv_W + model.BSIM4pdvt2 * Inv_LW;
+                pParam.BSIM4dvt0w = model.BSIM4dvt0w + model.BSIM4ldvt0w * Inv_L + model.BSIM4wdvt0w * Inv_W + model.BSIM4pdvt0w * Inv_LW;
+                pParam.BSIM4dvt1w = model.BSIM4dvt1w + model.BSIM4ldvt1w * Inv_L + model.BSIM4wdvt1w * Inv_W + model.BSIM4pdvt1w * Inv_LW;
+                pParam.BSIM4dvt2w = model.BSIM4dvt2w + model.BSIM4ldvt2w * Inv_L + model.BSIM4wdvt2w * Inv_W + model.BSIM4pdvt2w * Inv_LW;
+                pParam.BSIM4drout = model.BSIM4drout + model.BSIM4ldrout * Inv_L + model.BSIM4wdrout * Inv_W + model.BSIM4pdrout * Inv_LW;
+                pParam.BSIM4dsub = model.BSIM4dsub + model.BSIM4ldsub * Inv_L + model.BSIM4wdsub * Inv_W + model.BSIM4pdsub * Inv_LW;
+                pParam.BSIM4vth0 = model.BSIM4vth0 + model.BSIM4lvth0 * Inv_L + model.BSIM4wvth0 * Inv_W + model.BSIM4pvth0 * Inv_LW;
+                pParam.BSIM4ua = model.BSIM4ua + model.BSIM4lua * Inv_L + model.BSIM4wua * Inv_W + model.BSIM4pua * Inv_LW;
+                pParam.BSIM4ua1 = model.BSIM4ua1 + model.BSIM4lua1 * Inv_L + model.BSIM4wua1 * Inv_W + model.BSIM4pua1 * Inv_LW;
+                pParam.BSIM4ub = model.BSIM4ub + model.BSIM4lub * Inv_L + model.BSIM4wub * Inv_W + model.BSIM4pub * Inv_LW;
+                pParam.BSIM4ub1 = model.BSIM4ub1 + model.BSIM4lub1 * Inv_L + model.BSIM4wub1 * Inv_W + model.BSIM4pub1 * Inv_LW;
+                pParam.BSIM4uc = model.BSIM4uc + model.BSIM4luc * Inv_L + model.BSIM4wuc * Inv_W + model.BSIM4puc * Inv_LW;
+                pParam.BSIM4uc1 = model.BSIM4uc1 + model.BSIM4luc1 * Inv_L + model.BSIM4wuc1 * Inv_W + model.BSIM4puc1 * Inv_LW;
+                pParam.BSIM4ud = model.BSIM4ud + model.BSIM4lud * Inv_L + model.BSIM4wud * Inv_W + model.BSIM4pud * Inv_LW;
+                pParam.BSIM4ud1 = model.BSIM4ud1 + model.BSIM4lud1 * Inv_L + model.BSIM4wud1 * Inv_W + model.BSIM4pud1 * Inv_LW;
+                pParam.BSIM4up = model.BSIM4up + model.BSIM4lup * Inv_L + model.BSIM4wup * Inv_W + model.BSIM4pup * Inv_LW;
+                pParam.BSIM4lp = model.BSIM4lp + model.BSIM4llp * Inv_L + model.BSIM4wlp * Inv_W + model.BSIM4plp * Inv_LW;
+                pParam.BSIM4eu = model.BSIM4eu + model.BSIM4leu * Inv_L + model.BSIM4weu * Inv_W + model.BSIM4peu * Inv_LW;
+                pParam.BSIM4u0 = model.BSIM4u0 + model.BSIM4lu0 * Inv_L + model.BSIM4wu0 * Inv_W + model.BSIM4pu0 * Inv_LW;
+                pParam.BSIM4ute = model.BSIM4ute + model.BSIM4lute * Inv_L + model.BSIM4wute * Inv_W + model.BSIM4pute * Inv_LW;
                 /* high k mobility */
-                pParam.BSIM4ucs = Model.BSIM4ucs + Model.BSIM4lucs * Inv_L + Model.BSIM4wucs * Inv_W + Model.BSIM4pucs * Inv_LW;
-                pParam.BSIM4ucste = Model.BSIM4ucste + Model.BSIM4lucste * Inv_L + Model.BSIM4wucste * Inv_W + Model.BSIM4pucste * Inv_LW;
+                pParam.BSIM4ucs = model.BSIM4ucs + model.BSIM4lucs * Inv_L + model.BSIM4wucs * Inv_W + model.BSIM4pucs * Inv_LW;
+                pParam.BSIM4ucste = model.BSIM4ucste + model.BSIM4lucste * Inv_L + model.BSIM4wucste * Inv_W + model.BSIM4pucste * Inv_LW;
 
-                pParam.BSIM4voff = Model.BSIM4voff + Model.BSIM4lvoff * Inv_L + Model.BSIM4wvoff * Inv_W + Model.BSIM4pvoff * Inv_LW;
-                pParam.BSIM4tvoff = Model.BSIM4tvoff + Model.BSIM4ltvoff * Inv_L + Model.BSIM4wtvoff * Inv_W + Model.BSIM4ptvoff * Inv_LW;
-                pParam.BSIM4minv = Model.BSIM4minv + Model.BSIM4lminv * Inv_L + Model.BSIM4wminv * Inv_W + Model.BSIM4pminv * Inv_LW;
-                pParam.BSIM4minvcv = Model.BSIM4minvcv + Model.BSIM4lminvcv * Inv_L + Model.BSIM4wminvcv * Inv_W + Model.BSIM4pminvcv * Inv_LW;
-                pParam.BSIM4fprout = Model.BSIM4fprout + Model.BSIM4lfprout * Inv_L + Model.BSIM4wfprout * Inv_W + Model.BSIM4pfprout * Inv_LW;
-                pParam.BSIM4pdits = Model.BSIM4pdits + Model.BSIM4lpdits * Inv_L + Model.BSIM4wpdits * Inv_W + Model.BSIM4ppdits * Inv_LW;
-                pParam.BSIM4pditsd = Model.BSIM4pditsd + Model.BSIM4lpditsd * Inv_L + Model.BSIM4wpditsd * Inv_W + Model.BSIM4ppditsd * Inv_LW;
-                pParam.BSIM4delta = Model.BSIM4delta + Model.BSIM4ldelta * Inv_L + Model.BSIM4wdelta * Inv_W + Model.BSIM4pdelta * Inv_LW;
-                pParam.BSIM4rdsw = Model.BSIM4rdsw + Model.BSIM4lrdsw * Inv_L + Model.BSIM4wrdsw * Inv_W + Model.BSIM4prdsw * Inv_LW;
-                pParam.BSIM4rdw = Model.BSIM4rdw + Model.BSIM4lrdw * Inv_L + Model.BSIM4wrdw * Inv_W + Model.BSIM4prdw * Inv_LW;
-                pParam.BSIM4rsw = Model.BSIM4rsw + Model.BSIM4lrsw * Inv_L + Model.BSIM4wrsw * Inv_W + Model.BSIM4prsw * Inv_LW;
-                pParam.BSIM4prwg = Model.BSIM4prwg + Model.BSIM4lprwg * Inv_L + Model.BSIM4wprwg * Inv_W + Model.BSIM4pprwg * Inv_LW;
-                pParam.BSIM4prwb = Model.BSIM4prwb + Model.BSIM4lprwb * Inv_L + Model.BSIM4wprwb * Inv_W + Model.BSIM4pprwb * Inv_LW;
-                pParam.BSIM4prt = Model.BSIM4prt + Model.BSIM4lprt * Inv_L + Model.BSIM4wprt * Inv_W + Model.BSIM4pprt * Inv_LW;
-                pParam.BSIM4eta0 = Model.BSIM4eta0 + Model.BSIM4leta0 * Inv_L + Model.BSIM4weta0 * Inv_W + Model.BSIM4peta0 * Inv_LW;
-                pParam.BSIM4teta0 = Model.BSIM4teta0 /* v4.7 */  + Model.BSIM4lteta0 * Inv_L + Model.BSIM4wteta0 * Inv_W + Model.BSIM4pteta0 *
+                pParam.BSIM4voff = model.BSIM4voff + model.BSIM4lvoff * Inv_L + model.BSIM4wvoff * Inv_W + model.BSIM4pvoff * Inv_LW;
+                pParam.BSIM4tvoff = model.BSIM4tvoff + model.BSIM4ltvoff * Inv_L + model.BSIM4wtvoff * Inv_W + model.BSIM4ptvoff * Inv_LW;
+                pParam.BSIM4minv = model.BSIM4minv + model.BSIM4lminv * Inv_L + model.BSIM4wminv * Inv_W + model.BSIM4pminv * Inv_LW;
+                pParam.BSIM4minvcv = model.BSIM4minvcv + model.BSIM4lminvcv * Inv_L + model.BSIM4wminvcv * Inv_W + model.BSIM4pminvcv * Inv_LW;
+                pParam.BSIM4fprout = model.BSIM4fprout + model.BSIM4lfprout * Inv_L + model.BSIM4wfprout * Inv_W + model.BSIM4pfprout * Inv_LW;
+                pParam.BSIM4pdits = model.BSIM4pdits + model.BSIM4lpdits * Inv_L + model.BSIM4wpdits * Inv_W + model.BSIM4ppdits * Inv_LW;
+                pParam.BSIM4pditsd = model.BSIM4pditsd + model.BSIM4lpditsd * Inv_L + model.BSIM4wpditsd * Inv_W + model.BSIM4ppditsd * Inv_LW;
+                pParam.BSIM4delta = model.BSIM4delta + model.BSIM4ldelta * Inv_L + model.BSIM4wdelta * Inv_W + model.BSIM4pdelta * Inv_LW;
+                pParam.BSIM4rdsw = model.BSIM4rdsw + model.BSIM4lrdsw * Inv_L + model.BSIM4wrdsw * Inv_W + model.BSIM4prdsw * Inv_LW;
+                pParam.BSIM4rdw = model.BSIM4rdw + model.BSIM4lrdw * Inv_L + model.BSIM4wrdw * Inv_W + model.BSIM4prdw * Inv_LW;
+                pParam.BSIM4rsw = model.BSIM4rsw + model.BSIM4lrsw * Inv_L + model.BSIM4wrsw * Inv_W + model.BSIM4prsw * Inv_LW;
+                pParam.BSIM4prwg = model.BSIM4prwg + model.BSIM4lprwg * Inv_L + model.BSIM4wprwg * Inv_W + model.BSIM4pprwg * Inv_LW;
+                pParam.BSIM4prwb = model.BSIM4prwb + model.BSIM4lprwb * Inv_L + model.BSIM4wprwb * Inv_W + model.BSIM4pprwb * Inv_LW;
+                pParam.BSIM4prt = model.BSIM4prt + model.BSIM4lprt * Inv_L + model.BSIM4wprt * Inv_W + model.BSIM4pprt * Inv_LW;
+                pParam.BSIM4eta0 = model.BSIM4eta0 + model.BSIM4leta0 * Inv_L + model.BSIM4weta0 * Inv_W + model.BSIM4peta0 * Inv_LW;
+                pParam.BSIM4teta0 = model.BSIM4teta0 /* v4.7 */  + model.BSIM4lteta0 * Inv_L + model.BSIM4wteta0 * Inv_W + model.BSIM4pteta0 *
                    Inv_LW;
-                pParam.BSIM4tvoffcv = Model.BSIM4tvoffcv /* v4.8.0 */  + Model.BSIM4ltvoffcv * Inv_L + Model.BSIM4wtvoffcv * Inv_W +
-                                     Model.BSIM4ptvoffcv * Inv_LW;
-                pParam.BSIM4etab = Model.BSIM4etab + Model.BSIM4letab * Inv_L + Model.BSIM4wetab * Inv_W + Model.BSIM4petab * Inv_LW;
-                pParam.BSIM4pclm = Model.BSIM4pclm + Model.BSIM4lpclm * Inv_L + Model.BSIM4wpclm * Inv_W + Model.BSIM4ppclm * Inv_LW;
-                pParam.BSIM4pdibl1 = Model.BSIM4pdibl1 + Model.BSIM4lpdibl1 * Inv_L + Model.BSIM4wpdibl1 * Inv_W + Model.BSIM4ppdibl1 * Inv_LW;
-                pParam.BSIM4pdibl2 = Model.BSIM4pdibl2 + Model.BSIM4lpdibl2 * Inv_L + Model.BSIM4wpdibl2 * Inv_W + Model.BSIM4ppdibl2 * Inv_LW;
-                pParam.BSIM4pdiblb = Model.BSIM4pdiblb + Model.BSIM4lpdiblb * Inv_L + Model.BSIM4wpdiblb * Inv_W + Model.BSIM4ppdiblb * Inv_LW;
-                pParam.BSIM4pscbe1 = Model.BSIM4pscbe1 + Model.BSIM4lpscbe1 * Inv_L + Model.BSIM4wpscbe1 * Inv_W + Model.BSIM4ppscbe1 * Inv_LW;
-                pParam.BSIM4pscbe2 = Model.BSIM4pscbe2 + Model.BSIM4lpscbe2 * Inv_L + Model.BSIM4wpscbe2 * Inv_W + Model.BSIM4ppscbe2 * Inv_LW;
-                pParam.BSIM4pvag = Model.BSIM4pvag + Model.BSIM4lpvag * Inv_L + Model.BSIM4wpvag * Inv_W + Model.BSIM4ppvag * Inv_LW;
-                pParam.BSIM4wr = Model.BSIM4wr + Model.BSIM4lwr * Inv_L + Model.BSIM4wwr * Inv_W + Model.BSIM4pwr * Inv_LW;
-                pParam.BSIM4dwg = Model.BSIM4dwg + Model.BSIM4ldwg * Inv_L + Model.BSIM4wdwg * Inv_W + Model.BSIM4pdwg * Inv_LW;
-                pParam.BSIM4dwb = Model.BSIM4dwb + Model.BSIM4ldwb * Inv_L + Model.BSIM4wdwb * Inv_W + Model.BSIM4pdwb * Inv_LW;
-                pParam.BSIM4b0 = Model.BSIM4b0 + Model.BSIM4lb0 * Inv_L + Model.BSIM4wb0 * Inv_W + Model.BSIM4pb0 * Inv_LW;
-                pParam.BSIM4b1 = Model.BSIM4b1 + Model.BSIM4lb1 * Inv_L + Model.BSIM4wb1 * Inv_W + Model.BSIM4pb1 * Inv_LW;
-                pParam.BSIM4alpha0 = Model.BSIM4alpha0 + Model.BSIM4lalpha0 * Inv_L + Model.BSIM4walpha0 * Inv_W + Model.BSIM4palpha0 * Inv_LW;
-                pParam.BSIM4alpha1 = Model.BSIM4alpha1 + Model.BSIM4lalpha1 * Inv_L + Model.BSIM4walpha1 * Inv_W + Model.BSIM4palpha1 * Inv_LW;
-                pParam.BSIM4beta0 = Model.BSIM4beta0 + Model.BSIM4lbeta0 * Inv_L + Model.BSIM4wbeta0 * Inv_W + Model.BSIM4pbeta0 * Inv_LW;
-                pParam.BSIM4agidl = Model.BSIM4agidl + Model.BSIM4lagidl * Inv_L + Model.BSIM4wagidl * Inv_W + Model.BSIM4pagidl * Inv_LW;
-                pParam.BSIM4bgidl = Model.BSIM4bgidl + Model.BSIM4lbgidl * Inv_L + Model.BSIM4wbgidl * Inv_W + Model.BSIM4pbgidl * Inv_LW;
-                pParam.BSIM4cgidl = Model.BSIM4cgidl + Model.BSIM4lcgidl * Inv_L + Model.BSIM4wcgidl * Inv_W + Model.BSIM4pcgidl * Inv_LW;
-                pParam.BSIM4egidl = Model.BSIM4egidl + Model.BSIM4legidl * Inv_L + Model.BSIM4wegidl * Inv_W + Model.BSIM4pegidl * Inv_LW;
-                pParam.BSIM4rgidl = Model.BSIM4rgidl /* v4.7 New GIDL / GISL */  + Model.BSIM4lrgidl * Inv_L + Model.BSIM4wrgidl * Inv_W +
-                                     Model.BSIM4prgidl * Inv_LW;
-                pParam.BSIM4kgidl = Model.BSIM4kgidl /* v4.7 New GIDL / GISL */  + Model.BSIM4lkgidl * Inv_L + Model.BSIM4wkgidl * Inv_W +
-                                     Model.BSIM4pkgidl * Inv_LW;
-                pParam.BSIM4fgidl = Model.BSIM4fgidl /* v4.7 New GIDL / GISL */  + Model.BSIM4lfgidl * Inv_L + Model.BSIM4wfgidl * Inv_W +
-                                     Model.BSIM4pfgidl * Inv_LW;
-                pParam.BSIM4agisl = Model.BSIM4agisl + Model.BSIM4lagisl * Inv_L + Model.BSIM4wagisl * Inv_W + Model.BSIM4pagisl * Inv_LW;
-                pParam.BSIM4bgisl = Model.BSIM4bgisl + Model.BSIM4lbgisl * Inv_L + Model.BSIM4wbgisl * Inv_W + Model.BSIM4pbgisl * Inv_LW;
-                pParam.BSIM4cgisl = Model.BSIM4cgisl + Model.BSIM4lcgisl * Inv_L + Model.BSIM4wcgisl * Inv_W + Model.BSIM4pcgisl * Inv_LW;
-                pParam.BSIM4egisl = Model.BSIM4egisl + Model.BSIM4legisl * Inv_L + Model.BSIM4wegisl * Inv_W + Model.BSIM4pegisl * Inv_LW;
-                pParam.BSIM4rgisl = Model.BSIM4rgisl /* v4.7 New GIDL / GISL */  + Model.BSIM4lrgisl * Inv_L + Model.BSIM4wrgisl * Inv_W +
-                                     Model.BSIM4prgisl * Inv_LW;
-                pParam.BSIM4kgisl = Model.BSIM4kgisl /* v4.7 New GIDL / GISL */  + Model.BSIM4lkgisl * Inv_L + Model.BSIM4wkgisl * Inv_W +
-                                     Model.BSIM4pkgisl * Inv_LW;
-                pParam.BSIM4fgisl = Model.BSIM4fgisl /* v4.7 New GIDL / GISL */  + Model.BSIM4lfgisl * Inv_L + Model.BSIM4wfgisl * Inv_W +
-                                     Model.BSIM4pfgisl * Inv_LW;
-                pParam.BSIM4aigc = Model.BSIM4aigc + Model.BSIM4laigc * Inv_L + Model.BSIM4waigc * Inv_W + Model.BSIM4paigc * Inv_LW;
-                pParam.BSIM4bigc = Model.BSIM4bigc + Model.BSIM4lbigc * Inv_L + Model.BSIM4wbigc * Inv_W + Model.BSIM4pbigc * Inv_LW;
-                pParam.BSIM4cigc = Model.BSIM4cigc + Model.BSIM4lcigc * Inv_L + Model.BSIM4wcigc * Inv_W + Model.BSIM4pcigc * Inv_LW;
-                pParam.BSIM4aigsd = Model.BSIM4aigsd + Model.BSIM4laigsd * Inv_L + Model.BSIM4waigsd * Inv_W + Model.BSIM4paigsd * Inv_LW;
-                pParam.BSIM4bigsd = Model.BSIM4bigsd + Model.BSIM4lbigsd * Inv_L + Model.BSIM4wbigsd * Inv_W + Model.BSIM4pbigsd * Inv_LW;
-                pParam.BSIM4cigsd = Model.BSIM4cigsd + Model.BSIM4lcigsd * Inv_L + Model.BSIM4wcigsd * Inv_W + Model.BSIM4pcigsd * Inv_LW;
-                pParam.BSIM4aigs = Model.BSIM4aigs + Model.BSIM4laigs * Inv_L + Model.BSIM4waigs * Inv_W + Model.BSIM4paigs * Inv_LW;
-                pParam.BSIM4bigs = Model.BSIM4bigs + Model.BSIM4lbigs * Inv_L + Model.BSIM4wbigs * Inv_W + Model.BSIM4pbigs * Inv_LW;
-                pParam.BSIM4cigs = Model.BSIM4cigs + Model.BSIM4lcigs * Inv_L + Model.BSIM4wcigs * Inv_W + Model.BSIM4pcigs * Inv_LW;
-                pParam.BSIM4aigd = Model.BSIM4aigd + Model.BSIM4laigd * Inv_L + Model.BSIM4waigd * Inv_W + Model.BSIM4paigd * Inv_LW;
-                pParam.BSIM4bigd = Model.BSIM4bigd + Model.BSIM4lbigd * Inv_L + Model.BSIM4wbigd * Inv_W + Model.BSIM4pbigd * Inv_LW;
-                pParam.BSIM4cigd = Model.BSIM4cigd + Model.BSIM4lcigd * Inv_L + Model.BSIM4wcigd * Inv_W + Model.BSIM4pcigd * Inv_LW;
-                pParam.BSIM4aigbacc = Model.BSIM4aigbacc + Model.BSIM4laigbacc * Inv_L + Model.BSIM4waigbacc * Inv_W + Model.BSIM4paigbacc *
+                pParam.BSIM4tvoffcv = model.BSIM4tvoffcv /* v4.8.0 */  + model.BSIM4ltvoffcv * Inv_L + model.BSIM4wtvoffcv * Inv_W +
+                                     model.BSIM4ptvoffcv * Inv_LW;
+                pParam.BSIM4etab = model.BSIM4etab + model.BSIM4letab * Inv_L + model.BSIM4wetab * Inv_W + model.BSIM4petab * Inv_LW;
+                pParam.BSIM4pclm = model.BSIM4pclm + model.BSIM4lpclm * Inv_L + model.BSIM4wpclm * Inv_W + model.BSIM4ppclm * Inv_LW;
+                pParam.BSIM4pdibl1 = model.BSIM4pdibl1 + model.BSIM4lpdibl1 * Inv_L + model.BSIM4wpdibl1 * Inv_W + model.BSIM4ppdibl1 * Inv_LW;
+                pParam.BSIM4pdibl2 = model.BSIM4pdibl2 + model.BSIM4lpdibl2 * Inv_L + model.BSIM4wpdibl2 * Inv_W + model.BSIM4ppdibl2 * Inv_LW;
+                pParam.BSIM4pdiblb = model.BSIM4pdiblb + model.BSIM4lpdiblb * Inv_L + model.BSIM4wpdiblb * Inv_W + model.BSIM4ppdiblb * Inv_LW;
+                pParam.BSIM4pscbe1 = model.BSIM4pscbe1 + model.BSIM4lpscbe1 * Inv_L + model.BSIM4wpscbe1 * Inv_W + model.BSIM4ppscbe1 * Inv_LW;
+                pParam.BSIM4pscbe2 = model.BSIM4pscbe2 + model.BSIM4lpscbe2 * Inv_L + model.BSIM4wpscbe2 * Inv_W + model.BSIM4ppscbe2 * Inv_LW;
+                pParam.BSIM4pvag = model.BSIM4pvag + model.BSIM4lpvag * Inv_L + model.BSIM4wpvag * Inv_W + model.BSIM4ppvag * Inv_LW;
+                pParam.BSIM4wr = model.BSIM4wr + model.BSIM4lwr * Inv_L + model.BSIM4wwr * Inv_W + model.BSIM4pwr * Inv_LW;
+                pParam.BSIM4dwg = model.BSIM4dwg + model.BSIM4ldwg * Inv_L + model.BSIM4wdwg * Inv_W + model.BSIM4pdwg * Inv_LW;
+                pParam.BSIM4dwb = model.BSIM4dwb + model.BSIM4ldwb * Inv_L + model.BSIM4wdwb * Inv_W + model.BSIM4pdwb * Inv_LW;
+                pParam.BSIM4b0 = model.BSIM4b0 + model.BSIM4lb0 * Inv_L + model.BSIM4wb0 * Inv_W + model.BSIM4pb0 * Inv_LW;
+                pParam.BSIM4b1 = model.BSIM4b1 + model.BSIM4lb1 * Inv_L + model.BSIM4wb1 * Inv_W + model.BSIM4pb1 * Inv_LW;
+                pParam.BSIM4alpha0 = model.BSIM4alpha0 + model.BSIM4lalpha0 * Inv_L + model.BSIM4walpha0 * Inv_W + model.BSIM4palpha0 * Inv_LW;
+                pParam.BSIM4alpha1 = model.BSIM4alpha1 + model.BSIM4lalpha1 * Inv_L + model.BSIM4walpha1 * Inv_W + model.BSIM4palpha1 * Inv_LW;
+                pParam.BSIM4beta0 = model.BSIM4beta0 + model.BSIM4lbeta0 * Inv_L + model.BSIM4wbeta0 * Inv_W + model.BSIM4pbeta0 * Inv_LW;
+                pParam.BSIM4agidl = model.BSIM4agidl + model.BSIM4lagidl * Inv_L + model.BSIM4wagidl * Inv_W + model.BSIM4pagidl * Inv_LW;
+                pParam.BSIM4bgidl = model.BSIM4bgidl + model.BSIM4lbgidl * Inv_L + model.BSIM4wbgidl * Inv_W + model.BSIM4pbgidl * Inv_LW;
+                pParam.BSIM4cgidl = model.BSIM4cgidl + model.BSIM4lcgidl * Inv_L + model.BSIM4wcgidl * Inv_W + model.BSIM4pcgidl * Inv_LW;
+                pParam.BSIM4egidl = model.BSIM4egidl + model.BSIM4legidl * Inv_L + model.BSIM4wegidl * Inv_W + model.BSIM4pegidl * Inv_LW;
+                pParam.BSIM4rgidl = model.BSIM4rgidl /* v4.7 New GIDL / GISL */  + model.BSIM4lrgidl * Inv_L + model.BSIM4wrgidl * Inv_W +
+                                     model.BSIM4prgidl * Inv_LW;
+                pParam.BSIM4kgidl = model.BSIM4kgidl /* v4.7 New GIDL / GISL */  + model.BSIM4lkgidl * Inv_L + model.BSIM4wkgidl * Inv_W +
+                                     model.BSIM4pkgidl * Inv_LW;
+                pParam.BSIM4fgidl = model.BSIM4fgidl /* v4.7 New GIDL / GISL */  + model.BSIM4lfgidl * Inv_L + model.BSIM4wfgidl * Inv_W +
+                                     model.BSIM4pfgidl * Inv_LW;
+                pParam.BSIM4agisl = model.BSIM4agisl + model.BSIM4lagisl * Inv_L + model.BSIM4wagisl * Inv_W + model.BSIM4pagisl * Inv_LW;
+                pParam.BSIM4bgisl = model.BSIM4bgisl + model.BSIM4lbgisl * Inv_L + model.BSIM4wbgisl * Inv_W + model.BSIM4pbgisl * Inv_LW;
+                pParam.BSIM4cgisl = model.BSIM4cgisl + model.BSIM4lcgisl * Inv_L + model.BSIM4wcgisl * Inv_W + model.BSIM4pcgisl * Inv_LW;
+                pParam.BSIM4egisl = model.BSIM4egisl + model.BSIM4legisl * Inv_L + model.BSIM4wegisl * Inv_W + model.BSIM4pegisl * Inv_LW;
+                pParam.BSIM4rgisl = model.BSIM4rgisl /* v4.7 New GIDL / GISL */  + model.BSIM4lrgisl * Inv_L + model.BSIM4wrgisl * Inv_W +
+                                     model.BSIM4prgisl * Inv_LW;
+                pParam.BSIM4kgisl = model.BSIM4kgisl /* v4.7 New GIDL / GISL */  + model.BSIM4lkgisl * Inv_L + model.BSIM4wkgisl * Inv_W +
+                                     model.BSIM4pkgisl * Inv_LW;
+                pParam.BSIM4fgisl = model.BSIM4fgisl /* v4.7 New GIDL / GISL */  + model.BSIM4lfgisl * Inv_L + model.BSIM4wfgisl * Inv_W +
+                                     model.BSIM4pfgisl * Inv_LW;
+                pParam.BSIM4aigc = model.BSIM4aigc + model.BSIM4laigc * Inv_L + model.BSIM4waigc * Inv_W + model.BSIM4paigc * Inv_LW;
+                pParam.BSIM4bigc = model.BSIM4bigc + model.BSIM4lbigc * Inv_L + model.BSIM4wbigc * Inv_W + model.BSIM4pbigc * Inv_LW;
+                pParam.BSIM4cigc = model.BSIM4cigc + model.BSIM4lcigc * Inv_L + model.BSIM4wcigc * Inv_W + model.BSIM4pcigc * Inv_LW;
+                pParam.BSIM4aigsd = model.BSIM4aigsd + model.BSIM4laigsd * Inv_L + model.BSIM4waigsd * Inv_W + model.BSIM4paigsd * Inv_LW;
+                pParam.BSIM4bigsd = model.BSIM4bigsd + model.BSIM4lbigsd * Inv_L + model.BSIM4wbigsd * Inv_W + model.BSIM4pbigsd * Inv_LW;
+                pParam.BSIM4cigsd = model.BSIM4cigsd + model.BSIM4lcigsd * Inv_L + model.BSIM4wcigsd * Inv_W + model.BSIM4pcigsd * Inv_LW;
+                pParam.BSIM4aigs = model.BSIM4aigs + model.BSIM4laigs * Inv_L + model.BSIM4waigs * Inv_W + model.BSIM4paigs * Inv_LW;
+                pParam.BSIM4bigs = model.BSIM4bigs + model.BSIM4lbigs * Inv_L + model.BSIM4wbigs * Inv_W + model.BSIM4pbigs * Inv_LW;
+                pParam.BSIM4cigs = model.BSIM4cigs + model.BSIM4lcigs * Inv_L + model.BSIM4wcigs * Inv_W + model.BSIM4pcigs * Inv_LW;
+                pParam.BSIM4aigd = model.BSIM4aigd + model.BSIM4laigd * Inv_L + model.BSIM4waigd * Inv_W + model.BSIM4paigd * Inv_LW;
+                pParam.BSIM4bigd = model.BSIM4bigd + model.BSIM4lbigd * Inv_L + model.BSIM4wbigd * Inv_W + model.BSIM4pbigd * Inv_LW;
+                pParam.BSIM4cigd = model.BSIM4cigd + model.BSIM4lcigd * Inv_L + model.BSIM4wcigd * Inv_W + model.BSIM4pcigd * Inv_LW;
+                pParam.BSIM4aigbacc = model.BSIM4aigbacc + model.BSIM4laigbacc * Inv_L + model.BSIM4waigbacc * Inv_W + model.BSIM4paigbacc *
                    Inv_LW;
-                pParam.BSIM4bigbacc = Model.BSIM4bigbacc + Model.BSIM4lbigbacc * Inv_L + Model.BSIM4wbigbacc * Inv_W + Model.BSIM4pbigbacc *
+                pParam.BSIM4bigbacc = model.BSIM4bigbacc + model.BSIM4lbigbacc * Inv_L + model.BSIM4wbigbacc * Inv_W + model.BSIM4pbigbacc *
                    Inv_LW;
-                pParam.BSIM4cigbacc = Model.BSIM4cigbacc + Model.BSIM4lcigbacc * Inv_L + Model.BSIM4wcigbacc * Inv_W + Model.BSIM4pcigbacc *
+                pParam.BSIM4cigbacc = model.BSIM4cigbacc + model.BSIM4lcigbacc * Inv_L + model.BSIM4wcigbacc * Inv_W + model.BSIM4pcigbacc *
                    Inv_LW;
-                pParam.BSIM4aigbinv = Model.BSIM4aigbinv + Model.BSIM4laigbinv * Inv_L + Model.BSIM4waigbinv * Inv_W + Model.BSIM4paigbinv *
+                pParam.BSIM4aigbinv = model.BSIM4aigbinv + model.BSIM4laigbinv * Inv_L + model.BSIM4waigbinv * Inv_W + model.BSIM4paigbinv *
                    Inv_LW;
-                pParam.BSIM4bigbinv = Model.BSIM4bigbinv + Model.BSIM4lbigbinv * Inv_L + Model.BSIM4wbigbinv * Inv_W + Model.BSIM4pbigbinv *
+                pParam.BSIM4bigbinv = model.BSIM4bigbinv + model.BSIM4lbigbinv * Inv_L + model.BSIM4wbigbinv * Inv_W + model.BSIM4pbigbinv *
                    Inv_LW;
-                pParam.BSIM4cigbinv = Model.BSIM4cigbinv + Model.BSIM4lcigbinv * Inv_L + Model.BSIM4wcigbinv * Inv_W + Model.BSIM4pcigbinv *
+                pParam.BSIM4cigbinv = model.BSIM4cigbinv + model.BSIM4lcigbinv * Inv_L + model.BSIM4wcigbinv * Inv_W + model.BSIM4pcigbinv *
                    Inv_LW;
-                pParam.BSIM4nigc = Model.BSIM4nigc + Model.BSIM4lnigc * Inv_L + Model.BSIM4wnigc * Inv_W + Model.BSIM4pnigc * Inv_LW;
-                pParam.BSIM4nigbacc = Model.BSIM4nigbacc + Model.BSIM4lnigbacc * Inv_L + Model.BSIM4wnigbacc * Inv_W + Model.BSIM4pnigbacc *
+                pParam.BSIM4nigc = model.BSIM4nigc + model.BSIM4lnigc * Inv_L + model.BSIM4wnigc * Inv_W + model.BSIM4pnigc * Inv_LW;
+                pParam.BSIM4nigbacc = model.BSIM4nigbacc + model.BSIM4lnigbacc * Inv_L + model.BSIM4wnigbacc * Inv_W + model.BSIM4pnigbacc *
                    Inv_LW;
-                pParam.BSIM4nigbinv = Model.BSIM4nigbinv + Model.BSIM4lnigbinv * Inv_L + Model.BSIM4wnigbinv * Inv_W + Model.BSIM4pnigbinv *
+                pParam.BSIM4nigbinv = model.BSIM4nigbinv + model.BSIM4lnigbinv * Inv_L + model.BSIM4wnigbinv * Inv_W + model.BSIM4pnigbinv *
                    Inv_LW;
-                pParam.BSIM4ntox = Model.BSIM4ntox + Model.BSIM4lntox * Inv_L + Model.BSIM4wntox * Inv_W + Model.BSIM4pntox * Inv_LW;
-                pParam.BSIM4eigbinv = Model.BSIM4eigbinv + Model.BSIM4leigbinv * Inv_L + Model.BSIM4weigbinv * Inv_W + Model.BSIM4peigbinv *
+                pParam.BSIM4ntox = model.BSIM4ntox + model.BSIM4lntox * Inv_L + model.BSIM4wntox * Inv_W + model.BSIM4pntox * Inv_LW;
+                pParam.BSIM4eigbinv = model.BSIM4eigbinv + model.BSIM4leigbinv * Inv_L + model.BSIM4weigbinv * Inv_W + model.BSIM4peigbinv *
                    Inv_LW;
-                pParam.BSIM4pigcd = Model.BSIM4pigcd + Model.BSIM4lpigcd * Inv_L + Model.BSIM4wpigcd * Inv_W + Model.BSIM4ppigcd * Inv_LW;
-                pParam.BSIM4poxedge = Model.BSIM4poxedge + Model.BSIM4lpoxedge * Inv_L + Model.BSIM4wpoxedge * Inv_W + Model.BSIM4ppoxedge *
+                pParam.BSIM4pigcd = model.BSIM4pigcd + model.BSIM4lpigcd * Inv_L + model.BSIM4wpigcd * Inv_W + model.BSIM4ppigcd * Inv_LW;
+                pParam.BSIM4poxedge = model.BSIM4poxedge + model.BSIM4lpoxedge * Inv_L + model.BSIM4wpoxedge * Inv_W + model.BSIM4ppoxedge *
                    Inv_LW;
-                pParam.BSIM4xrcrg1 = Model.BSIM4xrcrg1 + Model.BSIM4lxrcrg1 * Inv_L + Model.BSIM4wxrcrg1 * Inv_W + Model.BSIM4pxrcrg1 * Inv_LW;
-                pParam.BSIM4xrcrg2 = Model.BSIM4xrcrg2 + Model.BSIM4lxrcrg2 * Inv_L + Model.BSIM4wxrcrg2 * Inv_W + Model.BSIM4pxrcrg2 * Inv_LW;
-                pParam.BSIM4lambda = Model.BSIM4lambda + Model.BSIM4llambda * Inv_L + Model.BSIM4wlambda * Inv_W + Model.BSIM4plambda * Inv_LW;
-                pParam.BSIM4vtl = Model.BSIM4vtl + Model.BSIM4lvtl * Inv_L + Model.BSIM4wvtl * Inv_W + Model.BSIM4pvtl * Inv_LW;
-                pParam.BSIM4xn = Model.BSIM4xn + Model.BSIM4lxn * Inv_L + Model.BSIM4wxn * Inv_W + Model.BSIM4pxn * Inv_LW;
-                pParam.BSIM4vfbsdoff = Model.BSIM4vfbsdoff + Model.BSIM4lvfbsdoff * Inv_L + Model.BSIM4wvfbsdoff * Inv_W +
-                                     Model.BSIM4pvfbsdoff * Inv_LW;
-                pParam.BSIM4tvfbsdoff = Model.BSIM4tvfbsdoff + Model.BSIM4ltvfbsdoff * Inv_L + Model.BSIM4wtvfbsdoff * Inv_W +
-                                     Model.BSIM4ptvfbsdoff * Inv_LW;
+                pParam.BSIM4xrcrg1 = model.BSIM4xrcrg1 + model.BSIM4lxrcrg1 * Inv_L + model.BSIM4wxrcrg1 * Inv_W + model.BSIM4pxrcrg1 * Inv_LW;
+                pParam.BSIM4xrcrg2 = model.BSIM4xrcrg2 + model.BSIM4lxrcrg2 * Inv_L + model.BSIM4wxrcrg2 * Inv_W + model.BSIM4pxrcrg2 * Inv_LW;
+                pParam.BSIM4lambda = model.BSIM4lambda + model.BSIM4llambda * Inv_L + model.BSIM4wlambda * Inv_W + model.BSIM4plambda * Inv_LW;
+                pParam.BSIM4vtl = model.BSIM4vtl + model.BSIM4lvtl * Inv_L + model.BSIM4wvtl * Inv_W + model.BSIM4pvtl * Inv_LW;
+                pParam.BSIM4xn = model.BSIM4xn + model.BSIM4lxn * Inv_L + model.BSIM4wxn * Inv_W + model.BSIM4pxn * Inv_LW;
+                pParam.BSIM4vfbsdoff = model.BSIM4vfbsdoff + model.BSIM4lvfbsdoff * Inv_L + model.BSIM4wvfbsdoff * Inv_W +
+                                     model.BSIM4pvfbsdoff * Inv_LW;
+                pParam.BSIM4tvfbsdoff = model.BSIM4tvfbsdoff + model.BSIM4ltvfbsdoff * Inv_L + model.BSIM4wtvfbsdoff * Inv_W +
+                                     model.BSIM4ptvfbsdoff * Inv_LW;
 
-                pParam.BSIM4cgsl = Model.BSIM4cgsl + Model.BSIM4lcgsl * Inv_L + Model.BSIM4wcgsl * Inv_W + Model.BSIM4pcgsl * Inv_LW;
-                pParam.BSIM4cgdl = Model.BSIM4cgdl + Model.BSIM4lcgdl * Inv_L + Model.BSIM4wcgdl * Inv_W + Model.BSIM4pcgdl * Inv_LW;
-                pParam.BSIM4ckappas = Model.BSIM4ckappas + Model.BSIM4lckappas * Inv_L + Model.BSIM4wckappas * Inv_W + Model.BSIM4pckappas *
+                pParam.BSIM4cgsl = model.BSIM4cgsl + model.BSIM4lcgsl * Inv_L + model.BSIM4wcgsl * Inv_W + model.BSIM4pcgsl * Inv_LW;
+                pParam.BSIM4cgdl = model.BSIM4cgdl + model.BSIM4lcgdl * Inv_L + model.BSIM4wcgdl * Inv_W + model.BSIM4pcgdl * Inv_LW;
+                pParam.BSIM4ckappas = model.BSIM4ckappas + model.BSIM4lckappas * Inv_L + model.BSIM4wckappas * Inv_W + model.BSIM4pckappas *
                    Inv_LW;
-                pParam.BSIM4ckappad = Model.BSIM4ckappad + Model.BSIM4lckappad * Inv_L + Model.BSIM4wckappad * Inv_W + Model.BSIM4pckappad *
+                pParam.BSIM4ckappad = model.BSIM4ckappad + model.BSIM4lckappad * Inv_L + model.BSIM4wckappad * Inv_W + model.BSIM4pckappad *
                    Inv_LW;
-                pParam.BSIM4cf = Model.BSIM4cf + Model.BSIM4lcf * Inv_L + Model.BSIM4wcf * Inv_W + Model.BSIM4pcf * Inv_LW;
-                pParam.BSIM4clc = Model.BSIM4clc + Model.BSIM4lclc * Inv_L + Model.BSIM4wclc * Inv_W + Model.BSIM4pclc * Inv_LW;
-                pParam.BSIM4cle = Model.BSIM4cle + Model.BSIM4lcle * Inv_L + Model.BSIM4wcle * Inv_W + Model.BSIM4pcle * Inv_LW;
-                pParam.BSIM4vfbcv = Model.BSIM4vfbcv + Model.BSIM4lvfbcv * Inv_L + Model.BSIM4wvfbcv * Inv_W + Model.BSIM4pvfbcv * Inv_LW;
-                pParam.BSIM4acde = Model.BSIM4acde + Model.BSIM4lacde * Inv_L + Model.BSIM4wacde * Inv_W + Model.BSIM4pacde * Inv_LW;
-                pParam.BSIM4moin = Model.BSIM4moin + Model.BSIM4lmoin * Inv_L + Model.BSIM4wmoin * Inv_W + Model.BSIM4pmoin * Inv_LW;
-                pParam.BSIM4noff = Model.BSIM4noff + Model.BSIM4lnoff * Inv_L + Model.BSIM4wnoff * Inv_W + Model.BSIM4pnoff * Inv_LW;
-                pParam.BSIM4voffcv = Model.BSIM4voffcv + Model.BSIM4lvoffcv * Inv_L + Model.BSIM4wvoffcv * Inv_W + Model.BSIM4pvoffcv * Inv_LW;
-                pParam.BSIM4kvth0we = Model.BSIM4kvth0we + Model.BSIM4lkvth0we * Inv_L + Model.BSIM4wkvth0we * Inv_W + Model.BSIM4pkvth0we *
+                pParam.BSIM4cf = model.BSIM4cf + model.BSIM4lcf * Inv_L + model.BSIM4wcf * Inv_W + model.BSIM4pcf * Inv_LW;
+                pParam.BSIM4clc = model.BSIM4clc + model.BSIM4lclc * Inv_L + model.BSIM4wclc * Inv_W + model.BSIM4pclc * Inv_LW;
+                pParam.BSIM4cle = model.BSIM4cle + model.BSIM4lcle * Inv_L + model.BSIM4wcle * Inv_W + model.BSIM4pcle * Inv_LW;
+                pParam.BSIM4vfbcv = model.BSIM4vfbcv + model.BSIM4lvfbcv * Inv_L + model.BSIM4wvfbcv * Inv_W + model.BSIM4pvfbcv * Inv_LW;
+                pParam.BSIM4acde = model.BSIM4acde + model.BSIM4lacde * Inv_L + model.BSIM4wacde * Inv_W + model.BSIM4pacde * Inv_LW;
+                pParam.BSIM4moin = model.BSIM4moin + model.BSIM4lmoin * Inv_L + model.BSIM4wmoin * Inv_W + model.BSIM4pmoin * Inv_LW;
+                pParam.BSIM4noff = model.BSIM4noff + model.BSIM4lnoff * Inv_L + model.BSIM4wnoff * Inv_W + model.BSIM4pnoff * Inv_LW;
+                pParam.BSIM4voffcv = model.BSIM4voffcv + model.BSIM4lvoffcv * Inv_L + model.BSIM4wvoffcv * Inv_W + model.BSIM4pvoffcv * Inv_LW;
+                pParam.BSIM4kvth0we = model.BSIM4kvth0we + model.BSIM4lkvth0we * Inv_L + model.BSIM4wkvth0we * Inv_W + model.BSIM4pkvth0we *
                    Inv_LW;
-                pParam.BSIM4k2we = Model.BSIM4k2we + Model.BSIM4lk2we * Inv_L + Model.BSIM4wk2we * Inv_W + Model.BSIM4pk2we * Inv_LW;
-                pParam.BSIM4ku0we = Model.BSIM4ku0we + Model.BSIM4lku0we * Inv_L + Model.BSIM4wku0we * Inv_W + Model.BSIM4pku0we * Inv_LW;
+                pParam.BSIM4k2we = model.BSIM4k2we + model.BSIM4lk2we * Inv_L + model.BSIM4wk2we * Inv_W + model.BSIM4pk2we * Inv_LW;
+                pParam.BSIM4ku0we = model.BSIM4ku0we + model.BSIM4lku0we * Inv_L + model.BSIM4wku0we * Inv_W + model.BSIM4pku0we * Inv_LW;
 
                 pParam.BSIM4abulkCVfactor = 1.0 + Math.Pow((pParam.BSIM4clc / pParam.BSIM4leffCV), pParam.BSIM4cle);
 
-                T0 = (Model.TRatio - 1.0);
+                T0 = (model.TRatio - 1.0);
 
                 PowWeffWr = Math.Pow(pParam.BSIM4weffCJ * 1.0e6, pParam.BSIM4wr) * BSIM4nf;
 
                 T1 = T2 = T3 = T4 = 0.0;
-                pParam.BSIM4ucs = pParam.BSIM4ucs * Math.Pow(Model.TRatio, pParam.BSIM4ucste);
-                if (Model.BSIM4tempMod.Value == 0)
+                pParam.BSIM4ucs = pParam.BSIM4ucs * Math.Pow(model.TRatio, pParam.BSIM4ucste);
+                if (model.BSIM4tempMod.Value == 0)
                 {
                     pParam.BSIM4ua = pParam.BSIM4ua + pParam.BSIM4ua1 * T0;
                     pParam.BSIM4ub = pParam.BSIM4ub + pParam.BSIM4ub1 * T0;
@@ -862,51 +867,51 @@ namespace SpiceSharp.Components
                     pParam.BSIM4ud = pParam.BSIM4ud + pParam.BSIM4ud1 * T0;
                     pParam.BSIM4vsattemp = pParam.BSIM4vsat - pParam.BSIM4at * T0;
                     T10 = pParam.BSIM4prt * T0;
-                    if (Model.BSIM4rdsMod > 0)
+                    if (model.BSIM4rdsMod > 0)
                     {
                         /* External Rd(V) */
                         T1 = pParam.BSIM4rdw + T10;
-                        T2 = Model.BSIM4rdwmin + T10;
+                        T2 = model.BSIM4rdwmin + T10;
                         /* External Rs(V) */
                         T3 = pParam.BSIM4rsw + T10;
-                        T4 = Model.BSIM4rswmin + T10;
+                        T4 = model.BSIM4rswmin + T10;
                     }
                     /* Internal Rds(V) in IV */
                     pParam.BSIM4rds0 = (pParam.BSIM4rdsw + T10) * BSIM4nf / PowWeffWr;
-                    pParam.BSIM4rdswmin = (Model.BSIM4rdswmin + T10) * BSIM4nf / PowWeffWr;
+                    pParam.BSIM4rdswmin = (model.BSIM4rdswmin + T10) * BSIM4nf / PowWeffWr;
                 }
                 else
                 {
-                    if (Model.BSIM4tempMod.Value == 3)
+                    if (model.BSIM4tempMod.Value == 3)
                     {
-                        pParam.BSIM4ua = pParam.BSIM4ua * Math.Pow(Model.TRatio, pParam.BSIM4ua1);
-                        pParam.BSIM4ub = pParam.BSIM4ub * Math.Pow(Model.TRatio, pParam.BSIM4ub1);
-                        pParam.BSIM4uc = pParam.BSIM4uc * Math.Pow(Model.TRatio, pParam.BSIM4uc1);
-                        pParam.BSIM4ud = pParam.BSIM4ud * Math.Pow(Model.TRatio, pParam.BSIM4ud1);
+                        pParam.BSIM4ua = pParam.BSIM4ua * Math.Pow(model.TRatio, pParam.BSIM4ua1);
+                        pParam.BSIM4ub = pParam.BSIM4ub * Math.Pow(model.TRatio, pParam.BSIM4ub1);
+                        pParam.BSIM4uc = pParam.BSIM4uc * Math.Pow(model.TRatio, pParam.BSIM4uc1);
+                        pParam.BSIM4ud = pParam.BSIM4ud * Math.Pow(model.TRatio, pParam.BSIM4ud1);
                     }
                     else
                     {
                         /* tempMod = 1, 2 */
-                        pParam.BSIM4ua = pParam.BSIM4ua * (1.0 + pParam.BSIM4ua1 * Model.delTemp);
-                        pParam.BSIM4ub = pParam.BSIM4ub * (1.0 + pParam.BSIM4ub1 * Model.delTemp);
-                        pParam.BSIM4uc = pParam.BSIM4uc * (1.0 + pParam.BSIM4uc1 * Model.delTemp);
-                        pParam.BSIM4ud = pParam.BSIM4ud * (1.0 + pParam.BSIM4ud1 * Model.delTemp);
+                        pParam.BSIM4ua = pParam.BSIM4ua * (1.0 + pParam.BSIM4ua1 * model.delTemp);
+                        pParam.BSIM4ub = pParam.BSIM4ub * (1.0 + pParam.BSIM4ub1 * model.delTemp);
+                        pParam.BSIM4uc = pParam.BSIM4uc * (1.0 + pParam.BSIM4uc1 * model.delTemp);
+                        pParam.BSIM4ud = pParam.BSIM4ud * (1.0 + pParam.BSIM4ud1 * model.delTemp);
                     }
-                    pParam.BSIM4vsattemp = pParam.BSIM4vsat * (1.0 - pParam.BSIM4at * Model.delTemp);
-                    T10 = 1.0 + pParam.BSIM4prt * Model.delTemp;
-                    if (Model.BSIM4rdsMod > 0)
+                    pParam.BSIM4vsattemp = pParam.BSIM4vsat * (1.0 - pParam.BSIM4at * model.delTemp);
+                    T10 = 1.0 + pParam.BSIM4prt * model.delTemp;
+                    if (model.BSIM4rdsMod > 0)
                     {
                         /* External Rd(V) */
                         T1 = pParam.BSIM4rdw * T10;
-                        T2 = Model.BSIM4rdwmin * T10;
+                        T2 = model.BSIM4rdwmin * T10;
 
                         /* External Rs(V) */
                         T3 = pParam.BSIM4rsw * T10;
-                        T4 = Model.BSIM4rswmin * T10;
+                        T4 = model.BSIM4rswmin * T10;
                     }
                     /* Internal Rds(V) in IV */
                     pParam.BSIM4rds0 = pParam.BSIM4rdsw * T10 * BSIM4nf / PowWeffWr;
-                    pParam.BSIM4rdswmin = Model.BSIM4rdswmin * T10 * BSIM4nf / PowWeffWr;
+                    pParam.BSIM4rdswmin = model.BSIM4rdswmin * T10 * BSIM4nf / PowWeffWr;
                 }
 
                 if (T1 < 0.0)
@@ -943,7 +948,7 @@ namespace SpiceSharp.Components
 
                 /* mobility channel length dependence */
                 T5 = 1.0 - pParam.BSIM4up * Math.Exp(-pParam.BSIM4leff / pParam.BSIM4lp);
-                pParam.BSIM4u0temp = pParam.BSIM4u0 * T5 * Math.Pow(Model.TRatio, pParam.BSIM4ute);
+                pParam.BSIM4u0temp = pParam.BSIM4u0 * T5 * Math.Pow(model.TRatio, pParam.BSIM4ute);
                 if (pParam.BSIM4eu < 0.0)
                 {
                     pParam.BSIM4eu = 0.0;
@@ -957,128 +962,128 @@ namespace SpiceSharp.Components
                     CircuitWarning.Warning(this, "Warning: ucs has been negative; reset to 0.0.");
                 }
 
-                pParam.BSIM4vfbsdoff = pParam.BSIM4vfbsdoff * (1.0 + pParam.BSIM4tvfbsdoff * Model.delTemp);
-                pParam.BSIM4voff = pParam.BSIM4voff * (1.0 + pParam.BSIM4tvoff * Model.delTemp);
+                pParam.BSIM4vfbsdoff = pParam.BSIM4vfbsdoff * (1.0 + pParam.BSIM4tvfbsdoff * model.delTemp);
+                pParam.BSIM4voff = pParam.BSIM4voff * (1.0 + pParam.BSIM4tvoff * model.delTemp);
 
-                pParam.BSIM4nfactor = pParam.BSIM4nfactor + pParam.BSIM4tnfactor * Model.delTemp / Model.Tnom; /*
+                pParam.BSIM4nfactor = pParam.BSIM4nfactor + pParam.BSIM4tnfactor * model.delTemp / model.Tnom; /*
 					 v4.7 temp dep of leakage currents */
-                pParam.BSIM4voffcv = pParam.BSIM4voffcv * (1.0 + pParam.BSIM4tvoffcv * Model.delTemp); /* v4.7 temp dep of leakage currents *
+                pParam.BSIM4voffcv = pParam.BSIM4voffcv * (1.0 + pParam.BSIM4tvoffcv * model.delTemp); /* v4.7 temp dep of leakage currents *
 					/ 
-				pParam.BSIM4eta0 = pParam.BSIM4eta0 + pParam.BSIM4teta0 * Model.delTemp / Model.Tnom; /* v4.7 temp dep of leakage currents */
+				pParam.BSIM4eta0 = pParam.BSIM4eta0 + pParam.BSIM4teta0 * model.delTemp / model.Tnom; /* v4.7 temp dep of leakage currents */
 
 
                 /* Source End Velocity Limit */
-                if ((Model.BSIM4vtl.Given) && (Model.BSIM4vtl > 0.0))
+                if ((model.BSIM4vtl.Given) && (model.BSIM4vtl > 0.0))
                 {
-                    if (Model.BSIM4lc < 0.0)
+                    if (model.BSIM4lc < 0.0)
 
                         pParam.BSIM4lc = 0.0;
-                    else pParam.BSIM4lc = Model.BSIM4lc;
+                    else pParam.BSIM4lc = model.BSIM4lc;
                     T0 = pParam.BSIM4leff / (pParam.BSIM4xn * pParam.BSIM4leff + pParam.BSIM4lc);
                     pParam.BSIM4tfactor = (1.0 - T0) / (1.0 + T0);
                 }
 
-                pParam.BSIM4cgdo = (Model.BSIM4cgdo + pParam.BSIM4cf) * pParam.BSIM4weffCV;
-                pParam.BSIM4cgso = (Model.BSIM4cgso + pParam.BSIM4cf) * pParam.BSIM4weffCV;
-                pParam.BSIM4cgbo = Model.BSIM4cgbo * pParam.BSIM4leffCV * BSIM4nf;
+                pParam.BSIM4cgdo = (model.BSIM4cgdo + pParam.BSIM4cf) * pParam.BSIM4weffCV;
+                pParam.BSIM4cgso = (model.BSIM4cgso + pParam.BSIM4cf) * pParam.BSIM4weffCV;
+                pParam.BSIM4cgbo = model.BSIM4cgbo * pParam.BSIM4leffCV * BSIM4nf;
 
-                if (!Model.BSIM4ndep.Given && Model.BSIM4gamma1.Given)
+                if (!model.BSIM4ndep.Given && model.BSIM4gamma1.Given)
                 {
-                    T0 = pParam.BSIM4gamma1 * Model.BSIM4coxe;
+                    T0 = pParam.BSIM4gamma1 * model.BSIM4coxe;
                     pParam.BSIM4ndep = 3.01248e22 * T0 * T0;
                 }
 
-                pParam.BSIM4phi = Model.Vtm0 * Math.Log(pParam.BSIM4ndep / Model.ni) + pParam.BSIM4phin + 0.4;
+                pParam.BSIM4phi = model.Vtm0 * Math.Log(pParam.BSIM4ndep / model.ni) + pParam.BSIM4phin + 0.4;
 
                 pParam.BSIM4sqrtPhi = Math.Sqrt(pParam.BSIM4phi);
                 pParam.BSIM4phis3 = pParam.BSIM4sqrtPhi * pParam.BSIM4phi;
 
-                pParam.BSIM4Xdep0 = Math.Sqrt(2.0 * Model.epssub / (Transistor.Charge_q * pParam.BSIM4ndep * 1.0e6)) * pParam.BSIM4sqrtPhi;
+                pParam.BSIM4Xdep0 = Math.Sqrt(2.0 * model.epssub / (Transistor.Charge_q * pParam.BSIM4ndep * 1.0e6)) * pParam.BSIM4sqrtPhi;
                 pParam.BSIM4sqrtXdep0 = Math.Sqrt(pParam.BSIM4Xdep0);
 
-                if (Model.BSIM4mtrlMod.Value == 0)
-                    pParam.BSIM4litl = Math.Sqrt(3.0 * 3.9 / Model.epsrox * pParam.BSIM4xj * Model.toxe);
+                if (model.BSIM4mtrlMod.Value == 0)
+                    pParam.BSIM4litl = Math.Sqrt(3.0 * 3.9 / model.epsrox * pParam.BSIM4xj * model.toxe);
                 else
-                    pParam.BSIM4litl = Math.Sqrt(Model.BSIM4epsrsub / Model.epsrox * pParam.BSIM4xj * Model.toxe);
+                    pParam.BSIM4litl = Math.Sqrt(model.BSIM4epsrsub / model.epsrox * pParam.BSIM4xj * model.toxe);
 
-                pParam.BSIM4vbi = Model.Vtm0 * Math.Log(pParam.BSIM4nsd * pParam.BSIM4ndep / (Model.ni * Model.ni));
+                pParam.BSIM4vbi = model.Vtm0 * Math.Log(pParam.BSIM4nsd * pParam.BSIM4ndep / (model.ni * model.ni));
 
-                if (Model.BSIM4mtrlMod.Value == 0)
+                if (model.BSIM4mtrlMod.Value == 0)
                 {
                     if (pParam.BSIM4ngate > 0.0)
                     {
-                        pParam.BSIM4vfbsd = Model.Vtm0 * Math.Log(pParam.BSIM4ngate / pParam.BSIM4nsd);
+                        pParam.BSIM4vfbsd = model.Vtm0 * Math.Log(pParam.BSIM4ngate / pParam.BSIM4nsd);
                     }
                     else
                         pParam.BSIM4vfbsd = 0.0;
                 }
                 else
                 {
-                    T0 = Model.Vtm0 * Math.Log(pParam.BSIM4nsd / Model.ni);
-                    T1 = 0.5 * Model.Eg0;
+                    T0 = model.Vtm0 * Math.Log(pParam.BSIM4nsd / model.ni);
+                    T1 = 0.5 * model.Eg0;
                     if (T0 > T1)
                         T0 = T1;
-                    T2 = Model.BSIM4easub + T1 - Model.BSIM4type * T0;
-                    pParam.BSIM4vfbsd = Model.BSIM4phig - T2;
+                    T2 = model.BSIM4easub + T1 - model.BSIM4type * T0;
+                    pParam.BSIM4vfbsd = model.BSIM4phig - T2;
                 }
 
-                pParam.BSIM4cdep0 = Math.Sqrt(Transistor.Charge_q * Model.epssub * pParam.BSIM4ndep * 1.0e6 / 2.0 / pParam.BSIM4phi);
+                pParam.BSIM4cdep0 = Math.Sqrt(Transistor.Charge_q * model.epssub * pParam.BSIM4ndep * 1.0e6 / 2.0 / pParam.BSIM4phi);
 
-                pParam.BSIM4ToxRatio = Math.Exp(pParam.BSIM4ntox * Math.Log(Model.BSIM4toxref / Model.toxe)) / Model.toxe / Model.toxe;
-                pParam.BSIM4ToxRatioEdge = Math.Exp(pParam.BSIM4ntox * Math.Log(Model.BSIM4toxref / (Model.toxe * pParam.BSIM4poxedge))) /
-                     Model.toxe / Model.toxe / pParam.BSIM4poxedge / pParam.BSIM4poxedge;
-                pParam.BSIM4Aechvb = (Model.BSIM4type == NMOS) ? 4.97232e-7 : 3.42537e-7;
-                pParam.BSIM4Bechvb = (Model.BSIM4type == NMOS) ? 7.45669e11 : 1.16645e12;
-                pParam.BSIM4AechvbEdgeS = pParam.BSIM4Aechvb * pParam.BSIM4weff * Model.BSIM4dlcig * pParam.BSIM4ToxRatioEdge;
-                pParam.BSIM4AechvbEdgeD = pParam.BSIM4Aechvb * pParam.BSIM4weff * Model.BSIM4dlcigd * pParam.BSIM4ToxRatioEdge;
-                pParam.BSIM4BechvbEdge = -pParam.BSIM4Bechvb * Model.toxe * pParam.BSIM4poxedge;
+                pParam.BSIM4ToxRatio = Math.Exp(pParam.BSIM4ntox * Math.Log(model.BSIM4toxref / model.toxe)) / model.toxe / model.toxe;
+                pParam.BSIM4ToxRatioEdge = Math.Exp(pParam.BSIM4ntox * Math.Log(model.BSIM4toxref / (model.toxe * pParam.BSIM4poxedge))) /
+                     model.toxe / model.toxe / pParam.BSIM4poxedge / pParam.BSIM4poxedge;
+                pParam.BSIM4Aechvb = (model.BSIM4type == NMOS) ? 4.97232e-7 : 3.42537e-7;
+                pParam.BSIM4Bechvb = (model.BSIM4type == NMOS) ? 7.45669e11 : 1.16645e12;
+                pParam.BSIM4AechvbEdgeS = pParam.BSIM4Aechvb * pParam.BSIM4weff * model.BSIM4dlcig * pParam.BSIM4ToxRatioEdge;
+                pParam.BSIM4AechvbEdgeD = pParam.BSIM4Aechvb * pParam.BSIM4weff * model.BSIM4dlcigd * pParam.BSIM4ToxRatioEdge;
+                pParam.BSIM4BechvbEdge = -pParam.BSIM4Bechvb * model.toxe * pParam.BSIM4poxedge;
                 pParam.BSIM4Aechvb *= pParam.BSIM4weff * pParam.BSIM4leff * pParam.BSIM4ToxRatio;
-                pParam.BSIM4Bechvb *= -Model.toxe;
+                pParam.BSIM4Bechvb *= -model.toxe;
 
                 pParam.BSIM4mstar = 0.5 + Math.Atan(pParam.BSIM4minv) / Circuit.CONSTPI;
                 pParam.BSIM4mstarcv = 0.5 + Math.Atan(pParam.BSIM4minvcv) / Circuit.CONSTPI;
-                pParam.BSIM4voffcbn = pParam.BSIM4voff + Model.BSIM4voffl / pParam.BSIM4leff;
-                pParam.BSIM4voffcbncv = pParam.BSIM4voffcv + Model.BSIM4voffcvl / pParam.BSIM4leff;
+                pParam.BSIM4voffcbn = pParam.BSIM4voff + model.BSIM4voffl / pParam.BSIM4leff;
+                pParam.BSIM4voffcbncv = pParam.BSIM4voffcv + model.BSIM4voffcvl / pParam.BSIM4leff;
 
-                pParam.BSIM4ldeb = Math.Sqrt(Model.epssub * Model.Vtm0 / (Transistor.Charge_q * pParam.BSIM4ndep * 1.0e6)) / 3.0;
+                pParam.BSIM4ldeb = Math.Sqrt(model.epssub * model.Vtm0 / (Transistor.Charge_q * pParam.BSIM4ndep * 1.0e6)) / 3.0;
                 pParam.BSIM4acde *= Math.Pow((pParam.BSIM4ndep / 2.0e16), -0.25);
 
-                if (Model.BSIM4k1.Given || Model.BSIM4k2.Given)
+                if (model.BSIM4k1.Given || model.BSIM4k2.Given)
                 {
-                    if (!Model.BSIM4k1.Given)
+                    if (!model.BSIM4k1.Given)
                     {
                         CircuitWarning.Warning(this, "Warning: k1 should be specified with k2.");
                         pParam.BSIM4k1 = 0.53;
                     }
-                    if (!Model.BSIM4k2.Given)
+                    if (!model.BSIM4k2.Given)
                     {
                         CircuitWarning.Warning(this, "Warning: k2 should be specified with k1.");
                         pParam.BSIM4k2 = -0.0186;
                     }
-                    if (Model.BSIM4nsub.Given)
+                    if (model.BSIM4nsub.Given)
                         CircuitWarning.Warning(this, "Warning: nsub is ignored because k1 or k2 is given.");
-                    if (Model.BSIM4xt.Given)
+                    if (model.BSIM4xt.Given)
                         CircuitWarning.Warning(this, "Warning: xt is ignored because k1 or k2 is given.");
-                    if (Model.BSIM4vbx.Given)
+                    if (model.BSIM4vbx.Given)
                         CircuitWarning.Warning(this, "Warning: vbx is ignored because k1 or k2 is given.");
-                    if (Model.BSIM4gamma1.Given)
+                    if (model.BSIM4gamma1.Given)
                         CircuitWarning.Warning(this, "Warning: gamma1 is ignored because k1 or k2 is given.");
-                    if (Model.BSIM4gamma2.Given)
+                    if (model.BSIM4gamma2.Given)
                         CircuitWarning.Warning(this, "Warning: gamma2 is ignored because k1 or k2 is given.");
                 }
                 else
                 {
-                    if (!Model.BSIM4vbx.Given)
+                    if (!model.BSIM4vbx.Given)
                         pParam.BSIM4vbx = pParam.BSIM4phi - 7.7348e-4 * pParam.BSIM4ndep * pParam.BSIM4xt * pParam.BSIM4xt;
                     if (pParam.BSIM4vbx > 0.0)
                         pParam.BSIM4vbx = -pParam.BSIM4vbx;
                     if (pParam.BSIM4vbm > 0.0)
                         pParam.BSIM4vbm = -pParam.BSIM4vbm;
 
-                    if (!Model.BSIM4gamma1.Given)
-                        pParam.BSIM4gamma1 = 5.753e-12 * Math.Sqrt(pParam.BSIM4ndep) / Model.BSIM4coxe;
-                    if (!Model.BSIM4gamma2.Given)
-                        pParam.BSIM4gamma2 = 5.753e-12 * Math.Sqrt(pParam.BSIM4nsub) / Model.BSIM4coxe;
+                    if (!model.BSIM4gamma1.Given)
+                        pParam.BSIM4gamma1 = 5.753e-12 * Math.Sqrt(pParam.BSIM4ndep) / model.BSIM4coxe;
+                    if (!model.BSIM4gamma2.Given)
+                        pParam.BSIM4gamma2 = 5.753e-12 * Math.Sqrt(pParam.BSIM4nsub) / model.BSIM4coxe;
 
                     T0 = pParam.BSIM4gamma1 - pParam.BSIM4gamma2;
                     T1 = Math.Sqrt(pParam.BSIM4phi - pParam.BSIM4vbx) - pParam.BSIM4sqrtPhi;
@@ -1087,22 +1092,22 @@ namespace SpiceSharp.Components
                     pParam.BSIM4k1 = pParam.BSIM4gamma2 - 2.0 * pParam.BSIM4k2 * Math.Sqrt(pParam.BSIM4phi - pParam.BSIM4vbm);
                 }
 
-                if (!Model.BSIM4vfb.Given)
+                if (!model.BSIM4vfb.Given)
                 {
-                    if (Model.BSIM4vth0.Given)
+                    if (model.BSIM4vth0.Given)
                     {
-                        pParam.BSIM4vfb = Model.BSIM4type * pParam.BSIM4vth0 - pParam.BSIM4phi - pParam.BSIM4k1 * pParam.BSIM4sqrtPhi;
+                        pParam.BSIM4vfb = model.BSIM4type * pParam.BSIM4vth0 - pParam.BSIM4phi - pParam.BSIM4k1 * pParam.BSIM4sqrtPhi;
                     }
                     else
                     {
-                        if ((Model.BSIM4mtrlMod > 0) && (Model.BSIM4phig.Given) && (Model.BSIM4nsub.Given))
+                        if ((model.BSIM4mtrlMod > 0) && (model.BSIM4phig.Given) && (model.BSIM4nsub.Given))
                         {
-                            T0 = Model.Vtm0 * Math.Log(pParam.BSIM4nsub / Model.ni);
-                            T1 = 0.5 * Model.Eg0;
+                            T0 = model.Vtm0 * Math.Log(pParam.BSIM4nsub / model.ni);
+                            T1 = 0.5 * model.Eg0;
                             if (T0 > T1)
                                 T0 = T1;
-                            T2 = Model.BSIM4easub + T1 + Model.BSIM4type * T0;
-                            pParam.BSIM4vfb = Model.BSIM4phig - T2;
+                            T2 = model.BSIM4easub + T1 + model.BSIM4type * T0;
+                            pParam.BSIM4vfb = model.BSIM4phig - T2;
                         }
                         else
                         {
@@ -1110,14 +1115,14 @@ namespace SpiceSharp.Components
                         }
                     }
                 }
-                if (!Model.BSIM4vth0.Given)
+                if (!model.BSIM4vth0.Given)
                 {
-                    pParam.BSIM4vth0 = Model.BSIM4type * (pParam.BSIM4vfb + pParam.BSIM4phi + pParam.BSIM4k1 * pParam.BSIM4sqrtPhi);
+                    pParam.BSIM4vth0 = model.BSIM4type * (pParam.BSIM4vfb + pParam.BSIM4phi + pParam.BSIM4k1 * pParam.BSIM4sqrtPhi);
                 }
 
-                pParam.BSIM4k1ox = pParam.BSIM4k1 * Model.toxe / Model.BSIM4toxm;
+                pParam.BSIM4k1ox = pParam.BSIM4k1 * model.toxe / model.BSIM4toxm;
 
-                tmp = Math.Sqrt(Model.epssub / (Model.epsrox * Transistor.EPS0) * Model.toxe * pParam.BSIM4Xdep0);
+                tmp = Math.Sqrt(model.epssub / (model.epsrox * Transistor.EPS0) * model.toxe * pParam.BSIM4Xdep0);
                 T0 = pParam.BSIM4dsub * pParam.BSIM4leff / tmp;
                 if (T0 < Transistor.EXP_THRESHOLD)
                 {
@@ -1145,7 +1150,7 @@ namespace SpiceSharp.Components
 
                 tmp = Math.Sqrt(pParam.BSIM4Xdep0);
                 tmp1 = pParam.BSIM4vbi - pParam.BSIM4phi;
-                tmp2 = Model.BSIM4factor1 * tmp;
+                tmp2 = model.BSIM4factor1 * tmp;
 
                 T0 = pParam.BSIM4dvt1w * pParam.BSIM4weff * pParam.BSIM4leff / tmp2;
                 if (T0 < Transistor.EXP_THRESHOLD)
@@ -1174,52 +1179,52 @@ namespace SpiceSharp.Components
                     T9 = 1.0 / (Transistor.MAX_EXP - 2.0);
                 T9 = pParam.BSIM4dvt0 * T9 * tmp1;
 
-                T4 = Model.toxe * pParam.BSIM4phi / (pParam.BSIM4weff + pParam.BSIM4w0);
+                T4 = model.toxe * pParam.BSIM4phi / (pParam.BSIM4weff + pParam.BSIM4w0);
 
                 T0 = Math.Sqrt(1.0 + pParam.BSIM4lpe0 / pParam.BSIM4leff);
-                if ((Model.BSIM4tempMod.Value == 1) || (Model.BSIM4tempMod.Value == 0))
-                    T3 = (pParam.BSIM4kt1 + pParam.BSIM4kt1l / pParam.BSIM4leff) * (Model.TRatio - 1.0);
-                if ((Model.BSIM4tempMod.Value == 2) || (Model.BSIM4tempMod.Value == 3))
-                    T3 = -pParam.BSIM4kt1 * (Model.TRatio - 1.0);
+                if ((model.BSIM4tempMod.Value == 1) || (model.BSIM4tempMod.Value == 0))
+                    T3 = (pParam.BSIM4kt1 + pParam.BSIM4kt1l / pParam.BSIM4leff) * (model.TRatio - 1.0);
+                if ((model.BSIM4tempMod.Value == 2) || (model.BSIM4tempMod.Value == 3))
+                    T3 = -pParam.BSIM4kt1 * (model.TRatio - 1.0);
 
                 T5 = pParam.BSIM4k1ox * (T0 - 1.0) * pParam.BSIM4sqrtPhi + T3;
                 pParam.BSIM4vfbzbfactor = -T8 - T9 + pParam.BSIM4k3 * T4 + T5 - pParam.BSIM4phi - pParam.BSIM4k1 * pParam.BSIM4sqrtPhi;
 
                 /* stress effect */
 
-                wlod = Model.BSIM4wlod;
-                if (Model.BSIM4wlod < 0.0)
+                wlod = model.BSIM4wlod;
+                if (model.BSIM4wlod < 0.0)
                 {
 
-                    CircuitWarning.Warning(this, $"Warning: WLOD = {Model.BSIM4wlod} is less than 0. 0.0 is used");
+                    CircuitWarning.Warning(this, $"Warning: WLOD = {model.BSIM4wlod} is less than 0. 0.0 is used");
                     wlod = 0.0;
                 }
-                T0 = Math.Pow(Lnew, Model.BSIM4llodku0);
+                T0 = Math.Pow(Lnew, model.BSIM4llodku0);
                 W_tmp = Wnew + wlod;
-                T1 = Math.Pow(W_tmp, Model.BSIM4wlodku0);
-                tmp1 = Model.BSIM4lku0 / T0 + Model.BSIM4wku0 / T1 + Model.BSIM4pku0 / (T0 * T1);
+                T1 = Math.Pow(W_tmp, model.BSIM4wlodku0);
+                tmp1 = model.BSIM4lku0 / T0 + model.BSIM4wku0 / T1 + model.BSIM4pku0 / (T0 * T1);
                 pParam.BSIM4ku0 = 1.0 + tmp1;
 
-                T0 = Math.Pow(Lnew, Model.BSIM4llodvth);
-                T1 = Math.Pow(W_tmp, Model.BSIM4wlodvth);
-                tmp1 = Model.BSIM4lkvth0 / T0 + Model.BSIM4wkvth0 / T1 + Model.BSIM4pkvth0 / (T0 * T1);
+                T0 = Math.Pow(Lnew, model.BSIM4llodvth);
+                T1 = Math.Pow(W_tmp, model.BSIM4wlodvth);
+                tmp1 = model.BSIM4lkvth0 / T0 + model.BSIM4wkvth0 / T1 + model.BSIM4pkvth0 / (T0 * T1);
                 pParam.BSIM4kvth0 = 1.0 + tmp1;
                 pParam.BSIM4kvth0 = Math.Sqrt(pParam.BSIM4kvth0 * pParam.BSIM4kvth0 + Transistor.DELTA);
 
-                T0 = (Model.TRatio - 1.0);
-                pParam.BSIM4ku0temp = pParam.BSIM4ku0 * (1.0 + Model.BSIM4tku0 * T0) + Transistor.DELTA;
+                T0 = (model.TRatio - 1.0);
+                pParam.BSIM4ku0temp = pParam.BSIM4ku0 * (1.0 + model.BSIM4tku0 * T0) + Transistor.DELTA;
 
-                Inv_saref = 1.0 / (Model.BSIM4saref + 0.5 * Ldrn);
-                Inv_sbref = 1.0 / (Model.BSIM4sbref + 0.5 * Ldrn);
+                Inv_saref = 1.0 / (model.BSIM4saref + 0.5 * Ldrn);
+                Inv_sbref = 1.0 / (model.BSIM4sbref + 0.5 * Ldrn);
                 pParam.BSIM4inv_od_ref = Inv_saref + Inv_sbref;
-                pParam.BSIM4rho_ref = Model.BSIM4ku0 / pParam.BSIM4ku0temp * pParam.BSIM4inv_od_ref;
+                pParam.BSIM4rho_ref = model.BSIM4ku0 / pParam.BSIM4ku0temp * pParam.BSIM4inv_od_ref;
 
                 /* high k */
                 /* Calculate VgsteffVth for mobMod = 3 */
-                if (Model.BSIM4mobMod.Value == 3)
+                if (model.BSIM4mobMod.Value == 3)
                 {
                     /* Calculate n @ Vbs = Vds = 0 */
-                    lt1 = Model.BSIM4factor1 * pParam.BSIM4sqrtXdep0;
+                    lt1 = model.BSIM4factor1 * pParam.BSIM4sqrtXdep0;
                     T0 = pParam.BSIM4dvt1 * pParam.BSIM4leff / lt1;
                     if (T0 < Transistor.EXP_THRESHOLD)
                     {
@@ -1232,9 +1237,9 @@ namespace SpiceSharp.Components
                     else
                         Theta0 = 1.0 / (Transistor.MAX_EXP - 2.0);
 
-                    tmp1 = Model.epssub / pParam.BSIM4Xdep0;
+                    tmp1 = model.epssub / pParam.BSIM4Xdep0;
                     tmp2 = pParam.BSIM4nfactor * tmp1;
-                    tmp3 = (tmp2 + pParam.BSIM4cdsc * Theta0 + pParam.BSIM4cit) / Model.BSIM4coxe;
+                    tmp3 = (tmp2 + pParam.BSIM4cdsc * Theta0 + pParam.BSIM4cit) / model.BSIM4coxe;
                     if (tmp3 >= -0.5)
                         n0 = 1.0 + tmp3;
                     else
@@ -1243,22 +1248,22 @@ namespace SpiceSharp.Components
                         n0 = (1.0 + 3.0 * tmp3) * T0;
                     }
 
-                    T0 = n0 * Model.BSIM4vtm;
+                    T0 = n0 * model.BSIM4vtm;
                     T1 = pParam.BSIM4voffcbn;
                     T2 = T1 / T0;
                     if (T2 < -Transistor.EXP_THRESHOLD)
                     {
-                        T3 = Model.BSIM4coxe * Transistor.MIN_EXP / pParam.BSIM4cdep0;
+                        T3 = model.BSIM4coxe * Transistor.MIN_EXP / pParam.BSIM4cdep0;
                         T4 = pParam.BSIM4mstar + T3 * n0;
                     }
                     else if (T2 > Transistor.EXP_THRESHOLD)
                     {
-                        T3 = Model.BSIM4coxe * Transistor.MAX_EXP / pParam.BSIM4cdep0;
+                        T3 = model.BSIM4coxe * Transistor.MAX_EXP / pParam.BSIM4cdep0;
                         T4 = pParam.BSIM4mstar + T3 * n0;
                     }
                     else
                     {
-                        T3 = Math.Exp(T2) * Model.BSIM4coxe / pParam.BSIM4cdep0;
+                        T3 = Math.Exp(T2) * model.BSIM4coxe / pParam.BSIM4cdep0;
                         T4 = pParam.BSIM4mstar + T3 * n0;
                     }
                     pParam.BSIM4VgsteffVth = T0 * Math.Log(2.0) / T4;
@@ -1277,17 +1282,17 @@ namespace SpiceSharp.Components
                 Inv_sa = 0;
                 Inv_sb = 0;
 
-                kvsat = Model.BSIM4kvsat;
-                if (Model.BSIM4kvsat < -1.0)
+                kvsat = model.BSIM4kvsat;
+                if (model.BSIM4kvsat < -1.0)
                 {
 
-                    CircuitWarning.Warning(this, $"Warning: KVSAT = {Model.BSIM4kvsat} is too small; - 1.0 is used.");
+                    CircuitWarning.Warning(this, $"Warning: KVSAT = {model.BSIM4kvsat} is too small; - 1.0 is used.");
                     kvsat = -1.0;
                 }
-                if (Model.BSIM4kvsat > 1.0)
+                if (model.BSIM4kvsat > 1.0)
                 {
 
-                    CircuitWarning.Warning(this, $"Warning: KVSAT = {Model.BSIM4kvsat} is too big; 1.0 is used.");
+                    CircuitWarning.Warning(this, $"Warning: KVSAT = {model.BSIM4kvsat} is too big; 1.0 is used.");
                     kvsat = 1.0;
                 }
 
@@ -1299,7 +1304,7 @@ namespace SpiceSharp.Components
                     Inv_sb += T1;
                 }
                 Inv_ODeff = Inv_sa + Inv_sb;
-                rho = Model.BSIM4ku0 / pParam.BSIM4ku0temp * Inv_ODeff;
+                rho = model.BSIM4ku0 / pParam.BSIM4ku0temp * Inv_ODeff;
                 T0 = (1.0 + rho) / (1.0 + pParam.BSIM4rho_ref);
                 BSIM4u0temp = pParam.BSIM4u0temp * T0;
 
@@ -1307,9 +1312,9 @@ namespace SpiceSharp.Components
                 BSIM4vsattemp = pParam.BSIM4vsattemp * T1;
 
                 OD_offset = Inv_ODeff - pParam.BSIM4inv_od_ref;
-                dvth0_lod = Model.BSIM4kvth0 / pParam.BSIM4kvth0 * OD_offset;
-                dk2_lod = Model.BSIM4stk2 / Math.Pow(pParam.BSIM4kvth0, Model.BSIM4lodk2) * OD_offset;
-                deta0_lod = Model.BSIM4steta0 / Math.Pow(pParam.BSIM4kvth0, Model.BSIM4lodeta0) * OD_offset;
+                dvth0_lod = model.BSIM4kvth0 / pParam.BSIM4kvth0 * OD_offset;
+                dk2_lod = model.BSIM4stk2 / Math.Pow(pParam.BSIM4kvth0, model.BSIM4lodk2) * OD_offset;
+                deta0_lod = model.BSIM4steta0 / Math.Pow(pParam.BSIM4kvth0, model.BSIM4lodeta0) * OD_offset;
                 BSIM4vth0 = pParam.BSIM4vth0 + dvth0_lod;
 
                 BSIM4eta0 = pParam.BSIM4eta0 + deta0_lod;
@@ -1325,19 +1330,19 @@ namespace SpiceSharp.Components
             }
 
             /* Well Proximity Effect */
-            if (Model.BSIM4wpemod > 0)
+            if (model.BSIM4wpemod > 0)
             {
                 if ((!BSIM4sca.Given) && (!BSIM4scb.Given) && (!BSIM4scc.Given))
                 {
                     if ((BSIM4sc.Given) && (BSIM4sc > 0.0))
                     {
                         T1 = BSIM4sc + Wdrn;
-                        T2 = 1.0 / Model.BSIM4scref;
-                        BSIM4sca.Value = Model.BSIM4scref * Model.BSIM4scref / (BSIM4sc * T1);
-                        BSIM4scb.Value = ((0.1 * BSIM4sc + 0.01 * Model.BSIM4scref) * Math.Exp(-10.0 * BSIM4sc * T2) - (0.1 * T1 + 0.01 *
-                                                     Model.BSIM4scref) * Math.Exp(-10.0 * T1 * T2)) / Wdrn;
-                        BSIM4scc.Value = ((0.05 * BSIM4sc + 0.0025 * Model.BSIM4scref) * Math.Exp(-20.0 * BSIM4sc * T2) - (0.05 * T1 +
-                             0.0025 * Model.BSIM4scref) * Math.Exp(-20.0 * T1 * T2)) / Wdrn;
+                        T2 = 1.0 / model.BSIM4scref;
+                        BSIM4sca.Value = model.BSIM4scref * model.BSIM4scref / (BSIM4sc * T1);
+                        BSIM4scb.Value = ((0.1 * BSIM4sc + 0.01 * model.BSIM4scref) * Math.Exp(-10.0 * BSIM4sc * T2) - (0.1 * T1 + 0.01 *
+                                                     model.BSIM4scref) * Math.Exp(-10.0 * T1 * T2)) / Wdrn;
+                        BSIM4scc.Value = ((0.05 * BSIM4sc + 0.0025 * model.BSIM4scref) * Math.Exp(-20.0 * BSIM4sc * T2) - (0.05 * T1 +
+                             0.0025 * model.BSIM4scref) * Math.Exp(-20.0 * T1 * T2)) / Wdrn;
                     }
                     else
                     {
@@ -1371,7 +1376,7 @@ namespace SpiceSharp.Components
                     BSIM4sc.Value = 0.0;
                 }
                 /* 4.6.2 */
-                sceff = BSIM4sca + Model.BSIM4web * BSIM4scb + Model.BSIM4wec * BSIM4scc;
+                sceff = BSIM4sca + model.BSIM4web * BSIM4scb + model.BSIM4wec * BSIM4scc;
                 BSIM4vth0 += pParam.BSIM4kvth0we * sceff;
                 BSIM4k2 += pParam.BSIM4k2we * sceff;
                 T3 = 1.0 + pParam.BSIM4ku0we * sceff;
@@ -1386,13 +1391,13 @@ namespace SpiceSharp.Components
 
             /* adding delvto */
             BSIM4vth0 += BSIM4delvto;
-            BSIM4vfb = pParam.BSIM4vfb + Model.BSIM4type * BSIM4delvto;
+            BSIM4vfb = pParam.BSIM4vfb + model.BSIM4type * BSIM4delvto;
 
             /* Instance variables calculation */
-            T3 = Model.BSIM4type * BSIM4vth0 - BSIM4vfb - pParam.BSIM4phi;
+            T3 = model.BSIM4type * BSIM4vth0 - BSIM4vfb - pParam.BSIM4phi;
             T4 = T3 + T3;
             T5 = 2.5 * T3;
-            BSIM4vtfbphi1 = (Model.BSIM4type == NMOS) ? T4 : T5;
+            BSIM4vtfbphi1 = (model.BSIM4type == NMOS) ? T4 : T5;
             if (BSIM4vtfbphi1 < 0.0)
 
                 BSIM4vtfbphi1 = 0.0;
@@ -1416,9 +1421,9 @@ namespace SpiceSharp.Components
                 BSIM4vbsc = -30.0;
             if (BSIM4vbsc > pParam.BSIM4vbm)
                 BSIM4vbsc = pParam.BSIM4vbm;
-            BSIM4k2ox = BSIM4k2 * Model.toxe / Model.BSIM4toxm;
+            BSIM4k2ox = BSIM4k2 * model.toxe / model.BSIM4toxm;
 
-            BSIM4vfbzb = pParam.BSIM4vfbzbfactor + Model.BSIM4type * BSIM4vth0;
+            BSIM4vfbzb = pParam.BSIM4vfbzbfactor + model.BSIM4type * BSIM4vth0;
 
             BSIM4cgso = pParam.BSIM4cgso;
             BSIM4cgdo = pParam.BSIM4cgdo;
@@ -1428,34 +1433,34 @@ namespace SpiceSharp.Components
             lnnf = Math.Log(BSIM4nf);
 
             bodymode = 5;
-            if ((!Model.BSIM4rbps0.Given) || (!Model.BSIM4rbpd0.Given))
+            if ((!model.BSIM4rbps0.Given) || (!model.BSIM4rbpd0.Given))
                 bodymode = 1;
             else
-            if ((!Model.BSIM4rbsbx0.Given && !Model.BSIM4rbsby0.Given) || (!Model.BSIM4rbdbx0.Given && !Model.BSIM4rbdby0.Given))
+            if ((!model.BSIM4rbsbx0.Given && !model.BSIM4rbsby0.Given) || (!model.BSIM4rbdbx0.Given && !model.BSIM4rbdby0.Given))
                 bodymode = 3;
 
             if (BSIM4rbodyMod.Value == 2)
             {
                 if (bodymode == 5)
                 {
-                    rbsbx = Model.BSIM4rbsbx0 * Math.Exp(Model.BSIM4rbsdbxl * lnl + Model.BSIM4rbsdbxw * lnw + Model.BSIM4rbsdbxnf * lnnf);
-                    rbsby = Model.BSIM4rbsby0 * Math.Exp(Model.BSIM4rbsdbyl * lnl + Model.BSIM4rbsdbyw * lnw + Model.BSIM4rbsdbynf *
+                    rbsbx = model.BSIM4rbsbx0 * Math.Exp(model.BSIM4rbsdbxl * lnl + model.BSIM4rbsdbxw * lnw + model.BSIM4rbsdbxnf * lnnf);
+                    rbsby = model.BSIM4rbsby0 * Math.Exp(model.BSIM4rbsdbyl * lnl + model.BSIM4rbsdbyw * lnw + model.BSIM4rbsdbynf *
                          lnnf);
                     BSIM4rbsb.Value = rbsbx * rbsby / (rbsbx + rbsby);
-                    rbdbx = Model.BSIM4rbdbx0 * Math.Exp(Model.BSIM4rbsdbxl * lnl + Model.BSIM4rbsdbxw * lnw + Model.BSIM4rbsdbxnf * lnnf);
-                    rbdby = Model.BSIM4rbdby0 * Math.Exp(Model.BSIM4rbsdbyl * lnl + Model.BSIM4rbsdbyw * lnw + Model.BSIM4rbsdbynf * lnnf);
+                    rbdbx = model.BSIM4rbdbx0 * Math.Exp(model.BSIM4rbsdbxl * lnl + model.BSIM4rbsdbxw * lnw + model.BSIM4rbsdbxnf * lnnf);
+                    rbdby = model.BSIM4rbdby0 * Math.Exp(model.BSIM4rbsdbyl * lnl + model.BSIM4rbsdbyw * lnw + model.BSIM4rbsdbynf * lnnf);
 
                     BSIM4rbdb.Value = rbdbx * rbdby / (rbdbx + rbdby);
                 }
 
                 if ((bodymode == 3) || (bodymode == 5))
                 {
-                    BSIM4rbps.Value = Model.BSIM4rbps0 * Math.Exp(Model.BSIM4rbpsl * lnl + Model.BSIM4rbpsw * lnw + Model.BSIM4rbpsnf * lnnf);
-                    BSIM4rbpd.Value = Model.BSIM4rbpd0 * Math.Exp(Model.BSIM4rbpdl * lnl + Model.BSIM4rbpdw * lnw + Model.BSIM4rbpdnf * lnnf);
+                    BSIM4rbps.Value = model.BSIM4rbps0 * Math.Exp(model.BSIM4rbpsl * lnl + model.BSIM4rbpsw * lnw + model.BSIM4rbpsnf * lnnf);
+                    BSIM4rbpd.Value = model.BSIM4rbpd0 * Math.Exp(model.BSIM4rbpdl * lnl + model.BSIM4rbpdw * lnw + model.BSIM4rbpdnf * lnnf);
 
                 }
-                rbpbx = Model.BSIM4rbpbx0 * Math.Exp(Model.BSIM4rbpbxl * lnl + Model.BSIM4rbpbxw * lnw + Model.BSIM4rbpbxnf * lnnf);
-                rbpby = Model.BSIM4rbpby0 * Math.Exp(Model.BSIM4rbpbyl * lnl + Model.BSIM4rbpbyw * lnw + Model.BSIM4rbpbynf * lnnf);
+                rbpbx = model.BSIM4rbpbx0 * Math.Exp(model.BSIM4rbpbxl * lnl + model.BSIM4rbpbxw * lnw + model.BSIM4rbpbxnf * lnnf);
+                rbpby = model.BSIM4rbpby0 * Math.Exp(model.BSIM4rbpbyl * lnl + model.BSIM4rbpbyw * lnw + model.BSIM4rbpbynf * lnnf);
 
                 BSIM4rbpb.Value = rbpbx * rbpby / (rbpbx + rbpby);
             }
@@ -1466,67 +1471,67 @@ namespace SpiceSharp.Components
 
                     BSIM4grbdb = 1.0e3; /* in mho */
                 else
-                    BSIM4grbdb = Model.BSIM4gbmin + 1.0 / BSIM4rbdb;
+                    BSIM4grbdb = model.BSIM4gbmin + 1.0 / BSIM4rbdb;
                 if (BSIM4rbpb < 1.0e-3)
 
                     BSIM4grbpb = 1.0e3;
                 else
-                    BSIM4grbpb = Model.BSIM4gbmin + 1.0 / BSIM4rbpb;
+                    BSIM4grbpb = model.BSIM4gbmin + 1.0 / BSIM4rbpb;
                 if (BSIM4rbps < 1.0e-3)
 
                     BSIM4grbps = 1.0e3;
                 else
-                    BSIM4grbps = Model.BSIM4gbmin + 1.0 / BSIM4rbps;
+                    BSIM4grbps = model.BSIM4gbmin + 1.0 / BSIM4rbps;
                 if (BSIM4rbsb < 1.0e-3)
 
                     BSIM4grbsb = 1.0e3;
                 else
-                    BSIM4grbsb = Model.BSIM4gbmin + 1.0 / BSIM4rbsb;
+                    BSIM4grbsb = model.BSIM4gbmin + 1.0 / BSIM4rbsb;
                 if (BSIM4rbpd < 1.0e-3)
 
                     BSIM4grbpd = 1.0e3;
                 else
-                    BSIM4grbpd = Model.BSIM4gbmin + 1.0 / BSIM4rbpd;
+                    BSIM4grbpd = model.BSIM4gbmin + 1.0 / BSIM4rbpd;
 
             }
 
             if ((BSIM4rbodyMod.Value == 2) && (bodymode == 3))
             {
-                BSIM4grbdb = BSIM4grbsb = Model.BSIM4gbmin;
+                BSIM4grbdb = BSIM4grbsb = model.BSIM4gbmin;
                 if (BSIM4rbpb < 1.0e-3)
 
                     BSIM4grbpb = 1.0e3;
                 else
-                    BSIM4grbpb = Model.BSIM4gbmin + 1.0 / BSIM4rbpb;
+                    BSIM4grbpb = model.BSIM4gbmin + 1.0 / BSIM4rbpb;
                 if (BSIM4rbps < 1.0e-3)
 
                     BSIM4grbps = 1.0e3;
                 else
-                    BSIM4grbps = Model.BSIM4gbmin + 1.0 / BSIM4rbps;
+                    BSIM4grbps = model.BSIM4gbmin + 1.0 / BSIM4rbps;
                 if (BSIM4rbpd < 1.0e-3)
 
                     BSIM4grbpd = 1.0e3;
                 else
-                    BSIM4grbpd = Model.BSIM4gbmin + 1.0 / BSIM4rbpd;
+                    BSIM4grbpd = model.BSIM4gbmin + 1.0 / BSIM4rbpd;
             }
 
             if ((BSIM4rbodyMod.Value == 2) && (bodymode == 1))
             {
-                BSIM4grbdb = BSIM4grbsb = Model.BSIM4gbmin;
+                BSIM4grbdb = BSIM4grbsb = model.BSIM4gbmin;
                 BSIM4grbps = BSIM4grbpd = 1.0e3;
                 if (BSIM4rbpb < 1.0e-3)
 
                     BSIM4grbpb = 1.0e3;
                 else
-                    BSIM4grbpb = Model.BSIM4gbmin + 1.0 / BSIM4rbpb;
+                    BSIM4grbpb = model.BSIM4gbmin + 1.0 / BSIM4rbpb;
             }
 
             /* 
 			* Process geomertry dependent parasitics
 			*/
 
-            BSIM4grgeltd = Model.BSIM4rshg * (BSIM4xgw + pParam.BSIM4weffCJ / 3.0 / BSIM4ngcon) / (BSIM4ngcon * BSIM4nf * (Lnew -
-                 Model.BSIM4xgl));
+            BSIM4grgeltd = model.BSIM4rshg * (BSIM4xgw + pParam.BSIM4weffCJ / 3.0 / BSIM4ngcon) / (BSIM4ngcon * BSIM4nf * (Lnew -
+                 model.BSIM4xgl));
             if (BSIM4grgeltd > 0.0)
                 BSIM4grgeltd = 1.0 / BSIM4grgeltd;
             else
@@ -1535,9 +1540,9 @@ namespace SpiceSharp.Components
                 if (BSIM4rgateMod != 0) CircuitWarning.Warning(this, "Warning: The gate conductance reset to 1.0e3 mho.");
             }
 
-            DMCGeff = Model.BSIM4dmcg - Model.BSIM4dmcgt;
-            DMCIeff = Model.BSIM4dmci;
-            DMDGeff = Model.BSIM4dmdg - Model.BSIM4dmcgt;
+            DMCGeff = model.BSIM4dmcg - model.BSIM4dmcgt;
+            DMCIeff = model.BSIM4dmci;
+            DMDGeff = model.BSIM4dmdg - model.BSIM4dmcgt;
 
             /* New Diode Model v4.7 */
             if (BSIM4sourcePerimeter.Given)
@@ -1553,7 +1558,7 @@ namespace SpiceSharp.Components
                 }
                 else
                 {
-                    if (Model.BSIM4perMod.Value == 0)
+                    if (model.BSIM4perMod.Value == 0)
                         BSIM4Pseff = BSIM4sourcePerimeter;
                     else
                         BSIM4Pseff = BSIM4sourcePerimeter - pParam.BSIM4weffCJ * BSIM4nf;
@@ -1588,7 +1593,7 @@ namespace SpiceSharp.Components
                 }
                 else
                 {
-                    if (Model.BSIM4perMod.Value == 0)
+                    if (model.BSIM4perMod.Value == 0)
                         BSIM4Pdeff = BSIM4drainPerimeter;
                     else
                         BSIM4Pdeff = BSIM4drainPerimeter - pParam.BSIM4weffCJ * BSIM4nf;
@@ -1643,11 +1648,11 @@ namespace SpiceSharp.Components
                 BSIM4sourceConductance = 0.0;
                 if (BSIM4sourceSquares.Given)
                 {
-                    BSIM4sourceConductance = Model.BSIM4sheetResistance * BSIM4sourceSquares;
+                    BSIM4sourceConductance = model.BSIM4sheetResistance * BSIM4sourceSquares;
                 } else if (BSIM4rgeoMod > 0)
                 {
                     double igsrc;
-                    BSIM4RdseffGeo(BSIM4nf, BSIM4geoMod, BSIM4rgeoMod, BSIM4min, pParam.BSIM4weffCJ, Model.BSIM4sheetResistance,
+                    BSIM4RdseffGeo(BSIM4nf, BSIM4geoMod, BSIM4rgeoMod, BSIM4min, pParam.BSIM4weffCJ, model.BSIM4sheetResistance,
                         DMCGeff, DMCIeff, DMDGeff, 1, out igsrc);
                     BSIM4sourceConductance = igsrc;
                 }
@@ -1674,11 +1679,11 @@ namespace SpiceSharp.Components
                 BSIM4drainConductance = 0.0;
                 if (BSIM4drainSquares.Given)
                 {
-                    BSIM4drainConductance = Model.BSIM4sheetResistance * BSIM4drainSquares;
+                    BSIM4drainConductance = model.BSIM4sheetResistance * BSIM4drainSquares;
                 } else if (BSIM4rgeoMod > 0)
                 {
                     double igdrn;
-                    BSIM4RdseffGeo(BSIM4nf, BSIM4geoMod, BSIM4rgeoMod, BSIM4min, pParam.BSIM4weffCJ, Model.BSIM4sheetResistance,
+                    BSIM4RdseffGeo(BSIM4nf, BSIM4geoMod, BSIM4rgeoMod, BSIM4min, pParam.BSIM4weffCJ, model.BSIM4sheetResistance,
                         DMCGeff, DMCIeff, DMDGeff, 0, out igdrn);
                     BSIM4drainConductance = igdrn;
                 }
@@ -1702,68 +1707,68 @@ namespace SpiceSharp.Components
 
             /* End of Rsd processing */
 
-            Nvtms = Model.BSIM4vtm * Model.BSIM4SjctEmissionCoeff;
+            Nvtms = model.BSIM4vtm * model.BSIM4SjctEmissionCoeff;
             if ((BSIM4Aseff <= 0.0) && (BSIM4Pseff <= 0.0))
             {
                 SourceSatCurrent = 0.0;
             }
             else
             {
-                SourceSatCurrent = BSIM4Aseff * Model.BSIM4SjctTempSatCurDensity + BSIM4Pseff * Model.BSIM4SjctSidewallTempSatCurDensity +
-                     pParam.BSIM4weffCJ * BSIM4nf * Model.BSIM4SjctGateSidewallTempSatCurDensity;
+                SourceSatCurrent = BSIM4Aseff * model.BSIM4SjctTempSatCurDensity + BSIM4Pseff * model.BSIM4SjctSidewallTempSatCurDensity +
+                     pParam.BSIM4weffCJ * BSIM4nf * model.BSIM4SjctGateSidewallTempSatCurDensity;
             }
             if (SourceSatCurrent > 0.0)
             {
-                switch (Model.BSIM4dioMod)
+                switch (model.BSIM4dioMod.Value)
                 {
                     case 0:
-                        if ((Model.BSIM4bvs / Nvtms) > Transistor.EXP_THRESHOLD)
-                            BSIM4XExpBVS = Model.BSIM4xjbvs * Transistor.MIN_EXP;
+                        if ((model.BSIM4bvs / Nvtms) > Transistor.EXP_THRESHOLD)
+                            BSIM4XExpBVS = model.BSIM4xjbvs * Transistor.MIN_EXP;
                         else
-                            BSIM4XExpBVS = Model.BSIM4xjbvs * Math.Exp(-Model.BSIM4bvs / Nvtms);
+                            BSIM4XExpBVS = model.BSIM4xjbvs * Math.Exp(-model.BSIM4bvs / Nvtms);
                         break;
                     case 1:
-                        BSIM4vjsmFwd = BSIM4DioIjthVjmEval(Nvtms, Model.BSIM4ijthsfwd, SourceSatCurrent, 0.0);
+                        BSIM4vjsmFwd = BSIM4DioIjthVjmEval(Nvtms, model.BSIM4ijthsfwd, SourceSatCurrent, 0.0);
                         BSIM4IVjsmFwd = SourceSatCurrent * Math.Exp(BSIM4vjsmFwd / Nvtms);
                         break;
                     case 2:
-                        if ((Model.BSIM4bvs / Nvtms) > Transistor.EXP_THRESHOLD)
+                        if ((model.BSIM4bvs / Nvtms) > Transistor.EXP_THRESHOLD)
                         {
-                            BSIM4XExpBVS = Model.BSIM4xjbvs * Transistor.MIN_EXP;
+                            BSIM4XExpBVS = model.BSIM4xjbvs * Transistor.MIN_EXP;
                             tmp = Transistor.MIN_EXP;
                         }
                         else
                         {
-                            BSIM4XExpBVS = Math.Exp(-Model.BSIM4bvs / Nvtms);
+                            BSIM4XExpBVS = Math.Exp(-model.BSIM4bvs / Nvtms);
                             tmp = BSIM4XExpBVS;
-                            BSIM4XExpBVS *= Model.BSIM4xjbvs;
+                            BSIM4XExpBVS *= model.BSIM4xjbvs;
                         }
 
 
-                        BSIM4vjsmFwd = BSIM4DioIjthVjmEval(Nvtms, Model.BSIM4ijthsfwd, SourceSatCurrent, BSIM4XExpBVS);
+                        BSIM4vjsmFwd = BSIM4DioIjthVjmEval(Nvtms, model.BSIM4ijthsfwd, SourceSatCurrent, BSIM4XExpBVS);
                         T0 = Math.Exp(BSIM4vjsmFwd / Nvtms);
                         BSIM4IVjsmFwd = SourceSatCurrent * (T0 - BSIM4XExpBVS / T0 + BSIM4XExpBVS - 1.0);
                         BSIM4SslpFwd = SourceSatCurrent * (T0 + BSIM4XExpBVS / T0) / Nvtms;
 
-                        T2 = Model.BSIM4ijthsrev / SourceSatCurrent;
+                        T2 = model.BSIM4ijthsrev / SourceSatCurrent;
                         if (T2 < 1.0)
                         {
                             T2 = 10.0;
 
                             CircuitWarning.Warning(this, $"Warning: ijthsrev too small and set to 10 times IsbSat.");
                         }
-                        BSIM4vjsmRev = -Model.BSIM4bvs - Nvtms * Math.Log((T2 - 1.0) / Model.BSIM4xjbvs);
-                        T1 = Model.BSIM4xjbvs * Math.Exp(-(Model.BSIM4bvs + BSIM4vjsmRev) / Nvtms);
+                        BSIM4vjsmRev = -model.BSIM4bvs - Nvtms * Math.Log((T2 - 1.0) / model.BSIM4xjbvs);
+                        T1 = model.BSIM4xjbvs * Math.Exp(-(model.BSIM4bvs + BSIM4vjsmRev) / Nvtms);
                         BSIM4IVjsmRev = SourceSatCurrent * (1.0 + T1);
                         BSIM4SslpRev = -SourceSatCurrent * T1 / Nvtms;
                         break;
                     default:
-                        CircuitWarning.Warning(this, $"Specified dioMod = {Model.BSIM4dioMod} not matched");
+                        CircuitWarning.Warning(this, $"Specified dioMod = {model.BSIM4dioMod} not matched");
                         break;
                 }
             }
 
-            Nvtmd = Model.BSIM4vtm * Model.BSIM4DjctEmissionCoeff;
+            Nvtmd = model.BSIM4vtm * model.BSIM4DjctEmissionCoeff;
             if ((BSIM4Adeff <= 0.0) && (BSIM4Pdeff <= 0.0))
             {
                 /* DrainSatCurrent = 1.0e-14; 	v4.7 */
@@ -1771,109 +1776,109 @@ namespace SpiceSharp.Components
             }
             else
             {
-                DrainSatCurrent = BSIM4Adeff * Model.BSIM4DjctTempSatCurDensity + BSIM4Pdeff * Model.BSIM4DjctSidewallTempSatCurDensity +
-                     pParam.BSIM4weffCJ * BSIM4nf * Model.BSIM4DjctGateSidewallTempSatCurDensity;
+                DrainSatCurrent = BSIM4Adeff * model.BSIM4DjctTempSatCurDensity + BSIM4Pdeff * model.BSIM4DjctSidewallTempSatCurDensity +
+                     pParam.BSIM4weffCJ * BSIM4nf * model.BSIM4DjctGateSidewallTempSatCurDensity;
             }
             if (DrainSatCurrent > 0.0)
             {
-                switch (Model.BSIM4dioMod)
+                switch (model.BSIM4dioMod.Value)
                 {
                     case 0:
-                        if ((Model.BSIM4bvd / Nvtmd) > Transistor.EXP_THRESHOLD)
-                            BSIM4XExpBVD = Model.BSIM4xjbvd * Transistor.MIN_EXP;
+                        if ((model.BSIM4bvd / Nvtmd) > Transistor.EXP_THRESHOLD)
+                            BSIM4XExpBVD = model.BSIM4xjbvd * Transistor.MIN_EXP;
                         else
-                            BSIM4XExpBVD = Model.BSIM4xjbvd * Math.Exp(-Model.BSIM4bvd / Nvtmd);
+                            BSIM4XExpBVD = model.BSIM4xjbvd * Math.Exp(-model.BSIM4bvd / Nvtmd);
                         break;
 
                     case 1:
-                        BSIM4vjdmFwd = BSIM4DioIjthVjmEval(Nvtmd, Model.BSIM4ijthdfwd, DrainSatCurrent, 0.0);
+                        BSIM4vjdmFwd = BSIM4DioIjthVjmEval(Nvtmd, model.BSIM4ijthdfwd, DrainSatCurrent, 0.0);
                         BSIM4IVjdmFwd = DrainSatCurrent * Math.Exp(BSIM4vjdmFwd / Nvtmd);
                         break;
 
                     case 2:
-                        if ((Model.BSIM4bvd / Nvtmd) > Transistor.EXP_THRESHOLD)
+                        if ((model.BSIM4bvd / Nvtmd) > Transistor.EXP_THRESHOLD)
                         {
-                            BSIM4XExpBVD = Model.BSIM4xjbvd * Transistor.MIN_EXP;
+                            BSIM4XExpBVD = model.BSIM4xjbvd * Transistor.MIN_EXP;
                             tmp = Transistor.MIN_EXP;
                         }
                         else
                         {
-                            BSIM4XExpBVD = Math.Exp(-Model.BSIM4bvd / Nvtmd);
+                            BSIM4XExpBVD = Math.Exp(-model.BSIM4bvd / Nvtmd);
                             tmp = BSIM4XExpBVD;
-                            BSIM4XExpBVD *= Model.BSIM4xjbvd;
+                            BSIM4XExpBVD *= model.BSIM4xjbvd;
                         }
 
 
-                        BSIM4vjdmFwd = BSIM4DioIjthVjmEval(Nvtmd, Model.BSIM4ijthdfwd, DrainSatCurrent, BSIM4XExpBVD);
+                        BSIM4vjdmFwd = BSIM4DioIjthVjmEval(Nvtmd, model.BSIM4ijthdfwd, DrainSatCurrent, BSIM4XExpBVD);
                         T0 = Math.Exp(BSIM4vjdmFwd / Nvtmd);
                         BSIM4IVjdmFwd = DrainSatCurrent * (T0 - BSIM4XExpBVD / T0 + BSIM4XExpBVD - 1.0);
                         BSIM4DslpFwd = DrainSatCurrent * (T0 + BSIM4XExpBVD / T0) / Nvtmd;
 
-                        T2 = Model.BSIM4ijthdrev / DrainSatCurrent;
+                        T2 = model.BSIM4ijthdrev / DrainSatCurrent;
                         if (T2 < 1.0)
                         {
                             T2 = 10.0;
 
                             CircuitWarning.Warning(this, $"Warning: ijthdrev too small and set to 10 times IdbSat.");
                         }
-                        BSIM4vjdmRev = -Model.BSIM4bvd - Nvtmd * Math.Log((T2 - 1.0) / Model.BSIM4xjbvd); /* bugfix */
-                        T1 = Model.BSIM4xjbvd * Math.Exp(-(Model.BSIM4bvd + BSIM4vjdmRev) / Nvtmd);
+                        BSIM4vjdmRev = -model.BSIM4bvd - Nvtmd * Math.Log((T2 - 1.0) / model.BSIM4xjbvd); /* bugfix */
+                        T1 = model.BSIM4xjbvd * Math.Exp(-(model.BSIM4bvd + BSIM4vjdmRev) / Nvtmd);
                         BSIM4IVjdmRev = DrainSatCurrent * (1.0 + T1);
                         BSIM4DslpRev = -DrainSatCurrent * T1 / Nvtmd;
                         break;
 
                     default:
-                        CircuitWarning.Warning(this, $"Specified dioMod = {Model.BSIM4dioMod} not matched");
+                        CircuitWarning.Warning(this, $"Specified dioMod = {model.BSIM4dioMod} not matched");
                         break;
                 }
             }
 
             /* GEDL current reverse bias */
-            T0 = (Model.TRatio - 1.0);
-            T7 = Model.Eg0 / Model.BSIM4vtm * T0;
-            T9 = Model.BSIM4xtss * T7;
+            T0 = (model.TRatio - 1.0);
+            T7 = model.Eg0 / model.BSIM4vtm * T0;
+            T9 = model.BSIM4xtss * T7;
             T1 = Dexp(T9);
-            T9 = Model.BSIM4xtsd * T7;
+            T9 = model.BSIM4xtsd * T7;
             T2 = Dexp(T9);
-            T9 = Model.BSIM4xtssws * T7;
+            T9 = model.BSIM4xtssws * T7;
             T3 = Dexp(T9);
-            T9 = Model.BSIM4xtsswd * T7;
+            T9 = model.BSIM4xtsswd * T7;
             T4 = Dexp(T9);
-            T9 = Model.BSIM4xtsswgs * T7;
+            T9 = model.BSIM4xtsswgs * T7;
             T5 = Dexp(T9);
-            T9 = Model.BSIM4xtsswgd * T7;
+            T9 = model.BSIM4xtsswgd * T7;
             T6 = Dexp(T9);
 
             /* IBM TAT */
-            if (Model.BSIM4jtweff < 0.0)
+            if (model.BSIM4jtweff < 0.0)
             {
-                Model.BSIM4jtweff.Value = 0.0;
+                model.BSIM4jtweff.Value = 0.0;
                 CircuitWarning.Warning(this, "TAT width dependence effect is negative. Jtweff is clamped to zero.");
             }
-            T11 = Math.Sqrt(Model.BSIM4jtweff / pParam.BSIM4weffCJ) + 1.0;
+            T11 = Math.Sqrt(model.BSIM4jtweff / pParam.BSIM4weffCJ) + 1.0;
 
             T10 = pParam.BSIM4weffCJ * BSIM4nf;
-            BSIM4SjctTempRevSatCur = T1 * BSIM4Aseff * Model.BSIM4jtss;
-            BSIM4DjctTempRevSatCur = T2 * BSIM4Adeff * Model.BSIM4jtsd;
-            BSIM4SswTempRevSatCur = T3 * BSIM4Pseff * Model.BSIM4jtssws;
-            BSIM4DswTempRevSatCur = T4 * BSIM4Pdeff * Model.BSIM4jtsswd;
-            BSIM4SswgTempRevSatCur = T5 * T10 * T11 * Model.BSIM4jtsswgs;
-            BSIM4DswgTempRevSatCur = T6 * T10 * T11 * Model.BSIM4jtsswgd;
+            BSIM4SjctTempRevSatCur = T1 * BSIM4Aseff * model.BSIM4jtss;
+            BSIM4DjctTempRevSatCur = T2 * BSIM4Adeff * model.BSIM4jtsd;
+            BSIM4SswTempRevSatCur = T3 * BSIM4Pseff * model.BSIM4jtssws;
+            BSIM4DswTempRevSatCur = T4 * BSIM4Pdeff * model.BSIM4jtsswd;
+            BSIM4SswgTempRevSatCur = T5 * T10 * T11 * model.BSIM4jtsswgs;
+            BSIM4DswgTempRevSatCur = T6 * T10 * T11 * model.BSIM4jtsswgd;
 
-            if (Model.BSIM4mtrlMod != 0 && Model.BSIM4mtrlCompatMod.Value == 0)
+            if (model.BSIM4mtrlMod != 0 && model.BSIM4mtrlCompatMod.Value == 0)
             {
                 /* Calculate TOXP from EOT */
                 /* Calculate Vgs_eff @ Vgs = VDD with Poly Depletion Effect */
-                double Vtm0eot = Transistor.KboQ * Model.BSIM4tempeot;
+                double Vtm0eot = Transistor.KboQ * model.BSIM4tempeot;
                 Vtmeot = Vtm0eot;
-                vbieot = Vtm0eot * Math.Log(pParam.BSIM4nsd * pParam.BSIM4ndep / (Model.ni * Model.ni));
-                phieot = Vtm0eot * Math.Log(pParam.BSIM4ndep / Model.ni) + pParam.BSIM4phin + 0.4;
+                vbieot = Vtm0eot * Math.Log(pParam.BSIM4nsd * pParam.BSIM4ndep / (model.ni * model.ni));
+                phieot = Vtm0eot * Math.Log(pParam.BSIM4ndep / model.ni) + pParam.BSIM4phin + 0.4;
                 tmp2 = BSIM4vfb + phieot;
-                vddeot = Model.BSIM4type * Model.BSIM4vddeot;
-                T0 = Model.BSIM4epsrgate * Transistor.EPS0;
+                vddeot = model.BSIM4type * model.BSIM4vddeot;
+                T0 = model.BSIM4epsrgate * Transistor.EPS0;
                 if ((pParam.BSIM4ngate > 1.0e18) && (pParam.BSIM4ngate < 1.0e25) && (vddeot > tmp2) && (T0 != 0))
                 {
-                    T1 = 1.0e6 * Circuit.CHARGE * T0 * pParam.BSIM4ngate / (Model.BSIM4coxe * Model.BSIM4coxe);
+                    T1 = 1.0e6 * Circuit.CHARGE * T0 * pParam.BSIM4ngate / (model.BSIM4coxe * model.BSIM4coxe);
                     T8 = vddeot - tmp2;
                     T4 = Math.Sqrt(1.0 + 2.0 * T8 / T1);
                     T2 = 2.0 * T8 / (T4 + 1.0);
@@ -1888,9 +1893,9 @@ namespace SpiceSharp.Components
 
                 /* Calculate Vth @ Vds = Vbs = 0 */
                 double V0 = vbieot - phieot;
-                lt1 = Model.BSIM4factor1 * pParam.BSIM4sqrtXdep0;
+                lt1 = model.BSIM4factor1 * pParam.BSIM4sqrtXdep0;
                 ltw = lt1;
-                T0 = pParam.BSIM4dvt1 * Model.BSIM4leffeot / lt1;
+                T0 = pParam.BSIM4dvt1 * model.BSIM4leffeot / lt1;
                 if (T0 < Transistor.EXP_THRESHOLD)
                 {
                     T1 = Math.Exp(T0);
@@ -1902,7 +1907,7 @@ namespace SpiceSharp.Components
                 else
                     Theta0 = 1.0 / (Transistor.MAX_EXP - 2.0);
                 Delt_vth = pParam.BSIM4dvt0 * Theta0 * V0;
-                T0 = pParam.BSIM4dvt1w * Model.BSIM4weffeot * Model.BSIM4leffeot / ltw;
+                T0 = pParam.BSIM4dvt1w * model.BSIM4weffeot * model.BSIM4leffeot / ltw;
                 if (T0 < Transistor.EXP_THRESHOLD)
                 {
                     T1 = Math.Exp(T0);
@@ -1914,19 +1919,19 @@ namespace SpiceSharp.Components
                 else
                     T5 = 1.0 / (Transistor.MAX_EXP - 2.0); /* 3.0 * Transistor.MIN_EXP omitted */
                 T2 = pParam.BSIM4dvt0w * T5 * V0;
-                TempRatioeot = Model.BSIM4tempeot / Model.BSIM4tnom - 1.0;
-                T0 = Math.Sqrt(1.0 + pParam.BSIM4lpe0 / Model.BSIM4leffeot);
+                TempRatioeot = model.BSIM4tempeot / model.BSIM4tnom - 1.0;
+                T0 = Math.Sqrt(1.0 + pParam.BSIM4lpe0 / model.BSIM4leffeot);
                 T1 = pParam.BSIM4k1ox * (T0 - 1.0) * Math.Sqrt(phieot) + (pParam.BSIM4kt1 + pParam.BSIM4kt1l /
-                     Model.BSIM4leffeot) * TempRatioeot;
-                Vth_NarrowW = Model.toxe * phieot / (Model.BSIM4weffeot + pParam.BSIM4w0);
-                Lpe_Vb = Math.Sqrt(1.0 + pParam.BSIM4lpeb / Model.BSIM4leffeot);
-                Vth = Model.BSIM4type * BSIM4vth0 + (pParam.BSIM4k1ox - pParam.BSIM4k1) * Math.Sqrt(phieot) * Lpe_Vb - Delt_vth - T2 +
+                     model.BSIM4leffeot) * TempRatioeot;
+                Vth_NarrowW = model.toxe * phieot / (model.BSIM4weffeot + pParam.BSIM4w0);
+                Lpe_Vb = Math.Sqrt(1.0 + pParam.BSIM4lpeb / model.BSIM4leffeot);
+                Vth = model.BSIM4type * BSIM4vth0 + (pParam.BSIM4k1ox - pParam.BSIM4k1) * Math.Sqrt(phieot) * Lpe_Vb - Delt_vth - T2 +
                      pParam.BSIM4k3 * Vth_NarrowW + T1;
 
                 /* Calculate n */
-                tmp1 = Model.epssub / pParam.BSIM4Xdep0;
+                tmp1 = model.epssub / pParam.BSIM4Xdep0;
                 tmp2 = pParam.BSIM4nfactor * tmp1;
-                tmp3 = (tmp2 + pParam.BSIM4cdsc * Theta0 + pParam.BSIM4cit) / Model.BSIM4coxe;
+                tmp3 = (tmp2 + pParam.BSIM4cdsc * Theta0 + pParam.BSIM4cit) / model.BSIM4coxe;
                 if (tmp3 >= -0.5)
                     n = 1.0 + tmp3;
                 else
@@ -1938,17 +1943,17 @@ namespace SpiceSharp.Components
                 /* Vth correction for Pocket implant */
                 if (pParam.BSIM4dvtp0 > 0.0)
                 {
-                    T3 = Model.BSIM4leffeot + pParam.BSIM4dvtp0 * 2.0;
-                    if (Model.BSIM4tempMod < 2)
+                    T3 = model.BSIM4leffeot + pParam.BSIM4dvtp0 * 2.0;
+                    if (model.BSIM4tempMod < 2)
 
-                        T4 = Vtmeot * Math.Log(Model.BSIM4leffeot / T3);
+                        T4 = Vtmeot * Math.Log(model.BSIM4leffeot / T3);
                     else
-                        T4 = Vtm0eot * Math.Log(Model.BSIM4leffeot / T3);
+                        T4 = Vtm0eot * Math.Log(model.BSIM4leffeot / T3);
                     Vth -= n * T4;
                 }
                 Vgsteff = Vgs_eff - Vth;
                 /* calculating Toxp */
-                T3 = Model.BSIM4type * BSIM4vth0 - BSIM4vfb - phieot;
+                T3 = model.BSIM4type * BSIM4vth0 - BSIM4vfb - phieot;
                 T4 = T3 + T3;
                 T5 = 2.5 * T3;
 
@@ -1958,28 +1963,28 @@ namespace SpiceSharp.Components
                     vtfbphi2eot = 0.0;
 
                 niter = 0;
-                toxpf = Model.toxe;
+                toxpf = model.toxe;
                 do
                 {
                     toxpi = toxpf;
                     tmp2 = 2.0e8 * toxpf;
                     T0 = (Vgsteff + vtfbphi2eot) / tmp2;
-                    T1 = 1.0 + Math.Exp(Model.BSIM4bdos * 0.7 * Math.Log(T0));
-                    Tcen = Model.BSIM4ados * 1.9e-9 / T1;
-                    toxpf = Model.toxe - Model.epsrox / Model.BSIM4epsrsub * Tcen;
+                    T1 = 1.0 + Math.Exp(model.BSIM4bdos * 0.7 * Math.Log(T0));
+                    Tcen = model.BSIM4ados * 1.9e-9 / T1;
+                    toxpf = model.toxe - model.epsrox / model.BSIM4epsrsub * Tcen;
                     niter++;
                 } while ((niter <= 4) && (Math.Abs(toxpf - toxpi) > 1e-12));
                 BSIM4toxp = toxpf;
-                BSIM4coxp = Model.epsrox * Transistor.EPS0 / Model.BSIM4toxp;
+                BSIM4coxp = model.epsrox * Transistor.EPS0 / model.BSIM4toxp;
             }
             else
             {
-                BSIM4toxp = Model.BSIM4toxp;
-                BSIM4coxp = Model.BSIM4coxp;
+                BSIM4toxp = model.BSIM4toxp;
+                BSIM4coxp = model.BSIM4coxp;
             }
 
             if (BSIM4checkModel(ckt) > 0)
-                throw new CircuitException($"Fatal error(s) detected during BSIM4.8.0 parameter checking for {Name} in model {Model.Name}");
+                throw new CircuitException($"Fatal error(s) detected during BSIM4.8.0 parameter checking for {Name} in model {model.Name}");
         }
 
         /// <summary>
@@ -1988,6 +1993,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Load(Circuit ckt)
         {
+            var model = Model as BSIM4Model;
             var state = ckt.State;
             var rstate = state.Real;
             var method = ckt.Method;
@@ -2073,9 +2079,9 @@ namespace SpiceSharp.Components
             }
             else if (state.Init == CircuitState.InitFlags.InitJct && !BSIM4off)
             {
-                vds = Model.BSIM4type * BSIM4icVDS;
-                vgs = vges = vgms = Model.BSIM4type * BSIM4icVGS;
-                vbs = vdbs = vsbs = Model.BSIM4type * BSIM4icVBS;
+                vds = model.BSIM4type * BSIM4icVDS;
+                vgs = vges = vgms = model.BSIM4type * BSIM4icVGS;
+                vbs = vdbs = vsbs = model.BSIM4type * BSIM4icVBS;
                 if (vds > 0.0)
                 {
                     vdes = vds + 0.01;
@@ -2097,7 +2103,7 @@ namespace SpiceSharp.Components
                     vds = 0.1;
                     vdes = 0.11;
                     vses = -0.01;
-                    vgs = vges = vgms = Model.BSIM4type * BSIM4vth0 + 0.1;
+                    vgs = vges = vgms = model.BSIM4type * BSIM4vth0 + 0.1;
                     vbs = vdbs = vsbs = 0.0;
                 }
             }
@@ -2109,16 +2115,16 @@ namespace SpiceSharp.Components
             else
             {
                 /* PREDICTOR */
-                vds = Model.BSIM4type * rstate.OldSolution[BSIM4dNodePrime] - rstate.OldSolution[BSIM4sNodePrime];
-                vgs = Model.BSIM4type * rstate.OldSolution[BSIM4gNodePrime] - rstate.OldSolution[BSIM4sNodePrime];
-                vbs = Model.BSIM4type * rstate.OldSolution[BSIM4bNodePrime] - rstate.OldSolution[BSIM4sNodePrime];
-                vges = Model.BSIM4type * rstate.OldSolution[BSIM4gNodeExt] - rstate.OldSolution[BSIM4sNodePrime];
-                vgms = Model.BSIM4type * rstate.OldSolution[BSIM4gNodeMid] - rstate.OldSolution[BSIM4sNodePrime];
-                vdbs = Model.BSIM4type * rstate.OldSolution[BSIM4dbNode] - rstate.OldSolution[BSIM4sNodePrime];
-                vsbs = Model.BSIM4type * rstate.OldSolution[BSIM4sbNode] - rstate.OldSolution[BSIM4sNodePrime];
-                vses = Model.BSIM4type * rstate.OldSolution[BSIM4sNode] - rstate.OldSolution[BSIM4sNodePrime];
-                vdes = Model.BSIM4type * rstate.OldSolution[BSIM4dNode] - rstate.OldSolution[BSIM4sNodePrime];
-                qdef = Model.BSIM4type * rstate.OldSolution[BSIM4qNode];
+                vds = model.BSIM4type * rstate.OldSolution[BSIM4dNodePrime] - rstate.OldSolution[BSIM4sNodePrime];
+                vgs = model.BSIM4type * rstate.OldSolution[BSIM4gNodePrime] - rstate.OldSolution[BSIM4sNodePrime];
+                vbs = model.BSIM4type * rstate.OldSolution[BSIM4bNodePrime] - rstate.OldSolution[BSIM4sNodePrime];
+                vges = model.BSIM4type * rstate.OldSolution[BSIM4gNodeExt] - rstate.OldSolution[BSIM4sNodePrime];
+                vgms = model.BSIM4type * rstate.OldSolution[BSIM4gNodeMid] - rstate.OldSolution[BSIM4sNodePrime];
+                vdbs = model.BSIM4type * rstate.OldSolution[BSIM4dbNode] - rstate.OldSolution[BSIM4sNodePrime];
+                vsbs = model.BSIM4type * rstate.OldSolution[BSIM4sbNode] - rstate.OldSolution[BSIM4sNodePrime];
+                vses = model.BSIM4type * rstate.OldSolution[BSIM4sNode] - rstate.OldSolution[BSIM4sNodePrime];
+                vdes = model.BSIM4type * rstate.OldSolution[BSIM4dNode] - rstate.OldSolution[BSIM4sNodePrime];
+                qdef = model.BSIM4type * rstate.OldSolution[BSIM4qNode];
 
                 vgdo = state.States[0][BSIM4states + BSIM4vgs] - state.States[0][BSIM4states + BSIM4vds];
                 vgedo = state.States[0][BSIM4states + BSIM4vges] - state.States[0][BSIM4states + BSIM4vds];
@@ -2216,7 +2222,7 @@ namespace SpiceSharp.Components
                         vged = vges - vds;
                     }
 
-                    if (Model.BSIM4rdsMod > 0)
+                    if (model.BSIM4rdsMod > 0)
                     {
                         vdes = Transistor.DEVlimvds(vdes, state.States[0][BSIM4states + BSIM4vdes]);
                         vses = -Transistor.DEVlimvds(-vses, -(state.States[0][BSIM4states + BSIM4vses]));
@@ -2243,7 +2249,7 @@ namespace SpiceSharp.Components
                         vges = vged + vds;
                     }
 
-                    if (Model.BSIM4rdsMod > 0)
+                    if (model.BSIM4rdsMod > 0)
                     {
                         vdes = -Transistor.DEVlimvds(-vdes, -(state.States[0][BSIM4states + BSIM4vdes]));
                         vses = Transistor.DEVlimvds(vses, state.States[0][BSIM4states + BSIM4vses]);
@@ -2252,13 +2258,13 @@ namespace SpiceSharp.Components
 
                 if (vds >= 0.0)
                 {
-                    vbs = Transistor.DEVpnjlim(vbs, state.States[0][BSIM4states + BSIM4vbs], Circuit.CONSTvt0, Model.BSIM4vcrit, ref Check);
+                    vbs = Transistor.DEVpnjlim(vbs, state.States[0][BSIM4states + BSIM4vbs], Circuit.CONSTvt0, model.BSIM4vcrit, ref Check);
                     vbd = vbs - vds;
                     if (BSIM4rbodyMod > 0)
                     {
-                        vdbs = Transistor.DEVpnjlim(vdbs, state.States[0][BSIM4states + BSIM4vdbs], Circuit.CONSTvt0, Model.BSIM4vcrit, ref Check1);
+                        vdbs = Transistor.DEVpnjlim(vdbs, state.States[0][BSIM4states + BSIM4vdbs], Circuit.CONSTvt0, model.BSIM4vcrit, ref Check1);
                         vdbd = vdbs - vds;
-                        vsbs = Transistor.DEVpnjlim(vsbs, state.States[0][BSIM4states + BSIM4vsbs], Circuit.CONSTvt0, Model.BSIM4vcrit, ref Check2);
+                        vsbs = Transistor.DEVpnjlim(vsbs, state.States[0][BSIM4states + BSIM4vsbs], Circuit.CONSTvt0, model.BSIM4vcrit, ref Check2);
                         if ((Check1 == 0) && (Check2 == 0))
                             Check = 0;
                         else
@@ -2267,15 +2273,15 @@ namespace SpiceSharp.Components
                 }
                 else
                 {
-                    vbd = Transistor.DEVpnjlim(vbd, state.States[0][BSIM4states + BSIM4vbd], Circuit.CONSTvt0, Model.BSIM4vcrit, ref Check);
+                    vbd = Transistor.DEVpnjlim(vbd, state.States[0][BSIM4states + BSIM4vbd], Circuit.CONSTvt0, model.BSIM4vcrit, ref Check);
                     vbs = vbd + vds;
                     if (BSIM4rbodyMod > 0)
                     {
-                        vdbd = Transistor.DEVpnjlim(vdbd, state.States[0][BSIM4states + BSIM4vdbd], Circuit.CONSTvt0, Model.BSIM4vcrit, ref Check1);
+                        vdbd = Transistor.DEVpnjlim(vdbd, state.States[0][BSIM4states + BSIM4vdbd], Circuit.CONSTvt0, model.BSIM4vcrit, ref Check1);
                         vdbs = vdbd + vds;
                         vsbdo = state.States[0][BSIM4states + BSIM4vsbs] - state.States[0][BSIM4states + BSIM4vds];
                         vsbd = vsbs - vds;
-                        vsbd = Transistor.DEVpnjlim(vsbd, vsbdo, Circuit.CONSTvt0, Model.BSIM4vcrit, ref Check2);
+                        vsbd = Transistor.DEVpnjlim(vsbd, vsbdo, Circuit.CONSTvt0, model.BSIM4vcrit, ref Check2);
                         vsbs = vsbd + vds;
                         if ((Check1 == 0) && (Check2 == 0))
                             Check = 0;
@@ -2298,7 +2304,7 @@ namespace SpiceSharp.Components
             vbd_jct = (BSIM4rbodyMod == 0) ? vbd : vdbd;
 
             /* Source / drain junction diode DC model begins */
-            Nvtms = Model.BSIM4vtm * Model.BSIM4SjctEmissionCoeff;
+            Nvtms = model.BSIM4vtm * model.BSIM4SjctEmissionCoeff;
             /* if ((BSIM4Aseff <= 0.0) && (BSIM4Pseff <= 0.0))
             {
                 SourceSatCurrent = 1.0e-14;
@@ -2309,8 +2315,8 @@ namespace SpiceSharp.Components
             }
             else
             {
-                SourceSatCurrent = BSIM4Aseff * Model.BSIM4SjctTempSatCurDensity + BSIM4Pseff * Model.BSIM4SjctSidewallTempSatCurDensity +
-                     pParam.BSIM4weffCJ * BSIM4nf * Model.BSIM4SjctGateSidewallTempSatCurDensity;
+                SourceSatCurrent = BSIM4Aseff * model.BSIM4SjctTempSatCurDensity + BSIM4Pseff * model.BSIM4SjctSidewallTempSatCurDensity +
+                     pParam.BSIM4weffCJ * BSIM4nf * model.BSIM4SjctGateSidewallTempSatCurDensity;
             }
 
             if (SourceSatCurrent <= 0.0)
@@ -2320,11 +2326,11 @@ namespace SpiceSharp.Components
             }
             else
             {
-                switch (Model.BSIM4dioMod)
+                switch (model.BSIM4dioMod.Value)
                 {
                     case 0:
                         evbs = Math.Exp(vbs_jct / Nvtms);
-                        T1 = Model.BSIM4xjbvs * Math.Exp(-(Model.BSIM4bvs + vbs_jct) / Nvtms);
+                        T1 = model.BSIM4xjbvs * Math.Exp(-(model.BSIM4bvs + vbs_jct) / Nvtms);
                         /* WDLiu: Magic T1 in this form; different from BSIM4 beta. */
                         BSIM4gbs = SourceSatCurrent * (evbs + T1) / Nvtms + state.Gmin;
                         BSIM4cbs = SourceSatCurrent * (evbs + BSIM4XExpBVS - T1 - 1.0) + state.Gmin * vbs_jct;
@@ -2383,7 +2389,7 @@ namespace SpiceSharp.Components
                                 devbs_dvb = evbs / Nvtms;
                             }
 
-                            T1 = (Model.BSIM4bvs + vbs_jct) / Nvtms;
+                            T1 = (model.BSIM4bvs + vbs_jct) / Nvtms;
                             if (T1 > Transistor.EXP_THRESHOLD)
                             {
                                 T2 = Transistor.MIN_EXP;
@@ -2394,8 +2400,8 @@ namespace SpiceSharp.Components
                                 T2 = Math.Exp(-T1);
                                 T3 = -T2 / Nvtms;
                             }
-                            BSIM4gbs = SourceSatCurrent * (devbs_dvb - Model.BSIM4xjbvs * T3) + state.Gmin;
-                            BSIM4cbs = SourceSatCurrent * (evbs + BSIM4XExpBVS - 1.0 - Model.BSIM4xjbvs * T2) + state.Gmin * vbs_jct;
+                            BSIM4gbs = SourceSatCurrent * (devbs_dvb - model.BSIM4xjbvs * T3) + state.Gmin;
+                            BSIM4cbs = SourceSatCurrent * (evbs + BSIM4XExpBVS - 1.0 - model.BSIM4xjbvs * T2) + state.Gmin * vbs_jct;
                         }
                         else
                         {
@@ -2407,7 +2413,7 @@ namespace SpiceSharp.Components
                 }
             }
 
-            Nvtmd = Model.BSIM4vtm * Model.BSIM4DjctEmissionCoeff;
+            Nvtmd = model.BSIM4vtm * model.BSIM4DjctEmissionCoeff;
             /* if ((BSIM4Adeff <= 0.0) && (BSIM4Pdeff <= 0.0))
             {
                 DrainSatCurrent = 1.0e-14;
@@ -2418,8 +2424,8 @@ namespace SpiceSharp.Components
             }
             else
             {
-                DrainSatCurrent = BSIM4Adeff * Model.BSIM4DjctTempSatCurDensity + BSIM4Pdeff * Model.BSIM4DjctSidewallTempSatCurDensity +
-                     pParam.BSIM4weffCJ * BSIM4nf * Model.BSIM4DjctGateSidewallTempSatCurDensity;
+                DrainSatCurrent = BSIM4Adeff * model.BSIM4DjctTempSatCurDensity + BSIM4Pdeff * model.BSIM4DjctSidewallTempSatCurDensity +
+                     pParam.BSIM4weffCJ * BSIM4nf * model.BSIM4DjctGateSidewallTempSatCurDensity;
             }
 
             if (DrainSatCurrent <= 0.0)
@@ -2429,11 +2435,11 @@ namespace SpiceSharp.Components
             }
             else
             {
-                switch (Model.BSIM4dioMod)
+                switch (model.BSIM4dioMod.Value)
                 {
                     case 0:
                         evbd = Math.Exp(vbd_jct / Nvtmd);
-                        T1 = Model.BSIM4xjbvd * Math.Exp(-(Model.BSIM4bvd + vbd_jct) / Nvtmd);
+                        T1 = model.BSIM4xjbvd * Math.Exp(-(model.BSIM4bvd + vbd_jct) / Nvtmd);
                         /* WDLiu: Magic T1 in this form; different from BSIM4 beta. */
                         BSIM4gbd = DrainSatCurrent * (evbd + T1) / Nvtmd + state.Gmin;
                         BSIM4cbd = DrainSatCurrent * (evbd + BSIM4XExpBVD - T1 - 1.0) + state.Gmin * vbd_jct;
@@ -2492,7 +2498,7 @@ namespace SpiceSharp.Components
                                 devbd_dvb = evbd / Nvtmd;
                             }
 
-                            T1 = (Model.BSIM4bvd + vbd_jct) / Nvtmd;
+                            T1 = (model.BSIM4bvd + vbd_jct) / Nvtmd;
                             if (T1 > Transistor.EXP_THRESHOLD)
                             {
                                 T2 = Transistor.MIN_EXP;
@@ -2503,8 +2509,8 @@ namespace SpiceSharp.Components
                                 T2 = Math.Exp(-T1);
                                 T3 = -T2 / Nvtmd;
                             }
-                            BSIM4gbd = DrainSatCurrent * (devbd_dvb - Model.BSIM4xjbvd * T3) + state.Gmin;
-                            BSIM4cbd = DrainSatCurrent * (evbd + BSIM4XExpBVD - 1.0 - Model.BSIM4xjbvd * T2) + state.Gmin * vbd_jct;
+                            BSIM4gbd = DrainSatCurrent * (devbd_dvb - model.BSIM4xjbvd * T3) + state.Gmin;
+                            BSIM4cbd = DrainSatCurrent * (evbd + BSIM4XExpBVD - 1.0 - model.BSIM4xjbvd * T2) + state.Gmin * vbd_jct;
                         }
                         else
                         {
@@ -2517,14 +2523,14 @@ namespace SpiceSharp.Components
             }
 
             /* trap - assisted tunneling and recombination current for reverse bias */
-            Nvtmrssws = Model.BSIM4vtm0 * Model.BSIM4njtsswstemp;
-            Nvtmrsswgs = Model.BSIM4vtm0 * Model.BSIM4njtsswgstemp;
-            Nvtmrss = Model.BSIM4vtm0 * Model.BSIM4njtsstemp;
-            Nvtmrsswd = Model.BSIM4vtm0 * Model.BSIM4njtsswdtemp;
-            Nvtmrsswgd = Model.BSIM4vtm0 * Model.BSIM4njtsswgdtemp;
-            Nvtmrsd = Model.BSIM4vtm0 * Model.BSIM4njtsdtemp;
+            Nvtmrssws = model.BSIM4vtm0 * model.BSIM4njtsswstemp;
+            Nvtmrsswgs = model.BSIM4vtm0 * model.BSIM4njtsswgstemp;
+            Nvtmrss = model.BSIM4vtm0 * model.BSIM4njtsstemp;
+            Nvtmrsswd = model.BSIM4vtm0 * model.BSIM4njtsswdtemp;
+            Nvtmrsswgd = model.BSIM4vtm0 * model.BSIM4njtsswgdtemp;
+            Nvtmrsd = model.BSIM4vtm0 * model.BSIM4njtsdtemp;
 
-            if ((Model.BSIM4vtss - vbs_jct) < (Model.BSIM4vtss * 1e-3))
+            if ((model.BSIM4vtss - vbs_jct) < (model.BSIM4vtss * 1e-3))
             {
                 T9 = 1.0e3;
                 T0 = -vbs_jct / Nvtmrss * T9;
@@ -2533,14 +2539,14 @@ namespace SpiceSharp.Components
             }
             else
             {
-                T9 = 1.0 / (Model.BSIM4vtss - vbs_jct);
-                T0 = -vbs_jct / Nvtmrss * Model.BSIM4vtss * T9;
-                dT0_dVb = Model.BSIM4vtss / Nvtmrss * (T9 + vbs_jct * T9 * T9);
+                T9 = 1.0 / (model.BSIM4vtss - vbs_jct);
+                T0 = -vbs_jct / Nvtmrss * model.BSIM4vtss * T9;
+                dT0_dVb = model.BSIM4vtss / Nvtmrss * (T9 + vbs_jct * T9 * T9);
                 Dexp(T0, out T1, out T10);
                 dT1_dVb = T10 * dT0_dVb;
             }
 
-            if ((Model.BSIM4vtsd - vbd_jct) < (Model.BSIM4vtsd * 1e-3))
+            if ((model.BSIM4vtsd - vbd_jct) < (model.BSIM4vtsd * 1e-3))
             {
                 T9 = 1.0e3;
                 T0 = -vbd_jct / Nvtmrsd * T9;
@@ -2549,14 +2555,14 @@ namespace SpiceSharp.Components
             }
             else
             {
-                T9 = 1.0 / (Model.BSIM4vtsd - vbd_jct);
-                T0 = -vbd_jct / Nvtmrsd * Model.BSIM4vtsd * T9;
-                dT0_dVb = Model.BSIM4vtsd / Nvtmrsd * (T9 + vbd_jct * T9 * T9);
+                T9 = 1.0 / (model.BSIM4vtsd - vbd_jct);
+                T0 = -vbd_jct / Nvtmrsd * model.BSIM4vtsd * T9;
+                dT0_dVb = model.BSIM4vtsd / Nvtmrsd * (T9 + vbd_jct * T9 * T9);
                 Dexp(T0, out T2, out T10);
                 dT2_dVb = T10 * dT0_dVb;
             }
 
-            if ((Model.BSIM4vtssws - vbs_jct) < (Model.BSIM4vtssws * 1e-3))
+            if ((model.BSIM4vtssws - vbs_jct) < (model.BSIM4vtssws * 1e-3))
             {
                 T9 = 1.0e3;
                 T0 = -vbs_jct / Nvtmrssws * T9;
@@ -2565,14 +2571,14 @@ namespace SpiceSharp.Components
             }
             else
             {
-                T9 = 1.0 / (Model.BSIM4vtssws - vbs_jct);
-                T0 = -vbs_jct / Nvtmrssws * Model.BSIM4vtssws * T9;
-                dT0_dVb = Model.BSIM4vtssws / Nvtmrssws * (T9 + vbs_jct * T9 * T9);
+                T9 = 1.0 / (model.BSIM4vtssws - vbs_jct);
+                T0 = -vbs_jct / Nvtmrssws * model.BSIM4vtssws * T9;
+                dT0_dVb = model.BSIM4vtssws / Nvtmrssws * (T9 + vbs_jct * T9 * T9);
                 Dexp(T0, out T3, out T10);
                 dT3_dVb = T10 * dT0_dVb;
             }
 
-            if ((Model.BSIM4vtsswd - vbd_jct) < (Model.BSIM4vtsswd * 1e-3))
+            if ((model.BSIM4vtsswd - vbd_jct) < (model.BSIM4vtsswd * 1e-3))
             {
                 T9 = 1.0e3;
                 T0 = -vbd_jct / Nvtmrsswd * T9;
@@ -2581,14 +2587,14 @@ namespace SpiceSharp.Components
             }
             else
             {
-                T9 = 1.0 / (Model.BSIM4vtsswd - vbd_jct);
-                T0 = -vbd_jct / Nvtmrsswd * Model.BSIM4vtsswd * T9;
-                dT0_dVb = Model.BSIM4vtsswd / Nvtmrsswd * (T9 + vbd_jct * T9 * T9);
+                T9 = 1.0 / (model.BSIM4vtsswd - vbd_jct);
+                T0 = -vbd_jct / Nvtmrsswd * model.BSIM4vtsswd * T9;
+                dT0_dVb = model.BSIM4vtsswd / Nvtmrsswd * (T9 + vbd_jct * T9 * T9);
                 Dexp(T0, out T4, out T10);
                 dT4_dVb = T10 * dT0_dVb;
             }
 
-            if ((Model.BSIM4vtsswgs - vbs_jct) < (Model.BSIM4vtsswgs * 1e-3))
+            if ((model.BSIM4vtsswgs - vbs_jct) < (model.BSIM4vtsswgs * 1e-3))
             {
                 T9 = 1.0e3;
                 T0 = -vbs_jct / Nvtmrsswgs * T9;
@@ -2597,14 +2603,14 @@ namespace SpiceSharp.Components
             }
             else
             {
-                T9 = 1.0 / (Model.BSIM4vtsswgs - vbs_jct);
-                T0 = -vbs_jct / Nvtmrsswgs * Model.BSIM4vtsswgs * T9;
-                dT0_dVb = Model.BSIM4vtsswgs / Nvtmrsswgs * (T9 + vbs_jct * T9 * T9);
+                T9 = 1.0 / (model.BSIM4vtsswgs - vbs_jct);
+                T0 = -vbs_jct / Nvtmrsswgs * model.BSIM4vtsswgs * T9;
+                dT0_dVb = model.BSIM4vtsswgs / Nvtmrsswgs * (T9 + vbs_jct * T9 * T9);
                 Dexp(T0, out T5, out T10);
                 dT5_dVb = T10 * dT0_dVb;
             }
 
-            if ((Model.BSIM4vtsswgd - vbd_jct) < (Model.BSIM4vtsswgd * 1e-3))
+            if ((model.BSIM4vtsswgd - vbd_jct) < (model.BSIM4vtsswgd * 1e-3))
             {
                 T9 = 1.0e3;
                 T0 = -vbd_jct / Nvtmrsswgd * T9;
@@ -2613,9 +2619,9 @@ namespace SpiceSharp.Components
             }
             else
             {
-                T9 = 1.0 / (Model.BSIM4vtsswgd - vbd_jct);
-                T0 = -vbd_jct / Nvtmrsswgd * Model.BSIM4vtsswgd * T9;
-                dT0_dVb = Model.BSIM4vtsswgd / Nvtmrsswgd * (T9 + vbd_jct * T9 * T9);
+                T9 = 1.0 / (model.BSIM4vtsswgd - vbd_jct);
+                T0 = -vbd_jct / Nvtmrsswgd * model.BSIM4vtsswgd * T9;
+                dT0_dVb = model.BSIM4vtsswgd / Nvtmrsswgd * (T9 + vbd_jct * T9 * T9);
                 Dexp(T0, out T6, out T10);
                 dT6_dVb = T10 * dT0_dVb;
             }
@@ -2646,16 +2652,16 @@ namespace SpiceSharp.Components
             }
 
             /* dunga */
-            if (Model.BSIM4mtrlMod > 0)
+            if (model.BSIM4mtrlMod > 0)
             {
                 epsrox = 3.9;
-                toxe = Model.BSIM4eot;
-                epssub = Transistor.EPS0 * Model.BSIM4epsrsub;
+                toxe = model.BSIM4eot;
+                epssub = Transistor.EPS0 * model.BSIM4epsrsub;
             }
             else
             {
-                epsrox = Model.BSIM4epsrox;
-                toxe = Model.BSIM4toxe;
+                epsrox = model.BSIM4epsrox;
+                toxe = model.BSIM4toxe;
                 epssub = Transistor.EPSSI;
             }
 
@@ -2688,8 +2694,8 @@ namespace SpiceSharp.Components
             dXdep_dVb = (pParam.BSIM4Xdep0 / pParam.BSIM4sqrtPhi) * dsqrtPhis_dVb;
 
             Leff = pParam.BSIM4leff;
-            Vtm = Model.BSIM4vtm;
-            Vtm0 = Model.BSIM4vtm0;
+            Vtm = model.BSIM4vtm;
+            Vtm0 = model.BSIM4vtm0;
 
             /* Vth Calculation */
             T3 = Math.Sqrt(Xdep);
@@ -2707,8 +2713,8 @@ namespace SpiceSharp.Components
                 T1 = (1.0 + 3.0 * T0) * T4;
                 T2 = pParam.BSIM4dvt2 * T4 * T4;
             }
-            lt1 = Model.BSIM4factor1 * T3 * T1;
-            dlt1_dVb = Model.BSIM4factor1 * (0.5 / T3 * T1 * dXdep_dVb + T3 * T2);
+            lt1 = model.BSIM4factor1 * T3 * T1;
+            dlt1_dVb = model.BSIM4factor1 * (0.5 / T3 * T1 * dXdep_dVb + T3 * T2);
 
             T0 = pParam.BSIM4dvt2w * Vbseff;
             if (T0 >= -0.5)
@@ -2722,8 +2728,8 @@ namespace SpiceSharp.Components
                 T1 = (1.0 + 3.0 * T0) * T4;
                 T2 = pParam.BSIM4dvt2w * T4 * T4;
             }
-            ltw = Model.BSIM4factor1 * T3 * T1;
-            dltw_dVb = Model.BSIM4factor1 * (0.5 / T3 * T1 * dXdep_dVb + T3 * T2);
+            ltw = model.BSIM4factor1 * T3 * T1;
+            dltw_dVb = model.BSIM4factor1 * (0.5 / T3 * T1 * dXdep_dVb + T3 * T2);
 
             T0 = pParam.BSIM4dvt1 * Leff / lt1;
             if (T0 < Transistor.EXP_THRESHOLD)
@@ -2765,7 +2771,7 @@ namespace SpiceSharp.Components
             T2 = T0 * V0;
             dT2_dVb = pParam.BSIM4dvt0w * dT5_dVb * V0;
 
-            TempRatio = ckt.State.Temperature / Model.BSIM4tnom - 1.0;
+            TempRatio = ckt.State.Temperature / model.BSIM4tnom - 1.0;
             T0 = Math.Sqrt(1.0 + pParam.BSIM4lpe0 / Leff);
             T1 = pParam.BSIM4k1ox * (T0 - 1.0) * pParam.BSIM4sqrtPhi + (pParam.BSIM4kt1 + pParam.BSIM4kt1l / Leff + pParam.BSIM4kt2 *
                  Vbseff) * TempRatio;
@@ -2787,7 +2793,7 @@ namespace SpiceSharp.Components
 
             Lpe_Vb = Math.Sqrt(1.0 + pParam.BSIM4lpeb / Leff);
 
-            Vth = Model.BSIM4type * BSIM4vth0 + (pParam.BSIM4k1ox * sqrtPhis - pParam.BSIM4k1 * pParam.BSIM4sqrtPhi) * Lpe_Vb -
+            Vth = model.BSIM4type * BSIM4vth0 + (pParam.BSIM4k1ox * sqrtPhis - pParam.BSIM4k1 * pParam.BSIM4sqrtPhi) * Lpe_Vb -
                  BSIM4k2ox * Vbseff - Delt_vth - T2 + (pParam.BSIM4k3 + pParam.BSIM4k3b * Vbseff) * Vth_NarrowW + T1 - DIBL_Sft;
 
             dVth_dVb = Lpe_Vb * pParam.BSIM4k1ox * dsqrtPhis_dVb - BSIM4k2ox - dDelt_vth_dVb - dT2_dVb + pParam.BSIM4k3b * Vth_NarrowW -
@@ -2796,23 +2802,23 @@ namespace SpiceSharp.Components
 
             /* Calculate n */
             tmp1 = epssub / Xdep;
-            BSIM4nstar = Model.BSIM4vtm / Transistor.Charge_q * (Model.BSIM4coxe + tmp1 + pParam.BSIM4cit);
+            BSIM4nstar = model.BSIM4vtm / Transistor.Charge_q * (model.BSIM4coxe + tmp1 + pParam.BSIM4cit);
             tmp2 = pParam.BSIM4nfactor * tmp1;
             tmp3 = pParam.BSIM4cdsc + pParam.BSIM4cdscb * Vbseff + pParam.BSIM4cdscd * Vds;
-            tmp4 = (tmp2 + tmp3 * Theta0 + pParam.BSIM4cit) / Model.BSIM4coxe;
+            tmp4 = (tmp2 + tmp3 * Theta0 + pParam.BSIM4cit) / model.BSIM4coxe;
             if (tmp4 >= -0.5)
             {
                 n = 1.0 + tmp4;
-                dn_dVb = (-tmp2 / Xdep * dXdep_dVb + tmp3 * dTheta0_dVb + pParam.BSIM4cdscb * Theta0) / Model.BSIM4coxe;
-                dn_dVd = pParam.BSIM4cdscd * Theta0 / Model.BSIM4coxe;
+                dn_dVb = (-tmp2 / Xdep * dXdep_dVb + tmp3 * dTheta0_dVb + pParam.BSIM4cdscb * Theta0) / model.BSIM4coxe;
+                dn_dVd = pParam.BSIM4cdscd * Theta0 / model.BSIM4coxe;
             }
             else
             {
                 T0 = 1.0 / (3.0 + 8.0 * tmp4);
                 n = (1.0 + 3.0 * tmp4) * T0;
                 T0 *= T0;
-                dn_dVb = (-tmp2 / Xdep * dXdep_dVb + tmp3 * dTheta0_dVb + pParam.BSIM4cdscb * Theta0) / Model.BSIM4coxe * T0;
-                dn_dVd = pParam.BSIM4cdscd * Theta0 / Model.BSIM4coxe * T0;
+                dn_dVb = (-tmp2 / Xdep * dXdep_dVb + tmp3 * dTheta0_dVb + pParam.BSIM4cdscb * Theta0) / model.BSIM4coxe * T0;
+                dn_dVd = pParam.BSIM4cdscd * Theta0 / model.BSIM4coxe * T0;
             }
 
             /* Vth correction for Pocket implant */
@@ -2832,15 +2838,15 @@ namespace SpiceSharp.Components
 
                 T3 = Leff + pParam.BSIM4dvtp0 * (1.0 + T2);
                 dT3_dVd = pParam.BSIM4dvtp0 * dT2_dVd;
-                if (Model.BSIM4tempMod < 2)
+                if (model.BSIM4tempMod < 2)
                 {
                     T4 = Vtm * Math.Log(Leff / T3);
                     dT4_dVd = -Vtm * dT3_dVd / T3;
                 }
                 else
                 {
-                    T4 = Model.BSIM4vtm0 * Math.Log(Leff / T3);
-                    dT4_dVd = -Model.BSIM4vtm0 * dT3_dVd / T3;
+                    T4 = model.BSIM4vtm0 * Math.Log(Leff / T3);
+                    dT4_dVd = -model.BSIM4vtm0 * dT3_dVd / T3;
                 }
                 dDITS_Sft_dVd = dn_dVd * T4 + n * dT4_dVd;
                 dDITS_Sft_dVb = T4 * dn_dVb;
@@ -2874,14 +2880,14 @@ namespace SpiceSharp.Components
 
             /* Poly Gate Si Depletion Effect */
             T0 = BSIM4vfb + pParam.BSIM4phi;
-            if (Model.BSIM4mtrlMod == 0)
+            if (model.BSIM4mtrlMod == 0)
                 T1 = Transistor.EPSSI;
             else
-                T1 = Model.BSIM4epsrgate * Transistor.EPS0;
+                T1 = model.BSIM4epsrgate * Transistor.EPS0;
 
-            BSIM4polyDepletion(T0, pParam.BSIM4ngate, T1, Model.BSIM4coxe, vgs, out vgs_eff, out dvgs_eff_dvg);
+            BSIM4polyDepletion(T0, pParam.BSIM4ngate, T1, model.BSIM4coxe, vgs, out vgs_eff, out dvgs_eff_dvg);
 
-            BSIM4polyDepletion(T0, pParam.BSIM4ngate, T1, Model.BSIM4coxe, vgd, out vgd_eff, out dvgd_eff_dvg);
+            BSIM4polyDepletion(T0, pParam.BSIM4ngate, T1, model.BSIM4coxe, vgd, out vgd_eff, out dvgd_eff_dvg);
 
             if (BSIM4mode > 0)
             {
@@ -2934,7 +2940,7 @@ namespace SpiceSharp.Components
             T2 = T1 / T0;
             if (T2 < -Transistor.EXP_THRESHOLD)
             {
-                T3 = Model.BSIM4coxe * Transistor.MIN_EXP / pParam.BSIM4cdep0;
+                T3 = model.BSIM4coxe * Transistor.MIN_EXP / pParam.BSIM4cdep0;
                 T9 = pParam.BSIM4mstar + T3 * n;
                 dT9_dVg = 0.0;
                 dT9_dVd = dn_dVd * T3;
@@ -2942,7 +2948,7 @@ namespace SpiceSharp.Components
             }
             else if (T2 > Transistor.EXP_THRESHOLD)
             {
-                T3 = Model.BSIM4coxe * Transistor.MAX_EXP / pParam.BSIM4cdep0;
+                T3 = model.BSIM4coxe * Transistor.MAX_EXP / pParam.BSIM4cdep0;
                 T9 = pParam.BSIM4mstar + T3 * n;
                 dT9_dVg = 0.0;
                 dT9_dVd = dn_dVd * T3;
@@ -2951,7 +2957,7 @@ namespace SpiceSharp.Components
             else
             {
                 ExpVgst = Math.Exp(T2);
-                T3 = Model.BSIM4coxe / pParam.BSIM4cdep0;
+                T3 = model.BSIM4coxe / pParam.BSIM4cdep0;
                 T4 = T3 * ExpVgst;
                 T5 = T1 * T4 / T0;
                 T9 = pParam.BSIM4mstar + n * T4;
@@ -2982,7 +2988,7 @@ namespace SpiceSharp.Components
                 dWeff_dVb *= T0;
             }
 
-            if (Model.BSIM4rdsMod == 1)
+            if (model.BSIM4rdsMod == 1)
                 Rds = dRds_dVg = dRds_dVb = 0.0;
             else
             {
@@ -3069,12 +3075,12 @@ namespace SpiceSharp.Components
             Abulk0 *= T0;
 
             /* Mobility calculation */
-            if (Model.BSIM4mtrlMod > 0 && Model.BSIM4mtrlCompatMod == 0)
-                T14 = 2.0 * Model.BSIM4type * (Model.BSIM4phig - Model.BSIM4easub - 0.5 * Model.BSIM4Eg0 + 0.45);
+            if (model.BSIM4mtrlMod > 0 && model.BSIM4mtrlCompatMod == 0)
+                T14 = 2.0 * model.BSIM4type * (model.BSIM4phig - model.BSIM4easub - 0.5 * model.BSIM4Eg0 + 0.45);
             else
                 T14 = 0.0;
 
-            if (Model.BSIM4mobMod == 0)
+            if (model.BSIM4mobMod == 0)
             {
                 T0 = Vgsteff + Vth + Vth - T14;
                 T2 = pParam.BSIM4ua + pParam.BSIM4uc * Vbseff;
@@ -3093,7 +3099,7 @@ namespace SpiceSharp.Components
                 dDenomi_dVb = T13 * dVth_dVb + pParam.BSIM4uc * T3;
                 dDenomi_dVg += T7;
             }
-            else if (Model.BSIM4mobMod == 1)
+            else if (model.BSIM4mobMod == 1)
             {
                 T0 = Vgsteff + Vth + Vth - T14;
                 T2 = 1.0 + pParam.BSIM4uc * Vbseff;
@@ -3113,7 +3119,7 @@ namespace SpiceSharp.Components
                 dDenomi_dVb = T13 * dVth_dVb + pParam.BSIM4uc * T4;
                 dDenomi_dVg += T7;
             }
-            else if (Model.BSIM4mobMod == 2)
+            else if (model.BSIM4mobMod == 2)
             {
                 T0 = (Vgsteff + BSIM4vtfbphi1) / toxe;
                 T1 = Math.Exp(pParam.BSIM4eu * Math.Log(T0));
@@ -3133,7 +3139,7 @@ namespace SpiceSharp.Components
                 dDenomi_dVd = T13 * dVth_dVd;
                 dDenomi_dVb = T13 * dVth_dVb + T1 * pParam.BSIM4uc;
             }
-            else if (Model.BSIM4mobMod == 4)
+            else if (model.BSIM4mobMod == 4)
             /* Synopsys 08 / 30 / 2013 add */
             {
                 T0 = Vgsteff + BSIM4vtfbphi1 - T14;
@@ -3151,7 +3157,7 @@ namespace SpiceSharp.Components
                 dDenomi_dVb = pParam.BSIM4uc * T3;
                 dDenomi_dVg += T7;
             }
-            else if (Model.BSIM4mobMod == 5)
+            else if (model.BSIM4mobMod == 5)
             /* Synopsys 08 / 30 / 2013 add */
             {
                 T0 = Vgsteff + BSIM4vtfbphi1 - T14;
@@ -3170,7 +3176,7 @@ namespace SpiceSharp.Components
                 dDenomi_dVb = pParam.BSIM4uc * T4;
                 dDenomi_dVg += T7;
             }
-            else if (Model.BSIM4mobMod == 6)
+            else if (model.BSIM4mobMod == 6)
             /* Synopsys 08 / 30 / 2013 modify */
             {
                 T0 = (Vgsteff + BSIM4vtfbphi1) / toxe;
@@ -3234,7 +3240,7 @@ namespace SpiceSharp.Components
             dueff_dVb = T9 * dDenomi_dVb;
 
             /* Saturation Drain Voltage  Vdsat */
-            WVCox = Weff * BSIM4vsattemp * Model.BSIM4coxe;
+            WVCox = Weff * BSIM4vsattemp * model.BSIM4coxe;
             WVCoxRds = WVCox * Rds;
 
             Esat = 2.0 * BSIM4vsattemp / ueff;
@@ -3377,7 +3383,7 @@ namespace SpiceSharp.Components
             BSIM4Vdseff = Vdseff;
 
             /* Velocity Overshoot */
-            if ((Model.BSIM4lambda.Given) && (Model.BSIM4lambda > 0.0))
+            if ((model.BSIM4lambda.Given) && (model.BSIM4lambda > 0.0))
             {
                 T1 = Leff * ueff;
                 T2 = pParam.BSIM4lambda / T1;
@@ -3448,10 +3454,10 @@ namespace SpiceSharp.Components
             dT0_dVg = 1.0 / tmp2;
             T0 = (Vgsteff + tmp1) * dT0_dVg;
 
-            tmp3 = Math.Exp(Model.BSIM4bdos * 0.7 * Math.Log(T0));
+            tmp3 = Math.Exp(model.BSIM4bdos * 0.7 * Math.Log(T0));
             T1 = 1.0 + tmp3;
-            T2 = Model.BSIM4bdos * 0.7 * tmp3 / T0;
-            Tcen = Model.BSIM4ados * 1.9e-9 / T1;
+            T2 = model.BSIM4bdos * 0.7 * tmp3 / T0;
+            Tcen = model.BSIM4ados * 1.9e-9 / T1;
             dTcen_dVg = -Tcen * T2 * dT0_dVg / T1;
 
             Coxeff = epssub * BSIM4coxp / (epssub + BSIM4coxp * Tcen);
@@ -3632,7 +3638,7 @@ namespace SpiceSharp.Components
 
             if (pParam.BSIM4pdits > Transistor.MIN_EXP)
             {
-                T2 = 1.0 + Model.BSIM4pditsl * Leff;
+                T2 = 1.0 + model.BSIM4pditsl * Leff;
                 VADITS = (1.0 + T2 * T1) / pParam.BSIM4pdits;
                 dVADITS_dVg = VADITS * dFP_dVg;
                 dVADITS_dVd = FP * T2 * dT1_dVd / pParam.BSIM4pdits;
@@ -3763,7 +3769,7 @@ namespace SpiceSharp.Components
             cdrain = Ids * Vdseff;
 
             /* Source End Velocity Limit */
-            if ((Model.BSIM4vtl.Given) && (Model.BSIM4vtl > 0.0))
+            if ((model.BSIM4vtl.Given) && (model.BSIM4vtl > 0.0))
             {
                 T12 = 1.0 / Leff / CoxeffWovL;
                 T11 = T12 / Vgsteff;
@@ -3814,7 +3820,7 @@ namespace SpiceSharp.Components
             /* Calculate Rg */
             if ((BSIM4rgateMod > 1) || (BSIM4trnqsMod != 0) || (BSIM4acnqsMod != 0))
             {
-                T9 = pParam.BSIM4xrcrg2 * Model.BSIM4vtm;
+                T9 = pParam.BSIM4xrcrg2 * model.BSIM4vtm;
                 T0 = T9 * beta;
                 dT0_dVd = (dbeta_dVd + dbeta_dVg * dVgsteff_dVd) * T9;
                 dT0_dVb = (dbeta_dVb + dbeta_dVg * dVgsteff_dVb) * T9;
@@ -3847,7 +3853,7 @@ namespace SpiceSharp.Components
             }
 
             /* Calculate bias - dependent external S / D resistance */
-            if (Model.BSIM4rdsMod > 0)
+            if (model.BSIM4rdsMod > 0)
             {
                 /* Rs(V) */
                 T0 = vgs - pParam.BSIM4vfbsd;
@@ -3930,10 +3936,10 @@ namespace SpiceSharp.Components
 
             /* GIDL / GISL Models */
 
-            if (Model.BSIM4mtrlMod == 0)
+            if (model.BSIM4mtrlMod == 0)
                 T0 = 3.0 * toxe;
             else
-                T0 = Model.BSIM4epsrsub * toxe / epsrox;
+                T0 = model.BSIM4epsrsub * toxe / epsrox;
 
             /* Calculate GIDL current */
 
@@ -3942,9 +3948,9 @@ namespace SpiceSharp.Components
             vgd_eff = BSIM4vgd_eff;
             dvgd_eff_dvg = BSIM4dvgd_eff_dvg;
 
-            if (Model.BSIM4gidlMod == 0)
+            if (model.BSIM4gidlMod == 0)
             {
-                if (Model.BSIM4mtrlMod == 0)
+                if (model.BSIM4mtrlMod == 0)
                     T1 = (vds - vgs_eff - pParam.BSIM4egidl) / T0;
                 else
                     T1 = (vds - vgs_eff - pParam.BSIM4egidl + pParam.BSIM4vfbsd) / T0;
@@ -3987,7 +3993,7 @@ namespace SpiceSharp.Components
                 BSIM4ggidlb = Ggidlb;
                 /* Calculate GISL current */
 
-                if (Model.BSIM4mtrlMod == 0)
+                if (model.BSIM4mtrlMod == 0)
                     T1 = (-vds - vgd_eff - pParam.BSIM4egisl) / T0;
                 else
                     T1 = (-vds - vgd_eff - pParam.BSIM4egisl + pParam.BSIM4vfbsd) / T0;
@@ -4034,7 +4040,7 @@ namespace SpiceSharp.Components
                 /* v4.7 New Gidl / GISL model */
 
                 /* GISL */
-                if (Model.BSIM4mtrlMod == 0)
+                if (model.BSIM4mtrlMod == 0)
                     T1 = (-vds - pParam.BSIM4rgisl * vgd_eff - pParam.BSIM4egisl) / T0;
                 else
                     T1 = (-vds - pParam.BSIM4rgisl * vgd_eff - pParam.BSIM4egisl + pParam.BSIM4vfbsd) / T0;
@@ -4089,7 +4095,7 @@ namespace SpiceSharp.Components
                 /* End of GISL */
 
                 /* GIDL */
-                if (Model.BSIM4mtrlMod == 0)
+                if (model.BSIM4mtrlMod == 0)
                     T1 = (vds - pParam.BSIM4rgidl * vgs_eff - pParam.BSIM4egidl) / T0;
                 else
                     T1 = (vds - pParam.BSIM4rgidl * vgs_eff - pParam.BSIM4egidl + pParam.BSIM4vfbsd) / T0;
@@ -4144,7 +4150,7 @@ namespace SpiceSharp.Components
             /* End of Gidl */
 
             /* Calculate gate tunneling current */
-            if ((Model.BSIM4igcMod != 0) || (Model.BSIM4igbMod != 0))
+            if ((model.BSIM4igcMod != 0) || (model.BSIM4igbMod != 0))
             {
                 Vfb = BSIM4vfbzb;
                 V3 = Vfb - Vgs_eff + Vbseff - Transistor.DELTA_3;
@@ -4191,24 +4197,24 @@ namespace SpiceSharp.Components
                 dVoxdepinv_dVb += dVgsteff_dVb;
             }
 
-            if (Model.BSIM4tempMod < 2)
+            if (model.BSIM4tempMod < 2)
                 tmp = Vtm;
-            else /* Model.BSIM4tempMod = 2, 3 */ tmp = Vtm0;
-            if (Model.BSIM4igcMod > 0)
+            else /* model.BSIM4tempMod = 2, 3 */ tmp = Vtm0;
+            if (model.BSIM4igcMod > 0)
             {
                 T0 = tmp * pParam.BSIM4nigc;
-                if (Model.BSIM4igcMod == 1)
+                if (model.BSIM4igcMod == 1)
                 {
-                    VxNVt = (Vgs_eff - Model.BSIM4type * BSIM4vth0) / T0;
+                    VxNVt = (Vgs_eff - model.BSIM4type * BSIM4vth0) / T0;
                     if (VxNVt > Transistor.EXP_THRESHOLD)
                     {
-                        Vaux = Vgs_eff - Model.BSIM4type * BSIM4vth0;
+                        Vaux = Vgs_eff - model.BSIM4type * BSIM4vth0;
                         dVaux_dVg = dVgs_eff_dVg;
                         dVaux_dVd = 0.0;
                         dVaux_dVb = 0.0;
                     }
                 }
-                else if (Model.BSIM4igcMod == 2)
+                else if (model.BSIM4igcMod == 2)
                 {
                     VxNVt = (Vgs_eff - BSIM4von) / T0;
                     if (VxNVt > Transistor.EXP_THRESHOLD)
@@ -4229,12 +4235,12 @@ namespace SpiceSharp.Components
                     ExpVxNVt = Math.Exp(VxNVt);
                     Vaux = T0 * Math.Log(1.0 + ExpVxNVt);
                     dVaux_dVg = ExpVxNVt / (1.0 + ExpVxNVt);
-                    if (Model.BSIM4igcMod == 1)
+                    if (model.BSIM4igcMod == 1)
                     {
                         dVaux_dVd = 0.0;
                         dVaux_dVb = 0.0;
                     }
-                    else if (Model.BSIM4igcMod == 2)
+                    else if (model.BSIM4igcMod == 2)
                     {
                         dVaux_dVd = -dVaux_dVg * dVth_dVd; /* Synopsys 08 / 30 / 2013 modify */
                         dVaux_dVb = -dVaux_dVg * dVth_dVb; /* Synopsys 08 / 30 / 2013 modify */
@@ -4277,7 +4283,7 @@ namespace SpiceSharp.Components
                 dIgc_dVd = T11 * (T2 * dT6_dVd + T6 * dT2_dVd);
                 dIgc_dVb = T11 * (T2 * dT6_dVb + T6 * dT2_dVb);
 
-                if (Model.BSIM4pigcd.Given)
+                if (model.BSIM4pigcd.Given)
                 {
                     Pigcd = pParam.BSIM4pigcd;
                     dPigcd_dVg = dPigcd_dVd = dPigcd_dVb = 0.0;
@@ -4430,7 +4436,7 @@ namespace SpiceSharp.Components
                 BSIM4Igd = BSIM4gIgdg = BSIM4gIgdd = 0.0;
             }
 
-            if (Model.BSIM4igbMod > 0)
+            if (model.BSIM4igbMod > 0)
             {
                 T0 = tmp * pParam.BSIM4nigbacc;
                 T1 = -Vgs_eff + Vbseff + Vfb;
@@ -4610,7 +4616,7 @@ namespace SpiceSharp.Components
 
             /* Calculations for noise analysis */
 
-            if (Model.BSIM4tnoiMod == 0)
+            if (model.BSIM4tnoiMod == 0)
             {
                 Abulk = Abulk0 * pParam.BSIM4abulkCVfactor;
                 Vdsat = Vgsteff / Abulk;
@@ -4634,7 +4640,7 @@ namespace SpiceSharp.Components
                 T3 = T0 * T2;
                 BSIM4qinv = Coxeff * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV * (Vgsteff - 0.5 * T0 + Abulk * T3);
             }
-            else if (Model.BSIM4tnoiMod == 2)
+            else if (model.BSIM4tnoiMod == 2)
             {
                 BSIM4noiGd0 = BSIM4nf * beta * Vgsteff / (1.0 + gche * Rds);
             }
@@ -4643,7 +4649,7 @@ namespace SpiceSharp.Components
             * BSIM4 C - V begins
             */
 
-            if ((Model.BSIM4xpart < 0) || (!ChargeComputationNeeded))
+            if ((model.BSIM4xpart < 0) || (!ChargeComputationNeeded))
             {
                 qgate = qdrn = qsrc = qbulk = 0.0;
                 BSIM4cggb = BSIM4cgsb = BSIM4cgdb = 0.0;
@@ -4655,7 +4661,7 @@ namespace SpiceSharp.Components
                 BSIM4gtau = 0.0;
                 goto finished;
             }
-            else if (Model.BSIM4capMod == 0)
+            else if (model.BSIM4capMod == 0)
             {
                 if (Vbseff < 0.0)
                 {
@@ -4675,7 +4681,7 @@ namespace SpiceSharp.Components
                 dVgst_dVb = -dVth_dVb;
                 dVgst_dVg = dVgs_eff_dVg;
 
-                CoxWL = Model.BSIM4coxe * pParam.BSIM4weffCV * pParam.BSIM4leffCV * BSIM4nf;
+                CoxWL = model.BSIM4coxe * pParam.BSIM4weffCV * pParam.BSIM4leffCV * BSIM4nf;
                 Arg1 = Vgs_eff - VbseffCV - Vfb;
 
                 if (Arg1 <= 0.0)
@@ -4729,7 +4735,7 @@ namespace SpiceSharp.Components
                     Vdsat = Vgst * dVdsat_dVg;
                     dVdsat_dVb = -(Vdsat * dAbulkCV_dVb + dVth_dVb) * dVdsat_dVg;
 
-                    if (Model.BSIM4xpart > 0.5)
+                    if (model.BSIM4xpart > 0.5)
                     {
                         /* 0 / 100 Charge partition model */
                         if (Vdsat <= Vds)
@@ -4798,7 +4804,7 @@ namespace SpiceSharp.Components
                             BSIM4cbsb = -(BSIM4cgsb + BSIM4cdsb + T0);
                         }
                     }
-                    else if (Model.BSIM4xpart < 0.5)
+                    else if (model.BSIM4xpart < 0.5)
                     {
                         /* 40 / 60 Charge partition model */
                         if (Vds >= Vdsat)
@@ -4953,9 +4959,9 @@ namespace SpiceSharp.Components
                     dVbseffCV_dVb = -dPhis_dVb;
                 }
 
-                CoxWL = Model.BSIM4coxe * pParam.BSIM4weffCV * pParam.BSIM4leffCV * BSIM4nf;
+                CoxWL = model.BSIM4coxe * pParam.BSIM4weffCV * pParam.BSIM4leffCV * BSIM4nf;
 
-                if (Model.BSIM4cvchargeMod == 0)
+                if (model.BSIM4cvchargeMod == 0)
                 {
                     /* Seperate VgsteffCV with noff and voffcv */
                     noff = n * pParam.BSIM4noff;
@@ -5026,7 +5032,7 @@ namespace SpiceSharp.Components
                     T2 = T1 / T0;
                     if (T2 < -Transistor.EXP_THRESHOLD)
                     {
-                        T3 = Model.BSIM4coxe * Transistor.MIN_EXP / pParam.BSIM4cdep0;
+                        T3 = model.BSIM4coxe * Transistor.MIN_EXP / pParam.BSIM4cdep0;
                         T9 = pParam.BSIM4mstarcv + T3 * n;
                         dT9_dVg = 0.0;
                         dT9_dVd = dn_dVd * T3;
@@ -5034,7 +5040,7 @@ namespace SpiceSharp.Components
                     }
                     else if (T2 > Transistor.EXP_THRESHOLD)
                     {
-                        T3 = Model.BSIM4coxe * Transistor.MAX_EXP / pParam.BSIM4cdep0;
+                        T3 = model.BSIM4coxe * Transistor.MAX_EXP / pParam.BSIM4cdep0;
                         T9 = pParam.BSIM4mstarcv + T3 * n;
                         dT9_dVg = 0.0;
                         dT9_dVd = dn_dVd * T3;
@@ -5043,7 +5049,7 @@ namespace SpiceSharp.Components
                     else
                     {
                         ExpVgst = Math.Exp(T2);
-                        T3 = Model.BSIM4coxe / pParam.BSIM4cdep0;
+                        T3 = model.BSIM4coxe / pParam.BSIM4cdep0;
                         T4 = T3 * ExpVgst;
                         T5 = T1 * T4 / T0;
                         T9 = pParam.BSIM4mstarcv + n * T4;
@@ -5061,7 +5067,7 @@ namespace SpiceSharp.Components
                     /* End of VgsteffCV for cvchargeMod = 1 */
                 }
 
-                if (Model.BSIM4capMod == 1)
+                if (model.BSIM4capMod == 1)
                 {
                     Vfb = BSIM4vfbzb;
                     V3 = Vfb - Vgs_eff + VbseffCV - Transistor.DELTA_3;
@@ -5164,7 +5170,7 @@ namespace SpiceSharp.Components
                     Cbb1 = CoxWL * (T5 * dVdseffCV_dVb + T6 * dAbulkCV_dVb) + Cbg1 * dVgsteff_dVb;
                     Cbg1 *= dVgsteff_dVg;
 
-                    if (Model.BSIM4xpart > 0.5)
+                    if (model.BSIM4xpart > 0.5)
                     {
                         /* 0 / 100 Charge petition model */
                         T1 = T1 + T1;
@@ -5178,7 +5184,7 @@ namespace SpiceSharp.Components
                         Csb = CoxWL * (T5 * dVdseffCV_dVb + T6 * dAbulkCV_dVb) + Csg * dVgsteff_dVb;
                         Csg *= dVgsteff_dVg;
                     }
-                    else if (Model.BSIM4xpart < 0.5)
+                    else if (model.BSIM4xpart < 0.5)
                     {
                         /* 40 / 60 Charge petition model */
                         T1 = T1 / 12.0;
@@ -5231,7 +5237,7 @@ namespace SpiceSharp.Components
                 }
 
                 /* Charge - Thickness capMod (CTM) begins */
-                else if (Model.BSIM4capMod == 2)
+                else if (model.BSIM4capMod == 2)
                 {
                     V3 = BSIM4vfbzb - Vgs_eff + VbseffCV - Transistor.DELTA_3;
                     if (BSIM4vfbzb <= 0.0)
@@ -5284,7 +5290,7 @@ namespace SpiceSharp.Components
                     dCoxeff_dVg = T2 * T2 * T3;
                     dCoxeff_dVb = dCoxeff_dVg * dTcen_dVb;
                     dCoxeff_dVg *= dTcen_dVg;
-                    CoxWLcen = CoxWL * Coxeff / Model.BSIM4coxe;
+                    CoxWLcen = CoxWL * Coxeff / model.BSIM4coxe;
 
                     Qac0 = CoxWLcen * (Vfbeff - BSIM4vfbzb);
                     QovCox = Qac0 / Coxeff;
@@ -5341,10 +5347,10 @@ namespace SpiceSharp.Components
 
                     Tox += Tox; /* WDLiu: Tcen reevaluated below due to different Vgsteff */
                     T0 = (Vgsteff + BSIM4vtfbphi2) / Tox;
-                    tmp = Math.Exp(Model.BSIM4bdos * 0.7 * Math.Log(T0));
+                    tmp = Math.Exp(model.BSIM4bdos * 0.7 * Math.Log(T0));
                     T1 = 1.0 + tmp;
-                    T2 = Model.BSIM4bdos * 0.7 * tmp / (T0 * Tox);
-                    Tcen = Model.BSIM4ados * 1.9e-9 / T1;
+                    T2 = model.BSIM4bdos * 0.7 * tmp / (T0 * Tox);
+                    Tcen = model.BSIM4ados * 1.9e-9 / T1;
                     dTcen_dVg = -Tcen * T2 / T1;
                     dTcen_dVd = dTcen_dVg * dVgsteff_dVd;
                     dTcen_dVb = dTcen_dVg * dVgsteff_dVb;
@@ -5358,7 +5364,7 @@ namespace SpiceSharp.Components
                     dCoxeff_dVd = dCoxeff_dVg * dTcen_dVd;
                     dCoxeff_dVb = dCoxeff_dVg * dTcen_dVb;
                     dCoxeff_dVg *= dTcen_dVg;
-                    CoxWLcen = CoxWL * Coxeff / Model.BSIM4coxe;
+                    CoxWLcen = CoxWL * Coxeff / model.BSIM4coxe;
 
                     AbulkCV = Abulk0 * pParam.BSIM4abulkCVfactor;
                     dAbulkCV_dVb = pParam.BSIM4abulkCVfactor * dAbulk0_dVb;
@@ -5426,7 +5432,7 @@ namespace SpiceSharp.Components
                     Cbb1 = CoxWLcen * (T11 * dVdseffCV_dVb + T12 * dAbulkCV_dVb) + Cbg1 * dVgsteff_dVb + QovCox * dCoxeff_dVb;
                     Cbg1 = Cbg1 * dVgsteff_dVg + QovCox * dCoxeff_dVg;
 
-                    if (Model.BSIM4xpart > 0.5)
+                    if (model.BSIM4xpart > 0.5)
                     {
                         /* 0 / 100 partition */
                         qsrc = -CoxWLcen * (T1 / 2.0 + T0 / 4.0 - 0.5 * T0 * T0 / T2);
@@ -5443,7 +5449,7 @@ namespace SpiceSharp.Components
                         Csb = CoxWLcen * (T5 * dVdseffCV_dVb + T6 * dAbulkCV_dVb) + Csg * dVgsteff_dVb + QovCox * dCoxeff_dVb;
                         Csg = Csg * dVgsteff_dVg + QovCox * dCoxeff_dVg;
                     }
-                    else if (Model.BSIM4xpart < 0.5)
+                    else if (model.BSIM4xpart < 0.5)
                     {
                         /* 40 / 60 partition */
                         T2 = T2 / 12.0;
@@ -5519,7 +5525,7 @@ namespace SpiceSharp.Components
                 BSIM4cqsb = -(BSIM4cgsb + BSIM4cbsb);
                 BSIM4cqbb = -(BSIM4cqgb + BSIM4cqdb + BSIM4cqsb);
 
-                CoxWL = Model.BSIM4coxe * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV;
+                CoxWL = model.BSIM4coxe * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV;
                 T1 = BSIM4gcrg / CoxWL; /* 1 / tau */
                 BSIM4gtau = T1 * ScalingFactor;
 
@@ -5538,20 +5544,20 @@ namespace SpiceSharp.Components
             /* Calculate junction C - V */
             if (ChargeComputationNeeded)
             {
-                czbd = Model.BSIM4DunitAreaTempJctCap * BSIM4Adeff; /* bug fix */
-                czbs = Model.BSIM4SunitAreaTempJctCap * BSIM4Aseff;
-                czbdsw = Model.BSIM4DunitLengthSidewallTempJctCap * BSIM4Pdeff;
-                czbdswg = Model.BSIM4DunitLengthGateSidewallTempJctCap * pParam.BSIM4weffCJ * BSIM4nf;
-                czbssw = Model.BSIM4SunitLengthSidewallTempJctCap * BSIM4Pseff;
-                czbsswg = Model.BSIM4SunitLengthGateSidewallTempJctCap * pParam.BSIM4weffCJ * BSIM4nf;
+                czbd = model.BSIM4DunitAreaTempJctCap * BSIM4Adeff; /* bug fix */
+                czbs = model.BSIM4SunitAreaTempJctCap * BSIM4Aseff;
+                czbdsw = model.BSIM4DunitLengthSidewallTempJctCap * BSIM4Pdeff;
+                czbdswg = model.BSIM4DunitLengthGateSidewallTempJctCap * pParam.BSIM4weffCJ * BSIM4nf;
+                czbssw = model.BSIM4SunitLengthSidewallTempJctCap * BSIM4Pseff;
+                czbsswg = model.BSIM4SunitLengthGateSidewallTempJctCap * pParam.BSIM4weffCJ * BSIM4nf;
 
-                MJS = Model.BSIM4SbulkJctBotGradingCoeff;
-                MJSWS = Model.BSIM4SbulkJctSideGradingCoeff;
-                MJSWGS = Model.BSIM4SbulkJctGateSideGradingCoeff;
+                MJS = model.BSIM4SbulkJctBotGradingCoeff;
+                MJSWS = model.BSIM4SbulkJctSideGradingCoeff;
+                MJSWGS = model.BSIM4SbulkJctGateSideGradingCoeff;
 
-                MJD = Model.BSIM4DbulkJctBotGradingCoeff;
-                MJSWD = Model.BSIM4DbulkJctSideGradingCoeff;
-                MJSWGD = Model.BSIM4DbulkJctGateSideGradingCoeff;
+                MJD = model.BSIM4DbulkJctBotGradingCoeff;
+                MJSWD = model.BSIM4DbulkJctSideGradingCoeff;
+                MJSWGD = model.BSIM4DbulkJctGateSideGradingCoeff;
 
                 /* Source Bulk Junction */
                 if (vbs_jct == 0.0)
@@ -5563,12 +5569,12 @@ namespace SpiceSharp.Components
                 {
                     if (czbs > 0.0)
                     {
-                        arg = 1.0 - vbs_jct / Model.BSIM4PhiBS;
+                        arg = 1.0 - vbs_jct / model.BSIM4PhiBS;
                         if (MJS == 0.5)
                             sarg = 1.0 / Math.Sqrt(arg);
                         else
                             sarg = Math.Exp(-MJS * Math.Log(arg));
-                        state.States[0][BSIM4states + BSIM4qbs] = Model.BSIM4PhiBS * czbs * (1.0 - arg * sarg) / (1.0 - MJS);
+                        state.States[0][BSIM4states + BSIM4qbs] = model.BSIM4PhiBS * czbs * (1.0 - arg * sarg) / (1.0 - MJS);
                         BSIM4capbs = czbs * sarg;
                     }
                     else
@@ -5578,22 +5584,22 @@ namespace SpiceSharp.Components
                     }
                     if (czbssw > 0.0)
                     {
-                        arg = 1.0 - vbs_jct / Model.BSIM4PhiBSWS;
+                        arg = 1.0 - vbs_jct / model.BSIM4PhiBSWS;
                         if (MJSWS == 0.5)
                             sarg = 1.0 / Math.Sqrt(arg);
                         else
                             sarg = Math.Exp(-MJSWS * Math.Log(arg));
-                        state.States[0][BSIM4states + BSIM4qbs] += Model.BSIM4PhiBSWS * czbssw * (1.0 - arg * sarg) / (1.0 - MJSWS);
+                        state.States[0][BSIM4states + BSIM4qbs] += model.BSIM4PhiBSWS * czbssw * (1.0 - arg * sarg) / (1.0 - MJSWS);
                         BSIM4capbs += czbssw * sarg;
                     }
                     if (czbsswg > 0.0)
                     {
-                        arg = 1.0 - vbs_jct / Model.BSIM4PhiBSWGS;
+                        arg = 1.0 - vbs_jct / model.BSIM4PhiBSWGS;
                         if (MJSWGS == 0.5)
                             sarg = 1.0 / Math.Sqrt(arg);
                         else
                             sarg = Math.Exp(-MJSWGS * Math.Log(arg));
-                        state.States[0][BSIM4states + BSIM4qbs] += Model.BSIM4PhiBSWGS * czbsswg * (1.0 - arg * sarg) / (1.0 - MJSWGS);
+                        state.States[0][BSIM4states + BSIM4qbs] += model.BSIM4PhiBSWGS * czbsswg * (1.0 - arg * sarg) / (1.0 - MJSWGS);
                         BSIM4capbs += czbsswg * sarg;
                     }
 
@@ -5601,8 +5607,8 @@ namespace SpiceSharp.Components
                 else
                 {
                     T0 = czbs + czbssw + czbsswg;
-                    T1 = vbs_jct * (czbs * MJS / Model.BSIM4PhiBS + czbssw * MJSWS / Model.BSIM4PhiBSWS + czbsswg * MJSWGS /
-                         Model.BSIM4PhiBSWGS);
+                    T1 = vbs_jct * (czbs * MJS / model.BSIM4PhiBS + czbssw * MJSWS / model.BSIM4PhiBSWS + czbsswg * MJSWGS /
+                         model.BSIM4PhiBSWGS);
                     state.States[0][BSIM4states + BSIM4qbs] = vbs_jct * (T0 + 0.5 * T1);
                     BSIM4capbs = T0 + T1;
                 }
@@ -5617,12 +5623,12 @@ namespace SpiceSharp.Components
                 {
                     if (czbd > 0.0)
                     {
-                        arg = 1.0 - vbd_jct / Model.BSIM4PhiBD;
+                        arg = 1.0 - vbd_jct / model.BSIM4PhiBD;
                         if (MJD == 0.5)
                             sarg = 1.0 / Math.Sqrt(arg);
                         else
                             sarg = Math.Exp(-MJD * Math.Log(arg));
-                        state.States[0][BSIM4states + BSIM4qbd] = Model.BSIM4PhiBD * czbd * (1.0 - arg * sarg) / (1.0 - MJD);
+                        state.States[0][BSIM4states + BSIM4qbd] = model.BSIM4PhiBD * czbd * (1.0 - arg * sarg) / (1.0 - MJD);
                         BSIM4capbd = czbd * sarg;
                     }
                     else
@@ -5632,29 +5638,29 @@ namespace SpiceSharp.Components
                     }
                     if (czbdsw > 0.0)
                     {
-                        arg = 1.0 - vbd_jct / Model.BSIM4PhiBSWD;
+                        arg = 1.0 - vbd_jct / model.BSIM4PhiBSWD;
                         if (MJSWD == 0.5)
                             sarg = 1.0 / Math.Sqrt(arg);
                         else
                             sarg = Math.Exp(-MJSWD * Math.Log(arg));
-                        state.States[0][BSIM4states + BSIM4qbd] += Model.BSIM4PhiBSWD * czbdsw * (1.0 - arg * sarg) / (1.0 - MJSWD);
+                        state.States[0][BSIM4states + BSIM4qbd] += model.BSIM4PhiBSWD * czbdsw * (1.0 - arg * sarg) / (1.0 - MJSWD);
                         BSIM4capbd += czbdsw * sarg;
                     }
                     if (czbdswg > 0.0)
                     {
-                        arg = 1.0 - vbd_jct / Model.BSIM4PhiBSWGD;
+                        arg = 1.0 - vbd_jct / model.BSIM4PhiBSWGD;
                         if (MJSWGD == 0.5)
                             sarg = 1.0 / Math.Sqrt(arg);
                         else
                             sarg = Math.Exp(-MJSWGD * Math.Log(arg));
-                        state.States[0][BSIM4states + BSIM4qbd] += Model.BSIM4PhiBSWGD * czbdswg * (1.0 - arg * sarg) / (1.0 - MJSWGD);
+                        state.States[0][BSIM4states + BSIM4qbd] += model.BSIM4PhiBSWGD * czbdswg * (1.0 - arg * sarg) / (1.0 - MJSWGD);
                         BSIM4capbd += czbdswg * sarg;
                     }
                 }
                 else
                 {
                     T0 = czbd + czbdsw + czbdswg;
-                    T1 = vbd_jct * (czbd * MJD / Model.BSIM4PhiBD + czbdsw * MJSWD / Model.BSIM4PhiBSWD + czbdswg * MJSWGD / Model.BSIM4PhiBSWGD);
+                    T1 = vbd_jct * (czbd * MJD / model.BSIM4PhiBD + czbdsw * MJSWD / model.BSIM4PhiBSWD + czbdswg * MJSWGD / model.BSIM4PhiBSWGD);
                     state.States[0][BSIM4states + BSIM4qbd] = vbd_jct * (T0 + 0.5 * T1);
                     BSIM4capbd = T0 + T1;
                 }
@@ -5695,7 +5701,7 @@ namespace SpiceSharp.Components
                 vgdx = vgd;
                 vgsx = vgs;
             }
-            if (Model.BSIM4capMod == 0)
+            if (model.BSIM4capMod == 0)
             {
                 cgdo = pParam.BSIM4cgdo;
                 qgdo = pParam.BSIM4cgdo * vgdx;
@@ -5818,7 +5824,7 @@ namespace SpiceSharp.Components
                 else
                 {
                     qcheq = BSIM4qchqs;
-                    CoxWL = Model.BSIM4coxe * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV;
+                    CoxWL = model.BSIM4coxe * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV;
                     T0 = qdef * ScalingFactor / CoxWL;
 
                     ggtg = BSIM4gtg = T0 * BSIM4gcrgg;
@@ -5834,11 +5840,11 @@ namespace SpiceSharp.Components
 
                     if (Math.Abs(qcheq) <= 1.0e-5 * CoxWL)
                     {
-                        if (Model.BSIM4xpart < 0.5)
+                        if (model.BSIM4xpart < 0.5)
                         {
                             dxpart = 0.4;
                         }
-                        else if (Model.BSIM4xpart > 0.5)
+                        else if (model.BSIM4xpart > 0.5)
                         {
                             dxpart = 0.0;
                         }
@@ -6013,7 +6019,7 @@ namespace SpiceSharp.Components
                 else
                 {
                     qcheq = BSIM4qchqs;
-                    CoxWL = Model.BSIM4coxe * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV;
+                    CoxWL = model.BSIM4coxe * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV;
                     T0 = qdef * ScalingFactor / CoxWL;
                     ggtg = BSIM4gtg = T0 * BSIM4gcrgg;
                     ggts = BSIM4gts = T0 * BSIM4gcrgd;
@@ -6028,11 +6034,11 @@ namespace SpiceSharp.Components
 
                     if (Math.Abs(qcheq) <= 1.0e-5 * CoxWL)
                     {
-                        if (Model.BSIM4xpart < 0.5)
+                        if (model.BSIM4xpart < 0.5)
                         {
                             sxpart = 0.4;
                         }
-                        else if (Model.BSIM4xpart > 0.5)
+                        else if (model.BSIM4xpart > 0.5)
                         {
                             sxpart = 0.0;
                         }
@@ -6211,7 +6217,7 @@ namespace SpiceSharp.Components
 
             if (BSIM4trnqsMod > 0)
             {
-                CoxWL = Model.BSIM4coxe * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV;
+                CoxWL = model.BSIM4coxe * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV;
                 T1 = BSIM4gcrg / CoxWL;
                 BSIM4gtau = T1 * ScalingFactor;
             }
@@ -6280,10 +6286,10 @@ namespace SpiceSharp.Components
                 FwdSum = Gm + Gmbs;
                 RevSum = 0.0;
 
-                ceqdrn = Model.BSIM4type * (cdrain - BSIM4gds * vds - Gm * vgs - Gmbs * vbs);
-                ceqbd = Model.BSIM4type * (BSIM4csub + BSIM4Igidl - (BSIM4gbds + BSIM4ggidld) * vds - (BSIM4gbgs + BSIM4ggidlg) * vgs -
+                ceqdrn = model.BSIM4type * (cdrain - BSIM4gds * vds - Gm * vgs - Gmbs * vbs);
+                ceqbd = model.BSIM4type * (BSIM4csub + BSIM4Igidl - (BSIM4gbds + BSIM4ggidld) * vds - (BSIM4gbgs + BSIM4ggidlg) * vgs -
                      (BSIM4gbbs + BSIM4ggidlb) * vbs);
-                ceqbs = Model.BSIM4type * (BSIM4Igisl + BSIM4ggisls * vds - BSIM4ggislg * vgd - BSIM4ggislb * vbd);
+                ceqbs = model.BSIM4type * (BSIM4Igisl + BSIM4ggisls * vds - BSIM4ggislg * vgd - BSIM4ggislb * vbd);
 
                 gbbdp = -(BSIM4gbds);
                 gbbsp = BSIM4gbds + BSIM4gbgs + BSIM4gbbs;
@@ -6298,19 +6304,19 @@ namespace SpiceSharp.Components
                 gbspb = 0.0;
                 gbspsp = 0.0;
 
-                if (Model.BSIM4igcMod > 0)
+                if (model.BSIM4igcMod > 0)
                 {
                     gIstotg = BSIM4gIgsg + BSIM4gIgcsg;
                     gIstotd = BSIM4gIgcsd;
                     gIstots = BSIM4gIgss + BSIM4gIgcss;
                     gIstotb = BSIM4gIgcsb;
-                    Istoteq = Model.BSIM4type * (BSIM4Igs + BSIM4Igcs - gIstotg * vgs - BSIM4gIgcsd * vds - BSIM4gIgcsb * vbs);
+                    Istoteq = model.BSIM4type * (BSIM4Igs + BSIM4Igcs - gIstotg * vgs - BSIM4gIgcsd * vds - BSIM4gIgcsb * vbs);
 
                     gIdtotg = BSIM4gIgdg + BSIM4gIgcdg;
                     gIdtotd = BSIM4gIgdd + BSIM4gIgcdd;
                     gIdtots = BSIM4gIgcds;
                     gIdtotb = BSIM4gIgcdb;
-                    Idtoteq = Model.BSIM4type * (BSIM4Igd + BSIM4Igcd - BSIM4gIgdg * vgd - BSIM4gIgcdg * vgs - BSIM4gIgcdd * vds - BSIM4gIgcdb *
+                    Idtoteq = model.BSIM4type * (BSIM4Igd + BSIM4Igcd - BSIM4gIgdg * vgd - BSIM4gIgcdg * vgs - BSIM4gIgcdd * vds - BSIM4gIgcdb *
                          vbs);
                 }
                 else
@@ -6319,18 +6325,18 @@ namespace SpiceSharp.Components
                     gIdtotg = gIdtotd = gIdtots = gIdtotb = Idtoteq = 0.0;
                 }
 
-                if (Model.BSIM4igbMod > 0)
+                if (model.BSIM4igbMod > 0)
                 {
                     gIbtotg = BSIM4gIgbg;
                     gIbtotd = BSIM4gIgbd;
                     gIbtots = BSIM4gIgbs;
                     gIbtotb = BSIM4gIgbb;
-                    Ibtoteq = Model.BSIM4type * (BSIM4Igb - BSIM4gIgbg * vgs - BSIM4gIgbd * vds - BSIM4gIgbb * vbs);
+                    Ibtoteq = model.BSIM4type * (BSIM4Igb - BSIM4gIgbg * vgs - BSIM4gIgbd * vds - BSIM4gIgbb * vbs);
                 }
                 else
                     gIbtotg = gIbtotd = gIbtots = gIbtotb = Ibtoteq = 0.0;
 
-                if ((Model.BSIM4igcMod != 0) || (Model.BSIM4igbMod != 0))
+                if ((model.BSIM4igcMod != 0) || (model.BSIM4igbMod != 0))
                 {
                     gIgtotg = gIstotg + gIdtotg + gIbtotg;
                     gIgtotd = gIstotd + gIdtotd + gIbtotd;
@@ -6365,11 +6371,11 @@ namespace SpiceSharp.Components
                 FwdSum = 0.0;
                 RevSum = -(Gm + Gmbs);
 
-                ceqdrn = -Model.BSIM4type * (cdrain + BSIM4gds * vds + Gm * vgd + Gmbs * vbd);
+                ceqdrn = -model.BSIM4type * (cdrain + BSIM4gds * vds + Gm * vgd + Gmbs * vbd);
 
-                ceqbs = Model.BSIM4type * (BSIM4csub + BSIM4Igisl + (BSIM4gbds + BSIM4ggisls) * vds - (BSIM4gbgs + BSIM4ggislg) * vgd -
+                ceqbs = model.BSIM4type * (BSIM4csub + BSIM4Igisl + (BSIM4gbds + BSIM4ggisls) * vds - (BSIM4gbgs + BSIM4ggislg) * vgd -
                      (BSIM4gbbs + BSIM4ggislb) * vbd);
-                ceqbd = Model.BSIM4type * (BSIM4Igidl - BSIM4ggidld * vds - BSIM4ggidlg * vgs - BSIM4ggidlb * vbs);
+                ceqbd = model.BSIM4type * (BSIM4Igidl - BSIM4ggidld * vds - BSIM4ggidlg * vgs - BSIM4ggidlb * vbs);
 
                 gbbsp = -(BSIM4gbds);
                 gbbdp = BSIM4gbds + BSIM4gbgs + BSIM4gbbs;
@@ -6384,20 +6390,20 @@ namespace SpiceSharp.Components
                 gbspb = BSIM4gbbs;
                 gbspdp = -(gbspg + gbspsp + gbspb);
 
-                if (Model.BSIM4igcMod > 0)
+                if (model.BSIM4igcMod > 0)
                 {
                     gIstotg = BSIM4gIgsg + BSIM4gIgcdg;
                     gIstotd = BSIM4gIgcds;
                     gIstots = BSIM4gIgss + BSIM4gIgcdd;
                     gIstotb = BSIM4gIgcdb;
-                    Istoteq = Model.BSIM4type * (BSIM4Igs + BSIM4Igcd - BSIM4gIgsg * vgs - BSIM4gIgcdg * vgd + BSIM4gIgcdd * vds - BSIM4gIgcdb *
+                    Istoteq = model.BSIM4type * (BSIM4Igs + BSIM4Igcd - BSIM4gIgsg * vgs - BSIM4gIgcdg * vgd + BSIM4gIgcdd * vds - BSIM4gIgcdb *
                          vbd);
 
                     gIdtotg = BSIM4gIgdg + BSIM4gIgcsg;
                     gIdtotd = BSIM4gIgdd + BSIM4gIgcss;
                     gIdtots = BSIM4gIgcsd;
                     gIdtotb = BSIM4gIgcsb;
-                    Idtoteq = Model.BSIM4type * (BSIM4Igd + BSIM4Igcs - (BSIM4gIgdg + BSIM4gIgcsg) * vgd + BSIM4gIgcsd * vds - BSIM4gIgcsb * vbd);
+                    Idtoteq = model.BSIM4type * (BSIM4Igd + BSIM4Igcs - (BSIM4gIgdg + BSIM4gIgcsg) * vgd + BSIM4gIgcsd * vds - BSIM4gIgcsb * vbd);
                 }
                 else
                 {
@@ -6405,18 +6411,18 @@ namespace SpiceSharp.Components
                     gIdtotg = gIdtotd = gIdtots = gIdtotb = Idtoteq = 0.0;
                 }
 
-                if (Model.BSIM4igbMod > 0)
+                if (model.BSIM4igbMod > 0)
                 {
                     gIbtotg = BSIM4gIgbg;
                     gIbtotd = BSIM4gIgbs;
                     gIbtots = BSIM4gIgbd;
                     gIbtotb = BSIM4gIgbb;
-                    Ibtoteq = Model.BSIM4type * (BSIM4Igb - BSIM4gIgbg * vgd + BSIM4gIgbd * vds - BSIM4gIgbb * vbd);
+                    Ibtoteq = model.BSIM4type * (BSIM4Igb - BSIM4gIgbg * vgd + BSIM4gIgbd * vds - BSIM4gIgbb * vbd);
                 }
                 else
                     gIbtotg = gIbtotd = gIbtots = gIbtotb = Ibtoteq = 0.0;
 
-                if ((Model.BSIM4igcMod != 0) || (Model.BSIM4igbMod != 0))
+                if ((model.BSIM4igcMod != 0) || (model.BSIM4igbMod != 0))
                 {
                     gIgtotg = gIstotg + gIdtotg + gIbtotg;
                     gIgtotd = gIstotd + gIdtotd + gIbtotd;
@@ -6445,9 +6451,9 @@ namespace SpiceSharp.Components
                     ceqgcrg = gcrg = gcrgd = gcrgg = gcrgs = gcrgb = 0.0;
             }
 
-            if (Model.BSIM4rdsMod == 1)
+            if (model.BSIM4rdsMod == 1)
             {
-                ceqgstot = Model.BSIM4type * (BSIM4gstotd * vds + BSIM4gstotg * vgs + BSIM4gstotb * vbs);
+                ceqgstot = model.BSIM4type * (BSIM4gstotd * vds + BSIM4gstotg * vgs + BSIM4gstotb * vbs);
                 /* WDLiu: ceqgstot flowing away from sNodePrime */
                 gstot = BSIM4gstot;
                 gstotd = BSIM4gstotd;
@@ -6455,7 +6461,7 @@ namespace SpiceSharp.Components
                 gstots = BSIM4gstots - gstot;
                 gstotb = BSIM4gstotb;
 
-                ceqgdtot = -Model.BSIM4type * (BSIM4gdtotd * vds + BSIM4gdtotg * vgs + BSIM4gdtotb * vbs);
+                ceqgdtot = -model.BSIM4type * (BSIM4gdtotd * vds + BSIM4gdtotg * vgs + BSIM4gdtotb * vbs);
                 /* WDLiu: ceqgdtot defined as flowing into dNodePrime */
                 gdtot = BSIM4gdtot;
                 gdtotd = BSIM4gdtotd - gdtot;
@@ -6469,7 +6475,7 @@ namespace SpiceSharp.Components
                 gdtot = gdtotd = gdtotg = gdtots = gdtotb = ceqgdtot = 0.0;
             }
 
-            if (Model.BSIM4type > 0)
+            if (model.BSIM4type > 0)
             {
                 ceqjs = (BSIM4cbs - BSIM4gbs * vbs_jct);
                 ceqjd = (BSIM4cbd - BSIM4gbd * vbd_jct);
@@ -6525,7 +6531,7 @@ namespace SpiceSharp.Components
                      Istoteq);
             }
 
-            if (Model.BSIM4rdsMod > 0)
+            if (model.BSIM4rdsMod > 0)
             {
                 rstate.Rhs[BSIM4dNode] -= ceqgdtot;
                 rstate.Rhs[BSIM4sNode] += ceqgstot;
@@ -6546,7 +6552,7 @@ namespace SpiceSharp.Components
             else
                 gjbd = gjbs = 0.0;
 
-            if (Model.BSIM4rdsMod == 0)
+            if (model.BSIM4rdsMod == 0)
             {
                 gdpr = BSIM4drainConductance;
                 gspr = BSIM4sourceConductance;
@@ -6612,7 +6618,7 @@ namespace SpiceSharp.Components
                 rstate.Matrix[BSIM4gNodePrime, BSIM4bNodePrime] += gcgbb - ggtb + gIgtotb;
             }
 
-            if (Model.BSIM4rdsMod > 0)
+            if (model.BSIM4rdsMod > 0)
             {
                 rstate.Matrix[BSIM4dNode, BSIM4gNodePrime] += gdtotg;
                 rstate.Matrix[BSIM4dNode, BSIM4sNodePrime] += gdtots;
@@ -6726,6 +6732,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void AcLoad(Circuit ckt)
         {
+            var model = Model as BSIM4Model;
             var state = ckt.State;
             var cstate = state.Complex;
             double capbd, capbs, cgso, cgdo, cgbo, Gm, Gmbs, FwdSum, RevSum, gbbdp, gbbsp, gbdpg, gbdpdp, gbdpb, gbdpsp, gbspdp, gbspg, gbspb, gbspsp, gIstotg, gIstotd, 
@@ -6761,7 +6768,7 @@ namespace SpiceSharp.Components
                 gbspb = 0.0;
                 gbspsp = 0.0;
 
-                if (Model.BSIM4igcMod > 0)
+                if (model.BSIM4igcMod > 0)
                 {
                     gIstotg = BSIM4gIgsg + BSIM4gIgcsg;
                     gIstotd = BSIM4gIgcsd;
@@ -6779,7 +6786,7 @@ namespace SpiceSharp.Components
                     gIdtotg = gIdtotd = gIdtots = gIdtotb = 0.0;
                 }
 
-                if (Model.BSIM4igbMod > 0)
+                if (model.BSIM4igbMod > 0)
                 {
                     gIbtotg = BSIM4gIgbg;
                     gIbtotd = BSIM4gIgbd;
@@ -6789,7 +6796,7 @@ namespace SpiceSharp.Components
                 else
                     gIbtotg = gIbtotd = gIbtots = gIbtotb = 0.0;
 
-                if ((Model.BSIM4igcMod != 0) || (Model.BSIM4igbMod != 0))
+                if ((model.BSIM4igcMod != 0) || (model.BSIM4igbMod != 0))
                 {
                     gIgtotg = gIstotg + gIdtotg + gIbtotg;
                     gIgtotd = gIstotd + gIdtotd + gIbtotd;
@@ -6899,15 +6906,15 @@ namespace SpiceSharp.Components
                     xcqsb = BSIM4cqsb;
                     xcqbb = BSIM4cqbb;
 
-                    CoxWL = Model.BSIM4coxe * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV;
+                    CoxWL = model.BSIM4coxe * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV;
                     qcheq = -(BSIM4qgate + BSIM4qbulk);
                     if (Math.Abs(qcheq) <= 1.0e-5 * CoxWL)
                     {
-                        if (Model.BSIM4xpart < 0.5)
+                        if (model.BSIM4xpart < 0.5)
                         {
                             dxpart = 0.4;
                         }
-                        else if (Model.BSIM4xpart > 0.5)
+                        else if (model.BSIM4xpart > 0.5)
                         {
                             dxpart = 0.0;
                         }
@@ -6960,7 +6967,7 @@ namespace SpiceSharp.Components
                 gbspb = BSIM4gbbs;
                 gbspdp = -(gbspg + gbspsp + gbspb);
 
-                if (Model.BSIM4igcMod > 0)
+                if (model.BSIM4igcMod > 0)
                 {
                     gIstotg = BSIM4gIgsg + BSIM4gIgcdg;
                     gIstotd = BSIM4gIgcds;
@@ -6978,7 +6985,7 @@ namespace SpiceSharp.Components
                     gIdtotg = gIdtotd = gIdtots = gIdtotb = 0.0;
                 }
 
-                if (Model.BSIM4igbMod > 0)
+                if (model.BSIM4igbMod > 0)
                 {
                     gIbtotg = BSIM4gIgbg;
                     gIbtotd = BSIM4gIgbs;
@@ -6988,7 +6995,7 @@ namespace SpiceSharp.Components
                 else
                     gIbtotg = gIbtotd = gIbtots = gIbtotb = 0.0;
 
-                if ((Model.BSIM4igcMod != 0) || (Model.BSIM4igbMod != 0))
+                if ((model.BSIM4igcMod != 0) || (model.BSIM4igbMod != 0))
                 {
                     gIgtotg = gIstotg + gIdtotg + gIbtotg;
                     gIgtotd = gIstotd + gIdtotd + gIbtotd;
@@ -7097,15 +7104,15 @@ namespace SpiceSharp.Components
                     xcqsb = BSIM4cqdb;
                     xcqbb = BSIM4cqbb;
 
-                    CoxWL = Model.BSIM4coxe * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV;
+                    CoxWL = model.BSIM4coxe * pParam.BSIM4weffCV * BSIM4nf * pParam.BSIM4leffCV;
                     qcheq = -(BSIM4qgate + BSIM4qbulk);
                     if (Math.Abs(qcheq) <= 1.0e-5 * CoxWL)
                     {
-                        if (Model.BSIM4xpart < 0.5)
+                        if (model.BSIM4xpart < 0.5)
                         {
                             sxpart = 0.4;
                         }
-                        else if (Model.BSIM4xpart > 0.5)
+                        else if (model.BSIM4xpart > 0.5)
                         {
                             sxpart = 0.0;
                         }
@@ -7139,7 +7146,7 @@ namespace SpiceSharp.Components
                 }
             }
 
-            if (Model.BSIM4rdsMod.Value == 1)
+            if (model.BSIM4rdsMod.Value == 1)
             {
                 gstot = BSIM4gstot;
                 gstotd = BSIM4gstotd;
@@ -7166,7 +7173,7 @@ namespace SpiceSharp.Components
             * Loading PZ matrix
             */
 
-            if (Model.BSIM4rdsMod == 0)
+            if (model.BSIM4rdsMod == 0)
             {
                 gdpr = BSIM4drainConductance;
                 gspr = BSIM4sourceConductance;
@@ -7253,7 +7260,7 @@ namespace SpiceSharp.Components
                 cstate.Matrix[BSIM4gNodePrime, BSIM4bNodePrime] -= xgtb - gIgtotb;
             }
 
-            if (Model.BSIM4rdsMod > 0)
+            if (model.BSIM4rdsMod > 0)
             {
                 cstate.Matrix[BSIM4dNode, BSIM4gNodePrime] += gdtotg;
                 cstate.Matrix[BSIM4dNode, BSIM4sNodePrime] += gdtots;
@@ -7371,7 +7378,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// BSIM4NumFingerDiff
         /// </summary>
-        private bool BSIM4NumFingerDiff(double nf, int minSD, out double nuIntD, out double nuEndD, out double nuIntS, out double nuEndS)
+        private bool BSIM4NumFingerDiff(double nf, double minSD, out double nuIntD, out double nuEndD, out double nuIntS, out double nuEndS)
         {
             int NF;
             NF = (int)nf;
@@ -7403,7 +7410,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// BSIM4PAeffGeo
         /// </summary>
-        private bool BSIM4PAeffGeo(double nf, int geo, int minSD, double Weffcj, double DMCG, double DMCI, double DMDG, out double Ps, out double Pd, out double As, out double Ad)
+        private bool BSIM4PAeffGeo(double nf, double geo, double minSD, double Weffcj, double DMCG, double DMCI, double DMDG, out double Ps, out double Pd, out double As, out double Ad)
         {
             double T0, T1, T2;
             double ADiso, ADsha, ADmer, ASiso, ASsha, ASmer;
@@ -7508,7 +7515,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// BSIM4RdseffGeo
         /// </summary>
-        private bool BSIM4RdseffGeo(double nf, int geo, int rgeo, int minSD, double Weffcj, double Rsh, double DMCG, double DMCI, double DMDG, int Type, out double Rtot)
+        private bool BSIM4RdseffGeo(double nf, double geo, double rgeo, double minSD, double Weffcj, double Rsh, double DMCG, double DMCI, double DMDG, double Type, out double Rtot)
         {
             double Rint = 0.0, Rend = 0.0;
             double nuIntD = 0.0, nuEndD = 0.0, nuIntS = 0.0, nuEndS = 0.0;
@@ -7639,7 +7646,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// BSIM4RdsEndIso
         /// </summary>
-        private bool BSIM4RdsEndIso(double Weffcj, double Rsh, double DMCG, double DMCI, double DMDG, double nuEnd, int rgeo, int Type, out double Rend)
+        private bool BSIM4RdsEndIso(double Weffcj, double Rsh, double DMCG, double DMCI, double DMDG, double nuEnd, double rgeo, double Type, out double Rend)
         {
             Rend = double.NaN;
             if (Type == 1)
@@ -7704,7 +7711,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// BSIM4RdsEndSha
         /// </summary>
-        private bool BSIM4RdsEndSha(double Weffcj, double Rsh, double DMCG, double DMCI, double DMDG, double nuEnd, int rgeo, int Type, out double Rend)
+        private bool BSIM4RdsEndSha(double Weffcj, double Rsh, double DMCG, double DMCI, double DMDG, double nuEnd, double rgeo, double Type, out double Rend)
         {
             Rend = double.NaN;
             if (Type == 1)
@@ -7820,7 +7827,7 @@ namespace SpiceSharp.Components
         /// </summary>
         private int BSIM4checkModel(Circuit ckt)
         {
-
+            var model = Model as BSIM4Model;
             int Fatal_Flag = 0;
             using (StreamWriter sw = new StreamWriter("bsim4.out"))
             {
@@ -7830,12 +7837,12 @@ namespace SpiceSharp.Components
 
                 sw.WriteLine("++++++++++ BSIM4 PARAMETER CHECKING BELOW ++++++++++");
 
-                if (Math.Abs(Model.BSIM4version - 4.80) > 0.0001)
+                if (Math.Abs(model.BSIM4version - 4.80) > 0.0001)
                 { sw.WriteLine("Warning: This model is BSIM4.8.0; you specified a wrong version number.");
                     CircuitWarning.Warning(this, "Warning: This model is BSIM4.8.0; you specified a wrong version number.");
                 }
 
-                sw.WriteLine("Model = %s", Model.Name);
+                sw.WriteLine("Model = %s", model.Name);
 
 
                 if ((BSIM4rgateMod == 2) || (BSIM4rgateMod == 3))
@@ -7845,10 +7852,10 @@ namespace SpiceSharp.Components
                     }
                 }
 
-                if (Model.BSIM4toxe <= 0.0)
-                { sw.WriteLine($"Fatal: Toxe = {Model.BSIM4toxe} is not positive.");
+                if (model.BSIM4toxe <= 0.0)
+                { sw.WriteLine($"Fatal: Toxe = {model.BSIM4toxe} is not positive.");
 
-                    CircuitWarning.Warning(this, $"Fatal: Toxe = {Model.BSIM4toxe} is not positive.");
+                    CircuitWarning.Warning(this, $"Fatal: Toxe = {model.BSIM4toxe} is not positive.");
                     Fatal_Flag = 1;
                 }
                 if (BSIM4toxp <= 0.0)
@@ -7856,41 +7863,41 @@ namespace SpiceSharp.Components
                     CircuitWarning.Warning(this, $"Fatal: Toxp = {BSIM4toxp} is not positive.");
                     Fatal_Flag = 1;
                 }
-                if (Model.BSIM4eot <= 0.0)
-                { sw.WriteLine($"Fatal: EOT = {Model.BSIM4eot} is not positive.");
-                    CircuitWarning.Warning(this, $"Fatal: EOT = {Model.BSIM4eot} is not positive.");
+                if (model.BSIM4eot <= 0.0)
+                { sw.WriteLine($"Fatal: EOT = {model.BSIM4eot} is not positive.");
+                    CircuitWarning.Warning(this, $"Fatal: EOT = {model.BSIM4eot} is not positive.");
                     Fatal_Flag = 1;
                 }
-                if (Model.BSIM4epsrgate < 0.0)
-                { sw.WriteLine($"Fatal: Epsrgate = {Model.BSIM4epsrgate} is not positive.");
-                    CircuitWarning.Warning(this, $"Fatal: Epsrgate = {Model.BSIM4epsrgate} is not positive.");
+                if (model.BSIM4epsrgate < 0.0)
+                { sw.WriteLine($"Fatal: Epsrgate = {model.BSIM4epsrgate} is not positive.");
+                    CircuitWarning.Warning(this, $"Fatal: Epsrgate = {model.BSIM4epsrgate} is not positive.");
                     Fatal_Flag = 1;
                 }
-                if (Model.BSIM4epsrsub < 0.0)
-                { sw.WriteLine($"Fatal: Epsrsub = {Model.BSIM4epsrsub} is not positive.");
-                    CircuitWarning.Warning(this, $"Fatal: Epsrsub = {Model.BSIM4epsrsub} is not positive.");
+                if (model.BSIM4epsrsub < 0.0)
+                { sw.WriteLine($"Fatal: Epsrsub = {model.BSIM4epsrsub} is not positive.");
+                    CircuitWarning.Warning(this, $"Fatal: Epsrsub = {model.BSIM4epsrsub} is not positive.");
                     Fatal_Flag = 1;
                 }
-                if (Model.BSIM4easub < 0.0)
-                { sw.WriteLine($"Fatal: Easub = {Model.BSIM4easub} is not positive.");
-                    CircuitWarning.Warning(this, $"Fatal: Easub = {Model.BSIM4easub} is not positive.");
+                if (model.BSIM4easub < 0.0)
+                { sw.WriteLine($"Fatal: Easub = {model.BSIM4easub} is not positive.");
+                    CircuitWarning.Warning(this, $"Fatal: Easub = {model.BSIM4easub} is not positive.");
                     Fatal_Flag = 1;
                 }
-                if (Model.BSIM4ni0sub <= 0.0)
-                { sw.WriteLine($"Fatal: Ni0sub = {Model.BSIM4ni0sub} is not positive.");
-                    CircuitWarning.Warning(this, $"Fatal: Easub = {Model.BSIM4ni0sub} is not positive.");
-                    Fatal_Flag = 1;
-                }
-
-                if (Model.BSIM4toxm <= 0.0)
-                { sw.WriteLine($"Fatal: Toxm = {Model.BSIM4toxm} is not positive.");
-                    CircuitWarning.Warning(this, $"Fatal: Toxm = {Model.BSIM4toxm} is not positive.");
+                if (model.BSIM4ni0sub <= 0.0)
+                { sw.WriteLine($"Fatal: Ni0sub = {model.BSIM4ni0sub} is not positive.");
+                    CircuitWarning.Warning(this, $"Fatal: Easub = {model.BSIM4ni0sub} is not positive.");
                     Fatal_Flag = 1;
                 }
 
-                if (Model.BSIM4toxref <= 0.0)
-                { sw.WriteLine($"Fatal: Toxref = {Model.BSIM4toxref} is not positive.");
-                    CircuitWarning.Warning(this, $"Fatal: Toxref = {Model.BSIM4toxref} is not positive.");
+                if (model.BSIM4toxm <= 0.0)
+                { sw.WriteLine($"Fatal: Toxm = {model.BSIM4toxm} is not positive.");
+                    CircuitWarning.Warning(this, $"Fatal: Toxm = {model.BSIM4toxm} is not positive.");
+                    Fatal_Flag = 1;
+                }
+
+                if (model.BSIM4toxref <= 0.0)
+                { sw.WriteLine($"Fatal: Toxref = {model.BSIM4toxref} is not positive.");
+                    CircuitWarning.Warning(this, $"Fatal: Toxref = {model.BSIM4toxref} is not positive.");
                     Fatal_Flag = 1;
                 }
 
@@ -7899,9 +7906,9 @@ namespace SpiceSharp.Components
                     CircuitWarning.Warning(this, $"Fatal: Lpe0 = {pParam.BSIM4lpe0} is less than -Leff.");
                     Fatal_Flag = 1;
                 }
-                if (Model.BSIM4lintnoi > pParam.BSIM4leff / 2)
-                { sw.WriteLine($"Fatal: Lintnoi = {Model.BSIM4lintnoi} is too large - Leff for noise is negative.");
-                    CircuitWarning.Warning(this, $"Fatal: Lintnoi = {Model.BSIM4lintnoi} is too large - Leff for noise is negative.");
+                if (model.BSIM4lintnoi > pParam.BSIM4leff / 2)
+                { sw.WriteLine($"Fatal: Lintnoi = {model.BSIM4lintnoi} is too large - Leff for noise is negative.");
+                    CircuitWarning.Warning(this, $"Fatal: Lintnoi = {model.BSIM4lintnoi} is too large - Leff for noise is negative.");
                     Fatal_Flag = 1;
                 }
                 if (pParam.BSIM4lpeb < -pParam.BSIM4leff)
@@ -8023,21 +8030,21 @@ namespace SpiceSharp.Components
 
                 if ((BSIM4sa > 0.0) && (BSIM4sb > 0.0) &&
                    ((BSIM4nf == 1.0) || ((BSIM4nf > 1.0) && (BSIM4sd > 0.0))))
-                { if (Model.BSIM4saref <= 0.0)
-                    { sw.WriteLine($"Fatal: SAref = {Model.BSIM4saref} is not positive.");
+                { if (model.BSIM4saref <= 0.0)
+                    { sw.WriteLine($"Fatal: SAref = {model.BSIM4saref} is not positive.");
 
-                        CircuitWarning.Warning(this, $"Fatal: SAref = {Model.BSIM4saref} is not positive.");
+                        CircuitWarning.Warning(this, $"Fatal: SAref = {model.BSIM4saref} is not positive.");
                         Fatal_Flag = 1;
                     }
-                    if (Model.BSIM4sbref <= 0.0)
-                    { sw.WriteLine($"Fatal: SBref = {Model.BSIM4sbref} is not positive.");
+                    if (model.BSIM4sbref <= 0.0)
+                    { sw.WriteLine($"Fatal: SBref = {model.BSIM4sbref} is not positive.");
 
-                        CircuitWarning.Warning(this, $"Fatal: SBref = {Model.BSIM4sbref} is not positive.");
+                        CircuitWarning.Warning(this, $"Fatal: SBref = {model.BSIM4sbref} is not positive.");
                         Fatal_Flag = 1;
                     }
                 }
 
-                if ((BSIM4l + Model.BSIM4xl) <= Model.BSIM4xgl)
+                if ((BSIM4l + model.BSIM4xl) <= model.BSIM4xgl)
                 { sw.WriteLine("Fatal: The parameter xgl must be smaller than Ldrawn+XL.");
                     CircuitWarning.Warning(this, "Fatal: The parameter xgl must be smaller than Ldrawn+XL.");
                     Fatal_Flag = 1;
@@ -8054,9 +8061,9 @@ namespace SpiceSharp.Components
                     CircuitWarning.Warning(this, "Warning: Ngcon must be equal to one or two; reset to 1.0.");
                 }
 
-                if (Model.BSIM4gbmin < 1.0e-20)
-                { sw.WriteLine($"Warning: Gbmin = {Model.BSIM4gbmin} is too small.");
-                    CircuitWarning.Warning(this, $"Warning: Gbmin = {Model.BSIM4gbmin} is too small.");
+                if (model.BSIM4gbmin < 1.0e-20)
+                { sw.WriteLine($"Warning: Gbmin = {model.BSIM4gbmin} is too small.");
+                    CircuitWarning.Warning(this, $"Warning: Gbmin = {model.BSIM4gbmin} is too small.");
                 }
 
                 /* Check saturation parameters */
@@ -8070,14 +8077,14 @@ namespace SpiceSharp.Components
                     CircuitWarning.Warning(this, $"Fatal: pdits = {pParam.BSIM4pdits} is negative.");
                     Fatal_Flag = 1;
                 }
-                if (Model.BSIM4pditsl < 0.0)
-                { sw.WriteLine($"Fatal: pditsl = {Model.BSIM4pditsl} is negative.");
-                    CircuitWarning.Warning(this, $"Fatal: pditsl = {Model.BSIM4pditsl} is negative.");
+                if (model.BSIM4pditsl < 0.0)
+                { sw.WriteLine($"Fatal: pditsl = {model.BSIM4pditsl} is negative.");
+                    CircuitWarning.Warning(this, $"Fatal: pditsl = {model.BSIM4pditsl} is negative.");
                     Fatal_Flag = 1;
                 }
 
                 /* Check gate current parameters */
-                if (Model.BSIM4igbMod > 0) {
+                if (model.BSIM4igbMod > 0) {
                     if (pParam.BSIM4nigbinv <= 0.0)
                     { sw.WriteLine($"Fatal: nigbinv = {pParam.BSIM4nigbinv} is non-positive.");
                         CircuitWarning.Warning(this, $"Fatal: nigbinv = {pParam.BSIM4nigbinv} is non-positive.");
@@ -8089,7 +8096,7 @@ namespace SpiceSharp.Components
                         Fatal_Flag = 1;
                     }
                 }
-                if (Model.BSIM4igcMod > 0) {
+                if (model.BSIM4igcMod > 0) {
                     if (pParam.BSIM4nigc <= 0.0)
                     { sw.WriteLine($"Fatal: nigc = {pParam.BSIM4nigc} is non-positive.");
                         CircuitWarning.Warning(this, $"Fatal: nigc = {pParam.BSIM4nigc} is non-positive.");
@@ -8127,45 +8134,45 @@ namespace SpiceSharp.Components
                     pParam.BSIM4ckappad = 0.02;
                 }
 
-                if (Model.BSIM4vtss < 0.0)
-                { sw.WriteLine($"Fatal: Vtss = {Model.BSIM4vtss} is negative.");
+                if (model.BSIM4vtss < 0.0)
+                { sw.WriteLine($"Fatal: Vtss = {model.BSIM4vtss} is negative.");
 
-                    CircuitWarning.Warning(this, $"Fatal: Vtss = {Model.BSIM4vtss} is negative.");
+                    CircuitWarning.Warning(this, $"Fatal: Vtss = {model.BSIM4vtss} is negative.");
                     Fatal_Flag = 1;
                 }
-                if (Model.BSIM4vtsd < 0.0)
-                { sw.WriteLine($"Fatal: Vtsd = {Model.BSIM4vtsd} is negative.");
+                if (model.BSIM4vtsd < 0.0)
+                { sw.WriteLine($"Fatal: Vtsd = {model.BSIM4vtsd} is negative.");
 
-                    CircuitWarning.Warning(this, $"Fatal: Vtsd = {Model.BSIM4vtsd} is negative.");
+                    CircuitWarning.Warning(this, $"Fatal: Vtsd = {model.BSIM4vtsd} is negative.");
                     Fatal_Flag = 1;
                 }
-                if (Model.BSIM4vtssws < 0.0)
-                { sw.WriteLine($"Fatal: Vtssws = {Model.BSIM4vtssws} is negative.");
+                if (model.BSIM4vtssws < 0.0)
+                { sw.WriteLine($"Fatal: Vtssws = {model.BSIM4vtssws} is negative.");
 
-                    CircuitWarning.Warning(this, $"Fatal: Vtssws = {Model.BSIM4vtssws} is negative.");
+                    CircuitWarning.Warning(this, $"Fatal: Vtssws = {model.BSIM4vtssws} is negative.");
                     Fatal_Flag = 1;
                 }
-                if (Model.BSIM4vtsswd < 0.0)
-                { sw.WriteLine($"Fatal: Vtsswd = {Model.BSIM4vtsswd} is negative.");
+                if (model.BSIM4vtsswd < 0.0)
+                { sw.WriteLine($"Fatal: Vtsswd = {model.BSIM4vtsswd} is negative.");
 
-                    CircuitWarning.Warning(this, $"Fatal: Vtsswd = {Model.BSIM4vtsswd} is negative.");
+                    CircuitWarning.Warning(this, $"Fatal: Vtsswd = {model.BSIM4vtsswd} is negative.");
                     Fatal_Flag = 1;
                 }
-                if (Model.BSIM4vtsswgs < 0.0)
-                { sw.WriteLine($"Fatal: Vtsswgs = {Model.BSIM4vtsswgs} is negative.");
+                if (model.BSIM4vtsswgs < 0.0)
+                { sw.WriteLine($"Fatal: Vtsswgs = {model.BSIM4vtsswgs} is negative.");
 
-                    CircuitWarning.Warning(this, $"Fatal: Vtsswgs = {Model.BSIM4vtsswgs} is negative.");
+                    CircuitWarning.Warning(this, $"Fatal: Vtsswgs = {model.BSIM4vtsswgs} is negative.");
                     Fatal_Flag = 1;
                 }
-                if (Model.BSIM4vtsswgd < 0.0)
-                { sw.WriteLine($"Fatal: Vtsswgd = {Model.BSIM4vtsswgd} is negative.");
+                if (model.BSIM4vtsswgd < 0.0)
+                { sw.WriteLine($"Fatal: Vtsswgd = {model.BSIM4vtsswgd} is negative.");
 
-                    CircuitWarning.Warning(this, $"Fatal: Vtsswgd = {Model.BSIM4vtsswgd} is negative.");
+                    CircuitWarning.Warning(this, $"Fatal: Vtsswgd = {model.BSIM4vtsswgd} is negative.");
                     Fatal_Flag = 1;
                 }
 
 
-                if (Model.BSIM4paramChk.Value == 1)
+                if (model.BSIM4paramChk.Value == 1)
                 {
                     /* Check L and W parameters */
                     if (pParam.BSIM4leff <= 1.0e-9)
@@ -8193,18 +8200,18 @@ namespace SpiceSharp.Components
                     }
 
                     /* Check threshold voltage parameters */
-                    if (Model.BSIM4toxe < 1.0e-10)
-                    { sw.WriteLine($"Warning: Toxe = {Model.BSIM4toxe} is less than 1A. Recommended Toxe >= 5A");
+                    if (model.BSIM4toxe < 1.0e-10)
+                    { sw.WriteLine($"Warning: Toxe = {model.BSIM4toxe} is less than 1A. Recommended Toxe >= 5A");
 
-                        CircuitWarning.Warning(this, $"Warning: Toxe = {Model.BSIM4toxe} is less than 1A. Recommended Toxe >= 5A");
+                        CircuitWarning.Warning(this, $"Warning: Toxe = {model.BSIM4toxe} is less than 1A. Recommended Toxe >= 5A");
                     }
                     if (BSIM4toxp < 1.0e-10)
                     { sw.WriteLine($"Warning: Toxp = {BSIM4toxp} is less than 1A. Recommended Toxp >= 5A");
                         CircuitWarning.Warning(this, $"Warning: Toxp = {BSIM4toxp} is less than 1A. Recommended Toxp >= 5A");
                     }
-                    if (Model.BSIM4toxm < 1.0e-10)
-                    { sw.WriteLine($"Warning: Toxm = {Model.BSIM4toxm} is less than 1A. Recommended Toxm >= 5A");
-                        CircuitWarning.Warning(this, $"Warning: Toxm = {Model.BSIM4toxm} is less than 1A. Recommended Toxm >= 5A");
+                    if (model.BSIM4toxm < 1.0e-10)
+                    { sw.WriteLine($"Warning: Toxm = {model.BSIM4toxm} is less than 1A. Recommended Toxm >= 5A");
+                        CircuitWarning.Warning(this, $"Warning: Toxm = {model.BSIM4toxm} is less than 1A. Recommended Toxm >= 5A");
                     }
 
                     if (pParam.BSIM4ndep <= 1.0e12)
@@ -8332,7 +8339,7 @@ namespace SpiceSharp.Components
                         CircuitWarning.Warning(this, $"Warning: Vsat at current temperature = {pParam.BSIM4vsattemp} may be too small.");
                     }
 
-                    if ((Model.BSIM4lambda.Given) && (pParam.BSIM4lambda > 0.0))
+                    if ((model.BSIM4lambda.Given) && (pParam.BSIM4lambda > 0.0))
                     {
                         if (pParam.BSIM4lambda > 1.0e-9)
                         { sw.WriteLine($"Warning: Lambda = {pParam.BSIM4lambda} may be too large.");
@@ -8341,7 +8348,7 @@ namespace SpiceSharp.Components
                         }
                     }
 
-                    if ((Model.BSIM4vtl.Given) && (pParam.BSIM4vtl > 0.0))
+                    if ((model.BSIM4vtl.Given) && (pParam.BSIM4vtl > 0.0))
                     {
                         if (pParam.BSIM4vtl < 6.0e4)
                         { sw.WriteLine($"Warning: Thermal velocity vtl = {pParam.BSIM4vtl} may be too small.");
@@ -8356,10 +8363,10 @@ namespace SpiceSharp.Components
                             pParam.BSIM4xn = 3.0;
                         }
 
-                        if (Model.BSIM4lc < 0.0)
-                        { sw.WriteLine($"Warning: back scattering coeff lc = {Model.BSIM4lc} is too small.");
+                        if (model.BSIM4lc < 0.0)
+                        { sw.WriteLine($"Warning: back scattering coeff lc = {model.BSIM4lc} is too small.");
 
-                            CircuitWarning.Warning(this, $"Warning: back scattering coeff lc = {Model.BSIM4lc} is too small. Reset to 0.0");
+                            CircuitWarning.Warning(this, $"Warning: back scattering coeff lc = {model.BSIM4lc} is too small. Reset to 0.0");
                             pParam.BSIM4lc = 0.0;
                         }
                     }
@@ -8378,31 +8385,31 @@ namespace SpiceSharp.Components
                     /* Check stress effect parameters */
                     if ((BSIM4sa > 0.0) && (BSIM4sb > 0.0) &&
                        ((BSIM4nf == 1.0) || ((BSIM4nf > 1.0) && (BSIM4sd > 0.0))))
-                    { if (Model.BSIM4lodk2 <= 0.0)
-                        { sw.WriteLine($"Warning: LODK2 = {Model.BSIM4lodk2} is not positive.");
-                            CircuitWarning.Warning(this, $"Warning: LODK2 = {Model.BSIM4lodk2} is not positive.");
+                    { if (model.BSIM4lodk2 <= 0.0)
+                        { sw.WriteLine($"Warning: LODK2 = {model.BSIM4lodk2} is not positive.");
+                            CircuitWarning.Warning(this, $"Warning: LODK2 = {model.BSIM4lodk2} is not positive.");
                         }
-                        if (Model.BSIM4lodeta0 <= 0.0)
-                        { sw.WriteLine($"Warning: LODETA0 = {Model.BSIM4lodeta0} is not positive.");
+                        if (model.BSIM4lodeta0 <= 0.0)
+                        { sw.WriteLine($"Warning: LODETA0 = {model.BSIM4lodeta0} is not positive.");
 
-                            CircuitWarning.Warning(this, $"Warning: LODETA0 = {Model.BSIM4lodeta0} is not positive.");
+                            CircuitWarning.Warning(this, $"Warning: LODETA0 = {model.BSIM4lodeta0} is not positive.");
                         }
                     }
 
                     /* Check gate resistance parameters */
                     if (BSIM4rgateMod == 1)
-                    { if (Model.BSIM4rshg <= 0.0)
+                    { if (model.BSIM4rshg <= 0.0)
 
                             CircuitWarning.Warning(this, "Warning: rshg should be positive for rgateMod = 1.");
                     }
                     else if (BSIM4rgateMod == 2)
-                    { if (Model.BSIM4rshg <= 0.0)
+                    { if (model.BSIM4rshg <= 0.0)
                             CircuitWarning.Warning(this, "Warning: rshg <= 0.0 for rgateMod = 2.");
                         else if (pParam.BSIM4xrcrg1 <= 0.0)
                             CircuitWarning.Warning(this, "Warning: xrcrg1 <= 0.0 for rgateMod = 2.");
                     }
                     if (BSIM4rgateMod == 3)
-                    { if (Model.BSIM4rshg <= 0.0)
+                    { if (model.BSIM4rshg <= 0.0)
                             CircuitWarning.Warning(this, "Warning: rshg should be positive for rgateMod = 3.");
                         else if (pParam.BSIM4xrcrg1 <= 0.0)
                             CircuitWarning.Warning(this, "Warning: xrcrg1 should be positive for rgateMod = 3.");
@@ -8410,52 +8417,52 @@ namespace SpiceSharp.Components
 
                     /* Check body resistance parameters */
 
-                    if (Model.BSIM4rbps0 <= 0.0)
-                    { sw.WriteLine($"Fatal: RBPS0 = {Model.BSIM4rbps0 } is not positive.");
+                    if (model.BSIM4rbps0 <= 0.0)
+                    { sw.WriteLine($"Fatal: RBPS0 = {model.BSIM4rbps0 } is not positive.");
 
-                        CircuitWarning.Warning(this, $"Fatal: RBPS0 = {Model.BSIM4rbps0} is not positive.");
+                        CircuitWarning.Warning(this, $"Fatal: RBPS0 = {model.BSIM4rbps0} is not positive.");
                         Fatal_Flag = 1;
                     }
-                    if (Model.BSIM4rbpd0 <= 0.0)
-                    { sw.WriteLine($"Fatal: RBPD0 = {Model.BSIM4rbpd0 } is not positive.");
+                    if (model.BSIM4rbpd0 <= 0.0)
+                    { sw.WriteLine($"Fatal: RBPD0 = {model.BSIM4rbpd0 } is not positive.");
 
-                        CircuitWarning.Warning(this, $"Fatal: RBPD0 = {Model.BSIM4rbpd0} is not positive.");
+                        CircuitWarning.Warning(this, $"Fatal: RBPD0 = {model.BSIM4rbpd0} is not positive.");
                         Fatal_Flag = 1;
                     }
-                    if (Model.BSIM4rbpbx0 <= 0.0)
-                    { sw.WriteLine($"Fatal: RBPBX0 = {Model.BSIM4rbpbx0} is not positive.");
+                    if (model.BSIM4rbpbx0 <= 0.0)
+                    { sw.WriteLine($"Fatal: RBPBX0 = {model.BSIM4rbpbx0} is not positive.");
 
-                        CircuitWarning.Warning(this, $"Fatal: RBPBX0 = {Model.BSIM4rbpbx0} is not positive.");
+                        CircuitWarning.Warning(this, $"Fatal: RBPBX0 = {model.BSIM4rbpbx0} is not positive.");
                         Fatal_Flag = 1;
                     }
-                    if (Model.BSIM4rbpby0 <= 0.0)
-                    { sw.WriteLine($"Fatal: RBPBY0 = {Model.BSIM4rbpby0} is not positive.");
+                    if (model.BSIM4rbpby0 <= 0.0)
+                    { sw.WriteLine($"Fatal: RBPBY0 = {model.BSIM4rbpby0} is not positive.");
 
-                        CircuitWarning.Warning(this, $"Fatal: RBPBY0 = {Model.BSIM4rbpby0} is not positive.");
+                        CircuitWarning.Warning(this, $"Fatal: RBPBY0 = {model.BSIM4rbpby0} is not positive.");
                         Fatal_Flag = 1;
                     }
-                    if (Model.BSIM4rbdbx0 <= 0.0)
-                    { sw.WriteLine($"Fatal: RBDBX0 = {Model.BSIM4rbdbx0} is not positive.");
+                    if (model.BSIM4rbdbx0 <= 0.0)
+                    { sw.WriteLine($"Fatal: RBDBX0 = {model.BSIM4rbdbx0} is not positive.");
 
-                        CircuitWarning.Warning(this, $"Fatal: RBDBX0 = {Model.BSIM4rbdbx0} is not positive.");
+                        CircuitWarning.Warning(this, $"Fatal: RBDBX0 = {model.BSIM4rbdbx0} is not positive.");
                         Fatal_Flag = 1;
                     }
-                    if (Model.BSIM4rbdby0 <= 0.0)
-                    { sw.WriteLine($"Fatal: RBDBY0 = {Model.BSIM4rbdby0} is not positive.");
+                    if (model.BSIM4rbdby0 <= 0.0)
+                    { sw.WriteLine($"Fatal: RBDBY0 = {model.BSIM4rbdby0} is not positive.");
 
-                        CircuitWarning.Warning(this, $"Fatal: RBDBY0 = {Model.BSIM4rbdby0} is not positive.");
+                        CircuitWarning.Warning(this, $"Fatal: RBDBY0 = {model.BSIM4rbdby0} is not positive.");
                         Fatal_Flag = 1;
                     }
-                    if (Model.BSIM4rbsbx0 <= 0.0)
-                    { sw.WriteLine($"Fatal: RBSBX0 = {Model.BSIM4rbsbx0} is not positive.");
+                    if (model.BSIM4rbsbx0 <= 0.0)
+                    { sw.WriteLine($"Fatal: RBSBX0 = {model.BSIM4rbsbx0} is not positive.");
 
-                        CircuitWarning.Warning(this, $"Fatal: RBSBX0 = {Model.BSIM4rbsbx0} is not positive.");
+                        CircuitWarning.Warning(this, $"Fatal: RBSBX0 = {model.BSIM4rbsbx0} is not positive.");
                         Fatal_Flag = 1;
                     }
-                    if (Model.BSIM4rbsby0 <= 0.0)
-                    { sw.WriteLine($"Fatal: RBSBY0 = {Model.BSIM4rbsby0} is not positive.");
+                    if (model.BSIM4rbsby0 <= 0.0)
+                    { sw.WriteLine($"Fatal: RBSBY0 = {model.BSIM4rbsby0} is not positive.");
 
-                        CircuitWarning.Warning(this, $"Fatal: RBSBY0 = {Model.BSIM4rbsby0} is not positive.");
+                        CircuitWarning.Warning(this, $"Fatal: RBSBY0 = {model.BSIM4rbsby0} is not positive.");
                         Fatal_Flag = 1;
                     }
 
@@ -8477,7 +8484,7 @@ namespace SpiceSharp.Components
                     { sw.WriteLine($"Warning: Moin = {pParam.BSIM4moin} is too large.");
                         CircuitWarning.Warning(this, $"Warning: Moin = {pParam.BSIM4moin} is too large.");
                     }
-                    if (Model.BSIM4capMod.Value == 2) {
+                    if (model.BSIM4capMod.Value == 2) {
                         if (pParam.BSIM4acde < 0.1)
                         { sw.WriteLine($"Warning:  Acde = {pParam.BSIM4acde} is too small.");
 
@@ -8491,180 +8498,180 @@ namespace SpiceSharp.Components
                     }
 
                     /* Check overlap capacitance parameters */
-                    if (Model.BSIM4cgdo < 0.0)
-                    { sw.WriteLine($"Warning: cgdo = {Model.BSIM4cgdo} is negative. Set to zero.");
+                    if (model.BSIM4cgdo < 0.0)
+                    { sw.WriteLine($"Warning: cgdo = {model.BSIM4cgdo} is negative. Set to zero.");
 
-                        CircuitWarning.Warning(this, $"Warning: cgdo = {Model.BSIM4cgdo} is negative. Set to zero.");
-                        Model.BSIM4cgdo.Value = 0.0;
+                        CircuitWarning.Warning(this, $"Warning: cgdo = {model.BSIM4cgdo} is negative. Set to zero.");
+                        model.BSIM4cgdo.Value = 0.0;
                     }
-                    if (Model.BSIM4cgso < 0.0)
-                    { sw.WriteLine($"Warning: cgso = {Model.BSIM4cgso} is negative. Set to zero.");
+                    if (model.BSIM4cgso < 0.0)
+                    { sw.WriteLine($"Warning: cgso = {model.BSIM4cgso} is negative. Set to zero.");
 
-                        CircuitWarning.Warning(this, $"Warning: cgso = {Model.BSIM4cgso} is negative. Set to zero.");
-                        Model.BSIM4cgso.Value = 0.0;
+                        CircuitWarning.Warning(this, $"Warning: cgso = {model.BSIM4cgso} is negative. Set to zero.");
+                        model.BSIM4cgso.Value = 0.0;
                     }
-                    if (Model.BSIM4cgbo < 0.0)
-                    { sw.WriteLine($"Warning: cgbo = {Model.BSIM4cgbo} is negative. Set to zero.");
+                    if (model.BSIM4cgbo < 0.0)
+                    { sw.WriteLine($"Warning: cgbo = {model.BSIM4cgbo} is negative. Set to zero.");
 
-                        CircuitWarning.Warning(this, $"Warning: cgbo = {Model.BSIM4cgbo} is negative. Set to zero.");
-                        Model.BSIM4cgbo.Value = 0.0;
-                    }
-
-                    /* v4.7 */
-                    if (Model.BSIM4tnoiMod.Value == 1 || Model.BSIM4tnoiMod.Value == 2) {
-                        if (Model.BSIM4tnoia < 0.0) {
-
-                            sw.WriteLine($"Warning: tnoia = {Model.BSIM4tnoia} is negative. Set to zero.");
-
-                            CircuitWarning.Warning(this, $"Warning: tnoia = {Model.BSIM4tnoia} is negative. Set to zero.");
-                            Model.BSIM4tnoia.Value = 0.0;
-                        }
-                        if (Model.BSIM4tnoib < 0.0) {
-
-                            sw.WriteLine($"Warning: tnoib = {Model.BSIM4tnoib} is negative. Set to zero.");
-
-                            CircuitWarning.Warning(this, $"Warning: tnoib = {Model.BSIM4tnoib} is negative. Set to zero.");
-                            Model.BSIM4tnoib.Value = 0.0;
-                        }
-                        if (Model.BSIM4rnoia < 0.0) {
-
-                            sw.WriteLine($"Warning: rnoia = {Model.BSIM4rnoia} is negative. Set to zero.");
-
-                            CircuitWarning.Warning(this, $"Warning: rnoia = {Model.BSIM4rnoia} is negative. Set to zero.");
-                            Model.BSIM4rnoia.Value = 0.0;
-                        }
-                        if (Model.BSIM4rnoib < 0.0) {
-
-                            sw.WriteLine($"Warning: rnoib = {Model.BSIM4rnoib} is negative. Set to zero.");
-
-                            CircuitWarning.Warning(this, $"Warning: rnoib = {Model.BSIM4rnoib} is negative. Set to zero.");
-                            Model.BSIM4rnoib.Value = 0.0;
-                        }
+                        CircuitWarning.Warning(this, $"Warning: cgbo = {model.BSIM4cgbo} is negative. Set to zero.");
+                        model.BSIM4cgbo.Value = 0.0;
                     }
 
                     /* v4.7 */
-                    if (Model.BSIM4tnoiMod.Value == 2) {
-                        if (Model.BSIM4tnoic < 0.0) {
+                    if (model.BSIM4tnoiMod.Value == 1 || model.BSIM4tnoiMod.Value == 2) {
+                        if (model.BSIM4tnoia < 0.0) {
 
-                            sw.WriteLine($"Warning: tnoic = {Model.BSIM4tnoic} is negative. Set to zero.");
+                            sw.WriteLine($"Warning: tnoia = {model.BSIM4tnoia} is negative. Set to zero.");
 
-                            CircuitWarning.Warning(this, $"Warning: tnoic = {Model.BSIM4tnoic} is negative. Set to zero.");
-                            Model.BSIM4tnoic.Value = 0.0;
+                            CircuitWarning.Warning(this, $"Warning: tnoia = {model.BSIM4tnoia} is negative. Set to zero.");
+                            model.BSIM4tnoia.Value = 0.0;
                         }
-                        if (Model.BSIM4rnoic < 0.0) {
+                        if (model.BSIM4tnoib < 0.0) {
 
-                            sw.WriteLine($"Warning: rnoic = {Model.BSIM4rnoic} is negative. Set to zero.");
+                            sw.WriteLine($"Warning: tnoib = {model.BSIM4tnoib} is negative. Set to zero.");
 
-                            CircuitWarning.Warning(this, $"Warning: rnoic = {Model.BSIM4rnoic} is negative. Set to zero.");
-                            Model.BSIM4rnoic.Value = 0.0;
+                            CircuitWarning.Warning(this, $"Warning: tnoib = {model.BSIM4tnoib} is negative. Set to zero.");
+                            model.BSIM4tnoib.Value = 0.0;
+                        }
+                        if (model.BSIM4rnoia < 0.0) {
+
+                            sw.WriteLine($"Warning: rnoia = {model.BSIM4rnoia} is negative. Set to zero.");
+
+                            CircuitWarning.Warning(this, $"Warning: rnoia = {model.BSIM4rnoia} is negative. Set to zero.");
+                            model.BSIM4rnoia.Value = 0.0;
+                        }
+                        if (model.BSIM4rnoib < 0.0) {
+
+                            sw.WriteLine($"Warning: rnoib = {model.BSIM4rnoib} is negative. Set to zero.");
+
+                            CircuitWarning.Warning(this, $"Warning: rnoib = {model.BSIM4rnoib} is negative. Set to zero.");
+                            model.BSIM4rnoib.Value = 0.0;
+                        }
+                    }
+
+                    /* v4.7 */
+                    if (model.BSIM4tnoiMod.Value == 2) {
+                        if (model.BSIM4tnoic < 0.0) {
+
+                            sw.WriteLine($"Warning: tnoic = {model.BSIM4tnoic} is negative. Set to zero.");
+
+                            CircuitWarning.Warning(this, $"Warning: tnoic = {model.BSIM4tnoic} is negative. Set to zero.");
+                            model.BSIM4tnoic.Value = 0.0;
+                        }
+                        if (model.BSIM4rnoic < 0.0) {
+
+                            sw.WriteLine($"Warning: rnoic = {model.BSIM4rnoic} is negative. Set to zero.");
+
+                            CircuitWarning.Warning(this, $"Warning: rnoic = {model.BSIM4rnoic} is negative. Set to zero.");
+                            model.BSIM4rnoic.Value = 0.0;
                         }
                     }
 
                     /* Limits of Njs and Njd modified in BSIM4.7 */
-                    if (Model.BSIM4SjctEmissionCoeff < 0.1) {
+                    if (model.BSIM4SjctEmissionCoeff < 0.1) {
 
-                        sw.WriteLine($"Warning: Njs = {Model.BSIM4SjctEmissionCoeff} is less than 0.1. Setting Njs to 0.1.");
+                        sw.WriteLine($"Warning: Njs = {model.BSIM4SjctEmissionCoeff} is less than 0.1. Setting Njs to 0.1.");
 
-                        CircuitWarning.Warning(this, $"Warning: Njs = {Model.BSIM4SjctEmissionCoeff} is less than 0.1. Setting Njs to 0.1.");
-                        Model.BSIM4SjctEmissionCoeff.Value = 0.1;
+                        CircuitWarning.Warning(this, $"Warning: Njs = {model.BSIM4SjctEmissionCoeff} is less than 0.1. Setting Njs to 0.1.");
+                        model.BSIM4SjctEmissionCoeff.Value = 0.1;
                     }
-                    else if (Model.BSIM4SjctEmissionCoeff < 0.7) {
+                    else if (model.BSIM4SjctEmissionCoeff < 0.7) {
 
-                        sw.WriteLine($"Warning: Njs = {Model.BSIM4SjctEmissionCoeff} is less than 0.7.");
+                        sw.WriteLine($"Warning: Njs = {model.BSIM4SjctEmissionCoeff} is less than 0.7.");
 
-                        CircuitWarning.Warning(this, $"Warning: Njs = {Model.BSIM4SjctEmissionCoeff} is less than 0.7.");
+                        CircuitWarning.Warning(this, $"Warning: Njs = {model.BSIM4SjctEmissionCoeff} is less than 0.7.");
                     }
-                    if (Model.BSIM4DjctEmissionCoeff < 0.1) {
+                    if (model.BSIM4DjctEmissionCoeff < 0.1) {
 
-                        sw.WriteLine($"Warning: Njd = {Model.BSIM4DjctEmissionCoeff} is less than 0.1. Setting Njd to 0.1.");
+                        sw.WriteLine($"Warning: Njd = {model.BSIM4DjctEmissionCoeff} is less than 0.1. Setting Njd to 0.1.");
 
-                        CircuitWarning.Warning(this, $"Warning: Njd = {Model.BSIM4DjctEmissionCoeff} is less than 0.1. Setting Njd to 0.1.");
-                        Model.BSIM4DjctEmissionCoeff.Value = 0.1;
+                        CircuitWarning.Warning(this, $"Warning: Njd = {model.BSIM4DjctEmissionCoeff} is less than 0.1. Setting Njd to 0.1.");
+                        model.BSIM4DjctEmissionCoeff.Value = 0.1;
                     }
-                    else if (Model.BSIM4DjctEmissionCoeff < 0.7) {
+                    else if (model.BSIM4DjctEmissionCoeff < 0.7) {
 
-                        sw.WriteLine($"Warning: Njd = {Model.BSIM4DjctEmissionCoeff} is less than 0.7.");
+                        sw.WriteLine($"Warning: Njd = {model.BSIM4DjctEmissionCoeff} is less than 0.7.");
 
-                        CircuitWarning.Warning(this, $"Warning: Njd = {Model.BSIM4DjctEmissionCoeff} is less than 0.7.");
-                    }
-
-                    if (Model.BSIM4njtsstemp < 0.0)
-                    { sw.WriteLine($"Warning: Njts = {Model.BSIM4njtsstemp} is negative at temperature = {ckt.State.Temperature}.");
-
-                        CircuitWarning.Warning(this, $"Warning: Njts = {Model.BSIM4njtsstemp} is negative at temperature = {ckt.State.Temperature}.");
-                    }
-                    if (Model.BSIM4njtsswstemp < 0.0)
-                    { sw.WriteLine($"Warning: Njtssw = {Model.BSIM4njtsswstemp} is negative at temperature = {ckt.State.Temperature}.");
-
-                        CircuitWarning.Warning(this, $"Warning: Njtssw = {Model.BSIM4njtsswstemp} is negative at temperature = {ckt.State.Temperature}.");
-                    }
-                    if (Model.BSIM4njtsswgstemp < 0.0)
-                    { sw.WriteLine($"Warning: Njtsswg = {Model.BSIM4njtsswgstemp} is negative at temperature = {ckt.State.Temperature}.");
-
-                        CircuitWarning.Warning(this, $"Warning: Njtsswg = {Model.BSIM4njtsswgstemp} is negative at temperature = {ckt.State.Temperature}.");
+                        CircuitWarning.Warning(this, $"Warning: Njd = {model.BSIM4DjctEmissionCoeff} is less than 0.7.");
                     }
 
-                    if (Model.BSIM4njtsd.Given && Model.BSIM4njtsdtemp < 0.0)
-                    { sw.WriteLine($"Warning: Njtsd = {Model.BSIM4njtsdtemp} is negative at temperature = {ckt.State.Temperature}.");
+                    if (model.BSIM4njtsstemp < 0.0)
+                    { sw.WriteLine($"Warning: Njts = {model.BSIM4njtsstemp} is negative at temperature = {ckt.State.Temperature}.");
 
-                        CircuitWarning.Warning(this, $"Warning: Njtsd = {Model.BSIM4njtsdtemp} is negative at temperature = {ckt.State.Temperature}.");
+                        CircuitWarning.Warning(this, $"Warning: Njts = {model.BSIM4njtsstemp} is negative at temperature = {ckt.State.Temperature}.");
                     }
-                    if (Model.BSIM4njtsswd.Given && Model.BSIM4njtsswdtemp < 0.0)
-                    { sw.WriteLine($"Warning: Njtsswd = {Model.BSIM4njtsswdtemp} is negative at temperature = {ckt.State.Temperature}.");
+                    if (model.BSIM4njtsswstemp < 0.0)
+                    { sw.WriteLine($"Warning: Njtssw = {model.BSIM4njtsswstemp} is negative at temperature = {ckt.State.Temperature}.");
 
-                        CircuitWarning.Warning(this, $"Warning: Njtsswd = {Model.BSIM4njtsswdtemp} is negative at temperature = {ckt.State.Temperature}.");
+                        CircuitWarning.Warning(this, $"Warning: Njtssw = {model.BSIM4njtsswstemp} is negative at temperature = {ckt.State.Temperature}.");
                     }
-                    if (Model.BSIM4njtsswgd.Given && Model.BSIM4njtsswgdtemp < 0.0)
-                    { sw.WriteLine($"Warning: Njtsswgd = {Model.BSIM4njtsswgdtemp} is negative at temperature = {ckt.State.Temperature}.");
+                    if (model.BSIM4njtsswgstemp < 0.0)
+                    { sw.WriteLine($"Warning: Njtsswg = {model.BSIM4njtsswgstemp} is negative at temperature = {ckt.State.Temperature}.");
 
-                        CircuitWarning.Warning(this, $"Warning: Njtsswgd = {Model.BSIM4njtsswgdtemp} is negative at temperature = {ckt.State.Temperature}.");
+                        CircuitWarning.Warning(this, $"Warning: Njtsswg = {model.BSIM4njtsswgstemp} is negative at temperature = {ckt.State.Temperature}.");
                     }
 
-                    if (Model.BSIM4ntnoi < 0.0)
-                    { sw.WriteLine($"Warning: ntnoi = {Model.BSIM4ntnoi} is negative. Set to zero.");
-                        CircuitWarning.Warning(this, $"Warning: ntnoi = {Model.BSIM4ntnoi} is negative. Set to zero.");
-                        Model.BSIM4ntnoi.Value = 0.0;
+                    if (model.BSIM4njtsd.Given && model.BSIM4njtsdtemp < 0.0)
+                    { sw.WriteLine($"Warning: Njtsd = {model.BSIM4njtsdtemp} is negative at temperature = {ckt.State.Temperature}.");
+
+                        CircuitWarning.Warning(this, $"Warning: Njtsd = {model.BSIM4njtsdtemp} is negative at temperature = {ckt.State.Temperature}.");
+                    }
+                    if (model.BSIM4njtsswd.Given && model.BSIM4njtsswdtemp < 0.0)
+                    { sw.WriteLine($"Warning: Njtsswd = {model.BSIM4njtsswdtemp} is negative at temperature = {ckt.State.Temperature}.");
+
+                        CircuitWarning.Warning(this, $"Warning: Njtsswd = {model.BSIM4njtsswdtemp} is negative at temperature = {ckt.State.Temperature}.");
+                    }
+                    if (model.BSIM4njtsswgd.Given && model.BSIM4njtsswgdtemp < 0.0)
+                    { sw.WriteLine($"Warning: Njtsswgd = {model.BSIM4njtsswgdtemp} is negative at temperature = {ckt.State.Temperature}.");
+
+                        CircuitWarning.Warning(this, $"Warning: Njtsswgd = {model.BSIM4njtsswgdtemp} is negative at temperature = {ckt.State.Temperature}.");
+                    }
+
+                    if (model.BSIM4ntnoi < 0.0)
+                    { sw.WriteLine($"Warning: ntnoi = {model.BSIM4ntnoi} is negative. Set to zero.");
+                        CircuitWarning.Warning(this, $"Warning: ntnoi = {model.BSIM4ntnoi} is negative. Set to zero.");
+                        model.BSIM4ntnoi.Value = 0.0;
                     }
 
                     /* diode model */
-                    if (Model.BSIM4SbulkJctBotGradingCoeff >= 0.99)
-                    { sw.WriteLine($"Warning: MJS = {Model.BSIM4SbulkJctBotGradingCoeff} is too big. Set to 0.99.");
-                        CircuitWarning.Warning(this, $"Warning: MJS = {Model.BSIM4SbulkJctBotGradingCoeff} is too big. Set to 0.99.");
-                        Model.BSIM4SbulkJctBotGradingCoeff.Value = 0.99;
+                    if (model.BSIM4SbulkJctBotGradingCoeff >= 0.99)
+                    { sw.WriteLine($"Warning: MJS = {model.BSIM4SbulkJctBotGradingCoeff} is too big. Set to 0.99.");
+                        CircuitWarning.Warning(this, $"Warning: MJS = {model.BSIM4SbulkJctBotGradingCoeff} is too big. Set to 0.99.");
+                        model.BSIM4SbulkJctBotGradingCoeff.Value = 0.99;
                     }
-                    if (Model.BSIM4SbulkJctSideGradingCoeff >= 0.99)
-                    { sw.WriteLine($"Warning: MJSWS = {Model.BSIM4SbulkJctSideGradingCoeff} is too big. Set to 0.99.");
-                        CircuitWarning.Warning(this, $"Warning: MJSWS = {Model.BSIM4SbulkJctSideGradingCoeff} is too big. Set to 0.99.");
-                        Model.BSIM4SbulkJctSideGradingCoeff.Value = 0.99;
+                    if (model.BSIM4SbulkJctSideGradingCoeff >= 0.99)
+                    { sw.WriteLine($"Warning: MJSWS = {model.BSIM4SbulkJctSideGradingCoeff} is too big. Set to 0.99.");
+                        CircuitWarning.Warning(this, $"Warning: MJSWS = {model.BSIM4SbulkJctSideGradingCoeff} is too big. Set to 0.99.");
+                        model.BSIM4SbulkJctSideGradingCoeff.Value = 0.99;
                     }
-                    if (Model.BSIM4SbulkJctGateSideGradingCoeff >= 0.99)
-                    { sw.WriteLine($"Warning: MJSWGS = {Model.BSIM4SbulkJctGateSideGradingCoeff} is too big. Set to 0.99.");
-                        CircuitWarning.Warning(this, $"Warning: MJSWGS = {Model.BSIM4SbulkJctGateSideGradingCoeff} is too big. Set to 0.99.");
-                        Model.BSIM4SbulkJctGateSideGradingCoeff.Value = 0.99;
+                    if (model.BSIM4SbulkJctGateSideGradingCoeff >= 0.99)
+                    { sw.WriteLine($"Warning: MJSWGS = {model.BSIM4SbulkJctGateSideGradingCoeff} is too big. Set to 0.99.");
+                        CircuitWarning.Warning(this, $"Warning: MJSWGS = {model.BSIM4SbulkJctGateSideGradingCoeff} is too big. Set to 0.99.");
+                        model.BSIM4SbulkJctGateSideGradingCoeff.Value = 0.99;
                     }
 
-                    if (Model.BSIM4DbulkJctBotGradingCoeff >= 0.99)
-                    { sw.WriteLine($"Warning: MJD = {Model.BSIM4DbulkJctBotGradingCoeff} is too big. Set to 0.99.");
-                        CircuitWarning.Warning(this, $"Warning: MJD = {Model.BSIM4DbulkJctBotGradingCoeff} is too big. Set to 0.99.");
-                        Model.BSIM4DbulkJctBotGradingCoeff.Value = 0.99;
+                    if (model.BSIM4DbulkJctBotGradingCoeff >= 0.99)
+                    { sw.WriteLine($"Warning: MJD = {model.BSIM4DbulkJctBotGradingCoeff} is too big. Set to 0.99.");
+                        CircuitWarning.Warning(this, $"Warning: MJD = {model.BSIM4DbulkJctBotGradingCoeff} is too big. Set to 0.99.");
+                        model.BSIM4DbulkJctBotGradingCoeff.Value = 0.99;
                     }
-                    if (Model.BSIM4DbulkJctSideGradingCoeff >= 0.99)
-                    { sw.WriteLine($"Warning: MJSWD = {Model.BSIM4DbulkJctSideGradingCoeff} is too big. Set to 0.99.");
-                        CircuitWarning.Warning(this, $"Warning: MJSWD = {Model.BSIM4DbulkJctSideGradingCoeff} is too big. Set to 0.99.");
-                        Model.BSIM4DbulkJctSideGradingCoeff.Value = 0.99;
+                    if (model.BSIM4DbulkJctSideGradingCoeff >= 0.99)
+                    { sw.WriteLine($"Warning: MJSWD = {model.BSIM4DbulkJctSideGradingCoeff} is too big. Set to 0.99.");
+                        CircuitWarning.Warning(this, $"Warning: MJSWD = {model.BSIM4DbulkJctSideGradingCoeff} is too big. Set to 0.99.");
+                        model.BSIM4DbulkJctSideGradingCoeff.Value = 0.99;
                     }
-                    if (Model.BSIM4DbulkJctGateSideGradingCoeff >= 0.99)
-                    { sw.WriteLine($"Warning: MJSWGD = {Model.BSIM4DbulkJctGateSideGradingCoeff} is too big. Set to 0.99.");
-                        CircuitWarning.Warning(this, $"Warning: MJSWGD = {Model.BSIM4DbulkJctGateSideGradingCoeff} is too big. Set to 0.99.");
-                        Model.BSIM4DbulkJctGateSideGradingCoeff.Value = 0.99;
+                    if (model.BSIM4DbulkJctGateSideGradingCoeff >= 0.99)
+                    { sw.WriteLine($"Warning: MJSWGD = {model.BSIM4DbulkJctGateSideGradingCoeff} is too big. Set to 0.99.");
+                        CircuitWarning.Warning(this, $"Warning: MJSWGD = {model.BSIM4DbulkJctGateSideGradingCoeff} is too big. Set to 0.99.");
+                        model.BSIM4DbulkJctGateSideGradingCoeff.Value = 0.99;
                     }
-                    if (Model.BSIM4wpemod.Value == 1)
+                    if (model.BSIM4wpemod.Value == 1)
                     {
-                        if (Model.BSIM4scref <= 0.0)
-                        { sw.WriteLine($"Warning: SCREF = {Model.BSIM4scref} is not positive. Set to 1e-6.");
+                        if (model.BSIM4scref <= 0.0)
+                        { sw.WriteLine($"Warning: SCREF = {model.BSIM4scref} is not positive. Set to 1e-6.");
 
-                            CircuitWarning.Warning(this, $"Warning: SCREF = {Model.BSIM4scref} is not positive. Set to 1e-6.");
-                            Model.BSIM4scref.Value = 1e-6;
+                            CircuitWarning.Warning(this, $"Warning: SCREF = {model.BSIM4scref} is not positive. Set to 1e-6.");
+                            model.BSIM4scref.Value = 1e-6;
                         }
                     }
                 }/* loop for the parameter check for warning messages */

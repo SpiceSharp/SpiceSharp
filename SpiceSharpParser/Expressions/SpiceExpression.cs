@@ -55,16 +55,5 @@ namespace SpiceSharp.Parser
             parser.ReInit(stream);
             return parser.ParseExpression();
         }
-
-        /// <summary>
-        /// An event that can be used for the SpiceMemberConvertData event
-        /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="data">The data</param>
-        public void OnSpiceConvert(object sender, SpiceMemberConvertData data)
-        {
-            if (data.Value is string && data.TargetType == typeof(double))
-                data.Result = Parse(data.Value as string);
-        }
     }
 }

@@ -8,8 +8,17 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents an inductor
     /// </summary>
-    public class Inductor : CircuitComponent
+    public class Inductor : CircuitComponent<Inductor>
     {
+        /// <summary>
+        /// Register parameters
+        /// </summary>
+        static Inductor()
+        {
+            Register();
+            terminals = new string[] { "L+", "L-" };
+        }
+
         /// <summary>
         /// Delegate for adding effects of a mutual inductance
         /// </summary>
@@ -26,9 +35,9 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [SpiceName("inductance"), SpiceInfo("Inductance of the inductor", IsPrincipal = true)]
-        public Parameter<double> INDinduct { get; } = new Parameter<double>();
+        public Parameter INDinduct { get; } = new Parameter();
         [SpiceName("ic"), SpiceInfo("Initial current through the inductor", Interesting = false)]
-        public Parameter<double> INDinitCond { get; } = new Parameter<double>();
+        public Parameter INDinitCond { get; } = new Parameter();
         [SpiceName("flux"), SpiceInfo("Flux through the inductor")]
         public double GetFlux(Circuit ckt) => ckt.State.States[0][INDstate + INDflux];
         [SpiceName("v"), SpiceName("volt"), SpiceInfo("Terminal voltage of the inductor")]
@@ -56,7 +65,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the inductor</param>
-        public Inductor(string name) : base(name, "L+", "L-") { }
+        public Inductor(string name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -64,11 +73,11 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the inductor</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="ind">The inductor</param>
-        public Inductor(string name, string pos, string neg, object ind) : base(name, "L+", "L-")
+        /// <param name="ind">The inductance</param>
+        public Inductor(string name, string pos, string neg, double ind) : base(name)
         {
             Connect(pos, neg);
-            Set("inductance", ind);
+            INDinduct.Set(ind);
         }
 
         /// <summary>
@@ -89,12 +98,6 @@ namespace SpiceSharp.Components
             foreach (var inv in UpdateMutualInductance.GetInvocationList())
                 UpdateMutualInductance -= (UpdateMutualInductanceEventHandler)inv;
         }
-
-        /// <summary>
-        /// Get the model for the inductor
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => null;
 
         /// <summary>
         /// Do temperature-dependent calculations

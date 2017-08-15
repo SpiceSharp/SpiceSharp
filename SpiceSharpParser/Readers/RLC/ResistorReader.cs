@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
         {
             Resistor res = new Resistor(name);
             res.ReadNodes(parameters, 2);
@@ -29,16 +29,16 @@ namespace SpiceSharp.Parser.Readers
             // We have two possible formats:
             // Normal: RXXXXXXX N1 N2 VALUE
             if (parameters.Count == 3)
-                res.Set("resistance", parameters[2].ReadValue());
+                res.RESresist.Set(netlist.ParseDouble(parameters[2]));
             else
             {
                 // Read the model
-                res.Model = parameters[2].ReadModel<ResistorModel>(netlist);
-                res.ReadParameters(parameters, 3);
+                res.SetModel(netlist.FindModel<ResistorModel>(parameters[2]));
+                netlist.ReadParameters(res, parameters, 3);
                 if (!res.RESlength.Given)
-                    throw new ParseException(name, "L needs to be specified");
+                    throw new ParseException(parameters[parameters.Count - 1], "L needs to be specified", false);
             }
-            return res;
+            return (ICircuitObject)res;
         }
     }
 }

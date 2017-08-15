@@ -7,53 +7,76 @@ using System.Linq;
 namespace SpiceSharp.Parameters
 {
     /// <summary>
-    /// An abstract class that contains parameters
-    /// These parameters can be write-only, read-only, ...
-    /// A table of parameters is also available for such classes.
+    /// This class allows referring to spice properties using their name, as specified by the SpiceName() attribute
     /// </summary>
-    public abstract class Parameterized
+    public abstract class Parameterized<T> : IParameterized
     {
         /// <summary>
-        /// Get the name of the object
+        /// Dictionaries for finding our parameters back
         /// </summary>
-        public string Name { get; }
+        private static Dictionary<string, Func<T, Parameter>> pgetter = new Dictionary<string, Func<T, Parameter>>();
+        private static Dictionary<string, Func<T, double>> dgetter = new Dictionary<string, Func<T, double>>();
+        private static Dictionary<string, Action<T, double>> dsetter = new Dictionary<string, Action<T, double>>();
+        private static Dictionary<string, Func<T, Circuit, double>> dcgetter = new Dictionary<string, Func<T, Circuit, double>>();
 
         /// <summary>
-        /// This dictionary contains all Spice keywords and their mapping
+        /// This method will register all the spice properties
         /// </summary>
-        private static Dictionary<Type, Dictionary<string, SpiceMember>> members { get; } = new Dictionary<Type, Dictionary<string, SpiceMember>>();
+        protected internal static void Register()
+        {
+            var members = typeof(T).GetMembers(BindingFlags.Instance | BindingFlags.Public).Where(m => m.GetCustomAttributes<SpiceName>().Any());
+            foreach (MemberInfo m in members)
+            {
+                // Create a delegate for the member
+                if (m is PropertyInfo)
+                {
+                    PropertyInfo pi = m as PropertyInfo;
+                    if (pi.PropertyType == typeof(Parameter))
+                    {
+                        Func<T, Parameter> getter = (Func<T, Parameter>)pi.GetGetMethod().CreateDelegate(typeof(Func<T, Parameter>));
+                        foreach (var attr in pi.GetCustomAttributes<SpiceName>())
+                            pgetter.Add((attr as SpiceName).Name, getter);
+                    }
+                    else if (pi.PropertyType == typeof(double))
+                    {
+                        Func<T, double> getter = (Func<T, double>)pi.GetGetMethod()?.CreateDelegate(typeof(Func<T, double>));
+                        Action<T, double> setter = (Action<T, double>)pi.GetSetMethod()?.CreateDelegate(typeof(Action<T, double>));
+                        foreach (var attr in pi.GetCustomAttributes<SpiceName>())
+                        {
+                            SpiceName sn = attr as SpiceName;
+                            if (getter != null)
+                                dgetter.Add(sn.Name, getter);
+                            if (setter != null)
+                                dsetter.Add(sn.Name, setter);
+                        }
+                    }
+                }
 
-        /// <summary>
-        /// All parameters for this instance
-        /// </summary>
-        private Dictionary<string, SpiceMember> parameters { get; } = new Dictionary<string, SpiceMember>();
+                else if (m is MethodInfo)
+                {
+                    MethodInfo mi = m as MethodInfo;
+
+                    // The only allowed parameter is a Circuit object
+                    var parameters = mi.GetParameters();
+                    if (parameters.Length == 1 && parameters[0].ParameterType == typeof(Circuit) && mi.ReturnType == typeof(double))
+                    {
+                        Func<T, Circuit, double> getter = (Func<T, Circuit, double>)mi.CreateDelegate(typeof(Func<T, Circuit, double>));
+                        foreach (var attr in mi.GetCustomAttributes<SpiceName>())
+                            dcgetter.Add(attr.Name, getter);
+                    }
+                }
+            }
+        }
+
+        private T me;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Parameterized(string name)
+        public Parameterized()
         {
-            Name = name;
-
-            // Build the parameters
-            if (!members.ContainsKey(GetType()))
-            {
-                var d = new Dictionary<string, SpiceMember>();
-                var tmembers = GetType().GetMembers(BindingFlags.Instance | BindingFlags.FlattenHierarchy | BindingFlags.Public).Where(p => p.GetCustomAttributes<SpiceName>().Any());
-                foreach (var m in tmembers)
-                {
-                    var nmember = new SpiceMember(m);
-
-                    var names = m.GetCustomAttributes<SpiceName>();
-                    foreach (var n in names)
-                        d.Add(n.Name, nmember);
-                }
-                members.Add(GetType(), d);
-                parameters = d;
-            }
-            else
-                parameters = members[GetType()];
+            me = (T)(object)this;
         }
 
         /// <summary>
@@ -62,107 +85,34 @@ namespace SpiceSharp.Parameters
         /// <param name="id">The parameter identifier</param>
         /// <param name="value">The value</param>
         /// <param name="ckt">The circuit if applicable</param>
-        public virtual void Set(string name, object value = null, Circuit ckt = null)
+        public virtual void Set(string name, double value)
         {
-            // Use reflection to find the member associated with the name
-            if (!parameters.ContainsKey(name))
-            {
-                CircuitWarning.Warning(this, $"{Name}: Parameter '{name}' does not exist");
-                return;
-            }
-
-            parameters[name].Set(this, value, ckt);
+            // Set the parameter
+            if (dsetter.ContainsKey(name))
+                dsetter[name].Invoke(me, value);
+            else
+                pgetter[name].Invoke(me).Set(value);
         }
 
         /// <summary>
         /// Request a parameter
         /// </summary>
         /// <param name="name">The parameter name</param>
-        /// <param name="ckt">The circuit if applicable</param>
         /// <returns></returns>
-        public virtual object Ask(string name, Circuit ckt = null)
+        public virtual double Ask(string name)
         {
-            if (!parameters.ContainsKey(name))
-                throw new CircuitException($"{Name}: Parameter '{name}' does not exist");
-
-            return parameters[name].Get(this, ckt);
+            return dgetter[name].Invoke(me);
         }
 
         /// <summary>
-        /// Get a list of all parameters
+        /// Request a parameter
         /// </summary>
+        /// <param name="name">The parameter name</param>
+        /// <param name="ckt">The circuit</param>
         /// <returns></returns>
-        public static string[] GetParameterNames(Parameterized p)
+        public virtual double Ask(string name, Circuit ckt)
         {
-            var ms = members[p.GetType()];
-            string[] parameters = new string[ms.Count];
-            int index = 0;
-            foreach (var m in ms.Keys)
-                parameters[index++] = m;
-            return parameters;
-        }
-
-        /// <summary>
-        /// Check if an object has a parameter
-        /// </summary>
-        /// <param name="p">The parameterized object</param>
-        /// <param name="name">The name</param>
-        /// <returns></returns>
-        public static bool HasParameter(Parameterized p, string name)
-        {
-            var ms = members[p.GetType()];
-            return ms.ContainsKey(name);
-        }
-
-        /// <summary>
-        /// Get the description for a parameter
-        /// </summary>
-        /// <param name="parameter">The parameter name</param>
-        /// <returns></returns>
-        public static string GetParameterDescription(Parameterized p, string parameter)
-        {
-            var ms = members[p.GetType()];
-            if (!ms.ContainsKey(parameter))
-                throw new CircuitException($"Parameter {parameter} does not exist");
-            var si = ms[parameter].Info.GetCustomAttribute<SpiceInfo>();
-            if (si != null)
-                return si.Description;
-            return "";
-        }
-
-        /// <summary>
-        /// Get the type of the parameter
-        /// </summary>
-        /// <param name="parameter">The parameter name</param>
-        /// <returns></returns>
-        public static Type GetParameterType(Parameterized p, string parameter)
-        {
-            var ms = members[p.GetType()];
-            if (!ms.ContainsKey(parameter))
-                throw new CircuitException($"Parameter {parameter} does not exist");
-            return ms[parameter].ValueType;
-        }
-
-        /// <summary>
-        /// Get a parameter from the object by name
-        /// The parameter must be defined as a property with a getter in order to 
-        /// be found by this method
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public virtual Parameter<T> GetParameter<T>(string name)
-        {
-            // Get the member with this name
-            var members = GetType().GetProperties()
-                .Where(p => p.PropertyType == typeof(Parameter<T>))
-                .Where(q => q.GetCustomAttributes<SpiceName>().Where(r => r.Name == name).Any());
-            if (members.Count() == 0)
-                return null;
-
-            // We found a parameter
-            var member = members.First();
-            return (Parameter<T>)member.GetValue(this);
+            return dcgetter[name].Invoke(me, ckt);
         }
     }
 }

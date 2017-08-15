@@ -9,19 +9,28 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents an independent current source
     /// </summary>
-    public class Currentsource : CircuitComponent
+    public class Currentsource : CircuitComponent<Currentsource>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static Currentsource()
+        {
+            Register();
+            terminals = new string[] { "I+", "I-" };
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("waveform"), SpiceInfo("The waveform object for this source")]
-        public Parameter<Waveform> ISRCwaveform { get; } = new Parameter<Waveform>();
+        public IWaveform ISRCwaveform { get; set; } = null;
         [SpiceName("dc"), SpiceInfo("D.C. source value")]
-        public Parameter<double> ISRCdcValue { get; } = new Parameter<double>();
+        public Parameter ISRCdcValue { get; } = new Parameter();
         [SpiceName("acmag"), SpiceInfo("A.C. magnitude value")]
-        public Parameter<double> ISRCacMag { get; } = new Parameter<double>();
+        public Parameter ISRCacMag { get; } = new Parameter();
         [SpiceName("acphase"), SpiceInfo("A.C. phase value")]
-        public Parameter<double> ISRCacPhase { get; } = new Parameter<double>();
+        public Parameter ISRCacPhase { get; } = new Parameter();
         [SpiceName("v"), SpiceInfo("Voltage accross the supply")]
         public double GetV(Circuit ckt) => (ckt.State.Real.Solution[ISRCposNode] - ckt.State.Real.Solution[ISRCnegNode]);
         [SpiceName("p"), SpiceInfo("Power supplied by the source")]
@@ -55,7 +64,9 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current source</param>
-        public Currentsource(string name) : base(name, "I+", "I-") { }
+        public Currentsource(string name) : base(name)
+        {
+        }
 
         /// <summary>
         /// Constructor
@@ -63,14 +74,24 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the current source</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="v">The DC value or Waveform-object</param>
-        public Currentsource(string name, string pos, string neg, object v) : base(name, "I+", "I-")
+        /// <param name="dc">The DC value</param>
+        public Currentsource(string name, string pos, string neg, double dc) : base(name)
         {
             Connect(pos, neg);
-            if (v is Waveform)
-                Set("waveform", v);
-            else
-                Set("dc", v);
+            ISRCdcValue.Set(dc);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">The name of the current source</param>
+        /// <param name="pos">The positive node</param>
+        /// <param name="neg">The negative node</param>
+        /// <param name="w">The Waveform-object</param>
+        public Currentsource(string name, string pos, string neg, IWaveform w) : base(name)
+        {
+            Connect(pos, neg);
+            ISRCwaveform = w;
         }
 
         /// <summary>
@@ -84,15 +105,8 @@ namespace SpiceSharp.Components
             ISRCnegNode = nodes[1].Index;
 
             // Setup waveform
-            if (ISRCwaveform.Given)
-                ISRCwaveform.Value?.Setup(ckt);
+            ISRCwaveform?.Setup(ckt);
         }
-
-        /// <summary>
-        /// No model
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => null;
 
         /// <summary>
         /// Do temperature-dependent calculations
@@ -103,7 +117,7 @@ namespace SpiceSharp.Components
             if (!ISRCdcValue.Given)
             {
                 // no DC value - either have a transient value or none
-                if (ISRCwaveform.Given)
+                if (ISRCwaveform != null)
                     CircuitWarning.Warning(this, $"{Name} has no DC value, transient time 0 value used");
                 else
                     CircuitWarning.Warning(this, $"{Name} has no value, DC 0 assumed");
@@ -131,8 +145,8 @@ namespace SpiceSharp.Components
                     time = ckt.Method.Time;
 
                 // Use the waveform if possible
-                if (ISRCwaveform.Given)
-                    value = ISRCwaveform.Value?.At(time) ?? ISRCdcValue.Value;
+                if (ISRCwaveform != null)
+                    value = ISRCwaveform.At(time);
                 else
                     value = ISRCdcValue * state.SrcFact;
             }

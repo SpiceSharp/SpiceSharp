@@ -10,7 +10,10 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Constructor
         /// </summary>
-        public ICReader() : base(StatementType.Control) { }
+        public ICReader() : base(StatementType.Control)
+        {
+            Identifier = "ic";
+        }
 
         /// <summary>
         /// Read
@@ -21,29 +24,32 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(Statement st, Netlist netlist)
         {
-            if (!st.Name.TryReadLiteral("ic"))
-                return false;
-
             // Only assignments are possible
             for (int i = 0; i < st.Parameters.Count; i++)
             {
-                // .IC st.Parameters are of the form V(node) = value
-                st.Parameters[i].ReadAssignment(out object pname, out object pvalue);
-                if (pname.TryReadBracket(out BracketToken bt) && bt.Name.TryReadLiteral("v"))
+                switch (st.Parameters[i].kind)
                 {
-                    if (bt.Parameters.Count != 1)
-                        throw new ParseException(pname, "One node expected");
-                    string node = bt.Parameters[0].ReadIdentifier();
-                    string value = pvalue.ReadValue();
-
-                    // Convert to a double
-                    double d = (double)Parameters.SpiceMember.ConvertType(this, value, typeof(double));
-                    netlist.Circuit.Nodes.IC.Add(node, d);
+                    case TokenConstants.ASSIGNMENT:
+                        AssignmentToken at = st.Parameters[i] as AssignmentToken;
+                        switch (at.Name.kind)
+                        {
+                            case TokenConstants.BRACKET:
+                                BracketToken bt = at.Name as BracketToken;
+                                if (bt.Name.image.ToLower() == "v" && bt.Parameters.Length == 1 && ReaderExtension.IsNode(bt.Parameters[0]))
+                                    netlist.Circuit.Nodes.IC.Add(bt.Parameters[0].image.ToLower(), netlist.ParseDouble(at.Value));
+                                else
+                                    throw new ParseException(st.Parameters[i], "Invalid format, v(<node>)=<ic> expected");
+                                break;
+                            default:
+                                if (ReaderExtension.IsNode(at.Name))
+                                    netlist.Circuit.Nodes.IC.Add(at.Name.image.ToLower(), netlist.ParseDouble(at.Value));
+                                else
+                                    throw new ParseException(st.Parameters[i], "Invalid format, <node>=<ic> expected");
+                                break;
+                        }
+                        break;
                 }
-                else
-                    throw new ParseException(pname, "V() expected");
             }
-
             return true;
         }
     }

@@ -17,57 +17,57 @@ namespace SpiceSharp.Simulations
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
         /// <param name="maxiter">The maximum number of iterations</param>
-        public static void Op(this Simulation sim, Circuit ckt, int maxiter)
+        public static void Op(SimulationConfiguration config, Circuit ckt, int maxiter)
         {
             // Create the current SimulationState
             var state = ckt.State;
             state.Init = CircuitState.InitFlags.InitJct;
 
-            if (!sim.Config.NoOpIter)
+            if (!config.NoOpIter)
             {
-                if (sim.Iterate(ckt, maxiter))
+                if (Iterate(config, ckt, maxiter))
                     return;
             }
 
             // No convergence
             // try Gmin stepping
-            if (sim.Config.NumGminSteps > 1)
+            if (config.NumGminSteps > 1)
             {
                 state.Init = CircuitState.InitFlags.InitJct;
-                CircuitWarning.Warning(sim, "Starting Gmin stepping");
-                state.Gmin = sim.Config.Gmin;
-                for (int i = 0; i < sim.Config.NumGminSteps; i++)
+                CircuitWarning.Warning(ckt, "Starting Gmin stepping");
+                state.Gmin = config.Gmin;
+                for (int i = 0; i < config.NumGminSteps; i++)
                     state.Gmin *= 10.0;
-                for (int i = 0; i <= sim.Config.NumGminSteps; i++)
+                for (int i = 0; i <= config.NumGminSteps; i++)
                 {
                     state.IsCon = true;
-                    if (!sim.Iterate(ckt, maxiter))
+                    if (!Iterate(config, ckt, maxiter))
                     {
                         state.Gmin = 0.0;
-                        CircuitWarning.Warning(sim, "Gmin step failed");
+                        CircuitWarning.Warning(ckt, "Gmin step failed");
                         break;
                     }
                     state.Gmin /= 10.0;
                     state.Init = CircuitState.InitFlags.InitFloat;
                 }
                 state.Gmin = 0.0;
-                if (sim.Iterate(ckt, maxiter))
+                if (Iterate(config, ckt, maxiter))
                     return;
             }
 
             // No we'll try source stepping
-            if (sim.Config.NumSrcSteps > 1)
+            if (config.NumSrcSteps > 1)
             {
                 state.Init = CircuitState.InitFlags.InitJct;
-                CircuitWarning.Warning(sim, "Starting source stepping");
-                for (int i = 0; i <= sim.Config.NumSrcSteps; i++)
+                CircuitWarning.Warning(ckt, "Starting source stepping");
+                for (int i = 0; i <= config.NumSrcSteps; i++)
                 {
-                    state.SrcFact = i / (double)sim.Config.NumSrcSteps;
-                    if (!sim.Iterate(ckt, maxiter))
+                    state.SrcFact = i / (double)config.NumSrcSteps;
+                    if (!Iterate(config, ckt, maxiter))
                     {
                         state.SrcFact = 1.0;
                         // ckt.CurrentAnalysis = AnalysisType.DoingTran;
-                        CircuitWarning.Warning(sim, "Source stepping failed");
+                        CircuitWarning.Warning(ckt, "Source stepping failed");
                         return;
                     }
                 }
@@ -86,7 +86,7 @@ namespace SpiceSharp.Simulations
         /// <param name="ckt">The circuit</param>
         /// <param name="maxiter">The maximum number of iterations</param>
         /// <returns></returns>
-        public static bool Iterate(this Simulation sim, Circuit ckt, int maxiter)
+        public static bool Iterate(SimulationConfiguration config, Circuit ckt, int maxiter)
         {
             var state = ckt.State;
             var rstate = state.Real;
@@ -139,7 +139,7 @@ namespace SpiceSharp.Simulations
                 }
 
                 if (state.IsCon && iterno != 1)
-                    state.IsCon = sim.IsConvergent(ckt);
+                    state.IsCon = IsConvergent(config, ckt);
                 else
                     state.IsCon = false;
 
@@ -188,7 +188,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
-        public static void AcIterate(this Simulation sim, Circuit ckt)
+        public static void AcIterate(SimulationConfiguration config, Circuit ckt)
         {
             // Initialize the circuit
             if (!ckt.State.Initialized)
@@ -198,7 +198,7 @@ namespace SpiceSharp.Simulations
 
             // Load AC
             ckt.State.Complex.Clear();
-            foreach (var c in ckt.Components)
+            foreach (var c in ckt.Objects)
                 c.AcLoad(ckt);
 
             // Solve
@@ -211,7 +211,7 @@ namespace SpiceSharp.Simulations
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
-        private static bool IsConvergent(this Simulation sim, Circuit ckt)
+        private static bool IsConvergent(SimulationConfiguration config, Circuit ckt)
         {
             var rstate = ckt.State.Real;
 
@@ -223,7 +223,7 @@ namespace SpiceSharp.Simulations
                 double o = rstate.OldSolution[node.Index];
                 if (node.Type == CircuitNode.NodeType.Voltage)
                 {
-                    double tol = sim.Config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + sim.Config.VoltTol;
+                    double tol = config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltTol;
                     if (Math.Abs(n - o) > tol)
                     {
                         return false;
@@ -231,7 +231,7 @@ namespace SpiceSharp.Simulations
                 }
                 else
                 {
-                    double tol = sim.Config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + sim.Config.AbsTol;
+                    double tol = config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + config.AbsTol;
                     if (Math.Abs(n - o) > tol)
                     {
                         // Convergence failed

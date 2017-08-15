@@ -9,13 +9,22 @@ namespace SpiceSharp
     /// <summary>
     /// This class represent a component
     /// </summary>
-    public abstract class CircuitComponent : Parameterized
+    public abstract class CircuitComponent<T> : Parameterized<T>, ICircuitObject, ICircuitComponent
     {
         /// <summary>
         /// Private variables
         /// </summary>
         private string[] connections;
-        protected string[] terminals;
+
+        /// <summary>
+        /// The terminals should be set statically
+        /// </summary>
+        protected static string[] terminals;
+
+        /// <summary>
+        /// Get the name of the component
+        /// </summary>
+        public string Name { get; }
 
         /// <summary>
         /// This parameter can change the order in which components are traversed
@@ -27,11 +36,20 @@ namespace SpiceSharp
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the component</param>
-        public CircuitComponent(string name, params string[] terminals) : base(name)
+        public CircuitComponent(string name)
+            : base()
         {
-            this.terminals = terminals;
-            connections = new string[terminals.Length];
+            Name = name;
+            if (terminals != null)
+                connections = new string[terminals.Length];
+            else
+                connections = null;
         }
+
+        /// <summary>
+        /// Get the model of the circuit component (if any)
+        /// </summary>
+        public ICircuitObject Model { get; protected set; } = null;
 
         /// <summary>
         /// Connect the component in the circuit
@@ -63,12 +81,6 @@ namespace SpiceSharp
                 throw new IndexOutOfRangeException();
             return connections[i];
         }
-
-        /// <summary>
-        /// Get the model for this component
-        /// </summary>
-        /// <returns>Returns null if no model is available</returns>
-        public abstract CircuitModel GetModel();
 
         /// <summary>
         /// Helper function for binding nodes to the circuit

@@ -3,14 +3,23 @@ using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
+using static SpiceSharp.Simulations.SimulationIterate;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// A simulation that executes a transient analysis
     /// </summary>
-    public class Transient : Simulation
+    public class Transient : Simulation<Transient>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static Transient()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Default configuration for transient simulations
         /// </summary>
@@ -116,17 +125,16 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the simulation</param>
         /// <param name="step">The timestep</param>
-        /// <param name="final">The final time</param>
-        public Transient(string name, object step, object stop)
+        /// <param name="final">The final timepoint</param>
+        public Transient(string name, double step, double final)
             : base(name, new Configuration())
         {
-            Set("step", step);
-            Set("stop", stop);
+            Step = step;
+            FinalTime = final;
         }
 
         /// <summary>
         /// Execute the transient simulation
-        /// The timesteps are always too small... I can't find what it is, must have checked almost 10 times now.
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public override void Execute(Circuit ckt)
@@ -149,7 +157,7 @@ namespace SpiceSharp.Simulations
 
             // Calculate the operating point
             Initialize(ckt);
-            this.Op(ckt, MyConfig.DcMaxIterations);
+            Op(Config, ckt, MyConfig.DcMaxIterations);
             ckt.Statistics.TimePoints++;
 
             // Initialize the method
@@ -174,7 +182,7 @@ namespace SpiceSharp.Simulations
                 while (true)
                 {
                     // Accept the current timepoint
-                    foreach (var c in ckt.Components)
+                    foreach (var c in ckt.Objects)
                         c.Accept(ckt);
                     method.SaveSolution(rstate.Solution);
 
@@ -217,7 +225,7 @@ namespace SpiceSharp.Simulations
                         state.States[1].CopyTo(state.States[0]);
 
                         // Try to solve the new point
-                        bool converged = this.Iterate(ckt, MyConfig.TranMaxIterations);
+                        bool converged = Iterate(Config, ckt, MyConfig.TranMaxIterations);
                         ckt.Statistics.TimePoints++;
 
                         // Spice copies the states the first time, we're not

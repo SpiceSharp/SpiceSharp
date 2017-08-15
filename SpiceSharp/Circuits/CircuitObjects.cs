@@ -7,15 +7,15 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Circuits
 {
     /// <summary>
-    /// This class represents all components in the circuit
+    /// This class represents all objects in the circuit
     /// </summary>
-    public class CircuitComponents : IEnumerable<CircuitComponent>
+    public class CircuitObjects : IEnumerable<ICircuitObject>
     {
         /// <summary>
         /// Private variables
         /// </summary>
-        private Dictionary<string, CircuitComponent> components = new Dictionary<string, CircuitComponent>();
-        private List<CircuitComponent> ordered = new List<CircuitComponent>();
+        private Dictionary<string, ICircuitObject> objects = new Dictionary<string, ICircuitObject>();
+        private List<ICircuitObject> ordered = new List<ICircuitObject>();
 
         /// <summary>
         /// Gets whether or not the list is already ordered
@@ -25,14 +25,14 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Constructor
         /// </summary>
-        public CircuitComponents() { }
+        public CircuitObjects() { }
 
         /// <summary>
         /// Search for a circuit component with a specific priority
         /// </summary>
         /// <param name="name">The name of the component</param>
         /// <returns></returns>
-        public CircuitComponent this[params string[] name]
+        public ICircuitObject this[params string[] name]
         {
             get
             {
@@ -41,10 +41,10 @@ namespace SpiceSharp.Circuits
                 if (name.Length == 0)
                     throw new ArgumentException("At least one name expected", nameof(name));
 
-                if (!components.ContainsKey(name[0]))
+                if (!objects.ContainsKey(name[0]))
                     throw new CircuitException($"Component \"{name[0]}\" does not exist");
 
-                CircuitComponent c = components[name[0]];
+                ICircuitObject c = objects[name[0]];
                 if (c is Subcircuit)
                 {
                     if (name.Length > 1)
@@ -52,7 +52,7 @@ namespace SpiceSharp.Circuits
                         string[] nn = new string[name.Length - 1];
                         for (int i = 1; i < name.Length; i++)
                             nn[i - 1] = name[i];
-                        return (c as Subcircuit).Components[nn];
+                        return (c as Subcircuit).Objects[nn];
                     }
                     else
                         throw new CircuitException($"Component \"{name[0]}\" does not exist");
@@ -67,18 +67,18 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Add one or more components
+        /// Add one or more objects
         /// </summary>
-        /// <param name="cs">The components that need to be added</param>
-        public void Add(params CircuitComponent[] cs)
+        /// <param name="cs">The objects that need to be added</param>
+        public void Add(params ICircuitObject[] cs)
         {
             foreach (var c in cs)
             {
                 if (c == null)
                     throw new ArgumentNullException(nameof(c));
-                if (components.ContainsKey(c.Name))
+                if (objects.ContainsKey(c.Name))
                     throw new CircuitException($"A component with the name {c.Name} already exists");
-                components.Add(c.Name, c);
+                objects.Add(c.Name, c);
                 isordered = false;
             }
         }
@@ -86,7 +86,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Remove a component from a specific priority
         /// </summary>
-        /// <param name="names">The names of the components that need to be deleted</param>
+        /// <param name="names">The names of the objects that need to be deleted</param>
         public void Remove(params string[] names)
         {
             foreach (var name in names)
@@ -94,8 +94,8 @@ namespace SpiceSharp.Circuits
                 if (name == null)
                     throw new ArgumentNullException(nameof(name));
 
-                if (components.ContainsKey(name))
-                    components.Remove(name);
+                if (objects.ContainsKey(name))
+                    objects.Remove(name);
                 isordered = false;
             }
         }
@@ -111,10 +111,10 @@ namespace SpiceSharp.Circuits
             if (name.Length == 0)
                 throw new ArgumentException("At least one name expected", nameof(name));
 
-            if (!components.ContainsKey(name[0]))
+            if (!objects.ContainsKey(name[0]))
                 return false;
 
-            CircuitComponent c = components[name[0]];
+            ICircuitObject c = objects[name[0]];
             if (c is Subcircuit)
             {
                 if (name.Length > 1)
@@ -122,7 +122,7 @@ namespace SpiceSharp.Circuits
                     string[] nn = new string[name.Length - 1];
                     for (int i = 1; i < name.Length; i++)
                         nn[i - 1] = name[i];
-                    return (c as Subcircuit).Components.Contains(nn);
+                    return (c as Subcircuit).Objects.Contains(nn);
                 }
                 else
                     return true;
@@ -136,23 +136,23 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Get all components of a specific type
+        /// Get all objects of a specific type
         /// </summary>
-        /// <param name="type">The type of components you wish to find</param>
+        /// <param name="type">The type of objects you wish to find</param>
         /// <returns></returns>
-        public CircuitComponent[] ByType(Type type)
+        public ICircuitObject[] ByType(Type type)
         {
-            List<CircuitComponent> components = new List<CircuitComponent>();
-            foreach (var c in this.components.Values)
+            List<ICircuitObject> result = new List<ICircuitObject>();
+            foreach (var c in objects.Values)
             {
                 if (c.GetType() == type)
-                    components.Add(c);
+                    result.Add(c);
             }
-            return components.ToArray();
+            return result.ToArray();
         }
 
         /// <summary>
-        /// This method will generate a list of circuit components with first all models, followed by all the components
+        /// This method will generate a list of circuit objects with first all models, followed by all the objects
         /// </summary>
         public void BuildOrderedComponentList()
         {
@@ -161,25 +161,28 @@ namespace SpiceSharp.Circuits
 
             // Initialize
             ordered.Clear();
-            var mods = new HashSet<CircuitModel>();
+            var added = new HashSet<ICircuitObject>();
 
             // Build our list
-            foreach (var c in components.Values)
+            foreach (var c in objects.Values)
             {
-                // Add models only once
-                var model = c.GetModel();
-                if (model != null && !mods.Contains(model))
+                if (c is ICircuitComponent)
                 {
-                    mods.Add(model);
-                    ordered.Add(model);
+                    var m = (c as ICircuitComponent).Model;
+                    if (m != null && !added.Contains(m))
+                    {
+                        added.Add(m);
+                        ordered.Add(m);
+                    }
                 }
 
-                // Add the components
-                ordered.Add(c);
+                // Add the component if it is not already a model that was added
+                if (!added.Contains(c))
+                    ordered.Add(c);
             }
 
             // Sort the list based on priority
-            ordered.Sort((CircuitComponent a, CircuitComponent b) => {
+            ordered.Sort((ICircuitObject a, ICircuitObject b) => {
                 return b.Priority.CompareTo(a.Priority);
             });
             isordered = true;
@@ -189,7 +192,7 @@ namespace SpiceSharp.Circuits
         /// Get enumerator
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<CircuitComponent> GetEnumerator() => ordered.GetEnumerator();
+        public IEnumerator<ICircuitObject> GetEnumerator() => ordered.GetEnumerator();
 
         /// <summary>
         /// Get enumerator

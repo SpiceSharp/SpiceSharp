@@ -6,29 +6,34 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A class that represents a resistor
     /// </summary>
-    public class Resistor : CircuitComponent
+    public class Resistor : CircuitComponent<Resistor>
     {
         /// <summary>
-        /// Create a default resistor model
+        /// Register parameters
         /// </summary>
-        private static ResistorModel defaultmodel = new ResistorModel(null);
+        static Resistor()
+        {
+            Register();
+            terminals = new string[] { "R+", "R-" };
+        }
 
         /// <summary>
-        /// Gets or sets the model
+        /// Set the model for the resistor
         /// </summary>
-        public ResistorModel Model { get; set; }
+        /// <param name="model"></param>
+        public void SetModel(ResistorModel model) => Model = (ICircuitObject)model;
 
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("temp"), SpiceInfo("Instance operating temperature", Interesting = false)]
-        public ParameterMethod<double> REStemp { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
+        [SpiceName("temp"), SpiceInfo("Instance operating temperature in Kelvin", Interesting = false)]
+        public Parameter REStemp { get; } = new Parameter(300.15);
         [SpiceName("resistance"), SpiceInfo("Resistance", IsPrincipal = true)]
-        public Parameter<double> RESresist { get; } = new Parameter<double>();
+        public Parameter RESresist { get; } = new Parameter();
         [SpiceName("w"), SpiceInfo("Width", Interesting = false)]
-        public Parameter<double> RESwidth { get; } = new Parameter<double>();
+        public Parameter RESwidth { get; } = new Parameter();
         [SpiceName("l"), SpiceInfo("Length", Interesting = false)]
-        public Parameter<double> RESlength { get; } = new Parameter<double>();
+        public Parameter RESlength { get; } = new Parameter();
         [SpiceName("i"), SpiceInfo("Current")]
         public double GetCurrent(Circuit ckt) => (ckt.State.Real.Solution[RESposNode] - ckt.State.Real.Solution[RESnegNode]) * RESconduct;
         [SpiceName("p"), SpiceInfo("Power")]
@@ -45,12 +50,13 @@ namespace SpiceSharp.Components
         /// Private variables
         /// </summary>
         private double RESconduct = 0.0;
+        private double temp = 0.0;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the resistor</param>
-        public Resistor(string name) : base(name, "R+", "R-") { }
+        public Resistor(string name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -59,10 +65,10 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="res">The resistance</param>
-        public Resistor(string name, string pos, string neg, object res) : base(name, "R+", "R-")
+        public Resistor(string name, string pos, string neg, double res) : base(name)
         {
             Connect(pos, neg);
-            Set("resistance", res);
+            RESresist.Set(res);
         }
 
         /// <summary>
@@ -90,12 +96,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Get the model for this resistor
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => Model;
-
-        /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
         /// <param name="ckt">The circuit</param>
@@ -103,17 +103,18 @@ namespace SpiceSharp.Components
         {
             double factor;
             double difference;
-            ResistorModel model = Model as ResistorModel ?? defaultmodel;
+            ResistorModel model = Model as ResistorModel;
 
             // Default Value Processing for Resistor Instance
-            if (!REStemp.Given) REStemp.Value = ckt.State.Temperature;
+            if (!REStemp.Given)
+                REStemp.Value = ckt.State.Temperature;
             if (!RESwidth.Given) RESwidth.Value = model?.RESdefWidth ?? 0.0;
             if (!RESresist.Given)
             {
+                if (model == null)
+                    throw new CircuitException("No model specified");
                 if (model.RESsheetRes.Given && (model.RESsheetRes != 0) && (RESlength != 0))
-                {
                     RESresist.Value = model.RESsheetRes * (RESlength - model.RESnarrow) / (RESwidth - model.RESnarrow);
-                }
                 else
                 {
                     CircuitWarning.Warning(this, string.Format("{0}: resistance=0, set to 1000", Name ?? "NULL"));

@@ -7,19 +7,30 @@ using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components
 {
-    public class Voltagesource : CircuitComponent
+    /// <summary>
+    /// This class describes a voltage source
+    /// </summary>
+    public class Voltagesource : CircuitComponent<Voltagesource>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static Voltagesource()
+        {
+            Register();
+            terminals = new string[] { "V+", "V-" };
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("waveform"), SpiceInfo("The waveform function")]
-        public Parameter<Waveform> VSRCwaveform { get; } = new Parameter<Waveform>();
+        public IWaveform VSRCwaveform { get; set; }
         [SpiceName("dc"), SpiceInfo("D.C. source value")]
-        public Parameter<double> VSRCdcValue { get; } = new Parameter<double>();
+        public Parameter VSRCdcValue { get; } = new Parameter();
         [SpiceName("acmag"), SpiceInfo("A.C. Magnitude")]
-        public Parameter<double> VSRCacMag { get; } = new Parameter<double>();
+        public Parameter VSRCacMag { get; } = new Parameter();
         [SpiceName("acphase"), SpiceInfo("A.C. Phase")]
-        public Parameter<double> VSRCacPhase { get; } = new Parameter<double>();
+        public Parameter VSRCacPhase { get; } = new Parameter();
         [SpiceName("ac"), SpiceInfo("A.C. magnitude, phase vector")]
         public void SetAc(Circuit ckt, double[] ac)
         {
@@ -65,8 +76,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="name"></param>
-        public Voltagesource(string name) : base(name, "V+", "V-") { }
+        /// <param name="name">The name</param>
+        public Voltagesource(string name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -74,14 +85,24 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the voltage source</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="v">The DC value or Waveform-object</param>
-        public Voltagesource(string name, string pos, string neg, object v) : base(name, "V+", "V-")
+        /// <param name="dc">The DC value</param>
+        public Voltagesource(string name, string pos, string neg, double dc) : base(name)
         {
             Connect(pos, neg);
-            if (v is Waveform)
-                Set("waveform", v);
-            else
-                Set("dc", v);
+            VSRCdcValue.Set(dc);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">The name of the voltage source</param>
+        /// <param name="pos">The positive node</param>
+        /// <param name="neg">The negative node</param>
+        /// <param name="w">The waveform</param>
+        public Voltagesource(string name, string pos, string neg, IWaveform w) : base(name)
+        {
+            Connect(pos, neg);
+            VSRCwaveform = w;
         }
 
         /// <summary>
@@ -97,14 +118,8 @@ namespace SpiceSharp.Components
             VSRCbranch = CreateNode(ckt, CircuitNode.NodeType.Current).Index;
 
             // Setup the waveform if specified
-            VSRCwaveform.Value?.Setup(ckt);
+            VSRCwaveform?.Setup(ckt);
         }
-
-        /// <summary>
-        /// Get the model
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => null;
 
         /// <summary>
         /// Do temperature-dependent calculations
@@ -116,7 +131,7 @@ namespace SpiceSharp.Components
             if (!VSRCdcValue.Given)
             {
                 // No DC value: either have a transient value or none
-                if (VSRCwaveform.Given)
+                if (VSRCwaveform != null)
                     CircuitWarning.Warning(this, $"{Name}: No DC value, transient time 0 value used");
                 else
                     CircuitWarning.Warning(this, $"{Name}: No value, DC 0 assumed");
@@ -147,8 +162,8 @@ namespace SpiceSharp.Components
                     time = ckt.Method.Time;
 
                 // Use the waveform if possible
-                if (VSRCwaveform.Given)
-                    value = VSRCwaveform.Value?.At(time) ?? VSRCdcValue.Value;
+                if (VSRCwaveform != null)
+                    value = VSRCwaveform.At(time);
                 else
                     value = VSRCdcValue * state.SrcFact;
             }
@@ -179,8 +194,8 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Accept(Circuit ckt)
         {
-            if (VSRCwaveform.Given)
-                VSRCwaveform.Value?.Accept(ckt);
+            if (VSRCwaveform != null)
+                VSRCwaveform.Accept(ckt);
         }
     }
 }

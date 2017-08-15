@@ -6,21 +6,29 @@ namespace SpiceSharp.Components.Waveforms
     /// <summary>
     /// This class is capable of generating a sine wave
     /// </summary>
-    public class Sine : Waveform
+    public class Sine : Waveform<Sine>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static Sine()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("vo"), SpiceInfo("The offset of the sine wave")]
-        public Parameter<double> VO { get; } = new Parameter<double>();
+        public Parameter VO { get; } = new Parameter();
         [SpiceName("va"), SpiceInfo("The amplitude of the sine wave")]
-        public Parameter<double> VA { get; } = new Parameter<double>();
+        public Parameter VA { get; } = new Parameter();
         [SpiceName("freq"), SpiceInfo("The frequency in Hz")]
-        public Parameter<double> Freq { get; } = new Parameter<double>();
+        public Parameter Freq { get; } = new Parameter();
         [SpiceName("td"), SpiceInfo("The delay in seconds")]
-        public Parameter<double> Delay { get; } = new Parameter<double>();
+        public Parameter Delay { get; } = new Parameter();
         [SpiceName("theta"), SpiceInfo("The damping factor")]
-        public Parameter<double> Theta { get; } = new Parameter<double>();
+        public Parameter Theta { get; } = new Parameter();
 
         /// <summary>
         /// Private variables
@@ -30,7 +38,7 @@ namespace SpiceSharp.Components.Waveforms
         /// <summary>
         /// Constructor
         /// </summary>
-        public Sine() : base("SINE") { }
+        public Sine() : base() { }
 
         /// <summary>
         /// Constructor
@@ -40,15 +48,15 @@ namespace SpiceSharp.Components.Waveforms
         /// <param name="freq">The frequency in Hz</param>
         /// <param name="td">The delay in seconds</param>
         /// <param name="theta">The damping factor</param>
-        public Sine(object vo, object va, object freq, object td = null, object theta = null) : base("SINE")
+        public Sine(double vo, double va, double freq, double td = double.NaN, double theta = double.NaN) : base()
         {
-            Set("vo", vo);
-            Set("va", va);
-            Set("freq", freq);
-            if (td != null)
-                Set("td", td);
-            if (theta != null)
-                Set("theta", theta);
+            VO.Set(vo);
+            VA.Set(va);
+            Freq.Set(freq);
+            if (!double.IsNaN(td))
+                Delay.Set(td);
+            if (!double.IsNaN(theta))
+                Theta.Set(theta);
         }
 
         /// <summary>

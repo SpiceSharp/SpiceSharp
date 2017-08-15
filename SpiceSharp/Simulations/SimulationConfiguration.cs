@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Simulations
+﻿using System.Collections.Generic;
+
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// This class contains the minimum configuration parameters for a simulation
@@ -40,5 +42,13 @@
         /// Absolute tolerance
         /// </summary>
         public double AbsTol = 1e-12;
+
+        /// <summary>
+        /// Simulation configuration
+        /// </summary>
+        /// <param name="b"></param>
+        public SimulationConfiguration()
+        {
+        }
     }
 }

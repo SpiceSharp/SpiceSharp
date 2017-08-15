@@ -7,8 +7,17 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    public class MOS2 : CircuitComponent
+    public class MOS2 : CircuitComponent<MOS2>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static MOS2()
+        {
+            Register();
+            terminals = new string[] { "Drain", "Gate", "Source", "Bulk" };
+        }
+
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
@@ -18,31 +27,31 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [SpiceName("temp"), SpiceInfo("Instance operating temperature")]
-        public ParameterMethod<double> MOS2temp { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
+        public Parameter MOS2temp { get; } = new Parameter(300.15);
         [SpiceName("w"), SpiceInfo("Width")]
-        public Parameter<double> MOS2w { get; } = new Parameter<double>();
+        public Parameter MOS2w { get; } = new Parameter();
         [SpiceName("l"), SpiceInfo("Length")]
-        public Parameter<double> MOS2l { get; } = new Parameter<double>();
+        public Parameter MOS2l { get; } = new Parameter();
         [SpiceName("as"), SpiceInfo("Source area")]
-        public Parameter<double> MOS2sourceArea { get; } = new Parameter<double>();
+        public Parameter MOS2sourceArea { get; } = new Parameter();
         [SpiceName("ad"), SpiceInfo("Drain area")]
-        public Parameter<double> MOS2drainArea { get; } = new Parameter<double>();
+        public Parameter MOS2drainArea { get; } = new Parameter();
         [SpiceName("ps"), SpiceInfo("Source perimeter")]
-        public Parameter<double> MOS2sourcePerimiter { get; } = new Parameter<double>();
+        public Parameter MOS2sourcePerimiter { get; } = new Parameter();
         [SpiceName("pd"), SpiceInfo("Drain perimeter")]
-        public Parameter<double> MOS2drainPerimiter { get; } = new Parameter<double>();
+        public Parameter MOS2drainPerimiter { get; } = new Parameter();
         [SpiceName("nrs"), SpiceInfo("Source squares")]
-        public Parameter<double> MOS2sourceSquares { get; } = new Parameter<double>(1);
+        public Parameter MOS2sourceSquares { get; } = new Parameter(1);
         [SpiceName("nrd"), SpiceInfo("Drain squares")]
-        public Parameter<double> MOS2drainSquares { get; } = new Parameter<double>(1);
+        public Parameter MOS2drainSquares { get; } = new Parameter(1);
         [SpiceName("off"), SpiceInfo("Device initially off")]
         public bool MOS2off { get; set; }
         [SpiceName("icvbs"), SpiceInfo("Initial B-S voltage")]
-        public Parameter<double> MOS2icVBS { get; } = new Parameter<double>();
+        public Parameter MOS2icVBS { get; } = new Parameter();
         [SpiceName("icvds"), SpiceInfo("Initial D-S voltage")]
-        public Parameter<double> MOS2icVDS { get; } = new Parameter<double>();
+        public Parameter MOS2icVDS { get; } = new Parameter();
         [SpiceName("icvgs"), SpiceInfo("Initial G-S voltage")]
-        public Parameter<double> MOS2icVGS { get; } = new Parameter<double>();
+        public Parameter MOS2icVGS { get; } = new Parameter();
         [SpiceName("dnode"), SpiceInfo("Number of drain node")]
         public int MOS2dNode { get; private set; }
         [SpiceName("gnode"), SpiceInfo("Number of gate node")]
@@ -261,15 +270,9 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS2(string name) : base(name, "Drain", "Gate", "Source", "Bulk")
+        public MOS2(string name) : base(name)
         {
         }
-
-        /// <summary>
-        /// Get the model
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => Model;
 
         /// <summary>
         /// Setup the device

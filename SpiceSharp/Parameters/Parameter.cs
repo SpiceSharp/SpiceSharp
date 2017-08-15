@@ -8,12 +8,12 @@ namespace SpiceSharp.Parameters
     /// found using the Given variable.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Parameter<T> : ICloneable, IParameter
+    public class Parameter : ICloneable
     {
         /// <summary>
         /// Gets or sets the raw value of the parameter without changing the Given parameter
         /// </summary>
-        public T Value { get; set; }
+        public double Value { get; set; }
 
         /// <summary>
         /// Gets whether or not the parameter was specified
@@ -24,7 +24,7 @@ namespace SpiceSharp.Parameters
         /// Constructor
         /// </summary>
         /// <param name="defvalue">The default value</param>
-        public Parameter(T defvalue = default(T))
+        public Parameter(double defvalue = 0.0)
         {
             Value = defvalue;
         }
@@ -35,7 +35,7 @@ namespace SpiceSharp.Parameters
         /// <returns></returns>
         public object Clone()
         {
-            var clone = new Parameter<T>()
+            var clone = new Parameter()
             {
                 Given = Given,
                 Value = Value
@@ -47,7 +47,7 @@ namespace SpiceSharp.Parameters
         /// Copy the parameter from another parameter
         /// </summary>
         /// <param name="source"></param>
-        public void CopyFrom(Parameter<T> source)
+        public void CopyFrom(Parameter source)
         {
             Value = source.Value;
             Given = source.Given;
@@ -57,7 +57,7 @@ namespace SpiceSharp.Parameters
         /// Copy the parameter to another parameter
         /// </summary>
         /// <param name="target"></param>
-        public void CopyTo(Parameter<T> target)
+        public void CopyTo(Parameter target)
         {
             target.Value = Value;
             target.Given = Given;
@@ -67,41 +67,17 @@ namespace SpiceSharp.Parameters
         /// Specify the parameter
         /// </summary>
         /// <param name="value"></param>
-        public void Set(T value)
+        public void Set(double value)
         {
             Value = value;
             Given = true;
         }
 
         /// <summary>
-        /// Get the value of the parameter
-        /// </summary>
-        /// <returns></returns>
-        public object Get()
-        {
-            return Value;
-        }
-
-        /// <summary>
-        /// Set the value of the parameter
-        /// </summary>
-        /// <param name="value">The value</param>
-        public void Set(object value)
-        {
-            if (value is T)
-            {
-                Value = (T)value;
-                Given = true;
-            }
-            else
-                throw new CircuitException($"Invalid type {value}");
-        }
-
-        /// <summary>
         /// Parameters can be implicitly converted to their base type
         /// </summary>
         /// <param name="p"></param>
-        public static implicit operator T(Parameter<T> p)
+        public static implicit operator double(Parameter p)
         {
             return p.Value;
         }

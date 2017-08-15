@@ -6,165 +6,173 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    public class BSIM1Model : CircuitModel
+    public class BSIM1Model : CircuitModel<BSIM1Model>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static BSIM1Model()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("vfb"), SpiceInfo("Flat band voltage")]
-        public Parameter<double> B1vfb0 { get; } = new Parameter<double>();
+        public Parameter B1vfb0 { get; } = new Parameter();
         [SpiceName("lvfb"), SpiceInfo("Length dependence of vfb")]
-        public Parameter<double> B1vfbL { get; } = new Parameter<double>();
+        public Parameter B1vfbL { get; } = new Parameter();
         [SpiceName("wvfb"), SpiceInfo("Width dependence of vfb")]
-        public Parameter<double> B1vfbW { get; } = new Parameter<double>();
+        public Parameter B1vfbW { get; } = new Parameter();
         [SpiceName("phi"), SpiceInfo("Strong inversion surface potential ")]
-        public Parameter<double> B1phi0 { get; } = new Parameter<double>();
+        public Parameter B1phi0 { get; } = new Parameter();
         [SpiceName("lphi"), SpiceInfo("Length dependence of phi")]
-        public Parameter<double> B1phiL { get; } = new Parameter<double>();
+        public Parameter B1phiL { get; } = new Parameter();
         [SpiceName("wphi"), SpiceInfo("Width dependence of phi")]
-        public Parameter<double> B1phiW { get; } = new Parameter<double>();
+        public Parameter B1phiW { get; } = new Parameter();
         [SpiceName("k1"), SpiceInfo("Bulk effect coefficient 1")]
-        public Parameter<double> B1K10 { get; } = new Parameter<double>();
+        public Parameter B1K10 { get; } = new Parameter();
         [SpiceName("lk1"), SpiceInfo("Length dependence of k1")]
-        public Parameter<double> B1K1L { get; } = new Parameter<double>();
+        public Parameter B1K1L { get; } = new Parameter();
         [SpiceName("wk1"), SpiceInfo("Width dependence of k1")]
-        public Parameter<double> B1K1W { get; } = new Parameter<double>();
+        public Parameter B1K1W { get; } = new Parameter();
         [SpiceName("k2"), SpiceInfo("Bulk effect coefficient 2")]
-        public Parameter<double> B1K20 { get; } = new Parameter<double>();
+        public Parameter B1K20 { get; } = new Parameter();
         [SpiceName("lk2"), SpiceInfo("Length dependence of k2")]
-        public Parameter<double> B1K2L { get; } = new Parameter<double>();
+        public Parameter B1K2L { get; } = new Parameter();
         [SpiceName("wk2"), SpiceInfo("Width dependence of k2")]
-        public Parameter<double> B1K2W { get; } = new Parameter<double>();
+        public Parameter B1K2W { get; } = new Parameter();
         [SpiceName("eta"), SpiceInfo("VDS dependence of threshold voltage")]
-        public Parameter<double> B1eta0 { get; } = new Parameter<double>();
+        public Parameter B1eta0 { get; } = new Parameter();
         [SpiceName("leta"), SpiceInfo("Length dependence of eta")]
-        public Parameter<double> B1etaL { get; } = new Parameter<double>();
+        public Parameter B1etaL { get; } = new Parameter();
         [SpiceName("weta"), SpiceInfo("Width dependence of eta")]
-        public Parameter<double> B1etaW { get; } = new Parameter<double>();
+        public Parameter B1etaW { get; } = new Parameter();
         [SpiceName("x2e"), SpiceInfo("VBS dependence of eta")]
-        public Parameter<double> B1etaB0 { get; } = new Parameter<double>();
+        public Parameter B1etaB0 { get; } = new Parameter();
         [SpiceName("lx2e"), SpiceInfo("Length dependence of x2e")]
-        public Parameter<double> B1etaBl { get; } = new Parameter<double>();
+        public Parameter B1etaBl { get; } = new Parameter();
         [SpiceName("wx2e"), SpiceInfo("Width dependence of x2e")]
-        public Parameter<double> B1etaBw { get; } = new Parameter<double>();
+        public Parameter B1etaBw { get; } = new Parameter();
         [SpiceName("x3e"), SpiceInfo("VDS dependence of eta")]
-        public Parameter<double> B1etaD0 { get; } = new Parameter<double>();
+        public Parameter B1etaD0 { get; } = new Parameter();
         [SpiceName("lx3e"), SpiceInfo("Length dependence of x3e")]
-        public Parameter<double> B1etaDl { get; } = new Parameter<double>();
+        public Parameter B1etaDl { get; } = new Parameter();
         [SpiceName("wx3e"), SpiceInfo("Width dependence of x3e")]
-        public Parameter<double> B1etaDw { get; } = new Parameter<double>();
+        public Parameter B1etaDw { get; } = new Parameter();
         [SpiceName("dl"), SpiceInfo("Channel length reduction in um")]
-        public Parameter<double> B1deltaL { get; } = new Parameter<double>();
+        public Parameter B1deltaL { get; } = new Parameter();
         [SpiceName("dw"), SpiceInfo("Channel width reduction in um")]
-        public Parameter<double> B1deltaW { get; } = new Parameter<double>();
+        public Parameter B1deltaW { get; } = new Parameter();
         [SpiceName("muz"), SpiceInfo("Zero field mobility at VDS=0 VGS=VTH")]
-        public Parameter<double> B1mobZero { get; } = new Parameter<double>();
+        public Parameter B1mobZero { get; } = new Parameter();
         [SpiceName("x2mz"), SpiceInfo("VBS dependence of muz")]
-        public Parameter<double> B1mobZeroB0 { get; } = new Parameter<double>();
+        public Parameter B1mobZeroB0 { get; } = new Parameter();
         [SpiceName("lx2mz"), SpiceInfo("Length dependence of x2mz")]
-        public Parameter<double> B1mobZeroBl { get; } = new Parameter<double>();
+        public Parameter B1mobZeroBl { get; } = new Parameter();
         [SpiceName("wx2mz"), SpiceInfo("Width dependence of x2mz")]
-        public Parameter<double> B1mobZeroBw { get; } = new Parameter<double>();
+        public Parameter B1mobZeroBw { get; } = new Parameter();
         [SpiceName("mus"), SpiceInfo("Mobility at VDS=VDD VGS=VTH, channel length modulation")]
-        public Parameter<double> B1mobVdd0 { get; } = new Parameter<double>();
+        public Parameter B1mobVdd0 { get; } = new Parameter();
         [SpiceName("lmus"), SpiceInfo("Length dependence of mus")]
-        public Parameter<double> B1mobVddl { get; } = new Parameter<double>();
+        public Parameter B1mobVddl { get; } = new Parameter();
         [SpiceName("wmus"), SpiceInfo("Width dependence of mus")]
-        public Parameter<double> B1mobVddw { get; } = new Parameter<double>();
+        public Parameter B1mobVddw { get; } = new Parameter();
         [SpiceName("x2ms"), SpiceInfo("VBS dependence of mus")]
-        public Parameter<double> B1mobVddB0 { get; } = new Parameter<double>();
+        public Parameter B1mobVddB0 { get; } = new Parameter();
         [SpiceName("lx2ms"), SpiceInfo("Length dependence of x2ms")]
-        public Parameter<double> B1mobVddBl { get; } = new Parameter<double>();
+        public Parameter B1mobVddBl { get; } = new Parameter();
         [SpiceName("wx2ms"), SpiceInfo("Width dependence of x2ms")]
-        public Parameter<double> B1mobVddBw { get; } = new Parameter<double>();
+        public Parameter B1mobVddBw { get; } = new Parameter();
         [SpiceName("x3ms"), SpiceInfo("VDS dependence of mus")]
-        public Parameter<double> B1mobVddD0 { get; } = new Parameter<double>();
+        public Parameter B1mobVddD0 { get; } = new Parameter();
         [SpiceName("lx3ms"), SpiceInfo("Length dependence of x3ms")]
-        public Parameter<double> B1mobVddDl { get; } = new Parameter<double>();
+        public Parameter B1mobVddDl { get; } = new Parameter();
         [SpiceName("wx3ms"), SpiceInfo("Width dependence of x3ms")]
-        public Parameter<double> B1mobVddDw { get; } = new Parameter<double>();
+        public Parameter B1mobVddDw { get; } = new Parameter();
         [SpiceName("u0"), SpiceInfo("VGS dependence of mobility")]
-        public Parameter<double> B1ugs0 { get; } = new Parameter<double>();
+        public Parameter B1ugs0 { get; } = new Parameter();
         [SpiceName("lu0"), SpiceInfo("Length dependence of u0")]
-        public Parameter<double> B1ugsL { get; } = new Parameter<double>();
+        public Parameter B1ugsL { get; } = new Parameter();
         [SpiceName("wu0"), SpiceInfo("Width dependence of u0")]
-        public Parameter<double> B1ugsW { get; } = new Parameter<double>();
+        public Parameter B1ugsW { get; } = new Parameter();
         [SpiceName("x2u0"), SpiceInfo("VBS dependence of u0")]
-        public Parameter<double> B1ugsB0 { get; } = new Parameter<double>();
+        public Parameter B1ugsB0 { get; } = new Parameter();
         [SpiceName("lx2u0"), SpiceInfo("Length dependence of x2u0")]
-        public Parameter<double> B1ugsBL { get; } = new Parameter<double>();
+        public Parameter B1ugsBL { get; } = new Parameter();
         [SpiceName("wx2u0"), SpiceInfo("Width dependence of x2u0")]
-        public Parameter<double> B1ugsBW { get; } = new Parameter<double>();
+        public Parameter B1ugsBW { get; } = new Parameter();
         [SpiceName("u1"), SpiceInfo("VDS depence of mobility, velocity saturation")]
-        public Parameter<double> B1uds0 { get; } = new Parameter<double>();
+        public Parameter B1uds0 { get; } = new Parameter();
         [SpiceName("lu1"), SpiceInfo("Length dependence of u1")]
-        public Parameter<double> B1udsL { get; } = new Parameter<double>();
+        public Parameter B1udsL { get; } = new Parameter();
         [SpiceName("wu1"), SpiceInfo("Width dependence of u1")]
-        public Parameter<double> B1udsW { get; } = new Parameter<double>();
+        public Parameter B1udsW { get; } = new Parameter();
         [SpiceName("x2u1"), SpiceInfo("VBS depence of u1")]
-        public Parameter<double> B1udsB0 { get; } = new Parameter<double>();
+        public Parameter B1udsB0 { get; } = new Parameter();
         [SpiceName("lx2u1"), SpiceInfo("Length depence of x2u1")]
-        public Parameter<double> B1udsBL { get; } = new Parameter<double>();
+        public Parameter B1udsBL { get; } = new Parameter();
         [SpiceName("wx2u1"), SpiceInfo("Width depence of x2u1")]
-        public Parameter<double> B1udsBW { get; } = new Parameter<double>();
+        public Parameter B1udsBW { get; } = new Parameter();
         [SpiceName("x3u1"), SpiceInfo("VDS depence of u1")]
-        public Parameter<double> B1udsD0 { get; } = new Parameter<double>();
+        public Parameter B1udsD0 { get; } = new Parameter();
         [SpiceName("lx3u1"), SpiceInfo("Length dependence of x3u1")]
-        public Parameter<double> B1udsDL { get; } = new Parameter<double>();
+        public Parameter B1udsDL { get; } = new Parameter();
         [SpiceName("wx3u1"), SpiceInfo("Width depence of x3u1")]
-        public Parameter<double> B1udsDW { get; } = new Parameter<double>();
+        public Parameter B1udsDW { get; } = new Parameter();
         [SpiceName("n0"), SpiceInfo("Subthreshold slope")]
-        public Parameter<double> B1subthSlope0 { get; } = new Parameter<double>();
+        public Parameter B1subthSlope0 { get; } = new Parameter();
         [SpiceName("ln0"), SpiceInfo("Length dependence of n0")]
-        public Parameter<double> B1subthSlopeL { get; } = new Parameter<double>();
+        public Parameter B1subthSlopeL { get; } = new Parameter();
         [SpiceName("wn0"), SpiceInfo("Width dependence of n0")]
-        public Parameter<double> B1subthSlopeW { get; } = new Parameter<double>();
+        public Parameter B1subthSlopeW { get; } = new Parameter();
         [SpiceName("nb"), SpiceInfo("VBS dependence of subthreshold slope")]
-        public Parameter<double> B1subthSlopeB0 { get; } = new Parameter<double>();
+        public Parameter B1subthSlopeB0 { get; } = new Parameter();
         [SpiceName("lnb"), SpiceInfo("Length dependence of nb")]
-        public Parameter<double> B1subthSlopeBL { get; } = new Parameter<double>();
+        public Parameter B1subthSlopeBL { get; } = new Parameter();
         [SpiceName("wnb"), SpiceInfo("Width dependence of nb")]
-        public Parameter<double> B1subthSlopeBW { get; } = new Parameter<double>();
+        public Parameter B1subthSlopeBW { get; } = new Parameter();
         [SpiceName("nd"), SpiceInfo("VDS dependence of subthreshold slope")]
-        public Parameter<double> B1subthSlopeD0 { get; } = new Parameter<double>();
+        public Parameter B1subthSlopeD0 { get; } = new Parameter();
         [SpiceName("lnd"), SpiceInfo("Length dependence of nd")]
-        public Parameter<double> B1subthSlopeDL { get; } = new Parameter<double>();
+        public Parameter B1subthSlopeDL { get; } = new Parameter();
         [SpiceName("wnd"), SpiceInfo("Width dependence of nd")]
-        public Parameter<double> B1subthSlopeDW { get; } = new Parameter<double>();
+        public Parameter B1subthSlopeDW { get; } = new Parameter();
         [SpiceName("tox"), SpiceInfo("Gate oxide thickness in um")]
-        public Parameter<double> B1oxideThickness { get; } = new Parameter<double>();
-        [SpiceName("temp"), SpiceInfo("Temperature in degree Celcius")]
-        public ParameterMethod<double> B1temp { get; } = new ParameterMethod<double>(300.15, (double celsius) => celsius + Circuit.CONSTCtoK, (double kelvin) => kelvin - Circuit.CONSTCtoK);
+        public Parameter B1oxideThickness { get; } = new Parameter();
+        [SpiceName("temp"), SpiceInfo("Temperature in degree Kelvin")]
+        public Parameter B1temp { get; } = new Parameter(300.15);
         [SpiceName("vdd"), SpiceInfo("Supply voltage to specify mus")]
-        public Parameter<double> B1vdd { get; } = new Parameter<double>();
+        public Parameter B1vdd { get; } = new Parameter();
         [SpiceName("cgso"), SpiceInfo("Gate source overlap capacitance per unit channel width(m)")]
-        public Parameter<double> B1gateSourceOverlapCap { get; } = new Parameter<double>();
+        public Parameter B1gateSourceOverlapCap { get; } = new Parameter();
         [SpiceName("cgdo"), SpiceInfo("Gate drain overlap capacitance per unit channel width(m)")]
-        public Parameter<double> B1gateDrainOverlapCap { get; } = new Parameter<double>();
+        public Parameter B1gateDrainOverlapCap { get; } = new Parameter();
         [SpiceName("cgbo"), SpiceInfo("Gate bulk overlap capacitance per unit channel length(m)")]
-        public Parameter<double> B1gateBulkOverlapCap { get; } = new Parameter<double>();
+        public Parameter B1gateBulkOverlapCap { get; } = new Parameter();
         [SpiceName("xpart"), SpiceInfo("Flag for channel charge partitioning")]
-        public Parameter<double> B1channelChargePartitionFlag { get; } = new Parameter<double>();
+        public Parameter B1channelChargePartitionFlag { get; } = new Parameter();
         [SpiceName("rsh"), SpiceInfo("Source drain diffusion sheet resistance in ohm per square")]
-        public Parameter<double> B1sheetResistance { get; } = new Parameter<double>();
+        public Parameter B1sheetResistance { get; } = new Parameter();
         [SpiceName("js"), SpiceInfo("Source drain junction saturation current per unit area")]
-        public Parameter<double> B1jctSatCurDensity { get; } = new Parameter<double>();
+        public Parameter B1jctSatCurDensity { get; } = new Parameter();
         [SpiceName("pb"), SpiceInfo("Source drain junction built in potential")]
-        public Parameter<double> B1bulkJctPotential { get; } = new Parameter<double>();
+        public Parameter B1bulkJctPotential { get; } = new Parameter();
         [SpiceName("mj"), SpiceInfo("Source drain bottom junction capacitance grading coefficient")]
-        public Parameter<double> B1bulkJctBotGradingCoeff { get; } = new Parameter<double>();
+        public Parameter B1bulkJctBotGradingCoeff { get; } = new Parameter();
         [SpiceName("pbsw"), SpiceInfo("Source drain side junction capacitance built in potential")]
-        public Parameter<double> B1sidewallJctPotential { get; } = new Parameter<double>();
+        public Parameter B1sidewallJctPotential { get; } = new Parameter();
         [SpiceName("mjsw"), SpiceInfo("Source drain side junction capacitance grading coefficient")]
-        public Parameter<double> B1bulkJctSideGradingCoeff { get; } = new Parameter<double>();
+        public Parameter B1bulkJctSideGradingCoeff { get; } = new Parameter();
         [SpiceName("cj"), SpiceInfo("Source drain bottom junction capacitance per unit area")]
-        public Parameter<double> B1unitAreaJctCap { get; } = new Parameter<double>();
+        public Parameter B1unitAreaJctCap { get; } = new Parameter();
         [SpiceName("cjsw"), SpiceInfo("Source drain side junction capacitance per unit area")]
-        public Parameter<double> B1unitLengthSidewallJctCap { get; } = new Parameter<double>();
+        public Parameter B1unitLengthSidewallJctCap { get; } = new Parameter();
         [SpiceName("wdf"), SpiceInfo("Default width of source drain diffusion in um")]
-        public Parameter<double> B1defaultWidth { get; } = new Parameter<double>();
+        public Parameter B1defaultWidth { get; } = new Parameter();
         [SpiceName("dell"), SpiceInfo("Length reduction of source drain diffusion")]
-        public Parameter<double> B1deltaLength { get; } = new Parameter<double>();
+        public Parameter B1deltaLength { get; } = new Parameter();
 
         /// <summary>
         /// Methods

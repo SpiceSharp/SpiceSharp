@@ -11,7 +11,10 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Constructor
         /// </summary>
-        public DCReader() : base(StatementType.Control) { }
+        public DCReader() : base(StatementType.Control)
+        {
+            Identifier = "dc";
+        }
 
         /// <summary>
         /// Read
@@ -22,9 +25,6 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(Statement st, Netlist netlist)
         {
-            if (!st.Name.TryReadLiteral("dc"))
-                return false;
-
             DC dc = new DC("DC " + (netlist.Simulations.Count + 1));
             int count = st.Parameters.Count / 4;
             switch (st.Parameters.Count - 4 * count)
@@ -42,10 +42,10 @@ namespace SpiceSharp.Parser.Readers
             for (int i = 0; i < count; i++)
             {
                 DC.Sweep sweep = new DC.Sweep(
-                    st.Parameters[i * 4].ReadWord(),
-                    st.Parameters[i * 4 + 1].ReadValue(),
-                    st.Parameters[i * 4 + 2].ReadValue(),
-                    st.Parameters[i * 4 + 3].ReadValue());
+                    st.Parameters[i * 4].image.ToLower(),
+                    netlist.ParseDouble(st.Parameters[i * 4 + 1]),
+                    netlist.ParseDouble(st.Parameters[i * 4 + 2]),
+                    netlist.ParseDouble(st.Parameters[i * 4 + 3]));
                 dc.Sweeps.Add(sweep);
             }
 

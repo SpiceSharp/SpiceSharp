@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
         {
             VoltageSwitch vsw = new VoltageSwitch(name);
             vsw.ReadNodes(parameters, 4);
@@ -29,20 +29,19 @@ namespace SpiceSharp.Parser.Readers
             // Read the model
             if (parameters.Count < 5)
                 throw new ParseException(parameters[3], "Model expected", false);
-            vsw.Model = parameters[4].ReadModel<VoltageSwitchModel>(netlist);
+            vsw.SetModel(netlist.FindModel<VoltageSwitchModel>(parameters[4]));
 
             // Optional ON or OFF
             if (parameters.Count == 6)
             {
-                string state = parameters[5].ReadWord();
-                switch (state)
+                switch (parameters[5].image.ToLower())
                 {
                     case "on": vsw.SetOn(); break;
                     case "off": vsw.SetOff(); break;
                     default: throw new ParseException(parameters[5], "ON or OFF expected");
                 }
             }
-            return vsw;
+            return (ICircuitObject)vsw;
         }
     }
 }

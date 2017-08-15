@@ -6,13 +6,22 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A class that describes a voltage-controlled current-source
     /// </summary>
-    public class VoltageControlledVoltagesource : CircuitComponent
+    public class VoltageControlledVoltagesource : CircuitComponent<VoltageControlledVoltagesource>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static VoltageControlledVoltagesource()
+        {
+            Register();
+            terminals = new string[] { "V+", "V-", "VC+", "VC-" };
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("gain"), SpiceInfo("Voltage gain")]
-        public Parameter<double> VCVScoeff { get; } = new Parameter<double>();
+        public Parameter VCVScoeff { get; } = new Parameter();
         [SpiceName("i"), SpiceInfo("Output current")]
         public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[VCVSbranch];
         [SpiceName("v"), SpiceInfo("Output current")]
@@ -37,7 +46,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled voltage source</param>
-        public VoltageControlledVoltagesource(string name) : base(name, "V+", "V-", "VC+", "VC-") { }
+        public VoltageControlledVoltagesource(string name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -48,17 +57,11 @@ namespace SpiceSharp.Components
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
         /// <param name="gain">The voltage gain</param>
-        public VoltageControlledVoltagesource(string name, string pos, string neg, string cont_pos, string cont_neg, object gain) : base(name, "V+", "V-", "VC+", "VC-")
+        public VoltageControlledVoltagesource(string name, string pos, string neg, string cont_pos, string cont_neg, double gain) : base(name)
         {
             Connect(pos, neg, cont_pos, cont_neg);
-            Set("gain", gain);
+            VCVScoeff.Set(gain);
         }
-
-        /// <summary>
-        /// No model
-        /// </summary>
-        /// <returns>null</returns>
-        public override CircuitModel GetModel() => null;
 
         /// <summary>
         /// Setup the voltage-controlled voltage source

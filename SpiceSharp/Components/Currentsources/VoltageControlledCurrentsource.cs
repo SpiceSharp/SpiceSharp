@@ -5,13 +5,22 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class describes a voltage-controlled current source
     /// </summary>
-    public class VoltageControlledCurrentsource : CircuitComponent
+    public class VoltageControlledCurrentsource : CircuitComponent<VoltageControlledCurrentsource>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static VoltageControlledCurrentsource()
+        {
+            Register();
+            terminals = new string[] { "V+", "V-", "VC+", "VC-" };
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("gain"), SpiceInfo("Transconductance of the source (gain)")]
-        public Parameter<double> VCCScoeff { get; } = new Parameter<double>();
+        public Parameter VCCScoeff { get; } = new Parameter();
         [SpiceName("i"), SpiceInfo("Output current")]
         public double GetCurrent(Circuit ckt) => (ckt.State.Real.Solution[VCCScontPosNode] - ckt.State.Real.Solution[VCCScontNegNode]) * VCCScoeff;
         [SpiceName("v"), SpiceInfo("Voltage across output")]
@@ -36,7 +45,9 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled current source</param>
-        public VoltageControlledCurrentsource(string name) : base(name, "V+", "V-", "VC+", "VC-") { }
+        public VoltageControlledCurrentsource(string name) : base(name)
+        {
+        }
 
         /// <summary>
         /// Constructor
@@ -46,18 +57,13 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
-        /// <param name="coeff"></param>
-        public VoltageControlledCurrentsource(string name, string pos, string neg, string cont_pos, string cont_neg, object gain) : base(name, "V+", "V-", "VC+", "VC-")
+        /// <param name="coeff">The transconductance gain</param>
+        public VoltageControlledCurrentsource(string name, string pos, string neg, string cont_pos, string cont_neg, double gain) 
+            : base(name)
         {
             Connect(pos, neg, cont_pos, cont_neg);
-            Set("gain", gain);
+            VCCScoeff.Set(gain);
         }
-
-        /// <summary>
-        /// No model
-        /// </summary>
-        /// <returns>null</returns>
-        public override CircuitModel GetModel() => null;
 
         /// <summary>
         /// Setup the voltage-controlled current source

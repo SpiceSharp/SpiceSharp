@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitComponent Generate(string name, List<object> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
         {
             CurrentControlledCurrentsource cccs = new CurrentControlledCurrentsource(name);
             cccs.ReadNodes(parameters, 2);
@@ -31,9 +31,9 @@ namespace SpiceSharp.Parser.Readers
                 case 3: throw new ParseException(parameters[2], "Value expected");
             }
 
-            cccs.Set("control", parameters[2].ReadWord());
-            cccs.Set("gain", parameters[3].ReadValue());
-            return cccs;
+            cccs.CCCScontName = parameters[2].image.ToLower();
+            cccs.CCCScoeff.Set(netlist.ParseDouble(parameters[3]));
+            return (ICircuitObject)cccs;
         }
     }
 }

@@ -11,7 +11,10 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Constructor
         /// </summary>
-        public TransientReader() : base(StatementType.Control) { }
+        public TransientReader() : base(StatementType.Control)
+        {
+            Identifier = "tran";
+        }
 
         /// <summary>
         /// Read
@@ -22,9 +25,6 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(Statement st, Netlist netlist)
         {
-            if (!st.Name.TryReadLiteral("tran"))
-                return false;
-
             Transient tran = new Transient("Transient " + (netlist.Simulations.Count + 1));
             switch (st.Parameters.Count)
             {
@@ -33,14 +33,14 @@ namespace SpiceSharp.Parser.Readers
             }
 
             // Standard st.Parameters
-            tran.Set("step", st.Parameters[0].ReadValue());
-            tran.Set("stop", st.Parameters[1].ReadValue());
+            tran.Step = netlist.ParseDouble(st.Parameters[0]);
+            tran.FinalTime = netlist.ParseDouble(st.Parameters[1]);
 
             // Optional st.Parameters
             if (st.Parameters.Count > 2)
-                tran.Set("start", st.Parameters[2].ReadValue());
+                tran.InitTime = netlist.ParseDouble(st.Parameters[2]);
             if (st.Parameters.Count > 3)
-                tran.Set("maxstep", st.Parameters[1].ReadValue());
+                tran.MaxStep = netlist.ParseDouble(st.Parameters[3]);
 
             netlist.Simulations.Add(tran);
             Generated = tran;

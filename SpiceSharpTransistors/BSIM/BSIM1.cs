@@ -7,40 +7,49 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    public class BSIM1 : CircuitComponent
+    public class BSIM1 : CircuitComponent<BSIM1>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static BSIM1()
+        {
+            Register();
+            terminals = new string[] { "Drain", "Gate", "Source", "Bulk" };
+        }
+
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public BSIM1Model Model { get; set; }
+        public void SetModel(BSIM1Model model) => Model = (ICircuitObject)model;
 
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("w"), SpiceInfo("Width")]
-        public Parameter<double> B1w { get; } = new Parameter<double>(5e-6);
+        public Parameter B1w { get; } = new Parameter(5e-6);
         [SpiceName("l"), SpiceInfo("Length")]
-        public Parameter<double> B1l { get; } = new Parameter<double>(5e-6);
+        public Parameter B1l { get; } = new Parameter(5e-6);
         [SpiceName("as"), SpiceInfo("Source area")]
-        public Parameter<double> B1sourceArea { get; } = new Parameter<double>();
+        public Parameter B1sourceArea { get; } = new Parameter();
         [SpiceName("ad"), SpiceInfo("Drain area")]
-        public Parameter<double> B1drainArea { get; } = new Parameter<double>();
+        public Parameter B1drainArea { get; } = new Parameter();
         [SpiceName("ps"), SpiceInfo("Source perimeter")]
-        public Parameter<double> B1sourcePerimeter { get; } = new Parameter<double>();
+        public Parameter B1sourcePerimeter { get; } = new Parameter();
         [SpiceName("pd"), SpiceInfo("Drain perimeter")]
-        public Parameter<double> B1drainPerimeter { get; } = new Parameter<double>();
+        public Parameter B1drainPerimeter { get; } = new Parameter();
         [SpiceName("nrs"), SpiceInfo("Number of squares in source")]
-        public Parameter<double> B1sourceSquares { get; } = new Parameter<double>(1);
+        public Parameter B1sourceSquares { get; } = new Parameter(1);
         [SpiceName("nrd"), SpiceInfo("Number of squares in drain")]
-        public Parameter<double> B1drainSquares { get; } = new Parameter<double>(1);
+        public Parameter B1drainSquares { get; } = new Parameter(1);
         [SpiceName("off"), SpiceInfo("Device is initially off")]
         public bool B1off { get; set; }
         [SpiceName("vbs"), SpiceInfo("Initial B-S voltage")]
-        public Parameter<double> B1icVBS { get; } = new Parameter<double>();
+        public Parameter B1icVBS { get; } = new Parameter();
         [SpiceName("vds"), SpiceInfo("Initial D-S voltage")]
-        public Parameter<double> B1icVDS { get; } = new Parameter<double>();
+        public Parameter B1icVDS { get; } = new Parameter();
         [SpiceName("vgs"), SpiceInfo("Initial G-S voltage")]
-        public Parameter<double> B1icVGS { get; } = new Parameter<double>();
+        public Parameter B1icVGS { get; } = new Parameter();
 
         /// <summary>
         /// Methods
@@ -149,15 +158,9 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM1(string name) : base(name, "Drain", "Gate", "Source", "Bulk")
+        public BSIM1(string name) : base(name)
         {
         }
-
-        /// <summary>
-        /// Get the model
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => Model;
 
         /// <summary>
         /// Setup the device
@@ -165,6 +168,8 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
+            var model = Model as BSIM1Model;
+
             // Allocate nodes
             var nodes = BindNodes(ckt);
             B1dNode = nodes[0].Index;
@@ -183,7 +188,7 @@ namespace SpiceSharp.Components
             B1von = 0;
 
             /* process drain series resistance */
-            if ((Model.B1sheetResistance.Value != 0) && (B1drainSquares.Value != 0.0) && (B1dNodePrime == 0))
+            if ((model.B1sheetResistance.Value != 0) && (B1drainSquares.Value != 0.0) && (B1dNodePrime == 0))
             {
                 B1dNodePrime = CreateNode(ckt).Index;
             }
@@ -193,7 +198,7 @@ namespace SpiceSharp.Components
             }
 
             /* process source series resistance */
-            if ((Model.B1sheetResistance.Value != 0) && (B1sourceSquares.Value != 0.0) && (B1sNodePrime == 0))
+            if ((model.B1sheetResistance.Value != 0) && (B1sourceSquares.Value != 0.0) && (B1sNodePrime == 0))
             {
                 if (B1sNodePrime == 0)
                 {
@@ -216,56 +221,57 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
+            var model = Model as BSIM1Model;
             double EffChanLength;
             double EffChanWidth;
             double Leff;
             double Weff;
             double CoxWoverL;
 
-            if ((EffChanLength = B1l.Value - Model.B1deltaL.Value * 1e-6) <= 0)
-                throw new CircuitException($"B1: mosfet {Name}, model {Model.Name}: Effective channel length <= 0");
-            if ((EffChanWidth = B1w.Value - Model.B1deltaW.Value * 1e-6) <= 0)
-                throw new CircuitException($"B1: mosfet {Name}, model {Model.Name}: Effective channel width <= 0");
-            B1GDoverlapCap = EffChanWidth * Model.B1gateDrainOverlapCap.Value;
-            B1GSoverlapCap = EffChanWidth * Model.B1gateSourceOverlapCap.Value;
-            B1GBoverlapCap = B1l.Value * Model.B1gateBulkOverlapCap.Value;
+            if ((EffChanLength = B1l.Value - model.B1deltaL.Value * 1e-6) <= 0)
+                throw new CircuitException($"B1: mosfet {Name}, model {model.Name}: Effective channel length <= 0");
+            if ((EffChanWidth = B1w.Value - model.B1deltaW.Value * 1e-6) <= 0)
+                throw new CircuitException($"B1: mosfet {Name}, model {model.Name}: Effective channel width <= 0");
+            B1GDoverlapCap = EffChanWidth * model.B1gateDrainOverlapCap.Value;
+            B1GSoverlapCap = EffChanWidth * model.B1gateSourceOverlapCap.Value;
+            B1GBoverlapCap = B1l.Value * model.B1gateBulkOverlapCap.Value;
 
             /* process drain series resistance */
-            if ((B1drainConductance = Model.B1sheetResistance.Value * B1drainSquares.Value) != 0.0)
+            if ((B1drainConductance = model.B1sheetResistance.Value * B1drainSquares.Value) != 0.0)
             {
                 B1drainConductance = 1.0 / B1drainConductance;
             }
 
             /* process source series resistance */
-            if ((B1sourceConductance = Model.B1sheetResistance.Value * B1sourceSquares.Value) != 0.0)
+            if ((B1sourceConductance = model.B1sheetResistance.Value * B1sourceSquares.Value) != 0.0)
             {
                 B1sourceConductance = 1.0 / B1sourceConductance;
             }
 
             Leff = EffChanLength * 1.0e6; /* convert into micron */
             Weff = EffChanWidth * 1.0e6; /* convert into micron */
-            CoxWoverL = Model.Cox * Weff / Leff; /* F / cm *  * 2 */
+            CoxWoverL = model.Cox * Weff / Leff; /* F / cm *  * 2 */
 
-            B1vfb = Model.B1vfb0.Value + Model.B1vfbL.Value / Leff + Model.B1vfbW.Value / Weff;
-            B1phi = Model.B1phi0.Value + Model.B1phiL.Value / Leff + Model.B1phiW.Value / Weff;
-            B1K1 = Model.B1K10.Value + Model.B1K1L.Value / Leff + Model.B1K1W.Value / Weff;
-            B1K2 = Model.B1K20.Value + Model.B1K2L.Value / Leff + Model.B1K2W.Value / Weff;
-            B1eta = Model.B1eta0.Value + Model.B1etaL.Value / Leff + Model.B1etaW.Value / Weff;
-            B1etaB = Model.B1etaB0.Value + Model.B1etaBl.Value / Leff + Model.B1etaBw.Value / Weff;
-            B1etaD = Model.B1etaD0.Value + Model.B1etaDl.Value / Leff + Model.B1etaDw.Value / Weff;
-            B1betaZero = Model.B1mobZero.Value;
-            B1betaZeroB = Model.B1mobZeroB0.Value + Model.B1mobZeroBl.Value / Leff + Model.B1mobZeroBw.Value / Weff;
-            B1ugs = Model.B1ugs0.Value + Model.B1ugsL.Value / Leff + Model.B1ugsW.Value / Weff;
-            B1ugsB = Model.B1ugsB0.Value + Model.B1ugsBL.Value / Leff + Model.B1ugsBW.Value / Weff;
-            B1uds = Model.B1uds0.Value + Model.B1udsL.Value / Leff + Model.B1udsW.Value / Weff;
-            B1udsB = Model.B1udsB0.Value + Model.B1udsBL.Value / Leff + Model.B1udsBW.Value / Weff;
-            B1udsD = Model.B1udsD0.Value + Model.B1udsDL.Value / Leff + Model.B1udsDW.Value / Weff;
-            B1betaVdd = Model.B1mobVdd0.Value + Model.B1mobVddl.Value / Leff + Model.B1mobVddw.Value / Weff;
-            B1betaVddB = Model.B1mobVddB0.Value + Model.B1mobVddBl.Value / Leff + Model.B1mobVddBw.Value / Weff;
-            B1betaVddD = Model.B1mobVddD0.Value + Model.B1mobVddDl.Value / Leff + Model.B1mobVddDw.Value / Weff;
-            B1subthSlope = Model.B1subthSlope0.Value + Model.B1subthSlopeL.Value / Leff + Model.B1subthSlopeW.Value / Weff;
-            B1subthSlopeB = Model.B1subthSlopeB0.Value + Model.B1subthSlopeBL.Value / Leff + Model.B1subthSlopeBW.Value / Weff;
-            B1subthSlopeD = Model.B1subthSlopeD0.Value + Model.B1subthSlopeDL.Value / Leff + Model.B1subthSlopeDW.Value / Weff;
+            B1vfb = model.B1vfb0.Value + model.B1vfbL.Value / Leff + model.B1vfbW.Value / Weff;
+            B1phi = model.B1phi0.Value + model.B1phiL.Value / Leff + model.B1phiW.Value / Weff;
+            B1K1 = model.B1K10.Value + model.B1K1L.Value / Leff + model.B1K1W.Value / Weff;
+            B1K2 = model.B1K20.Value + model.B1K2L.Value / Leff + model.B1K2W.Value / Weff;
+            B1eta = model.B1eta0.Value + model.B1etaL.Value / Leff + model.B1etaW.Value / Weff;
+            B1etaB = model.B1etaB0.Value + model.B1etaBl.Value / Leff + model.B1etaBw.Value / Weff;
+            B1etaD = model.B1etaD0.Value + model.B1etaDl.Value / Leff + model.B1etaDw.Value / Weff;
+            B1betaZero = model.B1mobZero.Value;
+            B1betaZeroB = model.B1mobZeroB0.Value + model.B1mobZeroBl.Value / Leff + model.B1mobZeroBw.Value / Weff;
+            B1ugs = model.B1ugs0.Value + model.B1ugsL.Value / Leff + model.B1ugsW.Value / Weff;
+            B1ugsB = model.B1ugsB0.Value + model.B1ugsBL.Value / Leff + model.B1ugsBW.Value / Weff;
+            B1uds = model.B1uds0.Value + model.B1udsL.Value / Leff + model.B1udsW.Value / Weff;
+            B1udsB = model.B1udsB0.Value + model.B1udsBL.Value / Leff + model.B1udsBW.Value / Weff;
+            B1udsD = model.B1udsD0.Value + model.B1udsDL.Value / Leff + model.B1udsDW.Value / Weff;
+            B1betaVdd = model.B1mobVdd0.Value + model.B1mobVddl.Value / Leff + model.B1mobVddw.Value / Weff;
+            B1betaVddB = model.B1mobVddB0.Value + model.B1mobVddBl.Value / Leff + model.B1mobVddBw.Value / Weff;
+            B1betaVddD = model.B1mobVddD0.Value + model.B1mobVddDl.Value / Leff + model.B1mobVddDw.Value / Weff;
+            B1subthSlope = model.B1subthSlope0.Value + model.B1subthSlopeL.Value / Leff + model.B1subthSlopeW.Value / Weff;
+            B1subthSlopeB = model.B1subthSlopeB0.Value + model.B1subthSlopeBL.Value / Leff + model.B1subthSlopeBW.Value / Weff;
+            B1subthSlopeD = model.B1subthSlopeD0.Value + model.B1subthSlopeDL.Value / Leff + model.B1subthSlopeDW.Value / Weff;
 
             if (B1phi < 0.1) B1phi = 0.1;
             if (B1K1 < 0.0) B1K1 = 0.0;
@@ -290,37 +296,38 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Load(Circuit ckt)
         {
+            var model = Model as BSIM1Model;
             var state = ckt.State;
             var rstate = state.Real;
             var method = ckt.Method;
             double EffectiveLength, DrainArea, SourceArea, DrainPerimeter, SourcePerimeter, DrainSatCurrent, SourceSatCurrent,
                 GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, von, vdsat, vt0;
-            int Check;
+            int Check;  
             double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat, vcrit, vgb, gbs, cbs,
                 evbs, gbd, cbd, evbd, cd, czbd, czbs, czbdsw, czbssw, PhiB, PhiBSW, MJ, MJSW, arg, argsw, sarg, sargsw, capbs = 0.0,
                 capbd = 0.0, ceqqg, gcdgb, gcsgb, gcggb, gcbgb, cqgate, cqbulk, cqdrn, ceqqb, ceqqd, ceqbs, ceqbd, xnrm, xrev, cdreq;
             double gm, gds, gmbs, qgate, qbulk, qdrn = 0.0, cggb = 0.0, cgdb = 0.0, cgsb = 0.0, cbgb = 0.0, cbdb = 0.0, cbsb = 0.0, cdgb = 0.0,
                 cddb = 0.0, cdsb = 0.0, cdrain, qsrc = 0.0, csgb = 0.0, cssb = 0.0, csdb = 0.0, gcgdb, gcgsb, gcbdb, gcbsb, gcddb, gcdsb, gcsdb, gcssb;
 
-            EffectiveLength = B1l - Model.B1deltaL * 1.0e-6; /* m */
+            EffectiveLength = B1l - model.B1deltaL * 1.0e-6; /* m */
             DrainArea = B1drainArea;
             SourceArea = B1sourceArea;
             DrainPerimeter = B1drainPerimeter;
             SourcePerimeter = B1sourcePerimeter;
-            if ((DrainSatCurrent = DrainArea * Model.B1jctSatCurDensity) < 1e-15)
+            if ((DrainSatCurrent = DrainArea * model.B1jctSatCurDensity) < 1e-15)
             {
                 DrainSatCurrent = 1.0e-15;
             }
-            if ((SourceSatCurrent = SourceArea * Model.B1jctSatCurDensity) < 1.0e-15)
+            if ((SourceSatCurrent = SourceArea * model.B1jctSatCurDensity) < 1.0e-15)
             {
                 SourceSatCurrent = 1.0e-15;
             }
-            GateSourceOverlapCap = Model.B1gateSourceOverlapCap * B1w;
-            GateDrainOverlapCap = Model.B1gateDrainOverlapCap * B1w;
-            GateBulkOverlapCap = Model.B1gateBulkOverlapCap * EffectiveLength;
-            von = Model.B1type * B1von;
-            vdsat = Model.B1type * B1vdsat;
-            vt0 = Model.B1type * B1vt0;
+            GateSourceOverlapCap = model.B1gateSourceOverlapCap * B1w;
+            GateDrainOverlapCap = model.B1gateDrainOverlapCap * B1w;
+            GateBulkOverlapCap = model.B1gateBulkOverlapCap * EffectiveLength;
+            von = model.B1type * B1von;
+            vdsat = model.B1type * B1vdsat;
+            vt0 = model.B1type * B1vt0;
 
             Check = 1;
             if (state.UseSmallSignal)
@@ -337,9 +344,9 @@ namespace SpiceSharp.Components
             }
             else if (state.Init == CircuitState.InitFlags.InitJct && !B1off)
             {
-                vds = Model.B1type * B1icVDS;
-                vgs = Model.B1type * B1icVGS;
-                vbs = Model.B1type * B1icVBS;
+                vds = model.B1type * B1icVDS;
+                vgs = model.B1type * B1icVGS;
+                vbs = model.B1type * B1icVBS;
                 if ((vds == 0) && (vgs == 0) && (vbs == 0) &&
                     (method != null || state.UseDC || state.Domain == CircuitState.DomainTypes.None || !state.UseIC))
                 {
@@ -355,9 +362,9 @@ namespace SpiceSharp.Components
             else
             {
                 /* PREDICTOR */
-                vbs = Model.B1type * (rstate.OldSolution[B1bNode] - rstate.OldSolution[B1sNodePrime]);
-                vgs = Model.B1type * (rstate.OldSolution[B1gNode] - rstate.OldSolution[B1sNodePrime]);
-                vds = Model.B1type * (rstate.OldSolution[B1dNodePrime] - rstate.OldSolution[B1sNodePrime]);
+                vbs = model.B1type * (rstate.OldSolution[B1bNode] - rstate.OldSolution[B1sNodePrime]);
+                vgs = model.B1type * (rstate.OldSolution[B1gNode] - rstate.OldSolution[B1sNodePrime]);
+                vds = model.B1type * (rstate.OldSolution[B1dNodePrime] - rstate.OldSolution[B1sNodePrime]);
                 /* PREDICTOR */
                 vbd = vbs - vds;
                 vgd = vgs - vds;
@@ -383,7 +390,7 @@ namespace SpiceSharp.Components
 
                 /* NOBYPASS */
 
-                von = Model.B1type * B1von;
+                von = model.B1type * B1von;
                 if (state.States[0][B1states + B1vds] >= 0)
                 {
                     vgs = Transistor.DEVfetlim(vgs, state.States[0][B1states + B1vgs], von);
@@ -467,8 +474,8 @@ namespace SpiceSharp.Components
                 out cssb, out csdb, out cdrain, out von, out vdsat, ckt);
             }
 
-            B1von = Model.B1type * von;
-            B1vdsat = Model.B1type * vdsat;
+            B1von = model.B1type * von;
+            B1vdsat = model.B1type * vdsat;
 
             /* 
 			* COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
@@ -486,14 +493,14 @@ namespace SpiceSharp.Components
 				* czbssw:zero bias source junction sidewall capacitance
 				*/
 
-                czbd = Model.B1unitAreaJctCap * DrainArea;
-                czbs = Model.B1unitAreaJctCap * SourceArea;
-                czbdsw = Model.B1unitLengthSidewallJctCap * DrainPerimeter;
-                czbssw = Model.B1unitLengthSidewallJctCap * SourcePerimeter;
-                PhiB = Model.B1bulkJctPotential;
-                PhiBSW = Model.B1sidewallJctPotential;
-                MJ = Model.B1bulkJctBotGradingCoeff;
-                MJSW = Model.B1bulkJctSideGradingCoeff;
+                czbd = model.B1unitAreaJctCap * DrainArea;
+                czbs = model.B1unitAreaJctCap * SourceArea;
+                czbdsw = model.B1unitLengthSidewallJctCap * DrainPerimeter;
+                czbssw = model.B1unitLengthSidewallJctCap * SourcePerimeter;
+                PhiB = model.B1bulkJctPotential;
+                PhiBSW = model.B1sidewallJctPotential;
+                MJ = model.B1bulkJctBotGradingCoeff;
+                MJSW = model.B1bulkJctSideGradingCoeff;
 
                 /* Source Bulk Junction */
                 if (vbs < 0)
@@ -677,23 +684,23 @@ namespace SpiceSharp.Components
 			*/
             line900:
 
-            ceqbs = Model.B1type * (cbs - (gbs - state.Gmin) * vbs);
-            ceqbd = Model.B1type * (cbd - (gbd - state.Gmin) * vbd);
+            ceqbs = model.B1type * (cbs - (gbs - state.Gmin) * vbs);
+            ceqbd = model.B1type * (cbd - (gbd - state.Gmin) * vbd);
 
-            ceqqg = Model.B1type * ceqqg;
-            ceqqb = Model.B1type * ceqqb;
-            ceqqd = Model.B1type * ceqqd;
+            ceqqg = model.B1type * ceqqg;
+            ceqqb = model.B1type * ceqqb;
+            ceqqd = model.B1type * ceqqd;
             if (B1mode >= 0)
             {
                 xnrm = 1;
                 xrev = 0;
-                cdreq = Model.B1type * (cdrain - gds * vds - gm * vgs - gmbs * vbs);
+                cdreq = model.B1type * (cdrain - gds * vds - gm * vgs - gmbs * vbs);
             }
             else
             {
                 xnrm = 0;
                 xrev = 1;
-                cdreq = -(Model.B1type) * (cdrain + gds * vds - gm * vgd - gmbs * vbd);
+                cdreq = -(model.B1type) * (cdrain + gds * vds - gm * vgd - gmbs * vbd);
             }
 
             rstate.Rhs[B1gNode] -= ceqqg;
@@ -836,6 +843,7 @@ namespace SpiceSharp.Components
                 out double cbgbPointer, out double cbdbPointer, out double cbsbPointer, out double cdgbPointer, out double cddbPointer,
                 out double cdsbPointer, out double cdrainPointer, out double vonPointer, out double vdsatPointer, Circuit ckt)
         {
+            var model = Model as BSIM1Model;
             double gm, gds, gmbs, qg = 0.0, qb = 0.0, qd = 0.0, cggb = 0, cgdb = 0, cgsb = 0, cbgb = 0, cbdb = 0, cbsb = 0, cdgb = 0, cddb = 0, cdsb = 0, Vfb, Phi, K1, K2, Vdd, Ugs, Uds, dUgsdVbs,
                 Leff, dUdsdVbs, dUdsdVds, Eta, dEtadVds, dEtadVbs, Vpb, SqrtVpb, Von, Vth, dVthdVbs, dVthdVds, Vgs_Vth, DrainCurrent,
                 G, A, Arg, dGdVbs, dAdVbs, Beta, Beta_Vds_0, BetaVdd, dBetaVdd_dVds, Beta0, dBeta0dVds, dBeta0dVbs, VddSquare, C1, C2,
@@ -867,7 +875,7 @@ namespace SpiceSharp.Components
             Phi = B1phi;
             K1 = B1K1;
             K2 = B1K2;
-            Vdd = Model.B1vdd;
+            Vdd = model.B1vdd;
             if ((Ugs = B1ugs + B1ugsB * vbs) <= 0)
             {
                 Ugs = 0;
@@ -885,7 +893,7 @@ namespace SpiceSharp.Components
             }
             else
             {
-                Leff = B1l * 1.0e6 - Model.B1deltaL; /* Leff in um */
+                Leff = B1l * 1.0e6 - model.B1deltaL; /* Leff in um */
                 Uds = Uds / Leff;
                 dUdsdVbs = B1udsB / Leff;
                 dUdsdVds = B1udsD / Leff;
@@ -1067,9 +1075,9 @@ namespace SpiceSharp.Components
             if (gds < 0.0) gds = 0.0;
             if (gmbs < 0.0) gmbs = 0.0;
 
-            WLCox = Model.B1Cox *
-                (B1l - Model.B1deltaL * 1.0e-6) *
-                (B1w - Model.B1deltaW * 1.0e-6) * 1.0e4;   /* F */
+            WLCox = model.B1Cox *
+                (B1l - model.B1deltaL * 1.0e-6) *
+                (B1w - model.B1deltaW * 1.0e-6) * 1.0e4;   /* F */
 
             if (!ChargeComputationNeeded)
             {
@@ -1095,7 +1103,7 @@ namespace SpiceSharp.Components
             dAdVbs = 0.25 * K1 / SqrtVpb * (2 * dGdVbs + G / Vpb);
             Phi = Math.Max(0.1, Phi);
 
-            if (Model.B1channelChargePartitionFlag >= 1)
+            if (model.B1channelChargePartitionFlag >= 1)
             {
 
                 /*0/100 partitioning for drain/source chArges at the saturation region*/

@@ -6,12 +6,21 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents a voltage-controlled switch
     /// </summary>
-    public class VoltageSwitch : CircuitComponent
+    public class VoltageSwitch : CircuitComponent<VoltageSwitch>
     {
+        /// <summary>
+        /// Register our parameters
+        /// </summary>
+        static VoltageSwitch()
+        {
+            Register();
+            terminals = new string[] { "S+", "S-", "SC+", "SC-" };
+        }
+
         /// <summary>
         /// Gets or sets the model
         /// </summary>
-        public VoltageSwitchModel Model { get; set; }
+        public void SetModel(VoltageSwitchModel model) => Model = (ICircuitObject)model;
 
         /// <summary>
         /// Parameters
@@ -40,7 +49,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled switch</param>
-        public VoltageSwitch(string name) : base(name, "S+", "S-", "SC+", "SC-") { }
+        public VoltageSwitch(string name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -50,16 +59,10 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
-        public VoltageSwitch(string name, string pos, string neg, string cont_pos, string cont_neg) : base(name, "S+", "S-", "SC+", "SC-")
+        public VoltageSwitch(string name, string pos, string neg, string cont_pos, string cont_neg) : base(name)
         {
             Connect(pos, neg, cont_pos, cont_neg);
         }
-
-        /// <summary>
-        /// Get the model of the voltage-controlled switch
-        /// </summary>
-        /// <returns></returns>
-        public override CircuitModel GetModel() => Model;
 
         /// <summary>
         /// Setup the voltage-controlled switch
@@ -90,6 +93,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Load(Circuit ckt)
         {
+            var model = Model as VoltageSwitchModel;
             double g_now;
             double v_ctrl;
             double previous_state;
@@ -124,9 +128,9 @@ namespace SpiceSharp.Components
                 v_ctrl = rstate.OldSolution[VSWcontPosNode] - rstate.OldSolution[VSWcontNegNode];
 
                 // Calculate the current state
-                if (v_ctrl > (Model.VSWthresh + Model.VSWhyst))
+                if (v_ctrl > (model.VSWthresh + model.VSWhyst))
                     current_state = 1.0;
-                else if (v_ctrl < (Model.VSWthresh - Model.VSWhyst))
+                else if (v_ctrl < (model.VSWthresh - model.VSWhyst))
                     current_state = 0.0;
                 else
                     current_state = previous_state;
@@ -147,9 +151,9 @@ namespace SpiceSharp.Components
                 previous_state = state.States[1][VSWstate];
                 v_ctrl = rstate.OldSolution[VSWcontPosNode] - rstate.OldSolution[VSWcontNegNode];
 
-                if (v_ctrl > (Model.VSWthresh + Model.VSWhyst))
+                if (v_ctrl > (model.VSWthresh + model.VSWhyst))
                     current_state = 1.0;
-                else if (v_ctrl < (Model.VSWthresh - Model.VSWhyst))
+                else if (v_ctrl < (model.VSWthresh - model.VSWhyst))
                     current_state = 0.0;
                 else
                     current_state = previous_state;
@@ -161,7 +165,7 @@ namespace SpiceSharp.Components
                     state.States[0][VSWstate] = 1.0;
             }
 
-            g_now = current_state > 0.0 ? Model.VSWonConduct : Model.VSWoffConduct;
+            g_now = current_state > 0.0 ? model.VSWonConduct : model.VSWoffConduct;
             VSWcond = g_now;
 
             // Load the Y-matrix
@@ -177,13 +181,14 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void AcLoad(Circuit ckt)
         {
+            var model = Model as VoltageSwitchModel;
             double current_state, g_now;
             var state = ckt.State;
             var cstate = state.Complex;
 
             // Get the current state
             current_state = state.States[0][VSWstate];
-            g_now = current_state > 0.0 ? Model.VSWonConduct : Model.VSWoffConduct;
+            g_now = current_state > 0.0 ? model.VSWonConduct : model.VSWoffConduct;
 
             // Load the Y-matrix
             cstate.Matrix[VSWposNode, VSWposNode] += g_now;

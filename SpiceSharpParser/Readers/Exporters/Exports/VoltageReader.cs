@@ -22,15 +22,21 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <returns></returns>
         public override bool Read(Statement st, Netlist netlist)
         {
-            if (!st.Name.TryReadLiteral("v"))
+            if (st.Name.image.ToLower() != "v")
                 return false;
 
             string node, reference = null;
             switch (st.Parameters.Count)
             {
                 case 0: throw new ParseException(st.Name, "Node expected", false);
-                case 2: reference = st.Parameters[1].ReadIdentifier(); goto case 1;
-                case 1: node = st.Parameters[0].ReadIdentifier(); break;
+                case 2:
+                    if (!ReaderExtension.IsNode(st.Parameters[1]))
+                        throw new ParseException(st.Parameters[1], "Node expected");
+                    reference = st.Parameters[1].image; goto case 1;
+                case 1:
+                    if (!ReaderExtension.IsNode(st.Parameters[0]))
+                        throw new ParseException(st.Parameters[0], "Node expected");
+                    node = st.Parameters[0].image; break;
                 default: throw new ParseException(st.Name, "Too many nodes specified", false);
             }
 
