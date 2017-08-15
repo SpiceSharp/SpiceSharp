@@ -2,6 +2,8 @@
 using System.Text;
 using System.IO;
 using SpiceSharp.Parser.Expressions;
+using SpiceSharp.Parser.Readers;
+using SpiceSharp.Parser.Subcircuits;
 using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Parser
@@ -54,6 +56,26 @@ namespace SpiceSharp.Parser
             stream.Position = 0;
             parser.ReInit(stream);
             return parser.ParseExpression();
+        }
+
+        /// <summary>
+        /// A method that can be used for the event of parsing data
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="data">The data</param>
+        public void OnParseExpression(object sender, ExpressionData data)
+        {
+            data.Output = Parse(data.Input);
+        }
+
+        /// <summary>
+        /// A method that can be used for the event of changing the current path
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="args">The data</param>
+        public void OnSubcircuitPathChanged(object sender, SubcircuitPathChangedEventArgs args)
+        {
+            Parameters = args.Parameters;
         }
     }
 }

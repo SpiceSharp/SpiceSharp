@@ -88,7 +88,7 @@ namespace SpiceSharp.Parser.Readers
             netlist.Path.Ascend();
 
             // Return the subcircuit
-            return (ICircuitObject)subckt;
+            return subckt;
         }
     }
 }

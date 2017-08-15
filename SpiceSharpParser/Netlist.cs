@@ -163,6 +163,11 @@ namespace SpiceSharp.Parser
                 new BipolarModelReader(false),
                 new DiodeModelReader());
 
+            // Standard parser
+            SpiceExpression e = new SpiceExpression();
+            netlist.Readers.OnParseExpression += e.OnParseExpression;
+            netlist.Path.OnSubcircuitPathChanged += e.OnSubcircuitPathChanged;
+
             return netlist;
         }
     }

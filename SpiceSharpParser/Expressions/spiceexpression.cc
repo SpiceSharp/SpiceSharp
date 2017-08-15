@@ -77,6 +77,7 @@ public class SpiceSharpExpressionParser
 			else
 				d *= 1e-3;
 			break;
+		case 'k': d *= 1e3; break;
 		case 'u': d *= 1e-6; break;
 		case 'n': d *= 1e-9; break;
 		case 'p': d *= 1e-12; break;

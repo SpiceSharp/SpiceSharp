@@ -139,6 +139,7 @@ namespace SpiceSharp.Parser.Readers
         public ExpressionData(string input)
         {
             Input = input;
+            Output = double.NaN;
         }
     }
 
