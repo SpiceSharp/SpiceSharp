@@ -59,14 +59,8 @@ namespace SpiceSharp.Parser.Readers.Collections
             if (!readers.ContainsKey(id))
                 throw new ParseException(st.Name, $"Cannot recognized component \"{st.Name.image}\"");
 
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
             if (readers[id].Read(st, netlist))
-            {
-                sw.Stop();
-                System.Console.WriteLine("Read component \"" + st.Name.image + "\" in " + sw.ElapsedMilliseconds + " ms");
                 return readers[id].Generated;
-            }
             throw new ParseException(st.Name, $"Cannot create component \"{st.Name.image}\"");
         }
     }

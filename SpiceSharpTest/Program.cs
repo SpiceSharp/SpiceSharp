@@ -13,8 +13,6 @@ namespace SpiceSharpTest
 {
     class Program
     {
-        private static SpiceExpression expr = new SpiceExpression();
-
         /// <summary>
         /// Main method
         /// </summary>
@@ -29,12 +27,14 @@ namespace SpiceSharpTest
             sw.Stop();
             Console.WriteLine("Time taken to parse: " + sw.ElapsedMilliseconds + " ms");
 
-            Console.ReadKey();
-        }
+            nr = new NetlistReader();
+            sw.Restart();
+            nr.Parse("test.net");
+            sw.Stop();
+            Console.WriteLine("Time taken to parse (2): " + sw.ElapsedMilliseconds + " ms");
 
-        private static void Path_OnSubcircuitPathChanged(object sender, SpiceSharp.Parser.Subcircuits.SubcircuitPathChangedEventArgs e)
-        {
-            expr.Parameters = e.Parameters;
+            Console.WriteLine("Parsing finished");
+            Console.ReadKey();
         }
     }
 }

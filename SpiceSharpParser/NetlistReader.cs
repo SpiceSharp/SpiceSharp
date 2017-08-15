@@ -1,8 +1,5 @@
 ﻿using System.IO;
 using SpiceSharp.Parser.Readers;
-using SpiceSharp.Parser.Readers.Exports;
-using SpiceSharp.Parser.Readers.Waveforms;
-using System;
 
 namespace SpiceSharp.Parser
 {
@@ -62,23 +59,15 @@ namespace SpiceSharp.Parser
             SpiceSharpParser parser = new SpiceSharpParser(stream);
 
             // Parse the netlist for control statements and subcircuit definitions
-            var sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
             Netlist.Readers.Active = StatementType.Control 
                 | StatementType.Model
                 | StatementType.Subcircuit 
                 | StatementType.Export;
             stream.Seek(0, SeekOrigin.Begin);
             parser.ReInit(stream);
-            sw.Stop();
-            Console.WriteLine("Setting up stream: " + sw.ElapsedMilliseconds);
-            sw.Restart();
             parser.ParseNetlist(Netlist);
-            sw.Stop();
-            Console.WriteLine("Parsing definitions: " + sw.ElapsedMilliseconds);
 
             // Parse the netlist for components while ignoring subcircuit definitions
-            sw.Restart();
             Netlist.Readers.Active = StatementType.All 
                 & ~StatementType.Model
                 & ~StatementType.Subcircuit 
@@ -86,12 +75,7 @@ namespace SpiceSharp.Parser
                 & ~StatementType.Export;
             stream.Seek(0, SeekOrigin.Begin);
             parser.ReInit(stream);
-            sw.Stop();
-            Console.WriteLine("Restarting stream " + sw.ElapsedMilliseconds);
-            sw.Restart();
             parser.ParseNetlist(Netlist);
-            sw.Stop();
-            Console.WriteLine("Parsing components: " + sw.ElapsedMilliseconds);
         }
     }
 }

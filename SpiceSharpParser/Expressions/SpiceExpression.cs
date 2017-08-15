@@ -65,7 +65,10 @@ namespace SpiceSharp.Parser
         /// <param name="data">The data</param>
         public void OnParseExpression(object sender, ExpressionData data)
         {
-            data.Output = Parse(data.Input);
+            if (double.TryParse(data.Input, out double result))
+                data.Output = result;
+            else
+                data.Output = Parse(data.Input);
         }
 
         /// <summary>
