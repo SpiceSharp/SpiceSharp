@@ -20,7 +20,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Statement st, Netlist netlist)
+        public override bool Read(string type, Statement st, Netlist netlist)
         {
             if (st.Parameters.Count < 2)
                 throw new ParseException(st.Name, "Subcircuit name expected", false);
@@ -43,7 +43,7 @@ namespace SpiceSharp.Parser.Readers
                         mode = false;
 
                     // Parameters have started, so we will keep reading parameters
-                    else if (st.Parameters[i].kind == TokenConstants.ASSIGNMENT)
+                    else if (st.Parameters[i].kind == ASSIGNMENT)
                     {
                         mode = false;
                         AssignmentToken at = st.Parameters[i] as AssignmentToken;
@@ -54,7 +54,7 @@ namespace SpiceSharp.Parser.Readers
                     else if (ReaderExtension.IsNode(st.Parameters[i]))
                         definition.Pins.Add(st.Parameters[i].image.ToLower());
                 }
-                else if (st.Parameters[i].kind == TokenConstants.ASSIGNMENT)
+                else if (st.Parameters[i].kind == ASSIGNMENT)
                 {
                     AssignmentToken at = st.Parameters[i] as AssignmentToken;
                     definition.Defaults.Add(at.Name.image.ToLower(), at.Value);

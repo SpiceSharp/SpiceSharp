@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Components;
+﻿using SpiceSharp.Components;
 
 namespace SpiceSharp.Parser.Readers
 {
@@ -9,18 +8,12 @@ namespace SpiceSharp.Parser.Readers
     public class BipolarModelReader : ModelReader
     {
         /// <summary>
-        /// Private variables
-        /// </summary>
-        private bool npn = true;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="isNpn">True if it is parsing npn transistor, false for pnp transistors</param>
-        public BipolarModelReader(bool isNpn)
-            : base(isNpn ? "npn" : "pnp")
+        public BipolarModelReader()
+            : base("npn;pnp")
         {
-            npn = isNpn;
         }
 
         /// <summary>
@@ -28,14 +21,14 @@ namespace SpiceSharp.Parser.Readers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        protected override ICircuitObject GenerateModel(string name)
+        protected override ICircuitObject GenerateModel(string name, string type)
         {
             BJTModel model = new BJTModel(name);
-            if (npn)
+            if (type == "npn")
                 model.SetNPN(true);
-            else
+            else if (type == "pnp")
                 model.SetPNP(true);
-            return (ICircuitObject)model;
+            return model;
         }
     }
 }

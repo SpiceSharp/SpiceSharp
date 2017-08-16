@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Parser.Readers.Extensions;
-
-namespace SpiceSharp.Parser.Readers
+﻿namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
     /// An exporter that can read .save statements
@@ -23,11 +21,11 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Statement st, Netlist netlist)
+        public override bool Read(string type, Statement st, Netlist netlist)
         {
             for (int i = 0; i < st.Parameters.Count; i++)
             {
-                if (st.Parameters[i].kind == TokenConstants.BRACKET)
+                if (st.Parameters[i].kind == BRACKET)
                 {
                     BracketToken bt = st.Parameters[i] as BracketToken;
                     Statement s = new Statement(StatementType.Export, bt.Name, bt.Parameters);

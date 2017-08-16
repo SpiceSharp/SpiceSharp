@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="st">Statement</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Statement st, Netlist netlist)
+        public override bool Read(string type, Statement st, Netlist netlist)
         {
             AC ac = new AC("AC " + (netlist.Simulations.Count + 1));
             switch (st.Parameters.Count)
@@ -34,8 +34,8 @@ namespace SpiceSharp.Parser.Readers
             }
 
             // Standard st.Parameters
-            string type = st.Parameters[0].image.ToLower();
-            switch (type)
+            string t = st.Parameters[0].image.ToLower();
+            switch (t)
             {
                 case "lin": ac.StepType = AC.StepTypes.Linear; break;
                 case "oct": ac.StepType = AC.StepTypes.Octave; break;

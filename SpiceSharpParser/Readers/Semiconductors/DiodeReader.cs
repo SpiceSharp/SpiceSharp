@@ -12,7 +12,7 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Constructor
         /// </summary>
-        public DiodeReader() : base('d') { }
+        public DiodeReader() : base("d") { }
 
         /// <summary>
         /// Generate a diode
@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string type, string name, List<Token> parameters, Netlist netlist)
         {
             Diode dio = new Diode(name);
             dio.ReadNodes(parameters, 2);
@@ -39,21 +39,26 @@ namespace SpiceSharp.Parser.Readers
             {
                 switch (parameters[i].kind)
                 {
-                    case SpiceSharpParserConstants.WORD:
+                    case WORD:
                         switch (parameters[i].image.ToLower())
                         {
-                            case "on": dio.DIOoff = false; break;
-                            case "off": dio.DIOoff = true; break;
-                            default: throw new ParseException("ON or OFF expected");
+                            case "on":
+                                dio.DIOoff = false;
+                                break;
+                            case "off":
+                                dio.DIOoff = true;
+                                break;
+                            default:
+                                throw new ParseException("ON or OFF expected");
                         }
                         break;
-                    case TokenConstants.ASSIGNMENT:
+                    case ASSIGNMENT:
                         AssignmentToken at = parameters[i] as AssignmentToken;
                         if (at.Name.image.ToLower() != "ic")
                             dio.DIOinitCond.Set(netlist.ParseDouble(at.Value));
                         break;
-                    case SpiceSharpParserConstants.VALUE:
-                    case SpiceSharpParserConstants.EXPRESSION:
+                    case VALUE:
+                    case EXPRESSION:
                         dio.DIOtemp.Set(netlist.ParseDouble(parameters[i]));
                         break;
                     default:
@@ -61,7 +66,7 @@ namespace SpiceSharp.Parser.Readers
                 }
             }
 
-            return (ICircuitObject)dio;
+            return dio;
         }
     }
 }

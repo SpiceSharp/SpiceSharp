@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SpiceSharp.Parser.Readers.Collections
 {
@@ -30,7 +26,9 @@ namespace SpiceSharp.Parser.Readers.Collections
         public override void Add(Reader r)
         {
             // Add the model
-            models.Add(r.Identifier, r);
+            string[] ids = r.Identifier.Split(';');
+            foreach (var id in ids)
+                models.Add(id, r);
         }
 
         /// <summary>
@@ -39,7 +37,9 @@ namespace SpiceSharp.Parser.Readers.Collections
         /// <param name="r">The reader</param>
         public override void Remove(Reader r)
         {
-            models.Remove(r.Identifier);
+            string[] ids = r.Identifier.Split(';');
+            foreach (var id in ids)
+                models.Remove(id);
         }
 
         /// <summary>
@@ -75,21 +75,23 @@ namespace SpiceSharp.Parser.Readers.Collections
                     break;
 
                 case SpiceSharpParserConstants.WORD:
-                    type = parameters[0].image.ToLower();
-                    for (int i = 1; i < parameters.Count; i++)
-                        parameters.Add(parameters[i]);
+                    type = st.Parameters[0].image.ToLower();
+                    for (int i = 1; i < st.Parameters.Count; i++)
+                        parameters.Add(st.Parameters[i]);
                     break;
 
                 default:
                     throw new ParseException(st.Name, "Invalid model definition");
             }
 
+            Statement mst = new Statement(StatementType.Model, st.Name, parameters);
+
             // The name should be the identifier
             if (!models.ContainsKey(type))
-                throw new ParseException(st.Name, $"Cannot recognize \"{st.Name.image}\"");
-            if (models[type].Read(st, netlist))
+                throw new ParseException(st.Name, $"Cannot read model \"{st.Name.image}\" of type \"{type}\"");
+            if (models[type].Read(type, mst, netlist))
                 return models[type].Generated;
-            throw new ParseException(st.Name, $"Could not create \"{st.Name.image}\"");
+            throw new ParseException(st.Name, $"Could not create model \"{st.Name.image}\"");
         }
     }
 }

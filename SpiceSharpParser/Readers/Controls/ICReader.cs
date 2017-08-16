@@ -22,24 +22,25 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Statement st, Netlist netlist)
+        public override bool Read(string type, Statement st, Netlist netlist)
         {
             // Only assignments are possible
             for (int i = 0; i < st.Parameters.Count; i++)
             {
                 switch (st.Parameters[i].kind)
                 {
-                    case TokenConstants.ASSIGNMENT:
+                    case ASSIGNMENT:
                         AssignmentToken at = st.Parameters[i] as AssignmentToken;
                         switch (at.Name.kind)
                         {
-                            case TokenConstants.BRACKET:
+                            case BRACKET:
                                 BracketToken bt = at.Name as BracketToken;
                                 if (bt.Name.image.ToLower() == "v" && bt.Parameters.Length == 1 && ReaderExtension.IsNode(bt.Parameters[0]))
                                     netlist.Circuit.Nodes.IC.Add(bt.Parameters[0].image.ToLower(), netlist.ParseDouble(at.Value));
                                 else
                                     throw new ParseException(st.Parameters[i], "Invalid format, v(<node>)=<ic> expected");
                                 break;
+
                             default:
                                 if (ReaderExtension.IsNode(at.Name))
                                     netlist.Circuit.Nodes.IC.Add(at.Name.image.ToLower(), netlist.ParseDouble(at.Value));

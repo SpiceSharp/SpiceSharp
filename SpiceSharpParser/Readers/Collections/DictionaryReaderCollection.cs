@@ -10,7 +10,8 @@ namespace SpiceSharp.Parser.Readers.Collections
         /// <summary>
         /// Private variables
         /// </summary>
-        private Dictionary<string, Reader> models = new Dictionary<string, Reader>();
+        private Dictionary<string, Reader> readers = new Dictionary<string, Reader>();
+        private List<Reader> any = new List<Reader>();
 
         /// <summary>
         /// Constructor
@@ -25,8 +26,19 @@ namespace SpiceSharp.Parser.Readers.Collections
         /// <param name="r">The reader</param>
         public override void Add(Reader r)
         {
-            // Add the model
-            models.Add(r.Identifier, r);
+            // If there is no identifier specified, the reader will deal with it by itself
+            if (r.Identifier == null)
+            {
+                if (!any.Contains(r))
+                    any.Add(r);
+            }
+            else
+            {
+                // Add the model
+                string[] ids = r.Identifier.Split(';');
+                foreach (var id in ids)
+                    readers.Add(id, r);
+            }
         }
 
         /// <summary>
@@ -35,7 +47,15 @@ namespace SpiceSharp.Parser.Readers.Collections
         /// <param name="r">The reader</param>
         public override void Remove(Reader r)
         {
-            models.Remove(r.Identifier);
+            if (r.Identifier == null)
+                any.Remove(r);
+            else
+            {
+                // Remove the model
+                string[] ids = r.Identifier.Split(';');
+                foreach (var id in ids)
+                    readers.Remove(id);
+            }
         }
 
         /// <summary>
@@ -43,7 +63,8 @@ namespace SpiceSharp.Parser.Readers.Collections
         /// </summary>
         public override void Clear()
         {
-            models.Clear();
+            any.Clear();
+            readers.Clear();
         }
 
         /// <summary>
@@ -56,10 +77,17 @@ namespace SpiceSharp.Parser.Readers.Collections
         {
             // The name should be the identifier
             string type = st.Name.image.ToLower();
-            if (!models.ContainsKey(type))
+            if (!readers.ContainsKey(type))
+            {
+                foreach (Reader r in any)
+                {
+                    if (r.Read(type, st, netlist))
+                        return r.Generated;
+                }
                 throw new ParseException(st.Name, $"Cannot recognize \"{st.Name.image}\"");
-            if (models[type].Read(st, netlist))
-                return models[type].Generated;
+            }
+            else if (readers[type].Read(type, st, netlist))
+                return readers[type].Generated;
             throw new ParseException(st.Name, $"Could not create \"{st.Name.image}\"");
         }
     }

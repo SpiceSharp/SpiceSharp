@@ -11,7 +11,6 @@ namespace SpiceSharp.Parser.Readers.Collections
         /// Private variables
         /// </summary>
         private List<Reader> readers = new List<Reader>();
-        private StatementType type = StatementType.None;
 
         /// <summary>
         /// Constructor
@@ -58,7 +57,7 @@ namespace SpiceSharp.Parser.Readers.Collections
         {
             foreach (Reader r in readers)
             {
-                if (r.Read(st, netlist))
+                if (r.Read(st.Name.image.ToLower(), st, netlist))
                     return r.Generated;
             }
             throw new ParseException(st.Name, "Unrecognized syntax");

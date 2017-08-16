@@ -18,6 +18,7 @@ namespace SpiceSharp.Parameters
         private static Dictionary<string, Func<T, double>> dgetter = new Dictionary<string, Func<T, double>>();
         private static Dictionary<string, Action<T, double>> dsetter = new Dictionary<string, Action<T, double>>();
         private static Dictionary<string, Func<T, Circuit, double>> dcgetter = new Dictionary<string, Func<T, Circuit, double>>();
+        private static Dictionary<string, Action<T, string>> ssetter = new Dictionary<string, Action<T, string>>();
 
         /// <summary>
         /// This method will register all the spice properties
@@ -48,6 +49,16 @@ namespace SpiceSharp.Parameters
                                 dgetter.Add(sn.Name, getter);
                             if (setter != null)
                                 dsetter.Add(sn.Name, setter);
+                        }
+                    }
+                    else if (pi.PropertyType == typeof(string))
+                    {
+                        Action<T, string> setter = (Action<T, string>)pi.GetSetMethod()?.CreateDelegate(typeof(Action<T, string>));
+                        foreach (var attr in pi.GetCustomAttributes<SpiceName>())
+                        {
+                            SpiceName sn = attr as SpiceName;
+                            if (setter != null)
+                                ssetter.Add(sn.Name, setter);
                         }
                     }
                 }
@@ -84,14 +95,29 @@ namespace SpiceSharp.Parameters
         /// </summary>
         /// <param name="id">The parameter identifier</param>
         /// <param name="value">The value</param>
-        /// <param name="ckt">The circuit if applicable</param>
         public virtual void Set(string name, double value)
         {
             // Set the parameter
             if (dsetter.ContainsKey(name))
                 dsetter[name].Invoke(me, value);
-            else
+            else if (pgetter.ContainsKey(name))
                 pgetter[name].Invoke(me).Set(value);
+            else
+                CircuitWarning.Warning(this, $"Unrecognized parameter \"{name}\"");
+        }
+
+        /// <summary>
+        /// Specify a parameter for this object
+        /// </summary>
+        /// <param name="name">The parameter identifier</param>
+        /// <param name="value">The value</param>
+        public virtual void Set(string name, string value)
+        {
+            // Set the parameter
+            if (ssetter.ContainsKey(name))
+                ssetter[name].Invoke(me, value);
+            else
+                CircuitWarning.Warning(this, $"Unrecognized parameter \"{name}\"");
         }
 
         /// <summary>
@@ -101,7 +127,9 @@ namespace SpiceSharp.Parameters
         /// <returns></returns>
         public virtual double Ask(string name)
         {
-            return dgetter[name].Invoke(me);
+            if (dgetter.ContainsKey(name))
+                return dgetter[name].Invoke(me);
+            return pgetter[name].Invoke(me).Value;
         }
 
         /// <summary>

@@ -124,7 +124,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                 {return new Statement(StatementType.Component, tn, parameters);}
       break;
     default:
-      mcc_la1[22] = mcc_gen;
+      mcc_la1[23] = mcc_gen;
       if (mcc_2_1(2)) {
         mcc_consume_token(DOT);
         tn = mcc_consume_token(1);
@@ -196,6 +196,15 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         
         mcc_consume_token(ENDS);
         switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
+        case WORD:
+          mcc_consume_token(WORD);
+          break;
+        default:
+          mcc_la1[11] = mcc_gen;
+          ;
+          break;
+        }
+        switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
         case NEWLINE:
           mcc_consume_token(NEWLINE);
           break;
@@ -203,7 +212,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           mcc_consume_token(0);
           break;
         default:
-          mcc_la1[11] = mcc_gen;
+          mcc_la1[12] = mcc_gen;
           mcc_consume_token(-1);
           throw new ParseException();
         }
@@ -223,7 +232,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
             ;
             break;
           default:
-            mcc_la1[12] = mcc_gen;
+            mcc_la1[13] = mcc_gen;
             goto label_9;
           }
           t = ParseParameter();
@@ -238,7 +247,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           mcc_consume_token(0);
           break;
         default:
-          mcc_la1[13] = mcc_gen;
+          mcc_la1[14] = mcc_gen;
           mcc_consume_token(-1);
           throw new ParseException();
         }
@@ -248,7 +257,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
             ;
             break;
           default:
-            mcc_la1[14] = mcc_gen;
+            mcc_la1[15] = mcc_gen;
             goto label_10;
           }
           mcc_consume_token(PLUS);
@@ -263,7 +272,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
               ;
               break;
             default:
-              mcc_la1[15] = mcc_gen;
+              mcc_la1[16] = mcc_gen;
               goto label_11;
             }
             t = ParseParameter();
@@ -278,7 +287,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
             mcc_consume_token(0);
             break;
           default:
-            mcc_la1[16] = mcc_gen;
+            mcc_la1[17] = mcc_gen;
             mcc_consume_token(-1);
             throw new ParseException();
           }
@@ -305,7 +314,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
               ;
               break;
             default:
-              mcc_la1[17] = mcc_gen;
+              mcc_la1[18] = mcc_gen;
               goto label_12;
             }
             t = ParseParameter();
@@ -320,7 +329,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
             mcc_consume_token(0);
             break;
           default:
-            mcc_la1[18] = mcc_gen;
+            mcc_la1[19] = mcc_gen;
             mcc_consume_token(-1);
             throw new ParseException();
           }
@@ -330,7 +339,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
               ;
               break;
             default:
-              mcc_la1[19] = mcc_gen;
+              mcc_la1[20] = mcc_gen;
               goto label_13;
             }
             mcc_consume_token(PLUS);
@@ -345,7 +354,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                 ;
                 break;
               default:
-                mcc_la1[20] = mcc_gen;
+                mcc_la1[21] = mcc_gen;
                 goto label_14;
               }
               t = ParseParameter();
@@ -360,7 +369,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
               mcc_consume_token(0);
               break;
             default:
-              mcc_la1[21] = mcc_gen;
+              mcc_la1[22] = mcc_gen;
               mcc_consume_token(-1);
               throw new ParseException();
             }
@@ -373,7 +382,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                       {return null;}
           break;
         default:
-          mcc_la1[23] = mcc_gen;
+          mcc_la1[24] = mcc_gen;
           mcc_consume_token(-1);
           throw new ParseException();
         }
@@ -400,7 +409,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           ;
           break;
         default:
-          mcc_la1[24] = mcc_gen;
+          mcc_la1[25] = mcc_gen;
           goto label_15;
         }
         tb = ParseParameter();
@@ -416,7 +425,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                                   {return new AssignmentToken(ta, tb);}
         break;
       default:
-        mcc_la1[25] = mcc_gen;
+        mcc_la1[26] = mcc_gen;
         ;
         break;
       }
@@ -435,7 +444,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           ;
           break;
         default:
-          mcc_la1[26] = mcc_gen;
+          mcc_la1[27] = mcc_gen;
           goto label_16;
         }
         tb = ParseParameter();
@@ -451,7 +460,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                                   {return new AssignmentToken(ta, tb);}
         break;
       default:
-        mcc_la1[27] = mcc_gen;
+        mcc_la1[28] = mcc_gen;
         ;
         break;
       }
@@ -473,7 +482,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                                {return ta;}
         break;
       default:
-        mcc_la1[28] = mcc_gen;
+        mcc_la1[29] = mcc_gen;
         mcc_consume_token(-1);
         throw new ParseException();
       }
@@ -504,7 +513,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
       t = mcc_consume_token(EXPRESSION);
       break;
     default:
-      mcc_la1[29] = mcc_gen;
+      mcc_la1[30] = mcc_gen;
       mcc_consume_token(-1);
       throw new ParseException();
     }
@@ -515,7 +524,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         ;
         break;
       default:
-        mcc_la1[30] = mcc_gen;
+        mcc_la1[31] = mcc_gen;
         goto label_17;
       }
       mcc_consume_token(COMMA);
@@ -539,7 +548,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         t = mcc_consume_token(EXPRESSION);
         break;
       default:
-        mcc_la1[31] = mcc_gen;
+        mcc_la1[32] = mcc_gen;
         mcc_consume_token(-1);
         throw new ParseException();
       }
@@ -658,13 +667,13 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
   public bool lookingAhead = false;
   private bool mcc_semLA;
   private int mcc_gen;
-  private int[] mcc_la1 = new int[32];
+  private int[] mcc_la1 = new int[33];
   static private int[] mcc_la1_0;
   static SpiceSharpParser() {
       mcc_gla1_0();
    }
    private static void mcc_gla1_0() {
-      mcc_la1_0 = new int[] {16924672,524289,66060288,131073,2048,66060288,131073,66060288,2048,66060288,16924672,131073,66060288,131073,2048,66060288,131073,66060288,131073,2048,66060288,131073,16777216,147456,66060288,32,66060288,32,66060288,66060288,32768,66060288,};
+      mcc_la1_0 = new int[] {16924672,524289,66060288,131073,2048,66060288,131073,66060288,2048,66060288,16924672,16777216,131073,66060288,131073,2048,66060288,131073,66060288,131073,2048,66060288,131073,16777216,147456,66060288,32,66060288,32,66060288,66060288,32768,66060288,};
    }
   private MccCalls[] mcc_2_rtns = new MccCalls[5];
   private bool mcc_rescan = false;
@@ -676,7 +685,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     token = new Token();
     mcc_ntk = -1;
     mcc_gen = 0;
-    for (int i = 0; i < 32; i++) mcc_la1[i] = -1;
+    for (int i = 0; i < 33; i++) mcc_la1[i] = -1;
     for (int i = 0; i < mcc_2_rtns.Length; i++) mcc_2_rtns[i] = new MccCalls();
   }
 
@@ -686,7 +695,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     token = new Token();
     mcc_ntk = -1;
     mcc_gen = 0;
-    for (int i = 0; i < 32; i++) mcc_la1[i] = -1;
+    for (int i = 0; i < 33; i++) mcc_la1[i] = -1;
     for (int i = 0; i < mcc_2_rtns.Length; i++) mcc_2_rtns[i] = new MccCalls();
   }
 
@@ -696,7 +705,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     token = new Token();
     mcc_ntk = -1;
     mcc_gen = 0;
-    for (int i = 0; i < 32; i++) mcc_la1[i] = -1;
+    for (int i = 0; i < 33; i++) mcc_la1[i] = -1;
     for (int i = 0; i < mcc_2_rtns.Length; i++) mcc_2_rtns[i] = new MccCalls();
   }
 
@@ -706,7 +715,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     token = new Token();
     mcc_ntk = -1;
     mcc_gen = 0;
-    for (int i = 0; i < 32; i++) mcc_la1[i] = -1;
+    for (int i = 0; i < 33; i++) mcc_la1[i] = -1;
     for (int i = 0; i < mcc_2_rtns.Length; i++) mcc_2_rtns[i] = new MccCalls();
   }
 
@@ -715,7 +724,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     token = new Token();
     mcc_ntk = -1;
     mcc_gen = 0;
-    for (int i = 0; i < 32; i++) mcc_la1[i] = -1;
+    for (int i = 0; i < 33; i++) mcc_la1[i] = -1;
     for (int i = 0; i < mcc_2_rtns.Length; i++) mcc_2_rtns[i] = new MccCalls();
   }
 
@@ -724,7 +733,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     token = new Token();
     mcc_ntk = -1;
     mcc_gen = 0;
-    for (int i = 0; i < 32; i++) mcc_la1[i] = -1;
+    for (int i = 0; i < 33; i++) mcc_la1[i] = -1;
     for (int i = 0; i < mcc_2_rtns.Length; i++) mcc_2_rtns[i] = new MccCalls();
   }
 
@@ -843,7 +852,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
       la1tokens[mcc_kind] = true;
       mcc_kind = -1;
     }
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < 33; i++) {
       if (mcc_la1[i] == mcc_gen) {
         for (int j = 0; j < 32; j++) {
           if ((mcc_la1_0[i] & (1<<j)) != 0) {

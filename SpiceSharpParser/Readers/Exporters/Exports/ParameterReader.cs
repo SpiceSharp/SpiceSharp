@@ -11,7 +11,10 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// Constructor
         /// </summary>
-        public ParameterReader() : base(StatementType.Export) { }
+        public ParameterReader() : base(StatementType.Export)
+        {
+            Identifier = null;
+        }
 
         /// <summary>
         /// Read
@@ -20,12 +23,14 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Statement st, Netlist netlist)
+        public override bool Read(string type, Statement st, Netlist netlist)
         {
-            if (st.Name.kind != TokenConstants.REFERENCE)
+            // We don't have an identifier, so we need to check here
+            if (st.Name.kind != REFERENCE)
                 return false;
-            if (st.Parameters.Count != 1 || (st.Parameters[0].kind != SpiceSharpParserConstants.WORD && st.Parameters[0].kind != SpiceSharpParserConstants.IDENTIFIER))
+            if (st.Parameters.Count != 1 || (st.Parameters[0].kind != WORD && st.Parameters[0].kind != IDENTIFIER))
                 return false;
+
             string component = st.Name.image.Substring(1).ToLower();
             string parameter = st.Parameters[0].image.ToLower();
 
@@ -77,10 +82,11 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public override object Extract(SimulationData data)
+        public override double Extract(SimulationData data)
         {
-            var c = (IParameterized)data.GetObject(Component);
-            return c?.Ask(Parameter, data.Circuit);
+            IParameterized c = (IParameterized)data.GetObject(Component);
+            // return c.Ask(Parameter, data.Circuit);
+            return c.Ask(Parameter);
         }
     }
 }

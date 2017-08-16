@@ -13,7 +13,7 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="type">The type, multiple types are separated by a semicolon (;)</param>
         public ModelReader(string id) : base(StatementType.Model)
         {
             Identifier = id;
@@ -23,7 +23,7 @@ namespace SpiceSharp.Parser.Readers
         /// Generate a model of the right type
         /// </summary>
         /// <returns></returns>
-        protected abstract ICircuitObject GenerateModel(string name);
+        protected abstract ICircuitObject GenerateModel(string name, string type);
 
         /// <summary>
         /// Read
@@ -32,7 +32,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Statement st, Netlist netlist)
+        public override bool Read(string type, Statement st, Netlist netlist)
         {
             // Errors
             switch (st.Parameters.Count)
@@ -40,7 +40,7 @@ namespace SpiceSharp.Parser.Readers
                 case 0: throw new ParseException(st.Name, "Model name and type expected", false);
             }
 
-            var model = GenerateModel(st.Name.image.ToLower());
+            var model = GenerateModel(st.Name.image.ToLower(), type);
             netlist.ReadParameters((IParameterized)model, st.Parameters);
             
             // Output

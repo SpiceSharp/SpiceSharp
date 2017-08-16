@@ -10,13 +10,13 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Constructor
         /// </summary>
-        public DiodeModelReader() : base("D") { }
+        public DiodeModelReader() : base("d") { }
 
         /// <summary>
         /// Generate a diode model
         /// </summary>
         /// <param name="name">Name</param>
         /// <returns></returns>
-        protected override ICircuitObject GenerateModel(string name) => (ICircuitObject)new DiodeModel(name);
+        protected override ICircuitObject GenerateModel(string name, string type) => new DiodeModel(name);
     }
 }

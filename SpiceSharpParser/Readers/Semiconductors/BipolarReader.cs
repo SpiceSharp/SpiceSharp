@@ -13,7 +13,7 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Constructor
         /// </summary>
-        public BipolarReader() : base('q') { }
+        public BipolarReader() : base("q") { }
 
         /// <summary>
         /// Generate the bipolar transistor
@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string type, string name, List<Token> parameters, Netlist netlist)
         {
             // I think the BJT definition is ambiguous (eg. QXXXX NC NB NE MNAME OFF can be either substrate = MNAME, model = OFF or model name = MNAME and transistor is OFF
             // We will only allow 3 terminals if there are only 4 parameters
@@ -50,14 +50,19 @@ namespace SpiceSharp.Parser.Readers
             {
                 switch (parameters[6].image.ToLower())
                 {
-                    case "on": bjt.BJToff = false; break;
-                    case "off": bjt.BJToff = true; break;
-                    default: throw new ParseException(parameters[6], "ON or OFF expected");
+                    case "on":
+                        bjt.BJToff = false;
+                        break;
+                    case "off":
+                        bjt.BJToff = true;
+                        break;
+                    default:
+                        throw new ParseException(parameters[6], "ON or OFF expected");
                 }
             }
 
             netlist.ReadParameters(bjt, parameters, 7);
-            return (ICircuitObject)bjt;
+            return bjt;
         }
     }
 }

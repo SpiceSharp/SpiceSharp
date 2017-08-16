@@ -12,7 +12,7 @@ namespace SpiceSharp.Parser.Readers
         /// </summary>
         /// <param name="stream">Stream</param>
         /// <param name="ckt">Circuit</param>
-        public abstract object Extract(SimulationData data);
+        public abstract double Extract(SimulationData data);
 
         /// <summary>
         /// Get the type name

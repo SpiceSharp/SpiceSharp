@@ -20,6 +20,6 @@ namespace SpiceSharp.Parser.Readers.Waveforms
         /// Generate a new sine waveform
         /// </summary>
         /// <returns></returns>
-        protected override IWaveform Generate() => new Sine();
+        protected override IWaveform Generate(string type) => new Sine();
     }
 }

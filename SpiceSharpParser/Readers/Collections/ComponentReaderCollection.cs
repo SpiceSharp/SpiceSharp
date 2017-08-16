@@ -26,8 +26,9 @@ namespace SpiceSharp.Parser.Readers.Collections
         /// <param name="r">Reader</param>
         public override void Add(Reader r)
         {
-            char c = r.Identifier[0];
-            readers.Add(c, r);
+            string[] c = r.Identifier.Split(';');
+            foreach (var id in c)
+                readers.Add(id[0], r);
         }
 
         /// <summary>
@@ -36,7 +37,9 @@ namespace SpiceSharp.Parser.Readers.Collections
         /// <param name="r">Reader</param>
         public override void Remove(Reader r)
         {
-            readers.Remove(r.Identifier[0]);
+            string[] c = r.Identifier.Split(';');
+            foreach (var id in c)
+                readers.Remove(id[0]);
         }
 
         /// <summary>
@@ -59,7 +62,7 @@ namespace SpiceSharp.Parser.Readers.Collections
             if (!readers.ContainsKey(id))
                 throw new ParseException(st.Name, $"Cannot recognized component \"{st.Name.image}\"");
 
-            if (readers[id].Read(st, netlist))
+            if (readers[id].Read(id.ToString(), st, netlist))
                 return readers[id].Generated;
             throw new ParseException(st.Name, $"Cannot create component \"{st.Name.image}\"");
         }

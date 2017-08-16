@@ -31,7 +31,7 @@ namespace SpiceSharp.Parser
             beginLine = name.beginLine;
             endLine = value.endLine;
             kind = TokenConstants.ASSIGNMENT;
-            image = name.image + "=" + name.image;
+            image = name.image + "=" + value.image;
         }
 
         /// <summary>

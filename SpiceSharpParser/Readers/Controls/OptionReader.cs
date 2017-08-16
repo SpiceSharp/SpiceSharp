@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Simulations;
-using SpiceSharp.Parser.Readers.Extensions;
+﻿using SpiceSharp.Parser.Readers.Extensions;
 using SpiceSharp.Parser.Readers.Simulations;
 
 namespace SpiceSharp.Parser.Readers
@@ -24,14 +23,14 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Statement st, Netlist netlist)
+        public override bool Read(string type, Statement st, Netlist netlist)
         {
             // Read all options
             for (int i = 0; i < st.Parameters.Count; i++)
             {
                 switch (st.Parameters[i].kind)
                 {
-                    case TokenConstants.ASSIGNMENT:
+                    case ASSIGNMENT:
                         AssignmentToken at = st.Parameters[i] as AssignmentToken;
                         string key = at.Name.image.ToLower();
                         switch (key)
@@ -58,7 +57,7 @@ namespace SpiceSharp.Parser.Readers
                         }
                         break;
 
-                    case SpiceSharpParserConstants.WORD:
+                    case WORD:
                         key = st.Parameters[i].image.ToLower();
                         switch (key)
                         {

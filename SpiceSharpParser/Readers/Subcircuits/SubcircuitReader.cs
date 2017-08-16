@@ -15,7 +15,7 @@ namespace SpiceSharp.Parser.Readers
         /// Constructor
         /// </summary>
         public SubcircuitReader()
-            : base('x')
+            : base("x")
         {
         }
 
@@ -26,7 +26,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override ICircuitObject Generate(string name, List<Token> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string type, string name, List<Token> parameters, Netlist netlist)
         {
             List<string> pins = new List<string>();
             Dictionary<string, Token> pars = new Dictionary<string, Token>();
@@ -50,7 +50,7 @@ namespace SpiceSharp.Parser.Readers
                 // Reading parameters
                 if (!mode)
                 {
-                    if (parameters[i].kind == TokenConstants.ASSIGNMENT)
+                    if (parameters[i].kind == ASSIGNMENT)
                     {
                         AssignmentToken at = parameters[i] as AssignmentToken;
                         switch (at.Name.kind)
@@ -82,8 +82,9 @@ namespace SpiceSharp.Parser.Readers
             netlist.Path.Descend(subckt, definition, pars);
             var oldactive = netlist.Readers.Active;
             netlist.Readers.Active = StatementType.All;
-            definition.Read(StatementType.Model, netlist);
-            definition.Read(StatementType.Component, netlist);
+            definition.Read(StatementType.Control, netlist); // Control parameters
+            definition.Read(StatementType.Model, netlist); // Models
+            definition.Read(StatementType.Component, netlist); // Components
             netlist.Readers.Active = oldactive;
             netlist.Path.Ascend();
 

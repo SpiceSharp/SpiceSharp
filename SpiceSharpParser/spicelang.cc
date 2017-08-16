@@ -51,7 +51,7 @@ Statement ParseSpiceLine() :
 	}
 		// Read the body of the subcircuit
 		(st = ParseSpiceLine() { if (st != null) statements.Add(st); })*
-		<ENDS> (<NEWLINE> | <EOF>)
+		<ENDS> (<WORD>)? (<NEWLINE> | <EOF>)
 	{
 		parameters.Add(new StatementsToken(statements.ToArray()));
 		return new Statement(StatementType.Subcircuit, tn, parameters);

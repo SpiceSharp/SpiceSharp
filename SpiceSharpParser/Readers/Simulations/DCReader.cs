@@ -23,7 +23,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        public override bool Read(Statement st, Netlist netlist)
+        public override bool Read(string type, Statement st, Netlist netlist)
         {
             DC dc = new DC("DC " + (netlist.Simulations.Count + 1));
             int count = st.Parameters.Count / 4;

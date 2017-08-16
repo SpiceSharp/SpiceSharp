@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace SpiceSharp.Parser.Readers
+﻿namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
     /// This interface can read tokens
     /// </summary>
-    public abstract class Reader
+    public abstract class Reader : TokenConstants
     {
         /// <summary>
         /// The reader type
@@ -34,12 +31,12 @@ namespace SpiceSharp.Parser.Readers
         public object Generated { get; protected set; } = null;
 
         /// <summary>
-        /// Read a line
+        /// Read a statement
         /// </summary>
-        /// <param name="name">The opening name/id</param>
-        /// <param name="parameters">The following parameters</param>
-        /// <param name="netlist">The resulting netlist</param>
-        /// <returns></returns>
-        public abstract bool Read(Statement st, Netlist netlist);
+        /// <param name="type">Type</param>
+        /// <param name="st">Statement</param>
+        /// <param name="netlist">Netlist</param>
+        /// <returns>True if reading succeeded</returns>
+        public abstract bool Read(string type, Statement st, Netlist netlist);
     }
 }

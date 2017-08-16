@@ -109,7 +109,7 @@ namespace SpiceSharp.Parser
                 new GenericReaderCollection(StatementType.Subcircuit),
                 new GenericReaderCollection(StatementType.Waveform),
                 new DictionaryReaderCollection(StatementType.Control),
-                new GenericReaderCollection(StatementType.Export)
+                new DictionaryReaderCollection(StatementType.Export)
                 );
 
             // Register standard readers
@@ -119,22 +119,15 @@ namespace SpiceSharp.Parser
                 new SubcircuitDefinitionReader(),
 
                 // Component readers
-                new ResistorReader(),
-                new CapacitorReader(),
-                new InductorReader(),
-                new MutualInductanceReader(),
+                new RLCMReader(),
                 new VoltagesourceReader(),
-                new VoltageControlledVoltagesourceReader(),
-                new CurrentControlledVoltagesourceReader(),
                 new CurrentsourceReader(),
-                new VoltageControlledCurrentsourceReader(),
-                new CurrentControlledCurrentsourceReader(),
-                new VoltageSwitchReader(),
-                new CurrentSwitchReader(),
+                new SwitchReader(),
                 new BipolarReader(),
                 new DiodeReader(),
 
                 // Control readers
+                new ParamSetReader(),
                 new DCReader(),
                 new ACReader(),
                 new TransientReader(),
@@ -146,8 +139,6 @@ namespace SpiceSharp.Parser
                 // Standard export types
                 new VoltageReader(),
                 new CurrentReader(),
-                new VoltageComplexReader(),
-                new CurrentComplexReader(),
                 new ParameterReader(),
 
                 // Standard waveform types
@@ -155,12 +146,9 @@ namespace SpiceSharp.Parser
                 new SineReader(),
 
                 // Add model types
-                new ResistorModelReader(),
-                new CapacitorModelReader(),
-                new VoltageSwitchModelReader(),
-                new CurrentSwitchModelReader(),
-                new BipolarModelReader(true),
-                new BipolarModelReader(false),
+                new RLCMModelReader(),
+                new SwitchModelReader(),
+                new BipolarModelReader(),
                 new DiodeModelReader());
 
             // Standard parser

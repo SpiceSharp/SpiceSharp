@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using SpiceSharp.Parameters;
 using SpiceSharp.Components;
 using static SpiceSharp.Parser.SpiceSharpParserConstants;
@@ -24,7 +23,7 @@ namespace SpiceSharp.Parser.Readers.Extensions
                 if (parameters[i].kind == TokenConstants.ASSIGNMENT)
                 {
                     AssignmentToken at = parameters[i] as AssignmentToken;
-                    string pname; double pvalue;
+                    string pname;
                     if (at.Name.kind == WORD)
                         pname = at.Name.image.ToLower();
                     else
@@ -32,15 +31,17 @@ namespace SpiceSharp.Parser.Readers.Extensions
                     switch (at.Value.kind)
                     {
                         case VALUE:
-                            pvalue = netlist.Readers.ParseDouble(at.Value.image.ToLower());
+                            obj.Set(pname, netlist.Readers.ParseDouble(at.Value.image.ToLower()));
                             break;
                         case EXPRESSION:
-                            pvalue = netlist.Readers.ParseDouble(at.Value.image.Substring(1, at.Value.image.Length - 2).ToLower());
+                            obj.Set(pname, netlist.Readers.ParseDouble(at.Value.image.Substring(1, at.Value.image.Length - 2).ToLower()));
+                            break;
+                        case WORD:
+                            obj.Set(pname, netlist.ParseString(at.Value));
                             break;
                         default:
                             throw new ParseException(parameters[i], "Invalid assignment");
                     }
-                    obj.Set(pname, pvalue);
                 }
             }
         }
@@ -106,6 +107,20 @@ namespace SpiceSharp.Parser.Readers.Extensions
         }
 
         /// <summary>
+        /// Check if the token is a value
+        /// </summary>
+        /// <param name="t">Token</param>
+        /// <returns></returns>
+        public static bool IsValue(Token t)
+        {
+            if (t.kind == VALUE)
+                return true;
+            if (t.kind == EXPRESSION)
+                return true;
+            return false;
+        }
+
+        /// <summary>
         /// Read a model from a Token-related object
         /// </summary>
         /// <typeparam name="T">A CircuitModel class</typeparam>
@@ -141,6 +156,25 @@ namespace SpiceSharp.Parser.Readers.Extensions
                     return netlist.Readers.ParseDouble(t.image.Substring(1, t.image.Length - 2).ToLower());
                 default:
                     throw new ParseException(t, "Value or expression expected");
+            }
+        }
+
+        /// <summary>
+        /// Parse a token to a string
+        /// </summary>
+        /// <param name="netlist">The netlist</param>
+        /// <param name="t">The token</param>
+        /// <returns></returns>
+        public static string ParseString(this Netlist netlist, Token t)
+        {
+            switch (t.kind)
+            {
+                case WORD:
+                    return t.image;
+                case STRING:
+                    return t.image.Substring(1, t.image.Length - 2);
+                default:
+                    throw new ParseException(t, "String expected");
             }
         }
 

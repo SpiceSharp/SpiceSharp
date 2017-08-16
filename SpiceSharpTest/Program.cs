@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
+using System.Diagnostics;
 using SpiceSharp.Parser;
-using SpiceSharp.Parameters;
-using System.Collections.Generic;
-using SpiceSharp.Components;
-using System.Reflection;
-using System.Reflection.Emit;
 
 namespace SpiceSharpTest
 {
     class Program
     {
+        static StreamWriter writer;
+
         /// <summary>
         /// Main method
         /// </summary>
@@ -27,14 +23,29 @@ namespace SpiceSharpTest
             sw.Stop();
             Console.WriteLine("Time taken to parse: " + sw.ElapsedMilliseconds + " ms");
 
-            nr = new NetlistReader();
-            sw.Restart();
-            nr.Parse("test.net");
-            sw.Stop();
-            Console.WriteLine("Time taken to parse (2): " + sw.ElapsedMilliseconds + " ms");
+            using (writer = new StreamWriter("output.csv"))
+            {
+                nr.Netlist.OnExportSimulationData += Netlist_OnExportSimulationData;
+                nr.Netlist.Simulate();
+            }
+
+            foreach (var w in SpiceSharp.Diagnostics.CircuitWarning.Warnings)
+                Console.WriteLine("Warning: " + w);
 
             Console.WriteLine("Parsing finished");
             Console.ReadKey();
+        }
+
+        private static void Netlist_OnExportSimulationData(object sender, SpiceSharp.Simulations.SimulationData data)
+        {
+            Netlist n = sender as Netlist;
+            writer.Write(data.GetTime());
+            for (int i = 0; i < n.Exports.Count; i++)
+            {
+                writer.Write(";");
+                writer.Write(n.Exports[i].Extract(data));
+            }
+            writer.WriteLine();
         }
     }
 }
