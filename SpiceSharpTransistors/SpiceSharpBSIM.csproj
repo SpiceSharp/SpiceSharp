@@ -55,16 +55,7 @@
     <Compile Include="BSIM\BSIM4.cs" />
     <Compile Include="BSIM\BSIM4Model.cs" />
     <Compile Include="BSIM\BSIM4SizeDependParam.cs" />
-    <Compile Include="MOS\MOS1.cs" />
-    <Compile Include="MOS\MOS1Model.cs" />
-    <Compile Include="MOS\MOS2.cs" />
-    <Compile Include="MOS\MOS2Model.cs" />
-    <Compile Include="MOS\MOS3.cs" />
-    <Compile Include="MOS\MOS3Model.cs" />
-    <Compile Include="MOS\MOS6.cs" />
-    <Compile Include="MOS\MOS6Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Transistor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpiceSharp\SpiceSharp.csproj">

@@ -50,6 +50,13 @@
     <Compile Include="Components\Currentsources\VoltageControlledCurrentsource.cs" />
     <Compile Include="Components\ICircuitComponent.cs" />
     <Compile Include="Circuits\ICircuitObject.cs" />
+    <Compile Include="Components\Transistors\MOS1.cs" />
+    <Compile Include="Components\Transistors\MOS1Model.cs" />
+    <Compile Include="Components\Transistors\MOS2.cs" />
+    <Compile Include="Components\Transistors\MOS2Model.cs" />
+    <Compile Include="Components\Transistors\MOS3.cs" />
+    <Compile Include="Components\Transistors\MOS3Model.cs" />
+    <Compile Include="Components\Transistors\Transistor.cs" />
     <Compile Include="Simulations\ISimulation.cs" />
     <Compile Include="Components\Waveforms\IWaveform.cs" />
     <Compile Include="Components\RLC\Inductor.cs" />

@@ -61,9 +61,9 @@
       <Project>{fdb9a121-dff2-403b-9430-d128a2a2794f}</Project>
       <Name>SpiceSharpParser</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SpiceSharpTransistors\SpiceSharpTransistors.csproj">
+    <ProjectReference Include="..\SpiceSharpTransistors\SpiceSharpBSIM.csproj">
       <Project>{104c054b-ea2f-4647-b19b-21502f88ea8c}</Project>
-      <Name>SpiceSharpTransistors</Name>
+      <Name>SpiceSharpBSIM</Name>
     </ProjectReference>
     <ProjectReference Include="..\SpiceSharp\SpiceSharp.csproj">
       <Project>{080d88db-051e-499b-a02b-eaa36de52853}</Project>
