@@ -124,6 +124,7 @@ namespace SpiceSharp.Parser
                 new CurrentsourceReader(),
                 new SwitchReader(),
                 new BipolarReader(),
+                new MosfetReader(),
                 new DiodeReader(),
 
                 // Control readers
@@ -149,6 +150,7 @@ namespace SpiceSharp.Parser
                 new RLCMModelReader(),
                 new SwitchModelReader(),
                 new BipolarModelReader(),
+                new MosfetModelReader(),
                 new DiodeModelReader());
 
             // Standard parser

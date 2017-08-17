@@ -83,7 +83,12 @@ namespace SpiceSharp.Components
         public Parameter MOS3kappa { get; } = new Parameter(.2);
         [SpiceName("xj"), SpiceInfo("Junction depth")]
         public Parameter MOS3junctionDepth { get; } = new Parameter();
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature in Kelvin")]
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
+        public double MOS3_TNOM
+        {
+            get => MOS3tnom - Circuit.CONSTCtoK;
+            set => MOS3tnom.Set(value + Circuit.CONSTCtoK);
+        }
         public Parameter MOS3tnom { get; } = new Parameter(300.15);
         [SpiceName("kf"), SpiceInfo("Flicker noise coefficient")]
         public Parameter MOS3fNcoef { get; } = new Parameter();

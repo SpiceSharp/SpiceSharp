@@ -28,7 +28,12 @@ namespace SpiceSharp.Components
         /// </summary>
         [SpiceName("area"), SpiceInfo("Area factor")]
         public Parameter BJTarea { get; } = new Parameter(1);
-        [SpiceName("temp"), SpiceInfo("Instance temperature in Kelvin")]
+        [SpiceName("temp"), SpiceInfo("Instance temperature")]
+        public double BJT_TEMP
+        {
+            get => BJTtemp - Circuit.CONSTCtoK;
+            set => BJTtemp.Set(value + Circuit.CONSTCtoK);
+        }
         public Parameter BJTtemp { get; } = new Parameter(300.15);
         [SpiceName("off"), SpiceInfo("Device initially off")]
         public bool BJToff { get; set; }

@@ -10,7 +10,7 @@ namespace SpiceSharp.Parser.Readers
         /// Constructor
         /// </summary>
         public RLCMReader()
-            : base("r;l;c;m")
+            : base("r;l;c;k")
         {
         }
 
@@ -29,7 +29,7 @@ namespace SpiceSharp.Parser.Readers
                 case "r": return GenerateRes(name, parameters, netlist);
                 case "l": return GenerateInd(name, parameters, netlist);
                 case "c": return GenerateCap(name, parameters, netlist);
-                case "m": return GenerateMut(name, parameters, netlist);
+                case "k": return GenerateMut(name, parameters, netlist);
             }
             return null;
         }

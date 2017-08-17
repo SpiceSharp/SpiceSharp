@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Components;
 using SpiceSharp.Parameters;
 using SpiceSharp.Parser.Readers.Extensions;
-using static SpiceSharp.Parser.SpiceSharpParserConstants;
 
 namespace SpiceSharp.Parser.Readers
 {

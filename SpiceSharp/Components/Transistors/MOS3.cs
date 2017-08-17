@@ -50,7 +50,12 @@ namespace SpiceSharp.Components
         public Parameter MOS3icVDS { get; } = new Parameter();
         [SpiceName("icvgs"), SpiceInfo("Initial G-S voltage")]
         public Parameter MOS3icVGS { get; } = new Parameter();
-        [SpiceName("temp"), SpiceInfo("Instance operating temperature in Kelvin")]
+        [SpiceName("temp"), SpiceInfo("Instance operating temperature")]
+        public double MOS3_TEMP
+        {
+            get => MOS3temp.Value - Circuit.CONSTCtoK;
+            set => MOS3temp.Set(value + Circuit.CONSTCtoK);
+        }
         public Parameter MOS3temp { get; } = new Parameter(300.15);
         [SpiceName("dnode"), SpiceInfo("Number of drain node")]
         public int MOS3dNode { get; private set; }

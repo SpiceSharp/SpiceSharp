@@ -32,6 +32,11 @@ namespace SpiceSharp.Components
         [SpiceName("off"), SpiceInfo("Initially off", Interesting = false)]
         public bool DIOoff { get; set; } = false;
         [SpiceName("temp"), SpiceInfo("Instance temperature", Interesting = false)]
+        public double DIO_TEMP
+        {
+            get => DIOtemp - Circuit.CONSTCtoK;
+            set => DIOtemp.Set(value + Circuit.CONSTCtoK);
+        }
         public Parameter DIOtemp { get; } = new Parameter(300.15);
         [SpiceName("ic"), SpiceInfo("Initial device voltage", Interesting = false)]
         public Parameter DIOinitCond { get; } = new Parameter();

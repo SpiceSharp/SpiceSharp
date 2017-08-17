@@ -55,7 +55,7 @@ namespace Spice2SpiceSharp
         /// <summary>
         /// Use the PzLoad function instead of the AcLoad analysis
         /// </summary>
-        public bool UsePzForAc { get; set; } = true;
+        public bool UsePzForAc { get; set; } = false;
 
         /// <summary>
         /// Read a device
@@ -204,7 +204,9 @@ namespace Spice2SpiceSharp
 
                 // Write namespace and class
                 WriteCode(sw, "", "namespace SpiceSharp.Components", "{");
-                WriteCode(sw, $"public class {name}Model : CircuitModel", "{");
+                WriteCode(sw, $"public class {name}Model : CircuitModel<{name}Model>", "{");
+                WriteCode(sw, "/// <summary>", "/// Register our model parameters", "/// </summary>");
+                WriteCode(sw, $"static {name}Model()", "{", "Register();", "}", "");
 
                 // Write the model parameters
                 WriteCode(sw, "/// <summary>", "/// Parameters", "/// </summary>");
@@ -278,11 +280,14 @@ namespace Spice2SpiceSharp
 
                 // Write namespace and class
                 WriteCode(sw, "", "namespace SpiceSharp.Components", "{");
-                WriteCode(sw, $"public class {name} : CircuitComponent", "{");
+                WriteCode(sw, $"public class {name} : CircuitComponent<{name}>", "{");
+
+                WriteCode(sw, "/// <summary>", "/// Register our device parameters and terminals", "/// </summary>");
+                WriteCode(sw, $"static {name}()", "{", "Register();", "terminals = new string[] {};", "}", "");
 
                 // Write device declaration
                 WriteCode(sw, "/// <summary>", "/// Gets or sets the device model", "/// </summary>");
-                WriteCode(sw, $"public {name}Model Model {{ get; set; }}");
+                WriteCode(sw, $"public void SetModel({name}Model model) => Model = ({name}Model)model;");
 
                 // Write the device parameters
                 WriteCode(sw, "", "/// <summary>", "/// Parameters", "/// </summary>");
@@ -330,17 +335,14 @@ namespace Spice2SpiceSharp
 
                 // Write the constructor
                 WriteCode(sw, "", "/// <summary>", "/// Constructor", "/// </summary>", "/// <param name=\"name\">The name of the device</param>");
-                WriteCode(sw, $"public {name}(string name) : base(name, 2)", "{", "}");
-
-                // Get the model
-                WriteCode(sw, "", "/// <summary>", "/// Get the model", "/// </summary>", "/// <returns></returns>");
-                WriteCode(sw, "public override CircuitModel GetModel() => Model;");
+                WriteCode(sw, $"public {name}(string name) : base(name)", "{", "}");
 
                 // Setup method
                 if (setup != null)
                 {
                     WriteCode(sw, "", "/// <summary>", "/// Setup the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void Setup(Circuit ckt)", "{");
+                    WriteCode(sw, $"var model = Model as {name}Model;");
                     foreach (string var in setup.DeviceVariables.Keys)
                         WriteCode(sw, $"{setup.DeviceVariables[var]} {var};");
                     WriteCode(sw, "", "// Allocate nodes");
@@ -357,6 +359,7 @@ namespace Spice2SpiceSharp
                 {
                     WriteCode(sw, "", "/// <summary>", "/// Do temperature-dependent calculations", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void Temperature(Circuit ckt)", "{");
+                    WriteCode(sw, $"var model = Model as {name}Model;");
                     foreach (string var in temp.DeviceVariables.Keys)
                         WriteCode(sw, $"{temp.DeviceVariables[var]} {var};");
                     WriteCode(sw, "", tempDev, "}");
@@ -367,7 +370,7 @@ namespace Spice2SpiceSharp
                 {
                     WriteCode(sw, "", "/// <summary>", "/// Load the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void Load(Circuit ckt)", "{");
-                    WriteCode(sw, "var state = ckt.State;", "var rstate = state.Real;", "var method = ckt.Method;");
+                    WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var rstate = state.Real;", "var method = ckt.Method;");
                     foreach (string var in load.DeviceVariables.Keys)
                         WriteCode(sw, $"{load.DeviceVariables[var]} {var};");
                     WriteCode(sw, "", loadDev, "}");
@@ -378,7 +381,7 @@ namespace Spice2SpiceSharp
                 {
                     WriteCode(sw, "", "/// <summary>", "/// Load the device for AC simulation", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void AcLoad(Circuit ckt)", "{");
-                    WriteCode(sw, "var state = ckt.State;", "var cstate = state.Complex;");
+                    WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var cstate = state.Complex;");
                     foreach (string var in acload.DeviceVariables.Keys)
                         WriteCode(sw, $"{acload.DeviceVariables[var]} {var};");
                     WriteCode(sw, "", acloadDev, "}");
@@ -389,7 +392,7 @@ namespace Spice2SpiceSharp
                 {
                     WriteCode(sw, "", "/// <summary>", "/// Load the device for AC simulation", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void AcLoad(Circuit ckt)", "{");
-                    WriteCode(sw, "var state = ckt.State;", "var cstate = state.Complex;");
+                    WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var cstate = state.Complex;");
                     foreach (string var in pzload.DeviceVariables.Keys)
                         WriteCode(sw, $"{pzload.DeviceVariables[var]} {var};");
                     WriteCode(sw, "", pzloadDev, "}");

@@ -17,7 +17,12 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature in Kelvin")]
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
+        public double BJT_TNOM
+        {
+            get => BJTtnom - Circuit.CONSTCtoK;
+            set => BJTtnom.Set(value + Circuit.CONSTCtoK);
+        }
         public Parameter BJTtnom { get; } = new Parameter(300.15);
         [SpiceName("is"), SpiceInfo("Saturation Current")]
         public Parameter BJTsatCur { get; } = new Parameter(1e-16);

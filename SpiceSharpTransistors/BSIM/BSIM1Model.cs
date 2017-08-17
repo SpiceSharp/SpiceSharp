@@ -141,7 +141,12 @@ namespace SpiceSharp.Components
         public Parameter B1subthSlopeDW { get; } = new Parameter();
         [SpiceName("tox"), SpiceInfo("Gate oxide thickness in um")]
         public Parameter B1oxideThickness { get; } = new Parameter();
-        [SpiceName("temp"), SpiceInfo("Temperature in degree Kelvin")]
+        [SpiceName("temp"), SpiceInfo("Temperature")]
+        public double B1_TEMP
+        {
+            get => B1temp - Circuit.CONSTCtoK;
+            set => B1temp.Set(value + Circuit.CONSTCtoK);
+        }
         public Parameter B1temp { get; } = new Parameter(300.15);
         [SpiceName("vdd"), SpiceInfo("Supply voltage to specify mus")]
         public Parameter B1vdd { get; } = new Parameter();

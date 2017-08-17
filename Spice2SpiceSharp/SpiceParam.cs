@@ -130,7 +130,16 @@ namespace Spice2SpiceSharp
                     if (defSet && defGet && name == paramGet)
                     {
                         GivenVariable.Add(paramGiven, name);
-                        decl.Add($"public Parameter<{type}> {name} {{ get; }} = new Parameter<{type}>();");
+                        switch (type.ToLower())
+                        {
+                            case "double":
+                            case "int":
+                                decl.Add($"public Parameter {name} {{ get; }} = new Parameter();");
+                                break;
+                            default:
+                                decl.Add($"public Parameter<{type}> {name} {{ get; }} = new Parameter<{type}>();");
+                                break;
+                        }
                     }
                     else if (IsDefaultSet(param_decl, out name) && defGet && name == paramGet)
                         decl.Add($"public {type} {name} {{ get; set; }}");
@@ -147,7 +156,18 @@ namespace Spice2SpiceSharp
                         {
                             name = multiS[0];
                             if (GivenVariable.ContainsValue(name))
-                                decl.Add($"private Parameter<{type}> {name} = new Parameter<{type}>();");
+                            {
+                                switch (type.ToLower())
+                                {
+                                    case "double":
+                                    case "int":
+                                        decl.Add($"private Parameter {name} {{ get; }} = new Parameter();");
+                                        break;
+                                    default:
+                                        decl.Add($"private Parameter<{type}> {name} = new Parameter<{type}>();");
+                                        break;
+                                }
+                            }
                             else
                                 decl.Add($"private {type} {name};");
                         }
@@ -165,7 +185,16 @@ namespace Spice2SpiceSharp
                     if (IsDefaultParameterSet(param_decl, out name, out given))
                     {
                         GivenVariable.Add(given, name);
-                        decl.Add($"public Parameter<{type}> {name} {{ get; }} = new Parameter<{type}>();");
+                        switch (type.ToLower())
+                        {
+                            case "double":
+                            case "int":
+                                decl.Add($"public Parameter {name} {{ get;}} = new Parameter();");
+                                break;
+                            default:
+                                decl.Add($"public Parameter<{type}> {name} {{ get; }} = new Parameter<{type}>();");
+                                break;
+                        }
                     }
                     else if (IsDefaultSet(param_decl, out name))
                         decl.Add($"public {type} {name} {{ get; set; }}");

@@ -718,7 +718,12 @@ namespace SpiceSharp.Components
         public Parameter BSIM3pnoff { get; } = new Parameter();
         [SpiceName("pvoffcv"), SpiceInfo("Cross-term dependence of voffcv")]
         public Parameter BSIM3pvoffcv { get; } = new Parameter();
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature in Kelvin")]
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
+        public double BSIM3_TNOM
+        {
+            get => BSIM3tnom - Circuit.CONSTCtoK;
+            set => BSIM3tnom.Set(value + Circuit.CONSTCtoK);
+        }
         public Parameter BSIM3tnom { get; } = new Parameter(300.15);
         [SpiceName("cgso"), SpiceInfo("Gate-source overlap capacitance per width")]
         public Parameter BSIM3cgso { get; } = new Parameter();

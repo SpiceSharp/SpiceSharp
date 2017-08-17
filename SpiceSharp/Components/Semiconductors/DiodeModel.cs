@@ -22,7 +22,12 @@ namespace SpiceSharp.Components
         /// </summary>
         [SpiceName("is"), SpiceInfo("Saturation current")]
         public Parameter DIOsatCur { get; } = new Parameter(1.0e-14);
-        [SpiceName("tnom"), SpiceInfo("Parameer measurement temperature in Kelvin", Interesting = false)]
+        [SpiceName("tnom"), SpiceInfo("Parameer measurement temperature", Interesting = false)]
+        public double DIO_TNOM
+        {
+            get => DIOnomTemp - Circuit.CONSTCtoK;
+            set => DIOnomTemp.Set(value + Circuit.CONSTCtoK);
+        }
         public Parameter DIOnomTemp { get; } = new Parameter(300.15);
         [SpiceName("rs"), SpiceInfo("Ohmic resistance")]
         public Parameter DIOresist { get; } = new Parameter();

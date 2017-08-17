@@ -235,7 +235,7 @@ namespace Spice2SpiceSharp
         /// <param name="ckt">The circuit identifier</param>
         /// <param name="model">The model identifier</param>
         /// <returns></returns>
-        protected string GetDeviceCode(SpiceParam mparam, SpiceParam dparam, string ckt = "ckt", string model = "Model")
+        protected string GetDeviceCode(SpiceParam mparam, SpiceParam dparam, string ckt = "ckt", string model = "model")
         {
             string code = DeviceCode.Trim();
             code = ApplyGeneral(code, ckt);

@@ -26,7 +26,12 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("temp"), SpiceInfo("Instance operating temperature in Kelvin", Interesting = false)]
+        [SpiceName("temp"), SpiceInfo("Instance operating temperature", Interesting = false)]
+        public double RES_TEMP
+        {
+            get => REStemp - Circuit.CONSTCtoK;
+            set => REStemp.Set(value + Circuit.CONSTCtoK);
+        }
         public Parameter REStemp { get; } = new Parameter(300.15);
         [SpiceName("resistance"), SpiceInfo("Resistance", IsPrincipal = true)]
         public Parameter RESresist { get; } = new Parameter();
