@@ -58,24 +58,30 @@ namespace SpiceSharp.Parser
                 throw new ParseException("No netlist specified");
             SpiceSharpParser parser = new SpiceSharpParser(stream);
 
-            // Parse the netlist for control statements and subcircuit definitions
-            Netlist.Readers.Active = StatementType.Control 
-                | StatementType.Model
-                | StatementType.Subcircuit 
-                | StatementType.Export;
-            stream.Seek(0, SeekOrigin.Begin);
-            parser.ReInit(stream);
-            parser.ParseNetlist(Netlist);
+            // The order of reading
+            StatementType[] order = new StatementType[]
+            {
+                StatementType.Subcircuit,
+                StatementType.Control,
+                StatementType.Model,
+                StatementType.Component
+            };
 
-            // Parse the netlist for components while ignoring subcircuit definitions
-            Netlist.Readers.Active = StatementType.All 
-                & ~StatementType.Model
-                & ~StatementType.Subcircuit 
-                & ~StatementType.Control
-                & ~StatementType.Export;
-            stream.Seek(0, SeekOrigin.Begin);
-            parser.ReInit(stream);
-            parser.ParseNetlist(Netlist);
+            // Parse the netlist and read the statements
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            StatementsToken main = parser.ParseNetlist(Netlist);
+            sw.Stop();
+            System.Console.WriteLine("Time for parsing: " + sw.ElapsedMilliseconds + " ms");
+
+            sw.Restart();
+            for (int i = 0; i < order.Length; i++)
+            {
+                foreach (var s in main.Statements(order[i]))
+                    Netlist.Readers.Read(s, Netlist);
+            }
+
+
         }
     }
 }

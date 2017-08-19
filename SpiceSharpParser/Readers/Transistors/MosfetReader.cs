@@ -22,18 +22,23 @@ namespace SpiceSharp.Parser.Readers
         public MosfetReader()
             : base("m")
         {
+            // MOS1
             Mosfets.Add(typeof(MOS1Model), (string name, ICircuitObject model) =>
             {
                 var m = new MOS1(name);
                 m.SetModel((MOS1Model)model);
                 return m;
             });
+
+            // MOS2
             Mosfets.Add(typeof(MOS2Model), (string name, ICircuitObject model) =>
             {
                 var m = new MOS2(name);
                 m.SetModel((MOS2Model)model);
                 return m;
             });
+
+            // MOS3
             Mosfets.Add(typeof(MOS3Model), (string name, ICircuitObject model) =>
             {
                 var m = new MOS3(name);
@@ -45,10 +50,10 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Generate the mosfet instance
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="name"></param>
-        /// <param name="parameters"></param>
-        /// <param name="netlist"></param>
+        /// <param name="type">Type</param>
+        /// <param name="name">Name</param>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="netlist">Netlist</param>
         /// <returns></returns>
         protected override ICircuitObject Generate(string type, string name, List<Token> parameters, Netlist netlist)
         {

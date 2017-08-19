@@ -30,7 +30,7 @@ namespace SpiceSharp.Parser.Readers
             StatementsToken body = st.Parameters[st.Parameters.Count - 1] as StatementsToken;
             if (body == null)
                 throw new ParseException(st.Name, "Invalid subcircuit body passed to method");
-            SubcircuitDefinition definition = new SubcircuitDefinition(name, body.Body);
+            SubcircuitDefinition definition = new SubcircuitDefinition(name, body);
 
             // Parse nodes and parameters
             bool mode = true; // true = nodes, false = parameters
@@ -64,7 +64,8 @@ namespace SpiceSharp.Parser.Readers
             // Create a new subcircuit definition
             netlist.Path.AddDefinition(definition);
             netlist.Path.Descend(null, definition, null);
-            definition.Read(StatementType.Subcircuit, netlist);
+            foreach (var s in definition.Body.Statements(StatementType.Subcircuit))
+                netlist.Readers.Read(s, netlist);
             netlist.Path.Ascend();
 
             Generated = definition;

@@ -58,6 +58,8 @@ namespace SpiceSharp.Parser.Readers
         {
             ExpressionData data = new ExpressionData(input);
             OnParseExpression?.Invoke(this, data);
+            if (double.IsNaN(data.Output))
+                throw new ParseException($"Could not parse \"{input}\"");
             return data.Output;
         }
 

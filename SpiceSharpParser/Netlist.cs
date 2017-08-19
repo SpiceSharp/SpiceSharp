@@ -4,6 +4,7 @@ using SpiceSharp.Parser.Readers.Exports;
 using SpiceSharp.Parser.Readers.Waveforms;
 using SpiceSharp.Parser.Subcircuits;
 using SpiceSharp.Parser.Readers.Collections;
+using SpiceSharp.Parser.Expressions;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Parser
@@ -155,8 +156,17 @@ namespace SpiceSharp.Parser
 
             // Standard parser
             SpiceExpression e = new SpiceExpression();
-            netlist.Readers.OnParseExpression += e.OnParseExpression;
-            netlist.Path.OnSubcircuitPathChanged += e.OnSubcircuitPathChanged;
+            netlist.Readers.OnParseExpression += (object sender, ExpressionData data) =>
+            {
+                data.Output = e.Parse(data.Input);
+            };
+            netlist.Path.OnSubcircuitPathChanged += (object sender, SubcircuitPathChangedEventArgs args) =>
+            {
+                e.Parameters = args.Parameters;
+            };
+            // SpiceExpression e = new SpiceExpression();
+            // netlist.Readers.OnParseExpression += e.OnParseExpression;
+            // netlist.Path.OnSubcircuitPathChanged += e.OnSubcircuitPathChanged;
 
             return netlist;
         }

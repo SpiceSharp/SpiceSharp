@@ -16,16 +16,20 @@ public class SpiceSharpParser
 }
 PARSER_END(SpiceSharpParser)
 
-void ParseNetlist(Netlist netlist) :
+StatementsToken ParseNetlist(Netlist netlist) :
 {
 	Statement st;
+	StatementsToken body = new StatementsToken();
 }
 {
 	(st = ParseSpiceLine()
 	{
 		if (st != null)
-			netlist.Readers.Read(st, netlist);
+			body.Add(st);
 	})* (<END> | <EOF>)
+	{
+		return body;
+	}
 }
 
 Statement ParseSpiceLine() :
@@ -33,6 +37,7 @@ Statement ParseSpiceLine() :
 	Statement st;
 	Token t, tn;
 	List<Token> parameters = new List<Token>();
+	StatementsToken body;
 	List<Statement> statements = new List<Statement>();
 }
 {
@@ -47,13 +52,13 @@ Statement ParseSpiceLine() :
 	| LOOKAHEAD(2) <DOT> tn = "SUBCKT" (t = ParseParameter() { parameters.Add(t); })* <NEWLINE>
 		(<PLUS> (t = ParseParameter() { parameters.Add(t); })* <NEWLINE>)*
 	{
-		statements = new List<Statement>();
+		body = new StatementsToken();
 	}
 		// Read the body of the subcircuit
-		(st = ParseSpiceLine() { if (st != null) statements.Add(st); })*
+		(st = ParseSpiceLine() { if (st != null) body.Add(st); })*
 		<ENDS> (<WORD>)? (<NEWLINE> | <EOF>)
 	{
-		parameters.Add(new StatementsToken(statements.ToArray()));
+		parameters.Add(body);
 		return new Statement(StatementType.Subcircuit, tn, parameters);
 	}
 

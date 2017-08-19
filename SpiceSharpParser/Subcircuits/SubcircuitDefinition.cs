@@ -25,9 +25,13 @@ namespace SpiceSharp.Parser.Subcircuits
         public Dictionary<string, Token> Defaults { get; } = new Dictionary<string, Token>();
 
         /// <summary>
+        /// The subcircuit definition body
+        /// </summary>
+        public StatementsToken Body { get; }
+
+        /// <summary>
         /// Private variables
         /// </summary>
-        private Dictionary<StatementType, List<Statement>> statements { get; } = new Dictionary<StatementType, List<Statement>>();
         private Dictionary<string, SubcircuitDefinition> definitions { get; } = new Dictionary<string, SubcircuitDefinition>();
 
         /// <summary>
@@ -35,42 +39,10 @@ namespace SpiceSharp.Parser.Subcircuits
         /// </summary>
         /// <param name="name">Name of the subcircuit definition</param>
         /// <param name="body">The statements</param>
-        public SubcircuitDefinition(string name, IEnumerable<Statement> body)
+        public SubcircuitDefinition(string name, StatementsToken body)
         {
             Name = name;
-
-            // Basic statements so later checks aren't needed
-            statements.Add(StatementType.Model, new List<Statement>());
-            statements.Add(StatementType.Control, new List<Statement>());
-
-            // Parse the body statements
-            foreach (Statement s in body)
-                AddStatement(s);
-        }
-
-        /// <summary>
-        /// Add a statement to the definition
-        /// </summary>
-        /// <param name="st">The statement</param>
-        private void AddStatement(Statement st)
-        {
-            if (!statements.ContainsKey(st.Type))
-                statements.Add(st.Type, new List<Statement>());
-            statements[st.Type].Add(st);
-        }
-
-        /// <summary>
-        /// Read the statements in the subcircuit definition
-        /// </summary>
-        /// <param name="type">The type of the statements</param>
-        /// <param name="netlist">The netlist</param>
-        public void Read(StatementType type, Netlist netlist)
-        {
-            if (statements.ContainsKey(type))
-            {
-                foreach (var st in statements[type])
-                    netlist.Readers.Read(st, netlist);
-            }
+            Body = body;
         }
 
         /// <summary>

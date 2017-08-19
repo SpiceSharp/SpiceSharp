@@ -78,17 +78,22 @@ namespace SpiceSharp.Parser.Readers
             Subcircuit subckt = new Subcircuit(name, definition.Pins.ToArray());
             subckt.Connect(pins.ToArray());
 
-            // Apply models and components
+            // Descend into the subcircuit
             netlist.Path.Descend(subckt, definition, pars);
-            var oldactive = netlist.Readers.Active;
-            netlist.Readers.Active = StatementType.All;
-            definition.Read(StatementType.Control, netlist); // Control parameters
-            definition.Read(StatementType.Model, netlist); // Models
-            definition.Read(StatementType.Component, netlist); // Components
-            netlist.Readers.Active = oldactive;
-            netlist.Path.Ascend();
 
-            // Return the subcircuit
+            // Read control statements
+            foreach (var s in definition.Body.Statements(StatementType.Control))
+                netlist.Readers.Read(s, netlist);
+
+            // Read model statements
+            foreach (var s in definition.Body.Statements(StatementType.Model))
+                netlist.Readers.Read(s, netlist);
+
+            // Read component statements
+            foreach (var s in definition.Body.Statements(StatementType.Component))
+                netlist.Readers.Read(s, netlist);
+
+            netlist.Path.Ascend();
             return subckt;
         }
     }
