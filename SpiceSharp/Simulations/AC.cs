@@ -51,6 +51,11 @@ namespace SpiceSharp.Simulations
         /// Gets or sets the number of steps
         /// </summary>
         [SpiceName("steps"), SpiceName("n"), SpiceInfo("The number of steps")]
+        public double Steps
+        {
+            get => NumberSteps;
+            set => NumberSteps = (int)(Math.Round(value) + 0.1);
+        }
         public int NumberSteps { get; set; } = 10;
 
         /// <summary>
@@ -85,8 +90,11 @@ namespace SpiceSharp.Simulations
             {
                 switch (value.ToLower())
                 {
+                    case "linear":
                     case "lin": StepType = StepTypes.Linear; break;
+                    case "octave":
                     case "oct": StepType = StepTypes.Octave; break;
+                    case "decade":
                     case "dec": StepType = StepTypes.Decade; break;
                     default:
                         throw new CircuitException($"Invalid step type {value}");

@@ -49,5 +49,21 @@ namespace SpiceSharp.Circuits
         /// Get the number of rejected timepoints
         /// </summary>
         public int Rejected { get; set; } = 0;
+
+        /// <summary>
+        /// Clear the statistics
+        /// </summary>
+        public void Clear()
+        {
+            NumIter = 0;
+            SolveTime.Reset();
+            LoadTime.Reset();
+            TimePoints = 0;
+            TranIter = 0;
+            TransientTime.Reset();
+            TransientSolveTime = TimeSpan.Zero;
+            Accepted = 0;
+            Rejected = 0;
+        }
     }
 }

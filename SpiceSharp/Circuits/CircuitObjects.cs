@@ -67,6 +67,21 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
+        /// The amount of objects
+        /// </summary>
+        public int Count => objects.Count;
+
+        /// <summary>
+        /// Clear all objects
+        /// </summary>
+        public void Clear()
+        {
+            objects.Clear();
+            ordered.Clear();
+            isordered = false;
+        }
+
+        /// <summary>
         /// Add one or more objects
         /// </summary>
         /// <param name="cs">The objects that need to be added</param>

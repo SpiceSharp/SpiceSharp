@@ -46,10 +46,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SpiceExpressionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpiceSharpTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -95,6 +95,26 @@ namespace SpiceSharp.Simulations
             public string ComponentName { get; set; }
 
             /// <summary>
+            /// Get the current value
+            /// </summary>
+            public double CurrentValue { get; private set; }
+
+            /// <summary>
+            /// Get the current step index
+            /// </summary>
+            public int CurrentStep { get; private set; }
+
+            /// <summary>
+            /// Calculate the new step value
+            /// </summary>
+            /// <param name="index">The step index</param>
+            public void SetCurrentStep(int index)
+            {
+                CurrentStep = index;
+                CurrentValue = Start + index * Step;
+            }
+
+            /// <summary>
             /// Constructor
             /// </summary>
             /// <param name="name">The name of the source to sweep</param>
@@ -158,7 +178,6 @@ namespace SpiceSharp.Simulations
             // Initialize
             IParameterized[] components = new IParameterized[Sweeps.Count];
             Parameter[] parameters = new Parameter[Sweeps.Count];
-            int[] values = new int[Sweeps.Count];
 
             // Initialize first time
             for (int i = 0; i < Sweeps.Count; i++)
@@ -173,8 +192,8 @@ namespace SpiceSharp.Simulations
                 parameters[i] = (Parameter)GetDcParameter(components[i]).Clone();
 
                 // Start with the original values
-                components[i].Set("dc", sweep.Start);
-                values[i] = 0;
+                sweep.SetCurrentStep(0);
+                components[i].Set("dc", sweep.CurrentValue);
             }
 
             Initialize(ckt);
@@ -187,8 +206,8 @@ namespace SpiceSharp.Simulations
                 while (level < Sweeps.Count - 1)
                 {
                     level++;
-                    values[level] = 0;
-                    components[level].Set("dc", Sweeps[level].Start);
+                    Sweeps[level].SetCurrentStep(0);
+                    components[level].Set("dc", Sweeps[level].CurrentValue);
                 }
 
                 // Calculate the solution
@@ -202,15 +221,14 @@ namespace SpiceSharp.Simulations
                 Export(ckt);
 
                 // Remove all values that are greater or equal to the maximum value
-                while (level >= 0 && values[level] >= Sweeps[level].Limit)
+                while (level >= 0 && Sweeps[level].CurrentStep >= Sweeps[level].Limit)
                     level--;
 
                 // Go to the next step for the top level
                 if (level >= 0)
                 {
-                    values[level]++;
-                    double newvalue = Sweeps[level].Start + values[level] * Sweeps[level].Step;
-                    components[level].Set("dc", newvalue);
+                    Sweeps[level].SetCurrentStep(Sweeps[level].CurrentStep + 1);
+                    components[level].Set("dc", Sweeps[level].CurrentValue);
                 }
             }
 

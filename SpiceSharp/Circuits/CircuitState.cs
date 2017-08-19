@@ -152,7 +152,7 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Destroy the state
+        /// Destroy/clear the state
         /// </summary>
         public void Destroy()
         {

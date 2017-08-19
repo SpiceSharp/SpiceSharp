@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp
 {
@@ -72,6 +73,11 @@ namespace SpiceSharp
             Setup();
             Simulation = sim;
 
+            if (Objects.Count <= 0)
+                throw new CircuitException("Circuit contains no objects");
+            if (Nodes.Count <= 1)
+                throw new CircuitException("Circuit contains no nodes");
+
             // Do temperature-dependent calculations
             foreach (var c in Objects)
                 c.Temperature(this);
@@ -118,6 +124,23 @@ namespace SpiceSharp
 
             // Remove all nodes
             Nodes.Clear();
+        }
+
+        /// <summary>
+        /// Clear all objects, nodes, etc. in the circuit
+        /// </summary>
+        public void Clear()
+        {
+            // Unsetup if necessary
+            Unsetup();
+
+            // Clear all values
+            Method = null;
+            Nodes.Clear();
+            Simulation = null;
+            State.Destroy();
+            Statistics.Clear();
+            Objects.Clear();
         }
     }
 }
