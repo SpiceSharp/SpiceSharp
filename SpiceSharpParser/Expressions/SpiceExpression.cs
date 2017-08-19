@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using SpiceSharp.Parser.Readers;
 
 namespace SpiceSharp.Parser.Expressions
 {
@@ -431,8 +428,14 @@ namespace SpiceSharp.Parser.Expressions
                     break;
                 case ID_EQUALS: output.Push(output.Pop() == output.Pop() ? 1.0 : 0.0); break;
                 case ID_INEQUALS: output.Push(output.Pop() != output.Pop() ? 1.0 : 0.0); break;
-                case ID_CONDITIONAL_AND: output.Push((output.Pop() != 0.0) && (output.Pop() != 0.0) ? 1.0 : 0.0); break;
-                case ID_CONDITIONAL_OR: output.Push((output.Pop() != 0.0) || (output.Pop() != 0.0) ? 1.0 : 0.0); break;
+                case ID_CONDITIONAL_AND:
+                    b = output.Pop();
+                    a = output.Pop();
+                    output.Push((a != 0.0) && (b != 0.0) ? 1.0 : 0.0); break;
+                case ID_CONDITIONAL_OR:
+                    b = output.Pop();
+                    a = output.Pop();
+                    output.Push((a != 0.0) || (b != 0.0) ? 1.0 : 0.0); break;
                 case ID_LESS: output.Push(output.Pop() > output.Pop() ? 1.0 : 0.0); break;
                 case ID_LESSEQUAL: output.Push(output.Pop() >= output.Pop() ? 1.0 : 0.0); break;
                 case ID_GREATER: output.Push(output.Pop() < output.Pop() ? 1.0 : 0.0); break;
@@ -479,7 +482,7 @@ namespace SpiceSharp.Parser.Expressions
                 if (input[i] == 'e' || input[i] == 'E')
                 {
                     i++;
-                    double b = 10.0;
+                    int exponent = 0;
                     bool neg = false;
                     if (i < count && (input[i] == '+' || input[i] == '-'))
                     {
@@ -489,12 +492,12 @@ namespace SpiceSharp.Parser.Expressions
                     }
 
                     // Get the exponent
-                    int exponent = 0;
                     while (i < count && (input[i] >= '0' && input[i] <= '9'))
                         exponent = exponent * 10 + (input[i++] - '0');
 
                     // Integer exponentation
                     double mult = 1.0;
+                    double b = 10.0;
                     while (exponent != 0)
                     {
                         if ((exponent & 0x01) == 0x01)
@@ -506,6 +509,7 @@ namespace SpiceSharp.Parser.Expressions
                         value /= mult;
                     else
                         value *= mult;
+                        
                 }
                 else
                 {
