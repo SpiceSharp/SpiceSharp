@@ -51,7 +51,7 @@ dc.OnExportSimulationData += (object sender, SimulationData data) =>
 };
 ckt.Simulate(dc);
 ```
-Each simulation implements *ISimulation* and will invoke *OnExportSimulationData* when a new point has be calculated. You can use this event to extract the voltages and currents that are of interest.
+Each simulation implements *ISimulation* and will invoke *OnExportSimulationData* when a new point has been calculated. You can use this event to extract the voltages and currents that are of interest.
 
 The models included in the main project are:
 - Passive components: Resistor, Capacitance, Inductor, Mutual inductance
