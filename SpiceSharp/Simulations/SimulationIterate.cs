@@ -131,6 +131,11 @@ namespace SpiceSharp.Simulations
                 rstate.Solve();
                 ckt.Statistics.SolveTime.Stop();
 
+                // Reset ground nodes
+                ckt.State.Real.Solution[0] = 0.0;
+                ckt.State.Complex.Solution[0] = 0.0;
+                ckt.State.Real.OldSolution[0] = 0.0;
+
                 // Exceeded maximum number of iterations
                 if (iterno > maxiter)
                 {
@@ -225,19 +230,13 @@ namespace SpiceSharp.Simulations
                 {
                     double tol = config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltTol;
                     if (Math.Abs(n - o) > tol)
-                    {
                         return false;
-                    }
                 }
                 else
                 {
                     double tol = config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + config.AbsTol;
                     if (Math.Abs(n - o) > tol)
-                    {
-                        // Convergence failed
-                        // ckt.TroubleNode = i;
                         return false;
-                    }
                 }
             }
 

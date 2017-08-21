@@ -55,7 +55,7 @@ namespace SpiceSharp.Parser.Readers
                     case ASSIGNMENT:
                         AssignmentToken at = parameters[i] as AssignmentToken;
                         if (at.Name.image.ToLower() != "ic")
-                            dio.DIOinitCond.Set(netlist.ParseDouble(at.Value));
+                            dio.DIOinitCond = netlist.ParseDouble(at.Value);
                         break;
                     case VALUE:
                     case EXPRESSION:

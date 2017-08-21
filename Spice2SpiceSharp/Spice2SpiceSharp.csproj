@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C351CBA3-7B96-42F7-9D71-F9AE5E773149}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spice2SpiceSharp</RootNamespace>
     <AssemblyName>Spice2SpiceSharp</AssemblyName>
@@ -29,6 +29,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Spice2SpiceSharp.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -43,6 +46,7 @@
     <Compile Include="Code.cs" />
     <Compile Include="ConverterWarnings.cs" />
     <Compile Include="ParameterExtractor.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="SpiceAcLoad.cs" />
     <Compile Include="SpiceClassGenerator.cs" />
     <Compile Include="SpiceDefinitions.cs" />

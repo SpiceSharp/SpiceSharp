@@ -5,6 +5,7 @@
 	- AN_noise
 	- NOBYPASS
 	- NEWTRUNC
+	- NEWCONV
 	- PREDICTOR
 2) Specify the ITF file (eg. bjt has bjtitf.h)
 3) Specify the definitions file (eg. bjt has bjtdefs.h)

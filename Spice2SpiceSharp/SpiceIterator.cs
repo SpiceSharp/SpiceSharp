@@ -109,7 +109,7 @@ namespace Spice2SpiceSharp
                 string model = m.Groups["var"].Value;
 
                 // Get the instance loop content
-                Regex instanceloop = new Regex(@"for\s*\(\s*(?<var>\w+)\s*\=\s*" + model + @"\s*\-\>\s*\w+\s*;\s*\k<var>\s*\!\=\s*NULL\s*;\s*\k<var>\s*\=\s*\k<var>\s*\-\>\s*\w+\s*\)\s*{");
+                Regex instanceloop = new Regex(@"for\s*\(\s*(?<var>\w+)\s*\=\s*" + model + @"\s*\-\>\s*\w+\s*;\s*\k<var>\s*(\!\=\s*NULL\s*)?;\s*\k<var>\s*\=\s*\k<var>\s*\-\>\s*\w+\s*\)\s*{");
                 var m2 = instanceloop.Match(content);
                 if (m2.Success)
                 {

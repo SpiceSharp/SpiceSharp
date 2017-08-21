@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Numerics;
-using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp;
 using SpiceSharp.Components;
@@ -12,11 +11,16 @@ namespace SpiceSharpTest
     [TestClass]
     public class SpiceSharpTest
     {
-        // Relative tolerance for things that will be accurate
+        /// <summary>
+        /// Relative tolerance for things that will be accurate
+        /// </summary>
         private double Tolerance = 1e-15;
 
-        // Absolute tolerance for transient analysis
-        // Solving differential equations will accumulate errors
+        /// <summary>
+        /// Absolute tolerance for transient analysis
+        /// Solving differential equations will accumulate errors, so
+        /// we cannot use a very strict tolerance
+        /// </summary>
         private double TranTolerance = 1e-3;
 
         [TestMethod]
