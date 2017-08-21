@@ -50,10 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Semiconductors\SpiceSharpDiodeTest.cs" />
+    <Compile Include="Models\Transistors\SpiceSharpBSIM3Test.cs" />
     <Compile Include="SpiceExpressionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpiceSharpTest.cs" />
-    <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

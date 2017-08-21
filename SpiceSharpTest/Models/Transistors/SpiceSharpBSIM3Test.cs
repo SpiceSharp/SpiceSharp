@@ -1,30 +1,41 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
-namespace Sandbox
+namespace SpiceSharpTest.Models.Transistors
 {
-    public partial class Main : Form
+    [TestClass]
+    public class SpiceSharpBSIM3Test
     {
         /// <summary>
-        /// The models I use for verification are not allowed to go public by the fab
-        /// If you with to do the test yourself: The format is simply
+        /// Unfortunately it is very hard to find BSIM3v3 models (I only found BSIM3v1) that are public.
+        /// I only have a model by a FAB that we use, but I cannot disclose that information.
         /// 
+        /// If you wish to run this test yourself, create a model file where each line contains
         /// [par1]=[val1]
         /// [par2]=[val2]
         /// ...
         /// 
+        /// The test results are also stored in a text file where VGS and VDS are swept from 0V to 1.8V in
+        /// steps of 0.3V (VDS is the main sweep). The result is stored in a text file where each line is
+        /// [ids_VDS=0&VGS=0]
+        /// [ids_VDS=0.3&VGS=0]
+        /// ...
+        /// [ids_VDS=1.8&VGS=0]
+        /// [ids_VDS=0&VGS=0.3]
+        /// [ids_VDS=0.3&VGS=0.3]
+        /// ...
+        /// [ids_VDS=1.8&VGS=1.8]
+        /// 
+        /// So there should be 7*7 = 49 lines in the file
+        /// 
+        /// Important note: My simulation data is exported from SmartSpice (Silvaco). There are some small
+        /// differences, so read the [note]s in this document if you want to run this test.
         /// </summary>
         private static string nmos_model = @"D:\Visual Studio\Info\nmosmod.txt";
         private static string pmos_model = @"D:\Visual Studio\Info\pmosmod.txt";
@@ -126,32 +137,58 @@ namespace Sandbox
             }
         }
 
-        // Simulated by SmartSpice (Silvaco)
-        private double[] reference = DCReferencePMOS;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public Main()
+        [TestMethod]
+        public void TestBSIM3_NMOS_DC()
         {
-            InitializeComponent();
+            // Simulated by SmartSpice (Silvaco)
+            double[] reference = DCReferenceNMOS;
 
-            int n = 7;
-            Series[] series = new Series[1];
-            Series[] refseries = new Series[series.Length];
-            Series[] diffseries = new Series[series.Length];
-            for (int i = 0; i < series.Length; i++)
+            // Generate the circuit
+            Circuit ckt = new Circuit();
+
+            BSIM3 nmos = new BSIM3("M1");
+            nmos.SetModel(TestModelNMOS);
+            nmos.Connect("2", "1", "0", "0");
+            nmos.Set("w", 1e-6); nmos.Set("l", 1e-6);
+            nmos.Set("ad", 0.85e-12); nmos.Set("as", 0.85e-12);
+            nmos.Set("pd", 2.7e-6); nmos.Set("ps", 2.7e-6);
+            nmos.Set("nrd", 0.3); nmos.Set("nrs", 0.3);
+            ckt.Objects.Add(
+                new Voltagesource("V2", "2", "0", 0.0),
+                new Voltagesource("V1", "1", "0", 0.0),
+                nmos);
+
+            // Generate the simulation
+            DC dc = new DC("TestBSIM3_NMOS_DC");
+
+            // Make the simulation slightly more accurate (error / 4)
+            // Might want to check why some time though
+            dc.Config.RelTol = 0.25e-3;
+            dc.Sweeps.Add(new DC.Sweep("V1", 0, 1.8, 0.3));
+            dc.Sweeps.Add(new DC.Sweep("V2", 0, 1.8, 0.3));
+            int index = 0;
+            dc.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                series[i] = chMain.Series.Add("Ids (" + i + ")");
-                series[i].ChartType = SeriesChartType.FastLine;
-                refseries[i] = chMain.Series.Add("Reference (" + i + ")");
-                refseries[i].ChartType = SeriesChartType.FastLine;
-                diffseries[i] = chMain.Series.Add("Difference (" + i + ")");
-                diffseries[i].ChartType = SeriesChartType.FastPoint;
-                diffseries[i].YAxisType = AxisType.Secondary;
-            }
+                double vds = dc.Sweeps.Last().CurrentValue;
+                double actual = nmos.BSIM3cd - nmos.BSIM3cbd;
 
-            SpiceSharp.Diagnostics.CircuitWarning.WarningGenerated += CircuitWarning_WarningGenerated;
+                // [note] I am using SmartSpice for verification here
+                // SmartSpice adds an additional GMIN conductance between drain and source
+                // for improving convergence. We don't do this, so we need to factor this in
+                double expected = reference[index] - ckt.State.Gmin * vds;
+                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
+
+                Assert.AreEqual(expected, actual, tol);
+                index++;
+            };
+            ckt.Simulate(dc);
+        }
+
+        [TestMethod]
+        public void TestBSIM3_PMOS_DC()
+        {
+            // Simulated by SmartSpice (Silvaco)
+            double[] reference = DCReferencePMOS;
 
             // Generate the circuit
             Circuit ckt = new Circuit();
@@ -174,7 +211,7 @@ namespace Sandbox
             // Make the simulation slightly more accurate (error / 4)
             // Might want to check why some time though
             dc.Config.RelTol = 0.25e-3;
-            // dc.Sweeps.Add(new DC.Sweep("V1", 0, 1.8, 0.3));
+            dc.Sweeps.Add(new DC.Sweep("V1", 0, 1.8, 0.3));
             dc.Sweeps.Add(new DC.Sweep("V2", 0, 1.8, 0.3));
             int index = 0;
             dc.OnExportSimulationData += (object sender, SimulationData data) =>
@@ -187,20 +224,11 @@ namespace Sandbox
                 // for improving convergence. We don't do this, so we need to factor this in
                 double expected = reference[index] + ckt.State.Gmin * vds;
                 double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
-
-                int row = index / n;
-                series[row].Points.AddXY(vds, actual);
-                refseries[row].Points.AddXY(vds, expected);
-                diffseries[row].Points.AddXY(vds, actual - expected);
+                Assert.AreEqual(expected, actual, tol);
 
                 index++;
             };
             ckt.Simulate(dc);
-        }
-
-        private void CircuitWarning_WarningGenerated(object sender, SpiceSharp.Diagnostics.WarningArgs e)
-        {
-            throw new Exception(e.Message);
         }
     }
 }

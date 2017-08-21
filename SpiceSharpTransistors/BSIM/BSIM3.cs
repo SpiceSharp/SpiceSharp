@@ -46,9 +46,9 @@ namespace SpiceSharp.Components
         [SpiceName("pd"), SpiceInfo("Drain perimeter")]
         public Parameter BSIM3drainPerimeter { get; } = new Parameter();
         [SpiceName("nrs"), SpiceInfo("Number of squares in source")]
-        public Parameter BSIM3sourceSquares { get; } = new Parameter();
+        public Parameter BSIM3sourceSquares { get; } = new Parameter(1.0);
         [SpiceName("nrd"), SpiceInfo("Number of squares in drain")]
-        public Parameter BSIM3drainSquares { get; } = new Parameter();
+        public Parameter BSIM3drainSquares { get; } = new Parameter(1.0);
         [SpiceName("off"), SpiceInfo("Device is initially off")]
         public bool BSIM3off { get; set; }
         [SpiceName("nqsmod"), SpiceInfo("Non-quasi-static model selector")]
@@ -3624,7 +3624,7 @@ namespace SpiceSharp.Components
             using (StreamWriter sw = new StreamWriter("b3v3check.log"))
             {
                 sw.WriteLine("BSIM3v3.3.0 Parameter Checking.");
-                if (model.BSIM3version == "3.3.0")
+                if (model.BSIM3version != "3.3.0")
                 {
                     sw.WriteLine("Warning: This model is BSIM3v3.3.0; you specified a wrong version number.");
                     CircuitWarning.Warning(this, "Warning: This model is BSIM3v3.3.0; you specified a wrong version number.");

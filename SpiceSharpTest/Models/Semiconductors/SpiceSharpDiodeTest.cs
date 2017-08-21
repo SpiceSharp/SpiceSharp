@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp;
 using SpiceSharp.Components;
@@ -98,7 +94,7 @@ namespace SpiceSharpTest.Models.Semiconductors
             {
                 double actual = d.GetCURRENT(data.Circuit);
                 double expected = reference[index++];
-                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-6;
+                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
                 Assert.AreEqual(expected, actual, tol);
             };
             ckt.Simulate(dc);

@@ -51,13 +51,13 @@ namespace SpiceSharp.Components
         [SpiceName("vsat"), SpiceInfo("Saturation velocity at tnom")]
         public Parameter BSIM3vsat { get; } = new Parameter(8.0e4);
         [SpiceName("a0"), SpiceInfo("Non-uniform depletion width effect coefficient.")]
-        public Parameter BSIM3a0 { get; } = new Parameter();
+        public Parameter BSIM3a0 { get; } = new Parameter(1.0);
         [SpiceName("ags"), SpiceInfo("Gate bias  coefficient of Abulk.")]
         public Parameter BSIM3ags { get; } = new Parameter();
         [SpiceName("a1"), SpiceInfo("Non-saturation effect coefficient")]
         public Parameter BSIM3a1 { get; } = new Parameter();
         [SpiceName("a2"), SpiceInfo("Non-saturation effect coefficient")]
-        public Parameter BSIM3a2 { get; } = new Parameter();
+        public Parameter BSIM3a2 { get; } = new Parameter(1.0);
         [SpiceName("at"), SpiceInfo("Temperature coefficient of vsat")]
         public Parameter BSIM3at { get; } = new Parameter(3.3e4);
         [SpiceName("keta"), SpiceInfo("Body-bias coefficient of non-uniform depletion width effect.")]
@@ -65,9 +65,29 @@ namespace SpiceSharp.Components
         [SpiceName("nsub"), SpiceInfo("Substrate doping concentration")]
         public Parameter BSIM3nsub { get; } = new Parameter(6.0e16);
         [SpiceName("nch"), SpiceInfo("Channel doping concentration")]
+        public double BSIM3_NPEAK
+        {
+            get => BSIM3npeak;
+            set
+            {
+                BSIM3npeak.Set(value);
+                if (BSIM3npeak > 1.0e20)
+                    BSIM3npeak.Value *= 1.0e-6;
+            }
+        }
         public Parameter BSIM3npeak { get; } = new Parameter(1.7e17);
         [SpiceName("ngate"), SpiceInfo("Poly-gate doping concentration")]
-        public Parameter BSIM3ngate { get; } = new Parameter(0.0);
+        public double BSIM3_NGATE
+        {
+            get => BSIM3ngate;
+            set
+            {
+                BSIM3ngate.Set(value);
+                if (BSIM3ngate > 1.0e23)
+                    BSIM3ngate.Value *= 1.0e-6;
+            }
+        }
+        public Parameter BSIM3ngate { get; } = new Parameter();
         [SpiceName("gamma1"), SpiceInfo("Vth body coefficient")]
         public Parameter BSIM3gamma1 { get; } = new Parameter();
         [SpiceName("gamma2"), SpiceInfo("Vth body coefficient")]
@@ -75,7 +95,7 @@ namespace SpiceSharp.Components
         [SpiceName("vbx"), SpiceInfo("Vth transition body Voltage")]
         public Parameter BSIM3vbx { get; } = new Parameter();
         [SpiceName("vbm"), SpiceInfo("Maximum body voltage")]
-        public Parameter BSIM3vbm { get; } = new Parameter();
+        public Parameter BSIM3vbm { get; } = new Parameter(-3.0);
         [SpiceName("xt"), SpiceInfo("Doping depth")]
         public Parameter BSIM3xt { get; } = new Parameter(1.55e-7);
         [SpiceName("k1"), SpiceInfo("Bulk effect coefficient 1")]
@@ -85,11 +105,11 @@ namespace SpiceSharp.Components
         [SpiceName("kt1l"), SpiceInfo("Temperature coefficient of Vth")]
         public Parameter BSIM3kt1l { get; } = new Parameter();
         [SpiceName("kt2"), SpiceInfo("Body-coefficient of kt1")]
-        public Parameter BSIM3kt2 { get; } = new Parameter();
+        public Parameter BSIM3kt2 { get; } = new Parameter(0.022);
         [SpiceName("k2"), SpiceInfo("Bulk effect coefficient 2")]
         public Parameter BSIM3k2 { get; } = new Parameter();
         [SpiceName("k3"), SpiceInfo("Narrow width effect coefficient")]
-        public Parameter BSIM3k3 { get; } = new Parameter();
+        public Parameter BSIM3k3 { get; } = new Parameter(80.0);
         [SpiceName("k3b"), SpiceInfo("Body effect coefficient of k3")]
         public Parameter BSIM3k3b { get; } = new Parameter();
         [SpiceName("nlx"), SpiceInfo("Lateral non-uniform doping effect")]
@@ -99,7 +119,7 @@ namespace SpiceSharp.Components
         [SpiceName("dvt0"), SpiceInfo("Short channel effect coeff. 0")]
         public Parameter BSIM3dvt0 { get; } = new Parameter(2.2);
         [SpiceName("dvt1"), SpiceInfo("Short channel effect coeff. 1")]
-        public Parameter BSIM3dvt1 { get; } = new Parameter();
+        public Parameter BSIM3dvt1 { get; } = new Parameter(0.53);
         [SpiceName("dvt2"), SpiceInfo("Short channel effect coeff. 2")]
         public Parameter BSIM3dvt2 { get; } = new Parameter(-0.032);
         [SpiceName("dvt0w"), SpiceInfo("Narrow Width coeff. 0")]
@@ -109,7 +129,7 @@ namespace SpiceSharp.Components
         [SpiceName("dvt2w"), SpiceInfo("Narrow Width effect coeff. 2")]
         public Parameter BSIM3dvt2w { get; } = new Parameter(-0.032);
         [SpiceName("drout"), SpiceInfo("DIBL coefficient of output resistance")]
-        public Parameter BSIM3drout { get; } = new Parameter();
+        public Parameter BSIM3drout { get; } = new Parameter(0.56);
         [SpiceName("dsub"), SpiceInfo("DIBL coefficient in the subthreshold region")]
         public Parameter BSIM3dsub { get; } = new Parameter();
         [SpiceName("vth0"), SpiceName("vtho"), SpiceInfo("Threshold voltage")]
@@ -133,7 +153,7 @@ namespace SpiceSharp.Components
         [SpiceName("voff"), SpiceInfo("Threshold voltage offset")]
         public Parameter BSIM3voff { get; } = new Parameter(-0.08);
         [SpiceName("delta"), SpiceInfo("Effective Vds parameter")]
-        public Parameter BSIM3delta { get; } = new Parameter();
+        public Parameter BSIM3delta { get; } = new Parameter(0.01);
         [SpiceName("rdsw"), SpiceInfo("Source-drain resistance per width")]
         public Parameter BSIM3rdsw { get; } = new Parameter();
         [SpiceName("prwg"), SpiceInfo("Gate-bias effect on parasitic resistance ")]
@@ -143,7 +163,7 @@ namespace SpiceSharp.Components
         [SpiceName("prt"), SpiceInfo("Temperature coefficient of parasitic resistance ")]
         public Parameter BSIM3prt { get; } = new Parameter();
         [SpiceName("eta0"), SpiceInfo("Subthreshold region DIBL coefficient")]
-        public Parameter BSIM3eta0 { get; } = new Parameter();
+        public Parameter BSIM3eta0 { get; } = new Parameter(0.08);
         [SpiceName("etab"), SpiceInfo("Subthreshold region DIBL coefficient")]
         public Parameter BSIM3etab { get; } = new Parameter(-0.07);
         [SpiceName("pclm"), SpiceInfo("Channel length modulation Coefficient")]
@@ -151,7 +171,7 @@ namespace SpiceSharp.Components
         [SpiceName("pdiblc1"), SpiceInfo("Drain-induced barrier lowering coefficient")]
         public Parameter BSIM3pdibl1 { get; } = new Parameter(.39);
         [SpiceName("pdiblc2"), SpiceInfo("Drain-induced barrier lowering coefficient")]
-        public Parameter BSIM3pdibl2 { get; } = new Parameter();
+        public Parameter BSIM3pdibl2 { get; } = new Parameter(0.0086);
         [SpiceName("pdiblcb"), SpiceInfo("Body-effect on drain-induced barrier lowering")]
         public Parameter BSIM3pdiblb { get; } = new Parameter();
         [SpiceName("pscbe1"), SpiceInfo("Substrate current body-effect coefficient")]
@@ -161,7 +181,7 @@ namespace SpiceSharp.Components
         [SpiceName("pvag"), SpiceInfo("Gate dependence of output resistance parameter")]
         public Parameter BSIM3pvag { get; } = new Parameter();
         [SpiceName("wr"), SpiceInfo("Width dependence of rds")]
-        public Parameter BSIM3wr { get; } = new Parameter();
+        public Parameter BSIM3wr { get; } = new Parameter(1.0);
         [SpiceName("dwg"), SpiceInfo("Width reduction parameter")]
         public Parameter BSIM3dwg { get; } = new Parameter();
         [SpiceName("dwb"), SpiceInfo("Width reduction parameter")]
@@ -175,37 +195,37 @@ namespace SpiceSharp.Components
         [SpiceName("alpha1"), SpiceInfo("substrate current model parameter")]
         public Parameter BSIM3alpha1 { get; } = new Parameter();
         [SpiceName("beta0"), SpiceInfo("substrate current model parameter")]
-        public Parameter BSIM3beta0 { get; } = new Parameter();
+        public Parameter BSIM3beta0 { get; } = new Parameter(30.0);
         [SpiceName("ijth"), SpiceInfo("Diode limiting current")]
-        public Parameter BSIM3ijth { get; } = new Parameter();
+        public Parameter BSIM3ijth { get; } = new Parameter(0.1);
         [SpiceName("vfb"), SpiceInfo("Flat Band Voltage")]
         public Parameter BSIM3vfb { get; } = new Parameter();
         [SpiceName("elm"), SpiceInfo("Non-quasi-static Elmore Constant Parameter")]
-        public Parameter BSIM3elm { get; } = new Parameter();
+        public Parameter BSIM3elm { get; } = new Parameter(5.0);
         [SpiceName("cgsl"), SpiceInfo("New C-V model parameter")]
         public Parameter BSIM3cgsl { get; } = new Parameter();
         [SpiceName("cgdl"), SpiceInfo("New C-V model parameter")]
         public Parameter BSIM3cgdl { get; } = new Parameter();
         [SpiceName("ckappa"), SpiceInfo("New C-V model parameter")]
-        public Parameter BSIM3ckappa { get; } = new Parameter();
+        public Parameter BSIM3ckappa { get; } = new Parameter(0.6);
         [SpiceName("cf"), SpiceInfo("Fringe capacitance parameter")]
         public Parameter BSIM3cf { get; } = new Parameter();
         [SpiceName("clc"), SpiceInfo("Vdsat parameter for C-V model")]
-        public Parameter BSIM3clc { get; } = new Parameter();
+        public Parameter BSIM3clc { get; } = new Parameter(0.1e-6);
         [SpiceName("cle"), SpiceInfo("Vdsat parameter for C-V model")]
-        public Parameter BSIM3cle { get; } = new Parameter();
+        public Parameter BSIM3cle { get; } = new Parameter(0.6);
         [SpiceName("dwc"), SpiceInfo("Delta W for C-V model")]
         public Parameter BSIM3dwc { get; } = new Parameter();
         [SpiceName("dlc"), SpiceInfo("Delta L for C-V model")]
         public Parameter BSIM3dlc { get; } = new Parameter();
         [SpiceName("vfbcv"), SpiceInfo("Flat Band Voltage parameter for capmod=0 only")]
-        public Parameter BSIM3vfbcv { get; } = new Parameter();
+        public Parameter BSIM3vfbcv { get; } = new Parameter(-1.0);
         [SpiceName("acde"), SpiceInfo("Exponential coefficient for finite charge thickness")]
-        public Parameter BSIM3acde { get; } = new Parameter();
+        public Parameter BSIM3acde { get; } = new Parameter(1.0);
         [SpiceName("moin"), SpiceInfo("Coefficient for gate-bias dependent surface potential")]
-        public Parameter BSIM3moin { get; } = new Parameter();
+        public Parameter BSIM3moin { get; } = new Parameter(15.0);
         [SpiceName("noff"), SpiceInfo("C-V turn-on/off parameter")]
-        public Parameter BSIM3noff { get; } = new Parameter();
+        public Parameter BSIM3noff { get; } = new Parameter(1.0);
         [SpiceName("voffcv"), SpiceInfo("C-V lateral-shift parameter")]
         public Parameter BSIM3voffcv { get; } = new Parameter();
         [SpiceName("tcj"), SpiceInfo("Temperature coefficient of cj")]
@@ -249,9 +269,29 @@ namespace SpiceSharp.Components
         [SpiceName("lnsub"), SpiceInfo("Length dependence of nsub")]
         public Parameter BSIM3lnsub { get; } = new Parameter();
         [SpiceName("lnch"), SpiceInfo("Length dependence of nch")]
-        public Parameter BSIM3lnpeak { get; } = new Parameter(0.0);
+        public double BSIM3_LNPEAK
+        {
+            get => BSIM3lnpeak;
+            set
+            {
+                BSIM3lnpeak.Set(value);
+                if (BSIM3lnpeak > 1.0e20)
+                    BSIM3lnpeak.Value *= 1.0e-6;
+            }
+        }
+        public Parameter BSIM3lnpeak { get; } = new Parameter();
         [SpiceName("lngate"), SpiceInfo("Length dependence of ngate")]
-        public Parameter BSIM3lngate { get; } = new Parameter(0.0);
+        public double BSIM3_LNGATE
+        {
+            get => BSIM3lngate;
+            set
+            {
+                BSIM3lngate.Set(value);
+                if (BSIM3lngate > 1.0e23)
+                    BSIM3lngate.Value *= 1.0e-6;
+            }
+        }
+        public Parameter BSIM3lngate { get; } = new Parameter();
         [SpiceName("lgamma1"), SpiceInfo("Length dependence of gamma1")]
         public Parameter BSIM3lgamma1 { get; } = new Parameter();
         [SpiceName("lgamma2"), SpiceInfo("Length dependence of gamma2")]
@@ -329,7 +369,7 @@ namespace SpiceSharp.Components
         [SpiceName("leta0"), SpiceInfo("Length dependence of eta0")]
         public Parameter BSIM3leta0 { get; } = new Parameter();
         [SpiceName("letab"), SpiceInfo("Length dependence of etab")]
-        public Parameter BSIM3letab { get; } = new Parameter();
+        public Parameter BSIM3letab { get; } = new Parameter(-0.0);
         [SpiceName("lpclm"), SpiceInfo("Length dependence of pclm")]
         public Parameter BSIM3lpclm { get; } = new Parameter();
         [SpiceName("lpdiblc1"), SpiceInfo("Length dependence of pdiblc1")]
@@ -415,9 +455,29 @@ namespace SpiceSharp.Components
         [SpiceName("wnsub"), SpiceInfo("Width dependence of nsub")]
         public Parameter BSIM3wnsub { get; } = new Parameter();
         [SpiceName("wnch"), SpiceInfo("Width dependence of nch")]
-        public Parameter BSIM3wnpeak { get; } = new Parameter(0.0);
+        public double BSIM3_WNPEAK
+        {
+            get => BSIM3wnpeak;
+            set
+            {
+                BSIM3wnpeak.Set(value);
+                if (BSIM3wnpeak > 1.0e20)
+                    BSIM3wnpeak.Value *= 1.0e-6;
+            }
+        }
+        public Parameter BSIM3wnpeak { get; } = new Parameter();
         [SpiceName("wngate"), SpiceInfo("Width dependence of ngate")]
-        public Parameter BSIM3wngate { get; } = new Parameter(0.0);
+        public double BSIM3_WNGATE
+        {
+            get => BSIM3wngate;
+            set
+            {
+                BSIM3wngate.Set(value);
+                if (BSIM3wngate > 1.0e23)
+                    BSIM3wngate.Value *= 1.0e-6;
+            }
+        }
+        public Parameter BSIM3wngate { get; } = new Parameter();
         [SpiceName("wgamma1"), SpiceInfo("Width dependence of gamma1")]
         public Parameter BSIM3wgamma1 { get; } = new Parameter();
         [SpiceName("wgamma2"), SpiceInfo("Width dependence of gamma2")]
@@ -581,9 +641,29 @@ namespace SpiceSharp.Components
         [SpiceName("pnsub"), SpiceInfo("Cross-term dependence of nsub")]
         public Parameter BSIM3pnsub { get; } = new Parameter();
         [SpiceName("pnch"), SpiceInfo("Cross-term dependence of nch")]
-        public Parameter BSIM3pnpeak { get; } = new Parameter(0.0);
+        public double BSIM3_PNPEAK
+        {
+            get => BSIM3pnpeak;
+            set
+            {
+                BSIM3pnpeak.Set(value);
+                if (BSIM3pnpeak > 1.0e20)
+                    BSIM3pnpeak.Value *= 1.0e-6;
+            }
+        }
+        public Parameter BSIM3pnpeak { get; } = new Parameter();
         [SpiceName("pngate"), SpiceInfo("Cross-term dependence of ngate")]
-        public Parameter BSIM3pngate { get; } = new Parameter(0.0);
+        public double BSIM3_PNGATE
+        {
+            get => BSIM3pngate;
+            set
+            {
+                BSIM3pngate.Set(value);
+                if (BSIM3pngate > 1.0e23)
+                    BSIM3pngate.Value *= 1.0e-6;
+            }
+        }
+        public Parameter BSIM3pngate { get; } = new Parameter();
         [SpiceName("pgamma1"), SpiceInfo("Cross-term dependence of gamma1")]
         public Parameter BSIM3pgamma1 { get; } = new Parameter();
         [SpiceName("pgamma2"), SpiceInfo("Cross-term dependence of gamma2")]
@@ -724,7 +804,7 @@ namespace SpiceSharp.Components
             get => BSIM3tnom - Circuit.CONSTCtoK;
             set => BSIM3tnom.Set(value + Circuit.CONSTCtoK);
         }
-        public Parameter BSIM3tnom { get; } = new Parameter(300.15);
+        public Parameter BSIM3tnom { get; } = new Parameter();
         [SpiceName("cgso"), SpiceInfo("Gate-source overlap capacitance per width")]
         public Parameter BSIM3cgso { get; } = new Parameter();
         [SpiceName("cgdo"), SpiceInfo("Gate-drain overlap capacitance per width")]
@@ -740,19 +820,19 @@ namespace SpiceSharp.Components
         [SpiceName("jsw"), SpiceInfo("Sidewall junction reverse saturation current density")]
         public Parameter BSIM3jctSidewallSatCurDensity { get; } = new Parameter();
         [SpiceName("pb"), SpiceInfo("Source/drain junction built-in potential")]
-        public Parameter BSIM3bulkJctPotential { get; } = new Parameter();
+        public Parameter BSIM3bulkJctPotential { get; } = new Parameter(1.0);
         [SpiceName("mj"), SpiceInfo("Source/drain bottom junction capacitance grading coefficient")]
-        public Parameter BSIM3bulkJctBotGradingCoeff { get; } = new Parameter();
+        public Parameter BSIM3bulkJctBotGradingCoeff { get; } = new Parameter(0.5);
         [SpiceName("pbsw"), SpiceInfo("Source/drain sidewall junction capacitance built in potential")]
-        public Parameter BSIM3sidewallJctPotential { get; } = new Parameter();
+        public Parameter BSIM3sidewallJctPotential { get; } = new Parameter(1.0);
         [SpiceName("mjsw"), SpiceInfo("Source/drain sidewall junction capacitance grading coefficient")]
-        public Parameter BSIM3bulkJctSideGradingCoeff { get; } = new Parameter();
+        public Parameter BSIM3bulkJctSideGradingCoeff { get; } = new Parameter(0.33);
         [SpiceName("cj"), SpiceInfo("Source/drain bottom junction capacitance per unit area")]
         public Parameter BSIM3unitAreaJctCap { get; } = new Parameter(5.0E-4);
         [SpiceName("cjsw"), SpiceInfo("Source/drain sidewall junction capacitance per unit periphery")]
         public Parameter BSIM3unitLengthSidewallJctCap { get; } = new Parameter(5.0E-10);
         [SpiceName("nj"), SpiceInfo("Source/drain junction emission coefficient")]
-        public Parameter BSIM3jctEmissionCoeff { get; } = new Parameter();
+        public Parameter BSIM3jctEmissionCoeff { get; } = new Parameter(1.0);
         [SpiceName("pbswg"), SpiceInfo("Source/drain (gate side) sidewall junction capacitance built in potential")]
         public Parameter BSIM3GatesidewallJctPotential { get; } = new Parameter();
         [SpiceName("mjswg"), SpiceInfo("Source/drain (gate side) sidewall junction capacitance grading coefficient")]
@@ -760,7 +840,7 @@ namespace SpiceSharp.Components
         [SpiceName("cjswg"), SpiceInfo("Source/drain (gate side) sidewall junction capacitance per unit width")]
         public Parameter BSIM3unitLengthGateSidewallJctCap { get; } = new Parameter();
         [SpiceName("xti"), SpiceInfo("Junction current temperature exponent")]
-        public Parameter BSIM3jctTempExponent { get; } = new Parameter();
+        public Parameter BSIM3jctTempExponent { get; } = new Parameter(3.0);
         [SpiceName("lintnoi"), SpiceInfo("lint offset for noise calculation")]
         public Parameter BSIM3lintnoi { get; } = new Parameter();
         [SpiceName("lint"), SpiceInfo("Length reduction parameter")]
@@ -770,13 +850,13 @@ namespace SpiceSharp.Components
         [SpiceName("llc"), SpiceInfo("Length reduction parameter for CV")]
         public Parameter BSIM3Llc { get; } = new Parameter();
         [SpiceName("lln"), SpiceInfo("Length reduction parameter")]
-        public Parameter BSIM3Lln { get; } = new Parameter();
+        public Parameter BSIM3Lln { get; } = new Parameter(1.0);
         [SpiceName("lw"), SpiceInfo("Length reduction parameter")]
         public Parameter BSIM3Lw { get; } = new Parameter();
         [SpiceName("lwc"), SpiceInfo("Length reduction parameter for CV")]
         public Parameter BSIM3Lwc { get; } = new Parameter();
         [SpiceName("lwn"), SpiceInfo("Length reduction parameter")]
-        public Parameter BSIM3Lwn { get; } = new Parameter();
+        public Parameter BSIM3Lwn { get; } = new Parameter(1.0);
         [SpiceName("lwl"), SpiceInfo("Length reduction parameter")]
         public Parameter BSIM3Lwl { get; } = new Parameter();
         [SpiceName("lwlc"), SpiceInfo("Length reduction parameter for CV")]
@@ -784,7 +864,7 @@ namespace SpiceSharp.Components
         [SpiceName("lmin"), SpiceInfo("Minimum length for the model")]
         public Parameter BSIM3Lmin { get; } = new Parameter();
         [SpiceName("lmax"), SpiceInfo("Maximum length for the model")]
-        public Parameter BSIM3Lmax { get; } = new Parameter();
+        public Parameter BSIM3Lmax { get; } = new Parameter(1.0);
         [SpiceName("wint"), SpiceInfo("Width reduction parameter")]
         public Parameter BSIM3Wint { get; } = new Parameter();
         [SpiceName("wl"), SpiceInfo("Width reduction parameter")]
@@ -792,13 +872,13 @@ namespace SpiceSharp.Components
         [SpiceName("wlc"), SpiceInfo("Width reduction parameter for CV")]
         public Parameter BSIM3Wlc { get; } = new Parameter();
         [SpiceName("wln"), SpiceInfo("Width reduction parameter")]
-        public Parameter BSIM3Wln { get; } = new Parameter();
+        public Parameter BSIM3Wln { get; } = new Parameter(1.0);
         [SpiceName("ww"), SpiceInfo("Width reduction parameter")]
         public Parameter BSIM3Ww { get; } = new Parameter();
         [SpiceName("wwc"), SpiceInfo("Width reduction parameter for CV")]
         public Parameter BSIM3Wwc { get; } = new Parameter();
         [SpiceName("wwn"), SpiceInfo("Width reduction parameter")]
-        public Parameter BSIM3Wwn { get; } = new Parameter();
+        public Parameter BSIM3Wwn { get; } = new Parameter(1.0);
         [SpiceName("wwl"), SpiceInfo("Width reduction parameter")]
         public Parameter BSIM3Wwl { get; } = new Parameter();
         [SpiceName("wwlc"), SpiceInfo("Width reduction parameter for CV")]
@@ -806,7 +886,7 @@ namespace SpiceSharp.Components
         [SpiceName("wmin"), SpiceInfo("Minimum width for the model")]
         public Parameter BSIM3Wmin { get; } = new Parameter();
         [SpiceName("wmax"), SpiceInfo("Maximum width for the model")]
-        public Parameter BSIM3Wmax { get; } = new Parameter();
+        public Parameter BSIM3Wmax { get; } = new Parameter(1.0);
         [SpiceName("noia"), SpiceInfo("Flicker noise parameter")]
         public Parameter BSIM3oxideTrapDensityA { get; } = new Parameter();
         [SpiceName("noib"), SpiceInfo("Flicker noise parameter")]
@@ -816,9 +896,9 @@ namespace SpiceSharp.Components
         [SpiceName("em"), SpiceInfo("Flicker noise parameter")]
         public Parameter BSIM3em { get; } = new Parameter(4.1e7);
         [SpiceName("ef"), SpiceInfo("Flicker noise frequency exponent")]
-        public Parameter BSIM3ef { get; } = new Parameter();
+        public Parameter BSIM3ef { get; } = new Parameter(1.0);
         [SpiceName("af"), SpiceInfo("Flicker noise exponent")]
-        public Parameter BSIM3af { get; } = new Parameter();
+        public Parameter BSIM3af { get; } = new Parameter(1.0);
         [SpiceName("kf"), SpiceInfo("Flicker noise coefficient")]
         public Parameter BSIM3kf { get; } = new Parameter();
 

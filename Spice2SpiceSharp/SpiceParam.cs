@@ -161,10 +161,10 @@ namespace Spice2SpiceSharp
                                 {
                                     case "double":
                                     case "int":
-                                        decl.Add($"private Parameter {name} {{ get; }} = new Parameter();");
+                                        decl.Add($"public Parameter {name} {{ get; }} = new Parameter();");
                                         break;
                                     default:
-                                        decl.Add($"private Parameter<{type}> {name} = new Parameter<{type}>();");
+                                        decl.Add($"public Parameter<{type}> {name} = new Parameter<{type}>();");
                                         break;
                                 }
                             }

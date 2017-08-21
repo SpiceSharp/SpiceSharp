@@ -113,7 +113,7 @@ namespace Spice2SpiceSharp
                 if (allowed)
                 {
                     // Remove values that are already the default
-                    if (Regex.IsMatch(value, @"^0+(\.0*)?|\.0+$"))
+                    if (Regex.IsMatch(value, @"^(0+(\.0*)?|\.0+)$"))
                         return "";
                     if (Regex.IsMatch(value, "false", RegexOptions.IgnoreCase))
                         return "";
