@@ -60,10 +60,12 @@ The models included in the main project are:
 - MOSFET: MOS1 (level 1), MOS2 (level 2), MOS3 (level 3)
 - Diode (D)
 - Switches: Voltage switch, Current switch
+
 The simulations included in the main project are:
 - AC simulation
 - DC simulation
 - Transient simulation
+
 The waveforms for independent sources included in the main project are:
 - Pulse
 - Sine
