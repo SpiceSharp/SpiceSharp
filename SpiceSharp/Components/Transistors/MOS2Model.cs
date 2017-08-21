@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Components.Transistors;
@@ -20,7 +19,12 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
-        public Parameter MOS2tnom { get; } = new Parameter(300.15);
+        public double MOS2_TNOM
+        {
+            get => MOS2tnom - Circuit.CONSTCtoK;
+            set => MOS2tnom.Set(value + Circuit.CONSTCtoK);
+        }
+        public Parameter MOS2tnom { get; } = new Parameter();
         [SpiceName("vto"), SpiceName("vt0"), SpiceInfo("Threshold voltage")]
         public Parameter MOS2vt0 { get; } = new Parameter();
         [SpiceName("kp"), SpiceInfo("Transconductance parameter")]
@@ -98,9 +102,17 @@ namespace SpiceSharp.Components
         /// Methods
         /// </summary>
         [SpiceName("nmos"), SpiceInfo("N type MOSfet model")]
-        public void SetNMOS(bool value) { MOS2type = 1; }
+        public void SetNMOS(bool value)
+        {
+            if (value)
+                MOS2type = 1;
+        }
         [SpiceName("pmos"), SpiceInfo("P type MOSfet model")]
-        public void SetPMOS(bool value) { MOS2type = -1; }
+        public void SetPMOS(bool value)
+        {
+            if (value)
+                MOS2type = -1;
+        }
         [SpiceName("type"), SpiceInfo("N-channel or P-channel MOS")]
         public string GetTYPE(Circuit ckt)
         {

@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Components.Transistors;
@@ -89,7 +88,7 @@ namespace SpiceSharp.Components
             get => MOS3tnom - Circuit.CONSTCtoK;
             set => MOS3tnom.Set(value + Circuit.CONSTCtoK);
         }
-        public Parameter MOS3tnom { get; } = new Parameter(300.15);
+        public Parameter MOS3tnom { get; } = new Parameter();
         [SpiceName("kf"), SpiceInfo("Flicker noise coefficient")]
         public Parameter MOS3fNcoef { get; } = new Parameter();
         [SpiceName("af"), SpiceInfo("Flicker noise exponent")]

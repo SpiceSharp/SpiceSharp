@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
             get => DIOnomTemp - Circuit.CONSTCtoK;
             set => DIOnomTemp.Set(value + Circuit.CONSTCtoK);
         }
-        public Parameter DIOnomTemp { get; } = new Parameter(300.15);
+        public Parameter DIOnomTemp { get; } = new Parameter();
         [SpiceName("rs"), SpiceInfo("Ohmic resistance")]
         public Parameter DIOresist { get; } = new Parameter();
         [SpiceName("n"), SpiceInfo("Emission Coefficient")]
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components
         [SpiceName("kf"), SpiceInfo("flicker noise coefficient")]
         public Parameter DIOfNcoef { get; } = new Parameter();
         [SpiceName("af"), SpiceInfo("flicker noise exponent")]
-        public Parameter DIOfNexp { get; } = new Parameter();
+        public Parameter DIOfNexp { get; } = new Parameter(1.0);
         [SpiceName("cond"), SpiceInfo("Ohmic conductance")]
         public double DIOconductance { get; private set; }
 
@@ -59,7 +59,7 @@ namespace SpiceSharp.Components
         /// Methods
         /// </summary>
         [SpiceName("d"), SpiceInfo("Diode model")]
-        public void SetMOD_D(bool value)
+        public void SetD(bool value)
         {
         }
 

@@ -21,7 +21,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public void SetModel(MOS3Model model) => Model = (ICircuitObject)model;
+        public void SetModel(MOS3Model model) => Model = model;
 
         /// <summary>
         /// Parameters
@@ -53,10 +53,10 @@ namespace SpiceSharp.Components
         [SpiceName("temp"), SpiceInfo("Instance operating temperature")]
         public double MOS3_TEMP
         {
-            get => MOS3temp.Value - Circuit.CONSTCtoK;
+            get => MOS3temp - Circuit.CONSTCtoK;
             set => MOS3temp.Set(value + Circuit.CONSTCtoK);
         }
-        public Parameter MOS3temp { get; } = new Parameter(300.15);
+        public Parameter MOS3temp { get; } = new Parameter();
         [SpiceName("dnode"), SpiceInfo("Number of drain node")]
         public int MOS3dNode { get; private set; }
         [SpiceName("gnode"), SpiceInfo("Number of gate node")]

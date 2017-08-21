@@ -29,10 +29,10 @@ namespace SpiceSharp.Components
         [SpiceName("temp"), SpiceInfo("Instance operating temperature")]
         public double MOS2_TEMP
         {
-            get => MOS2temp.Value - Circuit.CONSTCtoK;
+            get => MOS2temp - Circuit.CONSTCtoK;
             set => MOS2temp.Set(value + Circuit.CONSTCtoK);
         }
-        public Parameter MOS2temp { get; } = new Parameter(300.15);
+        public Parameter MOS2temp { get; } = new Parameter();
         [SpiceName("w"), SpiceInfo("Width")]
         public Parameter MOS2w { get; } = new Parameter();
         [SpiceName("l"), SpiceInfo("Length")]
