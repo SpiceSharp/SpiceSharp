@@ -87,7 +87,7 @@ R1 IN OUT r
 
 ### SpiceSharpBSIM
 This project contains the BSIM models:
-- BSIM1 (level = 4)
-- BSIM2 (level = 5)
-- BSIM3 (commonly level = 49, only latest version 3.3.0)
+- BSIM1
+- BSIM2
+- BSIM3 (latest version 3.3.0)
 - BSIM4 (latest version 4.8.0)
