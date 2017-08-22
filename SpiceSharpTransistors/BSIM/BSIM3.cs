@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
 using System.IO;
 using SpiceSharp.Circuits;
@@ -27,7 +28,6 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Size dependent parameters
         /// </summary>
-        public static Dictionary<Tuple<double, double>, BSIM3SizeDependParam> sizes = new Dictionary<Tuple<double, double>, BSIM3SizeDependParam>();
         private BSIM3SizeDependParam pParam = null;
 
         /// <summary>
@@ -202,7 +202,6 @@ namespace SpiceSharp.Components
 
             // Allocate states
             BSIM3states = ckt.State.GetState(17);
-            sizes.Clear();
             pParam = null;
 
             /* allocate a chunk of the state vector */
@@ -245,12 +244,12 @@ namespace SpiceSharp.Components
             double Ldrn, Wdrn, T0, T1, tmp1, tmp2, T2, T3, Inv_L, Inv_W, Inv_LW, tmp, T4, T5, tmp3, Nvtm, SourceSatCurrent, DrainSatCurrent;
 
             Tuple<double, double> mysize = new Tuple<double, double>(BSIM3w, BSIM3l);
-            if (sizes.ContainsKey(mysize))
-                pParam = sizes[mysize];
+            if (model.Sizes.ContainsKey(mysize))
+                pParam = model.Sizes[mysize];
             else
             {
                 pParam = new BSIM3SizeDependParam();
-                sizes.Add(mysize, pParam);
+                model.Sizes.Add(mysize, pParam);
 
                 Ldrn = BSIM3l;
                 Wdrn = BSIM3w;
@@ -3289,60 +3288,125 @@ namespace SpiceSharp.Components
             var model = Model as BSIM3Model;
             var state = ckt.State;
             var cstate = state.Complex;
-            double xcggb, xcgdb, xcgsb, xcgbb, xcbgb, xcbdb, xcbsb, xcbbb;
-            double xcdgb, xcddb, xcdsb, xcdbb, xcsgb, xcsdb, xcssb, xcsbb;
-            double gdpr, gspr, gds, gbd, gbs, capbd, capbs, FwdSum, RevSum, Gm, Gmbs;
-            double cggb, cgdb, cgsb, cbgb, cbdb, cbsb, cddb, cdgb, cdsb;
-            double GSoverlapCap, GDoverlapCap, GBoverlapCap;
-            double dxpart, sxpart, xgtg, xgtd, xgts, xgtb, xcqgb = 0.0, xcqdb = 0.0, xcqsb = 0.0, xcqbb = 0.0;
-            double gbspsp, gbbdp, gbbsp, gbspg, gbspb;
-            double gbspdp, gbdpdp, gbdpg, gbdpb, gbdpsp;
-            double ddxpart_dVd, ddxpart_dVg, ddxpart_dVb, ddxpart_dVs;
-            double dsxpart_dVd, dsxpart_dVg, dsxpart_dVb, dsxpart_dVs;
-            double T1, CoxWL, qcheq, Cdg, Cdd, Cds, Csg, Csd, Css;
-            double ScalingFactor = 1.0e-9;
+            double Csd, Csg, Css, T0, T1, T2, T3, gmr, gmbsr, gds, gmi, gmbsi, gdsi, Cddr, Cdgr, Cdsr, Cddi, Cdgi, Cdsi, Cdbi, Csdr, Csgr, Cssr, Csdi, Csgi, 
+                Cssi, Csbi, Cgdr, Cggr, Cgsr, Cgdi, Cggi, Cgsi, Cgbi, Gm, Gmbs, FwdSum, RevSum, Gmi, Gmbsi, FwdSumi, RevSumi, gbbdp, gbbsp, gbdpg, gbdpb, gbdpdp, 
+                gbdpsp, gbspdp, gbspg, gbspb, gbspsp, cggb, cgsb, cgdb, cbgb, cbsb, cbdb, cdgb, cdsb, cddb, xgtg, sxpart, dxpart, ddxpart_dVd, dsxpart_dVd, xgtd, 
+                xgts, xgtb, xcqgb = 0.0, xcqdb = 0.0, xcqsb = 0.0, xcqbb = 0.0, CoxWL, qcheq, Cdd, Cdg, ddxpart_dVg, Cds, ddxpart_dVs, ddxpart_dVb, dsxpart_dVg, dsxpart_dVs, dsxpart_dVb, 
+                xcdgbi, xcsgbi, xcddbi, xcdsbi, xcsdbi, xcssbi, xcdbbi, xcsbbi, xcggbi, xcgdbi, xcgsbi, xcgbbi, gdpr, gspr, gbd, gbs, capbd, capbs, GSoverlapCap, 
+                GDoverlapCap, GBoverlapCap, xcdgb, xcddb, xcdsb, xcsgb, xcsdb, xcssb, xcggb, xcgdb, xcgsb, xcbgb, xcbdb, xcbsb;
+
+            Csd = -(BSIM3cddb + BSIM3cgdb + BSIM3cbdb);
+            Csg = -(BSIM3cdgb + BSIM3cggb + BSIM3cbgb);
+            Css = -(BSIM3cdsb + BSIM3cgsb + BSIM3cbsb);
+
+            if (BSIM3acnqsMod != 0.0)
+            {
+                T0 = cstate.Laplace.Imaginary * BSIM3taunet;
+                T1 = T0 * T0;
+                T2 = 1.0 / (1.0 + T1);
+                T3 = T0 * T2;
+
+                gmr = BSIM3gm * T2;
+                gmbsr = BSIM3gmbs * T2;
+                gds = BSIM3gds * T2;
+
+                gmi = -BSIM3gm * T3;
+                gmbsi = -BSIM3gmbs * T3;
+                gdsi = -BSIM3gds * T3;
+
+                Cddr = BSIM3cddb * T2;
+                Cdgr = BSIM3cdgb * T2;
+                Cdsr = BSIM3cdsb * T2;
+
+                Cddi = BSIM3cddb * T3 * cstate.Laplace.Imaginary;
+                Cdgi = BSIM3cdgb * T3 * cstate.Laplace.Imaginary;
+                Cdsi = BSIM3cdsb * T3 * cstate.Laplace.Imaginary;
+                Cdbi = -(Cddi + Cdgi + Cdsi);
+
+                Csdr = Csd * T2;
+                Csgr = Csg * T2;
+                Cssr = Css * T2;
+
+                Csdi = Csd * T3 * cstate.Laplace.Imaginary;
+                Csgi = Csg * T3 * cstate.Laplace.Imaginary;
+                Cssi = Css * T3 * cstate.Laplace.Imaginary;
+                Csbi = -(Csdi + Csgi + Cssi);
+
+                Cgdr = -(Cddr + Csdr + BSIM3cbdb);
+                Cggr = -(Cdgr + Csgr + BSIM3cbgb);
+                Cgsr = -(Cdsr + Cssr + BSIM3cbsb);
+
+                Cgdi = -(Cddi + Csdi);
+                Cggi = -(Cdgi + Csgi);
+                Cgsi = -(Cdsi + Cssi);
+                Cgbi = -(Cgdi + Cggi + Cgsi);
+            }
+            else /* QS */
+            {
+                gmr = BSIM3gm;
+                gmbsr = BSIM3gmbs;
+                gds = BSIM3gds;
+                gmi = gmbsi = gdsi = 0.0;
+
+                Cddr = BSIM3cddb;
+                Cdgr = BSIM3cdgb;
+                Cdsr = BSIM3cdsb;
+                Cddi = Cdgi = Cdsi = Cdbi = 0.0;
+
+                Csdr = Csd;
+                Csgr = Csg;
+                Cssr = Css;
+                Csdi = Csgi = Cssi = Csbi = 0.0;
+
+                Cgdr = BSIM3cgdb;
+                Cggr = BSIM3cggb;
+                Cgsr = BSIM3cgsb;
+                Cgdi = Cggi = Cgsi = Cgbi = 0.0;
+            }
 
             if (BSIM3mode >= 0)
             {
-                Gm = BSIM3gm;
-                Gmbs = BSIM3gmbs;
+                Gm = gmr;
+                Gmbs = gmbsr;
                 FwdSum = Gm + Gmbs;
                 RevSum = 0.0;
+                Gmi = gmi;
+                Gmbsi = gmbsi;
+                FwdSumi = Gmi + Gmbsi;
+                RevSumi = 0.0;
 
                 gbbdp = -BSIM3gbds;
                 gbbsp = BSIM3gbds + BSIM3gbgs + BSIM3gbbs;
 
                 gbdpg = BSIM3gbgs;
-                gbdpdp = BSIM3gbds;
                 gbdpb = BSIM3gbbs;
-                gbdpsp = -(gbdpg + gbdpdp + gbdpb);
+                gbdpdp = BSIM3gbds;
+                gbdpsp = -(gbdpg + gbdpb + gbdpdp);
 
-                gbspg = 0.0;
                 gbspdp = 0.0;
+                gbspg = 0.0;
                 gbspb = 0.0;
                 gbspsp = 0.0;
 
-                if (BSIM3nqsMod == 0 && BSIM3acnqsMod == 0)
+                if (BSIM3nqsMod.Value == 0 || BSIM3acnqsMod.Value == 1)
                 {
-                    cggb = BSIM3cggb;
-                    cgsb = BSIM3cgsb;
-                    cgdb = BSIM3cgdb;
+                    cggb = Cggr;
+                    cgsb = Cgsr;
+                    cgdb = Cgdr;
 
                     cbgb = BSIM3cbgb;
                     cbsb = BSIM3cbsb;
                     cbdb = BSIM3cbdb;
 
-                    cdgb = BSIM3cdgb;
-                    cdsb = BSIM3cdsb;
-                    cddb = BSIM3cddb;
+                    cdgb = Cdgr;
+                    cdsb = Cdsr;
+                    cddb = Cddr;
 
                     xgtg = xgtd = xgts = xgtb = 0.0;
                     sxpart = 0.6;
                     dxpart = 0.4;
-                    ddxpart_dVd = ddxpart_dVg = ddxpart_dVb
-                        = ddxpart_dVs = 0.0;
-                    dsxpart_dVd = dsxpart_dVg = dsxpart_dVb
-                        = dsxpart_dVs = 0.0;
+                    ddxpart_dVd = ddxpart_dVg = ddxpart_dVb = ddxpart_dVs = 0.0;
+                    dsxpart_dVd = dsxpart_dVg = dsxpart_dVb = dsxpart_dVs = 0.0;
                 }
                 else
                 {
@@ -3355,13 +3419,12 @@ namespace SpiceSharp.Components
                     xgts = BSIM3gts;
                     xgtb = BSIM3gtb;
 
-                    xcqgb = BSIM3cqgb;
-                    xcqdb = BSIM3cqdb;
-                    xcqsb = BSIM3cqsb;
-                    xcqbb = BSIM3cqbb;
+                    xcqgb = BSIM3cqgb * cstate.Laplace.Imaginary;
+                    xcqdb = BSIM3cqdb * cstate.Laplace.Imaginary;
+                    xcqsb = BSIM3cqsb * cstate.Laplace.Imaginary;
+                    xcqbb = BSIM3cqbb * cstate.Laplace.Imaginary;
 
-                    CoxWL = model.BSIM3cox * pParam.BSIM3weffCV
-                                  * pParam.BSIM3leffCV;
+                    CoxWL = model.BSIM3cox * pParam.BSIM3weffCV * pParam.BSIM3leffCV;
                     qcheq = -(BSIM3qgate + BSIM3qbulk);
                     if (Math.Abs(qcheq) <= 1.0e-5 * CoxWL)
                     {
@@ -3377,28 +3440,23 @@ namespace SpiceSharp.Components
                         {
                             dxpart = 0.5;
                         }
-                        ddxpart_dVd = ddxpart_dVg = ddxpart_dVb
-                            = ddxpart_dVs = 0.0;
+                        ddxpart_dVd = ddxpart_dVg = ddxpart_dVb = ddxpart_dVs = 0.0;
                     }
                     else
                     {
                         dxpart = BSIM3qdrn / qcheq;
                         Cdd = BSIM3cddb;
-                        Csd = -(BSIM3cgdb + BSIM3cddb
-                        + BSIM3cbdb);
+                        Csd = -(BSIM3cgdb + BSIM3cddb + BSIM3cbdb);
                         ddxpart_dVd = (Cdd - dxpart * (Cdd + Csd)) / qcheq;
                         Cdg = BSIM3cdgb;
-                        Csg = -(BSIM3cggb + BSIM3cdgb
-                        + BSIM3cbgb);
+                        Csg = -(BSIM3cggb + BSIM3cdgb + BSIM3cbgb);
                         ddxpart_dVg = (Cdg - dxpart * (Cdg + Csg)) / qcheq;
 
                         Cds = BSIM3cdsb;
-                        Css = -(BSIM3cgsb + BSIM3cdsb
-                        + BSIM3cbsb);
+                        Css = -(BSIM3cgsb + BSIM3cdsb + BSIM3cbsb);
                         ddxpart_dVs = (Cds - dxpart * (Cds + Css)) / qcheq;
 
-                        ddxpart_dVb = -(ddxpart_dVd + ddxpart_dVg
-                            + ddxpart_dVs);
+                        ddxpart_dVb = -(ddxpart_dVd + ddxpart_dVg + ddxpart_dVs);
                     }
                     sxpart = 1.0 - dxpart;
                     dsxpart_dVd = -ddxpart_dVd;
@@ -3406,13 +3464,29 @@ namespace SpiceSharp.Components
                     dsxpart_dVs = -ddxpart_dVs;
                     dsxpart_dVb = -(dsxpart_dVd + dsxpart_dVg + dsxpart_dVs);
                 }
+                xcdgbi = Cdgi;
+                xcsgbi = Csgi;
+                xcddbi = Cddi;
+                xcdsbi = Cdsi;
+                xcsdbi = Csdi;
+                xcssbi = Cssi;
+                xcdbbi = Cdbi;
+                xcsbbi = Csbi;
+                xcggbi = Cggi;
+                xcgdbi = Cgdi;
+                xcgsbi = Cgsi;
+                xcgbbi = Cgbi;
             }
             else
             {
-                Gm = -BSIM3gm;
-                Gmbs = -BSIM3gmbs;
+                Gm = -gmr;
+                Gmbs = -gmbsr;
                 FwdSum = 0.0;
                 RevSum = -(Gm + Gmbs);
+                Gmi = -gmi;
+                Gmbsi = -gmbsi;
+                FwdSumi = 0.0;
+                RevSumi = -(Gmi + Gmbsi);
 
                 gbbsp = -BSIM3gbds;
                 gbbdp = BSIM3gbds + BSIM3gbgs + BSIM3gbbs;
@@ -3427,27 +3501,25 @@ namespace SpiceSharp.Components
                 gbspb = BSIM3gbbs;
                 gbspdp = -(gbspg + gbspsp + gbspb);
 
-                if (BSIM3nqsMod == 0 && BSIM3acnqsMod == 0)
+                if (BSIM3nqsMod.Value == 0 || BSIM3acnqsMod.Value == 1)
                 {
-                    cggb = BSIM3cggb;
-                    cgsb = BSIM3cgdb;
-                    cgdb = BSIM3cgsb;
+                    cggb = Cggr;
+                    cgsb = Cgdr;
+                    cgdb = Cgsr;
 
                     cbgb = BSIM3cbgb;
                     cbsb = BSIM3cbdb;
                     cbdb = BSIM3cbsb;
 
-                    cdgb = -(BSIM3cdgb + cggb + cbgb);
-                    cdsb = -(BSIM3cddb + cgsb + cbsb);
-                    cddb = -(BSIM3cdsb + cgdb + cbdb);
+                    cdgb = -(Cdgr + cggb + cbgb);
+                    cdsb = -(Cddr + cgsb + cbsb);
+                    cddb = -(Cdsr + cgdb + cbdb);
 
                     xgtg = xgtd = xgts = xgtb = 0.0;
                     sxpart = 0.4;
                     dxpart = 0.6;
-                    ddxpart_dVd = ddxpart_dVg = ddxpart_dVb
-                        = ddxpart_dVs = 0.0;
-                    dsxpart_dVd = dsxpart_dVg = dsxpart_dVb
-                        = dsxpart_dVs = 0.0;
+                    ddxpart_dVd = ddxpart_dVg = ddxpart_dVb = ddxpart_dVs = 0.0;
+                    dsxpart_dVd = dsxpart_dVg = dsxpart_dVb = dsxpart_dVs = 0.0;
                 }
                 else
                 {
@@ -3460,13 +3532,12 @@ namespace SpiceSharp.Components
                     xgts = BSIM3gtd;
                     xgtb = BSIM3gtb;
 
-                    xcqgb = BSIM3cqgb;
-                    xcqdb = BSIM3cqsb;
-                    xcqsb = BSIM3cqdb;
-                    xcqbb = BSIM3cqbb;
+                    xcqgb = BSIM3cqgb * cstate.Laplace.Imaginary;
+                    xcqdb = BSIM3cqsb * cstate.Laplace.Imaginary;
+                    xcqsb = BSIM3cqdb * cstate.Laplace.Imaginary;
+                    xcqbb = BSIM3cqbb * cstate.Laplace.Imaginary;
 
-                    CoxWL = model.BSIM3cox * pParam.BSIM3weffCV
-                                  * pParam.BSIM3leffCV;
+                    CoxWL = model.BSIM3cox * pParam.BSIM3weffCV * pParam.BSIM3leffCV;
                     qcheq = -(BSIM3qgate + BSIM3qbulk);
                     if (Math.Abs(qcheq) <= 1.0e-5 * CoxWL)
                     {
@@ -3482,28 +3553,23 @@ namespace SpiceSharp.Components
                         {
                             sxpart = 0.5;
                         }
-                        dsxpart_dVd = dsxpart_dVg = dsxpart_dVb
-                            = dsxpart_dVs = 0.0;
+                        dsxpart_dVd = dsxpart_dVg = dsxpart_dVb = dsxpart_dVs = 0.0;
                     }
                     else
                     {
                         sxpart = BSIM3qdrn / qcheq;
                         Css = BSIM3cddb;
-                        Cds = -(BSIM3cgdb + BSIM3cddb
-                        + BSIM3cbdb);
+                        Cds = -(BSIM3cgdb + BSIM3cddb + BSIM3cbdb);
                         dsxpart_dVs = (Css - sxpart * (Css + Cds)) / qcheq;
                         Csg = BSIM3cdgb;
-                        Cdg = -(BSIM3cggb + BSIM3cdgb
-                        + BSIM3cbgb);
+                        Cdg = -(BSIM3cggb + BSIM3cdgb + BSIM3cbgb);
                         dsxpart_dVg = (Csg - sxpart * (Csg + Cdg)) / qcheq;
 
                         Csd = BSIM3cdsb;
-                        Cdd = -(BSIM3cgsb + BSIM3cdsb
-                        + BSIM3cbsb);
+                        Cdd = -(BSIM3cgsb + BSIM3cdsb + BSIM3cbsb);
                         dsxpart_dVd = (Csd - sxpart * (Csd + Cdd)) / qcheq;
 
-                        dsxpart_dVb = -(dsxpart_dVd + dsxpart_dVg
-                            + dsxpart_dVs);
+                        dsxpart_dVb = -(dsxpart_dVd + dsxpart_dVg + dsxpart_dVs);
                     }
                     dxpart = 1.0 - sxpart;
                     ddxpart_dVd = -dsxpart_dVd;
@@ -3511,12 +3577,23 @@ namespace SpiceSharp.Components
                     ddxpart_dVs = -dsxpart_dVs;
                     ddxpart_dVb = -(ddxpart_dVd + ddxpart_dVg + ddxpart_dVs);
                 }
+                xcdgbi = Csgi;
+                xcsgbi = Cdgi;
+                xcddbi = Cssi;
+                xcdsbi = Csdi;
+                xcsdbi = Cdsi;
+                xcssbi = Cddi;
+                xcdbbi = Csbi;
+                xcsbbi = Cdbi;
+                xcggbi = Cggi;
+                xcgdbi = Cgsi;
+                xcgsbi = Cgdi;
+                xcgbbi = Cgbi;
             }
 
             T1 = state.States[0][BSIM3states + BSIM3qdef] * BSIM3gtau;
             gdpr = BSIM3drainConductance;
             gspr = BSIM3sourceConductance;
-            gds = BSIM3gds;
             gbd = BSIM3gbd;
             gbs = BSIM3gbs;
             capbd = BSIM3capbd;
@@ -3526,98 +3603,79 @@ namespace SpiceSharp.Components
             GDoverlapCap = BSIM3cgdo;
             GBoverlapCap = pParam.BSIM3cgbo;
 
-            xcdgb = (cdgb - GDoverlapCap);
-            xcddb = (cddb + capbd + GDoverlapCap);
-            xcdsb = cdsb;
-            xcdbb = -(xcdgb + xcddb + xcdsb);
-            xcsgb = -(cggb + cbgb + cdgb + GSoverlapCap);
-            xcsdb = -(cgdb + cbdb + cddb);
-            xcssb = (capbs + GSoverlapCap - (cgsb + cbsb + cdsb));
-            xcsbb = -(xcsgb + xcsdb + xcssb);
-            xcggb = (cggb + GDoverlapCap + GSoverlapCap + GBoverlapCap);
-            xcgdb = (cgdb - GDoverlapCap);
-            xcgsb = (cgsb - GSoverlapCap);
-            xcgbb = -(xcggb + xcgdb + xcgsb);
-            xcbgb = (cbgb - GBoverlapCap);
-            xcbdb = (cbdb - capbd);
-            xcbsb = (cbsb - capbs);
-            xcbbb = -(xcbgb + xcbdb + xcbsb);
+            xcdgb = (cdgb - GDoverlapCap) * cstate.Laplace.Imaginary;
+            xcddb = (cddb + capbd + GDoverlapCap) * cstate.Laplace.Imaginary;
+            xcdsb = cdsb * cstate.Laplace.Imaginary;
+            xcsgb = -(cggb + cbgb + cdgb + GSoverlapCap) * cstate.Laplace.Imaginary;
+            xcsdb = -(cgdb + cbdb + cddb) * cstate.Laplace.Imaginary;
+            xcssb = (capbs + GSoverlapCap - (cgsb + cbsb + cdsb)) * cstate.Laplace.Imaginary;
+            xcggb = (cggb + GDoverlapCap + GSoverlapCap + GBoverlapCap) * cstate.Laplace.Imaginary;
+            xcgdb = (cgdb - GDoverlapCap) * cstate.Laplace.Imaginary;
+            xcgsb = (cgsb - GSoverlapCap) * cstate.Laplace.Imaginary;
+            xcbgb = (cbgb - GBoverlapCap) * cstate.Laplace.Imaginary;
+            xcbdb = (cbdb - capbd) * cstate.Laplace.Imaginary;
+            xcbsb = (cbsb - capbs) * cstate.Laplace.Imaginary;
 
-            cstate.Matrix[BSIM3gNode, BSIM3gNode] += xcggb * cstate.Laplace;
-            cstate.Matrix[BSIM3bNode, BSIM3bNode] += xcbbb * cstate.Laplace;
-            cstate.Matrix[BSIM3dNodePrime, BSIM3dNodePrime] += xcddb * cstate.Laplace;
-            cstate.Matrix[BSIM3sNodePrime, BSIM3sNodePrime] += xcssb * cstate.Laplace;
-
-            cstate.Matrix[BSIM3gNode, BSIM3bNode] += xcgbb * cstate.Laplace;
-            cstate.Matrix[BSIM3gNode, BSIM3dNodePrime] += xcgdb * cstate.Laplace;
-            cstate.Matrix[BSIM3gNode, BSIM3sNodePrime] += xcgsb * cstate.Laplace;
-
-            cstate.Matrix[BSIM3bNode, BSIM3gNode] += xcbgb * cstate.Laplace;
-            cstate.Matrix[BSIM3bNode, BSIM3dNodePrime] += xcbdb * cstate.Laplace;
-            cstate.Matrix[BSIM3bNode, BSIM3sNodePrime] += xcbsb * cstate.Laplace;
-
-            cstate.Matrix[BSIM3dNodePrime, BSIM3gNode] += xcdgb * cstate.Laplace;
-            cstate.Matrix[BSIM3dNodePrime, BSIM3bNode] += xcdbb * cstate.Laplace;
-            cstate.Matrix[BSIM3dNodePrime, BSIM3sNodePrime] += xcdsb * cstate.Laplace;
-
-            cstate.Matrix[BSIM3sNodePrime, BSIM3gNode] += xcsgb * cstate.Laplace;
-            cstate.Matrix[BSIM3sNodePrime, BSIM3bNode] += xcsbb * cstate.Laplace;
-            cstate.Matrix[BSIM3sNodePrime, BSIM3dNodePrime] += xcsdb * cstate.Laplace;
+            cstate.Matrix[BSIM3gNode, BSIM3gNode] -= new Complex(xgtg - xcggbi, -xcggb);
+            cstate.Matrix[BSIM3bNode, BSIM3bNode] += new Complex(gbd + gbs - BSIM3gbbs, -(xcbgb + xcbdb + xcbsb));
+            cstate.Matrix[BSIM3dNodePrime, BSIM3dNodePrime] += new Complex(gdpr + gds + gbd + RevSum + xcddbi + dxpart * xgtd + T1 * ddxpart_dVd + gbdpdp, xcddb + gdsi + RevSumi);
+            cstate.Matrix[BSIM3sNodePrime, BSIM3sNodePrime] += new Complex(gspr + gds + gbs + FwdSum + xcssbi + sxpart * xgts + T1 * dsxpart_dVs + gbspsp, xcssb + gdsi + FwdSumi);
+            cstate.Matrix[BSIM3gNode, BSIM3bNode] -= new Complex(xgtb - xcgbbi, xcggb + xcgdb + xcgsb);
+            cstate.Matrix[BSIM3gNode, BSIM3dNodePrime] -= new Complex(xgtd - xcgdbi, -xcgdb);
+            cstate.Matrix[BSIM3gNode, BSIM3sNodePrime] -= new Complex(xgts - xcgsbi, -xcgsb);
+            cstate.Matrix[BSIM3bNode, BSIM3gNode] -= new Complex(BSIM3gbgs, -xcbgb);
+            cstate.Matrix[BSIM3bNode, BSIM3dNodePrime] -= new Complex(gbd - gbbdp, -xcbdb);
+            cstate.Matrix[BSIM3bNode, BSIM3sNodePrime] -= new Complex(gbs - gbbsp, -xcbsb);
+            cstate.Matrix[BSIM3dNodePrime, BSIM3gNode] += new Complex(Gm + dxpart * xgtg + T1 * ddxpart_dVg + gbdpg + xcdgbi, xcdgb + Gmi);
+            cstate.Matrix[BSIM3dNodePrime, BSIM3bNode] -= new Complex(gbd - Gmbs - dxpart * xgtb - T1 * ddxpart_dVb - gbdpb - xcdbbi, xcdgb + xcddb + xcdsb + Gmbsi);
+            cstate.Matrix[BSIM3dNodePrime, BSIM3sNodePrime] -= new Complex(gds + FwdSum - dxpart * xgts - T1 * ddxpart_dVs - gbdpsp - xcdsbi, -(xcdsb - gdsi - FwdSumi));
+            cstate.Matrix[BSIM3sNodePrime, BSIM3gNode] -= new Complex(Gm - sxpart * xgtg - T1 * dsxpart_dVg - gbspg - xcsgbi, -(xcsgb - Gmi));
+            cstate.Matrix[BSIM3sNodePrime, BSIM3bNode] -= new Complex(gbs + Gmbs - sxpart * xgtb - T1 * dsxpart_dVb - gbspb - xcsbbi, xcsgb + xcsdb + xcssb - Gmbsi);
+            cstate.Matrix[BSIM3sNodePrime, BSIM3dNodePrime] -= new Complex(gds + RevSum - sxpart * xgtd - T1 * dsxpart_dVd - gbspdp - xcsdbi, -(xcsdb - gdsi - RevSumi));
 
             cstate.Matrix[BSIM3dNode, BSIM3dNode] += gdpr;
-            cstate.Matrix[BSIM3dNode, BSIM3dNodePrime] -= gdpr;
-            cstate.Matrix[BSIM3dNodePrime, BSIM3dNode] -= gdpr;
-
             cstate.Matrix[BSIM3sNode, BSIM3sNode] += gspr;
+            cstate.Matrix[BSIM3dNode, BSIM3dNodePrime] -= gdpr;
             cstate.Matrix[BSIM3sNode, BSIM3sNodePrime] -= gspr;
+            cstate.Matrix[BSIM3dNodePrime, BSIM3dNode] -= gdpr;
             cstate.Matrix[BSIM3sNodePrime, BSIM3sNode] -= gspr;
 
-            cstate.Matrix[BSIM3bNode, BSIM3gNode] -= BSIM3gbgs;
-            cstate.Matrix[BSIM3bNode, BSIM3bNode] += gbd + gbs - BSIM3gbbs;
-            cstate.Matrix[BSIM3bNode, BSIM3dNodePrime] -= gbd - gbbdp;
-            cstate.Matrix[BSIM3bNode, BSIM3sNodePrime] -= gbs - gbbsp;
-
-            cstate.Matrix[BSIM3dNodePrime, BSIM3gNode] += Gm + dxpart * xgtg + T1 * ddxpart_dVg + gbdpg;
-            cstate.Matrix[BSIM3dNodePrime, BSIM3dNodePrime] += gdpr + gds + gbd + RevSum + dxpart * xgtd + T1 * ddxpart_dVd + gbdpdp;
-            cstate.Matrix[BSIM3dNodePrime, BSIM3sNodePrime] -= gds + FwdSum - dxpart * xgts - T1 * ddxpart_dVs - gbdpsp;
-            cstate.Matrix[BSIM3dNodePrime, BSIM3bNode] -= gbd - Gmbs - dxpart * xgtb - T1 * ddxpart_dVb - gbdpb;
-
-            cstate.Matrix[BSIM3sNodePrime, BSIM3gNode] -= Gm - sxpart * xgtg - T1 * dsxpart_dVg - gbspg;
-            cstate.Matrix[BSIM3sNodePrime, BSIM3sNodePrime] += gspr + gds + gbs + FwdSum + sxpart * xgts + T1 * dsxpart_dVs + gbspsp;
-            cstate.Matrix[BSIM3sNodePrime, BSIM3bNode] -= gbs + Gmbs - sxpart * xgtb - T1 * dsxpart_dVb - gbspb;
-            cstate.Matrix[BSIM3sNodePrime, BSIM3dNodePrime] -= gds + RevSum - sxpart * xgtd - T1 * dsxpart_dVd - gbspdp;
-
-            cstate.Matrix[BSIM3gNode, BSIM3gNode] -= xgtg;
-            cstate.Matrix[BSIM3gNode, BSIM3bNode] -= xgtb;
-            cstate.Matrix[BSIM3gNode, BSIM3dNodePrime] -= xgtd;
-            cstate.Matrix[BSIM3gNode, BSIM3sNodePrime] -= xgts;
-
-            if (BSIM3nqsMod > 0 || BSIM3acnqsMod > 0)
+            if (BSIM3nqsMod != 0)
             {
-                cstate.Matrix[BSIM3qNode, BSIM3qNode] += ScalingFactor * cstate.Laplace;
-                cstate.Matrix[BSIM3qNode, BSIM3gNode] -= xcqgb * cstate.Laplace;
-                cstate.Matrix[BSIM3qNode, BSIM3dNodePrime] -= xcqdb * cstate.Laplace;
-                cstate.Matrix[BSIM3qNode, BSIM3bNode] -= xcqbb * cstate.Laplace;
-                cstate.Matrix[BSIM3qNode, BSIM3sNodePrime] -= xcqsb * cstate.Laplace;
+                if (BSIM3acnqsMod != 0)
+                {
+                    cstate.Matrix[BSIM3qNode, BSIM3qNode] += 1.0;
+                    cstate.Matrix[BSIM3qNode, BSIM3gNode] += 0.0;
+                    cstate.Matrix[BSIM3qNode, BSIM3dNodePrime] += 0.0;
+                    cstate.Matrix[BSIM3qNode, BSIM3sNodePrime] += 0.0;
+                    cstate.Matrix[BSIM3qNode, BSIM3bNode] += 0.0;
 
-                cstate.Matrix[BSIM3gNode, BSIM3qNode] -= BSIM3gtau;
-                cstate.Matrix[BSIM3dNodePrime, BSIM3qNode] += dxpart * BSIM3gtau;
-                cstate.Matrix[BSIM3sNodePrime, BSIM3qNode] += sxpart * BSIM3gtau;
+                    cstate.Matrix[BSIM3dNodePrime, BSIM3qNode] += 0.0;
+                    cstate.Matrix[BSIM3sNodePrime, BSIM3qNode] += 0.0;
+                    cstate.Matrix[BSIM3gNode, BSIM3qNode] += 0.0;
 
-                cstate.Matrix[BSIM3qNode, BSIM3qNode] += BSIM3gtau;
-                cstate.Matrix[BSIM3qNode, BSIM3gNode] += xgtg;
-                cstate.Matrix[BSIM3qNode, BSIM3dNodePrime] += xgtd;
-                cstate.Matrix[BSIM3qNode, BSIM3bNode] += xgtb;
-                cstate.Matrix[BSIM3qNode, BSIM3sNodePrime] += xgts;
+                }
+                else
+                {
+                    cstate.Matrix[BSIM3qNode, BSIM3qNode] += new Complex(BSIM3gtau, cstate.Laplace.Imaginary * ScalingFactor);
+                    cstate.Matrix[BSIM3qNode, BSIM3gNode] += new Complex(xgtg, -xcqgb);
+                    cstate.Matrix[BSIM3qNode, BSIM3dNodePrime] += new Complex(xgtd, -xcqdb);
+                    cstate.Matrix[BSIM3qNode, BSIM3sNodePrime] += new Complex(xgts, -xcqsb);
+                    cstate.Matrix[BSIM3qNode, BSIM3bNode] += new Complex(xgtb, -xcqbb);
+
+                    cstate.Matrix[BSIM3dNodePrime, BSIM3qNode] += dxpart * BSIM3gtau;
+                    cstate.Matrix[BSIM3sNodePrime, BSIM3qNode] += sxpart * BSIM3gtau;
+                    cstate.Matrix[BSIM3gNode, BSIM3qNode] -= BSIM3gtau;
+                }
             }
         }
 
-        /// <summary>
-        /// Perform parameter checking
-        /// </summary>
-        /// <param name="ckt"></param>
-        /// <returns></returns>
-        private bool BSIM3checkModel()
+    /// <summary>
+    /// Perform parameter checking
+    /// </summary>
+    /// <param name="ckt"></param>
+    /// <returns></returns>
+    private bool BSIM3checkModel()
         {
             var model = Model as BSIM3Model;
             bool Fatal_Flag = false;

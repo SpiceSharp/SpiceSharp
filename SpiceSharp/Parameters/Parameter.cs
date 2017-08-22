@@ -1,10 +1,9 @@
 ﻿using System;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Parameters
 {
     /// <summary>
-    /// This class describes a parameter that is optional. Whether or not it is specified can be
+    /// This struct describes a parameter that is optional. Whether or not it was specified can be
     /// found using the Given variable.
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -18,7 +17,7 @@ namespace SpiceSharp.Parameters
         /// <summary>
         /// Gets whether or not the parameter was specified
         /// </summary>
-        public bool Given { get; private set; } = false;
+        public bool Given { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -27,6 +26,7 @@ namespace SpiceSharp.Parameters
         public Parameter(double defvalue = 0.0)
         {
             Value = defvalue;
+            Given = false;
         }
 
         /// <summary>
@@ -83,11 +83,23 @@ namespace SpiceSharp.Parameters
         }
 
         /// <summary>
+        /// Assignment
+        /// Warning: This is the same as calling Set on the parameter!
+        /// </summary>
+        /// <param name="p">The double representation</param>
+        public static implicit operator Parameter(double p)
+        {
+            return new Parameter(p) { Given = true };
+        }
+
+        /// <summary>
         /// Convert to string
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
+            if (Given)
+                return Value.ToString() + " (set)";
             return Value.ToString();
         }
     }

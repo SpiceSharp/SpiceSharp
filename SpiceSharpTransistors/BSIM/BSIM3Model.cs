@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Components.Transistors;
@@ -8,12 +9,17 @@ namespace SpiceSharp.Components
     public class BSIM3Model : CircuitModel<BSIM3Model>
     {
         /// <summary>
-        /// Register our parameters
+        /// Register our model parameters
         /// </summary>
         static BSIM3Model()
         {
             Register();
         }
+
+        /// <summary>
+        /// Allow caching of size-dependent parameters
+        /// </summary>
+        public Dictionary<Tuple<double, double>, BSIM3SizeDependParam> Sizes = new Dictionary<Tuple<double, double>, BSIM3SizeDependParam>();
 
         /// <summary>
         /// Parameters
@@ -31,7 +37,7 @@ namespace SpiceSharp.Components
         [SpiceName("acnqsmod"), SpiceInfo("AC NQS model selector")]
         public Parameter BSIM3acnqsMod { get; } = new Parameter();
         [SpiceName("version"), SpiceInfo(" parameter for model version")]
-        public string BSIM3version { get; set; } = "3.3.0";
+        public string BSIM3version { get; } = "3.3.0";
         [SpiceName("tox"), SpiceInfo("Gate oxide thickness in meters")]
         public Parameter BSIM3tox { get; } = new Parameter(150.0e-10);
         [SpiceName("toxm"), SpiceInfo("Gate oxide thickness used in extraction")]
@@ -909,13 +915,13 @@ namespace SpiceSharp.Components
         public void SetNMOS(bool value)
         {
             if (value)
-                BSIM3type = 1;
+                BSIM3type = NMOS;
         }
         [SpiceName("pmos"), SpiceInfo("Flag to indicate PMOS")]
         public void SetPMOS(bool value)
         {
             if (value)
-                BSIM3type = -1;
+                BSIM3type = PMOS;
         }
 
         /// <summary>
@@ -924,6 +930,8 @@ namespace SpiceSharp.Components
         public double TRatio { get; private set; }
         public double Vtm0 { get; private set; }
         public double ni { get; private set; }
+        public double T0 { get; private set; }
+        public double T1 { get; private set; }
 
         /// <summary>
         /// Extra variables
@@ -942,6 +950,9 @@ namespace SpiceSharp.Components
         public double BSIM3PhiBSW { get; private set; }
         public double BSIM3PhiBSWG { get; private set; }
 
+        private const double NMOS = 1.0;
+        private const double PMOS = -1.0;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -956,22 +967,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            if (BSIM3npeak > 1.0e20)
-                BSIM3npeak.Value *= 1e-6;
-            if (BSIM3ngate > 1.0e23)
-                BSIM3ngate.Value *= 1e-6;
-            if (BSIM3lnpeak.Value > 1.0e20)
-                BSIM3lnpeak.Value *= 1e-6;
-            if (BSIM3lngate > 1.0e23)
-                BSIM3lngate.Value *= 1e-6;
-            if (BSIM3wnpeak > 1.0e20)
-                BSIM3wnpeak.Value *= 1e-6;
-            if (BSIM3wngate > 1.0e23)
-                BSIM3wngate.Value *= 1e-6;
-            if (BSIM3pnpeak > 1.0e20)
-                BSIM3pnpeak.Value *= 1e-6;
-            if (BSIM3pngate > 1.0e23)
-                BSIM3pngate.Value *= 1e-6;
+            Sizes.Clear();
 
             /* Default value Processing for BSIM3 MOSFET Models */
             if (!BSIM3acnqsMod.Given)
@@ -984,17 +980,17 @@ namespace SpiceSharp.Components
             BSIM3cox = 3.453133e-11 / BSIM3tox;
             if (!BSIM3toxm.Given)
                 BSIM3toxm.Value = BSIM3tox;
-
             if (!BSIM3dsub.Given)
                 BSIM3dsub.Value = BSIM3drout;
             if (!BSIM3vth0.Given)
-                BSIM3vth0.Value = (BSIM3type == 1) ? 0.7 : -0.7;
+                BSIM3vth0.Value = (BSIM3type == NMOS) ? 0.7 : -0.7;
             if (!BSIM3uc.Given)
                 BSIM3uc.Value = (BSIM3mobMod.Value == 3) ? -0.0465 : -0.0465e-9;
             if (!BSIM3uc1.Given)
                 BSIM3uc1.Value = (BSIM3mobMod.Value == 3) ? -0.056 : -0.056e-9;
             if (!BSIM3u0.Given)
-                BSIM3u0.Value = (BSIM3type == 1) ? 0.067 : 0.025;
+                BSIM3u0.Value = (BSIM3type == NMOS) ? 0.067 : 0.025;
+
             if (!BSIM3tnom.Given)
                 BSIM3tnom.Value = ckt.State.NominalTemperature;
             if (!BSIM3Llc.Given)
@@ -1046,26 +1042,28 @@ namespace SpiceSharp.Components
                 BSIM3bulkJctGateSideGradingCoeff.Value = BSIM3bulkJctSideGradingCoeff;
             if (!BSIM3oxideTrapDensityA.Given)
             {
-                if (BSIM3type == 1)
+                if (BSIM3type == NMOS)
                     BSIM3oxideTrapDensityA.Value = 1e20;
                 else
                     BSIM3oxideTrapDensityA.Value = 9.9e18;
             }
             if (!BSIM3oxideTrapDensityB.Given)
             {
-                if (BSIM3type == 1)
+                if (BSIM3type == NMOS)
                     BSIM3oxideTrapDensityB.Value = 5e4;
                 else
                     BSIM3oxideTrapDensityB.Value = 2.4e3;
             }
             if (!BSIM3oxideTrapDensityC.Given)
             {
-                if (BSIM3type == 1)
+                if (BSIM3type == NMOS)
                     BSIM3oxideTrapDensityC.Value = -1.4e-12;
                 else
                     BSIM3oxideTrapDensityC.Value = 1.4e-12;
 
             }
+            /* V / m */
+            /* loop through all the instances of the model */
         }
 
         /// <summary>

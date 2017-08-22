@@ -11,9 +11,9 @@ namespace Spice2SpiceSharp
         public static void Main(string[] args)
         {
             SpiceDevice dev = new SpiceDevice();
-            dev.Folder = @"D:\Visual Studio\Info\SpiceSharp\spice3f5\src\lib\dev\mos3";
-            dev.ITF = @"mos3itf.h";
-            dev.Def = @"mos3defs.h";
+            dev.Folder = @"D:\Visual Studio\Info\SpiceSharp\ftpv330\ftpv330\src";
+            dev.ITF = @"bsim3itf.h";
+            dev.Def = @"bsim3def.h";
             dev.Defined.AddRange(new string[] {
                 "AN_pz",
                 "AN_noise",
@@ -21,7 +21,7 @@ namespace Spice2SpiceSharp
                 "NEWTRUNC",
                 "NEWCONV",
                 "PREDICTOR",
-                "DEV_mos3"
+                "DEV_bsim3"
             });
 
             // Generate
