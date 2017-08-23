@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 
@@ -31,7 +32,7 @@ namespace SpiceSharp.Components
         [SpiceName("gamma"), SpiceInfo("Bulk threshold parameter")]
         public Parameter MOS1gamma { get; } = new Parameter();
         [SpiceName("phi"), SpiceInfo("Surface potential")]
-        public Parameter MOS1phi { get; } = new Parameter(0.6);
+        public Parameter MOS1phi { get; } = new Parameter(.6);
         [SpiceName("lambda"), SpiceInfo("Channel length modulation")]
         public Parameter MOS1lambda { get; } = new Parameter();
         [SpiceName("rd"), SpiceInfo("Drain ohmic resistance")]
@@ -45,7 +46,7 @@ namespace SpiceSharp.Components
         [SpiceName("is"), SpiceInfo("Bulk junction sat. current")]
         public Parameter MOS1jctSatCur { get; } = new Parameter(1e-14);
         [SpiceName("pb"), SpiceInfo("Bulk junction potential")]
-        public Parameter MOS1bulkJctPotential { get; } = new Parameter(0.8);
+        public Parameter MOS1bulkJctPotential { get; } = new Parameter(.8);
         [SpiceName("cgso"), SpiceInfo("Gate-source overlap cap.")]
         public Parameter MOS1gateSourceOverlapCapFactor { get; } = new Parameter();
         [SpiceName("cgdo"), SpiceInfo("Gate-drain overlap cap.")]
@@ -55,11 +56,11 @@ namespace SpiceSharp.Components
         [SpiceName("cj"), SpiceInfo("Bottom junction cap per area")]
         public Parameter MOS1bulkCapFactor { get; } = new Parameter();
         [SpiceName("mj"), SpiceInfo("Bottom grading coefficient")]
-        public Parameter MOS1bulkJctBotGradingCoeff { get; } = new Parameter(0.5);
+        public Parameter MOS1bulkJctBotGradingCoeff { get; } = new Parameter(.5);
         [SpiceName("cjsw"), SpiceInfo("Side junction cap per area")]
         public Parameter MOS1sideWallCapFactor { get; } = new Parameter();
         [SpiceName("mjsw"), SpiceInfo("Side grading coefficient")]
-        public Parameter MOS1bulkJctSideGradingCoeff { get; } = new Parameter(0.5);
+        public Parameter MOS1bulkJctSideGradingCoeff { get; } = new Parameter(.5);
         [SpiceName("js"), SpiceInfo("Bulk jct. sat. current density")]
         public Parameter MOS1jctSatCurDensity { get; } = new Parameter();
         [SpiceName("tox"), SpiceInfo("Oxide thickness")]
@@ -71,7 +72,7 @@ namespace SpiceSharp.Components
         [SpiceName("u0"), SpiceName("uo"), SpiceInfo("Surface mobility")]
         public Parameter MOS1surfaceMobility { get; } = new Parameter();
         [SpiceName("fc"), SpiceInfo("Forward bias jct. fit parm.")]
-        public Parameter MOS1fwdCapDepCoeff { get; } = new Parameter(0.5);
+        public Parameter MOS1fwdCapDepCoeff { get; } = new Parameter(.5);
         [SpiceName("nss"), SpiceInfo("Surface state density")]
         public Parameter MOS1surfaceStateDensity { get; } = new Parameter();
         [SpiceName("nsub"), SpiceInfo("Substrate doping")]
@@ -90,13 +91,13 @@ namespace SpiceSharp.Components
         public void SetNMOS(bool value)
         {
             if (value)
-                MOS1type.Set(1);
+                MOS1type = 1.0;
         }
         [SpiceName("pmos"), SpiceInfo("P type MOSfet model")]
         public void SetPMOS(bool value)
         {
             if (value)
-                MOS1type.Set(-1);
+                MOS1type = -1.0;
         }
         [SpiceName("type"), SpiceInfo("N-channel or P-channel MOS")]
         public string GetTYPE(Circuit ckt)
@@ -118,12 +119,9 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Extra variables
         /// </summary>
-        public Parameter MOS1type { get; } = new Parameter(NMOS);
+        public double MOS1type { get; private set; } = 1.0;
         public double MOS1modName { get; private set; }
         public double MOS1oxideCapFactor { get; private set; }
-
-        private const int NMOS = 1;
-        private const int PMOS = -1;
 
         /// <summary>
         /// Constructor
@@ -167,15 +165,15 @@ namespace SpiceSharp.Components
                     {
                         MOS1surfaceMobility.Value = 600;
                     }
-                    MOS1transconductance.Value = MOS1surfaceMobility * MOS1oxideCapFactor * 1e-4 /* (m *  * 2 / cm *  * 2) */ ;
+                    MOS1transconductance.Value = MOS1surfaceMobility * MOS1oxideCapFactor * 1e-4;
                 }
                 if (MOS1substrateDoping.Given)
                 {
-                    if (MOS1substrateDoping * 1e6 /* (cm *  * 3 / m *  * 3) */ > 1.45e16)
+                    if (MOS1substrateDoping * 1e6 > 1.45e16)
                     {
                         if (!MOS1phi.Given)
                         {
-                            MOS1phi.Value = 2 * vtnom * Math.Log(MOS1substrateDoping * 1e6 /* (cm *  * 3 / m *  * 3) */  / 1.45e16);
+                            MOS1phi.Value = 2 * vtnom * Math.Log(MOS1substrateDoping * 1e6 / 1.45e16);
                             MOS1phi.Value = Math.Max(.1, MOS1phi);
                         }
                         fermis = MOS1type * .5 * MOS1phi;
@@ -196,7 +194,7 @@ namespace SpiceSharp.Components
 						{
 							if (!MOS1surfaceStateDensity.Given)
 							MOS1surfaceStateDensity.Value = 0;
-							vfb = wkfngs - MOS1surfaceStateDensity * 1e4 /* (cm *  * 2 / m *  * 2) */  * Circuit.CHARGE / MOS1oxideCapFactor;
+							vfb = wkfngs - MOS1surfaceStateDensity * 1e4 * Circuit.CHARGE / MOS1oxideCapFactor;
                             MOS1vt0.Value = vfb + MOS1type * (MOS1gamma * Math.Sqrt(MOS1phi) + MOS1phi);
                         }
                     }

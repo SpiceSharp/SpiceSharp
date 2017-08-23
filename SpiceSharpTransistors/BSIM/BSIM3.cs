@@ -3288,12 +3288,14 @@ namespace SpiceSharp.Components
             var model = Model as BSIM3Model;
             var state = ckt.State;
             var cstate = state.Complex;
-            double Csd, Csg, Css, T0, T1, T2, T3, gmr, gmbsr, gds, gmi, gmbsi, gdsi, Cddr, Cdgr, Cdsr, Cddi, Cdgi, Cdsi, Cdbi, Csdr, Csgr, Cssr, Csdi, Csgi, 
-                Cssi, Csbi, Cgdr, Cggr, Cgsr, Cgdi, Cggi, Cgsi, Cgbi, Gm, Gmbs, FwdSum, RevSum, Gmi, Gmbsi, FwdSumi, RevSumi, gbbdp, gbbsp, gbdpg, gbdpb, gbdpdp, 
-                gbdpsp, gbspdp, gbspg, gbspb, gbspsp, cggb, cgsb, cgdb, cbgb, cbsb, cbdb, cdgb, cdsb, cddb, xgtg, sxpart, dxpart, ddxpart_dVd, dsxpart_dVd, xgtd, 
-                xgts, xgtb, xcqgb = 0.0, xcqdb = 0.0, xcqsb = 0.0, xcqbb = 0.0, CoxWL, qcheq, Cdd, Cdg, ddxpart_dVg, Cds, ddxpart_dVs, ddxpart_dVb, dsxpart_dVg, dsxpart_dVs, dsxpart_dVb, 
-                xcdgbi, xcsgbi, xcddbi, xcdsbi, xcsdbi, xcssbi, xcdbbi, xcsbbi, xcggbi, xcgdbi, xcgsbi, xcgbbi, gdpr, gspr, gbd, gbs, capbd, capbs, GSoverlapCap, 
-                GDoverlapCap, GBoverlapCap, xcdgb, xcddb, xcdsb, xcsgb, xcsdb, xcssb, xcggb, xcgdb, xcgsb, xcbgb, xcbdb, xcbsb;
+            double omega = cstate.Laplace.Imaginary;
+            double Csd, Csg, Css, T0, T1, T2, T3, gmr, gmbsr, gds, gmi, gmbsi, gdsi, Cddr, Cdgr, Cdsr, Cddi, Cdgi, Cdsi, Cdbi, Csdr, Csgr,
+                Cssr, Csdi, Csgi, Cssi, Csbi, Cgdr, Cggr, Cgsr, Cgdi, Cggi, Cgsi, Cgbi, Gm, Gmbs, FwdSum, RevSum, Gmi, Gmbsi, FwdSumi, RevSumi,
+                gbbdp, gbbsp, gbdpg, gbdpb, gbdpdp, gbdpsp, gbspdp, gbspg, gbspb, gbspsp, cggb, cgsb, cgdb, cbgb, cbsb, cbdb, cdgb, cdsb, cddb,
+                xgtg, sxpart, dxpart, ddxpart_dVd, dsxpart_dVd, xgtd, xgts, xgtb, xcqgb = 0.0, xcqdb = 0.0, xcqsb = 0.0, xcqbb = 0.0, CoxWL, qcheq, Cdd, Cdg,
+                ddxpart_dVg, Cds, ddxpart_dVs, ddxpart_dVb, dsxpart_dVg, dsxpart_dVs, dsxpart_dVb, xcdgbi, xcsgbi, xcddbi, xcdsbi, xcsdbi,
+                xcssbi, xcdbbi, xcsbbi, xcggbi, xcgdbi, xcgsbi, xcgbbi, gdpr, gspr, gbd, gbs, capbd, capbs, GSoverlapCap, GDoverlapCap,
+                GBoverlapCap, xcdgb, xcddb, xcdsb, xcsgb, xcsdb, xcssb, xcggb, xcgdb, xcgsb, xcbgb, xcbdb, xcbsb;
 
             Csd = -(BSIM3cddb + BSIM3cgdb + BSIM3cbdb);
             Csg = -(BSIM3cdgb + BSIM3cggb + BSIM3cbgb);
@@ -3301,7 +3303,7 @@ namespace SpiceSharp.Components
 
             if (BSIM3acnqsMod != 0.0)
             {
-                T0 = cstate.Laplace.Imaginary * BSIM3taunet;
+                T0 = omega * BSIM3taunet;
                 T1 = T0 * T0;
                 T2 = 1.0 / (1.0 + T1);
                 T3 = T0 * T2;
@@ -3318,18 +3320,18 @@ namespace SpiceSharp.Components
                 Cdgr = BSIM3cdgb * T2;
                 Cdsr = BSIM3cdsb * T2;
 
-                Cddi = BSIM3cddb * T3 * cstate.Laplace.Imaginary;
-                Cdgi = BSIM3cdgb * T3 * cstate.Laplace.Imaginary;
-                Cdsi = BSIM3cdsb * T3 * cstate.Laplace.Imaginary;
+                Cddi = BSIM3cddb * T3 * omega;
+                Cdgi = BSIM3cdgb * T3 * omega;
+                Cdsi = BSIM3cdsb * T3 * omega;
                 Cdbi = -(Cddi + Cdgi + Cdsi);
 
                 Csdr = Csd * T2;
                 Csgr = Csg * T2;
                 Cssr = Css * T2;
 
-                Csdi = Csd * T3 * cstate.Laplace.Imaginary;
-                Csgi = Csg * T3 * cstate.Laplace.Imaginary;
-                Cssi = Css * T3 * cstate.Laplace.Imaginary;
+                Csdi = Csd * T3 * omega;
+                Csgi = Csg * T3 * omega;
+                Cssi = Css * T3 * omega;
                 Csbi = -(Csdi + Csgi + Cssi);
 
                 Cgdr = -(Cddr + Csdr + BSIM3cbdb);
@@ -3419,10 +3421,10 @@ namespace SpiceSharp.Components
                     xgts = BSIM3gts;
                     xgtb = BSIM3gtb;
 
-                    xcqgb = BSIM3cqgb * cstate.Laplace.Imaginary;
-                    xcqdb = BSIM3cqdb * cstate.Laplace.Imaginary;
-                    xcqsb = BSIM3cqsb * cstate.Laplace.Imaginary;
-                    xcqbb = BSIM3cqbb * cstate.Laplace.Imaginary;
+                    xcqgb = BSIM3cqgb * omega;
+                    xcqdb = BSIM3cqdb * omega;
+                    xcqsb = BSIM3cqsb * omega;
+                    xcqbb = BSIM3cqbb * omega;
 
                     CoxWL = model.BSIM3cox * pParam.BSIM3weffCV * pParam.BSIM3leffCV;
                     qcheq = -(BSIM3qgate + BSIM3qbulk);
@@ -3532,10 +3534,10 @@ namespace SpiceSharp.Components
                     xgts = BSIM3gtd;
                     xgtb = BSIM3gtb;
 
-                    xcqgb = BSIM3cqgb * cstate.Laplace.Imaginary;
-                    xcqdb = BSIM3cqsb * cstate.Laplace.Imaginary;
-                    xcqsb = BSIM3cqdb * cstate.Laplace.Imaginary;
-                    xcqbb = BSIM3cqbb * cstate.Laplace.Imaginary;
+                    xcqgb = BSIM3cqgb * omega;
+                    xcqdb = BSIM3cqsb * omega;
+                    xcqsb = BSIM3cqdb * omega;
+                    xcqbb = BSIM3cqbb * omega;
 
                     CoxWL = model.BSIM3cox * pParam.BSIM3weffCV * pParam.BSIM3leffCV;
                     qcheq = -(BSIM3qgate + BSIM3qbulk);
@@ -3603,23 +3605,25 @@ namespace SpiceSharp.Components
             GDoverlapCap = BSIM3cgdo;
             GBoverlapCap = pParam.BSIM3cgbo;
 
-            xcdgb = (cdgb - GDoverlapCap) * cstate.Laplace.Imaginary;
-            xcddb = (cddb + capbd + GDoverlapCap) * cstate.Laplace.Imaginary;
-            xcdsb = cdsb * cstate.Laplace.Imaginary;
-            xcsgb = -(cggb + cbgb + cdgb + GSoverlapCap) * cstate.Laplace.Imaginary;
-            xcsdb = -(cgdb + cbdb + cddb) * cstate.Laplace.Imaginary;
-            xcssb = (capbs + GSoverlapCap - (cgsb + cbsb + cdsb)) * cstate.Laplace.Imaginary;
-            xcggb = (cggb + GDoverlapCap + GSoverlapCap + GBoverlapCap) * cstate.Laplace.Imaginary;
-            xcgdb = (cgdb - GDoverlapCap) * cstate.Laplace.Imaginary;
-            xcgsb = (cgsb - GSoverlapCap) * cstate.Laplace.Imaginary;
-            xcbgb = (cbgb - GBoverlapCap) * cstate.Laplace.Imaginary;
-            xcbdb = (cbdb - capbd) * cstate.Laplace.Imaginary;
-            xcbsb = (cbsb - capbs) * cstate.Laplace.Imaginary;
+            xcdgb = (cdgb - GDoverlapCap) * omega;
+            xcddb = (cddb + capbd + GDoverlapCap) * omega;
+            xcdsb = cdsb * omega;
+            xcsgb = -(cggb + cbgb + cdgb + GSoverlapCap) * omega;
+            xcsdb = -(cgdb + cbdb + cddb) * omega;
+            xcssb = (capbs + GSoverlapCap - (cgsb + cbsb + cdsb)) * omega;
+            xcggb = (cggb + GDoverlapCap + GSoverlapCap + GBoverlapCap) * omega;
+            xcgdb = (cgdb - GDoverlapCap) * omega;
+            xcgsb = (cgsb - GSoverlapCap) * omega;
+            xcbgb = (cbgb - GBoverlapCap) * omega;
+            xcbdb = (cbdb - capbd) * omega;
+            xcbsb = (cbsb - capbs) * omega;
 
             cstate.Matrix[BSIM3gNode, BSIM3gNode] -= new Complex(xgtg - xcggbi, -xcggb);
             cstate.Matrix[BSIM3bNode, BSIM3bNode] += new Complex(gbd + gbs - BSIM3gbbs, -(xcbgb + xcbdb + xcbsb));
-            cstate.Matrix[BSIM3dNodePrime, BSIM3dNodePrime] += new Complex(gdpr + gds + gbd + RevSum + xcddbi + dxpart * xgtd + T1 * ddxpart_dVd + gbdpdp, xcddb + gdsi + RevSumi);
-            cstate.Matrix[BSIM3sNodePrime, BSIM3sNodePrime] += new Complex(gspr + gds + gbs + FwdSum + xcssbi + sxpart * xgts + T1 * dsxpart_dVs + gbspsp, xcssb + gdsi + FwdSumi);
+            cstate.Matrix[BSIM3dNodePrime, BSIM3dNodePrime] += new Complex(gdpr + gds + gbd + RevSum + xcddbi + dxpart * xgtd + T1 *
+                ddxpart_dVd + gbdpdp, xcddb + gdsi + RevSumi);
+            cstate.Matrix[BSIM3sNodePrime, BSIM3sNodePrime] += new Complex(gspr + gds + gbs + FwdSum + xcssbi + sxpart * xgts + T1 *
+                dsxpart_dVs + gbspsp, xcssb + gdsi + FwdSumi);
             cstate.Matrix[BSIM3gNode, BSIM3bNode] -= new Complex(xgtb - xcgbbi, xcggb + xcgdb + xcgsb);
             cstate.Matrix[BSIM3gNode, BSIM3dNodePrime] -= new Complex(xgtd - xcgdbi, -xcgdb);
             cstate.Matrix[BSIM3gNode, BSIM3sNodePrime] -= new Complex(xgts - xcgsbi, -xcgsb);
@@ -3627,22 +3631,30 @@ namespace SpiceSharp.Components
             cstate.Matrix[BSIM3bNode, BSIM3dNodePrime] -= new Complex(gbd - gbbdp, -xcbdb);
             cstate.Matrix[BSIM3bNode, BSIM3sNodePrime] -= new Complex(gbs - gbbsp, -xcbsb);
             cstate.Matrix[BSIM3dNodePrime, BSIM3gNode] += new Complex(Gm + dxpart * xgtg + T1 * ddxpart_dVg + gbdpg + xcdgbi, xcdgb + Gmi);
-            cstate.Matrix[BSIM3dNodePrime, BSIM3bNode] -= new Complex(gbd - Gmbs - dxpart * xgtb - T1 * ddxpart_dVb - gbdpb - xcdbbi, xcdgb + xcddb + xcdsb + Gmbsi);
-            cstate.Matrix[BSIM3dNodePrime, BSIM3sNodePrime] -= new Complex(gds + FwdSum - dxpart * xgts - T1 * ddxpart_dVs - gbdpsp - xcdsbi, -(xcdsb - gdsi - FwdSumi));
-            cstate.Matrix[BSIM3sNodePrime, BSIM3gNode] -= new Complex(Gm - sxpart * xgtg - T1 * dsxpart_dVg - gbspg - xcsgbi, -(xcsgb - Gmi));
-            cstate.Matrix[BSIM3sNodePrime, BSIM3bNode] -= new Complex(gbs + Gmbs - sxpart * xgtb - T1 * dsxpart_dVb - gbspb - xcsbbi, xcsgb + xcsdb + xcssb - Gmbsi);
-            cstate.Matrix[BSIM3sNodePrime, BSIM3dNodePrime] -= new Complex(gds + RevSum - sxpart * xgtd - T1 * dsxpart_dVd - gbspdp - xcsdbi, -(xcsdb - gdsi - RevSumi));
+            cstate.Matrix[BSIM3dNodePrime, BSIM3bNode] -= new Complex(gbd - Gmbs - dxpart * xgtb - T1 * ddxpart_dVb - gbdpb - xcdbbi,
+                xcdgb + xcddb + xcdsb + Gmbsi);
+            cstate.Matrix[BSIM3dNodePrime, BSIM3sNodePrime] -= new Complex(gds + FwdSum - dxpart * xgts - T1 * ddxpart_dVs - gbdpsp -
+                xcdsbi, -(xcdsb - gdsi - FwdSumi));
+            cstate.Matrix[BSIM3sNodePrime, BSIM3gNode] -= new Complex(Gm - sxpart * xgtg - T1 * dsxpart_dVg - gbspg - xcsgbi, -(xcsgb -
+                Gmi));
+            cstate.Matrix[BSIM3sNodePrime, BSIM3bNode] -= new Complex(gbs + Gmbs - sxpart * xgtb - T1 * dsxpart_dVb - gbspb - xcsbbi,
+                xcsgb + xcsdb + xcssb - Gmbsi);
+            cstate.Matrix[BSIM3sNodePrime, BSIM3dNodePrime] -= new Complex(gds + RevSum - sxpart * xgtd - T1 * dsxpart_dVd - gbspdp -
+                xcsdbi, -(xcsdb - gdsi - RevSumi));
 
             cstate.Matrix[BSIM3dNode, BSIM3dNode] += gdpr;
             cstate.Matrix[BSIM3sNode, BSIM3sNode] += gspr;
+
             cstate.Matrix[BSIM3dNode, BSIM3dNodePrime] -= gdpr;
             cstate.Matrix[BSIM3sNode, BSIM3sNodePrime] -= gspr;
+
             cstate.Matrix[BSIM3dNodePrime, BSIM3dNode] -= gdpr;
+
             cstate.Matrix[BSIM3sNodePrime, BSIM3sNode] -= gspr;
 
-            if (BSIM3nqsMod != 0)
+            if (BSIM3nqsMod != 0.0)
             {
-                if (BSIM3acnqsMod != 0)
+                if (BSIM3acnqsMod != 0.0)
                 {
                     cstate.Matrix[BSIM3qNode, BSIM3qNode] += 1.0;
                     cstate.Matrix[BSIM3qNode, BSIM3gNode] += 0.0;
@@ -3657,7 +3669,7 @@ namespace SpiceSharp.Components
                 }
                 else
                 {
-                    cstate.Matrix[BSIM3qNode, BSIM3qNode] += new Complex(BSIM3gtau, cstate.Laplace.Imaginary * ScalingFactor);
+                    cstate.Matrix[BSIM3qNode, BSIM3qNode] += new Complex(BSIM3gtau, omega * ScalingFactor);
                     cstate.Matrix[BSIM3qNode, BSIM3gNode] += new Complex(xgtg, -xcqgb);
                     cstate.Matrix[BSIM3qNode, BSIM3dNodePrime] += new Complex(xgtd, -xcqdb);
                     cstate.Matrix[BSIM3qNode, BSIM3sNodePrime] += new Complex(xgts, -xcqsb);
@@ -3666,16 +3678,17 @@ namespace SpiceSharp.Components
                     cstate.Matrix[BSIM3dNodePrime, BSIM3qNode] += dxpart * BSIM3gtau;
                     cstate.Matrix[BSIM3sNodePrime, BSIM3qNode] += sxpart * BSIM3gtau;
                     cstate.Matrix[BSIM3gNode, BSIM3qNode] -= BSIM3gtau;
+
                 }
             }
         }
 
-    /// <summary>
-    /// Perform parameter checking
-    /// </summary>
-    /// <param name="ckt"></param>
-    /// <returns></returns>
-    private bool BSIM3checkModel()
+        /// <summary>
+        /// Perform parameter checking
+        /// </summary>
+        /// <param name="ckt"></param>
+        /// <returns></returns>
+        private bool BSIM3checkModel()
         {
             var model = Model as BSIM3Model;
             bool Fatal_Flag = false;

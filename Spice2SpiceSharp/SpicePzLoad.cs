@@ -64,7 +64,7 @@ namespace Spice2SpiceSharp
         /// </summary>
         /// <param name="code">The code</param>
         /// <returns></returns>
-        private string ApplyCircuit(string code, string ckt = "ckt", string state = "state", string cstate = "cstate")
+        private string ApplyCircuit(string code, string ckt = "ckt", string state = "state", string cstate = "cstate", string method = "method")
         {
             Regex sr = new Regex($@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTstate(?<state>\d+)\s*\+\s*(?<var>\w+)\s*\)");
             code = sr.Replace(code, (Match m) => $"{state}.States[{m.Groups["state"].Value}][{states} + {m.Groups["var"].Value}]");
@@ -83,6 +83,151 @@ namespace Spice2SpiceSharp
                 Regex cmn = new Regex($@"\*\s*\(\s*{n}\s*\+\s*1\s*\)");
                 code = cmn.Replace(code, (Match m) => $"{cstate}.Matrix[{matrixnodes[n].Item1}, {matrixnodes[n].Item2}].Imag");
             }
+
+            // Basic state logic
+            code = Regex.Replace(code, $@"(?<not>\!)?\({ckt}\s*\-\>\s*CKTmode\s*&\s*(?<flag>\w+)\)", (Match m) =>
+            {
+                string result = "";
+                bool invert = m.Groups["not"].Success;
+                switch (m.Groups["flag"].Value)
+                {
+                    case "MODETRAN":
+                        result = $"({method} {(invert ? "!=" : "==")} null)";
+                        break;
+                    case "MODETRANOP":
+                        result = $"{(invert ? "!" : "")}({state}.Domain == CircuitState.DomainTypes.Time && {state}.UseDC)";
+                        break;
+                    case "MODEINITTRAN":
+                        result = (invert ? "!" : "") + $"({method} != null && {method}.SavedTime == 0.0)";
+                        break;
+
+                    case "MODEDCOP":
+                        result = (invert ? "!" : "") + $"{state}.UseDC";
+                        break;
+
+                    case "MODEINITSMSIG":
+                        result = (invert ? "!" : "") + $"{state}.UseSmallSignal";
+                        break;
+
+                    case "MODEDCTRANCURVE":
+                        result = $"({state}.Domain {(invert ? "!=" : "==")} CircuitState.DomainTypes.None";
+                        break;
+
+                    case "MODEUIC":
+                        result = (invert ? "!" : "") + $"{state}.UseIC";
+                        break;
+
+                    case "MODEAC": // Never reached...
+                        result = "true";
+                        break;
+
+                    case "MODEINITJCT":
+                        result = $"({state}.Init {(invert ? "!=" : "==")} CircuitState.InitFlags.InitJct)";
+                        break;
+                    case "INITFLOAT":
+                        result = $"({state}.Init {(invert ? "!=" : "==")} CircuitState.InitFlags.InitFloat)";
+                        break;
+                    case "MODEINITFIX":
+                        result = $"({state}.Init {(invert ? "!=" : "==")} CircuitState.InitFlags.InitFix)";
+                        break;
+                    default:
+                        result = m.Value;
+                        break;
+                }
+
+                return result;
+            });
+            code = Regex.Replace(code, $@"(?<not>\!)?\({ckt}\s*\-\>\s*CKTmode\s*&\s*\(\s*(?<flag>\w+)(\s*\|\s*(?<flag>\w+))*\)", (Match m) =>
+            {
+                // This is an OR for all the flags...
+                string result = "";
+                HashSet<string> flags = new HashSet<string>();
+                HashSet<string> conditions = new HashSet<string>();
+                foreach (Capture c in m.Groups["flag"].Captures)
+                    flags.Add(c.Value);
+
+                // MODEDC = MODEDCOP | MODETRANOP | MODEDCTRANCURVE
+                if (flags.Contains("MODEDC"))
+                {
+                    flags.Remove("MODEDC");
+                    flags.Add("MODEDCOP");
+                    flags.Add("MODETRANOP");
+                    flags.Add("MODEDCTRANCURVE");
+                }
+
+                // INITF = MODEINITFLOAT | MODEINITJCT | MODEINITFIX | MODEINITSMSIG | MODEINITTRAN | MODEINITPRED
+                if (flags.Contains("INITF"))
+                {
+                    flags.Remove("INITF");
+                    flags.Add("MODEINITFLOAT");
+                    flags.Add("MODEINITJCT");
+                    flags.Add("MODEINITFIX");
+                    flags.Add("MODEINITSMSIG");
+                    flags.Add("MODEINITTRAN");
+                }
+
+                // MODETRAN | MODETRANOP = (Domain == Time)
+                if (flags.Contains("MODETRAN") && flags.Contains("MODETRANOP"))
+                {
+                    flags.Remove("MODETRAN");
+                    flags.Remove("MODETRANOP");
+                    flags.Add("TIMEDOMAIN");
+                }
+
+                // MODETRAN | MODEINITTRAN = MODEINITTRAN
+                if (flags.Contains("MODEINITTRAN") && flags.Contains("MODETRAN"))
+                    flags.Remove("MODETRAN");
+
+                // MODEUIC = UseIC, but SpiceSharp will prioritize this variable in the following way:
+                // - MODETRANOP + MODEUIC = MODEUIC
+                // - MODETRAN + MODEUIC = MODEUIC
+                if (flags.Contains("MODEUIC"))
+                {
+                    if (flags.Contains("MODETRANOP"))
+                        flags.Remove("MODETRANOP");
+                    if (flags.Contains("MODETRAN"))
+                        flags.Remove("MODETRAN");
+                }
+
+                // Ignored flags
+                if (flags.Contains("MODEAC"))
+                    flags.Remove("MODEAC");
+                if (flags.Contains("MODEINITPRED"))
+                    flags.Remove("MODEINITPRED");
+
+                // Build the conditions
+                foreach (var flag in flags)
+                {
+                    switch (flag)
+                    {
+                        case "MODEUIC": conditions.Add($"{state}.UseIC"); break;
+                        case "MODETRAN": conditions.Add($"{method} != null"); break;
+                        case "MODETRANOP": conditions.Add($"({state}.Domain == CircuitState.DomainTypes.Time && {state}.UseDC)"); break;
+                        case "MODEINITTRAN": conditions.Add($"({method} != null && {method}.SavedTime == 0.0)"); break;
+                        case "MODEDCOP": conditions.Add($"{state}.UseDC"); break;
+                        case "MODEINITSMSIG": conditions.Add($"{state}.UseSmallSignal"); break;
+                        case "MODEDCTRANCURVE": conditions.Add($"{state}.Domain == CircuitState.DomainTypes.None"); break;
+
+                        case "MODEINITJCT": conditions.Add($"{state}.Init == CircuitState.InitFlags.InitJct"); break;
+                        case "MODEINITFLOAT": conditions.Add($"{state}.Init == CircuitState.InitFlags.InitFloat"); break;
+                        case "MODEINITFIX": conditions.Add($"{state}.Init == CircuitState.InitFlags.InitFix"); break;
+
+                        default:
+                            // Cannot convert!
+                            return m.Value;
+                    }
+                }
+
+                // Construct the conditions
+                if (m.Groups["not"].Success)
+                    result = "!(" + string.Join(" || ", conditions);
+                else
+                    result = "(" + string.Join(" || ", conditions);
+                return result;
+            });
+
+            // -> Is never possible, so let's go for dots
+            code = Regex.Replace(code, @"\s*\-\>\s*", ".");
 
             return code;
         }

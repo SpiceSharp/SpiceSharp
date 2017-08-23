@@ -249,5 +249,86 @@ namespace Spice2SpiceSharp
 
             return code;
         }
+
+        /// <summary>
+        /// Traverse code while also keeping track of scope levels
+        /// This allows us to format/change/track code within same-scope levels
+        /// Single/multiline comments and strings are ignored.
+        /// </summary>
+        /// <param name="code">The code to traverse</param>
+        /// <param name="up">When the level goes up (going inside a {} block)</param>
+        /// <param name="down">When the level goes down (going ouside a {} block)</param>
+        /// <param name="execute">When the level stays constant</param>
+        public static void LevelExecute(string code, LevelChanged up, LevelChanged down, LevelExecute execute)
+        {
+            int level = 0;
+            int mode = 0;
+            for (int i = 0; i < code.Length; i++)
+            {
+                switch (mode)
+                {
+                    case 0: // Normal
+
+                        // String
+                        if (code[i] == '"')
+                            mode = 2;
+
+                        // Comment
+                        if (code[i] == '/' && (i + 1 < code.Length && code[i + 1] == '*'))
+                            mode = 1;
+                        if (code[i] == '/' && (i + 1 < code.Length && code[i + 1] == '/'))
+                            mode = 3;
+
+                        // New level
+                        if (code[i] == '{')
+                        {
+                            level++;
+                            up(i, level);
+                        }
+
+                        // Exit level, match them!
+                        if (code[i] == '}')
+                        {
+                            down(i, level);
+                            level--;
+                        }
+
+                        // Add statements
+                        execute(i, level);
+                        break;
+
+                    case 1: // Comments
+                        if (code[i] == '*' && (i + 1 < code.Length && code[i + 1] == '/'))
+                            mode = 0;
+                        break;
+
+                    case 2: // Strings
+                        if (code[i] == '"')
+                            mode = 0;
+                        break;
+
+                    case 3: // Single line comment
+                        if (code[i] == '\r' || code[i] == '\n')
+                            mode = 0;
+                        break;
+                }
+            }
+        }
     }
+
+    /// <summary>
+    /// Delegate for an action when the level has changed
+    /// A level is a matching {} block, like when using if-statements
+    /// </summary>
+    /// <param name="index">The index in the code</param>
+    /// <param name="level">The level</param>
+    /// <returns></returns>
+    public delegate void LevelChanged(int index, int level);
+
+    /// <summary>
+    /// Delegate for executing within the current level
+    /// </summary>
+    /// <param name="index">The index in the code</param>
+    /// <param name="level">The current level</param>
+    public delegate void LevelExecute(int index, int level);
 }

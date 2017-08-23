@@ -47,6 +47,8 @@ MODETRANOP = Domain == Time && UseDC
 MODEINITTRAN = method != null && method.SavedTime == 0.0
 
 MODETRAN | MODETRANOP = Domain == Time
+MODETRAN & MODEINITTRAN = MODEINITTRAN
+MODETRAN | MODEINITTRAN = MODETRAN
 
 
 ModeDC = UseDC
@@ -61,4 +63,4 @@ MODEDCTRANCURVE = Domain == None
 MODEINITJCT = Init == InitJct
 MODEINITFLOAT = Init == InitFloat
 MODEINITPRED = used in transient simulations, if it is just copying state1 in state0 you can ignore it
-
+MODEINITFIX = Init == InitFix

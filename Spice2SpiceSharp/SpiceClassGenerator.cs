@@ -241,25 +241,31 @@ namespace Spice2SpiceSharp
                 WriteCode(sw, $"public {name}Model(string name) : base(name)", "{", "}");
 
                 // Setup method
-                WriteCode(sw, "", "/// <summary>", "/// Setup the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
-                WriteCode(sw, "public override void Setup(Circuit ckt)", "{");
-                foreach (string var in setup.ModelVariables.Keys)
-                    WriteCode(sw, $"{setup.ModelVariables[var]} {var};");
-                WriteCode(sw, "", setupMod, "}");
+                if (setup != null)
+                {
+                    WriteCode(sw, "", "/// <summary>", "/// Setup the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
+                    WriteCode(sw, "public override void Setup(Circuit ckt)", "{");
+                    WriteCode(sw, variables(setup.ModelVariables));
+                    WriteCode(sw, "", setupMod, "}");
+                }
 
                 // Temperature method
-                WriteCode(sw, "", "/// <summary>", "/// Do temperature-dependent calculations", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
-                WriteCode(sw, "public override void Temperature(Circuit ckt)", "{");
-                foreach (string var in temp.ModelVariables.Keys)
-                    WriteCode(sw, $"{temp.ModelVariables[var]} {var};");
-                WriteCode(sw, "", tempMod, "}");
+                if (temp != null)
+                {
+                    WriteCode(sw, "", "/// <summary>", "/// Do temperature-dependent calculations", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
+                    WriteCode(sw, "public override void Temperature(Circuit ckt)", "{");
+                    WriteCode(sw, variables(temp.ModelVariables));
+                    WriteCode(sw, "", tempMod, "}");
+                }
 
                 // Load method
-                WriteCode(sw, "", "/// <summary>", "/// Load the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
-                WriteCode(sw, "public override void Load(Circuit ckt)", "{");
-                foreach (string var in load.ModelVariables.Keys)
-                    WriteCode(sw, $"{load.ModelVariables[var]} {var};");
-                WriteCode(sw, "", loadMod, "}");
+                if (load != null)
+                {
+                    WriteCode(sw, "", "/// <summary>", "/// Load the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
+                    WriteCode(sw, "public override void Load(Circuit ckt)", "{");
+                    WriteCode(sw, variables(load.ModelVariables));
+                    WriteCode(sw, "", loadMod, "}");
+                }
 
                 // End class and namespace
                 WriteCode(sw, "}", "}");
@@ -343,8 +349,7 @@ namespace Spice2SpiceSharp
                     WriteCode(sw, "", "/// <summary>", "/// Setup the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void Setup(Circuit ckt)", "{");
                     WriteCode(sw, $"var model = Model as {name}Model;");
-                    foreach (string var in setup.DeviceVariables.Keys)
-                        WriteCode(sw, $"{setup.DeviceVariables[var]} {var};");
+                    WriteCode(sw, variables(setup.DeviceVariables));
                     WriteCode(sw, "", "// Allocate nodes");
                     WriteCode(sw, "var nodes = BindNodes(ckt);");
                     int index = 0;
@@ -360,8 +365,7 @@ namespace Spice2SpiceSharp
                     WriteCode(sw, "", "/// <summary>", "/// Do temperature-dependent calculations", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void Temperature(Circuit ckt)", "{");
                     WriteCode(sw, $"var model = Model as {name}Model;");
-                    foreach (string var in temp.DeviceVariables.Keys)
-                        WriteCode(sw, $"{temp.DeviceVariables[var]} {var};");
+                    WriteCode(sw, variables(temp.DeviceVariables));
                     WriteCode(sw, "", tempDev, "}");
                 }
 
@@ -371,8 +375,7 @@ namespace Spice2SpiceSharp
                     WriteCode(sw, "", "/// <summary>", "/// Load the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void Load(Circuit ckt)", "{");
                     WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var rstate = state.Real;", "var method = ckt.Method;");
-                    foreach (string var in load.DeviceVariables.Keys)
-                        WriteCode(sw, $"{load.DeviceVariables[var]} {var};");
+                    WriteCode(sw, variables(load.DeviceVariables));
                     WriteCode(sw, "", loadDev, "}");
                 }
 
@@ -382,8 +385,7 @@ namespace Spice2SpiceSharp
                     WriteCode(sw, "", "/// <summary>", "/// Load the device for AC simulation", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void AcLoad(Circuit ckt)", "{");
                     WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var cstate = state.Complex;");
-                    foreach (string var in acload.DeviceVariables.Keys)
-                        WriteCode(sw, $"{acload.DeviceVariables[var]} {var};");
+                    WriteCode(sw, variables(acload.DeviceVariables));
                     WriteCode(sw, "", acloadDev, "}");
                 }
                 
@@ -393,8 +395,7 @@ namespace Spice2SpiceSharp
                     WriteCode(sw, "", "/// <summary>", "/// Load the device for AC simulation", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void AcLoad(Circuit ckt)", "{");
                     WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var cstate = state.Complex;");
-                    foreach (string var in pzload.DeviceVariables.Keys)
-                        WriteCode(sw, $"{pzload.DeviceVariables[var]} {var};");
+                    WriteCode(sw, variables(pzload.DeviceVariables));
                     WriteCode(sw, "", pzloadDev, "}");
                 }
 
@@ -487,12 +488,32 @@ namespace Spice2SpiceSharp
 
                 // Split the line and start again
                 result.Add(line.Substring(0, index));
-                line = line.Substring(index);
+                line = line.Substring(index).Trim();
                 r += index;
             }
             result.Add(line);
 
             return string.Join(Environment.NewLine + offset + "\t", result);
+        }
+
+        /// <summary>
+        /// Generate the declaration of variables
+        /// </summary>
+        /// <param name="variables">The variables</param>
+        /// <returns></returns>
+        private string[] variables(Dictionary<string, string> variables)
+        {
+            Dictionary<string, HashSet<string>> declarations = new Dictionary<string, HashSet<string>>();
+            foreach (var item in variables)
+            {
+                if (!declarations.ContainsKey(item.Value))
+                    declarations.Add(item.Value, new HashSet<string>());
+                declarations[item.Value].Add(item.Key);
+            }
+            List<string> result = new List<string>();
+            foreach (var item in declarations)
+                result.Add(item.Key + " " + string.Join(", ", item.Value) + ";");
+            return result.ToArray();
         }
     }
 }

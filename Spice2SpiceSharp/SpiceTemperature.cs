@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Spice2SpiceSharp
@@ -30,7 +31,13 @@ namespace Spice2SpiceSharp
         public override string ExportModel(SpiceParam mparams)
         {
             string code = GetModelCode(mparams);
-            HashSet<string> leftover = new HashSet<string>();
+
+            // Find temperature stuff
+            code = Regex.Replace(code, @"ckt\s*\-\>\s*CKTtemp", "ckt.State.Temperature");
+            code = Regex.Replace(code, @"ckt\s*\-\>\s*CKTnomTemp", "ckt.State.NominalTemperature");
+
+            // -> Is never possible, so let's go for dots
+            code = Regex.Replace(code, @"\s*\-\>\s*", ".");
 
             return Code.Format(code);
         }
@@ -44,6 +51,13 @@ namespace Spice2SpiceSharp
         public override string ExportDevice(SpiceParam mparams, SpiceParam dparams)
         {
             string code = GetDeviceCode(mparams, dparams);
+
+            // Find temperature stuff
+            code = Regex.Replace(code, @"ckt\s*\-\>\s*CKTtemp", "ckt.State.Temperature");
+            code = Regex.Replace(code, @"ckt\s*\-\>\s*CKTnomTemp", "ckt.State.NominalTemperature");
+
+            // -> Is never possible, so let's go for dots
+            code = Regex.Replace(code, @"\s*\-\>\s*", ".");
 
             return Code.Format(code);
         }

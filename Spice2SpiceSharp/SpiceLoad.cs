@@ -66,16 +66,22 @@ namespace Spice2SpiceSharp
         /// </summary>
         /// <param name="code">The code</param>
         /// <returns></returns>
-        private string ApplyCircuit(string code, string ckt = "ckt", string state = "state", string rstate = "rstate")
+        private string ApplyCircuit(string code, string ckt = "ckt", string state = "state", string rstate = "rstate", string method = "method")
         {
+            // States
             Regex sr = new Regex($@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTstate(?<state>\d+)\s*\+\s*(?<var>\w+)\s*\)");
             code = sr.Replace(code, (Match m) => $"{state}.States[{m.Groups["state"].Value}][{states} + {m.Groups["var"].Value}]");
 
+            // Old solution
             Regex oldsol = new Regex($@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTrhsOld\s*\+\s*(?<node>\w+)\s*\)");
             code = oldsol.Replace(code, (Match m) => $"{rstate}.OldSolution[{m.Groups["node"].Value}]");
 
+            // RHS vector
             Regex rhs = new Regex($@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTrhs\s*\+\s*(?<node>\w+)\s*\)");
             code = rhs.Replace(code, (Match m) => $"{rstate}.Rhs[{m.Groups["node"].Value}]");
+
+            // Integration slope
+            code = Regex.Replace(code, $@"{ckt}\s*\-\>\s*CKTag\s*\[\s*0\s*\]", $"{method}.Slope");
 
             // Nodes
             foreach (string n in matrixnodes.Keys)
@@ -87,6 +93,12 @@ namespace Spice2SpiceSharp
                 Regex mn = new Regex($@"\*\s*\(\s*{n}\s*\)");
                 code = mn.Replace(code, (Match m) => $"{rstate}.Matrix[{matrixnodes[n].Item1}, {matrixnodes[n].Item2}]");
             }
+
+            // Apply state logic
+            code = ApplyStateLogic(code, ckt, state, method);
+
+            // -> Is never possible, so let's go for dots
+            code = Regex.Replace(code, @"\s*\-\>\s*", ".");
 
             return code;
         }

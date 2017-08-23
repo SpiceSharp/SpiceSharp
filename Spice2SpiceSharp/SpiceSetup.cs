@@ -65,6 +65,9 @@ namespace Spice2SpiceSharp
             string code = GetModelCode(modelparams);
             code = GetDefaultValues(code, ModelDefaultValues);
 
+            // -> Is never possible, so let's go for dots
+            code = Regex.Replace(code, @"\s*\-\>\s*", ".");
+
             return Code.Format(code);
         }
 
@@ -79,6 +82,9 @@ namespace Spice2SpiceSharp
             code = GetDefaultValues(code, DeviceDefaultValues);
             code = GetNodes(code);
             code = GetDeviceStates(code);
+
+            // -> Is never possible, so let's go for dots
+            code = Regex.Replace(code, @"\s*\-\>\s*", ".");
 
             return Code.Format(code);
         }
