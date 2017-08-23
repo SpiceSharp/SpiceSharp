@@ -12,122 +12,50 @@ using System.Windows.Forms.DataVisualization.Charting;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Parameters;
 
 namespace Sandbox
 {
     public partial class Main : Form
     {
         /// <summary>
-        /// The models I use for verification are not allowed to go public by the fab
-        /// If you with to do the test yourself: The format is simply
-        /// 
-        /// [par1]=[val1]
-        /// [par2]=[val2]
-        /// ...
-        /// 
+        /// Get the test model
         /// </summary>
-        private static string nmos_model = @"D:\Visual Studio\Info\nmosmod.txt";
-        private static string pmos_model = @"D:\Visual Studio\Info\pmosmod.txt";
-
-        private static string nmos_reference_dc = @"D:\Visual Studio\Info\nmos_bsim3v3_dc.txt";
-        private static string pmos_reference_dc = @"D:\Visual Studio\Info\pmos_bsim3v3_dc.txt";
-
-        /// <summary>
-        /// Test model NMOS
-        /// </summary>
-        private static BSIM3Model TestModelNMOS
+        private MOS1Model TestModel
         {
             get
             {
-                BSIM3Model model = new BSIM3Model("TestModelNMOS");
-                model.SetNMOS(true);
-                using (StreamReader sr = new StreamReader(nmos_model))
-                {
-                    while (!sr.EndOfStream)
-                    {
-                        string line = sr.ReadLine();
-                        if (string.IsNullOrWhiteSpace(line))
-                            continue;
-                        string[] assignment = line.Split('=');
-                        double value = double.Parse(assignment[1], System.Globalization.CultureInfo.InvariantCulture);
-                        model.Set(assignment[0], value);
-                    }
-                }
+                /* Model part of the ntd20n06 (ONSemi)
+                 * M1 9 7 8 8 MM L=100u W=100u
+                 * .MODEL MM NMOS LEVEL=1 IS=1e-32
+                 * +VTO=3.03646 LAMBDA=0 KP=5.28747
+                 * +CGSO=6.5761e-06 CGDO=1e-11 */
+                MOS1Model model = new MOS1Model("ntd20n06");
+                model.Set("is", 1e-32);
+                model.Set("vto", 3.03646);
+                model.Set("lambda", 0);
+                model.Set("kp", 5.28747);
+                model.Set("cgso", 6.5761e-06);
+                model.Set("cgdo", 1e-11);
                 return model;
             }
         }
 
-        /// <summary>
-        /// Test model NMOS
-        /// </summary>
-        private static BSIM3Model TestModelPMOS
+        // Reference
+        double[] reference = new double[]
         {
-            get
-            {
-                BSIM3Model model = new BSIM3Model("TestModelPMOS");
-                model.SetPMOS(true);
-                using (StreamReader sr = new StreamReader(pmos_model))
-                {
-                    while (!sr.EndOfStream)
-                    {
-                        string line = sr.ReadLine();
-                        if (string.IsNullOrWhiteSpace(line))
-                            continue;
-                        string[] assignment = line.Split('=');
-                        double value = double.Parse(assignment[1], System.Globalization.CultureInfo.InvariantCulture);
-                        model.Set(assignment[0], value);
-                    }
-                }
-                return model;
-            }
-        }
-
-        /// <summary>
-        /// Get the test data
-        /// </summary>
-        private static double[] DCReferenceNMOS
-        {
-            get
-            {
-                List<double> r = new List<double>();
-                using (StreamReader sr = new StreamReader(nmos_reference_dc))
-                {
-                    while (!sr.EndOfStream)
-                    {
-                        string line = sr.ReadLine();
-                        if (string.IsNullOrWhiteSpace(line))
-                            continue;
-                        r.Add(double.Parse(line, System.Globalization.CultureInfo.InvariantCulture));
-                    }
-                }
-                return r.ToArray();
-            }
-        }
-
-        /// <summary>
-        /// Get the test data
-        /// </summary>
-        private static double[] DCReferencePMOS
-        {
-            get
-            {
-                List<double> r = new List<double>();
-                using (StreamReader sr = new StreamReader(pmos_reference_dc))
-                {
-                    while (!sr.EndOfStream)
-                    {
-                        string line = sr.ReadLine();
-                        if (string.IsNullOrWhiteSpace(line))
-                            continue;
-                        r.Add(double.Parse(line, System.Globalization.CultureInfo.InvariantCulture));
-                    }
-                }
-                return r.ToArray();
-            }
-        }
-
-        // Simulated by SmartSpice (Silvaco)
-        private double[] reference = DCReferencePMOS;
+            0.000000000000000e+000, 1.000000000000000e-012, 2.000000000000000e-012, 3.000000000000000e-012, 4.000000000000000e-012, 5.000000000000000e-012, 6.000000000000000e-012, 7.000000000000000e-012, 8.000000000000000e-012, 9.000000000000000e-012, 9.999999999999999e-012,
+            0.000000000000000e+000, 1.000000000000000e-012, 2.000000000000000e-012, 3.000000000000000e-012, 4.000000000000000e-012, 5.000000000000000e-012, 6.000000000000000e-012, 7.000000000000000e-012, 8.000000000000000e-012, 9.000000000000000e-012, 9.999999999999999e-012,
+            0.000000000000000e+000, 1.000000000000000e-012, 2.000000000000000e-012, 3.000000000000000e-012, 4.000000000000000e-012, 5.000000000000000e-012, 6.000000000000000e-012, 7.000000000000000e-012, 8.000000000000000e-012, 9.000000000000000e-012, 9.999999999999999e-012,
+            0.000000000000000e+000, 1.000000000000000e-012, 2.000000000000000e-012, 3.000000000000000e-012, 4.000000000000000e-012, 5.000000000000000e-012, 6.000000000000000e-012, 7.000000000000000e-012, 8.000000000000000e-012, 9.000000000000000e-012, 9.999999999999999e-012,
+            0.000000000000000e+000, 1.000000000000000e-012, 2.000000000000000e-012, 3.000000000000000e-012, 4.000000000000000e-012, 5.000000000000000e-012, 6.000000000000000e-012, 7.000000000000000e-012, 8.000000000000000e-012, 9.000000000000000e-012, 9.999999999999999e-012,
+            0.000000000000000e+000, 1.000000000000000e-012, 2.000000000000000e-012, 3.000000000000000e-012, 4.000000000000000e-012, 5.000000000000000e-012, 6.000000000000000e-012, 7.000000000000000e-012, 8.000000000000000e-012, 9.000000000000000e-012, 9.999999999999999e-012,
+            0.000000000000000e+000, 1.000000000000000e-012, 2.000000000000000e-012, 3.000000000000000e-012, 4.000000000000000e-012, 5.000000000000000e-012, 6.000000000000000e-012, 7.000000000000000e-012, 8.000000000000000e-012, 9.000000000000000e-012, 9.999999999999999e-012,
+            0.000000000000000e+000, 5.680575723785252e-001, 5.680575723795250e-001, 5.680575723805251e-001, 5.680575723815250e-001, 5.680575723825251e-001, 5.680575723835252e-001, 5.680575723845250e-001, 5.680575723855251e-001, 5.680575723865250e-001, 5.680575723875251e-001,
+            0.000000000000000e+000, 1.886410671900999e+000, 2.454468244279524e+000, 2.454468244280524e+000, 2.454468244281524e+000, 2.454468244282523e+000, 2.454468244283524e+000, 2.454468244284524e+000, 2.454468244285524e+000, 2.454468244286524e+000, 2.454468244287524e+000,
+            0.000000000000000e+000, 3.208278171900999e+000, 5.094688843801998e+000, 5.662746416180523e+000, 5.662746416181523e+000, 5.662746416182523e+000, 5.662746416183524e+000, 5.662746416184524e+000, 5.662746416185524e+000, 5.662746416186524e+000, 5.662746416187522e+000,
+            0.000000000000000e+000, 4.530145671900999e+000, 7.738423843801998e+000, 9.624834515702997e+000, 1.019289208808152e+001, 1.019289208808252e+001, 1.019289208808352e+001, 1.019289208808452e+001, 1.019289208808552e+001, 1.019289208808652e+001, 1.019289208808752e+001
+        };
 
         /// <summary>
         /// Constructor
@@ -136,8 +64,8 @@ namespace Sandbox
         {
             InitializeComponent();
 
-            int n = 7;
-            Series[] series = new Series[1];
+            int n = 11;
+            Series[] series = new Series[11];
             Series[] refseries = new Series[series.Length];
             Series[] diffseries = new Series[series.Length];
             for (int i = 0; i < series.Length; i++)
@@ -153,47 +81,40 @@ namespace Sandbox
 
             SpiceSharp.Diagnostics.CircuitWarning.WarningGenerated += CircuitWarning_WarningGenerated;
 
-            // Generate the circuit
+            // Build the circuit
             Circuit ckt = new Circuit();
 
-            BSIM3 nmos = new BSIM3("M1");
-            nmos.SetModel(TestModelPMOS);
-            nmos.Connect("2", "1", "0", "0");
-            nmos.Set("w", 1e-6); nmos.Set("l", 1e-6);
-            nmos.Set("ad", 0.85e-12); nmos.Set("as", 0.85e-12);
-            nmos.Set("pd", 2.7e-6); nmos.Set("ps", 2.7e-6);
-            nmos.Set("nrd", 0.3); nmos.Set("nrs", 0.3);
+            MOS1 m = new MOS1("M1");
+            m.SetModel(TestModel);
+            m.Set("w", 100e-6);
+            m.Set("l", 100e-6);
+            m.Connect("D", "G", "GND", "GND");
             ckt.Objects.Add(
-                new Voltagesource("V2", "0", "2", 0.0),
-                new Voltagesource("V1", "0", "1", 0.0),
-                nmos);
+                new Voltagesource("V1", "G", "GND", 0.0),
+                new Voltagesource("V2", "D", "GND", 0.0),
+                m);
 
-            // Generate the simulation
-            DC dc = new DC("TestBSIM3_PMOS_DC");
-
-            // Make the simulation slightly more accurate (error / 4)
-            // Might want to check why some time though
-            dc.Config.RelTol = 0.25e-3;
-            // dc.Sweeps.Add(new DC.Sweep("V1", 0, 1.8, 0.3));
-            dc.Sweeps.Add(new DC.Sweep("V2", 0, 1.8, 0.3));
+            // Simulate the circuit
+            DC dc = new DC("TestMOS1_DC");
+            dc.Sweeps.Add(new DC.Sweep("V1", 0.0, 5.0, 0.5));
+            dc.Sweeps.Add(new DC.Sweep("V2", 0.0, 5.0, 0.5));
             int index = 0;
             dc.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                double vds = dc.Sweeps.Last().CurrentValue;
-                double actual = -(nmos.BSIM3cd - nmos.BSIM3cbd);
+                double vgs = dc.Sweeps[0].CurrentValue;
+                double vds = dc.Sweeps[1].CurrentValue;
 
-                // [note] I am using SmartSpice for verification here
-                // SmartSpice adds an additional GMIN conductance between drain and source
-                // for improving convergence. We don't do this, so we need to factor this in
-                double expected = reference[index] + ckt.State.Gmin * vds;
-                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
+                double expected = reference[index] - vds * ckt.State.Gmin;
+                double actual = -data.Ask("V2", "i");
 
-                int row = index / n;
-                series[row].Points.AddXY(vds, actual);
-                refseries[row].Points.AddXY(vds, expected);
-                diffseries[row].Points.AddXY(vds, actual - expected);
+                double tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * 1e-6 + 1e-12;
 
-                index++;
+                int r = index / n;
+                series[r].Points.AddXY(vds, actual);
+                refseries[r].Points.AddXY(vds, expected);
+                diffseries[r].Points.AddXY(vds, Math.Abs(actual - expected));
+
+                index = index + 1;
             };
             ckt.Simulate(dc);
         }

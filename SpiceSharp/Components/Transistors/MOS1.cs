@@ -684,8 +684,8 @@ namespace SpiceSharp.Components
             }
 
             /* now to determine whether the user was able to correctly
-			* identify the source and drain of his device
-			*/
+			 * identify the source and drain of his device
+			 */
             if (vds >= 0)
             {
                 /* normal mode */
@@ -965,14 +965,10 @@ namespace SpiceSharp.Components
             state.States[0][MOS1states + MOS1vgs] = vgs;
             state.States[0][MOS1states + MOS1vds] = vds;
 
-            /* 
-			
-			*/
-
             /* DETAILPROF */
             /* 
-			* meyer's capacitor model
-			*/
+			 * meyer's capacitor model
+			 */
             if (state.Domain == CircuitState.DomainTypes.Time || state.UseSmallSignal)
             {
                 /* 
@@ -1097,8 +1093,8 @@ namespace SpiceSharp.Components
             rstate.Rhs[MOS1dNodePrime] += (ceqbd - cdreq + model.MOS1type * ceqgd);
             rstate.Rhs[MOS1sNodePrime] += cdreq + ceqbs + model.MOS1type * ceqgs;
             /* 
-			* load y matrix
-			*/
+			 * load y matrix
+			 */
 
             rstate.Matrix[MOS1dNode, MOS1dNode] += (MOS1drainConductance);
             rstate.Matrix[MOS1gNode, MOS1gNode] += ((gcgd + gcgs + gcgb));

@@ -2,6 +2,7 @@
 using System.Numerics;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Components;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Simulations
 {
@@ -166,6 +167,18 @@ namespace SpiceSharp.Simulations
         public ICircuitObject GetObject(string name)
         {
             return Circuit.Objects[name];
+        }
+
+        /// <summary>
+        /// Ask a component parameter using the circuit
+        /// </summary>
+        /// <param name="component">The component name</param>
+        /// <param name="parameter">The parameter name</param>
+        /// <returns></returns>
+        public double Ask(string component, string parameter)
+        {
+            IParameterized p = (IParameterized)Circuit.Objects[component];
+            return p.Ask(parameter, Circuit);
         }
     }
 
