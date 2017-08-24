@@ -9,6 +9,12 @@ namespace SpiceSharpTest.Models.Transistors
     [TestClass]
     public class SpiceSharpMOS1Test
     {
+        /**
+         * Note to self:
+         * SmartSpice uses extended models, or propriety models for mosfet parasitic capacitances for LEVEL=1,2,3. If they are not specified by the model,
+         * use CAPMOD=1 to use the legacy parasitic capacitance calculations!
+         **/
+
         /// <summary>
         /// Get the test model
         /// </summary>
@@ -36,6 +42,8 @@ namespace SpiceSharpTest.Models.Transistors
         public void TestMOS1_DC()
         {
             // Simulation results from SmartSpice
+            // GMIN = 1e-12
+            // vds,vgs: 0->5V in 0.5V steps
             double[] reference = new double[]
             {
                 0.000000000000000e+000, 1.000000000000000e-012, 2.000000000000000e-012, 3.000000000000000e-012, 4.000000000000000e-012, 5.000000000000000e-012, 6.000000000000000e-012, 7.000000000000000e-012, 8.000000000000000e-012, 9.000000000000000e-012, 9.999999999999999e-012,
@@ -92,6 +100,8 @@ namespace SpiceSharpTest.Models.Transistors
             // Simulation data by LTSpiceXVII
             // Please note that LTSpice uses a different models for diodes in all models, including MOS1,
             // so our tolerance will be a little bit more relaxed
+            // GMIN = 1e-12
+            // vds,vgs: 0->5V in 0.5V steps
             double[] reference = new double[]
             {
                 0.000000e+000, -1.010000e-012, -2.010000e-012, -3.010000e-012, -4.010000e-012, -5.010000e-012, -6.010000e-012, -7.010000e-012, -8.010000e-012, -9.010000e-012, -1.001000e-011,
@@ -128,7 +138,7 @@ namespace SpiceSharpTest.Models.Transistors
                 double vds = dc.Sweeps[1].CurrentValue;
                 double expected = reference[index];
                 double actual = data.Ask("V2", "i");
-                double tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * 1e-6 + 1e-10;
+                double tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * 1e-6 + 1e-10; // Absolute tolerance weaker because BS/BD diode model is different
                 Assert.AreEqual(actual, expected, tol);
                 index++;
             };
@@ -138,6 +148,7 @@ namespace SpiceSharpTest.Models.Transistors
         [TestMethod]
         public void TestMOS1_AC()
         {
+            // Simulation from SmartSpice
             double[] reference_db = new double[]
             {
                 4.416233896274324e+001, 4.416233896248351e+001, 4.416233896183108e+001, 4.416233896019226e+001, 4.416233895607573e+001,

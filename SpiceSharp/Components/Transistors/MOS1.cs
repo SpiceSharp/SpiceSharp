@@ -21,7 +21,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public void SetModel(MOS1Model model) => Model = (MOS1Model)model;
+        public void SetModel(MOS1Model model) => Model = model;
 
         /// <summary>
         /// Parameters

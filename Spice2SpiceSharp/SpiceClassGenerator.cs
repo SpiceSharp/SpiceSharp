@@ -293,7 +293,7 @@ namespace Spice2SpiceSharp
 
                 // Write device declaration
                 WriteCode(sw, "/// <summary>", "/// Gets or sets the device model", "/// </summary>");
-                WriteCode(sw, $"public void SetModel({name}Model model) => Model = ({name}Model)model;");
+                WriteCode(sw, $"public void SetModel({name}Model model) => Model = model;");
 
                 // Write the device parameters
                 WriteCode(sw, "", "/// <summary>", "/// Parameters", "/// </summary>");

@@ -9,6 +9,12 @@ namespace SpiceSharpTest.Models.Transistors
     [TestClass]
     public class SpiceSharpMOS2Test
     {
+        /**
+         * Note to self:
+         * SmartSpice uses extended models, or propriety models for mosfet parasitic capacitances for LEVEL=1,2,3. If they are not specified by the model,
+         * use CAPMOD=1 to use the legacy parasitic capacitance calculations!
+         **/
+
         /// <summary>
         /// Test model
         /// </summary>
@@ -32,6 +38,8 @@ namespace SpiceSharpTest.Models.Transistors
         public void TestMOS2_DC()
         {
             // Reference as simulated by SmartSpice
+            // GMIN = 1e-12
+            // vds,vgs: 0->5V in 0.5V steps
             double[] reference = new double[]
             {
                 0.000000000000000e+000, 3.065946955721369e-005, 4.039078627363777e-005, 4.072779155040638e-005, 4.108672454042423e-005, 4.146353734283336e-005, 4.185399539701826e-005, 4.225416257546583e-005, 4.266069153043544e-005, 4.307092332607250e-005, 4.348285628966794e-005, 
