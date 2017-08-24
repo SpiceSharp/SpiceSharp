@@ -187,6 +187,7 @@ namespace SpiceSharp.Simulations
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;
+            state.Gmin = Config.Gmin;
             Initialize(ckt);
             Op(Config, ckt, MyConfig.DcMaxIterations);
 

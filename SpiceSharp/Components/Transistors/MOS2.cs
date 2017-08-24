@@ -2,15 +2,15 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
-using System.Numerics;
 using SpiceSharp.Components.Transistors;
+using System.Numerics;
 
 namespace SpiceSharp.Components
 {
     public class MOS2 : CircuitComponent<MOS2>
     {
         /// <summary>
-        /// Register our parameters
+        /// Register our device parameters and terminals
         /// </summary>
         static MOS2()
         {
@@ -21,7 +21,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public void SetModel(MOS2Model model) => Model = model;
+        public void SetModel(MOS2Model model) => Model = (MOS2Model)model;
 
         /// <summary>
         /// Parameters
@@ -34,9 +34,9 @@ namespace SpiceSharp.Components
         }
         public Parameter MOS2temp { get; } = new Parameter();
         [SpiceName("w"), SpiceInfo("Width")]
-        public Parameter MOS2w { get; } = new Parameter();
+        public Parameter MOS2w { get; } = new Parameter(1e-4);
         [SpiceName("l"), SpiceInfo("Length")]
-        public Parameter MOS2l { get; } = new Parameter();
+        public Parameter MOS2l { get; } = new Parameter(1e-4);
         [SpiceName("as"), SpiceInfo("Source area")]
         public Parameter MOS2sourceArea { get; } = new Parameter();
         [SpiceName("ad"), SpiceInfo("Drain area")]
@@ -178,20 +178,18 @@ namespace SpiceSharp.Components
         [SpiceName("ib"), SpiceInfo("Bulk current ")]
         public double GetCB(Circuit ckt) => MOS2cbd + MOS2cbs - ckt.State.States[0][MOS2states + MOS2cqgb];
         [SpiceName("ig"), SpiceInfo("Gate current ")]
-        public double GetCG(Circuit ckt)
-        {
-            if (ckt.Method == null)
-                return 0;
-            else
-                return ckt.State.States[0][MOS2states + MOS2cqgb] + ckt.State.States[0][MOS2states + MOS2cqgd] + ckt.State.States[0][MOS2states + MOS2cqgs];
-        }
+        public double GetCG(Circuit ckt) => ckt.State.UseDC ? 0.0 : ckt.State.States[0][MOS2states + MOS2cqgb] + ckt.State.States[0][MOS2states + MOS2cqgd] + 
+            ckt.State.States[0][MOS2states + MOS2cqgs];
         [SpiceName("is"), SpiceInfo("Source current ")]
         public double GetCS(Circuit ckt)
         {
             double value = -MOS2cd;
             value -= MOS2cbd + MOS2cbs - ckt.State.States[0][MOS2states + MOS2cqgb];
-            if (ckt.Method != null)
-                value -= ckt.State.States[0][MOS2states + MOS2cqgb] + ckt.State.States[0][MOS2states + MOS2cqgd] + ckt.State.States[0][MOS2states + MOS2cqgs];
+            if (ckt.State.Domain == CircuitState.DomainTypes.Time && !ckt.State.UseDC)
+            {
+                value -= ckt.State.States[0][MOS2states + MOS2cqgb] + ckt.State.States[0][MOS2states + MOS2cqgd] +
+                    ckt.State.States[0][MOS2states + MOS2cqgs];
+            }
             return value;
         }
         [SpiceName("p"), SpiceInfo("Instantaneous power ")]
@@ -200,20 +198,17 @@ namespace SpiceSharp.Components
             double temp;
             double value = MOS2cd * ckt.State.Real.Solution[MOS2dNode];
             value += (MOS2cbd + MOS2cbs - ckt.State.States[0][MOS2states + MOS2cqgb]) * ckt.State.Real.Solution[MOS2bNode];
-            if (ckt.Method != null)
+            if (ckt.State.Domain == CircuitState.DomainTypes.Time && !ckt.State.UseDC)
             {
-                value += (ckt.State.States[0][MOS2states + MOS2cqgb] +
-                ckt.State.States[0][MOS2states + MOS2cqgd] +
-                ckt.State.States[0][MOS2states + MOS2cqgs]) *
-                ckt.State.Real.Solution[MOS2gNode];
+                value += (ckt.State.States[0][MOS2states + MOS2cqgb] + ckt.State.States[0][MOS2states + MOS2cqgd] +
+                    ckt.State.States[0][MOS2states + MOS2cqgs]) * ckt.State.Real.Solution[MOS2gNode];
             }
             temp = -MOS2cd;
             temp -= MOS2cbd + MOS2cbs;
-            if (ckt.Method != null)
+            if (ckt.State.Domain == CircuitState.DomainTypes.Time && !ckt.State.UseDC)
             {
-                temp -= ckt.State.States[0][MOS2states + MOS2cqgb] +
-                ckt.State.States[0][MOS2states + MOS2cqgd] +
-                ckt.State.States[0][MOS2states + MOS2cqgs];
+                temp -= ckt.State.States[0][MOS2states + MOS2cqgb] + ckt.State.States[0][MOS2states + MOS2cqgd] +
+                    ckt.State.States[0][MOS2states + MOS2cqgs];
             }
             value += temp * ckt.State.Real.Solution[MOS2sNode];
             return value;
@@ -242,7 +237,6 @@ namespace SpiceSharp.Components
         public double MOS2f2s { get; private set; }
         public double MOS2f3s { get; private set; }
         public double MOS2f4s { get; private set; }
-        public double MOS2senPertFlag { get; private set; }
         public double MOS2cgs { get; private set; }
         public double MOS2cgd { get; private set; }
         public double MOS2cgb { get; private set; }
@@ -268,6 +262,7 @@ namespace SpiceSharp.Components
         private const int MOS2cqbd = 14;
         private const int MOS2qbs = 15;
         private const int MOS2cqbs = 16;
+
         private static double[] sig1 = new double[] { 1.0, -1.0, 1.0, -1.0 };
         private static double[] sig2 = new double[] { 1.0, 1.0, -1.0, -1.0 };
 
@@ -285,7 +280,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            MOS2Model model = (MOS2Model)Model;
+            var model = Model as MOS2Model;
 
             // Allocate nodes
             var nodes = BindNodes(ckt);
@@ -295,17 +290,18 @@ namespace SpiceSharp.Components
             MOS2bNode = nodes[3].Index;
 
             // Allocate states
-            MOS2states = ckt.State.GetState(26);
+            MOS2states = ckt.State.GetState(17);
 
             /* allocate a chunk of the state vector */
-            MOS2vdsat = 0;
+            MOS2vdsat = 0.0;
+            MOS2von = 0.0;
 
-            if ((model.MOS2drainResistance != 0 || (MOS2drainSquares != 0 && model.MOS2sheetResistance != 0)) && MOS2dNodePrime == 0)
+            if (model.MOS2drainResistance != 0 || (MOS2drainSquares != 0 && model.MOS2sheetResistance != 0))
                 MOS2dNodePrime = CreateNode(ckt).Index;
             else
                 MOS2dNodePrime = MOS2dNode;
 
-            if (((model.MOS2sourceResistance != 0) || ((MOS2sourceSquares != 0) && (model.MOS2sheetResistance != 0))) && (MOS2sNodePrime == 0))
+            if (model.MOS2sourceResistance != 0 || (MOS2sourceSquares != 0 && model.MOS2sheetResistance != 0))
                 MOS2sNodePrime = CreateNode(ckt).Index;
             else
                 MOS2sNodePrime = MOS2sNode;
@@ -317,12 +313,15 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            MOS2Model model = (MOS2Model)Model;
-            double vt, ratio, fact2, kt, egfet, arg, pbfact, ratio4, phio, pbo, gmaold, capfact, gmanew, czbd, czbdsw, sarg, sargsw, czbs, czbssw;
+            var model = Model as MOS2Model;
+            double vt, ratio, fact2, kt, egfet, arg, pbfact, ratio4, phio, pbo, gmaold, capfact, gmanew, czbd, czbdsw, sarg, sargsw, czbs,
+                czbssw;
 
             /* perform the parameter defaulting */
             if (!MOS2temp.Given)
+            {
                 MOS2temp.Value = ckt.State.Temperature;
+            }
             MOS2mode = 1;
             MOS2von = 0;
 
@@ -330,8 +329,7 @@ namespace SpiceSharp.Components
             ratio = MOS2temp / model.MOS2tnom;
             fact2 = MOS2temp / Circuit.CONSTRefTemp;
             kt = MOS2temp * Circuit.CONSTBoltz;
-            egfet = 1.16 - (7.02e-4 * MOS2temp * MOS2temp) /
-            (MOS2temp + 1108);
+            egfet = 1.16 - (7.02e-4 * MOS2temp * MOS2temp) / (MOS2temp + 1108);
             arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
             pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
             
@@ -350,8 +348,7 @@ namespace SpiceSharp.Components
             {
                 if (model.MOS2sheetResistance != 0)
                 {
-                    MOS2drainConductance =
-                    1 / (model.MOS2sheetResistance * MOS2drainSquares);
+                    MOS2drainConductance = 1 / (model.MOS2sheetResistance * MOS2drainSquares);
                 }
                 else
                 {
@@ -377,8 +374,7 @@ namespace SpiceSharp.Components
             {
                 if (model.MOS2sheetResistance != 0)
                 {
-                    MOS2sourceConductance =
-                    1 / (model.MOS2sheetResistance * MOS2sourceSquares);
+                    MOS2sourceConductance = 1 / (model.MOS2sheetResistance * MOS2sourceSquares);
                 }
                 else
                 {
@@ -397,8 +393,8 @@ namespace SpiceSharp.Components
             MOS2tSurfMob = model.MOS2surfaceMobility / ratio4;
             phio = (model.MOS2phi - model.pbfact1) / model.fact1;
             MOS2tPhi = fact2 * phio + pbfact;
-            MOS2tVbi = model.MOS2vt0 - model.MOS2type * (model.MOS2gamma * Math.Sqrt(model.MOS2phi))
-                + .5 * (model.egfet1 - egfet) + model.MOS2type * .5 * (MOS2tPhi - model.MOS2phi);
+            MOS2tVbi = model.MOS2vt0 - model.MOS2type * (model.MOS2gamma * Math.Sqrt(model.MOS2phi)) + .5 * (model.egfet1 - egfet) +
+                model.MOS2type * .5 * (MOS2tPhi - model.MOS2phi);
             MOS2tVto = MOS2tVbi + model.MOS2type * model.MOS2gamma * Math.Sqrt(MOS2tPhi);
             MOS2tSatCur = model.MOS2jctSatCur * Math.Exp(-egfet / vt + model.egfet1 / model.vtnom);
             MOS2tSatCurDens = model.MOS2jctSatCurDensity * Math.Exp(-egfet / vt + model.egfet1 / model.vtnom);
@@ -420,7 +416,7 @@ namespace SpiceSharp.Components
             MOS2tCjsw *= capfact;
             MOS2tDepCap = model.MOS2fwdCapDepCoeff * MOS2tBulkPot;
 
-            if ((MOS2tSatCurDens == 0) || (MOS2drainArea == 0) || (MOS2sourceArea == 0))
+            if ((MOS2tSatCurDens == 0) || (MOS2drainArea.Value == 0) || (MOS2sourceArea.Value == 0))
             {
                 MOS2sourceVcrit = MOS2drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS2tSatCur));
             }
@@ -457,13 +453,12 @@ namespace SpiceSharp.Components
             sargsw = Math.Exp((-model.MOS2bulkJctSideGradingCoeff) * Math.Log(arg));
             MOS2Cbd = czbd;
             MOS2Cbdsw = czbdsw;
-            MOS2f2d = czbd * (1 - model.MOS2fwdCapDepCoeff * (1 + model.MOS2bulkJctBotGradingCoeff)) * sarg / arg
-                + czbdsw * (1 - model.MOS2fwdCapDepCoeff * (1 + model.MOS2bulkJctSideGradingCoeff)) * sargsw / arg;
-            MOS2f3d = czbd * model.MOS2bulkJctBotGradingCoeff * sarg / arg / MOS2tBulkPot
-                + czbdsw * model.MOS2bulkJctSideGradingCoeff * sargsw / arg / MOS2tBulkPot;
-            MOS2f4d = czbd * MOS2tBulkPot * (1 - arg * sarg) / (1 - model.MOS2bulkJctBotGradingCoeff)
-                + czbdsw * MOS2tBulkPot * (1 - arg * sargsw) / (1 - model.MOS2bulkJctSideGradingCoeff)
-                - MOS2f3d / 2 * (MOS2tDepCap * MOS2tDepCap) - MOS2tDepCap * MOS2f2d;
+            MOS2f2d = czbd * (1 - model.MOS2fwdCapDepCoeff * (1 + model.MOS2bulkJctBotGradingCoeff)) * sarg / arg + czbdsw * (1 -
+                model.MOS2fwdCapDepCoeff * (1 + model.MOS2bulkJctSideGradingCoeff)) * sargsw / arg;
+            MOS2f3d = czbd * model.MOS2bulkJctBotGradingCoeff * sarg / arg / MOS2tBulkPot + czbdsw * model.MOS2bulkJctSideGradingCoeff *
+                sargsw / arg / MOS2tBulkPot;
+            MOS2f4d = czbd * MOS2tBulkPot * (1 - arg * sarg) / (1 - model.MOS2bulkJctBotGradingCoeff) + czbdsw * MOS2tBulkPot * (1 - arg *
+                sargsw) / (1 - model.MOS2bulkJctSideGradingCoeff) - MOS2f3d / 2 * (MOS2tDepCap * MOS2tDepCap) - MOS2tDepCap * MOS2f2d;
             if (model.MOS2capBS.Given)
             {
                 czbs = MOS2tCbs;
@@ -492,13 +487,12 @@ namespace SpiceSharp.Components
             sargsw = Math.Exp((-model.MOS2bulkJctSideGradingCoeff) * Math.Log(arg));
             MOS2Cbs = czbs;
             MOS2Cbssw = czbssw;
-            MOS2f2s = czbs * (1 - model.MOS2fwdCapDepCoeff * (1 + model.MOS2bulkJctBotGradingCoeff)) * sarg / arg
-            + czbssw * (1 - model.MOS2fwdCapDepCoeff * (1 + model.MOS2bulkJctSideGradingCoeff)) * sargsw / arg;
-            MOS2f3s = czbs * model.MOS2bulkJctBotGradingCoeff * sarg / arg / MOS2tBulkPot
-                + czbssw * model.MOS2bulkJctSideGradingCoeff * sargsw / arg / MOS2tBulkPot;
-            MOS2f4s = czbs * MOS2tBulkPot * (1 - arg * sarg) / (1 - model.MOS2bulkJctBotGradingCoeff)
-                + czbssw * MOS2tBulkPot * (1 - arg * sargsw) / (1 - model.MOS2bulkJctSideGradingCoeff)
-                - MOS2f3s / 2 * (MOS2tDepCap * MOS2tDepCap) - MOS2tDepCap * MOS2f2s;
+            MOS2f2s = czbs * (1 - model.MOS2fwdCapDepCoeff * (1 + model.MOS2bulkJctBotGradingCoeff)) * sarg / arg + czbssw * (1 -
+                model.MOS2fwdCapDepCoeff * (1 + model.MOS2bulkJctSideGradingCoeff)) * sargsw / arg;
+            MOS2f3s = czbs * model.MOS2bulkJctBotGradingCoeff * sarg / arg / MOS2tBulkPot + czbssw * model.MOS2bulkJctSideGradingCoeff *
+                sargsw / arg / MOS2tBulkPot;
+            MOS2f4s = czbs * MOS2tBulkPot * (1 - arg * sarg) / (1 - model.MOS2bulkJctBotGradingCoeff) + czbssw * MOS2tBulkPot * (1 - arg *
+                sargsw) / (1 - model.MOS2bulkJctSideGradingCoeff) - MOS2f3s / 2 * (MOS2tDepCap * MOS2tDepCap) - MOS2tDepCap * MOS2f2s;
         }
 
         /// <summary>
@@ -507,25 +501,21 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Load(Circuit ckt)
         {
-            MOS2Model model = (MOS2Model)Model;
+            var model = Model as MOS2Model;
             var state = ckt.State;
             var rstate = state.Real;
             var method = ckt.Method;
-            double vt;
-            int Check;
-            double EffectiveLength, DrainSatCur, SourceSatCur, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta, OxideCap, 
-                vgs, vds, vbs, vbd, vgb, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat, von, evbs, evbd, sarg, vdsat, arg, 
-                cdrain = 0.0, sargsw;
-            double vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs, ceqbd;
-            int xnrm;
-            int xrev;
-            double cdreq;
+            double vt, EffectiveLength, DrainSatCur, SourceSatCur, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
+                OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat, von, evbs, evbd,
+                vdsat, cdrain = 0.0, sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs,
+                ceqbd, cdreq;
+            int Check, xnrm, xrev;
 
             vt = Circuit.CONSTKoverQ * MOS2temp;
             Check = 1;
 
             EffectiveLength = MOS2l - 2 * model.MOS2latDiff;
-            if ((MOS2tSatCurDens == 0) || (MOS2drainArea == 0) || (MOS2sourceArea == 0))
+            if ((MOS2tSatCurDens == 0) || (MOS2drainArea.Value == 0) || (MOS2sourceArea.Value == 0))
             {
                 DrainSatCur = MOS2tSatCur;
                 SourceSatCur = MOS2tSatCur;
@@ -541,7 +531,8 @@ namespace SpiceSharp.Components
             Beta = MOS2tTransconductance * MOS2w / EffectiveLength;
             OxideCap = model.MOS2oxideCapFactor * EffectiveLength * MOS2w;
 
-            if (state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (method != null && method.SavedTime == 0.0) || (state.Init == CircuitState.InitFlags.InitFix && !MOS2off))
+            if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (method != null && method.SavedTime == 0.0)) ||
+                ((state.Init == CircuitState.InitFlags.InitFix) && (!MOS2off)))
             {
                 /* PREDICTOR */
 
@@ -565,9 +556,13 @@ namespace SpiceSharp.Components
 
                 /* these are needed for convergence testing */
                 if (MOS2mode >= 0)
+                {
                     cdhat = MOS2cd - MOS2gbd * delvbd + MOS2gmbs * delvbs + MOS2gm * delvgs + MOS2gds * delvds;
+                }
                 else
+                {
                     cdhat = MOS2cd + (MOS2gmbs - MOS2gbd) * delvbd - MOS2gm * delvgd + MOS2gds * delvds;
+                }
                 cbhat = MOS2cbs + MOS2cbd + MOS2gbd * delvbd + MOS2gbs * delvbs;
 
                 /* now lets see if we can bypass (ugh) */
@@ -576,11 +571,11 @@ namespace SpiceSharp.Components
 				* can't handle it in one piece, so it is broken up
 				* into several stages here
 				*/
-                /*NOBYPASS*/
+                /* NOBYPASS */
                 /* ok - bypass is out, do it the hard way */
 
                 von = model.MOS2type * MOS2von;
-                /*
+                /* 
 				* limiting
 				* We want to keep device voltages from changing
 				* so fast that the exponentials churn out overflows 
@@ -617,13 +612,13 @@ namespace SpiceSharp.Components
 				* look at other possibilities 
 				*/
 
-                if (state.Init == CircuitState.InitFlags.InitJct && !MOS2off)
+                if ((state.Init == CircuitState.InitFlags.InitJct) && !MOS2off)
                 {
                     vds = model.MOS2type * MOS2icVDS;
                     vgs = model.MOS2type * MOS2icVGS;
                     vbs = model.MOS2type * MOS2icVBS;
-                    if ((vds == 0) && (vgs == 0) && (vbs == 0) &&
-                        (method != null || state.UseDC || state.Domain == CircuitState.DomainTypes.None || !state.UseIC))
+                    if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((method != null || state.UseDC ||
+                        state.Domain == CircuitState.DomainTypes.None) || (!state.UseIC)))
                     {
                         vbs = -1;
                         vgs = model.MOS2type * MOS2tVto;
@@ -644,7 +639,7 @@ namespace SpiceSharp.Components
             vgd = vgs - vds;
             vgb = vgs - vbs;
 
-            /* bulk-source and bulk-drain doides
+            /* bulk - source and bulk - drain doides
 			* here we just evaluate the ideal diode current and the
 			* correspoinding derivative (conductance).
 			*/
@@ -684,26 +679,29 @@ namespace SpiceSharp.Components
                 MOS2mode = -1;
             }
             {
-                /* moseq2(vds,vbs,vgs,gm,gds,gmbs,qg,qc,qb,
-				*        cggb,cgdb,cgsb,cbgb,cbdb,cbsb)
+                /* moseq2(vds, vbs, vgs, gm, gds, gmbs, qg, qc, qb, 
+				* cggb, cgdb, cgsb, cbgb, cbdb, cbsb)
 				*/
                 /* note:  cgdb, cgsb, cbdb, cbsb never used */
 
-                /*
-				*     this routine evaluates the drain current, its derivatives and
-				*     the charges associated with the gate, channel and bulk
-				*     for mosfets
-				*
+                /* 
+				* this routine evaluates the drain current, its derivatives and
+				* the charges associated with the gate, channel and bulk
+				* for mosfets
+				* 
 				*/
 
-                double[] a4 = new double[4], b4 = new double[4], x4 = new double[4], poly4 = new double[8];
-                double beta1, dsrgdb, d2sdb2, sphi = 0.0;    /* square root of phi */
-                double sphi3 = 0.0;   /* square root of phi cubed */
-                double barg, d2bdb2, factor, dbrgdb, eta, vbin, argd = 0.0, args = 0.0, argss, argsd = 0.0, argxs = 0.0, argxd = 0.0, daddb2, dasdb2, dbargd, dbargs, dbxwd, dbxws, 
+                double arg;
+                double sarg;
+                double[] a4 = new double[4], b4 = new double[4], x4 = new double[8], poly4 = new double[8];
+                double beta1, dsrgdb, d2sdb2;
+                double sphi = 0.0; /* square root of phi */
+                double sphi3 = 0.0; /* square root of phi cubed */
+                double barg, d2bdb2, factor, dbrgdb, eta, vbin, argd = 0.0, args = 0.0, argss, argsd, argxs = 0.0, argxd = 0.0, daddb2, dasdb2, dbargd, dbargs, dbxwd, dbxws, 
                     dgddb2, dgddvb, dgdvds, gamasd, xwd, xws, ddxwd, gammad, vth, cfs, cdonco, xn = 0.0, argg = 0.0, vgst, sarg3, sbiarg, dgdvbs, body, gdbdv, 
                     dodvbs, dodvds = 0.0, dxndvd = 0.0, dxndvb = 0.0, udenom, dudvgs, dudvds, dudvbs, gammd2, argv, vgsx, ufact, ueff, dsdvgs, dsdvbs, a1, a3, a, b1, 
                     b3, b, c1, c, d1, fi, p0, p2, p3, p4, p, r3, r, ro, s2, s, v1, v2, xv, y3, delta4, xvalid = 0.0, bsarg = 0.0, dbsrdb = 0.0, bodys = 0.0, gdbdvs = 0.0, sargv, 
-                    xlfact, dldsat = 0.0, xdv, xlv, vqchan, dqdsat, vl, dfundg, dfunds, dfundb, xls, dldvgs, dldvds, dldvbs, dfact, clfact, xleff, deltal, 
+                    xlfact, dldsat, xdv, xlv, vqchan, dqdsat, vl, dfundg, dfunds, dfundb, xls, dldvgs = 0.0, dldvds = 0.0, dldvbs = 0.0, dfact, clfact, xleff, deltal, 
                     xwb, vdson, cdson, didvds, gdson, gmw, gbson, expg, xld;
                 double xlamda = model.MOS2lambda;
                 /* 'local' variables - these switch d & s around appropriately
@@ -715,13 +713,10 @@ namespace SpiceSharp.Components
                 double phiMinVbs = MOS2tPhi - lvbs;
                 double tmp; /* a temporary variable, not used for more than */
                             /* about 10 lines at a time */
-                int iknt;
-                int jknt;
-                int i;
-                int j;
+                int iknt, jknt, i, j;
 
-                /*
-				*  compute some useful quantities
+                /* 
+				* compute some useful quantities
 				*/
 
                 if (lvbs <= 0.0)
@@ -752,25 +747,23 @@ namespace SpiceSharp.Components
                     dbrgdb = -0.5 * barg * tmp;
                     d2bdb2 = -dbrgdb * tmp;
                 }
-                /*
-				*  calculate threshold voltage (von)
-				*     narrow-channel effect
+                /* 
+				* calculate threshold voltage (von)
+				* narrow - channel effect
 				*/
 
-                /*XXX constant per device */
-                factor = 0.125 * model.MOS2narrowFactor * 2.0 * Circuit.CONSTPI * Transistor.EPSSIL /
-                OxideCap * EffectiveLength;
-                /*XXX constant per device */
+                /* XXX constant per device */
+                factor = 0.125 * model.MOS2narrowFactor * 2.0 * Circuit.CONSTPI * Transistor.EPSSIL / OxideCap * EffectiveLength;
+                /* XXX constant per device */
                 eta = 1.0 + factor;
                 vbin = MOS2tVbi * model.MOS2type + factor * phiMinVbs;
-                if ((model.MOS2gamma > 0.0) ||
-                (model.MOS2substrateDoping > 0.0))
+                if ((model.MOS2gamma > 0.0) || (model.MOS2substrateDoping > 0.0))
                 {
                     xwd = model.MOS2xd * barg;
                     xws = model.MOS2xd * sarg;
 
-                    /*
-					*     short-channel effect with vds .ne. 0.0
+                    /* 
+					* short - channel effect with vds .ne. 0.0
 					*/
 
                     argss = 0.0;
@@ -798,12 +791,10 @@ namespace SpiceSharp.Components
                         tmp = 0.5 / EffectiveLength;
                         dbargs = tmp * dbxws / args;
                         dbargd = tmp * dbxwd / argd;
-                        dasdb2 = -model.MOS2xd * (d2sdb2 + dsrgdb * dsrgdb *
-                        model.MOS2xd / (model.MOS2junctionDepth * argxs)) /
-                        (EffectiveLength * args);
-                        daddb2 = -model.MOS2xd * (d2bdb2 + dbrgdb * dbrgdb *
-                        model.MOS2xd / (model.MOS2junctionDepth * argxd)) /
-                        (EffectiveLength * argd);
+                        dasdb2 = -model.MOS2xd * (d2sdb2 + dsrgdb * dsrgdb * model.MOS2xd / (model.MOS2junctionDepth * argxs)) / (EffectiveLength *
+                            args);
+                        daddb2 = -model.MOS2xd * (d2bdb2 + dbrgdb * dbrgdb * model.MOS2xd / (model.MOS2junctionDepth * argxd)) / (EffectiveLength *
+                            argd);
                         dgddb2 = -0.5 * model.MOS2gamma * (dasdb2 + daddb2);
                     }
                     dgddvb = -model.MOS2gamma * (dbargs + dbargd);
@@ -827,8 +818,7 @@ namespace SpiceSharp.Components
                 if (model.MOS2fastSurfaceStateDensity != 0.0 && OxideCap != 0.0)
                 {
                     /* XXX constant per model */
-                    cfs = Circuit.CHARGE * model.MOS2fastSurfaceStateDensity *
-                    1e4 /*(cm**2/m**2)*/;
+                    cfs = Circuit.CHARGE * model.MOS2fastSurfaceStateDensity * 1e4 /* (cm *  * 2 / m *  * 2) */ ;
                     cdonco = -(gamasd * dsrgdb + dgddvb * sarg) + factor;
                     xn = 1.0 + cfs / OxideCap * MOS2w * EffectiveLength + cdonco;
                     tmp = vt * xn;
@@ -841,16 +831,16 @@ namespace SpiceSharp.Components
                     vgst = lvgs - von;
                     if (lvgs <= von)
                     {
-                        /*
-						*  cutoff region
+                        /* 
+						* cutoff region
 						*/
                         MOS2gds = 0.0;
                         goto line1050;
                     }
                 }
 
-                /*
-				*  compute some more useful quantities
+                /* 
+				* compute some more useful quantities
 				*/
 
                 sarg3 = sarg * sarg * sarg;
@@ -861,36 +851,37 @@ namespace SpiceSharp.Components
                 body = barg * barg * barg - sarg3;
                 gdbdv = 2.0 * gammad * (barg * barg * dbrgdb - sarg * sarg * dsrgdb);
                 dodvbs = -factor + dgdvbs * sarg + gammad * dsrgdb;
-                if (model.MOS2fastSurfaceStateDensity == 0.0) goto line400;
-                if (OxideCap == 0.0) goto line410;
+                if (model.MOS2fastSurfaceStateDensity.Value == 0.0)
+                    goto line400;
+                if (OxideCap == 0.0)
+                    goto line410;
                 dxndvb = 2.0 * dgdvbs * dsrgdb + gammad * d2sdb2 + dgddb2 * sarg;
                 dodvbs = dodvbs + vt * dxndvb;
                 dxndvd = dgdvds * dsrgdb;
                 dodvds = dgdvds * sarg + vt * dxndvd;
-                /*
-				*  evaluate effective mobility and its derivatives
+                /* 
+				* evaluate effective mobility and its derivatives
 				*/
                 line400:
                 if (OxideCap <= 0.0) goto line410;
                 udenom = vgst;
-                tmp = model.MOS2critField * 100 /* cm/m */ * Transistor.EPSSIL /
-                model.MOS2oxideCapFactor;
+                tmp = model.MOS2critField * 100 /* cm / m */  * Transistor.EPSSIL / model.MOS2oxideCapFactor;
                 if (udenom <= tmp) goto line410;
                 ufact = Math.Exp(model.MOS2critFieldExp * Math.Log(tmp / udenom));
-                ueff = model.MOS2surfaceMobility * 1e-4 /*(m**2/cm**2) */ * ufact;
+                ueff = model.MOS2surfaceMobility * 1e-4 /* (m *  * 2 / cm *  * 2) */  * ufact;
                 dudvgs = -ufact * model.MOS2critFieldExp / udenom;
                 dudvds = 0.0;
                 dudvbs = model.MOS2critFieldExp * ufact * dodvbs / vgst;
                 goto line500;
                 line410:
                 ufact = 1.0;
-                ueff = model.MOS2surfaceMobility * 1e-4 /*(m**2/cm**2) */ ;
+                ueff = model.MOS2surfaceMobility * 1e-4 /* (m *  * 2 / cm *  * 2) */ ;
                 dudvgs = 0.0;
                 dudvds = 0.0;
                 dudvbs = 0.0;
-                /*
-				*     evaluate saturation voltage and its derivatives according to
-				*     grove-frohman equation
+                /* 
+				* evaluate saturation voltage and its derivatives according to
+				* grove - frohman equation
 				*/
                 line500:
                 vgsx = lvgs;
@@ -916,8 +907,7 @@ namespace SpiceSharp.Components
                         vdsat = (vgsx - vbin) / eta + gammd2 * (1.0 - arg) / 2.0;
                         vdsat = Math.Max(vdsat, 0.0);
                         dsdvgs = (1.0 - 1.0 / arg) / eta;
-                        dsdvbs = (gammad * (1.0 - arg) + 2.0 * argv / (gammad * arg)) /
-                        eta * dgdvbs + 1.0 / arg + factor * dsdvgs;
+                        dsdvbs = (gammad * (1.0 - arg) + 2.0 * argv / (gammad * arg)) / eta * dgdvbs + 1.0 / arg + factor * dsdvgs;
                     }
                 }
                 else
@@ -930,9 +920,9 @@ namespace SpiceSharp.Components
                 if (model.MOS2maxDriftVel > 0)
                 {
                     /* 
-					*     evaluate saturation voltage and its derivatives 
-					*     according to baum's theory of scattering velocity 
-					*     saturation
+					* evaluate saturation voltage and its derivatives 
+					* according to baum's theory of scattering velocity 
+					* saturation
 					*/
                     gammd2 = gammad * gammad;
                     v1 = (vgsx - vbin) / eta + phiMinVbs;
@@ -976,7 +966,8 @@ namespace SpiceSharp.Components
                         a4[i - 1] = a1 / 2.0 + sig1[i - 1] * a3;
                         b4[i - 1] = y3 / 2.0 + sig2[i - 1] * b3;
                         delta4 = a4[i - 1] * a4[i - 1] / 4.0 - b4[i - 1];
-                        if (delta4 < 0) continue;
+                        if (delta4 < 0)
+                            continue;
                         iknt = iknt + 1;
                         tmp = Math.Sqrt(delta4);
                         x4[iknt - 1] = -a4[i - 1] / 2.0 + tmp;
@@ -988,16 +979,17 @@ namespace SpiceSharp.Components
                     {
                         if (x4[j - 1] <= 0) continue;
                         /* XXX implement this sanely */
-                        poly4[j - 1] = x4[j - 1] * x4[j - 1] * x4[j - 1] * x4[j - 1] + a1 * x4[j - 1] *
-                        x4[j - 1] * x4[j - 1];
+                        poly4[j - 1] = x4[j - 1] * x4[j - 1] * x4[j - 1] * x4[j - 1] + a1 * x4[j - 1] * x4[j - 1] * x4[j - 1];
                         poly4[j - 1] = poly4[j - 1] + b1 * x4[j - 1] * x4[j - 1] + c1 * x4[j - 1] + d1;
-                        if (Math.Abs(poly4[j - 1]) > 1.0e-6) continue;
+                        if (Math.Abs(poly4[j - 1]) > 1.0e-6)
+                            continue;
                         jknt = jknt + 1;
                         if (jknt <= 1)
                         {
                             xvalid = x4[j - 1];
                         }
-                        if (x4[j - 1] > xvalid) continue;
+                        if (x4[j - 1] > xvalid)
+                            continue;
                         xvalid = x4[j - 1];
                     }
                     if (jknt > 0)
@@ -1005,8 +997,8 @@ namespace SpiceSharp.Components
                         vdsat = xvalid * xvalid - phiMinVbs;
                     }
                 }
-                /*
-				*  evaluate effective channel length and its derivatives
+                /* 
+				* evaluate effective channel length and its derivatives
 				*/
                 if (lvds != 0.0)
                 {
@@ -1025,21 +1017,16 @@ namespace SpiceSharp.Components
                     gdbdvs = 2.0 * gammad * (bsarg * bsarg * dbsrdb - sarg * sarg * dsrgdb);
                     if (model.MOS2maxDriftVel <= 0)
                     {
-                        if (model.MOS2substrateDoping == 0.0 || xlamda > 0.0)
-                        {
-                            dldvgs = 0.0;
-                            dldvds = 0.0;
-                            dldvbs = 0.0;
-                        }
-                        else
-                        {
-                            argv = (lvds - vdsat) / 4.0;
-                            sargv = Math.Sqrt(1.0 + argv * argv);
-                            arg = Math.Sqrt(argv + sargv);
-                            xlfact = model.MOS2xd / (EffectiveLength * lvds);
-                            xlamda = xlfact * arg;
-                            dldsat = lvds * xlamda / (8.0 * sargv);
-                        }
+                        if (model.MOS2substrateDoping.Value == 0.0)
+                            goto line610;
+                        if (xlamda > 0.0)
+                            goto line610;
+                        argv = (lvds - vdsat) / 4.0;
+                        sargv = Math.Sqrt(1.0 + argv * argv);
+                        arg = Math.Sqrt(argv + sargv);
+                        xlfact = model.MOS2xd / (EffectiveLength * lvds);
+                        xlamda = xlfact * arg;
+                        dldsat = lvds * xlamda / (8.0 * sargv);
                     }
                     else
                     {
@@ -1051,39 +1038,36 @@ namespace SpiceSharp.Components
                         vl = model.MOS2maxDriftVel * EffectiveLength;
                         dfunds = vl * dqdsat - ueff * vqchan;
                         dfundg = (vl - ueff * vdsat) / eta;
-                        dfundb = -vl * (1.0 + dqdsat - factor / eta) + ueff *
-                        (gdbdvs - dgdvbs * bodys / 1.5) / eta;
+                        dfundb = -vl * (1.0 + dqdsat - factor / eta) + ueff * (gdbdvs - dgdvbs * bodys / 1.5) / eta;
                         dsdvgs = -dfundg / dfunds;
                         dsdvbs = -dfundb / dfunds;
-                        if (model.MOS2substrateDoping == 0.0 || xlamda > 0.0)
-                        {
-                            dldvgs = 0.0;
-                            dldvds = 0.0;
-                            dldvbs = 0.0;
-                        }
-                        else
-                        {
-                            argv = lvds - vdsat;
-                            argv = Math.Max(argv, 0.0);
-                            xls = Math.Sqrt(xlv * xlv + argv);
-                            dldsat = xdv / (2.0 * xls);
-                            xlfact = xdv / (EffectiveLength * lvds);
-                            xlamda = xlfact * (xls - xlv);
-                            dldsat = dldsat / EffectiveLength;
-                        }
+                        if (model.MOS2substrateDoping.Value == 0.0)
+                            goto line610;
+                        if (xlamda > 0.0)
+                            goto line610;
+                        argv = lvds - vdsat;
+                        argv = Math.Max(argv, 0.0);
+                        xls = Math.Sqrt(xlv * xlv + argv);
+                        dldsat = xdv / (2.0 * xls);
+                        xlfact = xdv / (EffectiveLength * lvds);
+                        xlamda = xlfact * (xls - xlv);
+                        dldsat = dldsat / EffectiveLength;
                     }
                     dldvgs = dldsat * dsdvgs;
                     dldvds = -xlamda + dldsat;
                     dldvbs = dldsat * dsdvbs;
                 }
-                else
-                {
-                    dldvgs = 0.0;
-                    dldvds = 0.0;
-                    dldvbs = 0.0;
-                }
-                /*
-				*     limit channel shortening at punch-through
+
+                // Edited to work
+                goto line610_finish;
+                line610:
+                dldvgs = 0.0;
+                dldvds = 0.0;
+                dldvbs = 0.0;
+                line610_finish:
+
+                /* 
+				* limit channel shortening at punch - through
 				*/
                 xwb = model.MOS2xd * sbiarg;
                 xld = EffectiveLength - xwb;
@@ -1091,7 +1075,7 @@ namespace SpiceSharp.Components
                 dldvds = -xlamda - dldvds;
                 xleff = EffectiveLength * clfact;
                 deltal = xlamda * lvds * EffectiveLength;
-                if (model.MOS2substrateDoping == 0.0)
+                if (model.MOS2substrateDoping.Value == 0.0)
                     xwb = 0.25e-6;
                 if (xleff < xwb)
                 {
@@ -1102,12 +1086,12 @@ namespace SpiceSharp.Components
                     dldvds = dfact * dldvds;
                     dldvbs = dfact * dldvbs;
                 }
-                /*
-				*  evaluate effective beta (effective kp)
+                /* 
+				* evaluate effective beta (effective kp)
 				*/
                 beta1 = Beta * ufact / clfact;
-                /*
-				*  test for mode of operation and branch appropriately
+                /* 
+				* test for mode of operation and branch appropriately
 				*/
                 gammad = gamasd;
                 dgdvbs = dgddvb;
@@ -1115,15 +1099,13 @@ namespace SpiceSharp.Components
                 {
                     if (lvgs <= von)
                     {
-                        if ((model.MOS2fastSurfaceStateDensity == 0.0) ||
-                        (OxideCap == 0.0))
+                        if ((model.MOS2fastSurfaceStateDensity.Value == 0.0) || (OxideCap == 0.0))
                         {
                             MOS2gds = 0.0;
                             goto line1050;
                         }
 
-                        MOS2gds = beta1 * (von - vbin - gammad * sarg) * Math.Exp(argg *
-                        (lvgs - von));
+                        MOS2gds = beta1 * (von - vbin - gammad * sarg) * Math.Exp(argg * (lvgs - von));
                         goto line1050;
                     }
 
@@ -1131,14 +1113,16 @@ namespace SpiceSharp.Components
                     goto line1050;
                 }
 
-                if (lvgs > von) goto line900;
-                /*
-				*  subthreshold region
+                if (lvgs > von)
+                    goto line900;
+                /* 
+				* subthreshold region
 				*/
                 if (vdsat <= 0)
                 {
                     MOS2gds = 0.0;
-                    if (lvgs > vth) goto doneval;
+                    if (lvgs > vth)
+                        goto doneval;
                     goto line1050;
                 }
                 vdson = Math.Min(vdsat, lvds);
@@ -1152,15 +1136,17 @@ namespace SpiceSharp.Components
                 cdson = beta1 * ((von - vbin - eta * vdson * 0.5) * vdson - gammad * body / 1.5);
                 didvds = beta1 * (von - vbin - eta * vdson - gammad * barg);
                 gdson = -cdson * dldvds / clfact - beta1 * dgdvds * body / 1.5;
-                if (lvds < vdsat) gdson = gdson + didvds;
-                gbson = -cdson * dldvbs / clfact + beta1 *
-                (dodvbs * vdson + factor * vdson - dgdvbs * body / 1.5 - gdbdv);
-                if (lvds > vdsat) gbson = gbson + didvds * dsdvbs;
+                if (lvds < vdsat)
+                    gdson = gdson + didvds;
+                gbson = -cdson * dldvbs / clfact + beta1 * (dodvbs * vdson + factor * vdson - dgdvbs * body / 1.5 - gdbdv);
+                if (lvds > vdsat)
+                    gbson = gbson + didvds * dsdvbs;
                 expg = Math.Exp(argg * (lvgs - von));
                 cdrain = cdson * expg;
                 gmw = cdrain * argg;
                 MOS2gm = gmw;
-                if (lvds > vdsat) MOS2gm = gmw + didvds * dsdvgs * expg;
+                if (lvds > vdsat)
+                    MOS2gm = gmw + didvds * dsdvgs * expg;
                 tmp = gmw * (lvgs - von) / xn;
                 MOS2gds = gdson * expg - MOS2gm * dodvds - tmp * dxndvd;
                 MOS2gmbs = gbson * expg - MOS2gm * dodvbs - tmp * dxndvb;
@@ -1169,91 +1155,87 @@ namespace SpiceSharp.Components
                 line900:
                 if (lvds <= vdsat)
                 {
-                    /*
-					*  linear region
+                    /* 
+					* linear region
 					*/
                     cdrain = beta1 * ((lvgs - vbin - eta * lvds / 2.0) * lvds - gammad * body / 1.5);
                     arg = cdrain * (dudvgs / ufact - dldvgs / clfact);
                     MOS2gm = arg + beta1 * lvds;
                     arg = cdrain * (dudvds / ufact - dldvds / clfact);
-                    MOS2gds = arg + beta1 * (lvgs - vbin - eta *
-                    lvds - gammad * barg - dgdvds * body / 1.5);
+                    MOS2gds = arg + beta1 * (lvgs - vbin - eta * lvds - gammad * barg - dgdvds * body / 1.5);
                     arg = cdrain * (dudvbs / ufact - dldvbs / clfact);
                     MOS2gmbs = arg - beta1 * (gdbdv + dgdvbs * body / 1.5 - factor * lvds);
                 }
                 else
                 {
                     /* 
-					*  saturation region
+					* saturation region
 					*/
-                    cdrain = beta1 * ((lvgs - vbin - eta *
-                    vdsat / 2.0) * vdsat - gammad * bodys / 1.5);
+                    cdrain = beta1 * ((lvgs - vbin - eta * vdsat / 2.0) * vdsat - gammad * bodys / 1.5);
                     arg = cdrain * (dudvgs / ufact - dldvgs / clfact);
-                    MOS2gm = arg + beta1 * vdsat + beta1 * (lvgs -
-                    vbin - eta * vdsat - gammad * bsarg) * dsdvgs;
+                    MOS2gm = arg + beta1 * vdsat + beta1 * (lvgs - vbin - eta * vdsat - gammad * bsarg) * dsdvgs;
                     MOS2gds = -cdrain * dldvds / clfact - beta1 * dgdvds * bodys / 1.5;
                     arg = cdrain * (dudvbs / ufact - dldvbs / clfact);
-                    MOS2gmbs = arg - beta1 * (gdbdvs + dgdvbs * bodys / 1.5 - factor *
-                    vdsat) + beta1 * (lvgs - vbin - eta * vdsat - gammad * bsarg) * dsdvbs;
+                    MOS2gmbs = arg - beta1 * (gdbdvs + dgdvbs * bodys / 1.5 - factor * vdsat) + beta1 * (lvgs - vbin - eta * vdsat - gammad *
+                        bsarg) * dsdvbs;
                 }
-                /*
-				*     compute charges for "on" region
+                /* 
+				* compute charges for "on" region
 				*/
                 goto doneval;
-                /*
-				*  finish special cases
+                /* 
+				* finish special cases
 				*/
                 line1050:
                 cdrain = 0.0;
                 MOS2gm = 0.0;
                 MOS2gmbs = 0.0;
-                /*
-				*  finished
+                /* 
+				* finished
 				*/
 
             }
             doneval:
             MOS2von = model.MOS2type * von;
             MOS2vdsat = model.MOS2type * vdsat;
-            /*
-			*  COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
+            /* 
+			* COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
 			*/
             MOS2cd = MOS2mode * cdrain - MOS2cbd;
 
-            if (state.Domain == CircuitState.DomainTypes.Time || state.UseDC)
+            if (state.Domain == CircuitState.DomainTypes.Time || state.UseSmallSignal)
             {
                 /* 
-				* now we do the hard part of the bulk-drain and bulk-source
-				* diode - we evaluate the non-linear capacitance and
+				* now we do the hard part of the bulk - drain and bulk - source
+				* diode - we evaluate the non - linear capacitance and
 				* charge
-				*
+				* 
 				* the basic equations are not hard, but the implementation
-				* is somewhat long in an attempt to avoid log/exponential
+				* is somewhat long in an attempt to avoid log / exponential
 				* evaluations
 				*/
-                /*
-				*  charge storage elements
-				*
-				*.. bulk-drain and bulk-source depletion capacitances
+                /* 
+				* charge storage elements
+				* 
+				* .. bulk - drain and bulk - source depletion capacitances
 				*/
-                /*CAPBYPASS*/
+                /* CAPBYPASS */
                 {
                     /* can't bypass the diode capacitance calculations */
-                    /*CAPZEROBYPASS*/
+                    /* CAPZEROBYPASS */
                     if (vbs < MOS2tDepCap)
                     {
-                        arg = 1 - vbs / MOS2tBulkPot;
-                        /*
-						* the following block looks somewhat long and messy,
+                        double arg = 1 - vbs / MOS2tBulkPot, sarg;
+                        /* 
+						* the following block looks somewhat long and messy, 
 						* but since most users use the default grading
 						* coefficients of .5, and sqrt is MUCH faster than an
 						* Math.Exp(Math.Log()) we use this special case code to buy time.
 						* (as much as 10% of total job time!)
 						*/
-                        if (model.MOS2bulkJctBotGradingCoeff ==
-                        model.MOS2bulkJctSideGradingCoeff)
+                        if (model.MOS2bulkJctBotGradingCoeff.Value == model.MOS2bulkJctSideGradingCoeff)
                         {
-                            if (model.MOS2bulkJctBotGradingCoeff == .5)
+                            if (model.MOS2bulkJctBotGradingCoeff.Value == .5)
                             {
                                 sarg = sargsw = 1 / Math.Sqrt(arg);
                             }
@@ -1264,101 +1246,98 @@ namespace SpiceSharp.Components
                         }
                         else
                         {
-                            if (model.MOS2bulkJctBotGradingCoeff == .5)
+                            if (model.MOS2bulkJctBotGradingCoeff.Value == .5)
                             {
                                 sarg = 1 / Math.Sqrt(arg);
                             }
                             else
                             {
-                                /*NOSQRT*/
+                                /* NOSQRT */
                                 sarg = Math.Exp(-model.MOS2bulkJctBotGradingCoeff * Math.Log(arg));
                             }
-                            if (model.MOS2bulkJctSideGradingCoeff == .5)
+                            if (model.MOS2bulkJctSideGradingCoeff.Value == .5)
                             {
                                 sargsw = 1 / Math.Sqrt(arg);
                             }
                             else
                             {
-                                /*NOSQRT*/
+                                /* NOSQRT */
                                 sargsw = Math.Exp(-model.MOS2bulkJctSideGradingCoeff * Math.Log(arg));
                             }
                         }
-                        /*NOSQRT*/
-                        state.States[0][MOS2states + MOS2qbs] = MOS2tBulkPot * (MOS2Cbs * (1 - arg * sarg) / (1 - model.MOS2bulkJctBotGradingCoeff)
-                            + MOS2Cbssw * (1 - arg * sargsw) / (1 - model.MOS2bulkJctSideGradingCoeff));
-                        MOS2capbs = MOS2Cbs * sarg +
-                        MOS2Cbssw * sargsw;
+                        /* NOSQRT */
+                        state.States[0][MOS2states + MOS2qbs] = MOS2tBulkPot * (MOS2Cbs * (1 - arg * sarg) / (1 - model.MOS2bulkJctBotGradingCoeff) +
+                            MOS2Cbssw * (1 - arg * sargsw) / (1 - model.MOS2bulkJctSideGradingCoeff));
+                        MOS2capbs = MOS2Cbs * sarg + MOS2Cbssw * sargsw;
                     }
                     else
                     {
                         state.States[0][MOS2states + MOS2qbs] = MOS2f4s + vbs * (MOS2f2s + vbs * (MOS2f3s / 2));
                         MOS2capbs = MOS2f2s + MOS2f3s * vbs;
                     }
-                    /*CAPZEROBYPASS*/
+                    /* CAPZEROBYPASS */
                 }
-                /*CAPBYPASS*/
+                /* CAPBYPASS */
                 /* can't bypass the diode capacitance calculations */
                 {
-                    /*CAPZEROBYPASS*/
+                    /* CAPZEROBYPASS */
                     if (vbd < MOS2tDepCap)
                     {
-                        arg = 1 - vbd / MOS2tBulkPot;
-                        /*
-						* the following block looks somewhat long and messy,
+                        double arg = 1 - vbd / MOS2tBulkPot, sarg;
+                        /* 
+						* the following block looks somewhat long and messy, 
 						* but since most users use the default grading
 						* coefficients of .5, and sqrt is MUCH faster than an
 						* Math.Exp(Math.Log()) we use this special case code to buy time.
 						* (as much as 10% of total job time!)
 						*/
-                        if (model.MOS2bulkJctBotGradingCoeff == .5 && model.MOS2bulkJctSideGradingCoeff == .5)
+                        if (model.MOS2bulkJctBotGradingCoeff.Value == .5 && model.MOS2bulkJctSideGradingCoeff.Value == .5)
                         {
                             sarg = sargsw = 1 / Math.Sqrt(arg);
                         }
                         else
                         {
-                            if (model.MOS2bulkJctBotGradingCoeff == .5)
+                            if (model.MOS2bulkJctBotGradingCoeff.Value == .5)
                             {
                                 sarg = 1 / Math.Sqrt(arg);
                             }
                             else
                             {
-                                /*NOSQRT*/
+                                /* NOSQRT */
                                 sarg = Math.Exp(-model.MOS2bulkJctBotGradingCoeff * Math.Log(arg));
                             }
-                            if (model.MOS2bulkJctSideGradingCoeff == .5)
+                            if (model.MOS2bulkJctSideGradingCoeff.Value == .5)
                             {
                                 sargsw = 1 / Math.Sqrt(arg);
                             }
                             else
                             {
-                                /*NOSQRT*/
-                                sargsw = Math.Exp(-model.MOS2bulkJctSideGradingCoeff *
-                                Math.Log(arg));
+                                /* NOSQRT */
+                                sargsw = Math.Exp(-model.MOS2bulkJctSideGradingCoeff * Math.Log(arg));
                             }
                         }
-                        /*NOSQRT*/
-                        state.States[0][MOS2states + MOS2qbd] = MOS2tBulkPot * (MOS2Cbd * (1 - arg * sarg) / (1 - model.MOS2bulkJctBotGradingCoeff)
-                            + MOS2Cbdsw * (1 - arg * sargsw) / (1 - model.MOS2bulkJctSideGradingCoeff));
-                        MOS2capbd = MOS2Cbd * sarg +
-                        MOS2Cbdsw * sargsw;
+                        /* NOSQRT */
+                        state.States[0][MOS2states + MOS2qbd] = MOS2tBulkPot * (MOS2Cbd * (1 - arg * sarg) / (1 - model.MOS2bulkJctBotGradingCoeff) +
+                            MOS2Cbdsw * (1 - arg * sargsw) / (1 - model.MOS2bulkJctSideGradingCoeff));
+                        MOS2capbd = MOS2Cbd * sarg + MOS2Cbdsw * sargsw;
                     }
                     else
                     {
                         state.States[0][MOS2states + MOS2qbd] = MOS2f4d + vbd * (MOS2f2d + vbd * MOS2f3d / 2);
                         MOS2capbd = MOS2f2d + vbd * MOS2f3d;
                     }
-                    /*CAPZEROBYPASS*/
+                    /* CAPZEROBYPASS */
                 }
 
                 if (method != null)
                 {
                     /* (above only excludes tranop, since we're only at this
-					* point if tran or tranop )
+					* point if tran or tranop)
 					*/
 
-                    /*
-					*    calculate equivalent conductances and currents for
-					*    depletion capacitors
+                    /* 
+					* calculate equivalent conductances and currents for
+					* depletion capacitors
 					*/
 
                     /* integrate the capacitors and save results */
@@ -1372,10 +1351,10 @@ namespace SpiceSharp.Components
                 }
             }
 
-            /*
-			 *  check convergence
+            /* 
+			 * check convergence
 			 */
-            if (!MOS2off || !(state.Init == CircuitState.InitFlags.InitFix || state.UseSmallSignal))
+            if (!MOS2off || (!(state.Init == CircuitState.InitFlags.InitFix || state.UseSmallSignal)))
             {
                 if (Check == 1)
                     state.IsCon = false;
@@ -1385,22 +1364,29 @@ namespace SpiceSharp.Components
             state.States[0][MOS2states + MOS2vgs] = vgs;
             state.States[0][MOS2states + MOS2vds] = vds;
 
-            /*
-			 *     meyer's capacitor model
-			 */
+            /* 
+			* meyer's capacitor model
+			*/
             if (state.Domain == CircuitState.DomainTypes.Time || state.UseSmallSignal)
             {
-                /*
-				 *     calculate meyer's capacitors
+                /* 
+				 * calculate meyer's capacitors
 				 */
                 double icapgs, icapgd, icapgb;
                 if (MOS2mode > 0)
-                    Transistor.DEVqmeyer(vgs, vgd, vgb, von, vdsat, out icapgs, out icapgd, out icapgb, MOS2tPhi, OxideCap);
+                {
+                    Transistor.DEVqmeyer(vgs, vgd, vgb, von, vdsat,
+                        out icapgs, out icapgd, out icapgb, MOS2tPhi, OxideCap);
+                }
                 else
-                    Transistor.DEVqmeyer(vgd, vgs, vgb, von, vdsat, out icapgd, out icapgs, out icapgb, MOS2tPhi, OxideCap);
+                {
+                    Transistor.DEVqmeyer(vgd, vgs, vgb, von, vdsat,
+                        out icapgd, out icapgs, out icapgb, MOS2tPhi, OxideCap);
+                }
                 state.States[0][MOS2states + MOS2capgs] = icapgs;
                 state.States[0][MOS2states + MOS2capgd] = icapgd;
                 state.States[0][MOS2states + MOS2capgb] = icapgb;
+
                 vgs1 = state.States[1][MOS2states + MOS2vgs];
                 vgd1 = vgs1 - state.States[1][MOS2states + MOS2vds];
                 vgb1 = vgs1 - state.States[1][MOS2states + MOS2vbs];
@@ -1417,11 +1403,11 @@ namespace SpiceSharp.Components
                     capgb = state.States[0][MOS2states + MOS2capgb] + state.States[1][MOS2states + MOS2capgb] + GateBulkOverlapCap;
                 }
 
-                /*
-				*     store small-signal parameters (for meyer's model)
-				*  all parameters already stored, so done...
+                /* 
+				* store small - signal parameters (for meyer's model)
+				* all parameters already stored, so done...
 				*/
-
+                
                 /* PREDICTOR */
                 if (method != null)
                 {
@@ -1439,7 +1425,6 @@ namespace SpiceSharp.Components
                 /* PREDICTOR */
             }
             /* NOBYPASS */
-
             if ((method != null && method.SavedTime == 0.0) || method == null)
             {
                 /* initialize to zero charge conductances and current */
@@ -1459,9 +1444,9 @@ namespace SpiceSharp.Components
                     state.States[0][MOS2states + MOS2cqgd] = 0;
                 if (capgb == 0)
                     state.States[0][MOS2states + MOS2cqgb] = 0;
-                /*
-				 *    calculate equivalent conductances and currents for
-				 *    meyer"s capacitors
+                /* 
+				 * calculate equivalent conductances and currents for
+				 * meyer"s capacitors
 				 */
                 method.Integrate(state, out gcgs, out ceqgs, MOS2states + MOS2qgs, capgs);
                 method.Integrate(state, out gcgd, out ceqgd, MOS2states + MOS2qgd, capgd);
@@ -1470,12 +1455,12 @@ namespace SpiceSharp.Components
                 ceqgd = ceqgd - gcgd * vgd + method.Slope * state.States[0][MOS2states + MOS2qgd];
                 ceqgb = ceqgb - gcgb * vgb + method.Slope * state.States[0][MOS2states + MOS2qgb];
             }
-            /*
-			*     store charge storage info for meyer's cap in lx table
+            /* 
+			* store charge storage info for meyer's cap in lx table
 			*/
 
-            /*
-			*  load current vector
+            /* 
+			* load current vector
 			*/
             ceqbs = model.MOS2type * (MOS2cbs - (MOS2gbs - state.Gmin) * vbs);
             ceqbd = model.MOS2type * (MOS2cbd - (MOS2gbd - state.Gmin) * vbd);
@@ -1491,18 +1476,21 @@ namespace SpiceSharp.Components
                 xrev = 1;
                 cdreq = -(model.MOS2type) * (cdrain - MOS2gds * (-vds) - MOS2gm * vgd - MOS2gmbs * vbd);
             }
-
-            /*
-             * Load rhs vector
-             */
             rstate.Rhs[MOS2gNode] -= model.MOS2type * (ceqgs + ceqgb + ceqgd);
             rstate.Rhs[MOS2bNode] -= (ceqbs + ceqbd - model.MOS2type * ceqgb);
             rstate.Rhs[MOS2dNodePrime] += ceqbd - cdreq + model.MOS2type * ceqgd;
             rstate.Rhs[MOS2sNodePrime] += cdreq + ceqbs + model.MOS2type * ceqgs;
 
-            /*
-			 *  load y matrix
-			 */
+            /* printf(" loading %s at time %g\n", MOS2name, ckt.CKTtime); /*  */
+            /* printf("%g %g %g %g %g\n", MOS2drainConductance, gcgd + gcgs + gcgb, 
+			MOS2sourceConductance, MOS2gbd, MOS2gbs); /*  */
+            /* printf("%g %g %g %g %g\n", -gcgb, 0.0, 0.0, MOS2gds, MOS2gm); /*  */
+            /* printf("%g %g %g %g %g\n", MOS2gds, MOS2gmbs, gcgd, -gcgs, -gcgd); /*  */
+            /* printf("%g %g %g %g %g\n", -gcgs, -gcgd, 0.0, -gcgs, 0.0); /*  */
+
+            /* 
+			* load y matrix
+			*/
             rstate.Matrix[MOS2dNode, MOS2dNode] += (MOS2drainConductance);
             rstate.Matrix[MOS2gNode, MOS2gNode] += gcgd + gcgs + gcgb;
             rstate.Matrix[MOS2sNode, MOS2sNode] += (MOS2sourceConductance);
@@ -1533,23 +1521,12 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void AcLoad(Circuit ckt)
         {
-            MOS2Model model = (MOS2Model)Model;
+            var model = Model as MOS2Model;
             var state = ckt.State;
             var cstate = state.Complex;
-            int xnrm;
-            int xrev;
-            double EffectiveLength;
-            double GateSourceOverlapCap;
-            double GateDrainOverlapCap;
-            double GateBulkOverlapCap;
-            double capgs;
-            double capgd;
-            double capgb;
-            Complex xgs;
-            Complex xgd;
-            Complex xgb;
-            Complex xbd;
-            Complex xbs;
+            int xnrm, xrev;
+            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, capgs, capgd, capgb, xgs, xgd, xgb, xbd,
+                xbs;
 
             if (MOS2mode < 0)
             {
@@ -1561,8 +1538,8 @@ namespace SpiceSharp.Components
                 xnrm = 1;
                 xrev = 0;
             }
-            /*
-			*     meyer's model parameters
+            /* 
+			* meyer's model parameters
 			*/
             EffectiveLength = MOS2l - 2 * model.MOS2latDiff;
             GateSourceOverlapCap = model.MOS2gateSourceOverlapCapFactor * MOS2w;
@@ -1571,45 +1548,43 @@ namespace SpiceSharp.Components
             capgs = (state.States[0][MOS2states + MOS2capgs] + state.States[0][MOS2states + MOS2capgs] + GateSourceOverlapCap);
             capgd = (state.States[0][MOS2states + MOS2capgd] + state.States[0][MOS2states + MOS2capgd] + GateDrainOverlapCap);
             capgb = (state.States[0][MOS2states + MOS2capgb] + state.States[0][MOS2states + MOS2capgb] + GateBulkOverlapCap);
-            xgs = capgs * cstate.Laplace;
-            xgd = capgd * cstate.Laplace;
-            xgb = capgb * cstate.Laplace;
-            xbd = MOS2capbd * cstate.Laplace;
-            xbs = MOS2capbs * cstate.Laplace;
+            xgs = capgs * cstate.Laplace.Imaginary;
+            xgd = capgd * cstate.Laplace.Imaginary;
+            xgb = capgb * cstate.Laplace.Imaginary;
+            xbd = MOS2capbd * cstate.Laplace.Imaginary;
+            xbs = MOS2capbs * cstate.Laplace.Imaginary;
+            /* 
+			* load matrix
+			*/
 
-            /*
-			 *    load matrix
-			 */
-            cstate.Matrix[MOS2gNode, MOS2gNode] += xgd + xgs + xgb;
-            cstate.Matrix[MOS2bNode, MOS2bNode] += xgb + xbd + xbs;
-            cstate.Matrix[MOS2dNodePrime, MOS2dNodePrime] += xgd + xbd;
-            cstate.Matrix[MOS2sNodePrime, MOS2sNodePrime] += xgs + xbs;
-            cstate.Matrix[MOS2gNode, MOS2bNode] -= xgb;
-            cstate.Matrix[MOS2gNode, MOS2dNodePrime] -= xgd;
-            cstate.Matrix[MOS2gNode, MOS2sNodePrime] -= xgs;
-            cstate.Matrix[MOS2bNode, MOS2gNode] -= xgb;
-            cstate.Matrix[MOS2bNode, MOS2dNodePrime] -= xbd;
-            cstate.Matrix[MOS2bNode, MOS2sNodePrime] -= xbs;
-            cstate.Matrix[MOS2dNodePrime, MOS2gNode] -= xgd;
-            cstate.Matrix[MOS2dNodePrime, MOS2bNode] -= xbd;
-            cstate.Matrix[MOS2sNodePrime, MOS2gNode] -= xgs;
-            cstate.Matrix[MOS2sNodePrime, MOS2bNode] -= xbs;
+            cstate.Matrix[MOS2gNode, MOS2gNode] += new Complex(0.0, xgd + xgs + xgb);
+            cstate.Matrix[MOS2bNode, MOS2bNode] += new Complex(MOS2gbd + MOS2gbs, xgb + xbd + xbs);
+            cstate.Matrix[MOS2dNodePrime, MOS2dNodePrime] += new Complex(MOS2drainConductance + MOS2gds + MOS2gbd + xrev * (MOS2gm +
+                MOS2gmbs), xgd + xbd);
+            cstate.Matrix[MOS2sNodePrime, MOS2sNodePrime] += new Complex(MOS2sourceConductance + MOS2gds + MOS2gbs + xnrm * (MOS2gm +
+                MOS2gmbs), xgs + xbs);
+            cstate.Matrix[MOS2gNode, MOS2bNode] -= new Complex(0.0, xgb);
+            cstate.Matrix[MOS2gNode, MOS2dNodePrime] -= new Complex(0.0, xgd);
+            cstate.Matrix[MOS2gNode, MOS2sNodePrime] -= new Complex(0.0, xgs);
+            cstate.Matrix[MOS2bNode, MOS2gNode] -= new Complex(0.0, xgb);
+            cstate.Matrix[MOS2bNode, MOS2dNodePrime] -= new Complex(MOS2gbd, xbd);
+            cstate.Matrix[MOS2bNode, MOS2sNodePrime] -= new Complex(MOS2gbs, xbs);
+            cstate.Matrix[MOS2dNodePrime, MOS2gNode] += new Complex((xnrm - xrev) * MOS2gm, -xgd);
+            cstate.Matrix[MOS2dNodePrime, MOS2bNode] += new Complex(-MOS2gbd + (xnrm - xrev) * MOS2gmbs, -xbd);
+            cstate.Matrix[MOS2sNodePrime, MOS2gNode] -= new Complex((xnrm - xrev) * MOS2gm, xgs);
+            cstate.Matrix[MOS2sNodePrime, MOS2bNode] -= new Complex(MOS2gbs + (xnrm - xrev) * MOS2gmbs, xbs);
             cstate.Matrix[MOS2dNode, MOS2dNode] += MOS2drainConductance;
             cstate.Matrix[MOS2sNode, MOS2sNode] += MOS2sourceConductance;
-            cstate.Matrix[MOS2bNode, MOS2bNode] += MOS2gbd + MOS2gbs + xgb + xbd + xbs;
-            cstate.Matrix[MOS2dNodePrime, MOS2dNodePrime] += MOS2drainConductance + MOS2gds + MOS2gbd + xrev * (MOS2gm + MOS2gmbs) + xgd + xbd;
-            cstate.Matrix[MOS2sNodePrime, MOS2sNodePrime] += MOS2sourceConductance + MOS2gds + MOS2gbs + xnrm * (MOS2gm + MOS2gmbs) + xgs + xbs;
+
             cstate.Matrix[MOS2dNode, MOS2dNodePrime] -= MOS2drainConductance;
             cstate.Matrix[MOS2sNode, MOS2sNodePrime] -= MOS2sourceConductance;
-            cstate.Matrix[MOS2bNode, MOS2dNodePrime] -= MOS2gbd + xbd;
-            cstate.Matrix[MOS2bNode, MOS2sNodePrime] -= MOS2gbs + xbs;
+
             cstate.Matrix[MOS2dNodePrime, MOS2dNode] -= MOS2drainConductance;
-            cstate.Matrix[MOS2dNodePrime, MOS2gNode] += (xnrm - xrev) * MOS2gm - xgd;
-            cstate.Matrix[MOS2dNodePrime, MOS2bNode] += -MOS2gbd + (xnrm - xrev) * MOS2gmbs - xbd;
+
             cstate.Matrix[MOS2dNodePrime, MOS2sNodePrime] -= MOS2gds + xnrm * (MOS2gm + MOS2gmbs);
-            cstate.Matrix[MOS2sNodePrime, MOS2gNode] -= (xnrm - xrev) * MOS2gm + xgs;
+
             cstate.Matrix[MOS2sNodePrime, MOS2sNode] -= MOS2sourceConductance;
-            cstate.Matrix[MOS2sNodePrime, MOS2bNode] -= MOS2gbs + (xnrm - xrev) * MOS2gmbs + xbs;
+
             cstate.Matrix[MOS2sNodePrime, MOS2dNodePrime] -= MOS2gds + xrev * (MOS2gm + MOS2gmbs);
         }
     }

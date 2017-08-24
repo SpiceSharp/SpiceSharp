@@ -218,7 +218,7 @@ namespace Spice2SpiceSharp
                     return prefix + sp.GivenVariable[var] + ".Given";
                 if (!sp.Variables.Contains(var))
                     leftover.Add(var);
-                else if (m.Groups["assignment"].Success)
+                else if (sp.GivenVariable.ContainsValue(var) && m.Groups["assignment"].Success)
                     var += ".Value";
 
                 if (m.Groups["assignment"].Success)

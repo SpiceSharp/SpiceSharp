@@ -148,6 +148,7 @@ namespace SpiceSharp.Simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Domain = CircuitState.DomainTypes.Time;
+            state.Gmin = Config.Gmin;
 
             // Setup breakpoints
             method.Breaks.SetBreakpoint(InitTime);

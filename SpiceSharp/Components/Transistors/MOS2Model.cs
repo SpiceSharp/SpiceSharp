@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     public class MOS2Model : CircuitModel<MOS2Model>
     {
         /// <summary>
-        /// Register our parameters
+        /// Register our model parameters
         /// </summary>
         static MOS2Model()
         {
@@ -64,7 +64,7 @@ namespace SpiceSharp.Components
         [SpiceName("js"), SpiceInfo("Bulk jct. sat. current density")]
         public Parameter MOS2jctSatCurDensity { get; } = new Parameter();
         [SpiceName("tox"), SpiceInfo("Oxide thickness")]
-        public Parameter MOS2oxideThickness { get; } = new Parameter(1e-7);
+        public Parameter MOS2oxideThickness { get; } = new Parameter();
         [SpiceName("ld"), SpiceInfo("Lateral diffusion")]
         public Parameter MOS2latDiff { get; } = new Parameter();
         [SpiceName("rsh"), SpiceInfo("Sheet resistance")]
@@ -105,13 +105,13 @@ namespace SpiceSharp.Components
         public void SetNMOS(bool value)
         {
             if (value)
-                MOS2type = 1;
+                MOS2type = 1.0;
         }
         [SpiceName("pmos"), SpiceInfo("P type MOSfet model")]
         public void SetPMOS(bool value)
         {
             if (value)
-                MOS2type = -1;
+                MOS2type = -1.0;
         }
         [SpiceName("type"), SpiceInfo("N-channel or P-channel MOS")]
         public string GetTYPE(Circuit ckt)
@@ -133,7 +133,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Extra variables
         /// </summary>
-        public int MOS2type { get; private set; } = 1;
+        public double MOS2type { get; private set; } = 1.0;
         public double MOS2oxideCapFactor { get; private set; }
         public double MOS2xd { get; private set; }
 
@@ -151,13 +151,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            double kt1;
-            double arg1;
-            double fermis;
-            double wkfng;
-            double fermig;
-            double wkfngs;
-            double vfb;
+            double kt1, arg1, fermis, wkfng, fermig, wkfngs, vfb = 0.0;
 
             /* perform model defaulting */
 
@@ -171,19 +165,25 @@ namespace SpiceSharp.Components
             arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
             pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Circuit.CHARGE * arg1);
 
+            if (!MOS2oxideThickness.Given)
+            {
+                MOS2oxideThickness.Value = 1e-7;
+            }
             MOS2oxideCapFactor = 3.9 * 8.854214871e-12 / MOS2oxideThickness;
 
             if (!MOS2surfaceMobility.Given)
                 MOS2surfaceMobility.Value = 600;
             if (!MOS2transconductance.Given)
-                MOS2transconductance.Value = MOS2surfaceMobility * 1e-4 /*(m**2/cm**2) */ * MOS2oxideCapFactor;
+            {
+                MOS2transconductance.Value = MOS2surfaceMobility * 1e-4 * MOS2oxideCapFactor;
+            }
             if (MOS2substrateDoping.Given)
             {
-                if (MOS2substrateDoping * 1e6 /*(cm**3/m**3)*/ > 1.45e16)
+                if (MOS2substrateDoping * 1e6 > 1.45e16)
                 {
                     if (!MOS2phi.Given)
                     {
-                        MOS2phi.Value = 2 * vtnom * Math.Log(MOS2substrateDoping * 1e6 /*(cm**3/m**3)*// 1.45e16);
+                        MOS2phi.Value = 2 * vtnom * Math.Log(MOS2substrateDoping * 1e6 / 1.45e16);
                         MOS2phi.Value = Math.Max(.1, MOS2phi);
                     }
                     fermis = MOS2type * .5 * MOS2phi;
@@ -198,22 +198,20 @@ namespace SpiceSharp.Components
                     wkfngs = wkfng - (3.25 + .5 * egfet1 + fermis);
                     if (!MOS2gamma.Given)
                     {
-                        MOS2gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 *
-                        Circuit.CHARGE * MOS2substrateDoping *
-                        1e6 /*(cm**3/m**3)*/) / MOS2oxideCapFactor;
-                    }
-                    if (!MOS2vt0.Given)
-                    {
-                        if (!MOS2surfaceStateDensity.Given)
-                            MOS2surfaceStateDensity.Value = 0;
-                        vfb = wkfngs - MOS2surfaceStateDensity * 1e4 /*(cm**2/m**2)*/ * Circuit.CHARGE / MOS2oxideCapFactor;
+                        MOS2gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.CHARGE * MOS2substrateDoping * 1e6) / MOS2oxideCapFactor;
+					}
+					if (!MOS2vt0.Given)
+					{
+						if (!MOS2surfaceStateDensity.Given)
+						    MOS2surfaceStateDensity.Value = 0;
+						vfb = wkfngs - MOS2surfaceStateDensity * 1e4 * Circuit.CHARGE / MOS2oxideCapFactor;
                         MOS2vt0.Value = vfb + MOS2type * (MOS2gamma * Math.Sqrt(MOS2phi) + MOS2phi);
                     }
                     else
                     {
                         vfb = MOS2vt0 - MOS2type * (MOS2gamma * Math.Sqrt(MOS2phi) + MOS2phi);
                     }
-                    MOS2xd = Math.Sqrt((Transistor.EPSSIL + Transistor.EPSSIL) / (Circuit.CHARGE * MOS2substrateDoping * 1e6 /*(cm**3/m**3)*/));
+                    MOS2xd = Math.Sqrt((Transistor.EPSSIL + Transistor.EPSSIL) / (Circuit.CHARGE * MOS2substrateDoping * 1e6));
                 }
                 else
                 {
@@ -222,7 +220,10 @@ namespace SpiceSharp.Components
                 }
             }
             if (!MOS2bulkCapFactor.Given)
-                MOS2bulkCapFactor.Value = Math.Sqrt(Transistor.EPSSIL * Circuit.CHARGE * MOS2substrateDoping * 1e6 /*cm**3/m**3*/ / (2 * MOS2bulkJctPotential));
+            {
+                MOS2bulkCapFactor.Value = Math.Sqrt(Transistor.EPSSIL * Circuit.CHARGE * MOS2substrateDoping * 1e6 /* cm *  * 3 / m *  * 3 */  / (2 *
+                    MOS2bulkJctPotential));
+            }
         }
     }
 }

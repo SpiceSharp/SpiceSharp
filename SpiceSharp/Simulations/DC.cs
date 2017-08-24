@@ -174,6 +174,7 @@ namespace SpiceSharp.Simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Domain = CircuitState.DomainTypes.None;
+            state.Gmin = Config.Gmin;
 
             // Initialize
             IParameterized[] components = new IParameterized[Sweeps.Count];

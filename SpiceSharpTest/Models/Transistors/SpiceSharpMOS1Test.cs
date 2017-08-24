@@ -62,6 +62,7 @@ namespace SpiceSharpTest.Models.Transistors
             ckt.Objects.Add(
                 new Voltagesource("V1", "G", "GND", 0.0),
                 new Voltagesource("V2", "D", "GND", 0.0),
+                new Resistor("Rgmin", "D", "GND", 1e12), // To match SmartSpice
                 m);
 
             // Simulate the circuit
@@ -74,13 +75,62 @@ namespace SpiceSharpTest.Models.Transistors
                 double vgs = dc.Sweeps[0].CurrentValue;
                 double vds = dc.Sweeps[1].CurrentValue;
 
-                double expected = reference[index] - vds * ckt.State.Gmin;
+                double expected = reference[index];
                 double actual = -data.Ask("V2", "i");
 
                 double tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * 1e-6 + 1e-12;
 
                 Assert.AreEqual(expected, actual, tol);
                 index = index + 1;
+            };
+            ckt.Simulate(dc);
+        }
+
+        [TestMethod]
+        public void TestMOS1_DC_Default()
+        {
+            // Simulation data by LTSpiceXVII
+            // Please note that LTSpice uses a different models for diodes in all models, including MOS1,
+            // so our tolerance will be a little bit more relaxed
+            double[] reference = new double[]
+            {
+                0.000000e+000, -1.010000e-012, -2.010000e-012, -3.010000e-012, -4.010000e-012, -5.010000e-012, -6.010000e-012, -7.010000e-012, -8.010000e-012, -9.010000e-012, -1.001000e-011,
+                0.000000e+000, -2.500001e-006, -2.500002e-006, -2.500003e-006, -2.500004e-006, -2.500005e-006, -2.500006e-006, -2.500007e-006, -2.500008e-006, -2.500009e-006, -2.500010e-006,
+                0.000000e+000, -7.500001e-006, -1.000000e-005, -1.000000e-005, -1.000000e-005, -1.000001e-005, -1.000001e-005, -1.000001e-005, -1.000001e-005, -1.000001e-005, -1.000001e-005,
+                0.000000e+000, -1.250000e-005, -2.000000e-005, -2.250000e-005, -2.250000e-005, -2.250001e-005, -2.250001e-005, -2.250001e-005, -2.250001e-005, -2.250001e-005, -2.250001e-005,
+                0.000000e+000, -1.750000e-005, -3.000000e-005, -3.750000e-005, -4.000000e-005, -4.000001e-005, -4.000001e-005, -4.000001e-005, -4.000001e-005, -4.000001e-005, -4.000001e-005,
+                0.000000e+000, -2.250000e-005, -4.000000e-005, -5.250000e-005, -6.000001e-005, -6.250000e-005, -6.250000e-005, -6.250001e-005, -6.250001e-005, -6.250001e-005, -6.250001e-005,
+                0.000000e+000, -2.750000e-005, -5.000000e-005, -6.750000e-005, -8.000001e-005, -8.750000e-005, -9.000001e-005, -9.000001e-005, -9.000001e-005, -9.000001e-005, -9.000001e-005,
+                0.000000e+000, -3.250000e-005, -6.000000e-005, -8.250000e-005, -1.000000e-004, -1.125000e-004, -1.200000e-004, -1.225000e-004, -1.225000e-004, -1.225000e-004, -1.225000e-004,
+                0.000000e+000, -3.750000e-005, -7.000000e-005, -9.750000e-005, -1.200000e-004, -1.375000e-004, -1.500000e-004, -1.575000e-004, -1.600000e-004, -1.600000e-004, -1.600000e-004,
+                0.000000e+000, -4.250000e-005, -8.000001e-005, -1.125000e-004, -1.400000e-004, -1.625000e-004, -1.800000e-004, -1.925000e-004, -2.000000e-004, -2.025000e-004, -2.025000e-004,
+                0.000000e+000, -4.750000e-005, -9.000000e-005, -1.275000e-004, -1.600000e-004, -1.875000e-004, -2.100000e-004, -2.275000e-004, -2.400000e-004, -2.475000e-004, -2.500000e-004
+            };
+
+            // Build the circuit
+            Circuit ckt = new Circuit();
+            MOS1 m = new MOS1("M1");
+            m.SetModel(new MOS1Model("DefaultModel"));
+            m.Connect("D", "G", "0", "0");
+            ckt.Objects.Add(
+                new Voltagesource("V1", "G", "0", 0.0),
+                new Voltagesource("V2", "D", "0", 0.0),
+                m);
+
+            // Build the simulation
+            DC dc = new DC("TestMOS1_DC_Default");
+            dc.Sweeps.Add(new DC.Sweep("V1", 0.0, 5.0, 0.5));
+            dc.Sweeps.Add(new DC.Sweep("V2", 0.0, 5.0, 0.5));
+            int index = 0;
+            dc.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                double vgs = dc.Sweeps[0].CurrentValue;
+                double vds = dc.Sweeps[1].CurrentValue;
+                double expected = reference[index];
+                double actual = data.Ask("V2", "i");
+                double tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * 1e-6 + 1e-10;
+                Assert.AreEqual(actual, expected, tol);
+                index++;
             };
             ckt.Simulate(dc);
         }
@@ -124,6 +174,7 @@ namespace SpiceSharpTest.Models.Transistors
                 vsrc = new Voltagesource("V1", "IN", "GND", 3.067),
                 new Voltagesource("V2", "VDD", "GND", 5.0),
                 new Resistor("R1", "VDD", "OUT", 1e3),
+                new Resistor("Rgmin", "OUT", "GND", 1e12), // To match SmartSpice
                 new Capacitor("C1", "OUT", "GND", 1e-12),
                 m);
             vsrc.Set("acmag", 1.0);
@@ -146,7 +197,6 @@ namespace SpiceSharpTest.Models.Transistors
 
                 expected = reference_ph[index];
                 actual = data.GetPhase("OUT");
-                tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * 1e-6 + 1e-12;
                 tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * 1e-6 + 1e-12;
                 Assert.AreEqual(expected, actual, tol);
 
