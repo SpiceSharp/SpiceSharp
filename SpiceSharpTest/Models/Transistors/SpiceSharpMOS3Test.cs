@@ -41,6 +41,8 @@ namespace SpiceSharpTest.Models.Transistors
             // Simulated by LTSpiceXVII
             // GMIN = 0
             // vds,vgs: 0->5V in 0.5V steps
+            // I first tried this with SmartSpice, but it seems to be (very significantly) different from our model. So I tried again in LTSpice, and this matches our results.
+            // I believe that SmartSpice either has another flag I haven't set, or they just made a mistake in their model (they focus on IC design, so they might have missed it).
             double[] reference = new double[]
             {
                 0.000000e+000, -1.000000e-014, -1.000000e-014, -1.000000e-014, -1.000000e-014, -1.000000e-014, -1.000000e-014, -1.000000e-014, -1.000000e-014, -1.000000e-014, -1.000000e-014, 
@@ -84,6 +86,77 @@ namespace SpiceSharpTest.Models.Transistors
                 index++;
             };
             ckt.Simulate(dc);
+        }
+
+        [TestMethod]
+        public void TestMOS3_AC()
+        {
+            // Simulated by LTSpiceXVII
+            // GMIN = 0
+            // Actually a bit stupid, since the model doesn't contain any parasitic capacitance calculations...
+            double[] reference_db = new double[]
+            {
+                5.23569204830391e+001, 5.23569204827803e+001, 5.23569204821301e+001, 5.23569204804970e+001, 5.23569204763947e+001,
+                5.23569204660902e+001, 5.23569204402065e+001, 5.23569203751896e+001, 5.23569202118745e+001, 5.23569198016457e+001,
+                5.23569187711977e+001, 5.23569161828303e+001, 5.23569096811521e+001, 5.23568933497179e+001, 5.23568523272807e+001,
+                5.23567492852865e+001, 5.23564904662823e+001, 5.23558404103620e+001, 5.23542079727555e+001, 5.23501101792863e+001,
+                5.23398340092309e+001, 5.23141281781199e+001, 5.22502212813778e+001, 5.20937235951098e+001, 5.17238269113227e+001,
+                5.09136523893448e+001, 4.93679541595498e+001, 4.69320660989670e+001, 4.37548962052641e+001, 4.01314189208328e+001,
+                3.62908976851091e+001, 3.23560537627044e+001, 2.83822673724706e+001, 2.43927473913558e+001, 2.03969266102217e+001,
+                1.63985915070871e+001, 1.23992544921319e+001, 8.39951845940133e+000, 4.39962355112929e+000, 3.99665389607493e-001,
+                -3.60031795408214e+000
+            };
+            double[] reference_ph = new double[]
+            {
+                -3.59736084578309e-004, -5.70143271519450e-004, -9.03616189713592e-004, -1.43213514749521e-003, -2.26978124523478e-003,
+                -3.59736084110336e-003, -5.70143269656417e-003, -9.03616182296722e-003, -1.43213511796812e-002, -2.26978112768532e-002,
+                -3.59736037313060e-002, -5.70143083353170e-002, -9.03615440610809e-002, -1.43213216527004e-001, -2.26976937284984e-001,
+                -3.59731357696052e-001, -5.70124454135118e-001, -9.03541283085018e-001, -1.43183700608802e+000, -2.26859499480473e+000,
+                -3.59264499611456e+000, -5.68272521408002e+000, -8.96234257461569e+000, -1.40338025945571e+001, -2.16110719597444e+001,
+                -3.21229821137224e+001, -4.48589276118930e+001, -5.76223570288012e+001, -6.81950128513375e+001, -7.58328660296330e+001,
+                -8.09504143515078e+001, -8.42614040993042e+001, -8.63718916390832e+001, -8.77089756012569e+001, -8.85539975047450e+001,
+                -8.90875175039256e+001, -8.94242331689840e+001, -8.96367083288925e+001, -8.97707766029906e+001, -8.98553693496892e+001,
+                -8.99087441122862e+001
+            };
+
+            // Create the circuit
+            Circuit ckt = new Circuit();
+            MOS3 m = new MOS3("M1");
+            m.Connect("D", "G", "0", "0");
+            m.Set("w", 1e-6); m.Set("l", 1e-6);
+            m.SetModel(TestModel);
+            Voltagesource vsrc;
+            ckt.Objects.Add(
+                vsrc = new Voltagesource("V1", "0", "G", 0.711),
+                new Voltagesource("V2", "0", "VDD", 5.0),
+                new Resistor("R1", "VDD", "D", 1e3),
+                new Capacitor("C1", "D", "0", 1e-12),
+                m);
+            vsrc.Set("acmag", 1.0);
+
+            // Create the simulation
+            AC ac = new AC("TestMOS3_AC");
+            ac.StepType = AC.StepTypes.Decade;
+            ac.StartFreq = 1e3;
+            ac.StopFreq = 100e9;
+            ac.NumberSteps = 5;
+            int index = 0;
+            ac.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                double frequency = data.GetFrequency();
+                double expected = reference_db[index];
+                double actual = data.GetDb("D");
+                double tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * 1e-6 + 1e-12;
+                Assert.AreEqual(expected, actual, tol);
+
+                expected = reference_ph[index];
+                actual = data.GetPhase("D");
+                tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * 1e-6 + 1e-12;
+                Assert.AreEqual(expected, actual, tol);
+
+                index++;
+            };
+            ckt.Simulate(ac);
         }
     }
 }
