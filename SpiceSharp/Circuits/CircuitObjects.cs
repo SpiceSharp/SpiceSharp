@@ -45,17 +45,12 @@ namespace SpiceSharp.Circuits
                     throw new CircuitException($"Component \"{name[0]}\" does not exist");
 
                 ICircuitObject c = objects[name[0]];
-                if (c is Subcircuit)
+                if (c is Subcircuit && name.Length > 1)
                 {
-                    if (name.Length > 1)
-                    {
-                        string[] nn = new string[name.Length - 1];
-                        for (int i = 1; i < name.Length; i++)
-                            nn[i - 1] = name[i];
-                        return (c as Subcircuit).Objects[nn];
-                    }
-                    else
-                        throw new CircuitException($"Component \"{name[0]}\" does not exist");
+                    string[] nn = new string[name.Length - 1];
+                    for (int i = 1; i < name.Length; i++)
+                        nn[i - 1] = name[i];
+                    return (c as Subcircuit).Objects[nn];
                 }
                 else
                 {

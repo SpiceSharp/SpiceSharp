@@ -20,8 +20,7 @@ namespace SpiceSharpTest.Parser
                 "vjc = 1.92 mjc = 0.4567 xcjc = 0.82 tr = 13n cjs = 2.22p",
                 "vjs = 1.93 mjs = 0.4568 xtb = 0.85 eg = 1.143 xti = 4 kf = 0.1",
                 "af = 1.111 fc = 0.898 tnom = 30.123"
-            }) + Environment.NewLine +
-            "Q1 a b c d mybjt");
+            }), "Q1 a b c d mybjt");
             Test<BJTModel>(netlist, "mybjt", new string[] { "is", "bf", "nf", "vaf", "ikf",
                 "ise", "ne", "br", "nr", "var", "ikr",
                 "isc", "nc", "rb", "irb", "rbm", "re",

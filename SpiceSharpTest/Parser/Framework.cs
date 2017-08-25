@@ -17,10 +17,11 @@ namespace SpiceSharpTest.Parser
         /// <summary>
         /// Run a netlist using the standard parser
         /// </summary>
-        /// <param name="netlist">The netlist string</param>
+        /// <param name="lines">The netlist to parse</param>
         /// <returns></returns>
-        protected Netlist Run(string netlist)
+        protected Netlist Run(params string[] lines)
         {
+            string netlist = string.Join(Environment.NewLine, lines);
             MemoryStream m = new MemoryStream(Encoding.UTF8.GetBytes(netlist));
 
             // Create the parser and run it
@@ -55,6 +56,36 @@ namespace SpiceSharpTest.Parser
         protected T Test<T>(Netlist n, string name, string[] names = null, double[] values = null, string[] nodes = null)
         {
             ICircuitObject obj = n.Circuit.Objects[name.ToLower()];
+            Assert.AreEqual(typeof(T), obj.GetType());
+
+            // Test all parameters
+            if (names != null)
+                TestParameters((IParameterized)obj, names, values);
+
+            // Test all nodes
+            if (nodes != null)
+                TestNodes((ICircuitComponent)obj, nodes);
+
+            // Make sure there are no warnings
+            if (CircuitWarning.Warnings.Count > 0)
+                throw new Exception("Warning: " + CircuitWarning.Warnings[0]);
+            return (T)obj;
+        }
+
+        /// <summary>
+        /// Test a circuit object for all its parameters
+        /// </summary>
+        /// <param name="n">The netlist</param>
+        /// <param name="name">The name of the object</param>
+        /// <param name="names">The parameter names</param>
+        /// <param name="values">The parameter values</param>
+        /// <param name="nodes">The nodes (optional)</param>
+        /// <returns></returns>
+        protected T Test<T>(Netlist n, string[] name, string[] names = null, double[] values = null, string[] nodes = null)
+        {
+            for (int i = 0; i < name.Length; i++)
+                name[i] = name[i].ToLower();
+            ICircuitObject obj = n.Circuit.Objects[name];
             Assert.AreEqual(typeof(T), obj.GetType());
 
             // Test all parameters

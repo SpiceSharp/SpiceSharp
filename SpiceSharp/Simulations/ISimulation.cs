@@ -1,6 +1,8 @@
-﻿namespace SpiceSharp.Simulations
+﻿using SpiceSharp.Parameters;
+
+namespace SpiceSharp.Simulations
 {
-    public interface ISimulation
+    public interface ISimulation : IParameterized
     {
         /// <summary>
         /// Event that is called for initializing simulation data exports

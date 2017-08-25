@@ -14,9 +14,9 @@ namespace SpiceSharpTest.Parser
         [TestMethod]
         public void VoltagesourceTest()
         {
-            var netlist = Run("Vinput in g-n-d 5.0" + Environment.NewLine +
-                "Vsupply_2 a b AC 2 3" + Environment.NewLine +
-                "v2 b c PULSE(0 1 2 3 4 5 6)" + Environment.NewLine +
+            var netlist = Run("Vinput in g-n-d 5.0",
+                "Vsupply_2 a b AC 2 3",
+                "v2 b c PULSE(0 1 2 3 4 5 6)",
                 "v3 b c SINE(1 2 3 4 5)");
 
             Test<Voltagesource>(netlist, "Vinput", new string[] { "dc" }, new double[] { 5.0 }, new string[] { "in", "g-n-d" });
@@ -30,9 +30,9 @@ namespace SpiceSharpTest.Parser
         [TestMethod]
         public void CurrentsourceTest()
         {
-            var netlist = Run("Iinput in g-n-d 5.0" + Environment.NewLine +
-                "Isupply_2 a b AC 2 3" + Environment.NewLine +
-                "i2 b c PULSE(0 1 2 3 4 5 6)" + Environment.NewLine +
+            var netlist = Run("Iinput in g-n-d 5.0",
+                "Isupply_2 a b AC 2 3",
+                "i2 b c PULSE(0 1 2 3 4 5 6)",
                 "i3 b c SINE(1 2 3 4 5)");
 
             Test<Currentsource>(netlist, "Iinput", new string[] { "dc" }, new double[] { 5.0 }, new string[] { "in", "g-n-d" });
@@ -46,9 +46,9 @@ namespace SpiceSharpTest.Parser
         [TestMethod]
         public void ControlledSourceTest()
         {
-            var netlist = Run("G1 2 0 5 0 0.1mmho" + Environment.NewLine +
-                "e1 2 3 14 1 2.0" + Environment.NewLine +
-                "f1 13 5 VSENS 5" + Environment.NewLine + 
+            var netlist = Run("G1 2 0 5 0 0.1mmho",
+                "e1 2 3 14 1 2.0",
+                "f1 13 5 VSENS 5",
                 "HX 5 17 VZ 0.5k");
             Test<VoltageControlledCurrentsource>(netlist, "g1", new string[] { "gain" }, new double[] { 0.1e-3 }, new string[] { "2", "0", "5", "0" });
             Test<VoltageControlledVoltagesource>(netlist, "e1", new string[] { "gain" }, new double[] { 2.0 }, new string[] { "2", "3", "14", "1" });

@@ -52,6 +52,16 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
+        /// Get the node
+        /// </summary>
+        /// <param name="i">The index</param>
+        /// <returns></returns>
+        public override string GetNode(int i)
+        {
+            return map[Pins[i]];
+        }
+
+        /// <summary>
         /// Setup all objects in the subcircuit
         /// </summary>
         /// <param name="ckt">The circuit</param>

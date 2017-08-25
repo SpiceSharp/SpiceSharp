@@ -75,7 +75,7 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="i">The index</param>
         /// <returns></returns>
-        public string GetNode(int i)
+        public virtual string GetNode(int i)
         {
             if (i < 0 || i >= connections.Length)
                 throw new IndexOutOfRangeException();
