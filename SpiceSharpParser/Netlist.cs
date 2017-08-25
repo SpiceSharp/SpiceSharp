@@ -108,7 +108,7 @@ namespace SpiceSharp.Parser
                 new ComponentReaderCollection(),
                 new ModelReaderCollection(),
                 new GenericReaderCollection(StatementType.Subcircuit),
-                new GenericReaderCollection(StatementType.Waveform),
+                new DictionaryReaderCollection(StatementType.Waveform),
                 new DictionaryReaderCollection(StatementType.Control),
                 new DictionaryReaderCollection(StatementType.Export)
                 );

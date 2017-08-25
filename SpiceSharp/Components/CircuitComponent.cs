@@ -9,7 +9,7 @@ namespace SpiceSharp
     /// <summary>
     /// This class represent a component
     /// </summary>
-    public abstract class CircuitComponent<T> : Parameterized<T>, ICircuitObject, ICircuitComponent
+    public abstract class CircuitComponent<T> : Parameterized<T>, ICircuitComponent
     {
         /// <summary>
         /// Private variables

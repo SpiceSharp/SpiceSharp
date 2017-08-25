@@ -56,6 +56,10 @@
     <Compile Include="Models\Transistors\SpiceSharpMOS3Test.cs" />
     <Compile Include="Parser\Framework.cs" />
     <Compile Include="Parser\SpiceSharpParserRLCMTest.cs" />
+    <Compile Include="Parser\SpiceSharpParserSourcesTest.cs" />
+    <Compile Include="Parser\SpiceSharpParserSwitchTest.cs" />
+    <Compile Include="Parser\SpiceSharpParserDiodeTest.cs" />
+    <Compile Include="Parser\SpiceSharpParserBipolarTest.cs" />
     <Compile Include="SpiceExpressionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpiceSharpTest.cs" />

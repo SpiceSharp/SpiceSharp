@@ -13,7 +13,6 @@ namespace SpiceSharp.Parser.Readers
         /// Private variables
         /// </summary>
         private string[] keys;
-        private string id;
 
         /// <summary>
         /// Constructor
@@ -22,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
         public WaveformReader(string id, string[] keys)
             : base(StatementType.Waveform)
         {
-            this.id = id;
+            Identifier = id;
             this.keys = keys;
         }
 

@@ -3,25 +3,24 @@ namespace SpiceSharp.Parser{
 public  class SpiceSharpParserConstants {
 
   public const int EOF = 0;
-  public const int PLUS = 11;
-  public const int ASTERISK = 12;
-  public const int MINUS = 13;
-  public const int DOT = 14;
-  public const int COMMA = 15;
-  public const int DELIMITER = 16;
-  public const int NEWLINE = 17;
-  public const int ENDS = 18;
-  public const int END = 19;
-  public const int VALUE = 20;
-  public const int STRING = 21;
-  public const int EXPRESSION = 22;
-  public const int REFERENCE = 23;
-  public const int WORD = 24;
-  public const int IDENTIFIER = 25;
-  public const int DIGIT = 26;
-  public const int LETTER = 27;
-  public const int CHARACTER = 28;
-  public const int SPECIAL = 29;
+  public const int ASTERISK = 11;
+  public const int MINUS = 12;
+  public const int DOT = 13;
+  public const int COMMA = 14;
+  public const int DELIMITER = 15;
+  public const int NEWLINE = 16;
+  public const int ENDS = 17;
+  public const int END = 18;
+  public const int VALUE = 19;
+  public const int STRING = 20;
+  public const int EXPRESSION = 21;
+  public const int REFERENCE = 22;
+  public const int WORD = 23;
+  public const int IDENTIFIER = 24;
+  public const int DIGIT = 25;
+  public const int LETTER = 26;
+  public const int CHARACTER = 27;
+  public const int SPECIAL = 28;
 
   public const int DEFAULT = 0;
 
@@ -34,10 +33,9 @@ public  class SpiceSharpParserConstants {
     "\"=\"",
     "\"[\"",
     "\"]\"",
-    "\" \"",
-    "\"\\t\"",
+    "<token of kind 8>",
+    "<token of kind 9>",
     "<token of kind 10>",
-    "\"+\"",
     "\"*\"",
     "\"-\"",
     "\".\"",

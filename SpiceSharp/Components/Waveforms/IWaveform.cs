@@ -1,6 +1,8 @@
-﻿namespace SpiceSharp.Components
+﻿using SpiceSharp.Parameters;
+
+namespace SpiceSharp.Components
 {
-    public interface IWaveform
+    public interface IWaveform : IParameterized
     {
         /// <summary>
         /// Calculate the waveform at a specific time

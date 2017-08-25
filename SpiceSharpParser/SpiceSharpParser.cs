@@ -83,52 +83,10 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         mcc_consume_token(-1);
         throw new ParseException();
       }
-      while (true) {
-        switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
-        case PLUS:
-          ;
-          break;
-        default:
-          mcc_la1[4] = mcc_gen;
-          goto label_3;
-        }
-        mcc_consume_token(PLUS);
-        while (true) {
-          switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
-          case VALUE:
-          case STRING:
-          case EXPRESSION:
-          case REFERENCE:
-          case WORD:
-          case IDENTIFIER:
-            ;
-            break;
-          default:
-            mcc_la1[5] = mcc_gen;
-            goto label_4;
-          }
-          t = ParseParameter();
-                                                parameters.Add(t);
-        }label_4: ;
-        
-        switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
-        case NEWLINE:
-          mcc_consume_token(NEWLINE);
-          break;
-        case 0:
-          mcc_consume_token(0);
-          break;
-        default:
-          mcc_la1[6] = mcc_gen;
-          mcc_consume_token(-1);
-          throw new ParseException();
-        }
-      }label_3: ;
-      
                 {return new Statement(StatementType.Component, tn, parameters);}
       break;
     default:
-      mcc_la1[23] = mcc_gen;
+      mcc_la1[12] = mcc_gen;
       if (mcc_2_1(2)) {
         mcc_consume_token(DOT);
         tn = mcc_consume_token(1);
@@ -143,45 +101,14 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
             ;
             break;
           default:
-            mcc_la1[7] = mcc_gen;
-            goto label_5;
+            mcc_la1[4] = mcc_gen;
+            goto label_3;
           }
           t = ParseParameter();
                                                                    parameters.Add(t);
-        }label_5: ;
+        }label_3: ;
         
         mcc_consume_token(NEWLINE);
-        while (true) {
-          switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
-          case PLUS:
-            ;
-            break;
-          default:
-            mcc_la1[8] = mcc_gen;
-            goto label_6;
-          }
-          mcc_consume_token(PLUS);
-          while (true) {
-            switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
-            case VALUE:
-            case STRING:
-            case EXPRESSION:
-            case REFERENCE:
-            case WORD:
-            case IDENTIFIER:
-              ;
-              break;
-            default:
-              mcc_la1[9] = mcc_gen;
-              goto label_7;
-            }
-            t = ParseParameter();
-                                                parameters.Add(t);
-          }label_7: ;
-          
-          mcc_consume_token(NEWLINE);
-        }label_6: ;
-        
                 body = new StatementsToken();
         while (true) {
           switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
@@ -191,12 +118,12 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
             ;
             break;
           default:
-            mcc_la1[10] = mcc_gen;
-            goto label_8;
+            mcc_la1[5] = mcc_gen;
+            goto label_4;
           }
           st = ParseSpiceLine();
                                          if (st != null) body.Add(st);
-        }label_8: ;
+        }label_4: ;
         
         mcc_consume_token(ENDS);
         switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
@@ -204,7 +131,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           mcc_consume_token(WORD);
           break;
         default:
-          mcc_la1[11] = mcc_gen;
+          mcc_la1[6] = mcc_gen;
           ;
           break;
         }
@@ -216,7 +143,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           mcc_consume_token(0);
           break;
         default:
-          mcc_la1[12] = mcc_gen;
+          mcc_la1[7] = mcc_gen;
           mcc_consume_token(-1);
           throw new ParseException();
         }
@@ -236,12 +163,12 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
             ;
             break;
           default:
-            mcc_la1[13] = mcc_gen;
-            goto label_9;
+            mcc_la1[8] = mcc_gen;
+            goto label_5;
           }
           t = ParseParameter();
                                                                   parameters.Add(t);
-        }label_9: ;
+        }label_5: ;
         
         switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
         case NEWLINE:
@@ -251,52 +178,10 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           mcc_consume_token(0);
           break;
         default:
-          mcc_la1[14] = mcc_gen;
+          mcc_la1[9] = mcc_gen;
           mcc_consume_token(-1);
           throw new ParseException();
         }
-        while (true) {
-          switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
-          case PLUS:
-            ;
-            break;
-          default:
-            mcc_la1[15] = mcc_gen;
-            goto label_10;
-          }
-          mcc_consume_token(PLUS);
-          while (true) {
-            switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
-            case VALUE:
-            case STRING:
-            case EXPRESSION:
-            case REFERENCE:
-            case WORD:
-            case IDENTIFIER:
-              ;
-              break;
-            default:
-              mcc_la1[16] = mcc_gen;
-              goto label_11;
-            }
-            t = ParseParameter();
-                                                parameters.Add(t);
-          }label_11: ;
-          
-          switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
-          case NEWLINE:
-            mcc_consume_token(NEWLINE);
-            break;
-          case 0:
-            mcc_consume_token(0);
-            break;
-          default:
-            mcc_la1[17] = mcc_gen;
-            mcc_consume_token(-1);
-            throw new ParseException();
-          }
-        }label_10: ;
-        
                 if (parameters.Count < 2)
                         {throw new ParseException(tn, "At least a name and model type expected", false);}
                 tn = parameters[0];
@@ -318,12 +203,12 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
               ;
               break;
             default:
-              mcc_la1[18] = mcc_gen;
-              goto label_12;
+              mcc_la1[10] = mcc_gen;
+              goto label_6;
             }
             t = ParseParameter();
                                                     parameters.Add(t);
-          }label_12: ;
+          }label_6: ;
           
           switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
           case NEWLINE:
@@ -333,52 +218,10 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
             mcc_consume_token(0);
             break;
           default:
-            mcc_la1[19] = mcc_gen;
+            mcc_la1[11] = mcc_gen;
             mcc_consume_token(-1);
             throw new ParseException();
           }
-          while (true) {
-            switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
-            case PLUS:
-              ;
-              break;
-            default:
-              mcc_la1[20] = mcc_gen;
-              goto label_13;
-            }
-            mcc_consume_token(PLUS);
-            while (true) {
-              switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
-              case VALUE:
-              case STRING:
-              case EXPRESSION:
-              case REFERENCE:
-              case WORD:
-              case IDENTIFIER:
-                ;
-                break;
-              default:
-                mcc_la1[21] = mcc_gen;
-                goto label_14;
-              }
-              t = ParseParameter();
-                                                parameters.Add(t);
-            }label_14: ;
-            
-            switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
-            case NEWLINE:
-              mcc_consume_token(NEWLINE);
-              break;
-            case 0:
-              mcc_consume_token(0);
-              break;
-            default:
-              mcc_la1[22] = mcc_gen;
-              mcc_consume_token(-1);
-              throw new ParseException();
-            }
-          }label_13: ;
-          
                 {return new Statement(StatementType.Control, tn, parameters);}
           break;
         case NEWLINE:
@@ -386,7 +229,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                       {return null;}
           break;
         default:
-          mcc_la1[24] = mcc_gen;
+          mcc_la1[13] = mcc_gen;
           mcc_consume_token(-1);
           throw new ParseException();
         }
@@ -413,15 +256,15 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           ;
           break;
         default:
-          mcc_la1[25] = mcc_gen;
-          goto label_15;
+          mcc_la1[14] = mcc_gen;
+          goto label_7;
         }
         tb = ParseParameter();
                                                                      tokens.Add(tb);
-      }label_15: ;
+      }label_7: ;
       
       mcc_consume_token(4);
-                                                                                               ta = new BracketToken(ta, '(', tokens.ToArray());
+          ta = new BracketToken(ta, '(', tokens.ToArray());
       switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
       case 5:
         mcc_consume_token(5);
@@ -429,7 +272,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                                   {return new AssignmentToken(ta, tb);}
         break;
       default:
-        mcc_la1[26] = mcc_gen;
+        mcc_la1[15] = mcc_gen;
         ;
         break;
       }
@@ -448,12 +291,12 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
           ;
           break;
         default:
-          mcc_la1[27] = mcc_gen;
-          goto label_16;
+          mcc_la1[16] = mcc_gen;
+          goto label_8;
         }
         tb = ParseParameter();
                                                                        tokens.Add(tb);
-      }label_16: ;
+      }label_8: ;
       
       mcc_consume_token(7);
                                                                                                  ta = new BracketToken(ta, '[', tokens.ToArray());
@@ -464,7 +307,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                                   {return new AssignmentToken(ta, tb);}
         break;
       default:
-        mcc_la1[28] = mcc_gen;
+        mcc_la1[17] = mcc_gen;
         ;
         break;
       }
@@ -486,7 +329,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
                                {return ta;}
         break;
       default:
-        mcc_la1[29] = mcc_gen;
+        mcc_la1[18] = mcc_gen;
         mcc_consume_token(-1);
         throw new ParseException();
       }
@@ -517,7 +360,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
       t = mcc_consume_token(EXPRESSION);
       break;
     default:
-      mcc_la1[30] = mcc_gen;
+      mcc_la1[19] = mcc_gen;
       mcc_consume_token(-1);
       throw new ParseException();
     }
@@ -528,8 +371,8 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         ;
         break;
       default:
-        mcc_la1[31] = mcc_gen;
-        goto label_17;
+        mcc_la1[20] = mcc_gen;
+        goto label_9;
       }
       mcc_consume_token(COMMA);
       switch ((mcc_ntk==-1)?mcc_mntk():mcc_ntk) {
@@ -552,12 +395,12 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         t = mcc_consume_token(EXPRESSION);
         break;
       default:
-        mcc_la1[32] = mcc_gen;
+        mcc_la1[21] = mcc_gen;
         mcc_consume_token(-1);
         throw new ParseException();
       }
                   ts.Add(t);
-    }label_17: ;
+    }label_9: ;
     
                 if (ts.Count > 1)
                         {return new VectorToken(ts.ToArray());}
@@ -601,35 +444,20 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     finally { mcc_save(4, xla); }
   }
 
-  private bool mcc_3R_18() {
-    Token xsp;
-    xsp = mcc_scanpos;
-    if (mcc_scan_token(24)) {
-    mcc_scanpos = xsp;
-    if (mcc_scan_token(20)) {
-    mcc_scanpos = xsp;
-    if (mcc_scan_token(21)) {
-    mcc_scanpos = xsp;
-    if (mcc_scan_token(25)) {
-    mcc_scanpos = xsp;
-    if (mcc_scan_token(23)) {
-    mcc_scanpos = xsp;
-    if (mcc_scan_token(22)) return true;
-    }
-    }
-    }
-    }
-    }
-    while (true) {
-      xsp = mcc_scanpos;
-      if (mcc_3R_19()) { mcc_scanpos = xsp; break; }
-    }
+  private bool mcc_3R_11() {
+    if (mcc_scan_token(COMMA)) return true;
     return false;
   }
 
-  private bool mcc_3_4() {
-    if (mcc_3R_18()) return true;
-    if (mcc_scan_token(6)) return true;
+  private bool mcc_3_5() {
+    if (mcc_3R_10()) return true;
+    if (mcc_scan_token(5)) return true;
+    return false;
+  }
+
+  private bool mcc_3_2() {
+    if (mcc_scan_token(DOT)) return true;
+    if (mcc_scan_token(2)) return true;
     return false;
   }
 
@@ -639,26 +467,41 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     return false;
   }
 
+  private bool mcc_3R_10() {
+    Token xsp;
+    xsp = mcc_scanpos;
+    if (mcc_scan_token(23)) {
+    mcc_scanpos = xsp;
+    if (mcc_scan_token(19)) {
+    mcc_scanpos = xsp;
+    if (mcc_scan_token(20)) {
+    mcc_scanpos = xsp;
+    if (mcc_scan_token(24)) {
+    mcc_scanpos = xsp;
+    if (mcc_scan_token(22)) {
+    mcc_scanpos = xsp;
+    if (mcc_scan_token(21)) return true;
+    }
+    }
+    }
+    }
+    }
+    while (true) {
+      xsp = mcc_scanpos;
+      if (mcc_3R_11()) { mcc_scanpos = xsp; break; }
+    }
+    return false;
+  }
+
+  private bool mcc_3_4() {
+    if (mcc_3R_10()) return true;
+    if (mcc_scan_token(6)) return true;
+    return false;
+  }
+
   private bool mcc_3_3() {
-    if (mcc_3R_18()) return true;
+    if (mcc_3R_10()) return true;
     if (mcc_scan_token(3)) return true;
-    return false;
-  }
-
-  private bool mcc_3R_19() {
-    if (mcc_scan_token(COMMA)) return true;
-    return false;
-  }
-
-  private bool mcc_3_5() {
-    if (mcc_3R_18()) return true;
-    if (mcc_scan_token(5)) return true;
-    return false;
-  }
-
-  private bool mcc_3_2() {
-    if (mcc_scan_token(DOT)) return true;
-    if (mcc_scan_token(2)) return true;
     return false;
   }
 
@@ -671,13 +514,13 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
   public bool lookingAhead = false;
   private bool mcc_semLA;
   private int mcc_gen;
-  private int[] mcc_la1 = new int[33];
+  private int[] mcc_la1 = new int[22];
   static private int[] mcc_la1_0;
   static SpiceSharpParser() {
       mcc_gla1_0();
    }
    private static void mcc_gla1_0() {
-      mcc_la1_0 = new int[] {16924672,524289,66060288,131073,2048,66060288,131073,66060288,2048,66060288,16924672,16777216,131073,66060288,131073,2048,66060288,131073,66060288,131073,2048,66060288,131073,16777216,147456,66060288,32,66060288,32,66060288,66060288,32768,66060288,};
+      mcc_la1_0 = new int[] {8462336,262145,33030144,65537,33030144,8462336,8388608,65537,33030144,65537,33030144,65537,8388608,73728,33030144,32,33030144,32,33030144,33030144,16384,33030144,};
    }
   private MccCalls[] mcc_2_rtns = new MccCalls[5];
   private bool mcc_rescan = false;
@@ -689,7 +532,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     token = new Token();
     mcc_ntk = -1;
     mcc_gen = 0;
-    for (int i = 0; i < 33; i++) mcc_la1[i] = -1;
+    for (int i = 0; i < 22; i++) mcc_la1[i] = -1;
     for (int i = 0; i < mcc_2_rtns.Length; i++) mcc_2_rtns[i] = new MccCalls();
   }
 
@@ -699,7 +542,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     token = new Token();
     mcc_ntk = -1;
     mcc_gen = 0;
-    for (int i = 0; i < 33; i++) mcc_la1[i] = -1;
+    for (int i = 0; i < 22; i++) mcc_la1[i] = -1;
     for (int i = 0; i < mcc_2_rtns.Length; i++) mcc_2_rtns[i] = new MccCalls();
   }
 
@@ -709,7 +552,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     token = new Token();
     mcc_ntk = -1;
     mcc_gen = 0;
-    for (int i = 0; i < 33; i++) mcc_la1[i] = -1;
+    for (int i = 0; i < 22; i++) mcc_la1[i] = -1;
     for (int i = 0; i < mcc_2_rtns.Length; i++) mcc_2_rtns[i] = new MccCalls();
   }
 
@@ -719,7 +562,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     token = new Token();
     mcc_ntk = -1;
     mcc_gen = 0;
-    for (int i = 0; i < 33; i++) mcc_la1[i] = -1;
+    for (int i = 0; i < 22; i++) mcc_la1[i] = -1;
     for (int i = 0; i < mcc_2_rtns.Length; i++) mcc_2_rtns[i] = new MccCalls();
   }
 
@@ -728,7 +571,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     token = new Token();
     mcc_ntk = -1;
     mcc_gen = 0;
-    for (int i = 0; i < 33; i++) mcc_la1[i] = -1;
+    for (int i = 0; i < 22; i++) mcc_la1[i] = -1;
     for (int i = 0; i < mcc_2_rtns.Length; i++) mcc_2_rtns[i] = new MccCalls();
   }
 
@@ -737,7 +580,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
     token = new Token();
     mcc_ntk = -1;
     mcc_gen = 0;
-    for (int i = 0; i < 33; i++) mcc_la1[i] = -1;
+    for (int i = 0; i < 22; i++) mcc_la1[i] = -1;
     for (int i = 0; i < mcc_2_rtns.Length; i++) mcc_2_rtns[i] = new MccCalls();
   }
 
@@ -848,15 +691,15 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
 
   public ParseException GenerateParseException() {
     mcc_expentries.Clear();
-    bool[] la1tokens = new bool[30];
-    for (int i = 0; i < 30; i++) {
+    bool[] la1tokens = new bool[29];
+    for (int i = 0; i < 29; i++) {
       la1tokens[i] = false;
     }
     if (mcc_kind >= 0) {
       la1tokens[mcc_kind] = true;
       mcc_kind = -1;
     }
-    for (int i = 0; i < 33; i++) {
+    for (int i = 0; i < 22; i++) {
       if (mcc_la1[i] == mcc_gen) {
         for (int j = 0; j < 32; j++) {
           if ((mcc_la1_0[i] & (1<<j)) != 0) {
@@ -865,7 +708,7 @@ public class SpiceSharpParser : SpiceSharpParserConstants {
         }
       }
     }
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 29; i++) {
       if (la1tokens[i]) {
         mcc_expentry = new int[1];
         mcc_expentry[0] = i;

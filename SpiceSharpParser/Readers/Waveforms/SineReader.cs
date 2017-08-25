@@ -12,7 +12,7 @@ namespace SpiceSharp.Parser.Readers.Waveforms
         /// Constructor
         /// </summary>
         public SineReader()
-            : base("sin", new string[] { "vo", "va", "freq", "td", "theta" })
+            : base("sine", new string[] { "vo", "va", "freq", "td", "theta" })
         {
         }
 

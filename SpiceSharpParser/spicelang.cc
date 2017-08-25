@@ -43,14 +43,12 @@ Statement ParseSpiceLine() :
 {
 	// Component definitions
 	tn = <WORD> (t = ParseParameter() { parameters.Add(t); })* (<NEWLINE> | <EOF>)
-		(<PLUS> (t = ParseParameter() { parameters.Add(t); })* (<NEWLINE> | <EOF>))*
 	{
 		return new Statement(StatementType.Component, tn, parameters);
 	}
 
 	// Subcircuit declaration
 	| LOOKAHEAD(2) <DOT> tn = "SUBCKT" (t = ParseParameter() { parameters.Add(t); })* <NEWLINE>
-		(<PLUS> (t = ParseParameter() { parameters.Add(t); })* <NEWLINE>)*
 	{
 		body = new StatementsToken();
 	}
@@ -64,7 +62,6 @@ Statement ParseSpiceLine() :
 
 	// Model definitions
 	| LOOKAHEAD(2) <DOT> tn = "MODEL" (t = ParseParameter() { parameters.Add(t); })* (<NEWLINE> | <EOF>)
-		(<PLUS> (t = ParseParameter() { parameters.Add(t); })* (<NEWLINE> | <EOF>))*
 	{
 		if (parameters.Count < 2)
 			throw new ParseException(tn, "At least a name and model type expected", false);
@@ -75,7 +72,6 @@ Statement ParseSpiceLine() :
 
 	// Control statements
 	| <DOT> tn = <WORD> (t = ParseParameter() { parameters.Add(t); })* (<NEWLINE> | <EOF>)
-		(<PLUS> (t = ParseParameter() { parameters.Add(t); })* (<NEWLINE> | <EOF>))*
 	{
 		return new Statement(StatementType.Control, tn, parameters);
 	}
@@ -91,7 +87,8 @@ Token ParseParameter() :
 }
 {
 	// Bracketted
-	LOOKAHEAD(2) ta = ParseSingle() "(" (tb = ParseParameter() { tokens.Add(tb); })* ")" { ta = new BracketToken(ta, '(', tokens.ToArray()); }
+	LOOKAHEAD(2) ta = ParseSingle() "(" (tb = ParseParameter() { tokens.Add(tb); })* ")"
+	{ ta = new BracketToken(ta, '(', tokens.ToArray()); }
 	("=" tb = ParseSingle() { return new AssignmentToken(ta, tb); })?
 	{ return ta; }
 	| LOOKAHEAD(2) ta = ParseSingle() "[" (tb = ParseParameter() { tokens.Add(tb); })* "]" { ta = new BracketToken(ta, '[', tokens.ToArray()); }
@@ -119,12 +116,15 @@ Token ParseSingle() :
 	}
 }
 
-SKIP : { " " | "\t" }
-SKIP : { <("\n" | "\r" | "\r\n") "*" (~["\r","\n"])* > }
+SKIP : {
+	<" " | "\t">
+	| <("\n" | "\r" | "\r\n") "+">
+	| <("\n" | "\r" | "\r\n") "*" (~["\r","\n"])*>
+}
+
 TOKEN :
 { 
-	<PLUS : "+">
-	| <ASTERISK : "*">
+	<ASTERISK : "*">
 	| <MINUS : "-">
 	| <DOT : ".">
 	| <COMMA : ",">
