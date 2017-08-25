@@ -49,8 +49,8 @@
     <Compile Include="Readers\Collections\ReaderCollection.cs" />
     <Compile Include="Readers\ComponentReader.cs" />
     <Compile Include="Readers\Controls\ParamSetReader.cs" />
-    <Compile Include="Readers\RLC\RLCMModelReader.cs" />
-    <Compile Include="Readers\RLC\RLCMReader.cs" />
+    <Compile Include="Readers\RLCM\RLCMModelReader.cs" />
+    <Compile Include="Readers\RLCM\RLCMReader.cs" />
     <Compile Include="Readers\Simulations\Configuration.cs" />
     <Compile Include="Readers\Transistors\MosfetModelReader.cs" />
     <Compile Include="Readers\Transistors\MosfetReader.cs" />

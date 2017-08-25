@@ -54,6 +54,8 @@
     <Compile Include="Models\Transistors\SpiceSharpMOS1Test.cs" />
     <Compile Include="Models\Transistors\SpiceSharpMOS2Test.cs" />
     <Compile Include="Models\Transistors\SpiceSharpMOS3Test.cs" />
+    <Compile Include="Parser\Framework.cs" />
+    <Compile Include="Parser\SpiceSharpParserRLCMTest.cs" />
     <Compile Include="SpiceExpressionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpiceSharpTest.cs" />

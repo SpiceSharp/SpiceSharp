@@ -96,6 +96,11 @@ namespace SpiceSharp.Parser.Subcircuits
         {
             var nparameters = parameters != null ? MergeParameters(def, parameters) : null;
 
+            // The subcircuit definition should not be in the stack,
+            // else we are dealing with a recursive loop!
+            if (csubcktdef.Contains(def))
+                throw new ParseException($"Recursive loop detected: Subcircuit \"{def.Name}\" is instanced within itself");
+
             // Push
             csubckt.Push(subckt);
             csubcktdef.Push(def);
