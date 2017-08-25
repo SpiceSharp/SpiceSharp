@@ -6,11 +6,8 @@ I try to verify with other simulators using unit tests: ngSpice (PartSim), LTSpi
 Please note that this project is in no case meant to compete with existing commercial Spice simulators. I wanted to know more about the  Spice simulator, and I wanted to be able to extend its functionality in useful ways (eg. automating simple designs, modeling custom components, etc.)
 
 ## Features
-Supported simulations:
-- DC sweeps
-- AC analysis
-- Transient simulation
-Other simulations may be added later.
+The full project contains a Spice-based framework for simulating circuits possibly containing nonlinear components. The framework supports most native Spice models, and the framework allows for expanding with your own models.
+The solution contains a netlist parser to parse your netlists into the framework, a tool to help you convert native Spice models to the framework, as well as a library with some BSIM transistor models that I use.
 
 ## Usage
 The main project is called *SpiceSharp*. This project contains the framework for circuit simulation and has one dependency: Math.NET.
@@ -87,7 +84,7 @@ R1 IN OUT r
 
 ### SpiceSharpBSIM
 This project contains the BSIM models:
-- BSIM1
-- BSIM2
+- BSIM1 (level 4)
+- BSIM2 (level 5)
 - BSIM3 (latest version 3.3.0)
 - BSIM4 (latest version 4.8.0)
