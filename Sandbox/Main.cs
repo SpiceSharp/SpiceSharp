@@ -131,6 +131,15 @@ namespace Sandbox
                 index++;
             };
             ckt.Simulate(dc);
+
+            string var = "";
+            index = 0;
+            foreach (var name in Parameterized<MOS3Model>.ParameterList(false))
+            {
+                var = var + "\"" + name + "\", ";
+                // var = var + name + " = " + (index++) + " ";
+            }
+            MessageBox.Show(var);
         }
 
         private void CircuitWarning_WarningGenerated(object sender, SpiceSharp.Diagnostics.WarningArgs e)

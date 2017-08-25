@@ -44,11 +44,10 @@ namespace SpiceSharp.Parameters
                         Action<T, double> setter = (Action<T, double>)pi.GetSetMethod()?.CreateDelegate(typeof(Action<T, double>));
                         foreach (var attr in pi.GetCustomAttributes<SpiceName>())
                         {
-                            SpiceName sn = attr as SpiceName;
                             if (getter != null)
-                                dgetter.Add(sn.Name, getter);
+                                dgetter.Add(attr.Name, getter);
                             if (setter != null)
-                                dsetter.Add(sn.Name, setter);
+                                dsetter.Add(attr.Name, setter);
                         }
                     }
                     else if (pi.PropertyType == typeof(string))
@@ -56,9 +55,8 @@ namespace SpiceSharp.Parameters
                         Action<T, string> setter = (Action<T, string>)pi.GetSetMethod()?.CreateDelegate(typeof(Action<T, string>));
                         foreach (var attr in pi.GetCustomAttributes<SpiceName>())
                         {
-                            SpiceName sn = attr as SpiceName;
                             if (setter != null)
-                                ssetter.Add(sn.Name, setter);
+                                ssetter.Add(attr.Name, setter);
                         }
                     }
                 }
@@ -141,6 +139,71 @@ namespace SpiceSharp.Parameters
         public virtual double Ask(string name, Circuit ckt)
         {
             return dcgetter[name].Invoke(me, ckt);
+        }
+
+        /// <summary>
+        /// Enumerate all parameters
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<string> ParameterList(bool alias = true)
+        {
+            List<string> names = new List<string>();
+            var members = typeof(T).GetMembers(BindingFlags.Instance | BindingFlags.Public).Where(m => m.GetCustomAttributes<SpiceName>().Any());
+            foreach (MemberInfo m in members)
+            {
+                // Create a delegate for the member
+                if (m is PropertyInfo)
+                {
+                    PropertyInfo pi = m as PropertyInfo;
+                    if (pi.PropertyType == typeof(Parameter))
+                    {
+                        foreach (var attr in pi.GetCustomAttributes<SpiceName>())
+                        {
+                            names.Add(attr.Name);
+                            if (!alias)
+                                break;
+                        }
+                            
+                    }
+                    else if (pi.PropertyType == typeof(double))
+                    {
+                        foreach (var attr in pi.GetCustomAttributes<SpiceName>())
+                        {
+                            names.Add(attr.Name);
+                            if (!alias)
+                                break;
+                        }
+                    }
+                    else if (pi.PropertyType == typeof(string))
+                    {
+                        Action<T, string> setter = (Action<T, string>)pi.GetSetMethod()?.CreateDelegate(typeof(Action<T, string>));
+                        foreach (var attr in pi.GetCustomAttributes<SpiceName>())
+                        {
+                            names.Add(attr.Name);
+                            if (!alias)
+                                break;
+                        }
+                    }
+                }
+
+                else if (m is MethodInfo)
+                {
+                    MethodInfo mi = m as MethodInfo;
+
+                    // The only allowed parameter is a Circuit object
+                    var parameters = mi.GetParameters();
+                    if (parameters.Length == 1 && parameters[0].ParameterType == typeof(Circuit) && mi.ReturnType == typeof(double))
+                    {
+                        foreach (var attr in mi.GetCustomAttributes<SpiceName>())
+                        {
+                            names.Add(attr.Name);
+                            if (!alias)
+                                break;
+                        }
+                    }
+                }
+            }
+            return names;
         }
     }
 }
