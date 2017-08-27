@@ -65,6 +65,10 @@ namespace Spice2SpiceSharp
             string code = GetModelCode(modelparams);
             code = GetDefaultValues(code, ModelDefaultValues);
 
+            // Find temperature stuff
+            code = Regex.Replace(code, @"ckt\s*\-\>\s*CKTtemp", "ckt.State.Temperature");
+            code = Regex.Replace(code, @"ckt\s*\-\>\s*CKTnomTemp", "ckt.State.NominalTemperature");
+
             // -> Is never possible, so let's go for dots
             code = Regex.Replace(code, @"\s*\-\>\s*", ".");
 
@@ -82,6 +86,10 @@ namespace Spice2SpiceSharp
             code = GetDefaultValues(code, DeviceDefaultValues);
             code = GetNodes(code);
             code = GetDeviceStates(code);
+
+            // Find temperature stuff
+            code = Regex.Replace(code, @"ckt\s*\-\>\s*CKTtemp", "ckt.State.Temperature");
+            code = Regex.Replace(code, @"ckt\s*\-\>\s*CKTnomTemp", "ckt.State.NominalTemperature");
 
             // -> Is never possible, so let's go for dots
             code = Regex.Replace(code, @"\s*\-\>\s*", ".");

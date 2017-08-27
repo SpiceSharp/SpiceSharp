@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    public class BSIM3Model : CircuitModel<BSIM3Model>
+    public class BSIM3v22Model : CircuitModel<BSIM3v22Model>
     {
         /// <summary>
         /// Register our model parameters
         /// </summary>
-        static BSIM3Model()
+        static BSIM3v22Model()
         {
             Register();
         }
 
         /// <summary>
-        /// Allow caching of size-dependent parameters
+        /// The size-dependent parameters
         /// </summary>
-        public Dictionary<Tuple<double, double>, BSIM3SizeDependParam> Sizes = new Dictionary<Tuple<double, double>, BSIM3SizeDependParam>();
+        public Dictionary<Tuple<double, double>, BSIM3SizeDependParam> Sizes { get; } = new Dictionary<Tuple<double, double>, BSIM3SizeDependParam>();
 
         /// <summary>
         /// Parameters
@@ -34,10 +35,8 @@ namespace SpiceSharp.Components
         public Parameter BSIM3capMod { get; } = new Parameter(3);
         [SpiceName("noimod"), SpiceInfo("Noise model selector")]
         public Parameter BSIM3noiMod { get; } = new Parameter(1);
-        [SpiceName("acnqsmod"), SpiceInfo("AC NQS model selector")]
-        public Parameter BSIM3acnqsMod { get; } = new Parameter();
         [SpiceName("version"), SpiceInfo(" parameter for model version")]
-        public string BSIM3version { get; } = "3.3.0";
+        public string BSIM3version { get; } = "3.2.2";
         [SpiceName("tox"), SpiceInfo("Gate oxide thickness in meters")]
         public Parameter BSIM3tox { get; } = new Parameter(150.0e-10);
         [SpiceName("toxm"), SpiceInfo("Gate oxide thickness used in extraction")]
@@ -805,11 +804,6 @@ namespace SpiceSharp.Components
         [SpiceName("pvoffcv"), SpiceInfo("Cross-term dependence of voffcv")]
         public Parameter BSIM3pvoffcv { get; } = new Parameter();
         [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
-        public double BSIM3_TNOM
-        {
-            get => BSIM3tnom - Circuit.CONSTCtoK;
-            set => BSIM3tnom.Set(value + Circuit.CONSTCtoK);
-        }
         public Parameter BSIM3tnom { get; } = new Parameter();
         [SpiceName("cgso"), SpiceInfo("Gate-source overlap capacitance per width")]
         public Parameter BSIM3cgso { get; } = new Parameter();
@@ -847,8 +841,6 @@ namespace SpiceSharp.Components
         public Parameter BSIM3unitLengthGateSidewallJctCap { get; } = new Parameter();
         [SpiceName("xti"), SpiceInfo("Junction current temperature exponent")]
         public Parameter BSIM3jctTempExponent { get; } = new Parameter(3.0);
-        [SpiceName("lintnoi"), SpiceInfo("lint offset for noise calculation")]
-        public Parameter BSIM3lintnoi { get; } = new Parameter();
         [SpiceName("lint"), SpiceInfo("Length reduction parameter")]
         public Parameter BSIM3Lint { get; } = new Parameter();
         [SpiceName("ll"), SpiceInfo("Length reduction parameter")]
@@ -915,13 +907,13 @@ namespace SpiceSharp.Components
         public void SetNMOS(bool value)
         {
             if (value)
-                BSIM3type = NMOS;
+                BSIM3type = 1.0;
         }
         [SpiceName("pmos"), SpiceInfo("Flag to indicate PMOS")]
         public void SetPMOS(bool value)
         {
             if (value)
-                BSIM3type = PMOS;
+                BSIM3type = -1.0;
         }
 
         /// <summary>
@@ -930,22 +922,17 @@ namespace SpiceSharp.Components
         public double TRatio { get; private set; }
         public double Vtm0 { get; private set; }
         public double ni { get; private set; }
-        public double T0 { get; private set; }
-        public double T1 { get; private set; }
 
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double BSIM3type { get; private set; } = 1;
+        public double BSIM3type { get; private set; }
         public double BSIM3cox { get; private set; }
         public double BSIM3factor1 { get; private set; }
         public double BSIM3vtm { get; private set; }
         public double BSIM3jctTempSatCurDensity { get; private set; }
         public double BSIM3jctSidewallTempSatCurDensity { get; private set; }
         public double BSIM3vcrit { get; private set; }
-        public double BSIM3unitAreaTempJctCap { get; private set; }
-        public double BSIM3unitLengthSidewallTempJctCap { get; private set; }
-        public double BSIM3unitLengthGateSidewallTempJctCap { get; private set; }
         public double BSIM3PhiB { get; private set; }
         public double BSIM3PhiBSW { get; private set; }
         public double BSIM3PhiBSWG { get; private set; }
@@ -957,7 +944,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM3Model(string name) : base(name)
+        public BSIM3v22Model(string name) : base(name)
         {
         }
 
@@ -970,13 +957,6 @@ namespace SpiceSharp.Components
             Sizes.Clear();
 
             /* Default value Processing for BSIM3 MOSFET Models */
-            if (!BSIM3acnqsMod.Given)
-                BSIM3acnqsMod.Value = 0;
-            else if ((BSIM3acnqsMod != 0) && (BSIM3acnqsMod != 1))
-            {
-                BSIM3acnqsMod.Value = 0;
-                CircuitWarning.Warning(this, "Warning: acnqsMod has been set to its default value: 0.\n");
-            }
             BSIM3cox = 3.453133e-11 / BSIM3tox;
             if (!BSIM3toxm.Given)
                 BSIM3toxm.Value = BSIM3tox;
@@ -990,9 +970,10 @@ namespace SpiceSharp.Components
                 BSIM3uc1.Value = (BSIM3mobMod.Value == 3) ? -0.056 : -0.056e-9;
             if (!BSIM3u0.Given)
                 BSIM3u0.Value = (BSIM3type == NMOS) ? 0.067 : 0.025;
-
             if (!BSIM3tnom.Given)
                 BSIM3tnom.Value = ckt.State.NominalTemperature;
+            else
+                BSIM3tnom.Value = BSIM3tnom + 273.15;
             if (!BSIM3Llc.Given)
                 BSIM3Llc.Value = BSIM3Ll;
             if (!BSIM3Lwc.Given)
@@ -1078,17 +1059,17 @@ namespace SpiceSharp.Components
             if (BSIM3bulkJctPotential < 0.1)
             {
                 BSIM3bulkJctPotential.Value = 0.1;
-                CircuitWarning.Warning(this, "Given pb is less than 0.1. Pb is set to 0.1.\n");
+                CircuitWarning.Warning(this, "Given pb is less than 0.1. Pb is set to 0.1.");
             }
             if (BSIM3sidewallJctPotential < 0.1)
             {
                 BSIM3sidewallJctPotential.Value = 0.1;
-                CircuitWarning.Warning(this, "Given pbsw is less than 0.1. Pbsw is set to 0.1.\n");
+                CircuitWarning.Warning(this, "Given pbsw is less than 0.1. Pbsw is set to 0.1.");
             }
             if (BSIM3GatesidewallJctPotential < 0.1)
             {
                 BSIM3GatesidewallJctPotential.Value = 0.1;
-                CircuitWarning.Warning(this, "Given pbswg is less than 0.1. Pbswg is set to 0.1.\n");
+                CircuitWarning.Warning(this, "Given pbswg is less than 0.1. Pbswg is set to 0.1.");
             }
 
             Tnom = BSIM3tnom;
@@ -1126,51 +1107,51 @@ namespace SpiceSharp.Components
             T0 = BSIM3tcj * delTemp;
             if (T0 >= -1.0)
             {
-                BSIM3unitAreaTempJctCap = BSIM3unitAreaJctCap * (1.0 + T0);
+                BSIM3unitAreaJctCap.Value *= 1.0 + T0;
             }
             else if (BSIM3unitAreaJctCap > 0.0)
             {
-                BSIM3unitAreaTempJctCap = 0.0;
-                CircuitWarning.Warning(this, "Temperature effect has caused cj to be negative. Cj is clamped to zero.\n");
+                BSIM3unitAreaJctCap.Value = 0.0;
+                CircuitWarning.Warning(this, "Temperature effect has caused cj to be negative. Cj is clamped to zero.");
             }
             T0 = BSIM3tcjsw * delTemp;
             if (T0 >= -1.0)
             {
-                BSIM3unitLengthSidewallTempJctCap = BSIM3unitLengthSidewallJctCap * (1.0 + T0);
+                BSIM3unitLengthSidewallJctCap.Value *= 1.0 + T0;
             }
             else if (BSIM3unitLengthSidewallJctCap > 0.0)
             {
-                BSIM3unitLengthSidewallTempJctCap = 0.0;
-                CircuitWarning.Warning(this, "Temperature effect has caused cjsw to be negative. Cjsw is clamped to zero.\n");
+                BSIM3unitLengthSidewallJctCap.Value = 0.0;
+                CircuitWarning.Warning(this, "Temperature effect has caused cjsw to be negative. Cjsw is clamped to zero.");
             }
             T0 = BSIM3tcjswg * delTemp;
             if (T0 >= -1.0)
             {
-                BSIM3unitLengthGateSidewallTempJctCap = BSIM3unitLengthGateSidewallJctCap * (1.0 + T0);
+                BSIM3unitLengthGateSidewallJctCap.Value *= 1.0 + T0;
             }
             else if (BSIM3unitLengthGateSidewallJctCap > 0.0)
             {
-                BSIM3unitLengthGateSidewallTempJctCap = 0.0;
-                CircuitWarning.Warning(this, "Temperature effect has caused cjswg to be negative. Cjswg is clamped to zero.\n");
+                BSIM3unitLengthGateSidewallJctCap.Value = 0.0;
+                CircuitWarning.Warning(this, "Temperature effect has caused cjswg to be negative. Cjswg is clamped to zero.");
             }
 
             BSIM3PhiB = BSIM3bulkJctPotential - BSIM3tpb * delTemp;
             if (BSIM3PhiB < 0.01)
             {
                 BSIM3PhiB = 0.01;
-                CircuitWarning.Warning(this, "Temperature effect has caused pb to be less than 0.01. Pb is clamped to 0.01.\n");
+                CircuitWarning.Warning(this, "Temperature effect has caused pb to be less than 0.01. Pb is clamped to 0.01.");
             }
             BSIM3PhiBSW = BSIM3sidewallJctPotential - BSIM3tpbsw * delTemp;
             if (BSIM3PhiBSW <= 0.01)
             {
                 BSIM3PhiBSW = 0.01;
-                CircuitWarning.Warning(this, "Temperature effect has caused pbsw to be less than 0.01. Pbsw is clamped to 0.01.\n");
+                CircuitWarning.Warning(this, "Temperature effect has caused pbsw to be less than 0.01. Pbsw is clamped to 0.01.");
             }
             BSIM3PhiBSWG = BSIM3GatesidewallJctPotential - BSIM3tpbswg * delTemp;
             if (BSIM3PhiBSWG <= 0.01)
             {
                 BSIM3PhiBSWG = 0.01;
-                CircuitWarning.Warning(this, "Temperature effect has caused pbswg to be less than 0.01. Pbswg is clamped to 0.01.\n");
+                CircuitWarning.Warning(this, "Temperature effect has caused pbswg to be less than 0.01. Pbswg is clamped to 0.01.");
             }
         }
     }

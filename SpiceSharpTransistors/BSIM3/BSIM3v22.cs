@@ -1,32 +1,31 @@
 ﻿using System;
-using System.Numerics;
-using System.Collections.Generic;
 using System.IO;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
+using System.Numerics;
 using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    public class BSIM3 : CircuitComponent<BSIM3>
+    public class BSIM3v22 : CircuitComponent<BSIM3v22>
     {
         /// <summary>
-        /// Register our parameters
+        /// Register our device parameters and terminals
         /// </summary>
-        static BSIM3()
+        static BSIM3v22()
         {
             Register();
-            terminals = new string[] { "Drain", "Gate", "Source", "Bulk" };
+            terminals = new string[] { };
         }
 
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public void SetModel(BSIM3Model model) => Model = (ICircuitObject)model;
+        public void SetModel(BSIM3v22Model model) => Model = model;
 
         /// <summary>
-        /// Size dependent parameters
+        /// Size-dependent parameters
         /// </summary>
         private BSIM3SizeDependParam pParam = null;
 
@@ -53,8 +52,6 @@ namespace SpiceSharp.Components
         public bool BSIM3off { get; set; }
         [SpiceName("nqsmod"), SpiceInfo("Non-quasi-static model selector")]
         public Parameter BSIM3nqsMod { get; } = new Parameter();
-        [SpiceName("acnqsmod"), SpiceInfo("AC NQS model selector")]
-        public Parameter BSIM3acnqsMod { get; } = new Parameter();
         [SpiceName("id"), SpiceInfo("Ids")]
         public double BSIM3cd { get; private set; }
         [SpiceName("gm"), SpiceInfo("Gm")]
@@ -114,12 +111,7 @@ namespace SpiceSharp.Components
         public double BSIM3cbs { get; private set; }
         public double BSIM3gbs { get; private set; }
         public double BSIM3thetavth { get; private set; }
-        public double BSIM3Vgsteff { get; private set; }
-        public double BSIM3rds { get; private set; }
-        public double BSIM3Abulk { get; private set; }
         public double BSIM3ueff { get; private set; }
-        public double BSIM3AbovVgst2Vtm { get; private set; }
-        public double BSIM3Vdseff { get; private set; }
         public double BSIM3qinv { get; private set; }
         public double BSIM3cggb { get; private set; }
         public double BSIM3cgsb { get; private set; }
@@ -140,7 +132,6 @@ namespace SpiceSharp.Components
         public double BSIM3qdrn { get; private set; }
         public double BSIM3capbs { get; private set; }
         public double BSIM3capbd { get; private set; }
-        public double BSIM3taunet { get; private set; }
         public double BSIM3gtg { get; private set; }
         public double BSIM3gtd { get; private set; }
         public double BSIM3gts { get; private set; }
@@ -181,7 +172,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM3(string name) : base(name)
+        public BSIM3v22(string name) : base(name)
         {
         }
 
@@ -191,7 +182,8 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            var model = Model as BSIM3Model;
+            var model = Model as BSIM3v22Model;
+            pParam = null;
 
             // Allocate nodes
             var nodes = BindNodes(ckt);
@@ -202,33 +194,22 @@ namespace SpiceSharp.Components
 
             // Allocate states
             BSIM3states = ckt.State.GetState(17);
-            pParam = null;
-
-            /* allocate a chunk of the state vector */
-
-            /* perform the parameter defaulting */
-            if (!BSIM3acnqsMod.Given)
-                BSIM3acnqsMod.Value = model.BSIM3acnqsMod;
-            else if ((BSIM3acnqsMod != 0) && (BSIM3acnqsMod != 1))
-            {
-                BSIM3acnqsMod.Value = model.BSIM3acnqsMod;
-                CircuitWarning.Warning(this, $"Warning: acnqsMod has been set to its global value {model.BSIM3acnqsMod}.");
-            }
 
             /* process drain series resistance */
-            if ((model.BSIM3sheetResistance > 0.0) && (BSIM3drainSquares > 0.0) && (BSIM3dNodePrime == 0))
+            if ((model.BSIM3sheetResistance > 0.0) && (BSIM3drainSquares > 0.0))
                 BSIM3dNodePrime = CreateNode(ckt).Index;
             else
                 BSIM3dNodePrime = BSIM3dNode;
 
             /* process source series resistance */
-            if ((model.BSIM3sheetResistance > 0.0) && (BSIM3sourceSquares > 0.0) && (BSIM3sNodePrime == 0))
+            if ((model.BSIM3sheetResistance > 0.0) && (BSIM3sourceSquares > 0.0))
                 BSIM3sNodePrime = CreateNode(ckt).Index;
             else
                 BSIM3sNodePrime = BSIM3sNode;
 
             /* internal charge node */
-            if ((BSIM3nqsMod > 0) && (BSIM3qNode == 0))
+
+            if (BSIM3nqsMod != 0)
                 BSIM3qNode = CreateNode(ckt).Index;
             else
                 BSIM3qNode = 0;
@@ -240,17 +221,17 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            var model = Model as BSIM3Model;
-            double Ldrn, Wdrn, T0, T1, tmp1, tmp2, T2, T3, Inv_L, Inv_W, Inv_LW, tmp, T4, T5, tmp3, Nvtm, SourceSatCurrent, DrainSatCurrent;
+            var model = Model as BSIM3v22Model;
+            double Ldrn, Wdrn, T0, T1, tmp1, tmp2, T2, T3, Inv_L, Inv_W, Inv_LW, tmp, T4, T5, tmp3,
+                Nvtm, SourceSatCurrent, DrainSatCurrent;
 
-            Tuple<double, double> mysize = new Tuple<double, double>(BSIM3w, BSIM3l);
-            if (model.Sizes.ContainsKey(mysize))
-                pParam = model.Sizes[mysize];
+            Tuple<double, double> size = new Tuple<double, double>(BSIM3w, BSIM3l);
+            if (model.Sizes.ContainsKey(size))
+                pParam = model.Sizes[size];
             else
             {
                 pParam = new BSIM3SizeDependParam();
-                model.Sizes.Add(mysize, pParam);
-
+                model.Sizes.Add(size, pParam);
                 Ldrn = BSIM3l;
                 Wdrn = BSIM3w;
 
@@ -270,18 +251,17 @@ namespace SpiceSharp.Components
 
                 pParam.BSIM3leff = BSIM3l - 2.0 * pParam.BSIM3dl;
                 if (pParam.BSIM3leff <= 0.0)
-                    throw new CircuitException($"BSIM3: mosfet {Name}, model {model.Name}: Effective channel length <= 0");
+                    throw new CircuitException($"BSIM3v22: mosfet {Name}, model {model.Name}: Effective channel length <= 0");
                 pParam.BSIM3weff = BSIM3w - 2.0 * pParam.BSIM3dw;
                 if (pParam.BSIM3weff <= 0.0)
-                    throw new CircuitException($"BSIM3: mosfet {Name}, model {model.Name}: Effective channel width <= 0");
+                    throw new CircuitException($"BSIM3v22: mosfet {Name}, model {model.Name}: Effective channel width <= 0");
 
                 pParam.BSIM3leffCV = BSIM3l - 2.0 * pParam.BSIM3dlc;
                 if (pParam.BSIM3leffCV <= 0.0)
-                    throw new CircuitException($"BSIM3: mosfet {Name}, model {model.Name}: Effective channel length for C-V <= 0");
-
+                    throw new CircuitException($"BSIM3v22: mosfet {Name}, model {model.Name}: Effective channel length for C-V <= 0");
                 pParam.BSIM3weffCV = BSIM3w - 2.0 * pParam.BSIM3dwc;
                 if (pParam.BSIM3weffCV <= 0.0)
-                    throw new CircuitException($"BSIM3: mosfet {Name}, model {model.Name}: Effective channel width for C-V <= 0");
+                    throw new CircuitException($"BSIM3v22: mosfet {Name}, model {model.Name}: Effective channel width for C-V <= 0");
 
                 if (model.BSIM3binUnit.Value == 1)
                 {
@@ -302,7 +282,7 @@ namespace SpiceSharp.Components
 
                 pParam.BSIM3cit = model.BSIM3cit + model.BSIM3lcit * Inv_L + model.BSIM3wcit * Inv_W + model.BSIM3pcit * Inv_LW;
                 pParam.BSIM3nfactor = model.BSIM3nfactor + model.BSIM3lnfactor * Inv_L + model.BSIM3wnfactor * Inv_W + model.BSIM3pnfactor *
-                   Inv_LW;
+                  Inv_LW;
                 pParam.BSIM3xj = model.BSIM3xj + model.BSIM3lxj * Inv_L + model.BSIM3wxj * Inv_W + model.BSIM3pxj * Inv_LW;
                 pParam.BSIM3vsat = model.BSIM3vsat + model.BSIM3lvsat * Inv_L + model.BSIM3wvsat * Inv_W + model.BSIM3pvsat * Inv_LW;
                 pParam.BSIM3at = model.BSIM3at + model.BSIM3lat * Inv_L + model.BSIM3wat * Inv_W + model.BSIM3pat * Inv_LW;
@@ -399,7 +379,7 @@ namespace SpiceSharp.Components
                 pParam.BSIM3rds0 = (pParam.BSIM3rdsw + pParam.BSIM3prt * T0) / Math.Pow(pParam.BSIM3weff * 1E6, pParam.BSIM3wr);
 
                 if (BSIM3checkModel())
-                    throw new CircuitException($"Fatal error(s) detected during BSIM3v3.3 parameter checking for {Name} in model {model.Name}");
+                    throw new CircuitException($"Fatal error(s) detected during BSIM3v3.2 parameter checking for {Name} in model {model.Name}");
 
                 pParam.BSIM3cgdo = (model.BSIM3cgdo + pParam.BSIM3cf) * pParam.BSIM3weffCV;
                 pParam.BSIM3cgso = (model.BSIM3cgso + pParam.BSIM3cf) * pParam.BSIM3weffCV;
@@ -407,7 +387,7 @@ namespace SpiceSharp.Components
 
                 T0 = pParam.BSIM3leffCV * pParam.BSIM3leffCV;
                 pParam.BSIM3tconst = pParam.BSIM3u0temp * pParam.BSIM3elm / (model.BSIM3cox * pParam.BSIM3weffCV * pParam.BSIM3leffCV *
-                  T0);
+                    T0);
 
                 if (!model.BSIM3npeak.Given && model.BSIM3gamma1.Given)
                 {
@@ -433,11 +413,13 @@ namespace SpiceSharp.Components
                 {
                     if (!model.BSIM3k1.Given)
                     {
+
                         CircuitWarning.Warning(this, "Warning: k1 should be specified with k2.");
                         pParam.BSIM3k1 = 0.53;
                     }
                     if (!model.BSIM3k2.Given)
                     {
+
                         CircuitWarning.Warning(this, "Warning: k2 should be specified with k1.");
                         pParam.BSIM3k2 = -0.0186;
                     }
@@ -552,7 +534,7 @@ namespace SpiceSharp.Components
 
                 T0 = Math.Sqrt(1.0 + pParam.BSIM3nlx / pParam.BSIM3leff);
                 T5 = pParam.BSIM3k1ox * (T0 - 1.0) * pParam.BSIM3sqrtPhi + (pParam.BSIM3kt1 + pParam.BSIM3kt1l / pParam.BSIM3leff) *
-                     (model.TRatio - 1.0);
+                    (model.TRatio - 1.0);
 
                 tmp3 = model.BSIM3type * pParam.BSIM3vth0 - T2 - T3 + pParam.BSIM3k3 * T4 + T5;
                 pParam.BSIM3vfbzb = tmp3 - pParam.BSIM3phi - pParam.BSIM3k1 * pParam.BSIM3sqrtPhi;
@@ -582,7 +564,7 @@ namespace SpiceSharp.Components
             else
             {
                 SourceSatCurrent = BSIM3sourceArea * model.BSIM3jctTempSatCurDensity + BSIM3sourcePerimeter *
-                     model.BSIM3jctSidewallTempSatCurDensity;
+                    model.BSIM3jctSidewallTempSatCurDensity;
             }
             if ((SourceSatCurrent > 0.0) && (model.BSIM3ijth > 0.0))
             {
@@ -597,7 +579,7 @@ namespace SpiceSharp.Components
             else
             {
                 DrainSatCurrent = BSIM3drainArea * model.BSIM3jctTempSatCurDensity + BSIM3drainPerimeter *
-                     model.BSIM3jctSidewallTempSatCurDensity;
+                    model.BSIM3jctSidewallTempSatCurDensity;
             }
             if ((DrainSatCurrent > 0.0) && (model.BSIM3ijth > 0.0))
             {
@@ -612,36 +594,37 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Load(Circuit ckt)
         {
-            var model = Model as BSIM3Model;
+            var model = Model as BSIM3v22Model;
             var state = ckt.State;
             var rstate = state.Real;
             var method = ckt.Method;
             int Check;
-            double vbs, vgs, vds, qdef, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, Idtot, cdhat, Ibtot, cbhat, von, vgb, Nvtm, SourceSatCurrent,
-                        evbs, T0, DrainSatCurrent, evbd, Vds, Vgs, Vbs, T1, Vbseff, dVbseff_dVb, Phis, dPhis_dVb, sqrtPhis, dsqrtPhis_dVb, Xdep, dXdep_dVb,
-                        Leff, Vtm, T3, V0, T2, T4, lt1, dlt1_dVb, ltw, dltw_dVb, Theta0, dT1_dVb, dTheta0_dVb, Delt_vth, dDelt_vth_dVb, dT2_dVb, TempRatio,
-                        tmp2, T9, dDIBL_Sft_dVd, DIBL_Sft, Vth, dVth_dVb, dVth_dVd, tmp3, tmp4, n, dn_dVb, dn_dVd, T6, T5, Vgs_eff, dVgs_eff_dVg, Vgst, T10,
-                        VgstNVt, ExpArg, Vgsteff, dVgsteff_dVg, dVgsteff_dVd, dVgsteff_dVb, ExpVgst, dT1_dVg, dT1_dVd, dT2_dVg, dT2_dVd, Weff, dWeff_dVg,
-                        dWeff_dVb, Rds, dRds_dVg, dRds_dVb, tmp1, T7, Abulk0, dAbulk0_dVb, T8, dAbulk_dVg, Abulk, dAbulk_dVb, dT0_dVb, dDenomi_dVg, dDenomi_dVd,
-                        dDenomi_dVb, Denomi, ueff, dueff_dVg, dueff_dVd, dueff_dVb, WVCox, WVCoxRds, Esat, EsatL, dEsatL_dVg, dEsatL_dVd, dEsatL_dVb, a1,
-                        dLambda_dVg, Lambda, Vgst2Vtm, Vdsat, dT0_dVg, dT0_dVd, dVdsat_dVg, dVdsat_dVd, dVdsat_dVb, dT3_dVg, dT3_dVd, dT3_dVb, Vdseff, dVdseff_dVg,
-                        dVdseff_dVd, dVdseff_dVb, Vasat, dVasat_dVg, dVasat_dVb, dVasat_dVd, diffVds, VACLM, dVACLM_dVg, dVACLM_dVb, dVACLM_dVd, VADIBL,
-                        dVADIBL_dVg, dVADIBL_dVb, dVADIBL_dVd, Va, dVa_dVg, dVa_dVd, dVa_dVb, VASCBE, dVASCBE_dVg, dVASCBE_dVd, dVASCBE_dVb, CoxWovL, beta,
-                        dbeta_dVg, dbeta_dVd, dbeta_dVb, fgche1, dfgche1_dVg, dfgche1_dVd, dfgche1_dVb, fgche2, dfgche2_dVg, dfgche2_dVd, dfgche2_dVb, gche,
-                        dgche_dVg, dgche_dVd, dgche_dVb, Idl, dIdl_dVg, dIdl_dVd, dIdl_dVb, Idsa, dIdsa_dVg, dIdsa_dVd, dIdsa_dVb, Ids, Gm, Gds, Gmb, tmp, Isub,
-                        Gbg, Gbd, Gbb, cdrain, qgate = 0.0, Vfb, dVgst_dVb, dVgst_dVg, CoxWL, Arg1, qbulk = 0.0, qdrn = 0.0, One_Third_CoxWL, Two_Third_CoxWL, AbulkCV, dAbulkCV_dVb,
-                        Alphaz, T11, dAlphaz_dVg, dAlphaz_dVb, T12, VbseffCV, dVbseffCV_dVb, noff, dnoff_dVd, dnoff_dVb, voffcv, Cgg, Cgd, Cgb, Cbg, Cbd, Cbb, VdsatCV,
-                        dVdsatCV_dVg, dVdsatCV_dVb, Cgg1, Cgb1, Cgd1, Cbg1, Cbb1, Cbd1, qsrc, Csg, Csb, Csd, V3, Vfbeff, dVfbeff_dVg, dVfbeff_dVb, Qac0, dQac0_dVg,
-                        dQac0_dVb, Qsub0, dQsub0_dVg, dQsub0_dVd, dQsub0_dVb, V4, VdseffCV, dVdseffCV_dVg, dVdseffCV_dVd, dVdseffCV_dVb, qinoi, Cox, Tox, Tcen,
-                        dTcen_dVg, dTcen_dVb, LINK, Ccen, Coxeff, dCoxeff_dVg, dCoxeff_dVb, CoxWLcen, QovCox, DeltaPhi, dDeltaPhi_dVg, VgDP, dVgDP_dVg, dTcen_dVd,
-                        dCoxeff_dVd, czbd, czbs, czbdswg, czbdsw, czbssw, czbsswg, MJ, MJSW, MJSWG, arg, sarg, qcheq = 0.0, gtau_drift, gtau_diff, cgdo, qgdo, cgso, qgso,
-                        ag0, gcggb, gcgdb, gcgsb, gcdgb, gcddb, gcdsb, gcsgb, gcsdb, gcssb, gcbgb, gcbdb, gcbsb, qgd, qgs, qgb, ggtg, sxpart, dxpart, ddxpart_dVd,
-                        dsxpart_dVd, ggtd, ggts, ggtb, gqdef = 0.0, gcqgb = 0.0, gcqdb = 0.0, gcqsb = 0.0, gcqbb = 0.0, Cdd, Cdg, ddxpart_dVg, Cds, Css, ddxpart_dVs, ddxpart_dVb, dsxpart_dVg,
-                        dsxpart_dVs, dsxpart_dVb;
-            double cqdef;
-            double ceqqg, cqcheq, cqgate, cqbulk, cqdrn, ceqqb, ceqqd, Gmbs, FwdSum, RevSum, cdreq, ceqbd, ceqbs, gbbdp, gbbsp, gbdpg, gbdpdp, gbdpb, gbdpsp,
-                        gbspg, gbspdp, gbspb, gbspsp;
-            bool ChargeComputationNeeded = (method != null || state.UseSmallSignal) || (state.Domain == CircuitState.DomainTypes.Time && state.UseDC && state.UseIC);
+            double vbs, vgs, vds, qdef, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, Idtot, cdhat, Ibtot, cbhat, von,
+                vgb, Nvtm, SourceSatCurrent, evbs, T0, DrainSatCurrent, evbd, Vds, Vgs, Vbs, T1, Vbseff, dVbseff_dVb, Phis, dPhis_dVb,
+                sqrtPhis, dsqrtPhis_dVb, Xdep, dXdep_dVb, Leff, Vtm, T3, V0, T2, T4, lt1, dlt1_dVb, ltw, dltw_dVb, Theta0, dT1_dVb,
+                dTheta0_dVb, Delt_vth, dDelt_vth_dVb, dT2_dVb, TempRatio, tmp2, T9, dDIBL_Sft_dVd, DIBL_Sft, Vth, dVth_dVb, dVth_dVd, tmp3,
+                tmp4, n, dn_dVb, dn_dVd, T6, T5, Vgs_eff, dVgs_eff_dVg, Vgst, T10, VgstNVt, ExpArg, Vgsteff, dVgsteff_dVg, dVgsteff_dVd,
+                dVgsteff_dVb, ExpVgst, dT1_dVg, dT1_dVd, dT2_dVg, dT2_dVd, Weff, dWeff_dVg, dWeff_dVb, Rds, dRds_dVg, dRds_dVb, tmp1, T7,
+                Abulk0, dAbulk0_dVb, T8, dAbulk_dVg, Abulk, dAbulk_dVb, dT0_dVb, dDenomi_dVg, dDenomi_dVd, dDenomi_dVb, Denomi, ueff,
+                dueff_dVg, dueff_dVd, dueff_dVb, WVCox, WVCoxRds, Esat, EsatL, dEsatL_dVg, dEsatL_dVd, dEsatL_dVb, a1, dLambda_dVg, Lambda,
+                Vgst2Vtm, Vdsat, dT0_dVg, dT0_dVd, dVdsat_dVg, dVdsat_dVd, dVdsat_dVb, dT3_dVg, dT3_dVd, dT3_dVb, Vdseff, dVdseff_dVg,
+                dVdseff_dVd, dVdseff_dVb, Vasat, dVasat_dVg, dVasat_dVb, dVasat_dVd, diffVds, VACLM, dVACLM_dVg, dVACLM_dVb, dVACLM_dVd,
+                VADIBL, dVADIBL_dVg, dVADIBL_dVb, dVADIBL_dVd, Va, dVa_dVg, dVa_dVd, dVa_dVb, VASCBE, dVASCBE_dVg, dVASCBE_dVd, dVASCBE_dVb,
+                CoxWovL, beta, dbeta_dVg, dbeta_dVd, dbeta_dVb, fgche1, dfgche1_dVg, dfgche1_dVd, dfgche1_dVb, fgche2, dfgche2_dVg,
+                dfgche2_dVd, dfgche2_dVb, gche, dgche_dVg, dgche_dVd, dgche_dVb, Idl, dIdl_dVg, dIdl_dVd, dIdl_dVb, Idsa, dIdsa_dVg, dIdsa_dVd,
+                dIdsa_dVb, Ids, Gm, Gds, Gmb, tmp, Isub, Gbg, Gbd, Gbb, cdrain, qgate = 0, Vfb, dVgst_dVb, dVgst_dVg, CoxWL, Arg1, qbulk = 0, qdrn = 0,
+                One_Third_CoxWL, Two_Third_CoxWL, AbulkCV, dAbulkCV_dVb, Alphaz, T11, dAlphaz_dVg, dAlphaz_dVb, T12, VbseffCV, dVbseffCV_dVb,
+                noff, dnoff_dVd, dnoff_dVb, voffcv, Cgg, Cgd, Cgb, Cbg, Cbd, Cbb, VdsatCV, dVdsatCV_dVg, dVdsatCV_dVb, Cgg1, Cgb1, Cgd1, Cbg1,
+                Cbb1, Cbd1, qsrc, Csg, Csb, Csd, V3, Vfbeff, dVfbeff_dVg, dVfbeff_dVb, Qac0, dQac0_dVg, dQac0_dVb, Qsub0, dQsub0_dVg,
+                dQsub0_dVd, dQsub0_dVb, V4, VdseffCV, dVdseffCV_dVg, dVdseffCV_dVd, dVdseffCV_dVb, qinoi, Cox, Tox, Tcen, dTcen_dVg, dTcen_dVb,
+                LINK, Ccen, Coxeff, dCoxeff_dVg, dCoxeff_dVb, CoxWLcen, QovCox, DeltaPhi, dDeltaPhi_dVg, dDeltaPhi_dVd, dDeltaPhi_dVb,
+                dTcen_dVd, dCoxeff_dVd, czbd, czbs, czbdswg, czbdsw, czbssw, czbsswg, MJ, MJSW, MJSWG, arg, sarg, qcheq = 0, gtau_drift, gtau_diff,
+                cgdo, qgdo, cgso, qgso, ag0, gcggb, gcgdb, gcgsb, gcdgb, gcddb, gcdsb, gcsgb, gcsdb, gcssb, gcbgb, gcbdb, gcbsb, qgd, qgs, qgb,
+                ggtg, sxpart, dxpart, ddxpart_dVd, dsxpart_dVd, ggtd, ggts, ggtb, gqdef = 0, gcqgb = 0, gcqdb = 0, gcqsb = 0, gcqbb = 0, Cdd, Cdg, ddxpart_dVg,
+                Cds, Css, ddxpart_dVs, ddxpart_dVb, dsxpart_dVg, dsxpart_dVs, dsxpart_dVb, cqdef, ceqqg, cqcheq, cqgate, cqbulk, cqdrn, ceqqb,
+                ceqqd, Gmbs, FwdSum, RevSum, cdreq, ceqbd, ceqbs, gbbdp, gbbsp, gbdpg, gbdpdp, gbdpb, gbdpsp, gbspg, gbspdp, gbspb, gbspsp;
+            bool ChargeComputationNeeded = ((method != null || state.UseSmallSignal) || ((state.Domain == CircuitState.DomainTypes.Time &&
+    state.UseDC) && state.UseIC)) ? true : false;
 
             Check = 1;
             if (state.UseSmallSignal)
@@ -651,39 +634,39 @@ namespace SpiceSharp.Components
                 vds = state.States[0][BSIM3states + BSIM3vds];
                 qdef = state.States[0][BSIM3states + BSIM3qdef];
             }
-            else if (method != null && method.SavedTime == 0.0)
+            else if ((method != null && method.SavedTime == 0.0))
             {
                 vbs = state.States[1][BSIM3states + BSIM3vbs];
                 vgs = state.States[1][BSIM3states + BSIM3vgs];
                 vds = state.States[1][BSIM3states + BSIM3vds];
                 qdef = state.States[1][BSIM3states + BSIM3qdef];
             }
-            else if (state.Init == CircuitState.InitFlags.InitJct && !BSIM3off)
+            else if ((state.Init == CircuitState.InitFlags.InitJct) && !BSIM3off)
             {
                 vds = model.BSIM3type * BSIM3icVDS;
                 vgs = model.BSIM3type * BSIM3icVGS;
                 vbs = model.BSIM3type * BSIM3icVBS;
                 qdef = 0.0;
 
-                if ((vds == 0.0) && (vgs == 0.0) && (vbs == 0.0) &&
-                            (method != null || state.UseDC || state.Domain == CircuitState.DomainTypes.None || !state.UseIC))
+                if ((vds == 0.0) && (vgs == 0.0) && (vbs == 0.0) && ((method != null || state.UseDC ||
+                    state.Domain == CircuitState.DomainTypes.None) || (!state.UseIC)))
                 {
                     vbs = 0.0;
                     vgs = model.BSIM3type * pParam.BSIM3vth0 + 0.1;
                     vds = 0.1;
                 }
             }
-            else if ((state.Init == CircuitState.InitFlags.InitJct || state.Init == CircuitState.InitFlags.InitFix) && BSIM3off)
+            else if ((state.Init == CircuitState.InitFlags.InitJct || state.Init == CircuitState.InitFlags.InitFix) && (BSIM3off))
             {
                 qdef = vbs = vgs = vds = 0.0;
             }
             else
             {
                 /* PREDICTOR */
-                vbs = model.BSIM3type * (rstate.OldSolution[BSIM3bNode] - rstate.OldSolution[BSIM3sNodePrime]);
-                vgs = model.BSIM3type * (rstate.OldSolution[BSIM3gNode] - rstate.OldSolution[BSIM3sNodePrime]);
-                vds = model.BSIM3type * (rstate.OldSolution[BSIM3dNodePrime] - rstate.OldSolution[BSIM3sNodePrime]);
-                qdef = model.BSIM3type * (rstate.OldSolution[BSIM3qNode]);
+                vbs = model.BSIM3type * rstate.OldSolution[BSIM3bNode] - rstate.OldSolution[BSIM3sNodePrime];
+                vgs = model.BSIM3type * rstate.OldSolution[BSIM3gNode] - rstate.OldSolution[BSIM3sNodePrime];
+                vds = model.BSIM3type * rstate.OldSolution[BSIM3dNodePrime] - rstate.OldSolution[BSIM3sNodePrime];
+                qdef = model.BSIM3type * rstate.OldSolution[BSIM3qNode];
                 /* PREDICTOR */
 
                 vbd = vbs - vds;
@@ -699,7 +682,7 @@ namespace SpiceSharp.Components
                 {
                     Idtot = BSIM3cd + BSIM3csub - BSIM3cbd;
                     cdhat = Idtot - BSIM3gbd * delvbd + (BSIM3gmbs + BSIM3gbbs) * delvbs + (BSIM3gm + BSIM3gbgs) * delvgs + (BSIM3gds + BSIM3gbds) *
-                         delvds;
+                        delvds;
                     Ibtot = BSIM3cbs + BSIM3cbd - BSIM3csub;
                     cbhat = Ibtot + BSIM3gbd * delvbd + (BSIM3gbs - BSIM3gbbs) * delvbs - BSIM3gbgs * delvgs - BSIM3gbds * delvds;
                 }
@@ -756,7 +739,7 @@ namespace SpiceSharp.Components
             else
             {
                 SourceSatCurrent = BSIM3sourceArea * model.BSIM3jctTempSatCurDensity + BSIM3sourcePerimeter *
-                     model.BSIM3jctSidewallTempSatCurDensity;
+                    model.BSIM3jctSidewallTempSatCurDensity;
             }
             if (SourceSatCurrent <= 0.0)
             {
@@ -795,7 +778,7 @@ namespace SpiceSharp.Components
             else
             {
                 DrainSatCurrent = BSIM3drainArea * model.BSIM3jctTempSatCurDensity + BSIM3drainPerimeter *
-                     model.BSIM3jctSidewallTempSatCurDensity;
+                    model.BSIM3jctSidewallTempSatCurDensity;
             }
             if (DrainSatCurrent <= 0.0)
             {
@@ -946,10 +929,10 @@ namespace SpiceSharp.Components
             T2 = T0 * V0;
             dT2_dVb = pParam.BSIM3dvt0w * dT2_dVb * V0;
 
-            TempRatio = state.Temperature / model.BSIM3tnom - 1.0;
+            TempRatio = ckt.State.Temperature / model.BSIM3tnom - 1.0;
             T0 = Math.Sqrt(1.0 + pParam.BSIM3nlx / Leff);
             T1 = pParam.BSIM3k1ox * (T0 - 1.0) * pParam.BSIM3sqrtPhi + (pParam.BSIM3kt1 + pParam.BSIM3kt1l / Leff + pParam.BSIM3kt2 *
-                 Vbseff) * TempRatio;
+                Vbseff) * TempRatio;
             tmp2 = model.BSIM3tox * pParam.BSIM3phi / (pParam.BSIM3weff + pParam.BSIM3w0);
 
             T3 = pParam.BSIM3eta0 + pParam.BSIM3etab * Vbseff;
@@ -968,12 +951,12 @@ namespace SpiceSharp.Components
             DIBL_Sft = dDIBL_Sft_dVd * Vds;
 
             Vth = model.BSIM3type * pParam.BSIM3vth0 - pParam.BSIM3k1 * pParam.BSIM3sqrtPhi + pParam.BSIM3k1ox * sqrtPhis -
-                        pParam.BSIM3k2ox * Vbseff - Delt_vth - T2 + (pParam.BSIM3k3 + pParam.BSIM3k3b * Vbseff) * tmp2 + T1 - DIBL_Sft;
+                pParam.BSIM3k2ox * Vbseff - Delt_vth - T2 + (pParam.BSIM3k3 + pParam.BSIM3k3b * Vbseff) * tmp2 + T1 - DIBL_Sft;
 
             BSIM3von = Vth;
 
             dVth_dVb = pParam.BSIM3k1ox * dsqrtPhis_dVb - pParam.BSIM3k2ox - dDelt_vth_dVb - dT2_dVb + pParam.BSIM3k3b * tmp2 -
-                        pParam.BSIM3etab * Vds * pParam.BSIM3theta0vb0 * T4 + pParam.BSIM3kt2 * TempRatio;
+                pParam.BSIM3etab * Vds * pParam.BSIM3theta0vb0 * T4 + pParam.BSIM3kt2 * TempRatio;
             dVth_dVd = -dDIBL_Sft_dVd;
 
             /* Calculate n */
@@ -1061,7 +1044,6 @@ namespace SpiceSharp.Components
                 dVgsteff_dVd = (T2 * dT1_dVd - T1 * dT2_dVd) / T3;
                 dVgsteff_dVb = (T2 * dT1_dVb - T1 * dT2_dVb) / T3;
             }
-            BSIM3Vgsteff = Vgsteff;
 
             /* Calculate Effective Channel Geometry */
             T9 = sqrtPhis - pParam.BSIM3sqrtPhi;
@@ -1095,7 +1077,6 @@ namespace SpiceSharp.Components
                 dRds_dVg = pParam.BSIM3rds0 * pParam.BSIM3prwg * T1;
                 dRds_dVb = pParam.BSIM3rds0 * pParam.BSIM3prwb * dsqrtPhis_dVb * T1;
             }
-            BSIM3rds = Rds; /* Noise Bugfix */
 
             /* Calculate Abulk */
             T1 = 0.5 * pParam.BSIM3k1ox / sqrtPhis;
@@ -1137,7 +1118,6 @@ namespace SpiceSharp.Components
                 dAbulk_dVb *= T10;
                 dAbulk_dVg *= T10;
             }
-            BSIM3Abulk = Abulk;
 
             T2 = pParam.BSIM3keta * Vbseff;
             if (T2 >= -0.9)
@@ -1245,8 +1225,6 @@ namespace SpiceSharp.Components
             }
 
             Vgst2Vtm = Vgsteff + 2.0 * Vtm;
-            BSIM3AbovVgst2Vtm = Abulk / Vgst2Vtm;
-
             if (Rds > 0)
             {
                 tmp2 = dRds_dVg / Rds + dWeff_dVg / Weff;
@@ -1289,7 +1267,7 @@ namespace SpiceSharp.Components
                 T1 = Vgst2Vtm * (2.0 / Lambda - 1.0) + Abulk * EsatL + 3.0 * T7;
 
                 dT1_dVg = (2.0 / Lambda - 1.0) - 2.0 * Vgst2Vtm * tmp1 + Abulk * dEsatL_dVg + EsatL * dAbulk_dVg + 3.0 * (T9 + T7 * tmp2 + T6 *
-                     dAbulk_dVg);
+                    dAbulk_dVg);
                 dT1_dVb = Abulk * dEsatL_dVb + EsatL * dAbulk_dVb + 3.0 * (T6 * dAbulk_dVb + T7 * tmp3);
                 dT1_dVd = Abulk * dEsatL_dVd;
 
@@ -1344,7 +1322,7 @@ namespace SpiceSharp.Components
 
             T7 = 2.0 * WVCoxRds * tmp4;
             dT0_dVg = dEsatL_dVg + dVdsat_dVg + T7 * (1.0 + tmp2 * Vgsteff) - T8 * (Abulk * dVdsat_dVg - Abulk * Vdsat / Vgst2Vtm + Vdsat *
-                 dAbulk_dVg);
+                dAbulk_dVg);
 
             dT0_dVb = dEsatL_dVb + dVdsat_dVb + T7 * tmp3 * Vgsteff - T8 * (dAbulk_dVb * Vdsat + Abulk * dVdsat_dVb);
             dT0_dVd = dEsatL_dVd + dVdsat_dVd - T8 * Abulk * dVdsat_dVd;
@@ -1362,7 +1340,6 @@ namespace SpiceSharp.Components
             if (Vdseff > Vds)
                 Vdseff = Vds;
             diffVds = Vds - Vdseff;
-            BSIM3Vdseff = Vdseff;
 
             /* Calculate VACLM */
             if ((pParam.BSIM3pclm > 0.0) && (diffVds > 1.0e-10))
@@ -1603,7 +1580,7 @@ namespace SpiceSharp.Components
 
             BSIM3csub = Isub;
 
-            /* BSIM3 thermal noise Qinv calculated from all capMod 
+            /* BSIM3v22 thermal noise Qinv calculated from all capMod 
             * 0, 1, 2 & 3 stored in BSIM3qinv1 / 1998 */
 
             if ((model.BSIM3xpart < 0) || (!ChargeComputationNeeded))
@@ -1835,7 +1812,7 @@ namespace SpiceSharp.Components
                             tmp = -(T10 + T11 + T12);
 
                             BSIM3cbgb = -(BSIM3cggb + BSIM3cdgb + T12);
-                            BSIM3cbdb = -(BSIM3cgdb + BSIM3cddb + T10); /* bug fix */
+                            BSIM3cbdb = -(BSIM3cgdb + BSIM3cddb + T11);
                             BSIM3cbsb = -(BSIM3cgsb + BSIM3cdsb + tmp);
                             BSIM3qinv = -(qgate + qbulk);
                         }
@@ -2036,7 +2013,7 @@ namespace SpiceSharp.Components
                     else
                     {
                         T0 = AbulkCV * Vds;
-                        T1 = 12.0 * (Vgsteff - 0.5 * T0 + 1 - 20);
+                        T1 = 12.0 * (Vgsteff - 0.5 * T0 + 1.0e-20);
                         T2 = Vds / T1;
                         T3 = T0 * T2;
                         dT3_dVg = -12.0 * T2 * T2 * AbulkCV;
@@ -2068,7 +2045,7 @@ namespace SpiceSharp.Components
                             qsrc = -CoxWL * (0.5 * Vgsteff + 0.25 * T0 - T0 * T0 / T1);
                             Csg = -CoxWL * (0.5 + 24.0 * T0 * Vds / T1 / T1 * AbulkCV);
                             Csb = -CoxWL * (0.25 * Vds * dAbulkCV_dVb - 12.0 * T0 * Vds / T1 / T1 * (4.0 * Vgsteff - T0) * dAbulkCV_dVb) + Csg *
-                                 dVgsteff_dVb;
+                                dVgsteff_dVb;
                             Csd = -CoxWL * (0.25 * AbulkCV - 12.0 * AbulkCV * T0 / T1 / T1 * (4.0 * Vgsteff - T0)) + Csg * dVgsteff_dVd;
                             Csg *= dVgsteff_dVg;
                         }
@@ -2377,14 +2354,9 @@ namespace SpiceSharp.Components
 
                     DeltaPhi = Vtm * Math.Log(1.0 + T1 * Vgsteff / Denomi);
                     dDeltaPhi_dVg = 2.0 * Vtm * (T1 - T0) / (Denomi + T1 * Vgsteff);
+                    dDeltaPhi_dVd = dDeltaPhi_dVg * dVgsteff_dVd;
+                    dDeltaPhi_dVb = dDeltaPhi_dVg * dVgsteff_dVb;
                     /* End of delta Phis */
-
-                    /* VgDP = Vgsteff - DeltaPhi */
-                    T0 = Vgsteff - DeltaPhi - 0.001;
-                    dT0_dVg = 1.0 - dDeltaPhi_dVg;
-                    T1 = Math.Sqrt(T0 * T0 + Vgsteff * 0.004);
-                    VgDP = 0.5 * (T0 + T1);
-                    dVgDP_dVg = 0.5 * (dT0_dVg + (T0 * dT0_dVg + 0.002) / T1);
 
                     T3 = 4.0 * (Vth - pParam.BSIM3vfbzb - pParam.BSIM3phi);
                     Tox += Tox;
@@ -2422,33 +2394,17 @@ namespace SpiceSharp.Components
 
                     AbulkCV = Abulk0 * pParam.BSIM3abulkCVfactor;
                     dAbulkCV_dVb = pParam.BSIM3abulkCVfactor * dAbulk0_dVb;
-                    VdsatCV = VgDP / AbulkCV;
-                    T0 = VdsatCV - Vds - Transistor.DELTA_4;
-                    dT0_dVg = dVgDP_dVg / AbulkCV;
-                    dT0_dVb = -VdsatCV * dAbulkCV_dVb / AbulkCV;
-                    T1 = Math.Sqrt(T0 * T0 + 4.0 * Transistor.DELTA_4 * VdsatCV);
-                    dT1_dVg = (T0 + Transistor.DELTA_4 + Transistor.DELTA_4) / T1;
-                    dT1_dVd = -T0 / T1;
-                    dT1_dVb = dT1_dVg * dT0_dVb;
-                    dT1_dVg *= dT0_dVg;
-                    if (T0 >= 0.0)
-                    {
-                        VdseffCV = VdsatCV - 0.5 * (T0 + T1);
-                        dVdseffCV_dVg = 0.5 * (dT0_dVg - dT1_dVg);
-                        dVdseffCV_dVd = 0.5 * (1.0 - dT1_dVd);
-                        dVdseffCV_dVb = 0.5 * (dT0_dVb - dT1_dVb);
-                    }
-                    else
-                    {
-                        T3 = (Transistor.DELTA_4 + Transistor.DELTA_4) / (T1 - T0);
-                        T4 = 1.0 - T3;
-                        T5 = VdsatCV * T3 / (T1 - T0);
-                        VdseffCV = VdsatCV * T4;
-                        dVdseffCV_dVg = dT0_dVg * T4 + T5 * (dT1_dVg - dT0_dVg);
-                        dVdseffCV_dVd = T5 * (dT1_dVd + 1.0);
-                        dVdseffCV_dVb = dT0_dVb * (1.0 - T5) + T5 * dT1_dVb;
-                    }
-
+                    VdsatCV = (Vgsteff - DeltaPhi) / AbulkCV;
+                    V4 = VdsatCV - Vds - Transistor.DELTA_4;
+                    T0 = Math.Sqrt(V4 * V4 + 4.0 * Transistor.DELTA_4 * VdsatCV);
+                    VdseffCV = VdsatCV - 0.5 * (V4 + T0);
+                    T1 = 0.5 * (1.0 + V4 / T0);
+                    T2 = Transistor.DELTA_4 / T0;
+                    T3 = (1.0 - T1 - T2) / AbulkCV;
+                    T4 = T3 * (1.0 - dDeltaPhi_dVg);
+                    dVdseffCV_dVg = T4;
+                    dVdseffCV_dVd = T1;
+                    dVdseffCV_dVb = -T3 * VdsatCV * dAbulkCV_dVb;
                     /* Added to eliminate non - zero VdseffCV at Vds = 0.0 */
                     if (Vds == 0.0)
                     {
@@ -2458,7 +2414,7 @@ namespace SpiceSharp.Components
                     }
 
                     T0 = AbulkCV * VdseffCV;
-                    T1 = VgDP;
+                    T1 = Vgsteff - DeltaPhi;
                     T2 = 12.0 * (T1 - 0.5 * T0 + 1.0e-20);
                     T3 = T0 / T2;
                     T4 = 1.0 - 12.0 * T3 * T3;
@@ -2467,7 +2423,7 @@ namespace SpiceSharp.Components
 
                     qgate = qinoi = CoxWLcen * (T1 - T0 * (0.5 - T3));
                     QovCox = qgate / Coxeff;
-                    Cgg1 = CoxWLcen * (T4 * dVgDP_dVg + T5 * dVdseffCV_dVg);
+                    Cgg1 = CoxWLcen * (T4 * (1.0 - dDeltaPhi_dVg) + T5 * dVdseffCV_dVg);
                     Cgd1 = CoxWLcen * T5 * dVdseffCV_dVd + Cgg1 * dVgsteff_dVd + QovCox * dCoxeff_dVd;
                     Cgb1 = CoxWLcen * (T5 * dVdseffCV_dVb + T6 * dAbulkCV_dVb) + Cgg1 * dVgsteff_dVb + QovCox * dCoxeff_dVb;
                     Cgg1 = Cgg1 * dVgsteff_dVg + QovCox * dCoxeff_dVg;
@@ -2475,7 +2431,7 @@ namespace SpiceSharp.Components
                     T7 = 1.0 - AbulkCV;
                     T8 = T2 * T2;
                     T9 = 12.0 * T7 * T0 * T0 / (T8 * AbulkCV);
-                    T10 = T9 * dVgDP_dVg;
+                    T10 = T9 * (1.0 - dDeltaPhi_dVg);
                     T11 = -T7 * T5 / AbulkCV;
                     T12 = -(T9 * T1 / AbulkCV + VdseffCV * (0.5 - T0 / T2));
 
@@ -2494,7 +2450,7 @@ namespace SpiceSharp.Components
                         T2 += T2;
                         T3 = T2 * T2;
                         T7 = -(0.25 - 12.0 * T0 * (4.0 * T1 - T0) / T3);
-                        T4 = -(0.5 + 24.0 * T0 * T0 / T3) * dVgDP_dVg;
+                        T4 = -(0.5 + 24.0 * T0 * T0 / T3) * (1.0 - dDeltaPhi_dVg);
                         T5 = T7 * AbulkCV;
                         T6 = T7 * VdseffCV;
 
@@ -2516,7 +2472,7 @@ namespace SpiceSharp.Components
                         T6 = AbulkCV * (qsrc / T2 + T3 * T8);
                         T7 = T6 * VdseffCV / AbulkCV;
 
-                        Csg = T5 * dVgDP_dVg + T6 * dVdseffCV_dVg;
+                        Csg = T5 * (1.0 - dDeltaPhi_dVg) + T6 * dVdseffCV_dVg;
                         Csd = Csg * dVgsteff_dVd + T6 * dVdseffCV_dVd + QovCox * dCoxeff_dVd;
                         Csb = Csg * dVgsteff_dVb + T6 * dVdseffCV_dVb + T7 * dAbulkCV_dVb + QovCox * dCoxeff_dVb;
                         Csg = Csg * dVgsteff_dVg + QovCox * dCoxeff_dVg;
@@ -2586,27 +2542,27 @@ namespace SpiceSharp.Components
                 along gate side
                 */
 
-                czbd = model.BSIM3unitAreaTempJctCap * BSIM3drainArea; /* bug fix */
-                czbs = model.BSIM3unitAreaTempJctCap * BSIM3sourceArea;
+                czbd = model.BSIM3unitAreaJctCap * BSIM3drainArea;
+                czbs = model.BSIM3unitAreaJctCap * BSIM3sourceArea;
                 if (BSIM3drainPerimeter < pParam.BSIM3weff)
                 {
-                    czbdswg = model.BSIM3unitLengthGateSidewallTempJctCap * BSIM3drainPerimeter;
+                    czbdswg = model.BSIM3unitLengthGateSidewallJctCap * BSIM3drainPerimeter;
                     czbdsw = 0.0;
                 }
                 else
                 {
-                    czbdsw = model.BSIM3unitLengthSidewallTempJctCap * (BSIM3drainPerimeter - pParam.BSIM3weff);
-                    czbdswg = model.BSIM3unitLengthGateSidewallTempJctCap * pParam.BSIM3weff;
+                    czbdsw = model.BSIM3unitLengthSidewallJctCap * (BSIM3drainPerimeter - pParam.BSIM3weff);
+                    czbdswg = model.BSIM3unitLengthGateSidewallJctCap * pParam.BSIM3weff;
                 }
                 if (BSIM3sourcePerimeter < pParam.BSIM3weff)
                 {
                     czbssw = 0.0;
-                    czbsswg = model.BSIM3unitLengthGateSidewallTempJctCap * BSIM3sourcePerimeter;
+                    czbsswg = model.BSIM3unitLengthGateSidewallJctCap * BSIM3sourcePerimeter;
                 }
                 else
                 {
-                    czbssw = model.BSIM3unitLengthSidewallTempJctCap * (BSIM3sourcePerimeter - pParam.BSIM3weff);
-                    czbsswg = model.BSIM3unitLengthGateSidewallTempJctCap * pParam.BSIM3weff;
+                    czbssw = model.BSIM3unitLengthSidewallJctCap * (BSIM3sourcePerimeter - pParam.BSIM3weff);
+                    czbsswg = model.BSIM3unitLengthGateSidewallJctCap * pParam.BSIM3weff;
                 }
 
                 MJ = model.BSIM3bulkJctBotGradingCoeff;
@@ -2722,7 +2678,7 @@ namespace SpiceSharp.Components
             /* 
             * check convergence
             */
-            if (!BSIM3off || state.Init != CircuitState.InitFlags.InitFix)
+            if (!BSIM3off || ((state.Init != CircuitState.InitFlags.InitFix)))
             {
                 if (Check == 1)
                     state.IsCon = false;
@@ -2738,8 +2694,9 @@ namespace SpiceSharp.Components
             if (!ChargeComputationNeeded)
                 goto line850;
 
+            line755:
             /* NQS begins */
-            if ((BSIM3nqsMod > 0) || (BSIM3acnqsMod > 0))
+            if (BSIM3nqsMod != 0)
             {
                 qcheq = -(qbulk + qgate);
 
@@ -2752,18 +2709,31 @@ namespace SpiceSharp.Components
                 T0 = pParam.BSIM3leffCV * pParam.BSIM3leffCV;
                 gtau_diff = 16.0 * pParam.BSIM3u0temp * model.BSIM3vtm / T0 * ScalingFactor;
                 BSIM3gtau = gtau_drift + gtau_diff;
-                if (BSIM3acnqsMod > 0)
-                    BSIM3taunet = ScalingFactor / BSIM3gtau;
-
             }
 
             if (model.BSIM3capMod.Value == 0)
-            /* code merge - JX */
             {
-                cgdo = pParam.BSIM3cgdo;
-                qgdo = pParam.BSIM3cgdo * vgd;
-                cgso = pParam.BSIM3cgso;
-                qgso = pParam.BSIM3cgso * vgs;
+                if (vgd < 0.0)
+                {
+                    cgdo = pParam.BSIM3cgdo;
+                    qgdo = pParam.BSIM3cgdo * vgd;
+                }
+                else
+                {
+                    cgdo = pParam.BSIM3cgdo;
+                    qgdo = pParam.BSIM3cgdo * vgd;
+                }
+
+                if (vgs < 0.0)
+                {
+                    cgso = pParam.BSIM3cgso;
+                    qgso = pParam.BSIM3cgso * vgs;
+                }
+                else
+                {
+                    cgso = pParam.BSIM3cgso;
+                    qgso = pParam.BSIM3cgso * vgs;
+                }
             }
             else if (model.BSIM3capMod.Value == 1)
             {
@@ -3051,9 +3021,9 @@ namespace SpiceSharp.Components
             state.States[0][BSIM3states + BSIM3qg] = qgate;
             state.States[0][BSIM3states + BSIM3qd] = qdrn - state.States[0][BSIM3states + BSIM3qbd];
             state.States[0][BSIM3states + BSIM3qb] = qbulk + state.States[0][BSIM3states + BSIM3qbd] + state.States[0][BSIM3states +
-                 BSIM3qbs];
+                BSIM3qbs];
 
-            if (BSIM3nqsMod > 0)
+            if (BSIM3nqsMod != 0)
             {
                 state.States[0][BSIM3states + BSIM3qcdump] = qdef * ScalingFactor;
                 state.States[0][BSIM3states + BSIM3qcheq] = qcheq;
@@ -3061,9 +3031,7 @@ namespace SpiceSharp.Components
 
             /* store small signal parameters */
             if (state.UseSmallSignal)
-            {
                 goto line1000;
-            }
             if (!ChargeComputationNeeded)
                 goto line850;
 
@@ -3072,7 +3040,7 @@ namespace SpiceSharp.Components
                 state.States[1][BSIM3states + BSIM3qb] = state.States[0][BSIM3states + BSIM3qb];
                 state.States[1][BSIM3states + BSIM3qg] = state.States[0][BSIM3states + BSIM3qg];
                 state.States[1][BSIM3states + BSIM3qd] = state.States[0][BSIM3states + BSIM3qd];
-                if (BSIM3nqsMod > 0)
+                if (BSIM3nqsMod != 0)
                 {
                     state.States[1][BSIM3states + BSIM3qcheq] = state.States[0][BSIM3states + BSIM3qcheq];
                     state.States[1][BSIM3states + BSIM3qcdump] = state.States[0][BSIM3states + BSIM3qcdump];
@@ -3084,7 +3052,7 @@ namespace SpiceSharp.Components
                 method.Integrate(state, BSIM3states + BSIM3qb, 0.0);
                 method.Integrate(state, BSIM3states + BSIM3qg, 0.0);
                 method.Integrate(state, BSIM3states + BSIM3qd, 0.0);
-                if (BSIM3nqsMod > 0)
+                if (BSIM3nqsMod != 0)
                 {
                     method.Integrate(state, BSIM3states + BSIM3qcdump, 0.0);
                     method.Integrate(state, BSIM3states + BSIM3qcheq, 0.0);
@@ -3109,7 +3077,7 @@ namespace SpiceSharp.Components
             ddxpart_dVd = ddxpart_dVg = ddxpart_dVb = ddxpart_dVs = 0.0;
             dsxpart_dVd = dsxpart_dVg = dsxpart_dVb = dsxpart_dVs = 0.0;
 
-            if (BSIM3nqsMod > 0)
+            if (BSIM3nqsMod != 0)
                 BSIM3gtau = 16.0 * pParam.BSIM3u0temp * model.BSIM3vtm / pParam.BSIM3leffCV / pParam.BSIM3leffCV * ScalingFactor;
             else
                 BSIM3gtau = 0.0;
@@ -3127,7 +3095,7 @@ namespace SpiceSharp.Components
             ceqqb = cqbulk - gcbgb * vgb + gcbdb * vbd + gcbsb * vbs;
             ceqqd = cqdrn - gcdgb * vgb + gcddb * vbd + gcdsb * vbs;
 
-            if (BSIM3nqsMod > 0)
+            if (BSIM3nqsMod != 0)
             {
                 T0 = ggtg * vgb - ggtd * vbd - ggts * vbs;
                 ceqqg += T0;
@@ -3143,7 +3111,7 @@ namespace SpiceSharp.Components
                 state.States[1][BSIM3states + BSIM3cqg] = state.States[0][BSIM3states + BSIM3cqg];
                 state.States[1][BSIM3states + BSIM3cqd] = state.States[0][BSIM3states + BSIM3cqd];
 
-                if (BSIM3nqsMod > 0)
+                if (BSIM3nqsMod != 0)
                 {
                     state.States[1][BSIM3states + BSIM3cqcheq] = state.States[0][BSIM3states + BSIM3cqcheq];
                     state.States[1][BSIM3states + BSIM3cqcdump] = state.States[0][BSIM3states + BSIM3cqcdump];
@@ -3231,7 +3199,7 @@ namespace SpiceSharp.Components
             rstate.Rhs[BSIM3bNode] -= (ceqbs + ceqbd + ceqqb);
             rstate.Rhs[BSIM3dNodePrime] += (ceqbd - cdreq - ceqqd);
             rstate.Rhs[BSIM3sNodePrime] += (cdreq + ceqbs + ceqqg + ceqqb + ceqqd);
-            if (BSIM3nqsMod > 0)
+            if (BSIM3nqsMod != 0)
                 rstate.Rhs[BSIM3qNode] += (cqcheq - cqdef);
 
             /* 
@@ -3243,8 +3211,10 @@ namespace SpiceSharp.Components
             rstate.Matrix[BSIM3gNode, BSIM3gNode] += gcggb - ggtg;
             rstate.Matrix[BSIM3sNode, BSIM3sNode] += BSIM3sourceConductance;
             rstate.Matrix[BSIM3bNode, BSIM3bNode] += BSIM3gbd + BSIM3gbs - gcbgb - gcbdb - gcbsb - BSIM3gbbs;
-            rstate.Matrix[BSIM3dNodePrime, BSIM3dNodePrime] += BSIM3drainConductance + BSIM3gds + BSIM3gbd + RevSum + gcddb + dxpart * ggtd + T1 * ddxpart_dVd + gbdpdp;
-            rstate.Matrix[BSIM3sNodePrime, BSIM3sNodePrime] += BSIM3sourceConductance + BSIM3gds + BSIM3gbs + FwdSum + gcssb + sxpart * ggts + T1 * dsxpart_dVs + gbspsp;
+            rstate.Matrix[BSIM3dNodePrime, BSIM3dNodePrime] += BSIM3drainConductance + BSIM3gds + BSIM3gbd + RevSum + gcddb + dxpart *
+                ggtd + T1 * ddxpart_dVd + gbdpdp;
+            rstate.Matrix[BSIM3sNodePrime, BSIM3sNodePrime] += BSIM3sourceConductance + BSIM3gds + BSIM3gbs + FwdSum + gcssb + sxpart *
+                ggts + T1 * dsxpart_dVs + gbspsp;
             rstate.Matrix[BSIM3dNode, BSIM3dNodePrime] -= BSIM3drainConductance;
             rstate.Matrix[BSIM3gNode, BSIM3bNode] -= gcggb + gcgdb + gcgsb + ggtb;
             rstate.Matrix[BSIM3gNode, BSIM3dNodePrime] += gcgdb - ggtd;
@@ -3255,14 +3225,16 @@ namespace SpiceSharp.Components
             rstate.Matrix[BSIM3bNode, BSIM3sNodePrime] += gcbsb - BSIM3gbs + gbbsp;
             rstate.Matrix[BSIM3dNodePrime, BSIM3dNode] -= BSIM3drainConductance;
             rstate.Matrix[BSIM3dNodePrime, BSIM3gNode] += Gm + gcdgb + dxpart * ggtg + T1 * ddxpart_dVg + gbdpg;
-            rstate.Matrix[BSIM3dNodePrime, BSIM3bNode] -= BSIM3gbd - Gmbs + gcdgb + gcddb + gcdsb - dxpart * ggtb - T1 * ddxpart_dVb - gbdpb;
+            rstate.Matrix[BSIM3dNodePrime, BSIM3bNode] -= BSIM3gbd - Gmbs + gcdgb + gcddb + gcdsb - dxpart * ggtb - T1 * ddxpart_dVb -
+                gbdpb;
             rstate.Matrix[BSIM3dNodePrime, BSIM3sNodePrime] -= BSIM3gds + FwdSum - gcdsb - dxpart * ggts - T1 * ddxpart_dVs - gbdpsp;
             rstate.Matrix[BSIM3sNodePrime, BSIM3gNode] += gcsgb - Gm + sxpart * ggtg + T1 * dsxpart_dVg + gbspg;
             rstate.Matrix[BSIM3sNodePrime, BSIM3sNode] -= BSIM3sourceConductance;
-            rstate.Matrix[BSIM3sNodePrime, BSIM3bNode] -= BSIM3gbs + Gmbs + gcsgb + gcsdb + gcssb - sxpart * ggtb - T1 * dsxpart_dVb - gbspb;
+            rstate.Matrix[BSIM3sNodePrime, BSIM3bNode] -= BSIM3gbs + Gmbs + gcsgb + gcsdb + gcssb - sxpart * ggtb - T1 * dsxpart_dVb -
+                gbspb;
             rstate.Matrix[BSIM3sNodePrime, BSIM3dNodePrime] -= BSIM3gds + RevSum - gcsdb - sxpart * ggtd - T1 * dsxpart_dVd - gbspdp;
 
-            if (BSIM3nqsMod > 0)
+            if (BSIM3nqsMod != 0)
             {
                 rstate.Matrix[BSIM3qNode, BSIM3qNode] += (gqdef + BSIM3gtau);
 
@@ -3285,97 +3257,22 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void AcLoad(Circuit ckt)
         {
-            var model = Model as BSIM3Model;
+            var model = Model as BSIM3v22Model;
             var state = ckt.State;
             var cstate = state.Complex;
+            double Gm, Gmbs, FwdSum, RevSum, gbbdp, gbbsp, gbdpg, gbdpb, gbdpdp, gbdpsp, gbspdp, gbspg, gbspb, gbspsp, cggb, cgsb, cgdb,
+                cbgb, cbsb, cbdb, cdgb, cdsb, cddb, xgtg, sxpart, dxpart, ddxpart_dVd, dsxpart_dVd, xgtd, xgts, xgtb, xcqgb = 0, xcqdb = 0, xcqsb = 0,
+                xcqbb = 0, CoxWL, qcheq, Cdd, Csd, Cdg, Csg, ddxpart_dVg, Cds, Css, ddxpart_dVs, ddxpart_dVb, dsxpart_dVg, dsxpart_dVs,
+                dsxpart_dVb, T1, gdpr, gspr, gds, gbd, gbs, capbd, capbs, GSoverlapCap, GDoverlapCap, GBoverlapCap, xcdgb, xcddb, xcdsb, xcsgb,
+                xcsdb, xcssb, xcggb, xcgdb, xcgsb, xcbgb, xcbdb, xcbsb;
             double omega = cstate.Laplace.Imaginary;
-            double Csd, Csg, Css, T0, T1, T2, T3, gmr, gmbsr, gds, gmi, gmbsi, gdsi, Cddr, Cdgr, Cdsr, Cddi, Cdgi, Cdsi, Cdbi, Csdr, Csgr,
-                Cssr, Csdi, Csgi, Cssi, Csbi, Cgdr, Cggr, Cgsr, Cgdi, Cggi, Cgsi, Cgbi, Gm, Gmbs, FwdSum, RevSum, Gmi, Gmbsi, FwdSumi, RevSumi,
-                gbbdp, gbbsp, gbdpg, gbdpb, gbdpdp, gbdpsp, gbspdp, gbspg, gbspb, gbspsp, cggb, cgsb, cgdb, cbgb, cbsb, cbdb, cdgb, cdsb, cddb,
-                xgtg, sxpart, dxpart, ddxpart_dVd, dsxpart_dVd, xgtd, xgts, xgtb, xcqgb = 0.0, xcqdb = 0.0, xcqsb = 0.0, xcqbb = 0.0, CoxWL, qcheq, Cdd, Cdg,
-                ddxpart_dVg, Cds, ddxpart_dVs, ddxpart_dVb, dsxpart_dVg, dsxpart_dVs, dsxpart_dVb, xcdgbi, xcsgbi, xcddbi, xcdsbi, xcsdbi,
-                xcssbi, xcdbbi, xcsbbi, xcggbi, xcgdbi, xcgsbi, xcgbbi, gdpr, gspr, gbd, gbs, capbd, capbs, GSoverlapCap, GDoverlapCap,
-                GBoverlapCap, xcdgb, xcddb, xcdsb, xcsgb, xcsdb, xcssb, xcggb, xcgdb, xcgsb, xcbgb, xcbdb, xcbsb;
-
-            Csd = -(BSIM3cddb + BSIM3cgdb + BSIM3cbdb);
-            Csg = -(BSIM3cdgb + BSIM3cggb + BSIM3cbgb);
-            Css = -(BSIM3cdsb + BSIM3cgsb + BSIM3cbsb);
-
-            if (BSIM3acnqsMod != 0.0)
-            {
-                T0 = omega * BSIM3taunet;
-                T1 = T0 * T0;
-                T2 = 1.0 / (1.0 + T1);
-                T3 = T0 * T2;
-
-                gmr = BSIM3gm * T2;
-                gmbsr = BSIM3gmbs * T2;
-                gds = BSIM3gds * T2;
-
-                gmi = -BSIM3gm * T3;
-                gmbsi = -BSIM3gmbs * T3;
-                gdsi = -BSIM3gds * T3;
-
-                Cddr = BSIM3cddb * T2;
-                Cdgr = BSIM3cdgb * T2;
-                Cdsr = BSIM3cdsb * T2;
-
-                Cddi = BSIM3cddb * T3 * omega;
-                Cdgi = BSIM3cdgb * T3 * omega;
-                Cdsi = BSIM3cdsb * T3 * omega;
-                Cdbi = -(Cddi + Cdgi + Cdsi);
-
-                Csdr = Csd * T2;
-                Csgr = Csg * T2;
-                Cssr = Css * T2;
-
-                Csdi = Csd * T3 * omega;
-                Csgi = Csg * T3 * omega;
-                Cssi = Css * T3 * omega;
-                Csbi = -(Csdi + Csgi + Cssi);
-
-                Cgdr = -(Cddr + Csdr + BSIM3cbdb);
-                Cggr = -(Cdgr + Csgr + BSIM3cbgb);
-                Cgsr = -(Cdsr + Cssr + BSIM3cbsb);
-
-                Cgdi = -(Cddi + Csdi);
-                Cggi = -(Cdgi + Csgi);
-                Cgsi = -(Cdsi + Cssi);
-                Cgbi = -(Cgdi + Cggi + Cgsi);
-            }
-            else /* QS */
-            {
-                gmr = BSIM3gm;
-                gmbsr = BSIM3gmbs;
-                gds = BSIM3gds;
-                gmi = gmbsi = gdsi = 0.0;
-
-                Cddr = BSIM3cddb;
-                Cdgr = BSIM3cdgb;
-                Cdsr = BSIM3cdsb;
-                Cddi = Cdgi = Cdsi = Cdbi = 0.0;
-
-                Csdr = Csd;
-                Csgr = Csg;
-                Cssr = Css;
-                Csdi = Csgi = Cssi = Csbi = 0.0;
-
-                Cgdr = BSIM3cgdb;
-                Cggr = BSIM3cggb;
-                Cgsr = BSIM3cgsb;
-                Cgdi = Cggi = Cgsi = Cgbi = 0.0;
-            }
 
             if (BSIM3mode >= 0)
             {
-                Gm = gmr;
-                Gmbs = gmbsr;
+                Gm = BSIM3gm;
+                Gmbs = BSIM3gmbs;
                 FwdSum = Gm + Gmbs;
                 RevSum = 0.0;
-                Gmi = gmi;
-                Gmbsi = gmbsi;
-                FwdSumi = Gmi + Gmbsi;
-                RevSumi = 0.0;
 
                 gbbdp = -BSIM3gbds;
                 gbbsp = BSIM3gbds + BSIM3gbgs + BSIM3gbbs;
@@ -3390,19 +3287,19 @@ namespace SpiceSharp.Components
                 gbspb = 0.0;
                 gbspsp = 0.0;
 
-                if (BSIM3nqsMod.Value == 0 || BSIM3acnqsMod.Value == 1)
+                if (BSIM3nqsMod.Value == 0)
                 {
-                    cggb = Cggr;
-                    cgsb = Cgsr;
-                    cgdb = Cgdr;
+                    cggb = BSIM3cggb;
+                    cgsb = BSIM3cgsb;
+                    cgdb = BSIM3cgdb;
 
                     cbgb = BSIM3cbgb;
                     cbsb = BSIM3cbsb;
                     cbdb = BSIM3cbdb;
 
-                    cdgb = Cdgr;
-                    cdsb = Cdsr;
-                    cddb = Cddr;
+                    cdgb = BSIM3cdgb;
+                    cdsb = BSIM3cdsb;
+                    cddb = BSIM3cddb;
 
                     xgtg = xgtd = xgts = xgtb = 0.0;
                     sxpart = 0.6;
@@ -3466,29 +3363,13 @@ namespace SpiceSharp.Components
                     dsxpart_dVs = -ddxpart_dVs;
                     dsxpart_dVb = -(dsxpart_dVd + dsxpart_dVg + dsxpart_dVs);
                 }
-                xcdgbi = Cdgi;
-                xcsgbi = Csgi;
-                xcddbi = Cddi;
-                xcdsbi = Cdsi;
-                xcsdbi = Csdi;
-                xcssbi = Cssi;
-                xcdbbi = Cdbi;
-                xcsbbi = Csbi;
-                xcggbi = Cggi;
-                xcgdbi = Cgdi;
-                xcgsbi = Cgsi;
-                xcgbbi = Cgbi;
             }
             else
             {
-                Gm = -gmr;
-                Gmbs = -gmbsr;
+                Gm = -BSIM3gm;
+                Gmbs = -BSIM3gmbs;
                 FwdSum = 0.0;
                 RevSum = -(Gm + Gmbs);
-                Gmi = -gmi;
-                Gmbsi = -gmbsi;
-                FwdSumi = 0.0;
-                RevSumi = -(Gmi + Gmbsi);
 
                 gbbsp = -BSIM3gbds;
                 gbbdp = BSIM3gbds + BSIM3gbgs + BSIM3gbbs;
@@ -3503,19 +3384,19 @@ namespace SpiceSharp.Components
                 gbspb = BSIM3gbbs;
                 gbspdp = -(gbspg + gbspsp + gbspb);
 
-                if (BSIM3nqsMod.Value == 0 || BSIM3acnqsMod.Value == 1)
+                if (BSIM3nqsMod.Value == 0)
                 {
-                    cggb = Cggr;
-                    cgsb = Cgdr;
-                    cgdb = Cgsr;
+                    cggb = BSIM3cggb;
+                    cgsb = BSIM3cgdb;
+                    cgdb = BSIM3cgsb;
 
                     cbgb = BSIM3cbgb;
                     cbsb = BSIM3cbdb;
                     cbdb = BSIM3cbsb;
 
-                    cdgb = -(Cdgr + cggb + cbgb);
-                    cdsb = -(Cddr + cgsb + cbsb);
-                    cddb = -(Cdsr + cgdb + cbdb);
+                    cdgb = -(BSIM3cdgb + cggb + cbgb);
+                    cdsb = -(BSIM3cddb + cgsb + cbsb);
+                    cddb = -(BSIM3cdsb + cgdb + cbdb);
 
                     xgtg = xgtd = xgts = xgtb = 0.0;
                     sxpart = 0.4;
@@ -3579,23 +3460,12 @@ namespace SpiceSharp.Components
                     ddxpart_dVs = -dsxpart_dVs;
                     ddxpart_dVb = -(ddxpart_dVd + ddxpart_dVg + ddxpart_dVs);
                 }
-                xcdgbi = Csgi;
-                xcsgbi = Cdgi;
-                xcddbi = Cssi;
-                xcdsbi = Csdi;
-                xcsdbi = Cdsi;
-                xcssbi = Cddi;
-                xcdbbi = Csbi;
-                xcsbbi = Cdbi;
-                xcggbi = Cggi;
-                xcgdbi = Cgsi;
-                xcgsbi = Cgdi;
-                xcgbbi = Cgbi;
             }
 
             T1 = state.States[0][BSIM3states + BSIM3qdef] * BSIM3gtau;
             gdpr = BSIM3drainConductance;
             gspr = BSIM3sourceConductance;
+            gds = BSIM3gds;
             gbd = BSIM3gbd;
             gbs = BSIM3gbs;
             capbd = BSIM3capbd;
@@ -3618,29 +3488,28 @@ namespace SpiceSharp.Components
             xcbdb = (cbdb - capbd) * omega;
             xcbsb = (cbsb - capbs) * omega;
 
-            cstate.Matrix[BSIM3gNode, BSIM3gNode] -= new Complex(xgtg - xcggbi, -xcggb);
+            cstate.Matrix[BSIM3gNode, BSIM3gNode] -= new Complex(xgtg, -xcggb);
             cstate.Matrix[BSIM3bNode, BSIM3bNode] += new Complex(gbd + gbs - BSIM3gbbs, -(xcbgb + xcbdb + xcbsb));
-            cstate.Matrix[BSIM3dNodePrime, BSIM3dNodePrime] += new Complex(gdpr + gds + gbd + RevSum + xcddbi + dxpart * xgtd + T1 *
-                ddxpart_dVd + gbdpdp, xcddb + gdsi + RevSumi);
-            cstate.Matrix[BSIM3sNodePrime, BSIM3sNodePrime] += new Complex(gspr + gds + gbs + FwdSum + xcssbi + sxpart * xgts + T1 *
-                dsxpart_dVs + gbspsp, xcssb + gdsi + FwdSumi);
-            cstate.Matrix[BSIM3gNode, BSIM3bNode] -= new Complex(xgtb - xcgbbi, xcggb + xcgdb + xcgsb);
-            cstate.Matrix[BSIM3gNode, BSIM3dNodePrime] -= new Complex(xgtd - xcgdbi, -xcgdb);
-            cstate.Matrix[BSIM3gNode, BSIM3sNodePrime] -= new Complex(xgts - xcgsbi, -xcgsb);
+            cstate.Matrix[BSIM3dNodePrime, BSIM3dNodePrime] += new Complex(gdpr + gds + gbd + RevSum + dxpart * xgtd + T1 * ddxpart_dVd +
+                gbdpdp, xcddb);
+            cstate.Matrix[BSIM3sNodePrime, BSIM3sNodePrime] += new Complex(gspr + gds + gbs + FwdSum + sxpart * xgts + T1 * dsxpart_dVs +
+                gbspsp, xcssb);
+            cstate.Matrix[BSIM3gNode, BSIM3bNode] -= new Complex(xgtb, xcggb + xcgdb + xcgsb);
+            cstate.Matrix[BSIM3gNode, BSIM3dNodePrime] -= new Complex(xgtd, -xcgdb);
+            cstate.Matrix[BSIM3gNode, BSIM3sNodePrime] -= new Complex(xgts, -xcgsb);
             cstate.Matrix[BSIM3bNode, BSIM3gNode] -= new Complex(BSIM3gbgs, -xcbgb);
             cstate.Matrix[BSIM3bNode, BSIM3dNodePrime] -= new Complex(gbd - gbbdp, -xcbdb);
             cstate.Matrix[BSIM3bNode, BSIM3sNodePrime] -= new Complex(gbs - gbbsp, -xcbsb);
-            cstate.Matrix[BSIM3dNodePrime, BSIM3gNode] += new Complex(Gm + dxpart * xgtg + T1 * ddxpart_dVg + gbdpg + xcdgbi, xcdgb + Gmi);
-            cstate.Matrix[BSIM3dNodePrime, BSIM3bNode] -= new Complex(gbd - Gmbs - dxpart * xgtb - T1 * ddxpart_dVb - gbdpb - xcdbbi,
-                xcdgb + xcddb + xcdsb + Gmbsi);
-            cstate.Matrix[BSIM3dNodePrime, BSIM3sNodePrime] -= new Complex(gds + FwdSum - dxpart * xgts - T1 * ddxpart_dVs - gbdpsp -
-                xcdsbi, -(xcdsb - gdsi - FwdSumi));
-            cstate.Matrix[BSIM3sNodePrime, BSIM3gNode] -= new Complex(Gm - sxpart * xgtg - T1 * dsxpart_dVg - gbspg - xcsgbi, -(xcsgb -
-                Gmi));
-            cstate.Matrix[BSIM3sNodePrime, BSIM3bNode] -= new Complex(gbs + Gmbs - sxpart * xgtb - T1 * dsxpart_dVb - gbspb - xcsbbi,
-                xcsgb + xcsdb + xcssb - Gmbsi);
-            cstate.Matrix[BSIM3sNodePrime, BSIM3dNodePrime] -= new Complex(gds + RevSum - sxpart * xgtd - T1 * dsxpart_dVd - gbspdp -
-                xcsdbi, -(xcsdb - gdsi - RevSumi));
+            cstate.Matrix[BSIM3dNodePrime, BSIM3gNode] += new Complex(Gm + dxpart * xgtg + T1 * ddxpart_dVg + gbdpg, xcdgb);
+            cstate.Matrix[BSIM3dNodePrime, BSIM3bNode] -= new Complex(gbd - Gmbs - dxpart * xgtb - T1 * ddxpart_dVb - gbdpb, xcdgb + xcddb +
+                xcdsb);
+            cstate.Matrix[BSIM3dNodePrime, BSIM3sNodePrime] -= new Complex(gds + FwdSum - dxpart * xgts - T1 * ddxpart_dVs - gbdpsp, -
+                xcdsb);
+            cstate.Matrix[BSIM3sNodePrime, BSIM3gNode] -= new Complex(Gm - sxpart * xgtg - T1 * dsxpart_dVg - gbspg, -xcsgb);
+            cstate.Matrix[BSIM3sNodePrime, BSIM3bNode] -= new Complex(gbs + Gmbs - sxpart * xgtb - T1 * dsxpart_dVb - gbspb, xcsgb + xcsdb +
+                xcssb);
+            cstate.Matrix[BSIM3sNodePrime, BSIM3dNodePrime] -= new Complex(gds + RevSum - sxpart * xgtd - T1 * dsxpart_dVd - gbspdp, -
+                xcsdb);
 
             cstate.Matrix[BSIM3dNode, BSIM3dNode] += gdpr;
             cstate.Matrix[BSIM3sNode, BSIM3sNode] += gspr;
@@ -3652,56 +3521,36 @@ namespace SpiceSharp.Components
 
             cstate.Matrix[BSIM3sNodePrime, BSIM3sNode] -= gspr;
 
-            if (BSIM3nqsMod != 0.0)
+            if (BSIM3nqsMod != 0)
             {
-                if (BSIM3acnqsMod != 0.0)
-                {
-                    cstate.Matrix[BSIM3qNode, BSIM3qNode] += 1.0;
-                    cstate.Matrix[BSIM3qNode, BSIM3gNode] += 0.0;
-                    cstate.Matrix[BSIM3qNode, BSIM3dNodePrime] += 0.0;
-                    cstate.Matrix[BSIM3qNode, BSIM3sNodePrime] += 0.0;
-                    cstate.Matrix[BSIM3qNode, BSIM3bNode] += 0.0;
+                cstate.Matrix[BSIM3qNode, BSIM3qNode] += new Complex(BSIM3gtau, omega * ScalingFactor);
+                cstate.Matrix[BSIM3qNode, BSIM3gNode] += new Complex(xgtg, -xcqgb);
+                cstate.Matrix[BSIM3qNode, BSIM3dNodePrime] += new Complex(xgtd, -xcqdb);
+                cstate.Matrix[BSIM3qNode, BSIM3sNodePrime] += new Complex(xgts, -xcqsb);
+                cstate.Matrix[BSIM3qNode, BSIM3bNode] += new Complex(xgtb, -xcqbb);
 
-                    cstate.Matrix[BSIM3dNodePrime, BSIM3qNode] += 0.0;
-                    cstate.Matrix[BSIM3sNodePrime, BSIM3qNode] += 0.0;
-                    cstate.Matrix[BSIM3gNode, BSIM3qNode] += 0.0;
+                cstate.Matrix[BSIM3dNodePrime, BSIM3qNode] += dxpart * BSIM3gtau;
+                cstate.Matrix[BSIM3sNodePrime, BSIM3qNode] += sxpart * BSIM3gtau;
+                cstate.Matrix[BSIM3gNode, BSIM3qNode] -= BSIM3gtau;
 
-                }
-                else
-                {
-                    cstate.Matrix[BSIM3qNode, BSIM3qNode] += new Complex(BSIM3gtau, omega * ScalingFactor);
-                    cstate.Matrix[BSIM3qNode, BSIM3gNode] += new Complex(xgtg, -xcqgb);
-                    cstate.Matrix[BSIM3qNode, BSIM3dNodePrime] += new Complex(xgtd, -xcqdb);
-                    cstate.Matrix[BSIM3qNode, BSIM3sNodePrime] += new Complex(xgts, -xcqsb);
-                    cstate.Matrix[BSIM3qNode, BSIM3bNode] += new Complex(xgtb, -xcqbb);
-
-                    cstate.Matrix[BSIM3dNodePrime, BSIM3qNode] += dxpart * BSIM3gtau;
-                    cstate.Matrix[BSIM3sNodePrime, BSIM3qNode] += sxpart * BSIM3gtau;
-                    cstate.Matrix[BSIM3gNode, BSIM3qNode] -= BSIM3gtau;
-
-                }
             }
         }
 
-        /// <summary>
-        /// Perform parameter checking
-        /// </summary>
-        /// <param name="ckt"></param>
-        /// <returns></returns>
-        private bool BSIM3checkModel()
+        bool BSIM3checkModel()
         {
-            var model = Model as BSIM3Model;
+            BSIM3v22Model model = (BSIM3v22Model)Model;
             bool Fatal_Flag = false;
             using (StreamWriter sw = new StreamWriter("b3v3check.log"))
             {
-                sw.WriteLine("BSIM3v3.3.0 Parameter Checking.");
-                if (model.BSIM3version != "3.3.0")
-                {
-                    sw.WriteLine("Warning: This model is BSIM3v3.3.0; you specified a wrong version number.");
-                    CircuitWarning.Warning(this, "Warning: This model is BSIM3v3.3.0; you specified a wrong version number.");
-                }
-                sw.WriteLine($"Model = {Name}");
 
+                sw.WriteLine("BSIM3v3.2.2 Parameter Checking.");
+                if (model.BSIM3version != "3.2.2")
+                {
+                    sw.WriteLine("Warning: This model is BSIM3v3.2.2; you specified a wrong version number.");
+                    CircuitWarning.Warning(this, "Warning: This model is BSIM3v3.2.2; you specified a wrong version number.");
+                }
+
+                sw.WriteLine($"Model = {model.Name}");
                 if (pParam.BSIM3nlx < -pParam.BSIM3leff)
                 {
                     sw.WriteLine($"Fatal: Nlx = {pParam.BSIM3nlx} is less than -Leff.");
@@ -3720,13 +3569,6 @@ namespace SpiceSharp.Components
                 {
                     sw.WriteLine($"Fatal: Toxm = {model.BSIM3toxm} is not positive.");
                     CircuitWarning.Warning(this, $"Fatal: Toxm = {model.BSIM3toxm} is not positive.");
-                    Fatal_Flag = true;
-                }
-
-                if (model.BSIM3lintnoi > pParam.BSIM3leff / 2)
-                {
-                    sw.WriteLine($"Fatal: Lintnoi = {model.BSIM3lintnoi} is too large - Leff for noise is negative.");
-                    CircuitWarning.Warning(this, $"Fatal: Lintnoi = {model.BSIM3lintnoi} is too large - Leff for noise is negative.");
                     Fatal_Flag = true;
                 }
 
@@ -3819,7 +3661,6 @@ namespace SpiceSharp.Components
                 if (pParam.BSIM3pclm <= 0.0)
                 {
                     sw.WriteLine($"Fatal: Pclm = {pParam.BSIM3pclm} is not positive.");
-
                     CircuitWarning.Warning(this, $"Fatal: Pclm = {pParam.BSIM3pclm} is not positive.");
                     Fatal_Flag = true;
                 }
@@ -3885,7 +3726,6 @@ namespace SpiceSharp.Components
                 if (pParam.BSIM3clc < 0.0)
                 {
                     sw.WriteLine($"Fatal: Clc = {pParam.BSIM3clc} is negative.");
-
                     CircuitWarning.Warning(this, $"Fatal: Clc = {pParam.BSIM3clc} is negative.");
                     Fatal_Flag = true;
                 }
@@ -3901,18 +3741,15 @@ namespace SpiceSharp.Components
                     CircuitWarning.Warning(this, $"Warning: Moin = {pParam.BSIM3moin} is too large.");
                 }
 
-                if (model.BSIM3capMod == 3)
+                if (pParam.BSIM3acde < 0.4)
                 {
-                    if (pParam.BSIM3acde < 0.4)
-                    {
-                        sw.WriteLine($"Warning:  Acde = {pParam.BSIM3acde} is too small.");
-                        CircuitWarning.Warning(this, $"Warning: Acde = {pParam.BSIM3acde} is too small.");
-                    }
-                    if (pParam.BSIM3acde > 1.6)
-                    {
-                        sw.WriteLine($"Warning:  Acde = {pParam.BSIM3acde} is too large.");
-                        CircuitWarning.Warning(this, $"Warning: Acde = {pParam.BSIM3acde} is too large.");
-                    }
+                    sw.WriteLine($"Warning:  Acde = {pParam.BSIM3acde} is too small.");
+                    CircuitWarning.Warning(this, $"Warning: Acde = {pParam.BSIM3acde} is too small.");
+                }
+                if (pParam.BSIM3acde > 1.6)
+                {
+                    sw.WriteLine($"Warning:  Acde = {pParam.BSIM3acde} is too large.");
+                    CircuitWarning.Warning(this, $"Warning: Acde = {pParam.BSIM3acde} is too large.");
                 }
 
                 if (model.BSIM3paramChk == 1)
@@ -3962,7 +3799,6 @@ namespace SpiceSharp.Components
                     else if (pParam.BSIM3npeak >= 1.0e21)
                     {
                         sw.WriteLine($"Warning: Nch = {pParam.BSIM3npeak} may be too large.");
-
                         CircuitWarning.Warning(this, $"Warning: Nch = {pParam.BSIM3npeak} may be too large.");
                     }
 
@@ -4049,13 +3885,12 @@ namespace SpiceSharp.Components
                         pParam.BSIM3rdsw = 0.0;
                         pParam.BSIM3rds0 = 0.0;
                     }
-                    if (pParam.BSIM3rds0 < 0.0)
+                    else if ((pParam.BSIM3rds0 > 0.0) && (pParam.BSIM3rds0 < 0.001))
                     {
-                        sw.WriteLine($"Warning: Rds at current temperature = {pParam.BSIM3rds0} is negative. Set to zero.");
-                        CircuitWarning.Warning(this, $"Warning: Rds at current temperature = {pParam.BSIM3rds0} is negative. Set to zero.");
+                        sw.WriteLine($"Warning: Rds at current temperature = {pParam.BSIM3rds0} is less than 0.001 ohm. Set to zero.");
+                        CircuitWarning.Warning(this, $"Warning: Rds at current temperature = {pParam.BSIM3rds0} is less than 0.001 ohm. Set to zero.");
                         pParam.BSIM3rds0 = 0.0;
                     }
-
                     if (pParam.BSIM3vsattemp < 1.0e3)
                     {
                         sw.WriteLine($"Warning: Vsat at current temperature = {pParam.BSIM3vsattemp} may be too small.");
@@ -4093,9 +3928,11 @@ namespace SpiceSharp.Components
                     }
 
                 }/* loop for the parameter check for warning messages */
-            }
 
+            }
             return (Fatal_Flag);
         }
-    }
+
+
+	}
 }

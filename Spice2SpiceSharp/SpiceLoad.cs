@@ -83,6 +83,10 @@ namespace Spice2SpiceSharp
             // Integration slope
             code = Regex.Replace(code, $@"{ckt}\s*\-\>\s*CKTag\s*\[\s*0\s*\]", $"{method}.Slope");
 
+            // Find temperature stuff
+            code = Regex.Replace(code, @"ckt\s*\-\>\s*CKTtemp", "ckt.State.Temperature");
+            code = Regex.Replace(code, @"ckt\s*\-\>\s*CKTnomTemp", "ckt.State.NominalTemperature");
+
             // Nodes
             foreach (string n in matrixnodes.Keys)
             {
@@ -93,6 +97,7 @@ namespace Spice2SpiceSharp
                 Regex mn = new Regex($@"\*\s*\(\s*{n}\s*\)");
                 code = mn.Replace(code, (Match m) => $"{rstate}.Matrix[{matrixnodes[n].Item1}, {matrixnodes[n].Item2}]");
             }
+            code = Regex.Replace(code, $@"\((?<mat>{rstate}\.[^;]+)\);", (Match m) => m.Groups["mat"].Value + ";");
 
             // Apply state logic
             code = ApplyStateLogic(code, ckt, state, method);

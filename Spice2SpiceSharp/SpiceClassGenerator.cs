@@ -231,7 +231,7 @@ namespace Spice2SpiceSharp
                 foreach (var v in modelextra)
                 {
                     if (paramMod.GivenVariable.ContainsValue(v))
-                        WriteCode(sw, $"public Parameter<double> {v} {{ get; }} = new Parameter<double>();");
+                        WriteCode(sw, $"public Parameter {v} {{ get; }} = new Parameter();");
                     else
                         WriteCode(sw, $"public double {v} {{ get; private set; }}");
                 }
@@ -320,7 +320,7 @@ namespace Spice2SpiceSharp
                             continue;
                     }
                     if (paramDev.GivenVariable.ContainsValue(v))
-                        WriteCode(sw, $"public Parameter<double> {v} {{ get; }} = new Parameter<double>();");
+                        WriteCode(sw, $"public Parameter {v} {{ get; }} = new Parameter();");
                     else
                         WriteCode(sw, $"public double {v} {{ get; private set; }}");
                 }
@@ -476,7 +476,7 @@ namespace Spice2SpiceSharp
             int r = 0;
             while (line.Length > MaxLineLength && ss.Count > 0)
             {
-                // Find the index where we have to 
+                // Find the index where we have to split
                 int index = 0;
                 while (ss.Count > 0)
                 {

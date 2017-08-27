@@ -46,11 +46,11 @@ namespace SpiceSharpTest.Models.Transistors
         /// <summary>
         /// Test model NMOS
         /// </summary>
-        private static BSIM3Model TestModelNMOS
+        private static BSIM3v30Model TestModelNMOS
         {
             get
             {
-                BSIM3Model model = new BSIM3Model("TestModelNMOS");
+                BSIM3v30Model model = new BSIM3v30Model("TestModelNMOS");
                 model.SetNMOS(true);
                 using (StreamReader sr = new StreamReader(nmos_model))
                 {
@@ -71,11 +71,11 @@ namespace SpiceSharpTest.Models.Transistors
         /// <summary>
         /// Test model NMOS
         /// </summary>
-        private static BSIM3Model TestModelPMOS
+        private static BSIM3v30Model TestModelPMOS
         {
             get
             {
-                BSIM3Model model = new BSIM3Model("TestModelPMOS");
+                BSIM3v30Model model = new BSIM3v30Model("TestModelPMOS");
                 model.SetPMOS(true);
                 using (StreamReader sr = new StreamReader(pmos_model))
                 {
@@ -146,7 +146,7 @@ namespace SpiceSharpTest.Models.Transistors
             // Generate the circuit
             Circuit ckt = new Circuit();
 
-            BSIM3 nmos = new BSIM3("M1");
+            BSIM3v30 nmos = new BSIM3v30("M1");
             nmos.SetModel(TestModelNMOS);
             nmos.Connect("2", "1", "0", "0");
             nmos.Set("w", 1e-6); nmos.Set("l", 1e-6);
@@ -193,7 +193,7 @@ namespace SpiceSharpTest.Models.Transistors
             // Generate the circuit
             Circuit ckt = new Circuit();
 
-            BSIM3 nmos = new BSIM3("M1");
+            BSIM3v30 nmos = new BSIM3v30("M1");
             nmos.SetModel(TestModelPMOS);
             nmos.Connect("2", "1", "0", "0");
             nmos.Set("w", 1e-6); nmos.Set("l", 1e-6);
