@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BSIM3\BSIM3v21.cs" />
+    <Compile Include="BSIM3\BSIM3v21Model.cs" />
     <Compile Include="BSIM3\BSIM3v22.cs" />
     <Compile Include="BSIM3\BSIM3v22Model.cs" />
     <Compile Include="BSIM3\BSIM3v23.cs" />

@@ -8,12 +8,12 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    public class BSIM3v22 : CircuitComponent<BSIM3v22>
+    public class BSIM3v21 : CircuitComponent<BSIM3v21>
     {
         /// <summary>
         /// Register our device parameters and terminals
         /// </summary>
-        static BSIM3v22()
+        static BSIM3v21()
         {
             Register();
             terminals = new string[] { "Drain", "Gate", "Source", "Bulk" };
@@ -22,11 +22,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public void SetModel(BSIM3v22Model model) => Model = model;
-
-        /// <summary>
-        /// Size-dependent parameters
-        /// </summary>
+        public void SetModel(BSIM3v21Model model) => Model = model;
         private BSIM3SizeDependParam pParam = null;
 
         /// <summary>
@@ -172,7 +168,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM3v22(string name) : base(name)
+        public BSIM3v21(string name) : base(name)
         {
         }
 
@@ -182,7 +178,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            var model = Model as BSIM3v22Model;
+            var model = Model as BSIM3v21Model;
             pParam = null;
 
             // Allocate nodes
@@ -221,7 +217,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            var model = Model as BSIM3v22Model;
+            var model = Model as BSIM3v21Model;
             double Ldrn, Wdrn, T0, T1, tmp1, tmp2, T2, T3, Inv_L, Inv_W, Inv_LW, tmp, T4, T5, tmp3,
                 Nvtm, SourceSatCurrent, DrainSatCurrent;
 
@@ -232,6 +228,7 @@ namespace SpiceSharp.Components
             {
                 pParam = new BSIM3SizeDependParam();
                 model.Sizes.Add(size, pParam);
+
                 Ldrn = BSIM3l;
                 Wdrn = BSIM3w;
 
@@ -251,17 +248,17 @@ namespace SpiceSharp.Components
 
                 pParam.BSIM3leff = BSIM3l - 2.0 * pParam.BSIM3dl;
                 if (pParam.BSIM3leff <= 0.0)
-                    throw new CircuitException($"BSIM3v22: mosfet {Name}, model {model.Name}: Effective channel length <= 0");
+                    throw new CircuitException($"BSIM3v21: mosfet {Name}, model {model.Name}: Effective channel length <= 0");
                 pParam.BSIM3weff = BSIM3w - 2.0 * pParam.BSIM3dw;
                 if (pParam.BSIM3weff <= 0.0)
-                    throw new CircuitException($"BSIM3v22: mosfet {Name}, model {model.Name}: Effective channel width <= 0");
+                    throw new CircuitException($"BSIM3v21: mosfet {Name}, model {model.Name}: Effective channel width <= 0");
 
                 pParam.BSIM3leffCV = BSIM3l - 2.0 * pParam.BSIM3dlc;
                 if (pParam.BSIM3leffCV <= 0.0)
-                    throw new CircuitException($"BSIM3v22: mosfet {Name}, model {model.Name}: Effective channel length for C-V <= 0");
+                    throw new CircuitException($"BSIM3v21: mosfet {Name}, model {model.Name}: Effective channel length for C-V <= 0");
                 pParam.BSIM3weffCV = BSIM3w - 2.0 * pParam.BSIM3dwc;
                 if (pParam.BSIM3weffCV <= 0.0)
-                    throw new CircuitException($"BSIM3v22: mosfet {Name}, model {model.Name}: Effective channel width for C-V <= 0");
+                    throw new CircuitException($"BSIM3v21: mosfet {Name}, model {model.Name}: Effective channel width for C-V <= 0");
 
                 if (model.BSIM3binUnit.Value == 1)
                 {
@@ -594,7 +591,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Load(Circuit ckt)
         {
-            var model = Model as BSIM3v22Model;
+            var model = Model as BSIM3v21Model;
             var state = ckt.State;
             var rstate = state.Real;
             var method = ckt.Method;
@@ -614,17 +611,18 @@ namespace SpiceSharp.Components
                 dfgche2_dVd, dfgche2_dVb, gche, dgche_dVg, dgche_dVd, dgche_dVb, Idl, dIdl_dVg, dIdl_dVd, dIdl_dVb, Idsa, dIdsa_dVg, dIdsa_dVd,
                 dIdsa_dVb, Ids, Gm, Gds, Gmb, tmp, Isub, Gbg, Gbd, Gbb, cdrain, qgate = 0, Vfb, dVgst_dVb, dVgst_dVg, CoxWL, Arg1, qbulk = 0, qdrn = 0,
                 One_Third_CoxWL, Two_Third_CoxWL, AbulkCV, dAbulkCV_dVb, Alphaz, T11, dAlphaz_dVg, dAlphaz_dVb, T12, VbseffCV, dVbseffCV_dVb,
-                noff, dnoff_dVd, dnoff_dVb, voffcv, Cgg, Cgd, Cgb, Cbg, Cbd, Cbb, VdsatCV, dVdsatCV_dVg, dVdsatCV_dVb, Cgg1, Cgb1, Cgd1, Cbg1,
-                Cbb1, Cbd1, qsrc, Csg, Csb, Csd, V3, Vfbeff, dVfbeff_dVg, dVfbeff_dVb, Qac0, dQac0_dVg, dQac0_dVb, Qsub0, dQsub0_dVg,
-                dQsub0_dVd, dQsub0_dVb, V4, VdseffCV, dVdseffCV_dVg, dVdseffCV_dVd, dVdseffCV_dVb, qinoi, Cox, Tox, Tcen, dTcen_dVg, dTcen_dVb,
-                LINK, Ccen, Coxeff, dCoxeff_dVg, dCoxeff_dVb, CoxWLcen, QovCox, DeltaPhi, dDeltaPhi_dVg, dDeltaPhi_dVd, dDeltaPhi_dVb,
-                dTcen_dVd, dCoxeff_dVd, czbd, czbs, czbdswg, czbdsw, czbssw, czbsswg, MJ, MJSW, MJSWG, arg, sarg, qcheq = 0, gtau_drift, gtau_diff,
-                cgdo, qgdo, cgso, qgso, ag0, gcggb, gcgdb, gcgsb, gcdgb, gcddb, gcdsb, gcsgb, gcsdb, gcssb, gcbgb, gcbdb, gcbsb, qgd, qgs, qgb,
-                ggtg, sxpart, dxpart, ddxpart_dVd, dsxpart_dVd, ggtd, ggts, ggtb, gqdef = 0, gcqgb = 0, gcqdb = 0, gcqsb = 0, gcqbb = 0, Cdd, Cdg, ddxpart_dVg,
-                Cds, Css, ddxpart_dVs, ddxpart_dVb, dsxpart_dVg, dsxpart_dVs, dsxpart_dVb, cqdef, ceqqg, cqcheq, cqgate, cqbulk, cqdrn, ceqqb,
-                ceqqd, Gmbs, FwdSum, RevSum, cdreq, ceqbd, ceqbs, gbbdp, gbbsp, gbdpg, gbdpdp, gbdpb, gbdpsp, gbspg, gbspdp, gbspb, gbspsp;
+                noff, dnoff_dVd, dnoff_dVb, voffcv, dVfb_dVb, dVfb_dVd, Cgg, Cgd, Cgb, Cbg, Cbd, Cbb, VdsatCV, dVdsatCV_dVg, dVdsatCV_dVb,
+                Cgg1, Cgb1, Cgd1, Cbg1, Cbb1, Cbd1, qsrc, Csg, Csb, Csd, V3, Vfbeff, dVfbeff_dVd, dVfbeff_dVg, dVfbeff_dVb, Qac0, dQac0_dVg,
+                dQac0_dVd, dQac0_dVb, Qsub0, dQsub0_dVg, dQsub0_dVd, dQsub0_dVb, V4, VdseffCV, dVdseffCV_dVg, dVdseffCV_dVd, dVdseffCV_dVb,
+                qinoi, Cox, Tox, Tcen, dTcen_dVg, dTcen_dVb, LINK, Ccen, Coxeff, dCoxeff_dVg, dCoxeff_dVb, CoxWLcen, QovCox, DeltaPhi,
+                dDeltaPhi_dVg, dDeltaPhi_dVd, dDeltaPhi_dVb, dTcen_dVd, dCoxeff_dVd, czbd, czbs, czbdswg, czbdsw, czbssw, czbsswg, MJ, MJSW,
+                MJSWG, arg, sarg, qcheq = 0, gtau_drift, gtau_diff, cgdo, qgdo, cgso, qgso, ag0, gcggb, gcgdb, gcgsb, gcdgb, gcddb, gcdsb, gcsgb,
+                gcsdb, gcssb, gcbgb, gcbdb, gcbsb, qgd, qgs, qgb, ggtg, sxpart, dxpart, ddxpart_dVd, dsxpart_dVd, ggtd, ggts, ggtb, gqdef = 0,
+                gcqgb = 0, gcqdb = 0, gcqsb = 0, gcqbb = 0, Cdd, Cdg, ddxpart_dVg, Cds, Css, ddxpart_dVs, ddxpart_dVb, dsxpart_dVg, dsxpart_dVs, dsxpart_dVb,
+                cqdef, ceqqg, cqcheq, cqgate, cqbulk, cqdrn, ceqqb, ceqqd, Gmbs, FwdSum, RevSum, cdreq, ceqbd, ceqbs, gbbdp, gbbsp, gbdpg,
+                gbdpdp, gbdpb, gbdpsp, gbspg, gbspdp, gbspb, gbspsp;
             bool ChargeComputationNeeded = ((method != null || state.UseSmallSignal) || ((state.Domain == CircuitState.DomainTypes.Time &&
-    state.UseDC) && state.UseIC)) ? true : false;
+                state.UseDC) && state.UseIC)) ? true : false;
 
             Check = 1;
             if (state.UseSmallSignal)
@@ -1580,7 +1578,7 @@ namespace SpiceSharp.Components
 
             BSIM3csub = Isub;
 
-            /* BSIM3v22 thermal noise Qinv calculated from all capMod 
+            /* BSIM3v21 thermal noise Qinv calculated from all capMod 
             * 0, 1, 2 & 3 stored in BSIM3qinv1 / 1998 */
 
             if ((model.BSIM3xpart < 0) || (!ChargeComputationNeeded))
@@ -1935,15 +1933,18 @@ namespace SpiceSharp.Components
 
                 if (model.BSIM3capMod.Value == 1)
                 {
-                    Vfb = pParam.BSIM3vfbzb;
+                    Vfb = Vth - pParam.BSIM3phi - pParam.BSIM3k1ox * sqrtPhis;
+                    dVfb_dVb = dVth_dVb - pParam.BSIM3k1ox * dsqrtPhis_dVb;
+                    dVfb_dVd = dVth_dVd;
+
                     Arg1 = Vgs_eff - VbseffCV - Vfb - Vgsteff;
 
                     if (Arg1 <= 0.0)
                     {
                         qgate = CoxWL * Arg1;
                         Cgg = CoxWL * (dVgs_eff_dVg - dVgsteff_dVg);
-                        Cgd = -CoxWL * dVgsteff_dVd;
-                        Cgb = -CoxWL * (dVbseffCV_dVb + dVgsteff_dVb);
+                        Cgd = -CoxWL * (dVfb_dVd + dVgsteff_dVd);
+                        Cgb = -CoxWL * (dVfb_dVb + dVbseffCV_dVb + dVgsteff_dVb);
                     }
                     else
                     {
@@ -1954,8 +1955,8 @@ namespace SpiceSharp.Components
                         qgate = CoxWL * pParam.BSIM3k1ox * (T1 - T0);
 
                         Cgg = T2 * (dVgs_eff_dVg - dVgsteff_dVg);
-                        Cgd = -T2 * dVgsteff_dVd;
-                        Cgb = -T2 * (dVbseffCV_dVb + dVgsteff_dVb);
+                        Cgd = -T2 * (dVfb_dVd + dVgsteff_dVd);
+                        Cgb = -T2 * (dVfb_dVb + dVbseffCV_dVb + dVgsteff_dVb);
                     }
                     qbulk = -qgate;
                     Cbg = -Cgg;
@@ -2089,7 +2090,10 @@ namespace SpiceSharp.Components
 
                 else if (model.BSIM3capMod.Value == 2)
                 {
-                    Vfb = pParam.BSIM3vfbzb;
+                    Vfb = Vth - pParam.BSIM3phi - pParam.BSIM3k1ox * sqrtPhis;
+                    dVfb_dVb = dVth_dVb - pParam.BSIM3k1ox * dsqrtPhis_dVb;
+                    dVfb_dVd = dVth_dVd;
+
                     V3 = Vfb - Vgs_eff + VbseffCV - Transistor.DELTA_3;
                     if (Vfb <= 0.0)
                     {
@@ -2104,11 +2108,13 @@ namespace SpiceSharp.Components
 
                     T1 = 0.5 * (1.0 + V3 / T0);
                     Vfbeff = Vfb - 0.5 * (V3 + T0);
+                    dVfbeff_dVd = (1.0 - T1 - T2) * dVfb_dVd;
                     dVfbeff_dVg = T1 * dVgs_eff_dVg;
-                    dVfbeff_dVb = -T1 * dVbseffCV_dVb;
+                    dVfbeff_dVb = (1.0 - T1 - T2) * dVfb_dVb - T1 * dVbseffCV_dVb;
                     Qac0 = CoxWL * (Vfbeff - Vfb);
                     dQac0_dVg = CoxWL * dVfbeff_dVg;
-                    dQac0_dVb = CoxWL * dVfbeff_dVb;
+                    dQac0_dVd = CoxWL * (dVfbeff_dVd - dVfb_dVd);
+                    dQac0_dVb = CoxWL * (dVfbeff_dVb - dVfb_dVb);
 
                     T0 = 0.5 * pParam.BSIM3k1ox;
                     T3 = Vgs_eff - Vfbeff - VbseffCV - Vgsteff;
@@ -2131,7 +2137,7 @@ namespace SpiceSharp.Components
                     Qsub0 = CoxWL * pParam.BSIM3k1ox * (T1 - T0);
 
                     dQsub0_dVg = T2 * (dVgs_eff_dVg - dVfbeff_dVg - dVgsteff_dVg);
-                    dQsub0_dVd = -T2 * dVgsteff_dVd;
+                    dQsub0_dVd = -T2 * (dVfbeff_dVd + dVgsteff_dVd);
                     dQsub0_dVb = -T2 * (dVfbeff_dVb + dVbseffCV_dVb + dVgsteff_dVb);
 
                     AbulkCV = Abulk0 * pParam.BSIM3abulkCVfactor;
@@ -2225,11 +2231,11 @@ namespace SpiceSharp.Components
                     qdrn = -(qgate + qbulk + qsrc);
 
                     Cgg = dQac0_dVg + dQsub0_dVg + Cgg1;
-                    Cgd = dQsub0_dVd + Cgd1;
+                    Cgd = dQac0_dVd + dQsub0_dVd + Cgd1;
                     Cgb = dQac0_dVb + dQsub0_dVb + Cgb1;
 
                     Cbg = Cbg1 - dQac0_dVg - dQsub0_dVg;
-                    Cbd = Cbd1 - dQsub0_dVd;
+                    Cbd = Cbd1 - dQac0_dVd - dQsub0_dVd;
                     Cbb = Cbb1 - dQac0_dVb - dQsub0_dVb;
 
                     Cgb *= dVbseff_dVb;
@@ -2694,7 +2700,6 @@ namespace SpiceSharp.Components
             if (!ChargeComputationNeeded)
                 goto line850;
 
-            line755:
             /* NQS begins */
             if (BSIM3nqsMod != 0)
             {
@@ -3257,7 +3262,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void AcLoad(Circuit ckt)
         {
-            var model = Model as BSIM3v22Model;
+            var model = Model as BSIM3v21Model;
             var state = ckt.State;
             var cstate = state.Complex;
             double Gm, Gmbs, FwdSum, RevSum, gbbdp, gbbsp, gbdpg, gbdpb, gbdpdp, gbdpsp, gbspdp, gbspg, gbspb, gbspsp, cggb, cgsb, cgdb,
@@ -3538,22 +3543,24 @@ namespace SpiceSharp.Components
 
         private bool BSIM3checkModel()
         {
-            BSIM3v22Model model = (BSIM3v22Model)Model;
+            BSIM3v21Model model = (BSIM3v21Model)Model;
+
             bool Fatal_Flag = false;
             using (StreamWriter sw = new StreamWriter("b3v3check.log", true))
             {
-
-                sw.WriteLine("BSIM3v3.2.2 Parameter Checking.");
-                if (model.BSIM3version != "3.2.2")
+                sw.WriteLine("BSIM3v3.2.1 Parameter Checking.");
+                if (model.BSIM3version != "3.2.1")
                 {
-                    sw.WriteLine("Warning: This model is BSIM3v3.2.2; you specified a wrong version number.");
-                    CircuitWarning.Warning(this, "Warning: This model is BSIM3v3.2.2; you specified a wrong version number.");
+                    sw.WriteLine("Warning: This model is BSIM3v3.2.1; you specified a wrong version number.");
+                    CircuitWarning.Warning(this, "Warning: This model is BSIM3v3.2.1; you specified a wrong version number.");
                 }
 
-                sw.WriteLine($"Model = {model.Name}");
+                sw.WriteLine($"Model = {Model.Name}", model.BSIM3modName);
+
                 if (pParam.BSIM3nlx < -pParam.BSIM3leff)
                 {
                     sw.WriteLine($"Fatal: Nlx = {pParam.BSIM3nlx} is less than -Leff.");
+
                     CircuitWarning.Warning(this, $"Fatal: Nlx = {pParam.BSIM3nlx} is less than -Leff.");
                     Fatal_Flag = true;
                 }
@@ -3561,6 +3568,7 @@ namespace SpiceSharp.Components
                 if (model.BSIM3tox <= 0.0)
                 {
                     sw.WriteLine($"Fatal: Tox = {model.BSIM3tox} is not positive.");
+
                     CircuitWarning.Warning(this, $"Fatal: Tox = {model.BSIM3tox} is not positive.");
                     Fatal_Flag = true;
                 }
@@ -3575,30 +3583,35 @@ namespace SpiceSharp.Components
                 if (pParam.BSIM3npeak <= 0.0)
                 {
                     sw.WriteLine($"Fatal: Nch = {pParam.BSIM3npeak} is not positive.");
+
                     CircuitWarning.Warning(this, $"Fatal: Nch = {pParam.BSIM3npeak} is not positive.");
                     Fatal_Flag = true;
                 }
                 if (pParam.BSIM3nsub <= 0.0)
                 {
                     sw.WriteLine($"Fatal: Nsub = {pParam.BSIM3nsub} is not positive.");
+
                     CircuitWarning.Warning(this, $"Fatal: Nsub = {pParam.BSIM3nsub} is not positive.");
                     Fatal_Flag = true;
                 }
                 if (pParam.BSIM3ngate < 0.0)
                 {
                     sw.WriteLine($"Fatal: Ngate = {pParam.BSIM3ngate} is not positive.");
+
                     CircuitWarning.Warning(this, $"Fatal: Ngate = {pParam.BSIM3ngate} Ngate is not positive.");
                     Fatal_Flag = true;
                 }
                 if (pParam.BSIM3ngate > 1.0e25)
                 {
                     sw.WriteLine($"Fatal: Ngate = {pParam.BSIM3ngate} is too high.");
+
                     CircuitWarning.Warning(this, $"Fatal: Ngate = {pParam.BSIM3ngate} Ngate is too high");
                     Fatal_Flag = true;
                 }
                 if (pParam.BSIM3xj <= 0.0)
                 {
                     sw.WriteLine($"Fatal: Xj = {pParam.BSIM3xj} is not positive.");
+
                     CircuitWarning.Warning(this, $"Fatal: Xj = {pParam.BSIM3xj} is not positive.");
                     Fatal_Flag = true;
                 }
@@ -3606,6 +3619,7 @@ namespace SpiceSharp.Components
                 if (pParam.BSIM3dvt1 < 0.0)
                 {
                     sw.WriteLine($"Fatal: Dvt1 = {pParam.BSIM3dvt1} is negative.");
+
                     CircuitWarning.Warning(this, $"Fatal: Dvt1 = {pParam.BSIM3dvt1} is negative.");
                     Fatal_Flag = true;
                 }
@@ -3613,6 +3627,7 @@ namespace SpiceSharp.Components
                 if (pParam.BSIM3dvt1w < 0.0)
                 {
                     sw.WriteLine($"Fatal: Dvt1w = {pParam.BSIM3dvt1w} is negative.");
+
                     CircuitWarning.Warning(this, $"Fatal: Dvt1w = {pParam.BSIM3dvt1w} is negative.");
                     Fatal_Flag = true;
                 }
@@ -3620,6 +3635,7 @@ namespace SpiceSharp.Components
                 if (pParam.BSIM3w0 == -pParam.BSIM3weff)
                 {
                     sw.WriteLine("Fatal: (W0 + Weff) = 0 causing divided-by-zero.");
+
                     CircuitWarning.Warning(this, "Fatal: (W0 + Weff) = 0 causing divided-by-zero.");
                     Fatal_Flag = true;
                 }
@@ -3627,18 +3643,21 @@ namespace SpiceSharp.Components
                 if (pParam.BSIM3dsub < 0.0)
                 {
                     sw.WriteLine($"Fatal: Dsub = {pParam.BSIM3dsub} is negative.");
+
                     CircuitWarning.Warning(this, $"Fatal: Dsub = {pParam.BSIM3dsub} is negative.");
                     Fatal_Flag = true;
                 }
                 if (pParam.BSIM3b1 == -pParam.BSIM3weff)
                 {
                     sw.WriteLine("Fatal: (B1 + Weff) = 0 causing divided-by-zero.");
+
                     CircuitWarning.Warning(this, "Fatal: (B1 + Weff) = 0 causing divided-by-zero.");
                     Fatal_Flag = true;
                 }
                 if (pParam.BSIM3u0temp <= 0.0)
                 {
                     sw.WriteLine($"Fatal: u0 at current temperature = {pParam.BSIM3u0temp} is not positive.");
+
                     CircuitWarning.Warning(this, $"Fatal: u0 at current temperature = {pParam.BSIM3u0temp} is not positive.");
                     Fatal_Flag = true;
                 }
@@ -3647,6 +3666,7 @@ namespace SpiceSharp.Components
                 if (pParam.BSIM3delta < 0.0)
                 {
                     sw.WriteLine($"Fatal: Delta = {pParam.BSIM3delta} is less than zero.");
+
                     CircuitWarning.Warning(this, $"Fatal: Delta = {pParam.BSIM3delta} is less than zero.");
                     Fatal_Flag = true;
                 }
@@ -3654,6 +3674,7 @@ namespace SpiceSharp.Components
                 if (pParam.BSIM3vsattemp <= 0.0)
                 {
                     sw.WriteLine($"Fatal: Vsat at current temperature = {pParam.BSIM3vsattemp} is not positive.");
+
                     CircuitWarning.Warning(this, $"Fatal: Vsat at current temperature = {pParam.BSIM3vsattemp} is not positive.");
                     Fatal_Flag = true;
                 }
@@ -3661,6 +3682,7 @@ namespace SpiceSharp.Components
                 if (pParam.BSIM3pclm <= 0.0)
                 {
                     sw.WriteLine($"Fatal: Pclm = {pParam.BSIM3pclm} is not positive.");
+
                     CircuitWarning.Warning(this, $"Fatal: Pclm = {pParam.BSIM3pclm} is not positive.");
                     Fatal_Flag = true;
                 }
@@ -3668,6 +3690,7 @@ namespace SpiceSharp.Components
                 if (pParam.BSIM3drout < 0.0)
                 {
                     sw.WriteLine($"Fatal: Drout = {pParam.BSIM3drout} is negative.");
+
                     CircuitWarning.Warning(this, $"Fatal: Drout = {pParam.BSIM3drout} is negative.");
                     Fatal_Flag = true;
                 }
@@ -3684,11 +3707,13 @@ namespace SpiceSharp.Components
                     if (BSIM3drainPerimeter < pParam.BSIM3weff)
                     {
                         sw.WriteLine($"Warning: Pd = {BSIM3drainPerimeter} is less than W.");
+
                         CircuitWarning.Warning(this, $"Warning: Pd = {BSIM3drainPerimeter} is less than W.");
                     }
                     if (BSIM3sourcePerimeter < pParam.BSIM3weff)
                     {
                         sw.WriteLine($"Warning: Ps = {BSIM3sourcePerimeter} is less than W.");
+
                         CircuitWarning.Warning(this, $"Warning: Ps = {BSIM3sourcePerimeter} is less than W.");
                     }
                 }
@@ -3726,6 +3751,7 @@ namespace SpiceSharp.Components
                 if (pParam.BSIM3clc < 0.0)
                 {
                     sw.WriteLine($"Fatal: Clc = {pParam.BSIM3clc} is negative.");
+
                     CircuitWarning.Warning(this, $"Fatal: Clc = {pParam.BSIM3clc} is negative.");
                     Fatal_Flag = true;
                 }
@@ -3758,24 +3784,28 @@ namespace SpiceSharp.Components
                     if (pParam.BSIM3leff <= 5.0e-8)
                     {
                         sw.WriteLine($"Warning: Leff = {pParam.BSIM3leff} may be too small.");
+
                         CircuitWarning.Warning(this, $"Warning: Leff = {pParam.BSIM3leff} may be too small.");
                     }
 
                     if (pParam.BSIM3leffCV <= 5.0e-8)
                     {
                         sw.WriteLine($"Warning: Leff for CV = {pParam.BSIM3leffCV} may be too small.");
+
                         CircuitWarning.Warning(this, $"Warning: Leff for CV = {pParam.BSIM3leffCV} may be too small.");
                     }
 
                     if (pParam.BSIM3weff <= 1.0e-7)
                     {
                         sw.WriteLine($"Warning: Weff = {pParam.BSIM3weff} may be too small.");
+
                         CircuitWarning.Warning(this, $"Warning: Weff = {pParam.BSIM3weff} may be too small.");
                     }
 
                     if (pParam.BSIM3weffCV <= 1.0e-7)
                     {
                         sw.WriteLine($"Warning: Weff for CV = {pParam.BSIM3weffCV} may be too small.");
+
                         CircuitWarning.Warning(this, $"Warning: Weff for CV = {pParam.BSIM3weffCV} may be too small.");
                     }
 
@@ -3783,52 +3813,60 @@ namespace SpiceSharp.Components
                     if (pParam.BSIM3nlx < 0.0)
                     {
                         sw.WriteLine($"Warning: Nlx = {pParam.BSIM3nlx} is negative.");
+
                         CircuitWarning.Warning(this, $"Warning: Nlx = {pParam.BSIM3nlx} is negative.");
                     }
                     if (model.BSIM3tox < 1.0e-9)
                     {
                         sw.WriteLine($"Warning: Tox = {model.BSIM3tox} is less than 10A.");
+
                         CircuitWarning.Warning(this, $"Warning: Tox = {model.BSIM3tox} is less than 10A.");
                     }
 
                     if (pParam.BSIM3npeak <= 1.0e15)
                     {
                         sw.WriteLine($"Warning: Nch = {pParam.BSIM3npeak} may be too small.");
+
                         CircuitWarning.Warning(this, $"Warning: Nch = {pParam.BSIM3npeak} may be too small.");
                     }
                     else if (pParam.BSIM3npeak >= 1.0e21)
                     {
                         sw.WriteLine($"Warning: Nch = {pParam.BSIM3npeak} may be too large.");
+
                         CircuitWarning.Warning(this, $"Warning: Nch = {pParam.BSIM3npeak} may be too large.");
                     }
 
                     if (pParam.BSIM3nsub <= 1.0e14)
                     {
                         sw.WriteLine($"Warning: Nsub = {pParam.BSIM3nsub} may be too small.");
+
                         CircuitWarning.Warning(this, $"Warning: Nsub = {pParam.BSIM3nsub} may be too small.");
                     }
                     else if (pParam.BSIM3nsub >= 1.0e21)
                     {
                         sw.WriteLine($"Warning: Nsub = {pParam.BSIM3nsub} may be too large.");
+
                         CircuitWarning.Warning(this, $"Warning: Nsub = {pParam.BSIM3nsub} may be too large.");
                     }
 
-                    if ((pParam.BSIM3ngate > 0.0) &&
-                        (pParam.BSIM3ngate <= 1.0e18))
+                    if ((pParam.BSIM3ngate > 0.0) && (pParam.BSIM3ngate <= 1.0e18))
                     {
                         sw.WriteLine($"Warning: Ngate = {pParam.BSIM3ngate} is less than 1.E18cm^-3.");
+
                         CircuitWarning.Warning(this, $"Warning: Ngate = {pParam.BSIM3ngate} is less than 1.E18cm^-3.");
                     }
 
                     if (pParam.BSIM3dvt0 < 0.0)
                     {
                         sw.WriteLine($"Warning: Dvt0 = {pParam.BSIM3dvt0} is negative.");
+
                         CircuitWarning.Warning(this, $"Warning: Dvt0 = {pParam.BSIM3dvt0} is negative.");
                     }
 
                     if (Math.Abs(1.0e-6 / (pParam.BSIM3w0 + pParam.BSIM3weff)) > 10.0)
                     {
                         sw.WriteLine("Warning: (W0 + Weff) may be too small.");
+
                         CircuitWarning.Warning(this, "Warning: (W0 + Weff) may be too small.");
                     }
 
@@ -3836,22 +3874,26 @@ namespace SpiceSharp.Components
                     if (pParam.BSIM3nfactor < 0.0)
                     {
                         sw.WriteLine($"Warning: Nfactor = {pParam.BSIM3nfactor} is negative.");
+
                         CircuitWarning.Warning(this, $"Warning: Nfactor = {pParam.BSIM3nfactor} is negative.");
                     }
                     if (pParam.BSIM3cdsc < 0.0)
                     {
                         sw.WriteLine($"Warning: Cdsc = {pParam.BSIM3cdsc} is negative.");
+
                         CircuitWarning.Warning(this, $"Warning: Cdsc = {pParam.BSIM3cdsc} is negative.");
                     }
                     if (pParam.BSIM3cdscd < 0.0)
                     {
                         sw.WriteLine($"Warning: Cdscd = {pParam.BSIM3cdscd} is negative.");
+
                         CircuitWarning.Warning(this, $"Warning: Cdscd = {pParam.BSIM3cdscd} is negative.");
                     }
                     /* Check DIBL parameters */
                     if (pParam.BSIM3eta0 < 0.0)
                     {
                         sw.WriteLine($"Warning: Eta0 = {pParam.BSIM3eta0} is negative.");
+
                         CircuitWarning.Warning(this, $"Warning: Eta0 = {pParam.BSIM3eta0} is negative.");
                     }
 
@@ -3859,6 +3901,7 @@ namespace SpiceSharp.Components
                     if (Math.Abs(1.0e-6 / (pParam.BSIM3b1 + pParam.BSIM3weff)) > 10.0)
                     {
                         sw.WriteLine("Warning: (B1 + Weff) may be too small.");
+
                         CircuitWarning.Warning(this, "Warning: (B1 + Weff) may be too small.");
                     }
 
@@ -3867,20 +3910,24 @@ namespace SpiceSharp.Components
                     if (pParam.BSIM3a2 < 0.01)
                     {
                         sw.WriteLine($"Warning: A2 = {pParam.BSIM3a2} is too small. Set to 0.01.");
+
                         CircuitWarning.Warning(this, $"Warning: A2 = {pParam.BSIM3a2} is too small. Set to 0.01.");
                         pParam.BSIM3a2 = 0.01;
                     }
                     else if (pParam.BSIM3a2 > 1.0)
                     {
                         sw.WriteLine($"Warning: A2 = {pParam.BSIM3a2} is larger than 1. A2 is set to 1 and A1 is set to 0.");
+
                         CircuitWarning.Warning(this, $"Warning: A2 = {pParam.BSIM3a2} is larger than 1. A2 is set to 1 and A1 is set to 0.");
                         pParam.BSIM3a2 = 1.0;
                         pParam.BSIM3a1 = 0.0;
+
                     }
 
                     if (pParam.BSIM3rdsw < 0.0)
                     {
                         sw.WriteLine($"Warning: Rdsw = {pParam.BSIM3rdsw} is negative. Set to zero.");
+
                         CircuitWarning.Warning(this, $"Warning: Rdsw = {pParam.BSIM3rdsw} is negative. Set to zero.");
                         pParam.BSIM3rdsw = 0.0;
                         pParam.BSIM3rds0 = 0.0;
@@ -3888,51 +3935,56 @@ namespace SpiceSharp.Components
                     else if ((pParam.BSIM3rds0 > 0.0) && (pParam.BSIM3rds0 < 0.001))
                     {
                         sw.WriteLine($"Warning: Rds at current temperature = {pParam.BSIM3rds0} is less than 0.001 ohm. Set to zero.");
+
                         CircuitWarning.Warning(this, $"Warning: Rds at current temperature = {pParam.BSIM3rds0} is less than 0.001 ohm. Set to zero.");
                         pParam.BSIM3rds0 = 0.0;
                     }
                     if (pParam.BSIM3vsattemp < 1.0e3)
                     {
                         sw.WriteLine($"Warning: Vsat at current temperature = {pParam.BSIM3vsattemp} may be too small.");
+
                         CircuitWarning.Warning(this, $"Warning: Vsat at current temperature = {pParam.BSIM3vsattemp} may be too small.");
                     }
 
                     if (pParam.BSIM3pdibl1 < 0.0)
                     {
                         sw.WriteLine($"Warning: Pdibl1 = {pParam.BSIM3pdibl1} is negative.");
+
                         CircuitWarning.Warning(this, $"Warning: Pdibl1 = {pParam.BSIM3pdibl1} is negative.");
                     }
                     if (pParam.BSIM3pdibl2 < 0.0)
                     {
                         sw.WriteLine($"Warning: Pdibl2 = {pParam.BSIM3pdibl2} is negative.");
+
                         CircuitWarning.Warning(this, $"Warning: Pdibl2 = {pParam.BSIM3pdibl2} is negative.");
                     }
                     /* Check overlap capacitance parameters */
                     if (model.BSIM3cgdo < 0.0)
                     {
                         sw.WriteLine($"Warning: cgdo = {model.BSIM3cgdo} is negative. Set to zero.");
+
                         CircuitWarning.Warning(this, $"Warning: cgdo = {model.BSIM3cgdo} is negative. Set to zero.");
                         model.BSIM3cgdo.Value = 0.0;
                     }
                     if (model.BSIM3cgso < 0.0)
                     {
                         sw.WriteLine($"Warning: cgso = {model.BSIM3cgso} is negative. Set to zero.");
+
                         CircuitWarning.Warning(this, $"Warning: cgso = {model.BSIM3cgso} is negative. Set to zero.");
                         model.BSIM3cgso.Value = 0.0;
                     }
                     if (model.BSIM3cgbo < 0.0)
                     {
                         sw.WriteLine($"Warning: cgbo = {model.BSIM3cgbo} is negative. Set to zero.");
+
                         CircuitWarning.Warning(this, $"Warning: cgbo = {model.BSIM3cgbo} is negative. Set to zero.");
                         model.BSIM3cgbo.Value = 0.0;
                     }
 
-                }/* loop for the parameter check for warning messages */
+                } /* loop for the parameter check for warning messages */
 
             }
             return (Fatal_Flag);
         }
-
-
 	}
 }
