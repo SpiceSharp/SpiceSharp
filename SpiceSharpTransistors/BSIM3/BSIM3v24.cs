@@ -22,7 +22,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public void SetModel(BSIM3v30Model model) => Model = model;
+        public void SetModel(BSIM3v24Model model) => Model = model;
 		
         /// <summary>
         /// mysize dependent parameters

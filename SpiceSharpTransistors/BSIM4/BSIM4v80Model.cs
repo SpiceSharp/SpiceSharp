@@ -6,12 +6,12 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    public class BSIM4Model : CircuitModel<BSIM4Model>
+    public class BSIM4v80Model : CircuitModel<BSIM4v80Model>
     {
         /// <summary>
         /// Register our parameters
         /// </summary>
-        static BSIM4Model()
+        static BSIM4v80Model()
         {
             Register();
         }
@@ -1855,7 +1855,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM4Model(string name) : base(name)
+        public BSIM4v80Model(string name) : base(name)
         {
         }
 

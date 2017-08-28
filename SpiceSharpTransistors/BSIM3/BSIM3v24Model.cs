@@ -70,7 +70,7 @@ namespace SpiceSharp.Components
         [SpiceName("nsub"), SpiceInfo("Substrate doping concentration")]
         public Parameter BSIM3nsub { get; } = new Parameter(6.0e16);
         [SpiceName("nch"), SpiceInfo("Channel doping concentration")]
-        public double BSIM3_MOD_NPEAK
+        public double BSIM3_NPEAK
         {
             get => BSIM3npeak;
             set
@@ -82,7 +82,7 @@ namespace SpiceSharp.Components
         }
         public Parameter BSIM3npeak { get; } = new Parameter(1.7e17);
         [SpiceName("ngate"), SpiceInfo("Poly-gate doping concentration")]
-        public double BSIM3_MOD_NGATE
+        public double BSIM3_NGATE
         {
             get => BSIM3ngate;
             set
@@ -274,7 +274,7 @@ namespace SpiceSharp.Components
         [SpiceName("lnsub"), SpiceInfo("Length dependence of nsub")]
         public Parameter BSIM3lnsub { get; } = new Parameter();
         [SpiceName("lnch"), SpiceInfo("Length dependence of nch")]
-        public double BSIM3_MOD_LNPEAK
+        public double BSIM3_LNPEAK
         {
             get => BSIM3lnpeak;
             set
@@ -286,7 +286,7 @@ namespace SpiceSharp.Components
         }
         public Parameter BSIM3lnpeak { get; } = new Parameter();
         [SpiceName("lngate"), SpiceInfo("Length dependence of ngate")]
-        public double BSIM3_MOD_LNGATE
+        public double BSIM3_LNGATE
         {
             get => BSIM3lngate;
             set
@@ -460,7 +460,7 @@ namespace SpiceSharp.Components
         [SpiceName("wnsub"), SpiceInfo("Width dependence of nsub")]
         public Parameter BSIM3wnsub { get; } = new Parameter();
         [SpiceName("wnch"), SpiceInfo("Width dependence of nch")]
-        public double BSIM3_MOD_WNPEAK
+        public double BSIM3_WNPEAK
         {
             get => BSIM3wnpeak;
             set
@@ -472,7 +472,7 @@ namespace SpiceSharp.Components
         }
         public Parameter BSIM3wnpeak { get; } = new Parameter();
         [SpiceName("wngate"), SpiceInfo("Width dependence of ngate")]
-        public double BSIM3_MOD_WNGATE
+        public double BSIM3_WNGATE
         {
             get => BSIM3wngate;
             set
@@ -646,7 +646,7 @@ namespace SpiceSharp.Components
         [SpiceName("pnsub"), SpiceInfo("Cross-term dependence of nsub")]
         public Parameter BSIM3pnsub { get; } = new Parameter();
         [SpiceName("pnch"), SpiceInfo("Cross-term dependence of nch")]
-        public double BSIM3_MOD_PNPEAK
+        public double BSIM3_PNPEAK
         {
             get => BSIM3pnpeak;
             set
@@ -658,7 +658,7 @@ namespace SpiceSharp.Components
         }
         public Parameter BSIM3pnpeak { get; } = new Parameter();
         [SpiceName("pngate"), SpiceInfo("Cross-term dependence of ngate")]
-        public double BSIM3_MOD_PNGATE
+        public double BSIM3_PNGATE
         {
             get => BSIM3pngate;
             set
@@ -904,13 +904,13 @@ namespace SpiceSharp.Components
         /// Methods
         /// </summary>
         [SpiceName("nmos"), SpiceInfo("Flag to indicate NMOS")]
-        public void SetMOD_NMOS(bool value)
+        public void SetNMOS(bool value)
         {
             if (value)
                 BSIM3type = 1.0;
         }
         [SpiceName("pmos"), SpiceInfo("Flag to indicate PMOS")]
-        public void SetMOD_PMOS(bool value)
+        public void SetPMOS(bool value)
         {
             if (value)
                 BSIM3type = -1.0;

@@ -8,12 +8,12 @@ using System.IO;
 
 namespace SpiceSharp.Components
 {
-    public class BSIM4 : CircuitComponent<BSIM4>
+    public class BSIM4v80 : CircuitComponent<BSIM4v80>
     {
         /// <summary>
         /// Register our parameters
         /// </summary>
-        static BSIM4()
+        static BSIM4v80()
         {
             Register();
             terminals = new string[] { "Drain", "Gate", "Source", "Bulk" };
@@ -22,7 +22,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public void SetModel(BSIM4Model model) => Model = (ICircuitObject)model;
+        public void SetModel(BSIM4v80Model model) => Model = model;
 
         /// <summary>
         /// The sizes
@@ -385,7 +385,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM4(string name) : base(name)
+        public BSIM4v80(string name) : base(name)
         {
         }
 
@@ -395,7 +395,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            var model = Model as BSIM4Model;
+            var model = Model as BSIM4v80Model;
             int createNode;
             double Rtot;
 
@@ -582,7 +582,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            var model = Model as BSIM4Model;
+            var model = Model as BSIM4v80Model;
             double Ldrn, Wdrn, Lnew = 0.0, Wnew, T0, T1, tmp1, tmp2, T2, T3, Inv_L, Inv_W, Inv_LW, PowWeffWr, T10, T4, T5, tmp, T8, T9, wlod, W_tmp, Inv_saref, 
                 Inv_sbref, Theta0, tmp3, n0, Inv_sa, Inv_sb, kvsat, i, Inv_ODeff, rho, OD_offset, dvth0_lod, dk2_lod, deta0_lod, sceff, lnl, lnw, lnnf, 
                 bodymode, rbsby, rbsbx, rbdbx, rbdby, rbpbx, rbpby, DMCGeff, DMCIeff, DMDGeff, Nvtms, SourceSatCurrent, Nvtmd, DrainSatCurrent, T7, T11,
@@ -624,23 +624,23 @@ namespace SpiceSharp.Components
 
                 pParam.BSIM4leff = Lnew - 2.0 * pParam.BSIM4dl;
                 if (pParam.BSIM4leff <= 0.0)
-                    throw new CircuitException($"BSIM4: mosfet {Name}, model {model.Name}: Effective channel length <= 0");
+                    throw new CircuitException($"BSIM4v80: mosfet {Name}, model {model.Name}: Effective channel length <= 0");
 
                 pParam.BSIM4weff = Wnew - 2.0 * pParam.BSIM4dw;
                 if (pParam.BSIM4weff <= 0.0)
-                    throw new CircuitException($"BSIM4: mosfet {Name}, model {model.Name}: Effective channel width <= 0");
+                    throw new CircuitException($"BSIM4v80: mosfet {Name}, model {model.Name}: Effective channel width <= 0");
 
                 pParam.BSIM4leffCV = Lnew - 2.0 * pParam.BSIM4dlc;
                 if (pParam.BSIM4leffCV <= 0.0)
-                    throw new CircuitException($"BSIM4: mosfet {Name}, model {model.Name}: Effective channel length for C-V <= 0");
+                    throw new CircuitException($"BSIM4v80: mosfet {Name}, model {model.Name}: Effective channel length for C-V <= 0");
 
                 pParam.BSIM4weffCV = Wnew - 2.0 * pParam.BSIM4dwc;
                 if (pParam.BSIM4weffCV <= 0.0)
-                    throw new CircuitException($"BSIM4: mosfet {Name}, model {model.Name}: Effective channel width for C-V <= 0");
+                    throw new CircuitException($"BSIM4v80: mosfet {Name}, model {model.Name}: Effective channel width for C-V <= 0");
 
                 pParam.BSIM4weffCJ = Wnew - 2.0 * pParam.BSIM4dwj;
                 if (pParam.BSIM4weffCJ <= 0.0)
-                    throw new CircuitException($"BSIM4: mosfet {Name}, model {model.Name}: Effective channel width for S/D junctions <= 0");
+                    throw new CircuitException($"BSIM4v80: mosfet {Name}, model {model.Name}: Effective channel width for S/D junctions <= 0");
 
                 if (model.BSIM4binUnit.Value == 1)
                 {
@@ -1984,7 +1984,7 @@ namespace SpiceSharp.Components
             }
 
             if (BSIM4checkModel(ckt) > 0)
-                throw new CircuitException($"Fatal error(s) detected during BSIM4.8.0 parameter checking for {Name} in model {model.Name}");
+                throw new CircuitException($"Fatal error(s) detected during BSIM4v80.8.0 parameter checking for {Name} in model {model.Name}");
         }
 
         /// <summary>
@@ -1993,7 +1993,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Load(Circuit ckt)
         {
-            var model = Model as BSIM4Model;
+            var model = Model as BSIM4v80Model;
             var state = ckt.State;
             var rstate = state.Real;
             var method = ckt.Method;
@@ -2331,7 +2331,7 @@ namespace SpiceSharp.Components
                     case 0:
                         evbs = Math.Exp(vbs_jct / Nvtms);
                         T1 = model.BSIM4xjbvs * Math.Exp(-(model.BSIM4bvs + vbs_jct) / Nvtms);
-                        /* WDLiu: Magic T1 in this form; different from BSIM4 beta. */
+                        /* WDLiu: Magic T1 in this form; different from BSIM4v80 beta. */
                         BSIM4gbs = SourceSatCurrent * (evbs + T1) / Nvtms + state.Gmin;
                         BSIM4cbs = SourceSatCurrent * (evbs + BSIM4XExpBVS - T1 - 1.0) + state.Gmin * vbs_jct;
                         break;
@@ -2440,7 +2440,7 @@ namespace SpiceSharp.Components
                     case 0:
                         evbd = Math.Exp(vbd_jct / Nvtmd);
                         T1 = model.BSIM4xjbvd * Math.Exp(-(model.BSIM4bvd + vbd_jct) / Nvtmd);
-                        /* WDLiu: Magic T1 in this form; different from BSIM4 beta. */
+                        /* WDLiu: Magic T1 in this form; different from BSIM4v80 beta. */
                         BSIM4gbd = DrainSatCurrent * (evbd + T1) / Nvtmd + state.Gmin;
                         BSIM4cbd = DrainSatCurrent * (evbd + BSIM4XExpBVD - T1 - 1.0) + state.Gmin * vbd_jct;
                         break;
@@ -4646,7 +4646,7 @@ namespace SpiceSharp.Components
             }
 
             /* 
-            * BSIM4 C - V begins
+            * BSIM4v80 C - V begins
             */
 
             if ((model.BSIM4xpart < 0) || (!ChargeComputationNeeded))
@@ -6732,7 +6732,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void AcLoad(Circuit ckt)
         {
-            var model = Model as BSIM4Model;
+            var model = Model as BSIM4v80Model;
             var state = ckt.State;
             var cstate = state.Complex;
             double capbd, capbs, cgso, cgdo, cgbo, Gm, Gmbs, FwdSum, RevSum, gbbdp, gbbsp, gbdpg, gbdpdp, gbdpb, gbdpsp, gbspdp, gbspg, gbspb, gbspsp, gIstotg, gIstotd, 
@@ -7827,19 +7827,19 @@ namespace SpiceSharp.Components
         /// </summary>
         private int BSIM4checkModel(Circuit ckt)
         {
-            var model = Model as BSIM4Model;
+            var model = Model as BSIM4v80Model;
             int Fatal_Flag = 0;
             using (StreamWriter sw = new StreamWriter("bsim4.out"))
             {
-                sw.WriteLine("BSIM4: Berkeley Short Channel IGFET Model-4");
+                sw.WriteLine("BSIM4v80: Berkeley Short Channel IGFET Model-4");
                 sw.WriteLine("Developed by Xuemei (Jane) Xi, Mohan Dunga, Prof. Ali Niknejad and Prof. Chenming Hu in 2003.");
                 sw.WriteLine("");
 
-                sw.WriteLine("++++++++++ BSIM4 PARAMETER CHECKING BELOW ++++++++++");
+                sw.WriteLine("++++++++++ BSIM4v80 PARAMETER CHECKING BELOW ++++++++++");
 
                 if (Math.Abs(model.BSIM4version - 4.80) > 0.0001)
-                { sw.WriteLine("Warning: This model is BSIM4.8.0; you specified a wrong version number.");
-                    CircuitWarning.Warning(this, "Warning: This model is BSIM4.8.0; you specified a wrong version number.");
+                { sw.WriteLine("Warning: This model is BSIM4v80.8.0; you specified a wrong version number.");
+                    CircuitWarning.Warning(this, "Warning: This model is BSIM4v80.8.0; you specified a wrong version number.");
                 }
 
                 sw.WriteLine("Model = %s", model.Name);
@@ -8567,7 +8567,7 @@ namespace SpiceSharp.Components
                         }
                     }
 
-                    /* Limits of Njs and Njd modified in BSIM4.7 */
+                    /* Limits of Njs and Njd modified in BSIM4v80.7 */
                     if (model.BSIM4SjctEmissionCoeff < 0.1) {
 
                         sw.WriteLine($"Warning: Njs = {model.BSIM4SjctEmissionCoeff} is less than 0.1. Setting Njs to 0.1.");

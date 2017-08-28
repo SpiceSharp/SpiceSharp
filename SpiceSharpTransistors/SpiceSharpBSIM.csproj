@@ -54,16 +54,13 @@
     <Compile Include="BSIM3\BSIM3v30Model.cs" />
     <Compile Include="BSIM3\BSIM3SizeDependParam.cs" />
     <Compile Include="BSIM3\BSIM3v24Model.cs" />
-    <Compile Include="BSIM4\BSIM4.cs" />
-    <Compile Include="BSIM4\BSIM4Model.cs" />
+    <Compile Include="BSIM4\BSIM4v80.cs" />
+    <Compile Include="BSIM4\BSIM4v80Model.cs" />
     <Compile Include="BSIM4\BSIM4SizeDependParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Readers\BSIMParser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SpiceSharpParser\SpiceSharpParser.csproj">
-      <Project>{fdb9a121-dff2-403b-9430-d128a2a2794f}</Project>
-      <Name>SpiceSharpParser</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SpiceSharp\SpiceSharp.csproj">
       <Project>{080d88db-051e-499b-a02b-eaa36de52853}</Project>
       <Name>SpiceSharp</Name>
@@ -72,8 +69,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Readers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
