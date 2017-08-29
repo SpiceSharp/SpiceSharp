@@ -181,7 +181,7 @@ namespace SpiceSharpTest.Models.Transistors
         }
 
         [TestMethod]
-        public void TestBSIM3_PMOS_DC()
+        public void TestBSIM3v24_PMOS_DC()
         {
             // Simulated by SmartSpice (Silvaco)
             double[] reference = DCReferencePMOS;

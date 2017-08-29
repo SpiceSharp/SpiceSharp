@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Text;
 using System.IO;
-using SpiceSharp.Parser;
+using SpiceSharp;
 using SpiceSharp.Parameters;
 using SpiceSharp.Components;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Parser.Readers;
 
 namespace SpiceSharpTest.Parser
 {
@@ -28,15 +29,10 @@ namespace SpiceSharpTest.Parser
             NetlistReader r = new NetlistReader();
 
             // Add our BSIM transistor models
-            var mosfets = r.Netlist.Readers[SpiceSharp.Parser.Readers.StatementType.Component].Find<SpiceSharp.Parser.Readers.MosfetReader>().Mosfets;
-            mosfets.Add(typeof(BSIM1Model), BSIMParser.GenerateBSIM1);
-            mosfets.Add(typeof(BSIM2Model), BSIMParser.GenerateBSIM2);
-            mosfets.Add(typeof(BSIM3v30Model), BSIMParser.GenerateBSIM3);
-            mosfets.Add(typeof(BSIM3v24Model), BSIMParser.GenerateBSIM3);
-            var levels = r.Netlist.Readers[SpiceSharp.Parser.Readers.StatementType.Model].Find<SpiceSharp.Parser.Readers.MosfetModelReader>().Levels;
-            levels.Add(4, BSIMParser.GenerateBSIM1Model);
-            levels.Add(5, BSIMParser.GenerateBSIM2Model);
-            levels.Add(49, BSIMParser.GenerateBSIM3Model);
+            var mosfets = r.Netlist.Readers[StatementType.Component].Find<MosfetReader>().Mosfets;
+            BSIMParser.AddMosfetGenerators(mosfets);
+            var levels = r.Netlist.Readers[StatementType.Model].Find<MosfetModelReader>().Levels;
+            BSIMParser.AddMosfetModelGenerators(levels);
             r.Parse(m);
 
             // Return the generated netlist

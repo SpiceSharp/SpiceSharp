@@ -7,7 +7,7 @@ using SpiceSharp.Parser.Readers.Collections;
 using SpiceSharp.Parser.Expressions;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Parser
+namespace SpiceSharp
 {
     /// <summary>
     /// This class represents the netlist data for parsing

@@ -1,7 +1,8 @@
 ﻿using System.IO;
+using SpiceSharp.Parser;
 using SpiceSharp.Parser.Readers;
 
-namespace SpiceSharp.Parser
+namespace SpiceSharp
 {
     /// <summary>
     /// This class can read a netlist

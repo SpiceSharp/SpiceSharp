@@ -1,13 +1,81 @@
 ﻿using System;
-using SpiceSharp.Components;
+using System.Collections.Generic;
 
-namespace SpiceSharp.Parser
+namespace SpiceSharp.Components
 {
     /// <summary>
     /// This class contains a standard method for parsing BSIM models
     /// </summary>
     public static class BSIMParser
     {
+        /// <summary>
+        /// Mosfet generators for BSIM transistors
+        /// </summary>
+        public static Dictionary<Type, Func<string, ICircuitObject, ICircuitComponent>> Mosfets { get; } = new Dictionary<Type, Func<string, ICircuitObject, ICircuitComponent>>()
+        {
+            {  typeof(BSIM1Model), (string name, ICircuitObject model) =>
+            {
+                BSIM1 m = new BSIM1(name);
+                m.SetModel((BSIM1Model)model);
+                return m;
+            } },
+            { typeof(BSIM2Model), (string name, ICircuitObject model) =>
+            {
+                BSIM2 m = new BSIM2(name);
+                m.SetModel((BSIM2Model)model);
+                return m;
+            } },
+            { typeof(BSIM3v24Model), (string name, ICircuitObject model) =>
+            {
+                BSIM3v24 m = new BSIM3v24(name);
+                m.SetModel((BSIM3v24Model)model);
+                return m;
+            } },
+            { typeof(BSIM3v30Model), (string name, ICircuitObject model) =>
+            {
+                BSIM3v30 m = new BSIM3v30(name);
+                m.SetModel((BSIM3v30Model)model);
+                return m;
+            } },
+            { typeof(BSIM4v80Model), (string name, ICircuitObject model) =>
+            {
+                BSIM4v80 m = new BSIM4v80(name);
+                m.SetModel((BSIM4v80Model)model);
+                return m;
+            } }
+        };
+
+        /// <summary>
+        /// Mosfet model generators
+        /// </summary>
+        public static Dictionary<int, Func<string, string, string, ICircuitObject>> Levels { get; } = new Dictionary<int, Func<string, string, string, ICircuitObject>>()
+        {
+            { 4, GenerateBSIM1Model },
+            { 5, GenerateBSIM2Model },
+            { 7, GenerateBSIM3Model },
+            { 14, GenerateBSIM4Model }
+        };
+
+        /// <summary>
+        /// Add mofset generators
+        /// </summary>
+        /// <param name="mosfets">The list of mosfet generators</param>
+        public static void AddMosfetGenerators(Dictionary<Type, Func<string, ICircuitObject, ICircuitComponent>> mosfets)
+        {
+            foreach (var m in Mosfets)
+                mosfets.Add(m.Key, m.Value);
+        }
+
+        /// <summary>
+        /// Add mosfet model levels
+        /// </summary>
+        /// <param name="levels">The list of levels</param>
+        public static void AddMosfetModelGenerators(Dictionary<int, Func<string, string, string, ICircuitObject>> levels)
+        {
+            foreach (var m in Levels)
+                levels.Add(m.Key, m.Value);
+        }
+
         /// <summary>
         /// BSIM1 model generator
         /// Version is ignored
@@ -30,20 +98,6 @@ namespace SpiceSharp.Parser
         }
 
         /// <summary>
-        /// BSIM1 mosfet generator
-        /// Correct model type is assumed
-        /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="model">Model</param>
-        /// <returns></returns>
-        public static ICircuitComponent GenerateBSIM1(string name, ICircuitObject model)
-        {
-            BSIM1 m = new BSIM1(name);
-            m.SetModel((BSIM1Model)model);
-            return m;
-        }
-
-        /// <summary>
         /// BSIM2 model generator
         /// Version is ignored
         /// </summary>
@@ -62,20 +116,6 @@ namespace SpiceSharp.Parser
                     throw new Exception("Invalid type \"" + type + "\"");
             }
             return model;
-        }
-
-        /// <summary>
-        /// BSIM2 mosfet generator
-        /// Correct model type is assumed
-        /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="model">Model</param>
-        /// <returns></returns>
-        public static ICircuitComponent GenerateBSIM2(string name, ICircuitObject model)
-        {
-            BSIM2 m = new BSIM2(name);
-            m.SetModel((BSIM2Model)model);
-            return m;
         }
 
         /// <summary>
@@ -126,29 +166,6 @@ namespace SpiceSharp.Parser
         }
 
         /// <summary>
-        /// Generate a BSIM3 mosfet
-        /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="model">Model</param>
-        /// <returns></returns>
-        public static ICircuitComponent GenerateBSIM3(string name, ICircuitObject model)
-        {
-            if (model is BSIM3v30Model)
-            {
-                BSIM3v30 m3v3 = new BSIM3v30(name);
-                m3v3.SetModel((BSIM3v30Model)model);
-                return m3v3;
-            }
-            if (model is BSIM3v24Model)
-            {
-                BSIM3v24 m3v24 = new BSIM3v24(name);
-                m3v24.SetModel((BSIM3v24Model)model);
-                return m3v24;
-            }
-            throw new Exception("Invalid BSIM3 model of type \"" + model.GetType() + "\"");
-        }
-
-        /// <summary>
         /// Generate a BSIM4 model
         /// </summary>
         /// <param name="name">Name</param>
@@ -181,23 +198,6 @@ namespace SpiceSharp.Parser
             }
             else
                 throw new Exception("Invalid version \"" + v.ToString() + "\"");
-        }
-
-        /// <summary>
-        /// Generate a BSIM4 mosfet
-        /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="model">Model</param>
-        /// <returns></returns>
-        public static ICircuitComponent GenerateBSIM4(string name, ICircuitObject model)
-        {
-            if (model is BSIM4v80Model)
-            {
-                BSIM4v80 m4v80 = new BSIM4v80(name);
-                m4v80.SetModel((BSIM4v80Model)model);
-                return m4v80;
-            }
-            throw new Exception("Invalid BSIM4 model of type \"" + model.GetType() + "\"");
         }
     }
 }

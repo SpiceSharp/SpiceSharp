@@ -173,7 +173,7 @@ namespace SpiceSharpTest.Parser
         [TestMethod]
         public void BSIM3v24Test()
         {
-            var netlist = Run(".model lvl49mod pmos(level = 49 mobmod = 0 binunit = 1 paramchk = 2 capmod = 3",
+            var netlist = Run(".model lvl49mod pmos(level = 7 mobmod = 0 binunit = 1 paramchk = 2 capmod = 3",
                 "+ noimod = 4 version = 3.24 tox = 6 toxm = 7 cdsc = 8 cdscb = 9 cdscd = 10 cit = 11 nfactor = 12",
                 "+ xj = 13 vsat = 14 a0 = 15 ags = 16 a1 = 17 a2 = 18 at = 19 keta = 20 nsub = 21 nch = 22",
                 "+ ngate = 23 gamma1 = 24 gamma2 = 25 vbx = 26 vbm = 27 xt = 28 k1 = 29 kt1 = 30 kt1l = 31",
@@ -289,7 +289,7 @@ namespace SpiceSharpTest.Parser
         [TestMethod]
         public void BSIM3v30Test()
         {
-            var netlist = Run(".model lvl49mod nmos level = 49 version = 3.3.0 mobmod = 0 binunit = 1 paramchk = 2 capmod = 3",
+            var netlist = Run(".model lvl49mod nmos level = 7 version = 3.3.0 mobmod = 0 binunit = 1 paramchk = 2 capmod = 3",
                 "+ noimod = 4 acnqsmod = 5 tox = 7 toxm = 8 cdsc = 9 cdscb = 10 cdscd = 11 cit = 12",
                 "+ nfactor = 13 xj = 14 vsat = 15 a0 = 16 ags = 17 a1 = 18 a2 = 19 at = 20 keta = 21 nsub = 22",
                 "+ nch = 23 ngate = 24 gamma1 = 25 gamma2 = 26 vbx = 27 vbm = 28 xt = 29 k1 = 30 kt1 = 31 kt1l = 32",
