@@ -40,7 +40,7 @@ namespace Sandbox
             MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(netlist));
             nr.Parse(ms);
 
-            // Create the plots for the output
+            // Create the plots for the output using the export list
             Series[] plots = new Series[nr.Netlist.Exports.Count];
             for (int i = 0; i < plots.Length; i++)
             {
@@ -60,7 +60,7 @@ namespace Sandbox
                         case SpiceSharp.Circuits.CircuitState.DomainTypes.Time: x = data.GetTime(); break;
                         case SpiceSharp.Circuits.CircuitState.DomainTypes.Frequency: x = data.GetFrequency(); break;
                         case SpiceSharp.Circuits.CircuitState.DomainTypes.None:
-                            DC dc = (DC)sender;
+                            DC dc = (DC)data.Circuit.Simulation;
                             x = dc.Sweeps[dc.Sweeps.Count - 1].CurrentValue;
                             break;
                         default:
