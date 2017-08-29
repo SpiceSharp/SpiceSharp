@@ -25,29 +25,53 @@ namespace Sandbox
         {
             InitializeComponent();
 
-            // Set up the chart
-            Series[] series = new Series[12];
-            Series[] refseries = new Series[series.Length];
-            Series[] diffseries = new Series[series.Length];
-            for (int i = 0; i < series.Length; i++)
+            // The netlist
+            string netlist = string.Join(Environment.NewLine, new string[]
             {
-                series[i] = chMain.Series.Add("Ids (" + i + ")");
-                series[i].ChartType = SeriesChartType.FastLine;
-                refseries[i] = chMain.Series.Add("Reference (" + i + ")");
-                refseries[i].ChartType = SeriesChartType.FastLine;
-                refseries[i].BorderDashStyle = ChartDashStyle.Dash;
-                diffseries[i] = chMain.Series.Add("Difference (" + i + ")");
-                diffseries[i].ChartType = SeriesChartType.FastPoint;
-                diffseries[i].YAxisType = AxisType.Secondary;
-            }
-            // chMain.ChartAreas[0].AxisX.IsLogarithmic = true;
-            SpiceSharp.Diagnostics.CircuitWarning.WarningGenerated += CircuitWarning_WarningGenerated;
+                "vinput in gnd 0 pulse(0 5 1u 1n 1n 5u 10u)",
+                "rs in out 1k",
+                "cl out gnd 1n",
+                ".save v(in) v(out)",
+                ".tran 1n 20u"
+            });
 
+            // Read
             NetlistReader nr = new NetlistReader();
-            var mr = nr.Netlist.Readers[StatementType.Component].Find<MosfetReader>();
-            BSIMParser.AddMosfetGenerators(mr.Mosfets);
-            var modr = nr.Netlist.Readers[StatementType.Model].Find<MosfetModelReader>();
-            BSIMParser.AddMosfetModelGenerators(modr.Levels);
+            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(netlist));
+            nr.Parse(ms);
+
+            // Create the plots for the output
+            Series[] plots = new Series[nr.Netlist.Exports.Count];
+            for (int i = 0; i < plots.Length; i++)
+            {
+                plots[i] = chMain.Series.Add(nr.Netlist.Exports[i].Name);
+                plots[i].ChartType = SeriesChartType.FastLine;
+            }
+
+            // Simulate
+            nr.Netlist.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                for (int i = 0; i < plots.Length; i++)
+                {
+                    var export = nr.Netlist.Exports[i];
+                    double x = 0.0;
+                    switch (data.Circuit.State.Domain)
+                    {
+                        case SpiceSharp.Circuits.CircuitState.DomainTypes.Time: x = data.GetTime(); break;
+                        case SpiceSharp.Circuits.CircuitState.DomainTypes.Frequency: x = data.GetFrequency(); break;
+                        case SpiceSharp.Circuits.CircuitState.DomainTypes.None:
+                            DC dc = (DC)sender;
+                            x = dc.Sweeps[dc.Sweeps.Count - 1].CurrentValue;
+                            break;
+                        default:
+                            throw new Exception("Unknown type");
+                    }
+                    plots[i].Points.AddXY(x, export.Extract(data));
+                }
+            };
+            nr.Netlist.Simulate();
+            chMain.ChartAreas[0].AxisX.RoundAxisValues();
+
         }
 
         private void CircuitWarning_WarningGenerated(object sender, SpiceSharp.Diagnostics.WarningArgs e)

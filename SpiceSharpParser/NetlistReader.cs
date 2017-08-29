@@ -81,8 +81,6 @@ namespace SpiceSharp
                 foreach (var s in main.Statements(order[i]))
                     Netlist.Readers.Read(s, Netlist);
             }
-
-
         }
     }
 }
