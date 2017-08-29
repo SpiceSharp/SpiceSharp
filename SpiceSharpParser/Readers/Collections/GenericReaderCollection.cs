@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Parser.Readers.Collections
 {
@@ -61,6 +62,21 @@ namespace SpiceSharp.Parser.Readers.Collections
                     return r.Generated;
             }
             throw new ParseException(st.Name, "Unrecognized syntax");
+        }
+
+        /// <summary>
+        /// Find a specific reader
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public override T Find<T>()
+        {
+            foreach (var c in readers)
+            {
+                if (c is T)
+                    return (T)c;
+            }
+            return null;
         }
     }
 }

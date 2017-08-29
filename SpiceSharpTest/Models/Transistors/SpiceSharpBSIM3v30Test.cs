@@ -10,11 +10,11 @@ using SpiceSharp.Simulations;
 namespace SpiceSharpTest.Models.Transistors
 {
     [TestClass]
-    public class SpiceSharpBSIM3Test
+    public class SpiceSharpBSIM3v30Test
     {
         /// <summary>
         /// Unfortunately it is very hard to find BSIM3v3 models (I only found BSIM3v1) that are public.
-        /// I only have a model by a FAB that we use, but I cannot disclose that information.
+        /// I only have a model by a FAB that we use, but I cannot disclose the model parameters and simulation results.
         /// 
         /// If you wish to run this test yourself, create a model file where each line contains
         /// [par1]=[val1]
@@ -138,7 +138,7 @@ namespace SpiceSharpTest.Models.Transistors
         }
 
         [TestMethod]
-        public void TestBSIM3_NMOS_DC()
+        public void TestBSIM3v30_NMOS_DC()
         {
             // Simulated by SmartSpice (Silvaco)
             double[] reference = DCReferenceNMOS;
@@ -156,28 +156,20 @@ namespace SpiceSharpTest.Models.Transistors
             ckt.Objects.Add(
                 new Voltagesource("V2", "2", "0", 0.0),
                 new Voltagesource("V1", "1", "0", 0.0),
+                new Resistor("Rl", "2", "0", 1.0 / ckt.State.Gmin),
                 nmos);
 
             // Generate the simulation
             DC dc = new DC("TestBSIM3_NMOS_DC");
-
-            // Make the simulation slightly more accurate (error / 4)
-            // Might want to check why some time though
-            dc.Config.RelTol = 0.25e-3;
             dc.Sweeps.Add(new DC.Sweep("V1", 0, 1.8, 0.3));
             dc.Sweeps.Add(new DC.Sweep("V2", 0, 1.8, 0.3));
             int index = 0;
             dc.OnExportSimulationData += (object sender, SimulationData data) =>
             {
                 double vds = dc.Sweeps.Last().CurrentValue;
-                double actual = nmos.BSIM3cd - nmos.BSIM3cbd;
-
-                // [note] I am using SmartSpice for verification here
-                // SmartSpice adds an additional GMIN conductance between drain and source
-                // for improving convergence. We don't do this, so we need to factor this in
-                double expected = reference[index] - ckt.State.Gmin * vds;
+                double actual = -data.Ask("V2", "i");
+                double expected = reference[index];
                 double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
-
                 Assert.AreEqual(expected, actual, tol);
                 index++;
             };
@@ -185,7 +177,7 @@ namespace SpiceSharpTest.Models.Transistors
         }
 
         [TestMethod]
-        public void TestBSIM3_PMOS_DC()
+        public void TestBSIM3v30_PMOS_DC()
         {
             // Simulated by SmartSpice (Silvaco)
             double[] reference = DCReferencePMOS;
@@ -203,26 +195,19 @@ namespace SpiceSharpTest.Models.Transistors
             ckt.Objects.Add(
                 new Voltagesource("V2", "0", "2", 0.0),
                 new Voltagesource("V1", "0", "1", 0.0),
+                new Resistor("Rl", "2", "0", 1.0 / ckt.State.Gmin),
                 nmos);
 
             // Generate the simulation
             DC dc = new DC("TestBSIM3_PMOS_DC");
-
-            // Make the simulation slightly more accurate (error / 4)
-            // Might want to check why some time though
-            dc.Config.RelTol = 0.25e-3;
             dc.Sweeps.Add(new DC.Sweep("V1", 0, 1.8, 0.3));
             dc.Sweeps.Add(new DC.Sweep("V2", 0, 1.8, 0.3));
             int index = 0;
             dc.OnExportSimulationData += (object sender, SimulationData data) =>
             {
                 double vds = dc.Sweeps.Last().CurrentValue;
-                double actual = -(nmos.BSIM3cd - nmos.BSIM3cbd);
-
-                // [note] I am using SmartSpice for verification here
-                // SmartSpice adds an additional GMIN conductance between drain and source
-                // for improving convergence. We don't do this, so we need to factor this in
-                double expected = reference[index] + ckt.State.Gmin * vds;
+                double actual = data.Ask("V2", "i");
+                double expected = reference[index];
                 double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
                 Assert.AreEqual(expected, actual, tol);
 

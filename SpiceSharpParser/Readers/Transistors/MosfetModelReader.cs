@@ -84,13 +84,14 @@ namespace SpiceSharp.Parser.Readers
                     {
                         lindex = i;
                         level = (int)Math.Round(netlist.ParseDouble(at.Value));
-                        break;
                     }
                     if (at.Name.image.ToLower() == "version")
                     {
                         vindex = i;
                         version = at.Value.image.ToLower();
                     }
+                    if (vindex >= 0 && lindex >= 0)
+                        break;
                 }
             }
             if (lindex >= 0)
@@ -104,6 +105,9 @@ namespace SpiceSharp.Parser.Readers
                 model = Levels[level].Invoke(st.Name.image.ToLower(), type, version);
             else
                 throw new ParseException(st.Name, $"Unknown mosfet model level {level}");
+
+            // Read all the parameters
+            netlist.ReadParameters((IParameterized)model, st.Parameters);
 
             // Output
             netlist.Path.Objects.Add(model);

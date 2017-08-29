@@ -8,11 +8,6 @@ namespace SpiceSharp.Parser.Readers
     public class TokenReaders
     {
         /// <summary>
-        /// Currently active readers
-        /// </summary>
-        public StatementType Active { get; set; } = StatementType.All;
-
-        /// <summary>
         /// The event that is fired when an expression needs to be parsed
         /// </summary>
         public event ParseNetlistExpressionEventHandler OnParseExpression;
@@ -42,10 +37,6 @@ namespace SpiceSharp.Parser.Readers
             // Check if the type exists
             if (!Readers.ContainsKey(st.Type))
                 throw new ParseException(st.Name, "Unrecognized command type");
-
-            // Ignore without warning if the reader is not active
-            if ((st.Type & Active) == StatementType.None)
-                return null;
             return Readers[st.Type].Read(st, netlist);
         }
 

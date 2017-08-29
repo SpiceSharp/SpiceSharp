@@ -187,7 +187,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            var model = Model as BSIM3v30Model;
+            var model = Model as BSIM3v24Model;
             pParam = null;
 
             // Allocate nodes
@@ -226,7 +226,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            var model = Model as BSIM3v30Model;
+            var model = Model as BSIM3v24Model;
 
             double Ldrn, Wdrn, T0, T1, tmp1, tmp2, T2, T3, Inv_L, Inv_W, Inv_LW, tmp, T4, T5, tmp3,
                 Nvtm, SourceSatCurrent, DrainSatCurrent;
@@ -601,7 +601,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Load(Circuit ckt)
         {
-            var model = Model as BSIM3v30Model;
+            var model = Model as BSIM3v24Model;
             var state = ckt.State;
             var rstate = state.Real;
             var method = ckt.Method;
@@ -3252,7 +3252,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void AcLoad(Circuit ckt)
         {
-            var model = Model as BSIM3v30Model;
+            var model = Model as BSIM3v24Model;
             var state = ckt.State;
             var cstate = state.Complex;
             double Gm, Gmbs, FwdSum, RevSum, gbbdp, gbbsp, gbdpg, gbdpb, gbdpdp, gbdpsp, gbspdp, gbspg, gbspb, gbspsp, cggb, cgsb, cgdb,

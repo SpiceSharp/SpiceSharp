@@ -26,6 +26,17 @@ namespace SpiceSharpTest.Parser
 
             // Create the parser and run it
             NetlistReader r = new NetlistReader();
+
+            // Add our BSIM transistor models
+            var mosfets = r.Netlist.Readers[SpiceSharp.Parser.Readers.StatementType.Component].Find<SpiceSharp.Parser.Readers.MosfetReader>().Mosfets;
+            mosfets.Add(typeof(BSIM1Model), BSIMParser.GenerateBSIM1);
+            mosfets.Add(typeof(BSIM2Model), BSIMParser.GenerateBSIM2);
+            mosfets.Add(typeof(BSIM3v30Model), BSIMParser.GenerateBSIM3);
+            mosfets.Add(typeof(BSIM3v24Model), BSIMParser.GenerateBSIM3);
+            var levels = r.Netlist.Readers[SpiceSharp.Parser.Readers.StatementType.Model].Find<SpiceSharp.Parser.Readers.MosfetModelReader>().Levels;
+            levels.Add(4, BSIMParser.GenerateBSIM1Model);
+            levels.Add(5, BSIMParser.GenerateBSIM2Model);
+            levels.Add(49, BSIMParser.GenerateBSIM3Model);
             r.Parse(m);
 
             // Return the generated netlist

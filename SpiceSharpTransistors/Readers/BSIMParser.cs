@@ -90,10 +90,11 @@ namespace SpiceSharp.Parser
             double v = 3.3;
             switch (version)
             {
+                case null:
                 case "3.3.0": v = 3.3; break;
                 case "3.2.4": v = 3.24; break;
                 default:
-                    if (!double.TryParse(version, out v))
+                    if (!double.TryParse(version, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out v))
                         throw new Exception("Unsupported version \"" + version + "\"");
                     break;
             }
@@ -159,9 +160,10 @@ namespace SpiceSharp.Parser
             double v = 4.8;
             switch (version)
             {
+                case null:
                 case "4.8.0": v = 4.8; break;
                 default:
-                    if (!double.TryParse(version, out v))
+                    if (!double.TryParse(version, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out v))
                         throw new Exception("Unsupported version \"" + version + "\"");
                     break;
             }

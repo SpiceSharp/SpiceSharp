@@ -42,5 +42,12 @@
         /// Clear all readers
         /// </summary>
         public abstract void Clear();
+
+        /// <summary>
+        /// Find a specific reader
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public abstract T Find<T>() where T : Reader;
     }
 }

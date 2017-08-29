@@ -20,7 +20,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Get the size-dependent parameters
         /// </summary>
-        public static Dictionary<Tuple<double, double>, BSIM3SizeDependParam> Sizes { get; } = new Dictionary<Tuple<double, double>, BSIM3SizeDependParam>();
+        public Dictionary<Tuple<double, double>, BSIM3SizeDependParam> Sizes { get; } = new Dictionary<Tuple<double, double>, BSIM3SizeDependParam>();
 
         /// <summary>
         /// Parameters

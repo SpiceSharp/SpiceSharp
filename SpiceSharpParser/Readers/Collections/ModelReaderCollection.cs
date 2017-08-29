@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Parser.Readers.Collections
 {
@@ -92,6 +93,21 @@ namespace SpiceSharp.Parser.Readers.Collections
             if (models[type].Read(type, mst, netlist))
                 return models[type].Generated;
             throw new ParseException(st.Name, $"Could not create model \"{st.Name.image}\"");
+        }
+
+        /// <summary>
+        /// Find a specific reader
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public override T Find<T>()
+        {
+            foreach (var c in models.Values)
+            {
+                if (c is T)
+                    return (T)c;
+            }
+            return null;
         }
     }
 }
