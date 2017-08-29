@@ -6,16 +6,45 @@ I try to verify with other simulators using unit tests: ngSpice (PartSim), LTSpi
 Please note that this project is in no case meant to compete with existing commercial Spice simulators. I wanted to know more about the  Spice simulator, and I wanted to be able to extend its functionality in useful ways (eg. automating simple designs, modeling custom components, etc.)
 
 ## Features
-The full project contains a Spice-based framework for simulating circuits possibly containing nonlinear components. The framework supports most native Spice models, and the framework allows for expanding with your own models.
-The solution contains a netlist parser to parse your netlists into the framework, a tool to help you convert native Spice models to the framework, as well as a library with some BSIM transistor models that I use.
+The solution contains a Spice-based framework for simulating circuits possibly containing nonlinear components. The framework supports most native Spice models, and the framework allows expanding with your own custom models.
+
+The solution also contains a netlist parser, a tool to help you convert native Spice models to the framework, as well as a library with some BSIM transistor models.
+The framework currently does *not* support sensitivity analysis and transmission lines.
+
+Currently included models in *SpiceSharp*:
+- Passive components: Resistor, Capacitance, Inductor, Mutual inductance
+- Voltage sources and current sources: Independent, voltage-controlled, current-controlled
+- Bipolar transistor (BJT)
+- MOSFET: MOS1 (level 1), MOS2 (level 2), MOS3 (level 3) - tested DC and AC
+- Diode (D) - tested DC and AC
+- Switches: Voltage switch, Current switch
+
+The simulations included in the main project are:
+- AC simulation
+- DC simulation
+- Transient simulation
+
+The waveforms for independent sources included in the main project are:
+- Pulse
+- Sine
+
+Currently included models in *SpiceSharpBSIM*
+- BSIM1 (level 4)
+- BSIM2 (level 5)
+- BSIM3 (version 3.2.4 and 3.3.0) - Tested DC
+- BSIM4 (latest version 4.8.0)
 
 ## Usage
 The main project is called *SpiceSharp*. This project contains the framework for circuit simulation and has one dependency: Math.NET.
-The project *Spice2SpiceSharp* contains a tool that I use and try to maintain to convert Spice models to the SpiceSharp framework. Note that after conversion, it is still necessary to intervene in some parts. But it does make the process a lot easier for large models.
+
+The project *Spice2SpiceSharp* contains a tool that I use and try to maintain to convert Spice models to the SpiceSharp framework. Note that after using the tool, it is still necessary to intervene in some parts (fixing model-specific code unrelated to the framework). But it does make the process a lot easier for larger models.
+
 The project *SpiceSharpParser* contains a netlist parser and expression parser for Spice netlists. You can pass it any stream where it will read components, models, subcircuits, simulation statements and more.
 
+The project *SpiceSharpBSIM* contains some transistor models you can use for IC analog design.
+
 ### SpiceSharp
-Using SpiceSharp can be very easy. The *Circuit* class will be your main class. Any component, model or subcircuit that implements *ICircuitObject* can be added to do something when simulating your circuits.
+Using SpiceSharp can be very easy. The *Circuit* class will be your main class. Any component, model or subcircuit that implements *ICircuitObject* can be added to do something useful when simulating your circuits.
 The standard circuit components and models are in the namespace *SpiceSharp.Components*. Simulations are in *SpiceSharp.Simulations*.
 ```C#
 // Create a resistive voltage divider
@@ -50,23 +79,6 @@ ckt.Simulate(dc);
 ```
 Each simulation implements *ISimulation* and will invoke *OnExportSimulationData* when a new point has been calculated. You can use this event to extract the voltages and currents that are of interest.
 
-The models included in the main project are:
-- Passive components: Resistor, Capacitance, Inductor, Mutual inductance
-- Voltage sources and current sources: Independent, voltage-controlled, current-controlled
-- Bipolar transistor (BJT)
-- MOSFET: MOS1 (level 1), MOS2 (level 2), MOS3 (level 3)
-- Diode (D)
-- Switches: Voltage switch, Current switch
-
-The simulations included in the main project are:
-- AC simulation
-- DC simulation
-- Transient simulation
-
-The waveforms for independent sources included in the main project are:
-- Pulse
-- Sine
-
 ### SpiceSharpParser
 This project can import the circuits from text sources. The format is made to match the original Spice commands and uses a tool called CSharpCC (a port from JavaCC) to generate the lexer and parser.
 The parser is extended with some useful features that you often find in more advanced/commercial Spice simulators:
@@ -83,8 +95,11 @@ R1 IN OUT r
 ```
 
 ### SpiceSharpBSIM
-This project contains the BSIM models:
-- BSIM1 (level 4)
-- BSIM2 (level 5)
-- BSIM3 (latest version 3.3.0)
-- BSIM4 (latest version 4.8.0)
+This project includes a number of the BSIM models. In order to add them to the Spice parser, use the following code (include *SpiceSharp.Parser.Readers*).
+```C#
+NetlistReader nr = new NetlistReader();
+var mr = nr.Netlist.Readers[StatementType.Component].Find<MosfetReader>();
+BSIMParser.AddMosfetGenerators(mr.Mosfets);
+var modr = nr.Netlist.Readers[StatementType.Model].Find<MosfetModelReader>();
+BSIMParser.AddMosfetModelGenerators(modr.Levels);
+```
