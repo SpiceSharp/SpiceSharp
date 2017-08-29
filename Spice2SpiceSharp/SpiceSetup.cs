@@ -106,7 +106,7 @@ namespace Spice2SpiceSharp
         private string GetDefaultValues(string code, Dictionary<string, string> defaults)
         {
             // Find any default parameters
-            Regex defdecl = new Regex(@"if\s*\(\s*\!\s*(?<var>\w+)\.Given\s*\)\s*\{?\s*\k<var>.Value\s*\=\s*(?<value>[^;]+);\s*\}?");
+            Regex defdecl = new Regex(@"if\s*\(\s*\!\s*(?<var>\w+)\.Given\s*\)\s*\{?\s*\k<var>.Value\s*\=\s*(?<value>[^;]+);\s*\}?(?!\s*else)");
             code = defdecl.Replace(code, (Match m) =>
             {
                 string var = m.Groups["var"].Value;

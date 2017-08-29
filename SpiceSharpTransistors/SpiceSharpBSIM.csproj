@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BSIM3\BSIM3v24.cs" />
+    <Compile Include="BSIM4\BSIM4v80_helper.cs" />
+    <Compile Include="BSIM4\BSIM4v80_Load.cs" />
     <Compile Include="BSIM\BSIM1.cs" />
     <Compile Include="BSIM\BSIM1Model.cs" />
     <Compile Include="BSIM2\BSIM2.cs" />
