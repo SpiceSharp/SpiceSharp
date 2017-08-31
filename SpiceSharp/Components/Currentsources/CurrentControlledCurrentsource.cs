@@ -6,17 +6,9 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class describes a current-controlled current source
     /// </summary>
+    [SpiceNodes("F+", "F-")]
     public class CurrentControlledCurrentsource : CircuitComponent<CurrentControlledCurrentsource>
     {
-        /// <summary>
-        /// Static constructor
-        /// </summary>
-        static CurrentControlledCurrentsource()
-        {
-            Register();
-            terminals = new string[] { "F+", "F-" };
-        }
-
         /// <summary>
         /// Parameters
         /// </summary>

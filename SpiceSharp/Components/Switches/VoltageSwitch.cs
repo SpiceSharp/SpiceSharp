@@ -6,17 +6,9 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents a voltage-controlled switch
     /// </summary>
+    [SpiceNodes("S+", "S-", "SC+", "SC-")]
     public class VoltageSwitch : CircuitComponent<VoltageSwitch>
     {
-        /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static VoltageSwitch()
-        {
-            Register();
-            terminals = new string[] { "S+", "S-", "SC+", "SC-" };
-        }
-
         /// <summary>
         /// Gets or sets the model
         /// </summary>

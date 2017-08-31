@@ -8,17 +8,9 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents an inductor
     /// </summary>
+    [SpiceNodes("L+", "L-")]
     public class Inductor : CircuitComponent<Inductor>
     {
-        /// <summary>
-        /// Register parameters
-        /// </summary>
-        static Inductor()
-        {
-            Register();
-            terminals = new string[] { "L+", "L-" };
-        }
-
         /// <summary>
         /// Delegate for adding effects of a mutual inductance
         /// </summary>

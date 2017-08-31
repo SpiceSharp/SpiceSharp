@@ -6,17 +6,9 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class describes a capacitor
     /// </summary>
+    [SpiceNodes("C+", "C-")]
     public class Capacitor : CircuitComponent<Capacitor>
     {
-        /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static Capacitor()
-        {
-            Register();
-            terminals = new string[] { "C+", "C-" };
-        }
-
         /// <summary>
         /// Set the model for the capacitor
         /// </summary>

@@ -13,14 +13,6 @@ namespace SpiceSharp.Simulations
     public class AC : Simulation<AC>
     {
         /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static AC()
-        {
-            Register();
-        }
-
-        /// <summary>
         /// Default configuration for AC simulations
         /// </summary>
         public static Configuration Default { get; } = new Configuration();

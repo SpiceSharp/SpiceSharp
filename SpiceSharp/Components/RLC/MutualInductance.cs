@@ -10,15 +10,6 @@ namespace SpiceSharp.Components
     public class MutualInductance : CircuitComponent<MutualInductance>
     {
         /// <summary>
-        /// Register parameters
-        /// </summary>
-        static MutualInductance()
-        {
-            Register();
-            terminals = new string[] { };
-        }
-
-        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("k"), SpiceName("coefficient"), SpiceInfo("Mutual inductance", IsPrincipal = true)]

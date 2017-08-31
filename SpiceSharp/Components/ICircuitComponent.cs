@@ -11,6 +11,11 @@
         ICircuitObject Model { get; }
 
         /// <summary>
+        /// Get the node count of the component
+        /// </summary>
+        int NodeCount { get; }
+
+        /// <summary>
         /// Connect the component
         /// </summary>
         /// <param name="nodes">Nodes</param>
@@ -22,5 +27,13 @@
         /// <param name="i">The index</param>
         /// <returns></returns>
         string GetNode(int i);
+
+        /// <summary>
+        /// Get the index of a node after mapping
+        /// This will only be valid if the component is set up
+        /// </summary>
+        /// <param name="i">The index</param>
+        /// <returns></returns>
+        int GetNodeIndex(int i);
     }
 }

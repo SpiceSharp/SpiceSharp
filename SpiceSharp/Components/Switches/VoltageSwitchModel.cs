@@ -8,14 +8,6 @@ namespace SpiceSharp.Components
     public class VoltageSwitchModel : CircuitModel<VoltageSwitchModel>
     {
         /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static VoltageSwitchModel()
-        {
-            Register();
-        }
-
-        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("ron"), SpiceInfo("Resistance when closed")]

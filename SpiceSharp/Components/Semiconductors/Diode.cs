@@ -7,17 +7,12 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// This class represents a diode
+    /// </summary>
+    [SpiceNodes("D+", "D-")]
     public class Diode : CircuitComponent<Diode>
     {
-        /// <summary>
-        /// Register our device parameters and terminals
-        /// </summary>
-        static Diode()
-        {
-            Register();
-            terminals = new string[] { "D+", "D-" };
-        }
-
         /// <summary>
         /// Gets or sets the device model
         /// </summary>

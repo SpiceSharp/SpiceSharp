@@ -6,7 +6,7 @@ namespace SpiceSharp.Parameters
     /// This attribute allows giving (multiple) names
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
-    public class SpiceName : System.Attribute
+    public class SpiceName : Attribute
     {
         /// <summary>
         /// Get the name of the parameter

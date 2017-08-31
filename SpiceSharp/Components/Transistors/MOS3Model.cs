@@ -6,16 +6,11 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// The model for MOS3 MOSFETs
+    /// </summary>
     public class MOS3Model : CircuitModel<MOS3Model>
     {
-        /// <summary>
-        /// Register our model parameters
-        /// </summary>
-        static MOS3Model()
-        {
-            Register();
-        }
-
         /// <summary>
         /// Parameters
         /// </summary>

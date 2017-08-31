@@ -5,16 +5,11 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// The MOS2 model for MOSFETs
+    /// </summary>
     public class MOS2Model : CircuitModel<MOS2Model>
     {
-        /// <summary>
-        /// Register our model parameters
-        /// </summary>
-        static MOS2Model()
-        {
-            Register();
-        }
-
         /// <summary>
         /// Parameters
         /// </summary>

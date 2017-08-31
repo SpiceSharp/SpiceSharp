@@ -1,21 +1,9 @@
-﻿using System;
-using SpiceSharp.Circuits;
-using SpiceSharp.Diagnostics;
-using SpiceSharp.Parameters;
-using SpiceSharp.Components.Transistors;
+﻿using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
     public class BSIM2Model : CircuitModel<BSIM2Model>
     {
-        /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static BSIM2Model()
-        {
-            Register();
-        }
-
         /// <summary>
         /// Parameters
         /// </summary>

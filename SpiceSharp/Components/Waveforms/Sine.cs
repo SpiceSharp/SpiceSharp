@@ -9,14 +9,6 @@ namespace SpiceSharp.Components.Waveforms
     public class Sine : Waveform<Sine>
     {
         /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static Sine()
-        {
-            Register();
-        }
-
-        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("vo"), SpiceInfo("The offset of the sine wave")]

@@ -8,14 +8,6 @@ namespace SpiceSharp.Components
     public class ResistorModel : CircuitModel<ResistorModel>
     {
         /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static ResistorModel()
-        {
-            Register();
-        }
-
-        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature", Interesting = false)]

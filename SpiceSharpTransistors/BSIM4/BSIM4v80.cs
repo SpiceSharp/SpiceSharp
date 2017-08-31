@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using System.Numerics;
@@ -7,17 +6,9 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
+    [SpiceNodes("Drain", "Gate", "Source", "Bulk")]
     public partial class BSIM4v80 : CircuitComponent<BSIM4v80>
     {
-        /// <summary>
-        /// Register our device parameters and terminals
-        /// </summary>
-        static BSIM4v80()
-        {
-            Register();
-            terminals = new string[] { "Drain", "Gate", "Source", "Bulk" };
-        }
-
         /// <summary>
         /// Gets or sets the device model
         /// </summary>

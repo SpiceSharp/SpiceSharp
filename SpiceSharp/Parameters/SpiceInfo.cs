@@ -6,7 +6,7 @@ namespace SpiceSharp.Parameters
     /// This attribute allows giving descriptions for parameters
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
-    public class SpiceInfo : System.Attribute
+    public class SpiceInfo : Attribute
     {
         /// <summary>
         /// Get the description

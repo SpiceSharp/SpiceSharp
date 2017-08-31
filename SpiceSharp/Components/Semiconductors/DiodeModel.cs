@@ -4,16 +4,11 @@ using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// This class is a model for a diode
+    /// </summary>
     public class DiodeModel : CircuitModel<DiodeModel>
     {
-        /// <summary>
-        /// Register our model parameters
-        /// </summary>
-        static DiodeModel()
-        {
-            Register();
-        }
-
         /// <summary>
         /// Parameters
         /// </summary>

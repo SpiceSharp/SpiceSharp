@@ -6,17 +6,9 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents a current-controlled switch
     /// </summary>
+    [SpiceNodes("W+", "W-")]
     public class CurrentSwitch : CircuitComponent<CurrentSwitch>
     {
-        /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static CurrentSwitch()
-        {
-            Register();
-            terminals = new string[] { "W+", "W-" };
-        }
-
         /// <summary>
         /// Gets or sets the model for the current-controlled switch
         /// </summary>

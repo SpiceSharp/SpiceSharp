@@ -8,14 +8,6 @@ namespace SpiceSharp.Components
     public class CapacitorModel : CircuitModel<CapacitorModel>
     {
         /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static CapacitorModel()
-        {
-            Register();
-        }
-
-        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("cj"), SpiceInfo("Bottom capacitance per area")]

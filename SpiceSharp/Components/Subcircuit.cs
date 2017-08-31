@@ -24,7 +24,15 @@ namespace SpiceSharp.Components
         /// </summary>
         private Dictionary<string, string> map = new Dictionary<string, string>();
 
-        public string[] Pins { get; set; } = null;
+        /// <summary>
+        /// Gets the pin names of the subcircuit
+        /// </summary>
+        public string[] Pins { get; private set; } = null;
+
+        /// <summary>
+        /// Gets the number of nodes
+        /// </summary>
+        public override int NodeCount => Pins.Length;
 
         /// <summary>
         /// Constructor

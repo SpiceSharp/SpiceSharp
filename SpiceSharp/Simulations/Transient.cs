@@ -13,14 +13,6 @@ namespace SpiceSharp.Simulations
     public class Transient : Simulation<Transient>
     {
         /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static Transient()
-        {
-            Register();
-        }
-
-        /// <summary>
         /// Default configuration for transient simulations
         /// </summary>
         public static Configuration Default { get; } = new Configuration();

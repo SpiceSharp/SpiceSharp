@@ -9,6 +9,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents an independent current source
     /// </summary>
+    [SpiceNodes("I+", "I-")]
     public class Currentsource : CircuitComponent<Currentsource>
     {
         /// <summary>

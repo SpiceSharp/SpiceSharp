@@ -9,14 +9,6 @@ namespace SpiceSharp.Components.Waveforms
     public class Pulse : Waveform<Pulse>
     {
         /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static Pulse()
-        {
-            Register();
-        }
-
-        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("v1"), SpiceInfo("The initial value")]

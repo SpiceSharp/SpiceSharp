@@ -8,14 +8,6 @@ namespace SpiceSharp.Components
     public class CurrentSwitchModel : CircuitModel<CurrentSwitchModel>
     {
         /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static CurrentSwitchModel()
-        {
-            Register();
-        }
-
-        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("ron"), SpiceInfo("Closed resistance")]

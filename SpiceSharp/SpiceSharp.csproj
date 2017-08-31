@@ -36,9 +36,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +55,7 @@
     <Compile Include="Components\Transistors\MOS3.cs" />
     <Compile Include="Components\Transistors\MOS3Model.cs" />
     <Compile Include="Components\Transistors\Transistor.cs" />
+    <Compile Include="Components\SpiceNodes.cs" />
     <Compile Include="Simulations\ISimulation.cs" />
     <Compile Include="Components\Waveforms\IWaveform.cs" />
     <Compile Include="Components\RLC\Inductor.cs" />

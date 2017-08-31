@@ -11,15 +11,26 @@ namespace SpiceSharp
     /// </summary>
     public abstract class CircuitComponent<T> : Parameterized<T>, ICircuitComponent
     {
+        // Register the nodes
+        static CircuitComponent()
+        {
+            // Check if we have nodes
+            SpiceNodes[] data = (SpiceNodes[])typeof(T).GetCustomAttributes(typeof(SpiceNodes), false);
+            if (data != null && data.Length == 1)
+                terminals = data[0].Nodes;
+        }
+        protected static string[] terminals = null;
+
         /// <summary>
         /// Private variables
         /// </summary>
-        private string[] connections;
+        private string[] connections = null;
+        private int[] indices = null;
 
         /// <summary>
-        /// The terminals should be set statically
+        /// Get the number of nodes
         /// </summary>
-        protected static string[] terminals;
+        public virtual int NodeCount => connections.Length;
 
         /// <summary>
         /// Get the name of the component
@@ -41,9 +52,15 @@ namespace SpiceSharp
         {
             Name = name;
             if (terminals != null)
+            {
                 connections = new string[terminals.Length];
+                indices = new int[terminals.Length];
+            }
             else
+            {
                 connections = null;
+                indices = null;
+            }
         }
 
         /// <summary>
@@ -83,6 +100,18 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Get the node index of the component
+        /// </summary>
+        /// <param name="i">The index</param>
+        /// <returns></returns>
+        public virtual int GetNodeIndex(int i)
+        {
+            if (i < 0 || i >= connections.Length)
+                throw new IndexOutOfRangeException();
+            return indices[i];
+        }
+
+        /// <summary>
         /// Helper function for binding nodes to the circuit
         /// </summary>
         /// <param name="ckt"></param>
@@ -93,7 +122,10 @@ namespace SpiceSharp
             // Map connected nodes
             CircuitNode[] nodes = new CircuitNode[connections.Length];
             for (int i = 0; i < connections.Length; i++)
+            {
                 nodes[i] = ckt.Nodes.Map(connections[i]);
+                indices[i] = nodes[i].Index;
+            }
 
             // Return all nodes
             return nodes;

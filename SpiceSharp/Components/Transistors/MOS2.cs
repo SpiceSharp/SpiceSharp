@@ -7,17 +7,12 @@ using System.Numerics;
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// This class represents a MOS2 MOSFET
+    /// </summary>
+    [SpiceNodes("Drain", "Gate", "Source", "Bulk")]
     public class MOS2 : CircuitComponent<MOS2>
     {
-        /// <summary>
-        /// Register our device parameters and terminals
-        /// </summary>
-        static MOS2()
-        {
-            Register();
-            terminals = new string[] { "Drain", "Gate", "Source", "Bulk" };
-        }
-
         /// <summary>
         /// Gets or sets the device model
         /// </summary>

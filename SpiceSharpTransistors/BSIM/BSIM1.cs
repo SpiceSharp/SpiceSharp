@@ -7,17 +7,9 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
+    [SpiceNodes("Drain", "Gate", "Source", "Bulk")]
     public class BSIM1 : CircuitComponent<BSIM1>
     {
-        /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static BSIM1()
-        {
-            Register();
-            terminals = new string[] { "Drain", "Gate", "Source", "Bulk" };
-        }
-
         /// <summary>
         /// Gets or sets the device model
         /// </summary>

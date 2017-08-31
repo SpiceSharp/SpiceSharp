@@ -5,16 +5,11 @@ using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// This is the model for MOS1 MOSFETs
+    /// </summary>
     public class MOS1Model : CircuitModel<MOS1Model>
     {
-        /// <summary>
-        /// Register our model parameters
-        /// </summary>
-        static MOS1Model()
-        {
-            Register();
-        }
-
         /// <summary>
         /// Parameters
         /// </summary>

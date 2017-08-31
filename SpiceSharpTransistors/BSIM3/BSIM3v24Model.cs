@@ -10,14 +10,6 @@ namespace SpiceSharp.Components
     public class BSIM3v24Model : CircuitModel<BSIM3v24Model>
     {
         /// <summary>
-        /// Register our model parameters
-        /// </summary>
-        static BSIM3v24Model()
-        {
-            Register();
-        }
-
-        /// <summary>
         /// Get the size-dependent parameters
         /// </summary>
         public Dictionary<Tuple<double, double>, BSIM3SizeDependParam> Sizes { get; } = new Dictionary<Tuple<double, double>, BSIM3SizeDependParam>();

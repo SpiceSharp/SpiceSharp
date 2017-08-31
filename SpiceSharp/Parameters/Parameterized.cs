@@ -11,6 +11,12 @@ namespace SpiceSharp.Parameters
     /// </summary>
     public abstract class Parameterized<T> : IParameterized
     {
+        // Register our parameters
+        static Parameterized()
+        {
+            Register();
+        }
+
         /// <summary>
         /// Dictionaries for finding our parameters back
         /// </summary>
