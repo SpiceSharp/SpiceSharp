@@ -56,7 +56,7 @@
     <Compile Include="Components\Transistors\MOS3.cs" />
     <Compile Include="Components\Transistors\MOS3Model.cs" />
     <Compile Include="Components\Transistors\Transistor.cs" />
-    <Compile Include="Components\SpiceNodes.cs" />
+    <Compile Include="Attributes\SpiceNodes.cs" />
     <Compile Include="Simulations\ISimulation.cs" />
     <Compile Include="Components\Waveforms\IWaveform.cs" />
     <Compile Include="Components\RLC\Inductor.cs" />
@@ -79,8 +79,8 @@
     <Compile Include="IntegrationMethods\Breakpoints.cs" />
     <Compile Include="IntegrationMethods\Trapezoidal.cs" />
     <Compile Include="Parameters\IParameterized.cs" />
-    <Compile Include="Parameters\SpiceInfo.cs" />
-    <Compile Include="Parameters\SpiceName.cs" />
+    <Compile Include="Attributes\SpiceInfo.cs" />
+    <Compile Include="Attributes\SpiceName.cs" />
     <Compile Include="Circuits\CircuitObjects.cs" />
     <Compile Include="Components\CircuitComponent.cs" />
     <Compile Include="Circuits\Circuit.cs" />
