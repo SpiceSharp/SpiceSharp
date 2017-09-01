@@ -1,5 +1,6 @@
-﻿using SpiceSharp.Parser.Readers.Extensions;
-using SpiceSharp.Parser.Readers.Simulations;
+﻿using System;
+using SpiceSharp.Parser.Readers.Extensions;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Parser.Readers
 {
@@ -35,21 +36,22 @@ namespace SpiceSharp.Parser.Readers
                         string key = at.Name.image.ToLower();
                         switch (key)
                         {
-                            case "abstol":
-                            case "reltol":
-                            case "gmin":
-                            case "itl1":
-                            case "itl2":
-                            case "itl4":
-                            case "temp":
-                            case "tnom":
-                                double v = netlist.ParseDouble(at.Value);
-                                Configuration.Defaults[at.Name.image.ToLower()] = v;
-                                break;
-
+                            case "abstol": SimulationConfiguration.Default.AbsTol = netlist.ParseDouble(at.Value); break;
+                            case "reltol": SimulationConfiguration.Default.RelTol = netlist.ParseDouble(at.Value); break;
+                            case "gmin": SimulationConfiguration.Default.Gmin = netlist.ParseDouble(at.Value); break;
+                            case "itl1": SimulationConfiguration.Default.DcMaxIterations = (int)Math.Round(netlist.ParseDouble(at.Value)); break;
+                            case "itl2": SimulationConfiguration.Default.SweepMaxIterations = (int)Math.Round(netlist.ParseDouble(at.Value)); break;
+                            case "itl4": SimulationConfiguration.Default.TranMaxIterations = (int)Math.Round(netlist.ParseDouble(at.Value)); break;
+                            case "temp": netlist.Circuit.State.Temperature = netlist.ParseDouble(at.Value) + Circuit.CONSTCtoK; break;
+                            case "tnom": netlist.Circuit.State.NominalTemperature = netlist.ParseDouble(at.Value) + Circuit.CONSTCtoK; break;
                             case "method":
-                                string s = at.Value.image.ToLower();
-                                Configuration.StringDefaults[key] = s;
+                                switch (at.Value.image.ToLower())
+                                {
+                                    case "trap":
+                                    case "trapezoidal":
+                                        SimulationConfiguration.Default.Method = new IntegrationMethods.Trapezoidal();
+                                        break;
+                                }
                                 break;
 
                             default:
@@ -61,10 +63,7 @@ namespace SpiceSharp.Parser.Readers
                         key = st.Parameters[i].image.ToLower();
                         switch (key)
                         {
-                            case "keepopinfo":
-                                Configuration.FlagDefaults.Add(key);
-                                break;
-
+                            case "keepopinfo": SimulationConfiguration.Default.KeepOpInfo = true; break;
                             default:
                                 throw new ParseException(st.Parameters[i], "Unrecognized option");
                         }

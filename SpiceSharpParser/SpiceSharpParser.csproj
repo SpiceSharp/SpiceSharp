@@ -51,7 +51,6 @@
     <Compile Include="Readers\Controls\ParamSetReader.cs" />
     <Compile Include="Readers\RLCM\RLCMModelReader.cs" />
     <Compile Include="Readers\RLCM\RLCMReader.cs" />
-    <Compile Include="Readers\Simulations\Configuration.cs" />
     <Compile Include="Readers\Transistors\MosfetModelReader.cs" />
     <Compile Include="Readers\Transistors\MosfetReader.cs" />
     <Compile Include="Subcircuits\SubcircuitDefinition.cs" />

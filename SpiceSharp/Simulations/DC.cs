@@ -14,23 +14,6 @@ namespace SpiceSharp.Simulations
     public class DC : Simulation<DC>
     {
         /// <summary>
-        /// The default configuration for all DC simulations
-        /// </summary>
-        public static Configuration Default { get; } = new Configuration();
-
-        /// <summary>
-        /// Extended configuration for DC analysis
-        /// </summary>
-        public class Configuration : SimulationConfiguration
-        {
-            /// <summary>
-            /// The maximum number of iterations used each step
-            /// </summary>
-            public int MaxIterations = 50;
-        }
-        protected Configuration MyConfig { get { return (Configuration)Config ?? Default; } }
-
-        /// <summary>
         /// A delegate for when an iteration failed
         /// </summary>
         /// <param name="sender">The object sending the event</param>
@@ -140,8 +123,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The simulation name</param>
         /// <param name="config">The configuration</param>
-        public DC(string name, Configuration config = null)
-            : base(name, config)
+        public DC(string name) : base(name)
         {
         }
 
@@ -153,8 +135,7 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The starting value</param>
         /// <param name="stop">The stopping value</param>
         /// <param name="step">The step value</param>
-        public DC(string name, string source, double start, double stop, double step)
-            : base(name, new Configuration())
+        public DC(string name, string source, double start, double stop, double step) : base(name)
         {
             Sweep s = new Sweep(source, start, stop, step);
             Sweeps.Add(s);
@@ -170,11 +151,12 @@ namespace SpiceSharp.Simulations
             // Setup the state
             var state = ckt.State;
             var rstate = state.Real;
+            var config = CurrentConfig;
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Domain = CircuitState.DomainTypes.None;
-            state.Gmin = Config.Gmin;
+            state.Gmin = config.Gmin;
 
             // Initialize
             IParameterized[] components = new IParameterized[Sweeps.Count];
@@ -212,10 +194,10 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Calculate the solution
-                if (!Iterate(Config, ckt, MyConfig.MaxIterations))
+                if (!Iterate(config, ckt, config.SweepMaxIterations))
                 {
                     IterationFailed?.Invoke(this, ckt);
-                    Op(Config, ckt, MyConfig.MaxIterations);
+                    Op(config, ckt, config.DcMaxIterations);
                 }
 
                 // Export data

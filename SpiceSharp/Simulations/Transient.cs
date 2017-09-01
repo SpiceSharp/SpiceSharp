@@ -13,43 +13,6 @@ namespace SpiceSharp.Simulations
     public class Transient : Simulation<Transient>
     {
         /// <summary>
-        /// Default configuration for transient simulations
-        /// </summary>
-        public static Configuration Default { get; } = new Configuration();
-
-        /// <summary>
-        /// A class that executes a transient simulation
-        /// </summary>
-        public class Configuration : SimulationConfiguration
-        {
-            /// <summary>
-            /// Gets or sets the integration method used for this simulation
-            /// </summary>
-            public IntegrationMethod Method { get; set; } = new Trapezoidal();
-
-            /// <summary>
-            /// Gets or sets the maximum number of iterations when solving the operating point
-            /// </summary>
-            public int DcMaxIterations { get; set; } = 100;
-
-            /// <summary>
-            /// Gets or sets the maximum number of iterations when solving a new timestep
-            /// </summary>
-            public int TranMaxIterations { get; set; } = 100;
-
-            /// <summary>
-            /// Gets or sets the flag for using initial conditions without operating point
-            /// </summary>
-            public bool UseIC { get; set; } = false;
-
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            public Configuration() { }
-        }
-        protected Configuration MyConfig { get { return (Configuration)Config ?? Default; } }
-
-        /// <summary>
         /// Gets or sets the initial timepoint that should be exported
         /// </summary>
         [SpiceName("init"), SpiceName("start"), SpiceInfo("The starting timepoint")]
@@ -107,8 +70,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the simulation</param>
         /// <param name="config">The configuration</param>
-        public Transient(string name, Configuration config = null)
-            : base(name, config)
+        public Transient(string name) : base(name)
         {
         }
 
@@ -118,8 +80,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The name of the simulation</param>
         /// <param name="step">The timestep</param>
         /// <param name="final">The final timepoint</param>
-        public Transient(string name, double step, double final)
-            : base(name, null)
+        public Transient(string name, double step, double final) : base(name)
         {
             Step = step;
             FinalTime = final;
@@ -133,10 +94,10 @@ namespace SpiceSharp.Simulations
         {
             var state = ckt.State;
             var rstate = state.Real;
-            var method = MyConfig.Method;
+            var method = Config.Method;
 
             // Initialize
-            state.UseIC = MyConfig.UseIC;
+            state.UseIC = Config.UseIC;
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Domain = CircuitState.DomainTypes.Time;
@@ -150,7 +111,7 @@ namespace SpiceSharp.Simulations
 
             // Calculate the operating point
             Initialize(ckt);
-            Op(Config, ckt, MyConfig.DcMaxIterations);
+            Op(Config, ckt, Config.DcMaxIterations);
             ckt.Statistics.TimePoints++;
 
             // Initialize the method
@@ -218,7 +179,7 @@ namespace SpiceSharp.Simulations
                         state.States[1].CopyTo(state.States[0]);
 
                         // Try to solve the new point
-                        bool converged = Iterate(Config, ckt, MyConfig.TranMaxIterations);
+                        bool converged = Iterate(Config, ckt, Config.TranMaxIterations);
                         ckt.Statistics.TimePoints++;
 
                         // Spice copies the states the first time, we're not

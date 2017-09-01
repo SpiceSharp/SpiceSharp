@@ -14,6 +14,11 @@ namespace SpiceSharp
         public SimulationConfiguration Config { get; set; } = null;
 
         /// <summary>
+        /// Get the current configuration (for use in the simulation)
+        /// </summary>
+        protected SimulationConfiguration CurrentConfig => Config ?? SimulationConfiguration.Default;
+
+        /// <summary>
         /// Event that is called for initializing simulation data exports
         /// </summary>
         public event InitializeSimulationExportEventHandler InitializeSimulationExport;
@@ -37,10 +42,9 @@ namespace SpiceSharp
         /// Constructor
         /// </summary>
         /// <param name="config">The configuration for this simulation</param>
-        public Simulation(string name, SimulationConfiguration config = null)
-            : base()
+        public Simulation(string name) : base()
         {
-            Config = config;
+            Config = null;
             Name = name;
         }
 

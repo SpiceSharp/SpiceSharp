@@ -11,26 +11,11 @@ namespace SpiceSharp.Simulations
     public class OP : Simulation<OP>
     {
         /// <summary>
-        /// The default configuration for all DC simulations
-        /// </summary>
-        public static Configuration Default { get; } = new Configuration();
-
-        /// <summary>
-        /// Configuration for an operating point simulation
-        /// </summary>
-        public class Configuration : SimulationConfiguration
-        {
-            public int MaxIterations { get; set; } = 50;
-        }
-        protected Configuration MyConfig { get { return (Configuration)Config ?? Default; } }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
         /// <param name="config">Configuration</param>
-        public OP(string name, Configuration config = null)
-            : base(name, config ?? Default)
+        public OP(string name) : base(name)
         {
         }
 
@@ -51,7 +36,7 @@ namespace SpiceSharp.Simulations
             state.Gmin = Config.Gmin;
 
             Initialize(ckt);
-            Op(Config, ckt, MyConfig.MaxIterations);
+            Op(Config, ckt, CurrentConfig.DcMaxIterations);
             Export(ckt);
             Finalize(ckt);
         }

@@ -13,31 +13,9 @@ namespace SpiceSharp.Simulations
     public class AC : Simulation<AC>
     {
         /// <summary>
-        /// Default configuration for AC simulations
-        /// </summary>
-        public static Configuration Default { get; } = new Configuration();
-
-        /// <summary>
         /// Enumerations
         /// </summary>
         public enum StepTypes { Decade, Octave, Linear };
-
-        /// <summary>
-        /// Configuration for AC simulations
-        /// </summary>
-        public class Configuration : SimulationConfiguration
-        {
-            /// <summary>
-            /// Gets or sets the maximum number of iterations for calculating the operating point
-            /// </summary>
-            public int DcMaxIterations = 50;
-
-            /// <summary>
-            /// Gets or sets the flag for keeping the operating point information
-            /// </summary>
-            public bool KeepOpInfo = false;
-        }
-        protected Configuration MyConfig { get { return (Configuration)Config ?? Default; } }
 
         /// <summary>
         /// Gets or sets the number of steps
@@ -104,8 +82,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the simulation</param>
         /// <param name="config">The configuration</param>
-        public AC(string name, Configuration config = null) 
-            : base(name, config)
+        public AC(string name) : base(name)
         {
         }
 
@@ -117,8 +94,7 @@ namespace SpiceSharp.Simulations
         /// <param name="n">The number of steps</param>
         /// <param name="start">The starting frequency</param>
         /// <param name="stop">The stopping frequency</param>
-        public AC(string name, string type, int n, double start, double stop)
-            : base(name, null)
+        public AC(string name, string type, int n, double start, double stop) : base(name)
         {
             switch (type.ToLower())
             {
@@ -139,6 +115,7 @@ namespace SpiceSharp.Simulations
         {
             var state = ckt.State;
             var cstate = state.Complex;
+            var config = CurrentConfig;
 
             double freq = 0.0, freqdelta = 0.0;
             int n = 0;
@@ -179,9 +156,9 @@ namespace SpiceSharp.Simulations
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Gmin = MyConfig.Gmin;
+            state.Gmin = config.Gmin;
             Initialize(ckt);
-            Op(MyConfig, ckt, MyConfig.DcMaxIterations);
+            Op(config, ckt, config.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             state.UseDC = false;
@@ -190,7 +167,7 @@ namespace SpiceSharp.Simulations
                 c.Load(ckt);
 
             // Export operating point if requested
-            if (MyConfig.KeepOpInfo)
+            if (config.KeepOpInfo)
                 Export(ckt);
 
             // Calculate the AC solution
@@ -204,7 +181,7 @@ namespace SpiceSharp.Simulations
                 state.Complex.Laplace = new Complex(0.0, 2.0 * Circuit.CONSTPI * freq);
 
                 // Solve
-                AcIterate(MyConfig, ckt);
+                AcIterate(config, ckt);
 
                 // Export the timepoint
                 Export(ckt);
