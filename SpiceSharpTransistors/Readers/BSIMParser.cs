@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Circuits;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Components

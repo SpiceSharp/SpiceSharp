@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
         /// Set the model for the resistor
         /// </summary>
         /// <param name="model"></param>
-        public void SetModel(ResistorModel model) => Model = (ICircuitObject)model;
+        public void SetModel(ResistorModel model) => Model = model;
 
         /// <summary>
         /// Parameters

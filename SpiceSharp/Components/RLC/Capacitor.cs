@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
         /// Set the model for the capacitor
         /// </summary>
         /// <param name="model"></param>
-        public void SetModel(CapacitorModel model) => Model = (ICircuitObject)model;
+        public void SetModel(CapacitorModel model) => Model = model;
 
         /// <summary>
         /// Capacitance

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Components;
+using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Simulations

@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Components
+﻿using SpiceSharp.Circuits;
+
+namespace SpiceSharp.Components
 {
     /// <summary>
     /// Interface for circuit components

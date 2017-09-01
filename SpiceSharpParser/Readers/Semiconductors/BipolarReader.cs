@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Parser.Readers.Extensions;
 

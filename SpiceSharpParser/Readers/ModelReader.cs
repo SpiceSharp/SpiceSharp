@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Components;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Parser.Readers.Extensions;
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Parser.Subcircuits;
-using static SpiceSharp.Parser.SpiceSharpParserConstants;
 using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers

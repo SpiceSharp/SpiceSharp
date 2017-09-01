@@ -16,10 +16,13 @@ namespace SpiceSharp
         {
             // Check if we have nodes
             SpiceNodes[] data = (SpiceNodes[])typeof(T).GetCustomAttributes(typeof(SpiceNodes), false);
-            if (data != null && data.Length == 1)
-                terminals = data[0].Nodes;
+            if (data != null)
+                pins = data[0].Nodes;
+
+            // Check if we have voltage source drivers
         }
-        protected static string[] terminals = null;
+        protected static string[] pins = null;
+        protected static int[][] vsrc = null;
 
         /// <summary>
         /// Private variables
@@ -51,10 +54,10 @@ namespace SpiceSharp
             : base()
         {
             Name = name;
-            if (terminals != null)
+            if (pins != null)
             {
-                connections = new string[terminals.Length];
-                indices = new int[terminals.Length];
+                connections = new string[pins.Length];
+                indices = new int[pins.Length];
             }
             else
             {
@@ -74,8 +77,8 @@ namespace SpiceSharp
         /// <param name="nodes"></param>
         public virtual void Connect(params string[] nodes)
         {
-            if (terminals.Length != connections.Length)
-                connections = new string[terminals.Length];
+            if (pins.Length != connections.Length)
+                connections = new string[pins.Length];
 
             if (nodes.Length != connections.Length)
                 throw new CircuitException($"{Name}: Node count mismatch. {nodes.Length} given, {connections.Length} expected.");

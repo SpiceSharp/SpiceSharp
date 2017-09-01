@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SpiceSharp.Components;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Parser.Readers
 {

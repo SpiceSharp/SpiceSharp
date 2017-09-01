@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Circuits\CircuitCheck.cs" />
     <Compile Include="Circuits\CircuitStateComplex.cs" />
     <Compile Include="Circuits\CircuitStateReal.cs" />
     <Compile Include="Components\CircuitModel.cs" />

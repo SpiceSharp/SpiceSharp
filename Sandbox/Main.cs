@@ -28,12 +28,19 @@ namespace Sandbox
             // The netlist
             string netlist = string.Join(Environment.NewLine, new string[]
             {
+                ".MODEL MM NMOS LEVEL=1 IS=1e-32",
+                "+VTO=3.03646 LAMBDA=0 KP=5.28747",
+                "+CGSO=6.5761e-06 CGDO=1e-11",
                 "vinput in gnd 0 pulse(0 5 1u 1n 1n 5u 10u)",
-                "rs in out 1k",
-                "cl out gnd 1n",
+                "mstage out in gnd gnd MM l = 100u w = 100u",
+                "rload vdd out 100",
+                "cload out gnd 100n",
+                "vsupply vdd gnd 5.0",
                 ".save v(in) v(out)",
                 ".tran 1n 20u"
             });
+            chMain.ChartAreas[0].AxisX.Minimum = 0;
+            chMain.ChartAreas[0].AxisX.Maximum = 20e-6;
 
             // Read
             NetlistReader nr = new NetlistReader();
@@ -70,6 +77,7 @@ namespace Sandbox
                 }
             };
             nr.Netlist.Simulate();
+
             chMain.ChartAreas[0].AxisX.RoundAxisValues();
 
         }
