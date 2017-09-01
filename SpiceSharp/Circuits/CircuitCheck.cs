@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.LinearAlgebra.Factorization;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 
@@ -15,6 +16,8 @@ namespace SpiceSharp.Circuits
         /// </summary>
         private bool HasSource = false;
         private List<Tuple<ICircuitComponent, int, int>> voltagedriven = new List<Tuple<ICircuitComponent, int, int>>();
+        private Dictionary<int, HashSet<int>> connections = new Dictionary<int, HashSet<int>>();
+        private HashSet<int> unconnected = new HashSet<int>();
 
         /// <summary>
         /// Constructor
@@ -47,7 +50,20 @@ namespace SpiceSharp.Circuits
             // Check if a voltage driver is closing a loop
             var icc = FindVoltageDriveLoop();
             if (icc != null)
-                throw new CircuitException($"{icc.Name} closes a loop of voltage sources");
+                throw new CircuitException($"{string.Join(".", ckt.Objects.FindPath(icc))} closes a loop of voltage sources");
+
+            // Check for floating nodes
+            if (FindFloatingNodes() > 0)
+            {
+                List<string> un = new List<string>();
+                for (int i = 0; i < ckt.Nodes.Count; i++)
+                {
+                    int index = ckt.Nodes[i].Index;
+                    if (unconnected.Contains(index))
+                        un.Add(ckt.Nodes[i].Name);
+                }
+                throw new CircuitException($"{string.Join(", ", un)}: Floating nodes found");
+            }
         }
 
         /// <summary>
@@ -86,23 +102,44 @@ namespace SpiceSharp.Circuits
                 if (sc)
                     throw new CircuitException($"{icc.Name}: All pins have been short-circuited");
 
+                // Get the node indices for each pin
+                int[] nodes = new int[icc.PinCount];
+                for (int i = 0; i < nodes.Length; i++)
+                {
+                    nodes[i] = icc.GetNodeIndex(i);
+                    unconnected.Add(nodes[i]);
+                }
+
                 // Use attributes for checking properties
                 var attributes = c.GetType().GetCustomAttributes(false);
+                bool hasconnections = false;
                 foreach (var attr in attributes)
                 {
                     // Voltage driven nodes are checked for voltage loops
                     if (attr is VoltageDriver)
                     {
                         VoltageDriver vd = (VoltageDriver)attr;
-                        int pos = icc.GetNodeIndex(vd.Positive);
-                        int neg = icc.GetNodeIndex(vd.Negative);
-                        voltagedriven.Add(new Tuple<ICircuitComponent, int, int>(icc, pos, neg));
+                        voltagedriven.Add(new Tuple<ICircuitComponent, int, int>(icc, nodes[vd.Positive], nodes[vd.Negative]));
                     }
 
                     // At least one source needs to be available
                     if (attr is IndependentSource)
                         HasSource = true;
+
+                    if (attr is ConnectedPins)
+                    {
+                        ConnectedPins conn = (ConnectedPins)attr;
+                        int[] tmp = new int[conn.Pins.Length];
+                        for (int i = 0; i < conn.Pins.Length; i++)
+                            tmp[i] = nodes[conn.Pins[i]];
+                        AddConnections(tmp);
+                        hasconnections = true;
+                    }
                 }
+
+                // Check connections
+                if (!hasconnections)
+                    AddConnections(nodes);
             }
         }
 
@@ -121,7 +158,7 @@ namespace SpiceSharp.Circuits
                     if (!map.ContainsKey(vd.Item2))
                         map.Add(vd.Item2, index++);
                 }
-                if (vd.Item2 != 0)
+                if (vd.Item3 != 0)
                 {
                     if (!map.ContainsKey(vd.Item3))
                         map.Add(vd.Item3, index++);
@@ -142,13 +179,75 @@ namespace SpiceSharp.Circuits
             // We just built a matrix that, if correct, is able to generate one specific voltage for each node it applied to
             // Any rank that is smaller will be caused by voltage sources that are not independent = a voltage loop
             // We can use the LU decomposition to find out which voltage source closes a voltage source loop
+            string orig = conn.ToString();
             LU<double> result = conn.LU();
-            for (int i = 0; i < result.U.RowCount; i++)
+            string u = result.U.ToString();
+            for (int i = 0; i < voltagedriven.Count; i++)
             {
-                if (result.U[i, i] == 0)
-                    return voltagedriven[result.P[i]].Item1;
+                int k = result.P[i];
+                if (result.U[k, k] == 0)
+                    return voltagedriven[i].Item1;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Add connected nodes that will be used to find floating nodes
+        /// </summary>
+        /// <param name="nodes"></param>
+        private void AddConnections(int[] nodes)
+        {
+            if (nodes == null || nodes.Length == 0)
+                return;
+
+            // Find the minimum value
+            int min = nodes[0];
+            for (int i = 1; i < nodes.Length; i++)
+                min = nodes[i] < min ? nodes[i] : min;
+
+            if (!connections.ContainsKey(min))
+                connections.Add(min, new HashSet<int>());
+
+            // Add the connections
+            for (int i = 0; i < nodes.Length; i++)
+            {
+                if (nodes[i] != min)
+                    connections[min].Add(nodes[i]);
+            }
+        }
+
+        /// <summary>
+        /// Find a node that has no path to ground anywhere (open-circuited)
+        /// </summary>
+        /// <returns></returns>
+        private int FindFloatingNodes()
+        {
+            // We start from zero and we'll see how many nodes we can eliminate
+            Stack<int> todo = new Stack<int>();
+            todo.Push(0);
+            while (todo.Count > 0)
+            {
+                int c = todo.Pop();
+
+                // Remove the node from the unconnected nodes
+                unconnected.Remove(c);
+
+                // If it maps to other nodes, try to remove them too
+                if (connections.ContainsKey(c))
+                {
+                    // Add all these nodes to the stack
+                    foreach (var a in connections[c])
+                        todo.Push(a);
+                }
+            }
+
+            // The list that remains are all unconnected nodes
+            return unconnected.Count;
+        }
+
+        private void GetNodes(int[] indices, Nodes n)
+        {
+
         }
     }
 }

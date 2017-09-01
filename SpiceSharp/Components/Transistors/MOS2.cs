@@ -10,7 +10,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents a MOS2 MOSFET
     /// </summary>
-    [SpiceNodes("Drain", "Gate", "Source", "Bulk")]
+    [SpiceNodes("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
     public class MOS2 : CircuitComponent<MOS2>
     {
         /// <summary>

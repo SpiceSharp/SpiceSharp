@@ -15,6 +15,7 @@ namespace SpiceSharp.Circuits
         /// Private variables
         /// </summary>
         private Dictionary<string, ICircuitObject> objects = new Dictionary<string, ICircuitObject>();
+        private HashSet<Subcircuit> subckts = new HashSet<Subcircuit>();
         private List<ICircuitObject> ordered = new List<ICircuitObject>();
 
         /// <summary>
@@ -89,6 +90,8 @@ namespace SpiceSharp.Circuits
                 if (objects.ContainsKey(c.Name))
                     throw new CircuitException($"A component with the name {c.Name} already exists");
                 objects.Add(c.Name, c);
+                if (c is Subcircuit)
+                    subckts.Add((Subcircuit)c);
                 isordered = false;
             }
         }
@@ -105,7 +108,11 @@ namespace SpiceSharp.Circuits
                     throw new ArgumentNullException(nameof(name));
 
                 if (objects.ContainsKey(name))
+                {
+                    if (objects[name] is Subcircuit)
+                        subckts.Remove((Subcircuit)objects[name]);
                     objects.Remove(name);
+                }
                 isordered = false;
             }
         }
@@ -196,6 +203,46 @@ namespace SpiceSharp.Circuits
                 return b.Priority.CompareTo(a.Priority);
             });
             isordered = true;
+        }
+
+        /// <summary>
+        /// Find the circuitobject and expand the path
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public string[] FindPath(ICircuitObject o)
+        {
+            List<string> path = new List<string>();
+            if (TryFindPath(o, path))
+                return path.ToArray();
+            return null;
+        }
+
+        /// <summary>
+        /// Recursively search for a circuit object and return the path
+        /// </summary>
+        /// <param name="o">The object to search</param>
+        /// <param name="path">The path</param>
+        /// <returns></returns>
+        protected bool TryFindPath(ICircuitObject o, List<string> path)
+        {
+            if (objects.ContainsKey(o.Name) && objects[o.Name] == o)
+            {
+                path.Add(o.Name);
+                return true;
+            }
+            else
+            {
+                foreach (var subckt in subckts)
+                {
+                    if (subckt.Objects.TryFindPath(o, path))
+                    {
+                        path.Insert(0, subckt.Name);
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
         /// <summary>

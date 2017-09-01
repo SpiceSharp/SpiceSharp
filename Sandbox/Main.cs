@@ -26,7 +26,7 @@ namespace Sandbox
             InitializeComponent();
 
             // The netlist
-            /* string netlist = string.Join(Environment.NewLine, new string[]
+            string netlist = string.Join(Environment.NewLine, new string[]
             {
                 ".MODEL MM NMOS LEVEL=1 IS=1e-32",
                 "+VTO=3.03646 LAMBDA=0 KP=5.28747",
@@ -38,15 +38,6 @@ namespace Sandbox
                 "vsupply vdd gnd 5.0",
                 ".save v(in) v(out)",
                 ".tran 1n 20u"
-            }); */
-
-            // test a voltage loop
-            string netlist = string.Join(Environment.NewLine, new string[]
-            {
-                "R1 1 gnd 0",
-                "V2 1 2 1",
-                "V3 2 3 1",
-                "V4 3 1 1"
             });
 
             chMain.ChartAreas[0].AxisX.Minimum = 0;

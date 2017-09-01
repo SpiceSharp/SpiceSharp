@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class describes a capacitor
     /// </summary>
-    [SpiceNodes("C+", "C-")]
+    [SpiceNodes("C+", "C-"), ConnectedPins()]
     public class Capacitor : CircuitComponent<Capacitor>
     {
         /// <summary>

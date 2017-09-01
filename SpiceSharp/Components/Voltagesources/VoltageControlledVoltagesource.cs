@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A class that describes a voltage-controlled current-source
     /// </summary>
-    [SpiceNodes("V+", "V-", "VC+", "VC-"), VoltageDriver(0, 1)]
+    [SpiceNodes("V+", "V-", "VC+", "VC-"), VoltageDriver(0, 1), ConnectedPins(0, 1)]
     public class VoltageControlledVoltagesource : CircuitComponent<VoltageControlledVoltagesource>
     {
         /// <summary>

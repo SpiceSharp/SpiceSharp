@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents a voltage-controlled switch
     /// </summary>
-    [SpiceNodes("S+", "S-", "SC+", "SC-")]
+    [SpiceNodes("S+", "S-", "SC+", "SC-"), ConnectedPins(0, 1)]
     public class VoltageSwitch : CircuitComponent<VoltageSwitch>
     {
         /// <summary>
