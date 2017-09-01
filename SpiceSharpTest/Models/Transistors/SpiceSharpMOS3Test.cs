@@ -71,7 +71,7 @@ namespace SpiceSharpTest.Models.Transistors
 
             // Create the simulation
             DC dc = new DC("TestMOS3_DC");
-            dc.Config.Gmin = 0;
+            dc.Config = new SimulationConfiguration() { Gmin = 0 };
             dc.Sweeps.Add(new DC.Sweep("V1", 0.0, 5.0, 0.5));
             dc.Sweeps.Add(new DC.Sweep("V2", 0.0, 5.0, 0.5));
             int index = 0;

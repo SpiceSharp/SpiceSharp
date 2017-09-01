@@ -94,14 +94,15 @@ namespace SpiceSharp.Simulations
         {
             var state = ckt.State;
             var rstate = state.Real;
-            var method = Config.Method;
+            var config = CurrentConfig;
+            var method = config.Method;
 
             // Initialize
-            state.UseIC = Config.UseIC;
+            state.UseIC = config.UseIC;
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Domain = CircuitState.DomainTypes.Time;
-            state.Gmin = Config.Gmin;
+            state.Gmin = config.Gmin;
 
             // Setup breakpoints
             method.Breaks.SetBreakpoint(InitTime);
@@ -111,7 +112,7 @@ namespace SpiceSharp.Simulations
 
             // Calculate the operating point
             Initialize(ckt);
-            Op(Config, ckt, Config.DcMaxIterations);
+            Op(config, ckt, config.DcMaxIterations);
             ckt.Statistics.TimePoints++;
 
             // Initialize the method
@@ -179,7 +180,7 @@ namespace SpiceSharp.Simulations
                         state.States[1].CopyTo(state.States[0]);
 
                         // Try to solve the new point
-                        bool converged = Iterate(Config, ckt, Config.TranMaxIterations);
+                        bool converged = Iterate(config, ckt, config.TranMaxIterations);
                         ckt.Statistics.TimePoints++;
 
                         // Spice copies the states the first time, we're not

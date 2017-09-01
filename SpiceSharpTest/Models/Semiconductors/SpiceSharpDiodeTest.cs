@@ -87,7 +87,7 @@ namespace SpiceSharpTest.Models.Semiconductors
 
             // Make the simulation slightly more accurate (error / 4)
             // Might want to check why some time though
-            dc.Config.RelTol = 0.25e-3;
+            dc.Config = new SimulationConfiguration() { RelTol = 0.25e-3 };
             dc.Sweeps.Add(new DC.Sweep("V1", -1, 1, 10e-3));
             int index = 0;
             dc.OnExportSimulationData += (object sender, SimulationData data) =>
@@ -132,7 +132,7 @@ namespace SpiceSharpTest.Models.Semiconductors
             AC ac = new AC("TestDiodeAC");
 
             // Make the simulation slightly more accurate (ref. DC)
-            ac.Config.RelTol = 0.25e-3;
+            ac.Config = new SimulationConfiguration() { RelTol = 0.25e-3 };
             ac.StartFreq = 1e3; // 1kHz
             ac.StopFreq = 10e6; // 10megHz
             ac.NumberSteps = 5;

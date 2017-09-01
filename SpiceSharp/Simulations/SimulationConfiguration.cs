@@ -10,7 +10,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get the default simulation configuration
         /// </summary>
-        public static SimulationConfiguration Default { get; }
+        public static SimulationConfiguration Default { get; } = new SimulationConfiguration();
 
         /// <summary>
         /// If true, the operating point calculation immediately skips to the GMIN stepping phase

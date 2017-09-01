@@ -31,14 +31,6 @@ namespace SpiceSharp.Simulations
         public class Sweep : Parameterized<Sweep>
         {
             /// <summary>
-            /// Register our parameters
-            /// </summary>
-            static Sweep()
-            {
-                Register();
-            }
-
-            /// <summary>
             /// Starting value
             /// </summary>
             [SpiceName("start"), SpiceInfo("The starting value")]

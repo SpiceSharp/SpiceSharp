@@ -16,10 +16,10 @@ namespace SpiceSharp
         {
             // Check if we have nodes
             SpiceNodes[] data = (SpiceNodes[])typeof(T).GetCustomAttributes(typeof(SpiceNodes), false);
-            if (data != null)
+            if (data != null && data.Length > 0)
                 pins = data[0].Nodes;
-
-            // Check if we have voltage source drivers
+            else
+                pins = null;
         }
         protected static string[] pins = null;
         protected static int[][] vsrc = null;

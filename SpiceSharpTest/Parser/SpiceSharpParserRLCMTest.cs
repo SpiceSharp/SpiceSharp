@@ -55,7 +55,7 @@ namespace SpiceSharpTest.Parser
             var netlist = Run("L1 A GND 1m",
                 "L2 B GND 2m",
                 "K1 L1 L2 0.5");
-            var m = (MutualInductance)Test<MutualInductance>(netlist, "k1", new string[] { "k" }, new double[] { 0.5 });
+            var m = Test<MutualInductance>(netlist, "k1", new string[] { "k" }, new double[] { 0.5 });
             Assert.AreEqual(m.MUTind1, "l1");
             Assert.AreEqual(m.MUTind2, "l2");
         }

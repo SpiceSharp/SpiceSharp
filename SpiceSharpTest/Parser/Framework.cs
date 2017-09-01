@@ -62,7 +62,7 @@ namespace SpiceSharpTest.Parser
         /// <returns></returns>
         protected T Test<T>(Netlist n, string name, string[] names = null, double[] values = null, string[] nodes = null)
         {
-            ICircuitObject obj = n.Circuit.Objects[name.ToLower()];
+            var obj = n.Circuit.Objects[name.ToLower()];
             Assert.AreEqual(typeof(T), obj.GetType());
 
             // Test all parameters
@@ -92,7 +92,7 @@ namespace SpiceSharpTest.Parser
         {
             for (int i = 0; i < name.Length; i++)
                 name[i] = name[i].ToLower();
-            ICircuitObject obj = n.Circuit.Objects[name];
+            var obj = n.Circuit.Objects[name];
             Assert.AreEqual(typeof(T), obj.GetType());
 
             // Test all parameters

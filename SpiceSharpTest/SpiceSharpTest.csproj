@@ -67,6 +67,7 @@
     <Compile Include="SpiceExpressionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpiceSharpTest.cs" />
+    <Compile Include="SpiceSharpCircuitCheckTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

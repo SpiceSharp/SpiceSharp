@@ -135,7 +135,7 @@ namespace SpiceSharpTest.Models.Transistors
 
             // Make the simulation
             AC ac = new AC("TestMOS1_AC");
-            ac.Config.Gmin = 0; // I simulated the original data with GMIN=0 too
+            ac.Config = new SimulationConfiguration() { Gmin = 0 }; // I simulated the original data with GMIN=0 too
             ac.Config.RelTol = 1e-6; // The DC operating point is a little bit off here
             ac.StartFreq = 1e3;
             ac.StopFreq = 100e9;
