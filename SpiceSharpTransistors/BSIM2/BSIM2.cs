@@ -12,15 +12,6 @@ namespace SpiceSharp.Components
     public class BSIM2 : CircuitComponent<BSIM2>
     {
         /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static BSIM2()
-        {
-            Register();
-            terminals = new string[] { "Drain", "Gate", "Source", "Bulk" };
-        }
-
-        /// <summary>
         /// Gets or sets the device model
         /// </summary>
         public void SetModel(BSIM2Model model) => Model = (ICircuitObject)model;

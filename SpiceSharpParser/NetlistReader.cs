@@ -69,13 +69,7 @@ namespace SpiceSharp
             };
 
             // Parse the netlist and read the statements
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
             StatementsToken main = parser.ParseNetlist(Netlist);
-            sw.Stop();
-            System.Console.WriteLine("Time for parsing: " + sw.ElapsedMilliseconds + " ms");
-
-            sw.Restart();
             for (int i = 0; i < order.Length; i++)
             {
                 foreach (var s in main.Statements(order[i]))

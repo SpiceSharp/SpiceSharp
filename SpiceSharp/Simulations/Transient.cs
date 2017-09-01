@@ -108,7 +108,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The name of the simulation</param>
         /// <param name="config">The configuration</param>
         public Transient(string name, Configuration config = null)
-            : base(name, config ?? new Configuration())
+            : base(name, config)
         {
         }
 
@@ -119,7 +119,7 @@ namespace SpiceSharp.Simulations
         /// <param name="step">The timestep</param>
         /// <param name="final">The final timepoint</param>
         public Transient(string name, double step, double final)
-            : base(name, new Configuration())
+            : base(name, null)
         {
             Step = step;
             FinalTime = final;

@@ -105,7 +105,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The name of the simulation</param>
         /// <param name="config">The configuration</param>
         public AC(string name, Configuration config = null) 
-            : base(name, config ?? new Configuration())
+            : base(name, config)
         {
         }
 
@@ -118,7 +118,7 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The starting frequency</param>
         /// <param name="stop">The stopping frequency</param>
         public AC(string name, string type, int n, double start, double stop)
-            : base(name, new Configuration())
+            : base(name, null)
         {
             switch (type.ToLower())
             {
@@ -179,9 +179,9 @@ namespace SpiceSharp.Simulations
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Gmin = Config.Gmin;
+            state.Gmin = MyConfig.Gmin;
             Initialize(ckt);
-            Op(Config, ckt, MyConfig.DcMaxIterations);
+            Op(MyConfig, ckt, MyConfig.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             state.UseDC = false;
@@ -204,7 +204,7 @@ namespace SpiceSharp.Simulations
                 state.Complex.Laplace = new Complex(0.0, 2.0 * Circuit.CONSTPI * freq);
 
                 // Solve
-                AcIterate(Config, ckt);
+                AcIterate(MyConfig, ckt);
 
                 // Export the timepoint
                 Export(ckt);

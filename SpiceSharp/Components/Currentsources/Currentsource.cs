@@ -13,15 +13,6 @@ namespace SpiceSharp.Components
     public class Currentsource : CircuitComponent<Currentsource>
     {
         /// <summary>
-        /// Register our parameters
-        /// </summary>
-        static Currentsource()
-        {
-            Register();
-            terminals = new string[] { "I+", "I-" };
-        }
-
-        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("waveform"), SpiceInfo("The waveform object for this source")]

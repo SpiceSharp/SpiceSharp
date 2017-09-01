@@ -10,7 +10,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class describes a voltage source
     /// </summary>
-    [SpiceNodes("V+", "V-")]
+    [SpiceNodes("V+", "V-"), VoltageDriver(0, 1), IndependentSource]
     public class Voltagesource : CircuitComponent<Voltagesource>
     {
         /// <summary>

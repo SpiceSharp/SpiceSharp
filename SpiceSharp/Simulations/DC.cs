@@ -31,7 +31,7 @@ namespace SpiceSharp.Simulations
         protected Configuration MyConfig { get { return (Configuration)Config ?? Default; } }
 
         /// <summary>
-        /// A delegate for
+        /// A delegate for when an iteration failed
         /// </summary>
         /// <param name="sender">The object sending the event</param>
         /// <param name="ckt">The circuit</param>
@@ -141,7 +141,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The simulation name</param>
         /// <param name="config">The configuration</param>
         public DC(string name, Configuration config = null)
-            : base(name, config ?? new Configuration())
+            : base(name, config)
         {
         }
 

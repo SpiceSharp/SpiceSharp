@@ -32,7 +32,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets the number of nodes
         /// </summary>
-        public override int NodeCount => Pins.Length;
+        public override int PinCount => Pins.Length;
 
         /// <summary>
         /// Constructor

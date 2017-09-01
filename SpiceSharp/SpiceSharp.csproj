@@ -40,6 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\CurrentDriver.cs" />
+    <Compile Include="Attributes\IndependentSource.cs" />
+    <Compile Include="Attributes\VoltageDriver.cs" />
     <Compile Include="Circuits\CircuitCheck.cs" />
     <Compile Include="Circuits\CircuitStateComplex.cs" />
     <Compile Include="Circuits\CircuitStateReal.cs" />
@@ -100,6 +103,7 @@
     <Compile Include="IntegrationMethods\IntegrationMethod.cs" />
     <Compile Include="Parameters\Parameterized.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Simulations\OP.cs" />
     <Compile Include="Simulations\Simulation.cs" />
     <Compile Include="Simulations\AC.cs" />
     <Compile Include="Simulations\DC.cs" />

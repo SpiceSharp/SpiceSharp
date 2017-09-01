@@ -33,7 +33,7 @@ namespace SpiceSharp
         /// <summary>
         /// Get the number of nodes
         /// </summary>
-        public virtual int NodeCount => connections.Length;
+        public virtual int PinCount => connections.Length;
 
         /// <summary>
         /// Get the name of the component

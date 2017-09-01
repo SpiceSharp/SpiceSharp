@@ -15,7 +15,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Get the node count of the component
         /// </summary>
-        int NodeCount { get; }
+        int PinCount { get; }
 
         /// <summary>
         /// Connect the component
