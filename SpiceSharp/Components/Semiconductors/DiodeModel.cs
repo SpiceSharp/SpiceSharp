@@ -4,9 +4,6 @@ using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
-    /// <summary>
-    /// This class is a model for a diode
-    /// </summary>
     public class DiodeModel : CircuitModel<DiodeModel>
     {
         /// <summary>
@@ -54,8 +51,9 @@ namespace SpiceSharp.Components
         /// Methods
         /// </summary>
         [SpiceName("d"), SpiceInfo("Diode model")]
-        public void SetD(bool value)
+        public void SetDIO_D(bool value)
         {
+
         }
 
         /// <summary>
@@ -86,29 +84,21 @@ namespace SpiceSharp.Components
         {
 
             if (!DIOnomTemp.Given)
-                DIOnomTemp.Value = ckt.State.NominalTemperature;
-            vtnom = Circuit.CONSTKoverQ * DIOnomTemp;
-
-            /* limit grading coeff to max of .9 */
-            if (DIOgradingCoeff > 0.9)
             {
-                CircuitWarning.Warning(this, $"{Name}: garding coefficient too large, limited to 0.9");
-                DIOgradingCoeff.Value = 0.9;
+                DIOnomTemp.Value = ckt.State.NominalTemperature;
             }
+            vtnom = Circuit.CONSTKoverQ * DIOnomTemp;
+            /* limit grading coeff to max of .9 */
+            if (DIOgradingCoeff > .9)
+                CircuitWarning.Warning(this, $"{Name}: grading coefficient too large, limited to 0.9");
 
             /* limit activation energy to min of .1 */
             if (DIOactivationEnergy < .1)
-            {
                 CircuitWarning.Warning(this, $"{Name}: activation energy too small, limited to 0.1");
-                DIOactivationEnergy.Value = 0.1;
-            }
+
             /* limit depletion cap coeff to max of .95 */
             if (DIOdepletionCapCoeff > .95)
-            {
                 CircuitWarning.Warning(this, $"{Name}: coefficient Fc too large, limited to 0.95");
-                DIOdepletionCapCoeff.Value = 0.95;
-            }
-
             if (!DIOresist.Given || DIOresist.Value == 0)
                 DIOconductance = 0;
             else

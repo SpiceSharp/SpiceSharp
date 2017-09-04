@@ -1,7 +1,8 @@
 ﻿using System;
 using SpiceSharp.Parameters;
+using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Components.Waveforms
+namespace SpiceSharp.Components
 {
     /// <summary>
     /// A class that represents a pulsed waveform
@@ -74,6 +75,10 @@ namespace SpiceSharp.Components.Waveforms
             pw = PulseWidth;
             per = Period;
             lastbasetime = double.NaN;
+
+            // Some checks
+            if (per <= tr + pw + tf)
+                throw new CircuitException($"Invalid pulse specification: Period {per} is too small");
         }
 
         /// <summary>

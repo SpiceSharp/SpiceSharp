@@ -90,8 +90,10 @@ namespace SpiceSharp.Circuits
                 if (objects.ContainsKey(c.Name))
                     throw new CircuitException($"A component with the name {c.Name} already exists");
                 objects.Add(c.Name, c);
+
                 if (c is Subcircuit)
                     subckts.Add((Subcircuit)c);
+                
                 isordered = false;
             }
         }
@@ -172,23 +174,47 @@ namespace SpiceSharp.Circuits
         /// This method is called when building an ordered list of circuit objects
         /// Circuit objects will be called by descending priority
         /// </summary>
-        public void BuildOrderedComponentList()
+        public void BuildOrderedComponentList() => BuildOrderedComponentList(this);
+
+        /// <summary>
+        /// Build ordered list of components
+        /// This method is called recursively for subcircuits
+        /// </summary>
+        /// <param name="root"></param>
+        private void BuildOrderedComponentList(CircuitObjects root)
         {
             if (isordered)
                 return;
 
             // Initialize
             ordered.Clear();
+            HashSet<ICircuitObject> toadd = new HashSet<ICircuitObject>();
 
             // Build our list
             foreach (var c in objects.Values)
             {
                 ordered.Add(c);
 
-                // Do ordering for subcircuits
-                if (c is Subcircuit)
-                    (c as Subcircuit).Objects.BuildOrderedComponentList();
+                // Keep track of the models that aren't part of the circuit yet
+                if (c is ICircuitComponent)
+                {
+                    var model = (c as ICircuitComponent).Model;
+                    if (model != null)
+                        toadd.Add(model);
+                }
             }
+
+            // Add models automatically to the root object list
+            // This way, we are sure that subcircuits don't add them multiple times
+            foreach (var model in toadd)
+            {
+                if (!ordered.Contains(model) && !root.ordered.Contains(model))
+                    root.ordered.Add(model);
+            }
+
+            // Deal with subcircuits
+            foreach (var subckt in subckts)
+                subckt.Objects.BuildOrderedComponentList(root);
 
             // Sort the list based on priority
             ordered.Sort((ICircuitObject a, ICircuitObject b) => {

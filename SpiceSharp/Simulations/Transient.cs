@@ -217,9 +217,7 @@ namespace SpiceSharp.Simulations
                         if (method.Delta <= DeltaMin)
                         {
                             if (olddelta <= DeltaMin)
-                            {
-                                throw new CircuitException($"Timestep too small: {method.Delta}");
-                            }
+                                throw new CircuitException($"Timestep too small at time {method.SavedTime}: {method.Delta}");
                         }
                     }
                 }

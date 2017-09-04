@@ -1,7 +1,7 @@
 ﻿using System;
 using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.Waveforms
+namespace SpiceSharp.Components
 {
     /// <summary>
     /// This class is capable of generating a sine wave

@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Components;
-using SpiceSharp.Components.Waveforms;
 
 namespace SpiceSharp.Parser.Readers.Waveforms
 {

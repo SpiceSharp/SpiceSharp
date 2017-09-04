@@ -2,21 +2,18 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
+using SpiceSharp.Components.Semiconductors;
 using System.Numerics;
-using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    /// <summary>
-    /// This class represents a diode
-    /// </summary>
     [SpiceNodes("D+", "D-")]
     public class Diode : CircuitComponent<Diode>
     {
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public void SetModel(DiodeModel model) => Model = (DiodeModel)model;
+        public void SetModel(DiodeModel model) => Model = model;
 
         /// <summary>
         /// Parameters
@@ -24,7 +21,7 @@ namespace SpiceSharp.Components
         [SpiceName("area"), SpiceInfo("Area factor")]
         public Parameter DIOarea { get; } = new Parameter(1);
         [SpiceName("temp"), SpiceInfo("Instance temperature")]
-        public double TEMP
+        public double DIO_TEMP
         {
             get => DIOtemp - Circuit.CONSTCtoK;
             set => DIOtemp.Set(value + Circuit.CONSTCtoK);
@@ -43,17 +40,16 @@ namespace SpiceSharp.Components
         /// Methods
         /// </summary>
         [SpiceName("vd"), SpiceInfo("Diode voltage")]
-        public double GetVOLTAGE(Circuit ckt) => ckt.State.States[0][DIOstate + DIOvoltage];
+        public double GetDIO_VOLTAGE(Circuit ckt) => ckt.State.States[0][DIOstate + DIOvoltage];
         [SpiceName("id"), SpiceName("c"), SpiceInfo("Diode current")]
-        public double GetCURRENT(Circuit ckt) => ckt.State.States[0][DIOstate + DIOcurrent];
+        public double GetDIO_CURRENT(Circuit ckt) => ckt.State.States[0][DIOstate + DIOcurrent];
         [SpiceName("charge"), SpiceInfo("Diode capacitor charge")]
-        public double GetCHARGE(Circuit ckt) => ckt.State.States[0][DIOstate + DIOcapCharge];
+        public double GetDIO_CHARGE(Circuit ckt) => ckt.State.States[0][DIOstate + DIOcapCharge];
         [SpiceName("capcur"), SpiceInfo("Diode capacitor current")]
-        public double GetCAPCUR(Circuit ckt) => ckt.State.States[0][DIOstate + DIOcapCurrent];
+        public double GetDIO_CAPCUR(Circuit ckt) => ckt.State.States[0][DIOstate + DIOcapCurrent];
         [SpiceName("gd"), SpiceInfo("Diode conductance")]
-        public double GetCONDUCT(Circuit ckt) => ckt.State.States[0][DIOstate + DIOconduct];
+        public double GetDIO_CONDUCT(Circuit ckt) => ckt.State.States[0][DIOstate + DIOconduct];
         [SpiceName("p"), SpiceInfo("Diode power")]
-        public double GetPOWER(Circuit ckt) => ckt.State.States[0][DIOstate + DIOcurrent] * ckt.State.States[0][DIOstate + DIOvoltage];
 
         /// <summary>
         /// Extra variables
@@ -78,7 +74,6 @@ namespace SpiceSharp.Components
         private const int DIOconduct = 2;
         private const int DIOcapCharge = 3;
         private const int DIOcapCurrent = 4;
-        private const int DIOsensxp = 5;
 
         /// <summary>
         /// Constructor
@@ -102,11 +97,11 @@ namespace SpiceSharp.Components
             DIOnegNode = nodes[1].Index;
 
             // Allocate states
-            DIOstate = ckt.State.GetState(6);
+            DIOstate = ckt.State.GetState(5);
 
             if (model.DIOresist.Value == 0)
                 DIOposPrimeNode = DIOposNode;
-            else if (DIOposPrimeNode == 0)
+            else
                 DIOposPrimeNode = CreateNode(ckt).Index;
         }
 
@@ -123,13 +118,12 @@ namespace SpiceSharp.Components
             if (!DIOtemp.Given)
                 DIOtemp.Value = ckt.State.Temperature;
             vt = Circuit.CONSTKoverQ * DIOtemp;
-
             /* this part gets really ugly - I won't even try to
 			* explain these equations */
             fact2 = DIOtemp / Circuit.CONSTRefTemp;
             egfet = 1.16 - (7.02e-4 * DIOtemp * DIOtemp) / (DIOtemp + 1108);
             arg = -egfet / (2 * Circuit.CONSTBoltz * DIOtemp) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp +
-                 Circuit.CONSTRefTemp));
+                Circuit.CONSTRefTemp));
             pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
             egfet1 = 1.16 - (7.02e-4 * model.DIOnomTemp * model.DIOnomTemp) / (model.DIOnomTemp + 1108);
             arg1 = -egfet1 / (Circuit.CONSTBoltz * 2 * model.DIOnomTemp) + 1.1150877 / (2 * Circuit.CONSTBoltz * Circuit.CONSTRefTemp);
@@ -143,7 +137,7 @@ namespace SpiceSharp.Components
             DIOtJctCap *= 1 + model.DIOgradingCoeff * (400e-6 * (DIOtemp - Circuit.CONSTRefTemp) - gmanew);
 
             DIOtSatCur = model.DIOsatCur * Math.Exp(((DIOtemp / model.DIOnomTemp) - 1) * model.DIOactivationEnergy /
-                 (model.DIOemissionCoeff * vt) + model.DIOsaturationCurrentExp / model.DIOemissionCoeff * Math.Log(DIOtemp / model.DIOnomTemp));
+                (model.DIOemissionCoeff * vt) + model.DIOsaturationCurrentExp / model.DIOemissionCoeff * Math.Log(DIOtemp / model.DIOnomTemp));
             /* the defintion of f1, just recompute after temperature adjusting
 			* all the variables used in it */
             DIOtF1 = DIOtJctPot * (1 - Math.Exp((1 - model.DIOgradingCoeff) * model.xfc)) / (1 - model.DIOgradingCoeff);
@@ -160,7 +154,7 @@ namespace SpiceSharp.Components
                 if (cbv < DIOtSatCur * model.DIObreakdownVoltage / vt)
                 {
                     cbv = DIOtSatCur * model.DIObreakdownVoltage / vt;
-                    CircuitWarning.Warning(this, $"{Name}: breakdown current increased to {cbv} to resolve incompatability with specified saturation current");
+                    CircuitWarning.Warning(this, $"{Name}: breakdown current increased to {cbv.ToString("g")} to resolve incompatability with specified saturation current");
                     xbv = model.DIObreakdownVoltage;
                 }
                 else
@@ -174,7 +168,7 @@ namespace SpiceSharp.Components
                         xcbv = DIOtSatCur * (Math.Exp((model.DIObreakdownVoltage - xbv) / vt) - 1 + xbv / vt);
                         if (Math.Abs(xcbv - cbv) <= tol) goto matched;
                     }
-                    CircuitWarning.Warning(this, $"{Name}: unable to match forward and reverse diode regions: bv = {xbv}, ibc = {xcbv}");
+                    CircuitWarning.Warning(this, $"{Name}: unable to match forward and reverse diode regions: bv = {xbv.ToString("g")}, ibv = {xcbv.ToString("g")}");
                 }
                 matched:
                 DIOtBrkdwnV = xbv;
@@ -191,63 +185,71 @@ namespace SpiceSharp.Components
             var state = ckt.State;
             var rstate = state.Real;
             var method = ckt.Method;
-            double csat, gspr, vt, vte, vd;
-            int Check;
-            double delvd, cdhat, vdtemp, evd, cd, gd, arg, evrev, czero, sarg, capd, czof2;
-            double cdeq;
+            bool Check;
+            double csat, gspr, vt, vte, vd, delvd, cdhat, vdtemp, evd, cd, gd, arg, evrev, czero, sarg, capd, czof2, cdeq;
 
             /* 
-           * this routine loads diodes for dc and transient analyses.
-           */
+             * this routine loads diodes for dc and transient analyses.
+             */
+
             csat = DIOtSatCur * DIOarea;
             gspr = model.DIOconductance * DIOarea;
             vt = Circuit.CONSTKoverQ * DIOtemp;
             vte = model.DIOemissionCoeff * vt;
-
             /* 
-			* initialization 
-			*/
-            Check = 1;
+			 * initialization 
+			 */
+             
+            Check = true;
             if (state.UseSmallSignal)
+            {
                 vd = state.States[0][DIOstate + DIOvoltage];
+            }
             else if (method != null && method.SavedTime == 0.0)
+            {
                 vd = state.States[1][DIOstate + DIOvoltage];
-            else if (state.Init == CircuitState.InitFlags.InitJct && (state.Domain == CircuitState.DomainTypes.Time && state.UseDC) && state.UseIC)
+                Check = false; // EDIT: Spice does not check the first timepoint for convergence, but we do...
+            }
+            else if ((state.Init == CircuitState.InitFlags.InitJct) && (state.Domain == CircuitState.DomainTypes.Time && state.UseDC) &&
+              state.UseIC)
+            {
                 vd = DIOinitCond;
-            else if (state.Init == CircuitState.InitFlags.InitJct && DIOoff)
+            }
+            else if ((state.Init == CircuitState.InitFlags.InitJct) && DIOoff)
+            {
                 vd = 0;
+            }
             else if (state.Init == CircuitState.InitFlags.InitJct)
+            {
                 vd = DIOtVcrit;
-            else if (state.Init == CircuitState.InitFlags.InitFix && DIOoff)
+            }
+            else if (ckt.State.Init == CircuitState.InitFlags.InitFix && DIOoff)
+            {
                 vd = 0;
+            }
             else
             {
-                /* PREDICTOR */
                 vd = rstate.OldSolution[DIOposPrimeNode] - rstate.OldSolution[DIOnegNode];
-                /* PREDICTOR */
                 delvd = vd - state.States[0][DIOstate + DIOvoltage];
                 cdhat = state.States[0][DIOstate + DIOcurrent] + state.States[0][DIOstate + DIOconduct] * delvd;
+
                 /* 
-				* bypass if solution has not changed
-				*/
-                /* NOBYPASS */
-                /* 
-				* limit new junction voltage
-				*/
+				 * limit new junction voltage
+				 */
                 if ((model.DIObreakdownVoltage.Given) && (vd < Math.Min(0, -DIOtBrkdwnV + 10 * vte)))
                 {
                     vdtemp = -(vd + DIOtBrkdwnV);
-                    vdtemp = Transistor.DEVpnjlim(vdtemp, -(state.States[0][DIOstate + DIOvoltage] + DIOtBrkdwnV), vte, DIOtVcrit, ref Check);
+                    vdtemp = Semiconductor.DEVpnjlim(vdtemp, -(state.States[0][DIOstate + DIOvoltage] + DIOtBrkdwnV), vte, DIOtVcrit, ref Check);
                     vd = -(vdtemp + DIOtBrkdwnV);
                 }
                 else
                 {
-                    vd = Transistor.DEVpnjlim(vd, state.States[0][DIOstate + DIOvoltage], vte, DIOtVcrit, ref Check);
+                    vd = Semiconductor.DEVpnjlim(vd, state.States[0][DIOstate + DIOvoltage], vte, DIOtVcrit, ref Check);
                 }
             }
             /* 
-			* compute dc current and derivitives
-			*/
+			 * compute dc current and derivitives
+			 */
             if (vd >= -3 * vte)
             {
                 evd = Math.Exp(vd / vte);
@@ -267,8 +269,7 @@ namespace SpiceSharp.Components
                 cd = -csat * evrev + state.Gmin * vd;
                 gd = csat * evrev / vte + state.Gmin;
             }
-
-            if (method != null || state.UseSmallSignal || (state.Domain == CircuitState.DomainTypes.Time && state.UseDC) && state.UseIC)
+            if ((method != null || state.UseSmallSignal) || (state.Domain == CircuitState.DomainTypes.Time && state.UseDC) && state.UseIC)
             {
                 /* 
 				* charge storage elements
@@ -279,14 +280,14 @@ namespace SpiceSharp.Components
                     arg = 1 - vd / model.DIOjunctionPot;
                     sarg = Math.Exp(-model.DIOgradingCoeff * Math.Log(arg));
                     state.States[0][DIOstate + DIOcapCharge] = model.DIOtransitTime * cd + model.DIOjunctionPot * czero * (1 - arg * sarg) / (1 -
-                         model.DIOgradingCoeff);
+                        model.DIOgradingCoeff);
                     capd = model.DIOtransitTime * gd + czero * sarg;
                 }
                 else
                 {
                     czof2 = czero / model.DIOf2;
                     state.States[0][DIOstate + DIOcapCharge] = model.DIOtransitTime * cd + czero * DIOtF1 + czof2 * (model.DIOf3 * (vd -
-                         DIOtDepCap) + (model.DIOgradingCoeff / (model.DIOjunctionPot + model.DIOjunctionPot)) * (vd * vd - DIOtDepCap * DIOtDepCap));
+                        DIOtDepCap) + (model.DIOgradingCoeff / (model.DIOjunctionPot + model.DIOjunctionPot)) * (vd * vd - DIOtDepCap * DIOtDepCap));
                     capd = model.DIOtransitTime * gd + czof2 * (model.DIOf3 + model.DIOgradingCoeff * vd / model.DIOjunctionPot);
                 }
                 DIOcap = capd;
@@ -294,35 +295,37 @@ namespace SpiceSharp.Components
                 /* 
 				* store small - signal parameters
 				*/
-                if (!(state.Domain == CircuitState.DomainTypes.Time && state.UseDC) || !state.UseIC)
+                if ((!(state.Domain == CircuitState.DomainTypes.Time && state.UseDC)) || (!state.UseIC))
                 {
                     if (state.UseSmallSignal)
                     {
                         state.States[0][DIOstate + DIOcapCurrent] = capd;
                         return;
                     }
-                    
-                    if (method != null && method.SavedTime == 0.0)
-                        state.States[1][DIOstate + DIOcapCharge] = state.States[0][DIOstate + DIOcapCharge];
+
+                    /* 
+					 * transient analysis
+					 */
                     if (method != null)
                     {
-                        var result = method.Integrate(state, DIOstate + DIOcapCharge, capd);
-                        gd = gd + result.Geq;
+                        if (method.SavedTime == 0.0)
+                            state.States[1][DIOstate + DIOcapCharge] = state.States[0][DIOstate + DIOcapCharge];
+                            var result = method.Integrate(state, DIOstate + DIOcapCharge, capd);
+                            gd = gd + result.Geq;
+                            cd = cd + state.States[0][DIOstate + DIOcapCurrent];
+                        if (method != null && method.SavedTime == 0.0)
+                            state.States[1][DIOstate + DIOcapCurrent] = state.States[0][DIOstate + DIOcapCurrent];
                     }
-
-                    cd = cd + state.States[0][DIOstate + DIOcapCurrent];
-                    if (method != null && method.SavedTime == 0.0)
-                        state.States[1][DIOstate + DIOcapCurrent] = state.States[0][DIOstate + DIOcapCurrent];
                 }
             }
 
             /* 
-			* check convergence
-			*/
-            if ((state.Init != CircuitState.InitFlags.InitFix) || !DIOoff)
+			 * check convergence
+			 */
+            if (((state.Init != CircuitState.InitFlags.InitFix)) || (!(DIOoff)))
             {
-                if (Check == 1)
-                    state.IsCon = false;
+                if (Check)
+                    ckt.State.IsCon = false;
             }
             state.States[0][DIOstate + DIOvoltage] = vd;
             state.States[0][DIOstate + DIOcurrent] = cd;
@@ -334,7 +337,6 @@ namespace SpiceSharp.Components
             cdeq = cd - gd * vd;
             rstate.Rhs[DIOnegNode] += cdeq;
             rstate.Rhs[DIOposPrimeNode] -= cdeq;
-
             /* 
 			 * load matrix
 			 */
@@ -356,20 +358,21 @@ namespace SpiceSharp.Components
             var model = Model as DiodeModel;
             var state = ckt.State;
             var cstate = state.Complex;
-            double gspr;
-            double geq;
-            Complex xceq;
+            double gspr, geq, xceq;
 
             gspr = model.DIOconductance * DIOarea;
             geq = state.States[0][DIOstate + DIOconduct];
-            xceq = state.States[0][DIOstate + DIOcapCurrent] * cstate.Laplace;
+            xceq = state.States[0][DIOstate + DIOcapCurrent] * cstate.Laplace.Imaginary;
             cstate.Matrix[DIOposNode, DIOposNode] += gspr;
-            cstate.Matrix[DIOnegNode, DIOnegNode] += geq + xceq;
-            cstate.Matrix[DIOposPrimeNode, DIOposPrimeNode] += geq + gspr + xceq;
+            cstate.Matrix[DIOnegNode, DIOnegNode] += new Complex(geq, xceq);
+
+            cstate.Matrix[DIOposPrimeNode, DIOposPrimeNode] += new Complex(geq + gspr, xceq);
+
             cstate.Matrix[DIOposNode, DIOposPrimeNode] -= gspr;
-            cstate.Matrix[DIOnegNode, DIOposPrimeNode] -= geq + xceq;
+            cstate.Matrix[DIOnegNode, DIOposPrimeNode] -= new Complex(geq, xceq);
+
             cstate.Matrix[DIOposPrimeNode, DIOposNode] -= gspr;
-            cstate.Matrix[DIOposPrimeNode, DIOnegNode] -= geq + xceq;
+            cstate.Matrix[DIOposPrimeNode, DIOnegNode] -= new Complex(geq, xceq);
         }
     }
 }

@@ -205,8 +205,6 @@ namespace Spice2SpiceSharp
                 // Write namespace and class
                 WriteCode(sw, "", "namespace SpiceSharp.Components", "{");
                 WriteCode(sw, $"public class {name}Model : CircuitModel<{name}Model>", "{");
-                WriteCode(sw, "/// <summary>", "/// Register our model parameters", "/// </summary>");
-                WriteCode(sw, $"static {name}Model()", "{", "Register();", "}", "");
 
                 // Write the model parameters
                 WriteCode(sw, "/// <summary>", "/// Parameters", "/// </summary>");
@@ -287,9 +285,6 @@ namespace Spice2SpiceSharp
                 // Write namespace and class
                 WriteCode(sw, "", "namespace SpiceSharp.Components", "{");
                 WriteCode(sw, $"public class {name} : CircuitComponent<{name}>", "{");
-
-                WriteCode(sw, "/// <summary>", "/// Register our device parameters and terminals", "/// </summary>");
-                WriteCode(sw, $"static {name}()", "{", "Register();", "terminals = new string[] {};", "}", "");
 
                 // Write device declaration
                 WriteCode(sw, "/// <summary>", "/// Gets or sets the device model", "/// </summary>");
