@@ -9,6 +9,9 @@ using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Circuits
 {
+    /// <summary>
+    /// This class can check a circuit for common errors
+    /// </summary>
     public class CircuitCheck
     {
         /// <summary>
@@ -33,11 +36,14 @@ namespace SpiceSharp.Circuits
         public void Check(Circuit ckt)
         {
             // Make sure the circuit is set up
+            // We need this to access all the circuit component nodes
             ckt.Setup();
 
             // Initialize
             HasSource = false;
             voltagedriven.Clear();
+            unconnected.Clear();
+            connections.Clear();
 
             // Check all objects
             foreach (var c in ckt.Objects)
@@ -243,11 +249,6 @@ namespace SpiceSharp.Circuits
 
             // The list that remains are all unconnected nodes
             return unconnected.Count;
-        }
-
-        private void GetNodes(int[] indices, Nodes n)
-        {
-
         }
     }
 }

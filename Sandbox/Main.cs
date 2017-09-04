@@ -13,6 +13,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Parameters;
 using SpiceSharp.Parser.Readers;
+using SpiceSharp.Designer;
 
 namespace Sandbox
 {
@@ -47,9 +48,7 @@ namespace Sandbox
             NetlistReader nr = new NetlistReader();
             MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(netlist));
             nr.Parse(ms);
-
-            SpiceSharp.Circuits.CircuitCheck check = new SpiceSharp.Circuits.CircuitCheck();
-            check.Check(nr.Netlist.Circuit);
+            nr.Netlist.Circuit.Check();
 
             // Create the plots for the output using the export list
             Series[] plots = new Series[nr.Netlist.Exports.Count];
@@ -83,12 +82,6 @@ namespace Sandbox
             nr.Netlist.Simulate();
 
             chMain.ChartAreas[0].AxisX.RoundAxisValues();
-
-        }
-
-        private void CircuitWarning_WarningGenerated(object sender, SpiceSharp.Diagnostics.WarningArgs e)
-        {
-            throw new Exception(e.Message);
         }
     }
 }

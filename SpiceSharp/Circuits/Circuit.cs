@@ -104,6 +104,9 @@ namespace SpiceSharp
 
             // Initialize the state
             State.Initialize(this);
+
+            // Lock our nodes
+            Nodes.Lock();
         }
 
         /// <summary>
@@ -115,15 +118,15 @@ namespace SpiceSharp
                 return;
             IsSetup = false;
 
-            // Unsetup devices
-            foreach (var c in Objects)
-                c.Unsetup(this);
+            // Remove all nodes
+            Nodes.Clear();
 
             // Destroy state
             State.Destroy();
 
-            // Remove all nodes
-            Nodes.Clear();
+            // Unsetup devices
+            foreach (var c in Objects)
+                c.Unsetup(this);
         }
 
         /// <summary>
@@ -141,6 +144,15 @@ namespace SpiceSharp
             State.Destroy();
             Statistics.Clear();
             Objects.Clear();
+        }
+
+        /// <summary>
+        /// Check the circuit
+        /// </summary>
+        public void Check()
+        {
+            CircuitCheck checker = new CircuitCheck();
+            checker.Check(this);
         }
     }
 }

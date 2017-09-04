@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiceSharpTest", "SpiceShar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.csproj", "{8A97174E-3144-466F-AE26-20A43124ABF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiceSharpDesigner", "SpiceSharpDesigner\SpiceSharpDesigner.csproj", "{57203828-BB65-4927-A232-28F8051FACA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{8A97174E-3144-466F-AE26-20A43124ABF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A97174E-3144-466F-AE26-20A43124ABF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A97174E-3144-466F-AE26-20A43124ABF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57203828-BB65-4927-A232-28F8051FACA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57203828-BB65-4927-A232-28F8051FACA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57203828-BB65-4927-A232-28F8051FACA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57203828-BB65-4927-A232-28F8051FACA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
