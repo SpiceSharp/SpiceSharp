@@ -14,6 +14,7 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Parameters;
 using SpiceSharp.Parser.Readers;
 using SpiceSharp.Designer;
+using SpiceSharp.Diagnostics;
 
 namespace Sandbox
 {
@@ -26,62 +27,32 @@ namespace Sandbox
         {
             InitializeComponent();
 
-            // The netlist
-            string netlist = string.Join(Environment.NewLine, new string[]
-            {
-                ".MODEL MM NMOS LEVEL=1 IS=1e-32",
-                "+VTO=3.03646 LAMBDA=0 KP=5.28747",
-                "+CGSO=6.5761e-06 CGDO=1e-11",
-                "vinput in gnd 0 pulse(0 5 1u 1n 1n 5u 10u)",
-                "mstage out in gnd gnd MM l = 100u w = 100u",
-                "rload vdd out 100",
-                "cload out gnd 100n",
-                "vsupply vdd gnd 5.0",
-                ".save v(in) v(out)",
-                ".tran 1n 20u"
-            });
-
-            chMain.ChartAreas[0].AxisX.Minimum = 0;
-            chMain.ChartAreas[0].AxisX.Maximum = 20e-6;
-
-            // Read
+            // Initialize + Add BSIM transistor models!
             NetlistReader nr = new NetlistReader();
+            BSIMParser.AddMosfetGenerators(nr.Netlist.Readers[StatementType.Component].Find<MosfetReader>().Mosfets);
+            BSIMParser.AddMosfetModelGenerators(nr.Netlist.Readers[StatementType.Model].Find<MosfetModelReader>().Levels);
+            nr.Parse(@"D:\Visual Studio\Info\nmos.mod");
+
+            // Parse a circuit netlist: Diode-connected transistor
+            string netlist = string.Join(Environment.NewLine,
+                "Vsupply VDD GND 3.3",
+                "Ibias NBIAS VDD 20u",
+                "X1 NBIAS NBIAS GND GND nmos w=2.1u l=1u",
+                ".dc Ibias 1u 50u 0.5u");
             MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(netlist));
             nr.Parse(ms);
-            nr.Netlist.Circuit.Check();
+            IParameterized mos = (IParameterized)nr.Netlist.Circuit.Objects["x1", "m1"];
 
-            // Create the plots for the output using the export list
-            Series[] plots = new Series[nr.Netlist.Exports.Count];
-            for (int i = 0; i < plots.Length; i++)
-            {
-                plots[i] = chMain.Series.Add(nr.Netlist.Exports[i].Name);
-                plots[i].ChartType = SeriesChartType.FastLine;
-            }
+            // Build a design step to find the width where vgs-vth = 0.2V (strong inversion)
+            Newton step = new Newton();
+            step.Minimum = 0.4e-6;
+            step.Maximum = 1e-3;
+            step.Target = 0.2;
+            step.Apply = (DesignStep s, Circuit ckt, double value) => mos.Set("w", value);
+            step.Measurement = new OPMeasurement((SimulationData data) => mos.Ask("vgs", data.Circuit) - mos.Ask("vth"));
+            step.Execute(nr.Netlist.Circuit);
 
-            // Simulate
-            nr.Netlist.OnExportSimulationData += (object sender, SimulationData data) =>
-            {
-                for (int i = 0; i < plots.Length; i++)
-                {
-                    var export = nr.Netlist.Exports[i];
-                    double x = 0.0;
-                    switch (data.Circuit.State.Domain)
-                    {
-                        case SpiceSharp.Circuits.CircuitState.DomainTypes.Time: x = data.GetTime(); break;
-                        case SpiceSharp.Circuits.CircuitState.DomainTypes.Frequency: x = data.GetFrequency(); break;
-                        case SpiceSharp.Circuits.CircuitState.DomainTypes.None:
-                            DC dc = (DC)data.Circuit.Simulation;
-                            x = dc.Sweeps[dc.Sweeps.Count - 1].CurrentValue;
-                            break;
-                        default:
-                            throw new Exception("Unknown type");
-                    }
-                    plots[i].Points.AddXY(x, export.Extract(data));
-                }
-            };
-            nr.Netlist.Simulate();
-
-            chMain.ChartAreas[0].AxisX.RoundAxisValues();
+            MessageBox.Show($"Design step result: {(step.Result * 1e6).ToString("G3")} um / 1um in {step.Iterations} iterations");
         }
     }
 }

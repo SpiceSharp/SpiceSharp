@@ -75,9 +75,6 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            // Order the objects
-            Objects.BuildOrderedComponentList();
-
             // Introduce a pin new map
             ckt.Nodes.PushPinMap(Name + Delimiter, map);
 

@@ -169,7 +169,8 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// This method will generate a list of circuit objects with first all models, followed by all the objects
+        /// This method is called when building an ordered list of circuit objects
+        /// Circuit objects will be called by descending priority
         /// </summary>
         public void BuildOrderedComponentList()
         {
@@ -178,24 +179,15 @@ namespace SpiceSharp.Circuits
 
             // Initialize
             ordered.Clear();
-            var added = new HashSet<ICircuitObject>();
 
             // Build our list
             foreach (var c in objects.Values)
             {
-                if (c is ICircuitComponent)
-                {
-                    var m = (c as ICircuitComponent).Model;
-                    if (m != null && !added.Contains(m))
-                    {
-                        added.Add(m);
-                        ordered.Add(m);
-                    }
-                }
+                ordered.Add(c);
 
-                // Add the component if it is not already a model that was added
-                if (!added.Contains(c))
-                    ordered.Add(c);
+                // Do ordering for subcircuits
+                if (c is Subcircuit)
+                    (c as Subcircuit).Objects.BuildOrderedComponentList();
             }
 
             // Sort the list based on priority

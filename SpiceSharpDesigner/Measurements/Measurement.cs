@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Designer
 {

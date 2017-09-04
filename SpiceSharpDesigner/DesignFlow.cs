@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpiceSharp.Designer
 {
@@ -21,6 +18,10 @@ namespace SpiceSharp.Designer
         {
             if (ckt == null)
                 throw new ArgumentNullException(nameof(ckt));
+
+            // Execute all the steps
+            for (int i = 0; i < Steps.Count; i++)
+                Steps[i].Execute(ckt);
         }
     }
 }
