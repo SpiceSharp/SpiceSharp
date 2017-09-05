@@ -1,3 +1,6 @@
 configuration: Debug
 build:
   project: SpiceSharp.sln
+
+before-build:
+  - nuget restore
