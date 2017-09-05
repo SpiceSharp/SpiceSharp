@@ -10,6 +10,8 @@ SpiceSharp is available as a **NuGet Package**.
 [![NuGet Badge](https://buildstats.info/nuget/spicesharp)](https://www.nuget.org/packages/SpiceSharp/) SpiceSharp <br />
 [![NuGet Badge](https://buildstats.info/nuget/spicesharpparser)](https://www.nuget.org/packages/SpiceSharpParser/) SpiceSharp Parser
 
+[![Build status](https://ci.appveyor.com/api/projects/status/hhg89ejd795ykmvh?svg=true)](https://ci.appveyor.com/project/svenboulanger/spicesharp)
+
 ## SpiceSharp
 The basic usage is pretty easy. A `Circuit` object will hold all circuit objects, and can run a simulation. For example, doing a transient analysis of a simple RC-filter will look like this:
 
