@@ -11,12 +11,12 @@
     <iconUrl>https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceNetIcon.png?raw=true</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial NuGet package</releaseNotes>
+    <releaseNotes>Fixed dependencies</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>circuit electronics netlist parser spice simulator simulation ode solver</tags>
 	
 	<dependencies>
-		<dependency id="MathNet.Numerics" version="3.20.0.0" />
+		<dependency id="SpiceSharp" version="1.0.0" />
 	</dependencies>
   </metadata>
 </package>

@@ -31,22 +31,24 @@ namespace Sandbox
             Series output = chMain.Series.Add("Output");
             output.ChartType = SeriesChartType.Line;
 
-            Circuit ckt = new Circuit();
-            Diode d = new Diode("D1");
-            d.Connect("OUT", "GND");
-            d.SetModel(new DiodeModel("DiodeModel"));
-            ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "GND", new Pulse(-5, 5, 1e-3, 1e-5, 1e-5, 1e-3, 2e-3)),
-                new Resistor("R1", "IN", "OUT", 1e3),
-                d
+            string netlist = string.Join(Environment.NewLine,
+                ".MODEL diomod D is=1e-14",
+                "Vinput IN GND 0.0",
+                "Rseries IN OUT {1k * 10}",
+                "Dload OUT GND diomod",
+                ".SAVE v(OUT)",
+                ".DC Vinput -5 5 50m"
                 );
-            DC dc = new DC("DC 1");
-            dc.Sweeps.Add(new DC.Sweep("V1", -5.0, 5.0, 10e-3));
-            dc.OnExportSimulationData += (object sender, SimulationData data) =>
+            NetlistReader nr = new NetlistReader();
+            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(netlist));
+            nr.Parse(ms);
+            nr.Netlist.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                output.Points.AddXY(dc.Sweeps[0].CurrentValue, data.GetVoltage("OUT"));
+                double inp = data.GetVoltage("in");
+                double outp = nr.Netlist.Exports[0].Extract(data);
+                output.Points.AddXY(inp, outp);
             };
-            ckt.Simulate(dc);
+            nr.Netlist.Simulate();
 
             chMain.ChartAreas[0].AxisX.RoundAxisValues();
         }

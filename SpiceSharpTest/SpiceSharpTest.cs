@@ -111,7 +111,7 @@ namespace SpiceSharpTest
 
             // Create a simple lowpass network
             Voltagesource vsrc = new Voltagesource("V1", "IN", "GND", 
-                new SpiceSharp.Components.Waveforms.Pulse(0.0, 5.0, 1e-3, 1e-9, 1e-9, 10, 20));
+                new Pulse(0.0, 5.0, 1e-3, 1e-9, 1e-9, 10, 20));
             vsrc.Set("dc", 0.0);
             Resistor res = new Resistor("R1", "IN", "OUT", 1e3);
             Capacitor cap = new Capacitor("C1", "OUT", "GND", 1e-6);

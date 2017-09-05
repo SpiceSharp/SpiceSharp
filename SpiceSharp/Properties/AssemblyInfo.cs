@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SpiceSharp")]
-[assembly: AssemblyDescription("Spice-based circuit simulator written in C#. Uses Spice.NET for solving matrix equations.")]
+[assembly: AssemblyDescription("Spice-based circuit simulator written in C#. Uses Math.Net for solving matrix equations.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Sven Boulanger")]
 [assembly: AssemblyProduct("SpiceSharp")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]

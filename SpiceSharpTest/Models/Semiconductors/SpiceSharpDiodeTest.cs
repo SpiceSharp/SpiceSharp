@@ -92,7 +92,7 @@ namespace SpiceSharpTest.Models.Semiconductors
             int index = 0;
             dc.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                double actual = d.GetCURRENT(data.Circuit);
+                double actual = d.GetDIO_CURRENT(data.Circuit);
                 double expected = reference[index++];
                 double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
                 Assert.AreEqual(expected, actual, tol);

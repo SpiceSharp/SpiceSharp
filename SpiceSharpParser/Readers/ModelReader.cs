@@ -33,12 +33,6 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(string type, Statement st, Netlist netlist)
         {
-            // Errors
-            switch (st.Parameters.Count)
-            {
-                case 0: throw new ParseException(st.Name, "Model name and type expected", false);
-            }
-
             var model = GenerateModel(st.Name.image.ToLower(), type);
             netlist.ReadParameters((IParameterized)model, st.Parameters);
             
