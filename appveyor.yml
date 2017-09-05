@@ -1,2 +1,3 @@
 configuration: Release
-project: SpiceSharp.sln
+build:
+  project: SpiceSharp.sln
