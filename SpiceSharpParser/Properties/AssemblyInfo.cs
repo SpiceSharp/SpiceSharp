@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SpiceSharpParser")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("SpiceSharp.Parser")]
+[assembly: AssemblyDescription("Netlist parser for SpiceSharp")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SpiceSharpParser")]

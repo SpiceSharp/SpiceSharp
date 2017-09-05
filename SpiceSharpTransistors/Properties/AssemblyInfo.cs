@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SpiceSharpTransistors")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("BSIM (Berkeley Short-channel IGFET Model) models for SpiceSharp")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SpiceSharpTransistors")]
