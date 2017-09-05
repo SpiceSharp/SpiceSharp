@@ -7,101 +7,50 @@ Please note that this project is in no case meant to compete with existing comme
 
 SpiceSharp is available as a **NuGet Package**.
 
-## Features
-The solution contains a Spice-based framework for simulating circuits possibly containing nonlinear components. The framework supports most native Spice models, and the framework allows expanding with your own custom models.
+[![NuGet Badge](https://buildstats.info/nuget/spicesharp)](https://www.nuget.org/packages/SpiceSharp/) SpiceSharp <br />
+[![NuGet Badge](https://buildstats.info/nuget/spicesharpparser)](https://www.nuget.org/packages/SpiceSharpParser/) SpiceSharp Parser
 
-The solution also contains a netlist parser, a tool to help you convert native Spice models to the framework, as well as a library with some BSIM transistor models.
-The framework currently does *not* support sensitivity analysis and transmission lines.
+## SpiceSharp
+The basic usage is pretty easy. A `Circuit` object will hold all circuit objects, and can run a simulation. For example, doing a transient analysis of a simple RC-filter will look like this:
 
-Currently included models in *SpiceSharp*:
-- Passive components: Resistor, Capacitance, Inductor, Mutual inductance
-- Voltage sources and current sources: Independent, voltage-controlled, current-controlled
-- Bipolar transistor (BJT)
-- MOSFET: MOS1 (level 1), MOS2 (level 2), MOS3 (level 3) - tested DC and AC
-- Diode (D) - tested DC and AC
-- Switches: Voltage switch, Current switch
-
-The simulations included in the main project are:
-- AC simulation
-- DC simulation
-- Transient simulation
-
-The waveforms for independent sources included in the main project are:
-- Pulse
-- Sine
-
-Currently included models in *SpiceSharpBSIM*
-- BSIM1 (level 4)
-- BSIM2 (level 5)
-- BSIM3 (version 3.2.4 and 3.3.0) - Tested DC
-- BSIM4 (latest version 4.8.0)
-
-## Usage
-The main project is called *SpiceSharp*. This project contains the framework for circuit simulation and has one dependency: Math.NET.
-
-The project *Spice2SpiceSharp* contains a tool that I use and try to maintain to convert Spice models to the SpiceSharp framework. Note that after using the tool, it is still necessary to intervene in some parts (fixing model-specific code unrelated to the framework). But it does make the process a lot easier for larger models.
-
-The project *SpiceSharpParser* contains a netlist parser and expression parser for Spice netlists. You can pass it any stream where it will read components, models, subcircuits, simulation statements and more.
-
-The project *SpiceSharpBSIM* contains some transistor models you can use for IC analog design.
-
-### SpiceSharp
-Using SpiceSharp can be very easy. The *Circuit* class will be your main class. Any component, model or subcircuit that implements *ICircuitObject* can be added to do something useful when simulating your circuits.
-The standard circuit components and models are in the namespace *SpiceSharp.Components*. Simulations are in *SpiceSharp.Simulations*.
 ```C#
-// Create a resistive voltage divider
+// Build the circuit
 Circuit ckt = new Circuit();
 ckt.Objects.Add(
-  new Voltagesource("V1", "IN", "GND", 5.0),
-  new Resistor("R1", "IN", "OUT", 1e3),
-  new Resistor("R2", "OUT", "GND", 2e3)
-);
+    new Voltagesource("V1", "IN", "GND", new Pulse(0, 5, 1e-3, 1e-5, 1e-5, 1e-3, 2e-3)),
+    new Resistor("R1", "IN", "OUT", 1e3),
+    new Capacitor("C1", "OUT", "GND", 1e-6)
+    );
+
+// Simulation
+Transient tran = new Transient("Tran 1", 1e-6, 20e-3);
+tran.OnExportSimulationData += (object sender, SimulationData data) =>
+    {
+        double time = data.GetTime();
+        double output = data.GetVoltage("OUT");
+    };
+ckt.Simulate(tran);
 ```
 
-A component can also implement the *IParameterized* (SpiceSharp.Parameters) interface. In this case, the class can then specify identifiers by which it wishes to expose the parameter, along with some extra information. For example, if we wish to specify an AC magnitude signal for the voltage source we created before, we can write:
+## SpiceSharp.Parser
+An additional project has been published on NuGet that facilitates parsing netlists. It uses the original Spice syntax, but also contains an expression parser. For example:
+
 ```C#
-IParameterized vsrc = (IParameterized)ckt.Objects["V1"];
-vsrc.Set("acmag", 1.0);
-```
-This is because this parameter is exposed using attributes in the *Voltagesource*-class using:
-```C#
-[SpiceName("acmag"), SpiceInfo("A.C. Magnitude")]
-public Parameter VSRCacMag { get; } = new Parameter();
-```
-
-Let's do a DC sweep:
-```C#
-DC dc = new DC("DC 1");
-dc.Sweeps.Add(new DC.Sweep("V1", 0, 5, 0.1));
-dc.OnExportSimulationData += (object sender, SimulationData data) =>
-{
-  Console.WriteLine(dc.Sweeps[0].CurrentValue + ": " + data.GetVoltage("OUT"));
-};
-ckt.Simulate(dc);
-```
-Each simulation implements *ISimulation* and will invoke *OnExportSimulationData* when a new point has been calculated. You can use this event to extract the voltages and currents that are of interest.
-
-### SpiceSharpParser
-This project can import the circuits from text sources. The format is made to match the original Spice commands and uses a tool called CSharpCC (a port from JavaCC) to generate the lexer and parser.
-The parser is extended with some useful features that you often find in more advanced/commercial Spice simulators:
-- Subcircuits can be specified with their own parameters: .SUBCKT name A B PARAMS: a=1 b=2 c=3 can be called using X1 A B name a=1.5 b=1.6.
-- Parameters can be specified using *.PARAM*
-- Full expressions using parameters can be used
-Using any non-literal value (ie. expressions) have to be enclosed in accolades "{" and "}". For example:
-```
-* Is allowed
-R1 IN OUT {rscale*1k}
-
-* Is not allowed, because r is a parameter so it should be replaced by {r}
-R1 IN OUT r
-```
-
-### SpiceSharpBSIM
-This project includes a number of the BSIM models. In order to add them to the Spice parser, use the following code (include *SpiceSharp.Parser.Readers*).
-```C#
+string netlist = string.Join(Environment.NewLine,
+    ".MODEL diomod D is=1e-14",
+    "Vinput IN GND 0.0",
+    "Rseries IN OUT {1k * 10}",
+    "Dload OUT GND diomod",
+    ".SAVE v(OUT)",
+    ".DC Vinput -5 5 50m"
+    );
 NetlistReader nr = new NetlistReader();
-var mr = nr.Netlist.Readers[StatementType.Component].Find<MosfetReader>();
-BSIMParser.AddMosfetGenerators(mr.Mosfets);
-var modr = nr.Netlist.Readers[StatementType.Model].Find<MosfetModelReader>();
-BSIMParser.AddMosfetModelGenerators(modr.Levels);
+MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(netlist));
+nr.Parse(ms);
+nr.Netlist.OnExportSimulationData += (object sender, SimulationData data) =>
+{
+    double inp = data.GetVoltage("in");
+    double outp = nr.Netlist.Exports[0].Extract(data);
+};
+nr.Netlist.Simulate();
 ```
