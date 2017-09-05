@@ -4,3 +4,4 @@ before_build:
 build:
   project: SpiceSharp.sln
 
+os: Visual Studio 2017
