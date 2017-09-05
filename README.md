@@ -1,9 +1,11 @@
-# SpiceSharp
+# SpiceSharp <img src="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceNetIcon.png?raw=true" width="45px" />
 SpiceSharp is a Spice circuit simulator written in C#. It uses Math.NET to solve matrix equations. The simulator currently includes AC, DC and transient simulations. The framework is made to resemble the original Berkeley Spice version, but some parts have been altered/improved to fit into the .NET framework.
 
 I try to verify with other simulators using unit tests: ngSpice (PartSim), LTSpice (LTSpice XVII), SmartSpice (Gateway, Silvaco). This is not always easy, as each simulator makes other design choices and optimizations (LTSpice extended the diode model, Gateway adds extra GMIN conductances, etc.).
 
 Please note that this project is in no case meant to compete with existing commercial Spice simulators. I wanted to know more about the  Spice simulator, and I wanted to be able to extend its functionality in useful ways (eg. automating simple designs, modeling custom components, etc.)
+
+SpiceSharp is available as a **NuGet Package**.
 
 ## Features
 The solution contains a Spice-based framework for simulating circuits possibly containing nonlinear components. The framework supports most native Spice models, and the framework allows expanding with your own custom models.
