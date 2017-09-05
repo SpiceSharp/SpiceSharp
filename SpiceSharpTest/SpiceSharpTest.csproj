@@ -50,11 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Semiconductors\SpiceSharpDiodeTest.cs" />
-    <Compile Include="Models\Transistors\SpiceSharpBSIM3v30Test.cs" />
     <Compile Include="Models\Transistors\SpiceSharpMOS1Test.cs" />
     <Compile Include="Models\Transistors\SpiceSharpMOS2Test.cs" />
     <Compile Include="Models\Transistors\SpiceSharpMOS3Test.cs" />
-    <Compile Include="Models\Transistors\SpiceSharpBSIM3v24Test.cs" />
     <Compile Include="Parser\Framework.cs" />
     <Compile Include="Parser\SpiceSharpParserRLCMTest.cs" />
     <Compile Include="Parser\SpiceSharpParserSourcesTest.cs" />
