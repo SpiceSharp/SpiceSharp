@@ -3,7 +3,7 @@ SpiceSharp is a Spice circuit simulator written in C#. It uses Math.NET to solve
 
 I try to verify with other simulators using unit tests: ngSpice (PartSim), LTSpice (LTSpice XVII), SmartSpice (Gateway, Silvaco). This is not always easy, as each simulator makes other design choices and optimizations (LTSpice extended the diode model, Gateway adds extra GMIN conductances, etc.).
 
-Please note that this project is in no case meant to compete with existing commercial Spice simulators. I wanted to know more about the  Spice simulator, and I wanted to be able to extend its functionality in useful ways (eg. automating simple designs, modeling custom components, etc.)
+Please note that this project is by no means meant to compete with existing commercial Spice simulators, although its performance is probably similar. I wanted to know more about the Spice simulator, and I wanted to be able to extend its functionality in useful ways (eg. automating simple designs, modeling custom components, etc.)
 
 SpiceSharp is available as a **NuGet Package**.
 
@@ -33,7 +33,7 @@ ckt.Simulate(tran);
 ```
 
 ## SpiceSharp.Parser
-An additional project has been published on NuGet that facilitates parsing netlists. It uses the original Spice syntax, but also contains an expression parser. For example:
+An additional project has been published on NuGet that facilitates parsing Spice netlists. Parsing netlists is done using the `NetlistReader` class. For example:
 
 ```C#
 string netlist = string.Join(Environment.NewLine,
@@ -54,3 +54,8 @@ nr.Netlist.OnExportSimulationData += (object sender, SimulationData data) =>
 };
 nr.Netlist.Simulate();
 ```
+
+The parser features:
+- A light-weight but fast expression parser. Put expressions between "{" and "}"
+- An expandable library of readers for circuit components (R, C, L, D, ...) and control statements (.SAVE, .TRAN, ...)
+- Subcircuits with parameters
