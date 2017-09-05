@@ -70,9 +70,6 @@
     <Compile Include="SpiceSharpCircuitCheckTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SpiceSharpParser\SpiceSharpParser.csproj">
       <Project>{fdb9a121-dff2-403b-9430-d128a2a2794f}</Project>
       <Name>SpiceSharpParser</Name>
@@ -85,6 +82,9 @@
       <Project>{080d88db-051e-499b-a02b-eaa36de52853}</Project>
       <Name>SpiceSharp</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
