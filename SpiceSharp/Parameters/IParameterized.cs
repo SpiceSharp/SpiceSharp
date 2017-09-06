@@ -10,13 +10,6 @@
         void Set(string parameter, double value);
 
         /// <summary>
-        /// Set a parameter by name
-        /// </summary>
-        /// <param name="parameter">The parameter name</param>
-        /// <param name="value">The value</param>
-        void Set(string parameter, string value);
-
-        /// <summary>
         /// Ask a parameter by name
         /// </summary>
         /// <param name="parameter">The parameter name</param>

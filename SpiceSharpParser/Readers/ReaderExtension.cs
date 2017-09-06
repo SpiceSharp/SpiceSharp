@@ -37,9 +37,6 @@ namespace SpiceSharp.Parser.Readers.Extensions
                         case EXPRESSION:
                             obj.Set(pname, netlist.Readers.ParseDouble(at.Value.image.Substring(1, at.Value.image.Length - 2).ToLower()));
                             break;
-                        case WORD:
-                            obj.Set(pname, netlist.ParseString(at.Value));
-                            break;
                         default:
                             throw new ParseException(parameters[i], "Invalid assignment");
                     }

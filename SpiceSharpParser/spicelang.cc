@@ -9,8 +9,6 @@ namespace SpiceSharp.Parser;
 using System;
 using System.Collections.Generic;
 using SpiceSharp.Parser.Readers;
-using SpiceSharp.Parser.Readers.Extensions;
-using SpiceSharp.Parser.Subcircuits;
 public class SpiceSharpParser
 {
 }

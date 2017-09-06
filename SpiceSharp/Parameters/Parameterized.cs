@@ -24,7 +24,6 @@ namespace SpiceSharp.Parameters
         private static Dictionary<string, Func<T, double>> dgetter = new Dictionary<string, Func<T, double>>();
         private static Dictionary<string, Action<T, double>> dsetter = new Dictionary<string, Action<T, double>>();
         private static Dictionary<string, Func<T, Circuit, double>> dcgetter = new Dictionary<string, Func<T, Circuit, double>>();
-        private static Dictionary<string, Action<T, string>> ssetter = new Dictionary<string, Action<T, string>>();
 
         /// <summary>
         /// This method will register all the spice properties
@@ -38,12 +37,16 @@ namespace SpiceSharp.Parameters
                 if (m is PropertyInfo)
                 {
                     PropertyInfo pi = m as PropertyInfo;
+
+                    // TYPE Parameter
                     if (pi.PropertyType == typeof(Parameter))
                     {
                         Func<T, Parameter> getter = (Func<T, Parameter>)pi.GetGetMethod().CreateDelegate(typeof(Func<T, Parameter>));
                         foreach (var attr in pi.GetCustomAttributes<SpiceName>())
                             pgetter.Add((attr as SpiceName).Name, getter);
                     }
+
+                    // TYPE double
                     else if (pi.PropertyType == typeof(double))
                     {
                         Func<T, double> getter = (Func<T, double>)pi.GetGetMethod()?.CreateDelegate(typeof(Func<T, double>));
@@ -54,15 +57,6 @@ namespace SpiceSharp.Parameters
                                 dgetter.Add(attr.Name, getter);
                             if (setter != null)
                                 dsetter.Add(attr.Name, setter);
-                        }
-                    }
-                    else if (pi.PropertyType == typeof(string))
-                    {
-                        Action<T, string> setter = (Action<T, string>)pi.GetSetMethod()?.CreateDelegate(typeof(Action<T, string>));
-                        foreach (var attr in pi.GetCustomAttributes<SpiceName>())
-                        {
-                            if (setter != null)
-                                ssetter.Add(attr.Name, setter);
                         }
                     }
                 }
@@ -77,12 +71,14 @@ namespace SpiceSharp.Parameters
                     {
                         Func<T, Circuit, double> getter = (Func<T, Circuit, double>)mi.CreateDelegate(typeof(Func<T, Circuit, double>));
                         foreach (var attr in mi.GetCustomAttributes<SpiceName>())
-                            dcgetter.Add(attr.Name, getter);
+                        {
+                            if (dcgetter != null)
+                                dcgetter.Add(attr.Name, getter);
+                        }
                     }
                 }
             }
         }
-
         private T me;
 
         /// <summary>
@@ -106,20 +102,6 @@ namespace SpiceSharp.Parameters
                 dsetter[name].Invoke(me, value);
             else if (pgetter.ContainsKey(name))
                 pgetter[name].Invoke(me).Set(value);
-            else
-                CircuitWarning.Warning(this, $"Unrecognized parameter \"{name}\"");
-        }
-
-        /// <summary>
-        /// Specify a parameter for this object
-        /// </summary>
-        /// <param name="name">The parameter identifier</param>
-        /// <param name="value">The value</param>
-        public virtual void Set(string name, string value)
-        {
-            // Set the parameter
-            if (ssetter.ContainsKey(name))
-                ssetter[name].Invoke(me, value);
             else
                 CircuitWarning.Warning(this, $"Unrecognized parameter \"{name}\"");
         }

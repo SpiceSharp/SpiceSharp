@@ -50,10 +50,10 @@ namespace SpiceSharpTest
 
             // Create the simulation
             AC ac = new AC("TestAC");
-            ac.Set("start", 1.0);
-            ac.Set("stop", 10e9);
-            ac.Set("steps", 100);
-            ac.Set("type", "dec");
+            ac.StartFreq = 1.0;
+            ac.StopFreq = 10e9;
+            ac.Steps = 100;
+            ac.StepType = AC.StepTypes.Decade;
 
             // Perform the simulation
             ac.OnExportSimulationData += (object sender, SimulationData data) =>

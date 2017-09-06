@@ -30,26 +30,25 @@ namespace Sandbox
             input.ChartType = SeriesChartType.Line;
             Series output = chMain.Series.Add("Output");
             output.ChartType = SeriesChartType.Line;
+            chMain.ChartAreas[0].AxisX.IsLogarithmic = true;
 
-            string netlist = string.Join(Environment.NewLine,
-                ".MODEL diomod D is=1e-14",
-                "Vinput IN GND 0.0",
-                "Rseries IN OUT {1k * 10}",
-                "Dload OUT GND diomod",
-                ".SAVE v(OUT)",
-                ".DC Vinput -5 5 50m"
+            // Build the circuit
+            Circuit ckt = new Circuit();
+            ckt.Objects.Add(
+                new Voltagesource("V1", "IN", "GND", 0.0),
+                new Resistor("R1", "IN", "OUT", 1e3),
+                new Capacitor("C1", "OUT", "GND", 1e-6)
                 );
-            NetlistReader nr = new NetlistReader();
-            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(netlist));
-            nr.Parse(ms);
-            nr.Netlist.OnExportSimulationData += (object sender, SimulationData data) =>
-            {
-                double inp = data.GetVoltage("in");
-                double outp = nr.Netlist.Exports[0].Extract(data);
-                output.Points.AddXY(inp, outp);
-            };
-            nr.Netlist.Simulate();
+            (ckt.Objects["V1"] as IParameterized).Set("acmag", 1.0);
 
+            // Simulation
+            AC ac = new AC("AC 1", "dec", 100, 1.0, 1e6);
+            ac.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                output.Points.AddXY(data.GetFrequency(), data.GetDb("OUT"));
+            };
+            ckt.Simulate(ac);
+            
             chMain.ChartAreas[0].AxisX.RoundAxisValues();
         }
     }
