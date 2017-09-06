@@ -24,6 +24,8 @@ namespace SpiceSharp.Parameters
         private static Dictionary<string, Func<T, double>> dgetter = new Dictionary<string, Func<T, double>>();
         private static Dictionary<string, Action<T, double>> dsetter = new Dictionary<string, Action<T, double>>();
         private static Dictionary<string, Func<T, Circuit, double>> dcgetter = new Dictionary<string, Func<T, Circuit, double>>();
+        private static Dictionary<string, Action<T, string>> ssetter = new Dictionary<string, Action<T, string>>();
+        private static Dictionary<string, Func<T, string>> sgetter = new Dictionary<string, Func<T, string>>();
 
         /// <summary>
         /// This method will register all the spice properties
@@ -59,14 +61,30 @@ namespace SpiceSharp.Parameters
                                 dsetter.Add(attr.Name, setter);
                         }
                     }
+
+                    // TYPE string
+                    else if (pi.PropertyType == typeof(string))
+                    {
+                        Func<T, string> getter = (Func<T, string>)pi.GetGetMethod()?.CreateDelegate(typeof(Func<T, string>));
+                        Action<T, string> setter = (Action<T, string>)pi.GetSetMethod()?.CreateDelegate(typeof(Action<T, string>));
+                        foreach (var attr in pi.GetCustomAttributes<SpiceName>())
+                        {
+                            if (getter != null)
+                                sgetter.Add(attr.Name, getter);
+                            if (setter != null)
+                                ssetter.Add(attr.Name, setter);
+                        }
+                    }
                 }
 
                 else if (m is MethodInfo)
                 {
                     MethodInfo mi = m as MethodInfo;
 
-                    // The only allowed parameter is a Circuit object
+                    // Supported methods
                     var parameters = mi.GetParameters();
+
+                    // TYPE double METHOD(Circuit ckt)
                     if (parameters.Length == 1 && parameters[0].ParameterType == typeof(Circuit) && mi.ReturnType == typeof(double))
                     {
                         Func<T, Circuit, double> getter = (Func<T, Circuit, double>)mi.CreateDelegate(typeof(Func<T, Circuit, double>));
@@ -103,7 +121,16 @@ namespace SpiceSharp.Parameters
             else if (pgetter.ContainsKey(name))
                 pgetter[name].Invoke(me).Set(value);
             else
-                CircuitWarning.Warning(this, $"Unrecognized parameter \"{name}\"");
+                CircuitWarning.Warning(this, $"Unrecognized parameter \"{name}\" of type double");
+        }
+
+        public virtual void Set(string name, string value)
+        {
+            // Set the parameter
+            if (ssetter.ContainsKey(name))
+                ssetter[name].Invoke(me, value);
+            else
+                CircuitWarning.Warning(this, $"Unrecognized parameter \"{name}\" of type string");
         }
 
         /// <summary>
@@ -124,10 +151,14 @@ namespace SpiceSharp.Parameters
         /// <param name="name">The parameter name</param>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
-        public virtual double Ask(string name, Circuit ckt)
-        {
-            return dcgetter[name].Invoke(me, ckt);
-        }
+        public virtual double Ask(string name, Circuit ckt) => dcgetter[name].Invoke(me, ckt);
+
+        /// <summary>
+        /// Request a parameter
+        /// </summary>
+        /// <param name="name">The parameter name</param>
+        /// <returns></returns>
+        public virtual string AskString(string name) => sgetter[name].Invoke(me);
 
         /// <summary>
         /// Enumerate all parameters
