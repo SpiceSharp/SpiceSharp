@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using System.Reflection;
 using SpiceSharp.Diagnostics;
 using System.Linq;
@@ -36,6 +37,8 @@ namespace SpiceSharp.Parameters
             foreach (MemberInfo m in members)
             {
                 // Create a delegate for the member
+
+                // PROPERTIES
                 if (m is PropertyInfo)
                 {
                     PropertyInfo pi = m as PropertyInfo;
@@ -77,6 +80,52 @@ namespace SpiceSharp.Parameters
                     }
                 }
 
+                // FIELDS
+                else if (m is FieldInfo)
+                {
+                    FieldInfo fi = m as FieldInfo;
+
+                    // TYPE parameter
+                    if (fi.FieldType == typeof(Parameter))
+                    {
+                        Func<T, Parameter> getter = CreateGetter<T, Parameter>(fi);
+                        foreach (var attr in fi.GetCustomAttributes<SpiceName>())
+                        {
+                            if (getter != null)
+                                pgetter.Add(attr.Name, getter);
+                        }
+                    }
+                    
+                    // TYPE double
+                    if (fi.FieldType == typeof(double))
+                    {
+                        Func<T, double> getter = CreateGetter<T, double>(fi);
+                        Action<T, double> setter = CreateSetter<T, double>(fi);
+                        foreach (var attr in fi.GetCustomAttributes<SpiceName>())
+                        {
+                            if (getter != null)
+                                dgetter.Add(attr.Name, getter);
+                            if (setter != null)
+                                dsetter.Add(attr.Name, setter);
+                        }
+                    }
+
+                    // TYPE string
+                    if (fi.FieldType == typeof(string))
+                    {
+                        Func<T, string> getter = CreateGetter<T, string>(fi);
+                        Action<T, string> setter = CreateSetter<T, string>(fi);
+                        foreach (var attr in fi.GetCustomAttributes<SpiceName>())
+                        {
+                            if (getter != null)
+                                sgetter.Add(attr.Name, getter);
+                            if (setter != null)
+                                ssetter.Add(attr.Name, setter);
+                        }
+                    }
+                }
+
+                // METHODS
                 else if (m is MethodInfo)
                 {
                     MethodInfo mi = m as MethodInfo;
@@ -124,6 +173,11 @@ namespace SpiceSharp.Parameters
                 CircuitWarning.Warning(this, $"Unrecognized parameter \"{name}\" of type double");
         }
 
+        /// <summary>
+        /// Specify a parameter for this object
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public virtual void Set(string name, string value)
         {
             // Set the parameter
@@ -223,6 +277,60 @@ namespace SpiceSharp.Parameters
                 }
             }
             return names;
+        }
+
+        /// <summary>
+        /// Create a getter for a field
+        /// Code by Zotta (https://stackoverflow.com/questions/16073091/is-there-a-way-to-create-a-delegate-to-get-and-set-values-for-a-fieldinfo)
+        /// </summary>
+        /// <typeparam name="S">Object type</typeparam>
+        /// <typeparam name="T">Return type</typeparam>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        private static Func<S, T> CreateGetter<S, T>(FieldInfo field)
+        {
+            string methodName = field.ReflectedType.FullName + ".get_" + field.Name;
+            DynamicMethod setterMethod = new DynamicMethod(methodName, typeof(T), new Type[1] { typeof(S) }, true);
+            ILGenerator gen = setterMethod.GetILGenerator();
+            if (field.IsStatic)
+            {
+                gen.Emit(OpCodes.Ldsfld, field);
+            }
+            else
+            {
+                gen.Emit(OpCodes.Ldarg_0);
+                gen.Emit(OpCodes.Ldfld, field);
+            }
+            gen.Emit(OpCodes.Ret);
+            return (Func<S, T>)setterMethod.CreateDelegate(typeof(Func<S, T>));
+        }
+
+        /// <summary>
+        /// Create a setter for a field
+        /// Code by Zotta (https://stackoverflow.com/questions/16073091/is-there-a-way-to-create-a-delegate-to-get-and-set-values-for-a-fieldinfo)
+        /// </summary>
+        /// <typeparam name="S"></typeparam>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        private static Action<S, T> CreateSetter<S, T>(FieldInfo field)
+        {
+            string methodName = field.ReflectedType.FullName + ".set_" + field.Name;
+            DynamicMethod setterMethod = new DynamicMethod(methodName, null, new Type[2] { typeof(S), typeof(T) }, true);
+            ILGenerator gen = setterMethod.GetILGenerator();
+            if (field.IsStatic)
+            {
+                gen.Emit(OpCodes.Ldarg_1);
+                gen.Emit(OpCodes.Stsfld, field);
+            }
+            else
+            {
+                gen.Emit(OpCodes.Ldarg_0);
+                gen.Emit(OpCodes.Ldarg_1);
+                gen.Emit(OpCodes.Stfld, field);
+            }
+            gen.Emit(OpCodes.Ret);
+            return (Action<S, T>)setterMethod.CreateDelegate(typeof(Action<S, T>));
         }
     }
 }
