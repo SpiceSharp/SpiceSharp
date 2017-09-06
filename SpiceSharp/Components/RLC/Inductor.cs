@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// This class represents an inductor
     /// </summary>
-    [SpiceNodes("L+", "L-")]
+    [SpicePins("L+", "L-")]
     public class Inductor : CircuitComponent<Inductor>
     {
         /// <summary>

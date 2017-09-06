@@ -8,7 +8,7 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
-    [SpiceNodes("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
+    [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
     public class BSIM2 : CircuitComponent<BSIM2>
     {
         /// <summary>

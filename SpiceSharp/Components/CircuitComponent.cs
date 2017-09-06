@@ -15,7 +15,7 @@ namespace SpiceSharp
         static CircuitComponent()
         {
             // Check if we have nodes
-            SpiceNodes[] data = (SpiceNodes[])typeof(T).GetCustomAttributes(typeof(SpiceNodes), false);
+            SpicePins[] data = (SpicePins[])typeof(T).GetCustomAttributes(typeof(SpicePins), false);
             if (data != null && data.Length > 0)
                 pins = data[0].Nodes;
             else

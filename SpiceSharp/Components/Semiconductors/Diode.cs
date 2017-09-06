@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace SpiceSharp.Components
 {
-    [SpiceNodes("D+", "D-")]
+    [SpicePins("D+", "D-")]
     public class Diode : CircuitComponent<Diode>
     {
         /// <summary>

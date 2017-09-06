@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class SpiceNodes : Attribute
+    public class SpicePins : Attribute
     {
         /// <summary>
         /// Gets the nodes of the component
@@ -14,7 +14,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="nodes">The nodes (in order) of the circuit component</param>
-        public SpiceNodes(params string[] nodes)
+        public SpicePins(params string[] nodes)
         {
             Nodes = nodes;
         }

@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A class that represents a resistor
     /// </summary>
-    [SpiceNodes("R+", "R-")]
+    [SpicePins("R+", "R-")]
     public class Resistor : CircuitComponent<Resistor>
     {
         /// <summary>
