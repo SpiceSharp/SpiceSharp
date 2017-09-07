@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class CircuitObjects
+    <title>Class Simulation&lt;T&gt;
    </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class CircuitObjects
+    <meta name="title" content="Class Simulation&lt;T&gt;
    ">
     <meta name="generator" content="docfx 2.23.1.0">
     
@@ -95,8 +95,8 @@
                           <li class="">
                             <a href="SpiceSharp.Circuits.CircuitNode.NodeType.html" title="CircuitNode.NodeType" class="">CircuitNode.NodeType</a>
                           </li>
-                          <li class="active">
-                            <a href="SpiceSharp.Circuits.CircuitObjects.html" title="CircuitObjects" class="active">CircuitObjects</a>
+                          <li class="">
+                            <a href="SpiceSharp.Circuits.CircuitObjects.html" title="CircuitObjects" class="">CircuitObjects</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Circuits.CircuitState.html" title="CircuitState" class="">CircuitState</a>
@@ -362,8 +362,8 @@
                           <li class="">
                             <a href="SpiceSharp.Simulations.OP.html" title="OP" class="">OP</a>
                           </li>
-                          <li class="">
-                            <a href="SpiceSharp.Simulations.Simulation-1.html" title="Simulation&lt;T&gt;" class="">Simulation&lt;T&gt;</a>
+                          <li class="active">
+                            <a href="SpiceSharp.Simulations.Simulation-1.html" title="Simulation&lt;T&gt;" class="active">Simulation&lt;T&gt;</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Simulations.SimulationCircuit.html" title="SimulationCircuit" class="">SimulationCircuit</a>
@@ -397,21 +397,47 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="SpiceSharp.Circuits.CircuitObjects">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Simulations.Simulation`1">
   
   
-  <h1 id="SpiceSharp_Circuits_CircuitObjects" data-uid="SpiceSharp.Circuits.CircuitObjects" class="text-break">Class CircuitObjects
+  <h1 id="SpiceSharp_Simulations_Simulation_1" data-uid="SpiceSharp.Simulations.Simulation`1" class="text-break">Class Simulation&lt;T&gt;
   </h1>
-  <div class="markdown level0 summary"><p>Contains and manages a collection circuit objects.</p>
+  <div class="markdown level0 summary"><p>A class that can perform a simulation using a <a class="xref" href="SpiceSharp.Circuit.html">Circuit</a>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">CircuitObjects</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Parameters.Parameterized-1.html">Parameterized</a>&lt;T&gt;</div>
+    <div class="level2"><span class="xref">Simulation&lt;T&gt;</span></div>
   </div>
+      <div class="level3"><a class="xref" href="SpiceSharp.Simulations.AC.html">AC</a></div>
+      <div class="level3"><a class="xref" href="SpiceSharp.Simulations.DC.html">DC</a></div>
+      <div class="level3"><a class="xref" href="SpiceSharp.Simulations.OP.html">OP</a></div>
+      <div class="level3"><a class="xref" href="SpiceSharp.Simulations.Transient.html">Transient</a></div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Parameters.Parameterized-1.html#SpiceSharp_Parameters_Parameterized_1_Register">Parameterized&lt;T&gt;.Register()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Parameters.Parameterized-1.html#SpiceSharp_Parameters_Parameterized_1_Set_System_String_System_Double_">Parameterized&lt;T&gt;.Set(String, Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Parameters.Parameterized-1.html#SpiceSharp_Parameters_Parameterized_1_Set_System_String_System_String_">Parameterized&lt;T&gt;.Set(String, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Parameters.Parameterized-1.html#SpiceSharp_Parameters_Parameterized_1_Ask_System_String_">Parameterized&lt;T&gt;.Ask(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Parameters.Parameterized-1.html#SpiceSharp_Parameters_Parameterized_1_Ask_System_String_SpiceSharp_Circuit_">Parameterized&lt;T&gt;.Ask(String, Circuit)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Parameters.Parameterized-1.html#SpiceSharp_Parameters_Parameterized_1_AskString_System_String_">Parameterized&lt;T&gt;.AskString(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Parameters.Parameterized-1.html#SpiceSharp_Parameters_Parameterized_1_ParameterList_System_Boolean_">Parameterized&lt;T&gt;.ParameterList(Boolean)</a>
+    </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
     </div>
@@ -434,78 +460,44 @@
       <span class="xref">System.Object.MemberwiseClone()</span>
     </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Circuits.html">SpiceSharp.Circuits</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Simulations.html">SpiceSharp.Simulations</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
-  <h5 id="SpiceSharp_Circuits_CircuitObjects_syntax">Syntax</h5>
+  <h5 id="SpiceSharp_Simulations_Simulation_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class CircuitObjects : IEnumerable&lt;ICircuitObject&gt;, IEnumerable</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class Simulation&lt;T&gt; : Parameterized&lt;T&gt;, ISimulation, IParameterized</code></pre>
   </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects__ctor.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L29">View Source</a>
-  </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects__ctor_" data-uid="SpiceSharp.Circuits.CircuitObjects.#ctor*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects__ctor" data-uid="SpiceSharp.Circuits.CircuitObjects.#ctor">CircuitObjects()</h4>
-  <div class="markdown level1 summary"><p>Constructor</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public CircuitObjects()</code></pre>
-  </div>
-  <h3 id="properties">Properties
-  </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_Count.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.Count%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L68">View Source</a>
-  </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_Count_" data-uid="SpiceSharp.Circuits.CircuitObjects.Count*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_Count" data-uid="SpiceSharp.Circuits.CircuitObjects.Count">Count</h4>
-  <div class="markdown level1 summary"><p>The amount of circuit objects</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int Count { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
-        <th>Type</th>
+        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">T</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  <h3 id="constructors">Constructors
+  </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_Item_System_String___.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.Item(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1__ctor_System_String_.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.%23ctor(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L36">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Simulations/Simulation.cs/#L44">View Source</a>
   </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_Item_" data-uid="SpiceSharp.Circuits.CircuitObjects.Item*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_Item_System_String___" data-uid="SpiceSharp.Circuits.CircuitObjects.Item(System.String[])">Item[String[]]</h4>
-  <div class="markdown level1 summary"><p>Search for a circuit object by name</p>
+  <a id="SpiceSharp_Simulations_Simulation_1__ctor_" data-uid="SpiceSharp.Simulations.Simulation`1.#ctor*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_1__ctor_System_String_" data-uid="SpiceSharp.Simulations.Simulation`1.#ctor(System.String)">Simulation(String)</h4>
+  <div class="markdown level1 summary"><p>Constructor</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ICircuitObject this[params string[] name] { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public Simulation(string name)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -518,13 +510,30 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="xref">System.String</span></td>
         <td><span class="parametername">name</span></td>
-        <td><p>The name of the object</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_Config.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.Config%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Simulations/Simulation.cs/#L13">View Source</a>
+  </span>
+  <a id="SpiceSharp_Simulations_Simulation_1_Config_" data-uid="SpiceSharp.Simulations.Simulation`1.Config*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_1_Config" data-uid="SpiceSharp.Simulations.Simulation`1.Config">Config</h4>
+  <div class="markdown level1 summary"><p>The configuration</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SimulationConfiguration Config { get; set; }</code></pre>
+  </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -535,7 +544,71 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Circuits.ICircuitObject.html">ICircuitObject</a></td>
+        <td><a class="xref" href="SpiceSharp.Simulations.SimulationConfiguration.html">SimulationConfiguration</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="implements">Implements</h5>
+      <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Config">ISimulation.Config</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_CurrentConfig.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.CurrentConfig%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Simulations/Simulation.cs/#L18">View Source</a>
+  </span>
+  <a id="SpiceSharp_Simulations_Simulation_1_CurrentConfig_" data-uid="SpiceSharp.Simulations.Simulation`1.CurrentConfig*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_1_CurrentConfig" data-uid="SpiceSharp.Simulations.Simulation`1.CurrentConfig">CurrentConfig</h4>
+  <div class="markdown level1 summary"><p>Get the current configuration (for use in the simulation)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected SimulationConfiguration CurrentConfig { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.SimulationConfiguration.html">SimulationConfiguration</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_Name.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Simulations/Simulation.cs/#L38">View Source</a>
+  </span>
+  <a id="SpiceSharp_Simulations_Simulation_1_Name_" data-uid="SpiceSharp.Simulations.Simulation`1.Name*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_1_Name" data-uid="SpiceSharp.Simulations.Simulation`1.Name">Name</h4>
+  <div class="markdown level1 summary"><p>Get the name of the simulation</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Name { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -544,19 +617,19 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_Add_SpiceSharp_Circuits_ICircuitObject___.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.Add(SpiceSharp.Circuits.ICircuitObject%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_Execute_SpiceSharp_Circuit_.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.Execute(SpiceSharp.Circuit)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L84">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Simulations/Simulation.cs/#L55">View Source</a>
   </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_Add_" data-uid="SpiceSharp.Circuits.CircuitObjects.Add*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_Add_SpiceSharp_Circuits_ICircuitObject___" data-uid="SpiceSharp.Circuits.CircuitObjects.Add(SpiceSharp.Circuits.ICircuitObject[])">Add(ICircuitObject[])</h4>
-  <div class="markdown level1 summary"><p>Add one or more circuit objects</p>
+  <a id="SpiceSharp_Simulations_Simulation_1_Execute_" data-uid="SpiceSharp.Simulations.Simulation`1.Execute*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_1_Execute_SpiceSharp_Circuit_" data-uid="SpiceSharp.Simulations.Simulation`1.Execute(SpiceSharp.Circuit)">Execute(Circuit)</h4>
+  <div class="markdown level1 summary"><p>Execute the simulation</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Add(params ICircuitObject[] cs)</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract void Execute(Circuit ckt)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -569,241 +642,30 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Circuits.ICircuitObject.html">ICircuitObject</a>[]</td>
-        <td><span class="parametername">cs</span></td>
-        <td><p>The objects that need to be added</p>
+        <td><a class="xref" href="SpiceSharp.Circuit.html">Circuit</a></td>
+        <td><span class="parametername">ckt</span></td>
+        <td><p>The circuit to be used</p>
 </td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_BuildOrderedComponentList.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.BuildOrderedComponentList%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L190">View Source</a>
-  </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_BuildOrderedComponentList_" data-uid="SpiceSharp.Circuits.CircuitObjects.BuildOrderedComponentList*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_BuildOrderedComponentList" data-uid="SpiceSharp.Circuits.CircuitObjects.BuildOrderedComponentList">BuildOrderedComponentList()</h4>
-  <div class="markdown level1 summary"><p>This method is called when building an ordered list of circuit objects
-Circuit objects will be called by descending priority</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void BuildOrderedComponentList()</code></pre>
-  </div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_ByType_System_Type_.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.ByType(System.Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L175">View Source</a>
-  </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_ByType_" data-uid="SpiceSharp.Circuits.CircuitObjects.ByType*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_ByType_System_Type_" data-uid="SpiceSharp.Circuits.CircuitObjects.ByType(System.Type)">ByType(Type)</h4>
-  <div class="markdown level1 summary"><p>Get all objects of a specific type</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ICircuitObject[] ByType(Type type)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Type</span></td>
-        <td><span class="parametername">type</span></td>
-        <td><p>The type of objects you wish to find</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Circuits.ICircuitObject.html">ICircuitObject</a>[]</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_Clear.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.Clear%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L73">View Source</a>
-  </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_Clear_" data-uid="SpiceSharp.Circuits.CircuitObjects.Clear*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_Clear" data-uid="SpiceSharp.Circuits.CircuitObjects.Clear">Clear()</h4>
-  <div class="markdown level1 summary"><p>Clear all circuit objects</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
-  </div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_Contains_System_String___.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.Contains(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L141">View Source</a>
-  </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_Contains_" data-uid="SpiceSharp.Circuits.CircuitObjects.Contains*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_Contains_System_String___" data-uid="SpiceSharp.Circuits.CircuitObjects.Contains(System.String[])">Contains(String[])</h4>
-  <div class="markdown level1 summary"><p>Check if a component exists
-Multiple names can be specified, in which case the first names will refer to subcircuits</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Contains(params string[] name)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span>[]</td>
-        <td><span class="parametername">name</span></td>
-        <td><p>A list of names. If there are multiple names, the first names will refer to a subcircuit</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_FindPath_SpiceSharp_Circuits_ICircuitObject_.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.FindPath(SpiceSharp.Circuits.ICircuitObject)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L244">View Source</a>
-  </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_FindPath_" data-uid="SpiceSharp.Circuits.CircuitObjects.FindPath*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_FindPath_SpiceSharp_Circuits_ICircuitObject_" data-uid="SpiceSharp.Circuits.CircuitObjects.FindPath(SpiceSharp.Circuits.ICircuitObject)">FindPath(ICircuitObject)</h4>
-  <div class="markdown level1 summary"><p>Find the circuitobject and expand the path</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string[] FindPath(ICircuitObject o)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Circuits.ICircuitObject.html">ICircuitObject</a></td>
-        <td><span class="parametername">o</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span>[]</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_GetEnumerator.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L283">View Source</a>
-  </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_GetEnumerator_" data-uid="SpiceSharp.Circuits.CircuitObjects.GetEnumerator*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_GetEnumerator" data-uid="SpiceSharp.Circuits.CircuitObjects.GetEnumerator">GetEnumerator()</h4>
-  <div class="markdown level1 summary"><p>Get enumerator</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerator&lt;ICircuitObject&gt; GetEnumerator()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<a class="xref" href="SpiceSharp.Circuits.ICircuitObject.html">ICircuitObject</a>&gt;</td>
-        <td></td>
       </tr>
     </tbody>
   </table>
   <h5 class="implements">Implements</h5>
-      <div><span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;.GetEnumerator()</span></div>
+      <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Execute_SpiceSharp_Circuit_">ISimulation.Execute(Circuit)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_Remove_SpiceSharp_Circuits_ICircuitObject___.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.Remove(SpiceSharp.Circuits.ICircuitObject%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_Export_SpiceSharp_Circuit_.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.Export(SpiceSharp.Circuit)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L126">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Simulations/Simulation.cs/#L70">View Source</a>
   </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_Remove_" data-uid="SpiceSharp.Circuits.CircuitObjects.Remove*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_Remove_SpiceSharp_Circuits_ICircuitObject___" data-uid="SpiceSharp.Circuits.CircuitObjects.Remove(SpiceSharp.Circuits.ICircuitObject[])">Remove(ICircuitObject[])</h4>
-  <div class="markdown level1 summary"><p>Remove specific circuit objects from the collection</p>
+  <a id="SpiceSharp_Simulations_Simulation_1_Export_" data-uid="SpiceSharp.Simulations.Simulation`1.Export*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_1_Export_SpiceSharp_Circuit_" data-uid="SpiceSharp.Simulations.Simulation`1.Export(SpiceSharp.Circuit)">Export(Circuit)</h4>
+  <div class="markdown level1 summary"><p>Export the data</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Remove(params ICircuitObject[] cs)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void Export(Circuit ckt)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -816,121 +678,96 @@ Multiple names can be specified, in which case the first names will refer to sub
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Circuits.ICircuitObject.html">ICircuitObject</a>[]</td>
-        <td><span class="parametername">cs</span></td>
-        <td><p>The objects that need to be deleted</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_Remove_System_String___.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.Remove(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L105">View Source</a>
-  </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_Remove_" data-uid="SpiceSharp.Circuits.CircuitObjects.Remove*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_Remove_System_String___" data-uid="SpiceSharp.Circuits.CircuitObjects.Remove(System.String[])">Remove(String[])</h4>
-  <div class="markdown level1 summary"><p>Remove specific circuit objects from the collection</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Remove(params string[] names)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span>[]</td>
-        <td><span class="parametername">names</span></td>
-        <td><p>Names of the objects that need to be deleted</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_TryFindPath_SpiceSharp_Circuits_ICircuitObject_System_Collections_Generic_List_System_String__.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.TryFindPath(SpiceSharp.Circuits.ICircuitObject%2CSystem.Collections.Generic.List%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L258">View Source</a>
-  </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_TryFindPath_" data-uid="SpiceSharp.Circuits.CircuitObjects.TryFindPath*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_TryFindPath_SpiceSharp_Circuits_ICircuitObject_System_Collections_Generic_List_System_String__" data-uid="SpiceSharp.Circuits.CircuitObjects.TryFindPath(SpiceSharp.Circuits.ICircuitObject,System.Collections.Generic.List{System.String})">TryFindPath(ICircuitObject, List&lt;String&gt;)</h4>
-  <div class="markdown level1 summary"><p>Recursively search for a circuit object and return the path</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected bool TryFindPath(ICircuitObject o, List&lt;string&gt; path)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Circuits.ICircuitObject.html">ICircuitObject</a></td>
-        <td><span class="parametername">o</span></td>
-        <td><p>The object to search</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.List</span>&lt;<span class="xref">System.String</span>&gt;</td>
-        <td><span class="parametername">path</span></td>
-        <td><p>The path</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><a class="xref" href="SpiceSharp.Circuit.html">Circuit</a></td>
+        <td><span class="parametername">ckt</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h3 id="eii">Explicit Interface Implementations
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_Finalize_SpiceSharp_Circuit_.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.Finalize(SpiceSharp.Circuit)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Simulations/Simulation.cs/#L80">View Source</a>
+  </span>
+  <a id="SpiceSharp_Simulations_Simulation_1_Finalize_" data-uid="SpiceSharp.Simulations.Simulation`1.Finalize*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_1_Finalize_SpiceSharp_Circuit_" data-uid="SpiceSharp.Simulations.Simulation`1.Finalize(SpiceSharp.Circuit)">Finalize(Circuit)</h4>
+  <div class="markdown level1 summary"><p>Finalize the simulation</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Finalize(Circuit ckt)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Circuit.html">Circuit</a></td>
+        <td><span class="parametername">ckt</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_Initialize_SpiceSharp_Circuit_.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.Initialize(SpiceSharp.Circuit)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Simulations/Simulation.cs/#L61">View Source</a>
+  </span>
+  <a id="SpiceSharp_Simulations_Simulation_1_Initialize_" data-uid="SpiceSharp.Simulations.Simulation`1.Initialize*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_1_Initialize_SpiceSharp_Circuit_" data-uid="SpiceSharp.Simulations.Simulation`1.Initialize(SpiceSharp.Circuit)">Initialize(Circuit)</h4>
+  <div class="markdown level1 summary"><p>Initialize the simulation</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Initialize(Circuit ckt)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Circuit.html">Circuit</a></td>
+        <td><span class="parametername">ckt</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects_System_Collections_IEnumerable_GetEnumerator.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects.System%23Collections%23IEnumerable%23GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_FinalizeSimulationExport.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.FinalizeSimulationExport%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L289">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Simulations/Simulation.cs/#L33">View Source</a>
   </span>
-  <a id="SpiceSharp_Circuits_CircuitObjects_System_Collections_IEnumerable_GetEnumerator_" data-uid="SpiceSharp.Circuits.CircuitObjects.System#Collections#IEnumerable#GetEnumerator*"></a>
-  <h4 id="SpiceSharp_Circuits_CircuitObjects_System_Collections_IEnumerable_GetEnumerator" data-uid="SpiceSharp.Circuits.CircuitObjects.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
-  <div class="markdown level1 summary"><p>Get enumerator</p>
+  <h4 id="SpiceSharp_Simulations_Simulation_1_FinalizeSimulationExport" data-uid="SpiceSharp.Simulations.Simulation`1.FinalizeSimulationExport">FinalizeSimulationExport</h4>
+  <div class="markdown level1 summary"><p>Event that is called for finalizing simulation data exports</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+    <pre><code class="lang-csharp hljs">public event FinalizeSimulationExportEventHandler FinalizeSimulationExport</code></pre>
   </div>
-  <h5 class="returns">Returns</h5>
+  <h5 class="eventType">Event Type</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
@@ -940,13 +777,77 @@ Multiple names can be specified, in which case the first names will refer to sub
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td><a class="xref" href="SpiceSharp.Simulations.FinalizeSimulationExportEventHandler.html">FinalizeSimulationExportEventHandler</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <h5 class="implements">Implements</h5>
-      <div><span class="xref">System.Collections.IEnumerable.GetEnumerator()</span></div>
+      <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_FinalizeSimulationExport">ISimulation.FinalizeSimulationExport</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_InitializeSimulationExport.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.InitializeSimulationExport%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Simulations/Simulation.cs/#L23">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Simulations_Simulation_1_InitializeSimulationExport" data-uid="SpiceSharp.Simulations.Simulation`1.InitializeSimulationExport">InitializeSimulationExport</h4>
+  <div class="markdown level1 summary"><p>Event that is called for initializing simulation data exports</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event InitializeSimulationExportEventHandler InitializeSimulationExport</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.InitializeSimulationExportEventHandler.html">InitializeSimulationExportEventHandler</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="implements">Implements</h5>
+      <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_InitializeSimulationExport">ISimulation.InitializeSimulationExport</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_OnExportSimulationData.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.OnExportSimulationData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Simulations/Simulation.cs/#L28">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Simulations_Simulation_1_OnExportSimulationData" data-uid="SpiceSharp.Simulations.Simulation`1.OnExportSimulationData">OnExportSimulationData</h4>
+  <div class="markdown level1 summary"><p>Event that is called when new simulation data is available</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event ExportSimulationDataEventHandler OnExportSimulationData</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ExportSimulationDataEventHandler.html">ExportSimulationDataEventHandler</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="implements">Implements</h5>
+      <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_OnExportSimulationData">ISimulation.OnExportSimulationData</a></div>
 </article>
           </div>
           
@@ -955,10 +856,10 @@ Multiple names can be specified, in which case the first names will refer to sub
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Circuits_CircuitObjects.md&amp;value=---%0Auid%3A%20SpiceSharp.Circuits.CircuitObjects%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Circuits/CircuitObjects.cs/#L12" class="contribution-link">View Source</a>
+                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharp/Simulations/Simulation.cs/#L8" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

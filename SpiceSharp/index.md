@@ -5,4 +5,4 @@ to the Microsoft .NET framework, and programmed in C#.
 It uses Math.NET to solve matrix equations in an efficient and fast way.
 
 ## API
-The API can be found ![here](api/index.html).
+The API can be found [here](api/index.md).

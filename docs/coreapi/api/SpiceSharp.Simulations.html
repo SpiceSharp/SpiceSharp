@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc">
+    <meta property="docfx:navrel" content="">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -45,14 +45,6 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
-                <ul class="nav level1 navbar-nav">
-                  <li class="">
-                    <a href="../articles/intro.html" title="Articles" class="">Articles</a>
-                  </li>
-                  <li class="active">
-                    <a href="../api/index.html" title="API Documentation" class="active">API Documentation</a>
-                  </li>
-                </ul>
             </div>
           </div>
         </nav>
@@ -87,21 +79,6 @@
                         <ul class="nav level2">
                           <li class="">
                             <a href="SpiceSharp.Circuit.html" title="Circuit" class="">Circuit</a>
-                          </li>
-                          <li class="">
-                            <a href="SpiceSharp.CircuitComponent-1.html" title="CircuitComponent&lt;T&gt;" class="">CircuitComponent&lt;T&gt;</a>
-                          </li>
-                          <li class="">
-                            <a href="SpiceSharp.IntegrationMethod.html" title="IntegrationMethod" class="">IntegrationMethod</a>
-                          </li>
-                          <li class="">
-                            <a href="SpiceSharp.IntegrationMethod.Configuration.html" title="IntegrationMethod.Configuration" class="">IntegrationMethod.Configuration</a>
-                          </li>
-                          <li class="">
-                            <a href="SpiceSharp.IntegrationMethod.Result.html" title="IntegrationMethod.Result" class="">IntegrationMethod.Result</a>
-                          </li>
-                          <li class="">
-                            <a href="SpiceSharp.Simulation-1.html" title="Simulation&lt;T&gt;" class="">Simulation&lt;T&gt;</a>
                           </li>
                         </ul>  </li>
                     <li class="">
@@ -164,6 +141,9 @@
                             <a href="SpiceSharp.Components.CapacitorModel.html" title="CapacitorModel" class="">CapacitorModel</a>
                           </li>
                           <li class="">
+                            <a href="SpiceSharp.Components.CircuitComponent-1.html" title="CircuitComponent&lt;T&gt;" class="">CircuitComponent&lt;T&gt;</a>
+                          </li>
+                          <li class="">
                             <a href="SpiceSharp.Components.CircuitModel-1.html" title="CircuitModel&lt;T&gt;" class="">CircuitModel&lt;T&gt;</a>
                           </li>
                           <li class="">
@@ -174,9 +154,6 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Components.CurrentControlledVoltagesource.html" title="CurrentControlledVoltagesource" class="">CurrentControlledVoltagesource</a>
-                          </li>
-                          <li class="">
-                            <a href="SpiceSharp.Components.CurrentDriver.html" title="CurrentDriver" class="">CurrentDriver</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Components.Currentsource.html" title="Currentsource" class="">Currentsource</a>
@@ -317,6 +294,15 @@
                             <a href="SpiceSharp.IntegrationMethods.Breakpoints.html" title="Breakpoints" class="">Breakpoints</a>
                           </li>
                           <li class="">
+                            <a href="SpiceSharp.IntegrationMethods.IntegrationMethod.html" title="IntegrationMethod" class="">IntegrationMethod</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.html" title="IntegrationMethod.Configuration" class="">IntegrationMethod.Configuration</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.IntegrationMethods.IntegrationMethod.Result.html" title="IntegrationMethod.Result" class="">IntegrationMethod.Result</a>
+                          </li>
+                          <li class="">
                             <a href="SpiceSharp.IntegrationMethods.Trapezoidal.html" title="Trapezoidal" class="">Trapezoidal</a>
                           </li>
                         </ul>  </li>
@@ -377,6 +363,9 @@
                             <a href="SpiceSharp.Simulations.OP.html" title="OP" class="">OP</a>
                           </li>
                           <li class="">
+                            <a href="SpiceSharp.Simulations.Simulation-1.html" title="Simulation&lt;T&gt;" class="">Simulation&lt;T&gt;</a>
+                          </li>
+                          <li class="">
                             <a href="SpiceSharp.Simulations.SimulationCircuit.html" title="SimulationCircuit" class="">SimulationCircuit</a>
                           </li>
                           <li class="">
@@ -418,41 +407,43 @@
     <h3 id="classes">Classes
   </h3>
       <h4><a class="xref" href="SpiceSharp.Simulations.AC.html">AC</a></h4>
-      <section><p>This </p>
+      <section><p>Frequency-domain analysis (AC analysis)</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.DC.html">DC</a></h4>
-      <section><p>Describes a DC simulation</p>
+      <section><p>DC sweep analysis</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.DC.Sweep.html">DC.Sweep</a></h4>
       <section><p>A class that describes a job</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.OP.html">OP</a></h4>
-      <section></section>
+      <section><p>Operating Point analysis</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.Simulation-1.html">Simulation&lt;T&gt;</a></h4>
+      <section><p>A class that can perform a simulation using a <a class="xref" href="SpiceSharp.Circuit.html">Circuit</a>.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Simulations.SimulationCircuit.html">SimulationCircuit</a></h4>
-      <section></section>
+      <section><p>Provides static methods for basic simulations involving the circuit</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Simulations.SimulationConfiguration.html">SimulationConfiguration</a></h4>
-      <section><p>This class contains the minimum configuration parameters for a simulation</p>
+      <section><p>Configuration for simulations</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.SimulationData.html">SimulationData</a></h4>
-      <section><p>Simulation data</p>
+      <section><p>Exported simulation data. Can be used by simulations to pass exported simulation data as an event argument.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.SimulationIterate.html">SimulationIterate</a></h4>
-      <section><p>This static class contains the methods for:</p>
-<ul>
-<li>Op(): Finds the operating point for the circuit</li>
-<li>Iterate(): Tries to converge to a solution using the current circuit</li>
-</ul>
+      <section><p>This static class contains common methods for basic simulation.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.TimestepCutData.html">TimestepCutData</a></h4>
       <section><p>This class contains all data when a timestep cut event is triggered</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.Transient.html">Transient</a></h4>
-      <section><p>A simulation that executes a transient analysis</p>
+      <section><p>A time-domain analysis (Transient simulation)</p>
 </section>
     <h3 id="interfaces">Interfaces
   </h3>
       <h4><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></h4>
-      <section></section>
+      <section><p>Provides methods for performing a simulation using a <a class="xref" href="SpiceSharp.Circuit.html">Circuit</a>.</p>
+</section>
     <h3 id="enums">Enums
   </h3>
       <h4><a class="xref" href="SpiceSharp.Simulations.AC.StepTypes.html">AC.StepTypes</a></h4>

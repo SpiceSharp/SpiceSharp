@@ -9,25 +9,22 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "ZSH7p3pIaFek6dNsFkx3sg=="
+          "hash": "fem5r+SjKRvMpg+M473XDg=="
         }
       },
       "is_incremental": true,
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
       "type": "Conceptual",
       "source_relative_path": "index.md",
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "nwtAnCypPRPO+PGYk95iAg=="
+          "hash": "xqARzlwnv2erMIPywCQsZA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -36,19 +33,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuit.html",
-          "hash": "5g73qeAhJXu57vUjZX7iZw=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.CircuitComponent-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.CircuitComponent-1.html",
-          "hash": "eMV25b294UE78Zeno7P7gg=="
+          "hash": "VUCvbRHg/QTxjB+B0MBIMA=="
         }
       },
       "is_incremental": true,
@@ -60,7 +45,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.CircuitCheck.html",
-          "hash": "nBLxeuv2Pnsi9eXDy/e+xw=="
+          "hash": "WtOw7eogxq0iNkkeAJJwnw=="
         }
       },
       "is_incremental": true,
@@ -72,7 +57,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.CircuitNode.NodeType.html",
-          "hash": "pI4DQnB7F5TRa/PHtcqE2A=="
+          "hash": "ptUYwG95yNcH+1umkhYNdA=="
         }
       },
       "is_incremental": true,
@@ -84,7 +69,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.CircuitNode.html",
-          "hash": "ZUS0vgQc+EHO0w2ErppXCQ=="
+          "hash": "qVCDMtlz2i06rBKCFd4ChA=="
         }
       },
       "is_incremental": true,
@@ -96,7 +81,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.CircuitObjects.html",
-          "hash": "Y6XSilIVmfvCtY1vJIR8uw=="
+          "hash": "RgxNRj8kxHknGqEgtFQWVQ=="
         }
       },
       "is_incremental": true,
@@ -108,7 +93,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.CircuitState.DomainTypes.html",
-          "hash": "/nSfGbh5K5adT4wySgCj1g=="
+          "hash": "9Pd0nW5Gi+s8MTn6GoSwDA=="
         }
       },
       "is_incremental": true,
@@ -120,7 +105,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.CircuitState.InitFlags.html",
-          "hash": "k7UMePnQk4iiIzbBlWLgHQ=="
+          "hash": "1TLZXjOM6dGqnkNkKZtUuw=="
         }
       },
       "is_incremental": true,
@@ -132,7 +117,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.CircuitState.html",
-          "hash": "IstcEJm4NNWuUJ6anv0I8w=="
+          "hash": "71NqlT41oH9kjZteLmpZ7g=="
         }
       },
       "is_incremental": true,
@@ -144,7 +129,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.CircuitStateComplex.html",
-          "hash": "HgXhV/NVwPIJkdZ4G/RasA=="
+          "hash": "r1Eudt1cZIiAxwj9puZJ1Q=="
         }
       },
       "is_incremental": true,
@@ -156,7 +141,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.CircuitStateReal.html",
-          "hash": "9sL5NHE18qBSaSsap24wtQ=="
+          "hash": "9iZWnY7/jwPKEY8ezm0wuw=="
         }
       },
       "is_incremental": true,
@@ -168,7 +153,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.CircuitStatistics.html",
-          "hash": "qThRQas9vW9nH4QR+gV1dQ=="
+          "hash": "FG+XQzO1CzERPPzHlvGPCw=="
         }
       },
       "is_incremental": true,
@@ -180,7 +165,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.ICircuitObject.html",
-          "hash": "KRyfbOKsIA0WxPOjDoV3Zg=="
+          "hash": "guJYVwFyLhE8/mvfWeZyag=="
         }
       },
       "is_incremental": true,
@@ -192,7 +177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.Nodes.html",
-          "hash": "sFy4pgh9yyYI+7q4qJE/mw=="
+          "hash": "CzqnV910kJ5D/yA1kKd0pQ=="
         }
       },
       "is_incremental": true,
@@ -204,7 +189,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Circuits.html",
-          "hash": "iDmid1jXKkc5zepjSk74lg=="
+          "hash": "Igplnp6NEfk94ydNaxJkCg=="
         }
       },
       "is_incremental": true,
@@ -216,7 +201,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.BJT.html",
-          "hash": "iWBAhTK73/fNpptvDilDMw=="
+          "hash": "IZVFmKDuV2BYAMu2cXYk9A=="
         }
       },
       "is_incremental": true,
@@ -228,7 +213,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.BJTModel.html",
-          "hash": "Z8hFc2NFgNZkyLs/2wBYrQ=="
+          "hash": "ZwpFYJ/Dc+8YFVmR7OLBhA=="
         }
       },
       "is_incremental": true,
@@ -240,7 +225,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Capacitor.html",
-          "hash": "osxCmq8DEnJKHNLkdgzbrQ=="
+          "hash": "dCs72cEKBjamSGYsGq1BPQ=="
         }
       },
       "is_incremental": true,
@@ -252,7 +237,19 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.CapacitorModel.html",
-          "hash": "x1JRcSN0An7e9V75i6HtSw=="
+          "hash": "cNYuKT2lFthxU/OhrqiMag=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Components.CircuitComponent-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.CircuitComponent-1.html",
+          "hash": "A7m1e78+Bu0yChU18MnT9Q=="
         }
       },
       "is_incremental": true,
@@ -264,7 +261,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.CircuitModel-1.html",
-          "hash": "2269LtZ9VizNMJztIHpL1A=="
+          "hash": "hxzIriqYsijXBayMjL/mwA=="
         }
       },
       "is_incremental": true,
@@ -276,7 +273,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.ConnectedPins.html",
-          "hash": "duqmdbqfdooyvpgSAI+0pA=="
+          "hash": "dC+4o6mpqLAOxgLoQ/eQ8Q=="
         }
       },
       "is_incremental": true,
@@ -288,7 +285,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.CurrentControlledCurrentsource.html",
-          "hash": "sKErJV/G+O0V13G93ffJ2A=="
+          "hash": "uqgBZV8BtNMWAKzEsO4RSw=="
         }
       },
       "is_incremental": true,
@@ -300,19 +297,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.CurrentControlledVoltagesource.html",
-          "hash": "9Lw8e3pDJqThSBmAnx/QLg=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Components.CurrentDriver.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Components.CurrentDriver.html",
-          "hash": "bnzZLEkfnmu3EGMvRMUGrg=="
+          "hash": "u9N1BY8YHS+JDBaF0BcFCw=="
         }
       },
       "is_incremental": true,
@@ -324,7 +309,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.CurrentSwitch.html",
-          "hash": "LE7K9a2BT2YXDAiFMdM+mw=="
+          "hash": "8pIWJP9YAM9iTGL973HUWQ=="
         }
       },
       "is_incremental": true,
@@ -336,7 +321,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.CurrentSwitchModel.html",
-          "hash": "Xq9rQy9QDwI5TcYmoXUHwA=="
+          "hash": "fFT+HJGnpZu+dbCgC5m5vA=="
         }
       },
       "is_incremental": true,
@@ -348,7 +333,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Currentsource.html",
-          "hash": "hShdubrhAvkY8wfUj17vKg=="
+          "hash": "85AS1EuCRcLJENZJTkO/qA=="
         }
       },
       "is_incremental": true,
@@ -360,7 +345,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Diode.html",
-          "hash": "bR9uS7dnq0saNJELl5TQvQ=="
+          "hash": "G7g6KQX5bWb3sZDoJFBIPA=="
         }
       },
       "is_incremental": true,
@@ -372,7 +357,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.DiodeModel.html",
-          "hash": "EbDhdgSkXOymqK5WvMpqlQ=="
+          "hash": "4y8tMJoe2/fv8/7CYG4j7g=="
         }
       },
       "is_incremental": true,
@@ -384,7 +369,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.ICircuitComponent.html",
-          "hash": "u76Rblj1XObE5mrXOxyCUQ=="
+          "hash": "Ujs08AQrMDrh1/E7Dofkqw=="
         }
       },
       "is_incremental": true,
@@ -396,7 +381,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.IWaveform.html",
-          "hash": "hIegH+Zd4XV0+Tynn5AwVQ=="
+          "hash": "HEGt4tWZhGinWhhccy7SYw=="
         }
       },
       "is_incremental": true,
@@ -408,7 +393,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.IndependentSource.html",
-          "hash": "i5cn8oJwuSWUjWOORVmdpQ=="
+          "hash": "O5nUwdAgvByWxzalhVakaQ=="
         }
       },
       "is_incremental": true,
@@ -420,7 +405,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Inductor.UpdateMutualInductanceEventHandler.html",
-          "hash": "COaHHJuq9SSbli89X2vZ1g=="
+          "hash": "wiKvPnzQlaJRMzHLpEuNLA=="
         }
       },
       "is_incremental": true,
@@ -432,7 +417,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Inductor.html",
-          "hash": "+EENqOZQfzRRnqMxQLC/HQ=="
+          "hash": "xNMOJnvcjxbYVECPJtusIg=="
         }
       },
       "is_incremental": true,
@@ -444,7 +429,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.MOS1.html",
-          "hash": "DPWOtVQW3GZmbZuSV7S/jA=="
+          "hash": "mnR1boENcHhHyv4tkEA6gA=="
         }
       },
       "is_incremental": true,
@@ -456,7 +441,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.MOS1Model.html",
-          "hash": "dlbjjMZPCVYvIVqxKj5PHw=="
+          "hash": "W8naAbmP1H/5hQ3/c+ofCg=="
         }
       },
       "is_incremental": true,
@@ -468,7 +453,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.MOS2.html",
-          "hash": "LwCBGfp6a2aRPWl9pxY0Xg=="
+          "hash": "/BO9e0xJdsyhuacPvyFzUA=="
         }
       },
       "is_incremental": true,
@@ -480,7 +465,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.MOS2Model.html",
-          "hash": "vKZ+DB10jWvr34jbQzDkRA=="
+          "hash": "IvUDKp30WlBlTo06rW0BMw=="
         }
       },
       "is_incremental": true,
@@ -492,7 +477,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.MOS3.html",
-          "hash": "C0xjG8zmfvV4e7gPBua74w=="
+          "hash": "Ffe25DwoJ33sleRVhbds/A=="
         }
       },
       "is_incremental": true,
@@ -504,7 +489,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.MOS3Model.html",
-          "hash": "OUA2U3j9PU8VaNc/7IM2zQ=="
+          "hash": "7VlbsFnlORy3AC+lXMGQjw=="
         }
       },
       "is_incremental": true,
@@ -516,7 +501,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.MutualInductance.html",
-          "hash": "SYVhIqyGAKH0IO40Z9En8g=="
+          "hash": "fE4I+LacOjqa+PUa8LCKbg=="
         }
       },
       "is_incremental": true,
@@ -528,7 +513,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Pulse.html",
-          "hash": "G4/RTx385DSyIqSVWIR1XQ=="
+          "hash": "r5ELxfWou7jrPGLJxpCT5g=="
         }
       },
       "is_incremental": true,
@@ -540,7 +525,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Resistor.html",
-          "hash": "P3gMYiEGnAnKBMIXmiVvRg=="
+          "hash": "tsXPAwQVRSjn9aabkNyuUw=="
         }
       },
       "is_incremental": true,
@@ -552,7 +537,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.ResistorModel.html",
-          "hash": "j1LaVl0l83FhiBocapxvKg=="
+          "hash": "lvKyNtoEY/dk42J3knIwbw=="
         }
       },
       "is_incremental": true,
@@ -564,7 +549,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Semiconductors.Semiconductor.html",
-          "hash": "VjWYe70TsZavemFnR9euzw=="
+          "hash": "+JP93+lUfHz3Tb4Fvc8+Uw=="
         }
       },
       "is_incremental": true,
@@ -576,7 +561,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Semiconductors.html",
-          "hash": "ZQNZ8winB1ArISRzgyl4pQ=="
+          "hash": "zabQ04nlLJRu8drpcAbK4w=="
         }
       },
       "is_incremental": true,
@@ -588,7 +573,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Sine.html",
-          "hash": "zVCLsrwyTFEDPXDVT0tLsg=="
+          "hash": "3SN/N3YIBGmSiNu527GHow=="
         }
       },
       "is_incremental": true,
@@ -600,7 +585,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.SpicePins.html",
-          "hash": "ZPqOFr0p49OfwsAz+S0mpA=="
+          "hash": "cPodAe66gynyQc1xvyIMVQ=="
         }
       },
       "is_incremental": true,
@@ -612,7 +597,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Subcircuit.html",
-          "hash": "YkUDgc6YTHJjjBWh+L6NGA=="
+          "hash": "X0/ucoG74EYkYNSu39hvjQ=="
         }
       },
       "is_incremental": true,
@@ -624,7 +609,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Transistors.Transistor.html",
-          "hash": "X9B4soMbLIjFkSN54My/Cg=="
+          "hash": "VB5ca8xfFrqQrzaJdWvtgw=="
         }
       },
       "is_incremental": true,
@@ -636,7 +621,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Transistors.html",
-          "hash": "upT3H/JcE1PPTkpkeszRtQ=="
+          "hash": "XhD36yM9yNmbyjmYZd0lVA=="
         }
       },
       "is_incremental": true,
@@ -648,7 +633,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.VoltageControlledCurrentsource.html",
-          "hash": "E4ydgTareQPq7NdTYG2C7Q=="
+          "hash": "bPNAILWomHqO9a1p15L17w=="
         }
       },
       "is_incremental": true,
@@ -660,7 +645,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.VoltageControlledVoltagesource.html",
-          "hash": "2IgodANa1KD2J3IVzOBukg=="
+          "hash": "TbNmnmKXxYE78pacAF8Ceg=="
         }
       },
       "is_incremental": true,
@@ -672,7 +657,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.VoltageDriver.html",
-          "hash": "MQeHDyKU5gXJq7/nOm8uvw=="
+          "hash": "xHwC9cb4crpahTfCtXJQMA=="
         }
       },
       "is_incremental": true,
@@ -684,7 +669,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.VoltageSwitch.html",
-          "hash": "cioXItISj2ncl5vgIIX9MA=="
+          "hash": "VGo2RHtVrvvOCsnWLAJrIg=="
         }
       },
       "is_incremental": true,
@@ -696,7 +681,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.VoltageSwitchModel.html",
-          "hash": "84jyKPIHDBj8ffp8QbjINw=="
+          "hash": "dmx5/4DIscU99EIrd+uFqA=="
         }
       },
       "is_incremental": true,
@@ -708,7 +693,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Voltagesource.html",
-          "hash": "h1utZGSGjm8DODjb9cPZhA=="
+          "hash": "yI9mll4hzU2MkrlWMC+oww=="
         }
       },
       "is_incremental": true,
@@ -720,7 +705,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Waveform-1.html",
-          "hash": "1t6XWCuqEdX4SiC4L6raGg=="
+          "hash": "PCbZlfoVISR8R55sFy4hkA=="
         }
       },
       "is_incremental": true,
@@ -732,7 +717,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.html",
-          "hash": "x/nJVelXTaAx+n4A5c672Q=="
+          "hash": "T+xxJ8QXXsQXl5f21k0IJA=="
         }
       },
       "is_incremental": true,
@@ -744,7 +729,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Diagnostics.BadParameterException.html",
-          "hash": "dAe3GNM9sDpIyCXtUrl9vw=="
+          "hash": "Af7SzSAaq0XqZu9+vm2vEQ=="
         }
       },
       "is_incremental": true,
@@ -756,7 +741,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Diagnostics.CircuitException.html",
-          "hash": "Dx6Zsk6nMgaLqy5GoYLegA=="
+          "hash": "XqScc85OWDTVVwT+duV2Xw=="
         }
       },
       "is_incremental": true,
@@ -768,7 +753,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Diagnostics.CircuitWarning.html",
-          "hash": "7gcgpake5r9OFyGGOepMrQ=="
+          "hash": "aWSuuFmwHJbK7XVdF5H7lw=="
         }
       },
       "is_incremental": true,
@@ -780,7 +765,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Diagnostics.WarningArgs.html",
-          "hash": "hdhr06sov6Cnul8TXz7FWw=="
+          "hash": "T7zBO375tDIEzBg7jDaPtw=="
         }
       },
       "is_incremental": true,
@@ -792,7 +777,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Diagnostics.WarningEventHandler.html",
-          "hash": "3gUHtDIqiWfstBjGdYrFgQ=="
+          "hash": "dpTPD+/2w+JuyXEoX4HlVA=="
         }
       },
       "is_incremental": true,
@@ -804,43 +789,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Diagnostics.html",
-          "hash": "BA4tvS5fGXWO8vJW01SBDw=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethod.Configuration.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.IntegrationMethod.Configuration.html",
-          "hash": "YcYr7NJPvOTDp5gmU9SApA=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethod.Result.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.IntegrationMethod.Result.html",
-          "hash": "o07NzRwLtoSaAz2Af/zWMg=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethod.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.IntegrationMethod.html",
-          "hash": "SKx02GHEEdHvQ+Aixa61MA=="
+          "hash": "mGQNDPGq0SzEDZs9q+7Zaw=="
         }
       },
       "is_incremental": true,
@@ -852,7 +801,43 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.IntegrationMethods.Breakpoints.html",
-          "hash": "3qK/Hyy5/snNLbyHQvCj5Q=="
+          "hash": "7YPJLAiz1fkEJXc8uN046Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.html",
+          "hash": "Zy+AWnA2iSvx0F2medFxeA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.IntegrationMethod.Result.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.IntegrationMethods.IntegrationMethod.Result.html",
+          "hash": "he/dR9I67+MxjCtEcVbdUg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.IntegrationMethods.IntegrationMethod.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.IntegrationMethods.IntegrationMethod.html",
+          "hash": "INth+wQX8MPCfSbmjOarXQ=="
         }
       },
       "is_incremental": true,
@@ -864,7 +849,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.IntegrationMethods.Trapezoidal.html",
-          "hash": "+9psa6C6DWNOW/BATQE7og=="
+          "hash": "si5ooL1DDPY/b7VPYlOdsg=="
         }
       },
       "is_incremental": true,
@@ -876,7 +861,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.IntegrationMethods.html",
-          "hash": "KQAVvJwTwta5oua3Fn9mEA=="
+          "hash": "ZgHazGriIn5NtmQN2mS77w=="
         }
       },
       "is_incremental": true,
@@ -888,7 +873,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parameters.IParameterized.html",
-          "hash": "c/qS4zO+/HLZOTMPa9l8Hw=="
+          "hash": "FwykDhqXk0b+83P6oevTjg=="
         }
       },
       "is_incremental": true,
@@ -900,7 +885,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parameters.Parameter.html",
-          "hash": "jVawOAKszTOLvyDlYluiHw=="
+          "hash": "yK0nwfNkvH4tflSz2rmf3g=="
         }
       },
       "is_incremental": true,
@@ -912,7 +897,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parameters.Parameterized-1.html",
-          "hash": "+hmmp5r5873DyA4P8p6iUg=="
+          "hash": "NkUuER2zbYVh/3vT9GpwCg=="
         }
       },
       "is_incremental": true,
@@ -924,7 +909,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parameters.SpiceInfo.html",
-          "hash": "CyKh4ZPwTzpcicTCZpgj0g=="
+          "hash": "F5PRvdrQbh+hJ7v06gb6fg=="
         }
       },
       "is_incremental": true,
@@ -936,7 +921,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parameters.SpiceName.html",
-          "hash": "nI3D64rCNzQ3SktOrLRZyg=="
+          "hash": "HypQjwsf0ibP/2jdtqqRdA=="
         }
       },
       "is_incremental": true,
@@ -948,19 +933,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parameters.html",
-          "hash": "iMsseCaMaFbn5tyQLI3hGA=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Simulation-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Simulation-1.html",
-          "hash": "ilzXZZQtQlAApk75Ihwvnw=="
+          "hash": "UpRrTRQc8DZWrs7rCdFrWw=="
         }
       },
       "is_incremental": true,
@@ -972,7 +945,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.AC.StepTypes.html",
-          "hash": "DxtnQCr24mqtWxjId/48Vg=="
+          "hash": "cDX6C9fLPDWSnsc/iCB2yw=="
         }
       },
       "is_incremental": true,
@@ -984,7 +957,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.AC.html",
-          "hash": "FJ532u/lwc4DfjY3tpT03g=="
+          "hash": "ni6CUPdK9GI+ePTSNCincQ=="
         }
       },
       "is_incremental": true,
@@ -996,7 +969,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.DC.IterationFailedEventHandler.html",
-          "hash": "8akpsJKEo44RVZbBU3MO1w=="
+          "hash": "lqRSp+Ar2IdyZXKBE15UUg=="
         }
       },
       "is_incremental": true,
@@ -1008,7 +981,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.DC.Sweep.html",
-          "hash": "q543vZoLUq+zIeUlPx34NA=="
+          "hash": "mbDeVmTls3HhWRpbKG5hsw=="
         }
       },
       "is_incremental": true,
@@ -1020,7 +993,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.DC.html",
-          "hash": "1PUHw+8boWGNsf6cvzBTXg=="
+          "hash": "JQNZw4QCqhivpKmF9FC6og=="
         }
       },
       "is_incremental": true,
@@ -1032,7 +1005,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.ExportSimulationDataEventHandler.html",
-          "hash": "xrOyAtTWWyMsRCExWjdAzA=="
+          "hash": "cOgV22G3Uu8rXdHD9s+75Q=="
         }
       },
       "is_incremental": true,
@@ -1044,7 +1017,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.FinalizeSimulationExportEventHandler.html",
-          "hash": "QzRsYfgTrsys5oxG/5QBXQ=="
+          "hash": "Yf7SeyDouRzu+aGFbblfdw=="
         }
       },
       "is_incremental": true,
@@ -1056,7 +1029,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.ISimulation.html",
-          "hash": "P3f9wMVlm/NDm99f3fjRbg=="
+          "hash": "lNCj3eNHdoSAG0Hi2S3oNQ=="
         }
       },
       "is_incremental": true,
@@ -1068,7 +1041,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.InitializeSimulationExportEventHandler.html",
-          "hash": "rL5+ssyNp8EtPa6NmCvvqQ=="
+          "hash": "PfVkyhamOPz6UZokwhrCug=="
         }
       },
       "is_incremental": true,
@@ -1080,7 +1053,19 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.OP.html",
-          "hash": "iFCyh+vV0H4SRCcDfUGN+g=="
+          "hash": "LJCNuH3ImuAUlShoTBY2Uw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Simulations.Simulation-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.Simulation-1.html",
+          "hash": "Q6tRLqV0J/TI3TPHzzX6hg=="
         }
       },
       "is_incremental": true,
@@ -1092,7 +1077,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.SimulationCircuit.html",
-          "hash": "TqvK0XBbRqeJ0ioGNiJtog=="
+          "hash": "vruz6hTms989ejxuGXFXNg=="
         }
       },
       "is_incremental": true,
@@ -1104,7 +1089,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.SimulationConfiguration.html",
-          "hash": "Lc+hEK3rRzpW+0aBVHEuNA=="
+          "hash": "4Rfgy3CgdfJ8/aciulh+Eg=="
         }
       },
       "is_incremental": true,
@@ -1116,7 +1101,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.SimulationData.html",
-          "hash": "mgSms870IFbNaPFqEc81TQ=="
+          "hash": "1FbOmNI3/gr0slLVILsYgw=="
         }
       },
       "is_incremental": true,
@@ -1128,7 +1113,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.SimulationIterate.html",
-          "hash": "ovYLJkOylmhZZHdMKou0bA=="
+          "hash": "w3PiVQDZIAdEtFrkg9SxVA=="
         }
       },
       "is_incremental": true,
@@ -1140,7 +1125,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.TimestepCutData.TimestepCutReason.html",
-          "hash": "7VVOncG6S4EIUNWhVOzqPQ=="
+          "hash": "mZyloviv552uq/vwa4zzFA=="
         }
       },
       "is_incremental": true,
@@ -1152,7 +1137,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.TimestepCutData.html",
-          "hash": "AByyOdw9/C9oNlzF3GLOxg=="
+          "hash": "Qg36etW8cCJM7DUHZayKdg=="
         }
       },
       "is_incremental": true,
@@ -1164,7 +1149,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.Transient.TimestepCutEventHandler.html",
-          "hash": "dGWVlr5mYK61Tj6y5em3NQ=="
+          "hash": "R0XEIb0QYw/yUSeTxH+fXQ=="
         }
       },
       "is_incremental": true,
@@ -1176,7 +1161,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.Transient.html",
-          "hash": "sEqHAz7m5T+gcs6OfgIuiA=="
+          "hash": "6YPKIKK29Qj8R7VrtkP37A=="
         }
       },
       "is_incremental": true,
@@ -1188,7 +1173,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.html",
-          "hash": "4/lAEgsfdspSjEhPkHaR/g=="
+          "hash": "D3b45t+ajzUjRFaxMfK0Qg=="
         }
       },
       "is_incremental": true,
@@ -1200,7 +1185,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.html",
-          "hash": "qvuZVLOINgjCRQKzFqwptQ=="
+          "hash": "neMSRSfdwTfiQ2zhRsFBZw=="
         }
       },
       "is_incremental": true,
@@ -1219,11 +1204,6 @@
           "details": "Processor ResourceDocumentProcessor cannot suppport incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build"
         },
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot suppport incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build"
-        },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build"
@@ -1235,6 +1215,11 @@
         "RestApiDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor RestApiDocumentProcessor cannot suppport incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build"
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot suppport incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build"
         }
       }

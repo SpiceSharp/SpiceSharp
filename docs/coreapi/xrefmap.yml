@@ -211,296 +211,6 @@ references:
   commentId: Overload:SpiceSharp.Circuit.Unsetup
   fullName: SpiceSharp.Circuit.Unsetup
   nameWithType: Circuit.Unsetup
-- uid: SpiceSharp.CircuitComponent`1
-  name: CircuitComponent<T>
-  href: api/SpiceSharp.CircuitComponent-1.html
-  commentId: T:SpiceSharp.CircuitComponent`1
-  name.vb: CircuitComponent(Of T)
-  fullName: SpiceSharp.CircuitComponent<T>
-  fullName.vb: SpiceSharp.CircuitComponent(Of T)
-  nameWithType: CircuitComponent<T>
-  nameWithType.vb: CircuitComponent(Of T)
-- uid: SpiceSharp.CircuitComponent`1.#ctor(System.String)
-  name: CircuitComponent(String)
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1__ctor_System_String_
-  commentId: M:SpiceSharp.CircuitComponent`1.#ctor(System.String)
-  fullName: SpiceSharp.CircuitComponent<T>.CircuitComponent(System.String)
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).CircuitComponent(System.String)
-  nameWithType: CircuitComponent<T>.CircuitComponent(String)
-  nameWithType.vb: CircuitComponent(Of T).CircuitComponent(String)
-- uid: SpiceSharp.CircuitComponent`1.#ctor*
-  name: CircuitComponent
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1__ctor_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.#ctor
-  fullName: SpiceSharp.CircuitComponent<T>.CircuitComponent
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).CircuitComponent
-  nameWithType: CircuitComponent<T>.CircuitComponent
-  nameWithType.vb: CircuitComponent(Of T).CircuitComponent
-- uid: SpiceSharp.CircuitComponent`1.Accept(SpiceSharp.Circuit)
-  name: Accept(Circuit)
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Accept_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.CircuitComponent`1.Accept(SpiceSharp.Circuit)
-  fullName: SpiceSharp.CircuitComponent<T>.Accept(SpiceSharp.Circuit)
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Accept(SpiceSharp.Circuit)
-  nameWithType: CircuitComponent<T>.Accept(Circuit)
-  nameWithType.vb: CircuitComponent(Of T).Accept(Circuit)
-- uid: SpiceSharp.CircuitComponent`1.Accept*
-  name: Accept
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Accept_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.Accept
-  fullName: SpiceSharp.CircuitComponent<T>.Accept
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Accept
-  nameWithType: CircuitComponent<T>.Accept
-  nameWithType.vb: CircuitComponent(Of T).Accept
-- uid: SpiceSharp.CircuitComponent`1.AcLoad(SpiceSharp.Circuit)
-  name: AcLoad(Circuit)
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_AcLoad_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.CircuitComponent`1.AcLoad(SpiceSharp.Circuit)
-  fullName: SpiceSharp.CircuitComponent<T>.AcLoad(SpiceSharp.Circuit)
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).AcLoad(SpiceSharp.Circuit)
-  nameWithType: CircuitComponent<T>.AcLoad(Circuit)
-  nameWithType.vb: CircuitComponent(Of T).AcLoad(Circuit)
-- uid: SpiceSharp.CircuitComponent`1.AcLoad*
-  name: AcLoad
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_AcLoad_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.AcLoad
-  fullName: SpiceSharp.CircuitComponent<T>.AcLoad
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).AcLoad
-  nameWithType: CircuitComponent<T>.AcLoad
-  nameWithType.vb: CircuitComponent(Of T).AcLoad
-- uid: SpiceSharp.CircuitComponent`1.BindNodes(SpiceSharp.Circuit)
-  name: BindNodes(Circuit)
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_BindNodes_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.CircuitComponent`1.BindNodes(SpiceSharp.Circuit)
-  fullName: SpiceSharp.CircuitComponent<T>.BindNodes(SpiceSharp.Circuit)
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).BindNodes(SpiceSharp.Circuit)
-  nameWithType: CircuitComponent<T>.BindNodes(Circuit)
-  nameWithType.vb: CircuitComponent(Of T).BindNodes(Circuit)
-- uid: SpiceSharp.CircuitComponent`1.BindNodes*
-  name: BindNodes
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_BindNodes_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.BindNodes
-  fullName: SpiceSharp.CircuitComponent<T>.BindNodes
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).BindNodes
-  nameWithType: CircuitComponent<T>.BindNodes
-  nameWithType.vb: CircuitComponent(Of T).BindNodes
-- uid: SpiceSharp.CircuitComponent`1.Connect(System.String[])
-  name: Connect(String[])
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Connect_System_String___
-  commentId: M:SpiceSharp.CircuitComponent`1.Connect(System.String[])
-  name.vb: Connect(String())
-  fullName: SpiceSharp.CircuitComponent<T>.Connect(System.String[])
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Connect(System.String())
-  nameWithType: CircuitComponent<T>.Connect(String[])
-  nameWithType.vb: CircuitComponent(Of T).Connect(String())
-- uid: SpiceSharp.CircuitComponent`1.Connect*
-  name: Connect
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Connect_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.Connect
-  fullName: SpiceSharp.CircuitComponent<T>.Connect
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Connect
-  nameWithType: CircuitComponent<T>.Connect
-  nameWithType.vb: CircuitComponent(Of T).Connect
-- uid: SpiceSharp.CircuitComponent`1.CreateNode(SpiceSharp.Circuit,SpiceSharp.Circuits.CircuitNode.NodeType)
-  name: CreateNode(Circuit, CircuitNode.NodeType)
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_CreateNode_SpiceSharp_Circuit_SpiceSharp_Circuits_CircuitNode_NodeType_
-  commentId: M:SpiceSharp.CircuitComponent`1.CreateNode(SpiceSharp.Circuit,SpiceSharp.Circuits.CircuitNode.NodeType)
-  fullName: SpiceSharp.CircuitComponent<T>.CreateNode(SpiceSharp.Circuit, SpiceSharp.Circuits.CircuitNode.NodeType)
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).CreateNode(SpiceSharp.Circuit, SpiceSharp.Circuits.CircuitNode.NodeType)
-  nameWithType: CircuitComponent<T>.CreateNode(Circuit, CircuitNode.NodeType)
-  nameWithType.vb: CircuitComponent(Of T).CreateNode(Circuit, CircuitNode.NodeType)
-- uid: SpiceSharp.CircuitComponent`1.CreateNode*
-  name: CreateNode
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_CreateNode_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.CreateNode
-  fullName: SpiceSharp.CircuitComponent<T>.CreateNode
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).CreateNode
-  nameWithType: CircuitComponent<T>.CreateNode
-  nameWithType.vb: CircuitComponent(Of T).CreateNode
-- uid: SpiceSharp.CircuitComponent`1.GetNode(System.Int32)
-  name: GetNode(Int32)
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_GetNode_System_Int32_
-  commentId: M:SpiceSharp.CircuitComponent`1.GetNode(System.Int32)
-  fullName: SpiceSharp.CircuitComponent<T>.GetNode(System.Int32)
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).GetNode(System.Int32)
-  nameWithType: CircuitComponent<T>.GetNode(Int32)
-  nameWithType.vb: CircuitComponent(Of T).GetNode(Int32)
-- uid: SpiceSharp.CircuitComponent`1.GetNode*
-  name: GetNode
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_GetNode_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.GetNode
-  fullName: SpiceSharp.CircuitComponent<T>.GetNode
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).GetNode
-  nameWithType: CircuitComponent<T>.GetNode
-  nameWithType.vb: CircuitComponent(Of T).GetNode
-- uid: SpiceSharp.CircuitComponent`1.GetNodeIndex(System.Int32)
-  name: GetNodeIndex(Int32)
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_GetNodeIndex_System_Int32_
-  commentId: M:SpiceSharp.CircuitComponent`1.GetNodeIndex(System.Int32)
-  fullName: SpiceSharp.CircuitComponent<T>.GetNodeIndex(System.Int32)
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).GetNodeIndex(System.Int32)
-  nameWithType: CircuitComponent<T>.GetNodeIndex(Int32)
-  nameWithType.vb: CircuitComponent(Of T).GetNodeIndex(Int32)
-- uid: SpiceSharp.CircuitComponent`1.GetNodeIndex*
-  name: GetNodeIndex
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_GetNodeIndex_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.GetNodeIndex
-  fullName: SpiceSharp.CircuitComponent<T>.GetNodeIndex
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).GetNodeIndex
-  nameWithType: CircuitComponent<T>.GetNodeIndex
-  nameWithType.vb: CircuitComponent(Of T).GetNodeIndex
-- uid: SpiceSharp.CircuitComponent`1.Load(SpiceSharp.Circuit)
-  name: Load(Circuit)
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Load_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.CircuitComponent`1.Load(SpiceSharp.Circuit)
-  fullName: SpiceSharp.CircuitComponent<T>.Load(SpiceSharp.Circuit)
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Load(SpiceSharp.Circuit)
-  nameWithType: CircuitComponent<T>.Load(Circuit)
-  nameWithType.vb: CircuitComponent(Of T).Load(Circuit)
-- uid: SpiceSharp.CircuitComponent`1.Load*
-  name: Load
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Load_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.Load
-  fullName: SpiceSharp.CircuitComponent<T>.Load
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Load
-  nameWithType: CircuitComponent<T>.Load
-  nameWithType.vb: CircuitComponent(Of T).Load
-- uid: SpiceSharp.CircuitComponent`1.Model
-  name: Model
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Model
-  commentId: P:SpiceSharp.CircuitComponent`1.Model
-  fullName: SpiceSharp.CircuitComponent<T>.Model
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Model
-  nameWithType: CircuitComponent<T>.Model
-  nameWithType.vb: CircuitComponent(Of T).Model
-- uid: SpiceSharp.CircuitComponent`1.Model*
-  name: Model
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Model_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.Model
-  fullName: SpiceSharp.CircuitComponent<T>.Model
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Model
-  nameWithType: CircuitComponent<T>.Model
-  nameWithType.vb: CircuitComponent(Of T).Model
-- uid: SpiceSharp.CircuitComponent`1.Name
-  name: Name
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Name
-  commentId: P:SpiceSharp.CircuitComponent`1.Name
-  fullName: SpiceSharp.CircuitComponent<T>.Name
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Name
-  nameWithType: CircuitComponent<T>.Name
-  nameWithType.vb: CircuitComponent(Of T).Name
-- uid: SpiceSharp.CircuitComponent`1.Name*
-  name: Name
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Name_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.Name
-  fullName: SpiceSharp.CircuitComponent<T>.Name
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Name
-  nameWithType: CircuitComponent<T>.Name
-  nameWithType.vb: CircuitComponent(Of T).Name
-- uid: SpiceSharp.CircuitComponent`1.PinCount
-  name: PinCount
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_PinCount
-  commentId: P:SpiceSharp.CircuitComponent`1.PinCount
-  fullName: SpiceSharp.CircuitComponent<T>.PinCount
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).PinCount
-  nameWithType: CircuitComponent<T>.PinCount
-  nameWithType.vb: CircuitComponent(Of T).PinCount
-- uid: SpiceSharp.CircuitComponent`1.PinCount*
-  name: PinCount
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_PinCount_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.PinCount
-  fullName: SpiceSharp.CircuitComponent<T>.PinCount
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).PinCount
-  nameWithType: CircuitComponent<T>.PinCount
-  nameWithType.vb: CircuitComponent(Of T).PinCount
-- uid: SpiceSharp.CircuitComponent`1.pins
-  name: pins
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_pins
-  commentId: F:SpiceSharp.CircuitComponent`1.pins
-  fullName: SpiceSharp.CircuitComponent<T>.pins
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).pins
-  nameWithType: CircuitComponent<T>.pins
-  nameWithType.vb: CircuitComponent(Of T).pins
-- uid: SpiceSharp.CircuitComponent`1.Priority
-  name: Priority
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Priority
-  commentId: P:SpiceSharp.CircuitComponent`1.Priority
-  fullName: SpiceSharp.CircuitComponent<T>.Priority
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Priority
-  nameWithType: CircuitComponent<T>.Priority
-  nameWithType.vb: CircuitComponent(Of T).Priority
-- uid: SpiceSharp.CircuitComponent`1.Priority*
-  name: Priority
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Priority_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.Priority
-  fullName: SpiceSharp.CircuitComponent<T>.Priority
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Priority
-  nameWithType: CircuitComponent<T>.Priority
-  nameWithType.vb: CircuitComponent(Of T).Priority
-- uid: SpiceSharp.CircuitComponent`1.SetIc(SpiceSharp.Circuit)
-  name: SetIc(Circuit)
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_SetIc_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.CircuitComponent`1.SetIc(SpiceSharp.Circuit)
-  fullName: SpiceSharp.CircuitComponent<T>.SetIc(SpiceSharp.Circuit)
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).SetIc(SpiceSharp.Circuit)
-  nameWithType: CircuitComponent<T>.SetIc(Circuit)
-  nameWithType.vb: CircuitComponent(Of T).SetIc(Circuit)
-- uid: SpiceSharp.CircuitComponent`1.SetIc*
-  name: SetIc
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_SetIc_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.SetIc
-  fullName: SpiceSharp.CircuitComponent<T>.SetIc
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).SetIc
-  nameWithType: CircuitComponent<T>.SetIc
-  nameWithType.vb: CircuitComponent(Of T).SetIc
-- uid: SpiceSharp.CircuitComponent`1.Setup(SpiceSharp.Circuit)
-  name: Setup(Circuit)
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Setup_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.CircuitComponent`1.Setup(SpiceSharp.Circuit)
-  fullName: SpiceSharp.CircuitComponent<T>.Setup(SpiceSharp.Circuit)
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Setup(SpiceSharp.Circuit)
-  nameWithType: CircuitComponent<T>.Setup(Circuit)
-  nameWithType.vb: CircuitComponent(Of T).Setup(Circuit)
-- uid: SpiceSharp.CircuitComponent`1.Setup*
-  name: Setup
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Setup_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.Setup
-  fullName: SpiceSharp.CircuitComponent<T>.Setup
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Setup
-  nameWithType: CircuitComponent<T>.Setup
-  nameWithType.vb: CircuitComponent(Of T).Setup
-- uid: SpiceSharp.CircuitComponent`1.Temperature(SpiceSharp.Circuit)
-  name: Temperature(Circuit)
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Temperature_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.CircuitComponent`1.Temperature(SpiceSharp.Circuit)
-  fullName: SpiceSharp.CircuitComponent<T>.Temperature(SpiceSharp.Circuit)
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Temperature(SpiceSharp.Circuit)
-  nameWithType: CircuitComponent<T>.Temperature(Circuit)
-  nameWithType.vb: CircuitComponent(Of T).Temperature(Circuit)
-- uid: SpiceSharp.CircuitComponent`1.Temperature*
-  name: Temperature
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Temperature_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.Temperature
-  fullName: SpiceSharp.CircuitComponent<T>.Temperature
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Temperature
-  nameWithType: CircuitComponent<T>.Temperature
-  nameWithType.vb: CircuitComponent(Of T).Temperature
-- uid: SpiceSharp.CircuitComponent`1.Unsetup(SpiceSharp.Circuit)
-  name: Unsetup(Circuit)
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Unsetup_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.CircuitComponent`1.Unsetup(SpiceSharp.Circuit)
-  fullName: SpiceSharp.CircuitComponent<T>.Unsetup(SpiceSharp.Circuit)
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Unsetup(SpiceSharp.Circuit)
-  nameWithType: CircuitComponent<T>.Unsetup(Circuit)
-  nameWithType.vb: CircuitComponent(Of T).Unsetup(Circuit)
-- uid: SpiceSharp.CircuitComponent`1.Unsetup*
-  name: Unsetup
-  href: api/SpiceSharp.CircuitComponent-1.html#SpiceSharp_CircuitComponent_1_Unsetup_
-  commentId: Overload:SpiceSharp.CircuitComponent`1.Unsetup
-  fullName: SpiceSharp.CircuitComponent<T>.Unsetup
-  fullName.vb: SpiceSharp.CircuitComponent(Of T).Unsetup
-  nameWithType: CircuitComponent<T>.Unsetup
-  nameWithType.vb: CircuitComponent(Of T).Unsetup
 - uid: SpiceSharp.Circuits
   name: SpiceSharp.Circuits
   href: api/SpiceSharp.Circuits.html
@@ -756,6 +466,15 @@ references:
   commentId: Overload:SpiceSharp.Circuits.CircuitObjects.Item
   fullName: SpiceSharp.Circuits.CircuitObjects.Item
   nameWithType: CircuitObjects.Item
+- uid: SpiceSharp.Circuits.CircuitObjects.Remove(SpiceSharp.Circuits.ICircuitObject[])
+  name: Remove(ICircuitObject[])
+  href: api/SpiceSharp.Circuits.CircuitObjects.html#SpiceSharp_Circuits_CircuitObjects_Remove_SpiceSharp_Circuits_ICircuitObject___
+  commentId: M:SpiceSharp.Circuits.CircuitObjects.Remove(SpiceSharp.Circuits.ICircuitObject[])
+  name.vb: Remove(ICircuitObject())
+  fullName: SpiceSharp.Circuits.CircuitObjects.Remove(SpiceSharp.Circuits.ICircuitObject[])
+  fullName.vb: SpiceSharp.Circuits.CircuitObjects.Remove(SpiceSharp.Circuits.ICircuitObject())
+  nameWithType: CircuitObjects.Remove(ICircuitObject[])
+  nameWithType.vb: CircuitObjects.Remove(ICircuitObject())
 - uid: SpiceSharp.Circuits.CircuitObjects.Remove(System.String[])
   name: Remove(String[])
   href: api/SpiceSharp.Circuits.CircuitObjects.html#SpiceSharp_Circuits_CircuitObjects_Remove_System_String___
@@ -3628,6 +3347,296 @@ references:
   commentId: Overload:SpiceSharp.Components.CapacitorModel.SetCapFlag
   fullName: SpiceSharp.Components.CapacitorModel.SetCapFlag
   nameWithType: CapacitorModel.SetCapFlag
+- uid: SpiceSharp.Components.CircuitComponent`1
+  name: CircuitComponent<T>
+  href: api/SpiceSharp.Components.CircuitComponent-1.html
+  commentId: T:SpiceSharp.Components.CircuitComponent`1
+  name.vb: CircuitComponent(Of T)
+  fullName: SpiceSharp.Components.CircuitComponent<T>
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T)
+  nameWithType: CircuitComponent<T>
+  nameWithType.vb: CircuitComponent(Of T)
+- uid: SpiceSharp.Components.CircuitComponent`1.#ctor(System.String)
+  name: CircuitComponent(String)
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1__ctor_System_String_
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.#ctor(System.String)
+  fullName: SpiceSharp.Components.CircuitComponent<T>.CircuitComponent(System.String)
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).CircuitComponent(System.String)
+  nameWithType: CircuitComponent<T>.CircuitComponent(String)
+  nameWithType.vb: CircuitComponent(Of T).CircuitComponent(String)
+- uid: SpiceSharp.Components.CircuitComponent`1.#ctor*
+  name: CircuitComponent
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1__ctor_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.#ctor
+  fullName: SpiceSharp.Components.CircuitComponent<T>.CircuitComponent
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).CircuitComponent
+  nameWithType: CircuitComponent<T>.CircuitComponent
+  nameWithType.vb: CircuitComponent(Of T).CircuitComponent
+- uid: SpiceSharp.Components.CircuitComponent`1.Accept(SpiceSharp.Circuit)
+  name: Accept(Circuit)
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Accept_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.Accept(SpiceSharp.Circuit)
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Accept(SpiceSharp.Circuit)
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Accept(SpiceSharp.Circuit)
+  nameWithType: CircuitComponent<T>.Accept(Circuit)
+  nameWithType.vb: CircuitComponent(Of T).Accept(Circuit)
+- uid: SpiceSharp.Components.CircuitComponent`1.Accept*
+  name: Accept
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Accept_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.Accept
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Accept
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Accept
+  nameWithType: CircuitComponent<T>.Accept
+  nameWithType.vb: CircuitComponent(Of T).Accept
+- uid: SpiceSharp.Components.CircuitComponent`1.AcLoad(SpiceSharp.Circuit)
+  name: AcLoad(Circuit)
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_AcLoad_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.AcLoad(SpiceSharp.Circuit)
+  fullName: SpiceSharp.Components.CircuitComponent<T>.AcLoad(SpiceSharp.Circuit)
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).AcLoad(SpiceSharp.Circuit)
+  nameWithType: CircuitComponent<T>.AcLoad(Circuit)
+  nameWithType.vb: CircuitComponent(Of T).AcLoad(Circuit)
+- uid: SpiceSharp.Components.CircuitComponent`1.AcLoad*
+  name: AcLoad
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_AcLoad_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.AcLoad
+  fullName: SpiceSharp.Components.CircuitComponent<T>.AcLoad
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).AcLoad
+  nameWithType: CircuitComponent<T>.AcLoad
+  nameWithType.vb: CircuitComponent(Of T).AcLoad
+- uid: SpiceSharp.Components.CircuitComponent`1.BindNodes(SpiceSharp.Circuit)
+  name: BindNodes(Circuit)
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_BindNodes_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.BindNodes(SpiceSharp.Circuit)
+  fullName: SpiceSharp.Components.CircuitComponent<T>.BindNodes(SpiceSharp.Circuit)
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).BindNodes(SpiceSharp.Circuit)
+  nameWithType: CircuitComponent<T>.BindNodes(Circuit)
+  nameWithType.vb: CircuitComponent(Of T).BindNodes(Circuit)
+- uid: SpiceSharp.Components.CircuitComponent`1.BindNodes*
+  name: BindNodes
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_BindNodes_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.BindNodes
+  fullName: SpiceSharp.Components.CircuitComponent<T>.BindNodes
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).BindNodes
+  nameWithType: CircuitComponent<T>.BindNodes
+  nameWithType.vb: CircuitComponent(Of T).BindNodes
+- uid: SpiceSharp.Components.CircuitComponent`1.Connect(System.String[])
+  name: Connect(String[])
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Connect_System_String___
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.Connect(System.String[])
+  name.vb: Connect(String())
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Connect(System.String[])
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Connect(System.String())
+  nameWithType: CircuitComponent<T>.Connect(String[])
+  nameWithType.vb: CircuitComponent(Of T).Connect(String())
+- uid: SpiceSharp.Components.CircuitComponent`1.Connect*
+  name: Connect
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Connect_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.Connect
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Connect
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Connect
+  nameWithType: CircuitComponent<T>.Connect
+  nameWithType.vb: CircuitComponent(Of T).Connect
+- uid: SpiceSharp.Components.CircuitComponent`1.CreateNode(SpiceSharp.Circuit,SpiceSharp.Circuits.CircuitNode.NodeType)
+  name: CreateNode(Circuit, CircuitNode.NodeType)
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_CreateNode_SpiceSharp_Circuit_SpiceSharp_Circuits_CircuitNode_NodeType_
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.CreateNode(SpiceSharp.Circuit,SpiceSharp.Circuits.CircuitNode.NodeType)
+  fullName: SpiceSharp.Components.CircuitComponent<T>.CreateNode(SpiceSharp.Circuit, SpiceSharp.Circuits.CircuitNode.NodeType)
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).CreateNode(SpiceSharp.Circuit, SpiceSharp.Circuits.CircuitNode.NodeType)
+  nameWithType: CircuitComponent<T>.CreateNode(Circuit, CircuitNode.NodeType)
+  nameWithType.vb: CircuitComponent(Of T).CreateNode(Circuit, CircuitNode.NodeType)
+- uid: SpiceSharp.Components.CircuitComponent`1.CreateNode*
+  name: CreateNode
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_CreateNode_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.CreateNode
+  fullName: SpiceSharp.Components.CircuitComponent<T>.CreateNode
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).CreateNode
+  nameWithType: CircuitComponent<T>.CreateNode
+  nameWithType.vb: CircuitComponent(Of T).CreateNode
+- uid: SpiceSharp.Components.CircuitComponent`1.GetNode(System.Int32)
+  name: GetNode(Int32)
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_GetNode_System_Int32_
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.GetNode(System.Int32)
+  fullName: SpiceSharp.Components.CircuitComponent<T>.GetNode(System.Int32)
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).GetNode(System.Int32)
+  nameWithType: CircuitComponent<T>.GetNode(Int32)
+  nameWithType.vb: CircuitComponent(Of T).GetNode(Int32)
+- uid: SpiceSharp.Components.CircuitComponent`1.GetNode*
+  name: GetNode
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_GetNode_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.GetNode
+  fullName: SpiceSharp.Components.CircuitComponent<T>.GetNode
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).GetNode
+  nameWithType: CircuitComponent<T>.GetNode
+  nameWithType.vb: CircuitComponent(Of T).GetNode
+- uid: SpiceSharp.Components.CircuitComponent`1.GetNodeIndex(System.Int32)
+  name: GetNodeIndex(Int32)
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_GetNodeIndex_System_Int32_
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.GetNodeIndex(System.Int32)
+  fullName: SpiceSharp.Components.CircuitComponent<T>.GetNodeIndex(System.Int32)
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).GetNodeIndex(System.Int32)
+  nameWithType: CircuitComponent<T>.GetNodeIndex(Int32)
+  nameWithType.vb: CircuitComponent(Of T).GetNodeIndex(Int32)
+- uid: SpiceSharp.Components.CircuitComponent`1.GetNodeIndex*
+  name: GetNodeIndex
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_GetNodeIndex_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.GetNodeIndex
+  fullName: SpiceSharp.Components.CircuitComponent<T>.GetNodeIndex
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).GetNodeIndex
+  nameWithType: CircuitComponent<T>.GetNodeIndex
+  nameWithType.vb: CircuitComponent(Of T).GetNodeIndex
+- uid: SpiceSharp.Components.CircuitComponent`1.Load(SpiceSharp.Circuit)
+  name: Load(Circuit)
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Load_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.Load(SpiceSharp.Circuit)
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Load(SpiceSharp.Circuit)
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Load(SpiceSharp.Circuit)
+  nameWithType: CircuitComponent<T>.Load(Circuit)
+  nameWithType.vb: CircuitComponent(Of T).Load(Circuit)
+- uid: SpiceSharp.Components.CircuitComponent`1.Load*
+  name: Load
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Load_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.Load
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Load
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Load
+  nameWithType: CircuitComponent<T>.Load
+  nameWithType.vb: CircuitComponent(Of T).Load
+- uid: SpiceSharp.Components.CircuitComponent`1.Model
+  name: Model
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Model
+  commentId: P:SpiceSharp.Components.CircuitComponent`1.Model
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Model
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Model
+  nameWithType: CircuitComponent<T>.Model
+  nameWithType.vb: CircuitComponent(Of T).Model
+- uid: SpiceSharp.Components.CircuitComponent`1.Model*
+  name: Model
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Model_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.Model
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Model
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Model
+  nameWithType: CircuitComponent<T>.Model
+  nameWithType.vb: CircuitComponent(Of T).Model
+- uid: SpiceSharp.Components.CircuitComponent`1.Name
+  name: Name
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Name
+  commentId: P:SpiceSharp.Components.CircuitComponent`1.Name
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Name
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Name
+  nameWithType: CircuitComponent<T>.Name
+  nameWithType.vb: CircuitComponent(Of T).Name
+- uid: SpiceSharp.Components.CircuitComponent`1.Name*
+  name: Name
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Name_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.Name
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Name
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Name
+  nameWithType: CircuitComponent<T>.Name
+  nameWithType.vb: CircuitComponent(Of T).Name
+- uid: SpiceSharp.Components.CircuitComponent`1.PinCount
+  name: PinCount
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_PinCount
+  commentId: P:SpiceSharp.Components.CircuitComponent`1.PinCount
+  fullName: SpiceSharp.Components.CircuitComponent<T>.PinCount
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).PinCount
+  nameWithType: CircuitComponent<T>.PinCount
+  nameWithType.vb: CircuitComponent(Of T).PinCount
+- uid: SpiceSharp.Components.CircuitComponent`1.PinCount*
+  name: PinCount
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_PinCount_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.PinCount
+  fullName: SpiceSharp.Components.CircuitComponent<T>.PinCount
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).PinCount
+  nameWithType: CircuitComponent<T>.PinCount
+  nameWithType.vb: CircuitComponent(Of T).PinCount
+- uid: SpiceSharp.Components.CircuitComponent`1.pins
+  name: pins
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_pins
+  commentId: F:SpiceSharp.Components.CircuitComponent`1.pins
+  fullName: SpiceSharp.Components.CircuitComponent<T>.pins
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).pins
+  nameWithType: CircuitComponent<T>.pins
+  nameWithType.vb: CircuitComponent(Of T).pins
+- uid: SpiceSharp.Components.CircuitComponent`1.Priority
+  name: Priority
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Priority
+  commentId: P:SpiceSharp.Components.CircuitComponent`1.Priority
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Priority
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Priority
+  nameWithType: CircuitComponent<T>.Priority
+  nameWithType.vb: CircuitComponent(Of T).Priority
+- uid: SpiceSharp.Components.CircuitComponent`1.Priority*
+  name: Priority
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Priority_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.Priority
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Priority
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Priority
+  nameWithType: CircuitComponent<T>.Priority
+  nameWithType.vb: CircuitComponent(Of T).Priority
+- uid: SpiceSharp.Components.CircuitComponent`1.SetIc(SpiceSharp.Circuit)
+  name: SetIc(Circuit)
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_SetIc_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.SetIc(SpiceSharp.Circuit)
+  fullName: SpiceSharp.Components.CircuitComponent<T>.SetIc(SpiceSharp.Circuit)
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).SetIc(SpiceSharp.Circuit)
+  nameWithType: CircuitComponent<T>.SetIc(Circuit)
+  nameWithType.vb: CircuitComponent(Of T).SetIc(Circuit)
+- uid: SpiceSharp.Components.CircuitComponent`1.SetIc*
+  name: SetIc
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_SetIc_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.SetIc
+  fullName: SpiceSharp.Components.CircuitComponent<T>.SetIc
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).SetIc
+  nameWithType: CircuitComponent<T>.SetIc
+  nameWithType.vb: CircuitComponent(Of T).SetIc
+- uid: SpiceSharp.Components.CircuitComponent`1.Setup(SpiceSharp.Circuit)
+  name: Setup(Circuit)
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Setup_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.Setup(SpiceSharp.Circuit)
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Setup(SpiceSharp.Circuit)
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Setup(SpiceSharp.Circuit)
+  nameWithType: CircuitComponent<T>.Setup(Circuit)
+  nameWithType.vb: CircuitComponent(Of T).Setup(Circuit)
+- uid: SpiceSharp.Components.CircuitComponent`1.Setup*
+  name: Setup
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Setup_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.Setup
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Setup
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Setup
+  nameWithType: CircuitComponent<T>.Setup
+  nameWithType.vb: CircuitComponent(Of T).Setup
+- uid: SpiceSharp.Components.CircuitComponent`1.Temperature(SpiceSharp.Circuit)
+  name: Temperature(Circuit)
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Temperature_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.Temperature(SpiceSharp.Circuit)
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Temperature(SpiceSharp.Circuit)
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Temperature(SpiceSharp.Circuit)
+  nameWithType: CircuitComponent<T>.Temperature(Circuit)
+  nameWithType.vb: CircuitComponent(Of T).Temperature(Circuit)
+- uid: SpiceSharp.Components.CircuitComponent`1.Temperature*
+  name: Temperature
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Temperature_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.Temperature
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Temperature
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Temperature
+  nameWithType: CircuitComponent<T>.Temperature
+  nameWithType.vb: CircuitComponent(Of T).Temperature
+- uid: SpiceSharp.Components.CircuitComponent`1.Unsetup(SpiceSharp.Circuit)
+  name: Unsetup(Circuit)
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Unsetup_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.Components.CircuitComponent`1.Unsetup(SpiceSharp.Circuit)
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Unsetup(SpiceSharp.Circuit)
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Unsetup(SpiceSharp.Circuit)
+  nameWithType: CircuitComponent<T>.Unsetup(Circuit)
+  nameWithType.vb: CircuitComponent(Of T).Unsetup(Circuit)
+- uid: SpiceSharp.Components.CircuitComponent`1.Unsetup*
+  name: Unsetup
+  href: api/SpiceSharp.Components.CircuitComponent-1.html#SpiceSharp_Components_CircuitComponent_1_Unsetup_
+  commentId: Overload:SpiceSharp.Components.CircuitComponent`1.Unsetup
+  fullName: SpiceSharp.Components.CircuitComponent<T>.Unsetup
+  fullName.vb: SpiceSharp.Components.CircuitComponent(Of T).Unsetup
+  nameWithType: CircuitComponent<T>.Unsetup
+  nameWithType.vb: CircuitComponent(Of T).Unsetup
 - uid: SpiceSharp.Components.CircuitModel`1
   name: CircuitModel<T>
   href: api/SpiceSharp.Components.CircuitModel-1.html
@@ -4166,48 +4175,6 @@ references:
   commentId: Overload:SpiceSharp.Components.CurrentControlledVoltagesource.Temperature
   fullName: SpiceSharp.Components.CurrentControlledVoltagesource.Temperature
   nameWithType: CurrentControlledVoltagesource.Temperature
-- uid: SpiceSharp.Components.CurrentDriver
-  name: CurrentDriver
-  href: api/SpiceSharp.Components.CurrentDriver.html
-  commentId: T:SpiceSharp.Components.CurrentDriver
-  fullName: SpiceSharp.Components.CurrentDriver
-  nameWithType: CurrentDriver
-- uid: SpiceSharp.Components.CurrentDriver.#ctor(System.Int32,System.Int32)
-  name: CurrentDriver(Int32, Int32)
-  href: api/SpiceSharp.Components.CurrentDriver.html#SpiceSharp_Components_CurrentDriver__ctor_System_Int32_System_Int32_
-  commentId: M:SpiceSharp.Components.CurrentDriver.#ctor(System.Int32,System.Int32)
-  fullName: SpiceSharp.Components.CurrentDriver.CurrentDriver(System.Int32, System.Int32)
-  nameWithType: CurrentDriver.CurrentDriver(Int32, Int32)
-- uid: SpiceSharp.Components.CurrentDriver.#ctor*
-  name: CurrentDriver
-  href: api/SpiceSharp.Components.CurrentDriver.html#SpiceSharp_Components_CurrentDriver__ctor_
-  commentId: Overload:SpiceSharp.Components.CurrentDriver.#ctor
-  fullName: SpiceSharp.Components.CurrentDriver.CurrentDriver
-  nameWithType: CurrentDriver.CurrentDriver
-- uid: SpiceSharp.Components.CurrentDriver.Negative
-  name: Negative
-  href: api/SpiceSharp.Components.CurrentDriver.html#SpiceSharp_Components_CurrentDriver_Negative
-  commentId: P:SpiceSharp.Components.CurrentDriver.Negative
-  fullName: SpiceSharp.Components.CurrentDriver.Negative
-  nameWithType: CurrentDriver.Negative
-- uid: SpiceSharp.Components.CurrentDriver.Negative*
-  name: Negative
-  href: api/SpiceSharp.Components.CurrentDriver.html#SpiceSharp_Components_CurrentDriver_Negative_
-  commentId: Overload:SpiceSharp.Components.CurrentDriver.Negative
-  fullName: SpiceSharp.Components.CurrentDriver.Negative
-  nameWithType: CurrentDriver.Negative
-- uid: SpiceSharp.Components.CurrentDriver.Positive
-  name: Positive
-  href: api/SpiceSharp.Components.CurrentDriver.html#SpiceSharp_Components_CurrentDriver_Positive
-  commentId: P:SpiceSharp.Components.CurrentDriver.Positive
-  fullName: SpiceSharp.Components.CurrentDriver.Positive
-  nameWithType: CurrentDriver.Positive
-- uid: SpiceSharp.Components.CurrentDriver.Positive*
-  name: Positive
-  href: api/SpiceSharp.Components.CurrentDriver.html#SpiceSharp_Components_CurrentDriver_Positive_
-  commentId: Overload:SpiceSharp.Components.CurrentDriver.Positive
-  fullName: SpiceSharp.Components.CurrentDriver.Positive
-  nameWithType: CurrentDriver.Positive
 - uid: SpiceSharp.Components.Currentsource
   name: Currentsource
   href: api/SpiceSharp.Components.Currentsource.html
@@ -4250,6 +4217,18 @@ references:
   commentId: Overload:SpiceSharp.Components.Currentsource.AcLoad
   fullName: SpiceSharp.Components.Currentsource.AcLoad
   nameWithType: Currentsource.AcLoad
+- uid: SpiceSharp.Components.Currentsource.Current
+  name: Current
+  href: api/SpiceSharp.Components.Currentsource.html#SpiceSharp_Components_Currentsource_Current
+  commentId: P:SpiceSharp.Components.Currentsource.Current
+  fullName: SpiceSharp.Components.Currentsource.Current
+  nameWithType: Currentsource.Current
+- uid: SpiceSharp.Components.Currentsource.Current*
+  name: Current
+  href: api/SpiceSharp.Components.Currentsource.html#SpiceSharp_Components_Currentsource_Current_
+  commentId: Overload:SpiceSharp.Components.Currentsource.Current
+  fullName: SpiceSharp.Components.Currentsource.Current
+  nameWithType: Currentsource.Current
 - uid: SpiceSharp.Components.Currentsource.GetComplexVoltage(SpiceSharp.Circuit)
   name: GetComplexVoltage(Circuit)
   href: api/SpiceSharp.Components.Currentsource.html#SpiceSharp_Components_Currentsource_GetComplexVoltage_SpiceSharp_Circuit_
@@ -13053,384 +13032,6 @@ references:
   commentId: T:SpiceSharp.Diagnostics.WarningEventHandler
   fullName: SpiceSharp.Diagnostics.WarningEventHandler
   nameWithType: WarningEventHandler
-- uid: SpiceSharp.IntegrationMethod
-  name: IntegrationMethod
-  href: api/SpiceSharp.IntegrationMethod.html
-  commentId: T:SpiceSharp.IntegrationMethod
-  fullName: SpiceSharp.IntegrationMethod
-  nameWithType: IntegrationMethod
-- uid: SpiceSharp.IntegrationMethod.#ctor(SpiceSharp.IntegrationMethod.Configuration)
-  name: IntegrationMethod(IntegrationMethod.Configuration)
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod__ctor_SpiceSharp_IntegrationMethod_Configuration_
-  commentId: M:SpiceSharp.IntegrationMethod.#ctor(SpiceSharp.IntegrationMethod.Configuration)
-  fullName: SpiceSharp.IntegrationMethod.IntegrationMethod(SpiceSharp.IntegrationMethod.Configuration)
-  nameWithType: IntegrationMethod.IntegrationMethod(IntegrationMethod.Configuration)
-- uid: SpiceSharp.IntegrationMethod.#ctor*
-  name: IntegrationMethod
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod__ctor_
-  commentId: Overload:SpiceSharp.IntegrationMethod.#ctor
-  fullName: SpiceSharp.IntegrationMethod.IntegrationMethod
-  nameWithType: IntegrationMethod.IntegrationMethod
-- uid: SpiceSharp.IntegrationMethod.Advance(System.Double)
-  name: Advance(Double)
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Advance_System_Double_
-  commentId: M:SpiceSharp.IntegrationMethod.Advance(System.Double)
-  fullName: SpiceSharp.IntegrationMethod.Advance(System.Double)
-  nameWithType: IntegrationMethod.Advance(Double)
-- uid: SpiceSharp.IntegrationMethod.Advance*
-  name: Advance
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Advance_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Advance
-  fullName: SpiceSharp.IntegrationMethod.Advance
-  nameWithType: IntegrationMethod.Advance
-- uid: SpiceSharp.IntegrationMethod.Break
-  name: Break
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Break
-  commentId: P:SpiceSharp.IntegrationMethod.Break
-  fullName: SpiceSharp.IntegrationMethod.Break
-  nameWithType: IntegrationMethod.Break
-- uid: SpiceSharp.IntegrationMethod.Break*
-  name: Break
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Break_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Break
-  fullName: SpiceSharp.IntegrationMethod.Break
-  nameWithType: IntegrationMethod.Break
-- uid: SpiceSharp.IntegrationMethod.Breaks
-  name: Breaks
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Breaks
-  commentId: P:SpiceSharp.IntegrationMethod.Breaks
-  fullName: SpiceSharp.IntegrationMethod.Breaks
-  nameWithType: IntegrationMethod.Breaks
-- uid: SpiceSharp.IntegrationMethod.Breaks*
-  name: Breaks
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Breaks_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Breaks
-  fullName: SpiceSharp.IntegrationMethod.Breaks
-  nameWithType: IntegrationMethod.Breaks
-- uid: SpiceSharp.IntegrationMethod.ComputeCoefficients(SpiceSharp.Circuit)
-  name: ComputeCoefficients(Circuit)
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_ComputeCoefficients_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.IntegrationMethod.ComputeCoefficients(SpiceSharp.Circuit)
-  fullName: SpiceSharp.IntegrationMethod.ComputeCoefficients(SpiceSharp.Circuit)
-  nameWithType: IntegrationMethod.ComputeCoefficients(Circuit)
-- uid: SpiceSharp.IntegrationMethod.ComputeCoefficients*
-  name: ComputeCoefficients
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_ComputeCoefficients_
-  commentId: Overload:SpiceSharp.IntegrationMethod.ComputeCoefficients
-  fullName: SpiceSharp.IntegrationMethod.ComputeCoefficients
-  nameWithType: IntegrationMethod.ComputeCoefficients
-- uid: SpiceSharp.IntegrationMethod.Config
-  name: Config
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Config
-  commentId: P:SpiceSharp.IntegrationMethod.Config
-  fullName: SpiceSharp.IntegrationMethod.Config
-  nameWithType: IntegrationMethod.Config
-- uid: SpiceSharp.IntegrationMethod.Config*
-  name: Config
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Config_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Config
-  fullName: SpiceSharp.IntegrationMethod.Config
-  nameWithType: IntegrationMethod.Config
-- uid: SpiceSharp.IntegrationMethod.Configuration
-  name: IntegrationMethod.Configuration
-  href: api/SpiceSharp.IntegrationMethod.Configuration.html
-  commentId: T:SpiceSharp.IntegrationMethod.Configuration
-  fullName: SpiceSharp.IntegrationMethod.Configuration
-  nameWithType: IntegrationMethod.Configuration
-- uid: SpiceSharp.IntegrationMethod.Configuration.LteAbsTol
-  name: LteAbsTol
-  href: api/SpiceSharp.IntegrationMethod.Configuration.html#SpiceSharp_IntegrationMethod_Configuration_LteAbsTol
-  commentId: P:SpiceSharp.IntegrationMethod.Configuration.LteAbsTol
-  fullName: SpiceSharp.IntegrationMethod.Configuration.LteAbsTol
-  nameWithType: IntegrationMethod.Configuration.LteAbsTol
-- uid: SpiceSharp.IntegrationMethod.Configuration.LteAbsTol*
-  name: LteAbsTol
-  href: api/SpiceSharp.IntegrationMethod.Configuration.html#SpiceSharp_IntegrationMethod_Configuration_LteAbsTol_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Configuration.LteAbsTol
-  fullName: SpiceSharp.IntegrationMethod.Configuration.LteAbsTol
-  nameWithType: IntegrationMethod.Configuration.LteAbsTol
-- uid: SpiceSharp.IntegrationMethod.Configuration.LteRelTol
-  name: LteRelTol
-  href: api/SpiceSharp.IntegrationMethod.Configuration.html#SpiceSharp_IntegrationMethod_Configuration_LteRelTol
-  commentId: P:SpiceSharp.IntegrationMethod.Configuration.LteRelTol
-  fullName: SpiceSharp.IntegrationMethod.Configuration.LteRelTol
-  nameWithType: IntegrationMethod.Configuration.LteRelTol
-- uid: SpiceSharp.IntegrationMethod.Configuration.LteRelTol*
-  name: LteRelTol
-  href: api/SpiceSharp.IntegrationMethod.Configuration.html#SpiceSharp_IntegrationMethod_Configuration_LteRelTol_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Configuration.LteRelTol
-  fullName: SpiceSharp.IntegrationMethod.Configuration.LteRelTol
-  nameWithType: IntegrationMethod.Configuration.LteRelTol
-- uid: SpiceSharp.IntegrationMethod.Configuration.TrTol
-  name: TrTol
-  href: api/SpiceSharp.IntegrationMethod.Configuration.html#SpiceSharp_IntegrationMethod_Configuration_TrTol
-  commentId: P:SpiceSharp.IntegrationMethod.Configuration.TrTol
-  fullName: SpiceSharp.IntegrationMethod.Configuration.TrTol
-  nameWithType: IntegrationMethod.Configuration.TrTol
-- uid: SpiceSharp.IntegrationMethod.Configuration.TrTol*
-  name: TrTol
-  href: api/SpiceSharp.IntegrationMethod.Configuration.html#SpiceSharp_IntegrationMethod_Configuration_TrTol_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Configuration.TrTol
-  fullName: SpiceSharp.IntegrationMethod.Configuration.TrTol
-  nameWithType: IntegrationMethod.Configuration.TrTol
-- uid: SpiceSharp.IntegrationMethod.Delta
-  name: Delta
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Delta
-  commentId: P:SpiceSharp.IntegrationMethod.Delta
-  fullName: SpiceSharp.IntegrationMethod.Delta
-  nameWithType: IntegrationMethod.Delta
-- uid: SpiceSharp.IntegrationMethod.Delta*
-  name: Delta
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Delta_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Delta
-  fullName: SpiceSharp.IntegrationMethod.Delta
-  nameWithType: IntegrationMethod.Delta
-- uid: SpiceSharp.IntegrationMethod.DeltaMin
-  name: DeltaMin
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_DeltaMin
-  commentId: P:SpiceSharp.IntegrationMethod.DeltaMin
-  fullName: SpiceSharp.IntegrationMethod.DeltaMin
-  nameWithType: IntegrationMethod.DeltaMin
-- uid: SpiceSharp.IntegrationMethod.DeltaMin*
-  name: DeltaMin
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_DeltaMin_
-  commentId: Overload:SpiceSharp.IntegrationMethod.DeltaMin
-  fullName: SpiceSharp.IntegrationMethod.DeltaMin
-  nameWithType: IntegrationMethod.DeltaMin
-- uid: SpiceSharp.IntegrationMethod.DeltaOld
-  name: DeltaOld
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_DeltaOld
-  commentId: P:SpiceSharp.IntegrationMethod.DeltaOld
-  fullName: SpiceSharp.IntegrationMethod.DeltaOld
-  nameWithType: IntegrationMethod.DeltaOld
-- uid: SpiceSharp.IntegrationMethod.DeltaOld*
-  name: DeltaOld
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_DeltaOld_
-  commentId: Overload:SpiceSharp.IntegrationMethod.DeltaOld
-  fullName: SpiceSharp.IntegrationMethod.DeltaOld
-  nameWithType: IntegrationMethod.DeltaOld
-- uid: SpiceSharp.IntegrationMethod.FillOldDeltas(System.Double)
-  name: FillOldDeltas(Double)
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_FillOldDeltas_System_Double_
-  commentId: M:SpiceSharp.IntegrationMethod.FillOldDeltas(System.Double)
-  fullName: SpiceSharp.IntegrationMethod.FillOldDeltas(System.Double)
-  nameWithType: IntegrationMethod.FillOldDeltas(Double)
-- uid: SpiceSharp.IntegrationMethod.FillOldDeltas*
-  name: FillOldDeltas
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_FillOldDeltas_
-  commentId: Overload:SpiceSharp.IntegrationMethod.FillOldDeltas
-  fullName: SpiceSharp.IntegrationMethod.FillOldDeltas
-  nameWithType: IntegrationMethod.FillOldDeltas
-- uid: SpiceSharp.IntegrationMethod.Initialize
-  name: Initialize()
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Initialize
-  commentId: M:SpiceSharp.IntegrationMethod.Initialize
-  fullName: SpiceSharp.IntegrationMethod.Initialize()
-  nameWithType: IntegrationMethod.Initialize()
-- uid: SpiceSharp.IntegrationMethod.Initialize*
-  name: Initialize
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Initialize_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Initialize
-  fullName: SpiceSharp.IntegrationMethod.Initialize
-  nameWithType: IntegrationMethod.Initialize
-- uid: SpiceSharp.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState,System.Double@,System.Double@,System.Int32,System.Double)
-  name: Integrate(CircuitState, out Double, out Double, Int32, Double)
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Integrate_SpiceSharp_Circuits_CircuitState_System_Double__System_Double__System_Int32_System_Double_
-  commentId: M:SpiceSharp.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState,System.Double@,System.Double@,System.Int32,System.Double)
-  name.vb: Integrate(CircuitState, ByRef Double, ByRef Double, Int32, Double)
-  fullName: SpiceSharp.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState, out System.Double, out System.Double, System.Int32, System.Double)
-  fullName.vb: SpiceSharp.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState, ByRef System.Double, ByRef System.Double, System.Int32, System.Double)
-  nameWithType: IntegrationMethod.Integrate(CircuitState, out Double, out Double, Int32, Double)
-  nameWithType.vb: IntegrationMethod.Integrate(CircuitState, ByRef Double, ByRef Double, Int32, Double)
-- uid: SpiceSharp.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState,System.Int32,System.Double)
-  name: Integrate(CircuitState, Int32, Double)
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Integrate_SpiceSharp_Circuits_CircuitState_System_Int32_System_Double_
-  commentId: M:SpiceSharp.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState,System.Int32,System.Double)
-  fullName: SpiceSharp.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState, System.Int32, System.Double)
-  nameWithType: IntegrationMethod.Integrate(CircuitState, Int32, Double)
-- uid: SpiceSharp.IntegrationMethod.Integrate*
-  name: Integrate
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Integrate_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Integrate
-  fullName: SpiceSharp.IntegrationMethod.Integrate
-  nameWithType: IntegrationMethod.Integrate
-- uid: SpiceSharp.IntegrationMethod.MaxOrder
-  name: MaxOrder
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_MaxOrder
-  commentId: P:SpiceSharp.IntegrationMethod.MaxOrder
-  fullName: SpiceSharp.IntegrationMethod.MaxOrder
-  nameWithType: IntegrationMethod.MaxOrder
-- uid: SpiceSharp.IntegrationMethod.MaxOrder*
-  name: MaxOrder
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_MaxOrder_
-  commentId: Overload:SpiceSharp.IntegrationMethod.MaxOrder
-  fullName: SpiceSharp.IntegrationMethod.MaxOrder
-  nameWithType: IntegrationMethod.MaxOrder
-- uid: SpiceSharp.IntegrationMethod.NewDelta(SpiceSharp.Circuit)
-  name: NewDelta(Circuit)
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_NewDelta_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.IntegrationMethod.NewDelta(SpiceSharp.Circuit)
-  fullName: SpiceSharp.IntegrationMethod.NewDelta(SpiceSharp.Circuit)
-  nameWithType: IntegrationMethod.NewDelta(Circuit)
-- uid: SpiceSharp.IntegrationMethod.NewDelta*
-  name: NewDelta
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_NewDelta_
-  commentId: Overload:SpiceSharp.IntegrationMethod.NewDelta
-  fullName: SpiceSharp.IntegrationMethod.NewDelta
-  nameWithType: IntegrationMethod.NewDelta
-- uid: SpiceSharp.IntegrationMethod.Order
-  name: Order
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Order
-  commentId: P:SpiceSharp.IntegrationMethod.Order
-  fullName: SpiceSharp.IntegrationMethod.Order
-  nameWithType: IntegrationMethod.Order
-- uid: SpiceSharp.IntegrationMethod.Order*
-  name: Order
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Order_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Order
-  fullName: SpiceSharp.IntegrationMethod.Order
-  nameWithType: IntegrationMethod.Order
-- uid: SpiceSharp.IntegrationMethod.Predict(SpiceSharp.Circuit)
-  name: Predict(Circuit)
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Predict_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.IntegrationMethod.Predict(SpiceSharp.Circuit)
-  fullName: SpiceSharp.IntegrationMethod.Predict(SpiceSharp.Circuit)
-  nameWithType: IntegrationMethod.Predict(Circuit)
-- uid: SpiceSharp.IntegrationMethod.Predict*
-  name: Predict
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Predict_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Predict
-  fullName: SpiceSharp.IntegrationMethod.Predict
-  nameWithType: IntegrationMethod.Predict
-- uid: SpiceSharp.IntegrationMethod.Prediction
-  name: Prediction
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Prediction
-  commentId: P:SpiceSharp.IntegrationMethod.Prediction
-  fullName: SpiceSharp.IntegrationMethod.Prediction
-  nameWithType: IntegrationMethod.Prediction
-- uid: SpiceSharp.IntegrationMethod.Prediction*
-  name: Prediction
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Prediction_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Prediction
-  fullName: SpiceSharp.IntegrationMethod.Prediction
-  nameWithType: IntegrationMethod.Prediction
-- uid: SpiceSharp.IntegrationMethod.Result
-  name: IntegrationMethod.Result
-  href: api/SpiceSharp.IntegrationMethod.Result.html
-  commentId: T:SpiceSharp.IntegrationMethod.Result
-  fullName: SpiceSharp.IntegrationMethod.Result
-  nameWithType: IntegrationMethod.Result
-- uid: SpiceSharp.IntegrationMethod.Result.Ceq
-  name: Ceq
-  href: api/SpiceSharp.IntegrationMethod.Result.html#SpiceSharp_IntegrationMethod_Result_Ceq
-  commentId: F:SpiceSharp.IntegrationMethod.Result.Ceq
-  fullName: SpiceSharp.IntegrationMethod.Result.Ceq
-  nameWithType: IntegrationMethod.Result.Ceq
-- uid: SpiceSharp.IntegrationMethod.Result.Geq
-  name: Geq
-  href: api/SpiceSharp.IntegrationMethod.Result.html#SpiceSharp_IntegrationMethod_Result_Geq
-  commentId: F:SpiceSharp.IntegrationMethod.Result.Geq
-  fullName: SpiceSharp.IntegrationMethod.Result.Geq
-  nameWithType: IntegrationMethod.Result.Geq
-- uid: SpiceSharp.IntegrationMethod.Retry(System.Double)
-  name: Retry(Double)
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Retry_System_Double_
-  commentId: M:SpiceSharp.IntegrationMethod.Retry(System.Double)
-  fullName: SpiceSharp.IntegrationMethod.Retry(System.Double)
-  nameWithType: IntegrationMethod.Retry(Double)
-- uid: SpiceSharp.IntegrationMethod.Retry*
-  name: Retry
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Retry_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Retry
-  fullName: SpiceSharp.IntegrationMethod.Retry
-  nameWithType: IntegrationMethod.Retry
-- uid: SpiceSharp.IntegrationMethod.SavedTime
-  name: SavedTime
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_SavedTime
-  commentId: P:SpiceSharp.IntegrationMethod.SavedTime
-  fullName: SpiceSharp.IntegrationMethod.SavedTime
-  nameWithType: IntegrationMethod.SavedTime
-- uid: SpiceSharp.IntegrationMethod.SavedTime*
-  name: SavedTime
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_SavedTime_
-  commentId: Overload:SpiceSharp.IntegrationMethod.SavedTime
-  fullName: SpiceSharp.IntegrationMethod.SavedTime
-  nameWithType: IntegrationMethod.SavedTime
-- uid: SpiceSharp.IntegrationMethod.SaveSolution(MathNet.Numerics.LinearAlgebra.Vector{System.Double})
-  name: SaveSolution(Vector<Double>)
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_SaveSolution_MathNet_Numerics_LinearAlgebra_Vector_System_Double__
-  commentId: M:SpiceSharp.IntegrationMethod.SaveSolution(MathNet.Numerics.LinearAlgebra.Vector{System.Double})
-  name.vb: SaveSolution(Vector(Of Double))
-  fullName: SpiceSharp.IntegrationMethod.SaveSolution(MathNet.Numerics.LinearAlgebra.Vector<System.Double>)
-  fullName.vb: SpiceSharp.IntegrationMethod.SaveSolution(MathNet.Numerics.LinearAlgebra.Vector(Of System.Double))
-  nameWithType: IntegrationMethod.SaveSolution(Vector<Double>)
-  nameWithType.vb: IntegrationMethod.SaveSolution(Vector(Of Double))
-- uid: SpiceSharp.IntegrationMethod.SaveSolution*
-  name: SaveSolution
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_SaveSolution_
-  commentId: Overload:SpiceSharp.IntegrationMethod.SaveSolution
-  fullName: SpiceSharp.IntegrationMethod.SaveSolution
-  nameWithType: IntegrationMethod.SaveSolution
-- uid: SpiceSharp.IntegrationMethod.Slope
-  name: Slope
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Slope
-  commentId: P:SpiceSharp.IntegrationMethod.Slope
-  fullName: SpiceSharp.IntegrationMethod.Slope
-  nameWithType: IntegrationMethod.Slope
-- uid: SpiceSharp.IntegrationMethod.Slope*
-  name: Slope
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Slope_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Slope
-  fullName: SpiceSharp.IntegrationMethod.Slope
-  nameWithType: IntegrationMethod.Slope
-- uid: SpiceSharp.IntegrationMethod.Solutions
-  name: Solutions
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Solutions
-  commentId: P:SpiceSharp.IntegrationMethod.Solutions
-  fullName: SpiceSharp.IntegrationMethod.Solutions
-  nameWithType: IntegrationMethod.Solutions
-- uid: SpiceSharp.IntegrationMethod.Solutions*
-  name: Solutions
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Solutions_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Solutions
-  fullName: SpiceSharp.IntegrationMethod.Solutions
-  nameWithType: IntegrationMethod.Solutions
-- uid: SpiceSharp.IntegrationMethod.Time
-  name: Time
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Time
-  commentId: P:SpiceSharp.IntegrationMethod.Time
-  fullName: SpiceSharp.IntegrationMethod.Time
-  nameWithType: IntegrationMethod.Time
-- uid: SpiceSharp.IntegrationMethod.Time*
-  name: Time
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Time_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Time
-  fullName: SpiceSharp.IntegrationMethod.Time
-  nameWithType: IntegrationMethod.Time
-- uid: SpiceSharp.IntegrationMethod.Truncate(SpiceSharp.Circuit)
-  name: Truncate(Circuit)
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Truncate_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.IntegrationMethod.Truncate(SpiceSharp.Circuit)
-  fullName: SpiceSharp.IntegrationMethod.Truncate(SpiceSharp.Circuit)
-  nameWithType: IntegrationMethod.Truncate(Circuit)
-- uid: SpiceSharp.IntegrationMethod.Truncate*
-  name: Truncate
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_Truncate_
-  commentId: Overload:SpiceSharp.IntegrationMethod.Truncate
-  fullName: SpiceSharp.IntegrationMethod.Truncate
-  nameWithType: IntegrationMethod.Truncate
-- uid: SpiceSharp.IntegrationMethod.UpdateBreakpoints
-  name: UpdateBreakpoints()
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_UpdateBreakpoints
-  commentId: M:SpiceSharp.IntegrationMethod.UpdateBreakpoints
-  fullName: SpiceSharp.IntegrationMethod.UpdateBreakpoints()
-  nameWithType: IntegrationMethod.UpdateBreakpoints()
-- uid: SpiceSharp.IntegrationMethod.UpdateBreakpoints*
-  name: UpdateBreakpoints
-  href: api/SpiceSharp.IntegrationMethod.html#SpiceSharp_IntegrationMethod_UpdateBreakpoints_
-  commentId: Overload:SpiceSharp.IntegrationMethod.UpdateBreakpoints
-  fullName: SpiceSharp.IntegrationMethod.UpdateBreakpoints
-  nameWithType: IntegrationMethod.UpdateBreakpoints
 - uid: SpiceSharp.IntegrationMethods
   name: SpiceSharp.IntegrationMethods
   href: api/SpiceSharp.IntegrationMethods.html
@@ -13527,17 +13128,395 @@ references:
   commentId: Overload:SpiceSharp.IntegrationMethods.Breakpoints.SetBreakpoint
   fullName: SpiceSharp.IntegrationMethods.Breakpoints.SetBreakpoint
   nameWithType: Breakpoints.SetBreakpoint
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod
+  name: IntegrationMethod
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html
+  commentId: T:SpiceSharp.IntegrationMethods.IntegrationMethod
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod
+  nameWithType: IntegrationMethod
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.#ctor(SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration)
+  name: IntegrationMethod(IntegrationMethod.Configuration)
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod__ctor_SpiceSharp_IntegrationMethods_IntegrationMethod_Configuration_
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.#ctor(SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration)
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.IntegrationMethod(SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration)
+  nameWithType: IntegrationMethod.IntegrationMethod(IntegrationMethod.Configuration)
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.#ctor*
+  name: IntegrationMethod
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod__ctor_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.#ctor
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.IntegrationMethod
+  nameWithType: IntegrationMethod.IntegrationMethod
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Advance(System.Double)
+  name: Advance(Double)
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Advance_System_Double_
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.Advance(System.Double)
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Advance(System.Double)
+  nameWithType: IntegrationMethod.Advance(Double)
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Advance*
+  name: Advance
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Advance_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Advance
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Advance
+  nameWithType: IntegrationMethod.Advance
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Break
+  name: Break
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Break
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.Break
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Break
+  nameWithType: IntegrationMethod.Break
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Break*
+  name: Break
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Break_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Break
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Break
+  nameWithType: IntegrationMethod.Break
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Breaks
+  name: Breaks
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Breaks
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.Breaks
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Breaks
+  nameWithType: IntegrationMethod.Breaks
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Breaks*
+  name: Breaks
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Breaks_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Breaks
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Breaks
+  nameWithType: IntegrationMethod.Breaks
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.ComputeCoefficients(SpiceSharp.Circuit)
+  name: ComputeCoefficients(Circuit)
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_ComputeCoefficients_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.ComputeCoefficients(SpiceSharp.Circuit)
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.ComputeCoefficients(SpiceSharp.Circuit)
+  nameWithType: IntegrationMethod.ComputeCoefficients(Circuit)
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.ComputeCoefficients*
+  name: ComputeCoefficients
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_ComputeCoefficients_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.ComputeCoefficients
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.ComputeCoefficients
+  nameWithType: IntegrationMethod.ComputeCoefficients
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Config
+  name: Config
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Config
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.Config
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Config
+  nameWithType: IntegrationMethod.Config
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Config*
+  name: Config
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Config_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Config
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Config
+  nameWithType: IntegrationMethod.Config
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration
+  name: IntegrationMethod.Configuration
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.html
+  commentId: T:SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration
+  nameWithType: IntegrationMethod.Configuration
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.LteAbsTol
+  name: LteAbsTol
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Configuration_LteAbsTol
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.LteAbsTol
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.LteAbsTol
+  nameWithType: IntegrationMethod.Configuration.LteAbsTol
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.LteAbsTol*
+  name: LteAbsTol
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Configuration_LteAbsTol_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.LteAbsTol
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.LteAbsTol
+  nameWithType: IntegrationMethod.Configuration.LteAbsTol
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.LteRelTol
+  name: LteRelTol
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Configuration_LteRelTol
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.LteRelTol
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.LteRelTol
+  nameWithType: IntegrationMethod.Configuration.LteRelTol
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.LteRelTol*
+  name: LteRelTol
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Configuration_LteRelTol_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.LteRelTol
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.LteRelTol
+  nameWithType: IntegrationMethod.Configuration.LteRelTol
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.TrTol
+  name: TrTol
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Configuration_TrTol
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.TrTol
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.TrTol
+  nameWithType: IntegrationMethod.Configuration.TrTol
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.TrTol*
+  name: TrTol
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Configuration_TrTol_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.TrTol
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration.TrTol
+  nameWithType: IntegrationMethod.Configuration.TrTol
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Delta
+  name: Delta
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Delta
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.Delta
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Delta
+  nameWithType: IntegrationMethod.Delta
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Delta*
+  name: Delta
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Delta_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Delta
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Delta
+  nameWithType: IntegrationMethod.Delta
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaMin
+  name: DeltaMin
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_DeltaMin
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaMin
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaMin
+  nameWithType: IntegrationMethod.DeltaMin
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaMin*
+  name: DeltaMin
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_DeltaMin_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaMin
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaMin
+  nameWithType: IntegrationMethod.DeltaMin
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaOld
+  name: DeltaOld
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_DeltaOld
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaOld
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaOld
+  nameWithType: IntegrationMethod.DeltaOld
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaOld*
+  name: DeltaOld
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_DeltaOld_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaOld
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.DeltaOld
+  nameWithType: IntegrationMethod.DeltaOld
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.FillOldDeltas(System.Double)
+  name: FillOldDeltas(Double)
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_FillOldDeltas_System_Double_
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.FillOldDeltas(System.Double)
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.FillOldDeltas(System.Double)
+  nameWithType: IntegrationMethod.FillOldDeltas(Double)
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.FillOldDeltas*
+  name: FillOldDeltas
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_FillOldDeltas_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.FillOldDeltas
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.FillOldDeltas
+  nameWithType: IntegrationMethod.FillOldDeltas
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize
+  name: Initialize()
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Initialize
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize()
+  nameWithType: IntegrationMethod.Initialize()
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize*
+  name: Initialize
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Initialize_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Initialize
+  nameWithType: IntegrationMethod.Initialize
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState,System.Double@,System.Double@,System.Int32,System.Double)
+  name: Integrate(CircuitState, out Double, out Double, Int32, Double)
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Integrate_SpiceSharp_Circuits_CircuitState_System_Double__System_Double__System_Int32_System_Double_
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState,System.Double@,System.Double@,System.Int32,System.Double)
+  name.vb: Integrate(CircuitState, ByRef Double, ByRef Double, Int32, Double)
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState, out System.Double, out System.Double, System.Int32, System.Double)
+  fullName.vb: SpiceSharp.IntegrationMethods.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState, ByRef System.Double, ByRef System.Double, System.Int32, System.Double)
+  nameWithType: IntegrationMethod.Integrate(CircuitState, out Double, out Double, Int32, Double)
+  nameWithType.vb: IntegrationMethod.Integrate(CircuitState, ByRef Double, ByRef Double, Int32, Double)
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState,System.Int32,System.Double)
+  name: Integrate(CircuitState, Int32, Double)
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Integrate_SpiceSharp_Circuits_CircuitState_System_Int32_System_Double_
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState,System.Int32,System.Double)
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Integrate(SpiceSharp.Circuits.CircuitState, System.Int32, System.Double)
+  nameWithType: IntegrationMethod.Integrate(CircuitState, Int32, Double)
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Integrate*
+  name: Integrate
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Integrate_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Integrate
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Integrate
+  nameWithType: IntegrationMethod.Integrate
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.MaxOrder
+  name: MaxOrder
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_MaxOrder
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.MaxOrder
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.MaxOrder
+  nameWithType: IntegrationMethod.MaxOrder
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.MaxOrder*
+  name: MaxOrder
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_MaxOrder_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.MaxOrder
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.MaxOrder
+  nameWithType: IntegrationMethod.MaxOrder
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.NewDelta(SpiceSharp.Circuit)
+  name: NewDelta(Circuit)
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_NewDelta_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.NewDelta(SpiceSharp.Circuit)
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.NewDelta(SpiceSharp.Circuit)
+  nameWithType: IntegrationMethod.NewDelta(Circuit)
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.NewDelta*
+  name: NewDelta
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_NewDelta_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.NewDelta
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.NewDelta
+  nameWithType: IntegrationMethod.NewDelta
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Order
+  name: Order
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Order
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.Order
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Order
+  nameWithType: IntegrationMethod.Order
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Order*
+  name: Order
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Order_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Order
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Order
+  nameWithType: IntegrationMethod.Order
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Predict(SpiceSharp.Circuit)
+  name: Predict(Circuit)
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Predict_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.Predict(SpiceSharp.Circuit)
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Predict(SpiceSharp.Circuit)
+  nameWithType: IntegrationMethod.Predict(Circuit)
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Predict*
+  name: Predict
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Predict_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Predict
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Predict
+  nameWithType: IntegrationMethod.Predict
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Prediction
+  name: Prediction
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Prediction
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.Prediction
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Prediction
+  nameWithType: IntegrationMethod.Prediction
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Prediction*
+  name: Prediction
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Prediction_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Prediction
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Prediction
+  nameWithType: IntegrationMethod.Prediction
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Result
+  name: IntegrationMethod.Result
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.Result.html
+  commentId: T:SpiceSharp.IntegrationMethods.IntegrationMethod.Result
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Result
+  nameWithType: IntegrationMethod.Result
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Result.Ceq
+  name: Ceq
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.Result.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Result_Ceq
+  commentId: F:SpiceSharp.IntegrationMethods.IntegrationMethod.Result.Ceq
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Result.Ceq
+  nameWithType: IntegrationMethod.Result.Ceq
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Result.Geq
+  name: Geq
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.Result.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Result_Geq
+  commentId: F:SpiceSharp.IntegrationMethods.IntegrationMethod.Result.Geq
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Result.Geq
+  nameWithType: IntegrationMethod.Result.Geq
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Retry(System.Double)
+  name: Retry(Double)
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Retry_System_Double_
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.Retry(System.Double)
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Retry(System.Double)
+  nameWithType: IntegrationMethod.Retry(Double)
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Retry*
+  name: Retry
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Retry_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Retry
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Retry
+  nameWithType: IntegrationMethod.Retry
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.SavedTime
+  name: SavedTime
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_SavedTime
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.SavedTime
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.SavedTime
+  nameWithType: IntegrationMethod.SavedTime
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.SavedTime*
+  name: SavedTime
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_SavedTime_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.SavedTime
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.SavedTime
+  nameWithType: IntegrationMethod.SavedTime
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.SaveSolution(MathNet.Numerics.LinearAlgebra.Vector{System.Double})
+  name: SaveSolution(Vector<Double>)
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_SaveSolution_MathNet_Numerics_LinearAlgebra_Vector_System_Double__
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.SaveSolution(MathNet.Numerics.LinearAlgebra.Vector{System.Double})
+  name.vb: SaveSolution(Vector(Of Double))
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.SaveSolution(MathNet.Numerics.LinearAlgebra.Vector<System.Double>)
+  fullName.vb: SpiceSharp.IntegrationMethods.IntegrationMethod.SaveSolution(MathNet.Numerics.LinearAlgebra.Vector(Of System.Double))
+  nameWithType: IntegrationMethod.SaveSolution(Vector<Double>)
+  nameWithType.vb: IntegrationMethod.SaveSolution(Vector(Of Double))
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.SaveSolution*
+  name: SaveSolution
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_SaveSolution_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.SaveSolution
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.SaveSolution
+  nameWithType: IntegrationMethod.SaveSolution
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Slope
+  name: Slope
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Slope
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.Slope
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Slope
+  nameWithType: IntegrationMethod.Slope
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Slope*
+  name: Slope
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Slope_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Slope
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Slope
+  nameWithType: IntegrationMethod.Slope
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Solutions
+  name: Solutions
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Solutions
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.Solutions
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Solutions
+  nameWithType: IntegrationMethod.Solutions
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Solutions*
+  name: Solutions
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Solutions_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Solutions
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Solutions
+  nameWithType: IntegrationMethod.Solutions
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Time
+  name: Time
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Time
+  commentId: P:SpiceSharp.IntegrationMethods.IntegrationMethod.Time
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Time
+  nameWithType: IntegrationMethod.Time
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Time*
+  name: Time
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Time_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Time
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Time
+  nameWithType: IntegrationMethod.Time
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Truncate(SpiceSharp.Circuit)
+  name: Truncate(Circuit)
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Truncate_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.Truncate(SpiceSharp.Circuit)
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Truncate(SpiceSharp.Circuit)
+  nameWithType: IntegrationMethod.Truncate(Circuit)
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.Truncate*
+  name: Truncate
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_Truncate_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.Truncate
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.Truncate
+  nameWithType: IntegrationMethod.Truncate
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.UpdateBreakpoints
+  name: UpdateBreakpoints()
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_UpdateBreakpoints
+  commentId: M:SpiceSharp.IntegrationMethods.IntegrationMethod.UpdateBreakpoints
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.UpdateBreakpoints()
+  nameWithType: IntegrationMethod.UpdateBreakpoints()
+- uid: SpiceSharp.IntegrationMethods.IntegrationMethod.UpdateBreakpoints*
+  name: UpdateBreakpoints
+  href: api/SpiceSharp.IntegrationMethods.IntegrationMethod.html#SpiceSharp_IntegrationMethods_IntegrationMethod_UpdateBreakpoints_
+  commentId: Overload:SpiceSharp.IntegrationMethods.IntegrationMethod.UpdateBreakpoints
+  fullName: SpiceSharp.IntegrationMethods.IntegrationMethod.UpdateBreakpoints
+  nameWithType: IntegrationMethod.UpdateBreakpoints
 - uid: SpiceSharp.IntegrationMethods.Trapezoidal
   name: Trapezoidal
   href: api/SpiceSharp.IntegrationMethods.Trapezoidal.html
   commentId: T:SpiceSharp.IntegrationMethods.Trapezoidal
   fullName: SpiceSharp.IntegrationMethods.Trapezoidal
   nameWithType: Trapezoidal
-- uid: SpiceSharp.IntegrationMethods.Trapezoidal.#ctor(SpiceSharp.IntegrationMethod.Configuration)
+- uid: SpiceSharp.IntegrationMethods.Trapezoidal.#ctor(SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration)
   name: Trapezoidal(IntegrationMethod.Configuration)
-  href: api/SpiceSharp.IntegrationMethods.Trapezoidal.html#SpiceSharp_IntegrationMethods_Trapezoidal__ctor_SpiceSharp_IntegrationMethod_Configuration_
-  commentId: M:SpiceSharp.IntegrationMethods.Trapezoidal.#ctor(SpiceSharp.IntegrationMethod.Configuration)
-  fullName: SpiceSharp.IntegrationMethods.Trapezoidal.Trapezoidal(SpiceSharp.IntegrationMethod.Configuration)
+  href: api/SpiceSharp.IntegrationMethods.Trapezoidal.html#SpiceSharp_IntegrationMethods_Trapezoidal__ctor_SpiceSharp_IntegrationMethods_IntegrationMethod_Configuration_
+  commentId: M:SpiceSharp.IntegrationMethods.Trapezoidal.#ctor(SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration)
+  fullName: SpiceSharp.IntegrationMethods.Trapezoidal.Trapezoidal(SpiceSharp.IntegrationMethods.IntegrationMethod.Configuration)
   nameWithType: Trapezoidal.Trapezoidal(IntegrationMethod.Configuration)
 - uid: SpiceSharp.IntegrationMethods.Trapezoidal.#ctor*
   name: Trapezoidal
@@ -14011,167 +13990,6 @@ references:
   commentId: Overload:SpiceSharp.Parameters.SpiceName.Name
   fullName: SpiceSharp.Parameters.SpiceName.Name
   nameWithType: SpiceName.Name
-- uid: SpiceSharp.Simulation`1
-  name: Simulation<T>
-  href: api/SpiceSharp.Simulation-1.html
-  commentId: T:SpiceSharp.Simulation`1
-  name.vb: Simulation(Of T)
-  fullName: SpiceSharp.Simulation<T>
-  fullName.vb: SpiceSharp.Simulation(Of T)
-  nameWithType: Simulation<T>
-  nameWithType.vb: Simulation(Of T)
-- uid: SpiceSharp.Simulation`1.#ctor(System.String)
-  name: Simulation(String)
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1__ctor_System_String_
-  commentId: M:SpiceSharp.Simulation`1.#ctor(System.String)
-  fullName: SpiceSharp.Simulation<T>.Simulation(System.String)
-  fullName.vb: SpiceSharp.Simulation(Of T).Simulation(System.String)
-  nameWithType: Simulation<T>.Simulation(String)
-  nameWithType.vb: Simulation(Of T).Simulation(String)
-- uid: SpiceSharp.Simulation`1.#ctor*
-  name: Simulation
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1__ctor_
-  commentId: Overload:SpiceSharp.Simulation`1.#ctor
-  fullName: SpiceSharp.Simulation<T>.Simulation
-  fullName.vb: SpiceSharp.Simulation(Of T).Simulation
-  nameWithType: Simulation<T>.Simulation
-  nameWithType.vb: Simulation(Of T).Simulation
-- uid: SpiceSharp.Simulation`1.Config
-  name: Config
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_Config
-  commentId: P:SpiceSharp.Simulation`1.Config
-  fullName: SpiceSharp.Simulation<T>.Config
-  fullName.vb: SpiceSharp.Simulation(Of T).Config
-  nameWithType: Simulation<T>.Config
-  nameWithType.vb: Simulation(Of T).Config
-- uid: SpiceSharp.Simulation`1.Config*
-  name: Config
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_Config_
-  commentId: Overload:SpiceSharp.Simulation`1.Config
-  fullName: SpiceSharp.Simulation<T>.Config
-  fullName.vb: SpiceSharp.Simulation(Of T).Config
-  nameWithType: Simulation<T>.Config
-  nameWithType.vb: Simulation(Of T).Config
-- uid: SpiceSharp.Simulation`1.CurrentConfig
-  name: CurrentConfig
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_CurrentConfig
-  commentId: P:SpiceSharp.Simulation`1.CurrentConfig
-  fullName: SpiceSharp.Simulation<T>.CurrentConfig
-  fullName.vb: SpiceSharp.Simulation(Of T).CurrentConfig
-  nameWithType: Simulation<T>.CurrentConfig
-  nameWithType.vb: Simulation(Of T).CurrentConfig
-- uid: SpiceSharp.Simulation`1.CurrentConfig*
-  name: CurrentConfig
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_CurrentConfig_
-  commentId: Overload:SpiceSharp.Simulation`1.CurrentConfig
-  fullName: SpiceSharp.Simulation<T>.CurrentConfig
-  fullName.vb: SpiceSharp.Simulation(Of T).CurrentConfig
-  nameWithType: Simulation<T>.CurrentConfig
-  nameWithType.vb: Simulation(Of T).CurrentConfig
-- uid: SpiceSharp.Simulation`1.Execute(SpiceSharp.Circuit)
-  name: Execute(Circuit)
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_Execute_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.Simulation`1.Execute(SpiceSharp.Circuit)
-  fullName: SpiceSharp.Simulation<T>.Execute(SpiceSharp.Circuit)
-  fullName.vb: SpiceSharp.Simulation(Of T).Execute(SpiceSharp.Circuit)
-  nameWithType: Simulation<T>.Execute(Circuit)
-  nameWithType.vb: Simulation(Of T).Execute(Circuit)
-- uid: SpiceSharp.Simulation`1.Execute*
-  name: Execute
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_Execute_
-  commentId: Overload:SpiceSharp.Simulation`1.Execute
-  fullName: SpiceSharp.Simulation<T>.Execute
-  fullName.vb: SpiceSharp.Simulation(Of T).Execute
-  nameWithType: Simulation<T>.Execute
-  nameWithType.vb: Simulation(Of T).Execute
-- uid: SpiceSharp.Simulation`1.Export(SpiceSharp.Circuit)
-  name: Export(Circuit)
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_Export_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.Simulation`1.Export(SpiceSharp.Circuit)
-  fullName: SpiceSharp.Simulation<T>.Export(SpiceSharp.Circuit)
-  fullName.vb: SpiceSharp.Simulation(Of T).Export(SpiceSharp.Circuit)
-  nameWithType: Simulation<T>.Export(Circuit)
-  nameWithType.vb: Simulation(Of T).Export(Circuit)
-- uid: SpiceSharp.Simulation`1.Export*
-  name: Export
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_Export_
-  commentId: Overload:SpiceSharp.Simulation`1.Export
-  fullName: SpiceSharp.Simulation<T>.Export
-  fullName.vb: SpiceSharp.Simulation(Of T).Export
-  nameWithType: Simulation<T>.Export
-  nameWithType.vb: Simulation(Of T).Export
-- uid: SpiceSharp.Simulation`1.Finalize(SpiceSharp.Circuit)
-  name: Finalize(Circuit)
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_Finalize_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.Simulation`1.Finalize(SpiceSharp.Circuit)
-  fullName: SpiceSharp.Simulation<T>.Finalize(SpiceSharp.Circuit)
-  fullName.vb: SpiceSharp.Simulation(Of T).Finalize(SpiceSharp.Circuit)
-  nameWithType: Simulation<T>.Finalize(Circuit)
-  nameWithType.vb: Simulation(Of T).Finalize(Circuit)
-- uid: SpiceSharp.Simulation`1.Finalize*
-  name: Finalize
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_Finalize_
-  commentId: Overload:SpiceSharp.Simulation`1.Finalize
-  fullName: SpiceSharp.Simulation<T>.Finalize
-  fullName.vb: SpiceSharp.Simulation(Of T).Finalize
-  nameWithType: Simulation<T>.Finalize
-  nameWithType.vb: Simulation(Of T).Finalize
-- uid: SpiceSharp.Simulation`1.FinalizeSimulationExport
-  name: FinalizeSimulationExport
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_FinalizeSimulationExport
-  commentId: E:SpiceSharp.Simulation`1.FinalizeSimulationExport
-  fullName: SpiceSharp.Simulation<T>.FinalizeSimulationExport
-  fullName.vb: SpiceSharp.Simulation(Of T).FinalizeSimulationExport
-  nameWithType: Simulation<T>.FinalizeSimulationExport
-  nameWithType.vb: Simulation(Of T).FinalizeSimulationExport
-- uid: SpiceSharp.Simulation`1.Initialize(SpiceSharp.Circuit)
-  name: Initialize(Circuit)
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_Initialize_SpiceSharp_Circuit_
-  commentId: M:SpiceSharp.Simulation`1.Initialize(SpiceSharp.Circuit)
-  fullName: SpiceSharp.Simulation<T>.Initialize(SpiceSharp.Circuit)
-  fullName.vb: SpiceSharp.Simulation(Of T).Initialize(SpiceSharp.Circuit)
-  nameWithType: Simulation<T>.Initialize(Circuit)
-  nameWithType.vb: Simulation(Of T).Initialize(Circuit)
-- uid: SpiceSharp.Simulation`1.Initialize*
-  name: Initialize
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_Initialize_
-  commentId: Overload:SpiceSharp.Simulation`1.Initialize
-  fullName: SpiceSharp.Simulation<T>.Initialize
-  fullName.vb: SpiceSharp.Simulation(Of T).Initialize
-  nameWithType: Simulation<T>.Initialize
-  nameWithType.vb: Simulation(Of T).Initialize
-- uid: SpiceSharp.Simulation`1.InitializeSimulationExport
-  name: InitializeSimulationExport
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_InitializeSimulationExport
-  commentId: E:SpiceSharp.Simulation`1.InitializeSimulationExport
-  fullName: SpiceSharp.Simulation<T>.InitializeSimulationExport
-  fullName.vb: SpiceSharp.Simulation(Of T).InitializeSimulationExport
-  nameWithType: Simulation<T>.InitializeSimulationExport
-  nameWithType.vb: Simulation(Of T).InitializeSimulationExport
-- uid: SpiceSharp.Simulation`1.Name
-  name: Name
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_Name
-  commentId: P:SpiceSharp.Simulation`1.Name
-  fullName: SpiceSharp.Simulation<T>.Name
-  fullName.vb: SpiceSharp.Simulation(Of T).Name
-  nameWithType: Simulation<T>.Name
-  nameWithType.vb: Simulation(Of T).Name
-- uid: SpiceSharp.Simulation`1.Name*
-  name: Name
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_Name_
-  commentId: Overload:SpiceSharp.Simulation`1.Name
-  fullName: SpiceSharp.Simulation<T>.Name
-  fullName.vb: SpiceSharp.Simulation(Of T).Name
-  nameWithType: Simulation<T>.Name
-  nameWithType.vb: Simulation(Of T).Name
-- uid: SpiceSharp.Simulation`1.OnExportSimulationData
-  name: OnExportSimulationData
-  href: api/SpiceSharp.Simulation-1.html#SpiceSharp_Simulation_1_OnExportSimulationData
-  commentId: E:SpiceSharp.Simulation`1.OnExportSimulationData
-  fullName: SpiceSharp.Simulation<T>.OnExportSimulationData
-  fullName.vb: SpiceSharp.Simulation(Of T).OnExportSimulationData
-  nameWithType: Simulation<T>.OnExportSimulationData
-  nameWithType.vb: Simulation(Of T).OnExportSimulationData
 - uid: SpiceSharp.Simulations
   name: SpiceSharp.Simulations
   href: api/SpiceSharp.Simulations.html
@@ -14580,6 +14398,167 @@ references:
   commentId: Overload:SpiceSharp.Simulations.OP.Execute
   fullName: SpiceSharp.Simulations.OP.Execute
   nameWithType: OP.Execute
+- uid: SpiceSharp.Simulations.Simulation`1
+  name: Simulation<T>
+  href: api/SpiceSharp.Simulations.Simulation-1.html
+  commentId: T:SpiceSharp.Simulations.Simulation`1
+  name.vb: Simulation(Of T)
+  fullName: SpiceSharp.Simulations.Simulation<T>
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T)
+  nameWithType: Simulation<T>
+  nameWithType.vb: Simulation(Of T)
+- uid: SpiceSharp.Simulations.Simulation`1.#ctor(System.String)
+  name: Simulation(String)
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1__ctor_System_String_
+  commentId: M:SpiceSharp.Simulations.Simulation`1.#ctor(System.String)
+  fullName: SpiceSharp.Simulations.Simulation<T>.Simulation(System.String)
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Simulation(System.String)
+  nameWithType: Simulation<T>.Simulation(String)
+  nameWithType.vb: Simulation(Of T).Simulation(String)
+- uid: SpiceSharp.Simulations.Simulation`1.#ctor*
+  name: Simulation
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1__ctor_
+  commentId: Overload:SpiceSharp.Simulations.Simulation`1.#ctor
+  fullName: SpiceSharp.Simulations.Simulation<T>.Simulation
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Simulation
+  nameWithType: Simulation<T>.Simulation
+  nameWithType.vb: Simulation(Of T).Simulation
+- uid: SpiceSharp.Simulations.Simulation`1.Config
+  name: Config
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_Config
+  commentId: P:SpiceSharp.Simulations.Simulation`1.Config
+  fullName: SpiceSharp.Simulations.Simulation<T>.Config
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Config
+  nameWithType: Simulation<T>.Config
+  nameWithType.vb: Simulation(Of T).Config
+- uid: SpiceSharp.Simulations.Simulation`1.Config*
+  name: Config
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_Config_
+  commentId: Overload:SpiceSharp.Simulations.Simulation`1.Config
+  fullName: SpiceSharp.Simulations.Simulation<T>.Config
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Config
+  nameWithType: Simulation<T>.Config
+  nameWithType.vb: Simulation(Of T).Config
+- uid: SpiceSharp.Simulations.Simulation`1.CurrentConfig
+  name: CurrentConfig
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_CurrentConfig
+  commentId: P:SpiceSharp.Simulations.Simulation`1.CurrentConfig
+  fullName: SpiceSharp.Simulations.Simulation<T>.CurrentConfig
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).CurrentConfig
+  nameWithType: Simulation<T>.CurrentConfig
+  nameWithType.vb: Simulation(Of T).CurrentConfig
+- uid: SpiceSharp.Simulations.Simulation`1.CurrentConfig*
+  name: CurrentConfig
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_CurrentConfig_
+  commentId: Overload:SpiceSharp.Simulations.Simulation`1.CurrentConfig
+  fullName: SpiceSharp.Simulations.Simulation<T>.CurrentConfig
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).CurrentConfig
+  nameWithType: Simulation<T>.CurrentConfig
+  nameWithType.vb: Simulation(Of T).CurrentConfig
+- uid: SpiceSharp.Simulations.Simulation`1.Execute(SpiceSharp.Circuit)
+  name: Execute(Circuit)
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_Execute_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.Simulations.Simulation`1.Execute(SpiceSharp.Circuit)
+  fullName: SpiceSharp.Simulations.Simulation<T>.Execute(SpiceSharp.Circuit)
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Execute(SpiceSharp.Circuit)
+  nameWithType: Simulation<T>.Execute(Circuit)
+  nameWithType.vb: Simulation(Of T).Execute(Circuit)
+- uid: SpiceSharp.Simulations.Simulation`1.Execute*
+  name: Execute
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_Execute_
+  commentId: Overload:SpiceSharp.Simulations.Simulation`1.Execute
+  fullName: SpiceSharp.Simulations.Simulation<T>.Execute
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Execute
+  nameWithType: Simulation<T>.Execute
+  nameWithType.vb: Simulation(Of T).Execute
+- uid: SpiceSharp.Simulations.Simulation`1.Export(SpiceSharp.Circuit)
+  name: Export(Circuit)
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_Export_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.Simulations.Simulation`1.Export(SpiceSharp.Circuit)
+  fullName: SpiceSharp.Simulations.Simulation<T>.Export(SpiceSharp.Circuit)
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Export(SpiceSharp.Circuit)
+  nameWithType: Simulation<T>.Export(Circuit)
+  nameWithType.vb: Simulation(Of T).Export(Circuit)
+- uid: SpiceSharp.Simulations.Simulation`1.Export*
+  name: Export
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_Export_
+  commentId: Overload:SpiceSharp.Simulations.Simulation`1.Export
+  fullName: SpiceSharp.Simulations.Simulation<T>.Export
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Export
+  nameWithType: Simulation<T>.Export
+  nameWithType.vb: Simulation(Of T).Export
+- uid: SpiceSharp.Simulations.Simulation`1.Finalize(SpiceSharp.Circuit)
+  name: Finalize(Circuit)
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_Finalize_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.Simulations.Simulation`1.Finalize(SpiceSharp.Circuit)
+  fullName: SpiceSharp.Simulations.Simulation<T>.Finalize(SpiceSharp.Circuit)
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Finalize(SpiceSharp.Circuit)
+  nameWithType: Simulation<T>.Finalize(Circuit)
+  nameWithType.vb: Simulation(Of T).Finalize(Circuit)
+- uid: SpiceSharp.Simulations.Simulation`1.Finalize*
+  name: Finalize
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_Finalize_
+  commentId: Overload:SpiceSharp.Simulations.Simulation`1.Finalize
+  fullName: SpiceSharp.Simulations.Simulation<T>.Finalize
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Finalize
+  nameWithType: Simulation<T>.Finalize
+  nameWithType.vb: Simulation(Of T).Finalize
+- uid: SpiceSharp.Simulations.Simulation`1.FinalizeSimulationExport
+  name: FinalizeSimulationExport
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_FinalizeSimulationExport
+  commentId: E:SpiceSharp.Simulations.Simulation`1.FinalizeSimulationExport
+  fullName: SpiceSharp.Simulations.Simulation<T>.FinalizeSimulationExport
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).FinalizeSimulationExport
+  nameWithType: Simulation<T>.FinalizeSimulationExport
+  nameWithType.vb: Simulation(Of T).FinalizeSimulationExport
+- uid: SpiceSharp.Simulations.Simulation`1.Initialize(SpiceSharp.Circuit)
+  name: Initialize(Circuit)
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_Initialize_SpiceSharp_Circuit_
+  commentId: M:SpiceSharp.Simulations.Simulation`1.Initialize(SpiceSharp.Circuit)
+  fullName: SpiceSharp.Simulations.Simulation<T>.Initialize(SpiceSharp.Circuit)
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Initialize(SpiceSharp.Circuit)
+  nameWithType: Simulation<T>.Initialize(Circuit)
+  nameWithType.vb: Simulation(Of T).Initialize(Circuit)
+- uid: SpiceSharp.Simulations.Simulation`1.Initialize*
+  name: Initialize
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_Initialize_
+  commentId: Overload:SpiceSharp.Simulations.Simulation`1.Initialize
+  fullName: SpiceSharp.Simulations.Simulation<T>.Initialize
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Initialize
+  nameWithType: Simulation<T>.Initialize
+  nameWithType.vb: Simulation(Of T).Initialize
+- uid: SpiceSharp.Simulations.Simulation`1.InitializeSimulationExport
+  name: InitializeSimulationExport
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_InitializeSimulationExport
+  commentId: E:SpiceSharp.Simulations.Simulation`1.InitializeSimulationExport
+  fullName: SpiceSharp.Simulations.Simulation<T>.InitializeSimulationExport
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).InitializeSimulationExport
+  nameWithType: Simulation<T>.InitializeSimulationExport
+  nameWithType.vb: Simulation(Of T).InitializeSimulationExport
+- uid: SpiceSharp.Simulations.Simulation`1.Name
+  name: Name
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_Name
+  commentId: P:SpiceSharp.Simulations.Simulation`1.Name
+  fullName: SpiceSharp.Simulations.Simulation<T>.Name
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Name
+  nameWithType: Simulation<T>.Name
+  nameWithType.vb: Simulation(Of T).Name
+- uid: SpiceSharp.Simulations.Simulation`1.Name*
+  name: Name
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_Name_
+  commentId: Overload:SpiceSharp.Simulations.Simulation`1.Name
+  fullName: SpiceSharp.Simulations.Simulation<T>.Name
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).Name
+  nameWithType: Simulation<T>.Name
+  nameWithType.vb: Simulation(Of T).Name
+- uid: SpiceSharp.Simulations.Simulation`1.OnExportSimulationData
+  name: OnExportSimulationData
+  href: api/SpiceSharp.Simulations.Simulation-1.html#SpiceSharp_Simulations_Simulation_1_OnExportSimulationData
+  commentId: E:SpiceSharp.Simulations.Simulation`1.OnExportSimulationData
+  fullName: SpiceSharp.Simulations.Simulation<T>.OnExportSimulationData
+  fullName.vb: SpiceSharp.Simulations.Simulation(Of T).OnExportSimulationData
+  nameWithType: Simulation<T>.OnExportSimulationData
+  nameWithType.vb: Simulation(Of T).OnExportSimulationData
 - uid: SpiceSharp.Simulations.SimulationCircuit
   name: SimulationCircuit
   href: api/SpiceSharp.Simulations.SimulationCircuit.html
