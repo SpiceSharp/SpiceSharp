@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents a waveform object
+    /// Provides values in function of time. This is an abstract class.
     /// </summary>
     public abstract class Waveform<T> : Parameterized<T>, IWaveform
     {
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="ckt"></param>
+        /// <param name="ckt">The circuit</param>
         public abstract void Accept(Circuit ckt);
     }
 }

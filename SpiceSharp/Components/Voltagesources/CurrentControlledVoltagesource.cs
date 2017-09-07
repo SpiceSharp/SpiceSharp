@@ -5,7 +5,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class describes a current-controlled voltage source
+    /// A current-controlled voltage source
     /// </summary>
     [SpicePins("H+", "H-"), VoltageDriver(0, 1)]
     public class CurrentControlledVoltagesource : CircuitComponent<CurrentControlledVoltagesource>

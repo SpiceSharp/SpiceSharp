@@ -9,7 +9,7 @@ using static SpiceSharp.Simulations.SimulationIterate;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Describes a DC simulation
+    /// DC sweep analysis
     /// </summary>
     public class DC : Simulation<DC>
     {

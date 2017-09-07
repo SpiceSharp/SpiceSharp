@@ -8,13 +8,14 @@ using System.Numerics;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents a MOS2 MOSFET
+    /// A MOS2 Mosfet.
+    /// Level 2, A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits Using SPICE2, ERL Memo No. M80/7, Electronics Research Laboratory University of California, Berkeley, October 1980.
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
     public class MOS2 : CircuitComponent<MOS2>
     {
         /// <summary>
-        /// Gets or sets the device model
+        /// Set the model for the MOS2 Mosfet.
         /// </summary>
         public void SetModel(MOS2Model model) => Model = model;
 

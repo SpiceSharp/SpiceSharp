@@ -2,6 +2,9 @@
 
 namespace SpiceSharp.Simulations
 {
+    /// <summary>
+    /// Provides methods for performing a simulation using a <see cref="Circuit"/>.
+    /// </summary>
     public interface ISimulation : IParameterized
     {
         /// <summary>

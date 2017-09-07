@@ -1,24 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// Indicates that pins are connected by a finite impedance at DC. This attribute can be
+    /// applied to an <see cref="ICircuitComponent"/> to check for floating nodes.
+    /// If multiple attributes are specified, they are treated as separately connected pins.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class ConnectedPins : Attribute
     {
         /// <summary>
-        /// Get the connected pins
+        /// Gets the connected pins
         /// </summary>
         public int[] Pins { get; }
 
         /// <summary>
         /// Constructor
-        /// This information can be used to check for detecting open-circuit nodes
         /// </summary>
-        /// <param name="pins"></param>
+        /// <param name="pins">The internally connected pins</param>
         public ConnectedPins(params int[] pins)
         {
             Pins = pins;

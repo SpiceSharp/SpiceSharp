@@ -2,6 +2,9 @@
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// Specifies the pins for a circuit component that extends <see cref="CircuitComponent{T}"/>.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class SpicePins : Attribute
     {

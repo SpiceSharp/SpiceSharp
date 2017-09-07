@@ -3,6 +3,9 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace SpiceSharp.Simulations
 {
+    /// <summary>
+    /// Provides static methods for basic simulations involving the circuit
+    /// </summary>
     public static class SimulationCircuit
     {
         /// <summary>

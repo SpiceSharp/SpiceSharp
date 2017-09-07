@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ConnectedPins.cs" />
-    <Compile Include="Attributes\CurrentDriver.cs" />
     <Compile Include="Attributes\IndependentSource.cs" />
     <Compile Include="Attributes\VoltageDriver.cs" />
     <Compile Include="Circuits\CircuitCheck.cs" />
@@ -64,7 +63,7 @@
     <Compile Include="Components\Transistors\MOS3.cs" />
     <Compile Include="Components\Transistors\MOS3Model.cs" />
     <Compile Include="Components\Transistors\Transistor.cs" />
-    <Compile Include="Attributes\SpiceNodes.cs" />
+    <Compile Include="Attributes\SpicePins.cs" />
     <Compile Include="Simulations\ISimulation.cs" />
     <Compile Include="Components\Waveforms\IWaveform.cs" />
     <Compile Include="Components\RLC\Inductor.cs" />

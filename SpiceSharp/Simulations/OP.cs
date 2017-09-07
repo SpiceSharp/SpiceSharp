@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using static SpiceSharp.Simulations.SimulationIterate;
 
 namespace SpiceSharp.Simulations
 {
+    /// <summary>
+    /// Operating Point analysis
+    /// </summary>
     public class OP : Simulation<OP>
     {
         /// <summary>

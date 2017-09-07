@@ -8,13 +8,14 @@ using System.Numerics;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents a MOS3 MOSFET
+    /// A MOS3 Mosfet
+    /// Level 2, a semi-empirical model(see reference for level 2).
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
     public class MOS3 : CircuitComponent<MOS3>
     {
         /// <summary>
-        /// Gets or sets the device model
+        /// Set the model for the MOS3 model
         /// </summary>
         public void SetModel(MOS3Model model) => Model = model;
 

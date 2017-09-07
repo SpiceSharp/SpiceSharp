@@ -1,12 +1,13 @@
 ﻿using System;
 using SpiceSharp.Circuits;
+using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp
 {
     /// <summary>
-    /// A class that represents a circuit
+    /// Represents an electronic circuit.
     /// </summary>
     public class Circuit
     {
@@ -24,32 +25,34 @@ namespace SpiceSharp
         #endregion
 
         /// <summary>
-        /// Gets or sets the integration method
+        /// Gets or sets the integration method used in transient simulations
+        /// It should be set by the simulation
         /// </summary>
         public IntegrationMethod Method { get; set; }
 
         /// <summary>
-        /// Get the nodes for the circuit
+        /// Get all nodes in the circuit
+        /// Using nodes is only valid after calling <see cref="Setup"/>
         /// </summary>
         public Nodes Nodes { get; } = new Nodes();
 
         /// <summary>
-        /// Get the current simulation that is being run
+        /// Gets the current simulation that is being run by the circuit
         /// </summary>
         public ISimulation Simulation { get; private set; } = null;
 
         /// <summary>
-        /// Get the circuit state
+        /// Gets the current state of the circuit
         /// </summary>
         public CircuitState State { get; } = new CircuitState();
 
         /// <summary>
-        /// Gets the statistics
+        /// Gets statistics
         /// </summary>
         public CircuitStatistics Statistics { get; } = new CircuitStatistics();
 
         /// <summary>
-        /// Get the circuit components
+        /// Gets a collection of all circuit objects
         /// </summary>
         public CircuitObjects Objects { get; } = new CircuitObjects();
 
@@ -147,7 +150,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Check the circuit
+        /// Check the circuit for floating nodes, voltage loops and more
         /// </summary>
         public void Check()
         {

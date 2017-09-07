@@ -5,9 +5,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// This static class contains the methods for:
-    /// - Op(): Finds the operating point for the circuit
-    /// - Iterate(): Tries to converge to a solution using the current circuit
+    /// This static class contains common methods for basic simulation.
     /// </summary>
     public static class SimulationIterate
     {

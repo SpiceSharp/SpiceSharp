@@ -4,6 +4,9 @@ using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// A model for a <see cref="Diode"/>
+    /// </summary>
     public class DiodeModel : CircuitModel<DiodeModel>
     {
         /// <summary>

@@ -5,7 +5,7 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class is the model for a Bipolar Junction Transistor (BJT)
+    /// A model for a <see cref="BJT"/>
     /// </summary>
     public class BJTModel : CircuitModel<BJTModel>
     {

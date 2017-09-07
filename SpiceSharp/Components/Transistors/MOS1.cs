@@ -8,13 +8,14 @@ using System.Numerics;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents the MOS1 model for MOSFETs
+    /// A MOS1 Mosfet.
+    /// Level 1, Shichman-Hodges.
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
     public class MOS1 : CircuitComponent<MOS1>
     {
         /// <summary>
-        /// Gets or sets the device model
+        /// Set the model for the MOS1 Mosfet
         /// </summary>
         public void SetModel(MOS1Model model) => Model = model;
 

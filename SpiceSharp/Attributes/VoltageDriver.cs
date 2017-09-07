@@ -3,7 +3,8 @@
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// Attribute when a voltage is applied by a component
+    /// Indicates that two nodes are driven by a voltage source. This attribute can
+    /// be applied to a <see cref="ICircuitComponent"/> to check for voltage loops.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class VoltageDriver : Attribute

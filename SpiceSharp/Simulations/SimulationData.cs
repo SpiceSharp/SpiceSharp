@@ -7,9 +7,9 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Simulation data
+    /// Exported simulation data. Can be used by simulations to pass exported simulation data as an event argument.
     /// </summary>
-    public class SimulationData
+    public class SimulationData : EventArgs
     {
         /// <summary>
         /// The circuit

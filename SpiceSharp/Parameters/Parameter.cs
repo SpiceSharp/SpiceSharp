@@ -3,10 +3,9 @@
 namespace SpiceSharp.Parameters
 {
     /// <summary>
-    /// This struct describes a parameter that is optional. Whether or not it was specified can be
+    /// This class describes a parameter that is optional. Whether or not it was specified can be
     /// found using the Given variable.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class Parameter : ICloneable
     {
         /// <summary>

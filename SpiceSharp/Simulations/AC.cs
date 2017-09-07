@@ -8,7 +8,7 @@ using static SpiceSharp.Simulations.SimulationIterate;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// This 
+    /// Frequency-domain analysis (AC analysis)
     /// </summary>
     public class AC : Simulation<AC>
     {

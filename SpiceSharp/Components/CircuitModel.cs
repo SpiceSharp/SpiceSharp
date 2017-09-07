@@ -4,7 +4,8 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This model represents a component model
+    /// This class represents a model.
+    /// It also has parameters.
     /// </summary>
     public abstract class CircuitModel<T> : Parameterized<T>, ICircuitObject
     {

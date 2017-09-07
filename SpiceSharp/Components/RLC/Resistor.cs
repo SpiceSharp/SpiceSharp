@@ -4,7 +4,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A class that represents a resistor
+    /// A resistor
     /// </summary>
     [SpicePins("R+", "R-")]
     public class Resistor : CircuitComponent<Resistor>

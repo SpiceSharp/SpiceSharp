@@ -4,13 +4,13 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents a current-controlled switch
+    /// A current-controlled switch
     /// </summary>
     [SpicePins("W+", "W-")]
     public class CurrentSwitch : CircuitComponent<CurrentSwitch>
     {
         /// <summary>
-        /// Gets or sets the model for the current-controlled switch
+        /// Set the model for the current-controlled switch
         /// </summary>
         public void SetModel(CurrentSwitchModel model) => Model = (ICircuitObject)model;
 

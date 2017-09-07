@@ -5,7 +5,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class logically groups objects together
+    /// A subcircuit
     /// </summary>
     public class Subcircuit : CircuitComponent<Subcircuit>
     {
@@ -15,9 +15,10 @@ namespace SpiceSharp.Components
         public CircuitObjects Objects { get; } = new CircuitObjects();
 
         /// <summary>
-        /// Gets or sets the delimiter nodes in subcircuits
+        /// Gets or sets the delimiter used for nodes in the subcircuit.
+        /// Internal nodes are mapped to SUBCKT.NODE, where the . is the delimiter.
         /// </summary>
-        public static string Delimiter { get; set; } = ".";
+        public string Delimiter { get; set; } = ".";
 
         /// <summary>
         /// Private variables

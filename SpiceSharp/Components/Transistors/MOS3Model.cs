@@ -7,7 +7,7 @@ using SpiceSharp.Components.Transistors;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// The model for MOS3 MOSFETs
+    /// A model for a <see cref="MOS3"/>
     /// </summary>
     public class MOS3Model : CircuitModel<MOS3Model>
     {

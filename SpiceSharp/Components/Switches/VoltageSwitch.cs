@@ -4,13 +4,13 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents a voltage-controlled switch
+    /// A voltage-controlled switch
     /// </summary>
     [SpicePins("S+", "S-", "SC+", "SC-"), ConnectedPins(0, 1)]
     public class VoltageSwitch : CircuitComponent<VoltageSwitch>
     {
         /// <summary>
-        /// Gets or sets the model
+        /// Set the model for the voltage-controlled switch
         /// </summary>
         public void SetModel(VoltageSwitchModel model) => Model = (ICircuitObject)model;
 

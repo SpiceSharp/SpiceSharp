@@ -3,7 +3,7 @@
 namespace SpiceSharp.Diagnostics
 {
     /// <summary>
-    /// A basic exception class for circuits
+    /// A basic exception for circuits
     /// </summary>
     [Serializable]
     public class CircuitException : Exception

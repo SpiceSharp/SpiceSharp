@@ -4,7 +4,7 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class is capable of generating a sine wave
+    /// A sine waveform
     /// </summary>
     public class Sine : Waveform<Sine>
     {

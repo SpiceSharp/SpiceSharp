@@ -8,7 +8,7 @@ using System.Linq;
 namespace SpiceSharp.Parameters
 {
     /// <summary>
-    /// This class allows referring to spice properties using their name, as specified by the SpiceName() attribute
+    /// An abstract class that implements <see cref="IParameterized"/> by using attributes.
     /// </summary>
     public abstract class Parameterized<T> : IParameterized
     {

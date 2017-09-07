@@ -8,13 +8,13 @@ using System.Numerics;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents a bipolar junction transistor (BJT)
+    /// A bipolar junction transistor (BJT)
     /// </summary>
     [SpicePins("Collector", "Base", "Emitter", "Substrate")]
     public class BJT : CircuitComponent<BJT>
     {
         /// <summary>
-        /// Gets or sets the device model
+        /// Set the model for the BJT
         /// </summary>
         public void SetModel(BJTModel model) => Model = (ICircuitObject)model;
 

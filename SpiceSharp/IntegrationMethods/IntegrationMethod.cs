@@ -1,14 +1,13 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Diagnostics;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
-namespace SpiceSharp
+namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// An abstract class that will describe integration methods
+    /// Provides methods for differential equation integration in time-domain analysis. This is an abstract class.
     /// </summary>
     public abstract class IntegrationMethod
     {

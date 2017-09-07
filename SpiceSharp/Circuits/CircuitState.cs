@@ -5,7 +5,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 namespace SpiceSharp.Circuits
 {
     /// <summary>
-    /// This class represents the state of the circuit
+    /// Container for the state of an electronic circuit.
     /// </summary>
     public class CircuitState
     {

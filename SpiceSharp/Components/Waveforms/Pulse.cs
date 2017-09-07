@@ -5,7 +5,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A class that represents a pulsed waveform
+    /// A pulse waveform
     /// </summary>
     public class Pulse : Waveform<Pulse>
     {

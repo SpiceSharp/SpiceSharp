@@ -1,12 +1,11 @@
 ﻿using System;
-using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This is the model for MOS1 MOSFETs
+    /// A model for a <see cref="MOS1"/>
     /// </summary>
     public class MOS1Model : CircuitModel<MOS1Model>
     {

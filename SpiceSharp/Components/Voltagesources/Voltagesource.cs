@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
@@ -8,7 +7,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class describes a voltage source
+    /// An independent voltage source
     /// </summary>
     [SpicePins("V+", "V-"), VoltageDriver(0, 1), IndependentSource]
     public class Voltagesource : CircuitComponent<Voltagesource>

@@ -4,7 +4,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Circuits
 {
     /// <summary>
-    /// A class that keeps track of all circuit nodes
+    /// Contains and manages circuit nodes.
     /// </summary>
     public class Nodes
     {

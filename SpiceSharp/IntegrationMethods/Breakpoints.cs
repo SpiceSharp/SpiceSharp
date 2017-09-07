@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// A class representing the list of breakpoints
+    /// A collection of breakpoints used for time-domain analysis.
     /// </summary>
     public class Breakpoints
     {

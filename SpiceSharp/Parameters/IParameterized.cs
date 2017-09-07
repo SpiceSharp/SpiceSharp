@@ -1,5 +1,8 @@
 ﻿namespace SpiceSharp.Parameters
 {
+    /// <summary>
+    /// Implements named parameters.
+    /// </summary>
     public interface IParameterized
     {
         /// <summary>

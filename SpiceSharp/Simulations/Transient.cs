@@ -1,6 +1,5 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using static SpiceSharp.Simulations.SimulationIterate;
@@ -8,7 +7,7 @@ using static SpiceSharp.Simulations.SimulationIterate;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A simulation that executes a transient analysis
+    /// A time-domain analysis (Transient simulation)
     /// </summary>
     public class Transient : Simulation<Transient>
     {

@@ -2,6 +2,9 @@
 
 namespace SpiceSharp.Components.Transistors
 {
+    /// <summary>
+    /// A class with static methods for Mosfet transistors
+    /// </summary>
     public static class Transistor
     {
         /// <summary>

@@ -1,5 +1,8 @@
 ﻿namespace SpiceSharp.Diagnostics
 {
+    /// <summary>
+    /// Exception for a bad parameter.
+    /// </summary>
     public class BadParameterException : CircuitException
     {
         /// <summary>

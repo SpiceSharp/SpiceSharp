@@ -6,7 +6,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// This class implements the trapezoidal integration method
+    /// Trapezoidal rule implementation.
     /// </summary>
     public class Trapezoidal : IntegrationMethod
     {
@@ -75,7 +75,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Predict a new solution based on the previous ones
         /// </summary>
-        /// <param name="ckt"></param>
+        /// <param name="ckt">The circuit</param>
         public override void Predict(Circuit ckt)
         {
             // Get the state
@@ -110,7 +110,8 @@ namespace SpiceSharp.IntegrationMethods
 
         /// <summary>
         /// Truncate the timestep
-        /// Uses the Local Truncation Error
+        /// Uses the Local Truncation Error (LTE) to calculate an approximate timestep.
+        /// The method is slightly different from the original Spice 3f5 version.
         /// </summary>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>

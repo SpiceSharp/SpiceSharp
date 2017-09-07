@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents a model for a current-controlled switch
+    /// A model for a <see cref="CurrentSwitch"/>
     /// </summary>
     public class CurrentSwitchModel : CircuitModel<CurrentSwitchModel>
     {

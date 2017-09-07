@@ -5,7 +5,7 @@ using System.Numerics;
 namespace SpiceSharp.Circuits
 {
     /// <summary>
-    /// This class represents the state of a circuit when using complex numbers
+    /// Represents the state of an electronic circuit in the complex domain.
     /// </summary>
     public class CircuitStateComplex
     {

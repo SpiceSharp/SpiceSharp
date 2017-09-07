@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpiceSharp.Circuits
+﻿namespace SpiceSharp.Circuits
 {
     /// <summary>
-    /// An interface that can be used by a Circuit-object
+    /// Supports circuit simulation methods.
     /// </summary>
     public interface ICircuitObject
     {

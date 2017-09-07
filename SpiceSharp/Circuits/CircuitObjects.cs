@@ -7,7 +7,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Circuits
 {
     /// <summary>
-    /// This class represents all objects in the circuit
+    /// Contains and manages a collection circuit objects.
     /// </summary>
     public class CircuitObjects : IEnumerable<ICircuitObject>
     {
@@ -29,9 +29,9 @@ namespace SpiceSharp.Circuits
         public CircuitObjects() { }
 
         /// <summary>
-        /// Search for a circuit component with a specific priority
+        /// Search for a circuit object by name
         /// </summary>
-        /// <param name="name">The name of the component</param>
+        /// <param name="name">The name of the object</param>
         /// <returns></returns>
         public ICircuitObject this[params string[] name]
         {
@@ -63,12 +63,12 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// The amount of objects
+        /// The amount of circuit objects
         /// </summary>
         public int Count => objects.Count;
 
         /// <summary>
-        /// Clear all objects
+        /// Clear all circuit objects
         /// </summary>
         public void Clear()
         {
@@ -78,7 +78,7 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Add one or more objects
+        /// Add one or more circuit objects
         /// </summary>
         /// <param name="cs">The objects that need to be added</param>
         public void Add(params ICircuitObject[] cs)
@@ -99,9 +99,9 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Remove a component from a specific priority
+        /// Remove specific circuit objects from the collection
         /// </summary>
-        /// <param name="names">The names of the objects that need to be deleted</param>
+        /// <param name="names">Names of the objects that need to be deleted</param>
         public void Remove(params string[] names)
         {
             foreach (var name in names)
@@ -116,6 +116,19 @@ namespace SpiceSharp.Circuits
                     objects.Remove(name);
                 }
                 isordered = false;
+            }
+        }
+
+        /// <summary>
+        /// Remove specific circuit objects from the collection
+        /// </summary>
+        /// <param name="cs">The objects that need to be deleted</param>
+        public void Remove(params ICircuitObject[] cs)
+        {
+            foreach (var c in cs)
+            {
+                if (c == null)
+                    throw new ArgumentNullException(nameof(c));
             }
         }
 

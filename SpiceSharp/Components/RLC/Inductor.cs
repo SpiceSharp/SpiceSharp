@@ -6,7 +6,7 @@ using System.Numerics;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents an inductor
+    /// An inductor
     /// </summary>
     [SpicePins("L+", "L-")]
     public class Inductor : CircuitComponent<Inductor>

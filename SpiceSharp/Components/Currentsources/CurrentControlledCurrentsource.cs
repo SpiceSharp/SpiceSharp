@@ -4,7 +4,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class describes a current-controlled current source
+    /// A current-controlled current source
     /// </summary>
     [SpicePins("F+", "F-"), ConnectedPins()]
     public class CurrentControlledCurrentsource : CircuitComponent<CurrentControlledCurrentsource>

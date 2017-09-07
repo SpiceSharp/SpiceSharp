@@ -2,6 +2,9 @@
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// Provides values in function of time.
+    /// </summary>
     public interface IWaveform : IParameterized
     {
         /// <summary>

@@ -3,6 +3,9 @@ using System.Diagnostics;
 
 namespace SpiceSharp.Circuits
 {
+    /// <summary>
+    /// Keeps track of simulation statistics.
+    /// </summary>
     public class CircuitStatistics
     {
         /// <summary>

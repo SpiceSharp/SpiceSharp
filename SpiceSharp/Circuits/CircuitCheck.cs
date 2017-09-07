@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.LinearAlgebra.Factorization;
-using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Circuits
 {
     /// <summary>
-    /// This class can check a circuit for common errors
+    /// Provides methods for checking the integrity of a circuit.
     /// </summary>
     public class CircuitCheck
     {
@@ -30,9 +29,9 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Check the circuit
+        /// Check a circuit
         /// </summary>
-        /// <param name="ckt"></param>
+        /// <param name="ckt">The circuit</param>
         public void Check(Circuit ckt)
         {
             // Make sure the circuit is set up
@@ -75,7 +74,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Deal with a component
         /// </summary>
-        /// <param name="c"></param>
+        /// <param name="c">The circuit object</param>
         private void CheckObject(ICircuitObject c)
         {
             // Subcircuits

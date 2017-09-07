@@ -1,13 +1,13 @@
 ﻿using System;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp
+namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represent a component
+    /// A class that represents a circuit component/device.
+    /// It can be connected in a circuit and it also has parameters.
     /// </summary>
     public abstract class CircuitComponent<T> : Parameterized<T>, ICircuitComponent
     {

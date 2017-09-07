@@ -6,7 +6,7 @@ using SpiceSharp.Components.Transistors;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// The MOS2 model for MOSFETs
+    /// A model for a <see cref="MOS2"/>
     /// </summary>
     public class MOS2Model : CircuitModel<MOS2Model>
     {

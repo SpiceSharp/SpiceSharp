@@ -5,7 +5,7 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents the mutual inductance
+    /// A mutual inductance
     /// </summary>
     public class MutualInductance : CircuitComponent<MutualInductance>
     {

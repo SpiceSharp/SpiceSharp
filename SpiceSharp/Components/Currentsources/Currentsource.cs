@@ -7,7 +7,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents an independent current source
+    /// An independent current source
     /// </summary>
     [SpicePins("I+", "I-"), IndependentSource, ConnectedPins()]
     public class Currentsource : CircuitComponent<Currentsource>
@@ -40,6 +40,7 @@ namespace SpiceSharp.Components
             }
         }
         [SpiceName("c"), SpiceInfo("Current through current source")]
+        public double Current { get; private set; }
 
         public int ISRCposNode { get; private set; }
         public int ISRCnegNode { get; private set; }
@@ -150,6 +151,7 @@ namespace SpiceSharp.Components
 
             rstate.Rhs[ISRCposNode] += value;
             rstate.Rhs[ISRCnegNode] -= value;
+            Current = value;
         }
 
         /// <summary>

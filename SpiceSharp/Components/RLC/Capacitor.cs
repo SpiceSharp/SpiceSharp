@@ -4,7 +4,7 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class describes a capacitor
+    /// A capacitor
     /// </summary>
     [SpicePins("C+", "C-"), ConnectedPins()]
     public class Capacitor : CircuitComponent<Capacitor>

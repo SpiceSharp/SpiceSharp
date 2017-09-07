@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class represents a capacitor model
+    /// A model for a semiconductor <see cref="Capacitor"/>
     /// </summary>
     public class CapacitorModel : CircuitModel<CapacitorModel>
     {

@@ -1,10 +1,9 @@
-﻿using SpiceSharp.Simulations;
-using SpiceSharp.Parameters;
+﻿using SpiceSharp.Parameters;
 
-namespace SpiceSharp
+namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A class with everything needed to do a simulation
+    /// A class that can perform a simulation using a <see cref="Circuit"/>.
     /// </summary>
     public abstract class Simulation<T> : Parameterized<T>, ISimulation
     {

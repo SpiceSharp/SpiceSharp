@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// Interface for circuit components
+    /// Represents a circuit object that can be connected in the circuit.
     /// </summary>
     public interface ICircuitComponent : ICircuitObject
     {

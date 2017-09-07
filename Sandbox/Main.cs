@@ -31,7 +31,7 @@ namespace Sandbox
             Series output = chMain.Series.Add("Output");
             output.ChartType = SeriesChartType.Line;
             chMain.ChartAreas[0].AxisX.IsLogarithmic = true;
-
+            
             // Build the circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(

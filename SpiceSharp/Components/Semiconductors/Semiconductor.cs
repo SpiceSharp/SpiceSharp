@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.Semiconductors
 {
     /// <summary>
-    /// This class represents a semiconductor based circuit component
+    /// A class with static methods for semiconductor devices
     /// </summary>
     public static class Semiconductor
     {

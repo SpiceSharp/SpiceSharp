@@ -4,7 +4,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 namespace SpiceSharp.Circuits
 {
     /// <summary>
-    /// This class represents the state of a circuit when using real numbers
+    /// Represents the state of a circuit.
     /// </summary>
     public class CircuitStateReal
     {

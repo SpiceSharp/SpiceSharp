@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// This class describes a model for a voltage-controlled switch
+    /// A model for a <see cref="VoltageSwitch"/>
     /// </summary>
     public class VoltageSwitchModel : CircuitModel<VoltageSwitchModel>
     {

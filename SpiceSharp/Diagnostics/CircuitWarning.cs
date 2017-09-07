@@ -4,19 +4,14 @@ using System.Collections.Generic;
 namespace SpiceSharp.Diagnostics
 {
     /// <summary>
-    /// Keep track of warnings
+    /// Provides static methods for tracking warnings.
     /// </summary>
-    public class CircuitWarning
+    public static class CircuitWarning
     {
-        /// <summary>
-        /// Keep track of all warnings
-        /// </summary>
-        private static List<string> warnings = new List<string>();
-
         /// <summary>
         /// Get a list of all warnings
         /// </summary>
-        public static List<string> Warnings { get { return warnings; } }
+        public static List<string> Warnings { get; } = new List<string>();
 
         /// <summary>
         /// The event called when a warning is added
@@ -30,13 +25,13 @@ namespace SpiceSharp.Diagnostics
         public static void Warning(object sender, string msg)
         {
             WarningArgs arg = new WarningArgs(msg);
-            warnings.Add(msg);
+            Warnings.Add(msg);
             WarningGenerated?.Invoke(sender, arg);
         }
     }
 
     /// <summary>
-    /// A class for warning events
+    /// Warning arguments
     /// </summary>
     public class WarningArgs : EventArgs
     {
@@ -59,6 +54,7 @@ namespace SpiceSharp.Diagnostics
     /// <summary>
     /// A delegate for generating a warning
     /// </summary>
-    /// <param name="message"></param>
+    /// <param name="sender">The object invoking the warning</param>
+    /// <param name="message">The warning message</param>
     public delegate void WarningEventHandler(object sender, WarningArgs e);
 }

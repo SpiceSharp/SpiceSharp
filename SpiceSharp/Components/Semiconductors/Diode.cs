@@ -7,11 +7,14 @@ using System.Numerics;
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// A diode
+    /// </summary>
     [SpicePins("D+", "D-")]
     public class Diode : CircuitComponent<Diode>
     {
         /// <summary>
-        /// Gets or sets the device model
+        /// Set the model for the diode
         /// </summary>
         public void SetModel(DiodeModel model) => Model = model;
 

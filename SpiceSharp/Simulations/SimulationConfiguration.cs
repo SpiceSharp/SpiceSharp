@@ -3,7 +3,7 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// This class contains the minimum configuration parameters for a simulation
+    /// Configuration for simulations
     /// </summary>
     public class SimulationConfiguration
     {
