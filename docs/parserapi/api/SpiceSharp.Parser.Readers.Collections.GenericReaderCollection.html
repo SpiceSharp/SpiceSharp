@@ -1,0 +1,701 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class GenericReaderCollection
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class GenericReaderCollection
+   ">
+    <meta name="generator" content="docfx 2.23.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc">
+    <meta property="docfx:tocrel" content="toc">
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+                <ul class="nav level1 navbar-nav">
+                  <li class="">
+                    <a href="../articles/intro.html" title="Articles" class="">Articles</a>
+                  </li>
+                  <li class="active">
+                    <a href="../api/index.html" title="API Documentation" class="active">API Documentation</a>
+                  </li>
+                </ul>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div>
+              <div class="sidefilter">
+                <form class="toc-filter">
+                  <span class="glyphicon glyphicon-filter filter-icon"></span>
+                  <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
+                </form>
+              </div>
+              <div class="sidetoc">
+                <div class="toc" id="toc">
+                  
+                  <ul class="nav level1">
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.html" title="SpiceSharp" class="">SpiceSharp</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.ExportNetlistDataEventHandler.html" title="ExportNetlistDataEventHandler" class="">ExportNetlistDataEventHandler</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Netlist.html" title="Netlist" class="">Netlist</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.NetlistReader.html" title="NetlistReader" class="">NetlistReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.NetlistSimulationEventHandler.html" title="NetlistSimulationEventHandler" class="">NetlistSimulationEventHandler</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.html" title="SpiceSharp.Parser" class="">SpiceSharp.Parser</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.AssignmentToken.html" title="AssignmentToken" class="">AssignmentToken</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.AtToken.html" title="AtToken" class="">AtToken</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.BracketToken.html" title="BracketToken" class="">BracketToken</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.ParseException.html" title="ParseException" class="">ParseException</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.SpiceSharpParser.html" title="SpiceSharpParser" class="">SpiceSharpParser</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.SpiceSharpParserConstants.html" title="SpiceSharpParserConstants" class="">SpiceSharpParserConstants</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.SpiceSharpParserTokenManager.html" title="SpiceSharpParserTokenManager" class="">SpiceSharpParserTokenManager</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.StatementsToken.html" title="StatementsToken" class="">StatementsToken</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Token.html" title="Token" class="">Token</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.TokenConstants.html" title="TokenConstants" class="">TokenConstants</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.TokenMgrError.html" title="TokenMgrError" class="">TokenMgrError</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.VectorToken.html" title="VectorToken" class="">VectorToken</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Expressions.html" title="SpiceSharp.Parser.Expressions" class="">SpiceSharp.Parser.Expressions</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Expressions.SpiceExpression.html" title="SpiceExpression" class="">SpiceExpression</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Readers.html" title="SpiceSharp.Parser.Readers" class="">SpiceSharp.Parser.Readers</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ACReader.html" title="ACReader" class="">ACReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.BipolarModelReader.html" title="BipolarModelReader" class="">BipolarModelReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.BipolarReader.html" title="BipolarReader" class="">BipolarReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ComponentReader.html" title="ComponentReader" class="">ComponentReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.CurrentsourceReader.html" title="CurrentsourceReader" class="">CurrentsourceReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.DCReader.html" title="DCReader" class="">DCReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.DiodeModelReader.html" title="DiodeModelReader" class="">DiodeModelReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.DiodeReader.html" title="DiodeReader" class="">DiodeReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Export.html" title="Export" class="">Export</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ExpressionData.html" title="ExpressionData" class="">ExpressionData</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ICReader.html" title="ICReader" class="">ICReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ModelReader.html" title="ModelReader" class="">ModelReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.MosfetModelReader.html" title="MosfetModelReader" class="">MosfetModelReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.MosfetReader.html" title="MosfetReader" class="">MosfetReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.NodesetReader.html" title="NodesetReader" class="">NodesetReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.OptionReader.html" title="OptionReader" class="">OptionReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ParamSetReader.html" title="ParamSetReader" class="">ParamSetReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ParseNetlistExpressionEventHandler.html" title="ParseNetlistExpressionEventHandler" class="">ParseNetlistExpressionEventHandler</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Reader.html" title="Reader" class="">Reader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ReaderCollection.html" title="ReaderCollection" class="">ReaderCollection</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.RLCMModelReader.html" title="RLCMModelReader" class="">RLCMModelReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.RLCMReader.html" title="RLCMReader" class="">RLCMReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.SaveReader.html" title="SaveReader" class="">SaveReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Statement.html" title="Statement" class="">Statement</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.StatementType.html" title="StatementType" class="">StatementType</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.SubcircuitDefinitionReader.html" title="SubcircuitDefinitionReader" class="">SubcircuitDefinitionReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.SubcircuitReader.html" title="SubcircuitReader" class="">SubcircuitReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.SwitchModelReader.html" title="SwitchModelReader" class="">SwitchModelReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.SwitchReader.html" title="SwitchReader" class="">SwitchReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.TokenReaders.html" title="TokenReaders" class="">TokenReaders</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.TransientReader.html" title="TransientReader" class="">TransientReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.VoltagesourceReader.html" title="VoltagesourceReader" class="">VoltagesourceReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.WaveformReader.html" title="WaveformReader" class="">WaveformReader</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Readers.Collections.html" title="SpiceSharp.Parser.Readers.Collections" class="">SpiceSharp.Parser.Readers.Collections</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Collections.ComponentReaderCollection.html" title="ComponentReaderCollection" class="">ComponentReaderCollection</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Collections.DictionaryReaderCollection.html" title="DictionaryReaderCollection" class="">DictionaryReaderCollection</a>
+                          </li>
+                          <li class="active">
+                            <a href="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.html" title="GenericReaderCollection" class="active">GenericReaderCollection</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Collections.ModelReaderCollection.html" title="ModelReaderCollection" class="">ModelReaderCollection</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Readers.Exports.html" title="SpiceSharp.Parser.Readers.Exports" class="">SpiceSharp.Parser.Readers.Exports</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentDecibelExport.html" title="CurrentDecibelExport" class="">CurrentDecibelExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentExport.html" title="CurrentExport" class="">CurrentExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentImaginaryExport.html" title="CurrentImaginaryExport" class="">CurrentImaginaryExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentMagnitudeExport.html" title="CurrentMagnitudeExport" class="">CurrentMagnitudeExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentPhaseExport.html" title="CurrentPhaseExport" class="">CurrentPhaseExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentReader.html" title="CurrentReader" class="">CurrentReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentRealExport.html" title="CurrentRealExport" class="">CurrentRealExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.ParameterExport.html" title="ParameterExport" class="">ParameterExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.ParameterReader.html" title="ParameterReader" class="">ParameterReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltageDecibelExport.html" title="VoltageDecibelExport" class="">VoltageDecibelExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltageExport.html" title="VoltageExport" class="">VoltageExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltageImaginaryExport.html" title="VoltageImaginaryExport" class="">VoltageImaginaryExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltageMagnitudeExport.html" title="VoltageMagnitudeExport" class="">VoltageMagnitudeExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltagePhaseExport.html" title="VoltagePhaseExport" class="">VoltagePhaseExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltageReader.html" title="VoltageReader" class="">VoltageReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltageRealExport.html" title="VoltageRealExport" class="">VoltageRealExport</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Readers.Extensions.html" title="SpiceSharp.Parser.Readers.Extensions" class="">SpiceSharp.Parser.Readers.Extensions</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html" title="ReaderExtension" class="">ReaderExtension</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Readers.Waveforms.html" title="SpiceSharp.Parser.Readers.Waveforms" class="">SpiceSharp.Parser.Readers.Waveforms</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Waveforms.PulseReader.html" title="PulseReader" class="">PulseReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Waveforms.SineReader.html" title="SineReader" class="">SineReader</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Subcircuits.html" title="SpiceSharp.Parser.Subcircuits" class="">SpiceSharp.Parser.Subcircuits</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Subcircuits.SubcircuitDefinition.html" title="SubcircuitDefinition" class="">SubcircuitDefinition</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Subcircuits.SubcircuitPath.html" title="SubcircuitPath" class="">SubcircuitPath</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Subcircuits.SubcircuitPath.ScopeRule.html" title="SubcircuitPath.ScopeRule" class="">SubcircuitPath.ScopeRule</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Subcircuits.SubcircuitPathChangedEventArgs.html" title="SubcircuitPathChangedEventArgs" class="">SubcircuitPathChangedEventArgs</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Subcircuits.SubcircuitPathChangedEventArgs.ChangeType.html" title="SubcircuitPathChangedEventArgs.ChangeType" class="">SubcircuitPathChangedEventArgs.ChangeType</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Subcircuits.SubcircuitPathChangedEventHandler.html" title="SubcircuitPathChangedEventHandler" class="">SubcircuitPathChangedEventHandler</a>
+                          </li>
+                        </ul>  </li>
+                  </ul>        </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection">
+  
+  
+  <h1 id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection" class="text-break">Class GenericReaderCollection
+  </h1>
+  <div class="markdown level0 summary"><p>A class that does not really have a search strategy</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Parser.Readers.ReaderCollection.html">ReaderCollection</a></div>
+    <div class="level2"><span class="xref">GenericReaderCollection</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Parser.Readers.ReaderCollection.html#SpiceSharp_Parser_Readers_ReaderCollection_Type">ReaderCollection.Type</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Parser.Readers.Collections.html">SpiceSharp.Parser.Readers.Collections</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharpParser.dll</h6>
+  <h5 id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class GenericReaderCollection : ReaderCollection</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Readers_Collections_GenericReaderCollection__ctor_SpiceSharp_Parser_Readers_StatementType_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.%23ctor(SpiceSharp.Parser.Readers.StatementType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Readers/Collections/GenericReaderCollection.cs/#L20">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection__ctor_" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.#ctor*"></a>
+  <h4 id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection__ctor_SpiceSharp_Parser_Readers_StatementType_" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.#ctor(SpiceSharp.Parser.Readers.StatementType)">GenericReaderCollection(StatementType)</h4>
+  <div class="markdown level1 summary"><p>Constructor</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public GenericReaderCollection(StatementType type)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Parser.Readers.StatementType.html">StatementType</a></td>
+        <td><span class="parametername">type</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Add_SpiceSharp_Parser_Readers_Reader_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Add(SpiceSharp.Parser.Readers.Reader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Readers/Collections/GenericReaderCollection.cs/#L29">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Add_" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Add*"></a>
+  <h4 id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Add_SpiceSharp_Parser_Readers_Reader_" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Add(SpiceSharp.Parser.Readers.Reader)">Add(Reader)</h4>
+  <div class="markdown level1 summary"><p>Add a reader</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Add(Reader r)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Parser.Readers.Reader.html">Reader</a></td>
+        <td><span class="parametername">r</span></td>
+        <td><p>Reader</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.Parser.Readers.ReaderCollection.html#SpiceSharp_Parser_Readers_ReaderCollection_Add_SpiceSharp_Parser_Readers_Reader_">ReaderCollection.Add(Reader)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Clear.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Clear%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Readers/Collections/GenericReaderCollection.cs/#L46">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Clear_" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Clear*"></a>
+  <h4 id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Clear" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clear all readers</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Clear()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.Parser.Readers.ReaderCollection.html#SpiceSharp_Parser_Readers_ReaderCollection_Clear">ReaderCollection.Clear()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Find__1.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Find%60%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Readers/Collections/GenericReaderCollection.cs/#L72">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Find_" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Find*"></a>
+  <h4 id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Find__1" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Find``1">Find&lt;T&gt;()</h4>
+  <div class="markdown level1 summary"><p>Find a specific reader</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override T Find&lt;T&gt;()where T : Reader</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.Parser.Readers.ReaderCollection.html#SpiceSharp_Parser_Readers_ReaderCollection_Find__1">ReaderCollection.Find&lt;T&gt;()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Read_SpiceSharp_Parser_Readers_Statement_SpiceSharp_Netlist_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Read(SpiceSharp.Parser.Readers.Statement%2CSpiceSharp.Netlist)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Readers/Collections/GenericReaderCollection.cs/#L57">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Read_" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Read*"></a>
+  <h4 id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Read_SpiceSharp_Parser_Readers_Statement_SpiceSharp_Netlist_" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Read(SpiceSharp.Parser.Readers.Statement,SpiceSharp.Netlist)">Read(Statement, Netlist)</h4>
+  <div class="markdown level1 summary"><p>Read</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object Read(Statement st, Netlist netlist)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Parser.Readers.Statement.html">Statement</a></td>
+        <td><span class="parametername">st</span></td>
+        <td><p>Statement</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Netlist.html">Netlist</a></td>
+        <td><span class="parametername">netlist</span></td>
+        <td><p>Netlist</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.Parser.Readers.ReaderCollection.html#SpiceSharp_Parser_Readers_ReaderCollection_Read_SpiceSharp_Parser_Readers_Statement_SpiceSharp_Netlist_">ReaderCollection.Read(Statement, Netlist)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Remove_SpiceSharp_Parser_Readers_Reader_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Remove(SpiceSharp.Parser.Readers.Reader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Readers/Collections/GenericReaderCollection.cs/#L38">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Remove_" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Remove*"></a>
+  <h4 id="SpiceSharp_Parser_Readers_Collections_GenericReaderCollection_Remove_SpiceSharp_Parser_Readers_Reader_" data-uid="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.Remove(SpiceSharp.Parser.Readers.Reader)">Remove(Reader)</h4>
+  <div class="markdown level1 summary"><p>Remove a reader</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Remove(Reader r)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Parser.Readers.Reader.html">Reader</a></td>
+        <td><span class="parametername">r</span></td>
+        <td><p>Reader</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.Parser.Readers.ReaderCollection.html#SpiceSharp_Parser_Readers_ReaderCollection_Remove_SpiceSharp_Parser_Readers_Reader_">ReaderCollection.Remove(Reader)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Readers_Collections_GenericReaderCollection.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Readers.Collections.GenericReaderCollection%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Readers/Collections/GenericReaderCollection.cs/#L9" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Copyright © 2015-2017 Microsoft<br>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

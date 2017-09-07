@@ -11,6 +11,8 @@
     <AssemblyName>SpiceSharp</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +22,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -115,8 +119,14 @@
     <Compile Include="Simulations\Transient.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="api\index.md" />
+    <None Include="docfx.json" />
+    <None Include="index.md" />
     <None Include="packages.config" />
     <None Include="SpiceSharp.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="articles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

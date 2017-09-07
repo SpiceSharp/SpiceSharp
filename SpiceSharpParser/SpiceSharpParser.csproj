@@ -11,6 +11,8 @@
     <AssemblyName>SpiceSharpParser</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -105,8 +107,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="docfx.json" />
     <None Include="spicelang.cc" />
     <None Include="SpiceSharpParser.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="api\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,7 +11,7 @@
     <iconUrl>https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceNetIcon.png?raw=true</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial NuGet package</releaseNotes>
+    <releaseNotes>Update</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>circuit electronics netlist parser spice simulator simulation ode solver</tags>
 	

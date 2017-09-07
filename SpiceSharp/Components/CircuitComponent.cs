@@ -22,7 +22,6 @@ namespace SpiceSharp
                 pins = null;
         }
         protected static string[] pins = null;
-        protected static int[][] vsrc = null;
 
         /// <summary>
         /// Private variables
