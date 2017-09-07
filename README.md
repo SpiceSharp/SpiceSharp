@@ -12,6 +12,10 @@ SpiceSharp is available as a **NuGet Package**.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/hhg89ejd795ykmvh?svg=true)](https://ci.appveyor.com/project/svenboulanger/spicesharp)
 
+You can find the API documentation here:<br />
+![SpiceSharp](https://svenboulanger.github.io/SpiceSharp/coreapi/api/)<br />
+![SpiceSharp.Parser](https://svenboulanger.github.io/SpiceSharp/parserapi/api/)
+
 ## SpiceSharp
 The basic usage is pretty easy. A `Circuit` object will hold all circuit objects, and can run a simulation. For example, doing a transient analysis of a simple RC-filter will look like this:
 
