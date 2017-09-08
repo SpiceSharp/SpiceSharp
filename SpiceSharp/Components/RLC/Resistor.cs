@@ -47,7 +47,6 @@ namespace SpiceSharp.Components
         /// Private variables
         /// </summary>
         private double RESconduct = 0.0;
-        private double temp = 0.0;
 
         /// <summary>
         /// Constructor

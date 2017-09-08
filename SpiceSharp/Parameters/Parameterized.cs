@@ -287,10 +287,10 @@ namespace SpiceSharp.Parameters
         /// <typeparam name="T">Return type</typeparam>
         /// <param name="field"></param>
         /// <returns></returns>
-        private static Func<S, T> CreateGetter<S, T>(FieldInfo field)
+        private static Func<S, R> CreateGetter<S, R>(FieldInfo field)
         {
             string methodName = field.ReflectedType.FullName + ".get_" + field.Name;
-            DynamicMethod setterMethod = new DynamicMethod(methodName, typeof(T), new Type[1] { typeof(S) }, true);
+            DynamicMethod setterMethod = new DynamicMethod(methodName, typeof(R), new Type[1] { typeof(S) }, true);
             ILGenerator gen = setterMethod.GetILGenerator();
             if (field.IsStatic)
             {
@@ -302,7 +302,7 @@ namespace SpiceSharp.Parameters
                 gen.Emit(OpCodes.Ldfld, field);
             }
             gen.Emit(OpCodes.Ret);
-            return (Func<S, T>)setterMethod.CreateDelegate(typeof(Func<S, T>));
+            return (Func<S, R>)setterMethod.CreateDelegate(typeof(Func<S, R>));
         }
 
         /// <summary>
@@ -313,10 +313,10 @@ namespace SpiceSharp.Parameters
         /// <typeparam name="T"></typeparam>
         /// <param name="field"></param>
         /// <returns></returns>
-        private static Action<S, T> CreateSetter<S, T>(FieldInfo field)
+        private static Action<S, P> CreateSetter<S, P>(FieldInfo field)
         {
             string methodName = field.ReflectedType.FullName + ".set_" + field.Name;
-            DynamicMethod setterMethod = new DynamicMethod(methodName, null, new Type[2] { typeof(S), typeof(T) }, true);
+            DynamicMethod setterMethod = new DynamicMethod(methodName, null, new Type[2] { typeof(S), typeof(P) }, true);
             ILGenerator gen = setterMethod.GetILGenerator();
             if (field.IsStatic)
             {
@@ -330,7 +330,7 @@ namespace SpiceSharp.Parameters
                 gen.Emit(OpCodes.Stfld, field);
             }
             gen.Emit(OpCodes.Ret);
-            return (Action<S, T>)setterMethod.CreateDelegate(typeof(Action<S, T>));
+            return (Action<S, P>)setterMethod.CreateDelegate(typeof(Action<S, P>));
         }
     }
 }

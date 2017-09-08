@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.IntegrationMethods;
 
 namespace SpiceSharp.Components
 {

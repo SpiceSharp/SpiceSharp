@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using SpiceSharp.IntegrationMethods;
 
 namespace SpiceSharp.Simulations
 {
