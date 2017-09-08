@@ -1,11 +1,10 @@
 ﻿using System;
 using SpiceSharp.Simulations;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers.Exports
 {
     /// <summary>
-    /// Read an output
+    /// Reads a voltage export (V, VR, VI, VDB, VP).
     /// </summary>
     public class VoltageReader : Reader
     {
@@ -65,7 +64,7 @@ namespace SpiceSharp.Parser.Readers.Exports
     }
 
     /// <summary>
-    /// A voltage export
+    /// Voltage export.
     /// </summary>
     public class VoltageExport : Export
     {
@@ -115,7 +114,7 @@ namespace SpiceSharp.Parser.Readers.Exports
     }
 
     /// <summary>
-    /// An export for a real voltage
+    /// Real part of a complex voltage export.
     /// </summary>
     public class VoltageRealExport : Export
     {
@@ -169,7 +168,7 @@ namespace SpiceSharp.Parser.Readers.Exports
     }
 
     /// <summary>
-    /// An export for an imaginary voltage
+    /// Imaginary part of a complex voltage export.
     /// </summary>
     public class VoltageImaginaryExport : Export
     {
@@ -223,7 +222,7 @@ namespace SpiceSharp.Parser.Readers.Exports
     }
 
     /// <summary>
-    /// An export for a voltage magnitude
+    /// Magnitude of a complex voltage export.
     /// </summary>
     public class VoltageMagnitudeExport : Export
     {
@@ -277,7 +276,7 @@ namespace SpiceSharp.Parser.Readers.Exports
     }
 
     /// <summary>
-    /// An export for a voltage phase
+    /// Phase of a complex voltage export.
     /// </summary>
     public class VoltagePhaseExport : Export
     {
@@ -331,7 +330,7 @@ namespace SpiceSharp.Parser.Readers.Exports
     }
 
     /// <summary>
-    /// An export for voltage magnitude in decibels
+    /// Magnitude in decibels of a complex voltage export.
     /// </summary>
     public class VoltageDecibelExport : Export
     {

@@ -3,9 +3,9 @@
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class that describes all token readers
+    /// Reads a statement
     /// </summary>
-    public class TokenReaders
+    public class StatementReaders
     {
         /// <summary>
         /// The event that is fired when an expression needs to be parsed
@@ -20,12 +20,12 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Constructor
         /// </summary>
-        public TokenReaders()
+        public StatementReaders()
         {
         }
 
         /// <summary>
-        /// Read tokens
+        /// Read a statement
         /// </summary>
         /// <param name="type">The reader type</param>
         /// <param name="name">The name</param>
@@ -71,9 +71,9 @@ namespace SpiceSharp.Parser.Readers
         }
 
         /// <summary>
-        /// Register (multiple) token reader collections
+        /// Register (multiple) statement reader collections
         /// </summary>
-        /// <param name="collections"></param>
+        /// <param name="collections">Reader collections</param>
         public void Register(params ReaderCollection[] collections)
         {
             for (int i = 0; i < collections.Length; i++)
@@ -85,16 +85,16 @@ namespace SpiceSharp.Parser.Readers
         }
 
         /// <summary>
-        /// Unregister a token reader collection of a certain type
+        /// Unregister all statement reader collection of a certain type
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="type">Statement type</param>
         public void Unregister(StatementType type)
         {
             Readers.Remove(type);
         }
 
         /// <summary>
-        /// Get a list of Readers by their type
+        /// Get a list statement reader collections by their type
         /// </summary>
         /// <param name="t">The parse type</param>
         /// <returns></returns>
@@ -138,7 +138,7 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// An event handler for parsing a netlist expression
     /// </summary>
-    /// <param name="sender">The TokenReaders object sending the event</param>
+    /// <param name="sender">The StatementReaders object sending the event</param>
     /// <param name="data">The expression data</param>
     public delegate void ParseNetlistExpressionEventHandler(object sender, ExpressionData data);
 }

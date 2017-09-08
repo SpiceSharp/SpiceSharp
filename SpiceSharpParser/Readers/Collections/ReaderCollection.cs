@@ -1,7 +1,7 @@
 ﻿namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class capable of searching through readers
+    /// Describes a collection of statement readers.
     /// </summary>
     public abstract class ReaderCollection
     {

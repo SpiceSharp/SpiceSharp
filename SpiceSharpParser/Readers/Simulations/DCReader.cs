@@ -1,10 +1,9 @@
 ﻿using SpiceSharp.Simulations;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class that can read DC analysis
+    /// Reads a <see cref="DC"/> analysis (DC sweep analysis).
     /// </summary>
     public class DCReader : Reader
     {

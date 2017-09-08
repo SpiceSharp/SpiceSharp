@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// This class can read a voltage source
+    /// Reads <see cref="Voltagesource"/>, <see cref="VoltageControlledVoltagesource"/> and <see cref="CurrentControlledVoltagesource"/> components.
     /// </summary>
     public class VoltagesourceReader : ComponentReader
     {
@@ -45,7 +43,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateVSRC(string name, List<Token> parameters, Netlist netlist)
         {
             Voltagesource vsrc = new Voltagesource(name);
-            vsrc.ReadNodes(parameters, 2);
+            vsrc.ReadNodes(parameters);
 
             // We can have a value or just DC
             for (int i = 2; i < parameters.Count; i++)
@@ -98,7 +96,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateVCVS(string name, List<Token> parameters, Netlist netlist)
         {
             VoltageControlledVoltagesource vcvs = new VoltageControlledVoltagesource(name);
-            vcvs.ReadNodes(parameters, 4);
+            vcvs.ReadNodes(parameters);
 
             if (parameters.Count < 5)
                 throw new ParseException(parameters[3], "Value expected");
@@ -116,7 +114,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateCCVS(string name, List<Token> parameters, Netlist netlist)
         {
             CurrentControlledVoltagesource ccvs = new CurrentControlledVoltagesource(name);
-            ccvs.ReadNodes(parameters, 2);
+            ccvs.ReadNodes(parameters);
             switch (parameters.Count)
             {
                 case 2: throw new ParseException(parameters[1], "Voltage source expected", false);

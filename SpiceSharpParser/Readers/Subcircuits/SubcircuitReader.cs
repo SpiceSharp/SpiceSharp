@@ -2,12 +2,11 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Parser.Subcircuits;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// This class can read subcircuit instances
+    /// Reads a <see cref="Subcircuit"/> component.
     /// </summary>
     public class SubcircuitReader : ComponentReader
     {

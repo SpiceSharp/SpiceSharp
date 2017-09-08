@@ -1,11 +1,10 @@
 ﻿using System;
-using SpiceSharp.Parser.Readers.Extensions;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// This class can read all options
+    /// Reads options (.OPTIONS)
     /// </summary>
     public class OptionReader : Reader
     {

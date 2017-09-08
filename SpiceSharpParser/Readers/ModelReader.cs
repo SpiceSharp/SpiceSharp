@@ -1,11 +1,10 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class capable of reading models
+    /// Describes methods for reading a model definition.
     /// </summary>
     public abstract class ModelReader : Reader
     {

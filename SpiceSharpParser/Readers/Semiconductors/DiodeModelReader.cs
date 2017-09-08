@@ -4,7 +4,7 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class that can read diode models
+    /// Reads <see cref="DiodeModel"/> definitions.
     /// </summary>
     public class DiodeModelReader : ModelReader
     {

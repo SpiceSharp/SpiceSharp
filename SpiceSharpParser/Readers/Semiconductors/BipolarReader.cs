@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class that can read bipolar transistors
+    /// Reads <see cref="BJT"/> components.
     /// </summary>
     public class BipolarReader : ComponentReader
     {
@@ -29,13 +27,12 @@ namespace SpiceSharp.Parser.Readers
             // We will only allow 3 terminals if there are only 4 parameters
             BJT bjt = new BJT(name);
 
-            // Read the nodes
-            if (parameters.Count <= 4)
-                bjt.ReadNodes(parameters, 3);
-            else
-                bjt.ReadNodes(parameters, 4);
+            // If the component is of the format QXXX NC NB NE MNAME we will insert NE again before the model name
+            if (parameters.Count == 4)
+                parameters.Insert(3, parameters[2]);
+            bjt.ReadNodes(parameters);
 
-            if (parameters.Count == 3)
+            if (parameters.Count < 4)
                 throw new ParseException(parameters[2], "Model expected", false);
             if (parameters.Count == 4)
                 bjt.SetModel(netlist.FindModel<BJTModel>(parameters[3]));

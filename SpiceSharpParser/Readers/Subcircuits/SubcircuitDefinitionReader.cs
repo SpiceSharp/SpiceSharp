@@ -1,10 +1,9 @@
 ﻿using SpiceSharp.Parser.Subcircuits;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// This class can read subcircuit definitions
+    /// Reads a <see cref="SubcircuitDefinition"/>.
     /// </summary>
     public class SubcircuitDefinitionReader : Reader
     {

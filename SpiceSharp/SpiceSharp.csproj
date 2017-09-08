@@ -127,5 +127,8 @@
   <ItemGroup>
     <Folder Include="articles\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="api\images\logo_full.svg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

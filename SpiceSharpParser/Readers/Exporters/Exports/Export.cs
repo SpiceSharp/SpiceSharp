@@ -3,12 +3,12 @@
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class that can read an export from a circuit
+    /// Describes a quantity that can be exported using simulated data.
     /// </summary>
     public abstract class Export
     {
         /// <summary>
-        /// Read data
+        /// Extract the quantity from simulated data
         /// </summary>
         /// <param name="stream">Stream</param>
         /// <param name="ckt">Circuit</param>

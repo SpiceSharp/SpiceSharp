@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SpiceSharp.Parser.Readers.Collections
 {
     /// <summary>
-    /// A class that does not really have a search strategy
+    /// A reader collection that just goes through all readers in order intil it finds one that can parse a statement.
     /// </summary>
     public class GenericReaderCollection : ReaderCollection
     {

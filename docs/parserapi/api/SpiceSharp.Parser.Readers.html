@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc">
+    <meta property="docfx:navrel" content="">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -45,14 +45,6 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
-                <ul class="nav level1 navbar-nav">
-                  <li class="">
-                    <a href="../articles/intro.html" title="Articles" class="">Articles</a>
-                  </li>
-                  <li class="active">
-                    <a href="../api/index.html" title="API Documentation" class="active">API Documentation</a>
-                  </li>
-                </ul>
             </div>
           </div>
         </nav>
@@ -86,9 +78,6 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="SpiceSharp.ExportNetlistDataEventHandler.html" title="ExportNetlistDataEventHandler" class="">ExportNetlistDataEventHandler</a>
-                          </li>
-                          <li class="">
                             <a href="SpiceSharp.Netlist.html" title="Netlist" class="">Netlist</a>
                           </li>
                           <li class="">
@@ -114,6 +103,9 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.ParseException.html" title="ParseException" class="">ParseException</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.SimpleCharStream.html" title="SimpleCharStream" class="">SimpleCharStream</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.SpiceSharpParser.html" title="SpiceSharpParser" class="">SpiceSharpParser</a>
@@ -215,6 +207,9 @@
                             <a href="SpiceSharp.Parser.Readers.ReaderCollection.html" title="ReaderCollection" class="">ReaderCollection</a>
                           </li>
                           <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ReaderExtension.html" title="ReaderExtension" class="">ReaderExtension</a>
+                          </li>
+                          <li class="">
                             <a href="SpiceSharp.Parser.Readers.RLCMModelReader.html" title="RLCMModelReader" class="">RLCMModelReader</a>
                           </li>
                           <li class="">
@@ -225,6 +220,9 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.Statement.html" title="Statement" class="">Statement</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.StatementReaders.html" title="StatementReaders" class="">StatementReaders</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.StatementType.html" title="StatementType" class="">StatementType</a>
@@ -240,9 +238,6 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.SwitchReader.html" title="SwitchReader" class="">SwitchReader</a>
-                          </li>
-                          <li class="">
-                            <a href="SpiceSharp.Parser.Readers.TokenReaders.html" title="TokenReaders" class="">TokenReaders</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.TransientReader.html" title="TransientReader" class="">TransientReader</a>
@@ -328,15 +323,6 @@
                         </ul>  </li>
                     <li class="">
                       <span class="expand-stub"></span>
-                      <a href="SpiceSharp.Parser.Readers.Extensions.html" title="SpiceSharp.Parser.Readers.Extensions" class="">SpiceSharp.Parser.Readers.Extensions</a>
-                        
-                        <ul class="nav level2">
-                          <li class="">
-                            <a href="SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html" title="ReaderExtension" class="">ReaderExtension</a>
-                          </li>
-                        </ul>  </li>
-                    <li class="">
-                      <span class="expand-stub"></span>
                       <a href="SpiceSharp.Parser.Readers.Waveforms.html" title="SpiceSharp.Parser.Readers.Waveforms" class="">SpiceSharp.Parser.Readers.Waveforms</a>
                         
                         <ul class="nav level2">
@@ -388,96 +374,113 @@
     <h3 id="classes">Classes
   </h3>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.ACReader.html">ACReader</a></h4>
-      <section><p>A class that can read AC analysis</p>
+      <section><p>Reads a <span class="xref">SpiceSharp.Simulations.AC</span> analysis (frequency-domain analysis).</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.BipolarModelReader.html">BipolarModelReader</a></h4>
-      <section><p>This class can read bipolar transistor models</p>
+      <section><p>Reads <span class="xref">SpiceSharp.Components.BJTModel</span> definitions.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.BipolarReader.html">BipolarReader</a></h4>
-      <section><p>A class that can read bipolar transistors</p>
+      <section><p>Reads <span class="xref">SpiceSharp.Components.BJT</span> components.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.ComponentReader.html">ComponentReader</a></h4>
-      <section><p>A standard implementation for a component reader</p>
+      <section><p>A component reader that can handle most component statements.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.CurrentsourceReader.html">CurrentsourceReader</a></h4>
-      <section><p>This class can read current sources</p>
+      <section><p>Reads <span class="xref">SpiceSharp.Components.Currentsource</span>, <span class="xref">SpiceSharp.Components.CurrentControlledCurrentsource</span> and <span class="xref">SpiceSharp.Components.VoltageControlledCurrentsource</span> components.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.DCReader.html">DCReader</a></h4>
-      <section><p>A class that can read DC analysis</p>
+      <section><p>Reads a <span class="xref">SpiceSharp.Simulations.DC</span> analysis (DC sweep analysis).</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.DiodeModelReader.html">DiodeModelReader</a></h4>
-      <section><p>A class that can read diode models</p>
+      <section><p>Reads <span class="xref">SpiceSharp.Components.DiodeModel</span> definitions.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.DiodeReader.html">DiodeReader</a></h4>
-      <section><p>A class that can read a diode model</p>
+      <section><p>Reads <span class="xref">SpiceSharp.Components.Diode</span> components.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.Export.html">Export</a></h4>
-      <section><p>A class that can read an export from a circuit</p>
+      <section><p>Describes a quantity that can be exported using simulated data.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.ExpressionData.html">ExpressionData</a></h4>
       <section><p>Expression data</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.ICReader.html">ICReader</a></h4>
-      <section><p>This class can read initial conditions</p>
+      <section><p>Reads initial conditions (.IC)</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.ModelReader.html">ModelReader</a></h4>
-      <section><p>A class capable of reading models</p>
+      <section><p>Describes methods for reading a model definition.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.MosfetModelReader.html">MosfetModelReader</a></h4>
-      <section><p>This class can read MOSFET models</p>
+      <section><p>Reads Mosfet model definitions.
+It contains model generates indexed by the parameter LEVEL. Default implemented models are:</p>
+<ul>
+<li>LEVEL 1: <span class="xref">SpiceSharp.Components.MOS1Model</span></li>
+<li>LEVEL 2: <span class="xref">SpiceSharp.Components.MOS2Model</span></li>
+<li>LEVEL 3: <span class="xref">SpiceSharp.Components.MOS3Model</span></li>
+</ul>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.MosfetReader.html">MosfetReader</a></h4>
-      <section><p>Can read Mosfets</p>
+      <section><p>Read Mosfet transistor components.
+Mosfets are generated based on their model class. Default generators are:</p>
+<ul>
+<li><span class="xref">SpiceSharp.Components.MOS1Model</span> will generate <span class="xref">SpiceSharp.Components.MOS1</span></li>
+<li><span class="xref">SpiceSharp.Components.MOS2Model</span> will generate <span class="xref">SpiceSharp.Components.MOS2</span></li>
+<li><span class="xref">SpiceSharp.Components.MOS3Model</span> will generate <span class="xref">SpiceSharp.Components.MOS3</span></li>
+</ul>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.NodesetReader.html">NodesetReader</a></h4>
-      <section><p>This class can read nodesets</p>
+      <section><p>Reads nodesets (.NODESET)</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.OptionReader.html">OptionReader</a></h4>
-      <section><p>This class can read all options</p>
+      <section><p>Reads options (.OPTIONS)</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.ParamSetReader.html">ParamSetReader</a></h4>
-      <section><p>This class readers .param statements</p>
+      <section><p>Reads parameter definitions (.PARAM)</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.Reader.html">Reader</a></h4>
-      <section><p>This interface can read tokens</p>
+      <section><p>Provides methods to read statements generated by the netlist parser.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.ReaderCollection.html">ReaderCollection</a></h4>
-      <section><p>A class capable of searching through readers</p>
+      <section><p>Describes a collection of statement readers.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Parser.Readers.ReaderExtension.html">ReaderExtension</a></h4>
+      <section><p>Provides static methods for reading statements.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.RLCMModelReader.html">RLCMModelReader</a></h4>
-      <section><p>Resistor, Inductor, Capacitor, Mutual inductance model readers
-Only resistors and capacitors can have models, the rest is skipped</p>
+      <section><p>Reads <span class="xref">SpiceSharp.Components.ResistorModel</span> and <span class="xref">SpiceSharp.Components.CapacitorModel</span> definitions.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.RLCMReader.html">RLCMReader</a></h4>
-      <section></section>
+      <section><p>Reads <span class="xref">SpiceSharp.Components.Resistor</span>, <span class="xref">SpiceSharp.Components.Capacitor</span>, <span class="xref">SpiceSharp.Components.Inductor</span> and <span class="xref">SpiceSharp.Components.MutualInductance</span> components.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.SaveReader.html">SaveReader</a></h4>
-      <section><p>An exporter that can read .save statements</p>
+      <section><p>Reads saved exports (.SAVE).</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.Statement.html">Statement</a></h4>
-      <section></section>
+      <section><p>A statement consists of a name and parameters.
+Can be read by a <a class="xref" href="SpiceSharp.Parser.Readers.Reader.html">Reader</a>.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Parser.Readers.StatementReaders.html">StatementReaders</a></h4>
+      <section><p>Reads a statement</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.SubcircuitDefinitionReader.html">SubcircuitDefinitionReader</a></h4>
-      <section><p>This class can read subcircuit definitions</p>
+      <section><p>Reads a <a class="xref" href="SpiceSharp.Parser.Subcircuits.SubcircuitDefinition.html">SubcircuitDefinition</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.SubcircuitReader.html">SubcircuitReader</a></h4>
-      <section><p>This class can read subcircuit instances</p>
+      <section><p>Reads a <span class="xref">SpiceSharp.Components.Subcircuit</span> component.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.SwitchModelReader.html">SwitchModelReader</a></h4>
-      <section><p>This class can read voltage switch models</p>
+      <section><p>Reads <span class="xref">SpiceSharp.Components.VoltageSwitchModel</span> and <span class="xref">SpiceSharp.Components.CurrentSwitchModel</span> definitions.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.SwitchReader.html">SwitchReader</a></h4>
-      <section><p>This class can read voltage switches</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Parser.Readers.TokenReaders.html">TokenReaders</a></h4>
-      <section><p>A class that describes all token readers</p>
+      <section><p>Reads <span class="xref">SpiceSharp.Components.VoltageSwitch</span> and <span class="xref">SpiceSharp.Components.CurrentSwitch</span> components.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.TransientReader.html">TransientReader</a></h4>
-      <section><p>A class that can read a transient analysis</p>
+      <section><p>Reads a <span class="xref">SpiceSharp.Simulations.Transient</span> analysis (time-domain analysis).</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.VoltagesourceReader.html">VoltagesourceReader</a></h4>
-      <section><p>This class can read a voltage source</p>
+      <section><p>Reads <span class="xref">SpiceSharp.Components.Voltagesource</span>, <span class="xref">SpiceSharp.Components.VoltageControlledVoltagesource</span> and <span class="xref">SpiceSharp.Components.CurrentControlledVoltagesource</span> components.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Readers.WaveformReader.html">WaveformReader</a></h4>
-      <section><p>A class that can read a waveform</p>
+      <section><p>Describes methods for reading a waveform. This is an abstract class.</p>
 </section>
     <h3 id="enums">Enums
   </h3>

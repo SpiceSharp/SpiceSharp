@@ -1,10 +1,9 @@
 ﻿using SpiceSharp.Simulations;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class that can read AC analysis
+    /// Reads a <see cref="AC"/> analysis (frequency-domain analysis).
     /// </summary>
     public class ACReader : Reader
     {

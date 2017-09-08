@@ -4,8 +4,7 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// Resistor, Inductor, Capacitor, Mutual inductance model readers
-    /// Only resistors and capacitors can have models, the rest is skipped
+    /// Reads <see cref="ResistorModel"/> and <see cref="CapacitorModel"/> definitions.
     /// </summary>
     public class RLCMModelReader : ModelReader
     {

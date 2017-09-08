@@ -7,12 +7,6 @@ references:
   commentId: N:SpiceSharp
   fullName: SpiceSharp
   nameWithType: SpiceSharp
-- uid: SpiceSharp.ExportNetlistDataEventHandler
-  name: ExportNetlistDataEventHandler
-  href: api/SpiceSharp.ExportNetlistDataEventHandler.html
-  commentId: T:SpiceSharp.ExportNetlistDataEventHandler
-  fullName: SpiceSharp.ExportNetlistDataEventHandler
-  nameWithType: ExportNetlistDataEventHandler
 - uid: SpiceSharp.Netlist
   name: Netlist
   href: api/SpiceSharp.Netlist.html
@@ -370,18 +364,6 @@ references:
   commentId: Overload:SpiceSharp.Parser.Expressions.SpiceExpression.Parse
   fullName: SpiceSharp.Parser.Expressions.SpiceExpression.Parse
   nameWithType: SpiceExpression.Parse
-- uid: SpiceSharp.Parser.Expressions.SpiceExpression.ParseDouble
-  name: ParseDouble()
-  href: api/SpiceSharp.Parser.Expressions.SpiceExpression.html#SpiceSharp_Parser_Expressions_SpiceExpression_ParseDouble
-  commentId: M:SpiceSharp.Parser.Expressions.SpiceExpression.ParseDouble
-  fullName: SpiceSharp.Parser.Expressions.SpiceExpression.ParseDouble()
-  nameWithType: SpiceExpression.ParseDouble()
-- uid: SpiceSharp.Parser.Expressions.SpiceExpression.ParseDouble*
-  name: ParseDouble
-  href: api/SpiceSharp.Parser.Expressions.SpiceExpression.html#SpiceSharp_Parser_Expressions_SpiceExpression_ParseDouble_
-  commentId: Overload:SpiceSharp.Parser.Expressions.SpiceExpression.ParseDouble
-  fullName: SpiceSharp.Parser.Expressions.SpiceExpression.ParseDouble
-  nameWithType: SpiceExpression.ParseDouble
 - uid: SpiceSharp.Parser.ParseException
   name: ParseException
   href: api/SpiceSharp.Parser.ParseException.html
@@ -2272,138 +2254,6 @@ references:
   commentId: Overload:SpiceSharp.Parser.Readers.ExpressionData.Output
   fullName: SpiceSharp.Parser.Readers.ExpressionData.Output
   nameWithType: ExpressionData.Output
-- uid: SpiceSharp.Parser.Readers.Extensions
-  name: SpiceSharp.Parser.Readers.Extensions
-  href: api/SpiceSharp.Parser.Readers.Extensions.html
-  commentId: N:SpiceSharp.Parser.Readers.Extensions
-  fullName: SpiceSharp.Parser.Readers.Extensions
-  nameWithType: SpiceSharp.Parser.Readers.Extensions
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension
-  name: ReaderExtension
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html
-  commentId: T:SpiceSharp.Parser.Readers.Extensions.ReaderExtension
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension
-  nameWithType: ReaderExtension
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.FindModel*
-  name: FindModel
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_FindModel_
-  commentId: Overload:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.FindModel
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.FindModel
-  nameWithType: ReaderExtension.FindModel
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.FindModel``1(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
-  name: FindModel<T>(Netlist, Token)
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_FindModel__1_SpiceSharp_Netlist_SpiceSharp_Parser_Token_
-  commentId: M:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.FindModel``1(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
-  name.vb: FindModel(Of T)(Netlist, Token)
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.FindModel<T>(SpiceSharp.Netlist, SpiceSharp.Parser.Token)
-  fullName.vb: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.FindModel(Of T)(SpiceSharp.Netlist, SpiceSharp.Parser.Token)
-  nameWithType: ReaderExtension.FindModel<T>(Netlist, Token)
-  nameWithType.vb: ReaderExtension.FindModel(Of T)(Netlist, Token)
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsName(SpiceSharp.Parser.Token)
-  name: IsName(Token)
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_IsName_SpiceSharp_Parser_Token_
-  commentId: M:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsName(SpiceSharp.Parser.Token)
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsName(SpiceSharp.Parser.Token)
-  nameWithType: ReaderExtension.IsName(Token)
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsName*
-  name: IsName
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_IsName_
-  commentId: Overload:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsName
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsName
-  nameWithType: ReaderExtension.IsName
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsNode(SpiceSharp.Parser.Token)
-  name: IsNode(Token)
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_IsNode_SpiceSharp_Parser_Token_
-  commentId: M:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsNode(SpiceSharp.Parser.Token)
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsNode(SpiceSharp.Parser.Token)
-  nameWithType: ReaderExtension.IsNode(Token)
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsNode*
-  name: IsNode
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_IsNode_
-  commentId: Overload:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsNode
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsNode
-  nameWithType: ReaderExtension.IsNode
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsValue(SpiceSharp.Parser.Token)
-  name: IsValue(Token)
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_IsValue_SpiceSharp_Parser_Token_
-  commentId: M:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsValue(SpiceSharp.Parser.Token)
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsValue(SpiceSharp.Parser.Token)
-  nameWithType: ReaderExtension.IsValue(Token)
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsValue*
-  name: IsValue
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_IsValue_
-  commentId: Overload:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsValue
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.IsValue
-  nameWithType: ReaderExtension.IsValue
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ParseDouble(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
-  name: ParseDouble(Netlist, Token)
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_ParseDouble_SpiceSharp_Netlist_SpiceSharp_Parser_Token_
-  commentId: M:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ParseDouble(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ParseDouble(SpiceSharp.Netlist, SpiceSharp.Parser.Token)
-  nameWithType: ReaderExtension.ParseDouble(Netlist, Token)
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ParseDouble*
-  name: ParseDouble
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_ParseDouble_
-  commentId: Overload:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ParseDouble
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ParseDouble
-  nameWithType: ReaderExtension.ParseDouble
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ParseString(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
-  name: ParseString(Netlist, Token)
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_ParseString_SpiceSharp_Netlist_SpiceSharp_Parser_Token_
-  commentId: M:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ParseString(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ParseString(SpiceSharp.Netlist, SpiceSharp.Parser.Token)
-  nameWithType: ReaderExtension.ParseString(Netlist, Token)
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ParseString*
-  name: ParseString
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_ParseString_
-  commentId: Overload:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ParseString
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ParseString
-  nameWithType: ReaderExtension.ParseString
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadModel*
-  name: ReadModel
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_ReadModel_
-  commentId: Overload:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadModel
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadModel
-  nameWithType: ReaderExtension.ReadModel
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadModel``1(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
-  name: ReadModel<T>(Netlist, Token)
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_ReadModel__1_SpiceSharp_Netlist_SpiceSharp_Parser_Token_
-  commentId: M:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadModel``1(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
-  name.vb: ReadModel(Of T)(Netlist, Token)
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadModel<T>(SpiceSharp.Netlist, SpiceSharp.Parser.Token)
-  fullName.vb: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadModel(Of T)(SpiceSharp.Netlist, SpiceSharp.Parser.Token)
-  nameWithType: ReaderExtension.ReadModel<T>(Netlist, Token)
-  nameWithType.vb: ReaderExtension.ReadModel(Of T)(Netlist, Token)
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadNodes(SpiceSharp.Components.ICircuitComponent,System.Collections.Generic.List{SpiceSharp.Parser.Token},System.Int32,System.Int32)
-  name: ReadNodes(ICircuitComponent, List<Token>, Int32, Int32)
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_ReadNodes_SpiceSharp_Components_ICircuitComponent_System_Collections_Generic_List_SpiceSharp_Parser_Token__System_Int32_System_Int32_
-  commentId: M:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadNodes(SpiceSharp.Components.ICircuitComponent,System.Collections.Generic.List{SpiceSharp.Parser.Token},System.Int32,System.Int32)
-  name.vb: ReadNodes(ICircuitComponent, List(Of Token), Int32, Int32)
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadNodes(SpiceSharp.Components.ICircuitComponent, System.Collections.Generic.List<SpiceSharp.Parser.Token>, System.Int32, System.Int32)
-  fullName.vb: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadNodes(SpiceSharp.Components.ICircuitComponent, System.Collections.Generic.List(Of SpiceSharp.Parser.Token), System.Int32, System.Int32)
-  nameWithType: ReaderExtension.ReadNodes(ICircuitComponent, List<Token>, Int32, Int32)
-  nameWithType.vb: ReaderExtension.ReadNodes(ICircuitComponent, List(Of Token), Int32, Int32)
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadNodes*
-  name: ReadNodes
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_ReadNodes_
-  commentId: Overload:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadNodes
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadNodes
-  nameWithType: ReaderExtension.ReadNodes
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadParameters(SpiceSharp.Netlist,SpiceSharp.Parameters.IParameterized,System.Collections.Generic.List{SpiceSharp.Parser.Token},System.Int32)
-  name: ReadParameters(Netlist, IParameterized, List<Token>, Int32)
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_ReadParameters_SpiceSharp_Netlist_SpiceSharp_Parameters_IParameterized_System_Collections_Generic_List_SpiceSharp_Parser_Token__System_Int32_
-  commentId: M:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadParameters(SpiceSharp.Netlist,SpiceSharp.Parameters.IParameterized,System.Collections.Generic.List{SpiceSharp.Parser.Token},System.Int32)
-  name.vb: ReadParameters(Netlist, IParameterized, List(Of Token), Int32)
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadParameters(SpiceSharp.Netlist, SpiceSharp.Parameters.IParameterized, System.Collections.Generic.List<SpiceSharp.Parser.Token>, System.Int32)
-  fullName.vb: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadParameters(SpiceSharp.Netlist, SpiceSharp.Parameters.IParameterized, System.Collections.Generic.List(Of SpiceSharp.Parser.Token), System.Int32)
-  nameWithType: ReaderExtension.ReadParameters(Netlist, IParameterized, List<Token>, Int32)
-  nameWithType.vb: ReaderExtension.ReadParameters(Netlist, IParameterized, List(Of Token), Int32)
-- uid: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadParameters*
-  name: ReadParameters
-  href: api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html#SpiceSharp_Parser_Readers_Extensions_ReaderExtension_ReadParameters_
-  commentId: Overload:SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadParameters
-  fullName: SpiceSharp.Parser.Readers.Extensions.ReaderExtension.ReadParameters
-  nameWithType: ReaderExtension.ReadParameters
 - uid: SpiceSharp.Parser.Readers.ICReader
   name: ICReader
   href: api/SpiceSharp.Parser.Readers.ICReader.html
@@ -2818,6 +2668,132 @@ references:
   commentId: Overload:SpiceSharp.Parser.Readers.ReaderCollection.Type
   fullName: SpiceSharp.Parser.Readers.ReaderCollection.Type
   nameWithType: ReaderCollection.Type
+- uid: SpiceSharp.Parser.Readers.ReaderExtension
+  name: ReaderExtension
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html
+  commentId: T:SpiceSharp.Parser.Readers.ReaderExtension
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension
+  nameWithType: ReaderExtension
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.FindModel*
+  name: FindModel
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_FindModel_
+  commentId: Overload:SpiceSharp.Parser.Readers.ReaderExtension.FindModel
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.FindModel
+  nameWithType: ReaderExtension.FindModel
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.FindModel``1(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
+  name: FindModel<T>(Netlist, Token)
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_FindModel__1_SpiceSharp_Netlist_SpiceSharp_Parser_Token_
+  commentId: M:SpiceSharp.Parser.Readers.ReaderExtension.FindModel``1(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
+  name.vb: FindModel(Of T)(Netlist, Token)
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.FindModel<T>(SpiceSharp.Netlist, SpiceSharp.Parser.Token)
+  fullName.vb: SpiceSharp.Parser.Readers.ReaderExtension.FindModel(Of T)(SpiceSharp.Netlist, SpiceSharp.Parser.Token)
+  nameWithType: ReaderExtension.FindModel<T>(Netlist, Token)
+  nameWithType.vb: ReaderExtension.FindModel(Of T)(Netlist, Token)
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.IsName(SpiceSharp.Parser.Token)
+  name: IsName(Token)
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_IsName_SpiceSharp_Parser_Token_
+  commentId: M:SpiceSharp.Parser.Readers.ReaderExtension.IsName(SpiceSharp.Parser.Token)
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.IsName(SpiceSharp.Parser.Token)
+  nameWithType: ReaderExtension.IsName(Token)
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.IsName*
+  name: IsName
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_IsName_
+  commentId: Overload:SpiceSharp.Parser.Readers.ReaderExtension.IsName
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.IsName
+  nameWithType: ReaderExtension.IsName
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.IsNode(SpiceSharp.Parser.Token)
+  name: IsNode(Token)
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_IsNode_SpiceSharp_Parser_Token_
+  commentId: M:SpiceSharp.Parser.Readers.ReaderExtension.IsNode(SpiceSharp.Parser.Token)
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.IsNode(SpiceSharp.Parser.Token)
+  nameWithType: ReaderExtension.IsNode(Token)
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.IsNode*
+  name: IsNode
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_IsNode_
+  commentId: Overload:SpiceSharp.Parser.Readers.ReaderExtension.IsNode
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.IsNode
+  nameWithType: ReaderExtension.IsNode
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.IsValue(SpiceSharp.Parser.Token)
+  name: IsValue(Token)
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_IsValue_SpiceSharp_Parser_Token_
+  commentId: M:SpiceSharp.Parser.Readers.ReaderExtension.IsValue(SpiceSharp.Parser.Token)
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.IsValue(SpiceSharp.Parser.Token)
+  nameWithType: ReaderExtension.IsValue(Token)
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.IsValue*
+  name: IsValue
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_IsValue_
+  commentId: Overload:SpiceSharp.Parser.Readers.ReaderExtension.IsValue
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.IsValue
+  nameWithType: ReaderExtension.IsValue
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.ParseDouble(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
+  name: ParseDouble(Netlist, Token)
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_ParseDouble_SpiceSharp_Netlist_SpiceSharp_Parser_Token_
+  commentId: M:SpiceSharp.Parser.Readers.ReaderExtension.ParseDouble(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.ParseDouble(SpiceSharp.Netlist, SpiceSharp.Parser.Token)
+  nameWithType: ReaderExtension.ParseDouble(Netlist, Token)
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.ParseDouble*
+  name: ParseDouble
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_ParseDouble_
+  commentId: Overload:SpiceSharp.Parser.Readers.ReaderExtension.ParseDouble
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.ParseDouble
+  nameWithType: ReaderExtension.ParseDouble
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.ParseString(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
+  name: ParseString(Netlist, Token)
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_ParseString_SpiceSharp_Netlist_SpiceSharp_Parser_Token_
+  commentId: M:SpiceSharp.Parser.Readers.ReaderExtension.ParseString(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.ParseString(SpiceSharp.Netlist, SpiceSharp.Parser.Token)
+  nameWithType: ReaderExtension.ParseString(Netlist, Token)
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.ParseString*
+  name: ParseString
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_ParseString_
+  commentId: Overload:SpiceSharp.Parser.Readers.ReaderExtension.ParseString
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.ParseString
+  nameWithType: ReaderExtension.ParseString
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.ReadModel*
+  name: ReadModel
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_ReadModel_
+  commentId: Overload:SpiceSharp.Parser.Readers.ReaderExtension.ReadModel
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.ReadModel
+  nameWithType: ReaderExtension.ReadModel
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.ReadModel``1(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
+  name: ReadModel<T>(Netlist, Token)
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_ReadModel__1_SpiceSharp_Netlist_SpiceSharp_Parser_Token_
+  commentId: M:SpiceSharp.Parser.Readers.ReaderExtension.ReadModel``1(SpiceSharp.Netlist,SpiceSharp.Parser.Token)
+  name.vb: ReadModel(Of T)(Netlist, Token)
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.ReadModel<T>(SpiceSharp.Netlist, SpiceSharp.Parser.Token)
+  fullName.vb: SpiceSharp.Parser.Readers.ReaderExtension.ReadModel(Of T)(SpiceSharp.Netlist, SpiceSharp.Parser.Token)
+  nameWithType: ReaderExtension.ReadModel<T>(Netlist, Token)
+  nameWithType.vb: ReaderExtension.ReadModel(Of T)(Netlist, Token)
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.ReadNodes(SpiceSharp.Components.ICircuitComponent,System.Collections.Generic.List{SpiceSharp.Parser.Token},System.Int32)
+  name: ReadNodes(ICircuitComponent, List<Token>, Int32)
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_ReadNodes_SpiceSharp_Components_ICircuitComponent_System_Collections_Generic_List_SpiceSharp_Parser_Token__System_Int32_
+  commentId: M:SpiceSharp.Parser.Readers.ReaderExtension.ReadNodes(SpiceSharp.Components.ICircuitComponent,System.Collections.Generic.List{SpiceSharp.Parser.Token},System.Int32)
+  name.vb: ReadNodes(ICircuitComponent, List(Of Token), Int32)
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.ReadNodes(SpiceSharp.Components.ICircuitComponent, System.Collections.Generic.List<SpiceSharp.Parser.Token>, System.Int32)
+  fullName.vb: SpiceSharp.Parser.Readers.ReaderExtension.ReadNodes(SpiceSharp.Components.ICircuitComponent, System.Collections.Generic.List(Of SpiceSharp.Parser.Token), System.Int32)
+  nameWithType: ReaderExtension.ReadNodes(ICircuitComponent, List<Token>, Int32)
+  nameWithType.vb: ReaderExtension.ReadNodes(ICircuitComponent, List(Of Token), Int32)
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.ReadNodes*
+  name: ReadNodes
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_ReadNodes_
+  commentId: Overload:SpiceSharp.Parser.Readers.ReaderExtension.ReadNodes
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.ReadNodes
+  nameWithType: ReaderExtension.ReadNodes
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.ReadParameters(SpiceSharp.Netlist,SpiceSharp.Parameters.IParameterized,System.Collections.Generic.List{SpiceSharp.Parser.Token},System.Int32)
+  name: ReadParameters(Netlist, IParameterized, List<Token>, Int32)
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_ReadParameters_SpiceSharp_Netlist_SpiceSharp_Parameters_IParameterized_System_Collections_Generic_List_SpiceSharp_Parser_Token__System_Int32_
+  commentId: M:SpiceSharp.Parser.Readers.ReaderExtension.ReadParameters(SpiceSharp.Netlist,SpiceSharp.Parameters.IParameterized,System.Collections.Generic.List{SpiceSharp.Parser.Token},System.Int32)
+  name.vb: ReadParameters(Netlist, IParameterized, List(Of Token), Int32)
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.ReadParameters(SpiceSharp.Netlist, SpiceSharp.Parameters.IParameterized, System.Collections.Generic.List<SpiceSharp.Parser.Token>, System.Int32)
+  fullName.vb: SpiceSharp.Parser.Readers.ReaderExtension.ReadParameters(SpiceSharp.Netlist, SpiceSharp.Parameters.IParameterized, System.Collections.Generic.List(Of SpiceSharp.Parser.Token), System.Int32)
+  nameWithType: ReaderExtension.ReadParameters(Netlist, IParameterized, List<Token>, Int32)
+  nameWithType.vb: ReaderExtension.ReadParameters(Netlist, IParameterized, List(Of Token), Int32)
+- uid: SpiceSharp.Parser.Readers.ReaderExtension.ReadParameters*
+  name: ReadParameters
+  href: api/SpiceSharp.Parser.Readers.ReaderExtension.html#SpiceSharp_Parser_Readers_ReaderExtension_ReadParameters_
+  commentId: Overload:SpiceSharp.Parser.Readers.ReaderExtension.ReadParameters
+  fullName: SpiceSharp.Parser.Readers.ReaderExtension.ReadParameters
+  nameWithType: ReaderExtension.ReadParameters
 - uid: SpiceSharp.Parser.Readers.RLCMModelReader
   name: RLCMModelReader
   href: api/SpiceSharp.Parser.Readers.RLCMModelReader.html
@@ -3049,6 +3025,105 @@ references:
   commentId: Overload:SpiceSharp.Parser.Readers.Statement.Type
   fullName: SpiceSharp.Parser.Readers.Statement.Type
   nameWithType: Statement.Type
+- uid: SpiceSharp.Parser.Readers.StatementReaders
+  name: StatementReaders
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html
+  commentId: T:SpiceSharp.Parser.Readers.StatementReaders
+  fullName: SpiceSharp.Parser.Readers.StatementReaders
+  nameWithType: StatementReaders
+- uid: SpiceSharp.Parser.Readers.StatementReaders.#ctor
+  name: StatementReaders()
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders__ctor
+  commentId: M:SpiceSharp.Parser.Readers.StatementReaders.#ctor
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.StatementReaders()
+  nameWithType: StatementReaders.StatementReaders()
+- uid: SpiceSharp.Parser.Readers.StatementReaders.#ctor*
+  name: StatementReaders
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders__ctor_
+  commentId: Overload:SpiceSharp.Parser.Readers.StatementReaders.#ctor
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.StatementReaders
+  nameWithType: StatementReaders.StatementReaders
+- uid: SpiceSharp.Parser.Readers.StatementReaders.Item(SpiceSharp.Parser.Readers.StatementType)
+  name: Item[StatementType]
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders_Item_SpiceSharp_Parser_Readers_StatementType_
+  commentId: P:SpiceSharp.Parser.Readers.StatementReaders.Item(SpiceSharp.Parser.Readers.StatementType)
+  name.vb: Item(StatementType)
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.Item[SpiceSharp.Parser.Readers.StatementType]
+  fullName.vb: SpiceSharp.Parser.Readers.StatementReaders.Item(SpiceSharp.Parser.Readers.StatementType)
+  nameWithType: StatementReaders.Item[StatementType]
+  nameWithType.vb: StatementReaders.Item(StatementType)
+- uid: SpiceSharp.Parser.Readers.StatementReaders.Item*
+  name: Item
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders_Item_
+  commentId: Overload:SpiceSharp.Parser.Readers.StatementReaders.Item
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.Item
+  nameWithType: StatementReaders.Item
+- uid: SpiceSharp.Parser.Readers.StatementReaders.OnParseExpression
+  name: OnParseExpression
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders_OnParseExpression
+  commentId: E:SpiceSharp.Parser.Readers.StatementReaders.OnParseExpression
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.OnParseExpression
+  nameWithType: StatementReaders.OnParseExpression
+- uid: SpiceSharp.Parser.Readers.StatementReaders.ParseDouble(System.String)
+  name: ParseDouble(String)
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders_ParseDouble_System_String_
+  commentId: M:SpiceSharp.Parser.Readers.StatementReaders.ParseDouble(System.String)
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.ParseDouble(System.String)
+  nameWithType: StatementReaders.ParseDouble(String)
+- uid: SpiceSharp.Parser.Readers.StatementReaders.ParseDouble*
+  name: ParseDouble
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders_ParseDouble_
+  commentId: Overload:SpiceSharp.Parser.Readers.StatementReaders.ParseDouble
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.ParseDouble
+  nameWithType: StatementReaders.ParseDouble
+- uid: SpiceSharp.Parser.Readers.StatementReaders.Read(SpiceSharp.Parser.Readers.Statement,SpiceSharp.Netlist)
+  name: Read(Statement, Netlist)
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders_Read_SpiceSharp_Parser_Readers_Statement_SpiceSharp_Netlist_
+  commentId: M:SpiceSharp.Parser.Readers.StatementReaders.Read(SpiceSharp.Parser.Readers.Statement,SpiceSharp.Netlist)
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.Read(SpiceSharp.Parser.Readers.Statement, SpiceSharp.Netlist)
+  nameWithType: StatementReaders.Read(Statement, Netlist)
+- uid: SpiceSharp.Parser.Readers.StatementReaders.Read*
+  name: Read
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders_Read_
+  commentId: Overload:SpiceSharp.Parser.Readers.StatementReaders.Read
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.Read
+  nameWithType: StatementReaders.Read
+- uid: SpiceSharp.Parser.Readers.StatementReaders.Register(SpiceSharp.Parser.Readers.Reader[])
+  name: Register(Reader[])
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders_Register_SpiceSharp_Parser_Readers_Reader___
+  commentId: M:SpiceSharp.Parser.Readers.StatementReaders.Register(SpiceSharp.Parser.Readers.Reader[])
+  name.vb: Register(Reader())
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.Register(SpiceSharp.Parser.Readers.Reader[])
+  fullName.vb: SpiceSharp.Parser.Readers.StatementReaders.Register(SpiceSharp.Parser.Readers.Reader())
+  nameWithType: StatementReaders.Register(Reader[])
+  nameWithType.vb: StatementReaders.Register(Reader())
+- uid: SpiceSharp.Parser.Readers.StatementReaders.Register(SpiceSharp.Parser.Readers.ReaderCollection[])
+  name: Register(ReaderCollection[])
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders_Register_SpiceSharp_Parser_Readers_ReaderCollection___
+  commentId: M:SpiceSharp.Parser.Readers.StatementReaders.Register(SpiceSharp.Parser.Readers.ReaderCollection[])
+  name.vb: Register(ReaderCollection())
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.Register(SpiceSharp.Parser.Readers.ReaderCollection[])
+  fullName.vb: SpiceSharp.Parser.Readers.StatementReaders.Register(SpiceSharp.Parser.Readers.ReaderCollection())
+  nameWithType: StatementReaders.Register(ReaderCollection[])
+  nameWithType.vb: StatementReaders.Register(ReaderCollection())
+- uid: SpiceSharp.Parser.Readers.StatementReaders.Register*
+  name: Register
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders_Register_
+  commentId: Overload:SpiceSharp.Parser.Readers.StatementReaders.Register
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.Register
+  nameWithType: StatementReaders.Register
+- uid: SpiceSharp.Parser.Readers.StatementReaders.Unregister(SpiceSharp.Parser.Readers.StatementType)
+  name: Unregister(StatementType)
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders_Unregister_SpiceSharp_Parser_Readers_StatementType_
+  commentId: M:SpiceSharp.Parser.Readers.StatementReaders.Unregister(SpiceSharp.Parser.Readers.StatementType)
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.Unregister(SpiceSharp.Parser.Readers.StatementType)
+  nameWithType: StatementReaders.Unregister(StatementType)
+- uid: SpiceSharp.Parser.Readers.StatementReaders.Unregister*
+  name: Unregister
+  href: api/SpiceSharp.Parser.Readers.StatementReaders.html#SpiceSharp_Parser_Readers_StatementReaders_Unregister_
+  commentId: Overload:SpiceSharp.Parser.Readers.StatementReaders.Unregister
+  fullName: SpiceSharp.Parser.Readers.StatementReaders.Unregister
+  nameWithType: StatementReaders.Unregister
 - uid: SpiceSharp.Parser.Readers.StatementType
   name: StatementType
   href: api/SpiceSharp.Parser.Readers.StatementType.html
@@ -3259,105 +3334,6 @@ references:
   commentId: Overload:SpiceSharp.Parser.Readers.SwitchReader.GenerateVSW
   fullName: SpiceSharp.Parser.Readers.SwitchReader.GenerateVSW
   nameWithType: SwitchReader.GenerateVSW
-- uid: SpiceSharp.Parser.Readers.TokenReaders
-  name: TokenReaders
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html
-  commentId: T:SpiceSharp.Parser.Readers.TokenReaders
-  fullName: SpiceSharp.Parser.Readers.TokenReaders
-  nameWithType: TokenReaders
-- uid: SpiceSharp.Parser.Readers.TokenReaders.#ctor
-  name: TokenReaders()
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders__ctor
-  commentId: M:SpiceSharp.Parser.Readers.TokenReaders.#ctor
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.TokenReaders()
-  nameWithType: TokenReaders.TokenReaders()
-- uid: SpiceSharp.Parser.Readers.TokenReaders.#ctor*
-  name: TokenReaders
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders__ctor_
-  commentId: Overload:SpiceSharp.Parser.Readers.TokenReaders.#ctor
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.TokenReaders
-  nameWithType: TokenReaders.TokenReaders
-- uid: SpiceSharp.Parser.Readers.TokenReaders.Item(SpiceSharp.Parser.Readers.StatementType)
-  name: Item[StatementType]
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders_Item_SpiceSharp_Parser_Readers_StatementType_
-  commentId: P:SpiceSharp.Parser.Readers.TokenReaders.Item(SpiceSharp.Parser.Readers.StatementType)
-  name.vb: Item(StatementType)
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.Item[SpiceSharp.Parser.Readers.StatementType]
-  fullName.vb: SpiceSharp.Parser.Readers.TokenReaders.Item(SpiceSharp.Parser.Readers.StatementType)
-  nameWithType: TokenReaders.Item[StatementType]
-  nameWithType.vb: TokenReaders.Item(StatementType)
-- uid: SpiceSharp.Parser.Readers.TokenReaders.Item*
-  name: Item
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders_Item_
-  commentId: Overload:SpiceSharp.Parser.Readers.TokenReaders.Item
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.Item
-  nameWithType: TokenReaders.Item
-- uid: SpiceSharp.Parser.Readers.TokenReaders.OnParseExpression
-  name: OnParseExpression
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders_OnParseExpression
-  commentId: E:SpiceSharp.Parser.Readers.TokenReaders.OnParseExpression
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.OnParseExpression
-  nameWithType: TokenReaders.OnParseExpression
-- uid: SpiceSharp.Parser.Readers.TokenReaders.ParseDouble(System.String)
-  name: ParseDouble(String)
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders_ParseDouble_System_String_
-  commentId: M:SpiceSharp.Parser.Readers.TokenReaders.ParseDouble(System.String)
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.ParseDouble(System.String)
-  nameWithType: TokenReaders.ParseDouble(String)
-- uid: SpiceSharp.Parser.Readers.TokenReaders.ParseDouble*
-  name: ParseDouble
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders_ParseDouble_
-  commentId: Overload:SpiceSharp.Parser.Readers.TokenReaders.ParseDouble
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.ParseDouble
-  nameWithType: TokenReaders.ParseDouble
-- uid: SpiceSharp.Parser.Readers.TokenReaders.Read(SpiceSharp.Parser.Readers.Statement,SpiceSharp.Netlist)
-  name: Read(Statement, Netlist)
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders_Read_SpiceSharp_Parser_Readers_Statement_SpiceSharp_Netlist_
-  commentId: M:SpiceSharp.Parser.Readers.TokenReaders.Read(SpiceSharp.Parser.Readers.Statement,SpiceSharp.Netlist)
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.Read(SpiceSharp.Parser.Readers.Statement, SpiceSharp.Netlist)
-  nameWithType: TokenReaders.Read(Statement, Netlist)
-- uid: SpiceSharp.Parser.Readers.TokenReaders.Read*
-  name: Read
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders_Read_
-  commentId: Overload:SpiceSharp.Parser.Readers.TokenReaders.Read
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.Read
-  nameWithType: TokenReaders.Read
-- uid: SpiceSharp.Parser.Readers.TokenReaders.Register(SpiceSharp.Parser.Readers.Reader[])
-  name: Register(Reader[])
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders_Register_SpiceSharp_Parser_Readers_Reader___
-  commentId: M:SpiceSharp.Parser.Readers.TokenReaders.Register(SpiceSharp.Parser.Readers.Reader[])
-  name.vb: Register(Reader())
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.Register(SpiceSharp.Parser.Readers.Reader[])
-  fullName.vb: SpiceSharp.Parser.Readers.TokenReaders.Register(SpiceSharp.Parser.Readers.Reader())
-  nameWithType: TokenReaders.Register(Reader[])
-  nameWithType.vb: TokenReaders.Register(Reader())
-- uid: SpiceSharp.Parser.Readers.TokenReaders.Register(SpiceSharp.Parser.Readers.ReaderCollection[])
-  name: Register(ReaderCollection[])
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders_Register_SpiceSharp_Parser_Readers_ReaderCollection___
-  commentId: M:SpiceSharp.Parser.Readers.TokenReaders.Register(SpiceSharp.Parser.Readers.ReaderCollection[])
-  name.vb: Register(ReaderCollection())
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.Register(SpiceSharp.Parser.Readers.ReaderCollection[])
-  fullName.vb: SpiceSharp.Parser.Readers.TokenReaders.Register(SpiceSharp.Parser.Readers.ReaderCollection())
-  nameWithType: TokenReaders.Register(ReaderCollection[])
-  nameWithType.vb: TokenReaders.Register(ReaderCollection())
-- uid: SpiceSharp.Parser.Readers.TokenReaders.Register*
-  name: Register
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders_Register_
-  commentId: Overload:SpiceSharp.Parser.Readers.TokenReaders.Register
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.Register
-  nameWithType: TokenReaders.Register
-- uid: SpiceSharp.Parser.Readers.TokenReaders.Unregister(SpiceSharp.Parser.Readers.StatementType)
-  name: Unregister(StatementType)
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders_Unregister_SpiceSharp_Parser_Readers_StatementType_
-  commentId: M:SpiceSharp.Parser.Readers.TokenReaders.Unregister(SpiceSharp.Parser.Readers.StatementType)
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.Unregister(SpiceSharp.Parser.Readers.StatementType)
-  nameWithType: TokenReaders.Unregister(StatementType)
-- uid: SpiceSharp.Parser.Readers.TokenReaders.Unregister*
-  name: Unregister
-  href: api/SpiceSharp.Parser.Readers.TokenReaders.html#SpiceSharp_Parser_Readers_TokenReaders_Unregister_
-  commentId: Overload:SpiceSharp.Parser.Readers.TokenReaders.Unregister
-  fullName: SpiceSharp.Parser.Readers.TokenReaders.Unregister
-  nameWithType: TokenReaders.Unregister
 - uid: SpiceSharp.Parser.Readers.TransientReader
   name: TransientReader
   href: api/SpiceSharp.Parser.Readers.TransientReader.html
@@ -3577,6 +3553,360 @@ references:
   commentId: Overload:SpiceSharp.Parser.Readers.Waveforms.SineReader.Generate
   fullName: SpiceSharp.Parser.Readers.Waveforms.SineReader.Generate
   nameWithType: SineReader.Generate
+- uid: SpiceSharp.Parser.SimpleCharStream
+  name: SimpleCharStream
+  href: api/SpiceSharp.Parser.SimpleCharStream.html
+  commentId: T:SpiceSharp.Parser.SimpleCharStream
+  fullName: SpiceSharp.Parser.SimpleCharStream
+  nameWithType: SimpleCharStream
+- uid: SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.Stream)
+  name: SimpleCharStream(Stream)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_Stream_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.Stream)
+  fullName: SpiceSharp.Parser.SimpleCharStream.SimpleCharStream(System.IO.Stream)
+  nameWithType: SimpleCharStream.SimpleCharStream(Stream)
+- uid: SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.Stream,System.Int32,System.Int32)
+  name: SimpleCharStream(Stream, Int32, Int32)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_Stream_System_Int32_System_Int32_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.Stream,System.Int32,System.Int32)
+  fullName: SpiceSharp.Parser.SimpleCharStream.SimpleCharStream(System.IO.Stream, System.Int32, System.Int32)
+  nameWithType: SimpleCharStream.SimpleCharStream(Stream, Int32, Int32)
+- uid: SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.Stream,System.Int32,System.Int32,System.Int32)
+  name: SimpleCharStream(Stream, Int32, Int32, Int32)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_Stream_System_Int32_System_Int32_System_Int32_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.Stream,System.Int32,System.Int32,System.Int32)
+  fullName: SpiceSharp.Parser.SimpleCharStream.SimpleCharStream(System.IO.Stream, System.Int32, System.Int32, System.Int32)
+  nameWithType: SimpleCharStream.SimpleCharStream(Stream, Int32, Int32, Int32)
+- uid: SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.TextReader)
+  name: SimpleCharStream(TextReader)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_TextReader_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.TextReader)
+  fullName: SpiceSharp.Parser.SimpleCharStream.SimpleCharStream(System.IO.TextReader)
+  nameWithType: SimpleCharStream.SimpleCharStream(TextReader)
+- uid: SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.TextReader,System.Int32,System.Int32)
+  name: SimpleCharStream(TextReader, Int32, Int32)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_TextReader_System_Int32_System_Int32_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.TextReader,System.Int32,System.Int32)
+  fullName: SpiceSharp.Parser.SimpleCharStream.SimpleCharStream(System.IO.TextReader, System.Int32, System.Int32)
+  nameWithType: SimpleCharStream.SimpleCharStream(TextReader, Int32, Int32)
+- uid: SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.TextReader,System.Int32,System.Int32,System.Int32)
+  name: SimpleCharStream(TextReader, Int32, Int32, Int32)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_TextReader_System_Int32_System_Int32_System_Int32_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.TextReader,System.Int32,System.Int32,System.Int32)
+  fullName: SpiceSharp.Parser.SimpleCharStream.SimpleCharStream(System.IO.TextReader, System.Int32, System.Int32, System.Int32)
+  nameWithType: SimpleCharStream.SimpleCharStream(TextReader, Int32, Int32, Int32)
+- uid: SpiceSharp.Parser.SimpleCharStream.#ctor*
+  name: SimpleCharStream
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream__ctor_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.#ctor
+  fullName: SpiceSharp.Parser.SimpleCharStream.SimpleCharStream
+  nameWithType: SimpleCharStream.SimpleCharStream
+- uid: SpiceSharp.Parser.SimpleCharStream.AdjustBeginLineColumn(System.Int32,System.Int32)
+  name: AdjustBeginLineColumn(Int32, Int32)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_AdjustBeginLineColumn_System_Int32_System_Int32_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.AdjustBeginLineColumn(System.Int32,System.Int32)
+  fullName: SpiceSharp.Parser.SimpleCharStream.AdjustBeginLineColumn(System.Int32, System.Int32)
+  nameWithType: SimpleCharStream.AdjustBeginLineColumn(Int32, Int32)
+- uid: SpiceSharp.Parser.SimpleCharStream.AdjustBeginLineColumn*
+  name: AdjustBeginLineColumn
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_AdjustBeginLineColumn_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.AdjustBeginLineColumn
+  fullName: SpiceSharp.Parser.SimpleCharStream.AdjustBeginLineColumn
+  nameWithType: SimpleCharStream.AdjustBeginLineColumn
+- uid: SpiceSharp.Parser.SimpleCharStream.Backup(System.Int32)
+  name: Backup(Int32)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_Backup_System_Int32_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.Backup(System.Int32)
+  fullName: SpiceSharp.Parser.SimpleCharStream.Backup(System.Int32)
+  nameWithType: SimpleCharStream.Backup(Int32)
+- uid: SpiceSharp.Parser.SimpleCharStream.Backup*
+  name: Backup
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_Backup_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.Backup
+  fullName: SpiceSharp.Parser.SimpleCharStream.Backup
+  nameWithType: SimpleCharStream.Backup
+- uid: SpiceSharp.Parser.SimpleCharStream.BeginColumn
+  name: BeginColumn
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_BeginColumn
+  commentId: P:SpiceSharp.Parser.SimpleCharStream.BeginColumn
+  fullName: SpiceSharp.Parser.SimpleCharStream.BeginColumn
+  nameWithType: SimpleCharStream.BeginColumn
+- uid: SpiceSharp.Parser.SimpleCharStream.BeginColumn*
+  name: BeginColumn
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_BeginColumn_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.BeginColumn
+  fullName: SpiceSharp.Parser.SimpleCharStream.BeginColumn
+  nameWithType: SimpleCharStream.BeginColumn
+- uid: SpiceSharp.Parser.SimpleCharStream.BeginLine
+  name: BeginLine
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_BeginLine
+  commentId: P:SpiceSharp.Parser.SimpleCharStream.BeginLine
+  fullName: SpiceSharp.Parser.SimpleCharStream.BeginLine
+  nameWithType: SimpleCharStream.BeginLine
+- uid: SpiceSharp.Parser.SimpleCharStream.BeginLine*
+  name: BeginLine
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_BeginLine_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.BeginLine
+  fullName: SpiceSharp.Parser.SimpleCharStream.BeginLine
+  nameWithType: SimpleCharStream.BeginLine
+- uid: SpiceSharp.Parser.SimpleCharStream.BeginToken
+  name: BeginToken()
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_BeginToken
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.BeginToken
+  fullName: SpiceSharp.Parser.SimpleCharStream.BeginToken()
+  nameWithType: SimpleCharStream.BeginToken()
+- uid: SpiceSharp.Parser.SimpleCharStream.BeginToken*
+  name: BeginToken
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_BeginToken_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.BeginToken
+  fullName: SpiceSharp.Parser.SimpleCharStream.BeginToken
+  nameWithType: SimpleCharStream.BeginToken
+- uid: SpiceSharp.Parser.SimpleCharStream.bufcolumn
+  name: bufcolumn
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_bufcolumn
+  commentId: F:SpiceSharp.Parser.SimpleCharStream.bufcolumn
+  fullName: SpiceSharp.Parser.SimpleCharStream.bufcolumn
+  nameWithType: SimpleCharStream.bufcolumn
+- uid: SpiceSharp.Parser.SimpleCharStream.buffer
+  name: buffer
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_buffer
+  commentId: F:SpiceSharp.Parser.SimpleCharStream.buffer
+  fullName: SpiceSharp.Parser.SimpleCharStream.buffer
+  nameWithType: SimpleCharStream.buffer
+- uid: SpiceSharp.Parser.SimpleCharStream.bufline
+  name: bufline
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_bufline
+  commentId: F:SpiceSharp.Parser.SimpleCharStream.bufline
+  fullName: SpiceSharp.Parser.SimpleCharStream.bufline
+  nameWithType: SimpleCharStream.bufline
+- uid: SpiceSharp.Parser.SimpleCharStream.bufpos
+  name: bufpos
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_bufpos
+  commentId: F:SpiceSharp.Parser.SimpleCharStream.bufpos
+  fullName: SpiceSharp.Parser.SimpleCharStream.bufpos
+  nameWithType: SimpleCharStream.bufpos
+- uid: SpiceSharp.Parser.SimpleCharStream.column
+  name: column
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_column
+  commentId: F:SpiceSharp.Parser.SimpleCharStream.column
+  fullName: SpiceSharp.Parser.SimpleCharStream.column
+  nameWithType: SimpleCharStream.column
+- uid: SpiceSharp.Parser.SimpleCharStream.Column
+  name: Column
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_Column
+  commentId: P:SpiceSharp.Parser.SimpleCharStream.Column
+  fullName: SpiceSharp.Parser.SimpleCharStream.Column
+  nameWithType: SimpleCharStream.Column
+- uid: SpiceSharp.Parser.SimpleCharStream.Column*
+  name: Column
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_Column_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.Column
+  fullName: SpiceSharp.Parser.SimpleCharStream.Column
+  nameWithType: SimpleCharStream.Column
+- uid: SpiceSharp.Parser.SimpleCharStream.Done
+  name: Done()
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_Done
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.Done
+  fullName: SpiceSharp.Parser.SimpleCharStream.Done()
+  nameWithType: SimpleCharStream.Done()
+- uid: SpiceSharp.Parser.SimpleCharStream.Done*
+  name: Done
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_Done_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.Done
+  fullName: SpiceSharp.Parser.SimpleCharStream.Done
+  nameWithType: SimpleCharStream.Done
+- uid: SpiceSharp.Parser.SimpleCharStream.EndColumn
+  name: EndColumn
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_EndColumn
+  commentId: P:SpiceSharp.Parser.SimpleCharStream.EndColumn
+  fullName: SpiceSharp.Parser.SimpleCharStream.EndColumn
+  nameWithType: SimpleCharStream.EndColumn
+- uid: SpiceSharp.Parser.SimpleCharStream.EndColumn*
+  name: EndColumn
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_EndColumn_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.EndColumn
+  fullName: SpiceSharp.Parser.SimpleCharStream.EndColumn
+  nameWithType: SimpleCharStream.EndColumn
+- uid: SpiceSharp.Parser.SimpleCharStream.EndLine
+  name: EndLine
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_EndLine
+  commentId: P:SpiceSharp.Parser.SimpleCharStream.EndLine
+  fullName: SpiceSharp.Parser.SimpleCharStream.EndLine
+  nameWithType: SimpleCharStream.EndLine
+- uid: SpiceSharp.Parser.SimpleCharStream.EndLine*
+  name: EndLine
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_EndLine_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.EndLine
+  fullName: SpiceSharp.Parser.SimpleCharStream.EndLine
+  nameWithType: SimpleCharStream.EndLine
+- uid: SpiceSharp.Parser.SimpleCharStream.ExpandBuff(System.Boolean)
+  name: ExpandBuff(Boolean)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_ExpandBuff_System_Boolean_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.ExpandBuff(System.Boolean)
+  fullName: SpiceSharp.Parser.SimpleCharStream.ExpandBuff(System.Boolean)
+  nameWithType: SimpleCharStream.ExpandBuff(Boolean)
+- uid: SpiceSharp.Parser.SimpleCharStream.ExpandBuff*
+  name: ExpandBuff
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_ExpandBuff_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.ExpandBuff
+  fullName: SpiceSharp.Parser.SimpleCharStream.ExpandBuff
+  nameWithType: SimpleCharStream.ExpandBuff
+- uid: SpiceSharp.Parser.SimpleCharStream.FillBuff
+  name: FillBuff()
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_FillBuff
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.FillBuff
+  fullName: SpiceSharp.Parser.SimpleCharStream.FillBuff()
+  nameWithType: SimpleCharStream.FillBuff()
+- uid: SpiceSharp.Parser.SimpleCharStream.FillBuff*
+  name: FillBuff
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_FillBuff_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.FillBuff
+  fullName: SpiceSharp.Parser.SimpleCharStream.FillBuff
+  nameWithType: SimpleCharStream.FillBuff
+- uid: SpiceSharp.Parser.SimpleCharStream.GetImage
+  name: GetImage()
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_GetImage
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.GetImage
+  fullName: SpiceSharp.Parser.SimpleCharStream.GetImage()
+  nameWithType: SimpleCharStream.GetImage()
+- uid: SpiceSharp.Parser.SimpleCharStream.GetImage*
+  name: GetImage
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_GetImage_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.GetImage
+  fullName: SpiceSharp.Parser.SimpleCharStream.GetImage
+  nameWithType: SimpleCharStream.GetImage
+- uid: SpiceSharp.Parser.SimpleCharStream.GetSuffix(System.Int32)
+  name: GetSuffix(Int32)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_GetSuffix_System_Int32_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.GetSuffix(System.Int32)
+  fullName: SpiceSharp.Parser.SimpleCharStream.GetSuffix(System.Int32)
+  nameWithType: SimpleCharStream.GetSuffix(Int32)
+- uid: SpiceSharp.Parser.SimpleCharStream.GetSuffix*
+  name: GetSuffix
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_GetSuffix_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.GetSuffix
+  fullName: SpiceSharp.Parser.SimpleCharStream.GetSuffix
+  nameWithType: SimpleCharStream.GetSuffix
+- uid: SpiceSharp.Parser.SimpleCharStream.inBuf
+  name: inBuf
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_inBuf
+  commentId: F:SpiceSharp.Parser.SimpleCharStream.inBuf
+  fullName: SpiceSharp.Parser.SimpleCharStream.inBuf
+  nameWithType: SimpleCharStream.inBuf
+- uid: SpiceSharp.Parser.SimpleCharStream.inputStream
+  name: inputStream
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_inputStream
+  commentId: F:SpiceSharp.Parser.SimpleCharStream.inputStream
+  fullName: SpiceSharp.Parser.SimpleCharStream.inputStream
+  nameWithType: SimpleCharStream.inputStream
+- uid: SpiceSharp.Parser.SimpleCharStream.line
+  name: line
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_line
+  commentId: F:SpiceSharp.Parser.SimpleCharStream.line
+  fullName: SpiceSharp.Parser.SimpleCharStream.line
+  nameWithType: SimpleCharStream.line
+- uid: SpiceSharp.Parser.SimpleCharStream.Line
+  name: Line
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_Line
+  commentId: P:SpiceSharp.Parser.SimpleCharStream.Line
+  fullName: SpiceSharp.Parser.SimpleCharStream.Line
+  nameWithType: SimpleCharStream.Line
+- uid: SpiceSharp.Parser.SimpleCharStream.Line*
+  name: Line
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_Line_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.Line
+  fullName: SpiceSharp.Parser.SimpleCharStream.Line
+  nameWithType: SimpleCharStream.Line
+- uid: SpiceSharp.Parser.SimpleCharStream.maxNextCharInd
+  name: maxNextCharInd
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_maxNextCharInd
+  commentId: F:SpiceSharp.Parser.SimpleCharStream.maxNextCharInd
+  fullName: SpiceSharp.Parser.SimpleCharStream.maxNextCharInd
+  nameWithType: SimpleCharStream.maxNextCharInd
+- uid: SpiceSharp.Parser.SimpleCharStream.prevCharIsCR
+  name: prevCharIsCR
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_prevCharIsCR
+  commentId: F:SpiceSharp.Parser.SimpleCharStream.prevCharIsCR
+  fullName: SpiceSharp.Parser.SimpleCharStream.prevCharIsCR
+  nameWithType: SimpleCharStream.prevCharIsCR
+- uid: SpiceSharp.Parser.SimpleCharStream.prevCharIsLF
+  name: prevCharIsLF
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_prevCharIsLF
+  commentId: F:SpiceSharp.Parser.SimpleCharStream.prevCharIsLF
+  fullName: SpiceSharp.Parser.SimpleCharStream.prevCharIsLF
+  nameWithType: SimpleCharStream.prevCharIsLF
+- uid: SpiceSharp.Parser.SimpleCharStream.ReadChar
+  name: ReadChar()
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_ReadChar
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.ReadChar
+  fullName: SpiceSharp.Parser.SimpleCharStream.ReadChar()
+  nameWithType: SimpleCharStream.ReadChar()
+- uid: SpiceSharp.Parser.SimpleCharStream.ReadChar*
+  name: ReadChar
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_ReadChar_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.ReadChar
+  fullName: SpiceSharp.Parser.SimpleCharStream.ReadChar
+  nameWithType: SimpleCharStream.ReadChar
+- uid: SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream)
+  name: ReInit(Stream)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_Stream_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream)
+  fullName: SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream)
+  nameWithType: SimpleCharStream.ReInit(Stream)
+- uid: SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream,System.Int32,System.Int32)
+  name: ReInit(Stream, Int32, Int32)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_Stream_System_Int32_System_Int32_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream,System.Int32,System.Int32)
+  fullName: SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream, System.Int32, System.Int32)
+  nameWithType: SimpleCharStream.ReInit(Stream, Int32, Int32)
+- uid: SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream,System.Int32,System.Int32,System.Int32)
+  name: ReInit(Stream, Int32, Int32, Int32)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_Stream_System_Int32_System_Int32_System_Int32_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream,System.Int32,System.Int32,System.Int32)
+  fullName: SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream, System.Int32, System.Int32, System.Int32)
+  nameWithType: SimpleCharStream.ReInit(Stream, Int32, Int32, Int32)
+- uid: SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader)
+  name: ReInit(TextReader)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_TextReader_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader)
+  fullName: SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader)
+  nameWithType: SimpleCharStream.ReInit(TextReader)
+- uid: SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader,System.Int32,System.Int32)
+  name: ReInit(TextReader, Int32, Int32)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_TextReader_System_Int32_System_Int32_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader,System.Int32,System.Int32)
+  fullName: SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader, System.Int32, System.Int32)
+  nameWithType: SimpleCharStream.ReInit(TextReader, Int32, Int32)
+- uid: SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader,System.Int32,System.Int32,System.Int32)
+  name: ReInit(TextReader, Int32, Int32, Int32)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_TextReader_System_Int32_System_Int32_System_Int32_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader,System.Int32,System.Int32,System.Int32)
+  fullName: SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader, System.Int32, System.Int32, System.Int32)
+  nameWithType: SimpleCharStream.ReInit(TextReader, Int32, Int32, Int32)
+- uid: SpiceSharp.Parser.SimpleCharStream.ReInit*
+  name: ReInit
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_ReInit_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.ReInit
+  fullName: SpiceSharp.Parser.SimpleCharStream.ReInit
+  nameWithType: SimpleCharStream.ReInit
+- uid: SpiceSharp.Parser.SimpleCharStream.staticFlag
+  name: staticFlag
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_staticFlag
+  commentId: F:SpiceSharp.Parser.SimpleCharStream.staticFlag
+  fullName: SpiceSharp.Parser.SimpleCharStream.staticFlag
+  nameWithType: SimpleCharStream.staticFlag
+- uid: SpiceSharp.Parser.SimpleCharStream.UpdateLineColumn(System.Char)
+  name: UpdateLineColumn(Char)
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_UpdateLineColumn_System_Char_
+  commentId: M:SpiceSharp.Parser.SimpleCharStream.UpdateLineColumn(System.Char)
+  fullName: SpiceSharp.Parser.SimpleCharStream.UpdateLineColumn(System.Char)
+  nameWithType: SimpleCharStream.UpdateLineColumn(Char)
+- uid: SpiceSharp.Parser.SimpleCharStream.UpdateLineColumn*
+  name: UpdateLineColumn
+  href: api/SpiceSharp.Parser.SimpleCharStream.html#SpiceSharp_Parser_SimpleCharStream_UpdateLineColumn_
+  commentId: Overload:SpiceSharp.Parser.SimpleCharStream.UpdateLineColumn
+  fullName: SpiceSharp.Parser.SimpleCharStream.UpdateLineColumn
+  nameWithType: SimpleCharStream.UpdateLineColumn
 - uid: SpiceSharp.Parser.SpiceSharpParser
   name: SpiceSharpParser
   href: api/SpiceSharp.Parser.SpiceSharpParser.html
@@ -3877,17 +4207,17 @@ references:
   commentId: T:SpiceSharp.Parser.SpiceSharpParserTokenManager
   fullName: SpiceSharp.Parser.SpiceSharpParserTokenManager
   nameWithType: SpiceSharpParserTokenManager
-- uid: SpiceSharp.Parser.SpiceSharpParserTokenManager.#ctor(SimpleCharStream)
+- uid: SpiceSharp.Parser.SpiceSharpParserTokenManager.#ctor(SpiceSharp.Parser.SimpleCharStream)
   name: SpiceSharpParserTokenManager(SimpleCharStream)
-  href: api/SpiceSharp.Parser.SpiceSharpParserTokenManager.html#SpiceSharp_Parser_SpiceSharpParserTokenManager__ctor_SimpleCharStream_
-  commentId: M:SpiceSharp.Parser.SpiceSharpParserTokenManager.#ctor(SimpleCharStream)
-  fullName: SpiceSharp.Parser.SpiceSharpParserTokenManager.SpiceSharpParserTokenManager(SimpleCharStream)
+  href: api/SpiceSharp.Parser.SpiceSharpParserTokenManager.html#SpiceSharp_Parser_SpiceSharpParserTokenManager__ctor_SpiceSharp_Parser_SimpleCharStream_
+  commentId: M:SpiceSharp.Parser.SpiceSharpParserTokenManager.#ctor(SpiceSharp.Parser.SimpleCharStream)
+  fullName: SpiceSharp.Parser.SpiceSharpParserTokenManager.SpiceSharpParserTokenManager(SpiceSharp.Parser.SimpleCharStream)
   nameWithType: SpiceSharpParserTokenManager.SpiceSharpParserTokenManager(SimpleCharStream)
-- uid: SpiceSharp.Parser.SpiceSharpParserTokenManager.#ctor(SimpleCharStream,System.Int32)
+- uid: SpiceSharp.Parser.SpiceSharpParserTokenManager.#ctor(SpiceSharp.Parser.SimpleCharStream,System.Int32)
   name: SpiceSharpParserTokenManager(SimpleCharStream, Int32)
-  href: api/SpiceSharp.Parser.SpiceSharpParserTokenManager.html#SpiceSharp_Parser_SpiceSharpParserTokenManager__ctor_SimpleCharStream_System_Int32_
-  commentId: M:SpiceSharp.Parser.SpiceSharpParserTokenManager.#ctor(SimpleCharStream,System.Int32)
-  fullName: SpiceSharp.Parser.SpiceSharpParserTokenManager.SpiceSharpParserTokenManager(SimpleCharStream, System.Int32)
+  href: api/SpiceSharp.Parser.SpiceSharpParserTokenManager.html#SpiceSharp_Parser_SpiceSharpParserTokenManager__ctor_SpiceSharp_Parser_SimpleCharStream_System_Int32_
+  commentId: M:SpiceSharp.Parser.SpiceSharpParserTokenManager.#ctor(SpiceSharp.Parser.SimpleCharStream,System.Int32)
+  fullName: SpiceSharp.Parser.SpiceSharpParserTokenManager.SpiceSharpParserTokenManager(SpiceSharp.Parser.SimpleCharStream, System.Int32)
   nameWithType: SpiceSharpParserTokenManager.SpiceSharpParserTokenManager(SimpleCharStream, Int32)
 - uid: SpiceSharp.Parser.SpiceSharpParserTokenManager.#ctor*
   name: SpiceSharpParserTokenManager
@@ -3949,17 +4279,17 @@ references:
   commentId: F:SpiceSharp.Parser.SpiceSharpParserTokenManager.mccstrLiteralImages
   fullName: SpiceSharp.Parser.SpiceSharpParserTokenManager.mccstrLiteralImages
   nameWithType: SpiceSharpParserTokenManager.mccstrLiteralImages
-- uid: SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit(SimpleCharStream)
+- uid: SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit(SpiceSharp.Parser.SimpleCharStream)
   name: ReInit(SimpleCharStream)
-  href: api/SpiceSharp.Parser.SpiceSharpParserTokenManager.html#SpiceSharp_Parser_SpiceSharpParserTokenManager_ReInit_SimpleCharStream_
-  commentId: M:SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit(SimpleCharStream)
-  fullName: SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit(SimpleCharStream)
+  href: api/SpiceSharp.Parser.SpiceSharpParserTokenManager.html#SpiceSharp_Parser_SpiceSharpParserTokenManager_ReInit_SpiceSharp_Parser_SimpleCharStream_
+  commentId: M:SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit(SpiceSharp.Parser.SimpleCharStream)
+  fullName: SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit(SpiceSharp.Parser.SimpleCharStream)
   nameWithType: SpiceSharpParserTokenManager.ReInit(SimpleCharStream)
-- uid: SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit(SimpleCharStream,System.Int32)
+- uid: SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit(SpiceSharp.Parser.SimpleCharStream,System.Int32)
   name: ReInit(SimpleCharStream, Int32)
-  href: api/SpiceSharp.Parser.SpiceSharpParserTokenManager.html#SpiceSharp_Parser_SpiceSharpParserTokenManager_ReInit_SimpleCharStream_System_Int32_
-  commentId: M:SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit(SimpleCharStream,System.Int32)
-  fullName: SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit(SimpleCharStream, System.Int32)
+  href: api/SpiceSharp.Parser.SpiceSharpParserTokenManager.html#SpiceSharp_Parser_SpiceSharpParserTokenManager_ReInit_SpiceSharp_Parser_SimpleCharStream_System_Int32_
+  commentId: M:SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit(SpiceSharp.Parser.SimpleCharStream,System.Int32)
+  fullName: SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit(SpiceSharp.Parser.SimpleCharStream, System.Int32)
   nameWithType: SpiceSharpParserTokenManager.ReInit(SimpleCharStream, Int32)
 - uid: SpiceSharp.Parser.SpiceSharpParserTokenManager.ReInit*
   name: ReInit

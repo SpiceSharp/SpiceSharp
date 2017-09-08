@@ -3,7 +3,7 @@
 namespace SpiceSharp.Parser.Readers.Waveforms
 {
     /// <summary>
-    /// A class that can read a sine wave
+    /// Reads <see cref="Sine"/> waveforms.
     /// </summary>
     public class SineReader : WaveformReader
     {

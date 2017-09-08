@@ -4,7 +4,7 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Parser.Readers.Exports
 {
     /// <summary>
-    /// This class can read device parameters (eg. "@M1[gm]")
+    /// Reads device parameters (eg. &#64;M1[gm]).
     /// </summary>
     public class ParameterReader : Reader
     {

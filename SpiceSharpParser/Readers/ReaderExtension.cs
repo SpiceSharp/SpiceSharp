@@ -4,10 +4,10 @@ using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using static SpiceSharp.Parser.SpiceSharpParserConstants;
 
-namespace SpiceSharp.Parser.Readers.Extensions
+namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// Some extension methods for Token-related objects
+    /// Provides static methods for reading statements.
     /// </summary>
     public static class ReaderExtension
     {
@@ -51,12 +51,14 @@ namespace SpiceSharp.Parser.Readers.Extensions
         /// <summary>
         /// Read nodes for a component
         /// </summary>
-        /// <param name="c"></param>
-        /// <param name="parameters"></param>
-        /// <param name="count"></param>
-        /// <param name="index"></param>
-        public static void ReadNodes(this ICircuitComponent c, List<Token> parameters, int count, int index = 0)
+        /// <param name="c">The circuit component</param>
+        /// <param name="parameters">The parameters</param>
+        /// <param name="index">The index where to start reading, defaults to 0</param>
+        public static void ReadNodes(this ICircuitComponent c, List<Token> parameters, int index = 0)
         {
+            int count = c.PinCount;
+
+            // Check that there are enough parameters left to read
             if (parameters.Count < index + count)
             {
                 if (parameters.Count > 0)
@@ -109,7 +111,7 @@ namespace SpiceSharp.Parser.Readers.Extensions
         }
 
         /// <summary>
-        /// Check if the token is a value
+        /// Check if the token can represent a value
         /// </summary>
         /// <param name="t">Token</param>
         /// <returns></returns>
@@ -125,9 +127,9 @@ namespace SpiceSharp.Parser.Readers.Extensions
         /// <summary>
         /// Read a model from a Token-related object
         /// </summary>
-        /// <typeparam name="T">A CircuitModel class</typeparam>
-        /// <param name="o">The object</param>
+        /// <typeparam name="T">An ICircuitObject class</typeparam>
         /// <param name="netlist">The netlist</param>
+        /// <param name="t">The token representing the model name</param>
         /// <returns></returns>
         public static T ReadModel<T>(this Netlist netlist, Token t) where T : ICircuitObject
         {
@@ -143,7 +145,8 @@ namespace SpiceSharp.Parser.Readers.Extensions
         }
 
         /// <summary>
-        /// Parse a token to a double
+        /// Parse a token to a double.
+        /// Both literal values and expressions {...} are accepted.
         /// </summary>
         /// <param name="netlist">The netlist</param>
         /// <param name="t">The token</param>
@@ -163,6 +166,7 @@ namespace SpiceSharp.Parser.Readers.Extensions
 
         /// <summary>
         /// Parse a token to a string
+        /// Both literal and quoted "..." are accepted.
         /// </summary>
         /// <param name="netlist">The netlist</param>
         /// <param name="t">The token</param>
@@ -200,7 +204,7 @@ namespace SpiceSharp.Parser.Readers.Extensions
         }
 
         /// <summary>
-        /// Check for pure numbers
+        /// Check for digit-only strings
         /// </summary>
         /// <param name="value">The string</param>
         /// <returns></returns>

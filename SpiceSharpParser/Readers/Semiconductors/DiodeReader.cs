@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class that can read a diode model
+    /// Reads <see cref="Diode"/> components.
     /// </summary>
     public class DiodeReader : ComponentReader
     {
@@ -25,7 +24,7 @@ namespace SpiceSharp.Parser.Readers
         protected override ICircuitObject Generate(string type, string name, List<Token> parameters, Netlist netlist)
         {
             Diode dio = new Diode(name);
-            dio.ReadNodes(parameters, 2);
+            dio.ReadNodes(parameters);
 
             if (parameters.Count < 3)
                 throw new ParseException(parameters[1], "Model expected", false);

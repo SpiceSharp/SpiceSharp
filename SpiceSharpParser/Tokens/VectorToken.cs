@@ -1,5 +1,8 @@
 ﻿namespace SpiceSharp.Parser
 {
+    /// <summary>
+    /// Vector type tokens TOKEN, TOKEN, ... (eg. OUT,GND)
+    /// </summary>
     public class VectorToken : Token
     {
         /// <summary>

@@ -4,15 +4,15 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A standard implementation for a component reader
+    /// A component reader that can handle most component statements.
     /// </summary>
     public abstract class ComponentReader : Reader
     {
         /// <summary>
         /// Constructor
-        /// In order for a component to be detected, the name needs to start with the id-character
+        /// In order for a component to be detected, the name needs to start with the id-character.
         /// </summary>
-        /// <param name="id">The id character</param>
+        /// <param name="id">The id(s) for identifying the component</param>
         protected ComponentReader(string cid)
             : base(StatementType.Component)
         {

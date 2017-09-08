@@ -1,10 +1,9 @@
 ﻿using SpiceSharp.Simulations;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class that can read a transient analysis
+    /// Reads a <see cref="Transient"/> analysis (time-domain analysis).
     /// </summary>
     public class TransientReader : Reader
     {

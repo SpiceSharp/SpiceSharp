@@ -5,7 +5,7 @@ using SpiceSharp.Parser.Readers;
 namespace SpiceSharp
 {
     /// <summary>
-    /// This class can read a netlist
+    /// Reads Spice-formatted netlists and parses in a <see cref="Netlist"/>.
     /// </summary>
     public class NetlistReader
     {
@@ -26,7 +26,7 @@ namespace SpiceSharp
         /// Constructor
         /// If netlist is null, a standard netlist is generated
         /// </summary>
-        /// <param name="netlist">The netlist</param>
+        /// <param name="netlist">The netlist. If null, <see cref="Netlist.StandardNetlist"/> is used.</param>
         public NetlistReader(Netlist netlist)
         {
             if (netlist == null)
@@ -36,7 +36,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Parse the netlist
+        /// Parse a file
         /// </summary>
         public void Parse(string filename)
         {
@@ -48,11 +48,9 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Parse a stream
-        /// Seeking must be possible, as the netlist needs to be parsed in multiple passes.
+        /// Parse from a <see cref="Stream"/>
         /// </summary>
         /// <param name="stream">The stream</param>
-        /// <param name="source">The source</param>
         public void Parse(Stream stream)
         {
             if (Netlist == null)

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
+    /// <summary>
+    /// Reads <see cref="Resistor"/>, <see cref="Capacitor"/>, <see cref="Inductor"/> and <see cref="MutualInductance"/> components.
+    /// </summary>
     public class RLCMReader : ComponentReader
     {
         /// <summary>
@@ -45,7 +47,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateCap(string name, List<Token> parameters, Netlist netlist)
         {
             Capacitor cap = new Capacitor(name);
-            cap.ReadNodes(parameters, 2);
+            cap.ReadNodes(parameters);
 
             // Search for a parameter IC, which is common for both types of capacitors
             for (int i = 3; i < parameters.Count; i++)
@@ -96,7 +98,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateInd(string name, List<Token> parameters, Netlist netlist)
         {
             Inductor ind = new Inductor(name);
-            ind.ReadNodes(parameters, 2);
+            ind.ReadNodes(parameters);
 
             // Read the value
             if (parameters.Count < 3)
@@ -146,7 +148,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateRes(string name, List<Token> parameters, Netlist netlist)
         {
             Resistor res = new Resistor(name);
-            res.ReadNodes(parameters, 2);
+            res.ReadNodes(parameters);
 
             // We have two possible formats:
             // Normal: RXXXXXXX N1 N2 VALUE

@@ -4,7 +4,7 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// This class can read bipolar transistor models
+    /// Reads <see cref="BJTModel"/> definitions.
     /// </summary>
     public class BipolarModelReader : ModelReader
     {

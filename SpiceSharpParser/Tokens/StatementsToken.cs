@@ -4,7 +4,7 @@ using SpiceSharp.Parser.Readers;
 namespace SpiceSharp.Parser
 {
     /// <summary>
-    /// This token represents the body of a subcircuit definition
+    /// Represents a collection of grouped statements (eg. subcircuit definitions).
     /// </summary>
     public class StatementsToken : Token
     {
@@ -17,7 +17,6 @@ namespace SpiceSharp.Parser
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="body"></param>
         public StatementsToken()
         {
             kind = TokenConstants.BODY;

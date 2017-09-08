@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace SpiceSharp.Parser.Readers
 {
+    /// <summary>
+    /// A statement consists of a name and parameters.
+    /// Can be read by a <see cref="Reader"/>.
+    /// </summary>
     public class Statement
     {
         /// <summary>

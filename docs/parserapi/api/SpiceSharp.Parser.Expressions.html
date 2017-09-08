@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc">
+    <meta property="docfx:navrel" content="">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -45,14 +45,6 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
-                <ul class="nav level1 navbar-nav">
-                  <li class="">
-                    <a href="../articles/intro.html" title="Articles" class="">Articles</a>
-                  </li>
-                  <li class="active">
-                    <a href="../api/index.html" title="API Documentation" class="active">API Documentation</a>
-                  </li>
-                </ul>
             </div>
           </div>
         </nav>
@@ -86,9 +78,6 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="SpiceSharp.ExportNetlistDataEventHandler.html" title="ExportNetlistDataEventHandler" class="">ExportNetlistDataEventHandler</a>
-                          </li>
-                          <li class="">
                             <a href="SpiceSharp.Netlist.html" title="Netlist" class="">Netlist</a>
                           </li>
                           <li class="">
@@ -114,6 +103,9 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.ParseException.html" title="ParseException" class="">ParseException</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.SimpleCharStream.html" title="SimpleCharStream" class="">SimpleCharStream</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.SpiceSharpParser.html" title="SpiceSharpParser" class="">SpiceSharpParser</a>
@@ -215,6 +207,9 @@
                             <a href="SpiceSharp.Parser.Readers.ReaderCollection.html" title="ReaderCollection" class="">ReaderCollection</a>
                           </li>
                           <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ReaderExtension.html" title="ReaderExtension" class="">ReaderExtension</a>
+                          </li>
+                          <li class="">
                             <a href="SpiceSharp.Parser.Readers.RLCMModelReader.html" title="RLCMModelReader" class="">RLCMModelReader</a>
                           </li>
                           <li class="">
@@ -225,6 +220,9 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.Statement.html" title="Statement" class="">Statement</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.StatementReaders.html" title="StatementReaders" class="">StatementReaders</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.StatementType.html" title="StatementType" class="">StatementType</a>
@@ -240,9 +238,6 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.SwitchReader.html" title="SwitchReader" class="">SwitchReader</a>
-                          </li>
-                          <li class="">
-                            <a href="SpiceSharp.Parser.Readers.TokenReaders.html" title="TokenReaders" class="">TokenReaders</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.TransientReader.html" title="TransientReader" class="">TransientReader</a>
@@ -328,15 +323,6 @@
                         </ul>  </li>
                     <li class="">
                       <span class="expand-stub"></span>
-                      <a href="SpiceSharp.Parser.Readers.Extensions.html" title="SpiceSharp.Parser.Readers.Extensions" class="">SpiceSharp.Parser.Readers.Extensions</a>
-                        
-                        <ul class="nav level2">
-                          <li class="">
-                            <a href="SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html" title="ReaderExtension" class="">ReaderExtension</a>
-                          </li>
-                        </ul>  </li>
-                    <li class="">
-                      <span class="expand-stub"></span>
                       <a href="SpiceSharp.Parser.Readers.Waveforms.html" title="SpiceSharp.Parser.Readers.Waveforms" class="">SpiceSharp.Parser.Readers.Waveforms</a>
                         
                         <ul class="nav level2">
@@ -388,7 +374,12 @@
     <h3 id="classes">Classes
   </h3>
       <h4><a class="xref" href="SpiceSharp.Parser.Expressions.SpiceExpression.html">SpiceExpression</a></h4>
-      <section></section>
+      <section><p>A very light-weight and fast expression parser made for parsing Spice expressions
+It is based on Dijkstra&apos;s Shunting Yard algorithm. It is very fast for parsing expressions only once.
+The parser is also not very expressive for errors, so only use for relatively simple expressions.
+<p><strong>Supported operators</strong></p><ul><li>Positive and negative (&apos;+&apos;, &apos;-&apos;)</li><li>Addition and subtraction (&apos;+&apos;, &apos;-&apos;)</li><li>Multiplication and division (&apos;*&apos;, &apos;/&apos;)</li><li>Modulo (&apos;%&apos;)</li><li>Logical (&apos;&amp;&amp;&apos;, &apos;||&apos;, &apos;!&apos;)</li><li>Relational (&apos;==&apos;, &apos;!=&apos;, &apos;&lt;&apos;, &apos;&gt;&apos;, &apos;&lt;=&apos;, &apos;&gt;=&apos;)</li></ul>
+<p><strong>Supported functions</strong></p><ul><li>Minimum and maximum (&apos;min(a,b)&apos;, &apos;max(a,b)&apos;)</li><li>Square root (&apos;sqrt(a)&apos;)</li><li>Absolute value (&apos;abs(a)&apos;)</li><li>Exponent and logarithms (&apos;exp(a)&apos;, &apos;log(a)&apos;, &apos;log10(a)&apos;)</li><li>Powers (&apos;pow(a, b)&apos;)</li><li>Trigonometry (&apos;sin(a)&apos;, &apos;cos(a)&apos;, &apos;tan(a)&apos;, &apos;asin(a)&apos;, &apos;acos(a)&apos;, &apos;atan(a)&apos;, &apos;sinh(a)&apos;, &apos;cosh(a)&apos;, &apos;tanh(a)&apos;, &apos;atan2(a, b)&apos;)</li></ul></p>
+</section>
 </article>
           </div>
           

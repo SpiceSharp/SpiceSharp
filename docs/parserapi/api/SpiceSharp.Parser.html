@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc">
+    <meta property="docfx:navrel" content="">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -45,14 +45,6 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
-                <ul class="nav level1 navbar-nav">
-                  <li class="">
-                    <a href="../articles/intro.html" title="Articles" class="">Articles</a>
-                  </li>
-                  <li class="active">
-                    <a href="../api/index.html" title="API Documentation" class="active">API Documentation</a>
-                  </li>
-                </ul>
             </div>
           </div>
         </nav>
@@ -86,9 +78,6 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="SpiceSharp.ExportNetlistDataEventHandler.html" title="ExportNetlistDataEventHandler" class="">ExportNetlistDataEventHandler</a>
-                          </li>
-                          <li class="">
                             <a href="SpiceSharp.Netlist.html" title="Netlist" class="">Netlist</a>
                           </li>
                           <li class="">
@@ -114,6 +103,9 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.ParseException.html" title="ParseException" class="">ParseException</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.SimpleCharStream.html" title="SimpleCharStream" class="">SimpleCharStream</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.SpiceSharpParser.html" title="SpiceSharpParser" class="">SpiceSharpParser</a>
@@ -215,6 +207,9 @@
                             <a href="SpiceSharp.Parser.Readers.ReaderCollection.html" title="ReaderCollection" class="">ReaderCollection</a>
                           </li>
                           <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ReaderExtension.html" title="ReaderExtension" class="">ReaderExtension</a>
+                          </li>
+                          <li class="">
                             <a href="SpiceSharp.Parser.Readers.RLCMModelReader.html" title="RLCMModelReader" class="">RLCMModelReader</a>
                           </li>
                           <li class="">
@@ -225,6 +220,9 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.Statement.html" title="Statement" class="">Statement</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.StatementReaders.html" title="StatementReaders" class="">StatementReaders</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.StatementType.html" title="StatementType" class="">StatementType</a>
@@ -240,9 +238,6 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.SwitchReader.html" title="SwitchReader" class="">SwitchReader</a>
-                          </li>
-                          <li class="">
-                            <a href="SpiceSharp.Parser.Readers.TokenReaders.html" title="TokenReaders" class="">TokenReaders</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.TransientReader.html" title="TransientReader" class="">TransientReader</a>
@@ -328,15 +323,6 @@
                         </ul>  </li>
                     <li class="">
                       <span class="expand-stub"></span>
-                      <a href="SpiceSharp.Parser.Readers.Extensions.html" title="SpiceSharp.Parser.Readers.Extensions" class="">SpiceSharp.Parser.Readers.Extensions</a>
-                        
-                        <ul class="nav level2">
-                          <li class="">
-                            <a href="SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html" title="ReaderExtension" class="">ReaderExtension</a>
-                          </li>
-                        </ul>  </li>
-                    <li class="">
-                      <span class="expand-stub"></span>
                       <a href="SpiceSharp.Parser.Readers.Waveforms.html" title="SpiceSharp.Parser.Readers.Waveforms" class="">SpiceSharp.Parser.Readers.Waveforms</a>
                         
                         <ul class="nav level2">
@@ -388,34 +374,51 @@
     <h3 id="classes">Classes
   </h3>
       <h4><a class="xref" href="SpiceSharp.Parser.AssignmentToken.html">AssignmentToken</a></h4>
-      <section><p>An assignment token</p>
+      <section><p>Token representing an assignment: [TOKEN]=[TOKEN]</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.AtToken.html">AtToken</a></h4>
-      <section><p>An @-token (eg. &amp;quot;@M1[gm]&amp;quot;)</p>
+      <section><p>An @-token: @TOKEN[TOKEN] (eg. &amp;quot;@M1[gm]&amp;quot;)</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.BracketToken.html">BracketToken</a></h4>
-      <section><p>This class represents a bracketted token</p>
+      <section><p>A bracketted token (TOKEN TOKEN ...) or [TOKEN TOKEN ...], ...</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.ParseException.html">ParseException</a></h4>
-      <section></section>
+      <section><p>Exception thrown by the parser
+This class was generated by CSharpCC (a port of JavaCC to C#). Refer to spicelang.cc for the syntax.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Parser.SimpleCharStream.html">SimpleCharStream</a></h4>
+      <section><p>A simple character stream used for parsing
+This class is generated by CSharpCC (a port of JavaCC to C#). Refer to spicelang.cc for the syntax.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Parser.SpiceSharpParser.html">SpiceSharpParser</a></h4>
-      <section></section>
+      <section><p>Spice parser
+This class is generated by CSharpCC (a port of JavaCC to C#). Refer to spicelang.cc for the syntax.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Parser.SpiceSharpParserConstants.html">SpiceSharpParserConstants</a></h4>
-      <section></section>
+      <section><p>Collection of constants used for parsing
+This class is created by CSharpCC (a port of JavaCC to C#). Refer to spicelang.cc for the syntax.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Parser.SpiceSharpParserTokenManager.html">SpiceSharpParserTokenManager</a></h4>
-      <section></section>
+      <section><p>Token manager for parsing
+This file is generated by CSharpCC (a port of JavaCC to C#). Refer to spicelang.cc for the syntax.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Parser.StatementsToken.html">StatementsToken</a></h4>
-      <section><p>This token represents the body of a subcircuit definition</p>
+      <section><p>Represents a collection of grouped statements (eg. subcircuit definitions).</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.Token.html">Token</a></h4>
-      <section></section>
+      <section><p>Describes a token for parsing
+This class is generated by CSharpCC (a port of JavaCC to C#). Refer to spicelang.cc for the syntax.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Parser.TokenConstants.html">TokenConstants</a></h4>
-      <section><p>All our constants</p>
+      <section><p>Extension to <a class="xref" href="SpiceSharp.Parser.SpiceSharpParserConstants.html">SpiceSharpParserConstants</a> with our own custom tokens.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Parser.TokenMgrError.html">TokenMgrError</a></h4>
-      <section></section>
+      <section><p>Token manager exception
+This class is generated by CSharpCC (a port of JavaCC to C#). Refer to spicelang.cc for the syntax.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Parser.VectorToken.html">VectorToken</a></h4>
-      <section></section>
+      <section><p>Vector type tokens TOKEN, TOKEN, ... (eg. OUT,GND)</p>
+</section>
 </article>
           </div>
           

@@ -4,27 +4,26 @@
   "xrefmap": "xrefmap.yml",
   "files": [
     {
-      "type": "Conceptual",
-      "source_relative_path": "api/index.md",
+      "type": "Resource",
+      "source_relative_path": "api/images/logo_full.svg",
       "output": {
-        ".html": {
-          "relative_path": "api/index.html",
-          "hash": "TqYh1rkoJKeIsL1OQLMc6Q=="
+        "resource": {
+          "relative_path": "api/images/logo_full.svg"
         }
       },
       "is_incremental": false,
       "version": ""
     },
     {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.ExportNetlistDataEventHandler.yml",
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.ExportNetlistDataEventHandler.html",
-          "hash": "9hPpA0iHOfs0jXT/hTgVBw=="
+          "relative_path": "api/index.html",
+          "hash": "nnaRF8IIdQnPR7pE49cKzw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -33,7 +32,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Netlist.html",
-          "hash": "L2Ci4Oz012P5xKHmjmU1iQ=="
+          "hash": "fty0tCUZJOtVF0TZomEzSA=="
         }
       },
       "is_incremental": true,
@@ -45,7 +44,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.NetlistReader.html",
-          "hash": "bci1Q6vQZmFygH86EdVq4A=="
+          "hash": "XGO43sQcIjfjPvDVIYL7yg=="
         }
       },
       "is_incremental": true,
@@ -57,7 +56,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.NetlistSimulationEventHandler.html",
-          "hash": "GwoinAgMOCh82Moer0gT4g=="
+          "hash": "d52vSEnQl0L0K9IpM20slg=="
         }
       },
       "is_incremental": true,
@@ -69,7 +68,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.AssignmentToken.html",
-          "hash": "IbOZ4+kg2E00PJYuM7SbPg=="
+          "hash": "MVNh3NxzqtpLtow77SMUJA=="
         }
       },
       "is_incremental": true,
@@ -81,7 +80,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.AtToken.html",
-          "hash": "emc4PBhHjp2249BiwrEkYg=="
+          "hash": "BnKcKXwdE0APL7gldFbXuA=="
         }
       },
       "is_incremental": true,
@@ -93,7 +92,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.BracketToken.html",
-          "hash": "OcHfaCmoVfTtheTl15FVow=="
+          "hash": "BFRT72N2S0XwQ38OcnnhgA=="
         }
       },
       "is_incremental": true,
@@ -105,7 +104,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Expressions.SpiceExpression.html",
-          "hash": "7TAsZc34famEqpvR8vteFg=="
+          "hash": "woQdhnAEMoD3Ub3Ht98kCw=="
         }
       },
       "is_incremental": true,
@@ -117,7 +116,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Expressions.html",
-          "hash": "j0u3n/75HK+Wix4kxE1GPg=="
+          "hash": "lGdf8TRsVga+VjnGDsv6Pg=="
         }
       },
       "is_incremental": true,
@@ -129,7 +128,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.ParseException.html",
-          "hash": "dUjP8vkDuqBQhFsz9kmg7Q=="
+          "hash": "1JHd2cEBhSjteMMPn+2mjQ=="
         }
       },
       "is_incremental": true,
@@ -141,7 +140,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.ACReader.html",
-          "hash": "eZ9tnaQFpw3qPwt9WRf6Zg=="
+          "hash": "Dj52X3N87WnJ0mzApxMjCA=="
         }
       },
       "is_incremental": true,
@@ -153,7 +152,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.BipolarModelReader.html",
-          "hash": "asHs2W5TerJuqcP4ewSR9g=="
+          "hash": "rtPwNElUHFrQsScceCicvQ=="
         }
       },
       "is_incremental": true,
@@ -165,7 +164,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.BipolarReader.html",
-          "hash": "DE8K1jbr6COhUxj5KKpS3g=="
+          "hash": "i8JcnDa2wRmmoTMCSU5XvA=="
         }
       },
       "is_incremental": true,
@@ -177,7 +176,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Collections.ComponentReaderCollection.html",
-          "hash": "Jb9s3TLoOSUoFaS+l2p07A=="
+          "hash": "sumC+Zdg7JOvqBhrS09yew=="
         }
       },
       "is_incremental": true,
@@ -189,7 +188,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Collections.DictionaryReaderCollection.html",
-          "hash": "ezWGxSiUKS5kVBpzfnI7cA=="
+          "hash": "HMhf1PKu7l+5mEvLhSRiag=="
         }
       },
       "is_incremental": true,
@@ -201,7 +200,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.html",
-          "hash": "hJ3k+Av6YHDFjbszeLFRiw=="
+          "hash": "Ou+es2KIldXnCHX3wx8Z+w=="
         }
       },
       "is_incremental": true,
@@ -213,7 +212,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Collections.ModelReaderCollection.html",
-          "hash": "0lefStNl6X8eIqtY9tVS6w=="
+          "hash": "aKTVfKHF/TFDx+RVSXdTvA=="
         }
       },
       "is_incremental": true,
@@ -225,7 +224,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Collections.html",
-          "hash": "mtIYe03zZq3WCc97xNWbDQ=="
+          "hash": "Tjj9kU99MXAhc7qmoCHKJA=="
         }
       },
       "is_incremental": true,
@@ -237,7 +236,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.ComponentReader.html",
-          "hash": "7WBScP91nXLtQFDUcI5cKA=="
+          "hash": "HGEnCoFlzi6E2kGqjwI46g=="
         }
       },
       "is_incremental": true,
@@ -249,7 +248,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.CurrentsourceReader.html",
-          "hash": "9a9qR2mgejtp5qHznhH6ug=="
+          "hash": "SKDtY3WiU7Ef/dRLMCbMaA=="
         }
       },
       "is_incremental": true,
@@ -261,7 +260,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.DCReader.html",
-          "hash": "BHYLQ5dfzrvZkxKb5ad+sw=="
+          "hash": "j6oEEWE0t6PBsmdzMWoqQg=="
         }
       },
       "is_incremental": true,
@@ -273,7 +272,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.DiodeModelReader.html",
-          "hash": "KB/FfaTJT87DlGqWORqlKQ=="
+          "hash": "VqYJwWxrGw2UKEz57aXPdw=="
         }
       },
       "is_incremental": true,
@@ -285,7 +284,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.DiodeReader.html",
-          "hash": "STF3B+ElQZdcx1I//v/tVw=="
+          "hash": "Zg0ar3b3TCzOgQGFWtOtww=="
         }
       },
       "is_incremental": true,
@@ -297,7 +296,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Export.html",
-          "hash": "5BNsEst7BPj3yPxocgZXMg=="
+          "hash": "aorTNX7kfp6zN+FkF1DE0g=="
         }
       },
       "is_incremental": true,
@@ -309,7 +308,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.CurrentDecibelExport.html",
-          "hash": "rwXWf3yLGvBczmnb9hJ/IQ=="
+          "hash": "AcXk4iGdDoNSEuzhvh3nHA=="
         }
       },
       "is_incremental": true,
@@ -321,7 +320,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.CurrentExport.html",
-          "hash": "xFa46/Yj7gf1dMr+TGadwQ=="
+          "hash": "L5z6f2AH57ORQE45T72KIw=="
         }
       },
       "is_incremental": true,
@@ -333,7 +332,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.CurrentImaginaryExport.html",
-          "hash": "iil/N0CKr3PvHZFaRo0SXA=="
+          "hash": "7gOCD3jilCHhOTeFqHbJHw=="
         }
       },
       "is_incremental": true,
@@ -345,7 +344,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.CurrentMagnitudeExport.html",
-          "hash": "3ZXcB9fiz1VyEv9krbqP4w=="
+          "hash": "lCBH8YiwUPMyaVW9kEjW6w=="
         }
       },
       "is_incremental": true,
@@ -357,7 +356,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.CurrentPhaseExport.html",
-          "hash": "JkCJQ6FsgDkT62VGnstrtg=="
+          "hash": "dvwZqRFcREx4kmlEbeMskw=="
         }
       },
       "is_incremental": true,
@@ -369,7 +368,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.CurrentReader.html",
-          "hash": "MgQxejo/6zZMrjzLPaW9JA=="
+          "hash": "VCmVjRN/iJGc2tzEGD8L9g=="
         }
       },
       "is_incremental": true,
@@ -381,7 +380,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.CurrentRealExport.html",
-          "hash": "P+guVe6bE8hBm3Ws0Uws8w=="
+          "hash": "xV2a3p8g0EHz2L3QJut01g=="
         }
       },
       "is_incremental": true,
@@ -393,7 +392,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.ParameterExport.html",
-          "hash": "xI8mmhUwjyLUlXBvifMbyQ=="
+          "hash": "Q1JZtviaFlYdQIbhg53oFg=="
         }
       },
       "is_incremental": true,
@@ -405,7 +404,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.ParameterReader.html",
-          "hash": "QjxtmkETT90wmoEf+VuE2w=="
+          "hash": "0NHEUrOFPH8pTpWfvY1q+w=="
         }
       },
       "is_incremental": true,
@@ -417,7 +416,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.VoltageDecibelExport.html",
-          "hash": "IcF2T2IOkYbpnjYgrAwO/Q=="
+          "hash": "NKuA1Fg8oN8g/wtBFO/xCw=="
         }
       },
       "is_incremental": true,
@@ -429,7 +428,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.VoltageExport.html",
-          "hash": "R1UqsvMJ8YOfGsKjRLDa7A=="
+          "hash": "+Z+lSb10RgpYLqheu+kjSg=="
         }
       },
       "is_incremental": true,
@@ -441,7 +440,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.VoltageImaginaryExport.html",
-          "hash": "cTuCa2e/ntBw34zA4wY51A=="
+          "hash": "8f5V8l6wxEk4rsBFnNk0EQ=="
         }
       },
       "is_incremental": true,
@@ -453,7 +452,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.VoltageMagnitudeExport.html",
-          "hash": "j3XsV6l5/HeghLPRYQNZ/Q=="
+          "hash": "funcDCgriC06yeI10BoPDw=="
         }
       },
       "is_incremental": true,
@@ -465,7 +464,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.VoltagePhaseExport.html",
-          "hash": "3LLr13bn++y9gtQMNxTziw=="
+          "hash": "zNIaPx8xr1hj9Yqbr2Z/0A=="
         }
       },
       "is_incremental": true,
@@ -477,7 +476,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.VoltageReader.html",
-          "hash": "o3JIclNO07H/jW4YF9GkPQ=="
+          "hash": "rGZLKEYLFG4LW+tCR5IzXA=="
         }
       },
       "is_incremental": true,
@@ -489,7 +488,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.VoltageRealExport.html",
-          "hash": "rWMPmkIsdZKrSRDBq2PAHA=="
+          "hash": "N1mJyS90dyabIZQNBxaKLA=="
         }
       },
       "is_incremental": true,
@@ -501,7 +500,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Exports.html",
-          "hash": "sxT7G7jYMChRhv0WT4UrTQ=="
+          "hash": "TuTK1OMa5Z4TTZNIjEmyYA=="
         }
       },
       "is_incremental": true,
@@ -513,31 +512,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.ExpressionData.html",
-          "hash": "nGYpx/Sp74EitXi71meiAw=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html",
-          "hash": "q+SZZAyuW/qp+AaQUhfZ6g=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Parser.Readers.Extensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Parser.Readers.Extensions.html",
-          "hash": "+pedjTp9Wb6xDgverFCOvQ=="
+          "hash": "GzCFaFOza5L97CaM26jyKA=="
         }
       },
       "is_incremental": true,
@@ -549,7 +524,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.ICReader.html",
-          "hash": "Rs0cAR2ZVOr7/pvJX/Vg7g=="
+          "hash": "u9bEFXC34nhbkTZna7baWQ=="
         }
       },
       "is_incremental": true,
@@ -561,7 +536,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.ModelReader.html",
-          "hash": "XguW1mDFSYc1vG9lc27fsw=="
+          "hash": "K2Y5e5Fxa7DSRMSltKYFnA=="
         }
       },
       "is_incremental": true,
@@ -573,7 +548,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.MosfetModelReader.html",
-          "hash": "PHHSIZClAul5t6A2e5mhfA=="
+          "hash": "vuwbWix11h2qIiKKCg0N4Q=="
         }
       },
       "is_incremental": true,
@@ -585,7 +560,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.MosfetReader.html",
-          "hash": "imLGvWcUBALWQ8erEfvzPQ=="
+          "hash": "DxznaEChECDypEHEJM4J7w=="
         }
       },
       "is_incremental": true,
@@ -597,7 +572,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.NodesetReader.html",
-          "hash": "dteCZuteJdbsf6VRGPOchA=="
+          "hash": "j8ZZnseH+2uogim/DpmR9g=="
         }
       },
       "is_incremental": true,
@@ -609,7 +584,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.OptionReader.html",
-          "hash": "/Gryl3CLpFC4Hdtboa7YPQ=="
+          "hash": "7qaA/0CZNtRB/jj4OH6ksg=="
         }
       },
       "is_incremental": true,
@@ -621,7 +596,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.ParamSetReader.html",
-          "hash": "7yZPSm3lzG0+dCXHwcHwpg=="
+          "hash": "GYDuI3uewcjhyEwaoo2bJg=="
         }
       },
       "is_incremental": true,
@@ -633,7 +608,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.ParseNetlistExpressionEventHandler.html",
-          "hash": "50Sn6UgddMu9R/nBLXLO7g=="
+          "hash": "+zfT+VDluX4Jb/zr592CJg=="
         }
       },
       "is_incremental": true,
@@ -645,7 +620,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.RLCMModelReader.html",
-          "hash": "AY1Joil15P9iAf2QgrcurA=="
+          "hash": "YTkwRHxuoXPLmXwp2+M2tw=="
         }
       },
       "is_incremental": true,
@@ -657,7 +632,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.RLCMReader.html",
-          "hash": "m2wJqyQAxcqub7W5wh1APw=="
+          "hash": "WhdB8TI4uhxPRVnaERg7Aw=="
         }
       },
       "is_incremental": true,
@@ -669,7 +644,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Reader.html",
-          "hash": "2xi13X34AvMrbACY1zZI1w=="
+          "hash": "D5/Ph8jv5AcQx6TKTPSX1Q=="
         }
       },
       "is_incremental": true,
@@ -681,7 +656,19 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.ReaderCollection.html",
-          "hash": "j1+gUyaWUZpOs1moxJqn7Q=="
+          "hash": "ZcayZxbJCtBZTSytyLZNMA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Parser.Readers.ReaderExtension.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Parser.Readers.ReaderExtension.html",
+          "hash": "SD4O1WkCsFS/Dga9pvbhSg=="
         }
       },
       "is_incremental": true,
@@ -693,7 +680,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.SaveReader.html",
-          "hash": "ucPj0mHaNnQtivHAVVZpWA=="
+          "hash": "qXbP9F24i1jLGIAsVB1wQg=="
         }
       },
       "is_incremental": true,
@@ -705,7 +692,19 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Statement.html",
-          "hash": "84lsek/BUPCTunbP0qv4Zg=="
+          "hash": "H57RmGt3gY89iAuBggLLgw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Parser.Readers.StatementReaders.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Parser.Readers.StatementReaders.html",
+          "hash": "3yhbKGx46iZAr0BFa1MO0g=="
         }
       },
       "is_incremental": true,
@@ -717,7 +716,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.StatementType.html",
-          "hash": "UsDDyrNbtGjMDtF+kBguNw=="
+          "hash": "wUYOjsbc4pbW6vOe4QNzdg=="
         }
       },
       "is_incremental": true,
@@ -729,7 +728,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.SubcircuitDefinitionReader.html",
-          "hash": "De5Qav8hkKruRgxG+mLeuQ=="
+          "hash": "NRUBnYIC6wNAnqtxtsdZ6A=="
         }
       },
       "is_incremental": true,
@@ -741,7 +740,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.SubcircuitReader.html",
-          "hash": "u9DrqVA+hl+It6pQPEdBmg=="
+          "hash": "t6K11mrCnUl4Nvc+FLPAtQ=="
         }
       },
       "is_incremental": true,
@@ -753,7 +752,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.SwitchModelReader.html",
-          "hash": "NMKW5D2G/HjsqXpMRFW30g=="
+          "hash": "kB4gvmX/9+AeLzEfb7HjDw=="
         }
       },
       "is_incremental": true,
@@ -765,19 +764,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.SwitchReader.html",
-          "hash": "Gfg8tPXKPyGzEpLGD0v15A=="
-        }
-      },
-      "is_incremental": true,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/SpiceSharp.Parser.Readers.TokenReaders.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Parser.Readers.TokenReaders.html",
-          "hash": "GVa3TEw7GG0DCTKxugHFNQ=="
+          "hash": "4zMLZ3CjPDmJizGJ7gV/6g=="
         }
       },
       "is_incremental": true,
@@ -789,7 +776,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.TransientReader.html",
-          "hash": "8aFul25D/enReqLFfZug8A=="
+          "hash": "d5sa3ShjXLvdBclO5miFQw=="
         }
       },
       "is_incremental": true,
@@ -801,7 +788,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.VoltagesourceReader.html",
-          "hash": "n7ux1eiD/6THM8Rc+QtP4Q=="
+          "hash": "XxCmrbe9BoqvLz8lIn+lFw=="
         }
       },
       "is_incremental": true,
@@ -813,7 +800,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.WaveformReader.html",
-          "hash": "aN9XJUrXB4iYzGmYGARzyw=="
+          "hash": "RlBENo0xEJnObSV3SFZQKg=="
         }
       },
       "is_incremental": true,
@@ -825,7 +812,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Waveforms.PulseReader.html",
-          "hash": "4bfs1UzgLKR3Wgm/hbDyZw=="
+          "hash": "SklH0IqpMS91eNssroj1Gw=="
         }
       },
       "is_incremental": true,
@@ -837,7 +824,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Waveforms.SineReader.html",
-          "hash": "99THkOwFZMVT4WSaMOTRXw=="
+          "hash": "2RPogHhPOgmk99ngG/EZHA=="
         }
       },
       "is_incremental": true,
@@ -849,7 +836,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.Waveforms.html",
-          "hash": "hZEeC7issrD6T/y2YWt2CQ=="
+          "hash": "ZNpkWjGPTsh82hkAqyXgIQ=="
         }
       },
       "is_incremental": true,
@@ -861,7 +848,19 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Readers.html",
-          "hash": "HmawYcdD8+BIBi4n5B9lOA=="
+          "hash": "RDInJn/LGiccQ5PUBDUVYQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/SpiceSharp.Parser.SimpleCharStream.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Parser.SimpleCharStream.html",
+          "hash": "3bw9WS/W/Urm7zKzis/BCQ=="
         }
       },
       "is_incremental": true,
@@ -873,7 +872,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.SpiceSharpParser.html",
-          "hash": "rgbw0L803wgE7eRaIxV/LA=="
+          "hash": "3RemhN1caLFM0mJbc67iaA=="
         }
       },
       "is_incremental": true,
@@ -885,7 +884,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.SpiceSharpParserConstants.html",
-          "hash": "EThpmJTG0GEoXX40PErHqA=="
+          "hash": "wOAA8qb4m4eggO7vqU0akw=="
         }
       },
       "is_incremental": true,
@@ -897,7 +896,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.SpiceSharpParserTokenManager.html",
-          "hash": "lg356BuOaykzhlqXkdDYPQ=="
+          "hash": "1EX2yyZMle9v27uredoWyQ=="
         }
       },
       "is_incremental": true,
@@ -909,7 +908,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.StatementsToken.html",
-          "hash": "c0X4tpUtbjkYLV6fn3eygg=="
+          "hash": "/YwrTKliRXICbWyqsRYh2Q=="
         }
       },
       "is_incremental": true,
@@ -921,7 +920,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Subcircuits.SubcircuitDefinition.html",
-          "hash": "Q7hToAV97zE0tgF4B2BWbQ=="
+          "hash": "fFbn93oiGWgQx9xZjF8pJg=="
         }
       },
       "is_incremental": true,
@@ -933,7 +932,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Subcircuits.SubcircuitPath.ScopeRule.html",
-          "hash": "dtH7bt6KPHgIEA4t4AIiWQ=="
+          "hash": "gKXM3KeCHqLjphDlaXw6cQ=="
         }
       },
       "is_incremental": true,
@@ -945,7 +944,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Subcircuits.SubcircuitPath.html",
-          "hash": "0g9nGSAtbCXCsVBGuW/2rA=="
+          "hash": "cPuWz5ubOxCfXlXdJBf8Pw=="
         }
       },
       "is_incremental": true,
@@ -957,7 +956,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Subcircuits.SubcircuitPathChangedEventArgs.ChangeType.html",
-          "hash": "HZ5zOOH2nfxnjIP5NFFo0Q=="
+          "hash": "47kcXyx19kTKA71+rnYwVA=="
         }
       },
       "is_incremental": true,
@@ -969,7 +968,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Subcircuits.SubcircuitPathChangedEventArgs.html",
-          "hash": "eSCMqo970g/pTkAcGpoCoA=="
+          "hash": "ghY55nMYuxNPTQiWCB6NvA=="
         }
       },
       "is_incremental": true,
@@ -981,7 +980,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Subcircuits.SubcircuitPathChangedEventHandler.html",
-          "hash": "aQUY/FgkffoTGC2wRA84jA=="
+          "hash": "lporLbQcZMGsQ01125HaQQ=="
         }
       },
       "is_incremental": true,
@@ -993,7 +992,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Subcircuits.html",
-          "hash": "rEUTw7CBC8UVgONwpbgaeg=="
+          "hash": "RZYT9h7DVA1ze1Q3F0U8WQ=="
         }
       },
       "is_incremental": true,
@@ -1005,7 +1004,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.Token.html",
-          "hash": "rE9/PmF+lYMre5YaO4ot6A=="
+          "hash": "wFjdo19VhMqeaVkPwJ/s7w=="
         }
       },
       "is_incremental": true,
@@ -1017,7 +1016,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.TokenConstants.html",
-          "hash": "Nu2FG46JwgHsq4buDiPoVQ=="
+          "hash": "7njOtDArzFt+/q0GFwwdGg=="
         }
       },
       "is_incremental": true,
@@ -1029,7 +1028,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.TokenMgrError.html",
-          "hash": "kUjRmOYuTNFtkOdjilY9eQ=="
+          "hash": "/WkOR9qwSgvIBgE/ZveZdQ=="
         }
       },
       "is_incremental": true,
@@ -1041,7 +1040,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.VectorToken.html",
-          "hash": "LkIyTtcSTnjv+G5fyDcktQ=="
+          "hash": "692pTVdX8P+aglIb1f4RaQ=="
         }
       },
       "is_incremental": true,
@@ -1053,7 +1052,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Parser.html",
-          "hash": "UG5LmfXjsCSnMgGD+YvhQQ=="
+          "hash": "Rrqttutaw6rQpx2b/piwIg=="
         }
       },
       "is_incremental": true,
@@ -1065,7 +1064,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.html",
-          "hash": "+m1w62AWCM5FZGX0+ft/Ug=="
+          "hash": "xnqq2KHRPoUn4XdqMlQc2A=="
         }
       },
       "is_incremental": true,
@@ -1079,11 +1078,6 @@
         "incrementalPhase": "build"
       },
       "processors": {
-        "ResourceDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor ResourceDocumentProcessor cannot suppport incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build"
-        },
         "TocDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor TocDocumentProcessor cannot suppport incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
@@ -1095,6 +1089,11 @@
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
+          "incrementalPhase": "build"
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot suppport incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build"
         },
         "RestApiDocumentProcessor": {

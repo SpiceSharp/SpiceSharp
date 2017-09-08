@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// Can read Mosfets
+    /// Read Mosfet transistor components.
+    /// Mosfets are generated based on their model class. Default generators are:
+    /// - <see cref="MOS1Model"/> will generate <see cref="MOS1"/>
+    /// - <see cref="MOS2Model"/> will generate <see cref="MOS2"/>
+    /// - <see cref="MOS3Model"/> will generate <see cref="MOS3"/>
     /// </summary>
     public class MosfetReader : ComponentReader
     {
         /// <summary>
-        /// Get the mosfet for a certain model
+        /// Generate a mosfet instance based on a model.
+        /// The generator is passed the arguments name and model.
         /// </summary>
         public Dictionary<Type, Func<string, ICircuitObject, ICircuitComponent>> Mosfets { get; } = new Dictionary<Type, Func<string, ICircuitObject, ICircuitComponent>>();
 
@@ -77,9 +81,9 @@ namespace SpiceSharp.Parser.Readers
                 throw new ParseException(parameters[4], "Invalid model");
 
             // The rest is all just parameters
-            mosfet.ReadNodes(parameters, 4);
+            mosfet.ReadNodes(parameters);
             netlist.ReadParameters((IParameterized)mosfet, parameters, 4);
-            return (ICircuitObject)mosfet;
+            return mosfet;
         }
     }
 }

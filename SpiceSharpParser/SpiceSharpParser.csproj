@@ -107,12 +107,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="api\index.md" />
     <None Include="docfx.json" />
     <None Include="spicelang.cc" />
     <None Include="SpiceSharpParser.nuspec" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="api\" />
+    <Content Include="api\images\logo_full.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

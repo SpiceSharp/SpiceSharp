@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using SpiceSharp.Parser.Readers;
 
 namespace SpiceSharp.Parser.Subcircuits
 {
     /// <summary>
-    /// This class represents a subcircuit definition
+    /// Represents a subcircuit definition
     /// </summary>
     public class SubcircuitDefinition
     {

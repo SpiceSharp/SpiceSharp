@@ -1,9 +1,7 @@
-﻿using SpiceSharp.Parser.Readers.Extensions;
-
-namespace SpiceSharp.Parser.Readers
+﻿namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// This class readers .param statements
+    /// Reads parameter definitions (.PARAM)
     /// </summary>
     public class ParamSetReader : Reader
     {

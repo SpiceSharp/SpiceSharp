@@ -1,7 +1,7 @@
 ﻿namespace SpiceSharp.Parser
 {
     /// <summary>
-    /// All our constants
+    /// Extension to <see cref="SpiceSharpParserConstants"/> with our own custom tokens.
     /// </summary>
     public class TokenConstants : SpiceSharpParserConstants
     {

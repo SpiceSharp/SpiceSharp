@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc">
+    <meta property="docfx:navrel" content="">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -45,14 +45,6 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
-                <ul class="nav level1 navbar-nav">
-                  <li class="">
-                    <a href="../articles/intro.html" title="Articles" class="">Articles</a>
-                  </li>
-                  <li class="active">
-                    <a href="../api/index.html" title="API Documentation" class="active">API Documentation</a>
-                  </li>
-                </ul>
             </div>
           </div>
         </nav>
@@ -86,9 +78,6 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="SpiceSharp.ExportNetlistDataEventHandler.html" title="ExportNetlistDataEventHandler" class="">ExportNetlistDataEventHandler</a>
-                          </li>
-                          <li class="">
                             <a href="SpiceSharp.Netlist.html" title="Netlist" class="">Netlist</a>
                           </li>
                           <li class="">
@@ -114,6 +103,9 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.ParseException.html" title="ParseException" class="">ParseException</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.SimpleCharStream.html" title="SimpleCharStream" class="">SimpleCharStream</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.SpiceSharpParser.html" title="SpiceSharpParser" class="">SpiceSharpParser</a>
@@ -215,6 +207,9 @@
                             <a href="SpiceSharp.Parser.Readers.ReaderCollection.html" title="ReaderCollection" class="">ReaderCollection</a>
                           </li>
                           <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ReaderExtension.html" title="ReaderExtension" class="">ReaderExtension</a>
+                          </li>
+                          <li class="">
                             <a href="SpiceSharp.Parser.Readers.RLCMModelReader.html" title="RLCMModelReader" class="">RLCMModelReader</a>
                           </li>
                           <li class="">
@@ -225,6 +220,9 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.Statement.html" title="Statement" class="">Statement</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.StatementReaders.html" title="StatementReaders" class="">StatementReaders</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.StatementType.html" title="StatementType" class="">StatementType</a>
@@ -240,9 +238,6 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.SwitchReader.html" title="SwitchReader" class="">SwitchReader</a>
-                          </li>
-                          <li class="">
-                            <a href="SpiceSharp.Parser.Readers.TokenReaders.html" title="TokenReaders" class="">TokenReaders</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.TransientReader.html" title="TransientReader" class="">TransientReader</a>
@@ -328,15 +323,6 @@
                         </ul>  </li>
                     <li class="">
                       <span class="expand-stub"></span>
-                      <a href="SpiceSharp.Parser.Readers.Extensions.html" title="SpiceSharp.Parser.Readers.Extensions" class="">SpiceSharp.Parser.Readers.Extensions</a>
-                        
-                        <ul class="nav level2">
-                          <li class="">
-                            <a href="SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html" title="ReaderExtension" class="">ReaderExtension</a>
-                          </li>
-                        </ul>  </li>
-                    <li class="">
-                      <span class="expand-stub"></span>
                       <a href="SpiceSharp.Parser.Readers.Waveforms.html" title="SpiceSharp.Parser.Readers.Waveforms" class="">SpiceSharp.Parser.Readers.Waveforms</a>
                         
                         <ul class="nav level2">
@@ -383,7 +369,9 @@
   
   <h1 id="SpiceSharp_Parser_Token" data-uid="SpiceSharp.Parser.Token" class="text-break">Class Token
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>Describes a token for parsing
+This class is generated by CSharpCC (a port of JavaCC to C#). Refer to spicelang.cc for the syntax.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -429,10 +417,13 @@
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Token_beginColumn.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Token.beginColumn%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L24">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L28">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_Token_beginColumn" data-uid="SpiceSharp.Parser.Token.beginColumn">beginColumn</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>beginLine and beginColumn describe the position of the first character
+of this token; endLine and endColumn describe the position of the
+last character of this token.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -458,10 +449,13 @@
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Token_beginLine.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Token.beginLine%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L24">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L28">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_Token_beginLine" data-uid="SpiceSharp.Parser.Token.beginLine">beginLine</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>beginLine and beginColumn describe the position of the first character
+of this token; endLine and endColumn describe the position of the
+last character of this token.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -487,10 +481,13 @@
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Token_endColumn.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Token.endColumn%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L24">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L28">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_Token_endColumn" data-uid="SpiceSharp.Parser.Token.endColumn">endColumn</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>beginLine and beginColumn describe the position of the first character
+of this token; endLine and endColumn describe the position of the
+last character of this token.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -516,10 +513,13 @@
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Token_endLine.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Token.endLine%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L24">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L28">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_Token_endLine" data-uid="SpiceSharp.Parser.Token.endLine">endLine</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>beginLine and beginColumn describe the position of the first character
+of this token; endLine and endColumn describe the position of the
+last character of this token.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -545,10 +545,11 @@
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Token_image.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Token.image%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L29">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L33">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_Token_image" data-uid="SpiceSharp.Parser.Token.image">image</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The string image of the token.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -574,7 +575,7 @@
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Token_kind.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Token.kind%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L17">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L21">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_Token_kind" data-uid="SpiceSharp.Parser.Token.kind">kind</h4>
   <div class="markdown level1 summary"><p>Gets an integer that describes the kind of this token.</p>
@@ -608,10 +609,16 @@ a table of these numbers is stored in the class <a class="xref" href="SpiceSharp
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Token_next.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Token.next%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L39">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L43">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_Token_next" data-uid="SpiceSharp.Parser.Token.next">next</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>A reference to the next regular (non-special) token from the input
+stream.  If this is the last token from the input stream, or if the
+token manager has not read tokens beyond this one, this field is
+set to null.  This is true only if this token is also a regular
+token.  Otherwise, see below for a description of the contents of
+this field.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -637,10 +644,20 @@ a table of these numbers is stored in the class <a class="xref" href="SpiceSharp
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Token_specialToken.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Token.specialToken%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L53">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L57">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_Token_specialToken" data-uid="SpiceSharp.Parser.Token.specialToken">specialToken</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>This field is used to access special tokens that occur prior to this
+token, but after the immediately preceding regular (non-special) token.
+If there are no such special tokens, this field is set to null.
+When there are more than one such special token, this field refers
+to the last of these special tokens, which in turn refers to the next
+previous special token through its specialToken field, and so on
+until the first special token (whose specialToken field is null).
+The next fields of special tokens refer to other special tokens that
+immediately follow it (without an intervening regular token).  If there
+is no such token, this field is null.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -668,11 +685,19 @@ a table of these numbers is stored in the class <a class="xref" href="SpiceSharp
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Token_NewToken_System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Token.NewToken(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L75">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L79">View Source</a>
   </span>
   <a id="SpiceSharp_Parser_Token_NewToken_" data-uid="SpiceSharp.Parser.Token.NewToken*"></a>
   <h4 id="SpiceSharp_Parser_Token_NewToken_System_Int32_" data-uid="SpiceSharp.Parser.Token.NewToken(System.Int32)">NewToken(Int32)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Returns a new Token object, by default. However, if you want, you
+can create and return subclass objects based on the value of ofKind.
+Simply add the cases to the switch for all those special cases.
+For example, if you have a subclass of Token called IDToken that
+you want to create if ofKind is ID, simlpy add something like :</p>
+<p>case MyParserConstants.ID : return new IDToken();</p>
+<p>to the following switch statement. Then you can cast matchedToken
+variable to the appropriate type and use it in your lexical actions.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -715,11 +740,12 @@ a table of these numbers is stored in the class <a class="xref" href="SpiceSharp
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Token_ToString.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Token.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L58">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L62">View Source</a>
   </span>
   <a id="SpiceSharp_Parser_Token_ToString_" data-uid="SpiceSharp.Parser.Token.ToString*"></a>
   <h4 id="SpiceSharp_Parser_Token_ToString" data-uid="SpiceSharp.Parser.Token.ToString">ToString()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Returns the image.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -753,7 +779,7 @@ a table of these numbers is stored in the class <a class="xref" href="SpiceSharp
                     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_Token.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.Token%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L7" class="contribution-link">View Source</a>
+                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/Token.cs/#L11" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

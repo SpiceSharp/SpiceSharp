@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc">
+    <meta property="docfx:navrel" content="">
     <meta property="docfx:tocrel" content="toc">
     
     
@@ -45,14 +45,6 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
-                <ul class="nav level1 navbar-nav">
-                  <li class="">
-                    <a href="../articles/intro.html" title="Articles" class="">Articles</a>
-                  </li>
-                  <li class="active">
-                    <a href="../api/index.html" title="API Documentation" class="active">API Documentation</a>
-                  </li>
-                </ul>
             </div>
           </div>
         </nav>
@@ -86,9 +78,6 @@
                         
                         <ul class="nav level2">
                           <li class="">
-                            <a href="SpiceSharp.ExportNetlistDataEventHandler.html" title="ExportNetlistDataEventHandler" class="">ExportNetlistDataEventHandler</a>
-                          </li>
-                          <li class="">
                             <a href="SpiceSharp.Netlist.html" title="Netlist" class="">Netlist</a>
                           </li>
                           <li class="">
@@ -114,6 +103,9 @@
                           </li>
                           <li class="active">
                             <a href="SpiceSharp.Parser.ParseException.html" title="ParseException" class="active">ParseException</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.SimpleCharStream.html" title="SimpleCharStream" class="">SimpleCharStream</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.SpiceSharpParser.html" title="SpiceSharpParser" class="">SpiceSharpParser</a>
@@ -215,6 +207,9 @@
                             <a href="SpiceSharp.Parser.Readers.ReaderCollection.html" title="ReaderCollection" class="">ReaderCollection</a>
                           </li>
                           <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ReaderExtension.html" title="ReaderExtension" class="">ReaderExtension</a>
+                          </li>
+                          <li class="">
                             <a href="SpiceSharp.Parser.Readers.RLCMModelReader.html" title="RLCMModelReader" class="">RLCMModelReader</a>
                           </li>
                           <li class="">
@@ -225,6 +220,9 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.Statement.html" title="Statement" class="">Statement</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.StatementReaders.html" title="StatementReaders" class="">StatementReaders</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.StatementType.html" title="StatementType" class="">StatementType</a>
@@ -240,9 +238,6 @@
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.SwitchReader.html" title="SwitchReader" class="">SwitchReader</a>
-                          </li>
-                          <li class="">
-                            <a href="SpiceSharp.Parser.Readers.TokenReaders.html" title="TokenReaders" class="">TokenReaders</a>
                           </li>
                           <li class="">
                             <a href="SpiceSharp.Parser.Readers.TransientReader.html" title="TransientReader" class="">TransientReader</a>
@@ -328,15 +323,6 @@
                         </ul>  </li>
                     <li class="">
                       <span class="expand-stub"></span>
-                      <a href="SpiceSharp.Parser.Readers.Extensions.html" title="SpiceSharp.Parser.Readers.Extensions" class="">SpiceSharp.Parser.Readers.Extensions</a>
-                        
-                        <ul class="nav level2">
-                          <li class="">
-                            <a href="SpiceSharp.Parser.Readers.Extensions.ReaderExtension.html" title="ReaderExtension" class="">ReaderExtension</a>
-                          </li>
-                        </ul>  </li>
-                    <li class="">
-                      <span class="expand-stub"></span>
                       <a href="SpiceSharp.Parser.Readers.Waveforms.html" title="SpiceSharp.Parser.Readers.Waveforms" class="">SpiceSharp.Parser.Readers.Waveforms</a>
                         
                         <ul class="nav level2">
@@ -383,7 +369,9 @@
   
   <h1 id="SpiceSharp_Parser_ParseException" data-uid="SpiceSharp.Parser.ParseException" class="text-break">Class ParseException
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>Exception thrown by the parser
+This class was generated by CSharpCC (a port of JavaCC to C#). Refer to spicelang.cc for the syntax.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -459,11 +447,18 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_ParseException__ctor.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.ParseException.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L54">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L57">View Source</a>
   </span>
   <a id="SpiceSharp_Parser_ParseException__ctor_" data-uid="SpiceSharp.Parser.ParseException.#ctor*"></a>
   <h4 id="SpiceSharp_Parser_ParseException__ctor" data-uid="SpiceSharp.Parser.ParseException.#ctor">ParseException()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The following constructors are for use by you for whatever
+purpose you can think of.  Constructing the exception in this
+manner makes the exception behave in the normal way - i.e., as
+documented in the class &quot;Exception&quot;.  The fields &quot;errorToken&quot;,
+&quot;expectedTokenSequences&quot;, and &quot;tokenImage&quot; do not contain
+relevant information.  The CSharpCC generated code does not use
+these constructors.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -474,11 +469,21 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_ParseException__ctor_SpiceSharp_Parser_Token_System_Int32_____System_String___.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.ParseException.%23ctor(SpiceSharp.Parser.Token%2CSystem.Int32%5B%5D%5B%5D%2CSystem.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L34">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L37">View Source</a>
   </span>
   <a id="SpiceSharp_Parser_ParseException__ctor_" data-uid="SpiceSharp.Parser.ParseException.#ctor*"></a>
   <h4 id="SpiceSharp_Parser_ParseException__ctor_SpiceSharp_Parser_Token_System_Int32_____System_String___" data-uid="SpiceSharp.Parser.ParseException.#ctor(SpiceSharp.Parser.Token,System.Int32[][],System.String[])">ParseException(Token, Int32[][], String[])</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>This constructor is used by the method &quot;GenerateParseException&quot;
+in the generated parser. Calling this constructor generates
+a new object of this type with the fields &quot;currentToken&quot;,
+&quot;expectedTokenSequences&quot;, and &quot;tokenImage&quot; set.  The boolean
+flag &quot;specialConstructor&quot; is also set to true to indicate that
+this constructor was used to create this object.
+This constructor calls its super class with the empty string
+to force the &quot;toString&quot; method of parent class &quot;Throwable&quot; to
+print the error message in the form:
+ParseException: [result of getMessage]</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -516,11 +521,12 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_ParseException__ctor_SpiceSharp_Parser_Token_System_String_System_Boolean_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.ParseException.%23ctor(SpiceSharp.Parser.Token%2CSystem.String%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L64">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L78">View Source</a>
   </span>
   <a id="SpiceSharp_Parser_ParseException__ctor_" data-uid="SpiceSharp.Parser.ParseException.#ctor*"></a>
   <h4 id="SpiceSharp_Parser_ParseException__ctor_SpiceSharp_Parser_Token_System_String_System_Boolean_" data-uid="SpiceSharp.Parser.ParseException.#ctor(SpiceSharp.Parser.Token,System.String,System.Boolean)">ParseException(Token, String, Boolean)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Constructor for parse exceptions at a specific token</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -539,17 +545,20 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
       <tr>
         <td><a class="xref" href="SpiceSharp.Parser.Token.html">Token</a></td>
         <td><span class="parametername">token</span></td>
-        <td></td>
+        <td><p>The token</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">message</span></td>
-        <td></td>
+        <td><p>The error message</p>
+</td>
       </tr>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
         <td><span class="parametername">before</span></td>
-        <td></td>
+        <td><p>Defaults to true. If false, then the end of the token is considered to be the point of the error</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -558,11 +567,12 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_ParseException__ctor_System_String_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.ParseException.%23ctor(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L59">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L67">View Source</a>
   </span>
   <a id="SpiceSharp_Parser_ParseException__ctor_" data-uid="SpiceSharp.Parser.ParseException.#ctor*"></a>
   <h4 id="SpiceSharp_Parser_ParseException__ctor_System_String_" data-uid="SpiceSharp.Parser.ParseException.#ctor(System.String)">ParseException(String)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Constructor for general purposes.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -581,7 +591,8 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">message</span></td>
-        <td></td>
+        <td><p>The message</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -592,10 +603,13 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_ParseException_currentToken.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.ParseException.currentToken%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L81">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L96">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_ParseException_currentToken" data-uid="SpiceSharp.Parser.ParseException.currentToken">currentToken</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>This is the last token that has been consumed successfully.  If
+this object has been created due to a parse error, the token
+followng this token will (therefore) be the first error token.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -621,10 +635,11 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_ParseException_eol.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.ParseException.eol%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L157">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L173">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_ParseException_eol" data-uid="SpiceSharp.Parser.ParseException.eol">eol</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The end of line string for this machine.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -650,10 +665,13 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_ParseException_expectedTokenSequences.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.ParseException.expectedTokenSequences%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L88">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L103">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_ParseException_expectedTokenSequences" data-uid="SpiceSharp.Parser.ParseException.expectedTokenSequences">expectedTokenSequences</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Each entry in this array is an array of integers.  Each array
+of integers represents a sequence of tokens (by their ordinal
+values) that is expected at this point of the parse.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -679,10 +697,13 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_ParseException_specialConstructor.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.ParseException.specialConstructor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L74">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L89">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_ParseException_specialConstructor" data-uid="SpiceSharp.Parser.ParseException.specialConstructor">specialConstructor</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>This variable determines which constructor was used to create
+this object and thereby affects the semantics of the
+&quot;getMessage&quot; method (see below).</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -708,10 +729,13 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_ParseException_tokenImage.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.ParseException.tokenImage%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L95">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L110">View Source</a>
   </span>
   <h4 id="SpiceSharp_Parser_ParseException_tokenImage" data-uid="SpiceSharp.Parser.ParseException.tokenImage">tokenImage</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>This is a reference to the &quot;tokenImage&quot; array of the generated
+parser within which the parse error occurred.  This array is
+defined in the generated ...Constants interface.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -739,11 +763,19 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_ParseException_Message.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.ParseException.Message%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L107">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L122">View Source</a>
   </span>
   <a id="SpiceSharp_Parser_ParseException_Message_" data-uid="SpiceSharp.Parser.ParseException.Message*"></a>
   <h4 id="SpiceSharp_Parser_ParseException_Message" data-uid="SpiceSharp.Parser.ParseException.Message">Message</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>This method has the standard behavior when this object has been
+created using the standard constructors.  Otherwise, it uses
+&quot;currentToken&quot; and &quot;expectedTokenSequences&quot; to generate a parse
+error message and returns it.  If this object has been created
+due to a parse error, and you do not catch it (it gets thrown
+from the parser), then this method is called during the printing
+of the final stack trace, and hence the correct error message
+gets displayed.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -773,11 +805,14 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_ParseException_AddEscapes_System_String_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.ParseException.AddEscapes(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L164">View Source</a>
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L180">View Source</a>
   </span>
   <a id="SpiceSharp_Parser_ParseException_AddEscapes_" data-uid="SpiceSharp.Parser.ParseException.AddEscapes*"></a>
   <h4 id="SpiceSharp_Parser_ParseException_AddEscapes_System_String_" data-uid="SpiceSharp.Parser.ParseException.AddEscapes(System.String)">AddEscapes(String)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Used to convert raw characters to their escaped version
+when these raw version cannot be used as part of an ASCII
+string literal.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -826,7 +861,7 @@ public class ParseException : Exception, ISerializable, _Exception</code></pre>
                     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_ParseException.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.ParseException%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L19" class="contribution-link">View Source</a>
+                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/ParseException.cs/#L22" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

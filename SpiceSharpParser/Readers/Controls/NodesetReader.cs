@@ -1,9 +1,7 @@
-﻿using SpiceSharp.Parser.Readers.Extensions;
-
-namespace SpiceSharp.Parser.Readers
+﻿namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// This class can read nodesets
+    /// Reads nodesets (.NODESET)
     /// </summary>
     public class NodesetReader : Reader
     {

@@ -1,0 +1,1775 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class SimpleCharStream
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class SimpleCharStream
+   ">
+    <meta name="generator" content="docfx 2.23.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="">
+    <meta property="docfx:tocrel" content="toc">
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div>
+              <div class="sidefilter">
+                <form class="toc-filter">
+                  <span class="glyphicon glyphicon-filter filter-icon"></span>
+                  <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
+                </form>
+              </div>
+              <div class="sidetoc">
+                <div class="toc" id="toc">
+                  
+                  <ul class="nav level1">
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.html" title="SpiceSharp" class="">SpiceSharp</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Netlist.html" title="Netlist" class="">Netlist</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.NetlistReader.html" title="NetlistReader" class="">NetlistReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.NetlistSimulationEventHandler.html" title="NetlistSimulationEventHandler" class="">NetlistSimulationEventHandler</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.html" title="SpiceSharp.Parser" class="">SpiceSharp.Parser</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.AssignmentToken.html" title="AssignmentToken" class="">AssignmentToken</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.AtToken.html" title="AtToken" class="">AtToken</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.BracketToken.html" title="BracketToken" class="">BracketToken</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.ParseException.html" title="ParseException" class="">ParseException</a>
+                          </li>
+                          <li class="active">
+                            <a href="SpiceSharp.Parser.SimpleCharStream.html" title="SimpleCharStream" class="active">SimpleCharStream</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.SpiceSharpParser.html" title="SpiceSharpParser" class="">SpiceSharpParser</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.SpiceSharpParserConstants.html" title="SpiceSharpParserConstants" class="">SpiceSharpParserConstants</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.SpiceSharpParserTokenManager.html" title="SpiceSharpParserTokenManager" class="">SpiceSharpParserTokenManager</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.StatementsToken.html" title="StatementsToken" class="">StatementsToken</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Token.html" title="Token" class="">Token</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.TokenConstants.html" title="TokenConstants" class="">TokenConstants</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.TokenMgrError.html" title="TokenMgrError" class="">TokenMgrError</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.VectorToken.html" title="VectorToken" class="">VectorToken</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Expressions.html" title="SpiceSharp.Parser.Expressions" class="">SpiceSharp.Parser.Expressions</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Expressions.SpiceExpression.html" title="SpiceExpression" class="">SpiceExpression</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Readers.html" title="SpiceSharp.Parser.Readers" class="">SpiceSharp.Parser.Readers</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ACReader.html" title="ACReader" class="">ACReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.BipolarModelReader.html" title="BipolarModelReader" class="">BipolarModelReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.BipolarReader.html" title="BipolarReader" class="">BipolarReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ComponentReader.html" title="ComponentReader" class="">ComponentReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.CurrentsourceReader.html" title="CurrentsourceReader" class="">CurrentsourceReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.DCReader.html" title="DCReader" class="">DCReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.DiodeModelReader.html" title="DiodeModelReader" class="">DiodeModelReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.DiodeReader.html" title="DiodeReader" class="">DiodeReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Export.html" title="Export" class="">Export</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ExpressionData.html" title="ExpressionData" class="">ExpressionData</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ICReader.html" title="ICReader" class="">ICReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ModelReader.html" title="ModelReader" class="">ModelReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.MosfetModelReader.html" title="MosfetModelReader" class="">MosfetModelReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.MosfetReader.html" title="MosfetReader" class="">MosfetReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.NodesetReader.html" title="NodesetReader" class="">NodesetReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.OptionReader.html" title="OptionReader" class="">OptionReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ParamSetReader.html" title="ParamSetReader" class="">ParamSetReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ParseNetlistExpressionEventHandler.html" title="ParseNetlistExpressionEventHandler" class="">ParseNetlistExpressionEventHandler</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Reader.html" title="Reader" class="">Reader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ReaderCollection.html" title="ReaderCollection" class="">ReaderCollection</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.ReaderExtension.html" title="ReaderExtension" class="">ReaderExtension</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.RLCMModelReader.html" title="RLCMModelReader" class="">RLCMModelReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.RLCMReader.html" title="RLCMReader" class="">RLCMReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.SaveReader.html" title="SaveReader" class="">SaveReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Statement.html" title="Statement" class="">Statement</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.StatementReaders.html" title="StatementReaders" class="">StatementReaders</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.StatementType.html" title="StatementType" class="">StatementType</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.SubcircuitDefinitionReader.html" title="SubcircuitDefinitionReader" class="">SubcircuitDefinitionReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.SubcircuitReader.html" title="SubcircuitReader" class="">SubcircuitReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.SwitchModelReader.html" title="SwitchModelReader" class="">SwitchModelReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.SwitchReader.html" title="SwitchReader" class="">SwitchReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.TransientReader.html" title="TransientReader" class="">TransientReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.VoltagesourceReader.html" title="VoltagesourceReader" class="">VoltagesourceReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.WaveformReader.html" title="WaveformReader" class="">WaveformReader</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Readers.Collections.html" title="SpiceSharp.Parser.Readers.Collections" class="">SpiceSharp.Parser.Readers.Collections</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Collections.ComponentReaderCollection.html" title="ComponentReaderCollection" class="">ComponentReaderCollection</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Collections.DictionaryReaderCollection.html" title="DictionaryReaderCollection" class="">DictionaryReaderCollection</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Collections.GenericReaderCollection.html" title="GenericReaderCollection" class="">GenericReaderCollection</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Collections.ModelReaderCollection.html" title="ModelReaderCollection" class="">ModelReaderCollection</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Readers.Exports.html" title="SpiceSharp.Parser.Readers.Exports" class="">SpiceSharp.Parser.Readers.Exports</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentDecibelExport.html" title="CurrentDecibelExport" class="">CurrentDecibelExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentExport.html" title="CurrentExport" class="">CurrentExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentImaginaryExport.html" title="CurrentImaginaryExport" class="">CurrentImaginaryExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentMagnitudeExport.html" title="CurrentMagnitudeExport" class="">CurrentMagnitudeExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentPhaseExport.html" title="CurrentPhaseExport" class="">CurrentPhaseExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentReader.html" title="CurrentReader" class="">CurrentReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.CurrentRealExport.html" title="CurrentRealExport" class="">CurrentRealExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.ParameterExport.html" title="ParameterExport" class="">ParameterExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.ParameterReader.html" title="ParameterReader" class="">ParameterReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltageDecibelExport.html" title="VoltageDecibelExport" class="">VoltageDecibelExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltageExport.html" title="VoltageExport" class="">VoltageExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltageImaginaryExport.html" title="VoltageImaginaryExport" class="">VoltageImaginaryExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltageMagnitudeExport.html" title="VoltageMagnitudeExport" class="">VoltageMagnitudeExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltagePhaseExport.html" title="VoltagePhaseExport" class="">VoltagePhaseExport</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltageReader.html" title="VoltageReader" class="">VoltageReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Exports.VoltageRealExport.html" title="VoltageRealExport" class="">VoltageRealExport</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Readers.Waveforms.html" title="SpiceSharp.Parser.Readers.Waveforms" class="">SpiceSharp.Parser.Readers.Waveforms</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Waveforms.PulseReader.html" title="PulseReader" class="">PulseReader</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Readers.Waveforms.SineReader.html" title="SineReader" class="">SineReader</a>
+                          </li>
+                        </ul>  </li>
+                    <li class="">
+                      <span class="expand-stub"></span>
+                      <a href="SpiceSharp.Parser.Subcircuits.html" title="SpiceSharp.Parser.Subcircuits" class="">SpiceSharp.Parser.Subcircuits</a>
+                        
+                        <ul class="nav level2">
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Subcircuits.SubcircuitDefinition.html" title="SubcircuitDefinition" class="">SubcircuitDefinition</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Subcircuits.SubcircuitPath.html" title="SubcircuitPath" class="">SubcircuitPath</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Subcircuits.SubcircuitPath.ScopeRule.html" title="SubcircuitPath.ScopeRule" class="">SubcircuitPath.ScopeRule</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Subcircuits.SubcircuitPathChangedEventArgs.html" title="SubcircuitPathChangedEventArgs" class="">SubcircuitPathChangedEventArgs</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Subcircuits.SubcircuitPathChangedEventArgs.ChangeType.html" title="SubcircuitPathChangedEventArgs.ChangeType" class="">SubcircuitPathChangedEventArgs.ChangeType</a>
+                          </li>
+                          <li class="">
+                            <a href="SpiceSharp.Parser.Subcircuits.SubcircuitPathChangedEventHandler.html" title="SubcircuitPathChangedEventHandler" class="">SubcircuitPathChangedEventHandler</a>
+                          </li>
+                        </ul>  </li>
+                  </ul>        </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Parser.SimpleCharStream">
+  
+  
+  <h1 id="SpiceSharp_Parser_SimpleCharStream" data-uid="SpiceSharp.Parser.SimpleCharStream" class="text-break">Class SimpleCharStream
+  </h1>
+  <div class="markdown level0 summary"><p>A simple character stream used for parsing
+This class is generated by CSharpCC (a port of JavaCC to C#). Refer to spicelang.cc for the syntax.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">SimpleCharStream</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Parser.html">SpiceSharp.Parser</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharpParser.dll</h6>
+  <h5 id="SpiceSharp_Parser_SimpleCharStream_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class SimpleCharStream</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_Stream_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.%23ctor(System.IO.Stream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L344">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream__ctor_" data-uid="SpiceSharp.Parser.SimpleCharStream.#ctor*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_Stream_" data-uid="SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.Stream)">SimpleCharStream(Stream)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SimpleCharStream(Stream dstream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td><span class="parametername">dstream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_Stream_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.%23ctor(System.IO.Stream%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L338">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream__ctor_" data-uid="SpiceSharp.Parser.SimpleCharStream.#ctor*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_Stream_System_Int32_System_Int32_" data-uid="SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.Stream,System.Int32,System.Int32)">SimpleCharStream(Stream, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SimpleCharStream(Stream dstream, int startline, int startcolumn)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td><span class="parametername">dstream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startline</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startcolumn</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_Stream_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.%23ctor(System.IO.Stream%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L332">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream__ctor_" data-uid="SpiceSharp.Parser.SimpleCharStream.#ctor*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_Stream_System_Int32_System_Int32_System_Int32_" data-uid="SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.Stream,System.Int32,System.Int32,System.Int32)">SimpleCharStream(Stream, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SimpleCharStream(Stream dstream, int startline, int startcolumn, int buffersize)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td><span class="parametername">dstream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startline</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startcolumn</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">buffersize</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_TextReader_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.%23ctor(System.IO.TextReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L299">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream__ctor_" data-uid="SpiceSharp.Parser.SimpleCharStream.#ctor*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_TextReader_" data-uid="SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.TextReader)">SimpleCharStream(TextReader)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SimpleCharStream(TextReader dstream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">dstream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_TextReader_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.%23ctor(System.IO.TextReader%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L293">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream__ctor_" data-uid="SpiceSharp.Parser.SimpleCharStream.#ctor*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_TextReader_System_Int32_System_Int32_" data-uid="SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.TextReader,System.Int32,System.Int32)">SimpleCharStream(TextReader, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SimpleCharStream(TextReader dstream, int startline, int startcolumn)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">dstream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startline</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startcolumn</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_TextReader_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.%23ctor(System.IO.TextReader%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L276">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream__ctor_" data-uid="SpiceSharp.Parser.SimpleCharStream.#ctor*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream__ctor_System_IO_TextReader_System_Int32_System_Int32_System_Int32_" data-uid="SpiceSharp.Parser.SimpleCharStream.#ctor(System.IO.TextReader,System.Int32,System.Int32,System.Int32)">SimpleCharStream(TextReader, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SimpleCharStream(TextReader dstream, int startline, int startcolumn, int buffersize)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">dstream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startline</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startcolumn</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">buffersize</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_bufcolumn.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.bufcolumn%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L21">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_bufcolumn" data-uid="SpiceSharp.Parser.SimpleCharStream.bufcolumn">bufcolumn</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int[] bufcolumn</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_buffer.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.buffer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L31">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_buffer" data-uid="SpiceSharp.Parser.SimpleCharStream.buffer">buffer</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected char[] buffer</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_bufline.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.bufline%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L20">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_bufline" data-uid="SpiceSharp.Parser.SimpleCharStream.bufline">bufline</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int[] bufline</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_bufpos.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.bufpos%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L19">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_bufpos" data-uid="SpiceSharp.Parser.SimpleCharStream.bufpos">bufpos</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int bufpos</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_column.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.column%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L23">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_column" data-uid="SpiceSharp.Parser.SimpleCharStream.column">column</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int column</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_inBuf.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.inBuf%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L33">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_inBuf" data-uid="SpiceSharp.Parser.SimpleCharStream.inBuf">inBuf</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int inBuf</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_inputStream.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.inputStream%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L29">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_inputStream" data-uid="SpiceSharp.Parser.SimpleCharStream.inputStream">inputStream</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected TextReader inputStream</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_line.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.line%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L24">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_line" data-uid="SpiceSharp.Parser.SimpleCharStream.line">line</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int line</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_maxNextCharInd.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.maxNextCharInd%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L32">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_maxNextCharInd" data-uid="SpiceSharp.Parser.SimpleCharStream.maxNextCharInd">maxNextCharInd</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int maxNextCharInd</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_prevCharIsCR.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.prevCharIsCR%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L26">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_prevCharIsCR" data-uid="SpiceSharp.Parser.SimpleCharStream.prevCharIsCR">prevCharIsCR</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected bool prevCharIsCR</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_prevCharIsLF.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.prevCharIsLF%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L27">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_prevCharIsLF" data-uid="SpiceSharp.Parser.SimpleCharStream.prevCharIsLF">prevCharIsLF</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected bool prevCharIsLF</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_staticFlag.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.staticFlag%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L15">View Source</a>
+  </span>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_staticFlag" data-uid="SpiceSharp.Parser.SimpleCharStream.staticFlag">staticFlag</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly bool staticFlag</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_BeginColumn.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.BeginColumn%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L252">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_BeginColumn_" data-uid="SpiceSharp.Parser.SimpleCharStream.BeginColumn*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_BeginColumn" data-uid="SpiceSharp.Parser.SimpleCharStream.BeginColumn">BeginColumn</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int BeginColumn { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_BeginLine.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.BeginLine%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L260">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_BeginLine_" data-uid="SpiceSharp.Parser.SimpleCharStream.BeginLine*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_BeginLine" data-uid="SpiceSharp.Parser.SimpleCharStream.BeginLine">BeginLine</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int BeginLine { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_Column.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.Column%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L216">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_Column_" data-uid="SpiceSharp.Parser.SimpleCharStream.Column*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_Column" data-uid="SpiceSharp.Parser.SimpleCharStream.Column">Column</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Deprecated - use EndColumn instead.&quot;, false)]
+public int Column { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_EndColumn.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.EndColumn%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L236">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_EndColumn_" data-uid="SpiceSharp.Parser.SimpleCharStream.EndColumn*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_EndColumn" data-uid="SpiceSharp.Parser.SimpleCharStream.EndColumn">EndColumn</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int EndColumn { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_EndLine.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.EndLine%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L244">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_EndLine_" data-uid="SpiceSharp.Parser.SimpleCharStream.EndLine*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_EndLine" data-uid="SpiceSharp.Parser.SimpleCharStream.EndLine">EndLine</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int EndLine { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_Line.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.Line%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L226">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_Line_" data-uid="SpiceSharp.Parser.SimpleCharStream.Line*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_Line" data-uid="SpiceSharp.Parser.SimpleCharStream.Line">Line</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Deprecated - use EndLine instead.&quot;, false)]
+public int Line { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_AdjustBeginLineColumn_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.AdjustBeginLineColumn(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L399">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_AdjustBeginLineColumn_" data-uid="SpiceSharp.Parser.SimpleCharStream.AdjustBeginLineColumn*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_AdjustBeginLineColumn_System_Int32_System_Int32_" data-uid="SpiceSharp.Parser.SimpleCharStream.AdjustBeginLineColumn(System.Int32,System.Int32)">AdjustBeginLineColumn(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Method to adjust line and column numbers for the start of a token.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AdjustBeginLineColumn(int newLine, int newCol)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newLine</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newCol</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_Backup_System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.Backup(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L268">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_Backup_" data-uid="SpiceSharp.Parser.SimpleCharStream.Backup*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_Backup_System_Int32_" data-uid="SpiceSharp.Parser.SimpleCharStream.Backup(System.Int32)">Backup(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Backup(int amount)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">amount</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_BeginToken.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.BeginToken%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L131">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_BeginToken_" data-uid="SpiceSharp.Parser.SimpleCharStream.BeginToken*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_BeginToken" data-uid="SpiceSharp.Parser.SimpleCharStream.BeginToken">BeginToken()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public char BeginToken()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_Done.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.Done%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L389">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_Done_" data-uid="SpiceSharp.Parser.SimpleCharStream.Done*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_Done" data-uid="SpiceSharp.Parser.SimpleCharStream.Done">Done()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Done()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_ExpandBuff_System_Boolean_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.ExpandBuff(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L35">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_ExpandBuff_" data-uid="SpiceSharp.Parser.SimpleCharStream.ExpandBuff*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_ExpandBuff_System_Boolean_" data-uid="SpiceSharp.Parser.SimpleCharStream.ExpandBuff(System.Boolean)">ExpandBuff(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void ExpandBuff(bool wrapAround)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">wrapAround</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_FillBuff.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.FillBuff%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L84">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_FillBuff_" data-uid="SpiceSharp.Parser.SimpleCharStream.FillBuff*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_FillBuff" data-uid="SpiceSharp.Parser.SimpleCharStream.FillBuff">FillBuff()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void FillBuff()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_GetImage.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.GetImage%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L364">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_GetImage_" data-uid="SpiceSharp.Parser.SimpleCharStream.GetImage*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_GetImage" data-uid="SpiceSharp.Parser.SimpleCharStream.GetImage">GetImage()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string GetImage()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_GetSuffix_System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.GetSuffix(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L373">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_GetSuffix_" data-uid="SpiceSharp.Parser.SimpleCharStream.GetSuffix*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_GetSuffix_System_Int32_" data-uid="SpiceSharp.Parser.SimpleCharStream.GetSuffix(System.Int32)">GetSuffix(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public char[] GetSuffix(int len)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">len</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_ReadChar.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.ReadChar%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L188">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_ReadChar_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReadChar*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_ReadChar" data-uid="SpiceSharp.Parser.SimpleCharStream.ReadChar">ReadChar()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public char ReadChar()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_Stream_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L355">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_ReInit_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReInit*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_Stream_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream)">ReInit(Stream)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ReInit(Stream dstream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td><span class="parametername">dstream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_Stream_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L359">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_ReInit_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReInit*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_Stream_System_Int32_System_Int32_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream,System.Int32,System.Int32)">ReInit(Stream, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ReInit(Stream dstream, int startline, int startcolumn)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td><span class="parametername">dstream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startline</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startcolumn</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_Stream_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L349">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_ReInit_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReInit*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_Stream_System_Int32_System_Int32_System_Int32_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.Stream,System.Int32,System.Int32,System.Int32)">ReInit(Stream, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ReInit(Stream dstream, int startline, int startcolumn, int buffersize)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.Stream</span></td>
+        <td><span class="parametername">dstream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startline</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startcolumn</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">buffersize</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_TextReader_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L328">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_ReInit_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReInit*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_TextReader_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader)">ReInit(TextReader)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ReInit(TextReader dstream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">dstream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_TextReader_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L322">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_ReInit_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReInit*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_TextReader_System_Int32_System_Int32_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader,System.Int32,System.Int32)">ReInit(TextReader, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ReInit(TextReader dstream, int startline, int startcolumn)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">dstream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startline</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startcolumn</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_TextReader_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L303">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_ReInit_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReInit*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_ReInit_System_IO_TextReader_System_Int32_System_Int32_System_Int32_" data-uid="SpiceSharp.Parser.SimpleCharStream.ReInit(System.IO.TextReader,System.Int32,System.Int32,System.Int32)">ReInit(TextReader, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ReInit(TextReader dstream, int startline, int startcolumn, int buffersize)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">dstream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startline</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startcolumn</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">buffersize</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream_UpdateLineColumn_System_Char_.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream.UpdateLineColumn(System.Char)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L148">View Source</a>
+  </span>
+  <a id="SpiceSharp_Parser_SimpleCharStream_UpdateLineColumn_" data-uid="SpiceSharp.Parser.SimpleCharStream.UpdateLineColumn*"></a>
+  <h4 id="SpiceSharp_Parser_SimpleCharStream_UpdateLineColumn_System_Char_" data-uid="SpiceSharp.Parser.SimpleCharStream.UpdateLineColumn(System.Char)">UpdateLineColumn(Char)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void UpdateLineColumn(char c)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td><span class="parametername">c</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Parser_SimpleCharStream.md&amp;value=---%0Auid%3A%20SpiceSharp.Parser.SimpleCharStream%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceSharpParser/SimpleCharStream.cs/#L13" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Copyright © 2015-2017 Microsoft<br>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

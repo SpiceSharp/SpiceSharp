@@ -8,14 +8,29 @@ namespace SpiceSharp.Parser.Expressions
     /// A very light-weight and fast expression parser made for parsing Spice expressions
     /// It is based on Dijkstra's Shunting Yard algorithm. It is very fast for parsing expressions only once.
     /// The parser is also not very expressive for errors, so only use for relatively simple expressions.
-    /// 
-    /// Supported operators: +, -, *, /, %, &&, ||, !, ==, !=, <, <=, >, >=
-    /// Supported functions: min, max, sqrt, abs, exp, log, log10, pow, cos, sin, tan, cosh, sinh, tanh, acos, asin, atan, atan2
+    /// <list type="bullet">
+    ///     <listheader><description>Supported operators</description></listheader>
+    ///     <item><description>Positive and negative ('+', '-')</description></item>
+    ///     <item><description>Addition and subtraction ('+', '-')</description></item>
+    ///     <item><description>Multiplication and division ('*', '/')</description></item>
+    ///     <item><description>Modulo ('%')</description></item>
+    ///     <item><description>Logical ('&amp;&amp;', '||', '!')</description></item>
+    ///     <item><description>Relational ('==', '!=', '&lt;', '&gt;', '&lt;=', '&gt;=')</description></item>
+    /// </list>
+    /// <list type="bullet">
+    ///     <listheader><description>Supported functions</description></listheader>
+    ///     <item><description>Minimum and maximum ('min(a,b)', 'max(a,b)')</description></item>
+    ///     <item><description>Square root ('sqrt(a)')</description></item>
+    ///     <item><description>Absolute value ('abs(a)')</description></item>
+    ///     <item><description>Exponent and logarithms ('exp(a)', 'log(a)', 'log10(a)')</description></item>
+    ///     <item><description>Powers ('pow(a, b)')</description></item>
+    ///     <item><description>Trigonometry ('sin(a)', 'cos(a)', 'tan(a)', 'asin(a)', 'acos(a)', 'atan(a)', 'sinh(a)', 'cosh(a)', 'tanh(a)', 'atan2(a, b)')</description></item>
+    /// </list>
     /// </summary>
     public class SpiceExpression
     {
         /// <summary>
-        /// Operator
+        /// Operator description
         /// </summary>
         private class Operator
         {
@@ -38,7 +53,7 @@ namespace SpiceSharp.Parser.Expressions
         }
 
         /// <summary>
-        /// An operator for functions
+        /// Function description
         /// </summary>
         private class FunctionOperator : Operator
         {
@@ -456,7 +471,7 @@ namespace SpiceSharp.Parser.Expressions
         /// Parse a double value at the current position
         /// </summary>
         /// <returns></returns>
-        public double ParseDouble()
+        private double ParseDouble()
         {
             // Read integer part
             double value = 0.0;

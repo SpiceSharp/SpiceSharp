@@ -3,7 +3,7 @@
 namespace SpiceSharp.Parser.Readers.Waveforms
 {
     /// <summary>
-    /// A class that can read a pulse waveform
+    /// Reads <see cref="Pulse"/> waveforms.
     /// </summary>
     public class PulseReader : WaveformReader
     {

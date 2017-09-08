@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SpiceSharp.Parser.Readers.Collections
 {
     /// <summary>
-    /// This class will read component statements
+    /// A reader collection indexed by the first character of the name of a statement.
     /// </summary>
     public class ComponentReaderCollection : ReaderCollection
     {

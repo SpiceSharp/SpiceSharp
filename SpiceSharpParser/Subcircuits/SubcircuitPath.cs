@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
-using SpiceSharp.Parser.Readers.Extensions;
+using SpiceSharp.Parser.Readers;
 
 namespace SpiceSharp.Parser.Subcircuits
 {
     /// <summary>
-    /// A class for keeping track of subcircuits
+    /// Keeps track of subcircuits and subcircuit definitions
     /// </summary>
     public class SubcircuitPath
     {
@@ -49,7 +49,7 @@ namespace SpiceSharp.Parser.Subcircuits
         private Dictionary<string, double> globalparameters = new Dictionary<string, double>();
 
         /// <summary>
-        /// Event that is triggered when the netlist descends into a subcircuit
+        /// Event triggered when the netlist descends into/ascends from a subcircuit
         /// </summary>
         public event SubcircuitPathChangedEventHandler OnSubcircuitPathChanged;
 
@@ -118,7 +118,7 @@ namespace SpiceSharp.Parser.Subcircuits
         }
 
         /// <summary>
-        /// Ascend
+        /// Ascend from the current subcircuit
         /// </summary>
         public void Ascend()
         {
@@ -148,9 +148,9 @@ namespace SpiceSharp.Parser.Subcircuits
         }
 
         /// <summary>
-        /// Find a model
+        /// Find a model using the current scope rules
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">Name of the model</param>
         /// <returns></returns>
         public T FindModel<T>(string name)
         {
@@ -201,9 +201,9 @@ namespace SpiceSharp.Parser.Subcircuits
         }
 
         /// <summary>
-        /// Find a subcircuit definition
+        /// Find a subcircuit definition using the current scope rules
         /// </summary>
-        /// <param name="name">Name</param>
+        /// <param name="name">Name of the subcircuit definition</param>
         /// <returns></returns>
         public SubcircuitDefinition FindDefinition(string name)
         {
@@ -284,7 +284,7 @@ namespace SpiceSharp.Parser.Subcircuits
     }
 
     /// <summary>
-    /// Event data when the subcircuit path changes
+    /// Arguments when the current subcircuit changes
     /// </summary>
     public class SubcircuitPathChangedEventArgs : EventArgs
     {
@@ -332,7 +332,7 @@ namespace SpiceSharp.Parser.Subcircuits
     }
 
     /// <summary>
-    /// An event that can be fired when the subcircuit path changes
+    /// Event handler that can be used when the current subcircuit changes
     /// </summary>
     /// <param name="sender">The sender</param>
     /// <param name="e">The data</param>

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace SpiceSharp.Parser.Readers.Collections
 {
     /// <summary>
-    /// A collection for searching models
+    /// A reader collection for models, indexed by the first parameter (which is the model name).
     /// </summary>
     public class ModelReaderCollection : ReaderCollection
     {

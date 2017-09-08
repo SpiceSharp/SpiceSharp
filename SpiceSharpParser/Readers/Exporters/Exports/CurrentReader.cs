@@ -2,12 +2,11 @@
 using System.Numerics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers.Exports
 {
     /// <summary>
-    /// This class can read current exports
+    /// Reads a current export (I, IR, II, IDB, IP).
     /// </summary>
     public class CurrentReader : Reader
     {
@@ -62,7 +61,7 @@ namespace SpiceSharp.Parser.Readers.Exports
     }
 
     /// <summary>
-    /// A voltage export
+    /// Current export.
     /// </summary>
     public class CurrentExport : Export
     {
@@ -107,7 +106,7 @@ namespace SpiceSharp.Parser.Readers.Exports
     }
 
     /// <summary>
-    /// An export for a real Current
+    /// Real part of a complex current export.
     /// </summary>
     public class CurrentRealExport : Export
     {
@@ -156,7 +155,7 @@ namespace SpiceSharp.Parser.Readers.Exports
     }
 
     /// <summary>
-    /// An export for a imaginary current
+    /// Imaginary part of a complex current export.
     /// </summary>
     public class CurrentImaginaryExport : Export
     {
@@ -205,7 +204,7 @@ namespace SpiceSharp.Parser.Readers.Exports
     }
 
     /// <summary>
-    /// An export for a current magnitude
+    /// Magnitude of a complex current export.
     /// </summary>
     public class CurrentMagnitudeExport : Export
     {
@@ -254,7 +253,7 @@ namespace SpiceSharp.Parser.Readers.Exports
     }
 
     /// <summary>
-    /// An export for a current phase
+    /// Phase of a complex current export.
     /// </summary>
     public class CurrentPhaseExport : Export
     {
@@ -304,7 +303,7 @@ namespace SpiceSharp.Parser.Readers.Exports
     }
 
     /// <summary>
-    /// An export for a current magnitude in decibels
+    /// Magnitude in decibels of a complex current export.
     /// </summary>
     public class CurrentDecibelExport : Export
     {

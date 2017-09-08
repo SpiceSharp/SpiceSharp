@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// This class can read voltage switches
+    /// Reads <see cref="VoltageSwitch"/> and <see cref="CurrentSwitch"/> components.
     /// </summary>
     public class SwitchReader : ComponentReader
     {
@@ -44,7 +42,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateVSW(string name, List<Token> parameters, Netlist netlist)
         {
             VoltageSwitch vsw = new VoltageSwitch(name);
-            vsw.ReadNodes(parameters, 4);
+            vsw.ReadNodes(parameters);
 
             // Read the model
             if (parameters.Count < 5)
@@ -79,7 +77,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateCSW(string name, List<Token> parameters, Netlist netlist)
         {
             CurrentSwitch csw = new CurrentSwitch(name);
-            csw.ReadNodes(parameters, 2);
+            csw.ReadNodes(parameters);
             switch (parameters.Count)
             {
                 case 2: throw new ParseException(parameters[1], "Voltage source expected", false);

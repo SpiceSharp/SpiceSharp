@@ -1,11 +1,10 @@
 ﻿using SpiceSharp.Components;
 using SpiceSharp.Parameters;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// A class that can read a waveform
+    /// Describes methods for reading a waveform. This is an abstract class.
     /// </summary>
     public abstract class WaveformReader : Reader
     {

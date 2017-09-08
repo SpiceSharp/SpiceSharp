@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// This class can read MOSFET models
+    /// Reads Mosfet model definitions.
+    /// It contains model generates indexed by the parameter LEVEL. Default implemented models are:
+    /// - LEVEL 1: <see cref="MOS1Model"/>
+    /// - LEVEL 2: <see cref="MOS2Model"/>
+    /// - LEVEL 3: <see cref="MOS3Model"/>
     /// </summary>
     public class MosfetModelReader : Reader
     {
         /// <summary>
-        /// Available functions for transistor levels
+        /// Available model generators indexed by their LEVEL.
+        /// The parameters passed are name, type (nmos or pmos) and the version.
         /// </summary>
         public Dictionary<int, Func<string, string, string, ICircuitObject>> Levels { get; } = new Dictionary<int, Func<string, string, string, ICircuitObject>>();
 

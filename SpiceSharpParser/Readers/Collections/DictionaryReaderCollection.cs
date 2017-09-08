@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SpiceSharp.Parser.Readers.Collections
 {
     /// <summary>
-    /// Strategy for reading models
+    /// A reader collection indexed by the full name of the statement
     /// </summary>
     public class DictionaryReaderCollection : ReaderCollection
     {
@@ -19,7 +18,8 @@ namespace SpiceSharp.Parser.Readers.Collections
         /// </summary>
         public DictionaryReaderCollection(StatementType type)
             : base(type)
-        { }
+        {
+        }
 
         /// <summary>
         /// Add a model reader

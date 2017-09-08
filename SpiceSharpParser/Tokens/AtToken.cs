@@ -1,7 +1,7 @@
 ﻿namespace SpiceSharp.Parser
 {
     /// <summary>
-    /// An @-token (eg. "@M1[gm]")
+    /// An @-token: @TOKEN[TOKEN] (eg. "@M1[gm]")
     /// </summary>
     public class AtToken : Token
     {

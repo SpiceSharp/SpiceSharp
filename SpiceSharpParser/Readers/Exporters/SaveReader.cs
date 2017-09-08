@@ -1,7 +1,7 @@
 ﻿namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// An exporter that can read .save statements
+    /// Reads saved exports (.SAVE).
     /// </summary>
     public class SaveReader : Reader
     {

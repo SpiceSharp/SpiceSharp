@@ -1,8 +1,9 @@
 ﻿using static SpiceSharp.Parser.SpiceSharpParserConstants;
+
 namespace SpiceSharp.Parser
 {
     /// <summary>
-    /// An assignment token
+    /// Token representing an assignment: [TOKEN]=[TOKEN]
     /// </summary>
     public class AssignmentToken : Token
     {

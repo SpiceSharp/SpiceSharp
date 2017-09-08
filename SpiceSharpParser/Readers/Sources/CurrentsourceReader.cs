@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parser.Readers.Extensions;
 
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// This class can read current sources
+    /// Reads <see cref="Currentsource"/>, <see cref="CurrentControlledCurrentsource"/> and <see cref="VoltageControlledCurrentsource"/> components.
     /// </summary>
     public class CurrentsourceReader : ComponentReader
     {
@@ -44,7 +43,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateISRC(string name, List<Token> parameters, Netlist netlist)
         {
             Currentsource isrc = new Currentsource(name);
-            isrc.ReadNodes(parameters, 2);
+            isrc.ReadNodes(parameters);
 
             // We can have a value or just DC
             for (int i = 2; i < parameters.Count; i++)
@@ -97,7 +96,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateCCCS(string name, List<Token> parameters, Netlist netlist)
         {
             CurrentControlledCurrentsource cccs = new CurrentControlledCurrentsource(name);
-            cccs.ReadNodes(parameters, 2);
+            cccs.ReadNodes(parameters);
             switch (parameters.Count)
             {
                 case 2: throw new ParseException(parameters[1], "Voltage source expected", false);
@@ -121,7 +120,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateVCCS(string name, List<Token> parameters, Netlist netlist)
         {
             VoltageControlledCurrentsource vccs = new VoltageControlledCurrentsource(name);
-            vccs.ReadNodes(parameters, 4);
+            vccs.ReadNodes(parameters);
 
             if (parameters.Count < 5)
                 throw new ParseException(parameters[3], "Value expected", false);

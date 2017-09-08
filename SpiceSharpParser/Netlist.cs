@@ -10,48 +10,48 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp
 {
     /// <summary>
-    /// This class represents the netlist data for parsing
+    /// Container for parsed data
     /// </summary>
     public class Netlist
     {
         /// <summary>
-        /// The available reader classes for tokens when parsing a netlist
+        /// All statement readers
         /// </summary>
-        public TokenReaders Readers { get; } = new TokenReaders();
+        public StatementReaders Readers { get; } = new StatementReaders();
 
         /// <summary>
-        /// Gets the circuit
+        /// Get the circuit
         /// </summary>
         public Circuit Circuit { get; }
 
         /// <summary>
-        /// Gets the list of simulations to be performed
+        /// Get a list of simulations
         /// </summary>
         public List<ISimulation> Simulations { get; } = new List<ISimulation>();
 
         /// <summary>
-        /// Exports for the netlist
-        /// These exports will give you the values that are specified for exporting
+        /// Get a list of exported quantities
         /// </summary>
         public List<Export> Exports { get; } = new List<Export>();
 
         /// <summary>
-        /// The current path
+        /// Get the current subcircuit path
+        /// Used for parsing subcircuit definitions and instances
         /// </summary>
         public SubcircuitPath Path { get; }
 
         /// <summary>
-        /// The event that is fired before a new simulation is started
+        /// Event called before a new simulation is started
         /// </summary>
         public event NetlistSimulationEventHandler BeforeSimulationInitialized;
 
         /// <summary>
-        /// The event that is fired when new simulation data is exported
+        /// Event called when a simulation exports simulation data
         /// </summary>
-        public event ExportNetlistDataEventHandler OnExportSimulationData;
+        public event ExportSimulationDataEventHandler OnExportSimulationData;
 
         /// <summary>
-        /// The event that is fired after a simulation has finished
+        /// Event called after a simulation has finished
         /// </summary>
         public event NetlistSimulationEventHandler AfterSimulationFinished;
 
@@ -66,7 +66,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Simulate
+        /// Perform all simulations in the simulation queue
         /// </summary>
         public void Simulate()
         {
@@ -96,7 +96,12 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Create a standard netlist, which includes the following:
+        /// A standard netlist with the following features:
+        /// - Components: C, D, E, F, G, H, I, L, M, Q, R, S, X, W
+        /// - Control statements: .IC, .NODESET, .OPTIONS, .PARAM, 
+        /// - Exporters: V(), I(), VDB(), IDB(), VP(), IP(), VR, IR, VI, RI, @dev[par]
+        /// - Subcircuit definitions
+        /// - An expression parser
         /// </summary>
         /// <returns></returns>
         public static Netlist StandardNetlist()
@@ -164,25 +169,15 @@ namespace SpiceSharp
             {
                 e.Parameters = args.Parameters;
             };
-            // SpiceExpression e = new SpiceExpression();
-            // netlist.Readers.OnParseExpression += e.OnParseExpression;
-            // netlist.Path.OnSubcircuitPathChanged += e.OnSubcircuitPathChanged;
 
             return netlist;
         }
     }
 
     /// <summary>
-    /// An event handler for handling netlist actions
+    /// Event handler involving the current simulation
     /// </summary>
     /// <param name="sender">The netlist sending the event</param>
     /// <param name="sim">The simulation</param>
     public delegate void NetlistSimulationEventHandler(object sender, ISimulation sim);
-
-    /// <summary>
-    /// An event handler for exporting simulation data through a netlist
-    /// </summary>
-    /// <param name="sender">The netlist sending the event</param>
-    /// <param name="data">The simulation data</param>
-    public delegate void ExportNetlistDataEventHandler(object sender, SimulationData data);
 }

@@ -4,7 +4,7 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// This class can read voltage switch models
+    /// Reads <see cref="VoltageSwitchModel"/> and <see cref="CurrentSwitchModel"/> definitions.
     /// </summary>
     public class SwitchModelReader : ModelReader
     {

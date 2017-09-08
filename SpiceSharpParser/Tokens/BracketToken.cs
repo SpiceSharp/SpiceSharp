@@ -1,7 +1,7 @@
 ﻿namespace SpiceSharp.Parser
 {
     /// <summary>
-    /// This class represents a bracketted token
+    /// A bracketted token (TOKEN TOKEN ...) or [TOKEN TOKEN ...], ...
     /// </summary>
     public class BracketToken : Token
     {
@@ -24,6 +24,8 @@
         /// Constructor
         /// </summary>
         /// <param name="name">The name-token</param>
+        /// <param name="bracket">The bracket character (eg. '(' or '[')</param>
+        /// <param name="parameters">The parameters specified between brackets</param>
         public BracketToken(Token name, char bracket, Token[] parameters)
         {
             Name = name;
@@ -34,7 +36,16 @@
             endLine = parameters.Length > 0 ? parameters[parameters.Length - 1].endLine : name.endLine;
             endColumn = parameters.Length > 0 ? parameters[parameters.Length - 1].endLine : name.endLine;
             kind = TokenConstants.BRACKET;
-            image = name.image + "()";
+
+            // Create the image
+            switch (bracket)
+            {
+                case '(': image = name.image + "()"; break;
+                case '[': image = name.image + "[]"; break;
+                case '{': image = name.image + "{}"; break;
+                default:
+                    throw new ParseException(name, "Invalid bracket", false);
+            }
         }
     }
 }
