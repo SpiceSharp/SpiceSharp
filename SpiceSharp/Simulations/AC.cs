@@ -151,6 +151,7 @@ namespace SpiceSharp.Simulations
             }
 
             // Calculate the operating point
+            state.Initialize(ckt);
             state.Complex.Laplace = 0.0;
             state.Domain = CircuitState.DomainTypes.Frequency;
             state.UseIC = false;

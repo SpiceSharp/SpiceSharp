@@ -111,7 +111,7 @@ namespace SpiceSharpTest
 
             // Create a simple lowpass network
             Voltagesource vsrc = new Voltagesource("V1", "IN", "GND", 
-                new Pulse(0.0, 5.0, 1e-3, 1e-9, 1e-9, 10, 20));
+                new Pulse(0.0, 5.0, 1e-3, 1e-10, 1e-9, 10, 20));
             vsrc.Set("dc", 0.0);
             Resistor res = new Resistor("R1", "IN", "OUT", 1e3);
             Capacitor cap = new Capacitor("C1", "OUT", "GND", 1e-6);
@@ -121,25 +121,18 @@ namespace SpiceSharpTest
             Transient tran = new Transient("TestTransient");
             tran.Set("stop", 5e-3);
             tran.Set("step", 1e-9);
-            double max = 0.0;
-            double timemax = 0.0;
             tran.OnExportSimulationData += (object sender, SimulationData data) =>
             {
                 double time = data.GetTime();
-                double output = data.GetVoltage("OUT");
+                double actual = data.GetVoltage("OUT");
                 double expected = 0.0;
                 if (time > 1e-3)
                     expected = 5.0 * (1.0 - Math.Exp(-(time - 1e-3) / 1e-3));
+                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-6;
 
-                double error = Math.Abs(output - expected);
-                if (error > max)
-                {
-                    timemax = time;
-                    max = error;
-                }
+                Assert.AreEqual(expected, actual, tol);
             };
             ckt.Simulate(tran);
-            Assert.AreEqual(max, 0.0, TranTolerance); // Within 1mV precision seems a bit high no?
 
             // No warnings allowed
             Assert.AreEqual(CircuitWarning.Warnings.Count, 0, "No warnings allowed.");

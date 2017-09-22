@@ -141,7 +141,12 @@ namespace SpiceSharp.Circuits
             if (ckt.Method != null)
                 ReinitStates(ckt.Method);
             else
-                States = null;
+                States = new Vector<double>[2];
+
+            // Fill the states
+            NumStates = Math.Max(NumStates, 1);
+            for (int i = 0; i < States.Length; i++)
+                States[i] = new DenseVector(NumStates);
 
             Initialized = true;
         }
