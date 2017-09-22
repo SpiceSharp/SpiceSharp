@@ -92,5 +92,15 @@ namespace SpiceSharp.Components
         {
             // Do nothing
         }
+
+        /// <summary>
+        /// Truncate the timestep
+        /// </summary>
+        /// <param name="ckt"></param>
+        /// <param name="timeStep"></param>
+        public virtual void Truncate(Circuit ckt, ref double timeStep)
+        {
+            // Do nothing
+        }
     }
 }

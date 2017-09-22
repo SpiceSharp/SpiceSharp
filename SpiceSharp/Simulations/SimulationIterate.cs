@@ -224,6 +224,10 @@ namespace SpiceSharp.Simulations
                 var node = ckt.Nodes[i];
                 double n = rstate.Solution[node.Index];
                 double o = rstate.OldSolution[node.Index];
+
+                if (double.IsNaN(n))
+                    throw new CircuitException($"Non-convergence, node {node} is not a number.");
+
                 if (node.Type == CircuitNode.NodeType.Voltage)
                 {
                     double tol = config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltTol;

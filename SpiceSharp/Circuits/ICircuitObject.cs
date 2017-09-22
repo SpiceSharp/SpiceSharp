@@ -56,5 +56,12 @@
         /// </summary>
         /// <param name="ckt">The circuit</param>
         void Unsetup(Circuit ckt);
+
+        /// <summary>
+        /// Truncate the timestep
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="timeStep">Timestep</param>
+        void Truncate(Circuit ckt, ref double timeStep);
     }
 }

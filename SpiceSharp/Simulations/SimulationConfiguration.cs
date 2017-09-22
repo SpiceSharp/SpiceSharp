@@ -76,7 +76,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Integration method
         /// </summary>
-        public IntegrationMethod Method = new IntegrationMethods.Trapezoidal();
+        public IntegrationMethod Method = new Trapezoidal();
 
         /// <summary>
         /// Simulation configuration

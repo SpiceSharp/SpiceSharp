@@ -138,17 +138,25 @@ namespace SpiceSharp.Circuits
             Order = ckt.Nodes.Count + 1;
             Real = new CircuitStateReal(Order);
             Complex = new CircuitStateComplex(Order);
-
-            // Allocate states
             if (ckt.Method != null)
-                States = new Vector<double>[ckt.Method.MaxOrder + 2];
+                ReinitStates(ckt.Method);
             else
-                States = new Vector<double>[2];
+                States = null;
+
+            Initialized = true;
+        }
+
+        /// <summary>
+        /// Reinitialize states for a method
+        /// </summary>
+        /// <param name="method">The integration method</param>
+        public void ReinitStates(IntegrationMethods.IntegrationMethod method)
+        {
+            // Allocate states
+            States = new Vector<double>[method.MaxOrder + 2];
             NumStates = Math.Max(NumStates, 1);
             for (int i = 0; i < States.Length; i++)
                 States[i] = new DenseVector(NumStates);
-
-            Initialized = true;
         }
 
         /// <summary>
@@ -190,8 +198,8 @@ namespace SpiceSharp.Circuits
             var tmp = States[States.Length - 1];
             for (int i = States.Length - 1; i > 0; i--)
                 States[i] = States[i - 1];
-            // States[0] = tmp;
-            States[0] = new DenseVector(States[1].Count);
+            States[0] = tmp;
+            // States[0] = new DenseVector(States[1].Count);
         }
 
         /// <summary>
