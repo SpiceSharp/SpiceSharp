@@ -16,13 +16,6 @@ namespace SpiceSharpTest
         /// </summary>
         private double Tolerance = 1e-15;
 
-        /// <summary>
-        /// Absolute tolerance for transient analysis
-        /// Solving differential equations will accumulate errors, so
-        /// we cannot use a very strict tolerance
-        /// </summary>
-        private double TranTolerance = 1e-3;
-
         [TestMethod]
         public void TestAC()
         {

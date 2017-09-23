@@ -209,6 +209,11 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Problematic node for convergence
+        /// </summary>
+        public static CircuitNode ProblemNode = null;
+
+        /// <summary>
         /// Check if we are converging during iterations
         /// </summary>
         /// <param name="sim">The simulation</param>
@@ -232,13 +237,19 @@ namespace SpiceSharp.Simulations
                 {
                     double tol = config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltTol;
                     if (Math.Abs(n - o) > tol)
+                    {
+                        ProblemNode = node;
                         return false;
+                    }
                 }
                 else
                 {
                     double tol = config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + config.AbsTol;
                     if (Math.Abs(n - o) > tol)
+                    {
+                        ProblemNode = node;
                         return false;
+                    }
                 }
             }
 

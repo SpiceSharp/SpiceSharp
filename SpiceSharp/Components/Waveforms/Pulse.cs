@@ -32,7 +32,6 @@ namespace SpiceSharp.Components
         /// Private variables
         /// </summary>
         private double v1, v2, td, tr, tf, pw, per;
-        private double lastbasetime = double.NaN;
 
         /// <summary>
         /// Constructor
@@ -75,7 +74,6 @@ namespace SpiceSharp.Components
             tf = FallTime;
             pw = PulseWidth;
             per = Period;
-            lastbasetime = double.NaN;
 
             // Some checks
             if (per <= tr + pw + tf)
@@ -119,8 +117,11 @@ namespace SpiceSharp.Components
             if (ckt.Method == null)
                 return;
 
+            // Are we at a breakpoint?
             IntegrationMethod method = ckt.Method;
             var breaks = method.Breaks;
+            if (!method.Break)
+                return;
 
             // Find the time relative to the first period
             double time = method.Time - td;
@@ -130,25 +131,41 @@ namespace SpiceSharp.Components
                 basetime = per * Math.Floor(time / per);
                 time -= basetime;
             }
-            if (basetime == lastbasetime)
-                return;
-            lastbasetime = basetime;
+            double tol = 1e-7 * pw;
 
-            // Add all breakpoints for this period
-            breaks.SetBreakpoint(basetime + td);
-            breaks.SetBreakpoint(basetime + td + tr);
-            breaks.SetBreakpoint(basetime + td + tr + pw);
-            breaks.SetBreakpoint(basetime + td + tr + pw + tf);
-            breaks.SetBreakpoint(basetime + td + per); // Start of the next period
-
-            /*
-             * NOTE:
-             * Originally Spice only adds a breakpoint when the previous one has been reached.
-             * The problem is that if the next breakpoint is too close (< MinBreak), it will 
-             * not be added which means that any subsequent breakpoints will be lost too.
-             * 
-             * The same problem here will only occur if a whole period is < MinBreak.
-             */
+            // Are we at the start of a breakpoint?
+            if (time <= 0 || time >= tr + pw + tf)
+            {
+                if (Math.Abs(time - 0) <= tol)
+                    breaks.SetBreakpoint(basetime + tr + td);
+                else if (Math.Abs(tr + pw + tf - time) <= tol)
+                    breaks.SetBreakpoint(basetime + per + td);
+                else if ((time == -td))
+                    breaks.SetBreakpoint(basetime + td);
+                else if (Math.Abs(per - time) <= tol)
+                    breaks.SetBreakpoint(basetime + td + tr + per);
+            }
+            else if (time >= tr && time <= tr + pw)
+            {
+                if (Math.Abs(time - tr) <= tol)
+                    breaks.SetBreakpoint(basetime + td + tr + pw);
+                else if (Math.Abs(tr + pw - time) <= tol)
+                    breaks.SetBreakpoint(basetime + td + tr + pw + tf);
+            }
+            else if (time > 0 && time < tr)
+            {
+                if (Math.Abs(time - 0) <= tol)
+                    breaks.SetBreakpoint(basetime + td + tr);
+                else if (Math.Abs(time - tr) <= tol)
+                    breaks.SetBreakpoint(basetime + td + tr + pw);
+            }
+            else
+            {
+                if (Math.Abs(tr + pw - time) <= tol)
+                    breaks.SetBreakpoint(basetime + td + tr + pw + tf);
+                else if (Math.Abs(tr + pw + tf - time) <= tol)
+                    breaks.SetBreakpoint(basetime + td + per);
+            }
         }
     }
 }
