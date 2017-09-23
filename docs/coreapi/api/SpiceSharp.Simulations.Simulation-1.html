@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Simulation&lt;T&gt;
    ">
-    <meta name="generator" content="docfx 2.23.1.0">
+    <meta name="generator" content="docfx 2.24.0.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="">
     <meta property="docfx:tocrel" content="toc">
+    
     
     
   </head>
@@ -410,11 +411,16 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><a class="xref" href="SpiceSharp.Parameters.Parameterized-1.html">Parameterized</a>&lt;T&gt;</div>
     <div class="level2"><span class="xref">Simulation&lt;T&gt;</span></div>
-  </div>
       <div class="level3"><a class="xref" href="SpiceSharp.Simulations.AC.html">AC</a></div>
       <div class="level3"><a class="xref" href="SpiceSharp.Simulations.DC.html">DC</a></div>
       <div class="level3"><a class="xref" href="SpiceSharp.Simulations.OP.html">OP</a></div>
       <div class="level3"><a class="xref" href="SpiceSharp.Simulations.Transient.html">Transient</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></div>
+    <div><a class="xref" href="SpiceSharp.Parameters.IParameterized.html">IParameterized</a></div>
+  </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
@@ -549,8 +555,6 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="implements">Implements</h5>
-      <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Config">ISimulation.Config</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_CurrentConfig.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.CurrentConfig%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -649,8 +653,6 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="implements">Implements</h5>
-      <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Execute_SpiceSharp_Circuit_">ISimulation.Execute(Circuit)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_Export_SpiceSharp_Circuit_.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.Export(SpiceSharp.Circuit)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -782,8 +784,6 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="implements">Implements</h5>
-      <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_FinalizeSimulationExport">ISimulation.FinalizeSimulationExport</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_InitializeSimulationExport.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.InitializeSimulationExport%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -814,8 +814,6 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="implements">Implements</h5>
-      <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_InitializeSimulationExport">ISimulation.InitializeSimulationExport</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
     <a href="https://github.com/svenboulanger/SpiceSharp/new/master/apiSpec/new?filename=SpiceSharp_Simulations_Simulation_1_OnExportSimulationData.md&amp;value=---%0Auid%3A%20SpiceSharp.Simulations.Simulation%601.OnExportSimulationData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
@@ -846,8 +844,13 @@
       </tr>
     </tbody>
   </table>
-  <h5 class="implements">Implements</h5>
-      <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_OnExportSimulationData">ISimulation.OnExportSimulationData</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Parameters.IParameterized.html">IParameterized</a>
+  </div>
 </article>
           </div>
           
