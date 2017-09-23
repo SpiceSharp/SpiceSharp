@@ -3925,6 +3925,17 @@ namespace SpiceSharp.Components
             return Fatal_Flag;
         }
 
-
-	}
+        /// <summary>
+        /// Truncate
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="timeStep">Timestep</param>
+        public override void Truncate(Circuit ckt, ref double timeStep)
+        {
+            var method = ckt.Method;
+            method.Terr(BSIM3states + BSIM3qb, ckt, ref timeStep);
+            method.Terr(BSIM3states + BSIM3qg, ckt, ref timeStep);
+            method.Terr(BSIM3states + BSIM3qd, ckt, ref timeStep);
+        }
+    }
 }

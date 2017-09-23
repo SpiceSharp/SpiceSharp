@@ -2624,5 +2624,27 @@ namespace SpiceSharp.Components
                 cstate.Matrix[BSIM4gNodePrime, BSIM4qNode] += 0.0;
             }
         }
-	}
+
+        /// <summary>
+        /// Truncate
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="timeStep">Timestep</param>
+        public override void Truncate(Circuit ckt, ref double timeStep)
+        {
+            var method = ckt.Method;
+            method.Terr(BSIM4states + BSIM4qb, ckt, ref timeStep);
+            method.Terr(BSIM4states + BSIM4qg, ckt, ref timeStep);
+            method.Terr(BSIM4states + BSIM4qd, ckt, ref timeStep);
+            if (BSIM4trnqsMod != 0)
+                method.Terr(BSIM4states + BSIM4qcdump, ckt, ref timeStep);
+            if (BSIM4rbodyMod != 0)
+            {
+                method.Terr(BSIM4states + BSIM4qbs, ckt, ref timeStep);
+                method.Terr(BSIM4states + BSIM4qbd, ckt, ref timeStep);
+            }
+            if (BSIM4rgateMod == 3)
+                method.Terr(BSIM4states + BSIM4qgmid, ckt, ref timeStep);
+        }
+    }
 }
