@@ -49,6 +49,11 @@ namespace SpiceSharp.Simulations
         public double AbsTol = 1e-12;
 
         /// <summary>
+        /// Charge tolerance
+        /// </summary>
+        public double ChgTol = 1e-14;
+
+        /// <summary>
         /// Number of iterations for DC simulation
         /// </summary>
         public int DcMaxIterations = 50;

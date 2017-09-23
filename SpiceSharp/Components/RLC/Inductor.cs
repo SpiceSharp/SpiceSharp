@@ -159,5 +159,15 @@ namespace SpiceSharp.Components
             if (method != null && method.SavedTime == 0.0)
                 ckt.State.CopyDC(INDstate + INDflux);
         }
+
+        /// <summary>
+        /// Truncate
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="timeStep">Timestep</param>
+        public override void Truncate(Circuit ckt, ref double timeStep)
+        {
+            ckt.Method.Terr(INDstate + INDflux, ckt, ref timeStep);
+        }
     }
 }

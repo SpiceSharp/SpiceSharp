@@ -64,6 +64,7 @@
     <Compile Include="Components\Transistors\MOS3Model.cs" />
     <Compile Include="Components\Transistors\Transistor.cs" />
     <Compile Include="Attributes\SpicePins.cs" />
+    <Compile Include="IntegrationMethods\IntegrationConfiguration.cs" />
     <Compile Include="Simulations\ISimulation.cs" />
     <Compile Include="Components\Waveforms\IWaveform.cs" />
     <Compile Include="Components\RLC\Inductor.cs" />

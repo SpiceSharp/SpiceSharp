@@ -829,5 +829,18 @@ namespace SpiceSharp.Components
             cstate.Matrix[BJTbaseNode, BJTcolPrimeNode] -= xcbx;
             cstate.Matrix[BJTcolPrimeNode, BJTbaseNode] -= xcbx;
         }
+
+        /// <summary>
+        /// Truncate
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="timeStep">Timestep</param>
+        public override void Truncate(Circuit ckt, ref double timeStep)
+        {
+            var method = ckt.Method;
+            method.Terr(BJTstate + BJTqbe, ckt, ref timeStep);
+            method.Terr(BJTstate + BJTqbc, ckt, ref timeStep);
+            method.Terr(BJTstate + BJTqcs, ckt, ref timeStep);
+        }
     }
 }

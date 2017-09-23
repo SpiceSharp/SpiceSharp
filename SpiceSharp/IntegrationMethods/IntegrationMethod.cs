@@ -21,33 +21,9 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// This class represents an integration method configuration
-        /// </summary>
-        public class Configuration
-        {
-            /// <summary>
-            /// Gets or sets the transient tolerance
-            /// Used for timestep truncation
-            /// </summary>
-            public double TrTol { get; set; } = 7.0;
-
-            /// <summary>
-            /// Gets or sets the local truncation error relative tolerance
-            /// Used for calculating a timestep based on the estimated error
-            /// </summary>
-            public double LteRelTol { get; set; } = 1e-3;
-
-            /// <summary>
-            /// Gets or sets the local truncation error absolute tolerance
-            /// Used for calculating a timestep based on the estimated error
-            /// </summary>
-            public double LteAbsTol { get; set; } = 1e-6;
-        }
-
-        /// <summary>
         /// Gets the configuration for the integration method
         /// </summary>
-        public Configuration Config { get; } = new Configuration();
+        public IntegrationConfiguration Config { get; } = new IntegrationConfiguration();
 
         /// <summary>
         /// The breakpoints
@@ -126,16 +102,24 @@ namespace SpiceSharp.IntegrationMethods
         private double savetime = double.NaN;
 
         /// <summary>
+        /// Delegate for a truncation method
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public delegate double TruncationMethod(Circuit ckt);
+
+        /// <summary>
+        /// Truncate the timestep
+        /// </summary>
+        public TruncationMethod Truncate { get; protected set; } = null;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="config">The configuration</param>
-        public IntegrationMethod(Configuration config = null)
+        public IntegrationMethod(IntegrationConfiguration config = null)
         {
-            if (config == null)
-                Config = new Configuration();
-            else
-                Config = config;
-
+            Config = config ?? new IntegrationConfiguration();
             DeltaOld = new double[MaxOrder + 2];
             Solutions = new Vector<double>[MaxOrder + 1];
         }
@@ -174,12 +158,25 @@ namespace SpiceSharp.IntegrationMethods
             Time = 0.0;
             savetime = 0.0;
             Delta = 0.0;
-
             Order = 1;
-
             Prediction = null;
             DeltaOld = new double[MaxOrder + 1];
             Solutions = new Vector<double>[MaxOrder + 1];
+
+            // Choose the truncation method
+            switch (Config.TruncationMethod)
+            {
+                case IntegrationConfiguration.TruncationMethods.PerDevice:
+                    Truncate = TruncateDevices;
+                    break;
+
+                case IntegrationConfiguration.TruncationMethods.PerNode:
+                    Truncate = TruncateNodes;
+                    break;
+
+                default:
+                    throw new CircuitException("Invalid truncation method");
+            }
 
             // Last point was START so the current point is the point after a breakpoint (start)
             Break = true;
@@ -339,11 +336,24 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Truncate to relax timestep if possible
+        /// Truncate the timestep based on the nodes
         /// </summary>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
-        public abstract double Truncate(Circuit ckt);
+        public abstract double TruncateNodes(Circuit ckt);
+
+        /// <summary>
+        /// Do truncation using devices
+        /// </summary>
+        /// <param name="ckt"></param>
+        /// <returns></returns>
+        protected double TruncateDevices(Circuit ckt)
+        {
+            double timetmp = double.PositiveInfinity;
+            foreach (var o in ckt.Objects)
+                o.Truncate(ckt, ref timetmp);
+            return Math.Min(Delta * 2.0, timetmp);
+        }
 
         /// <summary>
         /// Calculate a prediction based on the current timestep
@@ -356,5 +366,13 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public abstract void ComputeCoefficients(Circuit ckt);
+
+        /// <summary>
+        /// LTE control by state variables
+        /// </summary>
+        /// <param name="qcap">Index of the state containing the charges</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="timeStep">Timestep</param>
+        public abstract void Terr(int qcap, Circuit ckt, ref double timeStep);
     }
 }

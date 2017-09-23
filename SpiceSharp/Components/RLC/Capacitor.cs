@@ -166,5 +166,15 @@ namespace SpiceSharp.Components
                 ckt.State.CopyDC(CAPstate + CAPqcap);
             }
         }
+
+        /// <summary>
+        /// Truncate
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="timeStep">Timestep</param>
+        public override void Truncate(Circuit ckt, ref double timeStep)
+        {
+            ckt.Method.Terr(CAPstate + CAPqcap, ckt, ref timeStep);
+        }
     }
 }

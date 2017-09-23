@@ -23,7 +23,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Constructor
         /// </summary>
-        public Trapezoidal(Configuration config = null)
+        public Trapezoidal(IntegrationConfiguration config = null)
             : base(config)
         {
         }
@@ -115,7 +115,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
-        public override double Truncate(Circuit ckt)
+        public override double TruncateNodes(Circuit ckt)
         {
             // Get the state
             var state = ckt.State.Real;
@@ -201,6 +201,61 @@ namespace SpiceSharp.IntegrationMethods
 
             // Store the derivative w.r.t. the current timestep
             Slope = ag[0];
+        }
+
+        /// <summary>
+        /// Control local truncation error on a state variable
+        /// </summary>
+        /// <param name="qcap">Index</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="timeStep">Timestep</param>
+        public override void Terr(int qcap, Circuit ckt, ref double timeStep)
+        {
+            var state = ckt.State;
+            var config = ckt.Simulation.Config ?? Simulations.SimulationConfiguration.Default;
+            int ccap = qcap + 1;
+
+            double[] diff = new double[state.States.Length];
+            double[] deltmp = new double[DeltaOld.Length];
+
+            // Calculate the tolerance
+            double volttol = config.AbsTol + config.RelTol * Math.Max(Math.Abs(state.States[0][ccap]), Math.Abs(state.States[1][ccap]));
+            double chargetol = Math.Max(Math.Abs(state.States[0][qcap]), Math.Abs(state.States[1][qcap]));
+            chargetol = Config.LteRelTol * Math.Max(chargetol, config.ChgTol) / Delta;
+            double tol = Math.Max(volttol, chargetol);
+
+            // Now divided differences
+            for (int i = 0; i < diff.Length; i++)
+                diff[i] = state.States[i][qcap];
+            for (int i = 0; i < deltmp.Length; i++)
+                deltmp[i] = DeltaOld[i];
+            int j = Order;
+            while (true)
+            {
+                for (int i = 0; i <= j; i++)
+                    diff[i] = (diff[i] - diff[i + 1]) / deltmp[i];
+                if (--j < 0)
+                    break;
+                for (int i = 0; i <= j; i++)
+                    deltmp[i] = deltmp[i + 1] + DeltaOld[i];
+            }
+
+            // Calculate the new timestep
+            double factor;
+            switch (Order)
+            {
+                case 1: factor = 0.5; break;
+                case 2: factor = 0.0833333333; break;
+                default: throw new CircuitException($"Invalid order {Order}");
+            }
+            double del = Config.TrTol * tol / Math.Max(config.AbsTol, factor * Math.Abs(diff[0]));
+            if (Order == 2)
+                del = Math.Sqrt(del);
+            else if (Order > 2)
+                del = Math.Exp(Math.Log(del) / Order);
+
+            // Return the timestep
+            timeStep = Math.Min(timeStep, del);
         }
     }
 }

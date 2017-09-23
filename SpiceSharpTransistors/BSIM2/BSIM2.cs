@@ -1601,5 +1601,18 @@ namespace SpiceSharp.Components
             qSourcePointer = -(qGatePointer + qBulkPointer + qDrainPointer);
 
         }
+
+        /// <summary>
+        /// Truncate
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="timeStep">Timestep</param>
+        public override void Truncate(Circuit ckt, ref double timeStep)
+        {
+            var method = ckt.Method;
+            method.Terr(B2states + B2qb, ckt, ref timeStep);
+            method.Terr(B2states + B2qg, ckt, ref timeStep);
+            method.Terr(B2states + B2qd, ckt, ref timeStep);
+        }
     }
 }

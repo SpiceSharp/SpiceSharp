@@ -1189,5 +1189,18 @@ namespace SpiceSharp.Components
 
             cstate.Matrix[MOS1sNodePrime, MOS1dNodePrime] -= MOS1gds + xrev * (MOS1gm + MOS1gmbs);
         }
+
+        /// <summary>
+        /// Truncate
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="timeStep">Timestep</param>
+        public override void Truncate(Circuit ckt, ref double timeStep)
+        {
+            var method = ckt.Method;
+            method.Terr(MOS1states + MOS1qgs, ckt, ref timeStep);
+            method.Terr(MOS1states + MOS1qgd, ckt, ref timeStep);
+            method.Terr(MOS1states + MOS1qgb, ckt, ref timeStep);
+        }
     }
 }

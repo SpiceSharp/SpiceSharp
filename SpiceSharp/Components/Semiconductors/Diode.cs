@@ -377,5 +377,15 @@ namespace SpiceSharp.Components
             cstate.Matrix[DIOposPrimeNode, DIOposNode] -= gspr;
             cstate.Matrix[DIOposPrimeNode, DIOnegNode] -= new Complex(geq, xceq);
         }
+
+        /// <summary>
+        /// Truncate
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="timeStep">Timestep</param>
+        public override void Truncate(Circuit ckt, ref double timeStep)
+        {
+            ckt.Method.Terr(DIOstate + DIOcapCharge, ckt, ref timeStep);
+        }
     }
 }
