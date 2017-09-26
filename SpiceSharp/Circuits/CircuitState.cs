@@ -158,7 +158,8 @@ namespace SpiceSharp.Circuits
         public void ReinitStates(IntegrationMethods.IntegrationMethod method)
         {
             // Allocate states
-            States = new Vector<double>[method.MaxOrder + 2];
+            // States = new Vector<double>[method.MaxOrder + 2];
+            States = new Vector<double>[8];
             NumStates = Math.Max(NumStates, 1);
             for (int i = 0; i < States.Length; i++)
                 States[i] = new DenseVector(NumStates);
@@ -204,6 +205,7 @@ namespace SpiceSharp.Circuits
             for (int i = States.Length - 1; i > 0; i--)
                 States[i] = States[i - 1];
             States[0] = tmp;
+            // States[0].Clear();
             // States[0] = new DenseVector(States[1].Count);
         }
 

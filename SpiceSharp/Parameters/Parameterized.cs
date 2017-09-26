@@ -205,7 +205,15 @@ namespace SpiceSharp.Parameters
         /// <param name="name">The parameter name</param>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
-        public virtual double Ask(string name, Circuit ckt) => dcgetter[name].Invoke(me, ckt);
+        public virtual double Ask(string name, Circuit ckt)
+        {
+            if (dcgetter.ContainsKey(name))
+                return dcgetter[name].Invoke(me, ckt);
+            else if (dgetter.ContainsKey(name))
+                return dgetter[name].Invoke(me);
+            else
+                return pgetter[name].Invoke(me).Value;
+        }
 
         /// <summary>
         /// Request a parameter

@@ -85,8 +85,8 @@ namespace SpiceSharp.Parser.Readers.Exports
         public override double Extract(SimulationData data)
         {
             IParameterized c = (IParameterized)data.GetObject(Component);
-            // return c.Ask(Parameter, data.Circuit);
-            return c.Ask(Parameter);
+            return c.Ask(Parameter, data.Circuit);
+            // return c.Ask(Parameter);
         }
     }
 }

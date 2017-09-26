@@ -21,9 +21,10 @@ namespace Spice2SpiceSharp
             Load = 0x04,
             AcLoad = 0x08,
             PzLoad = 0x10,
+            Truncate = 0x20,
 
             None = 0x00,
-            All = 0x1F
+            All = 0x3F
         }
 
         /// <summary>
@@ -34,6 +35,7 @@ namespace Spice2SpiceSharp
         private string loadDev, loadMod;
         private string acloadDev, acloadMod;
         private string pzloadDev, pzloadMod;
+        private string truncDev, truncMod;
         private SpiceParam paramDev, paramMod;
         private ParameterExtractor paramExtr;
         private string name;
@@ -44,6 +46,7 @@ namespace Spice2SpiceSharp
         private SpiceLoad load;
         private SpiceAcLoad acload;
         private SpicePzLoad pzload;
+        private SpiceTruncate trunc;
 
         private string offset = "";
         private Dictionary<string, string> shared = new Dictionary<string, string>();
@@ -173,6 +176,24 @@ namespace Spice2SpiceSharp
                     deviceextra.Add(v);
             }
 
+            // Truncation
+            if (export.HasFlag(Methods.Truncate))
+            {
+                trunc = new SpiceTruncate(dev, setup);
+                truncDev = trunc.ExportDevice(paramMod, paramDev);
+                truncMod = trunc.ExportModel(paramMod);
+                foreach (var v in trunc.SharedLocalVariables)
+                {
+                    if (shared.ContainsKey(v.Key) && shared[v.Key] != v.Value)
+                        throw new Exception($"Cannot share variable {v.Key}");
+                    shared.Add(v.Key, v.Value);
+                }
+                foreach (var v in trunc.ModelVariablesExtra)
+                    modelextra.Add(v);
+                foreach (var v in trunc.DeviceVariablesExtra)
+                    deviceextra.Add(v);
+            }
+
             // Apply default values!
             string[] names = paramMod.Declarations.Keys.ToArray();
             foreach (string n in names)
@@ -263,6 +284,15 @@ namespace Spice2SpiceSharp
                     WriteCode(sw, "public override void Load(Circuit ckt)", "{");
                     WriteCode(sw, variables(load.ModelVariables));
                     WriteCode(sw, "", loadMod, "}");
+                }
+
+                // Truncation method
+                if (trunc != null)
+                {
+                    WriteCode(sw, "", "/// <summary>", "/// Truncate the timestep", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>", "/// <param name=\"timeStep\">The timestep</param>");
+                    WriteCode(sw, "public override void Truncate(Circuit ckt, ref double timeStep)", "{");
+                    WriteCode(sw, variables(trunc.ModelVariables));
+                    WriteCode(sw, "", truncMod, "}");
                 }
 
                 // End class and namespace
@@ -392,6 +422,15 @@ namespace Spice2SpiceSharp
                     WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var cstate = state.Complex;");
                     WriteCode(sw, variables(pzload.DeviceVariables));
                     WriteCode(sw, "", pzloadDev, "}");
+                }
+
+                // Truncation method
+                if (trunc != null)
+                {
+                    WriteCode(sw, "", "/// <summary>", "/// Truncate the timestep", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>", "/// <param name=\"timeStep\">The timestep</param>");
+                    WriteCode(sw, "public override void Truncate(Circuit ckt, ref double timeStep)", "{");
+                    WriteCode(sw, variables(trunc.ModelVariables));
+                    WriteCode(sw, "", truncDev, "}");
                 }
 
                 // End class and namespace

@@ -17,10 +17,10 @@ namespace SpiceSharp
         public const double CONSTCtoK = 273.15;
         public const double CONSTBoltz = 1.3806226e-23;
         public const double CONSTRefTemp = 300.15; // 27degC
-        public const double CONSTroot2 = 1.41421356237;
+        public static double CONSTroot2 = Math.Sqrt(2); // 1.4142135623730951;
         public const double CONSTvt0 = CONSTBoltz * (27.0 + CONSTCtoK) / CHARGE;
         public const double CONSTKoverQ = CONSTBoltz / CHARGE;
-        public const double CONSTE = Math.E;
+        public static double CONSTE = Math.Exp(1.0);
         public const double CONSTPI = Math.PI;
         #endregion
 

@@ -495,12 +495,16 @@ namespace SpiceSharp.Components
             var method = ckt.Method;
             double vt, EffectiveLength, DrainSatCur, SourceSatCur, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat, von, evbs, evbd,
-                vdsat, cdrain, sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs,
+                vdsat, cdrain, sargsw, vgs1, vgd1, vgb1, capgs = 0, capgd = 0, capgb = 0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs,
                 ceqbd, cdreq;
             int Check, xnrm, xrev;
 
             vt = Circuit.CONSTKoverQ * MOS1temp;
             Check = 1;
+
+            /* 
+			
+			*/
 
             /* DETAILPROF */
 
@@ -534,7 +538,6 @@ namespace SpiceSharp.Components
 			* step or the general iteration step and they
 			* share some code, so we put them first - others later on
 			*/
-
             if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (method != null && method.SavedTime == 0.0)) ||
                 ((state.Init == CircuitState.InitFlags.InitFix) && (!MOS1off)))
             {
@@ -542,9 +545,9 @@ namespace SpiceSharp.Components
 
                 /* general iteration */
 
-                vbs = model.MOS1type * (rstate.OldSolution[MOS1bNode] - rstate.OldSolution[MOS1sNodePrime]);
-                vgs = model.MOS1type * (rstate.OldSolution[MOS1gNode] - rstate.OldSolution[MOS1sNodePrime]);
-                vds = model.MOS1type * (rstate.OldSolution[MOS1dNodePrime] - rstate.OldSolution[MOS1sNodePrime]);
+                vbs = model.MOS1type * rstate.OldSolution[MOS1bNode] - rstate.OldSolution[MOS1sNodePrime];
+                vgs = model.MOS1type * rstate.OldSolution[MOS1gNode] - rstate.OldSolution[MOS1sNodePrime];
+                vds = model.MOS1type * rstate.OldSolution[MOS1dNodePrime] - rstate.OldSolution[MOS1sNodePrime];
                 /* PREDICTOR */
 
                 /* now some common crunching for some more useful quantities */
@@ -569,9 +572,15 @@ namespace SpiceSharp.Components
                     cdhat = MOS1cd - (MOS1gbd - MOS1gmbs) * delvbd - MOS1gm * delvgd + MOS1gds * delvds;
                 }
                 cbhat = MOS1cbs + MOS1cbd + MOS1gbd * delvbd + MOS1gbs * delvbs;
+                /* 
+				
+				*/
 
                 /* DETAILPROF */
                 /* NOBYPASS */
+                /* 
+				
+				*/
 
                 /* DETAILPROF */
                 /* ok - bypass is out, do it the hard way */
@@ -609,6 +618,12 @@ namespace SpiceSharp.Components
                     vbd = Transistor.DEVpnjlim(vbd, state.States[0][MOS1states + MOS1vbd], vt, MOS1drainVcrit, ref Check);
                     vbs = vbd + vds;
                 }
+                /* NODELIMITING */
+                /* 
+				
+				*/
+
+                /* DETAILPROF */
             }
             else
             {
@@ -680,8 +695,8 @@ namespace SpiceSharp.Components
             }
 
             /* now to determine whether the user was able to correctly
-			 * identify the source and drain of his device
-			 */
+			* identify the source and drain of his device
+			*/
             if (vds >= 0)
             {
                 /* normal mode */
@@ -807,12 +822,13 @@ namespace SpiceSharp.Components
 				*/
                 /* CAPBYPASS */
                 {
+                    double arg, sarg;
+
                     /* can't bypass the diode capacitance calculations */
                     /* CAPZEROBYPASS */
                     if (vbs < MOS1tDepCap)
                     {
-                        double arg = 1 - vbs / MOS1tBulkPot;
-                        double sarg;
+                        arg = 1 - vbs / MOS1tBulkPot;
                         /* 
 						* the following block looks somewhat long and messy, 
 						* but since most users use the default grading
@@ -867,11 +883,12 @@ namespace SpiceSharp.Components
                 /* CAPBYPASS */
                 /* can't bypass the diode capacitance calculations */
                 {
+                    double arg, sarg;
+
                     /* CAPZEROBYPASS */
                     if (vbd < MOS1tDepCap)
                     {
-                        double arg = 1 - vbd / MOS1tBulkPot;
-                        double sarg;
+                        arg = 1 - vbd / MOS1tBulkPot;
                         /* 
 						* the following block looks somewhat long and messy, 
 						* but since most users use the default grading
@@ -916,10 +933,12 @@ namespace SpiceSharp.Components
                     }
                     /* CAPZEROBYPASS */
                 }
+                /* 
+				
+				*/
 
                 /* DETAILPROF */
-                
-                if (method != null && !state.UseIC)
+                if ((method != null) || ((method != null && method.SavedTime == 0.0) && !state.UseIC))
                 {
                     /* (above only excludes tranop, since we're only at this
 					* point if tran or tranop)
@@ -931,6 +950,7 @@ namespace SpiceSharp.Components
 					*/
 
                     /* integrate the capacitors and save results */
+
                     var result = method.Integrate(state, MOS1states + MOS1qbd, MOS1capbd);
                     MOS1gbd += result.Geq;
                     MOS1cbd += state.States[0][MOS1states + MOS1cqbd];
@@ -940,17 +960,23 @@ namespace SpiceSharp.Components
                     MOS1cbs += state.States[0][MOS1states + MOS1cqbs];
                 }
             }
+            /* 
+			
+			*/
 
             /* DETAILPROF */
 
             /* 
 			* check convergence
 			*/
-            if (!MOS1off || !(state.Init == CircuitState.InitFlags.InitFix || state.UseSmallSignal))
+            if (!MOS1off || (!(state.Init == CircuitState.InitFlags.InitFix || state.UseSmallSignal)))
             {
                 if (Check == 1)
                     state.IsCon = false;
             }
+            /* 
+			
+			*/
 
             /* DETAILPROF */
 
@@ -961,37 +987,42 @@ namespace SpiceSharp.Components
             state.States[0][MOS1states + MOS1vgs] = vgs;
             state.States[0][MOS1states + MOS1vds] = vds;
 
+            /* 
+			
+			*/
+
             /* DETAILPROF */
             /* 
-			 * meyer's capacitor model
-			 */
+			* meyer's capacitor model
+			*/
             if (state.Domain == CircuitState.DomainTypes.Time || state.UseSmallSignal)
             {
                 /* 
-				 * calculate meyer's capacitors
-				 */
+				* calculate meyer's capacitors
+				*/
                 /* 
-				 * new cmeyer - this just evaluates at the current time, 
-				 * expects you to remember values from previous time
-				 * returns 1 / 2 of non - constant portion of capacitance
-				 * you must add in the other half from previous time
-				 * and the constant part
-				 */
+				* new cmeyer - this just evaluates at the current time, 
+				* expects you to remember values from previous time
+				* returns 1 / 2 of non - constant portion of capacitance
+				* you must add in the other half from previous time
+				* and the constant part
+				*/
                 double icapgs, icapgd, icapgb;
                 if (MOS1mode > 0)
                 {
                     Transistor.DEVqmeyer(vgs, vgd, vgb, von, vdsat,
-                        out icapgs, out icapgd, out icapgb, MOS1tPhi, OxideCap);
+                        out icapgs, out icapgd, out icapgb,
+                        MOS1tPhi, OxideCap);
                 }
                 else
                 {
                     Transistor.DEVqmeyer(vgd, vgs, vgb, von, vdsat,
-                        out icapgd, out icapgs, out icapgb, MOS1tPhi, OxideCap);
+                        out icapgd, out icapgs, out icapgb,
+                        MOS1tPhi, OxideCap);
                 }
                 state.States[0][MOS1states + MOS1capgs] = icapgs;
                 state.States[0][MOS1states + MOS1capgd] = icapgd;
                 state.States[0][MOS1states + MOS1capgb] = icapgb;
-
                 vgs1 = state.States[1][MOS1states + MOS1vgs];
                 vgd1 = vgs1 - state.States[1][MOS1states + MOS1vds];
                 vgb1 = vgs1 - state.States[1][MOS1states + MOS1vbs];
@@ -1007,12 +1038,6 @@ namespace SpiceSharp.Components
                     capgd = (state.States[0][MOS1states + MOS1capgd] + state.States[1][MOS1states + MOS1capgd] + GateDrainOverlapCap);
                     capgb = (state.States[0][MOS1states + MOS1capgb] + state.States[1][MOS1states + MOS1capgb] + GateBulkOverlapCap);
                 }
-
-                /* DETAILPROF */
-                /* 
-				* store small - signal parameters (for meyer's model)
-				* all parameters already stored, so done...
-				*/
 
                 /* PREDICTOR */
                 if (method != null)
@@ -1031,7 +1056,7 @@ namespace SpiceSharp.Components
                 /* PREDICTOR */
             }
 
-            if (method == null || (method.SavedTime == 0.0))
+            if (((method != null && method.SavedTime == 0.0)) || (!(method != null)))
             {
                 /* 
 				* initialize to zero charge conductances 
@@ -1053,9 +1078,9 @@ namespace SpiceSharp.Components
                 if (capgb == 0)
                     state.States[0][MOS1states + MOS1cqgb] = 0;
                 /* 
-				 * calculate equivalent conductances and currents for
-				 * meyer"s capacitors
-				 */
+				* calculate equivalent conductances and currents for
+				* meyer"s capacitors
+				*/
                 method.Integrate(state, out gcgs, out ceqgs, MOS1states + MOS1qgs, capgs);
                 method.Integrate(state, out gcgd, out ceqgd, MOS1states + MOS1qgd, capgd);
                 method.Integrate(state, out gcgb, out ceqgb, MOS1states + MOS1qgb, capgb);
@@ -1089,8 +1114,8 @@ namespace SpiceSharp.Components
             rstate.Rhs[MOS1dNodePrime] += (ceqbd - cdreq + model.MOS1type * ceqgd);
             rstate.Rhs[MOS1sNodePrime] += cdreq + ceqbs + model.MOS1type * ceqgs;
             /* 
-			 * load y matrix
-			 */
+			* load y matrix
+			*/
 
             rstate.Matrix[MOS1dNode, MOS1dNode] += (MOS1drainConductance);
             rstate.Matrix[MOS1gNode, MOS1gNode] += ((gcgd + gcgs + gcgb));

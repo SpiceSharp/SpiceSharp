@@ -120,21 +120,30 @@ namespace SpiceSharp.Components
             else
                 vcap = rstate.OldSolution[CAPposNode] - rstate.OldSolution[CAPnegNode];
 
-            // Fill the matrix
-            state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
-
-            // Without integration, a capacitor cannot do anything
-            if (method != null)
+            if (state.Domain == Circuits.CircuitState.DomainTypes.Time)
             {
-                var result = ckt.Method.Integrate(state, CAPstate + CAPqcap, CAPcapac);
+                // Fill the matrix
+                state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
+                if (method != null && method.SavedTime == 0.0)
+                    state.States[1][CAPstate + CAPqcap] = state.States[0][CAPstate + CAPqcap];
 
-                rstate.Matrix[CAPposNode, CAPposNode] += result.Geq;
-                rstate.Matrix[CAPnegNode, CAPnegNode] += result.Geq;
-                rstate.Matrix[CAPposNode, CAPnegNode] -= result.Geq;
-                rstate.Matrix[CAPnegNode, CAPposNode] -= result.Geq;
-                rstate.Rhs[CAPposNode] -= result.Ceq;
-                rstate.Rhs[CAPnegNode] += result.Ceq;
+                // Without integration, a capacitor cannot do anything
+                if (method != null)
+                {
+                    var result = ckt.Method.Integrate(state, CAPstate + CAPqcap, CAPcapac);
+                    if (method != null && method.SavedTime == 0.0)
+                        state.States[1][CAPstate + CAPqcap] = state.States[0][CAPstate + CAPqcap];
+
+                    rstate.Matrix[CAPposNode, CAPposNode] += result.Geq;
+                    rstate.Matrix[CAPnegNode, CAPnegNode] += result.Geq;
+                    rstate.Matrix[CAPposNode, CAPnegNode] -= result.Geq;
+                    rstate.Matrix[CAPnegNode, CAPposNode] -= result.Geq;
+                    rstate.Rhs[CAPposNode] -= result.Ceq;
+                    rstate.Rhs[CAPnegNode] += result.Ceq;
+                }
             }
+            else
+                state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
         }
 
         /// <summary>

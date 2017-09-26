@@ -90,7 +90,7 @@ namespace SpiceSharp.IntegrationMethods
                     // Divided difference approach
                     dd0 = (Solutions[0] - Solutions[1]) / DeltaOld[1];
                     Prediction = Solutions[0] + DeltaOld[0] * dd0;
-                    Prediction.CopyTo(state.OldSolution);
+                    Prediction.CopyTo(state.Solution);
                     break;
 
                 case 2:
@@ -100,7 +100,7 @@ namespace SpiceSharp.IntegrationMethods
                     dd0 = (Solutions[0] - Solutions[1]) / DeltaOld[1];
                     dd1 = (Solutions[1] - Solutions[2]) / DeltaOld[2];
                     Prediction = Solutions[0] + (b * dd1 + a * dd0) * DeltaOld[0];
-                    Prediction.CopyTo(state.OldSolution);
+                    Prediction.CopyTo(state.Solution);
                     break;
 
                 default:

@@ -58,6 +58,7 @@
     <Compile Include="SpicePzLoad.cs" />
     <Compile Include="SpiceSetup.cs" />
     <Compile Include="SpiceTemperature.cs" />
+    <Compile Include="SpiceTruncate.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
