@@ -1,9 +1,11 @@
 # SpiceSharp <img src="https://github.com/svenboulanger/SpiceSharp/blob/master/SpiceNetIcon.png?raw=true" width="45px" />
 SpiceSharp is a Spice circuit simulator written in C#. It uses Math.NET to solve matrix equations. The simulator currently includes AC, DC and transient simulations. The framework is made to resemble the original Berkeley Spice version, but some parts have been altered/improved to fit into the .NET framework.
 
-I try to verify with other simulators using unit tests: ngSpice (PartSim), LTSpice (LTSpice XVII), SmartSpice (Gateway, Silvaco) or the original Spice 3f5. This is not always easy, as each simulator makes other design choices and optimizations (LTSpice extended the diode model, Gateway adds extra GMIN conductances, etc.). Math.NET also performs slightly better than Spice 3f5 for numerical errors, and so small differences may become noticeable.
+I try to verify with the original Spice 3f5 using unit tests. There are still small differences possible: Math.NET is slightly more accurate than Spice 3f5 with respect to numerical errors. Spice 3f5 was compiled using the preprocessor directives `PREDICTOR`. The main differences with SpiceSharp are:
+- Spice 3f5 is not object oriented, SpiceSharp is.
+- Spice 3f5 has a bugged NEWTRUNC feature, SpiceSharp's method will work. Set the integration method's configuration `TruncationMethod` to `PerNode`. The default is `PerDevice` where each device can truncate the timestep.
 
-Please note that this project is by no means meant to compete with existing commercial Spice simulators, although its performance is probably similar. I wanted to know more about the Spice simulator, and I wanted to be able to extend its functionality in useful ways (eg. automating simple designs, modeling custom components, etc.)
+Please note that this project is by no means meant to compete with existing commercial Spice simulators, although its performance may be similar. I wanted to know more about the Spice simulator, and I wanted to be able to extend its functionality in useful ways (eg. automating simple designs, modeling custom components, etc.)
 
 SpiceSharp is available as a **NuGet Package**.
 
