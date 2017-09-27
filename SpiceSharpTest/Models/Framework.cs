@@ -40,12 +40,57 @@ namespace SpiceSharpTest.Models
         }
 
         /// <summary>
-        /// Test using transient simulation
-        /// The netlist should contain a transient simulation. The first exporter is tested to the voltage
+        /// Test using DC simulation
+        /// The netlist should contain one DC simulation. The first exporter is tested to the reference
         /// </summary>
-        /// <param name="netlist"></param>
-        /// <param name="reft"></param>
-        /// <param name="refv"></param>
+        /// <param name="netlist">Netlist</param>
+        /// <param name="reference">Reference values</param>
+        protected void TestDC(Netlist netlist, double[] reference)
+        {
+            int index = 0;
+            netlist.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                double actual = netlist.Exports[0].Extract(data);
+                double expected = reference[index++];
+                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
+                Assert.AreEqual(expected, actual, tol);
+            };
+            netlist.Simulate();
+        }
+
+        /// <summary>
+        /// Test using AC analysis
+        /// The netlist should contain one AC analysis and two exporters. The first exporter is the real part,
+        /// the second exporter the second part. The reference is the real part followed by the imaginary part for each datapoint.
+        /// </summary>
+        /// <param name="netlist">Netlist</param>
+        /// <param name="reference">Reference values</param>
+        protected void TestAC(Netlist netlist, double[] reference)
+        {
+            int index = 0;
+            netlist.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                // Test real part
+                double actual = netlist.Exports[0].Extract(data);
+                double expected = reference[index++];
+                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-6 + 1e-30;
+                Assert.AreEqual(expected, actual, tol);
+
+                // Test the imaginary part
+                actual = netlist.Exports[1].Extract(data);
+                expected = reference[index++];
+                tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-6 + 1e-30;
+                Assert.AreEqual(expected, actual, tol);
+            };
+        }
+
+        /// <summary>
+        /// Test using transient simulation
+        /// The netlist should contain a transient simulation. The first exporter is tested to the reference
+        /// </summary>
+        /// <param name="netlist">Netlist</param>
+        /// <param name="reft">Reference time values</param>
+        /// <param name="refv">Reference values</param>
         protected void TestTransient(Netlist netlist, double[] reft, double[] refv)
         {
             var interpolation = LinearSpline.Interpolate(reft, refv);

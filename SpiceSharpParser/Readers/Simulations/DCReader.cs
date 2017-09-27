@@ -45,7 +45,7 @@ namespace SpiceSharp.Parser.Readers
                     netlist.ParseDouble(st.Parameters[i * 4 + 1]),
                     netlist.ParseDouble(st.Parameters[i * 4 + 2]),
                     netlist.ParseDouble(st.Parameters[i * 4 + 3]));
-                dc.Sweeps.Add(sweep);
+                dc.Sweeps.Insert(0, sweep);
             }
 
             netlist.Simulations.Add(dc);
