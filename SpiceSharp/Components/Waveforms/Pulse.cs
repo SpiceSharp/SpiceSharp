@@ -62,7 +62,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Setup the pulsed
+        /// Setup the pulsed waveform
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
@@ -83,7 +83,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Calculate the pulse at a timepoint
         /// </summary>
-        /// <param name="time"></param>
+        /// <param name="time">Timepoint</param>
         /// <returns></returns>
         public override double At(double time)
         {

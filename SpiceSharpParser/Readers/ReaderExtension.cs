@@ -165,6 +165,28 @@ namespace SpiceSharp.Parser.Readers
         }
 
         /// <summary>
+        /// Parse a vector of double values
+        /// </summary>
+        /// <param name="netlist">The netlist</param>
+        /// <param name="t">The token</param>
+        /// <returns></returns>
+        public static double[] ParseDoubleVector(this Netlist netlist, Token t)
+        {
+            if (t.kind == TokenConstants.VECTOR)
+            {
+                var vt = t as VectorToken;
+                double[] values = new double[vt.Tokens.Length];
+                for (int i = 0; i < values.Length; i++)
+                    values[i] = netlist.ParseDouble(vt.Tokens[i]);
+                return values;
+            }
+            else if (t.kind == VALUE || t.kind == EXPRESSION)
+                return new double[] { netlist.ParseDouble(t) };
+            else
+                throw new ParseException(t, "Vector expected");
+        }
+
+        /// <summary>
         /// Parse a token to a string
         /// Both literal and quoted "..." are accepted.
         /// </summary>

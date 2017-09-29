@@ -129,7 +129,15 @@ namespace Spice2SpiceSharp
                     ModelCode += content.Substring(e + 1);
                 }
                 else
-                    throw new Exception("Could not find instance iterator");
+                {
+                    ConverterWarnings.Add("Could not find instance iterator");
+                    int ms = method.IndexOf('{');
+                    Definition = method.Substring(ms + 1, m.Index - ms - 1);
+                    ModelCode = content;
+                    ModelParameter = m.Groups["var"].Value;
+                    DeviceCode = "";
+                    DeviceParameter = "";
+                }
             }
             else
                 throw new Exception("Could not find model iterator");
@@ -148,30 +156,36 @@ namespace Spice2SpiceSharp
             Regex def = new Regex(@"(?<!\w|\-\>)(?<var>\w+)\s*\=\s*[^;]+;");
 
             // Get all (local) model variables
-            var ms = def.Matches(ModelCode);
-            foreach (Match m in ms)
+            if (!string.IsNullOrWhiteSpace(ModelCode))
             {
-                string var = m.Groups["var"].Value;
-
-                // Try to find this variable in the device
-                Match b = def.Match(DeviceCode);
-                Match c = Regex.Match(DeviceCode, $@"(?<!\-\>\s*){var}(?!\w)");
-                if (c.Success)
+                var ms = def.Matches(ModelCode);
+                foreach (Match m in ms)
                 {
-                    if (!SharedLocalVariables.ContainsKey(var) && b.Success && b.Index != c.Index)
-                        SharedLocalVariables.Add(var, GetVariableType(var));
+                    string var = m.Groups["var"].Value;
+
+                    // Try to find this variable in the device
+                    Match b = def.Match(DeviceCode);
+                    Match c = Regex.Match(DeviceCode, $@"(?<!\-\>\s*){var}(?!\w)");
+                    if (c.Success)
+                    {
+                        if (!SharedLocalVariables.ContainsKey(var) && b.Success && b.Index != c.Index)
+                            SharedLocalVariables.Add(var, GetVariableType(var));
+                    }
+                    else if (!ModelVariables.ContainsKey(var))
+                        ModelVariables.Add(var, GetVariableType(var));
                 }
-                else if (!ModelVariables.ContainsKey(var))
-                    ModelVariables.Add(var, GetVariableType(var));
             }
 
             // Find all (local) device variables
-            ms = def.Matches(DeviceCode);
-            foreach (Match m in ms)
+            if (!string.IsNullOrWhiteSpace(DeviceCode))
             {
-                string var = m.Groups["var"].Value;
-                if (!DeviceVariables.ContainsKey(var))
-                    DeviceVariables.Add(var, GetVariableType(var));
+                var ms = def.Matches(DeviceCode);
+                foreach (Match m in ms)
+                {
+                    string var = m.Groups["var"].Value;
+                    if (!DeviceVariables.ContainsKey(var))
+                        DeviceVariables.Add(var, GetVariableType(var));
+                }
             }
         }
 
@@ -237,7 +251,7 @@ namespace Spice2SpiceSharp
         /// <returns></returns>
         protected string GetDeviceCode(SpiceParam mparam, SpiceParam dparam, string ckt = "ckt", string model = "model")
         {
-            string code = DeviceCode.Trim();
+            string code = DeviceCode?.Trim() ?? "";
             code = ApplyGeneral(code, ckt);
             code = ApplyParameters(code, DeviceParameter, dparam, DeviceVariablesExtra);
             code = ApplyParameters(code, ModelParameter, mparam, ModelVariablesExtra, model + ".");
@@ -257,7 +271,7 @@ namespace Spice2SpiceSharp
         /// <returns></returns>
         protected string GetModelCode(SpiceParam mparam, string ckt = "ckt")
         {
-            string code = ModelCode.Trim();
+            string code = ModelCode?.Trim() ?? "";
             code = ApplyGeneral(code, ckt);
             code = ApplyParameters(code, ModelParameter, mparam, ModelVariablesExtra);
 

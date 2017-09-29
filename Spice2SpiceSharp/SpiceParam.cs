@@ -246,6 +246,17 @@ namespace Spice2SpiceSharp
                 given = m.Groups["given"].Value;
                 return true;
             }
+
+            // Try other way around
+            psr = new Regex($@"^{par_here}\s*\-\>\s*(?<given>\w+Given)\s*\=\s*TRUE\s*;\s*{par_here}\s*\-\>\s*(?<var>\w+)\s*\=\s*{par_value}\s*\-\>\s*[ris]Value\s*;\s*(return\s*\(\s*OK\s*\);|break\s*;)\s*$");
+            m = psr.Match(code);
+            if (m.Success)
+            {
+                param = m.Groups["var"].Value;
+                given = m.Groups["given"].Value;
+                return true;
+            }
+
             return false;
         }
 
@@ -280,11 +291,19 @@ namespace Spice2SpiceSharp
         private bool AnySet(ref string code, out string[] p)
         {
             Regex psr = new Regex($@"{par_here}\s*\-\>\s*(?<var>\w+)\s*\=\s*(?<value>[^;]+);\s*{par_here}\s*\-\>\s*(?<given>\w+Given)\s*\=\s*TRUE\s*;", RegexOptions.Multiline);
+            Regex psr2 = new Regex($@"{par_here}\s*\-\>\s*(?<given>\w+Given)\s*\=\s*TRUE\s*;\s*{par_here}\s*\-\>\s*(?<var>\w+)\s*\=\s*(?<value>[^;]+);", RegexOptions.Multiline);
             Regex asr = new Regex($@"{par_here}\s*\-\>\s*(?<var>\w+)\s*\=\s*[^;]+;");
             HashSet<string> vars = new HashSet<string>();
 
             // Find any variable assignments
             code = psr.Replace(code, (Match m) =>
+            {
+                vars.Add(m.Groups["var"].Value);
+                if (!GivenVariable.ContainsKey(m.Groups["given"].Value))
+                    GivenVariable.Add(m.Groups["given"].Value, m.Groups["var"].Value);
+                return $"{m.Groups["var"].Value}.Set({m.Groups["value"].Value});";
+            });
+            code = psr2.Replace(code, (Match m) =>
             {
                 vars.Add(m.Groups["var"].Value);
                 if (!GivenVariable.ContainsKey(m.Groups["given"].Value))

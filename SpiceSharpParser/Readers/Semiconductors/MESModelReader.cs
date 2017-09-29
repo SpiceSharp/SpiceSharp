@@ -4,15 +4,15 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// Reads <see cref="BJTModel"/> definitions.
+    /// Reads <see cref="MESModel"/> definitions.
     /// </summary>
-    public class BipolarModelReader : ModelReader
+    public class MESModelReader : ModelReader
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public BipolarModelReader()
-            : base("npn;pnp")
+        public MESModelReader()
+            : base("nmf;pmf")
         {
         }
 
@@ -24,11 +24,11 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         protected override ICircuitObject GenerateModel(string name, string type)
         {
-            BJTModel model = new BJTModel(name);
-            if (type == "npn")
-                model.SetNPN(true);
-            else if (type == "pnp")
-                model.SetPNP(true);
+            MESModel model = new MESModel(name);
+            if (type == "nmf")
+                model.SetNMF(true);
+            else if (type == "pmf")
+                model.SetPMF(true);
             return model;
         }
     }

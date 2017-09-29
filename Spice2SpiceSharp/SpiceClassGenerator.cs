@@ -291,6 +291,7 @@ namespace Spice2SpiceSharp
                 {
                     WriteCode(sw, "", "/// <summary>", "/// Truncate the timestep", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>", "/// <param name=\"timeStep\">The timestep</param>");
                     WriteCode(sw, "public override void Truncate(Circuit ckt, ref double timeStep)", "{");
+                    WriteCode(sw, "var method = ckt.Method;");
                     WriteCode(sw, variables(trunc.ModelVariables));
                     WriteCode(sw, "", truncMod, "}");
                 }
@@ -429,6 +430,7 @@ namespace Spice2SpiceSharp
                 {
                     WriteCode(sw, "", "/// <summary>", "/// Truncate the timestep", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>", "/// <param name=\"timeStep\">The timestep</param>");
                     WriteCode(sw, "public override void Truncate(Circuit ckt, ref double timeStep)", "{");
+                    WriteCode(sw, "var method = ckt.Method;");
                     WriteCode(sw, variables(trunc.ModelVariables));
                     WriteCode(sw, "", truncDev, "}");
                 }

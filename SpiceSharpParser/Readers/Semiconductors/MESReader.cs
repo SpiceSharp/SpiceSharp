@@ -5,17 +5,17 @@ using SpiceSharp.Components;
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// Reads <see cref="BJT"/> components.
+    /// Readers <see cref="MES"/> components.
     /// </summary>
-    public class BipolarReader : ComponentReader
+    public class MESReader : ComponentReader
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public BipolarReader() : base("q") { }
+        public MESReader() : base("z") { }
 
         /// <summary>
-        /// Generate a bipolar transistor
+        /// Generate a MESFET
         /// </summary>
         /// <param name="type">Type</param>
         /// <param name="name">Name</param>
@@ -24,28 +24,24 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         protected override ICircuitObject Generate(string type, string name, List<Token> parameters, Netlist netlist)
         {
-            // I think the BJT definition is ambiguous (eg. QXXXX NC NB NE MNAME OFF can be either substrate = MNAME, model = OFF or model name = MNAME and transistor is OFF
-            // We will only allow 3 terminals if there are only 4 parameters
-            BJT bjt = new BJT(name);
+            MES mes = new MES(name);
+            mes.ReadNodes(parameters);
 
-            // If the component is of the format QXXX NC NB NE MNAME we will insert NE again before the model name
-            if (parameters.Count == 4)
-                parameters.Insert(3, parameters[2]);
-            bjt.ReadNodes(parameters);
+            // Read the model name
+            if (parameters.Count < 4)
+                throw new ParseException(parameters[2], "Model expected", false);
+            mes.SetModel(netlist.FindModel<MESModel>(parameters[3]));
 
-            if (parameters.Count < 5)
-                throw new ParseException(parameters[3], "Model expected", false);
-            bjt.SetModel(netlist.FindModel<BJTModel>(parameters[4]));
-
-            for (int i = 5; i < parameters.Count; i++)
+            // Read parameters
+            for (int i = 4; i < parameters.Count; i++)
             {
                 switch (parameters[i].kind)
                 {
                     case WORD:
                         switch (parameters[i].image.ToLower())
                         {
-                            case "on": bjt.BJToff = false; break;
-                            case "off": bjt.BJToff = true; break;
+                            case "on": mes.MESoff = false; break;
+                            case "off": mes.MESoff = true; break;
                             default: throw new ParseException(parameters[i], "ON or OFF expected");
                         }
                         break;
@@ -53,17 +49,15 @@ namespace SpiceSharp.Parser.Readers
                     case ASSIGNMENT:
                         var at = parameters[i] as AssignmentToken;
                         if (at.Name.image.ToLower() == "ic")
-                            bjt.SetIC(netlist.ParseDoubleVector(at.Value));
+                            mes.SetIC(netlist.ParseDoubleVector(at.Value));
                         else
                             throw new ParseException(parameters[i], "IC expected");
                         break;
 
                     case VALUE:
                     case EXPRESSION:
-                        if (!bjt.BJTarea.Given)
-                            bjt.BJTarea.Set(netlist.ParseDouble(parameters[i]));
-                        else if (!bjt.BJTtemp.Given)
-                            bjt.BJT_TEMP = netlist.ParseDouble(parameters[i]);
+                        if (!mes.MESarea.Given)
+                            mes.MESarea.Set(netlist.ParseDouble(parameters[i]));
                         else
                             throw new ParseException(parameters[i], "Invalid parameter");
                         break;
@@ -72,8 +66,8 @@ namespace SpiceSharp.Parser.Readers
                         throw new ParseException(parameters[i], "Invalid parameter");
                 }
             }
-            
-            return bjt;
+
+            return mes;
         }
     }
 }

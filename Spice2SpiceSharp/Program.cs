@@ -11,9 +11,9 @@ namespace Spice2SpiceSharp
         public static void Main(string[] args)
         {
             SpiceDevice dev = new SpiceDevice();
-            dev.Folder = @"D:\Visual Studio\Info\SpiceSharp\spice3f5\src\lib\dev\jfet";
-            dev.ITF = @"jfetitf.h"; 
-            dev.Def = @"jfetdefs.h";
+            dev.Folder = @"D:\Visual Studio\Info\SpiceSharp\spice3f5\src\lib\dev\mes";
+            dev.ITF = @"mesitf.h"; 
+            dev.Def = @"mesdefs.h";
             dev.Defined.AddRange(new string[] {
                 "AN_pz",
                 "AN_noise",
@@ -21,7 +21,7 @@ namespace Spice2SpiceSharp
                 "NEWTRUNC",
                 "NEWCONV",
                 "PREDICTOR",
-                "DEV_jfet"
+                "DEV_mes"
             });
 
             // Generate

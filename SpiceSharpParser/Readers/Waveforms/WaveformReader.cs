@@ -39,7 +39,7 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(string type, Statement st, Netlist netlist)
         {
-            IParameterized w = (IParameterized)Generate(type);
+            IParameterized w = Generate(type);
 
             if (st.Parameters.Count > keys.Length)
                 throw new ParseException(st.Name, $"Too many arguments for waveform \"{st.Name.image}\"");

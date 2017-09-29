@@ -132,6 +132,8 @@ namespace SpiceSharp
                 new BipolarReader(),
                 new MosfetReader(),
                 new DiodeReader(),
+                new JFETReader(),
+                new MESReader(),
 
                 // Control readers
                 new ParamSetReader(),
@@ -151,13 +153,16 @@ namespace SpiceSharp
                 // Standard waveform types
                 new PulseReader(),
                 new SineReader(),
+                new PwlReader(),
 
                 // Add model types
                 new RLCMModelReader(),
                 new SwitchModelReader(),
                 new BipolarModelReader(),
                 new MosfetModelReader(),
-                new DiodeModelReader());
+                new DiodeModelReader(),
+                new JFETModelReader(),
+                new MESModelReader());
 
             // Standard parser
             SpiceExpression e = new SpiceExpression();

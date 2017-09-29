@@ -4,31 +4,31 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
-    /// Reads <see cref="BJTModel"/> definitions.
+    /// Reads <see cref="JFETModel" /> definitions.
     /// </summary>
-    public class BipolarModelReader : ModelReader
+    public class JFETModelReader : ModelReader
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public BipolarModelReader()
-            : base("npn;pnp")
+        public JFETModelReader()
+            : base("njf;pjf")
         {
         }
 
         /// <summary>
         /// Generate a new model
         /// </summary>
-        /// <param name="name">Model name</param>
-        /// <param name="type">Model type</param>
+        /// <param name="name"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
         protected override ICircuitObject GenerateModel(string name, string type)
         {
-            BJTModel model = new BJTModel(name);
-            if (type == "npn")
-                model.SetNPN(true);
-            else if (type == "pnp")
-                model.SetPNP(true);
+            JFETModel model = new JFETModel(name);
+            if (type == "njf")
+                model.SetNJF(true);
+            else if (type == "pjf")
+                model.SetPJF(true);
             return model;
         }
     }
