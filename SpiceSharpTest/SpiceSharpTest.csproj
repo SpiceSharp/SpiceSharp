@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Framework.cs" />
+    <Compile Include="Models\Semiconductors\SpiceSharpBipolarTest.cs" />
     <Compile Include="Models\Semiconductors\SpiceSharpDiodeTest.cs" />
     <Compile Include="Models\Transistors\SpiceSharpMOS1Test.cs" />
     <Compile Include="Models\Transistors\SpiceSharpMOS2Test.cs" />
