@@ -106,7 +106,7 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(ckt);
             VSRCposNode = nodes[0].Index;
             VSRCnegNode = nodes[1].Index;
-            VSRCbranch = CreateNode(ckt, CircuitNode.NodeType.Current).Index;
+            VSRCbranch = CreateNode(ckt, $"{Name}#branch", CircuitNode.NodeType.Current).Index;
 
             // Setup the waveform if specified
             VSRCwaveform?.Setup(ckt);

@@ -288,12 +288,12 @@ namespace SpiceSharp.Components
             MOS1von = 0.0;
 
             if (model.MOS1drainResistance != 0 || (model.MOS1sheetResistance != 0 && MOS1drainSquares != 0))
-                MOS1dNodePrime = CreateNode(ckt).Index;
+                MOS1dNodePrime = CreateNode(ckt, $"{Name}#drain").Index;
             else
                 MOS1dNodePrime = MOS1dNode;
 
             if (model.MOS1sourceResistance != 0 || (model.MOS1sheetResistance != 0 && MOS1sourceSquares != 0))
-                MOS1sNodePrime = CreateNode(ckt).Index;
+                MOS1sNodePrime = CreateNode(ckt, $"{Name}#source").Index;
             else
                 MOS1sNodePrime = MOS1sNode;
         }

@@ -50,10 +50,6 @@
     <Compile Include="Readers\Controls\ParamSetReader.cs" />
     <Compile Include="Readers\RLCM\RLCMModelReader.cs" />
     <Compile Include="Readers\RLCM\RLCMReader.cs" />
-    <Compile Include="Readers\Semiconductors\JFETModelReader.cs" />
-    <Compile Include="Readers\Semiconductors\JFETReader.cs" />
-    <Compile Include="Readers\Semiconductors\MESModelReader.cs" />
-    <Compile Include="Readers\Semiconductors\MESReader.cs" />
     <Compile Include="Readers\Transistors\MosfetModelReader.cs" />
     <Compile Include="Readers\Transistors\MosfetReader.cs" />
     <Compile Include="Readers\Waveforms\PwlReader.cs" />

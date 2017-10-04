@@ -91,7 +91,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Map a node in the circuit
         /// </summary>
-        /// <param name="name">Can be a node name or NULL for an internal node that does not need a name</param>
+        /// <param name="name">The node name</param>
         /// <param name="type">The node type</param>
         /// <returns></returns>
         public CircuitNode Map(string name, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
@@ -99,34 +99,38 @@ namespace SpiceSharp.Circuits
             if (locked)
                 throw new CircuitException("Nodes locked, mapping is not allowed");
 
-            // Check for an existing node
-            if (name != null)
+            if (CaseInsensitive)
+                name = name.ToLower();
+
+            // Transform the name if necessary
+            if (prefix.Count > 0)
             {
-                if (CaseInsensitive)
-                    name = name.ToLower();
-
-                // Transform the name if necessary
-                if (prefix.Count > 0)
-                {
-                    if (pinmap.Peek().ContainsKey(name))
-                        return pinmap.Peek()[name];
-                    else if (name != Ground.Name && !Globals.Contains(name))
-                        name = prefix.Peek() + name;
-                }
-
-                // Check the node
-                if (map.ContainsKey(name))
-                    return map[name];
+                if (pinmap.Peek().ContainsKey(name))
+                    return pinmap.Peek()[name];
+                else if (name != Ground.Name && !Globals.Contains(name))
+                    name = prefix.Peek() + name;
             }
 
-            // Create a new node
+            // Check the node
+            if (map.ContainsKey(name))
+                return map[name];
+
+            var node = Create(name, type);
+            map.Add(name, node);
+            return node;
+        }
+
+        /// <summary>
+        /// Create a node without mapping it to the circuit
+        /// </summary>
+        /// <param name="name">The node name</param>
+        /// <param name="type">The node type</param>
+        /// <returns></returns>
+        public CircuitNode Create(string name, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
+        {
             var node = new CircuitNode(type, nodes.Count + 1);
             node.Name = name;
             nodes.Add(node);
-
-            // Keep a reference if it is not an internal node (null)
-            if (name != null)
-                map.Add(name, node);
             return node;
         }
 

@@ -351,7 +351,9 @@ namespace SpiceSharp.IntegrationMethods
         {
             double timetmp = double.PositiveInfinity;
             foreach (var o in ckt.Objects)
+            {
                 o.Truncate(ckt, ref timetmp);
+            }
             return Math.Min(Delta * 2.0, timetmp);
         }
 

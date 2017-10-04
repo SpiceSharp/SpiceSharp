@@ -208,19 +208,19 @@ namespace SpiceSharp.Components
 
             /* process drain series resistance */
             if ((model.BSIM3sheetResistance > 0.0) && (BSIM3drainSquares > 0.0))
-                BSIM3dNodePrime = CreateNode(ckt).Index;
+                BSIM3dNodePrime = CreateNode(ckt, $"{Name}#drain").Index;
             else
                 BSIM3dNodePrime = BSIM3dNode;
 
             /* process source series resistance */
             if ((model.BSIM3sheetResistance > 0.0) && (BSIM3sourceSquares > 0.0))
-                BSIM3sNodePrime = CreateNode(ckt).Index;
+                BSIM3sNodePrime = CreateNode(ckt, $"{Name}#source").Index;
             else
                 BSIM3sNodePrime = BSIM3sNode;
 
             /* internal charge node */
             if ((BSIM3nqsMod > 0) && (BSIM3qNode == 0))
-                BSIM3qNode = CreateNode(ckt).Index;
+                BSIM3qNode = CreateNode(ckt, $"{Name}#charge").Index;
             else
                 BSIM3qNode = 0;
         }

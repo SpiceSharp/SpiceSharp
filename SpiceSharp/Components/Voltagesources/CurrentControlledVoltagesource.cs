@@ -64,7 +64,7 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(ckt);
             CCVSposNode = nodes[0].Index;
             CCVSnegNode = nodes[1].Index;
-            CCVSbranch = CreateNode(ckt, CircuitNode.NodeType.Current).Index;
+            CCVSbranch = CreateNode(ckt, $"{Name}#branch", CircuitNode.NodeType.Current).Index;
 
             // Find the voltage source
             var vsource = ckt.Objects[CCVScontName];

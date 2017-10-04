@@ -293,12 +293,12 @@ namespace SpiceSharp.Components
             MOS2von = 0.0;
 
             if (model.MOS2drainResistance != 0 || (MOS2drainSquares != 0 && model.MOS2sheetResistance != 0))
-                MOS2dNodePrime = CreateNode(ckt).Index;
+                MOS2dNodePrime = CreateNode(ckt, $"{Name}#drain").Index;
             else
                 MOS2dNodePrime = MOS2dNode;
 
             if (model.MOS2sourceResistance != 0 || (MOS2sourceSquares != 0 && model.MOS2sheetResistance != 0))
-                MOS2sNodePrime = CreateNode(ckt).Index;
+                MOS2sNodePrime = CreateNode(ckt, $"{Name}#source").Index;
             else
                 MOS2sNodePrime = MOS2sNode;
         }

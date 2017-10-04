@@ -476,7 +476,7 @@ namespace SpiceSharp.Components
                 }
             }
             if (createNode != 0)
-                BSIM4dNodePrime = CreateNode(ckt).Index;
+                BSIM4dNodePrime = CreateNode(ckt, $"{Name}#drain").Index;
             else
                 BSIM4dNodePrime = BSIM4dNode;
 
@@ -499,18 +499,18 @@ namespace SpiceSharp.Components
                 }
             }
             if (createNode != 0)
-                BSIM4sNodePrime = CreateNode(ckt).Index;
+                BSIM4sNodePrime = CreateNode(ckt, $"{Name}#source").Index;
             else
                 BSIM4sNodePrime = BSIM4sNode;
 
             if (BSIM4rgateMod > 0)
-                BSIM4gNodePrime = CreateNode(ckt).Index;
+                BSIM4gNodePrime = CreateNode(ckt, $"{Name}#gate").Index;
             else
                 BSIM4gNodePrime = BSIM4gNodeExt;
 
             if (BSIM4rgateMod.Value == 3)
             {
-                BSIM4gNodeMid = CreateNode(ckt).Index;
+                BSIM4gNodeMid = CreateNode(ckt, $"{Name}#gmid").Index;
             }
             else
                 BSIM4gNodeMid = BSIM4gNodeExt;
@@ -518,16 +518,16 @@ namespace SpiceSharp.Components
             /* internal body nodes for body resistance model */
             if ((BSIM4rbodyMod.Value == 1) || (BSIM4rbodyMod.Value == 2))
             {
-                BSIM4dbNode = CreateNode(ckt).Index;
-                BSIM4bNodePrime = CreateNode(ckt).Index;
-                BSIM4sbNode = CreateNode(ckt).Index;
+                BSIM4dbNode = CreateNode(ckt, $"{Name}#db").Index;
+                BSIM4bNodePrime = CreateNode(ckt, $"{Name}#bulk").Index;
+                BSIM4sbNode = CreateNode(ckt, $"{Name}#sb").Index;
             }
             else
                 BSIM4dbNode = BSIM4bNodePrime = BSIM4sbNode = BSIM4bNode;
 
             /* NQS node */
             if (BSIM4trnqsMod != 0)
-                BSIM4qNode = CreateNode(ckt).Index;
+                BSIM4qNode = CreateNode(ckt, $"{Name}#q").Index;
             else
                 BSIM4qNode = 0;
         }

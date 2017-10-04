@@ -53,6 +53,7 @@ namespace SpiceSharp.Components
             pw = double.PositiveInfinity;
             for (int i = 1; i < Time.Length; i++)
                 pw = Math.Min(pw, Time[i] - Time[i - 1]);
+            cindex = 0;
         }
 
         /// <summary>
@@ -62,21 +63,12 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         public override double At(double time)
         {
-            double basetime = 0.0;
-
-            // Get the relative time
-            if (time > per)
-            {
-                basetime = per * Math.Floor(time / per);
-                time -= basetime;
-            }
-            if (time <= 0.0)
-                time = 0.0;
-            if (time > per)
-                time = per;
-
-            // Return the interpolated value
-            return interpolation.Interpolate(time);
+            if (time < Time[0])
+                return Value[0];
+            else if (time > Time[Time.Length - 1])
+                return Value[Value.Length - 1];
+            else
+                return interpolation.Interpolate(time);
         }
 
         /// <summary>
@@ -97,44 +89,23 @@ namespace SpiceSharp.Components
 
             // Get the relative time
             double time = method.Time;
-            double basetime = 0.0;
-            if (time > per)
-            {
-                basetime = per * Math.Floor(time / per);
-                time -= basetime;
-            }
-            if (time <= 0.0)
-                time = 0.0;
-            if (time > per)
-                time = per;
-
-            // Are we at the start of a breakpoint?
             double tol = 1e-7 * pw;
-            
-            // Are we at the start or very near the end?
-            if (Math.Abs(time) <= tol)
+
+            // Calculate the timepoint
+            if (time == 0)
             {
-                cindex = 0;
-                if (Time[cindex] == 0.0)
+                while (cindex < Time.Length && Time[cindex] <= 0)
                     cindex++;
-                breaks.SetBreakpoint(basetime + Time[cindex]);
-            }
-            else if (Math.Abs(time - per) <= tol)
-            {
-                cindex = 0;
-                if (Time[cindex] == 0.0)
-                    cindex++;
-                breaks.SetBreakpoint(basetime + per + Time[cindex]);
+                if (cindex < Time.Length)
+                    breaks.SetBreakpoint(Time[cindex]);
             }
             else
             {
-                if (Math.Abs(time - Time[cindex]) <= tol)
+                if (cindex < Time.Length && Math.Abs(time - Time[cindex]) < tol)
                 {
+                    cindex++;
                     if (cindex < Time.Length)
-                    {
-                        cindex++;
-                        breaks.SetBreakpoint(basetime + Time[cindex]);
-                    }
+                        breaks.SetBreakpoint(Time[cindex]);
                 }
             }
         }

@@ -132,8 +132,6 @@ namespace SpiceSharp
                 new BipolarReader(),
                 new MosfetReader(),
                 new DiodeReader(),
-                new JFETReader(),
-                new MESReader(),
 
                 // Control readers
                 new ParamSetReader(),
@@ -160,9 +158,7 @@ namespace SpiceSharp
                 new SwitchModelReader(),
                 new BipolarModelReader(),
                 new MosfetModelReader(),
-                new DiodeModelReader(),
-                new JFETModelReader(),
-                new MESModelReader());
+                new DiodeModelReader());
 
             // Standard parser
             SpiceExpression e = new SpiceExpression();

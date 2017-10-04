@@ -56,10 +56,6 @@
     <Compile Include="Components\Currentsources\VoltageControlledCurrentsource.cs" />
     <Compile Include="Components\ICircuitComponent.cs" />
     <Compile Include="Circuits\ICircuitObject.cs" />
-    <Compile Include="Components\Semiconductors\JFET.cs" />
-    <Compile Include="Components\Semiconductors\JFETModel.cs" />
-    <Compile Include="Components\Semiconductors\MES.cs" />
-    <Compile Include="Components\Semiconductors\MESModel.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1Model.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS2.cs" />

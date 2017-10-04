@@ -139,10 +139,10 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         /// <param name="type">The type</param>
         /// <returns></returns>
-        protected CircuitNode CreateNode(Circuit ckt, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
+        protected CircuitNode CreateNode(Circuit ckt, string name, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
         {
             // Map the extra equations
-            return ckt.Nodes.Map(null, type);
+            return ckt.Nodes.Create(name, type);
         }
 
         /// <summary>

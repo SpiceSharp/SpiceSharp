@@ -105,7 +105,7 @@ namespace SpiceSharp.Components
             if (model.DIOresist.Value == 0)
                 DIOposPrimeNode = DIOposNode;
             else
-                DIOposPrimeNode = CreateNode(ckt).Index;
+                DIOposPrimeNode = CreateNode(ckt, $"{Name}#pos").Index;
         }
 
         /// <summary>

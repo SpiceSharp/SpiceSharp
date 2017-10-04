@@ -163,27 +163,16 @@ namespace SpiceSharp.Components
             B2von = 0;
 
             /* process drain series resistance */
-            if ((model.B2sheetResistance != 0) && (B2drainSquares != 0.0) && (B2dNodePrime == 0))
-            {
-                B2dNodePrime = CreateNode(ckt).Index;
-            }
+            if (model.B2sheetResistance != 0 && B2drainSquares != 0.0)
+                B2dNodePrime = CreateNode(ckt, $"{Name}#drain").Index;
             else
-            {
                 B2dNodePrime = B2dNode;
-            }
 
             /* process source series resistance */
-            if ((model.B2sheetResistance != 0) && (B2sourceSquares != 0.0) && (B2sNodePrime == 0))
-            {
-                if (B2sNodePrime == 0)
-                {
-                    B2sNodePrime = CreateNode(ckt).Index;
-                }
-            }
+            if (model.B2sheetResistance != 0 && B2sourceSquares != 0.0)
+                B2sNodePrime = CreateNode(ckt, $"{Name}#source").Index;
             else
-            {
                 B2sNodePrime = B2sNode;
-            }
 
             if (sizes.Count > 0)
                 sizes.Clear();
