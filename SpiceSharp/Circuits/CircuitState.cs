@@ -108,6 +108,11 @@ namespace SpiceSharp.Circuits
         public CircuitStateComplex Complex { get; private set; } = null;
 
         /// <summary>
+        /// Noise state
+        /// </summary>
+        public CircuitStateNoise Noise { get; private set; } = null;
+
+        /// <summary>
         /// Get the order of the matrix/vectors
         /// </summary>
         public int Order { get; private set; } = 0;
@@ -138,6 +143,7 @@ namespace SpiceSharp.Circuits
             Order = ckt.Nodes.Count + 1;
             Real = new CircuitStateReal(Order);
             Complex = new CircuitStateComplex(Order);
+            Noise = new CircuitStateNoise();
             if (ckt.Method != null)
                 ReinitStates(ckt.Method);
             else

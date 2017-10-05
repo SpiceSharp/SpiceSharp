@@ -208,5 +208,14 @@ namespace SpiceSharp.Components
         {
             // Do nothing
         }
+
+        /// <summary>
+        /// Calculate noise method
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        public virtual void Noise(Circuit ckt)
+        {
+            // Do nothing (noiseless)
+        }
     }
 }

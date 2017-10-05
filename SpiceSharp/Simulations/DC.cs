@@ -137,7 +137,6 @@ namespace SpiceSharp.Simulations
         /// Execute the DC simulation
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        /// <param name="reset">Restart the circuit if true</param>
         public override void Execute(Circuit ckt)
         {
             // Setup the state

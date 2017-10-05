@@ -42,6 +42,7 @@ namespace SpiceSharp.Components
         /// </summary>
         public int RESposNode { get; private set; }
         public int RESnegNode { get; private set; }
+        public NoiseGenerators RESnoise { get; private set; } = new NoiseGenerators(new Noise.NoiseThermal("total"));
 
         /// <summary>
         /// Private variables
@@ -143,6 +144,16 @@ namespace SpiceSharp.Components
             cstate.Matrix[RESposNode, RESnegNode] -= RESconduct;
             cstate.Matrix[RESnegNode, RESposNode] -= RESconduct;
             cstate.Matrix[RESnegNode, RESnegNode] += RESconduct;
+        }
+
+        /// <summary>
+        /// Noise calculations
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        public override void Noise(Circuit ckt)
+        {
+            // Evaluate the noise sources
+            RESnoise.Generators[0].Evaluate(ckt, RESposNode, RESnegNode, RESconduct);
         }
     }
 }

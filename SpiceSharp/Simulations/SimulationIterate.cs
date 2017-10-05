@@ -209,6 +209,29 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// This routine solves the adjoint system. It assumes that the matrix has
+        /// already been loaded by a call to <see cref="AcIterate(SimulationConfiguration, Circuit)"/>, so it only alters the right
+        /// hand side vector. The unit-valued current excitation is applied between
+        /// nodes posDrive and negDrive.
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        /// <param name="posDrive">The positive driving node</param>
+        /// <param name="negDrive">The negative driving node</param>
+        public static void NzIterate(Circuit ckt, int posDrive, int negDrive)
+        {
+            var state = ckt.State.Complex;
+
+            // Clear out the right hand side vector
+            state.Rhs.Clear();
+
+            // Apply unit current excitation
+            state.Rhs[posDrive] = 1.0;
+            state.Rhs[negDrive] = -1.0;
+            state.SolveTransposed();
+            state.Solution[0] = 0.0;
+        }
+
+        /// <summary>
         /// Problematic node for convergence
         /// </summary>
         public static CircuitNode ProblemNode = null;

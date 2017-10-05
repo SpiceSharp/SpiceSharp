@@ -28,39 +28,29 @@ namespace Sandbox
         {
             InitializeComponent();
 
-            NetlistReader nr = new NetlistReader();
-            string netlist = string.Join(Environment.NewLine,
-                ".MODEL mjd44h11 npn",
-                "+ IS = 1.45468e-14 BF = 135.617 NF = 0.85 VAF = 10",
-                "+ IKF = 5.15565 ISE = 2.02483e-13 NE = 3.99964 BR = 13.5617",
-                "+ NR = 0.847424 VAR = 100 IKR = 8.44427 ISC = 1.86663e-13",
-                "+ NC = 1.00046 RB = 1.35729 IRB = 0.1 RBM = 0.1",
-                "+ RE = 0.0001 RC = 0.037687 XTB = 0.90331 XTI = 1",
-                "+ EG = 1.20459 CJE = 3.02297e-09 VJE = 0.649408 MJE = 0.351062",
-                "+ TF = 2.93022e-09 XTF = 1.5 VTF = 1.00001 ITF = 0.999997",
-                "+ CJC = 3.0004e-10 VJC = 0.600008 MJC = 0.409966 XCJC = 0.8",
-                "+ FC = 0.533878 CJS = 0 VJS = 0.75 MJS = 0.5",
-                "+ TR = 2.73328e-08 PTF = 0 KF = 0 AF = 1",
-                "V1 in 0 PULSE(0 5 1u 1n 0.5u 2u 6u)",
-                "Vsupply vdd 0 5",
-                "R1 vdd out 10k",
-                "R2 in b 1k",
-                "Q1 out b 0 0 mjd44h11",
-                ".SAVE v(out)",
-                ".tran 1n 10u"
-                );
-            nr.Parse(new MemoryStream(Encoding.UTF8.GetBytes(netlist)));
+            Series ns = chMain.Series.Add("Output noise density");
+            ns.ChartType = SeriesChartType.FastLine;
+            chMain.ChartAreas[0].AxisX.IsLogarithmic = true;
 
-            Series inp = chMain.Series.Add("Output");
-            inp.ChartType = SeriesChartType.FastPoint;
+            Circuit ckt = new Circuit();
+            ckt.Objects.Add(
+                new Voltagesource("V1", "in", "0", 0),
+                new Resistor("R1", "in", "out", 10e3),
+                new Capacitor("C1", "out", "0", 1e-9));
+            (ckt.Objects["V1"] as Voltagesource).VSRCacMag.Set(1.0);
 
-            nr.Netlist.OnExportSimulationData += (object sender, SimulationData data) =>
+            Noise noise = new Noise("Noise 1");
+            noise.StartFreq = 10.0;
+            noise.StopFreq = 10e9;
+            noise.StepType = Noise.StepTypes.Decade;
+            noise.NumberSteps = 10;
+            noise.Input = ckt.Objects["V1"];
+            noise.Output = "out";
+            noise.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                inp.Points.AddXY(data.GetTime(), nr.Netlist.Exports[0].Extract(data));
+                ns.Points.AddXY(data.GetFrequency(), Math.Log10(data.Circuit.State.Noise.outNdens * data.Circuit.State.Noise.GainSqInv) * 10.0);
             };
-            nr.Netlist.Simulate();
-
-            chMain.ChartAreas[0].AxisX.RoundAxisValues();
+            ckt.Simulate(noise);
         }
     }
 }

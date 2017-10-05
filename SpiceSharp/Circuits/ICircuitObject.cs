@@ -63,5 +63,11 @@
         /// <param name="ckt">Circuit</param>
         /// <param name="timeStep">Timestep</param>
         void Truncate(Circuit ckt, ref double timeStep);
+
+        /// <summary>
+        /// Noise operations
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        void Noise(Circuit ckt);
     }
 }
