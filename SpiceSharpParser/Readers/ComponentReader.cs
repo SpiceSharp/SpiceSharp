@@ -29,7 +29,7 @@ namespace SpiceSharp.Parser.Readers
         public override bool Read(string type, Statement st, Netlist netlist)
         {
             // Apply the change to the circuit
-            ICircuitObject result = Generate(type, st.Name.image.ToLower(), st.Parameters, netlist);
+            ICircuitObject result = Generate(type, new CircuitIdentifier(st.Name.image), st.Parameters, netlist);
             Generated = result;
             if (result != null)
             {
@@ -48,6 +48,6 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters"></param>
         /// <param name="netlist"></param>
         /// <returns></returns>
-        protected abstract ICircuitObject Generate(string type, string name, List<Token> parameters, Netlist netlist);
+        protected abstract ICircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 
 namespace SpiceSharpTest.Parser
@@ -21,7 +22,7 @@ namespace SpiceSharpTest.Parser
                 "vjs = 1.93 mjs = 0.4568 xtb = 0.85 eg = 1.143 xti = 4 kf = 0.1",
                 "af = 1.111 fc = 0.898 tnom = 30.123"
             }), "Q1 a b c d mybjt");
-            Test<BJTModel>(netlist, "mybjt", new string[] { "is", "bf", "nf", "vaf", "ikf",
+            Test<BJTModel>(netlist, new CircuitIdentifier("mybjt"), new string[] { "is", "bf", "nf", "vaf", "ikf",
                 "ise", "ne", "br", "nr", "var", "ikr",
                 "isc", "nc", "rb", "irb", "rbm", "re",
                 "rc", "cje", "vje", "mje", "tf",
@@ -39,7 +40,12 @@ namespace SpiceSharpTest.Parser
                 1.93, 0.4568, 0.85, 1.143, 4, 0.1,
                 1.111, 0.898, 30.123
             });
-            Test<BJT>(netlist, "Q1", null, null, new string[] { "a", "b", "c", "d" });
+            Test<BJT>(netlist, new CircuitIdentifier("Q1"), null, null, new CircuitIdentifier[] {
+                new CircuitIdentifier("a"),
+                new CircuitIdentifier("b"),
+                new CircuitIdentifier("c"),
+                new CircuitIdentifier("d")
+            });
         }
     }
 }

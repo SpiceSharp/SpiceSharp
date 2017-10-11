@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
 
@@ -28,7 +29,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         public override bool Read(string type, Statement st, Netlist netlist)
         {
             // Get the source name
-            string source;
+            CircuitIdentifier source;
             switch (st.Parameters.Count)
             {
                 case 0:
@@ -36,7 +37,7 @@ namespace SpiceSharp.Parser.Readers.Exports
                 case 1:
                     if (!ReaderExtension.IsName(st.Parameters[0]))
                         throw new ParseException(st.Parameters[0], "Component name expected");
-                    source = st.Parameters[0].image.ToLower();
+                    source = new CircuitIdentifier(st.Parameters[0].image);
                     break;
                 default:
                     throw new ParseException(st.Name, "Too many nodes specified", false);
@@ -68,14 +69,14 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The main node
         /// </summary>
-        public string Source { get; }
+        public CircuitIdentifier Source { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="node"></param>
         /// <param name="reference"></param>
-        public CurrentExport(string source)
+        public CurrentExport(CircuitIdentifier source)
         {
             Source = source;
         }
@@ -113,14 +114,14 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The main node
         /// </summary>
-        public string Source { get; }
+        public CircuitIdentifier Source { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="node">Positive node</param>
         /// <param name="reference">Negative reference node</param>
-        public CurrentRealExport(string source)
+        public CurrentRealExport(CircuitIdentifier source)
         {
             Source = source;
         }
@@ -145,8 +146,8 @@ namespace SpiceSharp.Parser.Readers.Exports
             Voltagesource vsrc = (Voltagesource)data.GetObject(Source);
             switch (data.Circuit.State.Domain)
             {
-                case Circuits.CircuitState.DomainTypes.Frequency:
-                case Circuits.CircuitState.DomainTypes.Laplace:
+                case CircuitState.DomainTypes.Frequency:
+                case CircuitState.DomainTypes.Laplace:
                     return vsrc.GetComplexCurrent(data.Circuit).Real;
                 default:
                     return vsrc.GetCurrent(data.Circuit);
@@ -162,14 +163,14 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The main node
         /// </summary>
-        public string Source { get; }
+        public CircuitIdentifier Source { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="node">Positive node</param>
         /// <param name="reference">Negative reference node</param>
-        public CurrentImaginaryExport(string source)
+        public CurrentImaginaryExport(CircuitIdentifier source)
         {
             Source = source;
         }
@@ -194,8 +195,8 @@ namespace SpiceSharp.Parser.Readers.Exports
             Voltagesource vsrc = (Voltagesource)data.GetObject(Source);
             switch (data.Circuit.State.Domain)
             {
-                case Circuits.CircuitState.DomainTypes.Frequency:
-                case Circuits.CircuitState.DomainTypes.Laplace:
+                case CircuitState.DomainTypes.Frequency:
+                case CircuitState.DomainTypes.Laplace:
                     return vsrc.GetComplexCurrent(data.Circuit).Imaginary;
                 default:
                     return 0.0;
@@ -211,14 +212,14 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The main node
         /// </summary>
-        public string Source { get; }
+        public CircuitIdentifier Source { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="node">Positive node</param>
         /// <param name="reference">Negative reference node</param>
-        public CurrentMagnitudeExport(string source)
+        public CurrentMagnitudeExport(CircuitIdentifier source)
         {
             Source = source;
         }
@@ -243,8 +244,8 @@ namespace SpiceSharp.Parser.Readers.Exports
             Voltagesource vsrc = (Voltagesource)data.GetObject(Source);
             switch (data.Circuit.State.Domain)
             {
-                case Circuits.CircuitState.DomainTypes.Frequency:
-                case Circuits.CircuitState.DomainTypes.Laplace:
+                case CircuitState.DomainTypes.Frequency:
+                case CircuitState.DomainTypes.Laplace:
                     return vsrc.GetComplexCurrent(data.Circuit).Magnitude;
                 default:
                     return vsrc.GetCurrent(data.Circuit);
@@ -260,14 +261,14 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The main node
         /// </summary>
-        public string Source { get; }
+        public CircuitIdentifier Source { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="node">Positive node</param>
         /// <param name="reference">Negative reference node</param>
-        public CurrentPhaseExport(string source)
+        public CurrentPhaseExport(CircuitIdentifier source)
         {
             Source = source;
         }
@@ -292,8 +293,8 @@ namespace SpiceSharp.Parser.Readers.Exports
             Voltagesource vsrc = (Voltagesource)data.GetObject(Source);
             switch (data.Circuit.State.Domain)
             {
-                case Circuits.CircuitState.DomainTypes.Frequency:
-                case Circuits.CircuitState.DomainTypes.Laplace:
+                case CircuitState.DomainTypes.Frequency:
+                case CircuitState.DomainTypes.Laplace:
                     Complex c = vsrc.GetComplexCurrent(data.Circuit);
                     return 180.0 / Math.PI * Math.Atan2(c.Imaginary, c.Real);
                 default:
@@ -310,14 +311,14 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The main node
         /// </summary>
-        public string Source { get; }
+        public CircuitIdentifier Source { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="node">Positive node</param>
         /// <param name="reference">Negative reference node</param>
-        public CurrentDecibelExport(string source)
+        public CurrentDecibelExport(CircuitIdentifier source)
         {
             Source = source;
         }
@@ -342,8 +343,8 @@ namespace SpiceSharp.Parser.Readers.Exports
             Voltagesource vsrc = (Voltagesource)data.GetObject(Source);
             switch (data.Circuit.State.Domain)
             {
-                case Circuits.CircuitState.DomainTypes.Frequency:
-                case Circuits.CircuitState.DomainTypes.Laplace:
+                case CircuitState.DomainTypes.Frequency:
+                case CircuitState.DomainTypes.Laplace:
                     Complex c = vsrc.GetComplexCurrent(data.Circuit);
                     return 10.0 * Math.Log10(c.Real * c.Real + c.Imaginary + c.Imaginary);
                 default:

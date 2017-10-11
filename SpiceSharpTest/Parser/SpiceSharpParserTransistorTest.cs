@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 
 namespace SpiceSharpTest.Parser
@@ -18,7 +19,7 @@ namespace SpiceSharpTest.Parser
                 "+ kf = 33 af = 34 fc = 35 tnom = 40)",
                 "M1 d g s b lvl1mod l=100u w=200u"
                 );
-            Test<MOS1Model>(netlist, "lvl1mod", new string[] {
+            Test<MOS1Model>(netlist, new CircuitIdentifier("lvl1mod"), new string[] {
                 "vto", "kp", "gamma", "phi", "lambda", "rd",
                 "rs", "cbd", "cbs", "is", "pb", "cgso", "cgdo", "cgbo", "rsh",
                 "cj", "mj", "cjsw", "mjsw", "js", "tox", "nsub", "nss", 
@@ -31,7 +32,11 @@ namespace SpiceSharpTest.Parser
                 24, 26, 27,
                 33, 34, 35, 40
             });
-            Test<MOS1>(netlist, "M1", new string[] { "w", "l" }, new double[] { 200e-6, 100e-6 }, new string[] { "d", "g", "s", "b" });
+            Test<MOS1>(netlist, new CircuitIdentifier("M1"), new string[] { "w", "l" }, new double[] { 200e-6, 100e-6 }, new CircuitIdentifier[] {
+                new CircuitIdentifier("d"),
+                new CircuitIdentifier("g"),
+                new CircuitIdentifier("s"),
+                new CircuitIdentifier("b") });
         }
 
         [TestMethod]
@@ -44,7 +49,7 @@ namespace SpiceSharpTest.Parser
                 "+ u0 = 23 fc = 24 nsub = 25 tpg = 26 nss = 27 nfs = 28 delta = 29",
                 "+ uexp = 30 vmax = 31 xj = 32 neff = 33 ucrit = 34 kf = 35 af = 36",
                 "M1 drain gate source bulk lvl2mod w = 5u l = 1u");
-            Test<MOS2Model>(netlist, "lvl2mod", new string[]
+            Test<MOS2Model>(netlist, new CircuitIdentifier("lvl2mod"), new string[]
             {
                 "tnom", "vto",
                 "kp", "gamma", "phi", "lambda", "rd", "rs", "cbd",
@@ -57,7 +62,12 @@ namespace SpiceSharpTest.Parser
                 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
                 29, 30, 31, 32, 33, 34, 35, 36
             });
-            Test<MOS2>(netlist, "M1", new string[] { "w", "l" }, new double[] { 5e-6, 1e-6 }, new string[] { "drain", "gate", "source", "bulk" });
+            Test<MOS2>(netlist, new CircuitIdentifier("M1"), new string[] { "w", "l" }, new double[] { 5e-6, 1e-6 }, new CircuitIdentifier[] {
+                new CircuitIdentifier("drain"),
+                new CircuitIdentifier("gate"),
+                new CircuitIdentifier("source"),
+                new CircuitIdentifier("bulk")
+            });
         }
 
         [TestMethod]
@@ -71,7 +81,7 @@ namespace SpiceSharpTest.Parser
                 "+ nfs = 27 theta = 28 vmax = 29 kappa = 30 xj = 31",
                 "+ tnom = 32 kf = 33 af = 34 delta = 38",
                 "M1 dr ga so bu lvl3mod w=10u l = 5u");
-            Test<MOS3Model>(netlist, "lvl3mod", new string[]
+            Test<MOS3Model>(netlist, new CircuitIdentifier("lvl3mod"), new string[]
             {
                 "vto", "kp",
                 "gamma", "phi", "rd", "rs", "cbd", "cbs", "is",
@@ -86,7 +96,12 @@ namespace SpiceSharpTest.Parser
                 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
                 29, 30, 31, 32, 33, 34, 38
             });
-            Test<MOS3>(netlist, "M1", new string[] { "w", "l" }, new double[] { 10e-6, 5e-6 }, new string[] { "dr", "ga", "so", "bu" });
+            Test<MOS3>(netlist, new CircuitIdentifier("M1"), new string[] { "w", "l" }, new double[] { 10e-6, 5e-6 }, new CircuitIdentifier[] {
+                new CircuitIdentifier("dr"),
+                new CircuitIdentifier("ga"),
+                new CircuitIdentifier("so"),
+                new CircuitIdentifier("bu")
+            });
         }
 
         [TestMethod]
@@ -102,7 +117,7 @@ namespace SpiceSharpTest.Parser
                 "+ vdd = 62 cgso = 63 cgdo = 64 cgbo = 65 xpart = 66 rsh = 67 js = 68 pb = 69 mj = 70 pbsw = 71",
                 "+ mjsw = 72 cj = 73 cjsw = 74 wdf = 75 dell = 76",
                 "MB d g s b lvl4mod w = 10u l = 11u ad = 1e-12 as = 2e-12 nrs = 2 nrd = 3 pd = 30u ps = 40u");
-            Test<BSIM1Model>(netlist, "lvl4mod", new string[]
+            Test<BSIM1Model>(netlist, new CircuitIdentifier("lvl4mod"), new string[]
             {
                 "vfb", "lvfb", "wvfb", "phi", "lphi", "wphi", "k1", "lk1", "wk1", "k2", "lk2", "wk2", "eta", "leta",
                 "weta", "x2e", "lx2e", "wx2e", "x3e", "lx3e", "wx3e", "dl", "dw", "muz", "x2mz", "lx2mz", "wx2mz",
@@ -116,10 +131,15 @@ namespace SpiceSharpTest.Parser
                 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
                 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76
             });
-            Test<BSIM1>(netlist, "MB",
+            Test<BSIM1>(netlist, new CircuitIdentifier("MB"),
                 new string[] { "w", "l", "ad", "as", "nrs", "nrd", "pd", "ps" },
                 new double[] { 10e-6, 11e-6, 1e-12, 2e-12, 2.0, 3.0, 30e-6, 40e-6 },
-                new string[] { "d", "g", "s", "b" });
+                new CircuitIdentifier[] {
+                    new CircuitIdentifier("d"),
+                    new CircuitIdentifier("g"),
+                    new CircuitIdentifier("s"),
+                    new CircuitIdentifier("b")
+                });
         }
 
         [TestMethod]
@@ -142,7 +162,7 @@ namespace SpiceSharpTest.Parser
                 "+ vbb = 118 cgso = 119 cgdo = 120 cgbo = 121 xpart = 122 rsh = 123 js = 124 pb = 125 mj = 126",
                 "+ pbsw = 127 mjsw = 128 cj = 129 cjsw = 130 wdf = 131 dell = 132",
                 "MB d g s b lvl5mod w = 10u l = 11u ad = 1e-12 as = 2e-12 nrs = 2 nrd = 3 pd = 30u ps = 40u");
-            Test<BSIM2Model>(netlist, "lvl5mod", new string[]
+            Test<BSIM2Model>(netlist, new CircuitIdentifier("lvl5mod"), new string[]
             {
                 "vfb", "lvfb", "wvfb", "phi", "lphi", "wphi", "k1", "lk1", "wk1", "k2", "lk2", "wk2", "eta0",
                 "leta0", "weta0", "etab", "letab", "wetab", "dl", "dw", "mu0", "mu0b", "lmu0b", "wmu0b", "mus0",
@@ -164,10 +184,15 @@ namespace SpiceSharpTest.Parser
                 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125,
                 126, 127, 128, 129, 130, 131, 132
             });
-            Test<BSIM2>(netlist, "MB",
+            Test<BSIM2>(netlist, new CircuitIdentifier("MB"),
                 new string[] { "w", "l", "ad", "as", "nrs", "nrd", "pd", "ps" },
                 new double[] { 10e-6, 11e-6, 1e-12, 2e-12, 2.0, 3.0, 30e-6, 40e-6 },
-                new string[] { "d", "g", "s", "b" });
+                new CircuitIdentifier[] {
+                    new CircuitIdentifier("d"),
+                    new CircuitIdentifier("g"),
+                    new CircuitIdentifier("s"),
+                    new CircuitIdentifier("b")
+                });
         }
 
         [TestMethod]
@@ -222,7 +247,7 @@ namespace SpiceSharpTest.Parser
                 "+ wwl = 386 wwlc = 387 wmin = 388 wmax = 389 noia = 390 noib = 391 noic = 392 em = 393 ef = 394",
                 "+ af = 395 kf = 396)",
                 "M1 dr g src blk lvl49mod w = 10u l = 11u ad = 1e-12 as = 2e-12 nrs = 2 nrd = 3 pd = 30u ps = 40u");
-            Test<BSIM3v24Model>(netlist, "lvl49mod", new string[]
+            Test<BSIM3v24Model>(netlist, new CircuitIdentifier("lvl49mod"), new string[]
             {
                 "mobmod", "binunit", "paramchk", "capmod", "noimod", "tox", "toxm", "cdsc", "cdscb", "cdscd", "cit",
                 "nfactor", "xj", "vsat", "a0", "ags", "a1", "a2", "at", "keta", "nsub", "nch", "ngate", "gamma1",
@@ -280,10 +305,15 @@ namespace SpiceSharpTest.Parser
                 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383,
                 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396
             });
-            Test<BSIM3v24>(netlist, "M1",
+            Test<BSIM3v24>(netlist, new CircuitIdentifier("M1"),
                 new string[] { "w", "l", "ad", "as", "nrs", "nrd", "pd", "ps" },
                 new double[] { 10e-6, 11e-6, 1e-12, 2e-12, 2.0, 3.0, 30e-6, 40e-6 },
-                new string[] { "dr", "g", "src", "blk" });
+                new CircuitIdentifier[] {
+                    new CircuitIdentifier("dr"),
+                    new CircuitIdentifier("g"),
+                    new CircuitIdentifier("src"),
+                    new CircuitIdentifier("blk")
+                });
         }
 
         [TestMethod]
@@ -337,7 +367,7 @@ namespace SpiceSharpTest.Parser
                 "+ wwc = 386 wwn = 387 wwl = 388 wwlc = 389 wmin = 390 wmax = 391 noia = 392 noib = 393 noic = 394 ",
                 "+ em = 395 ef = 396 af = 397 kf = 398",
                 "M1 dr g src blk lvl49mod w = 10u l = 11u ad = 1e-12 as = 2e-12 nrs = 2 nrd = 3 pd = 30u ps = 40u");
-            Test<BSIM3v30Model>(netlist, "lvl49mod", new string[]
+            Test<BSIM3v30Model>(netlist, new CircuitIdentifier("lvl49mod"), new string[]
             {
                 "mobmod", "binunit", "paramchk", "capmod",
                 "noimod", "acnqsmod", "tox", "toxm", "cdsc", "cdscb", "cdscd", "cit",
@@ -406,10 +436,15 @@ namespace SpiceSharpTest.Parser
                 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389,
                 390, 391, 392, 393, 394, 395, 396, 397, 398
             });
-            Test<BSIM3v30>(netlist, "M1", 
+            Test<BSIM3v30>(netlist, new CircuitIdentifier("M1"), 
                 new string[] { "w", "l", "ad", "as", "nrs", "nrd", "pd", "ps" }, 
                 new double[] { 10e-6, 11e-6, 1e-12, 2e-12, 2.0, 3.0, 30e-6, 40e-6 }, 
-                new string[] { "dr", "g", "src", "blk" });
+                new CircuitIdentifier[] {
+                    new CircuitIdentifier("dr"),
+                    new CircuitIdentifier("g"),
+                    new CircuitIdentifier("src"),
+                    new CircuitIdentifier("blk")
+                });
         }
     }
 }

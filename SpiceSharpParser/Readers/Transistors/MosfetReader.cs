@@ -19,7 +19,7 @@ namespace SpiceSharp.Parser.Readers
         /// Generate a mosfet instance based on a model.
         /// The generator is passed the arguments name and model.
         /// </summary>
-        public Dictionary<Type, Func<string, ICircuitObject, ICircuitComponent>> Mosfets { get; } = new Dictionary<Type, Func<string, ICircuitObject, ICircuitComponent>>();
+        public Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, ICircuitComponent>> Mosfets { get; } = new Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, ICircuitComponent>>();
 
         /// <summary>
         /// Constructor
@@ -28,7 +28,7 @@ namespace SpiceSharp.Parser.Readers
             : base("m")
         {
             // MOS1
-            Mosfets.Add(typeof(MOS1Model), (string name, ICircuitObject model) =>
+            Mosfets.Add(typeof(MOS1Model), (CircuitIdentifier name, ICircuitObject model) =>
             {
                 var m = new MOS1(name);
                 m.SetModel((MOS1Model)model);
@@ -36,7 +36,7 @@ namespace SpiceSharp.Parser.Readers
             });
 
             // MOS2
-            Mosfets.Add(typeof(MOS2Model), (string name, ICircuitObject model) =>
+            Mosfets.Add(typeof(MOS2Model), (CircuitIdentifier name, ICircuitObject model) =>
             {
                 var m = new MOS2(name);
                 m.SetModel((MOS2Model)model);
@@ -44,7 +44,7 @@ namespace SpiceSharp.Parser.Readers
             });
 
             // MOS3
-            Mosfets.Add(typeof(MOS3Model), (string name, ICircuitObject model) =>
+            Mosfets.Add(typeof(MOS3Model), (CircuitIdentifier name, ICircuitObject model) =>
             {
                 var m = new MOS3(name);
                 m.SetModel((MOS3Model)model);
@@ -60,7 +60,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override ICircuitObject Generate(string type, string name, List<Token> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             // Errors
             switch (parameters.Count)
@@ -73,7 +73,7 @@ namespace SpiceSharp.Parser.Readers
             }
 
             // Get the model and generate a component for it
-            ICircuitObject model = netlist.Path.FindModel<ICircuitObject>(parameters[4].image.ToLower());
+            ICircuitObject model = netlist.Path.FindModel<ICircuitObject>(new CircuitIdentifier(parameters[4].image));
             ICircuitComponent mosfet = null;
             if (Mosfets.ContainsKey(model.GetType()))
                 mosfet = Mosfets[model.GetType()].Invoke(name, model);

@@ -138,7 +138,7 @@ namespace SpiceSharp.Circuits
                 if (c is ICircuitComponent component)
                 {
                     var model = component.Model;
-                    if (!added.Contains(model))
+                    if (model != null && !added.Contains(model))
                     {
                         added.Add(model);
                         ordered.Add(model);

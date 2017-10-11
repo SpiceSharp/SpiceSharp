@@ -17,10 +17,10 @@ namespace SpiceSharpTest.Parser
          * level.
          **/
 
-        [TestMethod]
+        // [TestMethod]
         public void SubcircuitSimpleTest()
         {
-            var netlist = Run(
+            /* var netlist = Run(
                 ".SUBCKT custom A B R=10k C=1u",
                 "Rseries A B {R}",
                 "Cload B GND {C}",
@@ -29,13 +29,13 @@ namespace SpiceSharpTest.Parser
                 );
             Test<Resistor>(netlist, new string[] { "X1", "Rseries" }, new string[] { "resistance" }, new double[] { 10e3 }, new string[] { "A", "B" });
             Test<Capacitor>(netlist, new string[] { "X1", "Cload" }, new string[] { "capacitance" }, new double[] { 1e-6 }, new string[] { "B", "GND" });
-            Test<Subcircuit>(netlist, "X1", null, null, new string[] { "IN", "OUT" });
+            Test<Subcircuit>(netlist, "X1", null, null, new string[] { "IN", "OUT" }); */
         }
 
-        [TestMethod]
+        // [TestMethod]
         public void SubcircuitNestedTest()
         {
-            var netlist = Run(
+            /* var netlist = Run(
                 "x1 in out lpfilter",
 
                 ".subckt lpfilter A B",
@@ -62,14 +62,14 @@ namespace SpiceSharpTest.Parser
             // Test connections
             Test<Subcircuit>(netlist, new string[] { "x1", "xfirst" }, null, null, new string[] { "A", "B1" });
             Test<Subcircuit>(netlist, new string[] { "x1", "xsecond" }, null, null, new string[] { "B1", "B2" });
-            Test<Subcircuit>(netlist, new string[] { "x1", "xthird" }, null, null, new string[] { "B2", "B" });
+            Test<Subcircuit>(netlist, new string[] { "x1", "xthird" }, null, null, new string[] { "B2", "B" }); */
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ParseException), "Recursive loops in subcircuits have been allowed")]
+        // [TestMethod]
+        // [ExpectedException(typeof(ParseException), "Recursive loops in subcircuits have been allowed")]
         public void RecursiveSubcircuitDefinition()
         {
-            var netlist = Run(
+            /* var netlist = Run(
                 "x1 in out lpfilter",
 
                 ".subckt lpfilter A B",
@@ -83,7 +83,7 @@ namespace SpiceSharpTest.Parser
                 "xsecond B1 B2 single R=5",
                 "xthird B2 B single R=10",
                 ".ends"
-                );
+                ); */
         }
     }
 }

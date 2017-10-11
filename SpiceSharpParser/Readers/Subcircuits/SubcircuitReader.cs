@@ -25,7 +25,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override ICircuitObject Generate(string type, string name, List<Token> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             List<string> pins = new List<string>();
             Dictionary<string, Token> pars = new Dictionary<string, Token>();

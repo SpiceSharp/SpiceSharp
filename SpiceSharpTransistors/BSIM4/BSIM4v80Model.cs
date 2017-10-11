@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Components.Transistors;
@@ -1967,7 +1968,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM4v80Model(string name) : base(name)
+        public BSIM4v80Model(CircuitIdentifier name) : base(name)
         {
         }
 

@@ -25,7 +25,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override ICircuitObject Generate(string type, string name, List<Token> parameters, Netlist netlist)
+        protected override ICircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             switch (type)
             {
@@ -44,7 +44,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateCap(string name, List<Token> parameters, Netlist netlist)
+        protected ICircuitObject GenerateCap(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             Capacitor cap = new Capacitor(name);
             cap.ReadNodes(parameters);
@@ -75,7 +75,7 @@ namespace SpiceSharp.Parser.Readers
                 {
                     case WORD:
                     case IDENTIFIER:
-                        cap.SetModel(netlist.Path.FindModel<CapacitorModel>(parameters[2].image.ToLower()));
+                        cap.SetModel(netlist.Path.FindModel<CapacitorModel>(new CircuitIdentifier(parameters[2].image)));
                         break;
                     default:
                         throw new ParseException(parameters[2], "Model name expected");
@@ -95,7 +95,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateInd(string name, List<Token> parameters, Netlist netlist)
+        protected ICircuitObject GenerateInd(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             Inductor ind = new Inductor(name);
             ind.ReadNodes(parameters);
@@ -117,7 +117,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateMut(string name, List<Token> parameters, Netlist netlist)
+        protected ICircuitObject GenerateMut(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             MutualInductance mut = new MutualInductance(name);
             switch (parameters.Count)
@@ -130,10 +130,10 @@ namespace SpiceSharp.Parser.Readers
             // Read two inductors
             if (!ReaderExtension.IsName(parameters[0]))
                 throw new ParseException(parameters[0], "Component name expected");
-            mut.MUTind1 = parameters[0].image.ToLower();
+            mut.MUTind1 = new CircuitIdentifier(parameters[0].image);
             if (!ReaderExtension.IsName(parameters[1]))
                 throw new ParseException(parameters[1], "Component name expected");
-            mut.MUTind2 = parameters[1].image.ToLower();
+            mut.MUTind2 = new CircuitIdentifier(parameters[1].image);
             mut.MUTcoupling.Set(netlist.ParseDouble(parameters[2]));
             return mut;
         }
@@ -145,7 +145,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateRes(string name, List<Token> parameters, Netlist netlist)
+        protected ICircuitObject GenerateRes(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             Resistor res = new Resistor(name);
             res.ReadNodes(parameters);

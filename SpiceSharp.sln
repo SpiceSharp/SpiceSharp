@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiceSharp", "SpiceSharp\SpiceSharp.csproj", "{080D88DB-051E-499B-A02B-EAA36DE52853}"
 EndProject
@@ -17,8 +17,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiceSharpTest", "SpiceSharpTest\SpiceSharpTest.csproj", "{DE500B6D-352C-4C63-AA37-655D7369D728}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.csproj", "{8A97174E-3144-466F-AE26-20A43124ABF5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiceSharpDesigner", "SpiceSharpDesigner\SpiceSharpDesigner.csproj", "{57203828-BB65-4927-A232-28F8051FACA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0530BC95-5ECA-4D35-BD40-7880B4803608}"
 	ProjectSection(SolutionItems) = preProject
@@ -55,12 +53,11 @@ Global
 		{8A97174E-3144-466F-AE26-20A43124ABF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A97174E-3144-466F-AE26-20A43124ABF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A97174E-3144-466F-AE26-20A43124ABF5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57203828-BB65-4927-A232-28F8051FACA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57203828-BB65-4927-A232-28F8051FACA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57203828-BB65-4927-A232-28F8051FACA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57203828-BB65-4927-A232-28F8051FACA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4CD32ED4-D41E-47A2-9627-A4409628205D}
 	EndGlobalSection
 EndGlobal

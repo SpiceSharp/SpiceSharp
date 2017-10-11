@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Parser.Readers
+﻿using SpiceSharp.Circuits;
+
+namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
     /// Reads nodesets (.NODESET)
@@ -34,14 +36,14 @@
                             case BRACKET:
                                 BracketToken bt = at.Name as BracketToken;
                                 if (bt.Name.image.ToLower() == "v" && bt.Parameters.Length == 1 && ReaderExtension.IsNode(bt.Parameters[0]))
-                                    netlist.Circuit.Nodes.Nodeset.Add(bt.Parameters[0].image.ToLower(), netlist.ParseDouble(at.Value));
+                                    netlist.Circuit.Nodes.Nodeset.Add(new CircuitIdentifier(bt.Parameters[0].image), netlist.ParseDouble(at.Value));
                                 else
                                     throw new ParseException(st.Parameters[i], "Invalid format, v(<node>)=<ic> expected");
                                 break;
 
                             default:
                                 if (ReaderExtension.IsNode(at.Name))
-                                    netlist.Circuit.Nodes.Nodeset.Add(at.Name.image.ToLower(), netlist.ParseDouble(at.Value));
+                                    netlist.Circuit.Nodes.Nodeset.Add(new CircuitIdentifier(at.Name.image), netlist.ParseDouble(at.Value));
                                 else
                                     throw new ParseException(st.Parameters[i], "Invalid format, <node>=<ic> expected");
                                 break;

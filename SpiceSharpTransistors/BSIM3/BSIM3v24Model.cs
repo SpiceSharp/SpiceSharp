@@ -939,7 +939,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM3v24Model(string name) : base(name)
+        public BSIM3v24Model(CircuitIdentifier name) : base(name)
         {
         }
 

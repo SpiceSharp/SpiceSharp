@@ -23,8 +23,8 @@ namespace SpiceSharpTest.Models.Semiconductors
 
             var netlist = Run(
                 ".model 1N914 D(Is= 2.52n Rs = .568 N= 1.752 Cjo= 4p M = .4 tt= 20n)",
-                "V1 OUT GND 0",
-                "D1 OUT GND 1N914",
+                "V1 OUT 0 0",
+                "D1 OUT 0 1N914",
                 ".DC V1 -1 1 10m",
                 ".SAVE I(V1)"
                 );

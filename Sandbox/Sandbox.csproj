@@ -85,10 +85,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SpiceSharpDesigner\SpiceSharpDesigner.csproj">
-      <Project>{57203828-bb65-4927-a232-28f8051faca1}</Project>
-      <Name>SpiceSharpDesigner</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SpiceSharpParser\SpiceSharpParser.csproj">
       <Project>{fdb9a121-dff2-403b-9430-d128a2a2794f}</Project>
       <Name>SpiceSharpParser</Name>

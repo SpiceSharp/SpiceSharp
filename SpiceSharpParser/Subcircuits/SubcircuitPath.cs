@@ -151,7 +151,7 @@ namespace SpiceSharp.Parser.Subcircuits
         /// </summary>
         /// <param name="name">Name of the model</param>
         /// <returns></returns>
-        public T FindModel<T>(string name)
+        public T FindModel<T>(CircuitIdentifier name)
         {
             switch (ModelScope)
             {

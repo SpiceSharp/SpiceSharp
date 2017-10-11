@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Parser.Readers
 {
@@ -41,7 +42,7 @@ namespace SpiceSharp.Parser.Readers
             for (int i = 0; i < count; i++)
             {
                 DC.Sweep sweep = new DC.Sweep(
-                    st.Parameters[i * 4].image.ToLower(),
+                    new CircuitIdentifier(st.Parameters[i * 4].image),
                     netlist.ParseDouble(st.Parameters[i * 4 + 1]),
                     netlist.ParseDouble(st.Parameters[i * 4 + 2]),
                     netlist.ParseDouble(st.Parameters[i * 4 + 3]));

@@ -16,9 +16,9 @@ namespace SpiceSharpTest
         {
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "A", "GND", 1.0),
-                new Voltagesource("V2", "B", "A", 1.0),
-                new Voltagesource("V3", "B", "A", 1.0)
+                new Voltagesource(new CircuitIdentifier("V1"), new CircuitIdentifier("A"), new CircuitIdentifier("GND"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V2"), new CircuitIdentifier("B"), new CircuitIdentifier("A"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V3"), new CircuitIdentifier("B"), new CircuitIdentifier("A"), 1.0)
                 );
 
             CircuitCheck check = new CircuitCheck();
@@ -31,16 +31,16 @@ namespace SpiceSharpTest
         {
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "A", "GND", 1.0),
-                new Voltagesource("V2", "A", "B", 1.0),
-                new Voltagesource("V3", "B", "C", 1.0),
-                new Voltagesource("V4", "C", "D", 1.0),
-                new Voltagesource("V5", "D", "E", 1.0),
-                new Voltagesource("V6", "E", "F", 1.0),
-                new Voltagesource("V7", "F", "G", 1.0),
-                new Voltagesource("V8", "G", "H", 1.0),
-                new Voltagesource("V9", "H", "I", 1.0),
-                new Voltagesource("V10", "I", "0", 1.0)
+                new Voltagesource(new CircuitIdentifier("V1"), new CircuitIdentifier("A"), new CircuitIdentifier("GND"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V2"), new CircuitIdentifier("A"), new CircuitIdentifier("B"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V3"), new CircuitIdentifier("B"), new CircuitIdentifier("C"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V4"), new CircuitIdentifier("C"), new CircuitIdentifier("D"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V5"), new CircuitIdentifier("D"), new CircuitIdentifier("E"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V6"), new CircuitIdentifier("E"), new CircuitIdentifier("F"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V7"), new CircuitIdentifier("F"), new CircuitIdentifier("G"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V8"), new CircuitIdentifier("G"), new CircuitIdentifier("H"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V9"), new CircuitIdentifier("H"), new CircuitIdentifier("I"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V10"), new CircuitIdentifier("I"), new CircuitIdentifier("0"), 1.0)
                 );
             CircuitCheck check = new CircuitCheck();
             check.Check(ckt);
@@ -52,9 +52,9 @@ namespace SpiceSharpTest
         {
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "in", "gnd", 1.0),
-                new Capacitor("C1", "in", "out", 1e-12),
-                new Capacitor("C2", "out", "gnd", 1e-12)
+                new Voltagesource(new CircuitIdentifier("V1"), new CircuitIdentifier("in"), new CircuitIdentifier("gnd"), 1.0),
+                new Capacitor(new CircuitIdentifier("C1"), new CircuitIdentifier("in"), new CircuitIdentifier("out"), 1e-12),
+                new Capacitor(new CircuitIdentifier("C2"), new CircuitIdentifier("out"), new CircuitIdentifier("gnd"), 1e-12)
                 );
             CircuitCheck check = new CircuitCheck();
             check.Check(ckt);
@@ -66,9 +66,9 @@ namespace SpiceSharpTest
         {
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "input", "gnd", 1.0),
-                new VoltageControlledVoltagesource("E1", "out", "gnd", "in", "gnd", 2.0),
-                new VoltageControlledVoltagesource("E2", "out2", "gnd", "out", "gnd", 1.0)
+                new Voltagesource(new CircuitIdentifier("V1"), new CircuitIdentifier("input"), new CircuitIdentifier("gnd"), 1.0),
+                new VoltageControlledVoltagesource(new CircuitIdentifier("E1"), new CircuitIdentifier("out"), new CircuitIdentifier("gnd"), new CircuitIdentifier("in"), new CircuitIdentifier("gnd"), 2.0),
+                new VoltageControlledVoltagesource(new CircuitIdentifier("E2"), new CircuitIdentifier("out2"), new CircuitIdentifier("gnd"), new CircuitIdentifier("out"), new CircuitIdentifier("gnd"), 1.0)
                 );
             CircuitCheck check = new CircuitCheck();
             check.Check(ckt);

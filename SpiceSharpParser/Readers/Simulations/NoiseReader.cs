@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 using static SpiceSharp.Parser.Readers.ReaderExtension;
 
 namespace SpiceSharp.Parser.Readers
@@ -54,15 +55,15 @@ namespace SpiceSharp.Parser.Readers
                         // V(A, B)
                         case 2:
                             t = bracket.Parameters[0];
-                            noise.Output = IsNode(t) ? t.image.ToLower() : throw new ParseException(t, "Node expected");
+                            noise.Output = IsNode(t) ? new CircuitIdentifier(t.image) : throw new ParseException(t, "Node expected");
                             t = bracket.Parameters[1];
-                            noise.OutputRef = IsNode(t) ? t.image.ToLower() : throw new ParseException(t, "Node expected");
+                            noise.OutputRef = IsNode(t) ? new CircuitIdentifier(t.image) : throw new ParseException(t, "Node expected");
                             break;
 
                         // V(A)
                         case 1:
                             t = bracket.Parameters[0];
-                            noise.Output = IsNode(t) ? t.image.ToLower() : throw new ParseException(t, "Node expected");
+                            noise.Output = IsNode(t) ? new CircuitIdentifier(t.image) : throw new ParseException(t, "Node expected");
                             break;
 
                         default:
@@ -78,7 +79,7 @@ namespace SpiceSharp.Parser.Readers
             // The second parameter needs to be source
             if (!IsName(st.Parameters[1]))
                 throw new ParseException(st.Parameters[1], "Invalid source");
-            noise.Input = st.Parameters[1].image.ToLower();
+            noise.Input = new CircuitIdentifier(st.Parameters[1].image);
 
             // Sweep parameters
             switch (st.Parameters[2].image.ToLower())

@@ -13,7 +13,6 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Parameters;
 using SpiceSharp.Parser.Readers;
-using SpiceSharp.Designer;
 using SpiceSharp.Diagnostics;
 using MathNet.Numerics.Interpolation;
 
@@ -32,7 +31,7 @@ namespace Sandbox
             ns.ChartType = SeriesChartType.FastLine;
             Series sref = chMain.Series.Add("Reference");
             sref.ChartType = SeriesChartType.FastPoint;
-            chMain.ChartAreas[0].AxisX.IsLogarithmic = true;
+            // chMain.ChartAreas[0].AxisX.IsLogarithmic = true;
 
             // Reference
             double[] reference = new double[]
@@ -46,15 +45,16 @@ namespace Sandbox
                 "V1 in 0 DC 1 AC 1 0",
                 "R1 in out 10k",
                 "D1 out 0 1N914",
-                ".NOISE V(out) V1 dec 10 10 10g");
+                ".tran 1p 10n");
             nr.Parse(new MemoryStream(Encoding.UTF8.GetBytes(netlist)));
 
             int index = 0;
             nr.Netlist.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                double n = data.GetOutputNoiseDensity();
-                ns.Points.AddXY(data.GetFrequency(), Math.Log10(n) * 10.0);
-                sref.Points.AddXY(data.GetFrequency(), Math.Log10(reference[index++]) * 10.0);
+                // double n = data.GetOutputNoiseDensity();
+                // ns.Points.AddXY(data.GetFrequency(), Math.Log10(n) * 10.0);
+                // sref.Points.AddXY(data.GetFrequency(), Math.Log10(reference[index++]) * 10.0);
+                ns.Points.AddXY(data.GetTime(), data.GetVoltage(new SpiceSharp.Circuits.CircuitIdentifier("out")));
             };
             nr.Netlist.Simulate();
         }

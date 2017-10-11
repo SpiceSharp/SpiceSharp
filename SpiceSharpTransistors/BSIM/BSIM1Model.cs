@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Parameters;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
@@ -190,7 +191,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM1Model(string name) : base(name)
+        public BSIM1Model(CircuitIdentifier name) : base(name)
         {
         }
 

@@ -67,11 +67,11 @@ namespace SpiceSharp.Parser.Readers
             }
 
             // Extract the nodes
-            string[] nodes = new string[count];
+            CircuitIdentifier[] nodes = new CircuitIdentifier[count];
             for (int i = index; i < index + count; i++)
             {
                 if (IsNode(parameters[i]))
-                    nodes[i] = parameters[i].image.ToLower();
+                    nodes[i] = new CircuitIdentifier(parameters[i].image);
                 else
                     throw new ParseException(parameters[i], "Node expected");
             }
@@ -138,7 +138,7 @@ namespace SpiceSharp.Parser.Readers
             {
                 case WORD:
                 case IDENTIFIER:
-                    return netlist.Path.FindModel<T>(t.image.ToLower());
+                    return netlist.Path.FindModel<T>(new CircuitIdentifier(t.image));
                 default:
                     throw new ParseException(t, "Invalid model identifier");
             }
@@ -219,7 +219,7 @@ namespace SpiceSharp.Parser.Readers
             {
                 case WORD:
                 case IDENTIFIER:
-                    return netlist.Path.FindModel<T>(t.image.ToLower());
+                    return netlist.Path.FindModel<T>(new CircuitIdentifier(t.image));
                 default:
                     throw new ParseException(t, "Invalid model name");
             }

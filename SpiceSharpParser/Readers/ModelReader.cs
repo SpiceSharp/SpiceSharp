@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
         /// Generate a model of the right type
         /// </summary>
         /// <returns></returns>
-        protected abstract ICircuitObject GenerateModel(string name, string type);
+        protected abstract ICircuitObject GenerateModel(CircuitIdentifier name, string type);
 
         /// <summary>
         /// Read
@@ -32,7 +32,7 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(string type, Statement st, Netlist netlist)
         {
-            var model = GenerateModel(st.Name.image.ToLower(), type);
+            var model = GenerateModel(new CircuitIdentifier(st.Name.image), type);
             netlist.ReadParameters((IParameterized)model, st.Parameters);
             
             // Output

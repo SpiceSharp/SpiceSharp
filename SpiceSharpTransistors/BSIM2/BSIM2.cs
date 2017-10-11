@@ -134,7 +134,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM2(string name) : base(name)
+        public BSIM2(CircuitIdentifier name) : base(name)
         {
         }
 
@@ -164,13 +164,13 @@ namespace SpiceSharp.Components
 
             /* process drain series resistance */
             if (model.B2sheetResistance != 0 && B2drainSquares != 0.0)
-                B2dNodePrime = CreateNode(ckt, $"{Name}#drain").Index;
+                B2dNodePrime = CreateNode(ckt, Name + "#drain").Index;
             else
                 B2dNodePrime = B2dNode;
 
             /* process source series resistance */
             if (model.B2sheetResistance != 0 && B2sourceSquares != 0.0)
-                B2sNodePrime = CreateNode(ckt, $"{Name}#source").Index;
+                B2sNodePrime = CreateNode(ckt, Name + "#source").Index;
             else
                 B2sNodePrime = B2sNode;
 

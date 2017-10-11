@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 using SpiceSharp.Diagnostics;
 
@@ -30,7 +31,7 @@ namespace SpiceSharpTest.Parser
         {
             var netlist = Run(".dc V1 0 5 1m");
             TestParameters(((DC)netlist.Simulations[0]).Sweeps[0], new string[] { "start", "stop", "step" }, new double[] { 0.0, 5.0, 1e-3 });
-            Assert.AreEqual(((DC)netlist.Simulations[0]).Sweeps[0].ComponentName, "v1");
+            Assert.AreEqual(((DC)netlist.Simulations[0]).Sweeps[0].ComponentName, new CircuitIdentifier("V1"));
 
             if (CircuitWarning.Warnings.Count > 0)
                 throw new Exception("Warning: " + CircuitWarning.Warnings[0]);

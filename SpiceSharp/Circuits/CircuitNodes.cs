@@ -37,9 +37,9 @@ namespace SpiceSharp.Circuits
         /// </summary>
         public CircuitNodes()
         {
-            Ground = new CircuitNode("0", CircuitNode.NodeType.Voltage);
+            Ground = new CircuitNode(new CircuitIdentifier("0"), CircuitNode.NodeType.Voltage);
             map.Add(Ground.Name, Ground);
-            map.Add("gnd", Ground);
+            map.Add(new CircuitIdentifier("gnd"), Ground);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace SpiceSharp.Circuits
             nodes.Clear();
             map.Clear();
             map.Add(Ground.Name, Ground);
-            map.Add("gnd", Ground);
+            map.Add(new CircuitIdentifier("gnd"), Ground);
             locked = false;
         }
     }
