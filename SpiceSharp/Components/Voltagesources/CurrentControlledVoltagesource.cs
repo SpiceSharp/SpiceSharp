@@ -67,9 +67,8 @@ namespace SpiceSharp.Components
             CCVSbranch = CreateNode(ckt, $"{Name}#branch", CircuitNode.NodeType.Current).Index;
 
             // Find the voltage source
-            var vsource = ckt.Objects[CCVScontName];
-            if (vsource is Voltagesource)
-                CCVScontBranch = ((Voltagesource)vsource).VSRCbranch;
+            if (ckt.Objects[CCVScontName] is Voltagesource vsrc)
+                CCVScontBranch = vsrc.VSRCbranch;
             else
                 throw new CircuitException($"{Name}: Could not find voltage source '{CCVScontName}'");
         }

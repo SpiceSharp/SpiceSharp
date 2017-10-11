@@ -39,9 +39,6 @@ namespace SpiceSharp.Simulations
                     for (int i = 0; i < nodes.Count; i++)
                     {
                         var node = nodes[i];
-                        if (node.Name == null)
-                            continue;
-
                         if (nodes.Nodeset.ContainsKey(node.Name))
                         {
                             double ns = nodes.Nodeset[node.Name];
@@ -65,9 +62,6 @@ namespace SpiceSharp.Simulations
                     for (int i = 0; i < nodes.Count; i++)
                     {
                         var node = nodes[i];
-                        if (node.Name == null)
-                            continue;
-
                         if (nodes.IC.ContainsKey(node.Name))
                         {
                             double ic = nodes.IC[node.Name];
@@ -134,7 +128,7 @@ namespace SpiceSharp.Simulations
         /// <param name="nodes">The list of nodes</param>
         /// <param name="rownum">The row number</param>
         /// <returns></returns>
-        private static bool ZeroNoncurRow(Matrix<double> matrix, Nodes nodes, int rownum)
+        private static bool ZeroNoncurRow(Matrix<double> matrix, CircuitNodes nodes, int rownum)
         {
             bool currents = false;
             for (int n = 0; n < nodes.Count; n++)

@@ -80,9 +80,8 @@ namespace SpiceSharp.Components
             CSWnegNode = nodes[1].Index;
 
             // Find the voltage source
-            var vsource = ckt.Objects[CSWcontName];
-            if (vsource is Voltagesource)
-                CSWcontBranch = ((Voltagesource)vsource).VSRCbranch;
+            if (ckt.Objects[CSWcontName] is Voltagesource vsrc)
+                CSWcontBranch = vsrc.VSRCbranch;
 
             CSWstate = ckt.State.GetState();
         }

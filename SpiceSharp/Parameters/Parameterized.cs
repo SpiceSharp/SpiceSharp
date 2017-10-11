@@ -39,10 +39,8 @@ namespace SpiceSharp.Parameters
                 // Create a delegate for the member
 
                 // PROPERTIES
-                if (m is PropertyInfo)
+                if (m is PropertyInfo pi)
                 {
-                    PropertyInfo pi = m as PropertyInfo;
-
                     // TYPE Parameter
                     if (pi.PropertyType == typeof(Parameter))
                     {
@@ -81,10 +79,8 @@ namespace SpiceSharp.Parameters
                 }
 
                 // FIELDS
-                else if (m is FieldInfo)
+                else if (m is FieldInfo fi)
                 {
-                    FieldInfo fi = m as FieldInfo;
-
                     // TYPE parameter
                     if (fi.FieldType == typeof(Parameter))
                     {
@@ -126,10 +122,8 @@ namespace SpiceSharp.Parameters
                 }
 
                 // METHODS
-                else if (m is MethodInfo)
+                else if (m is MethodInfo mi)
                 {
-                    MethodInfo mi = m as MethodInfo;
-
                     // Supported methods
                     var parameters = mi.GetParameters();
 
@@ -233,9 +227,8 @@ namespace SpiceSharp.Parameters
             foreach (MemberInfo m in members)
             {
                 // Create a delegate for the member
-                if (m is PropertyInfo)
+                if (m is PropertyInfo pi)
                 {
-                    PropertyInfo pi = m as PropertyInfo;
                     if (pi.PropertyType == typeof(Parameter))
                     {
                         foreach (var attr in pi.GetCustomAttributes<SpiceName>())
@@ -267,10 +260,8 @@ namespace SpiceSharp.Parameters
                     }
                 }
 
-                else if (m is MethodInfo)
+                else if (m is MethodInfo mi)
                 {
-                    MethodInfo mi = m as MethodInfo;
-
                     // The only allowed parameter is a Circuit object
                     var parameters = mi.GetParameters();
                     if (parameters.Length == 1 && parameters[0].ParameterType == typeof(Circuit) && mi.ReturnType == typeof(double))

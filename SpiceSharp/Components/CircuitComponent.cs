@@ -37,7 +37,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Get the name of the component
         /// </summary>
-        public string Name { get; }
+        public CircuitIdentifier Name { get; }
 
         /// <summary>
         /// This parameter can change the order in which components are traversed
@@ -49,7 +49,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the component</param>
-        public CircuitComponent(string name)
+        public CircuitComponent(CircuitIdentifier name)
             : base()
         {
             Name = name;

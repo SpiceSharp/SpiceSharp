@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Get the name of the component
         /// </summary>
-        public string Name { get; }
+        public CircuitIdentifier Name { get; }
 
         /// <summary>
         /// Gets the priority
@@ -23,7 +23,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the model</param>
-        public CircuitModel(string name)
+        public CircuitModel(CircuitIdentifier name)
         {
             // Make sure the models are evaluated before the actual components
             Name = name;

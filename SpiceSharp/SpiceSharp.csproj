@@ -48,6 +48,7 @@
     <Compile Include="Attributes\IndependentSource.cs" />
     <Compile Include="Attributes\VoltageDriver.cs" />
     <Compile Include="Circuits\CircuitCheck.cs" />
+    <Compile Include="Circuits\CircuitIdentifier.cs" />
     <Compile Include="Circuits\CircuitStateComplex.cs" />
     <Compile Include="Circuits\CircuitStateNoise.cs" />
     <Compile Include="Circuits\CircuitStateReal.cs" />
@@ -81,7 +82,6 @@
     <Compile Include="Components\Semiconductors\Diode.cs" />
     <Compile Include="Components\Semiconductors\DiodeModel.cs" />
     <Compile Include="Components\Semiconductors\Semiconductor.cs" />
-    <Compile Include="Components\Subcircuit.cs" />
     <Compile Include="Components\Switches\CurrentSwitch.cs" />
     <Compile Include="Components\Switches\CurrentSwitchModel.cs" />
     <Compile Include="Components\Switches\VoltageSwitch.cs" />
@@ -102,7 +102,7 @@
     <Compile Include="Circuits\CircuitNode.cs" />
     <Compile Include="Circuits\CircuitState.cs" />
     <Compile Include="Circuits\CircuitStatistics.cs" />
-    <Compile Include="Circuits\Nodes.cs" />
+    <Compile Include="Circuits\CircuitNodes.cs" />
     <Compile Include="Components\RLC\Capacitor.cs" />
     <Compile Include="Components\RLC\CapacitorModel.cs" />
     <Compile Include="Components\RLC\Resistor.cs" />

@@ -76,8 +76,8 @@ namespace SpiceSharp.Parser.Readers.Collections
         {
             foreach (var r in readers.Values)
             {
-                if (r is T)
-                    return (T)r;
+                if (r is T res)
+                    return res;
             }
             return null;
         }

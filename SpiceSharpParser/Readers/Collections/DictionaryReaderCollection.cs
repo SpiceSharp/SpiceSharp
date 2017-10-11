@@ -101,13 +101,13 @@ namespace SpiceSharp.Parser.Readers.Collections
         {
             foreach (var c in readers.Values)
             {
-                if (c is T)
-                    return (T)c;
+                if (c is T res)
+                    return res;
             }
             foreach (var c in any)
             {
-                if (c is T)
-                    return (T)c;
+                if (c is T res)
+                    return res;
             }
             return null;
         }

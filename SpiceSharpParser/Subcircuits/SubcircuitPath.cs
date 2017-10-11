@@ -42,7 +42,6 @@ namespace SpiceSharp.Parser.Subcircuits
         /// Private variables
         /// </summary>
         private Netlist netlist;
-        private Stack<Subcircuit> csubckt = new Stack<Subcircuit>();
         private Stack<SubcircuitDefinition> csubcktdef = new Stack<SubcircuitDefinition>();
         private Stack<Dictionary<string, double>> cparams = new Stack<Dictionary<string, double>>();
         private Dictionary<string, SubcircuitDefinition> definitions = new Dictionary<string, SubcircuitDefinition>();
@@ -92,9 +91,9 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <param name="subckt">The subcircuit</param>
         /// <param name="def">Its matching definition</param>
         /// <param name="pars">Parameters passed to the subcircuit</param>
-        public void Descend(Subcircuit subckt, SubcircuitDefinition def, Dictionary<string, Token> parameters)
+        public void Descend(SubcircuitDefinition def, Dictionary<string, Token> parameters)
         {
-            var nparameters = parameters != null ? MergeParameters(def, parameters) : null;
+            /* var nparameters = parameters != null ? MergeParameters(def, parameters) : null;
 
             // The subcircuit definition should not be in the stack,
             // else we are dealing with a recursive loop!
@@ -114,7 +113,7 @@ namespace SpiceSharp.Parser.Subcircuits
 
             // Call the event
             SubcircuitPathChangedEventArgs args = new SubcircuitPathChangedEventArgs(subckt, def, SubcircuitPathChangedEventArgs.ChangeType.Descend, nparameters);
-            OnSubcircuitPathChanged?.Invoke(this, args);
+            OnSubcircuitPathChanged?.Invoke(this, args); */
         }
 
         /// <summary>
@@ -123,7 +122,7 @@ namespace SpiceSharp.Parser.Subcircuits
         public void Ascend()
         {
             // Pop
-            csubckt.Pop();
+            /* csubckt.Pop();
             csubcktdef.Pop();
             cparams.Pop();
 
@@ -144,7 +143,7 @@ namespace SpiceSharp.Parser.Subcircuits
 
             // Call the event
             SubcircuitPathChangedEventArgs args = new SubcircuitPathChangedEventArgs(subckt, def, SubcircuitPathChangedEventArgs.ChangeType.Ascend, pars);
-            OnSubcircuitPathChanged?.Invoke(this, args);
+            OnSubcircuitPathChanged?.Invoke(this, args); */
         }
 
         /// <summary>
@@ -158,7 +157,7 @@ namespace SpiceSharp.Parser.Subcircuits
             {
                 case ScopeRule.Descend:
                     // Find the model in any of the components
-                    foreach (Subcircuit subckt in csubckt)
+                    /* foreach (Subcircuit subckt in csubckt)
                     {
                         // Try to find it in this subcircuit
                         if (subckt.Objects.Contains(name))
@@ -167,14 +166,14 @@ namespace SpiceSharp.Parser.Subcircuits
                             if (c is T)
                                 return (T)c;
                         }
-                    }
+                    } */
 
                     // Finally try to find it in the circuit
                     if (netlist.Circuit.Objects.Contains(name))
                     {
                         ICircuitObject c = netlist.Circuit.Objects[name];
-                        if (c is T)
-                            return (T)c;
+                        if (c is T res)
+                            return res;
                     }
                     break;
 
@@ -183,8 +182,8 @@ namespace SpiceSharp.Parser.Subcircuits
                     if (Objects.Contains(name))
                     {
                         ICircuitObject c = Objects[name];
-                        if (c is T)
-                            return (T)c;
+                        if (c is T res)
+                            return res;
                     }
 
                     // Find the model globally
@@ -291,7 +290,7 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <summary>
         /// The subcircuit
         /// </summary>
-        public Subcircuit Subcircuit { get; }
+        // public Subcircuit Subcircuit { get; }
 
         /// <summary>
         /// The definition
@@ -322,9 +321,9 @@ namespace SpiceSharp.Parser.Subcircuits
         /// </summary>
         /// <param name="subckt">The subcircuit</param>
         /// <param name="def">The definition</param>
-        public SubcircuitPathChangedEventArgs(Subcircuit subckt, SubcircuitDefinition def, ChangeType type, Dictionary<string, double> parameters)
+        public SubcircuitPathChangedEventArgs(SubcircuitDefinition def, ChangeType type, Dictionary<string, double> parameters)
         {
-            Subcircuit = subckt;
+            // Subcircuit = subckt;
             Definition = def;
             Type = type;
             Parameters = parameters;

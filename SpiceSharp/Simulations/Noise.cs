@@ -121,15 +121,15 @@ namespace SpiceSharp.Simulations
             if (string.IsNullOrEmpty(Input))
                 throw new CircuitException($"{Name}: No input source specified");
             ICircuitObject source = ckt.Objects[Input];
-            if (source is Voltagesource)
+            if (source is Voltagesource vsource)
             {
-                if (!(source as Voltagesource).VSRCacMag.Given || (source as Voltagesource).VSRCacMag == 0.0)
-                    throw new CircuitException($"{Name}: Noise input source {source.Name} has no AC input");
+                if (!vsource.VSRCacMag.Given || vsource.VSRCacMag == 0.0)
+                    throw new CircuitException($"{Name}: Noise input source {vsource.Name} has no AC input");
             }
-            else if (source is Currentsource)
+            else if (source is Currentsource isource)
             {
-                if (!(source as Currentsource).ISRCacMag.Given || (source as Currentsource).ISRCacMag == 0.0)
-                    throw new CircuitException($"{Name}: Noise input source {source.Name} has not AC input");
+                if (!isource.ISRCacMag.Given || isource.ISRCacMag == 0.0)
+                    throw new CircuitException($"{Name}: Noise input source {isource.Name} has not AC input");
             }
             else
                 throw new CircuitException($"{Name}: No input source");

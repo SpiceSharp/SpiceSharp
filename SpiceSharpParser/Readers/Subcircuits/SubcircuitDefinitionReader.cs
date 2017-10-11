@@ -62,7 +62,7 @@ namespace SpiceSharp.Parser.Readers
 
             // Create a new subcircuit definition
             netlist.Path.AddDefinition(definition);
-            netlist.Path.Descend(null, definition, null);
+            netlist.Path.Descend(definition, null);
             foreach (var s in definition.Body.Statements(StatementType.Subcircuit))
                 netlist.Readers.Read(s, netlist);
             netlist.Path.Ascend();

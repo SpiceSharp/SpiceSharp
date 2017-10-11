@@ -74,11 +74,11 @@ namespace SpiceSharp.Parser.Readers
                 throw new ParseException(parameters[parameters.Count - 1], "Cannot find subcircuit");
 
             // Create the subcircuit
-            Subcircuit subckt = new Subcircuit(name, definition.Pins.ToArray());
+            /* Subcircuit subckt = new Subcircuit(name, definition.Pins.ToArray());
             subckt.Connect(pins.ToArray());
 
             // Descend into the subcircuit
-            netlist.Path.Descend(subckt, definition, pars);
+            netlist.Path.Descend(definition, pars);
 
             // Read control statements
             foreach (var s in definition.Body.Statements(StatementType.Control))
@@ -90,10 +90,10 @@ namespace SpiceSharp.Parser.Readers
 
             // Read component statements
             foreach (var s in definition.Body.Statements(StatementType.Component))
-                netlist.Readers.Read(s, netlist);
+                netlist.Readers.Read(s, netlist); */
 
             netlist.Path.Ascend();
-            return subckt;
+            return null;
         }
     }
 }

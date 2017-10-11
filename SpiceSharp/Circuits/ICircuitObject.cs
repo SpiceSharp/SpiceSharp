@@ -8,7 +8,7 @@
         /// <summary>
         /// Get the name of the object
         /// </summary>
-        string Name { get; }
+        CircuitIdentifier Name { get; }
 
         /// <summary>
         /// Get the priority of this object

@@ -221,10 +221,10 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         private Parameter GetDcParameter(IParameterized obj)
         {
-            if (obj is Voltagesource)
-                return (obj as Voltagesource).VSRCdcValue;
-            if (obj is Currentsource)
-                return (obj as Currentsource).ISRCdcValue;
+            if (obj is Voltagesource vsource)
+                return vsource.VSRCdcValue;
+            if (obj is Currentsource isource)
+                return isource.ISRCdcValue;
             return null;
         }
 
@@ -235,10 +235,10 @@ namespace SpiceSharp.Simulations
         /// <param name="par"></param>
         private void SetDcParameter(IParameterized obj, Parameter par)
         {
-            if (obj is Voltagesource)
-                (obj as Voltagesource).VSRCdcValue.CopyFrom(par);
-            if (obj is Currentsource)
-                (obj as Currentsource).ISRCdcValue.CopyFrom(par);
+            if (obj is Voltagesource vsource)
+                vsource.VSRCdcValue.CopyFrom(par);
+            if (obj is Currentsource isource)
+                isource.ISRCdcValue.CopyFrom(par);
         }
     }
 }

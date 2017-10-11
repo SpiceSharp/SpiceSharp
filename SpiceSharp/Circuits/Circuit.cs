@@ -34,7 +34,7 @@ namespace SpiceSharp
         /// Get all nodes in the circuit
         /// Using nodes is only valid after calling <see cref="Setup"/>
         /// </summary>
-        public Nodes Nodes { get; } = new Nodes();
+        public CircuitNodes Nodes { get; } = new CircuitNodes();
 
         /// <summary>
         /// Gets the current simulation that is being run by the circuit

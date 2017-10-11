@@ -55,12 +55,12 @@ namespace SpiceSharp.Circuits
             // Check if a voltage driver is closing a loop
             var icc = FindVoltageDriveLoop();
             if (icc != null)
-                throw new CircuitException($"{string.Join(".", ckt.Objects.FindPath(icc))} closes a loop of voltage sources");
+                throw new CircuitException($"{icc.Name} closes a loop of voltage sources");
 
             // Check for floating nodes
             if (FindFloatingNodes() > 0)
             {
-                List<string> un = new List<string>();
+                List<CircuitIdentifier> un = new List<CircuitIdentifier>();
                 for (int i = 0; i < ckt.Nodes.Count; i++)
                 {
                     int index = ckt.Nodes[i].Index;
@@ -77,20 +77,9 @@ namespace SpiceSharp.Circuits
         /// <param name="c">The circuit object</param>
         private void CheckObject(ICircuitObject c)
         {
-            // Subcircuits
-            if (c is Subcircuit)
-            {
-                Subcircuit subckt = (Subcircuit)c;
-                foreach (var sc in subckt.Objects)
-                    CheckObject(sc);
-                return;
-            }
-
             // Circuit components
-            if (c is ICircuitComponent)
+            if (c is ICircuitComponent icc)
             {
-                var icc = (ICircuitComponent)c;
-
                 // Check for short-circuited components
                 int n = -1;
                 bool sc = true;
@@ -121,19 +110,15 @@ namespace SpiceSharp.Circuits
                 foreach (var attr in attributes)
                 {
                     // Voltage driven nodes are checked for voltage loops
-                    if (attr is VoltageDriver)
-                    {
-                        VoltageDriver vd = (VoltageDriver)attr;
+                    if (attr is VoltageDriver vd)
                         voltagedriven.Add(new Tuple<ICircuitComponent, int, int>(icc, nodes[vd.Positive], nodes[vd.Negative]));
-                    }
 
                     // At least one source needs to be available
                     if (attr is IndependentSource)
                         HasSource = true;
 
-                    if (attr is ConnectedPins)
+                    if (attr is ConnectedPins conn)
                     {
-                        ConnectedPins conn = (ConnectedPins)attr;
                         int[] tmp = new int[conn.Pins.Length];
                         for (int i = 0; i < conn.Pins.Length; i++)
                             tmp[i] = nodes[conn.Pins[i]];

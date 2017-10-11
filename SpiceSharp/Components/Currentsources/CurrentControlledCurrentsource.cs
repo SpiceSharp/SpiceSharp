@@ -70,9 +70,8 @@ namespace SpiceSharp.Components
             CCCSnegNode = nodes[1].Index;
 
             // Find the voltage source for which the current is being measured
-            var vsrc = ckt.Objects[CCCScontName];
-            if (vsrc is Voltagesource)
-                CCCScontBranch = ((Voltagesource)vsrc).VSRCbranch;
+            if (ckt.Objects[CCCScontName] is Voltagesource vsrc)
+                CCCScontBranch = vsrc.VSRCbranch;
             else
                 throw new CircuitException($"{Name}: Could not find voltage source '{CCCScontName}'");
         }
