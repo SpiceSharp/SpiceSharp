@@ -16,7 +16,7 @@ namespace SpiceSharp.Components
         [SpiceName("gain"), SpiceInfo("Transresistance (gain)")]
         public Parameter CCVScoeff { get; } = new Parameter();
         [SpiceName("control"), SpiceInfo("Controlling voltage source")]
-        public string CCVScontName { get; set; }
+        public CircuitIdentifier CCVScontName { get; set; }
         [SpiceName("i"), SpiceInfo("Output current")]
         public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[CCVSbranch];
         [SpiceName("v"), SpiceInfo("Output voltage")]
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled current source</param>
-        public CurrentControlledVoltagesource(string name) : base(name) { }
+        public CurrentControlledVoltagesource(CircuitIdentifier name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source name</param>
         /// <param name="gain">The transresistance (gain)</param>
-        public CurrentControlledVoltagesource(string name, string pos, string neg, string vsource, double gain) : base(name)
+        public CurrentControlledVoltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name)
         {
             Connect(pos, neg);
             CCVScoeff.Set(gain);
@@ -64,7 +64,7 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(ckt);
             CCVSposNode = nodes[0].Index;
             CCVSnegNode = nodes[1].Index;
-            CCVSbranch = CreateNode(ckt, $"{Name}#branch", CircuitNode.NodeType.Current).Index;
+            CCVSbranch = CreateNode(ckt, Name + "#branch", CircuitNode.NodeType.Current).Index;
 
             // Find the voltage source
             if (ckt.Objects[CCVScontName] is Voltagesource vsrc)

@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 
@@ -15,9 +16,9 @@ namespace SpiceSharp.Components
         [SpiceName("k"), SpiceName("coefficient"), SpiceInfo("Mutual inductance", IsPrincipal = true)]
         public Parameter MUTcoupling { get; } = new Parameter();
         [SpiceName("inductor1"), SpiceInfo("First coupled inductor")]
-        public string MUTind1;
+        public CircuitIdentifier MUTind1 { get; set; }
         [SpiceName("inductor2"), SpiceInfo("Second coupled inductor")]
-        public string MUTind2;
+        public CircuitIdentifier MUTind2 { get; set; }
 
         /// <summary>
         /// The factor
@@ -34,7 +35,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the mutual inductance</param>
-        public MutualInductance(string name) : base(name)
+        public MutualInductance(CircuitIdentifier name) : base(name)
         {
             // Make sure mutual inductances are evaluated AFTER inductors
             Priority = -1;
@@ -56,6 +57,7 @@ namespace SpiceSharp.Components
 
             // Register our method for updating mutual inductance flux
             ind1.UpdateMutualInductance += UpdateMutualInductance;
+            ind2.UpdateMutualInductance += UpdateMutualInductance;
         }
 
         /// <summary>

@@ -198,7 +198,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BJT(string name) : base(name)
+        public BJT(CircuitIdentifier name) : base(name)
         {
         }
 
@@ -223,18 +223,16 @@ namespace SpiceSharp.Components
             if (model.BJTcollectorResist.Value == 0)
                 BJTcolPrimeNode = BJTcolNode;
             else if (BJTcolPrimeNode == 0)
-                BJTcolPrimeNode = CreateNode(ckt, $"{Name}#col").Index;
+                BJTcolPrimeNode = CreateNode(ckt, Name + "#col").Index;
 
             if (model.BJTbaseResist.Value == 0)
                 BJTbasePrimeNode = BJTbaseNode;
             else if (BJTbasePrimeNode == 0)
-                BJTbasePrimeNode = CreateNode(ckt, $"{Name}#base").Index;
+                BJTbasePrimeNode = CreateNode(ckt, Name + "#base").Index;
             if (model.BJTemitterResist.Value == 0)
                 BJTemitPrimeNode = BJTemitNode;
             else if (BJTemitPrimeNode == 0)
-                BJTemitPrimeNode = CreateNode(ckt, $"{Name}#emit").Index;
-
-            /* macro to make elements with built in test for out of memory */
+                BJTemitPrimeNode = CreateNode(ckt, Name + "#emit").Index;
         }
 
         /// <summary>

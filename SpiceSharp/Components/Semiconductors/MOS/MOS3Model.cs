@@ -145,7 +145,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS3Model(string name) : base(name)
+        public MOS3Model(CircuitIdentifier name) : base(name)
         {
         }
 

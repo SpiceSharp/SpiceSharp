@@ -26,7 +26,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        private string[] connections = null;
+        private CircuitIdentifier[] connections = null;
         private int[] indices = null;
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace SpiceSharp.Components
             Name = name;
             if (pins != null)
             {
-                connections = new string[pins.Length];
+                connections = new CircuitIdentifier[pins.Length];
                 indices = new int[pins.Length];
             }
             else
@@ -74,10 +74,10 @@ namespace SpiceSharp.Components
         /// Connect the component in the circuit
         /// </summary>
         /// <param name="nodes"></param>
-        public virtual void Connect(params string[] nodes)
+        public virtual void Connect(params CircuitIdentifier[] nodes)
         {
             if (pins.Length != connections.Length)
-                connections = new string[pins.Length];
+                connections = new CircuitIdentifier[pins.Length];
 
             if (nodes.Length != connections.Length)
                 throw new CircuitException($"{Name}: Node count mismatch. {nodes.Length} given, {connections.Length} expected.");
@@ -94,7 +94,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="i">The index</param>
         /// <returns></returns>
-        public virtual string GetNode(int i)
+        public virtual CircuitIdentifier GetNode(int i)
         {
             if (i < 0 || i >= connections.Length)
                 throw new IndexOutOfRangeException();
@@ -139,7 +139,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         /// <param name="type">The type</param>
         /// <returns></returns>
-        protected CircuitNode CreateNode(Circuit ckt, string name, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
+        protected CircuitNode CreateNode(Circuit ckt, CircuitIdentifier name, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
         {
             // Map the extra equations
             return ckt.Nodes.Create(name, type);

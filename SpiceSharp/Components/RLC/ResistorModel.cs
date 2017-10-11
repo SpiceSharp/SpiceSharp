@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Parameters;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
@@ -32,7 +33,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public ResistorModel(string name) : base(name)
+        public ResistorModel(CircuitIdentifier name) : base(name)
         {
         }
     }

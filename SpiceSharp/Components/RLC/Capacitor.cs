@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Capacitor(string name) : base(name) { }
+        public Capacitor(CircuitIdentifier name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -57,7 +57,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="cap">The capacitance</param>
-        public Capacitor(string name, string pos, string neg, double cap) : base(name)
+        public Capacitor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double cap) : base(name)
         {
             Connect(pos, neg);
             CAPcapac.Set(cap);
@@ -120,7 +120,7 @@ namespace SpiceSharp.Components
             else
                 vcap = rstate.OldSolution[CAPposNode] - rstate.OldSolution[CAPnegNode];
 
-            if (state.Domain == Circuits.CircuitState.DomainTypes.Time)
+            if (state.Domain == CircuitState.DomainTypes.Time)
             {
                 // Fill the matrix
                 state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
@@ -153,7 +153,7 @@ namespace SpiceSharp.Components
         public override void AcLoad(Circuit ckt)
         {
             var cstate = ckt.State.Complex;
-            Complex val = cstate.Laplace * CAPcapac.Value;
+            var val = cstate.Laplace * CAPcapac.Value;
 
             // Load the matrix
             cstate.Matrix[CAPposNode, CAPposNode] += val;

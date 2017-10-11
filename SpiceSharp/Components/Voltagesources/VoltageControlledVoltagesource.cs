@@ -38,7 +38,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled voltage source</param>
-        public VoltageControlledVoltagesource(string name) : base(name) { }
+        public VoltageControlledVoltagesource(CircuitIdentifier name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -49,7 +49,7 @@ namespace SpiceSharp.Components
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
         /// <param name="gain">The voltage gain</param>
-        public VoltageControlledVoltagesource(string name, string pos, string neg, string cont_pos, string cont_neg, double gain) : base(name)
+        public VoltageControlledVoltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier cont_pos, CircuitIdentifier cont_neg, double gain) : base(name)
         {
             Connect(pos, neg, cont_pos, cont_neg);
             VCVScoeff.Set(gain);
@@ -66,7 +66,7 @@ namespace SpiceSharp.Components
             VCVSnegNode = nodes[1].Index;
             VCVScontPosNode = nodes[2].Index;
             VCVScontNegNode = nodes[3].Index;
-            VCVSbranch = CreateNode(ckt, $"{Name}#branch", CircuitNode.NodeType.Current).Index;
+            VCVSbranch = CreateNode(ckt, Name + "#branch", CircuitNode.NodeType.Current).Index;
         }
 
         /// <summary>

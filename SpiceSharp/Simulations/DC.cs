@@ -67,7 +67,7 @@ namespace SpiceSharp.Simulations
             /// The name of the source being varied
             /// </summary>
             [SpiceName("source"), SpiceInfo("The name of the swept source")]
-            public string ComponentName { get; set; }
+            public CircuitIdentifier ComponentName { get; set; }
 
             /// <summary>
             /// Get the current value
@@ -96,7 +96,7 @@ namespace SpiceSharp.Simulations
             /// <param name="start">The starting value</param>
             /// <param name="stop">The stopping value</param>
             /// <param name="step">The step value</param>
-            public Sweep(string name, double start, double stop, double step) : base()
+            public Sweep(CircuitIdentifier name, double start, double stop, double step) : base()
             {
                 ComponentName = name;
                 Start = start;
@@ -127,7 +127,7 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The starting value</param>
         /// <param name="stop">The stopping value</param>
         /// <param name="step">The step value</param>
-        public DC(string name, string source, double start, double stop, double step) : base(name)
+        public DC(string name, CircuitIdentifier source, double start, double stop, double step) : base(name)
         {
             Sweep s = new Sweep(source, start, stop, step);
             Sweeps.Add(s);

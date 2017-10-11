@@ -21,14 +21,14 @@ namespace SpiceSharp.Components
         /// Connect the component
         /// </summary>
         /// <param name="nodes">Nodes</param>
-        void Connect(params string[] nodes);
+        void Connect(params CircuitIdentifier[] nodes);
 
         /// <summary>
         /// Get a connected node name of the node
         /// </summary>
         /// <param name="i">The index</param>
         /// <returns></returns>
-        string GetNode(int i);
+        CircuitIdentifier GetNode(int i);
 
         /// <summary>
         /// Get the index of a node after mapping

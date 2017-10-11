@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Parameters;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
@@ -37,7 +38,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled current source</param>
-        public VoltageControlledCurrentsource(string name) : base(name)
+        public VoltageControlledCurrentsource(CircuitIdentifier name) : base(name)
         {
         }
 
@@ -50,7 +51,7 @@ namespace SpiceSharp.Components
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
         /// <param name="coeff">The transconductance gain</param>
-        public VoltageControlledCurrentsource(string name, string pos, string neg, string cont_pos, string cont_neg, double gain) 
+        public VoltageControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier cont_pos, CircuitIdentifier cont_neg, double gain) 
             : base(name)
         {
             Connect(pos, neg, cont_pos, cont_neg);

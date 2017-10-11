@@ -57,7 +57,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the inductor</param>
-        public Inductor(string name) : base(name) { }
+        public Inductor(CircuitIdentifier name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -66,7 +66,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="ind">The inductance</param>
-        public Inductor(string name, string pos, string neg, double ind) : base(name)
+        public Inductor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double ind) : base(name)
         {
             Connect(pos, neg);
             INDinduct.Set(ind);
@@ -81,7 +81,7 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(ckt);
             INDposNode = nodes[0].Index;
             INDnegNode = nodes[1].Index;
-            INDbrEq = CreateNode(ckt, $"{Name}#branch", CircuitNode.NodeType.Current).Index;
+            INDbrEq = CreateNode(ckt, Name + "#branch", CircuitNode.NodeType.Current).Index;
 
             // Create 2 states
             INDstate = ckt.State.GetState(2);

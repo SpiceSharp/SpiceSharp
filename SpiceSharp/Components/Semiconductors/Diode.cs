@@ -90,7 +90,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public Diode(string name) : base(name)
+        public Diode(CircuitIdentifier name) : base(name)
         {
         }
 
@@ -113,7 +113,7 @@ namespace SpiceSharp.Components
             if (model.DIOresist.Value == 0)
                 DIOposPrimeNode = DIOposNode;
             else
-                DIOposPrimeNode = CreateNode(ckt, $"{Name}#pos").Index;
+                DIOposPrimeNode = CreateNode(ckt, Name + "#pos").Index;
 
             // Connect noise sources
             DIOnoise.Setup(ckt, DIOposNode, DIOposPrimeNode, DIOnegNode);

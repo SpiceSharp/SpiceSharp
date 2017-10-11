@@ -264,7 +264,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS3(string name) : base(name)
+        public MOS3(CircuitIdentifier name) : base(name)
         {
         }
 
@@ -292,16 +292,14 @@ namespace SpiceSharp.Components
             MOS3mode = 1;
 
             if (model.MOS3drainResistance != 0 || (model.MOS3sheetResistance != 0 && MOS3drainSquares != 0))
-                MOS3dNodePrime = CreateNode(ckt, $"{Name}#drain").Index;
+                MOS3dNodePrime = CreateNode(ckt, Name + "#drain").Index;
             else
                 MOS3dNodePrime = MOS3dNode;
 
             if (model.MOS3sourceResistance != 0 || (model.MOS3sheetResistance != 0 && MOS3sourceSquares != 0))
-                MOS3sNodePrime = CreateNode(ckt, $"{Name}#source").Index;
+                MOS3sNodePrime = CreateNode(ckt, Name + "#source").Index;
             else
                 MOS3sNodePrime = MOS3sNode;
-
-            /* macro to make elements with built in test for out of memory */
         }
 
         /// <summary>

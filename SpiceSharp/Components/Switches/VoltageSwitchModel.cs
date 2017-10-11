@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Parameters;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
@@ -27,7 +28,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the model</param>
-        public VoltageSwitchModel(string name) : base(name) { }
+        public VoltageSwitchModel(CircuitIdentifier name) : base(name) { }
 
         /// <summary>
         /// Setup the model

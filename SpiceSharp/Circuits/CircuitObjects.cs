@@ -30,9 +30,9 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Search for an object by path
         /// </summary>
-        /// <param name="path">The path of the object</param>
+        /// <param id="path">The path of the object</param>
         /// <returns></returns>
-        public ICircuitObject this[string name] => objects[name];
+        public ICircuitObject this[CircuitIdentifier id] => objects[id];
         
         /// <summary>
         /// The amount of circuit objects
@@ -52,7 +52,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Add one or more circuit objects
         /// </summary>
-        /// <param name="cs">The objects that need to be added</param>
+        /// <param id="cs">The objects that need to be added</param>
         public void Add(params ICircuitObject[] cs)
         {
             foreach (var c in cs)
@@ -60,7 +60,7 @@ namespace SpiceSharp.Circuits
                 if (c == null)
                     throw new ArgumentNullException(nameof(c));
                 if (objects.ContainsKey(c.Name))
-                    throw new CircuitException($"A component with the name {c.Name} already exists");
+                    throw new CircuitException($"A component with the id {c.Name} already exists");
                 objects.Add(c.Name, c);
                 isordered = false;
             }
@@ -69,14 +69,14 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Remove specific circuit objects from the collection
         /// </summary>
-        /// <param name="names">Names of the objects that need to be deleted</param>
-        public void Remove(params string[] names)
+        /// <param id="names">Names of the objects that need to be deleted</param>
+        public void Remove(params CircuitIdentifier[] ids)
         {
-            foreach (var name in names)
+            foreach (var id in ids)
             {
-                if (name == null)
-                    throw new ArgumentNullException(nameof(name));
-                objects.Remove(name);
+                if (id == null)
+                    throw new ArgumentNullException(nameof(id));
+                objects.Remove(id);
 
                 // Note: Removing objects does not interfere with the order!
             }
@@ -86,14 +86,22 @@ namespace SpiceSharp.Circuits
         /// Check if a component exists
         /// Multiple names can be specified, in which case the first names will refer to subcircuits
         /// </summary>
-        /// <param name="name">A list of names. If there are multiple names, the first names will refer to a subcircuit</param>
+        /// <param id="id">A list of names. If there are multiple names, the first names will refer to a subcircuit</param>
         /// <returns></returns>
-        public bool Contains(string name) => objects.ContainsKey(name);
+        public bool Contains(CircuitIdentifier id) => objects.ContainsKey(id);
+
+        /// <summary>
+        /// Get a circuit object
+        /// </summary>
+        /// <param id="id">Identifier</param>
+        /// <param id="obj"></param>
+        /// <returns></returns>
+        public bool TryGetObject(CircuitIdentifier id, out ICircuitObject obj) => objects.TryGetValue(id, out obj);
 
         /// <summary>
         /// Get all objects of a specific type
         /// </summary>
-        /// <param name="type">The type of objects you wish to find</param>
+        /// <param id="type">The type of objects you wish to find</param>
         /// <returns></returns>
         public ICircuitObject[] ByType(Type type)
         {
@@ -110,42 +118,32 @@ namespace SpiceSharp.Circuits
         /// This method is called when building an ordered list of circuit objects
         /// Circuit objects will be called by descending priority
         /// </summary>
-        public void BuildOrderedComponentList() => BuildOrderedComponentList(this);
-
-        /// <summary>
-        /// Build ordered list of components
-        /// This method is called recursively for subcircuits
-        /// </summary>
-        /// <param name="root"></param>
-        private void BuildOrderedComponentList(CircuitObjects root)
+        public void BuildOrderedComponentList()
         {
             if (isordered)
                 return;
 
             // Initialize
             ordered.Clear();
-            HashSet<ICircuitObject> toadd = new HashSet<ICircuitObject>();
+            HashSet<ICircuitObject> added = new HashSet<ICircuitObject>();
 
             // Build our list
             foreach (var c in objects.Values)
             {
+                // Add the object to the ordered list
                 ordered.Add(c);
+                added.Add(c);
 
-                // Keep track of the models that aren't part of the circuit yet
+                // Automatically add models to the ordered list
                 if (c is ICircuitComponent component)
                 {
                     var model = component.Model;
-                    if (model != null)
-                        toadd.Add(model);
+                    if (!added.Contains(model))
+                    {
+                        added.Add(model);
+                        ordered.Add(model);
+                    }
                 }
-            }
-
-            // Add models automatically to the root object list
-            // This way, we are sure that subcircuits don't add them multiple times
-            foreach (var model in toadd)
-            {
-                if (!ordered.Contains(model) && !root.ordered.Contains(model))
-                    root.ordered.Add(model);
             }
 
             // Sort the list based on priority

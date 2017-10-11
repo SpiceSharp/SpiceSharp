@@ -57,7 +57,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current source</param>
-        public Currentsource(string name) : base(name)
+        public Currentsource(CircuitIdentifier name) : base(name)
         {
         }
 
@@ -68,7 +68,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public Currentsource(string name, string pos, string neg, double dc) : base(name)
+        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name)
         {
             Connect(pos, neg);
             ISRCdcValue.Set(dc);
@@ -81,7 +81,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="w">The Waveform-object</param>
-        public Currentsource(string name, string pos, string neg, IWaveform w) : base(name)
+        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, IWaveform w) : base(name)
         {
             Connect(pos, neg);
             ISRCwaveform = w;

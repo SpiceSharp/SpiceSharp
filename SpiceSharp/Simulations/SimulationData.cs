@@ -31,7 +31,7 @@ namespace SpiceSharp.Simulations
         /// <param name="node">The node name</param>
         /// <param name="reference">The reference (null if no reference)</param>
         /// <returns></returns>
-        public double GetVoltage(string node, string reference = null)
+        public double GetVoltage(CircuitIdentifier node, CircuitIdentifier reference = null)
         {
             double result = 0.0;
 
@@ -119,7 +119,7 @@ namespace SpiceSharp.Simulations
         /// <param name="node">The node</param>
         /// <param name="reference">The reference node (null if no reference)</param>
         /// <returns></returns>
-        public Complex GetPhasor(string node, string reference = null)
+        public Complex GetPhasor(CircuitIdentifier node, CircuitIdentifier reference = null)
         {
             Complex result;
 
@@ -155,7 +155,7 @@ namespace SpiceSharp.Simulations
         /// <param name="node">The node</param>
         /// <param name="reference">The reference</param>
         /// <returns></returns>
-        public double GetDb(string node, string reference = null)
+        public double GetDb(CircuitIdentifier node, CircuitIdentifier reference = null)
         {
             Complex r = GetPhasor(node, reference);
             return 10.0 * Math.Log10(r.Real * r.Real + r.Imaginary * r.Imaginary);
@@ -167,7 +167,7 @@ namespace SpiceSharp.Simulations
         /// <param name="node"></param>
         /// <param name="reference"></param>
         /// <returns></returns>
-        public double GetPhase(string node, string reference = null)
+        public double GetPhase(CircuitIdentifier node, CircuitIdentifier reference = null)
         {
             Complex r = GetPhasor(node, reference);
             return 180.0 / Math.PI * Math.Atan2(r.Imaginary, r.Real);
@@ -180,7 +180,7 @@ namespace SpiceSharp.Simulations
         /// <param name="reference"></param>
         /// <param name="db">The voltage amplitude in decibels</param>
         /// <param name="phase">The phase in degrees</param>
-        public void GetDbPhase(string node, string reference, out double db, out double phase)
+        public void GetDbPhase(CircuitIdentifier node, CircuitIdentifier reference, out double db, out double phase)
         {
             Complex r = GetPhasor(node, reference);
             db = 10.0 * Math.Log10(r.Real * r.Real + r.Imaginary * r.Imaginary);
@@ -204,7 +204,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name</param>
         /// <returns></returns>
-        public ICircuitObject GetObject(string name)
+        public ICircuitObject GetObject(CircuitIdentifier name)
         {
             return Circuit.Objects[name];
         }
@@ -215,7 +215,7 @@ namespace SpiceSharp.Simulations
         /// <param name="component">The component name</param>
         /// <param name="parameter">The parameter name</param>
         /// <returns></returns>
-        public double Ask(string component, string parameter)
+        public double Ask(CircuitIdentifier component, string parameter)
         {
             IParameterized p = (IParameterized)Circuit.Objects[component];
             return p.Ask(parameter, Circuit);

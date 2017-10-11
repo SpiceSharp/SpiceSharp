@@ -22,7 +22,7 @@ namespace SpiceSharp.Components
         [SpiceName("off"), SpiceInfo("Initially open")]
         public void SetOff() { CSWzero_state = false; }
         [SpiceName("control"), SpiceInfo("Name of the controlling source")]
-        public string CSWcontName { get; set; }
+        public CircuitIdentifier CSWcontName { get; set; }
         [SpiceName("i"), SpiceInfo("Switch current")]
         public double GetCurrent(Circuit ckt) => (ckt.State.Real.Solution[CSWposNode] - ckt.State.Real.Solution[CSWnegNode]) * CSWcond;
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
@@ -49,7 +49,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled switch</param>
-        public CurrentSwitch(string name) : base(name)
+        public CurrentSwitch(CircuitIdentifier name) : base(name)
         {
             // Make sure the current switch is processed after voltage sources
             Priority = -1;
@@ -62,7 +62,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source</param>
-        public CurrentSwitch(string name, string pos, string neg, string vsource) : base(name)
+        public CurrentSwitch(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource) : base(name)
         {
             Connect(pos, neg);
             CSWcontName = vsource;

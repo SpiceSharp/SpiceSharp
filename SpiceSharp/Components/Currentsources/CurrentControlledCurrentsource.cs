@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Parameters;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components
@@ -15,7 +16,7 @@ namespace SpiceSharp.Components
         [SpiceName("gain"), SpiceInfo("Gain of the source")]
         public Parameter CCCScoeff { get; } = new Parameter();
         [SpiceName("control"), SpiceInfo("Name of the controlling source")]
-        public string CCCScontName { get; set; }
+        public CircuitIdentifier CCCScontName { get; set; }
         [SpiceName("i"), SpiceInfo("CCCS output current")]
         public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[CCCScontBranch] * CCCScoeff;
         [SpiceName("v"), SpiceInfo("CCCS voltage at output")]
@@ -37,7 +38,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current controlled current source</param>
-        public CurrentControlledCurrentsource(string name) : base(name)
+        public CurrentControlledCurrentsource(CircuitIdentifier name) : base(name)
         {
             // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
@@ -51,7 +52,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
-        public CurrentControlledCurrentsource(string name, string pos, string neg, string vsource, double gain) : base(name)
+        public CurrentControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name)
         {
             Priority = -1;
             Connect(pos, neg);

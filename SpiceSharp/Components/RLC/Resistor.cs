@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Parameters;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components
@@ -53,7 +54,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the resistor</param>
-        public Resistor(string name) : base(name) { }
+        public Resistor(CircuitIdentifier name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -62,7 +63,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="res">The resistance</param>
-        public Resistor(string name, string pos, string neg, double res) : base(name)
+        public Resistor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double res) : base(name)
         {
             Connect(pos, neg);
             RESresist.Set(res);
@@ -115,7 +116,7 @@ namespace SpiceSharp.Components
                     RESresist.Value = model.RESsheetRes * (RESlength - model.RESnarrow) / (RESwidth - model.RESnarrow);
                 else
                 {
-                    CircuitWarning.Warning(this, string.Format("{0}: resistance=0, set to 1000", Name ?? "NULL"));
+                    CircuitWarning.Warning(this, $"{Name}: resistance=0, set to 1000");
                     RESresist.Value = 1000;
                 }
             }

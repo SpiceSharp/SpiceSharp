@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Circuits
+﻿using SpiceSharp.Diagnostics;
+
+namespace SpiceSharp.Circuits
 {
     /// <summary>
     /// The name of a circuit object
@@ -41,6 +43,9 @@
         /// <param name="path">The full path</param>
         public CircuitIdentifier(params string[] path)
         {
+            if (path.Length == 0)
+                throw new CircuitException("Empty identifier");
+
             // Fix case if necessary
             if (CaseInsensitive)
             {
@@ -54,7 +59,11 @@
             // Compute a hash code
             hash = 1;
             for (int i = 0; i < path.Length; i++)
+            {
+                if (string.IsNullOrEmpty(path[i]))
+                    throw new CircuitException("Empty path name");
                 hash = hash * Prime + path[i].GetHashCode();
+            }
         }
 
         /// <summary>
@@ -98,15 +107,30 @@
         }
 
         /// <summary>
-        /// Implicitely convert a string to a name for a circuit object
+        /// Concatenate a name to the path
         /// </summary>
+        /// <param name="a">Identifier</param>
         /// <param name="name">Name</param>
-        public static implicit operator CircuitIdentifier(string name) => new CircuitIdentifier(name);
+        /// <returns></returns>
+        public static CircuitIdentifier operator +(CircuitIdentifier a, string b)
+        {
+            string[] npath = new string[a.Path.Length + 1];
+            for (int i = 0; i < a.Path.Length; i++)
+                npath[i] = a.Path[i];
+            npath[a.Path.Length] = b;
+            return new CircuitIdentifier(npath);
+        }
 
         /// <summary>
         /// Implicitely convert a string array to a path for a circuit object
         /// </summary>
         /// <param name="path">Path</param>
         public static implicit operator CircuitIdentifier(string[] path) => new CircuitIdentifier(path);
+
+        /// <summary>
+        /// Implicitely convert a string to a name for a circuit object
+        /// </summary>
+        /// <param name="name">Name</param>
+        // public static implicit operator CircuitIdentifier(string name) => new CircuitIdentifier(name);
     }
 }

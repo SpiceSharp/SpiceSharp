@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 
@@ -164,7 +165,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BJTModel(string name) : base(name)
+        public BJTModel(CircuitIdentifier name) : base(name)
         {
         }
 
@@ -174,23 +175,8 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-
             if (BJTtype != NPN && BJTtype != PNP)
                 BJTtype = NPN;
-
-            /* 
-			* COMPATABILITY WARNING!
-			* special note:  for backward compatability to much older models, spice 2G
-			* implemented a special case which checked if B - E leakage saturation
-			* current was >1, then it was instead a the B - E leakage saturation current
-			* divided by IS, and multiplied it by IS at this point.  This was not
-			* handled correctly in the 2G code, and there is some question on its 
-			* reasonability, since it is also undocumented, so it has been left out
-			* here.  It could easily be added with 1 line.  (The same applies to the B - C
-			* leakage saturation current).   TQ  6 / 29 / 84
-			*/
-
-            /* loop through all the instances of the model */
         }
 
         /// <summary>
@@ -199,7 +185,6 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-
             if (!BJTtnom.Given)
                 BJTtnom.Value = ckt.State.NominalTemperature;
             fact1 = BJTtnom / Circuit.CONSTRefTemp;
@@ -279,8 +264,6 @@ namespace SpiceSharp.Components
             BJTf3 = 1 - BJTdepletionCapCoeff * (1 + BJTjunctionExpBE);
             BJTf6 = Math.Exp((1 + BJTjunctionExpBC) * xfc);
             BJTf7 = 1 - BJTdepletionCapCoeff * (1 + BJTjunctionExpBC);
-
-            /* loop through all the instances of the model */
         }
     }
 }

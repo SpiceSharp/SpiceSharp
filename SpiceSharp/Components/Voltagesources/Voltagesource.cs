@@ -68,7 +68,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name</param>
-        public Voltagesource(string name) : base(name) { }
+        public Voltagesource(CircuitIdentifier name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -77,7 +77,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public Voltagesource(string name, string pos, string neg, double dc) : base(name)
+        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name)
         {
             Connect(pos, neg);
             VSRCdcValue.Set(dc);
@@ -90,7 +90,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="w">The waveform</param>
-        public Voltagesource(string name, string pos, string neg, IWaveform w) : base(name)
+        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, IWaveform w) : base(name)
         {
             Connect(pos, neg);
             VSRCwaveform = w;
@@ -106,7 +106,7 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(ckt);
             VSRCposNode = nodes[0].Index;
             VSRCnegNode = nodes[1].Index;
-            VSRCbranch = CreateNode(ckt, $"{Name}#branch", CircuitNode.NodeType.Current).Index;
+            VSRCbranch = CreateNode(ckt, Name + "#branch", CircuitNode.NodeType.Current).Index;
 
             // Setup the waveform if specified
             VSRCwaveform?.Setup(ckt);

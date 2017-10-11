@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Parameters;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
 {
@@ -27,7 +28,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the model</param>
-        public CurrentSwitchModel(string name) : base(name)
+        public CurrentSwitchModel(CircuitIdentifier name) : base(name)
         {
             // CurrentSwitch has a priority of -1, so this needs to be even earlier
             Priority = -2;

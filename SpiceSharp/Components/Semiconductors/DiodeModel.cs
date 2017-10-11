@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 
@@ -75,7 +76,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public DiodeModel(string name) : base(name)
+        public DiodeModel(CircuitIdentifier name) : base(name)
         {
         }
 

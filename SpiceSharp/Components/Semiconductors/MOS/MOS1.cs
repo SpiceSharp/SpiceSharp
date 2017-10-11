@@ -263,7 +263,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS1(string name) : base(name)
+        public MOS1(CircuitIdentifier name) : base(name)
         {
         }
 
@@ -288,12 +288,12 @@ namespace SpiceSharp.Components
             MOS1von = 0.0;
 
             if (model.MOS1drainResistance != 0 || (model.MOS1sheetResistance != 0 && MOS1drainSquares != 0))
-                MOS1dNodePrime = CreateNode(ckt, $"{Name}#drain").Index;
+                MOS1dNodePrime = CreateNode(ckt, Name + "#drain").Index;
             else
                 MOS1dNodePrime = MOS1dNode;
 
             if (model.MOS1sourceResistance != 0 || (model.MOS1sheetResistance != 0 && MOS1sourceSquares != 0))
-                MOS1sNodePrime = CreateNode(ckt, $"{Name}#source").Index;
+                MOS1sNodePrime = CreateNode(ckt, Name + "#source").Index;
             else
                 MOS1sNodePrime = MOS1sNode;
         }

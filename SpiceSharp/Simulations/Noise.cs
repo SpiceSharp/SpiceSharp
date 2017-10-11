@@ -22,19 +22,19 @@ namespace SpiceSharp.Simulations
         /// Gets or sets the noise output node
         /// </summary>
         [SpiceName("output"), SpiceInfo("Noise output summation node")]
-        public string Output { get; set; } = null;
+        public CircuitIdentifier Output { get; set; } = null;
 
         /// <summary>
         /// Gets or sets the noise output reference node
         /// </summary>
         [SpiceName("outputref"), SpiceInfo("Noise output reference node")]
-        public string OutputRef { get; set; } = null;
+        public CircuitIdentifier OutputRef { get; set; } = null;
 
         /// <summary>
         /// Gets or sets the name of the AC source used as input reference
         /// </summary>
         [SpiceName("input"), SpiceInfo("Name of the AC source used as input reference")]
-        public string Input { get; set; } = null;
+        public CircuitIdentifier Input { get; set; } = null;
 
         /// <summary>
         /// Gets or sets the starting frequency
@@ -114,11 +114,11 @@ namespace SpiceSharp.Simulations
             var config = CurrentConfig;
 
             // Find the output nodes
-            int posOutNode = !string.IsNullOrWhiteSpace(Output) ? ckt.Nodes[Output].Index : 0;
-            int negOutNode = !string.IsNullOrWhiteSpace(OutputRef) ? ckt.Nodes[OutputRef].Index : 0;
+            int posOutNode = Output != null ? ckt.Nodes[Output].Index : 0;
+            int negOutNode = OutputRef != null ? ckt.Nodes[OutputRef].Index : 0;
 
             // Check the voltage or current source
-            if (string.IsNullOrEmpty(Input))
+            if (Input == null)
                 throw new CircuitException($"{Name}: No input source specified");
             ICircuitObject source = ckt.Objects[Input];
             if (source is Voltagesource vsource)
