@@ -73,6 +73,46 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Get the input referred noise density
+        /// </summary>
+        /// <returns></returns>
+        public double GetInputNoiseDensity()
+        {
+            var noise = Circuit?.State?.Noise ?? throw new CircuitException("No noise data");
+            return noise.outNdens * noise.GainSqInv;
+        }
+
+        /// <summary>
+        /// Get the output referred noise density
+        /// </summary>
+        /// <returns></returns>
+        public double GetOutputNoiseDensity()
+        {
+            var noise = Circuit?.State?.Noise ?? throw new CircuitException("No noise data");
+            return noise.outNdens;
+        }
+
+        /// <summary>
+        /// Get the total integrated input noise
+        /// </summary>
+        /// <returns></returns>
+        public double GetInputNoise()
+        {
+            var noise = Circuit?.State?.Noise ?? throw new CircuitException("No noise data");
+            return noise.inNoise;
+        }
+
+        /// <summary>
+        /// Get the total integrated output noise
+        /// </summary>
+        /// <returns></returns>
+        public double GetOutputNoise()
+        {
+            var noise = Circuit?.State?.Noise ?? throw new CircuitException("No noise data");
+            return noise.outNoiz;
+        }
+
+        /// <summary>
         /// Get a phasor
         /// This will give you the complex phasor of a node when doing an AC analysis
         /// </summary>

@@ -104,5 +104,32 @@ namespace SpiceSharpTest.Models
             };
             netlist.Simulate();
         }
+
+        /// <summary>
+        /// Test using the noise simulation
+        /// The netlist should contain a noise simulation. Input and output referred noise density are checked
+        /// </summary>
+        /// <param name="netlist">Netlist</param>
+        /// <param name="reference">Reference values</param>
+        protected void TestNoise(Netlist netlist, double[] reference_in, double[] reference_out)
+        {
+            int index = 0;
+            netlist.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                double freq = data.GetFrequency();
+                double actual = Math.Log(data.GetInputNoiseDensity());
+                double expected = Math.Log(reference_in[index]);
+                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
+                Assert.AreEqual(expected, actual, tol);
+
+                actual = Math.Log(data.GetOutputNoiseDensity());
+                expected = Math.Log(reference_out[index]);
+                tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
+                Assert.AreEqual(expected, actual, tol);
+
+                index++;
+            };
+            netlist.Simulate();
+        }
     }
 }

@@ -70,6 +70,14 @@ namespace SpiceSharp.Components
         public int DIOstate { get; private set; }
 
         /// <summary>
+        /// Noise generators
+        /// </summary>
+        public ComponentNoise DIOnoise = new ComponentNoise(
+            new Noise.NoiseThermal("rs", 0, 1),
+            new Noise.NoiseShot("id", 1, 2),
+            new Noise.NoiseGain("1overf", 1, 2));
+
+        /// <summary>
         /// Constants
         /// </summary>
         private const int DIOvoltage = 0;
@@ -106,6 +114,9 @@ namespace SpiceSharp.Components
                 DIOposPrimeNode = DIOposNode;
             else
                 DIOposPrimeNode = CreateNode(ckt, $"{Name}#pos").Index;
+
+            // Connect noise sources
+            DIOnoise.Setup(ckt, DIOposNode, DIOposPrimeNode, DIOnegNode);
         }
 
         /// <summary>
@@ -386,6 +397,24 @@ namespace SpiceSharp.Components
         public override void Truncate(Circuit ckt, ref double timeStep)
         {
             ckt.Method.Terr(DIOstate + DIOcapCharge, ckt, ref timeStep);
+        }
+
+        /// <summary>
+        /// Perform noise calculations
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        public override void Noise(Circuit ckt)
+        {
+            var model = Model as DiodeModel;
+            var state = ckt.State;
+            var noise = ckt.State.Noise;
+
+            double Kf = model.DIOfNcoef * Math.Exp(model.DIOfNexp * Math.Log(Math.Max(Math.Abs(state.States[0][DIOstate + DIOcurrent]), 1e-38)));
+
+            DIOnoise.Evaluate(ckt,
+                model.DIOconductance * DIOarea, // Thermal noise
+                state.States[0][DIOstate + DIOcurrent], // Shot noise
+                Kf / noise.Freq); // 1 over f noise
         }
     }
 }

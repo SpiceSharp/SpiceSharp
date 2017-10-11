@@ -35,23 +35,53 @@ namespace SpiceSharp.Components
         public double InNoiz { get; private set; }
 
         /// <summary>
+        /// Gets node A of the noise source
+        /// </summary>
+        public int NOISEaNode { get; private set; }
+
+        /// <summary>
+        /// Gets node B of the noise source
+        /// </summary>
+        public int NOISEbNode { get; private set; }
+
+        /// <summary>
+        /// Private variables
+        /// </summary>
+        private int pinA, pinB;
+
+        /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="name">Name</param>
-        public NoiseGenerator(string name)
+        /// <param name="name">Name of the noise source</param>
+        /// <param name="a">Pin A</param>
+        /// <param name="b">Pin B</param>
+        public NoiseGenerator(string name, int a, int b)
         {
             Name = name;
+            pinA = a;
+            pinB = b;
+        }
+
+        /// <summary>
+        /// Connect the noise generator in the circuit
+        /// </summary>
+        /// <param name="node1">Node 1</param>
+        /// <param name="node2">Node 2</param>
+        public virtual void Setup(Circuit ckt, params int[] pins)
+        {
+            NOISEaNode = pins[pinA];
+            NOISEbNode = pins[pinB];
         }
 
         /// <summary>
         /// Evaluate
         /// </summary>
-        public virtual void Evaluate(Circuit ckt, int node1, int node2, double param)
+        public virtual void Evaluate(Circuit ckt, double param)
         {
             var sol = ckt.State.Complex.Solution;
             var noise = ckt.State.Noise;
 
-            Complex val = sol[node1] - sol[node2];
+            Complex val = sol[NOISEaNode] - sol[NOISEbNode];
             double gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
 
             // Calculate the noise
@@ -75,11 +105,7 @@ namespace SpiceSharp.Components
                 // Add integrated quantity
                 OutNoiz += tempOnoise;
                 InNoiz += tempInoise;
-                noise.outNoiz += tempOnoise;
-                noise.inNoise += tempInoise;
             }
-
-            noise.outNdens += Noise;
         }
 
         /// <summary>

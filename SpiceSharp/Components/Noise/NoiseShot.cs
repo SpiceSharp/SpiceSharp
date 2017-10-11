@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.Noise
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the noise source</param>
-        public NoiseShot(string name) : base(name) { }
+        public NoiseShot(string name, int a, int b) : base(name, a, b) { }
 
         /// <summary>
         /// Calculate the noise contribution

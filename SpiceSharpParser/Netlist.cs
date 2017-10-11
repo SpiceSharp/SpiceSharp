@@ -138,6 +138,7 @@ namespace SpiceSharp
                 new DCReader(),
                 new ACReader(),
                 new TransientReader(),
+                new NoiseReader(),
                 new ICReader(),
                 new NodesetReader(),
                 new OptionReader(),

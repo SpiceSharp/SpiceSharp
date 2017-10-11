@@ -9,7 +9,7 @@
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the noise source</param>
-        public NoiseGain(string name) : base(name) { }
+        public NoiseGain(string name, int a, int b) : base(name, a, b) { }
 
         /// <summary>
         /// Calculate the noise contribution
@@ -17,6 +17,6 @@
         /// <param name="ckt">Circuit</param>
         /// <param name="param">Parameter (unused)</param>
         /// <returns></returns>
-        protected override double CalculateNoise(Circuit ckt, double param) => 1.0;
+        protected override double CalculateNoise(Circuit ckt, double param) => param;
     }
 }

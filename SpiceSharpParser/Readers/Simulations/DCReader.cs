@@ -18,8 +18,8 @@ namespace SpiceSharp.Parser.Readers
         /// <summary>
         /// Read
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="parameters">Parameters</param>
+        /// <param name="type">Type</param>
+        /// <param name="st">Statement</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
         public override bool Read(string type, Statement st, Netlist netlist)

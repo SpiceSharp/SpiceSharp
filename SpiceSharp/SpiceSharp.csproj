@@ -59,7 +59,7 @@
     <Compile Include="Circuits\ICircuitObject.cs" />
     <Compile Include="Components\Noise\NoiseGain.cs" />
     <Compile Include="Components\Noise\NoiseGenerator.cs" />
-    <Compile Include="Components\Noise\NoiseGenerators.cs" />
+    <Compile Include="Components\Noise\ComponentNoise.cs" />
     <Compile Include="Components\Noise\NoiseShot.cs" />
     <Compile Include="Components\Noise\NoiseThermal.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1.cs" />

@@ -34,7 +34,7 @@ namespace SpiceSharp.Simulations
         /// Gets or sets the name of the AC source used as input reference
         /// </summary>
         [SpiceName("input"), SpiceInfo("Name of the AC source used as input reference")]
-        public ICircuitObject Input { get; set; } = null;
+        public string Input { get; set; } = null;
 
         /// <summary>
         /// Gets or sets the starting frequency
@@ -117,19 +117,22 @@ namespace SpiceSharp.Simulations
             int posOutNode = !string.IsNullOrWhiteSpace(Output) ? ckt.Nodes[Output].Index : 0;
             int negOutNode = !string.IsNullOrWhiteSpace(OutputRef) ? ckt.Nodes[OutputRef].Index : 0;
 
-            // See if the source specified is AC
-            if (Input is Voltagesource)
+            // Check the voltage or current source
+            if (string.IsNullOrEmpty(Input))
+                throw new CircuitException($"{Name}: No input source specified");
+            ICircuitObject source = ckt.Objects[Input];
+            if (source is Voltagesource)
             {
-                if (!(Input as Voltagesource).VSRCacMag.Given)
-                    throw new CircuitException($"{Name}: Noise input source {Input.Name} has no AC input");
+                if (!(source as Voltagesource).VSRCacMag.Given || (source as Voltagesource).VSRCacMag == 0.0)
+                    throw new CircuitException($"{Name}: Noise input source {source.Name} has no AC input");
             }
-            else if (Input is Currentsource)
+            else if (source is Currentsource)
             {
-                if (!(Input as Currentsource).ISRCacMag.Given)
-                    throw new CircuitException($"{Name}: Noise input source {Input.Name} has no AC input");
+                if (!(source as Currentsource).ISRCacMag.Given || (source as Currentsource).ISRCacMag == 0.0)
+                    throw new CircuitException($"{Name}: Noise input source {source.Name} has not AC input");
             }
             else
-                throw new CircuitException($"{Name}: Invalid input noise source");
+                throw new CircuitException($"{Name}: No input source");
 
             double freqdelta = 0.0;
             int n = 0;
