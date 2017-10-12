@@ -73,7 +73,7 @@ namespace SpiceSharp.Parser.Readers
             }
 
             // Get the model and generate a component for it
-            ICircuitObject model = netlist.Path.FindModel<ICircuitObject>(new CircuitIdentifier(parameters[4].image));
+            ICircuitObject model = netlist.Path.FindModel<ICircuitObject>(netlist.Circuit.Objects, new CircuitIdentifier(parameters[4].image));
             ICircuitComponent mosfet = null;
             if (Mosfets.ContainsKey(model.GetType()))
                 mosfet = Mosfets[model.GetType()].Invoke(name, model);
@@ -81,7 +81,7 @@ namespace SpiceSharp.Parser.Readers
                 throw new ParseException(parameters[4], "Invalid model");
 
             // The rest is all just parameters
-            mosfet.ReadNodes(parameters);
+            mosfet.ReadNodes(netlist.Path, parameters);
             netlist.ReadParameters((IParameterized)mosfet, parameters, 4);
             return mosfet;
         }

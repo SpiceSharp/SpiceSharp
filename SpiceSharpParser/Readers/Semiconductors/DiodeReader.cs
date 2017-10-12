@@ -24,7 +24,7 @@ namespace SpiceSharp.Parser.Readers
         protected override ICircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             Diode dio = new Diode(name);
-            dio.ReadNodes(parameters);
+            dio.ReadNodes(netlist.Path, parameters);
 
             if (parameters.Count < 3)
                 throw new ParseException(parameters[1], "Model expected", false);

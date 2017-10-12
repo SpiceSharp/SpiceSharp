@@ -8,55 +8,65 @@ namespace SpiceSharp.Parser.Readers
     /// <summary>
     /// Reads a <see cref="Subcircuit"/> component.
     /// </summary>
-    public class SubcircuitReader : ComponentReader
+    public class SubcircuitReader : Reader
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public SubcircuitReader()
-            : base("x")
+        public SubcircuitReader() : base(StatementType.Component)
         {
+            Identifier = "x";
         }
 
         /// <summary>
-        /// Generate
+        /// Read
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="parameters">Parameters</param>
+        /// <param name="type">Type</param>
+        /// <param name="st">Statement</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override ICircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        public override bool Read(string type, Statement st, Netlist netlist)
         {
-            List<string> pins = new List<string>();
-            Dictionary<string, Token> pars = new Dictionary<string, Token>();
-            string subcktname = null;
+            // Initialize
+            List<CircuitIdentifier> instancepins = new List<CircuitIdentifier>();
+            Dictionary<CircuitIdentifier, Token> instanceparameters = new Dictionary<CircuitIdentifier, Token>();
+            CircuitIdentifier definition = null;
+
+            // Get the name
+            CircuitIdentifier name;
+            if (netlist.Path.InstancePath != null)
+                name = netlist.Path.InstancePath.Grow(st.Name.image);
+            else
+                name = new CircuitIdentifier(st.Name.image);
 
             // Format: <NAME> <NODES>* <SUBCKT> <PAR1>=<VAL1> ...
+            // Or: <NAME> <NODES>* <SUBCKT> params: <PAR1>=<VAL1> ...
             bool mode = true; // true = nodes, false = parameters
-            for (int i = 0; i < parameters.Count; i++)
+            for (int i = 0; i < st.Parameters.Count; i++)
             {
+                // Reading nodes
                 if (mode)
                 {
-                    if (ReaderExtension.IsNode(parameters[i]))
-                        pins.Add(subcktname = parameters[i].image.ToLower());
+                    if (ReaderExtension.IsNode(st.Parameters[i]))
+                        instancepins.Add(definition = new CircuitIdentifier(st.Parameters[i].image));
                     else
                     {
-                        pins.RemoveAt(pins.Count - 1);
+                        instancepins.RemoveAt(instancepins.Count - 1);
                         mode = false;
                     }
                 }
 
                 // Reading parameters
-                if (!mode)
+                else
                 {
-                    if (parameters[i].kind == ASSIGNMENT)
+                    if (st.Parameters[i].kind == ASSIGNMENT)
                     {
-                        AssignmentToken at = parameters[i] as AssignmentToken;
+                        AssignmentToken at = st.Parameters[i] as AssignmentToken;
                         switch (at.Name.kind)
                         {
                             case WORD:
                             case IDENTIFIER:
-                                pars.Add(at.Name.image.ToLower(), at.Value);
+                                instanceparameters.Add(new CircuitIdentifier(at.Name.image), at.Value);
                                 break;
 
                             default:
@@ -65,35 +75,37 @@ namespace SpiceSharp.Parser.Readers
                     }
                 }
             }
+
+            // If there are only node-like tokens, then the last one is the definition by default
             if (mode)
-                pins.RemoveAt(pins.Count - 1);
+                instancepins.RemoveAt(instancepins.Count - 1);
 
             // Find the subcircuit definition
-            SubcircuitDefinition definition = netlist.Path.FindDefinition(subcktname);
-            if (definition == null)
-                throw new ParseException(parameters[parameters.Count - 1], "Cannot find subcircuit");
+            if (netlist.Path.DefinitionPath != null)
+                definition = netlist.Path.DefinitionPath.Grow(definition);
+            SubcircuitDefinition subcktdef = netlist.Path.FindDefinition(netlist.Definitions, definition) ?? 
+                throw new ParseException(st.Parameters[st.Parameters.Count - 1], "Cannot find subcircuit definition");
+            Subcircuit subckt = new Subcircuit(subcktdef, name, instancepins, instanceparameters);
 
-            // Create the subcircuit
-            /* Subcircuit subckt = new Subcircuit(name, definition.Pins.ToArray());
-            subckt.Connect(pins.ToArray());
+            SubcircuitPath orig = netlist.Path;
+            netlist.Path = new SubcircuitPath(netlist, orig, subckt);
 
-            // Descend into the subcircuit
-            netlist.Path.Descend(definition, pars);
-
-            // Read control statements
-            foreach (var s in definition.Body.Statements(StatementType.Control))
+            // Read all control statements
+            foreach (var s in subcktdef.Body.Statements(StatementType.Control))
                 netlist.Readers.Read(s, netlist);
 
-            // Read model statements
-            foreach (var s in definition.Body.Statements(StatementType.Model))
+            // Read all model statements
+            foreach (var s in subcktdef.Body.Statements(StatementType.Model))
                 netlist.Readers.Read(s, netlist);
 
-            // Read component statements
-            foreach (var s in definition.Body.Statements(StatementType.Component))
-                netlist.Readers.Read(s, netlist); */
+            // Read all component statements
+            foreach (var s in subcktdef.Body.Statements(StatementType.Component))
+                netlist.Readers.Read(s, netlist);
 
-            netlist.Path.Ascend();
-            return null;
+            // Restore
+            netlist.Path = orig;
+            Generated = subckt;
+            return true;
         }
     }
 }

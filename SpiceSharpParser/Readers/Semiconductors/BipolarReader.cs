@@ -31,7 +31,7 @@ namespace SpiceSharp.Parser.Readers
             // If the component is of the format QXXX NC NB NE MNAME we will insert NE again before the model name
             if (parameters.Count == 4)
                 parameters.Insert(3, parameters[2]);
-            bjt.ReadNodes(parameters);
+            bjt.ReadNodes(netlist.Path, parameters);
 
             if (parameters.Count < 5)
                 throw new ParseException(parameters[3], "Model expected", false);

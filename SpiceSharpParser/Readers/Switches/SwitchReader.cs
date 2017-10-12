@@ -42,7 +42,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateVSW(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             VoltageSwitch vsw = new VoltageSwitch(name);
-            vsw.ReadNodes(parameters);
+            vsw.ReadNodes(netlist.Path, parameters);
 
             // Read the model
             if (parameters.Count < 5)
@@ -77,7 +77,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateCSW(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             CurrentSwitch csw = new CurrentSwitch(name);
-            csw.ReadNodes(parameters);
+            csw.ReadNodes(netlist.Path, parameters);
             switch (parameters.Count)
             {
                 case 2: throw new ParseException(parameters[1], "Voltage source expected", false);

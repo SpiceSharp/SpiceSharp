@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Parser.Subcircuits;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Parser.Subcircuits;
 
 namespace SpiceSharp.Parser.Readers
 {
@@ -24,11 +25,13 @@ namespace SpiceSharp.Parser.Readers
             if (st.Parameters.Count < 2)
                 throw new ParseException(st.Name, "Subcircuit name expected", false);
 
-            // Create the subcircuit definition
-            string name = st.Parameters[0].image.ToLower();
-            StatementsToken body = st.Parameters[st.Parameters.Count - 1] as StatementsToken;
-            if (body == null)
-                throw new ParseException(st.Name, "Invalid subcircuit body passed to method");
+            // Create the identifier of the subcircuit definition
+            CircuitIdentifier name = new CircuitIdentifier(st.Parameters[0].image);
+            if (netlist.Path.DefinitionPath != null)
+                name = netlist.Path.DefinitionPath.Grow(name);
+
+            // Extract the subcircuit definition statements
+            StatementsToken body = (StatementsToken)st.Parameters[st.Parameters.Count - 1];
             SubcircuitDefinition definition = new SubcircuitDefinition(name, body);
 
             // Parse nodes and parameters
@@ -46,27 +49,31 @@ namespace SpiceSharp.Parser.Readers
                     {
                         mode = false;
                         AssignmentToken at = st.Parameters[i] as AssignmentToken;
-                        definition.Defaults.Add(at.Name.image.ToLower(), at.Value);
+                        definition.Defaults.Add(new CircuitIdentifier(at.Name.image), at.Value);
                     }
 
                     // Still reading nodes
                     else if (ReaderExtension.IsNode(st.Parameters[i]))
-                        definition.Pins.Add(st.Parameters[i].image.ToLower());
+                        definition.Pins.Add(new CircuitIdentifier(st.Parameters[i].image));
                 }
                 else if (st.Parameters[i].kind == ASSIGNMENT)
                 {
                     AssignmentToken at = st.Parameters[i] as AssignmentToken;
-                    definition.Defaults.Add(at.Name.image.ToLower(), at.Value);
+                    definition.Defaults.Add(new CircuitIdentifier(at.Name.image), at.Value);
                 }
             }
 
-            // Create a new subcircuit definition
-            netlist.Path.AddDefinition(definition);
-            netlist.Path.Descend(definition, null);
+            // Create a new subcircuit path
+            SubcircuitPath orig = netlist.Path;
+            netlist.Path = new SubcircuitPath(orig, definition);
             foreach (var s in definition.Body.Statements(StatementType.Subcircuit))
                 netlist.Readers.Read(s, netlist);
-            netlist.Path.Ascend();
 
+            // Restore
+            netlist.Path = orig;
+
+            // Return values
+            netlist.Definitions.Add(definition.Name, definition);
             Generated = definition;
             return true;
         }

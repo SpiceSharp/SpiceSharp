@@ -66,7 +66,7 @@ namespace SpiceSharp.Components
             VCVSnegNode = nodes[1].Index;
             VCVScontPosNode = nodes[2].Index;
             VCVScontNegNode = nodes[3].Index;
-            VCVSbranch = CreateNode(ckt, Name + "#branch", CircuitNode.NodeType.Current).Index;
+            VCVSbranch = CreateNode(ckt, Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
         }
 
         /// <summary>

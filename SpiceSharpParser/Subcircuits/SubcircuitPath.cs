@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SpiceSharp.Circuits;
-using SpiceSharp.Components;
 using SpiceSharp.Parser.Readers;
 
 namespace SpiceSharp.Parser.Subcircuits
@@ -19,321 +17,307 @@ namespace SpiceSharp.Parser.Subcircuits
             // Variables and models are passed down to each subcircuit
             Descend,
 
-            // Only the strictly local and global variables/models are visible
+            // Only strictly local and global variables/models are visible
             GlobalLocal
         }
 
         /// <summary>
         /// The scope rules for parameters
         /// </summary>
-        public ScopeRule ParameterScope { get; set; } = ScopeRule.Descend;
+        public static ScopeRule ParameterScope { get; set; } = ScopeRule.Descend;
 
         /// <summary>
         /// The scope rules for models
         /// </summary>
-        public ScopeRule ModelScope { get; set; } = ScopeRule.Descend;
+        public static ScopeRule ModelScope { get; set; } = ScopeRule.Descend;
 
         /// <summary>
         /// The scope rules for subcircuit definitions
         /// </summary>
-        public ScopeRule DefinitionScope { get; set; } = ScopeRule.Descend;
+        public static ScopeRule DefinitionScope { get; set; } = ScopeRule.Descend;
+
+        /// <summary>
+        /// Gets or sets the current instance path
+        /// </summary>
+        public CircuitIdentifier InstancePath { get; }
+
+        /// <summary>
+        /// Gets or sets the current subcircuit definition path
+        /// </summary>
+        public CircuitIdentifier DefinitionPath { get; }
+
+        /// <summary>
+        /// The current parameters
+        /// If no parameters are active, the global parameters are returned
+        /// </summary>
+        public Dictionary<CircuitIdentifier, double> Parameters { get; }
+
+        /// <summary>
+        /// Gets the currently active node map
+        /// </summary>
+        public Dictionary<CircuitIdentifier, CircuitIdentifier> NodeMap { get; }
+
+        /// <summary>
+        /// Get the global variables
+        /// </summary>
+        public HashSet<CircuitIdentifier> Globals { get; }
 
         /// <summary>
         /// Private variables
         /// </summary>
-        private Netlist netlist;
-        private Stack<SubcircuitDefinition> csubcktdef = new Stack<SubcircuitDefinition>();
-        private Stack<Dictionary<string, double>> cparams = new Stack<Dictionary<string, double>>();
-        private Dictionary<string, SubcircuitDefinition> definitions = new Dictionary<string, SubcircuitDefinition>();
-        private Dictionary<string, double> globalparameters = new Dictionary<string, double>();
+        private Dictionary<CircuitIdentifier, double> globalparameters;
 
         /// <summary>
-        /// Event triggered when the netlist descends into/ascends from a subcircuit
+        /// Constructor for the root path
         /// </summary>
-        public event SubcircuitPathChangedEventHandler OnSubcircuitPathChanged;
-
-        /// <summary>
-        /// Get the current components
-        /// </summary>
-        public CircuitObjects Objects { get; private set; }
-
-        /// <summary>
-        /// The global parameters
-        /// </summary>
-        public Dictionary<string, double> Parameters { get; private set; }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="netlist">The netlist for the path</param>
-        public SubcircuitPath(Netlist netlist)
+        public SubcircuitPath()
         {
-            this.netlist = netlist;
-            Objects = netlist.Circuit.Objects;
+            // Root path? Ignore all other parameters
+            globalparameters = new Dictionary<CircuitIdentifier, double>();
             Parameters = globalparameters;
+            InstancePath = null;
+            DefinitionPath = null;
+            NodeMap = new Dictionary<CircuitIdentifier, CircuitIdentifier>();
+            Globals = new HashSet<CircuitIdentifier>();
+            Globals.Add(new CircuitIdentifier("0"));
+
+            // Add globals to the nodemap
+            foreach (var id in Globals)
+                NodeMap.Add(id, id);
         }
 
         /// <summary>
-        /// Add a definition to the root path
+        /// Constructor when reading subcircuit definitions
         /// </summary>
-        /// <param name="def">The definition</param>
-        public void AddDefinition(SubcircuitDefinition def, SubcircuitDefinition parent = null)
+        /// <param name="parent">Parent path</param>
+        /// <param name="definition">Subcircuit definition</param>
+        public SubcircuitPath(SubcircuitPath parent, SubcircuitDefinition definition)
         {
-            if (parent == null)
-                definitions.Add(def.Name, def);
+            // Same global parameters
+            globalparameters = parent.globalparameters;
+
+            // No parameters or instances
+            Parameters = null; // Should not be used!
+            InstancePath = null;
+
+            // Build the definition path
+            if (parent.DefinitionPath != null)
+                DefinitionPath = parent.DefinitionPath.Grow(definition.Name);
             else
-                parent.AddDefinition(def);
+                DefinitionPath = definition.Name;
+
+            // No node map
+            NodeMap = null; // Should not be used!
         }
 
         /// <summary>
-        /// Descend into a subcircuit instance
+        /// Constructor when reading subcircuit instances
         /// </summary>
-        /// <param name="subckt">The subcircuit</param>
-        /// <param name="def">Its matching definition</param>
-        /// <param name="pars">Parameters passed to the subcircuit</param>
-        public void Descend(SubcircuitDefinition def, Dictionary<string, Token> parameters)
+        /// <param name="parent">Parent</param>
+        /// <param name="subckt">Subcircuit definition</param>
+        public SubcircuitPath(Netlist netlist, SubcircuitPath parent, Subcircuit subckt)
         {
-            /* var nparameters = parameters != null ? MergeParameters(def, parameters) : null;
+            // Same global parameters
+            globalparameters = parent.globalparameters;
 
-            // The subcircuit definition should not be in the stack,
-            // else we are dealing with a recursive loop!
-            if (csubcktdef.Contains(def))
-                throw new ParseException($"Recursive loop detected: Subcircuit \"{def.Name}\" is instanced within itself");
+            // Same globals
+            Globals = parent.Globals;
 
-            // Push
-            csubckt.Push(subckt);
-            csubcktdef.Push(def);
-            cparams.Push(nparameters);
+            // Build parameters
+            Parameters = GenerateParameters(netlist, subckt.Definition, subckt.Parameters);
 
-            // Update the currently active components
-            if (subckt != null)
-                Objects = subckt.Objects;
-            if (parameters != null)
-            Parameters = nparameters;
-
-            // Call the event
-            SubcircuitPathChangedEventArgs args = new SubcircuitPathChangedEventArgs(subckt, def, SubcircuitPathChangedEventArgs.ChangeType.Descend, nparameters);
-            OnSubcircuitPathChanged?.Invoke(this, args); */
-        }
-
-        /// <summary>
-        /// Ascend from the current subcircuit
-        /// </summary>
-        public void Ascend()
-        {
-            // Pop
-            /* csubckt.Pop();
-            csubcktdef.Pop();
-            cparams.Pop();
-
-            // Restore the previous state
-            if (csubckt.Count > 0 && csubckt.Peek() != null)
-                Objects = csubckt.Peek().Objects;
+            // Build instance path
+            if (parent.InstancePath != null)
+                InstancePath = parent.InstancePath.Grow(subckt.Name);
             else
-                Objects = netlist.Circuit.Objects;
-            if (cparams.Count > 0 && cparams.Peek() != null)
-                Parameters = cparams.Peek();
-            else
-                Parameters = globalparameters;
+                InstancePath = subckt.Name;
 
-            // Event arguments
-            Subcircuit subckt = csubckt.Count > 0 ? csubckt.Peek() : null;
-            SubcircuitDefinition def = csubcktdef.Count > 0 ? csubcktdef.Peek() : null;
-            Dictionary<string, double> pars = cparams.Count > 0 ? cparams.Peek() : Parameters;
+            // Node map
+            NodeMap = GenerateNodeMap(subckt.Definition, subckt.Pins);
 
-            // Call the event
-            SubcircuitPathChangedEventArgs args = new SubcircuitPathChangedEventArgs(subckt, def, SubcircuitPathChangedEventArgs.ChangeType.Ascend, pars);
-            OnSubcircuitPathChanged?.Invoke(this, args); */
+            // Add globals to the nodemap
+            foreach (var id in Globals)
+            {
+                if (!NodeMap.ContainsKey(id))
+                    NodeMap.Add(id, id);
+            }
         }
 
         /// <summary>
         /// Find a model using the current scope rules
         /// </summary>
-        /// <param name="name">Name of the model</param>
+        /// <param name="id">Identifier of the model</param>
         /// <returns></returns>
-        public T FindModel<T>(CircuitIdentifier name)
+        public T FindModel<T>(CircuitObjects obj, CircuitIdentifier id) where T : class, ICircuitObject
         {
+            ICircuitObject co;
+            T model = null;
+            CircuitIdentifier orig = id;
+
             switch (ModelScope)
             {
                 case ScopeRule.Descend:
-                    // Find the model in any of the components
-                    /* foreach (Subcircuit subckt in csubckt)
-                    {
-                        // Try to find it in this subcircuit
-                        if (subckt.Objects.Contains(name))
-                        {
-                            ICircuitObject c = subckt.Objects[name];
-                            if (c is T)
-                                return (T)c;
-                        }
-                    } */
 
-                    // Finally try to find it in the circuit
-                    if (netlist.Circuit.Objects.Contains(name))
+                    // Find the identifier in all parent paths, starting at the current level
+                    while (id != null)
                     {
-                        ICircuitObject c = netlist.Circuit.Objects[name];
-                        if (c is T res)
-                            return res;
+                        // Try to find the subcircuit
+                        if (obj.TryGetObject(id, out co))
+                        {
+                            model = co as T;
+                            if (model != null)
+                                return model;
+                        }
+
+                        // We didn't find the model yet, so try the parent path
+                        id = id.Shrink();
                     }
                     break;
 
                 case ScopeRule.GlobalLocal:
+
                     // Find the model locally
-                    if (Objects.Contains(name))
+                    if (obj.TryGetObject(id, out co))
                     {
-                        ICircuitObject c = Objects[name];
-                        if (c is T res)
-                            return res;
+                        model = co as T;
+                        if (model != null)
+                            return model;
                     }
 
                     // Find the model globally
-                    if (netlist.Circuit.Objects.Contains(name))
+                    if (id.Path.Length > 1)
                     {
-                        ICircuitObject c = netlist.Circuit.Objects[name];
-                        if (c is T)
-                            return (T)c;
+                        id = new CircuitIdentifier(id.Name);
+                        if (obj.TryGetObject(id, out co))
+                        {
+                            model = co as T;
+                            if (model != null)
+                                return model;
+                        }
                     }
                     break;
             }
 
-            throw new ParseException($"Cannot find model \"{name}\"");
+            throw new ParseException($"Cannot find model \"{orig}\"");
         }
 
         /// <summary>
         /// Find a subcircuit definition using the current scope rules
         /// </summary>
-        /// <param name="name">Name of the subcircuit definition</param>
+        /// <param name="id">Subcircuit definition identifier</param>
         /// <returns></returns>
-        public SubcircuitDefinition FindDefinition(string name)
+        public SubcircuitDefinition FindDefinition(Dictionary<CircuitIdentifier, SubcircuitDefinition> definitions, CircuitIdentifier id)
         {
+            SubcircuitDefinition result = null;
+            CircuitIdentifier orig = id;
+
             switch (DefinitionScope)
             {
                 case ScopeRule.Descend:
 
-                    // Find the definition in any of the subcircuit definitions
-                    foreach (SubcircuitDefinition def in csubcktdef)
+                    while (id != null)
                     {
-                        // try to find it in this definition
-                        if (def.ContainsDefinition(name))
-                            return def.GetDefinition(name);
-                    }
-                    break;
+                        // Try to find the definition
+                        if (definitions.TryGetValue(id, out result))
+                            return result;
 
-                case ScopeRule.GlobalLocal:
-                    if (csubcktdef.Count > 0)
-                    {
-                        if (csubcktdef.Peek().ContainsDefinition(name))
-                            return csubcktdef.Peek().GetDefinition(name);
-                    }
-                    break;
-            }
-
-            // Finally try to find it in the global definitions
-            if (definitions.ContainsKey(name))
-                return definitions[name];
-            throw new ParseException($"Cannot find subcircuit \"{name}\"");
-        }
-
-        /// <summary>
-        /// Merge parameters
-        /// </summary>
-        /// <param name="def">The circuit definition containing the default parameters</param>
-        /// <param name="parameters">The parameters</param>
-        private Dictionary<string, double> MergeParameters(SubcircuitDefinition def, Dictionary<string, Token> parameters)
-        {
-            Dictionary<string, double> nparameters = new Dictionary<string, double>();
-
-            // Convert all parameters now
-            foreach (var item in parameters)
-                nparameters.Add(item.Key, netlist.ParseDouble(item.Value));
-
-            // Add definition defaults
-            foreach (var item in def.Defaults)
-            {
-                if (!nparameters.ContainsKey(item.Key))
-                    nparameters.Add(item.Key, netlist.ParseDouble(item.Value));
-            }
-
-            // Merge the parameters depending on the scope rules
-            switch (ParameterScope)
-            {
-                case ScopeRule.Descend:
-
-                    // Add all previous parameters that aren't overwritten if they aren't yet added
-                    foreach (var item in Parameters)
-                    {
-                        if (!nparameters.ContainsKey(item.Key))
-                            nparameters.Add(item.Key, item.Value);
+                        // Not found, go to the parent path
+                        id = id.Shrink();
                     }
                     break;
 
                 case ScopeRule.GlobalLocal:
 
-                    // Only add the global parameters
-                    foreach (var item in globalparameters)
+                    // Try to find the definition locally
+                    if (definitions.TryGetValue(id, out result))
+                        return result;
+
+                    // Try to find the definition globally
+                    if (id.Path.Length > 1)
                     {
-                        if (!nparameters.ContainsKey(item.Key))
-                            nparameters.Add(item.Key, item.Value);
+                        id = new CircuitIdentifier(id.Name);
+                        if (definitions.TryGetValue(id, out result))
+                            return result;
                     }
                     break;
             }
+            throw new ParseException($"Cannot find subcircuit \"{orig}\"");
+        }
 
-            return nparameters;
+        /// <summary>
+        /// Find the parameters
+        /// </summary>
+        /// <param name="definition">Subcircuit definition</param>
+        /// <param name="parameters">Parameters</param>
+        /// <returns></returns>
+        private Dictionary<CircuitIdentifier, double> GenerateParameters(Netlist netlist, SubcircuitDefinition definition, Dictionary<CircuitIdentifier, Token> parameters)
+        {
+            // Our new parameters
+            Dictionary<CircuitIdentifier, double> np = new Dictionary<CircuitIdentifier, double>();
+
+            // Add local parameters
+            if (parameters != null)
+            {
+                foreach (var item in parameters)
+                    np.Add(item.Key, netlist.ParseDouble(item.Value));
+            }
+
+            // Add default parameters
+            if (definition.Defaults != null)
+            {
+                foreach (var item in definition.Defaults)
+                {
+                    if (!np.ContainsKey(item.Key))
+                        np.Add(item.Key, netlist.ParseDouble(item.Value));
+                }
+            }
+
+            // Other parameters
+            if (Parameters != null)
+            {
+                switch (ParameterScope)
+                {
+                    case ScopeRule.Descend:
+
+                        // Copy all parameters from the previous node
+                        foreach (var item in Parameters)
+                        {
+                            if (!np.ContainsKey(item.Key))
+                                np.Add(item.Key, item.Value);
+                        }
+                        break;
+
+                    case ScopeRule.GlobalLocal:
+
+                        // Only copy the global parameters
+                        foreach (var item in globalparameters)
+                        {
+                            if (!np.ContainsKey(item.Key))
+                                np.Add(item.Key, item.Value);
+                        }
+                        break;
+                }
+            }
+
+            // Return results
+            return np;
+        }
+
+        /// <summary>
+        /// Find the nodemap for a subcircuit definition
+        /// </summary>
+        /// <param name="definition">Subcircuit definition</param>
+        /// <param name="pins">The new pins</param>
+        /// <returns></returns>
+        private Dictionary<CircuitIdentifier, CircuitIdentifier> GenerateNodeMap(SubcircuitDefinition definition, List<CircuitIdentifier> pins)
+        {
+            // Initialize
+            Dictionary<CircuitIdentifier, CircuitIdentifier> nodemap = new Dictionary<CircuitIdentifier, CircuitIdentifier>();
+
+            // This is actually simple, just a one on one relation
+            for (int i = 0; i < pins.Count; i++)
+                nodemap.Add(definition.Pins[i], pins[i]);
+            return nodemap;
         }
     }
-
-    /// <summary>
-    /// Arguments when the current subcircuit changes
-    /// </summary>
-    public class SubcircuitPathChangedEventArgs : EventArgs
-    {
-        /// <summary>
-        /// The subcircuit
-        /// </summary>
-        // public Subcircuit Subcircuit { get; }
-
-        /// <summary>
-        /// The definition
-        /// </summary>
-        public SubcircuitDefinition Definition { get; }
-
-        /// <summary>
-        /// Enumeration of change types
-        /// </summary>
-        public enum ChangeType
-        {
-            Descend,
-            Ascend
-        }
-
-        /// <summary>
-        /// The parameters for the new path
-        /// </summary>
-        public Dictionary<string, double> Parameters { get; }
-
-        /// <summary>
-        /// The type of path change
-        /// </summary>
-        public ChangeType Type { get; }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="subckt">The subcircuit</param>
-        /// <param name="def">The definition</param>
-        public SubcircuitPathChangedEventArgs(SubcircuitDefinition def, ChangeType type, Dictionary<string, double> parameters)
-        {
-            // Subcircuit = subckt;
-            Definition = def;
-            Type = type;
-            Parameters = parameters;
-        }
-    }
-
-    /// <summary>
-    /// Event handler that can be used when the current subcircuit changes
-    /// </summary>
-    /// <param name="sender">The sender</param>
-    /// <param name="e">The data</param>
-    public delegate void SubcircuitPathChangedEventHandler(object sender, SubcircuitPathChangedEventArgs e);
 }

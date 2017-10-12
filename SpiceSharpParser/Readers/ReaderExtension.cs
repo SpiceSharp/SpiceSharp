@@ -2,6 +2,7 @@
 using SpiceSharp.Parameters;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
+using SpiceSharp.Parser.Subcircuits;
 using static SpiceSharp.Parser.SpiceSharpParserConstants;
 
 namespace SpiceSharp.Parser.Readers
@@ -54,7 +55,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="c">The circuit component</param>
         /// <param name="parameters">The parameters</param>
         /// <param name="index">The index where to start reading, defaults to 0</param>
-        public static void ReadNodes(this ICircuitComponent c, List<Token> parameters, int index = 0)
+        public static void ReadNodes(this ICircuitComponent c, SubcircuitPath path, List<Token> parameters, int index = 0)
         {
             int count = c.PinCount;
 
@@ -71,7 +72,17 @@ namespace SpiceSharp.Parser.Readers
             for (int i = index; i < index + count; i++)
             {
                 if (IsNode(parameters[i]))
-                    nodes[i] = new CircuitIdentifier(parameters[i].image);
+                {
+                    // Map to a new node if necessary, else make the node local to the current path
+                    CircuitIdentifier node = new CircuitIdentifier(parameters[i].image);
+                    if (path.NodeMap.TryGetValue(node, out CircuitIdentifier mapped))
+                        node = mapped;
+                    else if (path.InstancePath != null)
+                        node = path.InstancePath.Grow(node);
+
+                    // Store the node
+                    nodes[i] = node;
+                }
                 else
                     throw new ParseException(parameters[i], "Node expected");
             }
@@ -125,26 +136,6 @@ namespace SpiceSharp.Parser.Readers
         }
 
         /// <summary>
-        /// Read a model from a Token-related object
-        /// </summary>
-        /// <typeparam name="T">An ICircuitObject class</typeparam>
-        /// <param name="netlist">The netlist</param>
-        /// <param name="t">The token representing the model name</param>
-        /// <returns></returns>
-        public static T ReadModel<T>(this Netlist netlist, Token t) where T : ICircuitObject
-        {
-            // Get the model name
-            switch (t.kind)
-            {
-                case WORD:
-                case IDENTIFIER:
-                    return netlist.Path.FindModel<T>(new CircuitIdentifier(t.image));
-                default:
-                    throw new ParseException(t, "Invalid model identifier");
-            }
-        }
-
-        /// <summary>
         /// Parse a token to a double.
         /// Both literal values and expressions {...} are accepted.
         /// </summary>
@@ -158,7 +149,7 @@ namespace SpiceSharp.Parser.Readers
                 case VALUE:
                     return netlist.Readers.ParseDouble(t.image);
                 case EXPRESSION:
-                    return netlist.Readers.ParseDouble(t.image.Substring(1, t.image.Length - 2).ToLower());
+                    return netlist.Readers.ParseDouble(t.image.Substring(1, t.image.Length - 2));
                 default:
                     throw new ParseException(t, "Value or expression expected");
             }
@@ -213,13 +204,13 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="netlist">Netlist</param>
         /// <param name="t">Token</param>
         /// <returns></returns>
-        public static T FindModel<T>(this Netlist netlist, Token t)
+        public static T FindModel<T>(this Netlist netlist, Token t) where T : class, ICircuitObject
         {
             switch (t.kind)
             {
                 case WORD:
                 case IDENTIFIER:
-                    return netlist.Path.FindModel<T>(new CircuitIdentifier(t.image));
+                    return netlist.Path.FindModel<T>(netlist.Circuit.Objects, new CircuitIdentifier(t.image));
                 default:
                     throw new ParseException(t, "Invalid model name");
             }

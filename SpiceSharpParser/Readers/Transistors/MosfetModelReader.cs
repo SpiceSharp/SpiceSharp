@@ -115,7 +115,7 @@ namespace SpiceSharp.Parser.Readers
             netlist.ReadParameters((IParameterized)model, st.Parameters);
 
             // Output
-            netlist.Path.Objects.Add(model);
+            netlist.Circuit.Objects.Add(model);
             Generated = model;
             return true;
         }

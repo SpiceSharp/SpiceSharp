@@ -6,6 +6,7 @@ using SpiceSharp.Parser.Subcircuits;
 using SpiceSharp.Parser.Readers.Collections;
 using SpiceSharp.Parser.Expressions;
 using SpiceSharp.Simulations;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp
 {
@@ -38,7 +39,21 @@ namespace SpiceSharp
         /// Get the current subcircuit path
         /// Used for parsing subcircuit definitions and instances
         /// </summary>
-        public SubcircuitPath Path { get; }
+        public SubcircuitPath Path
+        {
+            get => path;
+            set
+            {
+                path = value;
+                OnPathChanged?.Invoke(this, path);
+            }
+        }
+        private SubcircuitPath path = new SubcircuitPath();
+
+        /// <summary>
+        /// Get all subcircuit definitions
+        /// </summary>
+        public Dictionary<CircuitIdentifier, SubcircuitDefinition> Definitions { get; } = new Dictionary<CircuitIdentifier, SubcircuitDefinition>();
 
         /// <summary>
         /// Event called before a new simulation is started
@@ -56,13 +71,17 @@ namespace SpiceSharp
         public event NetlistSimulationEventHandler AfterSimulationFinished;
 
         /// <summary>
+        /// Event called when the current path has changed
+        /// </summary>
+        public event NetlistPathChangedEventHandler OnPathChanged;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public Netlist(Circuit ckt)
         {
             Circuit = ckt;
-            Path = new SubcircuitPath(this);
         }
 
         /// <summary>
@@ -97,11 +116,25 @@ namespace SpiceSharp
 
         /// <summary>
         /// A standard netlist with the following features:
-        /// - Components: C, D, E, F, G, H, I, L, M, Q, R, S, X, W
-        /// - Control statements: .IC, .NODESET, .OPTIONS, .PARAM, 
-        /// - Exporters: V(), I(), VDB(), IDB(), VP(), IP(), VR, IR, VI, RI, @dev[par]
-        /// - Subcircuit definitions
-        /// - An expression parser
+        /// <list type="bullet">
+        ///     <listheader>Supported components</listheader>
+        ///     <item><token>R, C, L, M</token><description>Resistors, Capacitors, Inductors and Mutual inductances</description></item>
+        ///     <item><token>V, I</token><description>Independent sources</description></item>
+        ///     <item><token>E, F, H, G</token><description>Controlled sources</description></item>
+        ///     <item><token>S, W</token><description>Switches</description></item>
+        ///     <item><token>X</token><description>Subcircuit instances</description></item>
+        /// </list>
+        /// <list type="bullet">
+        ///     <listheader>Supported control statements</listheader>
+        ///     <item><token>.MODEL</token><description>Model definitions for above components</description></item>
+        ///     <item><token>.SUBCKT</token><description>Subcircuit definitions</description></item>
+        ///     <item><token>.IC, .NODESET</token><description>Initial conditions and nodesets</description></item>
+        ///     <item><token>.SAVE</token><description>Saving exported quantities</description></item>
+        /// </list>
+        /// <list type="bullet">
+        ///     <listheader>Additional features</listheader>
+        ///     <item><description>An expression parser</description></item>
+        /// </list>
         /// </summary>
         /// <returns></returns>
         public static Netlist StandardNetlist()
@@ -167,9 +200,9 @@ namespace SpiceSharp
             {
                 data.Output = e.Parse(data.Input);
             };
-            netlist.Path.OnSubcircuitPathChanged += (object sender, SubcircuitPathChangedEventArgs args) =>
+            netlist.OnPathChanged += (object sender, SubcircuitPath path) =>
             {
-                e.Parameters = args.Parameters;
+                e.Parameters = path.Parameters;
             };
 
             return netlist;
@@ -182,4 +215,11 @@ namespace SpiceSharp
     /// <param name="sender">The netlist sending the event</param>
     /// <param name="sim">The simulation</param>
     public delegate void NetlistSimulationEventHandler(object sender, ISimulation sim);
+
+    /// <summary>
+    /// Event handler used when changing the current path
+    /// </summary>
+    /// <param name="sender">Sender</param>
+    /// <param name="path">Subcircuit path</param>
+    public delegate void NetlistPathChangedEventHandler(object sender, SubcircuitPath path);
 }

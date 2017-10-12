@@ -223,16 +223,16 @@ namespace SpiceSharp.Components
             if (model.BJTcollectorResist.Value == 0)
                 BJTcolPrimeNode = BJTcolNode;
             else if (BJTcolPrimeNode == 0)
-                BJTcolPrimeNode = CreateNode(ckt, Name + "#col").Index;
+                BJTcolPrimeNode = CreateNode(ckt, Name.Grow("#col")).Index;
 
             if (model.BJTbaseResist.Value == 0)
                 BJTbasePrimeNode = BJTbaseNode;
             else if (BJTbasePrimeNode == 0)
-                BJTbasePrimeNode = CreateNode(ckt, Name + "#base").Index;
+                BJTbasePrimeNode = CreateNode(ckt, Name.Grow("#base")).Index;
             if (model.BJTemitterResist.Value == 0)
                 BJTemitPrimeNode = BJTemitNode;
             else if (BJTemitPrimeNode == 0)
-                BJTemitPrimeNode = CreateNode(ckt, Name + "#emit").Index;
+                BJTemitPrimeNode = CreateNode(ckt, Name.Grow("#emit")).Index;
         }
 
         /// <summary>

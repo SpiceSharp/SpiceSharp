@@ -98,7 +98,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// Get the name based on the properties
         /// </summary>
-        public override string Name => "v(" + Node + (Reference == null ? "" : ", " + Reference) + ")";
+        public override string Name => "v(" + Node.ToString() + (Reference == null ? "" : ", " + Reference.ToString()) + ")";
 
         /// <summary>
         /// Read the voltage and write to the output

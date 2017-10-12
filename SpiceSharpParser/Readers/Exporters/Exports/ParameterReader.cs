@@ -76,7 +76,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The display name of the export
         /// </summary>
-        public override string Name => "@" + Component + "[" + Parameter + "]";
+        public override string Name => "@" + Component.ToString() + "[" + Parameter.ToString() + "]";
 
         /// <summary>
         /// Extract the data

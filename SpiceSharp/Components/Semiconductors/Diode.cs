@@ -113,7 +113,7 @@ namespace SpiceSharp.Components
             if (model.DIOresist.Value == 0)
                 DIOposPrimeNode = DIOposNode;
             else
-                DIOposPrimeNode = CreateNode(ckt, Name + "#pos").Index;
+                DIOposPrimeNode = CreateNode(ckt, Name.Grow("#pos")).Index;
 
             // Connect noise sources
             DIOnoise.Setup(ckt, DIOposNode, DIOposPrimeNode, DIOnegNode);

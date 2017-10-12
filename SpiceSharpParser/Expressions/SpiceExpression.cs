@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Parser.Expressions
 {
     /// <summary>
     /// A very light-weight and fast expression parser made for parsing Spice expressions
     /// It is based on Dijkstra's Shunting Yard algorithm. It is very fast for parsing expressions only once.
-    /// The parser is also not very expressive for errors, so only use for relatively simple expressions.
+    /// The parser is also not very expressive for errors, so only use it for relatively simple expressions.
     /// <list type="bullet">
     ///     <listheader><description>Supported operators</description></listheader>
     ///     <item><description>Positive and negative ('+', '-')</description></item>
@@ -145,7 +146,7 @@ namespace SpiceSharp.Parser.Expressions
         /// <summary>
         /// The parameters for expressions
         /// </summary>
-        public Dictionary<string, double> Parameters { get; set; }
+        public Dictionary<CircuitIdentifier, double> Parameters { get; set; }
 
         /// <summary>
         /// Functions
@@ -360,7 +361,8 @@ namespace SpiceSharp.Parser.Expressions
                         }
                         else if (Parameters != null)
                         {
-                            output.Push(Parameters[sb.ToString()]);
+                            CircuitIdentifier id = new CircuitIdentifier(sb.ToString());
+                            output.Push(Parameters[id]);
                             infixPostfix = true;
                         }
                         else

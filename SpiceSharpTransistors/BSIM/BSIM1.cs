@@ -181,13 +181,13 @@ namespace SpiceSharp.Components
 
             /* process drain series resistance */
             if (model.B1sheetResistance.Value != 0 && B1drainSquares.Value != 0.0)
-                B1dNodePrime = CreateNode(ckt, Name + "#drain").Index;
+                B1dNodePrime = CreateNode(ckt, Name.Grow("#drain")).Index;
             else
                 B1dNodePrime = B1dNode;
 
             /* process source series resistance */
             if (model.B1sheetResistance.Value != 0 && B1sourceSquares.Value != 0.0)
-                B1sNodePrime = CreateNode(ckt, Name + "#source").Index;
+                B1sNodePrime = CreateNode(ckt, Name.Grow("#source")).Index;
             else
                 B1sNodePrime = B1sNode;
         }

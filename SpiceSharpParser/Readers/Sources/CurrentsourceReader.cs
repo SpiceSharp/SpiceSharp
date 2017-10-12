@@ -43,7 +43,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateISRC(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             Currentsource isrc = new Currentsource(name);
-            isrc.ReadNodes(parameters);
+            isrc.ReadNodes(netlist.Path, parameters);
 
             // We can have a value or just DC
             for (int i = 2; i < parameters.Count; i++)
@@ -96,7 +96,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateCCCS(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             CurrentControlledCurrentsource cccs = new CurrentControlledCurrentsource(name);
-            cccs.ReadNodes(parameters);
+            cccs.ReadNodes(netlist.Path, parameters);
             switch (parameters.Count)
             {
                 case 2: throw new ParseException(parameters[1], "Voltage source expected", false);
@@ -120,7 +120,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateVCCS(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             VoltageControlledCurrentsource vccs = new VoltageControlledCurrentsource(name);
-            vccs.ReadNodes(parameters);
+            vccs.ReadNodes(netlist.Path, parameters);
 
             if (parameters.Count < 5)
                 throw new ParseException(parameters[3], "Value expected", false);

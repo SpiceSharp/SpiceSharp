@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Parser.Readers
+﻿using SpiceSharp.Circuits;
+
+namespace SpiceSharp.Parser.Readers
 {
     /// <summary>
     /// Reads parameter definitions (.PARAM)
@@ -32,7 +34,7 @@
                         switch (at.Name.kind)
                         {
                             case WORD:
-                                netlist.Path.Parameters.Add(at.Name.image.ToLower(), netlist.ParseDouble(at.Value));
+                                netlist.Path.Parameters.Add(new CircuitIdentifier(at.Name.image), netlist.ParseDouble(at.Value));
                                 break;
 
                             default:

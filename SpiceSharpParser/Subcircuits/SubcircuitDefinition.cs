@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SpiceSharp.Circuits;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Parser.Subcircuits
 {
@@ -10,17 +11,17 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <summary>
         /// The name of the definition
         /// </summary>
-        public string Name { get; }
+        public CircuitIdentifier Name { get; }
 
         /// <summary>
         /// The pins of the subcircuit definition
         /// </summary>
-        public List<string> Pins { get; } = new List<string>();
+        public List<CircuitIdentifier> Pins { get; } = new List<CircuitIdentifier>();
 
         /// <summary>
         /// The default parameters for this subcircuit definition
         /// </summary>
-        public Dictionary<string, Token> Defaults { get; } = new Dictionary<string, Token>();
+        public Dictionary<CircuitIdentifier, Token> Defaults { get; } = new Dictionary<CircuitIdentifier, Token>();
 
         /// <summary>
         /// The subcircuit definition body
@@ -28,39 +29,14 @@ namespace SpiceSharp.Parser.Subcircuits
         public StatementsToken Body { get; }
 
         /// <summary>
-        /// Private variables
-        /// </summary>
-        private Dictionary<string, SubcircuitDefinition> definitions { get; } = new Dictionary<string, SubcircuitDefinition>();
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the subcircuit definition</param>
         /// <param name="body">The statements</param>
-        public SubcircuitDefinition(string name, StatementsToken body)
+        public SubcircuitDefinition(CircuitIdentifier name, StatementsToken body)
         {
-            Name = name;
-            Body = body;
+            Name = name ?? throw new ParseException("Invalid subcircuit identifier");
+            Body = body ?? throw new ParseException("Invalid subcircuit body");
         }
-
-        /// <summary>
-        /// Add a definition
-        /// </summary>
-        /// <param name="def">The subcircuit definition</param>
-        public void AddDefinition(SubcircuitDefinition def) => definitions.Add(def.Name, def);
-
-        /// <summary>
-        /// Check if a subcircuit definition is in the definitions
-        /// </summary>
-        /// <param name="name">The name</param>
-        /// <returns></returns>
-        public bool ContainsDefinition(string name) => definitions.ContainsKey(name);
-
-        /// <summary>
-        /// Get a definition by name
-        /// </summary>
-        /// <param name="name">The name</param>
-        /// <returns></returns>
-        public SubcircuitDefinition GetDefinition(string name) => definitions[name];
     }
 }

@@ -47,7 +47,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateCap(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             Capacitor cap = new Capacitor(name);
-            cap.ReadNodes(parameters);
+            cap.ReadNodes(netlist.Path, parameters);
 
             // Search for a parameter IC, which is common for both types of capacitors
             for (int i = 3; i < parameters.Count; i++)
@@ -75,7 +75,7 @@ namespace SpiceSharp.Parser.Readers
                 {
                     case WORD:
                     case IDENTIFIER:
-                        cap.SetModel(netlist.Path.FindModel<CapacitorModel>(new CircuitIdentifier(parameters[2].image)));
+                        cap.SetModel(netlist.Path.FindModel<CapacitorModel>(netlist.Circuit.Objects, new CircuitIdentifier(parameters[2].image)));
                         break;
                     default:
                         throw new ParseException(parameters[2], "Model name expected");
@@ -98,7 +98,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateInd(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             Inductor ind = new Inductor(name);
-            ind.ReadNodes(parameters);
+            ind.ReadNodes(netlist.Path, parameters);
 
             // Read the value
             if (parameters.Count < 3)
@@ -148,7 +148,7 @@ namespace SpiceSharp.Parser.Readers
         protected ICircuitObject GenerateRes(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             Resistor res = new Resistor(name);
-            res.ReadNodes(parameters);
+            res.ReadNodes(netlist.Path, parameters);
 
             // We have two possible formats:
             // Normal: RXXXXXXX N1 N2 VALUE
