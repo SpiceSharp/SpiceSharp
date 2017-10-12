@@ -240,6 +240,16 @@ namespace SpiceSharp.Components
         public int MOS3states { get; private set; }
 
         /// <summary>
+        /// Noise generators
+        /// </summary>
+        public ComponentNoise MOS3noise { get; } = new ComponentNoise(
+            new Noise.NoiseThermal("rd", 0, 4),
+            new Noise.NoiseThermal("rs", 2, 5),
+            new Noise.NoiseThermal("id", 4, 5),
+            new Noise.NoiseGain("1overf", 4, 5)
+            );
+
+        /// <summary>
         /// Constants
         /// </summary>
         private const int MOS3vbd = 0;
@@ -300,6 +310,14 @@ namespace SpiceSharp.Components
                 MOS3sNodePrime = CreateNode(ckt, Name.Grow("#source")).Index;
             else
                 MOS3sNodePrime = MOS3sNode;
+
+            MOS3noise.Setup(ckt,
+                MOS3dNode,
+                MOS3gNode,
+                MOS3sNode,
+                MOS3bNode,
+                MOS3dNodePrime,
+                MOS3sNodePrime);
         }
 
         /// <summary>
@@ -1467,6 +1485,25 @@ namespace SpiceSharp.Components
             method.Terr(MOS3states + MOS3qgs, ckt, ref timeStep);
             method.Terr(MOS3states + MOS3qgd, ckt, ref timeStep);
             method.Terr(MOS3states + MOS3qgb, ckt, ref timeStep);
+        }
+
+        /// <summary>
+        /// Noise calculations
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        public override void Noise(Circuit ckt)
+        {
+            var model = Model as MOS3Model;
+            var state = ckt.State;
+            var noise = state.Noise;
+
+            double Kf = model.MOS3fNcoef * Math.Exp(model.MOS3fNexp * Math.Log(Math.Max(Math.Abs(MOS3cd), 1e-38))) / (MOS3w * (MOS3l - 2 * model.MOS3latDiff) * model.MOS3oxideCapFactor * model.MOS3oxideCapFactor);
+
+            MOS3noise.Evaluate(ckt,
+                MOS3drainConductance,
+                MOS3sourceConductance,
+                2.0 / 3.0 * Math.Abs(MOS3gm),
+                Kf / noise.Freq);
         }
     }
 }
