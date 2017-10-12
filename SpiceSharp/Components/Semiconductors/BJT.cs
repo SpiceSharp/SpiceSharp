@@ -170,6 +170,18 @@ namespace SpiceSharp.Components
         public int BJTstate { get; private set; }
 
         /// <summary>
+        /// Noise generators
+        /// </summary>
+        public ComponentNoise BJTnoise = new ComponentNoise(
+            new Noise.NoiseThermal("rc", 0, 4),
+            new Noise.NoiseThermal("rb", 1, 5),
+            new Noise.NoiseThermal("re", 2, 6),
+            new Noise.NoiseShot("ic", 4, 6),
+            new Noise.NoiseShot("ib", 5, 6),
+            new Noise.NoiseGain("1overf", 5, 6)
+            );
+
+        /// <summary>
         /// Constants
         /// </summary>
         private const int BJTvbe = 0;
@@ -224,7 +236,6 @@ namespace SpiceSharp.Components
                 BJTcolPrimeNode = BJTcolNode;
             else if (BJTcolPrimeNode == 0)
                 BJTcolPrimeNode = CreateNode(ckt, Name.Grow("#col")).Index;
-
             if (model.BJTbaseResist.Value == 0)
                 BJTbasePrimeNode = BJTbaseNode;
             else if (BJTbasePrimeNode == 0)
@@ -233,6 +244,16 @@ namespace SpiceSharp.Components
                 BJTemitPrimeNode = BJTemitNode;
             else if (BJTemitPrimeNode == 0)
                 BJTemitPrimeNode = CreateNode(ckt, Name.Grow("#emit")).Index;
+
+            // Setup the noise
+            BJTnoise.Setup(ckt, 
+                BJTcolNode,
+                BJTbaseNode, 
+                BJTemitNode, 
+                BJTsubstNode, 
+                BJTcolPrimeNode, 
+                BJTbasePrimeNode, 
+                BJTemitPrimeNode);
         }
 
         /// <summary>
@@ -839,6 +860,27 @@ namespace SpiceSharp.Components
             method.Terr(BJTstate + BJTqbe, ckt, ref timeStep);
             method.Terr(BJTstate + BJTqbc, ckt, ref timeStep);
             method.Terr(BJTstate + BJTqcs, ckt, ref timeStep);
+        }
+
+        /// <summary>
+        /// Perform noise simulation
+        /// </summary>
+        /// <param name="ckt"></param>
+        public override void Noise(Circuit ckt)
+        {
+            var model = Model as BJTModel;
+            var state = ckt.State;
+            var noise = state.Noise;
+
+            double Kf = model.BJTfNcoef * Math.Exp(model.BJTfNexp * Math.Log(Math.Max(Math.Abs(state.States[0][BJTstate + BJTcb]), 1e-38)));
+
+            BJTnoise.Evaluate(ckt,
+                model.BJTcollectorConduct * BJTarea,
+                state.States[0][BJTstate + BJTgx],
+                model.BJTemitterConduct * BJTarea,
+                state.States[0][BJTstate + BJTcc],
+                state.States[0][BJTstate + BJTcb],
+                Kf / noise.Freq);
         }
     }
 }
