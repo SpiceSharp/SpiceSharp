@@ -172,7 +172,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Noise generators
         /// </summary>
-        public ComponentNoise BJTnoise = new ComponentNoise(
+        public ComponentNoise BJTnoise { get; } = new ComponentNoise(
             new Noise.NoiseThermal("rc", 0, 4),
             new Noise.NoiseThermal("rb", 1, 5),
             new Noise.NoiseThermal("re", 2, 6),

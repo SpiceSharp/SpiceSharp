@@ -72,7 +72,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Noise generators
         /// </summary>
-        public ComponentNoise DIOnoise = new ComponentNoise(
+        public ComponentNoise DIOnoise { get; } = new ComponentNoise(
             new Noise.NoiseThermal("rs", 0, 1),
             new Noise.NoiseShot("id", 1, 2),
             new Noise.NoiseGain("1overf", 1, 2));

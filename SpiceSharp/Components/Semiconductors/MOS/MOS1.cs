@@ -239,6 +239,16 @@ namespace SpiceSharp.Components
         public int MOS1states { get; private set; }
 
         /// <summary>
+        /// Noise generators
+        /// </summary>
+        public ComponentNoise MOS1noise { get; } = new ComponentNoise(
+            new Noise.NoiseThermal("rd", 0, 4),
+            new Noise.NoiseThermal("rs", 2, 5),
+            new Noise.NoiseThermal("id", 4, 5),
+            new Noise.NoiseGain("1overf", 4, 5)
+            );
+
+        /// <summary>
         /// Constants
         /// </summary>
         private const int MOS1vbd = 0;
@@ -296,6 +306,15 @@ namespace SpiceSharp.Components
                 MOS1sNodePrime = CreateNode(ckt, Name.Grow("#source")).Index;
             else
                 MOS1sNodePrime = MOS1sNode;
+
+            // Setup noise sources
+            MOS1noise.Setup(ckt,
+                MOS1dNode,
+                MOS1gNode,
+                MOS1sNode,
+                MOS1bNode,
+                MOS1dNodePrime,
+                MOS1sNodePrime);
         }
 
         /// <summary>
@@ -1226,6 +1245,33 @@ namespace SpiceSharp.Components
             method.Terr(MOS1states + MOS1qgs, ckt, ref timeStep);
             method.Terr(MOS1states + MOS1qgd, ckt, ref timeStep);
             method.Terr(MOS1states + MOS1qgb, ckt, ref timeStep);
+        }
+
+        /// <summary>
+        /// Noise calculations
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        public override void Noise(Circuit ckt)
+        {
+            var model = Model as MOS1Model;
+            var state = ckt.State;
+            var noise = state.Noise;
+
+            double coxSquared;
+            if (model.MOS1oxideCapFactor == 0.0)
+                coxSquared = 3.9 * 8.854214871e-12 / 1e-7;
+            else
+                coxSquared = model.MOS1oxideCapFactor;
+            coxSquared *= coxSquared;
+
+            double Kf = model.MOS1fNcoef * Math.Exp(model.MOS1fNexp * Math.Log(Math.Max(Math.Abs(MOS1cd), 1e-38))) / (MOS1w * (MOS1l - 2 * model.MOS1latDiff) * coxSquared);
+
+            MOS1noise.Evaluate(ckt,
+                MOS1drainConductance,
+                MOS1sourceConductance,
+                2.0 / 3.0 * Math.Abs(MOS1gm),
+                Kf / noise.Freq
+                );
         }
     }
 }
