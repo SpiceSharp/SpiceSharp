@@ -57,7 +57,8 @@ namespace SpiceSharp.Parser.Readers
                 }
 
                 // Reading parameters
-                else
+                // Don't use ELSE! We still need to read the last parameter
+                if (!mode)
                 {
                     if (st.Parameters[i].kind == ASSIGNMENT)
                     {
@@ -79,6 +80,15 @@ namespace SpiceSharp.Parser.Readers
             // If there are only node-like tokens, then the last one is the definition by default
             if (mode)
                 instancepins.RemoveAt(instancepins.Count - 1);
+
+            // Modify the instancepins to be local or use the nodemap
+            for (int i = 0; i < instancepins.Count; i++)
+            {
+                if (netlist.Path.NodeMap.TryGetValue(instancepins[i], out CircuitIdentifier node))
+                    instancepins[i] = node;
+                else if (netlist.Path.InstancePath != null)
+                    instancepins[i] = netlist.Path.InstancePath.Grow(instancepins[i].Name);
+            }
 
             // Find the subcircuit definition
             if (netlist.Path.DefinitionPath != null)

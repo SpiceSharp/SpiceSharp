@@ -29,7 +29,11 @@ namespace SpiceSharp.Parser.Readers
         public override bool Read(string type, Statement st, Netlist netlist)
         {
             // Apply the change to the circuit
-            CircuitIdentifier id = new CircuitIdentifier(st.Name.image);
+            CircuitIdentifier id;
+            if (netlist.Path.InstancePath != null)
+                id = netlist.Path.InstancePath.Grow(st.Name.image);
+            else
+                id = new CircuitIdentifier(st.Name.image);
             ICircuitObject result = Generate(type, id, st.Parameters, netlist);
             Generated = result;
             if (result != null)

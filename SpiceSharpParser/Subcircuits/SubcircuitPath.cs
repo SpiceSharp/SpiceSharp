@@ -102,7 +102,7 @@ namespace SpiceSharp.Parser.Subcircuits
 
             // Build the definition path
             if (parent.DefinitionPath != null)
-                DefinitionPath = parent.DefinitionPath.Grow(definition.Name);
+                DefinitionPath = parent.DefinitionPath.Grow(definition.Name.Name);
             else
                 DefinitionPath = definition.Name;
 
@@ -128,9 +128,15 @@ namespace SpiceSharp.Parser.Subcircuits
 
             // Build instance path
             if (parent.InstancePath != null)
-                InstancePath = parent.InstancePath.Grow(subckt.Name);
+                InstancePath = parent.InstancePath.Grow(subckt.Name.Name);
             else
                 InstancePath = subckt.Name;
+
+            // Build the definition path
+            if (parent.DefinitionPath != null)
+                DefinitionPath = parent.DefinitionPath.Grow(subckt.Definition.Name.Name);
+            else
+                DefinitionPath = subckt.Definition.Name;
 
             // Node map
             NodeMap = GenerateNodeMap(subckt.Definition, subckt.Pins);
@@ -140,6 +146,16 @@ namespace SpiceSharp.Parser.Subcircuits
             {
                 if (!NodeMap.ContainsKey(id))
                     NodeMap.Add(id, id);
+            }
+
+            // Check for recursively called paths
+            if (parent.DefinitionPath != null)
+            {
+                for (int i = 0; i < parent.DefinitionPath.Path.Length; i++)
+                {
+                    if (parent.DefinitionPath.Path[i] == subckt.Definition.Name.Name)
+                        throw new ParseException($"Subcircuit definition {subckt.Definition} is called recursively");
+                }
             }
         }
 
