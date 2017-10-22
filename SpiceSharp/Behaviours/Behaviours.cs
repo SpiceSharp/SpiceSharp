@@ -58,11 +58,11 @@ namespace SpiceSharp.Behaviours
                 }
 
                 var allBehaviours = GetAllBehavioursForComponent(obj, behaviourBaseTypes);
-                var objects = new List<ICircuitObjectBehavior>();
+                var objects = new List<ICircuitObjectBehaviour>();
 
                 foreach (var type in allBehaviours)
                 {
-                    var instance = (ICircuitObjectBehavior) Activator.CreateInstance(type);
+                    var instance = (ICircuitObjectBehaviour) Activator.CreateInstance(type);
                     instance.Setup(obj, ckt);
                     objects.Add(instance);
                 }
@@ -70,7 +70,7 @@ namespace SpiceSharp.Behaviours
             }
         }
 
-        public static void ExecuteBehaviour<T>(ICircuitObject obj, Circuit ckt) where T: class, ICircuitObjectBehavior
+        public static void ExecuteBehaviour<T>(ICircuitObject obj, Circuit ckt) where T: class, ICircuitObjectBehaviour
         {
             var behaviour = (obj as ICircuitComponentWithBehaviours)?.CurrentBehaviours.FirstOrDefault(b => b is T);
             if (behaviour != null)

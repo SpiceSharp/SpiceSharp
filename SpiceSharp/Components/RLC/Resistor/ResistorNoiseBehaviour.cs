@@ -4,7 +4,7 @@ using SpiceSharp.Components.Noise;
 
 namespace SpiceSharp.Behaviours.Noise
 {
-    internal class ResistorNoiseBehaviour : CircuitObjectBehavior
+    internal class ResistorNoiseBehaviour : CircuitObjectBehaviour
     {
         public ComponentNoise RESnoise { get; private set; } = new ComponentNoise(new NoiseThermal("thermal", 0, 1));
 

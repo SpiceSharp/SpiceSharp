@@ -2,7 +2,7 @@
 
 namespace SpiceSharp.Behaviours
 {
-    public abstract class CircuitObjectBehavior: ICircuitObjectBehavior
+    public abstract class CircuitObjectBehaviour: ICircuitObjectBehaviour
     {
         protected ICircuitObject Component { get; private set; }
 

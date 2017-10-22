@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviours
     {
         public static void Noise(this ICircuitObject obj, Circuit ckt)
         {
-            Behaviours.ExecuteBehaviour<CircuitObjectBehaviorNoise>(obj, ckt);
+            Behaviours.ExecuteBehaviour<CircuitObjectBehaviourNoise>(obj, ckt);
         }
     }
 }

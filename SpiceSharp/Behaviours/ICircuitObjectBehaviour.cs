@@ -2,7 +2,7 @@
 
 namespace SpiceSharp.Behaviours
 {
-    public interface ICircuitObjectBehavior
+    public interface ICircuitObjectBehaviour
     {
         void Setup(ICircuitObject component, Circuit ckt);
         void Execute(Circuit ckt);

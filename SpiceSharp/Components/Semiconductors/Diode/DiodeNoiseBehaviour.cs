@@ -5,7 +5,7 @@ using SpiceSharp.Components.Noise;
 
 namespace SpiceSharp.Behaviours.Noise
 {
-    internal class DiodeNoiseBehaviour : CircuitObjectBehavior
+    internal class DiodeNoiseBehaviour : CircuitObjectBehaviour
     {
         /// <summary>
         /// Noise generators

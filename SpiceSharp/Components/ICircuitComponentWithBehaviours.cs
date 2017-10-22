@@ -7,6 +7,6 @@ namespace SpiceSharp.Components
     /// </summary>
     public interface ICircuitComponentWithBehaviours : ICircuitComponent
     {
-        ICircuitObjectBehavior[] CurrentBehaviours { get; set; }
+        ICircuitObjectBehaviour[] CurrentBehaviours { get; set; }
     }
 }

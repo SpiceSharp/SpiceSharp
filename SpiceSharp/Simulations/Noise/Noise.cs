@@ -111,7 +111,7 @@ namespace SpiceSharp.Simulations
             Behaviours.Behaviours.CreateBehaviours(ckt,
                 typeof(CircuitObjectBehaviorAcLoad),
                 typeof(CircuitObjectBehaviorDcLoad),
-                typeof(CircuitObjectBehaviorNoise));
+                typeof(CircuitObjectBehaviourNoise));
         }
 
 

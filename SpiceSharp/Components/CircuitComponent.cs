@@ -71,7 +71,7 @@ namespace SpiceSharp.Components
         /// </summary>
         public ICircuitObject Model { get; protected set; } = null;
 
-        public ICircuitObjectBehavior[] CurrentBehaviours { get; set; }
+        public ICircuitObjectBehaviour[] CurrentBehaviours { get; set; }
 
         /// <summary>
         /// Connect the component in the circuit
