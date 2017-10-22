@@ -514,7 +514,7 @@ namespace SpiceSharp.Components
         /// Load the device
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void Load(Circuit ckt)
+        public void Load(Circuit ckt)
         {
             var model = Model as MOS2Model;
             var state = ckt.State;
@@ -1534,7 +1534,7 @@ namespace SpiceSharp.Components
         /// Load the device for AC simulation
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void AcLoad(Circuit ckt)
+        public void AcLoad(Circuit ckt)
         {
             var model = Model as MOS2Model;
             var state = ckt.State;
@@ -1620,7 +1620,7 @@ namespace SpiceSharp.Components
         /// Noise calculations
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Noise(Circuit ckt)
+        public void Noise(Circuit ckt)
         {
             var model = Model as MOS2Model;
             var state = ckt.State;

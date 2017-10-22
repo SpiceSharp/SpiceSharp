@@ -1,4 +1,6 @@
-﻿using SpiceSharp.Parameters;
+﻿using System;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Simulations
 {
@@ -11,6 +13,8 @@ namespace SpiceSharp.Simulations
         /// The configuration
         /// </summary>
         public SimulationConfiguration Config { get; set; } = null;
+
+        public Circuit Circuit { get; set; }
 
         /// <summary>
         /// Get the current configuration (for use in the simulation)
@@ -50,9 +54,34 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Execute the simulation
         /// </summary>
-        /// <param name="ckt">The circuit to be used</param>
-        /// <param name="reset">Restart the simulation when true</param>
-        public abstract void Execute(Circuit ckt);
+        protected abstract void Execute();
+
+
+        /// <summary>
+        /// Setup and execute the simulation
+        /// </summary>
+        public void SetupAndExecute()
+        {
+            if (this.Circuit == null)
+            {
+                throw new CircuitException("No circuit for simulation");    
+            }
+
+            // Setup the circuit
+            this.Circuit.Setup();
+
+            if (this.Circuit.Objects.Count <= 0)
+                throw new CircuitException("Circuit contains no objects");
+            if (this.Circuit.Nodes.Count <= 1)
+                throw new CircuitException("Circuit contains no nodes");
+
+            // Do temperature-dependent calculations
+            foreach (var c in this.Circuit.Objects)
+                c.Temperature(this.Circuit);
+
+            // Execute the simulation
+            this.Execute();
+        }
 
         /// <summary>
         /// Initialize the simulation

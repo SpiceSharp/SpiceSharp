@@ -271,7 +271,7 @@ namespace SpiceSharp.Components
         /// Load the device
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void Load(Circuit ckt)
+        public void Load(Circuit ckt)
         {
             var model = Model as BSIM1Model;
             var state = ckt.State;
@@ -719,7 +719,7 @@ namespace SpiceSharp.Components
         /// Load the device for AC simulation
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void AcLoad(Circuit ckt)
+        public void AcLoad(Circuit ckt)
         {
             var state = ckt.State;
             var cstate = state.Complex;

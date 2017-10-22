@@ -1,13 +1,15 @@
 ﻿using System;
 using SpiceSharp.Circuits;
+using MathNet.Numerics.LinearAlgebra;
+using SpiceSharp.Behaviours;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// This static class contains common methods for basic simulation.
+    /// Provides static methods for basic simulations involving the circuit
     /// </summary>
-    public static class SimulationIterate
+    public static class SimulationExtensions
     {
         /// <summary>
         /// Calculate the operating point of the circuit
@@ -15,15 +17,16 @@ namespace SpiceSharp.Simulations
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
         /// <param name="maxiter">The maximum number of iterations</param>
-        public static void Op(SimulationConfiguration config, Circuit ckt, int maxiter)
+        public static void Op(this ISimulation simulation, SimulationConfiguration config, int maxiter)
         {
+            Circuit ckt = simulation.Circuit;
             // Create the current SimulationState
             var state = ckt.State;
             state.Init = CircuitState.InitFlags.InitJct;
 
             if (!config.NoOpIter)
             {
-                if (Iterate(config, ckt, maxiter))
+                if (simulation.DcIterate(config, maxiter))
                     return;
             }
 
@@ -39,7 +42,7 @@ namespace SpiceSharp.Simulations
                 for (int i = 0; i <= config.NumGminSteps; i++)
                 {
                     state.IsCon = true;
-                    if (!Iterate(config, ckt, maxiter))
+                    if (!simulation.DcIterate(config, maxiter))
                     {
                         state.Gmin = 0.0;
                         CircuitWarning.Warning(ckt, "Gmin step failed");
@@ -49,7 +52,7 @@ namespace SpiceSharp.Simulations
                     state.Init = CircuitState.InitFlags.InitFloat;
                 }
                 state.Gmin = 0.0;
-                if (Iterate(config, ckt, maxiter))
+                if (simulation.DcIterate(config, maxiter))
                     return;
             }
 
@@ -60,8 +63,8 @@ namespace SpiceSharp.Simulations
                 CircuitWarning.Warning(ckt, "Starting source stepping");
                 for (int i = 0; i <= config.NumSrcSteps; i++)
                 {
-                    state.SrcFact = i / (double)config.NumSrcSteps;
-                    if (!Iterate(config, ckt, maxiter))
+                    state.SrcFact = i / (double) config.NumSrcSteps;
+                    if (!simulation.DcIterate(config, maxiter))
                     {
                         state.SrcFact = 1.0;
                         // ckt.CurrentAnalysis = AnalysisType.DoingTran;
@@ -78,14 +81,15 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Iterate to a solution
+        ///  Calculate the solution for DC analysis
         /// </summary>
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
         /// <param name="maxiter">The maximum number of iterations</param>
         /// <returns></returns>
-        public static bool Iterate(SimulationConfiguration config, Circuit ckt, int maxiter)
+        public static bool DcIterate(this ISimulation simulation, SimulationConfiguration config, int maxiter)
         {
+            Circuit ckt = simulation.Circuit;
             var state = ckt.State;
             var rstate = state.Real;
             bool pass = false;
@@ -102,7 +106,7 @@ namespace SpiceSharp.Simulations
 
                 // Voltages are set using IC statement on the nodes
                 // Internal initial conditions are calculated by the components
-                ckt.Load();
+                simulation.DcLoad();
                 return true;
             }
 
@@ -114,7 +118,7 @@ namespace SpiceSharp.Simulations
 
                 try
                 {
-                    ckt.Load();
+                    simulation.DcLoad();
                     iterno++;
                 }
                 catch (CircuitException)
@@ -142,7 +146,7 @@ namespace SpiceSharp.Simulations
                 }
 
                 if (state.IsCon && iterno != 1)
-                    state.IsCon = IsConvergent(config, ckt);
+                    state.IsCon = simulation.IsConvergent(config);
                 else
                     state.IsCon = false;
 
@@ -191,8 +195,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
-        public static void AcIterate(SimulationConfiguration config, Circuit ckt)
+        public static void AcIterate(this ISimulation simulation, SimulationConfiguration config)
         {
+            var ckt = simulation.Circuit;
             // Initialize the circuit
             if (!ckt.State.Initialized)
                 ckt.State.Initialize(ckt);
@@ -217,8 +222,9 @@ namespace SpiceSharp.Simulations
         /// <param name="ckt">The circuit</param>
         /// <param name="posDrive">The positive driving node</param>
         /// <param name="negDrive">The negative driving node</param>
-        public static void NzIterate(Circuit ckt, int posDrive, int negDrive)
+        public static void NzIterate(this ISimulation simulation, int posDrive, int negDrive)
         {
+            var ckt = simulation.Circuit;
             var state = ckt.State.Complex;
 
             // Clear out the right hand side vector
@@ -232,18 +238,14 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Problematic node for convergence
-        /// </summary>
-        public static CircuitNode ProblemNode = null;
-
-        /// <summary>
         /// Check if we are converging during iterations
         /// </summary>
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
-        private static bool IsConvergent(SimulationConfiguration config, Circuit ckt)
+        private static bool IsConvergent(this ISimulation simulation, SimulationConfiguration config)
         {
+            var ckt = simulation.Circuit;
             var rstate = ckt.State.Real;
 
             // Check convergence for each node
@@ -278,6 +280,148 @@ namespace SpiceSharp.Simulations
 
             // Convergence succeeded
             return true;
+        }
+
+        public static CircuitNode ProblemNode { get; set; }
+
+        /// <summary>
+        /// Exec DcLoad on the circuit for simulation
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public static void DcLoad(this ISimulation simulation)
+        {
+            var ckt = simulation.Circuit;
+            var state = ckt.State;
+            var rstate = state.Real;
+            var nodes = ckt.Nodes;
+
+            // Start the stopwatch
+            ckt.Statistics.LoadTime.Start();
+
+            // Clear rhs and matrix
+            rstate.Clear();
+
+            // Load all devices
+            // ckt.Load(this, state);
+            foreach (var c in ckt.Objects)
+                c.DcLoad(ckt);
+
+            // Check modes
+            if (state.UseDC)
+            {
+                // Consider doing nodeset & ic assignments
+                if ((state.Init & (CircuitState.InitFlags.InitJct | CircuitState.InitFlags.InitFix)) != 0)
+                {
+                    // Do nodesets
+                    for (int i = 0; i < nodes.Count; i++)
+                    {
+                        var node = nodes[i];
+                        if (nodes.Nodeset.ContainsKey(node.Name))
+                        {
+                            double ns = nodes.Nodeset[node.Name];
+                            if (ZeroNoncurRow(rstate.Matrix, nodes, node.Index))
+                            {
+                                rstate.Rhs[node.Index] = 1.0e10 * ns;
+                                rstate.Matrix[node.Index, node.Index] = 1.0e10;
+                            }
+                            else
+                            {
+                                rstate.Rhs[node.Index] = ns;
+                                rstate.Solution[node.Index] = ns;
+                                rstate.Matrix[node.Index, node.Index] = 1.0;
+                            }
+                        }
+                    }
+                }
+
+                if (state.Domain == CircuitState.DomainTypes.Time && !state.UseIC)
+                {
+                    for (int i = 0; i < nodes.Count; i++)
+                    {
+                        var node = nodes[i];
+                        if (nodes.IC.ContainsKey(node.Name))
+                        {
+                            double ic = nodes.IC[node.Name];
+                            if (ZeroNoncurRow(rstate.Matrix, nodes, node.Index))
+                            {
+                                rstate.Rhs[node.Index] = 1.0e10 * ic;
+                                rstate.Matrix[node.Index, node.Index] = 1.0e10;
+                            }
+                            else
+                            {
+                                rstate.Rhs[node.Index] = ic;
+                                rstate.Solution[node.Index] = ic;
+                                rstate.Matrix[node.Index, node.Index] = 1.0;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Keep statistics
+            ckt.Statistics.LoadTime.Stop();
+        }
+
+        /// <summary>
+        /// Set the initial conditions
+        /// </summary>
+        /// <param name="ckt"></param>
+        public static void Ic(this ISimulation simulation)
+        {
+            var ckt = simulation.Circuit;
+            var state = ckt.State;
+            var rstate = state.Real;
+            var nodes = ckt.Nodes;
+
+            // Clear the current solution
+            rstate.Solution.Clear();
+
+            // Go over all nodes
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                var node = nodes[i];
+                if (nodes.Nodeset.ContainsKey(node.Name))
+                {
+                    state.HadNodeset = true;
+                    rstate.Solution[node.Index] = nodes.Nodeset[node.Name];
+                }
+                if (nodes.IC.ContainsKey(node.Name))
+                {
+                    rstate.Solution[node.Index] = nodes.IC[node.Name];
+                }
+            }
+
+            // Use initial conditions
+            if (state.UseIC)
+            {
+                foreach (var c in ckt.Objects)
+                    c.SetIc(ckt);
+            }
+        }
+
+        /// <summary>
+        /// Reset the row to 0.0 and return true if the row is a current equation
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="nodes">The list of nodes</param>
+        /// <param name="rownum">The row number</param>
+        /// <returns></returns>
+        private static bool ZeroNoncurRow(Matrix<double> matrix, CircuitNodes nodes, int rownum)
+        {
+            bool currents = false;
+            for (int n = 0; n < nodes.Count; n++)
+            {
+                var node = nodes[n];
+                double x = matrix[rownum, node.Index];
+                if (x != 0.0)
+                {
+                    if (node.Type == CircuitNode.NodeType.Current)
+                        currents = true;
+                    else
+                        matrix[rownum, node.Index] = 0.0;
+                }
+            }
+            return currents;
         }
     }
 }

@@ -4,7 +4,7 @@ using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
-using static SpiceSharp.Simulations.SimulationIterate;
+using SpiceSharp.Behaviours;
 
 namespace SpiceSharp.Simulations
 {
@@ -104,12 +104,24 @@ namespace SpiceSharp.Simulations
         {
         }
 
+
+        public override void Initialize(Circuit ckt)
+        {
+            base.Initialize(ckt);
+            Behaviours.Behaviours.CreateBehaviours(ckt,
+                typeof(CircuitObjectBehaviorAcLoad),
+                typeof(CircuitObjectBehaviorDcLoad),
+                typeof(CircuitObjectBehaviorNoise));
+        }
+
+
         /// <summary>
         /// Execute the noise analysis
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void Execute(Circuit ckt)
+        protected override void Execute()
         {
+            var ckt = this.Circuit;
             var state = ckt.State;
             var config = CurrentConfig;
 
@@ -177,7 +189,7 @@ namespace SpiceSharp.Simulations
             state.UseSmallSignal = false;
             state.Gmin = config.Gmin;
             Initialize(ckt);
-            Op(config, ckt, config.DcMaxIterations);
+            this.Op(config, config.DcMaxIterations);
 
             var data = ckt.State.Noise;
             var cstate = ckt.State.Complex;
@@ -186,13 +198,13 @@ namespace SpiceSharp.Simulations
             for (int i = 0; i < n; i++)
             {
                 cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * data.Freq);
-                AcIterate(config, ckt);
+                this.AcIterate(config);
 
                 Complex val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
                 data.GainSqInv = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
 
                 // Solve the adjoint system
-                NzIterate(ckt, posOutNode, negOutNode);
+                this.NzIterate(posOutNode, negOutNode);
 
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit

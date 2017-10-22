@@ -106,7 +106,7 @@ namespace SpiceSharp.Components
         /// Load the capacitance
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void Load(Circuit ckt)
+        public void Load(Circuit ckt)
         {
             double vcap;
             var state = ckt.State;
@@ -150,7 +150,7 @@ namespace SpiceSharp.Components
         /// Load the capacitance for AC analysis
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void AcLoad(Circuit ckt)
+        public void AcLoad(Circuit ckt)
         {
             var cstate = ckt.State.Complex;
             var val = cstate.Laplace * CAPcapac.Value;

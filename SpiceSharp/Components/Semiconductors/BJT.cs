@@ -16,7 +16,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Set the model for the BJT
         /// </summary>
-        public void SetModel(BJTModel model) => Model = (ICircuitObject)model;
+        public void SetModel(BJTModel model) => Model = model;
 
         /// <summary>
         /// Parameters
@@ -311,7 +311,7 @@ namespace SpiceSharp.Components
         /// Load the device
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void Load(Circuit ckt)
+        public void Load(Circuit ckt)
         {
             BJTModel model = Model as BJTModel;
             var state = ckt.State;
@@ -791,7 +791,7 @@ namespace SpiceSharp.Components
         /// Load the device for AC simulation
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void AcLoad(Circuit ckt)
+        public void AcLoad(Circuit ckt)
         {
             BJTModel model = Model as BJTModel;
             var state = ckt.State;
@@ -866,7 +866,7 @@ namespace SpiceSharp.Components
         /// Perform noise simulation
         /// </summary>
         /// <param name="ckt"></param>
-        public override void Noise(Circuit ckt)
+        public void Noise(Circuit ckt)
         {
             var model = Model as BJTModel;
             var state = ckt.State;

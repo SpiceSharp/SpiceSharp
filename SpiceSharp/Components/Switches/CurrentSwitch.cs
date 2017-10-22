@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Set the model for the current-controlled switch
         /// </summary>
-        public void SetModel(CurrentSwitchModel model) => Model = (ICircuitObject)model;
+        public void SetModel(CurrentSwitchModel model) => Model = model;
 
         /// <summary>
         /// Parameters
@@ -96,7 +96,7 @@ namespace SpiceSharp.Components
         /// Load the current-controlled switch
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void Load(Circuit ckt)
+        public void Load(Circuit ckt)
         {
             CurrentSwitchModel model = Model as CurrentSwitchModel;
             double g_now;
@@ -185,7 +185,7 @@ namespace SpiceSharp.Components
         /// Load the current-controlled switch for AC analysis
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void AcLoad(Circuit ckt)
+        public void AcLoad(Circuit ckt)
         {
             CurrentSwitchModel model = Model as CurrentSwitchModel;
             double current_state;

@@ -3,8 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using System.Numerics;
 using SpiceSharp.Parameters;
-using static SpiceSharp.Simulations.SimulationIterate;
-
+using SpiceSharp.Behaviours;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
@@ -107,12 +106,19 @@ namespace SpiceSharp.Simulations
             StopFreq = stop;
         }
 
+        public override void Initialize(Circuit ckt)
+        {
+            base.Initialize(ckt);
+            Behaviours.Behaviours.CreateBehaviours(ckt, typeof(CircuitObjectBehaviorAcLoad), typeof(CircuitObjectBehaviorDcLoad));
+        }
+
         /// <summary>
         /// Execute
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Execute(Circuit ckt)
+        protected override void Execute()
         {
+            var ckt = this.Circuit;
+
             var state = ckt.State;
             var cstate = state.Complex;
             var config = CurrentConfig;
@@ -159,13 +165,13 @@ namespace SpiceSharp.Simulations
             state.UseSmallSignal = false;
             state.Gmin = config.Gmin;
             Initialize(ckt);
-            Op(config, ckt, config.DcMaxIterations);
+            this.Op(config, config.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             state.UseDC = false;
             state.UseSmallSignal = true;
-            foreach (var c in ckt.Objects)
-                c.Load(ckt);
+            foreach (var c in this.Circuit.Objects)
+                 c.DcLoad(ckt);
 
             // Export operating point if requested
             if (config.KeepOpInfo)
@@ -182,7 +188,7 @@ namespace SpiceSharp.Simulations
                 state.Complex.Laplace = new Complex(0.0, 2.0 * Circuit.CONSTPI * freq);
 
                 // Solve
-                AcIterate(config, ckt);
+                this.AcIterate(config);
 
                 // Export the timepoint
                 Export(ckt);

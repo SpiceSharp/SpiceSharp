@@ -95,7 +95,7 @@ namespace SpiceSharp.Components
         /// 
         /// </summary>
         /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        public void Load(Circuit ckt)
         {
             // Don't need to do anything here
         }

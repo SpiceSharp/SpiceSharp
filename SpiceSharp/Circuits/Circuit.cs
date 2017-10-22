@@ -3,6 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Behaviours;
 
 namespace SpiceSharp
 {
@@ -39,7 +40,7 @@ namespace SpiceSharp
         /// <summary>
         /// Gets the current simulation that is being run by the circuit
         /// </summary>
-        public ISimulation Simulation { get; private set; } = null;
+        public ISimulation Simulation { get;  set; } = null;
 
         /// <summary>
         /// Gets the current state of the circuit
@@ -67,29 +68,6 @@ namespace SpiceSharp
         public Circuit() { }
 
         /// <summary>
-        /// Simulate the circuit
-        /// </summary>
-        /// <param name="sim">The simulation that needs to be executed</param>
-        public void Simulate(ISimulation sim)
-        {
-            // Setup the circuit
-            Setup();
-            Simulation = sim;
-
-            if (Objects.Count <= 0)
-                throw new CircuitException("Circuit contains no objects");
-            if (Nodes.Count <= 1)
-                throw new CircuitException("Circuit contains no nodes");
-
-            // Do temperature-dependent calculations
-            foreach (var c in Objects)
-                c.Temperature(this);
-
-            // Execute the simulation
-            sim.Execute(this);
-        }
-
-        /// <summary>
         /// Setup the circuit
         /// </summary>
         public void Setup()
@@ -98,12 +76,17 @@ namespace SpiceSharp
                 return;
             IsSetup = true;
 
+
             // Rebuild the list of circuit components
             Objects.BuildOrderedComponentList();
 
             // Setup all devices
             foreach (var c in Objects)
+            {
                 c.Setup(this);
+            }
+
+
 
             // Initialize the state
             State.Initialize(this);

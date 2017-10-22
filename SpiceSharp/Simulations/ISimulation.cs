@@ -27,10 +27,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         SimulationConfiguration Config { get; }
 
-        /// <summary>
-        /// Execute the simulation
-        /// </summary>
-        /// <param name="ckt"></param>
-        void Execute(Circuit ckt);
+        Circuit Circuit { get; set; }
+
+        void SetupAndExecute();
     }
 }

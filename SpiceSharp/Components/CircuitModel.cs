@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
+using SpiceSharp.Behaviours;
 
 namespace SpiceSharp.Components
 {
@@ -18,6 +19,7 @@ namespace SpiceSharp.Components
         /// Gets the priority
         /// </summary>
         public int Priority { get; protected set; }
+        
 
         /// <summary>
         /// Constructor
@@ -58,24 +60,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Load the component in the current circuit state
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public virtual void Load(Circuit ckt)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Load the component in the current circuit state for AC analysis
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public virtual void AcLoad(Circuit ckt)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
         /// Accept the current timepoint as the solution
         /// </summary>
         /// <param name="ckt">The circuit</param>
@@ -99,15 +83,6 @@ namespace SpiceSharp.Components
         /// <param name="ckt"></param>
         /// <param name="timeStep"></param>
         public virtual void Truncate(Circuit ckt, ref double timeStep)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Noise calculation
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public virtual void Noise(Circuit ckt)
         {
             // Do nothing
         }

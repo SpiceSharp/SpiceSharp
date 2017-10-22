@@ -37,7 +37,7 @@ namespace SpiceSharp.Components
         [SpiceName("sens_area"), SpiceInfo("flag to request sensitivity WRT area")]
         public bool DIOsenParmNo { get; set; }
         [SpiceName("cd"), SpiceInfo("Diode capacitance")]
-        public double DIOcap { get; private set; }
+        public double DIOcap { get; set; }
 
         /// <summary>
         /// Methods
@@ -69,22 +69,15 @@ namespace SpiceSharp.Components
         public int DIOnegNode { get; private set; }
         public int DIOstate { get; private set; }
 
-        /// <summary>
-        /// Noise generators
-        /// </summary>
-        public ComponentNoise DIOnoise { get; } = new ComponentNoise(
-            new Noise.NoiseThermal("rs", 0, 1),
-            new Noise.NoiseShot("id", 1, 2),
-            new Noise.NoiseGain("1overf", 1, 2));
 
         /// <summary>
         /// Constants
         /// </summary>
-        private const int DIOvoltage = 0;
-        private const int DIOcurrent = 1;
-        private const int DIOconduct = 2;
-        private const int DIOcapCharge = 3;
-        private const int DIOcapCurrent = 4;
+        public const int DIOvoltage = 0;
+        public const int DIOcurrent = 1;
+        public const int DIOconduct = 2;
+        public const int DIOcapCharge = 3;
+        public const int DIOcapCurrent = 4;
 
         /// <summary>
         /// Constructor
@@ -114,9 +107,6 @@ namespace SpiceSharp.Components
                 DIOposPrimeNode = DIOposNode;
             else
                 DIOposPrimeNode = CreateNode(ckt, Name.Grow("#pos")).Index;
-
-            // Connect noise sources
-            DIOnoise.Setup(ckt, DIOposNode, DIOposPrimeNode, DIOnegNode);
         }
 
         /// <summary>
@@ -190,206 +180,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Load the device
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Load(Circuit ckt)
-        {
-            var model = Model as DiodeModel;
-            var state = ckt.State;
-            var rstate = state.Real;
-            var method = ckt.Method;
-            bool Check;
-            double csat, gspr, vt, vte, vd, delvd, cdhat, vdtemp, evd, cd, gd, arg, evrev, czero, sarg, capd, czof2, cdeq;
-
-            /* 
-             * this routine loads diodes for dc and transient analyses.
-             */
-
-            csat = DIOtSatCur * DIOarea;
-            gspr = model.DIOconductance * DIOarea;
-            vt = Circuit.CONSTKoverQ * DIOtemp;
-            vte = model.DIOemissionCoeff * vt;
-            /* 
-			 * initialization 
-			 */
-             
-            Check = true;
-            if (state.UseSmallSignal)
-            {
-                vd = state.States[0][DIOstate + DIOvoltage];
-            }
-            else if (method != null && method.SavedTime == 0.0)
-            {
-                vd = state.States[1][DIOstate + DIOvoltage];
-                Check = false; // EDIT: Spice does not check the first timepoint for convergence, but we do...
-            }
-            else if ((state.Init == CircuitState.InitFlags.InitJct) && (state.Domain == CircuitState.DomainTypes.Time && state.UseDC) &&
-              state.UseIC)
-            {
-                vd = DIOinitCond;
-            }
-            else if ((state.Init == CircuitState.InitFlags.InitJct) && DIOoff)
-            {
-                vd = 0;
-            }
-            else if (state.Init == CircuitState.InitFlags.InitJct)
-            {
-                vd = DIOtVcrit;
-            }
-            else if (ckt.State.Init == CircuitState.InitFlags.InitFix && DIOoff)
-            {
-                vd = 0;
-            }
-            else
-            {
-                vd = rstate.OldSolution[DIOposPrimeNode] - rstate.OldSolution[DIOnegNode];
-                delvd = vd - state.States[0][DIOstate + DIOvoltage];
-                cdhat = state.States[0][DIOstate + DIOcurrent] + state.States[0][DIOstate + DIOconduct] * delvd;
-
-                /* 
-				 * limit new junction voltage
-				 */
-                if ((model.DIObreakdownVoltage.Given) && (vd < Math.Min(0, -DIOtBrkdwnV + 10 * vte)))
-                {
-                    vdtemp = -(vd + DIOtBrkdwnV);
-                    vdtemp = Semiconductor.DEVpnjlim(vdtemp, -(state.States[0][DIOstate + DIOvoltage] + DIOtBrkdwnV), vte, DIOtVcrit, ref Check);
-                    vd = -(vdtemp + DIOtBrkdwnV);
-                }
-                else
-                {
-                    vd = Semiconductor.DEVpnjlim(vd, state.States[0][DIOstate + DIOvoltage], vte, DIOtVcrit, ref Check);
-                }
-            }
-            /* 
-			 * compute dc current and derivitives
-			 */
-            if (vd >= -3 * vte)
-            {
-                evd = Math.Exp(vd / vte);
-                cd = csat * (evd - 1) + state.Gmin * vd;
-                gd = csat * evd / vte + state.Gmin;
-            }
-            else if (DIOtBrkdwnV == 0.0 || vd >= -DIOtBrkdwnV)
-            {
-                arg = 3 * vte / (vd * Circuit.CONSTE);
-                arg = arg * arg * arg;
-                cd = -csat * (1 + arg) + state.Gmin * vd;
-                gd = csat * 3 * arg / vd + state.Gmin;
-            }
-            else
-            {
-                evrev = Math.Exp(-(DIOtBrkdwnV + vd) / vte);
-                cd = -csat * evrev + state.Gmin * vd;
-                gd = csat * evrev / vte + state.Gmin;
-            }
-            if ((method != null || state.UseSmallSignal) || (state.Domain == CircuitState.DomainTypes.Time && state.UseDC) && state.UseIC)
-            {
-                /* 
-				* charge storage elements
-				*/
-                czero = DIOtJctCap * DIOarea;
-                if (vd < DIOtDepCap)
-                {
-                    arg = 1 - vd / model.DIOjunctionPot;
-                    sarg = Math.Exp(-model.DIOgradingCoeff * Math.Log(arg));
-                    state.States[0][DIOstate + DIOcapCharge] = model.DIOtransitTime * cd + model.DIOjunctionPot * czero * (1 - arg * sarg) / (1 -
-                        model.DIOgradingCoeff);
-                    capd = model.DIOtransitTime * gd + czero * sarg;
-                }
-                else
-                {
-                    czof2 = czero / model.DIOf2;
-                    state.States[0][DIOstate + DIOcapCharge] = model.DIOtransitTime * cd + czero * DIOtF1 + czof2 * (model.DIOf3 * (vd -
-                        DIOtDepCap) + (model.DIOgradingCoeff / (model.DIOjunctionPot + model.DIOjunctionPot)) * (vd * vd - DIOtDepCap * DIOtDepCap));
-                    capd = model.DIOtransitTime * gd + czof2 * (model.DIOf3 + model.DIOgradingCoeff * vd / model.DIOjunctionPot);
-                }
-                DIOcap = capd;
-
-                /* 
-				* store small - signal parameters
-				*/
-                if ((!(state.Domain == CircuitState.DomainTypes.Time && state.UseDC)) || (!state.UseIC))
-                {
-                    if (state.UseSmallSignal)
-                    {
-                        state.States[0][DIOstate + DIOcapCurrent] = capd;
-                        return;
-                    }
-
-                    /* 
-					 * transient analysis
-					 */
-                    if (method != null)
-                    {
-                        if (method.SavedTime == 0.0)
-                            state.States[1][DIOstate + DIOcapCharge] = state.States[0][DIOstate + DIOcapCharge];
-                            var result = method.Integrate(state, DIOstate + DIOcapCharge, capd);
-                            gd = gd + result.Geq;
-                            cd = cd + state.States[0][DIOstate + DIOcapCurrent];
-                        if (method != null && method.SavedTime == 0.0)
-                            state.States[1][DIOstate + DIOcapCurrent] = state.States[0][DIOstate + DIOcapCurrent];
-                    }
-                }
-            }
-
-            /* 
-			 * check convergence
-			 */
-            if (((state.Init != CircuitState.InitFlags.InitFix)) || (!(DIOoff)))
-            {
-                if (Check)
-                    ckt.State.IsCon = false;
-            }
-            state.States[0][DIOstate + DIOvoltage] = vd;
-            state.States[0][DIOstate + DIOcurrent] = cd;
-            state.States[0][DIOstate + DIOconduct] = gd;
-            
-            /* 
-			 * load current vector
-			 */
-            cdeq = cd - gd * vd;
-            rstate.Rhs[DIOnegNode] += cdeq;
-            rstate.Rhs[DIOposPrimeNode] -= cdeq;
-            /* 
-			 * load matrix
-			 */
-            rstate.Matrix[DIOposNode, DIOposNode] += gspr;
-            rstate.Matrix[DIOnegNode, DIOnegNode] += gd;
-            rstate.Matrix[DIOposPrimeNode, DIOposPrimeNode] += (gd + gspr);
-            rstate.Matrix[DIOposNode, DIOposPrimeNode] -= gspr;
-            rstate.Matrix[DIOnegNode, DIOposPrimeNode] -= gd;
-            rstate.Matrix[DIOposPrimeNode, DIOposNode] -= gspr;
-            rstate.Matrix[DIOposPrimeNode, DIOnegNode] -= gd;
-        }
-
-        /// <summary>
-        /// Load the device for AC simulation
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void AcLoad(Circuit ckt)
-        {
-            var model = Model as DiodeModel;
-            var state = ckt.State;
-            var cstate = state.Complex;
-            double gspr, geq, xceq;
-
-            gspr = model.DIOconductance * DIOarea;
-            geq = state.States[0][DIOstate + DIOconduct];
-            xceq = state.States[0][DIOstate + DIOcapCurrent] * cstate.Laplace.Imaginary;
-            cstate.Matrix[DIOposNode, DIOposNode] += gspr;
-            cstate.Matrix[DIOnegNode, DIOnegNode] += new Complex(geq, xceq);
-
-            cstate.Matrix[DIOposPrimeNode, DIOposPrimeNode] += new Complex(geq + gspr, xceq);
-
-            cstate.Matrix[DIOposNode, DIOposPrimeNode] -= gspr;
-            cstate.Matrix[DIOnegNode, DIOposPrimeNode] -= new Complex(geq, xceq);
-
-            cstate.Matrix[DIOposPrimeNode, DIOposNode] -= gspr;
-            cstate.Matrix[DIOposPrimeNode, DIOnegNode] -= new Complex(geq, xceq);
-        }
-
-        /// <summary>
         /// Truncate
         /// </summary>
         /// <param name="ckt">Circuit</param>
@@ -397,24 +187,6 @@ namespace SpiceSharp.Components
         public override void Truncate(Circuit ckt, ref double timeStep)
         {
             ckt.Method.Terr(DIOstate + DIOcapCharge, ckt, ref timeStep);
-        }
-
-        /// <summary>
-        /// Perform noise calculations
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Noise(Circuit ckt)
-        {
-            var model = Model as DiodeModel;
-            var state = ckt.State;
-            var noise = ckt.State.Noise;
-
-            double Kf = model.DIOfNcoef * Math.Exp(model.DIOfNexp * Math.Log(Math.Max(Math.Abs(state.States[0][DIOstate + DIOcurrent]), 1e-38)));
-
-            DIOnoise.Evaluate(ckt,
-                model.DIOconductance * DIOarea, // Thermal noise
-                state.States[0][DIOstate + DIOcurrent], // Shot noise
-                Kf / noise.Freq); // 1 over f noise
         }
     }
 }

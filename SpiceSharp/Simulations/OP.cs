@@ -1,5 +1,5 @@
-﻿using SpiceSharp.Circuits;
-using static SpiceSharp.Simulations.SimulationIterate;
+﻿using SpiceSharp.Behaviours;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -17,13 +17,20 @@ namespace SpiceSharp.Simulations
         {
         }
 
+        public override void Initialize(Circuit ckt)
+        {
+            base.Initialize(ckt);
+
+            Behaviours.Behaviours.CreateBehaviours(ckt, typeof(CircuitObjectBehaviorDcLoad));
+        }
+
         /// <summary>
         /// Execute the DC simulation
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="reset">Restart the circuit if true</param>
-        public override void Execute(Circuit ckt)
+        protected override void Execute()
         {
+            var ckt = this.Circuit;
+
             // Setup the state
             var state = ckt.State;
             var rstate = state.Real;
@@ -35,7 +42,7 @@ namespace SpiceSharp.Simulations
             state.Gmin = config.Gmin;
 
             Initialize(ckt);
-            Op(config, ckt, config.DcMaxIterations);
+            this.Op(config, config.DcMaxIterations);
             Export(ckt);
             Finalize(ckt);
         }

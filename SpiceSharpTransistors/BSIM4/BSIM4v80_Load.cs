@@ -14,7 +14,7 @@ namespace SpiceSharp.Components
         /// Load the device
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void Load(Circuit ckt)
+        public void Load(Circuit ckt)
         {
             var model = Model as BSIM4v80Model;
             var state = ckt.State;

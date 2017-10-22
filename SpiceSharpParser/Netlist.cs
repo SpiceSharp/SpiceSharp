@@ -95,7 +95,10 @@ namespace SpiceSharp
 
                 // Register our event for catching data
                 Simulations[i].OnExportSimulationData += ExportSimulationData;
-                Circuit.Simulate(Simulations[i]);
+
+                Simulations[i].Circuit = Circuit;
+                Circuit.Simulation = Simulations[i];
+                Simulations[i].SetupAndExecute();
 
                 // Unregister
                 Simulations[i].OnExportSimulationData -= ExportSimulationData;

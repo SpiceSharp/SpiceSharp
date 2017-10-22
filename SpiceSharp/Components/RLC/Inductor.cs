@@ -104,7 +104,7 @@ namespace SpiceSharp.Components
         /// Load the inductor in the circuit
         /// </summary>
         /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        public void Load(Circuit ckt)
         {
             var state = ckt.State;
             var rstate = state.Real;
@@ -137,7 +137,7 @@ namespace SpiceSharp.Components
         /// Load the inductor for AC analysis
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void AcLoad(Circuit ckt)
+        public void AcLoad(Circuit ckt)
         {
             var cstate = ckt.State.Complex;
             Complex val = cstate.Laplace * INDinduct.Value;

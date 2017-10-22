@@ -1,8 +1,9 @@
 ﻿using System;
+using SpiceSharp.Behaviours;
 using SpiceSharp.Circuits;
+using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
-using static SpiceSharp.Simulations.SimulationIterate;
 
 namespace SpiceSharp.Simulations
 {
@@ -85,12 +86,20 @@ namespace SpiceSharp.Simulations
             FinalTime = final;
         }
 
+        public override void Initialize(Circuit ckt)
+        {
+            base.Initialize(ckt);
+
+            Behaviours.Behaviours.CreateBehaviours(ckt, typeof(CircuitObjectBehaviorDcLoad));
+        }
+
+
         /// <summary>
         /// Execute the transient simulation
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Execute(Circuit ckt)
+        protected override void Execute()
         {
+            var ckt = Circuit;
             var state = ckt.State;
             var rstate = state.Real;
             var config = CurrentConfig ?? throw new CircuitException("No configuration");
@@ -119,7 +128,7 @@ namespace SpiceSharp.Simulations
             Initialize(ckt);
 
             // Calculate the operating point
-            Op(config, ckt, config.DcMaxIterations);
+            this.Op(config, config.DcMaxIterations);
             ckt.Statistics.TimePoints++;
             for (int i = 0; i < method.DeltaOld.Length; i++)
                 method.DeltaOld[i] = MaxStep;
@@ -187,7 +196,7 @@ namespace SpiceSharp.Simulations
                     method.Predict(ckt);
 
                     // Try to solve the new point
-                    bool converged = Iterate(config, ckt, config.TranMaxIterations);
+                    bool converged = this.DcIterate(config, config.TranMaxIterations);
                     ckt.Statistics.TimePoints++;
                     if (method.SavedTime == 0.0)
                     {

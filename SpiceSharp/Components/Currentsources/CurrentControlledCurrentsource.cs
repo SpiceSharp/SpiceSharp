@@ -89,7 +89,7 @@ namespace SpiceSharp.Components
         /// Load the current-controlled current source
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void Load(Circuit ckt)
+        public void Load(Circuit ckt)
         {
             var rstate = ckt.State.Real;
             rstate.Matrix[CCCSposNode, CCCScontBranch] += CCCScoeff.Value;
@@ -100,7 +100,7 @@ namespace SpiceSharp.Components
         /// Load the current-controlled current source for AC analysis
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void AcLoad(Circuit ckt)
+        public void AcLoad(Circuit ckt)
         {
             var cstate = ckt.State.Complex;
             cstate.Matrix[CCCSposNode, CCCScontBranch] += CCCScoeff.Value;

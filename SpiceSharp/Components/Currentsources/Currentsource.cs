@@ -40,11 +40,11 @@ namespace SpiceSharp.Components
             }
         }
         [SpiceName("c"), SpiceInfo("Current through current source")]
-        public double Current { get; private set; }
+        public double Current { get; set; }
 
         public int ISRCposNode { get; private set; }
         public int ISRCnegNode { get; private set; }
-        private Complex ISRCac;
+        public Complex ISRCac;
 
         /// <summary>
         /// Get the complex voltage across the current source
@@ -117,52 +117,6 @@ namespace SpiceSharp.Components
             }
             double radians = ISRCacPhase * Circuit.CONSTPI / 180.0;
             ISRCac = new Complex(ISRCacMag * Math.Cos(radians), ISRCacMag * Math.Sin(radians));
-        }
-
-        /// <summary>
-        /// Load the current source in the circuit
-        /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
-        {
-            var state = ckt.State;
-            var rstate = state.Real;
-
-            double value = 0.0;
-            double time = 0.0;
-
-            // Time domain analysis
-            if (state.Domain == CircuitState.DomainTypes.Time)
-            {
-                if (ckt.Method != null)
-                    time = ckt.Method.Time;
-
-                // Use the waveform if possible
-                if (ISRCwaveform != null)
-                    value = ISRCwaveform.At(time);
-                else
-                    value = ISRCdcValue * state.SrcFact;
-            }
-            else
-            {
-                // AC or DC analysis use the DC value
-                value = ISRCdcValue * state.SrcFact;
-            }
-
-            rstate.Rhs[ISRCposNode] += value;
-            rstate.Rhs[ISRCnegNode] -= value;
-            Current = value;
-        }
-
-        /// <summary>
-        /// Load the current source in the circuit for AC analysis
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void AcLoad(Circuit ckt)
-        {
-            var cstate = ckt.State.Complex;
-            cstate.Rhs[ISRCposNode] += ISRCac;
-            cstate.Rhs[ISRCnegNode] -= ISRCac;
         }
     }
 }

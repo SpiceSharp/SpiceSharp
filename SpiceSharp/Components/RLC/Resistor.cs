@@ -43,12 +43,11 @@ namespace SpiceSharp.Components
         /// </summary>
         public int RESposNode { get; private set; }
         public int RESnegNode { get; private set; }
-        public ComponentNoise RESnoise { get; private set; } = new ComponentNoise(new Noise.NoiseThermal("thermal", 0, 1));
 
         /// <summary>
         /// Private variables
         /// </summary>
-        private double RESconduct = 0.0;
+        internal double RESconduct = 0.0;
 
         /// <summary>
         /// Constructor
@@ -69,18 +68,7 @@ namespace SpiceSharp.Components
             RESresist.Set(res);
         }
 
-        /// <summary>
-        /// Load the resistor
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Load(Circuit ckt)
-        {
-            var rstate = ckt.State.Real;
-            rstate.Matrix[RESposNode, RESposNode] += RESconduct;
-            rstate.Matrix[RESnegNode, RESnegNode] += RESconduct;
-            rstate.Matrix[RESposNode, RESnegNode] -= RESconduct;
-            rstate.Matrix[RESnegNode, RESposNode] -= RESconduct;
-        }
+        
 
         /// <summary>
         /// Setup the resistor
@@ -91,7 +79,6 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(ckt);
             RESposNode = nodes[0].Index;
             RESnegNode = nodes[1].Index;
-            RESnoise.Setup(ckt, RESposNode, RESnegNode);
         }
 
         /// <summary>
@@ -139,23 +126,13 @@ namespace SpiceSharp.Components
         /// Load the resistor for AC anlalysis
         /// </summary>
         /// <param name="ckt"></param>
-        public override void AcLoad(Circuit ckt)
+        public void AcLoad(Circuit ckt)
         {
             var cstate = ckt.State.Complex;
             cstate.Matrix[RESposNode, RESposNode] += RESconduct;
             cstate.Matrix[RESposNode, RESnegNode] -= RESconduct;
             cstate.Matrix[RESnegNode, RESposNode] -= RESconduct;
             cstate.Matrix[RESnegNode, RESnegNode] += RESconduct;
-        }
-
-        /// <summary>
-        /// Noise calculations
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Noise(Circuit ckt)
-        {
-            // Evaluate the noise sources
-            RESnoise.Evaluate(ckt, RESconduct);
         }
     }
 }

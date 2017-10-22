@@ -62,7 +62,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        private Complex VSRCac;
+        public Complex VSRCac;
 
         /// <summary>
         /// Constructor
@@ -129,54 +129,6 @@ namespace SpiceSharp.Components
             }
             double radians = VSRCacPhase * Circuit.CONSTPI / 180.0;
             VSRCac = new Complex(VSRCacMag * Math.Cos(radians), VSRCacMag * Math.Sin(radians));
-        }
-
-        /// <summary>
-        /// Load the device in the circuit
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Load(Circuit ckt)
-        {
-            var state = ckt.State;
-            var rstate = state.Real;
-            double time = 0.0;
-            double value = 0.0;
-
-            rstate.Matrix[VSRCposNode, VSRCbranch] += 1.0;
-            rstate.Matrix[VSRCbranch, VSRCposNode] += 1.0;
-            rstate.Matrix[VSRCnegNode, VSRCbranch] -= 1.0;
-            rstate.Matrix[VSRCbranch, VSRCnegNode] -= 1.0;
-
-            if (state.Domain == CircuitState.DomainTypes.Time)
-            {
-                if (ckt.Method != null)
-                    time = ckt.Method.Time;
-
-                // Use the waveform if possible
-                if (VSRCwaveform != null)
-                    value = VSRCwaveform.At(time);
-                else
-                    value = VSRCdcValue * state.SrcFact;
-            }
-            else
-            {
-                value = VSRCdcValue * state.SrcFact;
-            }
-            rstate.Rhs[VSRCbranch] += value;
-        }
-
-        /// <summary>
-        /// Load the voltage source for AC analysis
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void AcLoad(Circuit ckt)
-        {
-            var cstate = ckt.State.Complex;
-            cstate.Matrix[VSRCposNode, VSRCbranch] += 1.0;
-            cstate.Matrix[VSRCnegNode, VSRCbranch] -= 1.0;
-            cstate.Matrix[VSRCbranch, VSRCnegNode] -= 1.0;
-            cstate.Matrix[VSRCbranch, VSRCposNode] += 1.0;
-            cstate.Rhs[VSRCbranch] += VSRCac;
         }
 
         /// <summary>

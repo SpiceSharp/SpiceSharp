@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Set the model for the voltage-controlled switch
         /// </summary>
-        public void SetModel(VoltageSwitchModel model) => Model = (ICircuitObject)model;
+        public void SetModel(VoltageSwitchModel model) => Model = model;
 
         /// <summary>
         /// Parameters
@@ -83,7 +83,7 @@ namespace SpiceSharp.Components
         /// Load the voltage-controlled switch
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void Load(Circuit ckt)
+        public void Load(Circuit ckt)
         {
             var model = Model as VoltageSwitchModel;
             double g_now;
@@ -171,7 +171,7 @@ namespace SpiceSharp.Components
         /// Load the voltage-controlled switch for AC analysis
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void AcLoad(Circuit ckt)
+        public void AcLoad(Circuit ckt)
         {
             var model = Model as VoltageSwitchModel;
             double current_state, g_now;

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using SpiceSharp.Behaviours;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Components;
-using static SpiceSharp.Simulations.SimulationIterate;
 
 namespace SpiceSharp.Simulations
 {
@@ -133,12 +133,21 @@ namespace SpiceSharp.Simulations
             Sweeps.Add(s);
         }
 
+        public override void Initialize(Circuit ckt)
+        {
+            base.Initialize(ckt);
+
+            Behaviours.Behaviours.CreateBehaviours(ckt, typeof(CircuitObjectBehaviorDcLoad));
+        }
+
+
         /// <summary>
         /// Execute the DC simulation
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void Execute(Circuit ckt)
+        protected override void Execute()
         {
+            var ckt = this.Circuit;
             // Setup the state
             var state = ckt.State;
             var rstate = state.Real;
@@ -159,9 +168,9 @@ namespace SpiceSharp.Simulations
             {
                 // Get the component to be swept
                 var sweep = Sweeps[i];
-                if (!ckt.Objects.Contains(sweep.ComponentName))
+                if (!this.Circuit.Objects.Contains(sweep.ComponentName))
                     throw new CircuitException($"Could not find source {sweep.ComponentName}");
-                components[i] = (IParameterized)ckt.Objects[sweep.ComponentName];
+                components[i] = (IParameterized)this.Circuit.Objects[sweep.ComponentName];
 
                 // Get the parameter and save it for restoring later
                 parameters[i] = (Parameter)GetDcParameter(components[i]).Clone();
@@ -186,10 +195,10 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Calculate the solution
-                if (!Iterate(config, ckt, config.SweepMaxIterations))
+                if (!this.DcIterate(config, config.SweepMaxIterations))
                 {
                     IterationFailed?.Invoke(this, ckt);
-                    Op(config, ckt, config.DcMaxIterations);
+                    this.Op(config, config.DcMaxIterations);
                 }
 
                 // Export data

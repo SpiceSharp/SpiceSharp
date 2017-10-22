@@ -2,6 +2,7 @@
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Circuits;
+using SpiceSharp.Behaviours;
 
 namespace SpiceSharp.Components
 {
@@ -9,7 +10,7 @@ namespace SpiceSharp.Components
     /// A class that represents a circuit component/device.
     /// It can be connected in a circuit and it also has parameters.
     /// </summary>
-    public abstract class CircuitComponent<T> : Parameterized<T>, ICircuitComponent
+    public abstract class CircuitComponent<T> : Parameterized<T>, ICircuitComponentWithBehaviours
     {
         // Register the nodes
         static CircuitComponent()
@@ -69,6 +70,8 @@ namespace SpiceSharp.Components
         /// Get the model of the circuit component (if any)
         /// </summary>
         public ICircuitObject Model { get; protected set; } = null;
+
+        public ICircuitObjectBehavior[] CurrentBehaviours { get; set; }
 
         /// <summary>
         /// Connect the component in the circuit
@@ -167,21 +170,6 @@ namespace SpiceSharp.Components
         public abstract void Temperature(Circuit ckt);
 
         /// <summary>
-        /// Load the component in the current circuit state
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public abstract void Load(Circuit ckt);
-
-        /// <summary>
-        /// Load the component in the current circuit state for AC analysis
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public virtual void AcLoad(Circuit ckt)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
         /// Accept the current timepoint as the solution
         /// </summary>
         /// <param name="ckt">The circuit</param>
@@ -207,15 +195,6 @@ namespace SpiceSharp.Components
         public virtual void Truncate(Circuit ckt, ref double timeStep)
         {
             // Do nothing
-        }
-
-        /// <summary>
-        /// Calculate noise method
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public virtual void Noise(Circuit ckt)
-        {
-            // Do nothing (noiseless)
         }
     }
 }
