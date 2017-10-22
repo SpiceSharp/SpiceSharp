@@ -1,75 +1,74 @@
-﻿using SpiceSharp.Behaviours.AcLoad;
-using SpiceSharp.Behaviours.DcLoad;
-using SpiceSharp.Behaviours.Noise;
-using SpiceSharp.Circuits;
-using SpiceSharp.Components;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SpiceSharp.Circuits;
+using SpiceSharp.Components;
 
 namespace SpiceSharp.Behaviours
 {
+    /// <summary>
+    /// Class that handles all behaviours
+    /// </summary>
     public class Behaviours
     {
-        public static readonly Dictionary<string, List<Type>> Defaults = new Dictionary<string, List<Type>>();
+        /// <summary>
+        /// Behaviours per component type
+        /// </summary>
+        public static readonly Dictionary<Tuple<Type, Type>, List<Type>> Defaults = new Dictionary<Tuple<Type, Type>, List<Type>>();
 
-        static Behaviours()
+        /// <summary>
+        /// Register a default behaviour
+        /// </summary>
+        /// <param name="componentType"></param>
+        /// <param name="behaviourType"></param>
+        public static void RegisterBehaviour(Type componentType, Type behaviourType)
         {
-            RegisterDefaults();
-        }
-
-        private static void RegisterDefaults()
-        {
-            RegisterBehaviourMapping(typeof(Resistor), typeof(ResistorLoadAcBehaviour));
-            RegisterBehaviourMapping(typeof(Resistor), typeof(ResistorLoadDcBehaviour));
-            RegisterBehaviourMapping(typeof(Resistor), typeof(ResistorNoiseBehaviour));
-
-            RegisterBehaviourMapping(typeof(Diode), typeof(DiodeLoadAcBehaviour));
-            RegisterBehaviourMapping(typeof(Diode), typeof(DiodeLoadDcBehaviour));
-            RegisterBehaviourMapping(typeof(Diode), typeof(DiodeNoiseBehaviour));
-
-            RegisterBehaviourMapping(typeof(Voltagesource), typeof(VoltageSourceLoadAcBehaviour));
-            RegisterBehaviourMapping(typeof(Voltagesource), typeof(VoltagesourceLoadDcBehaviour));
-
-            RegisterBehaviourMapping(typeof(Currentsource), typeof(CurrentSourceLoadAcBehaviour));
-            RegisterBehaviourMapping(typeof(Currentsource), typeof(CurrentSourceLoadDcBehaviour));
-        }
-
-        public static void RegisterBehaviourMapping(Type componentType, Type behaviourType)
-        {
-            Type behaviourBaseType = behaviourType.BaseType;
-
-            string key = $"{behaviourBaseType}_{componentType}";
+            // Add an entry to the Defaults
+            var key = new Tuple<Type, Type>(componentType, behaviourType.BaseType);
             if (!Defaults.ContainsKey(key))
-            {
                 Defaults[key] = new List<Type>();
-            }
 
             Defaults[key].Add(behaviourType);
         }
 
-        public static void CreateBehaviours<T>(Circuit ckt, params T[] behaviourBaseTypes) 
+        /// <summary>
+        /// Create an enumerable of a certain behaviour
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="behaviours">The behaviours that need to be imported</param>
+        public static List<T> CreateBehaviours<T>(Circuit ckt) where T : CircuitObjectBehaviour
         {
+            List<T> result = new List<T>();
+
             foreach (var obj in ckt.Objects)
             {
+                // Skip objects that do not implement any behaviours
                 if (!(obj is ICircuitComponentWithBehaviours))
-                {
                     continue;
-                }
 
-                var allBehaviours = GetAllBehavioursForComponent(obj, behaviourBaseTypes);
-                var objects = new List<ICircuitObjectBehaviour>();
+                // Get all component behaviours
+                var allBehaviours = GetAllBehavioursForComponent<T>(obj);
 
+                // Add all behaviours of the type we want
                 foreach (var type in allBehaviours)
                 {
-                    var instance = (ICircuitObjectBehaviour) Activator.CreateInstance(type);
-                    instance.Setup(obj, ckt);
-                    objects.Add(instance);
+                    var instance = (T)Activator.CreateInstance(type);
+                    (instance as ICircuitObjectBehaviour)?.Setup(obj, ckt);
+                    result.Add(instance);
                 }
-                ((ICircuitComponentWithBehaviours) obj).CurrentBehaviours = objects.ToArray();
             }
+
+            return result;
         }
 
+        /// <summary>
+        /// Execute the behaviour
+        /// NOTE: This will not be needed in the future!
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="ckt"></param>
         public static void ExecuteBehaviour<T>(ICircuitObject obj, Circuit ckt) where T: class, ICircuitObjectBehaviour
         {
             var behaviour = (obj as ICircuitComponentWithBehaviours)?.CurrentBehaviours.FirstOrDefault(b => b is T);
@@ -96,14 +95,20 @@ namespace SpiceSharp.Behaviours
             }
         }
 
-        private static IEnumerable<Type> GetAllBehavioursForComponent<T>(ICircuitObject obj, params T[] behaviourBaseTypes)
+        /// <summary>
+        /// Get all behaviours of a certain type of a certain circuit object
+        /// </summary>
+        /// <typeparam name="T">The behaviour</typeparam>
+        /// <param name="obj">The object</param>
+        /// <returns></returns>
+        private static List<Type> GetAllBehavioursForComponent<T>(ICircuitObject obj) where T : CircuitObjectBehaviour
         {
             var result = new List<Type>();
-            foreach (var behaviourBaseType in behaviourBaseTypes)
-            {
-                string key = $"{behaviourBaseType}_{obj.GetType()}";
-                result.AddRange(Defaults.ContainsKey(key) ? Defaults[key] : new List<Type>());
-            }
+            var key = new Tuple<Type, Type>(obj.GetType(), typeof(T));
+
+            // Find the behaviour
+            if (Defaults.TryGetValue(key, out List<Type> behaviours))
+                result.AddRange(behaviours);
             return result;
         }
     }

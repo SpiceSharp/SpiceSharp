@@ -1,10 +1,17 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components;
+using SpiceSharp.Behaviours;
 
-namespace SpiceSharp.Behaviours.DcLoad
+namespace SpiceSharp.Components.ComponentBehaviours
 {
-    public class VoltagesourceLoadDcBehaviour : CircuitObjectBehaviorDcLoad
+    /// <summary>
+    /// Voltage source behaviour for DC and Transient analysis
+    /// </summary>
+    public class VoltagesourceLoadBehaviour : CircuitObjectBehaviourLoad
     {
+        /// <summary>
+        /// Execute DC or Transient behaviour
+        /// </summary>
+        /// <param name="ckt"></param>
         public override void Execute(Circuit ckt)
         {
             var voltageSource = ComponentTyped<Voltagesource>();

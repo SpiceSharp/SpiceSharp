@@ -1,10 +1,17 @@
 ﻿using System.Numerics;
-using SpiceSharp.Components;
+using SpiceSharp.Behaviours;
 
-namespace SpiceSharp.Behaviours.AcLoad
+namespace SpiceSharp.Components.ComponentBehaviours
 {
-    public class DiodeLoadAcBehaviour : CircuitObjectBehaviorAcLoad
+    /// <summary>
+    /// Behaviour of a diode in AC analysis
+    /// </summary>
+    public class DiodeAcBehaviour : CircuitObjectBehaviourAcLoad
     {
+        /// <summary>
+        /// Perform AC analysis
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
         public override void Execute(Circuit ckt)
         {
             var diode = ComponentTyped<Diode>();

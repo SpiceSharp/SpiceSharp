@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Behaviours;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
@@ -66,6 +67,11 @@ namespace SpiceSharp.Simulations
         public event TimestepCutEventHandler TimestepCut;
 
         /// <summary>
+        /// Private variables
+        /// </summary>
+        private List<CircuitObjectBehaviourLoad> loadbehaviours;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
@@ -86,11 +92,14 @@ namespace SpiceSharp.Simulations
             FinalTime = final;
         }
 
+        /// <summary>
+        /// Initialize the transient analysis
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
         public override void Initialize(Circuit ckt)
         {
             base.Initialize(ckt);
-
-            Behaviours.Behaviours.CreateBehaviours(ckt, typeof(CircuitObjectBehaviorDcLoad));
+            loadbehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourLoad>(ckt);
         }
 
 
@@ -128,7 +137,7 @@ namespace SpiceSharp.Simulations
             Initialize(ckt);
 
             // Calculate the operating point
-            this.Op(config, config.DcMaxIterations);
+            ckt.Op(loadbehaviours, config, config.DcMaxIterations);
             ckt.Statistics.TimePoints++;
             for (int i = 0; i < method.DeltaOld.Length; i++)
                 method.DeltaOld[i] = MaxStep;
@@ -196,7 +205,7 @@ namespace SpiceSharp.Simulations
                     method.Predict(ckt);
 
                     // Try to solve the new point
-                    bool converged = this.DcIterate(config, config.TranMaxIterations);
+                    bool converged = ckt.Iterate(loadbehaviours, config, config.TranMaxIterations);
                     ckt.Statistics.TimePoints++;
                     if (method.SavedTime == 0.0)
                     {

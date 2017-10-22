@@ -1,9 +1,16 @@
-﻿using SpiceSharp.Components;
+﻿using SpiceSharp.Behaviours;
 
-namespace SpiceSharp.Behaviours.AcLoad
+namespace SpiceSharp.Components.ComponentBehaviours
 {
-    public class VoltageSourceLoadAcBehaviour : CircuitObjectBehaviorAcLoad
+    /// <summary>
+    /// Voltage source behaviour for AC analysis
+    /// </summary>
+    public class VoltageSourceLoadAcBehaviour : CircuitObjectBehaviourAcLoad
     {
+        /// <summary>
+        /// Execute AC behaviour
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
         public override void Execute(Circuit ckt)
         {
             var voltagesource = ComponentTyped<Voltagesource>();

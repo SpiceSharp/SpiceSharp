@@ -1,12 +1,19 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Components;
+using SpiceSharp.Behaviours;
 using SpiceSharp.Components.Semiconductors;
 
-namespace SpiceSharp.Behaviours.DcLoad
+namespace SpiceSharp.Components.ComponentBehaviours
 {
-    public class DiodeLoadDcBehaviour : CircuitObjectBehaviorDcLoad
+    /// <summary>
+    /// Behaviour of a diode in DC or Transient
+    /// </summary>
+    public class DiodeLoadBehaviour : CircuitObjectBehaviourLoad
     {
+        /// <summary>
+        /// Behaviour
+        /// </summary>
+        /// <param name="ckt"></param>
         public override void Execute(Circuit ckt)
         {
             var diode = ComponentTyped<Diode>();
@@ -21,15 +28,14 @@ namespace SpiceSharp.Behaviours.DcLoad
             /* 
              * this routine loads diodes for dc and transient analyses.
              */
-
             csat = diode.DIOtSatCur * diode.DIOarea;
             gspr = model.DIOconductance * diode.DIOarea;
             vt = Circuit.CONSTKoverQ * diode.DIOtemp;
             vte = model.DIOemissionCoeff * vt;
+
             /* 
 			 * initialization 
 			 */
-
             Check = true;
             if (state.UseSmallSignal)
             {
@@ -167,6 +173,7 @@ namespace SpiceSharp.Behaviours.DcLoad
             cdeq = cd - gd * vd;
             rstate.Rhs[diode.DIOnegNode] += cdeq;
             rstate.Rhs[diode.DIOposPrimeNode] -= cdeq;
+
             /* 
 			 * load matrix
 			 */

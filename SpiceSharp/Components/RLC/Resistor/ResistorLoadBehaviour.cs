@@ -1,9 +1,16 @@
-﻿using SpiceSharp.Components;
+﻿using SpiceSharp.Behaviours;
 
-namespace SpiceSharp.Behaviours.DcLoad
+namespace SpiceSharp.Components.ComponentBehaviours
 {
-    public class ResistorLoadDcBehaviour : CircuitObjectBehaviorDcLoad
+    /// <summary>
+    /// Behaviour of a resistor for DC and Transient analysis
+    /// </summary>
+    public class ResistorLoadBehaviour : CircuitObjectBehaviourLoad
     {
+        /// <summary>
+        /// Perform calculations
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
         public override void Execute(Circuit ckt)
         {
             var rstate = ckt.State.Real;

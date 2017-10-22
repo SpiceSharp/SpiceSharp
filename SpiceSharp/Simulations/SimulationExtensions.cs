@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using MathNet.Numerics.LinearAlgebra;
 using SpiceSharp.Behaviours;
@@ -14,19 +15,19 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Calculate the operating point of the circuit
         /// </summary>
-        /// <param name="sim">The simulation</param>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="maxiter">The maximum number of iterations</param>
-        public static void Op(this ISimulation simulation, SimulationConfiguration config, int maxiter)
+        /// <param name="ckt">Circuit</param>
+        /// <param name="loaders">Loaders</param>
+        /// <param name="config">Simulation configuration</param>
+        /// <param name="maxiter">Maximum iterations</param>
+        public static void Op(this Circuit ckt, List<CircuitObjectBehaviourLoad> loaders, SimulationConfiguration config, int maxiter)
         {
-            Circuit ckt = simulation.Circuit;
             // Create the current SimulationState
             var state = ckt.State;
             state.Init = CircuitState.InitFlags.InitJct;
 
             if (!config.NoOpIter)
             {
-                if (simulation.DcIterate(config, maxiter))
+                if (ckt.Iterate(loaders, config, maxiter))
                     return;
             }
 
@@ -42,7 +43,7 @@ namespace SpiceSharp.Simulations
                 for (int i = 0; i <= config.NumGminSteps; i++)
                 {
                     state.IsCon = true;
-                    if (!simulation.DcIterate(config, maxiter))
+                    if (!ckt.Iterate(loaders, config, maxiter))
                     {
                         state.Gmin = 0.0;
                         CircuitWarning.Warning(ckt, "Gmin step failed");
@@ -52,7 +53,7 @@ namespace SpiceSharp.Simulations
                     state.Init = CircuitState.InitFlags.InitFloat;
                 }
                 state.Gmin = 0.0;
-                if (simulation.DcIterate(config, maxiter))
+                if (ckt.Iterate(loaders, config, maxiter))
                     return;
             }
 
@@ -64,7 +65,7 @@ namespace SpiceSharp.Simulations
                 for (int i = 0; i <= config.NumSrcSteps; i++)
                 {
                     state.SrcFact = i / (double) config.NumSrcSteps;
-                    if (!simulation.DcIterate(config, maxiter))
+                    if (!ckt.Iterate(loaders, config, maxiter))
                     {
                         state.SrcFact = 1.0;
                         // ckt.CurrentAnalysis = AnalysisType.DoingTran;
@@ -81,15 +82,15 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        ///  Calculate the solution for DC analysis
+        /// Solve iteratively for <see cref="OP"/>, <see cref="DC"/> or <see cref="Transient"/> simulations
         /// </summary>
-        /// <param name="sim">The simulation</param>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="maxiter">The maximum number of iterations</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="loaders">Loaders</param>
+        /// <param name="config">Simulation configuration</param>
+        /// <param name="maxiter">Maximum number of iterations</param>
         /// <returns></returns>
-        public static bool DcIterate(this ISimulation simulation, SimulationConfiguration config, int maxiter)
+        public static bool Iterate(this Circuit ckt, List<CircuitObjectBehaviourLoad> loaders, SimulationConfiguration config, int maxiter)
         {
-            Circuit ckt = simulation.Circuit;
             var state = ckt.State;
             var rstate = state.Real;
             bool pass = false;
@@ -106,7 +107,8 @@ namespace SpiceSharp.Simulations
 
                 // Voltages are set using IC statement on the nodes
                 // Internal initial conditions are calculated by the components
-                simulation.DcLoad();
+                foreach (var loader in loaders)
+                    loader.Execute(ckt);
                 return true;
             }
 
@@ -118,7 +120,8 @@ namespace SpiceSharp.Simulations
 
                 try
                 {
-                    simulation.DcLoad();
+                    foreach (var loader in loaders)
+                        loader.Execute(ckt);
                     iterno++;
                 }
                 catch (CircuitException)
@@ -146,7 +149,7 @@ namespace SpiceSharp.Simulations
                 }
 
                 if (state.IsCon && iterno != 1)
-                    state.IsCon = simulation.IsConvergent(config);
+                    state.IsCon = ckt.IsConvergent(config);
                 else
                     state.IsCon = false;
 
@@ -191,13 +194,12 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Calculate the solution for AC analysis
+        /// Calculate the solution for <see cref="AC"/> analysis
         /// </summary>
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
-        public static void AcIterate(this ISimulation simulation, SimulationConfiguration config)
+        public static void AcIterate(this Circuit ckt, List<CircuitObjectBehaviourAcLoad> loaders, SimulationConfiguration config)
         {
-            var ckt = simulation.Circuit;
             // Initialize the circuit
             if (!ckt.State.Initialized)
                 ckt.State.Initialize(ckt);
@@ -206,14 +208,15 @@ namespace SpiceSharp.Simulations
 
             // Load AC
             ckt.State.Complex.Clear();
-            foreach (var c in ckt.Objects)
-                c.AcLoad(ckt);
+            foreach (var behaviour in loaders)
+                behaviour.Execute(ckt);
 
             // Solve
             ckt.State.Complex.Solve();
         }
 
         /// <summary>
+        /// Calculate the solution for <see cref="Noise"/> analysis
         /// This routine solves the adjoint system. It assumes that the matrix has
         /// already been loaded by a call to <see cref="AcIterate(SimulationConfiguration, Circuit)"/>, so it only alters the right
         /// hand side vector. The unit-valued current excitation is applied between
@@ -222,9 +225,8 @@ namespace SpiceSharp.Simulations
         /// <param name="ckt">The circuit</param>
         /// <param name="posDrive">The positive driving node</param>
         /// <param name="negDrive">The negative driving node</param>
-        public static void NzIterate(this ISimulation simulation, int posDrive, int negDrive)
+        public static void NzIterate(this Circuit ckt, int posDrive, int negDrive)
         {
-            var ckt = simulation.Circuit;
             var state = ckt.State.Complex;
 
             // Clear out the right hand side vector
@@ -243,9 +245,8 @@ namespace SpiceSharp.Simulations
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
-        private static bool IsConvergent(this ISimulation simulation, SimulationConfiguration config)
+        private static bool IsConvergent(this Circuit ckt, SimulationConfiguration config)
         {
-            var ckt = simulation.Circuit;
             var rstate = ckt.State.Real;
 
             // Check convergence for each node
@@ -282,15 +283,18 @@ namespace SpiceSharp.Simulations
             return true;
         }
 
+        /// <summary>
+        /// Access to the problem node for convergence
+        /// </summary>
         public static CircuitNode ProblemNode { get; set; }
 
         /// <summary>
-        /// Exec DcLoad on the circuit for simulation
+        /// Load the circuit for <see cref="OP"/>, <see cref="DC"/> or <see cref="Transient"/> analysis
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public static void DcLoad(this ISimulation simulation)
+        /// <param name="ckt">Circuit</param>
+        /// <param name="loaders">Loaders</param>
+        public static void Load(this Circuit ckt, List<CircuitObjectBehaviourLoad> loaders)
         {
-            var ckt = simulation.Circuit;
             var state = ckt.State;
             var rstate = state.Real;
             var nodes = ckt.Nodes;
@@ -302,9 +306,8 @@ namespace SpiceSharp.Simulations
             rstate.Clear();
 
             // Load all devices
-            // ckt.Load(this, state);
-            foreach (var c in ckt.Objects)
-                c.DcLoad(ckt);
+            foreach (var loader in loaders)
+                loader.Execute(ckt);
 
             // Check modes
             if (state.UseDC)

@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviours;
+﻿using System.Collections.Generic;
+using SpiceSharp.Behaviours;
 using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
@@ -9,6 +10,11 @@ namespace SpiceSharp.Simulations
     public class OP : Simulation<OP>
     {
         /// <summary>
+        /// Private variables
+        /// </summary>
+        private List<CircuitObjectBehaviourLoad> loadbehaviours;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
@@ -17,11 +23,15 @@ namespace SpiceSharp.Simulations
         {
         }
 
+        /// <summary>
+        /// Initialize the analysis
+        /// </summary>
+        /// <param name="ckt"></param>
         public override void Initialize(Circuit ckt)
         {
             base.Initialize(ckt);
 
-            Behaviours.Behaviours.CreateBehaviours(ckt, typeof(CircuitObjectBehaviorDcLoad));
+            loadbehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourLoad>(ckt);
         }
 
         /// <summary>
@@ -29,7 +39,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Execute()
         {
-            var ckt = this.Circuit;
+            var ckt = Circuit;
 
             // Setup the state
             var state = ckt.State;
@@ -42,7 +52,7 @@ namespace SpiceSharp.Simulations
             state.Gmin = config.Gmin;
 
             Initialize(ckt);
-            this.Op(config, config.DcMaxIterations);
+            ckt.Op(loadbehaviours, config, config.DcMaxIterations);
             Export(ckt);
             Finalize(ckt);
         }

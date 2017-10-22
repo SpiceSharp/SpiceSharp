@@ -76,17 +76,12 @@ namespace SpiceSharp
                 return;
             IsSetup = true;
 
-
             // Rebuild the list of circuit components
             Objects.BuildOrderedComponentList();
 
             // Setup all devices
             foreach (var c in Objects)
-            {
                 c.Setup(this);
-            }
-
-
 
             // Initialize the state
             State.Initialize(this);

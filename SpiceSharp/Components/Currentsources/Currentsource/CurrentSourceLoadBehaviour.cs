@@ -1,10 +1,17 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components;
+using SpiceSharp.Behaviours;
 
-namespace SpiceSharp.Behaviours.DcLoad
+namespace SpiceSharp.Components.ComponentBehaviours
 {
-    public class CurrentSourceLoadDcBehaviour : CircuitObjectBehaviorDcLoad
+    /// <summary>
+    /// Current source behaviour for DC and Transient analysis
+    /// </summary>
+    public class CurrentsourceLoadBehaviour : CircuitObjectBehaviourLoad
     {
+        /// <summary>
+        /// Execute behaviour
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
         public override void Execute(Circuit ckt)
         {
             var currentSource = ComponentTyped<Currentsource>();

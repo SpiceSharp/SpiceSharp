@@ -13,6 +13,15 @@ namespace SpiceSharp.Components
     public class Currentsource : CircuitComponent<Currentsource>
     {
         /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static Currentsource()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Currentsource), typeof(ComponentBehaviours.CurrentsourceLoadBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Currentsource), typeof(ComponentBehaviours.CurrentsourceAcBehaviour));
+        }
+
+        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("waveform"), SpiceInfo("The waveform object for this source")]

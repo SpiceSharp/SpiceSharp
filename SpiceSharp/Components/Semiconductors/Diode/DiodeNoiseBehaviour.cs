@@ -1,11 +1,14 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Components;
+using SpiceSharp.Behaviours;
 using SpiceSharp.Components.Noise;
 
-namespace SpiceSharp.Behaviours.Noise
+namespace SpiceSharp.Components.ComponentBehaviours
 {
-    internal class DiodeNoiseBehaviour : CircuitObjectBehaviour
+    /// <summary>
+    /// Behaviour of a diode
+    /// </summary>
+    public class DiodeNoiseBehaviour : CircuitObjectBehaviour
     {
         /// <summary>
         /// Noise generators
@@ -15,13 +18,22 @@ namespace SpiceSharp.Behaviours.Noise
             new NoiseShot("id", 1, 2),
             new NoiseGain("1overf", 1, 2));
 
+        /// <summary>
+        /// Setup the diode
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
         public override void Setup(ICircuitObject component, Circuit ckt)
         {
             base.Setup(component, ckt);
             var diode = ComponentTyped<Diode>();
             DIOnoise.Setup(ckt, diode.DIOposNode, diode.DIOposPrimeNode, diode.DIOnegNode);
-
         }
+
+        /// <summary>
+        /// Perform diode noise calculations
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
         public override void Execute(Circuit ckt)
         {
             var diode = ComponentTyped<Diode>();

@@ -13,6 +13,15 @@ namespace SpiceSharp.Components
     public class Voltagesource : CircuitComponent<Voltagesource>
     {
         /// <summary>
+        /// Register default voltagesource behaviours
+        /// </summary>
+        static Voltagesource()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Voltagesource), typeof(ComponentBehaviours.VoltagesourceLoadBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Voltagesource), typeof(ComponentBehaviours.VoltageSourceLoadAcBehaviour));
+        }
+
+        /// <summary>
         /// Parameters
         /// </summary>
         public IWaveform VSRCwaveform { get; set; }

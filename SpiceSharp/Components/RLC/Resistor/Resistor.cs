@@ -11,6 +11,16 @@ namespace SpiceSharp.Components
     public class Resistor : CircuitComponent<Resistor>
     {
         /// <summary>
+        /// Register default behaviours of the resistor
+        /// </summary>
+        static Resistor()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Resistor), typeof(ComponentBehaviours.ResistorLoadBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Resistor), typeof(ComponentBehaviours.ResistorAcBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Resistor), typeof(ComponentBehaviours.ResistorNoiseBehaviour));
+        }
+
+        /// <summary>
         /// Set the model for the resistor
         /// </summary>
         /// <param name="model"></param>

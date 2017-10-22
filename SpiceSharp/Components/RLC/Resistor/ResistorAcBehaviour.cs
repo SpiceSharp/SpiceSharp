@@ -1,9 +1,16 @@
-﻿using SpiceSharp.Components;
+﻿using SpiceSharp.Behaviours;
 
-namespace SpiceSharp.Behaviours.AcLoad
+namespace SpiceSharp.Components.ComponentBehaviours
 {
-    public class ResistorLoadAcBehaviour : CircuitObjectBehaviorAcLoad
+    /// <summary>
+    /// Behaviour of a resistor for AC analysis
+    /// </summary>
+    public class ResistorAcBehaviour : CircuitObjectBehaviourAcLoad
     {
+        /// <summary>
+        /// Perform AC calculations
+        /// </summary>
+        /// <param name="ckt"></param>
         public override void Execute(Circuit ckt)
         {
             var cstate = ckt.State.Complex;

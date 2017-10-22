@@ -2,8 +2,6 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.Semiconductors;
-using System.Numerics;
 
 namespace SpiceSharp.Components
 {
@@ -13,6 +11,16 @@ namespace SpiceSharp.Components
     [SpicePins("D+", "D-")]
     public class Diode : CircuitComponent<Diode>
     {
+        /// <summary>
+        /// Register diode behaviours
+        /// </summary>
+        static Diode()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Diode), typeof(ComponentBehaviours.DiodeLoadBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Diode), typeof(ComponentBehaviours.DiodeAcBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Diode), typeof(ComponentBehaviours.DiodeNoiseBehaviour));
+        }
+
         /// <summary>
         /// Set the model for the diode
         /// </summary>

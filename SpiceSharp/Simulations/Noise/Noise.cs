@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
@@ -97,6 +98,13 @@ namespace SpiceSharp.Simulations
         public StepTypes StepType { get; set; } = StepTypes.Decade;
 
         /// <summary>
+        /// Private variables
+        /// </summary>
+        private List<CircuitObjectBehaviourLoad> loadbehaviours;
+        private List<CircuitObjectBehaviourAcLoad> acbehaviours;
+        private List<CircuitObjectBehaviourNoise> noisebehaviours;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
@@ -104,14 +112,18 @@ namespace SpiceSharp.Simulations
         {
         }
 
-
+        /// <summary>
+        /// Initialize the noise simulation
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
         public override void Initialize(Circuit ckt)
         {
             base.Initialize(ckt);
-            Behaviours.Behaviours.CreateBehaviours(ckt,
-                typeof(CircuitObjectBehaviorAcLoad),
-                typeof(CircuitObjectBehaviorDcLoad),
-                typeof(CircuitObjectBehaviourNoise));
+
+            // Get all behaviours necessary for noise analysis
+            loadbehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourLoad>(ckt);
+            acbehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourAcLoad>(ckt);
+            noisebehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourNoise>(ckt);
         }
 
 
@@ -121,7 +133,7 @@ namespace SpiceSharp.Simulations
         /// <param name="ckt">The circuit</param>
         protected override void Execute()
         {
-            var ckt = this.Circuit;
+            var ckt = Circuit;
             var state = ckt.State;
             var config = CurrentConfig;
 
@@ -189,7 +201,7 @@ namespace SpiceSharp.Simulations
             state.UseSmallSignal = false;
             state.Gmin = config.Gmin;
             Initialize(ckt);
-            this.Op(config, config.DcMaxIterations);
+            ckt.Op(loadbehaviours, config, config.DcMaxIterations);
 
             var data = ckt.State.Noise;
             var cstate = ckt.State.Complex;
@@ -198,19 +210,19 @@ namespace SpiceSharp.Simulations
             for (int i = 0; i < n; i++)
             {
                 cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * data.Freq);
-                this.AcIterate(config);
+                ckt.AcIterate(acbehaviours, config);
 
                 Complex val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
                 data.GainSqInv = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
 
                 // Solve the adjoint system
-                this.NzIterate(posOutNode, negOutNode);
+                ckt.NzIterate(posOutNode, negOutNode);
 
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit
                 data.outNdens = 0.0;
-                foreach (var o in ckt.Objects)
-                    o.Noise(ckt);
+                foreach (var behaviour in noisebehaviours)
+                    behaviour.Execute(ckt);
 
                 // Export the data
                 Export(ckt);
