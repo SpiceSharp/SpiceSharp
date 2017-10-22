@@ -82,6 +82,7 @@ namespace SpiceSharpTest.Models
                 tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-6 + 1e-30;
                 Assert.AreEqual(expected, actual, tol);
             };
+            netlist.Simulate();
         }
 
         /// <summary>

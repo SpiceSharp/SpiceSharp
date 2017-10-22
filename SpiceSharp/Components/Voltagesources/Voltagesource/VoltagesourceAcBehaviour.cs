@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.ComponentBehaviours
 {
     /// <summary>
-    /// Voltage source behaviour for AC analysis
+    /// AC behaviour for <see cref="Voltagesource"/>
     /// </summary>
     public class VoltageSourceLoadAcBehaviour : CircuitObjectBehaviourAcLoad
     {

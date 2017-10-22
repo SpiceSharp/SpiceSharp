@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.ComponentBehaviours
 {
     /// <summary>
-    /// Behaviour of a resistor for DC and Transient analysis
+    /// General behaviour for <see cref="Resistor"/>
     /// </summary>
     public class ResistorLoadBehaviour : CircuitObjectBehaviourLoad
     {

@@ -5,7 +5,7 @@ using SpiceSharp.Components.Noise;
 namespace SpiceSharp.Components.ComponentBehaviours
 {
     /// <summary>
-    /// Noise behaviour of a resistor
+    /// Noise behaviour for <see cref="Resistor"/>
     /// </summary>
     public class ResistorNoiseBehaviour : CircuitObjectBehaviourNoise
     {

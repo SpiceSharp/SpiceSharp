@@ -10,6 +10,15 @@ namespace SpiceSharp.Components
     public class Capacitor : CircuitComponent<Capacitor>
     {
         /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static Capacitor()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Capacitor), typeof(ComponentBehaviours.CapacitorLoadBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Capacitor), typeof(ComponentBehaviours.CapacitorAcBehaviour));
+        }
+
+        /// <summary>
         /// Set the model for the capacitor
         /// </summary>
         /// <param name="model"></param>
@@ -41,8 +50,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constants
         /// </summary>
-        private const int CAPqcap = 0;
-        private const int CAPccap = 1;
+        public const int CAPqcap = 0;
+        public const int CAPccap = 1;
 
         /// <summary>
         /// Constructor
@@ -100,66 +109,6 @@ namespace SpiceSharp.Components
                             (CAPlength - model.CAPnarrow) +
                             (CAPwidth - model.CAPnarrow));
             }
-        }
-
-        /// <summary>
-        /// Load the capacitance
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public void Load(Circuit ckt)
-        {
-            double vcap;
-            var state = ckt.State;
-            var rstate = state.Real;
-            var method = ckt.Method;
-
-            bool cond1 = (state.UseDC && state.Init == Circuits.CircuitState.InitFlags.InitJct) || state.UseIC;
-
-            if (cond1)
-                vcap = CAPinitCond;
-            else
-                vcap = rstate.OldSolution[CAPposNode] - rstate.OldSolution[CAPnegNode];
-
-            if (state.Domain == CircuitState.DomainTypes.Time)
-            {
-                // Fill the matrix
-                state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
-                if (method != null && method.SavedTime == 0.0)
-                    state.States[1][CAPstate + CAPqcap] = state.States[0][CAPstate + CAPqcap];
-
-                // Without integration, a capacitor cannot do anything
-                if (method != null)
-                {
-                    var result = ckt.Method.Integrate(state, CAPstate + CAPqcap, CAPcapac);
-                    if (method != null && method.SavedTime == 0.0)
-                        state.States[1][CAPstate + CAPqcap] = state.States[0][CAPstate + CAPqcap];
-
-                    rstate.Matrix[CAPposNode, CAPposNode] += result.Geq;
-                    rstate.Matrix[CAPnegNode, CAPnegNode] += result.Geq;
-                    rstate.Matrix[CAPposNode, CAPnegNode] -= result.Geq;
-                    rstate.Matrix[CAPnegNode, CAPposNode] -= result.Geq;
-                    rstate.Rhs[CAPposNode] -= result.Ceq;
-                    rstate.Rhs[CAPnegNode] += result.Ceq;
-                }
-            }
-            else
-                state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
-        }
-
-        /// <summary>
-        /// Load the capacitance for AC analysis
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public void AcLoad(Circuit ckt)
-        {
-            var cstate = ckt.State.Complex;
-            var val = cstate.Laplace * CAPcapac.Value;
-
-            // Load the matrix
-            cstate.Matrix[CAPposNode, CAPposNode] += val;
-            cstate.Matrix[CAPposNode, CAPnegNode] -= val;
-            cstate.Matrix[CAPnegNode, CAPposNode] -= val;
-            cstate.Matrix[CAPnegNode, CAPnegNode] += val;
         }
 
         /// <summary>

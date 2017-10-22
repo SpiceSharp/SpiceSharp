@@ -47,6 +47,11 @@
     <Compile Include="Attributes\ConnectedPins.cs" />
     <Compile Include="Attributes\IndependentSource.cs" />
     <Compile Include="Attributes\VoltageDriver.cs" />
+    <Compile Include="Components\RLC\Capacitor\CapacitorAcBehaviour.cs" />
+    <Compile Include="Components\RLC\Capacitor\CapacitorLoadBehaviour.cs" />
+    <Compile Include="Components\Semiconductors\BJT\BJTAcBehaviour.cs" />
+    <Compile Include="Components\Semiconductors\BJT\BJTLoadBehaviour.cs" />
+    <Compile Include="Components\Semiconductors\BJT\BJTNoiseBehaviour.cs" />
     <Compile Include="Components\Semiconductors\Diode\DiodeAcBehaviour.cs" />
     <Compile Include="Components\Currentsources\Currentsource\CurrentsourceAcBehaviour.cs" />
     <Compile Include="Components\Voltagesources\Voltagesource\VoltagesourceAcBehaviour.cs" />
@@ -96,8 +101,8 @@
     <Compile Include="Components\Waveforms\IWaveform.cs" />
     <Compile Include="Components\RLC\Inductor.cs" />
     <Compile Include="Components\RLC\MutualInductance.cs" />
-    <Compile Include="Components\Semiconductors\BJT.cs" />
-    <Compile Include="Components\Semiconductors\BJTModel.cs" />
+    <Compile Include="Components\Semiconductors\BJT\BJT.cs" />
+    <Compile Include="Components\Semiconductors\BJT\BJTModel.cs" />
     <Compile Include="Components\Semiconductors\Diode\Diode.cs" />
     <Compile Include="Components\Semiconductors\Diode\DiodeModel.cs" />
     <Compile Include="Components\Semiconductors\Semiconductor.cs" />
@@ -122,8 +127,8 @@
     <Compile Include="Circuits\CircuitState.cs" />
     <Compile Include="Circuits\CircuitStatistics.cs" />
     <Compile Include="Circuits\CircuitNodes.cs" />
-    <Compile Include="Components\RLC\Capacitor.cs" />
-    <Compile Include="Components\RLC\CapacitorModel.cs" />
+    <Compile Include="Components\RLC\Capacitor\Capacitor.cs" />
+    <Compile Include="Components\RLC\Capacitor\CapacitorModel.cs" />
     <Compile Include="Components\RLC\Resistor\Resistor.cs" />
     <Compile Include="Components\RLC\ResistorModel.cs" />
     <Compile Include="Components\Voltagesources\Voltagesource\Voltagesource.cs" />

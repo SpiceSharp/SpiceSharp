@@ -6,7 +6,7 @@ using SpiceSharp.Components.Noise;
 namespace SpiceSharp.Components.ComponentBehaviours
 {
     /// <summary>
-    /// Behaviour of a diode
+    /// Noise behaviour for <see cref="Diode"/>
     /// </summary>
     public class DiodeNoiseBehaviour : CircuitObjectBehaviourNoise
     {

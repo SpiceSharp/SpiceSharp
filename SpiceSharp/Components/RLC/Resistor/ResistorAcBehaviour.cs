@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.ComponentBehaviours
 {
     /// <summary>
-    /// Behaviour of a resistor for AC analysis
+    /// AC behaviour for <see cref="Resistor"/>
     /// </summary>
     public class ResistorAcBehaviour : CircuitObjectBehaviourAcLoad
     {

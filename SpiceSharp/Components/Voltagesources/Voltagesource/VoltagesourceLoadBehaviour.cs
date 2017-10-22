@@ -4,7 +4,7 @@ using SpiceSharp.Behaviours;
 namespace SpiceSharp.Components.ComponentBehaviours
 {
     /// <summary>
-    /// Voltage source behaviour for DC and Transient analysis
+    /// General behaviour for <see cref="Voltagesource"/>
     /// </summary>
     public class VoltagesourceLoadBehaviour : CircuitObjectBehaviourLoad
     {

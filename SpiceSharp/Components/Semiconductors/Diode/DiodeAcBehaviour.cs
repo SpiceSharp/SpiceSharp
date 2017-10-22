@@ -4,7 +4,7 @@ using SpiceSharp.Behaviours;
 namespace SpiceSharp.Components.ComponentBehaviours
 {
     /// <summary>
-    /// Behaviour of a diode in AC analysis
+    /// AC behaviour for <see cref="Diode"/>
     /// </summary>
     public class DiodeAcBehaviour : CircuitObjectBehaviourAcLoad
     {

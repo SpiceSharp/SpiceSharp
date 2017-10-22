@@ -6,7 +6,7 @@ using SpiceSharp.Components.Semiconductors;
 namespace SpiceSharp.Components.ComponentBehaviours
 {
     /// <summary>
-    /// Behaviour of a diode in DC or Transient
+    /// General behaviour for <see cref="Diode"/>
     /// </summary>
     public class DiodeLoadBehaviour : CircuitObjectBehaviourLoad
     {
