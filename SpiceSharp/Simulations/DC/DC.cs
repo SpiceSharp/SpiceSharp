@@ -159,6 +159,7 @@ namespace SpiceSharp.Simulations
             var state = ckt.State;
             var rstate = state.Real;
             var config = CurrentConfig;
+            state.Init = CircuitState.InitFlags.InitJct;
             state.Initialize(ckt);
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;

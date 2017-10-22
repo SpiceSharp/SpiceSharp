@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.ComponentBehaviours
     /// <summary>
     /// Behaviour of a diode
     /// </summary>
-    public class DiodeNoiseBehaviour : CircuitObjectBehaviour
+    public class DiodeNoiseBehaviour : CircuitObjectBehaviourNoise
     {
         /// <summary>
         /// Noise generators

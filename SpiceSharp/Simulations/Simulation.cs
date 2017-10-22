@@ -56,7 +56,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected abstract void Execute();
 
-
         /// <summary>
         /// Setup and execute the simulation
         /// </summary>

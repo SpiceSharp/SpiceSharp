@@ -107,8 +107,7 @@ namespace SpiceSharp.Simulations
 
                 // Voltages are set using IC statement on the nodes
                 // Internal initial conditions are calculated by the components
-                foreach (var loader in loaders)
-                    loader.Execute(ckt);
+                ckt.Load(loaders);
                 return true;
             }
 
@@ -120,8 +119,7 @@ namespace SpiceSharp.Simulations
 
                 try
                 {
-                    foreach (var loader in loaders)
-                        loader.Execute(ckt);
+                    ckt.Load(loaders);
                     iterno++;
                 }
                 catch (CircuitException)
