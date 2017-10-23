@@ -11,6 +11,15 @@ namespace SpiceSharp.Components
     public class CurrentControlledVoltagesource : CircuitComponent<CurrentControlledVoltagesource>
     {
         /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static CurrentControlledVoltagesource()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(CurrentControlledVoltagesource), typeof(ComponentBehaviours.CurrentControlledVoltagesourceLoadBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(CurrentControlledVoltagesource), typeof(ComponentBehaviours.CurrentControlledVoltagesourceAcBehaviour));
+        }
+
+        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("gain"), SpiceInfo("Transresistance (gain)")]
@@ -28,11 +37,11 @@ namespace SpiceSharp.Components
         /// Nodes
         /// </summary>
         [SpiceName("pos_node"), SpiceInfo("Positive node of the source")]
-        public int CCVSposNode { get; private set; }
+        public int CCVSposNode { get; internal set; }
         [SpiceName("neg_node"), SpiceInfo("Negative node of the source")]
-        public int CCVSnegNode { get; private set; }
-        public int CCVSbranch { get; private set; }
-        public int CCVScontBranch { get; private set; }
+        public int CCVSnegNode { get; internal set; }
+        public int CCVSbranch { get; internal set; }
+        public int CCVScontBranch { get; internal set; }
 
         /// <summary>
         /// Constructor
@@ -79,34 +88,6 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-        }
-
-        /// <summary>
-        /// Load the current-controlled voltage source
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public void Load(Circuit ckt)
-        {
-            var rstate = ckt.State.Real;
-            rstate.Matrix[CCVSposNode, CCVSbranch] += 1.0;
-            rstate.Matrix[CCVSbranch, CCVSposNode] += 1.0;
-            rstate.Matrix[CCVSnegNode, CCVSbranch] -= 1.0;
-            rstate.Matrix[CCVSbranch, CCVSnegNode] -= 1.0;
-            rstate.Matrix[CCVSbranch, CCVScontBranch] -= CCVScoeff;
-        }
-
-        /// <summary>
-        /// Load the current-controlled voltage source for AC analysis
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public void AcLoad(Circuit ckt)
-        {
-            var cstate = ckt.State.Complex;
-            cstate.Matrix[CCVSposNode, CCVSbranch] += 1.0;
-            cstate.Matrix[CCVSbranch, CCVSposNode] += 1.0;
-            cstate.Matrix[CCVSnegNode, CCVSbranch] -= 1.0;
-            cstate.Matrix[CCVSbranch, CCVSnegNode] -= 1.0;
-            cstate.Matrix[CCVSbranch, CCVScontBranch] -= CCVScoeff.Value;
         }
     }
 }

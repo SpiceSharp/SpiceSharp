@@ -78,6 +78,10 @@
     <Compile Include="Components\Switches\CurrentSwitch\CurrentSwitchLoadBehaviour.cs" />
     <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitchAcBehaviour.cs" />
     <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitchLoadBehaviour.cs" />
+    <Compile Include="Components\Voltagesources\CurrentControlledVoltagesource\CurrentControlledVoltagesourceAcBehaviour.cs" />
+    <Compile Include="Components\Voltagesources\CurrentControlledVoltagesource\CurrentControlledVoltagesourceLoadBehaviour.cs" />
+    <Compile Include="Components\Voltagesources\VoltageControlledVoltagesource\VoltageControlledVoltagesourceAcBehaviour.cs" />
+    <Compile Include="Components\Voltagesources\VoltageControlledVoltagesource\VoltageControlledVoltagesourceLoadBehaviour.cs" />
     <Compile Include="Components\Voltagesources\Voltagesource\VoltagesourceAcBehaviour.cs" />
     <Compile Include="Simulations\CircuitObjectBehaviourTemperature.cs" />
     <Compile Include="Simulations\Noise\CircuitObjectBehaviourNoise.cs" />
@@ -130,8 +134,8 @@
     <Compile Include="Components\Switches\CurrentSwitch\CurrentSwitchModel.cs" />
     <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitch.cs" />
     <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitchModel.cs" />
-    <Compile Include="Components\Voltagesources\CurrentControlledVoltagesource.cs" />
-    <Compile Include="Components\Voltagesources\VoltageControlledVoltagesource.cs" />
+    <Compile Include="Components\Voltagesources\CurrentControlledVoltagesource\CurrentControlledVoltagesource.cs" />
+    <Compile Include="Components\Voltagesources\VoltageControlledVoltagesource\VoltageControlledVoltagesource.cs" />
     <Compile Include="Components\Waveforms\Pulse.cs" />
     <Compile Include="Components\Waveforms\Sine.cs" />
     <Compile Include="Diagnostics\BadParameterException.cs" />

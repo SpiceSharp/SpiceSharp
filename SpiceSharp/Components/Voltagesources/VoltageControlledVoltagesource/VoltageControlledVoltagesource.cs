@@ -10,6 +10,15 @@ namespace SpiceSharp.Components
     public class VoltageControlledVoltagesource : CircuitComponent<VoltageControlledVoltagesource>
     {
         /// <summary>
+        /// Register our default behaviours
+        /// </summary>
+        static VoltageControlledVoltagesource()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(VoltageControlledVoltagesource), typeof(ComponentBehaviours.VoltageControlledVoltagesourceLoadBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(VoltageControlledVoltagesource), typeof(ComponentBehaviours.VoltageControlledVoltagesourceAcBehaviour));
+        }
+
+        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("gain"), SpiceInfo("Voltage gain")]
@@ -25,14 +34,14 @@ namespace SpiceSharp.Components
         /// Nodes
         /// </summary>
         [SpiceName("pos_node"), SpiceInfo("Positive node of the source")]
-        public int VCVSposNode { get; private set; }
+        public int VCVSposNode { get; internal set; }
         [SpiceName("neg_node"), SpiceInfo("Negative node of the source")]
-        public int VCVSnegNode { get; private set; }
+        public int VCVSnegNode { get; internal set; }
         [SpiceName("cont_p_node"), SpiceInfo("Positive controlling node of the source")]
-        public int VCVScontPosNode { get; private set; }
+        public int VCVScontPosNode { get; internal set; }
         [SpiceName("cont_n_node"), SpiceInfo("Negative controlling node of the source")]
-        public int VCVScontNegNode { get; private set; }
-        public int VCVSbranch { get; private set; }
+        public int VCVScontNegNode { get; internal set; }
+        public int VCVSbranch { get; internal set; }
 
         /// <summary>
         /// Constructor
@@ -77,34 +86,8 @@ namespace SpiceSharp.Components
         {
         }
 
-        /// <summary>
-        /// Load the voltage-controlled voltage source
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public void Load(Circuit ckt)
-        {
-            var rstate = ckt.State.Real;
-            rstate.Matrix[VCVSposNode, VCVSbranch] += 1.0;
-            rstate.Matrix[VCVSbranch, VCVSposNode] += 1.0;
-            rstate.Matrix[VCVSnegNode, VCVSbranch] -= 1.0;
-            rstate.Matrix[VCVSbranch, VCVSnegNode] -= 1.0;
-            rstate.Matrix[VCVSbranch, VCVScontPosNode] -= VCVScoeff;
-            rstate.Matrix[VCVSbranch, VCVScontNegNode] += VCVScoeff;
-        }
 
-        /// <summary>
-        /// Load the voltage-controlled voltage source for AC analysis
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public void AcLoad(Circuit ckt)
-        {
-            var cstate = ckt.State.Complex;
-            cstate.Matrix[VCVSposNode, VCVSbranch] += 1.0;
-            cstate.Matrix[VCVSbranch, VCVSposNode] += 1.0;
-            cstate.Matrix[VCVSnegNode, VCVSbranch] -= 1.0;
-            cstate.Matrix[VCVSbranch, VCVSnegNode] -= 1.0;
-            cstate.Matrix[VCVSbranch, VCVScontPosNode] -= VCVScoeff.Value;
-            cstate.Matrix[VCVSbranch, VCVScontNegNode] += VCVScoeff.Value;
-        }
+
+
     }
 }
