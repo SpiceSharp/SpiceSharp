@@ -10,6 +10,15 @@ namespace SpiceSharp.Components
     public class VoltageControlledCurrentsource : CircuitComponent<VoltageControlledCurrentsource>
     {
         /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static VoltageControlledCurrentsource()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(VoltageControlledCurrentsource), typeof(ComponentBehaviours.VoltageControlledCurrentsourceLoadBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(VoltageControlledCurrentsource), typeof(ComponentBehaviours.VoltageControlledCurrentsourceAcBehaviour));
+        }
+
+        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("gain"), SpiceInfo("Transconductance of the source (gain)")]
@@ -77,32 +86,6 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-        }
-
-        /// <summary>
-        /// Load the voltage-controlled current source
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public void Load(Circuit ckt)
-        {
-            var rstate = ckt.State.Real;
-            rstate.Matrix[VCCSposNode, VCCScontPosNode] += VCCScoeff;
-            rstate.Matrix[VCCSposNode, VCCScontNegNode] -= VCCScoeff;
-            rstate.Matrix[VCCSnegNode, VCCScontPosNode] -= VCCScoeff;
-            rstate.Matrix[VCCSnegNode, VCCScontNegNode] += VCCScoeff;
-        }
-
-        /// <summary>
-        /// Load the voltage-controlled current source for AC analysis
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public void AcLoad(Circuit ckt)
-        {
-            var cstate = ckt.State.Complex;
-            cstate.Matrix[VCCSposNode, VCCScontPosNode] += VCCScoeff.Value;
-            cstate.Matrix[VCCSposNode, VCCScontNegNode] -= VCCScoeff.Value;
-            cstate.Matrix[VCCSnegNode, VCCScontPosNode] -= VCCScoeff.Value;
-            cstate.Matrix[VCCSnegNode, VCCScontNegNode] += VCCScoeff.Value;
         }
     }
 }

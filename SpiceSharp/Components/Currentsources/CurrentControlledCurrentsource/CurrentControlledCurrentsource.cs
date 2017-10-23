@@ -11,6 +11,15 @@ namespace SpiceSharp.Components
     public class CurrentControlledCurrentsource : CircuitComponent<CurrentControlledCurrentsource>
     {
         /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static CurrentControlledCurrentsource()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(CurrentControlledCurrentsource), typeof(ComponentBehaviours.CurrentControlledCurrentsourceLoadBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(CurrentControlledCurrentsource), typeof(ComponentBehaviours.CurrentControlledCurrentsourceAcBehaviour));
+        }
+
+        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("gain"), SpiceInfo("Gain of the source")]
@@ -32,7 +41,7 @@ namespace SpiceSharp.Components
         public int CCCSposNode { get; private set; }
         [SpiceName("neg_node"), SpiceInfo("Negative node of the source")]
         public int CCCSnegNode { get; private set; }
-        private int CCCScontBranch;
+        public int CCCScontBranch { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -83,28 +92,6 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Temperature(Circuit ckt)
         {
-        }
-
-        /// <summary>
-        /// Load the current-controlled current source
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public void Load(Circuit ckt)
-        {
-            var rstate = ckt.State.Real;
-            rstate.Matrix[CCCSposNode, CCCScontBranch] += CCCScoeff.Value;
-            rstate.Matrix[CCCSnegNode, CCCScontBranch] -= CCCScoeff.Value;
-        }
-
-        /// <summary>
-        /// Load the current-controlled current source for AC analysis
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public void AcLoad(Circuit ckt)
-        {
-            var cstate = ckt.State.Complex;
-            cstate.Matrix[CCCSposNode, CCCScontBranch] += CCCScoeff.Value;
-            cstate.Matrix[CCCSnegNode, CCCScontBranch] -= CCCScoeff.Value;
         }
     }
 }

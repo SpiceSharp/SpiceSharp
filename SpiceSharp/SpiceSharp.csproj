@@ -47,6 +47,12 @@
     <Compile Include="Attributes\ConnectedPins.cs" />
     <Compile Include="Attributes\IndependentSource.cs" />
     <Compile Include="Attributes\VoltageDriver.cs" />
+    <Compile Include="Components\Currentsources\CurrentControlledCurrentsource\CurrentControlledCurrentsource.cs" />
+    <Compile Include="Components\Currentsources\CurrentControlledCurrentsource\CurrentControlledCurrentsourceAcBehaviour.cs" />
+    <Compile Include="Components\Currentsources\CurrentControlledCurrentsource\CurrentControlledCurrentsourceLoadBehaviour.cs" />
+    <Compile Include="Components\Currentsources\VoltageControlledCurrentsource\VoltageControlledCurrentsource.cs" />
+    <Compile Include="Components\Currentsources\VoltageControlledCurrentsource\VoltageControlledCurrentsourceAcBehaviour.cs" />
+    <Compile Include="Components\Currentsources\VoltageControlledCurrentsource\VoltageControlledCurrentsourceLoadBehaviour.cs" />
     <Compile Include="Components\RLC\Capacitor\CapacitorAcBehaviour.cs" />
     <Compile Include="Components\RLC\Capacitor\CapacitorLoadBehaviour.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTAcBehaviour.cs" />
@@ -54,6 +60,11 @@
     <Compile Include="Components\Semiconductors\BJT\BJTNoiseBehaviour.cs" />
     <Compile Include="Components\Semiconductors\Diode\DiodeAcBehaviour.cs" />
     <Compile Include="Components\Currentsources\Currentsource\CurrentsourceAcBehaviour.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1AcBehaviour.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1LoadBehaviour.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1Model.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1NoiseBehaviour.cs" />
     <Compile Include="Components\Voltagesources\Voltagesource\VoltagesourceAcBehaviour.cs" />
     <Compile Include="Simulations\CircuitObjectBehaviourTemperature.cs" />
     <Compile Include="Simulations\Noise\CircuitObjectBehaviourNoise.cs" />
@@ -76,9 +87,7 @@
     <Compile Include="Circuits\CircuitStateReal.cs" />
     <Compile Include="Circuits\ICircuitModel.cs" />
     <Compile Include="Components\CircuitModel.cs" />
-    <Compile Include="Components\Currentsources\CurrentControlledCurrentsource.cs" />
     <Compile Include="Components\Currentsources\Currentsource\Currentsource.cs" />
-    <Compile Include="Components\Currentsources\VoltageControlledCurrentsource.cs" />
     <Compile Include="Components\ICircuitComponentWithBehaviours.cs" />
     <Compile Include="Components\ICircuitComponent.cs" />
     <Compile Include="Circuits\ICircuitObject.cs" />
@@ -87,8 +96,6 @@
     <Compile Include="Components\Noise\ComponentNoise.cs" />
     <Compile Include="Components\Noise\NoiseShot.cs" />
     <Compile Include="Components\Noise\NoiseThermal.cs" />
-    <Compile Include="Components\Semiconductors\MOS\MOS1.cs" />
-    <Compile Include="Components\Semiconductors\MOS\MOS1Model.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS2.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS2Model.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS3.cs" />
@@ -158,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="articles\" />
+    <Folder Include="Components\Semiconductors\MOS\MOS2\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="api\images\logo_full.svg" />
