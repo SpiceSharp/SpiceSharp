@@ -65,6 +65,12 @@
     <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1LoadBehaviour.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1Model.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1NoiseBehaviour.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS2\MOS2AcBehaviour.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS2\MOS2LoadBehaviour.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS2\MOS2NoiseBehaviour.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3AcBehaviour.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3LoadBehaviour.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3NoiseBehaviour.cs" />
     <Compile Include="Components\Voltagesources\Voltagesource\VoltagesourceAcBehaviour.cs" />
     <Compile Include="Simulations\CircuitObjectBehaviourTemperature.cs" />
     <Compile Include="Simulations\Noise\CircuitObjectBehaviourNoise.cs" />
@@ -96,10 +102,10 @@
     <Compile Include="Components\Noise\ComponentNoise.cs" />
     <Compile Include="Components\Noise\NoiseShot.cs" />
     <Compile Include="Components\Noise\NoiseThermal.cs" />
-    <Compile Include="Components\Semiconductors\MOS\MOS2.cs" />
-    <Compile Include="Components\Semiconductors\MOS\MOS2Model.cs" />
-    <Compile Include="Components\Semiconductors\MOS\MOS3.cs" />
-    <Compile Include="Components\Semiconductors\MOS\MOS3Model.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS2\MOS2.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS2\MOS2Model.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3Model.cs" />
     <Compile Include="Components\Semiconductors\MOS\Transistor.cs" />
     <Compile Include="Attributes\SpicePins.cs" />
     <Compile Include="Components\Waveforms\Interpolated.cs" />
@@ -165,7 +171,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="articles\" />
-    <Folder Include="Components\Semiconductors\MOS\MOS2\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="api\images\logo_full.svg" />
