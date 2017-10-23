@@ -38,6 +38,16 @@ namespace SpiceSharp.Components.ComponentBehaviours
         }
 
         /// <summary>
+        /// Unsetup the behaviour
+        /// </summary>
+        public override void Unsetup()
+        {
+            var mut = ComponentTyped<MutualInductance>();
+            mut.Inductor1.UpdateMutualInductance -= UpdateMutualInductance;
+            mut.Inductor2.UpdateMutualInductance -= UpdateMutualInductance;
+        }
+
+        /// <summary>
         /// Update inductor 2
         /// </summary>
         /// <param name="sender">Inductor 2</param>

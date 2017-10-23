@@ -57,6 +57,7 @@
     <Compile Include="Components\RLC\Capacitor\CapacitorLoadBehaviour.cs" />
     <Compile Include="Components\RLC\Inductor\InductorAcBehaviour.cs" />
     <Compile Include="Components\RLC\Inductor\InductorLoadBehaviour.cs" />
+    <Compile Include="Components\RLC\Inductor\MutualInductanceAcBehaviour.cs" />
     <Compile Include="Components\RLC\Inductor\MutualInductanceLoadBehaviour.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTAcBehaviour.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTLoadBehaviour.cs" />

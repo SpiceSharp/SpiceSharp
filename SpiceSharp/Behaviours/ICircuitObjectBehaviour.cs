@@ -19,5 +19,10 @@ namespace SpiceSharp.Behaviours
         /// </summary>
         /// <param name="ckt"></param>
         void Execute(Circuit ckt);
+
+        /// <summary>
+        /// Unsetup the object behaviour
+        /// </summary>
+        void Unsetup();
     }
 }

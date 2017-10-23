@@ -19,7 +19,6 @@ namespace SpiceSharp.Components
         /// Gets the priority
         /// </summary>
         public int Priority { get; protected set; }
-        
 
         /// <summary>
         /// Constructor

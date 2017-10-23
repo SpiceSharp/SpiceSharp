@@ -17,7 +17,7 @@ namespace SpiceSharp.Behaviours
         /// </summary>
         /// <typeparam name="T">The component type</typeparam>
         /// <returns></returns>
-        protected T ComponentTyped<T>() where T : class, ICircuitObject =>  Component as T;
+        protected T ComponentTyped<T>() where T : class, ICircuitObject => Component as T;
 
         /// <summary>
         /// Setup the behaviour
@@ -34,5 +34,13 @@ namespace SpiceSharp.Behaviours
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public abstract void Execute(Circuit ckt);
+
+        /// <summary>
+        /// Unsetup the behaviour
+        /// </summary>
+        public virtual void Unsetup()
+        {
+            // Do nothing
+        }
     }
 }
