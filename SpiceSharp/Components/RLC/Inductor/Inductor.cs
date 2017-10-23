@@ -1,7 +1,6 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using System.Numerics;
 
 namespace SpiceSharp.Components
 {
@@ -11,6 +10,15 @@ namespace SpiceSharp.Components
     [SpicePins("L+", "L-")]
     public class Inductor : CircuitComponent<Inductor>
     {
+        /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static Inductor()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Inductor), typeof(ComponentBehaviours.InductorLoadBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Inductor), typeof(ComponentBehaviours.InductorAcBehaviour));
+        }
+
         /// <summary>
         /// Delegate for adding effects of a mutual inductance
         /// </summary>
@@ -42,16 +50,16 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        public int INDstate { get; private set; }
-        public int INDbrEq { get; private set; }
-        public int INDposNode { get; private set; }
-        public int INDnegNode { get; private set; }
+        public int INDstate { get; internal set; }
+        public int INDbrEq { get; internal set; }
+        public int INDposNode { get; internal set; }
+        public int INDnegNode { get; internal set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        private const int INDflux = 0;
-        private const int INDvolt = 1;
+        public const int INDflux = 0;
+        public const int INDvolt = 1;
 
         /// <summary>
         /// Constructor
@@ -92,61 +100,21 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
+        /// Update all mutual inductances
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        public void UpdateMutualInductances(Circuit ckt)
+        {
+            UpdateMutualInductance?.Invoke(this, ckt);
+        }
+
+        /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
         /// <param name="ckt"></param>
         public override void Temperature(Circuit ckt)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Load the inductor in the circuit
-        /// </summary>
-        /// <param name="ckt"></param>
-        public void Load(Circuit ckt)
-        {
-            var state = ckt.State;
-            var rstate = state.Real;
-
-            // Initialize
-            if (state.UseIC && INDinitCond.Given)
-                state.States[0][INDstate + INDflux] = INDinduct * INDinitCond;
-            else
-                state.States[0][INDstate + INDflux] = INDinduct * rstate.OldSolution[INDbrEq];
-
-            // Handle mutual inductances
-            UpdateMutualInductance?.Invoke(this, ckt);
-
-            // Finally load the Y-matrix
-            // Note that without an integration method, the result will be a short circuit
-            if (ckt.Method != null)
-            {
-                var result = ckt.Method.Integrate(state, INDstate + INDflux, INDinduct);
-                rstate.Rhs[INDbrEq] += result.Ceq;
-                rstate.Matrix[INDbrEq, INDbrEq] -= result.Geq;
-            }
-
-            rstate.Matrix[INDposNode, INDbrEq] += 1;
-            rstate.Matrix[INDnegNode, INDbrEq] -= 1;
-            rstate.Matrix[INDbrEq, INDposNode] += 1;
-            rstate.Matrix[INDbrEq, INDnegNode] -= 1;
-        }
-
-        /// <summary>
-        /// Load the inductor for AC analysis
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public void AcLoad(Circuit ckt)
-        {
-            var cstate = ckt.State.Complex;
-            Complex val = cstate.Laplace * INDinduct.Value;
-
-            cstate.Matrix[INDposNode, INDbrEq] += 1.0;
-            cstate.Matrix[INDnegNode, INDbrEq] -= 1.0;
-            cstate.Matrix[INDbrEq, INDnegNode] -= 1.0;
-            cstate.Matrix[INDbrEq, INDposNode] += 1.0;
-            cstate.Matrix[INDbrEq, INDbrEq] -= val;
         }
 
         /// <summary>

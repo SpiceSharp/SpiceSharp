@@ -55,6 +55,9 @@
     <Compile Include="Components\Currentsources\VoltageControlledCurrentsource\VoltageControlledCurrentsourceLoadBehaviour.cs" />
     <Compile Include="Components\RLC\Capacitor\CapacitorAcBehaviour.cs" />
     <Compile Include="Components\RLC\Capacitor\CapacitorLoadBehaviour.cs" />
+    <Compile Include="Components\RLC\Inductor\InductorAcBehaviour.cs" />
+    <Compile Include="Components\RLC\Inductor\InductorLoadBehaviour.cs" />
+    <Compile Include="Components\RLC\Inductor\MutualInductanceLoadBehaviour.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTAcBehaviour.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTLoadBehaviour.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTNoiseBehaviour.cs" />
@@ -112,8 +115,8 @@
     <Compile Include="IntegrationMethods\IntegrationConfiguration.cs" />
     <Compile Include="Simulations\ISimulation.cs" />
     <Compile Include="Components\Waveforms\IWaveform.cs" />
-    <Compile Include="Components\RLC\Inductor.cs" />
-    <Compile Include="Components\RLC\MutualInductance.cs" />
+    <Compile Include="Components\RLC\Inductor\Inductor.cs" />
+    <Compile Include="Components\RLC\Inductor\MutualInductance.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJT.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTModel.cs" />
     <Compile Include="Components\Semiconductors\Diode\Diode.cs" />
@@ -143,7 +146,7 @@
     <Compile Include="Components\RLC\Capacitor\Capacitor.cs" />
     <Compile Include="Components\RLC\Capacitor\CapacitorModel.cs" />
     <Compile Include="Components\RLC\Resistor\Resistor.cs" />
-    <Compile Include="Components\RLC\ResistorModel.cs" />
+    <Compile Include="Components\RLC\Resistor\ResistorModel.cs" />
     <Compile Include="Components\Voltagesources\Voltagesource\Voltagesource.cs" />
     <Compile Include="Components\Waveforms\Waveform.cs" />
     <Compile Include="Diagnostics\CircuitException.cs" />
