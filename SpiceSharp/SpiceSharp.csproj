@@ -74,6 +74,10 @@
     <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3AcBehaviour.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3LoadBehaviour.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3NoiseBehaviour.cs" />
+    <Compile Include="Components\Switches\CurrentSwitch\CurrentSwitchAcBehaviour.cs" />
+    <Compile Include="Components\Switches\CurrentSwitch\CurrentSwitchLoadBehaviour.cs" />
+    <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitchAcBehaviour.cs" />
+    <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitchLoadBehaviour.cs" />
     <Compile Include="Components\Voltagesources\Voltagesource\VoltagesourceAcBehaviour.cs" />
     <Compile Include="Simulations\CircuitObjectBehaviourTemperature.cs" />
     <Compile Include="Simulations\Noise\CircuitObjectBehaviourNoise.cs" />
@@ -122,10 +126,10 @@
     <Compile Include="Components\Semiconductors\Diode\Diode.cs" />
     <Compile Include="Components\Semiconductors\Diode\DiodeModel.cs" />
     <Compile Include="Components\Semiconductors\Semiconductor.cs" />
-    <Compile Include="Components\Switches\CurrentSwitch.cs" />
-    <Compile Include="Components\Switches\CurrentSwitchModel.cs" />
-    <Compile Include="Components\Switches\VoltageSwitch.cs" />
-    <Compile Include="Components\Switches\VoltageSwitchModel.cs" />
+    <Compile Include="Components\Switches\CurrentSwitch\CurrentSwitch.cs" />
+    <Compile Include="Components\Switches\CurrentSwitch\CurrentSwitchModel.cs" />
+    <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitch.cs" />
+    <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitchModel.cs" />
     <Compile Include="Components\Voltagesources\CurrentControlledVoltagesource.cs" />
     <Compile Include="Components\Voltagesources\VoltageControlledVoltagesource.cs" />
     <Compile Include="Components\Waveforms\Pulse.cs" />
