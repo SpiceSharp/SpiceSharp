@@ -14,8 +14,8 @@ namespace SpiceSharp.Components
         /// </summary>
         static VoltageSwitch()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(VoltageSwitch), typeof(ComponentBehaviours.VoltageSwitchLoadBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(VoltageSwitch), typeof(ComponentBehaviours.VoltageSwitchAcBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(VoltageSwitch), typeof(ComponentBehaviors.VoltageSwitchLoadBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(VoltageSwitch), typeof(ComponentBehaviors.VoltageSwitchAcBehavior));
         }
 
         /// <summary>

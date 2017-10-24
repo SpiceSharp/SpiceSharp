@@ -1,14 +1,14 @@
 ﻿using System;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Transistors;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour for a <see cref="BSIM3v24"/>
     /// </summary>
-    public class BSIM3v24LoadBehaviour : CircuitObjectBehaviourLoad
+    public class BSIM3v24LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Execute the behaviour

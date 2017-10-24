@@ -1,9 +1,9 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
-    public class VoltageSwitchLoadBehaviour : CircuitObjectBehaviourLoad
+    public class VoltageSwitchLoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Execute behaviour

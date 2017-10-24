@@ -1,14 +1,14 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Transistors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour of a <see cref="MOS2"/>
     /// </summary>
-    public class MOS2LoadBehaviour : CircuitObjectBehaviourLoad
+    public class MOS2LoadBehavior : CircuitObjectBehaviorLoad
     {
         private static double[] sig1 = new double[] { 1.0, -1.0, 1.0, -1.0 };
         private static double[] sig2 = new double[] { 1.0, 1.0, -1.0, -1.0 };

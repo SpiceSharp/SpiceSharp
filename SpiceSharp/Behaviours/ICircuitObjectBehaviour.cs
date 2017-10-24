@@ -1,11 +1,11 @@
 ﻿using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Behaviours
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Interface for a behaviour
     /// </summary>
-    public interface ICircuitObjectBehaviour
+    public interface ICircuitObjectBehavior
     {
         /// <summary>
         /// Setup the circuit object behaviour

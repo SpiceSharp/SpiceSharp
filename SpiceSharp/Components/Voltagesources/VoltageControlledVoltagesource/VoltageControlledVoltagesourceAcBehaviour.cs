@@ -1,11 +1,11 @@
-﻿using SpiceSharp.Behaviours;
+﻿using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// AC behaviour for a <see cref="VoltageControlledVoltagesource"/>
     /// </summary>
-    public class VoltageControlledVoltagesourceAcBehaviour : CircuitObjectBehaviourAcLoad
+    public class VoltageControlledVoltagesourceAcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Execute behaviour

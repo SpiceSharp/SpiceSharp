@@ -1,14 +1,14 @@
 ﻿using System;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Transistors;
 using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// Temperature behaviour for a <see cref="BSIM4v80Model"/>
     /// </summary>
-    public class BSIM4v80ModelTemperatureBehaviour : CircuitObjectBehaviourTemperature
+    public class BSIM4v80ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Execute behaviour

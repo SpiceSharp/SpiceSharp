@@ -1,12 +1,12 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour for a <see cref="CurrentSwitch"/>
     /// </summary>
-    public class CurrentSwitchLoadBehaviour : CircuitObjectBehaviourLoad
+    public class CurrentSwitchLoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Execute behaviour

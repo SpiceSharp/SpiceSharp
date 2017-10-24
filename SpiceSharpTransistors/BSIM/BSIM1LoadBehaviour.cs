@@ -1,15 +1,15 @@
 ﻿using System;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.Transistors;
 using static SpiceSharp.Components.Transistors.BSIM1Helpers;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour for a <see cref="BSIM1"/>
     /// </summary>
-    public class BSIM1LoadBehaviour : CircuitObjectBehaviourLoad
+    public class BSIM1LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Setup the behaviour

@@ -1,13 +1,13 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// Current source behaviour for DC and Transient analysis
     /// </summary>
-    public class CurrentsourceLoadBehaviour : CircuitObjectBehaviourLoad
+    public class CurrentsourceLoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Setup the behaviour

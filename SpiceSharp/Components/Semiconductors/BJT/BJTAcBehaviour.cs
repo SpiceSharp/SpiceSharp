@@ -1,12 +1,12 @@
 ﻿using System.Numerics;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// AC behaviour for <see cref="BJT"/>
     /// </summary>
-    public class BJTAcBehaviour : CircuitObjectBehaviourAcLoad
+    public class BJTAcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Execute AC behaviour

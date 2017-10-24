@@ -19,10 +19,10 @@ namespace SpiceSharp.Components
         /// </summary>
         static MOS1()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(MOS1), typeof(ComponentBehaviours.MOS1TemperatureBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(MOS1), typeof(ComponentBehaviours.MOS1LoadBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(MOS1), typeof(ComponentBehaviours.MOS1AcBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(MOS1), typeof(ComponentBehaviours.MOS1NoiseBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(MOS1), typeof(ComponentBehaviors.MOS1TemperatureBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(MOS1), typeof(ComponentBehaviors.MOS1LoadBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(MOS1), typeof(ComponentBehaviors.MOS1AcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(MOS1), typeof(ComponentBehaviors.MOS1NoiseBehavior));
         }
 
         /// <summary>

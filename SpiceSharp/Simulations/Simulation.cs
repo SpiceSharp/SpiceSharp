@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
 {
@@ -75,7 +75,7 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException("Circuit contains no nodes");
 
             // Do temperature-dependent calculations
-            var temperaturebehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourTemperature>(Circuit);
+            var temperaturebehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTemperature>(Circuit);
             foreach (var behaviour in temperaturebehaviours)
                 behaviour.Execute(Circuit);
 

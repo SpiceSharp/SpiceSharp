@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Transistors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// Temperature behaviour for a <see cref="BSIM3v24Model"/>
     /// </summary>
-    public class BSIM3v24ModelTemperatureBehaviour : CircuitObjectBehaviourTemperature
+    public class BSIM3v24ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Execute the behaviour

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// AC behaviour for <see cref="Voltagesource"/>
     /// </summary>
-    public class VoltageSourceLoadAcBehaviour : CircuitObjectBehaviourAcLoad
+    public class VoltageSourceLoadAcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Setup the behaviour

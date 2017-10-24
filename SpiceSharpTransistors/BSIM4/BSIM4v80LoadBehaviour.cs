@@ -1,15 +1,15 @@
 ﻿using System;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Transistors;
 using SpiceSharp.Circuits;
 using static SpiceSharp.Components.Transistors.BSIM4v80Helpers;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour for a <see cref="BSIM4v80"/>
     /// </summary>
-    public class BSIM4v80LoadBehaviour : CircuitObjectBehaviourLoad
+    public class BSIM4v80LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Execute behaviour

@@ -16,10 +16,10 @@ namespace SpiceSharp.Components
         /// </summary>
         static BJT()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(BJT), typeof(ComponentBehaviours.BJTTemperatureBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(BJT), typeof(ComponentBehaviours.BJTLoadBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(BJT), typeof(ComponentBehaviours.BJTAcBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(BJT), typeof(ComponentBehaviours.BJTNoiseBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BJT), typeof(ComponentBehaviors.BJTTemperatureBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BJT), typeof(ComponentBehaviors.BJTLoadBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BJT), typeof(ComponentBehaviors.BJTAcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BJT), typeof(ComponentBehaviors.BJTNoiseBehavior));
         }
 
         /// <summary>

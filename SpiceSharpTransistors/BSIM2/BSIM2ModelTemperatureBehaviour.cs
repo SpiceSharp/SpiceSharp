@@ -1,12 +1,12 @@
 ﻿using System;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// Temperature behaviour for a <see cref="BSIM2Model"/>
     /// </summary>
-    public class BSIM2ModelTemperatureBehaviour : CircuitObjectBehaviourTemperature
+    public class BSIM2ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Execute the behaviour

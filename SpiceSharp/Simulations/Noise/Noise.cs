@@ -5,7 +5,7 @@ using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
 {
@@ -100,9 +100,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<CircuitObjectBehaviourLoad> loadbehaviours;
-        private List<CircuitObjectBehaviourAcLoad> acbehaviours;
-        private List<CircuitObjectBehaviourNoise> noisebehaviours;
+        private List<CircuitObjectBehaviorLoad> loadbehaviours;
+        private List<CircuitObjectBehaviorAcLoad> acbehaviours;
+        private List<CircuitObjectBehaviorNoise> noisebehaviours;
 
         /// <summary>
         /// Constructor
@@ -121,9 +121,9 @@ namespace SpiceSharp.Simulations
             base.Initialize(ckt);
 
             // Get all behaviours necessary for noise analysis
-            loadbehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourLoad>(ckt);
-            acbehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourAcLoad>(ckt);
-            noisebehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourNoise>(ckt);
+            loadbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
+            acbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAcLoad>(ckt);
+            noisebehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorNoise>(ckt);
         }
 
 

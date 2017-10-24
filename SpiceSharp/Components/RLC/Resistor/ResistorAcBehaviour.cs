@@ -1,11 +1,11 @@
-﻿using SpiceSharp.Behaviours;
+﻿using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// AC behaviour for <see cref="Resistor"/>
     /// </summary>
-    public class ResistorAcBehaviour : CircuitObjectBehaviourAcLoad
+    public class ResistorAcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Perform AC calculations

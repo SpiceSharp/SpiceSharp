@@ -1,12 +1,12 @@
-﻿using SpiceSharp.Behaviours;
+﻿using SpiceSharp.Behaviors;
 using System.Numerics;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// AC behaviour for <see cref="MutualInductance"/>
     /// </summary>
-    public class MutualInductanceAcBehaviour : CircuitObjectBehaviourAcLoad
+    public class MutualInductanceAcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Execute behaviour

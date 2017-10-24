@@ -4,15 +4,15 @@ using System.Linq;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 
-namespace SpiceSharp.Behaviours
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Class that handles all behaviours
     /// </summary>
-    public class Behaviours
+    public class Behaviors
     {
         /// <summary>
-        /// Behaviours per component type
+        /// Behaviors per component type
         /// </summary>
         public static readonly Dictionary<Tuple<Type, Type>, List<Type>> Defaults = new Dictionary<Tuple<Type, Type>, List<Type>>();
 
@@ -21,7 +21,7 @@ namespace SpiceSharp.Behaviours
         /// </summary>
         /// <param name="componentType"></param>
         /// <param name="behaviourType"></param>
-        public static void RegisterBehaviour(Type componentType, Type behaviourType)
+        public static void RegisterBehavior(Type componentType, Type behaviourType)
         {
             // Add an entry to the Defaults
             var key = new Tuple<Type, Type>(componentType, behaviourType.BaseType);
@@ -37,20 +37,20 @@ namespace SpiceSharp.Behaviours
         /// <typeparam name="T"></typeparam>
         /// <param name="ckt">Circuit</param>
         /// <param name="behaviours">The behaviours that need to be imported</param>
-        public static List<T> CreateBehaviours<T>(Circuit ckt) where T : CircuitObjectBehaviour
+        public static List<T> CreateBehaviors<T>(Circuit ckt) where T : CircuitObjectBehavior
         {
             List<T> result = new List<T>();
 
             foreach (var obj in ckt.Objects)
             {
                 // Get all component behaviours
-                var allBehaviours = GetAllBehavioursForComponent<T>(obj);
+                var allBehaviors = GetAllBehaviorsForComponent<T>(obj);
 
                 // Add all behaviours of the type we want
-                foreach (var type in allBehaviours)
+                foreach (var type in allBehaviors)
                 {
                     var instance = (T)Activator.CreateInstance(type);
-                    (instance as ICircuitObjectBehaviour)?.Setup(obj, ckt);
+                    (instance as ICircuitObjectBehavior)?.Setup(obj, ckt);
                     result.Add(instance);
                 }
             }
@@ -64,7 +64,7 @@ namespace SpiceSharp.Behaviours
         /// <typeparam name="T">The behaviour</typeparam>
         /// <param name="obj">The object</param>
         /// <returns></returns>
-        private static List<Type> GetAllBehavioursForComponent<T>(ICircuitObject obj) where T : CircuitObjectBehaviour
+        private static List<Type> GetAllBehaviorsForComponent<T>(ICircuitObject obj) where T : CircuitObjectBehavior
         {
             var result = new List<Type>();
             var key = new Tuple<Type, Type>(obj.GetType(), typeof(T));

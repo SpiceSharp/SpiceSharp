@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
         /// </summary>
         static MOS2Model()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(MOS2Model), typeof(ComponentBehaviours.MOS2ModelTemperatureBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(MOS2Model), typeof(ComponentBehaviors.MOS2ModelTemperatureBehavior));
         }
 
         /// <summary>

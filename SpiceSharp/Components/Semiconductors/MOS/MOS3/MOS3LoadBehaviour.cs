@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.Transistors;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour for a <see cref="MOS3"/>
     /// </summary>
-    public class MOS3LoadBehaviour : CircuitObjectBehaviourLoad
+    public class MOS3LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Setup the behaviour

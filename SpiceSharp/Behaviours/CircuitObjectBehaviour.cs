@@ -1,11 +1,11 @@
 ﻿using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Behaviours
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Represents a behaviour for a class
     /// </summary>
-    public abstract class CircuitObjectBehaviour : ICircuitObjectBehaviour
+    public abstract class CircuitObjectBehavior : ICircuitObjectBehavior
     {
         /// <summary>
         /// The component the behaviour acts upon

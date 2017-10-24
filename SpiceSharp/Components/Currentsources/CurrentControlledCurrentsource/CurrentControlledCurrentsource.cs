@@ -15,8 +15,8 @@ namespace SpiceSharp.Components
         /// </summary>
         static CurrentControlledCurrentsource()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(CurrentControlledCurrentsource), typeof(ComponentBehaviours.CurrentControlledCurrentsourceLoadBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(CurrentControlledCurrentsource), typeof(ComponentBehaviours.CurrentControlledCurrentsourceAcBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(CurrentControlledCurrentsource), typeof(ComponentBehaviors.CurrentControlledCurrentsourceLoadBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(CurrentControlledCurrentsource), typeof(ComponentBehaviors.CurrentControlledCurrentsourceAcBehavior));
         }
 
         /// <summary>

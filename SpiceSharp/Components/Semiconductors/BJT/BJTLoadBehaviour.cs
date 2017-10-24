@@ -1,14 +1,14 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour for <see cref="BJT"/>
     /// </summary>
-    public class BJTLoadBehaviour : CircuitObjectBehaviourLoad
+    public class BJTLoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Execute behaviour for DC and Transient analysis

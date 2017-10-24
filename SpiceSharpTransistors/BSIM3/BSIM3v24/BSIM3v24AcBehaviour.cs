@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// AC behaviour for a <see cref="BSIM3v24"/>
     /// </summary>
-    public class BSIM3v24AcBehaviour : CircuitObjectBehaviourAcLoad
+    public class BSIM3v24AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Execute behaviour

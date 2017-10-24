@@ -1,14 +1,14 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Transistors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour for a <see cref="MOS1"/>
     /// </summary>
-    public class MOS1LoadBehaviour : CircuitObjectBehaviourLoad
+    public class MOS1LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Setup the behaviour

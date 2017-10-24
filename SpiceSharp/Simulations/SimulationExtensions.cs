@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using MathNet.Numerics.LinearAlgebra;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Simulations
@@ -19,7 +19,7 @@ namespace SpiceSharp.Simulations
         /// <param name="loaders">Loaders</param>
         /// <param name="config">Simulation configuration</param>
         /// <param name="maxiter">Maximum iterations</param>
-        public static void Op(this Circuit ckt, List<CircuitObjectBehaviourLoad> loaders, SimulationConfiguration config, int maxiter)
+        public static void Op(this Circuit ckt, List<CircuitObjectBehaviorLoad> loaders, SimulationConfiguration config, int maxiter)
         {
             // Create the current SimulationState
             var state = ckt.State;
@@ -89,7 +89,7 @@ namespace SpiceSharp.Simulations
         /// <param name="config">Simulation configuration</param>
         /// <param name="maxiter">Maximum number of iterations</param>
         /// <returns></returns>
-        public static bool Iterate(this Circuit ckt, List<CircuitObjectBehaviourLoad> loaders, SimulationConfiguration config, int maxiter)
+        public static bool Iterate(this Circuit ckt, List<CircuitObjectBehaviorLoad> loaders, SimulationConfiguration config, int maxiter)
         {
             var state = ckt.State;
             var rstate = state.Real;
@@ -196,7 +196,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
-        public static void AcIterate(this Circuit ckt, List<CircuitObjectBehaviourAcLoad> loaders, SimulationConfiguration config)
+        public static void AcIterate(this Circuit ckt, List<CircuitObjectBehaviorAcLoad> loaders, SimulationConfiguration config)
         {
             // Initialize the circuit
             if (!ckt.State.Initialized)
@@ -291,7 +291,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="ckt">Circuit</param>
         /// <param name="loaders">Loaders</param>
-        public static void Load(this Circuit ckt, List<CircuitObjectBehaviourLoad> loaders)
+        public static void Load(this Circuit ckt, List<CircuitObjectBehaviorLoad> loaders)
         {
             var state = ckt.State;
             var rstate = state.Real;

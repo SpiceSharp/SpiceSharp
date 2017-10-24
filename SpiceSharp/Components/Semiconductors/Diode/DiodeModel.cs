@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
         /// </summary>
         static DiodeModel()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(DiodeModel), typeof(ComponentBehaviours.DiodeModelTemperatureBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(DiodeModel), typeof(ComponentBehaviors.DiodeModelTemperatureBehavior));
         }
 
         /// <summary>

@@ -1,13 +1,13 @@
 ﻿using System;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// Noise behaviour for <see cref="MOS3"/>
     /// </summary>
-    public class MOS3NoiseBehaviour : CircuitObjectBehaviourNoise
+    public class MOS3NoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
         /// Noise generators

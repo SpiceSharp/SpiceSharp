@@ -1,14 +1,14 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Noise;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// Noise behaviour for <see cref="Diode"/>
     /// </summary>
-    public class DiodeNoiseBehaviour : CircuitObjectBehaviourNoise
+    public class DiodeNoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
         /// Noise generators

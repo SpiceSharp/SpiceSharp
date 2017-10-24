@@ -1,6 +1,6 @@
-﻿namespace SpiceSharp.Behaviours
+﻿namespace SpiceSharp.Behaviors
 {
-    public abstract class CircuitObjectBehaviourNoise: CircuitObjectBehaviour
+    public abstract class CircuitObjectBehaviorNoise: CircuitObjectBehavior
     {
     }
 }

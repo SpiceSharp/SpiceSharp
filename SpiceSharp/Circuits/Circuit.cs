@@ -3,7 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharp
 {

@@ -16,7 +16,7 @@ namespace SpiceSharp.Components
         /// </summary>
         static BSIM3v24Model()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(BSIM3v24Model), typeof(ComponentBehaviours.BSIM3v24ModelTemperatureBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v24Model), typeof(ComponentBehaviors.BSIM3v24ModelTemperatureBehavior));
         }
 
         /// <summary>

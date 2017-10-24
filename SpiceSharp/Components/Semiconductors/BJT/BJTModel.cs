@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
         /// </summary>
         static BJTModel()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(BJTModel), typeof(ComponentBehaviours.BJTModelTemperatureBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BJTModel), typeof(ComponentBehaviors.BJTModelTemperatureBehavior));
         }
 
         /// <summary>

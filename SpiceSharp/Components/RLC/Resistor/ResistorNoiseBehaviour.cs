@@ -1,13 +1,13 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Noise;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// Noise behaviour for <see cref="Resistor"/>
     /// </summary>
-    public class ResistorNoiseBehaviour : CircuitObjectBehaviourNoise
+    public class ResistorNoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
         /// Get resistor noise sources

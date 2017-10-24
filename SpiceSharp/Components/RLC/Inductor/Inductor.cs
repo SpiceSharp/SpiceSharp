@@ -15,8 +15,8 @@ namespace SpiceSharp.Components
         /// </summary>
         static Inductor()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Inductor), typeof(ComponentBehaviours.InductorLoadBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Inductor), typeof(ComponentBehaviours.InductorAcBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Inductor), typeof(ComponentBehaviors.InductorLoadBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Inductor), typeof(ComponentBehaviors.InductorAcBehavior));
         }
 
         /// <summary>

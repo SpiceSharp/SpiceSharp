@@ -1,13 +1,13 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour for <see cref="Voltagesource"/>
     /// </summary>
-    public class VoltagesourceLoadBehaviour : CircuitObjectBehaviourLoad
+    public class VoltagesourceLoadBehavior : CircuitObjectBehaviorLoad
     {
         public override void Setup(ICircuitObject component, Circuit ckt)
         {

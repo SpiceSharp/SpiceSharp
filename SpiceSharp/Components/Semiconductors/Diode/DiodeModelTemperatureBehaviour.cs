@@ -1,13 +1,13 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// Temperature behaviour for a <see cref="DiodeModel"/>
     /// </summary>
-    public class DiodeModelTemperatureBehaviour : CircuitObjectBehaviourTemperature
+    public class DiodeModelTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Execute behaviour

@@ -1,12 +1,12 @@
 ﻿using System.Numerics;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// AC behaviour for a <see cref="BSIM1"/>
     /// </summary>
-    public class BSIM1AcBehaviour : CircuitObjectBehaviourAcLoad
+    public class BSIM1AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Execute the behaviour

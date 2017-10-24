@@ -1,13 +1,13 @@
 ﻿using System;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// Noise behaviour for <see cref="BJT"/>
     /// </summary>
-    public class BJTNoiseBehaviour : CircuitObjectBehaviourNoise
+    public class BJTNoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
         /// Noise generators

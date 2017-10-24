@@ -18,9 +18,9 @@ namespace SpiceSharp.Components
         /// </summary>
         static BSIM2()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(BSIM2), typeof(ComponentBehaviours.BSIM2TemperatureBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(BSIM2), typeof(ComponentBehaviours.BSIM2LoadBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(BSIM2), typeof(ComponentBehaviours.BSIM2AcBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM2), typeof(ComponentBehaviors.BSIM2TemperatureBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM2), typeof(ComponentBehaviors.BSIM2LoadBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM2), typeof(ComponentBehaviors.BSIM2AcBehavior));
         }
 
         /// <summary>

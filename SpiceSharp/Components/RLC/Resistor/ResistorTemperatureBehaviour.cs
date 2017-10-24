@@ -1,12 +1,12 @@
 ﻿using SpiceSharp.Diagnostics;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// Temperature behaviour for a <see cref="Resistor"/>
     /// </summary>
-    public class ResistorTemperatureBehaviour : CircuitObjectBehaviourTemperature
+    public class ResistorTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Execute behaviour

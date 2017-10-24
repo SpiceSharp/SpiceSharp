@@ -14,10 +14,10 @@ namespace SpiceSharp.Components
         /// </summary>
         static Diode()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Diode), typeof(ComponentBehaviours.DiodeTemperatureBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Diode), typeof(ComponentBehaviours.DiodeLoadBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Diode), typeof(ComponentBehaviours.DiodeAcBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Diode), typeof(ComponentBehaviours.DiodeNoiseBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Diode), typeof(ComponentBehaviors.DiodeTemperatureBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Diode), typeof(ComponentBehaviors.DiodeLoadBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Diode), typeof(ComponentBehaviors.DiodeAcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Diode), typeof(ComponentBehaviors.DiodeNoiseBehavior));
         }
 
         /// <summary>

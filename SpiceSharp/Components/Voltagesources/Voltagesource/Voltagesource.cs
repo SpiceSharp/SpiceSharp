@@ -17,8 +17,8 @@ namespace SpiceSharp.Components
         /// </summary>
         static Voltagesource()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Voltagesource), typeof(ComponentBehaviours.VoltagesourceLoadBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Voltagesource), typeof(ComponentBehaviours.VoltageSourceLoadAcBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Voltagesource), typeof(ComponentBehaviors.VoltagesourceLoadBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Voltagesource), typeof(ComponentBehaviors.VoltageSourceLoadAcBehavior));
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
@@ -69,7 +69,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<CircuitObjectBehaviourLoad> loadbehaviours;
+        private List<CircuitObjectBehaviorLoad> loadbehaviours;
 
         /// <summary>
         /// Constructor
@@ -99,7 +99,7 @@ namespace SpiceSharp.Simulations
         public override void Initialize(Circuit ckt)
         {
             base.Initialize(ckt);
-            loadbehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourLoad>(ckt);
+            loadbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
         }
 
 

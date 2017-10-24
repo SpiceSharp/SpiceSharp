@@ -1,11 +1,11 @@
-﻿using SpiceSharp.Behaviours;
+﻿using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour for <see cref="Resistor"/>
     /// </summary>
-    public class ResistorLoadBehaviour : CircuitObjectBehaviourLoad
+    public class ResistorLoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Perform calculations

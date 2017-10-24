@@ -1,12 +1,12 @@
 ﻿using System;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// AC behaviour for a <see cref="CurrentSwitch"/>
     /// </summary>
-    public class CurrentSwitchAcBehaviour : CircuitObjectBehaviourAcLoad
+    public class CurrentSwitchAcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Execute behaviour

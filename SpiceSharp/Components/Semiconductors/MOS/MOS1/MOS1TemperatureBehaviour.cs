@@ -1,13 +1,13 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// Temperature behaviour for a <see cref="MOS1"/>
     /// </summary>
-    public class MOS1TemperatureBehaviour : CircuitObjectBehaviourTemperature
+    public class MOS1TemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Execute behaviour

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
-    /// Behaviour of a currentsource in AC analysis
+    /// Behavior of a currentsource in AC analysis
     /// </summary>
-    public class CurrentsourceAcBehaviour : CircuitObjectBehaviourAcLoad
+    public class CurrentsourceAcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Setup the behaviour

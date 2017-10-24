@@ -4,7 +4,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using System.Numerics;
 using SpiceSharp.Parameters;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
 {
@@ -78,8 +78,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public StepTypes StepType { get; set; } = StepTypes.Decade;
 
-        private List<CircuitObjectBehaviourLoad> loadbehaviours;
-        private List<CircuitObjectBehaviourAcLoad> acloadbehaviours;
+        private List<CircuitObjectBehaviorLoad> loadbehaviours;
+        private List<CircuitObjectBehaviorAcLoad> acloadbehaviours;
 
         /// <summary>
         /// Constructor
@@ -120,8 +120,8 @@ namespace SpiceSharp.Simulations
             base.Initialize(ckt);
 
             // Get the behaviours necessary for the AC analysis
-            loadbehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourLoad>(ckt);
-            acloadbehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourAcLoad>(ckt);
+            loadbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
+            acloadbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAcLoad>(ckt);
         }
 
         /// <summary>

@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// Noise behaviour for a <see cref="MOS1"/>
     /// </summary>
-    public class MOS1NoiseBehaviour : CircuitObjectBehaviourNoise
+    public class MOS1NoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
         /// Noise generators

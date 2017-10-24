@@ -1,12 +1,12 @@
 ﻿using System.Numerics;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// AC behaviour for <see cref="Diode"/>
     /// </summary>
-    public class DiodeAcBehaviour : CircuitObjectBehaviourAcLoad
+    public class DiodeAcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Perform AC analysis

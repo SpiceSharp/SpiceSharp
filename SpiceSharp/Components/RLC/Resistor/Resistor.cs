@@ -14,10 +14,10 @@ namespace SpiceSharp.Components
         /// </summary>
         static Resistor()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Resistor), typeof(ComponentBehaviours.ResistorLoadBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Resistor), typeof(ComponentBehaviours.ResistorAcBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Resistor), typeof(ComponentBehaviours.ResistorNoiseBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Resistor), typeof(ComponentBehaviours.ResistorTemperatureBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Resistor), typeof(ComponentBehaviors.ResistorLoadBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Resistor), typeof(ComponentBehaviors.ResistorAcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Resistor), typeof(ComponentBehaviors.ResistorNoiseBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Resistor), typeof(ComponentBehaviors.ResistorTemperatureBehavior));
         }
 
         /// <summary>

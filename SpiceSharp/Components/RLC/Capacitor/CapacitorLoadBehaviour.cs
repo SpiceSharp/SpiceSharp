@@ -1,12 +1,12 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour for <see cref="Capacitor"/>
     /// </summary>
-    public class CapacitorLoadBehaviour : CircuitObjectBehaviourLoad
+    public class CapacitorLoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Execute behaviour for DC and Transient analysis

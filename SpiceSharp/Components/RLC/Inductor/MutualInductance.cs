@@ -14,8 +14,8 @@ namespace SpiceSharp.Components
         /// </summary>
         static MutualInductance()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(MutualInductance), typeof(ComponentBehaviours.MutualInductanceLoadBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(MutualInductance), typeof(ComponentBehaviours.MutualInductanceAcBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(MutualInductance), typeof(ComponentBehaviors.MutualInductanceLoadBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(MutualInductance), typeof(ComponentBehaviors.MutualInductanceAcBehavior));
         }
 
         /// <summary>

@@ -14,8 +14,8 @@ namespace SpiceSharp.Components
         /// </summary>
         static CurrentSwitch()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(CurrentSwitch), typeof(ComponentBehaviours.CurrentSwitchLoadBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(CurrentSwitch), typeof(ComponentBehaviours.CurrentSwitchAcBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(CurrentSwitch), typeof(ComponentBehaviors.CurrentSwitchLoadBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(CurrentSwitch), typeof(ComponentBehaviors.CurrentSwitchAcBehavior));
         }
 
         /// <summary>

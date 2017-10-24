@@ -1,11 +1,11 @@
-﻿using SpiceSharp.Behaviours;
+﻿using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// AC behaviour for <see cref="CurrentControlledCurrentsource"/>
     /// </summary>
-    public class CurrentControlledCurrentsourceAcBehaviour : CircuitObjectBehaviourAcLoad
+    public class CurrentControlledCurrentsourceAcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Execute behaviour

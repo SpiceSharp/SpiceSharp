@@ -14,9 +14,9 @@ namespace SpiceSharp.Components
         /// </summary>
         static Capacitor()
         {
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Capacitor), typeof(ComponentBehaviours.CapacitorLoadBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Capacitor), typeof(ComponentBehaviours.CapacitorAcBehaviour));
-            Behaviours.Behaviours.RegisterBehaviour(typeof(Capacitor), typeof(ComponentBehaviours.CapacitorTemperatureBehaviour));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorLoadBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorAcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorTemperatureBehavior));
         }
 
         /// <summary>

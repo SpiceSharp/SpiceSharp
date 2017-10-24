@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
@@ -110,7 +110,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public List<Sweep> Sweeps { get; } = new List<Sweep>();
 
-        private List<CircuitObjectBehaviourLoad> loadbehaviours;
+        private List<CircuitObjectBehaviorLoad> loadbehaviours;
 
         /// <summary>
         /// Constructor
@@ -144,7 +144,7 @@ namespace SpiceSharp.Simulations
             base.Initialize(ckt);
 
             // Get behaviours for DC analysis
-            loadbehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourLoad>(ckt);
+            loadbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
         }
 
 

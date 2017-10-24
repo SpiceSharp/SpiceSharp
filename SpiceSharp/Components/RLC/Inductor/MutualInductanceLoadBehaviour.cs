@@ -1,13 +1,13 @@
 ﻿using System;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour for <see cref="MutualInductance"/>
     /// </summary>
-    public class MutualInductanceLoadBehaviour : CircuitObjectBehaviourLoad
+    public class MutualInductanceLoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Setup the mutual inductor

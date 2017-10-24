@@ -1,17 +1,17 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Behaviours;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 
-namespace SpiceSharp.Components.ComponentBehaviours
+namespace SpiceSharp.Components.ComponentBehaviors
 {
     /// <summary>
     /// General behaviour for <see cref="Diode"/>
     /// </summary>
-    public class DiodeLoadBehaviour : CircuitObjectBehaviourLoad
+    public class DiodeLoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
-        /// Behaviour
+        /// Behavior
         /// </summary>
         /// <param name="ckt"></param>
         public override void Execute(Circuit ckt)
