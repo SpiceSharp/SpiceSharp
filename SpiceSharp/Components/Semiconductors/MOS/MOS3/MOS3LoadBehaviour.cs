@@ -15,6 +15,20 @@ namespace SpiceSharp.Components.ComponentBehaviours
     public class MOS3LoadBehaviour : CircuitObjectBehaviourLoad
     {
         /// <summary>
+        /// Setup the behaviour
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        public override void Setup(ICircuitObject component, Circuit ckt)
+        {
+            base.Setup(component, ckt);
+            var mos3 = ComponentTyped<MOS3>();
+            mos3.MOS3vdsat = 0;
+            mos3.MOS3von = 0;
+            mos3.MOS3mode = 1;
+        }
+
+        /// <summary>
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt"></param>

@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components
 {
@@ -18,6 +17,7 @@ namespace SpiceSharp.Components
             Behaviours.Behaviours.RegisterBehaviour(typeof(Resistor), typeof(ComponentBehaviours.ResistorLoadBehaviour));
             Behaviours.Behaviours.RegisterBehaviour(typeof(Resistor), typeof(ComponentBehaviours.ResistorAcBehaviour));
             Behaviours.Behaviours.RegisterBehaviour(typeof(Resistor), typeof(ComponentBehaviours.ResistorNoiseBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Resistor), typeof(ComponentBehaviours.ResistorTemperatureBehaviour));
         }
 
         /// <summary>
@@ -78,8 +78,6 @@ namespace SpiceSharp.Components
             RESresist.Set(res);
         }
 
-        
-
         /// <summary>
         /// Setup the resistor
         /// </summary>
@@ -89,60 +87,6 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(ckt);
             RESposNode = nodes[0].Index;
             RESnegNode = nodes[1].Index;
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-            double factor;
-            double difference;
-            ResistorModel model = Model as ResistorModel;
-
-            // Default Value Processing for Resistor Instance
-            if (!REStemp.Given)
-                REStemp.Value = ckt.State.Temperature;
-            if (!RESwidth.Given) RESwidth.Value = model?.RESdefWidth ?? 0.0;
-            if (!RESresist.Given)
-            {
-                if (model == null)
-                    throw new CircuitException("No model specified");
-                if (model.RESsheetRes.Given && (model.RESsheetRes != 0) && (RESlength != 0))
-                    RESresist.Value = model.RESsheetRes * (RESlength - model.RESnarrow) / (RESwidth - model.RESnarrow);
-                else
-                {
-                    CircuitWarning.Warning(this, $"{Name}: resistance=0, set to 1000");
-                    RESresist.Value = 1000;
-                }
-            }
-
-            if (model != null)
-            {
-                difference = REStemp - model.REStnom;
-                factor = 1.0 + (model.REStempCoeff1) * difference + (model.REStempCoeff2) * difference * difference;
-            }
-            else
-            {
-                difference = REStemp - 300.15;
-                factor = 1.0;
-            }
-
-            RESconduct = 1.0 / (RESresist * factor);
-        }
-
-        /// <summary>
-        /// Load the resistor for AC anlalysis
-        /// </summary>
-        /// <param name="ckt"></param>
-        public void AcLoad(Circuit ckt)
-        {
-            var cstate = ckt.State.Complex;
-            cstate.Matrix[RESposNode, RESposNode] += RESconduct;
-            cstate.Matrix[RESposNode, RESnegNode] -= RESconduct;
-            cstate.Matrix[RESnegNode, RESposNode] -= RESconduct;
-            cstate.Matrix[RESnegNode, RESnegNode] += RESconduct;
         }
     }
 }

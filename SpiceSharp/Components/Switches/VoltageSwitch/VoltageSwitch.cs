@@ -79,13 +79,5 @@ namespace SpiceSharp.Components
 
             VSWstate = ckt.State.GetState();
         }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-        }
     }
 }

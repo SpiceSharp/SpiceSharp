@@ -10,7 +10,7 @@ namespace SpiceSharp.Components
     /// A class that represents a circuit component/device.
     /// It can be connected in a circuit and it also has parameters.
     /// </summary>
-    public abstract class CircuitComponent<T> : Parameterized<T>, ICircuitComponentWithBehaviours
+    public abstract class CircuitComponent<T> : Parameterized<T>, ICircuitComponent
     {
         // Register the nodes
         static CircuitComponent()
@@ -70,8 +70,6 @@ namespace SpiceSharp.Components
         /// Get the model of the circuit component (if any)
         /// </summary>
         public ICircuitObject Model { get; protected set; } = null;
-
-        public ICircuitObjectBehaviour[] CurrentBehaviours { get; set; }
 
         /// <summary>
         /// Connect the component in the circuit
@@ -167,7 +165,7 @@ namespace SpiceSharp.Components
         /// Do temperature-dependent calculations
         /// </summary>
         /// <param name="ckt"></param>
-        public abstract void Temperature(Circuit ckt);
+        // public abstract void Temperature(Circuit ckt);
 
         /// <summary>
         /// Accept the current timepoint as the solution

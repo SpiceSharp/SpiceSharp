@@ -85,13 +85,5 @@ namespace SpiceSharp.Components
             else
                 throw new CircuitException($"{Name}: Could not find voltage source '{CCCScontName}'");
         }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-        }
     }
 }

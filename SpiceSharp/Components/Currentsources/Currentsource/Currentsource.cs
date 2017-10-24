@@ -109,23 +109,5 @@ namespace SpiceSharp.Components
             // Setup waveform
             ISRCwaveform?.Setup(ckt);
         }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt"></param>
-        public override void Temperature(Circuit ckt)
-        {
-            if (!ISRCdcValue.Given)
-            {
-                // no DC value - either have a transient value or none
-                if (ISRCwaveform != null)
-                    CircuitWarning.Warning(this, $"{Name} has no DC value, transient time 0 value used");
-                else
-                    CircuitWarning.Warning(this, $"{Name} has no value, DC 0 assumed");
-            }
-            double radians = ISRCacPhase * Circuit.CONSTPI / 180.0;
-            ISRCac = new Complex(ISRCacMag * Math.Cos(radians), ISRCacMag * Math.Sin(radians));
-        }
     }
 }

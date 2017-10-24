@@ -33,7 +33,7 @@ namespace SpiceSharp.Circuits
         /// Do temperature-dependent calculations
         /// </summary>
         /// <param name="ckt"></param>
-        void Temperature(Circuit ckt);
+        // void Temperature(Circuit ckt);
 
         /// <summary>
         /// Accept the current timepoint as the solution

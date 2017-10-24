@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Circuits;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviours;
 
 namespace SpiceSharp.Components.ComponentBehaviours
@@ -8,6 +9,25 @@ namespace SpiceSharp.Components.ComponentBehaviours
     /// </summary>
     public class CurrentsourceLoadBehaviour : CircuitObjectBehaviourLoad
     {
+        /// <summary>
+        /// Setup the behaviour
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        public override void Setup(ICircuitObject component, Circuit ckt)
+        {
+            base.Setup(component, ckt);
+            var isrc = ComponentTyped<Currentsource>();
+            if (!isrc.ISRCdcValue.Given)
+            {
+                // no DC value - either have a transient value or none
+                if (isrc.ISRCwaveform != null)
+                    CircuitWarning.Warning(this, $"{isrc.Name} has no DC value, transient time 0 value used");
+                else
+                    CircuitWarning.Warning(this, $"{isrc.Name} has no value, DC 0 assumed");
+            }
+        }
+
         /// <summary>
         /// Execute behaviour
         /// </summary>

@@ -77,17 +77,5 @@ namespace SpiceSharp.Components
             VCVScontNegNode = nodes[3].Index;
             VCVSbranch = CreateNode(ckt, Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
         }
-
-        /// <summary>
-        /// Temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-        }
-
-
-
-
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using SpiceSharp.Circuits;
-using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
@@ -11,6 +8,14 @@ namespace SpiceSharp.Components
     /// </summary>
     public class MOS2Model : CircuitModel<MOS2Model>
     {
+        /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static MOS2Model()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(MOS2Model), typeof(ComponentBehaviours.MOS2ModelTemperatureBehaviour));
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
@@ -121,17 +126,14 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double fact1 { get; private set; }
-        public double vtnom { get; private set; }
-        public double egfet1 { get; private set; }
-        public double pbfact1 { get; private set; }
+        internal double fact1, vtnom, egfet1, pbfact1;
 
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double MOS2type { get; private set; } = 1.0;
-        public double MOS2oxideCapFactor { get; private set; }
-        public double MOS2xd { get; private set; }
+        public double MOS2type { get; internal set; } = 1.0;
+        public double MOS2oxideCapFactor { get; internal set; }
+        public double MOS2xd { get; internal set; }
 
         /// <summary>
         /// Constructor
@@ -139,87 +141,6 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public MOS2Model(CircuitIdentifier name) : base(name)
         {
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-            double kt1, arg1, fermis, wkfng, fermig, wkfngs, vfb = 0.0;
-
-            /* perform model defaulting */
-
-            /* now model parameter preprocessing */
-            if (!MOS2tnom.Given)
-                MOS2tnom.Value = ckt.State.NominalTemperature;
-            fact1 = MOS2tnom / Circuit.CONSTRefTemp;
-            vtnom = MOS2tnom * Circuit.CONSTKoverQ;
-            kt1 = Circuit.CONSTBoltz * MOS2tnom;
-            egfet1 = 1.16 - (7.02e-4 * MOS2tnom * MOS2tnom) / (MOS2tnom + 1108);
-            arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
-            pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Circuit.CHARGE * arg1);
-
-            if (!MOS2oxideThickness.Given)
-            {
-                MOS2oxideThickness.Value = 1e-7;
-            }
-            MOS2oxideCapFactor = 3.9 * 8.854214871e-12 / MOS2oxideThickness;
-
-            if (!MOS2surfaceMobility.Given)
-                MOS2surfaceMobility.Value = 600;
-            if (!MOS2transconductance.Given)
-            {
-                MOS2transconductance.Value = MOS2surfaceMobility * 1e-4 * MOS2oxideCapFactor;
-            }
-            if (MOS2substrateDoping.Given)
-            {
-                if (MOS2substrateDoping * 1e6 > 1.45e16)
-                {
-                    if (!MOS2phi.Given)
-                    {
-                        MOS2phi.Value = 2 * vtnom * Math.Log(MOS2substrateDoping * 1e6 / 1.45e16);
-                        MOS2phi.Value = Math.Max(.1, MOS2phi);
-                    }
-                    fermis = MOS2type * .5 * MOS2phi;
-                    wkfng = 3.2;
-                    if (!MOS2gateType.Given)
-                        MOS2gateType.Value = 1;
-                    if (MOS2gateType != 0)
-                    {
-                        fermig = MOS2type * MOS2gateType * .5 * egfet1;
-                        wkfng = 3.25 + .5 * egfet1 - fermig;
-                    }
-                    wkfngs = wkfng - (3.25 + .5 * egfet1 + fermis);
-                    if (!MOS2gamma.Given)
-                    {
-                        MOS2gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.CHARGE * MOS2substrateDoping * 1e6) / MOS2oxideCapFactor;
-					}
-					if (!MOS2vt0.Given)
-					{
-						if (!MOS2surfaceStateDensity.Given)
-						    MOS2surfaceStateDensity.Value = 0;
-						vfb = wkfngs - MOS2surfaceStateDensity * 1e4 * Circuit.CHARGE / MOS2oxideCapFactor;
-                        MOS2vt0.Value = vfb + MOS2type * (MOS2gamma * Math.Sqrt(MOS2phi) + MOS2phi);
-                    }
-                    else
-                    {
-                        vfb = MOS2vt0 - MOS2type * (MOS2gamma * Math.Sqrt(MOS2phi) + MOS2phi);
-                    }
-                    MOS2xd = Math.Sqrt((Transistor.EPSSIL + Transistor.EPSSIL) / (Circuit.CHARGE * MOS2substrateDoping * 1e6));
-                }
-                else
-                {
-                    MOS2substrateDoping.Value = 0;
-                    throw new CircuitException($"{Name}: Nsub < Ni");
-                }
-            }
-            if (!MOS2bulkCapFactor.Given)
-            {
-                MOS2bulkCapFactor.Value = Math.Sqrt(Transistor.EPSSIL * Circuit.CHARGE * MOS2substrateDoping * 1e6 /* cm *  * 3 / m *  * 3 */  / (2 *
-                    MOS2bulkJctPotential));
-            }
         }
     }
 }

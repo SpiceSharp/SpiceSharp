@@ -109,15 +109,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt"></param>
-        public override void Temperature(Circuit ckt)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Accept the current timepoint
         /// </summary>
         /// <param name="ckt">The circuit</param>

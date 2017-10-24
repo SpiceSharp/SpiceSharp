@@ -1,6 +1,4 @@
-﻿using System;
-using SpiceSharp.Circuits;
-using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
@@ -10,6 +8,14 @@ namespace SpiceSharp.Components
     /// </summary>
     public class DiodeModel : CircuitModel<DiodeModel>
     {
+        /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static DiodeModel()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(DiodeModel), typeof(ComponentBehaviours.DiodeModelTemperatureBehaviour));
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
@@ -49,7 +55,7 @@ namespace SpiceSharp.Components
         [SpiceName("af"), SpiceInfo("flicker noise exponent")]
         public Parameter DIOfNexp { get; } = new Parameter(1.0);
         [SpiceName("cond"), SpiceInfo("Ohmic conductance")]
-        public double DIOconductance { get; private set; }
+        public double DIOconductance { get; internal set; }
 
         /// <summary>
         /// Methods
@@ -63,14 +69,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double vtnom { get; private set; }
-        public double xfc { get; private set; }
+        internal double vtnom, xfc;
 
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double DIOf2 { get; private set; }
-        public double DIOf3 { get; private set; }
+        public double DIOf2 { get; internal set; }
+        public double DIOf3 { get; internal set; }
 
         /// <summary>
         /// Constructor
@@ -78,39 +83,6 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public DiodeModel(CircuitIdentifier name) : base(name)
         {
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-
-            if (!DIOnomTemp.Given)
-            {
-                DIOnomTemp.Value = ckt.State.NominalTemperature;
-            }
-            vtnom = Circuit.CONSTKoverQ * DIOnomTemp;
-            /* limit grading coeff to max of .9 */
-            if (DIOgradingCoeff > .9)
-                CircuitWarning.Warning(this, $"{Name}: grading coefficient too large, limited to 0.9");
-
-            /* limit activation energy to min of .1 */
-            if (DIOactivationEnergy < .1)
-                CircuitWarning.Warning(this, $"{Name}: activation energy too small, limited to 0.1");
-
-            /* limit depletion cap coeff to max of .95 */
-            if (DIOdepletionCapCoeff > .95)
-                CircuitWarning.Warning(this, $"{Name}: coefficient Fc too large, limited to 0.95");
-            if (!DIOresist.Given || DIOresist.Value == 0)
-                DIOconductance = 0;
-            else
-                DIOconductance = 1 / DIOresist;
-            xfc = Math.Log(1 - DIOdepletionCapCoeff);
-
-            DIOf2 = Math.Exp((1 + DIOgradingCoeff) * xfc);
-            DIOf3 = 1 - DIOdepletionCapCoeff * (1 + DIOgradingCoeff);
         }
     }
 }

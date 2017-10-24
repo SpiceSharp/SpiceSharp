@@ -16,6 +16,7 @@ namespace SpiceSharp.Components
         {
             Behaviours.Behaviours.RegisterBehaviour(typeof(Capacitor), typeof(ComponentBehaviours.CapacitorLoadBehaviour));
             Behaviours.Behaviours.RegisterBehaviour(typeof(Capacitor), typeof(ComponentBehaviours.CapacitorAcBehaviour));
+            Behaviours.Behaviours.RegisterBehaviour(typeof(Capacitor), typeof(ComponentBehaviours.CapacitorTemperatureBehaviour));
         }
 
         /// <summary>
@@ -84,31 +85,6 @@ namespace SpiceSharp.Components
 
             // Create to states for integration
             CAPstate = ckt.State.GetState(2);
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt"></param>
-        public override void Temperature(Circuit ckt)
-        {
-            CapacitorModel model = Model as CapacitorModel;
-            if (model == null)
-                return;
-
-            /* Default Value Processing for Capacitor Instance */
-            if (!CAPwidth.Given)
-                CAPwidth.Value = model.CAPdefWidth;
-            if (!CAPcapac.Given)
-            {
-                CAPcapac.Value =
-                        model.CAPcj *
-                            (CAPwidth - model.CAPnarrow) *
-                            (CAPlength - model.CAPnarrow) +
-                        model.CAPcjsw * 2 * (
-                            (CAPlength - model.CAPnarrow) +
-                            (CAPwidth - model.CAPnarrow));
-            }
         }
 
         /// <summary>

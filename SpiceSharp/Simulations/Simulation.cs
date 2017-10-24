@@ -1,6 +1,6 @@
-﻿using System;
-using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
+using SpiceSharp.Behaviours;
 
 namespace SpiceSharp.Simulations
 {
@@ -61,25 +61,26 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public void SetupAndExecute()
         {
-            if (this.Circuit == null)
+            if (Circuit == null)
             {
                 throw new CircuitException("No circuit for simulation");    
             }
 
             // Setup the circuit
-            this.Circuit.Setup();
+            Circuit.Setup();
 
-            if (this.Circuit.Objects.Count <= 0)
+            if (Circuit.Objects.Count <= 0)
                 throw new CircuitException("Circuit contains no objects");
-            if (this.Circuit.Nodes.Count <= 1)
+            if (Circuit.Nodes.Count <= 1)
                 throw new CircuitException("Circuit contains no nodes");
 
             // Do temperature-dependent calculations
-            foreach (var c in this.Circuit.Objects)
-                c.Temperature(this.Circuit);
+            var temperaturebehaviours = Behaviours.Behaviours.CreateBehaviours<CircuitObjectBehaviourTemperature>(Circuit);
+            foreach (var behaviour in temperaturebehaviours)
+                behaviour.Execute(Circuit);
 
             // Execute the simulation
-            this.Execute();
+            Execute();
         }
 
         /// <summary>

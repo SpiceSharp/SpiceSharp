@@ -14,6 +14,19 @@ namespace SpiceSharp.Components.ComponentBehaviours
         private static double[] sig2 = new double[] { 1.0, 1.0, -1.0, -1.0 };
 
         /// <summary>
+        /// Setup the behaviour
+        /// </summary>
+        /// <param name="component"></param>
+        /// <param name="ckt"></param>
+        public override void Setup(ICircuitObject component, Circuit ckt)
+        {
+            base.Setup(component, ckt);
+            var mos2 = ComponentTyped<MOS2>();
+            mos2.MOS2vdsat = 0.0;
+            mos2.MOS2von = 0.0;
+        }
+
+        /// <summary>
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>

@@ -122,25 +122,6 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-            // Calculate the voltage source's complex value
-            if (!VSRCdcValue.Given)
-            {
-                // No DC value: either have a transient value or none
-                if (VSRCwaveform != null)
-                    CircuitWarning.Warning(this, $"{Name}: No DC value, transient time 0 value used");
-                else
-                    CircuitWarning.Warning(this, $"{Name}: No value, DC 0 assumed");
-            }
-            double radians = VSRCacPhase * Circuit.CONSTPI / 180.0;
-            VSRCac = new Complex(VSRCacMag * Math.Cos(radians), VSRCacMag * Math.Sin(radians));
-        }
-
-        /// <summary>
         /// Accept the current timepoint as the solution
         /// </summary>
         /// <param name="ckt">The circuit</param>

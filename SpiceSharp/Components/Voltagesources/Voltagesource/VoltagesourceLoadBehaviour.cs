@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Behaviours;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components.ComponentBehaviours
 {
@@ -8,6 +9,22 @@ namespace SpiceSharp.Components.ComponentBehaviours
     /// </summary>
     public class VoltagesourceLoadBehaviour : CircuitObjectBehaviourLoad
     {
+        public override void Setup(ICircuitObject component, Circuit ckt)
+        {
+            base.Setup(component, ckt);
+            var vsrc = ComponentTyped<Voltagesource>();
+
+            // Calculate the voltage source's complex value
+            if (!vsrc.VSRCdcValue.Given)
+            {
+                // No DC value: either have a transient value or none
+                if (vsrc.VSRCwaveform != null)
+                    CircuitWarning.Warning(this, $"{vsrc.Name}: No DC value, transient time 0 value used");
+                else
+                    CircuitWarning.Warning(this, $"{vsrc.Name}: No value, DC 0 assumed");
+            }
+        }
+
         /// <summary>
         /// Execute DC or Transient behaviour
         /// </summary>

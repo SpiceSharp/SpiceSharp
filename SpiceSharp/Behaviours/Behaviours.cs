@@ -43,10 +43,6 @@ namespace SpiceSharp.Behaviours
 
             foreach (var obj in ckt.Objects)
             {
-                // Skip objects that do not implement any behaviours
-                if (!(obj is ICircuitComponentWithBehaviours))
-                    continue;
-
                 // Get all component behaviours
                 var allBehaviours = GetAllBehavioursForComponent<T>(obj);
 
@@ -60,39 +56,6 @@ namespace SpiceSharp.Behaviours
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Execute the behaviour
-        /// NOTE: This will not be needed in the future!
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <param name="ckt"></param>
-        public static void ExecuteBehaviour<T>(ICircuitObject obj, Circuit ckt) where T: class, ICircuitObjectBehaviour
-        {
-            var behaviour = (obj as ICircuitComponentWithBehaviours)?.CurrentBehaviours.FirstOrDefault(b => b is T);
-            if (behaviour != null)
-            {
-                behaviour.Execute(ckt);
-            }
-            else
-            {
-                // TODO: to remove someday when all Load, AcLoad, Noise will be moved to behaviours
-                if (typeof(T).Name == "CircuitObjectBehaviorAcLoad")
-                {
-                    obj.GetType().GetMethod("AcLoad")?.Invoke(obj, new object[] {ckt});
-                }
-                if (typeof(T).Name == "CircuitObjectBehaviorDcLoad")
-                {
-                    obj.GetType().GetMethod("Load")?.Invoke(obj, new object[] { ckt });
-                }
-
-                if (typeof(T).Name == "CircuitObjectBehaviorNoiseLoad")
-                {
-                    obj.GetType().GetMethod("Noise")?.Invoke(obj, new object[] { ckt });
-                }
-            }
         }
 
         /// <summary>

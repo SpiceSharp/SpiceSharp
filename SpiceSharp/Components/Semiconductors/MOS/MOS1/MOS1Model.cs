@@ -1,6 +1,4 @@
-﻿using System;
-using SpiceSharp.Circuits;
-using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
@@ -10,6 +8,14 @@ namespace SpiceSharp.Components
     /// </summary>
     public class MOS1Model : CircuitModel<MOS1Model>
     {
+        /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static MOS1Model()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(MOS1Model), typeof(ComponentBehaviours.MOS1ModelTemperatureBehaviour));
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
@@ -106,17 +112,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double fact1 { get; private set; }
-        public double vtnom { get; private set; }
-        public double egfet1 { get; private set; }
-        public double pbfact1 { get; private set; }
+        internal double fact1, vtnom, egfet1, pbfact1;
 
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double MOS1type { get; private set; } = 1.0;
-        public double MOS1modName { get; private set; }
-        public double MOS1oxideCapFactor { get; private set; }
+        public double MOS1type { get; internal set; } = 1.0;
+        public double MOS1oxideCapFactor { get; internal set; }
 
         /// <summary>
         /// Constructor
@@ -124,82 +126,6 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public MOS1Model(CircuitIdentifier name) : base(name)
         {
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-            double kt1, arg1, fermis, wkfng, fermig, wkfngs, vfb = 0.0;
-
-            /* perform model defaulting */
-            if (!MOS1tnom.Given)
-                MOS1tnom.Value = ckt.State.NominalTemperature;
-
-            fact1 = MOS1tnom / Circuit.CONSTRefTemp;
-            vtnom = MOS1tnom * Circuit.CONSTKoverQ;
-            kt1 = Circuit.CONSTBoltz * MOS1tnom;
-            egfet1 = 1.16 - (7.02e-4 * MOS1tnom * MOS1tnom) / (MOS1tnom + 1108);
-            arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
-            pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Circuit.CHARGE * arg1);
-
-            /* now model parameter preprocessing */
-
-            if (!MOS1oxideThickness.Given || MOS1oxideThickness.Value == 0)
-            {
-                MOS1oxideCapFactor = 0;
-            }
-            else
-            {
-                MOS1oxideCapFactor = 3.9 * 8.854214871e-12 / MOS1oxideThickness;
-                if (!MOS1transconductance.Given)
-                {
-                    if (!MOS1surfaceMobility.Given)
-                    {
-                        MOS1surfaceMobility.Value = 600;
-                    }
-                    MOS1transconductance.Value = MOS1surfaceMobility * MOS1oxideCapFactor * 1e-4;
-                }
-                if (MOS1substrateDoping.Given)
-                {
-                    if (MOS1substrateDoping * 1e6 > 1.45e16)
-                    {
-                        if (!MOS1phi.Given)
-                        {
-                            MOS1phi.Value = 2 * vtnom * Math.Log(MOS1substrateDoping * 1e6 / 1.45e16);
-                            MOS1phi.Value = Math.Max(.1, MOS1phi);
-                        }
-                        fermis = MOS1type * .5 * MOS1phi;
-                        wkfng = 3.2;
-                        if (!MOS1gateType.Given)
-                            MOS1gateType.Value = 1;
-                        if (MOS1gateType != 0)
-                        {
-                            fermig = MOS1type * MOS1gateType * .5 * egfet1;
-                            wkfng = 3.25 + .5 * egfet1 - fermig;
-                        }
-                        wkfngs = wkfng - (3.25 + .5 * egfet1 + fermis);
-                        if (!MOS1gamma.Given)
-                        {
-                            MOS1gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.CHARGE * MOS1substrateDoping * 1e6) / MOS1oxideCapFactor;
-						}
-						if (!MOS1vt0.Given)
-						{
-							if (!MOS1surfaceStateDensity.Given)
-							MOS1surfaceStateDensity.Value = 0;
-							vfb = wkfngs - MOS1surfaceStateDensity * 1e4 * Circuit.CHARGE / MOS1oxideCapFactor;
-                            MOS1vt0.Value = vfb + MOS1type * (MOS1gamma * Math.Sqrt(MOS1phi) + MOS1phi);
-                        }
-                    }
-                    else
-                    {
-                        MOS1substrateDoping.Value = 0;
-                        throw new CircuitException($"{Name}: Nsub < Ni");
-                    }
-                }
-            }
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using SpiceSharp.Circuits;
-using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
@@ -10,6 +8,14 @@ namespace SpiceSharp.Components
     /// </summary>
     public class BJTModel : CircuitModel<BJTModel>
     {
+        /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static BJTModel()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(BJTModel), typeof(ComponentBehaviours.BJTModelTemperatureBehaviour));
+        }
+
         /// <summary>
         /// Parameters
         /// </summary>
@@ -101,21 +107,21 @@ namespace SpiceSharp.Components
         [SpiceName("af"), SpiceInfo("Flicker Noise Exponent")]
         public Parameter BJTfNexp { get; } = new Parameter(1);
         [SpiceName("invearlyvoltf"), SpiceInfo("Inverse early voltage:forward")]
-        public double BJTinvEarlyVoltF { get; private set; }
+        public double BJTinvEarlyVoltF { get; internal set; }
         [SpiceName("invearlyvoltr"), SpiceInfo("Inverse early voltage:reverse")]
-        public double BJTinvEarlyVoltR { get; private set; }
+        public double BJTinvEarlyVoltR { get; internal set; }
         [SpiceName("invrollofff"), SpiceInfo("Inverse roll off - forward")]
-        public double BJTinvRollOffF { get; private set; }
+        public double BJTinvRollOffF { get; internal set; }
         [SpiceName("invrolloffr"), SpiceInfo("Inverse roll off - reverse")]
-        public double BJTinvRollOffR { get; private set; }
+        public double BJTinvRollOffR { get; internal set; }
         [SpiceName("collectorconduct"), SpiceInfo("Collector conductance")]
-        public double BJTcollectorConduct { get; private set; }
+        public double BJTcollectorConduct { get; internal set; }
         [SpiceName("emitterconduct"), SpiceInfo("Emitter conductance")]
-        public double BJTemitterConduct { get; private set; }
+        public double BJTemitterConduct { get; internal set; }
         [SpiceName("transtimevbcfact"), SpiceInfo("Transit time VBC factor")]
-        public double BJTtransitTimeVBCFactor { get; private set; }
+        public double BJTtransitTimeVBCFactor { get; internal set; }
         [SpiceName("excessphasefactor"), SpiceInfo("Excess phase fact.")]
-        public double BJTexcessPhaseFactor { get; private set; }
+        public double BJTexcessPhaseFactor { get; internal set; }
 
         /// <summary>
         /// Methods
@@ -144,19 +150,19 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double fact1 { get; private set; }
-        public double xfc { get; private set; }
+        internal double fact1;
+        internal double xfc;
 
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double BJTtype { get; private set; }
+        public double BJTtype { get; internal set; }
         public Parameter BJTc2 { get; } = new Parameter();
         public Parameter BJTc4 { get; } = new Parameter();
-        public double BJTf2 { get; private set; }
-        public double BJTf3 { get; private set; }
-        public double BJTf6 { get; private set; }
-        public double BJTf7 { get; private set; }
+        public double BJTf2 { get; internal set; }
+        public double BJTf3 { get; internal set; }
+        public double BJTf6 { get; internal set; }
+        public double BJTf7 { get; internal set; }
 
         private const int NPN = 1;
         private const int PNP = -1;
@@ -177,93 +183,6 @@ namespace SpiceSharp.Components
         {
             if (BJTtype != NPN && BJTtype != PNP)
                 BJTtype = NPN;
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-            if (!BJTtnom.Given)
-                BJTtnom.Value = ckt.State.NominalTemperature;
-            fact1 = BJTtnom / Circuit.CONSTRefTemp;
-
-            if (!BJTleakBEcurrent.Given)
-            {
-                if (BJTc2.Given)
-                    BJTleakBEcurrent.Value = BJTc2 * BJTsatCur;
-                else
-                    BJTleakBEcurrent.Value = 0;
-            }
-            if (!BJTleakBCcurrent.Given)
-            {
-                if (BJTc4.Given)
-                    BJTleakBCcurrent.Value = BJTc4 * BJTsatCur;
-                else
-                    BJTleakBCcurrent.Value = 0;
-            }
-            if (!BJTminBaseResist.Given)
-                BJTminBaseResist.Value = BJTbaseResist;
-
-            /* 
-			* COMPATABILITY WARNING!
-			* special note:  for backward compatability to much older models, spice 2G
-			* implemented a special case which checked if B - E leakage saturation
-			* current was >1, then it was instead a the B - E leakage saturation current
-			* divided by IS, and multiplied it by IS at this point.  This was not
-			* handled correctly in the 2G code, and there is some question on its 
-			* reasonability, since it is also undocumented, so it has been left out
-			* here.  It could easily be added with 1 line.  (The same applies to the B - C
-			* leakage saturation current).   TQ  6 / 29 / 84
-			*/
-
-            if (BJTearlyVoltF.Given && BJTearlyVoltF != 0)
-                BJTinvEarlyVoltF = 1 / BJTearlyVoltF;
-            else
-                BJTinvEarlyVoltF = 0;
-            if (BJTrollOffF.Given && BJTrollOffF != 0)
-                BJTinvRollOffF = 1 / BJTrollOffF;
-            else
-                BJTinvRollOffF = 0;
-            if (BJTearlyVoltR.Given && BJTearlyVoltR != 0)
-                BJTinvEarlyVoltR = 1 / BJTearlyVoltR;
-            else
-                BJTinvEarlyVoltR = 0;
-            if (BJTrollOffR.Given && BJTrollOffR != 0)
-                BJTinvRollOffR = 1 / BJTrollOffR;
-            else
-                BJTinvRollOffR = 0;
-            if (BJTcollectorResist.Given && BJTcollectorResist != 0)
-                BJTcollectorConduct = 1 / BJTcollectorResist;
-            else
-                BJTcollectorConduct = 0;
-            if (BJTemitterResist.Given && BJTemitterResist != 0)
-                BJTemitterConduct = 1 / BJTemitterResist;
-            else
-                BJTemitterConduct = 0;
-            if (BJTtransitTimeFVBC.Given && BJTtransitTimeFVBC != 0)
-                BJTtransitTimeVBCFactor = 1 / (BJTtransitTimeFVBC * 1.44);
-            else
-                BJTtransitTimeVBCFactor = 0;
-            BJTexcessPhaseFactor = (BJTexcessPhase / (180.0 / Circuit.CONSTPI)) * BJTtransitTimeF;
-            if (BJTdepletionCapCoeff.Given)
-            {
-                if (BJTdepletionCapCoeff > 0.9999)
-                {
-                    BJTdepletionCapCoeff.Value = 0.9999;
-                    throw new CircuitException($"BJT model {Name}, parameter fc limited to 0.9999");
-                }
-            }
-            else
-            {
-                BJTdepletionCapCoeff.Value = .5;
-            }
-            xfc = Math.Log(1 - BJTdepletionCapCoeff);
-            BJTf2 = Math.Exp((1 + BJTjunctionExpBE) * xfc);
-            BJTf3 = 1 - BJTdepletionCapCoeff * (1 + BJTjunctionExpBE);
-            BJTf6 = Math.Exp((1 + BJTjunctionExpBC) * xfc);
-            BJTf7 = 1 - BJTdepletionCapCoeff * (1 + BJTjunctionExpBC);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviours;
 using SpiceSharp.Circuits;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components.ComponentBehaviours
 {
@@ -20,9 +19,7 @@ namespace SpiceSharp.Components.ComponentBehaviours
             base.Setup(component, ckt);
             var mut = ComponentTyped<MutualInductance>();
 
-            // Find the inductors
-            mut.Inductor1 = ckt.Objects[mut.MUTind1] as Inductor ?? throw new CircuitException($"{mut.Name}: Could not find inductor '{mut.MUTind1}'");
-            mut.Inductor2 = ckt.Objects[mut.MUTind2] as Inductor ?? throw new CircuitException($"{mut.Name}: Could not find inductor '{mut.MUTind2}'");
+            // Register events for loading the mutual inductance
             mut.Inductor1.UpdateMutualInductance += UpdateMutualInductance;
             mut.Inductor2.UpdateMutualInductance += UpdateMutualInductance;
             mut.MUTfactor = mut.MUTcoupling * Math.Sqrt(mut.Inductor1.INDinduct * mut.Inductor2.INDinduct);

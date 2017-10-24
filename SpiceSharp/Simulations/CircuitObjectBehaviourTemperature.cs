@@ -1,9 +1,7 @@
-﻿using SpiceSharp.Behaviours;
-
-namespace SpiceSharp.Simulations
+﻿namespace SpiceSharp.Behaviours
 {
     /// <summary>
-    /// Class that should implement temperature-dependent calculations
+    /// Temperature-dependent behaviour for circuit objects
     /// </summary>
     public abstract class CircuitObjectBehaviourTemperature : CircuitObjectBehaviour
     {

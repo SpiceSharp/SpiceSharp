@@ -1,4 +1,7 @@
-﻿using SpiceSharp.Behaviours;
+﻿using System;
+using System.Numerics;
+using SpiceSharp.Behaviours;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components.ComponentBehaviours
 {
@@ -7,6 +10,19 @@ namespace SpiceSharp.Components.ComponentBehaviours
     /// </summary>
     public class CurrentsourceAcBehaviour : CircuitObjectBehaviourAcLoad
     {
+        /// <summary>
+        /// Setup the behaviour
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        public override void Setup(ICircuitObject component, Circuit ckt)
+        {
+            base.Setup(component, ckt);
+            var isrc = ComponentTyped<Currentsource>();
+            double radians = isrc.ISRCacPhase * Circuit.CONSTPI / 180.0;
+            isrc.ISRCac = new Complex(isrc.ISRCacMag * Math.Cos(radians), isrc.ISRCacMag * Math.Sin(radians));
+        }
+
         /// <summary>
         /// Execute AC behaviour
         /// </summary>

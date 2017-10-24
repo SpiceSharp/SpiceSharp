@@ -7,8 +7,19 @@ using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// The BSIM4v80 model
+    /// </summary>
     public class BSIM4v80Model : CircuitModel<BSIM4v80Model>
     {
+        /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static BSIM4v80Model()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(BSIM4v80Model), typeof(ComponentBehaviours.BSIM4v80ModelTemperatureBehaviour));
+        }
+
         /// <summary>
         /// Size-dependent parameters
         /// </summary>
@@ -1910,56 +1921,44 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double tnoiMod { get; private set; }
-        public double DMCGeff { get; private set; }
-        public double DMCIeff { get; private set; }
-        public double DMDGeff { get; private set; }
-        public double Temp { get; private set; }
-        public double epsrox { get; private set; }
-        public double toxe { get; private set; }
-        public double epssub { get; private set; }
-        public double Tnom { get; private set; }
-        public double TRatio { get; private set; }
-        public double Vtm0 { get; private set; }
-        public double Eg0 { get; private set; }
-        public double ni { get; private set; }
-        public double delTemp { get; private set; }
+        internal double tnoiMod, DMCGeff, DMCIeff, DMDGeff, Temp, epsrox, toxe, 
+            epssub, Tnom, TRatio, Vtm0, Eg0, ni, delTemp;
 
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double BSIM4type { get; private set; } = 1.0;
-        public double BSIM4coxe { get; private set; }
-        public double BSIM4factor1 { get; private set; }
-        public double BSIM4vtm { get; private set; }
-        public double BSIM4SjctTempSatCurDensity { get; private set; }
-        public double BSIM4SjctSidewallTempSatCurDensity { get; private set; }
-        public double BSIM4SjctGateSidewallTempSatCurDensity { get; private set; }
-        public double BSIM4DjctTempSatCurDensity { get; private set; }
-        public double BSIM4DjctSidewallTempSatCurDensity { get; private set; }
-        public double BSIM4DjctGateSidewallTempSatCurDensity { get; private set; }
-        public double BSIM4njtsstemp { get; private set; }
-        public double BSIM4njtsswstemp { get; private set; }
-        public double BSIM4njtsswgstemp { get; private set; }
-        public double BSIM4njtsdtemp { get; private set; }
-        public double BSIM4njtsswdtemp { get; private set; }
-        public double BSIM4njtsswgdtemp { get; private set; }
-        public double BSIM4coxp { get; private set; }
-        public double BSIM4vcrit { get; private set; }
-        public double BSIM4vtm0 { get; private set; }
-        public double BSIM4Eg0 { get; private set; }
-        public double BSIM4SunitAreaTempJctCap { get; private set; }
-        public double BSIM4DunitAreaTempJctCap { get; private set; }
-        public double BSIM4SunitLengthSidewallTempJctCap { get; private set; }
-        public double BSIM4DunitLengthSidewallTempJctCap { get; private set; }
-        public double BSIM4SunitLengthGateSidewallTempJctCap { get; private set; }
-        public double BSIM4DunitLengthGateSidewallTempJctCap { get; private set; }
-        public double BSIM4PhiBS { get; private set; }
-        public double BSIM4PhiBD { get; private set; }
-        public double BSIM4PhiBSWS { get; private set; }
-        public double BSIM4PhiBSWD { get; private set; }
-        public double BSIM4PhiBSWGS { get; private set; }
-        public double BSIM4PhiBSWGD { get; private set; }
+        public double BSIM4type { get; internal set; } = 1.0;
+        public double BSIM4coxe { get; internal set; }
+        public double BSIM4factor1 { get; internal set; }
+        public double BSIM4vtm { get; internal set; }
+        public double BSIM4SjctTempSatCurDensity { get; internal set; }
+        public double BSIM4SjctSidewallTempSatCurDensity { get; internal set; }
+        public double BSIM4SjctGateSidewallTempSatCurDensity { get; internal set; }
+        public double BSIM4DjctTempSatCurDensity { get; internal set; }
+        public double BSIM4DjctSidewallTempSatCurDensity { get; internal set; }
+        public double BSIM4DjctGateSidewallTempSatCurDensity { get; internal set; }
+        public double BSIM4njtsstemp { get; internal set; }
+        public double BSIM4njtsswstemp { get; internal set; }
+        public double BSIM4njtsswgstemp { get; internal set; }
+        public double BSIM4njtsdtemp { get; internal set; }
+        public double BSIM4njtsswdtemp { get; internal set; }
+        public double BSIM4njtsswgdtemp { get; internal set; }
+        public double BSIM4coxp { get; internal set; }
+        public double BSIM4vcrit { get; internal set; }
+        public double BSIM4vtm0 { get; internal set; }
+        public double BSIM4Eg0 { get; internal set; }
+        public double BSIM4SunitAreaTempJctCap { get; internal set; }
+        public double BSIM4DunitAreaTempJctCap { get; internal set; }
+        public double BSIM4SunitLengthSidewallTempJctCap { get; internal set; }
+        public double BSIM4DunitLengthSidewallTempJctCap { get; internal set; }
+        public double BSIM4SunitLengthGateSidewallTempJctCap { get; internal set; }
+        public double BSIM4DunitLengthGateSidewallTempJctCap { get; internal set; }
+        public double BSIM4PhiBS { get; internal set; }
+        public double BSIM4PhiBD { get; internal set; }
+        public double BSIM4PhiBSWS { get; internal set; }
+        public double BSIM4PhiBSWD { get; internal set; }
+        public double BSIM4PhiBSWGS { get; internal set; }
+        public double BSIM4PhiBSWGD { get; internal set; }
 
         private const double NMOS = 1.0;
         private const double PMOS = -1.0;
@@ -2784,353 +2783,6 @@ namespace SpiceSharp.Components
             DMCGeff = BSIM4dmcg - BSIM4dmcgt;
             DMCIeff = BSIM4dmci;
             DMDGeff = BSIM4dmdg - BSIM4dmcgt;
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-            double Eg, T0, T1, T2, T3;
-
-            Temp = ckt.State.Temperature;
-            if (BSIM4SbulkJctPotential < 0.1)
-            {
-                BSIM4SbulkJctPotential.Value = 0.1;
-                CircuitWarning.Warning(this, "Given pbs is less than 0.1. Pbs is set to 0.1.");
-            }
-            if (BSIM4SsidewallJctPotential < 0.1)
-            {
-                BSIM4SsidewallJctPotential.Value = 0.1;
-                CircuitWarning.Warning(this, "Given pbsws is less than 0.1. Pbsws is set to 0.1.");
-            }
-            if (BSIM4SGatesidewallJctPotential < 0.1)
-            {
-                BSIM4SGatesidewallJctPotential.Value = 0.1;
-                CircuitWarning.Warning(this, "Given pbswgs is less than 0.1. Pbswgs is set to 0.1.");
-            }
-
-            if (BSIM4DbulkJctPotential < 0.1)
-            {
-                BSIM4DbulkJctPotential.Value = 0.1;
-                CircuitWarning.Warning(this, "Given pbd is less than 0.1. Pbd is set to 0.1.");
-            }
-            if (BSIM4DsidewallJctPotential < 0.1)
-            {
-                BSIM4DsidewallJctPotential.Value = 0.1;
-                CircuitWarning.Warning(this, "Given pbswd is less than 0.1. Pbswd is set to 0.1.");
-            }
-            if (BSIM4DGatesidewallJctPotential < 0.1)
-            {
-                BSIM4DGatesidewallJctPotential.Value = 0.1;
-                CircuitWarning.Warning(this, "Given pbswgd is less than 0.1. Pbswgd is set to 0.1.");
-            }
-
-            if (BSIM4mtrlMod.Value == 0)
-            {
-                if ((BSIM4toxe.Given) && (BSIM4toxp.Given) && (BSIM4dtox.Given) && (BSIM4toxe != (BSIM4toxp + BSIM4dtox)))
-                    CircuitWarning.Warning(this, "Warning: toxe, toxp and dtox all given and toxe != toxp + dtox; dtox ignored.");
-                else if ((BSIM4toxe.Given) && (!BSIM4toxp.Given))
-                    BSIM4toxp.Value = BSIM4toxe - BSIM4dtox;
-                else if ((!BSIM4toxe.Given) && (BSIM4toxp.Given))
-                {
-                    BSIM4toxe.Value = BSIM4toxp + BSIM4dtox;
-                    if (!BSIM4toxm.Given)
-                        /* v4.7 */
-                        BSIM4toxm.Value = BSIM4toxe;
-                }
-            }
-            else if (BSIM4mtrlCompatMod != 0)
-            /* v4.7 */
-            {
-                T0 = BSIM4epsrox / 3.9;
-                if ((BSIM4eot.Given) && (BSIM4toxp.Given) && (BSIM4dtox.Given) && (Math.Abs(BSIM4eot * T0 - (BSIM4toxp + BSIM4dtox)) > 1.0e-20))
-                {
-                    CircuitWarning.Warning(this, "Warning: eot, toxp and dtox all given and eot * EPSROX / 3.9 != toxp + dtox; dtox ignored.");
-                }
-                else if ((BSIM4eot.Given) && (!BSIM4toxp.Given))
-                    BSIM4toxp.Value = T0 * BSIM4eot - BSIM4dtox;
-                else if ((!BSIM4eot.Given) && (BSIM4toxp.Given))
-                {
-                    BSIM4eot.Value = (BSIM4toxp + BSIM4dtox) / T0;
-                    if (!BSIM4toxm.Given)
-                        BSIM4toxm.Value = BSIM4eot;
-                }
-            }
-
-            if (BSIM4mtrlMod != 0)
-            {
-                epsrox = 3.9;
-                toxe = BSIM4eot;
-                epssub = Transistor.EPS0 * BSIM4epsrsub;
-            }
-            else
-            {
-                epsrox = BSIM4epsrox;
-                toxe = BSIM4toxe;
-                epssub = Transistor.EPSSI;
-            }
-
-            BSIM4coxe = epsrox * Transistor.EPS0 / toxe;
-            if (BSIM4mtrlMod.Value == 0 || BSIM4mtrlCompatMod != 0)
-                BSIM4coxp = BSIM4epsrox * Transistor.EPS0 / BSIM4toxp;
-
-            if (!BSIM4cgdo.Given)
-            {
-                if (BSIM4dlc.Given && (BSIM4dlc > 0.0))
-                    BSIM4cgdo.Value = BSIM4dlc * BSIM4coxe - BSIM4cgdl;
-                else
-                    BSIM4cgdo.Value = 0.6 * BSIM4xj * BSIM4coxe;
-            }
-            if (!BSIM4cgso.Given)
-            {
-                if (BSIM4dlc.Given && (BSIM4dlc > 0.0))
-                    BSIM4cgso.Value = BSIM4dlc * BSIM4coxe - BSIM4cgsl;
-                else
-                    BSIM4cgso.Value = 0.6 * BSIM4xj * BSIM4coxe;
-            }
-            if (!BSIM4cgbo.Given)
-                BSIM4cgbo.Value = 2.0 * BSIM4dwc * BSIM4coxe;
-
-            Tnom = BSIM4tnom;
-            TRatio = Temp / Tnom;
-
-            BSIM4vcrit = Circuit.CONSTvt0 * Math.Log(Circuit.CONSTvt0 / (Circuit.CONSTroot2 * 1.0e-14));
-            BSIM4factor1 = Math.Sqrt(epssub / (epsrox * Transistor.EPS0) * toxe);
-
-            Vtm0 = BSIM4vtm0 = Transistor.KboQ * Tnom;
-
-            if (BSIM4mtrlMod.Value == 0)
-            {
-                Eg0 = 1.16 - 7.02e-4 * Tnom * Tnom / (Tnom + 1108.0);
-                ni = 1.45e10 * (Tnom / 300.15) * Math.Sqrt(Tnom / 300.15) * Math.Exp(21.5565981 - Eg0 / (2.0 * Vtm0));
-            }
-            else
-            {
-                Eg0 = BSIM4bg0sub - BSIM4tbgasub * Tnom * Tnom / (Tnom + BSIM4tbgbsub);
-                T0 = BSIM4bg0sub - BSIM4tbgasub * 90090.0225 / (300.15 + BSIM4tbgbsub);
-                ni = BSIM4ni0sub * (Tnom / 300.15) * Math.Sqrt(Tnom / 300.15) * Math.Exp((T0 - Eg0) / (2.0 * Vtm0));
-            }
-
-            BSIM4Eg0 = Eg0;
-            BSIM4vtm = Transistor.KboQ * Temp;
-            if (BSIM4mtrlMod.Value == 0)
-                Eg = 1.16 - 7.02e-4 * Temp * Temp / (Temp + 1108.0);
-            else
-                Eg = BSIM4bg0sub - BSIM4tbgasub * Temp * Temp / (Temp + BSIM4tbgbsub);
-            if (Temp != Tnom)
-            {
-                T0 = Eg0 / Vtm0 - Eg / BSIM4vtm;
-                T1 = Math.Log(Temp / Tnom);
-                T2 = T0 + BSIM4SjctTempExponent * T1;
-                T3 = Math.Exp(T2 / BSIM4SjctEmissionCoeff);
-                BSIM4SjctTempSatCurDensity = BSIM4SjctSatCurDensity * T3;
-                BSIM4SjctSidewallTempSatCurDensity = BSIM4SjctSidewallSatCurDensity * T3;
-                BSIM4SjctGateSidewallTempSatCurDensity = BSIM4SjctGateSidewallSatCurDensity * T3;
-
-                T2 = T0 + BSIM4DjctTempExponent * T1;
-                T3 = Math.Exp(T2 / BSIM4DjctEmissionCoeff);
-                BSIM4DjctTempSatCurDensity = BSIM4DjctSatCurDensity * T3;
-                BSIM4DjctSidewallTempSatCurDensity = BSIM4DjctSidewallSatCurDensity * T3;
-                BSIM4DjctGateSidewallTempSatCurDensity = BSIM4DjctGateSidewallSatCurDensity * T3;
-            }
-            else
-            {
-                BSIM4SjctTempSatCurDensity = BSIM4SjctSatCurDensity;
-                BSIM4SjctSidewallTempSatCurDensity = BSIM4SjctSidewallSatCurDensity;
-                BSIM4SjctGateSidewallTempSatCurDensity = BSIM4SjctGateSidewallSatCurDensity;
-                BSIM4DjctTempSatCurDensity = BSIM4DjctSatCurDensity;
-                BSIM4DjctSidewallTempSatCurDensity = BSIM4DjctSidewallSatCurDensity;
-                BSIM4DjctGateSidewallTempSatCurDensity = BSIM4DjctGateSidewallSatCurDensity;
-            }
-
-            if (BSIM4SjctTempSatCurDensity < 0.0)
-                BSIM4SjctTempSatCurDensity = 0.0;
-            if (BSIM4SjctSidewallTempSatCurDensity < 0.0)
-                BSIM4SjctSidewallTempSatCurDensity = 0.0;
-            if (BSIM4SjctGateSidewallTempSatCurDensity < 0.0)
-                BSIM4SjctGateSidewallTempSatCurDensity = 0.0;
-            if (BSIM4DjctTempSatCurDensity < 0.0)
-                BSIM4DjctTempSatCurDensity = 0.0;
-            if (BSIM4DjctSidewallTempSatCurDensity < 0.0)
-                BSIM4DjctSidewallTempSatCurDensity = 0.0;
-            if (BSIM4DjctGateSidewallTempSatCurDensity < 0.0)
-                BSIM4DjctGateSidewallTempSatCurDensity = 0.0;
-
-            /* Temperature dependence of D / B and S / B diode capacitance begins */
-            delTemp = ckt.State.Temperature - BSIM4tnom;
-            T0 = BSIM4tcj * delTemp;
-            if (T0 >= -1.0)
-            {
-                BSIM4SunitAreaTempJctCap = BSIM4SunitAreaJctCap * (1.0 + T0); /* bug_fix - JX */
-                BSIM4DunitAreaTempJctCap = BSIM4DunitAreaJctCap * (1.0 + T0);
-            }
-            else
-            {
-                if (BSIM4SunitAreaJctCap > 0.0)
-                {
-                    BSIM4SunitAreaTempJctCap = 0.0;
-                    CircuitWarning.Warning(this, "Temperature effect has caused cjs to be negative. Cjs is clamped to zero.");
-                }
-                if (BSIM4DunitAreaJctCap > 0.0)
-                {
-                    BSIM4DunitAreaTempJctCap = 0.0;
-                    CircuitWarning.Warning(this, "Temperature effect has caused cjd to be negative. Cjd is clamped to zero.");
-                }
-            }
-            T0 = BSIM4tcjsw * delTemp;
-            if (BSIM4SunitLengthSidewallJctCap < 0.0)
-            /* 4.6.2 */
-            {
-                BSIM4SunitLengthSidewallJctCap.Value = 0.0;
-                CircuitWarning.Warning(this, "CJSWS is negative. Cjsws is clamped to zero.");
-            }
-            if (BSIM4DunitLengthSidewallJctCap < 0.0)
-            {
-                BSIM4DunitLengthSidewallJctCap.Value = 0.0;
-                CircuitWarning.Warning(this, "CJSWD is negative. Cjswd is clamped to zero.");
-            }
-            if (T0 >= -1.0)
-            {
-                BSIM4SunitLengthSidewallTempJctCap = BSIM4SunitLengthSidewallJctCap * (1.0 + T0);
-                BSIM4DunitLengthSidewallTempJctCap = BSIM4DunitLengthSidewallJctCap * (1.0 + T0);
-            }
-            else
-            {
-                if (BSIM4SunitLengthSidewallJctCap > 0.0)
-                {
-                    BSIM4SunitLengthSidewallTempJctCap = 0.0;
-                    CircuitWarning.Warning(this, "Temperature effect has caused cjsws to be negative. Cjsws is clamped to zero.");
-                }
-                if (BSIM4DunitLengthSidewallJctCap > 0.0)
-                {
-                    BSIM4DunitLengthSidewallTempJctCap = 0.0;
-                    CircuitWarning.Warning(this, "Temperature effect has caused cjswd to be negative. Cjswd is clamped to zero.");
-                }
-            }
-            T0 = BSIM4tcjswg * delTemp;
-            if (T0 >= -1.0)
-            {
-                BSIM4SunitLengthGateSidewallTempJctCap = BSIM4SunitLengthGateSidewallJctCap * (1.0 + T0);
-                BSIM4DunitLengthGateSidewallTempJctCap = BSIM4DunitLengthGateSidewallJctCap * (1.0 + T0);
-            }
-            else
-            {
-                if (BSIM4SunitLengthGateSidewallJctCap > 0.0)
-                {
-                    BSIM4SunitLengthGateSidewallTempJctCap = 0.0;
-                    CircuitWarning.Warning(this, "Temperature effect has caused cjswgs to be negative. Cjswgs is clamped to zero.");
-                }
-                if (BSIM4DunitLengthGateSidewallJctCap > 0.0)
-                {
-                    BSIM4DunitLengthGateSidewallTempJctCap = 0.0;
-                    CircuitWarning.Warning(this, "Temperature effect has caused cjswgd to be negative. Cjswgd is clamped to zero.");
-                }
-            }
-
-            BSIM4PhiBS = BSIM4SbulkJctPotential - BSIM4tpb * delTemp;
-            if (BSIM4PhiBS < 0.01)
-            {
-                BSIM4PhiBS = 0.01;
-                CircuitWarning.Warning(this, "Temperature effect has caused pbs to be less than 0.01. Pbs is clamped to 0.01.");
-            }
-            BSIM4PhiBD = BSIM4DbulkJctPotential - BSIM4tpb * delTemp;
-            if (BSIM4PhiBD < 0.01)
-            {
-                BSIM4PhiBD = 0.01;
-                CircuitWarning.Warning(this, "Temperature effect has caused pbd to be less than 0.01. Pbd is clamped to 0.01.");
-            }
-
-            BSIM4PhiBSWS = BSIM4SsidewallJctPotential - BSIM4tpbsw * delTemp;
-            if (BSIM4PhiBSWS <= 0.01)
-            {
-                BSIM4PhiBSWS = 0.01;
-                CircuitWarning.Warning(this, "Temperature effect has caused pbsws to be less than 0.01. Pbsws is clamped to 0.01.");
-            }
-            BSIM4PhiBSWD = BSIM4DsidewallJctPotential - BSIM4tpbsw * delTemp;
-            if (BSIM4PhiBSWD <= 0.01)
-            {
-                BSIM4PhiBSWD = 0.01;
-                CircuitWarning.Warning(this, "Temperature effect has caused pbswd to be less than 0.01. Pbswd is clamped to 0.01.");
-            }
-
-            BSIM4PhiBSWGS = BSIM4SGatesidewallJctPotential - BSIM4tpbswg * delTemp;
-            if (BSIM4PhiBSWGS <= 0.01)
-            {
-                BSIM4PhiBSWGS = 0.01;
-                CircuitWarning.Warning(this, "Temperature effect has caused pbswgs to be less than 0.01. Pbswgs is clamped to 0.01.");
-            }
-            BSIM4PhiBSWGD = BSIM4DGatesidewallJctPotential - BSIM4tpbswg * delTemp;
-            if (BSIM4PhiBSWGD <= 0.01)
-            {
-                BSIM4PhiBSWGD = 0.01;
-                CircuitWarning.Warning(this, "Temperature effect has caused pbswgd to be less than 0.01. Pbswgd is clamped to 0.01.");
-            } /* End of junction capacitance */
-
-            if (BSIM4ijthdfwd <= 0.0)
-            {
-                BSIM4ijthdfwd.Value = 0.0;
-                CircuitWarning.Warning(this, $"Ijthdfwd reset to {BSIM4ijthdfwd}.");
-            }
-            if (BSIM4ijthsfwd <= 0.0)
-            {
-                BSIM4ijthsfwd.Value = 0.0;
-                CircuitWarning.Warning(this, $"Ijthsfwd reset to {BSIM4ijthsfwd}.");
-            }
-            if (BSIM4ijthdrev <= 0.0)
-            {
-                BSIM4ijthdrev.Value = 0.0;
-                CircuitWarning.Warning(this, $"Ijthdrev reset to {BSIM4ijthdrev}.");
-            }
-            if (BSIM4ijthsrev <= 0.0)
-            {
-                BSIM4ijthsrev.Value = 0.0;
-                CircuitWarning.Warning(this, $"Ijthsrev reset to {BSIM4ijthsrev}.");
-            }
-
-            if ((BSIM4xjbvd <= 0.0) && (BSIM4dioMod.Value == 2))
-            {
-                BSIM4xjbvd.Value = 0.0;
-                CircuitWarning.Warning(this, $"Xjbvd reset to {BSIM4xjbvd}.");
-            }
-            else if ((BSIM4xjbvd < 0.0) && (BSIM4dioMod.Value == 0))
-            {
-                BSIM4xjbvd.Value = 0.0;
-                CircuitWarning.Warning(this, $"Xjbvd reset to {BSIM4xjbvd}.");
-            }
-
-            if (BSIM4bvd <= 0.0)
-            /* 4.6.2 */
-            {
-                BSIM4bvd.Value = 0.0;
-                CircuitWarning.Warning(this, $"BVD reset to {BSIM4bvd}.");
-            }
-
-            if ((BSIM4xjbvs <= 0.0) && (BSIM4dioMod.Value == 2))
-            {
-                BSIM4xjbvs.Value = 0.0;
-                CircuitWarning.Warning(this, $"Xjbvs reset to {BSIM4xjbvs}.");
-            }
-            else if ((BSIM4xjbvs < 0.0) && (BSIM4dioMod.Value == 0))
-            {
-                BSIM4xjbvs.Value = 0.0;
-                CircuitWarning.Warning(this, $"Xjbvs reset to {BSIM4xjbvs}.");
-            }
-
-            if (BSIM4bvs <= 0.0)
-            {
-                BSIM4bvs.Value = 0.0;
-                CircuitWarning.Warning(this, $"BVS reset to {BSIM4bvs}.");
-            }
-
-            T0 = (TRatio - 1.0);
-            BSIM4njtsstemp = BSIM4njts * (1.0 + BSIM4tnjts * T0);
-            BSIM4njtsswstemp = BSIM4njtssw * (1.0 + BSIM4tnjtssw * T0);
-            BSIM4njtsswgstemp = BSIM4njtsswg * (1.0 + BSIM4tnjtsswg * T0);
-            BSIM4njtsdtemp = BSIM4njtsd * (1.0 + BSIM4tnjtsd * T0);
-            BSIM4njtsswdtemp = BSIM4njtsswd * (1.0 + BSIM4tnjtsswd * T0);
-            BSIM4njtsswgdtemp = BSIM4njtsswgd * (1.0 + BSIM4tnjtsswgd * T0);
         }
     }
 }

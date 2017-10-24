@@ -1,14 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Circuits;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Components.Transistors;
 
 namespace SpiceSharp.Components
 {
+    /// <summary>
+    /// The BSIM3v24 model
+    /// </summary>
     public class BSIM3v24Model : CircuitModel<BSIM3v24Model>
     {
+        /// <summary>
+        /// Register default behaviours
+        /// </summary>
+        static BSIM3v24Model()
+        {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(BSIM3v24Model), typeof(ComponentBehaviours.BSIM3v24ModelTemperatureBehaviour));
+        }
+
         /// <summary>
         /// Get the size-dependent parameters
         /// </summary>
@@ -911,26 +921,24 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double TRatio { get; private set; }
-        public double Vtm0 { get; private set; }
-        public double ni { get; private set; }
+        internal double TRatio, Vtm0, ni;
 
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double BSIM3type { get; private set; } = 1.0;
-        public double BSIM3cox { get; private set; }
-        public double BSIM3factor1 { get; private set; }
-        public double BSIM3vtm { get; private set; }
-        public double BSIM3jctTempSatCurDensity { get; private set; }
-        public double BSIM3jctSidewallTempSatCurDensity { get; private set; }
-        public double BSIM3vcrit { get; private set; }
-        public double BSIM3unitAreaTempJctCap { get; private set; }
-        public double BSIM3unitLengthSidewallTempJctCap { get; private set; }
-        public double BSIM3unitLengthGateSidewallTempJctCap { get; private set; }
-        public double BSIM3PhiB { get; private set; }
-        public double BSIM3PhiBSW { get; private set; }
-        public double BSIM3PhiBSWG { get; private set; }
+        public double BSIM3type { get; internal set; } = 1.0;
+        public double BSIM3cox { get; internal set; }
+        public double BSIM3factor1 { get; internal set; }
+        public double BSIM3vtm { get; internal set; }
+        public double BSIM3jctTempSatCurDensity { get; internal set; }
+        public double BSIM3jctSidewallTempSatCurDensity { get; internal set; }
+        public double BSIM3vcrit { get; internal set; }
+        public double BSIM3unitAreaTempJctCap { get; internal set; }
+        public double BSIM3unitLengthSidewallTempJctCap { get; internal set; }
+        public double BSIM3unitLengthGateSidewallTempJctCap { get; internal set; }
+        public double BSIM3PhiB { get; internal set; }
+        public double BSIM3PhiBSW { get; internal set; }
+        public double BSIM3PhiBSWG { get; internal set; }
 
         private const double NMOS = 1.0;
         private const double PMOS = 1.0;
@@ -1038,117 +1046,6 @@ namespace SpiceSharp.Components
                     BSIM3oxideTrapDensityC.Value = -1.4e-12;
                 else
                     BSIM3oxideTrapDensityC.Value = 1.4e-12;
-
-            }
-            /* V / m */
-            /* loop through all the instances of the model */
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-            double Temp, Tnom, Eg0, Eg, delTemp, T0, T1;
-
-            Temp = ckt.State.Temperature;
-            if (BSIM3bulkJctPotential < 0.1)
-            {
-                BSIM3bulkJctPotential.Value = 0.1;
-                CircuitWarning.Warning(this, "Given pb is less than 0.1. Pb is set to 0.1");
-            }
-            if (BSIM3sidewallJctPotential < 0.1)
-            {
-                BSIM3sidewallJctPotential.Value = 0.1;
-                CircuitWarning.Warning(this, "Given pbsw is less than 0.1. Pbsw is set to 0.1");
-            }
-            if (BSIM3GatesidewallJctPotential < 0.1)
-            {
-                BSIM3GatesidewallJctPotential.Value = 0.1;
-                CircuitWarning.Warning(this, "Given pbswg is less than 0.1. Pbswg is set to 0.1");
-            }
-
-            Tnom = BSIM3tnom;
-            TRatio = Temp / Tnom;
-
-            BSIM3vcrit = Circuit.CONSTvt0 * Math.Log(Circuit.CONSTvt0 / (Circuit.CONSTroot2 * 1.0e-14));
-            BSIM3factor1 = Math.Sqrt(Transistor.EPSSI / Transistor.EPSOX * BSIM3tox);
-
-            Vtm0 = Transistor.KboQ * Tnom;
-            Eg0 = 1.16 - 7.02e-4 * Tnom * Tnom / (Tnom + 1108.0);
-            ni = 1.45e10 * (Tnom / 300.15) * Math.Sqrt(Tnom / 300.15) * Math.Exp(21.5565981 - Eg0 / (2.0 * Vtm0));
-
-            BSIM3vtm = Transistor.KboQ * Temp;
-            Eg = 1.16 - 7.02e-4 * Temp * Temp / (Temp + 1108.0);
-            if (Temp != Tnom)
-            {
-                T0 = Eg0 / Vtm0 - Eg / BSIM3vtm + BSIM3jctTempExponent * Math.Log(Temp / Tnom);
-                T1 = Math.Exp(T0 / BSIM3jctEmissionCoeff);
-                BSIM3jctTempSatCurDensity = BSIM3jctSatCurDensity * T1;
-                BSIM3jctSidewallTempSatCurDensity = BSIM3jctSidewallSatCurDensity * T1;
-            }
-            else
-            {
-                BSIM3jctTempSatCurDensity = BSIM3jctSatCurDensity;
-                BSIM3jctSidewallTempSatCurDensity = BSIM3jctSidewallSatCurDensity;
-            }
-
-            if (BSIM3jctTempSatCurDensity < 0.0)
-                BSIM3jctTempSatCurDensity = 0.0;
-            if (BSIM3jctSidewallTempSatCurDensity < 0.0)
-                BSIM3jctSidewallTempSatCurDensity = 0.0;
-
-            /* Temperature dependence of D / B and S / B diode capacitance begins */
-            delTemp = ckt.State.Temperature - BSIM3tnom;
-            T0 = BSIM3tcj * delTemp;
-            if (T0 >= -1.0)
-            {
-                BSIM3unitAreaTempJctCap = BSIM3unitAreaJctCap * (1.0 + T0);
-            }
-            else if (BSIM3unitAreaJctCap > 0.0)
-            {
-                BSIM3unitAreaTempJctCap = 0.0;
-                CircuitWarning.Warning(this, "Temperature effect has caused cj to be negative. Cj is clamped to zero");
-            }
-            T0 = BSIM3tcjsw * delTemp;
-            if (T0 >= -1.0)
-            {
-                BSIM3unitLengthSidewallTempJctCap = BSIM3unitLengthSidewallJctCap * (1.0 + T0);
-            }
-            else if (BSIM3unitLengthSidewallJctCap > 0.0)
-            {
-                BSIM3unitLengthSidewallTempJctCap = 0.0;
-                CircuitWarning.Warning(this, "Temperature effect has caused cjsw to be negative. Cjsw is clamped to zero");
-            }
-            T0 = BSIM3tcjswg * delTemp;
-            if (T0 >= -1.0)
-            {
-                BSIM3unitLengthGateSidewallTempJctCap = BSIM3unitLengthGateSidewallJctCap * (1.0 + T0);
-            }
-            else if (BSIM3unitLengthGateSidewallJctCap > 0.0)
-            {
-                BSIM3unitLengthGateSidewallTempJctCap = 0.0;
-                CircuitWarning.Warning(this, "Temperature effect has caused cjswg to be negative. Cjswg is clamped to zero");
-            }
-
-            BSIM3PhiB = BSIM3bulkJctPotential - BSIM3tpb * delTemp;
-            if (BSIM3PhiB < 0.01)
-            {
-                BSIM3PhiB = 0.01;
-                CircuitWarning.Warning(this, "Temperature effect has caused pb to be less than 0.01. Pb is clamped to 0.01");
-            }
-            BSIM3PhiBSW = BSIM3sidewallJctPotential - BSIM3tpbsw * delTemp;
-            if (BSIM3PhiBSW <= 0.01)
-            {
-                BSIM3PhiBSW = 0.01;
-                CircuitWarning.Warning(this, "Temperature effect has caused pbsw to be less than 0.01. Pbsw is clamped to 0.01");
-            }
-            BSIM3PhiBSWG = BSIM3GatesidewallJctPotential - BSIM3tpbswg * delTemp;
-            if (BSIM3PhiBSWG <= 0.01)
-            {
-                BSIM3PhiBSWG = 0.01;
-                CircuitWarning.Warning(this, "Temperature effect has caused pbswg to be less than 0.01. Pbswg is clamped to 0.01");
             }
         }
     }

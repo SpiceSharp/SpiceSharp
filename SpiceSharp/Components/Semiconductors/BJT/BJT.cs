@@ -16,6 +16,7 @@ namespace SpiceSharp.Components
         /// </summary>
         static BJT()
         {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(BJT), typeof(ComponentBehaviours.BJTTemperatureBehaviour));
             Behaviours.Behaviours.RegisterBehaviour(typeof(BJT), typeof(ComponentBehaviours.BJTLoadBehaviour));
             Behaviours.Behaviours.RegisterBehaviour(typeof(BJT), typeof(ComponentBehaviours.BJTAcBehaviour));
             Behaviours.Behaviours.RegisterBehaviour(typeof(BJT), typeof(ComponentBehaviours.BJTNoiseBehaviour));
@@ -225,72 +226,26 @@ namespace SpiceSharp.Components
             BJTemitNode = nodes[2].Index;
             BJTsubstNode = nodes[3].Index;
 
-            // Allocate states
-            BJTstate = ckt.State.GetState(21);
-
+            // Add a series collector node if necessary
             if (model.BJTcollectorResist.Value == 0)
                 BJTcolPrimeNode = BJTcolNode;
             else if (BJTcolPrimeNode == 0)
                 BJTcolPrimeNode = CreateNode(ckt, Name.Grow("#col")).Index;
+
+            // Add a series base node if necessary
             if (model.BJTbaseResist.Value == 0)
                 BJTbasePrimeNode = BJTbaseNode;
             else if (BJTbasePrimeNode == 0)
                 BJTbasePrimeNode = CreateNode(ckt, Name.Grow("#base")).Index;
+
+            // Add a series emitter node if necessary
             if (model.BJTemitterResist.Value == 0)
                 BJTemitPrimeNode = BJTemitNode;
             else if (BJTemitPrimeNode == 0)
                 BJTemitPrimeNode = CreateNode(ckt, Name.Grow("#emit")).Index;
-        }
 
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-            BJTModel model = Model as BJTModel;
-
-            double vt, fact2, egfet, arg, pbfact, ratlog, ratio1, factlog, factor, bfactor, pbo, gmaold, gmanew;
-
-            if (!BJTtemp.Given)
-                BJTtemp.Value = ckt.State.Temperature;
-            vt = BJTtemp * Circuit.CONSTKoverQ;
-            fact2 = BJTtemp / Circuit.CONSTRefTemp;
-            egfet = 1.16 - (7.02e-4 * BJTtemp * BJTtemp) / (BJTtemp + 1108);
-            arg = -egfet / (2 * Circuit.CONSTBoltz * BJTtemp) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp +
-                 Circuit.CONSTRefTemp));
-            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
-
-            ratlog = Math.Log(BJTtemp / model.BJTtnom);
-            ratio1 = BJTtemp / model.BJTtnom - 1;
-            factlog = ratio1 * model.BJTenergyGap / vt + model.BJTtempExpIS * ratlog;
-            factor = Math.Exp(factlog);
-            BJTtSatCur = model.BJTsatCur * factor;
-            bfactor = Math.Exp(ratlog * model.BJTbetaExp);
-            BJTtBetaF = model.BJTbetaF * bfactor;
-            BJTtBetaR = model.BJTbetaR * bfactor;
-            BJTtBEleakCur = model.BJTleakBEcurrent * Math.Exp(factlog / model.BJTleakBEemissionCoeff) / bfactor;
-            BJTtBCleakCur = model.BJTleakBCcurrent * Math.Exp(factlog / model.BJTleakBCemissionCoeff) / bfactor;
-
-            pbo = (model.BJTpotentialBE - pbfact) / model.fact1;
-            gmaold = (model.BJTpotentialBE - pbo) / pbo;
-            BJTtBEcap = model.BJTdepletionCapBE / (1 + model.BJTjunctionExpBE * (4e-4 * (model.BJTtnom - Circuit.CONSTRefTemp) - gmaold));
-            BJTtBEpot = fact2 * pbo + pbfact;
-            gmanew = (BJTtBEpot - pbo) / pbo;
-            BJTtBEcap *= 1 + model.BJTjunctionExpBE * (4e-4 * (BJTtemp - Circuit.CONSTRefTemp) - gmanew);
-
-            pbo = (model.BJTpotentialBC - pbfact) / model.fact1;
-            gmaold = (model.BJTpotentialBC - pbo) / pbo;
-            BJTtBCcap = model.BJTdepletionCapBC / (1 + model.BJTjunctionExpBC * (4e-4 * (model.BJTtnom - Circuit.CONSTRefTemp) - gmaold));
-            BJTtBCpot = fact2 * pbo + pbfact;
-            gmanew = (BJTtBCpot - pbo) / pbo;
-            BJTtBCcap *= 1 + model.BJTjunctionExpBC * (4e-4 * (BJTtemp - Circuit.CONSTRefTemp) - gmanew);
-
-            BJTtDepCap = model.BJTdepletionCapCoeff * BJTtBEpot;
-            BJTtf1 = BJTtBEpot * (1 - Math.Exp((1 - model.BJTjunctionExpBE) * model.xfc)) / (1 - model.BJTjunctionExpBE);
-            BJTtf4 = model.BJTdepletionCapCoeff * BJTtBCpot;
-            BJTtf5 = BJTtBCpot * (1 - Math.Exp((1 - model.BJTjunctionExpBC) * model.xfc)) / (1 - model.BJTjunctionExpBC);
-            BJTtVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * model.BJTsatCur));
+            // Allocate states
+            BJTstate = ckt.State.GetState(21);
         }
 
         /// <summary>

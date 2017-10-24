@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Circuits;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
@@ -53,16 +54,9 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-            // Do nothing
+            // Get the inductors for the mutual inductance
+            Inductor1 = ckt.Objects[MUTind1] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{MUTind1}'");
+            Inductor2 = ckt.Objects[MUTind2] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{MUTind2}'");
         }
     }
 }

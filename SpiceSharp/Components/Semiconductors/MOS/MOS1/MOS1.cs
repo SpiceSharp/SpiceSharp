@@ -19,6 +19,7 @@ namespace SpiceSharp.Components
         /// </summary>
         static MOS1()
         {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(MOS1), typeof(ComponentBehaviours.MOS1TemperatureBehaviour));
             Behaviours.Behaviours.RegisterBehaviour(typeof(MOS1), typeof(ComponentBehaviours.MOS1LoadBehaviour));
             Behaviours.Behaviours.RegisterBehaviour(typeof(MOS1), typeof(ComponentBehaviours.MOS1AcBehaviour));
             Behaviours.Behaviours.RegisterBehaviour(typeof(MOS1), typeof(ComponentBehaviours.MOS1NoiseBehaviour));
@@ -292,205 +293,20 @@ namespace SpiceSharp.Components
             MOS1sNode = nodes[2].Index;
             MOS1bNode = nodes[3].Index;
 
-            // Allocate states
-            MOS1states = ckt.State.GetState(17);
-            MOS1vdsat = 0.0;
-            MOS1von = 0.0;
-
+            // Add series drain node if necessary
             if (model.MOS1drainResistance != 0 || (model.MOS1sheetResistance != 0 && MOS1drainSquares != 0))
                 MOS1dNodePrime = CreateNode(ckt, Name.Grow("#drain")).Index;
             else
                 MOS1dNodePrime = MOS1dNode;
 
+            // Add series source node if necessary
             if (model.MOS1sourceResistance != 0 || (model.MOS1sheetResistance != 0 && MOS1sourceSquares != 0))
                 MOS1sNodePrime = CreateNode(ckt, Name.Grow("#source")).Index;
             else
                 MOS1sNodePrime = MOS1sNode;
-        }
 
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-            var model = Model as MOS1Model;
-            double vt, ratio, fact2, kt, egfet, arg, pbfact, ratio4, phio, pbo, gmaold, capfact, gmanew, czbd, czbdsw, sarg, sargsw, czbs,
-                czbssw;
-
-            /* perform the parameter defaulting */
-            if (!MOS1temp.Given)
-            {
-                MOS1temp.Value = ckt.State.Temperature;
-            }
-            vt = MOS1temp * Circuit.CONSTKoverQ;
-            ratio = MOS1temp / model.MOS1tnom;
-            fact2 = MOS1temp / Circuit.CONSTRefTemp;
-            kt = MOS1temp * Circuit.CONSTBoltz;
-            egfet = 1.16 - (7.02e-4 * MOS1temp * MOS1temp) / (MOS1temp + 1108);
-            arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
-            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
-
-            if (MOS1l - 2 * model.MOS1latDiff <= 0)
-                CircuitWarning.Warning(this, $"{Name}: effective channel length less than zero");
-            ratio4 = ratio * Math.Sqrt(ratio);
-            MOS1tTransconductance = model.MOS1transconductance / ratio4;
-            MOS1tSurfMob = model.MOS1surfaceMobility / ratio4;
-            phio = (model.MOS1phi - model.pbfact1) / model.fact1;
-            MOS1tPhi = fact2 * phio + pbfact;
-            MOS1tVbi = model.MOS1vt0 - model.MOS1type * (model.MOS1gamma * Math.Sqrt(model.MOS1phi)) + .5 * (model.egfet1 - egfet) +
-                model.MOS1type * .5 * (MOS1tPhi - model.MOS1phi);
-            MOS1tVto = MOS1tVbi + model.MOS1type * model.MOS1gamma * Math.Sqrt(MOS1tPhi);
-            MOS1tSatCur = model.MOS1jctSatCur * Math.Exp(-egfet / vt + model.egfet1 / model.vtnom);
-            MOS1tSatCurDens = model.MOS1jctSatCurDensity * Math.Exp(-egfet / vt + model.egfet1 / model.vtnom);
-            pbo = (model.MOS1bulkJctPotential - model.pbfact1) / model.fact1;
-            gmaold = (model.MOS1bulkJctPotential - pbo) / pbo;
-            capfact = 1 / (1 + model.MOS1bulkJctBotGradingCoeff * (4e-4 * (model.MOS1tnom - Circuit.CONSTRefTemp) - gmaold));
-            MOS1tCbd = model.MOS1capBD * capfact;
-            MOS1tCbs = model.MOS1capBS * capfact;
-            MOS1tCj = model.MOS1bulkCapFactor * capfact;
-            capfact = 1 / (1 + model.MOS1bulkJctSideGradingCoeff * (4e-4 * (model.MOS1tnom - Circuit.CONSTRefTemp) - gmaold));
-            MOS1tCjsw = model.MOS1sideWallCapFactor * capfact;
-            MOS1tBulkPot = fact2 * pbo + pbfact;
-            gmanew = (MOS1tBulkPot - pbo) / pbo;
-            capfact = (1 + model.MOS1bulkJctBotGradingCoeff * (4e-4 * (MOS1temp - Circuit.CONSTRefTemp) - gmanew));
-            MOS1tCbd *= capfact;
-            MOS1tCbs *= capfact;
-            MOS1tCj *= capfact;
-            capfact = (1 + model.MOS1bulkJctSideGradingCoeff * (4e-4 * (MOS1temp - Circuit.CONSTRefTemp) - gmanew));
-            MOS1tCjsw *= capfact;
-            MOS1tDepCap = model.MOS1fwdCapDepCoeff * MOS1tBulkPot;
-            if ((MOS1tSatCurDens == 0) || (MOS1drainArea.Value == 0) || (MOS1sourceArea.Value == 0))
-            {
-                MOS1sourceVcrit = MOS1drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS1tSatCur));
-            }
-            else
-            {
-                MOS1drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS1tSatCurDens * MOS1drainArea));
-                MOS1sourceVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS1tSatCurDens * MOS1sourceArea));
-            }
-
-            if (model.MOS1capBD.Given)
-            {
-                czbd = MOS1tCbd;
-            }
-            else
-            {
-                if (model.MOS1bulkCapFactor.Given)
-                {
-                    czbd = MOS1tCj * MOS1drainArea;
-                }
-                else
-                {
-                    czbd = 0;
-                }
-            }
-            if (model.MOS1sideWallCapFactor.Given)
-            {
-                czbdsw = MOS1tCjsw * MOS1drainPerimiter;
-            }
-            else
-            {
-                czbdsw = 0;
-            }
-            arg = 1 - model.MOS1fwdCapDepCoeff;
-            sarg = Math.Exp((-model.MOS1bulkJctBotGradingCoeff) * Math.Log(arg));
-            sargsw = Math.Exp((-model.MOS1bulkJctSideGradingCoeff) * Math.Log(arg));
-            MOS1Cbd = czbd;
-            MOS1Cbdsw = czbdsw;
-            MOS1f2d = czbd * (1 - model.MOS1fwdCapDepCoeff * (1 + model.MOS1bulkJctBotGradingCoeff)) * sarg / arg + czbdsw * (1 -
-                model.MOS1fwdCapDepCoeff * (1 + model.MOS1bulkJctSideGradingCoeff)) * sargsw / arg;
-            MOS1f3d = czbd * model.MOS1bulkJctBotGradingCoeff * sarg / arg / MOS1tBulkPot + czbdsw * model.MOS1bulkJctSideGradingCoeff *
-                sargsw / arg / MOS1tBulkPot;
-            MOS1f4d = czbd * MOS1tBulkPot * (1 - arg * sarg) / (1 - model.MOS1bulkJctBotGradingCoeff) + czbdsw * MOS1tBulkPot * (1 - arg *
-                sargsw) / (1 - model.MOS1bulkJctSideGradingCoeff) - MOS1f3d / 2 * (MOS1tDepCap * MOS1tDepCap) - MOS1tDepCap * MOS1f2d;
-            if (model.MOS1capBS.Given)
-            {
-                czbs = MOS1tCbs;
-            }
-            else
-            {
-                if (model.MOS1bulkCapFactor.Given)
-                {
-                    czbs = MOS1tCj * MOS1sourceArea;
-                }
-                else
-                {
-                    czbs = 0;
-                }
-            }
-            if (model.MOS1sideWallCapFactor.Given)
-            {
-                czbssw = MOS1tCjsw * MOS1sourcePerimiter;
-            }
-            else
-            {
-                czbssw = 0;
-            }
-            arg = 1 - model.MOS1fwdCapDepCoeff;
-            sarg = Math.Exp((-model.MOS1bulkJctBotGradingCoeff) * Math.Log(arg));
-            sargsw = Math.Exp((-model.MOS1bulkJctSideGradingCoeff) * Math.Log(arg));
-            MOS1Cbs = czbs;
-            MOS1Cbssw = czbssw;
-            MOS1f2s = czbs * (1 - model.MOS1fwdCapDepCoeff * (1 + model.MOS1bulkJctBotGradingCoeff)) * sarg / arg + czbssw * (1 -
-                model.MOS1fwdCapDepCoeff * (1 + model.MOS1bulkJctSideGradingCoeff)) * sargsw / arg;
-            MOS1f3s = czbs * model.MOS1bulkJctBotGradingCoeff * sarg / arg / MOS1tBulkPot + czbssw * model.MOS1bulkJctSideGradingCoeff *
-                sargsw / arg / MOS1tBulkPot;
-            MOS1f4s = czbs * MOS1tBulkPot * (1 - arg * sarg) / (1 - model.MOS1bulkJctBotGradingCoeff) + czbssw * MOS1tBulkPot * (1 - arg *
-                sargsw) / (1 - model.MOS1bulkJctSideGradingCoeff) - MOS1f3s / 2 * (MOS1tDepCap * MOS1tDepCap) - MOS1tDepCap * MOS1f2s;
-
-            if (model.MOS1drainResistance.Given)
-            {
-                if (model.MOS1drainResistance != 0)
-                {
-                    MOS1drainConductance = 1 / model.MOS1drainResistance;
-                }
-                else
-                {
-                    MOS1drainConductance = 0;
-                }
-            }
-            else if (model.MOS1sheetResistance.Given)
-            {
-                if (model.MOS1sheetResistance != 0)
-                {
-                    MOS1drainConductance = 1 / (model.MOS1sheetResistance * MOS1drainSquares);
-                }
-                else
-                {
-                    MOS1drainConductance = 0;
-                }
-            }
-            else
-            {
-                MOS1drainConductance = 0;
-            }
-            if (model.MOS1sourceResistance.Given)
-            {
-                if (model.MOS1sourceResistance != 0)
-                {
-                    MOS1sourceConductance = 1 / model.MOS1sourceResistance;
-                }
-                else
-                {
-                    MOS1sourceConductance = 0;
-                }
-            }
-            else if (model.MOS1sheetResistance.Given)
-            {
-                if (model.MOS1sheetResistance != 0)
-                {
-                    MOS1sourceConductance = 1 / (model.MOS1sheetResistance * MOS1sourceSquares);
-                }
-                else
-                {
-                    MOS1sourceConductance = 0;
-                }
-            }
-            else
-            {
-                MOS1sourceConductance = 0;
-            }
+            // Allocate states
+            MOS1states = ckt.State.GetState(17);
         }
 
         /// <summary>

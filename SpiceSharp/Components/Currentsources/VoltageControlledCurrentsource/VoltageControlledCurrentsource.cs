@@ -79,13 +79,5 @@ namespace SpiceSharp.Components
             VCCScontPosNode = nodes[2].Index;
             VCCScontNegNode = nodes[3].Index;
         }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-        }
     }
 }

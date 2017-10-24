@@ -11,6 +11,20 @@ namespace SpiceSharp.Components.ComponentBehaviours
     public class MOS1LoadBehaviour : CircuitObjectBehaviourLoad
     {
         /// <summary>
+        /// Setup the behaviour
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        public override void Setup(ICircuitObject component, Circuit ckt)
+        {
+            base.Setup(component, ckt);
+            var mos1 = ComponentTyped<MOS1>();
+
+            mos1.MOS1vdsat = 0.0;
+            mos1.MOS1von = 0.0;
+        }
+
+        /// <summary>
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
@@ -30,16 +44,12 @@ namespace SpiceSharp.Components.ComponentBehaviours
             vt = Circuit.CONSTKoverQ * mos1.MOS1temp;
             Check = 1;
 
-            /* 
-			
-			*/
-
             /* DETAILPROF */
 
             /* first, we compute a few useful values - these could be
-			* pre - computed, but for historical reasons are still done
-			* here.  They may be moved at the expense of instance size
-			*/
+			 * pre - computed, but for historical reasons are still done
+			 * here.  They may be moved at the expense of instance size
+			 */
 
             EffectiveLength = mos1.MOS1l - 2 * model.MOS1latDiff;
             if ((mos1.MOS1tSatCurDens == 0) || (mos1.MOS1drainArea.Value == 0) || (mos1.MOS1sourceArea.Value == 0))
@@ -58,28 +68,25 @@ namespace SpiceSharp.Components.ComponentBehaviours
             Beta = mos1.MOS1tTransconductance * mos1.MOS1w / EffectiveLength;
             OxideCap = model.MOS1oxideCapFactor * EffectiveLength * mos1.MOS1w;
             /* 
-			* ok - now to do the start - up operations
-			* 
-			* we must get values for vbs, vds, and vgs from somewhere
-			* so we either predict them or recover them from last iteration
-			* These are the two most common cases - either a prediction
-			* step or the general iteration step and they
-			* share some code, so we put them first - others later on
-			*/
+			 * ok - now to do the start - up operations
+			 * 
+			 * we must get values for vbs, vds, and vgs from somewhere
+			 * so we either predict them or recover them from last iteration
+			 * These are the two most common cases - either a prediction
+			 * step or the general iteration step and they
+			 * share some code, so we put them first - others later on
+			 */
             if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (method != null && method.SavedTime == 0.0)) ||
                 ((state.Init == CircuitState.InitFlags.InitFix) && (!mos1.MOS1off)))
             {
                 /* PREDICTOR */
 
                 /* general iteration */
-
                 vbs = model.MOS1type * rstate.OldSolution[mos1.MOS1bNode] - rstate.OldSolution[mos1.MOS1sNodePrime];
                 vgs = model.MOS1type * rstate.OldSolution[mos1.MOS1gNode] - rstate.OldSolution[mos1.MOS1sNodePrime];
                 vds = model.MOS1type * rstate.OldSolution[mos1.MOS1dNodePrime] - rstate.OldSolution[mos1.MOS1sNodePrime];
-                /* PREDICTOR */
 
                 /* now some common crunching for some more useful quantities */
-
                 vbd = vbs - vds;
                 vgd = vgs - vds;
                 vgdo = state.States[0][mos1.MOS1states + MOS1.MOS1vgs] - state.States[0][mos1.MOS1states + MOS1.MOS1vds];
@@ -90,7 +97,6 @@ namespace SpiceSharp.Components.ComponentBehaviours
                 delvgd = vgd - vgdo;
 
                 /* these are needed for convergence testing */
-
                 if (mos1.MOS1mode >= 0)
                 {
                     cdhat = mos1.MOS1cd - mos1.MOS1gbd * delvbd + mos1.MOS1gmbs * delvbs + mos1.MOS1gm * delvgs + mos1.MOS1gds * delvds;
@@ -100,27 +106,14 @@ namespace SpiceSharp.Components.ComponentBehaviours
                     cdhat = mos1.MOS1cd - (mos1.MOS1gbd - mos1.MOS1gmbs) * delvbd - mos1.MOS1gm * delvgd + mos1.MOS1gds * delvds;
                 }
                 cbhat = mos1.MOS1cbs + mos1.MOS1cbd + mos1.MOS1gbd * delvbd + mos1.MOS1gbs * delvbs;
-                /* 
-				
-				*/
-
-                /* DETAILPROF */
-                /* NOBYPASS */
-                /* 
-				
-				*/
-
-                /* DETAILPROF */
-                /* ok - bypass is out, do it the hard way */
-
                 von = model.MOS1type * mos1.MOS1von;
 
                 /* 
-				* limiting
-				* we want to keep device voltages from changing
-				* so fast that the exponentials churn out overflows
-				* and similar rudeness
-				*/
+				 * limiting
+				 * we want to keep device voltages from changing
+				 * so fast that the exponentials churn out overflows
+				 * and similar rudeness
+				 */
 
                 if (state.States[0][mos1.MOS1states + MOS1.MOS1vds] >= 0)
                 {
@@ -146,19 +139,13 @@ namespace SpiceSharp.Components.ComponentBehaviours
                     vbd = Transistor.DEVpnjlim(vbd, state.States[0][mos1.MOS1states + MOS1.MOS1vbd], vt, mos1.MOS1drainVcrit, ref Check);
                     vbs = vbd + vds;
                 }
-                /* NODELIMITING */
-                /* 
-				
-				*/
-
-                /* DETAILPROF */
             }
             else
             {
                 /* ok - not one of the simple cases, so we have to
-				* look at all of the possibilities for why we were
-				* called.  We still just initialize the three voltages
-				*/
+				 * look at all of the possibilities for why we were
+				 * called.  We still just initialize the three voltages
+				 */
 
                 if ((state.Init == CircuitState.InitFlags.InitJct) && !mos1.MOS1off)
                 {
@@ -178,25 +165,22 @@ namespace SpiceSharp.Components.ComponentBehaviours
                     vbs = vgs = vds = 0;
                 }
             }
-            /* 
-			
-			*/
 
             /* DETAILPROF */
 
             /* 
-			* now all the preliminaries are over - we can start doing the
-			* real work
-			*/
+			 * now all the preliminaries are over - we can start doing the
+			 * real work
+			 */
             vbd = vbs - vds;
             vgd = vgs - vds;
             vgb = vgs - vbs;
 
             /* 
-			* bulk - source and bulk - drain diodes
-			* here we just evaluate the ideal diode current and the
-			* corresponding derivative (conductance).
-			*/
+			 * bulk - source and bulk - drain diodes
+			 * here we just evaluate the ideal diode current and the
+			 * corresponding derivative (conductance).
+			 */
             if (vbs <= 0)
             {
                 mos1.MOS1gbs = SourceSatCur / vt;
@@ -223,8 +207,8 @@ namespace SpiceSharp.Components.ComponentBehaviours
             }
 
             /* now to determine whether the user was able to correctly
-			* identify the source and drain of his device
-			*/
+			 * identify the source and drain of his device
+			 */
             if (vds >= 0)
             {
                 /* normal mode */
@@ -235,23 +219,19 @@ namespace SpiceSharp.Components.ComponentBehaviours
                 /* inverse mode */
                 mos1.MOS1mode = -1;
             }
-            /* 
-			
-			*/
 
             /* DETAILPROF */
             {
                 /* 
-				* this block of code evaluates the drain current and its 
-				* derivatives using the shichman - hodges model and the 
-				* charges associated with the gate, channel and bulk for 
-				* mosfets
-				* 
-				*/
+				 * this block of code evaluates the drain current and its 
+				 * derivatives using the shichman - hodges model and the 
+				 * charges associated with the gate, channel and bulk for 
+				 * mosfets
+				 */
 
                 /* the following 4 variables are local to this code block until 
-				* it is obvious that they can be made global 
-				*/
+				 * it is obvious that they can be made global 
+				 */
                 double arg;
                 double betap;
                 double sarg;
@@ -281,8 +261,8 @@ namespace SpiceSharp.Components.ComponentBehaviours
                 if (vgst <= 0)
                 {
                     /* 
-					* cutoff region
-					*/
+					 * cutoff region
+					 */
                     cdrain = 0;
                     mos1.MOS1gm = 0;
                     mos1.MOS1gds = 0;
@@ -291,8 +271,8 @@ namespace SpiceSharp.Components.ComponentBehaviours
                 else
                 {
                     /* 
-					* saturation region
-					*/
+					 * saturation region
+					 */
                     betap = Beta * (1 + model.MOS1lambda * (vds * mos1.MOS1mode));
                     if (vgst <= (vds * mos1.MOS1mode))
                     {
@@ -313,41 +293,35 @@ namespace SpiceSharp.Components.ComponentBehaviours
                     }
                 }
                 /* 
-				* finished
-				*/
+				 * finished
+				 */
             }
-            /* 
-			
-			*/
-
-            /* DETAILPROF */
 
             /* now deal with n vs p polarity */
-
             mos1.MOS1von = model.MOS1type * von;
             mos1.MOS1vdsat = model.MOS1type * vdsat;
             /* line 490 */
             /* 
-			* COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
-			*/
+			 * COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
+			 */
             mos1.MOS1cd = mos1.MOS1mode * cdrain - mos1.MOS1cbd;
 
             if (state.Domain == CircuitState.DomainTypes.Time || state.UseSmallSignal)
             {
                 /* 
-				* now we do the hard part of the bulk - drain and bulk - source
-				* diode - we evaluate the non - linear capacitance and
-				* charge
-				* 
-				* the basic equations are not hard, but the implementation
-				* is somewhat long in an attempt to avoid log / exponential
-				* evaluations
-				*/
+				 * now we do the hard part of the bulk - drain and bulk - source
+				 * diode - we evaluate the non - linear capacitance and
+				 * charge
+				 * 
+				 * the basic equations are not hard, but the implementation
+				 * is somewhat long in an attempt to avoid log / exponential
+				 * evaluations
+				 */
                 /* 
-				* charge storage elements
-				* 
-				* .. bulk - drain and bulk - source depletion capacitances
-				*/
+				 * charge storage elements
+				 * 
+				 * .. bulk - drain and bulk - source depletion capacitances
+				 */
                 /* CAPBYPASS */
                 {
                     double arg, sarg;
@@ -358,12 +332,12 @@ namespace SpiceSharp.Components.ComponentBehaviours
                     {
                         arg = 1 - vbs / mos1.MOS1tBulkPot;
                         /* 
-						* the following block looks somewhat long and messy, 
-						* but since most users use the default grading
-						* coefficients of .5, and sqrt is MUCH faster than an
-						* Math.Exp(Math.Log()) we use this special case code to buy time.
-						* (as much as 10% of total job time!)
-						*/
+						 * the following block looks somewhat long and messy, 
+						 * but since most users use the default grading
+						 * coefficients of .5, and sqrt is MUCH faster than an
+						 * Math.Exp(Math.Log()) we use this special case code to buy time.
+						 * (as much as 10% of total job time!)
+						 */
                         if (model.MOS1bulkJctBotGradingCoeff.Value == model.MOS1bulkJctSideGradingCoeff)
                         {
                             if (model.MOS1bulkJctBotGradingCoeff.Value == .5)
@@ -469,13 +443,13 @@ namespace SpiceSharp.Components.ComponentBehaviours
                 if ((method != null) || ((method != null && method.SavedTime == 0.0) && !state.UseIC))
                 {
                     /* (above only excludes tranop, since we're only at this
-					* point if tran or tranop)
-					*/
+					 * point if tran or tranop)
+					 */
 
                     /* 
-					* calculate equivalent conductances and currents for
-					* depletion capacitors
-					*/
+					 * calculate equivalent conductances and currents for
+					 * depletion capacitors
+					 */
 
                     /* integrate the capacitors and save results */
 
@@ -488,53 +462,39 @@ namespace SpiceSharp.Components.ComponentBehaviours
                     mos1.MOS1cbs += state.States[0][mos1.MOS1states + MOS1.MOS1cqbs];
                 }
             }
-            /* 
-			
-			*/
-
-            /* DETAILPROF */
 
             /* 
-			* check convergence
-			*/
+			 * check convergence
+			 */
             if (!mos1.MOS1off || (!(state.Init == CircuitState.InitFlags.InitFix || state.UseSmallSignal)))
             {
                 if (Check == 1)
                     state.IsCon = false;
             }
-            /* 
-			
-			*/
 
             /* DETAILPROF */
 
             /* save things away for next time */
-
             state.States[0][mos1.MOS1states + MOS1.MOS1vbs] = vbs;
             state.States[0][mos1.MOS1states + MOS1.MOS1vbd] = vbd;
             state.States[0][mos1.MOS1states + MOS1.MOS1vgs] = vgs;
             state.States[0][mos1.MOS1states + MOS1.MOS1vds] = vds;
 
             /* 
-			
-			*/
-
-            /* DETAILPROF */
-            /* 
-			* meyer's capacitor model
-			*/
+			 * meyer's capacitor model
+			 */
             if (state.Domain == CircuitState.DomainTypes.Time || state.UseSmallSignal)
             {
                 /* 
-				* calculate meyer's capacitors
-				*/
+				 * calculate meyer's capacitors
+				 */
                 /* 
-				* new cmeyer - this just evaluates at the current time, 
-				* expects you to remember values from previous time
-				* returns 1 / 2 of non - constant portion of capacitance
-				* you must add in the other half from previous time
-				* and the constant part
-				*/
+				 * new cmeyer - this just evaluates at the current time, 
+				 * expects you to remember values from previous time
+				 * returns 1 / 2 of non - constant portion of capacitance
+				 * you must add in the other half from previous time
+				 * and the constant part
+				 */
                 double icapgs, icapgd, icapgb;
                 if (mos1.MOS1mode > 0)
                 {
@@ -587,9 +547,9 @@ namespace SpiceSharp.Components.ComponentBehaviours
             if (((method != null && method.SavedTime == 0.0)) || (!(method != null)))
             {
                 /* 
-				* initialize to zero charge conductances 
-				* and current
-				*/
+				 * initialize to zero charge conductances 
+				 * and current
+				 */
                 gcgs = 0;
                 ceqgs = 0;
                 gcgd = 0;
@@ -606,9 +566,9 @@ namespace SpiceSharp.Components.ComponentBehaviours
                 if (capgb == 0)
                     state.States[0][mos1.MOS1states + MOS1.MOS1cqgb] = 0;
                 /* 
-				* calculate equivalent conductances and currents for
-				* meyer"s capacitors
-				*/
+				 * calculate equivalent conductances and currents for
+				 * meyer"s capacitors
+				 */
                 method.Integrate(state, out gcgs, out ceqgs, mos1.MOS1states + MOS1.MOS1qgs, capgs);
                 method.Integrate(state, out gcgd, out ceqgd, mos1.MOS1states + MOS1.MOS1qgd, capgd);
                 method.Integrate(state, out gcgb, out ceqgb, mos1.MOS1states + MOS1.MOS1qgb, capgb);
@@ -616,13 +576,10 @@ namespace SpiceSharp.Components.ComponentBehaviours
                 ceqgd = ceqgd - gcgd * vgd + method.Slope * state.States[0][mos1.MOS1states + MOS1.MOS1qgd];
                 ceqgb = ceqgb - gcgb * vgb + method.Slope * state.States[0][mos1.MOS1states + MOS1.MOS1qgb];
             }
-            /* 
-			* store charge storage info for meyer's cap in lx table
-			*/
 
             /* 
-			* load current vector
-			*/
+			 * load current vector
+			 */
             ceqbs = model.MOS1type * (mos1.MOS1cbs - (mos1.MOS1gbs - state.Gmin) * vbs);
             ceqbd = model.MOS1type * (mos1.MOS1cbd - (mos1.MOS1gbd - state.Gmin) * vbd);
             if (mos1.MOS1mode >= 0)
@@ -641,10 +598,10 @@ namespace SpiceSharp.Components.ComponentBehaviours
             rstate.Rhs[mos1.MOS1bNode] -= (ceqbs + ceqbd - model.MOS1type * ceqgb);
             rstate.Rhs[mos1.MOS1dNodePrime] += (ceqbd - cdreq + model.MOS1type * ceqgd);
             rstate.Rhs[mos1.MOS1sNodePrime] += cdreq + ceqbs + model.MOS1type * ceqgs;
-            /* 
-			* load y matrix
-			*/
 
+            /* 
+			 * load y matrix
+			 */
             rstate.Matrix[mos1.MOS1dNode, mos1.MOS1dNode] += (mos1.MOS1drainConductance);
             rstate.Matrix[mos1.MOS1gNode, mos1.MOS1gNode] += ((gcgd + gcgs + gcgb));
             rstate.Matrix[mos1.MOS1sNode, mos1.MOS1sNode] += (mos1.MOS1sourceConductance);
