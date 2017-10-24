@@ -401,10 +401,10 @@ namespace SpiceSharp.Components
 
             // Allocate nodes
             var nodes = BindNodes(ckt);
-            BSIM4dNodePrime = nodes[0].Index;
-            BSIM4bNodePrime = nodes[1].Index;
-            BSIM4gNodePrime = nodes[2].Index;
-            BSIM4sNodePrime = nodes[3].Index;
+            BSIM4dNode = nodes[0].Index;
+            BSIM4gNodeExt = nodes[1].Index;
+            BSIM4sNode = nodes[2].Index;
+            BSIM4bNode = nodes[3].Index;
 
             // Allocate states
             BSIM4states = ckt.State.GetState(29);

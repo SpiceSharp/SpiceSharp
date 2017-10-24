@@ -11,6 +11,13 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class DiodeNoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
+        /// Noise sources by their index
+        /// </summary>
+        private const int DIORSNOIZ = 0;
+        private const int DIOIDNOIZ = 1;
+        private const int DIOFLNOIZ = 2;
+
+        /// <summary>
         /// Noise generators
         /// </summary>
         public ComponentNoise DIOnoise { get; } = new ComponentNoise(
@@ -42,12 +49,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var state = ckt.State;
             var noise = ckt.State.Noise;
 
-            double Kf = model.DIOfNcoef * Math.Exp(model.DIOfNexp * Math.Log(Math.Max(Math.Abs(state.States[0][diode.DIOstate + Diode.DIOcurrent]), 1e-38)));
+            // Set noise parameters
+            DIOnoise.Generators[DIORSNOIZ].Set(model.DIOconductance * diode.DIOarea);
+            DIOnoise.Generators[DIOIDNOIZ].Set(state.States[0][diode.DIOstate + Diode.DIOcurrent]);
+            DIOnoise.Generators[DIOFLNOIZ].Set(model.DIOfNcoef * Math.Exp(model.DIOfNexp 
+                * Math.Log(Math.Max(Math.Abs(state.States[0][diode.DIOstate + Diode.DIOcurrent]), 1e-38))) / noise.Freq);
 
-            DIOnoise.Evaluate(ckt,
-                model.DIOconductance * diode.DIOarea, // Thermal noise
-                state.States[0][diode.DIOstate + Diode.DIOcurrent], // Shot noise
-                Kf / noise.Freq); // 1 over f noise
+            // Evaluate noise
+            DIOnoise.Evaluate(ckt);
         }
     }
 }

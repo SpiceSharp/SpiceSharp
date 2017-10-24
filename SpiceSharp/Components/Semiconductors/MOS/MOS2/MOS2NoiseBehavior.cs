@@ -10,6 +10,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class MOS2NoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
+        /// Noise generators by their index
+        /// </summary>
+        private const int MOS2RDNOIZ = 0;
+        private const int MOS2RSNOIZ = 1;
+        private const int MOS2IDNOIZ = 2;
+        private const int MOS2FLNOIZ = 3;
+
+        /// <summary>
         /// Noise generators
         /// </summary>
         public ComponentNoise MOS2noise { get; } = new ComponentNoise(
@@ -48,13 +56,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var state = ckt.State;
             var noise = state.Noise;
 
-            double Kf = model.MOS2fNcoef * Math.Exp(model.MOS2fNexp * Math.Log(Math.Max(Math.Abs(mos2.MOS2cd), 1e-38))) / (mos2.MOS2w * (mos2.MOS2l - 2 * model.MOS2latDiff) * model.MOS2oxideCapFactor * model.MOS2oxideCapFactor);
+            // Set noise parameters
+            MOS2noise.Generators[MOS2RDNOIZ].Set(mos2.MOS2drainConductance);
+            MOS2noise.Generators[MOS2RSNOIZ].Set(mos2.MOS2sourceConductance);
+            MOS2noise.Generators[MOS2IDNOIZ].Set(2.0 / 3.0 * Math.Abs(mos2.MOS2gm));
+            MOS2noise.Generators[MOS2FLNOIZ].Set(model.MOS2fNcoef * Math.Exp(model.MOS2fNexp * Math.Log(Math.Max(Math.Abs(mos2.MOS2cd), 1e-38))) / (mos2.MOS2w * (mos2.MOS2l - 2 * model.MOS2latDiff) * model.MOS2oxideCapFactor * model.MOS2oxideCapFactor) / noise.Freq);
 
-            MOS2noise.Evaluate(ckt,
-                mos2.MOS2drainConductance,
-                mos2.MOS2sourceConductance,
-                2.0 / 3.0 * Math.Abs(mos2.MOS2gm),
-                Kf / noise.Freq);
+            // Evaluate noise sources
+            MOS2noise.Evaluate(ckt);
         }
     }
 }

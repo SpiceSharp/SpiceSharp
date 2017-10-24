@@ -1,7 +1,4 @@
-﻿using System;
-using System.Numerics;
-using System.IO;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Components.Transistors;
@@ -22,6 +19,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v30), typeof(ComponentBehaviors.BSIM3v30TemperatureBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v30), typeof(ComponentBehaviors.BSIM3v30LoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v30), typeof(ComponentBehaviors.BSIM3v30AcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v30), typeof(ComponentBehaviors.BSIM3v30NoiseBehavior));
         }
 
         /// <summary>

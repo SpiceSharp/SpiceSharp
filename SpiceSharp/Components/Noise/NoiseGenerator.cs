@@ -35,19 +35,14 @@ namespace SpiceSharp.Components
         public double InNoiz { get; private set; }
 
         /// <summary>
-        /// Gets node A of the noise source
+        /// Gets the nodes this noise generator is connected to
         /// </summary>
-        public int NOISEaNode { get; private set; }
-
-        /// <summary>
-        /// Gets node B of the noise source
-        /// </summary>
-        public int NOISEbNode { get; private set; }
+        public int[] NOISEnodes { get; private set; }
 
         /// <summary>
         /// Private variables
         /// </summary>
-        private int pinA, pinB;
+        private int[] pins;
 
         /// <summary>
         /// Constructor
@@ -55,37 +50,39 @@ namespace SpiceSharp.Components
         /// <param name="name">Name of the noise source</param>
         /// <param name="a">Pin A</param>
         /// <param name="b">Pin B</param>
-        public NoiseGenerator(string name, int a, int b)
+        public NoiseGenerator(string name, params int[] pins)
         {
             Name = name;
-            pinA = a;
-            pinB = b;
+            this.pins = pins;
         }
 
         /// <summary>
         /// Connect the noise generator in the circuit
         /// </summary>
-        /// <param name="node1">Node 1</param>
-        /// <param name="node2">Node 2</param>
-        public virtual void Setup(Circuit ckt, params int[] pins)
+        /// <param name="ckt">Circuit</param>
+        /// <param name="nodes">Nodes</param>
+        public virtual void Setup(Circuit ckt, params int[] nodes)
         {
-            NOISEaNode = pins[pinA];
-            NOISEbNode = pins[pinB];
+            NOISEnodes = new int[pins.Length];
+            for (int i = 0; i < pins.Length; i++)
+                NOISEnodes[i] = nodes[pins[i]];
         }
+
+        /// <summary>
+        /// Set the values for evaluating the noise generator
+        /// </summary>
+        /// <param name="values"></param>
+        public abstract void Set(params double[] values);
 
         /// <summary>
         /// Evaluate
         /// </summary>
-        public virtual void Evaluate(Circuit ckt, double param)
+        public virtual void Evaluate(Circuit ckt)
         {
-            var sol = ckt.State.Complex.Solution;
             var noise = ckt.State.Noise;
 
-            Complex val = sol[NOISEaNode] - sol[NOISEbNode];
-            double gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
-
             // Calculate the noise
-            Noise = gain * CalculateNoise(ckt, param);
+            Noise = CalculateNoise(ckt);
             double lnNdens = Math.Log(Math.Max(Noise, 1e-38));
 
             // Initialize the integrated noise if we just started
@@ -114,6 +111,6 @@ namespace SpiceSharp.Components
         /// <param name="ckt">Circuit</param>
         /// <param name="param">Parameter</param>
         /// <returns></returns>
-        protected abstract double CalculateNoise(Circuit ckt, double param);
+        protected abstract double CalculateNoise(Circuit ckt);
     }
 }

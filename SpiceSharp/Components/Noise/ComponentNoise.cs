@@ -60,7 +60,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="ckt">Circuit</param>
         /// <param name="parameters">Parameters</param>
-        public void Evaluate(Circuit ckt, params double[] parameters)
+        public void Evaluate(Circuit ckt)
         {
             var noise = ckt.State.Noise;
 
@@ -70,7 +70,7 @@ namespace SpiceSharp.Components
             OutNoiz = 0.0;
             for (int i = 0; i < Generators.Length; i++)
             {
-                Generators[i].Evaluate(ckt, parameters[i]);
+                Generators[i].Evaluate(ckt);
                 Noise += Generators[i].Noise;
                 InNoiz += Generators[i].InNoiz;
                 OutNoiz += Generators[i].OutNoiz;
