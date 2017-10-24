@@ -13,6 +13,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// </summary>
     public class MOS1NoiseBehavior : CircuitObjectBehaviorNoise
     {
+        private const int MOS1RDNOIZ = 0;
+        private const int MOS1RSNOIZ = 1;
+        private const int MOS1IDNOIZ = 2;
+        private const int MOS1FLNOIZ = 3;
+
         /// <summary>
         /// Noise generators
         /// </summary>
@@ -59,14 +64,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 coxSquared = model.MOS1oxideCapFactor;
             coxSquared *= coxSquared;
 
-            double Kf = model.MOS1fNcoef * Math.Exp(model.MOS1fNexp * Math.Log(Math.Max(Math.Abs(mos1.MOS1cd), 1e-38))) / (mos1.MOS1w * (mos1.MOS1l - 2 * model.MOS1latDiff) * coxSquared);
+            // Set noise parameters
+            MOS1noise.Generators[MOS1RDNOIZ].Set(mos1.MOS1drainConductance);
+            MOS1noise.Generators[MOS1RSNOIZ].Set(mos1.MOS1sourceConductance);
+            MOS1noise.Generators[MOS1IDNOIZ].Set(2.0 / 3.0 * Math.Abs(mos1.MOS1gm));
+            MOS1noise.Generators[MOS1FLNOIZ].Set(model.MOS1fNcoef * Math.Exp(model.MOS1fNexp * Math.Log(Math.Max(Math.Abs(mos1.MOS1cd), 1e-38))) / (mos1.MOS1w * (mos1.MOS1l - 2 * model.MOS1latDiff) * coxSquared) / noise.Freq);
 
-            MOS1noise.Evaluate(ckt,
-                mos1.MOS1drainConductance,
-                mos1.MOS1sourceConductance,
-                2.0 / 3.0 * Math.Abs(mos1.MOS1gm),
-                Kf / noise.Freq
-                );
+            // Evaluate noise sources
+            MOS1noise.Evaluate(ckt);
         }
     }
 }

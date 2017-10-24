@@ -10,6 +10,16 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class BJTNoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
+        /// Noise sources by their index
+        /// </summary>
+        private const int BJTRCNOIZ = 0;
+        private const int BJTRBNOIZ = 1;
+        private const int BJT_RE_NOISE = 2;
+        private const int BJTICNOIZ = 3;
+        private const int BJTIBNOIZ = 4;
+        private const int BJTFLNOIZ = 5;
+
+        /// <summary>
         /// Noise generators
         /// </summary>
         public ComponentNoise BJTnoise { get; } = new ComponentNoise(
@@ -52,15 +62,16 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var state = ckt.State;
             var noise = state.Noise;
 
-            double Kf = model.BJTfNcoef * Math.Exp(model.BJTfNexp * Math.Log(Math.Max(Math.Abs(state.States[0][bjt.BJTstate + BJT.BJTcb]), 1e-38)));
+            // Set noise parameters
+            BJTnoise.Generators[BJTRCNOIZ].Set(model.BJTcollectorConduct * bjt.BJTarea);
+            BJTnoise.Generators[BJTRBNOIZ].Set(state.States[0][bjt.BJTstate + BJT.BJTgx]);
+            BJTnoise.Generators[BJT_RE_NOISE].Set(model.BJTemitterConduct * bjt.BJTarea);
+            BJTnoise.Generators[BJTICNOIZ].Set(state.States[0][bjt.BJTstate + BJT.BJTcc]);
+            BJTnoise.Generators[BJTIBNOIZ].Set(state.States[0][bjt.BJTstate + BJT.BJTcb]);
+            BJTnoise.Generators[BJTFLNOIZ].Set(model.BJTfNcoef * Math.Exp(model.BJTfNexp * Math.Log(Math.Max(Math.Abs(state.States[0][bjt.BJTstate + BJT.BJTcb]), 1e-38))) / noise.Freq);
 
-            BJTnoise.Evaluate(ckt,
-                model.BJTcollectorConduct * bjt.BJTarea,
-                state.States[0][bjt.BJTstate + BJT.BJTgx],
-                model.BJTemitterConduct * bjt.BJTarea,
-                state.States[0][bjt.BJTstate + BJT.BJTcc],
-                state.States[0][bjt.BJTstate + BJT.BJTcb],
-                Kf / noise.Freq);
+            // Evaluate all noise sources
+            BJTnoise.Evaluate(ckt);
         }
     }
 }
