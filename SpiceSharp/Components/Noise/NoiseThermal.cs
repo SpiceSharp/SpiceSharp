@@ -37,7 +37,7 @@
             var sol = ckt.State.Complex.Solution;
             var val = sol[NOISEnodes[0]] - sol[NOISEnodes[1]];
             double gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
-            return 4.0 * Circuit.CONSTBoltz * ckt.State.Temperature * Conductance;
+            return 4.0 * Circuit.CONSTBoltz * ckt.State.Temperature * Conductance * gain;
         }
     }
 }

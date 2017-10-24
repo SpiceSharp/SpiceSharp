@@ -51,8 +51,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             // Set noise parameters
             DIOnoise.Generators[DIORSNOIZ].Set(model.DIOconductance * diode.DIOarea);
-            DIOnoise.Generators[DIORSNOIZ].Set(state.States[0][diode.DIOstate + Diode.DIOcurrent]);
-            DIOnoise.Generators[DIORSNOIZ].Set(model.DIOfNcoef * Math.Exp(model.DIOfNexp * Math.Log(Math.Max(Math.Abs(state.States[0][diode.DIOstate + Diode.DIOcurrent]), 1e-38))) / noise.Freq);
+            DIOnoise.Generators[DIOIDNOIZ].Set(state.States[0][diode.DIOstate + Diode.DIOcurrent]);
+            DIOnoise.Generators[DIOFLNOIZ].Set(model.DIOfNcoef * Math.Exp(model.DIOfNexp 
+                * Math.Log(Math.Max(Math.Abs(state.States[0][diode.DIOstate + Diode.DIOcurrent]), 1e-38))) / noise.Freq);
 
             // Evaluate noise
             DIOnoise.Evaluate(ckt);

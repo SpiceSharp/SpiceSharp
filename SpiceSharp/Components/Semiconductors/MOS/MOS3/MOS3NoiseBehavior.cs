@@ -60,7 +60,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
             MOS3noise.Generators[MOS3RDNOIZ].Set(mos3.MOS3drainConductance);
             MOS3noise.Generators[MOS3RSNOIZ].Set(mos3.MOS3sourceConductance);
             MOS3noise.Generators[MOS3IDNOIZ].Set(2.0 / 3.0 * Math.Abs(mos3.MOS3gm));
-            MOS3noise.Generators[MOS3FLNOIZ].Set(model.MOS3fNcoef * Math.Exp(model.MOS3fNexp * Math.Log(Math.Max(Math.Abs(mos3.MOS3cd), 1e-38))) / (mos3.MOS3w * (mos3.MOS3l - 2 * model.MOS3latDiff) * model.MOS3oxideCapFactor * model.MOS3oxideCapFactor) / noise.Freq);
+            MOS3noise.Generators[MOS3FLNOIZ].Set(model.MOS3fNcoef * Math.Exp(model.MOS3fNexp 
+                * Math.Log(Math.Max(Math.Abs(mos3.MOS3cd), 1e-38))) / (mos3.MOS3w * (mos3.MOS3l - 2 * model.MOS3latDiff) 
+                * model.MOS3oxideCapFactor * model.MOS3oxideCapFactor) / noise.Freq);
 
             // Evaluate noise sources
             MOS3noise.Evaluate(ckt);
