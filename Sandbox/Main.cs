@@ -43,24 +43,14 @@ namespace Sandbox
 
             NetlistReader nr = new NetlistReader();
             string netlist = string.Join(Environment.NewLine,
-                ".MODEL mjd44h11 npn",
-                "+ IS = 1.45468e-14 BF = 135.617 NF = 0.85 VAF = 10",
-                "+ IKF = 5.15565 ISE = 2.02483e-13 NE = 3.99964 BR = 13.5617",
-                "+ NR = 0.847424 VAR = 100 IKR = 8.44427 ISC = 1.86663e-13",
-                "+ NC = 1.00046 RB = 1.35729 IRB = 0.1 RBM = 0.1",
-                "+ RE = 0.0001 RC = 0.037687 XTB = 0.90331 XTI = 1",
-                "+ EG = 1.20459 CJE = 3.02297e-09 VJE = 0.649408 MJE = 0.351062",
-                "+ TF = 2.93022e-09 XTF = 1.5 VTF = 1.00001 ITF = 0.999997",
-                "+ CJC = 3.0004e-10 VJC = 0.600008 MJC = 0.409966 XCJC = 0.8",
-                "+ FC = 0.533878 CJS = 0 VJS = 0.75 MJS = 0.5",
-                "+ TR = 2.73328e-08 PTF = 0 KF = 0 AF = 1",
-                "V1 in 0 DC 0 AC 1 0",
-                "Vsupply vdd 0 5",
-                "R1 vdd out 1k",
-                "R2 out b 10k",
-                "Cin in b 1u",
-                "Q1 c b 0 0 mjd44h11",
-                ".SAVE vr(out) vi(out)",
+                "M1 out g vdd vdd DMOS L = 1u W = 1u",
+                ".MODEL DMOS pmos(LEVEL = 3 VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5)",
+                "Vsupply vdd 0 1.8",
+                "Vin in 0 DC 0 AC 1 0",
+                "R1 out 0 100k",
+                "R2 g out 10k",
+                "Cin in g 1u",
+                ".SAVE VR(out) VI(out)",
                 ".AC dec 5 10 10g"
                 );
             nr.Parse(new MemoryStream(Encoding.UTF8.GetBytes(netlist)));

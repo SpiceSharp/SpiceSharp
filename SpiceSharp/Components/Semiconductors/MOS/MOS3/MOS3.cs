@@ -16,6 +16,7 @@ namespace SpiceSharp.Components
         /// </summary>
         static MOS3()
         {
+            Behaviours.Behaviours.RegisterBehaviour(typeof(MOS3), typeof(ComponentBehaviours.MOS3TemperatureBehaviour));
             Behaviours.Behaviours.RegisterBehaviour(typeof(MOS3), typeof(ComponentBehaviours.MOS3LoadBehaviour));
             Behaviours.Behaviours.RegisterBehaviour(typeof(MOS3), typeof(ComponentBehaviours.MOS3AcBehaviour));
             Behaviours.Behaviours.RegisterBehaviour(typeof(MOS3), typeof(ComponentBehaviours.MOS3NoiseBehaviour));
