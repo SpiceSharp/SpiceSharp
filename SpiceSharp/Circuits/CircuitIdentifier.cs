@@ -161,6 +161,6 @@ namespace SpiceSharp.Circuits
         /// Implicitely convert a string to a name for a circuit object
         /// </summary>
         /// <param name="name">Name</param>
-        // public static implicit operator CircuitIdentifier(string name) => new CircuitIdentifier(name);
+        public static implicit operator CircuitIdentifier(string name) => new CircuitIdentifier(name);
     }
 }
