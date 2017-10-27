@@ -97,7 +97,6 @@ namespace SpiceSharp.Circuits
 
                 // Check for short-circuited components
                 int n = -1;
-                    int n = -1;
                 bool sc = true;
                 for (int i = 0; i < icc.PinCount; i++)
                 {

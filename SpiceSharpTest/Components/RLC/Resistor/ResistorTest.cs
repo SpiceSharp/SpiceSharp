@@ -29,6 +29,23 @@ namespace SpiceSharpTest.Components.RLC.Resistor
         }
 
         [TestMethod]
+        public void SingleResistorOnDcVoltage_Ac()
+        {
+            var ckt = CreateResistorDcCircuit(10, 1000);
+
+            ckt.Method = new Trapezoidal();
+            AC simulation = new AC("Simulation", "lin", 10, 1, 1001);
+            simulation.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                var current = data.Ask(new CircuitIdentifier("R_1"), "i");
+                Assert.That.AreEqualWithTol(0.01, current, 0, 1e-8);
+            };
+
+            simulation.Circuit = ckt;
+            simulation.SetupAndExecute();
+        }
+
+        [TestMethod]
         public void VoltageDividerDcVoltage_Op()
         {
             var ckt = CreateVoltageDividerResistorDcCircuit(100, 3, 1);
