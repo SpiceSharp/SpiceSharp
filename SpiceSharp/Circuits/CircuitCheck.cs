@@ -17,6 +17,7 @@ namespace SpiceSharp.Circuits
         /// Private variables
         /// </summary>
         private bool HasSource = false;
+        private bool HasGround = false;
         private List<Tuple<ICircuitComponent, int, int>> voltagedriven = new List<Tuple<ICircuitComponent, int, int>>();
         private Dictionary<int, HashSet<int>> connections = new Dictionary<int, HashSet<int>>();
         private HashSet<int> unconnected = new HashSet<int>();
@@ -52,6 +53,10 @@ namespace SpiceSharp.Circuits
             if (!HasSource)
                 throw new CircuitException("No independent source found");
 
+            // Check if a circuit has ground
+            if (!HasGround)
+                throw new CircuitException("No ground found");
+
             // Check if a voltage driver is closing a loop
             var icc = FindVoltageDriveLoop();
             if (icc != null)
@@ -80,8 +85,19 @@ namespace SpiceSharp.Circuits
             // Circuit components
             if (c is ICircuitComponent icc)
             {
+                //Check for ground node
+                for (int i = 0; i < icc.PinCount; i++)
+                {
+                    var id = icc.GetNode(i);
+                    if (id.Name == "0" || id.Name == "gnd")
+                    {
+                        HasGround = true;
+                    }
+                }
+
                 // Check for short-circuited components
                 int n = -1;
+                    int n = -1;
                 bool sc = true;
                 for (int i = 0; i < icc.PinCount; i++)
                 {
