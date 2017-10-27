@@ -184,6 +184,9 @@
     <Compile Include="Simulations\SimulationConfiguration.cs" />
     <Compile Include="Simulations\SimulationData.cs" />
     <Compile Include="Simulations\Transient\Transient.cs" />
+    <Compile Include="Sparse\Matrix.cs" />
+    <Compile Include="Sparse\MatrixElement.cs" />
+    <Compile Include="Sparse\SparseException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="api\index.md" />
