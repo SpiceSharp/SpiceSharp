@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Circuits\CircuitCheckTest.cs" />
+    <Compile Include="Components\Currentsources\Currentsource\CurrentsourceTest.cs" />
     <Compile Include="Components\RLC\Resistor\ResistorTest.cs" />
     <Compile Include="Models\Framework.cs" />
     <Compile Include="Models\Semiconductors\SpiceSharpBipolarTest.cs" />
