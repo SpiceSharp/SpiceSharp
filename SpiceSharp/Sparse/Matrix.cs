@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpiceSharp.Sparse
 {
@@ -14,28 +10,27 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Constants
         /// </summary>
-        /// 
         internal const int OK = 0;
         internal const int E_PANIC = 1;
         internal const int E_INTERN = E_PANIC;
         internal const int E_PRIVATE = 100;
         internal const int E_BADMATRIX = (E_PRIVATE + 1); /* ill-formed matrix can't be decomposed */
-        internal const int E_SINGULAR = (E_PRIVATE+2); /* matrix is singular */
-        internal const int E_ITERLIM = (E_PRIVATE+3);  /* iteration limit reached,operation aborted */
-        internal const int E_ORDER = (E_PRIVATE+4);    /* integration order not supported */
-        internal const int E_METHOD = (E_PRIVATE+5);   /* integration method not supported */
-        internal const int E_TIMESTEP = (E_PRIVATE+6); /* timestep too small */
-        internal const int E_XMISSIONLINE = (E_PRIVATE+7);    /* transmission line in pz analysis */
-        internal const int E_MAGEXCEEDED = (E_PRIVATE+8); /* pole-zero magnitude too large */
-        internal const int E_SHORT = (E_PRIVATE+9);   /* pole-zero input or output shorted */
-        internal const int E_INISOUT = (E_PRIVATE+10);    /* pole-zero input is output */
-        internal const int E_ASKCURRENT = (E_PRIVATE+11); /* ac currents cannot be ASKed */
-        internal const int E_ASKPOWER = (E_PRIVATE+12);   /* ac powers cannot be ASKed */
-        internal const int E_NODUNDEF = (E_PRIVATE+13); /* node not defined in noise anal */
-        internal const int E_NOACINPUT = (E_PRIVATE+14); /* no ac input src specified for noise */
-        internal const int E_NOF2SRC = (E_PRIVATE+15); /* no source at F2 for IM disto analysis */
-        internal const int E_NODISTO = (E_PRIVATE+16); /* no distortion analysis - NODISTO defined */
-        internal const int E_NONOISE = (E_PRIVATE+17); /* no noise analysis - NONOISE defined */
+        internal const int E_SINGULAR = (E_PRIVATE + 2); /* matrix is singular */
+        internal const int E_ITERLIM = (E_PRIVATE + 3);  /* iteration limit reached,operation aborted */
+        internal const int E_ORDER = (E_PRIVATE + 4);    /* integration order not supported */
+        internal const int E_METHOD = (E_PRIVATE + 5);   /* integration method not supported */
+        internal const int E_TIMESTEP = (E_PRIVATE + 6); /* timestep too small */
+        internal const int E_XMISSIONLINE = (E_PRIVATE + 7);    /* transmission line in pz analysis */
+        internal const int E_MAGEXCEEDED = (E_PRIVATE + 8); /* pole-zero magnitude too large */
+        internal const int E_SHORT = (E_PRIVATE + 9);   /* pole-zero input or output shorted */
+        internal const int E_INISOUT = (E_PRIVATE + 10);    /* pole-zero input is output */
+        internal const int E_ASKCURRENT = (E_PRIVATE + 11); /* ac currents cannot be ASKed */
+        internal const int E_ASKPOWER = (E_PRIVATE + 12);   /* ac powers cannot be ASKed */
+        internal const int E_NODUNDEF = (E_PRIVATE + 13); /* node not defined in noise anal */
+        internal const int E_NOACINPUT = (E_PRIVATE + 14); /* no ac input src specified for noise */
+        internal const int E_NOF2SRC = (E_PRIVATE + 15); /* no source at F2 for IM disto analysis */
+        internal const int E_NODISTO = (E_PRIVATE + 16); /* no distortion analysis - NODISTO defined */
+        internal const int E_NONOISE = (E_PRIVATE + 17); /* no noise analysis - NONOISE defined */
         internal const int spOKAY = OK;
         internal const int spSMALL_PIVOT = OK;
         internal const int spZERO_DIAG = E_SINGULAR;
@@ -80,7 +75,7 @@ namespace SpiceSharp.Sparse
         internal MatrixElement[] FirstInCol;
         internal MatrixElement[] FirstInRow;
         internal ulong ID;
-        internal double[] Intermediate;
+        internal MatrixElement[] Intermediate;
         internal bool InternalVectorsAllocated;
         internal int[] IntToExtColMap;
         internal int[] IntToExtRowMap;
@@ -105,11 +100,16 @@ namespace SpiceSharp.Sparse
         internal MatrixElement TrashCan;
 
         internal int RecordsRemaining;
-        internal MatrixElement NextAvailElement;
+        internal MatrixElement[] NextAvailElement;
         internal int ElementsRemaining;
-        internal MatrixElement NextAvailFillin;
+        internal MatrixElement[] NextAvailFillin;
         internal int FillinsRemaining;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="Size">Matrix size</param>
+        /// <param name="Complex">Is complex</param>
         public Matrix(int Size, bool Complex)
         {
             int SizePlusOne;
@@ -161,6 +161,7 @@ namespace SpiceSharp.Sparse
             FillinsRemaining = 0;
 
             // Take out the trash
+            TrashCan = new MatrixElement();
             TrashCan.Real = 0.0;
             TrashCan.Imag = 0.0;
             TrashCan.Row = 0;
@@ -205,9 +206,68 @@ namespace SpiceSharp.Sparse
             ExtToIntColMap[0] = 0;
             ExtToIntRowMap[0] = 0;
 
-            /* Allocate space for fill-ins and initial set of elements. */
+            // Allocate space for fill-ins and initial set of elements
             InitializeElementBlocks(SPACE_FOR_ELEMENTS * AllocatedSize,
                                              SPACE_FOR_FILL_INS * AllocatedSize);
         }
-    }
+
+        /// <summary>
+        /// Element allocation
+        /// </summary>
+        /// <returns></returns>
+        internal MatrixElement spcGetElement() => new MatrixElement();
+
+        /// <summary>
+        /// Get fill-in
+        /// </summary>
+        /// <returns></returns>
+        internal MatrixElement spcGetFillin() => new MatrixElement();
+
+        private void InitializeElementBlocks(int InitialNumberOfElements, int NumberOfFillinsExpected)
+        {
+            MatrixElement[] pElement;
+
+            // Allocate block of MatrixElements for elements
+            pElement = new MatrixElement[InitialNumberOfElements];
+            ElementsRemaining = InitialNumberOfElements;
+            NextAvailElement = pElement;
+
+            // Allocate block of MatrixElements for fill-ins
+            pElement = new MatrixElement[NumberOfFillinsExpected];
+            FillinsRemaining = NumberOfFillinsExpected;
+            NextAvailFillin = pElement;
+        }
+
+        /// <summary>
+        /// Where is matrix singular
+        /// </summary>
+        /// <param name="pRow">Row</param>
+        /// <param name="pCol">Column</param>
+        internal void spWhereSingular(out int pRow, out int pCol)
+        {
+            if (Error == spSINGULAR || Error == spZERO_DIAG)
+            {
+                pRow = SingularRow;
+                pCol = SingularCol;
+            }
+            else
+            {
+                pRow = 0;
+                pCol = 0;
+            }
+            return;
+        }
+
+        /// <summary>
+        /// Get matrix size
+        /// </summary>
+        /// <param name="External"></param>
+        /// <returns></returns>
+        internal int spGetSize(bool External) => External ? ExtSize : Size;
+
+        internal void spSetReal() => Complex = false;
+        internal void spSetComplex() => Complex = true;
+        internal int spFillinCount() => Fillins;
+        internal int spElementCount() => Elements;
+}
 }

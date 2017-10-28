@@ -187,6 +187,10 @@
     <Compile Include="Sparse\Matrix.cs" />
     <Compile Include="Sparse\MatrixElement.cs" />
     <Compile Include="Sparse\SparseException.cs" />
+    <Compile Include="Sparse\spbuild.cs" />
+    <Compile Include="Sparse\spdefs.cs" />
+    <Compile Include="Sparse\spfactor.cs" />
+    <Compile Include="Sparse\spoutput.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="api\index.md" />
