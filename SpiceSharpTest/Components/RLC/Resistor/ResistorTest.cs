@@ -62,6 +62,26 @@ namespace SpiceSharpTest.Components.RLC.Resistor
             simulation.SetupAndExecute();
         }
 
+        [TestMethod]
+        public void ParallelResistorsDcVoltage_Op()
+        {
+            var ckt = CreateParallelResistorsDcCircuit(100, 2, 1);
+
+            ckt.Method = new Trapezoidal();
+            OP simulation = new OP("Simulation");
+            simulation.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                var r1Current = data.Ask(new CircuitIdentifier("R_1"), "i");
+                var r2Current = data.Ask(new CircuitIdentifier("R_2"), "i");
+
+                Assert.That.AreEqualWithTol(50, r1Current, 0, 1e-8);
+                Assert.That.AreEqualWithTol(100, r2Current, 0, 1e-8);
+            };
+
+            simulation.Circuit = ckt;
+            simulation.SetupAndExecute();
+        }
+
         private static Circuit CreateVoltageDividerResistorDcCircuit(double dcVoltage, double resistance1, double resistance2)
         {
             Circuit ckt = new Circuit();
@@ -79,6 +99,29 @@ namespace SpiceSharpTest.Components.RLC.Resistor
                 new SpiceSharp.Components.Resistor(
                     new CircuitIdentifier("R_2"),
                     new CircuitIdentifier("OUT"),
+                    new CircuitIdentifier("gnd"),
+                    resistance2)
+            );
+            return ckt;
+        }
+
+        private static Circuit CreateParallelResistorsDcCircuit(double dcVoltage, double resistance1, double resistance2)
+        {
+            Circuit ckt = new Circuit();
+            ckt.Objects.Add(
+                new Voltagesource(
+                    new CircuitIdentifier("V_1"),
+                    new CircuitIdentifier("IN"),
+                    new CircuitIdentifier("gnd"),
+                    dcVoltage),
+                new SpiceSharp.Components.Resistor(
+                    new CircuitIdentifier("R_1"),
+                    new CircuitIdentifier("IN"),
+                    new CircuitIdentifier("gnd"),
+                    resistance1),
+                new SpiceSharp.Components.Resistor(
+                    new CircuitIdentifier("R_2"),
+                    new CircuitIdentifier("IN"),
                     new CircuitIdentifier("gnd"),
                     resistance2)
             );
