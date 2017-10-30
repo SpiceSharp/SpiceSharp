@@ -1,6 +1,5 @@
 ﻿using System;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Circuits
 {
@@ -21,6 +20,13 @@ namespace SpiceSharp.Circuits
             InitFix
         }
 
+        public enum SparseFlags
+        {
+            NISHOULDPREORDER = 0x01,
+            NIDIDPREORDER = 0x100,
+            NIACSHOULDREORDER = 0x10
+        }
+
         /// <summary>
         /// All possible domain types
         /// </summary>
@@ -33,9 +39,24 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
+        /// TEMPORARY: Pivot absolute tolerance
+        /// </summary>
+        public double PivotAbsTol { get; set; } = 1e-13;
+
+        /// <summary>
+        /// TEMPORARY: Pivot relative tolerance
+        /// </summary>
+        public double PivotRelTol { get; set; } = 1e-3;
+
+        /// <summary>
         /// Gets or sets the initialization flag
         /// </summary>
         public InitFlags Init { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sparse matrix flags
+        /// </summary>
+        public SparseFlags Sparse { get; set; }
 
         /// <summary>
         /// Gets or sets the current domain for simulation
@@ -126,7 +147,7 @@ namespace SpiceSharp.Circuits
         /// Get the states for this circuit
         /// Each element in the vector is used by circuit components to store their state
         /// </summary>
-        public Vector<double>[] States { get; private set; } = null;
+        public double[][] States { get; private set; } = null;
 
         /// <summary>
         /// True if already initialized
@@ -147,12 +168,12 @@ namespace SpiceSharp.Circuits
             if (ckt.Method != null)
                 ReinitStates(ckt.Method);
             else
-                States = new Vector<double>[2];
+                States = new double[2][];
 
             // Fill the states
             NumStates = Math.Max(NumStates, 1);
             for (int i = 0; i < States.Length; i++)
-                States[i] = new DenseVector(NumStates);
+                States[i] = new double[NumStates];
 
             Initialized = true;
         }
@@ -165,10 +186,10 @@ namespace SpiceSharp.Circuits
         {
             // Allocate states
             // States = new Vector<double>[method.MaxOrder + 2];
-            States = new Vector<double>[8];
+            States = new double[8][];
             NumStates = Math.Max(NumStates, 1);
             for (int i = 0; i < States.Length; i++)
-                States[i] = new DenseVector(NumStates);
+                States[i] = new double[NumStates];
         }
 
         /// <summary>

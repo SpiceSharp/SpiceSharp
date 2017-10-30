@@ -411,7 +411,7 @@ namespace Spice2SpiceSharp
         private string ComplexAssignments(string code)
         {
             // Find assignments to the imaginary part and try to combine them with the real counterpart
-            // The imaginary assignments are of the form: cstate.Matrix[<node1>, <node2>].Imag +=/-= <expression>;
+            // The imaginary assignments are of the form: // cstate.Matrix[<node1>, <node2>].Imag +=/-= <expression>;
             // We need to make sure that conditions are not broken while matching equations...
 
             // First clean up some annoying brackets
@@ -585,12 +585,12 @@ namespace Spice2SpiceSharp
 
                 // Build the value
                 if (string.IsNullOrEmpty(ipart))
-                    na.Value = $"cstate.Matrix[{node.Item1}, {node.Item2}] {na.Op} {rpart};";
+                    na.Value = $"// cstate.Matrix[{node.Item1}, {node.Item2}] {na.Op} {rpart};";
                 else
                 {
                     if (string.IsNullOrEmpty(rpart))
                         rpart = "0.0";
-                    na.Value = $"cstate.Matrix[{node.Item1}, {node.Item2}] {na.Op} new Complex({rpart}, {ipart});";
+                    na.Value = $"// cstate.Matrix[{node.Item1}, {node.Item2}] {na.Op} new Complex({rpart}, {ipart});";
                 }
                 na.Length = na.Value.Length;
                 insert.Add(na.Index, na);

@@ -348,66 +348,59 @@ namespace SpiceSharp.Components.ComponentBehaviors
             xcbdb = (cbdb - capbd) * omega;
             xcbsb = (cbsb - capbs) * omega;
 
-            cstate.Matrix[bsim3.BSIM3gNode, bsim3.BSIM3gNode] -= new Complex(xgtg - xcggbi, -xcggb);
-            cstate.Matrix[bsim3.BSIM3bNode, bsim3.BSIM3bNode] += new Complex(gbd + gbs - bsim3.BSIM3gbbs, -(xcbgb + xcbdb + xcbsb));
-            cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3dNodePrime] += new Complex(gdpr + gds + gbd + RevSum + xcddbi + dxpart * xgtd + T1 *
-                ddxpart_dVd + gbdpdp, xcddb + gdsi + RevSumi);
-            cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3sNodePrime] += new Complex(gspr + gds + gbs + FwdSum + xcssbi + sxpart * xgts + T1 *
-                dsxpart_dVs + gbspsp, xcssb + gdsi + FwdSumi);
-            cstate.Matrix[bsim3.BSIM3gNode, bsim3.BSIM3bNode] -= new Complex(xgtb - xcgbbi, xcggb + xcgdb + xcgsb);
-            cstate.Matrix[bsim3.BSIM3gNode, bsim3.BSIM3dNodePrime] -= new Complex(xgtd - xcgdbi, -xcgdb);
-            cstate.Matrix[bsim3.BSIM3gNode, bsim3.BSIM3sNodePrime] -= new Complex(xgts - xcgsbi, -xcgsb);
-            cstate.Matrix[bsim3.BSIM3bNode, bsim3.BSIM3gNode] -= new Complex(bsim3.BSIM3gbgs, -xcbgb);
-            cstate.Matrix[bsim3.BSIM3bNode, bsim3.BSIM3dNodePrime] -= new Complex(gbd - gbbdp, -xcbdb);
-            cstate.Matrix[bsim3.BSIM3bNode, bsim3.BSIM3sNodePrime] -= new Complex(gbs - gbbsp, -xcbsb);
-            cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3gNode] += new Complex(Gm + dxpart * xgtg + T1 * ddxpart_dVg + gbdpg + xcdgbi, xcdgb + Gmi);
-            cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3bNode] -= new Complex(gbd - Gmbs - dxpart * xgtb - T1 * ddxpart_dVb - gbdpb - xcdbbi,
-                xcdgb + xcddb + xcdsb + Gmbsi);
-            cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3sNodePrime] -= new Complex(gds + FwdSum - dxpart * xgts - T1 * ddxpart_dVs - gbdpsp -
-                xcdsbi, -(xcdsb - gdsi - FwdSumi));
-            cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3gNode] -= new Complex(Gm - sxpart * xgtg - T1 * dsxpart_dVg - gbspg - xcsgbi, -(xcsgb -
-                Gmi));
-            cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3bNode] -= new Complex(gbs + Gmbs - sxpart * xgtb - T1 * dsxpart_dVb - gbspb - xcsbbi,
-                xcsgb + xcsdb + xcssb - Gmbsi);
-            cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3dNodePrime] -= new Complex(gds + RevSum - sxpart * xgtd - T1 * dsxpart_dVd - gbspdp -
-                xcsdbi, -(xcsdb - gdsi - RevSumi));
+            // cstate.Matrix[bsim3.BSIM3gNode, bsim3.BSIM3gNode] -= new Complex(xgtg - xcggbi, -xcggb);
+            // cstate.Matrix[bsim3.BSIM3bNode, bsim3.BSIM3bNode] += new Complex(gbd + gbs - bsim3.BSIM3gbbs, -(xcbgb + xcbdb + xcbsb));
+            // cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3dNodePrime] += new Complex(gdpr + gds + gbd + RevSum + xcddbi + dxpart * xgtd + T1 * ddxpart_dVd + gbdpdp, xcddb + gdsi + RevSumi);
+            // cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3sNodePrime] += new Complex(gspr + gds + gbs + FwdSum + xcssbi + sxpart * xgts + T1 * dsxpart_dVs + gbspsp, xcssb + gdsi + FwdSumi);
+            // cstate.Matrix[bsim3.BSIM3gNode, bsim3.BSIM3bNode] -= new Complex(xgtb - xcgbbi, xcggb + xcgdb + xcgsb);
+            // cstate.Matrix[bsim3.BSIM3gNode, bsim3.BSIM3dNodePrime] -= new Complex(xgtd - xcgdbi, -xcgdb);
+            // cstate.Matrix[bsim3.BSIM3gNode, bsim3.BSIM3sNodePrime] -= new Complex(xgts - xcgsbi, -xcgsb);
+            // cstate.Matrix[bsim3.BSIM3bNode, bsim3.BSIM3gNode] -= new Complex(bsim3.BSIM3gbgs, -xcbgb);
+            // cstate.Matrix[bsim3.BSIM3bNode, bsim3.BSIM3dNodePrime] -= new Complex(gbd - gbbdp, -xcbdb);
+            // cstate.Matrix[bsim3.BSIM3bNode, bsim3.BSIM3sNodePrime] -= new Complex(gbs - gbbsp, -xcbsb);
+            // cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3gNode] += new Complex(Gm + dxpart * xgtg + T1 * ddxpart_dVg + gbdpg + xcdgbi, xcdgb + Gmi);
+            // cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3bNode] -= new Complex(gbd - Gmbs - dxpart * xgtb - T1 * ddxpart_dVb - gbdpb - xcdbbi, xcdgb + xcddb + xcdsb + Gmbsi);
+            // cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3sNodePrime] -= new Complex(gds + FwdSum - dxpart * xgts - T1 * ddxpart_dVs - gbdpsp - xcdsbi, -(xcdsb - gdsi - FwdSumi));
+            // cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3gNode] -= new Complex(Gm - sxpart * xgtg - T1 * dsxpart_dVg - gbspg - xcsgbi, -(xcsgb - Gmi));
+            // cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3bNode] -= new Complex(gbs + Gmbs - sxpart * xgtb - T1 * dsxpart_dVb - gbspb - xcsbbi, xcsgb + xcsdb + xcssb - Gmbsi);
+            // cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3dNodePrime] -= new Complex(gds + RevSum - sxpart * xgtd - T1 * dsxpart_dVd - gbspdp - xcsdbi, -(xcsdb - gdsi - RevSumi));
 
-            cstate.Matrix[bsim3.BSIM3dNode, bsim3.BSIM3dNode] += gdpr;
-            cstate.Matrix[bsim3.BSIM3sNode, bsim3.BSIM3sNode] += gspr;
+            // cstate.Matrix[bsim3.BSIM3dNode, bsim3.BSIM3dNode] += gdpr;
+            // cstate.Matrix[bsim3.BSIM3sNode, bsim3.BSIM3sNode] += gspr;
 
-            cstate.Matrix[bsim3.BSIM3dNode, bsim3.BSIM3dNodePrime] -= gdpr;
-            cstate.Matrix[bsim3.BSIM3sNode, bsim3.BSIM3sNodePrime] -= gspr;
+            // cstate.Matrix[bsim3.BSIM3dNode, bsim3.BSIM3dNodePrime] -= gdpr;
+            // cstate.Matrix[bsim3.BSIM3sNode, bsim3.BSIM3sNodePrime] -= gspr;
 
-            cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3dNode] -= gdpr;
+            // cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3dNode] -= gdpr;
 
-            cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3sNode] -= gspr;
+            // cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3sNode] -= gspr;
 
             if (bsim3.BSIM3nqsMod != 0.0)
             {
                 if (bsim3.BSIM3acnqsMod != 0.0)
                 {
-                    cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3qNode] += 1.0;
-                    cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3gNode] += 0.0;
-                    cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3dNodePrime] += 0.0;
-                    cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3sNodePrime] += 0.0;
-                    cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3bNode] += 0.0;
+                    // cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3qNode] += 1.0;
+                    // cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3gNode] += 0.0;
+                    // cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3dNodePrime] += 0.0;
+                    // cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3sNodePrime] += 0.0;
+                    // cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3bNode] += 0.0;
 
-                    cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3qNode] += 0.0;
-                    cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3qNode] += 0.0;
-                    cstate.Matrix[bsim3.BSIM3gNode, bsim3.BSIM3qNode] += 0.0;
+                    // cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3qNode] += 0.0;
+                    // cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3qNode] += 0.0;
+                    // cstate.Matrix[bsim3.BSIM3gNode, bsim3.BSIM3qNode] += 0.0;
 
                 }
                 else
                 {
-                    cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3qNode] += new Complex(bsim3.BSIM3gtau, omega * BSIM3v30.ScalingFactor);
-                    cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3gNode] += new Complex(xgtg, -xcqgb);
-                    cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3dNodePrime] += new Complex(xgtd, -xcqdb);
-                    cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3sNodePrime] += new Complex(xgts, -xcqsb);
-                    cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3bNode] += new Complex(xgtb, -xcqbb);
+                    // cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3qNode] += new Complex(bsim3.BSIM3gtau, omega * BSIM3v30.ScalingFactor);
+                    // cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3gNode] += new Complex(xgtg, -xcqgb);
+                    // cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3dNodePrime] += new Complex(xgtd, -xcqdb);
+                    // cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3sNodePrime] += new Complex(xgts, -xcqsb);
+                    // cstate.Matrix[bsim3.BSIM3qNode, bsim3.BSIM3bNode] += new Complex(xgtb, -xcqbb);
 
-                    cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3qNode] += dxpart * bsim3.BSIM3gtau;
-                    cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3qNode] += sxpart * bsim3.BSIM3gtau;
-                    cstate.Matrix[bsim3.BSIM3gNode, bsim3.BSIM3qNode] -= bsim3.BSIM3gtau;
+                    // cstate.Matrix[bsim3.BSIM3dNodePrime, bsim3.BSIM3qNode] += dxpart * bsim3.BSIM3gtau;
+                    // cstate.Matrix[bsim3.BSIM3sNodePrime, bsim3.BSIM3qNode] += sxpart * bsim3.BSIM3gtau;
+                    // cstate.Matrix[bsim3.BSIM3gNode, bsim3.BSIM3qNode] -= bsim3.BSIM3gtau;
 
                 }
             }

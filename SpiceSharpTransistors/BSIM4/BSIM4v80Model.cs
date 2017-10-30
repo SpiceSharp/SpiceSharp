@@ -2171,7 +2171,7 @@ namespace SpiceSharp.Components
                 BSIM4kgidl.Value = 0.0;
             if (!BSIM4fgidl.Given)
                 /* v4.7 New GIDL / GISL */
-                /* BSIM4fgidl.Value = 0.0; */
+                /* BSIM4fgidl.Value = 0.0;
                 /* Default value of fgdil set to 1 in BSIM4.8.0 */
                 BSIM4fgidl.Value = 1.0;
 

@@ -26,10 +26,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             g_now = current_state > 0.0 ? model.CSWonConduct : model.CSWoffConduct;
 
             // Load the Y-matrix
-            cstate.Matrix[csw.CSWposNode, csw.CSWposNode] += g_now;
-            cstate.Matrix[csw.CSWposNode, csw.CSWnegNode] -= g_now;
-            cstate.Matrix[csw.CSWnegNode, csw.CSWposNode] -= g_now;
-            cstate.Matrix[csw.CSWnegNode, csw.CSWnegNode] += g_now;
+            // cstate.Matrix[csw.CSWposNode, csw.CSWposNode] += g_now;
+            // cstate.Matrix[csw.CSWposNode, csw.CSWnegNode] -= g_now;
+            // cstate.Matrix[csw.CSWnegNode, csw.CSWposNode] -= g_now;
+            // cstate.Matrix[csw.CSWnegNode, csw.CSWnegNode] += g_now;
         }
     }
 }

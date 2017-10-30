@@ -458,37 +458,37 @@ namespace SpiceSharp.Components.ComponentBehaviors
             ceqbe = model.BJTtype * (cc + cb - vbe * (gm + go + gpi) + vbc * (go - geqcb));
             ceqbc = model.BJTtype * (-cc + vbe * (gm + go) - vbc * (gmu + go));
 
-            rstate.Rhs[bjt.BJTbaseNode] += (-ceqbx);
-            rstate.Rhs[bjt.BJTcolPrimeNode] += (ceqcs + ceqbx + ceqbc);
-            rstate.Rhs[bjt.BJTbasePrimeNode] += (-ceqbe - ceqbc);
-            rstate.Rhs[bjt.BJTemitPrimeNode] += (ceqbe);
-            rstate.Rhs[bjt.BJTsubstNode] += (-ceqcs);
+            // rstate.Rhs[bjt.BJTbaseNode] += (-ceqbx);
+            // rstate.Rhs[bjt.BJTcolPrimeNode] += (ceqcs + ceqbx + ceqbc);
+            // rstate.Rhs[bjt.BJTbasePrimeNode] += (-ceqbe - ceqbc);
+            // rstate.Rhs[bjt.BJTemitPrimeNode] += (ceqbe);
+            // rstate.Rhs[bjt.BJTsubstNode] += (-ceqcs);
             /* 
 			 * load y matrix
 			 */
-            rstate.Matrix[bjt.BJTcolNode, bjt.BJTcolNode] += (gcpr);
-            rstate.Matrix[bjt.BJTbaseNode, bjt.BJTbaseNode] += (gx + geqbx);
-            rstate.Matrix[bjt.BJTemitNode, bjt.BJTemitNode] += (gepr);
-            rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTcolPrimeNode] += (gmu + go + gcpr + gccs + geqbx);
-            rstate.Matrix[bjt.BJTbasePrimeNode, bjt.BJTbasePrimeNode] += (gx + gpi + gmu + geqcb);
-            rstate.Matrix[bjt.BJTemitPrimeNode, bjt.BJTemitPrimeNode] += (gpi + gepr + gm + go);
-            rstate.Matrix[bjt.BJTcolNode, bjt.BJTcolPrimeNode] += (-gcpr);
-            rstate.Matrix[bjt.BJTbaseNode, bjt.BJTbasePrimeNode] += (-gx);
-            rstate.Matrix[bjt.BJTemitNode, bjt.BJTemitPrimeNode] += (-gepr);
-            rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTcolNode] += (-gcpr);
-            rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTbasePrimeNode] += (-gmu + gm);
-            rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTemitPrimeNode] += (-gm - go);
-            rstate.Matrix[bjt.BJTbasePrimeNode, bjt.BJTbaseNode] += (-gx);
-            rstate.Matrix[bjt.BJTbasePrimeNode, bjt.BJTcolPrimeNode] += (-gmu - geqcb);
-            rstate.Matrix[bjt.BJTbasePrimeNode, bjt.BJTemitPrimeNode] += (-gpi);
-            rstate.Matrix[bjt.BJTemitPrimeNode, bjt.BJTemitNode] += (-gepr);
-            rstate.Matrix[bjt.BJTemitPrimeNode, bjt.BJTcolPrimeNode] += (-go + geqcb);
-            rstate.Matrix[bjt.BJTemitPrimeNode, bjt.BJTbasePrimeNode] += (-gpi - gm - geqcb);
-            rstate.Matrix[bjt.BJTsubstNode, bjt.BJTsubstNode] += (gccs);
-            rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTsubstNode] += (-gccs);
-            rstate.Matrix[bjt.BJTsubstNode, bjt.BJTcolPrimeNode] += (-gccs);
-            rstate.Matrix[bjt.BJTbaseNode, bjt.BJTcolPrimeNode] += (-geqbx);
-            rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTbaseNode] += (-geqbx);
+            // rstate.Matrix[bjt.BJTcolNode, bjt.BJTcolNode] += (gcpr);
+            // rstate.Matrix[bjt.BJTbaseNode, bjt.BJTbaseNode] += (gx + geqbx);
+            // rstate.Matrix[bjt.BJTemitNode, bjt.BJTemitNode] += (gepr);
+            // rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTcolPrimeNode] += (gmu + go + gcpr + gccs + geqbx);
+            // rstate.Matrix[bjt.BJTbasePrimeNode, bjt.BJTbasePrimeNode] += (gx + gpi + gmu + geqcb);
+            // rstate.Matrix[bjt.BJTemitPrimeNode, bjt.BJTemitPrimeNode] += (gpi + gepr + gm + go);
+            // rstate.Matrix[bjt.BJTcolNode, bjt.BJTcolPrimeNode] += (-gcpr);
+            // rstate.Matrix[bjt.BJTbaseNode, bjt.BJTbasePrimeNode] += (-gx);
+            // rstate.Matrix[bjt.BJTemitNode, bjt.BJTemitPrimeNode] += (-gepr);
+            // rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTcolNode] += (-gcpr);
+            // rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTbasePrimeNode] += (-gmu + gm);
+            // rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTemitPrimeNode] += (-gm - go);
+            // rstate.Matrix[bjt.BJTbasePrimeNode, bjt.BJTbaseNode] += (-gx);
+            // rstate.Matrix[bjt.BJTbasePrimeNode, bjt.BJTcolPrimeNode] += (-gmu - geqcb);
+            // rstate.Matrix[bjt.BJTbasePrimeNode, bjt.BJTemitPrimeNode] += (-gpi);
+            // rstate.Matrix[bjt.BJTemitPrimeNode, bjt.BJTemitNode] += (-gepr);
+            // rstate.Matrix[bjt.BJTemitPrimeNode, bjt.BJTcolPrimeNode] += (-go + geqcb);
+            // rstate.Matrix[bjt.BJTemitPrimeNode, bjt.BJTbasePrimeNode] += (-gpi - gm - geqcb);
+            // rstate.Matrix[bjt.BJTsubstNode, bjt.BJTsubstNode] += (gccs);
+            // rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTsubstNode] += (-gccs);
+            // rstate.Matrix[bjt.BJTsubstNode, bjt.BJTcolPrimeNode] += (-gccs);
+            // rstate.Matrix[bjt.BJTbaseNode, bjt.BJTcolPrimeNode] += (-geqbx);
+            // rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTbaseNode] += (-geqbx);
         }
     }
 }

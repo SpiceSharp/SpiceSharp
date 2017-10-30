@@ -31,14 +31,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if (ckt.Method != null)
             {
                 var result = ckt.Method.Integrate(state, ind.INDstate + Inductor.INDflux, ind.INDinduct);
-                rstate.Rhs[ind.INDbrEq] += result.Ceq;
-                rstate.Matrix[ind.INDbrEq, ind.INDbrEq] -= result.Geq;
+                // rstate.Rhs[ind.INDbrEq] += result.Ceq;
+                // rstate.Matrix[ind.INDbrEq, ind.INDbrEq] -= result.Geq;
             }
 
-            rstate.Matrix[ind.INDposNode, ind.INDbrEq] += 1;
-            rstate.Matrix[ind.INDnegNode, ind.INDbrEq] -= 1;
-            rstate.Matrix[ind.INDbrEq, ind.INDposNode] += 1;
-            rstate.Matrix[ind.INDbrEq, ind.INDnegNode] -= 1;
+            // rstate.Matrix[ind.INDposNode, ind.INDbrEq] += 1;
+            // rstate.Matrix[ind.INDnegNode, ind.INDbrEq] -= 1;
+            // rstate.Matrix[ind.INDbrEq, ind.INDposNode] += 1;
+            // rstate.Matrix[ind.INDbrEq, ind.INDnegNode] -= 1;
         }
     }
 }

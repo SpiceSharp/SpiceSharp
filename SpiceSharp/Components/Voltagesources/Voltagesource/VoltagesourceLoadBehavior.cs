@@ -38,10 +38,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             double time = 0.0;
             double value = 0.0;
 
-            rstate.Matrix[voltageSource.VSRCposNode, voltageSource.VSRCbranch] += 1.0;
-            rstate.Matrix[voltageSource.VSRCbranch, voltageSource.VSRCposNode] += 1.0;
-            rstate.Matrix[voltageSource.VSRCnegNode, voltageSource.VSRCbranch] -= 1.0;
-            rstate.Matrix[voltageSource.VSRCbranch, voltageSource.VSRCnegNode] -= 1.0;
+            // rstate.Matrix[voltageSource.VSRCposNode, voltageSource.VSRCbranch] += 1.0;
+            // rstate.Matrix[voltageSource.VSRCbranch, voltageSource.VSRCposNode] += 1.0;
+            // rstate.Matrix[voltageSource.VSRCnegNode, voltageSource.VSRCbranch] -= 1.0;
+            // rstate.Matrix[voltageSource.VSRCbranch, voltageSource.VSRCnegNode] -= 1.0;
 
             if (state.Domain == CircuitState.DomainTypes.Time)
             {
@@ -58,7 +58,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 value = voltageSource.VSRCdcValue * state.SrcFact;
             }
-            rstate.Rhs[voltageSource.VSRCbranch] += value;
+            // rstate.Rhs[voltageSource.VSRCbranch] += value;
         }
     }
 }

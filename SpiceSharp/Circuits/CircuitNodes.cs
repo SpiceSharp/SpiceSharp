@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Circuits
 {
@@ -93,7 +94,8 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         public CircuitNode Create(CircuitIdentifier id, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
         {
-            var node = new CircuitNode(id, type, nodes.Count + 1);
+            int index = nodes.Count + 1;
+            var node = new CircuitNode(id, type, index);
             nodes.Add(node);
             return node;
         }

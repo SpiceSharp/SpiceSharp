@@ -18,10 +18,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var val = cstate.Laplace * cap.CAPcapac.Value;
 
             // Load the matrix
-            cstate.Matrix[cap.CAPposNode, cap.CAPposNode] += val;
-            cstate.Matrix[cap.CAPposNode, cap.CAPnegNode] -= val;
-            cstate.Matrix[cap.CAPnegNode, cap.CAPposNode] -= val;
-            cstate.Matrix[cap.CAPnegNode, cap.CAPnegNode] += val;
+            // cstate.Matrix[cap.CAPposNode, cap.CAPposNode] += val;
+            // cstate.Matrix[cap.CAPposNode, cap.CAPnegNode] -= val;
+            // cstate.Matrix[cap.CAPnegNode, cap.CAPposNode] -= val;
+            // cstate.Matrix[cap.CAPnegNode, cap.CAPnegNode] += val;
         }
     }
 }

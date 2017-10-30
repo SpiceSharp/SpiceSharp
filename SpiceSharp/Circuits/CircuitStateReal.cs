@@ -1,5 +1,4 @@
-﻿using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
+﻿using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Circuits
 {
@@ -11,53 +10,33 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Get the equation matrix
         /// </summary>
-        public Matrix<double> Matrix { get; private set; } = null;
+        public Matrix Matrix { get; private set; } = null;
 
         /// <summary>
         /// Get the right-hand side vector
         /// </summary>
-        public Vector<double> Rhs { get; private set; } = null;
+        public double[] Rhs { get; private set; } = null;
 
         /// <summary>
         /// Get the current solution
         /// </summary>
-        public Vector<double> Solution { get; private set; } = null;
+        public double[] Solution { get; private set; } = null;
 
         /// <summary>
         /// Get the previous solution
         /// Can be used for checking convergence
         /// </summary>
-        public Vector<double> OldSolution { get; private set; } = null;
+        public double[] OldSolution { get; private set; } = null;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public CircuitStateReal(int order)
         {
-            Matrix = new SparseMatrix(order);
-            Rhs = new SparseVector(order);
-            Solution = new DenseVector(order);
-            OldSolution = new DenseVector(order);
-        }
-
-        /// <summary>
-        /// Solve the matrix equations
-        /// </summary>
-        public void Solve()
-        {
-            // All indices at 0 are the ground node
-            // We remove these rows/columns because they will lead to a singular matrix
-            var m = Matrix.RemoveRow(0).RemoveColumn(0);
-            var b = Rhs.SubVector(1, Rhs.Count - 1);
-
-            // Create a new solution vector of the original size
-            if (Solution == null)
-                Solution = new DenseVector(Rhs.Count);
-
-            // Fill the 1-N elements with the solution
-            var sol = m.Solve(b);
-            Solution[0] = 0.0;
-            Solution.SetSubVector(1, Solution.Count - 1, sol);
+            Matrix = spsmp.SMPnewMatrix(); // new SparseMatrix(order);
+            Rhs = new double[order]; // new SparseVector(order);
+            Solution = new double[order]; // new DenseVector(order);
+            OldSolution = new double[order]; // new DenseVector(order);
         }
 
         /// <summary>
@@ -65,8 +44,9 @@ namespace SpiceSharp.Circuits
         /// </summary>
         public void Clear()
         {
-            Matrix.Clear();
-            Rhs.Clear();
+            spbuild.spClear(Matrix);
+            for (int i = 0; i < Rhs.Length; i++)
+                Rhs[i] = 0.0;
         }
 
         /// <summary>
@@ -74,8 +54,8 @@ namespace SpiceSharp.Circuits
         /// </summary>
         public void StoreSolution()
         {
-            var tmp = OldSolution;
-            OldSolution = Solution;
+            var tmp = Rhs;
+            Rhs = Solution;
             Solution = tmp;
         }
 

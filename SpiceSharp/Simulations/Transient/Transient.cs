@@ -150,7 +150,10 @@ namespace SpiceSharp.Simulations
             // Stop calculating a DC solution
             state.UseIC = false;
             state.UseDC = false;
-            state.States[0].CopyTo(state.States[1]);
+            for (int i = 0; i < state.States[0].Length; i++)
+            {
+                state.States[1][i] = state.States[0][i];
+            }
 
             // Start our statistics
             ckt.Statistics.TransientTime.Start();
@@ -209,8 +212,11 @@ namespace SpiceSharp.Simulations
                     ckt.Statistics.TimePoints++;
                     if (method.SavedTime == 0.0)
                     {
-                        state.States[1].CopyTo(state.States[2]);
-                        state.States[1].CopyTo(state.States[3]);
+                        for (int i = 0; i < state.States[1].Length; i++)
+                        {
+                            state.States[2][i] = state.States[1][i];
+                            state.States[3][i] = state.States[1][i];
+                        }
                     }
 
                     // Spice copies the states the first time, we're not

@@ -17,8 +17,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var mut = ComponentTyped<MutualInductance>();
             var cstate = ckt.State.Complex;
             Complex value = cstate.Laplace * mut.MUTfactor;
-            cstate.Matrix[mut.Inductor1.INDbrEq, mut.Inductor2.INDbrEq] -= value;
-            cstate.Matrix[mut.Inductor2.INDbrEq, mut.Inductor1.INDbrEq] -= value;
+            // cstate.Matrix[mut.Inductor1.INDbrEq, mut.Inductor2.INDbrEq] -= value;
+            // cstate.Matrix[mut.Inductor2.INDbrEq, mut.Inductor1.INDbrEq] -= value;
         }
     }
 }

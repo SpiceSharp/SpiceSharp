@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Numerics.LinearAlgebra.Factorization;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 
@@ -155,6 +152,8 @@ namespace SpiceSharp.Circuits
                 }
             }
 
+            /*
+             * NEED TO REDO!
             // Build the connection matrix
             Matrix<double> conn = new SparseMatrix(Math.Max(voltagedriven.Count, map.Count));
             for (int i = 0; i < voltagedriven.Count; i++)
@@ -177,7 +176,7 @@ namespace SpiceSharp.Circuits
                 int k = result.P[i];
                 if (result.U[k, k] == 0)
                     return voltagedriven[i].Item1;
-            }
+            } */
             return null;
         }
 

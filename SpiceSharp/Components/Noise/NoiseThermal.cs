@@ -35,9 +35,10 @@
         protected override double CalculateNoise(Circuit ckt)
         {
             var sol = ckt.State.Complex.Solution;
-            var val = sol[NOISEnodes[0]] - sol[NOISEnodes[1]];
+            /* var val = sol[NOISEnodes[0]] - sol[NOISEnodes[1]];
             double gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
-            return 4.0 * Circuit.CONSTBoltz * ckt.State.Temperature * Conductance * gain;
+            return 4.0 * Circuit.CONSTBoltz * ckt.State.Temperature * Conductance * gain; */
+            return 0.0;
         }
     }
 }

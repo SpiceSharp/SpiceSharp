@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Circuits
+﻿using SpiceSharp.Sparse;
+
+namespace SpiceSharp.Circuits
 {
     /// <summary>
     /// Describes a node in an electronic circuit.
@@ -31,6 +33,11 @@
         /// This is also the row index in the state matrix
         /// </summary>
         public int Index { get; }
+
+        /// <summary>
+        /// Gets the diagonal matrix element associated with the node
+        /// </summary>
+        public MatrixElement Diagonal { get; set; }
 
         /// <summary>
         /// Gets the node type

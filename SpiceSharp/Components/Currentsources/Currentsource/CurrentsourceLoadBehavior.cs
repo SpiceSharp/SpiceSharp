@@ -60,8 +60,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 value = currentSource.ISRCdcValue * state.SrcFact;
             }
 
-            rstate.Rhs[currentSource.ISRCposNode] += value;
-            rstate.Rhs[currentSource.ISRCnegNode] -= value;
+            // // rstate.Rhs[currentSource.ISRCposNode] += value;
+            // // rstate.Rhs[currentSource.ISRCnegNode] -= value;
             currentSource.Current = value;
         }
     }

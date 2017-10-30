@@ -15,11 +15,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
         {
             var ccvs = ComponentTyped<CurrentControlledVoltagesource>();
             var cstate = ckt.State.Complex;
-            cstate.Matrix[ccvs.CCVSposNode, ccvs.CCVSbranch] += 1.0;
-            cstate.Matrix[ccvs.CCVSbranch, ccvs.CCVSposNode] += 1.0;
-            cstate.Matrix[ccvs.CCVSnegNode, ccvs.CCVSbranch] -= 1.0;
-            cstate.Matrix[ccvs.CCVSbranch, ccvs.CCVSnegNode] -= 1.0;
-            cstate.Matrix[ccvs.CCVSbranch, ccvs.CCVScontBranch] -= ccvs.CCVScoeff.Value;
+            // cstate.Matrix[ccvs.CCVSposNode, ccvs.CCVSbranch] += 1.0;
+            // cstate.Matrix[ccvs.CCVSbranch, ccvs.CCVSposNode] += 1.0;
+            // cstate.Matrix[ccvs.CCVSnegNode, ccvs.CCVSbranch] -= 1.0;
+            // cstate.Matrix[ccvs.CCVSbranch, ccvs.CCVSnegNode] -= 1.0;
+            // cstate.Matrix[ccvs.CCVSbranch, ccvs.CCVScontBranch] -= ccvs.CCVScoeff.Value;
         }
     }
 }

@@ -18,11 +18,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var cstate = ckt.State.Complex;
             Complex val = cstate.Laplace * ind.INDinduct.Value;
 
-            cstate.Matrix[ind.INDposNode, ind.INDbrEq] += 1.0;
-            cstate.Matrix[ind.INDnegNode, ind.INDbrEq] -= 1.0;
-            cstate.Matrix[ind.INDbrEq, ind.INDnegNode] -= 1.0;
-            cstate.Matrix[ind.INDbrEq, ind.INDposNode] += 1.0;
-            cstate.Matrix[ind.INDbrEq, ind.INDbrEq] -= val;
+            // cstate.Matrix[ind.INDposNode, ind.INDbrEq] += 1.0;
+            // cstate.Matrix[ind.INDnegNode, ind.INDbrEq] -= 1.0;
+            // cstate.Matrix[ind.INDbrEq, ind.INDnegNode] -= 1.0;
+            // cstate.Matrix[ind.INDbrEq, ind.INDposNode] += 1.0;
+            // cstate.Matrix[ind.INDbrEq, ind.INDbrEq] -= val;
         }
     }
 }

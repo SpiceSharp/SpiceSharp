@@ -79,6 +79,12 @@ namespace SpiceSharp.Simulations
             foreach (var behaviour in temperaturebehaviours)
                 behaviour.Execute(Circuit);
 
+            // Initialize the simulation
+            Initialize(Circuit);
+
+            // Do initial condition
+            SimulationExtensions.Ic(this);
+
             // Execute the simulation
             Execute();
         }

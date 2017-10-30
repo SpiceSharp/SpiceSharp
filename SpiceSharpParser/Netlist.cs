@@ -188,7 +188,6 @@ namespace SpiceSharp
                 // Standard waveform types
                 new PulseReader(),
                 new SineReader(),
-                new PwlReader(),
 
                 // Add model types
                 new RLCMModelReader(),

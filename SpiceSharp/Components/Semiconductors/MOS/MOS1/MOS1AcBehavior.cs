@@ -51,35 +51,33 @@ namespace SpiceSharp.Components.ComponentBehaviors
 			* load matrix
 			*/
 
-            cstate.Matrix[mos1.MOS1gNode, mos1.MOS1gNode] += new Complex(0.0, xgd + xgs + xgb);
-            cstate.Matrix[mos1.MOS1bNode, mos1.MOS1bNode] += new Complex(mos1.MOS1gbd + mos1.MOS1gbs, xgb + xbd + xbs);
-            cstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1dNodePrime] += new Complex(mos1.MOS1drainConductance + mos1.MOS1gds + mos1.MOS1gbd + xrev * (mos1.MOS1gm +
-                mos1.MOS1gmbs), xgd + xbd);
-            cstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1sNodePrime] += new Complex(mos1.MOS1sourceConductance + mos1.MOS1gds + mos1.MOS1gbs + xnrm * (mos1.MOS1gm +
-                mos1.MOS1gmbs), xgs + xbs);
-            cstate.Matrix[mos1.MOS1gNode, mos1.MOS1bNode] -= new Complex(0.0, xgb);
-            cstate.Matrix[mos1.MOS1gNode, mos1.MOS1dNodePrime] -= new Complex(0.0, xgd);
-            cstate.Matrix[mos1.MOS1gNode, mos1.MOS1sNodePrime] -= new Complex(0.0, xgs);
-            cstate.Matrix[mos1.MOS1bNode, mos1.MOS1gNode] -= new Complex(0.0, xgb);
-            cstate.Matrix[mos1.MOS1bNode, mos1.MOS1dNodePrime] -= new Complex(mos1.MOS1gbd, xbd);
-            cstate.Matrix[mos1.MOS1bNode, mos1.MOS1sNodePrime] -= new Complex(mos1.MOS1gbs, xbs);
-            cstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1gNode] += new Complex((xnrm - xrev) * mos1.MOS1gm, -xgd);
-            cstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1bNode] += new Complex(-mos1.MOS1gbd + (xnrm - xrev) * mos1.MOS1gmbs, -xbd);
-            cstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1gNode] -= new Complex((xnrm - xrev) * mos1.MOS1gm, xgs);
-            cstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1bNode] -= new Complex(mos1.MOS1gbs + (xnrm - xrev) * mos1.MOS1gmbs, xbs);
-            cstate.Matrix[mos1.MOS1dNode, mos1.MOS1dNode] += mos1.MOS1drainConductance;
-            cstate.Matrix[mos1.MOS1sNode, mos1.MOS1sNode] += mos1.MOS1sourceConductance;
+            // cstate.Matrix[mos1.MOS1gNode, mos1.MOS1gNode] += new Complex(0.0, xgd + xgs + xgb);
+            // cstate.Matrix[mos1.MOS1bNode, mos1.MOS1bNode] += new Complex(mos1.MOS1gbd + mos1.MOS1gbs, xgb + xbd + xbs);
+            // cstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1dNodePrime] += new Complex(mos1.MOS1drainConductance + mos1.MOS1gds + mos1.MOS1gbd + xrev * (mos1.MOS1gm + mos1.MOS1gmbs), xgd + xbd);
+            // cstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1sNodePrime] += new Complex(mos1.MOS1sourceConductance + mos1.MOS1gds + mos1.MOS1gbs + xnrm * (mos1.MOS1gm + mos1.MOS1gmbs), xgs + xbs);
+            // cstate.Matrix[mos1.MOS1gNode, mos1.MOS1bNode] -= new Complex(0.0, xgb);
+            // cstate.Matrix[mos1.MOS1gNode, mos1.MOS1dNodePrime] -= new Complex(0.0, xgd);
+            // cstate.Matrix[mos1.MOS1gNode, mos1.MOS1sNodePrime] -= new Complex(0.0, xgs);
+            // cstate.Matrix[mos1.MOS1bNode, mos1.MOS1gNode] -= new Complex(0.0, xgb);
+            // cstate.Matrix[mos1.MOS1bNode, mos1.MOS1dNodePrime] -= new Complex(mos1.MOS1gbd, xbd);
+            // cstate.Matrix[mos1.MOS1bNode, mos1.MOS1sNodePrime] -= new Complex(mos1.MOS1gbs, xbs);
+            // cstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1gNode] += new Complex((xnrm - xrev) * mos1.MOS1gm, -xgd);
+            // cstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1bNode] += new Complex(-mos1.MOS1gbd + (xnrm - xrev) * mos1.MOS1gmbs, -xbd);
+            // cstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1gNode] -= new Complex((xnrm - xrev) * mos1.MOS1gm, xgs);
+            // cstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1bNode] -= new Complex(mos1.MOS1gbs + (xnrm - xrev) * mos1.MOS1gmbs, xbs);
+            // cstate.Matrix[mos1.MOS1dNode, mos1.MOS1dNode] += mos1.MOS1drainConductance;
+            // cstate.Matrix[mos1.MOS1sNode, mos1.MOS1sNode] += mos1.MOS1sourceConductance;
 
-            cstate.Matrix[mos1.MOS1dNode, mos1.MOS1dNodePrime] -= mos1.MOS1drainConductance;
-            cstate.Matrix[mos1.MOS1sNode, mos1.MOS1sNodePrime] -= mos1.MOS1sourceConductance;
+            // cstate.Matrix[mos1.MOS1dNode, mos1.MOS1dNodePrime] -= mos1.MOS1drainConductance;
+            // cstate.Matrix[mos1.MOS1sNode, mos1.MOS1sNodePrime] -= mos1.MOS1sourceConductance;
 
-            cstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1dNode] -= mos1.MOS1drainConductance;
+            // cstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1dNode] -= mos1.MOS1drainConductance;
 
-            cstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1sNodePrime] -= mos1.MOS1gds + xnrm * (mos1.MOS1gm + mos1.MOS1gmbs);
+            // cstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1sNodePrime] -= mos1.MOS1gds + xnrm * (mos1.MOS1gm + mos1.MOS1gmbs);
 
-            cstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1sNode] -= mos1.MOS1sourceConductance;
+            // cstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1sNode] -= mos1.MOS1sourceConductance;
 
-            cstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1dNodePrime] -= mos1.MOS1gds + xrev * (mos1.MOS1gm + mos1.MOS1gmbs);
+            // cstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1dNodePrime] -= mos1.MOS1gds + xrev * (mos1.MOS1gm + mos1.MOS1gmbs);
         }
     }
 }

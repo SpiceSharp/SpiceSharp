@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Circuits;
-using MathNet.Numerics.LinearAlgebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
 {
@@ -129,14 +129,40 @@ namespace SpiceSharp.Simulations
                     throw;
                 }
 
-                // Solve the equation (thank you Math.NET)
+                // Preorder matrix
+                if (!state.Sparse.HasFlag(CircuitState.SparseFlags.NIDIDPREORDER))
+                {
+                    spsmp.SMPpreOrder(rstate.Matrix);
+                    state.Sparse |= CircuitState.SparseFlags.NIDIDPREORDER;
+                }
+                if (state.Init == CircuitState.InitFlags.InitJct || (ckt.Method != null && ckt.Method.SavedTime == 0.0))
+                {
+                    state.Sparse |= CircuitState.SparseFlags.NISHOULDPREORDER;
+                }
+
+                // Preorder
+                if (state.Sparse.HasFlag(CircuitState.SparseFlags.NISHOULDPREORDER))
+                {
+                    ckt.Statistics.ReorderTime.Start();
+                    spsmp.SMPreorder(rstate.Matrix, state.PivotAbsTol, state.PivotRelTol, ckt.Simulation.Config.DiagGmin);
+                    ckt.Statistics.ReorderTime.Stop();
+                    state.Sparse &= ~CircuitState.SparseFlags.NISHOULDPREORDER;
+                }
+                else
+                {
+                    // Decompose
+                    ckt.Statistics.DecompositionTime.Start();
+                    spsmp.SMPluFac(rstate.Matrix, state.PivotAbsTol, ckt.Simulation.Config.DiagGmin);
+                    ckt.Statistics.DecompositionTime.Stop();
+                }
+
+                // Solve the equation
                 ckt.Statistics.SolveTime.Start();
-                rstate.Solve();
+                spsmp.SMPsolve(rstate.Matrix, rstate.Rhs, null);
                 ckt.Statistics.SolveTime.Stop();
 
                 // Reset ground nodes
                 ckt.State.Real.Solution[0] = 0.0;
-                ckt.State.Complex.Solution[0] = 0.0;
                 ckt.State.Real.OldSolution[0] = 0.0;
 
                 // Exceeded maximum number of iterations
@@ -169,6 +195,7 @@ namespace SpiceSharp.Simulations
 
                     case CircuitState.InitFlags.InitJct:
                         state.Init = CircuitState.InitFlags.InitFix;
+                        state.Sparse |= CircuitState.SparseFlags.NISHOULDPREORDER;
                         break;
 
                     case CircuitState.InitFlags.InitFix:
@@ -198,19 +225,50 @@ namespace SpiceSharp.Simulations
         /// <param name="ckt">The circuit</param>
         public static void AcIterate(this Circuit ckt, List<CircuitObjectBehaviorAcLoad> loaders, SimulationConfiguration config)
         {
-            // Initialize the circuit
-            if (!ckt.State.Initialized)
-                ckt.State.Initialize(ckt);
+            var state = ckt.State;
+            var cstate = state.Complex;
 
-            ckt.State.IsCon = true;
+            // Initialize the circuit
+            if (!state.Initialized)
+                state.Initialize(ckt);
+
+            retry:
+            state.IsCon = true;
 
             // Load AC
-            ckt.State.Complex.Clear();
+            cstate.Clear();
             foreach (var behaviour in loaders)
                 behaviour.Execute(ckt);
 
+            if (state.Sparse.HasFlag(CircuitState.SparseFlags.NIACSHOULDREORDER))
+            {
+                spsmp.SMPcReorder(cstate.Matrix, state.PivotAbsTol, state.PivotRelTol, out _);
+                state.Sparse &= ~CircuitState.SparseFlags.NIACSHOULDREORDER;
+            }
+            else
+            {
+                var error = spsmp.SMPcLUfac(cstate.Matrix, state.PivotAbsTol);
+                if (error != 0)
+                {
+                    if (error == Matrix.E_SINGULAR)
+                    {
+                        state.Sparse |= CircuitState.SparseFlags.NIACSHOULDREORDER;
+                        goto retry;
+                    }
+                }
+            }
+
             // Solve
-            ckt.State.Complex.Solve();
+            spsmp.SMPcSolve(cstate.Matrix, cstate.Rhs, cstate.iRhs, null, null);
+
+            // Reset values
+            cstate.Rhs[0] = 0.0;
+            cstate.iRhs[0] = 0.0;
+            cstate.Solution[0] = 0.0;
+            cstate.iSolution[0] = 0.0;
+
+            // Store them in the solution
+            cstate.StoreSolution();
         }
 
         /// <summary>
@@ -228,13 +286,20 @@ namespace SpiceSharp.Simulations
             var state = ckt.State.Complex;
 
             // Clear out the right hand side vector
-            state.Rhs.Clear();
+            for (int i = 0; i < state.Rhs.Length; i++)
+            {
+                state.Rhs[i] = 0.0;
+                state.iRhs[i] = 0.0;
+            }
 
             // Apply unit current excitation
             state.Rhs[posDrive] = 1.0;
             state.Rhs[negDrive] = -1.0;
-            state.SolveTransposed();
+
+            spsmp.SMPcaSolve(state.Matrix, state.Rhs, state.iRhs, null, null);
+
             state.Solution[0] = 0.0;
+            state.iSolution[0] = 0.0;
         }
 
         /// <summary>
@@ -323,13 +388,12 @@ namespace SpiceSharp.Simulations
                             if (ZeroNoncurRow(rstate.Matrix, nodes, node.Index))
                             {
                                 rstate.Rhs[node.Index] = 1.0e10 * ns;
-                                rstate.Matrix[node.Index, node.Index] = 1.0e10;
+                                node.Diagonal.Value.Real = 1e10;
                             }
                             else
                             {
                                 rstate.Rhs[node.Index] = ns;
-                                rstate.Solution[node.Index] = ns;
-                                rstate.Matrix[node.Index, node.Index] = 1.0;
+                                node.Diagonal.Value.Real = 1.0;
                             }
                         }
                     }
@@ -346,13 +410,12 @@ namespace SpiceSharp.Simulations
                             if (ZeroNoncurRow(rstate.Matrix, nodes, node.Index))
                             {
                                 rstate.Rhs[node.Index] = 1.0e10 * ic;
-                                rstate.Matrix[node.Index, node.Index] = 1.0e10;
+                                node.Diagonal.Value.Real = 1e10;
                             }
                             else
                             {
                                 rstate.Rhs[node.Index] = ic;
-                                rstate.Solution[node.Index] = ic;
-                                rstate.Matrix[node.Index, node.Index] = 1.0;
+                                node.Diagonal.Value.Real = 1.0;
                             }
                         }
                     }
@@ -375,7 +438,10 @@ namespace SpiceSharp.Simulations
             var nodes = ckt.Nodes;
 
             // Clear the current solution
-            rstate.Solution.Clear();
+            for (int i = 0; i < rstate.Solution.Length; i++)
+            {
+                rstate.Rhs[i] = 0.0;
+            }
 
             // Go over all nodes
             for (int i = 0; i < nodes.Count; i++)
@@ -383,12 +449,14 @@ namespace SpiceSharp.Simulations
                 var node = nodes[i];
                 if (nodes.Nodeset.ContainsKey(node.Name))
                 {
+                    node.Diagonal = spsmp.SMPmakeElt(rstate.Matrix, node.Index, node.Index);
                     state.HadNodeset = true;
-                    rstate.Solution[node.Index] = nodes.Nodeset[node.Name];
+                    rstate.Rhs[node.Index] = nodes.Nodeset[node.Name];
                 }
                 if (nodes.IC.ContainsKey(node.Name))
                 {
-                    rstate.Solution[node.Index] = nodes.IC[node.Name];
+                    node.Diagonal = spsmp.SMPmakeElt(rstate.Matrix, node.Index, node.Index);
+                    rstate.Rhs[node.Index] = nodes.IC[node.Name];
                 }
             }
 
@@ -407,19 +475,19 @@ namespace SpiceSharp.Simulations
         /// <param name="nodes">The list of nodes</param>
         /// <param name="rownum">The row number</param>
         /// <returns></returns>
-        private static bool ZeroNoncurRow(Matrix<double> matrix, CircuitNodes nodes, int rownum)
+        private static bool ZeroNoncurRow(Matrix matrix, CircuitNodes nodes, int rownum)
         {
             bool currents = false;
             for (int n = 0; n < nodes.Count; n++)
             {
                 var node = nodes[n];
-                double x = matrix[rownum, node.Index];
-                if (x != 0.0)
+                MatrixElement x = spsmp.SMPfindElt(matrix, rownum, node.Index, false); // matrix[rownum, node.Index];
+                if (x.Value.Real != 0.0)
                 {
                     if (node.Type == CircuitNode.NodeType.Current)
                         currents = true;
                     else
-                        matrix[rownum, node.Index] = 0.0;
+                        x.Value.Real = 0.0;
                 }
             }
             return currents;

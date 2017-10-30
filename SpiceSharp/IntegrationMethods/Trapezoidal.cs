@@ -1,6 +1,5 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using MathNet.Numerics.LinearAlgebra;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.IntegrationMethods
@@ -83,24 +82,27 @@ namespace SpiceSharp.IntegrationMethods
 
             // Predict a solution
             double a, b;
-            Vector<double> dd0, dd1;
             switch (Order)
             {
                 case 1:
                     // Divided difference approach
-                    dd0 = (Solutions[0] - Solutions[1]) / DeltaOld[1];
-                    Prediction = Solutions[0] + DeltaOld[0] * dd0;
-                    Prediction.CopyTo(state.Solution);
+                    for (int i = 0; i < Solutions[0].Length; i++)
+                    {
+                        double dd0 = (Solutions[0][i] - Solutions[1][i]) / DeltaOld[1];
+                        Prediction[i] = Solutions[0][i] + DeltaOld[0] * dd0;
+                    }
                     break;
 
                 case 2:
                     // Adams-Bashforth method (second order for variable timesteps)
                     b = -DeltaOld[0] / (2.0 * DeltaOld[1]);
                     a = 1 - b;
-                    dd0 = (Solutions[0] - Solutions[1]) / DeltaOld[1];
-                    dd1 = (Solutions[1] - Solutions[2]) / DeltaOld[2];
-                    Prediction = Solutions[0] + (b * dd1 + a * dd0) * DeltaOld[0];
-                    Prediction.CopyTo(state.Solution);
+                    for (int i = 0; i < Solutions[0].Length; i++)
+                    {
+                        double dd0 = (Solutions[0][i] - Solutions[1][i]) / DeltaOld[1];
+                        double dd1 = (Solutions[1][i] - Solutions[2][i]) / DeltaOld[2];
+                        Prediction[i] = Solutions[0][i] + (b * dd1 + a * dd0) * DeltaOld[0];
+                    }
                     break;
 
                 default:

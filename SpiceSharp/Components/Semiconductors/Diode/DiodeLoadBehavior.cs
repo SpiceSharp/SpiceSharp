@@ -171,19 +171,19 @@ namespace SpiceSharp.Components.ComponentBehaviors
 			 * load current vector
 			 */
             cdeq = cd - gd * vd;
-            rstate.Rhs[diode.DIOnegNode] += cdeq;
-            rstate.Rhs[diode.DIOposPrimeNode] -= cdeq;
+            // rstate.Rhs[diode.DIOnegNode] += cdeq;
+            // rstate.Rhs[diode.DIOposPrimeNode] -= cdeq;
 
             /* 
 			 * load matrix
 			 */
-            rstate.Matrix[diode.DIOposNode, diode.DIOposNode] += gspr;
-            rstate.Matrix[diode.DIOnegNode, diode.DIOnegNode] += gd;
-            rstate.Matrix[diode.DIOposPrimeNode, diode.DIOposPrimeNode] += (gd + gspr);
-            rstate.Matrix[diode.DIOposNode, diode.DIOposPrimeNode] -= gspr;
-            rstate.Matrix[diode.DIOnegNode, diode.DIOposPrimeNode] -= gd;
-            rstate.Matrix[diode.DIOposPrimeNode, diode.DIOposNode] -= gspr;
-            rstate.Matrix[diode.DIOposPrimeNode, diode.DIOnegNode] -= gd;
+            // rstate.Matrix[diode.DIOposNode, diode.DIOposNode] += gspr;
+            // rstate.Matrix[diode.DIOnegNode, diode.DIOnegNode] += gd;
+            // rstate.Matrix[diode.DIOposPrimeNode, diode.DIOposPrimeNode] += (gd + gspr);
+            // rstate.Matrix[diode.DIOposNode, diode.DIOposPrimeNode] -= gspr;
+            // rstate.Matrix[diode.DIOnegNode, diode.DIOposPrimeNode] -= gd;
+            // rstate.Matrix[diode.DIOposPrimeNode, diode.DIOposNode] -= gspr;
+            // rstate.Matrix[diode.DIOposPrimeNode, diode.DIOnegNode] -= gd;
         }
     }
 }

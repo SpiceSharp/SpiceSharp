@@ -24,6 +24,16 @@ namespace SpiceSharp.Circuits
         public Stopwatch LoadTime { get; } = new Stopwatch();
 
         /// <summary>
+        /// The total time spent reordering the equation matrix
+        /// </summary>
+        public Stopwatch ReorderTime { get; } = new Stopwatch();
+
+        /// <summary>
+        /// The total time spent on decomposition of the matrix
+        /// </summary>
+        public Stopwatch DecompositionTime { get; } = new Stopwatch();
+
+        /// <summary>
         /// Gets or sets the number of timepoints calculated
         /// </summary>
         public int TimePoints { get; set; } = 0;

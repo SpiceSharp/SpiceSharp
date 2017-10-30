@@ -88,10 +88,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             vsw.VSWcond = g_now;
 
             // Load the Y-matrix
-            rstate.Matrix[vsw.VSWposNode, vsw.VSWposNode] += g_now;
-            rstate.Matrix[vsw.VSWposNode, vsw.VSWnegNode] -= g_now;
-            rstate.Matrix[vsw.VSWnegNode, vsw.VSWposNode] -= g_now;
-            rstate.Matrix[vsw.VSWnegNode, vsw.VSWnegNode] += g_now;
+            // rstate.Matrix[vsw.VSWposNode, vsw.VSWposNode] += g_now;
+            // rstate.Matrix[vsw.VSWposNode, vsw.VSWnegNode] -= g_now;
+            // rstate.Matrix[vsw.VSWnegNode, vsw.VSWposNode] -= g_now;
+            // rstate.Matrix[vsw.VSWnegNode, vsw.VSWnegNode] += g_now;
         }
 
     }
