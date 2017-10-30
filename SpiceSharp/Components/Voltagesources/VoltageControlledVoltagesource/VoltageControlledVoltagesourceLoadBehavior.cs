@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Execute(Circuit ckt)
         {
             var vcvs = ComponentTyped<VoltageControlledVoltagesource>();
-            var rstate = ckt.State.Real;
+            var rstate = ckt.State;
             // rstate.Matrix[vcvs.VCVSposNode, vcvs.VCVSbranch] += 1.0;
             // rstate.Matrix[vcvs.VCVSbranch, vcvs.VCVSposNode] += 1.0;
             // rstate.Matrix[vcvs.VCVSnegNode, vcvs.VCVSbranch] -= 1.0;

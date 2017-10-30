@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             BJT bjt = ComponentTyped<BJT>();
             BJTModel model = bjt.Model as BJTModel;
             var state = ckt.State;
-            var cstate = state.Complex;
+            var cstate = state;
             double gcpr, gepr, gpi, gmu, go, td, gx;
             Complex gm, xcpi, xcmu, xcbx, xccs, xcmcb;
 

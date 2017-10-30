@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         {
             var source = ComponentTyped<Currentsource>();
 
-            var cstate = ckt.State.Complex;
+            var cstate = ckt.State;
             cstate.Rhs[source.ISRCposNode] += source.ISRCac.Real;
             cstate.iRhs[source.ISRCposNode] += source.ISRCac.Imaginary;
             cstate.Rhs[source.ISRCnegNode] -= source.ISRCac.Real;

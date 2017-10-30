@@ -24,11 +24,11 @@ namespace SpiceSharp.Components
         [SpiceName("gain"), SpiceInfo("Voltage gain")]
         public Parameter VCVScoeff { get; } = new Parameter();
         [SpiceName("i"), SpiceInfo("Output current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[VCVSbranch];
+        public double GetCurrent(Circuit ckt) => ckt.State.Solution[VCVSbranch];
         [SpiceName("v"), SpiceInfo("Output current")]
-        public double GetVoltage(Circuit ckt) => ckt.State.Real.Solution[VCVSposNode] - ckt.State.Real.Solution[VCVSnegNode];
+        public double GetVoltage(Circuit ckt) => ckt.State.Solution[VCVSposNode] - ckt.State.Solution[VCVSnegNode];
         [SpiceName("p"), SpiceInfo("Power")]
-        public double GetPower(Circuit ckt) => ckt.State.Real.Solution[VCVSbranch] * (ckt.State.Real.Solution[VCVSposNode] - ckt.State.Real.Solution[VCVSnegNode]);
+        public double GetPower(Circuit ckt) => ckt.State.Solution[VCVSbranch] * (ckt.State.Solution[VCVSposNode] - ckt.State.Solution[VCVSnegNode]);
 
         /// <summary>
         /// Nodes

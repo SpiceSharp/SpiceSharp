@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var bsim4 = ComponentTyped<BSIM4v80>();
             var model = bsim4.Model as BSIM4v80Model;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var method = ckt.Method;
             int Check, Check1, Check2;
             double vds, vgs, vbs, vges, vgms, vdbs, vsbs, vses, vdes, qdef, vgdo, vgedo, vgmdo, vbd, vdbd, vgd, vged, vgmd, delvbd,

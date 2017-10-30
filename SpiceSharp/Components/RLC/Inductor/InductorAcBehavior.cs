@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Execute(Circuit ckt)
         {
             var ind = ComponentTyped<Inductor>();
-            var cstate = ckt.State.Complex;
+            var cstate = ckt.State;
             Complex val = cstate.Laplace * ind.INDinduct.Value;
 
             // cstate.Matrix[ind.INDposNode, ind.INDbrEq] += 1.0;

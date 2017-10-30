@@ -201,12 +201,12 @@ namespace SpiceSharp.Components
         {
             double temp;
 
-            double value = MOS3cd * ckt.State.Real.Solution[MOS3dNode];
-            value += (MOS3cbd + MOS3cbs - ckt.State.States[0][MOS3states + MOS3cqgb]) * ckt.State.Real.Solution[MOS3bNode];
+            double value = MOS3cd * ckt.State.Solution[MOS3dNode];
+            value += (MOS3cbd + MOS3cbs - ckt.State.States[0][MOS3states + MOS3cqgb]) * ckt.State.Solution[MOS3bNode];
             if (ckt.State.Domain == CircuitState.DomainTypes.Time && !ckt.State.UseDC)
             {
                 value += (ckt.State.States[0][MOS3states + MOS3cqgb] + ckt.State.States[0][MOS3states + MOS3cqgd] +
-                    ckt.State.States[0][MOS3states + MOS3cqgs]) * ckt.State.Real.Solution[MOS3gNode];
+                    ckt.State.States[0][MOS3states + MOS3cqgs]) * ckt.State.Solution[MOS3gNode];
             }
             temp = -MOS3cd;
             temp -= MOS3cbd + MOS3cbs;
@@ -215,7 +215,7 @@ namespace SpiceSharp.Components
                 temp -= ckt.State.States[0][MOS3states + MOS3cqgb] + ckt.State.States[0][MOS3states + MOS3cqgd] +
                     ckt.State.States[0][MOS3states + MOS3cqgs];
             }
-            value += temp * ckt.State.Real.Solution[MOS3sNode];
+            value += temp * ckt.State.Solution[MOS3sNode];
             return value;
         }
 

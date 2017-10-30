@@ -44,10 +44,10 @@ namespace SpiceSharp.Components
         [SpiceName("l"), SpiceInfo("Length", Interesting = false)]
         public Parameter RESlength { get; } = new Parameter();
         [SpiceName("i"), SpiceInfo("Current")]
-        public double GetCurrent(Circuit ckt) => (ckt.State.Real.Solution[RESposNode] - ckt.State.Real.Solution[RESnegNode]) * RESconduct;
+        public double GetCurrent(Circuit ckt) => (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) * RESconduct;
         [SpiceName("p"), SpiceInfo("Power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Real.Solution[RESposNode] - ckt.State.Real.Solution[RESnegNode]) *
-            (ckt.State.Real.Solution[RESposNode] - ckt.State.Real.Solution[RESnegNode]) * RESconduct;
+        public double GetPower(Circuit ckt) => (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) *
+            (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) * RESconduct;
 
         /// <summary>
         /// Nodes
@@ -94,7 +94,7 @@ namespace SpiceSharp.Components
             RESposNode = nodes[0].Index;
             RESnegNode = nodes[1].Index;
 
-            var state = ckt.State.Real;
+            var state = ckt.State;
             RESposPosPtr = state.Matrix.SMPmakeElt(RESposNode, RESposNode);
             RESnegNegPtr = state.Matrix.SMPmakeElt(RESnegNode, RESnegNode);
             RESposNegPtr = state.Matrix.SMPmakeElt(RESposNode, RESnegNode);

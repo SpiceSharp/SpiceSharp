@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.Noise
         /// <returns></returns>
         protected override double CalculateNoise(Circuit ckt)
         {
-            var sol = ckt.State.Complex.Solution;
+            var sol = ckt.State.Solution;
             Complex val = sol[NOISEnodes[0]] - sol[NOISEnodes[1]];
             double gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
             return gain * Gain;

@@ -33,10 +33,10 @@ namespace SpiceSharp.Components
         [SpiceName("control"), SpiceInfo("Name of the controlling source")]
         public CircuitIdentifier CSWcontName { get; set; }
         [SpiceName("i"), SpiceInfo("Switch current")]
-        public double GetCurrent(Circuit ckt) => (ckt.State.Real.Solution[CSWposNode] - ckt.State.Real.Solution[CSWnegNode]) * CSWcond;
+        public double GetCurrent(Circuit ckt) => (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) * CSWcond;
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Real.Solution[CSWposNode] - ckt.State.Real.Solution[CSWnegNode]) *
-            (ckt.State.Real.Solution[CSWposNode] - ckt.State.Real.Solution[CSWnegNode]) * CSWcond;
+        public double GetPower(Circuit ckt) => (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) *
+            (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) * CSWcond;
         public double CSWcond { get; internal set; }
 
         /// <summary>

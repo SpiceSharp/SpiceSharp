@@ -27,12 +27,12 @@ namespace SpiceSharp.Components
         [SpiceName("control"), SpiceInfo("Name of the controlling source")]
         public CircuitIdentifier CCCScontName { get; set; }
         [SpiceName("i"), SpiceInfo("CCCS output current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[CCCScontBranch] * CCCScoeff;
+        public double GetCurrent(Circuit ckt) => ckt.State.Solution[CCCScontBranch] * CCCScoeff;
         [SpiceName("v"), SpiceInfo("CCCS voltage at output")]
-        public double GetVoltage(Circuit ckt) => ckt.State.Real.Solution[CCCSposNode] - ckt.State.Real.Solution[CCCSnegNode];
+        public double GetVoltage(Circuit ckt) => ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode];
         [SpiceName("p"), SpiceInfo("CCCS power")]
-        public double GetPower(Circuit ckt) => ckt.State.Real.Solution[CCCScontBranch] * CCCScoeff *
-            (ckt.State.Real.Solution[CCCSposNode] - ckt.State.Real.Solution[CCCSnegNode]);
+        public double GetPower(Circuit ckt) => ckt.State.Solution[CCCScontBranch] * CCCScoeff *
+            (ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode]);
 
         /// <summary>
         /// Nodes

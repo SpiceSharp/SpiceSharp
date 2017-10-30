@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Circuits
@@ -118,15 +119,42 @@ namespace SpiceSharp.Circuits
         #endregion
 
         #region Simulation solutions
-        /// <summary>
-        /// The real state
-        /// </summary>
-        public CircuitStateReal Real { get; } = new CircuitStateReal();
 
         /// <summary>
-        /// The complex state
+        /// Get the equation matrix
         /// </summary>
-        public CircuitStateComplex Complex { get; } = new CircuitStateComplex();
+        public Matrix Matrix { get; private set; } = null;
+
+        /// <summary>
+        /// Gets the real part of the RHS vector
+        /// </summary>
+        public double[] Rhs { get; private set; } = null;
+
+        /// <summary>
+        /// Gets the imaginary part of the RHS vector
+        /// </summary>
+        public double[] iRhs { get; private set; } = null;
+
+        /// <summary>
+        /// Gets the (real part of the) solution vector
+        /// </summary>
+        public double[] Solution { get; private set; } = null;
+
+        /// <summary>
+        /// Gets the imaginary part of the solution vector
+        /// </summary>
+        public double[] iSolution { get; private set; } = null;
+
+        /// <summary>
+        /// Gets the old solution
+        /// </summary>
+        public double[] OldSolution { get; private set; } = null;
+
+        /// <summary>
+        /// Gets or sets the current laplace variable
+        /// Using a purely imaginary variable here will give you the steady-state frequency response
+        /// </summary>
+        public Complex Laplace = new Complex();
 
         /// <summary>
         /// Noise state
@@ -155,6 +183,14 @@ namespace SpiceSharp.Circuits
         public bool Initialized { get; private set; } = false;
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public CircuitState()
+        {
+            Matrix = spsmp.SMPnewMatrix();
+        }
+
+        /// <summary>
         /// Initialize the state
         /// </summary>
         /// <param name="ckt"></param>
@@ -162,10 +198,12 @@ namespace SpiceSharp.Circuits
         {
             // Initialize all matrices
             Order = ckt.Nodes.Count + 1;
-            Real.Initialize(Order);
-            Complex.Initialize(Order);
-            // Real = new CircuitStateReal(Order);
-            // Complex = new CircuitStateComplex(Order);
+            Rhs = new double[Order];
+            iRhs = new double[Order];
+            Solution = new double[Order];
+            OldSolution = new double[Order];
+            iSolution = new double[Order];
+
             Noise = new CircuitStateNoise();
             if (ckt.Method != null)
                 ReinitStates(ckt.Method);
@@ -203,11 +241,39 @@ namespace SpiceSharp.Circuits
             NumStates = 0;
             Initialized = false;
 
-            Real.Destroy();
-            Complex.Destroy();
+            Rhs = null;
+            iRhs = null;
+            Solution = null;
+            iSolution = null;
+            Matrix = null;
 
             // Remove states
             States = null;
+        }
+
+        /// <summary>
+        /// Store the solution stored in Rhs
+        /// </summary>
+        /// <param name="imaginary"></param>
+        public void StoreSolution(bool imaginary = false)
+        {
+            var tmp = Rhs;
+            Rhs = OldSolution;
+            OldSolution = Solution;
+            Solution = tmp;
+        }
+
+        /// <summary>
+        /// Clear the matrix and Rhs vector
+        /// </summary>
+        public void Clear()
+        {
+            for (int i = 0; i < Order; i++)
+            {
+                Rhs[i] = 0;
+                iRhs[i] = 0;
+            }
+            Matrix.spClear();
         }
 
         /// <summary>

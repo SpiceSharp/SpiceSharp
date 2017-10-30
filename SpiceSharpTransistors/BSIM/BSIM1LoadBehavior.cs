@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var bsim1 = ComponentTyped<BSIM1>();
             var model = bsim1.Model as BSIM1Model;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var method = ckt.Method;
             double EffectiveLength, DrainArea, SourceArea, DrainPerimeter, SourcePerimeter, DrainSatCurrent, SourceSatCurrent,
                 GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, von, vdsat, vt0;

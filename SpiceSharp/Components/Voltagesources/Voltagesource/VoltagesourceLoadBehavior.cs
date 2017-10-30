@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var voltageSource = ComponentTyped<Voltagesource>();
 
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             double time = 0.0;
             double value = 0.0;
 

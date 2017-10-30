@@ -400,7 +400,7 @@ namespace Spice2SpiceSharp
                 {
                     WriteCode(sw, "", "/// <summary>", "/// Load the device", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void Load(Circuit ckt)", "{");
-                    WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var rstate = state.Real;", "var method = ckt.Method;");
+                    WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var rstate = state;", "var method = ckt.Method;");
                     WriteCode(sw, variables(load.DeviceVariables));
                     WriteCode(sw, "", loadDev, "}");
                 }
@@ -410,7 +410,7 @@ namespace Spice2SpiceSharp
                 {
                     WriteCode(sw, "", "/// <summary>", "/// Load the device for AC simulation", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void AcLoad(Circuit ckt)", "{");
-                    WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var cstate = state.Complex;");
+                    WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var cstate = state;");
                     WriteCode(sw, variables(acload.DeviceVariables));
                     WriteCode(sw, "", acloadDev, "}");
                 }
@@ -420,7 +420,7 @@ namespace Spice2SpiceSharp
                 {
                     WriteCode(sw, "", "/// <summary>", "/// Load the device for AC simulation", "/// </summary>", "/// <param name=\"ckt\">The circuit</param>");
                     WriteCode(sw, "public override void AcLoad(Circuit ckt)", "{");
-                    WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var cstate = state.Complex;");
+                    WriteCode(sw, $"var model = Model as {name}Model;", "var state = ckt.State;", "var cstate = state;");
                     WriteCode(sw, variables(pzload.DeviceVariables));
                     WriteCode(sw, "", pzloadDev, "}");
                 }

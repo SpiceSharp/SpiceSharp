@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var mos3 = ComponentTyped<MOS3>();
             var model = mos3.Model as MOS3Model;
             var state = ckt.State;
-            var cstate = state.Complex;
+            var cstate = state;
             int xnrm, xrev;
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, capgs, capgd, capgb, xgs, xgd, xgb, xbd,
                 xbs;

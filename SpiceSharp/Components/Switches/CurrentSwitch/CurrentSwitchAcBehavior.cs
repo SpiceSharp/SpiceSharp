@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             double current_state;
             double g_now;
             var state = ckt.State;
-            var cstate = state.Complex;
+            var cstate = state;
 
             // Get the current state
             current_state = state.States[0][csw.CSWstate];

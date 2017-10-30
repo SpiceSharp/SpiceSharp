@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var mos3 = ComponentTyped<MOS3>();
             var model = mos3.Model as MOS3Model;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var method = ckt.Method;
             double vt, EffectiveLength, DrainSatCur, SourceSatCur, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat, von, evbs, evbd, vdsat,

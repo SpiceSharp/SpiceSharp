@@ -110,7 +110,7 @@ namespace SpiceSharp.Simulations
         {
             var ckt = Circuit;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var config = CurrentConfig ?? throw new CircuitException("No configuration");
             var method = config.Method ?? throw new CircuitException("No integration method");
 

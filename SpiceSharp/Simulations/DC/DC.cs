@@ -157,7 +157,7 @@ namespace SpiceSharp.Simulations
             var ckt = this.Circuit;
             // Setup the state
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var config = CurrentConfig;
             state.Init = CircuitState.InitFlags.InitJct;
             state.Initialize(ckt);

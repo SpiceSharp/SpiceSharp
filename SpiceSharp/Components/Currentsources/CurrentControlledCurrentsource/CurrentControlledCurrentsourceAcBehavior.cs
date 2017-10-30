@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Execute(Circuit ckt)
         {
             var src = ComponentTyped<CurrentControlledCurrentsource>();
-            var cstate = ckt.State.Complex;
+            var cstate = ckt.State;
             // // cstate.Matrix[src.CCCSposNode, src.CCCScontBranch] += src.CCCScoeff.Value;
             // // cstate.Matrix[src.CCCSnegNode, src.CCCScontBranch] -= src.CCCScoeff.Value;
         }

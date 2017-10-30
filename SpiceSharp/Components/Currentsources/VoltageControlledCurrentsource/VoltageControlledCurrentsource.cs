@@ -24,12 +24,12 @@ namespace SpiceSharp.Components
         [SpiceName("gain"), SpiceInfo("Transconductance of the source (gain)")]
         public Parameter VCCScoeff { get; } = new Parameter();
         [SpiceName("i"), SpiceInfo("Output current")]
-        public double GetCurrent(Circuit ckt) => (ckt.State.Real.Solution[VCCScontPosNode] - ckt.State.Real.Solution[VCCScontNegNode]) * VCCScoeff;
+        public double GetCurrent(Circuit ckt) => (ckt.State.Solution[VCCScontPosNode] - ckt.State.Solution[VCCScontNegNode]) * VCCScoeff;
         [SpiceName("v"), SpiceInfo("Voltage across output")]
-        public double GetVoltage(Circuit ckt) => ckt.State.Real.Solution[VCCSposNode] - ckt.State.Real.Solution[VCCSnegNode];
+        public double GetVoltage(Circuit ckt) => ckt.State.Solution[VCCSposNode] - ckt.State.Solution[VCCSnegNode];
         [SpiceName("p"), SpiceInfo("Power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Real.Solution[VCCScontPosNode] - ckt.State.Real.Solution[VCCScontNegNode]) * VCCScoeff *
-            (ckt.State.Real.Solution[VCCSposNode] - ckt.State.Real.Solution[VCCSnegNode]);
+        public double GetPower(Circuit ckt) => (ckt.State.Solution[VCCScontPosNode] - ckt.State.Solution[VCCScontNegNode]) * VCCScoeff *
+            (ckt.State.Solution[VCCSposNode] - ckt.State.Solution[VCCSnegNode]);
 
         /// <summary>
         /// Nodes

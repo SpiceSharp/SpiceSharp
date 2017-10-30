@@ -33,9 +33,9 @@ namespace SpiceSharp.Components
         [SpiceName("acphase"), SpiceInfo("A.C. phase value")]
         public Parameter ISRCacPhase { get; } = new Parameter();
         [SpiceName("v"), SpiceInfo("Voltage accross the supply")]
-        public double GetV(Circuit ckt) => (ckt.State.Real.Solution[ISRCposNode] - ckt.State.Real.Solution[ISRCnegNode]);
+        public double GetV(Circuit ckt) => (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode]);
         [SpiceName("p"), SpiceInfo("Power supplied by the source")]
-        public double GetP(Circuit ckt) => (ckt.State.Real.Solution[ISRCposNode] - ckt.State.Real.Solution[ISRCposNode]) * -ISRCdcValue;
+        public double GetP(Circuit ckt) => (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCposNode]) * -ISRCdcValue;
         [SpiceName("ac"), SpiceInfo("A.C. magnitude, phase vector")]
         public void SetAc(double[] ac)
         {
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public Complex GetComplexVoltage(Circuit ckt) => ckt.State.Complex.Solution[ISRCposNode] - ckt.State.Complex.Solution[ISRCnegNode];
+        public Complex GetComplexVoltage(Circuit ckt) => ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode];
 
         /// <summary>
         /// Constructor

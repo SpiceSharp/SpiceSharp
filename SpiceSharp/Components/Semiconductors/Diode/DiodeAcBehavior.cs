@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             var model = diode.Model as DiodeModel;
             var state = ckt.State;
-            var cstate = state.Complex;
+            var cstate = state;
             double gspr, geq, xceq;
 
             gspr = model.DIOconductance * diode.DIOarea;

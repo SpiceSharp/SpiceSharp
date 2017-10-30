@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -39,7 +40,7 @@ namespace SpiceSharp.Components
         [SpiceName("i"), SpiceInfo("Device current")]
         public double GetCurrent(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap];
         [SpiceName("p"), SpiceInfo("Instantaneous device power")]
-        public double GetPower(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap] * (ckt.State.Real.Solution[CAPposNode] - ckt.State.Real.Solution[CAPnegNode]);
+        public double GetPower(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap] * (ckt.State.Solution[CAPposNode] - ckt.State.Solution[CAPnegNode]);
 
         /// <summary>
         /// Nodes and states
@@ -47,6 +48,11 @@ namespace SpiceSharp.Components
         public int CAPstate { get; private set; }
         public int CAPposNode { get; private set; }
         public int CAPnegNode { get; private set; }
+
+        MatrixElement CAPposPosptr;
+        MatrixElement CAPnegNegptr;
+        MatrixElement CAPposNegptr;
+        MatrixElement CAPnegPosptr;
 
         /// <summary>
         /// Constants
@@ -82,6 +88,12 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(ckt);
             CAPposNode = nodes[0].Index;
             CAPnegNode = nodes[1].Index;
+
+            var matrix = ckt.State.Matrix;
+            CAPposPosptr = matrix.SMPmakeElt(CAPposNode, CAPposNode);
+            CAPnegNegptr = matrix.SMPmakeElt(CAPnegNode, CAPnegNode);
+            CAPnegPosptr = matrix.SMPmakeElt(CAPnegNode, CAPposNode);
+            CAPposNegptr = matrix.SMPmakeElt(CAPposNode, CAPnegNode);
 
             // Create to states for integration
             CAPstate = ckt.State.GetState(2);

@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var bsim3 = ComponentTyped<BSIM3v30>();
             var model = bsim3.Model as BSIM3v30Model;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var method = ckt.Method;
             int Check;
             double vbs, vgs, vds, qdef, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, Idtot, cdhat, Ibtot, cbhat, von, vgb, Nvtm, SourceSatCurrent,

@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             var model = diode.Model as DiodeModel;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var method = ckt.Method;
             bool Check;
             double csat, gspr, vt, vte, vd, delvd, cdhat, vdtemp, evd, cd, gd, arg, evrev, czero, sarg, capd, czof2, cdeq;

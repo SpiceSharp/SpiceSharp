@@ -291,7 +291,7 @@ namespace SpiceSharp.Parser
             int i = 1;
             mccstateSet[0] = startState;
             int kind = Int32.MaxValue;
-            for (;;)
+            for (; ; )
             {
                 if (++mccround == Int32.MaxValue)
                     ReInitRounds();
@@ -783,7 +783,7 @@ null, null, null, null, null, null, null, null, null, null, null, null, null, nu
             Token matchedToken;
             int curPos = 0;
 
-            for (;;)
+            for (; ;)
             {
                 try
                 {

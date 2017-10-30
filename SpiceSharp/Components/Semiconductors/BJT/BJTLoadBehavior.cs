@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             BJT bjt = ComponentTyped<BJT>();
             BJTModel model = bjt.Model as BJTModel;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var method = ckt.Method;
             double vt;
             double gccs, ceqcs, geqbx, ceqbx, geqcb, csat, rbpr, rbpi, gcpr, gepr, oik, c2, vte, oikr, c4, vtc, td, xjrb, vbe, vbc, vbx, vcs;

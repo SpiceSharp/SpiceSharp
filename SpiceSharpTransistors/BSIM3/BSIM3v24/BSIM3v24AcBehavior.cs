@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var bsim3 = ComponentTyped<BSIM3v24>();
             var model = bsim3.Model as BSIM3v24Model;
             var state = ckt.State;
-            var cstate = state.Complex;
+            var cstate = state;
             double Gm, Gmbs, FwdSum, RevSum, gbbdp, gbbsp, gbdpg, gbdpb, gbdpdp, gbdpsp, gbspdp, gbspg, gbspb, gbspsp, cggb, cgsb, cgdb,
                 cbgb, cbsb, cbdb, cdgb, cdsb, cddb, xgtg, sxpart, dxpart, ddxpart_dVd, dsxpart_dVd, xgtd, xgts, xgtb, xcqgb = 0.0, xcqdb = 0.0, xcqsb = 0.0,
                 xcqbb = 0.0, CoxWL, qcheq, Cdd, Csd, Cdg, Csg, ddxpart_dVg, Cds, Css, ddxpart_dVs, ddxpart_dVb, dsxpart_dVg, dsxpart_dVs,

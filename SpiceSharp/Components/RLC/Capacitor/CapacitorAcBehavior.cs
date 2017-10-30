@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Execute(Circuit ckt)
         {
             Capacitor cap = ComponentTyped<Capacitor>();
-            var cstate = ckt.State.Complex;
+            var cstate = ckt.State;
             var val = cstate.Laplace * cap.CAPcapac.Value;
 
             // Load the matrix

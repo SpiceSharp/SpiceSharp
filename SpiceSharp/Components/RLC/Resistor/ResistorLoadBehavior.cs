@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt">Circuit</param>
         public override void Execute(Circuit ckt)
         {
-            var rstate = ckt.State.Real;
+            var rstate = ckt.State;
             var resistor = ComponentTyped<Resistor>();
 
             resistor.RESposPosPtr.Value.Real += resistor.RESconduct;

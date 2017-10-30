@@ -48,16 +48,16 @@ namespace SpiceSharp.Components
         [SpiceName("acimag"), SpiceInfo("A.C. imaginary part")]
         public double GetAcImag(Circuit ckt) => VSRCac.Imaginary;
         [SpiceName("i"), SpiceInfo("Voltage source current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[VSRCbranch];
+        public double GetCurrent(Circuit ckt) => ckt.State.Solution[VSRCbranch];
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Real.Solution[VSRCposNode] - ckt.State.Real.Solution[VSRCnegNode]) * -ckt.State.Real.Solution[VSRCbranch];
+        public double GetPower(Circuit ckt) => (ckt.State.Solution[VSRCposNode] - ckt.State.Solution[VSRCnegNode]) * -ckt.State.Solution[VSRCbranch];
         
         /// <summary>
         /// Get the complex current through the voltage source
         /// </summary>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
-        public Complex GetComplexCurrent(Circuit ckt) => ckt.State.Complex.Solution[VSRCbranch];
+        public Complex GetComplexCurrent(Circuit ckt) => ckt.State.Solution[VSRCbranch];
         
         /// <summary>
         /// Nodes

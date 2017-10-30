@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var bsim3 = ComponentTyped<BSIM3v30>();
             var model = bsim3.Model as BSIM3v30Model;
             var state = ckt.State;
-            var cstate = state.Complex;
+            var cstate = state;
             double omega = cstate.Laplace.Imaginary;
             double Csd, Csg, Css, T0, T1, T2, T3, gmr, gmbsr, gds, gmi, gmbsi, gdsi, Cddr, Cdgr, Cdsr, Cddi, Cdgi, Cdsi, Cdbi, Csdr, Csgr,
                 Cssr, Csdi, Csgi, Cssi, Csbi, Cgdr, Cggr, Cgsr, Cgdi, Cggi, Cgsi, Cgbi, Gm, Gmbs, FwdSum, RevSum, Gmi, Gmbsi, FwdSumi, RevSumi,

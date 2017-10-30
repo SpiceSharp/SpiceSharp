@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var bsim2 = ComponentTyped<BSIM2>();
             var model = bsim2.Model as BSIM2Model;
             var state = ckt.State;
-            var cstate = state.Complex;
+            var cstate = state;
             int xnrm;
             int xrev;
             double gdpr, gspr, gm, gds, gmbs, gbd, gbs, capbd, capbs, cggb, cgsb, cgdb, cbgb, cbsb, cbdb, cdgb, cdsb, cddb;

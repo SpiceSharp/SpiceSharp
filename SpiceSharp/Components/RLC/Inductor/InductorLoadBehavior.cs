@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         {
             var ind = ComponentTyped<Inductor>();
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
 
             // Initialize
             if (state.UseIC && ind.INDinitCond.Given)

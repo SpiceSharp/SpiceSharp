@@ -146,16 +146,16 @@ namespace SpiceSharp.Components
         [SpiceName("p"), SpiceInfo("Power dissipation")]
         public double GetPOWER(Circuit ckt)
         {
-            double value = ckt.State.States[0][BJTstate + BJTcc] * ckt.State.Real.Solution[BJTcolNode];
-            value += ckt.State.States[0][BJTstate + BJTcb] * ckt.State.Real.Solution[BJTbaseNode];
+            double value = ckt.State.States[0][BJTstate + BJTcc] * ckt.State.Solution[BJTcolNode];
+            value += ckt.State.States[0][BJTstate + BJTcb] * ckt.State.Solution[BJTbaseNode];
             if (ckt.Method != null && !(ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC))
-                value -= ckt.State.States[0][BJTstate + BJTcqcs] * ckt.State.Real.Solution[BJTsubstNode];
+                value -= ckt.State.States[0][BJTstate + BJTcqcs] * ckt.State.Solution[BJTsubstNode];
             
             double tmp = -ckt.State.States[0][BJTstate + BJTcc];
             tmp -= ckt.State.States[0][BJTstate + BJTcb];
             if (ckt.Method != null && !(ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC))
                 tmp += ckt.State.States[0][BJTstate + BJTcqcs];
-            value += tmp * ckt.State.Real.Solution[BJTemitNode];
+            value += tmp * ckt.State.Solution[BJTemitNode];
             return value;
         }
 

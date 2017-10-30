@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var bsim3 = ComponentTyped<BSIM3v24>();
             var model = bsim3.Model as BSIM3v24Model;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var method = ckt.Method;
 
             int Check;

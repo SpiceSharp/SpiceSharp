@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var bsim4 = ComponentTyped<BSIM4v80>();
             var model = bsim4.Model as BSIM4v80Model;
             var state = ckt.State;
-            var cstate = state.Complex;
+            var cstate = state;
             double capbd, capbs, cgso, cgdo, cgbo, Csd, Csg, Css, T0 = 0, T1, T2, T3, gmr, gmbsr, gdsr, gmi, gmbsi, gdsi, Cddr, Cdgr,
                 Cdsr, Cdbr, Cddi, Cdgi, Cdsi, Cdbi, Csdr, Csgr, Cssr, Csbr, Csdi, Csgi, Cssi, Csbi, Cgdr, Cggr, Cgsr, Cgbr, Cgdi, Cggi, Cgsi,
                 Cgbi, Gmr, Gmbsr, FwdSumr, RevSumr, Gmi, Gmbsi, FwdSumi, RevSumi, gbbdp, gbbsp, gbdpg, gbdpdp, gbdpb, gbdpsp, gbspdp, gbspg,

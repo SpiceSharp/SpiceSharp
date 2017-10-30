@@ -78,7 +78,7 @@ namespace SpiceSharp.IntegrationMethods
         public override void Predict(Circuit ckt)
         {
             // Get the state
-            var state = ckt.State.Real;
+            var state = ckt.State;
 
             // Predict a solution
             double a, b;
@@ -120,7 +120,7 @@ namespace SpiceSharp.IntegrationMethods
         public override double TruncateNodes(Circuit ckt)
         {
             // Get the state
-            var state = ckt.State.Real;
+            var state = ckt.State;
             double tol, diff, tmp;
             double timetemp = Double.PositiveInfinity;
             int rows = ckt.Nodes.Count;

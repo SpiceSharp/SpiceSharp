@@ -27,11 +27,11 @@ namespace SpiceSharp.Components
         [SpiceName("control"), SpiceInfo("Controlling voltage source")]
         public CircuitIdentifier CCVScontName { get; set; }
         [SpiceName("i"), SpiceInfo("Output current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[CCVSbranch];
+        public double GetCurrent(Circuit ckt) => ckt.State.Solution[CCVSbranch];
         [SpiceName("v"), SpiceInfo("Output voltage")]
-        public double GetVoltage(Circuit ckt) => ckt.State.Real.Solution[CCVSposNode] - ckt.State.Real.Solution[CCVSnegNode];
+        public double GetVoltage(Circuit ckt) => ckt.State.Solution[CCVSposNode] - ckt.State.Solution[CCVSnegNode];
         [SpiceName("p"), SpiceInfo("Power")]
-        public double GetPower(Circuit ckt) => ckt.State.Real.Solution[CCVSbranch] * (ckt.State.Real.Solution[CCVSposNode] - ckt.State.Real.Solution[CCVSnegNode]);
+        public double GetPower(Circuit ckt) => ckt.State.Solution[CCVSbranch] * (ckt.State.Solution[CCVSposNode] - ckt.State.Solution[CCVSnegNode]);
 
         /// <summary>
         /// Nodes

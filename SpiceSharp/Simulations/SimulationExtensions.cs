@@ -92,7 +92,7 @@ namespace SpiceSharp.Simulations
         public static bool Iterate(this Circuit ckt, List<CircuitObjectBehaviorLoad> loaders, SimulationConfiguration config, int maxiter)
         {
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             bool pass = false;
             int iterno = 0;
 
@@ -162,9 +162,9 @@ namespace SpiceSharp.Simulations
                 ckt.Statistics.SolveTime.Stop();
 
                 // Reset ground nodes
-                ckt.State.Real.Rhs[0] = 0.0;
-                ckt.State.Real.Solution[0] = 0.0;
-                ckt.State.Real.OldSolution[0] = 0.0;
+                ckt.State.Rhs[0] = 0.0;
+                ckt.State.Solution[0] = 0.0;
+                ckt.State.OldSolution[0] = 0.0;
 
                 // Exceeded maximum number of iterations
                 if (iterno > maxiter)
@@ -227,7 +227,7 @@ namespace SpiceSharp.Simulations
         public static void AcIterate(this Circuit ckt, List<CircuitObjectBehaviorAcLoad> loaders, SimulationConfiguration config)
         {
             var state = ckt.State;
-            var cstate = state.Complex;
+            var cstate = state;
 
             // Initialize the circuit
             if (!state.Initialized)
@@ -284,7 +284,7 @@ namespace SpiceSharp.Simulations
         /// <param name="negDrive">The negative driving node</param>
         public static void NzIterate(this Circuit ckt, int posDrive, int negDrive)
         {
-            var state = ckt.State.Complex;
+            var state = ckt.State;
 
             // Clear out the right hand side vector
             for (int i = 0; i < state.Rhs.Length; i++)
@@ -311,7 +311,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         private static bool IsConvergent(this Circuit ckt, SimulationConfiguration config)
         {
-            var rstate = ckt.State.Real;
+            var rstate = ckt.State;
 
             // Check convergence for each node
             for (int i = 0; i < ckt.Nodes.Count; i++)
@@ -360,7 +360,7 @@ namespace SpiceSharp.Simulations
         public static void Load(this Circuit ckt, List<CircuitObjectBehaviorLoad> loaders)
         {
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var nodes = ckt.Nodes;
 
             // Start the stopwatch
@@ -435,7 +435,7 @@ namespace SpiceSharp.Simulations
         {
             var ckt = simulation.Circuit;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var nodes = ckt.Nodes;
 
             // Clear the current solution

@@ -194,7 +194,7 @@ namespace SpiceSharp.Simulations
             // Initialize
             state.Initialize(ckt);
             ckt.State.Noise.Initialize(StartFreq);
-            state.Complex.Laplace = 0;
+            state.Laplace = 0;
             state.Domain = CircuitState.DomainTypes.Frequency;
             state.UseIC = false;
             state.UseDC = true;
@@ -204,7 +204,7 @@ namespace SpiceSharp.Simulations
             ckt.Op(loadbehaviours, config, config.DcMaxIterations);
 
             var data = ckt.State.Noise;
-            var cstate = ckt.State.Complex;
+            var cstate = ckt.State;
 
             // Loop through noise figures
             for (int i = 0; i < n; i++)

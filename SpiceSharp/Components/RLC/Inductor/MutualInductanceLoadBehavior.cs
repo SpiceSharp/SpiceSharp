@@ -53,7 +53,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         {
             var mut = ComponentTyped<MutualInductance>();
             var state = ckt.State;
-            var rstate = ckt.State.Real;
+            var rstate = ckt.State;
 
             if (sender == mut.Inductor1)
             {

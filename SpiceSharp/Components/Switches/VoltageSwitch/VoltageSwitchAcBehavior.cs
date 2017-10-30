@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var model = vsw.Model as VoltageSwitchModel;
             double current_state, g_now;
             var state = ckt.State;
-            var cstate = state.Complex;
+            var cstate = state;
 
             // Get the current state
             current_state = state.States[0][vsw.VSWstate];

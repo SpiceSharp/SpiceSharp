@@ -43,7 +43,7 @@ namespace SpiceSharp.Simulations
 
             // Setup the state
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var config = CurrentConfig;
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;

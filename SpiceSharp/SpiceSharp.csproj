@@ -109,9 +109,7 @@
     <Compile Include="Components\RLC\Resistor\ResistorNoiseBehavior.cs" />
     <Compile Include="Circuits\CircuitCheck.cs" />
     <Compile Include="Circuits\CircuitIdentifier.cs" />
-    <Compile Include="Circuits\CircuitStateComplex.cs" />
     <Compile Include="Circuits\CircuitStateNoise.cs" />
-    <Compile Include="Circuits\CircuitStateReal.cs" />
     <Compile Include="Circuits\ICircuitModel.cs" />
     <Compile Include="Components\CircuitModel.cs" />
     <Compile Include="Components\Currentsources\Currentsource\Currentsource.cs" />

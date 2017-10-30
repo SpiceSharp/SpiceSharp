@@ -43,9 +43,9 @@ namespace SpiceSharp.Components
         [SpiceName("v"), SpiceName("volt"), SpiceInfo("Terminal voltage of the inductor")]
         public double GetVolt(Circuit ckt) => ckt.State.States[0][INDstate + INDvolt];
         [SpiceName("i"), SpiceName("current"), SpiceInfo("Current through the inductor")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[INDbrEq];
+        public double GetCurrent(Circuit ckt) => ckt.State.Solution[INDbrEq];
         [SpiceName("p"), SpiceInfo("Instantaneous power dissipated by the inductor")]
-        public double GetPower(Circuit ckt) => ckt.State.Real.Solution[INDbrEq] * ckt.State.States[0][INDstate + INDvolt];
+        public double GetPower(Circuit ckt) => ckt.State.Solution[INDbrEq] * ckt.State.States[0][INDstate + INDvolt];
 
         /// <summary>
         /// Nodes

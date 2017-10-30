@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             double vcap;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var method = ckt.Method;
 
             bool cond1 = (state.UseDC && state.Init == Circuits.CircuitState.InitFlags.InitJct) || state.UseIC;

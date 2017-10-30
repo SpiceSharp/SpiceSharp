@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             double previous_state;
             double current_state = 0.0;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
 
             if (state.Init == CircuitState.InitFlags.InitFix || state.Init == CircuitState.InitFlags.InitJct)
             {
