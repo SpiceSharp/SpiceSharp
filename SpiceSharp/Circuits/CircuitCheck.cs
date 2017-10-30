@@ -5,6 +5,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 using MathNet.Numerics.LinearAlgebra.Factorization;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
+using System.Linq;
 
 namespace SpiceSharp.Circuits
 {
@@ -18,8 +19,8 @@ namespace SpiceSharp.Circuits
         /// </summary>
         private bool HasSource = false;
         private List<Tuple<ICircuitComponent, int, int>> voltagedriven = new List<Tuple<ICircuitComponent, int, int>>();
-        private Dictionary<int, HashSet<int>> connections = new Dictionary<int, HashSet<int>>();
-        private HashSet<int> unconnected = new HashSet<int>();
+        private Dictionary<int, int> connectedgroups = new Dictionary<int, int>();
+        private int cgroup = 0;
 
         /// <summary>
         /// Constructor
@@ -41,8 +42,9 @@ namespace SpiceSharp.Circuits
             // Initialize
             HasSource = false;
             voltagedriven.Clear();
-            unconnected.Clear();
-            connections.Clear();
+            connectedgroups.Clear();
+            connectedgroups.Add(0, 0);
+            cgroup = 1;
 
             // Check all objects
             foreach (var c in ckt.Objects)
@@ -58,7 +60,8 @@ namespace SpiceSharp.Circuits
                 throw new CircuitException($"{icc.Name} closes a loop of voltage sources");
 
             // Check for floating nodes
-            if (FindFloatingNodes() > 0)
+            var unconnected = FindFloatingNodes();
+            if (unconnected.Count > 0)
             {
                 List<CircuitIdentifier> un = new List<CircuitIdentifier>();
                 for (int i = 0; i < ckt.Nodes.Count; i++)
@@ -101,7 +104,8 @@ namespace SpiceSharp.Circuits
                 for (int i = 0; i < nodes.Length; i++)
                 {
                     nodes[i] = icc.GetNodeIndex(i);
-                    unconnected.Add(nodes[i]);
+                    if (!connectedgroups.ContainsKey(nodes[i]))
+                        connectedgroups.Add(nodes[i], cgroup++);
                 }
 
                 // Use attributes for checking properties
@@ -127,7 +131,7 @@ namespace SpiceSharp.Circuits
                     }
                 }
 
-                // Check connections
+                // If the object does not have connected pins specified, assume they're all connected
                 if (!hasconnections)
                     AddConnections(nodes);
             }
@@ -175,8 +179,17 @@ namespace SpiceSharp.Circuits
             for (int i = 0; i < voltagedriven.Count; i++)
             {
                 int k = result.P[i];
-                if (result.U[k, k] == 0)
-                    return voltagedriven[i].Item1;
+                bool closes = true;
+                for (int j = i; j < result.U.ColumnCount; j++)
+                {
+                    if (result.U[i, j] != 0.0)
+                    {
+                        closes = false;
+                        break;
+                    }
+                }
+                if (closes)
+                    return voltagedriven[k].Item1;
             }
             return null;
         }
@@ -190,49 +203,61 @@ namespace SpiceSharp.Circuits
             if (nodes == null || nodes.Length == 0)
                 return;
 
-            // Find the minimum value
-            int min = nodes[0];
-            for (int i = 1; i < nodes.Length; i++)
-                min = nodes[i] < min ? nodes[i] : min;
-
-            if (!connections.ContainsKey(min))
-                connections.Add(min, new HashSet<int>());
-
-            // Add the connections
+            // All connections
             for (int i = 0; i < nodes.Length; i++)
             {
-                if (nodes[i] != min)
-                    connections[min].Add(nodes[i]);
+                for (int j = i + 1; j < nodes.Length; j++)
+                    AddConnection(nodes[i], nodes[j]);
             }
+        }
+
+        /// <summary>
+        /// Add a connection for checking for floating nodes
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        private void AddConnection(int a, int b)
+        {
+            if (a == b)
+                return;
+
+            int groupa, groupb;
+            bool hasa = connectedgroups.TryGetValue(a, out groupa);
+            bool hasb = connectedgroups.TryGetValue(b, out groupb);
+
+            if (hasa && hasb)
+            {
+                // Connect the two groups to that of the minimum group
+                int newgroup = Math.Min(groupa, groupb);
+                int oldgroup = Math.Max(groupa, groupb);
+                int[] keys = connectedgroups.Keys.ToArray();
+                foreach (var key in keys)
+                {
+                    if (connectedgroups[key] == oldgroup)
+                        connectedgroups[key] = newgroup;
+                }
+            }
+            else if (hasa)
+                connectedgroups.Add(b, groupa);
+            else if (hasb)
+                connectedgroups.Add(a, groupb);
         }
 
         /// <summary>
         /// Find a node that has no path to ground anywhere (open-circuited)
         /// </summary>
         /// <returns></returns>
-        private int FindFloatingNodes()
+        private HashSet<int> FindFloatingNodes()
         {
-            // We start from zero and we'll see how many nodes we can eliminate
-            Stack<int> todo = new Stack<int>();
-            todo.Push(0);
-            while (todo.Count > 0)
+            HashSet<int> unconnected = new HashSet<int>();
+
+            foreach (var key in connectedgroups.Keys)
             {
-                int c = todo.Pop();
-
-                // Remove the node from the unconnected nodes
-                unconnected.Remove(c);
-
-                // If it maps to other nodes, try to remove them too
-                if (connections.ContainsKey(c))
-                {
-                    // Add all these nodes to the stack
-                    foreach (var a in connections[c])
-                        todo.Push(a);
-                }
+                if (connectedgroups[key] != 0)
+                    unconnected.Add(key);
             }
 
-            // The list that remains are all unconnected nodes
-            return unconnected.Count;
+            return unconnected;
         }
     }
 }
