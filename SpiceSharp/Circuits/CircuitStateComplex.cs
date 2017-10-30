@@ -39,13 +39,21 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Constructor
         /// </summary>
-        public CircuitStateComplex(int order)
+        public CircuitStateComplex()
         {
             Matrix = spsmp.SMPnewMatrix();
             // Matrix =  new SparseMatrix(order);
-            Rhs = new double[order]; // new SparseVector(order);
+            // Rhs = new double[order]; // new SparseVector(order);
+            // iRhs = new double[order];
+            // Solution = new double[order]; // Solution = new DenseVector(order);
+            // iSolution = new double[order];
+        }
+
+        public void Initialize(int order)
+        {
+            Rhs = new double[order];
             iRhs = new double[order];
-            Solution = new double[order]; // Solution = new DenseVector(order);
+            Solution = new double[order];
             iSolution = new double[order];
         }
 

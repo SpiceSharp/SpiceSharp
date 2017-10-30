@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -54,6 +55,11 @@ namespace SpiceSharp.Components
         public int RESposNode { get; private set; }
         public int RESnegNode { get; private set; }
 
+        internal MatrixElement RESposPosPtr;
+        internal MatrixElement RESnegNegPtr;
+        internal MatrixElement RESposNegPtr;
+        internal MatrixElement RESnegPosPtr;
+
         /// <summary>
         /// Private variables
         /// </summary>
@@ -87,6 +93,12 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(ckt);
             RESposNode = nodes[0].Index;
             RESnegNode = nodes[1].Index;
+
+            var state = ckt.State.Real;
+            RESposPosPtr = state.Matrix.SMPmakeElt(RESposNode, RESposNode);
+            RESnegNegPtr = state.Matrix.SMPmakeElt(RESnegNode, RESnegNode);
+            RESposNegPtr = state.Matrix.SMPmakeElt(RESposNode, RESnegNode);
+            RESnegPosPtr = state.Matrix.SMPmakeElt(RESnegNode, RESposNode);
         }
     }
 }

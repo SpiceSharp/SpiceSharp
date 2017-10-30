@@ -31,12 +31,23 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Constructor
         /// </summary>
-        public CircuitStateReal(int order)
+        public CircuitStateReal()
         {
             Matrix = spsmp.SMPnewMatrix(); // new SparseMatrix(order);
-            Rhs = new double[order]; // new SparseVector(order);
-            Solution = new double[order]; // new DenseVector(order);
-            OldSolution = new double[order]; // new DenseVector(order);
+            // Rhs = new double[order]; // new SparseVector(order);
+            // Solution = new double[order]; // new DenseVector(order);
+            // OldSolution = new double[order]; // new DenseVector(order);
+        }
+
+        /// <summary>
+        /// Initialize
+        /// </summary>
+        /// <param name="order"></param>
+        public void Initialize(int order)
+        {
+            Rhs = new double[order];
+            Solution = new double[order];
+            OldSolution = new double[order];
         }
 
         /// <summary>
@@ -55,7 +66,8 @@ namespace SpiceSharp.Circuits
         public void StoreSolution()
         {
             var tmp = Rhs;
-            Rhs = Solution;
+            Rhs = OldSolution;
+            OldSolution = Solution;
             Solution = tmp;
         }
 

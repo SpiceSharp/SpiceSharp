@@ -16,6 +16,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var rstate = ckt.State.Real;
             var resistor = ComponentTyped<Resistor>();
 
+            resistor.RESposPosPtr.Value.Real += resistor.RESconduct;
+            resistor.RESnegNegPtr.Value.Real += resistor.RESconduct;
+            resistor.RESposNegPtr.Value.Real -= resistor.RESconduct;
+            resistor.RESnegPosPtr.Value.Real -= resistor.RESconduct;
+
             // rstate.Matrix[resistor.RESposNode, resistor.RESposNode] += resistor.RESconduct;
             // rstate.Matrix[resistor.RESnegNode, resistor.RESnegNode] += resistor.RESconduct;
             // rstate.Matrix[resistor.RESposNode, resistor.RESnegNode] -= resistor.RESconduct;

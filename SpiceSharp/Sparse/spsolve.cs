@@ -35,9 +35,8 @@
 
             //  Initialize Intermediate vector. 
             pExtOrder = matrix.IntToExtRowMap;
-            int index = Size;
             for (I = Size; I > 0; I--)
-                Intermediate[I].Real = RHS[pExtOrder[Size--]];
+                Intermediate[I].Real = RHS[pExtOrder[I]];
 
             //  Forward elimination. Solves Lc = b.
             for (I = 1; I <= Size; I++)
@@ -72,9 +71,8 @@
 
             //  Unscramble Intermediate vector while placing data in to Solution vector. 
             pExtOrder = matrix.IntToExtColMap;
-            index = Size;
             for (I = Size; I > 0; I--)
-                Solution[pExtOrder[index--]] = Intermediate[I];
+                Solution[pExtOrder[I]] = Intermediate[I];
 
             return;
         }

@@ -22,7 +22,7 @@ namespace SpiceSharp.Circuits
 
         public enum SparseFlags
         {
-            NISHOULDPREORDER = 0x01,
+            NISHOULDREORDER = 0x01,
             NIDIDPREORDER = 0x100,
             NIACSHOULDREORDER = 0x10
         }
@@ -121,12 +121,12 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// The real state
         /// </summary>
-        public CircuitStateReal Real { get; private set; } = null;
+        public CircuitStateReal Real { get; } = new CircuitStateReal();
 
         /// <summary>
         /// The complex state
         /// </summary>
-        public CircuitStateComplex Complex { get; private set; } = null;
+        public CircuitStateComplex Complex { get; } = new CircuitStateComplex();
 
         /// <summary>
         /// Noise state
@@ -162,8 +162,10 @@ namespace SpiceSharp.Circuits
         {
             // Initialize all matrices
             Order = ckt.Nodes.Count + 1;
-            Real = new CircuitStateReal(Order);
-            Complex = new CircuitStateComplex(Order);
+            Real.Initialize(Order);
+            Complex.Initialize(Order);
+            // Real = new CircuitStateReal(Order);
+            // Complex = new CircuitStateComplex(Order);
             Noise = new CircuitStateNoise();
             if (ckt.Method != null)
                 ReinitStates(ckt.Method);

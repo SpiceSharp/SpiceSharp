@@ -137,22 +137,22 @@ namespace SpiceSharp.Simulations
                 }
                 if (state.Init == CircuitState.InitFlags.InitJct || (ckt.Method != null && ckt.Method.SavedTime == 0.0))
                 {
-                    state.Sparse |= CircuitState.SparseFlags.NISHOULDPREORDER;
+                    state.Sparse |= CircuitState.SparseFlags.NISHOULDREORDER;
                 }
 
-                // Preorder
-                if (state.Sparse.HasFlag(CircuitState.SparseFlags.NISHOULDPREORDER))
+                // Reorder
+                if (state.Sparse.HasFlag(CircuitState.SparseFlags.NISHOULDREORDER))
                 {
                     ckt.Statistics.ReorderTime.Start();
-                    spsmp.SMPreorder(rstate.Matrix, state.PivotAbsTol, state.PivotRelTol, ckt.Simulation.Config.DiagGmin);
+                    spsmp.SMPreorder(rstate.Matrix, state.PivotAbsTol, state.PivotRelTol, ckt.Simulation?.Config?.DiagGmin ?? 0.0);
                     ckt.Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~CircuitState.SparseFlags.NISHOULDPREORDER;
+                    state.Sparse &= ~CircuitState.SparseFlags.NISHOULDREORDER;
                 }
                 else
                 {
                     // Decompose
                     ckt.Statistics.DecompositionTime.Start();
-                    spsmp.SMPluFac(rstate.Matrix, state.PivotAbsTol, ckt.Simulation.Config.DiagGmin);
+                    spsmp.SMPluFac(rstate.Matrix, state.PivotAbsTol, ckt.Simulation?.Config?.DiagGmin ?? 0.0);
                     ckt.Statistics.DecompositionTime.Stop();
                 }
 
@@ -162,6 +162,7 @@ namespace SpiceSharp.Simulations
                 ckt.Statistics.SolveTime.Stop();
 
                 // Reset ground nodes
+                ckt.State.Real.Rhs[0] = 0.0;
                 ckt.State.Real.Solution[0] = 0.0;
                 ckt.State.Real.OldSolution[0] = 0.0;
 
@@ -195,7 +196,7 @@ namespace SpiceSharp.Simulations
 
                     case CircuitState.InitFlags.InitJct:
                         state.Init = CircuitState.InitFlags.InitFix;
-                        state.Sparse |= CircuitState.SparseFlags.NISHOULDPREORDER;
+                        state.Sparse |= CircuitState.SparseFlags.NISHOULDREORDER;
                         break;
 
                     case CircuitState.InitFlags.InitFix:

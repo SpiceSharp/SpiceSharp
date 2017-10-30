@@ -159,7 +159,7 @@ namespace SpiceSharp.Sparse
                 else
                 {
                     // Update column using indirect addressing scatter-gather
-                    ElementValue[] pDest = matrix.Intermediate;
+                    MatrixElement[] pDest = new MatrixElement[matrix.Diag.Length];
 
                     // Scatter
                     pElement = matrix.FirstInCol[Step];
@@ -174,9 +174,9 @@ namespace SpiceSharp.Sparse
                     while (pColumn.Row < Step)
                     {
                         pElement = matrix.Diag[pColumn.Row];
-                        double Mult = (pDest[pColumn.Row].Real *= pElement.Value.Real);
+                        double Mult = (pDest[pColumn.Row].Value.Real *= pElement.Value.Real);
                         while ((pElement = pElement.NextInCol) != null)
-                            pDest[pElement.Row].Real -= Mult * pElement.Value.Real;
+                            pDest[pElement.Row].Value.Real -= Mult * pElement.Value.Real;
                         pColumn = pColumn.NextInCol;
                     }
 
@@ -477,21 +477,19 @@ namespace SpiceSharp.Sparse
             for (I = Step; I <= Size; I++)
             {
                 // If chance of overflow, use real numbers. 
-                if ((pMarkowitzRow[Step] > short.MaxValue && pMarkowitzCol[Step] != 0) ||
-                     (pMarkowitzCol[Step] > short.MaxValue && pMarkowitzRow[Step] != 0))
+                if ((pMarkowitzRow[I] > short.MaxValue && pMarkowitzCol[I] != 0) ||
+                     (pMarkowitzCol[I] > short.MaxValue && pMarkowitzRow[I] != 0))
                 {
-                    Step++;
-                    fProduct = (double)pMarkowitzRow[Step] * pMarkowitzCol[Step];
+                    fProduct = (double)pMarkowitzRow[I] * pMarkowitzCol[I];
                     if (fProduct >= long.MaxValue)
-                        pMarkowitzProduct[Step] = long.MaxValue;
+                        pMarkowitzProduct[I] = long.MaxValue;
                     else
-                        pMarkowitzProduct[Step] = (long)fProduct;
+                        pMarkowitzProduct[I] = (long)fProduct;
                 }
                 else
                 {
-                    Step++;
-                    Product = pMarkowitzRow[Step] * pMarkowitzCol[Step];
-                    if ((pMarkowitzProduct[Step] = Product) == 0)
+                    Product = pMarkowitzRow[I] * pMarkowitzCol[I];
+                    if ((pMarkowitzProduct[I] = Product) == 0)
                         matrix.Singletons++;
                 }
             }

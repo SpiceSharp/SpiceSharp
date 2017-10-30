@@ -116,7 +116,7 @@ namespace SpiceSharp.Sparse
             int SizePlusOne;
             int AllocatedSize;
 
-            if (Size <= 0)
+            if (Size < 0)
                 throw new SparseException("Invalid size");
 
             // Create matrix

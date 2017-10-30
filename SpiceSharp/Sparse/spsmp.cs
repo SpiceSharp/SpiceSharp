@@ -29,7 +29,7 @@ namespace SpiceSharp.Sparse
         /// <param name="Row"></param>
         /// <param name="Col"></param>
         /// <returns></returns>
-        public static MatrixElement SMPmakeElt(Matrix matrix, int Row, int Col)
+        public static MatrixElement SMPmakeElt(this Matrix matrix, int Row, int Col)
         {
             return spbuild.spGetElement(matrix, Row, Col);
         }
@@ -152,7 +152,7 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public static Matrix SMPnewMatrix()
         {
-            return new Sparse.Matrix(0, true);
+            return new Matrix(0, true);
         }
 
         /*

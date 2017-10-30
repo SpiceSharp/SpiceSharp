@@ -2,8 +2,9 @@
 using System.Numerics;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
-using SpiceSharp.Sparse;
+using SpiceSharp;
+using SpiceSharp.Components;
+using SpiceSharp.Simulations;
 
 namespace Sandbox
 {
@@ -19,15 +20,21 @@ namespace Sandbox
         {
             InitializeComponent();
 
-            // Test a simple matrix
-            Matrix matrix = new Matrix(3, false);
-            matrix.spGetElement(3, 2).Value.Real = 32.0;
-            matrix.spGetElement(2, 3).Value.Real = 23.0;
-            matrix.spGetElement(1, 1).Value.Real = 11.0;
+            Circuit ckt = new Circuit();
+            ckt.Objects.Add(
+                new Currentsource("I1", "IN", "0", 1e-3),
+                new Resistor("R2", "OUT", "0", 1e3),
+                new Resistor("R1", "IN", "OUT", 1e3)
+                );
 
-            matrix.spcLinkRows();
-
-            Console.WriteLine(matrix.spPrint(false, true, true));
+            DC dc = new DC("DC 1");
+            dc.Sweeps.Add(new DC.Sweep("I1", 1e-3, 10e-3, 1e-3));
+            dc.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                Console.WriteLine(data.GetVoltage("IN"));
+            };
+            dc.Circuit = ckt;
+            dc.SetupAndExecute();
         }
     }
 }

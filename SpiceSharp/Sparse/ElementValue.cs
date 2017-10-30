@@ -18,7 +18,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// The imaginary value
         /// </summary>
-        [FieldOffset(4)]
+        [FieldOffset(8)]
         public double Imag;
 
         /// <summary>
@@ -36,6 +36,15 @@ namespace SpiceSharp.Sparse
         {
             Real = re;
             Imag = im;
+        }
+
+        /// <summary>
+        /// String representation
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"({Real}; {Imag})";
         }
 
         /// <summary>
