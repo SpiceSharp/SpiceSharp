@@ -112,9 +112,9 @@ namespace SpiceSharp.Sparse
 
             int Size = matrix.Size;
 
-            if (matrix.Diag[1].Real == 0.0)
+            if (matrix.Diag[1].Value.Real == 0.0)
                 return ZeroPivot(matrix, 1);
-            matrix.Diag[1].Real = 1.0 / matrix.Diag[1].Real;
+            matrix.Diag[1].Value.Real = 1.0 / matrix.Diag[1].Value.Real;
 
             // Start factorization
             for (int Step = 2; Step <= Size; Step++)
@@ -122,7 +122,7 @@ namespace SpiceSharp.Sparse
                 if (matrix.DoRealDirect[Step])
                 {
                     // Update column using direct addressing scatter-gather
-                    MatrixElement[] Dest = matrix.Intermediate;
+                    ElementValue[] Dest = matrix.Intermediate;
 
                     // Scatter
                     pElement = matrix.FirstInCol[Step];
@@ -137,9 +137,9 @@ namespace SpiceSharp.Sparse
                     while (pColumn.Row < Step)
                     {
                         pElement = matrix.Diag[pColumn.Row];
-                        pColumn.Real = Dest[pColumn.Row] * pElement.Real;
+                        pColumn.Value.Real = Dest[pColumn.Row] * pElement.Value.Real;
                         while ((pElement = pElement.NextInCol) != null)
-                            Dest[pElement.Row].Real -= pColumn.Real * pElement.Real;
+                            Dest[pElement.Row].Real -= pColumn.Value.Real * pElement.Value.Real;
                         pColumn = pColumn.NextInCol;
                     }
 
@@ -147,19 +147,19 @@ namespace SpiceSharp.Sparse
                     pElement = matrix.Diag[Step].NextInCol;
                     while (pElement != null)
                     {
-                        pElement.Real = Dest[pElement.Row];
+                        pElement.Value.Real = Dest[pElement.Row];
                         pElement = pElement.NextInCol;
                     }
 
                     // Check for singular matrix
                     if (Dest[Step] == 0.0)
                         return ZeroPivot(matrix, Step);
-                    matrix.Diag[Step].Real = 1.0 / Dest[Step];
+                    matrix.Diag[Step].Value.Real = 1.0 / Dest[Step];
                 }
                 else
                 {
                     // Update column using indirect addressing scatter-gather
-                    MatrixElement[] pDest = matrix.Intermediate;
+                    ElementValue[] pDest = matrix.Intermediate;
 
                     // Scatter
                     pElement = matrix.FirstInCol[Step];
@@ -174,16 +174,16 @@ namespace SpiceSharp.Sparse
                     while (pColumn.Row < Step)
                     {
                         pElement = matrix.Diag[pColumn.Row];
-                        double Mult = (pDest[pColumn.Row].Real *= pElement.Real);
+                        double Mult = (pDest[pColumn.Row].Real *= pElement.Value.Real);
                         while ((pElement = pElement.NextInCol) != null)
-                            pDest[pElement.Row].Real -= Mult * pElement.Real;
+                            pDest[pElement.Row].Real -= Mult * pElement.Value.Real;
                         pColumn = pColumn.NextInCol;
                     }
 
                     // Check for singular matrix
-                    if (matrix.Diag[Step].Real == 0.0)
+                    if (matrix.Diag[Step].Value.Real == 0.0)
                         return ZeroPivot(matrix, Step);
-                    matrix.Diag[Step].Real = 1.0 / matrix.Diag[Step].Real;
+                    matrix.Diag[Step].Value.Real = 1.0 / matrix.Diag[Step].Value.Real;
                 }
             }
 
@@ -195,8 +195,8 @@ namespace SpiceSharp.Sparse
         {
             MatrixElement pElement, pColumn;
             int Step, Size;
-            MatrixElement Mult = new MatrixElement();
-            MatrixElement Pivot = new MatrixElement();
+            ElementValue Mult = new ElementValue();
+            ElementValue Pivot;
 
             if (!matrix.Complex)
                 throw new SparseException("Matrix is not complex");
@@ -207,7 +207,7 @@ namespace SpiceSharp.Sparse
                 return ZeroPivot(matrix, 1);
 
             // Cmplx expr: *pPivot = 1.0 / *pPivot
-            spdefs.CMPLX_RECIPROCAL(pElement, pElement);
+            spdefs.CMPLX_RECIPROCAL(ref pElement.Value, pElement);
 
             // Start factorization
             for (Step = 2; Step <= Size; Step++)
@@ -215,7 +215,7 @@ namespace SpiceSharp.Sparse
                 if (matrix.DoCmplxDirect[Step])
                 {
                     // Update column using direct addressing scatter-gather
-                    MatrixElement[] Dest = matrix.Intermediate;
+                    ElementValue[] Dest = matrix.Intermediate;
 
                     // Scatter
                     pElement = matrix.FirstInCol[Step];
@@ -232,12 +232,12 @@ namespace SpiceSharp.Sparse
                         pElement = matrix.Diag[pColumn.Row];
 
                         // Cmplx expr: Mult = Dest[pColumn.Row] * (1.0 / *pPivot)
-                        spdefs.CMPLX_MULT(Mult, Dest[pColumn.Row], pElement);
-                        spdefs.CMPLX_ASSIGN(pColumn, Mult);
+                        spdefs.CMPLX_MULT(ref Mult, Dest[pColumn.Row], pElement);
+                        spdefs.CMPLX_ASSIGN(ref pColumn.Value, Mult);
                         while ((pElement = pElement.NextInCol) != null)
                         {
                             // Cmplx expr: Dest[pElement.Row] -= Mult * pElement
-                            spdefs.CMPLX_MULT_SUBT_ASSIGN(Dest[pElement.Row], Mult, pElement);
+                            spdefs.CMPLX_MULT_SUBT_ASSIGN(ref Dest[pElement.Row], Mult, pElement);
                         }
                         pColumn = pColumn.NextInCol;
                     }
@@ -246,8 +246,8 @@ namespace SpiceSharp.Sparse
                     pElement = matrix.Diag[Step].NextInCol;
                     while (pElement != null)
                     {
-                        pElement.Real = Dest[pElement.Row].Real;
-                        pElement.Imag = Dest[pElement.Row].Imag;
+                        pElement.Value.Real = Dest[pElement.Row].Real;
+                        pElement.Value.Imag = Dest[pElement.Row].Imag;
                         pElement = pElement.NextInCol;
                     }
 
@@ -255,12 +255,12 @@ namespace SpiceSharp.Sparse
                     Pivot = Dest[Step];
                     if (spdefs.CMPLX_1_NORM(Pivot) == 0.0)
                         return ZeroPivot(matrix, Step);
-                    spdefs.CMPLX_RECIPROCAL(matrix.Diag[Step], Pivot);
+                    spdefs.CMPLX_RECIPROCAL(ref matrix.Diag[Step].Value, Pivot);
                 }
                 else
                 {
                     // Update column using direct addressing scatter-gather
-                    MatrixElement[] pDest = matrix.Intermediate;
+                    ElementValue[] pDest = matrix.Intermediate;
 
                     // Scatter
                     pElement = matrix.FirstInCol[Step];
@@ -277,12 +277,12 @@ namespace SpiceSharp.Sparse
                         pElement = matrix.Diag[pColumn.Row];
 
                         // Cmplx expr: Mult = *pDest[pColumn.Row] * (1.0 / *pPivot)
-                        spdefs.CMPLX_MULT(Mult, pDest[pColumn.Row], pElement);
-                        spdefs.CMPLX_ASSIGN(pDest[pColumn.Row], Mult);
+                        spdefs.CMPLX_MULT(ref Mult, pDest[pColumn.Row], pElement);
+                        spdefs.CMPLX_ASSIGN(ref pDest[pColumn.Row], Mult);
                         while ((pElement = pElement.NextInCol) != null)
                         {
                             // Cmplx expr: *pDest[pElement.Row] -= Mult * pElement
-                            spdefs.CMPLX_MULT_SUBT_ASSIGN(pDest[pElement.Row], Mult, pElement);
+                            spdefs.CMPLX_MULT_SUBT_ASSIGN(ref pDest[pElement.Row], Mult, pElement);
                         }
                         pColumn = pColumn.NextInCol;
                     }
@@ -291,7 +291,7 @@ namespace SpiceSharp.Sparse
                     pElement = matrix.Diag[Step];
                     if (spdefs.ELEMENT_MAG(pElement) == 0.0)
                         return ZeroPivot(matrix, Step);
-                    spdefs.CMPLX_RECIPROCAL(pElement, pElement);
+                    spdefs.CMPLX_RECIPROCAL(ref pElement.Value, pElement);
                 }
             }
 
@@ -406,7 +406,9 @@ namespace SpiceSharp.Sparse
 
             // Create Intermediate vectors for use in MatrixSolve
             if (matrix.Intermediate == null)
-                matrix.Intermediate = new MatrixElement[2 * (Size + 1)];
+            {
+                matrix.Intermediate = new ElementValue[Size + 1];
+            }
 
             matrix.InternalVectorsAllocated = true;
         }
@@ -1346,18 +1348,18 @@ if (pElement.Row != Row)
             MatrixElement pLower, pUpper;
 
             // Test for zero pivot. 
-            if (Math.Abs(pPivot.Real) == 0.0)
+            if (Math.Abs(pPivot.Value.Real) == 0.0)
             {
                 MatrixIsSingular(matrix, pPivot.Row);
                 return;
             }
-            pPivot.Real = 1.0 / pPivot.Real;
+            pPivot.Value.Real = 1.0 / pPivot.Value.Real;
 
             pUpper = pPivot.NextInRow;
             while (pUpper != null)
             {
                 // Calculate upper triangular element. 
-                pUpper.Real *= pPivot.Real;
+                pUpper.Value.Real *= pPivot.Value.Real;
 
                 pSub = pUpper.NextInCol;
                 pLower = pPivot.NextInCol;
@@ -1374,7 +1376,7 @@ if (pElement.Row != Row)
                     {
                         pSub = CreateFillin(matrix, Row, pUpper.Col);
                     }
-                    pSub.Real -= pUpper.Real * pLower.Real;
+                    pSub.Value.Real -= pUpper.Value.Real * pLower.Value.Real;
                     pSub = pSub.NextInCol;
                     pLower = pLower.NextInCol;
                 }
@@ -1394,14 +1396,14 @@ if (pElement.Row != Row)
                 MatrixIsSingular(matrix, pPivot.Row);
                 return;
             }
-            spdefs.CMPLX_RECIPROCAL(pPivot, pPivot);
+            spdefs.CMPLX_RECIPROCAL(ref pPivot.Value, pPivot);
 
             pUpper = pPivot.NextInRow;
             while (pUpper != null)
             {
                 // Calculate upper triangular element. 
                 // Cmplx expr: *pUpper = *pUpper * (1.0 / *pPivot)
-                spdefs.CMPLX_MULT_ASSIGN(pUpper, pPivot);
+                spdefs.CMPLX_MULT_ASSIGN(ref pUpper.Value, pPivot);
 
                 pSub = pUpper.NextInCol;
                 pLower = pPivot.NextInCol;
@@ -1420,7 +1422,7 @@ if (pElement.Row != Row)
                     }
 
                     // Cmplx expr: pElement -= *pUpper * pLower
-                    spdefs.CMPLX_MULT_SUBT_ASSIGN(pSub, pUpper, pLower);
+                    spdefs.CMPLX_MULT_SUBT_ASSIGN(ref pSub.Value, pUpper, pLower);
                     pSub = pSub.NextInCol;
                     pLower = pLower.NextInCol;
                 }

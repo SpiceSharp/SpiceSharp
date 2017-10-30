@@ -1,9 +1,4 @@
-﻿using System;
-using System.Numerics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
 namespace SpiceSharp.Sparse
 {
@@ -13,25 +8,20 @@ namespace SpiceSharp.Sparse
     public class MatrixElement
     {
         /// <summary>
-        /// Real part
+        /// Gets or sets the value
         /// </summary>
-        public double Real;
+        public ElementValue Value;
 
         /// <summary>
-        /// Imaginary part
+        /// The row index
         /// </summary>
-        public double Imag;
+        public int Row;
 
         /// <summary>
-        /// Row index
+        /// The column index
         /// </summary>
-        internal int Row;
-
-        /// <summary>
-        /// Column index
-        /// </summary>
-        internal int Col;
-
+        public int Col;
+        
         /// <summary>
         /// Next matrix element in the same row
         /// </summary>
@@ -46,12 +36,18 @@ namespace SpiceSharp.Sparse
         /// Allow casting to a double
         /// </summary>
         /// <param name="el">Matrix element</param>
-        public static implicit operator double(MatrixElement el) => el.Real;
+        public static implicit operator double(MatrixElement el) => el.Value.Real;
 
         /// <summary>
         /// Allow casting to a complex number
         /// </summary>
         /// <param name="el">Matrix element</param>
-        public static implicit operator Complex(MatrixElement el) => new Complex(el.Real, el.Imag);
+        public static implicit operator Complex(MatrixElement el) => el.Value.Cplx;
+
+        /// <summary>
+        /// Allow casting to an value
+        /// </summary>
+        /// <param name="el"></param>
+        public static implicit operator ElementValue(MatrixElement el) => el.Value;
     }
 }

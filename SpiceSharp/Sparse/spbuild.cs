@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpiceSharp.Sparse
 {
@@ -20,8 +16,7 @@ namespace SpiceSharp.Sparse
                     pElement = matrix.FirstInCol[I];
                     while (pElement != null)
                     {
-                        pElement.Real = 0.0;
-                        pElement.Imag = 0.0;
+                        pElement.Value.Cplx = 0.0;
                         pElement = pElement.NextInCol;
                     }
                 }
@@ -33,15 +28,14 @@ namespace SpiceSharp.Sparse
                     pElement = matrix.FirstInCol[I];
                     while (pElement != null)
                     {
-                        pElement.Real = 0.0;
+                        pElement.Value.Real = 0.0;
                         pElement = pElement.NextInCol;
                     }
                 }
             }
 
             // Empty the trash
-            matrix.TrashCan.Real = 0.0;
-            matrix.TrashCan.Imag = 0.0;
+            matrix.TrashCan.Value.Cplx = 0.0;
 
             matrix.Error = Matrix.spOKAY;
             matrix.Factored = false;
@@ -195,8 +189,7 @@ namespace SpiceSharp.Sparse
                 pCreatedElement = pElement;
                 pElement.Row = Row;
                 pElement.Col = Col;
-                pElement.Real = 0.0;
-                pElement.Imag = 0.0;
+                pElement.Value.Cplx = 0.0;
 
                 // Splice element into column
                 if (LastAddr != null)
@@ -258,8 +251,7 @@ namespace SpiceSharp.Sparse
                 pCreatedElement = pElement;
                 pElement.Col = Col;
                 pElement.Row = Row;
-                pElement.Real = 0.0;
-                pElement.Imag = 0.0;
+                pElement.Value.Cplx = 0.0;
 
                 // Splice element into column
                 if (LastAddr != null)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 namespace SpiceSharp.Sparse
 {
@@ -75,7 +76,7 @@ namespace SpiceSharp.Sparse
         internal MatrixElement[] FirstInCol;
         internal MatrixElement[] FirstInRow;
         internal ulong ID;
-        internal MatrixElement[] Intermediate;
+        internal ElementValue[] Intermediate;
         internal bool InternalVectorsAllocated;
         internal int[] IntToExtColMap;
         internal int[] IntToExtRowMap;
@@ -162,8 +163,6 @@ namespace SpiceSharp.Sparse
 
             // Take out the trash
             TrashCan = new MatrixElement();
-            TrashCan.Real = 0.0;
-            TrashCan.Imag = 0.0;
             TrashCan.Row = 0;
             TrashCan.Col = 0;
             TrashCan.NextInRow = null;

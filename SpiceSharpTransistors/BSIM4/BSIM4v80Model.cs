@@ -1921,7 +1921,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Shared parameters
         /// </summary>
-        internal double tnoiMod, DMCGeff, DMCIeff, DMDGeff, Temp, epsrox, toxe, 
+        internal double DMCGeff, DMCIeff, DMDGeff, Temp, epsrox, toxe, 
             epssub, Tnom, TRatio, Vtm0, Eg0, ni, delTemp;
 
         /// <summary>
