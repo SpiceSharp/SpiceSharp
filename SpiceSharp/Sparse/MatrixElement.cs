@@ -21,7 +21,7 @@ namespace SpiceSharp.Sparse
         /// The column index
         /// </summary>
         public int Col;
-        
+
         /// <summary>
         /// Next matrix element in the same row
         /// </summary>

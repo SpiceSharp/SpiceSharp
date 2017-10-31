@@ -20,21 +20,37 @@ namespace Sandbox
         {
             InitializeComponent();
 
+            var plotInput = chMain.Series.Add("Input");
+            plotInput.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            var plotOutput = chMain.Series.Add("Output");
+            plotOutput.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", 0),
-                new Resistor("R2", "OUT", "0", 1),
-                new Resistor("R1", "IN", "OUT", 1)
+                new Voltagesource("V1", "IN", "0", new Pulse(0, 5, 1e-3, 1e-6, 1e-6, 1e-3, 2e-3))
                 );
 
-            DC dc = new DC("DC 1");
-            dc.Sweeps.Add(new DC.Sweep("V1", 1, 10, 1));
-            dc.OnExportSimulationData += (object sender, SimulationData data) =>
+            // Add a 100 RC stages
+            string node = "IN";
+            for (int i = 1; i <= 100; i++)
             {
-                Console.WriteLine(data.GetVoltage("OUT"));
+                string outnode = "out" + i;
+                ckt.Objects.Add(new Resistor("R" + i, node, outnode, 1e3));
+                ckt.Objects.Add(new Capacitor("C" + i, outnode, "0", 1e-6));
+                node = outnode;
+            }
+
+            Transient tran = new Transient("Transient 1", 1e-9, 10e-3);
+            ckt.Simulation = tran;
+            tran.Circuit = ckt;
+            tran.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                plotInput.Points.AddXY(data.GetTime(), data.GetVoltage("IN"));
+                plotOutput.Points.AddXY(data.GetTime(), data.GetVoltage("out5"));
             };
-            dc.Circuit = ckt;
-            dc.SetupAndExecute();
+            tran.SetupAndExecute();
+
+            chMain.ChartAreas[0].AxisX.RoundAxisValues();
         }
     }
 }

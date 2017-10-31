@@ -166,12 +166,12 @@ namespace SpiceSharp.Sparse
 
                     if (matrix.Complex && Data)
                     {
-                        sb.Append("    ");
+                        sb.Append("     ");
                         for (J = StartCol; J <= StopCol; J++)
                         {
                             if (pImagElements[J - StartCol] != null)
                             {
-                                sb.AppendFormat((pImagElements[J - StartCol].Value.Imag).ToString());
+                                sb.AppendFormat("{0, 9:G3}j",pImagElements[J - StartCol].Value.Imag);
                             }
                             else sb.Append("          ");
                         }

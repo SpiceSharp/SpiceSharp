@@ -1106,12 +1106,13 @@ if (pElement.Row != Row)
             matrix.ExtToIntRowMap[matrix.IntToExtRowMap[Row2]] = Row2;
         }
 
-        public static void spcColExchange(this Matrix matrix, int Col1, int Col2)
+        public static void spcColExchange(Matrix matrix, int Col1, int Col2)
         {
             MatrixElement Col1Ptr, Col2Ptr;
             int Row;
             MatrixElement Element1, Element2;
 
+            /* Begin `spcColExchange'. */
             if (Col1 > Col2)
                 spdefs.SWAP(ref Col1, ref Col2);
 
@@ -1119,7 +1120,7 @@ if (pElement.Row != Row)
             Col2Ptr = matrix.FirstInCol[Col2];
             while (Col1Ptr != null || Col2Ptr != null)
             {
-                // Exchange elements in rows while traveling from top to bottom. 
+                /* Exchange elements in rows while traveling from top to bottom. */
                 if (Col1Ptr == null)
                 {
                     Row = Col2Ptr.Row;
@@ -1148,7 +1149,7 @@ if (pElement.Row != Row)
                     Element2 = Col2Ptr;
                     Col2Ptr = Col2Ptr.NextInCol;
                 }
-                else   // Col1Ptr.Row == Col2Ptr.Row 
+                else   /* Col1Ptr.Row == Col2Ptr.Row */
                 {
                     Row = Col1Ptr.Row;
                     Element1 = Col1Ptr;
@@ -1158,14 +1159,17 @@ if (pElement.Row != Row)
                 }
 
                 ExchangeRowElements(matrix, Col1, Element1, Col2, Element2, Row);
-            }  // end of while(Col1Ptr != null ||  Col2Ptr != null) 
+            }  /* end of while(Col1Ptr != null || Col2Ptr != null) */
 
             if (matrix.InternalVectorsAllocated)
                 spdefs.SWAP(ref matrix.MarkowitzCol[Col1], ref matrix.MarkowitzCol[Col2]);
+
             spdefs.SWAP(ref matrix.FirstInCol[Col1], ref matrix.FirstInCol[Col2]);
             spdefs.SWAP(ref matrix.IntToExtColMap[Col1], ref matrix.IntToExtColMap[Col2]);
             matrix.ExtToIntColMap[matrix.IntToExtColMap[Col1]] = Col1;
             matrix.ExtToIntColMap[matrix.IntToExtColMap[Col2]] = Col2;
+
+            return;
         }
 
         public static void ExchangeColElements(Matrix matrix, int Row1, MatrixElement Element1, int Row2, MatrixElement Element2, int Column)
@@ -1389,7 +1393,7 @@ if (pElement.Row != Row)
                         Element2.NextInRow = ElementRightOfCol1;
 
                         if (ElementLeftOfCol2 != null)
-                            ElementLeftOfCol2.NextInRow = Element2;
+                            ElementLeftOfCol2.NextInRow = Element1;
                         else
                             matrix.FirstInRow[Row] = Element1;
                         // *ElementLeftOfCol2 = Element1;

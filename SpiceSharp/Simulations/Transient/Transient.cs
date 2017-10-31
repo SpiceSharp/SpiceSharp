@@ -137,6 +137,7 @@ namespace SpiceSharp.Simulations
             Initialize(ckt);
 
             // Calculate the operating point
+            ckt.Method = null;
             ckt.Op(loadbehaviours, config, config.DcMaxIterations);
             ckt.Statistics.TimePoints++;
             for (int i = 0; i < method.DeltaOld.Length; i++)

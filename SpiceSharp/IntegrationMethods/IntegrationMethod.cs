@@ -134,6 +134,7 @@ namespace SpiceSharp.IntegrationMethods
                 // No solutions yet, so allocate vectors
                 for (int i = 0; i < Solutions.Length; i++)
                     Solutions[i] = new double[solution.Length]; // new DenseVector(solution.Count);
+                Prediction = new double[solution.Length];
                 // solution.CopyTo(Solutions[0]);
                 for (int i = 0; i < solution.Length; i++)
                     Solutions[0][i] = solution[i];
