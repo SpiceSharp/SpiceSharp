@@ -42,12 +42,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
                     if (method != null && method.SavedTime == 0.0)
                         state.States[1][cap.CAPstate + Capacitor.CAPqcap] = state.States[0][cap.CAPstate + Capacitor.CAPqcap];
 
-                    // rstate.Matrix[cap.CAPposNode, cap.CAPposNode] += result.Geq;
-                    // rstate.Matrix[cap.CAPnegNode, cap.CAPnegNode] += result.Geq;
-                    // rstate.Matrix[cap.CAPposNode, cap.CAPnegNode] -= result.Geq;
-                    // rstate.Matrix[cap.CAPnegNode, cap.CAPposNode] -= result.Geq;
-                    // rstate.Rhs[cap.CAPposNode] -= result.Ceq;
-                    // rstate.Rhs[cap.CAPnegNode] += result.Ceq;
+                    cap.CAPposPosptr.Value.Real += result.Geq;
+                    cap.CAPnegNegptr.Value.Real += result.Geq;
+                    cap.CAPposNegptr.Value.Real -= result.Geq;
+                    cap.CAPnegPosptr.Value.Real -= result.Geq;
+                    state.Rhs[cap.CAPposNode] -= result.Ceq;
+                    state.Rhs[cap.CAPnegNode] += result.Ceq;
                 }
             }
             else

@@ -49,10 +49,10 @@ namespace SpiceSharp.Components
         public int CAPposNode { get; private set; }
         public int CAPnegNode { get; private set; }
 
-        MatrixElement CAPposPosptr;
-        MatrixElement CAPnegNegptr;
-        MatrixElement CAPposNegptr;
-        MatrixElement CAPnegPosptr;
+        internal MatrixElement CAPposPosptr;
+        internal MatrixElement CAPnegNegptr;
+        internal MatrixElement CAPposNegptr;
+        internal MatrixElement CAPnegPosptr;
 
         /// <summary>
         /// Constants

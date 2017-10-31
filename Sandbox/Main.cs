@@ -22,16 +22,16 @@ namespace Sandbox
 
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Currentsource("I1", "IN", "0", 1e-3),
-                new Resistor("R2", "OUT", "0", 1e3),
-                new Resistor("R1", "IN", "OUT", 1e3)
+                new Voltagesource("V1", "IN", "0", 0),
+                new Resistor("R2", "OUT", "0", 1),
+                new Resistor("R1", "IN", "OUT", 1)
                 );
 
             DC dc = new DC("DC 1");
-            dc.Sweeps.Add(new DC.Sweep("I1", 1e-3, 10e-3, 1e-3));
+            dc.Sweeps.Add(new DC.Sweep("V1", 1, 10, 1));
             dc.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                Console.WriteLine(data.GetVoltage("IN"));
+                Console.WriteLine(data.GetVoltage("OUT"));
             };
             dc.Circuit = ckt;
             dc.SetupAndExecute();

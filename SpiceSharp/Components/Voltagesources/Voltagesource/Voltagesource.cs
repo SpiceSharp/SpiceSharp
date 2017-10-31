@@ -3,6 +3,7 @@ using System.Numerics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -68,6 +69,12 @@ namespace SpiceSharp.Components
         public int VSRCnegNode { get; private set; }
         public int VSRCbranch { get; private set; }
 
+        internal MatrixElement VSRCposIbrptr;
+        internal MatrixElement VSRCnegIbrptr; 
+        internal MatrixElement VSRCibrPosptr;
+        internal MatrixElement VSRCibrNegptr;
+        internal MatrixElement VSRCibrIbrptr;
+
         /// <summary>
         /// Private variables
         /// </summary>
@@ -116,6 +123,12 @@ namespace SpiceSharp.Components
             VSRCposNode = nodes[0].Index;
             VSRCnegNode = nodes[1].Index;
             VSRCbranch = CreateNode(ckt, Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
+
+            var matrix = ckt.State.Matrix;
+            VSRCposIbrptr = matrix.SMPmakeElt(VSRCposNode, VSRCbranch);
+            VSRCibrPosptr = matrix.SMPmakeElt(VSRCbranch, VSRCposNode);
+            VSRCnegIbrptr = matrix.SMPmakeElt(VSRCnegNode, VSRCbranch);
+            VSRCibrNegptr = matrix.SMPmakeElt(VSRCbranch, VSRCnegNode);
 
             // Setup the waveform if specified
             VSRCwaveform?.Setup(ckt);

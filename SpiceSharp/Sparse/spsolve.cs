@@ -19,7 +19,7 @@
             int[] pExtOrder;
             MatrixElement pPivot;
 
-            //  Begin `spSolve'. 
+            // Begin `spSolve'. 
             if (!(matrix.Factored && !matrix.NeedsOrdering))
                 throw new SparseException("Matrix is not refactored or needs ordering");
 
@@ -32,17 +32,16 @@
             Intermediate = matrix.Intermediate;
             Size = matrix.Size;
 
-
-            //  Initialize Intermediate vector. 
+            // Initialize Intermediate vector. 
             pExtOrder = matrix.IntToExtRowMap;
             for (I = Size; I > 0; I--)
                 Intermediate[I].Real = RHS[pExtOrder[I]];
 
-            //  Forward elimination. Solves Lc = b.
+            // Forward elimination. Solves Lc = b.
             for (I = 1; I <= Size; I++)
             {
-                //  This step of the elimination is skipped if Temp equals zero. 
-                if ((Temp = Intermediate[I]) != 0.0)
+                // This step of the elimination is skipped if Temp equals zero. 
+                if ((Temp = Intermediate[I].Real) != 0.0)
                 {
                     pPivot = matrix.Diag[I];
                     Intermediate[I].Real = (Temp *= pPivot.Value.Real);
@@ -56,7 +55,7 @@
                 }
             }
 
-            //  Backward Substitution. Solves Ux = c.
+            // Backward Substitution. Solves Ux = c.
             for (I = Size; I > 0; I--)
             {
                 Temp = Intermediate[I];
@@ -69,7 +68,7 @@
                 Intermediate[I].Real = Temp;
             }
 
-            //  Unscramble Intermediate vector while placing data in to Solution vector. 
+            // Unscramble Intermediate vector while placing data in to Solution vector. 
             pExtOrder = matrix.IntToExtColMap;
             for (I = Size; I > 0; I--)
                 Solution[pExtOrder[I]] = Intermediate[I];
@@ -97,7 +96,7 @@
             Size = matrix.Size;
             Intermediate = matrix.Intermediate;
 
-            //  Initialize Intermediate vector. 
+            // Initialize Intermediate vector. 
             int index = Size;
             pExtOrder = matrix.IntToExtRowMap;
             for (I = Size; I > 0; I--)
@@ -106,29 +105,29 @@
                 Intermediate[I].Imag = iRHS[pExtOrder[index--]];
             }
 
-            //  Forward substitution. Solves Lc = b.
+            // Forward substitution. Solves Lc = b.
             for (I = 1; I <= Size; I++)
             {
                 Temp = Intermediate[I];
 
-                //  This step of the substitution is skipped if Temp equals zero. 
+                // This step of the substitution is skipped if Temp equals zero. 
                 if ((Temp.Real != 0.0) || (Temp.Imag != 0.0))
                 {
                     pPivot = matrix.Diag[I];
-                    //  Cmplx expr: Temp *= (1.0 / Pivot). 
+                    // Cmplx expr: Temp *= (1.0 / Pivot). 
                     spdefs.CMPLX_MULT_ASSIGN(ref Temp, pPivot);
                     Intermediate[I] = Temp;
                     pElement = pPivot.NextInCol;
                     while (pElement != null)
                     {
-                        //  Cmplx expr: Intermediate[Element.Row] -= Temp * *Element. 
+                        // Cmplx expr: Intermediate[Element.Row] -= Temp * *Element. 
                         spdefs.CMPLX_MULT_SUBT_ASSIGN(ref Intermediate[pElement.Row], Temp, pElement);
                         pElement = pElement.NextInCol;
                     }
                 }
             }
 
-            //  Backward Substitution. Solves Ux = c.
+            // Backward Substitution. Solves Ux = c.
             for (I = Size; I > 0; I--)
             {
                 Temp = Intermediate[I];
@@ -136,14 +135,14 @@
 
                 while (pElement != null)
                 {
-                    //  Cmplx expr: Temp -= *Element * Intermediate[Element.Col]. 
+                    // Cmplx expr: Temp -= *Element * Intermediate[Element.Col]. 
                     spdefs.CMPLX_MULT_SUBT_ASSIGN(ref Temp, pElement, Intermediate[pElement.Col]);
                     pElement = pElement.NextInRow;
                 }
                 Intermediate[I] = Temp;
             }
 
-            //  Unscramble Intermediate vector while placing data in to Solution vector. 
+            // Unscramble Intermediate vector while placing data in to Solution vector. 
             index = Size;
             pExtOrder = matrix.IntToExtColMap;
 
@@ -186,16 +185,16 @@
             Intermediate = matrix.Intermediate;
 
 
-            //  Initialize Intermediate vector. 
+            // Initialize Intermediate vector. 
             int index = Size;
             pExtOrder = matrix.IntToExtColMap;
             for (I = Size; I > 0; I--)
                 Intermediate[I].Real = RHS[pExtOrder[index--]];
 
-            //  Forward elimination. 
+            // Forward elimination. 
             for (I = 1; I <= Size; I++)
             {
-                //  This step of the elimination is skipped if Temp equals zero. 
+                // This step of the elimination is skipped if Temp equals zero. 
                 if ((Temp = Intermediate[I]) != 0.0)
                 {
                     pElement = matrix.Diag[I].NextInRow;
@@ -208,7 +207,7 @@
                 }
             }
 
-            //  Backward Substitution. 
+            // Backward Substitution. 
             for (I = Size; I > 0; I--)
             {
                 pPivot = matrix.Diag[I];
@@ -222,7 +221,7 @@
                 Intermediate[I].Real = Temp * pPivot.Value.Real;
             }
 
-            //  Unscramble Intermediate vector while placing data in to Solution vector. 
+            // Unscramble Intermediate vector while placing data in to Solution vector. 
             index = Size;
             pExtOrder = matrix.IntToExtRowMap;
             for (I = Size; I > 0; I--)
@@ -248,12 +247,12 @@
             MatrixElement pPivot;
             ElementValue Temp;
 
-            //  Begin `SolveComplexTransposedMatrix'. 
+            // Begin `SolveComplexTransposedMatrix'. 
 
             Size = matrix.Size;
             Intermediate = matrix.Intermediate;
 
-            //  Initialize Intermediate vector. 
+            // Initialize Intermediate vector. 
             int index = Size;
             pExtOrder = matrix.IntToExtColMap;
 
@@ -264,25 +263,25 @@
             }
 
 
-            //  Forward elimination. 
+            // Forward elimination. 
             for (I = 1; I <= Size; I++)
             {
                 Temp = Intermediate[I];
 
-                //  This step of the elimination is skipped if Temp equals zero. 
+                // This step of the elimination is skipped if Temp equals zero. 
                 if ((Temp.Real != 0.0) || (Temp.Imag != 0.0))
                 {
                     pElement = matrix.Diag[I].NextInRow;
                     while (pElement != null)
                     {
-                        //  Cmplx expr: Intermediate[Element.Col] -= Temp * *Element. 
+                        // Cmplx expr: Intermediate[Element.Col] -= Temp * *Element. 
                         spdefs.CMPLX_MULT_SUBT_ASSIGN(ref Intermediate[pElement.Col], Temp, pElement);
                         pElement = pElement.NextInRow;
                     }
                 }
             }
 
-            //  Backward Substitution. 
+            // Backward Substitution. 
             for (I = Size; I > 0; I--)
             {
                 pPivot = matrix.Diag[I];
@@ -291,16 +290,16 @@
 
                 while (pElement != null)
                 {
-                    //  Cmplx expr: Temp -= Intermediate[Element.Row] * *Element. 
+                    // Cmplx expr: Temp -= Intermediate[Element.Row] * *Element. 
                     spdefs.CMPLX_MULT_SUBT_ASSIGN(ref Temp, Intermediate[pElement.Row], pElement);
 
                     pElement = pElement.NextInCol;
                 }
-                //  Cmplx expr: Intermediate = Temp * (1.0 / *pPivot). 
+                // Cmplx expr: Intermediate = Temp * (1.0 / *pPivot). 
                 spdefs.CMPLX_MULT(ref Intermediate[I], Temp, pPivot);
             }
 
-            //  Unscramble Intermediate vector while placing data in to Solution vector. 
+            // Unscramble Intermediate vector while placing data in to Solution vector. 
             index = Size;
             pExtOrder = matrix.IntToExtRowMap;
             for (I = Size; I > 0; I--)

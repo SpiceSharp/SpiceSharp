@@ -1170,15 +1170,18 @@ if (pElement.Row != Row)
 
         public static void ExchangeColElements(Matrix matrix, int Row1, MatrixElement Element1, int Row2, MatrixElement Element2, int Column)
         {
+            MatrixElement ElementAboveRow1, ElementAboveRow2;
             MatrixElement ElementBelowRow1, ElementBelowRow2;
             MatrixElement pElement;
 
+            // Begin `ExchangeColElements'. 
             // Search to find the ElementAboveRow1. 
-            // NOTE: ElementAboveRow1 and ElementAboveRo2 are never used (all is commented out)
-            pElement = matrix.FirstInCol[Column];
+            ElementAboveRow1 = null; // &(matrix.FirstInCol[Column]);
+            pElement = matrix.FirstInCol[Column]; // *ElementAboveRow1;
             while (pElement.Row < Row1)
             {
-                pElement = pElement.NextInCol;
+                ElementAboveRow1 = pElement; // &(pElement.NextInCol);
+                pElement = pElement.NextInCol; // *ElementAboveRow1;
             }
             if (Element1 != null)
             {
@@ -1188,17 +1191,33 @@ if (pElement.Row != Row)
                     // Element2 does not exist, move Element1 down to Row2. 
                     if (ElementBelowRow1 != null && ElementBelowRow1.Row < Row2)
                     {
-                        // Element1 must be removed from linked list and moved. 
+                        // Element1 must be removed from linked list and moved.
+                        if (ElementAboveRow1 != null)
+                            ElementAboveRow1.NextInCol = ElementBelowRow1;
+                        else
+                            matrix.FirstInCol[Column] = ElementBelowRow1;
+                        // *ElementAboveRow1 = ElementBelowRow1;
 
                         // Search column for Row2. 
                         pElement = ElementBelowRow1;
                         do
                         {
-                            pElement = pElement.NextInCol;
+                            ElementAboveRow2 = pElement; // &(pElement.NextInCol);
+                            pElement = pElement.NextInCol; // *ElementAboveRow2;
                         } while (pElement != null && pElement.Row < Row2);
 
-                        // Place Element1 in Row2. 
+                        // Place Element1 in Row2
+                        if (ElementAboveRow2 != null)
+                            ElementAboveRow2.NextInCol = Element1;
+                        else
+                            matrix.FirstInCol[Column] = Element1;
+                        // *ElementAboveRow2 = Element1;
                         Element1.NextInCol = pElement;
+                        if (ElementAboveRow1 != null)
+                            ElementAboveRow1.NextInCol = ElementBelowRow1;
+                        else
+                            matrix.FirstInCol[Column] = ElementBelowRow1;
+                        // *ElementAboveRow1 =ElementBelowRow1;
                     }
                     Element1.Row = Row2;
                 }
@@ -1210,6 +1229,11 @@ if (pElement.Row != Row)
                         // Element2 is just below Element1, exchange them. 
                         Element1.NextInCol = Element2.NextInCol;
                         Element2.NextInCol = Element1;
+                        if (ElementAboveRow1 != null)
+                            ElementAboveRow1.NextInCol = Element2;
+                        else
+                            matrix.FirstInCol[Column] = Element2;
+                        // *ElementAboveRow1 = Element2;
                     }
                     else
                     {
@@ -1217,14 +1241,24 @@ if (pElement.Row != Row)
                         pElement = ElementBelowRow1;
                         do
                         {
-                            pElement = pElement.NextInCol;
+                            ElementAboveRow2 = pElement; // &(pElement.NextInCol);
+                            pElement = pElement.NextInCol; // *ElementAboveRow2;
                         } while (pElement.Row < Row2);
 
                         ElementBelowRow2 = Element2.NextInCol;
 
-                        // Switch Element1 and Element2. 
-                        // ElementAboveRow1 = Element2;
+                        // Switch Element1 and Element2
+                        if (ElementAboveRow1 != null)
+                            ElementAboveRow1.NextInCol = Element2;
+                        else
+                            matrix.FirstInCol[Column] = Element2;
+                        // *ElementAboveRow1 = Element2;
                         Element2.NextInCol = ElementBelowRow1;
+                        if (ElementAboveRow2 != null)
+                            ElementAboveRow2.NextInCol = Element1;
+                        else
+                            matrix.FirstInCol[Column] = Element1;
+                        // *ElementAboveRow2 = Element1;
                         Element1.NextInCol = ElementBelowRow2;
                     }
                     Element1.Row = Row2;
@@ -1241,12 +1275,23 @@ if (pElement.Row != Row)
                 {
                     do
                     {
-                        pElement = pElement.NextInCol;
+                        ElementAboveRow2 = pElement; // &(pElement.NextInCol);
+                        pElement = pElement.NextInCol; // *ElementAboveRow2;
                     } while (pElement.Row < Row2);
 
                     ElementBelowRow2 = Element2.NextInCol;
 
-                    // Move Element2 to Row1. 
+                    // Move Element2 to Row1
+                    if (ElementAboveRow2 != null)
+                        ElementAboveRow2.NextInCol = Element2.NextInCol;
+                    else
+                        matrix.FirstInCol[Column] = Element2.NextInCol;
+                    // *ElementAboveRow2 = Element2.NextInCol;
+                    if (ElementAboveRow1 != null)
+                        ElementAboveRow1.NextInCol = Element2;
+                    else
+                        matrix.FirstInCol[Column] = Element2;
+                    // *ElementAboveRow1 = Element2;
                     Element2.NextInCol = ElementBelowRow1;
                 }
                 Element2.Row = Row1;
@@ -1256,14 +1301,18 @@ if (pElement.Row != Row)
 
         public static void ExchangeRowElements(Matrix matrix, int Col1, MatrixElement Element1, int Col2, MatrixElement Element2, int Row)
         {
+            MatrixElement ElementLeftOfCol1, ElementLeftOfCol2;
             MatrixElement ElementRightOfCol1, ElementRightOfCol2;
             MatrixElement pElement;
 
-            // Search to find the ElementLeftOfCol1
-            pElement = matrix.FirstInRow[Row];
+            // Begin `ExchangeRowElements'. 
+            // Search to find the ElementLeftOfCol1. 
+            ElementLeftOfCol1 = null; // &(matrix.FirstInRow[Row]);
+            pElement = matrix.FirstInRow[Row]; // *ElementLeftOfCol1;
             while (pElement.Col < Col1)
             {
-                pElement = pElement.NextInRow;
+                ElementLeftOfCol1 = pElement; // ElementLeftOfCol1 = &(pElement.NextInRow);
+                pElement = pElement.NextInRow; // pElement = *ElementLeftOfCol1;
             }
             if (Element1 != null)
             {
@@ -1273,18 +1322,34 @@ if (pElement.Row != Row)
                     // Element2 does not exist, move Element1 to right to Col2. 
                     if (ElementRightOfCol1 != null && ElementRightOfCol1.Col < Col2)
                     {
-                        // Element1 must be removed from linked list and moved. 
-                        // ElementLeftOfCol1 = ElementRightOfCol1;
+                        // Element1 must be removed from linked list and moved.
+                        if (ElementLeftOfCol1 != null)
+                            ElementLeftOfCol1.NextInRow = ElementRightOfCol1;
+                        else
+                            matrix.FirstInRow[Row] = ElementRightOfCol1;
+                        // *ElementLeftOfCol1 = ElementRightOfCol1;
 
                         // Search Row for Col2. 
                         pElement = ElementRightOfCol1;
                         do
                         {
-                            pElement = pElement.NextInRow;
+                            ElementLeftOfCol2 = pElement; // &(pElement.NextInRow);
+                            pElement = pElement.NextInRow; // *ElementLeftOfCol2;
                         } while (pElement != null && pElement.Col < Col2);
 
                         // Place Element1 in Col2. 
+                        if (ElementLeftOfCol2 != null)
+                            ElementLeftOfCol2.NextInRow = Element1;
+                        else
+                            matrix.FirstInRow[Row] = Element1;
+                        // *ElementLeftOfCol2 = Element1;
                         Element1.NextInRow = pElement;
+
+                        if (ElementLeftOfCol1 != null)
+                            ElementLeftOfCol1.NextInRow = ElementRightOfCol1;
+                        else
+                            matrix.FirstInRow[Row] = ElementRightOfCol1;
+                        // *ElementLeftOfCol1 = ElementRightOfCol1;
                     }
                     Element1.Col = Col2;
                 }
@@ -1296,6 +1361,12 @@ if (pElement.Row != Row)
                         // Element2 is just right of Element1, exchange them. 
                         Element1.NextInRow = Element2.NextInRow;
                         Element2.NextInRow = Element1;
+
+                        if (ElementLeftOfCol1 != null)
+                            ElementLeftOfCol1.NextInRow = Element2;
+                        else
+                            matrix.FirstInRow[Row] = Element2;
+                        // *ElementLeftOfCol1 = Element2;
                     }
                     else
                     {
@@ -1303,13 +1374,25 @@ if (pElement.Row != Row)
                         pElement = ElementRightOfCol1;
                         do
                         {
-                            pElement = pElement.NextInRow;
+                            ElementLeftOfCol2 = pElement; // &(pElement.NextInRow);
+                            pElement = pElement.NextInRow; // *ElementLeftOfCol2;
                         } while (pElement.Col < Col2);
 
                         ElementRightOfCol2 = Element2.NextInRow;
 
                         // Switch Element1 and Element2. 
+                        if (ElementLeftOfCol1 != null)
+                            ElementLeftOfCol1.NextInRow = Element2;
+                        else
+                            matrix.FirstInRow[Row] = Element2;
+                        // *ElementLeftOfCol1 = Element2;
                         Element2.NextInRow = ElementRightOfCol1;
+
+                        if (ElementLeftOfCol2 != null)
+                            ElementLeftOfCol2.NextInRow = Element2;
+                        else
+                            matrix.FirstInRow[Row] = Element1;
+                        // *ElementLeftOfCol2 = Element1;
                         Element1.NextInRow = ElementRightOfCol2;
                     }
                     Element1.Col = Col2;
@@ -1326,12 +1409,24 @@ if (pElement.Row != Row)
                 {
                     do
                     {
-                        pElement = pElement.NextInRow;
+                        ElementLeftOfCol2 = pElement; // &(pElement.NextInRow);
+                        pElement = pElement.NextInRow; // *ElementLeftOfCol2;
                     } while (pElement.Col < Col2);
 
                     ElementRightOfCol2 = Element2.NextInRow;
 
                     // Move Element2 to Col1. 
+                    if (ElementLeftOfCol2 != null)
+                        ElementLeftOfCol2.NextInRow = Element2.NextInRow;
+                    else
+                        matrix.FirstInRow[Row] = Element2.NextInRow;
+                    // *ElementLeftOfCol2 = Element2.NextInRow;
+
+                    if (ElementLeftOfCol1 != null)
+                        ElementLeftOfCol1.NextInRow = Element2;
+                    else
+                        matrix.FirstInRow[Row] = Element2;
+                    // *ElementLeftOfCol1 = Element2;
                     Element2.NextInRow = ElementRightOfCol1;
                 }
                 Element2.Col = Col1;
