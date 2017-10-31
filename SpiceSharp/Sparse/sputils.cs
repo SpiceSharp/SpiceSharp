@@ -121,7 +121,7 @@ public static class sputils
             if (matrix.Factored)
                 throw new SparseException("Matrix is factored");
             if (!matrix.RowsLinked)
-                spbuild.spcLinkRows(matrix);
+                SparseBuild.spcLinkRows(matrix);
             if (!matrix.InternalVectorsAllocated)
                 spfactor.spcCreateInternalVectors(matrix);
 
@@ -294,7 +294,7 @@ public static class sputils
 
             pExponent = 0;
 
-            if (matrix.Error == Matrix.spSINGULAR)
+            if (matrix.Error == Matrix.SparseError.Singular)
             {
                 pDeterminant = 0.0;
                 piDeterminant = 0.0;
@@ -418,36 +418,37 @@ public static class sputils
 
         public static string spErrorMessage(Matrix matrix, string Originator)
         {
-            int Row = 0, Col = 0, Error;
+            int Row = 0, Col = 0;
+            Matrix.SparseError Error;
             StringBuilder sb = new StringBuilder();
 
             Error = matrix.Error;
-            if (Error == Matrix.spOKAY)
+            if (Error == Matrix.SparseError.Okay)
                 return null;
             if (Originator == null)
                 Originator = "sparse";
             if (Originator != null)
                 sb.Append($"{Originator.ToString()}: ");
-            if (Error >= Matrix.spFATAL)
+            if ((int)Error >= (int)Matrix.SparseError.Fatal)
                 sb.Append("fatal error, ");
             else
                 sb.Append("warning, ");
             
             // Print particular error message.
             // Do not use switch statement because error codes may not be unique.
-            if (Error == Matrix.spPANIC)
+            if (Error == Matrix.SparseError.Panic)
                 sb.Append("Sparse called improperly.");
-            else if (Error == Matrix.spSINGULAR)
+            else if (Error == Matrix.SparseError.Singular)
             {
                 matrix.spWhereSingular(out Row, out Col);
                 sb.Append($"singular matrix detected at row {Row} and column {Col}.");
             }
-            else if (Error == Matrix.spZERO_DIAG)
+            else if (Error == Matrix.SparseError.ZeroDiagonal)
             {
                 matrix.spWhereSingular(out Row, out Col);
                 sb.Append($"zero diagonal detected at row {Row} and column {Col}.");
             }
-            else if (Error == Matrix.spSMALL_PIVOT)
+            else if (Error == Matrix.SparseError.SmallPivot)
             {
                 sb.Append("unable to find a pivot that is larger than absolute threshold.");
             }

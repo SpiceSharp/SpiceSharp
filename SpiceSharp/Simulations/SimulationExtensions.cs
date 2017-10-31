@@ -251,7 +251,7 @@ namespace SpiceSharp.Simulations
                 var error = spsmp.SMPcLUfac(cstate.Matrix, state.PivotAbsTol);
                 if (error != 0)
                 {
-                    if (error == Matrix.E_SINGULAR)
+                    if (error == Matrix.SparseError.Singular)
                     {
                         state.Sparse |= CircuitState.SparseFlags.NIACSHOULDREORDER;
                         goto retry;

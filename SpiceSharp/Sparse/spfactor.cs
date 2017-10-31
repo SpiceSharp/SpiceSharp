@@ -4,7 +4,7 @@ namespace SpiceSharp.Sparse
 {
     public static class spfactor
     {
-        public static int spOrderAndFactor(Matrix matrix, double[] RHS, double RelThreshold, double AbsThreshold, bool DiagPivoting)
+        public static Matrix.SparseError spOrderAndFactor(Matrix matrix, double[] RHS, double RelThreshold, double AbsThreshold, bool DiagPivoting)
         {
             MatrixElement pPivot;
             int Step, Size;
@@ -14,7 +14,7 @@ namespace SpiceSharp.Sparse
             if (matrix.Factored)
                 throw new SparseException("Matrix is factored");
 
-            matrix.Error = Matrix.spOKAY;
+            matrix.Error = Matrix.SparseError.Okay;
             Size = matrix.Size;
             if (RelThreshold <= 0.0) RelThreshold = matrix.RelThreshold;
             if (RelThreshold > 1.0) RelThreshold = matrix.RelThreshold;
@@ -60,10 +60,10 @@ namespace SpiceSharp.Sparse
                 // factorization.
                 Step = 1;
                 if (!matrix.RowsLinked)
-                    spbuild.spcLinkRows(matrix);
+                    SparseBuild.spcLinkRows(matrix);
                 if (!matrix.InternalVectorsAllocated)
                     spcCreateInternalVectors(matrix);
-                if (matrix.Error >= Matrix.spFATAL)
+                if ((int)matrix.Error >= (int)Matrix.SparseError.Fatal)
                     return matrix.Error;
             }
 
@@ -85,7 +85,7 @@ namespace SpiceSharp.Sparse
                 else
                     RealRowColElimination(matrix, pPivot);
 
-                if (matrix.Error >= Matrix.spFATAL)
+                if ((int)matrix.Error >= (int)Matrix.SparseError.Fatal)
                     return matrix.Error;
                 UpdateMarkowitzNumbers(matrix, pPivot);
             }
@@ -97,7 +97,7 @@ namespace SpiceSharp.Sparse
             return matrix.Error;
         }
 
-        public static int spFactor(Matrix matrix)
+        public static Matrix.SparseError spFactor(Matrix matrix)
         {
             if (matrix.Factored)
                 throw new SparseException("Matrix is factored");
@@ -188,10 +188,10 @@ namespace SpiceSharp.Sparse
             }
 
             matrix.Factored = true;
-            return (matrix.Error = Matrix.spOKAY);
+            return (matrix.Error = Matrix.SparseError.Okay);
         }
 
-        public static int FactorComplexMatrix(Matrix matrix)
+        public static Matrix.SparseError FactorComplexMatrix(Matrix matrix)
         {
             MatrixElement pElement, pColumn;
             int Step, Size;
@@ -296,7 +296,7 @@ namespace SpiceSharp.Sparse
             }
 
             matrix.Factored = true;
-            return (matrix.Error = Matrix.spOKAY);
+            return (matrix.Error = Matrix.SparseError.Okay);
         }
 
         public static void spPartition(Matrix matrix, int Mode)
@@ -906,11 +906,11 @@ ChosenPivot = pElement;
 
             if (LargestElementMag == 0.0)
             {
-                matrix.Error = Matrix.spSINGULAR;
+                matrix.Error = Matrix.SparseError.Singular;
                 return null;
             }
 
-            matrix.Error = Matrix.spSMALL_PIVOT;
+            matrix.Error = Matrix.SparseError.SmallPivot;
             return pLargestElement;
         }
 
@@ -921,7 +921,7 @@ ChosenPivot = pElement;
             // Search column for largest element beginning at Element. 
             while (pElement != null)
             {
-if ((Magnitude = spdefs.ELEMENT_MAG(pElement)) > Largest)
+                if ((Magnitude = spdefs.ELEMENT_MAG(pElement)) > Largest)
                     Largest = Magnitude;
                 pElement = pElement.NextInCol;
             }
@@ -1023,13 +1023,13 @@ if (pElement.Row != Row)
                             matrix.Singletons++;
                     }
 
-                    matrix.Diag[Col] = spbuild.spcFindElementInCol(matrix, Col, Col, false);
+                    matrix.Diag[Col] = SparseBuild.spcFindElementInCol(matrix, Col, Col, false);
                 }
                 if (Row != Step)
                 {
-                    matrix.Diag[Row] = spbuild.spcFindElementInCol(matrix, Row, Row, false);
+                    matrix.Diag[Row] = SparseBuild.spcFindElementInCol(matrix, Row, Row, false);
                 }
-                matrix.Diag[Step] = spbuild.spcFindElementInCol(matrix, Step, Step, false);
+                matrix.Diag[Step] = SparseBuild.spcFindElementInCol(matrix, Step, Step, false);
 
                 // Update singleton count. 
                 matrix.MarkowitzProd[Step] = matrix.MarkowitzCol[Step] * matrix.MarkowitzRow[Step];
@@ -1596,7 +1596,7 @@ if (pElement.Row != Row)
             }
 
             // End of search, create the element. 
-            pElement = spbuild.spcCreateElement(matrix, Row, Col, aboveElement, true);
+            pElement = SparseBuild.spcCreateElement(matrix, Row, Col, aboveElement, true);
 
             // Update Markowitz counts and products. 
             matrix.MarkowitzProd[Row] = ++matrix.MarkowitzRow[Row] * matrix.MarkowitzCol[Row];
@@ -1609,18 +1609,30 @@ if (pElement.Row != Row)
             return pElement;
         }
 
-        public static int MatrixIsSingular(Matrix matrix, int Step)
+        /// <summary>
+        /// We have a singular matrix
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="Step">Current step</param>
+        /// <returns></returns>
+        public static Matrix.SparseError MatrixIsSingular(Matrix matrix, int Step)
         {
             matrix.SingularRow = matrix.IntToExtRowMap[Step];
             matrix.SingularCol = matrix.IntToExtColMap[Step];
-            return (matrix.Error = Matrix.spSINGULAR);
+            return (matrix.Error = Matrix.SparseError.Singular);
         }
 
-        public static int ZeroPivot(Matrix matrix, int Step)
+        /// <summary>
+        /// We have a zero on the diagonal
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="Step">Current step</param>
+        /// <returns></returns>
+        public static Matrix.SparseError ZeroPivot(Matrix matrix, int Step)
         {
             matrix.SingularRow = matrix.IntToExtRowMap[Step];
             matrix.SingularCol = matrix.IntToExtColMap[Step];
-            return (matrix.Error = Matrix.spZERO_DIAG);
+            return (matrix.Error = Matrix.SparseError.ZeroDiagonal);
         }
     }
 }

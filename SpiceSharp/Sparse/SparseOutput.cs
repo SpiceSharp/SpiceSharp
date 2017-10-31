@@ -6,10 +6,24 @@ using System.Threading.Tasks;
 
 namespace SpiceSharp.Sparse
 {
-    public static class spoutput
+    /// <summary>
+    /// Methods used to output matrix data
+    /// </summary>
+    public static class SparseOutput
     {
+        /// <summary>
+        /// Maximum width for strings
+        /// </summary>
         public static int Printer_Width = 80;
 
+        /// <summary>
+        /// Convert a matrix to a string
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="PrintReordered">True if the internal order is shown</param>
+        /// <param name="Data">True if the actual values should be shown</param>
+        /// <param name="Header">True if the header is shown</param>
+        /// <returns></returns>
         public static string spPrint(this Matrix matrix, bool PrintReordered, bool Data, bool Header)
         {
             int J = 0;

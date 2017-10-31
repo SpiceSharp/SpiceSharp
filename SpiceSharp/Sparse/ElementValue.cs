@@ -39,6 +39,15 @@ namespace SpiceSharp.Sparse
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="cplx">Complex number</param>
+        public ElementValue(Complex cplx) : this()
+        {
+            Cplx = cplx;
+        }
+
+        /// <summary>
         /// String representation
         /// </summary>
         /// <returns></returns>

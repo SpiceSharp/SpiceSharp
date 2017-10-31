@@ -15,22 +15,33 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// The row index
         /// </summary>
-        public int Row;
+        public int Row = 0;
 
         /// <summary>
         /// The column index
         /// </summary>
-        public int Col;
+        public int Col = 0;
 
         /// <summary>
         /// Next matrix element in the same row
         /// </summary>
-        internal MatrixElement NextInRow;
+        internal MatrixElement NextInRow = null;
 
         /// <summary>
         /// Next matrix element in the same column
         /// </summary>
-        internal MatrixElement NextInCol;
+        internal MatrixElement NextInCol = null;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="row">Row</param>
+        /// <param name="col">Column</param>
+        public MatrixElement(int row, int col)
+        {
+            Row = row;
+            Col = col;
+        }
 
         /// <summary>
         /// Allow casting to a double
