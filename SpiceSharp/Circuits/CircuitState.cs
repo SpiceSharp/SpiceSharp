@@ -187,7 +187,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         public CircuitState()
         {
-            Matrix = spsmp.SMPnewMatrix();
+            Matrix = new Matrix();
         }
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace SpiceSharp.Circuits
                 Rhs[i] = 0;
                 iRhs[i] = 0;
             }
-            Matrix.spClear();
+            Matrix.Clear();
         }
 
         /// <summary>
@@ -300,8 +300,6 @@ namespace SpiceSharp.Circuits
             for (int i = States.Length - 1; i > 0; i--)
                 States[i] = States[i - 1];
             States[0] = tmp;
-            // States[0].Clear();
-            // States[0] = new DenseVector(States[1].Count);
         }
 
         /// <summary>

@@ -9,38 +9,10 @@ namespace SpiceSharp.Sparse
     public static class spsmp
     {
         /// <summary>
-        /// SMPaddElt
-        /// </summary>
-        /// <param name="matrix"></param>
-        /// <param name="Row"></param>
-        /// <param name="Col"></param>
-        /// <param name="Value"></param>
-        /// <returns></returns>
-        public static Matrix.SparseError SMPaddElt(Matrix matrix, int Row, int Col, double Value)
-        {
-            // SparseBuild.spGetElement(matrix, Row, Col).Value.Real = Value;
-            matrix.GetElement(Row, Col).Value.Real = Value;
-            return matrix.Error;
-        }
-
-        /// <summary>
-        /// SMPmakeElt
-        /// </summary>
-        /// <param name="matrix"></param>
-        /// <param name="Row"></param>
-        /// <param name="Col"></param>
-        /// <returns></returns>
-        public static MatrixElement SMPmakeElt(this Matrix matrix, int Row, int Col)
-        {
-            // return SparseBuild.spGetElement(matrix, Row, Col);
-            return matrix.GetElement(Row, Col);
-        }
-
-        /// <summary>
         /// SMPcClear
         /// </summary>
         /// <param name="matrix"></param>
-        public static void SMPcClear(Matrix matrix)
+        public static void SMPcClear(this Matrix matrix)
         {
             // SparseBuild.spClear(matrix);
             matrix.Clear();
@@ -52,10 +24,10 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix"></param>
         /// <param name="PivTol"></param>
         /// <returns></returns>
-        public static Matrix.SparseError SMPcLUfac(Matrix matrix, double PivTol)
+        public static SparseError SMPcLUfac(this Matrix matrix, double PivTol)
         {
-            matrix.spSetComplex();
-            return spfactor.spFactor(matrix);
+            matrix.SetComplex();
+            return matrix.Factor();
         }
 
         /// <summary>
@@ -65,11 +37,11 @@ namespace SpiceSharp.Sparse
         /// <param name="PivTol"></param>
         /// <param name="Gmin"></param>
         /// <returns></returns>
-        public static Matrix.SparseError SMPluFac(Matrix matrix, double PivTol, double Gmin)
+        public static SparseError SMPluFac(this Matrix matrix, double PivTol, double Gmin)
         {
-            matrix.spSetReal();
-            LoadGmin(matrix, Gmin);
-            return spfactor.spFactor(matrix);
+            matrix.SetReal();
+            matrix.LoadGmin(Gmin);
+            return matrix.Factor();
         }
 
         /// <summary>
@@ -80,11 +52,11 @@ namespace SpiceSharp.Sparse
         /// <param name="PivRel"></param>
         /// <param name="NumSwaps"></param>
         /// <returns></returns>
-        public static Matrix.SparseError SMPcReorder(Matrix matrix, double PivTol, double PivRel, out int NumSwaps)
+        public static SparseError SMPcReorder(this Matrix matrix, double PivTol, double PivRel, out int NumSwaps)
         {
             NumSwaps = 1;
-            matrix.spSetComplex();
-            return spfactor.spOrderAndFactor(matrix, null, PivRel, PivTol, true);
+            matrix.SetComplex();
+            return matrix.OrderAndFactor(null, PivRel, PivTol, true);
         }
 
         /// <summary>
@@ -95,11 +67,11 @@ namespace SpiceSharp.Sparse
         /// <param name="PivRel"></param>
         /// <param name="Gmin"></param>
         /// <returns></returns>
-        public static Matrix.SparseError SMPreorder(Matrix matrix, double PivTol, double PivRel, double Gmin)
+        public static SparseError SMPreorder(this Matrix matrix, double PivTol, double PivRel, double Gmin)
         {
-            matrix.spSetReal();
-            LoadGmin(matrix, Gmin);
-            return spfactor.spOrderAndFactor(matrix, null, PivRel, PivTol, true);
+            matrix.SetReal();
+            matrix.LoadGmin(Gmin);
+            return matrix.OrderAndFactor(null, PivRel, PivTol, true);
         }
 
         /// <summary>
@@ -110,7 +82,7 @@ namespace SpiceSharp.Sparse
         /// <param name="iRHS"></param>
         /// <param name="Spare"></param>
         /// <param name="iSpare"></param>
-        public static void SMPcaSolve(Matrix matrix, double[] RHS, double[] iRHS, double[] Spare, double[] iSpare)
+        public static void SMPcaSolve(this Matrix matrix, double[] RHS, double[] iRHS, double[] Spare, double[] iSpare)
         {
             spsolve.spSolveTransposed(matrix, RHS, RHS, iRHS, iRHS);
         }
@@ -123,7 +95,7 @@ namespace SpiceSharp.Sparse
         /// <param name="iRHS"></param>
         /// <param name="Spare"></param>
         /// <param name="iSpare"></param>
-        public static void SMPcSolve(Matrix matrix, double[] RHS, double[] iRHS, double[] Spare, double[] iSpare)
+        public static void SMPcSolve(this Matrix matrix, double[] RHS, double[] iRHS, double[] Spare, double[] iSpare)
         {
             spsolve.spSolve(matrix, RHS, RHS, iRHS, iRHS);
         }
@@ -134,7 +106,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix"></param>
         /// <param name="RHS"></param>
         /// <param name="Spare"></param>
-        public static void SMPsolve(Matrix matrix, double[] RHS, double[] Spare)
+        public static void SMPsolve(this Matrix matrix, double[] RHS, double[] Spare)
         {
             spsolve.spSolve(matrix, RHS, RHS, null, null);
         }
@@ -144,7 +116,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix"></param>
         /// <returns></returns>
-        public static int SMPmatSize(Matrix matrix)
+        public static int SMPmatSize(this Matrix matrix)
         {
             return matrix.spGetSize(true);
         }
@@ -174,9 +146,9 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix"></param>
         /// <returns></returns>
-        public static Matrix.SparseError SMPpreOrder(Matrix matrix)
+        public static SparseError SMPpreOrder(this Matrix matrix)
         {
-            sputils.spMNA_Preorder(matrix);
+            SparseUtilities.PreorderMNA(matrix);
             return matrix.Error;
         }
 
@@ -187,12 +159,15 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public static string SMPprint(Matrix matrix)
         {
-            return SparseOutput.spPrint(matrix, false, true, true);
+            return matrix.Print(false, true, true);
         }
 
-        /*
-         * SMPgetError()
-         */
+        /// <summary>
+        /// Get the source of the error
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="Col"></param>
+        /// <param name="Row"></param>
         public static void SMPgetError(Matrix matrix, out int Col, out int Row)
         {
             matrix.spWhereSingular(out Row, out Col);
@@ -208,12 +183,12 @@ namespace SpiceSharp.Sparse
         /// <param name="pMantissa"></param>
         /// <param name="pExponent"></param>
         /// <returns></returns>
-        public static Matrix.SparseError SMPcDProd(Matrix matrix, MatrixElement pMantissa, out int pExponent)
+        public static SparseError SMPcDProd(Matrix matrix, MatrixElement pMantissa, out int pExponent)
         {
             double re, im, x, y, z;
             int p;
 
-            sputils.spDeterminant(matrix, out p, out re, out im);
+            matrix.Determinant(out p, out re, out im);
 
             /* Convert base 10 numbers to base 2 numbers, for comparison */
             y = p * M_LN10 / M_LN2;
@@ -270,7 +245,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix"></param>
         /// <param name="Gmin"></param>
-        public static void LoadGmin(Matrix matrix, double Gmin)
+        public static void LoadGmin(this Matrix matrix, double Gmin)
         {
             MatrixElement[] Diag = matrix.Diag;
 
@@ -286,29 +261,12 @@ namespace SpiceSharp.Sparse
         }
 
         /// <summary>
-        /// Find element
+        /// Make a column zero
         /// </summary>
-        /// <param name="matrix"></param>
-        /// <param name="Row"></param>
-        /// <param name="Col"></param>
-        /// <param name="CreateIfMissing"></param>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="Col">Column</param>
         /// <returns></returns>
-        public static MatrixElement SMPfindElt(Matrix matrix, int Row, int Col, bool CreateIfMissing)
-        {
-            MatrixElement Element;
-
-            Row = matrix.ExtToIntRowMap[Row];
-            Col = matrix.ExtToIntColMap[Col];
-            Element = SparseBuild.spcFindElementInCol(matrix, Row, Col, CreateIfMissing);
-            return Element;
-        }
-
-        // XXX The following should probably be implemented in spUtils
-
-        /*
-         * SMPcZeroCol()
-         */
-        public static Matrix.SparseError SMPcZeroCol(Matrix matrix, int Col)
+        public static SparseError SMPcZeroCol(Matrix matrix, int Col)
         {
             MatrixElement Element;
 
@@ -330,7 +288,7 @@ namespace SpiceSharp.Sparse
         /// <param name="Accum_Col"></param>
         /// <param name="Addend_Col"></param>
         /// <returns></returns>
-        public static Matrix.SparseError SMPcAddCol(Matrix matrix, int Accum_Col, int Addend_Col)
+        public static SparseError SMPcAddCol(Matrix matrix, int Accum_Col, int Addend_Col)
         {
             MatrixElement Accum, Addend, Prev;
 
@@ -364,7 +322,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix"></param>
         /// <param name="Row"></param>
         /// <returns></returns>
-        public static Matrix.SparseError SMPzeroRow(Matrix matrix, int Row)
+        public static SparseError SMPzeroRow(Matrix matrix, int Row)
         {
             MatrixElement Element;
 

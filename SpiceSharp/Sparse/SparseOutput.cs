@@ -24,7 +24,7 @@ namespace SpiceSharp.Sparse
         /// <param name="Data">True if the actual values should be shown</param>
         /// <param name="Header">True if the header is shown</param>
         /// <returns></returns>
-        public static string spPrint(this Matrix matrix, bool PrintReordered, bool Data, bool Header)
+        public static string Print(this Matrix matrix, bool PrintReordered, bool Data, bool Header)
         {
             int J = 0;
             int I, Row, Col, Size, Top, StartCol = 1, StopCol, Columns, ElementCount = 0;

@@ -115,13 +115,13 @@
                 {
                     pPivot = matrix.Diag[I];
                     // Cmplx expr: Temp *= (1.0 / Pivot). 
-                    spdefs.CMPLX_MULT_ASSIGN(ref Temp, pPivot);
+                    SparseDefinitions.CMPLX_MULT_ASSIGN(ref Temp, pPivot);
                     Intermediate[I] = Temp;
                     pElement = pPivot.NextInCol;
                     while (pElement != null)
                     {
                         // Cmplx expr: Intermediate[Element.Row] -= Temp * *Element. 
-                        spdefs.CMPLX_MULT_SUBT_ASSIGN(ref Intermediate[pElement.Row], Temp, pElement);
+                        SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref Intermediate[pElement.Row], Temp, pElement);
                         pElement = pElement.NextInCol;
                     }
                 }
@@ -136,7 +136,7 @@
                 while (pElement != null)
                 {
                     // Cmplx expr: Temp -= *Element * Intermediate[Element.Col]. 
-                    spdefs.CMPLX_MULT_SUBT_ASSIGN(ref Temp, pElement, Intermediate[pElement.Col]);
+                    SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref Temp, pElement, Intermediate[pElement.Col]);
                     pElement = pElement.NextInRow;
                 }
                 Intermediate[I] = Temp;
@@ -275,7 +275,7 @@
                     while (pElement != null)
                     {
                         // Cmplx expr: Intermediate[Element.Col] -= Temp * *Element. 
-                        spdefs.CMPLX_MULT_SUBT_ASSIGN(ref Intermediate[pElement.Col], Temp, pElement);
+                        SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref Intermediate[pElement.Col], Temp, pElement);
                         pElement = pElement.NextInRow;
                     }
                 }
@@ -291,12 +291,12 @@
                 while (pElement != null)
                 {
                     // Cmplx expr: Temp -= Intermediate[Element.Row] * *Element. 
-                    spdefs.CMPLX_MULT_SUBT_ASSIGN(ref Temp, Intermediate[pElement.Row], pElement);
+                    SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref Temp, Intermediate[pElement.Row], pElement);
 
                     pElement = pElement.NextInCol;
                 }
                 // Cmplx expr: Intermediate = Temp * (1.0 / *pPivot). 
-                spdefs.CMPLX_MULT(ref Intermediate[I], Temp, pPivot);
+                SparseDefinitions.CMPLX_MULT(ref Intermediate[I], Temp, pPivot);
             }
 
             // Unscramble Intermediate vector while placing data in to Solution vector. 

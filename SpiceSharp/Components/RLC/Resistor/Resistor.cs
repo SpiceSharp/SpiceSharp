@@ -94,11 +94,11 @@ namespace SpiceSharp.Components
             RESposNode = nodes[0].Index;
             RESnegNode = nodes[1].Index;
 
-            var state = ckt.State;
-            RESposPosPtr = state.Matrix.SMPmakeElt(RESposNode, RESposNode);
-            RESnegNegPtr = state.Matrix.SMPmakeElt(RESnegNode, RESnegNode);
-            RESposNegPtr = state.Matrix.SMPmakeElt(RESposNode, RESnegNode);
-            RESnegPosPtr = state.Matrix.SMPmakeElt(RESnegNode, RESposNode);
+            var matrix = ckt.State.Matrix;
+            RESposPosPtr = matrix.GetElement(RESposNode, RESposNode);
+            RESnegNegPtr = matrix.GetElement(RESnegNode, RESnegNode);
+            RESposNegPtr = matrix.GetElement(RESposNode, RESnegNode);
+            RESnegPosPtr = matrix.GetElement(RESnegNode, RESposNode);
         }
     }
 }

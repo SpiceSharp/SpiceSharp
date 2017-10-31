@@ -22,6 +22,13 @@ namespace SpiceSharp.Sparse
                     elt = elt.NextInCol;
                 }
             }
+
+            // Reset flags
+            matrix.Error = SparseError.Okay;
+            matrix.Factored = false;
+            matrix.SingularCol = 0;
+            matrix.SingularRow = 0;
+            matrix.PreviousMatrixWasComplex = matrix.Complex;
         }
 
         /// <summary>
@@ -97,6 +104,7 @@ namespace SpiceSharp.Sparse
 
         /// <summary>
         /// Create a new element in the matrix if it doesn't exist
+        /// Only used internally!
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="row">Row</param>
@@ -189,80 +197,6 @@ namespace SpiceSharp.Sparse
                 elt.NextInRow = splice.NextInRow;
                 splice.NextInRow = elt;
             }
-        }
-
-        public static void spClear(this Matrix matrix)
-        {
-            MatrixElement pElement;
-
-            // Clear matrix
-            if (matrix.PreviousMatrixWasComplex || matrix.Complex)
-            {
-                for (int I = matrix.Size; I > 0; I--)
-                {
-                    pElement = matrix.FirstInCol[I];
-                    while (pElement != null)
-                    {
-                        pElement.Value.Cplx = 0.0;
-                        pElement = pElement.NextInCol;
-                    }
-                }
-            }
-            else
-            {
-                for (int I = matrix.Size; I > 0; I--)
-                {
-                    pElement = matrix.FirstInCol[I];
-                    while (pElement != null)
-                    {
-                        pElement.Value.Real = 0.0;
-                        pElement = pElement.NextInCol;
-                    }
-                }
-            }
-
-            // Empty the trash
-            matrix.TrashCan.Value.Cplx = 0.0;
-
-            matrix.Error = Matrix.SparseError.Okay;
-            matrix.Factored = false;
-            matrix.SingularCol = 0;
-            matrix.SingularRow = 0;
-            matrix.PreviousMatrixWasComplex = matrix.Complex;
-            return;
-        }
-
-        public static MatrixElement spGetElement(this Matrix matrix, int Row, int Col)
-        {
-            if (Row < 0 || Col < 0)
-                throw new SparseException("Indices out of bounds");
-
-            if ((Row == 0) || (Col == 0))
-                return matrix.TrashCan;
-
-            Translate(matrix, ref Row, ref Col);
-
-            /*
-             * The condition part of the following if statement tests to see if the
-             * element resides along the diagonal, if it does then it tests to see
-             * if the element has been created yet (Diag pointer not NULL).  The
-             * pointer to the element is then assigned to Element after it is cast
-             * into a pointer to a RealNumber.  This casting makes the pointer into
-             * a pointer to Real.  This statement depends on the fact that Real
-             * is the first record in the MatrixElement structure.
-             */
-            MatrixElement pElement;
-            if ((Row != Col) || ((pElement = matrix.Diag[Row]) == null))
-            {
-                /*
-                 * Element does not exist or does not reside along diagonal.  Search
-                 * column for element.  As in the if statement above, the pointer to the
-                 * element which is returned by spcFindElementInCol is cast into a
-                 * pointer to Real, a RealNumber.
-                 */
-                pElement = spcFindElementInCol(matrix, Row, Col, true);
-            }
-            return pElement;
         }
 
         public static MatrixElement spcFindElementInCol(Matrix matrix, int Row, int Col, bool CreateIfMissing)

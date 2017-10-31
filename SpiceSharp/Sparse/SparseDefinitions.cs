@@ -2,12 +2,15 @@
 
 namespace SpiceSharp.Sparse
 {
-    public static class spdefs
+    /// <summary>
+    /// Sparse definitions for basic operations
+    /// </summary>
+    public static class SparseDefinitions
     {
-        public static double ELEMENT_MAG(ElementValue ptr) => Math.Abs(ptr.Real) + Math.Abs(ptr.Imag);
-        public static double ELEMENT_MAG(MatrixElement ptr) => Math.Abs(ptr.Value.Real) + Math.Abs(ptr.Value.Imag);
+        public static double ELEMENT_MAG(this ElementValue ptr) => Math.Abs(ptr.Real) + Math.Abs(ptr.Imag);
+        public static double ELEMENT_MAG(this MatrixElement ptr) => Math.Abs(ptr.Value.Real) + Math.Abs(ptr.Value.Imag);
 
-        /* Complex assignment statements. */
+        // Complex assignment statements.
         public static void CMPLX_ASSIGN(ref ElementValue to, ElementValue from)
         {
             to.Real = from.Real;
@@ -35,58 +38,58 @@ namespace SpiceSharp.Sparse
             a.Imag = -a.Imag;
         }
 
-        /* Macro that returns the approx magnitude (L-1 norm) of a complex number. */
+        // Macro that returns the approx magnitude (L-1 norm) of a complex number. 
         public static double CMPLX_1_NORM(ElementValue a) => Math.Abs(a.Real) + Math.Abs(a.Imag);
 
-        /* Macro that returns the approx magnitude (L-infinity norm) of a complex. */
+        // Macro that returns the approx magnitude (L-infinity norm) of a complex. 
         public static double CMPLX_INF_NORM(ElementValue a) => Math.Max(Math.Abs(a.Real), Math.Abs(a.Imag));
 
-        /* Macro function that returns the magnitude (L-2 norm) of a complex number. */
+        // Macro function that returns the magnitude (L-2 norm) of a complex number. 
         public static void CMPLX_2_NORM(ElementValue a) => Math.Sqrt(a.Real * a.Real + a.Imag * a.Imag);
 
-        /* Macro function that performs complex addition. */
+        // Macro function that performs complex addition. 
         public static void CMPLX_ADD(ref ElementValue to, ElementValue from_a, ElementValue from_b)
         {
             to.Real = from_a.Real + from_b.Real;
             to.Imag = from_a.Imag + from_b.Imag;
         }
 
-        /* Macro function that performs complex subtraction. */
+        // Macro function that performs complex subtraction. 
         public static void CMPLX_SUBT(ref ElementValue to, ElementValue from_a, ElementValue from_b)
         {
             to.Real = from_a.Real - from_b.Real;
             to.Imag = from_a.Imag - from_b.Imag;
         }
 
-        /* Macro function that is equivalent to += operator for complex numbers. */
+        // Macro function that is equivalent to += operator for complex numbers. 
         public static void CMPLX_ADD_ASSIGN(ref ElementValue to, ElementValue from)
         {
             to.Real += from.Real;
             to.Imag += from.Imag;
         }
 
-        /* Macro function that is equivalent to -= operator for complex numbers. */
+        // Macro function that is equivalent to -= operator for complex numbers. 
         public static void CMPLX_SUBT_ASSIGN(ref ElementValue to, ElementValue from)
         {
             to.Real -= from.Real;
             to.Imag -= from.Imag;
         }
 
-        /* Macro function that multiplies a complex number by a scalar. */
+        // Macro function that multiplies a complex number by a scalar. 
         public static void SCLR_MULT(ref ElementValue to, double sclr, ElementValue cmplx)
         {
             to.Real = sclr * cmplx.Real;
             to.Imag = sclr * cmplx.Imag;
         }
 
-        /* Macro function that multiply-assigns a complex number by a scalar. */
+        // Macro function that multiply-assigns a complex number by a scalar. 
         public static void SCLR_MULT_ASSIGN(ref ElementValue to, ElementValue sclr)
         {
             to.Real *= sclr;
             to.Imag *= sclr;
         }
 
-        /* Macro function that multiplies two complex numbers. */
+        // Macro function that multiplies two complex numbers. 
         public static void CMPLX_MULT(ref ElementValue to, ElementValue from_a, ElementValue from_b)
         {
             to.Real = from_a.Real * from_b.Real -
@@ -95,7 +98,7 @@ namespace SpiceSharp.Sparse
                         from_a.Imag * from_b.Real;
         }
 
-        /* Macro function that implements to *= from for complex numbers. */
+        // Macro function that implements to *= from for complex numbers. 
         public static void CMPLX_MULT_ASSIGN(ref ElementValue to, ElementValue from)
         {
             double to_real_ = to.Real;
@@ -115,8 +118,8 @@ namespace SpiceSharp.Sparse
                         from_a.Imag * from_b.Real;
         }
 
-        /* Macro function that multiplies two complex numbers and then adds them
-         * to another. to = add + mult_a * mult_b */
+        // Macro function that multiplies two complex numbers and then adds them
+        // to another. to = add + mult_a * mult_b
         public static void CMPLX_MULT_ADD(ref ElementValue to, ElementValue mult_a, ElementValue mult_b, ElementValue add)
         {
             to.Real = mult_a.Real * mult_b.Real -
@@ -125,8 +128,8 @@ namespace SpiceSharp.Sparse
                         mult_a.Imag * mult_b.Real + add.Imag;
         }
 
-        /* Macro function that subtracts the product of two complex numbers from
-         * another.  to = subt - mult_a * mult_b */
+        // Macro function that subtracts the product of two complex numbers from
+        // another.  to = subt - mult_a * mult_b
         public static void CMPLX_MULT_SUBT(ref ElementValue to, ElementValue mult_a, ElementValue mult_b, ElementValue subt)
         {
             to.Real = subt.Real - mult_a.Real * mult_b.Real +
@@ -135,9 +138,9 @@ namespace SpiceSharp.Sparse
                                       mult_a.Imag * mult_b.Real;
         }
 
-        /* Macro function that multiplies two complex numbers and then adds them
-         * to another. to = add + mult_a* * mult_b where mult_a* represents mult_a
-         * conjugate. */
+        // Macro function that multiplies two complex numbers and then adds them
+        // to another. to = add + mult_a* * mult_b where mult_a* represents mult_a
+        // conjugate.
         public static void CMPLX_CONJ_MULT_ADD(ref ElementValue to, ElementValue mult_a, ElementValue mult_b, ElementValue add)
         {
             to.Real = mult_a.Real * mult_b.Real +
@@ -146,8 +149,8 @@ namespace SpiceSharp.Sparse
                         mult_a.Imag * mult_b.Real + add.Imag;
         }
 
-        /* Macro function that multiplies two complex numbers and then adds them
-         * to another. to += mult_a * mult_b */
+        // Macro function that multiplies two complex numbers and then adds them
+        // to another. to += mult_a * mult_b
         public static void CMPLX_MULT_ADD_ASSIGN(ref ElementValue to, ElementValue from_a, ElementValue from_b)
         {
             to.Real += from_a.Real * from_b.Real -
@@ -166,9 +169,9 @@ namespace SpiceSharp.Sparse
                          from_a.Imag * from_b.Real;
         }
 
-        /* Macro function that multiplies two complex numbers and then adds them
-         * to the destination. to += from_a* * from_b where from_a* represents from_a
-         * conjugate. */
+        // Macro function that multiplies two complex numbers and then adds them
+        // to the destination. to += from_a* * from_b where from_a* represents from_a
+        // conjugate.
         public static void CMPLX_CONJ_MULT_ADD_ASSIGN(ref ElementValue to, ElementValue from_a, ElementValue from_b)
         {
             to.Real += from_a.Real * from_b.Real +
@@ -188,11 +191,7 @@ namespace SpiceSharp.Sparse
                          from_a.Imag * from_b.Real;
         }
 
-        /*
-         * Macro functions that provide complex division.
-         */
-
-        /* Complex division:  to = num / den */
+        // Complex division:  to = num / den 
         public static void CMPLX_DIV(ref ElementValue to, ElementValue num, ElementValue den)
         {
             double r_, s_;
@@ -213,7 +212,7 @@ namespace SpiceSharp.Sparse
             }
         }
 
-        /* Complex division and assignment:  num /= den */
+        // Complex division and assignment:  num /= den 
         public static void CMPLX_DIV_ASSIGN(ref ElementValue num, ElementValue den)
         {
             double r_, s_, t_;
@@ -236,7 +235,7 @@ namespace SpiceSharp.Sparse
             }
         }
 
-        /* Complex reciprocation:  to = 1.0 / den */
+        // Complex reciprocation:  to = 1.0 / den 
         public static void CMPLX_RECIPROCAL(ref ElementValue to, ElementValue den)
         {
             double r_;
@@ -253,10 +252,10 @@ namespace SpiceSharp.Sparse
             }
         }
 
-        /* Macro function that returns the square of a number. */
+        // Macro function that returns the square of a number. 
         public static double SQR(double a) => a * a;
 
-        /* Macro procedure that swaps two entities. */
+        // Macro procedure that swaps two entities. 
         public static void SWAP(ref int a, ref int b)
         {
             int swapx = a;

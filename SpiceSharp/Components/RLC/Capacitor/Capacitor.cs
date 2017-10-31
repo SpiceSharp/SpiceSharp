@@ -90,10 +90,10 @@ namespace SpiceSharp.Components
             CAPnegNode = nodes[1].Index;
 
             var matrix = ckt.State.Matrix;
-            CAPposPosptr = matrix.SMPmakeElt(CAPposNode, CAPposNode);
-            CAPnegNegptr = matrix.SMPmakeElt(CAPnegNode, CAPnegNode);
-            CAPnegPosptr = matrix.SMPmakeElt(CAPnegNode, CAPposNode);
-            CAPposNegptr = matrix.SMPmakeElt(CAPposNode, CAPnegNode);
+            CAPposPosptr = matrix.GetElement(CAPposNode, CAPposNode);
+            CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
+            CAPnegPosptr = matrix.GetElement(CAPnegNode, CAPposNode);
+            CAPposNegptr = matrix.GetElement(CAPposNode, CAPnegNode);
 
             // Create to states for integration
             CAPstate = ckt.State.GetState(2);

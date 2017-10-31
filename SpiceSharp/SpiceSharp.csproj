@@ -184,12 +184,12 @@
     <Compile Include="Sparse\SparseException.cs" />
     <Compile Include="Sparse\SparseBuild.cs" />
     <Compile Include="Sparse\SparseTranslation.cs" />
-    <Compile Include="Sparse\spdefs.cs" />
-    <Compile Include="Sparse\spfactor.cs" />
+    <Compile Include="Sparse\SparseDefinitions.cs" />
+    <Compile Include="Sparse\SparseFactor.cs" />
     <Compile Include="Sparse\SparseOutput.cs" />
-    <Compile Include="Sparse\spsmp.cs" />
+    <Compile Include="Sparse\SparseHelper.cs" />
     <Compile Include="Sparse\spsolve.cs" />
-    <Compile Include="Sparse\sputils.cs" />
+    <Compile Include="Sparse\SparseUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="api\index.md" />

@@ -125,10 +125,10 @@ namespace SpiceSharp.Components
             VSRCbranch = CreateNode(ckt, Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
 
             var matrix = ckt.State.Matrix;
-            VSRCposIbrptr = matrix.SMPmakeElt(VSRCposNode, VSRCbranch);
-            VSRCibrPosptr = matrix.SMPmakeElt(VSRCbranch, VSRCposNode);
-            VSRCnegIbrptr = matrix.SMPmakeElt(VSRCnegNode, VSRCbranch);
-            VSRCibrNegptr = matrix.SMPmakeElt(VSRCbranch, VSRCnegNode);
+            VSRCposIbrptr = matrix.GetElement(VSRCposNode, VSRCbranch);
+            VSRCibrPosptr = matrix.GetElement(VSRCbranch, VSRCposNode);
+            VSRCnegIbrptr = matrix.GetElement(VSRCnegNode, VSRCbranch);
+            VSRCibrNegptr = matrix.GetElement(VSRCbranch, VSRCnegNode);
 
             // Setup the waveform if specified
             VSRCwaveform?.Setup(ckt);

@@ -2,9 +2,21 @@
 
 namespace SpiceSharp.Sparse
 {
-    public static class spfactor
+    /// <summary>
+    /// Extension methods for factoring a sparse matrix
+    /// </summary>
+    public static class SparseFactor
     {
-        public static Matrix.SparseError spOrderAndFactor(Matrix matrix, double[] RHS, double RelThreshold, double AbsThreshold, bool DiagPivoting)
+        /// <summary>
+        /// Order and factor the matrix
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="RHS">Right-Hand Side</param>
+        /// <param name="RelThreshold">Relative threshold for pivot selection</param>
+        /// <param name="AbsThreshold">Absolute threshold for pivot selection</param>
+        /// <param name="DiagPivoting">Use diagonal pivoting</param>
+        /// <returns></returns>
+        public static SparseError OrderAndFactor(this Matrix matrix, double[] RHS, double RelThreshold, double AbsThreshold, bool DiagPivoting)
         {
             MatrixElement pPivot;
             int Step, Size;
@@ -12,9 +24,9 @@ namespace SpiceSharp.Sparse
             double LargestInCol;
 
             if (matrix.Factored)
-                throw new SparseException("Matrix is factored");
+                throw new SparseException("Matrix is already factored");
 
-            matrix.Error = Matrix.SparseError.Okay;
+            matrix.Error = SparseError.Okay;
             Size = matrix.Size;
             if (RelThreshold <= 0.0) RelThreshold = matrix.RelThreshold;
             if (RelThreshold > 1.0) RelThreshold = matrix.RelThreshold;
@@ -30,7 +42,7 @@ namespace SpiceSharp.Sparse
                 {
                     pPivot = matrix.Diag[Step];
                     LargestInCol = FindLargestInCol(pPivot.NextInCol);
-                    if (LargestInCol * RelThreshold < spdefs.ELEMENT_MAG(pPivot))
+                    if (LargestInCol * RelThreshold < SparseDefinitions.ELEMENT_MAG(pPivot))
                     {
                         if (matrix.Complex)
                             ComplexRowColElimination(matrix, pPivot);
@@ -63,7 +75,7 @@ namespace SpiceSharp.Sparse
                     SparseBuild.spcLinkRows(matrix);
                 if (!matrix.InternalVectorsAllocated)
                     spcCreateInternalVectors(matrix);
-                if ((int)matrix.Error >= (int)Matrix.SparseError.Fatal)
+                if ((int)matrix.Error >= (int)SparseError.Fatal)
                     return matrix.Error;
             }
 
@@ -85,7 +97,7 @@ namespace SpiceSharp.Sparse
                 else
                     RealRowColElimination(matrix, pPivot);
 
-                if ((int)matrix.Error >= (int)Matrix.SparseError.Fatal)
+                if ((int)matrix.Error >= (int)SparseError.Fatal)
                     return matrix.Error;
                 UpdateMarkowitzNumbers(matrix, pPivot);
             }
@@ -97,16 +109,21 @@ namespace SpiceSharp.Sparse
             return matrix.Error;
         }
 
-        public static Matrix.SparseError spFactor(Matrix matrix)
+        /// <summary>
+        /// Factor the matrix
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <returns></returns>
+        internal static SparseError Factor(this Matrix matrix)
         {
             if (matrix.Factored)
                 throw new SparseException("Matrix is factored");
             MatrixElement pElement, pColumn;
 
             if (matrix.NeedsOrdering)
-                return spOrderAndFactor(matrix, null, 0.0, 0.0, Matrix.DIAG_PIVOTING_AS_DEFAULT);
+                return OrderAndFactor(matrix, null, 0.0, 0.0, Matrix.DIAG_PIVOTING_AS_DEFAULT);
             if (!matrix.Partitioned)
-                spPartition(matrix, Matrix.spDEFAULT_PARTITION);
+                Partition(matrix, SparsePartition.Default);
             if (matrix.Complex)
                 return FactorComplexMatrix(matrix);
 
@@ -188,10 +205,15 @@ namespace SpiceSharp.Sparse
             }
 
             matrix.Factored = true;
-            return (matrix.Error = Matrix.SparseError.Okay);
+            return (matrix.Error = SparseError.Okay);
         }
 
-        public static Matrix.SparseError FactorComplexMatrix(Matrix matrix)
+        /// <summary>
+        /// Factor the matrix in the complex domain
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <returns></returns>
+        internal static SparseError FactorComplexMatrix(Matrix matrix)
         {
             MatrixElement pElement, pColumn;
             int Step, Size;
@@ -203,11 +225,11 @@ namespace SpiceSharp.Sparse
 
             Size = matrix.Size;
             pElement = matrix.Diag[1];
-            if (spdefs.ELEMENT_MAG(pElement) == 0.0)
+            if (SparseDefinitions.ELEMENT_MAG(pElement) == 0.0)
                 return ZeroPivot(matrix, 1);
 
             // Cmplx expr: *pPivot = 1.0 / *pPivot
-            spdefs.CMPLX_RECIPROCAL(ref pElement.Value, pElement);
+            SparseDefinitions.CMPLX_RECIPROCAL(ref pElement.Value, pElement);
 
             // Start factorization
             for (Step = 2; Step <= Size; Step++)
@@ -232,12 +254,12 @@ namespace SpiceSharp.Sparse
                         pElement = matrix.Diag[pColumn.Row];
 
                         // Cmplx expr: Mult = Dest[pColumn.Row] * (1.0 / *pPivot)
-                        spdefs.CMPLX_MULT(ref Mult, Dest[pColumn.Row], pElement);
-                        spdefs.CMPLX_ASSIGN(ref pColumn.Value, Mult);
+                        SparseDefinitions.CMPLX_MULT(ref Mult, Dest[pColumn.Row], pElement);
+                        SparseDefinitions.CMPLX_ASSIGN(ref pColumn.Value, Mult);
                         while ((pElement = pElement.NextInCol) != null)
                         {
                             // Cmplx expr: Dest[pElement.Row] -= Mult * pElement
-                            spdefs.CMPLX_MULT_SUBT_ASSIGN(ref Dest[pElement.Row], Mult, pElement);
+                            SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref Dest[pElement.Row], Mult, pElement);
                         }
                         pColumn = pColumn.NextInCol;
                     }
@@ -253,9 +275,9 @@ namespace SpiceSharp.Sparse
 
                     // Check for singular matrix
                     Pivot = Dest[Step];
-                    if (spdefs.CMPLX_1_NORM(Pivot) == 0.0)
+                    if (SparseDefinitions.CMPLX_1_NORM(Pivot) == 0.0)
                         return ZeroPivot(matrix, Step);
-                    spdefs.CMPLX_RECIPROCAL(ref matrix.Diag[Step].Value, Pivot);
+                    SparseDefinitions.CMPLX_RECIPROCAL(ref matrix.Diag[Step].Value, Pivot);
                 }
                 else
                 {
@@ -277,29 +299,29 @@ namespace SpiceSharp.Sparse
                         pElement = matrix.Diag[pColumn.Row];
 
                         // Cmplx expr: Mult = *pDest[pColumn.Row] * (1.0 / *pPivot)
-                        spdefs.CMPLX_MULT(ref Mult, pDest[pColumn.Row], pElement);
-                        spdefs.CMPLX_ASSIGN(ref pDest[pColumn.Row], Mult);
+                        SparseDefinitions.CMPLX_MULT(ref Mult, pDest[pColumn.Row], pElement);
+                        SparseDefinitions.CMPLX_ASSIGN(ref pDest[pColumn.Row], Mult);
                         while ((pElement = pElement.NextInCol) != null)
                         {
                             // Cmplx expr: *pDest[pElement.Row] -= Mult * pElement
-                            spdefs.CMPLX_MULT_SUBT_ASSIGN(ref pDest[pElement.Row], Mult, pElement);
+                            SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref pDest[pElement.Row], Mult, pElement);
                         }
                         pColumn = pColumn.NextInCol;
                     }
 
                     // Check for singular matrix
                     pElement = matrix.Diag[Step];
-                    if (spdefs.ELEMENT_MAG(pElement) == 0.0)
+                    if (SparseDefinitions.ELEMENT_MAG(pElement) == 0.0)
                         return ZeroPivot(matrix, Step);
-                    spdefs.CMPLX_RECIPROCAL(ref pElement.Value, pElement);
+                    SparseDefinitions.CMPLX_RECIPROCAL(ref pElement.Value, pElement);
                 }
             }
 
             matrix.Factored = true;
-            return (matrix.Error = Matrix.SparseError.Okay);
+            return (matrix.Error = SparseError.Okay);
         }
 
-        public static void spPartition(Matrix matrix, int Mode)
+        internal static void Partition(Matrix matrix, SparsePartition Mode)
         {
             MatrixElement pElement, pColumn;
             int Step, Size;
@@ -315,9 +337,9 @@ namespace SpiceSharp.Sparse
             matrix.Partitioned = true;
 
             // If partition is specified by the user, this is easy
-            if (Mode == Matrix.spDEFAULT_PARTITION)
+            if (Mode == SparsePartition.Default)
                 Mode = Matrix.DEFAULT_PARTITION;
-            if (Mode == Matrix.spDIRECT_PARTITION)
+            if (Mode == SparsePartition.Direct)
             {
                 for (Step = 1; Step <= Size; Step++)
                 {
@@ -326,7 +348,7 @@ namespace SpiceSharp.Sparse
                 }
                 return;
             }
-            else if (Mode == Matrix.spINDIRECT_PARTITION)
+            else if (Mode == SparsePartition.Indirect)
             {
                 for (Step = 1; Step <= Size; Step++)
                 {
@@ -335,7 +357,7 @@ namespace SpiceSharp.Sparse
                 }
                 return;
             }
-            else if (Mode != Matrix.spAUTO_PARTITION)
+            else if (Mode != SparsePartition.Auto)
                 throw new SparseException("Invalid partition mode");
 
             // Otherwise, count all operations needed in when factoring matrix
@@ -603,7 +625,7 @@ namespace SpiceSharp.Sparse
                 if ((ChosenPivot = matrix.Diag[I]) != null)
                 {
                     // Singleton lies on the diagonal. 
-                    PivotMag = spdefs.ELEMENT_MAG(ChosenPivot);
+                    PivotMag = SparseDefinitions.ELEMENT_MAG(ChosenPivot);
                     if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                         return ChosenPivot;
                 }
@@ -620,7 +642,7 @@ ChosenPivot = matrix.FirstInCol[I];
                             // Reduced column has no elements, matrix is singular. 
                             break;
                         }
-                        PivotMag = spdefs.ELEMENT_MAG(ChosenPivot);
+                        PivotMag = SparseDefinitions.ELEMENT_MAG(ChosenPivot);
                         if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                             return ChosenPivot;
                         else
@@ -635,7 +657,7 @@ ChosenPivot = matrix.FirstInRow[I];
                                     // Reduced row has no elements, matrix is singular. 
                                     break;
                                 }
-                                PivotMag = spdefs.ELEMENT_MAG(ChosenPivot);
+                                PivotMag = SparseDefinitions.ELEMENT_MAG(ChosenPivot);
                                 if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                                     return ChosenPivot;
                             }
@@ -650,7 +672,7 @@ ChosenPivot = matrix.FirstInRow[I];
                         {   // Reduced row has no elements, matrix is singular. 
                             break;
                         }
-                        PivotMag = spdefs.ELEMENT_MAG(ChosenPivot);
+                        PivotMag = SparseDefinitions.ELEMENT_MAG(ChosenPivot);
                         if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                             return ChosenPivot;
                     }
@@ -716,7 +738,7 @@ ChosenPivot = matrix.FirstInRow[I];
 
                 if ((pDiag = matrix.Diag[I]) == null)
                     continue; // Endless for loop 
-                if ((Magnitude = spdefs.ELEMENT_MAG(pDiag)) <= matrix.AbsThreshold)
+                if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pDiag)) <= matrix.AbsThreshold)
                     continue; // Endless for loop 
 
                 if (matrix.MarkowitzProd[index] == 1)
@@ -750,7 +772,7 @@ if (pOtherInCol.Row >= Step && pOtherInCol.Row != I)
                     {
                         if (pOtherInRow.Col == pOtherInCol.Row)
                         {
-                            LargestOffDiagonal = Math.Max(spdefs.ELEMENT_MAG(pOtherInRow), spdefs.ELEMENT_MAG(pOtherInCol));
+                            LargestOffDiagonal = Math.Max(SparseDefinitions.ELEMENT_MAG(pOtherInRow), SparseDefinitions.ELEMENT_MAG(pOtherInCol));
                             if (Magnitude >= LargestOffDiagonal)
                             {
                                 // Accept pivot, it is unlikely to contribute excess error. 
@@ -767,7 +789,7 @@ if (pOtherInCol.Row >= Step && pOtherInCol.Row != I)
             if (ChosenPivot != null)
             {
                 LargestInCol = FindBiggestInColExclude(matrix, ChosenPivot, Step);
-                if (spdefs.ELEMENT_MAG(ChosenPivot) <= matrix.RelThreshold * LargestInCol)
+                if (SparseDefinitions.ELEMENT_MAG(ChosenPivot) <= matrix.RelThreshold * LargestInCol)
                     ChosenPivot = null;
             }
             return ChosenPivot;
@@ -801,7 +823,7 @@ if (pOtherInCol.Row >= Step && pOtherInCol.Row != I)
                     I = J;
                 if ((pDiag = matrix.Diag[I]) == null)
                     continue; // for loop 
-                if ((Magnitude = spdefs.ELEMENT_MAG(pDiag)) <= matrix.AbsThreshold)
+                if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pDiag)) <= matrix.AbsThreshold)
                     continue; // for loop 
 
                 // Test to see if diagonal's magnitude is acceptable. 
@@ -862,7 +884,7 @@ ChosenPivot = pDiag;
                 {
                     /* Check to see if element is the largest encountered so far.  If so, record
                        its magnitude and address. */
-                    if ((Magnitude = spdefs.ELEMENT_MAG(pElement)) > LargestElementMag)
+                    if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pElement)) > LargestElementMag)
                     {
                         LargestElementMag = Magnitude;
                         pLargestElement = pElement;
@@ -906,11 +928,11 @@ ChosenPivot = pElement;
 
             if (LargestElementMag == 0.0)
             {
-                matrix.Error = Matrix.SparseError.Singular;
+                matrix.Error = SparseError.Singular;
                 return null;
             }
 
-            matrix.Error = Matrix.SparseError.SmallPivot;
+            matrix.Error = SparseError.SmallPivot;
             return pLargestElement;
         }
 
@@ -921,7 +943,7 @@ ChosenPivot = pElement;
             // Search column for largest element beginning at Element. 
             while (pElement != null)
             {
-                if ((Magnitude = spdefs.ELEMENT_MAG(pElement)) > Largest)
+                if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pElement)) > Largest)
                     Largest = Magnitude;
                 pElement = pElement.NextInCol;
             }
@@ -945,14 +967,14 @@ ChosenPivot = pElement;
 
             // Initialize the variable Largest. 
             if (pElement.Row != Row)
-                Largest = spdefs.ELEMENT_MAG(pElement);
+                Largest = SparseDefinitions.ELEMENT_MAG(pElement);
             else
                 Largest = 0.0;
 
             // Search rest of column for largest element, avoiding excluded element. 
             while ((pElement = pElement.NextInCol) != null)
             {
-                if ((Magnitude = spdefs.ELEMENT_MAG(pElement)) > Largest)
+                if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pElement)) > Largest)
                 {
 if (pElement.Row != Row)
                         Largest = Magnitude;
@@ -979,8 +1001,8 @@ if (pElement.Row != Row)
             {
                 spcRowExchange(matrix, Step, Row);
                 spcColExchange(matrix, Step, Col);
-                spdefs.SWAP(ref matrix.MarkowitzProd[Step], ref matrix.MarkowitzProd[Row]);
-                spdefs.SWAP(ref matrix.Diag[Row], ref matrix.Diag[Step]);
+                SparseDefinitions.SWAP(ref matrix.MarkowitzProd[Step], ref matrix.MarkowitzProd[Row]);
+                SparseDefinitions.SWAP(ref matrix.Diag[Row], ref matrix.Diag[Step]);
             }
             else
             {
@@ -1051,7 +1073,7 @@ if (pElement.Row != Row)
             MatrixElement Element1, Element2;
 
             if (Row1 > Row2)
-                spdefs.SWAP(ref Row1, ref Row2);
+                SparseDefinitions.SWAP(ref Row1, ref Row2);
 
             Row1Ptr = matrix.FirstInRow[Row1];
             Row2Ptr = matrix.FirstInRow[Row2];
@@ -1099,9 +1121,9 @@ if (pElement.Row != Row)
             }  // end of while(Row1Ptr != null ||  Row2Ptr != null) 
 
             if (matrix.InternalVectorsAllocated)
-                spdefs.SWAP(ref matrix.MarkowitzRow[Row1], ref matrix.MarkowitzRow[Row2]);
-            spdefs.SWAP(ref matrix.FirstInRow[Row1], ref matrix.FirstInRow[Row2]);
-            spdefs.SWAP(ref matrix.IntToExtRowMap[Row1], ref matrix.IntToExtRowMap[Row2]);
+                SparseDefinitions.SWAP(ref matrix.MarkowitzRow[Row1], ref matrix.MarkowitzRow[Row2]);
+            SparseDefinitions.SWAP(ref matrix.FirstInRow[Row1], ref matrix.FirstInRow[Row2]);
+            SparseDefinitions.SWAP(ref matrix.IntToExtRowMap[Row1], ref matrix.IntToExtRowMap[Row2]);
             matrix.ExtToIntRowMap[matrix.IntToExtRowMap[Row1]] = Row1;
             matrix.ExtToIntRowMap[matrix.IntToExtRowMap[Row2]] = Row2;
         }
@@ -1114,7 +1136,7 @@ if (pElement.Row != Row)
 
             /* Begin `spcColExchange'. */
             if (Col1 > Col2)
-                spdefs.SWAP(ref Col1, ref Col2);
+                SparseDefinitions.SWAP(ref Col1, ref Col2);
 
             Col1Ptr = matrix.FirstInCol[Col1];
             Col2Ptr = matrix.FirstInCol[Col2];
@@ -1162,10 +1184,10 @@ if (pElement.Row != Row)
             }  /* end of while(Col1Ptr != null || Col2Ptr != null) */
 
             if (matrix.InternalVectorsAllocated)
-                spdefs.SWAP(ref matrix.MarkowitzCol[Col1], ref matrix.MarkowitzCol[Col2]);
+                SparseDefinitions.SWAP(ref matrix.MarkowitzCol[Col1], ref matrix.MarkowitzCol[Col2]);
 
-            spdefs.SWAP(ref matrix.FirstInCol[Col1], ref matrix.FirstInCol[Col2]);
-            spdefs.SWAP(ref matrix.IntToExtColMap[Col1], ref matrix.IntToExtColMap[Col2]);
+            SparseDefinitions.SWAP(ref matrix.FirstInCol[Col1], ref matrix.FirstInCol[Col2]);
+            SparseDefinitions.SWAP(ref matrix.IntToExtColMap[Col1], ref matrix.IntToExtColMap[Col2]);
             matrix.ExtToIntColMap[matrix.IntToExtColMap[Col1]] = Col1;
             matrix.ExtToIntColMap[matrix.IntToExtColMap[Col2]] = Col2;
 
@@ -1488,19 +1510,19 @@ if (pElement.Row != Row)
             MatrixElement pLower, pUpper;
 
             // Test for zero pivot. 
-            if (spdefs.ELEMENT_MAG(pPivot) == 0.0)
+            if (SparseDefinitions.ELEMENT_MAG(pPivot) == 0.0)
             {
                 MatrixIsSingular(matrix, pPivot.Row);
                 return;
             }
-            spdefs.CMPLX_RECIPROCAL(ref pPivot.Value, pPivot);
+            SparseDefinitions.CMPLX_RECIPROCAL(ref pPivot.Value, pPivot);
 
             pUpper = pPivot.NextInRow;
             while (pUpper != null)
             {
                 // Calculate upper triangular element. 
                 // Cmplx expr: *pUpper = *pUpper * (1.0 / *pPivot)
-                spdefs.CMPLX_MULT_ASSIGN(ref pUpper.Value, pPivot);
+                SparseDefinitions.CMPLX_MULT_ASSIGN(ref pUpper.Value, pPivot);
 
                 pSub = pUpper.NextInCol;
                 pLower = pPivot.NextInCol;
@@ -1519,7 +1541,7 @@ if (pElement.Row != Row)
                     }
 
                     // Cmplx expr: pElement -= *pUpper * pLower
-                    spdefs.CMPLX_MULT_SUBT_ASSIGN(ref pSub.Value, pUpper, pLower);
+                    SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref pSub.Value, pUpper, pLower);
                     pSub = pSub.NextInCol;
                     pLower = pLower.NextInCol;
                 }
@@ -1615,11 +1637,11 @@ if (pElement.Row != Row)
         /// <param name="matrix">Matrix</param>
         /// <param name="Step">Current step</param>
         /// <returns></returns>
-        public static Matrix.SparseError MatrixIsSingular(Matrix matrix, int Step)
+        public static SparseError MatrixIsSingular(Matrix matrix, int Step)
         {
             matrix.SingularRow = matrix.IntToExtRowMap[Step];
             matrix.SingularCol = matrix.IntToExtColMap[Step];
-            return (matrix.Error = Matrix.SparseError.Singular);
+            return (matrix.Error = SparseError.Singular);
         }
 
         /// <summary>
@@ -1628,11 +1650,11 @@ if (pElement.Row != Row)
         /// <param name="matrix">Matrix</param>
         /// <param name="Step">Current step</param>
         /// <returns></returns>
-        public static Matrix.SparseError ZeroPivot(Matrix matrix, int Step)
+        public static SparseError ZeroPivot(Matrix matrix, int Step)
         {
             matrix.SingularRow = matrix.IntToExtRowMap[Step];
             matrix.SingularCol = matrix.IntToExtColMap[Step];
-            return (matrix.Error = Matrix.SparseError.ZeroDiagonal);
+            return (matrix.Error = SparseError.ZeroDiagonal);
         }
     }
 }
