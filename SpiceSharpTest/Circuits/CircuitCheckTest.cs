@@ -13,6 +13,7 @@ namespace SpiceSharpTest.Circuits
         [ExpectedException(typeof(CircuitException))]
         public void BadGroundNodeName()
         {
+            // Verifies that CircuitException is thrown during Check when circuit has a ground node called "GND"
             var ckt = CreateCircuit("GND");
             ckt.Check();
         }
@@ -20,6 +21,7 @@ namespace SpiceSharpTest.Circuits
         [TestMethod]
         public void CorrectGroundNodeName()
         {
+            // Verifies that CircuitException is not thrown during Check when circuit has a ground node called "gnd"
             var ckt = CreateCircuit("gnd");
             ckt.Check();
         }
@@ -27,10 +29,17 @@ namespace SpiceSharpTest.Circuits
         [TestMethod]
         public void CorrectSecondGroundNodeName()
         {
+            // Verifies that CircuitException is not thrown during Check when circuit has a ground node called "0"
             var ckt = CreateCircuit("0");
             ckt.Check();
         }
 
+        /// <summary>
+        /// Creates a circuit with a resistor and a voltage source which is connected to IN
+        /// node and a ground node with name <paramref name="groundNodeName"/>
+        /// </summary>
+        /// <param name="groundNodeName"></param>
+        /// <returns></returns>
         private static Circuit CreateCircuit(string groundNodeName)
         {
             Circuit ckt = new Circuit();
@@ -40,7 +49,7 @@ namespace SpiceSharpTest.Circuits
                     new CircuitIdentifier("IN"),
                     new CircuitIdentifier(groundNodeName),
                     1),
-                new SpiceSharp.Components.Resistor(
+                new Resistor(
                     new CircuitIdentifier("R_1"),
                     new CircuitIdentifier("IN"),
                     new CircuitIdentifier(groundNodeName),

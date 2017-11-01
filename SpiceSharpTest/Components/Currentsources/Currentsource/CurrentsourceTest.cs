@@ -13,6 +13,11 @@ namespace SpiceSharpTest.Components.Currentsources.Currentsource
         [TestMethod]
         public void SingleResistorOnCurrentSource_Op()
         {
+            // A circuit contains a current source 10A and resistor 1000 Ohms
+            // The test verifies that after OP simulation:
+            // 1) a current through resistor is 10A
+            // 2) a voltage through the current source is 1000V
+
             var ckt = CreateResistorCircuit(10, 1000);
 
             ckt.Method = new Trapezoidal();
@@ -32,6 +37,11 @@ namespace SpiceSharpTest.Components.Currentsources.Currentsource
         [TestMethod]
         public void ResistorsInSeriesOnCurrentSource_Op()
         {
+            // A circuit contains a current source 100A and 500 resistor 1000 Ohms
+            // The test verifies that after OP simulation:
+            // 1) a current through each resistor is 100A
+            // 2) a voltage through the current source is 500000V (currentInAmp * resistanceInOhms * resistorCount)
+
             int currentInAmp = 100;
             int resistanceInOhms = 10;
             int resistorCount = 500;
@@ -89,6 +99,10 @@ namespace SpiceSharpTest.Components.Currentsources.Currentsource
             return ckt;
         }
 
+        /// <summary>
+        /// Creates a circuit with a resistor and a voltage source which is connected to IN
+        /// node and a ground node
+        /// </summary>
         private static Circuit CreateResistorCircuit(double current, double resistance)
         {
             Circuit ckt = new Circuit();
