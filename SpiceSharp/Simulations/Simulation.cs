@@ -71,7 +71,7 @@ namespace SpiceSharp.Simulations
 
             if (Circuit.Objects.Count <= 0)
                 throw new CircuitException("Circuit contains no objects");
-            if (Circuit.Nodes.Count <= 1)
+            if (Circuit.Nodes.Count < 1)
                 throw new CircuitException("Circuit contains no nodes");
 
             // Do temperature-dependent calculations
