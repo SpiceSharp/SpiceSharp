@@ -1,6 +1,6 @@
 ﻿namespace SpiceSharp.Sparse
 {
-    public static class spsolve
+    public static class SparseSolve
     {
         /// <summary>
         /// spSolve
@@ -84,7 +84,7 @@
         /// <param name="Solution"></param>
         /// <param name="iRHS"></param>
         /// <param name="iSolution"></param>
-        public static void SolveComplexMatrix(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
+        private static void SolveComplexMatrix(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
         {
             MatrixElement pElement;
             ElementValue[] Intermediate;
@@ -97,12 +97,11 @@
             Intermediate = matrix.Intermediate;
 
             // Initialize Intermediate vector. 
-            int index = Size;
             pExtOrder = matrix.IntToExtRowMap;
             for (I = Size; I > 0; I--)
             {
-                Intermediate[I].Real = RHS[pExtOrder[index]];
-                Intermediate[I].Imag = iRHS[pExtOrder[index--]];
+                Intermediate[I].Real = RHS[pExtOrder[I]];
+                Intermediate[I].Imag = iRHS[pExtOrder[I]];
             }
 
             // Forward substitution. Solves Lc = b.
@@ -142,14 +141,12 @@
                 Intermediate[I] = Temp;
             }
 
-            // Unscramble Intermediate vector while placing data in to Solution vector. 
-            index = Size;
+            // Unscramble Intermediate vector while placing data in to Solution vector.
             pExtOrder = matrix.IntToExtColMap;
-
             for (I = Size; I > 0; I--)
             {
-                Solution[pExtOrder[index]] = Intermediate[I].Real;
-                iSolution[pExtOrder[index--]] = Intermediate[I].Imag;
+                Solution[pExtOrder[I]] = Intermediate[I].Real;
+                iSolution[pExtOrder[I]] = Intermediate[I].Imag;
             }
 
             return;

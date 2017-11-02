@@ -318,7 +318,7 @@ namespace SpiceSharp.Sparse
             }
             else
                 throw new SparseException("Unrecognized error");
-            return null;
+            return sb.ToString();
         }
     }
 }

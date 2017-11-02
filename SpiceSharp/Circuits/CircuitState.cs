@@ -261,6 +261,13 @@ namespace SpiceSharp.Circuits
             Rhs = OldSolution;
             OldSolution = Solution;
             Solution = tmp;
+
+            if (imaginary)
+            {
+                tmp = iRhs;
+                iRhs = iSolution;
+                iSolution = tmp;
+            }
         }
 
         /// <summary>

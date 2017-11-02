@@ -54,13 +54,6 @@ namespace SpiceSharp.Components
         public double GetPower(Circuit ckt) => (ckt.State.Solution[VSRCposNode] - ckt.State.Solution[VSRCnegNode]) * -ckt.State.Solution[VSRCbranch];
         
         /// <summary>
-        /// Get the complex current through the voltage source
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <returns></returns>
-        public Complex GetComplexCurrent(Circuit ckt) => ckt.State.Solution[VSRCbranch];
-        
-        /// <summary>
         /// Nodes
         /// </summary>
         [SpiceName("pos_node")]

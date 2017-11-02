@@ -156,7 +156,7 @@ namespace SpiceSharp.Sparse
 
                             // Case where element exists
                             if (Data)
-                                sb.AppendFormat("{0,10:G3}", pElement.Value.Real.ToString());
+                                sb.AppendFormat("{0,10}", pElement.Value.Real.ToString("G3"));
                             else
                                 sb.Append('x');
 
@@ -185,7 +185,7 @@ namespace SpiceSharp.Sparse
                         {
                             if (pImagElements[J - StartCol] != null)
                             {
-                                sb.AppendFormat("{0, 9:G3}j",pImagElements[J - StartCol].Value.Imag);
+                                sb.AppendFormat("{0,9}j",pImagElements[J - StartCol].Value.Imag.ToString("G3"));
                             }
                             else sb.Append("          ");
                         }

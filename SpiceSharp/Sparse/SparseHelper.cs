@@ -84,7 +84,7 @@ namespace SpiceSharp.Sparse
         /// <param name="iSpare"></param>
         public static void SMPcaSolve(this Matrix matrix, double[] RHS, double[] iRHS, double[] Spare, double[] iSpare)
         {
-            spsolve.spSolveTransposed(matrix, RHS, RHS, iRHS, iRHS);
+            SparseSolve.spSolveTransposed(matrix, RHS, RHS, iRHS, iRHS);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace SpiceSharp.Sparse
         /// <param name="iSpare"></param>
         public static void SMPcSolve(this Matrix matrix, double[] RHS, double[] iRHS, double[] Spare, double[] iSpare)
         {
-            spsolve.spSolve(matrix, RHS, RHS, iRHS, iRHS);
+            SparseSolve.spSolve(matrix, RHS, RHS, iRHS, iRHS);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace SpiceSharp.Sparse
         /// <param name="Spare"></param>
         public static void SMPsolve(this Matrix matrix, double[] RHS, double[] Spare)
         {
-            spsolve.spSolve(matrix, RHS, RHS, null, null);
+            SparseSolve.spSolve(matrix, RHS, RHS, null, null);
         }
 
         /// <summary>

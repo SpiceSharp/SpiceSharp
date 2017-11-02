@@ -188,7 +188,7 @@
     <Compile Include="Sparse\SparseFactor.cs" />
     <Compile Include="Sparse\SparseOutput.cs" />
     <Compile Include="Sparse\SparseHelper.cs" />
-    <Compile Include="Sparse\spsolve.cs" />
+    <Compile Include="Sparse\SparseSolve.cs" />
     <Compile Include="Sparse\SparseUtilities.cs" />
   </ItemGroup>
   <ItemGroup>

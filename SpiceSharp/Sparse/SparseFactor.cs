@@ -28,10 +28,13 @@ namespace SpiceSharp.Sparse
 
             matrix.Error = SparseError.Okay;
             Size = matrix.Size;
-            if (RelThreshold <= 0.0) RelThreshold = matrix.RelThreshold;
-            if (RelThreshold > 1.0) RelThreshold = matrix.RelThreshold;
+            if (RelThreshold <= 0.0)
+                RelThreshold = matrix.RelThreshold;
+            if (RelThreshold > 1.0)
+                RelThreshold = matrix.RelThreshold;
             matrix.RelThreshold = RelThreshold;
-            if (AbsThreshold < 0.0) AbsThreshold = matrix.AbsThreshold;
+            if (AbsThreshold < 0.0)
+                AbsThreshold = matrix.AbsThreshold;
             matrix.AbsThreshold = AbsThreshold;
             ReorderingRequired = false;
 
@@ -1460,7 +1463,12 @@ if (pElement.Row != Row)
             return;
         }
 
-        public static void RealRowColElimination(Matrix matrix, MatrixElement pPivot)
+        /// <summary>
+        /// Eliminate a row with real numbers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="pPivot">Current pivot</param>
+        private static void RealRowColElimination(Matrix matrix, MatrixElement pPivot)
         {
             MatrixElement pSub;
             int Row;
@@ -1503,6 +1511,11 @@ if (pElement.Row != Row)
             }
         }
 
+        /// <summary>
+        /// Eliminate a row with complex numbers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="pPivot">Current pivot</param>
         public static void ComplexRowColElimination(Matrix matrix, MatrixElement pPivot)
         {
             MatrixElement pSub;

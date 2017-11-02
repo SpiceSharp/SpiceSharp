@@ -150,7 +150,7 @@ namespace SpiceSharp.Simulations
 
                     // Add diagonal GMIN, then order and factor using pivots on the diagonal
                     matrix.LoadGmin(ckt.Simulation?.Config?.DiagGmin ?? 0.0);
-                    matrix.OrderAndFactor(state.Rhs, state.PivotRelTol, state.PivotAbsTol, true);
+                    matrix.OrderAndFactor(null, state.PivotRelTol, state.PivotAbsTol, true);
 
                     ckt.Statistics.ReorderTime.Stop();
                     state.Sparse &= ~CircuitState.SparseFlags.NISHOULDREORDER;
@@ -233,7 +233,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
-        public static void AcIterate(this Circuit ckt, List<CircuitObjectBehaviorAcLoad> loaders, SimulationConfiguration config)
+        public static void AcIterate(this Circuit ckt, List<CircuitObjectBehaviorAcLoad> acloaders, SimulationConfiguration config)
         {
             var state = ckt.State;
             var matrix = state.Matrix;
@@ -247,13 +247,15 @@ namespace SpiceSharp.Simulations
 
             // Load AC
             state.Clear();
-            foreach (var behaviour in loaders)
+            foreach (var behaviour in acloaders)
                 behaviour.Execute(ckt);
 
             if (state.Sparse.HasFlag(CircuitState.SparseFlags.NIACSHOULDREORDER))
             {
-                matrix.SMPcReorder(state.PivotAbsTol, state.PivotRelTol, out _);
+                var error = matrix.SMPcReorder(state.PivotAbsTol, state.PivotRelTol, out _);
                 state.Sparse &= ~CircuitState.SparseFlags.NIACSHOULDREORDER;
+                if (error != SparseError.Okay)
+                    throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
             }
             else
             {
@@ -265,6 +267,7 @@ namespace SpiceSharp.Simulations
                         state.Sparse |= CircuitState.SparseFlags.NIACSHOULDREORDER;
                         goto retry;
                     }
+                    throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
                 }
             }
 
@@ -278,7 +281,7 @@ namespace SpiceSharp.Simulations
             state.iSolution[0] = 0.0;
 
             // Store them in the solution
-            state.StoreSolution();
+            state.StoreSolution(true);
         }
 
         /// <summary>
