@@ -147,11 +147,7 @@ namespace SpiceSharp.Simulations
                 if (state.Sparse.HasFlag(CircuitState.SparseFlags.NISHOULDREORDER))
                 {
                     ckt.Statistics.ReorderTime.Start();
-
-                    // Add diagonal GMIN, then order and factor using pivots on the diagonal
-                    matrix.LoadGmin(ckt.Simulation?.Config?.DiagGmin ?? 0.0);
-                    matrix.OrderAndFactor(null, state.PivotRelTol, state.PivotAbsTol, true);
-
+                    matrix.SMPreorder(state.PivotRelTol, state.PivotAbsTol, ckt.Simulation?.Config?.DiagGmin ?? 0.0);
                     ckt.Statistics.ReorderTime.Stop();
                     state.Sparse &= ~CircuitState.SparseFlags.NISHOULDREORDER;
                 }
@@ -159,9 +155,7 @@ namespace SpiceSharp.Simulations
                 {
                     // Decompose
                     ckt.Statistics.DecompositionTime.Start();
-
-                    matrix.LoadGmin(ckt.Simulation?.Config?.DiagGmin ?? 0.0);
-                    matrix.Factor();
+                    matrix.SMPluFac(state.PivotAbsTol, ckt.Simulation?.Config?.DiagGmin ?? 0.0);
                     ckt.Statistics.DecompositionTime.Stop();
                 }
 

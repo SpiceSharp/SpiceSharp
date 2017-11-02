@@ -9,6 +9,15 @@ namespace SpiceSharp.Sparse
     public static class spsmp
     {
         /// <summary>
+        /// SMPclear
+        /// </summary>
+        /// <param name="matrix"></param>
+        public static void SMPclear(this Matrix matrix)
+        {
+            matrix.Clear();
+        }
+
+        /// <summary>
         /// SMPcClear
         /// </summary>
         /// <param name="matrix"></param>
