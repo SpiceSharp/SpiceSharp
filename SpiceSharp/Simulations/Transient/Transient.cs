@@ -112,9 +112,13 @@ namespace SpiceSharp.Simulations
             var state = ckt.State;
             var rstate = state.Real;
             var config = CurrentConfig ?? throw new CircuitException("No configuration");
-            var method = config.Method ?? throw new CircuitException("No integration method");
+            var method = ckt.Method ?? (config.Method ?? throw new CircuitException("No integration method"));
 
             double delta = Math.Min(FinalTime / 50.0, Step) / 10.0;
+
+            method.Initialize();
+            method.Delta = delta;
+            method.ComputeCoefficients(ckt);
 
             // Setup breakpoints
             method.Breaks.Clear();
@@ -131,6 +135,8 @@ namespace SpiceSharp.Simulations
 
             // Setup breakpoints
             method.Initialize();
+            method.Delta = delta;
+            method.ComputeCoefficients(ckt);
             state.ReinitStates(method);
 
             // Call events for initializing the simulation
