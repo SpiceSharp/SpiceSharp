@@ -116,10 +116,6 @@ namespace SpiceSharp.Simulations
 
             double delta = Math.Min(FinalTime / 50.0, Step) / 10.0;
 
-            method.Initialize();
-            method.Delta = delta;
-            method.ComputeCoefficients(ckt);
-
             // Setup breakpoints
             method.Breaks.Clear();
             method.Breaks.SetBreakpoint(0.0);
@@ -135,8 +131,6 @@ namespace SpiceSharp.Simulations
 
             // Setup breakpoints
             method.Initialize();
-            method.Delta = delta;
-            method.ComputeCoefficients(ckt);
             state.ReinitStates(method);
 
             // Call events for initializing the simulation
