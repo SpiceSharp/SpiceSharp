@@ -16,7 +16,7 @@ namespace SpiceSharpTest.Components.RLC.Capacitor
         {
             // A test for a RC circuit (DC voltage, resistor, capacitor)
             // An init voltage on capacitor is 0V
-            // After 5 * tau = 5 * R*C, voltage on capacitor should be 99.7% of DC voltage
+            // After 5 * tau = 5 * R*C, voltage on capacitor should about 99.3% of DC voltage
 
             double dcVoltage = 10;
             double resistorResistance = 10000;
