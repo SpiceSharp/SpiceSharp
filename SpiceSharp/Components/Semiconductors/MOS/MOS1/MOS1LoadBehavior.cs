@@ -79,12 +79,21 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (state.Init == CircuitState.InitFlags.InitTransient)) ||
                 ((state.Init == CircuitState.InitFlags.InitFix) && (!mos1.MOS1off)))
             {
-                /* PREDICTOR */
-
-                /* general iteration */
-                vbs = model.MOS1type * rstate.OldSolution[mos1.MOS1bNode] - rstate.OldSolution[mos1.MOS1sNodePrime];
-                vgs = model.MOS1type * rstate.OldSolution[mos1.MOS1gNode] - rstate.OldSolution[mos1.MOS1sNodePrime];
-                vds = model.MOS1type * rstate.OldSolution[mos1.MOS1dNodePrime] - rstate.OldSolution[mos1.MOS1sNodePrime];
+                if (state.UseSmallSignal)
+                {
+                    // [FIX] to match Spice 3f5... Why would you even use the less accurate solution?
+                    // AC loading
+                    vbs = model.MOS1type * (rstate.OldSolution[mos1.MOS1bNode] - rstate.OldSolution[mos1.MOS1sNodePrime]);
+                    vgs = model.MOS1type * (rstate.OldSolution[mos1.MOS1gNode] - rstate.OldSolution[mos1.MOS1sNodePrime]);
+                    vds = model.MOS1type * (rstate.OldSolution[mos1.MOS1dNodePrime] - rstate.OldSolution[mos1.MOS1sNodePrime]);
+                }
+                else
+                {
+                    // general iteration
+                    vbs = model.MOS1type * (rstate.Solution[mos1.MOS1bNode] - rstate.Solution[mos1.MOS1sNodePrime]);
+                    vgs = model.MOS1type * (rstate.Solution[mos1.MOS1gNode] - rstate.Solution[mos1.MOS1sNodePrime]);
+                    vds = model.MOS1type * (rstate.Solution[mos1.MOS1dNodePrime] - rstate.Solution[mos1.MOS1sNodePrime]);
+                }
 
                 /* now some common crunching for some more useful quantities */
                 vbd = vbs - vds;
@@ -594,36 +603,36 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 xrev = 1;
                 cdreq = -(model.MOS1type) * (cdrain - mos1.MOS1gds * (-vds) - mos1.MOS1gm * vgd - mos1.MOS1gmbs * vbd);
             }
-            // rstate.Rhs[mos1.MOS1gNode] -= (model.MOS1type * (ceqgs + ceqgb + ceqgd));
-            // rstate.Rhs[mos1.MOS1bNode] -= (ceqbs + ceqbd - model.MOS1type * ceqgb);
-            // rstate.Rhs[mos1.MOS1dNodePrime] += (ceqbd - cdreq + model.MOS1type * ceqgd);
-            // rstate.Rhs[mos1.MOS1sNodePrime] += cdreq + ceqbs + model.MOS1type * ceqgs;
+            rstate.Rhs[mos1.MOS1gNode] -= (model.MOS1type * (ceqgs + ceqgb + ceqgd));
+            rstate.Rhs[mos1.MOS1bNode] -= (ceqbs + ceqbd - model.MOS1type * ceqgb);
+            rstate.Rhs[mos1.MOS1dNodePrime] += (ceqbd - cdreq + model.MOS1type * ceqgd);
+            rstate.Rhs[mos1.MOS1sNodePrime] += cdreq + ceqbs + model.MOS1type * ceqgs;
 
             /* 
 			 * load y matrix
 			 */
-            // rstate.Matrix[mos1.MOS1dNode, mos1.MOS1dNode] += (mos1.MOS1drainConductance);
-            // rstate.Matrix[mos1.MOS1gNode, mos1.MOS1gNode] += ((gcgd + gcgs + gcgb));
-            // rstate.Matrix[mos1.MOS1sNode, mos1.MOS1sNode] += (mos1.MOS1sourceConductance);
-            // rstate.Matrix[mos1.MOS1bNode, mos1.MOS1bNode] += (mos1.MOS1gbd + mos1.MOS1gbs + gcgb);
-            // rstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1dNodePrime] += (mos1.MOS1drainConductance + mos1.MOS1gds + mos1.MOS1gbd + xrev * (mos1.MOS1gm + mos1.MOS1gmbs) + gcgd);
-            // rstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1sNodePrime] += (mos1.MOS1sourceConductance + mos1.MOS1gds + mos1.MOS1gbs + xnrm * (mos1.MOS1gm + mos1.MOS1gmbs) + gcgs);
-            // rstate.Matrix[mos1.MOS1dNode, mos1.MOS1dNodePrime] += (-mos1.MOS1drainConductance);
-            // rstate.Matrix[mos1.MOS1gNode, mos1.MOS1bNode] -= gcgb;
-            // rstate.Matrix[mos1.MOS1gNode, mos1.MOS1dNodePrime] -= gcgd;
-            // rstate.Matrix[mos1.MOS1gNode, mos1.MOS1sNodePrime] -= gcgs;
-            // rstate.Matrix[mos1.MOS1sNode, mos1.MOS1sNodePrime] += (-mos1.MOS1sourceConductance);
-            // rstate.Matrix[mos1.MOS1bNode, mos1.MOS1gNode] -= gcgb;
-            // rstate.Matrix[mos1.MOS1bNode, mos1.MOS1dNodePrime] -= mos1.MOS1gbd;
-            // rstate.Matrix[mos1.MOS1bNode, mos1.MOS1sNodePrime] -= mos1.MOS1gbs;
-            // rstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1dNode] += (-mos1.MOS1drainConductance);
-            // rstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1gNode] += ((xnrm - xrev) * mos1.MOS1gm - gcgd);
-            // rstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1bNode] += (-mos1.MOS1gbd + (xnrm - xrev) * mos1.MOS1gmbs);
-            // rstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1sNodePrime] += (-mos1.MOS1gds - xnrm * (mos1.MOS1gm + mos1.MOS1gmbs));
-            // rstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1gNode] += (-(xnrm - xrev) * mos1.MOS1gm - gcgs);
-            // rstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1sNode] += (-mos1.MOS1sourceConductance);
-            // rstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1bNode] += (-mos1.MOS1gbs - (xnrm - xrev) * mos1.MOS1gmbs);
-            // rstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1dNodePrime] += (-mos1.MOS1gds - xrev * (mos1.MOS1gm + mos1.MOS1gmbs));
+            mos1.MOS1DdPtr.Add(mos1.MOS1drainConductance);
+            mos1.MOS1GgPtr.Add(gcgd + gcgs + gcgb);
+            mos1.MOS1SsPtr.Add(mos1.MOS1sourceConductance);
+            mos1.MOS1BbPtr.Add(mos1.MOS1gbd + mos1.MOS1gbs + gcgb);
+            mos1.MOS1DPdpPtr.Add(mos1.MOS1drainConductance + mos1.MOS1gds + mos1.MOS1gbd + xrev * (mos1.MOS1gm + mos1.MOS1gmbs) + gcgd);
+            mos1.MOS1SPspPtr.Add(mos1.MOS1sourceConductance + mos1.MOS1gds + mos1.MOS1gbs + xnrm * (mos1.MOS1gm + mos1.MOS1gmbs) + gcgs);
+            mos1.MOS1DdpPtr.Add(-mos1.MOS1drainConductance);
+            mos1.MOS1GbPtr.Sub(gcgb);
+            mos1.MOS1GdpPtr.Sub(gcgd);
+            mos1.MOS1GspPtr.Sub(gcgs);
+            mos1.MOS1SspPtr.Add(-mos1.MOS1sourceConductance);
+            mos1.MOS1BgPtr.Sub(gcgb);
+            mos1.MOS1BdpPtr.Sub(mos1.MOS1gbd);
+            mos1.MOS1BspPtr.Sub(mos1.MOS1gbs);
+            mos1.MOS1DPdPtr.Add(-mos1.MOS1drainConductance);
+            mos1.MOS1DPgPtr.Add((xnrm - xrev) * mos1.MOS1gm - gcgd);
+            mos1.MOS1DPbPtr.Add(-mos1.MOS1gbd + (xnrm - xrev) * mos1.MOS1gmbs);
+            mos1.MOS1DPspPtr.Add(-mos1.MOS1gds - xnrm * (mos1.MOS1gm + mos1.MOS1gmbs));
+            mos1.MOS1SPgPtr.Add(-(xnrm - xrev) * mos1.MOS1gm - gcgs);
+            mos1.MOS1SPsPtr.Add(-mos1.MOS1sourceConductance);
+            mos1.MOS1SPbPtr.Add(-mos1.MOS1gbs - (xnrm - xrev) * mos1.MOS1gmbs);
+            mos1.MOS1SPdpPtr.Add(-mos1.MOS1gds - xrev * (mos1.MOS1gm + mos1.MOS1gmbs));
         }
     }
 }

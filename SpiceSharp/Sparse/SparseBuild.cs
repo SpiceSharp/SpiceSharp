@@ -112,11 +112,10 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         internal static MatrixElement CreateElement(this Matrix matrix, int row, int col)
         {
-            MatrixElement splice = matrix.FirstInCol[col];
-            MatrixElement elt;
+            MatrixElement elt = matrix.FirstInCol[col], last = null;
 
             // Splice into the column vector while also searching for an existing element
-            if (splice == null || splice.Row > row)
+            if (elt == null || elt.Row > row)
             {
                 // There are no elements yet in the column
                 elt = new MatrixElement(row, col);
@@ -130,15 +129,19 @@ namespace SpiceSharp.Sparse
             }
             else
             {
-                while (splice.NextInCol != null && splice.NextInCol.Row < row)
-                    splice = splice.NextInCol;
-                if (splice.Row == row)
-                    elt = splice;
-                else
+                // Find the insert point
+                while (elt != null && elt.Row < row)
+                {
+                    last = elt;
+                    elt = elt.NextInCol;
+                }
+
+                // If the element does not exist yet, create it
+                if (elt == null || elt.Row != row)
                 {
                     elt = new MatrixElement(row, col);
-                    elt.NextInCol = splice.NextInCol;
-                    splice.NextInCol = elt;
+                    elt.NextInCol = last.NextInCol;
+                    last.NextInCol = elt;
 
                     if (row == col)
                         matrix.Diag[row] = elt;

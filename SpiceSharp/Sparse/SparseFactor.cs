@@ -1137,7 +1137,7 @@ if (pElement.Row != Row)
             int Row;
             MatrixElement Element1, Element2;
 
-            /* Begin `spcColExchange'. */
+            // Begin `spcColExchange'
             if (Col1 > Col2)
                 SparseDefinitions.SWAP(ref Col1, ref Col2);
 
@@ -1145,7 +1145,7 @@ if (pElement.Row != Row)
             Col2Ptr = matrix.FirstInCol[Col2];
             while (Col1Ptr != null || Col2Ptr != null)
             {
-                /* Exchange elements in rows while traveling from top to bottom. */
+                // Exchange elements in rows while traveling from top to bottom
                 if (Col1Ptr == null)
                 {
                     Row = Col2Ptr.Row;
@@ -1174,7 +1174,7 @@ if (pElement.Row != Row)
                     Element2 = Col2Ptr;
                     Col2Ptr = Col2Ptr.NextInCol;
                 }
-                else   /* Col1Ptr.Row == Col2Ptr.Row */
+                else   // Col1Ptr.Row == Col2Ptr.Row
                 {
                     Row = Col1Ptr.Row;
                     Element1 = Col1Ptr;
@@ -1184,7 +1184,7 @@ if (pElement.Row != Row)
                 }
 
                 ExchangeRowElements(matrix, Col1, Element1, Col2, Element2, Row);
-            }  /* end of while(Col1Ptr != null || Col2Ptr != null) */
+            }  // end of while(Col1Ptr != null || Col2Ptr != null)
 
             if (matrix.InternalVectorsAllocated)
                 SparseDefinitions.SWAP(ref matrix.MarkowitzCol[Col1], ref matrix.MarkowitzCol[Col2]);
@@ -1335,50 +1335,42 @@ if (pElement.Row != Row)
             MatrixElement pElement;
 
             // Begin `ExchangeRowElements'. 
-            // Search to find the ElementLeftOfCol1. 
-            ElementLeftOfCol1 = null; // &(matrix.FirstInRow[Row]);
-            pElement = matrix.FirstInRow[Row]; // *ElementLeftOfCol1;
+
+            // Search to find the element left of Col1
+            ElementLeftOfCol1 = null;
+            pElement = matrix.FirstInRow[Row];
             while (pElement.Col < Col1)
             {
-                ElementLeftOfCol1 = pElement; // ElementLeftOfCol1 = &(pElement.NextInRow);
-                pElement = pElement.NextInRow; // pElement = *ElementLeftOfCol1;
+                ElementLeftOfCol1 = pElement;
+                pElement = pElement.NextInRow;
             }
+
+            // Swap the elements depending on whether or not the element exist
             if (Element1 != null)
             {
                 ElementRightOfCol1 = Element1.NextInRow;
                 if (Element2 == null)
                 {
-                    // Element2 does not exist, move Element1 to right to Col2. 
+                    // Element2 does not exist, remove Element1 and splice it in at Col2
                     if (ElementRightOfCol1 != null && ElementRightOfCol1.Col < Col2)
                     {
-                        // Element1 must be removed from linked list and moved.
+                        // Remove Element1
                         if (ElementLeftOfCol1 != null)
                             ElementLeftOfCol1.NextInRow = ElementRightOfCol1;
                         else
                             matrix.FirstInRow[Row] = ElementRightOfCol1;
-                        // *ElementLeftOfCol1 = ElementRightOfCol1;
 
-                        // Search Row for Col2. 
+                        // Find point to insert
                         pElement = ElementRightOfCol1;
                         do
                         {
-                            ElementLeftOfCol2 = pElement; // &(pElement.NextInRow);
-                            pElement = pElement.NextInRow; // *ElementLeftOfCol2;
+                            ElementLeftOfCol2 = pElement;
+                            pElement = pElement.NextInRow;
                         } while (pElement != null && pElement.Col < Col2);
 
                         // Place Element1 in Col2. 
-                        if (ElementLeftOfCol2 != null)
-                            ElementLeftOfCol2.NextInRow = Element1;
-                        else
-                            matrix.FirstInRow[Row] = Element1;
-                        // *ElementLeftOfCol2 = Element1;
+                        ElementLeftOfCol2.NextInRow = Element1;
                         Element1.NextInRow = pElement;
-
-                        if (ElementLeftOfCol1 != null)
-                            ElementLeftOfCol1.NextInRow = ElementRightOfCol1;
-                        else
-                            matrix.FirstInRow[Row] = ElementRightOfCol1;
-                        // *ElementLeftOfCol1 = ElementRightOfCol1;
                     }
                     Element1.Col = Col2;
                 }
@@ -1387,7 +1379,7 @@ if (pElement.Row != Row)
                     // Element2 does exist, and the two elements must be exchanged. 
                     if (ElementRightOfCol1.Col == Col2)
                     {
-                        // Element2 is just right of Element1, exchange them. 
+                        // Element1 and Element2 are next to each other
                         Element1.NextInRow = Element2.NextInRow;
                         Element2.NextInRow = Element1;
 
@@ -1395,33 +1387,26 @@ if (pElement.Row != Row)
                             ElementLeftOfCol1.NextInRow = Element2;
                         else
                             matrix.FirstInRow[Row] = Element2;
-                        // *ElementLeftOfCol1 = Element2;
                     }
                     else
                     {
-                        // Element2 is not just right of Element1 and must be searched for. 
+                        // Element1 and Element2 have elements in between them
                         pElement = ElementRightOfCol1;
                         do
                         {
-                            ElementLeftOfCol2 = pElement; // &(pElement.NextInRow);
-                            pElement = pElement.NextInRow; // *ElementLeftOfCol2;
+                            ElementLeftOfCol2 = pElement;
+                            pElement = pElement.NextInRow;
                         } while (pElement.Col < Col2);
-
                         ElementRightOfCol2 = Element2.NextInRow;
 
-                        // Switch Element1 and Element2. 
+                        // Switch Element1 and Element2
                         if (ElementLeftOfCol1 != null)
                             ElementLeftOfCol1.NextInRow = Element2;
                         else
                             matrix.FirstInRow[Row] = Element2;
-                        // *ElementLeftOfCol1 = Element2;
                         Element2.NextInRow = ElementRightOfCol1;
 
-                        if (ElementLeftOfCol2 != null)
-                            ElementLeftOfCol2.NextInRow = Element1;
-                        else
-                            matrix.FirstInRow[Row] = Element1;
-                        // *ElementLeftOfCol2 = Element1;
+                        ElementLeftOfCol2.NextInRow = Element1; // Cannot be null
                         Element1.NextInRow = ElementRightOfCol2;
                     }
                     Element1.Col = Col2;
@@ -1430,18 +1415,16 @@ if (pElement.Row != Row)
             }
             else
             {
-                // Element1 does not exist. 
+                // Remove Element2 and insert it at Col1
                 ElementRightOfCol1 = pElement;
-
-                // Find Element2. 
                 if (ElementRightOfCol1.Col != Col2)
                 {
+                    // Find the elements next to Element2 to remove it
                     do
                     {
-                        ElementLeftOfCol2 = pElement; // &(pElement.NextInRow);
-                        pElement = pElement.NextInRow; // *ElementLeftOfCol2;
+                        ElementLeftOfCol2 = pElement;
+                        pElement = pElement.NextInRow;
                     } while (pElement.Col < Col2);
-
                     ElementRightOfCol2 = Element2.NextInRow;
 
                     // Move Element2 to Col1. 
