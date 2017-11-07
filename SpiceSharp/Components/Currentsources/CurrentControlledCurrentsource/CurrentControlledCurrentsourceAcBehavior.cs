@@ -15,8 +15,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
         {
             var src = ComponentTyped<CurrentControlledCurrentsource>();
             var cstate = ckt.State;
-            // // cstate.Matrix[src.CCCSposNode, src.CCCScontBranch] += src.CCCScoeff.Value;
-            // // cstate.Matrix[src.CCCSnegNode, src.CCCScontBranch] -= src.CCCScoeff.Value;
+            src.CCCSposContBrptr.Add(src.CCCScoeff.Value);
+            src.CCCSnegContBrptr.Sub(src.CCCScoeff.Value);
         }
     }
 }

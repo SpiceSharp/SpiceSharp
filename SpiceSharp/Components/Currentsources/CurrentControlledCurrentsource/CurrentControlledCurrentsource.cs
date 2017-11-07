@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -44,6 +45,12 @@ namespace SpiceSharp.Components
         public int CCCScontBranch { get; private set; }
 
         /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement CCCSposContBrptr { get; private set; }
+        internal MatrixElement CCCSnegContBrptr { get; private set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current controlled current source</param>
@@ -84,6 +91,22 @@ namespace SpiceSharp.Components
                 CCCScontBranch = vsrc.VSRCbranch;
             else
                 throw new CircuitException($"{Name}: Could not find voltage source '{CCCScontName}'");
+
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            CCCSposContBrptr = matrix.GetElement(CCCSposNode, CCCScontBranch);
+            CCCSnegContBrptr = matrix.GetElement(CCCSnegNode, CCCScontBranch);
+        }
+
+        /// <summary>
+        /// Unsetup the source
+        /// </summary>
+        /// <param name="ckt"></param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            CCCSposContBrptr = null;
+            CCCSnegContBrptr = null;
         }
     }
 }

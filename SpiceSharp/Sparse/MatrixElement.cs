@@ -44,6 +44,30 @@ namespace SpiceSharp.Sparse
         }
 
         /// <summary>
+        /// Overload addition
+        /// </summary>
+        /// <param name="value"></param>
+        public void Add(double value) => Value.Real += value;
+
+        /// <summary>
+        /// Overload subtraction
+        /// </summary>
+        /// <param name="value"></param>
+        public void Sub(double value) => Value.Real -= value;
+
+        /// <summary>
+        /// Overload addition
+        /// </summary>
+        /// <param name="value"></param>
+        public void Add(Complex value) => Value.Cplx += value;
+
+        /// <summary>
+        /// Overload subtraction
+        /// </summary>
+        /// <param name="value"></param>
+        public void Sub(Complex value) => Value.Cplx -= value;
+        
+        /// <summary>
         /// Allow casting to a double
         /// </summary>
         /// <param name="el">Matrix element</param>
