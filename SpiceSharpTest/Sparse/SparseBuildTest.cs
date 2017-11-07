@@ -78,7 +78,7 @@ namespace SpiceSharpTest.Sparse
                         matrix.GetElement(r, c).Value.Cplx = new Complex(r, c);
                 }
             }
-            SparseBuild.spcLinkRows(matrix);
+            matrix.LinkRows();
 
             // Please note that the elements are reordered internally!
             for (int r = 1; r < 100; r++)

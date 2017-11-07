@@ -75,7 +75,7 @@ namespace SpiceSharp.Sparse
                 // factorization.
                 Step = 1;
                 if (!matrix.RowsLinked)
-                    SparseBuild.spcLinkRows(matrix);
+                    SparseBuild.LinkRows(matrix);
                 if (!matrix.InternalVectorsAllocated)
                     spcCreateInternalVectors(matrix);
                 if ((int)matrix.Error >= (int)SparseError.Fatal)
@@ -1048,13 +1048,13 @@ if (pElement.Row != Row)
                             matrix.Singletons++;
                     }
 
-                    matrix.Diag[Col] = SparseBuild.spcFindElementInCol(matrix, Col, Col, false);
+                    matrix.Diag[Col] = matrix.FindElement(Col, Col);
                 }
                 if (Row != Step)
                 {
-                    matrix.Diag[Row] = SparseBuild.spcFindElementInCol(matrix, Row, Row, false);
+                    matrix.Diag[Row] = matrix.FindElement(Row, Row);
                 }
-                matrix.Diag[Step] = SparseBuild.spcFindElementInCol(matrix, Step, Step, false);
+                matrix.Diag[Step] = matrix.FindElement(Step, Step);
 
                 // Update singleton count. 
                 matrix.MarkowitzProd[Step] = matrix.MarkowitzCol[Step] * matrix.MarkowitzRow[Step];
@@ -1610,11 +1610,12 @@ if (pElement.Row != Row)
                     aboveElement = pElement;
                     pElement = pElement.NextInCol;
                 }
-                else break; // while loop 
+                else
+                    break; // while loop 
             }
 
             // End of search, create the element. 
-            pElement = SparseBuild.spcCreateElement(matrix, Row, Col, aboveElement, true);
+            pElement = matrix.CreateElement(Row, Col);
 
             // Update Markowitz counts and products. 
             matrix.MarkowitzProd[Row] = ++matrix.MarkowitzRow[Row] * matrix.MarkowitzCol[Row];

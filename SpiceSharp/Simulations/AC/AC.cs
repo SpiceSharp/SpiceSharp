@@ -192,6 +192,7 @@ namespace SpiceSharp.Simulations
             // Calculate the AC solution
             state.UseDC = false;
             freq = StartFreq;
+            ckt.State.Matrix.Complex = true;
 
             // Sweep the frequency
             for (int i = 0; i < n; i++)

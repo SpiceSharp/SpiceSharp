@@ -21,18 +21,18 @@ namespace SpiceSharp.Simulations
         /// <param name="maxiter">Maximum iterations</param>
         public static void Op(this Circuit ckt, List<CircuitObjectBehaviorLoad> loaders, SimulationConfiguration config, int maxiter)
         {
-            // Create the current SimulationState
             var state = ckt.State;
             state.Init = CircuitState.InitFlags.InitJct;
+            state.Matrix.Complex = false;
 
+            // First, let's try finding an operating point by using normal iterations
             if (!config.NoOpIter)
             {
                 if (ckt.Iterate(loaders, config, maxiter))
                     return;
             }
 
-            // No convergence
-            // try Gmin stepping
+            // No convergence, try Gmin stepping
             if (config.NumGminSteps > 1)
             {
                 state.Init = CircuitState.InitFlags.InitJct;
@@ -57,7 +57,7 @@ namespace SpiceSharp.Simulations
                     return;
             }
 
-            // No we'll try source stepping
+            // Nope, still not converging, let's try source stepping
             if (config.NumSrcSteps > 1)
             {
                 state.Init = CircuitState.InitFlags.InitJct;
@@ -97,7 +97,7 @@ namespace SpiceSharp.Simulations
             int iterno = 0;
 
             // Make sure we're using real numbers!
-            matrix.SetReal();
+            matrix.Complex = false;
 
             // Initialize the state of the circuit
             if (!state.Initialized)
@@ -155,7 +155,7 @@ namespace SpiceSharp.Simulations
                 {
                     // Decompose
                     ckt.Statistics.DecompositionTime.Start();
-                    matrix.SMPluFac(state.PivotAbsTol, ckt.Simulation?.Config?.DiagGmin ?? 0.0);
+                    matrix.SMPluFac(ckt.Simulation?.Config?.DiagGmin ?? 0.0);
                     ckt.Statistics.DecompositionTime.Stop();
                 }
 
@@ -237,6 +237,7 @@ namespace SpiceSharp.Simulations
         {
             var state = ckt.State;
             var matrix = state.Matrix;
+            matrix.Complex = true;
 
             // Initialize the circuit
             if (!state.Initialized)
@@ -252,14 +253,14 @@ namespace SpiceSharp.Simulations
 
             if (state.Sparse.HasFlag(CircuitState.SparseFlags.NIACSHOULDREORDER))
             {
-                var error = matrix.SMPcReorder(state.PivotAbsTol, state.PivotRelTol, out _);
+                var error = matrix.SMPcReorder(state.PivotAbsTol, state.PivotRelTol);
                 state.Sparse &= ~CircuitState.SparseFlags.NIACSHOULDREORDER;
                 if (error != SparseError.Okay)
                     throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
             }
             else
             {
-                var error = matrix.SMPcLUfac(state.PivotAbsTol);
+                var error = matrix.SMPcLUfac();
                 if (error != 0)
                 {
                     if (error == SparseError.Singular)
@@ -272,7 +273,7 @@ namespace SpiceSharp.Simulations
             }
 
             // Solve
-            matrix.SMPcSolve(state.Rhs, state.iRhs, null, null);
+            matrix.SMPcSolve(state.Rhs, state.iRhs);
 
             // Reset values
             state.Rhs[0] = 0.0;
@@ -309,7 +310,7 @@ namespace SpiceSharp.Simulations
             state.Rhs[posDrive] = 1.0;
             state.Rhs[negDrive] = -1.0;
 
-            state.Matrix.SMPcaSolve(state.Rhs, state.iRhs, null, null);
+            state.Matrix.SMPcaSolve(state.Rhs, state.iRhs);
 
             state.StoreSolution(true);
 

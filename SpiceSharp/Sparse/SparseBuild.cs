@@ -201,36 +201,13 @@ namespace SpiceSharp.Sparse
                 splice.NextInRow = elt;
             }
         }
-
-        public static MatrixElement spcFindElementInCol(Matrix matrix, int Row, int Col, bool CreateIfMissing)
-        {
-            MatrixElement pElement = matrix.FirstInCol[Col];
-            MatrixElement last = null;
-
-            // Search for element
-            while (pElement != null)
-            {
-                if (pElement.Row < Row)
-                {
-                    // Have not reached element yet
-                    last = pElement;
-                    pElement = pElement.NextInCol;
-                }
-                else if (pElement.Row == Row)
-                {
-                    // Reached element
-                    return pElement;
-                }
-                else
-                    break;
-            }
-
-            // Element does not exist and must be created
-            if (CreateIfMissing)
-                return spcCreateElement(matrix, Row, Col, last, false);
-            else return null;
-        }
-
+        
+        /// <summary>
+        /// Translate external indices to internal indices
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="Row">Row index</param>
+        /// <param name="Col">Column index</param>
         internal static void Translate(this Matrix matrix, ref int Row, ref int Col)
         {
             int IntRow, IntCol, ExtRow, ExtCol;
@@ -284,135 +261,7 @@ namespace SpiceSharp.Sparse
             Row = IntRow;
             Col = IntCol;
         }
-
-        public static MatrixElement spcCreateElement(this Matrix matrix, int Row, int Col, MatrixElement LastAddr, bool Fillin)
-        {
-            MatrixElement pElement, pCreatedElement, pLastElement;
-
-            if (matrix.RowsLinked)
-            {
-                // Row pointers cannot be ignored
-                if (Fillin)
-                {
-                    pElement = new MatrixElement(Row, Col);
-                    matrix.Fillins++;
-                }
-                else
-                {
-                    pElement = new MatrixElement(Row, Col);
-                    matrix.NeedsOrdering = true;
-                }
-                if (pElement == null)
-                    return null;
-
-                // If element is on diagonal, store pointer in Diag
-                if (Row == Col)
-                    matrix.Diag[Row] = pElement;
-
-                // Initialize Element
-                pCreatedElement = pElement;
-                pElement.Row = Row;
-                pElement.Col = Col;
-                pElement.Value.Cplx = 0.0;
-
-                // Splice element into column
-                if (LastAddr != null)
-                {
-                    pElement.NextInCol = LastAddr.NextInCol;
-                    LastAddr.NextInCol = pElement;
-                }
-                else
-                {
-                    pElement.NextInCol = matrix.FirstInCol[Col];
-                    matrix.FirstInCol[Col] = pElement;
-                }
-
-                // Search row for proper element position
-                pElement = matrix.FirstInRow[Row];
-                pLastElement = null;
-                while (pElement != null)
-                {
-                    // Search for element row position
-                    if (pElement.Col < Col)
-                    {
-                        // Have not reached desired element
-                        pLastElement = pElement;
-                        pElement = pElement.NextInRow;
-                    }
-                    else
-                        pElement = null;
-                }
-
-                // Splice element into row
-                pElement = pCreatedElement;
-                if (pLastElement == null)
-                {
-                    // Element is first in row
-                    pElement.NextInRow = matrix.FirstInRow[Row];
-                    matrix.FirstInRow[Row] = pElement;
-                }
-                else
-                {
-                    // Element is not first in row
-                    pElement.NextInRow = pLastElement.NextInRow;
-                    pLastElement.NextInRow = pElement;
-                }
-
-            }
-            else
-            {
-                // Matrix has not been factored yet.  Thus get element rather than fill-in.
-                // Also, row pointers can be ignored.
-
-                // Allocate memory for Element
-                pElement = new MatrixElement(Row, Col);
-
-                // If element is on diagonal, store pointer in Diag
-                if (Row == Col)
-                    matrix.Diag[Row] = pElement;
-
-                // Initialize Element
-                pCreatedElement = pElement;
-                pElement.Col = Col;
-                pElement.Row = Row;
-                pElement.Value.Cplx = 0.0;
-
-                // Splice element into column
-                if (LastAddr != null)
-                {
-                    pElement.NextInCol = LastAddr.NextInCol;
-                    LastAddr.NextInCol = pElement;
-                }
-                else
-                {
-                    pElement.NextInCol = matrix.FirstInCol[Col];
-                    matrix.FirstInCol[Col] = pElement;
-                }
-            }
-
-            matrix.Elements++;
-            return pCreatedElement;
-        }
-
-        public static void spcLinkRows(this Matrix matrix)
-        {
-            for (int Col = matrix.Size; Col >= 1; Col--)
-            {
-                // Generate row links for the elements in the Col'th column
-                MatrixElement pElement = matrix.FirstInCol[Col];
-
-                while (pElement != null)
-                {
-                    pElement.Col = Col;
-                    pElement.NextInRow = matrix.FirstInRow[pElement.Row];
-                    matrix.FirstInRow[pElement.Row] = pElement;
-                    pElement = pElement.NextInCol;
-                }
-            }
-            matrix.RowsLinked = true;
-            return;
-        }
-
+        
         /// <summary>
         /// Allocate memory when making a matrix bigger
         /// </summary>

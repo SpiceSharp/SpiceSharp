@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SpiceSharp.Sparse
 {
@@ -17,7 +14,17 @@ namespace SpiceSharp.Sparse
         public static int Printer_Width = 80;
 
         /// <summary>
-        /// Convert a matrix to a string
+        /// Nicely print the matrix
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <returns></returns>
+        public static string Print(this Matrix matrix)
+        {
+            return Print(matrix, false, true, true);
+        }
+
+        /// <summary>
+        /// Nicely print the matrix
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="PrintReordered">True if the internal order is shown</param>

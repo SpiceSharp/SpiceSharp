@@ -32,6 +32,9 @@ namespace SpiceSharp.Sparse
     /// </summary>
     public class Matrix
     {
+        /// <summary>
+        /// Constants
+        /// </summary>
         internal const double DEFAULT_THRESHOLD = 1.0e-3;
         internal const bool DIAG_PIVOTING_AS_DEFAULT = true;
         internal const int MINIMUM_ALLOCATED_SIZE = 6;
@@ -40,10 +43,27 @@ namespace SpiceSharp.Sparse
         internal const int TIES_MULTIPLIER = 5;
         internal const SparsePartition DEFAULT_PARTITION = SparsePartition.Auto;
 
+        /// <summary>
+        /// Flag for indicating if he matrix uses complex numbers or not
+        /// </summary>
+        public bool Complex { get; set; }
+
+        /// <summary>
+        /// Gets the external size
+        /// </summary>
+        public int ExternalSize { get => ExtSize; }
+
+        /// <summary>
+        /// Gets the internal size
+        /// </summary>
+        public int InternalSize { get => Size; }
+
+        /// <summary>
+        /// Internal variables
+        /// </summary>
         internal double AbsThreshold;
         internal int AllocatedSize;
         internal int AllocatedExtSize;
-        internal bool Complex;
         internal int CurrentSize;
         internal MatrixElement[] Diag;
         internal bool[] DoCmplxDirect;
@@ -57,7 +77,6 @@ namespace SpiceSharp.Sparse
         internal int Fillins;
         internal MatrixElement[] FirstInCol;
         internal MatrixElement[] FirstInRow;
-        internal ulong ID;
         internal ElementValue[] Intermediate;
         internal bool InternalVectorsAllocated;
         internal int[] IntToExtColMap;
@@ -186,7 +205,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="pRow">Row</param>
         /// <param name="pCol">Column</param>
-        internal void spWhereSingular(out int pRow, out int pCol)
+        internal void SingularAt(out int pRow, out int pCol)
         {
             if (Error == SparseError.Singular || Error == SparseError.ZeroDiagonal)
             {
@@ -206,17 +225,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="External"></param>
         /// <returns></returns>
-        public int spGetSize(bool External) => External ? ExtSize : Size;
-
-        /// <summary>
-        /// Set the matrix to use real numbers
-        /// </summary>
-        public void SetReal() => Complex = false;
-
-        /// <summary>
-        /// Set the matrix to use complex numbers
-        /// </summary>
-        public void SetComplex() => Complex = true;
+        public int GetSize(bool External) => External ? ExtSize : Size;
 
         /// <summary>
         /// Get the number of fillins

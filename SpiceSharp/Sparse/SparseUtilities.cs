@@ -304,12 +304,12 @@ namespace SpiceSharp.Sparse
                 sb.Append("Sparse called improperly.");
             else if (Error == SparseError.Singular)
             {
-                matrix.spWhereSingular(out Row, out Col);
+                matrix.SingularAt(out Row, out Col);
                 sb.Append($"singular matrix detected at row {Row} and column {Col}.");
             }
             else if (Error == SparseError.ZeroDiagonal)
             {
-                matrix.spWhereSingular(out Row, out Col);
+                matrix.SingularAt(out Row, out Col);
                 sb.Append($"zero diagonal detected at row {Row} and column {Col}.");
             }
             else if (Error == SparseError.SmallPivot)
