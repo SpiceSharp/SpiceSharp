@@ -55,15 +55,18 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var state = ckt.State;
             var rstate = ckt.State;
 
-            if (sender == mut.Inductor1)
+            if (ckt.Method != null)
             {
-                state.States[0][mut.Inductor1.INDstate + Inductor.INDflux] += mut.MUTfactor * rstate.OldSolution[mut.Inductor2.INDbrEq];
-                // rstate.Matrix[mut.Inductor1.INDbrEq, mut.Inductor2.INDbrEq] -= mut.MUTfactor * ckt.Method.Slope;
-            }
-            else
-            {
-                state.States[0][mut.Inductor2.INDstate + Inductor.INDflux] += mut.MUTfactor * rstate.OldSolution[mut.Inductor1.INDbrEq];
-                // rstate.Matrix[mut.Inductor2.INDbrEq, mut.Inductor2.INDbrEq] -= mut.MUTfactor * ckt.Method.Slope;
+                if (sender == mut.Inductor1)
+                {
+                    state.States[0][mut.Inductor1.INDstate + Inductor.INDflux] += mut.MUTfactor * rstate.OldSolution[mut.Inductor2.INDbrEq];
+                    mut.MUTbr1br2.Sub(mut.MUTfactor * ckt.Method.Slope);
+                }
+                else
+                {
+                    state.States[0][mut.Inductor2.INDstate + Inductor.INDflux] += mut.MUTfactor * rstate.OldSolution[mut.Inductor1.INDbrEq];
+                    mut.MUTbr2br1.Sub(mut.MUTfactor * ckt.Method.Slope);
+                }
             }
         }
     }

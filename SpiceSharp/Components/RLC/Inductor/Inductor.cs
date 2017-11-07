@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -56,6 +57,15 @@ namespace SpiceSharp.Components
         public int INDnegNode { get; internal set; }
 
         /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement INDposIbrptr { get; private set; }
+        internal MatrixElement INDnegIbrptr { get; private set; }
+        internal MatrixElement INDibrNegptr { get; private set; }
+        internal MatrixElement INDibrPosptr { get; private set; }
+        internal MatrixElement INDibrIbrptr { get; private set; }
+
+        /// <summary>
         /// Constants
         /// </summary>
         public const int INDflux = 0;
@@ -91,12 +101,34 @@ namespace SpiceSharp.Components
             INDnegNode = nodes[1].Index;
             INDbrEq = CreateNode(ckt, Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
 
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            INDposIbrptr = matrix.GetElement(INDposNode, INDbrEq);
+            INDnegIbrptr = matrix.GetElement(INDnegNode, INDbrEq);
+            INDibrNegptr = matrix.GetElement(INDbrEq, INDnegNode);
+            INDibrPosptr = matrix.GetElement(INDbrEq, INDposNode);
+            INDibrIbrptr = matrix.GetElement(INDbrEq, INDbrEq);
+
             // Create 2 states
             INDstate = ckt.State.GetState(2);
 
             // Clear all events
             foreach (var inv in UpdateMutualInductance.GetInvocationList())
                 UpdateMutualInductance -= (UpdateMutualInductanceEventHandler)inv;
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            INDposIbrptr = null;
+            INDnegIbrptr = null;
+            INDibrNegptr = null;
+            INDibrPosptr = null;
+            INDibrIbrptr = null;
         }
 
         /// <summary>

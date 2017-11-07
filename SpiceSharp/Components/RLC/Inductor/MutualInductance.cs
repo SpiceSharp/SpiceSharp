@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -39,6 +40,12 @@ namespace SpiceSharp.Components
         internal Inductor Inductor1, Inductor2;
 
         /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement MUTbr1br2 { get; private set; }
+        internal MatrixElement MUTbr2br1 { get; private set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the mutual inductance</param>
@@ -57,6 +64,22 @@ namespace SpiceSharp.Components
             // Get the inductors for the mutual inductance
             Inductor1 = ckt.Objects[MUTind1] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{MUTind1}'");
             Inductor2 = ckt.Objects[MUTind2] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{MUTind2}'");
+
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            MUTbr1br2 = matrix.GetElement(Inductor1.INDbrEq, Inductor2.INDbrEq);
+            MUTbr2br1 = matrix.GetElement(Inductor2.INDbrEq, Inductor1.INDbrEq);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            MUTbr1br2 = null;
+            MUTbr2br1 = null;
         }
     }
 }
