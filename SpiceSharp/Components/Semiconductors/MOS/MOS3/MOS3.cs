@@ -1,12 +1,13 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// A MOS3 Mosfet
-    /// Level 2, a semi-empirical model(see reference for level 2).
+    /// Level 3, a semi-empirical model(see reference for level 3).
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
     public class MOS3 : CircuitComponent<MOS3>
@@ -248,6 +249,32 @@ namespace SpiceSharp.Components
         public int MOS3states { get; internal set; }
 
         /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement MOS3DdPtr { get; private set; }
+        internal MatrixElement MOS3GgPtr { get; private set; }
+        internal MatrixElement MOS3SsPtr { get; private set; }
+        internal MatrixElement MOS3BbPtr { get; private set; }
+        internal MatrixElement MOS3DPdpPtr { get; private set; }
+        internal MatrixElement MOS3SPspPtr { get; private set; }
+        internal MatrixElement MOS3DdpPtr { get; private set; }
+        internal MatrixElement MOS3GbPtr { get; private set; }
+        internal MatrixElement MOS3GdpPtr { get; private set; }
+        internal MatrixElement MOS3GspPtr { get; private set; }
+        internal MatrixElement MOS3SspPtr { get; private set; }
+        internal MatrixElement MOS3BdpPtr { get; private set; }
+        internal MatrixElement MOS3BspPtr { get; private set; }
+        internal MatrixElement MOS3DPspPtr { get; private set; }
+        internal MatrixElement MOS3DPdPtr { get; private set; }
+        internal MatrixElement MOS3BgPtr { get; private set; }
+        internal MatrixElement MOS3DPgPtr { get; private set; }
+        internal MatrixElement MOS3SPgPtr { get; private set; }
+        internal MatrixElement MOS3SPsPtr { get; private set; }
+        internal MatrixElement MOS3DPbPtr { get; private set; }
+        internal MatrixElement MOS3SPbPtr { get; private set; }
+        internal MatrixElement MOS3SPdpPtr { get; private set; }
+
+        /// <summary>
         /// Constants
         /// </summary>
         public const int MOS3vbd = 0;
@@ -303,8 +330,64 @@ namespace SpiceSharp.Components
             else
                 MOS3sNodePrime = MOS3sNode;
 
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            MOS3DdPtr = matrix.GetElement(MOS3dNode, MOS3dNode);
+            MOS3GgPtr = matrix.GetElement(MOS3gNode, MOS3gNode);
+            MOS3SsPtr = matrix.GetElement(MOS3sNode, MOS3sNode);
+            MOS3BbPtr = matrix.GetElement(MOS3bNode, MOS3bNode);
+            MOS3DPdpPtr = matrix.GetElement(MOS3dNodePrime, MOS3dNodePrime);
+            MOS3SPspPtr = matrix.GetElement(MOS3sNodePrime, MOS3sNodePrime);
+            MOS3DdpPtr = matrix.GetElement(MOS3dNode, MOS3dNodePrime);
+            MOS3GbPtr = matrix.GetElement(MOS3gNode, MOS3bNode);
+            MOS3GdpPtr = matrix.GetElement(MOS3gNode, MOS3dNodePrime);
+            MOS3GspPtr = matrix.GetElement(MOS3gNode, MOS3sNodePrime);
+            MOS3SspPtr = matrix.GetElement(MOS3sNode, MOS3sNodePrime);
+            MOS3BdpPtr = matrix.GetElement(MOS3bNode, MOS3dNodePrime);
+            MOS3BspPtr = matrix.GetElement(MOS3bNode, MOS3sNodePrime);
+            MOS3DPspPtr = matrix.GetElement(MOS3dNodePrime, MOS3sNodePrime);
+            MOS3DPdPtr = matrix.GetElement(MOS3dNodePrime, MOS3dNode);
+            MOS3BgPtr = matrix.GetElement(MOS3bNode, MOS3gNode);
+            MOS3DPgPtr = matrix.GetElement(MOS3dNodePrime, MOS3gNode);
+            MOS3SPgPtr = matrix.GetElement(MOS3sNodePrime, MOS3gNode);
+            MOS3SPsPtr = matrix.GetElement(MOS3sNodePrime, MOS3sNode);
+            MOS3DPbPtr = matrix.GetElement(MOS3dNodePrime, MOS3bNode);
+            MOS3SPbPtr = matrix.GetElement(MOS3sNodePrime, MOS3bNode);
+            MOS3SPdpPtr = matrix.GetElement(MOS3sNodePrime, MOS3dNodePrime);
+
             // Allocate states
             MOS3states = ckt.State.GetState(17);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            MOS3DdPtr = null;
+            MOS3GgPtr = null;
+            MOS3SsPtr = null;
+            MOS3BbPtr = null;
+            MOS3DPdpPtr = null;
+            MOS3SPspPtr = null;
+            MOS3DdpPtr = null;
+            MOS3GbPtr = null;
+            MOS3GdpPtr = null;
+            MOS3GspPtr = null;
+            MOS3SspPtr = null;
+            MOS3BdpPtr = null;
+            MOS3BspPtr = null;
+            MOS3DPspPtr = null;
+            MOS3DPdPtr = null;
+            MOS3BgPtr = null;
+            MOS3DPgPtr = null;
+            MOS3SPgPtr = null;
+            MOS3SPsPtr = null;
+            MOS3DPbPtr = null;
+            MOS3SPbPtr = null;
+            MOS3SPdpPtr = null;
         }
 
         /// <summary>

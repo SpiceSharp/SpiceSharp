@@ -56,33 +56,28 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
 			 * load matrix
 			 */
-            // cstate.Matrix[mos3.MOS3gNode, mos3.MOS3gNode] += new Complex(0.0, xgd + xgs + xgb);
-            // cstate.Matrix[mos3.MOS3bNode, mos3.MOS3bNode] += new Complex(mos3.MOS3gbd + mos3.MOS3gbs, xgb + xbd + xbs);
-            // cstate.Matrix[mos3.MOS3dNodePrime, mos3.MOS3dNodePrime] += new Complex(mos3.MOS3drainConductance + mos3.MOS3gds + mos3.MOS3gbd + xrev * (mos3.MOS3gm + mos3.MOS3gmbs), xgd + xbd);
-            // cstate.Matrix[mos3.MOS3sNodePrime, mos3.MOS3sNodePrime] += new Complex(mos3.MOS3sourceConductance + mos3.MOS3gds + mos3.MOS3gbs + xnrm * (mos3.MOS3gm + mos3.MOS3gmbs), xgs + xbs);
-            // cstate.Matrix[mos3.MOS3gNode, mos3.MOS3bNode] -= new Complex(0.0, xgb);
-            // cstate.Matrix[mos3.MOS3gNode, mos3.MOS3dNodePrime] -= new Complex(0.0, xgd);
-            // cstate.Matrix[mos3.MOS3gNode, mos3.MOS3sNodePrime] -= new Complex(0.0, xgs);
-            // cstate.Matrix[mos3.MOS3bNode, mos3.MOS3gNode] -= new Complex(0.0, xgb);
-            // cstate.Matrix[mos3.MOS3bNode, mos3.MOS3dNodePrime] -= new Complex(mos3.MOS3gbd, xbd);
-            // cstate.Matrix[mos3.MOS3bNode, mos3.MOS3sNodePrime] -= new Complex(mos3.MOS3gbs, xbs);
-            // cstate.Matrix[mos3.MOS3dNodePrime, mos3.MOS3gNode] += new Complex((xnrm - xrev) * mos3.MOS3gm, -xgd);
-            // cstate.Matrix[mos3.MOS3dNodePrime, mos3.MOS3bNode] += new Complex(-mos3.MOS3gbd + (xnrm - xrev) * mos3.MOS3gmbs, -xbd);
-            // cstate.Matrix[mos3.MOS3sNodePrime, mos3.MOS3gNode] -= new Complex((xnrm - xrev) * mos3.MOS3gm, xgs);
-            // cstate.Matrix[mos3.MOS3sNodePrime, mos3.MOS3bNode] -= new Complex(mos3.MOS3gbs + (xnrm - xrev) * mos3.MOS3gmbs, xbs);
-            // cstate.Matrix[mos3.MOS3dNode, mos3.MOS3dNode] += mos3.MOS3drainConductance;
-            // cstate.Matrix[mos3.MOS3sNode, mos3.MOS3sNode] += mos3.MOS3sourceConductance;
-
-            // cstate.Matrix[mos3.MOS3dNode, mos3.MOS3dNodePrime] -= mos3.MOS3drainConductance;
-            // cstate.Matrix[mos3.MOS3sNode, mos3.MOS3sNodePrime] -= mos3.MOS3sourceConductance;
-
-            // cstate.Matrix[mos3.MOS3dNodePrime, mos3.MOS3dNode] -= mos3.MOS3drainConductance;
-
-            // cstate.Matrix[mos3.MOS3dNodePrime, mos3.MOS3sNodePrime] -= mos3.MOS3gds + xnrm * (mos3.MOS3gm + mos3.MOS3gmbs);
-
-            // cstate.Matrix[mos3.MOS3sNodePrime, mos3.MOS3sNode] -= mos3.MOS3sourceConductance;
-
-            // cstate.Matrix[mos3.MOS3sNodePrime, mos3.MOS3dNodePrime] -= mos3.MOS3gds + xrev * (mos3.MOS3gm + mos3.MOS3gmbs);
+            mos3.MOS3GgPtr.Add(new Complex(0.0, xgd + xgs + xgb));
+            mos3.MOS3BbPtr.Add(new Complex(mos3.MOS3gbd + mos3.MOS3gbs, xgb + xbd + xbs));
+            mos3.MOS3DPdpPtr.Add(new Complex(mos3.MOS3drainConductance + mos3.MOS3gds + mos3.MOS3gbd + xrev * (mos3.MOS3gm + mos3.MOS3gmbs), xgd + xbd));
+            mos3.MOS3SPspPtr.Add(new Complex(mos3.MOS3sourceConductance + mos3.MOS3gds + mos3.MOS3gbs + xnrm * (mos3.MOS3gm + mos3.MOS3gmbs), xgs + xbs));
+            mos3.MOS3GbPtr.Sub(new Complex(0.0, xgb));
+            mos3.MOS3GdpPtr.Sub(new Complex(0.0, xgd));
+            mos3.MOS3GspPtr.Sub(new Complex(0.0, xgs));
+            mos3.MOS3BgPtr.Sub(new Complex(0.0, xgb));
+            mos3.MOS3BdpPtr.Sub(new Complex(mos3.MOS3gbd, xbd));
+            mos3.MOS3BspPtr.Sub(new Complex(mos3.MOS3gbs, xbs));
+            mos3.MOS3DPgPtr.Add(new Complex((xnrm - xrev) * mos3.MOS3gm, -xgd));
+            mos3.MOS3DPbPtr.Add(new Complex(-mos3.MOS3gbd + (xnrm - xrev) * mos3.MOS3gmbs, -xbd));
+            mos3.MOS3SPgPtr.Sub(new Complex((xnrm - xrev) * mos3.MOS3gm, xgs));
+            mos3.MOS3SPbPtr.Sub(new Complex(mos3.MOS3gbs + (xnrm - xrev) * mos3.MOS3gmbs, xbs));
+            mos3.MOS3DdPtr.Add(mos3.MOS3drainConductance);
+            mos3.MOS3SsPtr.Add(mos3.MOS3sourceConductance);
+            mos3.MOS3DdpPtr.Sub(mos3.MOS3drainConductance);
+            mos3.MOS3SspPtr.Sub(mos3.MOS3sourceConductance);
+            mos3.MOS3DPdPtr.Sub(mos3.MOS3drainConductance);
+            mos3.MOS3DPspPtr.Sub(mos3.MOS3gds + xnrm * (mos3.MOS3gm + mos3.MOS3gmbs));
+            mos3.MOS3SPsPtr.Sub(mos3.MOS3sourceConductance);
+            mos3.MOS3SPdpPtr.Sub(mos3.MOS3gds + xrev * (mos3.MOS3gm + mos3.MOS3gmbs));
         }
     }
 }
