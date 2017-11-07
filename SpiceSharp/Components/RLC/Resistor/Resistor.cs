@@ -55,10 +55,13 @@ namespace SpiceSharp.Components
         public int RESposNode { get; private set; }
         public int RESnegNode { get; private set; }
 
-        internal MatrixElement RESposPosPtr;
-        internal MatrixElement RESnegNegPtr;
-        internal MatrixElement RESposNegPtr;
-        internal MatrixElement RESnegPosPtr;
+        /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement RESposPosPtr { get; private set; }
+        internal MatrixElement RESnegNegPtr { get; private set; }
+        internal MatrixElement RESposNegPtr { get; private set; }
+        internal MatrixElement RESnegPosPtr { get; private set; }
 
         /// <summary>
         /// Private variables
@@ -94,11 +97,25 @@ namespace SpiceSharp.Components
             RESposNode = nodes[0].Index;
             RESnegNode = nodes[1].Index;
 
+            // Get matrix elements
             var matrix = ckt.State.Matrix;
             RESposPosPtr = matrix.GetElement(RESposNode, RESposNode);
             RESnegNegPtr = matrix.GetElement(RESnegNode, RESnegNode);
             RESposNegPtr = matrix.GetElement(RESposNode, RESnegNode);
             RESnegPosPtr = matrix.GetElement(RESnegNode, RESposNode);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            RESposPosPtr = null;
+            RESnegNegPtr = null;
+            RESposNegPtr = null;
+            RESnegPosPtr = null;
         }
     }
 }

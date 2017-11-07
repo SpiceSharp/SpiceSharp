@@ -16,10 +16,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var rstate = ckt.State;
             var resistor = ComponentTyped<Resistor>();
 
-            resistor.RESposPosPtr.Value.Real += resistor.RESconduct;
-            resistor.RESnegNegPtr.Value.Real += resistor.RESconduct;
-            resistor.RESposNegPtr.Value.Real -= resistor.RESconduct;
-            resistor.RESnegPosPtr.Value.Real -= resistor.RESconduct;
+            resistor.RESposPosPtr.Add(resistor.RESconduct);
+            resistor.RESnegNegPtr.Add(resistor.RESconduct);
+            resistor.RESposNegPtr.Sub(resistor.RESconduct);
+            resistor.RESnegPosPtr.Sub(resistor.RESconduct);
         }
     }
 }
