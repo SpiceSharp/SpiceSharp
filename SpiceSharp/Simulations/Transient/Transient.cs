@@ -209,6 +209,8 @@ namespace SpiceSharp.Simulations
                     method.Predict(ckt);
 
                     // Try to solve the new point
+                    if (method.SavedTime == 0.0)
+                        state.Init = CircuitState.InitFlags.InitTransient;
                     bool converged = ckt.Iterate(loadbehaviours, config, config.TranMaxIterations);
                     ckt.Statistics.TimePoints++;
                     if (method.SavedTime == 0.0)

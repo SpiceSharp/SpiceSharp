@@ -32,14 +32,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 // Fill the matrix
                 state.States[0][cap.CAPstate + Capacitor.CAPqcap] = cap.CAPcapac * vcap;
-                if (method != null && method.SavedTime == 0.0)
+                if (state.Init == CircuitState.InitFlags.InitTransient)
                     state.States[1][cap.CAPstate + Capacitor.CAPqcap] = state.States[0][cap.CAPstate + Capacitor.CAPqcap];
 
                 // Without integration, a capacitor cannot do anything
                 if (method != null)
                 {
                     var result = ckt.Method.Integrate(state, cap.CAPstate + Capacitor.CAPqcap, cap.CAPcapac);
-                    if (method != null && method.SavedTime == 0.0)
+                    if (state.Init == CircuitState.InitFlags.InitTransient)
                         state.States[1][cap.CAPstate + Capacitor.CAPqcap] = state.States[0][cap.CAPstate + Capacitor.CAPqcap];
 
                     cap.CAPposPosptr.Value.Real += result.Geq;

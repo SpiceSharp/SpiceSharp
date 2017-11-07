@@ -114,8 +114,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Accept(Circuit ckt)
         {
-            var method = ckt.Method;
-            if (method != null && method.SavedTime == 0.0)
+            if (ckt.State.Init == CircuitState.InitFlags.InitTransient)
                 ckt.State.CopyDC(INDstate + INDflux);
         }
 

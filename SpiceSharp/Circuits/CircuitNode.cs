@@ -32,7 +32,7 @@ namespace SpiceSharp.Circuits
         /// Gets the index of the node
         /// This is also the row index in the state matrix
         /// </summary>
-        public int Index { get; private set; }
+        public int Index { get; }
 
         /// <summary>
         /// Gets the diagonal matrix element associated with the node

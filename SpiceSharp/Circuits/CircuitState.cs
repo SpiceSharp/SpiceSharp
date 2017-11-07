@@ -18,7 +18,8 @@ namespace SpiceSharp.Circuits
             Init,
             InitFloat,
             InitJct,
-            InitFix
+            InitFix,
+            InitTransient
         }
 
         public enum SparseFlags

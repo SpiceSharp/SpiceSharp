@@ -181,12 +181,10 @@
             Size = matrix.Size;
             Intermediate = matrix.Intermediate;
 
-
             // Initialize Intermediate vector. 
-            int index = Size;
             pExtOrder = matrix.IntToExtColMap;
             for (I = Size; I > 0; I--)
-                Intermediate[I].Real = RHS[pExtOrder[index--]];
+                Intermediate[I].Real = RHS[pExtOrder[I]];
 
             // Forward elimination. 
             for (I = 1; I <= Size; I++)
@@ -219,10 +217,9 @@
             }
 
             // Unscramble Intermediate vector while placing data in to Solution vector. 
-            index = Size;
             pExtOrder = matrix.IntToExtRowMap;
             for (I = Size; I > 0; I--)
-                Solution[pExtOrder[index--]] = Intermediate[I];
+                Solution[pExtOrder[I]] = Intermediate[I];
 
             return;
         }
@@ -250,15 +247,12 @@
             Intermediate = matrix.Intermediate;
 
             // Initialize Intermediate vector. 
-            int index = Size;
             pExtOrder = matrix.IntToExtColMap;
-
             for (I = Size; I > 0; I--)
             {
-                Intermediate[I].Real = RHS[pExtOrder[index]];
-                Intermediate[I].Imag = iRHS[pExtOrder[index--]];
+                Intermediate[I].Real = RHS[pExtOrder[I]];
+                Intermediate[I].Imag = iRHS[pExtOrder[I]];
             }
-
 
             // Forward elimination. 
             for (I = 1; I <= Size; I++)
@@ -297,12 +291,11 @@
             }
 
             // Unscramble Intermediate vector while placing data in to Solution vector. 
-            index = Size;
             pExtOrder = matrix.IntToExtRowMap;
             for (I = Size; I > 0; I--)
             {
-                Solution[pExtOrder[index]] = Intermediate[I].Real;
-                iSolution[pExtOrder[index--]] = Intermediate[I].Imag;
+                Solution[pExtOrder[I]] = Intermediate[I].Real;
+                iSolution[pExtOrder[I]] = Intermediate[I].Imag;
             }
 
             return;

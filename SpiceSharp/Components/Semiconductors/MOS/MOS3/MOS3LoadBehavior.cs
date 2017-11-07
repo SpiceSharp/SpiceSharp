@@ -83,7 +83,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 			* share some code, so we put them first - others later on
 			*/
 
-            if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (method != null && method.SavedTime == 0.0)) ||
+            if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (state.Init == CircuitState.InitFlags.InitTransient)) ||
                 ((state.Init == CircuitState.InitFlags.InitFix) && (!mos3.MOS3off)))
             {
                 /* PREDICTOR */

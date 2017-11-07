@@ -223,7 +223,7 @@ namespace SpiceSharp.IntegrationMethods
             // Calculate the tolerance
             double volttol = config.AbsTol + config.RelTol * Math.Max(Math.Abs(state.States[0][ccap]), Math.Abs(state.States[1][ccap]));
             double chargetol = Math.Max(Math.Abs(state.States[0][qcap]), Math.Abs(state.States[1][qcap]));
-            chargetol = Config.LteRelTol * Math.Max(chargetol, config.ChgTol) / Delta;
+            chargetol = config.RelTol * Math.Max(chargetol, config.ChgTol) / Delta;
             double tol = Math.Max(volttol, chargetol);
 
             // Now divided differences

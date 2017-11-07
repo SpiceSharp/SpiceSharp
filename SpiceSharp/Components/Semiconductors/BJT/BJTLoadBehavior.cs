@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 vbx = model.BJTtype * (rstate.OldSolution[bjt.BJTbaseNode] - rstate.OldSolution[bjt.BJTcolPrimeNode]);
                 vcs = model.BJTtype * (rstate.OldSolution[bjt.BJTsubstNode] - rstate.OldSolution[bjt.BJTcolPrimeNode]);
             }
-            else if (method != null && method.SavedTime == 0.0)
+            else if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 vbe = state.States[1][bjt.BJTstate + BJT.BJTvbe];
                 vbc = state.States[1][bjt.BJTstate + BJT.BJTvbc];
@@ -383,7 +383,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 					 * transient analysis
 					 */
 
-                    if (method != null && method.SavedTime == 0.0)
+                    if (state.Init == CircuitState.InitFlags.InitTransient)
                     {
                         state.States[1][bjt.BJTstate + BJT.BJTqbe] = state.States[0][bjt.BJTstate + BJT.BJTqbe];
                         state.States[1][bjt.BJTstate + BJT.BJTqbc] = state.States[0][bjt.BJTstate + BJT.BJTqbc];
@@ -403,7 +403,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                     cb = cb + state.States[0][bjt.BJTstate + BJT.BJTcqbc];
                     cc = cc - state.States[0][bjt.BJTstate + BJT.BJTcqbc];
 
-                    if (method != null && method.SavedTime == 0.0)
+                    if (state.Init == CircuitState.InitFlags.InitTransient)
                     {
                         state.States[1][bjt.BJTstate + BJT.BJTcqbe] = state.States[0][bjt.BJTstate + BJT.BJTcqbe];
                         state.States[1][bjt.BJTstate + BJT.BJTcqbc] = state.States[0][bjt.BJTstate + BJT.BJTcqbc];

@@ -100,7 +100,7 @@ namespace SpiceSharpTest.Models
                 double time = data.GetTime();
                 double actual = netlist.Exports[0].Extract(data);
                 double expected = interpolation.Interpolate(time);
-                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
+                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-6;
                 Assert.AreEqual(expected, actual, tol);
             };
             netlist.Simulate();

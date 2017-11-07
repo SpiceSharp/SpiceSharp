@@ -285,7 +285,7 @@ namespace SpiceSharp.Sparse
                 else
                 {
                     // Update column using direct addressing scatter-gather
-                    ElementValue[] pDest = matrix.Intermediate;
+                    MatrixElement[] pDest = new MatrixElement[matrix.Intermediate.Length];
 
                     // Scatter
                     pElement = matrix.FirstInCol[Step];
@@ -303,11 +303,11 @@ namespace SpiceSharp.Sparse
 
                         // Cmplx expr: Mult = *pDest[pColumn.Row] * (1.0 / *pPivot)
                         SparseDefinitions.CMPLX_MULT(ref Mult, pDest[pColumn.Row], pElement);
-                        SparseDefinitions.CMPLX_ASSIGN(ref pDest[pColumn.Row], Mult);
+                        SparseDefinitions.CMPLX_ASSIGN(ref pDest[pColumn.Row].Value, Mult);
                         while ((pElement = pElement.NextInCol) != null)
                         {
                             // Cmplx expr: *pDest[pElement.Row] -= Mult * pElement
-                            SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref pDest[pElement.Row], Mult, pElement);
+                            SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref pDest[pElement.Row].Value, Mult, pElement);
                         }
                         pColumn = pColumn.NextInCol;
                     }
@@ -618,7 +618,7 @@ namespace SpiceSharp.Sparse
                     // you take one down and pass it around;
                     // N-1 bottles of beer on the wall.
                 }
-                I = (int)(pMarkowitzProduct[index] - matrix.MarkowitzProd[0] + 1);
+                I = index + 1;
 
                 // Assure that I is valid. 
                 if (I < Step) break;  // while (Singletons-- > 0) 
@@ -700,7 +700,7 @@ ChosenPivot = matrix.FirstInRow[I];
 
             ChosenPivot = null;
             MinMarkowitzProduct = long.MaxValue;
-            int index = matrix.Singletons + 2;
+            int index = matrix.Size + 2;
             // pMarkowitzProduct = matrix.MarkowitzProd[index];
             matrix.MarkowitzProd[matrix.Size + 1] = matrix.MarkowitzProd[Step];
 

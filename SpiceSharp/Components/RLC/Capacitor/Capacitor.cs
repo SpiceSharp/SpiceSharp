@@ -106,11 +106,8 @@ namespace SpiceSharp.Components
         public override void Accept(Circuit ckt)
         {
             // Copy DC states when accepting the first timepoint
-            var method = ckt.Method;
-            if (method != null && method.SavedTime == 0.0)
-            {
+            if (ckt.State.Init == CircuitState.InitFlags.InitTransient)
                 ckt.State.CopyDC(CAPstate + CAPqcap);
-            }
         }
 
         /// <summary>

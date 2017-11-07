@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 			 * step or the general iteration step and they
 			 * share some code, so we put them first - others later on
 			 */
-            if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (method != null && method.SavedTime == 0.0)) ||
+            if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (state.Init == CircuitState.InitFlags.InitTransient)) ||
                 ((state.Init == CircuitState.InitFlags.InitFix) && (!mos1.MOS1off)))
             {
                 /* PREDICTOR */
@@ -440,7 +440,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 				*/
 
                 /* DETAILPROF */
-                if ((method != null) || ((method != null && method.SavedTime == 0.0) && !state.UseIC))
+                if ((method != null) || ((state.Init == CircuitState.InitFlags.InitTransient) && !state.UseIC))
                 {
                     /* (above only excludes tranop, since we're only at this
 					 * point if tran or tranop)
@@ -544,7 +544,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 /* PREDICTOR */
             }
 
-            if (((method != null && method.SavedTime == 0.0)) || (!(method != null)))
+            if (((state.Init == CircuitState.InitFlags.InitTransient)) || (!(method != null)))
             {
                 /* 
 				 * initialize to zero charge conductances 

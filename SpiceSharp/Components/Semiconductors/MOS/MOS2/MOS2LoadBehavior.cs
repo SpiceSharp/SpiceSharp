@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             Beta = mos2.MOS2tTransconductance * mos2.MOS2w / EffectiveLength;
             OxideCap = model.MOS2oxideCapFactor * EffectiveLength * mos2.MOS2w;
 
-            if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (method != null && method.SavedTime == 0.0)) ||
+            if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (state.Init == CircuitState.InitFlags.InitTransient)) ||
                 ((state.Init == CircuitState.InitFlags.InitFix) && (!mos2.MOS2off)))
             {
                 /* PREDICTOR */
@@ -957,7 +957,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 /* PREDICTOR */
             }
             /* NOBYPASS */
-            if ((method != null && method.SavedTime == 0.0) || method == null)
+            if ((state.Init == CircuitState.InitFlags.InitTransient) || method == null)
             {
                 /* initialize to zero charge conductances and current */
 

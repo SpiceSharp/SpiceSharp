@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 vd = state.States[0][diode.DIOstate + Diode.DIOvoltage];
             }
-            else if (method != null && method.SavedTime == 0.0)
+            else if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 vd = state.States[1][diode.DIOstate + Diode.DIOvoltage];
                 Check = false; // EDIT: Spice does not check the first timepoint for convergence, but we do...
@@ -149,7 +149,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                         var result = method.Integrate(state, diode.DIOstate + Diode.DIOcapCharge, capd);
                         gd = gd + result.Geq;
                         cd = cd + state.States[0][diode.DIOstate + Diode.DIOcapCurrent];
-                        if (method != null && method.SavedTime == 0.0)
+                        if (state.Init == CircuitState.InitFlags.InitTransient)
                             state.States[1][diode.DIOstate + Diode.DIOcapCurrent] = state.States[0][diode.DIOstate + Diode.DIOcapCurrent];
                     }
                 }

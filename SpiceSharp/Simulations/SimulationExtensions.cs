@@ -164,6 +164,9 @@ namespace SpiceSharp.Simulations
                 matrix.SMPsolve(state.Rhs, null);
                 ckt.Statistics.SolveTime.Stop();
 
+                // The result is now stored in the RHS vector, let's move it to the current solution vector
+                state.StoreSolution();
+
                 // Reset ground nodes
                 ckt.State.Rhs[0] = 0.0;
                 ckt.State.Solution[0] = 0.0;
@@ -208,6 +211,12 @@ namespace SpiceSharp.Simulations
                         pass = true;
                         break;
 
+                    case CircuitState.InitFlags.InitTransient:
+                        if (iterno <= 1)
+                            state.Sparse = CircuitState.SparseFlags.NISHOULDREORDER;
+                        state.Init = CircuitState.InitFlags.InitFloat;
+                        break;
+
                     case CircuitState.InitFlags.Init:
                         state.Init = CircuitState.InitFlags.InitFloat;
                         break;
@@ -216,9 +225,6 @@ namespace SpiceSharp.Simulations
                         ckt.Statistics.NumIter += iterno;
                         throw new CircuitException("Could not find flag");
                 }
-
-                // We need to do another iteration, swap solutions with the old solution
-                state.StoreSolution();
             }
         }
 
@@ -304,6 +310,8 @@ namespace SpiceSharp.Simulations
             state.Rhs[negDrive] = -1.0;
 
             state.Matrix.SMPcaSolve(state.Rhs, state.iRhs, null, null);
+
+            state.StoreSolution(true);
 
             state.Solution[0] = 0.0;
             state.iSolution[0] = 0.0;

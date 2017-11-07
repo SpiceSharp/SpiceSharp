@@ -204,16 +204,17 @@ namespace SpiceSharp.Simulations
             ckt.Op(loadbehaviours, config, config.DcMaxIterations);
 
             var data = ckt.State.Noise;
-            var cstate = ckt.State;
+            state.Sparse |= CircuitState.SparseFlags.NIACSHOULDREORDER;
 
             // Loop through noise figures
             for (int i = 0; i < n; i++)
             {
-                cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * data.Freq);
+                state.Laplace = new Complex(0.0, 2.0 * Math.PI * data.Freq);
                 ckt.AcIterate(acbehaviours, config);
 
-                Complex val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
-                data.GainSqInv = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
+                double rval = state.Solution[posOutNode] - state.Solution[negOutNode];
+                double ival = state.iSolution[posOutNode] - state.iSolution[negOutNode];
+                data.GainSqInv = 1.0 / Math.Max(rval * rval + ival * ival, 1e-20);
 
                 // Solve the adjoint system
                 ckt.NzIterate(posOutNode, negOutNode);
