@@ -92,10 +92,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             csw.CSWcond = g_now;
 
             // Load the Y-matrix
-            // rstate.Matrix[csw.CSWposNode, csw.CSWposNode] += g_now;
-            // rstate.Matrix[csw.CSWposNode, csw.CSWnegNode] -= g_now;
-            // rstate.Matrix[csw.CSWnegNode, csw.CSWposNode] -= g_now;
-            // rstate.Matrix[csw.CSWnegNode, csw.CSWnegNode] += g_now;
+            csw.CSWposPosptr.Add(g_now);
+            csw.CSWposNegptr.Sub(g_now);
+            csw.CSWnegPosptr.Sub(g_now);
+            csw.CSWnegNegptr.Add(g_now);
         }
     }
 }
