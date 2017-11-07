@@ -18,10 +18,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var val = cstate.Laplace * cap.CAPcapac.Value;
 
             // Load the matrix
-            cap.CAPposPosptr.Value.Cplx += val;
-            cap.CAPnegNegptr.Value.Cplx += val;
-            cap.CAPposNegptr.Value.Cplx -= val;
-            cap.CAPnegPosptr.Value.Cplx -= val;
+            cap.CAPposPosptr.Add(val);
+            cap.CAPnegNegptr.Add(val);
+            cap.CAPposNegptr.Sub(val);
+            cap.CAPnegPosptr.Sub(val);
         }
     }
 }

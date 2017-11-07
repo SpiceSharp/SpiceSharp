@@ -42,10 +42,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
                     if (state.Init == CircuitState.InitFlags.InitTransient)
                         state.States[1][cap.CAPstate + Capacitor.CAPqcap] = state.States[0][cap.CAPstate + Capacitor.CAPqcap];
 
-                    cap.CAPposPosptr.Value.Real += result.Geq;
-                    cap.CAPnegNegptr.Value.Real += result.Geq;
-                    cap.CAPposNegptr.Value.Real -= result.Geq;
-                    cap.CAPnegPosptr.Value.Real -= result.Geq;
+                    cap.CAPposPosptr.Add(result.Geq);
+                    cap.CAPnegNegptr.Add(result.Geq);
+                    cap.CAPposNegptr.Sub(result.Geq);
+                    cap.CAPnegPosptr.Sub(result.Geq);
                     state.Rhs[cap.CAPposNode] -= result.Ceq;
                     state.Rhs[cap.CAPnegNode] += result.Ceq;
                 }

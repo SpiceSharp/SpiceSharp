@@ -49,10 +49,13 @@ namespace SpiceSharp.Components
         public int CAPposNode { get; private set; }
         public int CAPnegNode { get; private set; }
 
-        internal MatrixElement CAPposPosptr;
-        internal MatrixElement CAPnegNegptr;
-        internal MatrixElement CAPposNegptr;
-        internal MatrixElement CAPnegPosptr;
+        /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement CAPposPosptr { get; private set; }
+        internal MatrixElement CAPnegNegptr { get; private set; }
+        internal MatrixElement CAPposNegptr { get; private set; }
+        internal MatrixElement CAPnegPosptr { get; private set; }
 
         /// <summary>
         /// Constants
@@ -89,6 +92,7 @@ namespace SpiceSharp.Components
             CAPposNode = nodes[0].Index;
             CAPnegNode = nodes[1].Index;
 
+            // Get matrix elements
             var matrix = ckt.State.Matrix;
             CAPposPosptr = matrix.GetElement(CAPposNode, CAPposNode);
             CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
@@ -97,6 +101,19 @@ namespace SpiceSharp.Components
 
             // Create to states for integration
             CAPstate = ckt.State.GetState(2);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            CAPposPosptr = null;
+            CAPnegNegptr = null;
+            CAPnegPosptr = null;
+            CAPposNegptr = null;
         }
 
         /// <summary>
