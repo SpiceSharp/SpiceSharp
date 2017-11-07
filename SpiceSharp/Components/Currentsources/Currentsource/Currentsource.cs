@@ -51,6 +51,9 @@ namespace SpiceSharp.Components
         [SpiceName("c"), SpiceInfo("Current through current source")]
         public double Current { get; set; }
 
+        /// <summary>
+        /// Nodes
+        /// </summary>
         public int ISRCposNode { get; private set; }
         public int ISRCnegNode { get; private set; }
         public Complex ISRCac;

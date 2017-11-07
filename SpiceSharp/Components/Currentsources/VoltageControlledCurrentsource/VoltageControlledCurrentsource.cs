@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -44,6 +45,14 @@ namespace SpiceSharp.Components
         public int VCCScontNegNode { get; private set; }
 
         /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement VCCSposContPosptr { get; private set; }
+        internal MatrixElement VCCSposContNegptr { get; private set; }
+        internal MatrixElement VCCSnegContPosptr { get; private set; }
+        internal MatrixElement VCCSnegContNegptr { get; private set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled current source</param>
@@ -70,7 +79,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the voltage-controlled current source
         /// </summary>
-        /// <param name="ckt">The circuit</param>
+        /// <param name="ckt">Circuit</param>
         public override void Setup(Circuit ckt)
         {
             var nodes = BindNodes(ckt);
@@ -78,6 +87,26 @@ namespace SpiceSharp.Components
             VCCSnegNode = nodes[1].Index;
             VCCScontPosNode = nodes[2].Index;
             VCCScontNegNode = nodes[3].Index;
+
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            VCCSposContPosptr = matrix.GetElement(VCCSposNode, VCCScontPosNode);
+            VCCSposContNegptr = matrix.GetElement(VCCSposNode, VCCScontNegNode);
+            VCCSnegContPosptr = matrix.GetElement(VCCSnegNode, VCCScontPosNode);
+            VCCSnegContNegptr = matrix.GetElement(VCCSnegNode, VCCScontNegNode);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            VCCSposContPosptr = null;
+            VCCSposContNegptr = null;
+            VCCSnegContPosptr = null;
+            VCCSnegContNegptr = null;
         }
     }
 }

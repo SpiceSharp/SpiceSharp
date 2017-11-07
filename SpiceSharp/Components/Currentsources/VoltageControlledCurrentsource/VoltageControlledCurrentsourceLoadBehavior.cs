@@ -15,10 +15,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         {
             var src = ComponentTyped<VoltageControlledCurrentsource>();
             var rstate = ckt.State;
-            // rstate.Matrix[src.VCCSposNode, src.VCCScontPosNode] += src.VCCScoeff;
-            // rstate.Matrix[src.VCCSposNode, src.VCCScontNegNode] -= src.VCCScoeff;
-            // rstate.Matrix[src.VCCSnegNode, src.VCCScontPosNode] -= src.VCCScoeff;
-            // rstate.Matrix[src.VCCSnegNode, src.VCCScontNegNode] += src.VCCScoeff;
+            src.VCCSposContPosptr.Add(src.VCCScoeff.Value);
+            src.VCCSposContNegptr.Sub(src.VCCScoeff.Value);
+            src.VCCSnegContPosptr.Sub(src.VCCScoeff.Value);
+            src.VCCSnegContNegptr.Add(src.VCCScoeff.Value);
         }
     }
 }
