@@ -73,13 +73,13 @@ namespace SpiceSharpTest.Models
                 // Test real part
                 double actual = netlist.Exports[0].Extract(data);
                 double expected = reference[index++];
-                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-6 + 1e-30;
+                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-6 + 1e-12;
                 Assert.AreEqual(expected, actual, tol);
 
                 // Test the imaginary part
                 actual = netlist.Exports[1].Extract(data);
                 expected = reference[index++];
-                tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-6 + 1e-30;
+                tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-6 + 1e-12;
                 Assert.AreEqual(expected, actual, tol);
             };
             netlist.Simulate();

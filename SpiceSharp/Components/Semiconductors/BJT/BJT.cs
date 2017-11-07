@@ -2,6 +2,7 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -179,6 +180,33 @@ namespace SpiceSharp.Components
         public int BJTstate { get; internal set; }
 
         /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement BJTcolColPrimePtr { get; private set; }
+        internal MatrixElement BJTbaseBasePrimePtr { get; private set; }
+        internal MatrixElement BJTemitEmitPrimePtr { get; private set; }
+        internal MatrixElement BJTcolPrimeColPtr { get; private set; }
+        internal MatrixElement BJTcolPrimeBasePrimePtr { get; private set; }
+        internal MatrixElement BJTcolPrimeEmitPrimePtr { get; private set; }
+        internal MatrixElement BJTbasePrimeBasePtr { get; private set; }
+        internal MatrixElement BJTbasePrimeColPrimePtr { get; private set; }
+        internal MatrixElement BJTbasePrimeEmitPrimePtr { get; private set; }
+        internal MatrixElement BJTemitPrimeEmitPtr { get; private set; }
+        internal MatrixElement BJTemitPrimeColPrimePtr { get; private set; }
+        internal MatrixElement BJTemitPrimeBasePrimePtr { get; private set; }
+        internal MatrixElement BJTcolColPtr { get; private set; }
+        internal MatrixElement BJTbaseBasePtr { get; private set; }
+        internal MatrixElement BJTemitEmitPtr { get; private set; }
+        internal MatrixElement BJTcolPrimeColPrimePtr { get; private set; }
+        internal MatrixElement BJTbasePrimeBasePrimePtr { get; private set; }
+        internal MatrixElement BJTemitPrimeEmitPrimePtr { get; private set; }
+        internal MatrixElement BJTsubstSubstPtr { get; private set; }
+        internal MatrixElement BJTcolPrimeSubstPtr { get; private set; }
+        internal MatrixElement BJTsubstColPrimePtr { get; private set; }
+        internal MatrixElement BJTbaseColPrimePtr { get; private set; }
+        internal MatrixElement BJTcolPrimeBasePtr { get; private set; }
+
+        /// <summary>
         /// Constants
         /// </summary>
         public const int BJTvbe = 0;
@@ -244,8 +272,66 @@ namespace SpiceSharp.Components
             else if (BJTemitPrimeNode == 0)
                 BJTemitPrimeNode = CreateNode(ckt, Name.Grow("#emit")).Index;
 
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            BJTcolColPrimePtr = matrix.GetElement(BJTcolNode, BJTcolPrimeNode);
+            BJTbaseBasePrimePtr = matrix.GetElement(BJTbaseNode, BJTbasePrimeNode);
+            BJTemitEmitPrimePtr = matrix.GetElement(BJTemitNode, BJTemitPrimeNode);
+            BJTcolPrimeColPtr = matrix.GetElement(BJTcolPrimeNode, BJTcolNode);
+            BJTcolPrimeBasePrimePtr = matrix.GetElement(BJTcolPrimeNode, BJTbasePrimeNode);
+            BJTcolPrimeEmitPrimePtr = matrix.GetElement(BJTcolPrimeNode, BJTemitPrimeNode);
+            BJTbasePrimeBasePtr = matrix.GetElement(BJTbasePrimeNode, BJTbaseNode);
+            BJTbasePrimeColPrimePtr = matrix.GetElement(BJTbasePrimeNode, BJTcolPrimeNode);
+            BJTbasePrimeEmitPrimePtr = matrix.GetElement(BJTbasePrimeNode, BJTemitPrimeNode);
+            BJTemitPrimeEmitPtr = matrix.GetElement(BJTemitPrimeNode, BJTemitNode);
+            BJTemitPrimeColPrimePtr = matrix.GetElement(BJTemitPrimeNode, BJTcolPrimeNode);
+            BJTemitPrimeBasePrimePtr = matrix.GetElement(BJTemitPrimeNode, BJTbasePrimeNode);
+            BJTcolColPtr = matrix.GetElement(BJTcolNode, BJTcolNode);
+            BJTbaseBasePtr = matrix.GetElement(BJTbaseNode, BJTbaseNode);
+            BJTemitEmitPtr = matrix.GetElement(BJTemitNode, BJTemitNode);
+            BJTcolPrimeColPrimePtr = matrix.GetElement(BJTcolPrimeNode, BJTcolPrimeNode);
+            BJTbasePrimeBasePrimePtr = matrix.GetElement(BJTbasePrimeNode, BJTbasePrimeNode);
+            BJTemitPrimeEmitPrimePtr = matrix.GetElement(BJTemitPrimeNode, BJTemitPrimeNode);
+            BJTsubstSubstPtr = matrix.GetElement(BJTsubstNode, BJTsubstNode);
+            BJTcolPrimeSubstPtr = matrix.GetElement(BJTcolPrimeNode, BJTsubstNode);
+            BJTsubstColPrimePtr = matrix.GetElement(BJTsubstNode, BJTcolPrimeNode);
+            BJTbaseColPrimePtr = matrix.GetElement(BJTbaseNode, BJTcolPrimeNode);
+            BJTcolPrimeBasePtr = matrix.GetElement(BJTcolPrimeNode, BJTbaseNode);
+
             // Allocate states
             BJTstate = ckt.State.GetState(21);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            BJTcolColPrimePtr = null;
+            BJTbaseBasePrimePtr = null;
+            BJTemitEmitPrimePtr = null;
+            BJTcolPrimeColPtr = null;
+            BJTcolPrimeBasePrimePtr = null;
+            BJTcolPrimeEmitPrimePtr = null;
+            BJTbasePrimeBasePtr = null;
+            BJTbasePrimeColPrimePtr = null;
+            BJTbasePrimeEmitPrimePtr = null;
+            BJTemitPrimeEmitPtr = null;
+            BJTemitPrimeColPrimePtr = null;
+            BJTemitPrimeBasePrimePtr = null;
+            BJTcolColPtr = null;
+            BJTbaseBasePtr = null;
+            BJTemitEmitPtr = null;
+            BJTcolPrimeColPrimePtr = null;
+            BJTbasePrimeBasePrimePtr = null;
+            BJTemitPrimeEmitPrimePtr = null;
+            BJTsubstSubstPtr = null;
+            BJTcolPrimeSubstPtr = null;
+            BJTsubstColPrimePtr = null;
+            BJTbaseColPrimePtr = null;
+            BJTcolPrimeBasePtr = null;
         }
 
         /// <summary>

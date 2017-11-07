@@ -129,7 +129,7 @@ namespace SpiceSharp.Simulations
             if (Circuit.Nodes.Contains(node))
             {
                 int index = Circuit.Nodes[node].Index;
-                result = Circuit.State.Solution[index];
+                result = new Complex(Circuit.State.Solution[index], Circuit.State.iSolution[index]);
             }
             else
                 throw new CircuitException($"Could not find node '{node}'");
@@ -140,7 +140,7 @@ namespace SpiceSharp.Simulations
                 if (Circuit.Nodes.Contains(reference))
                 {
                     int index = Circuit.Nodes[reference].Index;
-                    result -= Circuit.State.Solution[index];
+                    result -= new Complex(Circuit.State.Solution[index], Circuit.State.iSolution[index]);
                 }
                 else
                     throw new CircuitException($"Could not find node '{reference}'");

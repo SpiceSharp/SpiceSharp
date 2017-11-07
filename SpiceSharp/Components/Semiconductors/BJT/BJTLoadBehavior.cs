@@ -64,15 +64,15 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 vbe = state.States[0][bjt.BJTstate + BJT.BJTvbe];
                 vbc = state.States[0][bjt.BJTstate + BJT.BJTvbc];
-                vbx = model.BJTtype * (rstate.OldSolution[bjt.BJTbaseNode] - rstate.OldSolution[bjt.BJTcolPrimeNode]);
-                vcs = model.BJTtype * (rstate.OldSolution[bjt.BJTsubstNode] - rstate.OldSolution[bjt.BJTcolPrimeNode]);
+                vbx = model.BJTtype * (rstate.Solution[bjt.BJTbaseNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
+                vcs = model.BJTtype * (rstate.Solution[bjt.BJTsubstNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
             }
             else if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 vbe = state.States[1][bjt.BJTstate + BJT.BJTvbe];
                 vbc = state.States[1][bjt.BJTstate + BJT.BJTvbc];
-                vbx = model.BJTtype * (rstate.OldSolution[bjt.BJTbaseNode] - rstate.OldSolution[bjt.BJTcolPrimeNode]);
-                vcs = model.BJTtype * (rstate.OldSolution[bjt.BJTsubstNode] - rstate.OldSolution[bjt.BJTcolPrimeNode]);
+                vbx = model.BJTtype * (rstate.Solution[bjt.BJTbaseNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
+                vcs = model.BJTtype * (rstate.Solution[bjt.BJTsubstNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
                 if (state.UseIC)
                 {
                     vbx = model.BJTtype * (bjt.BJTicVBE - bjt.BJTicVCE);
@@ -107,14 +107,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 /* 
                  * compute new nonlinear branch voltages
                  */
-                vbe = model.BJTtype * (rstate.OldSolution[bjt.BJTbasePrimeNode] - rstate.OldSolution[bjt.BJTemitPrimeNode]);
-                vbc = model.BJTtype * (rstate.OldSolution[bjt.BJTbasePrimeNode] - rstate.OldSolution[bjt.BJTcolPrimeNode]);
+                vbe = model.BJTtype * (rstate.Solution[bjt.BJTbasePrimeNode] - rstate.Solution[bjt.BJTemitPrimeNode]);
+                vbc = model.BJTtype * (rstate.Solution[bjt.BJTbasePrimeNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
 
                 /* PREDICTOR */
                 delvbe = vbe - state.States[0][bjt.BJTstate + BJT.BJTvbe];
                 delvbc = vbc - state.States[0][bjt.BJTstate + BJT.BJTvbc];
-                vbx = model.BJTtype * (rstate.OldSolution[bjt.BJTbaseNode] - rstate.OldSolution[bjt.BJTcolPrimeNode]);
-                vcs = model.BJTtype * (rstate.OldSolution[bjt.BJTsubstNode] - rstate.OldSolution[bjt.BJTcolPrimeNode]);
+                vbx = model.BJTtype * (rstate.Solution[bjt.BJTbaseNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
+                vcs = model.BJTtype * (rstate.Solution[bjt.BJTsubstNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
                 cchat = state.States[0][bjt.BJTstate + BJT.BJTcc] + (state.States[0][bjt.BJTstate + BJT.BJTgm] + state.States[0][bjt.BJTstate + BJT.BJTgo]) * delvbe -
                      (state.States[0][bjt.BJTstate + BJT.BJTgo] + state.States[0][bjt.BJTstate + BJT.BJTgmu]) * delvbc;
                 cbhat = state.States[0][bjt.BJTstate + BJT.BJTcb] + state.States[0][bjt.BJTstate + BJT.BJTgpi] * delvbe + state.States[0][bjt.BJTstate + BJT.BJTgmu] *
@@ -458,37 +458,38 @@ namespace SpiceSharp.Components.ComponentBehaviors
             ceqbe = model.BJTtype * (cc + cb - vbe * (gm + go + gpi) + vbc * (go - geqcb));
             ceqbc = model.BJTtype * (-cc + vbe * (gm + go) - vbc * (gmu + go));
 
-            // rstate.Rhs[bjt.BJTbaseNode] += (-ceqbx);
-            // rstate.Rhs[bjt.BJTcolPrimeNode] += (ceqcs + ceqbx + ceqbc);
-            // rstate.Rhs[bjt.BJTbasePrimeNode] += (-ceqbe - ceqbc);
-            // rstate.Rhs[bjt.BJTemitPrimeNode] += (ceqbe);
-            // rstate.Rhs[bjt.BJTsubstNode] += (-ceqcs);
+            rstate.Rhs[bjt.BJTbaseNode] += (-ceqbx);
+            rstate.Rhs[bjt.BJTcolPrimeNode] += (ceqcs + ceqbx + ceqbc);
+            rstate.Rhs[bjt.BJTbasePrimeNode] += (-ceqbe - ceqbc);
+            rstate.Rhs[bjt.BJTemitPrimeNode] += (ceqbe);
+            rstate.Rhs[bjt.BJTsubstNode] += (-ceqcs);
+
             /* 
 			 * load y matrix
 			 */
-            // rstate.Matrix[bjt.BJTcolNode, bjt.BJTcolNode] += (gcpr);
-            // rstate.Matrix[bjt.BJTbaseNode, bjt.BJTbaseNode] += (gx + geqbx);
-            // rstate.Matrix[bjt.BJTemitNode, bjt.BJTemitNode] += (gepr);
-            // rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTcolPrimeNode] += (gmu + go + gcpr + gccs + geqbx);
-            // rstate.Matrix[bjt.BJTbasePrimeNode, bjt.BJTbasePrimeNode] += (gx + gpi + gmu + geqcb);
-            // rstate.Matrix[bjt.BJTemitPrimeNode, bjt.BJTemitPrimeNode] += (gpi + gepr + gm + go);
-            // rstate.Matrix[bjt.BJTcolNode, bjt.BJTcolPrimeNode] += (-gcpr);
-            // rstate.Matrix[bjt.BJTbaseNode, bjt.BJTbasePrimeNode] += (-gx);
-            // rstate.Matrix[bjt.BJTemitNode, bjt.BJTemitPrimeNode] += (-gepr);
-            // rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTcolNode] += (-gcpr);
-            // rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTbasePrimeNode] += (-gmu + gm);
-            // rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTemitPrimeNode] += (-gm - go);
-            // rstate.Matrix[bjt.BJTbasePrimeNode, bjt.BJTbaseNode] += (-gx);
-            // rstate.Matrix[bjt.BJTbasePrimeNode, bjt.BJTcolPrimeNode] += (-gmu - geqcb);
-            // rstate.Matrix[bjt.BJTbasePrimeNode, bjt.BJTemitPrimeNode] += (-gpi);
-            // rstate.Matrix[bjt.BJTemitPrimeNode, bjt.BJTemitNode] += (-gepr);
-            // rstate.Matrix[bjt.BJTemitPrimeNode, bjt.BJTcolPrimeNode] += (-go + geqcb);
-            // rstate.Matrix[bjt.BJTemitPrimeNode, bjt.BJTbasePrimeNode] += (-gpi - gm - geqcb);
-            // rstate.Matrix[bjt.BJTsubstNode, bjt.BJTsubstNode] += (gccs);
-            // rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTsubstNode] += (-gccs);
-            // rstate.Matrix[bjt.BJTsubstNode, bjt.BJTcolPrimeNode] += (-gccs);
-            // rstate.Matrix[bjt.BJTbaseNode, bjt.BJTcolPrimeNode] += (-geqbx);
-            // rstate.Matrix[bjt.BJTcolPrimeNode, bjt.BJTbaseNode] += (-geqbx);
+            bjt.BJTcolColPtr.Add(gcpr);
+            bjt.BJTbaseBasePtr.Add(gx + geqbx);
+            bjt.BJTemitEmitPtr.Add(gepr);
+            bjt.BJTcolPrimeColPrimePtr.Add(gmu + go + gcpr + gccs + geqbx);
+            bjt.BJTbasePrimeBasePrimePtr.Add(gx + gpi + gmu + geqcb);
+            bjt.BJTemitPrimeEmitPrimePtr.Add(gpi + gepr + gm + go);
+            bjt.BJTcolColPrimePtr.Add(-gcpr);
+            bjt.BJTbaseBasePrimePtr.Add(-gx);
+            bjt.BJTemitEmitPrimePtr.Add(-gepr);
+            bjt.BJTcolPrimeColPtr.Add(-gcpr);
+            bjt.BJTcolPrimeBasePrimePtr.Add(-gmu + gm);
+            bjt.BJTcolPrimeEmitPrimePtr.Add(-gm - go);
+            bjt.BJTbasePrimeBasePtr.Add(-gx);
+            bjt.BJTbasePrimeColPrimePtr.Add(-gmu - geqcb);
+            bjt.BJTbasePrimeEmitPrimePtr.Add(-gpi);
+            bjt.BJTemitPrimeEmitPtr.Add(-gepr);
+            bjt.BJTemitPrimeColPrimePtr.Add(-go + geqcb);
+            bjt.BJTemitPrimeBasePrimePtr.Add(-gpi - gm - geqcb);
+            bjt.BJTsubstSubstPtr.Add(gccs);
+            bjt.BJTcolPrimeSubstPtr.Add(-gccs);
+            bjt.BJTsubstColPrimePtr.Add(-gccs);
+            bjt.BJTbaseColPrimePtr.Add(-geqbx);
+            bjt.BJTcolPrimeBasePtr.Add(-geqbx);
         }
     }
 }
