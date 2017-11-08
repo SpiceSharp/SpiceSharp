@@ -18,6 +18,7 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public static SparseError OrderAndFactor(this Matrix matrix, double[] RHS, double RelThreshold, double AbsThreshold, bool DiagPivoting)
         {
+            var pivoting = matrix.Pivoting;
             MatrixElement pPivot;
             int Step, Size;
             bool ReorderingRequired;
@@ -44,7 +45,7 @@ namespace SpiceSharp.Sparse
                 for (Step = 1; Step <= Size; Step++)
                 {
                     pPivot = matrix.Diag[Step];
-                    LargestInCol = FindLargestInCol(pPivot.NextInCol);
+                    LargestInCol = pivoting.FindLargestInCol(pPivot.NextInCol);
                     if (LargestInCol * RelThreshold < SparseDefinitions.ELEMENT_MAG(pPivot))
                     {
                         if (matrix.Complex)
@@ -76,21 +77,21 @@ namespace SpiceSharp.Sparse
                 Step = 1;
                 if (!matrix.RowsLinked)
                     SparseBuild.LinkRows(matrix);
-                if (!matrix.InternalVectorsAllocated)
-                    CreateInternalVectors(matrix);
+                if (!matrix.Pivoting.InternalVectorsAllocated)
+                    matrix.Pivoting.CreateInternalVectors(matrix.IntSize);
                 if ((int)matrix.Error >= (int)SparseError.Fatal)
                     return matrix.Error;
             }
 
             // Form initial Markowitz products. 
-            CountMarkowitz(matrix, RHS, Step);
-            MarkowitzProducts(matrix, Step);
+            pivoting.CountMarkowitz(matrix, RHS, Step);
+            pivoting.MarkowitzProducts(matrix, Step);
             matrix.MaxRowCountInLowerTri = -1;
 
             // Perform reordering and factorization. 
             for (; Step <= Size; Step++)
             {
-                pPivot = SearchForPivot(matrix, Step, DiagPivoting);
+                pPivot = pivoting.SearchForPivot(matrix, Step, DiagPivoting);
                 if (pPivot == null)
                     return MatrixIsSingular(matrix, Step);
                 ExchangeRowsAndCols(matrix, pPivot, Step);
@@ -102,7 +103,7 @@ namespace SpiceSharp.Sparse
 
                 if ((int)matrix.Error >= (int)SparseError.Fatal)
                     return matrix.Error;
-                UpdateMarkowitzNumbers(matrix, pPivot);
+                pivoting.UpdateMarkowitzNumbers(matrix, pPivot);
             }
 
             Done:
@@ -119,14 +120,16 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public static SparseError Factor(this Matrix matrix)
         {
+            var pivoting = matrix.Pivoting;
+
             if (matrix.Factored)
                 throw new SparseException("Matrix is factored");
             MatrixElement pElement, pColumn;
 
             if (matrix.NeedsOrdering)
                 return OrderAndFactor(matrix, null, 0.0, 0.0, Matrix.DIAG_PIVOTING_AS_DEFAULT);
-            if (!matrix.Partitioned)
-                Partition(matrix, SparsePartition.Default);
+            if (!pivoting.Partitioned)
+                pivoting.Partition(matrix, SparsePartition.Default);
             if (matrix.Complex)
                 return FactorComplexMatrix(matrix);
 
@@ -139,10 +142,10 @@ namespace SpiceSharp.Sparse
             // Start factorization
             for (int Step = 2; Step <= Size; Step++)
             {
-                if (matrix.DoRealDirect[Step])
+                if (pivoting.DoRealDirect[Step])
                 {
                     // Update column using direct addressing scatter-gather
-                    ElementValue[] Dest = matrix.Intermediate;
+                    ElementValue[] Dest = pivoting.Intermediate;
 
                     // Scatter
                     pElement = matrix.FirstInCol[Step];
@@ -218,6 +221,7 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         private static SparseError FactorComplexMatrix(Matrix matrix)
         {
+            var pivoting = matrix.Pivoting;
             MatrixElement pElement, pColumn;
             int Step, Size;
             ElementValue Mult = new ElementValue();
@@ -237,10 +241,10 @@ namespace SpiceSharp.Sparse
             // Start factorization
             for (Step = 2; Step <= Size; Step++)
             {
-                if (matrix.DoCmplxDirect[Step])
+                if (pivoting.DoCmplxDirect[Step])
                 {
                     // Update column using direct addressing scatter-gather
-                    ElementValue[] Dest = matrix.Intermediate;
+                    ElementValue[] Dest = pivoting.Intermediate;
 
                     // Scatter
                     pElement = matrix.FirstInCol[Step];
@@ -285,7 +289,7 @@ namespace SpiceSharp.Sparse
                 else
                 {
                     // Update column using direct addressing scatter-gather
-                    MatrixElement[] pDest = new MatrixElement[matrix.Intermediate.Length];
+                    MatrixElement[] pDest = new MatrixElement[pivoting.Intermediate.Length];
 
                     // Scatter
                     pElement = matrix.FirstInCol[Step];
@@ -324,731 +328,7 @@ namespace SpiceSharp.Sparse
             return (matrix.Error = SparseError.Okay);
         }
 
-        /// <summary>
-        /// Partition the matrix
-        /// </summary>
-        /// <param name="matrix">The matrix</param>
-        /// <param name="Mode">The mode</param>
-        private static void Partition(Matrix matrix, SparsePartition Mode)
-        {
-            MatrixElement pElement, pColumn;
-            int Step, Size;
-            int[] Nc, No;
-            long[] Nm;
-            bool[] DoRealDirect, DoCmplxDirect;
 
-            if (matrix.Partitioned)
-                return;
-            Size = matrix.IntSize;
-            DoRealDirect = matrix.DoRealDirect;
-            DoCmplxDirect = matrix.DoCmplxDirect;
-            matrix.Partitioned = true;
-
-            // If partition is specified by the user, this is easy
-            if (Mode == SparsePartition.Default)
-                Mode = Matrix.DEFAULT_PARTITION;
-            if (Mode == SparsePartition.Direct)
-            {
-                for (Step = 1; Step <= Size; Step++)
-                {
-                    DoRealDirect[Step] = true;
-                    DoCmplxDirect[Step] = true;
-                }
-                return;
-            }
-            else if (Mode == SparsePartition.Indirect)
-            {
-                for (Step = 1; Step <= Size; Step++)
-                {
-                    DoRealDirect[Step] = false;
-                    DoCmplxDirect[Step] = false;
-                }
-                return;
-            }
-            else if (Mode != SparsePartition.Auto)
-                throw new SparseException("Invalid partition mode");
-
-            // Otherwise, count all operations needed in when factoring matrix
-            Nc = matrix.MarkowitzRow;
-            No = matrix.MarkowitzCol;
-            Nm = matrix.MarkowitzProd;
-
-            // Start mock-factorization. 
-            for (Step = 1; Step <= Size; Step++)
-            {
-                Nc[Step] = No[Step] = 0;
-                Nm[Step] = 0;
-
-                pElement = matrix.FirstInCol[Step];
-                while (pElement != null)
-                {
-                    Nc[Step]++;
-                    pElement = pElement.NextInCol;
-                }
-
-                pColumn = matrix.FirstInCol[Step];
-                while (pColumn.Row < Step)
-                {
-                    pElement = matrix.Diag[pColumn.Row];
-                    Nm[Step]++;
-                    while ((pElement = pElement.NextInCol) != null)
-                        No[Step]++;
-                    pColumn = pColumn.NextInCol;
-                }
-            }
-
-            for (Step = 1; Step <= Size; Step++)
-            {
-                // The following are just estimates based on a count on the number of
-                // machine instructions used on each machine to perform the various
-                // tasks.  It was assumed that each machine instruction required the
-                // same amount of time (I don't believe this is true for the VAX, and
-                // have no idea if this is true for the 68000 family).  For optimum
-                // performance, these numbers should be tuned to the machine.
-                //   Nc is the number of nonzero elements in the column.
-                //   Nm is the number of multipliers in the column.
-                //   No is the number of operations in the inner loop.
-
-                DoRealDirect[Step] = (Nm[Step] + No[Step] > 3 * Nc[Step] - 2 * Nm[Step]);
-                DoCmplxDirect[Step] = (Nm[Step] + No[Step] > 7 * Nc[Step] - 4 * Nm[Step]);
-            }
-        }
-
-        /// <summary>
-        /// Create internal vectors
-        /// </summary>
-        /// <param name="matrix">The matrix</param>
-        private static void CreateInternalVectors(Matrix matrix)
-        {
-            int Size;
-
-            // Create Markowitz arrays
-            Size = matrix.IntSize;
-
-            if (matrix.MarkowitzRow == null)
-                matrix.MarkowitzRow = new int[Size + 1];
-            if (matrix.MarkowitzCol == null)
-                matrix.MarkowitzCol = new int[Size + 1];
-            if (matrix.MarkowitzProd == null)
-                matrix.MarkowitzProd = new long[Size + 2];
-
-            // Create DoDirect vectors for use in spFactor()
-            if (matrix.DoRealDirect == null)
-                matrix.DoRealDirect = new bool[Size + 1];
-            if (matrix.DoCmplxDirect == null)
-                matrix.DoCmplxDirect = new bool[Size + 1];
-
-            // Create Intermediate vectors for use in MatrixSolve
-            if (matrix.Intermediate == null)
-            {
-                matrix.Intermediate = new ElementValue[Size + 1];
-            }
-
-            matrix.InternalVectorsAllocated = true;
-        }
-
-        /// <summary>
-        /// Count markowitz
-        /// </summary>
-        /// <param name="matrix">The matrix</param>
-        /// <param name="RHS">Right hand side</param>
-        /// <param name="Step">Current step</param>
-        private static void CountMarkowitz(Matrix matrix, double[] RHS, int Step)
-        {
-            int Count, I, Size = matrix.IntSize;
-            MatrixElement pElement;
-            int ExtRow;
-
-            // Generate MarkowitzRow Count for each row
-            for (I = Step; I <= Size; I++)
-            {
-                // Set Count to -1 initially to remove count due to pivot element
-                Count = -1;
-                pElement = matrix.FirstInRow[I];
-                while (pElement != null && pElement.Col < Step)
-                    pElement = pElement.NextInRow;
-                while (pElement != null)
-                {
-                    Count++;
-                    pElement = pElement.NextInRow;
-                }
-
-                // Include nonzero elements in the RHS vector
-                ExtRow = matrix.Translation.IntToExtRowMap[I];
-
-                if (RHS != null)
-                    if (RHS[ExtRow] != 0.0)
-                        Count++;
-                matrix.MarkowitzRow[I] = Count;
-            }
-
-            // Generate the MarkowitzCol count for each column
-            for (I = Step; I <= Size; I++)
-            {
-                // Set Count to -1 initially to remove count due to pivot element
-                Count = -1;
-                pElement = matrix.FirstInCol[I];
-                while (pElement != null && pElement.Row < Step)
-                    pElement = pElement.NextInCol;
-                while (pElement != null)
-                {
-                    Count++;
-                    pElement = pElement.NextInCol;
-                }
-                matrix.MarkowitzCol[I] = Count;
-            }
-        }
-
-        /// <summary>
-        /// Calculate markowitz products
-        /// </summary>
-        /// <param name="matrix"></param>
-        /// <param name="Step"></param>
-        private static void MarkowitzProducts(Matrix matrix, int Step)
-        {
-            int I;
-            int[] pMarkowitzRow, pMarkowitzCol;
-            long Product;
-            long[] pMarkowitzProduct;
-            int Size = matrix.IntSize;
-            double fProduct;
-
-            matrix.Singletons = 0;
-
-            pMarkowitzProduct = matrix.MarkowitzProd;
-            pMarkowitzRow = matrix.MarkowitzRow;
-            pMarkowitzCol = matrix.MarkowitzCol;
-
-            for (I = Step; I <= Size; I++)
-            {
-                // If chance of overflow, use real numbers. 
-                if ((pMarkowitzRow[I] > short.MaxValue && pMarkowitzCol[I] != 0) ||
-                     (pMarkowitzCol[I] > short.MaxValue && pMarkowitzRow[I] != 0))
-                {
-                    fProduct = (double)pMarkowitzRow[I] * pMarkowitzCol[I];
-                    if (fProduct >= long.MaxValue)
-                        pMarkowitzProduct[I] = long.MaxValue;
-                    else
-                        pMarkowitzProduct[I] = (long)fProduct;
-                }
-                else
-                {
-                    Product = pMarkowitzRow[I] * pMarkowitzCol[I];
-                    if ((pMarkowitzProduct[I] = Product) == 0)
-                        matrix.Singletons++;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Search for a pivot in the matrix
-        /// </summary>
-        /// <param name="matrix">The matrix</param>
-        /// <param name="Step">Step</param>
-        /// <param name="DiagPivoting">Use the diagonal for searching a pivot</param>
-        /// <returns></returns>
-        private static MatrixElement SearchForPivot(Matrix matrix, int Step, bool DiagPivoting)
-        {
-            MatrixElement ChosenPivot;
-
-            // If singletons exist, look for an acceptable one to use as pivot. 
-            if (matrix.Singletons != 0)
-            {
-                ChosenPivot = SearchForSingleton(matrix, Step);
-                if (ChosenPivot != null)
-                {
-                    matrix.PivotSelectionMethod = 's';
-                    return ChosenPivot;
-                }
-            }
-
-            if (DiagPivoting)
-            {
-
-                // Either no singletons exist or they weren't acceptable.  Take quick first
-                // pass at searching diagonal.  First search for element on diagonal of 
-                // remaining submatrix with smallest Markowitz product, then check to see
-                // if it okay numerically.  If not, QuicklySearchDiagonal fails.
-
-                ChosenPivot = QuicklySearchDiagonal(matrix, Step);
-                if (ChosenPivot != null)
-                {
-                    matrix.PivotSelectionMethod = 'q';
-                    return ChosenPivot;
-                }
-
-                // Quick search of diagonal failed, carefully search diagonal and check each
-                // pivot candidate numerically before even tentatively accepting it.
-
-                ChosenPivot = SearchDiagonal(matrix, Step);
-                if (ChosenPivot != null)
-                {
-                    matrix.PivotSelectionMethod = 'd';
-                    return ChosenPivot;
-                }
-            }
-
-            // No acceptable pivot found yet, search entire matrix. 
-            ChosenPivot = SearchEntireMatrix(matrix, Step);
-            matrix.PivotSelectionMethod = 'e';
-
-            return ChosenPivot;
-        }
-
-        /// <summary>
-        /// Search for singletons
-        /// </summary>
-        /// <param name="matrix">The matrix</param>
-        /// <param name="Step">The current step</param>
-        /// <returns></returns>
-        private static MatrixElement SearchForSingleton(Matrix matrix, int Step)
-        {
-            MatrixElement ChosenPivot;
-            int I;
-            long[] pMarkowitzProduct;
-            int Singletons;
-            double PivotMag;
-
-            // Initialize pointer that is to scan through MarkowitzProduct vector. 
-            int index = matrix.IntSize + 1;
-            pMarkowitzProduct = matrix.MarkowitzProd;
-            matrix.MarkowitzProd[matrix.IntSize + 1] = matrix.MarkowitzProd[Step];
-
-            // Decrement the count of available singletons, on the assumption that an
-            // acceptable one will be found
-            Singletons = matrix.Singletons--;
-
-            // Assure that following while loop will always terminate, this is just
-            // preventive medicine, if things are working right this should never
-            // be needed.
-            matrix.MarkowitzProd[Step - 1] = 0;
-
-            while (Singletons-- > 0)
-            {
-                // Singletons exist, find them. 
-
-                // This is tricky.  Am using a pointer to sequentially step through the
-                // MarkowitzProduct array.  Search terminates when singleton (Product = 0)
-                // is found.  Note that the conditional in the while statement
-                // ( *pMarkowitzProduct ) is true as long as the MarkowitzProduct is not
-                // equal to zero.  The row (and column) index on the diagonal is then
-                // calculated by subtracting the pointer to the Markowitz product of
-                // the first diagonal from the pointer to the Markowitz product of the
-                // desired element, the singleton.
-                //
-                // Search proceeds from the end (high row and column numbers) to the
-                // beginning (low row and column numbers) so that rows and columns with
-                // large Markowitz products will tend to be move to the bottom of the
-                // matrix.  However, choosing Diag[Step] is desirable because it would
-                // require no row and column interchanges, so inspect it first by
-                // putting its Markowitz product at the end of the MarkowitzProd
-                // vector.
-
-                while (pMarkowitzProduct[index--] != 0)
-                {
-                    // N bottles of beer on the wall;
-                    // N bottles of beer.
-                    // you take one down and pass it around;
-                    // N-1 bottles of beer on the wall.
-                }
-                I = index + 1;
-
-                // Assure that I is valid. 
-                if (I < Step) break;  // while (Singletons-- > 0) 
-                if (I > matrix.IntSize) I = Step;
-
-                // Singleton has been found in either/both row or/and column I. 
-                if ((ChosenPivot = matrix.Diag[I]) != null)
-                {
-                    // Singleton lies on the diagonal. 
-                    PivotMag = SparseDefinitions.ELEMENT_MAG(ChosenPivot);
-                    if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
-                        return ChosenPivot;
-                }
-                else
-                {
-                    // Singleton does not lie on diagonal, find it. 
-                    if (matrix.MarkowitzCol[I] == 0)
-                    {
-ChosenPivot = matrix.FirstInCol[I];
-                        while ((ChosenPivot != null) && (ChosenPivot.Row < Step))
-                            ChosenPivot = ChosenPivot.NextInCol;
-                        if (ChosenPivot != null)
-                        {
-                            // Reduced column has no elements, matrix is singular. 
-                            break;
-                        }
-                        PivotMag = SparseDefinitions.ELEMENT_MAG(ChosenPivot);
-                        if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
-                            return ChosenPivot;
-                        else
-                        {
-if (matrix.MarkowitzRow[I] == 0)
-                            {
-ChosenPivot = matrix.FirstInRow[I];
-                                while ((ChosenPivot != null) && (ChosenPivot.Col < Step))
-                                    ChosenPivot = ChosenPivot.NextInRow;
-                                if (ChosenPivot != null)
-                                {
-                                    // Reduced row has no elements, matrix is singular. 
-                                    break;
-                                }
-                                PivotMag = SparseDefinitions.ELEMENT_MAG(ChosenPivot);
-                                if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
-                                    return ChosenPivot;
-                            }
-                        }
-                    }
-                    else
-                    {
-ChosenPivot = matrix.FirstInRow[I];
-                        while ((ChosenPivot != null) && (ChosenPivot.Col < Step))
-                            ChosenPivot = ChosenPivot.NextInRow;
-                        if (ChosenPivot != null)
-                        {   // Reduced row has no elements, matrix is singular. 
-                            break;
-                        }
-                        PivotMag = SparseDefinitions.ELEMENT_MAG(ChosenPivot);
-                        if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
-                            return ChosenPivot;
-                    }
-                }
-                // Singleton not acceptable (too small), try another. 
-            } // end of while(lSingletons>0) 
-
-            // All singletons were unacceptable.  Restore matrix.Singletons count.
-            // Initial assumption that an acceptable singleton would be found was wrong.
-            matrix.Singletons++;
-            return null;
-        }
-
-        /// <summary>
-        /// Quickly search the diagonal
-        /// </summary>
-        /// <param name="matrix">The matrix</param>
-        /// <param name="Step">The current step</param>
-        /// <returns></returns>
-        private static MatrixElement QuicklySearchDiagonal(Matrix matrix, int Step)
-        {
-            long MinMarkowitzProduct;
-            // long pMarkowitzProduct;
-            MatrixElement pDiag;
-            int I;
-            MatrixElement ChosenPivot, pOtherInRow, pOtherInCol;
-            double Magnitude, LargestInCol, LargestOffDiagonal;
-
-            ChosenPivot = null;
-            MinMarkowitzProduct = long.MaxValue;
-            int index = matrix.IntSize + 2;
-            // pMarkowitzProduct = matrix.MarkowitzProd[index];
-            matrix.MarkowitzProd[matrix.IntSize + 1] = matrix.MarkowitzProd[Step];
-
-            // Assure that following while loop will always terminate. 
-            matrix.MarkowitzProd[Step - 1] = -1;
-
-            // This is tricky.  Am using a pointer in the inner while loop to
-            // sequentially step through the MarkowitzProduct array.  Search
-            // terminates when the Markowitz product of zero placed at location
-            // Step-1 is found.  The row (and column) index on the diagonal is then
-            // calculated by subtracting the pointer to the Markowitz product of
-            // the first diagonal from the pointer to the Markowitz product of the
-            // desired element. The outer for loop is infinite, broken by using
-            // break.
-            //
-            // Search proceeds from the end (high row and column numbers) to the
-            // beginning (low row and column numbers) so that rows and columns with
-            // large Markowitz products will tend to be move to the bottom of the
-            // matrix.  However, choosing Diag[Step] is desirable because it would
-            // require no row and column interchanges, so inspect it first by
-            // putting its Markowitz product at the end of the MarkowitzProd
-            // vector.
-
-            for (; ; )  // Endless for loop. 
-            {
-                while (matrix.MarkowitzProd[--index] >= MinMarkowitzProduct)
-                {
-                    // Just passing through. 
-                }
-
-                I = index; // pMarkowitzProduct - matrix.MarkowitzProd; // NOTE: Weird way to calculate index?
-
-                // Assure that I is valid; if I < Step, terminate search. 
-                if (I < Step)
-                    break; // Endless for loop 
-                if (I > matrix.IntSize)
-                    I = Step;
-
-                if ((pDiag = matrix.Diag[I]) == null)
-                    continue; // Endless for loop 
-                if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pDiag)) <= matrix.AbsThreshold)
-                    continue; // Endless for loop 
-
-                if (matrix.MarkowitzProd[index] == 1)
-                {
-                    // Case where only one element exists in row and column other than diagonal. 
-
-                    // Find off-diagonal elements. 
-                    pOtherInRow = pDiag.NextInRow;
-                    pOtherInCol = pDiag.NextInCol;
-                    if (pOtherInRow == null && pOtherInCol == null)
-                    {
-                        pOtherInRow = matrix.FirstInRow[I];
-                        while (pOtherInRow != null)
-                        {
-if (pOtherInRow.Col >= Step && pOtherInRow.Col != I)
-                                break;
-                            pOtherInRow = pOtherInRow.NextInRow;
-                        }
-                        pOtherInCol = matrix.FirstInCol[I];
-                        while (pOtherInCol != null)
-                        {
-if (pOtherInCol.Row >= Step && pOtherInCol.Row != I)
-                                break;
-                            pOtherInCol = pOtherInCol.NextInCol;
-                        }
-                    }
-
-                    /* Accept diagonal as pivot if diagonal is larger than off-diagonals and the
-                    // off-diagonals are placed symmetricly. */
-                    if (pOtherInRow != null && pOtherInCol != null)
-                    {
-                        if (pOtherInRow.Col == pOtherInCol.Row)
-                        {
-                            LargestOffDiagonal = Math.Max(SparseDefinitions.ELEMENT_MAG(pOtherInRow), SparseDefinitions.ELEMENT_MAG(pOtherInCol));
-                            if (Magnitude >= LargestOffDiagonal)
-                            {
-                                // Accept pivot, it is unlikely to contribute excess error. 
-                                return pDiag;
-                            }
-                        }
-                    }
-                }
-
-                MinMarkowitzProduct = matrix.MarkowitzProd[index]; // *pMarkowitzProduct;
-                ChosenPivot = pDiag;
-            }  // End of endless for loop. 
-
-            if (ChosenPivot != null)
-            {
-                LargestInCol = FindBiggestInColExclude(matrix, ChosenPivot, Step);
-                if (SparseDefinitions.ELEMENT_MAG(ChosenPivot) <= matrix.RelThreshold * LargestInCol)
-                    ChosenPivot = null;
-            }
-            return ChosenPivot;
-        }
-
-        /// <summary>
-        /// Search the diagonal
-        /// </summary>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="Step">Step</param>
-        /// <returns></returns>
-        private static MatrixElement SearchDiagonal(Matrix matrix, int Step)
-        {
-            int J;
-            long MinMarkowitzProduct;
-            //, *pMarkowitzProduct;
-            int I;
-            MatrixElement pDiag;
-            int NumberOfTies = 0, Size = matrix.IntSize;
-            MatrixElement ChosenPivot;
-            double Magnitude, Ratio, RatioOfAccepted = 0, LargestInCol;
-
-            ChosenPivot = null;
-            MinMarkowitzProduct = long.MaxValue;
-            int index = Size + 2;
-            // pMarkowitzProduct = &(matrix.MarkowitzProd[Size+2]);
-            matrix.MarkowitzProd[Size + 1] = matrix.MarkowitzProd[Step];
-
-            // Start search of diagonal. 
-            for (J = Size + 1; J > Step; J--)
-            {
-                if (matrix.MarkowitzProd[--index] > MinMarkowitzProduct)
-                    continue; // for loop 
-                if (J > matrix.IntSize)
-                    I = Step;
-                else
-                    I = J;
-                if ((pDiag = matrix.Diag[I]) == null)
-                    continue; // for loop 
-                if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pDiag)) <= matrix.AbsThreshold)
-                    continue; // for loop 
-
-                // Test to see if diagonal's magnitude is acceptable. 
-                LargestInCol = FindBiggestInColExclude(matrix, pDiag, Step);
-                if (Magnitude <= matrix.RelThreshold * LargestInCol)
-                    continue; // for loop 
-
-                if (matrix.MarkowitzProd[index] < MinMarkowitzProduct)
-                {
-                    // Notice strict inequality in test. This is a new smallest MarkowitzProduct. 
-                    ChosenPivot = pDiag;
-                    MinMarkowitzProduct = matrix.MarkowitzProd[index];
-                    RatioOfAccepted = LargestInCol / Magnitude;
-                    NumberOfTies = 0;
-                }
-                else
-                {
-                    // This case handles Markowitz ties. 
-                    NumberOfTies++;
-                    Ratio = LargestInCol / Magnitude;
-                    if (Ratio < RatioOfAccepted)
-                    {
-ChosenPivot = pDiag;
-                        RatioOfAccepted = Ratio;
-                    }
-                    if (NumberOfTies >= MinMarkowitzProduct * Matrix.TIES_MULTIPLIER)
-                        return ChosenPivot;
-                }
-            } // End of for(Step) 
-            return ChosenPivot;
-        }
-
-        /// <summary>
-        /// Search the entire matrix!
-        /// </summary>
-        /// <param name="matrix">The matrix</param>
-        /// <param name="Step">Current step</param>
-        /// <returns></returns>
-        private static MatrixElement SearchEntireMatrix(Matrix matrix, int Step)
-        {
-            int I, Size = matrix.IntSize;
-            MatrixElement pElement;
-            int NumberOfTies = 0;
-            long Product, MinMarkowitzProduct;
-            MatrixElement ChosenPivot, pLargestElement = null;
-            double Magnitude, LargestElementMag, Ratio, RatioOfAccepted = 0, LargestInCol;
-
-            ChosenPivot = null;
-            LargestElementMag = 0.0;
-            MinMarkowitzProduct = long.MaxValue;
-
-            // Start search of matrix on column by column basis. 
-            for (I = Step; I <= Size; I++)
-            {
-                pElement = matrix.FirstInCol[I];
-
-                while (pElement != null && pElement.Row < Step)
-                    pElement = pElement.NextInCol;
-
-                if ((LargestInCol = FindLargestInCol(pElement)) == 0.0)
-                    continue; // for loop 
-
-                while (pElement != null)
-                {
-                    /* Check to see if element is the largest encountered so far.  If so, record
-                       its magnitude and address. */
-                    if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pElement)) > LargestElementMag)
-                    {
-                        LargestElementMag = Magnitude;
-                        pLargestElement = pElement;
-                    }
-                    // Calculate element's MarkowitzProduct. 
-                    Product = matrix.MarkowitzRow[pElement.Row] *
-                              matrix.MarkowitzCol[pElement.Col];
-
-                    // Test to see if element is acceptable as a pivot candidate. 
-                    if ((Product <= MinMarkowitzProduct) && (Magnitude > matrix.RelThreshold * LargestInCol) && (Magnitude > matrix.AbsThreshold))
-                    {
-                        /* Test to see if element has lowest MarkowitzProduct yet found, or whether it
-                           is tied with an element found earlier. */
-                        if (Product < MinMarkowitzProduct)
-                        {
-                            // Notice strict inequality in test. This is a new smallest MarkowitzProduct. 
-                            ChosenPivot = pElement;
-                            MinMarkowitzProduct = Product;
-                            RatioOfAccepted = LargestInCol / Magnitude;
-                            NumberOfTies = 0;
-                        }
-                        else
-                        {
-                            // This case handles Markowitz ties. 
-                            NumberOfTies++;
-                            Ratio = LargestInCol / Magnitude;
-                            if (Ratio < RatioOfAccepted)
-                            {
-ChosenPivot = pElement;
-                                RatioOfAccepted = Ratio;
-                            }
-                            if (NumberOfTies >= MinMarkowitzProduct * Matrix.TIES_MULTIPLIER)
-                                return ChosenPivot;
-                        }
-                    }
-                    pElement = pElement.NextInCol;
-                }  // End of while(pElement != null) 
-            } // End of for(Step) 
-
-            if (ChosenPivot != null) return ChosenPivot;
-
-            if (LargestElementMag == 0.0)
-            {
-                matrix.Error = SparseError.Singular;
-                return null;
-            }
-
-            matrix.Error = SparseError.SmallPivot;
-            return pLargestElement;
-        }
-
-        /// <summary>
-        /// Find largest element in the column
-        /// </summary>
-        /// <param name="pElement">Element where we need to start searching</param>
-        /// <returns></returns>
-        private static double FindLargestInCol(MatrixElement pElement)
-        {
-            double Magnitude, Largest = 0.0;
-
-            // Search column for largest element beginning at Element. 
-            while (pElement != null)
-            {
-                if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pElement)) > Largest)
-                    Largest = Magnitude;
-                pElement = pElement.NextInCol;
-            }
-
-            return Largest;
-        }
-
-        /// <summary>
-        /// Find biggest value in column excluding
-        /// </summary>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="pElement">Element</param>
-        /// <param name="Step">Step</param>
-        /// <returns></returns>
-        private static double FindBiggestInColExclude(Matrix matrix, MatrixElement pElement, int Step)
-        {
-            int Row;
-            int Col;
-            double Largest, Magnitude;
-
-            Row = pElement.Row;
-            Col = pElement.Col;
-            pElement = matrix.FirstInCol[Col];
-
-            // Travel down column until reduced submatrix is entered. 
-            while ((pElement != null) && (pElement.Row < Step))
-                pElement = pElement.NextInCol;
-
-            // Initialize the variable Largest. 
-            if (pElement.Row != Row)
-                Largest = SparseDefinitions.ELEMENT_MAG(pElement);
-            else
-                Largest = 0.0;
-
-            // Search rest of column for largest element, avoiding excluded element. 
-            while ((pElement = pElement.NextInCol) != null)
-            {
-                if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pElement)) > Largest)
-                {
-                    if (pElement.Row != Row)
-                        Largest = Magnitude;
-                }
-            }
-
-            return Largest;
-        }
 
         /// <summary>
         /// Exchange row and column
@@ -1058,13 +338,14 @@ ChosenPivot = pElement;
         /// <param name="Step">Current step</param>
         private static void ExchangeRowsAndCols(Matrix matrix, MatrixElement pPivot, int Step)
         {
+            var pivoting = matrix.Pivoting;
             int Row, Col;
             long OldMarkowitzProd_Step, OldMarkowitzProd_Row, OldMarkowitzProd_Col;
 
             Row = pPivot.Row;
             Col = pPivot.Col;
-            matrix.PivotsOriginalRow = Row;
-            matrix.PivotsOriginalCol = Col;
+            pivoting.PivotsOriginalRow = Row;
+            pivoting.PivotsOriginalCol = Col;
 
             if ((Row == Step) && (Col == Step)) return;
 
@@ -1073,31 +354,31 @@ ChosenPivot = pElement;
             {
                 RowExchange(matrix, Step, Row);
                 ColExchange(matrix, Step, Col);
-                SparseDefinitions.SWAP(ref matrix.MarkowitzProd[Step], ref matrix.MarkowitzProd[Row]);
+                SparseDefinitions.SWAP(ref pivoting.MarkowitzProd[Step], ref pivoting.MarkowitzProd[Row]);
                 SparseDefinitions.SWAP(ref matrix.Diag[Row], ref matrix.Diag[Step]);
             }
             else
             {
 
                 // Initialize variables that hold old Markowitz products. 
-                OldMarkowitzProd_Step = matrix.MarkowitzProd[Step];
-                OldMarkowitzProd_Row = matrix.MarkowitzProd[Row];
-                OldMarkowitzProd_Col = matrix.MarkowitzProd[Col];
+                OldMarkowitzProd_Step = pivoting.MarkowitzProd[Step];
+                OldMarkowitzProd_Row = pivoting.MarkowitzProd[Row];
+                OldMarkowitzProd_Col = pivoting.MarkowitzProd[Col];
 
                 // Exchange rows. 
                 if (Row != Step)
                 {
                     RowExchange(matrix, Step, Row);
                     matrix.NumberOfInterchangesIsOdd = !matrix.NumberOfInterchangesIsOdd;
-                    matrix.MarkowitzProd[Row] = matrix.MarkowitzRow[Row] * matrix.MarkowitzCol[Row];
+                    pivoting.MarkowitzProd[Row] = pivoting.MarkowitzRow[Row] * pivoting.MarkowitzCol[Row];
 
                     // Update singleton count. 
-                    if ((matrix.MarkowitzProd[Row] == 0) != (OldMarkowitzProd_Row == 0))
+                    if ((pivoting.MarkowitzProd[Row] == 0) != (OldMarkowitzProd_Row == 0))
                     {
                         if (OldMarkowitzProd_Row == 0)
-                            matrix.Singletons--;
+                            pivoting.Singletons--;
                         else
-                            matrix.Singletons++;
+                            pivoting.Singletons++;
                     }
                 }
 
@@ -1106,15 +387,15 @@ ChosenPivot = pElement;
                 {
                     ColExchange(matrix, Step, Col);
                     matrix.NumberOfInterchangesIsOdd = !matrix.NumberOfInterchangesIsOdd;
-                    matrix.MarkowitzProd[Col] = matrix.MarkowitzCol[Col] * matrix.MarkowitzRow[Col];
+                    pivoting.MarkowitzProd[Col] = pivoting.MarkowitzCol[Col] * pivoting.MarkowitzRow[Col];
 
                     // Update singleton count. 
-                    if ((matrix.MarkowitzProd[Col] == 0) != (OldMarkowitzProd_Col == 0))
+                    if ((pivoting.MarkowitzProd[Col] == 0) != (OldMarkowitzProd_Col == 0))
                     {
                         if (OldMarkowitzProd_Col == 0)
-                            matrix.Singletons--;
+                            pivoting.Singletons--;
                         else
-                            matrix.Singletons++;
+                            pivoting.Singletons++;
                     }
 
                     matrix.Diag[Col] = matrix.FindElement(Col, Col);
@@ -1126,13 +407,13 @@ ChosenPivot = pElement;
                 matrix.Diag[Step] = matrix.FindElement(Step, Step);
 
                 // Update singleton count. 
-                matrix.MarkowitzProd[Step] = matrix.MarkowitzCol[Step] * matrix.MarkowitzRow[Step];
-                if ((matrix.MarkowitzProd[Step] == 0) != (OldMarkowitzProd_Step == 0))
+                pivoting.MarkowitzProd[Step] = pivoting.MarkowitzCol[Step] * pivoting.MarkowitzRow[Step];
+                if ((pivoting.MarkowitzProd[Step] == 0) != (OldMarkowitzProd_Step == 0))
                 {
                     if (OldMarkowitzProd_Step == 0)
-                        matrix.Singletons--;
+                        pivoting.Singletons--;
                     else
-                        matrix.Singletons++;
+                        pivoting.Singletons++;
                 }
             }
             return;
@@ -1198,8 +479,8 @@ ChosenPivot = pElement;
                 ExchangeColElements(matrix, Row1, Element1, Row2, Element2, Column);
             }  // end of while(Row1Ptr != null ||  Row2Ptr != null) 
 
-            if (matrix.InternalVectorsAllocated)
-                SparseDefinitions.SWAP(ref matrix.MarkowitzRow[Row1], ref matrix.MarkowitzRow[Row2]);
+            if (matrix.Pivoting.InternalVectorsAllocated)
+                SparseDefinitions.SWAP(ref matrix.Pivoting.MarkowitzRow[Row1], ref matrix.Pivoting.MarkowitzRow[Row2]);
             SparseDefinitions.SWAP(ref matrix.FirstInRow[Row1], ref matrix.FirstInRow[Row2]);
             SparseDefinitions.SWAP(ref matrix.Translation.IntToExtRowMap[Row1], ref matrix.Translation.IntToExtRowMap[Row2]);
             matrix.Translation.ExtToIntRowMap[matrix.Translation.IntToExtRowMap[Row1]] = Row1;
@@ -1267,8 +548,8 @@ ChosenPivot = pElement;
                 ExchangeRowElements(matrix, Col1, Element1, Col2, Element2, Row);
             }  // end of while(Col1Ptr != null || Col2Ptr != null)
 
-            if (matrix.InternalVectorsAllocated)
-                SparseDefinitions.SWAP(ref matrix.MarkowitzCol[Col1], ref matrix.MarkowitzCol[Col2]);
+            if (matrix.Pivoting.InternalVectorsAllocated)
+                SparseDefinitions.SWAP(ref matrix.Pivoting.MarkowitzCol[Col1], ref matrix.Pivoting.MarkowitzCol[Col2]);
 
             SparseDefinitions.SWAP(ref matrix.FirstInCol[Col1], ref matrix.FirstInCol[Col2]);
             SparseDefinitions.SWAP(ref matrix.Translation.IntToExtColMap[Col1], ref matrix.Translation.IntToExtColMap[Col2]);
@@ -1644,60 +925,7 @@ ChosenPivot = pElement;
             }
         }
 
-        /// <summary>
-        /// Update Markowitz numbers
-        /// </summary>
-        /// <param name="matrix">The matrix</param>
-        /// <param name="pPivot">Pivot element</param>
-        private static void UpdateMarkowitzNumbers(Matrix matrix, MatrixElement pPivot)
-        {
-            int Row, Col;
-            MatrixElement ColPtr, RowPtr;
-            int[] MarkoRow = matrix.MarkowitzRow, MarkoCol = matrix.MarkowitzCol;
-            double Product;
 
-            // Update Markowitz numbers. 
-            for (ColPtr = pPivot.NextInCol; ColPtr != null; ColPtr = ColPtr.NextInCol)
-            {
-                Row = ColPtr.Row;
-                --MarkoRow[Row];
-
-                // Form Markowitz product while being cautious of overflows. 
-                if ((MarkoRow[Row] > short.MaxValue && MarkoCol[Row] != 0) ||
-                    (MarkoCol[Row] > short.MaxValue && MarkoRow[Row] != 0))
-                {
-                    Product = MarkoCol[Row] * MarkoRow[Row];
-                    if (Product >= long.MaxValue)
-                        matrix.MarkowitzProd[Row] = long.MaxValue;
-                    else
-                        matrix.MarkowitzProd[Row] = (long)Product;
-                }
-                else matrix.MarkowitzProd[Row] = MarkoRow[Row] * MarkoCol[Row];
-                if (MarkoRow[Row] == 0)
-                    matrix.Singletons++;
-            }
-
-            for (RowPtr = pPivot.NextInRow; RowPtr != null; RowPtr = RowPtr.NextInRow)
-            {
-                Col = RowPtr.Col;
-                --MarkoCol[Col];
-
-                // Form Markowitz product while being cautious of overflows. 
-                if ((MarkoRow[Col] > short.MaxValue && MarkoCol[Col] != 0) ||
-                    (MarkoCol[Col] > short.MaxValue && MarkoRow[Col] != 0))
-                {
-                    Product = MarkoCol[Col] * MarkoRow[Col];
-                    if (Product >= long.MaxValue)
-                        matrix.MarkowitzProd[Col] = long.MaxValue;
-                    else
-                        matrix.MarkowitzProd[Col] = (long)Product;
-                }
-                else matrix.MarkowitzProd[Col] = MarkoRow[Col] * MarkoCol[Col];
-                if ((MarkoCol[Col] == 0) && (MarkoRow[Col] != 0))
-                    matrix.Singletons++;
-            }
-            return;
-        }
 
         /// <summary>
         /// Create a fillin matrix element
@@ -1708,6 +936,7 @@ ChosenPivot = pElement;
         /// <returns></returns>
         private static MatrixElement CreateFillin(Matrix matrix, int Row, int Col)
         {
+            var pivoting = matrix.Pivoting;
             MatrixElement pElement, aboveElement;
 
             // Find Element above fill-in. 
@@ -1728,13 +957,13 @@ ChosenPivot = pElement;
             // End of search, create the element. 
             pElement = matrix.CreateElement(Row, Col);
 
-            // Update Markowitz counts and products. 
-            matrix.MarkowitzProd[Row] = ++matrix.MarkowitzRow[Row] * matrix.MarkowitzCol[Row];
-            if ((matrix.MarkowitzRow[Row] == 1) && (matrix.MarkowitzCol[Row] != 0))
-                matrix.Singletons--;
-            matrix.MarkowitzProd[Col] = ++matrix.MarkowitzCol[Col] * matrix.MarkowitzRow[Col];
-            if ((matrix.MarkowitzRow[Col] != 0) && (matrix.MarkowitzCol[Col] == 1))
-                matrix.Singletons--;
+            // Update Markowitz counts and products
+            pivoting.MarkowitzProd[Row] = ++pivoting.MarkowitzRow[Row] * pivoting.MarkowitzCol[Row];
+            if ((pivoting.MarkowitzRow[Row] == 1) && (pivoting.MarkowitzCol[Row] != 0))
+                pivoting.Singletons--;
+            pivoting.MarkowitzProd[Col] = ++pivoting.MarkowitzCol[Col] * pivoting.MarkowitzRow[Col];
+            if ((pivoting.MarkowitzRow[Col] != 0) && (pivoting.MarkowitzCol[Col] == 1))
+                pivoting.Singletons--;
 
             return pElement;
         }

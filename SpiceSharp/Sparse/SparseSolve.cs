@@ -33,7 +33,7 @@
                 return;
             }
 
-            Intermediate = matrix.Intermediate;
+            Intermediate = matrix.Pivoting.Intermediate;
             Size = matrix.IntSize;
 
             // Initialize Intermediate vector. 
@@ -98,7 +98,7 @@
             ElementValue Temp;
 
             Size = matrix.IntSize;
-            Intermediate = matrix.Intermediate;
+            Intermediate = matrix.Pivoting.Intermediate;
 
             // Initialize Intermediate vector. 
             pExtOrder = matrix.Translation.IntToExtRowMap;
@@ -183,7 +183,7 @@
             }
 
             Size = matrix.IntSize;
-            Intermediate = matrix.Intermediate;
+            Intermediate = matrix.Pivoting.Intermediate;
 
             // Initialize Intermediate vector. 
             pExtOrder = matrix.Translation.IntToExtColMap;
@@ -248,7 +248,7 @@
             // Begin `SolveComplexTransposedMatrix'. 
 
             Size = matrix.IntSize;
-            Intermediate = matrix.Intermediate;
+            Intermediate = matrix.Pivoting.Intermediate;
 
             // Initialize Intermediate vector. 
             pExtOrder = matrix.Translation.IntToExtColMap;

@@ -79,34 +79,30 @@ namespace SpiceSharp.Sparse
         internal MatrixElement[] FirstInRow;
         internal MatrixElement TrashCan;
 
-        internal bool[] DoCmplxDirect;
-        internal bool[] DoRealDirect;
-        internal int[] MarkowitzRow;
-        internal int[] MarkowitzCol;
-        internal long[] MarkowitzProd;
-
         internal bool Factored;
-
-        internal ElementValue[] Intermediate;
-        internal bool InternalVectorsAllocated;
 
         internal int MaxRowCountInLowerTri;
         internal bool NeedsOrdering;
         internal bool NumberOfInterchangesIsOdd;
-        internal bool Partitioned;
-        internal int PivotsOriginalCol;
-        internal int PivotsOriginalRow;
-        internal char PivotSelectionMethod;
+
+
         internal bool Reordered;
         internal bool RowsLinked;
 
-        internal int Singletons;
 
         internal SparseError Error;
         internal int SingularCol;
         internal int SingularRow;
 
+        /// <summary>
+        /// Translation for indices
+        /// </summary>
         public SparseTranslation Translation { get; }
+
+        /// <summary>
+        /// Pivoting
+        /// </summary>
+        public SparsePivoting Pivoting { get; }
 
         /// <summary>
         /// Constructor
@@ -138,9 +134,7 @@ namespace SpiceSharp.Sparse
             Reordered = false;
             NeedsOrdering = true;
             NumberOfInterchangesIsOdd = false;
-            Partitioned = false;
             RowsLinked = false;
-            InternalVectorsAllocated = false;
             SingularCol = 0;
             SingularRow = 0;
             IntSize = size;
@@ -148,12 +142,6 @@ namespace SpiceSharp.Sparse
             Size = size;
             AllocatedExtSize = allocated;
             CurrentSize = 0;
-            MarkowitzRow = null;
-            MarkowitzCol = null;
-            MarkowitzProd = null;
-            DoCmplxDirect = null;
-            DoRealDirect = null;
-            Intermediate = null;
             RelThreshold = DEFAULT_THRESHOLD;
             AbsThreshold = 0.0;
 
@@ -168,6 +156,8 @@ namespace SpiceSharp.Sparse
             FirstInRow = new MatrixElement[sizeplusone];
 
             Translation = new SparseTranslation(sizeplusone);
+
+            Pivoting = new SparsePivoting();
 
         }
 

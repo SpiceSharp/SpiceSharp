@@ -145,43 +145,37 @@ namespace SpiceSharp.Sparse
         /// Allocate memory when making a matrix bigger
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        /// <param name="NewSize">Matrix size</param>
-        private void EnlargeMatrix(Matrix matrix, int NewSize)
+        /// <param name="newsize">Matrix size</param>
+        private void EnlargeMatrix(Matrix matrix, int newsize)
         {
             int OldAllocatedSize = matrix.AllocatedSize;
-            matrix.IntSize = NewSize;
+            matrix.IntSize = newsize;
 
-            if (NewSize <= OldAllocatedSize)
+            if (newsize <= OldAllocatedSize)
                 return;
 
             // Expand the matrix frame
-            NewSize = Math.Max(NewSize, (int)(Matrix.EXPANSION_FACTOR * OldAllocatedSize));
-            matrix.AllocatedSize = NewSize;
+            newsize = Math.Max(newsize, (int)(Matrix.EXPANSION_FACTOR * OldAllocatedSize));
+            matrix.AllocatedSize = newsize;
 
-            Array.Resize(ref IntToExtColMap, NewSize + 1);
-            Array.Resize(ref IntToExtRowMap, NewSize + 1);
-            Array.Resize(ref matrix.Diag, NewSize + 1);
-            Array.Resize(ref matrix.FirstInCol, NewSize + 1);
-            Array.Resize(ref matrix.FirstInRow, NewSize + 1);
+            Array.Resize(ref IntToExtColMap, newsize + 1);
+            Array.Resize(ref IntToExtRowMap, newsize + 1);
+            Array.Resize(ref matrix.Diag, newsize + 1);
+            Array.Resize(ref matrix.FirstInCol, newsize + 1);
+            Array.Resize(ref matrix.FirstInRow, newsize + 1);
 
             // Destroy the Markowitz and Intermediate vectors, they will be recreated
             // in spOrderAndFactor().
-            matrix.MarkowitzRow = null;
-            matrix.MarkowitzCol = null;
-            matrix.MarkowitzProd = null;
-            matrix.DoRealDirect = null;
-            matrix.DoCmplxDirect = null;
-            matrix.Intermediate = null;
-            matrix.InternalVectorsAllocated = false;
+            matrix.Pivoting.Clear();
 
-            /* Initialize the new portion of the vectors. */
-            for (int I = OldAllocatedSize + 1; I <= NewSize; I++)
+            // Initialize the new portion of the vectors
+            for (int i = OldAllocatedSize + 1; i <= newsize; i++)
             {
-                IntToExtColMap[I] = I;
-                IntToExtRowMap[I] = I;
-                matrix.Diag[I] = null;
-                matrix.FirstInRow[I] = null;
-                matrix.FirstInCol[I] = null;
+                IntToExtColMap[i] = i;
+                IntToExtRowMap[i] = i;
+                matrix.Diag[i] = null;
+                matrix.FirstInRow[i] = null;
+                matrix.FirstInCol[i] = null;
             }
         }
     }
