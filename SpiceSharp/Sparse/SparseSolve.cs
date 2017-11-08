@@ -37,7 +37,7 @@
             Size = matrix.IntSize;
 
             // Initialize Intermediate vector. 
-            pExtOrder = matrix.IntToExtRowMap;
+            pExtOrder = matrix.Translation.IntToExtRowMap;
             for (I = Size; I > 0; I--)
                 Intermediate[I].Real = RHS[pExtOrder[I]];
 
@@ -73,7 +73,7 @@
             }
 
             // Unscramble Intermediate vector while placing data in to Solution vector. 
-            pExtOrder = matrix.IntToExtColMap;
+            pExtOrder = matrix.Translation.IntToExtColMap;
             for (I = Size; I > 0; I--)
                 Solution[pExtOrder[I]] = Intermediate[I];
 
@@ -101,7 +101,7 @@
             Intermediate = matrix.Intermediate;
 
             // Initialize Intermediate vector. 
-            pExtOrder = matrix.IntToExtRowMap;
+            pExtOrder = matrix.Translation.IntToExtRowMap;
             for (I = Size; I > 0; I--)
             {
                 Intermediate[I].Real = RHS[pExtOrder[I]];
@@ -146,7 +146,7 @@
             }
 
             // Unscramble Intermediate vector while placing data in to Solution vector.
-            pExtOrder = matrix.IntToExtColMap;
+            pExtOrder = matrix.Translation.IntToExtColMap;
             for (I = Size; I > 0; I--)
             {
                 Solution[pExtOrder[I]] = Intermediate[I].Real;
@@ -186,7 +186,7 @@
             Intermediate = matrix.Intermediate;
 
             // Initialize Intermediate vector. 
-            pExtOrder = matrix.IntToExtColMap;
+            pExtOrder = matrix.Translation.IntToExtColMap;
             for (I = Size; I > 0; I--)
                 Intermediate[I].Real = RHS[pExtOrder[I]];
 
@@ -221,7 +221,7 @@
             }
 
             // Unscramble Intermediate vector while placing data in to Solution vector. 
-            pExtOrder = matrix.IntToExtRowMap;
+            pExtOrder = matrix.Translation.IntToExtRowMap;
             for (I = Size; I > 0; I--)
                 Solution[pExtOrder[I]] = Intermediate[I];
 
@@ -251,7 +251,7 @@
             Intermediate = matrix.Intermediate;
 
             // Initialize Intermediate vector. 
-            pExtOrder = matrix.IntToExtColMap;
+            pExtOrder = matrix.Translation.IntToExtColMap;
             for (I = Size; I > 0; I--)
             {
                 Intermediate[I].Real = RHS[pExtOrder[I]];
@@ -295,7 +295,7 @@
             }
 
             // Unscramble Intermediate vector while placing data in to Solution vector. 
-            pExtOrder = matrix.IntToExtRowMap;
+            pExtOrder = matrix.Translation.IntToExtRowMap;
             for (I = Size; I > 0; I--)
             {
                 Solution[pExtOrder[I]] = Intermediate[I].Real;

@@ -73,17 +73,11 @@ namespace SpiceSharp.Sparse
         internal int AllocatedSize;
         internal int AllocatedExtSize;
         internal int CurrentSize;
-        
 
         internal MatrixElement[] Diag;
         internal MatrixElement[] FirstInCol;
         internal MatrixElement[] FirstInRow;
         internal MatrixElement TrashCan;
-
-        internal int[] IntToExtColMap;
-        internal int[] IntToExtRowMap;
-        internal int[] ExtToIntColMap;
-        internal int[] ExtToIntRowMap;
 
         internal bool[] DoCmplxDirect;
         internal bool[] DoRealDirect;
@@ -111,6 +105,8 @@ namespace SpiceSharp.Sparse
         internal SparseError Error;
         internal int SingularCol;
         internal int SingularRow;
+
+        public SparseTranslation Translation { get; }
 
         /// <summary>
         /// Constructor
@@ -152,10 +148,6 @@ namespace SpiceSharp.Sparse
             Size = size;
             AllocatedExtSize = allocated;
             CurrentSize = 0;
-            ExtToIntColMap = null;
-            ExtToIntRowMap = null;
-            IntToExtColMap = null;
-            IntToExtRowMap = null;
             MarkowitzRow = null;
             MarkowitzCol = null;
             MarkowitzProd = null;
@@ -175,22 +167,8 @@ namespace SpiceSharp.Sparse
             FirstInCol = new MatrixElement[sizeplusone];
             FirstInRow = new MatrixElement[sizeplusone];
 
-            // Allocate space in memory for translation vectors
-            IntToExtColMap = new int[sizeplusone];
-            IntToExtRowMap = new int[sizeplusone];
-            ExtToIntColMap = new int[sizeplusone];
-            ExtToIntRowMap = new int[sizeplusone];
+            Translation = new SparseTranslation(sizeplusone);
 
-            // Initialize MapIntToExt vectors
-            for (int I = 1; I <= allocated; I++)
-            {
-                IntToExtRowMap[I] = I;
-                IntToExtColMap[I] = I;
-                ExtToIntColMap[I] = -1;
-                ExtToIntRowMap[I] = -1;
-            }
-            ExtToIntColMap[0] = 0;
-            ExtToIntRowMap[0] = 0;
         }
 
         /// <summary>

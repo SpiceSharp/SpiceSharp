@@ -84,7 +84,7 @@ namespace SpiceSharpTest.Sparse
             for (int r = 1; r < 100; r++)
             {
                 // Test row links
-                elt = matrix.FirstInRow[matrix.ExtToIntRowMap[r]];
+                elt = matrix.FirstInRow[matrix.Translation.ExtToIntRowMap[r]];
                 bool oddrow = r % 2 == 0;
 
                 for (int c = 1; c < 100; c++)
@@ -101,7 +101,7 @@ namespace SpiceSharpTest.Sparse
             for (int c = 1; c < 100; c++)
             {
                 // Test column links
-                elt = matrix.FirstInCol[matrix.ExtToIntColMap[c]];
+                elt = matrix.FirstInCol[matrix.Translation.ExtToIntColMap[c]];
                 bool oddcol = c % 2 == 0;
 
                 for (int r = 1; r < 100; r++)

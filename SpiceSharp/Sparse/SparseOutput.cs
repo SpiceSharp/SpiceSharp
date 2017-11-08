@@ -52,8 +52,8 @@ namespace SpiceSharp.Sparse
             PrintOrdToIntColMap = new int[Top + 1];
             for (I = 1; I <= Size; I++)
             {
-                PrintOrdToIntRowMap[matrix.IntToExtRowMap[I]] = I;
-                PrintOrdToIntColMap[matrix.IntToExtColMap[I]] = I;
+                PrintOrdToIntRowMap[matrix.Translation.IntToExtRowMap[I]] = I;
+                PrintOrdToIntColMap[matrix.Translation.IntToExtColMap[I]] = I;
             }
 
             // Pack the arrays
@@ -112,7 +112,7 @@ namespace SpiceSharp.Sparse
                                 Col = I;
                             else
                                 Col = PrintOrdToIntColMap[I];
-                            sb.AppendFormat(" {0,9}", matrix.IntToExtColMap[Col]);
+                            sb.AppendFormat(" {0,9}", matrix.Translation.IntToExtColMap[Col]);
                         }
                         sb.Append(Environment.NewLine + Environment.NewLine);
                     }
@@ -121,7 +121,7 @@ namespace SpiceSharp.Sparse
                         if (printReordered)
                             sb.Append($"Columns {StartCol} to {StopCol}.{Environment.NewLine}");
                         else
-                            sb.Append($"Columns {matrix.IntToExtColMap[PrintOrdToIntColMap[StartCol]]} to {matrix.IntToExtColMap[PrintOrdToIntColMap[StopCol]]}.{Environment.NewLine}");
+                            sb.Append($"Columns {matrix.Translation.IntToExtColMap[PrintOrdToIntColMap[StartCol]]} to {matrix.Translation.IntToExtColMap[PrintOrdToIntColMap[StopCol]]}.{Environment.NewLine}");
                     }
                 }
 
@@ -138,7 +138,7 @@ namespace SpiceSharp.Sparse
                         if (printReordered && !data)
                             sb.AppendFormat("{0,4}", I);
                         else
-                            sb.AppendFormat("{0,4}", matrix.IntToExtRowMap[Row]);
+                            sb.AppendFormat("{0,4}", matrix.Translation.IntToExtRowMap[Row]);
                         if (!data)
                             sb.Append(' ');
                     }

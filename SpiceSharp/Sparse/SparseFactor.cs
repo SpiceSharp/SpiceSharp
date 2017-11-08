@@ -474,7 +474,7 @@ namespace SpiceSharp.Sparse
                 }
 
                 // Include nonzero elements in the RHS vector
-                ExtRow = matrix.IntToExtRowMap[I];
+                ExtRow = matrix.Translation.IntToExtRowMap[I];
 
                 if (RHS != null)
                     if (RHS[ExtRow] != 0.0)
@@ -1201,9 +1201,9 @@ ChosenPivot = pElement;
             if (matrix.InternalVectorsAllocated)
                 SparseDefinitions.SWAP(ref matrix.MarkowitzRow[Row1], ref matrix.MarkowitzRow[Row2]);
             SparseDefinitions.SWAP(ref matrix.FirstInRow[Row1], ref matrix.FirstInRow[Row2]);
-            SparseDefinitions.SWAP(ref matrix.IntToExtRowMap[Row1], ref matrix.IntToExtRowMap[Row2]);
-            matrix.ExtToIntRowMap[matrix.IntToExtRowMap[Row1]] = Row1;
-            matrix.ExtToIntRowMap[matrix.IntToExtRowMap[Row2]] = Row2;
+            SparseDefinitions.SWAP(ref matrix.Translation.IntToExtRowMap[Row1], ref matrix.Translation.IntToExtRowMap[Row2]);
+            matrix.Translation.ExtToIntRowMap[matrix.Translation.IntToExtRowMap[Row1]] = Row1;
+            matrix.Translation.ExtToIntRowMap[matrix.Translation.IntToExtRowMap[Row2]] = Row2;
         }
 
         /// <summary>
@@ -1271,9 +1271,9 @@ ChosenPivot = pElement;
                 SparseDefinitions.SWAP(ref matrix.MarkowitzCol[Col1], ref matrix.MarkowitzCol[Col2]);
 
             SparseDefinitions.SWAP(ref matrix.FirstInCol[Col1], ref matrix.FirstInCol[Col2]);
-            SparseDefinitions.SWAP(ref matrix.IntToExtColMap[Col1], ref matrix.IntToExtColMap[Col2]);
-            matrix.ExtToIntColMap[matrix.IntToExtColMap[Col1]] = Col1;
-            matrix.ExtToIntColMap[matrix.IntToExtColMap[Col2]] = Col2;
+            SparseDefinitions.SWAP(ref matrix.Translation.IntToExtColMap[Col1], ref matrix.Translation.IntToExtColMap[Col2]);
+            matrix.Translation.ExtToIntColMap[matrix.Translation.IntToExtColMap[Col1]] = Col1;
+            matrix.Translation.ExtToIntColMap[matrix.Translation.IntToExtColMap[Col2]] = Col2;
 
             return;
         }
@@ -1747,8 +1747,8 @@ ChosenPivot = pElement;
         /// <returns></returns>
         private static SparseError MatrixIsSingular(Matrix matrix, int Step)
         {
-            matrix.SingularRow = matrix.IntToExtRowMap[Step];
-            matrix.SingularCol = matrix.IntToExtColMap[Step];
+            matrix.SingularRow = matrix.Translation.IntToExtRowMap[Step];
+            matrix.SingularCol = matrix.Translation.IntToExtColMap[Step];
             return (matrix.Error = SparseError.Singular);
         }
 
@@ -1760,8 +1760,8 @@ ChosenPivot = pElement;
         /// <returns></returns>
         private static SparseError ZeroPivot(Matrix matrix, int Step)
         {
-            matrix.SingularRow = matrix.IntToExtRowMap[Step];
-            matrix.SingularCol = matrix.IntToExtColMap[Step];
+            matrix.SingularRow = matrix.Translation.IntToExtRowMap[Step];
+            matrix.SingularCol = matrix.Translation.IntToExtColMap[Step];
             return (matrix.Error = SparseError.ZeroDiagonal);
         }
     }
