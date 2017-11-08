@@ -76,7 +76,7 @@ namespace SpiceSharp.Sparse
                 // factorization.
                 Step = 1;
                 if (!matrix.RowsLinked)
-                    SparseBuild.LinkRows(matrix);
+                    matrix.LinkRows();
                 if (!matrix.Pivoting.InternalVectorsAllocated)
                     matrix.Pivoting.CreateInternalVectors(matrix.IntSize);
                 if ((int)matrix.Error >= (int)SparseError.Fatal)
@@ -864,7 +864,7 @@ namespace SpiceSharp.Sparse
                     // Test to see if desired element was not found, if not, create fill-in. 
                     if (pSub == null || pSub.Row > Row)
                     {
-                        pSub = CreateFillin(matrix, Row, pUpper.Col);
+                        pSub = matrix.CreateFillin(Row, pUpper.Col);
                     }
                     pSub.Value.Real -= pUpper.Value.Real * pLower.Value.Real;
                     pSub = pSub.NextInCol;
@@ -913,7 +913,7 @@ namespace SpiceSharp.Sparse
                     // Test to see if desired element was not found, if not, create fill-in. 
                     if (pSub == null || pSub.Row > Row)
                     {
-                        pSub = CreateFillin(matrix, Row, pUpper.Col);
+                        pSub = matrix.CreateFillin(Row, pUpper.Col);
                     }
 
                     // Cmplx expr: pElement -= *pUpper * pLower
@@ -923,49 +923,6 @@ namespace SpiceSharp.Sparse
                 }
                 pUpper = pUpper.NextInRow;
             }
-        }
-
-
-
-        /// <summary>
-        /// Create a fillin matrix element
-        /// </summary>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="Row">Row</param>
-        /// <param name="Col">Column</param>
-        /// <returns></returns>
-        private static MatrixElement CreateFillin(Matrix matrix, int Row, int Col)
-        {
-            var pivoting = matrix.Pivoting;
-            MatrixElement pElement, aboveElement;
-
-            // Find Element above fill-in. 
-            // ppElementAbove = &matrix.FirstInCol[Col];
-            aboveElement = null;
-            pElement = matrix.FirstInCol[Col];
-            while (pElement != null)
-            {
-                if (pElement.Row < Row)
-                {
-                    aboveElement = pElement;
-                    pElement = pElement.NextInCol;
-                }
-                else
-                    break; // while loop 
-            }
-
-            // End of search, create the element. 
-            pElement = matrix.CreateElement(Row, Col);
-
-            // Update Markowitz counts and products
-            pivoting.MarkowitzProd[Row] = ++pivoting.MarkowitzRow[Row] * pivoting.MarkowitzCol[Row];
-            if ((pivoting.MarkowitzRow[Row] == 1) && (pivoting.MarkowitzCol[Row] != 0))
-                pivoting.Singletons--;
-            pivoting.MarkowitzProd[Col] = ++pivoting.MarkowitzCol[Col] * pivoting.MarkowitzRow[Col];
-            if ((pivoting.MarkowitzRow[Col] != 0) && (pivoting.MarkowitzCol[Col] == 1))
-                pivoting.Singletons--;
-
-            return pElement;
         }
 
         /// <summary>

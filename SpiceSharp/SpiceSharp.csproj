@@ -182,7 +182,6 @@
     <Compile Include="Sparse\Matrix.cs" />
     <Compile Include="Sparse\MatrixElement.cs" />
     <Compile Include="Sparse\SparseException.cs" />
-    <Compile Include="Sparse\SparseBuild.cs" />
     <Compile Include="Sparse\SparsePivoting.cs" />
     <Compile Include="Sparse\SparseTranslation.cs" />
     <Compile Include="Sparse\SparseDefinitions.cs" />

@@ -162,6 +162,239 @@ namespace SpiceSharp.Sparse
         }
 
         /// <summary>
+        /// Clear all elements of a matrix
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public void Clear()
+        {
+            for (int i = 1; i <= IntSize; i++)
+            {
+                MatrixElement elt = FirstInCol[i];
+                while (elt != null)
+                {
+                    elt.Value.Cplx = 0.0;
+                    elt = elt.NextInCol;
+                }
+            }
+
+            // Reset flags
+            Error = SparseError.Okay;
+            Factored = false;
+            SingularCol = 0;
+            SingularRow = 0;
+        }
+
+        /// <summary>
+        /// Get an element from the matrix
+        /// If it does not find the element in the matrix, it will create it!
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="row">Row</param>
+        /// <param name="col">Column</param>
+        /// <returns></returns>
+        public MatrixElement GetElement(int row, int col)
+        {
+            if (row < 0 || col < 0)
+                throw new SparseException("Index out of bounds");
+
+            // Trash
+            if (row == 0 || col == 0)
+                return TrashCan;
+
+            // Translate external indices to internal indices
+            Translation.Translate(this, ref row, ref col);
+
+            // Quickly access diagonal
+            MatrixElement elt;
+            if (row != col || (elt = Diag[row]) == null)
+            {
+                // We have to find the element or create it!
+                elt = CreateElement(row, col);
+            }
+            return elt;
+        }
+
+        /// <summary>
+        /// Find an element in the matrix without creating it
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="row">Row</param>
+        /// <param name="col">Column</param>
+        /// <returns></returns>
+        public MatrixElement FindElement(int row, int col)
+        {
+            if (row < 0 || col < 0)
+                throw new SparseException("Index out of bounds");
+
+            if (row == 0 || col == 0)
+                return TrashCan;
+
+            // Translate external indices to internal indices
+            Translation.Translate(this, ref row, ref col);
+
+            // Find the element at the right place
+            MatrixElement elt = FirstInCol[col];
+            while (elt != null)
+            {
+                if (elt.Row < row)
+                {
+                    // Next one maybe?
+                    elt = elt.NextInCol;
+                }
+                else if (elt.Row == row)
+                {
+                    // Found it!
+                    return elt;
+                }
+                else
+                {
+                    // Aww...
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Create a new element in the matrix if it doesn't exist
+        /// Only used internally!
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="row">Row</param>
+        /// <param name="col">Column</param>
+        /// <returns></returns>
+        private MatrixElement CreateElement(int row, int col)
+        {
+            MatrixElement elt = FirstInCol[col], last = null;
+
+            // Splice into the column vector while also searching for an existing element
+            if (elt == null || elt.Row > row)
+            {
+                // There are no elements yet in the column
+                elt = new MatrixElement(row, col);
+                elt.NextInCol = FirstInCol[col];
+                FirstInCol[col] = elt;
+                if (row == col)
+                    Diag[row] = elt;
+
+                if (RowsLinked)
+                    SpliceInRows(elt);
+            }
+            else
+            {
+                // Find the insert point
+                while (elt != null && elt.Row < row)
+                {
+                    last = elt;
+                    elt = elt.NextInCol;
+                }
+
+                // If the element does not exist yet, create it
+                if (elt == null || elt.Row != row)
+                {
+                    elt = new MatrixElement(row, col);
+                    elt.NextInCol = last.NextInCol;
+                    last.NextInCol = elt;
+
+                    if (row == col)
+                        Diag[row] = elt;
+
+                    // Splice it in the row vector
+                    if (RowsLinked)
+                        SpliceInRows(elt);
+                }
+            }
+            return elt;
+        }
+
+        /// <summary>
+        /// Create a fillin matrix element
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="Row">Row</param>
+        /// <param name="Col">Column</param>
+        /// <returns></returns>
+        internal MatrixElement CreateFillin(int Row, int Col)
+        {
+            MatrixElement pElement, aboveElement;
+
+            // Find Element above fill-in. 
+            // ppElementAbove = &matrix.FirstInCol[Col];
+            aboveElement = null;
+            pElement = FirstInCol[Col];
+            while (pElement != null)
+            {
+                if (pElement.Row < Row)
+                {
+                    aboveElement = pElement;
+                    pElement = pElement.NextInCol;
+                }
+                else
+                    break; // while loop 
+            }
+
+            // End of search, create the element. 
+            pElement = CreateElement(Row, Col);
+
+            // Update Markowitz counts and products
+            Pivoting.MarkowitzProd[Row] = ++Pivoting.MarkowitzRow[Row] * Pivoting.MarkowitzCol[Row];
+            if ((Pivoting.MarkowitzRow[Row] == 1) && (Pivoting.MarkowitzCol[Row] != 0))
+                Pivoting.Singletons--;
+            Pivoting.MarkowitzProd[Col] = ++Pivoting.MarkowitzCol[Col] * Pivoting.MarkowitzRow[Col];
+            if ((Pivoting.MarkowitzRow[Col] != 0) && (Pivoting.MarkowitzCol[Col] == 1))
+                Pivoting.Singletons--;
+            return pElement;
+        }
+
+        /// <summary>
+        /// Build the row links
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public void LinkRows()
+        {
+            for (int Col = IntSize; Col >= 1; Col--)
+            {
+                // Generate row links for the elements in the Col'th column
+                MatrixElement pElement = FirstInCol[Col];
+
+                while (pElement != null)
+                {
+                    pElement.Col = Col;
+                    pElement.NextInRow = FirstInRow[pElement.Row];
+                    FirstInRow[pElement.Row] = pElement;
+                    pElement = pElement.NextInCol;
+                }
+            }
+            RowsLinked = true;
+            return;
+        }
+
+        /// <summary>
+        /// Splice a matrix element in the row vectors
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="elt">Element</param>
+        private void SpliceInRows(MatrixElement elt)
+        {
+            int row = elt.Row;
+            int col = elt.Col;
+
+            MatrixElement splice = FirstInRow[row];
+            if (splice == null || splice.Col > col)
+            {
+                elt.NextInRow = FirstInRow[row];
+                FirstInRow[row] = elt;
+            }
+            else
+            {
+                while (splice.NextInRow != null && splice.NextInRow.Col < col)
+                    splice = splice.NextInRow;
+                elt.NextInRow = splice.NextInRow;
+                splice.NextInRow = elt;
+            }
+        }
+
+        /// <summary>
         /// Where is matrix singular
         /// </summary>
         /// <param name="pRow">Row</param>
