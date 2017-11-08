@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 }
                 else
                 {
-                    tol = ckt.Simulation.Config.RelTol * cbv;
+                    tol = ckt.Simulation.CurrentConfig.RelTol * cbv;
                     xbv = model.DIObreakdownVoltage - vt * Math.Log(1 + cbv / dio.DIOtSatCur);
                     iter = 0;
                     for (iter = 0; iter < 25; iter++)

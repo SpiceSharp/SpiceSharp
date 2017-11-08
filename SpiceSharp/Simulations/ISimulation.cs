@@ -25,7 +25,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get the configuration for the simulation
         /// </summary>
-        SimulationConfiguration Config { get; }
+        SimulationConfiguration CurrentConfig { get; }
 
         Circuit Circuit { get; set; }
 

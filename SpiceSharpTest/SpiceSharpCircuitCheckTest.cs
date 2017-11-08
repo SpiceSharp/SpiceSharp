@@ -16,7 +16,7 @@ namespace SpiceSharpTest
         {
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource(new CircuitIdentifier("V1"), new CircuitIdentifier("A"), new CircuitIdentifier("GND"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V1"), new CircuitIdentifier("A"), new CircuitIdentifier("0"), 1.0),
                 new Voltagesource(new CircuitIdentifier("V2"), new CircuitIdentifier("B"), new CircuitIdentifier("A"), 1.0),
                 new Voltagesource(new CircuitIdentifier("V3"), new CircuitIdentifier("B"), new CircuitIdentifier("A"), 1.0)
                 );
@@ -31,7 +31,7 @@ namespace SpiceSharpTest
         {
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource(new CircuitIdentifier("V1"), new CircuitIdentifier("A"), new CircuitIdentifier("GND"), 1.0),
+                new Voltagesource(new CircuitIdentifier("V1"), new CircuitIdentifier("A"), new CircuitIdentifier("0"), 1.0),
                 new Voltagesource(new CircuitIdentifier("V2"), new CircuitIdentifier("A"), new CircuitIdentifier("B"), 1.0),
                 new Voltagesource(new CircuitIdentifier("V3"), new CircuitIdentifier("B"), new CircuitIdentifier("C"), 1.0),
                 new Voltagesource(new CircuitIdentifier("V4"), new CircuitIdentifier("C"), new CircuitIdentifier("D"), 1.0),

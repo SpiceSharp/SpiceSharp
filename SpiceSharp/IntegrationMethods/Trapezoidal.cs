@@ -214,7 +214,7 @@ namespace SpiceSharp.IntegrationMethods
         public override void Terr(int qcap, Circuit ckt, ref double timeStep)
         {
             var state = ckt.State;
-            var config = ckt.Simulation.Config ?? Simulations.SimulationConfiguration.Default;
+            var config = ckt.Simulation.CurrentConfig ?? Simulations.SimulationConfiguration.Default;
             int ccap = qcap + 1;
 
             double[] diff = new double[state.States.Length];

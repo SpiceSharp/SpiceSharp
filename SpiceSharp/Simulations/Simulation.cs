@@ -12,14 +12,14 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// The configuration
         /// </summary>
-        public SimulationConfiguration Config { get; set; } = null;
+        protected SimulationConfiguration Config { get; set; } = null;
 
         public Circuit Circuit { get; set; }
 
         /// <summary>
         /// Get the current configuration (for use in the simulation)
         /// </summary>
-        protected SimulationConfiguration CurrentConfig => Config ?? SimulationConfiguration.Default;
+        public SimulationConfiguration CurrentConfig => Config ?? SimulationConfiguration.Default;
 
         /// <summary>
         /// Event that is called for initializing simulation data exports

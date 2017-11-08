@@ -112,7 +112,7 @@ namespace SpiceSharp.Simulations
             var state = ckt.State;
             var rstate = state;
             var config = CurrentConfig ?? throw new CircuitException("No configuration");
-            var method = config.Method ?? throw new CircuitException("No integration method");
+            var method = ckt.Method ?? (config.Method ?? throw new CircuitException("No integration method"));
 
             double delta = Math.Min(FinalTime / 50.0, Step) / 10.0;
 
