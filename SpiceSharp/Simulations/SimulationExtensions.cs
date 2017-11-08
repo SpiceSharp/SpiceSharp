@@ -135,7 +135,7 @@ namespace SpiceSharp.Simulations
                 // Preorder matrix
                 if (!state.Sparse.HasFlag(CircuitState.SparseFlags.NIDIDPREORDER))
                 {
-                    matrix.SMPpreOrder();
+                    matrix.PreOrder();
                     state.Sparse |= CircuitState.SparseFlags.NIDIDPREORDER;
                 }
                 if (state.Init == CircuitState.InitFlags.InitJct || (ckt.Method != null && ckt.Method.SavedTime == 0.0))
@@ -161,7 +161,7 @@ namespace SpiceSharp.Simulations
 
                 // Solve the equation
                 ckt.Statistics.SolveTime.Start();
-                matrix.SMPsolve(state.Rhs, null);
+                matrix.Solve(state.Rhs);
                 ckt.Statistics.SolveTime.Stop();
 
                 // The result is now stored in the RHS vector, let's move it to the current solution vector
@@ -310,7 +310,7 @@ namespace SpiceSharp.Simulations
             state.Rhs[posDrive] = 1.0;
             state.Rhs[negDrive] = -1.0;
 
-            state.Matrix.SMPcaSolve(state.Rhs, state.iRhs);
+            state.Matrix.SolveTransposed(state.Rhs, state.iRhs);
 
             state.StoreSolution(true);
 

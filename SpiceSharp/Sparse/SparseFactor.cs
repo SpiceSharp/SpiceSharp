@@ -328,8 +328,6 @@ namespace SpiceSharp.Sparse
             return (matrix.Error = SparseError.Okay);
         }
 
-
-
         /// <summary>
         /// Exchange row and column
         /// </summary>

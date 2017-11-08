@@ -56,7 +56,7 @@
         /// <param name="matrix">The matrix</param>
         /// <param name="RHS">The right hand side</param>
         /// <param name="iRHS">The imaginary values of the right hand side</param>
-        public static void SMPcaSolve(this Matrix matrix, double[] RHS, double[] iRHS)
+        public static void SolveTransposed(this Matrix matrix, double[] RHS, double[] iRHS)
         {
             SparseSolve.SolveTransposed(matrix, RHS, RHS, iRHS, iRHS);
         }
@@ -78,7 +78,7 @@
         /// <param name="matrix">The matrix</param>
         /// <param name="RHS">Right hand side</param>
         /// <param name="Spare">Imaginary values of the right hand side</param>
-        public static void SMPsolve(this Matrix matrix, double[] RHS, double[] Spare)
+        public static void Solve(this Matrix matrix, double[] RHS)
         {
             SparseSolve.Solve(matrix, RHS, RHS, null, null);
         }
@@ -88,7 +88,7 @@
         /// </summary>
         /// <param name="matrix">The matrix</param>
         /// <returns></returns>
-        public static SparseError SMPpreOrder(this Matrix matrix)
+        public static SparseError PreOrder(this Matrix matrix)
         {
             SparseUtilities.PreorderMNA(matrix);
             return matrix.Error;
