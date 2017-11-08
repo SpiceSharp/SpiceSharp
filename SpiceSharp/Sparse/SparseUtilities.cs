@@ -27,7 +27,7 @@ namespace SpiceSharp.Sparse
 
             if (matrix.RowsLinked)
                 return;
-            Size = matrix.Size;
+            Size = matrix.IntSize;
             matrix.Reordered = true;
 
             do
@@ -79,7 +79,7 @@ namespace SpiceSharp.Sparse
         /// <param name="ppTwin1"></param>
         /// <param name="ppTwin2"></param>
         /// <returns></returns>
-        internal static int CountTwins(Matrix matrix, int Col, ref MatrixElement ppTwin1, ref MatrixElement ppTwin2)
+        private static int CountTwins(Matrix matrix, int Col, ref MatrixElement ppTwin1, ref MatrixElement ppTwin2)
         {
             int Row, Twins = 0;
             MatrixElement pTwin1, pTwin2;
@@ -114,7 +114,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix"></param>
         /// <param name="pTwin1"></param>
         /// <param name="pTwin2"></param>
-        internal static void SwapCols(Matrix matrix, MatrixElement pTwin1, MatrixElement pTwin2)
+        private static void SwapCols(Matrix matrix, MatrixElement pTwin1, MatrixElement pTwin2)
         {
             int Col1 = pTwin1.Col, Col2 = pTwin2.Col;
 
@@ -159,7 +159,7 @@ namespace SpiceSharp.Sparse
                 return;
             }
 
-            Size = matrix.Size;
+            Size = matrix.IntSize;
             I = 0;
 
             if (matrix.Complex)        // Complex Case. 

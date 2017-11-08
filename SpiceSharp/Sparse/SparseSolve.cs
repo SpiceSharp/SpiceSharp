@@ -1,16 +1,20 @@
 ﻿namespace SpiceSharp.Sparse
 {
+    /// <summary>
+    /// Methods used to solve matrix equations
+    /// </summary>
     public static class SparseSolve
     {
         /// <summary>
-        /// spSolve
+        /// Solve the matrix
+        /// This method can solve in-place
         /// </summary>
-        /// <param name="matrix"></param>
-        /// <param name="RHS"></param>
-        /// <param name="Solution"></param>
-        /// <param name="iRHS"></param>
-        /// <param name="iSolution"></param>
-        public static void spSolve(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
+        /// <param name="matrix">The matrix</param>
+        /// <param name="RHS">The right hand side</param>
+        /// <param name="Solution">The solution</param>
+        /// <param name="iRHS">The imaginary values of the right hand side</param>
+        /// <param name="iSolution">The imaginary values of the solution</param>
+        public static void Solve(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
         {
             MatrixElement pElement;
             ElementValue[] Intermediate;
@@ -30,7 +34,7 @@
             }
 
             Intermediate = matrix.Intermediate;
-            Size = matrix.Size;
+            Size = matrix.IntSize;
 
             // Initialize Intermediate vector. 
             pExtOrder = matrix.IntToExtRowMap;
@@ -84,7 +88,7 @@
         /// <param name="Solution"></param>
         /// <param name="iRHS"></param>
         /// <param name="iSolution"></param>
-        private static void SolveComplexMatrix(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
+        public static void SolveComplexMatrix(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
         {
             MatrixElement pElement;
             ElementValue[] Intermediate;
@@ -93,7 +97,7 @@
             MatrixElement pPivot;
             ElementValue Temp;
 
-            Size = matrix.Size;
+            Size = matrix.IntSize;
             Intermediate = matrix.Intermediate;
 
             // Initialize Intermediate vector. 
@@ -155,12 +159,12 @@
         /// <summary>
         /// spSolveTransposed
         /// </summary>
-        /// <param name="matrix"></param>
-        /// <param name="RHS"></param>
-        /// <param name="Solution"></param>
-        /// <param name="iRHS"></param>
-        /// <param name="iSolution"></param>
-        public static void spSolveTransposed(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
+        /// <param name="matrix">The matrix</param>
+        /// <param name="RHS">The right hand side</param>
+        /// <param name="Solution">The solution</param>
+        /// <param name="iRHS">The imaginary values of the right-hand side</param>
+        /// <param name="iSolution">The imaginary solution</param>
+        public static void SolveTransposed(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
         {
             MatrixElement pElement;
             ElementValue[] Intermediate;
@@ -178,7 +182,7 @@
                 return;
             }
 
-            Size = matrix.Size;
+            Size = matrix.IntSize;
             Intermediate = matrix.Intermediate;
 
             // Initialize Intermediate vector. 
@@ -227,11 +231,11 @@
         /// <summary>
         /// SolveComplexTransposedMatrix
         /// </summary>
-        /// <param name="matrix"></param>
-        /// <param name="RHS"></param>
-        /// <param name="Solution"></param>
-        /// <param name="iRHS"></param>
-        /// <param name="iSolution"></param>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="RHS">The right hand side</param>
+        /// <param name="Solution">The solution</param>
+        /// <param name="iRHS">The imaginary values of the right hand side</param>
+        /// <param name="iSolution">The imaginary values of the solution</param>
         public static void SolveComplexTransposedMatrix(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
         {
             MatrixElement pElement;
@@ -243,7 +247,7 @@
 
             // Begin `SolveComplexTransposedMatrix'. 
 
-            Size = matrix.Size;
+            Size = matrix.IntSize;
             Intermediate = matrix.Intermediate;
 
             // Initialize Intermediate vector. 

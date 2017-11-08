@@ -27,11 +27,11 @@ namespace SpiceSharp.Sparse
         /// Nicely print the matrix
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        /// <param name="PrintReordered">True if the internal order is shown</param>
-        /// <param name="Data">True if the actual values should be shown</param>
-        /// <param name="Header">True if the header is shown</param>
+        /// <param name="printReordered">True if the internal order is shown</param>
+        /// <param name="data">True if the actual values should be shown</param>
+        /// <param name="header">True if the header is shown</param>
         /// <returns></returns>
-        public static string Print(this Matrix matrix, bool PrintReordered, bool Data, bool Header)
+        public static string Print(this Matrix matrix, bool printReordered, bool data, bool header)
         {
             int J = 0;
             int I, Row, Col, Size, Top, StartCol = 1, StopCol, Columns, ElementCount = 0;
@@ -42,7 +42,7 @@ namespace SpiceSharp.Sparse
             int[] PrintOrdToIntRowMap, PrintOrdToIntColMap;
 
             StringBuilder sb = new StringBuilder();
-            Size = matrix.Size;
+            Size = matrix.IntSize;
             pImagElements = new MatrixElement[Printer_Width / 10 + 1];
 
             // Create a packed external to internal row and column translation array
@@ -69,11 +69,11 @@ namespace SpiceSharp.Sparse
             }
 
             // Print header
-            if (Header)
+            if (header)
             {
                 sb.Append("MATRIX SUMMARY" + Environment.NewLine + Environment.NewLine);
                 sb.Append($"Size of matrix = {Size} x {Size}.{Environment.NewLine}");
-                if (matrix.Reordered && PrintReordered)
+                if (matrix.Reordered && printReordered)
                     sb.Append("Matrix has been reordered." + Environment.NewLine);
                 sb.Append(Environment.NewLine);
 
@@ -87,8 +87,8 @@ namespace SpiceSharp.Sparse
 
             // Determine how many columns to use
             Columns = Printer_Width;
-            if (Header) Columns -= 5;
-            if (Data) Columns = (Columns + 1) / 10;
+            if (header) Columns -= 5;
+            if (data) Columns = (Columns + 1) / 10;
 
             // Print matrix by printing groups of complete columns until all the columns
             // are printed.
@@ -101,14 +101,14 @@ namespace SpiceSharp.Sparse
                     StopCol = Size;
 
                 // Label the columns
-                if (Header)
+                if (header)
                 {
-                    if (Data)
+                    if (data)
                     {
                         sb.Append("    ");
                         for (I = StartCol; I <= StopCol; I++)
                         {
-                            if (PrintReordered)
+                            if (printReordered)
                                 Col = I;
                             else
                                 Col = PrintOrdToIntColMap[I];
@@ -118,7 +118,7 @@ namespace SpiceSharp.Sparse
                     }
                     else
                     {
-                        if (PrintReordered)
+                        if (printReordered)
                             sb.Append($"Columns {StartCol} to {StopCol}.{Environment.NewLine}");
                         else
                             sb.Append($"Columns {matrix.IntToExtColMap[PrintOrdToIntColMap[StartCol]]} to {matrix.IntToExtColMap[PrintOrdToIntColMap[StopCol]]}.{Environment.NewLine}");
@@ -128,25 +128,25 @@ namespace SpiceSharp.Sparse
                 // Print every row ...
                 for (I = 1; I <= Size; I++)
                 {
-                    if (PrintReordered)
+                    if (printReordered)
                         Row = I;
                     else
                         Row = PrintOrdToIntRowMap[I];
 
-                    if (Header)
+                    if (header)
                     {
-                        if (PrintReordered && !Data)
+                        if (printReordered && !data)
                             sb.AppendFormat("{0,4}", I);
                         else
                             sb.AppendFormat("{0,4}", matrix.IntToExtRowMap[Row]);
-                        if (!Data)
+                        if (!data)
                             sb.Append(' ');
                     }
 
                     // ... in each column of the group
                     for (J = StartCol; J <= StopCol; J++)
                     {
-                        if (PrintReordered)
+                        if (printReordered)
                             Col = J;
                         else
                             Col = PrintOrdToIntColMap[J];
@@ -155,14 +155,14 @@ namespace SpiceSharp.Sparse
                         while (pElement != null && pElement.Row != Row)
                             pElement = pElement.NextInCol;
 
-                        if (Data)
+                        if (data)
                             pImagElements[J - StartCol] = pElement;
 
                         if (pElement != null)
                         {
 
                             // Case where element exists
-                            if (Data)
+                            if (data)
                                 sb.AppendFormat("{0,10}", pElement.Value.Real.ToString("G3"));
                             else
                                 sb.Append('x');
@@ -177,7 +177,7 @@ namespace SpiceSharp.Sparse
                         else
                         {
                             // Case where element is structurally zero
-                            if (Data)
+                            if (data)
                                 sb.Append("       ...");
                             else
                                 sb.Append('.');
@@ -185,7 +185,7 @@ namespace SpiceSharp.Sparse
                     }
                     sb.Append(Environment.NewLine);
 
-                    if (matrix.Complex && Data)
+                    if (matrix.Complex && data)
                     {
                         sb.Append("     ");
                         for (J = StartCol; J <= StopCol; J++)
@@ -205,7 +205,7 @@ namespace SpiceSharp.Sparse
                 StartCol++;
                 sb.Append(Environment.NewLine);
             }
-            if (Header)
+            if (header)
             {
                 sb.Append($"{Environment.NewLine}Largest element in matrix = {LargestElement}.{Environment.NewLine}");
                 sb.Append($"Smallest element in matrix = {SmallestElement}.{Environment.NewLine}");

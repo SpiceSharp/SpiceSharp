@@ -49,41 +49,52 @@ namespace SpiceSharp.Sparse
         public bool Complex { get; set; }
 
         /// <summary>
-        /// Gets the external size
+        /// Gets the number of fillins
         /// </summary>
-        public int ExternalSize { get => ExtSize; }
+        public int Fillins { get; internal set; }
 
         /// <summary>
-        /// Gets the internal size
+        /// Gets the number of elements
         /// </summary>
-        public int InternalSize { get => Size; }
+        public int Elements { get; internal set; }
+
+        /// <summary>
+        /// Gets the public size of the matrix
+        /// </summary>
+        public int ExtSize { get; internal set; }
 
         /// <summary>
         /// Internal variables
         /// </summary>
         internal double AbsThreshold;
+        internal double RelThreshold;
+
         internal int AllocatedSize;
         internal int AllocatedExtSize;
         internal int CurrentSize;
+        internal int IntSize;
+
         internal MatrixElement[] Diag;
-        internal bool[] DoCmplxDirect;
-        internal bool[] DoRealDirect;
-        internal int Elements;
-        internal SparseError Error;
-        internal int ExtSize;
-        internal int[] ExtToIntColMap;
-        internal int[] ExtToIntRowMap;
-        internal bool Factored;
-        internal int Fillins;
         internal MatrixElement[] FirstInCol;
         internal MatrixElement[] FirstInRow;
-        internal ElementValue[] Intermediate;
-        internal bool InternalVectorsAllocated;
+        internal MatrixElement TrashCan;
+
         internal int[] IntToExtColMap;
         internal int[] IntToExtRowMap;
+        internal int[] ExtToIntColMap;
+        internal int[] ExtToIntRowMap;
+
+        internal bool[] DoCmplxDirect;
+        internal bool[] DoRealDirect;
         internal int[] MarkowitzRow;
         internal int[] MarkowitzCol;
         internal long[] MarkowitzProd;
+
+        internal bool Factored;
+
+        internal ElementValue[] Intermediate;
+        internal bool InternalVectorsAllocated;
+
         internal int MaxRowCountInLowerTri;
         internal bool NeedsOrdering;
         internal bool NumberOfInterchangesIsOdd;
@@ -91,15 +102,14 @@ namespace SpiceSharp.Sparse
         internal int PivotsOriginalCol;
         internal int PivotsOriginalRow;
         internal char PivotSelectionMethod;
-        internal bool PreviousMatrixWasComplex;
-        internal double RelThreshold;
         internal bool Reordered;
         internal bool RowsLinked;
+
+        internal int Singletons;
+
+        internal SparseError Error;
         internal int SingularCol;
         internal int SingularRow;
-        internal int Singletons;
-        internal int Size;
-        internal MatrixElement TrashCan;
 
         /// <summary>
         /// Constructor
@@ -111,20 +121,19 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="Size">Matrix size</param>
+        /// <param name="IntSize">Matrix size</param>
         /// <param name="Complex">Is complex</param>
-        public Matrix(int Size, bool Complex)
+        public Matrix(int size, bool complex)
         {
-            if (Size < 0)
+            if (size < 0)
                 throw new SparseException("Invalid size");
 
             // Create matrix
-            int AllocatedSize = Math.Max(Size, MINIMUM_ALLOCATED_SIZE);
-            int SizePlusOne = AllocatedSize + 1;
+            int allocated = Math.Max(size, MINIMUM_ALLOCATED_SIZE);
+            int sizeplusone = allocated + 1;
 
             // Initialize matrix
-            this.Complex = Complex;
-            PreviousMatrixWasComplex = Complex;
+            Complex = complex;
             Factored = false;
             Elements = 0;
             Error = SparseError.Okay;
@@ -137,10 +146,10 @@ namespace SpiceSharp.Sparse
             InternalVectorsAllocated = false;
             SingularCol = 0;
             SingularRow = 0;
-            this.Size = Size;
-            this.AllocatedSize = AllocatedSize;
-            ExtSize = Size;
-            AllocatedExtSize = AllocatedSize;
+            IntSize = size;
+            AllocatedSize = allocated;
+            ExtSize = size;
+            AllocatedExtSize = allocated;
             CurrentSize = 0;
             ExtToIntColMap = null;
             ExtToIntRowMap = null;
@@ -157,42 +166,25 @@ namespace SpiceSharp.Sparse
 
             // Take out the trash
             TrashCan = new MatrixElement(0, 0);
-            TrashCan.Row = 0;
-            TrashCan.Col = 0;
-            TrashCan.NextInRow = null;
-            TrashCan.NextInCol = null;
 
             // Allocate space in memory for Diag pointer vector
-            Diag = new MatrixElement[SizePlusOne];
+            Diag = new MatrixElement[sizeplusone];
 
-            // Allocate space in memory for FirstInCol pointer vector
-            FirstInCol = new MatrixElement[SizePlusOne];
+            // Allocate space in memory for FirstInRow/Col pointer vectors
+            FirstInCol = new MatrixElement[sizeplusone];
+            FirstInRow = new MatrixElement[sizeplusone];
 
-            // Allocate space in memory for FirstInRow pointer vector
-            FirstInRow = new MatrixElement[SizePlusOne];
-
-            // Allocate space in memory for IntToExtColMap vector
-            IntToExtColMap = new int[SizePlusOne];
-
-            // Allocate space in memory for IntToExtRowMap vector
-            IntToExtRowMap = new int[SizePlusOne];
+            // Allocate space in memory for translation vectors
+            IntToExtColMap = new int[sizeplusone];
+            IntToExtRowMap = new int[sizeplusone];
+            ExtToIntColMap = new int[sizeplusone];
+            ExtToIntRowMap = new int[sizeplusone];
 
             // Initialize MapIntToExt vectors
-            for (int I = 1; I <= AllocatedSize; I++)
+            for (int I = 1; I <= allocated; I++)
             {
                 IntToExtRowMap[I] = I;
                 IntToExtColMap[I] = I;
-            }
-
-            // Allocate space in memory for ExtToIntColMap vector
-            ExtToIntColMap = new int[SizePlusOne];
-
-            // Allocate space in memory for ExtToIntRowMap vector
-            ExtToIntRowMap = new int[SizePlusOne];
-
-            // Initialize MapExtToInt vectors
-            for (int I = 1; I <= AllocatedSize; I++)
-            {
                 ExtToIntColMap[I] = -1;
                 ExtToIntRowMap[I] = -1;
             }
@@ -219,25 +211,6 @@ namespace SpiceSharp.Sparse
             }
             return;
         }
-
-        /// <summary>
-        /// Get matrix size
-        /// </summary>
-        /// <param name="External"></param>
-        /// <returns></returns>
-        public int GetSize(bool External) => External ? ExtSize : Size;
-
-        /// <summary>
-        /// Get the number of fillins
-        /// </summary>
-        /// <returns></returns>
-        public int spFillinCount() => Fillins;
-
-        /// <summary>
-        /// Get the number of elements
-        /// </summary>
-        /// <returns></returns>
-        public int spElementCount() => Elements;
 
         /// <summary>
         /// Convert the matrix to a string

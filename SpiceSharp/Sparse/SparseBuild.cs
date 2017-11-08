@@ -13,7 +13,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">Matrix</param>
         public static void Clear(this Matrix matrix)
         {
-            for (int i = 1; i <= matrix.Size; i++)
+            for (int i = 1; i <= matrix.IntSize; i++)
             {
                 MatrixElement elt = matrix.FirstInCol[i];
                 while (elt != null)
@@ -28,7 +28,6 @@ namespace SpiceSharp.Sparse
             matrix.Factored = false;
             matrix.SingularCol = 0;
             matrix.SingularRow = 0;
-            matrix.PreviousMatrixWasComplex = matrix.Complex;
         }
 
         /// <summary>
@@ -160,7 +159,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">Matrix</param>
         internal static void LinkRows(this Matrix matrix)
         {
-            for (int Col = matrix.Size; Col >= 1; Col--)
+            for (int Col = matrix.IntSize; Col >= 1; Col--)
             {
                 // Generate row links for the elements in the Col'th column
                 MatrixElement pElement = matrix.FirstInCol[Col];
@@ -235,7 +234,7 @@ namespace SpiceSharp.Sparse
                 IntRow = matrix.CurrentSize;
 
                 // Re-size Matrix if necessary
-                if (IntRow > matrix.Size)
+                if (IntRow > matrix.IntSize)
                     EnlargeMatrix(matrix, IntRow);
 
                 matrix.IntToExtRowMap[IntRow] = ExtRow;
@@ -251,7 +250,7 @@ namespace SpiceSharp.Sparse
                 IntCol = matrix.CurrentSize;
 
                 // Re-size Matrix if necessary
-                if (IntCol > matrix.Size)
+                if (IntCol > matrix.IntSize)
                     EnlargeMatrix(matrix, IntCol);
 
                 matrix.IntToExtRowMap[IntCol] = ExtCol;
@@ -270,7 +269,7 @@ namespace SpiceSharp.Sparse
         private static void EnlargeMatrix(this Matrix matrix, int NewSize)
         {
             int OldAllocatedSize = matrix.AllocatedSize;
-            matrix.Size = NewSize;
+            matrix.IntSize = NewSize;
 
             if (NewSize <= OldAllocatedSize)
                 return;

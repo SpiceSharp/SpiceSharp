@@ -27,7 +27,7 @@ namespace SpiceSharp.Sparse
                 throw new SparseException("Matrix is already factored");
 
             matrix.Error = SparseError.Okay;
-            Size = matrix.Size;
+            Size = matrix.IntSize;
             if (RelThreshold <= 0.0)
                 RelThreshold = matrix.RelThreshold;
             if (RelThreshold > 1.0)
@@ -77,7 +77,7 @@ namespace SpiceSharp.Sparse
                 if (!matrix.RowsLinked)
                     SparseBuild.LinkRows(matrix);
                 if (!matrix.InternalVectorsAllocated)
-                    spcCreateInternalVectors(matrix);
+                    CreateInternalVectors(matrix);
                 if ((int)matrix.Error >= (int)SparseError.Fatal)
                     return matrix.Error;
             }
@@ -117,7 +117,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <returns></returns>
-        internal static SparseError Factor(this Matrix matrix)
+        public static SparseError Factor(this Matrix matrix)
         {
             if (matrix.Factored)
                 throw new SparseException("Matrix is factored");
@@ -130,7 +130,7 @@ namespace SpiceSharp.Sparse
             if (matrix.Complex)
                 return FactorComplexMatrix(matrix);
 
-            int Size = matrix.Size;
+            int Size = matrix.IntSize;
 
             if (matrix.Diag[1].Value.Real == 0.0)
                 return ZeroPivot(matrix, 1);
@@ -216,7 +216,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <returns></returns>
-        internal static SparseError FactorComplexMatrix(Matrix matrix)
+        private static SparseError FactorComplexMatrix(Matrix matrix)
         {
             MatrixElement pElement, pColumn;
             int Step, Size;
@@ -226,7 +226,7 @@ namespace SpiceSharp.Sparse
             if (!matrix.Complex)
                 throw new SparseException("Matrix is not complex");
 
-            Size = matrix.Size;
+            Size = matrix.IntSize;
             pElement = matrix.Diag[1];
             if (SparseDefinitions.ELEMENT_MAG(pElement) == 0.0)
                 return ZeroPivot(matrix, 1);
@@ -324,7 +324,12 @@ namespace SpiceSharp.Sparse
             return (matrix.Error = SparseError.Okay);
         }
 
-        internal static void Partition(Matrix matrix, SparsePartition Mode)
+        /// <summary>
+        /// Partition the matrix
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="Mode">The mode</param>
+        private static void Partition(Matrix matrix, SparsePartition Mode)
         {
             MatrixElement pElement, pColumn;
             int Step, Size;
@@ -334,7 +339,7 @@ namespace SpiceSharp.Sparse
 
             if (matrix.Partitioned)
                 return;
-            Size = matrix.Size;
+            Size = matrix.IntSize;
             DoRealDirect = matrix.DoRealDirect;
             DoCmplxDirect = matrix.DoCmplxDirect;
             matrix.Partitioned = true;
@@ -409,12 +414,16 @@ namespace SpiceSharp.Sparse
             }
         }
 
-        public static void spcCreateInternalVectors(Matrix matrix)
+        /// <summary>
+        /// Create internal vectors
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        private static void CreateInternalVectors(Matrix matrix)
         {
             int Size;
 
             // Create Markowitz arrays
-            Size = matrix.Size;
+            Size = matrix.IntSize;
 
             if (matrix.MarkowitzRow == null)
                 matrix.MarkowitzRow = new int[Size + 1];
@@ -438,9 +447,15 @@ namespace SpiceSharp.Sparse
             matrix.InternalVectorsAllocated = true;
         }
 
-        public static void CountMarkowitz(Matrix matrix, double[] RHS, int Step)
+        /// <summary>
+        /// Count markowitz
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="RHS">Right hand side</param>
+        /// <param name="Step">Current step</param>
+        private static void CountMarkowitz(Matrix matrix, double[] RHS, int Step)
         {
-            int Count, I, Size = matrix.Size;
+            int Count, I, Size = matrix.IntSize;
             MatrixElement pElement;
             int ExtRow;
 
@@ -484,13 +499,18 @@ namespace SpiceSharp.Sparse
             }
         }
 
-        public static void MarkowitzProducts(Matrix matrix, int Step)
+        /// <summary>
+        /// Calculate markowitz products
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="Step"></param>
+        private static void MarkowitzProducts(Matrix matrix, int Step)
         {
             int I;
             int[] pMarkowitzRow, pMarkowitzCol;
             long Product;
             long[] pMarkowitzProduct;
-            int Size = matrix.Size;
+            int Size = matrix.IntSize;
             double fProduct;
 
             matrix.Singletons = 0;
@@ -520,7 +540,14 @@ namespace SpiceSharp.Sparse
             }
         }
 
-        public static MatrixElement SearchForPivot(Matrix matrix, int Step, bool DiagPivoting)
+        /// <summary>
+        /// Search for a pivot in the matrix
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="Step">Step</param>
+        /// <param name="DiagPivoting">Use the diagonal for searching a pivot</param>
+        /// <returns></returns>
+        private static MatrixElement SearchForPivot(Matrix matrix, int Step, bool DiagPivoting)
         {
             MatrixElement ChosenPivot;
 
@@ -568,7 +595,13 @@ namespace SpiceSharp.Sparse
             return ChosenPivot;
         }
 
-        public static MatrixElement SearchForSingleton(Matrix matrix, int Step)
+        /// <summary>
+        /// Search for singletons
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="Step">The current step</param>
+        /// <returns></returns>
+        private static MatrixElement SearchForSingleton(Matrix matrix, int Step)
         {
             MatrixElement ChosenPivot;
             int I;
@@ -577,9 +610,9 @@ namespace SpiceSharp.Sparse
             double PivotMag;
 
             // Initialize pointer that is to scan through MarkowitzProduct vector. 
-            int index = matrix.Size + 1;
+            int index = matrix.IntSize + 1;
             pMarkowitzProduct = matrix.MarkowitzProd;
-            matrix.MarkowitzProd[matrix.Size + 1] = matrix.MarkowitzProd[Step];
+            matrix.MarkowitzProd[matrix.IntSize + 1] = matrix.MarkowitzProd[Step];
 
             // Decrement the count of available singletons, on the assumption that an
             // acceptable one will be found
@@ -622,7 +655,7 @@ namespace SpiceSharp.Sparse
 
                 // Assure that I is valid. 
                 if (I < Step) break;  // while (Singletons-- > 0) 
-                if (I > matrix.Size) I = Step;
+                if (I > matrix.IntSize) I = Step;
 
                 // Singleton has been found in either/both row or/and column I. 
                 if ((ChosenPivot = matrix.Diag[I]) != null)
@@ -689,7 +722,13 @@ ChosenPivot = matrix.FirstInRow[I];
             return null;
         }
 
-        public static MatrixElement QuicklySearchDiagonal(Matrix matrix, int Step)
+        /// <summary>
+        /// Quickly search the diagonal
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="Step">The current step</param>
+        /// <returns></returns>
+        private static MatrixElement QuicklySearchDiagonal(Matrix matrix, int Step)
         {
             long MinMarkowitzProduct;
             // long pMarkowitzProduct;
@@ -700,9 +739,9 @@ ChosenPivot = matrix.FirstInRow[I];
 
             ChosenPivot = null;
             MinMarkowitzProduct = long.MaxValue;
-            int index = matrix.Size + 2;
+            int index = matrix.IntSize + 2;
             // pMarkowitzProduct = matrix.MarkowitzProd[index];
-            matrix.MarkowitzProd[matrix.Size + 1] = matrix.MarkowitzProd[Step];
+            matrix.MarkowitzProd[matrix.IntSize + 1] = matrix.MarkowitzProd[Step];
 
             // Assure that following while loop will always terminate. 
             matrix.MarkowitzProd[Step - 1] = -1;
@@ -736,7 +775,7 @@ ChosenPivot = matrix.FirstInRow[I];
                 // Assure that I is valid; if I < Step, terminate search. 
                 if (I < Step)
                     break; // Endless for loop 
-                if (I > matrix.Size)
+                if (I > matrix.IntSize)
                     I = Step;
 
                 if ((pDiag = matrix.Diag[I]) == null)
@@ -798,14 +837,20 @@ if (pOtherInCol.Row >= Step && pOtherInCol.Row != I)
             return ChosenPivot;
         }
 
-        public static MatrixElement SearchDiagonal(Matrix matrix, int Step)
+        /// <summary>
+        /// Search the diagonal
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="Step">Step</param>
+        /// <returns></returns>
+        private static MatrixElement SearchDiagonal(Matrix matrix, int Step)
         {
             int J;
             long MinMarkowitzProduct;
             //, *pMarkowitzProduct;
             int I;
             MatrixElement pDiag;
-            int NumberOfTies = 0, Size = matrix.Size;
+            int NumberOfTies = 0, Size = matrix.IntSize;
             MatrixElement ChosenPivot;
             double Magnitude, Ratio, RatioOfAccepted = 0, LargestInCol;
 
@@ -820,7 +865,7 @@ if (pOtherInCol.Row >= Step && pOtherInCol.Row != I)
             {
                 if (matrix.MarkowitzProd[--index] > MinMarkowitzProduct)
                     continue; // for loop 
-                if (J > matrix.Size)
+                if (J > matrix.IntSize)
                     I = Step;
                 else
                     I = J;
@@ -859,9 +904,15 @@ ChosenPivot = pDiag;
             return ChosenPivot;
         }
 
-        public static MatrixElement SearchEntireMatrix(Matrix matrix, int Step)
+        /// <summary>
+        /// Search the entire matrix!
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="Step">Current step</param>
+        /// <returns></returns>
+        private static MatrixElement SearchEntireMatrix(Matrix matrix, int Step)
         {
-            int I, Size = matrix.Size;
+            int I, Size = matrix.IntSize;
             MatrixElement pElement;
             int NumberOfTies = 0;
             long Product, MinMarkowitzProduct;
@@ -939,7 +990,12 @@ ChosenPivot = pElement;
             return pLargestElement;
         }
 
-        public static double FindLargestInCol(MatrixElement pElement)
+        /// <summary>
+        /// Find largest element in the column
+        /// </summary>
+        /// <param name="pElement">Element where we need to start searching</param>
+        /// <returns></returns>
+        private static double FindLargestInCol(MatrixElement pElement)
         {
             double Magnitude, Largest = 0.0;
 
@@ -954,7 +1010,14 @@ ChosenPivot = pElement;
             return Largest;
         }
 
-        public static double FindBiggestInColExclude(Matrix matrix, MatrixElement pElement, int Step)
+        /// <summary>
+        /// Find biggest value in column excluding
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="pElement">Element</param>
+        /// <param name="Step">Step</param>
+        /// <returns></returns>
+        private static double FindBiggestInColExclude(Matrix matrix, MatrixElement pElement, int Step)
         {
             int Row;
             int Col;
@@ -979,7 +1042,7 @@ ChosenPivot = pElement;
             {
                 if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pElement)) > Largest)
                 {
-if (pElement.Row != Row)
+                    if (pElement.Row != Row)
                         Largest = Magnitude;
                 }
             }
@@ -987,7 +1050,13 @@ if (pElement.Row != Row)
             return Largest;
         }
 
-        public static void ExchangeRowsAndCols(Matrix matrix, MatrixElement pPivot, int Step)
+        /// <summary>
+        /// Exchange row and column
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="pPivot">Pivot</param>
+        /// <param name="Step">Current step</param>
+        private static void ExchangeRowsAndCols(Matrix matrix, MatrixElement pPivot, int Step)
         {
             int Row, Col;
             long OldMarkowitzProd_Step, OldMarkowitzProd_Row, OldMarkowitzProd_Col;
@@ -1002,8 +1071,8 @@ if (pElement.Row != Row)
             // Exchange rows and columns. 
             if (Row == Col)
             {
-                spcRowExchange(matrix, Step, Row);
-                spcColExchange(matrix, Step, Col);
+                RowExchange(matrix, Step, Row);
+                ColExchange(matrix, Step, Col);
                 SparseDefinitions.SWAP(ref matrix.MarkowitzProd[Step], ref matrix.MarkowitzProd[Row]);
                 SparseDefinitions.SWAP(ref matrix.Diag[Row], ref matrix.Diag[Step]);
             }
@@ -1018,7 +1087,7 @@ if (pElement.Row != Row)
                 // Exchange rows. 
                 if (Row != Step)
                 {
-                    spcRowExchange(matrix, Step, Row);
+                    RowExchange(matrix, Step, Row);
                     matrix.NumberOfInterchangesIsOdd = !matrix.NumberOfInterchangesIsOdd;
                     matrix.MarkowitzProd[Row] = matrix.MarkowitzRow[Row] * matrix.MarkowitzCol[Row];
 
@@ -1035,7 +1104,7 @@ if (pElement.Row != Row)
                 // Exchange columns. 
                 if (Col != Step)
                 {
-                    spcColExchange(matrix, Step, Col);
+                    ColExchange(matrix, Step, Col);
                     matrix.NumberOfInterchangesIsOdd = !matrix.NumberOfInterchangesIsOdd;
                     matrix.MarkowitzProd[Col] = matrix.MarkowitzCol[Col] * matrix.MarkowitzRow[Col];
 
@@ -1069,7 +1138,13 @@ if (pElement.Row != Row)
             return;
         }
 
-        public static void spcRowExchange(this Matrix matrix, int Row1, int Row2)
+        /// <summary>
+        /// Exchange rows
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="Row1">Row 1</param>
+        /// <param name="Row2">Row 2</param>
+        private static void RowExchange(this Matrix matrix, int Row1, int Row2)
         {
             MatrixElement Row1Ptr, Row2Ptr;
             int Column;
@@ -1131,7 +1206,13 @@ if (pElement.Row != Row)
             matrix.ExtToIntRowMap[matrix.IntToExtRowMap[Row2]] = Row2;
         }
 
-        public static void spcColExchange(Matrix matrix, int Col1, int Col2)
+        /// <summary>
+        /// Exchange columns
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="Col1">Column 1</param>
+        /// <param name="Col2">Column 2</param>
+        private static void ColExchange(Matrix matrix, int Col1, int Col2)
         {
             MatrixElement Col1Ptr, Col2Ptr;
             int Row;
@@ -1197,7 +1278,16 @@ if (pElement.Row != Row)
             return;
         }
 
-        public static void ExchangeColElements(Matrix matrix, int Row1, MatrixElement Element1, int Row2, MatrixElement Element2, int Column)
+        /// <summary>
+        /// Exchange column elements
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="Row1">Row of the first element</param>
+        /// <param name="Element1">First element</param>
+        /// <param name="Row2">Row of the second element</param>
+        /// <param name="Element2">Second element</param>
+        /// <param name="Column">Column</param>
+        private static void ExchangeColElements(Matrix matrix, int Row1, MatrixElement Element1, int Row2, MatrixElement Element2, int Column)
         {
             MatrixElement ElementAboveRow1, ElementAboveRow2;
             MatrixElement ElementBelowRow1, ElementBelowRow2;
@@ -1328,7 +1418,16 @@ if (pElement.Row != Row)
             return;
         }
 
-        public static void ExchangeRowElements(Matrix matrix, int Col1, MatrixElement Element1, int Col2, MatrixElement Element2, int Row)
+        /// <summary>
+        /// Exchange row elements
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="Col1">Column of the first element</param>
+        /// <param name="Element1">First element</param>
+        /// <param name="Col2">Column of the second element</param>
+        /// <param name="Element2">Second element</param>
+        /// <param name="Row">Row</param>
+        private static void ExchangeRowElements(Matrix matrix, int Col1, MatrixElement Element1, int Col2, MatrixElement Element2, int Row)
         {
             MatrixElement ElementLeftOfCol1, ElementLeftOfCol2;
             MatrixElement ElementRightOfCol1, ElementRightOfCol2;
@@ -1499,7 +1598,7 @@ if (pElement.Row != Row)
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="pPivot">Current pivot</param>
-        public static void ComplexRowColElimination(Matrix matrix, MatrixElement pPivot)
+        private static void ComplexRowColElimination(Matrix matrix, MatrixElement pPivot)
         {
             MatrixElement pSub;
             int Row;
@@ -1545,7 +1644,12 @@ if (pElement.Row != Row)
             }
         }
 
-        public static void UpdateMarkowitzNumbers(Matrix matrix, MatrixElement pPivot)
+        /// <summary>
+        /// Update Markowitz numbers
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        /// <param name="pPivot">Pivot element</param>
+        private static void UpdateMarkowitzNumbers(Matrix matrix, MatrixElement pPivot)
         {
             int Row, Col;
             MatrixElement ColPtr, RowPtr;
@@ -1595,7 +1699,14 @@ if (pElement.Row != Row)
             return;
         }
 
-        public static MatrixElement CreateFillin(Matrix matrix, int Row, int Col)
+        /// <summary>
+        /// Create a fillin matrix element
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        /// <param name="Row">Row</param>
+        /// <param name="Col">Column</param>
+        /// <returns></returns>
+        private static MatrixElement CreateFillin(Matrix matrix, int Row, int Col)
         {
             MatrixElement pElement, aboveElement;
 
@@ -1634,7 +1745,7 @@ if (pElement.Row != Row)
         /// <param name="matrix">Matrix</param>
         /// <param name="Step">Current step</param>
         /// <returns></returns>
-        public static SparseError MatrixIsSingular(Matrix matrix, int Step)
+        private static SparseError MatrixIsSingular(Matrix matrix, int Step)
         {
             matrix.SingularRow = matrix.IntToExtRowMap[Step];
             matrix.SingularCol = matrix.IntToExtColMap[Step];
@@ -1647,7 +1758,7 @@ if (pElement.Row != Row)
         /// <param name="matrix">Matrix</param>
         /// <param name="Step">Current step</param>
         /// <returns></returns>
-        public static SparseError ZeroPivot(Matrix matrix, int Step)
+        private static SparseError ZeroPivot(Matrix matrix, int Step)
         {
             matrix.SingularRow = matrix.IntToExtRowMap[Step];
             matrix.SingularCol = matrix.IntToExtColMap[Step];

@@ -46,6 +46,7 @@ namespace Sandbox
                 ".AC dec 5 10 10g"
                 );
             nr.Parse(new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(netlist)));
+            
 
             int index = 0;
             nr.Netlist.OnExportSimulationData += (object sender, SimulationData data) =>

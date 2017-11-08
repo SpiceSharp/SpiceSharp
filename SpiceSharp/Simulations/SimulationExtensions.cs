@@ -147,7 +147,7 @@ namespace SpiceSharp.Simulations
                 if (state.Sparse.HasFlag(CircuitState.SparseFlags.NISHOULDREORDER))
                 {
                     ckt.Statistics.ReorderTime.Start();
-                    matrix.SMPreorder(state.PivotRelTol, state.PivotAbsTol, ckt.Simulation?.Config?.DiagGmin ?? 0.0);
+                    matrix.Reorder(state.PivotRelTol, state.PivotAbsTol, ckt.Simulation?.Config?.DiagGmin ?? 0.0);
                     ckt.Statistics.ReorderTime.Stop();
                     state.Sparse &= ~CircuitState.SparseFlags.NISHOULDREORDER;
                 }
@@ -155,7 +155,7 @@ namespace SpiceSharp.Simulations
                 {
                     // Decompose
                     ckt.Statistics.DecompositionTime.Start();
-                    matrix.SMPluFac(ckt.Simulation?.Config?.DiagGmin ?? 0.0);
+                    matrix.Factor(ckt.Simulation?.Config?.DiagGmin ?? 0.0);
                     ckt.Statistics.DecompositionTime.Stop();
                 }
 
@@ -253,14 +253,14 @@ namespace SpiceSharp.Simulations
 
             if (state.Sparse.HasFlag(CircuitState.SparseFlags.NIACSHOULDREORDER))
             {
-                var error = matrix.SMPcReorder(state.PivotAbsTol, state.PivotRelTol);
+                var error = matrix.Reorder(state.PivotAbsTol, state.PivotRelTol);
                 state.Sparse &= ~CircuitState.SparseFlags.NIACSHOULDREORDER;
                 if (error != SparseError.Okay)
                     throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
             }
             else
             {
-                var error = matrix.SMPcLUfac();
+                var error = matrix.Factor();
                 if (error != 0)
                 {
                     if (error == SparseError.Singular)
@@ -273,7 +273,7 @@ namespace SpiceSharp.Simulations
             }
 
             // Solve
-            matrix.SMPcSolve(state.Rhs, state.iRhs);
+            matrix.Solve(state.Rhs, state.iRhs);
 
             // Reset values
             state.Rhs[0] = 0.0;
