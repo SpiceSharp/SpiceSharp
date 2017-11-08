@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if (cond1)
                 vcap = cap.CAPinitCond;
             else
-                vcap = rstate.OldSolution[cap.CAPposNode] - rstate.OldSolution[cap.CAPnegNode];
+                vcap = rstate.Solution[cap.CAPposNode] - rstate.Solution[cap.CAPnegNode];
 
             if (state.Domain == CircuitState.DomainTypes.Time)
             {

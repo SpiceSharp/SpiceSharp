@@ -26,6 +26,7 @@ namespace Sandbox
             InitializeComponent();
 
             var plotOutput = chMain.Series.Add("Output");
+            plotOutput.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
 
             double dcVoltage = 10;
             double resistorResistance = 1e4;

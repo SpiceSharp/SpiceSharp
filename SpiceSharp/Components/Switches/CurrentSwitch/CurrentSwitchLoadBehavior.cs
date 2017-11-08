@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 // No time-dependence, so use current state instead
                 previous_state = state.States[0][csw.CSWstate];
-                i_ctrl = rstate.OldSolution[csw.CSWcontBranch];
+                i_ctrl = rstate.Solution[csw.CSWcontBranch];
                 if (i_ctrl > (model.CSWthresh + model.CSWhyst))
                     current_state = 1.0;
                 else if (i_ctrl < (model.CSWthresh - model.CSWhyst))
@@ -70,7 +70,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 // Get the previous state
                 previous_state = state.States[1][csw.CSWstate];
-                i_ctrl = rstate.OldSolution[csw.CSWcontBranch];
+                i_ctrl = rstate.Solution[csw.CSWcontBranch];
 
                 // Calculate the current state
                 if (i_ctrl > (model.CSWthresh + model.CSWhyst))

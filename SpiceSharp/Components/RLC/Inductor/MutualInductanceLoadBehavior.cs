@@ -59,12 +59,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 if (sender == mut.Inductor1)
                 {
-                    state.States[0][mut.Inductor1.INDstate + Inductor.INDflux] += mut.MUTfactor * rstate.OldSolution[mut.Inductor2.INDbrEq];
+                    state.States[0][mut.Inductor1.INDstate + Inductor.INDflux] += mut.MUTfactor * rstate.Solution[mut.Inductor2.INDbrEq];
                     mut.MUTbr1br2.Sub(mut.MUTfactor * ckt.Method.Slope);
                 }
                 else
                 {
-                    state.States[0][mut.Inductor2.INDstate + Inductor.INDflux] += mut.MUTfactor * rstate.OldSolution[mut.Inductor1.INDbrEq];
+                    state.States[0][mut.Inductor2.INDstate + Inductor.INDflux] += mut.MUTfactor * rstate.Solution[mut.Inductor1.INDbrEq];
                     mut.MUTbr2br1.Sub(mut.MUTfactor * ckt.Method.Slope);
                 }
             }

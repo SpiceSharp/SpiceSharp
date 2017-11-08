@@ -44,7 +44,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 // Time-independent calculations: use current state
                 previous_state = state.States[0][vsw.VSWstate];
-                v_ctrl = rstate.OldSolution[vsw.VSWcontPosNode] - rstate.OldSolution[vsw.VSWcontNegNode];
+                v_ctrl = rstate.Solution[vsw.VSWcontPosNode] - rstate.Solution[vsw.VSWcontNegNode];
 
                 // Calculate the current state
                 if (v_ctrl > (model.VSWthresh + model.VSWhyst))
@@ -68,7 +68,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 // Get the previous state
                 previous_state = state.States[1][vsw.VSWstate];
-                v_ctrl = rstate.OldSolution[vsw.VSWcontPosNode] - rstate.OldSolution[vsw.VSWcontNegNode];
+                v_ctrl = rstate.Solution[vsw.VSWcontPosNode] - rstate.Solution[vsw.VSWcontNegNode];
 
                 if (v_ctrl > (model.VSWthresh + model.VSWhyst))
                     current_state = 1.0;

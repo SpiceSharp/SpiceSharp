@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if (state.UseIC && ind.INDinitCond.Given)
                 state.States[0][ind.INDstate + Inductor.INDflux] = ind.INDinduct * ind.INDinitCond;
             else
-                state.States[0][ind.INDstate + Inductor.INDflux] = ind.INDinduct * rstate.OldSolution[ind.INDbrEq];
+                state.States[0][ind.INDstate + Inductor.INDflux] = ind.INDinduct * rstate.Solution[ind.INDbrEq];
 
             // Handle mutual inductances
             ind.UpdateMutualInductances(ckt);
