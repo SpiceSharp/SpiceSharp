@@ -219,9 +219,9 @@ namespace SpiceSharp.Sparse
             if ((ExtRow > matrix.AllocatedExtSize) || (ExtCol > matrix.AllocatedExtSize))
                 ExpandTranslationArrays(matrix, Math.Max(ExtRow, ExtCol));
 
-            // Set ExtSize if necessary. */
-            if ((ExtRow > matrix.ExtSize) || (ExtCol > matrix.ExtSize))
-                matrix.ExtSize = Math.Max(ExtRow, ExtCol);
+            // Set Size if necessary. */
+            if ((ExtRow > matrix.Size) || (ExtCol > matrix.Size))
+                matrix.Size = Math.Max(ExtRow, ExtCol);
 
             // Translate external row or node number to internal row or node number
             IntRow = matrix.ExtToIntRowMap[ExtRow];
@@ -313,7 +313,7 @@ namespace SpiceSharp.Sparse
         private static void ExpandTranslationArrays(Matrix matrix, int NewSize)
         {
             int OldAllocatedSize = matrix.AllocatedExtSize;
-            matrix.ExtSize = NewSize;
+            matrix.Size = NewSize;
 
             if (NewSize <= OldAllocatedSize)
                 return;

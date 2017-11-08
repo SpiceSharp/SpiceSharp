@@ -61,7 +61,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Gets the public size of the matrix
         /// </summary>
-        public int ExtSize { get; internal set; }
+        public int Size { get; internal set; }
 
         /// <summary>
         /// Internal variables
@@ -69,10 +69,11 @@ namespace SpiceSharp.Sparse
         internal double AbsThreshold;
         internal double RelThreshold;
 
+        internal int IntSize;
         internal int AllocatedSize;
         internal int AllocatedExtSize;
         internal int CurrentSize;
-        internal int IntSize;
+        
 
         internal MatrixElement[] Diag;
         internal MatrixElement[] FirstInCol;
@@ -148,7 +149,7 @@ namespace SpiceSharp.Sparse
             SingularRow = 0;
             IntSize = size;
             AllocatedSize = allocated;
-            ExtSize = size;
+            Size = size;
             AllocatedExtSize = allocated;
             CurrentSize = 0;
             ExtToIntColMap = null;
