@@ -25,15 +25,52 @@ namespace Sandbox
         {
             InitializeComponent();
 
+            var plotOutput = chMain.Series.Add("Output");
+
+            double dcVoltage = 10;
+            double resistorResistance = 1e4;
+            double capacitance = 1e-6;
+
+            double tau = resistorResistance * capacitance;
+
             Circuit ckt = new Circuit();
-            ckt.Objects.Add(
-            new Voltagesource("V2", "1", "2", 1),
-            new Voltagesource("V1", "6", "gnd", 1),
-            new Resistor("V1-R", "gnd", "1", 1),
-            new Resistor("V2-R", "2", "3", 1),
-            new Resistor("R", "1", "6", 1)
+
+            var capacitor = new Capacitor(
+                new CircuitIdentifier("C_1"),
+                new CircuitIdentifier("OUT"),
+                new CircuitIdentifier("gnd"),
+                capacitance
             );
-            ckt.Check();
+
+            ckt.Objects.Add(
+                new Voltagesource(
+                    new CircuitIdentifier("V_1"),
+                    new CircuitIdentifier("IN"),
+                    new CircuitIdentifier("gnd"),
+                    dcVoltage),
+                new Resistor(
+                    new CircuitIdentifier("R_1"),
+                    new CircuitIdentifier("IN"),
+                    new CircuitIdentifier("OUT"),
+                    resistorResistance),
+                capacitor
+            );
+
+            double maxVoltage = 0;
+            Transient trans = new Transient("T", 1e-3, 5 * tau);
+            trans.Circuit = ckt; //TODO: refactor this ..
+            ckt.Simulation = trans; //TODO: refactor this ..
+            trans.CurrentConfig.UseIC = true;
+            trans.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                var outVoltage = data.GetVoltage(new CircuitIdentifier("OUT"), new CircuitIdentifier("gnd"));
+                if (outVoltage > maxVoltage)
+                {
+                    maxVoltage = outVoltage;
+                }
+                plotOutput.Points.AddXY(data.GetTime(), data.GetVoltage("OUT"));
+            };
+            trans.SetupAndExecute();
         }
     }
 }

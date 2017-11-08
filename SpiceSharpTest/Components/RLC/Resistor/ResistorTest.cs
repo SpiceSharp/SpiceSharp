@@ -46,7 +46,7 @@ namespace SpiceSharpTest.Components.RLC.Resistor
             simulation.OnExportSimulationData += (object sender, SimulationData data) =>
             {
                 var current = data.Ask(new CircuitIdentifier("R_1"), "i");
-                Assert.That.AreEqualWithTol(0.01, current, 0, 1e-8);
+                Assert.That.AreEqualWithTol(0.0, current, 0, 1e-8);
             };
 
             simulation.Circuit = ckt;
