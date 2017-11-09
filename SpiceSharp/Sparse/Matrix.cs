@@ -39,7 +39,6 @@ namespace SpiceSharp.Sparse
         internal const bool DIAG_PIVOTING_AS_DEFAULT = true;
         internal const int MINIMUM_ALLOCATED_SIZE = 6;
         internal const float EXPANSION_FACTOR = 1.5f;
-        internal const int MAX_MARKOWITZ_TIES = 100;
         internal const int TIES_MULTIPLIER = 5;
         internal const SparsePartition DEFAULT_PARTITION = SparsePartition.Auto;
 
@@ -316,25 +315,8 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         internal MatrixElement CreateFillin(int Row, int Col)
         {
-            MatrixElement pElement, aboveElement;
-
-            // Find Element above fill-in. 
-            // ppElementAbove = &matrix.FirstInCol[Col];
-            aboveElement = null;
-            pElement = FirstInCol[Col];
-            while (pElement != null)
-            {
-                if (pElement.Row < Row)
-                {
-                    aboveElement = pElement;
-                    pElement = pElement.NextInCol;
-                }
-                else
-                    break; // while loop 
-            }
-
             // End of search, create the element. 
-            pElement = CreateElement(Row, Col);
+            MatrixElement pElement = CreateElement(Row, Col);
 
             // Update Markowitz counts and products
             Pivoting.MarkowitzProd[Row] = ++Pivoting.MarkowitzRow[Row] * Pivoting.MarkowitzCol[Row];

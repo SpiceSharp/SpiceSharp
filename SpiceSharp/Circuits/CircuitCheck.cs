@@ -13,6 +13,12 @@ namespace SpiceSharp.Circuits
     public class CircuitCheck
     {
         /// <summary>
+        /// Constants
+        /// </summary>
+        private const double PivotAbsTol = 1e-6;
+        private const double PivotRelTol = 1e-3;
+
+        /// <summary>
         /// Private variables
         /// </summary>
         private bool HasSource = false;
@@ -181,7 +187,7 @@ namespace SpiceSharp.Circuits
                 conn.GetElement(i + 1, map[pins.Item2]).Add(1.0);
                 conn.GetElement(i + 1, map[pins.Item3]).Add(1.0);
             }
-            var error = conn.OrderAndFactor(null, 1e-3, 1e-6, true);
+            var error = conn.OrderAndFactor(null, PivotRelTol, PivotAbsTol, true);
             conn.SingularAt(out int row, out _);
             row--;
             if (error == SparseError.Singular && row < voltagedriven.Count)

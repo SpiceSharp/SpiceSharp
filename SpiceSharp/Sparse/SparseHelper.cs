@@ -6,12 +6,6 @@
     public static class SparseHelper
     {
         /// <summary>
-        /// Constants
-        /// </summary>
-        public const double M_LN2 = 0.69314718055994530942;
-        public const double M_LN10 = 2.30258509299404568402;
-
-        /// <summary>
         /// SMPluFac
         /// </summary>
         /// <param name="matrix">The matrix</param>

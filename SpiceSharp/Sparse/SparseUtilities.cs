@@ -61,7 +61,7 @@ namespace SpiceSharp.Sparse
                     {
                         if (matrix.Diag[J] == null)
                         {
-                            Twins = CountTwins(matrix, J, ref pTwin1, ref pTwin2);
+                            CountTwins(matrix, J, ref pTwin1, ref pTwin2);
                             SwapCols(matrix, pTwin1, pTwin2);
                             Swapped = true;
                         }

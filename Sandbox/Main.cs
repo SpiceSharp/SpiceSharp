@@ -61,7 +61,10 @@ namespace Sandbox
             Transient trans = new Transient("T", 1e-3, 5 * tau);
             trans.Circuit = ckt; //TODO: refactor this ..
             ckt.Simulation = trans; //TODO: refactor this ..
-            trans.CurrentConfig.UseIC = true;
+
+            // Start at 0V at the output
+            ckt.Nodes.IC.Add("OUT", 0.0);
+
             trans.OnExportSimulationData += (object sender, SimulationData data) =>
             {
                 var outVoltage = data.GetVoltage(new CircuitIdentifier("OUT"), new CircuitIdentifier("gnd"));

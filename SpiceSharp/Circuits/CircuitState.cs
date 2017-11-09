@@ -15,17 +15,55 @@ namespace SpiceSharp.Circuits
         /// </summary>
         public enum InitFlags
         {
+            /// <summary>
+            /// Default state
+            /// </summary>
             Init,
+
+            /// <summary>
+            /// Indicates that nodes may still be everywhere, and a first solution should be calculated
+            /// </summary>
             InitFloat,
+
+            /// <summary>
+            /// Indicates that PN junctions should be initialized to a specific voltage
+            /// </summary>
+            /// <remarks>PN junction often don't behave well in iterative methods. A good initial value can be critical.</remarks>
             InitJct,
+
+            /// <summary>
+            /// Indicates that an initial iteration has been done and that we need to fix it to check for convergence
+            /// </summary>
             InitFix,
+
+            /// <summary>
+            /// Indicates that we are switching from DC to time-domain analysis.
+            /// This is the case when calculating the first nonzero timepoint in Transient analysis.
+            /// </summary>
             InitTransient
         }
 
+        /// <summary>
+        /// Sparse matrix flags
+        /// </summary>
         public enum SparseFlags
         {
+            /// <summary>
+            /// Indicates that the matrix should be reordered
+            /// </summary>
+            /// <remarks>Pivoting is necessary to minimize numerical errors and to factorize a matrix using LU decomposition.</remarks>
             NISHOULDREORDER = 0x01,
+
+            /// <summary>
+            /// Indicates that the matrix is preordered
+            /// </summary>
+            /// <remarks>Preordering uses common observations in matrices for Modifed Nodal Analysis (MNA) to reorder the matrix before running any analysis.</remarks>
             NIDIDPREORDER = 0x100,
+
+            /// <summary>
+            /// Indicates that the matrix should be reordered for AC analysis
+            /// </summary>
+            /// <remarks>Pivoting is necessary to minimize numerical errors and to factorize a matrix using LU decomposition.</remarks>
             NIACSHOULDREORDER = 0x10
         }
 
@@ -227,7 +265,7 @@ namespace SpiceSharp.Circuits
         {
             // Allocate states
             // States = new Vector<double>[method.MaxOrder + 2];
-            States = new double[8][];
+            States = new double[method.MaxOrder + 2][];
             NumStates = Math.Max(NumStates, 1);
             for (int i = 0; i < States.Length; i++)
                 States[i] = new double[NumStates];

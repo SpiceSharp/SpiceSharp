@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             vsw.SWposPosptr.Add(g_now);
             vsw.SWposNegptr.Sub(g_now);
             vsw.SWnegPosptr.Sub(g_now);
-            vsw.SWnegNegptr.Sub(g_now);
+            vsw.SWnegNegptr.Add(g_now);
         }
     }
 }

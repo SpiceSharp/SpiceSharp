@@ -64,8 +64,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 vbe = state.States[0][bjt.BJTstate + BJT.BJTvbe];
                 vbc = state.States[0][bjt.BJTstate + BJT.BJTvbc];
-                vbx = model.BJTtype * (rstate.Solution[bjt.BJTbaseNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
-                vcs = model.BJTtype * (rstate.Solution[bjt.BJTsubstNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
+                vbx = model.BJTtype * (rstate.OldSolution[bjt.BJTbaseNode] - rstate.OldSolution[bjt.BJTcolPrimeNode]);
+                vcs = model.BJTtype * (rstate.OldSolution[bjt.BJTsubstNode] - rstate.OldSolution[bjt.BJTcolPrimeNode]);
             }
             else if (state.Init == CircuitState.InitFlags.InitTransient)
             {
