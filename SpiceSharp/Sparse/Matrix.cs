@@ -176,6 +176,9 @@ namespace SpiceSharp.Sparse
                 }
             }
 
+            // Empty the trash
+            TrashCan.Value.Cplx = 0.0;
+
             // Reset flags
             Error = SparseError.Okay;
             Factored = false;

@@ -52,8 +52,23 @@ namespace SpiceSharpTest.Models
             {
                 double actual = netlist.Exports[0].Extract(data);
                 double expected = reference[index++];
-                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-14;
-                Assert.AreEqual(expected, actual, tol);
+                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
+                try
+                {
+                    Assert.AreEqual(expected, actual, tol);
+                } catch (Exception ex)
+                {
+                    DC dc = netlist.Simulations[0] as DC;
+                    string msg = ex.Message;
+                    if (dc != null)
+                    {
+                        string[] sweep = new string[dc.Sweeps.Count];
+                        for (int i = 0; i < dc.Sweeps.Count; i++)
+                            sweep[i] = $"{dc.Sweeps[i].ComponentName} at {dc.Sweeps[i].CurrentValue}";
+                        msg += " - " + string.Join(" ; ", sweep);
+                    }
+                    throw new Exception(msg);
+                }
             };
             netlist.Simulate();
         }

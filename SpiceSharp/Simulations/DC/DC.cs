@@ -154,7 +154,8 @@ namespace SpiceSharp.Simulations
         /// <param name="ckt">The circuit</param>
         protected override void Execute()
         {
-            var ckt = this.Circuit;
+            var ckt = Circuit;
+
             // Setup the state
             var state = ckt.State;
             var rstate = state;
@@ -176,7 +177,7 @@ namespace SpiceSharp.Simulations
             {
                 // Get the component to be swept
                 var sweep = Sweeps[i];
-                if (!this.Circuit.Objects.Contains(sweep.ComponentName))
+                if (!Circuit.Objects.Contains(sweep.ComponentName))
                     throw new CircuitException($"Could not find source {sweep.ComponentName}");
                 components[i] = (IParameterized)this.Circuit.Objects[sweep.ComponentName];
 
@@ -200,6 +201,7 @@ namespace SpiceSharp.Simulations
                     level++;
                     Sweeps[level].SetCurrentStep(0);
                     components[level].Set("dc", Sweeps[level].CurrentValue);
+                    state.Init = CircuitState.InitFlags.InitJct;
                 }
 
                 // Calculate the solution
