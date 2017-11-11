@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -27,12 +28,12 @@ namespace SpiceSharp.Components
         [SpiceName("control"), SpiceInfo("Name of the controlling source")]
         public CircuitIdentifier CCCScontName { get; set; }
         [SpiceName("i"), SpiceInfo("CCCS output current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[CCCScontBranch] * CCCScoeff;
+        public double GetCurrent(Circuit ckt) => ckt.State.Solution[CCCScontBranch] * CCCScoeff;
         [SpiceName("v"), SpiceInfo("CCCS voltage at output")]
-        public double GetVoltage(Circuit ckt) => ckt.State.Real.Solution[CCCSposNode] - ckt.State.Real.Solution[CCCSnegNode];
+        public double GetVoltage(Circuit ckt) => ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode];
         [SpiceName("p"), SpiceInfo("CCCS power")]
-        public double GetPower(Circuit ckt) => ckt.State.Real.Solution[CCCScontBranch] * CCCScoeff *
-            (ckt.State.Real.Solution[CCCSposNode] - ckt.State.Real.Solution[CCCSnegNode]);
+        public double GetPower(Circuit ckt) => ckt.State.Solution[CCCScontBranch] * CCCScoeff *
+            (ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode]);
 
         /// <summary>
         /// Nodes
@@ -42,6 +43,12 @@ namespace SpiceSharp.Components
         [SpiceName("neg_node"), SpiceInfo("Negative node of the source")]
         public int CCCSnegNode { get; private set; }
         public int CCCScontBranch { get; private set; }
+
+        /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement CCCSposContBrptr { get; private set; }
+        internal MatrixElement CCCSnegContBrptr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -84,6 +91,22 @@ namespace SpiceSharp.Components
                 CCCScontBranch = vsrc.VSRCbranch;
             else
                 throw new CircuitException($"{Name}: Could not find voltage source '{CCCScontName}'");
+
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            CCCSposContBrptr = matrix.GetElement(CCCSposNode, CCCScontBranch);
+            CCCSnegContBrptr = matrix.GetElement(CCCSnegNode, CCCScontBranch);
+        }
+
+        /// <summary>
+        /// Unsetup the source
+        /// </summary>
+        /// <param name="ckt"></param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            CCCSposContBrptr = null;
+            CCCSnegContBrptr = null;
         }
     }
 }

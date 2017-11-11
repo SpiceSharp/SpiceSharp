@@ -1,6 +1,5 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using MathNet.Numerics.LinearAlgebra;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.IntegrationMethods
@@ -79,28 +78,31 @@ namespace SpiceSharp.IntegrationMethods
         public override void Predict(Circuit ckt)
         {
             // Get the state
-            var state = ckt.State.Real;
+            var state = ckt.State;
 
             // Predict a solution
             double a, b;
-            Vector<double> dd0, dd1;
             switch (Order)
             {
                 case 1:
                     // Divided difference approach
-                    dd0 = (Solutions[0] - Solutions[1]) / DeltaOld[1];
-                    Prediction = Solutions[0] + DeltaOld[0] * dd0;
-                    Prediction.CopyTo(state.Solution);
+                    for (int i = 0; i < Solutions[0].Length; i++)
+                    {
+                        double dd0 = (Solutions[0][i] - Solutions[1][i]) / DeltaOld[1];
+                        Prediction[i] = Solutions[0][i] + DeltaOld[0] * dd0;
+                    }
                     break;
 
                 case 2:
                     // Adams-Bashforth method (second order for variable timesteps)
                     b = -DeltaOld[0] / (2.0 * DeltaOld[1]);
                     a = 1 - b;
-                    dd0 = (Solutions[0] - Solutions[1]) / DeltaOld[1];
-                    dd1 = (Solutions[1] - Solutions[2]) / DeltaOld[2];
-                    Prediction = Solutions[0] + (b * dd1 + a * dd0) * DeltaOld[0];
-                    Prediction.CopyTo(state.Solution);
+                    for (int i = 0; i < Solutions[0].Length; i++)
+                    {
+                        double dd0 = (Solutions[0][i] - Solutions[1][i]) / DeltaOld[1];
+                        double dd1 = (Solutions[1][i] - Solutions[2][i]) / DeltaOld[2];
+                        Prediction[i] = Solutions[0][i] + (b * dd1 + a * dd0) * DeltaOld[0];
+                    }
                     break;
 
                 default:
@@ -118,7 +120,7 @@ namespace SpiceSharp.IntegrationMethods
         public override double TruncateNodes(Circuit ckt)
         {
             // Get the state
-            var state = ckt.State.Real;
+            var state = ckt.State;
             double tol, diff, tmp;
             double timetemp = Double.PositiveInfinity;
             int rows = ckt.Nodes.Count;
@@ -221,7 +223,7 @@ namespace SpiceSharp.IntegrationMethods
             // Calculate the tolerance
             double volttol = config.AbsTol + config.RelTol * Math.Max(Math.Abs(state.States[0][ccap]), Math.Abs(state.States[1][ccap]));
             double chargetol = Math.Max(Math.Abs(state.States[0][qcap]), Math.Abs(state.States[1][qcap]));
-            chargetol = Config.LteRelTol * Math.Max(chargetol, config.ChgTol) / Delta;
+            chargetol = config.RelTol * Math.Max(chargetol, config.ChgTol) / Delta;
             double tol = Math.Max(volttol, chargetol);
 
             // Now divided differences

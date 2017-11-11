@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -77,6 +78,17 @@ namespace SpiceSharp.Components
         public int DIOstate { get; private set; }
 
         /// <summary>
+        /// Matrix element pointers
+        /// </summary>
+        internal MatrixElement DIOposPosPrimePtr;
+        internal MatrixElement DIOnegPosPrimePtr;
+        internal MatrixElement DIOposPrimePosPtr;
+        internal MatrixElement DIOposPrimeNegPtr;
+        internal MatrixElement DIOposPosPtr;
+        internal MatrixElement DIOnegNegPtr;
+        internal MatrixElement DIOposPrimePosPrimePtr;
+
+        /// <summary>
         /// Constants
         /// </summary>
         public const int DIOvoltage = 0;
@@ -113,6 +125,15 @@ namespace SpiceSharp.Components
                 DIOposPrimeNode = DIOposNode;
             else
                 DIOposPrimeNode = CreateNode(ckt, Name.Grow("#pos")).Index;
+
+            var matrix = ckt.State.Matrix;
+            DIOposPosPrimePtr = matrix.GetElement(DIOposNode, DIOposPrimeNode);
+            DIOnegPosPrimePtr = matrix.GetElement(DIOnegNode, DIOposPrimeNode);
+            DIOposPrimePosPtr = matrix.GetElement(DIOposPrimeNode, DIOposNode);
+            DIOposPrimeNegPtr = matrix.GetElement(DIOposPrimeNode, DIOnegNode);
+            DIOposPosPtr = matrix.GetElement(DIOposNode, DIOposNode);
+            DIOnegNegPtr = matrix.GetElement(DIOnegNode, DIOnegNode);
+            DIOposPrimePosPrimePtr = matrix.GetElement(DIOposPrimeNode, DIOposPrimeNode);
         }
 
         /// <summary>

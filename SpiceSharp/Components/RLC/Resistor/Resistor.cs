@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -43,16 +44,24 @@ namespace SpiceSharp.Components
         [SpiceName("l"), SpiceInfo("Length", Interesting = false)]
         public Parameter RESlength { get; } = new Parameter();
         [SpiceName("i"), SpiceInfo("Current")]
-        public double GetCurrent(Circuit ckt) => (ckt.State.Real.Solution[RESposNode] - ckt.State.Real.Solution[RESnegNode]) * RESconduct;
+        public double GetCurrent(Circuit ckt) => (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) * RESconduct;
         [SpiceName("p"), SpiceInfo("Power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Real.Solution[RESposNode] - ckt.State.Real.Solution[RESnegNode]) *
-            (ckt.State.Real.Solution[RESposNode] - ckt.State.Real.Solution[RESnegNode]) * RESconduct;
+        public double GetPower(Circuit ckt) => (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) *
+            (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) * RESconduct;
 
         /// <summary>
         /// Nodes
         /// </summary>
         public int RESposNode { get; private set; }
         public int RESnegNode { get; private set; }
+
+        /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement RESposPosPtr { get; private set; }
+        internal MatrixElement RESnegNegPtr { get; private set; }
+        internal MatrixElement RESposNegPtr { get; private set; }
+        internal MatrixElement RESnegPosPtr { get; private set; }
 
         /// <summary>
         /// Private variables
@@ -87,6 +96,26 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(ckt);
             RESposNode = nodes[0].Index;
             RESnegNode = nodes[1].Index;
+
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            RESposPosPtr = matrix.GetElement(RESposNode, RESposNode);
+            RESnegNegPtr = matrix.GetElement(RESnegNode, RESnegNode);
+            RESposNegPtr = matrix.GetElement(RESposNode, RESnegNode);
+            RESnegPosPtr = matrix.GetElement(RESnegNode, RESposNode);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            RESposPosPtr = null;
+            RESnegNegPtr = null;
+            RESposNegPtr = null;
+            RESnegPosPtr = null;
         }
     }
 }

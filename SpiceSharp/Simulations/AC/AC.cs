@@ -132,7 +132,7 @@ namespace SpiceSharp.Simulations
             var ckt = Circuit;
 
             var state = ckt.State;
-            var cstate = state.Complex;
+            var cstate = state;
             var config = CurrentConfig;
 
             double freq = 0.0, freqdelta = 0.0;
@@ -170,7 +170,7 @@ namespace SpiceSharp.Simulations
 
             // Calculate the operating point
             state.Initialize(ckt);
-            state.Complex.Laplace = 0.0;
+            state.Laplace = 0.0;
             state.Domain = CircuitState.DomainTypes.Frequency;
             state.UseIC = false;
             state.UseDC = true;
@@ -192,12 +192,13 @@ namespace SpiceSharp.Simulations
             // Calculate the AC solution
             state.UseDC = false;
             freq = StartFreq;
+            ckt.State.Matrix.Complex = true;
 
             // Sweep the frequency
             for (int i = 0; i < n; i++)
             {
                 // Calculate the current frequency
-                state.Complex.Laplace = new Complex(0.0, 2.0 * Circuit.CONSTPI * freq);
+                state.Laplace = new Complex(0.0, 2.0 * Circuit.CONSTPI * freq);
 
                 // Solve
                 ckt.AcIterate(acloadbehaviours, config);

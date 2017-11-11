@@ -2,8 +2,7 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.Transistors;
-using System.Numerics;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -203,12 +202,12 @@ namespace SpiceSharp.Components
         public double GetPOWER(Circuit ckt)
         {
             double temp;
-            double value = MOS1cd * ckt.State.Real.Solution[MOS1dNode];
-            value += (MOS1cbd + MOS1cbs - ckt.State.States[0][MOS1states + MOS1cqgb]) * ckt.State.Real.Solution[MOS1bNode];
+            double value = MOS1cd * ckt.State.Solution[MOS1dNode];
+            value += (MOS1cbd + MOS1cbs - ckt.State.States[0][MOS1states + MOS1cqgb]) * ckt.State.Solution[MOS1bNode];
             if (ckt.Method != null && !(ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC))
             {
                 value += (ckt.State.States[0][MOS1states + MOS1cqgb] + ckt.State.States[0][MOS1states + MOS1cqgd] +
-                    ckt.State.States[0][MOS1states + MOS1cqgs]) * ckt.State.Real.Solution[MOS1gNode];
+                    ckt.State.States[0][MOS1states + MOS1cqgs]) * ckt.State.Solution[MOS1gNode];
             }
             temp = -MOS1cd;
             temp -= MOS1cbd + MOS1cbs;
@@ -217,7 +216,7 @@ namespace SpiceSharp.Components
                 temp -= ckt.State.States[0][MOS1states + MOS1cqgb] + ckt.State.States[0][MOS1states + MOS1cqgd] +
                     ckt.State.States[0][MOS1states + MOS1cqgs];
             }
-            value += temp * ckt.State.Real.Solution[MOS1sNode];
+            value += temp * ckt.State.Solution[MOS1sNode];
             return value;
         }
 
@@ -248,6 +247,32 @@ namespace SpiceSharp.Components
         public double MOS1cgd { get; internal set; }
         public double MOS1cgb { get; internal set; }
         public int MOS1states { get; internal set; }
+
+        /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement MOS1DdPtr{ get; private set; }
+        internal MatrixElement MOS1GgPtr{ get; private set; }
+        internal MatrixElement MOS1SsPtr{ get; private set; }
+        internal MatrixElement MOS1BbPtr{ get; private set; }
+        internal MatrixElement MOS1DPdpPtr{ get; private set; }
+        internal MatrixElement MOS1SPspPtr{ get; private set; }
+        internal MatrixElement MOS1DdpPtr{ get; private set; }
+        internal MatrixElement MOS1GbPtr{ get; private set; }
+        internal MatrixElement MOS1GdpPtr{ get; private set; }
+        internal MatrixElement MOS1GspPtr{ get; private set; }
+        internal MatrixElement MOS1SspPtr{ get; private set; }
+        internal MatrixElement MOS1BdpPtr{ get; private set; }
+        internal MatrixElement MOS1BspPtr{ get; private set; }
+        internal MatrixElement MOS1DPspPtr{ get; private set; }
+        internal MatrixElement MOS1DPdPtr{ get; private set; }
+        internal MatrixElement MOS1BgPtr{ get; private set; }
+        internal MatrixElement MOS1DPgPtr{ get; private set; }
+        internal MatrixElement MOS1SPgPtr{ get; private set; }
+        internal MatrixElement MOS1SPsPtr{ get; private set; }
+        internal MatrixElement MOS1DPbPtr{ get; private set; }
+        internal MatrixElement MOS1SPbPtr{ get; private set; }
+        internal MatrixElement MOS1SPdpPtr { get; private set; }
 
         /// <summary>
         /// Constants
@@ -305,8 +330,64 @@ namespace SpiceSharp.Components
             else
                 MOS1sNodePrime = MOS1sNode;
 
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            MOS1DdPtr = matrix.GetElement(MOS1dNode, MOS1dNode);
+            MOS1GgPtr = matrix.GetElement(MOS1gNode, MOS1gNode);
+            MOS1SsPtr = matrix.GetElement(MOS1sNode, MOS1sNode);
+            MOS1BbPtr = matrix.GetElement(MOS1bNode, MOS1bNode);
+            MOS1DPdpPtr = matrix.GetElement(MOS1dNodePrime, MOS1dNodePrime);
+            MOS1SPspPtr = matrix.GetElement(MOS1sNodePrime, MOS1sNodePrime);
+            MOS1DdpPtr = matrix.GetElement(MOS1dNode, MOS1dNodePrime);
+            MOS1GbPtr = matrix.GetElement(MOS1gNode, MOS1bNode);
+            MOS1GdpPtr = matrix.GetElement(MOS1gNode, MOS1dNodePrime);
+            MOS1GspPtr = matrix.GetElement(MOS1gNode, MOS1sNodePrime);
+            MOS1SspPtr = matrix.GetElement(MOS1sNode, MOS1sNodePrime);
+            MOS1BdpPtr = matrix.GetElement(MOS1bNode, MOS1dNodePrime);
+            MOS1BspPtr = matrix.GetElement(MOS1bNode, MOS1sNodePrime);
+            MOS1DPspPtr = matrix.GetElement(MOS1dNodePrime, MOS1sNodePrime);
+            MOS1DPdPtr = matrix.GetElement(MOS1dNodePrime, MOS1dNode);
+            MOS1BgPtr = matrix.GetElement(MOS1bNode, MOS1gNode);
+            MOS1DPgPtr = matrix.GetElement(MOS1dNodePrime, MOS1gNode);
+            MOS1SPgPtr = matrix.GetElement(MOS1sNodePrime, MOS1gNode);
+            MOS1SPsPtr = matrix.GetElement(MOS1sNodePrime, MOS1sNode);
+            MOS1DPbPtr = matrix.GetElement(MOS1dNodePrime, MOS1bNode);
+            MOS1SPbPtr = matrix.GetElement(MOS1sNodePrime, MOS1bNode);
+            MOS1SPdpPtr = matrix.GetElement(MOS1sNodePrime, MOS1dNodePrime);
+
             // Allocate states
             MOS1states = ckt.State.GetState(17);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            MOS1DdPtr = null;
+            MOS1GgPtr = null;
+            MOS1SsPtr = null;
+            MOS1BbPtr = null;
+            MOS1DPdpPtr = null;
+            MOS1SPspPtr = null;
+            MOS1DdpPtr = null;
+            MOS1GbPtr = null;
+            MOS1GdpPtr = null;
+            MOS1GspPtr = null;
+            MOS1SspPtr = null;
+            MOS1BdpPtr = null;
+            MOS1BspPtr = null;
+            MOS1DPspPtr = null;
+            MOS1DPdPtr = null;
+            MOS1BgPtr = null;
+            MOS1DPgPtr = null;
+            MOS1SPgPtr = null;
+            MOS1SPsPtr = null;
+            MOS1DPbPtr = null;
+            MOS1SPbPtr = null;
+            MOS1SPdpPtr = null;
         }
 
         /// <summary>

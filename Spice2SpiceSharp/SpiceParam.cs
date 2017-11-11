@@ -425,7 +425,7 @@ namespace Spice2SpiceSharp
                     $@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTstate(?<state>\d+)\s*\+\s*(?<node>\w+)\s*\)",
                     (Match m) => $"ckt.State.States[{m.Groups["state"].Value}][{setup.StatesVariable} + {m.Groups["node"].Value}]");
                 code = Regex.Replace(code, dev.DeviceName + "_", "", RegexOptions.IgnoreCase);
-                code = Regex.Replace(code, $@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTrhsOld\s*\+\s*(?<node>\w+)\s*\)", (Match m) => $"ckt.State.Real.Solution[{m.Groups["node"].Value}]");
+                code = Regex.Replace(code, $@"\*\s*\(\s*{ckt}\s*\-\>\s*CKTrhsOld\s*\+\s*(?<node>\w+)\s*\)", (Match m) => $"ckt.State.Solution[{m.Groups["node"].Value}]");
 
                 // If it just a simple setter, then use the shorthand notation
                 Regex simpleset = new Regex(@"\s*\{\s*value\s*\=\s*(?<value>[^;]+);(\s*return\s*\(\s*OK\s*\)\s*;)?\s*\}\s*$");

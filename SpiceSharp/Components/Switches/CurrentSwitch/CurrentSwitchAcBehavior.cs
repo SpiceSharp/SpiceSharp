@@ -19,17 +19,17 @@ namespace SpiceSharp.Components.ComponentBehaviors
             double current_state;
             double g_now;
             var state = ckt.State;
-            var cstate = state.Complex;
+            var cstate = state;
 
             // Get the current state
             current_state = state.States[0][csw.CSWstate];
             g_now = current_state > 0.0 ? model.CSWonConduct : model.CSWoffConduct;
 
             // Load the Y-matrix
-            cstate.Matrix[csw.CSWposNode, csw.CSWposNode] += g_now;
-            cstate.Matrix[csw.CSWposNode, csw.CSWnegNode] -= g_now;
-            cstate.Matrix[csw.CSWnegNode, csw.CSWposNode] -= g_now;
-            cstate.Matrix[csw.CSWnegNode, csw.CSWnegNode] += g_now;
+            csw.CSWposPosptr.Add(g_now);
+            csw.CSWposNegptr.Sub(g_now);
+            csw.CSWnegPosptr.Sub(g_now);
+            csw.CSWnegNegptr.Add(g_now);
         }
     }
 }

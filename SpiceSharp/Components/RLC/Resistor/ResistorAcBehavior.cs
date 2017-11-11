@@ -13,13 +13,13 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt"></param>
         public override void Execute(Circuit ckt)
         {
-            var cstate = ckt.State.Complex;
+            var cstate = ckt.State;
             var resistor = ComponentTyped<Resistor>();
 
-            cstate.Matrix[resistor.RESposNode, resistor.RESposNode] += resistor.RESconduct;
-            cstate.Matrix[resistor.RESposNode, resistor.RESnegNode] -= resistor.RESconduct;
-            cstate.Matrix[resistor.RESnegNode, resistor.RESposNode] -= resistor.RESconduct;
-            cstate.Matrix[resistor.RESnegNode, resistor.RESnegNode] += resistor.RESconduct;
+            resistor.RESposPosPtr.Add(resistor.RESconduct);
+            resistor.RESnegNegPtr.Add(resistor.RESconduct);
+            resistor.RESposNegPtr.Sub(resistor.RESconduct);
+            resistor.RESnegPosPtr.Sub(resistor.RESconduct);
         }
     }
 }

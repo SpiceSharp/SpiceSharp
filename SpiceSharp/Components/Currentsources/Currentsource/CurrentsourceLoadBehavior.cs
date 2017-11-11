@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var currentSource = ComponentTyped<Currentsource>();
 
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
 
             double value = 0.0;
             double time = 0.0;

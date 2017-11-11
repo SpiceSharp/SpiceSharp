@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             double vcap;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var method = ckt.Method;
 
             bool cond1 = (state.UseDC && state.Init == Circuits.CircuitState.InitFlags.InitJct) || state.UseIC;
@@ -26,28 +26,28 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if (cond1)
                 vcap = cap.CAPinitCond;
             else
-                vcap = rstate.OldSolution[cap.CAPposNode] - rstate.OldSolution[cap.CAPnegNode];
+                vcap = rstate.Solution[cap.CAPposNode] - rstate.Solution[cap.CAPnegNode];
 
             if (state.Domain == CircuitState.DomainTypes.Time)
             {
                 // Fill the matrix
                 state.States[0][cap.CAPstate + Capacitor.CAPqcap] = cap.CAPcapac * vcap;
-                if (method != null && method.SavedTime == 0.0)
+                if (state.Init == CircuitState.InitFlags.InitTransient)
                     state.States[1][cap.CAPstate + Capacitor.CAPqcap] = state.States[0][cap.CAPstate + Capacitor.CAPqcap];
 
                 // Without integration, a capacitor cannot do anything
                 if (method != null)
                 {
                     var result = ckt.Method.Integrate(state, cap.CAPstate + Capacitor.CAPqcap, cap.CAPcapac);
-                    if (method != null && method.SavedTime == 0.0)
+                    if (state.Init == CircuitState.InitFlags.InitTransient)
                         state.States[1][cap.CAPstate + Capacitor.CAPqcap] = state.States[0][cap.CAPstate + Capacitor.CAPqcap];
 
-                    rstate.Matrix[cap.CAPposNode, cap.CAPposNode] += result.Geq;
-                    rstate.Matrix[cap.CAPnegNode, cap.CAPnegNode] += result.Geq;
-                    rstate.Matrix[cap.CAPposNode, cap.CAPnegNode] -= result.Geq;
-                    rstate.Matrix[cap.CAPnegNode, cap.CAPposNode] -= result.Geq;
-                    rstate.Rhs[cap.CAPposNode] -= result.Ceq;
-                    rstate.Rhs[cap.CAPnegNode] += result.Ceq;
+                    cap.CAPposPosptr.Add(result.Geq);
+                    cap.CAPnegNegptr.Add(result.Geq);
+                    cap.CAPposNegptr.Sub(result.Geq);
+                    cap.CAPnegPosptr.Sub(result.Geq);
+                    state.Rhs[cap.CAPposNode] -= result.Ceq;
+                    state.Rhs[cap.CAPnegNode] += result.Ceq;
                 }
             }
             else

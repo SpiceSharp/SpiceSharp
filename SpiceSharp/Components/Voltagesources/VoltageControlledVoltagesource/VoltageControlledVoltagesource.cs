@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -24,11 +25,11 @@ namespace SpiceSharp.Components
         [SpiceName("gain"), SpiceInfo("Voltage gain")]
         public Parameter VCVScoeff { get; } = new Parameter();
         [SpiceName("i"), SpiceInfo("Output current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[VCVSbranch];
+        public double GetCurrent(Circuit ckt) => ckt.State.Solution[VCVSbranch];
         [SpiceName("v"), SpiceInfo("Output current")]
-        public double GetVoltage(Circuit ckt) => ckt.State.Real.Solution[VCVSposNode] - ckt.State.Real.Solution[VCVSnegNode];
+        public double GetVoltage(Circuit ckt) => ckt.State.Solution[VCVSposNode] - ckt.State.Solution[VCVSnegNode];
         [SpiceName("p"), SpiceInfo("Power")]
-        public double GetPower(Circuit ckt) => ckt.State.Real.Solution[VCVSbranch] * (ckt.State.Real.Solution[VCVSposNode] - ckt.State.Real.Solution[VCVSnegNode]);
+        public double GetPower(Circuit ckt) => ckt.State.Solution[VCVSbranch] * (ckt.State.Solution[VCVSposNode] - ckt.State.Solution[VCVSnegNode]);
 
         /// <summary>
         /// Nodes
@@ -43,6 +44,16 @@ namespace SpiceSharp.Components
         public int VCVScontNegNode { get; internal set; }
         public int VCVSbranch { get; internal set; }
 
+        /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement VCVSposIbrptr { get; private set; }
+        internal MatrixElement VCVSnegIbrptr { get; private set; }
+        internal MatrixElement VCVSibrPosptr { get; private set; }
+        internal MatrixElement VCVSibrNegptr { get; private set; }
+        internal MatrixElement VCVSibrContPosptr { get; private set; }
+        internal MatrixElement VCVSibrContNegptr { get; private set; }
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -76,6 +87,30 @@ namespace SpiceSharp.Components
             VCVScontPosNode = nodes[2].Index;
             VCVScontNegNode = nodes[3].Index;
             VCVSbranch = CreateNode(ckt, Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
+
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            VCVSposIbrptr = matrix.GetElement(VCVSposNode, VCVSbranch);
+            VCVSnegIbrptr = matrix.GetElement(VCVSnegNode, VCVSbranch);
+            VCVSibrPosptr = matrix.GetElement(VCVSbranch, VCVSposNode);
+            VCVSibrNegptr = matrix.GetElement(VCVSbranch, VCVSnegNode);
+            VCVSibrContPosptr = matrix.GetElement(VCVSbranch, VCVScontPosNode);
+            VCVSibrContNegptr = matrix.GetElement(VCVSbranch, VCVScontNegNode);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            VCVSposIbrptr = null;
+            VCVSnegIbrptr = null;
+            VCVSibrPosptr = null;
+            VCVSibrNegptr = null;
+            VCVSibrContPosptr = null;
+            VCVSibrContNegptr = null;
         }
     }
 }

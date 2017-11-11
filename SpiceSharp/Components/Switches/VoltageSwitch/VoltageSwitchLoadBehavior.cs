@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             double previous_state;
             double current_state = 0.0;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
 
             if (state.Init == CircuitState.InitFlags.InitFix || state.Init == CircuitState.InitFlags.InitJct)
             {
@@ -44,7 +44,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 // Time-independent calculations: use current state
                 previous_state = state.States[0][vsw.VSWstate];
-                v_ctrl = rstate.OldSolution[vsw.VSWcontPosNode] - rstate.OldSolution[vsw.VSWcontNegNode];
+                v_ctrl = rstate.Solution[vsw.VSWcontPosNode] - rstate.Solution[vsw.VSWcontNegNode];
 
                 // Calculate the current state
                 if (v_ctrl > (model.VSWthresh + model.VSWhyst))
@@ -68,7 +68,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 // Get the previous state
                 previous_state = state.States[1][vsw.VSWstate];
-                v_ctrl = rstate.OldSolution[vsw.VSWcontPosNode] - rstate.OldSolution[vsw.VSWcontNegNode];
+                v_ctrl = rstate.Solution[vsw.VSWcontPosNode] - rstate.Solution[vsw.VSWcontNegNode];
 
                 if (v_ctrl > (model.VSWthresh + model.VSWhyst))
                     current_state = 1.0;
@@ -88,10 +88,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             vsw.VSWcond = g_now;
 
             // Load the Y-matrix
-            rstate.Matrix[vsw.VSWposNode, vsw.VSWposNode] += g_now;
-            rstate.Matrix[vsw.VSWposNode, vsw.VSWnegNode] -= g_now;
-            rstate.Matrix[vsw.VSWnegNode, vsw.VSWposNode] -= g_now;
-            rstate.Matrix[vsw.VSWnegNode, vsw.VSWnegNode] += g_now;
+            vsw.SWposPosptr.Add(g_now);
+            vsw.SWposNegptr.Sub(g_now);
+            vsw.SWnegPosptr.Sub(g_now);
+            vsw.SWnegNegptr.Add(g_now);
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -47,6 +48,14 @@ namespace SpiceSharp.Components
         public double VSWcond { get; internal set; }
 
         /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement SWposPosptr { get; private set; }
+        internal MatrixElement SWnegPosptr { get; private set; }
+        internal MatrixElement SWposNegptr { get; private set; }
+        internal MatrixElement SWnegNegptr { get; private set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled switch</param>
@@ -77,7 +86,26 @@ namespace SpiceSharp.Components
             VSWcontPosNode = nodes[2].Index;
             VSWcontNegNode = nodes[3].Index;
 
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            SWposPosptr = matrix.GetElement(VSWposNode, VSWposNode);
+            SWposNegptr = matrix.GetElement(VSWposNode, VSWnegNode);
+            SWnegPosptr = matrix.GetElement(VSWnegNode, VSWposNode);
+            SWnegNegptr = matrix.GetElement(VSWnegNode, VSWnegNode);
+
             VSWstate = ckt.State.GetState();
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            SWposPosptr = null;
+            SWposNegptr = null;
+            SWnegPosptr = null;
+            SWnegNegptr = null;
         }
     }
 }

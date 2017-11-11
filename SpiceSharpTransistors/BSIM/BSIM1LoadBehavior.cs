@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var bsim1 = ComponentTyped<BSIM1>();
             var model = bsim1.Model as BSIM1Model;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var method = ckt.Method;
             double EffectiveLength, DrainArea, SourceArea, DrainPerimeter, SourcePerimeter, DrainSatCurrent, SourceSatCurrent,
                 GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, von, vdsat, vt0;
@@ -438,37 +438,37 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 cdreq = -(model.B1type) * (cdrain + gds * vds - gm * vgd - gmbs * vbd);
             }
 
-            rstate.Rhs[bsim1.B1gNode] -= ceqqg;
-            rstate.Rhs[bsim1.B1bNode] -= (ceqbs + ceqbd + ceqqb);
-            rstate.Rhs[bsim1.B1dNodePrime] += (ceqbd - cdreq - ceqqd);
-            rstate.Rhs[bsim1.B1sNodePrime] += (cdreq + ceqbs + ceqqg + ceqqb + ceqqd);
+            // rstate.Rhs[bsim1.B1gNode] -= ceqqg;
+            // rstate.Rhs[bsim1.B1bNode] -= (ceqbs + ceqbd + ceqqb);
+            // rstate.Rhs[bsim1.B1dNodePrime] += (ceqbd - cdreq - ceqqd);
+            // rstate.Rhs[bsim1.B1sNodePrime] += (cdreq + ceqbs + ceqqg + ceqqb + ceqqd);
 
             /* 
 			* load y matrix
 			*/
 
-            rstate.Matrix[bsim1.B1dNode, bsim1.B1dNode] += (bsim1.B1drainConductance);
-            rstate.Matrix[bsim1.B1gNode, bsim1.B1gNode] += (gcggb);
-            rstate.Matrix[bsim1.B1sNode, bsim1.B1sNode] += (bsim1.B1sourceConductance);
-            rstate.Matrix[bsim1.B1bNode, bsim1.B1bNode] += (gbd + gbs - gcbgb - gcbdb - gcbsb);
-            rstate.Matrix[bsim1.B1dNodePrime, bsim1.B1dNodePrime] += (bsim1.B1drainConductance + gds + gbd + xrev * (gm + gmbs) + gcddb);
-            rstate.Matrix[bsim1.B1sNodePrime, bsim1.B1sNodePrime] += (bsim1.B1sourceConductance + gds + gbs + xnrm * (gm + gmbs) + gcssb);
-            rstate.Matrix[bsim1.B1dNode, bsim1.B1dNodePrime] += (-bsim1.B1drainConductance);
-            rstate.Matrix[bsim1.B1gNode, bsim1.B1bNode] += (-gcggb - gcgdb - gcgsb);
-            rstate.Matrix[bsim1.B1gNode, bsim1.B1dNodePrime] += (gcgdb);
-            rstate.Matrix[bsim1.B1gNode, bsim1.B1sNodePrime] += (gcgsb);
-            rstate.Matrix[bsim1.B1sNode, bsim1.B1sNodePrime] += (-bsim1.B1sourceConductance);
-            rstate.Matrix[bsim1.B1bNode, bsim1.B1gNode] += (gcbgb);
-            rstate.Matrix[bsim1.B1bNode, bsim1.B1dNodePrime] += (-gbd + gcbdb);
-            rstate.Matrix[bsim1.B1bNode, bsim1.B1sNodePrime] += (-gbs + gcbsb);
-            rstate.Matrix[bsim1.B1dNodePrime, bsim1.B1dNode] += (-bsim1.B1drainConductance);
-            rstate.Matrix[bsim1.B1dNodePrime, bsim1.B1gNode] += ((xnrm - xrev) * gm + gcdgb);
-            rstate.Matrix[bsim1.B1dNodePrime, bsim1.B1bNode] += (-gbd + (xnrm - xrev) * gmbs - gcdgb - gcddb - gcdsb);
-            rstate.Matrix[bsim1.B1dNodePrime, bsim1.B1sNodePrime] += (-gds - xnrm * (gm + gmbs) + gcdsb);
-            rstate.Matrix[bsim1.B1sNodePrime, bsim1.B1gNode] += (-(xnrm - xrev) * gm + gcsgb);
-            rstate.Matrix[bsim1.B1sNodePrime, bsim1.B1sNode] += (-bsim1.B1sourceConductance);
-            rstate.Matrix[bsim1.B1sNodePrime, bsim1.B1bNode] += (-gbs - (xnrm - xrev) * gmbs - gcsgb - gcsdb - gcssb);
-            rstate.Matrix[bsim1.B1sNodePrime, bsim1.B1dNodePrime] += (-gds - xrev * (gm + gmbs) + gcsdb);
+            // rstate.Matrix[bsim1.B1dNode, bsim1.B1dNode] += (bsim1.B1drainConductance);
+            // rstate.Matrix[bsim1.B1gNode, bsim1.B1gNode] += (gcggb);
+            // rstate.Matrix[bsim1.B1sNode, bsim1.B1sNode] += (bsim1.B1sourceConductance);
+            // rstate.Matrix[bsim1.B1bNode, bsim1.B1bNode] += (gbd + gbs - gcbgb - gcbdb - gcbsb);
+            // rstate.Matrix[bsim1.B1dNodePrime, bsim1.B1dNodePrime] += (bsim1.B1drainConductance + gds + gbd + xrev * (gm + gmbs) + gcddb);
+            // rstate.Matrix[bsim1.B1sNodePrime, bsim1.B1sNodePrime] += (bsim1.B1sourceConductance + gds + gbs + xnrm * (gm + gmbs) + gcssb);
+            // rstate.Matrix[bsim1.B1dNode, bsim1.B1dNodePrime] += (-bsim1.B1drainConductance);
+            // rstate.Matrix[bsim1.B1gNode, bsim1.B1bNode] += (-gcggb - gcgdb - gcgsb);
+            // rstate.Matrix[bsim1.B1gNode, bsim1.B1dNodePrime] += (gcgdb);
+            // rstate.Matrix[bsim1.B1gNode, bsim1.B1sNodePrime] += (gcgsb);
+            // rstate.Matrix[bsim1.B1sNode, bsim1.B1sNodePrime] += (-bsim1.B1sourceConductance);
+            // rstate.Matrix[bsim1.B1bNode, bsim1.B1gNode] += (gcbgb);
+            // rstate.Matrix[bsim1.B1bNode, bsim1.B1dNodePrime] += (-gbd + gcbdb);
+            // rstate.Matrix[bsim1.B1bNode, bsim1.B1sNodePrime] += (-gbs + gcbsb);
+            // rstate.Matrix[bsim1.B1dNodePrime, bsim1.B1dNode] += (-bsim1.B1drainConductance);
+            // rstate.Matrix[bsim1.B1dNodePrime, bsim1.B1gNode] += ((xnrm - xrev) * gm + gcdgb);
+            // rstate.Matrix[bsim1.B1dNodePrime, bsim1.B1bNode] += (-gbd + (xnrm - xrev) * gmbs - gcdgb - gcddb - gcdsb);
+            // rstate.Matrix[bsim1.B1dNodePrime, bsim1.B1sNodePrime] += (-gds - xnrm * (gm + gmbs) + gcdsb);
+            // rstate.Matrix[bsim1.B1sNodePrime, bsim1.B1gNode] += (-(xnrm - xrev) * gm + gcsgb);
+            // rstate.Matrix[bsim1.B1sNodePrime, bsim1.B1sNode] += (-bsim1.B1sourceConductance);
+            // rstate.Matrix[bsim1.B1sNodePrime, bsim1.B1bNode] += (-gbs - (xnrm - xrev) * gmbs - gcsgb - gcsdb - gcssb);
+            // rstate.Matrix[bsim1.B1sNodePrime, bsim1.B1dNodePrime] += (-gds - xrev * (gm + gmbs) + gcsdb);
 
             line1000:;
         }

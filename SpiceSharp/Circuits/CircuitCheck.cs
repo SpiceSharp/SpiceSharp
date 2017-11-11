@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
-using MathNet.Numerics.LinearAlgebra.Factorization;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 using System.Linq;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Circuits
 {
@@ -14,6 +12,12 @@ namespace SpiceSharp.Circuits
     /// </summary>
     public class CircuitCheck
     {
+        /// <summary>
+        /// Constants
+        /// </summary>
+        private const double PivotAbsTol = 1e-6;
+        private const double PivotRelTol = 1e-3;
+
         /// <summary>
         /// Private variables
         /// </summary>
@@ -158,8 +162,9 @@ namespace SpiceSharp.Circuits
         private ICircuitComponent FindVoltageDriveLoop()
         {
             // Remove the ground node and make a map for reducing the matrix complexity
-            int index = 0;
+            int index = 1;
             Dictionary<int, int> map = new Dictionary<int, int>();
+            map.Add(0, 0);
             foreach (var vd in voltagedriven)
             {
                 if (vd.Item2 != 0)
@@ -174,38 +179,19 @@ namespace SpiceSharp.Circuits
                 }
             }
 
-            // Build the connection matrix
-            Matrix<double> conn = new SparseMatrix(Math.Max(voltagedriven.Count, map.Count));
+            // Determine the rank of the matrix
+            Matrix conn = new Matrix(Math.Max(voltagedriven.Count, map.Count), false);
             for (int i = 0; i < voltagedriven.Count; i++)
             {
                 var pins = voltagedriven[i];
-                if (pins.Item2 != 0)
-                    conn[i, map[pins.Item2]] = 1.0;
-                if (pins.Item3 != 0)
-                    conn[i, map[pins.Item3]] = -1.0;
+                conn.GetElement(i + 1, map[pins.Item2]).Add(1.0);
+                conn.GetElement(i + 1, map[pins.Item3]).Add(1.0);
             }
-
-            // We just built a matrix that, if correct, is able to generate one specific voltage for each node it applied to
-            // Any rank that is smaller will be caused by voltage sources that are not independent = a voltage loop
-            // We can use the LU decomposition to find out which voltage source closes a voltage source loop
-            string orig = conn.ToString();
-            LU<double> result = conn.LU();
-            string u = result.U.ToString();
-            for (int i = 0; i < voltagedriven.Count; i++)
-            {
-                int k = result.P[i];
-                bool closes = true;
-                for (int j = i; j < result.U.ColumnCount; j++)
-                {
-                    if (result.U[i, j] != 0.0)
-                    {
-                        closes = false;
-                        break;
-                    }
-                }
-                if (closes)
-                    return voltagedriven[k].Item1;
-            }
+            var error = conn.OrderAndFactor(null, PivotRelTol, PivotAbsTol, true);
+            conn.SingularAt(out int row, out _);
+            row--;
+            if (error == SparseError.Singular && row < voltagedriven.Count)
+                return voltagedriven[row].Item1;
             return null;
         }
 

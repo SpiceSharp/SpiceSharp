@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Circuits;
-using MathNet.Numerics.LinearAlgebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
 {
@@ -21,18 +21,18 @@ namespace SpiceSharp.Simulations
         /// <param name="maxiter">Maximum iterations</param>
         public static void Op(this Circuit ckt, List<CircuitObjectBehaviorLoad> loaders, SimulationConfiguration config, int maxiter)
         {
-            // Create the current SimulationState
             var state = ckt.State;
             state.Init = CircuitState.InitFlags.InitJct;
+            state.Matrix.Complex = false;
 
+            // First, let's try finding an operating point by using normal iterations
             if (!config.NoOpIter)
             {
                 if (ckt.Iterate(loaders, config, maxiter))
                     return;
             }
 
-            // No convergence
-            // try Gmin stepping
+            // No convergence, try Gmin stepping
             if (config.NumGminSteps > 1)
             {
                 state.Init = CircuitState.InitFlags.InitJct;
@@ -57,7 +57,7 @@ namespace SpiceSharp.Simulations
                     return;
             }
 
-            // No we'll try source stepping
+            // Nope, still not converging, let's try source stepping
             if (config.NumSrcSteps > 1)
             {
                 state.Init = CircuitState.InitFlags.InitJct;
@@ -92,9 +92,12 @@ namespace SpiceSharp.Simulations
         public static bool Iterate(this Circuit ckt, List<CircuitObjectBehaviorLoad> loaders, SimulationConfiguration config, int maxiter)
         {
             var state = ckt.State;
-            var rstate = state.Real;
+            var matrix = state.Matrix;
             bool pass = false;
             int iterno = 0;
+
+            // Make sure we're using real numbers!
+            matrix.Complex = false;
 
             // Initialize the state of the circuit
             if (!state.Initialized)
@@ -103,7 +106,7 @@ namespace SpiceSharp.Simulations
             // Ignore operating condition point, just use the solution as-is
             if (ckt.State.UseIC && ckt.State.Domain == CircuitState.DomainTypes.Time)
             {
-                rstate.StoreSolution();
+                state.StoreSolution();
 
                 // Voltages are set using IC statement on the nodes
                 // Internal initial conditions are calculated by the components
@@ -129,15 +132,45 @@ namespace SpiceSharp.Simulations
                     throw;
                 }
 
-                // Solve the equation (thank you Math.NET)
+                // Preorder matrix
+                if (!state.Sparse.HasFlag(CircuitState.SparseFlags.NIDIDPREORDER))
+                {
+                    matrix.PreOrder();
+                    state.Sparse |= CircuitState.SparseFlags.NIDIDPREORDER;
+                }
+                if (state.Init == CircuitState.InitFlags.InitJct || (ckt.Method != null && ckt.Method.SavedTime == 0.0))
+                {
+                    state.Sparse |= CircuitState.SparseFlags.NISHOULDREORDER;
+                }
+
+                // Reorder
+                if (state.Sparse.HasFlag(CircuitState.SparseFlags.NISHOULDREORDER))
+                {
+                    ckt.Statistics.ReorderTime.Start();
+                    matrix.Reorder(state.PivotRelTol, state.PivotAbsTol, ckt.Simulation?.CurrentConfig?.DiagGmin ?? 0.0);
+                    ckt.Statistics.ReorderTime.Stop();
+                    state.Sparse &= ~CircuitState.SparseFlags.NISHOULDREORDER;
+                }
+                else
+                {
+                    // Decompose
+                    ckt.Statistics.DecompositionTime.Start();
+                    matrix.Factor(ckt.Simulation?.CurrentConfig?.DiagGmin ?? 0.0);
+                    ckt.Statistics.DecompositionTime.Stop();
+                }
+
+                // Solve the equation
                 ckt.Statistics.SolveTime.Start();
-                rstate.Solve();
+                matrix.Solve(state.Rhs);
                 ckt.Statistics.SolveTime.Stop();
 
+                // The result is now stored in the RHS vector, let's move it to the current solution vector
+                state.StoreSolution();
+
                 // Reset ground nodes
-                ckt.State.Real.Solution[0] = 0.0;
-                ckt.State.Complex.Solution[0] = 0.0;
-                ckt.State.Real.OldSolution[0] = 0.0;
+                ckt.State.Rhs[0] = 0.0;
+                ckt.State.Solution[0] = 0.0;
+                ckt.State.OldSolution[0] = 0.0;
 
                 // Exceeded maximum number of iterations
                 if (iterno > maxiter)
@@ -169,12 +202,19 @@ namespace SpiceSharp.Simulations
 
                     case CircuitState.InitFlags.InitJct:
                         state.Init = CircuitState.InitFlags.InitFix;
+                        state.Sparse |= CircuitState.SparseFlags.NISHOULDREORDER;
                         break;
 
                     case CircuitState.InitFlags.InitFix:
                         if (state.IsCon)
                             state.Init = CircuitState.InitFlags.InitFloat;
                         pass = true;
+                        break;
+
+                    case CircuitState.InitFlags.InitTransient:
+                        if (iterno <= 1)
+                            state.Sparse = CircuitState.SparseFlags.NISHOULDREORDER;
+                        state.Init = CircuitState.InitFlags.InitFloat;
                         break;
 
                     case CircuitState.InitFlags.Init:
@@ -185,9 +225,6 @@ namespace SpiceSharp.Simulations
                         ckt.Statistics.NumIter += iterno;
                         throw new CircuitException("Could not find flag");
                 }
-
-                // We need to do another iteration, swap solutions with the old solution
-                rstate.StoreSolution();
             }
         }
 
@@ -196,21 +233,56 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
-        public static void AcIterate(this Circuit ckt, List<CircuitObjectBehaviorAcLoad> loaders, SimulationConfiguration config)
+        public static void AcIterate(this Circuit ckt, List<CircuitObjectBehaviorAcLoad> acloaders, SimulationConfiguration config)
         {
-            // Initialize the circuit
-            if (!ckt.State.Initialized)
-                ckt.State.Initialize(ckt);
+            var state = ckt.State;
+            var matrix = state.Matrix;
+            matrix.Complex = true;
 
-            ckt.State.IsCon = true;
+            // Initialize the circuit
+            if (!state.Initialized)
+                state.Initialize(ckt);
+
+            retry:
+            state.IsCon = true;
 
             // Load AC
-            ckt.State.Complex.Clear();
-            foreach (var behaviour in loaders)
+            state.Clear();
+            foreach (var behaviour in acloaders)
                 behaviour.Execute(ckt);
 
+            if (state.Sparse.HasFlag(CircuitState.SparseFlags.NIACSHOULDREORDER))
+            {
+                var error = matrix.Reorder(state.PivotAbsTol, state.PivotRelTol);
+                state.Sparse &= ~CircuitState.SparseFlags.NIACSHOULDREORDER;
+                if (error != SparseError.Okay)
+                    throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
+            }
+            else
+            {
+                var error = matrix.Factor();
+                if (error != 0)
+                {
+                    if (error == SparseError.Singular)
+                    {
+                        state.Sparse |= CircuitState.SparseFlags.NIACSHOULDREORDER;
+                        goto retry;
+                    }
+                    throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
+                }
+            }
+
             // Solve
-            ckt.State.Complex.Solve();
+            matrix.Solve(state.Rhs, state.iRhs);
+
+            // Reset values
+            state.Rhs[0] = 0.0;
+            state.iRhs[0] = 0.0;
+            state.Solution[0] = 0.0;
+            state.iSolution[0] = 0.0;
+
+            // Store them in the solution
+            state.StoreSolution(true);
         }
 
         /// <summary>
@@ -225,16 +297,25 @@ namespace SpiceSharp.Simulations
         /// <param name="negDrive">The negative driving node</param>
         public static void NzIterate(this Circuit ckt, int posDrive, int negDrive)
         {
-            var state = ckt.State.Complex;
+            var state = ckt.State;
 
             // Clear out the right hand side vector
-            state.Rhs.Clear();
+            for (int i = 0; i < state.Rhs.Length; i++)
+            {
+                state.Rhs[i] = 0.0;
+                state.iRhs[i] = 0.0;
+            }
 
             // Apply unit current excitation
             state.Rhs[posDrive] = 1.0;
             state.Rhs[negDrive] = -1.0;
-            state.SolveTransposed();
+
+            state.Matrix.SolveTransposed(state.Rhs, state.iRhs);
+
+            state.StoreSolution(true);
+
             state.Solution[0] = 0.0;
+            state.iSolution[0] = 0.0;
         }
 
         /// <summary>
@@ -245,7 +326,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         private static bool IsConvergent(this Circuit ckt, SimulationConfiguration config)
         {
-            var rstate = ckt.State.Real;
+            var rstate = ckt.State;
 
             // Check convergence for each node
             for (int i = 0; i < ckt.Nodes.Count; i++)
@@ -294,7 +375,7 @@ namespace SpiceSharp.Simulations
         public static void Load(this Circuit ckt, List<CircuitObjectBehaviorLoad> loaders)
         {
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var nodes = ckt.Nodes;
 
             // Start the stopwatch
@@ -323,13 +404,12 @@ namespace SpiceSharp.Simulations
                             if (ZeroNoncurRow(rstate.Matrix, nodes, node.Index))
                             {
                                 rstate.Rhs[node.Index] = 1.0e10 * ns;
-                                rstate.Matrix[node.Index, node.Index] = 1.0e10;
+                                node.Diagonal.Value.Real = 1e10;
                             }
                             else
                             {
                                 rstate.Rhs[node.Index] = ns;
-                                rstate.Solution[node.Index] = ns;
-                                rstate.Matrix[node.Index, node.Index] = 1.0;
+                                node.Diagonal.Value.Real = 1.0;
                             }
                         }
                     }
@@ -346,13 +426,12 @@ namespace SpiceSharp.Simulations
                             if (ZeroNoncurRow(rstate.Matrix, nodes, node.Index))
                             {
                                 rstate.Rhs[node.Index] = 1.0e10 * ic;
-                                rstate.Matrix[node.Index, node.Index] = 1.0e10;
+                                node.Diagonal.Value.Real = 1e10;
                             }
                             else
                             {
                                 rstate.Rhs[node.Index] = ic;
-                                rstate.Solution[node.Index] = ic;
-                                rstate.Matrix[node.Index, node.Index] = 1.0;
+                                node.Diagonal.Value.Real = 1.0;
                             }
                         }
                     }
@@ -371,11 +450,14 @@ namespace SpiceSharp.Simulations
         {
             var ckt = simulation.Circuit;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var nodes = ckt.Nodes;
 
             // Clear the current solution
-            rstate.Solution.Clear();
+            for (int i = 0; i < rstate.Solution.Length; i++)
+            {
+                rstate.Rhs[i] = 0.0;
+            }
 
             // Go over all nodes
             for (int i = 0; i < nodes.Count; i++)
@@ -383,12 +465,14 @@ namespace SpiceSharp.Simulations
                 var node = nodes[i];
                 if (nodes.Nodeset.ContainsKey(node.Name))
                 {
+                    node.Diagonal = rstate.Matrix.GetElement(node.Index, node.Index);
                     state.HadNodeset = true;
-                    rstate.Solution[node.Index] = nodes.Nodeset[node.Name];
+                    rstate.Rhs[node.Index] = nodes.Nodeset[node.Name];
                 }
                 if (nodes.IC.ContainsKey(node.Name))
                 {
-                    rstate.Solution[node.Index] = nodes.IC[node.Name];
+                    node.Diagonal = rstate.Matrix.GetElement(node.Index, node.Index);
+                    rstate.Rhs[node.Index] = nodes.IC[node.Name];
                 }
             }
 
@@ -407,19 +491,19 @@ namespace SpiceSharp.Simulations
         /// <param name="nodes">The list of nodes</param>
         /// <param name="rownum">The row number</param>
         /// <returns></returns>
-        private static bool ZeroNoncurRow(Matrix<double> matrix, CircuitNodes nodes, int rownum)
+        private static bool ZeroNoncurRow(Matrix matrix, CircuitNodes nodes, int rownum)
         {
             bool currents = false;
             for (int n = 0; n < nodes.Count; n++)
             {
                 var node = nodes[n];
-                double x = matrix[rownum, node.Index];
-                if (x != 0.0)
+                MatrixElement x = matrix.FindElement(rownum, node.Index);
+                if (x != null && x.Value.Real != 0.0)
                 {
                     if (node.Type == CircuitNode.NodeType.Current)
                         currents = true;
                     else
-                        matrix[rownum, node.Index] = 0.0;
+                        x.Value.Real = 0.0;
                 }
             }
             return currents;

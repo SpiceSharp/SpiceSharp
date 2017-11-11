@@ -15,13 +15,13 @@ namespace SpiceSharp.Components.ComponentBehaviors
         {
             var ind = ComponentTyped<Inductor>();
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
 
             // Initialize
             if (state.UseIC && ind.INDinitCond.Given)
                 state.States[0][ind.INDstate + Inductor.INDflux] = ind.INDinduct * ind.INDinitCond;
             else
-                state.States[0][ind.INDstate + Inductor.INDflux] = ind.INDinduct * rstate.OldSolution[ind.INDbrEq];
+                state.States[0][ind.INDstate + Inductor.INDflux] = ind.INDinduct * rstate.Solution[ind.INDbrEq];
 
             // Handle mutual inductances
             ind.UpdateMutualInductances(ckt);
@@ -32,13 +32,13 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 var result = ckt.Method.Integrate(state, ind.INDstate + Inductor.INDflux, ind.INDinduct);
                 rstate.Rhs[ind.INDbrEq] += result.Ceq;
-                rstate.Matrix[ind.INDbrEq, ind.INDbrEq] -= result.Geq;
+                ind.INDibrIbrptr.Sub(result.Geq);
             }
 
-            rstate.Matrix[ind.INDposNode, ind.INDbrEq] += 1;
-            rstate.Matrix[ind.INDnegNode, ind.INDbrEq] -= 1;
-            rstate.Matrix[ind.INDbrEq, ind.INDposNode] += 1;
-            rstate.Matrix[ind.INDbrEq, ind.INDnegNode] -= 1;
+            ind.INDposIbrptr.Add(1.0);
+            ind.INDnegIbrptr.Sub(1.0);
+            ind.INDibrPosptr.Add(1.0);
+            ind.INDibrNegptr.Sub(1.0);
         }
     }
 }

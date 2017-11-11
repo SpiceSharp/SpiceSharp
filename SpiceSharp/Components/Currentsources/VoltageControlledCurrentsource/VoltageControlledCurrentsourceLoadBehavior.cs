@@ -14,11 +14,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Execute(Circuit ckt)
         {
             var src = ComponentTyped<VoltageControlledCurrentsource>();
-            var rstate = ckt.State.Real;
-            rstate.Matrix[src.VCCSposNode, src.VCCScontPosNode] += src.VCCScoeff;
-            rstate.Matrix[src.VCCSposNode, src.VCCScontNegNode] -= src.VCCScoeff;
-            rstate.Matrix[src.VCCSnegNode, src.VCCScontPosNode] -= src.VCCScoeff;
-            rstate.Matrix[src.VCCSnegNode, src.VCCScontNegNode] += src.VCCScoeff;
+            var rstate = ckt.State;
+            src.VCCSposContPosptr.Add(src.VCCScoeff.Value);
+            src.VCCSposContNegptr.Sub(src.VCCScoeff.Value);
+            src.VCCSnegContPosptr.Sub(src.VCCScoeff.Value);
+            src.VCCSnegContNegptr.Add(src.VCCScoeff.Value);
         }
     }
 }

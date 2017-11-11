@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -39,7 +40,7 @@ namespace SpiceSharp.Components
         [SpiceName("i"), SpiceInfo("Device current")]
         public double GetCurrent(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap];
         [SpiceName("p"), SpiceInfo("Instantaneous device power")]
-        public double GetPower(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap] * (ckt.State.Real.Solution[CAPposNode] - ckt.State.Real.Solution[CAPnegNode]);
+        public double GetPower(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap] * (ckt.State.Solution[CAPposNode] - ckt.State.Solution[CAPnegNode]);
 
         /// <summary>
         /// Nodes and states
@@ -47,6 +48,14 @@ namespace SpiceSharp.Components
         public int CAPstate { get; private set; }
         public int CAPposNode { get; private set; }
         public int CAPnegNode { get; private set; }
+
+        /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement CAPposPosptr { get; private set; }
+        internal MatrixElement CAPnegNegptr { get; private set; }
+        internal MatrixElement CAPposNegptr { get; private set; }
+        internal MatrixElement CAPnegPosptr { get; private set; }
 
         /// <summary>
         /// Constants
@@ -83,8 +92,28 @@ namespace SpiceSharp.Components
             CAPposNode = nodes[0].Index;
             CAPnegNode = nodes[1].Index;
 
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            CAPposPosptr = matrix.GetElement(CAPposNode, CAPposNode);
+            CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
+            CAPnegPosptr = matrix.GetElement(CAPnegNode, CAPposNode);
+            CAPposNegptr = matrix.GetElement(CAPposNode, CAPnegNode);
+
             // Create to states for integration
             CAPstate = ckt.State.GetState(2);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            CAPposPosptr = null;
+            CAPnegNegptr = null;
+            CAPnegPosptr = null;
+            CAPposNegptr = null;
         }
 
         /// <summary>
@@ -94,11 +123,8 @@ namespace SpiceSharp.Components
         public override void Accept(Circuit ckt)
         {
             // Copy DC states when accepting the first timepoint
-            var method = ckt.Method;
-            if (method != null && method.SavedTime == 0.0)
-            {
+            if (ckt.State.Init == CircuitState.InitFlags.InitTransient)
                 ckt.State.CopyDC(CAPstate + CAPqcap);
-            }
         }
 
         /// <summary>

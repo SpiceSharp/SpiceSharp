@@ -99,8 +99,8 @@ namespace SpiceSharp.Parser.Readers.Exports
         public override double Extract(SimulationData data)
         {
             Voltagesource vsrc = (Voltagesource)data.GetObject(Source);
-            if (data.Circuit.State.Domain == Circuits.CircuitState.DomainTypes.Frequency || data.Circuit.State.Domain == Circuits.CircuitState.DomainTypes.Laplace)
-                return vsrc.GetComplexCurrent(data.Circuit).Real;
+            if (data.Circuit.State.Domain == CircuitState.DomainTypes.Frequency || data.Circuit.State.Domain == CircuitState.DomainTypes.Laplace)
+                return data.Circuit.State.Solution[vsrc.VSRCbranch];
             else
                 return vsrc.GetCurrent(data.Circuit);
         }
@@ -148,7 +148,7 @@ namespace SpiceSharp.Parser.Readers.Exports
             {
                 case CircuitState.DomainTypes.Frequency:
                 case CircuitState.DomainTypes.Laplace:
-                    return vsrc.GetComplexCurrent(data.Circuit).Real;
+                    return data.Circuit.State.Solution[vsrc.VSRCbranch];
                 default:
                     return vsrc.GetCurrent(data.Circuit);
             }
@@ -197,7 +197,7 @@ namespace SpiceSharp.Parser.Readers.Exports
             {
                 case CircuitState.DomainTypes.Frequency:
                 case CircuitState.DomainTypes.Laplace:
-                    return vsrc.GetComplexCurrent(data.Circuit).Imaginary;
+                    return data.Circuit.State.iSolution[vsrc.VSRCbranch];
                 default:
                     return 0.0;
             }
@@ -246,7 +246,9 @@ namespace SpiceSharp.Parser.Readers.Exports
             {
                 case CircuitState.DomainTypes.Frequency:
                 case CircuitState.DomainTypes.Laplace:
-                    return vsrc.GetComplexCurrent(data.Circuit).Magnitude;
+                    double r = data.Circuit.State.Solution[vsrc.VSRCbranch];
+                    double i = data.Circuit.State.iSolution[vsrc.VSRCbranch];
+                    return Math.Sqrt(r * r + i * i);
                 default:
                     return vsrc.GetCurrent(data.Circuit);
             }
@@ -295,8 +297,9 @@ namespace SpiceSharp.Parser.Readers.Exports
             {
                 case CircuitState.DomainTypes.Frequency:
                 case CircuitState.DomainTypes.Laplace:
-                    Complex c = vsrc.GetComplexCurrent(data.Circuit);
-                    return 180.0 / Math.PI * Math.Atan2(c.Imaginary, c.Real);
+                    double r = data.Circuit.State.Solution[vsrc.VSRCbranch];
+                    double i = data.Circuit.State.iSolution[vsrc.VSRCbranch];
+                    return 180.0 / Math.PI * Math.Atan2(i, r);
                 default:
                     return vsrc.GetCurrent(data.Circuit);
             }
@@ -345,8 +348,9 @@ namespace SpiceSharp.Parser.Readers.Exports
             {
                 case CircuitState.DomainTypes.Frequency:
                 case CircuitState.DomainTypes.Laplace:
-                    Complex c = vsrc.GetComplexCurrent(data.Circuit);
-                    return 10.0 * Math.Log10(c.Real * c.Real + c.Imaginary + c.Imaginary);
+                    double r = data.Circuit.State.Solution[vsrc.VSRCbranch];
+                    double i = data.Circuit.State.iSolution[vsrc.VSRCbranch];
+                    return 10.0 * Math.Log10(r * r + i * i);
                 default:
                     return 20.0 * Math.Log10(vsrc.GetCurrent(data.Circuit));
             }

@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var bsim4 = ComponentTyped<BSIM4v80>();
             var model = bsim4.Model as BSIM4v80Model;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var method = ckt.Method;
             int Check, Check1, Check2;
             double vds, vgs, vbs, vges, vgms, vdbs, vsbs, vses, vdes, qdef, vgdo, vgedo, vgmdo, vbd, vdbd, vgd, vged, vgmd, delvbd,
@@ -2326,7 +2326,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 dT7_dVd = -Vdseff * dPigcd_dVd - Pigcd * dVdseff_dVd + dT7_dVg * dVgsteff_dVd;
                 dT7_dVb = -Vdseff * dPigcd_dVb - Pigcd * dVdseff_dVb + dT7_dVg * dVgsteff_dVb;
                 dT7_dVg *= dVgsteff_dVg;
-                /* dT7_dVb *= dVbseff_dVb; */  /* Synopsys, 2013 / 08 / 30 */
+                /* dT7_dVb *= dVbseff_dVb;  /* Synopsys, 2013 / 08 / 30 */
                 T8 = T7 * T7 + 2.0e-4;
                 dT8_dVg = 2.0 * T7;
                 dT8_dVd = dT8_dVg * dT7_dVd;
@@ -4527,36 +4527,35 @@ namespace SpiceSharp.Components.ComponentBehaviors
             * Loading RHS
             */
 
-            rstate.Rhs[bsim4.BSIM4dNodePrime] += (ceqjd - ceqbd + ceqgdtot - ceqdrn - ceqqd + Idtoteq);
-            rstate.Rhs[bsim4.BSIM4gNodePrime] -= ceqqg - ceqgcrg + Igtoteq;
+            // rstate.Rhs[bsim4.BSIM4dNodePrime] += (ceqjd - ceqbd + ceqgdtot - ceqdrn - ceqqd + Idtoteq);
+            // rstate.Rhs[bsim4.BSIM4gNodePrime] -= ceqqg - ceqgcrg + Igtoteq;
 
-            if (bsim4.BSIM4rgateMod.Value == 2)
-                rstate.Rhs[bsim4.BSIM4gNodeExt] -= ceqgcrg;
+            if (bsim4.BSIM4rgateMod.Value == 2) { }
+            // rstate.Rhs[bsim4.BSIM4gNodeExt] -= ceqgcrg;
             else if (bsim4.BSIM4rgateMod.Value == 3)
-                rstate.Rhs[bsim4.BSIM4gNodeMid] -= ceqqgmid + ceqgcrg;
+                // rstate.Rhs[bsim4.BSIM4gNodeMid] -= ceqqgmid + ceqgcrg;
 
-            if (bsim4.BSIM4rbodyMod == 0)
-            {
-                rstate.Rhs[bsim4.BSIM4bNodePrime] += (ceqbd + ceqbs - ceqjd - ceqjs - ceqqb + Ibtoteq);
-                rstate.Rhs[bsim4.BSIM4sNodePrime] += (ceqdrn - ceqbs + ceqjs + ceqqg + ceqqb + ceqqd + ceqqgmid - ceqgstot + Istoteq);
-            }
-            else
-            {
-                rstate.Rhs[bsim4.BSIM4dbNode] -= (ceqjd + ceqqjd);
-                rstate.Rhs[bsim4.BSIM4bNodePrime] += (ceqbd + ceqbs - ceqqb + Ibtoteq);
-                rstate.Rhs[bsim4.BSIM4sbNode] -= (ceqjs + ceqqjs);
-                rstate.Rhs[bsim4.BSIM4sNodePrime] += (ceqdrn - ceqbs + ceqjs + ceqqd + ceqqg + ceqqb + ceqqjd + ceqqjs + ceqqgmid - ceqgstot +
-                    Istoteq);
-            }
+                if (bsim4.BSIM4rbodyMod == 0)
+                {
+                    // rstate.Rhs[bsim4.BSIM4bNodePrime] += (ceqbd + ceqbs - ceqjd - ceqjs - ceqqb + Ibtoteq);
+                    // rstate.Rhs[bsim4.BSIM4sNodePrime] += (ceqdrn - ceqbs + ceqjs + ceqqg + ceqqb + ceqqd + ceqqgmid - ceqgstot + Istoteq);
+                }
+                else
+                {
+                    // rstate.Rhs[bsim4.BSIM4dbNode] -= (ceqjd + ceqqjd);
+                    // rstate.Rhs[bsim4.BSIM4bNodePrime] += (ceqbd + ceqbs - ceqqb + Ibtoteq);
+                    // rstate.Rhs[bsim4.BSIM4sbNode] -= (ceqjs + ceqqjs);
+                    // rstate.Rhs[bsim4.BSIM4sNodePrime] += (ceqdrn - ceqbs + ceqjs + ceqqd + ceqqg + ceqqb + ceqqjd + ceqqjs + ceqqgmid - ceqgstot + Istoteq);
+                }
 
             if (model.BSIM4rdsMod != 0)
             {
-                rstate.Rhs[bsim4.BSIM4dNode] -= ceqgdtot;
-                rstate.Rhs[bsim4.BSIM4sNode] += ceqgstot;
+                // rstate.Rhs[bsim4.BSIM4dNode] -= ceqgdtot;
+                // rstate.Rhs[bsim4.BSIM4sNode] += ceqgstot;
             }
 
             if (bsim4.BSIM4trnqsMod != 0)
-                rstate.Rhs[bsim4.BSIM4qNode] += (cqcheq - cqdef);
+                // rstate.Rhs[bsim4.BSIM4qNode] += (cqcheq - cqdef);
 
             /* 
             * Loading matrix
@@ -4584,96 +4583,90 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             if (bsim4.BSIM4rgateMod.Value == 1)
             {
-                rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4gNodeExt] += geltd;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodeExt] -= geltd;
-                rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4gNodePrime] -= geltd;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodePrime] += gcggb + geltd - ggtg + gIgtotg;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4dNodePrime] += gcgdb - ggtd + gIgtotd;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4sNodePrime] += gcgsb - ggts + gIgtots;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4bNodePrime] += gcgbb - ggtb + gIgtotb;
+                // rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4gNodeExt] += geltd;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodeExt] -= geltd;
+                // rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4gNodePrime] -= geltd;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodePrime] += gcggb + geltd - ggtg + gIgtotg;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4dNodePrime] += gcgdb - ggtd + gIgtotd;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4sNodePrime] += gcgsb - ggts + gIgtots;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4bNodePrime] += gcgbb - ggtb + gIgtotb;
             } /* WDLiu: gcrg already subtracted from all gcrgg below */
             else if (bsim4.BSIM4rgateMod.Value == 2)
             {
-                rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4gNodeExt] += gcrg;
-                rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4gNodePrime] += gcrgg;
-                rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4dNodePrime] += gcrgd;
-                rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4sNodePrime] += gcrgs;
-                rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4bNodePrime] += gcrgb;
+                // rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4gNodeExt] += gcrg;
+                // rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4gNodePrime] += gcrgg;
+                // rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4dNodePrime] += gcrgd;
+                // rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4sNodePrime] += gcrgs;
+                // rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4bNodePrime] += gcrgb;
 
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodeExt] -= gcrg;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodePrime] += gcggb - gcrgg - ggtg + gIgtotg;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4dNodePrime] += gcgdb - gcrgd - ggtd + gIgtotd;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4sNodePrime] += gcgsb - gcrgs - ggts + gIgtots;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4bNodePrime] += gcgbb - gcrgb - ggtb + gIgtotb;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodeExt] -= gcrg;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodePrime] += gcggb - gcrgg - ggtg + gIgtotg;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4dNodePrime] += gcgdb - gcrgd - ggtd + gIgtotd;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4sNodePrime] += gcgsb - gcrgs - ggts + gIgtots;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4bNodePrime] += gcgbb - gcrgb - ggtb + gIgtotb;
             }
             else if (bsim4.BSIM4rgateMod.Value == 3)
             {
-                rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4gNodeExt] += geltd;
-                rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4gNodeMid] -= geltd;
-                rstate.Matrix[bsim4.BSIM4gNodeMid, bsim4.BSIM4gNodeExt] -= geltd;
-                rstate.Matrix[bsim4.BSIM4gNodeMid, bsim4.BSIM4gNodeMid] += geltd + gcrg + gcgmgmb;
+                // rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4gNodeExt] += geltd;
+                // rstate.Matrix[bsim4.BSIM4gNodeExt, bsim4.BSIM4gNodeMid] -= geltd;
+                // rstate.Matrix[bsim4.BSIM4gNodeMid, bsim4.BSIM4gNodeExt] -= geltd;
+                // rstate.Matrix[bsim4.BSIM4gNodeMid, bsim4.BSIM4gNodeMid] += geltd + gcrg + gcgmgmb;
 
-                rstate.Matrix[bsim4.BSIM4gNodeMid, bsim4.BSIM4dNodePrime] += gcrgd + gcgmdb;
-                rstate.Matrix[bsim4.BSIM4gNodeMid, bsim4.BSIM4gNodePrime] += gcrgg;
-                rstate.Matrix[bsim4.BSIM4gNodeMid, bsim4.BSIM4sNodePrime] += gcrgs + gcgmsb;
-                rstate.Matrix[bsim4.BSIM4gNodeMid, bsim4.BSIM4bNodePrime] += gcrgb + gcgmbb;
+                // rstate.Matrix[bsim4.BSIM4gNodeMid, bsim4.BSIM4dNodePrime] += gcrgd + gcgmdb;
+                // rstate.Matrix[bsim4.BSIM4gNodeMid, bsim4.BSIM4gNodePrime] += gcrgg;
+                // rstate.Matrix[bsim4.BSIM4gNodeMid, bsim4.BSIM4sNodePrime] += gcrgs + gcgmsb;
+                // rstate.Matrix[bsim4.BSIM4gNodeMid, bsim4.BSIM4bNodePrime] += gcrgb + gcgmbb;
 
-                rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4gNodeMid] += gcdgmb;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodeMid] -= gcrg;
-                rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4gNodeMid] += gcsgmb;
-                rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4gNodeMid] += gcbgmb;
+                // rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4gNodeMid] += gcdgmb;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodeMid] -= gcrg;
+                // rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4gNodeMid] += gcsgmb;
+                // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4gNodeMid] += gcbgmb;
 
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodePrime] += gcggb - gcrgg - ggtg + gIgtotg;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4dNodePrime] += gcgdb - gcrgd - ggtd + gIgtotd;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4sNodePrime] += gcgsb - gcrgs - ggts + gIgtots;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4bNodePrime] += gcgbb - gcrgb - ggtb + gIgtotb;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodePrime] += gcggb - gcrgg - ggtg + gIgtotg;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4dNodePrime] += gcgdb - gcrgd - ggtd + gIgtotd;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4sNodePrime] += gcgsb - gcrgs - ggts + gIgtots;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4bNodePrime] += gcgbb - gcrgb - ggtb + gIgtotb;
             }
             else
             {
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodePrime] += gcggb - ggtg + gIgtotg;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4dNodePrime] += gcgdb - ggtd + gIgtotd;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4sNodePrime] += gcgsb - ggts + gIgtots;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4bNodePrime] += gcgbb - ggtb + gIgtotb;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4gNodePrime] += gcggb - ggtg + gIgtotg;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4dNodePrime] += gcgdb - ggtd + gIgtotd;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4sNodePrime] += gcgsb - ggts + gIgtots;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4bNodePrime] += gcgbb - ggtb + gIgtotb;
             }
 
             if (model.BSIM4rdsMod != 0)
             {
-                rstate.Matrix[bsim4.BSIM4dNode, bsim4.BSIM4gNodePrime] += gdtotg;
-                rstate.Matrix[bsim4.BSIM4dNode, bsim4.BSIM4sNodePrime] += gdtots;
-                rstate.Matrix[bsim4.BSIM4dNode, bsim4.BSIM4bNodePrime] += gdtotb;
-                rstate.Matrix[bsim4.BSIM4sNode, bsim4.BSIM4dNodePrime] += gstotd;
-                rstate.Matrix[bsim4.BSIM4sNode, bsim4.BSIM4gNodePrime] += gstotg;
-                rstate.Matrix[bsim4.BSIM4sNode, bsim4.BSIM4bNodePrime] += gstotb;
+                // rstate.Matrix[bsim4.BSIM4dNode, bsim4.BSIM4gNodePrime] += gdtotg;
+                // rstate.Matrix[bsim4.BSIM4dNode, bsim4.BSIM4sNodePrime] += gdtots;
+                // rstate.Matrix[bsim4.BSIM4dNode, bsim4.BSIM4bNodePrime] += gdtotb;
+                // rstate.Matrix[bsim4.BSIM4sNode, bsim4.BSIM4dNodePrime] += gstotd;
+                // rstate.Matrix[bsim4.BSIM4sNode, bsim4.BSIM4gNodePrime] += gstotg;
+                // rstate.Matrix[bsim4.BSIM4sNode, bsim4.BSIM4bNodePrime] += gstotb;
             }
 
-            rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4dNodePrime] += gdpr + bsim4.BSIM4gds + bsim4.BSIM4gbd + T1 * ddxpart_dVd - gdtotd + RevSum + gcddb +
-                gbdpdp + dxpart * ggtd - gIdtotd;
-            rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4dNode] -= gdpr + gdtot;
-            rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4gNodePrime] += Gm + gcdgb - gdtotg + gbdpg - gIdtotg + dxpart * ggtg + T1 * ddxpart_dVg;
-            rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4sNodePrime] -= bsim4.BSIM4gds + gdtots - dxpart * ggts + gIdtots - T1 * ddxpart_dVs + FwdSum -
-                gcdsb - gbdpsp;
-            rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4bNodePrime] -= gjbd + gdtotb - Gmbs - gcdbb - gbdpb + gIdtotb - T1 * ddxpart_dVb - dxpart *
-                ggtb;
+            // rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4dNodePrime] += gdpr + bsim4.BSIM4gds + bsim4.BSIM4gbd + T1 * ddxpart_dVd - gdtotd + RevSum + gcddb + gbdpdp + dxpart * ggtd - gIdtotd;
+            // rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4dNode] -= gdpr + gdtot;
+            // rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4gNodePrime] += Gm + gcdgb - gdtotg + gbdpg - gIdtotg + dxpart * ggtg + T1 * ddxpart_dVg;
+            // rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4sNodePrime] -= bsim4.BSIM4gds + gdtots - dxpart * ggts + gIdtots - T1 * ddxpart_dVs + FwdSum - gcdsb - gbdpsp;
+            // rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4bNodePrime] -= gjbd + gdtotb - Gmbs - gcdbb - gbdpb + gIdtotb - T1 * ddxpart_dVb - dxpart * ggtb;
 
-            rstate.Matrix[bsim4.BSIM4dNode, bsim4.BSIM4dNodePrime] -= gdpr - gdtotd;
-            rstate.Matrix[bsim4.BSIM4dNode, bsim4.BSIM4dNode] += gdpr + gdtot;
+            // rstate.Matrix[bsim4.BSIM4dNode, bsim4.BSIM4dNodePrime] -= gdpr - gdtotd;
+            // rstate.Matrix[bsim4.BSIM4dNode, bsim4.BSIM4dNode] += gdpr + gdtot;
 
-            rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4dNodePrime] -= bsim4.BSIM4gds + gstotd + RevSum - gcsdb - gbspdp - T1 * dsxpart_dVd - sxpart *
-                ggtd + gIstotd;
-            rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4gNodePrime] += gcsgb - Gm - gstotg + gbspg + sxpart * ggtg + T1 * dsxpart_dVg - gIstotg;
-            rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4sNodePrime] += gspr + bsim4.BSIM4gds + bsim4.BSIM4gbs + T1 * dsxpart_dVs - gstots + FwdSum + gcssb +
-                gbspsp + sxpart * ggts - gIstots;
-            rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4sNode] -= gspr + gstot;
-            rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4bNodePrime] -= gjbs + gstotb + Gmbs - gcsbb - gbspb - sxpart * ggtb - T1 * dsxpart_dVb +
-                gIstotb;
+            // rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4dNodePrime] -= bsim4.BSIM4gds + gstotd + RevSum - gcsdb - gbspdp - T1 * dsxpart_dVd - sxpart * ggtd + gIstotd;
+            // rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4gNodePrime] += gcsgb - Gm - gstotg + gbspg + sxpart * ggtg + T1 * dsxpart_dVg - gIstotg;
+            // rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4sNodePrime] += gspr + bsim4.BSIM4gds + bsim4.BSIM4gbs + T1 * dsxpart_dVs - gstots + FwdSum + gcssb + gbspsp + sxpart * ggts - gIstots;
+            // rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4sNode] -= gspr + gstot;
+            // rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4bNodePrime] -= gjbs + gstotb + Gmbs - gcsbb - gbspb - sxpart * ggtb - T1 * dsxpart_dVb + gIstotb;
 
-            rstate.Matrix[bsim4.BSIM4sNode, bsim4.BSIM4sNodePrime] -= gspr - gstots;
-            rstate.Matrix[bsim4.BSIM4sNode, bsim4.BSIM4sNode] += gspr + gstot;
+            // rstate.Matrix[bsim4.BSIM4sNode, bsim4.BSIM4sNodePrime] -= gspr - gstots;
+            // rstate.Matrix[bsim4.BSIM4sNode, bsim4.BSIM4sNode] += gspr + gstot;
 
-            rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4dNodePrime] += gcbdb - gjbd + gbbdp - gIbtotd;
-            rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4gNodePrime] += gcbgb - bsim4.BSIM4gbgs - gIbtotg;
-            rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4sNodePrime] += gcbsb - gjbs + gbbsp - gIbtots;
-            rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4bNodePrime] += gjbd + gjbs + gcbbb - bsim4.BSIM4gbbs - gIbtotb;
+            // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4dNodePrime] += gcbdb - gjbd + gbbdp - gIbtotd;
+            // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4gNodePrime] += gcbgb - bsim4.BSIM4gbgs - gIbtotg;
+            // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4sNodePrime] += gcbsb - gjbs + gbbsp - gIbtots;
+            // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4bNodePrime] += gjbd + gjbs + gcbbb - bsim4.BSIM4gbbs - gIbtotb;
 
             ggidld = bsim4.BSIM4ggidld;
             ggidlg = bsim4.BSIM4ggidlg;
@@ -4683,62 +4676,62 @@ namespace SpiceSharp.Components.ComponentBehaviors
             ggislb = bsim4.BSIM4ggislb;
 
             /* stamp gidl */
-            rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4dNodePrime] += ggidld;
-            rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4gNodePrime] += ggidlg;
-            rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4sNodePrime] -= (ggidlg + ggidld + ggidlb);
-            rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4bNodePrime] += ggidlb;
-            rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4dNodePrime] -= ggidld;
-            rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4gNodePrime] -= ggidlg;
-            rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4sNodePrime] += (ggidlg + ggidld + ggidlb);
-            rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4bNodePrime] -= ggidlb;
+            // rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4dNodePrime] += ggidld;
+            // rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4gNodePrime] += ggidlg;
+            // rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4sNodePrime] -= (ggidlg + ggidld + ggidlb);
+            // rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4bNodePrime] += ggidlb;
+            // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4dNodePrime] -= ggidld;
+            // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4gNodePrime] -= ggidlg;
+            // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4sNodePrime] += (ggidlg + ggidld + ggidlb);
+            // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4bNodePrime] -= ggidlb;
             /* stamp gisl */
-            rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4dNodePrime] -= (ggisls + ggislg + ggislb);
-            rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4gNodePrime] += ggislg;
-            rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4sNodePrime] += ggisls;
-            rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4bNodePrime] += ggislb;
-            rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4dNodePrime] += (ggislg + ggisls + ggislb);
-            rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4gNodePrime] -= ggislg;
-            rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4sNodePrime] -= ggisls;
-            rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4bNodePrime] -= ggislb;
+            // rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4dNodePrime] -= (ggisls + ggislg + ggislb);
+            // rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4gNodePrime] += ggislg;
+            // rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4sNodePrime] += ggisls;
+            // rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4bNodePrime] += ggislb;
+            // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4dNodePrime] += (ggislg + ggisls + ggislb);
+            // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4gNodePrime] -= ggislg;
+            // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4sNodePrime] -= ggisls;
+            // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4bNodePrime] -= ggislb;
 
             if (bsim4.BSIM4rbodyMod != 0)
             {
-                rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4dbNode] += gcdbdb - bsim4.BSIM4gbd;
-                rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4sbNode] -= bsim4.BSIM4gbs - gcsbsb;
+                // rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4dbNode] += gcdbdb - bsim4.BSIM4gbd;
+                // rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4sbNode] -= bsim4.BSIM4gbs - gcsbsb;
 
-                rstate.Matrix[bsim4.BSIM4dbNode, bsim4.BSIM4dNodePrime] += gcdbdb - bsim4.BSIM4gbd;
-                rstate.Matrix[bsim4.BSIM4dbNode, bsim4.BSIM4dbNode] += bsim4.BSIM4gbd - gcdbdb + bsim4.BSIM4grbpd + bsim4.BSIM4grbdb;
-                rstate.Matrix[bsim4.BSIM4dbNode, bsim4.BSIM4bNodePrime] -= bsim4.BSIM4grbpd;
-                rstate.Matrix[bsim4.BSIM4dbNode, bsim4.BSIM4bNode] -= bsim4.BSIM4grbdb;
+                // rstate.Matrix[bsim4.BSIM4dbNode, bsim4.BSIM4dNodePrime] += gcdbdb - bsim4.BSIM4gbd;
+                // rstate.Matrix[bsim4.BSIM4dbNode, bsim4.BSIM4dbNode] += bsim4.BSIM4gbd - gcdbdb + bsim4.BSIM4grbpd + bsim4.BSIM4grbdb;
+                // rstate.Matrix[bsim4.BSIM4dbNode, bsim4.BSIM4bNodePrime] -= bsim4.BSIM4grbpd;
+                // rstate.Matrix[bsim4.BSIM4dbNode, bsim4.BSIM4bNode] -= bsim4.BSIM4grbdb;
 
-                rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4dbNode] -= bsim4.BSIM4grbpd;
-                rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4bNode] -= bsim4.BSIM4grbpb;
-                rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4sbNode] -= bsim4.BSIM4grbps;
-                rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4bNodePrime] += bsim4.BSIM4grbpd + bsim4.BSIM4grbps + bsim4.BSIM4grbpb;
+                // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4dbNode] -= bsim4.BSIM4grbpd;
+                // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4bNode] -= bsim4.BSIM4grbpb;
+                // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4sbNode] -= bsim4.BSIM4grbps;
+                // rstate.Matrix[bsim4.BSIM4bNodePrime, bsim4.BSIM4bNodePrime] += bsim4.BSIM4grbpd + bsim4.BSIM4grbps + bsim4.BSIM4grbpb;
                 /* WDLiu: (gcbbb - bsim4.BSIM4gbbs) already added to BPbpPtr */
 
-                rstate.Matrix[bsim4.BSIM4sbNode, bsim4.BSIM4sNodePrime] += gcsbsb - bsim4.BSIM4gbs;
-                rstate.Matrix[bsim4.BSIM4sbNode, bsim4.BSIM4bNodePrime] -= bsim4.BSIM4grbps;
-                rstate.Matrix[bsim4.BSIM4sbNode, bsim4.BSIM4bNode] -= bsim4.BSIM4grbsb;
-                rstate.Matrix[bsim4.BSIM4sbNode, bsim4.BSIM4sbNode] += bsim4.BSIM4gbs - gcsbsb + bsim4.BSIM4grbps + bsim4.BSIM4grbsb;
+                // rstate.Matrix[bsim4.BSIM4sbNode, bsim4.BSIM4sNodePrime] += gcsbsb - bsim4.BSIM4gbs;
+                // rstate.Matrix[bsim4.BSIM4sbNode, bsim4.BSIM4bNodePrime] -= bsim4.BSIM4grbps;
+                // rstate.Matrix[bsim4.BSIM4sbNode, bsim4.BSIM4bNode] -= bsim4.BSIM4grbsb;
+                // rstate.Matrix[bsim4.BSIM4sbNode, bsim4.BSIM4sbNode] += bsim4.BSIM4gbs - gcsbsb + bsim4.BSIM4grbps + bsim4.BSIM4grbsb;
 
-                rstate.Matrix[bsim4.BSIM4bNode, bsim4.BSIM4dbNode] -= bsim4.BSIM4grbdb;
-                rstate.Matrix[bsim4.BSIM4bNode, bsim4.BSIM4bNodePrime] -= bsim4.BSIM4grbpb;
-                rstate.Matrix[bsim4.BSIM4bNode, bsim4.BSIM4sbNode] -= bsim4.BSIM4grbsb;
-                rstate.Matrix[bsim4.BSIM4bNode, bsim4.BSIM4bNode] += bsim4.BSIM4grbsb + bsim4.BSIM4grbdb + bsim4.BSIM4grbpb;
+                // rstate.Matrix[bsim4.BSIM4bNode, bsim4.BSIM4dbNode] -= bsim4.BSIM4grbdb;
+                // rstate.Matrix[bsim4.BSIM4bNode, bsim4.BSIM4bNodePrime] -= bsim4.BSIM4grbpb;
+                // rstate.Matrix[bsim4.BSIM4bNode, bsim4.BSIM4sbNode] -= bsim4.BSIM4grbsb;
+                // rstate.Matrix[bsim4.BSIM4bNode, bsim4.BSIM4bNode] += bsim4.BSIM4grbsb + bsim4.BSIM4grbdb + bsim4.BSIM4grbpb;
             }
 
             if (bsim4.BSIM4trnqsMod != 0)
             {
-                rstate.Matrix[bsim4.BSIM4qNode, bsim4.BSIM4qNode] += gqdef + bsim4.BSIM4gtau;
-                rstate.Matrix[bsim4.BSIM4qNode, bsim4.BSIM4gNodePrime] += ggtg - gcqgb;
-                rstate.Matrix[bsim4.BSIM4qNode, bsim4.BSIM4dNodePrime] += ggtd - gcqdb;
-                rstate.Matrix[bsim4.BSIM4qNode, bsim4.BSIM4sNodePrime] += ggts - gcqsb;
-                rstate.Matrix[bsim4.BSIM4qNode, bsim4.BSIM4bNodePrime] += ggtb - gcqbb;
+                // rstate.Matrix[bsim4.BSIM4qNode, bsim4.BSIM4qNode] += gqdef + bsim4.BSIM4gtau;
+                // rstate.Matrix[bsim4.BSIM4qNode, bsim4.BSIM4gNodePrime] += ggtg - gcqgb;
+                // rstate.Matrix[bsim4.BSIM4qNode, bsim4.BSIM4dNodePrime] += ggtd - gcqdb;
+                // rstate.Matrix[bsim4.BSIM4qNode, bsim4.BSIM4sNodePrime] += ggts - gcqsb;
+                // rstate.Matrix[bsim4.BSIM4qNode, bsim4.BSIM4bNodePrime] += ggtb - gcqbb;
 
-                rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4qNode] += dxpart * bsim4.BSIM4gtau;
-                rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4qNode] += sxpart * bsim4.BSIM4gtau;
-                rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4qNode] -= bsim4.BSIM4gtau;
+                // rstate.Matrix[bsim4.BSIM4dNodePrime, bsim4.BSIM4qNode] += dxpart * bsim4.BSIM4gtau;
+                // rstate.Matrix[bsim4.BSIM4sNodePrime, bsim4.BSIM4qNode] += sxpart * bsim4.BSIM4gtau;
+                // rstate.Matrix[bsim4.BSIM4gNodePrime, bsim4.BSIM4qNode] -= bsim4.BSIM4gtau;
             }
 
             line1000:;

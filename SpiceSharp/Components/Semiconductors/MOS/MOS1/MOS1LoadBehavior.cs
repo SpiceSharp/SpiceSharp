@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var mos1 = ComponentTyped<MOS1>();
             var model = mos1.Model as MOS1Model;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var method = ckt.Method;
             double vt, EffectiveLength, DrainSatCur, SourceSatCur, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat, von, evbs, evbd,
@@ -76,15 +76,24 @@ namespace SpiceSharp.Components.ComponentBehaviors
 			 * step or the general iteration step and they
 			 * share some code, so we put them first - others later on
 			 */
-            if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (method != null && method.SavedTime == 0.0)) ||
+            if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (state.Init == CircuitState.InitFlags.InitTransient)) ||
                 ((state.Init == CircuitState.InitFlags.InitFix) && (!mos1.MOS1off)))
             {
-                /* PREDICTOR */
-
-                /* general iteration */
-                vbs = model.MOS1type * rstate.OldSolution[mos1.MOS1bNode] - rstate.OldSolution[mos1.MOS1sNodePrime];
-                vgs = model.MOS1type * rstate.OldSolution[mos1.MOS1gNode] - rstate.OldSolution[mos1.MOS1sNodePrime];
-                vds = model.MOS1type * rstate.OldSolution[mos1.MOS1dNodePrime] - rstate.OldSolution[mos1.MOS1sNodePrime];
+                if (state.UseSmallSignal)
+                {
+                    // [FIX] to match Spice 3f5... Why would you even use the less accurate solution?
+                    // AC loading
+                    vbs = model.MOS1type * (rstate.OldSolution[mos1.MOS1bNode] - rstate.OldSolution[mos1.MOS1sNodePrime]);
+                    vgs = model.MOS1type * (rstate.OldSolution[mos1.MOS1gNode] - rstate.OldSolution[mos1.MOS1sNodePrime]);
+                    vds = model.MOS1type * (rstate.OldSolution[mos1.MOS1dNodePrime] - rstate.OldSolution[mos1.MOS1sNodePrime]);
+                }
+                else
+                {
+                    // general iteration
+                    vbs = model.MOS1type * (rstate.Solution[mos1.MOS1bNode] - rstate.Solution[mos1.MOS1sNodePrime]);
+                    vgs = model.MOS1type * (rstate.Solution[mos1.MOS1gNode] - rstate.Solution[mos1.MOS1sNodePrime]);
+                    vds = model.MOS1type * (rstate.Solution[mos1.MOS1dNodePrime] - rstate.Solution[mos1.MOS1sNodePrime]);
+                }
 
                 /* now some common crunching for some more useful quantities */
                 vbd = vbs - vds;
@@ -440,7 +449,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 				*/
 
                 /* DETAILPROF */
-                if ((method != null) || ((method != null && method.SavedTime == 0.0) && !state.UseIC))
+                if ((method != null) || ((state.Init == CircuitState.InitFlags.InitTransient) && !state.UseIC))
                 {
                     /* (above only excludes tranop, since we're only at this
 					 * point if tran or tranop)
@@ -544,7 +553,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 /* PREDICTOR */
             }
 
-            if (((method != null && method.SavedTime == 0.0)) || (!(method != null)))
+            if (((state.Init == CircuitState.InitFlags.InitTransient)) || (!(method != null)))
             {
                 /* 
 				 * initialize to zero charge conductances 
@@ -602,29 +611,28 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
 			 * load y matrix
 			 */
-            rstate.Matrix[mos1.MOS1dNode, mos1.MOS1dNode] += (mos1.MOS1drainConductance);
-            rstate.Matrix[mos1.MOS1gNode, mos1.MOS1gNode] += ((gcgd + gcgs + gcgb));
-            rstate.Matrix[mos1.MOS1sNode, mos1.MOS1sNode] += (mos1.MOS1sourceConductance);
-            rstate.Matrix[mos1.MOS1bNode, mos1.MOS1bNode] += (mos1.MOS1gbd + mos1.MOS1gbs + gcgb);
-            rstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1dNodePrime] += (mos1.MOS1drainConductance + mos1.MOS1gds + mos1.MOS1gbd + xrev * (mos1.MOS1gm + mos1.MOS1gmbs) + gcgd);
-            rstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1sNodePrime] += (mos1.MOS1sourceConductance + mos1.MOS1gds + mos1.MOS1gbs + xnrm * (mos1.MOS1gm + mos1.MOS1gmbs) +
-                gcgs);
-            rstate.Matrix[mos1.MOS1dNode, mos1.MOS1dNodePrime] += (-mos1.MOS1drainConductance);
-            rstate.Matrix[mos1.MOS1gNode, mos1.MOS1bNode] -= gcgb;
-            rstate.Matrix[mos1.MOS1gNode, mos1.MOS1dNodePrime] -= gcgd;
-            rstate.Matrix[mos1.MOS1gNode, mos1.MOS1sNodePrime] -= gcgs;
-            rstate.Matrix[mos1.MOS1sNode, mos1.MOS1sNodePrime] += (-mos1.MOS1sourceConductance);
-            rstate.Matrix[mos1.MOS1bNode, mos1.MOS1gNode] -= gcgb;
-            rstate.Matrix[mos1.MOS1bNode, mos1.MOS1dNodePrime] -= mos1.MOS1gbd;
-            rstate.Matrix[mos1.MOS1bNode, mos1.MOS1sNodePrime] -= mos1.MOS1gbs;
-            rstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1dNode] += (-mos1.MOS1drainConductance);
-            rstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1gNode] += ((xnrm - xrev) * mos1.MOS1gm - gcgd);
-            rstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1bNode] += (-mos1.MOS1gbd + (xnrm - xrev) * mos1.MOS1gmbs);
-            rstate.Matrix[mos1.MOS1dNodePrime, mos1.MOS1sNodePrime] += (-mos1.MOS1gds - xnrm * (mos1.MOS1gm + mos1.MOS1gmbs));
-            rstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1gNode] += (-(xnrm - xrev) * mos1.MOS1gm - gcgs);
-            rstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1sNode] += (-mos1.MOS1sourceConductance);
-            rstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1bNode] += (-mos1.MOS1gbs - (xnrm - xrev) * mos1.MOS1gmbs);
-            rstate.Matrix[mos1.MOS1sNodePrime, mos1.MOS1dNodePrime] += (-mos1.MOS1gds - xrev * (mos1.MOS1gm + mos1.MOS1gmbs));
+            mos1.MOS1DdPtr.Add(mos1.MOS1drainConductance);
+            mos1.MOS1GgPtr.Add(gcgd + gcgs + gcgb);
+            mos1.MOS1SsPtr.Add(mos1.MOS1sourceConductance);
+            mos1.MOS1BbPtr.Add(mos1.MOS1gbd + mos1.MOS1gbs + gcgb);
+            mos1.MOS1DPdpPtr.Add(mos1.MOS1drainConductance + mos1.MOS1gds + mos1.MOS1gbd + xrev * (mos1.MOS1gm + mos1.MOS1gmbs) + gcgd);
+            mos1.MOS1SPspPtr.Add(mos1.MOS1sourceConductance + mos1.MOS1gds + mos1.MOS1gbs + xnrm * (mos1.MOS1gm + mos1.MOS1gmbs) + gcgs);
+            mos1.MOS1DdpPtr.Add(-mos1.MOS1drainConductance);
+            mos1.MOS1GbPtr.Sub(gcgb);
+            mos1.MOS1GdpPtr.Sub(gcgd);
+            mos1.MOS1GspPtr.Sub(gcgs);
+            mos1.MOS1SspPtr.Add(-mos1.MOS1sourceConductance);
+            mos1.MOS1BgPtr.Sub(gcgb);
+            mos1.MOS1BdpPtr.Sub(mos1.MOS1gbd);
+            mos1.MOS1BspPtr.Sub(mos1.MOS1gbs);
+            mos1.MOS1DPdPtr.Add(-mos1.MOS1drainConductance);
+            mos1.MOS1DPgPtr.Add((xnrm - xrev) * mos1.MOS1gm - gcgd);
+            mos1.MOS1DPbPtr.Add(-mos1.MOS1gbd + (xnrm - xrev) * mos1.MOS1gmbs);
+            mos1.MOS1DPspPtr.Add(-mos1.MOS1gds - xnrm * (mos1.MOS1gm + mos1.MOS1gmbs));
+            mos1.MOS1SPgPtr.Add(-(xnrm - xrev) * mos1.MOS1gm - gcgs);
+            mos1.MOS1SPsPtr.Add(-mos1.MOS1sourceConductance);
+            mos1.MOS1SPbPtr.Add(-mos1.MOS1gbs - (xnrm - xrev) * mos1.MOS1gmbs);
+            mos1.MOS1SPdpPtr.Add(-mos1.MOS1gds - xrev * (mos1.MOS1gm + mos1.MOS1gmbs));
         }
     }
 }

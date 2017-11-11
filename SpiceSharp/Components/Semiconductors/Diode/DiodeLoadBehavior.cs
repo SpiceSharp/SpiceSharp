@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             var model = diode.Model as DiodeModel;
             var state = ckt.State;
-            var rstate = state.Real;
+            var matrix = state.Matrix;
             var method = ckt.Method;
             bool Check;
             double csat, gspr, vt, vte, vd, delvd, cdhat, vdtemp, evd, cd, gd, arg, evrev, czero, sarg, capd, czof2, cdeq;
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 vd = state.States[0][diode.DIOstate + Diode.DIOvoltage];
             }
-            else if (method != null && method.SavedTime == 0.0)
+            else if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 vd = state.States[1][diode.DIOstate + Diode.DIOvoltage];
                 Check = false; // EDIT: Spice does not check the first timepoint for convergence, but we do...
@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             }
             else
             {
-                vd = rstate.OldSolution[diode.DIOposPrimeNode] - rstate.OldSolution[diode.DIOnegNode];
+                vd = state.Solution[diode.DIOposPrimeNode] - state.Solution[diode.DIOnegNode];
                 delvd = vd - state.States[0][diode.DIOstate + Diode.DIOvoltage];
                 cdhat = state.States[0][diode.DIOstate + Diode.DIOcurrent] + state.States[0][diode.DIOstate + Diode.DIOconduct] * delvd;
 
@@ -149,7 +149,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                         var result = method.Integrate(state, diode.DIOstate + Diode.DIOcapCharge, capd);
                         gd = gd + result.Geq;
                         cd = cd + state.States[0][diode.DIOstate + Diode.DIOcapCurrent];
-                        if (method != null && method.SavedTime == 0.0)
+                        if (state.Init == CircuitState.InitFlags.InitTransient)
                             state.States[1][diode.DIOstate + Diode.DIOcapCurrent] = state.States[0][diode.DIOstate + Diode.DIOcapCurrent];
                     }
                 }
@@ -171,19 +171,20 @@ namespace SpiceSharp.Components.ComponentBehaviors
 			 * load current vector
 			 */
             cdeq = cd - gd * vd;
-            rstate.Rhs[diode.DIOnegNode] += cdeq;
-            rstate.Rhs[diode.DIOposPrimeNode] -= cdeq;
+            state.Rhs[diode.DIOnegNode] += cdeq;
+            state.Rhs[diode.DIOposPrimeNode] -= cdeq;
 
             /* 
 			 * load matrix
 			 */
-            rstate.Matrix[diode.DIOposNode, diode.DIOposNode] += gspr;
-            rstate.Matrix[diode.DIOnegNode, diode.DIOnegNode] += gd;
-            rstate.Matrix[diode.DIOposPrimeNode, diode.DIOposPrimeNode] += (gd + gspr);
-            rstate.Matrix[diode.DIOposNode, diode.DIOposPrimeNode] -= gspr;
-            rstate.Matrix[diode.DIOnegNode, diode.DIOposPrimeNode] -= gd;
-            rstate.Matrix[diode.DIOposPrimeNode, diode.DIOposNode] -= gspr;
-            rstate.Matrix[diode.DIOposPrimeNode, diode.DIOnegNode] -= gd;
+            diode.DIOposPosPtr.Value.Real += gspr;
+            diode.DIOnegNegPtr.Value.Real += gd;
+            diode.DIOposPrimePosPrimePtr.Value.Real += gd + gspr;
+
+            diode.DIOposPosPrimePtr.Value.Real -= gspr;
+            diode.DIOposPrimePosPtr.Value.Real -= gspr;
+            diode.DIOnegPosPrimePtr.Value.Real -= gd;
+            diode.DIOposPrimeNegPtr.Value.Real -= gd;
         }
     }
 }

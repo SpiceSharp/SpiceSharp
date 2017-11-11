@@ -15,14 +15,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Execute(Circuit ckt)
         {
             var ind = ComponentTyped<Inductor>();
-            var cstate = ckt.State.Complex;
+            var cstate = ckt.State;
             Complex val = cstate.Laplace * ind.INDinduct.Value;
 
-            cstate.Matrix[ind.INDposNode, ind.INDbrEq] += 1.0;
-            cstate.Matrix[ind.INDnegNode, ind.INDbrEq] -= 1.0;
-            cstate.Matrix[ind.INDbrEq, ind.INDnegNode] -= 1.0;
-            cstate.Matrix[ind.INDbrEq, ind.INDposNode] += 1.0;
-            cstate.Matrix[ind.INDbrEq, ind.INDbrEq] -= val;
+            ind.INDposIbrptr.Add(1.0);
+            ind.INDnegIbrptr.Sub(1.0);
+            ind.INDibrNegptr.Sub(1.0);
+            ind.INDibrPosptr.Add(1.0);
+            ind.INDibrIbrptr.Sub(val);
         }
     }
 }

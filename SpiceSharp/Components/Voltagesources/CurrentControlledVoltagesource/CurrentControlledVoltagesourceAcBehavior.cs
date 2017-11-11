@@ -14,12 +14,13 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Execute(Circuit ckt)
         {
             var ccvs = ComponentTyped<CurrentControlledVoltagesource>();
-            var cstate = ckt.State.Complex;
-            cstate.Matrix[ccvs.CCVSposNode, ccvs.CCVSbranch] += 1.0;
-            cstate.Matrix[ccvs.CCVSbranch, ccvs.CCVSposNode] += 1.0;
-            cstate.Matrix[ccvs.CCVSnegNode, ccvs.CCVSbranch] -= 1.0;
-            cstate.Matrix[ccvs.CCVSbranch, ccvs.CCVSnegNode] -= 1.0;
-            cstate.Matrix[ccvs.CCVSbranch, ccvs.CCVScontBranch] -= ccvs.CCVScoeff.Value;
+            var cstate = ckt.State;
+
+            ccvs.CCVSposIbrptr.Add(1.0);
+            ccvs.CCVSibrPosptr.Add(1.0);
+            ccvs.CCVSnegIbrptr.Sub(1.0);
+            ccvs.CCVSibrNegptr.Sub(1.0);
+            ccvs.CCVSibrContBrptr.Sub(ccvs.CCVScoeff);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -33,10 +34,10 @@ namespace SpiceSharp.Components
         [SpiceName("control"), SpiceInfo("Name of the controlling source")]
         public CircuitIdentifier CSWcontName { get; set; }
         [SpiceName("i"), SpiceInfo("Switch current")]
-        public double GetCurrent(Circuit ckt) => (ckt.State.Real.Solution[CSWposNode] - ckt.State.Real.Solution[CSWnegNode]) * CSWcond;
+        public double GetCurrent(Circuit ckt) => (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) * CSWcond;
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Real.Solution[CSWposNode] - ckt.State.Real.Solution[CSWnegNode]) *
-            (ckt.State.Real.Solution[CSWposNode] - ckt.State.Real.Solution[CSWnegNode]) * CSWcond;
+        public double GetPower(Circuit ckt) => (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) *
+            (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) * CSWcond;
         public double CSWcond { get; internal set; }
 
         /// <summary>
@@ -49,6 +50,14 @@ namespace SpiceSharp.Components
         internal int CSWcontBranch;
         public int CSWstate { get; internal set; }
 
+        /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement CSWposPosptr { get; private set; }
+        internal MatrixElement CSWnegPosptr { get; private set; }
+        internal MatrixElement CSWposNegptr { get; private set; }
+        internal MatrixElement CSWnegNegptr { get; private set; }
+        
         /// <summary>
         /// Private variables
         /// </summary>
@@ -91,6 +100,13 @@ namespace SpiceSharp.Components
             // Find the voltage source
             if (ckt.Objects[CSWcontName] is Voltagesource vsrc)
                 CSWcontBranch = vsrc.VSRCbranch;
+
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            CSWposPosptr = matrix.GetElement(CSWposNode, CSWposNode);
+            CSWposNegptr = matrix.GetElement(CSWposNode, CSWnegNode);
+            CSWnegPosptr = matrix.GetElement(CSWnegNode, CSWposNode);
+            CSWnegNegptr = matrix.GetElement(CSWnegNode, CSWnegNode);
 
             CSWstate = ckt.State.GetState();
         }

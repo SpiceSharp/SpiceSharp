@@ -1,8 +1,6 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -78,12 +76,12 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Get the old solutions
         /// </summary>
-        public Vector<double>[] Solutions { get; protected set; } = null;
+        public double[][] Solutions { get; protected set; } = null;
 
         /// <summary>
         /// Get the prediction for the next timestep
         /// </summary>
-        public Vector<double> Prediction { get; protected set; } = null;
+        public double[] Prediction { get; protected set; } = null;
 
         /// <summary>
         /// The first order derivative of any variable that is
@@ -121,22 +119,25 @@ namespace SpiceSharp.IntegrationMethods
         {
             Config = config ?? new IntegrationConfiguration();
             DeltaOld = new double[MaxOrder + 2];
-            Solutions = new Vector<double>[MaxOrder + 1];
+            Solutions = new double[MaxOrder + 1][]; // new Vector<double>[MaxOrder + 1];
         }
 
         /// <summary>
         /// Save a solution for future integrations
         /// </summary>
         /// <param name="solution">The solution</param>
-        public void SaveSolution(Vector<double> solution)
+        public void SaveSolution(double[] solution)
         {
             // Now, move the solution vectors around
             if (Solutions[0] == null)
             {
                 // No solutions yet, so allocate vectors
                 for (int i = 0; i < Solutions.Length; i++)
-                    Solutions[i] = new DenseVector(solution.Count);
-                solution.CopyTo(Solutions[0]);
+                    Solutions[i] = new double[solution.Length]; // new DenseVector(solution.Count);
+                Prediction = new double[solution.Length];
+                // solution.CopyTo(Solutions[0]);
+                for (int i = 0; i < solution.Length; i++)
+                    Solutions[0][i] = solution[i];
             }
             else
             {
@@ -145,7 +146,8 @@ namespace SpiceSharp.IntegrationMethods
                 for (int i = Solutions.Length - 1; i > 0; i--)
                     Solutions[i] = Solutions[i - 1];
                 Solutions[0] = tmp;
-                solution.CopyTo(Solutions[0]);
+                for (int i = 0; i < solution.Length; i++)
+                    Solutions[0][i] = solution[i];
             }
         }
 
@@ -161,7 +163,7 @@ namespace SpiceSharp.IntegrationMethods
             Order = 1;
             Prediction = null;
             DeltaOld = new double[MaxOrder + 1];
-            Solutions = new Vector<double>[MaxOrder + 1];
+            Solutions = new double[MaxOrder + 1][]; // new Vector<double>[MaxOrder + 1];
 
             // Choose the truncation method
             switch (Config.TruncationMethod)

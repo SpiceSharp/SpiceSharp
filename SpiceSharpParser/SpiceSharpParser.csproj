@@ -53,7 +53,6 @@
     <Compile Include="Readers\Simulations\NoiseReader.cs" />
     <Compile Include="Readers\Transistors\MosfetModelReader.cs" />
     <Compile Include="Readers\Transistors\MosfetReader.cs" />
-    <Compile Include="Readers\Waveforms\PwlReader.cs" />
     <Compile Include="Subcircuits\Subcircuit.cs" />
     <Compile Include="Subcircuits\SubcircuitDefinition.cs" />
     <Compile Include="Readers\Subcircuits\SubcircuitDefinitionReader.cs" />

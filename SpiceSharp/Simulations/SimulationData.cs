@@ -41,7 +41,7 @@ namespace SpiceSharp.Simulations
             if (Circuit.Nodes.Contains(node))
             {
                 int index = Circuit.Nodes[node].Index;
-                result = Circuit.State.Real.Solution[index];
+                result = Circuit.State.Solution[index];
             }
             else
                 throw new CircuitException($"Could not find node '{node}'");
@@ -52,7 +52,7 @@ namespace SpiceSharp.Simulations
                 if (Circuit.Nodes.Contains(reference))
                 {
                     int index = Circuit.Nodes[reference].Index;
-                    result -= Circuit.State.Real.Solution[index];
+                    result -= Circuit.State.Solution[index];
                 }
                 else
                     throw new CircuitException($"Could not find node '{reference}'");
@@ -129,7 +129,7 @@ namespace SpiceSharp.Simulations
             if (Circuit.Nodes.Contains(node))
             {
                 int index = Circuit.Nodes[node].Index;
-                result = Circuit.State.Complex.Solution[index];
+                result = new Complex(Circuit.State.Solution[index], Circuit.State.iSolution[index]);
             }
             else
                 throw new CircuitException($"Could not find node '{node}'");
@@ -140,7 +140,7 @@ namespace SpiceSharp.Simulations
                 if (Circuit.Nodes.Contains(reference))
                 {
                     int index = Circuit.Nodes[reference].Index;
-                    result -= Circuit.State.Complex.Solution[index];
+                    result -= new Complex(Circuit.State.Solution[index], Circuit.State.iSolution[index]);
                 }
                 else
                     throw new CircuitException($"Could not find node '{reference}'");
@@ -193,7 +193,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public double GetFrequency()
         {
-            var c = Circuit.State.Complex.Laplace;
+            var c = Circuit.State.Laplace;
             if (c.Real != 0.0)
                 throw new CircuitException($"Cannot get the frequency of the complex number {c}");
             return c.Imaginary / 2.0 / Circuit.CONSTPI;

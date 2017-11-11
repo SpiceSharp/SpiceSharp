@@ -110,7 +110,7 @@ namespace SpiceSharp.Simulations
         {
             var ckt = Circuit;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
             var config = CurrentConfig ?? throw new CircuitException("No configuration");
             var method = ckt.Method ?? (config.Method ?? throw new CircuitException("No integration method"));
 
@@ -137,6 +137,7 @@ namespace SpiceSharp.Simulations
             Initialize(ckt);
 
             // Calculate the operating point
+            ckt.Method = null;
             ckt.Op(loadbehaviours, config, config.DcMaxIterations);
             ckt.Statistics.TimePoints++;
             for (int i = 0; i < method.DeltaOld.Length; i++)
@@ -150,7 +151,10 @@ namespace SpiceSharp.Simulations
             // Stop calculating a DC solution
             state.UseIC = false;
             state.UseDC = false;
-            state.States[0].CopyTo(state.States[1]);
+            for (int i = 0; i < state.States[0].Length; i++)
+            {
+                state.States[1][i] = state.States[0][i];
+            }
 
             // Start our statistics
             ckt.Statistics.TransientTime.Start();
@@ -205,12 +209,17 @@ namespace SpiceSharp.Simulations
                     method.Predict(ckt);
 
                     // Try to solve the new point
+                    if (method.SavedTime == 0.0)
+                        state.Init = CircuitState.InitFlags.InitTransient;
                     bool converged = ckt.Iterate(loadbehaviours, config, config.TranMaxIterations);
                     ckt.Statistics.TimePoints++;
                     if (method.SavedTime == 0.0)
                     {
-                        state.States[1].CopyTo(state.States[2]);
-                        state.States[1].CopyTo(state.States[3]);
+                        for (int i = 0; i < state.States[1].Length; i++)
+                        {
+                            state.States[2][i] = state.States[1][i];
+                            state.States[3][i] = state.States[1][i];
+                        }
                     }
 
                     // Spice copies the states the first time, we're not

@@ -1921,7 +1921,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Shared parameters
         /// </summary>
-        internal double tnoiMod, DMCGeff, DMCIeff, DMDGeff, Temp, epsrox, toxe, 
+        internal double DMCGeff, DMCIeff, DMDGeff, Temp, epsrox, toxe, 
             epssub, Tnom, TRatio, Vtm0, Eg0, ni, delTemp;
 
         /// <summary>
@@ -2171,7 +2171,7 @@ namespace SpiceSharp.Components
                 BSIM4kgidl.Value = 0.0;
             if (!BSIM4fgidl.Given)
                 /* v4.7 New GIDL / GISL */
-                /* BSIM4fgidl.Value = 0.0; */
+                /* BSIM4fgidl.Value = 0.0;
                 /* Default value of fgdil set to 1 in BSIM4.8.0 */
                 BSIM4fgidl.Value = 1.0;
 

@@ -14,14 +14,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Execute(Circuit ckt)
         {
             Capacitor cap = ComponentTyped<Capacitor>();
-            var cstate = ckt.State.Complex;
+            var cstate = ckt.State;
             var val = cstate.Laplace * cap.CAPcapac.Value;
 
             // Load the matrix
-            cstate.Matrix[cap.CAPposNode, cap.CAPposNode] += val;
-            cstate.Matrix[cap.CAPposNode, cap.CAPnegNode] -= val;
-            cstate.Matrix[cap.CAPnegNode, cap.CAPposNode] -= val;
-            cstate.Matrix[cap.CAPnegNode, cap.CAPnegNode] += val;
+            cap.CAPposPosptr.Add(val);
+            cap.CAPnegNegptr.Add(val);
+            cap.CAPposNegptr.Sub(val);
+            cap.CAPnegPosptr.Sub(val);
         }
     }
 }

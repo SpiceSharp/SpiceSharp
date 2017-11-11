@@ -71,6 +71,7 @@
     <Compile Include="Parser\SpiceSharpParserSimulationTest.cs" />
     <Compile Include="Parser\SpiceSharpParserSubcircuitTest.cs" />
     <Compile Include="Parser\SpiceSharpParserTransistorTest.cs" />
+    <Compile Include="Sparse\SparseBuildTest.cs" />
     <Compile Include="SpiceExpressionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpiceSharpTest.cs" />

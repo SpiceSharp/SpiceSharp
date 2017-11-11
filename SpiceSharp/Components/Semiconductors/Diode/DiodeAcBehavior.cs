@@ -18,22 +18,22 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             var model = diode.Model as DiodeModel;
             var state = ckt.State;
-            var cstate = state.Complex;
             double gspr, geq, xceq;
 
             gspr = model.DIOconductance * diode.DIOarea;
             geq = state.States[0][diode.DIOstate + Diode.DIOconduct];
-            xceq = state.States[0][diode.DIOstate + Diode.DIOcapCurrent] * cstate.Laplace.Imaginary;
-            cstate.Matrix[diode.DIOposNode, diode.DIOposNode] += gspr;
-            cstate.Matrix[diode.DIOnegNode, diode.DIOnegNode] += new Complex(geq, xceq);
+            xceq = state.States[0][diode.DIOstate + Diode.DIOcapCurrent] * state.Laplace.Imaginary;
 
-            cstate.Matrix[diode.DIOposPrimeNode, diode.DIOposPrimeNode] += new Complex(geq + gspr, xceq);
+            diode.DIOposPosPtr.Value.Real += gspr;
+            diode.DIOnegNegPtr.Value.Cplx += new Complex(geq, xceq);
 
-            cstate.Matrix[diode.DIOposNode, diode.DIOposPrimeNode] -= gspr;
-            cstate.Matrix[diode.DIOnegNode, diode.DIOposPrimeNode] -= new Complex(geq, xceq);
+            diode.DIOposPrimePosPrimePtr.Value.Cplx += new Complex(geq + gspr, xceq);
 
-            cstate.Matrix[diode.DIOposPrimeNode, diode.DIOposNode] -= gspr;
-            cstate.Matrix[diode.DIOposPrimeNode, diode.DIOnegNode] -= new Complex(geq, xceq);
+            diode.DIOposPosPrimePtr.Value.Real -= gspr;
+            diode.DIOnegPosPrimePtr.Value.Cplx -= new Complex(geq, xceq);
+
+            diode.DIOposPrimePosPtr.Value.Real -= gspr;
+            diode.DIOposPrimeNegPtr.Value.Cplx -= new Complex(geq, xceq);
         }
     }
 }

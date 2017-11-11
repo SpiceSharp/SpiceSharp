@@ -3,6 +3,7 @@ using System.Numerics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -48,16 +49,9 @@ namespace SpiceSharp.Components
         [SpiceName("acimag"), SpiceInfo("A.C. imaginary part")]
         public double GetAcImag(Circuit ckt) => VSRCac.Imaginary;
         [SpiceName("i"), SpiceInfo("Voltage source current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[VSRCbranch];
+        public double GetCurrent(Circuit ckt) => ckt.State.OldSolution[VSRCbranch];
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Real.Solution[VSRCposNode] - ckt.State.Real.Solution[VSRCnegNode]) * -ckt.State.Real.Solution[VSRCbranch];
-        
-        /// <summary>
-        /// Get the complex current through the voltage source
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <returns></returns>
-        public Complex GetComplexCurrent(Circuit ckt) => ckt.State.Complex.Solution[VSRCbranch];
+        public double GetPower(Circuit ckt) => (ckt.State.OldSolution[VSRCposNode] - ckt.State.OldSolution[VSRCnegNode]) * -ckt.State.OldSolution[VSRCbranch];
         
         /// <summary>
         /// Nodes
@@ -67,6 +61,12 @@ namespace SpiceSharp.Components
         [SpiceName("neg_node")]
         public int VSRCnegNode { get; private set; }
         public int VSRCbranch { get; private set; }
+
+        internal MatrixElement VSRCposIbrptr;
+        internal MatrixElement VSRCnegIbrptr; 
+        internal MatrixElement VSRCibrPosptr;
+        internal MatrixElement VSRCibrNegptr;
+        internal MatrixElement VSRCibrIbrptr;
 
         /// <summary>
         /// Private variables
@@ -116,6 +116,12 @@ namespace SpiceSharp.Components
             VSRCposNode = nodes[0].Index;
             VSRCnegNode = nodes[1].Index;
             VSRCbranch = CreateNode(ckt, Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
+
+            var matrix = ckt.State.Matrix;
+            VSRCposIbrptr = matrix.GetElement(VSRCposNode, VSRCbranch);
+            VSRCibrPosptr = matrix.GetElement(VSRCbranch, VSRCposNode);
+            VSRCnegIbrptr = matrix.GetElement(VSRCnegNode, VSRCbranch);
+            VSRCibrNegptr = matrix.GetElement(VSRCbranch, VSRCnegNode);
 
             // Setup the waveform if specified
             VSRCwaveform?.Setup(ckt);

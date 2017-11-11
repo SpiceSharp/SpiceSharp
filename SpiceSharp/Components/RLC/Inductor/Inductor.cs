@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -43,9 +44,9 @@ namespace SpiceSharp.Components
         [SpiceName("v"), SpiceName("volt"), SpiceInfo("Terminal voltage of the inductor")]
         public double GetVolt(Circuit ckt) => ckt.State.States[0][INDstate + INDvolt];
         [SpiceName("i"), SpiceName("current"), SpiceInfo("Current through the inductor")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Real.Solution[INDbrEq];
+        public double GetCurrent(Circuit ckt) => ckt.State.Solution[INDbrEq];
         [SpiceName("p"), SpiceInfo("Instantaneous power dissipated by the inductor")]
-        public double GetPower(Circuit ckt) => ckt.State.Real.Solution[INDbrEq] * ckt.State.States[0][INDstate + INDvolt];
+        public double GetPower(Circuit ckt) => ckt.State.Solution[INDbrEq] * ckt.State.States[0][INDstate + INDvolt];
 
         /// <summary>
         /// Nodes
@@ -54,6 +55,15 @@ namespace SpiceSharp.Components
         public int INDbrEq { get; internal set; }
         public int INDposNode { get; internal set; }
         public int INDnegNode { get; internal set; }
+
+        /// <summary>
+        /// Matrix elements
+        /// </summary>
+        internal MatrixElement INDposIbrptr { get; private set; }
+        internal MatrixElement INDnegIbrptr { get; private set; }
+        internal MatrixElement INDibrNegptr { get; private set; }
+        internal MatrixElement INDibrPosptr { get; private set; }
+        internal MatrixElement INDibrIbrptr { get; private set; }
 
         /// <summary>
         /// Constants
@@ -91,12 +101,34 @@ namespace SpiceSharp.Components
             INDnegNode = nodes[1].Index;
             INDbrEq = CreateNode(ckt, Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
 
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            INDposIbrptr = matrix.GetElement(INDposNode, INDbrEq);
+            INDnegIbrptr = matrix.GetElement(INDnegNode, INDbrEq);
+            INDibrNegptr = matrix.GetElement(INDbrEq, INDnegNode);
+            INDibrPosptr = matrix.GetElement(INDbrEq, INDposNode);
+            INDibrIbrptr = matrix.GetElement(INDbrEq, INDbrEq);
+
             // Create 2 states
             INDstate = ckt.State.GetState(2);
 
             // Clear all events
             foreach (var inv in UpdateMutualInductance.GetInvocationList())
                 UpdateMutualInductance -= (UpdateMutualInductanceEventHandler)inv;
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup(Circuit ckt)
+        {
+            // Remove references
+            INDposIbrptr = null;
+            INDnegIbrptr = null;
+            INDibrNegptr = null;
+            INDibrPosptr = null;
+            INDibrIbrptr = null;
         }
 
         /// <summary>
@@ -114,8 +146,7 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Accept(Circuit ckt)
         {
-            var method = ckt.Method;
-            if (method != null && method.SavedTime == 0.0)
+            if (ckt.State.Init == CircuitState.InitFlags.InitTransient)
                 ckt.State.CopyDC(INDstate + INDflux);
         }
 

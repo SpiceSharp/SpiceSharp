@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             double previous_state;
             double current_state = 0.0;
             var state = ckt.State;
-            var rstate = state.Real;
+            var rstate = state;
 
             // decide the state of the switch
             if (state.Init == CircuitState.InitFlags.InitFix || state.Init == CircuitState.InitFlags.InitJct)
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 // No time-dependence, so use current state instead
                 previous_state = state.States[0][csw.CSWstate];
-                i_ctrl = rstate.OldSolution[csw.CSWcontBranch];
+                i_ctrl = rstate.Solution[csw.CSWcontBranch];
                 if (i_ctrl > (model.CSWthresh + model.CSWhyst))
                     current_state = 1.0;
                 else if (i_ctrl < (model.CSWthresh - model.CSWhyst))
@@ -70,7 +70,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 // Get the previous state
                 previous_state = state.States[1][csw.CSWstate];
-                i_ctrl = rstate.OldSolution[csw.CSWcontBranch];
+                i_ctrl = rstate.Solution[csw.CSWcontBranch];
 
                 // Calculate the current state
                 if (i_ctrl > (model.CSWthresh + model.CSWhyst))
@@ -92,10 +92,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             csw.CSWcond = g_now;
 
             // Load the Y-matrix
-            rstate.Matrix[csw.CSWposNode, csw.CSWposNode] += g_now;
-            rstate.Matrix[csw.CSWposNode, csw.CSWnegNode] -= g_now;
-            rstate.Matrix[csw.CSWnegNode, csw.CSWposNode] -= g_now;
-            rstate.Matrix[csw.CSWnegNode, csw.CSWnegNode] += g_now;
+            csw.CSWposPosptr.Add(g_now);
+            csw.CSWposNegptr.Sub(g_now);
+            csw.CSWnegPosptr.Sub(g_now);
+            csw.CSWnegNegptr.Add(g_now);
         }
     }
 }
