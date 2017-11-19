@@ -24,11 +24,6 @@ namespace SpiceSharp.Simulations
         public double Gmin = 1e-12;
 
         /// <summary>
-        /// Extra conductance that is added to all nodes to ground to aid convergence
-        /// </summary>
-        public double DiagGmin = 0;
-
-        /// <summary>
         /// The number of steps when using GMIN stepping to improve convergence
         /// </summary>
         public int NumGminSteps = 10;
