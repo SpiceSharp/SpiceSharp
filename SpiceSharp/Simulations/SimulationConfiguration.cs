@@ -56,7 +56,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Number of iterations for DC simulation
         /// </summary>
-        public int DcMaxIterations = 50;
+        public int DcMaxIterations = 100;
 
         /// <summary>
         /// Number of iterations for DC sweeps

@@ -27,7 +27,7 @@ namespace Sandbox
 
             double reference_ve = 9.452632245345402e+00;
             double abstol = 1e-16;
-            double reltol = 1e-20;
+            double reltol = 1e-12;
 
             // Create the netlist
             string strNetlist = string.Join(Environment.NewLine,
@@ -42,10 +42,11 @@ namespace Sandbox
                 "+ CJC = 3.0004e-10 VJC = 0.600008 MJC = 0.409966 XCJC = 0.8",
                 "+ FC = 0.533878 CJS = 0 VJS = 0.75 MJS = 0.5",
                 "+ TR = 2.73328e-08 PTF = 0 KF = 0 AF = 1",
-                "V1 V_B 0 10",
-                "V2 V_C 0 100",
+                "Q1 V_C V_B V_E 0 mjd44h11",
                 "R1 V_E 0 1000",
-                "Q1 V_C V_B V_E 0 mjd44h11");
+                "V2 V_C 0 100",
+                "V1 V_B 0 10"
+                );
             var nr = new NetlistReader();
             nr.Parse(new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(strNetlist)));
 
