@@ -362,7 +362,10 @@ namespace SpiceSharp.Simulations
             foreach (var loader in loaders)
             {
                 if (!loader.IsConvergent(ckt))
-                    return false;
+                {
+                    // I believe this should be false, but Spice 3f5 doesn't...
+                    return true;
+                }
             }
 
             // Convergence succeeded
