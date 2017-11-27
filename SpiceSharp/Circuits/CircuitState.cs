@@ -89,6 +89,11 @@ namespace SpiceSharp.Circuits
         public double PivotRelTol { get; set; } = 1e-3;
 
         /// <summary>
+        /// Extra conductance that is added to all nodes to ground to aid convergence
+        /// </summary>
+        public double DiagGmin = 0;
+
+        /// <summary>
         /// Gets or sets the initialization flag
         /// </summary>
         public InitFlags Init { get; set; }
