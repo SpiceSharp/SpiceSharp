@@ -498,8 +498,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             double vbe, vbc, delvbe, delvbc, cchat, cbhat, cc, cb;
 
-            vbe = model.BJTtype * (state.Solution[bjt.BJTbasePrimeNode] - state.Solution[bjt.BJTemitPrimeNode]);
-            vbc = model.BJTtype * (state.Solution[bjt.BJTbasePrimeNode] - state.Solution[bjt.BJTcolPrimeNode]);
+            vbe = model.BJTtype * (state.OldSolution[bjt.BJTbasePrimeNode] - state.OldSolution[bjt.BJTemitPrimeNode]);
+            vbc = model.BJTtype * (state.OldSolution[bjt.BJTbasePrimeNode] - state.OldSolution[bjt.BJTcolPrimeNode]);
             delvbe = vbe - state.States[0][bjt.BJTstate + BJT.BJTvbe];
             delvbc = vbc - state.States[0][bjt.BJTstate + BJT.BJTvbc];
             cchat = state.States[0][bjt.BJTstate + BJT.BJTcc] + (state.States[0][bjt.BJTstate + BJT.BJTgm] + state.States[0][bjt.BJTstate + BJT.BJTgo]) * delvbe -
