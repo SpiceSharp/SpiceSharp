@@ -66,20 +66,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (state.Init == CircuitState.InitFlags.InitTransient)) ||
                 ((state.Init == CircuitState.InitFlags.InitFix) && (!mos2.MOS2off)))
             {
-                if (state.UseSmallSignal)
-                {
-                    // general iteration
-                    vbs = model.MOS2type * (rstate.OldSolution[mos2.MOS2bNode] - rstate.OldSolution[mos2.MOS2sNodePrime]);
-                    vgs = model.MOS2type * (rstate.OldSolution[mos2.MOS2gNode] - rstate.OldSolution[mos2.MOS2sNodePrime]);
-                    vds = model.MOS2type * (rstate.OldSolution[mos2.MOS2dNodePrime] - rstate.OldSolution[mos2.MOS2sNodePrime]);
-                }
-                else
-                {
-                    // general iteration
-                    vbs = model.MOS2type * (rstate.Solution[mos2.MOS2bNode] - rstate.Solution[mos2.MOS2sNodePrime]);
-                    vgs = model.MOS2type * (rstate.Solution[mos2.MOS2gNode] - rstate.Solution[mos2.MOS2sNodePrime]);
-                    vds = model.MOS2type * (rstate.Solution[mos2.MOS2dNodePrime] - rstate.Solution[mos2.MOS2sNodePrime]);
-                }
+                // general iteration
+                vbs = model.MOS2type * (rstate.Solution[mos2.MOS2bNode] - rstate.Solution[mos2.MOS2sNodePrime]);
+                vgs = model.MOS2type * (rstate.Solution[mos2.MOS2gNode] - rstate.Solution[mos2.MOS2sNodePrime]);
+                vds = model.MOS2type * (rstate.Solution[mos2.MOS2dNodePrime] - rstate.Solution[mos2.MOS2sNodePrime]);
 
                 /* now some common crunching for some more useful quantities */
 
