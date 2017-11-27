@@ -63,9 +63,7 @@ namespace Sandbox
                 plotReference.Points.AddXY(reft[index], (reft[index] - data.GetTime()) * 1e3);
                 index++;
             };
-            netlist.Circuit.Simulation = op;
-            op.Circuit = netlist.Circuit;
-            op.SetupAndExecute();
+            nr.Netlist.Simulate();
         }
     }
 }
