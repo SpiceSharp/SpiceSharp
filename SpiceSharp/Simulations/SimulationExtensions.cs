@@ -180,7 +180,7 @@ namespace SpiceSharp.Simulations
                 }
 
                 if (state.IsCon && iterno != 1)
-                    state.IsCon = ckt.IsConvergent(config);
+                    state.IsCon = ckt.IsConvergent(loaders, config);
                 else
                     state.IsCon = false;
 
@@ -324,7 +324,7 @@ namespace SpiceSharp.Simulations
         /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
-        private static bool IsConvergent(this Circuit ckt, SimulationConfiguration config)
+        private static bool IsConvergent(this Circuit ckt, List<CircuitObjectBehaviorLoad> loaders, SimulationConfiguration config)
         {
             var rstate = ckt.State;
 
@@ -356,6 +356,13 @@ namespace SpiceSharp.Simulations
                         return false;
                     }
                 }
+            }
+
+            // Device-level convergence tests
+            foreach (var loader in loaders)
+            {
+                if (!loader.IsConvergent(ckt))
+                    return false;
             }
 
             // Convergence succeeded
