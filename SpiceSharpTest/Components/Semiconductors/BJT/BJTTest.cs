@@ -6,6 +6,7 @@ using SpiceSharp.Simulations;
 using SpiceSharpTest.Utils;
 using SpiceSharpTest.Models;
 using SpiceSharp.Circuits;
+using System;
 
 namespace SpiceSharpTest.Components.Semiconductors.BJT
 {
@@ -17,25 +18,45 @@ namespace SpiceSharpTest.Components.Semiconductors.BJT
         {
             // A test for BJT transistor (model mjd44h11) acting in an emitter-follower transistor circuit.
             // A circuit consists of a BJT transistor and resistor connected to the transistor emitter.
-            // The voltage betwen base and emitter is around 0.7V when a transistor is in active mode.
 
             var collectorVoltage = 100.0;
-            var baseVoltages = new double[] { 1.0, 2.0, 10.0, 20.00, 30.0, 60.0, 90.0, 98.0 };
-            var resistancesOfResistorConnectedToEmitter = new int[] { 5, 10, 30, 40, 50, 60, 70, 1000 };
+            var baseVoltages = new double[] { 10.0 };
+            var resistancesOfResistorConnectedToEmitter = new int[] { 900, 1000, 1200 };
+            var references_ve = new double[] {
+                9.450319661131841e+00, // V_C = 100, V_B = 10, R = 900 (from improved spice3f5 RELTOL=1e-16 ABSTOL=1e-20)
+                9.452632245347569e+00, // V_C = 100, V_B = 10, R = 1000 (from improved spice3f5 RELTOL=1e-16 ABSTOL=1e-20)
+                9.456633700898708e+00, // V_C = 100, V_B = 10, R = 1200 (from improved spice3f5 RELTOL=1e-16 ABSTOL=1e-20)
+            };
+            double abstol = 1e-12;
+            double reltol = 1e-9;
 
+            double spice3f5AbsTol = 1e-20;
+            double spice3f5RelTol = 1e-16;
+
+            int reference_ve_index = 0;
             foreach (var baseVoltage in baseVoltages)
             {
                 foreach (var resistance in resistancesOfResistorConnectedToEmitter)
                 {
-                    var emitterVoltage =
+                    double reference_ve = references_ve[reference_ve_index];
+
+                    var actual_ve =
                         GetEmitterVoltageFromEmitterFollowerCircuit(
                             baseVoltage,
                             collectorVoltage,
-                            resistance);
+                            resistance,
+                            reltol,
+                            abstol);
 
-                    var voltage_base_emitter = baseVoltage - emitterVoltage;
+                    double tol = reltol * Math.Abs(actual_ve) + abstol;
+                    double difference = Math.Abs(actual_ve - reference_ve);
+                    tol += spice3f5RelTol * Math.Abs(reference_ve) + spice3f5AbsTol; // Contribution from tolerance of Spice 3f5
 
-                    Assert.That.AreEqualWithTol(0.7, voltage_base_emitter, 0, 0.5);
+                    double allowed_difference = tol;
+
+                    Assert.IsTrue(allowed_difference > difference);
+
+                    reference_ve_index++;
                 }
             }
         }
@@ -43,9 +64,11 @@ namespace SpiceSharpTest.Components.Semiconductors.BJT
         private double GetEmitterVoltageFromEmitterFollowerCircuit(
             double baseVoltage, 
             double collectorVoltage,
-            int resistance)
+            int resistance,
+            double reltol,
+            double abstol)
         {
-            var netlist = GetEmitterFollowerNetlist(baseVoltage, collectorVoltage, resistance);
+            var netlist = GetEmitterFollowerNetlist(baseVoltage, collectorVoltage, resistance, reltol, abstol);
             double emitterVoltage = 0;
             netlist.OnExportSimulationData += (object sender, SimulationData data) =>
             {
@@ -56,7 +79,7 @@ namespace SpiceSharpTest.Components.Semiconductors.BJT
             return emitterVoltage;
         }
 
-        private Netlist GetEmitterFollowerNetlist(double baseVoltage, double collectorVoltage, int resistance)
+        private Netlist GetEmitterFollowerNetlist(double baseVoltage, double collectorVoltage, int resistance, double reltol, double abstol)
         {
             var netlist = Run(
                   ".MODEL mjd44h11 npn",
@@ -74,8 +97,9 @@ namespace SpiceSharpTest.Components.Semiconductors.BJT
                   $"V2 V_C gnd {collectorVoltage}",
                   $"R1 V_E gnd {resistance}",
                   "Q1 V_C V_B V_E 0 mjd44h11",
+                  ".OP",
                   ".SAVE V(V_E)",
-                  ".OP"
+                  $".OPTIONS RELTOL={reltol} ABSTOL={abstol}"
                   );
 
             return netlist;
