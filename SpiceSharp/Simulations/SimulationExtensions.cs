@@ -37,22 +37,22 @@ namespace SpiceSharp.Simulations
             {
                 state.Init = CircuitState.InitFlags.InitJct;
                 CircuitWarning.Warning(ckt, "Starting Gmin stepping");
-                state.Gmin = config.Gmin;
+                state.DiagGmin = config.Gmin;
                 for (int i = 0; i < config.NumGminSteps; i++)
-                    state.Gmin *= 10.0;
+                    state.DiagGmin *= 10.0;
                 for (int i = 0; i <= config.NumGminSteps; i++)
                 {
-                    state.IsCon = true;
+                    state.IsCon = false;
                     if (!ckt.Iterate(loaders, config, maxiter))
                     {
-                        state.Gmin = 0.0;
+                        state.DiagGmin = 0.0;
                         CircuitWarning.Warning(ckt, "Gmin step failed");
                         break;
                     }
-                    state.Gmin /= 10.0;
+                    state.DiagGmin /= 10.0;
                     state.Init = CircuitState.InitFlags.InitFloat;
                 }
-                state.Gmin = 0.0;
+                state.DiagGmin = 0.0;
                 if (ckt.Iterate(loaders, config, maxiter))
                     return;
             }
@@ -147,7 +147,7 @@ namespace SpiceSharp.Simulations
                 if (state.Sparse.HasFlag(CircuitState.SparseFlags.NISHOULDREORDER))
                 {
                     ckt.Statistics.ReorderTime.Start();
-                    matrix.Reorder(state.PivotRelTol, state.PivotAbsTol, ckt.Simulation?.CurrentConfig?.DiagGmin ?? 0.0);
+                    matrix.Reorder(state.PivotRelTol, state.PivotAbsTol, state.DiagGmin);
                     ckt.Statistics.ReorderTime.Stop();
                     state.Sparse &= ~CircuitState.SparseFlags.NISHOULDREORDER;
                 }
@@ -155,7 +155,7 @@ namespace SpiceSharp.Simulations
                 {
                     // Decompose
                     ckt.Statistics.DecompositionTime.Start();
-                    matrix.Factor(ckt.Simulation?.CurrentConfig?.DiagGmin ?? 0.0);
+                    matrix.Factor(state.DiagGmin);
                     ckt.Statistics.DecompositionTime.Stop();
                 }
 
