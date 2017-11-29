@@ -49,9 +49,9 @@ namespace SpiceSharp.Components
         [SpiceName("acimag"), SpiceInfo("A.C. imaginary part")]
         public double GetAcImag(Circuit ckt) => VSRCac.Imaginary;
         [SpiceName("i"), SpiceInfo("Voltage source current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.OldSolution[VSRCbranch];
+        public double GetCurrent(Circuit ckt) => ckt.State.Solution[VSRCbranch];
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
-        public double GetPower(Circuit ckt) => (ckt.State.OldSolution[VSRCposNode] - ckt.State.OldSolution[VSRCnegNode]) * -ckt.State.OldSolution[VSRCbranch];
+        public double GetPower(Circuit ckt) => (ckt.State.Solution[VSRCposNode] - ckt.State.Solution[VSRCnegNode]) * -ckt.State.Solution[VSRCbranch];
         
         /// <summary>
         /// Nodes

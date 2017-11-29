@@ -79,21 +79,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (state.Init == CircuitState.InitFlags.InitTransient)) ||
                 ((state.Init == CircuitState.InitFlags.InitFix) && (!mos1.MOS1off)))
             {
-                if (state.UseSmallSignal)
-                {
-                    // [FIX] to match Spice 3f5... Why would you even use the less accurate solution?
-                    // AC loading
-                    vbs = model.MOS1type * (rstate.OldSolution[mos1.MOS1bNode] - rstate.OldSolution[mos1.MOS1sNodePrime]);
-                    vgs = model.MOS1type * (rstate.OldSolution[mos1.MOS1gNode] - rstate.OldSolution[mos1.MOS1sNodePrime]);
-                    vds = model.MOS1type * (rstate.OldSolution[mos1.MOS1dNodePrime] - rstate.OldSolution[mos1.MOS1sNodePrime]);
-                }
-                else
-                {
-                    // general iteration
-                    vbs = model.MOS1type * (rstate.Solution[mos1.MOS1bNode] - rstate.Solution[mos1.MOS1sNodePrime]);
-                    vgs = model.MOS1type * (rstate.Solution[mos1.MOS1gNode] - rstate.Solution[mos1.MOS1sNodePrime]);
-                    vds = model.MOS1type * (rstate.Solution[mos1.MOS1dNodePrime] - rstate.Solution[mos1.MOS1sNodePrime]);
-                }
+                // general iteration
+                vbs = model.MOS1type * (rstate.Solution[mos1.MOS1bNode] - rstate.Solution[mos1.MOS1sNodePrime]);
+                vgs = model.MOS1type * (rstate.Solution[mos1.MOS1gNode] - rstate.Solution[mos1.MOS1sNodePrime]);
+                vds = model.MOS1type * (rstate.Solution[mos1.MOS1dNodePrime] - rstate.Solution[mos1.MOS1sNodePrime]);
 
                 /* now some common crunching for some more useful quantities */
                 vbd = vbs - vds;

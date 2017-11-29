@@ -82,20 +82,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (state.Init == CircuitState.InitFlags.InitTransient)) ||
                 ((state.Init == CircuitState.InitFlags.InitFix) && (!mos3.MOS3off)))
             {
-                if (state.UseSmallSignal)
-                {
-                    // General iteration
-                    vbs = model.MOS3type * (rstate.OldSolution[mos3.MOS3bNode] - rstate.OldSolution[mos3.MOS3sNodePrime]);
-                    vgs = model.MOS3type * (rstate.OldSolution[mos3.MOS3gNode] - rstate.OldSolution[mos3.MOS3sNodePrime]);
-                    vds = model.MOS3type * (rstate.OldSolution[mos3.MOS3dNodePrime] - rstate.OldSolution[mos3.MOS3sNodePrime]);
-                }
-                else
-                {
-                    // General iteration
-                    vbs = model.MOS3type * (rstate.Solution[mos3.MOS3bNode] - rstate.Solution[mos3.MOS3sNodePrime]);
-                    vgs = model.MOS3type * (rstate.Solution[mos3.MOS3gNode] - rstate.Solution[mos3.MOS3sNodePrime]);
-                    vds = model.MOS3type * (rstate.Solution[mos3.MOS3dNodePrime] - rstate.Solution[mos3.MOS3sNodePrime]);
-                }
+                // General iteration
+                vbs = model.MOS3type * (rstate.Solution[mos3.MOS3bNode] - rstate.Solution[mos3.MOS3sNodePrime]);
+                vgs = model.MOS3type * (rstate.Solution[mos3.MOS3gNode] - rstate.Solution[mos3.MOS3sNodePrime]);
+                vds = model.MOS3type * (rstate.Solution[mos3.MOS3dNodePrime] - rstate.Solution[mos3.MOS3sNodePrime]);
 
                 /* now some common crunching for some more useful quantities */
                 /* DETAILPROF */
