@@ -1046,6 +1046,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
             mos2.MOS2SPdpPtr.Add(-mos2.MOS2gds - xrev * (mos2.MOS2gm + mos2.MOS2gmbs));
         }
 
+        /// <summary>
+        /// Check convergence
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
         public override bool IsConvergent(Circuit ckt)
         {
             var mos2 = ComponentTyped<MOS2>();
@@ -1055,19 +1060,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat;
 
-            vbs = model.MOS2type * (
-    state.Solution[mos2.MOS2bNode] -
-    state.Solution[mos2.MOS2sNodePrime]);
-            vgs = model.MOS2type * (
-                state.Solution[mos2.MOS2gNode] -
-                state.Solution[mos2.MOS2sNodePrime]);
-            vds = model.MOS2type * (
-                state.Solution[mos2.MOS2dNodePrime] -
-                state.Solution[mos2.MOS2sNodePrime]);
+            vbs = model.MOS2type * (state.Solution[mos2.MOS2bNode] - state.Solution[mos2.MOS2sNodePrime]);
+            vgs = model.MOS2type * (state.Solution[mos2.MOS2gNode] - state.Solution[mos2.MOS2sNodePrime]);
+            vds = model.MOS2type * (state.Solution[mos2.MOS2dNodePrime] - state.Solution[mos2.MOS2sNodePrime]);
             vbd = vbs - vds;
             vgd = vgs - vds;
-            vgdo = state.States[0][mos2.MOS2states + MOS2.MOS2vgs] -
-                state.States[0][mos2.MOS2states + MOS2.MOS2vds];
+            vgdo = state.States[0][mos2.MOS2states + MOS2.MOS2vgs] - state.States[0][mos2.MOS2states + MOS2.MOS2vds];
             delvbs = vbs - state.States[0][mos2.MOS2states + MOS2.MOS2vbs];
             delvbd = vbd - state.States[0][mos2.MOS2states + MOS2.MOS2vbd];
             delvgs = vgs - state.States[0][mos2.MOS2states + MOS2.MOS2vgs];
