@@ -199,7 +199,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             double delvd, cdhat, cd;
 
-            double vd = state.OldSolution[diode.DIOposPrimeNode] - state.OldSolution[diode.DIOnegNode];
+            double vd = state.Solution[diode.DIOposPrimeNode] - state.Solution[diode.DIOnegNode];
 
             delvd = vd - state.States[0][diode.DIOstate + Diode.DIOvoltage];
             cdhat = state.States[0][diode.DIOstate + Diode.DIOcurrent] + state.States[0][diode.DIOstate + Diode.DIOconduct] * delvd;
