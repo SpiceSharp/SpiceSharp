@@ -173,6 +173,7 @@ namespace SpiceSharp
                 new ParamSetReader(),
                 new DCReader(),
                 new ACReader(),
+                new OPReader(),
                 new TransientReader(),
                 new NoiseReader(),
                 new ICReader(),
