@@ -938,9 +938,15 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* these are needed for convergence testing */
 
             if (mos3.MOS3mode >= 0)
-                cdhat = mos3.MOS3cd - mos3.MOS3gbd * delvbd + mos3.MOS3gmbs * delvbs + mos3.MOS3gm * delvgs + mos3.MOS3gds * delvds;
+            {
+                cdhat = mos3.MOS3cd - mos3.MOS3gbd * delvbd + mos3.MOS3gmbs * delvbs +
+                    mos3.MOS3gm * delvgs + mos3.MOS3gds * delvds;
+            }
             else
-                cdhat = mos3.MOS3cd - (mos3.MOS3gbd - mos3.MOS3gmbs) * delvbd - mos3.MOS3gm * delvgd + mos3.MOS3gds * delvds;
+            {
+                cdhat = mos3.MOS3cd - (mos3.MOS3gbd - mos3.MOS3gmbs) * delvbd -
+                    mos3.MOS3gm * delvgd + mos3.MOS3gds * delvds;
+            }
             cbhat = mos3.MOS3cbs + mos3.MOS3cbd + mos3.MOS3gbd * delvbd + mos3.MOS3gbs * delvbs;
 
             /*

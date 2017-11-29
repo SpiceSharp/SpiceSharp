@@ -364,6 +364,26 @@ namespace SpiceSharp.Simulations
                 if (!loader.IsConvergent(ckt))
                 {
                     // I believe this should be false, but Spice 3f5 doesn't...
+
+                    /*
+                     * Each device that checks convergence returns (OK) = 0 regardless
+                     * of convergence (eg. Dev2/mos2conv.c). Not being convergent is communicated
+                     * through the CKTnoncon variable (state.IsCon for Spice#).
+                     * 
+                     * The convergence methods are called in CKT/cktop.c at line 121. If an error
+                     * occurs, it is returned. If non-convergence is detected through CKTnoncon,
+                     * (OK) is returned anyway, so it doesn't make a difference. Remember that 
+                     * our devices aren't returning anything else but (OK) anyway.
+                     * 
+                     * CKTconvTest in turn is called in NI/niconv.c at line 65. The result is
+                     * therefore always (OK) too, and so the returned value by NIconvTest()
+                     * is always (OK) if each device has tested convergence. Note that 1 is
+                     * returned in the case of non-convergence for nodes!
+                     * 
+                     * Finally, in NI/niiter.c at line 184, when convergence is tested, the result
+                     * is used to overwrite CKTnoncon, so there is no way we can still find out if
+                     * any device detected non-convergence.
+                     */
                     return true;
                 }
             }

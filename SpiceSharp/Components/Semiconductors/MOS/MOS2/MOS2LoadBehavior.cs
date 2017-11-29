@@ -1065,9 +1065,15 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* these are needed for convergence testing */
 
             if (mos2.MOS2mode >= 0)
-                cdhat = mos2.MOS2cd - mos2.MOS2gbd * delvbd + mos2.MOS2gmbs * delvbs + mos2.MOS2gm * delvgs + mos2.MOS2gds * delvds;
+            {
+                cdhat = mos2.MOS2cd - mos2.MOS2gbd * delvbd + mos2.MOS2gmbs * delvbs +
+                    mos2.MOS2gm * delvgs + mos2.MOS2gds * delvds;
+            }
             else
-                cdhat = mos2.MOS2cd - (mos2.MOS2gbd - mos2.MOS2gmbs) * delvbd - mos2.MOS2gm * delvgd + mos2.MOS2gds * delvds;
+            {
+                cdhat = mos2.MOS2cd - (mos2.MOS2gbd - mos2.MOS2gmbs) * delvbd - 
+                    mos2.MOS2gm * delvgd + mos2.MOS2gds * delvds;
+            }
             cbhat = mos2.MOS2cbs + mos2.MOS2cbd + mos2.MOS2gbd * delvbd + mos2.MOS2gbs * delvbs;
 
             /*
