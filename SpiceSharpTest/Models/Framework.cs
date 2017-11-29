@@ -47,17 +47,23 @@ namespace SpiceSharpTest.Models
         /// <param name="reference">Reference values</param>
         protected void TestDC(Netlist netlist, double[] reference)
         {
+            double abstol = netlist.Simulations[0].CurrentConfig.AbsTol;
+            double reltol = netlist.Simulations[0].CurrentConfig.RelTol;
+
             int index = 0;
             netlist.OnExportSimulationData += (object sender, SimulationData data) =>
             {
                 double actual = netlist.Exports[0].Extract(data);
                 double expected = reference[index++];
-                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
+                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * reltol + abstol;
+
                 try
                 {
                     Assert.AreEqual(expected, actual, tol);
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
+                    // Add some more information in the exception
                     DC dc = netlist.Simulations[0] as DC;
                     string msg = ex.Message;
                     if (dc != null)
@@ -110,13 +116,15 @@ namespace SpiceSharpTest.Models
         protected void TestTransient(Netlist netlist, double[] reft, double[] refv)
         {
             var interpolation = LinearSpline.Interpolate(reft, refv);
+            int index = 0;
             netlist.OnExportSimulationData += (object sender, SimulationData data) =>
             {
                 double time = data.GetTime();
                 double actual = netlist.Exports[0].Extract(data);
-                double expected = interpolation.Interpolate(time);
-                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-6;
+                double expected = refv[index]; // interpolation.Interpolate(time);
+                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-5 + 1e-9;
                 Assert.AreEqual(expected, actual, tol);
+                index++;
             };
             netlist.Simulate();
         }
