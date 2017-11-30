@@ -50,7 +50,7 @@ namespace SpiceSharpTest.Parser
             n.Circuit.Setup();
             var temperaturebehaviours = SpiceSharp.Behaviors.Behaviors.CreateBehaviors<SpiceSharp.Behaviors.CircuitObjectBehaviorTemperature>(n.Circuit);
             foreach (var behaviour in temperaturebehaviours)
-                behaviour.Execute(n.Circuit);
+                behaviour.Temperature(n.Circuit);
         }
 
         /// <summary>
