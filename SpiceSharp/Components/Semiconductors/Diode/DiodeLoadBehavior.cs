@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <summary>
         /// Behavior
         /// </summary>
-        /// <param name="ckt"></param>
+        /// <param name="ckt">Circuit</param>
         public override void Execute(Circuit ckt)
         {
             var diode = ComponentTyped<Diode>();
@@ -23,7 +23,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var matrix = state.Matrix;
             var method = ckt.Method;
             bool Check;
-            double csat, gspr, vt, vte, vd, delvd, cdhat, vdtemp, evd, cd, gd, arg, evrev, czero, sarg, capd, czof2, cdeq;
+            double csat, gspr, vt, vte, vd, vdtemp, evd, cd, gd, arg, evrev, czero, sarg, capd, czof2, cdeq;
 
             /* 
              * this routine loads diodes for dc and transient analyses.
@@ -66,8 +66,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             else
             {
                 vd = state.Solution[diode.DIOposPrimeNode] - state.Solution[diode.DIOnegNode];
-                delvd = vd - state.States[0][diode.DIOstate + Diode.DIOvoltage];
-                cdhat = state.States[0][diode.DIOstate + Diode.DIOcurrent] + state.States[0][diode.DIOstate + Diode.DIOconduct] * delvd;
 
                 /* 
 				 * limit new junction voltage
@@ -185,6 +183,39 @@ namespace SpiceSharp.Components.ComponentBehaviors
             diode.DIOposPrimePosPtr.Value.Real -= gspr;
             diode.DIOnegPosPrimePtr.Value.Real -= gd;
             diode.DIOposPrimeNegPtr.Value.Real -= gd;
+        }
+
+        /// <summary>
+        /// Check convergence for the diode
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public override bool IsConvergent(Circuit ckt)
+        {
+            var state = ckt.State;
+            var diode = ComponentTyped<Diode>();
+            var model = diode.Model as DiodeModel;
+            var config = ckt.Simulation.CurrentConfig;
+
+            double delvd, cdhat, cd;
+
+            double vd = state.Solution[diode.DIOposPrimeNode] - state.Solution[diode.DIOnegNode];
+
+            delvd = vd - state.States[0][diode.DIOstate + Diode.DIOvoltage];
+            cdhat = state.States[0][diode.DIOstate + Diode.DIOcurrent] + state.States[0][diode.DIOstate + Diode.DIOconduct] * delvd;
+
+            cd = state.States[0][diode.DIOstate + Diode.DIOcurrent];
+
+            /*
+             *   check convergence
+             */
+            double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsTol;
+            if (Math.Abs(cdhat - cd) > tol)
+            {
+                state.IsCon = false;
+                return false;
+            }
+            return true;
         }
     }
 }

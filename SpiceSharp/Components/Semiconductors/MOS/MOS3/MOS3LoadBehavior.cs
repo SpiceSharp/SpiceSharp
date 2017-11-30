@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.Transistors;
 using SpiceSharp.Behaviors;
@@ -911,6 +907,67 @@ namespace SpiceSharp.Components.ComponentBehaviors
             mos3.MOS3SPsPtr.Add(-mos3.MOS3sourceConductance);
             mos3.MOS3SPbPtr.Add(-mos3.MOS3gbs - (xnrm - xrev) * mos3.MOS3gmbs);
             mos3.MOS3SPdpPtr.Add(-mos3.MOS3gds - xrev * (mos3.MOS3gm + mos3.MOS3gmbs));
+        }
+
+        /// <summary>
+        /// Check convergence
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public override bool IsConvergent(Circuit ckt)
+        {
+            var mos3 = ComponentTyped<MOS3>();
+            var model = mos3.Model as MOS3Model;
+            var config = ckt.Simulation.CurrentConfig;
+            var state = ckt.State;
+
+            double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat;
+
+            vbs = model.MOS3type * (state.Solution[mos3.MOS3bNode] - state.Solution[mos3.MOS3sNodePrime]);
+            vgs = model.MOS3type * (state.Solution[mos3.MOS3gNode] - state.Solution[mos3.MOS3sNodePrime]);
+            vds = model.MOS3type * (state.Solution[mos3.MOS3dNodePrime] - state.Solution[mos3.MOS3sNodePrime]);
+            vbd = vbs - vds;
+            vgd = vgs - vds;
+            vgdo = state.States[0][mos3.MOS3states + MOS3.MOS3vgs] - state.States[0][mos3.MOS3states + MOS3.MOS3vds];
+            delvbs = vbs - state.States[0][mos3.MOS3states + MOS3.MOS3vbs];
+            delvbd = vbd - state.States[0][mos3.MOS3states + MOS3.MOS3vbd];
+            delvgs = vgs - state.States[0][mos3.MOS3states + MOS3.MOS3vgs];
+            delvds = vds - state.States[0][mos3.MOS3states + MOS3.MOS3vds];
+            delvgd = vgd - vgdo;
+
+            /* these are needed for convergence testing */
+
+            if (mos3.MOS3mode >= 0)
+            {
+                cdhat = mos3.MOS3cd - mos3.MOS3gbd * delvbd + mos3.MOS3gmbs * delvbs +
+                    mos3.MOS3gm * delvgs + mos3.MOS3gds * delvds;
+            }
+            else
+            {
+                cdhat = mos3.MOS3cd - (mos3.MOS3gbd - mos3.MOS3gmbs) * delvbd -
+                    mos3.MOS3gm * delvgd + mos3.MOS3gds * delvds;
+            }
+            cbhat = mos3.MOS3cbs + mos3.MOS3cbd + mos3.MOS3gbd * delvbd + mos3.MOS3gbs * delvbs;
+
+            /*
+             *  check convergence
+             */
+            double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(mos3.MOS3cd)) + config.AbsTol;
+            if (Math.Abs(cdhat - mos3.MOS3cd) >= tol)
+            {
+                state.IsCon = false;
+                return false;
+            }
+            else
+            {
+                tol = config.RelTol * Math.Max(Math.Abs(cbhat), Math.Abs(mos3.MOS3cbs + mos3.MOS3cbd)) + config.AbsTol;
+                if (Math.Abs(cbhat - (mos3.MOS3cbs + mos3.MOS3cbd)) > tol)
+                {
+                    state.IsCon = false;
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

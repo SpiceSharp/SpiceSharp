@@ -1035,5 +1035,66 @@ namespace SpiceSharp.Components.ComponentBehaviors
             mos2.MOS2SPbPtr.Add(-mos2.MOS2gbs - (xnrm - xrev) * mos2.MOS2gmbs);
             mos2.MOS2SPdpPtr.Add(-mos2.MOS2gds - xrev * (mos2.MOS2gm + mos2.MOS2gmbs));
         }
+
+        /// <summary>
+        /// Check convergence
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public override bool IsConvergent(Circuit ckt)
+        {
+            var mos2 = ComponentTyped<MOS2>();
+            var model = mos2.Model as MOS2Model;
+            var config = ckt.Simulation.CurrentConfig;
+            var state = ckt.State;
+
+            double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat;
+
+            vbs = model.MOS2type * (state.Solution[mos2.MOS2bNode] - state.Solution[mos2.MOS2sNodePrime]);
+            vgs = model.MOS2type * (state.Solution[mos2.MOS2gNode] - state.Solution[mos2.MOS2sNodePrime]);
+            vds = model.MOS2type * (state.Solution[mos2.MOS2dNodePrime] - state.Solution[mos2.MOS2sNodePrime]);
+            vbd = vbs - vds;
+            vgd = vgs - vds;
+            vgdo = state.States[0][mos2.MOS2states + MOS2.MOS2vgs] - state.States[0][mos2.MOS2states + MOS2.MOS2vds];
+            delvbs = vbs - state.States[0][mos2.MOS2states + MOS2.MOS2vbs];
+            delvbd = vbd - state.States[0][mos2.MOS2states + MOS2.MOS2vbd];
+            delvgs = vgs - state.States[0][mos2.MOS2states + MOS2.MOS2vgs];
+            delvds = vds - state.States[0][mos2.MOS2states + MOS2.MOS2vds];
+            delvgd = vgd - vgdo;
+
+            /* these are needed for convergence testing */
+
+            if (mos2.MOS2mode >= 0)
+            {
+                cdhat = mos2.MOS2cd - mos2.MOS2gbd * delvbd + mos2.MOS2gmbs * delvbs +
+                    mos2.MOS2gm * delvgs + mos2.MOS2gds * delvds;
+            }
+            else
+            {
+                cdhat = mos2.MOS2cd - (mos2.MOS2gbd - mos2.MOS2gmbs) * delvbd - 
+                    mos2.MOS2gm * delvgd + mos2.MOS2gds * delvds;
+            }
+            cbhat = mos2.MOS2cbs + mos2.MOS2cbd + mos2.MOS2gbd * delvbd + mos2.MOS2gbs * delvbs;
+
+            /*
+             *  check convergence
+             */
+            double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(mos2.MOS2cd)) + config.AbsTol;
+            if (Math.Abs(cdhat - mos2.MOS2cd) >= tol)
+            {
+                state.IsCon = false;
+                return false;
+            }
+            else
+            {
+                tol = config.RelTol * Math.Max(Math.Abs(cbhat), Math.Abs(mos2.MOS2cbs + mos2.MOS2cbd)) + config.AbsTol;
+                if (Math.Abs(cbhat - (mos2.MOS2cbs + mos2.MOS2cbd)) > tol)
+                {
+                    state.IsCon = false;
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

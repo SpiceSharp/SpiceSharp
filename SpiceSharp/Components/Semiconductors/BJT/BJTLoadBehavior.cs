@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             double vt;
             double gccs, ceqcs, geqbx, ceqbx, geqcb, csat, rbpr, rbpi, gcpr, gepr, oik, c2, vte, oikr, c4, vtc, td, xjrb, vbe, vbc, vbx, vcs;
             bool icheck;
-            double vce, delvbe, delvbc, cchat, cbhat;
+            double vce;
             bool ichk1;
             double vtn, evbe, cbe, gbe, gben, evben, cben, evbc, cbc, gbc, gbcn, evbcn, cbcn, q1, dqbdve, dqbdvc, q2, arg, sqarg, qb, cc, cex,
                 gex, arg1, arg2, denom, arg3, cb, gx, gpi, gmu, go, gm, tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps,
@@ -92,15 +92,15 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 vbe = bjt.BJTtVcrit;
                 vbc = 0;
-                /* ERROR:  need to initialize VCS, VBX here */
-                vcs = vbx = 0;
+                vcs = 0;
+                vbx = 0;
             }
             else if (state.Init == CircuitState.InitFlags.InitJct || (state.Init == CircuitState.InitFlags.InitFix && bjt.BJToff))
             {
                 vbe = 0;
                 vbc = 0;
-                /* ERROR:  need to initialize VCS, VBX here */
-                vcs = vbx = 0;
+                vcs = 0;
+                vbx = 0;
             }
             else
             {
@@ -109,17 +109,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
                  */
                 vbe = model.BJTtype * (rstate.Solution[bjt.BJTbasePrimeNode] - rstate.Solution[bjt.BJTemitPrimeNode]);
                 vbc = model.BJTtype * (rstate.Solution[bjt.BJTbasePrimeNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
-
-                /* PREDICTOR */
-                delvbe = vbe - state.States[0][bjt.BJTstate + BJT.BJTvbe];
-                delvbc = vbc - state.States[0][bjt.BJTstate + BJT.BJTvbc];
                 vbx = model.BJTtype * (rstate.Solution[bjt.BJTbaseNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
                 vcs = model.BJTtype * (rstate.Solution[bjt.BJTsubstNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
-                cchat = state.States[0][bjt.BJTstate + BJT.BJTcc] + (state.States[0][bjt.BJTstate + BJT.BJTgm] + state.States[0][bjt.BJTstate + BJT.BJTgo]) * delvbe -
-                     (state.States[0][bjt.BJTstate + BJT.BJTgo] + state.States[0][bjt.BJTstate + BJT.BJTgmu]) * delvbc;
-                cbhat = state.States[0][bjt.BJTstate + BJT.BJTcb] + state.States[0][bjt.BJTstate + BJT.BJTgpi] * delvbe + state.States[0][bjt.BJTstate + BJT.BJTgmu] *
-                     delvbc;
-                /* NOBYPASS */
+
                 /* 
 				 * limit nonlinear branch voltages
 				 */
@@ -490,6 +482,51 @@ namespace SpiceSharp.Components.ComponentBehaviors
             bjt.BJTsubstColPrimePtr.Add(-gccs);
             bjt.BJTbaseColPrimePtr.Add(-geqbx);
             bjt.BJTcolPrimeBasePtr.Add(-geqbx);
+        }
+
+        /// <summary>
+        /// Check if the BJT is convergent
+        /// </summary>
+        /// <param name="ckt"></param>
+        /// <returns></returns>
+        public override bool IsConvergent(Circuit ckt)
+        {
+            var bjt = ComponentTyped<BJT>();
+            var model = bjt.Model as BJTModel;
+            var state = ckt.State;
+            var config = ckt.Simulation.CurrentConfig;
+
+            double vbe, vbc, delvbe, delvbc, cchat, cbhat, cc, cb;
+
+            vbe = model.BJTtype * (state.Solution[bjt.BJTbasePrimeNode] - state.Solution[bjt.BJTemitPrimeNode]);
+            vbc = model.BJTtype * (state.Solution[bjt.BJTbasePrimeNode] - state.Solution[bjt.BJTcolPrimeNode]);
+            delvbe = vbe - state.States[0][bjt.BJTstate + BJT.BJTvbe];
+            delvbc = vbc - state.States[0][bjt.BJTstate + BJT.BJTvbc];
+            cchat = state.States[0][bjt.BJTstate + BJT.BJTcc] + (state.States[0][bjt.BJTstate + BJT.BJTgm] + state.States[0][bjt.BJTstate + BJT.BJTgo]) * delvbe -
+                    (state.States[0][bjt.BJTstate + BJT.BJTgo] + state.States[0][bjt.BJTstate + BJT.BJTgmu]) * delvbc;
+            cbhat = state.States[0][bjt.BJTstate + BJT.BJTcb] + state.States[0][bjt.BJTstate + BJT.BJTgpi] * delvbe + state.States[0][bjt.BJTstate + BJT.BJTgmu] * delvbc;
+            cc = state.States[0][bjt.BJTstate + BJT.BJTcc];
+            cb = state.States[0][bjt.BJTstate + BJT.BJTcb];
+
+            /*
+             *   check convergence
+             */
+            double tol = config.RelTol * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + config.AbsTol;
+            if (Math.Abs(cchat - cc) > tol)
+            {
+                state.IsCon = false;
+                return false;
+            }
+            else
+            {
+                tol = config.RelTol * Math.Max(Math.Abs(cbhat), Math.Abs(cb)) + config.AbsTol;
+                if (Math.Abs(cbhat - cb) > tol)
+                {
+                    state.IsCon = false;
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
