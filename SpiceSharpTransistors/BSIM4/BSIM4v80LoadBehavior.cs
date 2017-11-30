@@ -83,7 +83,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
                 qdef = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qdef];
             }
-            else if ((method != null && method.SavedTime == 0.0))
+            else if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 vds = state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4vds];
                 vgs = state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4vgs];
@@ -3553,7 +3553,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                     bsim4.BSIM4taunet = 1.0 / T1;
 
                 state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qcheq] = qcheq;
-                if (method != null && method.SavedTime == 0.0)
+                if (state.Init == CircuitState.InitFlags.InitTransient)
                     state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4qcheq] = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qcheq];
                 if (bsim4.BSIM4trnqsMod != 0 && method != null)
                     method.Integrate(state, bsim4.BSIM4states + BSIM4v80.BSIM4qcheq, 0.0);
@@ -4154,7 +4154,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if (bsim4.BSIM4trnqsMod != 0)
             {
                 state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qcdump] = qdef * BSIM4v80.ScalingFactor;
-                if (method != null && method.SavedTime == 0.0)
+                if (state.Init == CircuitState.InitFlags.InitTransient)
                     state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4qcdump] = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qcdump];
                 if (method != null)
                     method.Integrate(state, bsim4.BSIM4states + BSIM4v80.BSIM4qcdump, 0.0);
@@ -4181,7 +4181,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if (!ChargeComputationNeeded)
                 goto line850;
 
-            if (method != null && method.SavedTime == 0.0)
+            if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4qb] = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qb];
                 state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4qg] = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qg];
@@ -4276,7 +4276,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 cqcheq = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4cqcheq] - (gcqgb * vgb - gcqdb * vbd - gcqsb * vbs) + T0;
             }
 
-            if (method != null && method.SavedTime == 0.0)
+            if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4cqb] = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4cqb];
                 state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4cqg] = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4cqg];

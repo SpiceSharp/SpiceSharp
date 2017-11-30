@@ -138,7 +138,7 @@ namespace SpiceSharp.Simulations
                     matrix.PreOrder();
                     state.Sparse |= CircuitState.SparseFlags.NIDIDPREORDER;
                 }
-                if (state.Init == CircuitState.InitFlags.InitJct || (ckt.Method != null && ckt.Method.SavedTime == 0.0))
+                if (state.Init == CircuitState.InitFlags.InitJct || state.Init == CircuitState.InitFlags.InitTransient)
                 {
                     state.Sparse |= CircuitState.SparseFlags.NISHOULDREORDER;
                 }

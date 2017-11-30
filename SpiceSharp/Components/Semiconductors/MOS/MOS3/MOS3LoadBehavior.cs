@@ -822,7 +822,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             /* DETAILPROF */
 
-            if (method == null || method.SavedTime == 0.0)
+            if (method == null || state.Init == CircuitState.InitFlags.InitTransient)
             {
                 /* 
 				 * initialize to zero charge conductances 
