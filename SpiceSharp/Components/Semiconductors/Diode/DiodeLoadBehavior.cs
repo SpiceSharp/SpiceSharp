@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var diode = ComponentTyped<Diode>();
 

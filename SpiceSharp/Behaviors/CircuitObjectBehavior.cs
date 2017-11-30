@@ -30,12 +30,6 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Execute the behaviour
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public abstract void Execute(Circuit ckt);
-
-        /// <summary>
         /// Unsetup the behaviour
         /// </summary>
         public virtual void Unsetup()

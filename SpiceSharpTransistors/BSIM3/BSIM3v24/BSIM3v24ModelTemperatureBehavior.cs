@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Transistors;
@@ -18,7 +16,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute the behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Temperature(Circuit ckt)
         {
 
             var model = ComponentTyped<BSIM3v24Model>();

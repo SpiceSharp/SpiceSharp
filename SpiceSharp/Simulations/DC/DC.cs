@@ -110,7 +110,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public List<Sweep> Sweeps { get; } = new List<Sweep>();
 
-        private List<CircuitObjectBehaviorLoad> loadbehaviours;
+        private List<CircuitObjectBehaviorLoad> loadbehaviors;
 
         /// <summary>
         /// Constructor
@@ -143,8 +143,8 @@ namespace SpiceSharp.Simulations
         {
             base.Initialize(ckt);
 
-            // Get behaviours for DC analysis
-            loadbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
+            // Get behaviors for DC analysis
+            loadbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
         }
 
 
@@ -205,10 +205,10 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Calculate the solution
-                if (!ckt.Iterate(loadbehaviours, config, config.SweepMaxIterations))
+                if (!ckt.Iterate(loadbehaviors, config, config.SweepMaxIterations))
                 {
                     IterationFailed?.Invoke(this, ckt);
-                    ckt.Op(loadbehaviours, config, config.DcMaxIterations);
+                    ckt.Op(loadbehaviors, config, config.DcMaxIterations);
                 }
 
                 // Export data

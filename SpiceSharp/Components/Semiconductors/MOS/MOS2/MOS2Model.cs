@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     public class MOS2Model : CircuitModel<MOS2Model>
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static MOS2Model()
         {

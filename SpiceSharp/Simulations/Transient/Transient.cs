@@ -69,7 +69,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<CircuitObjectBehaviorLoad> loadbehaviours;
+        private List<CircuitObjectBehaviorLoad> loadbehaviors;
+        private List<CircuitObjectBehaviorAccept> acceptbehaviors;
+        private List<CircuitObjectBehaviorTruncate> truncatebehaviors;
 
         /// <summary>
         /// Constructor
@@ -99,7 +101,9 @@ namespace SpiceSharp.Simulations
         public override void Initialize(Circuit ckt)
         {
             base.Initialize(ckt);
-            loadbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
+            loadbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
+            acceptbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAccept>(ckt);
+            truncatebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTruncate>(ckt);
         }
 
 
@@ -130,7 +134,7 @@ namespace SpiceSharp.Simulations
             state.Gmin = config.Gmin;
 
             // Setup breakpoints
-            method.Initialize();
+            method.Initialize(ckt);
             state.ReinitStates(method);
 
             // Call events for initializing the simulation
@@ -138,7 +142,7 @@ namespace SpiceSharp.Simulations
 
             // Calculate the operating point
             ckt.Method = null;
-            ckt.Op(loadbehaviours, config, config.DcMaxIterations);
+            ckt.Op(loadbehaviors, config, config.DcMaxIterations);
             ckt.Statistics.TimePoints++;
             for (int i = 0; i < method.DeltaOld.Length; i++)
                 method.DeltaOld[i] = MaxStep;
@@ -166,8 +170,8 @@ namespace SpiceSharp.Simulations
                 nextTime:
 
                 // Accept the current timepoint (CKTaccept())
-                foreach (var c in ckt.Objects)
-                    c.Accept(ckt);
+                foreach (var behavior in acceptbehaviors)
+                    behavior.Accept(ckt);
                 method.SaveSolution(rstate.Solution);
                 // end of CKTaccept()
 
@@ -211,7 +215,7 @@ namespace SpiceSharp.Simulations
                     // Try to solve the new point
                     if (method.SavedTime == 0.0)
                         state.Init = CircuitState.InitFlags.InitTransient;
-                    bool converged = ckt.Iterate(loadbehaviours, config, config.TranMaxIterations);
+                    bool converged = ckt.Iterate(loadbehaviors, config, config.TranMaxIterations);
                     ckt.Statistics.TimePoints++;
                     if (method.SavedTime == 0.0)
                     {

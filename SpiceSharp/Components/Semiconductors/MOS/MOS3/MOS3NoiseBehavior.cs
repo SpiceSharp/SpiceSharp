@@ -49,7 +49,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Noise(Circuit ckt)
         {
             var mos3 = ComponentTyped<MOS3>();
             var model = mos3.Model as MOS3Model;

@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute the behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var src = ComponentTyped<VoltageControlledCurrentsource>();
             var cstate = ckt.State;

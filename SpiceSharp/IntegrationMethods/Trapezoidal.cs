@@ -30,9 +30,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Initialize
         /// </summary>
-        public override void Initialize()
+        public override void Initialize(Circuit ckt)
         {
-            base.Initialize();
+            base.Initialize(ckt);
 
             ag = new double[MaxOrder];
             for (int i = 0; i < MaxOrder; i++)

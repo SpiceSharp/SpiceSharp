@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
     public class Resistor : CircuitComponent<Resistor>
     {
         /// <summary>
-        /// Register default behaviours of the resistor
+        /// Register default behaviors of the resistor
         /// </summary>
         static Resistor()
         {

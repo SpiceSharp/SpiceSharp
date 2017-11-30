@@ -152,44 +152,10 @@ namespace SpiceSharp.Components
         public abstract void Setup(Circuit ckt);
 
         /// <summary>
-        /// Use initial conditions for the device
-        /// </summary>
-        /// <param name="ckt"></param>
-        public virtual void SetIc(Circuit ckt)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt"></param>
-        // public abstract void Temperature(Circuit ckt);
-
-        /// <summary>
-        /// Accept the current timepoint as the solution
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public virtual void Accept(Circuit ckt)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
         /// Unsetup/destroy the component
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public virtual void Unsetup(Circuit ckt)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Truncate the timestep
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">The timestep that can be truncated</param>
-        public virtual void Truncate(Circuit ckt, ref double timeStep)
         {
             // Do nothing
         }

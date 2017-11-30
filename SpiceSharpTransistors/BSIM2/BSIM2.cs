@@ -21,6 +21,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM2), typeof(ComponentBehaviors.BSIM2TemperatureBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM2), typeof(ComponentBehaviors.BSIM2LoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM2), typeof(ComponentBehaviors.BSIM2AcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM2), typeof(ComponentBehaviors.BSIM2TruncateBehavior));
         }
 
         /// <summary>
@@ -180,19 +181,6 @@ namespace SpiceSharp.Components
             // Allocate states
             B2states = ckt.State.GetState(35);
             pParam = null;
-        }
-
-        /// <summary>
-        /// Truncate
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            var method = ckt.Method;
-            method.Terr(B2states + B2qb, ckt, ref timeStep);
-            method.Terr(B2states + B2qg, ckt, ref timeStep);
-            method.Terr(B2states + B2qd, ckt, ref timeStep);
         }
     }
 }

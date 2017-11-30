@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     public class BJTModel : CircuitModel<BJTModel>
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static BJTModel()
         {

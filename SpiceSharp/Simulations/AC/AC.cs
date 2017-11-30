@@ -78,8 +78,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public StepTypes StepType { get; set; } = StepTypes.Decade;
 
-        private List<CircuitObjectBehaviorLoad> loadbehaviours;
-        private List<CircuitObjectBehaviorAcLoad> acloadbehaviours;
+        private List<CircuitObjectBehaviorLoad> loadbehaviors;
+        private List<CircuitObjectBehaviorAcLoad> acloadbehaviors;
 
         /// <summary>
         /// Constructor
@@ -119,9 +119,9 @@ namespace SpiceSharp.Simulations
         {
             base.Initialize(ckt);
 
-            // Get the behaviours necessary for the AC analysis
-            loadbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
-            acloadbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAcLoad>(ckt);
+            // Get the behaviors necessary for the AC analysis
+            loadbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
+            acloadbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAcLoad>(ckt);
         }
 
         /// <summary>
@@ -177,13 +177,13 @@ namespace SpiceSharp.Simulations
             state.UseSmallSignal = false;
             state.Gmin = config.Gmin;
             Initialize(ckt);
-            ckt.Op(loadbehaviours, config, config.DcMaxIterations);
+            ckt.Op(loadbehaviors, config, config.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             state.UseDC = false;
             state.UseSmallSignal = true;
-            foreach (var behaviour in loadbehaviours)
-                behaviour.Execute(ckt);
+            foreach (var behaviour in loadbehaviors)
+                behaviour.Load(ckt);
 
             // Export operating point if requested
             if (config.KeepOpInfo)
@@ -201,7 +201,7 @@ namespace SpiceSharp.Simulations
                 state.Laplace = new Complex(0.0, 2.0 * Circuit.CONSTPI * freq);
 
                 // Solve
-                ckt.AcIterate(acloadbehaviours, config);
+                ckt.AcIterate(acloadbehaviors, config);
 
                 // Export the timepoint
                 Export(ckt);

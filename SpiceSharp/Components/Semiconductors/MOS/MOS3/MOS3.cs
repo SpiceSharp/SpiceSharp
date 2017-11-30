@@ -21,6 +21,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS3), typeof(ComponentBehaviors.MOS3LoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS3), typeof(ComponentBehaviors.MOS3AcBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS3), typeof(ComponentBehaviors.MOS3NoiseBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(MOS3), typeof(ComponentBehaviors.MOS3TruncateBehavior));
         }
 
         /// <summary>
@@ -388,19 +389,6 @@ namespace SpiceSharp.Components
             MOS3DPbPtr = null;
             MOS3SPbPtr = null;
             MOS3SPdpPtr = null;
-        }
-
-        /// <summary>
-        /// Truncate the timestep
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="timeStep">The timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            var method = ckt.Method;
-            method.Terr(MOS3states + MOS3qgs, ckt, ref timeStep);
-            method.Terr(MOS3states + MOS3qgd, ckt, ref timeStep);
-            method.Terr(MOS3states + MOS3qgb, ckt, ref timeStep);
         }
     }
 }

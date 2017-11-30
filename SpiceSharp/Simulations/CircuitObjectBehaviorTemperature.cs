@@ -5,5 +5,10 @@
     /// </summary>
     public abstract class CircuitObjectBehaviorTemperature : CircuitObjectBehavior
     {
+        /// <summary>
+        /// Do temperature-dependent calculations
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        public abstract void Temperature(Circuit ckt);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
@@ -13,12 +12,13 @@ namespace SpiceSharp.Components
     public class Currentsource : CircuitComponent<Currentsource>
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static Currentsource()
         {
             Behaviors.Behaviors.RegisterBehavior(typeof(Currentsource), typeof(ComponentBehaviors.CurrentsourceLoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(Currentsource), typeof(ComponentBehaviors.CurrentsourceAcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Currentsource), typeof(ComponentBehaviors.CurrentsourceAcceptBehavior));
         }
 
         /// <summary>

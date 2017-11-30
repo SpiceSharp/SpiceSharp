@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var mos1 = ComponentTyped<MOS1>();
             var model = mos1.Model as MOS1Model;

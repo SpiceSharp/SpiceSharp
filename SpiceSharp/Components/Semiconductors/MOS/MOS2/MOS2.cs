@@ -14,7 +14,7 @@ namespace SpiceSharp.Components
     public class MOS2 : CircuitComponent<MOS2>
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static MOS2()
         {
@@ -22,6 +22,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS2), typeof(ComponentBehaviors.MOS2LoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS2), typeof(ComponentBehaviors.MOS2AcBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS2), typeof(ComponentBehaviors.MOS2NoiseBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(MOS2), typeof(ComponentBehaviors.MOS2TruncateBehavior));
         }
 
         /// <summary>
@@ -388,19 +389,6 @@ namespace SpiceSharp.Components
             MOS2DPbPtr = null;
             MOS2SPbPtr = null;
             MOS2SPdpPtr = null;
-        }
-
-        /// <summary>
-        /// Truncate the timestep
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="timeStep">The timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            var method = ckt.Method;
-            method.Terr(MOS2states + MOS2qgs, ckt, ref timeStep);
-            method.Terr(MOS2states + MOS2qgd, ckt, ref timeStep);
-            method.Terr(MOS2states + MOS2qgb, ckt, ref timeStep);
         }
     }
 }

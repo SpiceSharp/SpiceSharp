@@ -12,12 +12,14 @@ namespace SpiceSharp.Components
     public class Inductor : CircuitComponent<Inductor>
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static Inductor()
         {
             Behaviors.Behaviors.RegisterBehavior(typeof(Inductor), typeof(ComponentBehaviors.InductorLoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(Inductor), typeof(ComponentBehaviors.InductorAcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Inductor), typeof(ComponentBehaviors.InductorAcceptBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Inductor), typeof(ComponentBehaviors.InductorTruncateBehavior));
         }
 
         /// <summary>
@@ -138,26 +140,6 @@ namespace SpiceSharp.Components
         public void UpdateMutualInductances(Circuit ckt)
         {
             UpdateMutualInductance?.Invoke(this, ckt);
-        }
-
-        /// <summary>
-        /// Accept the current timepoint
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Accept(Circuit ckt)
-        {
-            if (ckt.State.Init == CircuitState.InitFlags.InitTransient)
-                ckt.State.CopyDC(INDstate + INDflux);
-        }
-
-        /// <summary>
-        /// Truncate
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            ckt.Method.Terr(INDstate + INDflux, ckt, ref timeStep);
         }
     }
 }

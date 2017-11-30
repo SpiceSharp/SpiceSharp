@@ -12,11 +12,16 @@ namespace SpiceSharp.Components
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
     public partial class BSIM4v80 : CircuitComponent<BSIM4v80>
     {
+        /// <summary>
+        /// Register default behaviors
+        /// </summary>
         static BSIM4v80()
         {
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM4v80), typeof(ComponentBehaviors.BSIM4v80TemperatureBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM4v80), typeof(ComponentBehaviors.BSIM4v80LoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM4v80), typeof(ComponentBehaviors.BSIM4v80AcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM4v80), typeof(ComponentBehaviors.BSIM4v80NoiseBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM4v80), typeof(ComponentBehaviors.BSIM4v80TruncateBehavior));
         }
 
         /// <summary>
@@ -540,28 +545,6 @@ namespace SpiceSharp.Components
                 BSIM4qNode = CreateNode(ckt, Name.Grow("#q")).Index;
             else
                 BSIM4qNode = 0;
-        }
-
-        /// <summary>
-        /// Truncate
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            var method = ckt.Method;
-            method.Terr(BSIM4states + BSIM4qb, ckt, ref timeStep);
-            method.Terr(BSIM4states + BSIM4qg, ckt, ref timeStep);
-            method.Terr(BSIM4states + BSIM4qd, ckt, ref timeStep);
-            if (BSIM4trnqsMod != 0)
-                method.Terr(BSIM4states + BSIM4qcdump, ckt, ref timeStep);
-            if (BSIM4rbodyMod != 0)
-            {
-                method.Terr(BSIM4states + BSIM4qbs, ckt, ref timeStep);
-                method.Terr(BSIM4states + BSIM4qbd, ckt, ref timeStep);
-            }
-            if (BSIM4rgateMod == 3)
-                method.Terr(BSIM4states + BSIM4qgmid, ckt, ref timeStep);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
     public class VoltageControlledVoltagesource : CircuitComponent<VoltageControlledVoltagesource>
     {
         /// <summary>
-        /// Register our default behaviours
+        /// Register our default behaviors
         /// </summary>
         static VoltageControlledVoltagesource()
         {

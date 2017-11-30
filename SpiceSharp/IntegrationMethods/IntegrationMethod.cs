@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -98,6 +100,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Private variables
         /// </summary>
         private double savetime = double.NaN;
+        private List<CircuitObjectBehaviorTruncate> truncatebehaviors;
 
         /// <summary>
         /// Delegate for a truncation method
@@ -154,7 +157,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Initialize/reset the integration method
         /// </summary>
-        public virtual void Initialize()
+        public virtual void Initialize(Circuit ckt)
         {
             // Initialize variables
             Time = 0.0;
@@ -170,10 +173,12 @@ namespace SpiceSharp.IntegrationMethods
             {
                 case IntegrationConfiguration.TruncationMethods.PerDevice:
                     Truncate = TruncateDevices;
+                    truncatebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTruncate>(ckt);
                     break;
 
                 case IntegrationConfiguration.TruncationMethods.PerNode:
                     Truncate = TruncateNodes;
+                    truncatebehaviors = null;
                     break;
 
                 default:
@@ -352,10 +357,8 @@ namespace SpiceSharp.IntegrationMethods
         protected double TruncateDevices(Circuit ckt)
         {
             double timetmp = double.PositiveInfinity;
-            foreach (var o in ckt.Objects)
-            {
-                o.Truncate(ckt, ref timetmp);
-            }
+            foreach (var behavior in truncatebehaviors)
+                behavior.Truncate(ckt, ref timetmp);
             return Math.Min(Delta * 2.0, timetmp);
         }
 

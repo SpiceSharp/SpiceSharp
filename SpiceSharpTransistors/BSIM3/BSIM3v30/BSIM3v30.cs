@@ -20,6 +20,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v30), typeof(ComponentBehaviors.BSIM3v30LoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v30), typeof(ComponentBehaviors.BSIM3v30AcBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v30), typeof(ComponentBehaviors.BSIM3v30NoiseBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v30), typeof(ComponentBehaviors.BSIM3v30TruncateBehavior));
         }
 
         /// <summary>
@@ -234,19 +235,6 @@ namespace SpiceSharp.Components
                 BSIM3qNode = CreateNode(ckt, Name.Grow("#charge")).Index;
             else
                 BSIM3qNode = 0;
-        }
-
-        /// <summary>
-        /// Truncate
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            var method = ckt.Method;
-            method.Terr(BSIM3states + BSIM3qb, ckt, ref timeStep);
-            method.Terr(BSIM3states + BSIM3qg, ckt, ref timeStep);
-            method.Terr(BSIM3states + BSIM3qd, ckt, ref timeStep);
         }
     }
 }

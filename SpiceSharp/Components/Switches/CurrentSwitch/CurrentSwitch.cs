@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
     public class CurrentSwitch : CircuitComponent<CurrentSwitch>
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static CurrentSwitch()
         {

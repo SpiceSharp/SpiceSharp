@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
     public class VoltageSwitch : CircuitComponent<VoltageSwitch>
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static VoltageSwitch()
         {

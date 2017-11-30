@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
     public class CurrentControlledCurrentsource : CircuitComponent<CurrentControlledCurrentsource>
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static CurrentControlledCurrentsource()
         {

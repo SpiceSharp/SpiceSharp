@@ -34,6 +34,11 @@ namespace SpiceSharp.Circuits
         public Stopwatch DecompositionTime { get; } = new Stopwatch();
 
         /// <summary>
+        /// The total time spent on creating behaviors for each device
+        /// </summary>
+        public Stopwatch BehaviorCreationTime { get; } = new Stopwatch();
+
+        /// <summary>
         /// Gets or sets the number of timepoints calculated
         /// </summary>
         public int TimePoints { get; set; } = 0;

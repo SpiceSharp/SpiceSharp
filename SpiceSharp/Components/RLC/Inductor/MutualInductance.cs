@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
     public class MutualInductance : CircuitComponent<MutualInductance>
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static MutualInductance()
         {

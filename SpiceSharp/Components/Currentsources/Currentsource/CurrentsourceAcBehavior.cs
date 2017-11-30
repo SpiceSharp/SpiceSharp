@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute AC behaviour
         /// </summary>
         /// <param name="ckt"></param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var source = ComponentTyped<Currentsource>();
 

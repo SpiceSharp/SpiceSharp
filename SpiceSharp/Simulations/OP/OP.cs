@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<CircuitObjectBehaviorLoad> loadbehaviours;
+        private List<CircuitObjectBehaviorLoad> loadbehaviors;
 
         /// <summary>
         /// Constructor
@@ -31,7 +31,7 @@ namespace SpiceSharp.Simulations
         {
             base.Initialize(ckt);
 
-            loadbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
+            loadbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace SpiceSharp.Simulations
             state.Gmin = config.Gmin;
 
             Initialize(ckt);
-            ckt.Op(loadbehaviours, config, config.DcMaxIterations);
+            ckt.Op(loadbehaviors, config, config.DcMaxIterations);
             Export(ckt);
             Finalize(ckt);
         }

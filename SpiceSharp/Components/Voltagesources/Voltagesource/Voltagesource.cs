@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
@@ -14,12 +13,13 @@ namespace SpiceSharp.Components
     public class Voltagesource : CircuitComponent<Voltagesource>
     {
         /// <summary>
-        /// Register default voltagesource behaviours
+        /// Register default voltagesource behaviors
         /// </summary>
         static Voltagesource()
         {
             Behaviors.Behaviors.RegisterBehavior(typeof(Voltagesource), typeof(ComponentBehaviors.VoltagesourceLoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(Voltagesource), typeof(ComponentBehaviors.VoltageSourceLoadAcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Voltagesource), typeof(ComponentBehaviors.VoltagesourceAcceptBehavior));
         }
 
         /// <summary>
@@ -125,16 +125,6 @@ namespace SpiceSharp.Components
 
             // Setup the waveform if specified
             VSRCwaveform?.Setup(ckt);
-        }
-
-        /// <summary>
-        /// Accept the current timepoint as the solution
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Accept(Circuit ckt)
-        {
-            if (VSRCwaveform != null)
-                VSRCwaveform.Accept(ckt);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute AC behaviour
         /// </summary>
         /// <param name="ckt"></param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             BJT bjt = ComponentTyped<BJT>();
             BJTModel model = bjt.Model as BJTModel;

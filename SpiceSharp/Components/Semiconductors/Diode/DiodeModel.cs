@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     public class DiodeModel : CircuitModel<DiodeModel>
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static DiodeModel()
         {

@@ -249,7 +249,7 @@ namespace SpiceSharp.Simulations
             // Load AC
             state.Clear();
             foreach (var behaviour in acloaders)
-                behaviour.Execute(ckt);
+                behaviour.Load(ckt);
 
             if (state.Sparse.HasFlag(CircuitState.SparseFlags.NIACSHOULDREORDER))
             {
@@ -416,7 +416,7 @@ namespace SpiceSharp.Simulations
 
             // Load all devices
             foreach (var loader in loaders)
-                loader.Execute(ckt);
+                loader.Load(ckt);
 
             // Check modes
             if (state.UseDC)
@@ -476,7 +476,7 @@ namespace SpiceSharp.Simulations
         /// Set the initial conditions
         /// </summary>
         /// <param name="ckt"></param>
-        public static void Ic(this ISimulation simulation)
+        public static void Ic(this ISimulation simulation, List<CircuitObjectBehaviorIc> icbehaviors)
         {
             var ckt = simulation.Circuit;
             var state = ckt.State;
@@ -509,8 +509,8 @@ namespace SpiceSharp.Simulations
             // Use initial conditions
             if (state.UseIC)
             {
-                foreach (var c in ckt.Objects)
-                    c.SetIc(ckt);
+                foreach (var behavior in icbehaviors)
+                    behavior.SetIc(ckt);
             }
         }
 

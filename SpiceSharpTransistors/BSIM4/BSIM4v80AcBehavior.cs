@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var bsim4 = ComponentTyped<BSIM4v80>();
             var model = bsim4.Model as BSIM4v80Model;

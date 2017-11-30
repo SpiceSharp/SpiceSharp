@@ -11,13 +11,15 @@ namespace SpiceSharp.Components
     public class Capacitor : CircuitComponent<Capacitor>
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static Capacitor()
         {
             Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorLoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorAcBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorTemperatureBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorAcceptBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorTruncateBehavior));
         }
 
         /// <summary>
@@ -114,27 +116,6 @@ namespace SpiceSharp.Components
             CAPnegNegptr = null;
             CAPnegPosptr = null;
             CAPposNegptr = null;
-        }
-
-        /// <summary>
-        /// Accept a timepoint
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Accept(Circuit ckt)
-        {
-            // Copy DC states when accepting the first timepoint
-            if (ckt.State.Init == CircuitState.InitFlags.InitTransient)
-                ckt.State.CopyDC(CAPstate + CAPqcap);
-        }
-
-        /// <summary>
-        /// Truncate
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            ckt.Method.Terr(CAPstate + CAPqcap, ckt, ref timeStep);
         }
     }
 }

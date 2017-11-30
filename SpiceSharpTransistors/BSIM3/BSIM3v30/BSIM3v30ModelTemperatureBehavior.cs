@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Temperature(Circuit ckt)
         {
             double Temp, Tnom, Eg0, Eg, delTemp, T0, T1;
             var model = ComponentTyped<BSIM3v30Model>();

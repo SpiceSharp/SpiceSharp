@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
@@ -13,7 +12,7 @@ namespace SpiceSharp.Components
     public class BJT : CircuitComponent<BJT>
     {
         /// <summary>
-        /// Register default BJT behaviours
+        /// Register default BJT behaviors
         /// </summary>
         static BJT()
         {
@@ -21,6 +20,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(BJT), typeof(ComponentBehaviors.BJTLoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BJT), typeof(ComponentBehaviors.BJTAcBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BJT), typeof(ComponentBehaviors.BJTNoiseBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BJT), typeof(ComponentBehaviors.BJTTruncateBehavior));
         }
 
         /// <summary>
@@ -332,19 +332,6 @@ namespace SpiceSharp.Components
             BJTsubstColPrimePtr = null;
             BJTbaseColPrimePtr = null;
             BJTcolPrimeBasePtr = null;
-        }
-
-        /// <summary>
-        /// Truncate
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            var method = ckt.Method;
-            method.Terr(BJTstate + BJTqbe, ckt, ref timeStep);
-            method.Terr(BJTstate + BJTqbc, ckt, ref timeStep);
-            method.Terr(BJTstate + BJTqcs, ckt, ref timeStep);
         }
     }
 }

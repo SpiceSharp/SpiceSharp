@@ -75,15 +75,16 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException("Circuit contains no nodes");
 
             // Do temperature-dependent calculations
-            var temperaturebehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTemperature>(Circuit);
-            foreach (var behaviour in temperaturebehaviours)
-                behaviour.Execute(Circuit);
+            var temperaturebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTemperature>(Circuit);
+            foreach (var behaviour in temperaturebehaviors)
+                behaviour.Temperature(Circuit);
 
             // Initialize the simulation
             Initialize(Circuit);
 
             // Do initial condition
-            SimulationExtensions.Ic(this);
+            var icbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorIc>(Circuit);
+            SimulationExtensions.Ic(this, icbehaviors);
 
             // Execute the simulation
             Execute();
