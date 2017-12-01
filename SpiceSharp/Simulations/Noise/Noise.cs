@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Noise analysis
     /// </summary>
-    public class Noise : FrequencyAnalysis<Noise>
+    public class Noise : FrequencySimulation<Noise>
     {
         /// <summary>
         /// Gets or sets the noise output node

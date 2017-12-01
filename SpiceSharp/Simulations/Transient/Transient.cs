@@ -10,48 +10,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A time-domain analysis (Transient simulation)
     /// </summary>
-    public class Transient : Simulation<Transient>
+    public class Transient : TimeSimulation<Transient>
     {
-        /// <summary>
-        /// Gets or sets the initial timepoint that should be exported
-        /// </summary>
-        [SpiceName("init"), SpiceName("start"), SpiceInfo("The starting timepoint")]
-        public double InitTime { get; set; } = 0.0;
-
-        /// <summary>
-        /// Gets or sets the final simulation timepoint
-        /// </summary>
-        [SpiceName("final"), SpiceName("stop"), SpiceInfo("The final timepoint")]
-        public double FinalTime { get; set; } = double.NaN;
-
-        /// <summary>
-        /// Gets or sets the step
-        /// </summary>
-        [SpiceName("step"), SpiceInfo("The timestep")]
-        public double Step { get; set; } = double.NaN;
-
-        /// <summary>
-        /// Gets or sets the maximum timestep
-        /// </summary>
-        [SpiceName("maxstep"), SpiceInfo("The maximum allowed timestep")]
-        public double MaxStep
-        {
-            get
-            {
-                if (maxstep == 0.0 && !double.IsNaN(maxstep))
-                    return (FinalTime - InitTime) / 50.0;
-                return maxstep;
-            }
-            set { maxstep = value; }
-        }
-        private double maxstep;
-
-        /// <summary>
-        /// Get the minimum timestep allowed
-        /// </summary>
-        [SpiceName("deltamin"), SpiceInfo("The minimum delta for breakpoints")]
-        public double DeltaMin { get { return 1e-13 * MaxStep; } }
-
         /// <summary>
         /// An event handler for when the timestep has been cut
         /// </summary>
@@ -68,7 +28,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<CircuitObjectBehaviorTransient> transientbehaviors;
         private List<CircuitObjectBehaviorAccept> acceptbehaviors;
         private List<CircuitObjectBehaviorTruncate> truncatebehaviors;
 
@@ -99,10 +58,9 @@ namespace SpiceSharp.Simulations
         /// <param name="ckt">Circuit</param>
         public override void Initialize(Circuit ckt)
         {
-            base.Initialize(ckt);
-            transientbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTransient>(ckt);
             acceptbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAccept>(ckt);
             truncatebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTruncate>(ckt);
+            base.Initialize(ckt);
         }
 
         /// <summary>
@@ -114,7 +72,6 @@ namespace SpiceSharp.Simulations
             var state = ckt.State;
             var rstate = state;
             var config = CurrentConfig ?? throw new CircuitException("No configuration");
-            var method = ckt.Method ?? (config.Method ?? throw new CircuitException("No integration method"));
 
             double delta = Math.Min(FinalTime / 50.0, Step) / 10.0;
 
@@ -217,7 +174,7 @@ namespace SpiceSharp.Simulations
                     // Try to solve the new point
                     if (method.SavedTime == 0.0)
                         state.Init = CircuitState.InitFlags.InitTransient;
-                    bool converged = Iterate(ckt, config.TranMaxIterations);
+                    bool converged = TranIterate(ckt, config.TranMaxIterations);
                     ckt.Statistics.TimePoints++;
                     if (method.SavedTime == 0.0)
                     {

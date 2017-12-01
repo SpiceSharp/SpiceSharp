@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Frequency-domain analysis (AC analysis)
     /// </summary>
-    public class AC : FrequencyAnalysis<AC>
+    public class AC : FrequencySimulation<AC>
     {
         /// <summary>
         /// Constructor
