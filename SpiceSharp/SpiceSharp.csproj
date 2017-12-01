@@ -106,6 +106,7 @@
     <Compile Include="Components\Voltagesources\Voltagesource\VoltagesourceAcceptBehavior.cs" />
     <Compile Include="Simulations\CircuitObjectBehaviorIc.cs" />
     <Compile Include="Simulations\CircuitObjectBehaviorTemperature.cs" />
+    <Compile Include="Simulations\FrequencyAnalysis.cs" />
     <Compile Include="Simulations\Noise\CircuitObjectBehaviorNoise.cs" />
     <Compile Include="Simulations\CircuitObjectBehaviorLoad.cs" />
     <Compile Include="Simulations\AC\CircuitObjectBehaviorAcLoad.cs" />
@@ -137,7 +138,8 @@
     <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3Model.cs" />
     <Compile Include="Components\Semiconductors\MOS\Transistor.cs" />
     <Compile Include="Attributes\SpicePins.cs" />
-    <Compile Include="IntegrationMethods\IntegrationConfiguration.cs" />
+    <Compile Include="Simulations\Transient\CircuitObjectBehaviorTransient.cs" />
+    <Compile Include="Simulations\Transient\IntegrationMethods\IntegrationConfiguration.cs" />
     <Compile Include="Simulations\ISimulation.cs" />
     <Compile Include="Components\Waveforms\IWaveform.cs" />
     <Compile Include="Components\RLC\Inductor\Inductor.cs" />
@@ -156,8 +158,8 @@
     <Compile Include="Components\Waveforms\Pulse.cs" />
     <Compile Include="Components\Waveforms\Sine.cs" />
     <Compile Include="Diagnostics\BadParameterException.cs" />
-    <Compile Include="IntegrationMethods\Breakpoints.cs" />
-    <Compile Include="IntegrationMethods\Trapezoidal.cs" />
+    <Compile Include="Simulations\Transient\IntegrationMethods\Breakpoints.cs" />
+    <Compile Include="Simulations\Transient\IntegrationMethods\Trapezoidal.cs" />
     <Compile Include="Parameters\IParameterized.cs" />
     <Compile Include="Attributes\SpiceInfo.cs" />
     <Compile Include="Attributes\SpiceName.cs" />
@@ -177,7 +179,7 @@
     <Compile Include="Diagnostics\CircuitException.cs" />
     <Compile Include="Diagnostics\CircuitWarning.cs" />
     <Compile Include="Parameters\Parameter.cs" />
-    <Compile Include="IntegrationMethods\IntegrationMethod.cs" />
+    <Compile Include="Simulations\Transient\IntegrationMethods\IntegrationMethod.cs" />
     <Compile Include="Parameters\Parameterized.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulations\Noise\Noise.cs" />

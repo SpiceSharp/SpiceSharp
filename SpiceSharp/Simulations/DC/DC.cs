@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
@@ -110,8 +109,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public List<Sweep> Sweeps { get; } = new List<Sweep>();
 
-        private List<CircuitObjectBehaviorLoad> loadbehaviors;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -136,22 +133,8 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Initialize the circuit
+        /// Execute the DC analysis
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Initialize(Circuit ckt)
-        {
-            base.Initialize(ckt);
-
-            // Get behaviors for DC analysis
-            loadbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
-        }
-
-
-        /// <summary>
-        /// Execute the DC simulation
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
         protected override void Execute()
         {
             var ckt = Circuit;
@@ -205,10 +188,10 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Calculate the solution
-                if (!ckt.Iterate(loadbehaviors, config, config.SweepMaxIterations))
+                if (!Iterate(ckt, config.SweepMaxIterations))
                 {
                     IterationFailed?.Invoke(this, ckt);
-                    ckt.Op(loadbehaviors, config, config.DcMaxIterations);
+                    Op(ckt, config.DcMaxIterations);
                 }
 
                 // Export data

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
-using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
 {
@@ -70,6 +70,7 @@ namespace SpiceSharp.Simulations
         /// Private variables
         /// </summary>
         private List<CircuitObjectBehaviorLoad> loadbehaviors;
+        private List<CircuitObjectBehaviorTransient> transientbehaviors;
         private List<CircuitObjectBehaviorAccept> acceptbehaviors;
         private List<CircuitObjectBehaviorTruncate> truncatebehaviors;
 
@@ -102,10 +103,10 @@ namespace SpiceSharp.Simulations
         {
             base.Initialize(ckt);
             loadbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
+            transientbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTransient>(ckt);
             acceptbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAccept>(ckt);
             truncatebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTruncate>(ckt);
         }
-
 
         /// <summary>
         /// Execute the transient simulation
@@ -142,7 +143,7 @@ namespace SpiceSharp.Simulations
 
             // Calculate the operating point
             ckt.Method = null;
-            ckt.Op(loadbehaviors, config, config.DcMaxIterations);
+            Op(ckt, config.DcMaxIterations);
             ckt.Statistics.TimePoints++;
             for (int i = 0; i < method.DeltaOld.Length; i++)
                 method.DeltaOld[i] = MaxStep;
@@ -215,7 +216,7 @@ namespace SpiceSharp.Simulations
                     // Try to solve the new point
                     if (method.SavedTime == 0.0)
                         state.Init = CircuitState.InitFlags.InitTransient;
-                    bool converged = ckt.Iterate(loadbehaviors, config, config.TranMaxIterations);
+                    bool converged = Iterate(ckt, config.TranMaxIterations);
                     ckt.Statistics.TimePoints++;
                     if (method.SavedTime == 0.0)
                     {

@@ -6,19 +6,15 @@ using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Noise analysis
     /// </summary>
-    public class Noise : Simulation<Noise>
+    public class Noise : FrequencyAnalysis<Noise>
     {
-        /// <summary>
-        /// Enumerations
-        /// </summary>
-        public enum StepTypes { Decade, Octave, Linear };
-
         /// <summary>
         /// Gets or sets the noise output node
         /// </summary>
@@ -36,72 +32,10 @@ namespace SpiceSharp.Simulations
         /// </summary>
         [SpiceName("input"), SpiceInfo("Name of the AC source used as input reference")]
         public CircuitIdentifier Input { get; set; } = null;
-
-        /// <summary>
-        /// Gets or sets the starting frequency
-        /// </summary>
-        [SpiceName("start"), SpiceInfo("Starting frequency")]
-        public double StartFreq { get; set; } = 1.0;
-
-        /// <summary>
-        /// Gets or sets the stopping frequency
-        /// </summary>
-        [SpiceName("stop"), SpiceInfo("Stopping frequency")]
-        public double StopFreq { get; set; } = 1.0e3;
-
-        /// <summary>
-        /// Gets or sets the number of steps
-        /// </summary>
-        [SpiceName("steps"), SpiceName("n"), SpiceInfo("The number of steps")]
-        public double Steps
-        {
-            get => NumberSteps;
-            set => NumberSteps = (int)Math.Round(value + 0.1);
-        }
-        public int NumberSteps { get; set; } = 10;
-
-        /// <summary>
-        /// Gets or sets the step type (string version)
-        /// </summary>
-        [SpiceName("type"), SpiceInfo("The step type")]
-        public string _StepType
-        {
-            get
-            {
-                switch (StepType)
-                {
-                    case StepTypes.Linear: return "lin";
-                    case StepTypes.Octave: return "oct";
-                    case StepTypes.Decade: return "dec";
-                }
-                return null;
-            }
-            set
-            {
-                switch (value.ToLower())
-                {
-                    case "linear":
-                    case "lin": StepType = StepTypes.Linear; break;
-                    case "octave":
-                    case "oct": StepType = StepTypes.Octave; break;
-                    case "decade":
-                    case "dec": StepType = StepTypes.Decade; break;
-                    default:
-                        throw new CircuitException($"Invalid step type {value}");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the type of step used
-        /// </summary>
-        public StepTypes StepType { get; set; } = StepTypes.Decade;
-
+        
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<CircuitObjectBehaviorLoad> loadbehaviors;
-        private List<CircuitObjectBehaviorAcLoad> acbehaviors;
         private List<CircuitObjectBehaviorNoise> noisebehaviors;
 
         /// <summary>
@@ -118,12 +52,9 @@ namespace SpiceSharp.Simulations
         /// <param name="ckt">Circuit</param>
         public override void Initialize(Circuit ckt)
         {
-            base.Initialize(ckt);
-
             // Get all behaviors necessary for noise analysis
-            loadbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
-            acbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAcLoad>(ckt);
             noisebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorNoise>(ckt);
+            base.Initialize(ckt);
         }
 
 
@@ -201,7 +132,7 @@ namespace SpiceSharp.Simulations
             state.UseSmallSignal = false;
             state.Gmin = config.Gmin;
             Initialize(ckt);
-            ckt.Op(loadbehaviors, config, config.DcMaxIterations);
+            Op(ckt, config.DcMaxIterations);
 
             var data = ckt.State.Noise;
             state.Sparse |= CircuitState.SparseFlags.NIACSHOULDREORDER;
@@ -210,14 +141,14 @@ namespace SpiceSharp.Simulations
             for (int i = 0; i < n; i++)
             {
                 state.Laplace = new Complex(0.0, 2.0 * Math.PI * data.Freq);
-                ckt.AcIterate(acbehaviors, config);
+                AcIterate(ckt);
 
                 double rval = state.Solution[posOutNode] - state.Solution[negOutNode];
                 double ival = state.iSolution[posOutNode] - state.iSolution[negOutNode];
                 data.GainSqInv = 1.0 / Math.Max(rval * rval + ival * ival, 1e-20);
 
                 // Solve the adjoint system
-                ckt.NzIterate(posOutNode, negOutNode);
+                NzIterate(ckt, posOutNode, negOutNode);
 
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit
@@ -243,6 +174,39 @@ namespace SpiceSharp.Simulations
             }
 
             Finalize(ckt);
+        }
+
+        /// <summary>
+        /// Calculate the solution for <see cref="Noise"/> analysis
+        /// This routine solves the adjoint system. It assumes that the matrix has
+        /// already been loaded by a call to <see cref="AcIterate(SimulationConfiguration, Circuit)"/>, so it only alters the right
+        /// hand side vector. The unit-valued current excitation is applied between
+        /// nodes posDrive and negDrive.
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        /// <param name="posDrive">The positive driving node</param>
+        /// <param name="negDrive">The negative driving node</param>
+        private void NzIterate(Circuit ckt, int posDrive, int negDrive)
+        {
+            var state = ckt.State;
+
+            // Clear out the right hand side vector
+            for (int i = 0; i < state.Rhs.Length; i++)
+            {
+                state.Rhs[i] = 0.0;
+                state.iRhs[i] = 0.0;
+            }
+
+            // Apply unit current excitation
+            state.Rhs[posDrive] = 1.0;
+            state.Rhs[negDrive] = -1.0;
+
+            state.Matrix.SolveTransposed(state.Rhs, state.iRhs);
+
+            state.StoreSolution(true);
+
+            state.Solution[0] = 0.0;
+            state.iSolution[0] = 0.0;
         }
     }
 }

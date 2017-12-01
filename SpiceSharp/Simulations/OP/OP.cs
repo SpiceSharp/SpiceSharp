@@ -52,7 +52,7 @@ namespace SpiceSharp.Simulations
             state.Gmin = config.Gmin;
 
             Initialize(ckt);
-            ckt.Op(loadbehaviors, config, config.DcMaxIterations);
+            Op(ckt, config.DcMaxIterations);
             Export(ckt);
             Finalize(ckt);
         }

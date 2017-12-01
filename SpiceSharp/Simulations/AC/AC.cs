@@ -1,86 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using System.Numerics;
-using SpiceSharp.Parameters;
-using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Frequency-domain analysis (AC analysis)
     /// </summary>
-    public class AC : Simulation<AC>
+    public class AC : FrequencyAnalysis<AC>
     {
-        /// <summary>
-        /// Enumerations
-        /// </summary>
-        public enum StepTypes { Decade, Octave, Linear };
-
-        /// <summary>
-        /// Gets or sets the number of steps
-        /// </summary>
-        [SpiceName("steps"), SpiceName("n"), SpiceInfo("The number of steps")]
-        public double Steps
-        {
-            get => NumberSteps;
-            set => NumberSteps = (int)(Math.Round(value) + 0.1);
-        }
-        public int NumberSteps { get; set; } = 10;
-
-        /// <summary>
-        /// Gets or sets the starting frequency
-        /// </summary>
-        [SpiceName("start"), SpiceInfo("Starting frequency")]
-        public double StartFreq { get; set; } = 1.0;
-
-        /// <summary>
-        /// Gets or sets the stopping frequency
-        /// </summary>
-        [SpiceName("stop"), SpiceInfo("Stopping frequency")]
-        public double StopFreq { get; set; } = 1.0e3;
-
-        /// <summary>
-        /// Gets or sets the step type (string version)
-        /// </summary>
-        [SpiceName("type"), SpiceInfo("The step type")]
-        public string _StepType
-        {
-            get
-            {
-                switch (StepType)
-                {
-                    case StepTypes.Linear: return "lin";
-                    case StepTypes.Octave: return "oct";
-                    case StepTypes.Decade: return "dec";
-                }
-                return null;
-            }
-            set
-            {
-                switch (value.ToLower())
-                {
-                    case "linear":
-                    case "lin": StepType = StepTypes.Linear; break;
-                    case "octave":
-                    case "oct": StepType = StepTypes.Octave; break;
-                    case "decade":
-                    case "dec": StepType = StepTypes.Decade; break;
-                    default:
-                        throw new CircuitException($"Invalid step type {value}");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the type of step used
-        /// </summary>
-        public StepTypes StepType { get; set; } = StepTypes.Decade;
-
-        private List<CircuitObjectBehaviorLoad> loadbehaviors;
-        private List<CircuitObjectBehaviorAcLoad> acloadbehaviors;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -109,19 +38,6 @@ namespace SpiceSharp.Simulations
             NumberSteps = n;
             StartFreq = start;
             StopFreq = stop;
-        }
-
-        /// <summary>
-        /// Initialize the AC analysis
-        /// </summary>
-        /// <param name="ckt"></param>
-        public override void Initialize(Circuit ckt)
-        {
-            base.Initialize(ckt);
-
-            // Get the behaviors necessary for the AC analysis
-            loadbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
-            acloadbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAcLoad>(ckt);
         }
 
         /// <summary>
@@ -177,7 +93,7 @@ namespace SpiceSharp.Simulations
             state.UseSmallSignal = false;
             state.Gmin = config.Gmin;
             Initialize(ckt);
-            ckt.Op(loadbehaviors, config, config.DcMaxIterations);
+            Op(ckt, config.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             state.UseDC = false;
@@ -201,7 +117,7 @@ namespace SpiceSharp.Simulations
                 state.Laplace = new Complex(0.0, 2.0 * Circuit.CONSTPI * freq);
 
                 // Solve
-                ckt.AcIterate(acloadbehaviors, config);
+                AcIterate(ckt);
 
                 // Export the timepoint
                 Export(ckt);
