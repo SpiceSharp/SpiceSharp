@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -10,28 +8,12 @@ namespace SpiceSharp.Simulations
     public class OP : Simulation<OP>
     {
         /// <summary>
-        /// Private variables
-        /// </summary>
-        private List<CircuitObjectBehaviorLoad> loadbehaviors;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
         /// <param name="config">Configuration</param>
         public OP(string name) : base(name)
         {
-        }
-
-        /// <summary>
-        /// Initialize the analysis
-        /// </summary>
-        /// <param name="ckt"></param>
-        public override void Initialize(Circuit ckt)
-        {
-            base.Initialize(ckt);
-
-            loadbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
         }
 
         /// <summary>

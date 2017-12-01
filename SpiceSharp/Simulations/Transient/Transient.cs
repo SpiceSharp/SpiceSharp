@@ -4,7 +4,6 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
-using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
 {
@@ -69,7 +68,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<CircuitObjectBehaviorLoad> loadbehaviors;
         private List<CircuitObjectBehaviorTransient> transientbehaviors;
         private List<CircuitObjectBehaviorAccept> acceptbehaviors;
         private List<CircuitObjectBehaviorTruncate> truncatebehaviors;
@@ -102,7 +100,6 @@ namespace SpiceSharp.Simulations
         public override void Initialize(Circuit ckt)
         {
             base.Initialize(ckt);
-            loadbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
             transientbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTransient>(ckt);
             acceptbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAccept>(ckt);
             truncatebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTruncate>(ckt);
@@ -146,7 +143,9 @@ namespace SpiceSharp.Simulations
             Op(ckt, config.DcMaxIterations);
             ckt.Statistics.TimePoints++;
             for (int i = 0; i < method.DeltaOld.Length; i++)
+            {
                 method.DeltaOld[i] = MaxStep;
+            }
             method.Delta = delta;
             method.SaveDelta = FinalTime / 50.0;
 
@@ -182,7 +181,9 @@ namespace SpiceSharp.Simulations
 
                 // Export the current timepoint
                 if (method.Time >= InitTime)
+                {
                     Export(ckt);
+                }
 
                 // Detect the end of the simulation
                 if (method.Time >= FinalTime)
@@ -245,11 +246,10 @@ namespace SpiceSharp.Simulations
                     else
                     {
                         // Do not check the first time point
-                        if (method.SavedTime == 0.0)
+                        if (method.SavedTime == 0.0 || method.LteControl(ckt))
+                        {
                             goto nextTime;
-
-                        if (method.LteControl(ckt))
-                            goto nextTime;
+                        }
                         else
                         {
                             ckt.Statistics.Rejected++;

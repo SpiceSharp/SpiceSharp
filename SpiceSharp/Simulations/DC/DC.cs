@@ -219,7 +219,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get the DC parameter
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="obj">Parameterized object</param>
         /// <returns></returns>
         private Parameter GetDcParameter(IParameterized obj)
         {
@@ -233,8 +233,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Copy the DC parameter back to the object
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="par"></param>
+        /// <param name="obj">Parameterized object</param>
+        /// <param name="par">Parameter</param>
         private void SetDcParameter(IParameterized obj, Parameter par)
         {
             if (obj is Voltagesource vsource)

@@ -179,7 +179,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Calculate the solution for <see cref="Noise"/> analysis
         /// This routine solves the adjoint system. It assumes that the matrix has
-        /// already been loaded by a call to <see cref="AcIterate(SimulationConfiguration, Circuit)"/>, so it only alters the right
+        /// already been loaded by a call to AcIterate, so it only alters the right
         /// hand side vector. The unit-valued current excitation is applied between
         /// nodes posDrive and negDrive.
         /// </summary>

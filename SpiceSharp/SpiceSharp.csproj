@@ -109,7 +109,7 @@
     <Compile Include="Simulations\FrequencyAnalysis.cs" />
     <Compile Include="Simulations\Noise\CircuitObjectBehaviorNoise.cs" />
     <Compile Include="Simulations\CircuitObjectBehaviorLoad.cs" />
-    <Compile Include="Simulations\AC\CircuitObjectBehaviorAcLoad.cs" />
+    <Compile Include="Simulations\CircuitObjectBehaviorAcLoad.cs" />
     <Compile Include="Behaviors\Behaviors.cs" />
     <Compile Include="Behaviors\CircuitObjectBehavior.cs" />
     <Compile Include="Components\Semiconductors\Diode\DiodeLoadBehavior.cs" />
