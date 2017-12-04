@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Attributes\ConnectedPins.cs" />
     <Compile Include="Attributes\IndependentSource.cs" />
+    <Compile Include="Attributes\SpiceParameter.cs" />
     <Compile Include="Attributes\VoltageDriver.cs" />
     <Compile Include="Components\Currentsources\CurrentControlledCurrentsource\CurrentControlledCurrentsource.cs" />
     <Compile Include="Components\Currentsources\CurrentControlledCurrentsource\CurrentControlledCurrentsourceAcBehavior.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3NoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3TemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3TruncateBehavior.cs" />
+    <Compile Include="Attributes\SpiceParameters.cs" />
     <Compile Include="Components\Switches\CurrentSwitch\CurrentSwitchAcBehavior.cs" />
     <Compile Include="Components\Switches\CurrentSwitch\CurrentSwitchLoadBehavior.cs" />
     <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitchAcBehavior.cs" />
