@@ -142,12 +142,13 @@ namespace SpiceSharp.Components
         public const int B2vdsato = 32;
         public const int B2qbs = 33;
         public const int B2qbd = 34;
+        public const int B2pinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM2(CircuitIdentifier name) : base(name, 4)
+        public BSIM2(CircuitIdentifier name) : base(name, B2pinCount)
         {
         }
 

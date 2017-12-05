@@ -294,12 +294,13 @@ namespace SpiceSharp.Components
         public const int MOS1cqbd = 14;
         public const int MOS1qbs = 15;
         public const int MOS1cqbs = 16;
+        public const int MOS1pinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS1(CircuitIdentifier name) : base(name, 4)
+        public MOS1(CircuitIdentifier name) : base(name, MOS1pinCount)
         {
         }
 

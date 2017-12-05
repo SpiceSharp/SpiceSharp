@@ -56,10 +56,15 @@ namespace SpiceSharp.Components
         internal MatrixElement SWnegNegptr { get; private set; }
 
         /// <summary>
+        /// Constants
+        /// </summary>
+        public const int SWpinCount = 4;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled switch</param>
-        public VoltageSwitch(CircuitIdentifier name) : base(name, 4) { }
+        public VoltageSwitch(CircuitIdentifier name) : base(name, SWpinCount) { }
 
         /// <summary>
         /// Constructor
@@ -69,7 +74,8 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
-        public VoltageSwitch(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier cont_pos, CircuitIdentifier cont_neg) : base(name, 4)
+        public VoltageSwitch(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier cont_pos, CircuitIdentifier cont_neg) 
+            : base(name, SWpinCount)
         {
             Connect(pos, neg, cont_pos, cont_neg);
         }

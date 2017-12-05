@@ -74,10 +74,15 @@ namespace SpiceSharp.Components
         public Complex VSRCac;
 
         /// <summary>
+        /// Constants
+        /// </summary>
+        public const int VSRCpinCount = 2;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name</param>
-        public Voltagesource(CircuitIdentifier name) : base(name, 2) { }
+        public Voltagesource(CircuitIdentifier name) : base(name, VSRCpinCount) { }
 
         /// <summary>
         /// Constructor
@@ -86,7 +91,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name, 2)
+        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name, VSRCpinCount)
         {
             Connect(pos, neg);
             VSRCdcValue.Set(dc);
@@ -99,7 +104,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="w">The waveform</param>
-        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, Waveform w) : base(name, 2)
+        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, Waveform w) : base(name, VSRCpinCount)
         {
             Connect(pos, neg);
             VSRCwaveform = w;

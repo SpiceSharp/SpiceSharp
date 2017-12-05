@@ -97,12 +97,13 @@ namespace SpiceSharp.Components
         public const int DIOconduct = 2;
         public const int DIOcapCharge = 3;
         public const int DIOcapCurrent = 4;
+        public const int DIOpinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public Diode(CircuitIdentifier name) : base(name, 2)
+        public Diode(CircuitIdentifier name) : base(name, DIOpinCount)
         {
         }
 

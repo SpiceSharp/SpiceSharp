@@ -230,12 +230,13 @@ namespace SpiceSharp.Components
         public const int BJTgeqcb = 18;
         public const int BJTgccs = 19;
         public const int BJTgeqbx = 20;
+        public const int BJTpinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BJT(CircuitIdentifier name) : base(name, 4)
+        public BJT(CircuitIdentifier name) : base(name, BJTpinCount)
         {
         }
 

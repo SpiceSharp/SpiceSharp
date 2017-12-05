@@ -64,12 +64,13 @@ namespace SpiceSharp.Components
         /// </summary>
         public const int CAPqcap = 0;
         public const int CAPccap = 1;
+        public const int CAPpinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Capacitor(CircuitIdentifier name) : base(name,2 ) { }
+        public Capacitor(CircuitIdentifier name) : base(name, CAPpinCount) { }
 
         /// <summary>
         /// Constructor
@@ -78,7 +79,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="cap">The capacitance</param>
-        public Capacitor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double cap) : base(name, 2)
+        public Capacitor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double cap) : base(name, CAPpinCount)
         {
             Connect(pos, neg);
             CAPcapac.Set(cap);

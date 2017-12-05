@@ -52,12 +52,17 @@ namespace SpiceSharp.Components
         internal MatrixElement CCVSibrPosptr { get; private set; }
         internal MatrixElement CCVSibrNegptr { get; private set; }
         internal MatrixElement CCVSibrContBrptr { get; private set; }
+
+        /// <summary>
+        /// Constants
+        /// </summary>
+        public const int CCVSpinCount = 2;
         
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled current source</param>
-        public CurrentControlledVoltagesource(CircuitIdentifier name) : base(name, 2) { }
+        public CurrentControlledVoltagesource(CircuitIdentifier name) : base(name, CCVSpinCount) { }
 
         /// <summary>
         /// Constructor
@@ -67,7 +72,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source name</param>
         /// <param name="gain">The transresistance (gain)</param>
-        public CurrentControlledVoltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name, 2)
+        public CurrentControlledVoltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name, CCVSpinCount)
         {
             Connect(pos, neg);
             CCVScoeff.Set(gain);

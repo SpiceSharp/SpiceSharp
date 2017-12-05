@@ -72,12 +72,13 @@ namespace SpiceSharp.Components
         /// </summary>
         public const int INDflux = 0;
         public const int INDvolt = 1;
+        public const int INDpinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the inductor</param>
-        public Inductor(CircuitIdentifier name) : base(name, 2) { }
+        public Inductor(CircuitIdentifier name) : base(name, INDpinCount) { }
 
         /// <summary>
         /// Constructor
@@ -86,7 +87,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="ind">The inductance</param>
-        public Inductor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double ind) : base(name, 2)
+        public Inductor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double ind) : base(name, INDpinCount)
         {
             Connect(pos, neg);
             INDinduct.Set(ind);

@@ -380,6 +380,7 @@ namespace SpiceSharp.Components
         public const int BSIM4cqcdump = 26;
         public const int BSIM4qdef = 27;
         public const int BSIM4qs = 28;
+        public const int BSIM4pinCount = 4;
 
         public const double NMOS = 1.0;
         public const double PMOS = -1.0;
@@ -389,7 +390,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM4v80(CircuitIdentifier name) : base(name, 4)
+        public BSIM4v80(CircuitIdentifier name) : base(name, BSIM4pinCount)
         {
         }
 

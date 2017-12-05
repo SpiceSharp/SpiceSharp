@@ -123,103 +123,107 @@ namespace SpiceSharp.Simulations
 
             try
             {
-                nextTime:
-
-                // Accept the current timepoint (CKTaccept())
-                foreach (var behavior in acceptbehaviors)
-                    behavior.Accept(ckt);
-                method.SaveSolution(rstate.Solution);
-                // end of CKTaccept()
-
-                // Check if current breakpoint is outdated; if so, clear
-                method.UpdateBreakpoints();
-                ckt.Statistics.Accepted++;
-
-                // Export the current timepoint
-                if (method.Time >= InitTime)
-                {
-                    Export(ckt);
-                }
-
-                // Detect the end of the simulation
-                if (method.Time >= FinalTime)
-                {
-                    // Keep our statistics
-                    ckt.Statistics.TransientTime.Stop();
-                    ckt.Statistics.TranIter += ckt.Statistics.NumIter - startIters;
-                    ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
-
-                    // Finished!
-                    Finalize(ckt);
-                    return;
-                }
-
-                // Pause test - pausing not supported
-
-                // resume:
-                method.Delta = Math.Min(method.Delta, MaxStep);
-                method.Resume();
-                state.ShiftStates();
-
-                // Calculate a new solution
                 while (true)
                 {
-                    method.TryDelta();
+                    // nextTime:
 
-                    // Compute coefficients and predict a solution and reset states to our previous solution
-                    method.ComputeCoefficients(ckt);
-                    method.Predict(ckt);
+                    // Accept the current timepoint (CKTaccept())
+                    foreach (var behavior in acceptbehaviors)
+                        behavior.Accept(ckt);
+                    method.SaveSolution(rstate.Solution);
+                    // end of CKTaccept()
 
-                    // Try to solve the new point
-                    if (method.SavedTime == 0.0)
-                        state.Init = CircuitState.InitFlags.InitTransient;
-                    bool converged = TranIterate(ckt, config.TranMaxIterations);
-                    ckt.Statistics.TimePoints++;
-                    if (method.SavedTime == 0.0)
+                    // Check if current breakpoint is outdated; if so, clear
+                    method.UpdateBreakpoints();
+                    ckt.Statistics.Accepted++;
+
+                    // Export the current timepoint
+                    if (method.Time >= InitTime)
                     {
-                        for (int i = 0; i < state.States[1].Length; i++)
-                        {
-                            state.States[2][i] = state.States[1][i];
-                            state.States[3][i] = state.States[1][i];
-                        }
+                        Export(ckt);
                     }
 
-                    // Spice copies the states the first time, we're not
-                    // I believe this is because Spice treats the first timepoint after the OP as special (MODEINITTRAN)
-                    // We don't treat it special (we just assume it started from a circuit in rest)
-
-                    if (!converged)
+                    // Detect the end of the simulation
+                    if (method.Time >= FinalTime)
                     {
-                        // Failed to converge, let's try again with a smaller timestep
-                        method.Rollback();
-                        ckt.Statistics.Rejected++;
-                        method.Delta /= 8.0;
-                        method.CutOrder();
+                        // Keep our statistics
+                        ckt.Statistics.TransientTime.Stop();
+                        ckt.Statistics.TranIter += ckt.Statistics.NumIter - startIters;
+                        ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
 
-                        var data = new TimestepCutData(ckt, method.Delta / 8.0, TimestepCutData.TimestepCutReason.Convergence);
-                        TimestepCut?.Invoke(this, data);
+                        // Finished!
+                        Finalize(ckt);
+                        return;
                     }
-                    else
+
+                    // Pause test - pausing not supported
+
+                    // resume:
+                    method.Delta = Math.Min(method.Delta, MaxStep);
+                    method.Resume();
+                    state.ShiftStates();
+
+                    // Calculate a new solution
+                    while (true)
                     {
-                        // Do not check the first time point
-                        if (method.SavedTime == 0.0 || method.LteControl(ckt))
+                        method.TryDelta();
+
+                        // Compute coefficients and predict a solution and reset states to our previous solution
+                        method.ComputeCoefficients(ckt);
+                        method.Predict(ckt);
+
+                        // Try to solve the new point
+                        if (method.SavedTime == 0.0)
+                            state.Init = CircuitState.InitFlags.InitTransient;
+                        bool converged = TranIterate(ckt, config.TranMaxIterations);
+                        ckt.Statistics.TimePoints++;
+                        if (method.SavedTime == 0.0)
                         {
-                            goto nextTime;
+                            for (int i = 0; i < state.States[1].Length; i++)
+                            {
+                                state.States[2][i] = state.States[1][i];
+                                state.States[3][i] = state.States[1][i];
+                            }
                         }
-                        else
+
+                        // Spice copies the states the first time, we're not
+                        // I believe this is because Spice treats the first timepoint after the OP as special (MODEINITTRAN)
+                        // We don't treat it special (we just assume it started from a circuit in rest)
+
+                        if (!converged)
                         {
+                            // Failed to converge, let's try again with a smaller timestep
+                            method.Rollback();
                             ckt.Statistics.Rejected++;
-                            var data = new TimestepCutData(ckt, method.Delta, TimestepCutData.TimestepCutReason.Truncation);
+                            method.Delta /= 8.0;
+                            method.CutOrder();
+
+                            var data = new TimestepCutData(ckt, method.Delta / 8.0, TimestepCutData.TimestepCutReason.Convergence);
                             TimestepCut?.Invoke(this, data);
                         }
-                    }
-
-                    if (method.Delta <= DeltaMin)
-                    {
-                        if (method.OldDelta > DeltaMin)
-                            method.Delta = DeltaMin;
                         else
-                            throw new CircuitException($"Timestep too small at t={method.SavedTime.ToString("g")}: {method.Delta.ToString("g")}");
+                        {
+                            // Do not check the first time point
+                            if (method.SavedTime == 0.0 || method.LteControl(ckt))
+                            {
+                                // goto nextTime;
+                                break;
+                            }
+                            else
+                            {
+                                ckt.Statistics.Rejected++;
+                                var data = new TimestepCutData(ckt, method.Delta, TimestepCutData.TimestepCutReason.Truncation);
+                                TimestepCut?.Invoke(this, data);
+                            }
+                        }
+
+                        if (method.Delta <= DeltaMin)
+                        {
+                            if (method.OldDelta > DeltaMin)
+                                method.Delta = DeltaMin;
+                            else
+                                throw new CircuitException($"Timestep too small at t={method.SavedTime.ToString("g")}: {method.Delta.ToString("g")}");
+                        }
                     }
                 }
             }

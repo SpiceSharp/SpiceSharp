@@ -51,10 +51,15 @@ namespace SpiceSharp.Components
         internal MatrixElement CCCSnegContBrptr { get; private set; }
 
         /// <summary>
+        /// Constants
+        /// </summary>
+        public const int CCCSpinCount = 2;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current controlled current source</param>
-        public CurrentControlledCurrentsource(CircuitIdentifier name) : base(name, 2)
+        public CurrentControlledCurrentsource(CircuitIdentifier name) : base(name, CCCSpinCount)
         {
             // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
@@ -68,7 +73,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
-        public CurrentControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name, 2)
+        public CurrentControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name, CCCSpinCount)
         {
             Priority = -1;
             Connect(pos, neg);

@@ -295,12 +295,13 @@ namespace SpiceSharp.Components
         public const int MOS3cqbd = 14;
         public const int MOS3qbs = 15;
         public const int MOS3cqbs = 16;
+        public const int MOS3pinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS3(CircuitIdentifier name) : base(name, 4)
+        public MOS3(CircuitIdentifier name) : base(name, MOS3pinCount)
         {
         }
 

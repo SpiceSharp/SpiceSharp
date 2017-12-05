@@ -64,10 +64,15 @@ namespace SpiceSharp.Components
         internal bool CSWzero_state = false;
 
         /// <summary>
+        /// Constants
+        /// </summary>
+        public const int CSWpinCount = 2;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled switch</param>
-        public CurrentSwitch(CircuitIdentifier name) : base(name, 2)
+        public CurrentSwitch(CircuitIdentifier name) : base(name, CSWpinCount)
         {
             // Make sure the current switch is processed after voltage sources
             Priority = -1;

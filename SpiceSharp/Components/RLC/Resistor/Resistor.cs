@@ -69,10 +69,15 @@ namespace SpiceSharp.Components
         internal double RESconduct = 0.0;
 
         /// <summary>
+        /// Constants
+        /// </summary>
+        public const int RESpinCount = 2;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the resistor</param>
-        public Resistor(CircuitIdentifier name) : base(name, 2) { }
+        public Resistor(CircuitIdentifier name) : base(name, RESpinCount) { }
 
         /// <summary>
         /// Constructor
@@ -81,7 +86,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="res">The resistance</param>
-        public Resistor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double res) : base(name, 2)
+        public Resistor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double res) : base(name, RESpinCount)
         {
             Connect(pos, neg);
             RESresist.Set(res);

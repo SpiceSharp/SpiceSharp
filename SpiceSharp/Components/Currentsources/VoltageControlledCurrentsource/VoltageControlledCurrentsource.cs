@@ -53,10 +53,15 @@ namespace SpiceSharp.Components
         internal MatrixElement VCCSnegContNegptr { get; private set; }
 
         /// <summary>
+        /// Private constants
+        /// </summary>
+        public const int VCCSpinCount = 4;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled current source</param>
-        public VoltageControlledCurrentsource(CircuitIdentifier name) : base(name, 4)
+        public VoltageControlledCurrentsource(CircuitIdentifier name) : base(name, VCCSpinCount)
         {
         }
 
@@ -70,7 +75,7 @@ namespace SpiceSharp.Components
         /// <param name="cont_neg">The negative controlling node</param>
         /// <param name="coeff">The transconductance gain</param>
         public VoltageControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier cont_pos, CircuitIdentifier cont_neg, double gain) 
-            : base(name, 4)
+            : base(name, VCCSpinCount)
         {
             Connect(pos, neg, cont_pos, cont_neg);
             VCCScoeff.Set(gain);
