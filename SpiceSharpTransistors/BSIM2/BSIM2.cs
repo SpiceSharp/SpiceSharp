@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
     /// BSIM2 model device
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class BSIM2 : CircuitComponent<BSIM2>
+    public class BSIM2 : CircuitComponent
     {
         /// <summary>
         /// Register default behaviours
@@ -21,6 +21,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM2), typeof(ComponentBehaviors.BSIM2TemperatureBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM2), typeof(ComponentBehaviors.BSIM2LoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM2), typeof(ComponentBehaviors.BSIM2AcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM2), typeof(ComponentBehaviors.BSIM2TruncateBehavior));
         }
 
         /// <summary>
@@ -141,12 +142,13 @@ namespace SpiceSharp.Components
         public const int B2vdsato = 32;
         public const int B2qbs = 33;
         public const int B2qbd = 34;
+        public const int B2pinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM2(CircuitIdentifier name) : base(name)
+        public BSIM2(CircuitIdentifier name) : base(name, B2pinCount)
         {
         }
 
@@ -180,19 +182,6 @@ namespace SpiceSharp.Components
             // Allocate states
             B2states = ckt.State.GetState(35);
             pParam = null;
-        }
-
-        /// <summary>
-        /// Truncate
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            var method = ckt.Method;
-            method.Terr(B2states + B2qb, ckt, ref timeStep);
-            method.Terr(B2states + B2qg, ckt, ref timeStep);
-            method.Terr(B2states + B2qd, ckt, ref timeStep);
         }
     }
 }

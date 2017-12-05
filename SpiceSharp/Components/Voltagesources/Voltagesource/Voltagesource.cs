@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
@@ -11,21 +10,22 @@ namespace SpiceSharp.Components
     /// An independent voltage source
     /// </summary>
     [SpicePins("V+", "V-"), VoltageDriver(0, 1), IndependentSource]
-    public class Voltagesource : CircuitComponent<Voltagesource>
+    public class Voltagesource : CircuitComponent
     {
         /// <summary>
-        /// Register default voltagesource behaviours
+        /// Register default voltagesource behaviors
         /// </summary>
         static Voltagesource()
         {
             Behaviors.Behaviors.RegisterBehavior(typeof(Voltagesource), typeof(ComponentBehaviors.VoltagesourceLoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(Voltagesource), typeof(ComponentBehaviors.VoltageSourceLoadAcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Voltagesource), typeof(ComponentBehaviors.VoltagesourceAcceptBehavior));
         }
 
         /// <summary>
         /// Parameters
         /// </summary>
-        public IWaveform VSRCwaveform { get; set; }
+        public Waveform VSRCwaveform { get; set; }
         [SpiceName("dc"), SpiceInfo("D.C. source value")]
         public Parameter VSRCdcValue { get; } = new Parameter();
         [SpiceName("acmag"), SpiceInfo("A.C. Magnitude")]
@@ -74,10 +74,15 @@ namespace SpiceSharp.Components
         public Complex VSRCac;
 
         /// <summary>
+        /// Constants
+        /// </summary>
+        public const int VSRCpinCount = 2;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name</param>
-        public Voltagesource(CircuitIdentifier name) : base(name) { }
+        public Voltagesource(CircuitIdentifier name) : base(name, VSRCpinCount) { }
 
         /// <summary>
         /// Constructor
@@ -86,7 +91,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name)
+        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name, VSRCpinCount)
         {
             Connect(pos, neg);
             VSRCdcValue.Set(dc);
@@ -99,7 +104,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="w">The waveform</param>
-        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, IWaveform w) : base(name)
+        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, Waveform w) : base(name, VSRCpinCount)
         {
             Connect(pos, neg);
             VSRCwaveform = w;
@@ -125,16 +130,6 @@ namespace SpiceSharp.Components
 
             // Setup the waveform if specified
             VSRCwaveform?.Setup(ckt);
-        }
-
-        /// <summary>
-        /// Accept the current timepoint as the solution
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Accept(Circuit ckt)
-        {
-            if (VSRCwaveform != null)
-                VSRCwaveform.Accept(ckt);
         }
     }
 }

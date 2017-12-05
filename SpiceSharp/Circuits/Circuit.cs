@@ -40,7 +40,7 @@ namespace SpiceSharp
         /// <summary>
         /// Gets the current simulation that is being run by the circuit
         /// </summary>
-        public ISimulation Simulation { get;  set; } = null;
+        public Simulation Simulation { get;  set; } = null;
 
         /// <summary>
         /// Gets the current state of the circuit

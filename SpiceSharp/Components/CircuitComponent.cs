@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Circuits;
 
@@ -9,20 +8,8 @@ namespace SpiceSharp.Components
     /// A class that represents a circuit component/device.
     /// It can be connected in a circuit and it also has parameters.
     /// </summary>
-    public abstract class CircuitComponent<T> : Parameterized<T>, ICircuitComponent
+    public abstract class CircuitComponent : ICircuitObject
     {
-        // Register the nodes
-        static CircuitComponent()
-        {
-            // Check if we have nodes
-            SpicePins[] data = (SpicePins[])typeof(T).GetCustomAttributes(typeof(SpicePins), false);
-            if (data != null && data.Length > 0)
-                pins = data[0].Nodes;
-            else
-                pins = null;
-        }
-        protected static string[] pins = null;
-
         /// <summary>
         /// Private variables
         /// </summary>
@@ -49,20 +36,20 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the component</param>
-        public CircuitComponent(CircuitIdentifier name)
-            : base()
+        public CircuitComponent(CircuitIdentifier name, int nodecount)
         {
-            Name = name;
-            if (pins != null)
+            // Initialize
+            if (nodecount > 0)
             {
-                connections = new CircuitIdentifier[pins.Length];
-                indices = new int[pins.Length];
+                connections = new CircuitIdentifier[nodecount];
+                indices = new int[nodecount];
             }
             else
             {
                 connections = null;
                 indices = null;
             }
+            Name = name;
         }
 
         /// <summary>
@@ -76,9 +63,6 @@ namespace SpiceSharp.Components
         /// <param name="nodes"></param>
         public virtual void Connect(params CircuitIdentifier[] nodes)
         {
-            if (pins.Length != connections.Length)
-                connections = new CircuitIdentifier[pins.Length];
-
             if (nodes.Length != connections.Length)
                 throw new CircuitException($"{Name}: Node count mismatch. {nodes.Length} given, {connections.Length} expected.");
             for (int i = 0; i < nodes.Length; i++)
@@ -152,44 +136,10 @@ namespace SpiceSharp.Components
         public abstract void Setup(Circuit ckt);
 
         /// <summary>
-        /// Use initial conditions for the device
-        /// </summary>
-        /// <param name="ckt"></param>
-        public virtual void SetIc(Circuit ckt)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt"></param>
-        // public abstract void Temperature(Circuit ckt);
-
-        /// <summary>
-        /// Accept the current timepoint as the solution
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public virtual void Accept(Circuit ckt)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
         /// Unsetup/destroy the component
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public virtual void Unsetup(Circuit ckt)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Truncate the timestep
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">The timestep that can be truncated</param>
-        public virtual void Truncate(Circuit ckt, ref double timeStep)
         {
             // Do nothing
         }

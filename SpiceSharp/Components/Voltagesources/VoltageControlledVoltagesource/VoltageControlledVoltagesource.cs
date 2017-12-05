@@ -8,10 +8,10 @@ namespace SpiceSharp.Components
     /// A voltage-controlled current-source
     /// </summary>
     [SpicePins("V+", "V-", "VC+", "VC-"), VoltageDriver(0, 1), ConnectedPins(0, 1)]
-    public class VoltageControlledVoltagesource : CircuitComponent<VoltageControlledVoltagesource>
+    public class VoltageControlledVoltagesource : CircuitComponent
     {
         /// <summary>
-        /// Register our default behaviours
+        /// Register our default behaviors
         /// </summary>
         static VoltageControlledVoltagesource()
         {
@@ -53,12 +53,17 @@ namespace SpiceSharp.Components
         internal MatrixElement VCVSibrNegptr { get; private set; }
         internal MatrixElement VCVSibrContPosptr { get; private set; }
         internal MatrixElement VCVSibrContNegptr { get; private set; }
+
+        /// <summary>
+        /// Constants
+        /// </summary>
+        public const int VCVSpinCount = 4;
         
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled voltage source</param>
-        public VoltageControlledVoltagesource(CircuitIdentifier name) : base(name) { }
+        public VoltageControlledVoltagesource(CircuitIdentifier name) : base(name, VCVSpinCount) { }
 
         /// <summary>
         /// Constructor
@@ -69,7 +74,8 @@ namespace SpiceSharp.Components
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
         /// <param name="gain">The voltage gain</param>
-        public VoltageControlledVoltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier cont_pos, CircuitIdentifier cont_neg, double gain) : base(name)
+        public VoltageControlledVoltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier cont_pos, CircuitIdentifier cont_neg, double gain) 
+            : base(name, VCVSpinCount)
         {
             Connect(pos, neg, cont_pos, cont_neg);
             VCVScoeff.Set(gain);

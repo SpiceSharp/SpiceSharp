@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Parameters;
-using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components
 {
@@ -8,7 +6,7 @@ namespace SpiceSharp.Components
     /// This class represents a model.
     /// It also has parameters.
     /// </summary>
-    public abstract class CircuitModel<T> : Parameterized<T>, ICircuitObject
+    public abstract class CircuitModel : ICircuitObject
     {
         /// <summary>
         /// Get the name of the component
@@ -39,49 +37,12 @@ namespace SpiceSharp.Components
         {
             // Do nothing
         }
-
-        /// <summary>
-        /// Use initial conditions for the device
-        /// </summary>
-        /// <param name="ckt"></param>
-        public virtual void SetIc(Circuit ckt)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
-        /// <param name="ckt"></param>
-        public virtual void Temperature(Circuit ckt)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Accept the current timepoint as the solution
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public virtual void Accept(Circuit ckt)
-        {
-            // Do nothing
-        }
-
+        
         /// <summary>
         /// Unsetup/destroy the component
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public virtual void Unsetup(Circuit ckt)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Truncate the timestep
-        /// </summary>
-        /// <param name="ckt"></param>
-        /// <param name="timeStep"></param>
-        public virtual void Truncate(Circuit ckt, ref double timeStep)
         {
             // Do nothing
         }

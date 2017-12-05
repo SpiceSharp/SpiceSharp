@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute noise behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Noise(Circuit ckt)
         {
             RESnoise.Generators[0].Set(ComponentTyped<Resistor>().RESconduct);
             RESnoise.Evaluate(ckt);

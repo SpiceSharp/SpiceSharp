@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt"></param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var mos3 = ComponentTyped<MOS3>();
             var model = mos3.Model as MOS3Model;
@@ -822,7 +822,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             /* DETAILPROF */
 
-            if (method == null || method.SavedTime == 0.0)
+            if (method == null || state.Init == CircuitState.InitFlags.InitTransient)
             {
                 /* 
 				 * initialize to zero charge conductances 

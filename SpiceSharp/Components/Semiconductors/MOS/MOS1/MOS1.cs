@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
@@ -11,10 +10,10 @@ namespace SpiceSharp.Components
     /// Level 1, Shichman-Hodges.
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class MOS1 : CircuitComponent<MOS1>
+    public class MOS1 : CircuitComponent
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static MOS1()
         {
@@ -22,6 +21,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS1), typeof(ComponentBehaviors.MOS1LoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS1), typeof(ComponentBehaviors.MOS1AcBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS1), typeof(ComponentBehaviors.MOS1NoiseBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(MOS1), typeof(ComponentBehaviors.MOS1TruncateBehavior));
         }
 
         /// <summary>
@@ -294,12 +294,13 @@ namespace SpiceSharp.Components
         public const int MOS1cqbd = 14;
         public const int MOS1qbs = 15;
         public const int MOS1cqbs = 16;
+        public const int MOS1pinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS1(CircuitIdentifier name) : base(name)
+        public MOS1(CircuitIdentifier name) : base(name, MOS1pinCount)
         {
         }
 
@@ -388,19 +389,6 @@ namespace SpiceSharp.Components
             MOS1DPbPtr = null;
             MOS1SPbPtr = null;
             MOS1SPdpPtr = null;
-        }
-
-        /// <summary>
-        /// Truncate
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            var method = ckt.Method;
-            method.Terr(MOS1states + MOS1qgs, ckt, ref timeStep);
-            method.Terr(MOS1states + MOS1qgd, ckt, ref timeStep);
-            method.Terr(MOS1states + MOS1qgb, ckt, ref timeStep);
         }
     }
 }

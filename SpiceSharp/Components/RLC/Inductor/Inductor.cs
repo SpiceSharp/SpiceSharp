@@ -9,15 +9,17 @@ namespace SpiceSharp.Components
     /// An inductor
     /// </summary>
     [SpicePins("L+", "L-")]
-    public class Inductor : CircuitComponent<Inductor>
+    public class Inductor : CircuitComponent
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static Inductor()
         {
             Behaviors.Behaviors.RegisterBehavior(typeof(Inductor), typeof(ComponentBehaviors.InductorLoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(Inductor), typeof(ComponentBehaviors.InductorAcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Inductor), typeof(ComponentBehaviors.InductorAcceptBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Inductor), typeof(ComponentBehaviors.InductorTruncateBehavior));
         }
 
         /// <summary>
@@ -70,12 +72,13 @@ namespace SpiceSharp.Components
         /// </summary>
         public const int INDflux = 0;
         public const int INDvolt = 1;
+        public const int INDpinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the inductor</param>
-        public Inductor(CircuitIdentifier name) : base(name) { }
+        public Inductor(CircuitIdentifier name) : base(name, INDpinCount) { }
 
         /// <summary>
         /// Constructor
@@ -84,7 +87,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="ind">The inductance</param>
-        public Inductor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double ind) : base(name)
+        public Inductor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double ind) : base(name, INDpinCount)
         {
             Connect(pos, neg);
             INDinduct.Set(ind);
@@ -138,26 +141,6 @@ namespace SpiceSharp.Components
         public void UpdateMutualInductances(Circuit ckt)
         {
             UpdateMutualInductance?.Invoke(this, ckt);
-        }
-
-        /// <summary>
-        /// Accept the current timepoint
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Accept(Circuit ckt)
-        {
-            if (ckt.State.Init == CircuitState.InitFlags.InitTransient)
-                ckt.State.CopyDC(INDstate + INDflux);
-        }
-
-        /// <summary>
-        /// Truncate
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            ckt.Method.Terr(INDstate + INDflux, ckt, ref timeStep);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Perform AC analysis
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var diode = ComponentTyped<Diode>();
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
@@ -10,22 +9,23 @@ namespace SpiceSharp.Components
     /// An independent current source
     /// </summary>
     [SpicePins("I+", "I-"), IndependentSource, ConnectedPins()]
-    public class Currentsource : CircuitComponent<Currentsource>
+    public class Currentsource : CircuitComponent
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static Currentsource()
         {
             Behaviors.Behaviors.RegisterBehavior(typeof(Currentsource), typeof(ComponentBehaviors.CurrentsourceLoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(Currentsource), typeof(ComponentBehaviors.CurrentsourceAcBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Currentsource), typeof(ComponentBehaviors.CurrentsourceAcceptBehavior));
         }
 
         /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("waveform"), SpiceInfo("The waveform object for this source")]
-        public IWaveform ISRCwaveform { get; set; } = null;
+        public Waveform ISRCwaveform { get; set; } = null;
         [SpiceName("dc"), SpiceInfo("D.C. source value")]
         public Parameter ISRCdcValue { get; } = new Parameter();
         [SpiceName("acmag"), SpiceInfo("A.C. magnitude value")]
@@ -59,6 +59,11 @@ namespace SpiceSharp.Components
         public Complex ISRCac;
 
         /// <summary>
+        /// Constants
+        /// </summary>
+        private const int ISRCpinCount = 2;
+
+        /// <summary>
         /// Get the complex voltage across the current source
         /// </summary>
         /// <param name="ckt">Circuit</param>
@@ -69,7 +74,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current source</param>
-        public Currentsource(CircuitIdentifier name) : base(name)
+        public Currentsource(CircuitIdentifier name) : base(name, ISRCpinCount)
         {
         }
 
@@ -80,7 +85,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name)
+        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name, ISRCpinCount)
         {
             Connect(pos, neg);
             ISRCdcValue.Set(dc);
@@ -93,7 +98,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="w">The Waveform-object</param>
-        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, IWaveform w) : base(name)
+        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, Waveform w) : base(name, ISRCpinCount)
         {
             Connect(pos, neg);
             ISRCwaveform = w;

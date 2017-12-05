@@ -9,6 +9,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// </summary>
     public class VoltagesourceLoadBehavior : CircuitObjectBehaviorLoad
     {
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
         public override void Setup(ICircuitObject component, Circuit ckt)
         {
             base.Setup(component, ckt);
@@ -29,7 +34,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute DC or Transient behaviour
         /// </summary>
         /// <param name="ckt"></param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var vsrc = ComponentTyped<Voltagesource>();
 

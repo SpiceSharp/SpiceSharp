@@ -10,7 +10,7 @@ namespace SpiceSharp.Components
     /// Level 3, a semi-empirical model(see reference for level 3).
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class MOS3 : CircuitComponent<MOS3>
+    public class MOS3 : CircuitComponent
     {
         /// <summary>
         /// Register default behaviour
@@ -21,6 +21,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS3), typeof(ComponentBehaviors.MOS3LoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS3), typeof(ComponentBehaviors.MOS3AcBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS3), typeof(ComponentBehaviors.MOS3NoiseBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(MOS3), typeof(ComponentBehaviors.MOS3TruncateBehavior));
         }
 
         /// <summary>
@@ -294,12 +295,13 @@ namespace SpiceSharp.Components
         public const int MOS3cqbd = 14;
         public const int MOS3qbs = 15;
         public const int MOS3cqbs = 16;
+        public const int MOS3pinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS3(CircuitIdentifier name) : base(name)
+        public MOS3(CircuitIdentifier name) : base(name, MOS3pinCount)
         {
         }
 
@@ -388,19 +390,6 @@ namespace SpiceSharp.Components
             MOS3DPbPtr = null;
             MOS3SPbPtr = null;
             MOS3SPdpPtr = null;
-        }
-
-        /// <summary>
-        /// Truncate the timestep
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="timeStep">The timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            var method = ckt.Method;
-            method.Terr(MOS3states + MOS3qgs, ckt, ref timeStep);
-            method.Terr(MOS3states + MOS3qgd, ckt, ref timeStep);
-            method.Terr(MOS3states + MOS3qgb, ckt, ref timeStep);
         }
     }
 }

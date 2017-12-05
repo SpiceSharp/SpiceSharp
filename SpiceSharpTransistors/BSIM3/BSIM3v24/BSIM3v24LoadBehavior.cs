@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute the behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var bsim3 = ComponentTyped<BSIM3v24>();
             var model = bsim3.Model as BSIM3v24Model;
@@ -58,7 +58,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 vds = state.States[0][bsim3.BSIM3states + BSIM3v24.BSIM3vds];
                 qdef = state.States[0][bsim3.BSIM3states + BSIM3v24.BSIM3qdef];
             }
-            else if ((method != null && method.SavedTime == 0.0))
+            else if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 vbs = state.States[1][bsim3.BSIM3states + BSIM3v24.BSIM3vbs];
                 vgs = state.States[1][bsim3.BSIM3states + BSIM3v24.BSIM3vgs];
@@ -2447,7 +2447,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if (!ChargeComputationNeeded)
                 goto line850;
 
-            if (method != null && method.SavedTime == 0.0)
+            if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 state.States[1][bsim3.BSIM3states + BSIM3v24.BSIM3qb] = state.States[0][bsim3.BSIM3states + BSIM3v24.BSIM3qb];
                 state.States[1][bsim3.BSIM3states + BSIM3v24.BSIM3qg] = state.States[0][bsim3.BSIM3states + BSIM3v24.BSIM3qg];
@@ -2517,7 +2517,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 cqcheq = state.States[0][bsim3.BSIM3states + BSIM3v24.BSIM3cqcheq] - (gcqgb * vgb - gcqdb * vbd - gcqsb * vbs) + T0;
             }
 
-            if (method != null && method.SavedTime == 0.0)
+            if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 state.States[1][bsim3.BSIM3states + BSIM3v24.BSIM3cqb] = state.States[0][bsim3.BSIM3states + BSIM3v24.BSIM3cqb];
                 state.States[1][bsim3.BSIM3states + BSIM3v24.BSIM3cqg] = state.States[0][bsim3.BSIM3states + BSIM3v24.BSIM3cqg];

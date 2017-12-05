@@ -6,10 +6,10 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="Diode"/>
     /// </summary>
-    public class DiodeModel : CircuitModel<DiodeModel>
+    public class DiodeModel : CircuitModel
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static DiodeModel()
         {

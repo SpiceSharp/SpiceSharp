@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Perform diode noise calculations
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Noise(Circuit ckt)
         {
             var diode = ComponentTyped<Diode>();
 

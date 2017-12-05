@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute the behaviour
         /// </summary>
         /// <param name="ckt"></param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var bsim1 = ComponentTyped<BSIM1>();
             var state = ckt.State;

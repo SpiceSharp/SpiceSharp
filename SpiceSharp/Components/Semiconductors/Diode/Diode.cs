@@ -8,10 +8,10 @@ namespace SpiceSharp.Components
     /// A diode
     /// </summary>
     [SpicePins("D+", "D-")]
-    public class Diode : CircuitComponent<Diode>
+    public class Diode : CircuitComponent
     {
         /// <summary>
-        /// Register diode behaviours
+        /// Register diode behaviors
         /// </summary>
         static Diode()
         {
@@ -19,6 +19,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(Diode), typeof(ComponentBehaviors.DiodeLoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(Diode), typeof(ComponentBehaviors.DiodeAcBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(Diode), typeof(ComponentBehaviors.DiodeNoiseBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Diode), typeof(ComponentBehaviors.DiodeTruncateBehavior));
         }
 
         /// <summary>
@@ -96,12 +97,13 @@ namespace SpiceSharp.Components
         public const int DIOconduct = 2;
         public const int DIOcapCharge = 3;
         public const int DIOcapCurrent = 4;
+        public const int DIOpinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public Diode(CircuitIdentifier name) : base(name)
+        public Diode(CircuitIdentifier name) : base(name, DIOpinCount)
         {
         }
 
@@ -137,13 +139,18 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Truncate
+        /// Unsetup the device
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
+        public override void Unsetup(Circuit ckt)
         {
-            ckt.Method.Terr(DIOstate + DIOcapCharge, ckt, ref timeStep);
+            DIOposPosPrimePtr = null;
+            DIOnegPosPrimePtr = null;
+            DIOposPrimePosPtr = null;
+            DIOposPrimeNegPtr = null;
+            DIOposPosPtr = null;
+            DIOnegNegPtr = null;
+            DIOposPrimePosPrimePtr = null;
         }
     }
 }

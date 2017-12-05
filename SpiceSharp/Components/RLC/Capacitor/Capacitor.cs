@@ -8,16 +8,18 @@ namespace SpiceSharp.Components
     /// A capacitor
     /// </summary>
     [SpicePins("C+", "C-"), ConnectedPins()]
-    public class Capacitor : CircuitComponent<Capacitor>
+    public class Capacitor : CircuitComponent
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static Capacitor()
         {
             Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorLoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorAcBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorTemperatureBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorAcceptBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(Capacitor), typeof(ComponentBehaviors.CapacitorTruncateBehavior));
         }
 
         /// <summary>
@@ -62,12 +64,13 @@ namespace SpiceSharp.Components
         /// </summary>
         public const int CAPqcap = 0;
         public const int CAPccap = 1;
+        public const int CAPpinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Capacitor(CircuitIdentifier name) : base(name) { }
+        public Capacitor(CircuitIdentifier name) : base(name, CAPpinCount) { }
 
         /// <summary>
         /// Constructor
@@ -76,7 +79,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="cap">The capacitance</param>
-        public Capacitor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double cap) : base(name)
+        public Capacitor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double cap) : base(name, CAPpinCount)
         {
             Connect(pos, neg);
             CAPcapac.Set(cap);
@@ -114,27 +117,6 @@ namespace SpiceSharp.Components
             CAPnegNegptr = null;
             CAPnegPosptr = null;
             CAPposNegptr = null;
-        }
-
-        /// <summary>
-        /// Accept a timepoint
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Accept(Circuit ckt)
-        {
-            // Copy DC states when accepting the first timepoint
-            if (ckt.State.Init == CircuitState.InitFlags.InitTransient)
-                ckt.State.CopyDC(CAPstate + CAPqcap);
-        }
-
-        /// <summary>
-        /// Truncate
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            ckt.Method.Terr(CAPstate + CAPqcap, ckt, ref timeStep);
         }
     }
 }

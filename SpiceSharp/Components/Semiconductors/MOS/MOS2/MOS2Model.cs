@@ -6,10 +6,10 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="MOS2"/>
     /// </summary>
-    public class MOS2Model : CircuitModel<MOS2Model>
+    public class MOS2Model : CircuitModel
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static MOS2Model()
         {

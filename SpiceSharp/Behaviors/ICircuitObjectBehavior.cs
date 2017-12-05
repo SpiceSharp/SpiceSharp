@@ -15,12 +15,6 @@ namespace SpiceSharp.Behaviors
         void Setup(ICircuitObject component, Circuit ckt);
 
         /// <summary>
-        /// Execute the circuit object behaviour
-        /// </summary>
-        /// <param name="ckt"></param>
-        void Execute(Circuit ckt);
-
-        /// <summary>
         /// Unsetup the object behaviour
         /// </summary>
         void Unsetup();

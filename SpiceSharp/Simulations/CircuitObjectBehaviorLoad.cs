@@ -6,6 +6,12 @@
     public abstract class CircuitObjectBehaviorLoad : CircuitObjectBehavior
     {
         /// <summary>
+        /// Load the Y-matrix and Rhs-vector
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        public abstract void Load(Circuit ckt);
+
+        /// <summary>
         /// Test convergence
         /// </summary>
         /// <returns></returns>

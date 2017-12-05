@@ -11,10 +11,10 @@ namespace SpiceSharp.Components
     /// Level 2, A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits Using SPICE2, ERL Memo No. M80/7, Electronics Research Laboratory University of California, Berkeley, October 1980.
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class MOS2 : CircuitComponent<MOS2>
+    public class MOS2 : CircuitComponent
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static MOS2()
         {
@@ -22,6 +22,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS2), typeof(ComponentBehaviors.MOS2LoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS2), typeof(ComponentBehaviors.MOS2AcBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(MOS2), typeof(ComponentBehaviors.MOS2NoiseBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(MOS2), typeof(ComponentBehaviors.MOS2TruncateBehavior));
         }
 
         /// <summary>
@@ -294,12 +295,13 @@ namespace SpiceSharp.Components
         public const int MOS2cqbd = 14;
         public const int MOS2qbs = 15;
         public const int MOS2cqbs = 16;
+        public const int MOS2pinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS2(CircuitIdentifier name) : base(name)
+        public MOS2(CircuitIdentifier name) : base(name, MOS2pinCount)
         {
         }
 
@@ -388,19 +390,6 @@ namespace SpiceSharp.Components
             MOS2DPbPtr = null;
             MOS2SPbPtr = null;
             MOS2SPdpPtr = null;
-        }
-
-        /// <summary>
-        /// Truncate the timestep
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="timeStep">The timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            var method = ckt.Method;
-            method.Terr(MOS2states + MOS2qgs, ckt, ref timeStep);
-            method.Terr(MOS2states + MOS2qgd, ckt, ref timeStep);
-            method.Terr(MOS2states + MOS2qgb, ckt, ref timeStep);
         }
     }
 }

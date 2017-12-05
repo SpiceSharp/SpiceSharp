@@ -208,18 +208,6 @@ namespace SpiceSharp.Simulations
         {
             return Circuit.Objects[name];
         }
-
-        /// <summary>
-        /// Ask a component parameter using the circuit
-        /// </summary>
-        /// <param name="component">The component name</param>
-        /// <param name="parameter">The parameter name</param>
-        /// <returns></returns>
-        public double Ask(CircuitIdentifier component, string parameter)
-        {
-            IParameterized p = (IParameterized)Circuit.Objects[component];
-            return p.Ask(parameter, Circuit);
-        }
     }
 
     /// <summary>

@@ -92,7 +92,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute the behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Noise(Circuit ckt)
         {
             var here = ComponentTyped<BSIM4v80>();
             var model = here.Model as BSIM4v80Model;

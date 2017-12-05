@@ -28,7 +28,7 @@ namespace SpiceSharp
         /// <summary>
         /// Get a list of simulations
         /// </summary>
-        public List<ISimulation> Simulations { get; } = new List<ISimulation>();
+        public List<Simulation> Simulations { get; } = new List<Simulation>();
 
         /// <summary>
         /// Get a list of exported quantities
@@ -217,7 +217,7 @@ namespace SpiceSharp
     /// </summary>
     /// <param name="sender">The netlist sending the event</param>
     /// <param name="sim">The simulation</param>
-    public delegate void NetlistSimulationEventHandler(object sender, ISimulation sim);
+    public delegate void NetlistSimulationEventHandler(object sender, Simulation sim);
 
     /// <summary>
     /// Event handler used when changing the current path

@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// The BSIM3v24 device
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class BSIM3v24 : CircuitComponent<BSIM3v24>
+    public class BSIM3v24 : CircuitComponent
     {
         /// <summary>
         /// Register default behaviours
@@ -20,6 +20,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v24), typeof(ComponentBehaviors.BSIM3v24LoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v24), typeof(ComponentBehaviors.BSIM3v24AcBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v24), typeof(ComponentBehaviors.BSIM3v24NoiseBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BSIM3v24), typeof(ComponentBehaviors.BSIM3v24TruncateBehavior));
         }
 
         /// <summary>
@@ -173,6 +174,7 @@ namespace SpiceSharp.Components
         public const int BSIM3qcdump = 14;
         public const int BSIM3cqcdump = 15;
         public const int BSIM3qdef = 16;
+        public const int BSIM3pinCount = 4;
 
         public const double ScalingFactor = 1e-9;
 
@@ -180,7 +182,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM3v24(CircuitIdentifier name) : base(name)
+        public BSIM3v24(CircuitIdentifier name) : base(name, BSIM3pinCount)
         {
         }
 
@@ -220,19 +222,6 @@ namespace SpiceSharp.Components
 
             // Allocate states
             BSIM3states = ckt.State.GetState(17);
-        }
-
-        /// <summary>
-        /// Truncate
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            var method = ckt.Method;
-            method.Terr(BSIM3states + BSIM3qb, ckt, ref timeStep);
-            method.Terr(BSIM3states + BSIM3qg, ckt, ref timeStep);
-            method.Terr(BSIM3states + BSIM3qd, ckt, ref timeStep);
         }
     }
 }

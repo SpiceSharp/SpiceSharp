@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute behaviour for DC and Transient analysis
         /// </summary>
         /// <param name="ckt"></param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             BJT bjt = ComponentTyped<BJT>();
             BJTModel model = bjt.Model as BJTModel;
@@ -210,7 +210,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 arg1 = arg2 * arg1;
                 denom = 1 + arg1 + arg2;
                 arg3 = arg1 / denom;
-                if (method.SavedTime == 0.0)
+                if (state.Init == CircuitState.InitFlags.InitTransient)
                 {
                     state.States[1][bjt.BJTstate + BJT.BJTcexbc] = cbe / qb;
                     state.States[2][bjt.BJTstate + BJT.BJTcexbc] = state.States[1][bjt.BJTstate + BJT.BJTcexbc];
@@ -419,7 +419,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 method.Integrate(state, out gccs, out ceq, bjt.BJTstate + BJT.BJTqcs, capcs);
                 method.Integrate(state, out geqbx, out ceq, bjt.BJTstate + BJT.BJTqbx, capbx);
-                if (method.SavedTime == 0.0)
+                if (state.Init == CircuitState.InitFlags.InitTransient)
                 {
                     state.States[1][bjt.BJTstate + BJT.BJTcqbx] = state.States[0][bjt.BJTstate + BJT.BJTcqbx];
                     state.States[1][bjt.BJTstate + BJT.BJTcqcs] = state.States[0][bjt.BJTstate + BJT.BJTcqcs];

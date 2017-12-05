@@ -55,7 +55,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Perform noise simulation
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Noise(Circuit ckt)
         {
             var bjt = ComponentTyped<BJT>();
             var model = bjt.Model as BJTModel;

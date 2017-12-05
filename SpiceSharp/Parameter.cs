@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Parameters
+namespace SpiceSharp
 {
     /// <summary>
     /// This class describes a parameter that is optional. Whether or not it was specified can be

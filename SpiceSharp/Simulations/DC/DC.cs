@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
@@ -11,7 +10,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// DC sweep analysis
     /// </summary>
-    public class DC : Simulation<DC>
+    public class DC : Simulation
     {
         /// <summary>
         /// A delegate for when an iteration failed
@@ -28,7 +27,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// A class that describes a job
         /// </summary>
-        public class Sweep : Parameterized<Sweep>
+        public class Sweep
         {
             /// <summary>
             /// Starting value
@@ -110,8 +109,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public List<Sweep> Sweeps { get; } = new List<Sweep>();
 
-        private List<CircuitObjectBehaviorLoad> loadbehaviours;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -136,22 +133,8 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Initialize the circuit
+        /// Execute the DC analysis
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Initialize(Circuit ckt)
-        {
-            base.Initialize(ckt);
-
-            // Get behaviours for DC analysis
-            loadbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
-        }
-
-
-        /// <summary>
-        /// Execute the DC simulation
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
         protected override void Execute()
         {
             var ckt = Circuit;
@@ -169,8 +152,9 @@ namespace SpiceSharp.Simulations
             state.Gmin = config.Gmin;
 
             // Initialize
-            IParameterized[] components = new IParameterized[Sweeps.Count];
-            Parameter[] parameters = new Parameter[Sweeps.Count];
+            // ICircuitObject[] components = new ICircuitObject[Sweeps.Count];
+            Parameter[] swept = new Parameter[Sweeps.Count];
+            Parameter[] original = new Parameter[Sweeps.Count];
 
             // Initialize first time
             for (int i = 0; i < Sweeps.Count; i++)
@@ -179,14 +163,20 @@ namespace SpiceSharp.Simulations
                 var sweep = Sweeps[i];
                 if (!Circuit.Objects.Contains(sweep.ComponentName))
                     throw new CircuitException($"Could not find source {sweep.ComponentName}");
-                components[i] = (IParameterized)this.Circuit.Objects[sweep.ComponentName];
+                var component = Circuit.Objects[sweep.ComponentName];
 
                 // Get the parameter and save it for restoring later
-                parameters[i] = (Parameter)GetDcParameter(components[i]).Clone();
+                if (component is Voltagesource vsrc)
+                    swept[i] = vsrc.VSRCdcValue;
+                else if (component is Currentsource isrc)
+                    swept[i] = isrc.ISRCdcValue;
+                else
+                    throw new CircuitException("Invalid sweep object");
+                original[i] = (Parameter)swept[i].Clone();
+                swept[i].Set(sweep.Start);
 
                 // Start with the original values
                 sweep.SetCurrentStep(0);
-                components[i].Set("dc", sweep.CurrentValue);
             }
 
             Initialize(ckt);
@@ -200,15 +190,15 @@ namespace SpiceSharp.Simulations
                 {
                     level++;
                     Sweeps[level].SetCurrentStep(0);
-                    components[level].Set("dc", Sweeps[level].CurrentValue);
+                    swept[level].Set(Sweeps[level].CurrentValue);
                     state.Init = CircuitState.InitFlags.InitJct;
                 }
 
                 // Calculate the solution
-                if (!ckt.Iterate(loadbehaviours, config, config.SweepMaxIterations))
+                if (!Iterate(ckt, config.SweepMaxIterations))
                 {
                     IterationFailed?.Invoke(this, ckt);
-                    ckt.Op(loadbehaviours, config, config.DcMaxIterations);
+                    Op(ckt, config.DcMaxIterations);
                 }
 
                 // Export data
@@ -222,42 +212,15 @@ namespace SpiceSharp.Simulations
                 if (level >= 0)
                 {
                     Sweeps[level].SetCurrentStep(Sweeps[level].CurrentStep + 1);
-                    components[level].Set("dc", Sweeps[level].CurrentValue);
+                    swept[level].Set(Sweeps[level].CurrentValue);
                 }
             }
 
             // Restore all the parameters of the swept components
             for (int i = 0; i < Sweeps.Count; i++)
-                SetDcParameter(components[i], parameters[i]);
+                swept[i].CopyFrom(original[i]);
 
             Finalize(ckt);
-        }
-
-        /// <summary>
-        /// Get the DC parameter
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        private Parameter GetDcParameter(IParameterized obj)
-        {
-            if (obj is Voltagesource vsource)
-                return vsource.VSRCdcValue;
-            if (obj is Currentsource isource)
-                return isource.ISRCdcValue;
-            return null;
-        }
-
-        /// <summary>
-        /// Copy the DC parameter back to the object
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="par"></param>
-        private void SetDcParameter(IParameterized obj, Parameter par)
-        {
-            if (obj is Voltagesource vsource)
-                vsource.VSRCdcValue.CopyFrom(par);
-            if (obj is Currentsource isource)
-                isource.ISRCdcValue.CopyFrom(par);
         }
     }
 }

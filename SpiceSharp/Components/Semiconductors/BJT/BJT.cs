@@ -1,5 +1,4 @@
-﻿using System;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
@@ -10,10 +9,10 @@ namespace SpiceSharp.Components
     /// A bipolar junction transistor (BJT)
     /// </summary>
     [SpicePins("Collector", "Base", "Emitter", "Substrate")]
-    public class BJT : CircuitComponent<BJT>
+    public class BJT : CircuitComponent
     {
         /// <summary>
-        /// Register default BJT behaviours
+        /// Register default BJT behaviors
         /// </summary>
         static BJT()
         {
@@ -21,6 +20,7 @@ namespace SpiceSharp.Components
             Behaviors.Behaviors.RegisterBehavior(typeof(BJT), typeof(ComponentBehaviors.BJTLoadBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BJT), typeof(ComponentBehaviors.BJTAcBehavior));
             Behaviors.Behaviors.RegisterBehavior(typeof(BJT), typeof(ComponentBehaviors.BJTNoiseBehavior));
+            Behaviors.Behaviors.RegisterBehavior(typeof(BJT), typeof(ComponentBehaviors.BJTTruncateBehavior));
         }
 
         /// <summary>
@@ -230,12 +230,13 @@ namespace SpiceSharp.Components
         public const int BJTgeqcb = 18;
         public const int BJTgccs = 19;
         public const int BJTgeqbx = 20;
+        public const int BJTpinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BJT(CircuitIdentifier name) : base(name)
+        public BJT(CircuitIdentifier name) : base(name, BJTpinCount)
         {
         }
 
@@ -332,19 +333,6 @@ namespace SpiceSharp.Components
             BJTsubstColPrimePtr = null;
             BJTbaseColPrimePtr = null;
             BJTcolPrimeBasePtr = null;
-        }
-
-        /// <summary>
-        /// Truncate
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timeStep)
-        {
-            var method = ckt.Method;
-            method.Terr(BJTstate + BJTqbe, ckt, ref timeStep);
-            method.Terr(BJTstate + BJTqbc, ckt, ref timeStep);
-            method.Terr(BJTstate + BJTqcs, ckt, ref timeStep);
         }
     }
 }

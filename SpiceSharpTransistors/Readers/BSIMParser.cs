@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Mosfet generators for BSIM transistors
         /// </summary>
-        public static Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, ICircuitComponent>> Mosfets { get; } = new Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, ICircuitComponent>>()
+        public static Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, CircuitComponent>> Mosfets { get; } = new Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, CircuitComponent>>()
         {
             {  typeof(BSIM1Model), (CircuitIdentifier name, ICircuitObject model) =>
             {
@@ -61,7 +61,7 @@ namespace SpiceSharp.Components
         /// Add mofset generators
         /// </summary>
         /// <param name="mosfets">The list of mosfet generators</param>
-        public static void AddMosfetGenerators(Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, ICircuitComponent>> mosfets)
+        public static void AddMosfetGenerators(Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, CircuitComponent>> mosfets)
         {
             foreach (var m in Mosfets)
                 mosfets.Add(m.Key, m.Value);

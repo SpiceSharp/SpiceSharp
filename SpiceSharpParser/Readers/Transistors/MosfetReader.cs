@@ -19,7 +19,7 @@ namespace SpiceSharp.Parser.Readers
         /// Generate a mosfet instance based on a model.
         /// The generator is passed the arguments name and model.
         /// </summary>
-        public Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, ICircuitComponent>> Mosfets { get; } = new Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, ICircuitComponent>>();
+        public Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, CircuitComponent>> Mosfets { get; } = new Dictionary<Type, Func<CircuitIdentifier, ICircuitObject, CircuitComponent>>();
 
         /// <summary>
         /// Constructor
@@ -74,7 +74,7 @@ namespace SpiceSharp.Parser.Readers
 
             // Get the model and generate a component for it
             ICircuitObject model = netlist.Path.FindModel<ICircuitObject>(netlist.Circuit.Objects, new CircuitIdentifier(parameters[4].image));
-            ICircuitComponent mosfet = null;
+            CircuitComponent mosfet = null;
             if (Mosfets.ContainsKey(model.GetType()))
                 mosfet = Mosfets[model.GetType()].Invoke(name, model);
             else
@@ -82,7 +82,7 @@ namespace SpiceSharp.Parser.Readers
 
             // The rest is all just parameters
             mosfet.ReadNodes(netlist.Path, parameters);
-            netlist.ReadParameters((IParameterized)mosfet, parameters, 4);
+            netlist.ReadParameters(mosfet, parameters, 4);
             return mosfet;
         }
     }

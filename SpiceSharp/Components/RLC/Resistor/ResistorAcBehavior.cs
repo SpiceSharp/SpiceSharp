@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Perform AC calculations
         /// </summary>
         /// <param name="ckt"></param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var cstate = ckt.State;
             var resistor = ComponentTyped<Resistor>();

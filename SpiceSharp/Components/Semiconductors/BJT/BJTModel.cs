@@ -6,10 +6,10 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="BJT"/>
     /// </summary>
-    public class BJTModel : CircuitModel<BJTModel>
+    public class BJTModel : CircuitModel
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static BJTModel()
         {

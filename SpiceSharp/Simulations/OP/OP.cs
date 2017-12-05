@@ -1,19 +1,12 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Operating Point analysis
     /// </summary>
-    public class OP : Simulation<OP>
+    public class OP : Simulation
     {
-        /// <summary>
-        /// Private variables
-        /// </summary>
-        private List<CircuitObjectBehaviorLoad> loadbehaviours;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -21,17 +14,6 @@ namespace SpiceSharp.Simulations
         /// <param name="config">Configuration</param>
         public OP(string name) : base(name)
         {
-        }
-
-        /// <summary>
-        /// Initialize the analysis
-        /// </summary>
-        /// <param name="ckt"></param>
-        public override void Initialize(Circuit ckt)
-        {
-            base.Initialize(ckt);
-
-            loadbehaviours = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorLoad>(ckt);
         }
 
         /// <summary>
@@ -52,7 +34,7 @@ namespace SpiceSharp.Simulations
             state.Gmin = config.Gmin;
 
             Initialize(ckt);
-            ckt.Op(loadbehaviours, config, config.DcMaxIterations);
+            Op(ckt, config.DcMaxIterations);
             Export(ckt);
             Finalize(ckt);
         }

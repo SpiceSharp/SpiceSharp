@@ -77,7 +77,7 @@ namespace SpiceSharp.Parser.Readers
                     // Find the reader
                     BracketToken bt = parameters[i] as BracketToken;
                     Statement st = new Statement(StatementType.Waveform, bt.Name, bt.Parameters);
-                    isrc.ISRCwaveform = (IWaveform)netlist.Readers.Read(st, netlist);
+                    isrc.ISRCwaveform = (Waveform)netlist.Readers.Read(st, netlist);
                 }
                 else
                     throw new ParseException(parameters[i], "Unrecognized parameter");

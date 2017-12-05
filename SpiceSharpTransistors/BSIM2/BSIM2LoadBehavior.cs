@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Execute the behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var bsim2 = ComponentTyped<BSIM2>();
             var model = bsim2.Model as BSIM2Model;
@@ -72,7 +72,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 vgs = state.States[0][bsim2.B2states + BSIM2.B2vgs];
                 vds = state.States[0][bsim2.B2states + BSIM2.B2vds];
             }
-            else if (method != null && method.SavedTime == 0.0)
+            else if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 vbs = state.States[1][bsim2.B2states + BSIM2.B2vbs];
                 vgs = state.States[1][bsim2.B2states + BSIM2.B2vgs];
@@ -375,7 +375,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 goto line1000;
             }
 
-            if (method != null && method.SavedTime == 0.0)
+            if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 state.States[1][bsim2.B2states + BSIM2.B2qb] = state.States[0][bsim2.B2states + BSIM2.B2qb];
                 state.States[1][bsim2.B2states + BSIM2.B2qg] = state.States[0][bsim2.B2states + BSIM2.B2qg];
@@ -409,7 +409,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             ceqqb = cqbulk - gcbgb * vgb + gcbdb * vbd + gcbsb * vbs;
             ceqqd = cqdrn - gcdgb * vgb + gcddb * vbd + gcdsb * vbs;
 
-            if (method != null && method.SavedTime == 0.0)
+            if (state.Init == CircuitState.InitFlags.InitTransient)
             {
                 state.States[1][bsim2.B2states + BSIM2.B2iqb] = state.States[0][bsim2.B2states + BSIM2.B2iqb];
                 state.States[1][bsim2.B2states + BSIM2.B2iqg] = state.States[0][bsim2.B2states + BSIM2.B2iqg];

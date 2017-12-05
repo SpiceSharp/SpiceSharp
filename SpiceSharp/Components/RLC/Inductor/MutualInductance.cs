@@ -8,10 +8,10 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A mutual inductance
     /// </summary>
-    public class MutualInductance : CircuitComponent<MutualInductance>
+    public class MutualInductance : CircuitComponent
     {
         /// <summary>
-        /// Register default behaviours
+        /// Register default behaviors
         /// </summary>
         static MutualInductance()
         {
@@ -49,7 +49,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the mutual inductance</param>
-        public MutualInductance(CircuitIdentifier name) : base(name)
+        public MutualInductance(CircuitIdentifier name) : base(name, 0)
         {
             // Make sure mutual inductances are evaluated AFTER inductors
             Priority = -1;

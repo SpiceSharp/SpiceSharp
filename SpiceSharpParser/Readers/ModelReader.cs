@@ -33,7 +33,7 @@ namespace SpiceSharp.Parser.Readers
         public override bool Read(string type, Statement st, Netlist netlist)
         {
             var model = GenerateModel(new CircuitIdentifier(st.Name.image), type);
-            netlist.ReadParameters((IParameterized)model, st.Parameters);
+            netlist.ReadParameters(model, st.Parameters);
             
             // Output
             netlist.Circuit.Objects.Add(model);

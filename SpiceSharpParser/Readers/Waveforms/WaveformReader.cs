@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Components;
-using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Parser.Readers
 {
@@ -28,7 +27,7 @@ namespace SpiceSharp.Parser.Readers
         /// Create a new waveform
         /// </summary>
         /// <returns></returns>
-        protected abstract IWaveform Generate(string type);
+        protected abstract Waveform Generate(string type);
 
         /// <summary>
         /// Read
@@ -39,12 +38,16 @@ namespace SpiceSharp.Parser.Readers
         /// <returns></returns>
         public override bool Read(string type, Statement st, Netlist netlist)
         {
-            IParameterized w = Generate(type);
+            Waveform w = Generate(type);
 
             if (st.Parameters.Count > keys.Length)
                 throw new ParseException(st.Name, $"Too many arguments for waveform \"{st.Name.image}\"");
+
+            var dict = ReaderExtension.GetParameters(w.GetType());
             for (int i = 0; i < st.Parameters.Count; i++)
-                w.Set(keys[i], netlist.ParseDouble(st.Parameters[i]));
+            {
+                dict[keys[i]].Set(w, netlist.ParseDouble(st.Parameters[i]));
+            }
 
             Generated = w;
             return true;

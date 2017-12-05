@@ -7,7 +7,7 @@ using SpiceSharp.Components;
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Class that handles all behaviours
+    /// Class that handles all behaviors
     /// </summary>
     public class Behaviors
     {
@@ -36,17 +36,21 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="ckt">Circuit</param>
-        /// <param name="behaviours">The behaviours that need to be imported</param>
+        /// <param name="behaviors">The behaviors that need to be imported</param>
         public static List<T> CreateBehaviors<T>(Circuit ckt) where T : CircuitObjectBehavior
         {
+            // Track how long we are spending on creating behaviors
+            var stats = ckt.Statistics;
+            stats.BehaviorCreationTime.Start();
+
             List<T> result = new List<T>();
 
             foreach (var obj in ckt.Objects)
             {
-                // Get all component behaviours
+                // Get all component behaviors
                 var allBehaviors = GetAllBehaviorsForComponent<T>(obj);
 
-                // Add all behaviours of the type we want
+                // Add all behaviors of the type we want
                 foreach (var type in allBehaviors)
                 {
                     var instance = (T)Activator.CreateInstance(type);
@@ -55,11 +59,12 @@ namespace SpiceSharp.Behaviors
                 }
             }
 
+            stats.BehaviorCreationTime.Stop();
             return result;
         }
 
         /// <summary>
-        /// Get all behaviours of a certain type of a certain circuit object
+        /// Get all behaviors of a certain type of a certain circuit object
         /// </summary>
         /// <typeparam name="T">The behaviour</typeparam>
         /// <param name="obj">The object</param>
@@ -70,8 +75,8 @@ namespace SpiceSharp.Behaviors
             var key = new Tuple<Type, Type>(obj.GetType(), typeof(T));
 
             // Find the behaviour
-            if (Defaults.TryGetValue(key, out List<Type> behaviours))
-                result.AddRange(behaviours);
+            if (Defaults.TryGetValue(key, out List<Type> behaviors))
+                result.AddRange(behaviors);
             return result;
         }
     }

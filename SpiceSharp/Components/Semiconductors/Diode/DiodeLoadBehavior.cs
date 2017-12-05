@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Execute(Circuit ckt)
+        public override void Load(Circuit ckt)
         {
             var diode = ComponentTyped<Diode>();
 
@@ -142,7 +142,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 					 */
                     if (method != null)
                     {
-                        if (method.SavedTime == 0.0)
+                        if (state.Init == CircuitState.InitFlags.InitTransient)
                             state.States[1][diode.DIOstate + Diode.DIOcapCharge] = state.States[0][diode.DIOstate + Diode.DIOcapCharge];
                         var result = method.Integrate(state, diode.DIOstate + Diode.DIOcapCharge, capd);
                         gd = gd + result.Geq;

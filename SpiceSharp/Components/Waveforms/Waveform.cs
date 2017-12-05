@@ -1,11 +1,9 @@
-﻿using SpiceSharp.Parameters;
-
-namespace SpiceSharp.Components
+﻿namespace SpiceSharp.Components
 {
     /// <summary>
     /// Provides values in function of time. This is an abstract class.
     /// </summary>
-    public abstract class Waveform<T> : Parameterized<T>, IWaveform
+    public abstract class Waveform
     {
         /// <summary>
         /// Constructor
