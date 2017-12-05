@@ -78,7 +78,7 @@ namespace SpiceSharp.Parser.Readers
                     var bt = parameters[i] as BracketToken;
                     Statement st = new Statement(StatementType.Waveform, bt.Name, bt.Parameters);
                     object w = netlist.Readers.Read(st, netlist);
-                    vsrc.VSRCwaveform = (IWaveform)w;
+                    vsrc.VSRCwaveform = (Waveform)w;
                 }
                 else
                     throw new ParseException(parameters[i], "Unrecognized parameter");
@@ -100,7 +100,7 @@ namespace SpiceSharp.Parser.Readers
 
             if (parameters.Count < 5)
                 throw new ParseException(parameters[3], "Value expected");
-            vcvs.Set("gain", netlist.ParseDouble(parameters[4]));
+            vcvs.VCVScoeff.Set(netlist.ParseDouble(parameters[4]));
             return vcvs;
         }
 

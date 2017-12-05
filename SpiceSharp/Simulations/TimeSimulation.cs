@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
     /// A base class for time-domain analysis
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class TimeSimulation<T> : Simulation<T>
+    public abstract class TimeSimulation : Simulation
     {
         /// <summary>
         /// Gets or sets the initial timepoint that should be exported

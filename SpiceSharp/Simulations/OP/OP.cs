@@ -5,7 +5,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Operating Point analysis
     /// </summary>
-    public class OP : Simulation<OP>
+    public class OP : Simulation
     {
         /// <summary>
         /// Constructor

@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Parameters;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
+using SpiceSharp.Parameters;
 using SpiceSharp.Parser.Subcircuits;
 using static SpiceSharp.Parser.SpiceSharpParserConstants;
 
@@ -13,13 +14,43 @@ namespace SpiceSharp.Parser.Readers
     public static class ReaderExtension
     {
         /// <summary>
+        /// This dictionary will keep the parameters
+        /// </summary>
+        private static Dictionary<Type, Dictionary<string, SpiceParameter>> Parameters = new Dictionary<Type, Dictionary<string, SpiceParameter>>();
+
+        /// <summary>
+        /// Register a type in the setter dictionary
+        /// </summary>
+        /// <param name="t"></param>
+        public static Dictionary<string, SpiceParameter> GetParameters(Type t)
+        {
+            // Create a new dictionary if necessary
+            Dictionary<string, SpiceParameter> dict;
+            if (!Parameters.TryGetValue(t, out dict))
+            {
+                dict = new Dictionary<string, SpiceParameter>();
+                Parameters.Add(t, dict);
+
+                // Add the setters
+                var parameters = SpiceParameters.List(t);
+                foreach (var parameter in parameters)
+                {
+                    foreach (var name in parameter.Names)
+                        dict.Add(name.Name.ToLower(), parameter);
+                }
+            }
+            return dict;
+        }
+
+        /// <summary>
         /// Read named parameters for a Parameterized object
         /// </summary>
         /// <param name="obj">The parameterized object</param>
         /// <param name="parameters">The parameters</param>
         /// <param name="start">The starting index</param>
-        public static void ReadParameters(this Netlist netlist, IParameterized obj, List<Token> parameters, int start = 0)
+        public static void ReadParameters(this Netlist netlist, object obj, List<Token> parameters, int start = 0)
         {
+            var dict = GetParameters(obj.GetType());
             for (int i = start; i < parameters.Count; i++)
             {
                 if (parameters[i].kind == TokenConstants.ASSIGNMENT)
@@ -30,17 +61,28 @@ namespace SpiceSharp.Parser.Readers
                         pname = at.Name.image.ToLower();
                     else
                         throw new ParseException(parameters[i], "Invalid assignment");
+
+                    SpiceParameter p;
                     switch (at.Value.kind)
                     {
                         case VALUE:
-                            obj.Set(pname, netlist.Readers.ParseDouble(at.Value.image.ToLower()));
+                            if (dict.TryGetValue(pname, out p))
+                                p.Set(obj, netlist.Readers.ParseDouble(at.Value.image.ToLower()));
+                            else
+                                Diagnostics.CircuitWarning.Warning(obj, $"Unrecognized parameter \"{pname}\"");
                             break;
                         case EXPRESSION:
-                            obj.Set(pname, netlist.Readers.ParseDouble(at.Value.image.Substring(1, at.Value.image.Length - 2).ToLower()));
+                            if (dict.TryGetValue(pname, out p))
+                                p.Set(obj, netlist.Readers.ParseDouble(at.Value.image.Substring(1, at.Value.image.Length - 2).ToLower()));
+                            else
+                                Diagnostics.CircuitWarning.Warning(obj, $"Unrecognized parameter \"{pname}\"");
                             break;
                         case WORD:
                         case STRING:
-                            obj.Set(pname, netlist.ParseString(at.Value));
+                            if (dict.TryGetValue(pname, out p))
+                                p.Set(obj, netlist.ParseString(at.Value));
+                            else
+                                Diagnostics.CircuitWarning.Warning(obj, $"Unrecognized parameter \"{pname}\"");
                             break;
                         default:
                             throw new ParseException(parameters[i], "Invalid assignment");
@@ -55,7 +97,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="c">The circuit component</param>
         /// <param name="parameters">The parameters</param>
         /// <param name="index">The index where to start reading, defaults to 0</param>
-        public static void ReadNodes(this ICircuitComponent c, SubcircuitPath path, List<Token> parameters, int index = 0)
+        public static void ReadNodes(this CircuitComponent c, SubcircuitPath path, List<Token> parameters, int index = 0)
         {
             int count = c.PinCount;
 

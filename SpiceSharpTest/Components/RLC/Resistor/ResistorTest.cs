@@ -24,7 +24,8 @@ namespace SpiceSharpTest.Components.RLC.Resistor
             OP simulation = new OP("Simulation");
             simulation.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                var current = data.Ask(new CircuitIdentifier("R_1"), "i");
+                var R1 = ckt.Objects["R_1"];
+                var current = ((SpiceSharp.Components.Resistor)R1).GetCurrent(ckt);
                 Assert.That.AreEqualWithTol(0.01, current, 0, 1e-8);
             };
 
@@ -45,7 +46,8 @@ namespace SpiceSharpTest.Components.RLC.Resistor
             AC simulation = new AC("Simulation", "lin", 10, 1, 1001);
             simulation.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                var current = data.Ask(new CircuitIdentifier("R_1"), "i");
+                var R1 = ckt.Objects["R_1"];
+                var current = ((SpiceSharp.Components.Resistor)R1).GetCurrent(ckt);
                 Assert.That.AreEqualWithTol(0.0, current, 0, 1e-8);
             };
 
@@ -88,8 +90,10 @@ namespace SpiceSharpTest.Components.RLC.Resistor
             OP simulation = new OP("Simulation");
             simulation.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                var r1Current = data.Ask(new CircuitIdentifier("R_1"), "i");
-                var r2Current = data.Ask(new CircuitIdentifier("R_2"), "i");
+                var R1 = (SpiceSharp.Components.Resistor)ckt.Objects["R_1"];
+                var R2 = (SpiceSharp.Components.Resistor)ckt.Objects["R_2"];
+                var r1Current = R1.GetCurrent(ckt);
+                var r2Current = R2.GetCurrent(ckt);
 
                 Assert.That.AreEqualWithTol(50, r1Current, 0, 1e-8);
                 Assert.That.AreEqualWithTol(100, r2Current, 0, 1e-8);

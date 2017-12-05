@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Parameters;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components
 {
@@ -7,7 +6,7 @@ namespace SpiceSharp.Components
     /// This class represents a model.
     /// It also has parameters.
     /// </summary>
-    public abstract class CircuitModel<T> : Parameterized<T>, ICircuitObject
+    public abstract class CircuitModel : ICircuitObject
     {
         /// <summary>
         /// Get the name of the component

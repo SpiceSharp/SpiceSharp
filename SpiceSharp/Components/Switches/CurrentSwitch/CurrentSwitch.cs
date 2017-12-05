@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// A current-controlled switch
     /// </summary>
     [SpicePins("W+", "W-")]
-    public class CurrentSwitch : CircuitComponent<CurrentSwitch>
+    public class CurrentSwitch : CircuitComponent
     {
         /// <summary>
         /// Register default behaviors
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled switch</param>
-        public CurrentSwitch(CircuitIdentifier name) : base(name)
+        public CurrentSwitch(CircuitIdentifier name) : base(name, 2)
         {
             // Make sure the current switch is processed after voltage sources
             Priority = -1;
@@ -80,7 +80,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source</param>
-        public CurrentSwitch(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource) : base(name)
+        public CurrentSwitch(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource) : base(name, 2)
         {
             Connect(pos, neg);
             CSWcontName = vsource;

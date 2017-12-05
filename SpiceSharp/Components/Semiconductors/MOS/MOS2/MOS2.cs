@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
     /// Level 2, A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits Using SPICE2, ERL Memo No. M80/7, Electronics Research Laboratory University of California, Berkeley, October 1980.
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class MOS2 : CircuitComponent<MOS2>
+    public class MOS2 : CircuitComponent
     {
         /// <summary>
         /// Register default behaviors
@@ -300,7 +300,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS2(CircuitIdentifier name) : base(name)
+        public MOS2(CircuitIdentifier name) : base(name, 4)
         {
         }
 

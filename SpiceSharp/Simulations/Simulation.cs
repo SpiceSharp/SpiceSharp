@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Parameters;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
@@ -11,7 +10,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A class that can perform a simulation using a <see cref="Circuit"/>.
     /// </summary>
-    public abstract class Simulation<T> : Parameterized<T>, ISimulation
+    public abstract class Simulation
     {
         /// <summary>
         /// The configuration

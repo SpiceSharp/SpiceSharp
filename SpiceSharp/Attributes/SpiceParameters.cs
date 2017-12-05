@@ -17,14 +17,14 @@ namespace SpiceSharp.Parameters
         /// </summary>
         /// <param name="t">Type</param>
         /// <returns></returns>
-        public static List<SpiceParameter<T>> List<T>()
+        public static List<SpiceParameter> List(Type t)
         {
-            List<SpiceParameter<T>> result = new List<SpiceParameter<T>>();
+            List<SpiceParameter> result = new List<SpiceParameter>();
 
-            var members = typeof(T).GetMembers(BindingFlags.Instance | BindingFlags.Public).Where(m => m.GetCustomAttributes<SpiceName>().Any());
+            var members = t.GetMembers(BindingFlags.Instance | BindingFlags.Public).Where(m => m.GetCustomAttributes<SpiceName>().Any());
             foreach (MemberInfo m in members)
             {
-                result.Add(new SpiceParameter<T>(m));
+                result.Add(new SpiceParameter(m));
             }
 
             // Return the list

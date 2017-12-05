@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// A current-controlled voltage source
     /// </summary>
     [SpicePins("H+", "H-"), VoltageDriver(0, 1)]
-    public class CurrentControlledVoltagesource : CircuitComponent<CurrentControlledVoltagesource>
+    public class CurrentControlledVoltagesource : CircuitComponent
     {
         /// <summary>
         /// Register default behaviors
@@ -57,7 +57,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled current source</param>
-        public CurrentControlledVoltagesource(CircuitIdentifier name) : base(name) { }
+        public CurrentControlledVoltagesource(CircuitIdentifier name) : base(name, 2) { }
 
         /// <summary>
         /// Constructor
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source name</param>
         /// <param name="gain">The transresistance (gain)</param>
-        public CurrentControlledVoltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name)
+        public CurrentControlledVoltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name, 2)
         {
             Connect(pos, neg);
             CCVScoeff.Set(gain);

@@ -16,7 +16,7 @@ namespace SpiceSharp.Simulations
         /// Set the initial conditions
         /// </summary>
         /// <param name="ckt"></param>
-        public static void Ic(this ISimulation simulation, List<CircuitObjectBehaviorIc> icbehaviors)
+        public static void Ic(this Simulation simulation, List<CircuitObjectBehaviorIc> icbehaviors)
         {
             var ckt = simulation.Circuit;
             var state = ckt.State;

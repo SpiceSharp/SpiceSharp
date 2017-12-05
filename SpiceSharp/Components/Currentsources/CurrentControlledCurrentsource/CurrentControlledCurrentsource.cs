@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// A current-controlled current source
     /// </summary>
     [SpicePins("F+", "F-"), ConnectedPins()]
-    public class CurrentControlledCurrentsource : CircuitComponent<CurrentControlledCurrentsource>
+    public class CurrentControlledCurrentsource : CircuitComponent
     {
         /// <summary>
         /// Register default behaviors
@@ -54,7 +54,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current controlled current source</param>
-        public CurrentControlledCurrentsource(CircuitIdentifier name) : base(name)
+        public CurrentControlledCurrentsource(CircuitIdentifier name) : base(name, 2)
         {
             // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
@@ -68,7 +68,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
-        public CurrentControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name)
+        public CurrentControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name, 2)
         {
             Priority = -1;
             Connect(pos, neg);

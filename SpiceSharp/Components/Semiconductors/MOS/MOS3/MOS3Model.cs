@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="MOS3"/>
     /// </summary>
-    public class MOS3Model : CircuitModel<MOS3Model>
+    public class MOS3Model : CircuitModel
     {
         /// <summary>
         /// Register default behaviors

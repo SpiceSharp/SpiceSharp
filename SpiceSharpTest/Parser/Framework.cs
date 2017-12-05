@@ -8,6 +8,7 @@ using SpiceSharp.Components;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parser.Readers;
+using System.Collections.Generic;
 
 namespace SpiceSharpTest.Parser
 {
@@ -69,11 +70,11 @@ namespace SpiceSharpTest.Parser
 
             // Test all parameters
             if (names != null)
-                TestParameters((IParameterized)obj, names, values);
+                TestParameters(obj, names, values);
 
             // Test all nodes
             if (nodes != null)
-                TestNodes((ICircuitComponent)obj, nodes);
+                TestNodes((CircuitComponent)obj, nodes);
 
             // Make sure there are no warnings
             if (CircuitWarning.Warnings.Count > 0)
@@ -87,16 +88,24 @@ namespace SpiceSharpTest.Parser
         /// <param name="obj">The parameterized object</param>
         /// <param name="names">The parameter names</param>
         /// <param name="values">The expected parameter values</param>
-        protected void TestParameters(IParameterized p, string[] names, double[] values)
+        protected void TestParameters(object p, string[] names, double[] values)
         {
             if (names.Length != values.Length)
                 throw new Exception("Unit test error: parameter name array does not match the value array");
+
+            Dictionary<string, Func<double>> getter = new Dictionary<string, Func<double>>();
+            var parameters = SpiceParameters.List(p.GetType());
+            foreach (var parameter in parameters)
+            {
+                foreach (var n in parameter.Names)
+                    getter.Add(n.Name.ToLower(), () => parameter.Get(p));
+            }
 
             // Test all parameters
             for (int i = 0; i < names.Length; i++)
             {
                 double expected = values[i];
-                double actual = p.Ask(names[i]);
+                double actual = getter[names[i]]();
                 double tol = Math.Min(Math.Abs(expected), Math.Abs(actual)) * 1e-6;
                 Assert.AreEqual(expected, actual, tol);
             }
@@ -107,7 +116,7 @@ namespace SpiceSharpTest.Parser
         /// </summary>
         /// <param name="c">The component</param>
         /// <param name="nodes">The expected node names</param>
-        protected void TestNodes(ICircuitComponent c, CircuitIdentifier[] nodes)
+        protected void TestNodes(CircuitComponent c, CircuitIdentifier[] nodes)
         {
             // Test all nodes
             for (int i = 0; i < nodes.Length; i++)

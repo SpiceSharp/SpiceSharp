@@ -4,6 +4,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 using SpiceSharpTest.Utils;
+using SpiceSharp.Components;
 
 namespace SpiceSharpTest.Components.Currentsources.Currentsource
 {
@@ -24,8 +25,10 @@ namespace SpiceSharpTest.Components.Currentsources.Currentsource
             OP simulation = new OP("Simulation");
             simulation.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                var currentOnResistor = data.Ask(new CircuitIdentifier("R_1"), "i");
-                var volategeOnCurrentSource = data.Ask(new CircuitIdentifier("I_1"), "v");
+                var R1 = data.Circuit.Objects["R_1"];
+                var I1 = data.Circuit.Objects["I_1"];
+                var currentOnResistor = ((Resistor)R1).GetCurrent(data.Circuit);
+                var volategeOnCurrentSource = ((SpiceSharp.Components.Currentsource)I1).GetV(data.Circuit);
                 Assert.That.AreEqualWithTol(10, currentOnResistor, 0, 1e-8);
                 Assert.That.AreEqualWithTol(10000, volategeOnCurrentSource, 0, 1e-8);
             };
@@ -52,8 +55,10 @@ namespace SpiceSharpTest.Components.Currentsources.Currentsource
             OP simulation = new OP("Simulation");
             simulation.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                var currentOnResistor = data.Ask(new CircuitIdentifier("R1"), "i");
-                var volategeOnCurrentSource = data.Ask(new CircuitIdentifier("I_1"), "v");
+                var R1 = data.Circuit.Objects["R1"];
+                var I1 = data.Circuit.Objects["I_1"];
+                var currentOnResistor = ((Resistor)R1).GetCurrent(data.Circuit);
+                var volategeOnCurrentSource = ((SpiceSharp.Components.Currentsource)I1).GetV(data.Circuit);
                 Assert.That.AreEqualWithTol(currentInAmp, currentOnResistor, 0, 1e-8);
                 Assert.That.AreEqualWithTol(currentInAmp * resistanceInOhms * resistorCount, volategeOnCurrentSource, 0, 1e-6);
             };

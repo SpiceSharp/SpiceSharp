@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// A diode
     /// </summary>
     [SpicePins("D+", "D-")]
-    public class Diode : CircuitComponent<Diode>
+    public class Diode : CircuitComponent
     {
         /// <summary>
         /// Register diode behaviors
@@ -102,7 +102,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public Diode(CircuitIdentifier name) : base(name)
+        public Diode(CircuitIdentifier name) : base(name, 2)
         {
         }
 

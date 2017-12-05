@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// The BSIM3v24 device
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class BSIM3v24 : CircuitComponent<BSIM3v24>
+    public class BSIM3v24 : CircuitComponent
     {
         /// <summary>
         /// Register default behaviours
@@ -181,7 +181,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM3v24(CircuitIdentifier name) : base(name)
+        public BSIM3v24(CircuitIdentifier name) : base(name, 4)
         {
         }
 

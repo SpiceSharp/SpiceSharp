@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A sine waveform
     /// </summary>
-    public class Sine : Waveform<Sine>
+    public class Sine : Waveform
     {
         /// <summary>
         /// Parameters

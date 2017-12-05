@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A pulse waveform
     /// </summary>
-    public class Pulse : Waveform<Pulse>
+    public class Pulse : Waveform
     {
         /// <summary>
         /// Parameters

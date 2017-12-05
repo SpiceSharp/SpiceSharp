@@ -112,7 +112,7 @@ namespace SpiceSharp.Parser.Readers
                 throw new ParseException(st.Name, $"Unknown mosfet model level {level}");
 
             // Read all the parameters
-            netlist.ReadParameters((IParameterized)model, st.Parameters);
+            netlist.ReadParameters(model, st.Parameters);
 
             // Output
             netlist.Circuit.Objects.Add(model);

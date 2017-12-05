@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// An inductor
     /// </summary>
     [SpicePins("L+", "L-")]
-    public class Inductor : CircuitComponent<Inductor>
+    public class Inductor : CircuitComponent
     {
         /// <summary>
         /// Register default behaviors
@@ -77,7 +77,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the inductor</param>
-        public Inductor(CircuitIdentifier name) : base(name) { }
+        public Inductor(CircuitIdentifier name) : base(name, 2) { }
 
         /// <summary>
         /// Constructor
@@ -86,7 +86,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="ind">The inductance</param>
-        public Inductor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double ind) : base(name)
+        public Inductor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double ind) : base(name, 2)
         {
             Connect(pos, neg);
             INDinduct.Set(ind);

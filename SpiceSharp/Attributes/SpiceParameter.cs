@@ -1,20 +1,17 @@
 ﻿using System.Reflection;
 using System.Collections.Generic;
-using System.Reflection.Emit;
-using System;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Parameters
 {
     /// <summary>
     /// A class for parameter information
     /// </summary>
-    public class SpiceParameter<T>
+    public class SpiceParameter
     {
         /// <summary>
         /// Private variables
         /// </summary>
-        private MemberInfo member;
+        public MemberInfo Member { get; }
 
         /// <summary>
         /// Get all names for the parameter
@@ -33,7 +30,8 @@ namespace SpiceSharp.Parameters
         /// <param name="info">Info of the parameter</param>
         public SpiceParameter(MemberInfo member)
         {
-            this.member = member;
+            Member = member;
+
             List<SpiceName> names = new List<SpiceName>();
             foreach (var attr in member.GetCustomAttributes())
             {
@@ -44,148 +42,91 @@ namespace SpiceSharp.Parameters
             }
             Names = names.ToArray();
         }
-
+        
         /// <summary>
-        /// Create a getter for the parameter
+        /// Set the value of the parameter
         /// </summary>
-        /// <typeparam name="R">Return type</typeparam>
-        /// <returns></returns>
-        public Func<T, R> CreateGetter<R>()
-        {
-            // Properties
-            if (member is PropertyInfo pi)
-            {
-                return (Func<T, R>)pi.GetGetMethod().CreateDelegate(typeof(Func<T, R>));
-            }
-
-            // Fields
-            if (member is FieldInfo fi)
-            {
-                return CreateGetter<T, R>(fi);
-            }
-
-            // Method
-            if (member is MethodInfo mi)
-            {
-                var parameters = mi.GetParameters();
-
-                // R method() is allowed
-                if (parameters.Length == 0 && mi.ReturnType == typeof(R))
-                {
-                    return (Func<T, R>)mi.CreateDelegate(typeof(Func<T, R>));
-                }
-            }
-
-            throw new CircuitException("Invalid parameter type");
-        }
-
-        /// <summary>
-        /// Create an asking method
-        /// </summary>
-        /// <typeparam name="R">Return type</typeparam>
-        /// <returns></returns>
-        public Func<T, Circuit, R> CreateAsker<R>()
-        {
-            // Method
-            if (member is MethodInfo mi)
-            {
-                var parameters = mi.GetParameters();
-
-                // R method(ckt) is allowed
-                if (parameters.Length == 1 && parameters[0].ParameterType == typeof(Circuit) && mi.ReturnType == typeof(R))
-                {
-                    return (Func<T, Circuit, R>)mi.CreateDelegate(typeof(Func<T, Circuit, R>));
-                }
-            }
-
-            throw new CircuitException("Invalid parameter type");
-        }
-
-        /// <summary>
-        /// Create a setter for the parameter
-        /// </summary>
-        /// <typeparam name="P">The parameter type</typeparam>
-        /// <returns></returns>
-        public Action<T, P> CreateSetter<P>()
+        /// <param name="obj">Object</param>
+        /// <param name="value">Value</param>
+        public void Set(object obj, double value)
         {
             // Property
-            if (member is PropertyInfo pi)
+            if (Member is PropertyInfo pi)
             {
-                return (Action<T, P>)pi.GetSetMethod().CreateDelegate(typeof(Action<T, P>));
+                if (pi.PropertyType == typeof(Parameter))
+                    ((Parameter)pi.GetValue(obj)).Set(value);
+                else
+                    pi.SetValue(obj, value);
             }
 
             // Field
-            if (member is FieldInfo fi)
+            else if (Member is FieldInfo fi)
             {
-                return CreateSetter<T, P>(fi);
+                fi.SetValue(obj, value);
             }
 
             // Method
-            if (member is MethodInfo mi)
+            else if (Member is MethodInfo mi)
             {
-                var parameters = mi.GetParameters();
-
-                if (parameters.Length == 1 && parameters[0].ParameterType == typeof(P))
-                {
-                    return (Action<T, P>)mi.CreateDelegate(typeof(Action<T, P>));
-                }
+                mi.Invoke(obj, new object[] { value });
             }
-
-            throw new CircuitException("Invalid parameter type");
         }
 
         /// <summary>
-        /// Create a getter for a field
-        /// Code by Zotta (https://stackoverflow.com/questions/16073091/is-there-a-way-to-create-a-delegate-to-get-and-set-values-for-a-fieldinfo)
+        /// Set the value of the parameter
         /// </summary>
-        /// <typeparam name="S">Object type</typeparam>
-        /// <typeparam name="T">Return type</typeparam>
-        /// <param name="field"></param>
-        /// <returns></returns>
-        private static Func<S, R> CreateGetter<S, R>(FieldInfo field)
+        /// <param name="obj">Object</param>
+        /// <param name="value">Value</param>
+        public void Set(object obj, object value)
         {
-            string methodName = field.ReflectedType.FullName + ".get_" + field.Name;
-            DynamicMethod setterMethod = new DynamicMethod(methodName, typeof(R), new Type[1] { typeof(S) }, true);
-            ILGenerator gen = setterMethod.GetILGenerator();
-            if (field.IsStatic)
+            // Property
+            if (Member is PropertyInfo pi)
             {
-                gen.Emit(OpCodes.Ldsfld, field);
+                pi.SetValue(obj, value);
             }
-            else
+
+            // Field
+            else if (Member is FieldInfo fi)
             {
-                gen.Emit(OpCodes.Ldarg_0);
-                gen.Emit(OpCodes.Ldfld, field);
+                fi.SetValue(obj, value);
             }
-            gen.Emit(OpCodes.Ret);
-            return (Func<S, R>)setterMethod.CreateDelegate(typeof(Func<S, R>));
+
+            // Method
+            else if (Member is MethodInfo mi)
+            {
+                mi.Invoke(obj, new object[] { value });
+            }
         }
 
         /// <summary>
-        /// Create a setter for a field
-        /// Code by Zotta (https://stackoverflow.com/questions/16073091/is-there-a-way-to-create-a-delegate-to-get-and-set-values-for-a-fieldinfo)
+        /// Get the value of the parameter
         /// </summary>
-        /// <typeparam name="S"></typeparam>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="field"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        private static Action<S, P> CreateSetter<S, P>(FieldInfo field)
+        public double Get(object obj)
         {
-            string methodName = field.ReflectedType.FullName + ".set_" + field.Name;
-            DynamicMethod setterMethod = new DynamicMethod(methodName, null, new Type[2] { typeof(S), typeof(P) }, true);
-            ILGenerator gen = setterMethod.GetILGenerator();
-            if (field.IsStatic)
+            // Property
+            if (Member is PropertyInfo pi)
             {
-                gen.Emit(OpCodes.Ldarg_1);
-                gen.Emit(OpCodes.Stsfld, field);
+                if (pi.PropertyType == typeof(Parameter))
+                    return ((Parameter)pi.GetValue(obj)).Value;
+                else
+                    return (double)pi.GetValue(obj);
             }
-            else
+
+            // Field
+            if (Member is FieldInfo fi)
             {
-                gen.Emit(OpCodes.Ldarg_0);
-                gen.Emit(OpCodes.Ldarg_1);
-                gen.Emit(OpCodes.Stfld, field);
+                return (double)fi.GetValue(obj);
             }
-            gen.Emit(OpCodes.Ret);
-            return (Action<S, P>)setterMethod.CreateDelegate(typeof(Action<S, P>));
+
+            // Method
+            if (Member is MethodInfo mi)
+            {
+                return (double)mi.Invoke(obj, null);
+            }
+
+            return double.NaN;
         }
     }
 }

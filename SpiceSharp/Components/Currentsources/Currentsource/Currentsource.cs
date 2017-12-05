@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// An independent current source
     /// </summary>
     [SpicePins("I+", "I-"), IndependentSource, ConnectedPins()]
-    public class Currentsource : CircuitComponent<Currentsource>
+    public class Currentsource : CircuitComponent
     {
         /// <summary>
         /// Register default behaviors
@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [SpiceName("waveform"), SpiceInfo("The waveform object for this source")]
-        public IWaveform ISRCwaveform { get; set; } = null;
+        public Waveform ISRCwaveform { get; set; } = null;
         [SpiceName("dc"), SpiceInfo("D.C. source value")]
         public Parameter ISRCdcValue { get; } = new Parameter();
         [SpiceName("acmag"), SpiceInfo("A.C. magnitude value")]
@@ -69,7 +69,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current source</param>
-        public Currentsource(CircuitIdentifier name) : base(name)
+        public Currentsource(CircuitIdentifier name) : base(name, 2)
         {
         }
 
@@ -80,7 +80,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name)
+        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name, 2)
         {
             Connect(pos, neg);
             ISRCdcValue.Set(dc);
@@ -93,7 +93,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="w">The Waveform-object</param>
-        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, IWaveform w) : base(name)
+        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, Waveform w) : base(name, 2)
         {
             Connect(pos, neg);
             ISRCwaveform = w;

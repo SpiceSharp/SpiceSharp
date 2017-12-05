@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// A time-domain analysis (Transient simulation)
     /// </summary>
-    public class Transient : TimeSimulation<Transient>
+    public class Transient : TimeSimulation
     {
         /// <summary>
         /// An event handler for when the timestep has been cut

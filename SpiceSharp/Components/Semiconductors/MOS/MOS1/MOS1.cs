@@ -10,7 +10,7 @@ namespace SpiceSharp.Components
     /// Level 1, Shichman-Hodges.
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class MOS1 : CircuitComponent<MOS1>
+    public class MOS1 : CircuitComponent
     {
         /// <summary>
         /// Register default behaviors
@@ -299,7 +299,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS1(CircuitIdentifier name) : base(name)
+        public MOS1(CircuitIdentifier name) : base(name, 4)
         {
         }
 

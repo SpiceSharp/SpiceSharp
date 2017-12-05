@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a semiconductor <see cref="Capacitor"/>
     /// </summary>
-    public class CapacitorModel : CircuitModel<CapacitorModel>
+    public class CapacitorModel : CircuitModel
     {
         /// <summary>
         /// Parameters

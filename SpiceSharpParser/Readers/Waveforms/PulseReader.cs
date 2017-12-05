@@ -19,6 +19,6 @@ namespace SpiceSharp.Parser.Readers.Waveforms
         /// Generate a new pulse waveform
         /// </summary>
         /// <returns></returns>
-        protected override IWaveform Generate(string type) => new Pulse();
+        protected override Waveform Generate(string type) => new Pulse();
     }
 }

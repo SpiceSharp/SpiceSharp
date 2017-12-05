@@ -10,7 +10,7 @@ namespace SpiceSharp.Components
     /// Level 3, a semi-empirical model(see reference for level 3).
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class MOS3 : CircuitComponent<MOS3>
+    public class MOS3 : CircuitComponent
     {
         /// <summary>
         /// Register default behaviour
@@ -300,7 +300,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS3(CircuitIdentifier name) : base(name)
+        public MOS3(CircuitIdentifier name) : base(name, 4)
         {
         }
 

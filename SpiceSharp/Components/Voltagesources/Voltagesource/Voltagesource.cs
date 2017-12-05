@@ -10,7 +10,7 @@ namespace SpiceSharp.Components
     /// An independent voltage source
     /// </summary>
     [SpicePins("V+", "V-"), VoltageDriver(0, 1), IndependentSource]
-    public class Voltagesource : CircuitComponent<Voltagesource>
+    public class Voltagesource : CircuitComponent
     {
         /// <summary>
         /// Register default voltagesource behaviors
@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Parameters
         /// </summary>
-        public IWaveform VSRCwaveform { get; set; }
+        public Waveform VSRCwaveform { get; set; }
         [SpiceName("dc"), SpiceInfo("D.C. source value")]
         public Parameter VSRCdcValue { get; } = new Parameter();
         [SpiceName("acmag"), SpiceInfo("A.C. Magnitude")]
@@ -77,7 +77,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name</param>
-        public Voltagesource(CircuitIdentifier name) : base(name) { }
+        public Voltagesource(CircuitIdentifier name) : base(name, 2) { }
 
         /// <summary>
         /// Constructor
@@ -86,7 +86,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name)
+        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name, 2)
         {
             Connect(pos, neg);
             VSRCdcValue.Set(dc);
@@ -99,7 +99,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="w">The waveform</param>
-        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, IWaveform w) : base(name)
+        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, Waveform w) : base(name, 2)
         {
             Connect(pos, neg);
             VSRCwaveform = w;

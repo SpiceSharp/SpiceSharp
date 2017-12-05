@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// A capacitor
     /// </summary>
     [SpicePins("C+", "C-"), ConnectedPins()]
-    public class Capacitor : CircuitComponent<Capacitor>
+    public class Capacitor : CircuitComponent
     {
         /// <summary>
         /// Register default behaviors
@@ -69,7 +69,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Capacitor(CircuitIdentifier name) : base(name) { }
+        public Capacitor(CircuitIdentifier name) : base(name,2 ) { }
 
         /// <summary>
         /// Constructor
@@ -78,7 +78,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="cap">The capacitance</param>
-        public Capacitor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double cap) : base(name)
+        public Capacitor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double cap) : base(name, 2)
         {
             Connect(pos, neg);
             CAPcapac.Set(cap);
