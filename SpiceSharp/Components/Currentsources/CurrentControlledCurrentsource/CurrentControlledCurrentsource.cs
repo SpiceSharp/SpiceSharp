@@ -55,13 +55,14 @@ namespace SpiceSharp.Components
         {
             // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
-            RegisterBehavior(new CurrentControlledCurrentsourceLoadBehavior());
+            var loadbehavior = new CurrentControlledCurrentsourceLoadBehavior();
+            RegisterBehavior(loadbehavior);
             RegisterBehavior(new CurrentControlledCurrentsourceAcBehavior());
 
             // Connect and update the device
             Connect(pos, neg);
             CCCScontName = vsource;
-            Set("gain", gain);
+            loadbehavior.CCCScoeff.Set(gain);
         }
 
         /// <summary>

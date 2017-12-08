@@ -3,6 +3,7 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -14,20 +15,27 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("gain"), SpiceInfo("Gain of the source")]
-        public Parameter CCCScoeff { get; } = new Parameter();
+        public double CCCScoeff = 0.0;
 
         [SpiceName("i"), SpiceInfo("CCCS output current")]
-        public Complex GetCurrent(Circuit ckt) => new Complex(ckt.State.Solution[CCCScontBranch], ckt.State.iSolution[CCCScontBranch]) * CCCScoeff.Value;
+        public Complex GetCurrent(Circuit ckt)
+        {
+            return new Complex(ckt.State.Solution[CCCScontBranch], ckt.State.iSolution[CCCScontBranch]) * CCCScoeff;
+        }
         [SpiceName("v"), SpiceInfo("CCCS voltage at output")]
-        public Complex GetVoltage(Circuit ckt) => new Complex(
-            ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode],
-            ckt.State.iSolution[CCCSposNode] - ckt.State.iSolution[CCCSnegNode]);
+        public Complex GetVoltage(Circuit ckt)
+        {
+            return new Complex(
+                ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode],
+                ckt.State.iSolution[CCCSposNode] - ckt.State.iSolution[CCCSnegNode]);
+        }
         [SpiceName("p"), SpiceInfo("CCCS power")]
         public Complex GetPower(Circuit ckt)
         {
-            Complex current = new Complex(ckt.State.Solution[CCCScontBranch], ckt.State.iSolution[CCCScontBranch]) * CCCScoeff.Value;
-            Complex voltage = new Complex(ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode], ckt.State.iSolution[CCCSposNode] - ckt.State.iSolution[CCCSnegNode]);
+            Complex current = new Complex(ckt.State.Solution[CCCScontBranch], ckt.State.iSolution[CCCScontBranch]) * CCCScoeff;
+            Complex voltage = new Complex(
+                ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode],
+                ckt.State.iSolution[CCCSposNode] - ckt.State.iSolution[CCCSnegNode]);
             return current * voltage;
         }
 
@@ -36,9 +44,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         private MatrixElement CCCSposContBrptr = null;
         private MatrixElement CCCSnegContBrptr = null;
-        private int CCCScontBranch;
-        private int CCCSposNode;
-        private int CCCSnegNode;
+        private int CCCScontBranch = 0;
+        private int CCCSposNode = 0;
+        private int CCCSnegNode = 0;
         
         /// <summary>
         /// Setup the behavior
@@ -50,6 +58,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var cccs = component as CurrentControlledCurrentsource;
             var matrix = ckt.State.Matrix;
 
+            // Extract necessary info from the load behavior
+            var loadbehavior = cccs.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as CurrentControlledCurrentsourceLoadBehavior 
+                ?? throw new CircuitException("No load behavior found");
+            CCCScoeff = loadbehavior.CCCScoeff.Value;
+
+            // Get nodes
             CCCSposNode = cccs.CCCSposNode;
             CCCSnegNode = cccs.CCCSnegNode;
             CCCScontBranch = cccs.CCCScontBranch;
@@ -73,8 +87,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)
         {
-            CCCSposContBrptr.Add(CCCScoeff.Value);
-            CCCSnegContBrptr.Sub(CCCScoeff.Value);
+            CCCSposContBrptr.Add(CCCScoeff);
+            CCCSnegContBrptr.Sub(CCCScoeff);
         }
     }
 }
