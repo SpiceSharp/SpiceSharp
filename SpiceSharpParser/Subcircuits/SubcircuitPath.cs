@@ -164,9 +164,9 @@ namespace SpiceSharp.Parser.Subcircuits
         /// </summary>
         /// <param name="id">Identifier of the model</param>
         /// <returns></returns>
-        public T FindModel<T>(CircuitObjects obj, CircuitIdentifier id) where T : class, ICircuitObject
+        public T FindModel<T>(CircuitObjects obj, CircuitIdentifier id) where T : class, CircuitObject
         {
-            ICircuitObject co;
+            CircuitObject co;
             T model = null;
             CircuitIdentifier orig = id;
 

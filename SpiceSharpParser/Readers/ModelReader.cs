@@ -21,7 +21,7 @@ namespace SpiceSharp.Parser.Readers
         /// Generate a model of the right type
         /// </summary>
         /// <returns></returns>
-        protected abstract ICircuitObject GenerateModel(CircuitIdentifier name, string type);
+        protected abstract CircuitObject GenerateModel(CircuitIdentifier name, string type);
 
         /// <summary>
         /// Read

@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override ICircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected override CircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             switch (type)
             {
@@ -39,7 +39,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateVSW(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected CircuitObject GenerateVSW(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             VoltageSwitch vsw = new VoltageSwitch(name);
             vsw.ReadNodes(netlist.Path, parameters);
@@ -74,7 +74,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateCSW(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected CircuitObject GenerateCSW(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             CurrentSwitch csw = new CurrentSwitch(name);
             csw.ReadNodes(netlist.Path, parameters);

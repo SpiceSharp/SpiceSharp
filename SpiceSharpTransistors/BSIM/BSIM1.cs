@@ -21,7 +21,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public void SetModel(BSIM1Model model) => Model = (ICircuitObject)model;
+        public void SetModel(BSIM1Model model) => Model = (CircuitObject)model;
 
         /// <summary>
         /// Parameters

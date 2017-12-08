@@ -69,7 +69,7 @@ namespace SpiceSharp.Behaviors
         /// <typeparam name="T">The behaviour</typeparam>
         /// <param name="obj">The object</param>
         /// <returns></returns>
-        private static List<Type> GetAllBehaviorsForComponent<T>(ICircuitObject obj) where T : CircuitObjectBehavior
+        private static List<Type> GetAllBehaviorsForComponent<T>(CircuitObject obj) where T : CircuitObjectBehavior
         {
             var result = new List<Type>();
             var key = new Tuple<Type, Type>(obj.GetType(), typeof(T));

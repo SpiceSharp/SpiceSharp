@@ -19,7 +19,7 @@ namespace SpiceSharp.Parser.Readers
         /// Available model generators indexed by their LEVEL.
         /// The parameters passed are name, type (nmos or pmos) and the version.
         /// </summary>
-        public Dictionary<int, Func<CircuitIdentifier, string, string, ICircuitObject>> Levels { get; } = new Dictionary<int, Func<CircuitIdentifier, string, string, ICircuitObject>>();
+        public Dictionary<int, Func<CircuitIdentifier, string, string, CircuitObject>> Levels { get; } = new Dictionary<int, Func<CircuitIdentifier, string, string, CircuitObject>>();
 
         /// <summary>
         /// Constructor
@@ -105,7 +105,7 @@ namespace SpiceSharp.Parser.Readers
                 st.Parameters.RemoveAt(vindex < lindex ? vindex : vindex - 1);
 
             // Generate the model
-            ICircuitObject model = null;
+            CircuitObject model = null;
             if (Levels.ContainsKey(level))
                 model = Levels[level].Invoke(new CircuitIdentifier(st.Name.image), type, version);
             else

@@ -2,6 +2,7 @@
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Sparse;
+using SpiceSharp.Components.ComponentBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -12,28 +13,12 @@ namespace SpiceSharp.Components
     public class CurrentControlledCurrentsource : CircuitComponent
     {
         /// <summary>
-        /// Register default behaviors
-        /// </summary>
-        static CurrentControlledCurrentsource()
-        {
-            Behaviors.Behaviors.RegisterBehavior(typeof(CurrentControlledCurrentsource), typeof(ComponentBehaviors.CurrentControlledCurrentsourceLoadBehavior));
-            Behaviors.Behaviors.RegisterBehavior(typeof(CurrentControlledCurrentsource), typeof(ComponentBehaviors.CurrentControlledCurrentsourceAcBehavior));
-        }
-
-        /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("gain"), SpiceInfo("Gain of the source")]
-        public Parameter CCCScoeff { get; } = new Parameter();
         [SpiceName("control"), SpiceInfo("Name of the controlling source")]
         public CircuitIdentifier CCCScontName { get; set; }
-        [SpiceName("i"), SpiceInfo("CCCS output current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Solution[CCCScontBranch] * CCCScoeff;
-        [SpiceName("v"), SpiceInfo("CCCS voltage at output")]
-        public double GetVoltage(Circuit ckt) => ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode];
-        [SpiceName("p"), SpiceInfo("CCCS power")]
-        public double GetPower(Circuit ckt) => ckt.State.Solution[CCCScontBranch] * CCCScoeff *
-            (ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode]);
+
+
 
         /// <summary>
         /// Nodes
@@ -43,12 +28,6 @@ namespace SpiceSharp.Components
         [SpiceName("neg_node"), SpiceInfo("Negative node of the source")]
         public int CCCSnegNode { get; private set; }
         public int CCCScontBranch { get; private set; }
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
-        internal MatrixElement CCCSposContBrptr { get; private set; }
-        internal MatrixElement CCCSnegContBrptr { get; private set; }
 
         /// <summary>
         /// Constants
@@ -63,6 +42,8 @@ namespace SpiceSharp.Components
         {
             // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
+            RegisterBehavior(new CurrentControlledCurrentsourceLoadBehavior());
+            RegisterBehavior(new CurrentControlledCurrentsourceAcBehavior());
         }
 
         /// <summary>
@@ -75,10 +56,15 @@ namespace SpiceSharp.Components
         /// <param name="gain">The current gain</param>
         public CurrentControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name, CCCSpinCount)
         {
+            // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
+            RegisterBehavior(new CurrentControlledCurrentsourceLoadBehavior());
+            RegisterBehavior(new CurrentControlledCurrentsourceAcBehavior());
+
+            // Connect and update the device
             Connect(pos, neg);
-            CCCScoeff.Set(gain);
             CCCScontName = vsource;
+            Set("gain", gain);
         }
 
         /// <summary>
@@ -96,22 +82,6 @@ namespace SpiceSharp.Components
                 CCCScontBranch = vsrc.VSRCbranch;
             else
                 throw new CircuitException($"{Name}: Could not find voltage source '{CCCScontName}'");
-
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
-            CCCSposContBrptr = matrix.GetElement(CCCSposNode, CCCScontBranch);
-            CCCSnegContBrptr = matrix.GetElement(CCCSnegNode, CCCScontBranch);
-        }
-
-        /// <summary>
-        /// Unsetup the source
-        /// </summary>
-        /// <param name="ckt"></param>
-        public override void Unsetup(Circuit ckt)
-        {
-            // Remove references
-            CCCSposContBrptr = null;
-            CCCSnegContBrptr = null;
         }
     }
 }

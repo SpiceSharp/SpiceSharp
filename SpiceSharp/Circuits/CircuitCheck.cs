@@ -87,7 +87,7 @@ namespace SpiceSharp.Circuits
         /// Deal with a component
         /// </summary>
         /// <param name="c">The circuit object</param>
-        private void CheckObject(ICircuitObject c)
+        private void CheckObject(CircuitObject c)
         {
             // Circuit components
             if (c is CircuitComponent icc)

@@ -246,7 +246,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="netlist">Netlist</param>
         /// <param name="t">Token</param>
         /// <returns></returns>
-        public static T FindModel<T>(this Netlist netlist, Token t) where T : class, ICircuitObject
+        public static T FindModel<T>(this Netlist netlist, Token t) where T : class, CircuitObject
         {
             switch (t.kind)
             {

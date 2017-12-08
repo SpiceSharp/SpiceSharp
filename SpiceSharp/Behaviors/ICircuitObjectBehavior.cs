@@ -12,7 +12,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        void Setup(ICircuitObject component, Circuit ckt);
+        void Setup(CircuitObject component, Circuit ckt);
 
         /// <summary>
         /// Unsetup the object behaviour

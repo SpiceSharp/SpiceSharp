@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// This class represents a model.
     /// It also has parameters.
     /// </summary>
-    public abstract class CircuitModel : ICircuitObject
+    public abstract class CircuitModel : CircuitObject
     {
         /// <summary>
         /// Get the name of the component

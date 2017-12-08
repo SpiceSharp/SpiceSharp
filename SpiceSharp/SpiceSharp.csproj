@@ -45,6 +45,7 @@
     <Compile Include="Attributes\IndependentSource.cs" />
     <Compile Include="Attributes\SpiceParameter.cs" />
     <Compile Include="Attributes\VoltageDriver.cs" />
+    <Compile Include="Components\ComponentState.cs" />
     <Compile Include="Components\Currentsources\CurrentControlledCurrentsource\CurrentControlledCurrentsource.cs" />
     <Compile Include="Components\Currentsources\CurrentControlledCurrentsource\CurrentControlledCurrentsourceAcBehavior.cs" />
     <Compile Include="Components\Currentsources\CurrentControlledCurrentsource\CurrentControlledCurrentsourceLoadBehavior.cs" />
@@ -128,7 +129,7 @@
     <Compile Include="Circuits\CircuitStateNoise.cs" />
     <Compile Include="Components\CircuitModel.cs" />
     <Compile Include="Components\Currentsources\Currentsource\Currentsource.cs" />
-    <Compile Include="Circuits\ICircuitObject.cs" />
+    <Compile Include="Circuits\CircuitObject.cs" />
     <Compile Include="Components\Noise\NoiseGain.cs" />
     <Compile Include="Components\Noise\NoiseGenerator.cs" />
     <Compile Include="Components\Noise\ComponentNoise.cs" />

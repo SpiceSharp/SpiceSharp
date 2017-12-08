@@ -10,21 +10,21 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// The component the behaviour acts upon
         /// </summary>
-        protected ICircuitObject Component { get; private set; }
+        protected CircuitObject Component { get; private set; }
 
         /// <summary>
         /// Gets the component this behaviour uses
         /// </summary>
         /// <typeparam name="T">The component type</typeparam>
         /// <returns></returns>
-        protected T ComponentTyped<T>() where T : class, ICircuitObject => Component as T;
+        protected T ComponentTyped<T>() where T : CircuitObject => Component as T;
 
         /// <summary>
         /// Setup the behaviour
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public virtual void Setup(ICircuitObject component, Circuit ckt)
+        public virtual void Setup(CircuitObject component, Circuit ckt)
         {
             Component = component;
         }
@@ -35,6 +35,31 @@ namespace SpiceSharp.Behaviors
         public virtual void Unsetup()
         {
             // Do nothing
+        }
+
+        /// <summary>
+        /// Set a parameter of this behavior
+        /// Returns true if this behavior has a parameter by that name
+        /// </summary>
+        /// <param name="parameter">Parameter name</param>
+        /// <param name="value">Parameter value</param>
+        public virtual bool Set(string parameter, double value)
+        {
+            // No parameter by default
+            return false;
+        }
+
+        /// <summary>
+        /// Ask a parameter of this behavior
+        /// Returns true if this behavior has a parameter by that name
+        /// </summary>
+        /// <param name="parameter">Parameter name</param>
+        /// <returns></returns>
+        public virtual bool Ask(string parameter, out double value)
+        {
+            // No parameter by default
+            value = double.NaN;
+            return false;
         }
     }
 }

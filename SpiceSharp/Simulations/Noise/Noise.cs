@@ -75,7 +75,7 @@ namespace SpiceSharp.Simulations
             // Check the voltage or current source
             if (Input == null)
                 throw new CircuitException($"{Name}: No input source specified");
-            ICircuitObject source = ckt.Objects[Input];
+            CircuitObject source = ckt.Objects[Input];
             if (source is Voltagesource vsource)
             {
                 if (!vsource.VSRCacMag.Given || vsource.VSRCacMag == 0.0)

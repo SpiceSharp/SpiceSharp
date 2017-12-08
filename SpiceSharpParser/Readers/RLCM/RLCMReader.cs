@@ -25,7 +25,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override ICircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected override CircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             switch (type)
             {
@@ -44,7 +44,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateCap(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected CircuitObject GenerateCap(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             Capacitor cap = new Capacitor(name);
             cap.ReadNodes(netlist.Path, parameters);
@@ -95,7 +95,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateInd(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected CircuitObject GenerateInd(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             Inductor ind = new Inductor(name);
             ind.ReadNodes(netlist.Path, parameters);
@@ -117,7 +117,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateMut(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected CircuitObject GenerateMut(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             MutualInductance mut = new MutualInductance(name);
             switch (parameters.Count)
@@ -145,7 +145,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateRes(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected CircuitObject GenerateRes(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             Resistor res = new Resistor(name);
             res.ReadNodes(netlist.Path, parameters);

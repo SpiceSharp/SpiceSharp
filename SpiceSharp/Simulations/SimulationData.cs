@@ -204,7 +204,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name</param>
         /// <returns></returns>
-        public ICircuitObject GetObject(CircuitIdentifier name)
+        public CircuitObject GetObject(CircuitIdentifier name)
         {
             return Circuit.Objects[name];
         }

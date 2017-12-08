@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// A class that represents a circuit component/device.
     /// It can be connected in a circuit and it also has parameters.
     /// </summary>
-    public abstract class CircuitComponent : ICircuitObject
+    public abstract class CircuitComponent : CircuitObject
     {
         /// <summary>
         /// Private variables
@@ -22,21 +22,11 @@ namespace SpiceSharp.Components
         public virtual int PinCount => connections.Length;
 
         /// <summary>
-        /// Get the name of the component
-        /// </summary>
-        public CircuitIdentifier Name { get; }
-
-        /// <summary>
-        /// This parameter can change the order in which components are traversed
-        /// Components with a higher priority will get the first chance to execute their methods
-        /// </summary>
-        public int Priority { get; protected set; } = 0;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the component</param>
         public CircuitComponent(CircuitIdentifier name, int nodecount)
+            : base(name)
         {
             // Initialize
             if (nodecount > 0)
@@ -49,13 +39,12 @@ namespace SpiceSharp.Components
                 connections = null;
                 indices = null;
             }
-            Name = name;
         }
 
         /// <summary>
         /// Get the model of the circuit component (if any)
         /// </summary>
-        public ICircuitObject Model { get; protected set; } = null;
+        public CircuitObject Model { get; protected set; } = null;
 
         /// <summary>
         /// Connect the component in the circuit
@@ -127,21 +116,6 @@ namespace SpiceSharp.Components
         {
             // Map the extra equations
             return ckt.Nodes.Create(name, type);
-        }
-
-        /// <summary>
-        /// Setup the component
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public abstract void Setup(Circuit ckt);
-
-        /// <summary>
-        /// Unsetup/destroy the component
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public virtual void Unsetup(Circuit ckt)
-        {
-            // Do nothing
         }
     }
 }

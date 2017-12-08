@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="name">Model name</param>
         /// <param name="type">Model type</param>
         /// <returns></returns>
-        protected override ICircuitObject GenerateModel(CircuitIdentifier name, string type)
+        protected override CircuitObject GenerateModel(CircuitIdentifier name, string type)
         {
             BJTModel model = new BJTModel(name);
             if (type == "npn")

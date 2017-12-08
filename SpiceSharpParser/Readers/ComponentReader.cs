@@ -34,7 +34,7 @@ namespace SpiceSharp.Parser.Readers
                 id = netlist.Path.InstancePath.Grow(st.Name.image);
             else
                 id = new CircuitIdentifier(st.Name.image);
-            ICircuitObject result = Generate(type, id, st.Parameters, netlist);
+            CircuitObject result = Generate(type, id, st.Parameters, netlist);
             Generated = result;
             if (result != null)
             {
@@ -53,6 +53,6 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters"></param>
         /// <param name="netlist"></param>
         /// <returns></returns>
-        protected abstract ICircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist);
+        protected abstract CircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist);
     }
 }

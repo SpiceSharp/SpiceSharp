@@ -9,13 +9,13 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Contains and manages a collection circuit objects.
     /// </summary>
-    public class CircuitObjects : IEnumerable<ICircuitObject>
+    public class CircuitObjects : IEnumerable<CircuitObject>
     {
         /// <summary>
         /// Private variables
         /// </summary>
-        private Dictionary<CircuitIdentifier, ICircuitObject> objects = new Dictionary<CircuitIdentifier, ICircuitObject>();
-        private List<ICircuitObject> ordered = new List<ICircuitObject>();
+        private Dictionary<CircuitIdentifier, CircuitObject> objects = new Dictionary<CircuitIdentifier, CircuitObject>();
+        private List<CircuitObject> ordered = new List<CircuitObject>();
 
         /// <summary>
         /// Gets whether or not the list is already ordered
@@ -32,7 +32,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param id="path">The path of the object</param>
         /// <returns></returns>
-        public ICircuitObject this[CircuitIdentifier id] => objects[id];
+        public CircuitObject this[CircuitIdentifier id] => objects[id];
         
         /// <summary>
         /// The amount of circuit objects
@@ -53,7 +53,7 @@ namespace SpiceSharp.Circuits
         /// Add one or more circuit objects
         /// </summary>
         /// <param id="cs">The objects that need to be added</param>
-        public void Add(params ICircuitObject[] cs)
+        public void Add(params CircuitObject[] cs)
         {
             foreach (var c in cs)
             {
@@ -96,16 +96,16 @@ namespace SpiceSharp.Circuits
         /// <param id="id">Identifier</param>
         /// <param id="obj"></param>
         /// <returns></returns>
-        public bool TryGetObject(CircuitIdentifier id, out ICircuitObject obj) => objects.TryGetValue(id, out obj);
+        public bool TryGetObject(CircuitIdentifier id, out CircuitObject obj) => objects.TryGetValue(id, out obj);
 
         /// <summary>
         /// Get all objects of a specific type
         /// </summary>
         /// <param id="type">The type of objects you wish to find</param>
         /// <returns></returns>
-        public ICircuitObject[] ByType(Type type)
+        public CircuitObject[] ByType(Type type)
         {
-            List<ICircuitObject> result = new List<ICircuitObject>();
+            List<CircuitObject> result = new List<CircuitObject>();
             foreach (var c in objects.Values)
             {
                 if (c.GetType() == type)
@@ -125,7 +125,7 @@ namespace SpiceSharp.Circuits
 
             // Initialize
             ordered.Clear();
-            HashSet<ICircuitObject> added = new HashSet<ICircuitObject>();
+            HashSet<CircuitObject> added = new HashSet<CircuitObject>();
 
             // Build our list
             foreach (var c in objects.Values)
@@ -147,7 +147,7 @@ namespace SpiceSharp.Circuits
             }
 
             // Sort the list based on priority
-            ordered.Sort((ICircuitObject a, ICircuitObject b) => {
+            ordered.Sort((CircuitObject a, CircuitObject b) => {
                 return b.Priority.CompareTo(a.Priority);
             });
             isordered = true;
@@ -157,7 +157,7 @@ namespace SpiceSharp.Circuits
         /// Get enumerator
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<ICircuitObject> GetEnumerator() => ordered.GetEnumerator();
+        public IEnumerator<CircuitObject> GetEnumerator() => ordered.GetEnumerator();
 
         /// <summary>
         /// Get enumerator

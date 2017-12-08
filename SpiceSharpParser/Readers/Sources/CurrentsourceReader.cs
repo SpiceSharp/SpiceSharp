@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override ICircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected override CircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             switch (type)
             {
@@ -40,7 +40,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateISRC(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected CircuitObject GenerateISRC(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             Currentsource isrc = new Currentsource(name);
             isrc.ReadNodes(netlist.Path, parameters);
@@ -93,7 +93,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateCCCS(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected CircuitObject GenerateCCCS(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             CurrentControlledCurrentsource cccs = new CurrentControlledCurrentsource(name);
             cccs.ReadNodes(netlist.Path, parameters);
@@ -117,7 +117,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected ICircuitObject GenerateVCCS(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected CircuitObject GenerateVCCS(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
         {
             VoltageControlledCurrentsource vccs = new VoltageControlledCurrentsource(name);
             vccs.ReadNodes(netlist.Path, parameters);

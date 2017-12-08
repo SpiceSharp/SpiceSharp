@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component"></param>
         /// <param name="ckt"></param>
-        public override void Setup(ICircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             base.Setup(component, ckt);
             var mut = ComponentTyped<MutualInductance>();
