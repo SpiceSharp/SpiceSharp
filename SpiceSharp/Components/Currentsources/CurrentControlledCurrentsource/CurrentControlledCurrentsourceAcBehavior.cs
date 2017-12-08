@@ -39,39 +39,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         private int CCCScontBranch;
         private int CCCSposNode;
         private int CCCSnegNode;
-
-        /// <summary>
-        /// Set a parameter
-        /// </summary>
-        /// <param name="parameter">Parameter name</param>
-        /// <param name="value">Parameter value</param>
-        /// <returns></returns>
-        public override bool Set(string parameter, double value)
-        {
-            switch (parameter)
-            {
-                case "name": CCCScoeff.Set(value); return true;
-                default: return false;
-            }
-        }
-
-        /// <summary>
-        /// Ask a parameter
-        /// </summary>
-        /// <param name="parameter">Parameter name</param>
-        /// <param name="value">Parameter value</param>
-        /// <returns></returns>
-        public override bool Ask(string parameter, out double value)
-        {
-            switch (parameter)
-            {
-                case "name": value = CCCScoeff; return true;
-                default:
-                    value = double.NaN;
-                    return false;
-            }
-        }
-
+        
         /// <summary>
         /// Setup the behavior
         /// </summary>

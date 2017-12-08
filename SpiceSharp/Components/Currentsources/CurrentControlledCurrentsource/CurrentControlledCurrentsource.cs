@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Sparse;
 using SpiceSharp.Components.ComponentBehaviors;
 
 namespace SpiceSharp.Components
@@ -17,8 +16,6 @@ namespace SpiceSharp.Components
         /// </summary>
         [SpiceName("control"), SpiceInfo("Name of the controlling source")]
         public CircuitIdentifier CCCScontName { get; set; }
-
-
 
         /// <summary>
         /// Nodes
