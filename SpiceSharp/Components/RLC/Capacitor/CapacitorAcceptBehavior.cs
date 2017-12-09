@@ -8,17 +8,29 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// </summary>
     public class CapacitorAcceptBehavior : CircuitObjectBehaviorAccept
     {
+        CapacitorLoadBehavior load = null;
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        public override void Setup(CircuitObject component, Circuit ckt)
+        {
+            base.Setup(component, ckt);
+
+            load = component.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as CapacitorLoadBehavior;
+        }
+
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Accept(Circuit ckt)
         {
-            var cap = ComponentTyped<Capacitor>();
-
             // Copy DC states when accepting the first timepoint
             if (ckt.State.Init == CircuitState.InitFlags.InitTransient)
-                ckt.State.CopyDC(cap.CAPstate + Capacitor.CAPqcap);
+                ckt.State.CopyDC(load.CAPstate + CapacitorLoadBehavior.CAPqcap);
         }
     }
 }

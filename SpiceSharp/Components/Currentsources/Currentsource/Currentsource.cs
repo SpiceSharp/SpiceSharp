@@ -39,15 +39,11 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc) : base(name, ISRCpinCount)
+        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc)
+            : this(name)
         {
             Connect(pos, neg);
-
-            var loadbehavior = new CurrentsourceLoadBehavior();
-            loadbehavior.ISRCdcValue.Set(dc);
-            RegisterBehavior(loadbehavior);
-            RegisterBehavior(new CurrentsourceAcBehavior());
-            RegisterBehavior(new CurrentsourceAcceptBehavior());
+            Set("dc", dc);
         }
 
         /// <summary>

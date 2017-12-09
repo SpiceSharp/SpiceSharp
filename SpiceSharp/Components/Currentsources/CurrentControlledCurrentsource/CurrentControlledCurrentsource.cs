@@ -51,18 +51,16 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
-        public CurrentControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name, CCCSpinCount)
+        public CurrentControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain)
+            : this(name)
         {
             // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
-            var loadbehavior = new CurrentControlledCurrentsourceLoadBehavior();
-            RegisterBehavior(loadbehavior);
-            RegisterBehavior(new CurrentControlledCurrentsourceAcBehavior());
 
             // Connect and update the device
             Connect(pos, neg);
             CCCScontName = vsource;
-            loadbehavior.CCCScoeff.Set(gain);
+            Set("gain", gain);
         }
 
         /// <summary>
