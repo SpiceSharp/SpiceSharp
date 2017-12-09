@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Sparse;
+using SpiceSharp.Components.ComponentBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -10,28 +10,6 @@ namespace SpiceSharp.Components
     [SpicePins("V+", "V-", "VC+", "VC-"), ConnectedPins(0, 1)]
     public class VoltageControlledCurrentsource : CircuitComponent
     {
-        /// <summary>
-        /// Register default behaviors
-        /// </summary>
-        static VoltageControlledCurrentsource()
-        {
-            Behaviors.Behaviors.RegisterBehavior(typeof(VoltageControlledCurrentsource), typeof(ComponentBehaviors.VoltageControlledCurrentsourceLoadBehavior));
-            Behaviors.Behaviors.RegisterBehavior(typeof(VoltageControlledCurrentsource), typeof(ComponentBehaviors.VoltageControlledCurrentsourceAcBehavior));
-        }
-
-        /// <summary>
-        /// Parameters
-        /// </summary>
-        [SpiceName("gain"), SpiceInfo("Transconductance of the source (gain)")]
-        public Parameter VCCScoeff { get; } = new Parameter();
-        [SpiceName("i"), SpiceInfo("Output current")]
-        public double GetCurrent(Circuit ckt) => (ckt.State.Solution[VCCScontPosNode] - ckt.State.Solution[VCCScontNegNode]) * VCCScoeff;
-        [SpiceName("v"), SpiceInfo("Voltage across output")]
-        public double GetVoltage(Circuit ckt) => ckt.State.Solution[VCCSposNode] - ckt.State.Solution[VCCSnegNode];
-        [SpiceName("p"), SpiceInfo("Power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Solution[VCCScontPosNode] - ckt.State.Solution[VCCScontNegNode]) * VCCScoeff *
-            (ckt.State.Solution[VCCSposNode] - ckt.State.Solution[VCCSnegNode]);
-
         /// <summary>
         /// Nodes
         /// </summary>
@@ -45,14 +23,6 @@ namespace SpiceSharp.Components
         public int VCCScontNegNode { get; private set; }
 
         /// <summary>
-        /// Matrix elements
-        /// </summary>
-        internal MatrixElement VCCSposContPosptr { get; private set; }
-        internal MatrixElement VCCSposContNegptr { get; private set; }
-        internal MatrixElement VCCSnegContPosptr { get; private set; }
-        internal MatrixElement VCCSnegContNegptr { get; private set; }
-
-        /// <summary>
         /// Private constants
         /// </summary>
         public const int VCCSpinCount = 4;
@@ -63,6 +33,8 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the voltage-controlled current source</param>
         public VoltageControlledCurrentsource(CircuitIdentifier name) : base(name, VCCSpinCount)
         {
+            RegisterBehavior(new VoltageControlledCurrentsourceLoadBehavior());
+            RegisterBehavior(new VoltageControlledCurrentsourceAcBehavior());
         }
 
         /// <summary>
@@ -78,7 +50,11 @@ namespace SpiceSharp.Components
             : base(name, VCCSpinCount)
         {
             Connect(pos, neg, cont_pos, cont_neg);
-            VCCScoeff.Set(gain);
+
+            var loadbehavior = new VoltageControlledCurrentsourceLoadBehavior();
+            loadbehavior.VCCScoeff.Set(gain);
+            RegisterBehavior(loadbehavior);
+            RegisterBehavior(new VoltageControlledCurrentsourceAcBehavior());
         }
 
         /// <summary>
@@ -92,26 +68,6 @@ namespace SpiceSharp.Components
             VCCSnegNode = nodes[1].Index;
             VCCScontPosNode = nodes[2].Index;
             VCCScontNegNode = nodes[3].Index;
-
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
-            VCCSposContPosptr = matrix.GetElement(VCCSposNode, VCCScontPosNode);
-            VCCSposContNegptr = matrix.GetElement(VCCSposNode, VCCScontNegNode);
-            VCCSnegContPosptr = matrix.GetElement(VCCSnegNode, VCCScontPosNode);
-            VCCSnegContNegptr = matrix.GetElement(VCCSnegNode, VCCScontNegNode);
-        }
-
-        /// <summary>
-        /// Unsetup
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Unsetup(Circuit ckt)
-        {
-            // Remove references
-            VCCSposContPosptr = null;
-            VCCSposContNegptr = null;
-            VCCSnegContPosptr = null;
-            VCCSnegContNegptr = null;
         }
     }
 }
