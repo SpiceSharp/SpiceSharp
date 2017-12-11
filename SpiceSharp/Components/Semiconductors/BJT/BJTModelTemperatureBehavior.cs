@@ -1,6 +1,8 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -10,33 +12,167 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class BJTModelTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
+        /// Parameters
+        /// </summary>
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
+        public double BJT_TNOM
+        {
+            get => BJTtnom - Circuit.CONSTCtoK;
+            set => BJTtnom.Set(value + Circuit.CONSTCtoK);
+        }
+        public Parameter BJTtnom { get; } = new Parameter();
+        [SpiceName("is"), SpiceInfo("Saturation Current")]
+        public Parameter BJTsatCur { get; } = new Parameter(1e-16);
+        [SpiceName("bf"), SpiceInfo("Ideal forward beta")]
+        public Parameter BJTbetaF { get; } = new Parameter(100);
+        [SpiceName("nf"), SpiceInfo("Forward emission coefficient")]
+        public Parameter BJTemissionCoeffF { get; } = new Parameter(1);
+        [SpiceName("vaf"), SpiceName("va"), SpiceInfo("Forward Early voltage")]
+        public Parameter BJTearlyVoltF { get; } = new Parameter();
+        [SpiceName("ikf"), SpiceName("ik"), SpiceInfo("Forward beta roll-off corner current")]
+        public Parameter BJTrollOffF { get; } = new Parameter();
+        [SpiceName("ise"), SpiceInfo("B-E leakage saturation current")]
+        public Parameter BJTleakBEcurrent { get; } = new Parameter();
+        [SpiceName("ne"), SpiceInfo("B-E leakage emission coefficient")]
+        public Parameter BJTleakBEemissionCoeff { get; } = new Parameter(1.5);
+        [SpiceName("br"), SpiceInfo("Ideal reverse beta")]
+        public Parameter BJTbetaR { get; } = new Parameter(1);
+        [SpiceName("nr"), SpiceInfo("Reverse emission coefficient")]
+        public Parameter BJTemissionCoeffR { get; } = new Parameter(1);
+        [SpiceName("var"), SpiceName("vb"), SpiceInfo("Reverse Early voltage")]
+        public Parameter BJTearlyVoltR { get; } = new Parameter();
+        [SpiceName("ikr"), SpiceInfo("reverse beta roll-off corner current")]
+        public Parameter BJTrollOffR { get; } = new Parameter();
+        [SpiceName("isc"), SpiceInfo("B-C leakage saturation current")]
+        public Parameter BJTleakBCcurrent { get; } = new Parameter();
+        [SpiceName("nc"), SpiceInfo("B-C leakage emission coefficient")]
+        public Parameter BJTleakBCemissionCoeff { get; } = new Parameter(2);
+        [SpiceName("rb"), SpiceInfo("Zero bias base resistance")]
+        public Parameter BJTbaseResist { get; } = new Parameter();
+        [SpiceName("irb"), SpiceInfo("Current for base resistance=(rb+rbm)/2")]
+        public Parameter BJTbaseCurrentHalfResist { get; } = new Parameter();
+        [SpiceName("rbm"), SpiceInfo("Minimum base resistance")]
+        public Parameter BJTminBaseResist { get; } = new Parameter();
+        [SpiceName("re"), SpiceInfo("Emitter resistance")]
+        public Parameter BJTemitterResist { get; } = new Parameter();
+        [SpiceName("rc"), SpiceInfo("Collector resistance")]
+        public Parameter BJTcollectorResist { get; } = new Parameter();
+        [SpiceName("cje"), SpiceInfo("Zero bias B-E depletion capacitance")]
+        public Parameter BJTdepletionCapBE { get; } = new Parameter();
+        [SpiceName("vje"), SpiceName("pe"), SpiceInfo("B-E built in potential")]
+        public Parameter BJTpotentialBE { get; } = new Parameter(0.75);
+        [SpiceName("mje"), SpiceName("me"), SpiceInfo("B-E junction grading coefficient")]
+        public Parameter BJTjunctionExpBE { get; } = new Parameter(.33);
+        [SpiceName("tf"), SpiceInfo("Ideal forward transit time")]
+        public Parameter BJTtransitTimeF { get; } = new Parameter();
+        [SpiceName("xtf"), SpiceInfo("Coefficient for bias dependence of TF")]
+        public Parameter BJTtransitTimeBiasCoeffF { get; } = new Parameter();
+        [SpiceName("vtf"), SpiceInfo("Voltage giving VBC dependence of TF")]
+        public Parameter BJTtransitTimeFVBC { get; } = new Parameter();
+        [SpiceName("itf"), SpiceInfo("High current dependence of TF")]
+        public Parameter BJTtransitTimeHighCurrentF { get; } = new Parameter();
+        [SpiceName("ptf"), SpiceInfo("Excess phase")]
+        public Parameter BJTexcessPhase { get; } = new Parameter();
+        [SpiceName("cjc"), SpiceInfo("Zero bias B-C depletion capacitance")]
+        public Parameter BJTdepletionCapBC { get; } = new Parameter();
+        [SpiceName("vjc"), SpiceName("pc"), SpiceInfo("B-C built in potential")]
+        public Parameter BJTpotentialBC { get; } = new Parameter(0.75);
+        [SpiceName("mjc"), SpiceName("mc"), SpiceInfo("B-C junction grading coefficient")]
+        public Parameter BJTjunctionExpBC { get; } = new Parameter(.33);
+        [SpiceName("xcjc"), SpiceInfo("Fraction of B-C cap to internal base")]
+        public Parameter BJTbaseFractionBCcap { get; } = new Parameter(1);
+        [SpiceName("tr"), SpiceInfo("Ideal reverse transit time")]
+        public Parameter BJTtransitTimeR { get; } = new Parameter();
+        [SpiceName("cjs"), SpiceName("ccs"), SpiceInfo("Zero bias C-S capacitance")]
+        public Parameter BJTcapCS { get; } = new Parameter();
+        [SpiceName("vjs"), SpiceName("ps"), SpiceInfo("Substrate junction built in potential")]
+        public Parameter BJTpotentialSubstrate { get; } = new Parameter(.75);
+        [SpiceName("mjs"), SpiceName("ms"), SpiceInfo("Substrate junction grading coefficient")]
+        public Parameter BJTexponentialSubstrate { get; } = new Parameter();
+        [SpiceName("xtb"), SpiceInfo("Forward and reverse beta temp. exp.")]
+        public Parameter BJTbetaExp { get; } = new Parameter();
+        [SpiceName("eg"), SpiceInfo("Energy gap for IS temp. dependency")]
+        public Parameter BJTenergyGap { get; } = new Parameter(1.11);
+        [SpiceName("xti"), SpiceInfo("Temp. exponent for IS")]
+        public Parameter BJTtempExpIS { get; } = new Parameter(3);
+        [SpiceName("fc"), SpiceInfo("Forward bias junction fit parameter")]
+        public Parameter BJTdepletionCapCoeff { get; } = new Parameter();
+        [SpiceName("invearlyvoltf"), SpiceInfo("Inverse early voltage:forward")]
+        public double BJTinvEarlyVoltF { get; internal set; }
+        [SpiceName("invearlyvoltr"), SpiceInfo("Inverse early voltage:reverse")]
+        public double BJTinvEarlyVoltR { get; internal set; }
+        [SpiceName("invrollofff"), SpiceInfo("Inverse roll off - forward")]
+        public double BJTinvRollOffF { get; internal set; }
+        [SpiceName("invrolloffr"), SpiceInfo("Inverse roll off - reverse")]
+        public double BJTinvRollOffR { get; internal set; }
+        [SpiceName("collectorconduct"), SpiceInfo("Collector conductance")]
+        public double BJTcollectorConduct { get; internal set; }
+        [SpiceName("emitterconduct"), SpiceInfo("Emitter conductance")]
+        public double BJTemitterConduct { get; internal set; }
+        [SpiceName("transtimevbcfact"), SpiceInfo("Transit time VBC factor")]
+        public double BJTtransitTimeVBCFactor { get; internal set; }
+        [SpiceName("excessphasefactor"), SpiceInfo("Excess phase fact.")]
+        public double BJTexcessPhaseFactor { get; internal set; }
+
+        /// <summary>
+        /// Shared parameters
+        /// </summary>
+        public double fact1 { get; protected set; }
+        public double xfc { get; protected set; }
+
+        /// <summary>
+        /// Extra variables
+        /// </summary>
+        public Parameter BJTc2 { get; } = new Parameter();
+        public Parameter BJTc4 { get; } = new Parameter();
+        public double BJTf2 { get; protected set; }
+        public double BJTf3 { get; protected set; }
+        public double BJTf6 { get; protected set; }
+        public double BJTf7 { get; protected set; }
+
+        /// <summary>
+        /// Private variables
+        /// </summary>
+        private CircuitIdentifier name;
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="component"></param>
+        /// <param name="ckt"></param>
+        public override bool Setup(CircuitObject component, Circuit ckt)
+        {
+            // Store the name for error reporting
+            name = (component as BJTModel).Name;
+            return true;
+        }
+
+        /// <summary>
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            var model = ComponentTyped<BJTModel>();
+            if (!BJTtnom.Given)
+                BJTtnom.Value = ckt.State.NominalTemperature;
+            fact1 = BJTtnom / Circuit.CONSTRefTemp;
 
-            if (!model.BJTtnom.Given)
-                model.BJTtnom.Value = ckt.State.NominalTemperature;
-            model.fact1 = model.BJTtnom / Circuit.CONSTRefTemp;
-
-            if (!model.BJTleakBEcurrent.Given)
+            if (!BJTleakBEcurrent.Given)
             {
-                if (model.BJTc2.Given)
-                    model.BJTleakBEcurrent.Value = model.BJTc2 * model.BJTsatCur;
+                if (BJTc2.Given)
+                    BJTleakBEcurrent.Value = BJTc2 * BJTsatCur;
                 else
-                    model.BJTleakBEcurrent.Value = 0;
+                    BJTleakBEcurrent.Value = 0;
             }
-            if (!model.BJTleakBCcurrent.Given)
+            if (!BJTleakBCcurrent.Given)
             {
-                if (model.BJTc4.Given)
-                    model.BJTleakBCcurrent.Value = model.BJTc4 * model.BJTsatCur;
+                if (BJTc4.Given)
+                    BJTleakBCcurrent.Value = BJTc4 * BJTsatCur;
                 else
-                    model.BJTleakBCcurrent.Value = 0;
+                    BJTleakBCcurrent.Value = 0;
             }
-            if (!model.BJTminBaseResist.Given)
-                model.BJTminBaseResist.Value = model.BJTbaseResist;
+            if (!BJTminBaseResist.Given)
+                BJTminBaseResist.Value = BJTbaseResist;
 
             /* 
 			 * COMPATABILITY WARNING!
@@ -50,52 +186,52 @@ namespace SpiceSharp.Components.ComponentBehaviors
 			 * leakage saturation current).   TQ  6 / 29 / 84
 			 */
 
-            if (model.BJTearlyVoltF.Given && model.BJTearlyVoltF != 0)
-                model.BJTinvEarlyVoltF = 1 / model.BJTearlyVoltF;
+            if (BJTearlyVoltF.Given && BJTearlyVoltF != 0)
+                BJTinvEarlyVoltF = 1 / BJTearlyVoltF;
             else
-                model.BJTinvEarlyVoltF = 0;
-            if (model.BJTrollOffF.Given && model.BJTrollOffF != 0)
-                model.BJTinvRollOffF = 1 / model.BJTrollOffF;
+                BJTinvEarlyVoltF = 0;
+            if (BJTrollOffF.Given && BJTrollOffF != 0)
+                BJTinvRollOffF = 1 / BJTrollOffF;
             else
-                model.BJTinvRollOffF = 0;
-            if (model.BJTearlyVoltR.Given && model.BJTearlyVoltR != 0)
-                model.BJTinvEarlyVoltR = 1 / model.BJTearlyVoltR;
+                BJTinvRollOffF = 0;
+            if (BJTearlyVoltR.Given && BJTearlyVoltR != 0)
+                BJTinvEarlyVoltR = 1 / BJTearlyVoltR;
             else
-                model.BJTinvEarlyVoltR = 0;
-            if (model.BJTrollOffR.Given && model.BJTrollOffR != 0)
-                model.BJTinvRollOffR = 1 / model.BJTrollOffR;
+                BJTinvEarlyVoltR = 0;
+            if (BJTrollOffR.Given && BJTrollOffR != 0)
+                BJTinvRollOffR = 1 / BJTrollOffR;
             else
-                model.BJTinvRollOffR = 0;
-            if (model.BJTcollectorResist.Given && model.BJTcollectorResist != 0)
-                model.BJTcollectorConduct = 1 / model.BJTcollectorResist;
+                BJTinvRollOffR = 0;
+            if (BJTcollectorResist.Given && BJTcollectorResist != 0)
+                BJTcollectorConduct = 1 / BJTcollectorResist;
             else
-                model.BJTcollectorConduct = 0;
-            if (model.BJTemitterResist.Given && model.BJTemitterResist != 0)
-                model.BJTemitterConduct = 1 / model.BJTemitterResist;
+                BJTcollectorConduct = 0;
+            if (BJTemitterResist.Given && BJTemitterResist != 0)
+                BJTemitterConduct = 1 / BJTemitterResist;
             else
-                model.BJTemitterConduct = 0;
-            if (model.BJTtransitTimeFVBC.Given && model.BJTtransitTimeFVBC != 0)
-                model.BJTtransitTimeVBCFactor = 1 / (model.BJTtransitTimeFVBC * 1.44);
+                BJTemitterConduct = 0;
+            if (BJTtransitTimeFVBC.Given && BJTtransitTimeFVBC != 0)
+                BJTtransitTimeVBCFactor = 1 / (BJTtransitTimeFVBC * 1.44);
             else
-                model.BJTtransitTimeVBCFactor = 0;
-            model.BJTexcessPhaseFactor = (model.BJTexcessPhase / (180.0 / Circuit.CONSTPI)) * model.BJTtransitTimeF;
-            if (model.BJTdepletionCapCoeff.Given)
+                BJTtransitTimeVBCFactor = 0;
+            BJTexcessPhaseFactor = (BJTexcessPhase / (180.0 / Circuit.CONSTPI)) * BJTtransitTimeF;
+            if (BJTdepletionCapCoeff.Given)
             {
-                if (model.BJTdepletionCapCoeff > 0.9999)
+                if (BJTdepletionCapCoeff > 0.9999)
                 {
-                    model.BJTdepletionCapCoeff.Value = 0.9999;
-                    throw new CircuitException($"model.BJT model {model.Name}, parameter fc limited to 0.9999");
+                    BJTdepletionCapCoeff.Value = 0.9999;
+                    throw new CircuitException($"BJT model {name}, parameter fc limited to 0.9999");
                 }
             }
             else
             {
-                model.BJTdepletionCapCoeff.Value = .5;
+                BJTdepletionCapCoeff.Value = .5;
             }
-            model.xfc = Math.Log(1 - model.BJTdepletionCapCoeff);
-            model.BJTf2 = Math.Exp((1 + model.BJTjunctionExpBE) * model.xfc);
-            model.BJTf3 = 1 - model.BJTdepletionCapCoeff * (1 + model.BJTjunctionExpBE);
-            model.BJTf6 = Math.Exp((1 + model.BJTjunctionExpBC) * model.xfc);
-            model.BJTf7 = 1 - model.BJTdepletionCapCoeff * (1 + model.BJTjunctionExpBC);
+            xfc = Math.Log(1 - BJTdepletionCapCoeff);
+            BJTf2 = Math.Exp((1 + BJTjunctionExpBE) * xfc);
+            BJTf3 = 1 - BJTdepletionCapCoeff * (1 + BJTjunctionExpBE);
+            BJTf6 = Math.Exp((1 + BJTjunctionExpBC) * xfc);
+            BJTf7 = 1 - BJTdepletionCapCoeff * (1 + BJTjunctionExpBC);
         }
     }
 }

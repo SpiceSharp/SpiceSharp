@@ -105,17 +105,5 @@ namespace SpiceSharp.Components
             // Return all nodes
             return nodes;
         }
-
-        /// <summary>
-        /// Helper function for binding an extra equation
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="type">The type</param>
-        /// <returns></returns>
-        protected CircuitNode CreateNode(Circuit ckt, CircuitIdentifier name, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
-        {
-            // Map the extra equations
-            return ckt.Nodes.Create(name, type);
-        }
     }
 }

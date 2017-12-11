@@ -56,6 +56,7 @@
     <Compile Include="Components\RLC\Capacitor\CapacitorAcBehavior.cs" />
     <Compile Include="Components\RLC\Capacitor\CapacitorAcceptBehavior.cs" />
     <Compile Include="Components\RLC\Capacitor\CapacitorLoadBehavior.cs" />
+    <Compile Include="Components\RLC\Capacitor\CapacitorModelTemperatureBehavior.cs" />
     <Compile Include="Components\RLC\Capacitor\CapacitorTemperatureBehavior.cs" />
     <Compile Include="Components\RLC\Capacitor\CapacitorTruncateBehavior.cs" />
     <Compile Include="Components\RLC\Inductor\InductorAcBehavior.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Components\RLC\Resistor\ResistorTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTAcBehavior.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTLoadBehavior.cs" />
+    <Compile Include="Components\Semiconductors\BJT\BJTModelNoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTModelTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTNoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTTemperatureBehavior.cs" />

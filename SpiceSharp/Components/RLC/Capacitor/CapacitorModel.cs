@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
+using SpiceSharp.Components.ComponentBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -11,14 +12,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("cj"), SpiceInfo("Bottom capacitance per area")]
-        public Parameter CAPcj { get; } = new Parameter();
-        [SpiceName("cjsw"), SpiceInfo("Sidewall capacitance per meter")]
-        public Parameter CAPcjsw { get; } = new Parameter();
-        [SpiceName("defw"), SpiceInfo("Default width")]
-        public Parameter CAPdefWidth { get; } = new Parameter(10.0e-6);
-        [SpiceName("narrow"), SpiceInfo("Width correction factor")]
-        public Parameter CAPnarrow { get; } = new Parameter();
+        /// <param name="ckt">Circuit</param>
+        /// <param name="flag">Flag</param>
         [SpiceName("c"), SpiceInfo("Capacitor model")]
         public void SetCapFlag(Circuit ckt, bool flag) { }
 
@@ -28,6 +23,7 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public CapacitorModel(CircuitIdentifier name) : base(name)
         {
+            RegisterBehavior(new CapacitorModelTemperatureBehavior());
         }
     }
 }

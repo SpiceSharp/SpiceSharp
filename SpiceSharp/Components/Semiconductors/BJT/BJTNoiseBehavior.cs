@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
+using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -9,6 +10,18 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// </summary>
     public class BJTNoiseBehavior : CircuitObjectBehaviorNoise
     {
+        /// <summary>
+        /// Necessary behaviors
+        /// </summary>
+        private BJTModelNoiseBehavior modelnoise;
+        private BJTModelTemperatureBehavior modeltemp;
+
+        /// <summary>
+        /// Parameters
+        /// </summary>
+        [SpiceName("area"), SpiceInfo("Area factor")]
+        public Parameter BJTarea { get; } = new Parameter(1);
+
         /// <summary>
         /// Noise sources by their index
         /// </summary>
@@ -32,15 +45,26 @@ namespace SpiceSharp.Components.ComponentBehaviors
             );
 
         /// <summary>
+        /// Private variables
+        /// </summary>
+        private int BJTstate;
+
+        /// <summary>
         /// Setup the BJT behaviour for noise analysis
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override bool Setup(CircuitObject component, Circuit ckt)
         {
-            base.Setup(component, ckt);
+            var bjt = component as BJT;
+            var model = bjt.Model as BJTModel;
 
-            BJT bjt = ComponentTyped<BJT>();
+            // Get behaviors
+            modeltemp = model.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as BJTModelTemperatureBehavior;
+            modelnoise = model.GetBehavior(typeof(CircuitObjectBehaviorNoise)) as BJTModelNoiseBehavior;
+            var load = bjt.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as BJTLoadBehavior;
+            BJTstate = load.BJTstate;
+
             BJTnoise.Setup(ckt,
                 bjt.BJTcolNode,
                 bjt.BJTbaseNode,
@@ -49,6 +73,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 bjt.BJTcolPrimeNode,
                 bjt.BJTbasePrimeNode,
                 bjt.BJTemitPrimeNode);
+            return true;
         }
 
         /// <summary>
@@ -63,12 +88,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var noise = state.Noise;
 
             // Set noise parameters
-            BJTnoise.Generators[BJTRCNOIZ].Set(model.BJTcollectorConduct * bjt.BJTarea);
-            BJTnoise.Generators[BJTRBNOIZ].Set(state.States[0][bjt.BJTstate + BJT.BJTgx]);
-            BJTnoise.Generators[BJT_RE_NOISE].Set(model.BJTemitterConduct * bjt.BJTarea);
-            BJTnoise.Generators[BJTICNOIZ].Set(state.States[0][bjt.BJTstate + BJT.BJTcc]);
-            BJTnoise.Generators[BJTIBNOIZ].Set(state.States[0][bjt.BJTstate + BJT.BJTcb]);
-            BJTnoise.Generators[BJTFLNOIZ].Set(model.BJTfNcoef * Math.Exp(model.BJTfNexp * Math.Log(Math.Max(Math.Abs(state.States[0][bjt.BJTstate + BJT.BJTcb]), 1e-38))) / noise.Freq);
+            BJTnoise.Generators[BJTRCNOIZ].Set(modeltemp.BJTcollectorConduct * BJTarea);
+            BJTnoise.Generators[BJTRBNOIZ].Set(state.States[0][BJTstate + BJTLoadBehavior.BJTgx]);
+            BJTnoise.Generators[BJT_RE_NOISE].Set(modeltemp.BJTemitterConduct * BJTarea);
+            BJTnoise.Generators[BJTICNOIZ].Set(state.States[0][BJTstate + BJTLoadBehavior.BJTcc]);
+            BJTnoise.Generators[BJTIBNOIZ].Set(state.States[0][BJTstate + BJTLoadBehavior.BJTcb]);
+            BJTnoise.Generators[BJTFLNOIZ].Set(modelnoise.BJTfNcoef * Math.Exp(modelnoise.BJTfNexp * Math.Log(Math.Max(Math.Abs(state.States[0][BJTstate + BJTLoadBehavior.BJTcb]), 1e-38))) / noise.Freq);
 
             // Evaluate all noise sources
             BJTnoise.Evaluate(ckt);

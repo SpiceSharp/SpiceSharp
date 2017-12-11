@@ -55,12 +55,17 @@ namespace SpiceSharp.Behaviors
 
         /// <summary>
         /// Setup the behaviour
+        /// If this method returns false, then the behavior is assumed not to change during simulations. If the method
+        /// returns true, then the behavior will be registered for execution during analysis. This can be used to flag
+        /// a behavior for data-only.
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public virtual void Setup(CircuitObject component, Circuit ckt)
+        /// <returns>Returns false if the behavior is only describing data</returns>
+        public virtual bool Setup(CircuitObject component, Circuit ckt)
         {
             Component = component;
+            return true;
         }
 
         /// <summary>
@@ -107,6 +112,18 @@ namespace SpiceSharp.Behaviors
             }
             value = double.NaN;
             return false;
+        }
+
+        /// <summary>
+        /// Helper function for binding an extra equation in a circuit
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        /// <param name="type">The type</param>
+        /// <returns></returns>
+        protected CircuitNode CreateNode(Circuit ckt, CircuitIdentifier name, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
+        {
+            // Map the extra equations
+            return ckt.Nodes.Create(name, type);
         }
     }
 }

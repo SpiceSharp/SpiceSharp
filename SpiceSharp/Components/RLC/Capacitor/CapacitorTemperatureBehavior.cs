@@ -25,19 +25,19 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <summary>
         /// Private variables
         /// </summary>
-        private CapacitorModel model;
+        private CapacitorModelTemperatureBehavior temp;
 
         /// <summary>
         /// Setup the behavior
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override bool Setup(CircuitObject component, Circuit ckt)
         {
-            base.Setup(component, ckt);
-            
             // Get the model
-            model = (component as Capacitor)?.Model as CapacitorModel;
+            var model = (component as Capacitor)?.Model as CapacitorModel;
+            temp = model?.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as CapacitorModelTemperatureBehavior;
+            return true;
         }
 
         /// <summary>
@@ -47,16 +47,16 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Temperature(Circuit ckt)
         {
             // Default Value Processing for Capacitor Instance
-            if (model != null)
+            if (temp != null)
             {
                 if (!CAPwidth.Given)
-                    CAPwidth.Value = model.CAPdefWidth;
-                CAPcapac = model.CAPcj *
-                                (CAPwidth - model.CAPnarrow) *
-                                (CAPlength - model.CAPnarrow) +
-                            model.CAPcjsw * 2 * (
-                                (CAPlength - model.CAPnarrow) +
-                                (CAPwidth - model.CAPnarrow));
+                    CAPwidth.Value = temp.CAPdefWidth;
+                CAPcapac = temp.CAPcj *
+                                (CAPwidth - temp.CAPnarrow) *
+                                (CAPlength - temp.CAPnarrow) +
+                            temp.CAPcjsw * 2 * (
+                                (CAPlength - temp.CAPnarrow) +
+                                (CAPwidth - temp.CAPnarrow));
             }
         }
     }

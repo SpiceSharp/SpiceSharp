@@ -2,6 +2,9 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
+using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -11,13 +14,295 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class BJTLoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
+        /// Necessary behaviors
+        /// </summary>
+        private BJTModelTemperatureBehavior modeltemp;
+        private BJTTemperatureBehavior temp;
+
+        /// <summary>
+        /// Parameters
+        /// </summary>
+        [SpiceName("area"), SpiceInfo("Area factor")]
+        public Parameter BJTarea { get; } = new Parameter(1);
+
+        [SpiceName("off"), SpiceInfo("Device initially off")]
+        public bool BJToff { get; set; }
+        [SpiceName("icvbe"), SpiceInfo("Initial B-E voltage")]
+        public Parameter BJTicVBE { get; } = new Parameter();
+        [SpiceName("icvce"), SpiceInfo("Initial C-E voltage")]
+        public Parameter BJTicVCE { get; } = new Parameter();
+        [SpiceName("sens_area"), SpiceInfo("flag to request sensitivity WRT area")]
+        public bool BJTsenParmNo { get; set; }
+        [SpiceName("cpi"), SpiceInfo("Internal base to emitter capactance")]
+        public double BJTcapbe { get; internal set; }
+        [SpiceName("cmu"), SpiceInfo("Internal base to collector capactiance")]
+        public double BJTcapbc { get; internal set; }
+        [SpiceName("cbx"), SpiceInfo("Base to collector capacitance")]
+        public double BJTcapbx { get; internal set; }
+        [SpiceName("ccs"), SpiceInfo("Collector to substrate capacitance")]
+        public double BJTcapcs { get; internal set; }
+
+        /// <summary>
+        /// Methods
+        /// </summary>
+        [SpiceName("ic"), SpiceInfo("Initial condition vector")]
+        public void SetIC(double[] value)
+        {
+            switch (value.Length)
+            {
+                case 2: BJTicVCE.Set(value[1]); goto case 1;
+                case 1: BJTicVBE.Set(value[0]); break;
+                default:
+                    throw new CircuitException("Bad parameter");
+            }
+        }
+        [SpiceName("vbe"), SpiceInfo("B-E voltage")]
+        public double GetVBE(Circuit ckt) => ckt.State.States[0][BJTstate + BJTvbe];
+        [SpiceName("vbc"), SpiceInfo("B-C voltage")]
+        public double GetVBC(Circuit ckt) => ckt.State.States[0][BJTstate + BJTvbc];
+        [SpiceName("cc"), SpiceInfo("Current at collector node")]
+        public double GetCC(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcc];
+        [SpiceName("cb"), SpiceInfo("Current at base node")]
+        public double GetCB(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcb];
+        [SpiceName("gpi"), SpiceInfo("Small signal input conductance - pi")]
+        public double GetGPI(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgpi];
+        [SpiceName("gmu"), SpiceInfo("Small signal conductance - mu")]
+        public double GetGMU(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgmu];
+        [SpiceName("gm"), SpiceInfo("Small signal transconductance")]
+        public double GetGM(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgm];
+        [SpiceName("go"), SpiceInfo("Small signal output conductance")]
+        public double GetGO(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgo];
+        [SpiceName("qbe"), SpiceInfo("Charge storage B-E junction")]
+        public double GetQBE(Circuit ckt) => ckt.State.States[0][BJTstate + BJTqbe];
+        [SpiceName("cqbe"), SpiceInfo("Cap. due to charge storage in B-E jct.")]
+        public double GetCQBE(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcqbe];
+        [SpiceName("qbc"), SpiceInfo("Charge storage B-C junction")]
+        public double GetQBC(Circuit ckt) => ckt.State.States[0][BJTstate + BJTqbc];
+        [SpiceName("cqbc"), SpiceInfo("Cap. due to charge storage in B-C jct.")]
+        public double GetCQBC(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcqbc];
+        [SpiceName("qcs"), SpiceInfo("Charge storage C-S junction")]
+        public double GetQCS(Circuit ckt) => ckt.State.States[0][BJTstate + BJTqcs];
+        [SpiceName("cqcs"), SpiceInfo("Cap. due to charge storage in C-S jct.")]
+        public double GetCQCS(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcqcs];
+        [SpiceName("qbx"), SpiceInfo("Charge storage B-X junction")]
+        public double GetQBX(Circuit ckt) => ckt.State.States[0][BJTstate + BJTqbx];
+        [SpiceName("cqbx"), SpiceInfo("Cap. due to charge storage in B-X jct.")]
+        public double GetCQBX(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcqbx];
+        [SpiceName("gx"), SpiceInfo("Conductance from base to internal base")]
+        public double GetGX(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgx];
+        [SpiceName("cexbc"), SpiceInfo("Total Capacitance in B-X junction")]
+        public double GetCEXBC(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcexbc];
+        [SpiceName("geqcb"), SpiceInfo("d(Ibe)/d(Vbc)")]
+        public double GetGEQCB(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgeqcb];
+        [SpiceName("gccs"), SpiceInfo("Internal C-S cap. equiv. cond.")]
+        public double GetGCCS(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgccs];
+        [SpiceName("geqbx"), SpiceInfo("Internal C-B-base cap. equiv. cond.")]
+        public double GetGEQBX(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgeqbx];
+        [SpiceName("cs"), SpiceInfo("Substrate current")]
+        public double GetCS(Circuit ckt)
+        {
+            if (ckt.State.UseDC)
+                return 0.0;
+            else
+                return -ckt.State.States[0][BJTstate + BJTcqcs];
+        }
+        [SpiceName("ce"), SpiceInfo("Emitter current")]
+        public double GetCE(Circuit ckt)
+        {
+            double value = -ckt.State.States[0][BJTstate + BJTcc];
+            value -= ckt.State.States[0][BJTstate + BJTcb];
+            if (ckt.Method != null && !(ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC))
+                value += ckt.State.States[0][BJTstate + BJTcqcs];
+            return value;
+        }
+        [SpiceName("p"), SpiceInfo("Power dissipation")]
+        public double GetPOWER(Circuit ckt)
+        {
+            double value = ckt.State.States[0][BJTstate + BJTcc] * ckt.State.Solution[BJTcolNode];
+            value += ckt.State.States[0][BJTstate + BJTcb] * ckt.State.Solution[BJTbaseNode];
+            if (ckt.Method != null && !(ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC))
+                value -= ckt.State.States[0][BJTstate + BJTcqcs] * ckt.State.Solution[BJTsubstNode];
+
+            double tmp = -ckt.State.States[0][BJTstate + BJTcc];
+            tmp -= ckt.State.States[0][BJTstate + BJTcb];
+            if (ckt.Method != null && !(ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC))
+                tmp += ckt.State.States[0][BJTstate + BJTcqcs];
+            value += tmp * ckt.State.Solution[BJTemitNode];
+            return value;
+        }
+
+        /// <summary>
+        /// Extra variables
+        /// </summary>
+        public int BJTstate { get; protected set; }
+
+        /// <summary>
+        /// Nodes
+        /// </summary>
+        private int BJTcolNode, BJTbaseNode, BJTemitNode, BJTsubstNode;
+        public int BJTcolPrimeNode { get; protected set; }
+        public int BJTbasePrimeNode { get; protected set; }
+        public int BJTemitPrimeNode { get; protected set; }
+        private MatrixElement BJTcolColPrimePtr;
+        private MatrixElement BJTbaseBasePrimePtr;
+        private MatrixElement BJTemitEmitPrimePtr;
+        private MatrixElement BJTcolPrimeColPtr;
+        private MatrixElement BJTcolPrimeBasePrimePtr;
+        private MatrixElement BJTcolPrimeEmitPrimePtr;
+        private MatrixElement BJTbasePrimeBasePtr;
+        private MatrixElement BJTbasePrimeColPrimePtr;
+        private MatrixElement BJTbasePrimeEmitPrimePtr;
+        private MatrixElement BJTemitPrimeEmitPtr;
+        private MatrixElement BJTemitPrimeColPrimePtr;
+        private MatrixElement BJTemitPrimeBasePrimePtr;
+        private MatrixElement BJTcolColPtr;
+        private MatrixElement BJTbaseBasePtr;
+        private MatrixElement BJTemitEmitPtr;
+        private MatrixElement BJTcolPrimeColPrimePtr;
+        private MatrixElement BJTbasePrimeBasePrimePtr;
+        private MatrixElement BJTemitPrimeEmitPrimePtr;
+        private MatrixElement BJTsubstSubstPtr;
+        private MatrixElement BJTcolPrimeSubstPtr;
+        private MatrixElement BJTsubstColPrimePtr;
+        private MatrixElement BJTbaseColPrimePtr;
+        private MatrixElement BJTcolPrimeBasePtr;
+
+        private double BJTtype = 1.0;
+
+        /// <summary>
+        /// Constants
+        /// </summary>
+        public const int BJTvbe = 0;
+        public const int BJTvbc = 1;
+        public const int BJTcc = 2;
+        public const int BJTcb = 3;
+        public const int BJTgpi = 4;
+        public const int BJTgmu = 5;
+        public const int BJTgm = 6;
+        public const int BJTgo = 7;
+        public const int BJTqbe = 8;
+        public const int BJTcqbe = 9;
+        public const int BJTqbc = 10;
+        public const int BJTcqbc = 11;
+        public const int BJTqcs = 12;
+        public const int BJTcqcs = 13;
+        public const int BJTqbx = 14;
+        public const int BJTcqbx = 15;
+        public const int BJTgx = 16;
+        public const int BJTcexbc = 17;
+        public const int BJTgeqcb = 18;
+        public const int BJTgccs = 19;
+        public const int BJTgeqbx = 20;
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        public override bool Setup(CircuitObject component, Circuit ckt)
+        {
+            base.Setup(component, ckt);
+            var bjt = component as BJT ?? throw new CircuitException("No component");
+            var model = bjt.Model as BJTModel;
+
+            // Get necessary behaviors
+            modeltemp = model?.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as BJTModelTemperatureBehavior;
+            temp = bjt.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as BJTTemperatureBehavior;
+            BJTtype = model.BJTtype;
+
+            // Allocate states
+            BJTstate = ckt.State.GetState(21);
+
+            // Get connected nodes
+            BJTcolNode = bjt.BJTcolNode;
+            BJTbaseNode = bjt.BJTbaseNode;
+            BJTemitNode = bjt.BJTemitNode;
+            BJTsubstNode = bjt.BJTsubstNode;
+
+            // Add a series collector node if necessary
+            if (modeltemp.BJTcollectorResist.Value == 0)
+                BJTcolPrimeNode = BJTcolNode;
+            else if (BJTcolPrimeNode == 0)
+                BJTcolPrimeNode = CreateNode(ckt, bjt.Name.Grow("#col")).Index;
+
+            // Add a series base node if necessary
+            if (modeltemp.BJTbaseResist.Value == 0)
+                BJTbasePrimeNode = BJTbaseNode;
+            else if (BJTbasePrimeNode == 0)
+                BJTbasePrimeNode = CreateNode(ckt, bjt.Name.Grow("#base")).Index;
+
+            // Add a series emitter node if necessary
+            if (modeltemp.BJTemitterResist.Value == 0)
+                BJTemitPrimeNode = BJTemitNode;
+            else if (BJTemitPrimeNode == 0)
+                BJTemitPrimeNode = CreateNode(ckt, bjt.Name.Grow("#emit")).Index;
+
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            BJTcolColPrimePtr = matrix.GetElement(BJTcolNode, BJTcolPrimeNode);
+            BJTbaseBasePrimePtr = matrix.GetElement(BJTbaseNode, BJTbasePrimeNode);
+            BJTemitEmitPrimePtr = matrix.GetElement(BJTemitNode, BJTemitPrimeNode);
+            BJTcolPrimeColPtr = matrix.GetElement(BJTcolPrimeNode, BJTcolNode);
+            BJTcolPrimeBasePrimePtr = matrix.GetElement(BJTcolPrimeNode, BJTbasePrimeNode);
+            BJTcolPrimeEmitPrimePtr = matrix.GetElement(BJTcolPrimeNode, BJTemitPrimeNode);
+            BJTbasePrimeBasePtr = matrix.GetElement(BJTbasePrimeNode, BJTbaseNode);
+            BJTbasePrimeColPrimePtr = matrix.GetElement(BJTbasePrimeNode, BJTcolPrimeNode);
+            BJTbasePrimeEmitPrimePtr = matrix.GetElement(BJTbasePrimeNode, BJTemitPrimeNode);
+            BJTemitPrimeEmitPtr = matrix.GetElement(BJTemitPrimeNode, BJTemitNode);
+            BJTemitPrimeColPrimePtr = matrix.GetElement(BJTemitPrimeNode, BJTcolPrimeNode);
+            BJTemitPrimeBasePrimePtr = matrix.GetElement(BJTemitPrimeNode, BJTbasePrimeNode);
+            BJTcolColPtr = matrix.GetElement(BJTcolNode, BJTcolNode);
+            BJTbaseBasePtr = matrix.GetElement(BJTbaseNode, BJTbaseNode);
+            BJTemitEmitPtr = matrix.GetElement(BJTemitNode, BJTemitNode);
+            BJTcolPrimeColPrimePtr = matrix.GetElement(BJTcolPrimeNode, BJTcolPrimeNode);
+            BJTbasePrimeBasePrimePtr = matrix.GetElement(BJTbasePrimeNode, BJTbasePrimeNode);
+            BJTemitPrimeEmitPrimePtr = matrix.GetElement(BJTemitPrimeNode, BJTemitPrimeNode);
+            BJTsubstSubstPtr = matrix.GetElement(BJTsubstNode, BJTsubstNode);
+            BJTcolPrimeSubstPtr = matrix.GetElement(BJTcolPrimeNode, BJTsubstNode);
+            BJTsubstColPrimePtr = matrix.GetElement(BJTsubstNode, BJTcolPrimeNode);
+            BJTbaseColPrimePtr = matrix.GetElement(BJTbaseNode, BJTcolPrimeNode);
+            BJTcolPrimeBasePtr = matrix.GetElement(BJTcolPrimeNode, BJTbaseNode);
+            return true;
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        /// <param name="ckt">The circuit</param>
+        public override void Unsetup()
+        {
+            // Remove references
+            BJTcolColPrimePtr = null;
+            BJTbaseBasePrimePtr = null;
+            BJTemitEmitPrimePtr = null;
+            BJTcolPrimeColPtr = null;
+            BJTcolPrimeBasePrimePtr = null;
+            BJTcolPrimeEmitPrimePtr = null;
+            BJTbasePrimeBasePtr = null;
+            BJTbasePrimeColPrimePtr = null;
+            BJTbasePrimeEmitPrimePtr = null;
+            BJTemitPrimeEmitPtr = null;
+            BJTemitPrimeColPrimePtr = null;
+            BJTemitPrimeBasePrimePtr = null;
+            BJTcolColPtr = null;
+            BJTbaseBasePtr = null;
+            BJTemitEmitPtr = null;
+            BJTcolPrimeColPrimePtr = null;
+            BJTbasePrimeBasePrimePtr = null;
+            BJTemitPrimeEmitPrimePtr = null;
+            BJTsubstSubstPtr = null;
+            BJTcolPrimeSubstPtr = null;
+            BJTsubstColPrimePtr = null;
+            BJTbaseColPrimePtr = null;
+            BJTcolPrimeBasePtr = null;
+        }
+
+        /// <summary>
         /// Execute behaviour for DC and Transient analysis
         /// </summary>
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)
         {
-            BJT bjt = ComponentTyped<BJT>();
-            BJTModel model = bjt.Model as BJTModel;
             var state = ckt.State;
             var rstate = state;
             var method = ckt.Method;
@@ -31,7 +316,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 xms, xtf, ovtf, xjtf, argtf, temp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, capbx = 0.0, czbxf2, capcs = 0.0;
             double ceqbe, ceqbc, ceq;
 
-            vt = bjt.BJTtemp * Circuit.CONSTKoverQ;
+            vt = this.temp.BJTtemp * Circuit.CONSTKoverQ;
 
             gccs = 0;
             ceqcs = 0;
@@ -42,19 +327,19 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
 			 * dc model paramters
 			 */
-            csat = bjt.BJTtSatCur * bjt.BJTarea;
-            rbpr = model.BJTminBaseResist / bjt.BJTarea;
-            rbpi = model.BJTbaseResist / bjt.BJTarea - rbpr;
-            gcpr = model.BJTcollectorConduct * bjt.BJTarea;
-            gepr = model.BJTemitterConduct * bjt.BJTarea;
-            oik = model.BJTinvRollOffF / bjt.BJTarea;
-            c2 = bjt.BJTtBEleakCur * bjt.BJTarea;
-            vte = model.BJTleakBEemissionCoeff * vt;
-            oikr = model.BJTinvRollOffR / bjt.BJTarea;
-            c4 = bjt.BJTtBCleakCur * bjt.BJTarea;
-            vtc = model.BJTleakBCemissionCoeff * vt;
-            td = model.BJTexcessPhaseFactor;
-            xjrb = model.BJTbaseCurrentHalfResist * bjt.BJTarea;
+            csat = this.temp.BJTtSatCur * BJTarea;
+            rbpr = modeltemp.BJTminBaseResist / BJTarea;
+            rbpi = modeltemp.BJTbaseResist / BJTarea - rbpr;
+            gcpr = modeltemp.BJTcollectorConduct * BJTarea;
+            gepr = modeltemp.BJTemitterConduct * BJTarea;
+            oik = modeltemp.BJTinvRollOffF / BJTarea;
+            c2 = this.temp.BJTtBEleakCur * BJTarea;
+            vte = modeltemp.BJTleakBEemissionCoeff * vt;
+            oikr = modeltemp.BJTinvRollOffR / BJTarea;
+            c4 = this.temp.BJTtBCleakCur * BJTarea;
+            vtc = modeltemp.BJTleakBCemissionCoeff * vt;
+            td = modeltemp.BJTexcessPhaseFactor;
+            xjrb = modeltemp.BJTbaseCurrentHalfResist * BJTarea;
 
             /* 
 			* initialization
@@ -62,40 +347,40 @@ namespace SpiceSharp.Components.ComponentBehaviors
             icheck = true;
             if (state.UseSmallSignal)
             {
-                vbe = state.States[0][bjt.BJTstate + BJT.BJTvbe];
-                vbc = state.States[0][bjt.BJTstate + BJT.BJTvbc];
-                vbx = model.BJTtype * (rstate.Solution[bjt.BJTbaseNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
-                vcs = model.BJTtype * (rstate.Solution[bjt.BJTsubstNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
+                vbe = state.States[0][BJTstate + BJTvbe];
+                vbc = state.States[0][BJTstate + BJTvbc];
+                vbx = BJTtype * (rstate.Solution[BJTbaseNode] - rstate.Solution[BJTcolPrimeNode]);
+                vcs = BJTtype * (rstate.Solution[BJTsubstNode] - rstate.Solution[BJTcolPrimeNode]);
             }
             else if (state.Init == CircuitState.InitFlags.InitTransient)
             {
-                vbe = state.States[1][bjt.BJTstate + BJT.BJTvbe];
-                vbc = state.States[1][bjt.BJTstate + BJT.BJTvbc];
-                vbx = model.BJTtype * (rstate.Solution[bjt.BJTbaseNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
-                vcs = model.BJTtype * (rstate.Solution[bjt.BJTsubstNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
+                vbe = state.States[1][BJTstate + BJTvbe];
+                vbc = state.States[1][BJTstate + BJTvbc];
+                vbx = BJTtype * (rstate.Solution[BJTbaseNode] - rstate.Solution[BJTcolPrimeNode]);
+                vcs = BJTtype * (rstate.Solution[BJTsubstNode] - rstate.Solution[BJTcolPrimeNode]);
                 if (state.UseIC)
                 {
-                    vbx = model.BJTtype * (bjt.BJTicVBE - bjt.BJTicVCE);
+                    vbx = BJTtype * (BJTicVBE - BJTicVCE);
                     vcs = 0;
                 }
                 icheck = false; // EDIT: Spice does not check the first timepoint for convergence, but we do...
             }
             else if (state.Init == CircuitState.InitFlags.InitJct && state.Domain == CircuitState.DomainTypes.Time && state.UseDC && state.UseIC)
             {
-                vbe = model.BJTtype * bjt.BJTicVBE;
-                vce = model.BJTtype * bjt.BJTicVCE;
+                vbe = BJTtype * BJTicVBE;
+                vce = BJTtype * BJTicVCE;
                 vbc = vbe - vce;
                 vbx = vbc;
                 vcs = 0;
             }
-            else if (state.Init == CircuitState.InitFlags.InitJct && !bjt.BJToff)
+            else if (state.Init == CircuitState.InitFlags.InitJct && !BJToff)
             {
-                vbe = bjt.BJTtVcrit;
+                vbe = this.temp.BJTtVcrit;
                 vbc = 0;
                 vcs = 0;
                 vbx = 0;
             }
-            else if (state.Init == CircuitState.InitFlags.InitJct || (state.Init == CircuitState.InitFlags.InitFix && bjt.BJToff))
+            else if (state.Init == CircuitState.InitFlags.InitJct || (state.Init == CircuitState.InitFlags.InitFix && BJToff))
             {
                 vbe = 0;
                 vbc = 0;
@@ -107,17 +392,17 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 /* 
                  * compute new nonlinear branch voltages
                  */
-                vbe = model.BJTtype * (rstate.Solution[bjt.BJTbasePrimeNode] - rstate.Solution[bjt.BJTemitPrimeNode]);
-                vbc = model.BJTtype * (rstate.Solution[bjt.BJTbasePrimeNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
-                vbx = model.BJTtype * (rstate.Solution[bjt.BJTbaseNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
-                vcs = model.BJTtype * (rstate.Solution[bjt.BJTsubstNode] - rstate.Solution[bjt.BJTcolPrimeNode]);
+                vbe = BJTtype * (rstate.Solution[BJTbasePrimeNode] - rstate.Solution[BJTemitPrimeNode]);
+                vbc = BJTtype * (rstate.Solution[BJTbasePrimeNode] - rstate.Solution[BJTcolPrimeNode]);
+                vbx = BJTtype * (rstate.Solution[BJTbaseNode] - rstate.Solution[BJTcolPrimeNode]);
+                vcs = BJTtype * (rstate.Solution[BJTsubstNode] - rstate.Solution[BJTcolPrimeNode]);
 
                 /* 
 				 * limit nonlinear branch voltages
 				 */
                 ichk1 = true;
-                vbe = Semiconductor.DEVpnjlim(vbe, state.States[0][bjt.BJTstate + BJT.BJTvbe], vt, bjt.BJTtVcrit, ref icheck);
-                vbc = Semiconductor.DEVpnjlim(vbc, state.States[0][bjt.BJTstate + BJT.BJTvbc], vt, bjt.BJTtVcrit, ref ichk1);
+                vbe = Semiconductor.DEVpnjlim(vbe, state.States[0][BJTstate + BJTvbe], vt, this.temp.BJTtVcrit, ref icheck);
+                vbc = Semiconductor.DEVpnjlim(vbc, state.States[0][BJTstate + BJTvbc], vt, this.temp.BJTtVcrit, ref ichk1);
                 if (ichk1 == true)
                     icheck = true;
             }
@@ -125,7 +410,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
 			 * determine dc current and derivitives
 			 */
-            vtn = vt * model.BJTemissionCoeffF;
+            vtn = vt * modeltemp.BJTemissionCoeffF;
             if (vbe > -5 * vtn)
             {
                 evbe = Math.Exp(vbe / vtn);
@@ -150,7 +435,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 gben = -c2 / vbe;
                 cben = gben * vbe;
             }
-            vtn = vt * model.BJTemissionCoeffR;
+            vtn = vt * modeltemp.BJTemissionCoeffR;
             if (vbc > -5 * vtn)
             {
                 evbc = Math.Exp(vbc / vtn);
@@ -178,12 +463,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
 			 * determine base charge terms
 			 */
-            q1 = 1 / (1 - model.BJTinvEarlyVoltF * vbc - model.BJTinvEarlyVoltR * vbe);
+            q1 = 1 / (1 - modeltemp.BJTinvEarlyVoltF * vbc - modeltemp.BJTinvEarlyVoltR * vbe);
             if (oik == 0 && oikr == 0)
             {
                 qb = q1;
-                dqbdve = q1 * qb * model.BJTinvEarlyVoltR;
-                dqbdvc = q1 * qb * model.BJTinvEarlyVoltF;
+                dqbdve = q1 * qb * modeltemp.BJTinvEarlyVoltR;
+                dqbdvc = q1 * qb * modeltemp.BJTinvEarlyVoltF;
             }
             else
             {
@@ -193,8 +478,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 if (arg != 0)
                     sqarg = Math.Sqrt(arg);
                 qb = q1 * (1 + sqarg) / 2;
-                dqbdve = q1 * (qb * model.BJTinvEarlyVoltR + oik * gbe / sqarg);
-                dqbdvc = q1 * (qb * model.BJTinvEarlyVoltF + oikr * gbc / sqarg);
+                dqbdve = q1 * (qb * modeltemp.BJTinvEarlyVoltR + oik * gbe / sqarg);
+                dqbdvc = q1 * (qb * modeltemp.BJTinvEarlyVoltF + oikr * gbc / sqarg);
             }
             /* 
 			 * weil's approx. for excess phase applied with backward - 
@@ -212,21 +497,21 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 arg3 = arg1 / denom;
                 if (state.Init == CircuitState.InitFlags.InitTransient)
                 {
-                    state.States[1][bjt.BJTstate + BJT.BJTcexbc] = cbe / qb;
-                    state.States[2][bjt.BJTstate + BJT.BJTcexbc] = state.States[1][bjt.BJTstate + BJT.BJTcexbc];
+                    state.States[1][BJTstate + BJTcexbc] = cbe / qb;
+                    state.States[2][BJTstate + BJTcexbc] = state.States[1][BJTstate + BJTcexbc];
                 }
-                cc = (state.States[1][bjt.BJTstate + BJT.BJTcexbc] * (1 + method.Delta / method.DeltaOld[1] + arg2) - state.States[2][bjt.BJTstate +
-                     BJT.BJTcexbc] * method.Delta / method.DeltaOld[1]) / denom;
+                cc = (state.States[1][BJTstate + BJTcexbc] * (1 + method.Delta / method.DeltaOld[1] + arg2) - state.States[2][BJTstate +
+                     BJTcexbc] * method.Delta / method.DeltaOld[1]) / denom;
                 cex = cbe * arg3;
                 gex = gbe * arg3;
-                state.States[0][bjt.BJTstate + BJT.BJTcexbc] = cc + cex / qb;
+                state.States[0][BJTstate + BJTcexbc] = cc + cex / qb;
             }
 
             /* 
 			 * determine dc incremental conductances
 			 */
-            cc = cc + (cex - cbc) / qb - cbc / bjt.BJTtBetaR - cbcn;
-            cb = cbe / bjt.BJTtBetaF + cben + cbc / bjt.BJTtBetaR + cbcn;
+            cc = cc + (cex - cbc) / qb - cbc / this.temp.BJTtBetaR - cbcn;
+            cb = cbe / this.temp.BJTtBetaF + cben + cbc / this.temp.BJTtBetaR + cbcn;
             gx = rbpr + rbpi / qb;
             if (xjrb != 0)
             {
@@ -237,8 +522,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
             }
             if (gx != 0)
                 gx = 1 / gx;
-            gpi = gbe / bjt.BJTtBetaF + gben;
-            gmu = gbc / bjt.BJTtBetaR + gbcn;
+            gpi = gbe / this.temp.BJTtBetaF + gben;
+            gmu = gbc / this.temp.BJTtBetaR + gbcn;
             go = (gbc + (cex - cbc) * dqbdvc / qb) / qb;
             gm = (gex - (cex - cbc) * dqbdve / qb) / qb - go;
 
@@ -247,24 +532,24 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 /* 
 				 * charge storage elements
 				 */
-                tf = model.BJTtransitTimeF;
-                tr = model.BJTtransitTimeR;
-                czbe = bjt.BJTtBEcap * bjt.BJTarea;
-                pe = bjt.BJTtBEpot;
-                xme = model.BJTjunctionExpBE;
-                cdis = model.BJTbaseFractionBCcap;
-                ctot = bjt.BJTtBCcap * bjt.BJTarea;
+                tf = modeltemp.BJTtransitTimeF;
+                tr = modeltemp.BJTtransitTimeR;
+                czbe = this.temp.BJTtBEcap * BJTarea;
+                pe = this.temp.BJTtBEpot;
+                xme = modeltemp.BJTjunctionExpBE;
+                cdis = modeltemp.BJTbaseFractionBCcap;
+                ctot = this.temp.BJTtBCcap * BJTarea;
                 czbc = ctot * cdis;
                 czbx = ctot - czbc;
-                pc = bjt.BJTtBCpot;
-                xmc = model.BJTjunctionExpBC;
-                fcpe = bjt.BJTtDepCap;
-                czcs = model.BJTcapCS * bjt.BJTarea;
-                ps = model.BJTpotentialSubstrate;
-                xms = model.BJTexponentialSubstrate;
-                xtf = model.BJTtransitTimeBiasCoeffF;
-                ovtf = model.BJTtransitTimeVBCFactor;
-                xjtf = model.BJTtransitTimeHighCurrentF * bjt.BJTarea;
+                pc = this.temp.BJTtBCpot;
+                xmc = modeltemp.BJTjunctionExpBC;
+                fcpe = this.temp.BJTtDepCap;
+                czcs = modeltemp.BJTcapCS * BJTarea;
+                ps = modeltemp.BJTpotentialSubstrate;
+                xms = modeltemp.BJTexponentialSubstrate;
+                xtf = modeltemp.BJTtransitTimeBiasCoeffF;
+                ovtf = modeltemp.BJTtransitTimeVBCFactor;
+                xjtf = modeltemp.BJTtransitTimeHighCurrentF * BJTarea;
                 if (tf != 0 && vbe > 0)
                 {
                     argtf = 0;
@@ -294,34 +579,34 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 {
                     arg = 1 - vbe / pe;
                     sarg = Math.Exp(-xme * Math.Log(arg));
-                    state.States[0][bjt.BJTstate + BJT.BJTqbe] = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
+                    state.States[0][BJTstate + BJTqbe] = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
                     capbe = tf * gbe + czbe * sarg;
                 }
                 else
                 {
-                    f1 = bjt.BJTtf1;
-                    f2 = model.BJTf2;
-                    f3 = model.BJTf3;
+                    f1 = this.temp.BJTtf1;
+                    f2 = modeltemp.BJTf2;
+                    f3 = modeltemp.BJTf3;
                     czbef2 = czbe / f2;
-                    state.States[0][bjt.BJTstate + BJT.BJTqbe] = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
+                    state.States[0][BJTstate + BJTqbe] = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
                          fcpe * fcpe));
                     capbe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
                 }
-                fcpc = bjt.BJTtf4;
-                f1 = bjt.BJTtf5;
-                f2 = model.BJTf6;
-                f3 = model.BJTf7;
+                fcpc = this.temp.BJTtf4;
+                f1 = this.temp.BJTtf5;
+                f2 = modeltemp.BJTf6;
+                f3 = modeltemp.BJTf7;
                 if (vbc < fcpc)
                 {
                     arg = 1 - vbc / pc;
                     sarg = Math.Exp(-xmc * Math.Log(arg));
-                    state.States[0][bjt.BJTstate + BJT.BJTqbc] = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
+                    state.States[0][BJTstate + BJTqbc] = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
                     capbc = tr * gbc + czbc * sarg;
                 }
                 else
                 {
                     czbcf2 = czbc / f2;
-                    state.States[0][bjt.BJTstate + BJT.BJTqbc] = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
+                    state.States[0][BJTstate + BJTqbc] = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
                          fcpc * fcpc));
                     capbc = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
                 }
@@ -329,31 +614,31 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 {
                     arg = 1 - vbx / pc;
                     sarg = Math.Exp(-xmc * Math.Log(arg));
-                    state.States[0][bjt.BJTstate + BJT.BJTqbx] = pc * czbx * (1 - arg * sarg) / (1 - xmc);
+                    state.States[0][BJTstate + BJTqbx] = pc * czbx * (1 - arg * sarg) / (1 - xmc);
                     capbx = czbx * sarg;
                 }
                 else
                 {
                     czbxf2 = czbx / f2;
-                    state.States[0][bjt.BJTstate + BJT.BJTqbx] = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
+                    state.States[0][BJTstate + BJTqbx] = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
                     capbx = czbxf2 * (f3 + xmc * vbx / pc);
                 }
                 if (vcs < 0)
                 {
                     arg = 1 - vcs / ps;
                     sarg = Math.Exp(-xms * Math.Log(arg));
-                    state.States[0][bjt.BJTstate + BJT.BJTqcs] = ps * czcs * (1 - arg * sarg) / (1 - xms);
+                    state.States[0][BJTstate + BJTqcs] = ps * czcs * (1 - arg * sarg) / (1 - xms);
                     capcs = czcs * sarg;
                 }
                 else
                 {
-                    state.States[0][bjt.BJTstate + BJT.BJTqcs] = vcs * czcs * (1 + xms * vcs / (2 * ps));
+                    state.States[0][BJTstate + BJTqcs] = vcs * czcs * (1 + xms * vcs / (2 * ps));
                     capcs = czcs * (1 + xms * vcs / ps);
                 }
-                bjt.BJTcapbe = capbe;
-                bjt.BJTcapbc = capbc;
-                bjt.BJTcapcs = capcs;
-                bjt.BJTcapbx = capbx;
+                BJTcapbe = capbe;
+                BJTcapbc = capbc;
+                BJTcapcs = capcs;
+                BJTcapbx = capbx;
 
                 /* 
 				 * store small - signal parameters
@@ -362,11 +647,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 {
                     if (state.UseSmallSignal)
                     {
-                        state.States[0][bjt.BJTstate + BJT.BJTcqbe] = capbe;
-                        state.States[0][bjt.BJTstate + BJT.BJTcqbc] = capbc;
-                        state.States[0][bjt.BJTstate + BJT.BJTcqcs] = capcs;
-                        state.States[0][bjt.BJTstate + BJT.BJTcqbx] = capbx;
-                        state.States[0][bjt.BJTstate + BJT.BJTcexbc] = geqcb;
+                        state.States[0][BJTstate + BJTcqbe] = capbe;
+                        state.States[0][BJTstate + BJTcqbc] = capbc;
+                        state.States[0][BJTstate + BJTcqcs] = capcs;
+                        state.States[0][BJTstate + BJTcqbx] = capbx;
+                        state.States[0][BJTstate + BJTcexbc] = geqcb;
 
                         /* SENSDEBUG */
                         return; /* go to 1000 */
@@ -377,28 +662,28 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
                     if (state.Init == CircuitState.InitFlags.InitTransient)
                     {
-                        state.States[1][bjt.BJTstate + BJT.BJTqbe] = state.States[0][bjt.BJTstate + BJT.BJTqbe];
-                        state.States[1][bjt.BJTstate + BJT.BJTqbc] = state.States[0][bjt.BJTstate + BJT.BJTqbc];
-                        state.States[1][bjt.BJTstate + BJT.BJTqbx] = state.States[0][bjt.BJTstate + BJT.BJTqbx];
-                        state.States[1][bjt.BJTstate + BJT.BJTqcs] = state.States[0][bjt.BJTstate + BJT.BJTqcs];
+                        state.States[1][BJTstate + BJTqbe] = state.States[0][BJTstate + BJTqbe];
+                        state.States[1][BJTstate + BJTqbc] = state.States[0][BJTstate + BJTqbc];
+                        state.States[1][BJTstate + BJTqbx] = state.States[0][BJTstate + BJTqbx];
+                        state.States[1][BJTstate + BJTqcs] = state.States[0][BJTstate + BJTqcs];
                     }
 
                     if (method != null)
                     {
-                        var result = method.Integrate(state, bjt.BJTstate + BJT.BJTqbe, capbe);
+                        var result = method.Integrate(state, BJTstate + BJTqbe, capbe);
                         geqcb = geqcb * method.Slope;
                         gpi = gpi + result.Geq;
-                        result = method.Integrate(state, bjt.BJTstate + BJT.BJTqbc, capbc);
+                        result = method.Integrate(state, BJTstate + BJTqbc, capbc);
                         gmu = gmu + result.Geq;
                     }
-                    cb = cb + state.States[0][bjt.BJTstate + BJT.BJTcqbe];
-                    cb = cb + state.States[0][bjt.BJTstate + BJT.BJTcqbc];
-                    cc = cc - state.States[0][bjt.BJTstate + BJT.BJTcqbc];
+                    cb = cb + state.States[0][BJTstate + BJTcqbe];
+                    cb = cb + state.States[0][BJTstate + BJTcqbc];
+                    cc = cc - state.States[0][BJTstate + BJTcqbc];
 
                     if (state.Init == CircuitState.InitFlags.InitTransient)
                     {
-                        state.States[1][bjt.BJTstate + BJT.BJTcqbe] = state.States[0][bjt.BJTstate + BJT.BJTcqbe];
-                        state.States[1][bjt.BJTstate + BJT.BJTcqbc] = state.States[0][bjt.BJTstate + BJT.BJTcqbc];
+                        state.States[1][BJTstate + BJTcqbe] = state.States[0][BJTstate + BJTcqbe];
+                        state.States[1][BJTstate + BJTcqbc] = state.States[0][BJTstate + BJTcqbc];
                     }
                 }
             }
@@ -406,7 +691,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
 			 * check convergence
 			 */
-            if (state.Init != CircuitState.InitFlags.InitFix || !bjt.BJToff)
+            if (state.Init != CircuitState.InitFlags.InitFix || !BJToff)
             {
                 if (icheck)
                     state.IsCon = false;
@@ -417,27 +702,27 @@ namespace SpiceSharp.Components.ComponentBehaviors
 			 */
             if (method != null)
             {
-                method.Integrate(state, out gccs, out ceq, bjt.BJTstate + BJT.BJTqcs, capcs);
-                method.Integrate(state, out geqbx, out ceq, bjt.BJTstate + BJT.BJTqbx, capbx);
+                method.Integrate(state, out gccs, out ceq, BJTstate + BJTqcs, capcs);
+                method.Integrate(state, out geqbx, out ceq, BJTstate + BJTqbx, capbx);
                 if (state.Init == CircuitState.InitFlags.InitTransient)
                 {
-                    state.States[1][bjt.BJTstate + BJT.BJTcqbx] = state.States[0][bjt.BJTstate + BJT.BJTcqbx];
-                    state.States[1][bjt.BJTstate + BJT.BJTcqcs] = state.States[0][bjt.BJTstate + BJT.BJTcqcs];
+                    state.States[1][BJTstate + BJTcqbx] = state.States[0][BJTstate + BJTcqbx];
+                    state.States[1][BJTstate + BJTcqcs] = state.States[0][BJTstate + BJTcqcs];
                 }
             }
 
-            state.States[0][bjt.BJTstate + BJT.BJTvbe] = vbe;
-            state.States[0][bjt.BJTstate + BJT.BJTvbc] = vbc;
-            state.States[0][bjt.BJTstate + BJT.BJTcc] = cc;
-            state.States[0][bjt.BJTstate + BJT.BJTcb] = cb;
-            state.States[0][bjt.BJTstate + BJT.BJTgpi] = gpi;
-            state.States[0][bjt.BJTstate + BJT.BJTgmu] = gmu;
-            state.States[0][bjt.BJTstate + BJT.BJTgm] = gm;
-            state.States[0][bjt.BJTstate + BJT.BJTgo] = go;
-            state.States[0][bjt.BJTstate + BJT.BJTgx] = gx;
-            state.States[0][bjt.BJTstate + BJT.BJTgeqcb] = geqcb;
-            state.States[0][bjt.BJTstate + BJT.BJTgccs] = gccs;
-            state.States[0][bjt.BJTstate + BJT.BJTgeqbx] = geqbx;
+            state.States[0][BJTstate + BJTvbe] = vbe;
+            state.States[0][BJTstate + BJTvbc] = vbc;
+            state.States[0][BJTstate + BJTcc] = cc;
+            state.States[0][BJTstate + BJTcb] = cb;
+            state.States[0][BJTstate + BJTgpi] = gpi;
+            state.States[0][BJTstate + BJTgmu] = gmu;
+            state.States[0][BJTstate + BJTgm] = gm;
+            state.States[0][BJTstate + BJTgo] = go;
+            state.States[0][BJTstate + BJTgx] = gx;
+            state.States[0][BJTstate + BJTgeqcb] = geqcb;
+            state.States[0][BJTstate + BJTgccs] = gccs;
+            state.States[0][BJTstate + BJTgeqbx] = geqbx;
 
             /* Do not load the Jacobian and the rhs if
 			   perturbation is being carried out */
@@ -445,43 +730,43 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
 			 * load current excitation vector
 			 */
-            ceqcs = model.BJTtype * (state.States[0][bjt.BJTstate + BJT.BJTcqcs] - vcs * gccs);
-            ceqbx = model.BJTtype * (state.States[0][bjt.BJTstate + BJT.BJTcqbx] - vbx * geqbx);
-            ceqbe = model.BJTtype * (cc + cb - vbe * (gm + go + gpi) + vbc * (go - geqcb));
-            ceqbc = model.BJTtype * (-cc + vbe * (gm + go) - vbc * (gmu + go));
+            ceqcs = BJTtype * (state.States[0][BJTstate + BJTcqcs] - vcs * gccs);
+            ceqbx = BJTtype * (state.States[0][BJTstate + BJTcqbx] - vbx * geqbx);
+            ceqbe = BJTtype * (cc + cb - vbe * (gm + go + gpi) + vbc * (go - geqcb));
+            ceqbc = BJTtype * (-cc + vbe * (gm + go) - vbc * (gmu + go));
 
-            rstate.Rhs[bjt.BJTbaseNode] += (-ceqbx);
-            rstate.Rhs[bjt.BJTcolPrimeNode] += (ceqcs + ceqbx + ceqbc);
-            rstate.Rhs[bjt.BJTbasePrimeNode] += (-ceqbe - ceqbc);
-            rstate.Rhs[bjt.BJTemitPrimeNode] += (ceqbe);
-            rstate.Rhs[bjt.BJTsubstNode] += (-ceqcs);
+            rstate.Rhs[BJTbaseNode] += (-ceqbx);
+            rstate.Rhs[BJTcolPrimeNode] += (ceqcs + ceqbx + ceqbc);
+            rstate.Rhs[BJTbasePrimeNode] += (-ceqbe - ceqbc);
+            rstate.Rhs[BJTemitPrimeNode] += (ceqbe);
+            rstate.Rhs[BJTsubstNode] += (-ceqcs);
 
             /* 
 			 * load y matrix
 			 */
-            bjt.BJTcolColPtr.Add(gcpr);
-            bjt.BJTbaseBasePtr.Add(gx + geqbx);
-            bjt.BJTemitEmitPtr.Add(gepr);
-            bjt.BJTcolPrimeColPrimePtr.Add(gmu + go + gcpr + gccs + geqbx);
-            bjt.BJTbasePrimeBasePrimePtr.Add(gx + gpi + gmu + geqcb);
-            bjt.BJTemitPrimeEmitPrimePtr.Add(gpi + gepr + gm + go);
-            bjt.BJTcolColPrimePtr.Add(-gcpr);
-            bjt.BJTbaseBasePrimePtr.Add(-gx);
-            bjt.BJTemitEmitPrimePtr.Add(-gepr);
-            bjt.BJTcolPrimeColPtr.Add(-gcpr);
-            bjt.BJTcolPrimeBasePrimePtr.Add(-gmu + gm);
-            bjt.BJTcolPrimeEmitPrimePtr.Add(-gm - go);
-            bjt.BJTbasePrimeBasePtr.Add(-gx);
-            bjt.BJTbasePrimeColPrimePtr.Add(-gmu - geqcb);
-            bjt.BJTbasePrimeEmitPrimePtr.Add(-gpi);
-            bjt.BJTemitPrimeEmitPtr.Add(-gepr);
-            bjt.BJTemitPrimeColPrimePtr.Add(-go + geqcb);
-            bjt.BJTemitPrimeBasePrimePtr.Add(-gpi - gm - geqcb);
-            bjt.BJTsubstSubstPtr.Add(gccs);
-            bjt.BJTcolPrimeSubstPtr.Add(-gccs);
-            bjt.BJTsubstColPrimePtr.Add(-gccs);
-            bjt.BJTbaseColPrimePtr.Add(-geqbx);
-            bjt.BJTcolPrimeBasePtr.Add(-geqbx);
+            BJTcolColPtr.Add(gcpr);
+            BJTbaseBasePtr.Add(gx + geqbx);
+            BJTemitEmitPtr.Add(gepr);
+            BJTcolPrimeColPrimePtr.Add(gmu + go + gcpr + gccs + geqbx);
+            BJTbasePrimeBasePrimePtr.Add(gx + gpi + gmu + geqcb);
+            BJTemitPrimeEmitPrimePtr.Add(gpi + gepr + gm + go);
+            BJTcolColPrimePtr.Add(-gcpr);
+            BJTbaseBasePrimePtr.Add(-gx);
+            BJTemitEmitPrimePtr.Add(-gepr);
+            BJTcolPrimeColPtr.Add(-gcpr);
+            BJTcolPrimeBasePrimePtr.Add(-gmu + gm);
+            BJTcolPrimeEmitPrimePtr.Add(-gm - go);
+            BJTbasePrimeBasePtr.Add(-gx);
+            BJTbasePrimeColPrimePtr.Add(-gmu - geqcb);
+            BJTbasePrimeEmitPrimePtr.Add(-gpi);
+            BJTemitPrimeEmitPtr.Add(-gepr);
+            BJTemitPrimeColPrimePtr.Add(-go + geqcb);
+            BJTemitPrimeBasePrimePtr.Add(-gpi - gm - geqcb);
+            BJTsubstSubstPtr.Add(gccs);
+            BJTcolPrimeSubstPtr.Add(-gccs);
+            BJTsubstColPrimePtr.Add(-gccs);
+            BJTbaseColPrimePtr.Add(-geqbx);
+            BJTcolPrimeBasePtr.Add(-geqbx);
         }
 
         /// <summary>
@@ -491,22 +776,20 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <returns></returns>
         public override bool IsConvergent(Circuit ckt)
         {
-            var bjt = ComponentTyped<BJT>();
-            var model = bjt.Model as BJTModel;
             var state = ckt.State;
             var config = ckt.Simulation.CurrentConfig;
 
             double vbe, vbc, delvbe, delvbc, cchat, cbhat, cc, cb;
 
-            vbe = model.BJTtype * (state.Solution[bjt.BJTbasePrimeNode] - state.Solution[bjt.BJTemitPrimeNode]);
-            vbc = model.BJTtype * (state.Solution[bjt.BJTbasePrimeNode] - state.Solution[bjt.BJTcolPrimeNode]);
-            delvbe = vbe - state.States[0][bjt.BJTstate + BJT.BJTvbe];
-            delvbc = vbc - state.States[0][bjt.BJTstate + BJT.BJTvbc];
-            cchat = state.States[0][bjt.BJTstate + BJT.BJTcc] + (state.States[0][bjt.BJTstate + BJT.BJTgm] + state.States[0][bjt.BJTstate + BJT.BJTgo]) * delvbe -
-                    (state.States[0][bjt.BJTstate + BJT.BJTgo] + state.States[0][bjt.BJTstate + BJT.BJTgmu]) * delvbc;
-            cbhat = state.States[0][bjt.BJTstate + BJT.BJTcb] + state.States[0][bjt.BJTstate + BJT.BJTgpi] * delvbe + state.States[0][bjt.BJTstate + BJT.BJTgmu] * delvbc;
-            cc = state.States[0][bjt.BJTstate + BJT.BJTcc];
-            cb = state.States[0][bjt.BJTstate + BJT.BJTcb];
+            vbe = BJTtype * (state.Solution[BJTbasePrimeNode] - state.Solution[BJTemitPrimeNode]);
+            vbc = BJTtype * (state.Solution[BJTbasePrimeNode] - state.Solution[BJTcolPrimeNode]);
+            delvbe = vbe - state.States[0][BJTstate + BJTvbe];
+            delvbc = vbc - state.States[0][BJTstate + BJTvbc];
+            cchat = state.States[0][BJTstate + BJTcc] + (state.States[0][BJTstate + BJTgm] + state.States[0][BJTstate + BJTgo]) * delvbe -
+                    (state.States[0][BJTstate + BJTgo] + state.States[0][BJTstate + BJTgmu]) * delvbc;
+            cbhat = state.States[0][BJTstate + BJTcb] + state.States[0][BJTstate + BJTgpi] * delvbe + state.States[0][BJTstate + BJTgmu] * delvbc;
+            cc = state.States[0][BJTstate + BJTcc];
+            cb = state.States[0][BJTstate + BJTcb];
 
             /*
              *   check convergence
