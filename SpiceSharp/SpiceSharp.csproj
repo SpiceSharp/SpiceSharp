@@ -75,6 +75,7 @@
     <Compile Include="Components\Semiconductors\BJT\BJTTruncateBehavior.cs" />
     <Compile Include="Components\Semiconductors\Diode\DiodeAcBehavior.cs" />
     <Compile Include="Components\Currentsources\Currentsource\CurrentsourceAcBehavior.cs" />
+    <Compile Include="Components\Semiconductors\Diode\DiodeModelNoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\Diode\DiodeModelTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\Diode\DiodeTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\Diode\DiodeTruncateBehavior.cs" />

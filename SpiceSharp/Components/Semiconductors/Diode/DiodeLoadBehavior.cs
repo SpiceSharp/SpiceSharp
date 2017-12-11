@@ -1,6 +1,8 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Parameters;
+using SpiceSharp.Sparse;
 using SpiceSharp.Components.Semiconductors;
 
 namespace SpiceSharp.Components.ComponentBehaviors
@@ -11,14 +13,125 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class DiodeLoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
+        /// Necessary behaviors
+        /// </summary>
+        private DiodeModelTemperatureBehavior modeltemp;
+        private DiodeTemperatureBehavior temp;
+
+        /// <summary>
+        /// Parameters
+        /// </summary>
+        [SpiceName("area"), SpiceInfo("Area factor")]
+        public Parameter DIOarea { get; } = new Parameter(1);
+        [SpiceName("off"), SpiceInfo("Initially off")]
+        public bool DIOoff { get; set; }
+        [SpiceName("ic"), SpiceInfo("Initial device voltage")]
+        public double DIOinitCond { get; set; }
+        [SpiceName("sens_area"), SpiceInfo("flag to request sensitivity WRT area")]
+        public bool DIOsenParmNo { get; set; }
+        [SpiceName("cd"), SpiceInfo("Diode capacitance")]
+        public double DIOcap { get; set; }
+
+        /// <summary>
+        /// Methods
+        /// </summary>
+        [SpiceName("vd"), SpiceInfo("Diode voltage")]
+        public double GetDIO_VOLTAGE(Circuit ckt) => ckt.State.States[0][DIOstate + DIOvoltage];
+        [SpiceName("id"), SpiceName("c"), SpiceInfo("Diode current")]
+        public double GetDIO_CURRENT(Circuit ckt) => ckt.State.States[0][DIOstate + DIOcurrent];
+        [SpiceName("charge"), SpiceInfo("Diode capacitor charge")]
+        public double GetDIO_CHARGE(Circuit ckt) => ckt.State.States[0][DIOstate + DIOcapCharge];
+        [SpiceName("capcur"), SpiceInfo("Diode capacitor current")]
+        public double GetDIO_CAPCUR(Circuit ckt) => ckt.State.States[0][DIOstate + DIOcapCurrent];
+        [SpiceName("gd"), SpiceInfo("Diode conductance")]
+        public double GetDIO_CONDUCT(Circuit ckt) => ckt.State.States[0][DIOstate + DIOconduct];
+        // [SpiceName("p"), SpiceInfo("Diode power")]
+
+        /// <summary>
+        /// Nodes
+        /// </summary>
+        private int DIOposNode, DIOnegNode;
+        public int DIOposPrimeNode { get; private set; }
+        private MatrixElement DIOposPosPrimePtr;
+        private MatrixElement DIOnegPosPrimePtr;
+        private MatrixElement DIOposPrimePosPtr;
+        private MatrixElement DIOposPrimeNegPtr;
+        private MatrixElement DIOposPosPtr;
+        private MatrixElement DIOnegNegPtr;
+        private MatrixElement DIOposPrimePosPrimePtr;
+
+        /// <summary>
+        /// Extra variables
+        /// </summary>
+        public int DIOstate { get; protected set; }
+
+        /// <summary>
+        /// Constants
+        /// </summary>
+        public const int DIOvoltage = 0;
+        public const int DIOcurrent = 1;
+        public const int DIOconduct = 2;
+        public const int DIOcapCharge = 3;
+        public const int DIOcapCurrent = 4;
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public override bool Setup(CircuitObject component, Circuit ckt)
+        {
+            var dio = component as Diode;
+            var model = dio.Model as DiodeModel;
+
+            // Get behaviors
+            temp = dio.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as DiodeTemperatureBehavior;
+            modeltemp = model.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as DiodeModelTemperatureBehavior;
+
+            // Allocate states
+            DIOstate = ckt.State.GetState(5);
+
+            // Nodes
+            DIOposNode = dio.DIOposNode;
+            DIOnegNode = dio.DIOnegNode;
+            if (modeltemp.DIOresist.Value == 0)
+                DIOposPrimeNode = DIOposNode;
+            else
+                DIOposPrimeNode = CreateNode(ckt, dio.Name.Grow("#pos")).Index;
+
+            var matrix = ckt.State.Matrix;
+            DIOposPosPrimePtr = matrix.GetElement(DIOposNode, DIOposPrimeNode);
+            DIOnegPosPrimePtr = matrix.GetElement(DIOnegNode, DIOposPrimeNode);
+            DIOposPrimePosPtr = matrix.GetElement(DIOposPrimeNode, DIOposNode);
+            DIOposPrimeNegPtr = matrix.GetElement(DIOposPrimeNode, DIOnegNode);
+            DIOposPosPtr = matrix.GetElement(DIOposNode, DIOposNode);
+            DIOnegNegPtr = matrix.GetElement(DIOnegNode, DIOnegNode);
+            DIOposPrimePosPrimePtr = matrix.GetElement(DIOposPrimeNode, DIOposPrimeNode);
+            return true;
+        }
+
+        /// <summary>
+        /// Unsetup the device
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        public override void Unsetup()
+        {
+            DIOposPosPrimePtr = null;
+            DIOnegPosPrimePtr = null;
+            DIOposPrimePosPtr = null;
+            DIOposPrimeNegPtr = null;
+            DIOposPosPtr = null;
+            DIOnegNegPtr = null;
+            DIOposPrimePosPrimePtr = null;
+        }
+
+        /// <summary>
         /// Behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Load(Circuit ckt)
         {
-            var diode = ComponentTyped<Diode>();
-
-            var model = diode.Model as DiodeModel;
             var state = ckt.State;
             var matrix = state.Matrix;
             var method = ckt.Method;
@@ -28,10 +141,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
              * this routine loads diodes for dc and transient analyses.
              */
-            csat = diode.DIOtSatCur * diode.DIOarea;
-            gspr = model.DIOconductance * diode.DIOarea;
-            vt = Circuit.CONSTKoverQ * diode.DIOtemp;
-            vte = model.DIOemissionCoeff * vt;
+            csat = temp.DIOtSatCur * DIOarea;
+            gspr = modeltemp.DIOconductance * DIOarea;
+            vt = Circuit.CONSTKoverQ * temp.DIOtemp;
+            vte = modeltemp.DIOemissionCoeff * vt;
 
             /* 
 			 * initialization 
@@ -39,46 +152,46 @@ namespace SpiceSharp.Components.ComponentBehaviors
             Check = true;
             if (state.UseSmallSignal)
             {
-                vd = state.States[0][diode.DIOstate + Diode.DIOvoltage];
+                vd = state.States[0][DIOstate + DIOvoltage];
             }
             else if (state.Init == CircuitState.InitFlags.InitTransient)
             {
-                vd = state.States[1][diode.DIOstate + Diode.DIOvoltage];
+                vd = state.States[1][DIOstate + DIOvoltage];
                 Check = false; // EDIT: Spice does not check the first timepoint for convergence, but we do...
             }
             else if ((state.Init == CircuitState.InitFlags.InitJct) && (state.Domain == CircuitState.DomainTypes.Time && state.UseDC) &&
               state.UseIC)
             {
-                vd = diode.DIOinitCond;
+                vd = DIOinitCond;
             }
-            else if ((state.Init == CircuitState.InitFlags.InitJct) && diode.DIOoff)
+            else if ((state.Init == CircuitState.InitFlags.InitJct) && DIOoff)
             {
                 vd = 0;
             }
             else if (state.Init == CircuitState.InitFlags.InitJct)
             {
-                vd = diode.DIOtVcrit;
+                vd = temp.DIOtVcrit;
             }
-            else if (ckt.State.Init == CircuitState.InitFlags.InitFix && diode.DIOoff)
+            else if (ckt.State.Init == CircuitState.InitFlags.InitFix && DIOoff)
             {
                 vd = 0;
             }
             else
             {
-                vd = state.Solution[diode.DIOposPrimeNode] - state.Solution[diode.DIOnegNode];
+                vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
 
                 /* 
 				 * limit new junction voltage
 				 */
-                if ((model.DIObreakdownVoltage.Given) && (vd < Math.Min(0, -diode.DIOtBrkdwnV + 10 * vte)))
+                if ((modeltemp.DIObreakdownVoltage.Given) && (vd < Math.Min(0, -temp.DIOtBrkdwnV + 10 * vte)))
                 {
-                    vdtemp = -(vd + diode.DIOtBrkdwnV);
-                    vdtemp = Semiconductor.DEVpnjlim(vdtemp, -(state.States[0][diode.DIOstate + Diode.DIOvoltage] + diode.DIOtBrkdwnV), vte, diode.DIOtVcrit, ref Check);
-                    vd = -(vdtemp + diode.DIOtBrkdwnV);
+                    vdtemp = -(vd + temp.DIOtBrkdwnV);
+                    vdtemp = Semiconductor.DEVpnjlim(vdtemp, -(state.States[0][DIOstate + DIOvoltage] + temp.DIOtBrkdwnV), vte, temp.DIOtVcrit, ref Check);
+                    vd = -(vdtemp + temp.DIOtBrkdwnV);
                 }
                 else
                 {
-                    vd = Semiconductor.DEVpnjlim(vd, state.States[0][diode.DIOstate + Diode.DIOvoltage], vte, diode.DIOtVcrit, ref Check);
+                    vd = Semiconductor.DEVpnjlim(vd, state.States[0][DIOstate + DIOvoltage], vte, temp.DIOtVcrit, ref Check);
                 }
             }
             /* 
@@ -90,7 +203,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 cd = csat * (evd - 1) + state.Gmin * vd;
                 gd = csat * evd / vte + state.Gmin;
             }
-            else if (diode.DIOtBrkdwnV == 0.0 || vd >= -diode.DIOtBrkdwnV)
+            else if (temp.DIOtBrkdwnV == 0.0 || vd >= -temp.DIOtBrkdwnV)
             {
                 arg = 3 * vte / (vd * Circuit.CONSTE);
                 arg = arg * arg * arg;
@@ -99,7 +212,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             }
             else
             {
-                evrev = Math.Exp(-(diode.DIOtBrkdwnV + vd) / vte);
+                evrev = Math.Exp(-(temp.DIOtBrkdwnV + vd) / vte);
                 cd = -csat * evrev + state.Gmin * vd;
                 gd = csat * evrev / vte + state.Gmin;
             }
@@ -108,23 +221,23 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 /* 
 				* charge storage elements
 				*/
-                czero = diode.DIOtJctCap * diode.DIOarea;
-                if (vd < diode.DIOtDepCap)
+                czero = temp.DIOtJctCap * DIOarea;
+                if (vd < temp.DIOtDepCap)
                 {
-                    arg = 1 - vd / model.DIOjunctionPot;
-                    sarg = Math.Exp(-model.DIOgradingCoeff * Math.Log(arg));
-                    state.States[0][diode.DIOstate + Diode.DIOcapCharge] = model.DIOtransitTime * cd + model.DIOjunctionPot * czero * (1 - arg * sarg) / (1 -
-                        model.DIOgradingCoeff);
-                    capd = model.DIOtransitTime * gd + czero * sarg;
+                    arg = 1 - vd / modeltemp.DIOjunctionPot;
+                    sarg = Math.Exp(-modeltemp.DIOgradingCoeff * Math.Log(arg));
+                    state.States[0][DIOstate + DIOcapCharge] = modeltemp.DIOtransitTime * cd + modeltemp.DIOjunctionPot * czero * (1 - arg * sarg) / (1 -
+                        modeltemp.DIOgradingCoeff);
+                    capd = modeltemp.DIOtransitTime * gd + czero * sarg;
                 }
                 else
                 {
-                    czof2 = czero / model.DIOf2;
-                    state.States[0][diode.DIOstate + Diode.DIOcapCharge] = model.DIOtransitTime * cd + czero * diode.DIOtF1 + czof2 * (model.DIOf3 * (vd -
-                        diode.DIOtDepCap) + (model.DIOgradingCoeff / (model.DIOjunctionPot + model.DIOjunctionPot)) * (vd * vd - diode.DIOtDepCap * diode.DIOtDepCap));
-                    capd = model.DIOtransitTime * gd + czof2 * (model.DIOf3 + model.DIOgradingCoeff * vd / model.DIOjunctionPot);
+                    czof2 = czero / modeltemp.DIOf2;
+                    state.States[0][DIOstate + DIOcapCharge] = modeltemp.DIOtransitTime * cd + czero * temp.DIOtF1 + czof2 * (modeltemp.DIOf3 * (vd -
+                        temp.DIOtDepCap) + (modeltemp.DIOgradingCoeff / (modeltemp.DIOjunctionPot + modeltemp.DIOjunctionPot)) * (vd * vd - temp.DIOtDepCap * temp.DIOtDepCap));
+                    capd = modeltemp.DIOtransitTime * gd + czof2 * (modeltemp.DIOf3 + modeltemp.DIOgradingCoeff * vd / modeltemp.DIOjunctionPot);
                 }
-                diode.DIOcap = capd;
+                DIOcap = capd;
 
                 /* 
 				* store small - signal parameters
@@ -133,7 +246,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 {
                     if (state.UseSmallSignal)
                     {
-                        state.States[0][diode.DIOstate + Diode.DIOcapCurrent] = capd;
+                        state.States[0][DIOstate + DIOcapCurrent] = capd;
                         return;
                     }
 
@@ -143,12 +256,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
                     if (method != null)
                     {
                         if (state.Init == CircuitState.InitFlags.InitTransient)
-                            state.States[1][diode.DIOstate + Diode.DIOcapCharge] = state.States[0][diode.DIOstate + Diode.DIOcapCharge];
-                        var result = method.Integrate(state, diode.DIOstate + Diode.DIOcapCharge, capd);
+                            state.States[1][DIOstate + DIOcapCharge] = state.States[0][DIOstate + DIOcapCharge];
+                        var result = method.Integrate(state, DIOstate + DIOcapCharge, capd);
                         gd = gd + result.Geq;
-                        cd = cd + state.States[0][diode.DIOstate + Diode.DIOcapCurrent];
+                        cd = cd + state.States[0][DIOstate + DIOcapCurrent];
                         if (state.Init == CircuitState.InitFlags.InitTransient)
-                            state.States[1][diode.DIOstate + Diode.DIOcapCurrent] = state.States[0][diode.DIOstate + Diode.DIOcapCurrent];
+                            state.States[1][DIOstate + DIOcapCurrent] = state.States[0][DIOstate + DIOcapCurrent];
                     }
                 }
             }
@@ -156,33 +269,33 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
 			 * check convergence
 			 */
-            if (((state.Init != CircuitState.InitFlags.InitFix)) || (!(diode.DIOoff)))
+            if (((state.Init != CircuitState.InitFlags.InitFix)) || (!(DIOoff)))
             {
                 if (Check)
                     ckt.State.IsCon = false;
             }
-            state.States[0][diode.DIOstate + Diode.DIOvoltage] = vd;
-            state.States[0][diode.DIOstate + Diode.DIOcurrent] = cd;
-            state.States[0][diode.DIOstate + Diode.DIOconduct] = gd;
+            state.States[0][DIOstate + DIOvoltage] = vd;
+            state.States[0][DIOstate + DIOcurrent] = cd;
+            state.States[0][DIOstate + DIOconduct] = gd;
 
             /* 
 			 * load current vector
 			 */
             cdeq = cd - gd * vd;
-            state.Rhs[diode.DIOnegNode] += cdeq;
-            state.Rhs[diode.DIOposPrimeNode] -= cdeq;
+            state.Rhs[DIOnegNode] += cdeq;
+            state.Rhs[DIOposPrimeNode] -= cdeq;
 
             /* 
 			 * load matrix
 			 */
-            diode.DIOposPosPtr.Value.Real += gspr;
-            diode.DIOnegNegPtr.Value.Real += gd;
-            diode.DIOposPrimePosPrimePtr.Value.Real += gd + gspr;
+            DIOposPosPtr.Value.Real += gspr;
+            DIOnegNegPtr.Value.Real += gd;
+            DIOposPrimePosPrimePtr.Value.Real += gd + gspr;
 
-            diode.DIOposPosPrimePtr.Value.Real -= gspr;
-            diode.DIOposPrimePosPtr.Value.Real -= gspr;
-            diode.DIOnegPosPrimePtr.Value.Real -= gd;
-            diode.DIOposPrimeNegPtr.Value.Real -= gd;
+            DIOposPosPrimePtr.Value.Real -= gspr;
+            DIOposPrimePosPtr.Value.Real -= gspr;
+            DIOnegPosPrimePtr.Value.Real -= gd;
+            DIOposPrimeNegPtr.Value.Real -= gd;
         }
 
         /// <summary>
@@ -193,18 +306,16 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override bool IsConvergent(Circuit ckt)
         {
             var state = ckt.State;
-            var diode = ComponentTyped<Diode>();
-            var model = diode.Model as DiodeModel;
             var config = ckt.Simulation.CurrentConfig;
 
             double delvd, cdhat, cd;
 
-            double vd = state.Solution[diode.DIOposPrimeNode] - state.Solution[diode.DIOnegNode];
+            double vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
 
-            delvd = vd - state.States[0][diode.DIOstate + Diode.DIOvoltage];
-            cdhat = state.States[0][diode.DIOstate + Diode.DIOcurrent] + state.States[0][diode.DIOstate + Diode.DIOconduct] * delvd;
+            delvd = vd - state.States[0][DIOstate + DIOvoltage];
+            cdhat = state.States[0][DIOstate + DIOcurrent] + state.States[0][DIOstate + DIOconduct] * delvd;
 
-            cd = state.States[0][diode.DIOstate + Diode.DIOcurrent];
+            cd = state.States[0][DIOstate + DIOcurrent];
 
             /*
              *   check convergence

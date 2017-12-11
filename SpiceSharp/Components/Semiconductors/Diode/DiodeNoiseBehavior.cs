@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Parameters;
 using SpiceSharp.Components.Noise;
 
 namespace SpiceSharp.Components.ComponentBehaviors
@@ -10,6 +11,18 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// </summary>
     public class DiodeNoiseBehavior : CircuitObjectBehaviorNoise
     {
+        /// <summary>
+        /// Necessary behaviors
+        /// </summary>
+        private DiodeModelNoiseBehavior modelnoise;
+        private DiodeModelTemperatureBehavior modeltemp;
+
+        /// <summary>
+        /// Parameters
+        /// </summary>
+        [SpiceName("area"), SpiceInfo("Area factor")]
+        public Parameter DIOarea { get; } = new Parameter(1);
+
         /// <summary>
         /// Noise sources by their index
         /// </summary>
@@ -26,15 +39,28 @@ namespace SpiceSharp.Components.ComponentBehaviors
             new NoiseGain("1overf", 1, 2));
 
         /// <summary>
+        /// Private variables
+        /// </summary>
+        private int DIOstate;
+
+        /// <summary>
         /// Setup the diode
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override bool Setup(CircuitObject component, Circuit ckt)
         {
-            base.Setup(component, ckt);
-            var diode = ComponentTyped<Diode>();
-            DIOnoise.Setup(ckt, diode.DIOposNode, diode.DIOposPrimeNode, diode.DIOnegNode);
+            var diode = component as Diode;
+            var model = diode.Model as DiodeModel;
+
+            // Get behaviors
+            modeltemp = model.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as DiodeModelTemperatureBehavior;
+            modelnoise = model.GetBehavior(typeof(CircuitObjectBehaviorNoise)) as DiodeModelNoiseBehavior;
+            var load = diode.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as DiodeLoadBehavior;
+            DIOstate = load.DIOstate;
+
+            DIOnoise.Setup(ckt, diode.DIOposNode, load.DIOposPrimeNode, diode.DIOnegNode);
+            return true;
         }
 
         /// <summary>
@@ -50,10 +76,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var noise = ckt.State.Noise;
 
             // Set noise parameters
-            DIOnoise.Generators[DIORSNOIZ].Set(model.DIOconductance * diode.DIOarea);
-            DIOnoise.Generators[DIOIDNOIZ].Set(state.States[0][diode.DIOstate + Diode.DIOcurrent]);
-            DIOnoise.Generators[DIOFLNOIZ].Set(model.DIOfNcoef * Math.Exp(model.DIOfNexp 
-                * Math.Log(Math.Max(Math.Abs(state.States[0][diode.DIOstate + Diode.DIOcurrent]), 1e-38))) / noise.Freq);
+            DIOnoise.Generators[DIORSNOIZ].Set(modeltemp.DIOconductance * DIOarea);
+            DIOnoise.Generators[DIOIDNOIZ].Set(state.States[0][DIOstate + DiodeLoadBehavior.DIOcurrent]);
+            DIOnoise.Generators[DIOFLNOIZ].Set(modelnoise.DIOfNcoef * Math.Exp(modelnoise.DIOfNexp 
+                * Math.Log(Math.Max(Math.Abs(state.States[0][DIOstate + DiodeLoadBehavior.DIOcurrent]), 1e-38))) / noise.Freq);
 
             // Evaluate noise
             DIOnoise.Evaluate(ckt);
