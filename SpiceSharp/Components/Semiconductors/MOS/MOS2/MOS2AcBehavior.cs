@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -9,20 +10,40 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class MOS2AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
+        /// Necessary behaviors
+        /// </summary>
+        private MOS2LoadBehavior load;
+        private MOS2TemperatureBehavior temp;
+        private MOS2ModelTemperatureBehavior modeltemp;
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public override bool Setup(CircuitObject component, Circuit ckt)
+        {
+            var mos2 = component as MOS2;
+            load = GetBehavior<MOS2LoadBehavior>(component);
+            temp = GetBehavior<MOS2TemperatureBehavior>(component);
+            modeltemp = GetBehavior<MOS2ModelTemperatureBehavior>(mos2.Model);
+            return true;
+        }
+
+        /// <summary>
         /// Execute the behaviour
         /// </summary>
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)
         {
-            var mos2 = ComponentTyped<MOS2>();
-            var model = mos2.Model as MOS2Model;
             var state = ckt.State;
             var cstate = state;
             int xnrm, xrev;
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, capgs, capgd, capgb, xgs, xgd, xgb, xbd,
                 xbs;
 
-            if (mos2.MOS2mode < 0)
+            if (load.MOS2mode < 0)
             {
                 xnrm = 0;
                 xrev = 1;
@@ -35,44 +56,44 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
 			* meyer's model parameters
 			*/
-            EffectiveLength = mos2.MOS2l - 2 * model.MOS2latDiff;
-            GateSourceOverlapCap = model.MOS2gateSourceOverlapCapFactor * mos2.MOS2w;
-            GateDrainOverlapCap = model.MOS2gateDrainOverlapCapFactor * mos2.MOS2w;
-            GateBulkOverlapCap = model.MOS2gateBulkOverlapCapFactor * EffectiveLength;
-            capgs = (state.States[0][mos2.MOS2states + MOS2.MOS2capgs] + state.States[0][mos2.MOS2states + MOS2.MOS2capgs] + GateSourceOverlapCap);
-            capgd = (state.States[0][mos2.MOS2states + MOS2.MOS2capgd] + state.States[0][mos2.MOS2states + MOS2.MOS2capgd] + GateDrainOverlapCap);
-            capgb = (state.States[0][mos2.MOS2states + MOS2.MOS2capgb] + state.States[0][mos2.MOS2states + MOS2.MOS2capgb] + GateBulkOverlapCap);
+            EffectiveLength = temp.MOS2l - 2 * modeltemp.MOS2latDiff;
+            GateSourceOverlapCap = modeltemp.MOS2gateSourceOverlapCapFactor * temp.MOS2w;
+            GateDrainOverlapCap = modeltemp.MOS2gateDrainOverlapCapFactor * temp.MOS2w;
+            GateBulkOverlapCap = modeltemp.MOS2gateBulkOverlapCapFactor * EffectiveLength;
+            capgs = (state.States[0][load.MOS2states + MOS2LoadBehavior.MOS2capgs] + state.States[0][load.MOS2states + MOS2LoadBehavior.MOS2capgs] + GateSourceOverlapCap);
+            capgd = (state.States[0][load.MOS2states + MOS2LoadBehavior.MOS2capgd] + state.States[0][load.MOS2states + MOS2LoadBehavior.MOS2capgd] + GateDrainOverlapCap);
+            capgb = (state.States[0][load.MOS2states + MOS2LoadBehavior.MOS2capgb] + state.States[0][load.MOS2states + MOS2LoadBehavior.MOS2capgb] + GateBulkOverlapCap);
             xgs = capgs * cstate.Laplace.Imaginary;
             xgd = capgd * cstate.Laplace.Imaginary;
             xgb = capgb * cstate.Laplace.Imaginary;
-            xbd = mos2.MOS2capbd * cstate.Laplace.Imaginary;
-            xbs = mos2.MOS2capbs * cstate.Laplace.Imaginary;
+            xbd = load.MOS2capbd * cstate.Laplace.Imaginary;
+            xbs = load.MOS2capbs * cstate.Laplace.Imaginary;
 
             /* 
 			 * load matrix
 			 */
-            mos2.MOS2GgPtr.Add(new Complex(0.0, xgd + xgs + xgb));
-            mos2.MOS2BbPtr.Add(new Complex(mos2.MOS2gbd + mos2.MOS2gbs, xgb + xbd + xbs));
-            mos2.MOS2DPdpPtr.Add(new Complex(mos2.MOS2drainConductance + mos2.MOS2gds + mos2.MOS2gbd + xrev * (mos2.MOS2gm + mos2.MOS2gmbs), xgd + xbd));
-            mos2.MOS2SPspPtr.Add(new Complex(mos2.MOS2sourceConductance + mos2.MOS2gds + mos2.MOS2gbs + xnrm * (mos2.MOS2gm + mos2.MOS2gmbs), xgs + xbs));
-            mos2.MOS2GbPtr.Sub(new Complex(0.0, xgb));
-            mos2.MOS2GdpPtr.Sub(new Complex(0.0, xgd));
-            mos2.MOS2GspPtr.Sub(new Complex(0.0, xgs));
-            mos2.MOS2BgPtr.Sub(new Complex(0.0, xgb));
-            mos2.MOS2BdpPtr.Sub(new Complex(mos2.MOS2gbd, xbd));
-            mos2.MOS2BspPtr.Sub(new Complex(mos2.MOS2gbs, xbs));
-            mos2.MOS2DPgPtr.Add(new Complex((xnrm - xrev) * mos2.MOS2gm, -xgd));
-            mos2.MOS2DPbPtr.Add(new Complex(-mos2.MOS2gbd + (xnrm - xrev) * mos2.MOS2gmbs, -xbd));
-            mos2.MOS2SPgPtr.Sub(new Complex((xnrm - xrev) * mos2.MOS2gm, xgs));
-            mos2.MOS2SPbPtr.Sub(new Complex(mos2.MOS2gbs + (xnrm - xrev) * mos2.MOS2gmbs, xbs));
-            mos2.MOS2DdPtr.Add(mos2.MOS2drainConductance);
-            mos2.MOS2SsPtr.Add(mos2.MOS2sourceConductance);
-            mos2.MOS2DdpPtr.Sub(mos2.MOS2drainConductance);
-            mos2.MOS2SspPtr.Sub(mos2.MOS2sourceConductance);
-            mos2.MOS2DPdPtr.Sub(mos2.MOS2drainConductance);
-            mos2.MOS2DPspPtr.Sub(mos2.MOS2gds + xnrm * (mos2.MOS2gm + mos2.MOS2gmbs));
-            mos2.MOS2SPsPtr.Sub(mos2.MOS2sourceConductance);
-            mos2.MOS2SPdpPtr.Sub(mos2.MOS2gds + xrev * (mos2.MOS2gm + mos2.MOS2gmbs));
+            load.MOS2GgPtr.Add(new Complex(0.0, xgd + xgs + xgb));
+            load.MOS2BbPtr.Add(new Complex(load.MOS2gbd + load.MOS2gbs, xgb + xbd + xbs));
+            load.MOS2DPdpPtr.Add(new Complex(temp.MOS2drainConductance + load.MOS2gds + load.MOS2gbd + xrev * (load.MOS2gm + load.MOS2gmbs), xgd + xbd));
+            load.MOS2SPspPtr.Add(new Complex(temp.MOS2sourceConductance + load.MOS2gds + load.MOS2gbs + xnrm * (load.MOS2gm + load.MOS2gmbs), xgs + xbs));
+            load.MOS2GbPtr.Sub(new Complex(0.0, xgb));
+            load.MOS2GdpPtr.Sub(new Complex(0.0, xgd));
+            load.MOS2GspPtr.Sub(new Complex(0.0, xgs));
+            load.MOS2BgPtr.Sub(new Complex(0.0, xgb));
+            load.MOS2BdpPtr.Sub(new Complex(load.MOS2gbd, xbd));
+            load.MOS2BspPtr.Sub(new Complex(load.MOS2gbs, xbs));
+            load.MOS2DPgPtr.Add(new Complex((xnrm - xrev) * load.MOS2gm, -xgd));
+            load.MOS2DPbPtr.Add(new Complex(-load.MOS2gbd + (xnrm - xrev) * load.MOS2gmbs, -xbd));
+            load.MOS2SPgPtr.Sub(new Complex((xnrm - xrev) * load.MOS2gm, xgs));
+            load.MOS2SPbPtr.Sub(new Complex(load.MOS2gbs + (xnrm - xrev) * load.MOS2gmbs, xbs));
+            load.MOS2DdPtr.Add(temp.MOS2drainConductance);
+            load.MOS2SsPtr.Add(temp.MOS2sourceConductance);
+            load.MOS2DdpPtr.Sub(temp.MOS2drainConductance);
+            load.MOS2SspPtr.Sub(temp.MOS2sourceConductance);
+            load.MOS2DPdPtr.Sub(temp.MOS2drainConductance);
+            load.MOS2DPspPtr.Sub(load.MOS2gds + xnrm * (load.MOS2gm + load.MOS2gmbs));
+            load.MOS2SPsPtr.Sub(temp.MOS2sourceConductance);
+            load.MOS2SPdpPtr.Sub(load.MOS2gds + xrev * (load.MOS2gm + load.MOS2gmbs));
         }
     }
 }

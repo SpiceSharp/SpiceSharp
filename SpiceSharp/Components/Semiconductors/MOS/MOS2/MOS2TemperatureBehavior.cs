@@ -1,6 +1,8 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Parameters;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -10,192 +12,293 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class MOS2TemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
+        /// Necessary behaviors
+        /// </summary>
+        private MOS2ModelTemperatureBehavior modeltemp;
+
+        /// <summary>
+        /// Parameters
+        /// </summary>
+        [SpiceName("temp"), SpiceInfo("Instance operating temperature")]
+        public double MOS2_TEMP
+        {
+            get => MOS2temp - Circuit.CONSTCtoK;
+            set => MOS2temp.Set(value + Circuit.CONSTCtoK);
+        }
+        public Parameter MOS2temp { get; } = new Parameter();
+        [SpiceName("w"), SpiceInfo("Width")]
+        public Parameter MOS2w { get; } = new Parameter(1e-4);
+        [SpiceName("l"), SpiceInfo("Length")]
+        public Parameter MOS2l { get; } = new Parameter(1e-4);
+        [SpiceName("as"), SpiceInfo("Source area")]
+        public Parameter MOS2sourceArea { get; } = new Parameter();
+        [SpiceName("ad"), SpiceInfo("Drain area")]
+        public Parameter MOS2drainArea { get; } = new Parameter();
+        [SpiceName("ps"), SpiceInfo("Source perimeter")]
+        public Parameter MOS2sourcePerimiter { get; } = new Parameter();
+        [SpiceName("pd"), SpiceInfo("Drain perimeter")]
+        public Parameter MOS2drainPerimiter { get; } = new Parameter();
+        [SpiceName("nrs"), SpiceInfo("Source squares")]
+        public Parameter MOS2sourceSquares { get; } = new Parameter(1);
+        [SpiceName("nrd"), SpiceInfo("Drain squares")]
+        public Parameter MOS2drainSquares { get; } = new Parameter(1);
+        [SpiceName("sourceconductance"), SpiceInfo("Source conductance")]
+        public double MOS2sourceConductance { get; internal set; }
+        [SpiceName("drainconductance"), SpiceInfo("Drain conductance")]
+        public double MOS2drainConductance { get; internal set; }
+        [SpiceName("sourcevcrit"), SpiceInfo("Critical source voltage")]
+        public double MOS2sourceVcrit { get; internal set; }
+        [SpiceName("drainvcrit"), SpiceInfo("Critical drain voltage")]
+        public double MOS2drainVcrit { get; internal set; }
+        [SpiceName("cbd0"), SpiceInfo("Zero-Bias B-D junction capacitance")]
+        public double MOS2Cbd { get; internal set; }
+        [SpiceName("cbdsw0"), SpiceInfo(" ")]
+        public double MOS2Cbdsw { get; internal set; }
+        [SpiceName("cbs0"), SpiceInfo("Zero-Bias B-S junction capacitance")]
+        public double MOS2Cbs { get; internal set; }
+        [SpiceName("cbssw0"), SpiceInfo(" ")]
+        public double MOS2Cbssw { get; internal set; }
+        [SpiceName("rs"), SpiceInfo("Source resistance")]
+        public double GetSOURCERESIST(Circuit ckt)
+        {
+            if (MOS2sourceConductance != 0.0)
+                return 1.0 / MOS2sourceConductance;
+            else
+                return 0.0;
+        }
+        [SpiceName("rd"), SpiceInfo("Drain resistance")]
+        public double GetDRAINRESIST(Circuit ckt)
+        {
+            if (MOS2drainConductance != 0.0)
+                return 1.0 / MOS2drainConductance;
+            else
+                return 0.0;
+        }
+
+        /// <summary>
+        /// Extra variables
+        /// </summary>
+        public double MOS2tTransconductance { get; internal set; }
+        public double MOS2tSurfMob { get; internal set; }
+        public double MOS2tPhi { get; internal set; }
+        public double MOS2tVbi { get; internal set; }
+        public double MOS2tVto { get; internal set; }
+        public double MOS2tSatCur { get; internal set; }
+        public double MOS2tSatCurDens { get; internal set; }
+        public double MOS2tCbd { get; internal set; }
+        public double MOS2tCbs { get; internal set; }
+        public double MOS2tCj { get; internal set; }
+        public double MOS2tCjsw { get; internal set; }
+        public double MOS2tBulkPot { get; internal set; }
+        public double MOS2tDepCap { get; internal set; }
+        public double MOS2f2d { get; internal set; }
+        public double MOS2f3d { get; internal set; }
+        public double MOS2f4d { get; internal set; }
+        public double MOS2f2s { get; internal set; }
+        public double MOS2f3s { get; internal set; }
+        public double MOS2f4s { get; internal set; }
+        public double MOS2cgs { get; internal set; }
+        public double MOS2cgd { get; internal set; }
+        public double MOS2cgb { get; internal set; }
+
+        private CircuitIdentifier name;
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public override bool Setup(CircuitObject component, Circuit ckt)
+        {
+            modeltemp = GetBehavior<MOS2ModelTemperatureBehavior>(component);
+            name = component.Name;
+            return true;
+        }
+
+        /// <summary>
         /// Execute the behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            var mos2 = ComponentTyped<MOS2>();
-            var model = mos2.Model as MOS2Model;
             double vt, ratio, fact2, kt, egfet, arg, pbfact, ratio4, phio, pbo, gmaold, capfact, gmanew, czbd, czbdsw, sarg, sargsw, czbs,
                 czbssw;
 
             /* perform the parameter defaulting */
-            if (!mos2.MOS2temp.Given)
+            if (!MOS2temp.Given)
             {
-                mos2.MOS2temp.Value = ckt.State.Temperature;
+                MOS2temp.Value = ckt.State.Temperature;
             }
-            mos2.MOS2mode = 1;
-            mos2.MOS2von = 0;
 
-            vt = mos2.MOS2temp * Circuit.CONSTKoverQ;
-            ratio = mos2.MOS2temp / model.MOS2tnom;
-            fact2 = mos2.MOS2temp / Circuit.CONSTRefTemp;
-            kt = mos2.MOS2temp * Circuit.CONSTBoltz;
-            egfet = 1.16 - (7.02e-4 * mos2.MOS2temp * mos2.MOS2temp) / (mos2.MOS2temp + 1108);
+            vt = MOS2temp * Circuit.CONSTKoverQ;
+            ratio = MOS2temp / modeltemp.MOS2tnom;
+            fact2 = MOS2temp / Circuit.CONSTRefTemp;
+            kt = MOS2temp * Circuit.CONSTBoltz;
+            egfet = 1.16 - (7.02e-4 * MOS2temp * MOS2temp) / (MOS2temp + 1108);
             arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
             pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
 
-            if (model.MOS2drainResistance.Given)
+            if (modeltemp.MOS2drainResistance.Given)
             {
-                if (model.MOS2drainResistance != 0)
+                if (modeltemp.MOS2drainResistance != 0)
                 {
-                    mos2.MOS2drainConductance = 1 / model.MOS2drainResistance;
+                    MOS2drainConductance = 1 / modeltemp.MOS2drainResistance;
                 }
                 else
                 {
-                    mos2.MOS2drainConductance = 0;
+                    MOS2drainConductance = 0;
                 }
             }
-            else if (model.MOS2sheetResistance.Given)
+            else if (modeltemp.MOS2sheetResistance.Given)
             {
-                if (model.MOS2sheetResistance != 0)
+                if (modeltemp.MOS2sheetResistance != 0)
                 {
-                    mos2.MOS2drainConductance = 1 / (model.MOS2sheetResistance * mos2.MOS2drainSquares);
+                    MOS2drainConductance = 1 / (modeltemp.MOS2sheetResistance * MOS2drainSquares);
                 }
                 else
                 {
-                    mos2.MOS2drainConductance = 0;
+                    MOS2drainConductance = 0;
                 }
             }
             else
             {
-                mos2.MOS2drainConductance = 0;
+                MOS2drainConductance = 0;
             }
-            if (model.MOS2sourceResistance.Given)
+            if (modeltemp.MOS2sourceResistance.Given)
             {
-                if (model.MOS2sourceResistance != 0)
+                if (modeltemp.MOS2sourceResistance != 0)
                 {
-                    mos2.MOS2sourceConductance = 1 / model.MOS2sourceResistance;
+                    MOS2sourceConductance = 1 / modeltemp.MOS2sourceResistance;
                 }
                 else
                 {
-                    mos2.MOS2sourceConductance = 0;
+                    MOS2sourceConductance = 0;
                 }
             }
-            else if (model.MOS2sheetResistance.Given)
+            else if (modeltemp.MOS2sheetResistance.Given)
             {
-                if (model.MOS2sheetResistance != 0)
+                if (modeltemp.MOS2sheetResistance != 0)
                 {
-                    mos2.MOS2sourceConductance = 1 / (model.MOS2sheetResistance * mos2.MOS2sourceSquares);
+                    MOS2sourceConductance = 1 / (modeltemp.MOS2sheetResistance * MOS2sourceSquares);
                 }
                 else
                 {
-                    mos2.MOS2sourceConductance = 0;
+                    MOS2sourceConductance = 0;
                 }
             }
             else
             {
-                mos2.MOS2sourceConductance = 0;
+                MOS2sourceConductance = 0;
             }
-            if (mos2.MOS2l - 2 * model.MOS2latDiff <= 0)
-                CircuitWarning.Warning(this, $"{mos2.Name}: effective channel length less than zero");
+            if (MOS2l - 2 * modeltemp.MOS2latDiff <= 0)
+                CircuitWarning.Warning(this, $"{name}: effective channel length less than zero");
 
             ratio4 = ratio * Math.Sqrt(ratio);
-            mos2.MOS2tTransconductance = model.MOS2transconductance / ratio4;
-            mos2.MOS2tSurfMob = model.MOS2surfaceMobility / ratio4;
-            phio = (model.MOS2phi - model.pbfact1) / model.fact1;
-            mos2.MOS2tPhi = fact2 * phio + pbfact;
-            mos2.MOS2tVbi = model.MOS2vt0 - model.MOS2type * (model.MOS2gamma * Math.Sqrt(model.MOS2phi)) + .5 * (model.egfet1 - egfet) +
-                model.MOS2type * .5 * (mos2.MOS2tPhi - model.MOS2phi);
-            mos2.MOS2tVto = mos2.MOS2tVbi + model.MOS2type * model.MOS2gamma * Math.Sqrt(mos2.MOS2tPhi);
-            mos2.MOS2tSatCur = model.MOS2jctSatCur * Math.Exp(-egfet / vt + model.egfet1 / model.vtnom);
-            mos2.MOS2tSatCurDens = model.MOS2jctSatCurDensity * Math.Exp(-egfet / vt + model.egfet1 / model.vtnom);
-            pbo = (model.MOS2bulkJctPotential - model.pbfact1) / model.fact1;
-            gmaold = (model.MOS2bulkJctPotential - pbo) / pbo;
-            capfact = 1 / (1 + model.MOS2bulkJctBotGradingCoeff * (4e-4 * (model.MOS2tnom - Circuit.CONSTRefTemp) - gmaold));
-            mos2.MOS2tCbd = model.MOS2capBD * capfact;
-            mos2.MOS2tCbs = model.MOS2capBS * capfact;
-            mos2.MOS2tCj = model.MOS2bulkCapFactor * capfact;
-            capfact = 1 / (1 + model.MOS2bulkJctSideGradingCoeff * (4e-4 * (model.MOS2tnom - Circuit.CONSTRefTemp) - gmaold));
-            mos2.MOS2tCjsw = model.MOS2sideWallCapFactor * capfact;
-            mos2.MOS2tBulkPot = fact2 * pbo + pbfact;
-            gmanew = (mos2.MOS2tBulkPot - pbo) / pbo;
-            capfact = (1 + model.MOS2bulkJctBotGradingCoeff * (4e-4 * (mos2.MOS2temp - Circuit.CONSTRefTemp) - gmanew));
-            mos2.MOS2tCbd *= capfact;
-            mos2.MOS2tCbs *= capfact;
-            mos2.MOS2tCj *= capfact;
-            capfact = (1 + model.MOS2bulkJctSideGradingCoeff * (4e-4 * (mos2.MOS2temp - Circuit.CONSTRefTemp) - gmanew));
-            mos2.MOS2tCjsw *= capfact;
-            mos2.MOS2tDepCap = model.MOS2fwdCapDepCoeff * mos2.MOS2tBulkPot;
+            MOS2tTransconductance = modeltemp.MOS2transconductance / ratio4;
+            MOS2tSurfMob = modeltemp.MOS2surfaceMobility / ratio4;
+            phio = (modeltemp.MOS2phi - modeltemp.pbfact1) / modeltemp.fact1;
+            MOS2tPhi = fact2 * phio + pbfact;
+            MOS2tVbi = modeltemp.MOS2vt0 - modeltemp.MOS2type * (modeltemp.MOS2gamma * Math.Sqrt(modeltemp.MOS2phi)) + .5 * (modeltemp.egfet1 - egfet) +
+                modeltemp.MOS2type * .5 * (MOS2tPhi - modeltemp.MOS2phi);
+            MOS2tVto = MOS2tVbi + modeltemp.MOS2type * modeltemp.MOS2gamma * Math.Sqrt(MOS2tPhi);
+            MOS2tSatCur = modeltemp.MOS2jctSatCur * Math.Exp(-egfet / vt + modeltemp.egfet1 / modeltemp.vtnom);
+            MOS2tSatCurDens = modeltemp.MOS2jctSatCurDensity * Math.Exp(-egfet / vt + modeltemp.egfet1 / modeltemp.vtnom);
+            pbo = (modeltemp.MOS2bulkJctPotential - modeltemp.pbfact1) / modeltemp.fact1;
+            gmaold = (modeltemp.MOS2bulkJctPotential - pbo) / pbo;
+            capfact = 1 / (1 + modeltemp.MOS2bulkJctBotGradingCoeff * (4e-4 * (modeltemp.MOS2tnom - Circuit.CONSTRefTemp) - gmaold));
+            MOS2tCbd = modeltemp.MOS2capBD * capfact;
+            MOS2tCbs = modeltemp.MOS2capBS * capfact;
+            MOS2tCj = modeltemp.MOS2bulkCapFactor * capfact;
+            capfact = 1 / (1 + modeltemp.MOS2bulkJctSideGradingCoeff * (4e-4 * (modeltemp.MOS2tnom - Circuit.CONSTRefTemp) - gmaold));
+            MOS2tCjsw = modeltemp.MOS2sideWallCapFactor * capfact;
+            MOS2tBulkPot = fact2 * pbo + pbfact;
+            gmanew = (MOS2tBulkPot - pbo) / pbo;
+            capfact = (1 + modeltemp.MOS2bulkJctBotGradingCoeff * (4e-4 * (MOS2temp - Circuit.CONSTRefTemp) - gmanew));
+            MOS2tCbd *= capfact;
+            MOS2tCbs *= capfact;
+            MOS2tCj *= capfact;
+            capfact = (1 + modeltemp.MOS2bulkJctSideGradingCoeff * (4e-4 * (MOS2temp - Circuit.CONSTRefTemp) - gmanew));
+            MOS2tCjsw *= capfact;
+            MOS2tDepCap = modeltemp.MOS2fwdCapDepCoeff * MOS2tBulkPot;
 
-            if ((mos2.MOS2tSatCurDens == 0) || (mos2.MOS2drainArea.Value == 0) || (mos2.MOS2sourceArea.Value == 0))
+            if ((MOS2tSatCurDens == 0) || (MOS2drainArea.Value == 0) || (MOS2sourceArea.Value == 0))
             {
-                mos2.MOS2sourceVcrit = mos2.MOS2drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * mos2.MOS2tSatCur));
+                MOS2sourceVcrit = MOS2drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS2tSatCur));
             }
             else
             {
-                mos2.MOS2drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * mos2.MOS2tSatCurDens * mos2.MOS2drainArea));
-                mos2.MOS2sourceVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * mos2.MOS2tSatCurDens * mos2.MOS2sourceArea));
+                MOS2drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS2tSatCurDens * MOS2drainArea));
+                MOS2sourceVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS2tSatCurDens * MOS2sourceArea));
             }
-            if (model.MOS2capBD.Given)
+            if (modeltemp.MOS2capBD.Given)
             {
-                czbd = mos2.MOS2tCbd;
+                czbd = MOS2tCbd;
             }
             else
             {
-                if (model.MOS2bulkCapFactor.Given)
+                if (modeltemp.MOS2bulkCapFactor.Given)
                 {
-                    czbd = mos2.MOS2tCj * mos2.MOS2drainArea;
+                    czbd = MOS2tCj * MOS2drainArea;
                 }
                 else
                 {
                     czbd = 0;
                 }
             }
-            if (model.MOS2sideWallCapFactor.Given)
+            if (modeltemp.MOS2sideWallCapFactor.Given)
             {
-                czbdsw = mos2.MOS2tCjsw * mos2.MOS2drainPerimiter;
+                czbdsw = MOS2tCjsw * MOS2drainPerimiter;
             }
             else
             {
                 czbdsw = 0;
             }
-            arg = 1 - model.MOS2fwdCapDepCoeff;
-            sarg = Math.Exp((-model.MOS2bulkJctBotGradingCoeff) * Math.Log(arg));
-            sargsw = Math.Exp((-model.MOS2bulkJctSideGradingCoeff) * Math.Log(arg));
-            mos2.MOS2Cbd = czbd;
-            mos2.MOS2Cbdsw = czbdsw;
-            mos2.MOS2f2d = czbd * (1 - model.MOS2fwdCapDepCoeff * (1 + model.MOS2bulkJctBotGradingCoeff)) * sarg / arg + czbdsw * (1 -
-                model.MOS2fwdCapDepCoeff * (1 + model.MOS2bulkJctSideGradingCoeff)) * sargsw / arg;
-            mos2.MOS2f3d = czbd * model.MOS2bulkJctBotGradingCoeff * sarg / arg / mos2.MOS2tBulkPot + czbdsw * model.MOS2bulkJctSideGradingCoeff *
-                sargsw / arg / mos2.MOS2tBulkPot;
-            mos2.MOS2f4d = czbd * mos2.MOS2tBulkPot * (1 - arg * sarg) / (1 - model.MOS2bulkJctBotGradingCoeff) + czbdsw * mos2.MOS2tBulkPot * (1 - arg *
-                sargsw) / (1 - model.MOS2bulkJctSideGradingCoeff) - mos2.MOS2f3d / 2 * (mos2.MOS2tDepCap * mos2.MOS2tDepCap) - mos2.MOS2tDepCap * mos2.MOS2f2d;
-            if (model.MOS2capBS.Given)
+            arg = 1 - modeltemp.MOS2fwdCapDepCoeff;
+            sarg = Math.Exp((-modeltemp.MOS2bulkJctBotGradingCoeff) * Math.Log(arg));
+            sargsw = Math.Exp((-modeltemp.MOS2bulkJctSideGradingCoeff) * Math.Log(arg));
+            MOS2Cbd = czbd;
+            MOS2Cbdsw = czbdsw;
+            MOS2f2d = czbd * (1 - modeltemp.MOS2fwdCapDepCoeff * (1 + modeltemp.MOS2bulkJctBotGradingCoeff)) * sarg / arg + czbdsw * (1 -
+                modeltemp.MOS2fwdCapDepCoeff * (1 + modeltemp.MOS2bulkJctSideGradingCoeff)) * sargsw / arg;
+            MOS2f3d = czbd * modeltemp.MOS2bulkJctBotGradingCoeff * sarg / arg / MOS2tBulkPot + czbdsw * modeltemp.MOS2bulkJctSideGradingCoeff *
+                sargsw / arg / MOS2tBulkPot;
+            MOS2f4d = czbd * MOS2tBulkPot * (1 - arg * sarg) / (1 - modeltemp.MOS2bulkJctBotGradingCoeff) + czbdsw * MOS2tBulkPot * (1 - arg *
+                sargsw) / (1 - modeltemp.MOS2bulkJctSideGradingCoeff) - MOS2f3d / 2 * (MOS2tDepCap * MOS2tDepCap) - MOS2tDepCap * MOS2f2d;
+            if (modeltemp.MOS2capBS.Given)
             {
-                czbs = mos2.MOS2tCbs;
+                czbs = MOS2tCbs;
             }
             else
             {
-                if (model.MOS2bulkCapFactor.Given)
+                if (modeltemp.MOS2bulkCapFactor.Given)
                 {
-                    czbs = mos2.MOS2tCj * mos2.MOS2sourceArea;
+                    czbs = MOS2tCj * MOS2sourceArea;
                 }
                 else
                 {
                     czbs = 0;
                 }
             }
-            if (model.MOS2sideWallCapFactor.Given)
+            if (modeltemp.MOS2sideWallCapFactor.Given)
             {
-                czbssw = mos2.MOS2tCjsw * mos2.MOS2sourcePerimiter;
+                czbssw = MOS2tCjsw * MOS2sourcePerimiter;
             }
             else
             {
                 czbssw = 0;
             }
-            arg = 1 - model.MOS2fwdCapDepCoeff;
-            sarg = Math.Exp((-model.MOS2bulkJctBotGradingCoeff) * Math.Log(arg));
-            sargsw = Math.Exp((-model.MOS2bulkJctSideGradingCoeff) * Math.Log(arg));
-            mos2.MOS2Cbs = czbs;
-            mos2.MOS2Cbssw = czbssw;
-            mos2.MOS2f2s = czbs * (1 - model.MOS2fwdCapDepCoeff * (1 + model.MOS2bulkJctBotGradingCoeff)) * sarg / arg + czbssw * (1 -
-                model.MOS2fwdCapDepCoeff * (1 + model.MOS2bulkJctSideGradingCoeff)) * sargsw / arg;
-            mos2.MOS2f3s = czbs * model.MOS2bulkJctBotGradingCoeff * sarg / arg / mos2.MOS2tBulkPot + czbssw * model.MOS2bulkJctSideGradingCoeff *
-                sargsw / arg / mos2.MOS2tBulkPot;
-            mos2.MOS2f4s = czbs * mos2.MOS2tBulkPot * (1 - arg * sarg) / (1 - model.MOS2bulkJctBotGradingCoeff) + czbssw * mos2.MOS2tBulkPot * (1 - arg *
-                sargsw) / (1 - model.MOS2bulkJctSideGradingCoeff) - mos2.MOS2f3s / 2 * (mos2.MOS2tDepCap * mos2.MOS2tDepCap) - mos2.MOS2tDepCap * mos2.MOS2f2s;
+            arg = 1 - modeltemp.MOS2fwdCapDepCoeff;
+            sarg = Math.Exp((-modeltemp.MOS2bulkJctBotGradingCoeff) * Math.Log(arg));
+            sargsw = Math.Exp((-modeltemp.MOS2bulkJctSideGradingCoeff) * Math.Log(arg));
+            MOS2Cbs = czbs;
+            MOS2Cbssw = czbssw;
+            MOS2f2s = czbs * (1 - modeltemp.MOS2fwdCapDepCoeff * (1 + modeltemp.MOS2bulkJctBotGradingCoeff)) * sarg / arg + czbssw * (1 -
+                modeltemp.MOS2fwdCapDepCoeff * (1 + modeltemp.MOS2bulkJctSideGradingCoeff)) * sargsw / arg;
+            MOS2f3s = czbs * modeltemp.MOS2bulkJctBotGradingCoeff * sarg / arg / MOS2tBulkPot + czbssw * modeltemp.MOS2bulkJctSideGradingCoeff *
+                sargsw / arg / MOS2tBulkPot;
+            MOS2f4s = czbs * MOS2tBulkPot * (1 - arg * sarg) / (1 - modeltemp.MOS2bulkJctBotGradingCoeff) + czbssw * MOS2tBulkPot * (1 - arg *
+                sargsw) / (1 - modeltemp.MOS2bulkJctSideGradingCoeff) - MOS2f3s / 2 * (MOS2tDepCap * MOS2tDepCap) - MOS2tDepCap * MOS2f2s;
         }
     }
 }
