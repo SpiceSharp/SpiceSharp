@@ -1,4 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -8,6 +10,69 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class CurrentControlledVoltagesourceAcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
+        /// Necessary behaviors
+        /// </summary>
+        private CurrentControlledVoltagesourceLoadBehavior load;
+
+        /// <summary>
+        /// Nodes
+        /// </summary>
+        protected int CCVSposNode { get; private set; }
+        protected int CCVSnegNode { get; private set; }
+        public int CCVSbranch { get; private set; }
+        public int CCVScontBranch { get; private set; }
+
+        /// <summary>
+        /// Matrix elements
+        /// </summary>
+        protected MatrixElement CCVSposIbrptr { get; private set; }
+        protected MatrixElement CCVSnegIbrptr { get; private set; }
+        protected MatrixElement CCVSibrPosptr { get; private set; }
+        protected MatrixElement CCVSibrNegptr { get; private set; }
+        protected MatrixElement CCVSibrContBrptr { get; private set; }
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public override bool Setup(CircuitObject component, Circuit ckt)
+        {
+            var ccvs = component as CurrentControlledVoltagesource;
+
+            // Get behaviors
+            load = GetBehavior<CurrentControlledVoltagesourceLoadBehavior>(component);
+
+            // Get nodes
+            CCVSposNode = ccvs.CCVSposNode;
+            CCVSnegNode = ccvs.CCVSnegNode;
+            CCVSbranch = load.CCVSbranch;
+            CCVScontBranch = load.CCVScontBranch;
+
+            // Get matrix elements
+            var matrix = ckt.State.Matrix;
+            CCVSposIbrptr = matrix.GetElement(CCVSposNode, CCVSbranch);
+            CCVSnegIbrptr = matrix.GetElement(CCVSnegNode, CCVSbranch);
+            CCVSibrPosptr = matrix.GetElement(CCVSbranch, CCVSposNode);
+            CCVSibrNegptr = matrix.GetElement(CCVSbranch, CCVSnegNode);
+            CCVSibrContBrptr = matrix.GetElement(CCVSbranch, CCVScontBranch);
+            return true;
+        }
+
+        /// <summary>
+        /// Unsetup the behavior
+        /// </summary>
+        public override void Unsetup()
+        {
+            CCVSposIbrptr = null;
+            CCVSnegIbrptr = null;
+            CCVSibrPosptr = null;
+            CCVSibrNegptr = null;
+            CCVSibrContBrptr = null;
+        }
+
+        /// <summary>
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
@@ -16,11 +81,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var ccvs = ComponentTyped<CurrentControlledVoltagesource>();
             var cstate = ckt.State;
 
-            ccvs.CCVSposIbrptr.Add(1.0);
-            ccvs.CCVSibrPosptr.Add(1.0);
-            ccvs.CCVSnegIbrptr.Sub(1.0);
-            ccvs.CCVSibrNegptr.Sub(1.0);
-            ccvs.CCVSibrContBrptr.Sub(ccvs.CCVScoeff);
+            CCVSposIbrptr.Add(1.0);
+            CCVSibrPosptr.Add(1.0);
+            CCVSnegIbrptr.Sub(1.0);
+            CCVSibrNegptr.Sub(1.0);
+            CCVSibrContBrptr.Sub(load.CCVScoeff);
         }
     }
 }

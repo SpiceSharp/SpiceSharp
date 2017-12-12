@@ -2,6 +2,7 @@
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Sparse;
+using SpiceSharp.Components.ComponentBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -12,46 +13,19 @@ namespace SpiceSharp.Components
     public class CurrentControlledVoltagesource : CircuitComponent
     {
         /// <summary>
-        /// Register default behaviors
-        /// </summary>
-        static CurrentControlledVoltagesource()
-        {
-            Behaviors.Behaviors.RegisterBehavior(typeof(CurrentControlledVoltagesource), typeof(ComponentBehaviors.CurrentControlledVoltagesourceLoadBehavior));
-            Behaviors.Behaviors.RegisterBehavior(typeof(CurrentControlledVoltagesource), typeof(ComponentBehaviors.CurrentControlledVoltagesourceAcBehavior));
-        }
-
-        /// <summary>
-        /// Parameters
-        /// </summary>
-        [SpiceName("gain"), SpiceInfo("Transresistance (gain)")]
-        public Parameter CCVScoeff { get; } = new Parameter();
-        [SpiceName("control"), SpiceInfo("Controlling voltage source")]
-        public CircuitIdentifier CCVScontName { get; set; }
-        [SpiceName("i"), SpiceInfo("Output current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Solution[CCVSbranch];
-        [SpiceName("v"), SpiceInfo("Output voltage")]
-        public double GetVoltage(Circuit ckt) => ckt.State.Solution[CCVSposNode] - ckt.State.Solution[CCVSnegNode];
-        [SpiceName("p"), SpiceInfo("Power")]
-        public double GetPower(Circuit ckt) => ckt.State.Solution[CCVSbranch] * (ckt.State.Solution[CCVSposNode] - ckt.State.Solution[CCVSnegNode]);
-
-        /// <summary>
         /// Nodes
         /// </summary>
         [SpiceName("pos_node"), SpiceInfo("Positive node of the source")]
         public int CCVSposNode { get; internal set; }
         [SpiceName("neg_node"), SpiceInfo("Negative node of the source")]
         public int CCVSnegNode { get; internal set; }
-        public int CCVSbranch { get; internal set; }
-        public int CCVScontBranch { get; internal set; }
+        [SpiceName("control"), SpiceInfo("Controlling voltage source")]
+        public CircuitIdentifier CCVScontName { get; set; }
 
         /// <summary>
-        /// Matrix elements
+        /// Get the controlling voltage source
         /// </summary>
-        internal MatrixElement CCVSposIbrptr { get; private set; }
-        internal MatrixElement CCVSnegIbrptr { get; private set; }
-        internal MatrixElement CCVSibrPosptr { get; private set; }
-        internal MatrixElement CCVSibrNegptr { get; private set; }
-        internal MatrixElement CCVSibrContBrptr { get; private set; }
+        public Voltagesource CCVScontSource { get; protected set; }
 
         /// <summary>
         /// Constants
@@ -62,7 +36,11 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled current source</param>
-        public CurrentControlledVoltagesource(CircuitIdentifier name) : base(name, CCVSpinCount) { }
+        public CurrentControlledVoltagesource(CircuitIdentifier name) : base(name, CCVSpinCount)
+        {
+            RegisterBehavior(new CurrentControlledVoltagesourceLoadBehavior());
+            RegisterBehavior(new CurrentControlledVoltagesourceAcBehavior());
+        }
 
         /// <summary>
         /// Constructor
@@ -72,10 +50,11 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source name</param>
         /// <param name="gain">The transresistance (gain)</param>
-        public CurrentControlledVoltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) : base(name, CCVSpinCount)
+        public CurrentControlledVoltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) 
+            : this(name)
         {
             Connect(pos, neg);
-            CCVScoeff.Set(gain);
+            Set("gain", gain);
             CCVScontName = vsource;
         }
 
@@ -88,35 +67,12 @@ namespace SpiceSharp.Components
             var nodes = BindNodes(ckt);
             CCVSposNode = nodes[0].Index;
             CCVSnegNode = nodes[1].Index;
-            CCVSbranch = CreateNode(ckt, Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
 
             // Find the voltage source
             if (ckt.Objects[CCVScontName] is Voltagesource vsrc)
-                CCVScontBranch = vsrc.VSRCbranch;
+                CCVScontSource = vsrc;
             else
                 throw new CircuitException($"{Name}: Could not find voltage source '{CCVScontName}'");
-
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
-            CCVSposIbrptr = matrix.GetElement(CCVSposNode, CCVSbranch);
-            CCVSnegIbrptr = matrix.GetElement(CCVSnegNode, CCVSbranch);
-            CCVSibrPosptr = matrix.GetElement(CCVSbranch, CCVSposNode);
-            CCVSibrNegptr = matrix.GetElement(CCVSbranch, CCVSnegNode);
-            CCVSibrContBrptr = matrix.GetElement(CCVSbranch, CCVScontBranch);
-        }
-
-        /// <summary>
-        /// Unsetup
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Unsetup(Circuit ckt)
-        {
-            // Remove references
-            CCVSposIbrptr = null;
-            CCVSnegIbrptr = null;
-            CCVSibrPosptr = null;
-            CCVSibrNegptr = null;
-            CCVSibrContBrptr = null;
         }
     }
 }
