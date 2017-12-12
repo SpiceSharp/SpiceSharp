@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -7,6 +8,23 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// </summary>
     public class MOS1TruncateBehavior : CircuitObjectBehaviorTruncate
     {
+        private int MOS1states;
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public override bool Setup(CircuitObject component, Circuit ckt)
+        {
+            var mos1 = component as MOS1;
+
+            var load = mos1.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as MOS1LoadBehavior;
+            MOS1states = load.MOS1states;
+            return true;
+        }
+
         /// <summary>
         /// Truncate the timestep
         /// </summary>
@@ -14,11 +32,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="timestep">Timestep</param>
         public override void Truncate(Circuit ckt, ref double timestep)
         {
-            var mos1 = ComponentTyped<MOS1>();
             var method = ckt.Method;
-            method.Terr(mos1.MOS1states + MOS1.MOS1qgs, ckt, ref timestep);
-            method.Terr(mos1.MOS1states + MOS1.MOS1qgd, ckt, ref timestep);
-            method.Terr(mos1.MOS1states + MOS1.MOS1qgb, ckt, ref timestep);
+            method.Terr(MOS1states + MOS1LoadBehavior.MOS1qgs, ckt, ref timestep);
+            method.Terr(MOS1states + MOS1LoadBehavior.MOS1qgd, ckt, ref timestep);
+            method.Terr(MOS1states + MOS1LoadBehavior.MOS1qgb, ckt, ref timestep);
         }
     }
 }

@@ -83,6 +83,7 @@
     <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1AcBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1LoadBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1Model.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1ModelNoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1ModelTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1NoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1TemperatureBehavior.cs" />

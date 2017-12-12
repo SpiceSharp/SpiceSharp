@@ -1,6 +1,8 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Parameters;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -10,77 +12,189 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class MOS1ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
+        /// Parameters
+        /// </summary>
+        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
+        public double MOS1_TNOM
+        {
+            get => MOS1tnom - Circuit.CONSTCtoK;
+            set => MOS1tnom.Set(value + Circuit.CONSTCtoK);
+        }
+        public Parameter MOS1tnom { get; } = new Parameter();
+        [SpiceName("vto"), SpiceName("vt0"), SpiceInfo("Threshold voltage")]
+        public Parameter MOS1vt0 { get; } = new Parameter();
+        [SpiceName("kp"), SpiceInfo("Transconductance parameter")]
+        public Parameter MOS1transconductance { get; } = new Parameter(2e-5);
+        [SpiceName("gamma"), SpiceInfo("Bulk threshold parameter")]
+        public Parameter MOS1gamma { get; } = new Parameter();
+        [SpiceName("phi"), SpiceInfo("Surface potential")]
+        public Parameter MOS1phi { get; } = new Parameter(.6);
+        [SpiceName("lambda"), SpiceInfo("Channel length modulation")]
+        public Parameter MOS1lambda { get; } = new Parameter();
+        [SpiceName("rd"), SpiceInfo("Drain ohmic resistance")]
+        public Parameter MOS1drainResistance { get; } = new Parameter();
+        [SpiceName("rs"), SpiceInfo("Source ohmic resistance")]
+        public Parameter MOS1sourceResistance { get; } = new Parameter();
+        [SpiceName("cbd"), SpiceInfo("B-D junction capacitance")]
+        public Parameter MOS1capBD { get; } = new Parameter();
+        [SpiceName("cbs"), SpiceInfo("B-S junction capacitance")]
+        public Parameter MOS1capBS { get; } = new Parameter();
+        [SpiceName("is"), SpiceInfo("Bulk junction sat. current")]
+        public Parameter MOS1jctSatCur { get; } = new Parameter(1e-14);
+        [SpiceName("pb"), SpiceInfo("Bulk junction potential")]
+        public Parameter MOS1bulkJctPotential { get; } = new Parameter(.8);
+        [SpiceName("cgso"), SpiceInfo("Gate-source overlap cap.")]
+        public Parameter MOS1gateSourceOverlapCapFactor { get; } = new Parameter();
+        [SpiceName("cgdo"), SpiceInfo("Gate-drain overlap cap.")]
+        public Parameter MOS1gateDrainOverlapCapFactor { get; } = new Parameter();
+        [SpiceName("cgbo"), SpiceInfo("Gate-bulk overlap cap.")]
+        public Parameter MOS1gateBulkOverlapCapFactor { get; } = new Parameter();
+        [SpiceName("cj"), SpiceInfo("Bottom junction cap per area")]
+        public Parameter MOS1bulkCapFactor { get; } = new Parameter();
+        [SpiceName("mj"), SpiceInfo("Bottom grading coefficient")]
+        public Parameter MOS1bulkJctBotGradingCoeff { get; } = new Parameter(.5);
+        [SpiceName("cjsw"), SpiceInfo("Side junction cap per area")]
+        public Parameter MOS1sideWallCapFactor { get; } = new Parameter();
+        [SpiceName("mjsw"), SpiceInfo("Side grading coefficient")]
+        public Parameter MOS1bulkJctSideGradingCoeff { get; } = new Parameter(.5);
+        [SpiceName("js"), SpiceInfo("Bulk jct. sat. current density")]
+        public Parameter MOS1jctSatCurDensity { get; } = new Parameter();
+        [SpiceName("tox"), SpiceInfo("Oxide thickness")]
+        public Parameter MOS1oxideThickness { get; } = new Parameter();
+        [SpiceName("ld"), SpiceInfo("Lateral diffusion")]
+        public Parameter MOS1latDiff { get; } = new Parameter();
+        [SpiceName("rsh"), SpiceInfo("Sheet resistance")]
+        public Parameter MOS1sheetResistance { get; } = new Parameter();
+        [SpiceName("u0"), SpiceName("uo"), SpiceInfo("Surface mobility")]
+        public Parameter MOS1surfaceMobility { get; } = new Parameter();
+        [SpiceName("fc"), SpiceInfo("Forward bias jct. fit parm.")]
+        public Parameter MOS1fwdCapDepCoeff { get; } = new Parameter(.5);
+        [SpiceName("nss"), SpiceInfo("Surface state density")]
+        public Parameter MOS1surfaceStateDensity { get; } = new Parameter();
+        [SpiceName("nsub"), SpiceInfo("Substrate doping")]
+        public Parameter MOS1substrateDoping { get; } = new Parameter();
+        [SpiceName("tpg"), SpiceInfo("Gate type")]
+        public Parameter MOS1gateType { get; } = new Parameter();
+
+        /// <summary>
+        /// Methods
+        /// </summary>
+        [SpiceName("nmos"), SpiceInfo("N type MOSfet model")]
+        public void SetNMOS(bool value)
+        {
+            if (value)
+                MOS1type = 1.0;
+        }
+        [SpiceName("pmos"), SpiceInfo("P type MOSfet model")]
+        public void SetPMOS(bool value)
+        {
+            if (value)
+                MOS1type = -1.0;
+        }
+        [SpiceName("type"), SpiceInfo("N-channel or P-channel MOS")]
+        public string GetTYPE(Circuit ckt)
+        {
+            if (MOS1type > 0)
+                return "nmos";
+            else
+                return "pmos";
+        }
+
+        /// <summary>
+        /// Extra variables
+        /// </summary>
+        public double fact1 { get; protected set; }
+        public double vtnom { get; protected set; }
+        public double egfet1 { get; protected set; }
+        public double pbfact1 { get; protected set; }
+        public double MOS1type { get; internal set; } = 1.0;
+        public double MOS1oxideCapFactor { get; internal set; }
+
+        private CircuitIdentifier name;
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public override bool Setup(CircuitObject component, Circuit ckt)
+        {
+            name = component.Name;
+            return true;
+        }
+
+        /// <summary>
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            var model = ComponentTyped<MOS1Model>();
             double kt1, arg1, fermis, wkfng, fermig, wkfngs, vfb = 0.0;
 
             /* perform model defaulting */
-            if (!model.MOS1tnom.Given)
-                model.MOS1tnom.Value = ckt.State.NominalTemperature;
+            if (!MOS1tnom.Given)
+                MOS1tnom.Value = ckt.State.NominalTemperature;
 
-            model.fact1 = model.MOS1tnom / Circuit.CONSTRefTemp;
-            model.vtnom = model.MOS1tnom * Circuit.CONSTKoverQ;
-            kt1 = Circuit.CONSTBoltz * model.MOS1tnom;
-            model.egfet1 = 1.16 - (7.02e-4 * model.MOS1tnom * model.MOS1tnom) / (model.MOS1tnom + 1108);
-            arg1 = -model.egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
-            model.pbfact1 = -2 * model.vtnom * (1.5 * Math.Log(model.fact1) + Circuit.CHARGE * arg1);
+            fact1 = MOS1tnom / Circuit.CONSTRefTemp;
+            vtnom = MOS1tnom * Circuit.CONSTKoverQ;
+            kt1 = Circuit.CONSTBoltz * MOS1tnom;
+            egfet1 = 1.16 - (7.02e-4 * MOS1tnom * MOS1tnom) / (MOS1tnom + 1108);
+            arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
+            pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Circuit.CHARGE * arg1);
 
             /* now model parameter preprocessing */
 
-            if (!model.MOS1oxideThickness.Given || model.MOS1oxideThickness.Value == 0)
+            if (!MOS1oxideThickness.Given || MOS1oxideThickness.Value == 0)
             {
-                model.MOS1oxideCapFactor = 0;
+                MOS1oxideCapFactor = 0;
             }
             else
             {
-                model.MOS1oxideCapFactor = 3.9 * 8.854214871e-12 / model.MOS1oxideThickness;
-                if (!model.MOS1transconductance.Given)
+                MOS1oxideCapFactor = 3.9 * 8.854214871e-12 / MOS1oxideThickness;
+                if (!MOS1transconductance.Given)
                 {
-                    if (!model.MOS1surfaceMobility.Given)
+                    if (!MOS1surfaceMobility.Given)
                     {
-                        model.MOS1surfaceMobility.Value = 600;
+                        MOS1surfaceMobility.Value = 600;
                     }
-                    model.MOS1transconductance.Value = model.MOS1surfaceMobility * model.MOS1oxideCapFactor * 1e-4;
+                    MOS1transconductance.Value = MOS1surfaceMobility * MOS1oxideCapFactor * 1e-4;
                 }
-                if (model.MOS1substrateDoping.Given)
+                if (MOS1substrateDoping.Given)
                 {
-                    if (model.MOS1substrateDoping * 1e6 > 1.45e16)
+                    if (MOS1substrateDoping * 1e6 > 1.45e16)
                     {
-                        if (!model.MOS1phi.Given)
+                        if (!MOS1phi.Given)
                         {
-                            model.MOS1phi.Value = 2 * model.vtnom * Math.Log(model.MOS1substrateDoping * 1e6 / 1.45e16);
-                            model.MOS1phi.Value = Math.Max(.1, model.MOS1phi);
+                            MOS1phi.Value = 2 * vtnom * Math.Log(MOS1substrateDoping * 1e6 / 1.45e16);
+                            MOS1phi.Value = Math.Max(.1, MOS1phi);
                         }
-                        fermis = model.MOS1type * .5 * model.MOS1phi;
+                        fermis = MOS1type * .5 * MOS1phi;
                         wkfng = 3.2;
-                        if (!model.MOS1gateType.Given)
-                            model.MOS1gateType.Value = 1;
-                        if (model.MOS1gateType != 0)
+                        if (!MOS1gateType.Given)
+                            MOS1gateType.Value = 1;
+                        if (MOS1gateType != 0)
                         {
-                            fermig = model.MOS1type * model.MOS1gateType * .5 * model.egfet1;
-                            wkfng = 3.25 + .5 * model.egfet1 - fermig;
+                            fermig = MOS1type * MOS1gateType * .5 * egfet1;
+                            wkfng = 3.25 + .5 * egfet1 - fermig;
                         }
-                        wkfngs = wkfng - (3.25 + .5 * model.egfet1 + fermis);
-                        if (!model.MOS1gamma.Given)
+                        wkfngs = wkfng - (3.25 + .5 * egfet1 + fermis);
+                        if (!MOS1gamma.Given)
                         {
-                            model.MOS1gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.CHARGE * model.MOS1substrateDoping * 1e6) / model.MOS1oxideCapFactor;
+                            MOS1gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.CHARGE * MOS1substrateDoping * 1e6) / MOS1oxideCapFactor;
                         }
-                        if (!model.MOS1vt0.Given)
+                        if (!MOS1vt0.Given)
                         {
-                            if (!model.MOS1surfaceStateDensity.Given)
-                                model.MOS1surfaceStateDensity.Value = 0;
-                            vfb = wkfngs - model.MOS1surfaceStateDensity * 1e4 * Circuit.CHARGE / model.MOS1oxideCapFactor;
-                            model.MOS1vt0.Value = vfb + model.MOS1type * (model.MOS1gamma * Math.Sqrt(model.MOS1phi) + model.MOS1phi);
+                            if (!MOS1surfaceStateDensity.Given)
+                                MOS1surfaceStateDensity.Value = 0;
+                            vfb = wkfngs - MOS1surfaceStateDensity * 1e4 * Circuit.CHARGE / MOS1oxideCapFactor;
+                            MOS1vt0.Value = vfb + MOS1type * (MOS1gamma * Math.Sqrt(MOS1phi) + MOS1phi);
                         }
                     }
                     else
                     {
-                        model.MOS1substrateDoping.Value = 0;
-                        throw new CircuitException($"{model.Name}: Nsub < Ni");
+                        MOS1substrateDoping.Value = 0;
+                        throw new CircuitException($"{name}: Nsub < Ni");
                     }
                 }
             }
