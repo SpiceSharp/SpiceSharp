@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -8,13 +9,29 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class VoltagesourceAcceptBehavior : CircuitObjectBehaviorAccept
     {
         /// <summary>
+        /// Necessary behaviors
+        /// </summary>
+        private VoltagesourceLoadBehavior load;
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public override bool Setup(CircuitObject component, Circuit ckt)
+        {
+            load = GetBehavior<VoltagesourceLoadBehavior>(component);
+            return true;
+        }
+
+        /// <summary>
         /// Accept the current timepoint
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Accept(Circuit ckt)
         {
-            var src = ComponentTyped<Voltagesource>();
-            src.VSRCwaveform?.Accept(ckt);
+            load.VSRCwaveform?.Accept(ckt);
         }
     }
 }
