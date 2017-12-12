@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Sparse;
+using SpiceSharp.Components.ComponentBehaviors;
 
 namespace SpiceSharp.Components
 {
@@ -11,15 +11,6 @@ namespace SpiceSharp.Components
     public class CurrentSwitch : CircuitComponent
     {
         /// <summary>
-        /// Register default behaviors
-        /// </summary>
-        static CurrentSwitch()
-        {
-            Behaviors.Behaviors.RegisterBehavior(typeof(CurrentSwitch), typeof(ComponentBehaviors.CurrentSwitchLoadBehavior));
-            Behaviors.Behaviors.RegisterBehavior(typeof(CurrentSwitch), typeof(ComponentBehaviors.CurrentSwitchAcBehavior));
-        }
-
-        /// <summary>
         /// Set the model for the current-controlled switch
         /// </summary>
         public void SetModel(CurrentSwitchModel model) => Model = model;
@@ -27,19 +18,9 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("on"), SpiceInfo("Initially closed")]
-        public void SetOn() { CSWzero_state = true; }
-        [SpiceName("off"), SpiceInfo("Initially open")]
-        public void SetOff() { CSWzero_state = false; }
         [SpiceName("control"), SpiceInfo("Name of the controlling source")]
         public CircuitIdentifier CSWcontName { get; set; }
-        [SpiceName("i"), SpiceInfo("Switch current")]
-        public double GetCurrent(Circuit ckt) => (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) * CSWcond;
-        [SpiceName("p"), SpiceInfo("Instantaneous power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) *
-            (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) * CSWcond;
-        public double CSWcond { get; internal set; }
-
+        
         /// <summary>
         /// Nodes
         /// </summary>
@@ -47,21 +28,11 @@ namespace SpiceSharp.Components
         public int CSWposNode { get; internal set; }
         [SpiceName("neg_node"), SpiceInfo("Negative node of the switch")]
         public int CSWnegNode { get; internal set; }
-        internal int CSWcontBranch;
-        public int CSWstate { get; internal set; }
 
         /// <summary>
-        /// Matrix elements
+        /// Get the controlling voltage source
         /// </summary>
-        internal MatrixElement CSWposPosptr { get; private set; }
-        internal MatrixElement CSWnegPosptr { get; private set; }
-        internal MatrixElement CSWposNegptr { get; private set; }
-        internal MatrixElement CSWnegNegptr { get; private set; }
-        
-        /// <summary>
-        /// Private variables
-        /// </summary>
-        internal bool CSWzero_state = false;
+        public Voltagesource CSWcontSource { get; protected set; }
 
         /// <summary>
         /// Constants
@@ -76,6 +47,8 @@ namespace SpiceSharp.Components
         {
             // Make sure the current switch is processed after voltage sources
             Priority = -1;
+            RegisterBehavior(new CurrentSwitchLoadBehavior());
+            RegisterBehavior(new CurrentSwitchAcBehavior());
         }
 
         /// <summary>
@@ -104,16 +77,7 @@ namespace SpiceSharp.Components
 
             // Find the voltage source
             if (ckt.Objects[CSWcontName] is Voltagesource vsrc)
-                CSWcontBranch = vsrc.VSRCbranch;
-
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
-            CSWposPosptr = matrix.GetElement(CSWposNode, CSWposNode);
-            CSWposNegptr = matrix.GetElement(CSWposNode, CSWnegNode);
-            CSWnegPosptr = matrix.GetElement(CSWnegNode, CSWposNode);
-            CSWnegNegptr = matrix.GetElement(CSWnegNode, CSWnegNode);
-
-            CSWstate = ckt.State.GetState();
+                CSWcontSource = vsrc;
         }
     }
 }

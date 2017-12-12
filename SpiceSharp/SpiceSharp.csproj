@@ -106,6 +106,7 @@
     <Compile Include="Attributes\SpiceParameters.cs" />
     <Compile Include="Components\Switches\CurrentSwitch\CurrentSwitchAcBehavior.cs" />
     <Compile Include="Components\Switches\CurrentSwitch\CurrentSwitchLoadBehavior.cs" />
+    <Compile Include="Components\Switches\CurrentSwitch\CurrentSwitchModelLoadBehavior.cs" />
     <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitchAcBehavior.cs" />
     <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitchLoadBehavior.cs" />
     <Compile Include="Components\Voltagesources\CurrentControlledVoltagesource\CurrentControlledVoltagesourceAcBehavior.cs" />
