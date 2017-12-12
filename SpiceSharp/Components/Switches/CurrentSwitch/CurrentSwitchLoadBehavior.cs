@@ -79,6 +79,17 @@ namespace SpiceSharp.Components.ComponentBehaviors
         }
 
         /// <summary>
+        /// Unsetup the behavior
+        /// </summary>
+        public override void Unsetup()
+        {
+            CSWposPosptr = null;
+            CSWposNegptr = null;
+            CSWnegPosptr = null;
+            CSWnegNegptr = null;
+        }
+
+        /// <summary>
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>

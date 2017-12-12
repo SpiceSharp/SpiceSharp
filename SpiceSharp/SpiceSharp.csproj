@@ -109,6 +109,7 @@
     <Compile Include="Components\Switches\CurrentSwitch\CurrentSwitchModelLoadBehavior.cs" />
     <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitchAcBehavior.cs" />
     <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitchLoadBehavior.cs" />
+    <Compile Include="Components\Switches\VoltageSwitch\VoltageSwitchModelLoadBehavior.cs" />
     <Compile Include="Components\Voltagesources\CurrentControlledVoltagesource\CurrentControlledVoltagesourceAcBehavior.cs" />
     <Compile Include="Components\Voltagesources\CurrentControlledVoltagesource\CurrentControlledVoltagesourceLoadBehavior.cs" />
     <Compile Include="Components\Voltagesources\VoltageControlledVoltagesource\VoltageControlledVoltagesourceAcBehavior.cs" />

@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
+using SpiceSharp.Components.ComponentBehaviors;
 using SpiceSharp.Parameters;
-using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -11,26 +11,9 @@ namespace SpiceSharp.Components
     public class VoltageSwitch : CircuitComponent
     {
         /// <summary>
-        /// Register default behaviors
-        /// </summary>
-        static VoltageSwitch()
-        {
-            Behaviors.Behaviors.RegisterBehavior(typeof(VoltageSwitch), typeof(ComponentBehaviors.VoltageSwitchLoadBehavior));
-            Behaviors.Behaviors.RegisterBehavior(typeof(VoltageSwitch), typeof(ComponentBehaviors.VoltageSwitchAcBehavior));
-        }
-
-        /// <summary>
         /// Set the model for the voltage-controlled switch
         /// </summary>
         public void SetModel(VoltageSwitchModel model) => Model = model;
-
-        /// <summary>
-        /// Parameters
-        /// </summary>
-        [SpiceName("on"), SpiceInfo("Switch initially closed")]
-        public void SetOn() { VSWzero_state = true; }
-        [SpiceName("off"), SpiceInfo("Switch initially open")]
-        public void SetOff() { VSWzero_state = false; }
 
         /// <summary>
         /// Nodes
@@ -43,17 +26,6 @@ namespace SpiceSharp.Components
         public int VSWcontPosNode { get; internal set; }
         [SpiceName("cont_n_node"), SpiceInfo("Negative controlling node of the switch")]
         public int VSWcontNegNode { get; internal set; }
-        internal bool VSWzero_state = false;
-        public int VSWstate { get; internal set; }
-        public double VSWcond { get; internal set; }
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
-        internal MatrixElement SWposPosptr { get; private set; }
-        internal MatrixElement SWnegPosptr { get; private set; }
-        internal MatrixElement SWposNegptr { get; private set; }
-        internal MatrixElement SWnegNegptr { get; private set; }
 
         /// <summary>
         /// Constants
@@ -64,7 +36,11 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled switch</param>
-        public VoltageSwitch(CircuitIdentifier name) : base(name, SWpinCount) { }
+        public VoltageSwitch(CircuitIdentifier name) : base(name, SWpinCount)
+        {
+            RegisterBehavior(new VoltageSwitchLoadBehavior());
+            RegisterBehavior(new VoltageSwitchAcBehavior());
+        }
 
         /// <summary>
         /// Constructor
@@ -75,7 +51,7 @@ namespace SpiceSharp.Components
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
         public VoltageSwitch(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier cont_pos, CircuitIdentifier cont_neg) 
-            : base(name, SWpinCount)
+            : this(name)
         {
             Connect(pos, neg, cont_pos, cont_neg);
         }
@@ -91,27 +67,6 @@ namespace SpiceSharp.Components
             VSWnegNode = nodes[1].Index;
             VSWcontPosNode = nodes[2].Index;
             VSWcontNegNode = nodes[3].Index;
-
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
-            SWposPosptr = matrix.GetElement(VSWposNode, VSWposNode);
-            SWposNegptr = matrix.GetElement(VSWposNode, VSWnegNode);
-            SWnegPosptr = matrix.GetElement(VSWnegNode, VSWposNode);
-            SWnegNegptr = matrix.GetElement(VSWnegNode, VSWnegNode);
-
-            VSWstate = ckt.State.GetState();
-        }
-
-        /// <summary>
-        /// Unsetup
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Unsetup(Circuit ckt)
-        {
-            SWposPosptr = null;
-            SWposNegptr = null;
-            SWnegPosptr = null;
-            SWnegNegptr = null;
         }
     }
 }
