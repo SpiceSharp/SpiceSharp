@@ -60,11 +60,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             // Get behaviors
             modelload = GetBehavior<CurrentSwitchModelLoadBehavior>(csw.Model);
+            var vsrcload = GetBehavior<VoltagesourceLoadBehavior>(csw.CSWcontSource);
 
             // Nodes
             CSWposNode = csw.CSWposNode;
             CSWnegNode = csw.CSWnegNode;
-            CSWcontBranch = csw.CSWcontSource.VSRCbranch;
+            CSWcontBranch = vsrcload.VSRCbranch;
 
             // Get matrix elements
             var matrix = ckt.State.Matrix;

@@ -49,11 +49,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
         {
             var ccvs = component as CurrentControlledVoltagesource;
 
+            // Get behaviors
+            var vsrcload = GetBehavior<VoltagesourceLoadBehavior>(ccvs.CCVScontSource);
+
             // Get nodes
             CCVSposNode = ccvs.CCVSposNode;
             CCVSnegNode = ccvs.CCVSnegNode;
             CCVSbranch = CreateNode(ckt, component.Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
-            CCVScontBranch = ccvs.CCVScontSource.VSRCbranch;
+            CCVScontBranch = vsrcload.VSRCbranch;
 
             // Get matrix elements
             var matrix = ckt.State.Matrix;

@@ -61,14 +61,17 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var matrix = ckt.State.Matrix;
 
             // Extract necessary info from the load behavior
+            var vsrcload = GetBehavior<VoltagesourceLoadBehavior>(cccs.CCCScontSource);
             load = GetBehavior<CurrentControlledCurrentsourceLoadBehavior>(component);
 
             // Get nodes
             CCCSposNode = cccs.CCCSposNode;
             CCCSnegNode = cccs.CCCSnegNode;
-            CCCScontBranch = cccs.CCCScontBranch;
-            CCCSposContBrptr = matrix.GetElement(cccs.CCCSposNode, cccs.CCCScontBranch);
-            CCCSnegContBrptr = matrix.GetElement(cccs.CCCSnegNode, cccs.CCCScontBranch);
+            CCCScontBranch = vsrcload.VSRCbranch;
+
+            // Get matrix elements
+            CCCSposContBrptr = matrix.GetElement(CCCSposNode, CCCScontBranch);
+            CCCSnegContBrptr = matrix.GetElement(CCCSnegNode, CCCScontBranch);
             return true;
         }
 

@@ -24,13 +24,17 @@ namespace SpiceSharp.Components.ComponentBehaviors
             (ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode]);
 
         /// <summary>
-        /// Private variables
+        /// Nodes
         /// </summary>
-        private MatrixElement CCCSposContBrptr = null;
-        private MatrixElement CCCSnegContBrptr = null;
-        private int CCCScontBranch;
-        private int CCCSposNode;
-        private int CCCSnegNode;
+        protected int CCCScontBranch;
+        protected int CCCSposNode;
+        protected int CCCSnegNode;
+
+        /// <summary>
+        /// Matrix elements
+        /// </summary>
+        protected MatrixElement CCCSposContBrptr = null;
+        protected MatrixElement CCCSnegContBrptr = null;
 
         /// <summary>
         /// Setup the behavior
@@ -41,12 +45,17 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var cccs = component as CurrentControlledCurrentsource;
             var matrix = ckt.State.Matrix;
 
+            // Get behaviors
+            var vsrcload = GetBehavior<VoltagesourceLoadBehavior>(cccs.CCCScontSource);
+
             // Nodes
             CCCSposNode = cccs.CCCSposNode;
             CCCSnegNode = cccs.CCCSnegNode;
-            CCCScontBranch = cccs.CCCScontBranch;
-            CCCSposContBrptr = matrix.GetElement(cccs.CCCSposNode, cccs.CCCScontBranch);
-            CCCSnegContBrptr = matrix.GetElement(cccs.CCCSnegNode, cccs.CCCScontBranch);
+            CCCScontBranch = vsrcload.VSRCbranch;
+
+            // Get matrix elements
+            CCCSposContBrptr = matrix.GetElement(cccs.CCCSposNode, CCCScontBranch);
+            CCCSnegContBrptr = matrix.GetElement(cccs.CCCSnegNode, CCCScontBranch);
             return true;
         }
 

@@ -4,6 +4,8 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Components;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Components.ComponentBehaviors;
 
 namespace SpiceSharp.Simulations
 {
@@ -167,9 +169,9 @@ namespace SpiceSharp.Simulations
 
                 // Get the parameter and save it for restoring later
                 if (component is Voltagesource vsrc)
-                    swept[i] = vsrc.VSRCdcValue;
+                    swept[i] = (vsrc.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as VoltagesourceLoadBehavior).VSRCdcValue;
                 else if (component is Currentsource isrc)
-                    swept[i] = isrc.ISRCdcValue;
+                    swept[i] = (isrc.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as CurrentsourceLoadBehavior).ISRCdcValue;
                 else
                     throw new CircuitException("Invalid sweep object");
                 original[i] = (Parameter)swept[i].Clone();

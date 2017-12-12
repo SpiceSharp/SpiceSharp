@@ -24,7 +24,7 @@ namespace SpiceSharp.Components
         public int CCCSposNode { get; private set; }
         [SpiceName("neg_node"), SpiceInfo("Negative node of the source")]
         public int CCCSnegNode { get; private set; }
-        public int CCCScontBranch { get; private set; }
+        public Voltagesource CCCScontSource { get; protected set; }
 
         /// <summary>
         /// Constants
@@ -72,7 +72,7 @@ namespace SpiceSharp.Components
 
             // Find the voltage source for which the current is being measured
             if (ckt.Objects[CCCScontName] is Voltagesource vsrc)
-                CCCScontBranch = vsrc.VSRCbranch;
+                CCCScontSource = vsrc;
             else
                 throw new CircuitException($"{Name}: Could not find voltage source '{CCCScontName}'");
         }
