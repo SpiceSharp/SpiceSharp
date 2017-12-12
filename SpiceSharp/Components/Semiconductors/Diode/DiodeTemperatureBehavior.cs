@@ -52,11 +52,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override bool Setup(CircuitObject component, Circuit ckt)
         {
             var dio = component as Diode;
-            var model = dio.Model as DiodeModel;
 
+            // Get behaviors
+            modeltemp = GetBehavior<DiodeModelTemperatureBehavior>(dio.Model);
+            
             name = dio.Name;
-            modeltemp = model.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as DiodeModelTemperatureBehavior;
-
             return true;
         }
 

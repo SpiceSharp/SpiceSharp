@@ -15,7 +15,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         [SpiceName("gain"), SpiceInfo("Transconductance of the source (gain)")]
         public Parameter VCCScoeff { get; } = new Parameter();
-
         [SpiceName("i"), SpiceInfo("Output current")]
         public double GetCurrent(Circuit ckt)
         {
@@ -50,7 +49,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override bool Setup(CircuitObject component, Circuit ckt)
         {
             base.Setup(component, ckt);
 
@@ -65,6 +64,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             VCCSposContNegptr = matrix.GetElement(VCCSposNode, VCCScontNegNode);
             VCCSnegContPosptr = matrix.GetElement(VCCSnegNode, VCCScontPosNode);
             VCCSnegContNegptr = matrix.GetElement(VCCSnegNode, VCCScontNegNode);
+            return true;
         }
 
         /// <summary>

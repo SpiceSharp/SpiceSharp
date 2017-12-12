@@ -17,7 +17,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public Parameter CAPcapac { get; } = new Parameter();
         [SpiceName("ic"), SpiceInfo("Initial capacitor voltage", Interesting = false)]
         public Parameter CAPinitCond { get; } = new Parameter();
-        
         [SpiceName("i"), SpiceInfo("Device current")]
         public double GetCurrent(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap];
         [SpiceName("p"), SpiceInfo("Instantaneous device power")]
@@ -44,10 +43,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component"></param>
         /// <param name="ckt"></param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override bool Setup(CircuitObject component, Circuit ckt)
         {
-            base.Setup(component, ckt);
-
             // If the capacitance is not given, try getting it from the temperature behavior
             if (!CAPcapac.Given)
             {
@@ -70,6 +67,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
             CAPnegPosptr = matrix.GetElement(CAPnegNode, CAPposNode);
             CAPposNegptr = matrix.GetElement(CAPposNode, CAPnegNode);
+            return true;
         }
 
         /// <summary>

@@ -47,10 +47,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var model = mos1.Model as MOS1Model;
 
             // Get behaviors
-            temp = mos1.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as MOS1TemperatureBehavior;
-            load = mos1.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as MOS1LoadBehavior;
-            modeltemp = model.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as MOS1ModelTemperatureBehavior;
-            modelnoise = model.GetBehavior(typeof(CircuitObjectBehaviorNoise)) as MOS1ModelNoiseBehavior;
+            temp = GetBehavior<MOS1TemperatureBehavior>(component);
+            load = GetBehavior<MOS1LoadBehavior>(component);
+            modeltemp = GetBehavior<MOS1ModelTemperatureBehavior>(mos1.Model);
+            modelnoise = GetBehavior<MOS1ModelNoiseBehavior>(mos1.Model);
 
             MOS1noise.Setup(ckt,
                 mos1.MOS1dNode,
@@ -68,8 +68,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt">Circuit</param>
         public override void Noise(Circuit ckt)
         {
-            var mos1 = ComponentTyped<MOS1>();
-            var model = mos1.Model as MOS1Model;
             var state = ckt.State;
             var noise = state.Noise;
 

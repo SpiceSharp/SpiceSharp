@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Parameters;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -38,6 +39,19 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public double BJTtf4 { get; protected set; }
         public double BJTtf5 { get; protected set; }
         public double BJTtVcrit { get; protected set; }
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public override bool Setup(CircuitObject component, Circuit ckt)
+        {
+            var bjt = component as BJT;
+            modeltemp = GetBehavior<BJTModelTemperatureBehavior>(bjt.Model);
+            return true;
+        }
 
         /// <summary>
         /// Execute behaviour

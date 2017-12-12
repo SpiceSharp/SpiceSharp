@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -8,14 +9,30 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class InductorTruncateBehavior : CircuitObjectBehaviorTruncate
     {
         /// <summary>
+        /// Necessary behaviors
+        /// </summary>
+        private InductorLoadBehavior load;
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
+        public override bool Setup(CircuitObject component, Circuit ckt)
+        {
+            load = GetBehavior<InductorLoadBehavior>(component);
+            return true;
+        }
+
+        /// <summary>
         /// Truncate the timestep
         /// </summary>
         /// <param name="ckt">Circuit</param>
         /// <param name="timestep">Timestep</param>
         public override void Truncate(Circuit ckt, ref double timestep)
         {
-            var ind = ComponentTyped<Inductor>();
-            ckt.Method.Terr(ind.INDstate + Inductor.INDflux, ckt, ref timestep);
+            ckt.Method.Terr(load.INDstate + InductorLoadBehavior.INDflux, ckt, ref timestep);
         }
     }
 }

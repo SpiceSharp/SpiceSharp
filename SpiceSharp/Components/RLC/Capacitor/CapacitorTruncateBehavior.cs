@@ -18,9 +18,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override bool Setup(CircuitObject component, Circuit ckt)
         {
-            load = component.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as CapacitorLoadBehavior;
+            load = GetBehavior<CapacitorLoadBehavior>(component);
+            return true;
         }
 
         /// <summary>

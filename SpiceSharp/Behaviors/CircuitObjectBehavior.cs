@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Represents a behaviour for a class
     /// </summary>
-    public abstract class CircuitObjectBehavior : ICircuitObjectBehavior
+    public abstract class CircuitObjectBehavior
     {
         /// <summary>
         /// The component the behaviour acts upon
@@ -27,14 +28,15 @@ namespace SpiceSharp.Behaviors
         protected T ComponentTyped<T>() where T : CircuitObject => Component as T;
 
         /// <summary>
-        /// Build a dictionary of named parameters
+        /// Build a dictionary of named parameters for an object
+        /// These objects can then be accessed using Set() and Ask()
         /// </summary>
-        protected void BuildParameterDictionary()
+        protected void BuildParameterDictionary(object obj)
         {
             NamedParameters = new Dictionary<string, Parameter>();
 
             // Reflection can be used to find all parameters in the behavior
-            var properties = GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var properties = obj.GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             foreach (var property in properties)
             {
                 if (property.DeclaringType == typeof(Parameter))
@@ -54,6 +56,21 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
+        /// Get a behavior of a specific type
+        /// </summary>
+        /// <typeparam name="T">The circuit behavior we want to ask</typeparam>
+        /// <param name="co">The circuit object with the behaviors</param>
+        /// <returns></returns>
+        protected T GetBehavior<T>(CircuitObject co) where T : CircuitObjectBehavior
+        {
+            // Get base class
+            var behavior = co.GetBehavior(typeof(T).BaseType) as T;
+            if (behavior == null)
+                throw new CircuitException($"{co.Name}: Could not find behavior \"{typeof(T).Name}\"");
+            return behavior;
+        }
+
+        /// <summary>
         /// Setup the behaviour
         /// If this method returns false, then the behavior is assumed not to change during simulations. If the method
         /// returns true, then the behavior will be registered for execution during analysis. This can be used to flag
@@ -62,11 +79,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns>Returns false if the behavior is only describing data</returns>
-        public virtual bool Setup(CircuitObject component, Circuit ckt)
-        {
-            Component = component;
-            return true;
-        }
+        public virtual bool Setup(CircuitObject component, Circuit ckt) => true;
 
         /// <summary>
         /// Unsetup the behaviour
@@ -85,7 +98,7 @@ namespace SpiceSharp.Behaviors
         public virtual bool Set(string name, double value)
         {
             if (NamedParameters == null)
-                BuildParameterDictionary();
+                BuildParameterDictionary(this);
             if (NamedParameters.TryGetValue(name, out Parameter parameter))
             {
                 parameter.Set(value);
@@ -104,7 +117,7 @@ namespace SpiceSharp.Behaviors
         {
             // No parameter by default
             if (NamedParameters == null)
-                BuildParameterDictionary();
+                BuildParameterDictionary(this);
             if (NamedParameters.TryGetValue(name, out Parameter parameter))
             {
                 value = parameter.Value;

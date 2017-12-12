@@ -16,12 +16,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         private BJTLoadBehavior load;
         private BJTModelTemperatureBehavior modeltemp;
-
-        /// <summary>
-        /// Parameters
-        /// </summary>
-        [SpiceName("area"), SpiceInfo("Area factor")]
-        public Parameter BJTarea { get; } = new Parameter(1);
         
         /// <summary>
         /// Nodes
@@ -65,11 +59,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override bool Setup(CircuitObject component, Circuit ckt)
         {
             var bjt = component as BJT;
-            var model = bjt.Model as BJTModel;
 
             // Get behaviors
-            load = bjt.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as BJTLoadBehavior;
-            modeltemp = model.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as BJTModelTemperatureBehavior;
+            load = GetBehavior<BJTLoadBehavior>(component);
+            modeltemp = GetBehavior<BJTModelTemperatureBehavior>(bjt.Model);
 
             // Get connected nodes
             BJTcolNode = bjt.BJTcolNode;
@@ -156,8 +149,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
             double gcpr, gepr, gpi, gmu, go, td, gx, xgm;
             Complex gm, xcpi, xcmu, xcbx, xccs, xcmcb;
 
-            gcpr = modeltemp.BJTcollectorConduct * BJTarea;
-            gepr = modeltemp.BJTemitterConduct * BJTarea;
+            gcpr = modeltemp.BJTcollectorConduct * load.BJTarea;
+            gepr = modeltemp.BJTemitterConduct * load.BJTarea;
             gpi = state.States[0][BJTstate + BJTLoadBehavior.BJTgpi];
             gmu = state.States[0][BJTstate + BJTLoadBehavior.BJTgmu];
             gm = state.States[0][BJTstate + BJTLoadBehavior.BJTgm];

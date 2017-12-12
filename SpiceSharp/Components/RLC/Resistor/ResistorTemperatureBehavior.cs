@@ -1,5 +1,7 @@
 ﻿using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Parameters;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -9,46 +11,89 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class ResistorTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
+        /// Necessary behaviors
+        /// </summary>
+        private ResistorModelTemperatureBehavior modeltemp;
+
+        /// <summary>
+        /// Parameters
+        /// </summary>
+        [SpiceName("temp"), SpiceInfo("Instance operating temperature", Interesting = false)]
+        public double RES_TEMP
+        {
+            get => REStemp - Circuit.CONSTCtoK;
+            set => REStemp.Set(value + Circuit.CONSTCtoK);
+        }
+        public Parameter REStemp { get; } = new Parameter(300.15);
+        [SpiceName("w"), SpiceInfo("Width", Interesting = false)]
+        public Parameter RESwidth { get; } = new Parameter();
+        [SpiceName("l"), SpiceInfo("Length", Interesting = false)]
+        public Parameter RESlength { get; } = new Parameter();
+
+        /// <summary>
+        /// Get the default conductance for this model
+        /// </summary>
+        public double RESresist { get; protected set; }
+        public double RESconduct { get; protected set; }
+
+        /// <summary>
+        /// Name of the component
+        /// </summary>
+        private CircuitIdentifier name;
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="component"></param>
+        /// <param name="ckt"></param>
+        /// <returns></returns>
+        public override bool Setup(CircuitObject component, Circuit ckt)
+        {
+            var res = component as Resistor;
+            if (res.Model == null)
+                return false;
+            modeltemp = GetBehavior<ResistorModelTemperatureBehavior>(res.Model);
+            name = res.Name;
+            return true;
+        }
+
+        /// <summary>
         /// Execute behaviour
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            var res = ComponentTyped<Resistor>();
             double factor;
             double difference;
-            ResistorModel model = res.Model as ResistorModel;
 
             // Default Value Processing for Resistor Instance
-            if (!res.REStemp.Given)
-                res.REStemp.Value = ckt.State.Temperature;
-            if (!res.RESwidth.Given)
-                res.RESwidth.Value = model?.RESdefWidth ?? 0.0;
-            if (!res.RESresist.Given)
+            if (!REStemp.Given)
+                REStemp.Value = ckt.State.Temperature;
+            if (!RESwidth.Given)
+                RESwidth.Value = modeltemp?.RESdefWidth ?? 0.0;
+
+            if (modeltemp == null)
+                throw new CircuitException("No modeltemp specified");
+            if (modeltemp.RESsheetRes.Given && (modeltemp.RESsheetRes != 0) && (RESlength != 0))
+                RESresist = modeltemp.RESsheetRes * (RESlength - modeltemp.RESnarrow) / (RESwidth - modeltemp.RESnarrow);
+            else
             {
-                if (model == null)
-                    throw new CircuitException("No model specified");
-                if (model.RESsheetRes.Given && (model.RESsheetRes != 0) && (res.RESlength != 0))
-                    res.RESresist.Value = model.RESsheetRes * (res.RESlength - model.RESnarrow) / (res.RESwidth - model.RESnarrow);
-                else
-                {
-                    CircuitWarning.Warning(this, $"{res.Name}: resistance=0, set to 1000");
-                    res.RESresist.Value = 1000;
-                }
+                CircuitWarning.Warning(this, $"{name}: resistance=0, set to 1000");
+                RESresist = 1000;
             }
 
-            if (model != null)
+            if (modeltemp != null)
             {
-                difference = res.REStemp - model.REStnom;
-                factor = 1.0 + (model.REStempCoeff1) * difference + (model.REStempCoeff2) * difference * difference;
+                difference = REStemp - modeltemp.REStnom;
+                factor = 1.0 + (modeltemp.REStempCoeff1) * difference + (modeltemp.REStempCoeff2) * difference * difference;
             }
             else
             {
-                difference = res.REStemp - 300.15;
+                difference = REStemp - 300.15;
                 factor = 1.0;
             }
 
-            res.RESconduct = 1.0 / (res.RESresist * factor);
+            RESconduct = 1.0 / (RESresist * factor);
         }
     }
 }

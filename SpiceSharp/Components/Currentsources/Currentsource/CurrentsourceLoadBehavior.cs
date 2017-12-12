@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override bool Setup(CircuitObject component, Circuit ckt)
         {
             base.Setup(component, ckt);
 
@@ -58,6 +58,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             // Copy nodes
             ISRCposNode = isrc.ISRCposNode;
             ISRCnegNode = isrc.ISRCnegNode;
+            return true;
         }
 
         /// <summary>

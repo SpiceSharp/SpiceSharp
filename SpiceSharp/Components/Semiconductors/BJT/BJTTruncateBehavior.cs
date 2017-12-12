@@ -9,9 +9,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class BJTTruncateBehavior : CircuitObjectBehaviorTruncate
     {
         /// <summary>
-        /// Private variables
+        /// Necessary behaviors
         /// </summary>
-        private int BJTstate;
+        private BJTLoadBehavior load;
 
         /// <summary>
         /// Setup the behavior
@@ -21,9 +21,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <returns></returns>
         public override bool Setup(CircuitObject component, Circuit ckt)
         {
-            var bjt = component as BJT;
-            var load = bjt.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as BJTLoadBehavior;
-            BJTstate = load.BJTstate;
+            load = GetBehavior<BJTLoadBehavior>(component);
             return true;
         }
 
@@ -35,9 +33,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Truncate(Circuit ckt, ref double timestep)
         {
             var method = ckt.Method;
-            method.Terr(BJTstate + BJTLoadBehavior.BJTqbe, ckt, ref timestep);
-            method.Terr(BJTstate + BJTLoadBehavior.BJTqbc, ckt, ref timestep);
-            method.Terr(BJTstate + BJTLoadBehavior.BJTqcs, ckt, ref timestep);
+            method.Terr(load.BJTstate + BJTLoadBehavior.BJTqbe, ckt, ref timestep);
+            method.Terr(load.BJTstate + BJTLoadBehavior.BJTqbc, ckt, ref timestep);
+            method.Terr(load.BJTstate + BJTLoadBehavior.BJTqcs, ckt, ref timestep);
         }
     }
 }

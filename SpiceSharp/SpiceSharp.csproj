@@ -65,6 +65,7 @@
     <Compile Include="Components\RLC\Inductor\InductorTruncateBehavior.cs" />
     <Compile Include="Components\RLC\Inductor\MutualInductanceAcBehavior.cs" />
     <Compile Include="Components\RLC\Inductor\MutualInductanceLoadBehavior.cs" />
+    <Compile Include="Components\RLC\Resistor\ResistorModelTemperatureBehavior.cs" />
     <Compile Include="Components\RLC\Resistor\ResistorTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTAcBehavior.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTLoadBehavior.cs" />
@@ -123,7 +124,6 @@
     <Compile Include="Components\Semiconductors\Diode\DiodeLoadBehavior.cs" />
     <Compile Include="Components\Currentsources\Currentsource\CurrentsourceLoadBehavior.cs" />
     <Compile Include="Components\Voltagesources\Voltagesource\VoltagesourceLoadBehavior.cs" />
-    <Compile Include="Behaviors\ICircuitObjectBehavior.cs" />
     <Compile Include="Components\RLC\Resistor\ResistorAcBehavior.cs" />
     <Compile Include="Components\RLC\Resistor\ResistorLoadBehavior.cs" />
     <Compile Include="Components\Semiconductors\Diode\DiodeNoiseBehavior.cs" />

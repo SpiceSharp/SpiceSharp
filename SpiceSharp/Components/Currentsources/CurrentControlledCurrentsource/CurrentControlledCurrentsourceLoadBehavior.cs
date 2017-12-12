@@ -15,7 +15,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         [SpiceName("gain"), SpiceInfo("Gain of the source")]
         public Parameter CCCScoeff { get; } = new Parameter();
-
         [SpiceName("i"), SpiceInfo("CCCS output current")]
         public double GetCurrent(Circuit ckt) => ckt.State.Solution[CCCScontBranch] * CCCScoeff;
         [SpiceName("v"), SpiceInfo("CCCS voltage at output")]
@@ -37,16 +36,18 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Setup the behavior
         /// </summary>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override bool Setup(CircuitObject component, Circuit ckt)
         {
             var cccs = component as CurrentControlledCurrentsource;
             var matrix = ckt.State.Matrix;
 
+            // Nodes
             CCCSposNode = cccs.CCCSposNode;
             CCCSnegNode = cccs.CCCSnegNode;
             CCCScontBranch = cccs.CCCScontBranch;
             CCCSposContBrptr = matrix.GetElement(cccs.CCCSposNode, cccs.CCCScontBranch);
             CCCSnegContBrptr = matrix.GetElement(cccs.CCCSnegNode, cccs.CCCScontBranch);
+            return true;
         }
 
         /// <summary>

@@ -54,9 +54,6 @@ namespace SpiceSharp.Components
         public CurrentControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain)
             : this(name)
         {
-            // Make sure the current controlled current source happens after voltage sources
-            Priority = -1;
-
             // Connect and update the device
             Connect(pos, neg);
             CCCScontName = vsource;

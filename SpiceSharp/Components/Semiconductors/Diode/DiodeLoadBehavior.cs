@@ -52,13 +52,13 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         private int DIOposNode, DIOnegNode;
         public int DIOposPrimeNode { get; private set; }
-        private MatrixElement DIOposPosPrimePtr;
-        private MatrixElement DIOnegPosPrimePtr;
-        private MatrixElement DIOposPrimePosPtr;
-        private MatrixElement DIOposPrimeNegPtr;
-        private MatrixElement DIOposPosPtr;
-        private MatrixElement DIOnegNegPtr;
-        private MatrixElement DIOposPrimePosPrimePtr;
+        protected MatrixElement DIOposPosPrimePtr { get; private set; }
+        protected MatrixElement DIOnegPosPrimePtr { get; private set; }
+        protected MatrixElement DIOposPrimePosPtr { get; private set; }
+        protected MatrixElement DIOposPrimeNegPtr { get; private set; }
+        protected MatrixElement DIOposPosPtr { get; private set; }
+        protected MatrixElement DIOnegNegPtr { get; private set; }
+        protected MatrixElement DIOposPrimePosPrimePtr { get; private set; }
 
         /// <summary>
         /// Extra variables
@@ -83,11 +83,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override bool Setup(CircuitObject component, Circuit ckt)
         {
             var dio = component as Diode;
-            var model = dio.Model as DiodeModel;
 
             // Get behaviors
-            temp = dio.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as DiodeTemperatureBehavior;
-            modeltemp = model.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as DiodeModelTemperatureBehavior;
+            temp = GetBehavior<DiodeTemperatureBehavior>(component);
+            modeltemp = GetBehavior<DiodeModelTemperatureBehavior>(dio.Model);
 
             // Allocate states
             DIOstate = ckt.State.GetState(5);

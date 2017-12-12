@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components.ComponentBehaviors
@@ -14,13 +13,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
+        private DiodeLoadBehavior load;
         private DiodeModelTemperatureBehavior modeltemp;
-
-        /// <summary>
-        /// Parameters
-        /// </summary>
-        [SpiceName("area"), SpiceInfo("Area factor")]
-        public Parameter DIOarea { get; } = new Parameter(1);
 
         /// <summary>
         /// Nodes
@@ -35,11 +29,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         private MatrixElement DIOposPrimePosPrimePtr;
 
         /// <summary>
-        /// Private variables
-        /// </summary>
-        private int DIOstate;
-
-        /// <summary>
         /// Setup the behavior
         /// </summary>
         /// <param name="component">Component</param>
@@ -48,11 +37,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override bool Setup(CircuitObject component, Circuit ckt)
         {
             var diode = component as Diode;
-            var model = diode.Model as DiodeModel;
 
             // Get necessary behaviors
-            modeltemp = model.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as DiodeModelTemperatureBehavior;
-            var load = diode.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as DiodeLoadBehavior;
+            load = GetBehavior<DiodeLoadBehavior>(component);
+            modeltemp = GetBehavior<DiodeModelTemperatureBehavior>(diode.Model);
 
             // Nodes
             DIOposNode = diode.DIOposNode;
@@ -94,9 +82,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var state = ckt.State;
             double gspr, geq, xceq;
 
-            gspr = modeltemp.DIOconductance * DIOarea;
-            geq = state.States[0][DIOstate + DiodeLoadBehavior.DIOconduct];
-            xceq = state.States[0][DIOstate + DiodeLoadBehavior.DIOcapCurrent] * state.Laplace.Imaginary;
+            gspr = modeltemp.DIOconductance * load.DIOarea;
+            geq = state.States[0][load.DIOstate + DiodeLoadBehavior.DIOconduct];
+            xceq = state.States[0][load.DIOstate + DiodeLoadBehavior.DIOcapCurrent] * state.Laplace.Imaginary;
 
             DIOposPosPtr.Value.Real += gspr;
             DIOnegNegPtr.Value.Cplx += new Complex(geq, xceq);

@@ -14,6 +14,27 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
+        [SpiceName("npn"), SpiceInfo("NPN type device")]
+        public void SetNPN(bool value)
+        {
+            if (value)
+                BJTtype = NPN;
+        }
+        [SpiceName("pnp"), SpiceInfo("PNP type device")]
+        public void SetPNP(bool value)
+        {
+            if (value)
+                BJTtype = PNP;
+        }
+        [SpiceName("type"), SpiceInfo("NPN or PNP")]
+        public string GetTYPE(Circuit ckt)
+        {
+            if (BJTtype == NPN)
+                return "npn";
+            else
+                return "pnp";
+        }
+        public double BJTtype { get; internal set; }
         [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
         public double BJT_TNOM
         {
@@ -115,6 +136,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public double BJTexcessPhaseFactor { get; internal set; }
 
         /// <summary>
+        /// Constants
+        /// </summary>
+        public const int NPN = 1;
+        public const int PNP = -1;
+
+        /// <summary>
         /// Shared parameters
         /// </summary>
         public double fact1 { get; protected set; }
@@ -143,7 +170,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override bool Setup(CircuitObject component, Circuit ckt)
         {
             // Store the name for error reporting
-            name = (component as BJTModel).Name;
+            name = component.Name;
             return true;
         }
 

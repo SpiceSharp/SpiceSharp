@@ -102,6 +102,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public double MOS1cgd { get; internal set; }
         public double MOS1cgb { get; internal set; }
 
+        /// <summary>
+        /// Name of the mosfet
+        /// </summary>
         private CircuitIdentifier name;
 
         /// <summary>
@@ -113,11 +116,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override bool Setup(CircuitObject component, Circuit ckt)
         {
             var mos1 = component as MOS1;
-            var model = mos1.Model as MOS1Model;
-
-            // Get necessary behaviors
-            modeltemp = model.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as MOS1ModelTemperatureBehavior;
-
+            modeltemp = GetBehavior<MOS1ModelTemperatureBehavior>(mos1.Model);
             name = component.Name;
             return true;
         }

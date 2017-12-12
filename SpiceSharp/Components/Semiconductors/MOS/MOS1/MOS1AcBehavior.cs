@@ -17,6 +17,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
         private MOS1TemperatureBehavior temp;
         private MOS1ModelTemperatureBehavior modeltemp;
 
+        /// <summary>
+        /// Nodes
+        /// </summary>
         private int MOS1dNode, MOS1gNode, MOS1sNode, MOS1bNode;
         private int MOS1dNodePrime, MOS1sNodePrime;
 
@@ -58,9 +61,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var model = mos1.Model as MOS1Model;
 
             // Get behaviors
-            load = mos1.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as MOS1LoadBehavior;
-            temp = mos1.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as MOS1TemperatureBehavior;
-            modeltemp = model.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as MOS1ModelTemperatureBehavior;
+            load = GetBehavior<MOS1LoadBehavior>(component);
+            temp = GetBehavior<MOS1TemperatureBehavior>(component);
+            modeltemp = GetBehavior<MOS1ModelTemperatureBehavior>(mos1.Model);
 
             // Nodes
             MOS1dNode = mos1.MOS1dNode;

@@ -11,15 +11,13 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class CapacitorAcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
-        /// Parameters
+        /// Necessary behaviors
         /// </summary>
-        [SpiceName("capacitance"), SpiceInfo("Device capacitance", IsPrincipal = true)]
-        public Parameter CAPcapac { get; } = new Parameter();
+        private CapacitorLoadBehavior load;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        private int CAPstate;
         private int CAPposNode, CAPnegNode;
         private MatrixElement CAPposPosptr;
         private MatrixElement CAPnegNegptr;
@@ -31,18 +29,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component"></param>
         /// <param name="ckt"></param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override bool Setup(CircuitObject component, Circuit ckt)
         {
-            base.Setup(component, ckt);
-
-            // If the capacitance is not given, try getting it from the temperature behavior
-            if (!CAPcapac.Given)
-            {
-                var temp = component.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as CapacitorTemperatureBehavior;
-                if (temp != null)
-                    CAPcapac.Value = temp.CAPcapac;
-            }
-
+            load = GetBehavior<CapacitorLoadBehavior>(component);
+            
             // Get nodes
             var cap = component as Capacitor;
             CAPposNode = cap.CAPposNode;
@@ -54,6 +44,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
             CAPnegPosptr = matrix.GetElement(CAPnegNode, CAPposNode);
             CAPposNegptr = matrix.GetElement(CAPposNode, CAPnegNode);
+            return true;
         }
         
         /// <summary>
@@ -62,9 +53,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)
         {
-            Capacitor cap = ComponentTyped<Capacitor>();
             var cstate = ckt.State;
-            var val = cstate.Laplace * CAPcapac.Value;
+            var val = cstate.Laplace * load.CAPcapac.Value;
 
             // Load the matrix
             CAPposPosptr.Add(val);

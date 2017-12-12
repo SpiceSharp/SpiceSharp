@@ -223,8 +223,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var model = mos1.Model as MOS1Model;
 
             // Get behaviors
-            temp = mos1.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as MOS1TemperatureBehavior;
-            modeltemp = model.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as MOS1ModelTemperatureBehavior;
+            temp = GetBehavior<MOS1TemperatureBehavior>(component);
+            modeltemp = GetBehavior<MOS1ModelTemperatureBehavior>(component);
 
             // Nodes
             MOS1dNode = mos1.MOS1dNode;
