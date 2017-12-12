@@ -164,28 +164,28 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        internal MatrixElement MOS2DdPtr { get; private set; }
-        internal MatrixElement MOS2GgPtr { get; private set; }
-        internal MatrixElement MOS2SsPtr { get; private set; }
-        internal MatrixElement MOS2BbPtr { get; private set; }
-        internal MatrixElement MOS2DPdpPtr { get; private set; }
-        internal MatrixElement MOS2SPspPtr { get; private set; }
-        internal MatrixElement MOS2DdpPtr { get; private set; }
-        internal MatrixElement MOS2GbPtr { get; private set; }
-        internal MatrixElement MOS2GdpPtr { get; private set; }
-        internal MatrixElement MOS2GspPtr { get; private set; }
-        internal MatrixElement MOS2SspPtr { get; private set; }
-        internal MatrixElement MOS2BdpPtr { get; private set; }
-        internal MatrixElement MOS2BspPtr { get; private set; }
-        internal MatrixElement MOS2DPspPtr { get; private set; }
-        internal MatrixElement MOS2DPdPtr { get; private set; }
-        internal MatrixElement MOS2BgPtr { get; private set; }
-        internal MatrixElement MOS2DPgPtr { get; private set; }
-        internal MatrixElement MOS2SPgPtr { get; private set; }
-        internal MatrixElement MOS2SPsPtr { get; private set; }
-        internal MatrixElement MOS2DPbPtr { get; private set; }
-        internal MatrixElement MOS2SPbPtr { get; private set; }
-        internal MatrixElement MOS2SPdpPtr { get; private set; }
+        protected MatrixElement MOS2DdPtr { get; private set; }
+        protected MatrixElement MOS2GgPtr { get; private set; }
+        protected MatrixElement MOS2SsPtr { get; private set; }
+        protected MatrixElement MOS2BbPtr { get; private set; }
+        protected MatrixElement MOS2DPdpPtr { get; private set; }
+        protected MatrixElement MOS2SPspPtr { get; private set; }
+        protected MatrixElement MOS2DdpPtr { get; private set; }
+        protected MatrixElement MOS2GbPtr { get; private set; }
+        protected MatrixElement MOS2GdpPtr { get; private set; }
+        protected MatrixElement MOS2GspPtr { get; private set; }
+        protected MatrixElement MOS2SspPtr { get; private set; }
+        protected MatrixElement MOS2BdpPtr { get; private set; }
+        protected MatrixElement MOS2BspPtr { get; private set; }
+        protected MatrixElement MOS2DPspPtr { get; private set; }
+        protected MatrixElement MOS2DPdPtr { get; private set; }
+        protected MatrixElement MOS2BgPtr { get; private set; }
+        protected MatrixElement MOS2DPgPtr { get; private set; }
+        protected MatrixElement MOS2SPgPtr { get; private set; }
+        protected MatrixElement MOS2SPsPtr { get; private set; }
+        protected MatrixElement MOS2DPbPtr { get; private set; }
+        protected MatrixElement MOS2SPbPtr { get; private set; }
+        protected MatrixElement MOS2SPdpPtr { get; private set; }
 
         /// <summary>
         /// Constants

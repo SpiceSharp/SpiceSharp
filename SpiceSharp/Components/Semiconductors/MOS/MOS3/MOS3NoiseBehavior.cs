@@ -10,6 +10,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class MOS3NoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
+        /// Necessary behaviors
+        /// </summary>
+        private MOS3LoadBehavior load;
+        private MOS3TemperatureBehavior temp;
+        private MOS3ModelTemperatureBehavior modeltemp;
+        private MOS3ModelNoiseBehavior modelnoise;
+
+        /// <summary>
         /// Noise generators by their index
         /// </summary>
         private const int MOS3RDNOIZ = 0;
@@ -30,19 +38,26 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <summary>
         /// Setup behaviour
         /// </summary>
-        /// <param name="component"></param>
-        /// <param name="ckt"></param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        /// <param name="component">Component</param>
+        /// <param name="ckt">Circuit</param>
+        public override bool Setup(CircuitObject component, Circuit ckt)
         {
-            base.Setup(component, ckt);
-            var mos3 = ComponentTyped<MOS3>();
+            var mos3 = component as MOS3;
+
+            // Get behaviors
+            load = GetBehavior<MOS3LoadBehavior>(component);
+            temp = GetBehavior<MOS3TemperatureBehavior>(component);
+            modeltemp = GetBehavior<MOS3ModelTemperatureBehavior>(mos3.Model);
+            modelnoise = GetBehavior<MOS3ModelNoiseBehavior>(mos3.Model);
+
             MOS3noise.Setup(ckt,
                 mos3.MOS3dNode,
                 mos3.MOS3gNode,
                 mos3.MOS3sNode,
                 mos3.MOS3bNode,
-                mos3.MOS3dNodePrime,
-                mos3.MOS3sNodePrime);
+                load.MOS3dNodePrime,
+                load.MOS3sNodePrime);
+            return true;
         }
 
         /// <summary>
@@ -57,12 +72,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var noise = state.Noise;
 
             // Set noise parameters
-            MOS3noise.Generators[MOS3RDNOIZ].Set(mos3.MOS3drainConductance);
-            MOS3noise.Generators[MOS3RSNOIZ].Set(mos3.MOS3sourceConductance);
-            MOS3noise.Generators[MOS3IDNOIZ].Set(2.0 / 3.0 * Math.Abs(mos3.MOS3gm));
-            MOS3noise.Generators[MOS3FLNOIZ].Set(model.MOS3fNcoef * Math.Exp(model.MOS3fNexp 
-                * Math.Log(Math.Max(Math.Abs(mos3.MOS3cd), 1e-38))) / (mos3.MOS3w * (mos3.MOS3l - 2 * model.MOS3latDiff) 
-                * model.MOS3oxideCapFactor * model.MOS3oxideCapFactor) / noise.Freq);
+            MOS3noise.Generators[MOS3RDNOIZ].Set(temp.MOS3drainConductance);
+            MOS3noise.Generators[MOS3RSNOIZ].Set(temp.MOS3sourceConductance);
+            MOS3noise.Generators[MOS3IDNOIZ].Set(2.0 / 3.0 * Math.Abs(load.MOS3gm));
+            MOS3noise.Generators[MOS3FLNOIZ].Set(modelnoise.MOS3fNcoef * Math.Exp(modelnoise.MOS3fNexp 
+                * Math.Log(Math.Max(Math.Abs(load.MOS3cd), 1e-38))) / (temp.MOS3w * (temp.MOS3l - 2 * modeltemp.MOS3latDiff) 
+                * modeltemp.MOS3oxideCapFactor * modeltemp.MOS3oxideCapFactor) / noise.Freq);
 
             // Evaluate noise sources
             MOS3noise.Evaluate(ckt);

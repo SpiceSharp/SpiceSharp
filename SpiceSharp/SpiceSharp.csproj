@@ -98,6 +98,7 @@
     <Compile Include="Components\Semiconductors\MOS\MOS2\MOS2TruncateBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3AcBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3LoadBehavior.cs" />
+    <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3ModelNoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3ModelTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3NoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS3\MOS3TemperatureBehavior.cs" />
