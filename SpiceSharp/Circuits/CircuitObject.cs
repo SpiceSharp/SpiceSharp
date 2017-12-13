@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Collections.Generic;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Parameters;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Circuits
 {
@@ -48,7 +47,17 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Collect named parameters for the current object
+        /// Collect all named parameters from the behaviors
+        /// </summary>
+        protected void CollectNamedParameters()
+        {
+            foreach (var behavior in Behaviors.Values)
+                CollectNamedParameters(behavior);
+            CollectedParameters = true;
+        }
+
+        /// <summary>
+        /// Collect named parameters of an object
         /// </summary>
         protected void CollectNamedParameters(object obj)
         {
@@ -110,11 +119,7 @@ namespace SpiceSharp.Circuits
         {
             // Collect all parameters
             if (!CollectedParameters)
-            {
-                foreach (var behavior in Behaviors.Values)
-                    CollectNamedParameters(behavior);
-                CollectedParameters = true;
-            }
+                CollectNamedParameters();
 
             // Set the parameters
             NamedParameters[parameter].Set(value);
@@ -128,11 +133,7 @@ namespace SpiceSharp.Circuits
         public virtual double Ask(string parameter)
         {
             if (!CollectedParameters)
-            {
-                foreach (var behavior in Behaviors.Values)
-                    CollectNamedParameters(behavior);
-                CollectedParameters = true;
-            }
+                CollectNamedParameters();
 
             // Ask the parameters
             return NamedParameters[parameter];

@@ -2,6 +2,7 @@
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Parameters;
+using System;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -35,6 +36,24 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Nodes
         /// </summary>
         private int ISRCposNode, ISRCnegNode;
+
+        /// <summary>
+        /// Create getter
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="parameter">Parameter name</param>
+        /// <returns></returns>
+        public override Func<double> CreateGetter(Circuit ckt, string parameter)
+        {
+            switch (parameter)
+            {
+                case "v": return () => ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode];
+                case "p": return () => (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode]) * -ISRCdcValue;
+                case "c": return () => Current;
+                default:
+                    return base.CreateGetter(ckt, parameter);
+            }
+        }
 
         /// <summary>
         /// Setup the behaviour

@@ -59,7 +59,8 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Create a getter method for extracting a parameter
+        /// Create a function for extracting data
+        /// This function can be used to extract parameters during simulation
         /// </summary>
         /// <param name="ckt">Circuit</param>
         /// <param name="parameter">Parameter</param>

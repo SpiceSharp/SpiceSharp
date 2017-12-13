@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using System;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
@@ -35,6 +36,28 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         protected MatrixElement CCCSposContBrptr = null;
         protected MatrixElement CCCSnegContBrptr = null;
+
+        /// <summary>
+        /// Create a getter
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="parameter">Parameter name</param>
+        /// <returns></returns>
+        public override Func<double> CreateGetter(Circuit ckt, string parameter)
+        {
+            switch (parameter)
+            {
+                case "i": return () => ckt.State.Solution[CCCScontBranch] * CCCScoeff;
+                case "v": return () => ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode];
+                case "p": return () =>
+                    {
+                        double v = ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode];
+                        return ckt.State.Solution[CCCScontBranch] * CCCScoeff * v;
+                    };
+                default:
+                    return base.CreateGetter(ckt, parameter);
+            }
+        }
 
         /// <summary>
         /// Setup the behavior
