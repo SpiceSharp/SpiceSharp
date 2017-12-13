@@ -24,7 +24,8 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the inductor</param>
-        public Inductor(CircuitIdentifier name) : base(name, INDpinCount)
+        public Inductor(CircuitIdentifier name)
+            : base(name, INDpinCount)
         {
             RegisterBehavior(new InductorLoadBehavior());
             RegisterBehavior(new InductorAcBehavior());
@@ -39,10 +40,20 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="ind">The inductance</param>
-        public Inductor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double ind) : this(name)
+        public Inductor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double ind) 
+            : base(name, INDpinCount)
         {
             Connect(pos, neg);
-            Set("inductance", ind);
+
+            // Set inductance
+            var load = new InductorLoadBehavior();
+            load.INDinduct.Set(ind);
+            RegisterBehavior(load);
+
+            // Register behaviors
+            RegisterBehavior(new InductorAcBehavior());
+            RegisterBehavior(new InductorAcceptBehavior());
+            RegisterBehavior(new InductorTruncateBehavior());
         }
 
         /// <summary>

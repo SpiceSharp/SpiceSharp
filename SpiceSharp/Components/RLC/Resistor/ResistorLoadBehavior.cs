@@ -63,6 +63,13 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 RESresist.Value = temp.RESresist;
                 RESconduct = temp.RESconduct;
             }
+            else
+            {
+                if (RESresist.Value == 0.0)
+                    RESconduct = 1e12;
+                else
+                    RESconduct = 1.0 / RESresist.Value;
+            }
 
             // Nodes
             RESposNode = res.RESposNode;

@@ -33,17 +33,18 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Setup()
         {
-            // Perform some basic checks
+            // No use simulating an empty circuit
             if (Circuit.Objects.Count == 0)
                 throw new CircuitException($"{Name}: No circuit objects for simulation");
-            if (Circuit.Nodes.Count <= 1)
-                throw new CircuitException($"{Name}: No circuit nodes for simulation");
 
             // Setup all objects
+            Circuit.Objects.BuildOrderedComponentList();
             foreach (var o in Circuit.Objects)
             {
                 o.Setup(Circuit);
             }
+            if (Circuit.Nodes.Count <= 1)
+                throw new CircuitException($"{Name}: No circuit nodes for simulation");
 
             // Setup behaviors
             tempbehaviors = SetupBehaviors<CircuitObjectBehaviorTemperature>();

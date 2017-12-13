@@ -49,12 +49,21 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="cap">The capacitance</param>
-        public Capacitor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double cap) : base(name, CAPpinCount)
+        public Capacitor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double cap) 
+            : base(name, CAPpinCount)
         {
             Connect(pos, neg);
 
-            var loadbehavior = new CapacitorLoadBehavior();
-            Set("capacitance", cap);
+            // Set capacitance
+            var load = new CapacitorLoadBehavior();
+            load.CAPcapac.Set(cap);
+            RegisterBehavior(load);
+
+            // Register other behaviors
+            RegisterBehavior(new CapacitorAcBehavior());
+            RegisterBehavior(new CapacitorTemperatureBehavior());
+            RegisterBehavior(new CapacitorAcceptBehavior());
+            RegisterBehavior(new CapacitorTruncateBehavior());
         }
         
         /// <summary>

@@ -1,9 +1,6 @@
-﻿using System.Numerics;
-using SpiceSharp.Parameters;
+﻿using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Components.ComponentBehaviors;
-using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Components
 {
@@ -45,10 +42,18 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
         public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc)
-            : this(name)
+            : base(name, VSRCpinCount)
         {
             Connect(pos, neg);
-            Set("dc", dc);
+
+            // Set waveform
+            var load = new VoltagesourceLoadBehavior();
+            load.VSRCdcValue.Set(dc);
+            RegisterBehavior(load);
+
+            // Register behaviors
+            RegisterBehavior(new VoltageSourceLoadAcBehavior());
+            RegisterBehavior(new VoltagesourceAcceptBehavior());
         }
 
         /// <summary>
@@ -62,9 +67,13 @@ namespace SpiceSharp.Components
             : base(name, VSRCpinCount)
         {
             Connect(pos, neg);
+
+            // Set waveform
             var load = new VoltagesourceLoadBehavior();
             load.VSRCwaveform = w;
             RegisterBehavior(load);
+
+            // Register behaviors
             RegisterBehavior(new VoltageSourceLoadAcBehavior());
             RegisterBehavior(new VoltagesourceAcceptBehavior());
         }

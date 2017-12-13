@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Parameters;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 
@@ -24,34 +24,6 @@ namespace SpiceSharp.Behaviors
         /// Gets whether or not the behavior is already set up
         /// </summary>
         public bool DataOnly { get; protected set; } = false;
-
-        /// <summary>
-        /// Build a dictionary of named parameters for an object
-        /// These objects can then be accessed using Set() and Ask()
-        /// </summary>
-        protected void BuildParameterDictionary(object obj)
-        {
-            NamedParameters = new Dictionary<string, Parameter>();
-
-            // Reflection can be used to find all parameters in the behavior
-            var properties = obj.GetType().GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-            foreach (var property in properties)
-            {
-                if (property.DeclaringType == typeof(Parameter))
-                {
-                    // Check for custom types
-                    var names = (SpiceName[])property.GetCustomAttributes(typeof(SpiceName), false);
-                    if (names.Length > 0)
-                    {
-                        var parameter = (Parameter)property.GetValue(this);
-                        foreach (var name in names)
-                        {
-                            NamedParameters.Add(name.Name, parameter);
-                        }
-                    }
-                }
-            }
-        }
 
         /// <summary>
         /// Get a behavior of a specific type
@@ -87,41 +59,15 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Set a parameter of this behavior
-        /// Returns true if this behavior has a parameter by that name
+        /// Create a getter method for extracting a parameter
         /// </summary>
-        /// <param name="name">Parameter name</param>
-        /// <param name="value">Parameter value</param>
-        public virtual bool Set(string name, double value)
-        {
-            if (NamedParameters == null)
-                BuildParameterDictionary(this);
-            if (NamedParameters.TryGetValue(name, out Parameter parameter))
-            {
-                parameter.Set(value);
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Ask a parameter from the behavior
-        /// </summary>
-        /// <param name="name">Parameter name</param>
-        /// <param name="value">Parameter value</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="parameter">Parameter</param>
         /// <returns></returns>
-        public virtual bool Ask(string name, out double value)
+        public virtual Func<double> CreateGetter(Circuit ckt, string parameter)
         {
-            // No parameter by default
-            if (NamedParameters == null)
-                BuildParameterDictionary(this);
-            if (NamedParameters.TryGetValue(name, out Parameter parameter))
-            {
-                value = parameter.Value;
-                return true;
-            }
-            value = double.NaN;
-            return false;
+            // No gettable parameters by default
+            return () => double.NaN;
         }
 
         /// <summary>

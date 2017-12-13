@@ -3,6 +3,7 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
+using System;
 
 namespace SpiceSharp.Components.ComponentBehaviors
 {
@@ -36,6 +37,23 @@ namespace SpiceSharp.Components.ComponentBehaviors
         protected MatrixElement VSRCibrPosptr { get; private set; }
         protected MatrixElement VSRCibrNegptr { get; private set; }
         protected MatrixElement VSRCibrIbrptr { get; private set; }
+
+        /// <summary>
+        /// Create a getter
+        /// </summary>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="parameter">Parameter</param>
+        /// <returns></returns>
+        public override Func<double> CreateGetter(Circuit ckt, string parameter)
+        {
+            switch (parameter)
+            {
+                case "i": return () => ckt.State.Solution[VSRCbranch];
+                case "p": return () => (ckt.State.Solution[VSRCposNode] - ckt.State.Solution[VSRCnegNode]) * -ckt.State.Solution[VSRCbranch];
+                default:
+                    return base.CreateGetter(ckt, parameter);
+            }
+        }
 
         /// <summary>
         /// Setup the behavior

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Circuits
@@ -14,6 +16,12 @@ namespace SpiceSharp.Circuits
         /// Available behaviors for the circuit object
         /// </summary>
         protected Dictionary<Type, CircuitObjectBehavior> Behaviors { get; } = new Dictionary<Type, CircuitObjectBehavior>();
+
+        /// <summary>
+        /// A table of named parameters
+        /// </summary>
+        protected Dictionary<string, Parameter> NamedParameters { get; } = new Dictionary<string, Parameter>();
+        protected bool CollectedParameters = false;
 
         /// <summary>
         /// Get the name of the object
@@ -40,6 +48,26 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
+        /// Collect named parameters for the current object
+        /// </summary>
+        protected void CollectNamedParameters(object obj)
+        {
+            var properties = obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            foreach (var property in properties)
+            {
+                // Store parameters
+                if (property.PropertyType == typeof(Parameter))
+                {
+                    // Get all names
+                    var parameter = (Parameter)property.GetValue(obj);
+                    var names = property.GetCustomAttributes<SpiceName>();
+                    foreach (SpiceName name in names)
+                        NamedParameters.Add(name.Name, parameter);
+                }
+            }
+        }
+
+        /// <summary>
         /// Get the behavior of the object
         /// </summary>
         /// <param name="behaviorbase">The base class of the behavior</param>
@@ -62,10 +90,7 @@ namespace SpiceSharp.Circuits
         /// Setup the component
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public virtual void Setup(Circuit ckt)
-        {
-            // Do nothing
-        }
+        public abstract void Setup(Circuit ckt);
 
         /// <summary>
         /// Unsetup/destroy the component
@@ -75,54 +100,42 @@ namespace SpiceSharp.Circuits
         {
             // Do nothing
         }
-
+        
         /// <summary>
-        /// Set a parameter of all behaviors
+        /// Set a parameter
         /// </summary>
         /// <param name="parameter">Parameter name</param>
         /// <param name="value">Parameter value</param>
         public virtual void Set(string parameter, double value)
         {
-            bool found = false;
-            foreach (var behavior in Behaviors.Values)
+            // Collect all parameters
+            if (!CollectedParameters)
             {
-                found |= behavior.Set(parameter, value);
+                foreach (var behavior in Behaviors.Values)
+                    CollectNamedParameters(behavior);
+                CollectedParameters = true;
             }
-            if (!found)
-                CircuitWarning.Warning(this, $"{Name}: Unrecognized parameter {parameter}");
+
+            // Set the parameters
+            NamedParameters[parameter].Set(value);
         }
 
         /// <summary>
-        /// Set the parameter for a specific behavior
+        /// Ask a parameter
         /// </summary>
-        /// <param name="behaviorbase">Base type of the behavior</param>
-        /// <param name="parameter">Parameter name</param>
-        /// <param name="value">Parameter value</param>
-        public virtual void Set(Type behaviorbase, string parameter, double value)
-        {
-            if (Behaviors.TryGetValue(behaviorbase, out CircuitObjectBehavior behavior))
-            {
-                if (behavior.Set(parameter, value))
-                    return;
-            }
-            CircuitWarning.Warning(this, $"{Name}: Unrecognized parameter {parameter}");
-        }
-
-        /// <summary>
-        /// Ask a parameter to a specific behavior
-        /// </summary>
-        /// <param name="behaviorbase">Base type of the behavior</param>
         /// <param name="parameter">Parameter name</param>
         /// <returns></returns>
-        public virtual double Ask(Type behaviorbase, string parameter)
+        public virtual double Ask(string parameter)
         {
-            if (Behaviors.TryGetValue(behaviorbase, out CircuitObjectBehavior behavior))
+            if (!CollectedParameters)
             {
-                if (behavior.Ask(parameter, out double value))
-                    return value;
+                foreach (var behavior in Behaviors.Values)
+                    CollectNamedParameters(behavior);
+                CollectedParameters = true;
             }
-            CircuitWarning.Warning(this, $"{Name}: Unrecognized parameter {parameter}");
-            return double.NaN;
+
+            // Ask the parameters
+            return NamedParameters[parameter];
         }
     }
 }

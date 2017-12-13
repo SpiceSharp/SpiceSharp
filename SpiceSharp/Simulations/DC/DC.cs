@@ -154,7 +154,6 @@ namespace SpiceSharp.Simulations
             state.Gmin = config.Gmin;
 
             // Initialize
-            // ICircuitObject[] components = new ICircuitObject[Sweeps.Count];
             Parameter[] swept = new Parameter[Sweeps.Count];
             Parameter[] original = new Parameter[Sweeps.Count];
 
