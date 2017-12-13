@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// DC sweep analysis
     /// </summary>
-    public class DC : Simulation
+    public class DC : BaseSimulation
     {
         /// <summary>
         /// A delegate for when an iteration failed
@@ -116,7 +116,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The simulation name</param>
         /// <param name="config">The configuration</param>
-        public DC(string name) : base(name)
+        public DC(CircuitIdentifier name) : base(name)
         {
         }
 
@@ -128,7 +128,7 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The starting value</param>
         /// <param name="stop">The stopping value</param>
         /// <param name="step">The step value</param>
-        public DC(string name, CircuitIdentifier source, double start, double stop, double step) : base(name)
+        public DC(CircuitIdentifier name, CircuitIdentifier source, double start, double stop, double step) : base(name)
         {
             Sweep s = new Sweep(source, start, stop, step);
             Sweeps.Add(s);
@@ -181,8 +181,6 @@ namespace SpiceSharp.Simulations
                 sweep.SetCurrentStep(0);
             }
 
-            Initialize(ckt);
-
             // Execute the sweeps
             int level = Sweeps.Count - 1;
             while (level >= 0)
@@ -221,8 +219,6 @@ namespace SpiceSharp.Simulations
             // Restore all the parameters of the swept components
             for (int i = 0; i < Sweeps.Count; i++)
                 swept[i].CopyFrom(original[i]);
-
-            Finalize(ckt);
         }
     }
 }

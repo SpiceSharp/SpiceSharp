@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Setup the behavior
         /// </summary>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var cccs = component as CurrentControlledCurrentsource;
             var matrix = ckt.State.Matrix;
@@ -56,7 +56,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             // Get matrix elements
             CCCSposContBrptr = matrix.GetElement(cccs.CCCSposNode, CCCScontBranch);
             CCCSnegContBrptr = matrix.GetElement(cccs.CCCSnegNode, CCCScontBranch);
-            return true;
         }
 
         /// <summary>

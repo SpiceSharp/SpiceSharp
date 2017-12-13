@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the simulation</param>
         /// <param name="config">The configuration</param>
-        public Transient(string name) : base(name)
+        public Transient(CircuitIdentifier name) : base(name)
         {
         }
 
@@ -52,14 +52,33 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Initialize the transient analysis
+        /// Setup the simulation
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Initialize(Circuit ckt)
+        protected override void Setup()
         {
-            acceptbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAccept>(ckt);
-            truncatebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTruncate>(ckt);
-            base.Initialize(ckt);
+            base.Setup();
+
+            // Get behaviors
+            acceptbehaviors = SetupBehaviors<CircuitObjectBehaviorAccept>();
+            truncatebehaviors = SetupBehaviors<CircuitObjectBehaviorTruncate>();
+        }
+
+        /// <summary>
+        /// Unsetup the behavior
+        /// </summary>
+        protected override void Unsetup()
+        {
+            // Remove references
+            foreach (var behavior in truncatebehaviors)
+                behavior.Unsetup();
+            foreach (var behavior in acceptbehaviors)
+                behavior.Unsetup();
+            truncatebehaviors.Clear();
+            truncatebehaviors = null;
+            acceptbehaviors.Clear();
+            acceptbehaviors = null;
+
+            base.Unsetup();
         }
 
         /// <summary>
@@ -90,9 +109,6 @@ namespace SpiceSharp.Simulations
             // Setup breakpoints
             method.Initialize(ckt);
             state.ReinitStates(method);
-
-            // Call events for initializing the simulation
-            Initialize(ckt);
 
             // Calculate the operating point
             ckt.Method = null;
@@ -152,7 +168,6 @@ namespace SpiceSharp.Simulations
                         ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
 
                         // Finished!
-                        Finalize(ckt);
                         return;
                     }
 

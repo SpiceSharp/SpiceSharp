@@ -117,12 +117,13 @@
     <Compile Include="Components\Voltagesources\Voltagesource\VoltagesourceAcBehavior.cs" />
     <Compile Include="Components\Voltagesources\Voltagesource\VoltagesourceAcceptBehavior.cs" />
     <Compile Include="Parameter.cs" />
+    <Compile Include="Simulations\BaseSimulation.cs" />
     <Compile Include="Simulations\CircuitObjectBehaviorIc.cs" />
     <Compile Include="Simulations\CircuitObjectBehaviorTemperature.cs" />
     <Compile Include="Simulations\FrequencySimulation.cs" />
     <Compile Include="Simulations\Noise\CircuitObjectBehaviorNoise.cs" />
     <Compile Include="Simulations\CircuitObjectBehaviorLoad.cs" />
-    <Compile Include="Simulations\CircuitObjectBehaviorAcLoad.cs" />
+    <Compile Include="Simulations\AC\CircuitObjectBehaviorAcLoad.cs" />
     <Compile Include="Behaviors\CircuitObjectBehavior.cs" />
     <Compile Include="Components\Semiconductors\Diode\DiodeLoadBehavior.cs" />
     <Compile Include="Components\Currentsources\Currentsource\CurrentsourceLoadBehavior.cs" />
@@ -193,7 +194,6 @@
     <Compile Include="Simulations\Simulation.cs" />
     <Compile Include="Simulations\AC\AC.cs" />
     <Compile Include="Simulations\DC\DC.cs" />
-    <Compile Include="Simulations\SimulationExtensions.cs" />
     <Compile Include="Simulations\SimulationConfiguration.cs" />
     <Compile Include="Simulations\SimulationData.cs" />
     <Compile Include="Simulations\Transient\CircuitObjectBehaviorAccept.cs" />

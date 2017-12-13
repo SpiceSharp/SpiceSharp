@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
     /// A base class for frequency-dependent analysis
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class FrequencySimulation : Simulation
+    public abstract class FrequencySimulation : BaseSimulation
     {
         /// <summary>
         /// Enumerations
@@ -88,19 +88,33 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public FrequencySimulation(string name) : base(name)
+        public FrequencySimulation(CircuitIdentifier name) : base(name)
         {
         }
 
         /// <summary>
-        /// Initialize the frequency analysis
+        /// Setup the simulation
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Initialize(Circuit ckt)
+        protected override void Setup()
         {
-            // Get the behaviors necessary for the AC analysis
-            acbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAcLoad>(ckt);
-            base.Initialize(ckt);
+            base.Setup();
+
+            // Get behaviors
+            acbehaviors = SetupBehaviors<CircuitObjectBehaviorAcLoad>();
+        }
+
+        /// <summary>
+        /// Unsetup the simulation
+        /// </summary>
+        protected override void Unsetup()
+        {
+            // Remove references
+            foreach (var behavior in acbehaviors)
+                behavior.Unsetup();
+            acbehaviors.Clear();
+            acbehaviors = null;
+
+            base.Unsetup();
         }
 
         /// <summary>

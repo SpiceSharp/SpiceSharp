@@ -58,56 +58,10 @@ namespace SpiceSharp
         public CircuitObjects Objects { get; } = new CircuitObjects();
 
         /// <summary>
-        /// Private variables
-        /// </summary>
-        private bool IsSetup = false;
-
-        /// <summary>
         /// Constructor
         /// </summary>
-        public Circuit() { }
-
-        /// <summary>
-        /// Setup the circuit
-        /// </summary>
-        public void Setup()
+        public Circuit()
         {
-            if (IsSetup)
-                return;
-            IsSetup = true;
-
-            // Rebuild the list of circuit components
-            Objects.BuildOrderedComponentList();
-
-            // Setup all devices
-            foreach (var c in Objects)
-                c.Setup(this);
-
-            // Initialize the state
-            State.Initialize(this);
-
-            // Lock our nodes
-            Nodes.Lock();
-        }
-
-        /// <summary>
-        /// Unsetup/destroy the circuit
-        /// </summary>
-        public void Unsetup()
-        {
-            if (!IsSetup)
-                return;
-            IsSetup = false;
-
-            // Remove all nodes
-            Nodes.Clear();
-
-            // Destroy state
-            State.Destroy();
-
-            // Unsetup devices
-            foreach (var c in Objects)
-                c.Unsetup(this);
         }
 
         /// <summary>
@@ -115,15 +69,11 @@ namespace SpiceSharp
         /// </summary>
         public void Clear()
         {
-            // Unsetup if necessary
-            Unsetup();
-
             // Clear all values
             Method = null;
             Nodes.Clear();
             Simulation = null;
             State.Destroy();
-            Statistics.Clear();
             Objects.Clear();
         }
 

@@ -21,11 +21,9 @@ namespace SpiceSharp.Behaviors
         protected Dictionary<string, Parameter> NamedParameters { get; set; } = null;
 
         /// <summary>
-        /// Gets the component this behaviour uses
+        /// Gets whether or not the behavior is already set up
         /// </summary>
-        /// <typeparam name="T">The component type</typeparam>
-        /// <returns></returns>
-        protected T ComponentTyped<T>() where T : CircuitObject => Component as T;
+        public bool DataOnly { get; protected set; } = false;
 
         /// <summary>
         /// Build a dictionary of named parameters for an object
@@ -72,14 +70,13 @@ namespace SpiceSharp.Behaviors
 
         /// <summary>
         /// Setup the behaviour
-        /// If this method returns false, then the behavior is assumed not to change during simulations. If the method
-        /// returns true, then the behavior will be registered for execution during analysis. This can be used to flag
-        /// a behavior for data-only.
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        /// <returns>Returns false if the behavior is only describing data</returns>
-        public virtual bool Setup(CircuitObject component, Circuit ckt) => true;
+        public virtual void Setup(CircuitObject component, Circuit ckt)
+        {
+            // Do nothing
+        }
 
         /// <summary>
         /// Unsetup the behaviour

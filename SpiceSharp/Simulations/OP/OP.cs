@@ -5,14 +5,14 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Operating Point analysis
     /// </summary>
-    public class OP : Simulation
+    public class OP : BaseSimulation
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
         /// <param name="config">Configuration</param>
-        public OP(string name) : base(name)
+        public OP(CircuitIdentifier name) : base(name)
         {
         }
 
@@ -33,10 +33,8 @@ namespace SpiceSharp.Simulations
             state.Domain = CircuitState.DomainTypes.None;
             state.Gmin = config.Gmin;
 
-            Initialize(ckt);
             Op(ckt, config.DcMaxIterations);
             Export(ckt);
-            Finalize(ckt);
         }
     }
 }

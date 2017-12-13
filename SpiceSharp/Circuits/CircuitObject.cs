@@ -35,7 +35,7 @@ namespace SpiceSharp.Circuits
         /// <param name="behavior">Behavior</param>
         public void RegisterBehavior(CircuitObjectBehavior behavior)
         {
-            Type type = behavior.GetType();
+            Type type = behavior.GetType().BaseType;
             Behaviors[type] = behavior;
         }
 
@@ -44,6 +44,14 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="behaviorbase">The base class of the behavior</param>
         public CircuitObjectBehavior GetBehavior(Type behaviorbase) => Behaviors[behaviorbase];
+
+        /// <summary>
+        /// Try and get a behavior from the object
+        /// </summary>
+        /// <param name="behaviorbase">Base class type of the behavior</param>
+        /// <param name="behavior">Behavior</param>
+        /// <returns></returns>
+        public bool TryGetBehavior(Type behaviorbase, out CircuitObjectBehavior behavior) => Behaviors.TryGetValue(behaviorbase, out behavior);
 
         /// <summary>
         /// Get the priority of this object

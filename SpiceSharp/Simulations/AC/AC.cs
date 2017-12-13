@@ -27,7 +27,7 @@ namespace SpiceSharp.Simulations
         /// <param name="n">The number of steps</param>
         /// <param name="start">The starting frequency</param>
         /// <param name="stop">The stopping frequency</param>
-        public AC(string name, string type, int n, double start, double stop) : base(name)
+        public AC(CircuitIdentifier name, string type, int n, double start, double stop) : base(name)
         {
             switch (type.ToLower())
             {
@@ -92,7 +92,6 @@ namespace SpiceSharp.Simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Gmin = config.Gmin;
-            Initialize(ckt);
             Op(ckt, config.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
@@ -135,9 +134,6 @@ namespace SpiceSharp.Simulations
                         break;
                 }
             }
-
-            // Finalize the export
-            Finalize(ckt);
         }
     }
 }

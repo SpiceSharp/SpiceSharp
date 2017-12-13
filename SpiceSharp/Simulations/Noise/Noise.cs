@@ -6,6 +6,7 @@ using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Components.ComponentBehaviors;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
@@ -42,21 +43,34 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public Noise(string name) : base(name)
+        public Noise(CircuitIdentifier name) : base(name)
         {
         }
 
         /// <summary>
-        /// Initialize the noise simulation
+        /// Setup the simulation
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Initialize(Circuit ckt)
+        protected override void Setup()
         {
-            // Get all behaviors necessary for noise analysis
-            noisebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorNoise>(ckt);
-            base.Initialize(ckt);
+            base.Setup();
+
+            // Get behaviors
+            noisebehaviors = SetupBehaviors<CircuitObjectBehaviorNoise>();
         }
 
+        /// <summary>
+        /// Unsetup the simulation
+        /// </summary>
+        protected override void Unsetup()
+        {
+            // Remove references
+            foreach (var behavior in noisebehaviors)
+                behavior.Unsetup();
+            noisebehaviors.Clear();
+            noisebehaviors = null;
+
+            base.Unsetup();
+        }
 
         /// <summary>
         /// Execute the noise analysis
@@ -78,12 +92,14 @@ namespace SpiceSharp.Simulations
             CircuitObject source = ckt.Objects[Input];
             if (source is Voltagesource vsource)
             {
-                if (!vsource.VSRCacMag.Given || vsource.VSRCacMag == 0.0)
+                var ac = vsource.GetBehavior(typeof(CircuitObjectBehaviorAcLoad)) as VoltageSourceLoadAcBehavior;
+                if (!ac.VSRCacMag.Given || ac.VSRCacMag == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {vsource.Name} has no AC input");
             }
             else if (source is Currentsource isource)
             {
-                if (!isource.ISRCacMag.Given || isource.ISRCacMag == 0.0)
+                var ac = isource.GetBehavior(typeof(CircuitObjectBehaviorAcLoad)) as CurrentsourceAcBehavior;
+                if (!ac.ISRCacMag.Given || ac.ISRCacMag == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {isource.Name} has not AC input");
             }
             else
@@ -172,8 +188,6 @@ namespace SpiceSharp.Simulations
                         break;
                 }
             }
-
-            Finalize(ckt);
         }
 
         /// <summary>

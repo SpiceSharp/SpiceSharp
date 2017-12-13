@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
     /// A base class for time-domain analysis
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class TimeSimulation : Simulation
+    public abstract class TimeSimulation : BaseSimulation
     {
         /// <summary>
         /// Gets or sets the initial timepoint that should be exported
@@ -57,7 +57,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Time-domain behaviors
         /// </summary>
-        protected List<CircuitObjectBehaviorTransient> transientbehaviors = null;
+        protected List<CircuitObjectBehaviorTransient> tranbehaviors = null;
         protected IntegrationMethod method = null;
 
         /// <summary>
@@ -69,14 +69,31 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Initialize
+        /// Setup the simulation
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Initialize(Circuit ckt)
+        protected override void Setup()
         {
-            method = CurrentConfig.Method ?? throw new CircuitException("No integration method specified");
-            transientbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTransient>(ckt);
-            base.Initialize(ckt);
+            // Get base behaviors
+            base.Setup();
+
+            // Also configure the method
+            method = CurrentConfig.Method ?? throw new CircuitException($"{Name}: No integration method specified");
+            tranbehaviors = SetupBehaviors<CircuitObjectBehaviorTransient>();
+        }
+
+        /// <summary>
+        /// Unsetup the simulation
+        /// </summary>
+        protected override void Unsetup()
+        {
+            // Remove references
+            foreach (var behavior in tranbehaviors)
+                behavior.Unsetup();
+            tranbehaviors.Clear();
+            tranbehaviors = null;
+            method = null;
+
+            base.Unsetup();
         }
 
         /// <summary>
@@ -119,7 +136,7 @@ namespace SpiceSharp.Simulations
                 {
                     // Load the Y-matrix and Rhs-vector for DC and transients
                     Load(ckt);
-                    foreach (var behavior in transientbehaviors)
+                    foreach (var behavior in tranbehaviors)
                         behavior.Transient(ckt);
                     iterno++;
                 }
