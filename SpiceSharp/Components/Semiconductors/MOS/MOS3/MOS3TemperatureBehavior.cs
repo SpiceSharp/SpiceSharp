@@ -119,12 +119,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var mos3 = component as MOS3;
             modeltemp = GetBehavior<MOS3ModelTemperatureBehavior>(mos3.Model);
             name = component.Name;
-            return true;
         }
 
         /// <summary>

@@ -57,7 +57,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var vsrc = component as Voltagesource;
 
@@ -78,7 +78,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             double radians = VSRCacPhase * Circuit.CONSTPI / 180.0;
             VSRCac = new Complex(VSRCacMag * Math.Cos(radians), VSRCacMag * Math.Sin(radians));
-            return true;
         }
 
         /// <summary>

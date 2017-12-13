@@ -46,11 +46,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var bjt = component as BJT;
+
+            // Get behaviors
             modeltemp = GetBehavior<BJTModelTemperatureBehavior>(bjt.Model);
-            return true;
         }
 
         /// <summary>

@@ -10,6 +10,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class CapacitorTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
+        /// Necessary behaviors
+        /// </summary>
+        private CapacitorModelTemperatureBehavior modeltemp;
+        
+        /// <summary>
         /// Parameters
         /// </summary>
         [SpiceName("w"), SpiceInfo("Device width", Interesting = false)]
@@ -23,21 +28,21 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public double CAPcapac { get; private set; }
 
         /// <summary>
-        /// Private variables
-        /// </summary>
-        private CapacitorModelTemperatureBehavior temp;
-
-        /// <summary>
         /// Setup the behavior
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
-            // Get the model
-            var model = (component as Capacitor)?.Model as CapacitorModel;
-            temp = model?.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as CapacitorModelTemperatureBehavior;
-            return true;
+            var cap = component as Capacitor;
+            if (cap.Model == null)
+            {
+                modeltemp = null;
+                return;
+            }
+
+            // Get behaviors
+            modeltemp = GetBehavior<CapacitorModelTemperatureBehavior>(cap.Model);
         }
 
         /// <summary>
@@ -47,16 +52,16 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Temperature(Circuit ckt)
         {
             // Default Value Processing for Capacitor Instance
-            if (temp != null)
+            if (modeltemp != null)
             {
                 if (!CAPwidth.Given)
-                    CAPwidth.Value = temp.CAPdefWidth;
-                CAPcapac = temp.CAPcj *
-                                (CAPwidth - temp.CAPnarrow) *
-                                (CAPlength - temp.CAPnarrow) +
-                            temp.CAPcjsw * 2 * (
-                                (CAPlength - temp.CAPnarrow) +
-                                (CAPwidth - temp.CAPnarrow));
+                    CAPwidth.Value = modeltemp.CAPdefWidth;
+                CAPcapac = modeltemp.CAPcj *
+                                (CAPwidth - modeltemp.CAPnarrow) *
+                                (CAPlength - modeltemp.CAPnarrow) +
+                            modeltemp.CAPcjsw * 2 * (
+                                (CAPlength - modeltemp.CAPnarrow) +
+                                (CAPwidth - modeltemp.CAPnarrow));
             }
         }
     }

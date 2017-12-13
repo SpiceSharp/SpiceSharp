@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var vsrc = component as Voltagesource;
 
@@ -70,7 +70,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 else
                     CircuitWarning.Warning(this, $"{component.Name}: No value, DC 0 assumed");
             }
-            return true;
         }
 
         /// <summary>

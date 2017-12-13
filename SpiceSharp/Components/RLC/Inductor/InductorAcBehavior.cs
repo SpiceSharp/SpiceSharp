@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var ind = component as Inductor;
 
@@ -56,7 +56,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             INDibrNegptr = matrix.GetElement(INDbrEq, INDnegNode);
             INDibrPosptr = matrix.GetElement(INDbrEq, INDposNode);
             INDibrIbrptr = matrix.GetElement(INDbrEq, INDbrEq);
-            return true;
         }
 
         /// <summary>

@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var mos3 = component as MOS3;
 
@@ -57,7 +57,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 mos3.MOS3bNode,
                 load.MOS3dNodePrime,
                 load.MOS3sNodePrime);
-            return true;
         }
 
         /// <summary>
@@ -66,8 +65,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt">Circuit</param>
         public override void Noise(Circuit ckt)
         {
-            var mos3 = ComponentTyped<MOS3>();
-            var model = mos3.Model as MOS3Model;
             var state = ckt.State;
             var noise = state.Noise;
 

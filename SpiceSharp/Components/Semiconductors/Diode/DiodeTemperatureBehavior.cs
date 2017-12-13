@@ -49,15 +49,15 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var dio = component as Diode;
 
             // Get behaviors
             modeltemp = GetBehavior<DiodeModelTemperatureBehavior>(dio.Model);
             
+            // Get name
             name = dio.Name;
-            return true;
         }
 
         /// <summary>

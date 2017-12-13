@@ -217,14 +217,13 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var mos1 = component as MOS1;
-            var model = mos1.Model as MOS1Model;
 
             // Get behaviors
             temp = GetBehavior<MOS1TemperatureBehavior>(component);
-            modeltemp = GetBehavior<MOS1ModelTemperatureBehavior>(component);
+            modeltemp = GetBehavior<MOS1ModelTemperatureBehavior>(mos1.Model);
 
             // Nodes
             MOS1dNode = mos1.MOS1dNode;
@@ -275,7 +274,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             // Initialize
             MOS1vdsat = 0.0;
             MOS1von = 0.0;
-            return true;
         }
 
         /// <summary>

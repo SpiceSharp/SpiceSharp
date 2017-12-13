@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var ind = component as Inductor;
 
@@ -92,7 +92,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             // Clear all events
             foreach (var inv in UpdateMutualInductance.GetInvocationList())
                 UpdateMutualInductance -= (UpdateMutualInductanceEventHandler)inv;
-            return true;
         }
 
         /// <summary>

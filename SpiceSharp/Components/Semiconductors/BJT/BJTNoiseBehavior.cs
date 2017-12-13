@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var bjt = component as BJT;
 
@@ -67,7 +67,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 bjt.BJTcolPrimeNode,
                 bjt.BJTbasePrimeNode,
                 bjt.BJTemitPrimeNode);
-            return true;
         }
 
         /// <summary>
@@ -76,8 +75,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt">Circuit</param>
         public override void Noise(Circuit ckt)
         {
-            var bjt = ComponentTyped<BJT>();
-            var model = bjt.Model as BJTModel;
             var state = ckt.State;
             var noise = state.Noise;
 

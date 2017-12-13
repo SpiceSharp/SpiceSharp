@@ -107,7 +107,7 @@ namespace SpiceSharp.Simulations
             state.Gmin = config.Gmin;
 
             // Setup breakpoints
-            method.Initialize(ckt);
+            method.Initialize(ckt, truncatebehaviors);
             state.ReinitStates(method);
 
             // Calculate the operating point

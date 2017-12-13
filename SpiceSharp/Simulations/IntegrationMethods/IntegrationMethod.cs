@@ -157,7 +157,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Initialize/reset the integration method
         /// </summary>
-        public virtual void Initialize(Circuit ckt)
+        /// <param name="ckt">Circuit</param>
+        /// <param name="truncatebehaviors">Truncation behaviors</param>
+        public virtual void Initialize(Circuit ckt, List<CircuitObjectBehaviorTruncate> truncatebehaviors)
         {
             // Initialize variables
             Time = 0.0;
@@ -173,12 +175,12 @@ namespace SpiceSharp.IntegrationMethods
             {
                 case IntegrationConfiguration.TruncationMethods.PerDevice:
                     Truncate = TruncateDevices;
-                    truncatebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTruncate>(ckt);
+                    this.truncatebehaviors = truncatebehaviors;
                     break;
 
                 case IntegrationConfiguration.TruncationMethods.PerNode:
                     Truncate = TruncateNodes;
-                    truncatebehaviors = null;
+                    this.truncatebehaviors = null;
                     break;
 
                 default:

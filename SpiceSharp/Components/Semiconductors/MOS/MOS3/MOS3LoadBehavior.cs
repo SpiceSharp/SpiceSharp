@@ -213,7 +213,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var mos3 = component as MOS3;
 
@@ -271,7 +271,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             MOS3vdsat = 0;
             MOS3von = 0;
             MOS3mode = 1;
-            return true;
         }
 
         /// <summary>

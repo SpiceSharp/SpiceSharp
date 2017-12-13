@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var mut = component as MutualInductance;
 
@@ -55,7 +55,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             load1.UpdateMutualInductance += UpdateMutualInductance;
             load2.UpdateMutualInductance += UpdateMutualInductance;
             MUTfactor = MUTcoupling * Math.Sqrt(load1.INDinduct * load2.INDinduct);
-            return true;
         }
 
         /// <summary>
@@ -87,7 +86,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt">The circuit</param>
         private void UpdateMutualInductance(InductorLoadBehavior sender, Circuit ckt)
         {
-            var mut = ComponentTyped<MutualInductance>();
             var state = ckt.State;
             var rstate = ckt.State;
 

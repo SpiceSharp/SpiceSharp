@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component"></param>
         /// <param name="ckt"></param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             // If the capacitance is not given, try getting it from the temperature behavior
             if (!CAPcapac.Given)
@@ -67,7 +67,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
             CAPnegPosptr = matrix.GetElement(CAPnegNode, CAPposNode);
             CAPposNegptr = matrix.GetElement(CAPposNode, CAPnegNode);
-            return true;
         }
 
         /// <summary>

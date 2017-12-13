@@ -29,8 +29,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component"></param>
         /// <param name="ckt"></param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
+            // Get behaviors
             load = GetBehavior<CapacitorLoadBehavior>(component);
             
             // Get nodes
@@ -44,7 +45,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
             CAPnegPosptr = matrix.GetElement(CAPnegNode, CAPposNode);
             CAPposNegptr = matrix.GetElement(CAPposNode, CAPnegNode);
-            return true;
         }
         
         /// <summary>

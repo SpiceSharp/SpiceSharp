@@ -19,10 +19,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
+            // Get behaviors
             load = GetBehavior<BJTLoadBehavior>(component);
-            return true;
         }
 
         /// <summary>

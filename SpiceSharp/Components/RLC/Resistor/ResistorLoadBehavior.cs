@@ -52,7 +52,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var res = component as Resistor;
 
@@ -74,7 +74,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             RESnegNegPtr = matrix.GetElement(RESnegNode, RESnegNode);
             RESposNegPtr = matrix.GetElement(RESposNode, RESnegNode);
             RESnegPosPtr = matrix.GetElement(RESnegNode, RESposNode);
-            return true;
         }
 
         /// <summary>

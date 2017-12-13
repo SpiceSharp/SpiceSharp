@@ -27,12 +27,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var mut = component as MutualInductance;
-            load = GetBehavior<MutualInductanceLoadBehavior>(component);
-
+            
             // Get behaviors
+            load = GetBehavior<MutualInductanceLoadBehavior>(component);
             var load1 = GetBehavior<InductorLoadBehavior>(mut.Inductor1);
             var load2 = GetBehavior<InductorLoadBehavior>(mut.Inductor2);
 
@@ -40,8 +40,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var matrix = ckt.State.Matrix;
             MUTbr1br2 = matrix.GetElement(load1.INDbrEq, load2.INDbrEq);
             MUTbr2br1 = matrix.GetElement(load2.INDbrEq, load1.INDbrEq);
-
-            return true;
         }
 
         /// <summary>

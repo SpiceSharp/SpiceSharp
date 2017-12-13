@@ -44,7 +44,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var diode = component as Diode;
 
@@ -52,8 +52,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
             load = GetBehavior<DiodeLoadBehavior>(diode);
             modeltemp = GetBehavior<DiodeModelTemperatureBehavior>(diode.Model);
             modelnoise = GetBehavior<DiodeModelNoiseBehavior>(diode.Model);
+
             DIOnoise.Setup(ckt, diode.DIOposNode, load.DIOposPrimeNode, diode.DIOnegNode);
-            return true;
         }
 
         /// <summary>

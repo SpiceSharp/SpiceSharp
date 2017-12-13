@@ -67,10 +67,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
+            // Get name
             name = component.Name;
-            return true;
         }
 
         /// <summary>
@@ -79,7 +79,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt">Circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            var model = ComponentTyped<DiodeModel>();
             if (!DIOnomTemp.Given)
             {
                 DIOnomTemp.Value = ckt.State.NominalTemperature;

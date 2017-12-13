@@ -147,7 +147,6 @@ namespace SpiceSharp.Simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Gmin = config.Gmin;
-            Initialize(ckt);
             Op(ckt, config.DcMaxIterations);
 
             var data = ckt.State.Noise;

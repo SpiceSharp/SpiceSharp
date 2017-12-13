@@ -56,7 +56,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var bjt = component as BJT;
 
@@ -101,7 +101,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             BJTsubstColPrimePtr = matrix.GetElement(BJTsubstNode, BJTcolPrimeNode);
             BJTbaseColPrimePtr = matrix.GetElement(BJTbaseNode, BJTcolPrimeNode);
             BJTcolPrimeBasePtr = matrix.GetElement(BJTcolPrimeNode, BJTbaseNode);
-            return true;
         }
 
         /// <summary>
@@ -142,8 +141,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)
         {
-            BJT bjt = ComponentTyped<BJT>();
-            BJTModel model = bjt.Model as BJTModel;
             var state = ckt.State;
             var cstate = state;
             double gcpr, gepr, gpi, gmu, go, td, gx, xgm;

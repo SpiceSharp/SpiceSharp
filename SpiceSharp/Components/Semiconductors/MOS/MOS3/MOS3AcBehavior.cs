@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var mos3 = component as MOS3;
             load = GetBehavior<MOS3LoadBehavior>(component);
@@ -93,8 +93,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             MOS3DPbPtr = matrix.GetElement(MOS3dNodePrime, MOS3bNode);
             MOS3SPbPtr = matrix.GetElement(MOS3sNodePrime, MOS3bNode);
             MOS3SPdpPtr = matrix.GetElement(MOS3sNodePrime, MOS3dNodePrime);
-
-            return true;
         }
 
         /// <summary>

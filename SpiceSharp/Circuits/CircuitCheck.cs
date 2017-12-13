@@ -40,9 +40,9 @@ namespace SpiceSharp.Circuits
         /// <param name="ckt">The circuit</param>
         public void Check(Circuit ckt)
         {
-            // Make sure the circuit is set up
-            // We need this to access all the circuit component nodes
-            ckt.Setup();
+            // Connect all objects in the circuit
+            foreach (var o in ckt.Objects)
+                o.Setup(ckt);
 
             // Initialize
             HasSource = false;

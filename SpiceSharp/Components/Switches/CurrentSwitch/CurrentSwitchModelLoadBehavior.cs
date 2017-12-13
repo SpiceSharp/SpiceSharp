@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             if (!CSWon.Given)
             {
@@ -48,7 +48,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             }
             else
                 CSWoffConduct = 1.0 / CSWoff.Value;
-            return false;
         }
 
         /// <summary>

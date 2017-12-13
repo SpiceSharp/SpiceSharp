@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -26,13 +28,15 @@ namespace SpiceSharp.IntegrationMethods
             : base(config)
         {
         }
-
+        
         /// <summary>
-        /// Initialize
+        /// Initialize the trapezoidal integration method
         /// </summary>
-        public override void Initialize(Circuit ckt)
+        /// <param name="ckt">Circuit</param>
+        /// <param name="truncatebehaviors">Truncation behaviors</param>
+        public override void Initialize(Circuit ckt, List<CircuitObjectBehaviorTruncate> truncatebehaviors)
         {
-            base.Initialize(ckt);
+            base.Initialize(ckt, truncatebehaviors);
 
             ag = new double[MaxOrder];
             for (int i = 0; i < MaxOrder; i++)

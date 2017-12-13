@@ -59,7 +59,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var vccs = component as VoltageControlledCurrentsource;
 
@@ -77,7 +77,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             VCCSposContNegptr = matrix.GetElement(VCCSposNode, VCCScontNegNode);
             VCCSnegContPosptr = matrix.GetElement(VCCSnegNode, VCCScontPosNode);
             VCCSnegContNegptr = matrix.GetElement(VCCSnegNode, VCCScontNegNode);
-            return true;
         }
 
         /// <summary>

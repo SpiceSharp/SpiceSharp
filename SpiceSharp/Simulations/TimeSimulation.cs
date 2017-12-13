@@ -64,7 +64,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public TimeSimulation(string name) : base(name)
+        public TimeSimulation(CircuitIdentifier name) : base(name)
         {
         }
 

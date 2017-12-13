@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
     public class CapacitorTruncateBehavior : CircuitObjectBehaviorTruncate
     {
         /// <summary>
-        /// Private variables
+        /// Necessary behaviors
         /// </summary>
         private CapacitorLoadBehavior load;
 
@@ -18,10 +18,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
+            // Get behaviors
             load = GetBehavior<CapacitorLoadBehavior>(component);
-            return true;
         }
 
         /// <summary>

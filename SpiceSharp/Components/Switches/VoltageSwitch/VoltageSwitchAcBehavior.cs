@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override bool Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(CircuitObject component, Circuit ckt)
         {
             var vsw = component as VoltageSwitch;
 
@@ -54,8 +54,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
             SWposNegptr = matrix.GetElement(VSWposNode, VSWnegNode);
             SWnegPosptr = matrix.GetElement(VSWnegNode, VSWposNode);
             SWnegNegptr = matrix.GetElement(VSWnegNode, VSWnegNode);
-
-            return true;
         }
 
         /// <summary>
