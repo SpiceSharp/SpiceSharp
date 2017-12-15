@@ -119,13 +119,13 @@
     <Compile Include="Components\Voltagesources\VSRC\LoadBehavior.cs" />
     <Compile Include="Parameter.cs" />
     <Compile Include="Simulations\BaseSimulation.cs" />
-    <Compile Include="Simulations\TemperatureBehavior.cs" />
+    <Compile Include="Simulations\Behaviors\TemperatureBehavior.cs" />
     <Compile Include="Simulations\FrequencySimulation.cs" />
-    <Compile Include="Simulations\IcBehavior.cs" />
+    <Compile Include="Simulations\Behaviors\IcBehavior.cs" />
     <Compile Include="Simulations\Noise\NoiseBehavior.cs" />
-    <Compile Include="Simulations\LoadBehavior.cs" />
+    <Compile Include="Simulations\Behaviors\LoadBehavior.cs" />
     <Compile Include="Simulations\AC\AcBehavior.cs" />
-    <Compile Include="Behaviors\Behavior.cs" />
+    <Compile Include="Simulations\Behaviors\Behavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\LoadBehavior.cs" />
     <Compile Include="Components\Currentsources\ISRC\LoadBehavior.cs" />
     <Compile Include="Components\RLC\RES\AcBehavior.cs" />
