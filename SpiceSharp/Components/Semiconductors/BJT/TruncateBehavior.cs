@@ -1,17 +1,16 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.BJT
 {
     /// <summary>
     /// Truncate behavior for a <see cref="BJT"/>
     /// </summary>
-    public class BJTTruncateBehavior : CircuitObjectBehaviorTruncate
+    public class TruncateBehavior : CircuitObjectBehaviorTruncate
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private BJTLoadBehavior load;
+        private LoadBehavior load;
 
         /// <summary>
         /// Setup the behavior
@@ -22,7 +21,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Setup(CircuitObject component, Circuit ckt)
         {
             // Get behaviors
-            load = GetBehavior<BJTLoadBehavior>(component);
+            load = GetBehavior<LoadBehavior>(component);
         }
 
         /// <summary>
@@ -33,9 +32,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Truncate(Circuit ckt, ref double timestep)
         {
             var method = ckt.Method;
-            method.Terr(load.BJTstate + BJTLoadBehavior.BJTqbe, ckt, ref timestep);
-            method.Terr(load.BJTstate + BJTLoadBehavior.BJTqbc, ckt, ref timestep);
-            method.Terr(load.BJTstate + BJTLoadBehavior.BJTqcs, ckt, ref timestep);
+            method.Terr(load.BJTstate + LoadBehavior.BJTqbe, ckt, ref timestep);
+            method.Terr(load.BJTstate + LoadBehavior.BJTqbc, ckt, ref timestep);
+            method.Terr(load.BJTstate + LoadBehavior.BJTqcs, ckt, ref timestep);
         }
     }
 }

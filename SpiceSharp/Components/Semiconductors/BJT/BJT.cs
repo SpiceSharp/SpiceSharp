@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Behaviors.BJT;
 
 namespace SpiceSharp.Components
 {
@@ -44,11 +44,11 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public BJT(CircuitIdentifier name) : base(name, BJTpinCount)
         {
-            RegisterBehavior(new BJTLoadBehavior());
-            RegisterBehavior(new BJTTemperatureBehavior());
-            RegisterBehavior(new BJTAcBehavior());
-            RegisterBehavior(new BJTTruncateBehavior());
-            RegisterBehavior(new BJTNoiseBehavior());
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new TemperatureBehavior());
+            RegisterBehavior(new AcBehavior());
+            RegisterBehavior(new TruncateBehavior());
+            RegisterBehavior(new NoiseBehavior());
         }
 
         /// <summary>

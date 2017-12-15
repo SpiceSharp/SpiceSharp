@@ -1,21 +1,20 @@
 ﻿using System.Numerics;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
-using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.BJT
 {
     /// <summary>
     /// AC behaviour for <see cref="BJT"/>
     /// </summary>
-    public class BJTAcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private BJTLoadBehavior load;
-        private BJTModelTemperatureBehavior modeltemp;
+        private LoadBehavior load;
+        private ModelTemperatureBehavior modeltemp;
         
         /// <summary>
         /// Nodes
@@ -58,11 +57,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <returns></returns>
         public override void Setup(CircuitObject component, Circuit ckt)
         {
-            var bjt = component as BJT;
+            var bjt = component as Components.BJT;
 
             // Get behaviors
-            load = GetBehavior<BJTLoadBehavior>(component);
-            modeltemp = GetBehavior<BJTModelTemperatureBehavior>(bjt.Model);
+            load = GetBehavior<LoadBehavior>(component);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(bjt.Model);
 
             // Get connected nodes
             BJTcolNode = bjt.BJTcolNode;
@@ -148,10 +147,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             gcpr = modeltemp.BJTcollectorConduct * load.BJTarea;
             gepr = modeltemp.BJTemitterConduct * load.BJTarea;
-            gpi = state.States[0][BJTstate + BJTLoadBehavior.BJTgpi];
-            gmu = state.States[0][BJTstate + BJTLoadBehavior.BJTgmu];
-            gm = state.States[0][BJTstate + BJTLoadBehavior.BJTgm];
-            go = state.States[0][BJTstate + BJTLoadBehavior.BJTgo];
+            gpi = state.States[0][BJTstate + LoadBehavior.BJTgpi];
+            gmu = state.States[0][BJTstate + LoadBehavior.BJTgmu];
+            gm = state.States[0][BJTstate + LoadBehavior.BJTgm];
+            go = state.States[0][BJTstate + LoadBehavior.BJTgo];
             td = modeltemp.BJTexcessPhaseFactor;
             if (td != 0)
             {
@@ -161,12 +160,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 gm = gm * Complex.Exp(-arg);
                 gm = gm - go;
             }
-            gx = state.States[0][BJTstate + BJTLoadBehavior.BJTgx];
-            xcpi = state.States[0][BJTstate + BJTLoadBehavior.BJTcqbe] * cstate.Laplace;
-            xcmu = state.States[0][BJTstate + BJTLoadBehavior.BJTcqbc] * cstate.Laplace;
-            xcbx = state.States[0][BJTstate + BJTLoadBehavior.BJTcqbx] * cstate.Laplace;
-            xccs = state.States[0][BJTstate + BJTLoadBehavior.BJTcqcs] * cstate.Laplace;
-            xcmcb = state.States[0][BJTstate + BJTLoadBehavior.BJTcexbc] * cstate.Laplace;
+            gx = state.States[0][BJTstate + LoadBehavior.BJTgx];
+            xcpi = state.States[0][BJTstate + LoadBehavior.BJTcqbe] * cstate.Laplace;
+            xcmu = state.States[0][BJTstate + LoadBehavior.BJTcqbc] * cstate.Laplace;
+            xcbx = state.States[0][BJTstate + LoadBehavior.BJTcqbx] * cstate.Laplace;
+            xccs = state.States[0][BJTstate + LoadBehavior.BJTcqcs] * cstate.Laplace;
+            xcmcb = state.States[0][BJTstate + LoadBehavior.BJTcexbc] * cstate.Laplace;
 
             BJTcolColPtr.Add(gcpr);
             BJTbaseBasePtr.Add(gx + xcbx);

@@ -1,15 +1,14 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.BJT
 {
     /// <summary>
-    /// Temperature behaviour for a <see cref="BJTModel"/>
+    /// Temperature behaviour for a <see cref="Components.BJTModel"/>
     /// </summary>
-    public class BJTModelTemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Parameters

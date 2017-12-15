@@ -1,19 +1,18 @@
 ﻿using System;
 using SpiceSharp.Parameters;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.BJT
 {
     /// <summary>
-    /// Temperature behaviour for a <see cref="BJT"/>
+    /// Temperature behaviour for a <see cref="Components.BJT"/>
     /// </summary>
-    public class BJTTemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class TemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private BJTModelTemperatureBehavior modeltemp;
+        private ModelTemperatureBehavior modeltemp;
 
         /// <summary>
         /// Parameters
@@ -48,10 +47,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <returns></returns>
         public override void Setup(CircuitObject component, Circuit ckt)
         {
-            var bjt = component as BJT;
+            var bjt = component as Components.BJT;
 
             // Get behaviors
-            modeltemp = GetBehavior<BJTModelTemperatureBehavior>(bjt.Model);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(bjt.Model);
         }
 
         /// <summary>
