@@ -7,7 +7,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// A class that represents noise
     /// </summary>
-    public class CircuitStateNoise
+    public class StateNoise
     {
         /// <summary>
         /// Private variables

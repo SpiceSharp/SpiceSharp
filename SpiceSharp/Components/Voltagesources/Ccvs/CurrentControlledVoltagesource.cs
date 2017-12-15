@@ -20,7 +20,7 @@ namespace SpiceSharp.Components
         [SpiceName("neg_node"), SpiceInfo("Negative node of the source")]
         public int CCVSnegNode { get; internal set; }
         [SpiceName("control"), SpiceInfo("Controlling voltage source")]
-        public CircuitIdentifier CCVScontName { get; set; }
+        public Identifier CCVScontName { get; set; }
 
         /// <summary>
         /// Get the controlling voltage source
@@ -36,7 +36,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled current source</param>
-        public CurrentControlledVoltagesource(CircuitIdentifier name) : base(name, CCVSpinCount)
+        public CurrentControlledVoltagesource(Identifier name) : base(name, CCVSpinCount)
         {
             RegisterBehavior(new LoadBehavior());
             RegisterBehavior(new AcBehavior());
@@ -50,7 +50,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source name</param>
         /// <param name="gain">The transresistance (gain)</param>
-        public CurrentControlledVoltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain) 
+        public CurrentControlledVoltagesource(Identifier name, Identifier pos, Identifier neg, Identifier vsource, double gain) 
             : this(name)
         {
             Connect(pos, neg);

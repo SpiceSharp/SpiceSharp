@@ -63,7 +63,7 @@ namespace SpiceSharpTest.Parser
         /// <param name="values">The parameter values</param>
         /// <param name="nodes">The nodes (optional)</param>
         /// <returns></returns>
-        protected T Test<T>(Netlist n, CircuitIdentifier name, string[] names = null, double[] values = null, CircuitIdentifier[] nodes = null)
+        protected T Test<T>(Netlist n, Identifier name, string[] names = null, double[] values = null, Identifier[] nodes = null)
         {
             var obj = n.Circuit.Objects[name];
             Assert.AreEqual(typeof(T), obj.GetType());
@@ -116,13 +116,13 @@ namespace SpiceSharpTest.Parser
         /// </summary>
         /// <param name="c">The component</param>
         /// <param name="nodes">The expected node names</param>
-        protected void TestNodes(Component c, CircuitIdentifier[] nodes)
+        protected void TestNodes(Component c, Identifier[] nodes)
         {
             // Test all nodes
             for (int i = 0; i < nodes.Length; i++)
             {
-                CircuitIdentifier expected = nodes[i];
-                CircuitIdentifier actual = c.GetNode(i);
+                Identifier expected = nodes[i];
+                Identifier actual = c.GetNode(i);
                 Assert.AreEqual(expected, actual);
             }
         }

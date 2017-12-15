@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected override Entity Generate(string type, Identifier name, List<Token> parameters, Netlist netlist)
         {
             switch (type)
             {
@@ -40,7 +40,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected CircuitObject GenerateISRC(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected Entity GenerateISRC(Identifier name, List<Token> parameters, Netlist netlist)
         {
             Currentsource isrc = new Currentsource(name);
             isrc.ReadNodes(netlist.Path, parameters);
@@ -93,7 +93,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected CircuitObject GenerateCCCS(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected Entity GenerateCCCS(Identifier name, List<Token> parameters, Netlist netlist)
         {
             CurrentControlledCurrentsource cccs = new CurrentControlledCurrentsource(name);
             cccs.ReadNodes(netlist.Path, parameters);
@@ -105,7 +105,7 @@ namespace SpiceSharp.Parser.Readers
 
             if (!ReaderExtension.IsName(parameters[2]))
                 throw new ParseException(parameters[2], "Component name expected");
-            cccs.CCCScontName = new CircuitIdentifier(parameters[2].image);
+            cccs.CCCScontName = new Identifier(parameters[2].image);
             cccs.CCCScoeff.Set(netlist.ParseDouble(parameters[3]));
             return cccs;
         }
@@ -117,7 +117,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected CircuitObject GenerateVCCS(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected Entity GenerateVCCS(Identifier name, List<Token> parameters, Netlist netlist)
         {
             VoltageControlledCurrentsource vccs = new VoltageControlledCurrentsource(name);
             vccs.ReadNodes(netlist.Path, parameters);

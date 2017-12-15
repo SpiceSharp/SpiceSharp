@@ -45,14 +45,14 @@ namespace SpiceSharpTest.Circuits
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
                 new Voltagesource(
-                    new CircuitIdentifier("V_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier(groundNodeName),
+                    new Identifier("V_1"),
+                    new Identifier("IN"),
+                    new Identifier(groundNodeName),
                     1),
                 new Resistor(
-                    new CircuitIdentifier("R_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier(groundNodeName),
+                    new Identifier("R_1"),
+                    new Identifier("IN"),
+                    new Identifier(groundNodeName),
                     1)
             );
             return ckt;

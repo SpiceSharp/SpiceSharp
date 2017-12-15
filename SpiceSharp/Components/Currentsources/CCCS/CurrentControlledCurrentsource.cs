@@ -15,7 +15,7 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [SpiceName("control"), SpiceInfo("Name of the controlling source")]
-        public CircuitIdentifier CCCScontName { get; set; }
+        public Identifier CCCScontName { get; set; }
 
         /// <summary>
         /// Nodes
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current controlled current source</param>
-        public CurrentControlledCurrentsource(CircuitIdentifier name) : base(name, CCCSpinCount)
+        public CurrentControlledCurrentsource(Identifier name) : base(name, CCCSpinCount)
         {
             // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
-        public CurrentControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain)
+        public CurrentControlledCurrentsource(Identifier name, Identifier pos, Identifier neg, Identifier vsource, double gain)
             : this(name)
         {
             // Register behaviors

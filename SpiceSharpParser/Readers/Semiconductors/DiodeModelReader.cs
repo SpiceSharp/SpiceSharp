@@ -18,6 +18,6 @@ namespace SpiceSharp.Parser.Readers
         /// </summary>
         /// <param name="name">Name</param>
         /// <returns></returns>
-        protected override CircuitObject GenerateModel(CircuitIdentifier name, string type) => new DiodeModel(name);
+        protected override Entity GenerateModel(Identifier name, string type) => new DiodeModel(name);
     }
 }

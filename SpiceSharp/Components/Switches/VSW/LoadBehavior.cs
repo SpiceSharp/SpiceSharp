@@ -46,7 +46,7 @@ namespace SpiceSharp.Behaviors.VSW
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var vsw = component as VoltageSwitch;
 
@@ -93,7 +93,7 @@ namespace SpiceSharp.Behaviors.VSW
             var state = ckt.State;
             var rstate = state;
 
-            if (state.Init == CircuitState.InitFlags.InitFix || state.Init == CircuitState.InitFlags.InitJct)
+            if (state.Init == State.InitFlags.InitFix || state.Init == State.InitFlags.InitJct)
             {
                 if (VSWzero_state)
                 {

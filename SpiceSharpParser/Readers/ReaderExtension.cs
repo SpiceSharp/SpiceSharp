@@ -110,14 +110,14 @@ namespace SpiceSharp.Parser.Readers
             }
 
             // Extract the nodes
-            CircuitIdentifier[] nodes = new CircuitIdentifier[count];
+            Identifier[] nodes = new Identifier[count];
             for (int i = index; i < index + count; i++)
             {
                 if (IsNode(parameters[i]))
                 {
                     // Map to a new node if necessary, else make the node local to the current path
-                    CircuitIdentifier node = new CircuitIdentifier(parameters[i].image);
-                    if (path.NodeMap.TryGetValue(node, out CircuitIdentifier mapped))
+                    Identifier node = new Identifier(parameters[i].image);
+                    if (path.NodeMap.TryGetValue(node, out Identifier mapped))
                         node = mapped;
                     else if (path.InstancePath != null)
                         node = path.InstancePath.Grow(node);
@@ -246,13 +246,13 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="netlist">Netlist</param>
         /// <param name="t">Token</param>
         /// <returns></returns>
-        public static T FindModel<T>(this Netlist netlist, Token t) where T : class, CircuitObject
+        public static T FindModel<T>(this Netlist netlist, Token t) where T : class, Entity
         {
             switch (t.kind)
             {
                 case WORD:
                 case IDENTIFIER:
-                    return netlist.Path.FindModel<T>(netlist.Circuit.Objects, new CircuitIdentifier(t.image));
+                    return netlist.Path.FindModel<T>(netlist.Circuit.Objects, new Identifier(t.image));
                 default:
                     throw new ParseException(t, "Invalid model name");
             }

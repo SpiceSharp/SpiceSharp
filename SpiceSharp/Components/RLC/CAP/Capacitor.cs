@@ -33,7 +33,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Capacitor(CircuitIdentifier name) : base(name, CAPpinCount)
+        public Capacitor(Identifier name) : base(name, CAPpinCount)
         {
             RegisterBehavior(new LoadBehavior());
             RegisterBehavior(new AcBehavior());
@@ -49,7 +49,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="cap">The capacitance</param>
-        public Capacitor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double cap) 
+        public Capacitor(Identifier name, Identifier pos, Identifier neg, double cap) 
             : base(name, CAPpinCount)
         {
             // Register behaviors

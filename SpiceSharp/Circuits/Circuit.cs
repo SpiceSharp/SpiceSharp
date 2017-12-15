@@ -35,7 +35,7 @@ namespace SpiceSharp
         /// Get all nodes in the circuit
         /// Using nodes is only valid after calling <see cref="Setup"/>
         /// </summary>
-        public CircuitNodes Nodes { get; } = new CircuitNodes();
+        public Nodes Nodes { get; } = new Nodes();
 
         /// <summary>
         /// Gets the current simulation that is being run by the circuit
@@ -45,17 +45,17 @@ namespace SpiceSharp
         /// <summary>
         /// Gets the current state of the circuit
         /// </summary>
-        public CircuitState State { get; } = new CircuitState();
+        public State State { get; } = new State();
 
         /// <summary>
         /// Gets statistics
         /// </summary>
-        public CircuitStatistics Statistics { get; } = new CircuitStatistics();
+        public Statistics Statistics { get; } = new Statistics();
 
         /// <summary>
         /// Gets a collection of all circuit objects
         /// </summary>
-        public CircuitObjects Objects { get; } = new CircuitObjects();
+        public Entities Objects { get; } = new Entities();
 
         /// <summary>
         /// Constructor
@@ -82,7 +82,7 @@ namespace SpiceSharp
         /// </summary>
         public void Check()
         {
-            CircuitCheck checker = new CircuitCheck();
+            Checker checker = new Checker();
             checker.Check(this);
         }
     }

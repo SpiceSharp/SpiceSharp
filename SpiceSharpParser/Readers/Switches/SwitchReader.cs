@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected override Entity Generate(string type, Identifier name, List<Token> parameters, Netlist netlist)
         {
             switch (type)
             {
@@ -39,7 +39,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected CircuitObject GenerateVSW(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected Entity GenerateVSW(Identifier name, List<Token> parameters, Netlist netlist)
         {
             VoltageSwitch vsw = new VoltageSwitch(name);
             vsw.ReadNodes(netlist.Path, parameters);
@@ -74,7 +74,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected CircuitObject GenerateCSW(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected Entity GenerateCSW(Identifier name, List<Token> parameters, Netlist netlist)
         {
             CurrentSwitch csw = new CurrentSwitch(name);
             csw.ReadNodes(netlist.Path, parameters);
@@ -88,7 +88,7 @@ namespace SpiceSharp.Parser.Readers
             switch (parameters[2].kind)
             {
                 case WORD:
-                    csw.CSWcontName = new CircuitIdentifier(parameters[2].image);
+                    csw.CSWcontName = new Identifier(parameters[2].image);
                     break;
                 default:
                     throw new ParseException(parameters[2], "Voltage source name expected");

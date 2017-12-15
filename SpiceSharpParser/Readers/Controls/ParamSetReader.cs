@@ -34,7 +34,7 @@ namespace SpiceSharp.Parser.Readers
                         switch (at.Name.kind)
                         {
                             case WORD:
-                                netlist.Path.Parameters.Add(new CircuitIdentifier(at.Name.image), netlist.ParseDouble(at.Value));
+                                netlist.Path.Parameters.Add(new Identifier(at.Name.image), netlist.ParseDouble(at.Value));
                                 break;
 
                             default:

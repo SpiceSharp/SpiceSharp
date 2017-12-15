@@ -17,7 +17,7 @@ namespace SpiceSharp.Behaviors.CAP
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             // Get behaviors
             load = GetBehavior<LoadBehavior>(component);
@@ -30,7 +30,7 @@ namespace SpiceSharp.Behaviors.CAP
         public override void Accept(Circuit ckt)
         {
             // Copy DC states when accepting the first timepoint
-            if (ckt.State.Init == CircuitState.InitFlags.InitTransient)
+            if (ckt.State.Init == State.InitFlags.InitTransient)
                 ckt.State.CopyDC(load.CAPstate + LoadBehavior.CAPqcap);
         }
     }

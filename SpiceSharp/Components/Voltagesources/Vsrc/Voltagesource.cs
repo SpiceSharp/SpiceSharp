@@ -27,7 +27,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name</param>
-        public Voltagesource(CircuitIdentifier name) : base(name, VSRCpinCount)
+        public Voltagesource(Identifier name) : base(name, VSRCpinCount)
         {
             RegisterBehavior(new LoadBehavior());
             RegisterBehavior(new AcBehavior());
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc)
+        public Voltagesource(Identifier name, Identifier pos, Identifier neg, double dc)
             : base(name, VSRCpinCount)
         {
             Connect(pos, neg);
@@ -63,7 +63,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="w">The waveform</param>
-        public Voltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, Waveform w) 
+        public Voltagesource(Identifier name, Identifier pos, Identifier neg, Waveform w) 
             : base(name, VSRCpinCount)
         {
             Connect(pos, neg);

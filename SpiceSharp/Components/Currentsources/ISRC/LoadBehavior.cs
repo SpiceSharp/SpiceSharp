@@ -85,7 +85,7 @@ namespace SpiceSharp.Behaviors.ISRC
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var isrc = component as Currentsource;
             if (!ISRCdcValue.Given)
@@ -115,7 +115,7 @@ namespace SpiceSharp.Behaviors.ISRC
             double time = 0.0;
 
             // Time domain analysis
-            if (state.Domain == CircuitState.DomainTypes.Time)
+            if (state.Domain == State.DomainTypes.Time)
             {
                 if (ckt.Method != null)
                     time = ckt.Method.Time;

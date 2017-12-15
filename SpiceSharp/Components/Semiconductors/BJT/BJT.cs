@@ -42,7 +42,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BJT(CircuitIdentifier name) : base(name, BJTpinCount)
+        public BJT(Identifier name) : base(name, BJTpinCount)
         {
             RegisterBehavior(new LoadBehavior());
             RegisterBehavior(new TemperatureBehavior());

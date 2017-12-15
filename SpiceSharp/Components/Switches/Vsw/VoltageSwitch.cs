@@ -36,7 +36,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled switch</param>
-        public VoltageSwitch(CircuitIdentifier name) : base(name, SWpinCount)
+        public VoltageSwitch(Identifier name) : base(name, SWpinCount)
         {
             RegisterBehavior(new LoadBehavior());
             RegisterBehavior(new AcBehavior());
@@ -50,7 +50,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
-        public VoltageSwitch(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier cont_pos, CircuitIdentifier cont_neg) 
+        public VoltageSwitch(Identifier name, Identifier pos, Identifier neg, Identifier cont_pos, Identifier cont_neg) 
             : this(name)
         {
             Connect(pos, neg, cont_pos, cont_neg);

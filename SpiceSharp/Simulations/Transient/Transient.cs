@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the simulation</param>
         /// <param name="config">The configuration</param>
-        public Transient(CircuitIdentifier name) : base(name)
+        public Transient(Identifier name) : base(name)
         {
         }
 
@@ -103,7 +103,7 @@ namespace SpiceSharp.Simulations
             state.UseIC = config.UseIC;
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Domain = CircuitState.DomainTypes.Time;
+            state.Domain = State.DomainTypes.Time;
             state.Gmin = config.Gmin;
 
             // Setup breakpoints
@@ -189,7 +189,7 @@ namespace SpiceSharp.Simulations
 
                         // Try to solve the new point
                         if (method.SavedTime == 0.0)
-                            state.Init = CircuitState.InitFlags.InitTransient;
+                            state.Init = State.InitFlags.InitTransient;
                         bool converged = TranIterate(ckt, config.TranMaxIterations);
                         ckt.Statistics.TimePoints++;
                         if (method.SavedTime == 0.0)

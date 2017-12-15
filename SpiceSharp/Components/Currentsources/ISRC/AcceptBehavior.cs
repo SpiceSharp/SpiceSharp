@@ -18,7 +18,7 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             load = GetBehavior<LoadBehavior>(component);
         }

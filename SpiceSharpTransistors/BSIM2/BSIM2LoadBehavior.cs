@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component"></param>
         /// <param name="ckt"></param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             base.Setup(component, ckt);
             var bsim2 = ComponentTyped<BSIM2>();
@@ -72,26 +72,26 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 vgs = state.States[0][bsim2.B2states + BSIM2.B2vgs];
                 vds = state.States[0][bsim2.B2states + BSIM2.B2vds];
             }
-            else if (state.Init == CircuitState.InitFlags.InitTransient)
+            else if (state.Init == State.InitFlags.InitTransient)
             {
                 vbs = state.States[1][bsim2.B2states + BSIM2.B2vbs];
                 vgs = state.States[1][bsim2.B2states + BSIM2.B2vgs];
                 vds = state.States[1][bsim2.B2states + BSIM2.B2vds];
             }
-            else if (state.Init == CircuitState.InitFlags.InitJct && !bsim2.B2off)
+            else if (state.Init == State.InitFlags.InitJct && !bsim2.B2off)
             {
                 vds = model.B2type * bsim2.B2icVDS;
                 vgs = model.B2type * bsim2.B2icVGS;
                 vbs = model.B2type * bsim2.B2icVBS;
                 if ((vds == 0) && (vgs == 0) && (vbs == 0) &&
-                            (method != null || state.UseDC || state.Domain == CircuitState.DomainTypes.None || !state.UseIC))
+                            (method != null || state.UseDC || state.Domain == State.DomainTypes.None || !state.UseIC))
                 {
                     vbs = -1;
                     vgs = vt0;
                     vds = 0;
                 }
             }
-            else if ((state.Init == CircuitState.InitFlags.InitJct || state.Init == CircuitState.InitFlags.InitFix) && bsim2.B2off)
+            else if ((state.Init == State.InitFlags.InitJct || state.Init == State.InitFlags.InitFix) && bsim2.B2off)
             {
                 vbs = vgs = vds = 0;
             }
@@ -217,7 +217,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             * COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
             */
             cd = bsim2.B2mode * cdrain - cbd;
-            if (method != null || state.UseSmallSignal || (state.Domain == CircuitState.DomainTypes.Time && state.UseDC && state.UseIC))
+            if (method != null || state.UseSmallSignal || (state.Domain == State.DomainTypes.Time && state.UseDC && state.UseIC))
             {
                 /* 
                 * charge storage elements
@@ -277,7 +277,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
             * check convergence
             */
-            if (!bsim2.B2off || state.Init != CircuitState.InitFlags.InitFix)
+            if (!bsim2.B2off || state.Init != State.InitFlags.InitFix)
             {
                 if (Check == 1)
                     state.IsCon = false;
@@ -312,7 +312,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             /* bulk and channel charge plus overlaps */
 
-            if (method == null && ((!(state.Domain == CircuitState.DomainTypes.Time && state.UseDC)) || !state.UseIC) && !state.UseSmallSignal)
+            if (method == null && ((!(state.Domain == State.DomainTypes.Time && state.UseDC)) || !state.UseIC) && !state.UseSmallSignal)
                 goto line850;
 
             if (bsim2.B2mode > 0)
@@ -355,7 +355,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             state.States[0][bsim2.B2states + BSIM2.B2qb] = qbulk + state.States[0][bsim2.B2states + BSIM2.B2qbd] + state.States[0][bsim2.B2states + BSIM2.B2qbs];
 
             /* store small signal parameters */
-            if (method == null && (state.Domain == CircuitState.DomainTypes.Time && state.UseDC) && state.UseIC)
+            if (method == null && (state.Domain == State.DomainTypes.Time && state.UseDC) && state.UseIC)
                 goto line850;
 
             if (state.UseSmallSignal)
@@ -375,7 +375,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 goto line1000;
             }
 
-            if (state.Init == CircuitState.InitFlags.InitTransient)
+            if (state.Init == State.InitFlags.InitTransient)
             {
                 state.States[1][bsim2.B2states + BSIM2.B2qb] = state.States[0][bsim2.B2states + BSIM2.B2qb];
                 state.States[1][bsim2.B2states + BSIM2.B2qg] = state.States[0][bsim2.B2states + BSIM2.B2qg];
@@ -409,7 +409,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             ceqqb = cqbulk - gcbgb * vgb + gcbdb * vbd + gcbsb * vbs;
             ceqqd = cqdrn - gcdgb * vgb + gcddb * vbd + gcdsb * vbs;
 
-            if (state.Init == CircuitState.InitFlags.InitTransient)
+            if (state.Init == State.InitFlags.InitTransient)
             {
                 state.States[1][bsim2.B2states + BSIM2.B2iqb] = state.States[0][bsim2.B2states + BSIM2.B2iqb];
                 state.States[1][bsim2.B2states + BSIM2.B2iqg] = state.States[0][bsim2.B2states + BSIM2.B2iqg];

@@ -27,22 +27,22 @@ namespace SpiceSharpTest.Components.RLC.Capacitor
             Circuit ckt = new Circuit();
 
             var capacitor = new SpiceSharp.Components.Capacitor(
-                new CircuitIdentifier("C_1"),
-                new CircuitIdentifier("OUT"),
-                new CircuitIdentifier("gnd"),
+                new Identifier("C_1"),
+                new Identifier("OUT"),
+                new Identifier("gnd"),
                 capacitance
             );
             
             ckt.Objects.Add(
                 new Voltagesource(
-                    new CircuitIdentifier("V_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier("gnd"),
+                    new Identifier("V_1"),
+                    new Identifier("IN"),
+                    new Identifier("gnd"),
                     dcVoltage),
                 new SpiceSharp.Components.Resistor(
-                    new CircuitIdentifier("R_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier("OUT"),
+                    new Identifier("R_1"),
+                    new Identifier("IN"),
+                    new Identifier("OUT"),
                     resistorResistance),
                 capacitor
             );
@@ -56,7 +56,7 @@ namespace SpiceSharpTest.Components.RLC.Capacitor
             ckt.Nodes.IC.Add("OUT", 0.0);
             trans.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                var outVoltage = data.GetVoltage(new CircuitIdentifier("OUT"), new CircuitIdentifier("gnd"));
+                var outVoltage = data.GetVoltage(new Identifier("OUT"), new Identifier("gnd"));
                 if (outVoltage > maxVoltage)
                 {
                     maxVoltage = outVoltage;

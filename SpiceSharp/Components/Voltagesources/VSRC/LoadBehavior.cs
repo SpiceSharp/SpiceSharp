@@ -60,14 +60,14 @@ namespace SpiceSharp.Behaviors.VSRC
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var vsrc = component as Voltagesource;
 
             // Get nodes
             VSRCposNode = vsrc.VSRCposNode;
             VSRCnegNode = vsrc.VSRCnegNode;
-            VSRCbranch = CreateNode(ckt, component.Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
+            VSRCbranch = CreateNode(ckt, component.Name.Grow("#branch"), Node.NodeType.Current).Index;
 
             // Get matrix elements
             var matrix = ckt.State.Matrix;
@@ -117,7 +117,7 @@ namespace SpiceSharp.Behaviors.VSRC
             VSRCnegIbrptr.Value.Real -= 1.0;
             VSRCibrNegptr.Value.Real -= 1.0;
 
-            if (state.Domain == CircuitState.DomainTypes.Time)
+            if (state.Domain == State.DomainTypes.Time)
             {
                 if (ckt.Method != null)
                     time = ckt.Method.Time;

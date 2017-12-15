@@ -111,7 +111,7 @@ namespace SpiceSharp.Behaviors.MOS3
         /// <summary>
         /// Name
         /// </summary>
-        private CircuitIdentifier name;
+        private Identifier name;
 
         /// <summary>
         /// Setup the behavior
@@ -119,7 +119,7 @@ namespace SpiceSharp.Behaviors.MOS3
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var mos3 = component as Components.MOS3;
             modeltemp = GetBehavior<ModelTemperatureBehavior>(mos3.Model);

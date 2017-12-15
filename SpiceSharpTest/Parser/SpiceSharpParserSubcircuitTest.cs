@@ -29,18 +29,18 @@ namespace SpiceSharpTest.Parser
                 ".ENDS",
                 "X1 IN OUT custom"
                 );
-            Test<Resistor>(netlist, new string[] { "X1", "Rseries" }, new string[] { "resistance" }, new double[] { 10e3 }, new CircuitIdentifier[] {
-                new CircuitIdentifier("IN"),
-                new CircuitIdentifier("X1", "I")
+            Test<Resistor>(netlist, new string[] { "X1", "Rseries" }, new string[] { "resistance" }, new double[] { 10e3 }, new Identifier[] {
+                new Identifier("IN"),
+                new Identifier("X1", "I")
             });
-            Test<Resistor>(netlist, new string[] { "X1", "Rseries2" }, new string[] { "resistance" }, new double[] { 20e3 }, new CircuitIdentifier[]
+            Test<Resistor>(netlist, new string[] { "X1", "Rseries2" }, new string[] { "resistance" }, new double[] { 20e3 }, new Identifier[]
             {
-                new CircuitIdentifier("X1", "I"),
-                new CircuitIdentifier("OUT")
+                new Identifier("X1", "I"),
+                new Identifier("OUT")
             });
-            Test<Capacitor>(netlist, new string[] { "X1", "Cload" }, new string[] { "capacitance" }, new double[] { 1e-6 }, new CircuitIdentifier[] {
-                new CircuitIdentifier("OUT"),
-                new CircuitIdentifier("0")
+            Test<Capacitor>(netlist, new string[] { "X1", "Cload" }, new string[] { "capacitance" }, new double[] { 1e-6 }, new Identifier[] {
+                new Identifier("OUT"),
+                new Identifier("0")
             });
         }
 
@@ -64,29 +64,29 @@ namespace SpiceSharpTest.Parser
                 );
 
             // Test parameters
-            Test<Resistor>(netlist, new string[] { "x1", "xfirst", "r1" }, new string[] { "resistance" }, new double[] { 2e3 }, new CircuitIdentifier[] {
-                new CircuitIdentifier("in"),
-                new CircuitIdentifier("x1", "B1")
+            Test<Resistor>(netlist, new string[] { "x1", "xfirst", "r1" }, new string[] { "resistance" }, new double[] { 2e3 }, new Identifier[] {
+                new Identifier("in"),
+                new Identifier("x1", "B1")
             });
-            Test<Resistor>(netlist, new string[] { "x1", "xsecond", "r1" }, new string[] { "resistance" }, new double[] { 5e3 }, new CircuitIdentifier[] {
-                new CircuitIdentifier("x1", "B1"),
-                new CircuitIdentifier("x1", "B2")
+            Test<Resistor>(netlist, new string[] { "x1", "xsecond", "r1" }, new string[] { "resistance" }, new double[] { 5e3 }, new Identifier[] {
+                new Identifier("x1", "B1"),
+                new Identifier("x1", "B2")
             });
-            Test<Resistor>(netlist, new string[] { "x1", "xthird", "r1" }, new string[] { "resistance" }, new double[] { 10e3 }, new CircuitIdentifier[] {
-                new CircuitIdentifier("x1", "B2"),
-                new CircuitIdentifier("out")
+            Test<Resistor>(netlist, new string[] { "x1", "xthird", "r1" }, new string[] { "resistance" }, new double[] { 10e3 }, new Identifier[] {
+                new Identifier("x1", "B2"),
+                new Identifier("out")
             });
-            Test<Capacitor>(netlist, new string[] { "x1", "xfirst", "c1" }, new string[] { "capacitance" }, new double[] { 1e-6 }, new CircuitIdentifier[] {
-                new CircuitIdentifier("x1", "B1"),
-                new CircuitIdentifier("0")
+            Test<Capacitor>(netlist, new string[] { "x1", "xfirst", "c1" }, new string[] { "capacitance" }, new double[] { 1e-6 }, new Identifier[] {
+                new Identifier("x1", "B1"),
+                new Identifier("0")
             });
-            Test<Capacitor>(netlist, new string[] { "x1", "xsecond", "c1" }, new string[] { "capacitance" }, new double[] { 1e-6 }, new CircuitIdentifier[] {
-                new CircuitIdentifier("x1", "B2"),
-                new CircuitIdentifier("0")
+            Test<Capacitor>(netlist, new string[] { "x1", "xsecond", "c1" }, new string[] { "capacitance" }, new double[] { 1e-6 }, new Identifier[] {
+                new Identifier("x1", "B2"),
+                new Identifier("0")
             });
-            Test<Capacitor>(netlist, new string[] { "x1", "xthird", "c1" }, new string[] { "capacitance" }, new double[] { 1e-6 }, new CircuitIdentifier[] {
-                new CircuitIdentifier("out"),
-                new CircuitIdentifier("0")
+            Test<Capacitor>(netlist, new string[] { "x1", "xthird", "c1" }, new string[] { "capacitance" }, new double[] { 1e-6 }, new Identifier[] {
+                new Identifier("out"),
+                new Identifier("0")
             });
         }
 

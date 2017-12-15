@@ -45,7 +45,7 @@ namespace SpiceSharp.Behaviors.CCVS
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var ccvs = component as CurrentControlledVoltagesource;
 
@@ -55,7 +55,7 @@ namespace SpiceSharp.Behaviors.CCVS
             // Get nodes
             CCVSposNode = ccvs.CCVSposNode;
             CCVSnegNode = ccvs.CCVSnegNode;
-            CCVSbranch = CreateNode(ckt, component.Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
+            CCVSbranch = CreateNode(ckt, component.Name.Grow("#branch"), Node.NodeType.Current).Index;
             CCVScontBranch = vsrcload.VSRCbranch;
 
             // Get matrix elements

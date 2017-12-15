@@ -326,7 +326,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="index">The index of the variable to be integrated</param>
         /// <param name="cap">The capacitance</param>
         /// <returns></returns>
-        public abstract Result Integrate(CircuitState state, int index, double cap);
+        public abstract Result Integrate(State state, int index, double cap);
 
         /// <summary>
         /// Integrate a state variable
@@ -337,7 +337,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="ceq">The Ceq parameter</param>
         /// <param name="index">The index of the variable to be integrated</param>
         /// <param name="cap">The capacitance</param>
-        public void Integrate(CircuitState state, out double geq, out double ceq, int index, double cap)
+        public void Integrate(State state, out double geq, out double ceq, int index, double cap)
         {
             var result = Integrate(state, index, cap);
             geq = result.Geq;

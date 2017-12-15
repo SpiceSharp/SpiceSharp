@@ -9,13 +9,13 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Contains and manages a collection circuit objects.
     /// </summary>
-    public class CircuitObjects : IEnumerable<CircuitObject>
+    public class Entities : IEnumerable<Entity>
     {
         /// <summary>
         /// Private variables
         /// </summary>
-        private Dictionary<CircuitIdentifier, CircuitObject> objects = new Dictionary<CircuitIdentifier, CircuitObject>();
-        private List<CircuitObject> ordered = new List<CircuitObject>();
+        private Dictionary<Identifier, Entity> objects = new Dictionary<Identifier, Entity>();
+        private List<Entity> ordered = new List<Entity>();
 
         /// <summary>
         /// Gets whether or not the list is already ordered
@@ -25,14 +25,14 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Constructor
         /// </summary>
-        public CircuitObjects() { }
+        public Entities() { }
 
         /// <summary>
         /// Search for an object by path
         /// </summary>
         /// <param id="path">The path of the object</param>
         /// <returns></returns>
-        public CircuitObject this[CircuitIdentifier id] => objects[id];
+        public Entity this[Identifier id] => objects[id];
         
         /// <summary>
         /// The amount of circuit objects
@@ -53,7 +53,7 @@ namespace SpiceSharp.Circuits
         /// Add one or more circuit objects
         /// </summary>
         /// <param id="cs">The objects that need to be added</param>
-        public void Add(params CircuitObject[] cs)
+        public void Add(params Entity[] cs)
         {
             foreach (var c in cs)
             {
@@ -70,7 +70,7 @@ namespace SpiceSharp.Circuits
         /// Remove specific circuit objects from the collection
         /// </summary>
         /// <param id="names">Names of the objects that need to be deleted</param>
-        public void Remove(params CircuitIdentifier[] ids)
+        public void Remove(params Identifier[] ids)
         {
             foreach (var id in ids)
             {
@@ -88,7 +88,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param id="id">A list of names. If there are multiple names, the first names will refer to a subcircuit</param>
         /// <returns></returns>
-        public bool Contains(CircuitIdentifier id) => objects.ContainsKey(id);
+        public bool Contains(Identifier id) => objects.ContainsKey(id);
 
         /// <summary>
         /// Get a circuit object
@@ -96,16 +96,16 @@ namespace SpiceSharp.Circuits
         /// <param id="id">Identifier</param>
         /// <param id="obj"></param>
         /// <returns></returns>
-        public bool TryGetObject(CircuitIdentifier id, out CircuitObject obj) => objects.TryGetValue(id, out obj);
+        public bool TryGetObject(Identifier id, out Entity obj) => objects.TryGetValue(id, out obj);
 
         /// <summary>
         /// Get all objects of a specific type
         /// </summary>
         /// <param id="type">The type of objects you wish to find</param>
         /// <returns></returns>
-        public CircuitObject[] ByType(Type type)
+        public Entity[] ByType(Type type)
         {
-            List<CircuitObject> result = new List<CircuitObject>();
+            List<Entity> result = new List<Entity>();
             foreach (var c in objects.Values)
             {
                 if (c.GetType() == type)
@@ -125,7 +125,7 @@ namespace SpiceSharp.Circuits
 
             // Initialize
             ordered.Clear();
-            HashSet<CircuitObject> added = new HashSet<CircuitObject>();
+            HashSet<Entity> added = new HashSet<Entity>();
 
             // Build our list
             foreach (var c in objects.Values)
@@ -147,7 +147,7 @@ namespace SpiceSharp.Circuits
             }
 
             // Sort the list based on priority
-            ordered.Sort((CircuitObject a, CircuitObject b) => {
+            ordered.Sort((Entity a, Entity b) => {
                 return b.Priority.CompareTo(a.Priority);
             });
             isordered = true;
@@ -157,7 +157,7 @@ namespace SpiceSharp.Circuits
         /// Get enumerator
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<CircuitObject> GetEnumerator() => ordered.GetEnumerator();
+        public IEnumerator<Entity> GetEnumerator() => ordered.GetEnumerator();
 
         /// <summary>
         /// Get enumerator

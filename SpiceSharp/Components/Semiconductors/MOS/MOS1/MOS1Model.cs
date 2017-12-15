@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS1Model(CircuitIdentifier name) : base(name)
+        public MOS1Model(Identifier name) : base(name)
         {
             RegisterBehavior(new ModelTemperatureBehavior());
             RegisterBehavior(new ModelNoiseBehavior());

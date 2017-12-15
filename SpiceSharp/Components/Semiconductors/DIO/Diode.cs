@@ -29,7 +29,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public Diode(CircuitIdentifier name) : base(name, DIOpinCount)
+        public Diode(Identifier name) : base(name, DIOpinCount)
         {
             RegisterBehavior(new LoadBehavior());
             RegisterBehavior(new TemperatureBehavior());

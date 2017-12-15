@@ -185,7 +185,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM3v30(CircuitIdentifier name) : base(name, BSIM3pinCount)
+        public BSIM3v30(Identifier name) : base(name, BSIM3pinCount)
         {
         }
 

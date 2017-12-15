@@ -67,7 +67,7 @@ namespace SpiceSharp.Simulations
             /// The name of the source being varied
             /// </summary>
             [SpiceName("source"), SpiceInfo("The name of the swept source")]
-            public CircuitIdentifier ComponentName { get; set; }
+            public Identifier ComponentName { get; set; }
 
             /// <summary>
             /// Get the current value
@@ -96,7 +96,7 @@ namespace SpiceSharp.Simulations
             /// <param name="start">The starting value</param>
             /// <param name="stop">The stopping value</param>
             /// <param name="step">The step value</param>
-            public Sweep(CircuitIdentifier name, double start, double stop, double step) : base()
+            public Sweep(Identifier name, double start, double stop, double step) : base()
             {
                 ComponentName = name;
                 Start = start;
@@ -114,7 +114,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">The simulation name</param>
-        public DC(CircuitIdentifier name) : base(name)
+        public DC(Identifier name) : base(name)
         {
         }
 
@@ -126,7 +126,7 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The starting value</param>
         /// <param name="stop">The stopping value</param>
         /// <param name="step">The step value</param>
-        public DC(CircuitIdentifier name, CircuitIdentifier source, double start, double stop, double step) : base(name)
+        public DC(Identifier name, Identifier source, double start, double stop, double step) : base(name)
         {
             Sweep s = new Sweep(source, start, stop, step);
             Sweeps.Add(s);
@@ -143,12 +143,12 @@ namespace SpiceSharp.Simulations
             var state = ckt.State;
             var rstate = state;
             var config = CurrentConfig;
-            state.Init = CircuitState.InitFlags.InitJct;
+            state.Init = State.InitFlags.InitJct;
             state.Initialize(ckt);
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Domain = CircuitState.DomainTypes.None;
+            state.Domain = State.DomainTypes.None;
             state.Gmin = config.Gmin;
 
             // Initialize
@@ -188,7 +188,7 @@ namespace SpiceSharp.Simulations
                     level++;
                     Sweeps[level].SetCurrentStep(0);
                     swept[level].Set(Sweeps[level].CurrentValue);
-                    state.Init = CircuitState.InitFlags.InitJct;
+                    state.Init = State.InitFlags.InitJct;
                 }
 
                 // Calculate the solution

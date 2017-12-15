@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the model</param>
-        public VoltageSwitchModel(CircuitIdentifier name) : base(name)
+        public VoltageSwitchModel(Identifier name) : base(name)
         {
             RegisterBehavior(new ModelLoadBehavior());
         }

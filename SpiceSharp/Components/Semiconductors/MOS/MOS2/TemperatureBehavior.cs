@@ -100,7 +100,7 @@ namespace SpiceSharp.Behaviors.MOS2
         public double MOS2cgd { get; internal set; }
         public double MOS2cgb { get; internal set; }
 
-        private CircuitIdentifier name;
+        private Identifier name;
 
         /// <summary>
         /// Setup the behavior
@@ -108,7 +108,7 @@ namespace SpiceSharp.Behaviors.MOS2
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             modeltemp = GetBehavior<ModelTemperatureBehavior>(component);
             name = component.Name;

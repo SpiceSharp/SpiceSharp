@@ -19,19 +19,19 @@ namespace SpiceSharp.Simulations
         /// Gets or sets the noise output node
         /// </summary>
         [SpiceName("output"), SpiceInfo("Noise output summation node")]
-        public CircuitIdentifier Output { get; set; } = null;
+        public Identifier Output { get; set; } = null;
 
         /// <summary>
         /// Gets or sets the noise output reference node
         /// </summary>
         [SpiceName("outputref"), SpiceInfo("Noise output reference node")]
-        public CircuitIdentifier OutputRef { get; set; } = null;
+        public Identifier OutputRef { get; set; } = null;
 
         /// <summary>
         /// Gets or sets the name of the AC source used as input reference
         /// </summary>
         [SpiceName("input"), SpiceInfo("Name of the AC source used as input reference")]
-        public CircuitIdentifier Input { get; set; } = null;
+        public Identifier Input { get; set; } = null;
         
         /// <summary>
         /// Private variables
@@ -42,7 +42,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public Noise(CircuitIdentifier name) : base(name)
+        public Noise(Identifier name) : base(name)
         {
         }
 
@@ -87,7 +87,7 @@ namespace SpiceSharp.Simulations
             // Check the voltage or current source
             if (Input == null)
                 throw new CircuitException($"{Name}: No input source specified");
-            CircuitObject source = ckt.Objects[Input];
+            Entity source = ckt.Objects[Input];
             if (source is Voltagesource vsource)
             {
                 var ac = vsource.GetBehavior(typeof(AcBehavior)) as Behaviors.VSRC.AcBehavior;
@@ -140,7 +140,7 @@ namespace SpiceSharp.Simulations
             state.Initialize(ckt);
             ckt.State.Noise.Initialize(StartFreq);
             state.Laplace = 0;
-            state.Domain = CircuitState.DomainTypes.Frequency;
+            state.Domain = State.DomainTypes.Frequency;
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;
@@ -148,7 +148,7 @@ namespace SpiceSharp.Simulations
             Op(ckt, config.DcMaxIterations);
 
             var data = ckt.State.Noise;
-            state.Sparse |= CircuitState.SparseFlags.NIACSHOULDREORDER;
+            state.Sparse |= State.SparseFlags.NIACSHOULDREORDER;
 
             // Loop through noise figures
             for (int i = 0; i < n; i++)

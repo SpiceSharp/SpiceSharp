@@ -19,7 +19,7 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="component">Componnet</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             // Get behaviors
             load = GetBehavior<LoadBehavior>(component);
@@ -31,7 +31,7 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="ckt">Circuit</param>
         public override void Accept(Circuit ckt)
         {
-            if (ckt.State.Init == CircuitState.InitFlags.InitTransient)
+            if (ckt.State.Init == State.InitFlags.InitTransient)
                 ckt.State.CopyDC(load.INDstate + LoadBehavior.INDflux);
         }
     }

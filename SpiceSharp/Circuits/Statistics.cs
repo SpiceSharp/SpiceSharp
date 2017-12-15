@@ -6,7 +6,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Keeps track of simulation statistics.
     /// </summary>
-    public class CircuitStatistics
+    public class Statistics
     {
         /// <summary>
         /// Get the total number of iterations

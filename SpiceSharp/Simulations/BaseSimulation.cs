@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public BaseSimulation(CircuitIdentifier name)
+        public BaseSimulation(Identifier name)
             : base(name)
         {
         }
@@ -103,7 +103,7 @@ namespace SpiceSharp.Simulations
         {
             var state = ckt.State;
             var config = CurrentConfig;
-            state.Init = CircuitState.InitFlags.InitJct;
+            state.Init = State.InitFlags.InitJct;
             state.Matrix.Complex = false;
 
             // First, let's try finding an operating point by using normal iterations
@@ -116,7 +116,7 @@ namespace SpiceSharp.Simulations
             // No convergence, try Gmin stepping
             if (config.NumGminSteps > 1)
             {
-                state.Init = CircuitState.InitFlags.InitJct;
+                state.Init = State.InitFlags.InitJct;
                 CircuitWarning.Warning(ckt, "Starting Gmin stepping");
                 state.DiagGmin = config.Gmin;
                 for (int i = 0; i < config.NumGminSteps; i++)
@@ -131,7 +131,7 @@ namespace SpiceSharp.Simulations
                         break;
                     }
                     state.DiagGmin /= 10.0;
-                    state.Init = CircuitState.InitFlags.InitFloat;
+                    state.Init = State.InitFlags.InitFloat;
                 }
                 state.DiagGmin = 0.0;
                 if (Iterate(ckt, maxiter))
@@ -141,7 +141,7 @@ namespace SpiceSharp.Simulations
             // Nope, still not converging, let's try source stepping
             if (config.NumSrcSteps > 1)
             {
-                state.Init = CircuitState.InitFlags.InitJct;
+                state.Init = State.InitFlags.InitJct;
                 CircuitWarning.Warning(ckt, "Starting source stepping");
                 for (int i = 0; i <= config.NumSrcSteps; i++)
                 {
@@ -185,7 +185,7 @@ namespace SpiceSharp.Simulations
                 state.Initialize(ckt);
 
             // Ignore operating condition point, just use the solution as-is
-            if (ckt.State.UseIC && ckt.State.Domain == CircuitState.DomainTypes.Time)
+            if (ckt.State.UseIC && ckt.State.Domain == State.DomainTypes.Time)
             {
                 state.StoreSolution();
 
@@ -214,23 +214,23 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Preorder matrix
-                if (!state.Sparse.HasFlag(CircuitState.SparseFlags.NIDIDPREORDER))
+                if (!state.Sparse.HasFlag(State.SparseFlags.NIDIDPREORDER))
                 {
                     matrix.PreOrder();
-                    state.Sparse |= CircuitState.SparseFlags.NIDIDPREORDER;
+                    state.Sparse |= State.SparseFlags.NIDIDPREORDER;
                 }
-                if (state.Init == CircuitState.InitFlags.InitJct || state.Init == CircuitState.InitFlags.InitTransient)
+                if (state.Init == State.InitFlags.InitJct || state.Init == State.InitFlags.InitTransient)
                 {
-                    state.Sparse |= CircuitState.SparseFlags.NISHOULDREORDER;
+                    state.Sparse |= State.SparseFlags.NISHOULDREORDER;
                 }
 
                 // Reorder
-                if (state.Sparse.HasFlag(CircuitState.SparseFlags.NISHOULDREORDER))
+                if (state.Sparse.HasFlag(State.SparseFlags.NISHOULDREORDER))
                 {
                     ckt.Statistics.ReorderTime.Start();
                     matrix.Reorder(state.PivotRelTol, state.PivotAbsTol, state.DiagGmin);
                     ckt.Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~CircuitState.SparseFlags.NISHOULDREORDER;
+                    state.Sparse &= ~State.SparseFlags.NISHOULDREORDER;
                 }
                 else
                 {
@@ -267,7 +267,7 @@ namespace SpiceSharp.Simulations
 
                 switch (state.Init)
                 {
-                    case CircuitState.InitFlags.InitFloat:
+                    case State.InitFlags.InitFloat:
                         if (state.UseDC && state.HadNodeset)
                         {
                             if (pass)
@@ -281,25 +281,25 @@ namespace SpiceSharp.Simulations
                         }
                         break;
 
-                    case CircuitState.InitFlags.InitJct:
-                        state.Init = CircuitState.InitFlags.InitFix;
-                        state.Sparse |= CircuitState.SparseFlags.NISHOULDREORDER;
+                    case State.InitFlags.InitJct:
+                        state.Init = State.InitFlags.InitFix;
+                        state.Sparse |= State.SparseFlags.NISHOULDREORDER;
                         break;
 
-                    case CircuitState.InitFlags.InitFix:
+                    case State.InitFlags.InitFix:
                         if (state.IsCon)
-                            state.Init = CircuitState.InitFlags.InitFloat;
+                            state.Init = State.InitFlags.InitFloat;
                         pass = true;
                         break;
 
-                    case CircuitState.InitFlags.InitTransient:
+                    case State.InitFlags.InitTransient:
                         if (iterno <= 1)
-                            state.Sparse = CircuitState.SparseFlags.NISHOULDREORDER;
-                        state.Init = CircuitState.InitFlags.InitFloat;
+                            state.Sparse = State.SparseFlags.NISHOULDREORDER;
+                        state.Init = State.InitFlags.InitFloat;
                         break;
 
-                    case CircuitState.InitFlags.Init:
-                        state.Init = CircuitState.InitFlags.InitFloat;
+                    case State.InitFlags.Init:
+                        state.Init = State.InitFlags.InitFloat;
                         break;
 
                     default:
@@ -334,7 +334,7 @@ namespace SpiceSharp.Simulations
             if (state.UseDC)
             {
                 // Consider doing nodeset & ic assignments
-                if ((state.Init & (CircuitState.InitFlags.InitJct | CircuitState.InitFlags.InitFix)) != 0)
+                if ((state.Init & (State.InitFlags.InitJct | State.InitFlags.InitFix)) != 0)
                 {
                     // Do nodesets
                     for (int i = 0; i < nodes.Count; i++)
@@ -357,7 +357,7 @@ namespace SpiceSharp.Simulations
                     }
                 }
 
-                if (state.Domain == CircuitState.DomainTypes.Time && !state.UseIC)
+                if (state.Domain == State.DomainTypes.Time && !state.UseIC)
                 {
                     for (int i = 0; i < nodes.Count; i++)
                     {
@@ -433,7 +433,7 @@ namespace SpiceSharp.Simulations
         /// <param name="nodes">The list of nodes</param>
         /// <param name="rownum">The row number</param>
         /// <returns></returns>
-        private bool ZeroNoncurRow(Matrix matrix, CircuitNodes nodes, int rownum)
+        private bool ZeroNoncurRow(Matrix matrix, Nodes nodes, int rownum)
         {
             bool currents = false;
             for (int n = 0; n < nodes.Count; n++)
@@ -442,7 +442,7 @@ namespace SpiceSharp.Simulations
                 MatrixElement x = matrix.FindElement(rownum, node.Index);
                 if (x != null && x.Value.Real != 0.0)
                 {
-                    if (node.Type == CircuitNode.NodeType.Current)
+                    if (node.Type == Node.NodeType.Current)
                         currents = true;
                     else
                         x.Value.Real = 0.0;
@@ -472,7 +472,7 @@ namespace SpiceSharp.Simulations
                 if (double.IsNaN(n))
                     throw new CircuitException($"Non-convergence, node {node} is not a number.");
 
-                if (node.Type == CircuitNode.NodeType.Voltage)
+                if (node.Type == Node.NodeType.Voltage)
                 {
                     double tol = config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltTol;
                     if (Math.Abs(n - o) > tol)

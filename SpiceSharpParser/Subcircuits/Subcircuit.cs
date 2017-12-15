@@ -16,24 +16,24 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <summary>
         /// Gets the name of the subcircuit
         /// </summary>
-        public CircuitIdentifier Name { get; }
+        public Identifier Name { get; }
 
         /// <summary>
         /// Gets the list of pins for the subcircuit
         /// </summary>
-        public List<CircuitIdentifier> Pins { get; } = new List<CircuitIdentifier>();
+        public List<Identifier> Pins { get; } = new List<Identifier>();
 
         /// <summary>
         /// Gets the parameters for this instance
         /// </summary>
-        public Dictionary<CircuitIdentifier, Token> Parameters { get; } = new Dictionary<CircuitIdentifier, Token>();
+        public Dictionary<Identifier, Token> Parameters { get; } = new Dictionary<Identifier, Token>();
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="definition">The definition</param>
         /// <param name="name">Name identifier</param>
-        public Subcircuit(SubcircuitDefinition definition, CircuitIdentifier name, List<CircuitIdentifier> pins, Dictionary<CircuitIdentifier, Token> parameters = null)
+        public Subcircuit(SubcircuitDefinition definition, Identifier name, List<Identifier> pins, Dictionary<Identifier, Token> parameters = null)
         {
             Definition = definition;
             Name = name;

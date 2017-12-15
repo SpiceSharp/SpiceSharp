@@ -19,7 +19,7 @@ namespace SpiceSharp.Parser.Readers
         /// Available model generators indexed by their LEVEL.
         /// The parameters passed are name, type (nmos or pmos) and the version.
         /// </summary>
-        public Dictionary<int, Func<CircuitIdentifier, string, string, CircuitObject>> Levels { get; } = new Dictionary<int, Func<CircuitIdentifier, string, string, CircuitObject>>();
+        public Dictionary<int, Func<Identifier, string, string, Entity>> Levels { get; } = new Dictionary<int, Func<Identifier, string, string, Entity>>();
 
         /// <summary>
         /// Constructor
@@ -30,7 +30,7 @@ namespace SpiceSharp.Parser.Readers
             Identifier = "nmos;pmos";
 
             // Default MOS levels
-            Levels.Add(1, (CircuitIdentifier name, string type, string version) =>
+            Levels.Add(1, (Identifier name, string type, string version) =>
             {
                 var m = new MOS1Model(name);
                 switch (type)
@@ -40,7 +40,7 @@ namespace SpiceSharp.Parser.Readers
                 }
                 return m;
             });
-            Levels.Add(2, (CircuitIdentifier name, string type, string version) =>
+            Levels.Add(2, (Identifier name, string type, string version) =>
             {
                 var m = new MOS2Model(name);
                 switch (type)
@@ -50,7 +50,7 @@ namespace SpiceSharp.Parser.Readers
                 }
                 return m;
             });
-            Levels.Add(3, (CircuitIdentifier name, string type, string version) =>
+            Levels.Add(3, (Identifier name, string type, string version) =>
             {
                 var m = new MOS3Model(name);
                 switch (type)
@@ -105,9 +105,9 @@ namespace SpiceSharp.Parser.Readers
                 st.Parameters.RemoveAt(vindex < lindex ? vindex : vindex - 1);
 
             // Generate the model
-            CircuitObject model = null;
+            Entity model = null;
             if (Levels.ContainsKey(level))
-                model = Levels[level].Invoke(new CircuitIdentifier(st.Name.image), type, version);
+                model = Levels[level].Invoke(new Identifier(st.Name.image), type, version);
             else
                 throw new ParseException(st.Name, $"Unknown mosfet model level {level}");
 

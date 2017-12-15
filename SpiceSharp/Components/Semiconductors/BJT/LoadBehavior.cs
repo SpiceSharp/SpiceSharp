@@ -109,7 +109,7 @@ namespace SpiceSharp.Behaviors.BJT
         {
             double value = -ckt.State.States[0][BJTstate + BJTcc];
             value -= ckt.State.States[0][BJTstate + BJTcb];
-            if (ckt.Method != null && !(ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC))
+            if (ckt.Method != null && !(ckt.State.Domain == State.DomainTypes.Time && ckt.State.UseDC))
                 value += ckt.State.States[0][BJTstate + BJTcqcs];
             return value;
         }
@@ -118,12 +118,12 @@ namespace SpiceSharp.Behaviors.BJT
         {
             double value = ckt.State.States[0][BJTstate + BJTcc] * ckt.State.Solution[BJTcolNode];
             value += ckt.State.States[0][BJTstate + BJTcb] * ckt.State.Solution[BJTbaseNode];
-            if (ckt.Method != null && !(ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC))
+            if (ckt.Method != null && !(ckt.State.Domain == State.DomainTypes.Time && ckt.State.UseDC))
                 value -= ckt.State.States[0][BJTstate + BJTcqcs] * ckt.State.Solution[BJTsubstNode];
 
             double tmp = -ckt.State.States[0][BJTstate + BJTcc];
             tmp -= ckt.State.States[0][BJTstate + BJTcb];
-            if (ckt.Method != null && !(ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC))
+            if (ckt.Method != null && !(ckt.State.Domain == State.DomainTypes.Time && ckt.State.UseDC))
                 tmp += ckt.State.States[0][BJTstate + BJTcqcs];
             value += tmp * ckt.State.Solution[BJTemitNode];
             return value;
@@ -195,7 +195,7 @@ namespace SpiceSharp.Behaviors.BJT
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var bjt = component as Components.BJT;
 
@@ -344,7 +344,7 @@ namespace SpiceSharp.Behaviors.BJT
                 vbx = modeltemp.BJTtype * (rstate.Solution[BJTbaseNode] - rstate.Solution[BJTcolPrimeNode]);
                 vcs = modeltemp.BJTtype * (rstate.Solution[BJTsubstNode] - rstate.Solution[BJTcolPrimeNode]);
             }
-            else if (state.Init == CircuitState.InitFlags.InitTransient)
+            else if (state.Init == State.InitFlags.InitTransient)
             {
                 vbe = state.States[1][BJTstate + BJTvbe];
                 vbc = state.States[1][BJTstate + BJTvbc];
@@ -357,7 +357,7 @@ namespace SpiceSharp.Behaviors.BJT
                 }
                 icheck = false; // EDIT: Spice does not check the first timepoint for convergence, but we do...
             }
-            else if (state.Init == CircuitState.InitFlags.InitJct && state.Domain == CircuitState.DomainTypes.Time && state.UseDC && state.UseIC)
+            else if (state.Init == State.InitFlags.InitJct && state.Domain == State.DomainTypes.Time && state.UseDC && state.UseIC)
             {
                 vbe = modeltemp.BJTtype * BJTicVBE;
                 vce = modeltemp.BJTtype * BJTicVCE;
@@ -365,14 +365,14 @@ namespace SpiceSharp.Behaviors.BJT
                 vbx = vbc;
                 vcs = 0;
             }
-            else if (state.Init == CircuitState.InitFlags.InitJct && !BJToff)
+            else if (state.Init == State.InitFlags.InitJct && !BJToff)
             {
                 vbe = this.temp.BJTtVcrit;
                 vbc = 0;
                 vcs = 0;
                 vbx = 0;
             }
-            else if (state.Init == CircuitState.InitFlags.InitJct || (state.Init == CircuitState.InitFlags.InitFix && BJToff))
+            else if (state.Init == State.InitFlags.InitJct || (state.Init == State.InitFlags.InitFix && BJToff))
             {
                 vbe = 0;
                 vbc = 0;
@@ -487,7 +487,7 @@ namespace SpiceSharp.Behaviors.BJT
                 arg1 = arg2 * arg1;
                 denom = 1 + arg1 + arg2;
                 arg3 = arg1 / denom;
-                if (state.Init == CircuitState.InitFlags.InitTransient)
+                if (state.Init == State.InitFlags.InitTransient)
                 {
                     state.States[1][BJTstate + BJTcexbc] = cbe / qb;
                     state.States[2][BJTstate + BJTcexbc] = state.States[1][BJTstate + BJTcexbc];
@@ -519,7 +519,7 @@ namespace SpiceSharp.Behaviors.BJT
             go = (gbc + (cex - cbc) * dqbdvc / qb) / qb;
             gm = (gex - (cex - cbc) * dqbdve / qb) / qb - go;
 
-            if (state.Domain == CircuitState.DomainTypes.Time || state.UseIC || state.UseSmallSignal)
+            if (state.Domain == State.DomainTypes.Time || state.UseIC || state.UseSmallSignal)
             {
                 /* 
 				 * charge storage elements
@@ -635,7 +635,7 @@ namespace SpiceSharp.Behaviors.BJT
                 /* 
 				 * store small - signal parameters
 				 */
-                if (!(state.Domain == CircuitState.DomainTypes.Time && state.UseDC && state.UseIC))
+                if (!(state.Domain == State.DomainTypes.Time && state.UseDC && state.UseIC))
                 {
                     if (state.UseSmallSignal)
                     {
@@ -652,7 +652,7 @@ namespace SpiceSharp.Behaviors.BJT
 					 * transient analysis
 					 */
 
-                    if (state.Init == CircuitState.InitFlags.InitTransient)
+                    if (state.Init == State.InitFlags.InitTransient)
                     {
                         state.States[1][BJTstate + BJTqbe] = state.States[0][BJTstate + BJTqbe];
                         state.States[1][BJTstate + BJTqbc] = state.States[0][BJTstate + BJTqbc];
@@ -672,7 +672,7 @@ namespace SpiceSharp.Behaviors.BJT
                     cb = cb + state.States[0][BJTstate + BJTcqbc];
                     cc = cc - state.States[0][BJTstate + BJTcqbc];
 
-                    if (state.Init == CircuitState.InitFlags.InitTransient)
+                    if (state.Init == State.InitFlags.InitTransient)
                     {
                         state.States[1][BJTstate + BJTcqbe] = state.States[0][BJTstate + BJTcqbe];
                         state.States[1][BJTstate + BJTcqbc] = state.States[0][BJTstate + BJTcqbc];
@@ -683,7 +683,7 @@ namespace SpiceSharp.Behaviors.BJT
             /* 
 			 * check convergence
 			 */
-            if (state.Init != CircuitState.InitFlags.InitFix || !BJToff)
+            if (state.Init != State.InitFlags.InitFix || !BJToff)
             {
                 if (icheck)
                     state.IsCon = false;
@@ -696,7 +696,7 @@ namespace SpiceSharp.Behaviors.BJT
             {
                 method.Integrate(state, out gccs, out ceq, BJTstate + BJTqcs, capcs);
                 method.Integrate(state, out geqbx, out ceq, BJTstate + BJTqbx, capbx);
-                if (state.Init == CircuitState.InitFlags.InitTransient)
+                if (state.Init == State.InitFlags.InitTransient)
                 {
                     state.States[1][BJTstate + BJTcqbx] = state.States[0][BJTstate + BJTcqbx];
                     state.States[1][BJTstate + BJTcqcs] = state.States[0][BJTstate + BJTcqcs];

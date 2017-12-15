@@ -24,7 +24,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current source</param>
-        public Currentsource(CircuitIdentifier name) : base(name, ISRCpinCount)
+        public Currentsource(Identifier name) : base(name, ISRCpinCount)
         {
             RegisterBehavior(new LoadBehavior());
             RegisterBehavior(new AcBehavior());
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc)
+        public Currentsource(Identifier name, Identifier pos, Identifier neg, double dc)
             : this(name)
         {
             // Register behaviors
@@ -57,7 +57,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="w">The Waveform-object</param>
-        public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, Waveform w) : base(name, ISRCpinCount)
+        public Currentsource(Identifier name, Identifier pos, Identifier neg, Waveform w) : base(name, ISRCpinCount)
         {
             // Register behaviors
             RegisterBehavior(new LoadBehavior(w));

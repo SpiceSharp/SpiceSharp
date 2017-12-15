@@ -18,7 +18,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// The node that gives problems
         /// </summary>
-        public CircuitNode ProblemNode { get; protected set; }
+        public Node ProblemNode { get; protected set; }
 
         /// <summary>
         /// The circuit
@@ -48,13 +48,13 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get the name of the simulation
         /// </summary>
-        public CircuitIdentifier Name { get; }
+        public Identifier Name { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="config">The configuration for this simulation</param>
-        public Simulation(CircuitIdentifier name)
+        public Simulation(Identifier name)
         {
             Config = null;
             Name = name;

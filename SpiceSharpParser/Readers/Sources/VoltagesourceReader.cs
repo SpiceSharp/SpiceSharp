@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected override CircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected override Entity Generate(string type, Identifier name, List<Token> parameters, Netlist netlist)
         {
             switch (type)
             {
@@ -40,7 +40,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected CircuitObject GenerateVSRC(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected Entity GenerateVSRC(Identifier name, List<Token> parameters, Netlist netlist)
         {
             Voltagesource vsrc = new Voltagesource(name);
             vsrc.ReadNodes(netlist.Path, parameters);
@@ -93,7 +93,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected CircuitObject GenerateVCVS(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected Entity GenerateVCVS(Identifier name, List<Token> parameters, Netlist netlist)
         {
             VoltageControlledVoltagesource vcvs = new VoltageControlledVoltagesource(name);
             vcvs.ReadNodes(netlist.Path, parameters);
@@ -111,7 +111,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters">Parameters</param>
         /// <param name="netlist">Netlist</param>
         /// <returns></returns>
-        protected CircuitObject GenerateCCVS(CircuitIdentifier name, List<Token> parameters, Netlist netlist)
+        protected Entity GenerateCCVS(Identifier name, List<Token> parameters, Netlist netlist)
         {
             CurrentControlledVoltagesource ccvs = new CurrentControlledVoltagesource(name);
             ccvs.ReadNodes(netlist.Path, parameters);
@@ -123,7 +123,7 @@ namespace SpiceSharp.Parser.Readers
 
             if (!ReaderExtension.IsName(parameters[2]))
                 throw new ParseException(parameters[2], "Component name expected");
-            ccvs.CCVScontName = new CircuitIdentifier(parameters[2].image);
+            ccvs.CCVScontName = new Identifier(parameters[2].image);
             ccvs.CCVScoeff.Set(netlist.ParseDouble(parameters[3]));
             return ccvs;
         }

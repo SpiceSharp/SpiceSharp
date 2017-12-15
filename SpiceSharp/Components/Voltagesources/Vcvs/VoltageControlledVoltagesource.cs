@@ -31,7 +31,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled voltage source</param>
-        public VoltageControlledVoltagesource(CircuitIdentifier name) 
+        public VoltageControlledVoltagesource(Identifier name) 
             : base(name, VCVSpinCount)
         {
             RegisterBehavior(new LoadBehavior());
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
         /// <param name="gain">The voltage gain</param>
-        public VoltageControlledVoltagesource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier cont_pos, CircuitIdentifier cont_neg, double gain) 
+        public VoltageControlledVoltagesource(Identifier name, Identifier pos, Identifier neg, Identifier cont_pos, Identifier cont_neg, double gain) 
             : this(name)
         {
             Connect(pos, neg, cont_pos, cont_neg);

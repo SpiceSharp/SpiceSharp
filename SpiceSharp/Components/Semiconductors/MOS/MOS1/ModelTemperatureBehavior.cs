@@ -109,7 +109,7 @@ namespace SpiceSharp.Behaviors.MOS1
         public double MOS1type { get; internal set; } = 1.0;
         public double MOS1oxideCapFactor { get; internal set; }
 
-        private CircuitIdentifier name;
+        private Identifier name;
 
         /// <summary>
         /// Setup the behavior
@@ -117,7 +117,7 @@ namespace SpiceSharp.Behaviors.MOS1
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             // Get name
             name = component.Name;

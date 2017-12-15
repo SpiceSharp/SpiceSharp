@@ -27,7 +27,7 @@ namespace SpiceSharp.Simulations
         /// <param name="n">The number of steps</param>
         /// <param name="start">The starting frequency</param>
         /// <param name="stop">The stopping frequency</param>
-        public AC(CircuitIdentifier name, string type, int n, double start, double stop) : base(name)
+        public AC(Identifier name, string type, int n, double start, double stop) : base(name)
         {
             switch (type.ToLower())
             {
@@ -87,7 +87,7 @@ namespace SpiceSharp.Simulations
             // Calculate the operating point
             state.Initialize(ckt);
             state.Laplace = 0.0;
-            state.Domain = CircuitState.DomainTypes.Frequency;
+            state.Domain = State.DomainTypes.Frequency;
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;

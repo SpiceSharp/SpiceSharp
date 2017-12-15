@@ -129,7 +129,7 @@ namespace SpiceSharp.Behaviors.MOS1
         {
             double value = -MOS1cd;
             value -= MOS1cbd + MOS1cbs - ckt.State.States[0][MOS1states + MOS1cqgb];
-            if (ckt.Method != null && !(ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC))
+            if (ckt.Method != null && !(ckt.State.Domain == State.DomainTypes.Time && ckt.State.UseDC))
             {
                 value -= ckt.State.States[0][MOS1states + MOS1cqgb] + ckt.State.States[0][MOS1states + MOS1cqgd] +
                     ckt.State.States[0][MOS1states + MOS1cqgs];
@@ -142,14 +142,14 @@ namespace SpiceSharp.Behaviors.MOS1
             double temp;
             double value = MOS1cd * ckt.State.Solution[MOS1dNode];
             value += (MOS1cbd + MOS1cbs - ckt.State.States[0][MOS1states + MOS1cqgb]) * ckt.State.Solution[MOS1bNode];
-            if (ckt.Method != null && !(ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC))
+            if (ckt.Method != null && !(ckt.State.Domain == State.DomainTypes.Time && ckt.State.UseDC))
             {
                 value += (ckt.State.States[0][MOS1states + MOS1cqgb] + ckt.State.States[0][MOS1states + MOS1cqgd] +
                     ckt.State.States[0][MOS1states + MOS1cqgs]) * ckt.State.Solution[MOS1gNode];
             }
             temp = -MOS1cd;
             temp -= MOS1cbd + MOS1cbs;
-            if (ckt.Method != null && !(ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC))
+            if (ckt.Method != null && !(ckt.State.Domain == State.DomainTypes.Time && ckt.State.UseDC))
             {
                 temp -= ckt.State.States[0][MOS1states + MOS1cqgb] + ckt.State.States[0][MOS1states + MOS1cqgd] +
                     ckt.State.States[0][MOS1states + MOS1cqgs];
@@ -216,7 +216,7 @@ namespace SpiceSharp.Behaviors.MOS1
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var mos1 = component as Components.MOS1;
 
@@ -356,8 +356,8 @@ namespace SpiceSharp.Behaviors.MOS1
 			 * step or the general iteration step and they
 			 * share some code, so we put them first - others later on
 			 */
-            if ((state.Init == CircuitState.InitFlags.InitFloat || state.UseSmallSignal || (state.Init == CircuitState.InitFlags.InitTransient)) ||
-                ((state.Init == CircuitState.InitFlags.InitFix) && (!MOS1off)))
+            if ((state.Init == State.InitFlags.InitFloat || state.UseSmallSignal || (state.Init == State.InitFlags.InitTransient)) ||
+                ((state.Init == State.InitFlags.InitFix) && (!MOS1off)))
             {
                 // general iteration
                 vbs = modeltemp.MOS1type * (rstate.Solution[MOS1bNode] - rstate.Solution[MOS1sNodePrime]);
@@ -409,13 +409,13 @@ namespace SpiceSharp.Behaviors.MOS1
 				 * called.  We still just initialize the three voltages
 				 */
 
-                if ((state.Init == CircuitState.InitFlags.InitJct) && !MOS1off)
+                if ((state.Init == State.InitFlags.InitJct) && !MOS1off)
                 {
                     vds = modeltemp.MOS1type * MOS1icVDS;
                     vgs = modeltemp.MOS1type * MOS1icVGS;
                     vbs = modeltemp.MOS1type * MOS1icVBS;
                     if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((method != null || state.UseDC ||
-                        state.Domain == CircuitState.DomainTypes.None) || (!state.UseIC)))
+                        state.Domain == State.DomainTypes.None) || (!state.UseIC)))
                     {
                         vbs = -1;
                         vgs = modeltemp.MOS1type * temp.MOS1tVto;
@@ -568,7 +568,7 @@ namespace SpiceSharp.Behaviors.MOS1
 			 */
             MOS1cd = MOS1mode * cdrain - MOS1cbd;
 
-            if (state.Domain == CircuitState.DomainTypes.Time || state.UseSmallSignal)
+            if (state.Domain == State.DomainTypes.Time || state.UseSmallSignal)
             {
                 /* 
 				 * now we do the hard part of the bulk - drain and bulk - source
@@ -702,7 +702,7 @@ namespace SpiceSharp.Behaviors.MOS1
 				*/
 
                 /* DETAILPROF */
-                if ((method != null) || ((state.Init == CircuitState.InitFlags.InitTransient) && !state.UseIC))
+                if ((method != null) || ((state.Init == State.InitFlags.InitTransient) && !state.UseIC))
                 {
                     /* (above only excludes tranop, since we're only at this
 					 * point if tran or tranop)
@@ -728,7 +728,7 @@ namespace SpiceSharp.Behaviors.MOS1
             /* 
 			 * check convergence
 			 */
-            if (!MOS1off || (!(state.Init == CircuitState.InitFlags.InitFix || state.UseSmallSignal)))
+            if (!MOS1off || (!(state.Init == State.InitFlags.InitFix || state.UseSmallSignal)))
             {
                 if (Check == 1)
                     state.IsCon = false;
@@ -745,7 +745,7 @@ namespace SpiceSharp.Behaviors.MOS1
             /* 
 			 * meyer's capacitor model
 			 */
-            if (state.Domain == CircuitState.DomainTypes.Time || state.UseSmallSignal)
+            if (state.Domain == State.DomainTypes.Time || state.UseSmallSignal)
             {
                 /* 
 				 * calculate meyer's capacitors
@@ -776,7 +776,7 @@ namespace SpiceSharp.Behaviors.MOS1
                 vgs1 = state.States[1][MOS1states + MOS1vgs];
                 vgd1 = vgs1 - state.States[1][MOS1states + MOS1vds];
                 vgb1 = vgs1 - state.States[1][MOS1states + MOS1vbs];
-                if ((state.Domain == CircuitState.DomainTypes.Time && state.UseDC) || state.UseSmallSignal)
+                if ((state.Domain == State.DomainTypes.Time && state.UseDC) || state.UseSmallSignal)
                 {
                     capgs = 2 * state.States[0][MOS1states + MOS1capgs] + GateSourceOverlapCap;
                     capgd = 2 * state.States[0][MOS1states + MOS1capgd] + GateDrainOverlapCap;
@@ -806,7 +806,7 @@ namespace SpiceSharp.Behaviors.MOS1
                 /* PREDICTOR */
             }
 
-            if (((state.Init == CircuitState.InitFlags.InitTransient)) || (!(method != null)))
+            if (((state.Init == State.InitFlags.InitTransient)) || (!(method != null)))
             {
                 /* 
 				 * initialize to zero charge conductances 

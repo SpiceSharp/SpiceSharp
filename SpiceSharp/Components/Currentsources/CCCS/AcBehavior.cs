@@ -55,7 +55,7 @@ namespace SpiceSharp.Behaviors.CCCS
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var cccs = component as CurrentControlledCurrentsource;
             var matrix = ckt.State.Matrix;

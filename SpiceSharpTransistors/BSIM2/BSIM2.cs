@@ -27,7 +27,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public void SetModel(BSIM2Model model) => Model = (CircuitObject)model;
+        public void SetModel(BSIM2Model model) => Model = (Entity)model;
 
         /// <summary>
         /// Sizes
@@ -148,7 +148,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM2(CircuitIdentifier name) : base(name, B2pinCount)
+        public BSIM2(Identifier name) : base(name, B2pinCount)
         {
         }
 

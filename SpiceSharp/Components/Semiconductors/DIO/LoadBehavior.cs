@@ -80,7 +80,7 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var dio = component as Diode;
 
@@ -152,25 +152,25 @@ namespace SpiceSharp.Behaviors.DIO
             {
                 vd = state.States[0][DIOstate + DIOvoltage];
             }
-            else if (state.Init == CircuitState.InitFlags.InitTransient)
+            else if (state.Init == State.InitFlags.InitTransient)
             {
                 vd = state.States[1][DIOstate + DIOvoltage];
                 Check = false; // EDIT: Spice does not check the first timepoint for convergence, but we do...
             }
-            else if ((state.Init == CircuitState.InitFlags.InitJct) && (state.Domain == CircuitState.DomainTypes.Time && state.UseDC) &&
+            else if ((state.Init == State.InitFlags.InitJct) && (state.Domain == State.DomainTypes.Time && state.UseDC) &&
               state.UseIC)
             {
                 vd = DIOinitCond;
             }
-            else if ((state.Init == CircuitState.InitFlags.InitJct) && DIOoff)
+            else if ((state.Init == State.InitFlags.InitJct) && DIOoff)
             {
                 vd = 0;
             }
-            else if (state.Init == CircuitState.InitFlags.InitJct)
+            else if (state.Init == State.InitFlags.InitJct)
             {
                 vd = temp.DIOtVcrit;
             }
-            else if (ckt.State.Init == CircuitState.InitFlags.InitFix && DIOoff)
+            else if (ckt.State.Init == State.InitFlags.InitFix && DIOoff)
             {
                 vd = 0;
             }
@@ -214,7 +214,7 @@ namespace SpiceSharp.Behaviors.DIO
                 cd = -csat * evrev + state.Gmin * vd;
                 gd = csat * evrev / vte + state.Gmin;
             }
-            if ((method != null || state.UseSmallSignal) || (state.Domain == CircuitState.DomainTypes.Time && state.UseDC) && state.UseIC)
+            if ((method != null || state.UseSmallSignal) || (state.Domain == State.DomainTypes.Time && state.UseDC) && state.UseIC)
             {
                 /* 
 				* charge storage elements
@@ -240,7 +240,7 @@ namespace SpiceSharp.Behaviors.DIO
                 /* 
 				* store small - signal parameters
 				*/
-                if ((!(state.Domain == CircuitState.DomainTypes.Time && state.UseDC)) || (!state.UseIC))
+                if ((!(state.Domain == State.DomainTypes.Time && state.UseDC)) || (!state.UseIC))
                 {
                     if (state.UseSmallSignal)
                     {
@@ -253,12 +253,12 @@ namespace SpiceSharp.Behaviors.DIO
 					 */
                     if (method != null)
                     {
-                        if (state.Init == CircuitState.InitFlags.InitTransient)
+                        if (state.Init == State.InitFlags.InitTransient)
                             state.States[1][DIOstate + DIOcapCharge] = state.States[0][DIOstate + DIOcapCharge];
                         var result = method.Integrate(state, DIOstate + DIOcapCharge, capd);
                         gd = gd + result.Geq;
                         cd = cd + state.States[0][DIOstate + DIOcapCurrent];
-                        if (state.Init == CircuitState.InitFlags.InitTransient)
+                        if (state.Init == State.InitFlags.InitTransient)
                             state.States[1][DIOstate + DIOcapCurrent] = state.States[0][DIOstate + DIOcapCurrent];
                     }
                 }
@@ -267,7 +267,7 @@ namespace SpiceSharp.Behaviors.DIO
             /* 
 			 * check convergence
 			 */
-            if (((state.Init != CircuitState.InitFlags.InitFix)) || (!(DIOoff)))
+            if (((state.Init != State.InitFlags.InitFix)) || (!(DIOoff)))
             {
                 if (Check)
                     ckt.State.IsCon = false;

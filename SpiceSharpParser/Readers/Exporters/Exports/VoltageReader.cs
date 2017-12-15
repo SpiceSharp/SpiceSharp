@@ -27,7 +27,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         public override bool Read(string type, Statement st, Netlist netlist)
         {
             // Get the nodes
-            CircuitIdentifier node, reference = null;
+            Identifier node, reference = null;
             switch (st.Parameters.Count)
             {
                 case 0:
@@ -35,12 +35,12 @@ namespace SpiceSharp.Parser.Readers.Exports
                 case 2:
                     if (!ReaderExtension.IsNode(st.Parameters[1]))
                         throw new ParseException(st.Parameters[1], "Node expected");
-                    reference = new CircuitIdentifier(st.Parameters[1].image);
+                    reference = new Identifier(st.Parameters[1].image);
                     goto case 1;
                 case 1:
                     if (!ReaderExtension.IsNode(st.Parameters[0]))
                         throw new ParseException(st.Parameters[0], "Node expected");
-                    node = new CircuitIdentifier(st.Parameters[0].image);
+                    node = new Identifier(st.Parameters[0].image);
                     break;
                 default:
                     throw new ParseException(st.Name, "Too many nodes specified", false);
@@ -72,19 +72,19 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The main node
         /// </summary>
-        public CircuitIdentifier Node { get; }
+        public Identifier Node { get; }
 
         /// <summary>
         /// The reference node
         /// </summary>
-        public CircuitIdentifier Reference { get; }
+        public Identifier Reference { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="node">Node</param>
         /// <param name="reference">Reference</param>
-        public VoltageExport(CircuitIdentifier node, CircuitIdentifier reference = null)
+        public VoltageExport(Identifier node, Identifier reference = null)
         {
             Node = node;
             Reference = reference;
@@ -107,7 +107,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <param name="ckt">Circuit</param>
         public override double Extract(SimulationData data)
         {
-            if (data.Circuit.State.Domain == Circuits.CircuitState.DomainTypes.Frequency || data.Circuit.State.Domain == Circuits.CircuitState.DomainTypes.Laplace)
+            if (data.Circuit.State.Domain == Circuits.State.DomainTypes.Frequency || data.Circuit.State.Domain == Circuits.State.DomainTypes.Laplace)
                 return data.GetPhasor(Node, Reference).Real;
             else
                 return data.GetVoltage(Node, Reference);
@@ -122,19 +122,19 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The main node
         /// </summary>
-        public CircuitIdentifier Node { get; }
+        public Identifier Node { get; }
 
         /// <summary>
         /// The reference node
         /// </summary>
-        public CircuitIdentifier Reference { get; }
+        public Identifier Reference { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="node">Positive node</param>
         /// <param name="reference">Negative reference node</param>
-        public VoltageRealExport(CircuitIdentifier node, CircuitIdentifier reference = null)
+        public VoltageRealExport(Identifier node, Identifier reference = null)
         {
             Node = node;
             Reference = reference;
@@ -159,8 +159,8 @@ namespace SpiceSharp.Parser.Readers.Exports
         {
             switch (data.Circuit.State.Domain)
             {
-                case Circuits.CircuitState.DomainTypes.Frequency:
-                case Circuits.CircuitState.DomainTypes.Laplace:
+                case Circuits.State.DomainTypes.Frequency:
+                case Circuits.State.DomainTypes.Laplace:
                     return data.GetPhasor(Node, Reference).Real;
                 default:
                     return data.GetVoltage(Node, Reference);
@@ -176,19 +176,19 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The main node
         /// </summary>
-        public CircuitIdentifier Node { get; }
+        public Identifier Node { get; }
 
         /// <summary>
         /// The reference node
         /// </summary>
-        public CircuitIdentifier Reference { get; }
+        public Identifier Reference { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="node">Positive node</param>
         /// <param name="reference">Negative reference node</param>
-        public VoltageImaginaryExport(CircuitIdentifier node, CircuitIdentifier reference = null)
+        public VoltageImaginaryExport(Identifier node, Identifier reference = null)
         {
             Node = node;
             Reference = reference;
@@ -213,8 +213,8 @@ namespace SpiceSharp.Parser.Readers.Exports
         {
             switch (data.Circuit.State.Domain)
             {
-                case CircuitState.DomainTypes.Frequency:
-                case CircuitState.DomainTypes.Laplace:
+                case State.DomainTypes.Frequency:
+                case State.DomainTypes.Laplace:
                     return data.GetPhasor(Node, Reference).Imaginary;
                 default:
                     return 0.0;
@@ -230,19 +230,19 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The main node
         /// </summary>
-        public CircuitIdentifier Node { get; }
+        public Identifier Node { get; }
 
         /// <summary>
         /// The reference node
         /// </summary>
-        public CircuitIdentifier Reference { get; }
+        public Identifier Reference { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="node">Positive node</param>
         /// <param name="reference">Negative reference node</param>
-        public VoltageMagnitudeExport(CircuitIdentifier node, CircuitIdentifier reference = null)
+        public VoltageMagnitudeExport(Identifier node, Identifier reference = null)
         {
             Node = node;
             Reference = reference;
@@ -267,8 +267,8 @@ namespace SpiceSharp.Parser.Readers.Exports
         {
             switch (data.Circuit.State.Domain)
             {
-                case Circuits.CircuitState.DomainTypes.Frequency:
-                case Circuits.CircuitState.DomainTypes.Laplace:
+                case Circuits.State.DomainTypes.Frequency:
+                case Circuits.State.DomainTypes.Laplace:
                     return data.GetPhasor(Node, Reference).Magnitude;
                 default:
                     return data.GetVoltage(Node, Reference);
@@ -284,19 +284,19 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The main node
         /// </summary>
-        public CircuitIdentifier Node { get; }
+        public Identifier Node { get; }
 
         /// <summary>
         /// The reference node
         /// </summary>
-        public CircuitIdentifier Reference { get; }
+        public Identifier Reference { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="node">Positive node</param>
         /// <param name="reference">Negative reference node</param>
-        public VoltagePhaseExport(CircuitIdentifier node, CircuitIdentifier reference = null)
+        public VoltagePhaseExport(Identifier node, Identifier reference = null)
         {
             Node = node;
             Reference = reference;
@@ -321,8 +321,8 @@ namespace SpiceSharp.Parser.Readers.Exports
         {
             switch (data.Circuit.State.Domain)
             {
-                case CircuitState.DomainTypes.Frequency:
-                case CircuitState.DomainTypes.Laplace:
+                case State.DomainTypes.Frequency:
+                case State.DomainTypes.Laplace:
                     return data.GetPhase(Node, Reference);
                 default:
                     return 0.0;
@@ -338,19 +338,19 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The main node
         /// </summary>
-        public CircuitIdentifier Node { get; }
+        public Identifier Node { get; }
 
         /// <summary>
         /// The reference node
         /// </summary>
-        public CircuitIdentifier Reference { get; }
+        public Identifier Reference { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="node">Positive node</param>
         /// <param name="reference">Negative reference node</param>
-        public VoltageDecibelExport(CircuitIdentifier node, CircuitIdentifier reference = null)
+        public VoltageDecibelExport(Identifier node, Identifier reference = null)
         {
             Node = node;
             Reference = reference;
@@ -375,8 +375,8 @@ namespace SpiceSharp.Parser.Readers.Exports
         {
             switch (data.Circuit.State.Domain)
             {
-                case CircuitState.DomainTypes.Frequency:
-                case CircuitState.DomainTypes.Laplace:
+                case State.DomainTypes.Frequency:
+                case State.DomainTypes.Laplace:
                     return data.GetDb(Node, Reference);
                 default:
                     return 20.0 * Math.Log10(data.GetVoltage(Node, Reference));

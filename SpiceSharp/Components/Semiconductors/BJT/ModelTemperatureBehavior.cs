@@ -159,14 +159,14 @@ namespace SpiceSharp.Behaviors.BJT
         /// <summary>
         /// Private variables
         /// </summary>
-        private CircuitIdentifier name;
+        private Identifier name;
 
         /// <summary>
         /// Setup the behavior
         /// </summary>
         /// <param name="component"></param>
         /// <param name="ckt"></param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             // Store the name for error reporting
             name = component.Name;

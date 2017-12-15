@@ -40,7 +40,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS2(CircuitIdentifier name) : base(name, MOS2pinCount)
+        public MOS2(Identifier name) : base(name, MOS2pinCount)
         {
             RegisterBehavior(new TemperatureBehavior());
             RegisterBehavior(new LoadBehavior());

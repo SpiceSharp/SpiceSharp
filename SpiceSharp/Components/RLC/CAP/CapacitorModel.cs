@@ -24,7 +24,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public CapacitorModel(CircuitIdentifier name) : base(name)
+        public CapacitorModel(Identifier name) : base(name)
         {
             RegisterBehavior(new ModelTemperatureBehavior());
         }

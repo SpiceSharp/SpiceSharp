@@ -74,31 +74,31 @@ namespace SpiceSharpTest.Components.Currentsources.Currentsource
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
                 new SpiceSharp.Components.Currentsource(
-                    new CircuitIdentifier("I_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier("gnd"),
+                    new Identifier("I_1"),
+                    new Identifier("IN"),
+                    new Identifier("gnd"),
                     current));
 
 
             ckt.Objects.Add(new SpiceSharp.Components.Resistor(
-                new CircuitIdentifier("R1"),
-                new CircuitIdentifier("IN"),
-                new CircuitIdentifier("B1"),
+                new Identifier("R1"),
+                new Identifier("IN"),
+                new Identifier("B1"),
                 resistance));
 
             for (var i = 2; i <= count - 1; i++)
             {
                 ckt.Objects.Add(new SpiceSharp.Components.Resistor(
-                    new CircuitIdentifier("R" + i),
-                    new CircuitIdentifier("B" + (i - 1)),
-                    new CircuitIdentifier("B" + i),
+                    new Identifier("R" + i),
+                    new Identifier("B" + (i - 1)),
+                    new Identifier("B" + i),
                     resistance));
             }
 
             ckt.Objects.Add(new SpiceSharp.Components.Resistor(
-                new CircuitIdentifier("R" + count),
-                new CircuitIdentifier("B" + (count - 1)),
-                new CircuitIdentifier("gnd"),
+                new Identifier("R" + count),
+                new Identifier("B" + (count - 1)),
+                new Identifier("gnd"),
                 resistance));
 
             return ckt;
@@ -113,14 +113,14 @@ namespace SpiceSharpTest.Components.Currentsources.Currentsource
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
                 new SpiceSharp.Components.Currentsource(
-                    new CircuitIdentifier("I_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier("gnd"),
+                    new Identifier("I_1"),
+                    new Identifier("IN"),
+                    new Identifier("gnd"),
                     current),
                 new SpiceSharp.Components.Resistor(
-                    new CircuitIdentifier("R_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier("gnd"),
+                    new Identifier("R_1"),
+                    new Identifier("IN"),
+                    new Identifier("gnd"),
                     resistance)
             );
             return ckt;

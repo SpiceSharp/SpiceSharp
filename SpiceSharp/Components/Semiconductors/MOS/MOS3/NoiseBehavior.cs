@@ -41,7 +41,7 @@ namespace SpiceSharp.Behaviors.MOS3
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var mos3 = component as Components.MOS3;
 

@@ -69,7 +69,7 @@ namespace SpiceSharpTest.Components.RLC.Resistor
             OP simulation = new OP("Simulation");
             simulation.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                var outVoltage = data.GetVoltage(new CircuitIdentifier("OUT"));
+                var outVoltage = data.GetVoltage(new Identifier("OUT"));
                 Assert.That.AreEqualWithTol(25, outVoltage, 0, 1e-8);
             };
 
@@ -108,19 +108,19 @@ namespace SpiceSharpTest.Components.RLC.Resistor
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
                 new Voltagesource(
-                    new CircuitIdentifier("V_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier("gnd"),
+                    new Identifier("V_1"),
+                    new Identifier("IN"),
+                    new Identifier("gnd"),
                     dcVoltage),
                 new SpiceSharp.Components.Resistor(
-                    new CircuitIdentifier("R_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier("OUT"),
+                    new Identifier("R_1"),
+                    new Identifier("IN"),
+                    new Identifier("OUT"),
                     resistance1),
                 new SpiceSharp.Components.Resistor(
-                    new CircuitIdentifier("R_2"),
-                    new CircuitIdentifier("OUT"),
-                    new CircuitIdentifier("gnd"),
+                    new Identifier("R_2"),
+                    new Identifier("OUT"),
+                    new Identifier("gnd"),
                     resistance2)
             );
             return ckt;
@@ -131,19 +131,19 @@ namespace SpiceSharpTest.Components.RLC.Resistor
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
                 new Voltagesource(
-                    new CircuitIdentifier("V_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier("gnd"),
+                    new Identifier("V_1"),
+                    new Identifier("IN"),
+                    new Identifier("gnd"),
                     dcVoltage),
                 new SpiceSharp.Components.Resistor(
-                    new CircuitIdentifier("R_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier("gnd"),
+                    new Identifier("R_1"),
+                    new Identifier("IN"),
+                    new Identifier("gnd"),
                     resistance1),
                 new SpiceSharp.Components.Resistor(
-                    new CircuitIdentifier("R_2"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier("gnd"),
+                    new Identifier("R_2"),
+                    new Identifier("IN"),
+                    new Identifier("gnd"),
                     resistance2)
             );
             return ckt;
@@ -154,14 +154,14 @@ namespace SpiceSharpTest.Components.RLC.Resistor
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
                 new Voltagesource(
-                    new CircuitIdentifier("V_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier("gnd"),
+                    new Identifier("V_1"),
+                    new Identifier("IN"),
+                    new Identifier("gnd"),
                     dcVoltage),
                 new SpiceSharp.Components.Resistor(
-                    new CircuitIdentifier("R_1"),
-                    new CircuitIdentifier("IN"),
-                    new CircuitIdentifier("gnd"),
+                    new Identifier("R_1"),
+                    new Identifier("IN"),
+                    new Identifier("gnd"),
                     resistance)
             );
             return ckt;

@@ -39,7 +39,7 @@ namespace SpiceSharp.Behaviors.RES
         /// <summary>
         /// Name of the component
         /// </summary>
-        private CircuitIdentifier name;
+        private Identifier name;
 
         /// <summary>
         /// Setup the behavior
@@ -47,7 +47,7 @@ namespace SpiceSharp.Behaviors.RES
         /// <param name="component"></param>
         /// <param name="ckt"></param>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var res = component as Resistor;
             if (res.Model == null)

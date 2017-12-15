@@ -7,7 +7,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Container for the state of an electronic circuit.
     /// </summary>
-    public class CircuitState
+    public class State
     {
         #region Simulation parameters
         /// <summary>
@@ -203,7 +203,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Noise state
         /// </summary>
-        public CircuitStateNoise Noise { get; private set; } = null;
+        public StateNoise Noise { get; private set; } = null;
 
         /// <summary>
         /// Get the order of the matrix/vectors
@@ -229,7 +229,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Constructor
         /// </summary>
-        public CircuitState()
+        public State()
         {
             Matrix = new Matrix();
         }
@@ -248,7 +248,7 @@ namespace SpiceSharp.Circuits
             OldSolution = new double[Order];
             iSolution = new double[Order];
 
-            Noise = new CircuitStateNoise();
+            Noise = new StateNoise();
             if (ckt.Method != null)
                 ReinitStates(ckt.Method);
             else

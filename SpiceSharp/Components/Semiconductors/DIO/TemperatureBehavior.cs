@@ -41,7 +41,7 @@ namespace SpiceSharp.Behaviors.DIO
         /// <summary>
         /// Private variables
         /// </summary>
-        private CircuitIdentifier name;
+        private Identifier name;
 
         /// <summary>
         /// Setup the behavior
@@ -49,7 +49,7 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var dio = component as Diode;
 

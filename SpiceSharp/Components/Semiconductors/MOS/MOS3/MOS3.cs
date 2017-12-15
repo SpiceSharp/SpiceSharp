@@ -37,7 +37,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS3(CircuitIdentifier name) : base(name, MOS3pinCount)
+        public MOS3(Identifier name) : base(name, MOS3pinCount)
         {
             RegisterBehavior(new TemperatureBehavior());
             RegisterBehavior(new LoadBehavior());

@@ -51,7 +51,7 @@ namespace SpiceSharp.Behaviors.BJT
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var bjt = component as Components.BJT;
 

@@ -59,7 +59,7 @@ namespace SpiceSharp.Behaviors.CAP
         /// </summary>
         /// <param name="component"></param>
         /// <param name="ckt"></param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             // If the capacitance is not given, try getting it from the temperature behavior
             if (!CAPcapac.Given)
@@ -107,25 +107,25 @@ namespace SpiceSharp.Behaviors.CAP
             var rstate = state;
             var method = ckt.Method;
 
-            bool cond1 = (state.UseDC && state.Init == CircuitState.InitFlags.InitJct) || state.UseIC;
+            bool cond1 = (state.UseDC && state.Init == State.InitFlags.InitJct) || state.UseIC;
 
             if (cond1)
                 vcap = CAPinitCond;
             else
                 vcap = rstate.Solution[CAPposNode] - rstate.Solution[CAPnegNode];
 
-            if (state.Domain == CircuitState.DomainTypes.Time)
+            if (state.Domain == State.DomainTypes.Time)
             {
                 // Fill the matrix
                 state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
-                if (state.Init == CircuitState.InitFlags.InitTransient)
+                if (state.Init == State.InitFlags.InitTransient)
                     state.States[1][CAPstate + CAPqcap] = state.States[0][CAPstate + CAPqcap];
 
                 // Without integration, a capacitor cannot do anything
                 if (method != null)
                 {
                     var result = ckt.Method.Integrate(state, CAPstate + CAPqcap, CAPcapac);
-                    if (state.Init == CircuitState.InitFlags.InitTransient)
+                    if (state.Init == State.InitFlags.InitTransient)
                         state.States[1][CAPstate + CAPqcap] = state.States[0][CAPstate + CAPqcap];
 
                     CAPposPosptr.Add(result.Geq);

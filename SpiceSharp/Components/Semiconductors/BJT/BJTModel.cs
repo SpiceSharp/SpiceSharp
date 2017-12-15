@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BJTModel(CircuitIdentifier name) : base(name)
+        public BJTModel(Identifier name) : base(name)
         {
             RegisterBehavior(new ModelTemperatureBehavior());
             RegisterBehavior(new ModelNoiseBehavior());

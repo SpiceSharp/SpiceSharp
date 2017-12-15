@@ -28,16 +28,16 @@ namespace SpiceSharp.Parser.Readers
         public override bool Read(string type, Statement st, Netlist netlist)
         {
             // Initialize
-            List<CircuitIdentifier> instancepins = new List<CircuitIdentifier>();
-            Dictionary<CircuitIdentifier, Token> instanceparameters = new Dictionary<CircuitIdentifier, Token>();
-            CircuitIdentifier definition = null;
+            List<Identifier> instancepins = new List<Identifier>();
+            Dictionary<Identifier, Token> instanceparameters = new Dictionary<Identifier, Token>();
+            Identifier definition = null;
 
             // Get the name
-            CircuitIdentifier name;
+            Identifier name;
             if (netlist.Path.InstancePath != null)
                 name = netlist.Path.InstancePath.Grow(st.Name.image);
             else
-                name = new CircuitIdentifier(st.Name.image);
+                name = new Identifier(st.Name.image);
 
             // Format: <NAME> <NODES>* <SUBCKT> <PAR1>=<VAL1> ...
             // Or: <NAME> <NODES>* <SUBCKT> params: <PAR1>=<VAL1> ...
@@ -48,7 +48,7 @@ namespace SpiceSharp.Parser.Readers
                 if (mode)
                 {
                     if (ReaderExtension.IsNode(st.Parameters[i]))
-                        instancepins.Add(definition = new CircuitIdentifier(st.Parameters[i].image));
+                        instancepins.Add(definition = new Identifier(st.Parameters[i].image));
                     else
                     {
                         instancepins.RemoveAt(instancepins.Count - 1);
@@ -67,7 +67,7 @@ namespace SpiceSharp.Parser.Readers
                         {
                             case WORD:
                             case IDENTIFIER:
-                                instanceparameters.Add(new CircuitIdentifier(at.Name.image), at.Value);
+                                instanceparameters.Add(new Identifier(at.Name.image), at.Value);
                                 break;
 
                             default:
@@ -84,7 +84,7 @@ namespace SpiceSharp.Parser.Readers
             // Modify the instancepins to be local or use the nodemap
             for (int i = 0; i < instancepins.Count; i++)
             {
-                if (netlist.Path.NodeMap.TryGetValue(instancepins[i], out CircuitIdentifier node))
+                if (netlist.Path.NodeMap.TryGetValue(instancepins[i], out Identifier node))
                     instancepins[i] = node;
                 else if (netlist.Path.InstancePath != null)
                     instancepins[i] = netlist.Path.InstancePath.Grow(instancepins[i].Name);

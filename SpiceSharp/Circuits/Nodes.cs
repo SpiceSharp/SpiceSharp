@@ -7,40 +7,40 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Contains and manages circuit nodes.
     /// </summary>
-    public class CircuitNodes
+    public class Nodes
     {
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<CircuitNode> nodes = new List<CircuitNode>();
-        private Dictionary<CircuitIdentifier, CircuitNode> map = new Dictionary<CircuitIdentifier, CircuitNode>();
+        private List<Node> nodes = new List<Node>();
+        private Dictionary<Identifier, Node> map = new Dictionary<Identifier, Node>();
         private bool locked = false;
 
         /// <summary>
         /// The initial conditions
         /// This is the initial value when simulation starts
         /// </summary>
-        public Dictionary<CircuitIdentifier, double> IC { get; } = new Dictionary<CircuitIdentifier, double>();
+        public Dictionary<Identifier, double> IC { get; } = new Dictionary<Identifier, double>();
 
         /// <summary>
         /// The nodeset values
         /// This value can help convergence
         /// </summary>
-        public Dictionary<CircuitIdentifier, double> Nodeset { get; } = new Dictionary<CircuitIdentifier, double>();
+        public Dictionary<Identifier, double> Nodeset { get; } = new Dictionary<Identifier, double>();
 
         /// <summary>
         /// Gets the ground node
         /// </summary>
-        public CircuitNode Ground { get; private set; }
+        public Node Ground { get; private set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CircuitNodes()
+        public Nodes()
         {
-            Ground = new CircuitNode(new CircuitIdentifier("0"), CircuitNode.NodeType.Voltage);
+            Ground = new Node(new Identifier("0"), Node.NodeType.Voltage);
             map.Add(Ground.Name, Ground);
-            map.Add(new CircuitIdentifier("gnd"), Ground);
+            map.Add(new Identifier("gnd"), Ground);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param id="id">Identifier</param>
         /// <returns></returns>
-        public CircuitNode this[CircuitIdentifier id]
+        public Node this[Identifier id]
         {
             get => map[id];
         }
@@ -58,7 +58,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param id="index"></param>
         /// <returns></returns>
-        public CircuitNode this[int index] => nodes[index];
+        public Node this[int index] => nodes[index];
 
         /// <summary>
         /// Get the node count
@@ -71,7 +71,7 @@ namespace SpiceSharp.Circuits
         /// <param id="id">Identifier</param>
         /// <param id="type">Type</param>
         /// <returns></returns>
-        public CircuitNode Map(CircuitIdentifier id, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
+        public Node Map(Identifier id, Node.NodeType type = Node.NodeType.Voltage)
         {
             if (locked)
                 throw new CircuitException("Nodes are locked, mapping is not allowed");
@@ -80,7 +80,7 @@ namespace SpiceSharp.Circuits
             if (map.ContainsKey(id))
                 return map[id];
 
-            var node = new CircuitNode(id, type, nodes.Count + 1);
+            var node = new Node(id, type, nodes.Count + 1);
             nodes.Add(node);
             map.Add(id, node);
             return node;
@@ -92,10 +92,10 @@ namespace SpiceSharp.Circuits
         /// <param name="id">Identifier</param>
         /// <param name="type">Type</param>
         /// <returns></returns>
-        public CircuitNode Create(CircuitIdentifier id, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
+        public Node Create(Identifier id, Node.NodeType type = Node.NodeType.Voltage)
         {
             int index = nodes.Count + 1;
-            var node = new CircuitNode(id, type, index);
+            var node = new Node(id, type, index);
             nodes.Add(node);
             return node;
         }
@@ -105,7 +105,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param id="id">Identifier</param>
         /// <returns></returns>
-        public bool Contains(CircuitIdentifier id) => map.ContainsKey(id);
+        public bool Contains(Identifier id) => map.ContainsKey(id);
 
         /// <summary>
         /// Avoid changing to the internal structure by locking the node list
@@ -123,7 +123,7 @@ namespace SpiceSharp.Circuits
             nodes.Clear();
             map.Clear();
             map.Add(Ground.Name, Ground);
-            map.Add(new CircuitIdentifier("gnd"), Ground);
+            map.Add(new Identifier("gnd"), Ground);
             locked = false;
         }
     }

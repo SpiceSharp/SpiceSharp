@@ -10,7 +10,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Provides methods for checking the integrity of a circuit.
     /// </summary>
-    public class CircuitCheck
+    public class Checker
     {
         /// <summary>
         /// Constants
@@ -30,7 +30,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Constructor
         /// </summary>
-        public CircuitCheck()
+        public Checker()
         {
         }
 
@@ -72,7 +72,7 @@ namespace SpiceSharp.Circuits
             var unconnected = FindFloatingNodes();
             if (unconnected.Count > 0)
             {
-                List<CircuitIdentifier> un = new List<CircuitIdentifier>();
+                List<Identifier> un = new List<Identifier>();
                 for (int i = 0; i < ckt.Nodes.Count; i++)
                 {
                     int index = ckt.Nodes[i].Index;
@@ -87,7 +87,7 @@ namespace SpiceSharp.Circuits
         /// Deal with a component
         /// </summary>
         /// <param name="c">The circuit object</param>
-        private void CheckObject(CircuitObject c)
+        private void CheckObject(Entity c)
         {
             // Circuit components
             if (c is Component icc)

@@ -5,7 +5,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// An identifier for a circuit object
     /// </summary>
-    public class CircuitIdentifier
+    public class Identifier
     {
         /// <summary>
         /// Gets or sets the separator for displaying path names
@@ -42,7 +42,7 @@ namespace SpiceSharp.Circuits
         /// Constructor
         /// </summary>
         /// <param name="path">The full path</param>
-        public CircuitIdentifier(params string[] path)
+        public Identifier(params string[] path)
         {
             // Check inputs
             if (path.Length == 0)
@@ -77,7 +77,7 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (obj is CircuitIdentifier con)
+            if (obj is Identifier con)
             {
                 // Check lengths
                 if (Path.Length != con.Path.Length)
@@ -109,13 +109,13 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns></returns>
-        public CircuitIdentifier Grow(string id)
+        public Identifier Grow(string id)
         {
             string[] npath = new string[Path.Length + 1];
             for (int i = 0; i < Path.Length; i++)
                 npath[i] = Path[i];
             npath[Path.Length] = id;
-            return new CircuitIdentifier(npath);
+            return new Identifier(npath);
         }
 
         /// <summary>
@@ -123,21 +123,21 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns></returns>
-        public CircuitIdentifier Grow(CircuitIdentifier id)
+        public Identifier Grow(Identifier id)
         {
             string[] npath = new string[Path.Length + id.Path.Length];
             for (int i = 0; i < Path.Length; i++)
                 npath[i] = Path[i];
             for (int i = 0; i < id.Path.Length; i++)
                 npath[i + Path.Length] = id.Path[i];
-            return new CircuitIdentifier(npath);
+            return new Identifier(npath);
         }
 
         /// <summary>
         /// Remove the last identifier from the path
         /// </summary>
         /// <returns></returns>
-        public CircuitIdentifier Shrink()
+        public Identifier Shrink()
         {
             // Cannot shrink any more
             if (Path.Length == 1)
@@ -148,19 +148,19 @@ namespace SpiceSharp.Circuits
             for (int i = 0; i < npath.Length - 1; i++)
                 npath[i] = Path[i];
             npath[npath.Length - 1] = Name;
-            return new CircuitIdentifier(npath);
+            return new Identifier(npath);
         }
 
         /// <summary>
         /// Implicitely convert a string array to a path for a circuit object
         /// </summary>
         /// <param name="path">Path</param>
-        public static implicit operator CircuitIdentifier(string[] path) => new CircuitIdentifier(path);
+        public static implicit operator Identifier(string[] path) => new Identifier(path);
 
         /// <summary>
         /// Implicitely convert a string to a name for a circuit object
         /// </summary>
         /// <param name="name">Name</param>
-        public static implicit operator CircuitIdentifier(string name) => new CircuitIdentifier(name);
+        public static implicit operator Identifier(string name) => new Identifier(name);
     }
 }

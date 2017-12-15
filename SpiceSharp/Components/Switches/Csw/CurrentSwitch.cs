@@ -19,7 +19,7 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [SpiceName("control"), SpiceInfo("Name of the controlling source")]
-        public CircuitIdentifier CSWcontName { get; set; }
+        public Identifier CSWcontName { get; set; }
         
         /// <summary>
         /// Nodes
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled switch</param>
-        public CurrentSwitch(CircuitIdentifier name) : base(name, CSWpinCount)
+        public CurrentSwitch(Identifier name) : base(name, CSWpinCount)
         {
             // Make sure the current switch is processed after voltage sources
             Priority = -1;
@@ -58,7 +58,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source</param>
-        public CurrentSwitch(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource) : base(name, 2)
+        public CurrentSwitch(Identifier name, Identifier pos, Identifier neg, Identifier vsource) : base(name, 2)
         {
             Connect(pos, neg);
             CSWcontName = vsource;

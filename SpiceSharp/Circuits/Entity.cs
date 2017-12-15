@@ -9,7 +9,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Base class for any circuit object that can take part in simulations
     /// </summary>
-    public abstract class CircuitObject
+    public abstract class Entity
     {
         /// <summary>
         /// Available behaviors for the circuit object
@@ -25,13 +25,13 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Get the name of the object
         /// </summary>
-        public CircuitIdentifier Name { get; }
+        public Identifier Name { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the object</param>
-        public CircuitObject(CircuitIdentifier name)
+        public Entity(Identifier name)
         {
             Name = name;
         }

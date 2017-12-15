@@ -8,12 +8,12 @@ namespace SpiceSharp.Components
     /// A class that represents a circuit component/device.
     /// It can be connected in a circuit and it also has parameters.
     /// </summary>
-    public abstract class Component : CircuitObject
+    public abstract class Component : Entity
     {
         /// <summary>
         /// Private variables
         /// </summary>
-        private CircuitIdentifier[] connections = null;
+        private Identifier[] connections = null;
         private int[] indices = null;
 
         /// <summary>
@@ -25,13 +25,13 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the component</param>
-        public Component(CircuitIdentifier name, int nodecount)
+        public Component(Identifier name, int nodecount)
             : base(name)
         {
             // Initialize
             if (nodecount > 0)
             {
-                connections = new CircuitIdentifier[nodecount];
+                connections = new Identifier[nodecount];
                 indices = new int[nodecount];
             }
             else
@@ -44,13 +44,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Get the model of the circuit component (if any)
         /// </summary>
-        public CircuitObject Model { get; protected set; } = null;
+        public Entity Model { get; protected set; } = null;
 
         /// <summary>
         /// Connect the component in the circuit
         /// </summary>
         /// <param name="nodes"></param>
-        public virtual void Connect(params CircuitIdentifier[] nodes)
+        public virtual void Connect(params Identifier[] nodes)
         {
             if (nodes.Length != connections.Length)
                 throw new CircuitException($"{Name}: Node count mismatch. {nodes.Length} given, {connections.Length} expected.");
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="i">The index</param>
         /// <returns></returns>
-        public virtual CircuitIdentifier GetNode(int i)
+        public virtual Identifier GetNode(int i)
         {
             if (i < 0 || i >= connections.Length)
                 throw new IndexOutOfRangeException();
@@ -92,10 +92,10 @@ namespace SpiceSharp.Components
         /// <param name="ckt"></param>
         /// <param name="extra"></param>
         /// <returns></returns>
-        protected CircuitNode[] BindNodes(Circuit ckt)
+        protected Node[] BindNodes(Circuit ckt)
         {
             // Map connected nodes
-            CircuitNode[] nodes = new CircuitNode[connections.Length];
+            Node[] nodes = new Node[connections.Length];
             for (int i = 0; i < connections.Length; i++)
             {
                 nodes[i] = ckt.Nodes.Map(connections[i]);

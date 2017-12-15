@@ -13,7 +13,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// The component the behaviour acts upon
         /// </summary>
-        protected CircuitObject Component { get; private set; }
+        protected Entity Component { get; private set; }
 
         /// <summary>
         /// A table of named parameters
@@ -31,7 +31,7 @@ namespace SpiceSharp.Behaviors
         /// <typeparam name="T">The circuit behavior we want to ask</typeparam>
         /// <param name="co">The circuit object with the behaviors</param>
         /// <returns></returns>
-        protected T GetBehavior<T>(CircuitObject co) where T : Behavior
+        protected T GetBehavior<T>(Entity co) where T : Behavior
         {
             // Get base class
             var behavior = co.GetBehavior(typeof(T).BaseType) as T;
@@ -45,7 +45,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public virtual void Setup(CircuitObject component, Circuit ckt)
+        public virtual void Setup(Entity component, Circuit ckt)
         {
             // Do nothing
         }
@@ -77,7 +77,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="ckt">The circuit</param>
         /// <param name="type">The type</param>
         /// <returns></returns>
-        protected CircuitNode CreateNode(Circuit ckt, CircuitIdentifier name, CircuitNode.NodeType type = CircuitNode.NodeType.Voltage)
+        protected Node CreateNode(Circuit ckt, Identifier name, Node.NodeType type = Node.NodeType.Voltage)
         {
             // Map the extra equations
             return ckt.Nodes.Create(name, type);

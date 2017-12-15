@@ -5,7 +5,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Describes a node in an electronic circuit.
     /// </summary>
-    public class CircuitNode
+    public class Node
     {
         /// <summary>
         /// Enumeration of unknown types
@@ -26,7 +26,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets or sets the name of the node
         /// </summary>
-        public CircuitIdentifier Name { get; }
+        public Identifier Name { get; }
 
         /// <summary>
         /// Gets the index of the node
@@ -46,11 +46,11 @@ namespace SpiceSharp.Circuits
 
         /// <summary>
         /// Constructor
-        /// Used by <see cref="CircuitNodes"/>
+        /// Used by <see cref="Nodes"/>
         /// </summary>
         /// <param name="type">The type of node</param>
         /// <param name="index">The row index</param>
-        public CircuitNode(CircuitIdentifier name, NodeType type, int index = 0)
+        public Node(Identifier name, NodeType type, int index = 0)
         {
             Name = name;
             Type = type;

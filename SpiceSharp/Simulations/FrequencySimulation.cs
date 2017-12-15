@@ -88,7 +88,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public FrequencySimulation(CircuitIdentifier name) : base(name)
+        public FrequencySimulation(Identifier name) : base(name)
         {
         }
 
@@ -139,10 +139,10 @@ namespace SpiceSharp.Simulations
             foreach (var behavior in acbehaviors)
                 behavior.Load(ckt);
 
-            if (state.Sparse.HasFlag(CircuitState.SparseFlags.NIACSHOULDREORDER))
+            if (state.Sparse.HasFlag(State.SparseFlags.NIACSHOULDREORDER))
             {
                 var error = matrix.Reorder(state.PivotAbsTol, state.PivotRelTol);
-                state.Sparse &= ~CircuitState.SparseFlags.NIACSHOULDREORDER;
+                state.Sparse &= ~State.SparseFlags.NIACSHOULDREORDER;
                 if (error != SparseError.Okay)
                     throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
             }
@@ -153,7 +153,7 @@ namespace SpiceSharp.Simulations
                 {
                     if (error == SparseError.Singular)
                     {
-                        state.Sparse |= CircuitState.SparseFlags.NIACSHOULDREORDER;
+                        state.Sparse |= State.SparseFlags.NIACSHOULDREORDER;
                         goto retry;
                     }
                     throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));

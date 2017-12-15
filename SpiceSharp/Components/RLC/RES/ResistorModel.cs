@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public ResistorModel(CircuitIdentifier name) : base(name)
+        public ResistorModel(Identifier name) : base(name)
         {
             RegisterBehavior(new ModelTemperatureBehavior());
         }

@@ -35,7 +35,7 @@ namespace SpiceSharp.Behaviors.RES
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             DataOnly = true;
         }

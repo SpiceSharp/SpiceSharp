@@ -50,7 +50,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="index">The state index to integrate</param>
         /// <param name="cap">The capacitance</param>
         /// <returns></returns>
-        public override Result Integrate(CircuitState state, int qcap, double cap)
+        public override Result Integrate(State state, int qcap, double cap)
         {
             int ccap = qcap + 1;
 
@@ -137,7 +137,7 @@ namespace SpiceSharp.IntegrationMethods
                     for (int i = 0; i < ckt.Nodes.Count; i++)
                     {
                         var node = ckt.Nodes[i];
-                        if (node.Type != CircuitNode.NodeType.Voltage)
+                        if (node.Type != Node.NodeType.Voltage)
                             continue;
                         index = node.Index;
 
@@ -156,7 +156,7 @@ namespace SpiceSharp.IntegrationMethods
                     for (int i = 0; i < ckt.Nodes.Count; i++)
                     {
                         var node = ckt.Nodes[i];
-                        if (node.Type != CircuitNode.NodeType.Voltage)
+                        if (node.Type != Node.NodeType.Voltage)
                             continue;
                         index = node.Index;
 

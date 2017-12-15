@@ -83,12 +83,12 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             var ind = component as Inductor;
 
             // Create branch equation
-            INDbrEq = CreateNode(ckt, ind.Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
+            INDbrEq = CreateNode(ckt, ind.Name.Grow("#branch"), Node.NodeType.Current).Index;
 
             // Get nodes
             INDposNode = ind.INDposNode;

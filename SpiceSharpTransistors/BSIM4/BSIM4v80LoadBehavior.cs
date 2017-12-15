@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 gIbtotg, gIbtotd, gIbtots, gIbtotb, Ibtoteq, gIgtotg, gIgtotd, gIgtots, gIgtotb, Igtoteq, gcrgd, gcrgg, gcrgs, gcrgb, ceqgcrg,
                 gcrg, ceqgstot, gstot, gstotd, gstotg, gstots, gstotb, ceqgdtot, gdtot, gdtotd, gdtotg, gdtots, gdtotb, ceqjs, ceqjd, gjbd,
                 gjbs, gdpr, gspr, geltd, ggidld = 0, ggidlg = 0, ggidlb = 0, ggislg = 0, ggisls = 0, ggislb = 0;
-            bool ChargeComputationNeeded = (method != null || state.UseSmallSignal) || (state.Domain == CircuitState.DomainTypes.Time && state.UseDC && state.UseIC);
+            bool ChargeComputationNeeded = (method != null || state.UseSmallSignal) || (state.Domain == State.DomainTypes.Time && state.UseDC && state.UseIC);
 
             Check = Check1 = Check2 = 1;
 
@@ -83,7 +83,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
                 qdef = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qdef];
             }
-            else if (state.Init == CircuitState.InitFlags.InitTransient)
+            else if (state.Init == State.InitFlags.InitTransient)
             {
                 vds = state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4vds];
                 vgs = state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4vgs];
@@ -97,7 +97,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
                 qdef = state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4qdef];
             }
-            else if ((state.Init == CircuitState.InitFlags.InitJct) && !bsim4.BSIM4off)
+            else if ((state.Init == State.InitFlags.InitJct) && !bsim4.BSIM4off)
             {
                 vds = model.BSIM4type * bsim4.BSIM4icVDS;
                 vgs = vges = vgms = model.BSIM4type * bsim4.BSIM4icVGS;
@@ -118,7 +118,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 qdef = 0.0;
 
                 if ((vds == 0.0) && (vgs == 0.0) && (vbs == 0.0) && ((method != null || state.UseDC ||
-                    state.Domain == CircuitState.DomainTypes.None) || (!state.UseIC)))
+                    state.Domain == State.DomainTypes.None) || (!state.UseIC)))
                 {
                     vds = 0.1;
                     vdes = 0.11;
@@ -127,7 +127,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                     vbs = vdbs = vsbs = 0.0;
                 }
             }
-            else if ((state.Init == CircuitState.InitFlags.InitJct || state.Init == CircuitState.InitFlags.InitFix) && (bsim4.BSIM4off))
+            else if ((state.Init == State.InitFlags.InitJct || state.Init == State.InitFlags.InitFix) && (bsim4.BSIM4off))
             {
                 vds = vgs = vbs = vges = vgms = 0.0;
                 vdbs = vsbs = vdes = vses = qdef = 0.0;
@@ -3553,7 +3553,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                     bsim4.BSIM4taunet = 1.0 / T1;
 
                 state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qcheq] = qcheq;
-                if (state.Init == CircuitState.InitFlags.InitTransient)
+                if (state.Init == State.InitFlags.InitTransient)
                     state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4qcheq] = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qcheq];
                 if (bsim4.BSIM4trnqsMod != 0 && method != null)
                     method.Integrate(state, bsim4.BSIM4states + BSIM4v80.BSIM4qcheq, 0.0);
@@ -3690,7 +3690,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             * check convergence
             */
 
-            if (!bsim4.BSIM4off || ((state.Init != CircuitState.InitFlags.InitFix)))
+            if (!bsim4.BSIM4off || ((state.Init != State.InitFlags.InitFix)))
             {
                 if (Check == 1)
                     state.IsCon = false;
@@ -4154,7 +4154,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if (bsim4.BSIM4trnqsMod != 0)
             {
                 state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qcdump] = qdef * BSIM4v80.ScalingFactor;
-                if (state.Init == CircuitState.InitFlags.InitTransient)
+                if (state.Init == State.InitFlags.InitTransient)
                     state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4qcdump] = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qcdump];
                 if (method != null)
                     method.Integrate(state, bsim4.BSIM4states + BSIM4v80.BSIM4qcdump, 0.0);
@@ -4181,7 +4181,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if (!ChargeComputationNeeded)
                 goto line850;
 
-            if (state.Init == CircuitState.InitFlags.InitTransient)
+            if (state.Init == State.InitFlags.InitTransient)
             {
                 state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4qb] = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qb];
                 state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4qg] = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4qg];
@@ -4276,7 +4276,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 cqcheq = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4cqcheq] - (gcqgb * vgb - gcqdb * vbd - gcqsb * vbs) + T0;
             }
 
-            if (state.Init == CircuitState.InitFlags.InitTransient)
+            if (state.Init == State.InitFlags.InitTransient)
             {
                 state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4cqb] = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4cqb];
                 state.States[1][bsim4.BSIM4states + BSIM4v80.BSIM4cqg] = state.States[0][bsim4.BSIM4states + BSIM4v80.BSIM4cqg];

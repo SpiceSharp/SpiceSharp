@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.Transistors
             bool ChargeComputationNeeded;
             int valuetypeflag;			/* added  3/19/90 JSD   */
 
-            if (ckt.Method != null || (ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC && ckt.State.UseIC) || ckt.State.UseSmallSignal)
+            if (ckt.Method != null || (ckt.State.Domain == State.DomainTypes.Time && ckt.State.UseDC && ckt.State.UseIC) || ckt.State.UseSmallSignal)
                 ChargeComputationNeeded = true;
             else
                 ChargeComputationNeeded = false;

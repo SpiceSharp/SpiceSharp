@@ -18,7 +18,7 @@ namespace SpiceSharp.Behaviors.CAP
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(CircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             // Get behaviors
             load = GetBehavior<LoadBehavior>(component);

@@ -29,12 +29,12 @@ namespace SpiceSharp.Parser.Readers
         public override bool Read(string type, Statement st, Netlist netlist)
         {
             // Apply the change to the circuit
-            CircuitIdentifier id;
+            Identifier id;
             if (netlist.Path.InstancePath != null)
                 id = netlist.Path.InstancePath.Grow(st.Name.image);
             else
-                id = new CircuitIdentifier(st.Name.image);
-            CircuitObject result = Generate(type, id, st.Parameters, netlist);
+                id = new Identifier(st.Name.image);
+            Entity result = Generate(type, id, st.Parameters, netlist);
             Generated = result;
             if (result != null)
             {
@@ -53,6 +53,6 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="parameters"></param>
         /// <param name="netlist"></param>
         /// <returns></returns>
-        protected abstract CircuitObject Generate(string type, CircuitIdentifier name, List<Token> parameters, Netlist netlist);
+        protected abstract Entity Generate(string type, Identifier name, List<Token> parameters, Netlist netlist);
     }
 }
