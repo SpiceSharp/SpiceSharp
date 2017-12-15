@@ -3,7 +3,7 @@
     /// <summary>
     /// Behavior for setting initial conditions
     /// </summary>
-    public abstract class CircuitObjectBehaviorIc : CircuitObjectBehavior
+    public abstract class CircuitObjectBehaviorIc : Behavior
     {
         /// <summary>
         /// Set the initial conditions

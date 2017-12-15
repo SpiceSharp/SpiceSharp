@@ -112,12 +112,12 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <typeparam name="T">Base behavior</typeparam>
         /// <returns></returns>
-        protected List<T> SetupBehaviors<T>() where T : CircuitObjectBehavior
+        protected List<T> SetupBehaviors<T>() where T : Behavior
         {
             List<T> result = new List<T>();
             foreach (var o in Circuit.Objects)
             {
-                if (o.TryGetBehavior(typeof(T), out CircuitObjectBehavior behavior))
+                if (o.TryGetBehavior(typeof(T), out Behavior behavior))
                 {
                     // The object returned a behavior, so we can setup and collect it
                     behavior.Setup(o, Circuit);

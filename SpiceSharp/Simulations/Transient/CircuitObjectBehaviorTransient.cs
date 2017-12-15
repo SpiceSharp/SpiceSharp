@@ -3,7 +3,7 @@
     /// <summary>
     /// Transient behavior
     /// </summary>
-    public abstract class CircuitObjectBehaviorTransient : CircuitObjectBehavior
+    public abstract class CircuitObjectBehaviorTransient : Behavior
     {
         /// <summary>
         /// Transient calculations

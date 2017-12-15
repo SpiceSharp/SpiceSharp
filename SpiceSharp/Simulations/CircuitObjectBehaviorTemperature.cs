@@ -3,7 +3,7 @@
     /// <summary>
     /// Temperature-dependent behaviour for circuit objects
     /// </summary>
-    public abstract class CircuitObjectBehaviorTemperature : CircuitObjectBehavior
+    public abstract class CircuitObjectBehaviorTemperature : Behavior
     {
         /// <summary>
         /// Do temperature-dependent calculations

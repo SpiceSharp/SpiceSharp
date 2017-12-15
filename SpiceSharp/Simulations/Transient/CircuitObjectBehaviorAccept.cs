@@ -3,7 +3,7 @@
     /// <summary>
     /// Behavior for accepting a timepoint
     /// </summary>
-    public abstract class CircuitObjectBehaviorAccept : CircuitObjectBehavior
+    public abstract class CircuitObjectBehaviorAccept : Behavior
     {
         /// <summary>
         /// Accept the current timepoint

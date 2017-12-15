@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Represents a behaviour for a class
     /// </summary>
-    public abstract class CircuitObjectBehavior
+    public abstract class Behavior
     {
         /// <summary>
         /// The component the behaviour acts upon
@@ -31,7 +31,7 @@ namespace SpiceSharp.Behaviors
         /// <typeparam name="T">The circuit behavior we want to ask</typeparam>
         /// <param name="co">The circuit object with the behaviors</param>
         /// <returns></returns>
-        protected T GetBehavior<T>(CircuitObject co) where T : CircuitObjectBehavior
+        protected T GetBehavior<T>(CircuitObject co) where T : Behavior
         {
             // Get base class
             var behavior = co.GetBehavior(typeof(T).BaseType) as T;

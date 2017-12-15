@@ -3,7 +3,7 @@
     /// <summary>
     /// General behaviour for a circuit object
     /// </summary>
-    public abstract class CircuitObjectBehaviorLoad : CircuitObjectBehavior
+    public abstract class CircuitObjectBehaviorLoad : Behavior
     {
         /// <summary>
         /// Load the Y-matrix and Rhs-vector

@@ -14,7 +14,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Available behaviors for the circuit object
         /// </summary>
-        protected Dictionary<Type, CircuitObjectBehavior> Behaviors { get; } = new Dictionary<Type, CircuitObjectBehavior>();
+        protected Dictionary<Type, Behavior> Behaviors { get; } = new Dictionary<Type, Behavior>();
 
         /// <summary>
         /// A table of named parameters
@@ -40,7 +40,7 @@ namespace SpiceSharp.Circuits
         /// Register a behavior
         /// </summary>
         /// <param name="behavior">Behavior</param>
-        public void RegisterBehavior(CircuitObjectBehavior behavior)
+        public void RegisterBehavior(Behavior behavior)
         {
             Type type = behavior.GetType().BaseType;
             Behaviors[type] = behavior;
@@ -80,7 +80,7 @@ namespace SpiceSharp.Circuits
         /// Get the behavior of the object
         /// </summary>
         /// <param name="behaviorbase">The base class of the behavior</param>
-        public CircuitObjectBehavior GetBehavior(Type behaviorbase) => Behaviors[behaviorbase];
+        public Behavior GetBehavior(Type behaviorbase) => Behaviors[behaviorbase];
 
         /// <summary>
         /// Try and get a behavior from the object
@@ -88,7 +88,7 @@ namespace SpiceSharp.Circuits
         /// <param name="behaviorbase">Base class type of the behavior</param>
         /// <param name="behavior">Behavior</param>
         /// <returns></returns>
-        public bool TryGetBehavior(Type behaviorbase, out CircuitObjectBehavior behavior) => Behaviors.TryGetValue(behaviorbase, out behavior);
+        public bool TryGetBehavior(Type behaviorbase, out Behavior behavior) => Behaviors.TryGetValue(behaviorbase, out behavior);
 
         /// <summary>
         /// Get the priority of this object
