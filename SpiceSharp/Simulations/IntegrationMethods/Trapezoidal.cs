@@ -34,7 +34,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="ckt">Circuit</param>
         /// <param name="truncatebehaviors">Truncation behaviors</param>
-        public override void Initialize(Circuit ckt, List<CircuitObjectBehaviorTruncate> truncatebehaviors)
+        public override void Initialize(Circuit ckt, List<TruncateBehavior> truncatebehaviors)
         {
             base.Initialize(ckt, truncatebehaviors);
 

@@ -11,7 +11,7 @@ namespace SpiceSharp.Behaviors.VSRC
     /// <summary>
     /// AC behaviour for <see cref="Voltagesource"/>
     /// </summary>
-    public class AcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : Behaviors.AcBehavior
     {
         /// <summary>
         /// Parameters

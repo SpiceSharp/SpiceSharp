@@ -10,7 +10,7 @@ namespace SpiceSharp.Behaviors.BJT
     /// <summary>
     /// General behaviour for <see cref="BJT"/>
     /// </summary>
-    public class LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Necessary behaviors

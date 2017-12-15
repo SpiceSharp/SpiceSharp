@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors.BJT
     /// <summary>
     /// AC behaviour for <see cref="BJT"/>
     /// </summary>
-    public class AcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : Behaviors.AcBehavior
     {
         /// <summary>
         /// Necessary behaviors

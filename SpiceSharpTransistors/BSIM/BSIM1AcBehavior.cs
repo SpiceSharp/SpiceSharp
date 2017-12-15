@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// <summary>
     /// AC behaviour for a <see cref="BSIM1"/>
     /// </summary>
-    public class BSIM1AcBehavior : CircuitObjectBehaviorAcLoad
+    public class BSIM1AcBehavior : AcBehavior
     {
         /// <summary>
         /// Execute the behaviour

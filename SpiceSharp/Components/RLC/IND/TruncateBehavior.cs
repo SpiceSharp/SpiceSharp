@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.IND
     /// <summary>
     /// Truncate behavior for inductors
     /// </summary>
-    public class TruncateBehavior : CircuitObjectBehaviorTruncate
+    public class TruncateBehavior : Behaviors.TruncateBehavior
     {
         /// <summary>
         /// Necessary behaviors

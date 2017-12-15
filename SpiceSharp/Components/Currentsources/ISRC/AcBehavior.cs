@@ -10,7 +10,7 @@ namespace SpiceSharp.Behaviors.ISRC
     /// <summary>
     /// Behavior of a currentsource in AC analysis
     /// </summary>
-    public class AcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : Behaviors.AcBehavior
     {
         /// <summary>
         /// Parameters

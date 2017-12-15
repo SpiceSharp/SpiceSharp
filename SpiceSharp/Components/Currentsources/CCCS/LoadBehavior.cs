@@ -9,7 +9,7 @@ namespace SpiceSharp.Behaviors.CCCS
     /// <summary>
     /// Behavior for a <see cref="CurrentControlledCurrentsource"/>
     /// </summary>
-    public class LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Parameters

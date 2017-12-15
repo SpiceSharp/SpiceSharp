@@ -9,7 +9,7 @@ namespace SpiceSharp.Behaviors.ISRC
     /// <summary>
     /// Current source behaviour for DC and Transient analysis
     /// </summary>
-    public class LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Parameters

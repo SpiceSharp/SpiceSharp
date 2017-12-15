@@ -27,8 +27,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<CircuitObjectBehaviorAccept> acceptbehaviors;
-        private List<CircuitObjectBehaviorTruncate> truncatebehaviors;
+        private List<AcceptBehavior> acceptbehaviors;
+        private List<TruncateBehavior> truncatebehaviors;
 
         /// <summary>
         /// Constructor
@@ -59,8 +59,8 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get behaviors
-            acceptbehaviors = SetupBehaviors<CircuitObjectBehaviorAccept>();
-            truncatebehaviors = SetupBehaviors<CircuitObjectBehaviorTruncate>();
+            acceptbehaviors = SetupBehaviors<AcceptBehavior>();
+            truncatebehaviors = SetupBehaviors<TruncateBehavior>();
         }
 
         /// <summary>

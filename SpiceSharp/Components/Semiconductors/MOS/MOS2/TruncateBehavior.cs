@@ -5,7 +5,7 @@ namespace SpiceSharp.Behaviors.MOS2
     /// <summary>
     /// Truncate behavior for a <see cref="Components.MOS2"/>
     /// </summary>
-    public class TruncateBehavior : CircuitObjectBehaviorTruncate
+    public class TruncateBehavior : Behaviors.TruncateBehavior
     {
         /// <summary>
         /// Necessary behaviors

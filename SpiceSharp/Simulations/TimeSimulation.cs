@@ -57,7 +57,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Time-domain behaviors
         /// </summary>
-        protected List<CircuitObjectBehaviorTransient> tranbehaviors = null;
+        protected List<TransientBehavior> tranbehaviors = null;
         protected IntegrationMethod method = null;
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace SpiceSharp.Simulations
 
             // Also configure the method
             method = CurrentConfig.Method ?? throw new CircuitException($"{Name}: No integration method specified");
-            tranbehaviors = SetupBehaviors<CircuitObjectBehaviorTransient>();
+            tranbehaviors = SetupBehaviors<TransientBehavior>();
         }
 
         /// <summary>

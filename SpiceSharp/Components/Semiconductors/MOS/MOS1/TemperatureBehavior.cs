@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors.MOS1
     /// <summary>
     /// Temperature behaviour for a <see cref="MOS1"/>
     /// </summary>
-    public class TemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {
         /// <summary>
         /// Necessary behaviors

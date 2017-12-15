@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviors.RES
     /// <summary>
     /// Temperature behavior for a <see cref="Components.ResistorModel"/>
     /// </summary>
-    public class ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class ModelTemperatureBehavior : Behaviors.TemperatureBehavior
     {
         /// <summary>
         /// Parameters

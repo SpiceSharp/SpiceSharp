@@ -9,7 +9,7 @@ namespace SpiceSharp.Behaviors.MOS3
     /// <summary>
     /// Temperature behaviour for a <see cref="Components.MOS3Model"/>
     /// </summary>
-    public class ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class ModelTemperatureBehavior : Behaviors.TemperatureBehavior
     {
         /// <summary>
         /// Parameters

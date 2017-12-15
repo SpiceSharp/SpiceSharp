@@ -3,7 +3,7 @@
     /// <summary>
     /// Behavior for noise analysis
     /// </summary>
-    public abstract class CircuitObjectBehaviorNoise: Behavior
+    public abstract class NoiseBehavior: Behavior
     {
         /// <summary>
         /// Noise calculations

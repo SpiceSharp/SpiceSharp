@@ -100,7 +100,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Private variables
         /// </summary>
         private double savetime = double.NaN;
-        private List<CircuitObjectBehaviorTruncate> truncatebehaviors;
+        private List<TruncateBehavior> truncatebehaviors;
 
         /// <summary>
         /// Delegate for a truncation method
@@ -159,7 +159,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="ckt">Circuit</param>
         /// <param name="truncatebehaviors">Truncation behaviors</param>
-        public virtual void Initialize(Circuit ckt, List<CircuitObjectBehaviorTruncate> truncatebehaviors)
+        public virtual void Initialize(Circuit ckt, List<TruncateBehavior> truncatebehaviors)
         {
             // Initialize variables
             Time = 0.0;

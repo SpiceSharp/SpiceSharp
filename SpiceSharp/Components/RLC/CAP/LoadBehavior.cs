@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.CAP
     /// <summary>
     /// General behaviour for <see cref="Capacitor"/>
     /// </summary>
-    public class LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Parameters
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.CAP
             // If the capacitance is not given, try getting it from the temperature behavior
             if (!CAPcapac.Given)
             {
-                var temp = component.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as TemperatureBehavior;
+                var temp = component.GetBehavior(typeof(Behaviors.TemperatureBehavior)) as TemperatureBehavior;
                 if (temp != null)
                     CAPcapac.Value = temp.CAPcapac;
             }

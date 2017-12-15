@@ -114,7 +114,6 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">The simulation name</param>
-        /// <param name="config">The configuration</param>
         public DC(CircuitIdentifier name) : base(name)
         {
         }
@@ -167,9 +166,9 @@ namespace SpiceSharp.Simulations
 
                 // Get the parameter and save it for restoring later
                 if (component is Voltagesource vsrc)
-                    swept[i] = (vsrc.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as Behaviors.VSRC.LoadBehavior).VSRCdcValue;
+                    swept[i] = (vsrc.GetBehavior(typeof(LoadBehavior)) as Behaviors.VSRC.LoadBehavior).VSRCdcValue;
                 else if (component is Currentsource isrc)
-                    swept[i] = (isrc.GetBehavior(typeof(CircuitObjectBehaviorLoad)) as Behaviors.ISRC.LoadBehavior).ISRCdcValue;
+                    swept[i] = (isrc.GetBehavior(typeof(LoadBehavior)) as Behaviors.ISRC.LoadBehavior).ISRCdcValue;
                 else
                     throw new CircuitException("Invalid sweep object");
                 original[i] = (Parameter)swept[i].Clone();

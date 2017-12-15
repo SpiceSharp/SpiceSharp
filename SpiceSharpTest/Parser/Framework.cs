@@ -49,7 +49,7 @@ namespace SpiceSharpTest.Parser
         protected void Initialize(Netlist n)
         {
             n.Circuit.Setup();
-            var temperaturebehaviours = SpiceSharp.Behaviors.Behaviors.CreateBehaviors<SpiceSharp.Behaviors.CircuitObjectBehaviorTemperature>(n.Circuit);
+            var temperaturebehaviours = SpiceSharp.Behaviors.Behaviors.CreateBehaviors<SpiceSharp.Behaviors.TemperatureBehavior>(n.Circuit);
             foreach (var behaviour in temperaturebehaviours)
                 behaviour.Temperature(n.Circuit);
         }

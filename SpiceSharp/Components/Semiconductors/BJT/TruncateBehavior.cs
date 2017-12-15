@@ -5,7 +5,7 @@ namespace SpiceSharp.Behaviors.BJT
     /// <summary>
     /// Truncate behavior for a <see cref="BJT"/>
     /// </summary>
-    public class TruncateBehavior : CircuitObjectBehaviorTruncate
+    public class TruncateBehavior : Behaviors.TruncateBehavior
     {
         /// <summary>
         /// Necessary behaviors

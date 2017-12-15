@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors.CSW
     /// <summary>
     /// General behaviour for a <see cref="CurrentSwitch"/>
     /// </summary>
-    public class LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Necessary behaviors

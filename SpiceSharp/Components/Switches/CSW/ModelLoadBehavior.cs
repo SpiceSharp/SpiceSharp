@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviors.CSW
     /// <summary>
     /// Load behavior for a <see cref="Components.CurrentSwitchModel"/>
     /// </summary>
-    public class ModelLoadBehavior : CircuitObjectBehaviorLoad
+    public class ModelLoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Parameters

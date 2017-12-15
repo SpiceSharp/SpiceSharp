@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors.MOS1
     /// <summary>
     /// Noise behaviour for a <see cref="MOS1"/>
     /// </summary>
-    public class NoiseBehavior : CircuitObjectBehaviorNoise
+    public class NoiseBehavior : Behaviors.NoiseBehavior
     {
         /// <summary>
         /// Necessary behaviors

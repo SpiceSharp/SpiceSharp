@@ -9,7 +9,7 @@ namespace SpiceSharp.Behaviors.DIO
     /// <summary>
     /// Noise behaviour for <see cref="Diode"/>
     /// </summary>
-    public class NoiseBehavior : CircuitObjectBehaviorNoise
+    public class NoiseBehavior : Behaviors.NoiseBehavior
     {
         /// <summary>
         /// Necessary behaviors

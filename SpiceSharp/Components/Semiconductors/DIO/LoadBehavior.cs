@@ -10,7 +10,7 @@ namespace SpiceSharp.Behaviors.DIO
     /// <summary>
     /// General behaviour for <see cref="Diode"/>
     /// </summary>
-    public class LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Necessary behaviors

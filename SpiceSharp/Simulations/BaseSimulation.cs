@@ -15,9 +15,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        protected List<CircuitObjectBehaviorLoad> loadbehaviors = null;
-        protected List<CircuitObjectBehaviorTemperature> tempbehaviors = null;
-        protected List<CircuitObjectBehaviorIc> icbehaviors = null;
+        protected List<LoadBehavior> loadbehaviors = null;
+        protected List<TemperatureBehavior> tempbehaviors = null;
+        protected List<IcBehavior> icbehaviors = null;
 
         /// <summary>
         /// Constructor
@@ -47,9 +47,9 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException($"{Name}: No circuit nodes for simulation");
 
             // Setup behaviors
-            tempbehaviors = SetupBehaviors<CircuitObjectBehaviorTemperature>();
-            loadbehaviors = SetupBehaviors<CircuitObjectBehaviorLoad>();
-            icbehaviors = SetupBehaviors<CircuitObjectBehaviorIc>();
+            tempbehaviors = SetupBehaviors<TemperatureBehavior>();
+            loadbehaviors = SetupBehaviors<LoadBehavior>();
+            icbehaviors = SetupBehaviors<IcBehavior>();
         }
 
         /// <summary>

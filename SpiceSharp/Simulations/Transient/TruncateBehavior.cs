@@ -3,7 +3,7 @@
     /// <summary>
     /// Behavior for truncating the current timestep
     /// </summary>
-    public abstract class CircuitObjectBehaviorTruncate : Behavior
+    public abstract class TruncateBehavior : Behavior
     {
         /// <summary>
         /// Truncate the current timestep

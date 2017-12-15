@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors.BJT
     /// <summary>
     /// Temperature behaviour for a <see cref="Components.BJTModel"/>
     /// </summary>
-    public class ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class ModelTemperatureBehavior : Behaviors.TemperatureBehavior
     {
         /// <summary>
         /// Parameters

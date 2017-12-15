@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.CAP
     /// <summary>
     /// Temperature behaviour for a <see cref="Capacitor"/>
     /// </summary>
-    public class TemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {
         /// <summary>
         /// Necessary behaviors

@@ -7,7 +7,7 @@ namespace SpiceSharp.Behaviors.MOS2
     /// <summary>
     /// AC behaviour for a <see cref="Components.MOS2"/>
     /// </summary>
-    public class AcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : Behaviors.AcBehavior
     {
         /// <summary>
         /// Necessary behaviors

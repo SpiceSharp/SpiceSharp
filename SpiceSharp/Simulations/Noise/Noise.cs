@@ -36,7 +36,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<CircuitObjectBehaviorNoise> noisebehaviors;
+        private List<NoiseBehavior> noisebehaviors;
 
         /// <summary>
         /// Constructor
@@ -54,7 +54,7 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get behaviors
-            noisebehaviors = SetupBehaviors<CircuitObjectBehaviorNoise>();
+            noisebehaviors = SetupBehaviors<NoiseBehavior>();
         }
 
         /// <summary>
@@ -74,7 +74,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Execute the noise analysis
         /// </summary>
-        /// <param name="ckt">The circuit</param>
         protected override void Execute()
         {
             var ckt = Circuit;
@@ -91,13 +90,13 @@ namespace SpiceSharp.Simulations
             CircuitObject source = ckt.Objects[Input];
             if (source is Voltagesource vsource)
             {
-                var ac = vsource.GetBehavior(typeof(CircuitObjectBehaviorAcLoad)) as Behaviors.VSRC.AcBehavior;
+                var ac = vsource.GetBehavior(typeof(AcBehavior)) as Behaviors.VSRC.AcBehavior;
                 if (!ac.VSRCacMag.Given || ac.VSRCacMag == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {vsource.Name} has no AC input");
             }
             else if (source is Currentsource isource)
             {
-                var ac = isource.GetBehavior(typeof(CircuitObjectBehaviorAcLoad)) as Behaviors.ISRC.AcBehavior;
+                var ac = isource.GetBehavior(typeof(AcBehavior)) as Behaviors.ISRC.AcBehavior;
                 if (!ac.ISRCacMag.Given || ac.ISRCacMag == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {isource.Name} has not AC input");
             }

@@ -3,7 +3,7 @@
     /// <summary>
     /// AC behaviour for circuit objects
     /// </summary>
-    public abstract class CircuitObjectBehaviorAcLoad : Behavior
+    public abstract class AcBehavior : Behavior
     {
         /// <summary>
         /// Load the Y-matrix and Rhs-vector for AC analysis

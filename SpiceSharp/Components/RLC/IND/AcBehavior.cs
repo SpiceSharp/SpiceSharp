@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.IND
     /// <summary>
     /// AC behaviour for <see cref="Inductor"/>
     /// </summary>
-    public class AcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : Behaviors.AcBehavior
     {
         /// <summary>
         /// Necessary behaviors

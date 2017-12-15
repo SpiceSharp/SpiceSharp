@@ -25,7 +25,7 @@ namespace Sandbox
                 new Resistor("R2", "OUT", "0", 1e4)
                 );
 
-            var current = ckt.Objects["V1"].GetBehavior(typeof(SpiceSharp.Behaviors.CircuitObjectBehaviorLoad)).CreateGetter(ckt, "i");
+            var current = ckt.Objects["V1"].GetBehavior(typeof(SpiceSharp.Behaviors.LoadBehavior)).CreateGetter(ckt, "i");
 
             DC dc = new DC("DC 1", "V1", 0, 10, 1e-3);
             dc.OnExportSimulationData += (object sender, SimulationData data) =>

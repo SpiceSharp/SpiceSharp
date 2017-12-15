@@ -7,7 +7,7 @@ namespace SpiceSharp.Behaviors.VSW
     /// <summary>
     /// AC behaviour for <see cref="VoltageSwitch"/>
     /// </summary>
-    public class AcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : Behaviors.AcBehavior
     {
         /// <summary>
         /// Necessary behaviors

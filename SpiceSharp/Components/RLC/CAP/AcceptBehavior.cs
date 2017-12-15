@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.CAP
     /// <summary>
     /// Accept behavior for capacitances
     /// </summary>
-    public class AcceptBehavior : CircuitObjectBehaviorAccept
+    public class AcceptBehavior : Behaviors.AcceptBehavior
     {
         /// <summary>
         /// Necessary behaviors

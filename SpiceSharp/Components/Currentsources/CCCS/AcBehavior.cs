@@ -9,7 +9,7 @@ namespace SpiceSharp.Behaviors.CCCS
     /// <summary>
     /// AC behaviour for <see cref="CurrentControlledCurrentsource"/>
     /// </summary>
-    public class AcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : Behaviors.AcBehavior
     {
         /// <summary>
         /// Necessary behaviors

@@ -7,7 +7,7 @@ namespace SpiceSharp.Behaviors.BJT
     /// <summary>
     /// Temperature behaviour for a <see cref="Components.BJT"/>
     /// </summary>
-    public class TemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {
         /// <summary>
         /// Necessary behaviors

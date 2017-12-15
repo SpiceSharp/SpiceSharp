@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors.CCVS
     /// <summary>
     /// General behaviour for <see cref="CurrentControlledVoltagesource"/>
     /// </summary>
-    public class LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Parameters

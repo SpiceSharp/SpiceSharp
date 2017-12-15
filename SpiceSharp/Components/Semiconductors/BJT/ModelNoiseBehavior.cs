@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviors.BJT
     /// <summary>
     /// Noise behavior for <see cref="Components.BJTModel"/>
     /// </summary>
-    public class ModelNoiseBehavior : CircuitObjectBehaviorNoise
+    public class ModelNoiseBehavior : Behaviors.NoiseBehavior
     {
         /// <summary>
         /// Parameters

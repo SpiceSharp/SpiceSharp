@@ -10,7 +10,7 @@ namespace SpiceSharp.Behaviors.VSRC
     /// <summary>
     /// General behaviour for <see cref="Voltagesource"/>
     /// </summary>
-    public class LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Parameters

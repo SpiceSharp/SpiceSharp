@@ -82,7 +82,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        protected List<CircuitObjectBehaviorAcLoad> acbehaviors = null;
+        protected List<AcBehavior> acbehaviors = null;
 
         /// <summary>
         /// Constructor
@@ -100,7 +100,7 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get behaviors
-            acbehaviors = SetupBehaviors<CircuitObjectBehaviorAcLoad>();
+            acbehaviors = SetupBehaviors<AcBehavior>();
         }
 
         /// <summary>

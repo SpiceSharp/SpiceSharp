@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors.DIO
     /// <summary>
     /// Temperature behaviour for a <see cref="Components.DiodeModel"/>
     /// </summary>
-    public class ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class ModelTemperatureBehavior : Behaviors.TemperatureBehavior
     {
         /// <summary>
         /// Parameters

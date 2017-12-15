@@ -9,7 +9,7 @@ namespace SpiceSharp.Behaviors.RES
     /// <summary>
     /// AC behaviour for <see cref="Resistor"/>
     /// </summary>
-    public class AcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : Behaviors.AcBehavior
     {
         /// <summary>
         /// Parameters

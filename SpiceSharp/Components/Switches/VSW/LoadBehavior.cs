@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors.VSW
     /// <summary>
     /// Load behavior for a <see cref="VoltageSwitch"/>
     /// </summary>
-    public class LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Necessary behaviors

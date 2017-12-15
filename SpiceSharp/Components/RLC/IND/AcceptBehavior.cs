@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.IND
     /// <summary>
     /// Accept behavior for inductors
     /// </summary>
-    public class AcceptBehavior : CircuitObjectBehaviorAccept
+    public class AcceptBehavior : Behaviors.AcceptBehavior
     {
         /// <summary>
         /// Necessary behaviors

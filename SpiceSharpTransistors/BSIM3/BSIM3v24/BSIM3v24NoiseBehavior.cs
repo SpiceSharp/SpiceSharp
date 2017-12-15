@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// <summary>
     /// Noise behaviour for a <see cref="BSIM3v24"/>
     /// </summary>
-    public class BSIM3v24NoiseBehavior : CircuitObjectBehaviorNoise
+    public class BSIM3v24NoiseBehavior : NoiseBehavior
     {
         /// <summary>
         /// Noise generators by their index

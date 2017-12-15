@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.CAP
     /// <summary>
     /// Truncate behavior for capacitors
     /// </summary>
-    public class TruncateBehavior : CircuitObjectBehaviorTruncate
+    public class TruncateBehavior : Behaviors.TruncateBehavior
     {
         /// <summary>
         /// Necessary behaviors

@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.IND
     /// <summary>
     /// General behaviour for a <see cref="Inductor"/>
     /// </summary>
-    public class LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Parameters

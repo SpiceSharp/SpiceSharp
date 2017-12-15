@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviors.MOS3
     /// <summary>
     /// Noise behavior for a <see cref="Components.MOS3Model"/>
     /// </summary>
-    public class ModelNoiseBehavior : CircuitObjectBehaviorNoise
+    public class ModelNoiseBehavior : Behaviors.NoiseBehavior
     {
         /// <summary>
         /// Parameters

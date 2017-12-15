@@ -5,7 +5,7 @@ namespace SpiceSharp.Behaviors.ISRC
     /// <summary>
     /// Accept behavior for a <see cref="Components.Currentsource"/>
     /// </summary>
-    public class AcceptBehavior : CircuitObjectBehaviorAccept
+    public class AcceptBehavior : Behaviors.AcceptBehavior
     {
         /// <summary>
         /// Necessary behaviors

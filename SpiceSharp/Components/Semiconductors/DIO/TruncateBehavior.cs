@@ -5,7 +5,7 @@ namespace SpiceSharp.Behaviors.DIO
     /// <summary>
     /// Truncate behavior for a <see cref="Diode"/>
     /// </summary>
-    public class TruncateBehavior : CircuitObjectBehaviorTruncate
+    public class TruncateBehavior : Behaviors.TruncateBehavior
     {
         /// <summary>
         /// Necessary behaviors

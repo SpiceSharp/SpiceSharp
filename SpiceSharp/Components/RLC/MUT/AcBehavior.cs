@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.MUT
     /// <summary>
     /// AC behaviour for <see cref="MutualInductance"/>
     /// </summary>
-    public class AcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : Behaviors.AcBehavior
     {
         /// <summary>
         /// Necessary behaviors

@@ -10,7 +10,7 @@ namespace SpiceSharp.Behaviors.MOS3
     /// <summary>
     /// General behaviour for a <see cref="Components.MOS3"/>
     /// </summary>
-    public class LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Necessary behaviors

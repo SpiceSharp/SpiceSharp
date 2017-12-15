@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// <summary>
     /// Temperature behaviour for a <see cref="BSIM3v24"/>
     /// </summary>
-    public class BSIM3v24TemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class BSIM3v24TemperatureBehavior : TemperatureBehavior
     {
         /// <summary>
         /// Execute the behaviour

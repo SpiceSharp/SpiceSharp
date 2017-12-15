@@ -8,7 +8,7 @@ namespace SpiceSharp.Behaviors.RES
     /// <summary>
     /// General behaviour for <see cref="Resistor"/>
     /// </summary>
-    public class LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Parameters

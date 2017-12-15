@@ -7,7 +7,7 @@ namespace SpiceSharp.Behaviors.RES
     /// <summary>
     /// Noise behaviour for <see cref="Resistor"/>
     /// </summary>
-    public class NoiseBehavior : CircuitObjectBehaviorNoise
+    public class NoiseBehavior : Behaviors.NoiseBehavior
     {
         /// <summary>
         /// Necessary behaviors

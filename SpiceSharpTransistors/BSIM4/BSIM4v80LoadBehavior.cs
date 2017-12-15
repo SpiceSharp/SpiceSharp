@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// <summary>
     /// General behaviour for a <see cref="BSIM4v80"/>
     /// </summary>
-    public class BSIM4v80LoadBehavior : CircuitObjectBehaviorLoad
+    public class BSIM4v80LoadBehavior : LoadBehavior
     {
         /// <summary>
         /// Execute behaviour
