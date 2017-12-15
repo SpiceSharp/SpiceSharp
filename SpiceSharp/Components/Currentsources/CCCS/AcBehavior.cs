@@ -3,18 +3,19 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
+using SpiceSharp.Components.ComponentBehaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.CCCS
 {
     /// <summary>
     /// AC behaviour for <see cref="CurrentControlledCurrentsource"/>
     /// </summary>
-    public class CurrentControlledCurrentsourceAcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private CurrentControlledCurrentsourceLoadBehavior load;
+        private LoadBehavior load;
 
         /// <summary>
         /// Parameters
@@ -62,7 +63,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
 
             // Extract necessary info from the load behavior
             var vsrcload = GetBehavior<VoltagesourceLoadBehavior>(cccs.CCCScontSource);
-            load = GetBehavior<CurrentControlledCurrentsourceLoadBehavior>(component);
+            load = GetBehavior<LoadBehavior>(component);
 
             // Get nodes
             CCCSposNode = cccs.CCCSposNode;

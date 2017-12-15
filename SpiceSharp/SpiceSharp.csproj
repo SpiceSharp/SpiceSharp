@@ -47,9 +47,9 @@
     <Compile Include="Attributes\VoltageDriver.cs" />
     <Compile Include="Components\ComponentState.cs" />
     <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsource.cs" />
-    <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsourceAcBehavior.cs" />
-    <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsourceLoadBehavior.cs" />
-    <Compile Include="Components\Currentsources\ISRC\CurrentsourceAcceptBehavior.cs" />
+    <Compile Include="Components\Currentsources\CCCS\AcBehavior.cs" />
+    <Compile Include="Components\Currentsources\CCCS\LoadBehavior.cs" />
+    <Compile Include="Components\Currentsources\ISRC\AcceptBehavior.cs" />
     <Compile Include="Components\Currentsources\VCCS\VoltageControlledCurrentsource.cs" />
     <Compile Include="Components\Currentsources\VCCS\VoltageControlledCurrentsourceAcBehavior.cs" />
     <Compile Include="Components\Currentsources\VCCS\VoltageControlledCurrentsourceLoadBehavior.cs" />
@@ -75,7 +75,7 @@
     <Compile Include="Components\Semiconductors\BJT\BJTTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\BJT\BJTTruncateBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\DiodeAcBehavior.cs" />
-    <Compile Include="Components\Currentsources\ISRC\CurrentsourceAcBehavior.cs" />
+    <Compile Include="Components\Currentsources\ISRC\AcBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\DiodeModelNoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\DiodeModelTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\DiodeTemperatureBehavior.cs" />
@@ -126,7 +126,7 @@
     <Compile Include="Simulations\AC\CircuitObjectBehaviorAcLoad.cs" />
     <Compile Include="Behaviors\Behavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\DiodeLoadBehavior.cs" />
-    <Compile Include="Components\Currentsources\ISRC\CurrentsourceLoadBehavior.cs" />
+    <Compile Include="Components\Currentsources\ISRC\LoadBehavior.cs" />
     <Compile Include="Components\Voltagesources\VSRC\VoltagesourceLoadBehavior.cs" />
     <Compile Include="Components\RLC\RES\ResistorAcBehavior.cs" />
     <Compile Include="Components\RLC\RES\ResistorLoadBehavior.cs" />

@@ -4,12 +4,12 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Parameters;
 using System;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.ISRC
 {
     /// <summary>
     /// Current source behaviour for DC and Transient analysis
     /// </summary>
-    public class CurrentsourceLoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Parameters

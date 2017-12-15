@@ -5,12 +5,12 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.ISRC
 {
     /// <summary>
     /// Behavior of a currentsource in AC analysis
     /// </summary>
-    public class CurrentsourceAcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Parameters

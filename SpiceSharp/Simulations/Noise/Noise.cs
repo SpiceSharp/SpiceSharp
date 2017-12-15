@@ -98,7 +98,7 @@ namespace SpiceSharp.Simulations
             }
             else if (source is Currentsource isource)
             {
-                var ac = isource.GetBehavior(typeof(CircuitObjectBehaviorAcLoad)) as CurrentsourceAcBehavior;
+                var ac = isource.GetBehavior(typeof(CircuitObjectBehaviorAcLoad)) as Components.ISRC.AcBehavior;
                 if (!ac.ISRCacMag.Given || ac.ISRCacMag == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {isource.Name} has not AC input");
             }

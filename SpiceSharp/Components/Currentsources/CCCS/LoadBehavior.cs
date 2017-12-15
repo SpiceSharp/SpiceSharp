@@ -3,13 +3,14 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
+using SpiceSharp.Components.ComponentBehaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.CCCS
 {
     /// <summary>
     /// Behavior for a <see cref="CurrentControlledCurrentsource"/>
     /// </summary>
-    public class CurrentControlledCurrentsourceLoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Parameters

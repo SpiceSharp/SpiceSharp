@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Components.CCCS;
 
 namespace SpiceSharp.Components
 {
@@ -39,8 +39,8 @@ namespace SpiceSharp.Components
         {
             // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
-            RegisterBehavior(new CurrentControlledCurrentsourceLoadBehavior());
-            RegisterBehavior(new CurrentControlledCurrentsourceAcBehavior());
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new AcBehavior());
         }
 
         /// <summary>

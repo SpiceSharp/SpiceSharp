@@ -1,17 +1,17 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.ISRC
 {
     /// <summary>
     /// Accept behavior for current sources
     /// </summary>
-    public class CurrentsourceAcceptBehavior : CircuitObjectBehaviorAccept
+    public class AcceptBehavior : CircuitObjectBehaviorAccept
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private CurrentsourceLoadBehavior load;
+        private LoadBehavior load;
 
         /// <summary>
         /// Setup the behavior
@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <returns></returns>
         public override void Setup(CircuitObject component, Circuit ckt)
         {
-            load = GetBehavior<CurrentsourceLoadBehavior>(component);
+            load = GetBehavior<LoadBehavior>(component);
         }
 
         /// <summary>

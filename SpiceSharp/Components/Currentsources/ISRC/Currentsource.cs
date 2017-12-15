@@ -1,6 +1,5 @@
-﻿using System.Numerics;
-using SpiceSharp.Circuits;
-using SpiceSharp.Components.ComponentBehaviors;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Components.ISRC;
 
 namespace SpiceSharp.Components
 {
@@ -27,9 +26,9 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the current source</param>
         public Currentsource(CircuitIdentifier name) : base(name, ISRCpinCount)
         {
-            RegisterBehavior(new CurrentsourceLoadBehavior());
-            RegisterBehavior(new CurrentsourceAcBehavior());
-            RegisterBehavior(new CurrentsourceAcceptBehavior());
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new AcBehavior());
+            RegisterBehavior(new AcceptBehavior());
         }
 
         /// <summary>
@@ -57,10 +56,10 @@ namespace SpiceSharp.Components
         {
             Connect(pos, neg);
 
-            var loadbehavior = new CurrentsourceLoadBehavior();
+            var loadbehavior = new LoadBehavior();
             loadbehavior.ISRCwaveform = w;
-            RegisterBehavior(new CurrentsourceAcBehavior());
-            RegisterBehavior(new CurrentsourceAcceptBehavior());
+            RegisterBehavior(new AcBehavior());
+            RegisterBehavior(new AcceptBehavior());
         }
 
         /// <summary>
