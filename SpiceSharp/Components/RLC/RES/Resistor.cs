@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// A resistor
     /// </summary>
     [SpicePins("R+", "R-")]
-    public class Resistor : CircuitComponent
+    public class Resistor : Component
     {
         /// <summary>
         /// Set the model for the resistor

@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="CurrentSwitch"/>
     /// </summary>
-    public class CurrentSwitchModel : CircuitModel
+    public class CurrentSwitchModel : Model
     {
         /// <summary>
         /// Constructor

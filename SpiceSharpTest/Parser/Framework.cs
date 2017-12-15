@@ -74,7 +74,7 @@ namespace SpiceSharpTest.Parser
 
             // Test all nodes
             if (nodes != null)
-                TestNodes((CircuitComponent)obj, nodes);
+                TestNodes((Component)obj, nodes);
 
             // Make sure there are no warnings
             if (CircuitWarning.Warnings.Count > 0)
@@ -116,7 +116,7 @@ namespace SpiceSharpTest.Parser
         /// </summary>
         /// <param name="c">The component</param>
         /// <param name="nodes">The expected node names</param>
-        protected void TestNodes(CircuitComponent c, CircuitIdentifier[] nodes)
+        protected void TestNodes(Component c, CircuitIdentifier[] nodes)
         {
             // Test all nodes
             for (int i = 0; i < nodes.Length; i++)

@@ -97,7 +97,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="c">The circuit component</param>
         /// <param name="parameters">The parameters</param>
         /// <param name="index">The index where to start reading, defaults to 0</param>
-        public static void ReadNodes(this CircuitComponent c, SubcircuitPath path, List<Token> parameters, int index = 0)
+        public static void ReadNodes(this Component c, SubcircuitPath path, List<Token> parameters, int index = 0)
         {
             int count = c.PinCount;
 

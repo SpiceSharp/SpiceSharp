@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// The BSIM3v24 model
     /// </summary>
-    public class BSIM3v24Model : CircuitModel
+    public class BSIM3v24Model : Model
     {
         /// <summary>
         /// Register default behaviours

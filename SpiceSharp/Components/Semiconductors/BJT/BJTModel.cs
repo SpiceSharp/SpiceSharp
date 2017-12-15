@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="BJT"/>
     /// </summary>
-    public class BJTModel : CircuitModel
+    public class BJTModel : Model
     {
         /// <summary>
         /// Constructor

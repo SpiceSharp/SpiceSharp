@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A mutual inductance
     /// </summary>
-    public class MutualInductance : CircuitComponent
+    public class MutualInductance : Component
     {
         /// <summary>
         /// Parameters

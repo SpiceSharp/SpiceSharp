@@ -5,7 +5,7 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Components
 {
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class BSIM1 : CircuitComponent
+    public class BSIM1 : Component
     {
         /// <summary>
         /// Register default behaviours

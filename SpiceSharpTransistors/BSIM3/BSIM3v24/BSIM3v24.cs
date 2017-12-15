@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// The BSIM3v24 device
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class BSIM3v24 : CircuitComponent
+    public class BSIM3v24 : Component
     {
         /// <summary>
         /// Register default behaviours

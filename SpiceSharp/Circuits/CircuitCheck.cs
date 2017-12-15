@@ -23,7 +23,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         private bool HasSource = false;
         private bool HasGround = false;
-        private List<Tuple<CircuitComponent, int, int>> voltagedriven = new List<Tuple<CircuitComponent, int, int>>();
+        private List<Tuple<Component, int, int>> voltagedriven = new List<Tuple<Component, int, int>>();
         private Dictionary<int, int> connectedgroups = new Dictionary<int, int>();
         private int cgroup = 0;
 
@@ -90,7 +90,7 @@ namespace SpiceSharp.Circuits
         private void CheckObject(CircuitObject c)
         {
             // Circuit components
-            if (c is CircuitComponent icc)
+            if (c is Component icc)
             {
                 //Check for ground node
                 for (int i = 0; i < icc.PinCount; i++)
@@ -134,7 +134,7 @@ namespace SpiceSharp.Circuits
                 {
                     // Voltage driven nodes are checked for voltage loops
                     if (attr is VoltageDriver vd)
-                        voltagedriven.Add(new Tuple<CircuitComponent, int, int>(icc, nodes[vd.Positive], nodes[vd.Negative]));
+                        voltagedriven.Add(new Tuple<Component, int, int>(icc, nodes[vd.Positive], nodes[vd.Negative]));
 
                     // At least one source needs to be available
                     if (attr is IndependentSource)
@@ -159,7 +159,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Find a voltage driver that closes a voltage drive loop
         /// </summary>
-        private CircuitComponent FindVoltageDriveLoop()
+        private Component FindVoltageDriveLoop()
         {
             // Remove the ground node and make a map for reducing the matrix complexity
             int index = 1;

@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// Level 3, a semi-empirical model(see reference for level 3).
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class MOS3 : CircuitComponent
+    public class MOS3 : Component
     {
         /// <summary>
         /// Set the model for the MOS3 model

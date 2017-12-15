@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// A voltage-controlled current-source
     /// </summary>
     [SpicePins("V+", "V-", "VC+", "VC-"), VoltageDriver(0, 1), ConnectedPins(0, 1)]
-    public class VoltageControlledVoltagesource : CircuitComponent
+    public class VoltageControlledVoltagesource : Component
     {
         /// <summary>
         /// Nodes

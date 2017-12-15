@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// A current-controlled switch
     /// </summary>
     [SpicePins("W+", "W-")]
-    public class CurrentSwitch : CircuitComponent
+    public class CurrentSwitch : Component
     {
         /// <summary>
         /// Set the model for the current-controlled switch

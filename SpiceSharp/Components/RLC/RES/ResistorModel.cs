@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for semiconductor <see cref="Resistor"/>
     /// </summary>
-    public class ResistorModel : CircuitModel
+    public class ResistorModel : Model
     {
         /// <summary>
         /// Constructor

@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// A class that represents a circuit component/device.
     /// It can be connected in a circuit and it also has parameters.
     /// </summary>
-    public abstract class CircuitComponent : CircuitObject
+    public abstract class Component : CircuitObject
     {
         /// <summary>
         /// Private variables
@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the component</param>
-        public CircuitComponent(CircuitIdentifier name, int nodecount)
+        public Component(CircuitIdentifier name, int nodecount)
             : base(name)
         {
             // Initialize

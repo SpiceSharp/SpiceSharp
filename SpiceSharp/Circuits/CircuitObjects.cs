@@ -135,7 +135,7 @@ namespace SpiceSharp.Circuits
                 added.Add(c);
 
                 // Automatically add models to the ordered list
-                if (c is CircuitComponent component)
+                if (c is Component component)
                 {
                     var model = component.Model;
                     if (model != null && !added.Contains(model))

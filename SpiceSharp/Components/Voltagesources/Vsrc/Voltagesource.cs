@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// An independent voltage source
     /// </summary>
     [SpicePins("V+", "V-"), VoltageDriver(0, 1), IndependentSource]
-    public class Voltagesource : CircuitComponent
+    public class Voltagesource : Component
     {
         /// <summary>
         /// Nodes

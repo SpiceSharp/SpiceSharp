@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="Diode"/>
     /// </summary>
-    public class DiodeModel : CircuitModel
+    public class DiodeModel : Model
     {
         /// <summary>
         /// Methods

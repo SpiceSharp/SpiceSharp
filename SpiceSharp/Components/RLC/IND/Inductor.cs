@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// An inductor
     /// </summary>
     [SpicePins("L+", "L-")]
-    public class Inductor : CircuitComponent
+    public class Inductor : Component
     {
         /// <summary>
         /// Nodes

@@ -45,6 +45,7 @@
     <Compile Include="Attributes\IndependentSource.cs" />
     <Compile Include="Attributes\SpiceParameter.cs" />
     <Compile Include="Attributes\VoltageDriver.cs" />
+    <Compile Include="Components\Component.cs" />
     <Compile Include="Components\ComponentState.cs" />
     <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsource.cs" />
     <Compile Include="Components\Currentsources\CCCS\AcBehavior.cs" />
@@ -135,7 +136,7 @@
     <Compile Include="Circuits\CircuitCheck.cs" />
     <Compile Include="Circuits\CircuitIdentifier.cs" />
     <Compile Include="Circuits\CircuitStateNoise.cs" />
-    <Compile Include="Components\CircuitModel.cs" />
+    <Compile Include="Components\Model.cs" />
     <Compile Include="Components\Currentsources\ISRC\Currentsource.cs" />
     <Compile Include="Circuits\CircuitObject.cs" />
     <Compile Include="Components\Noise\NoiseGain.cs" />
@@ -172,7 +173,6 @@
     <Compile Include="Attributes\SpiceInfo.cs" />
     <Compile Include="Attributes\SpiceName.cs" />
     <Compile Include="Circuits\CircuitObjects.cs" />
-    <Compile Include="Components\CircuitComponent.cs" />
     <Compile Include="Circuits\Circuit.cs" />
     <Compile Include="Circuits\CircuitNode.cs" />
     <Compile Include="Circuits\CircuitState.cs" />
@@ -193,7 +193,7 @@
     <Compile Include="Simulations\Simulation.cs" />
     <Compile Include="Simulations\AC\AC.cs" />
     <Compile Include="Simulations\DC\DC.cs" />
-    <Compile Include="Simulations\SimulationConfiguration.cs" />
+    <Compile Include="Simulations\Configuration.cs" />
     <Compile Include="Simulations\SimulationData.cs" />
     <Compile Include="Simulations\Transient\AcceptBehavior.cs" />
     <Compile Include="Simulations\Transient\Transient.cs" />

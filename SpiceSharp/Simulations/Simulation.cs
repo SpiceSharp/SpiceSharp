@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// The configuration
         /// </summary>
-        protected SimulationConfiguration Config { get; set; } = null;
+        protected Configuration Config { get; set; } = null;
 
         /// <summary>
         /// The node that gives problems
@@ -28,7 +28,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get the current configuration (for use in the simulation)
         /// </summary>
-        public SimulationConfiguration CurrentConfig => Config ?? SimulationConfiguration.Default;
+        public Configuration CurrentConfig => Config ?? Configuration.Default;
 
         /// <summary>
         /// Event that is called for initializing simulation data exports
