@@ -1,16 +1,15 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Components.Transistors;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.MOS3
 {
     /// <summary>
-    /// Temperature behaviour for a <see cref="MOS3Model"/>
+    /// Temperature behaviour for a <see cref="Components.MOS3Model"/>
     /// </summary>
-    public class MOS3ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Parameters

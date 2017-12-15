@@ -1,21 +1,22 @@
 ﻿using System;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
+using SpiceSharp.Components.Noise;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.MOS3
 {
     /// <summary>
-    /// Noise behaviour for <see cref="MOS3"/>
+    /// Noise behaviour for <see cref="Components.MOS3"/>
     /// </summary>
-    public class MOS3NoiseBehavior : CircuitObjectBehaviorNoise
+    public class NoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private MOS3LoadBehavior load;
-        private MOS3TemperatureBehavior temp;
-        private MOS3ModelTemperatureBehavior modeltemp;
-        private MOS3ModelNoiseBehavior modelnoise;
+        private LoadBehavior load;
+        private TemperatureBehavior temp;
+        private ModelTemperatureBehavior modeltemp;
+        private ModelNoiseBehavior modelnoise;
 
         /// <summary>
         /// Noise generators by their index
@@ -29,10 +30,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Noise generators
         /// </summary>
         public ComponentNoise MOS3noise { get; } = new ComponentNoise(
-            new Noise.NoiseThermal("rd", 0, 4),
-            new Noise.NoiseThermal("rs", 2, 5),
-            new Noise.NoiseThermal("id", 4, 5),
-            new Noise.NoiseGain("1overf", 4, 5)
+            new NoiseThermal("rd", 0, 4),
+            new NoiseThermal("rs", 2, 5),
+            new NoiseThermal("id", 4, 5),
+            new NoiseGain("1overf", 4, 5)
             );
 
         /// <summary>
@@ -42,13 +43,13 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt">Circuit</param>
         public override void Setup(CircuitObject component, Circuit ckt)
         {
-            var mos3 = component as MOS3;
+            var mos3 = component as Components.MOS3;
 
             // Get behaviors
-            load = GetBehavior<MOS3LoadBehavior>(component);
-            temp = GetBehavior<MOS3TemperatureBehavior>(component);
-            modeltemp = GetBehavior<MOS3ModelTemperatureBehavior>(mos3.Model);
-            modelnoise = GetBehavior<MOS3ModelNoiseBehavior>(mos3.Model);
+            load = GetBehavior<LoadBehavior>(component);
+            temp = GetBehavior<TemperatureBehavior>(component);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(mos3.Model);
+            modelnoise = GetBehavior<ModelNoiseBehavior>(mos3.Model);
 
             MOS3noise.Setup(ckt,
                 mos3.MOS3dNode,

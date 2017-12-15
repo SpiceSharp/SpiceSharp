@@ -1,21 +1,20 @@
 ﻿using System.Numerics;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.MOS2
 {
     /// <summary>
-    /// AC behaviour for a <see cref="MOS2"/>
+    /// AC behaviour for a <see cref="Components.MOS2"/>
     /// </summary>
-    public class MOS2AcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private MOS2LoadBehavior load;
-        private MOS2TemperatureBehavior temp;
-        private MOS2ModelTemperatureBehavior modeltemp;
+        private LoadBehavior load;
+        private TemperatureBehavior temp;
+        private ModelTemperatureBehavior modeltemp;
 
         /// <summary>
         /// Nodes
@@ -56,12 +55,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <returns></returns>
         public override void Setup(CircuitObject component, Circuit ckt)
         {
-            var mos2 = component as MOS2;
+            var mos2 = component as Components.MOS2;
 
             // Get behaviors
-            load = GetBehavior<MOS2LoadBehavior>(component);
-            temp = GetBehavior<MOS2TemperatureBehavior>(component);
-            modeltemp = GetBehavior<MOS2ModelTemperatureBehavior>(mos2.Model);
+            load = GetBehavior<LoadBehavior>(component);
+            temp = GetBehavior<TemperatureBehavior>(component);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(mos2.Model);
 
             // Get nodes
             MOS2dNode = mos2.MOS2dNode;
@@ -126,9 +125,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
             GateSourceOverlapCap = modeltemp.MOS2gateSourceOverlapCapFactor * temp.MOS2w;
             GateDrainOverlapCap = modeltemp.MOS2gateDrainOverlapCapFactor * temp.MOS2w;
             GateBulkOverlapCap = modeltemp.MOS2gateBulkOverlapCapFactor * EffectiveLength;
-            capgs = (state.States[0][load.MOS2states + MOS2LoadBehavior.MOS2capgs] + state.States[0][load.MOS2states + MOS2LoadBehavior.MOS2capgs] + GateSourceOverlapCap);
-            capgd = (state.States[0][load.MOS2states + MOS2LoadBehavior.MOS2capgd] + state.States[0][load.MOS2states + MOS2LoadBehavior.MOS2capgd] + GateDrainOverlapCap);
-            capgb = (state.States[0][load.MOS2states + MOS2LoadBehavior.MOS2capgb] + state.States[0][load.MOS2states + MOS2LoadBehavior.MOS2capgb] + GateBulkOverlapCap);
+            capgs = (state.States[0][load.MOS2states + LoadBehavior.MOS2capgs] + state.States[0][load.MOS2states + LoadBehavior.MOS2capgs] + GateSourceOverlapCap);
+            capgd = (state.States[0][load.MOS2states + LoadBehavior.MOS2capgd] + state.States[0][load.MOS2states + LoadBehavior.MOS2capgd] + GateDrainOverlapCap);
+            capgb = (state.States[0][load.MOS2states + LoadBehavior.MOS2capgb] + state.States[0][load.MOS2states + LoadBehavior.MOS2capgb] + GateBulkOverlapCap);
             xgs = capgs * cstate.Laplace.Imaginary;
             xgd = capgd * cstate.Laplace.Imaginary;
             xgb = capgb * cstate.Laplace.Imaginary;

@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Behaviors.MOS3;
 
 namespace SpiceSharp.Components
 {
@@ -14,8 +14,8 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public MOS3Model(CircuitIdentifier name) : base(name)
         {
-            RegisterBehavior(new MOS3ModelTemperatureBehavior());
-            RegisterBehavior(new MOS3ModelNoiseBehavior());
+            RegisterBehavior(new ModelTemperatureBehavior());
+            RegisterBehavior(new ModelNoiseBehavior());
         }
     }
 }

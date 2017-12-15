@@ -1,26 +1,25 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.Transistors;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.MOS2
 {
     /// <summary>
-    /// General behaviour of a <see cref="MOS2"/>
+    /// General behaviour of a <see cref="Components.MOS2"/>
     /// </summary>
-    public class MOS2LoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private MOS2TemperatureBehavior temp;
-        private MOS2ModelTemperatureBehavior modeltemp;
+        private TemperatureBehavior temp;
+        private ModelTemperatureBehavior modeltemp;
 
-        private static double[] sig1 = new double[] { 1.0, -1.0, 1.0, -1.0 };
-        private static double[] sig2 = new double[] { 1.0, 1.0, -1.0, -1.0 };
+        private static double[] sig1 = { 1.0, -1.0, 1.0, -1.0 };
+        private static double[] sig2 = { 1.0, 1.0, -1.0, -1.0 };
 
         /// <summary>
         /// Parameters
@@ -215,11 +214,11 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt"></param>
         public override void Setup(CircuitObject component, Circuit ckt)
         {
-            var mos2 = component as MOS2;
+            var mos2 = component as Components.MOS2;
 
             // Get behaviors
-            temp = GetBehavior<MOS2TemperatureBehavior>(component);
-            modeltemp = GetBehavior<MOS2ModelTemperatureBehavior>(mos2.Model);
+            temp = GetBehavior<TemperatureBehavior>(component);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(mos2.Model);
 
             // Nodes
             MOS2dNode = mos2.MOS2dNode;

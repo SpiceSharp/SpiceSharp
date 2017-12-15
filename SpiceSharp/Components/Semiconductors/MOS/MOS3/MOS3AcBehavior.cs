@@ -1,21 +1,20 @@
 ﻿using System.Numerics;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.MOS3
 {
     /// <summary>
-    /// AC behaviour for <see cref="MOS3"/>
+    /// AC behaviour for <see cref="Components.MOS3"/>
     /// </summary>
-    public class MOS3AcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private MOS3LoadBehavior load;
-        private MOS3TemperatureBehavior temp;
-        private MOS3ModelTemperatureBehavior modeltemp;
+        private LoadBehavior load;
+        private TemperatureBehavior temp;
+        private ModelTemperatureBehavior modeltemp;
 
         /// <summary>
         /// Nodes
@@ -56,10 +55,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <returns></returns>
         public override void Setup(CircuitObject component, Circuit ckt)
         {
-            var mos3 = component as MOS3;
-            load = GetBehavior<MOS3LoadBehavior>(component);
-            temp = GetBehavior<MOS3TemperatureBehavior>(component);
-            modeltemp = GetBehavior<MOS3ModelTemperatureBehavior>(mos3.Model);
+            var mos3 = component as Components.MOS3;
+            load = GetBehavior<LoadBehavior>(component);
+            temp = GetBehavior<TemperatureBehavior>(component);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(mos3.Model);
 
             // Get nodes
             MOS3dNode = mos3.MOS3dNode;
@@ -129,9 +128,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
 			 * meyer"s model parameters
 			 */
-            capgs = (state.States[0][load.MOS3states + MOS3LoadBehavior.MOS3capgs] + state.States[0][load.MOS3states + MOS3LoadBehavior.MOS3capgs] + GateSourceOverlapCap);
-            capgd = (state.States[0][load.MOS3states + MOS3LoadBehavior.MOS3capgd] + state.States[0][load.MOS3states + MOS3LoadBehavior.MOS3capgd] + GateDrainOverlapCap);
-            capgb = (state.States[0][load.MOS3states + MOS3LoadBehavior.MOS3capgb] + state.States[0][load.MOS3states + MOS3LoadBehavior.MOS3capgb] + GateBulkOverlapCap);
+            capgs = (state.States[0][load.MOS3states + LoadBehavior.MOS3capgs] + state.States[0][load.MOS3states + LoadBehavior.MOS3capgs] + GateSourceOverlapCap);
+            capgd = (state.States[0][load.MOS3states + LoadBehavior.MOS3capgd] + state.States[0][load.MOS3states + LoadBehavior.MOS3capgd] + GateDrainOverlapCap);
+            capgb = (state.States[0][load.MOS3states + LoadBehavior.MOS3capgb] + state.States[0][load.MOS3states + LoadBehavior.MOS3capgb] + GateBulkOverlapCap);
             xgs = capgs * cstate.Laplace.Imaginary;
             xgd = capgd * cstate.Laplace.Imaginary;
             xgb = capgb * cstate.Laplace.Imaginary;

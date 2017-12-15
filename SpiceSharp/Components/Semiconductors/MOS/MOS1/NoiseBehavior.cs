@@ -1,25 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
+using SpiceSharp.Components.Noise;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.MOS1
 {
     /// <summary>
     /// Noise behaviour for a <see cref="MOS1"/>
     /// </summary>
-    public class MOS1NoiseBehavior : CircuitObjectBehaviorNoise
+    public class NoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private MOS1TemperatureBehavior temp;
-        private MOS1LoadBehavior load;
-        private MOS1ModelTemperatureBehavior modeltemp;
-        private MOS1ModelNoiseBehavior modelnoise;
+        private TemperatureBehavior temp;
+        private LoadBehavior load;
+        private ModelTemperatureBehavior modeltemp;
+        private ModelNoiseBehavior modelnoise;
 
         private const int MOS1RDNOIZ = 0;
         private const int MOS1RSNOIZ = 1;
@@ -30,10 +27,10 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// Noise generators
         /// </summary>
         public ComponentNoise MOS1noise { get; } = new ComponentNoise(
-            new Noise.NoiseThermal("rd", 0, 4),
-            new Noise.NoiseThermal("rs", 2, 5),
-            new Noise.NoiseThermal("id", 4, 5),
-            new Noise.NoiseGain("1overf", 4, 5)
+            new NoiseThermal("rd", 0, 4),
+            new NoiseThermal("rs", 2, 5),
+            new NoiseThermal("id", 4, 5),
+            new NoiseGain("1overf", 4, 5)
             );
 
         /// <summary>
@@ -43,13 +40,13 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt">Circuit</param>
         public override void Setup(CircuitObject component, Circuit ckt)
         {
-            var mos1 = component as MOS1;
+            var mos1 = component as Components.MOS1;
 
             // Get behaviors
-            temp = GetBehavior<MOS1TemperatureBehavior>(component);
-            load = GetBehavior<MOS1LoadBehavior>(component);
-            modeltemp = GetBehavior<MOS1ModelTemperatureBehavior>(mos1.Model);
-            modelnoise = GetBehavior<MOS1ModelNoiseBehavior>(mos1.Model);
+            temp = GetBehavior<TemperatureBehavior>(component);
+            load = GetBehavior<LoadBehavior>(component);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(mos1.Model);
+            modelnoise = GetBehavior<ModelNoiseBehavior>(mos1.Model);
 
             MOS1noise.Setup(ckt,
                 mos1.MOS1dNode,

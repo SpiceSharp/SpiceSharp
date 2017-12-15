@@ -1,13 +1,12 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.MOS2
 {
     /// <summary>
-    /// Noise behavior for a <see cref="MOS2Model"/>
+    /// Noise behavior for a <see cref="Components.MOS2Model"/>
     /// </summary>
-    public class MOS2ModelNoiseBehavior : CircuitObjectBehaviorNoise
+    public class ModelNoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
         /// Parameters

@@ -1,20 +1,19 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.MOS2
 {
     /// <summary>
-    /// Temperature behaviour for a <see cref="MOS2"/>
+    /// Temperature behaviour for a <see cref="Components.MOS2"/>
     /// </summary>
-    public class MOS2TemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class TemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private MOS2ModelTemperatureBehavior modeltemp;
+        private ModelTemperatureBehavior modeltemp;
 
         /// <summary>
         /// Parameters
@@ -111,7 +110,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <returns></returns>
         public override void Setup(CircuitObject component, Circuit ckt)
         {
-            modeltemp = GetBehavior<MOS2ModelTemperatureBehavior>(component);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(component);
             name = component.Name;
         }
 
