@@ -3,12 +3,12 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.IND
 {
     /// <summary>
     /// General behaviour for a <see cref="Inductor"/>
     /// </summary>
-    public class InductorLoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Parameters
@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="sender">The inductor that sends the request</param>
         /// <param name="ckt">The circuit</param>
-        public delegate void UpdateMutualInductanceEventHandler(InductorLoadBehavior sender, Circuit ckt);
+        public delegate void UpdateMutualInductanceEventHandler(LoadBehavior sender, Circuit ckt);
 
         /// <summary>
         /// An event that is called when mutual inductances need to be included
@@ -97,7 +97,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <summary>
         /// Unsetup
         /// </summary>
-        /// <param name="ckt">The circuit</param>
         public override void Unsetup()
         {
             // Remove references

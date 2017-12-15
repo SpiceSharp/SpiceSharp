@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Components.CAP;
 
 namespace SpiceSharp.Components
 {
@@ -15,7 +15,10 @@ namespace SpiceSharp.Components
         /// <param name="ckt">Circuit</param>
         /// <param name="flag">Flag</param>
         [SpiceName("c"), SpiceInfo("Capacitor model")]
-        public void SetCapFlag(Circuit ckt, bool flag) { }
+        public void SetCapFlag(Circuit ckt, bool flag)
+        {
+            // Do nothing...
+        }
 
         /// <summary>
         /// Constructor
@@ -23,7 +26,7 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public CapacitorModel(CircuitIdentifier name) : base(name)
         {
-            RegisterBehavior(new CapacitorModelTemperatureBehavior());
+            RegisterBehavior(new ModelTemperatureBehavior());
         }
     }
 }

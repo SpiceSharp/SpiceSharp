@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Behaviors.RES;
 
 namespace SpiceSharp.Components
 {
@@ -14,7 +14,7 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public ResistorModel(CircuitIdentifier name) : base(name)
         {
-            RegisterBehavior(new ResistorModelTemperatureBehavior());
+            RegisterBehavior(new ModelTemperatureBehavior());
         }
     }
 }

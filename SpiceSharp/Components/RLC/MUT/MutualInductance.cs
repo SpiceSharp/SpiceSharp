@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Components.MUT;
 
 namespace SpiceSharp.Components
 {
@@ -32,8 +32,8 @@ namespace SpiceSharp.Components
         {
             // Make sure mutual inductances are evaluated AFTER inductors
             Priority = -1;
-            RegisterBehavior(new MutualInductanceLoadBehavior());
-            RegisterBehavior(new MutualInductanceAcBehavior());
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new AcBehavior());
         }
 
         /// <summary>

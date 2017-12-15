@@ -3,17 +3,17 @@ using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.MUT
 {
     /// <summary>
     /// AC behaviour for <see cref="MutualInductance"/>
     /// </summary>
-    public class MutualInductanceAcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private MutualInductanceLoadBehavior load;
+        private LoadBehavior load;
 
         /// <summary>
         /// Matrix elements
@@ -32,9 +32,9 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var mut = component as MutualInductance;
             
             // Get behaviors
-            load = GetBehavior<MutualInductanceLoadBehavior>(component);
-            var load1 = GetBehavior<InductorLoadBehavior>(mut.Inductor1);
-            var load2 = GetBehavior<InductorLoadBehavior>(mut.Inductor2);
+            load = GetBehavior<LoadBehavior>(component);
+            var load1 = GetBehavior<IND.LoadBehavior>(mut.Inductor1);
+            var load2 = GetBehavior<IND.LoadBehavior>(mut.Inductor2);
 
             // Get matrix elements
             var matrix = ckt.State.Matrix;

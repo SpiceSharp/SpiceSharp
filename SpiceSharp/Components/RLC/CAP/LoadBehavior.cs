@@ -3,12 +3,12 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.CAP
 {
     /// <summary>
     /// General behaviour for <see cref="Capacitor"/>
     /// </summary>
-    public class CapacitorLoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Parameters
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             // If the capacitance is not given, try getting it from the temperature behavior
             if (!CAPcapac.Given)
             {
-                var temp = component.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as CapacitorTemperatureBehavior;
+                var temp = component.GetBehavior(typeof(CircuitObjectBehaviorTemperature)) as TemperatureBehavior;
                 if (temp != null)
                     CAPcapac.Value = temp.CAPcapac;
             }

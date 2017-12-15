@@ -2,12 +2,12 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.CAP
 {
     /// <summary>
     /// Temperature behavior for a <see cref="CapacitorModel"/>
     /// </summary>
-    public class CapacitorModelTemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Parameters

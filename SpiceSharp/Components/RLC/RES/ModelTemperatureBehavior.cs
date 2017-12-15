@@ -1,13 +1,12 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.RES
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="ResistorModel"/>
+    /// Temperature behavior for a <see cref="Components.ResistorModel"/>
     /// </summary>
-    public class ResistorModelTemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class ModelTemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Parameters

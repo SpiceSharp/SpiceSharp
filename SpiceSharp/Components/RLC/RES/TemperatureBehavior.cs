@@ -1,19 +1,19 @@
 ﻿using SpiceSharp.Diagnostics;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.RES
 {
     /// <summary>
     /// Temperature behaviour for a <see cref="Resistor"/>
     /// </summary>
-    public class ResistorTemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class TemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private ResistorModelTemperatureBehavior modeltemp;
+        private ModelTemperatureBehavior modeltemp;
 
         /// <summary>
         /// Parameters
@@ -55,7 +55,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 modeltemp = null;
                 return;
             }
-            modeltemp = GetBehavior<ResistorModelTemperatureBehavior>(res.Model);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(res.Model);
             name = res.Name;
         }
 

@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components.ISRC;
+using SpiceSharp.Behaviors.ISRC;
 
 namespace SpiceSharp.Components
 {

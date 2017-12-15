@@ -3,17 +3,17 @@ using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.CAP
 {
     /// <summary>
     /// AC behaviour for <see cref="Capacitor"/>
     /// </summary>
-    public class CapacitorAcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private CapacitorLoadBehavior load;
+        private LoadBehavior load;
 
         /// <summary>
         /// Nodes
@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Setup(CircuitObject component, Circuit ckt)
         {
             // Get behaviors
-            load = GetBehavior<CapacitorLoadBehavior>(component);
+            load = GetBehavior<LoadBehavior>(component);
             
             // Get nodes
             var cap = component as Capacitor;

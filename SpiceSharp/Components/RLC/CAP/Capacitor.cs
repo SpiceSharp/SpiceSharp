@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Components.CAP;
 
 namespace SpiceSharp.Components
 {
@@ -35,11 +35,11 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public Capacitor(CircuitIdentifier name) : base(name, CAPpinCount)
         {
-            RegisterBehavior(new CapacitorLoadBehavior());
-            RegisterBehavior(new CapacitorAcBehavior());
-            RegisterBehavior(new CapacitorTemperatureBehavior());
-            RegisterBehavior(new CapacitorAcceptBehavior());
-            RegisterBehavior(new CapacitorTruncateBehavior());
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new AcBehavior());
+            RegisterBehavior(new TemperatureBehavior());
+            RegisterBehavior(new AcceptBehavior());
+            RegisterBehavior(new TruncateBehavior());
         }
 
         /// <summary>
@@ -55,15 +55,15 @@ namespace SpiceSharp.Components
             Connect(pos, neg);
 
             // Set capacitance
-            var load = new CapacitorLoadBehavior();
+            var load = new LoadBehavior();
             load.CAPcapac.Set(cap);
             RegisterBehavior(load);
 
             // Register other behaviors
-            RegisterBehavior(new CapacitorAcBehavior());
-            RegisterBehavior(new CapacitorTemperatureBehavior());
-            RegisterBehavior(new CapacitorAcceptBehavior());
-            RegisterBehavior(new CapacitorTruncateBehavior());
+            RegisterBehavior(new AcBehavior());
+            RegisterBehavior(new TemperatureBehavior());
+            RegisterBehavior(new AcceptBehavior());
+            RegisterBehavior(new TruncateBehavior());
         }
         
         /// <summary>

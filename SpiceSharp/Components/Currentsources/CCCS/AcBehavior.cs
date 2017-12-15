@@ -1,11 +1,11 @@
 ﻿using System.Numerics;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.ComponentBehaviors;
 
-namespace SpiceSharp.Components.CCCS
+namespace SpiceSharp.Behaviors.CCCS
 {
     /// <summary>
     /// AC behaviour for <see cref="CurrentControlledCurrentsource"/>

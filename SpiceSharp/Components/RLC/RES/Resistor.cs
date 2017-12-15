@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Behaviors.RES;
 
 namespace SpiceSharp.Components
 {
@@ -32,10 +32,10 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the resistor</param>
         public Resistor(CircuitIdentifier name) : base(name, RESpinCount)
         {
-            RegisterBehavior(new ResistorLoadBehavior());
-            RegisterBehavior(new ResistorAcBehavior());
-            RegisterBehavior(new ResistorNoiseBehavior());
-            RegisterBehavior(new ResistorTemperatureBehavior());
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new AcBehavior());
+            RegisterBehavior(new NoiseBehavior());
+            RegisterBehavior(new TemperatureBehavior());
         }
 
         /// <summary>
@@ -48,14 +48,14 @@ namespace SpiceSharp.Components
         public Resistor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double res) : base(name, RESpinCount)
         {
             // Set the resistance
-            var load = new ResistorLoadBehavior();
+            var load = new LoadBehavior();
             load.RESresist.Set(res);
             RegisterBehavior(load);
 
             // Add other behaviors
-            RegisterBehavior(new ResistorAcBehavior());
-            RegisterBehavior(new ResistorNoiseBehavior());
-            RegisterBehavior(new ResistorTemperatureBehavior());
+            RegisterBehavior(new AcBehavior());
+            RegisterBehavior(new NoiseBehavior());
+            RegisterBehavior(new TemperatureBehavior());
             Connect(pos, neg);
         }
 

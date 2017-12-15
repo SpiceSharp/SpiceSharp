@@ -3,17 +3,17 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.IND
 {
     /// <summary>
     /// AC behaviour for <see cref="Inductor"/>
     /// </summary>
-    public class InductorAcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private InductorLoadBehavior load;
+        private LoadBehavior load;
 
         /// <summary>
         /// Nodes
@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var ind = component as Inductor;
 
             // Get behaviors
-            load = GetBehavior<InductorLoadBehavior>(component);
+            load = GetBehavior<LoadBehavior>(component);
 
             // Get nodes
             INDposNode = ind.INDposNode;

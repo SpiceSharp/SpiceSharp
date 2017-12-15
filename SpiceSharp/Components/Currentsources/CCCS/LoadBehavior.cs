@@ -1,11 +1,11 @@
 ﻿using System;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.ComponentBehaviors;
 
-namespace SpiceSharp.Components.CCCS
+namespace SpiceSharp.Behaviors.CCCS
 {
     /// <summary>
     /// Behavior for a <see cref="CurrentControlledCurrentsource"/>

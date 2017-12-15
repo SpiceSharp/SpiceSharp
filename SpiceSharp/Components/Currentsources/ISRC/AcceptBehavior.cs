@@ -1,10 +1,9 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ISRC
+namespace SpiceSharp.Behaviors.ISRC
 {
     /// <summary>
-    /// Accept behavior for current sources
+    /// Accept behavior for a <see cref="Components.Currentsource"/>
     /// </summary>
     public class AcceptBehavior : CircuitObjectBehaviorAccept
     {

@@ -1,14 +1,14 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
+using SpiceSharp.Components;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.RES
 {
     /// <summary>
     /// General behaviour for <see cref="Resistor"/>
     /// </summary>
-    public class ResistorLoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Parameters
@@ -59,7 +59,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             // If the resistance is not given, get the default from the model
             if (!RESresist.Given)
             {
-                var temp = GetBehavior<ResistorTemperatureBehavior>(component);
+                var temp = GetBehavior<TemperatureBehavior>(component);
                 RESresist.Value = temp.RESresist;
                 RESconduct = temp.RESconduct;
             }

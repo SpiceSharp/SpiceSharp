@@ -1,38 +1,38 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.IND
 {
     /// <summary>
-    /// Accept behavior for capacitances
+    /// Truncate behavior for inductors
     /// </summary>
-    public class CapacitorAcceptBehavior : CircuitObjectBehaviorAccept
+    public class TruncateBehavior : CircuitObjectBehaviorTruncate
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private CapacitorLoadBehavior load = null;
+        private LoadBehavior load;
 
         /// <summary>
         /// Setup the behavior
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
+        /// <returns></returns>
         public override void Setup(CircuitObject component, Circuit ckt)
         {
             // Get behaviors
-            load = GetBehavior<CapacitorLoadBehavior>(component);
+            load = GetBehavior<LoadBehavior>(component);
         }
 
         /// <summary>
-        /// Accept the current timepoint
+        /// Truncate the timestep
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        public override void Accept(Circuit ckt)
+        /// <param name="timestep">Timestep</param>
+        public override void Truncate(Circuit ckt, ref double timestep)
         {
-            // Copy DC states when accepting the first timepoint
-            if (ckt.State.Init == CircuitState.InitFlags.InitTransient)
-                ckt.State.CopyDC(load.CAPstate + CapacitorLoadBehavior.CAPqcap);
+            ckt.Method.Terr(load.INDstate + LoadBehavior.INDflux, ckt, ref timestep);
         }
     }
 }

@@ -1,47 +1,37 @@
-﻿using System.Numerics;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
-using SpiceSharp.Parameters;
+﻿using SpiceSharp.Parameters;
+using SpiceSharp.Components;
 using SpiceSharp.Sparse;
+using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.VCCS
 {
     /// <summary>
-    /// AC behaviour for a <see cref="VoltageControlledCurrentsource"/>
+    /// General behaviour for a <see cref="VoltageControlledCurrentsource"/>
     /// </summary>
-    public class VoltageControlledCurrentsourceAcBehavior : CircuitObjectBehaviorAcLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
-        /// <summary>
-        /// Necessary behaviors
-        /// </summary>
-        private VoltageControlledCurrentsourceLoadBehavior load;
-
         /// <summary>
         /// Parameters
         /// </summary>
+        [SpiceName("gain"), SpiceInfo("Transconductance of the source (gain)")]
+        public Parameter VCCScoeff { get; } = new Parameter();
         [SpiceName("i"), SpiceInfo("Output current")]
-        public Complex GetCurrent(Circuit ckt)
+        public double GetCurrent(Circuit ckt)
         {
-            return new Complex(
-                ckt.State.Solution[VCCScontPosNode] - ckt.State.Solution[VCCScontNegNode],
-                ckt.State.iSolution[VCCScontPosNode] - ckt.State.iSolution[VCCScontNegNode]) * load.VCCScoeff.Value;
+            return (ckt.State.Solution[VCCScontPosNode] - ckt.State.Solution[VCCScontNegNode]) 
+                * VCCScoeff.Value;
         }
         [SpiceName("v"), SpiceInfo("Voltage across output")]
-        public Complex GetVoltage(Circuit ckt)
+        public double GetVoltage(Circuit ckt)
         {
-            return new Complex(
-                ckt.State.Solution[VCCSposNode] - ckt.State.Solution[VCCSnegNode],
-                ckt.State.iSolution[VCCSposNode] - ckt.State.iSolution[VCCSnegNode]);
+            return (ckt.State.Solution[VCCSposNode] - ckt.State.Solution[VCCSnegNode]);
         }
         [SpiceName("p"), SpiceInfo("Power")]
-        public Complex GetPower(Circuit ckt)
+        public double GetPower(Circuit ckt)
         {
-            Complex current = new Complex(
-                ckt.State.Solution[VCCScontPosNode] - ckt.State.Solution[VCCScontNegNode],
-                ckt.State.iSolution[VCCScontPosNode] - ckt.State.iSolution[VCCScontNegNode]) * load.VCCScoeff.Value;
-            Complex voltage = new Complex(
-                ckt.State.Solution[VCCSposNode] - ckt.State.Solution[VCCSnegNode],
-                ckt.State.iSolution[VCCSposNode] - ckt.State.iSolution[VCCSnegNode]);
+            double current = (ckt.State.Solution[VCCScontPosNode] - ckt.State.Solution[VCCScontNegNode])
+                * VCCScoeff.Value;
+            double voltage = (ckt.State.Solution[VCCSposNode] - ckt.State.Solution[VCCSnegNode]);
             return voltage * current;
         }
 
@@ -62,11 +52,6 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Setup(CircuitObject component, Circuit ckt)
         {
             var vccs = component as VoltageControlledCurrentsource;
-
-            // Get behaviors
-            load = GetBehavior<VoltageControlledCurrentsourceLoadBehavior>(component);
-
-            // Get nodes
             VCCSposNode = vccs.VCCSposNode;
             VCCSnegNode = vccs.VCCSnegNode;
             VCCScontPosNode = vccs.VCCScontPosNode;
@@ -92,16 +77,16 @@ namespace SpiceSharp.Components.ComponentBehaviors
         }
 
         /// <summary>
-        /// Execute the behaviour
+        /// Execute behaviour
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="ckt"></param>
         public override void Load(Circuit ckt)
         {
-            var cstate = ckt.State;
-            VCCSposContPosptr.Add(load.VCCScoeff.Value);
-            VCCSposContNegptr.Sub(load.VCCScoeff.Value);
-            VCCSnegContPosptr.Sub(load.VCCScoeff.Value);
-            VCCSnegContNegptr.Add(load.VCCScoeff.Value);
+            var rstate = ckt.State;
+            VCCSposContPosptr.Add(VCCScoeff.Value);
+            VCCSposContNegptr.Sub(VCCScoeff.Value);
+            VCCSnegContPosptr.Sub(VCCScoeff.Value);
+            VCCSnegContNegptr.Add(VCCScoeff.Value);
         }
     }
 }

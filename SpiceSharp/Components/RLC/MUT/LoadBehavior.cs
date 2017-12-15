@@ -4,17 +4,17 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.MUT
 {
     /// <summary>
     /// General behaviour for <see cref="MutualInductance"/>
     /// </summary>
-    public class MutualInductanceLoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private InductorLoadBehavior load1, load2;
+        private IND.LoadBehavior load1, load2;
 
         /// <summary>
         /// Parameters
@@ -43,8 +43,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var mut = component as MutualInductance;
 
             // Get behaviors
-            load1 = GetBehavior<InductorLoadBehavior>(mut.Inductor1);
-            load2 = GetBehavior<InductorLoadBehavior>(mut.Inductor2);
+            load1 = GetBehavior<IND.LoadBehavior>(mut.Inductor1);
+            load2 = GetBehavior<IND.LoadBehavior>(mut.Inductor2);
 
             // Get matrix elements
             var matrix = ckt.State.Matrix;
@@ -84,7 +84,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="sender">Inductor 2</param>
         /// <param name="ckt">The circuit</param>
-        private void UpdateMutualInductance(InductorLoadBehavior sender, Circuit ckt)
+        private void UpdateMutualInductance(IND.LoadBehavior sender, Circuit ckt)
         {
             var state = ckt.State;
             var rstate = ckt.State;
@@ -93,12 +93,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
             {
                 if (sender == load1)
                 {
-                    state.States[0][load1.INDstate + InductorLoadBehavior.INDflux] += MUTfactor * rstate.Solution[load2.INDbrEq];
+                    state.States[0][load1.INDstate + IND.LoadBehavior.INDflux] += MUTfactor * rstate.Solution[load2.INDbrEq];
                     MUTbr1br2.Sub(MUTfactor * ckt.Method.Slope);
                 }
                 else
                 {
-                    state.States[0][load2.INDstate + InductorLoadBehavior.INDflux] += MUTfactor * rstate.Solution[load1.INDbrEq];
+                    state.States[0][load2.INDstate + IND.LoadBehavior.INDflux] += MUTfactor * rstate.Solution[load1.INDbrEq];
                     MUTbr2br1.Sub(MUTfactor * ckt.Method.Slope);
                 }
             }

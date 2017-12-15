@@ -1,18 +1,18 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Components.Noise;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.RES
 {
     /// <summary>
     /// Noise behaviour for <see cref="Resistor"/>
     /// </summary>
-    public class ResistorNoiseBehavior : CircuitObjectBehaviorNoise
+    public class NoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private ResistorLoadBehavior load;
+        private LoadBehavior load;
 
         /// <summary>
         /// Get resistor noise sources
@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var res = component as Resistor;
 
             // Get behaviors
-            load = GetBehavior<ResistorLoadBehavior>(component);
+            load = GetBehavior<LoadBehavior>(component);
 
             RESnoise?.Setup(ckt, res.RESposNode, res.RESnegNode);
         }

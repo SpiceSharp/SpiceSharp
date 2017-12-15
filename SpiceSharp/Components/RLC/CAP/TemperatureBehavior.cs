@@ -2,17 +2,17 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Components.CAP
 {
     /// <summary>
     /// Temperature behaviour for a <see cref="Capacitor"/>
     /// </summary>
-    public class CapacitorTemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class TemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private CapacitorModelTemperatureBehavior modeltemp;
+        private ModelTemperatureBehavior modeltemp;
         
         /// <summary>
         /// Parameters
@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             }
 
             // Get behaviors
-            modeltemp = GetBehavior<CapacitorModelTemperatureBehavior>(cap.Model);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(cap.Model);
         }
 
         /// <summary>

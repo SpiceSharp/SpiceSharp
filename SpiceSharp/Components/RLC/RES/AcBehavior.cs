@@ -1,15 +1,15 @@
 ﻿using System.Numerics;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.RES
 {
     /// <summary>
     /// AC behaviour for <see cref="Resistor"/>
     /// </summary>
-    public class ResistorAcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Parameters
@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private ResistorLoadBehavior load;
+        private LoadBehavior load;
 
         /// <summary>
         /// Nodes
@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var res = component as Resistor;
 
             // Get behaviors
-            load = GetBehavior<ResistorLoadBehavior>(component);
+            load = GetBehavior<LoadBehavior>(component);
 
             // Nodes
             RESposNode = res.RESposNode;

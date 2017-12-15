@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Components.CCCS;
+using SpiceSharp.Behaviors.CCCS;
 
 namespace SpiceSharp.Components
 {

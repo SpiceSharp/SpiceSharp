@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Behaviors.VCCS;
 
 namespace SpiceSharp.Components
 {
@@ -33,8 +33,8 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the voltage-controlled current source</param>
         public VoltageControlledCurrentsource(CircuitIdentifier name) : base(name, VCCSpinCount)
         {
-            RegisterBehavior(new VoltageControlledCurrentsourceLoadBehavior());
-            RegisterBehavior(new VoltageControlledCurrentsourceAcBehavior());
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new AcBehavior());
         }
 
         /// <summary>
