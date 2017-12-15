@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Behaviors.CSW;
 
 namespace SpiceSharp.Components
 {
@@ -16,7 +16,7 @@ namespace SpiceSharp.Components
         {
             // CurrentSwitch has a priority of -1, so this needs to be even earlier
             Priority = -2;
-            RegisterBehavior(new CurrentSwitchModelLoadBehavior());
+            RegisterBehavior(new ModelLoadBehavior());
         }
     }
 }

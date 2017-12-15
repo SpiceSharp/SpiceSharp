@@ -1,13 +1,12 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.VSW
 {
     /// <summary>
-    /// Load behavior for a <see cref="VoltageSwitchModel"/>
+    /// Load behavior for a <see cref="Components.VoltageSwitchModel"/>
     /// </summary>
-    public class VoltageSwitchModelLoadBehavior : CircuitObjectBehaviorLoad
+    public class ModelLoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Parameters

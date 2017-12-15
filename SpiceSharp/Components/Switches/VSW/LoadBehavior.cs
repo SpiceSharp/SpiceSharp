@@ -1,19 +1,19 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.VSW
 {
     /// <summary>
     /// Load behavior for a <see cref="VoltageSwitch"/>
     /// </summary>
-    public class VoltageSwitchLoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private VoltageSwitchModelLoadBehavior modelload;
+        private ModelLoadBehavior modelload;
 
         /// <summary>
         /// Parameters
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var vsw = component as VoltageSwitch;
 
             // Get behaviors
-            modelload = GetBehavior<VoltageSwitchModelLoadBehavior>(vsw.Model);
+            modelload = GetBehavior<ModelLoadBehavior>(vsw.Model);
 
             // Get nodes
             VSWposNode = vsw.VSWposNode;

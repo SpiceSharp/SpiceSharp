@@ -1,20 +1,19 @@
-﻿using System;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.CSW
 {
     /// <summary>
     /// AC behaviour for a <see cref="CurrentSwitch"/>
     /// </summary>
-    public class CurrentSwitchAcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private CurrentSwitchLoadBehavior load;
-        private CurrentSwitchModelLoadBehavior modelload;
+        private LoadBehavior load;
+        private ModelLoadBehavior modelload;
 
         /// <summary>
         /// Nodes
@@ -40,8 +39,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var csw = component as CurrentSwitch;
 
             // Get behaviors
-            load = GetBehavior<CurrentSwitchLoadBehavior>(component);
-            modelload = GetBehavior<CurrentSwitchModelLoadBehavior>(csw.Model);
+            load = GetBehavior<LoadBehavior>(component);
+            modelload = GetBehavior<ModelLoadBehavior>(csw.Model);
         }
 
         /// <summary>

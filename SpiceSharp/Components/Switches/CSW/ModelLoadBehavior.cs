@@ -1,13 +1,12 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.CSW
 {
     /// <summary>
-    /// Load behavior for a <see cref="CurrentSwitchModel"/>
+    /// Load behavior for a <see cref="Components.CurrentSwitchModel"/>
     /// </summary>
-    public class CurrentSwitchModelLoadBehavior : CircuitObjectBehaviorLoad
+    public class ModelLoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Parameters

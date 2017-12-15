@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Behaviors.VSW;
 using SpiceSharp.Parameters;
 
 namespace SpiceSharp.Components
@@ -38,8 +38,8 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the voltage-controlled switch</param>
         public VoltageSwitch(CircuitIdentifier name) : base(name, SWpinCount)
         {
-            RegisterBehavior(new VoltageSwitchLoadBehavior());
-            RegisterBehavior(new VoltageSwitchAcBehavior());
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new AcBehavior());
         }
 
         /// <summary>

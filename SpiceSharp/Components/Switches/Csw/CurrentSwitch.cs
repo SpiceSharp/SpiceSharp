@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Behaviors.CSW;
 
 namespace SpiceSharp.Components
 {
@@ -47,8 +47,8 @@ namespace SpiceSharp.Components
         {
             // Make sure the current switch is processed after voltage sources
             Priority = -1;
-            RegisterBehavior(new CurrentSwitchLoadBehavior());
-            RegisterBehavior(new CurrentSwitchAcBehavior());
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new AcBehavior());
         }
 
         /// <summary>

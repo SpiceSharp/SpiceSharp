@@ -1,19 +1,20 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
+using SpiceSharp.Components.ComponentBehaviors;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.CSW
 {
     /// <summary>
     /// General behaviour for a <see cref="CurrentSwitch"/>
     /// </summary>
-    public class CurrentSwitchLoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private CurrentSwitchModelLoadBehavior modelload;
+        private ModelLoadBehavior modelload;
 
         /// <summary>
         /// Parameters
@@ -59,7 +60,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var csw = component as CurrentSwitch;
 
             // Get behaviors
-            modelload = GetBehavior<CurrentSwitchModelLoadBehavior>(csw.Model);
+            modelload = GetBehavior<ModelLoadBehavior>(csw.Model);
             var vsrcload = GetBehavior<VoltagesourceLoadBehavior>(csw.CSWcontSource);
 
             // Nodes
