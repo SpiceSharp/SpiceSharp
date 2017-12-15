@@ -1,22 +1,22 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.Semiconductors;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
     /// General behaviour for <see cref="Diode"/>
     /// </summary>
-    public class DiodeLoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private DiodeModelTemperatureBehavior modeltemp;
-        private DiodeTemperatureBehavior temp;
+        private ModelTemperatureBehavior modeltemp;
+        private TemperatureBehavior temp;
 
         /// <summary>
         /// Parameters
@@ -85,8 +85,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var dio = component as Diode;
 
             // Get behaviors
-            temp = GetBehavior<DiodeTemperatureBehavior>(component);
-            modeltemp = GetBehavior<DiodeModelTemperatureBehavior>(dio.Model);
+            temp = GetBehavior<TemperatureBehavior>(component);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(dio.Model);
 
             // Allocate states
             DIOstate = ckt.State.GetState(5);

@@ -1,17 +1,16 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
     /// Truncate behavior for a <see cref="Diode"/>
     /// </summary>
-    public class DiodeTruncateBehavior : CircuitObjectBehaviorTruncate
+    public class TruncateBehavior : CircuitObjectBehaviorTruncate
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private DiodeLoadBehavior load;
+        private LoadBehavior load;
 
         /// <summary>
         /// Setup the behavior
@@ -22,7 +21,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         public override void Setup(CircuitObject component, Circuit ckt)
         {
             // Get behaviors
-            load = GetBehavior<DiodeLoadBehavior>(component);
+            load = GetBehavior<LoadBehavior>(component);
         }
 
         /// <summary>
@@ -32,7 +31,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="timestep">Timestep</param>
         public override void Truncate(Circuit ckt, ref double timestep)
         {
-            ckt.Method.Terr(load.DIOstate + DiodeLoadBehavior.DIOcapCharge, ckt, ref timestep);
+            ckt.Method.Terr(load.DIOstate + LoadBehavior.DIOcapCharge, ckt, ref timestep);
         }
     }
 }

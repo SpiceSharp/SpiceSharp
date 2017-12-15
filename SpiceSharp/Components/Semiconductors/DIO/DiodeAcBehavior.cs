@@ -1,20 +1,20 @@
 ﻿using System.Numerics;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
+using SpiceSharp.Components;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
     /// AC behaviour for <see cref="Diode"/>
     /// </summary>
-    public class DiodeAcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private DiodeLoadBehavior load;
-        private DiodeModelTemperatureBehavior modeltemp;
+        private LoadBehavior load;
+        private ModelTemperatureBehavior modeltemp;
 
         /// <summary>
         /// Nodes
@@ -39,8 +39,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var diode = component as Diode;
 
             // Get necessary behaviors
-            load = GetBehavior<DiodeLoadBehavior>(component);
-            modeltemp = GetBehavior<DiodeModelTemperatureBehavior>(diode.Model);
+            load = GetBehavior<LoadBehavior>(component);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(diode.Model);
 
             // Nodes
             DIOposNode = diode.DIOposNode;
@@ -82,8 +82,8 @@ namespace SpiceSharp.Components.ComponentBehaviors
             double gspr, geq, xceq;
 
             gspr = modeltemp.DIOconductance * load.DIOarea;
-            geq = state.States[0][load.DIOstate + DiodeLoadBehavior.DIOconduct];
-            xceq = state.States[0][load.DIOstate + DiodeLoadBehavior.DIOcapCurrent] * state.Laplace.Imaginary;
+            geq = state.States[0][load.DIOstate + LoadBehavior.DIOconduct];
+            xceq = state.States[0][load.DIOstate + LoadBehavior.DIOcapCurrent] * state.Laplace.Imaginary;
 
             DIOposPosPtr.Value.Real += gspr;
             DIOnegNegPtr.Value.Cplx += new Complex(geq, xceq);

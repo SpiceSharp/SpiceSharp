@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Behaviors.DIO;
 
 namespace SpiceSharp.Components
 {
@@ -23,7 +23,7 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public DiodeModel(CircuitIdentifier name) : base(name)
         {
-            RegisterBehavior(new DiodeModelTemperatureBehavior());
+            RegisterBehavior(new ModelTemperatureBehavior());
         }
     }
 }

@@ -1,14 +1,12 @@
-﻿using System;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
-    /// Noise behavior for a <see cref="DiodeModel"/>
+    /// Noise behavior for a <see cref="Components.DiodeModel"/>
     /// </summary>
-    public class DiodeModelNoiseBehavior : CircuitObjectBehaviorNoise
+    public class ModelNoiseBehavior : CircuitObjectBehaviorNoise
     {
         /// <summary>
         /// Parameters

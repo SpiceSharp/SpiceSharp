@@ -1,20 +1,20 @@
 ﻿using System;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
     /// Temperature behaviour for a <see cref="Diode"/>
     /// </summary>
-    public class DiodeTemperatureBehavior : CircuitObjectBehaviorTemperature
+    public class TemperatureBehavior : CircuitObjectBehaviorTemperature
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private DiodeModelTemperatureBehavior modeltemp;
+        private ModelTemperatureBehavior modeltemp;
 
         /// <summary>
         /// Extra variables
@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var dio = component as Diode;
 
             // Get behaviors
-            modeltemp = GetBehavior<DiodeModelTemperatureBehavior>(dio.Model);
+            modeltemp = GetBehavior<ModelTemperatureBehavior>(dio.Model);
             
             // Get name
             name = dio.Name;

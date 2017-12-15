@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Behaviors.DIO;
 
 namespace SpiceSharp.Components
 {
@@ -31,11 +31,11 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public Diode(CircuitIdentifier name) : base(name, DIOpinCount)
         {
-            RegisterBehavior(new DiodeLoadBehavior());
-            RegisterBehavior(new DiodeTemperatureBehavior());
-            RegisterBehavior(new DiodeAcBehavior());
-            RegisterBehavior(new DiodeNoiseBehavior());
-            RegisterBehavior(new DiodeTruncateBehavior());
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new TemperatureBehavior());
+            RegisterBehavior(new AcBehavior());
+            RegisterBehavior(new NoiseBehavior());
+            RegisterBehavior(new TruncateBehavior());
         }
 
         /// <summary>
