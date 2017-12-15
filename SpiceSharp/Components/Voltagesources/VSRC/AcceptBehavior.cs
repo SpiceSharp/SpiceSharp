@@ -1,17 +1,16 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.VSRC
 {
     /// <summary>
-    /// Accept behavior for voltage sources
+    /// Accept behavior for a <see cref="Components.Voltagesource"/>
     /// </summary>
-    public class VoltagesourceAcceptBehavior : CircuitObjectBehaviorAccept
+    public class AcceptBehavior : CircuitObjectBehaviorAccept
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private VoltagesourceLoadBehavior load;
+        private LoadBehavior load;
 
         /// <summary>
         /// Setup the behavior
@@ -21,7 +20,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <returns></returns>
         public override void Setup(CircuitObject component, Circuit ckt)
         {
-            load = GetBehavior<VoltagesourceLoadBehavior>(component);
+            load = GetBehavior<LoadBehavior>(component);
         }
 
         /// <summary>

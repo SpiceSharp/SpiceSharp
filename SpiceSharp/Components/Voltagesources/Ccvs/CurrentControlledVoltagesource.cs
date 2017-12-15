@@ -2,7 +2,7 @@
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Behaviors.CCVS;
 
 namespace SpiceSharp.Components
 {
@@ -38,8 +38,8 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the current-controlled current source</param>
         public CurrentControlledVoltagesource(CircuitIdentifier name) : base(name, CCVSpinCount)
         {
-            RegisterBehavior(new CurrentControlledVoltagesourceLoadBehavior());
-            RegisterBehavior(new CurrentControlledVoltagesourceAcBehavior());
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new AcBehavior());
         }
 
         /// <summary>

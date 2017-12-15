@@ -1,18 +1,18 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.CCVS
 {
     /// <summary>
     /// AC behaviour for <see cref="CurrentControlledVoltagesource"/>
     /// </summary>
-    public class CurrentControlledVoltagesourceAcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private CurrentControlledVoltagesourceLoadBehavior load;
+        private LoadBehavior load;
 
         /// <summary>
         /// Nodes
@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var ccvs = component as CurrentControlledVoltagesource;
 
             // Get behaviors
-            load = GetBehavior<CurrentControlledVoltagesourceLoadBehavior>(component);
+            load = GetBehavior<LoadBehavior>(component);
 
             // Get nodes
             CCVSposNode = ccvs.CCVSposNode;

@@ -110,12 +110,13 @@
     <Compile Include="Components\Switches\VSW\AcBehavior.cs" />
     <Compile Include="Components\Switches\VSW\LoadBehavior.cs" />
     <Compile Include="Components\Switches\VSW\ModelLoadBehavior.cs" />
-    <Compile Include="Components\Voltagesources\CCVS\CurrentControlledVoltagesourceAcBehavior.cs" />
-    <Compile Include="Components\Voltagesources\CCVS\CurrentControlledVoltagesourceLoadBehavior.cs" />
-    <Compile Include="Components\Voltagesources\VCVS\VoltageControlledVoltagesourceAcBehavior.cs" />
-    <Compile Include="Components\Voltagesources\VCVS\VoltageControlledVoltagesourceLoadBehavior.cs" />
-    <Compile Include="Components\Voltagesources\VSRC\VoltagesourceAcBehavior.cs" />
-    <Compile Include="Components\Voltagesources\VSRC\VoltagesourceAcceptBehavior.cs" />
+    <Compile Include="Components\Voltagesources\CCVS\AcBehavior.cs" />
+    <Compile Include="Components\Voltagesources\CCVS\LoadBehavior.cs" />
+    <Compile Include="Components\Voltagesources\VCVS\AcBehavior.cs" />
+    <Compile Include="Components\Voltagesources\VCVS\LoadBehavior.cs" />
+    <Compile Include="Components\Voltagesources\VSRC\AcBehavior.cs" />
+    <Compile Include="Components\Voltagesources\VSRC\AcceptBehavior.cs" />
+    <Compile Include="Components\Voltagesources\VSRC\LoadBehavior.cs" />
     <Compile Include="Parameter.cs" />
     <Compile Include="Simulations\BaseSimulation.cs" />
     <Compile Include="Simulations\CircuitObjectBehaviorIc.cs" />
@@ -127,7 +128,6 @@
     <Compile Include="Behaviors\Behavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\LoadBehavior.cs" />
     <Compile Include="Components\Currentsources\ISRC\LoadBehavior.cs" />
-    <Compile Include="Components\Voltagesources\VSRC\VoltagesourceLoadBehavior.cs" />
     <Compile Include="Components\RLC\RES\AcBehavior.cs" />
     <Compile Include="Components\RLC\RES\LoadBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\NoiseBehavior.cs" />

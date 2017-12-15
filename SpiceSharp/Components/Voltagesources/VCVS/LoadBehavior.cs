@@ -1,18 +1,26 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
+using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.VCVS
 {
     /// <summary>
-    /// AC behaviour for a <see cref="VoltageControlledVoltagesource"/>
+    /// General behaviour for a <see cref="VoltageControlledVoltagesource"/>
     /// </summary>
-    public class VoltageControlledVoltagesourceAcBehavior : CircuitObjectBehaviorAcLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
-        /// Necessary behaviors
+        /// Parameters
         /// </summary>
-        private VoltageControlledVoltagesourceLoadBehavior load;
+        [SpiceName("gain"), SpiceInfo("Voltage gain")]
+        public Parameter VCVScoeff { get; } = new Parameter();
+        [SpiceName("i"), SpiceInfo("Output current")]
+        public double GetCurrent(Circuit ckt) => ckt.State.Solution[VCVSbranch];
+        [SpiceName("v"), SpiceInfo("Output current")]
+        public double GetVoltage(Circuit ckt) => ckt.State.Solution[VCVSposNode] - ckt.State.Solution[VCVSnegNode];
+        [SpiceName("p"), SpiceInfo("Power")]
+        public double GetPower(Circuit ckt) => ckt.State.Solution[VCVSbranch] * (ckt.State.Solution[VCVSposNode] - ckt.State.Solution[VCVSnegNode]);
 
         /// <summary>
         /// Nodes
@@ -21,7 +29,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         protected int VCVSnegNode { get; private set; }
         protected int VCVScontPosNode { get; private set; }
         protected int VCVScontNegNode { get; private set; }
-        protected int VCVSbranch { get; private set; }
+        public int VCVSbranch { get; protected set; }
 
         /// <summary>
         /// Matrix elements
@@ -34,7 +42,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         protected MatrixElement VCVSibrContNegptr { get; private set; }
 
         /// <summary>
-        /// Setup behavior
+        /// Setup the behavior
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
@@ -43,15 +51,12 @@ namespace SpiceSharp.Components.ComponentBehaviors
         {
             var vcvs = component as VoltageControlledVoltagesource;
 
-            // Get behaviors
-            load = GetBehavior<VoltageControlledVoltagesourceLoadBehavior>(component);
-
             // Get nodes
             VCVSposNode = vcvs.VCVSposNode;
             VCVSnegNode = vcvs.VCVSnegNode;
             VCVScontPosNode = vcvs.VCVScontPosNode;
             VCVScontNegNode = vcvs.VCVScontNegNode;
-            VCVSbranch = load.VCVSbranch;
+            VCVSbranch = CreateNode(ckt, component.Name.Grow("#branch"), CircuitNode.NodeType.Current).Index;
 
             // Get matrix elements
             var matrix = ckt.State.Matrix;
@@ -83,12 +88,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// <param name="ckt">Circuit</param>
         public override void Load(Circuit ckt)
         {
+            var rstate = ckt.State;
+
             VCVSposIbrptr.Add(1.0);
             VCVSibrPosptr.Add(1.0);
             VCVSnegIbrptr.Sub(1.0);
             VCVSibrNegptr.Sub(1.0);
-            VCVSibrContPosptr.Sub(load.VCVScoeff);
-            VCVSibrContNegptr.Add(load.VCVScoeff);
+            VCVSibrContPosptr.Sub(VCVScoeff);
+            VCVSibrContNegptr.Add(VCVScoeff);
         }
     }
 }

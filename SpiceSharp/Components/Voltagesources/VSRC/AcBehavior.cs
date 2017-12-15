@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Parameters;
 using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.VSRC
 {
     /// <summary>
     /// AC behaviour for <see cref="Voltagesource"/>
     /// </summary>
-    public class VoltageSourceLoadAcBehavior : CircuitObjectBehaviorAcLoad
+    public class AcBehavior : CircuitObjectBehaviorAcLoad
     {
         /// <summary>
         /// Parameters
@@ -62,7 +62,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var vsrc = component as Voltagesource;
 
             // Get behaviors
-            var load = GetBehavior<VoltagesourceLoadBehavior>(component);
+            var load = GetBehavior<LoadBehavior>(component);
 
             // Get nodes
             VSRCposNode = vsrc.VSRCposNode;

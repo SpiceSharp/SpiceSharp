@@ -1,14 +1,14 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Components;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.CCVS
 {
     /// <summary>
     /// General behaviour for <see cref="CurrentControlledVoltagesource"/>
     /// </summary>
-    public class CurrentControlledVoltagesourceLoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Parameters
@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             var ccvs = component as CurrentControlledVoltagesource;
 
             // Get behaviors
-            var vsrcload = GetBehavior<VoltagesourceLoadBehavior>(ccvs.CCVScontSource);
+            var vsrcload = GetBehavior<VSRC.LoadBehavior>(ccvs.CCVScontSource);
 
             // Get nodes
             CCVSposNode = ccvs.CCVSposNode;

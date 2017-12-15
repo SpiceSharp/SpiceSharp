@@ -6,7 +6,6 @@ using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.ComponentBehaviors;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
@@ -92,7 +91,7 @@ namespace SpiceSharp.Simulations
             CircuitObject source = ckt.Objects[Input];
             if (source is Voltagesource vsource)
             {
-                var ac = vsource.GetBehavior(typeof(CircuitObjectBehaviorAcLoad)) as VoltageSourceLoadAcBehavior;
+                var ac = vsource.GetBehavior(typeof(CircuitObjectBehaviorAcLoad)) as Behaviors.VSRC.AcBehavior;
                 if (!ac.VSRCacMag.Given || ac.VSRCacMag == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {vsource.Name} has no AC input");
             }

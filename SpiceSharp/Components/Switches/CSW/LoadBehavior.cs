@@ -2,7 +2,6 @@
 using SpiceSharp.Components;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.ComponentBehaviors;
 
 namespace SpiceSharp.Behaviors.CSW
 {
@@ -61,7 +60,7 @@ namespace SpiceSharp.Behaviors.CSW
 
             // Get behaviors
             modelload = GetBehavior<ModelLoadBehavior>(csw.Model);
-            var vsrcload = GetBehavior<VoltagesourceLoadBehavior>(csw.CSWcontSource);
+            var vsrcload = GetBehavior<VSRC.LoadBehavior>(csw.CSWcontSource);
 
             // Nodes
             CSWposNode = csw.CSWposNode;

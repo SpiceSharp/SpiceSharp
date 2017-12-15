@@ -3,7 +3,6 @@ using SpiceSharp.Components;
 using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.ComponentBehaviors;
 
 namespace SpiceSharp.Behaviors.CCCS
 {
@@ -62,7 +61,7 @@ namespace SpiceSharp.Behaviors.CCCS
             var matrix = ckt.State.Matrix;
 
             // Extract necessary info from the load behavior
-            var vsrcload = GetBehavior<VoltagesourceLoadBehavior>(cccs.CCCScontSource);
+            var vsrcload = GetBehavior<VSRC.LoadBehavior>(cccs.CCCScontSource);
             load = GetBehavior<LoadBehavior>(component);
 
             // Get nodes

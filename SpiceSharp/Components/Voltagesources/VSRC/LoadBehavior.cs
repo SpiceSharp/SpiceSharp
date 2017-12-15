@@ -1,16 +1,16 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
 using System;
 
-namespace SpiceSharp.Components.ComponentBehaviors
+namespace SpiceSharp.Behaviors.VSRC
 {
     /// <summary>
     /// General behaviour for <see cref="Voltagesource"/>
     /// </summary>
-    public class VoltagesourceLoadBehavior : CircuitObjectBehaviorLoad
+    public class LoadBehavior : CircuitObjectBehaviorLoad
     {
         /// <summary>
         /// Parameters

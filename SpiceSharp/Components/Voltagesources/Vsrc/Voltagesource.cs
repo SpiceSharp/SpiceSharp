@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
-using SpiceSharp.Components.ComponentBehaviors;
+using SpiceSharp.Behaviors.VSRC;
 
 namespace SpiceSharp.Components
 {
@@ -29,9 +29,9 @@ namespace SpiceSharp.Components
         /// <param name="name">The name</param>
         public Voltagesource(CircuitIdentifier name) : base(name, VSRCpinCount)
         {
-            RegisterBehavior(new VoltagesourceLoadBehavior());
-            RegisterBehavior(new VoltageSourceLoadAcBehavior());
-            RegisterBehavior(new VoltagesourceAcceptBehavior());
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new AcBehavior());
+            RegisterBehavior(new AcceptBehavior());
         }
 
         /// <summary>
@@ -47,13 +47,13 @@ namespace SpiceSharp.Components
             Connect(pos, neg);
 
             // Set waveform
-            var load = new VoltagesourceLoadBehavior();
+            var load = new LoadBehavior();
             load.VSRCdcValue.Set(dc);
             RegisterBehavior(load);
 
             // Register behaviors
-            RegisterBehavior(new VoltageSourceLoadAcBehavior());
-            RegisterBehavior(new VoltagesourceAcceptBehavior());
+            RegisterBehavior(new AcBehavior());
+            RegisterBehavior(new AcceptBehavior());
         }
 
         /// <summary>
@@ -69,13 +69,13 @@ namespace SpiceSharp.Components
             Connect(pos, neg);
 
             // Set waveform
-            var load = new VoltagesourceLoadBehavior();
+            var load = new LoadBehavior();
             load.VSRCwaveform = w;
             RegisterBehavior(load);
 
             // Register behaviors
-            RegisterBehavior(new VoltageSourceLoadAcBehavior());
-            RegisterBehavior(new VoltagesourceAcceptBehavior());
+            RegisterBehavior(new AcBehavior());
+            RegisterBehavior(new AcceptBehavior());
         }
 
         /// <summary>
