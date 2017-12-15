@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.CAP;
+using SpiceSharp.Behaviors.CAP;
 
 namespace SpiceSharp.Components
 {
@@ -52,18 +52,15 @@ namespace SpiceSharp.Components
         public Capacitor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double cap) 
             : base(name, CAPpinCount)
         {
-            Connect(pos, neg);
-
-            // Set capacitance
-            var load = new LoadBehavior();
-            load.CAPcapac.Set(cap);
-            RegisterBehavior(load);
-
-            // Register other behaviors
+            // Register behaviors
+            RegisterBehavior(new LoadBehavior(cap));
             RegisterBehavior(new AcBehavior());
             RegisterBehavior(new TemperatureBehavior());
             RegisterBehavior(new AcceptBehavior());
             RegisterBehavior(new TruncateBehavior());
+
+            // Connect
+            Connect(pos, neg);
         }
         
         /// <summary>

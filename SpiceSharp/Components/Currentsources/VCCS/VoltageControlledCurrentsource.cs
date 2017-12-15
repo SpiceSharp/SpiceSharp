@@ -45,12 +45,16 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
-        /// <param name="coeff">The transconductance gain</param>
+        /// <param name="gain">The transconductance gain</param>
         public VoltageControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier cont_pos, CircuitIdentifier cont_neg, double gain) 
             : this(name)
         {
+            // Register behaviors
+            RegisterBehavior(new LoadBehavior(gain));
+            RegisterBehavior(new AcBehavior());
+
+            // Connect
             Connect(pos, neg, cont_pos, cont_neg);
-            Set("gain", gain);
         }
 
         /// <summary>

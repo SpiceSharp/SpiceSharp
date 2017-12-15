@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components.IND;
+using SpiceSharp.Behaviors.IND;
 
 namespace SpiceSharp.Components
 {
@@ -43,17 +43,14 @@ namespace SpiceSharp.Components
         public Inductor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double ind) 
             : base(name, INDpinCount)
         {
-            Connect(pos, neg);
-
-            // Set inductance
-            var load = new LoadBehavior();
-            load.INDinduct.Set(ind);
-            RegisterBehavior(load);
-
             // Register behaviors
+            RegisterBehavior(new LoadBehavior(ind));
             RegisterBehavior(new AcBehavior());
             RegisterBehavior(new AcceptBehavior());
             RegisterBehavior(new TruncateBehavior());
+
+            // Connect
+            Connect(pos, neg);
         }
 
         /// <summary>

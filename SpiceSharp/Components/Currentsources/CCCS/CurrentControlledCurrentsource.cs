@@ -54,10 +54,14 @@ namespace SpiceSharp.Components
         public CurrentControlledCurrentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, CircuitIdentifier vsource, double gain)
             : this(name)
         {
-            // Connect and update the device
+            // Register behaviors
+            Priority = -1;
+            RegisterBehavior(new LoadBehavior(gain));
+            RegisterBehavior(new AcBehavior());
+
+            // Connect
             Connect(pos, neg);
             CCCScontName = vsource;
-            Set("gain", gain);
         }
 
         /// <summary>

@@ -1,10 +1,9 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.IND
+namespace SpiceSharp.Behaviors.IND
 {
     /// <summary>
-    /// Truncate behavior for inductors
+    /// Truncate behavior for an <see cref="Components.Inductor"/>
     /// </summary>
     public class TruncateBehavior : Behaviors.TruncateBehavior
     {

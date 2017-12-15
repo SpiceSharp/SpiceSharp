@@ -45,6 +45,22 @@ namespace SpiceSharp.Behaviors.VCCS
         private MatrixElement VCCSnegContNegptr;
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public LoadBehavior()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="gain">Gain</param>
+        public LoadBehavior(double gain)
+        {
+            VCCScoeff.Set(gain);
+        }
+
+        /// <summary>
         /// Setup the behavior
         /// </summary>
         /// <param name="component">Component</param>

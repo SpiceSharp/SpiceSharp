@@ -1,9 +1,9 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.CAP
+namespace SpiceSharp.Behaviors.CAP
 {
     /// <summary>
     /// General behaviour for <see cref="Capacitor"/>
@@ -37,6 +37,22 @@ namespace SpiceSharp.Components.CAP
         /// </summary>
         public const int CAPqcap = 0;
         public const int CAPccap = 1;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public LoadBehavior()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="cap">Capacitance</param>
+        public LoadBehavior(double cap)
+        {
+            CAPcapac.Set(cap);
+        }
 
         /// <summary>
         /// Setup the behavior

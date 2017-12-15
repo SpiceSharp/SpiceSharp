@@ -1,9 +1,9 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Components;
 using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.MUT
+namespace SpiceSharp.Behaviors.MUT
 {
     /// <summary>
     /// AC behaviour for <see cref="MutualInductance"/>

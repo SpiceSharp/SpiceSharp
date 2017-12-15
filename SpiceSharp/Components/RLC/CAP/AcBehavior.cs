@@ -1,9 +1,8 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Parameters;
+﻿using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.CAP
+namespace SpiceSharp.Behaviors.CAP
 {
     /// <summary>
     /// AC behaviour for <see cref="Capacitor"/>

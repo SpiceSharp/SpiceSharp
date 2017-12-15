@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Parameters;
-using SpiceSharp.Components.MUT;
+using SpiceSharp.Behaviors.MUT;
 
 namespace SpiceSharp.Components
 {
@@ -34,6 +34,26 @@ namespace SpiceSharp.Components
             Priority = -1;
             RegisterBehavior(new LoadBehavior());
             RegisterBehavior(new AcBehavior());
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="ind1">Inductor 1</param>
+        /// <param name="ind2">Inductor 2</param>
+        /// <param name="coupling">Mutual inductance</param>
+        public MutualInductance(CircuitIdentifier name, CircuitIdentifier ind1, CircuitIdentifier ind2, double coupling)
+            : base(name, 0)
+        {
+            // Register behaviors
+            Priority = -1;
+            RegisterBehavior(new LoadBehavior(coupling));
+            RegisterBehavior(new AcBehavior());
+
+            // Connect
+            MUTind1 = ind1;
+            MUTind2 = ind2;
         }
 
         /// <summary>

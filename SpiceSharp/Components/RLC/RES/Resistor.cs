@@ -30,7 +30,8 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the resistor</param>
-        public Resistor(CircuitIdentifier name) : base(name, RESpinCount)
+        public Resistor(CircuitIdentifier name) 
+            : base(name, RESpinCount)
         {
             RegisterBehavior(new LoadBehavior());
             RegisterBehavior(new AcBehavior());
@@ -45,17 +46,16 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="res">The resistance</param>
-        public Resistor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double res) : base(name, RESpinCount)
+        public Resistor(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double res) 
+            : base(name, RESpinCount)
         {
-            // Set the resistance
-            var load = new LoadBehavior();
-            load.RESresist.Set(res);
-            RegisterBehavior(load);
-
-            // Add other behaviors
+            // Register behaviors
+            RegisterBehavior(new LoadBehavior(res));
             RegisterBehavior(new AcBehavior());
             RegisterBehavior(new NoiseBehavior());
             RegisterBehavior(new TemperatureBehavior());
+
+            // Connect
             Connect(pos, neg);
         }
 

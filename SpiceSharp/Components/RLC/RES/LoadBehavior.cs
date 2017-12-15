@@ -47,6 +47,22 @@ namespace SpiceSharp.Behaviors.RES
         protected MatrixElement RESnegPosPtr { get; private set; }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public LoadBehavior()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="res">Resistance</param>
+        public LoadBehavior(double res)
+        {
+            RESresist.Set(res);
+        }
+
+        /// <summary>
         /// Setup the behavior
         /// </summary>
         /// <param name="component">Component</param>

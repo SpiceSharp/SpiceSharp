@@ -1,8 +1,8 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 
-namespace SpiceSharp.Components.CAP
+namespace SpiceSharp.Behaviors.CAP
 {
     /// <summary>
     /// Temperature behaviour for a <see cref="Capacitor"/>

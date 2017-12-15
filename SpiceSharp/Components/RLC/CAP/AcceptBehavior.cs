@@ -1,10 +1,9 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.CAP
+namespace SpiceSharp.Behaviors.CAP
 {
     /// <summary>
-    /// Accept behavior for capacitances
+    /// Accept behavior for a <see cref="Components.Capacitor"/>
     /// </summary>
     public class AcceptBehavior : Behaviors.AcceptBehavior
     {

@@ -1,9 +1,9 @@
 ﻿using System.Numerics;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.IND
+namespace SpiceSharp.Behaviors.IND
 {
     /// <summary>
     /// AC behaviour for <see cref="Inductor"/>

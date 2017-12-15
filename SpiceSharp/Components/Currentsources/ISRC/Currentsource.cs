@@ -41,8 +41,13 @@ namespace SpiceSharp.Components
         public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, double dc)
             : this(name)
         {
+            // Register behaviors
+            RegisterBehavior(new LoadBehavior(dc));
+            RegisterBehavior(new AcBehavior());
+            RegisterBehavior(new AcceptBehavior());
+
+            // Connect
             Connect(pos, neg);
-            Set("dc", dc);
         }
 
         /// <summary>
@@ -54,12 +59,13 @@ namespace SpiceSharp.Components
         /// <param name="w">The Waveform-object</param>
         public Currentsource(CircuitIdentifier name, CircuitIdentifier pos, CircuitIdentifier neg, Waveform w) : base(name, ISRCpinCount)
         {
-            Connect(pos, neg);
-
-            var loadbehavior = new LoadBehavior();
-            loadbehavior.ISRCwaveform = w;
+            // Register behaviors
+            RegisterBehavior(new LoadBehavior(w));
             RegisterBehavior(new AcBehavior());
             RegisterBehavior(new AcceptBehavior());
+
+            // Connect
+            Connect(pos, neg);
         }
 
         /// <summary>

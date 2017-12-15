@@ -38,6 +38,22 @@ namespace SpiceSharp.Behaviors.CCCS
         protected MatrixElement CCCSnegContBrptr = null;
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public LoadBehavior()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="gain">Gain</param>
+        public LoadBehavior(double gain)
+        {
+            CCCScoeff.Set(gain);
+        }
+
+        /// <summary>
         /// Create a getter
         /// </summary>
         /// <param name="ckt">Circuit</param>

@@ -1,9 +1,9 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.IND
+namespace SpiceSharp.Behaviors.IND
 {
     /// <summary>
     /// General behaviour for a <see cref="Inductor"/>
@@ -60,6 +60,22 @@ namespace SpiceSharp.Components.IND
         /// </summary>
         public const int INDflux = 0;
         public const int INDvolt = 1;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public LoadBehavior()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="ind">Inductance</param>
+        public LoadBehavior(double ind)
+        {
+            INDinduct.Set(ind);
+        }
 
         /// <summary>
         /// Setup the load behavior

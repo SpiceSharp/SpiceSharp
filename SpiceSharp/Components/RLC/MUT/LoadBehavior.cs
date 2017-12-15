@@ -1,10 +1,10 @@
 ﻿using System;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Components.MUT
+namespace SpiceSharp.Behaviors.MUT
 {
     /// <summary>
     /// General behaviour for <see cref="MutualInductance"/>
@@ -32,6 +32,22 @@ namespace SpiceSharp.Components.MUT
         /// </summary>
         protected MatrixElement MUTbr1br2 { get; private set; }
         protected MatrixElement MUTbr2br1 { get; private set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public LoadBehavior()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="coupling">Mutual inductance</param>
+        public LoadBehavior(double coupling)
+        {
+            MUTcoupling.Set(coupling);
+        }
 
         /// <summary>
         /// Setup the mutual inductor

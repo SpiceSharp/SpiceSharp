@@ -1,7 +1,7 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Components.IND
+namespace SpiceSharp.Behaviors.IND
 {
     /// <summary>
     /// Accept behavior for inductors

@@ -38,6 +38,31 @@ namespace SpiceSharp.Behaviors.ISRC
         private int ISRCposNode, ISRCnegNode;
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public LoadBehavior()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="dc">DC value</param>
+        public LoadBehavior(double dc)
+        {
+            ISRCdcValue.Set(dc);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="w">Waveform</param>
+        public LoadBehavior(Waveform w)
+        {
+            ISRCwaveform = w;
+        }
+
+        /// <summary>
         /// Create getter
         /// </summary>
         /// <param name="ckt">Circuit</param>
