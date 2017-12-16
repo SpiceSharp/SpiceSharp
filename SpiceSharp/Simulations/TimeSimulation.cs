@@ -40,13 +40,13 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (maxstep == 0.0 && !double.IsNaN(maxstep))
+                if (double.IsNaN(maxstep))
                     return (FinalTime - InitTime) / 50.0;
                 return maxstep;
             }
             set { maxstep = value; }
         }
-        private double maxstep;
+        private double maxstep = double.NaN;
 
         /// <summary>
         /// Get the minimum timestep allowed
@@ -55,10 +55,14 @@ namespace SpiceSharp.Simulations
         public double DeltaMin { get { return 1e-13 * MaxStep; } }
 
         /// <summary>
+        /// Gets the integration method
+        /// </summary>
+        public IntegrationMethod Method { get; protected set; }
+
+        /// <summary>
         /// Time-domain behaviors
         /// </summary>
         protected List<TransientBehavior> tranbehaviors = null;
-        protected IntegrationMethod method = null;
 
         /// <summary>
         /// Constructor
@@ -77,7 +81,13 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Also configure the method
-            method = CurrentConfig.Method ?? throw new CircuitException($"{Name}: No integration method specified");
+            Method = CurrentConfig.Method ?? throw new CircuitException($"{Name}: No integration method specified");
+            Method.Breaks.Clear();
+            Method.Breaks.SetBreakpoint(InitTime);
+            Method.Breaks.SetBreakpoint(FinalTime);
+            Method.Breaks.MinBreak = MaxStep * 5e-5;
+            
+            // Get behaviors
             tranbehaviors = SetupBehaviors<TransientBehavior>();
         }
 
@@ -91,7 +101,7 @@ namespace SpiceSharp.Simulations
                 behavior.Unsetup();
             tranbehaviors.Clear();
             tranbehaviors = null;
-            method = null;
+            Method = null;
 
             base.Unsetup();
         }
@@ -137,7 +147,7 @@ namespace SpiceSharp.Simulations
                     // Load the Y-matrix and Rhs-vector for DC and transients
                     Load(ckt);
                     foreach (var behavior in tranbehaviors)
-                        behavior.Transient(ckt);
+                        behavior.Transient(this);
                     iterno++;
                 }
                 catch (CircuitException)

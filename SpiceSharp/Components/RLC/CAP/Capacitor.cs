@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public Capacitor(Identifier name) : base(name, CAPpinCount)
         {
-            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new TransientBehavior());
             RegisterBehavior(new AcBehavior());
             RegisterBehavior(new TemperatureBehavior());
             RegisterBehavior(new AcceptBehavior());
@@ -53,7 +53,7 @@ namespace SpiceSharp.Components
             : base(name, CAPpinCount)
         {
             // Register behaviors
-            RegisterBehavior(new LoadBehavior(cap));
+            RegisterBehavior(new TransientBehavior(cap));
             RegisterBehavior(new AcBehavior());
             RegisterBehavior(new TemperatureBehavior());
             RegisterBehavior(new AcceptBehavior());

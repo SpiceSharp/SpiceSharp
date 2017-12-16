@@ -10,7 +10,7 @@ namespace SpiceSharp.Behaviors.CAP
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load = null;
+        private TransientBehavior tran = null;
 
         /// <summary>
         /// Setup the behavior
@@ -20,7 +20,7 @@ namespace SpiceSharp.Behaviors.CAP
         public override void Setup(Entity component, Circuit ckt)
         {
             // Get behaviors
-            load = GetBehavior<LoadBehavior>(component);
+            tran = GetBehavior<TransientBehavior>(component);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace SpiceSharp.Behaviors.CAP
         {
             // Copy DC states when accepting the first timepoint
             if (ckt.State.Init == State.InitFlags.InitTransient)
-                ckt.State.CopyDC(load.CAPstate + LoadBehavior.CAPqcap);
+                ckt.State.CopyDC(tran.CAPstate + TransientBehavior.CAPqcap);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace SpiceSharp.Behaviors.CAP
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
+        private TransientBehavior tran;
 
         /// <summary>
         /// Nodes
@@ -31,7 +31,7 @@ namespace SpiceSharp.Behaviors.CAP
         public override void Setup(Entity component, Circuit ckt)
         {
             // Get behaviors
-            load = GetBehavior<LoadBehavior>(component);
+            tran = GetBehavior<TransientBehavior>(component);
             
             // Get nodes
             var cap = component as Capacitor;
@@ -53,7 +53,7 @@ namespace SpiceSharp.Behaviors.CAP
         public override void Load(Circuit ckt)
         {
             var cstate = ckt.State;
-            var val = cstate.Laplace * load.CAPcapac.Value;
+            var val = cstate.Laplace * tran.CAPcapac.Value;
 
             // Load the matrix
             CAPposPosptr.Add(val);

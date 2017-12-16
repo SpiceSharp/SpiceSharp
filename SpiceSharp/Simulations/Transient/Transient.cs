@@ -93,12 +93,6 @@ namespace SpiceSharp.Simulations
 
             double delta = Math.Min(FinalTime / 50.0, Step) / 10.0;
 
-            // Setup breakpoints
-            method.Breaks.Clear();
-            method.Breaks.SetBreakpoint(0.0);
-            method.Breaks.SetBreakpoint(FinalTime);
-            method.Breaks.MinBreak = MaxStep * 5e-5;
-
             // Initialize before starting the simulation
             state.UseIC = config.UseIC;
             state.UseDC = true;
@@ -107,23 +101,23 @@ namespace SpiceSharp.Simulations
             state.Gmin = config.Gmin;
 
             // Setup breakpoints
-            method.Initialize(ckt, truncatebehaviors);
+            Method.Initialize(ckt, truncatebehaviors);
             state.Initialize(ckt);
-            state.ReinitStates(method);
+            state.ReinitStates(Method);
 
             // Calculate the operating point
             ckt.Method = null;
             Op(ckt, config.DcMaxIterations);
             ckt.Statistics.TimePoints++;
-            for (int i = 0; i < method.DeltaOld.Length; i++)
+            for (int i = 0; i < Method.DeltaOld.Length; i++)
             {
-                method.DeltaOld[i] = MaxStep;
+                Method.DeltaOld[i] = MaxStep;
             }
-            method.Delta = delta;
-            method.SaveDelta = FinalTime / 50.0;
+            Method.Delta = delta;
+            Method.SaveDelta = FinalTime / 50.0;
 
-            // Initialize the method
-            ckt.Method = method;
+            // Initialize the Method
+            ckt.Method = Method;
 
             // Stop calculating a DC solution
             state.UseIC = false;
@@ -147,21 +141,21 @@ namespace SpiceSharp.Simulations
                     // Accept the current timepoint (CKTaccept())
                     foreach (var behavior in acceptbehaviors)
                         behavior.Accept(ckt);
-                    method.SaveSolution(rstate.Solution);
+                    Method.SaveSolution(rstate.Solution);
                     // end of CKTaccept()
 
                     // Check if current breakpoint is outdated; if so, clear
-                    method.UpdateBreakpoints();
+                    Method.UpdateBreakpoints();
                     ckt.Statistics.Accepted++;
 
                     // Export the current timepoint
-                    if (method.Time >= InitTime)
+                    if (Method.Time >= InitTime)
                     {
                         Export(ckt);
                     }
 
                     // Detect the end of the simulation
-                    if (method.Time >= FinalTime)
+                    if (Method.Time >= FinalTime)
                     {
                         // Keep our statistics
                         ckt.Statistics.TransientTime.Stop();
@@ -175,25 +169,25 @@ namespace SpiceSharp.Simulations
                     // Pause test - pausing not supported
 
                     // resume:
-                    method.Delta = Math.Min(method.Delta, MaxStep);
-                    method.Resume();
+                    Method.Delta = Math.Min(Method.Delta, MaxStep);
+                    Method.Resume();
                     state.ShiftStates();
 
                     // Calculate a new solution
                     while (true)
                     {
-                        method.TryDelta();
+                        Method.TryDelta();
 
                         // Compute coefficients and predict a solution and reset states to our previous solution
-                        method.ComputeCoefficients(ckt);
-                        method.Predict(ckt);
+                        Method.ComputeCoefficients(ckt);
+                        Method.Predict(ckt);
 
                         // Try to solve the new point
-                        if (method.SavedTime == 0.0)
+                        if (Method.SavedTime == 0.0)
                             state.Init = State.InitFlags.InitTransient;
                         bool converged = TranIterate(ckt, config.TranMaxIterations);
                         ckt.Statistics.TimePoints++;
-                        if (method.SavedTime == 0.0)
+                        if (Method.SavedTime == 0.0)
                         {
                             for (int i = 0; i < state.States[1].Length; i++)
                             {
@@ -209,18 +203,18 @@ namespace SpiceSharp.Simulations
                         if (!converged)
                         {
                             // Failed to converge, let's try again with a smaller timestep
-                            method.Rollback();
+                            Method.Rollback();
                             ckt.Statistics.Rejected++;
-                            method.Delta /= 8.0;
-                            method.CutOrder();
+                            Method.Delta /= 8.0;
+                            Method.CutOrder();
 
-                            var data = new TimestepCutData(ckt, method.Delta / 8.0, TimestepCutData.TimestepCutReason.Convergence);
+                            var data = new TimestepCutData(ckt, Method.Delta / 8.0, TimestepCutData.TimestepCutReason.Convergence);
                             TimestepCut?.Invoke(this, data);
                         }
                         else
                         {
                             // Do not check the first time point
-                            if (method.SavedTime == 0.0 || method.LteControl(this))
+                            if (Method.SavedTime == 0.0 || Method.LteControl(this))
                             {
                                 // goto nextTime;
                                 break;
@@ -228,17 +222,17 @@ namespace SpiceSharp.Simulations
                             else
                             {
                                 ckt.Statistics.Rejected++;
-                                var data = new TimestepCutData(ckt, method.Delta, TimestepCutData.TimestepCutReason.Truncation);
+                                var data = new TimestepCutData(ckt, Method.Delta, TimestepCutData.TimestepCutReason.Truncation);
                                 TimestepCut?.Invoke(this, data);
                             }
                         }
 
-                        if (method.Delta <= DeltaMin)
+                        if (Method.Delta <= DeltaMin)
                         {
-                            if (method.OldDelta > DeltaMin)
-                                method.Delta = DeltaMin;
+                            if (Method.OldDelta > DeltaMin)
+                                Method.Delta = DeltaMin;
                             else
-                                throw new CircuitException($"Timestep too small at t={method.SavedTime.ToString("g")}: {method.Delta.ToString("g")}");
+                                throw new CircuitException($"Timestep too small at t={Method.SavedTime.ToString("g")}: {Method.Delta.ToString("g")}");
                         }
                     }
                 }

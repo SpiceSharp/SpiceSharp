@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.Simulations;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Transient behavior
@@ -8,7 +10,7 @@
         /// <summary>
         /// Transient calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public abstract void Transient(Circuit ckt);
+        /// <param name="sim">Time-base simulation</param>
+        public abstract void Transient(TimeSimulation sim);
     }
 }

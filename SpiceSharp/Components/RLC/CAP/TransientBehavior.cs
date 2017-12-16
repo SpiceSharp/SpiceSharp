@@ -2,13 +2,14 @@
 using SpiceSharp.Components;
 using SpiceSharp.Parameters;
 using SpiceSharp.Sparse;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.CAP
 {
     /// <summary>
-    /// General behaviour for <see cref="Capacitor"/>
+    /// Transient behaviour for <see cref="Capacitor"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior
+    public class TransientBehavior : Behaviors.TransientBehavior
     {
         /// <summary>
         /// Parameters
@@ -41,7 +42,7 @@ namespace SpiceSharp.Behaviors.CAP
         /// <summary>
         /// Constructor
         /// </summary>
-        public LoadBehavior()
+        public TransientBehavior()
         {
         }
 
@@ -49,7 +50,7 @@ namespace SpiceSharp.Behaviors.CAP
         /// Constructor
         /// </summary>
         /// <param name="cap">Capacitance</param>
-        public LoadBehavior(double cap)
+        public TransientBehavior(double cap)
         {
             CAPcapac.Set(cap);
         }
@@ -99,10 +100,11 @@ namespace SpiceSharp.Behaviors.CAP
         /// <summary>
         /// Execute behaviour for DC and Transient analysis
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Time-based simulation</param>
+        public override void Transient(TimeSimulation sim)
         {
             double vcap;
+            var ckt = sim.Circuit;
             var state = ckt.State;
             var rstate = state;
             var method = ckt.Method;
@@ -114,30 +116,22 @@ namespace SpiceSharp.Behaviors.CAP
             else
                 vcap = rstate.Solution[CAPposNode] - rstate.Solution[CAPnegNode];
 
-            if (state.Domain == State.DomainTypes.Time)
-            {
-                // Fill the matrix
-                state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
-                if (state.Init == State.InitFlags.InitTransient)
-                    state.States[1][CAPstate + CAPqcap] = state.States[0][CAPstate + CAPqcap];
+            // Fill the matrix
+            state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
+            if (state.Init == State.InitFlags.InitTransient)
+                state.States[1][CAPstate + CAPqcap] = state.States[0][CAPstate + CAPqcap];
 
-                // Without integration, a capacitor cannot do anything
-                if (method != null)
-                {
-                    var result = ckt.Method.Integrate(state, CAPstate + CAPqcap, CAPcapac);
-                    if (state.Init == State.InitFlags.InitTransient)
-                        state.States[1][CAPstate + CAPqcap] = state.States[0][CAPstate + CAPqcap];
+            // Integrate
+            var result = ckt.Method.Integrate(state, CAPstate + CAPqcap, CAPcapac);
+            if (state.Init == State.InitFlags.InitTransient)
+                state.States[1][CAPstate + CAPqcap] = state.States[0][CAPstate + CAPqcap];
 
-                    CAPposPosptr.Add(result.Geq);
-                    CAPnegNegptr.Add(result.Geq);
-                    CAPposNegptr.Sub(result.Geq);
-                    CAPnegPosptr.Sub(result.Geq);
-                    state.Rhs[CAPposNode] -= result.Ceq;
-                    state.Rhs[CAPnegNode] += result.Ceq;
-                }
-            }
-            else
-                state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
+            CAPposPosptr.Add(result.Geq);
+            CAPnegNegptr.Add(result.Geq);
+            CAPposNegptr.Sub(result.Geq);
+            CAPnegPosptr.Sub(result.Geq);
+            state.Rhs[CAPposNode] -= result.Ceq;
+            state.Rhs[CAPnegNode] += result.Ceq;
         }
     }
 }
