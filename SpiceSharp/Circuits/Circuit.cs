@@ -2,8 +2,6 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
-using SpiceSharp.Diagnostics;
-using SpiceSharp.Behaviors;
 
 namespace SpiceSharp
 {
@@ -82,7 +80,7 @@ namespace SpiceSharp
         /// </summary>
         public void Check()
         {
-            Checker checker = new Checker();
+            Validator checker = new Validator();
             checker.Check(this);
         }
     }

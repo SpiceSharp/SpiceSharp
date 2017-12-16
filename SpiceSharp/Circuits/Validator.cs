@@ -10,7 +10,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Provides methods for checking the integrity of a circuit.
     /// </summary>
-    public class Checker
+    public class Validator
     {
         /// <summary>
         /// Constants
@@ -30,7 +30,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Constructor
         /// </summary>
-        public Checker()
+        public Validator()
         {
         }
 

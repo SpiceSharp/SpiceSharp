@@ -21,7 +21,7 @@ namespace SpiceSharpTest
                 new Voltagesource(new Identifier("V3"), new Identifier("B"), new Identifier("A"), 1.0)
                 );
 
-            Checker check = new Checker();
+            Validator check = new Validator();
             check.Check(ckt);
         }
 
@@ -42,7 +42,7 @@ namespace SpiceSharpTest
                 new Voltagesource(new Identifier("V9"), new Identifier("H"), new Identifier("I"), 1.0),
                 new Voltagesource(new Identifier("V10"), new Identifier("I"), new Identifier("0"), 1.0)
                 );
-            Checker check = new Checker();
+            Validator check = new Validator();
             check.Check(ckt);
         }
 
@@ -56,7 +56,7 @@ namespace SpiceSharpTest
                 new Capacitor(new Identifier("C1"), new Identifier("in"), new Identifier("out"), 1e-12),
                 new Capacitor(new Identifier("C2"), new Identifier("out"), new Identifier("gnd"), 1e-12)
                 );
-            Checker check = new Checker();
+            Validator check = new Validator();
             check.Check(ckt);
         }
 
@@ -70,7 +70,7 @@ namespace SpiceSharpTest
                 new VoltageControlledVoltagesource(new Identifier("E1"), new Identifier("out"), new Identifier("gnd"), new Identifier("in"), new Identifier("gnd"), 2.0),
                 new VoltageControlledVoltagesource(new Identifier("E2"), new Identifier("out2"), new Identifier("gnd"), new Identifier("out"), new Identifier("gnd"), 1.0)
                 );
-            Checker check = new Checker();
+            Validator check = new Validator();
             check.Check(ckt);
         }
     }

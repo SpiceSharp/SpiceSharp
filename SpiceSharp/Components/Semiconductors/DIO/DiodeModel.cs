@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Parameters;
 using SpiceSharp.Behaviors.DIO;
 
 namespace SpiceSharp.Components
@@ -9,14 +8,6 @@ namespace SpiceSharp.Components
     /// </summary>
     public class DiodeModel : Model
     {
-        /// <summary>
-        /// Methods
-        /// </summary>
-        [SpiceName("d"), SpiceInfo("Diode model")]
-        public void SetDIO_D(bool value)
-        {
-        }
-
         /// <summary>
         /// Constructor
         /// </summary>

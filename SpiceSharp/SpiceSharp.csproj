@@ -133,7 +133,7 @@
     <Compile Include="Components\RLC\RES\LoadBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\NoiseBehavior.cs" />
     <Compile Include="Components\RLC\RES\NoiseBehavior.cs" />
-    <Compile Include="Circuits\Checker.cs" />
+    <Compile Include="Circuits\Validator.cs" />
     <Compile Include="Circuits\Identifier.cs" />
     <Compile Include="Circuits\StateNoise.cs" />
     <Compile Include="Components\Model.cs" />
