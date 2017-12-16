@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.IND
 {
@@ -27,11 +28,11 @@ namespace SpiceSharp.Behaviors.IND
         /// <summary>
         /// Truncate the timestep
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">Simulation</param>
         /// <param name="timestep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timestep)
+        public override void Truncate(TimeSimulation sim, ref double timestep)
         {
-            ckt.Method.Terr(load.INDstate + LoadBehavior.INDflux, ckt, ref timestep);
+            sim.Circuit.Method.Terr(load.INDstate + LoadBehavior.INDflux, sim, ref timestep);
         }
     }
 }

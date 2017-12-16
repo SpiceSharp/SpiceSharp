@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.MOS2
 {
@@ -26,14 +27,14 @@ namespace SpiceSharp.Behaviors.MOS2
         /// <summary>
         /// Truncate the timestep
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">Simulation</param>
         /// <param name="timestep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timestep)
+        public override void Truncate(TimeSimulation sim, ref double timestep)
         {
-            var method = ckt.Method;
-            method.Terr(load.MOS2states + LoadBehavior.MOS2qgs, ckt, ref timestep);
-            method.Terr(load.MOS2states + LoadBehavior.MOS2qgd, ckt, ref timestep);
-            method.Terr(load.MOS2states + LoadBehavior.MOS2qgb, ckt, ref timestep);
+            var method = sim.Circuit.Method;
+            method.Terr(load.MOS2states + LoadBehavior.MOS2qgs, sim, ref timestep);
+            method.Terr(load.MOS2states + LoadBehavior.MOS2qgd, sim, ref timestep);
+            method.Terr(load.MOS2states + LoadBehavior.MOS2qgb, sim, ref timestep);
         }
     }
 }

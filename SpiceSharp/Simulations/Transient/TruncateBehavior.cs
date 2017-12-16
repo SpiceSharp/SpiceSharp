@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.Simulations;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Behavior for truncating the current timestep
@@ -8,8 +10,8 @@
         /// <summary>
         /// Truncate the current timestep
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">Simulation</param>
         /// <param name="timestep">Timestep</param>
-        public abstract void Truncate(Circuit ckt, ref double timestep);
+        public abstract void Truncate(TimeSimulation sim, ref double timestep);
     }
 }

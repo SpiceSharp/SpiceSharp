@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.BJT
 {
@@ -27,14 +28,14 @@ namespace SpiceSharp.Behaviors.BJT
         /// <summary>
         /// Truncate the timestep
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">Simulations</param>
         /// <param name="timestep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timestep)
+        public override void Truncate(TimeSimulation sim, ref double timestep)
         {
-            var method = ckt.Method;
-            method.Terr(load.BJTstate + LoadBehavior.BJTqbe, ckt, ref timestep);
-            method.Terr(load.BJTstate + LoadBehavior.BJTqbc, ckt, ref timestep);
-            method.Terr(load.BJTstate + LoadBehavior.BJTqcs, ckt, ref timestep);
+            var method = sim.Circuit.Method;
+            method.Terr(load.BJTstate + LoadBehavior.BJTqbe, sim, ref timestep);
+            method.Terr(load.BJTstate + LoadBehavior.BJTqbc, sim, ref timestep);
+            method.Terr(load.BJTstate + LoadBehavior.BJTqcs, sim, ref timestep);
         }
     }
 }

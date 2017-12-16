@@ -1,9 +1,10 @@
 ﻿using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
-    /// Truncate behavior for a <see cref="Diode"/>
+    /// Truncate behavior for a <see cref="Components.Diode"/>
     /// </summary>
     public class TruncateBehavior : Behaviors.TruncateBehavior
     {
@@ -27,11 +28,11 @@ namespace SpiceSharp.Behaviors.DIO
         /// <summary>
         /// Truncate the timestep
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">Simulation</param>
         /// <param name="timestep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timestep)
+        public override void Truncate(TimeSimulation sim, ref double timestep)
         {
-            ckt.Method.Terr(load.DIOstate + LoadBehavior.DIOcapCharge, ckt, ref timestep);
+            sim.Circuit.Method.Terr(load.DIOstate + LoadBehavior.DIOcapCharge, sim, ref timestep);
         }
     }
 }

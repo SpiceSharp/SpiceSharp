@@ -108,6 +108,7 @@ namespace SpiceSharp.Simulations
 
             // Setup breakpoints
             method.Initialize(ckt, truncatebehaviors);
+            state.Initialize(ckt);
             state.ReinitStates(method);
 
             // Calculate the operating point
@@ -219,7 +220,7 @@ namespace SpiceSharp.Simulations
                         else
                         {
                             // Do not check the first time point
-                            if (method.SavedTime == 0.0 || method.LteControl(ckt))
+                            if (method.SavedTime == 0.0 || method.LteControl(this))
                             {
                                 // goto nextTime;
                                 break;

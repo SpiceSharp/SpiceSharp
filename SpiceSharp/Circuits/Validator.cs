@@ -92,7 +92,7 @@ namespace SpiceSharp.Circuits
             // Circuit components
             if (c is Component icc)
             {
-                //Check for ground node
+                // Check for ground node
                 for (int i = 0; i < icc.PinCount; i++)
                 {
                     var id = icc.GetNode(i);

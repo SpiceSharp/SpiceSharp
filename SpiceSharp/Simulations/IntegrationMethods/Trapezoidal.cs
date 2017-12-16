@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -121,9 +122,10 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
-        public override double TruncateNodes(Circuit ckt)
+        public override double TruncateNodes(TimeSimulation sim)
         {
             // Get the state
+            var ckt = sim.Circuit;
             var state = ckt.State;
             double tol, diff, tmp;
             double timetemp = Double.PositiveInfinity;
@@ -215,10 +217,10 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="qcap">Index</param>
         /// <param name="ckt">Circuit</param>
         /// <param name="timeStep">Timestep</param>
-        public override void Terr(int qcap, Circuit ckt, ref double timeStep)
+        public override void Terr(int qcap, Simulation sim, ref double timeStep)
         {
-            var state = ckt.State;
-            var config = ckt.Simulation.CurrentConfig ?? Simulations.Configuration.Default;
+            var state = sim.Circuit.State;
+            var config = sim.CurrentConfig ?? Configuration.Default;
             int ccap = qcap + 1;
 
             double[] diff = new double[state.States.Length];

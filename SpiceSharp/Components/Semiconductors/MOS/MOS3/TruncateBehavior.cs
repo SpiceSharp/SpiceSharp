@@ -1,10 +1,10 @@
-﻿using SpiceSharp.Components;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.MOS3
 {
     /// <summary>
-    /// Truncate behavior for a <see cref="MOS3"/>
+    /// Truncate behavior for a <see cref="Components.MOS3"/>
     /// </summary>
     public class TruncateBehavior : Behaviors.TruncateBehavior
     {
@@ -27,14 +27,14 @@ namespace SpiceSharp.Behaviors.MOS3
         /// <summary>
         /// Truncate the timestep
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">Simulation</param>
         /// <param name="timestep">Timestep</param>
-        public override void Truncate(Circuit ckt, ref double timestep)
+        public override void Truncate(TimeSimulation sim, ref double timestep)
         {
-            var method = ckt.Method;
-            method.Terr(load.MOS3states + LoadBehavior.MOS3qgs, ckt, ref timestep);
-            method.Terr(load.MOS3states + LoadBehavior.MOS3qgd, ckt, ref timestep);
-            method.Terr(load.MOS3states + LoadBehavior.MOS3qgb, ckt, ref timestep);
+            var method = sim.Circuit.Method;
+            method.Terr(load.MOS3states + LoadBehavior.MOS3qgs, sim, ref timestep);
+            method.Terr(load.MOS3states + LoadBehavior.MOS3qgd, sim, ref timestep);
+            method.Terr(load.MOS3states + LoadBehavior.MOS3qgb, sim, ref timestep);
         }
     }
 }

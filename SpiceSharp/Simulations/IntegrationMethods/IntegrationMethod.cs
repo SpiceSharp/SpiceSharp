@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -107,7 +108,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        public delegate double TruncationMethod(Circuit ckt);
+        public delegate double TruncationMethod(TimeSimulation sim);
 
         /// <summary>
         /// Truncate the timestep
@@ -195,7 +196,6 @@ namespace SpiceSharp.IntegrationMethods
         /// Advance the time with the specified timestep for the first time
         /// The actual timestep may be smaller due to breakpoints
         /// </summary>
-        /// <param name="delta">The timestep</param>
         public void Resume()
         {
             // Are we at a breakpoint, or indistinguishably close?
@@ -282,17 +282,17 @@ namespace SpiceSharp.IntegrationMethods
         /// The result is stored in Delta
         /// Note: This method does not advance time!
         /// </summary>
-        /// <param name="ckt">The circuit</param>
+        /// <param name="sim">Time-based simulation</param>
         /// <returns>True if the timestep isn't cut</returns>
-        public bool LteControl(Circuit ckt)
+        public bool LteControl(TimeSimulation sim)
         {
-            double newdelta = Truncate(ckt);
+            double newdelta = Truncate(sim);
             if (newdelta > 0.9 * Delta)
             {
                 if (Order == 1)
                 {
                     Order = 2;
-                    newdelta = Truncate(ckt);
+                    newdelta = Truncate(sim);
                     if (newdelta <= 1.05 * Delta)
                         Order = 1;
                 }
@@ -347,20 +347,20 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Truncate the timestep based on the nodes
         /// </summary>
-        /// <param name="ckt">The circuit</param>
+        /// <param name="sim">Time-based simulation</param>
         /// <returns></returns>
-        public abstract double TruncateNodes(Circuit ckt);
+        public abstract double TruncateNodes(TimeSimulation sim);
 
         /// <summary>
         /// Do truncation using devices
         /// </summary>
-        /// <param name="ckt"></param>
+        /// <param name="sim">Time-based simulation</param>
         /// <returns></returns>
-        protected double TruncateDevices(Circuit ckt)
+        protected double TruncateDevices(TimeSimulation sim)
         {
             double timetmp = double.PositiveInfinity;
             foreach (var behavior in truncatebehaviors)
-                behavior.Truncate(ckt, ref timetmp);
+                behavior.Truncate(sim, ref timetmp);
             return Math.Min(Delta * 2.0, timetmp);
         }
 
@@ -380,8 +380,8 @@ namespace SpiceSharp.IntegrationMethods
         /// LTE control by state variables
         /// </summary>
         /// <param name="qcap">Index of the state containing the charges</param>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">Simulation</param>
         /// <param name="timeStep">Timestep</param>
-        public abstract void Terr(int qcap, Circuit ckt, ref double timeStep);
+        public abstract void Terr(int qcap, Simulation sim, ref double timeStep);
     }
 }

@@ -96,8 +96,6 @@ namespace SpiceSharp.Simulations
         /// Calculate the operating point of the circuit
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        /// <param name="loaders">Loaders</param>
-        /// <param name="config">Simulation configuration</param>
         /// <param name="maxiter">Maximum iterations</param>
         protected void Op(Circuit ckt, int maxiter)
         {
@@ -166,8 +164,6 @@ namespace SpiceSharp.Simulations
         /// Solve iteratively for <see cref="OP"/>, <see cref="DC"/> or <see cref="Transient"/> simulations
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        /// <param name="loaders">Loaders</param>
-        /// <param name="config">Simulation configuration</param>
         /// <param name="maxiter">Maximum number of iterations</param>
         /// <returns></returns>
         protected bool Iterate(Circuit ckt, int maxiter)
