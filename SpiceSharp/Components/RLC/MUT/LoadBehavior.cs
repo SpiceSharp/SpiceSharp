@@ -7,7 +7,7 @@ using SpiceSharp.Sparse;
 namespace SpiceSharp.Behaviors.MUT
 {
     /// <summary>
-    /// General behaviour for <see cref="MutualInductance"/>
+    /// General behavior for <see cref="MutualInductance"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior
     {
@@ -87,7 +87,7 @@ namespace SpiceSharp.Behaviors.MUT
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)

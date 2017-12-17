@@ -6,7 +6,7 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Behaviors.RES
 {
     /// <summary>
-    /// Temperature behaviour for a <see cref="Resistor"/>
+    /// Temperature behavior for a <see cref="Resistor"/>
     /// </summary>
     public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {
@@ -60,7 +60,7 @@ namespace SpiceSharp.Behaviors.RES
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Temperature(Circuit ckt)

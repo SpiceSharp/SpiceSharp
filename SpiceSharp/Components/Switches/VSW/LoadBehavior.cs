@@ -81,7 +81,7 @@ namespace SpiceSharp.Behaviors.VSW
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)

@@ -5,7 +5,7 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Behaviors.BJT
 {
     /// <summary>
-    /// Temperature behaviour for a <see cref="Components.BJT"/>
+    /// Temperature behavior for a <see cref="Components.BJT"/>
     /// </summary>
     public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {
@@ -54,7 +54,7 @@ namespace SpiceSharp.Behaviors.BJT
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Temperature(Circuit ckt)

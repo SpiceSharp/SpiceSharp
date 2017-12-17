@@ -8,7 +8,7 @@ using SpiceSharp.Components.Semiconductors;
 namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
-    /// General behaviour for <see cref="Diode"/>
+    /// General behavior for <see cref="Diode"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior
     {

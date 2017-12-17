@@ -5,7 +5,7 @@ using SpiceSharp.Sparse;
 namespace SpiceSharp.Behaviors.MOS3
 {
     /// <summary>
-    /// AC behaviour for <see cref="Components.MOS3"/>
+    /// AC behavior for <see cref="Components.MOS3"/>
     /// </summary>
     public class AcBehavior : Behaviors.AcBehavior
     {
@@ -95,7 +95,7 @@ namespace SpiceSharp.Behaviors.MOS3
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Load(Circuit ckt)

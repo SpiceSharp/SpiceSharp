@@ -6,7 +6,7 @@ using SpiceSharp.Sparse;
 namespace SpiceSharp.Behaviors.CSW
 {
     /// <summary>
-    /// General behaviour for a <see cref="CurrentSwitch"/>
+    /// General behavior for a <see cref="CurrentSwitch"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior
     {
@@ -90,7 +90,7 @@ namespace SpiceSharp.Behaviors.CSW
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Load(Circuit ckt)

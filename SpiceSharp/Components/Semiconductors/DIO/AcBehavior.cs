@@ -6,7 +6,7 @@ using SpiceSharp.Components;
 namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
-    /// AC behaviour for <see cref="Diode"/>
+    /// AC behavior for <see cref="Diode"/>
     /// </summary>
     public class AcBehavior : Behaviors.AcBehavior
     {

@@ -7,7 +7,7 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Behaviors.BJT
 {
     /// <summary>
-    /// Noise behaviour for <see cref="BJT"/>
+    /// Noise behavior for <see cref="BJT"/>
     /// </summary>
     public class NoiseBehavior : Behaviors.NoiseBehavior
     {
@@ -47,7 +47,7 @@ namespace SpiceSharp.Behaviors.BJT
             );
 
         /// <summary>
-        /// Setup the BJT behaviour for noise analysis
+        /// Setup the BJT behavior for noise analysis
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>

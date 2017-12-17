@@ -6,7 +6,7 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Behaviors.MOS1
 {
     /// <summary>
-    /// Noise behaviour for a <see cref="MOS1"/>
+    /// Noise behavior for a <see cref="MOS1"/>
     /// </summary>
     public class NoiseBehavior : Behaviors.NoiseBehavior
     {
@@ -34,7 +34,7 @@ namespace SpiceSharp.Behaviors.MOS1
             );
 
         /// <summary>
-        /// Setup the behaviour
+        /// Setup the behavior
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
@@ -58,7 +58,7 @@ namespace SpiceSharp.Behaviors.MOS1
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Noise(Circuit ckt)

@@ -8,7 +8,7 @@ using SpiceSharp.Components.Transistors;
 namespace SpiceSharp.Behaviors.MOS2
 {
     /// <summary>
-    /// General behaviour of a <see cref="Components.MOS2"/>
+    /// General behavior of a <see cref="Components.MOS2"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior
     {
@@ -208,7 +208,7 @@ namespace SpiceSharp.Behaviors.MOS2
         public const int MOS2cqbs = 16;
 
         /// <summary>
-        /// Setup the behaviour
+        /// Setup the behavior
         /// </summary>
         /// <param name="component"></param>
         /// <param name="ckt"></param>
@@ -301,7 +301,7 @@ namespace SpiceSharp.Behaviors.MOS2
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Load(Circuit ckt)

@@ -7,7 +7,7 @@ using System;
 namespace SpiceSharp.Behaviors.ISRC
 {
     /// <summary>
-    /// Current source behaviour for DC and Transient analysis
+    /// Current source behavior for DC and Transient analysis
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior
     {
@@ -81,7 +81,7 @@ namespace SpiceSharp.Behaviors.ISRC
         }
 
         /// <summary>
-        /// Setup the behaviour
+        /// Setup the behavior
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
@@ -103,7 +103,7 @@ namespace SpiceSharp.Behaviors.ISRC
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Load(Circuit ckt)

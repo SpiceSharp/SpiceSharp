@@ -1,7 +1,7 @@
 ﻿namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// General behaviour for a circuit object
+    /// General behavior for a circuit object
     /// </summary>
     public abstract class LoadBehavior : Behavior
     {

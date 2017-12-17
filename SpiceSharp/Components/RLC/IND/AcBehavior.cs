@@ -6,7 +6,7 @@ using SpiceSharp.Sparse;
 namespace SpiceSharp.Behaviors.IND
 {
     /// <summary>
-    /// AC behaviour for <see cref="Inductor"/>
+    /// AC behavior for <see cref="Inductor"/>
     /// </summary>
     public class AcBehavior : Behaviors.AcBehavior
     {
@@ -59,7 +59,7 @@ namespace SpiceSharp.Behaviors.IND
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Load(Circuit ckt)
