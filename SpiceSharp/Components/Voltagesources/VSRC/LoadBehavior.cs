@@ -8,7 +8,7 @@ using System;
 namespace SpiceSharp.Behaviors.VSRC
 {
     /// <summary>
-    /// General behaviour for <see cref="Voltagesource"/>
+    /// General behavior for <see cref="Voltagesource"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior
     {
@@ -102,7 +102,7 @@ namespace SpiceSharp.Behaviors.VSRC
         }
 
         /// <summary>
-        /// Execute DC or Transient behaviour
+        /// Execute DC or Transient behavior
         /// </summary>
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)

@@ -7,7 +7,7 @@ using SpiceSharp.Sparse;
 namespace SpiceSharp.Behaviors.CCCS
 {
     /// <summary>
-    /// AC behaviour for <see cref="CurrentControlledCurrentsource"/>
+    /// AC behavior for <see cref="CurrentControlledCurrentsource"/>
     /// </summary>
     public class AcBehavior : Behaviors.AcBehavior
     {
@@ -85,7 +85,7 @@ namespace SpiceSharp.Behaviors.CCCS
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)

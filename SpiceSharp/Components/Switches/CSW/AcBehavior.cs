@@ -5,7 +5,7 @@ using SpiceSharp.Sparse;
 namespace SpiceSharp.Behaviors.CSW
 {
     /// <summary>
-    /// AC behaviour for a <see cref="CurrentSwitch"/>
+    /// AC behavior for a <see cref="CurrentSwitch"/>
     /// </summary>
     public class AcBehavior : Behaviors.AcBehavior
     {
@@ -55,7 +55,7 @@ namespace SpiceSharp.Behaviors.CSW
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)

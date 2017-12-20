@@ -98,7 +98,7 @@ namespace SpiceSharp.Behaviors.CCCS
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Load(Circuit ckt)

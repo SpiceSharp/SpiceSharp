@@ -6,12 +6,12 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Represents a behaviour for a class
+    /// Represents a behavior for a class
     /// </summary>
     public abstract class Behavior
     {
         /// <summary>
-        /// The component the behaviour acts upon
+        /// The component the behavior acts upon
         /// </summary>
         protected Entity Component { get; private set; }
 
@@ -41,7 +41,7 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Setup the behaviour
+        /// Setup the behavior
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
@@ -51,7 +51,7 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Unsetup the behaviour
+        /// Unsetup the behavior
         /// </summary>
         public virtual void Unsetup()
         {

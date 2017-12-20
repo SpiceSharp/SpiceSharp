@@ -8,7 +8,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Behaviors.BJT
 {
     /// <summary>
-    /// General behaviour for <see cref="BJT"/>
+    /// General behavior for <see cref="BJT"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior
     {
@@ -290,7 +290,7 @@ namespace SpiceSharp.Behaviors.BJT
         }
 
         /// <summary>
-        /// Execute behaviour for DC and Transient analysis
+        /// Execute behavior for DC and Transient analysis
         /// </summary>
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)

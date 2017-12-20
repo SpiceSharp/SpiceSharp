@@ -5,7 +5,7 @@ using SpiceSharp.Components.Noise;
 namespace SpiceSharp.Behaviors.RES
 {
     /// <summary>
-    /// Noise behaviour for <see cref="Resistor"/>
+    /// Noise behavior for <see cref="Resistor"/>
     /// </summary>
     public class NoiseBehavior : Behaviors.NoiseBehavior
     {
@@ -20,7 +20,7 @@ namespace SpiceSharp.Behaviors.RES
         public ComponentNoise RESnoise { get; private set; } = new ComponentNoise(new NoiseThermal("thermal", 0, 1));
 
         /// <summary>
-        /// Setup noise behaviour
+        /// Setup noise behavior
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
@@ -35,7 +35,7 @@ namespace SpiceSharp.Behaviors.RES
         }
 
         /// <summary>
-        /// Execute noise behaviour
+        /// Execute noise behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Noise(Circuit ckt)

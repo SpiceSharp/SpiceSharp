@@ -5,7 +5,7 @@ using SpiceSharp.Sparse;
 namespace SpiceSharp.Behaviors.CAP
 {
     /// <summary>
-    /// AC behaviour for <see cref="Capacitor"/>
+    /// AC behavior for <see cref="Capacitor"/>
     /// </summary>
     public class AcBehavior : Behaviors.AcBehavior
     {
@@ -47,7 +47,7 @@ namespace SpiceSharp.Behaviors.CAP
         }
         
         /// <summary>
-        /// Execute behaviour for AC analysis
+        /// Execute behavior for AC analysis
         /// </summary>
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)

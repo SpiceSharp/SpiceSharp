@@ -1,7 +1,7 @@
 ﻿namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// AC behaviour for circuit objects
+    /// AC behavior for circuit objects
     /// </summary>
     public abstract class AcBehavior : Behavior
     {

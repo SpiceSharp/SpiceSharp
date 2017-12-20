@@ -7,7 +7,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Behaviors.CAP
 {
     /// <summary>
-    /// Transient behaviour for <see cref="Capacitor"/>
+    /// General behavior for <see cref="Capacitor"/>
     /// </summary>
     public class TransientBehavior : Behaviors.TransientBehavior
     {
@@ -98,7 +98,7 @@ namespace SpiceSharp.Behaviors.CAP
         }
 
         /// <summary>
-        /// Execute behaviour for DC and Transient analysis
+        /// Execute behavior for DC and Transient analysis
         /// </summary>
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)

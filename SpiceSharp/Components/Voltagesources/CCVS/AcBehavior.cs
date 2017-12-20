@@ -5,7 +5,7 @@ using SpiceSharp.Sparse;
 namespace SpiceSharp.Behaviors.CCVS
 {
     /// <summary>
-    /// AC behaviour for <see cref="CurrentControlledVoltagesource"/>
+    /// AC behavior for <see cref="CurrentControlledVoltagesource"/>
     /// </summary>
     public class AcBehavior : Behaviors.AcBehavior
     {
@@ -72,7 +72,7 @@ namespace SpiceSharp.Behaviors.CCVS
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Load(Circuit ckt)

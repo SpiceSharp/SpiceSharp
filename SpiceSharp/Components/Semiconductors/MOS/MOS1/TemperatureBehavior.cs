@@ -6,7 +6,7 @@ using SpiceSharp.Circuits;
 namespace SpiceSharp.Behaviors.MOS1
 {
     /// <summary>
-    /// Temperature behaviour for a <see cref="MOS1"/>
+    /// Temperature behavior for a <see cref="MOS1"/>
     /// </summary>
     public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {
@@ -120,7 +120,7 @@ namespace SpiceSharp.Behaviors.MOS1
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Temperature(Circuit ckt)

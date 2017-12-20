@@ -5,7 +5,7 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Behaviors.CAP
 {
     /// <summary>
-    /// Temperature behaviour for a <see cref="Capacitor"/>
+    /// Temperature behavior for a <see cref="Capacitor"/>
     /// </summary>
     public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {
@@ -46,7 +46,7 @@ namespace SpiceSharp.Behaviors.CAP
         }
 
         /// <summary>
-        /// Execute the behaviour
+        /// Execute the behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Temperature(Circuit ckt)

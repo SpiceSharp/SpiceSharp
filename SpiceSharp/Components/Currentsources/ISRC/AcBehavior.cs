@@ -39,7 +39,7 @@ namespace SpiceSharp.Behaviors.ISRC
         private Complex ISRCac;
 
         /// <summary>
-        /// Setup the behaviour
+        /// Setup the behavior
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
@@ -57,7 +57,7 @@ namespace SpiceSharp.Behaviors.ISRC
         }
 
         /// <summary>
-        /// Execute AC behaviour
+        /// Execute AC behavior
         /// </summary>
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)

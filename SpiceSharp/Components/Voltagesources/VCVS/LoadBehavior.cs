@@ -6,7 +6,7 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Behaviors.VCVS
 {
     /// <summary>
-    /// General behaviour for a <see cref="VoltageControlledVoltagesource"/>
+    /// General behavior for a <see cref="VoltageControlledVoltagesource"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior
     {
@@ -83,7 +83,7 @@ namespace SpiceSharp.Behaviors.VCVS
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Load(Circuit ckt)

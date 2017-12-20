@@ -7,7 +7,7 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
-    /// Temperature behaviour for a <see cref="Diode"/>
+    /// Temperature behavior for a <see cref="Diode"/>
     /// </summary>
     public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {
@@ -61,7 +61,7 @@ namespace SpiceSharp.Behaviors.DIO
         }
 
         /// <summary>
-        /// Execute behaviour
+        /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Temperature(Circuit ckt)

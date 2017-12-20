@@ -166,8 +166,8 @@ namespace SpiceSharp.Simulations
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit
                 data.outNdens = 0.0;
-                foreach (var behaviour in noisebehaviors)
-                    behaviour.Noise(ckt);
+                foreach (var behavior in noisebehaviors)
+                    behavior.Noise(ckt);
 
                 // Export the data
                 Export(ckt);

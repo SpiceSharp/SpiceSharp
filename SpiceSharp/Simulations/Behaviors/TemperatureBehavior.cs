@@ -1,7 +1,7 @@
 ﻿namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Temperature-dependent behaviour for circuit objects
+    /// Temperature-dependent behavior for circuit objects
     /// </summary>
     public abstract class TemperatureBehavior : Behavior
     {

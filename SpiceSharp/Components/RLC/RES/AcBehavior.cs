@@ -7,7 +7,7 @@ using SpiceSharp.Parameters;
 namespace SpiceSharp.Behaviors.RES
 {
     /// <summary>
-    /// AC behaviour for <see cref="Resistor"/>
+    /// AC behavior for <see cref="Resistor"/>
     /// </summary>
     public class AcBehavior : Behaviors.AcBehavior
     {
