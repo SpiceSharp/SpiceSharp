@@ -33,8 +33,8 @@ namespace SpiceSharp.Behaviors.MUT
             
             // Get behaviors
             load = GetBehavior<LoadBehavior>(component);
-            var load1 = GetBehavior<IND.LoadBehavior>(mut.Inductor1);
-            var load2 = GetBehavior<IND.LoadBehavior>(mut.Inductor2);
+            var load1 = GetBehavior<IND.TransientBehavior>(mut.Inductor1);
+            var load2 = GetBehavior<IND.TransientBehavior>(mut.Inductor2);
 
             // Get matrix elements
             var matrix = ckt.State.Matrix;

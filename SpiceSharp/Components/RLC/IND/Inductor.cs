@@ -28,6 +28,7 @@ namespace SpiceSharp.Components
             : base(name, INDpinCount)
         {
             RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new TransientBehavior());
             RegisterBehavior(new AcBehavior());
             RegisterBehavior(new AcceptBehavior());
             RegisterBehavior(new TruncateBehavior());
@@ -44,7 +45,8 @@ namespace SpiceSharp.Components
             : base(name, INDpinCount)
         {
             // Register behaviors
-            RegisterBehavior(new LoadBehavior(ind));
+            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new TransientBehavior(ind));
             RegisterBehavior(new AcBehavior());
             RegisterBehavior(new AcceptBehavior());
             RegisterBehavior(new TruncateBehavior());

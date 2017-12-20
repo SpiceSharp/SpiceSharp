@@ -218,8 +218,8 @@ namespace SpiceSharp.Sparse
 
         /// <summary>
         /// Find an element in the matrix without creating it
+        /// Note that the row and column are internal indices and not external indices
         /// </summary>
-        /// <param name="matrix">Matrix</param>
         /// <param name="row">Row</param>
         /// <param name="col">Column</param>
         /// <returns></returns>
@@ -230,9 +230,6 @@ namespace SpiceSharp.Sparse
 
             if (row == 0 || col == 0)
                 return TrashCan;
-
-            // Translate external indices to internal indices
-            Translation.Translate(this, ref row, ref col);
 
             // Find the element at the right place
             MatrixElement elt = FirstInCol[col];

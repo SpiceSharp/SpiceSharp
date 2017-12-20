@@ -43,6 +43,11 @@ namespace SpiceSharp.Sparse
             Col = col;
         }
 
+        public override string ToString()
+        {
+            return $"({Row}, {Col}) = {Value}";
+        }
+
         /// <summary>
         /// Overload addition
         /// </summary>

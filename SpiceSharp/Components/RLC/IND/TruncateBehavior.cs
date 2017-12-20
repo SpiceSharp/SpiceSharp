@@ -11,7 +11,7 @@ namespace SpiceSharp.Behaviors.IND
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
+        private TransientBehavior load;
 
         /// <summary>
         /// Setup the behavior
@@ -22,7 +22,7 @@ namespace SpiceSharp.Behaviors.IND
         public override void Setup(Entity component, Circuit ckt)
         {
             // Get behaviors
-            load = GetBehavior<LoadBehavior>(component);
+            load = GetBehavior<TransientBehavior>(component);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="timestep">Timestep</param>
         public override void Truncate(TimeSimulation sim, ref double timestep)
         {
-            sim.Circuit.Method.Terr(load.INDstate + LoadBehavior.INDflux, sim, ref timestep);
+            sim.Circuit.Method.Terr(load.INDstate + TransientBehavior.INDflux, sim, ref timestep);
         }
     }
 }

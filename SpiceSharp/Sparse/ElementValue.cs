@@ -53,7 +53,10 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public override string ToString()
         {
-            return $"({Real}; {Imag})";
+            if (Imag == 0.0)
+                return Real.ToString();
+            else
+                return $"({Real}; {Imag})";
         }
 
         /// <summary>

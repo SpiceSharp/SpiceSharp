@@ -23,7 +23,6 @@
         /// <param name="matrix">The matrix</param>
         /// <param name="PivTol">Pivot tolerance</param>
         /// <param name="PivRel">Pivot relative tolerance</param>
-        /// <param name="NumSwaps">The number of swaps performed</param>
         /// <returns></returns>
         public static SparseError Reorder(this Matrix matrix, double PivTol, double PivRel)
         {

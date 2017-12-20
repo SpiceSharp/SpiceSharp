@@ -13,7 +13,7 @@ namespace SpiceSharp.Behaviors.IND
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
+        private TransientBehavior load;
 
         /// <summary>
         /// Nodes
@@ -42,7 +42,7 @@ namespace SpiceSharp.Behaviors.IND
             var ind = component as Inductor;
 
             // Get behaviors
-            load = GetBehavior<LoadBehavior>(component);
+            load = GetBehavior<TransientBehavior>(component);
 
             // Get nodes
             INDposNode = ind.INDposNode;

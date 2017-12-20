@@ -309,7 +309,6 @@ namespace SpiceSharp.Simulations
         /// Load the circuit with the load behaviors
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        /// <param name="loaders">Loaders</param>
         protected void Load(Circuit ckt)
         {
             var state = ckt.State;

@@ -63,6 +63,7 @@
     <Compile Include="Components\RLC\IND\AcBehavior.cs" />
     <Compile Include="Components\RLC\IND\AcceptBehavior.cs" />
     <Compile Include="Components\RLC\IND\LoadBehavior.cs" />
+    <Compile Include="Components\RLC\IND\TransientBehavior.cs" />
     <Compile Include="Components\RLC\IND\TruncateBehavior.cs" />
     <Compile Include="Components\RLC\MUT\AcBehavior.cs" />
     <Compile Include="Components\RLC\MUT\LoadBehavior.cs" />
