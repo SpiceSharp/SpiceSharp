@@ -47,19 +47,17 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the component noise
         /// </summary>
-        /// <param name="ckt">The circuit</param>
         /// <param name="pins">The pin indices</param>
-        public void Setup(Circuit ckt, params int[] pins)
+        public void Setup(params int[] pins)
         {
             for (int i = 0; i < Generators.Length; i++)
-                Generators[i].Setup(ckt, pins);
+                Generators[i].Setup(pins);
         }
 
         /// <summary>
         /// Evaluate all noise source contributions
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        /// <param name="parameters">Parameters</param>
         public void Evaluate(Circuit ckt)
         {
             var noise = ckt.State.Noise;

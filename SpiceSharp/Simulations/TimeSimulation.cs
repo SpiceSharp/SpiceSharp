@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Circuits;

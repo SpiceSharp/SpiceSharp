@@ -1,12 +1,11 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Parameters;
+﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Behaviors.RES
+namespace SpiceSharp.Components.RES
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="Components.ResistorModel"/>
+    /// Parameters for a <see cref="ResistorModel"/>
     /// </summary>
-    public class ModelTemperatureBehavior : Behaviors.TemperatureBehavior
+    public class ModelBaseParameters : Parameters
     {
         /// <summary>
         /// Parameters
@@ -28,25 +27,5 @@ namespace SpiceSharp.Behaviors.RES
         public Parameter RESdefWidth { get; } = new Parameter(10.0e-6);
         [SpiceName("narrow"), SpiceInfo("Narrowing of resistor")]
         public Parameter RESnarrow { get; } = new Parameter();
-
-        /// <summary>
-        /// Setup the behavior
-        /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
-        {
-            DataOnly = true;
-        }
-
-        /// <summary>
-        /// Temperature behavior
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Temperature(Circuit ckt)
-        {
-            // Do nothing
-        }
     }
 }

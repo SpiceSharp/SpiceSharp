@@ -14,6 +14,11 @@ namespace SpiceSharp.Behaviors
         /// The component the behavior acts upon
         /// </summary>
         protected Entity Component { get; private set; }
+        
+        /// <summary>
+        /// Get the name of the behavior
+        /// </summary>
+        public Identifier Name { get; }
 
         /// <summary>
         /// A table of named parameters
@@ -24,6 +29,16 @@ namespace SpiceSharp.Behaviors
         /// Gets whether or not the behavior is already set up
         /// </summary>
         public bool DataOnly { get; protected set; } = false;
+
+        /// <summary>
+        /// Constructor
+        /// NOTE: remove default later
+        /// </summary>
+        /// <param name="name">Name of the behavior</param>
+        public Behavior(Identifier name = null)
+        {
+            Name = name;
+        }
 
         /// <summary>
         /// Get a behavior of a specific type
@@ -38,6 +53,16 @@ namespace SpiceSharp.Behaviors
             if (behavior == null)
                 throw new CircuitException($"{co.Name}: Could not find behavior \"{typeof(T).Name}\"");
             return behavior;
+        }
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Pool of behaviors</param>
+        public virtual void Setup(ParametersCollection parameters, BehaviorPool pool)
+        {
+            // Do nothing
         }
 
         /// <summary>

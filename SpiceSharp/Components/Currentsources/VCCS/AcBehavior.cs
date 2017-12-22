@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Behaviors.VCCS

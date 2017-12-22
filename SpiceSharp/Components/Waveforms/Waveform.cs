@@ -15,8 +15,7 @@
         /// <summary>
         /// Setup the waveform
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public abstract void Setup(Circuit ckt);
+        public abstract void Setup();
 
         /// <summary>
         /// Calculate the value of the waveform at a specific value

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Parameters
+namespace SpiceSharp.Attributes
 {
     /// <summary>
     /// Specifies the name for a parameter of a class that extends <see cref="Parameterized{T}"/>.

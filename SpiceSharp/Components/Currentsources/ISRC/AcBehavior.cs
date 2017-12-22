@@ -2,7 +2,7 @@
 using System.Numerics;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Behaviors.ISRC

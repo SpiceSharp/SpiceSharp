@@ -1,6 +1,6 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Behaviors.DIO

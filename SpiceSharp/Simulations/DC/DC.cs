@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Components;
 using SpiceSharp.Behaviors;
@@ -166,7 +166,7 @@ namespace SpiceSharp.Simulations
 
                 // Get the parameter and save it for restoring later
                 if (component is Voltagesource vsrc)
-                    swept[i] = (vsrc.GetBehavior(typeof(LoadBehavior)) as Behaviors.VSRC.LoadBehavior).VSRCdcValue;
+                    swept[i] = vsrc.Parameters.Get<Components.VSRC.BaseParameters>().VSRCdcValue;
                 else if (component is Currentsource isrc)
                     swept[i] = (isrc.GetBehavior(typeof(LoadBehavior)) as Behaviors.ISRC.LoadBehavior).ISRCdcValue;
                 else

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Sparse;
 using SpiceSharp.Behaviors;

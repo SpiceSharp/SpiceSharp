@@ -1,5 +1,5 @@
 ﻿using System;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {
@@ -54,8 +54,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the sine wave
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        public override void Setup()
         {
             vo = VO;
             va = VA;

@@ -7,17 +7,33 @@ namespace SpiceSharp.Behaviors.RES
     /// <summary>
     /// Noise behavior for <see cref="Resistor"/>
     /// </summary>
-    public class NoiseBehavior : Behaviors.NoiseBehavior
+    public class NoiseBehavior : Behaviors.NoiseBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
+        LoadBehavior load;
+
+        /// <summary>
+        /// Nodes
+        /// </summary>
+        public int RESposNode { get; protected set; }
+        public int RESnegNode { get; protected set; }
 
         /// <summary>
         /// Get resistor noise sources
         /// </summary>
         public ComponentNoise RESnoise { get; private set; } = new ComponentNoise(new NoiseThermal("thermal", 0, 1));
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Behavior pool</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        {
+            load = pool.GetBehavior<LoadBehavior>();
+        }
 
         /// <summary>
         /// Setup noise behavior
@@ -30,8 +46,15 @@ namespace SpiceSharp.Behaviors.RES
 
             // Get behaviors
             load = GetBehavior<LoadBehavior>(component);
+        }
 
-            RESnoise?.Setup(ckt, res.RESposNode, res.RESnegNode);
+        /// <summary>
+        /// Connect the noise
+        /// </summary>
+        /// <param name="nodes"></param>
+        public void Connect(params int[] pins)
+        {
+            RESnoise?.Setup(pins[0], pins[1]);
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
-﻿using SpiceSharp.Parameters;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors.VSRC;
+using SpiceSharp.Components.VSRC;
 
 namespace SpiceSharp.Components
 {
@@ -29,9 +30,14 @@ namespace SpiceSharp.Components
         /// <param name="name">The name</param>
         public Voltagesource(Identifier name) : base(name, VSRCpinCount)
         {
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new AcceptBehavior());
+            // Register parameters
+            Parameters.Register(new BaseParameters());
+            Parameters.Register(new AcParameters());
+
+            // Register factories
+            factories.Add(typeof(LoadBehavior), () => new LoadBehavior());
+            factories.Add(typeof(AcBehavior), () => new AcBehavior());
+            factories.Add(typeof(AcceptBehavior), () => new AcceptBehavior());
         }
 
         /// <summary>
@@ -44,16 +50,17 @@ namespace SpiceSharp.Components
         public Voltagesource(Identifier name, Identifier pos, Identifier neg, double dc)
             : base(name, VSRCpinCount)
         {
+            // Register parameters
+            Parameters.Register(new BaseParameters(dc));
+            Parameters.Register(new AcParameters());
+
+            // Register factories
+            factories.Add(typeof(LoadBehavior), () => new LoadBehavior());
+            factories.Add(typeof(AcBehavior), () => new AcBehavior());
+            factories.Add(typeof(AcceptBehavior), () => new AcceptBehavior());
+
+            // Connect the device
             Connect(pos, neg);
-
-            // Set waveform
-            var load = new LoadBehavior();
-            load.VSRCdcValue.Set(dc);
-            RegisterBehavior(load);
-
-            // Register behaviors
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new AcceptBehavior());
         }
 
         /// <summary>
@@ -66,16 +73,17 @@ namespace SpiceSharp.Components
         public Voltagesource(Identifier name, Identifier pos, Identifier neg, Waveform w) 
             : base(name, VSRCpinCount)
         {
+            // Register parameters
+            Parameters.Register(new BaseParameters(w));
+            Parameters.Register(new AcParameters());
+
+            // Register factories
+            factories.Add(typeof(LoadBehavior), () => new LoadBehavior());
+            factories.Add(typeof(AcBehavior), () => new AcBehavior());
+            factories.Add(typeof(AcceptBehavior), () => new AcceptBehavior());
+
+            // Connect the device
             Connect(pos, neg);
-
-            // Set waveform
-            var load = new LoadBehavior();
-            load.VSRCwaveform = w;
-            RegisterBehavior(load);
-
-            // Register behaviors
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new AcceptBehavior());
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Circuits;
+using SpiceSharp.Components.RES;
 using SpiceSharp.Behaviors.RES;
 
 namespace SpiceSharp.Components
@@ -33,10 +34,14 @@ namespace SpiceSharp.Components
         public Resistor(Identifier name) 
             : base(name, RESpinCount)
         {
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new NoiseBehavior());
-            RegisterBehavior(new TemperatureBehavior());
+            // Register parameters
+            Parameters.Register(new BaseParameters());
+
+            // Register factories
+            factories.Add(typeof(LoadBehavior), () => new LoadBehavior());
+            factories.Add(typeof(AcBehavior), () => new AcBehavior());
+            factories.Add(typeof(NoiseBehavior), () => new NoiseBehavior());
+            factories.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior());
         }
 
         /// <summary>
@@ -49,11 +54,14 @@ namespace SpiceSharp.Components
         public Resistor(Identifier name, Identifier pos, Identifier neg, double res) 
             : base(name, RESpinCount)
         {
-            // Register behaviors
-            RegisterBehavior(new LoadBehavior(res));
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new NoiseBehavior());
-            RegisterBehavior(new TemperatureBehavior());
+            // Register parameters
+            Parameters.Register(new BaseParameters(res));
+
+            // Register factories
+            factories.Add(typeof(LoadBehavior), () => new LoadBehavior());
+            factories.Add(typeof(AcBehavior), () => new AcBehavior());
+            factories.Add(typeof(NoiseBehavior), () => new NoiseBehavior());
+            factories.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior());
 
             // Connect
             Connect(pos, neg);

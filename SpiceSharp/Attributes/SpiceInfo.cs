@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace SpiceSharp.Parameters
+namespace SpiceSharp.Attributes
 {
     /// <summary>
-    /// Specifies a description and other metadata of a parameter for a class that extends <see cref="Parameterized{T}"/>.
+    /// Specifies a description and other metadata of a parameter
     /// It can be applied to a field, property or method
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]

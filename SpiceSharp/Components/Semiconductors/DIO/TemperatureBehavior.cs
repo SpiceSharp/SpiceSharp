@@ -2,7 +2,7 @@
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Behaviors.DIO
 {

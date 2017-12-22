@@ -1,15 +1,14 @@
 ﻿using System.Numerics;
-using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Behaviors.RES
 {
     /// <summary>
-    /// AC behavior for <see cref="Resistor"/>
+    /// AC behavior for <see cref="Components.Resistor"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior
+    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Parameters
@@ -36,13 +35,13 @@ namespace SpiceSharp.Behaviors.RES
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
+        LoadBehavior load;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        public int RESposNode { get; private set; }
-        public int RESnegNode { get; private set; }
+        public int RESposNode { get; protected set; }
+        public int RESnegNode { get; protected set; }
 
         /// <summary>
         /// Matrix elements
@@ -55,22 +54,19 @@ namespace SpiceSharp.Behaviors.RES
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Pool of behaviors</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
-            var res = component as Resistor;
+            load = pool.GetBehavior<LoadBehavior>();
+        }
 
-            // Get behaviors
-            load = GetBehavior<LoadBehavior>(component);
-
-            // Nodes
-            RESposNode = res.RESposNode;
-            RESnegNode = res.RESnegNode;
-
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
             RESposPosPtr = matrix.GetElement(RESposNode, RESposNode);
             RESnegNegPtr = matrix.GetElement(RESnegNode, RESnegNode);
             RESposNegPtr = matrix.GetElement(RESposNode, RESnegNode);
@@ -78,9 +74,8 @@ namespace SpiceSharp.Behaviors.RES
         }
 
         /// <summary>
-        /// Unsetup
+        /// Unsetup the behavior
         /// </summary>
-        /// <param name="ckt">The circuit</param>
         public override void Unsetup()
         {
             // Remove references
@@ -88,6 +83,16 @@ namespace SpiceSharp.Behaviors.RES
             RESnegNegPtr = null;
             RESposNegPtr = null;
             RESnegPosPtr = null;
+        }
+
+        /// <summary>
+        /// Connect behavior
+        /// </summary>
+        /// <param name="nodes"></param>
+        public void Connect(params int[] pins)
+        {
+            RESposNode = pins[0];
+            RESnegNode = pins[1];
         }
 
         /// <summary>

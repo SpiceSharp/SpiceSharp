@@ -1,7 +1,7 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Components;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Behaviors.MOS3

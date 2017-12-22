@@ -1,23 +1,26 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using System;
+using SpiceSharp.Components.VSRC;
 
 namespace SpiceSharp.Behaviors.VSRC
 {
     /// <summary>
     /// General behavior for <see cref="Voltagesource"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior
+    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Parameters
+        /// Necessary behaviors and parameters
         /// </summary>
-        public Waveform VSRCwaveform { get; set; }
-        [SpiceName("dc"), SpiceInfo("D.C. source value")]
-        public Parameter VSRCdcValue { get; } = new Parameter();
+        BaseParameters bp;
+
+        /// <summary>
+        /// Methods
+        /// </summary>
         [SpiceName("i"), SpiceInfo("Voltage source current")]
         public double GetCurrent(Circuit ckt) => ckt.State.Solution[VSRCbranch];
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
@@ -58,36 +61,47 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="parameters"></param>
+        /// <param name="pool"></param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
-            var vsrc = component as Voltagesource;
+            bp = parameters.Get<BaseParameters>();
 
+            bp.VSRCwaveform?.Setup();
+
+            // Calculate the voltage source's complex value
+            if (!bp.VSRCdcValue.Given)
+            {
+                // No DC value: either have a transient value or none
+                if (bp.VSRCwaveform != null)
+                    CircuitWarning.Warning(this, $"{Name}: No DC value, transient time 0 value used");
+                else
+                    CircuitWarning.Warning(this, $"{Name}: No value, DC 0 assumed");
+            }
+        }
+
+        /// <summary>
+        /// Connect the load behavior
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
             // Get nodes
-            VSRCposNode = vsrc.VSRCposNode;
-            VSRCnegNode = vsrc.VSRCnegNode;
-            VSRCbranch = CreateNode(ckt, component.Name.Grow("#branch"), Node.NodeType.Current).Index;
+            VSRCposNode = pins[0];
+            VSRCnegNode = pins[1];
+        }
 
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        {
+            VSRCbranch = nodes.Create(Name?.Grow("#branch"), Node.NodeType.Current).Index;
             VSRCposIbrptr = matrix.GetElement(VSRCposNode, VSRCbranch);
             VSRCibrPosptr = matrix.GetElement(VSRCbranch, VSRCposNode);
             VSRCnegIbrptr = matrix.GetElement(VSRCnegNode, VSRCbranch);
             VSRCibrNegptr = matrix.GetElement(VSRCbranch, VSRCnegNode);
-
-            // Setup the waveform if specified
-            VSRCwaveform?.Setup(ckt);
-
-            // Calculate the voltage source's complex value
-            if (!VSRCdcValue.Given)
-            {
-                // No DC value: either have a transient value or none
-                if (VSRCwaveform != null)
-                    CircuitWarning.Warning(this, $"{component.Name}: No DC value, transient time 0 value used");
-                else
-                    CircuitWarning.Warning(this, $"{component.Name}: No value, DC 0 assumed");
-            }
         }
 
         /// <summary>
@@ -123,14 +137,14 @@ namespace SpiceSharp.Behaviors.VSRC
                     time = ckt.Method.Time;
 
                 // Use the waveform if possible
-                if (VSRCwaveform != null)
-                    value = VSRCwaveform.At(time);
+                if (bp.VSRCwaveform != null)
+                    value = bp.VSRCwaveform.At(time);
                 else
-                    value = VSRCdcValue * state.SrcFact;
+                    value = bp.VSRCdcValue * state.SrcFact;
             }
             else
             {
-                value = VSRCdcValue * state.SrcFact;
+                value = bp.VSRCdcValue * state.SrcFact;
             }
             rstate.Rhs[VSRCbranch] += value;
         }

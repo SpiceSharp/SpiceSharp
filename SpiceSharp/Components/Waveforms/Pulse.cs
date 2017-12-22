@@ -1,5 +1,5 @@
 ﻿using System;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.IntegrationMethods;
 
@@ -64,8 +64,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the pulsed waveform
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        public override void Setup()
         {
             v1 = V1;
             v2 = V2;

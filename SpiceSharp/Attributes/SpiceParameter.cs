@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Parameters
+namespace SpiceSharp.Attributes
 {
     /// <summary>
     /// A class for parameter information

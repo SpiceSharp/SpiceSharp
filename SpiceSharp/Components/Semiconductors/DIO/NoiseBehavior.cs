@@ -1,7 +1,7 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Components.Noise;
 
 namespace SpiceSharp.Behaviors.DIO
@@ -53,7 +53,7 @@ namespace SpiceSharp.Behaviors.DIO
             modeltemp = GetBehavior<ModelTemperatureBehavior>(diode.Model);
             modelnoise = GetBehavior<ModelNoiseBehavior>(diode.Model);
 
-            DIOnoise.Setup(ckt, diode.DIOposNode, load.DIOposPrimeNode, diode.DIOnegNode);
+            DIOnoise.Setup(diode.DIOposNode, load.DIOposPrimeNode, diode.DIOnegNode);
         }
 
         /// <summary>

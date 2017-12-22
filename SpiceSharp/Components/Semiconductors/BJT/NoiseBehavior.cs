@@ -2,7 +2,7 @@
 using SpiceSharp.Components;
 using SpiceSharp.Components.Noise;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Behaviors.BJT
 {
@@ -60,7 +60,7 @@ namespace SpiceSharp.Behaviors.BJT
             modeltemp = GetBehavior<ModelTemperatureBehavior>(bjt.Model);
             modelnoise = GetBehavior<ModelNoiseBehavior>(bjt.Model);
 
-            BJTnoise.Setup(ckt,
+            BJTnoise.Setup(
                 bjt.BJTcolNode,
                 bjt.BJTbaseNode,
                 bjt.BJTemitNode,

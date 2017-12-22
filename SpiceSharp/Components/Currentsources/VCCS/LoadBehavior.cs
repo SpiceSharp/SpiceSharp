@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Parameters;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components;
 using SpiceSharp.Sparse;
 using SpiceSharp.Circuits;

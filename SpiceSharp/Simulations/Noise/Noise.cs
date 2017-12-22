@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Behaviors;
@@ -90,7 +90,7 @@ namespace SpiceSharp.Simulations
             Entity source = ckt.Objects[Input];
             if (source is Voltagesource vsource)
             {
-                var ac = vsource.GetBehavior(typeof(AcBehavior)) as Behaviors.VSRC.AcBehavior;
+                var ac = vsource.Parameters.Get<Components.VSRC.AcParameters>();
                 if (!ac.VSRCacMag.Given || ac.VSRCacMag == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {vsource.Name} has no AC input");
             }

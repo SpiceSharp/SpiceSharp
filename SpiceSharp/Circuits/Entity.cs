@@ -2,7 +2,8 @@
 using System.Reflection;
 using System.Collections.Generic;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Parameters;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Circuits
 {
@@ -15,6 +16,16 @@ namespace SpiceSharp.Circuits
         /// Available behaviors for the circuit object
         /// </summary>
         protected Dictionary<Type, Behavior> Behaviors { get; } = new Dictionary<Type, Behavior>();
+
+        /// <summary>
+        /// Constructors for behaviors
+        /// </summary>
+        protected Dictionary<Type, Func<Behavior>> factories { get; } = new Dictionary<Type, Func<Behavior>>();
+
+        /// <summary>
+        /// Get a collection of parameters
+        /// </summary>
+        public ParametersCollection Parameters { get; } = new ParametersCollection();
 
         /// <summary>
         /// A table of named parameters
@@ -44,6 +55,31 @@ namespace SpiceSharp.Circuits
         {
             Type type = behavior.GetType().BaseType;
             Behaviors[type] = behavior;
+        }
+
+        /// <summary>
+        /// Register a behavior factory
+        /// </summary>
+        /// <param name="type">Resulting type</param>
+        /// <param name="factory">Factory</param>
+        public void RegisterFactory(Type type, Func<Behavior> factory)
+        {
+            if (!typeof(Behavior).IsAssignableFrom(type))
+                throw new CircuitException("Not a behavior");
+            factories[type] = factory;
+        }
+
+        /// <summary>
+        /// Get a behavior from the entity
+        /// </summary>
+        /// <typeparam name="T">Behavior base type</typeparam>
+        /// <param name="pool">Pool of all behaviors</param>
+        /// <returns></returns>
+        public virtual T GetBehavior<T>(BehaviorPool pool) where T : Behavior
+        {
+            Behavior behavior = factories[typeof(T)]();
+            behavior.Setup(Parameters, pool);
+            return (T)behavior;
         }
 
         /// <summary>

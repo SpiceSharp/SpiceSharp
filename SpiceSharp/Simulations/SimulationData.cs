@@ -2,7 +2,7 @@
 using System.Numerics;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
 {

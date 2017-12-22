@@ -1,7 +1,7 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.Semiconductors;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Diagnostics;
 

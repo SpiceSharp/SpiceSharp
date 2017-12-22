@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using SpiceSharp.Components.VSRC;
 
 namespace SpiceSharp.Behaviors.VSRC
 {
@@ -8,19 +8,18 @@ namespace SpiceSharp.Behaviors.VSRC
     public class AcceptBehavior : Behaviors.AcceptBehavior
     {
         /// <summary>
-        /// Necessary behaviors
+        /// Necessary behaviors and parameters
         /// </summary>
-        private LoadBehavior load;
+        BaseParameters bp;
 
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="parameters"></param>
+        /// <param name="pool"></param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
-            load = GetBehavior<LoadBehavior>(component);
+            bp = parameters.Get<BaseParameters>();
         }
 
         /// <summary>
@@ -29,7 +28,7 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <param name="ckt">Circuit</param>
         public override void Accept(Circuit ckt)
         {
-            load.VSRCwaveform?.Accept(ckt);
+            bp.VSRCwaveform?.Accept(ckt);
         }
     }
 }

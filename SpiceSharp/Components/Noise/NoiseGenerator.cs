@@ -59,9 +59,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Connect the noise generator in the circuit
         /// </summary>
-        /// <param name="ckt">Circuit</param>
         /// <param name="nodes">Nodes</param>
-        public virtual void Setup(Circuit ckt, params int[] nodes)
+        public virtual void Setup(params int[] nodes)
         {
             NOISEnodes = new int[pins.Length];
             for (int i = 0; i < pins.Length; i++)

@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Circuits;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -13,8 +16,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        private Identifier[] connections = null;
-        private int[] indices = null;
+        Identifier[] connections;
+        int[] indices;
 
         /// <summary>
         /// Get the number of nodes
@@ -25,7 +28,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the component</param>
-        public Component(Identifier name, int nodecount)
+        protected Component(Identifier name, int nodecount)
             : base(name)
         {
             // Initialize
@@ -63,6 +66,32 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
+        /// Get a behavior
+        /// </summary>
+        /// <typeparam name="T">Base behavior</typeparam>
+        /// <param name="pool">Pool of all behaviors</param>
+        /// <returns></returns>
+        public override T GetBehavior<T>(BehaviorPool pool)
+        {
+            T behavior = base.GetBehavior<T>(pool);
+
+            // Extra functionality for behaviors that can be connected
+            if (behavior is IConnectedBehavior cb)
+            {
+                cb.Connect(indices);
+            }
+
+            // Extra functionality for behaviors that can have a model
+            if (behavior is IModelBehavior mb)
+            {
+                pool.SetCurrentEntity(Model);
+                mb.SetupModel(Model.Parameters, pool);
+            }
+
+            return behavior;
+        }
+
+        /// <summary>
         /// Get the connection of the component
         /// </summary>
         /// <param name="i">The index</param>
@@ -90,7 +119,6 @@ namespace SpiceSharp.Components
         /// Helper function for binding nodes to the circuit
         /// </summary>
         /// <param name="ckt"></param>
-        /// <param name="extra"></param>
         /// <returns></returns>
         protected Node[] BindNodes(Circuit ckt)
         {

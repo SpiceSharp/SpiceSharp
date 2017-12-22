@@ -1,6 +1,6 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Components.Transistors;
 using SpiceSharp.Circuits;
 

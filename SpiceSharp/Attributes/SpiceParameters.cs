@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SpiceSharp.Parameters
+namespace SpiceSharp.Attributes
 {
     /// <summary>
     /// A helper class for identifying and extracting Spice-related parameters

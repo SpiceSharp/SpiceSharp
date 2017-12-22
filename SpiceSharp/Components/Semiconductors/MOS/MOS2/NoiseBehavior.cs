@@ -51,7 +51,7 @@ namespace SpiceSharp.Behaviors.MOS2
             modeltemp = GetBehavior<ModelTemperatureBehavior>(mos2.Model);
             modelnoise = GetBehavior<ModelNoiseBehavior>(mos2.Model);
 
-            MOS2noise.Setup(ckt,
+            MOS2noise.Setup(
                 mos2.MOS2dNode,
                 mos2.MOS2gNode,
                 mos2.MOS2sNode,

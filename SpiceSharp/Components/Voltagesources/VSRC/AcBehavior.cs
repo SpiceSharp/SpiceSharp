@@ -1,42 +1,29 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
-using SpiceSharp.Parameters;
-using SpiceSharp.Diagnostics;
+using SpiceSharp.Attributes;
+using SpiceSharp.Components.VSRC;
 
 namespace SpiceSharp.Behaviors.VSRC
 {
     /// <summary>
-    /// AC behavior for <see cref="Voltagesource"/>
+    /// AC behavior for <see cref="Components.Voltagesource"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior
+    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Parameters
+        /// Methods
         /// </summary>
-        [SpiceName("acmag"), SpiceInfo("A.C. Magnitude")]
-        public Parameter VSRCacMag { get; } = new Parameter();
-        [SpiceName("acphase"), SpiceInfo("A.C. Phase")]
-        public Parameter VSRCacPhase { get; } = new Parameter();
-        [SpiceName("ac"), SpiceInfo("A.C. magnitude, phase vector")]
-        public void SetAc(Circuit ckt, double[] ac)
-        {
-            switch (ac?.Length ?? -1)
-            {
-                case 2: VSRCacPhase.Set(ac[1]); goto case 1;
-                case 1: VSRCacMag.Set(ac[0]); break;
-                case 0: VSRCacMag.Set(0.0); break;
-                default:
-                    throw new BadParameterException("ac");
-            }
-        }
         [SpiceName("acreal"), SpiceInfo("A.C. real part")]
-        public double GetAcReal(Circuit ckt) => VSRCac.Real;
+        public double GetAcReal() => VSRCac.Real;
         [SpiceName("acimag"), SpiceInfo("A.C. imaginary part")]
-        public double GetAcImag(Circuit ckt) => VSRCac.Imaginary;
-        public Complex VSRCac;
+        public double GetAcImag() => VSRCac.Imaginary;
+
+        /// <summary>
+        /// AC excitation vector
+        /// </summary>
+        public Complex VSRCac { get; protected set; }
 
         /// <summary>
         /// Nodes
@@ -55,29 +42,36 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Pool of behaviors</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
-            var vsrc = component as Voltagesource;
+            AcParameters ap = parameters.Get<AcParameters>();
+            double radians = ap.VSRCacPhase * Circuit.CONSTPI / 180.0;
+            VSRCac = new Complex(ap.VSRCacMag * Math.Cos(radians), ap.VSRCacMag * Math.Sin(radians));
+            VSRCbranch = pool.GetBehavior<LoadBehavior>().VSRCbranch;
+        }
 
-            // Get behaviors
-            var load = GetBehavior<LoadBehavior>(component);
+        /// <summary>
+        /// Connect the behavior
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            VSRCposNode = pins[0];
+            VSRCnegNode = pins[1];
+        }
 
-            // Get nodes
-            VSRCposNode = vsrc.VSRCposNode;
-            VSRCnegNode = vsrc.VSRCnegNode;
-            VSRCbranch = load.VSRCbranch;
-
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
             VSRCposIbrptr = matrix.GetElement(VSRCposNode, VSRCbranch);
             VSRCibrPosptr = matrix.GetElement(VSRCbranch, VSRCposNode);
             VSRCnegIbrptr = matrix.GetElement(VSRCnegNode, VSRCbranch);
             VSRCibrNegptr = matrix.GetElement(VSRCbranch, VSRCnegNode);
-
-            double radians = VSRCacPhase * Circuit.CONSTPI / 180.0;
-            VSRCac = new Complex(VSRCacMag * Math.Cos(radians), VSRCacMag * Math.Sin(radians));
         }
 
         /// <summary>

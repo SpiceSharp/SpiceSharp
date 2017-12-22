@@ -1,62 +1,50 @@
 ﻿using SpiceSharp.Diagnostics;
 using SpiceSharp.Components;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
+using SpiceSharp.Components.RES;
 
 namespace SpiceSharp.Behaviors.RES
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Resistor"/>
     /// </summary>
-    public class TemperatureBehavior : Behaviors.TemperatureBehavior
+    public class TemperatureBehavior : Behaviors.TemperatureBehavior, IModelBehavior
     {
         /// <summary>
-        /// Necessary behaviors
+        /// Necessary parameters
         /// </summary>
-        private ModelTemperatureBehavior modeltemp;
-
-        /// <summary>
-        /// Parameters
-        /// </summary>
-        [SpiceName("temp"), SpiceInfo("Instance operating temperature", Interesting = false)]
-        public double RES_TEMP
-        {
-            get => REStemp - Circuit.CONSTCtoK;
-            set => REStemp.Set(value + Circuit.CONSTCtoK);
-        }
-        public Parameter REStemp { get; } = new Parameter(300.15);
-        [SpiceName("w"), SpiceInfo("Width", Interesting = false)]
-        public Parameter RESwidth { get; } = new Parameter();
-        [SpiceName("l"), SpiceInfo("Length", Interesting = false)]
-        public Parameter RESlength { get; } = new Parameter();
+        ModelBaseParameters mbp;
+        BaseParameters bp;
 
         /// <summary>
         /// Get the default conductance for this model
         /// </summary>
-        public double RESresist { get; protected set; }
         public double RESconduct { get; protected set; }
 
         /// <summary>
         /// Name of the component
         /// </summary>
-        private Identifier name;
+        Identifier name;
 
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="component"></param>
-        /// <param name="ckt"></param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Pool of all behaviors</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
-            var res = component as Resistor;
-            if (res.Model == null)
-            {
-                modeltemp = null;
-                return;
-            }
-            modeltemp = GetBehavior<ModelTemperatureBehavior>(res.Model);
-            name = res.Name;
+            bp = parameters.Get<BaseParameters>();
+        }
+
+        /// <summary>
+        /// Setup the model of the behavior
+        /// </summary>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Pool of all behaviors</param>
+        public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
+        {
+            mbp = parameters.Get<ModelBaseParameters>();
         }
 
         /// <summary>
@@ -67,31 +55,30 @@ namespace SpiceSharp.Behaviors.RES
         {
             double factor;
             double difference;
+            double RESresist = bp.RESresist;
 
             // Default Value Processing for Resistor Instance
-            if (!REStemp.Given)
-                REStemp.Value = ckt.State.Temperature;
-            if (!RESwidth.Given)
-                RESwidth.Value = modeltemp?.RESdefWidth ?? 0.0;
+            if (!bp.REStemp.Given)
+                bp.REStemp.Value = ckt.State.Temperature;
+            if (!bp.RESwidth.Given)
+                bp.RESwidth.Value = mbp?.RESdefWidth ?? 0.0;
 
-            if (modeltemp == null)
-                throw new CircuitException("No modeltemp specified");
-            if (modeltemp.RESsheetRes.Given && (modeltemp.RESsheetRes != 0) && (RESlength != 0))
-                RESresist = modeltemp.RESsheetRes * (RESlength - modeltemp.RESnarrow) / (RESwidth - modeltemp.RESnarrow);
-            else
+            if (mbp != null)
             {
-                CircuitWarning.Warning(this, $"{name}: resistance=0, set to 1000");
-                RESresist = 1000;
-            }
+                if (mbp.RESsheetRes.Given && (mbp.RESsheetRes != 0) && (bp.RESlength != 0))
+                    RESresist = mbp.RESsheetRes * (bp.RESlength - mbp.RESnarrow) / (bp.RESwidth - mbp.RESnarrow);
+                else
+                {
+                    CircuitWarning.Warning(this, $"{name}: resistance=0, set to 1000");
+                    RESresist = 1000;
+                }
 
-            if (modeltemp != null)
-            {
-                difference = REStemp - modeltemp.REStnom;
-                factor = 1.0 + (modeltemp.REStempCoeff1) * difference + (modeltemp.REStempCoeff2) * difference * difference;
+                difference = bp.REStemp - mbp.REStnom;
+                factor = 1.0 + (mbp.REStempCoeff1) * difference + (mbp.REStempCoeff2) * difference * difference;
             }
             else
             {
-                difference = REStemp - 300.15;
+                difference = bp.REStemp - 300.15;
                 factor = 1.0;
             }
 

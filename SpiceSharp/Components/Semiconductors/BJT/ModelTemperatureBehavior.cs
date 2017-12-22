@@ -1,7 +1,7 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Circuits;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Behaviors.BJT
 {
