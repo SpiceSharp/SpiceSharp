@@ -22,12 +22,13 @@ namespace Sandbox
 
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", new Pulse(0, 5, 1e-6, 1e-9, 1e-9, 10e-6, 20e-6)),
-                new Capacitor("C1", "OUT", "0", 1e-6),
-                new Inductor("L1", "IN", "OUT", 1e-6)
+                new Voltagesource("V1", "IN", "0", new Sine(0, 4, 1e6)),
+                new Resistor("R1", "IN", "OUT", 1e3),
+                new Resistor("R2", "OUT", "0", 2e3)
                 );
 
             Transient tran = new Transient("Transient 1", 1e-6, 10e-6);
+            tran.MaxStep = 1e-8;
             tran.OnExportSimulationData += (object sender, SimulationData data) =>
             {
                 plotInput.Points.AddXY(data.GetTime(), data.GetVoltage("IN"));

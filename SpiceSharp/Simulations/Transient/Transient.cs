@@ -12,11 +12,10 @@ namespace SpiceSharp.Simulations
     public class Transient : TimeSimulation
     {
         /// <summary>
-        /// An event handler for when the timestep has been cut
+        /// Event handler when cutting a timestep
         /// </summary>
-        /// <param name="sender">The simulation that sends the event</param>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="newstep">The timestep that will be tried next</param>
+        /// <param name="sender">Sender</param>
+        /// <param name="data">Timestep cut data</param>
         public delegate void TimestepCutEventHandler(object sender, TimestepCutData data);
 
         /// <summary>
@@ -34,7 +33,6 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
-        /// <param name="config">The configuration</param>
         public Transient(Identifier name) : base(name)
         {
         }
@@ -61,6 +59,11 @@ namespace SpiceSharp.Simulations
             // Get behaviors
             acceptbehaviors = SetupBehaviors<AcceptBehavior>();
             truncatebehaviors = SetupBehaviors<TruncateBehavior>();
+
+            // Setup the behaviors for usage with our matrix
+            var matrix = Circuit.State.Matrix;
+            foreach (var behavior in loadbehaviors)
+                behavior.GetMatrixPointers(Circuit.Nodes, matrix);
         }
 
         /// <summary>

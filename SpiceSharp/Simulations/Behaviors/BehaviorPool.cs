@@ -92,7 +92,21 @@ namespace SpiceSharp.Behaviors
         /// <returns></returns>
         public T[] GetBehaviors<T>() where T : Behavior
         {
-            return (T[])behaviors[typeof(T)].ToArray();
+            if (behaviors.TryGetValue(typeof(T), out List<Behavior> list))
+                return (T[])list.ToArray();
+            return new T[] { };
+        }
+
+        /// <summary>
+        /// Get a list of behaviors
+        /// </summary>
+        /// <typeparam name="T">Behavior type</typeparam>
+        /// <returns></returns>
+        public List<T> GetBehaviorList<T>() where T : Behavior
+        {
+            if (behaviors.TryGetValue(typeof(T), out List<Behavior> list))
+                return list.ConvertAll((Behavior b) => (T)b);
+            return new List<T>();
         }
     }
 }

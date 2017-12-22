@@ -42,6 +42,14 @@ namespace SpiceSharp.Behaviors.VSRC
         protected MatrixElement VSRCibrIbrptr { get; private set; }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public LoadBehavior(Identifier name) : base(name)
+        {
+        }
+
+        /// <summary>
         /// Create a getter
         /// </summary>
         /// <param name="ckt">Circuit</param>

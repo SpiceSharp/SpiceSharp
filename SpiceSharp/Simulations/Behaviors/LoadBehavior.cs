@@ -9,6 +9,12 @@ namespace SpiceSharp.Behaviors
     public abstract class LoadBehavior : Behavior
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name"></param>
+        public LoadBehavior(Identifier name = null) : base(name) { }
+
+        /// <summary>
         /// Setup the behavior for usage with a matrix
         /// </summary>
         /// <param name="matrix">The matrix</param>

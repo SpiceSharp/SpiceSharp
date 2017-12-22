@@ -48,6 +48,21 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
+        /// Add a factory to the behavior factory list
+        /// </summary>
+        /// <param name="t">Returned behavior</param>
+        /// <param name="factory">Factory method</param>
+        protected void AddFactory(Type t, Func<Behavior> factory)
+        {
+            Type mytype = t.BaseType;
+            while (mytype != typeof(Behavior))
+            {
+                factories.Add(mytype, factory);
+                mytype = mytype.BaseType;
+            }
+        }
+
+        /// <summary>
         /// Register a behavior
         /// </summary>
         /// <param name="behavior">Behavior</param>
@@ -77,9 +92,18 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         public virtual T GetBehavior<T>(BehaviorPool pool) where T : Behavior
         {
-            Behavior behavior = factories[typeof(T)]();
-            behavior.Setup(Parameters, pool);
-            return (T)behavior;
+            if (factories.TryGetValue(typeof(T), out Func<Behavior> factory))
+            {
+                // Setup the behavior
+                Behavior behavior = factory();
+                pool.SetCurrentEntity(this);
+                behavior.Setup(Parameters, pool);
+                return (T)behavior;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
