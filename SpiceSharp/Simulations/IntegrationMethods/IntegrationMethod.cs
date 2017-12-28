@@ -39,7 +39,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Get the maximum order for the integration method
         /// </summary>
-        public abstract int MaxOrder { get; }
+        public int MaxOrder { get; }
 
         /// <summary>
         /// Gets the current order
@@ -98,15 +98,21 @@ namespace SpiceSharp.IntegrationMethods
         public double SavedTime { get { return savetime; } }
 
         /// <summary>
+        /// The states associated with the integration method
+        /// Used for integration
+        /// </summary>
+        protected StatePool statepool;
+
+        /// <summary>
         /// Private variables
         /// </summary>
         private double savetime = double.NaN;
         private List<TruncateBehavior> truncatebehaviors;
 
         /// <summary>
-        /// Delegate for a truncation method
+        /// Delegate for truncation
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">Time-based simulation</param>
         /// <returns></returns>
         public delegate double TruncationMethod(TimeSimulation sim);
 
@@ -119,11 +125,27 @@ namespace SpiceSharp.IntegrationMethods
         /// Constructor
         /// </summary>
         /// <param name="config">The configuration</param>
-        public IntegrationMethod(IntegrationConfiguration config = null)
+        /// <param name="maxorder">Maximum integration order</param>
+        public IntegrationMethod(IntegrationConfiguration config, int maxorder)
         {
+            MaxOrder = maxorder;
             Config = config ?? new IntegrationConfiguration();
-            DeltaOld = new double[MaxOrder + 2];
-            Solutions = new double[MaxOrder + 1][]; // new Vector<double>[MaxOrder + 1];
+            DeltaOld = new double[maxorder + 2];
+            Solutions = new double[maxorder + 1][]; // new Vector<double>[MaxOrder + 1];
+            statepool = new StatePool(maxorder + 2);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="maxorder">Maximum integration order</param>
+        public IntegrationMethod(int maxorder)
+        {
+            MaxOrder = maxorder;
+            Config = new IntegrationConfiguration();
+            DeltaOld = new double[maxorder + 2];
+            Solutions = new double[maxorder + 1][]; // new Vector<double>[MaxOrder + 1];
+            statepool = new StatePool(maxorder + 2);
         }
 
         /// <summary>

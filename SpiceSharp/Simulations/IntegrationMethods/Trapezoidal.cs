@@ -15,18 +15,13 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Private variables
         /// </summary>
-        private double[] ag = new double[2];
-
-        /// <summary>
-        /// Get the maximum order for the trapezoidal rule
-        /// </summary>
-        public override int MaxOrder => 2;
+        double[] ag = new double[2];
 
         /// <summary>
         /// Constructor
         /// </summary>
         public Trapezoidal(IntegrationConfiguration config = null)
-            : base(config)
+            : base(config, 2)
         {
         }
         

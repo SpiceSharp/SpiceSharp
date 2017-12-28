@@ -46,7 +46,7 @@
     <Compile Include="Attributes\SpiceParameter.cs" />
     <Compile Include="Attributes\VoltageDriver.cs" />
     <Compile Include="Components\Component.cs" />
-    <Compile Include="Components\ComponentState.cs" />
+    <Compile Include="Simulations\IntegrationMethods\ComponentState.cs" />
     <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsource.cs" />
     <Compile Include="Components\Currentsources\CCCS\AcBehavior.cs" />
     <Compile Include="Components\Currentsources\CCCS\LoadBehavior.cs" />
@@ -133,6 +133,8 @@
     <Compile Include="Simulations\Behaviors\TemperatureBehavior.cs" />
     <Compile Include="Simulations\FrequencySimulation.cs" />
     <Compile Include="Simulations\Behaviors\IcBehavior.cs" />
+    <Compile Include="Simulations\IntegrationMethods\StatePool.cs" />
+    <Compile Include="Simulations\IntegrationMethods\StateVariable.cs" />
     <Compile Include="Simulations\Noise\NoiseBehavior.cs" />
     <Compile Include="Simulations\Behaviors\LoadBehavior.cs" />
     <Compile Include="Simulations\AC\AcBehavior.cs" />
