@@ -22,15 +22,15 @@ namespace SpiceSharpTest.Sparse
             matrix.GetElement(2, 3).Value.Real = 4.0;
             matrix.GetElement(3, 1).Value.Real = 5.0;
 
-            Assert.AreEqual(1.0, matrix.FindElement(1, 1).Value.Real);
-            Assert.AreEqual(2.0, matrix.FindElement(1, 2).Value.Real);
-            Assert.AreEqual(null, matrix.FindElement(1, 3));
-            Assert.AreEqual(null, matrix.FindElement(2, 1));
-            Assert.AreEqual(null, matrix.FindElement(2, 2));
-            Assert.AreEqual(4.0, matrix.FindElement(2, 3).Value.Real);
-            Assert.AreEqual(5.0, matrix.FindElement(3, 1).Value.Real);
-            Assert.AreEqual(null, matrix.FindElement(3, 2));
-            Assert.AreEqual(3.0, matrix.FindElement(3, 3).Value.Real);
+            Assert.AreEqual(1.0, matrix.FindReorderedElement(1, 1).Value.Real);
+            Assert.AreEqual(2.0, matrix.FindReorderedElement(1, 2).Value.Real);
+            Assert.AreEqual(null, matrix.FindReorderedElement(1, 3));
+            Assert.AreEqual(null, matrix.FindReorderedElement(2, 1));
+            Assert.AreEqual(null, matrix.FindReorderedElement(2, 2));
+            Assert.AreEqual(4.0, matrix.FindReorderedElement(2, 3).Value.Real);
+            Assert.AreEqual(5.0, matrix.FindReorderedElement(3, 1).Value.Real);
+            Assert.AreEqual(null, matrix.FindReorderedElement(3, 2));
+            Assert.AreEqual(3.0, matrix.FindReorderedElement(3, 3).Value.Real);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace SpiceSharpTest.Sparse
             {
                 for (int c = 1; c < 100; c++)
                 {
-                    Assert.AreEqual(new Complex(r, c), matrix.FindElement(r, c));
+                    Assert.AreEqual(new Complex(r, c), matrix.FindReorderedElement(r, c));
                 }
             }
         }

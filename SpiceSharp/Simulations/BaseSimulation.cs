@@ -61,6 +61,9 @@ namespace SpiceSharp.Simulations
             foreach (var behavior in tempbehaviors)
                 behavior.Temperature(Circuit);
 
+            // Initialize the solution
+            Circuit.State.Initialize(Circuit);
+
             // Do initial conditions
             Ic();
         }
@@ -382,7 +385,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Set the initial conditions
         /// </summary>
-        /// <param name="ckt">Circuit</param>
         protected void Ic()
         {
             var ckt = Circuit;
@@ -449,7 +451,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Check if we are converging during iterations
         /// </summary>
-        /// <param name="sim">The simulation</param>
         /// <param name="ckt">The circuit</param>
         /// <returns></returns>
         protected bool IsConvergent(Circuit ckt)

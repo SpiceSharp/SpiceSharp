@@ -113,8 +113,8 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="IntSize">Matrix size</param>
-        /// <param name="Complex">Is complex</param>
+        /// <param name="size">Matrix size</param>
+        /// <param name="complex">Is complex</param>
         public Matrix(int size, bool complex)
         {
             if (size < 0)
@@ -163,7 +163,6 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Clear all elements of a matrix
         /// </summary>
-        /// <param name="matrix">Matrix</param>
         public void Clear()
         {
             for (int i = 1; i <= IntSize; i++)
@@ -190,7 +189,6 @@ namespace SpiceSharp.Sparse
         /// Get an element from the matrix
         /// If it does not find the element in the matrix, it will create it!
         /// </summary>
-        /// <param name="matrix">Matrix</param>
         /// <param name="row">Row</param>
         /// <param name="col">Column</param>
         /// <returns></returns>
@@ -218,12 +216,12 @@ namespace SpiceSharp.Sparse
 
         /// <summary>
         /// Find an element in the matrix without creating it
-        /// Note that the row and column are internal indices and not external indices
+        /// This method works on the reordered matrix!
         /// </summary>
         /// <param name="row">Row</param>
         /// <param name="col">Column</param>
         /// <returns></returns>
-        public MatrixElement FindElement(int row, int col)
+        public MatrixElement FindReorderedElement(int row, int col)
         {
             if (row < 0 || col < 0)
                 throw new SparseException("Index out of bounds");
@@ -255,10 +253,21 @@ namespace SpiceSharp.Sparse
         }
 
         /// <summary>
+        /// Find an element in the matrix without creating it
+        /// </summary>
+        /// <param name="row">Row</param>
+        /// <param name="col">Column</param>
+        /// <returns></returns>
+        public MatrixElement FindElement(int row, int col)
+        {
+            Translation.Translate(this, ref row, ref col);
+            return FindReorderedElement(row, col);
+        }
+
+        /// <summary>
         /// Create a new element in the matrix if it doesn't exist
         /// Only used internally!
         /// </summary>
-        /// <param name="matrix">Matrix</param>
         /// <param name="row">Row</param>
         /// <param name="col">Column</param>
         /// <returns></returns>
@@ -309,7 +318,6 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Create a fillin matrix element
         /// </summary>
-        /// <param name="matrix">Matrix</param>
         /// <param name="Row">Row</param>
         /// <param name="Col">Column</param>
         /// <returns></returns>
@@ -331,7 +339,6 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Build the row links
         /// </summary>
-        /// <param name="matrix">Matrix</param>
         public void LinkRows()
         {
             for (int Col = IntSize; Col >= 1; Col--)
@@ -354,7 +361,6 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Splice a matrix element in the row vectors
         /// </summary>
-        /// <param name="matrix">Matrix</param>
         /// <param name="elt">Element</param>
         private void SpliceInRows(MatrixElement elt)
         {

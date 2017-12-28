@@ -89,6 +89,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Execute()
         {
+            // First do temperature-dependent calculations and IC
+            base.Execute();
+
             var ckt = Circuit;
             var state = ckt.State;
             var rstate = state;

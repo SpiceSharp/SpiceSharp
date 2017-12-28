@@ -396,13 +396,13 @@ namespace SpiceSharp.Sparse
                             pivoting.Singletons++;
                     }
 
-                    matrix.Diag[Col] = matrix.FindElement(Col, Col);
+                    matrix.Diag[Col] = matrix.FindReorderedElement(Col, Col);
                 }
                 if (Row != Step)
                 {
-                    matrix.Diag[Row] = matrix.FindElement(Row, Row);
+                    matrix.Diag[Row] = matrix.FindReorderedElement(Row, Row);
                 }
-                matrix.Diag[Step] = matrix.FindElement(Step, Step);
+                matrix.Diag[Step] = matrix.FindReorderedElement(Step, Step);
 
                 // Update singleton count. 
                 pivoting.MarkowitzProd[Step] = pivoting.MarkowitzCol[Step] * pivoting.MarkowitzRow[Step];

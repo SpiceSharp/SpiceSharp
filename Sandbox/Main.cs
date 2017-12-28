@@ -27,6 +27,8 @@ namespace Sandbox
                 new Capacitor("C1", "OUT", "0", 1e-9)
                 );
 
+            ckt.Nodes.IC.Add("OUT", 1.0);
+
             Transient tran = new Transient("Transient 1", 1e-6, 10e-6);
             tran.MaxStep = 1e-8;
             tran.OnExportSimulationData += (object sender, SimulationData data) =>
