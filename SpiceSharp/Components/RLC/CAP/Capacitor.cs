@@ -59,9 +59,9 @@ namespace SpiceSharp.Components
             Parameters.Register(new BaseParameters(cap));
 
             // Register factories
-            RegisterFactory(typeof(TransientBehavior), () => new TransientBehavior());
-            RegisterFactory(typeof(AcBehavior), () => new AcBehavior());
-            RegisterFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior());
+            AddFactory(typeof(TransientBehavior), () => new TransientBehavior());
+            AddFactory(typeof(AcBehavior), () => new AcBehavior());
+            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior());
 
             // Connect
             Connect(pos, neg);
