@@ -46,6 +46,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Sparse matrix flags
         /// </summary>
+        [Flags]
         public enum SparseFlags
         {
             /// <summary>

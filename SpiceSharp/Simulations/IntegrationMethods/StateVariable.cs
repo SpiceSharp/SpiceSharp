@@ -49,9 +49,6 @@
         /// </summary>
         /// <param name="cap">Capacitance</param>
         /// <returns></returns>
-        public IntegrationMethod.Result Integrate(double cap)
-        {
-            return source.Integrate(index, cap);
-        }
+        public IntegrationMethod.Result Integrate(double cap) => source.Integrate(index, cap);
     }
 }

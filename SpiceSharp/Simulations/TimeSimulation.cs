@@ -60,6 +60,11 @@ namespace SpiceSharp.Simulations
         public IntegrationMethod Method { get; protected set; }
 
         /// <summary>
+        /// Gets all states in the simulation
+        /// </summary>
+        public StatePool States { get; protected set; }
+
+        /// <summary>
         /// Time-domain behaviors
         /// </summary>
         protected List<TransientBehavior> tranbehaviors = null;
@@ -89,6 +94,12 @@ namespace SpiceSharp.Simulations
             
             // Get behaviors
             tranbehaviors = SetupBehaviors<TransientBehavior>();
+
+            // Setup the state pool and register states
+            States = new StatePool(Method);
+            foreach (var behavior in tranbehaviors)
+                behavior.RegisterStates(States);
+            States.BuildStates();
         }
 
         /// <summary>

@@ -60,10 +60,7 @@
         /// </summary>
         /// <param name="index">The index</param>
         /// <returns></returns>
-        public IntegrationMethod.Result Integrate(int index, double cap)
-        {
-            return Method.Integrate(First, index, cap);
-        }
+        public IntegrationMethod.Result Integrate(int index, double cap) => Method.Integrate(First, index, cap);
         
         /// <summary>
         /// Build the arrays for all history points
@@ -78,6 +75,28 @@
                 current = current.Next;
             }
             while (current != First);
+        }
+
+        /// <summary>
+        /// Clear all states for DC
+        /// </summary>
+        public void ClearDC()
+        {
+            // DC means all states are constant in time so df/dt=0
+            for (int i = 0; i < StateCount; i++)
+                First.Derivatives[i] = 0.0;
+
+            // Copy values to all other states
+            HistoryPoint current = First.Next;
+            while (current != First)
+            {
+                for (int i = 0; i < StateCount; i++)
+                {
+                    current.Values[i] = First.Values[i];
+                    current.Derivatives[i] = 0.0;
+                }
+                current = current.Next;
+            }
         }
 
         /// <summary>

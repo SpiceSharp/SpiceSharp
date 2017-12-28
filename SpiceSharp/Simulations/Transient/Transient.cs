@@ -129,6 +129,9 @@ namespace SpiceSharp.Simulations
             {
                 state.States[1][i] = state.States[0][i];
             }
+            foreach (var behavior in tranbehaviors)
+                behavior.GetDCstate(this);
+            States.ClearDC();
 
             // Start our statistics
             ckt.Statistics.TransientTime.Start();
@@ -175,6 +178,7 @@ namespace SpiceSharp.Simulations
                     Method.Delta = Math.Min(Method.Delta, MaxStep);
                     Method.Resume();
                     state.ShiftStates();
+                    States.ShiftStates();
 
                     // Calculate a new solution
                     while (true)
