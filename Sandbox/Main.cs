@@ -22,9 +22,9 @@ namespace Sandbox
 
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", new Sine(0, 4, 1e6)),
+                new Voltagesource("V1", "IN", "0", new Pulse(0, 5, 1e-6, 1e-10, 1e-10, 1e-6, 2e-6)),
                 new Resistor("R1", "IN", "OUT", 1e3),
-                new Resistor("R2", "OUT", "0", 2e3)
+                new Capacitor("C1", "OUT", "0", 1e-9)
                 );
 
             Transient tran = new Transient("Transient 1", 1e-6, 10e-6);
