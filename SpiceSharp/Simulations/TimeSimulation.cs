@@ -98,7 +98,7 @@ namespace SpiceSharp.Simulations
             // Setup the state pool and register states
             States = new StatePool(Method);
             foreach (var behavior in tranbehaviors)
-                behavior.RegisterStates(States);
+                behavior.CreateStates(States);
             States.BuildStates();
         }
 

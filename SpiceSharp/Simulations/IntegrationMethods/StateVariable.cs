@@ -50,5 +50,11 @@
         /// <param name="cap">Capacitance</param>
         /// <returns></returns>
         public IntegrationMethod.Result Integrate(double cap) => source.Integrate(index, cap);
+
+        /// <summary>
+        /// Truncate the timestep based on the LTE (Local Truncation Error)
+        /// </summary>
+        /// <param name="timestep">Timestep</param>
+        public void LocalTruncationError(ref double timestep) => source.LocalTruncationError(index, ref timestep);
     }
 }

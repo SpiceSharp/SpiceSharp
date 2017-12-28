@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors.CAP;
+using SpiceSharp.Components.CAP;
 
 namespace SpiceSharp.Components
 {
@@ -14,7 +14,8 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public CapacitorModel(Identifier name) : base(name)
         {
-            RegisterBehavior(new ModelTemperatureBehavior());
+            // Register parameters
+            Parameters.Register(new ModelBaseParameters());
         }
     }
 }

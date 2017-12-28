@@ -19,6 +19,11 @@
         /// Number of states in the pool
         /// </summary>
         public int StateCount { get; private set; }
+
+        /// <summary>
+        /// Get the number of points in history
+        /// </summary>
+        public int HistoryCount { get; }
         
         /// <summary>
         /// Constructor
@@ -27,11 +32,12 @@
         public StatePool(IntegrationMethod method)
         {
             Method = method;
+            HistoryCount = method.MaxOrder + 2;
 
             // Create a linked list for all history points
             First = new HistoryPoint();
             HistoryPoint current = First;
-            for (int i = 0; i < method.MaxOrder + 2; i++)
+            for (int i = 0; i < HistoryCount; i++)
             {
                 HistoryPoint next = new HistoryPoint();
                 next.Previous = current;
@@ -61,6 +67,13 @@
         /// <param name="index">The index</param>
         /// <returns></returns>
         public IntegrationMethod.Result Integrate(int index, double cap) => Method.Integrate(First, index, cap);
+
+        /// <summary>
+        /// Truncate the timestep based on the LTE (Local Truncation Error)
+        /// </summary>
+        /// <param name="index">Index</param>
+        /// <param name="timestep">Timestep</param>
+        public void LocalTruncationError(int index, ref double timestep) => Method.LocalTruncateError(First, index, ref timestep);
         
         /// <summary>
         /// Build the arrays for all history points

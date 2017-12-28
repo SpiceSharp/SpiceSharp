@@ -1,48 +1,37 @@
-﻿using SpiceSharp.Components;
-using SpiceSharp.Circuits;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Diagnostics;
+using SpiceSharp.Components.CAP;
 
 namespace SpiceSharp.Behaviors.CAP
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="Capacitor"/>
+    /// Temperature behavior for a <see cref="Components.Capacitor"/>
     /// </summary>
-    public class TemperatureBehavior : Behaviors.TemperatureBehavior
+    public class TemperatureBehavior : Behaviors.TemperatureBehavior, IModelBehavior
     {
         /// <summary>
-        /// Necessary behaviors
+        /// Necessary parameters and behaviors
         /// </summary>
-        private ModelTemperatureBehavior modeltemp;
-        
-        /// <summary>
-        /// Parameters
-        /// </summary>
-        [SpiceName("w"), SpiceInfo("Device width", Interesting = false)]
-        public Parameter CAPwidth { get; } = new Parameter();
-        [SpiceName("l"), SpiceInfo("Device length", Interesting = false)]
-        public Parameter CAPlength { get; } = new Parameter();
-
-        /// <summary>
-        /// The calculated capacitance
-        /// </summary>
-        public double CAPcapac { get; private set; }
+        ModelBaseParameters mbp;
+        BaseParameters bp;
 
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Pool</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
-            var cap = component as Capacitor;
-            if (cap.Model == null)
-            {
-                modeltemp = null;
-                return;
-            }
+            bp = parameters.Get<BaseParameters>();
+        }
 
-            // Get behaviors
-            modeltemp = GetBehavior<ModelTemperatureBehavior>(cap.Model);
+        /// <summary>
+        /// Setup model parameters and behaviors
+        /// </summary>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Behaviors</param>
+        public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
+        {
+            mbp = parameters.Get<ModelBaseParameters>();
         }
 
         /// <summary>
@@ -51,17 +40,18 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="ckt">Circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            // Default Value Processing for Capacitor Instance
-            if (modeltemp != null)
+            if (!bp.CAPcapac.Given)
             {
-                if (!CAPwidth.Given)
-                    CAPwidth.Value = modeltemp.CAPdefWidth;
-                CAPcapac = modeltemp.CAPcj *
-                                (CAPwidth - modeltemp.CAPnarrow) *
-                                (CAPlength - modeltemp.CAPnarrow) +
-                            modeltemp.CAPcjsw * 2 * (
-                                (CAPlength - modeltemp.CAPnarrow) +
-                                (CAPwidth - modeltemp.CAPnarrow));
+                if (mbp == null)
+                    throw new CircuitException("No model specified");
+
+                double width = bp.CAPwidth.Given ? bp.CAPwidth.Value : mbp.CAPdefWidth.Value;
+                bp.CAPcapac.Value = mbp.CAPcj *
+                    (bp.CAPwidth - mbp.CAPnarrow) *
+                    (bp.CAPlength - mbp.CAPnarrow) +
+                    mbp.CAPcjsw * 2 * (
+                    (bp.CAPlength - mbp.CAPnarrow) +
+                    (bp.CAPwidth - mbp.CAPnarrow));
             }
         }
     }

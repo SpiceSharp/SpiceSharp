@@ -1,45 +1,53 @@
-﻿using SpiceSharp.Components;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Components.CAP;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Behaviors.CAP
 {
     /// <summary>
-    /// AC behavior for <see cref="Capacitor"/>
+    /// AC behavior for <see cref="Components.Capacitor"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior
+    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Necessary behaviors
+        /// Necessary paramters and behaviors
         /// </summary>
-        private TransientBehavior tran;
+        BaseParameters bp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        private int CAPposNode, CAPnegNode;
-        private MatrixElement CAPposPosptr;
-        private MatrixElement CAPnegNegptr;
-        private MatrixElement CAPposNegptr;
-        private MatrixElement CAPnegPosptr;
+        int CAPposNode, CAPnegNode;
+        MatrixElement CAPposPosptr;
+        MatrixElement CAPnegNegptr;
+        MatrixElement CAPposNegptr;
+        MatrixElement CAPnegPosptr;
 
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="component"></param>
-        /// <param name="ckt"></param>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Behaviors</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
-            // Get behaviors
-            tran = GetBehavior<TransientBehavior>(component);
-            
-            // Get nodes
-            var cap = component as Capacitor;
-            CAPposNode = cap.CAPposNode;
-            CAPnegNode = cap.CAPnegNode;
+            bp = parameters.Get<BaseParameters>();
+        }
 
-            // Get matrix pointers
-            var matrix = ckt.State.Matrix;
+        /// <summary>
+        /// Connect behavior
+        /// </summary>
+        /// <param name="pins"></param>
+        public void Connect(params int[] pins)
+        {
+            CAPposNode = pins[0];
+            CAPnegNode = pins[1];
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix">The matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
             CAPposPosptr = matrix.GetElement(CAPposNode, CAPposNode);
             CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
             CAPnegPosptr = matrix.GetElement(CAPnegNode, CAPposNode);
@@ -53,7 +61,7 @@ namespace SpiceSharp.Behaviors.CAP
         public override void Load(Circuit ckt)
         {
             var cstate = ckt.State;
-            var val = cstate.Laplace * tran.CAPcapac.Value;
+            var val = cstate.Laplace * bp.CAPcapac.Value;
 
             // Load the matrix
             CAPposPosptr.Add(val);

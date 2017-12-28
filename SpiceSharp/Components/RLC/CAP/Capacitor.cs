@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors.CAP;
+using SpiceSharp.Components.CAP;
 
 namespace SpiceSharp.Components
 {
@@ -35,11 +36,13 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public Capacitor(Identifier name) : base(name, CAPpinCount)
         {
-            RegisterBehavior(new TransientBehavior());
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new TemperatureBehavior());
-            RegisterBehavior(new AcceptBehavior());
-            RegisterBehavior(new TruncateBehavior());
+            // Register parameters
+            Parameters.Register(new BaseParameters());
+
+            // Register factories
+            RegisterFactory(typeof(TransientBehavior), () => new TransientBehavior());
+            RegisterFactory(typeof(AcBehavior), () => new AcBehavior());
+            RegisterFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior());
         }
 
         /// <summary>
@@ -52,12 +55,13 @@ namespace SpiceSharp.Components
         public Capacitor(Identifier name, Identifier pos, Identifier neg, double cap) 
             : base(name, CAPpinCount)
         {
-            // Register behaviors
-            RegisterBehavior(new TransientBehavior(cap));
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new TemperatureBehavior());
-            RegisterBehavior(new AcceptBehavior());
-            RegisterBehavior(new TruncateBehavior());
+            // Register parameters
+            Parameters.Register(new BaseParameters(cap));
+
+            // Register factories
+            RegisterFactory(typeof(TransientBehavior), () => new TransientBehavior());
+            RegisterFactory(typeof(AcBehavior), () => new AcBehavior());
+            RegisterFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior());
 
             // Connect
             Connect(pos, neg);

@@ -406,5 +406,13 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="sim">Simulation</param>
         /// <param name="timeStep">Timestep</param>
         public abstract void Terr(int qcap, Simulation sim, ref double timeStep);
+
+        /// <summary>
+        /// Calculate the new timestep based on the LTE (local truncation error)
+        /// </summary>
+        /// <param name="first">First point</param>
+        /// <param name="index">Index</param>
+        /// <param name="timestep">Timestep</param>
+        public abstract void LocalTruncateError(HistoryPoint first, int index, ref double timestep);
     }
 }

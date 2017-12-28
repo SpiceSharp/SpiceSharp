@@ -289,5 +289,61 @@ namespace SpiceSharp.IntegrationMethods
             // Return the timestep
             timeStep = Math.Min(timeStep, del);
         }
+
+        /// <summary>
+        /// Calculate the timestep based on the LTE (Local Truncation Error)
+        /// </summary>
+        /// <param name="first">History point</param>
+        /// <param name="index">Index</param>
+        /// <param name="timestep">Timestep</param>
+        public override void LocalTruncateError(HistoryPoint first, int index, ref double timestep)
+        {
+            double[] diff = new double[MaxOrder + 2];
+            double[] deltmp = new double[DeltaOld.Length];
+
+            // Calculate the tolerance
+            // Note: These need to be available in the integration method configuration, defaults are used for now to avoid too much changes
+            double volttol = 1e-12 + 1e-3 * Math.Max(Math.Abs(first.Derivatives[index]), Math.Abs(first.Previous.Derivatives[index]));
+            double chargetol = Math.Max(Math.Abs(first.Values[index]), Math.Abs(first.Previous.Values[index]));
+            chargetol = 1e-3 * Math.Max(chargetol, 1e-14) / Delta;
+            double tol = Math.Max(volttol, chargetol);
+
+            // Now divided differences
+            var current = first;
+            for (int i = 0; i < diff.Length; i++)
+            {
+                diff[i] = current.Values[index];
+                current = current.Previous;
+            }
+            for (int i = 0; i < deltmp.Length; i++)
+                deltmp[i] = DeltaOld[i];
+            int j = Order;
+            while (true)
+            {
+                for (int i = 0; i <= j; i++)
+                    diff[i] = (diff[i] - diff[i + 1]) / deltmp[i];
+                if (--j < 0)
+                    break;
+                for (int i = 0; i <= j; i++)
+                    deltmp[i] = deltmp[i + 1] + DeltaOld[i];
+            }
+
+            // Calculate the new timestep
+            double factor;
+            switch (Order)
+            {
+                case 1: factor = 0.5; break;
+                case 2: factor = 0.0833333333; break;
+                default: throw new CircuitException($"Invalid order {Order}");
+            }
+            double del = Config.TrTol * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
+            if (Order == 2)
+                del = Math.Sqrt(del);
+            else if (Order > 2)
+                del = Math.Exp(Math.Log(del) / Order);
+
+            // Return the timestep
+            timestep = Math.Min(timestep, del);
+        }
     }
 }

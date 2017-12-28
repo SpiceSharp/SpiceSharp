@@ -1,91 +1,95 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
+using SpiceSharp.IntegrationMethods;
+using SpiceSharp.Components.CAP;
 
 namespace SpiceSharp.Behaviors.CAP
 {
     /// <summary>
-    /// General behavior for <see cref="Capacitor"/>
+    /// General behavior for <see cref="Components.Capacitor"/>
     /// </summary>
-    public class TransientBehavior : Behaviors.TransientBehavior
+    public class TransientBehavior : Behaviors.TransientBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Parameters
+        /// Necessary behaviors and parameters
         /// </summary>
-        [SpiceName("capacitance"), SpiceInfo("Device capacitance", IsPrincipal = true)]
-        public Parameter CAPcapac { get; } = new Parameter();
-        [SpiceName("ic"), SpiceInfo("Initial capacitor voltage", Interesting = false)]
-        public Parameter CAPinitCond { get; } = new Parameter();
+        BaseParameters bp;
+
+        /// <summary>
+        /// Methods
+        /// </summary>
         [SpiceName("i"), SpiceInfo("Device current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap];
+        public double GetCurrent() => CAPqcap.Derivative;
         [SpiceName("p"), SpiceInfo("Instantaneous device power")]
-        public double GetPower(Circuit ckt) => ckt.State.States[0][CAPstate + CAPccap] * (ckt.State.Solution[CAPposNode] - ckt.State.Solution[CAPnegNode]);
+        public double GetPower(Circuit ckt) => CAPqcap.Derivative * (ckt.State.Solution[CAPposNode] - ckt.State.Solution[CAPnegNode]);
 
         /// <summary>
         /// Nodes and states
         /// </summary>
-        public int CAPstate { get; private set; }
-        private int CAPposNode, CAPnegNode;
-        private MatrixElement CAPposPosptr;
-        private MatrixElement CAPnegNegptr;
-        private MatrixElement CAPposNegptr;
-        private MatrixElement CAPnegPosptr;
+        int CAPposNode, CAPnegNode;
+        MatrixElement CAPposPosptr;
+        MatrixElement CAPnegNegptr;
+        MatrixElement CAPposNegptr;
+        MatrixElement CAPnegPosptr;
+        StateVariable CAPqcap;
 
         /// <summary>
-        /// States
+        /// Setup behavior
         /// </summary>
-        public const int CAPqcap = 0;
-        public const int CAPccap = 1;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public TransientBehavior()
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Pool of behaviors</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
+            // Get base parameters
+            bp = parameters.Get<BaseParameters>();
         }
 
         /// <summary>
-        /// Constructor
+        /// Connect the behavior
         /// </summary>
-        /// <param name="cap">Capacitance</param>
-        public TransientBehavior(double cap)
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
         {
-            CAPcapac.Set(cap);
+            CAPposNode = pins[0];
+            CAPnegNode = pins[1];
         }
 
         /// <summary>
-        /// Setup the behavior
+        /// Create states
         /// </summary>
-        /// <param name="component"></param>
-        /// <param name="ckt"></param>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="states">States</param>
+        public override void CreateStates(StatePool states)
         {
-            // If the capacitance is not given, try getting it from the temperature behavior
-            if (!CAPcapac.Given)
-            {
-                var temp = component.GetBehavior(typeof(Behaviors.TemperatureBehavior)) as TemperatureBehavior;
-                if (temp != null)
-                    CAPcapac.Value = temp.CAPcapac;
-            }
+            CAPqcap = states.Create();
+        }
 
-            // Allocate states
-            CAPstate = ckt.State.GetState(2);
-
-            // Get nodes
-            var cap = component as Capacitor;
-            CAPposNode = cap.CAPposNode;
-            CAPnegNode = cap.CAPnegNode;
-
-            // Get matrix pointers
-            var matrix = ckt.State.Matrix;
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
             CAPposPosptr = matrix.GetElement(CAPposNode, CAPposNode);
             CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
             CAPnegPosptr = matrix.GetElement(CAPnegNode, CAPposNode);
             CAPposNegptr = matrix.GetElement(CAPposNode, CAPnegNode);
         }
 
+        /// <summary>
+        /// Calculate the state for DC
+        /// </summary>
+        /// <param name="sim"></param>
+        public override void GetDCstate(TimeSimulation sim)
+        {
+            // Calculate the state for DC
+            var sol = sim.Circuit.State.Solution;
+            if (bp.CAPinitCond.Given)
+                CAPqcap.Value = bp.CAPinitCond;
+            else
+                CAPqcap.Value = bp.CAPcapac * (sol[CAPposNode] - sol[CAPnegNode]);
+        }
+        
         /// <summary>
         /// Unsetup the behavior
         /// </summary>
@@ -103,35 +107,27 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
-            double vcap;
-            var ckt = sim.Circuit;
-            var state = ckt.State;
-            var rstate = state;
-            var method = ckt.Method;
-
-            bool cond1 = (state.UseDC && state.Init == State.InitFlags.InitJct) || state.UseIC;
-
-            if (cond1)
-                vcap = CAPinitCond;
-            else
-                vcap = rstate.Solution[CAPposNode] - rstate.Solution[CAPnegNode];
+            var state = sim.Circuit.State;
+            double vcap = state.Solution[CAPposNode] - state.Solution[CAPnegNode];
 
             // Fill the matrix
-            state.States[0][CAPstate + CAPqcap] = CAPcapac * vcap;
-            if (state.Init == State.InitFlags.InitTransient)
-                state.States[1][CAPstate + CAPqcap] = state.States[0][CAPstate + CAPqcap];
-
-            // Integrate
-            var result = ckt.Method.Integrate(state, CAPstate + CAPqcap, CAPcapac);
-            if (state.Init == State.InitFlags.InitTransient)
-                state.States[1][CAPstate + CAPqcap] = state.States[0][CAPstate + CAPqcap];
-
+            CAPqcap.Value = bp.CAPcapac * vcap;
+            var result = CAPqcap.Integrate(bp.CAPcapac);
             CAPposPosptr.Add(result.Geq);
             CAPnegNegptr.Add(result.Geq);
             CAPposNegptr.Sub(result.Geq);
             CAPnegPosptr.Sub(result.Geq);
             state.Rhs[CAPposNode] -= result.Ceq;
             state.Rhs[CAPnegNode] += result.Ceq;
+        }
+
+        /// <summary>
+        /// Truncate the timestep
+        /// </summary>
+        /// <param name="timestep">Timestep</param>
+        public override void Truncate(ref double timestep)
+        {
+            CAPqcap.LocalTruncationError(ref timestep);
         }
     }
 }
