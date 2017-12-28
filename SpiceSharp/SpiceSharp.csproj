@@ -133,6 +133,7 @@
     <Compile Include="Simulations\Behaviors\TemperatureBehavior.cs" />
     <Compile Include="Simulations\FrequencySimulation.cs" />
     <Compile Include="Simulations\Behaviors\IcBehavior.cs" />
+    <Compile Include="Simulations\IntegrationMethods\HistoryPoint.cs" />
     <Compile Include="Simulations\IntegrationMethods\StatePool.cs" />
     <Compile Include="Simulations\IntegrationMethods\StateVariable.cs" />
     <Compile Include="Simulations\Noise\NoiseBehavior.cs" />

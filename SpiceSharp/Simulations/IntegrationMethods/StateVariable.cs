@@ -43,5 +43,15 @@
             this.source = source;
             this.index = index;
         }
+
+        /// <summary>
+        /// Integrate the state variable
+        /// </summary>
+        /// <param name="cap">Capacitance</param>
+        /// <returns></returns>
+        public IntegrationMethod.Result Integrate(double cap)
+        {
+            return source.Integrate(index, cap);
+        }
     }
 }

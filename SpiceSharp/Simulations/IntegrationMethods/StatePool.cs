@@ -6,15 +6,9 @@
     public class StatePool
     {
         /// <summary>
-        /// Class for points in history
+        /// Get the integration method for the state pool
         /// </summary>
-        public class HistoryPoint
-        {
-            public double[] Values;
-            public double[] Derivatives;
-            public HistoryPoint Next;
-            public HistoryPoint Previous;
-        }
+        public IntegrationMethod Method { get; }
 
         /// <summary>
         /// The current point
@@ -25,17 +19,19 @@
         /// Number of states in the pool
         /// </summary>
         public int StateCount { get; private set; }
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="points">Number of points in history</param>
-        public StatePool(int points)
+        /// <param name="method">The integration method</param>
+        public StatePool(IntegrationMethod method)
         {
+            Method = method;
+
             // Create a linked list for all history points
             First = new HistoryPoint();
             HistoryPoint current = First;
-            for (int i = 0; i < points; i++)
+            for (int i = 0; i < method.MaxOrder + 2; i++)
             {
                 HistoryPoint next = new HistoryPoint();
                 next.Previous = current;
@@ -58,6 +54,16 @@
             StateCount++;
             return result;
         }
+
+        /// <summary>
+        /// Integrate a state variable
+        /// </summary>
+        /// <param name="index">The index</param>
+        /// <returns></returns>
+        public IntegrationMethod.Result Integrate(int index, double cap)
+        {
+            return Method.Integrate(First, index, cap);
+        }
         
         /// <summary>
         /// Build the arrays for all history points
@@ -73,5 +79,10 @@
             }
             while (current != First);
         }
+
+        /// <summary>
+        /// Shift states
+        /// </summary>
+        public void ShiftStates() => First = First.Next;
     }
 }

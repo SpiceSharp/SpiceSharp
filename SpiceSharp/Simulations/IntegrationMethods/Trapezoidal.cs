@@ -72,6 +72,35 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
+        /// Integrate a variable at a specific index
+        /// </summary>
+        /// <param name="index">Index</param>
+        /// <param name="cap">Capacitance</param>
+        /// <returns></returns>
+        public override Result Integrate(HistoryPoint first, int index, double cap)
+        {
+            switch (Order)
+            {
+                case 1:
+                    first.Derivatives[index] = ag[0] * first.Values[index] + ag[1] * first.Previous.Values[index];
+                    break;
+
+                case 2:
+                    first.Derivatives[index] = -first.Previous.Derivatives[index] * ag[1] + ag[0] * (first.Values[index] - first.Previous.Values[index]);
+                    break;
+
+                default:
+                    throw new CircuitException("Invalid order");
+            }
+
+            // Create the returned object
+            Result result = new Result();
+            result.Ceq = first.Derivatives[index] - ag[0] * first.Values[index];
+            result.Geq = ag[0] * cap;
+            return result;
+        }
+
+        /// <summary>
         /// Predict a new solution based on the previous ones
         /// </summary>
         /// <param name="ckt">The circuit</param>

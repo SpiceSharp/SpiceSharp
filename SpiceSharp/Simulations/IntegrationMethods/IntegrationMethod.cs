@@ -96,18 +96,12 @@ namespace SpiceSharp.IntegrationMethods
         /// Get the last time point that was accepted
         /// </summary>
         public double SavedTime { get { return savetime; } }
-
-        /// <summary>
-        /// The states associated with the integration method
-        /// Used for integration
-        /// </summary>
-        protected StatePool statepool;
-
+        
         /// <summary>
         /// Private variables
         /// </summary>
-        private double savetime = double.NaN;
-        private List<TruncateBehavior> truncatebehaviors;
+        double savetime = double.NaN;
+        List<TruncateBehavior> truncatebehaviors;
 
         /// <summary>
         /// Delegate for truncation
@@ -132,7 +126,6 @@ namespace SpiceSharp.IntegrationMethods
             Config = config ?? new IntegrationConfiguration();
             DeltaOld = new double[maxorder + 2];
             Solutions = new double[maxorder + 1][]; // new Vector<double>[MaxOrder + 1];
-            statepool = new StatePool(maxorder + 2);
         }
 
         /// <summary>
@@ -145,7 +138,6 @@ namespace SpiceSharp.IntegrationMethods
             Config = new IntegrationConfiguration();
             DeltaOld = new double[maxorder + 2];
             Solutions = new double[maxorder + 1][]; // new Vector<double>[MaxOrder + 1];
-            statepool = new StatePool(maxorder + 2);
         }
 
         /// <summary>
@@ -339,6 +331,15 @@ namespace SpiceSharp.IntegrationMethods
 
             Break = false;
         }
+
+        /// <summary>
+        /// Integrate a state variable at a specific index
+        /// </summary>
+        /// <param name="first">The current point with state variables</param>
+        /// <param name="index">The index of the state to be used</param>
+        /// <param name="cap">Capacitance</param>
+        /// <returns></returns>
+        public abstract Result Integrate(HistoryPoint first, int index, double cap);
 
         /// <summary>
         /// Integrate a state variable
