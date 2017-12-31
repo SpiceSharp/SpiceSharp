@@ -38,10 +38,10 @@ namespace SpiceSharp.Components
             Parameters.Register(new BaseParameters());
 
             // Register factories
-            AddFactory(typeof(LoadBehavior), () => new LoadBehavior());
-            AddFactory(typeof(AcBehavior), () => new AcBehavior());
-            AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior());
-            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior());
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
+            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
         }
 
         /// <summary>
@@ -58,10 +58,10 @@ namespace SpiceSharp.Components
             Parameters.Register(new BaseParameters(res));
 
             // Register factories
-            AddFactory(typeof(LoadBehavior), () => new LoadBehavior());
-            AddFactory(typeof(AcBehavior), () => new AcBehavior());
-            AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior());
-            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior());
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
+            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
 
             // Connect
             Connect(pos, neg);

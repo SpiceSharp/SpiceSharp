@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components.CAP;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Components.CAP;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Behaviors.CAP
@@ -21,6 +22,12 @@ namespace SpiceSharp.Behaviors.CAP
         MatrixElement CAPnegNegptr;
         MatrixElement CAPposNegptr;
         MatrixElement CAPnegPosptr;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public AcBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior

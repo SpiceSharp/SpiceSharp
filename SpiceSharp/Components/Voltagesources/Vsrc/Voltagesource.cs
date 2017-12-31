@@ -35,9 +35,9 @@ namespace SpiceSharp.Components
             Parameters.Register(new AcParameters());
 
             // Register factories
-            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior());
-            AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior());
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
         }
 
         /// <summary>
@@ -55,9 +55,9 @@ namespace SpiceSharp.Components
             Parameters.Register(new AcParameters());
 
             // Register factories
-            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior());
-            AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior());
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
             // Connect the device
             Connect(pos, neg);
@@ -78,9 +78,9 @@ namespace SpiceSharp.Components
             Parameters.Register(new AcParameters());
 
             // Register factories
-            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior());
-            AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior());
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
             // Connect the device
             Connect(pos, neg);

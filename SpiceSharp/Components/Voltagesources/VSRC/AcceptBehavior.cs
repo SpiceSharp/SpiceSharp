@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components.VSRC;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Components.VSRC;
 
 namespace SpiceSharp.Behaviors.VSRC
 {
@@ -11,6 +12,12 @@ namespace SpiceSharp.Behaviors.VSRC
         /// Necessary behaviors and parameters
         /// </summary>
         BaseParameters bp;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public AcceptBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior

@@ -40,6 +40,12 @@ namespace SpiceSharp.Behaviors.VSRC
         protected MatrixElement VSRCibrIbrptr { get; private set; }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public AcBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
         /// Setup the behavior
         /// </summary>
         /// <param name="parameters">Parameters</param>

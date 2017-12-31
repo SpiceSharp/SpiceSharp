@@ -3,6 +3,7 @@ using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Components.CAP;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Behaviors.CAP
 {
@@ -33,6 +34,12 @@ namespace SpiceSharp.Behaviors.CAP
         MatrixElement CAPposNegptr;
         MatrixElement CAPnegPosptr;
         StateVariable CAPqcap;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name of the behavior</param>
+        public TransientBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

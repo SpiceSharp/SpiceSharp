@@ -1,13 +1,11 @@
 ﻿using SpiceSharp.Diagnostics;
-using SpiceSharp.Components;
-using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.RES;
 
 namespace SpiceSharp.Behaviors.RES
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="Resistor"/>
+    /// Temperature behavior for a <see cref="Components.Resistor"/>
     /// </summary>
     public class TemperatureBehavior : Behaviors.TemperatureBehavior, IModelBehavior
     {
@@ -23,9 +21,10 @@ namespace SpiceSharp.Behaviors.RES
         public double RESconduct { get; protected set; }
 
         /// <summary>
-        /// Name of the component
+        /// Constructor
         /// </summary>
-        Identifier name;
+        /// <param name="name">Name</param>
+        public TemperatureBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior
@@ -69,7 +68,7 @@ namespace SpiceSharp.Behaviors.RES
                     RESresist = mbp.RESsheetRes * (bp.RESlength - mbp.RESnarrow) / (bp.RESwidth - mbp.RESnarrow);
                 else
                 {
-                    CircuitWarning.Warning(this, $"{name}: resistance=0, set to 1000");
+                    CircuitWarning.Warning(this, $"{Name}: resistance=0, set to 1000");
                     RESresist = 1000;
                 }
 

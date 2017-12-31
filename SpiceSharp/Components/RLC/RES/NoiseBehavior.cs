@@ -26,6 +26,12 @@ namespace SpiceSharp.Behaviors.RES
         public ComponentNoise RESnoise { get; private set; } = new ComponentNoise(new NoiseThermal("thermal", 0, 1));
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public NoiseBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
         /// Setup behavior
         /// </summary>
         /// <param name="parameters">Parameters</param>

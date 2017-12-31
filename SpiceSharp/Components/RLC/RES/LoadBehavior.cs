@@ -45,6 +45,12 @@ namespace SpiceSharp.Behaviors.RES
         protected MatrixElement RESnegPosPtr { get; private set; }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public LoadBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
         /// Setup the behavior
         /// </summary>
         /// <param name="pool">The behavior pool</param>

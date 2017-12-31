@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Components.CAP;
 
 namespace SpiceSharp.Behaviors.CAP
@@ -13,6 +14,12 @@ namespace SpiceSharp.Behaviors.CAP
         /// </summary>
         ModelBaseParameters mbp;
         BaseParameters bp;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public TemperatureBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior

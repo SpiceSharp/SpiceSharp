@@ -40,9 +40,9 @@ namespace SpiceSharp.Components
             Parameters.Register(new BaseParameters());
 
             // Register factories
-            RegisterFactory(typeof(TransientBehavior), () => new TransientBehavior());
-            RegisterFactory(typeof(AcBehavior), () => new AcBehavior());
-            RegisterFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior());
+            RegisterFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
+            RegisterFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            RegisterFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
         }
 
         /// <summary>
@@ -59,9 +59,9 @@ namespace SpiceSharp.Components
             Parameters.Register(new BaseParameters(cap));
 
             // Register factories
-            AddFactory(typeof(TransientBehavior), () => new TransientBehavior());
-            AddFactory(typeof(AcBehavior), () => new AcBehavior());
-            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior());
+            AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
 
             // Connect
             Connect(pos, neg);
