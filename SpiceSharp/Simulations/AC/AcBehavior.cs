@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Sparse;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Behaviors
 {
@@ -7,6 +8,12 @@ namespace SpiceSharp.Behaviors
     /// </summary>
     public abstract class AcBehavior : Behavior
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public AcBehavior(Identifier name = null) : base(name) { }
+
         /// <summary>
         /// Get matrix pointers
         /// </summary>

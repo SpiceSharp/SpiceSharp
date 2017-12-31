@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Sparse;
 
@@ -9,6 +10,12 @@ namespace SpiceSharp.Behaviors
     /// </summary>
     public abstract class TransientBehavior : Behavior
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public TransientBehavior(Identifier name = null) : base(name) { }
+
         /// <summary>
         /// Register states
         /// </summary>

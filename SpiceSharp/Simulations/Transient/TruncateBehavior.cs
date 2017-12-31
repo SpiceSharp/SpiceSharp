@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {
@@ -7,6 +8,12 @@ namespace SpiceSharp.Behaviors
     /// </summary>
     public abstract class TruncateBehavior : Behavior
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public TruncateBehavior(Identifier name = null) : base(name) { }
+
         /// <summary>
         /// Truncate the current timestep
         /// </summary>
