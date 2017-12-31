@@ -123,7 +123,7 @@ namespace SpiceSharp.Simulations
             {
                 T behavior = o.GetBehavior<T>(pool);
                 if (behavior != null)
-                    pool.Add(o, behavior);
+                    pool.Add(o.Name, behavior);
             }
             return pool.GetBehaviorList<T>();
 

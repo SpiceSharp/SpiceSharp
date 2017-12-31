@@ -84,7 +84,7 @@ namespace SpiceSharp.Components
             // Extra functionality for behaviors that can have a model
             if (Model != null && behavior is IModelBehavior mb)
             {
-                pool.SetCurrentEntity(Model);
+                pool.SetCurrentEntity(Model.Name);
                 mb.SetupModel(Model.Parameters, pool);
             }
 

@@ -13,7 +13,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Behaviors indexed by the entity that created them
         /// </summary>
-        Dictionary<Entity, EntityBehaviors> entitybehaviors = new Dictionary<Entity, EntityBehaviors>();
+        Dictionary<Identifier, EntityBehaviors> entitybehaviors = new Dictionary<Identifier, EntityBehaviors>();
 
         /// <summary>
         /// Lists of behaviors
@@ -23,23 +23,24 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// The source entity of the last registered behavior
         /// </summary>
-        Entity activesource;
+        EntityBehaviors active;
 
         /// <summary>
         /// Set the current entity of which behaviors can be requested
         /// </summary>
-        /// <param name="entity">Entity</param>
-        public void SetCurrentEntity(Entity entity)
+        /// <param name="id">Name of the active entity</param>
+        public void SetCurrentEntity(Identifier id)
         {
-            activesource = entity;
+            if (!entitybehaviors.TryGetValue(id, out active))
+                active = null;
         }
 
         /// <summary>
         /// Add a behavior to the collection
         /// </summary>
-        /// <param name="creator"></param>
-        /// <param name="behavior"></param>
-        public void Add(Entity creator, Behavior behavior)
+        /// <param name="creator">Name of the entity creating the behavior</param>
+        /// <param name="behavior">Created behavior</param>
+        public void Add(Identifier creator, Behavior behavior)
         {
             EntityBehaviors eb;
             if (!entitybehaviors.TryGetValue(creator, out eb))
@@ -64,9 +65,9 @@ namespace SpiceSharp.Behaviors
         /// Get a behavior
         /// </summary>
         /// <typeparam name="T">Behavior base type</typeparam>
-        /// <param name="source">Entity that created the behavior</param>
+        /// <param name="source">Name of the entity that created the behavior</param>
         /// <returns></returns>
-        public T GetBehavior<T>(Entity source) where T : Behavior
+        public T GetBehavior<T>(Identifier source) where T : Behavior
         {
             if (entitybehaviors.TryGetValue(source, out EntityBehaviors eb))
                 return eb.Get<T>();
@@ -78,12 +79,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <typeparam name="T">Behavior type</typeparam>
         /// <returns></returns>
-        public T GetBehavior<T>() where T : Behavior
-        {
-            if (entitybehaviors.TryGetValue(activesource, out EntityBehaviors eb))
-                return eb.Get<T>();
-            return null;
-        }
+        public T GetBehavior<T>() where T : Behavior => active?.Get<T>();
 
         /// <summary>
         /// Get a list of behaviors

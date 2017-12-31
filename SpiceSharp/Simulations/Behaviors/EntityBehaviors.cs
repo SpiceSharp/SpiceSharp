@@ -12,7 +12,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Source entity
         /// </summary>
-        public Entity Source { get; }
+        public Identifier Source { get; }
 
         /// <summary>
         /// Behavior lists (in order of registration)
@@ -23,7 +23,7 @@ namespace SpiceSharp.Behaviors
         /// Constructor
         /// </summary>
         /// <param name="source">The source of the behaviors</param>
-        public EntityBehaviors(Entity source)
+        public EntityBehaviors(Identifier source)
         {
             Source = source;
         }

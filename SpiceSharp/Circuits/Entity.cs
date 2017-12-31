@@ -96,7 +96,7 @@ namespace SpiceSharp.Circuits
             {
                 // Setup the behavior
                 Behavior behavior = factory();
-                pool.SetCurrentEntity(this);
+                pool.SetCurrentEntity(Name);
                 behavior.Setup(Parameters, pool);
                 return (T)behavior;
             }
