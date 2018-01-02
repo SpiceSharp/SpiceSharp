@@ -1,61 +1,56 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Components;
 using SpiceSharp.Circuits;
-using SpiceSharp.Attributes;
-using SpiceSharp.Diagnostics;
+using SpiceSharp.Components.ISRC;
 
 namespace SpiceSharp.Behaviors.ISRC
 {
     /// <summary>
     /// Behavior of a currentsource in AC analysis
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior
+    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Parameters
+        /// Necessary behaviors and parameters
         /// </summary>
-        [SpiceName("acmag"), SpiceInfo("A.C. magnitude value")]
-        public Parameter ISRCacMag { get; } = new Parameter();
-        [SpiceName("acphase"), SpiceInfo("A.C. phase value")]
-        public Parameter ISRCacPhase { get; } = new Parameter();
-        [SpiceName("ac"), SpiceInfo("A.C. magnitude, phase vector")]
-        public void SetAc(double[] ac)
-        {
-            switch (ac.Length)
-            {
-                case 2: ISRCacPhase.Set(ac[1]); goto case 1;
-                case 1: ISRCacMag.Set(ac[0]); break;
-                case 0: ISRCacMag.Set(0.0); break;
-                default:
-                    throw new BadParameterException("ac");
-            }
-        }
+        AcParameters ap;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        private int ISRCposNode, ISRCnegNode;
-        private Complex ISRCac;
+        int ISRCposNode, ISRCnegNode;
+        Complex ISRCac;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public AcBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Behaviors</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
-            base.Setup(component, ckt);
+            ap = parameters.Get<AcParameters>();
 
-            var isrc = component as Currentsource;
-            double radians = ISRCacPhase * Circuit.CONSTPI / 180.0;
-            ISRCac = new Complex(ISRCacMag * Math.Cos(radians), ISRCacMag * Math.Sin(radians));
-
-            // Copy nodes
-            ISRCposNode = isrc.ISRCposNode;
-            ISRCnegNode = isrc.ISRCnegNode;
+            // Calculate the AC vector
+            double radians = ap.ISRCacPhase * Circuit.CONSTPI / 180.0;
+            ISRCac = new Complex(ap.ISRCacMag * Math.Cos(radians), ap.ISRCacMag * Math.Sin(radians));
         }
 
+        /// <summary>
+        /// Connect the behavior
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            ISRCposNode = pins[0];
+            ISRCnegNode = pins[1];
+        }
+        
         /// <summary>
         /// Execute AC behavior
         /// </summary>

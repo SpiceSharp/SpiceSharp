@@ -168,7 +168,7 @@ namespace SpiceSharp.Simulations
                 if (component is Voltagesource vsrc)
                     swept[i] = vsrc.Parameters.Get<Components.VSRC.BaseParameters>().VSRCdcValue;
                 else if (component is Currentsource isrc)
-                    swept[i] = (isrc.GetBehavior(typeof(LoadBehavior)) as Behaviors.ISRC.LoadBehavior).ISRCdcValue;
+                    swept[i] = isrc.Parameters.Get<Components.ISRC.BaseParameters>().ISRCdcValue;
                 else
                     throw new CircuitException("Invalid sweep object");
                 original[i] = (Parameter)swept[i].Clone();

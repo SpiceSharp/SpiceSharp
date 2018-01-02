@@ -3,22 +3,25 @@ using SpiceSharp.Diagnostics;
 using SpiceSharp.Components;
 using SpiceSharp.Attributes;
 using System;
+using SpiceSharp.Components.ISRC;
 
 namespace SpiceSharp.Behaviors.ISRC
 {
     /// <summary>
     /// Current source behavior for DC and Transient analysis
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior
+    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Parameters
+        /// Necessary behaviors and parameters
         /// </summary>
-        [SpiceName("waveform"), SpiceInfo("The waveform object for this source")]
-        public Waveform ISRCwaveform { get; set; } = null;
-        [SpiceName("dc"), SpiceInfo("D.C. source value")]
-        public Parameter ISRCdcValue { get; } = new Parameter();
+        BaseParameters bp;
 
+        /// <summary>
+        /// Methods
+        /// </summary>
+        /// <param name="ckt"></param>
+        /// <returns></returns>
         [SpiceName("v"), SpiceInfo("Voltage accross the supply")]
         public double GetV(Circuit ckt)
         {
@@ -27,41 +30,22 @@ namespace SpiceSharp.Behaviors.ISRC
         [SpiceName("p"), SpiceInfo("Power supplied by the source")]
         public double GetP(Circuit ckt)
         {
-            return (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCposNode]) * -ISRCdcValue;
+            return (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCposNode]) * -bp.ISRCdcValue;
         }
         [SpiceName("c"), SpiceInfo("Current through current source")]
-        public double Current { get; private set; }
+        public double Current { get; protected set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        private int ISRCposNode, ISRCnegNode;
+        int ISRCposNode, ISRCnegNode;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LoadBehavior()
-        {
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="dc">DC value</param>
-        public LoadBehavior(double dc)
-        {
-            ISRCdcValue.Set(dc);
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="w">Waveform</param>
-        public LoadBehavior(Waveform w)
-        {
-            ISRCwaveform = w;
-        }
-
+        /// <param name="name">Name</param>
+        public LoadBehavior(Identifier name) : base(name) { }
+        
         /// <summary>
         /// Create getter
         /// </summary>
@@ -73,7 +57,7 @@ namespace SpiceSharp.Behaviors.ISRC
             switch (parameter)
             {
                 case "v": return () => ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode];
-                case "p": return () => (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode]) * -ISRCdcValue;
+                case "p": return () => (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode]) * -bp.ISRCdcValue;
                 case "c": return () => Current;
                 default:
                     return base.CreateGetter(ckt, parameter);
@@ -83,25 +67,31 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Behaviors</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
-            var isrc = component as Currentsource;
-            if (!ISRCdcValue.Given)
+            bp = parameters.Get<BaseParameters>();
+            if (!bp.ISRCdcValue.Given)
             {
                 // no DC value - either have a transient value or none
-                if (ISRCwaveform != null)
-                    CircuitWarning.Warning(this, $"{isrc.Name} has no DC value, transient time 0 value used");
+                if (bp.ISRCwaveform != null)
+                    CircuitWarning.Warning(this, $"{Name} has no DC value, transient time 0 value used");
                 else
-                    CircuitWarning.Warning(this, $"{isrc.Name} has no value, DC 0 assumed");
+                    CircuitWarning.Warning(this, $"{Name} has no value, DC 0 assumed");
             }
-
-            // Copy nodes
-            ISRCposNode = isrc.ISRCposNode;
-            ISRCnegNode = isrc.ISRCnegNode;
         }
 
+        /// <summary>
+        /// Connect the behavior
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            ISRCposNode = pins[0];
+            ISRCnegNode = pins[1];
+        }
+        
         /// <summary>
         /// Execute behavior
         /// </summary>
@@ -121,15 +111,15 @@ namespace SpiceSharp.Behaviors.ISRC
                     time = ckt.Method.Time;
 
                 // Use the waveform if possible
-                if (ISRCwaveform != null)
-                    value = ISRCwaveform.At(time);
+                if (bp.ISRCwaveform != null)
+                    value = bp.ISRCwaveform.At(time);
                 else
-                    value = ISRCdcValue * state.SrcFact;
+                    value = bp.ISRCdcValue * state.SrcFact;
             }
             else
             {
                 // AC or DC analysis use the DC value
-                value = ISRCdcValue * state.SrcFact;
+                value = bp.ISRCdcValue * state.SrcFact;
             }
 
             rstate.Rhs[ISRCposNode] += value;

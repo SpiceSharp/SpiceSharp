@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors.ISRC;
+using SpiceSharp.Components.ISRC;
 
 namespace SpiceSharp.Components
 {
@@ -26,9 +27,14 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the current source</param>
         public Currentsource(Identifier name) : base(name, ISRCpinCount)
         {
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new AcceptBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters());
+            Parameters.Register(new AcParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
         }
 
         /// <summary>
@@ -41,10 +47,14 @@ namespace SpiceSharp.Components
         public Currentsource(Identifier name, Identifier pos, Identifier neg, double dc)
             : this(name)
         {
-            // Register behaviors
-            RegisterBehavior(new LoadBehavior(dc));
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new AcceptBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters(dc));
+            Parameters.Register(new AcParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
             // Connect
             Connect(pos, neg);
@@ -59,10 +69,14 @@ namespace SpiceSharp.Components
         /// <param name="w">The Waveform-object</param>
         public Currentsource(Identifier name, Identifier pos, Identifier neg, Waveform w) : base(name, ISRCpinCount)
         {
-            // Register behaviors
-            RegisterBehavior(new LoadBehavior(w));
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new AcceptBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters(w));
+            Parameters.Register(new AcParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
             // Connect
             Connect(pos, neg);

@@ -1,5 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 
+using SpiceSharp.Components.ISRC;
+
 namespace SpiceSharp.Behaviors.ISRC
 {
     /// <summary>
@@ -10,26 +12,31 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
+        BaseParameters bp;
 
         /// <summary>
-        /// Setup the behavior
+        /// Constructor
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
-        {
-            load = GetBehavior<LoadBehavior>(component);
-        }
+        /// <param name="name">Name</param>
+        public AcceptBehavior(Identifier name) : base(name) { }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Pool</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        {
+            bp = parameters.Get<BaseParameters>();
+        }
+        
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Accept(Circuit ckt)
         {
-            load.ISRCwaveform?.Accept(ckt);
+            bp.ISRCwaveform?.Accept(ckt);
         }
     }
 }
