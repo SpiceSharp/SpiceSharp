@@ -1,26 +1,39 @@
 ﻿using System;
-using System.Numerics;
 using SpiceSharp.Circuits;
-using SpiceSharp.Sparse;
-using SpiceSharp.Components;
+using SpiceSharp.Attributes;
 using SpiceSharp.Components.DIO;
 using SpiceSharp.Simulations;
+using SpiceSharp.Sparse;
+using SpiceSharp.IntegrationMethods;
 
 namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
-    /// AC behavior for <see cref="Diode"/>
+    /// Transient behavior for a <see cref="Components.Diode"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior, IModelBehavior
+    public class TransientBehavior : Behaviors.TransientBehavior, IConnectedBehavior, IModelBehavior
     {
         /// <summary>
-        /// Necessary behaviors
+        /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters bp;
-        ModelBaseParameters mbp;
         LoadBehavior load;
         TemperatureBehavior temp;
         ModelTemperatureBehavior modeltemp;
+        BaseParameters bp;
+        ModelBaseParameters mbp;
+
+        /// <summary>
+        /// Diode capacitance
+        /// </summary>
+        [SpiceName("cd"), SpiceInfo("Diode capacitance")]
+        public double DIOcap { get; protected set; }
+        public double DIOcurrent { get; protected set; }
+        public double DIOconduct { get; protected set; }
+
+        /// <summary>
+        /// The charge on the junction capacitance
+        /// </summary>
+        public StateVariable DIOcapCharge { get; private set; }
 
         /// <summary>
         /// Nodes
@@ -35,15 +48,10 @@ namespace SpiceSharp.Behaviors.DIO
         protected MatrixElement DIOposPrimePosPrimePtr { get; private set; }
 
         /// <summary>
-        /// Gets the junction capacitance
-        /// </summary>
-        public double DIOcap { get; protected set; }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcBehavior(Identifier name) : base(name) { }
+        public TransientBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior
@@ -61,46 +69,17 @@ namespace SpiceSharp.Behaviors.DIO
         }
 
         /// <summary>
-        /// Connect
+        /// Setup model
         /// </summary>
-        /// <param name="pins">Pins</param>
-        public void Connect(params int[] pins)
-        {
-            DIOposNode = pins[0];
-            DIOnegNode = pins[1];
-        }
-
-        /// <summary>
-        /// Setup model parameters and behaviors
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="pool"></param>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Behaviors</param>
         public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
         {
-            // Get parameters
+            // Get model parameters
             mbp = parameters.Get<ModelBaseParameters>();
 
             // Get behaviors
             modeltemp = pool.GetBehavior<ModelTemperatureBehavior>();
-        }
-
-        /// <summary>
-        /// Get matrix pointers
-        /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
-        {
-            // Get node
-            DIOposPrimeNode = load.DIOposPrimeNode;
-
-            // Get matrix pointers
-            DIOposPosPrimePtr = matrix.GetElement(DIOposNode, DIOposPrimeNode);
-            DIOnegPosPrimePtr = matrix.GetElement(DIOnegNode, DIOposPrimeNode);
-            DIOposPrimePosPtr = matrix.GetElement(DIOposPrimeNode, DIOposNode);
-            DIOposPrimeNegPtr = matrix.GetElement(DIOposPrimeNode, DIOnegNode);
-            DIOposPosPtr = matrix.GetElement(DIOposNode, DIOposNode);
-            DIOnegNegPtr = matrix.GetElement(DIOnegNode, DIOnegNode);
-            DIOposPrimePosPrimePtr = matrix.GetElement(DIOposPrimeNode, DIOposPrimeNode);
         }
 
         /// <summary>
@@ -118,10 +97,48 @@ namespace SpiceSharp.Behaviors.DIO
         }
 
         /// <summary>
-        /// Calculate AC parameters
+        /// Connect
         /// </summary>
-        /// <param name="sim"></param>
-        public override void InitializeParameters(FrequencySimulation sim)
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            DIOposNode = pins[0];
+            DIOnegNode = pins[1];
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix"></param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
+            // Get extra nodes
+            DIOposPrimeNode = load.DIOposPrimeNode;
+
+            // Get matrix pointers
+            DIOposPosPrimePtr = matrix.GetElement(DIOposNode, DIOposPrimeNode);
+            DIOnegPosPrimePtr = matrix.GetElement(DIOnegNode, DIOposPrimeNode);
+            DIOposPrimePosPtr = matrix.GetElement(DIOposPrimeNode, DIOposNode);
+            DIOposPrimeNegPtr = matrix.GetElement(DIOposPrimeNode, DIOnegNode);
+            DIOposPosPtr = matrix.GetElement(DIOposNode, DIOposNode);
+            DIOnegNegPtr = matrix.GetElement(DIOnegNode, DIOnegNode);
+            DIOposPrimePosPrimePtr = matrix.GetElement(DIOposPrimeNode, DIOposPrimeNode);
+        }
+
+        /// <summary>
+        /// Create states
+        /// </summary>
+        /// <param name="states">States</param>
+        public override void CreateStates(StatePool states)
+        {
+            DIOcapCharge = states.Create();
+        }
+
+        /// <summary>
+        /// Transient behavior
+        /// </summary>
+        /// <param name="sim">Time-based simulation</param>
+        public override void Transient(TimeSimulation sim)
         {
             var state = sim.Circuit.State;
             double arg, czero, sarg, capd, czof2;
@@ -133,39 +150,42 @@ namespace SpiceSharp.Behaviors.DIO
             {
                 arg = 1 - vd / mbp.DIOjunctionPot;
                 sarg = Math.Exp(-mbp.DIOgradingCoeff * Math.Log(arg));
+                DIOcapCharge.Value = mbp.DIOtransitTime * load.DIOcurrent + mbp.DIOjunctionPot * czero * (1 - arg * sarg) / (1 -
+                        mbp.DIOgradingCoeff);
                 capd = mbp.DIOtransitTime * load.DIOconduct + czero * sarg;
             }
             else
             {
                 czof2 = czero / modeltemp.DIOf2;
+                DIOcapCharge.Value = mbp.DIOtransitTime * load.DIOcurrent + czero * temp.DIOtF1 + czof2 * (modeltemp.DIOf3 * (vd -
+                    temp.DIOtDepCap) + (mbp.DIOgradingCoeff / (mbp.DIOjunctionPot + mbp.DIOjunctionPot)) * (vd * vd - temp.DIOtDepCap * temp.DIOtDepCap));
                 capd = mbp.DIOtransitTime * load.DIOconduct + czof2 * (modeltemp.DIOf3 + mbp.DIOgradingCoeff * vd / mbp.DIOjunctionPot);
             }
             DIOcap = capd;
+
+            // Integrate
+            var result = DIOcapCharge.Integrate(capd);
+
+            // Load Rhs vector
+            double cdeq = DIOcapCharge.Derivative - result.Geq * vd;
+            state.Rhs[DIOnegNode] += cdeq;
+            state.Rhs[DIOposPrimeNode] -= cdeq;
+
+            // Load Y-matrix
+            double gd = result.Geq;
+            DIOnegNegPtr.Add(gd);
+            DIOposPrimePosPrimePtr.Add(gd);
+            DIOnegPosPrimePtr.Sub(gd);
+            DIOposPrimeNegPtr.Sub(gd);
         }
 
         /// <summary>
-        /// Perform AC analysis
+        /// Use local truncation error to cut timestep
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="timestep">Timestep</param>
+        public override void Truncate(ref double timestep)
         {
-            var state = ckt.State;
-            double gspr, geq, xceq;
-
-            gspr = modeltemp.DIOconductance * bp.DIOarea;
-            geq = load.DIOconduct;
-            xceq = DIOcap * state.Laplace.Imaginary;
-
-            DIOposPosPtr.Value.Real += gspr;
-            DIOnegNegPtr.Value.Cplx += new Complex(geq, xceq);
-
-            DIOposPrimePosPrimePtr.Value.Cplx += new Complex(geq + gspr, xceq);
-
-            DIOposPosPrimePtr.Value.Real -= gspr;
-            DIOnegPosPrimePtr.Value.Cplx -= new Complex(geq, xceq);
-
-            DIOposPrimePosPtr.Value.Real -= gspr;
-            DIOposPrimeNegPtr.Value.Cplx -= new Complex(geq, xceq);
+            DIOcapCharge.LocalTruncationError(ref timestep);
         }
     }
 }

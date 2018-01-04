@@ -117,13 +117,17 @@ namespace SpiceSharp.Behaviors.CAP
             var state = sim.Circuit.State;
             double vcap = state.Solution[CAPposNode] - state.Solution[CAPnegNode];
 
-            // Fill the matrix
+            // Integrate
             CAPqcap.Value = bp.CAPcapac * vcap;
             var result = CAPqcap.Integrate(bp.CAPcapac);
+
+            // Load matrix
             CAPposPosptr.Add(result.Geq);
             CAPnegNegptr.Add(result.Geq);
             CAPposNegptr.Sub(result.Geq);
             CAPnegPosptr.Sub(result.Geq);
+
+            // Load Rhs vector
             state.Rhs[CAPposNode] -= result.Ceq;
             state.Rhs[CAPnegNode] += result.Ceq;
         }

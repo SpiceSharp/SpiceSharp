@@ -3,26 +3,27 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Attributes;
 using SpiceSharp.Components.Noise;
+using SpiceSharp.Components.DIO;
 
 namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
     /// Noise behavior for <see cref="Diode"/>
     /// </summary>
-    public class NoiseBehavior : Behaviors.NoiseBehavior
+    public class NoiseBehavior : Behaviors.NoiseBehavior, IConnectedBehavior, IModelBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
-        private ModelNoiseBehavior modelnoise;
-        private ModelTemperatureBehavior modeltemp;
+        LoadBehavior load;
+        BaseParameters bp;
+        ModelNoiseParameters mnp;
+        ModelTemperatureBehavior modeltemp;
 
         /// <summary>
-        /// Parameters
+        /// Nodes
         /// </summary>
-        [SpiceName("area"), SpiceInfo("Area factor")]
-        public Parameter DIOarea { get; } = new Parameter(1);
+        int DIOposNode, DIOnegNode, DIOposPrimeNode;
 
         /// <summary>
         /// Noise sources by their index
@@ -40,20 +41,52 @@ namespace SpiceSharp.Behaviors.DIO
             new NoiseGain("1overf", 1, 2));
 
         /// <summary>
-        /// Setup the diode
+        /// Constructor
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="name">Name</param>
+        public NoiseBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Behaviors</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
-            var diode = component as Diode;
+            // Get parameters
+            bp = parameters.Get<BaseParameters>();
 
             // Get behaviors
-            load = GetBehavior<LoadBehavior>(diode);
-            modeltemp = GetBehavior<ModelTemperatureBehavior>(diode.Model);
-            modelnoise = GetBehavior<ModelNoiseBehavior>(diode.Model);
+            load = pool.GetBehavior<LoadBehavior>();
+        }
 
-            DIOnoise.Setup(diode.DIOposNode, load.DIOposPrimeNode, diode.DIOnegNode);
+        /// <summary>
+        /// Connect the noise source
+        /// </summary>
+        public override void ConnectNoise() => DIOnoise.Setup(DIOposNode, DIOposPrimeNode, DIOnegNode);
+
+        /// <summary>
+        /// Setup the model
+        /// </summary>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Pool</param>
+        public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
+        {
+            // Get parameters
+            mnp = parameters.Get<ModelNoiseParameters>();
+
+            // Get behaviors
+            modeltemp = pool.GetBehavior<ModelTemperatureBehavior>();
+        }
+
+        /// <summary>
+        /// Connect the behavior
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            DIOposNode = pins[0];
+            DIOnegNode = pins[1];
         }
 
         /// <summary>
@@ -66,10 +99,10 @@ namespace SpiceSharp.Behaviors.DIO
             var noise = ckt.State.Noise;
 
             // Set noise parameters
-            DIOnoise.Generators[DIORSNOIZ].Set(modeltemp.DIOconductance * DIOarea);
-            DIOnoise.Generators[DIOIDNOIZ].Set(state.States[0][load.DIOstate + LoadBehavior.DIOcurrent]);
-            DIOnoise.Generators[DIOFLNOIZ].Set(modelnoise.DIOfNcoef * Math.Exp(modelnoise.DIOfNexp 
-                * Math.Log(Math.Max(Math.Abs(state.States[0][load.DIOstate + LoadBehavior.DIOcurrent]), 1e-38))) / noise.Freq);
+            DIOnoise.Generators[DIORSNOIZ].Set(modeltemp.DIOconductance * bp.DIOarea);
+            DIOnoise.Generators[DIOIDNOIZ].Set(load.DIOcurrent);
+            DIOnoise.Generators[DIOFLNOIZ].Set(mnp.DIOfNcoef * Math.Exp(mnp.DIOfNexp 
+                * Math.Log(Math.Max(Math.Abs(load.DIOcurrent), 1e-38))) / noise.Freq);
 
             // Evaluate noise
             DIOnoise.Evaluate(ckt);

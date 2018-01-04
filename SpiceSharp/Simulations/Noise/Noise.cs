@@ -150,6 +150,10 @@ namespace SpiceSharp.Simulations
             var data = ckt.State.Noise;
             state.Sparse |= State.SparseFlags.NIACSHOULDREORDER;
 
+            // Connect noise sources
+            foreach (var behavior in noisebehaviors)
+                behavior.ConnectNoise();
+
             // Loop through noise figures
             for (int i = 0; i < n; i++)
             {

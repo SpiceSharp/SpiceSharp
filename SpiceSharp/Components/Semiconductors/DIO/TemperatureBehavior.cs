@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Components.DIO;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
@@ -9,39 +10,56 @@ namespace SpiceSharp.Behaviors.DIO
     /// <summary>
     /// Temperature behavior for a <see cref="Diode"/>
     /// </summary>
-    public class TemperatureBehavior : Behaviors.TemperatureBehavior
+    public class TemperatureBehavior : Behaviors.TemperatureBehavior, IModelBehavior
     {
         /// <summary>
-        /// Necessary behaviors
+        /// Necessary parameters and behaviors
         /// </summary>
-        private ModelTemperatureBehavior modeltemp;
+        BaseParameters bp;
+        ModelBaseParameters mbp;
+        ModelTemperatureBehavior modeltemp;
 
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double DIOtJctCap { get; private set; }
-        public double DIOtJctPot { get; private set; }
-        public double DIOtSatCur { get; private set; }
-        public double DIOtF1 { get; private set; }
-        public double DIOtDepCap { get; private set; }
-        public double DIOtVcrit { get; private set; }
-        public double DIOtBrkdwnV { get; private set; }
+        public double DIOtJctCap { get; protected set; }
+        public double DIOtJctPot { get; protected set; }
+        public double DIOtSatCur { get; protected set; }
+        public double DIOtF1 { get; protected set; }
+        public double DIOtDepCap { get; protected set; }
+        public double DIOtVcrit { get; protected set; }
+        public double DIOtBrkdwnV { get; protected set; }
 
         /// <summary>
-        /// Parameters
+        /// Constructor
         /// </summary>
-        [SpiceName("temp"), SpiceInfo("Instance temperature")]
-        public double DIO_TEMP
+        /// <param name="name">Name</param>
+        public TemperatureBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Behaviors</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
-            get => DIOtemp - Circuit.CONSTCtoK;
-            set => DIOtemp.Set(value + Circuit.CONSTCtoK);
+            // Get parameters
+            bp = parameters.Get<BaseParameters>();
         }
-        public Parameter DIOtemp { get; } = new Parameter();
 
         /// <summary>
-        /// Private variables
+        /// Setup the model
         /// </summary>
-        private Identifier name;
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Behaviors</param>
+        public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
+        {
+            // Get behaviors
+            mbp = parameters.Get<ModelBaseParameters>();
+
+            // Get behaviors
+            modeltemp = pool.GetBehavior<ModelTemperatureBehavior>();
+        }
 
         /// <summary>
         /// Setup the behavior
@@ -55,9 +73,6 @@ namespace SpiceSharp.Behaviors.DIO
 
             // Get behaviors
             modeltemp = GetBehavior<ModelTemperatureBehavior>(dio.Model);
-            
-            // Get name
-            name = dio.Name;
         }
 
         /// <summary>
@@ -69,62 +84,65 @@ namespace SpiceSharp.Behaviors.DIO
             double vt, fact2, egfet, arg, pbfact, egfet1, arg1, fact1, pbfact1, pbo, gmaold, gmanew, vte, cbv, xbv, tol, iter, xcbv = 0.0;
 
             // loop through all the instances
-            if (!DIOtemp.Given)
-                DIOtemp.Value = ckt.State.Temperature;
-            vt = Circuit.CONSTKoverQ * DIOtemp;
-            /* this part gets really ugly - I won't even try to
-			 * explain these equations */
-            fact2 = DIOtemp / Circuit.CONSTRefTemp;
-            egfet = 1.16 - (7.02e-4 * DIOtemp * DIOtemp) / (DIOtemp + 1108);
-            arg = -egfet / (2 * Circuit.CONSTBoltz * DIOtemp) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp +
+            if (!bp.DIOtemp.Given)
+                bp.DIOtemp.Value = ckt.State.Temperature;
+            vt = Circuit.CONSTKoverQ * bp.DIOtemp;
+
+            // this part gets really ugly - I won't even try to explain these equations
+            fact2 = bp.DIOtemp / Circuit.CONSTRefTemp;
+            egfet = 1.16 - (7.02e-4 * bp.DIOtemp * bp.DIOtemp) / (bp.DIOtemp + 1108);
+            arg = -egfet / (2 * Circuit.CONSTBoltz * bp.DIOtemp) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp +
                 Circuit.CONSTRefTemp));
             pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
-            egfet1 = 1.16 - (7.02e-4 * modeltemp.DIOnomTemp * modeltemp.DIOnomTemp) / (modeltemp.DIOnomTemp + 1108);
-            arg1 = -egfet1 / (Circuit.CONSTBoltz * 2 * modeltemp.DIOnomTemp) + 1.1150877 / (2 * Circuit.CONSTBoltz * Circuit.CONSTRefTemp);
-            fact1 = modeltemp.DIOnomTemp / Circuit.CONSTRefTemp;
+            egfet1 = 1.16 - (7.02e-4 * mbp.DIOnomTemp * mbp.DIOnomTemp) / (mbp.DIOnomTemp + 1108);
+            arg1 = -egfet1 / (Circuit.CONSTBoltz * 2 * mbp.DIOnomTemp) + 1.1150877 / (2 * Circuit.CONSTBoltz * Circuit.CONSTRefTemp);
+            fact1 = mbp.DIOnomTemp / Circuit.CONSTRefTemp;
             pbfact1 = -2 * modeltemp.vtnom * (1.5 * Math.Log(fact1) + Circuit.CHARGE * arg1);
-            pbo = (modeltemp.DIOjunctionPot - pbfact1) / fact1;
-            gmaold = (modeltemp.DIOjunctionPot - pbo) / pbo;
-            DIOtJctCap = modeltemp.DIOjunctionCap / (1 + modeltemp.DIOgradingCoeff * (400e-6 * (modeltemp.DIOnomTemp - Circuit.CONSTRefTemp) - gmaold));
+            pbo = (mbp.DIOjunctionPot - pbfact1) / fact1;
+            gmaold = (mbp.DIOjunctionPot - pbo) / pbo;
+            DIOtJctCap = mbp.DIOjunctionCap / (1 + mbp.DIOgradingCoeff * (400e-6 * (mbp.DIOnomTemp - Circuit.CONSTRefTemp) - gmaold));
             DIOtJctPot = pbfact + fact2 * pbo;
             gmanew = (DIOtJctPot - pbo) / pbo;
-            DIOtJctCap *= 1 + modeltemp.DIOgradingCoeff * (400e-6 * (DIOtemp - Circuit.CONSTRefTemp) - gmanew);
+            DIOtJctCap *= 1 + mbp.DIOgradingCoeff * (400e-6 * (bp.DIOtemp - Circuit.CONSTRefTemp) - gmanew);
 
-            DIOtSatCur = modeltemp.DIOsatCur * Math.Exp(((DIOtemp / modeltemp.DIOnomTemp) - 1) * modeltemp.DIOactivationEnergy /
-                (modeltemp.DIOemissionCoeff * vt) + modeltemp.DIOsaturationCurrentExp / modeltemp.DIOemissionCoeff * Math.Log(DIOtemp / modeltemp.DIOnomTemp));
-            /* the defintion of f1, just recompute after temperature adjusting
-			 * all the variables used in it */
-            DIOtF1 = DIOtJctPot * (1 - Math.Exp((1 - modeltemp.DIOgradingCoeff) * modeltemp.xfc)) / (1 - modeltemp.DIOgradingCoeff);
-            /* same for Depletion Capacitance */
-            DIOtDepCap = modeltemp.DIOdepletionCapCoeff * DIOtJctPot;
-            /* and Vcrit */
-            vte = modeltemp.DIOemissionCoeff * vt;
+            DIOtSatCur = mbp.DIOsatCur * Math.Exp(((bp.DIOtemp / mbp.DIOnomTemp) - 1) * mbp.DIOactivationEnergy /
+                (mbp.DIOemissionCoeff * vt) + mbp.DIOsaturationCurrentExp / mbp.DIOemissionCoeff * Math.Log(bp.DIOtemp / mbp.DIOnomTemp));
+
+            // the defintion of f1, just recompute after temperature adjusting all the variables used in it
+            DIOtF1 = DIOtJctPot * (1 - Math.Exp((1 - mbp.DIOgradingCoeff) * modeltemp.xfc)) / (1 - mbp.DIOgradingCoeff);
+
+            // same for Depletion Capacitance
+            DIOtDepCap = mbp.DIOdepletionCapCoeff * DIOtJctPot;
+            
+            // and Vcrit
+            vte = mbp.DIOemissionCoeff * vt;
             DIOtVcrit = vte * Math.Log(vte / (Circuit.CONSTroot2 * DIOtSatCur));
-            /* and now to copute the breakdown voltage, again, using
-			 * temperature adjusted basic parameters */
-            if (modeltemp.DIObreakdownVoltage.Given)
+
+            // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
+            if (mbp.DIObreakdownVoltage.Given)
             {
-                cbv = modeltemp.DIObreakdownCurrent;
-                if (cbv < DIOtSatCur * modeltemp.DIObreakdownVoltage / vt)
+                cbv = mbp.DIObreakdownCurrent;
+                if (cbv < DIOtSatCur * mbp.DIObreakdownVoltage / vt)
                 {
-                    cbv = DIOtSatCur * modeltemp.DIObreakdownVoltage / vt;
-                    CircuitWarning.Warning(this, $"{name}: breakdown current increased to {cbv.ToString("g")} to resolve incompatability with specified saturation current");
-                    xbv = modeltemp.DIObreakdownVoltage;
+                    cbv = DIOtSatCur * mbp.DIObreakdownVoltage / vt;
+                    CircuitWarning.Warning(this, $"{Name}: breakdown current increased to {cbv.ToString("g")} to resolve incompatability with specified saturation current");
+                    xbv = mbp.DIObreakdownVoltage;
                 }
                 else
                 {
                     tol = ckt.Simulation.CurrentConfig.RelTol * cbv;
-                    xbv = modeltemp.DIObreakdownVoltage - vt * Math.Log(1 + cbv / DIOtSatCur);
+                    xbv = mbp.DIObreakdownVoltage - vt * Math.Log(1 + cbv / DIOtSatCur);
                     iter = 0;
                     for (iter = 0; iter < 25; iter++)
                     {
-                        xbv = modeltemp.DIObreakdownVoltage - vt * Math.Log(cbv / DIOtSatCur + 1 - xbv / vt);
-                        xcbv = DIOtSatCur * (Math.Exp((modeltemp.DIObreakdownVoltage - xbv) / vt) - 1 + xbv / vt);
-                        if (Math.Abs(xcbv - cbv) <= tol) goto matched;
+                        xbv = mbp.DIObreakdownVoltage - vt * Math.Log(cbv / DIOtSatCur + 1 - xbv / vt);
+                        xcbv = DIOtSatCur * (Math.Exp((mbp.DIObreakdownVoltage - xbv) / vt) - 1 + xbv / vt);
+                        if (Math.Abs(xcbv - cbv) <= tol)
+                            break;
                     }
-                    CircuitWarning.Warning(this, $"{name}: unable to match forward and reverse diode regions: bv = {xbv.ToString("g")}, ibv = {xcbv.ToString("g")}");
+                    if (iter >= 25)
+                        CircuitWarning.Warning(this, $"{Name}: unable to match forward and reverse diode regions: bv = {xbv.ToString("g")}, ibv = {xcbv.ToString("g")}");
                 }
-                matched:
                 DIOtBrkdwnV = xbv;
             }
         }

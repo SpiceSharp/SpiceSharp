@@ -2,6 +2,7 @@
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
+using SpiceSharp.Components.DIO;
 
 namespace SpiceSharp.Behaviors.DIO
 {
@@ -11,39 +12,13 @@ namespace SpiceSharp.Behaviors.DIO
     public class ModelTemperatureBehavior : Behaviors.TemperatureBehavior
     {
         /// <summary>
-        /// Parameters
+        /// Necessary behaviors and parameters
         /// </summary>
-        [SpiceName("is"), SpiceInfo("Saturation current")]
-        public Parameter DIOsatCur { get; } = new Parameter(1e-14);
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
-        public double DIO_TNOM
-        {
-            get => DIOnomTemp - Circuit.CONSTCtoK;
-            set => DIOnomTemp.Set(value + Circuit.CONSTCtoK);
-        }
-        public Parameter DIOnomTemp { get; } = new Parameter();
-        [SpiceName("rs"), SpiceInfo("Ohmic resistance")]
-        public Parameter DIOresist { get; } = new Parameter();
-        [SpiceName("n"), SpiceInfo("Emission Coefficient")]
-        public Parameter DIOemissionCoeff { get; } = new Parameter(1);
-        [SpiceName("tt"), SpiceInfo("Transit Time")]
-        public Parameter DIOtransitTime { get; } = new Parameter();
-        [SpiceName("cjo"), SpiceName("cj0"), SpiceInfo("Junction capacitance")]
-        public Parameter DIOjunctionCap { get; } = new Parameter();
-        [SpiceName("vj"), SpiceInfo("Junction potential")]
-        public Parameter DIOjunctionPot { get; } = new Parameter(1);
-        [SpiceName("m"), SpiceInfo("Grading coefficient")]
-        public Parameter DIOgradingCoeff { get; } = new Parameter(.5);
-        [SpiceName("eg"), SpiceInfo("Activation energy")]
-        public Parameter DIOactivationEnergy { get; } = new Parameter(1.11);
-        [SpiceName("xti"), SpiceInfo("Saturation current temperature exp.")]
-        public Parameter DIOsaturationCurrentExp { get; } = new Parameter(3);
-        [SpiceName("fc"), SpiceInfo("Forward bias junction fit parameter")]
-        public Parameter DIOdepletionCapCoeff { get; } = new Parameter(.5);
-        [SpiceName("bv"), SpiceInfo("Reverse breakdown voltage")]
-        public Parameter DIObreakdownVoltage { get; } = new Parameter();
-        [SpiceName("ibv"), SpiceInfo("Current at reverse breakdown voltage")]
-        public Parameter DIObreakdownCurrent { get; } = new Parameter(1e-3);
+        ModelBaseParameters mbp;
+
+        /// <summary>
+        /// Conductance
+        /// </summary>
         [SpiceName("cond"), SpiceInfo("Ohmic conductance")]
         public double DIOconductance { get; internal set; }
 
@@ -56,20 +31,19 @@ namespace SpiceSharp.Behaviors.DIO
         public double DIOf3 { get; internal set; }
 
         /// <summary>
-        /// Private variables
+        /// Constructor
         /// </summary>
-        private Identifier name;
+        /// <param name="name">Name</param>
+        public ModelTemperatureBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="parameters">Parameters</param>
+        /// <param name="pool">Behaviors</param>
+        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
         {
-            // Get name
-            name = component.Name;
+            mbp = parameters.Get<ModelBaseParameters>();
         }
 
         /// <summary>
@@ -78,30 +52,41 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="ckt">Circuit</param>
         public override void Temperature(Circuit ckt)
         {
-            if (!DIOnomTemp.Given)
+            if (!mbp.DIOnomTemp.Given)
             {
-                DIOnomTemp.Value = ckt.State.NominalTemperature;
+                mbp.DIOnomTemp.Value = ckt.State.NominalTemperature;
             }
-            vtnom = Circuit.CONSTKoverQ * DIOnomTemp;
-            /* limit grading coeff to max of .9 */
-            if (DIOgradingCoeff > .9)
-                CircuitWarning.Warning(this, $"{name}: grading coefficient too large, limited to 0.9");
+            vtnom = Circuit.CONSTKoverQ * mbp.DIOnomTemp;
 
-            /* limit activation energy to min of .1 */
-            if (DIOactivationEnergy < .1)
-                CircuitWarning.Warning(this, $"{name}: activation energy too small, limited to 0.1");
+            // limit grading coeff to max of .9
+            if (mbp.DIOgradingCoeff > .9)
+            {
+                mbp.DIOgradingCoeff.Value = 0.9;
+                CircuitWarning.Warning(this, $"{Name}: grading coefficient too large, limited to 0.9");
+            }
 
-            /* limit depletion cap coeff to max of .95 */
-            if (DIOdepletionCapCoeff > .95)
-                CircuitWarning.Warning(this, $"{name}: coefficient Fc too large, limited to 0.95");
-            if (!DIOresist.Given || DIOresist.Value == 0)
+            // limit activation energy to min of .1
+            if (mbp.DIOactivationEnergy < .1)
+            {
+                mbp.DIOactivationEnergy.Value = 0.1;
+                CircuitWarning.Warning(this, $"{Name}: activation energy too small, limited to 0.1");
+            }
+
+            // limit depletion cap coeff to max of .95
+            if (mbp.DIOdepletionCapCoeff > .95)
+            {
+                mbp.DIOdepletionCapCoeff.Value = 0.95;
+                CircuitWarning.Warning(this, $"{Name}: coefficient Fc too large, limited to 0.95");
+            }
+
+            if (!mbp.DIOresist.Given || mbp.DIOresist.Value == 0)
                 DIOconductance = 0;
             else
-                DIOconductance = 1 / DIOresist;
-            xfc = Math.Log(1 - DIOdepletionCapCoeff);
+                DIOconductance = 1 / mbp.DIOresist;
+            xfc = Math.Log(1 - mbp.DIOdepletionCapCoeff);
 
-            DIOf2 = Math.Exp((1 + DIOgradingCoeff) * xfc);
-            DIOf3 = 1 - DIOdepletionCapCoeff * (1 + DIOgradingCoeff);
+            DIOf2 = Math.Exp((1 + mbp.DIOgradingCoeff) * xfc);
+            DIOf3 = 1 - mbp.DIOdepletionCapCoeff * (1 + mbp.DIOgradingCoeff);
         }
     }
 }

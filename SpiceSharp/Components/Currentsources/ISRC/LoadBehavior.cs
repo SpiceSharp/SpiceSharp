@@ -57,7 +57,7 @@ namespace SpiceSharp.Behaviors.ISRC
             switch (parameter)
             {
                 case "v": return () => ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode];
-                case "p": return () => (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode]) * -bp.ISRCdcValue;
+                case "p": return () => (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode]) * -Current;
                 case "c": return () => Current;
                 default:
                     return base.CreateGetter(ckt, parameter);

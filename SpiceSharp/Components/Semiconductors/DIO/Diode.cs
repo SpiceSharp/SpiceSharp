@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors.DIO;
+using SpiceSharp.Components.DIO;
 
 namespace SpiceSharp.Components
 {
@@ -17,8 +18,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Extra variables
         /// </summary>
-        public int DIOposNode { get; internal set; }
-        public int DIOnegNode { get; internal set; }
+        public int DIOposNode { get; private set; }
+        public int DIOnegNode { get; private set; }
 
         /// <summary>
         /// Constants
@@ -31,11 +32,14 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public Diode(Identifier name) : base(name, DIOpinCount)
         {
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new TemperatureBehavior());
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new NoiseBehavior());
-            RegisterBehavior(new TruncateBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
         }
 
         /// <summary>

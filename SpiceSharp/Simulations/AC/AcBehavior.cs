@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Sparse;
 using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {
@@ -13,6 +14,14 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="name">Name</param>
         public AcBehavior(Identifier name = null) : base(name) { }
+
+        /// <summary>
+        /// Initialize parameters for AC analysis
+        /// </summary>
+        public virtual void InitializeParameters(FrequencySimulation sim)
+        {
+            // Nothing to initialize by default
+        }
 
         /// <summary>
         /// Get matrix pointers

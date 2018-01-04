@@ -1,0 +1,516 @@
+diff --git a/SpiceSharp/Circuits/Entity.cs b/SpiceSharp/Circuits/Entity.cs
+index 095e611..28e1938 100644
+--- a/SpiceSharp/Circuits/Entity.cs
++++ b/SpiceSharp/Circuits/Entity.cs
+@@ -96,8 +96,7 @@ namespace SpiceSharp.Circuits
+             {
+                 // Setup the behavior
+                 Behavior behavior = factory();
+-                pool.SetCurrentEntity(Name);
+-                behavior.Setup(Parameters, pool);
++                behavior.Setup(Parameters, pool.Filter(Name));
+                 return (T)behavior;
+             }
+             else
+diff --git a/SpiceSharp/Components/Component.cs b/SpiceSharp/Components/Component.cs
+index 7751c9f..64ef827 100644
+--- a/SpiceSharp/Components/Component.cs
++++ b/SpiceSharp/Components/Component.cs
+@@ -84,8 +84,7 @@ namespace SpiceSharp.Components
+             // Extra functionality for behaviors that can have a model
+             if (Model != null && behavior is IModelBehavior mb)
+             {
+-                pool.SetCurrentEntity(Model.Name);
+-                mb.SetupModel(Model.Parameters, pool);
++                mb.SetupModel(Model.Parameters, pool.Filter(Model.Name));
+             }
+ 
+             return behavior;
+diff --git a/SpiceSharp/Components/Currentsources/ISRC/AcBehavior.cs b/SpiceSharp/Components/Currentsources/ISRC/AcBehavior.cs
+index 8e668a9..eea6d34 100644
+--- a/SpiceSharp/Components/Currentsources/ISRC/AcBehavior.cs
++++ b/SpiceSharp/Components/Currentsources/ISRC/AcBehavior.cs
+@@ -2,6 +2,7 @@
+ using System.Numerics;
+ using SpiceSharp.Circuits;
+ using SpiceSharp.Components.ISRC;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors.ISRC
+ {
+@@ -31,8 +32,8 @@ namespace SpiceSharp.Behaviors.ISRC
+         /// Setup the behavior
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Behaviors</param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Behaviors</param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             ap = parameters.Get<AcParameters>();
+ 
+diff --git a/SpiceSharp/Components/Currentsources/ISRC/AcceptBehavior.cs b/SpiceSharp/Components/Currentsources/ISRC/AcceptBehavior.cs
+index 4e5d42e..d80c155 100644
+--- a/SpiceSharp/Components/Currentsources/ISRC/AcceptBehavior.cs
++++ b/SpiceSharp/Components/Currentsources/ISRC/AcceptBehavior.cs
+@@ -1,6 +1,7 @@
+ ﻿using SpiceSharp.Circuits;
+ 
+ using SpiceSharp.Components.ISRC;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors.ISRC
+ {
+@@ -24,8 +25,8 @@ namespace SpiceSharp.Behaviors.ISRC
+         /// Constructor
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Pool</param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Source of behaviors</param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             bp = parameters.Get<BaseParameters>();
+         }
+diff --git a/SpiceSharp/Components/Currentsources/ISRC/LoadBehavior.cs b/SpiceSharp/Components/Currentsources/ISRC/LoadBehavior.cs
+index 3494828..c05f818 100644
+--- a/SpiceSharp/Components/Currentsources/ISRC/LoadBehavior.cs
++++ b/SpiceSharp/Components/Currentsources/ISRC/LoadBehavior.cs
+@@ -4,6 +4,7 @@ using SpiceSharp.Components;
+ using SpiceSharp.Attributes;
+ using System;
+ using SpiceSharp.Components.ISRC;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors.ISRC
+ {
+@@ -68,8 +69,8 @@ namespace SpiceSharp.Behaviors.ISRC
+         /// Setup the behavior
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Behaviors</param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Behaviors</param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             bp = parameters.Get<BaseParameters>();
+             if (!bp.ISRCdcValue.Given)
+diff --git a/SpiceSharp/Components/IModelBehavior.cs b/SpiceSharp/Components/IModelBehavior.cs
+index 84af24d..ea12daa 100644
+--- a/SpiceSharp/Components/IModelBehavior.cs
++++ b/SpiceSharp/Components/IModelBehavior.cs
+@@ -1,4 +1,6 @@
+-﻿namespace SpiceSharp.Behaviors
++﻿using SpiceSharp.Simulations.Behaviors;
++
++namespace SpiceSharp.Behaviors
+ {
+     /// <summary>
+     /// Interface for behaviors that use a model
+@@ -9,7 +11,7 @@
+         /// Setup the behavior for a specific model
+         /// </summary>
+         /// <param name="parameters">Parameters of the model</param>
+-        /// <param name="pool">Pool of behaviors</param>
+-        void SetupModel(ParametersCollection parameters, BehaviorPool pool);
++        /// <param name="source">Source of behaviors</param>
++        void SetupModel(ParametersCollection parameters, IBehaviorProvider source);
+     }
+ }
+diff --git a/SpiceSharp/Components/RLC/CAP/AcBehavior.cs b/SpiceSharp/Components/RLC/CAP/AcBehavior.cs
+index 0cc0b23..17d86dd 100644
+--- a/SpiceSharp/Components/RLC/CAP/AcBehavior.cs
++++ b/SpiceSharp/Components/RLC/CAP/AcBehavior.cs
+@@ -1,5 +1,6 @@
+ ﻿using SpiceSharp.Circuits;
+ using SpiceSharp.Components.CAP;
++using SpiceSharp.Simulations.Behaviors;
+ using SpiceSharp.Sparse;
+ 
+ namespace SpiceSharp.Behaviors.CAP
+@@ -33,8 +34,8 @@ namespace SpiceSharp.Behaviors.CAP
+         /// Setup the behavior
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Behaviors</param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Behaviors</param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             bp = parameters.Get<BaseParameters>();
+         }
+diff --git a/SpiceSharp/Components/RLC/CAP/TemperatureBehavior.cs b/SpiceSharp/Components/RLC/CAP/TemperatureBehavior.cs
+index ca79919..997628b 100644
+--- a/SpiceSharp/Components/RLC/CAP/TemperatureBehavior.cs
++++ b/SpiceSharp/Components/RLC/CAP/TemperatureBehavior.cs
+@@ -1,6 +1,7 @@
+ ﻿using SpiceSharp.Circuits;
+ using SpiceSharp.Diagnostics;
+ using SpiceSharp.Components.CAP;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors.CAP
+ {
+@@ -25,8 +26,8 @@ namespace SpiceSharp.Behaviors.CAP
+         /// Setup the behavior
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Pool</param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Source</param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             bp = parameters.Get<BaseParameters>();
+         }
+@@ -35,8 +36,8 @@ namespace SpiceSharp.Behaviors.CAP
+         /// Setup model parameters and behaviors
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Behaviors</param>
+-        public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Source</param>
++        public void SetupModel(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             mbp = parameters.Get<ModelBaseParameters>();
+         }
+diff --git a/SpiceSharp/Components/RLC/CAP/TransientBehavior.cs b/SpiceSharp/Components/RLC/CAP/TransientBehavior.cs
+index 820d928..2d51cc5 100644
+--- a/SpiceSharp/Components/RLC/CAP/TransientBehavior.cs
++++ b/SpiceSharp/Components/RLC/CAP/TransientBehavior.cs
+@@ -4,6 +4,7 @@ using SpiceSharp.Simulations;
+ using SpiceSharp.IntegrationMethods;
+ using SpiceSharp.Components.CAP;
+ using SpiceSharp.Circuits;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors.CAP
+ {
+@@ -45,8 +46,8 @@ namespace SpiceSharp.Behaviors.CAP
+         /// Setup behavior
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Pool of behaviors</param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Pool of behaviors</param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             // Get base parameters
+             bp = parameters.Get<BaseParameters>();
+diff --git a/SpiceSharp/Components/RLC/RES/AcBehavior.cs b/SpiceSharp/Components/RLC/RES/AcBehavior.cs
+index ed06ead..567046a 100644
+--- a/SpiceSharp/Components/RLC/RES/AcBehavior.cs
++++ b/SpiceSharp/Components/RLC/RES/AcBehavior.cs
+@@ -2,6 +2,7 @@
+ using SpiceSharp.Circuits;
+ using SpiceSharp.Sparse;
+ using SpiceSharp.Attributes;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors.RES
+ {
+@@ -61,10 +62,10 @@ namespace SpiceSharp.Behaviors.RES
+         /// Setup the behavior
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Pool of behaviors</param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Source of behaviors</param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+-            load = pool.GetBehavior<LoadBehavior>();
++            load = source.Get<LoadBehavior>();
+         }
+ 
+         /// <summary>
+diff --git a/SpiceSharp/Components/RLC/RES/LoadBehavior.cs b/SpiceSharp/Components/RLC/RES/LoadBehavior.cs
+index 9b656d5..442291c 100644
+--- a/SpiceSharp/Components/RLC/RES/LoadBehavior.cs
++++ b/SpiceSharp/Components/RLC/RES/LoadBehavior.cs
+@@ -2,6 +2,7 @@
+ using SpiceSharp.Attributes;
+ using SpiceSharp.Sparse;
+ using SpiceSharp.Components.RES;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors.RES
+ {
+@@ -53,14 +54,14 @@ namespace SpiceSharp.Behaviors.RES
+         /// <summary>
+         /// Setup the behavior
+         /// </summary>
+-        /// <param name="pool">The behavior pool</param>
+         /// <param name="parameters">Parameters</param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">The behavior source</param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             var p = parameters.Get<BaseParameters>();
+             if (!p.RESresist.Given)
+             {
+-                var temp = pool.GetBehavior<TemperatureBehavior>();
++                var temp = source.Get<TemperatureBehavior>();
+                 RESconduct = temp.RESconduct;
+             }
+             else
+diff --git a/SpiceSharp/Components/RLC/RES/NoiseBehavior.cs b/SpiceSharp/Components/RLC/RES/NoiseBehavior.cs
+index 877a379..35cf84e 100644
+--- a/SpiceSharp/Components/RLC/RES/NoiseBehavior.cs
++++ b/SpiceSharp/Components/RLC/RES/NoiseBehavior.cs
+@@ -1,6 +1,7 @@
+ ﻿using SpiceSharp.Circuits;
+ using SpiceSharp.Components;
+ using SpiceSharp.Components.Noise;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors.RES
+ {
+@@ -35,10 +36,10 @@ namespace SpiceSharp.Behaviors.RES
+         /// Setup behavior
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Behavior pool</param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Behavior pool</param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+-            load = pool.GetBehavior<LoadBehavior>();
++            load = source.Get<LoadBehavior>();
+         }
+ 
+         /// <summary>
+diff --git a/SpiceSharp/Components/RLC/RES/TemperatureBehavior.cs b/SpiceSharp/Components/RLC/RES/TemperatureBehavior.cs
+index add33ce..ec6951d 100644
+--- a/SpiceSharp/Components/RLC/RES/TemperatureBehavior.cs
++++ b/SpiceSharp/Components/RLC/RES/TemperatureBehavior.cs
+@@ -1,6 +1,7 @@
+ ﻿using SpiceSharp.Diagnostics;
+ using SpiceSharp.Circuits;
+ using SpiceSharp.Components.RES;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors.RES
+ {
+@@ -30,8 +31,8 @@ namespace SpiceSharp.Behaviors.RES
+         /// Setup the behavior
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Pool of all behaviors</param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Source of behaviors</param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             bp = parameters.Get<BaseParameters>();
+         }
+@@ -40,8 +41,8 @@ namespace SpiceSharp.Behaviors.RES
+         /// Setup the model of the behavior
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Pool of all behaviors</param>
+-        public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Source of behaviors</param>
++        public void SetupModel(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             mbp = parameters.Get<ModelBaseParameters>();
+         }
+diff --git a/SpiceSharp/Components/Voltagesources/VSRC/AcBehavior.cs b/SpiceSharp/Components/Voltagesources/VSRC/AcBehavior.cs
+index f00dca3..b2858b9 100644
+--- a/SpiceSharp/Components/Voltagesources/VSRC/AcBehavior.cs
++++ b/SpiceSharp/Components/Voltagesources/VSRC/AcBehavior.cs
+@@ -4,6 +4,7 @@ using SpiceSharp.Circuits;
+ using SpiceSharp.Sparse;
+ using SpiceSharp.Attributes;
+ using SpiceSharp.Components.VSRC;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors.VSRC
+ {
+@@ -49,13 +50,13 @@ namespace SpiceSharp.Behaviors.VSRC
+         /// Setup the behavior
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Pool of behaviors</param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Source of behaviors</param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             AcParameters ap = parameters.Get<AcParameters>();
+             double radians = ap.VSRCacPhase * Circuit.CONSTPI / 180.0;
+             VSRCac = new Complex(ap.VSRCacMag * Math.Cos(radians), ap.VSRCacMag * Math.Sin(radians));
+-            VSRCbranch = pool.GetBehavior<LoadBehavior>().VSRCbranch;
++            VSRCbranch = source.Get<LoadBehavior>().VSRCbranch;
+         }
+ 
+         /// <summary>
+diff --git a/SpiceSharp/Components/Voltagesources/VSRC/AcceptBehavior.cs b/SpiceSharp/Components/Voltagesources/VSRC/AcceptBehavior.cs
+index d8e8aac..1feb835 100644
+--- a/SpiceSharp/Components/Voltagesources/VSRC/AcceptBehavior.cs
++++ b/SpiceSharp/Components/Voltagesources/VSRC/AcceptBehavior.cs
+@@ -1,5 +1,6 @@
+ ﻿using SpiceSharp.Circuits;
+ using SpiceSharp.Components.VSRC;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors.VSRC
+ {
+@@ -23,8 +24,8 @@ namespace SpiceSharp.Behaviors.VSRC
+         /// Setup the behavior
+         /// </summary>
+         /// <param name="parameters"></param>
+-        /// <param name="pool"></param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source"></param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             bp = parameters.Get<BaseParameters>();
+         }
+diff --git a/SpiceSharp/Components/Voltagesources/VSRC/LoadBehavior.cs b/SpiceSharp/Components/Voltagesources/VSRC/LoadBehavior.cs
+index 49ab615..b387349 100644
+--- a/SpiceSharp/Components/Voltagesources/VSRC/LoadBehavior.cs
++++ b/SpiceSharp/Components/Voltagesources/VSRC/LoadBehavior.cs
+@@ -5,6 +5,7 @@ using SpiceSharp.Attributes;
+ using SpiceSharp.Sparse;
+ using System;
+ using SpiceSharp.Components.VSRC;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors.VSRC
+ {
+@@ -70,8 +71,8 @@ namespace SpiceSharp.Behaviors.VSRC
+         /// Setup the behavior
+         /// </summary>
+         /// <param name="parameters"></param>
+-        /// <param name="pool"></param>
+-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source"></param>
++        public override void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             bp = parameters.Get<BaseParameters>();
+ 
+diff --git a/SpiceSharp/Simulations/Behaviors/Behavior.cs b/SpiceSharp/Simulations/Behaviors/Behavior.cs
+index f355f4c..b5a0b7c 100644
+--- a/SpiceSharp/Simulations/Behaviors/Behavior.cs
++++ b/SpiceSharp/Simulations/Behaviors/Behavior.cs
+@@ -2,6 +2,7 @@
+ using System.Collections.Generic;
+ using SpiceSharp.Circuits;
+ using SpiceSharp.Diagnostics;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors
+ {
+@@ -59,8 +60,8 @@ namespace SpiceSharp.Behaviors
+         /// Setup the behavior
+         /// </summary>
+         /// <param name="parameters">Parameters</param>
+-        /// <param name="pool">Pool of behaviors</param>
+-        public virtual void Setup(ParametersCollection parameters, BehaviorPool pool)
++        /// <param name="source">Source of behaviors</param>
++        public virtual void Setup(ParametersCollection parameters, IBehaviorProvider source)
+         {
+             // Do nothing
+         }
+diff --git a/SpiceSharp/Simulations/Behaviors/BehaviorPool.cs b/SpiceSharp/Simulations/Behaviors/BehaviorPool.cs
+index b808b09..6ae7b2c 100644
+--- a/SpiceSharp/Simulations/Behaviors/BehaviorPool.cs
++++ b/SpiceSharp/Simulations/Behaviors/BehaviorPool.cs
+@@ -1,6 +1,7 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using SpiceSharp.Circuits;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors
+ {
+@@ -16,23 +17,18 @@ namespace SpiceSharp.Behaviors
+         Dictionary<Identifier, EntityBehaviors> entitybehaviors = new Dictionary<Identifier, EntityBehaviors>();
+ 
+         /// <summary>
+-        /// Lists of behaviors
++        /// Dictionary of all behaviors where key is base type of behavior
+         /// </summary>
+         Dictionary<Type, List<Behavior>> behaviors = new Dictionary<Type, List<Behavior>>();
+ 
+-        /// <summary>
+-        /// The source entity of the last registered behavior
+-        /// </summary>
+-        EntityBehaviors active;
+-
+-        /// <summary>
+-        /// Set the current entity of which behaviors can be requested
+-        /// </summary>
+-        /// <param name="id">Name of the active entity</param>
+-        public void SetCurrentEntity(Identifier id)
++        public IBehaviorProvider Filter(Identifier id)
+         {
+-            if (!entitybehaviors.TryGetValue(id, out active))
+-                active = null;
++            EntityBehaviors eb;
++            if (!entitybehaviors.TryGetValue(id, out eb))
++            {
++                eb = null;
++            }
++            return eb;
+         }
+ 
+         /// <summary>
+@@ -75,13 +71,6 @@ namespace SpiceSharp.Behaviors
+         }
+ 
+         /// <summary>
+-        /// Get a behavior of the entity that last registered a behavior
+-        /// </summary>
+-        /// <typeparam name="T">Behavior type</typeparam>
+-        /// <returns></returns>
+-        public T GetBehavior<T>() where T : Behavior => active?.Get<T>();
+-
+-        /// <summary>
+         /// Get a list of behaviors
+         /// </summary>
+         /// <typeparam name="T">Behavior base type</typeparam>
+diff --git a/SpiceSharp/Simulations/Behaviors/EntityBehaviors.cs b/SpiceSharp/Simulations/Behaviors/EntityBehaviors.cs
+index 06e7e48..e6c4520 100644
+--- a/SpiceSharp/Simulations/Behaviors/EntityBehaviors.cs
++++ b/SpiceSharp/Simulations/Behaviors/EntityBehaviors.cs
+@@ -1,13 +1,14 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using SpiceSharp.Circuits;
++using SpiceSharp.Simulations.Behaviors;
+ 
+ namespace SpiceSharp.Behaviors
+ {
+     /// <summary>
+     /// Component behaviors
+     /// </summary>
+-    public class EntityBehaviors
++    public class EntityBehaviors : IBehaviorProvider
+     {
+         /// <summary>
+         /// Source entity
+diff --git a/SpiceSharp/Simulations/Behaviors/IBehaviorProvider.cs b/SpiceSharp/Simulations/Behaviors/IBehaviorProvider.cs
+new file mode 100644
+index 0000000..6940e9d
+--- /dev/null
++++ b/SpiceSharp/Simulations/Behaviors/IBehaviorProvider.cs
+@@ -0,0 +1,9 @@
++﻿using SpiceSharp.Behaviors;
++
++namespace SpiceSharp.Simulations.Behaviors
++{
++    public interface IBehaviorProvider
++    {
++        T Get<T>() where T : Behavior;
++    }
++}
+diff --git a/SpiceSharp/SpiceSharp.csproj b/SpiceSharp/SpiceSharp.csproj
+index 735a775..75ee13e 100644
+--- a/SpiceSharp/SpiceSharp.csproj
++++ b/SpiceSharp/SpiceSharp.csproj
+@@ -50,6 +50,7 @@
+     <Compile Include="Components\Currentsources\ISRC\BaseParameters.cs" />
+     <Compile Include="Components\RLC\CAP\BaseParameters.cs" />
+     <Compile Include="Components\RLC\CAP\ModelBaseParameters.cs" />
++    <Compile Include="Simulations\Behaviors\IBehaviorProvider.cs" />
+     <Compile Include="Simulations\IntegrationMethods\ComponentState.cs" />
+     <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsource.cs" />
+     <Compile Include="Components\Currentsources\CCCS\AcBehavior.cs" />

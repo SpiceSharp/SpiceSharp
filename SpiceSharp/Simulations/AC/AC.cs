@@ -99,6 +99,8 @@ namespace SpiceSharp.Simulations
             state.UseSmallSignal = true;
             foreach (var behavior in loadbehaviors)
                 behavior.Load(ckt);
+            foreach (var behavior in acbehaviors)
+                behavior.InitializeParameters(this);
 
             // Export operating point if requested
             if (config.KeepOpInfo)

@@ -14,6 +14,14 @@ namespace SpiceSharp.Behaviors
         public NoiseBehavior(Identifier name = null) : base(name) { }
 
         /// <summary>
+        /// Connect noise sources
+        /// </summary>
+        public virtual void ConnectNoise()
+        {
+            // No noise to connect by default
+        }
+
+        /// <summary>
         /// Noise calculations
         /// </summary>
         /// <param name="ckt">Circuit</param>

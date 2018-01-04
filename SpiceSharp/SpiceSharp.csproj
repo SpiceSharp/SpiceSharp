@@ -50,6 +50,10 @@
     <Compile Include="Components\Currentsources\ISRC\BaseParameters.cs" />
     <Compile Include="Components\RLC\CAP\BaseParameters.cs" />
     <Compile Include="Components\RLC\CAP\ModelBaseParameters.cs" />
+    <Compile Include="Components\Semiconductors\DIO\BaseParameters.cs" />
+    <Compile Include="Components\Semiconductors\DIO\ModelBaseParameters.cs" />
+    <Compile Include="Components\Semiconductors\DIO\ModelNoiseParameters.cs" />
+    <Compile Include="Components\Semiconductors\DIO\TransientBehavior.cs" />
     <Compile Include="Simulations\IntegrationMethods\ComponentState.cs" />
     <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsource.cs" />
     <Compile Include="Components\Currentsources\CCCS\AcBehavior.cs" />
@@ -89,7 +93,6 @@
     <Compile Include="Components\Semiconductors\DIO\ModelNoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\ModelTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\TemperatureBehavior.cs" />
-    <Compile Include="Components\Semiconductors\DIO\TruncateBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1\MOS1.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1\AcBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS1\LoadBehavior.cs" />
