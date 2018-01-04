@@ -48,16 +48,21 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Pool of behaviors</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            AcParameters ap = parameters.Get<AcParameters>();
+            // Get parameters
+            var ap = provider.GetParameters<AcParameters>();
+
+            // Calculate AC vector
             double radians = ap.VSRCacPhase * Circuit.CONSTPI / 180.0;
             VSRCac = new Complex(ap.VSRCacMag * Math.Cos(radians), ap.VSRCacMag * Math.Sin(radians));
-            VSRCbranch = pool.GetBehavior<LoadBehavior>().VSRCbranch;
-        }
 
+            // Get behaviors
+            var load = provider.GetBehavior<LoadBehavior>();
+            VSRCbranch = load.VSRCbranch;
+        }
+        
         /// <summary>
         /// Connect the behavior
         /// </summary>

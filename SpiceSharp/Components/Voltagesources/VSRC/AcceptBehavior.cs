@@ -22,11 +22,11 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="pool"></param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            bp = parameters.Get<BaseParameters>();
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
         }
 
         /// <summary>

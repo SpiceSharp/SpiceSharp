@@ -1,7 +1,6 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
-using SpiceSharp.Attributes;
 using SpiceSharp.Components.Noise;
 using SpiceSharp.Components.DIO;
 
@@ -10,7 +9,7 @@ namespace SpiceSharp.Behaviors.DIO
     /// <summary>
     /// Noise behavior for <see cref="Diode"/>
     /// </summary>
-    public class NoiseBehavior : Behaviors.NoiseBehavior, IConnectedBehavior, IModelBehavior
+    public class NoiseBehavior : Behaviors.NoiseBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
@@ -28,9 +27,9 @@ namespace SpiceSharp.Behaviors.DIO
         /// <summary>
         /// Noise sources by their index
         /// </summary>
-        private const int DIORSNOIZ = 0;
-        private const int DIOIDNOIZ = 1;
-        private const int DIOFLNOIZ = 2;
+        const int DIORSNOIZ = 0;
+        const int DIOIDNOIZ = 1;
+        const int DIOFLNOIZ = 2;
 
         /// <summary>
         /// Noise generators
@@ -46,39 +45,22 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="name">Name</param>
         public NoiseBehavior(Identifier name) : base(name) { }
 
-        /// <summary>
-        /// Setup the behavior
-        /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Behaviors</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            bp = parameters.Get<BaseParameters>();
+            bp = provider.GetParameters<BaseParameters>();
+            mnp = provider.GetParameters<ModelNoiseParameters>(1);
 
             // Get behaviors
-            load = pool.GetBehavior<LoadBehavior>();
+            load = provider.GetBehavior<LoadBehavior>();
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
         }
-
+        
         /// <summary>
         /// Connect the noise source
         /// </summary>
         public override void ConnectNoise() => DIOnoise.Setup(DIOposNode, DIOposPrimeNode, DIOnegNode);
-
-        /// <summary>
-        /// Setup the model
-        /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Pool</param>
-        public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
-        {
-            // Get parameters
-            mnp = parameters.Get<ModelNoiseParameters>();
-
-            // Get behaviors
-            modeltemp = pool.GetBehavior<ModelTemperatureBehavior>();
-        }
-
+        
         /// <summary>
         /// Connect the behavior
         /// </summary>

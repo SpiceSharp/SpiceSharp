@@ -32,13 +32,13 @@ namespace SpiceSharp.Behaviors.CAP
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Behaviors</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            bp = parameters.Get<BaseParameters>();
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
         }
-
+        
         /// <summary>
         /// Connect behavior
         /// </summary>

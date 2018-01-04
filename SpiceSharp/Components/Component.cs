@@ -80,15 +80,25 @@ namespace SpiceSharp.Components
             {
                 cb.Connect(indices);
             }
+            return behavior;
+        }
 
-            // Extra functionality for behaviors that can have a model
-            if (Model != null && behavior is IModelBehavior mb)
+        /// <summary>
+        /// Build the data provider for setting up behaviors
+        /// </summary>
+        /// <param name="pool">All behaviors</param>
+        /// <returns></returns>
+        protected override SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
+        {
+            var provider = base.BuildSetupDataProvider(pool);
+
+            // Add our model parameters and behaviors
+            if (Model != null)
             {
-                pool.SetCurrentEntity(Model.Name);
-                mb.SetupModel(Model.Parameters, pool);
+                provider.Add(Model.Parameters, pool.GetEntityBehaviors(Model.Name));
             }
 
-            return behavior;
+            return provider;
         }
 
         /// <summary>

@@ -54,6 +54,7 @@
     <Compile Include="Components\Semiconductors\DIO\ModelBaseParameters.cs" />
     <Compile Include="Components\Semiconductors\DIO\ModelNoiseParameters.cs" />
     <Compile Include="Components\Semiconductors\DIO\TransientBehavior.cs" />
+    <Compile Include="Simulations\Behaviors\SetupDataProvider.cs" />
     <Compile Include="Simulations\IntegrationMethods\ComponentState.cs" />
     <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsource.cs" />
     <Compile Include="Components\Currentsources\CCCS\AcBehavior.cs" />
@@ -63,7 +64,6 @@
     <Compile Include="Components\Currentsources\VCCS\AcBehavior.cs" />
     <Compile Include="Components\Currentsources\VCCS\LoadBehavior.cs" />
     <Compile Include="Components\IConnectedBehavior.cs" />
-    <Compile Include="Components\IModelBehavior.cs" />
     <Compile Include="Components\RLC\RES\BaseParameters.cs" />
     <Compile Include="Components\RLC\RES\ModelBaseParameters.cs" />
     <Compile Include="Components\Voltagesources\VSRC\AcParameters.cs" />

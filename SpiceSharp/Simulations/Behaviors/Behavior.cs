@@ -58,9 +58,8 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Pool of behaviors</param>
-        public virtual void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider">The data provider</param>
+        public virtual void Setup(SetupDataProvider provider)
         {
             // Do nothing
         }

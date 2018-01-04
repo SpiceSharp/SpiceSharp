@@ -21,13 +21,13 @@ namespace SpiceSharp.Behaviors.ISRC
         public AcceptBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Constructor
+        /// Setup the behavior
         /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Pool</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            bp = parameters.Get<BaseParameters>();
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
         }
         
         /// <summary>

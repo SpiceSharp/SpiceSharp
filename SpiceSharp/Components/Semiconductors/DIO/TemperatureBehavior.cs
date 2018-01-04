@@ -10,7 +10,7 @@ namespace SpiceSharp.Behaviors.DIO
     /// <summary>
     /// Temperature behavior for a <see cref="Diode"/>
     /// </summary>
-    public class TemperatureBehavior : Behaviors.TemperatureBehavior, IModelBehavior
+    public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {
         /// <summary>
         /// Necessary parameters and behaviors
@@ -39,28 +39,17 @@ namespace SpiceSharp.Behaviors.DIO
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Behaviors</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            bp = parameters.Get<BaseParameters>();
-        }
-
-        /// <summary>
-        /// Setup the model
-        /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Behaviors</param>
-        public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
-        {
-            // Get behaviors
-            mbp = parameters.Get<ModelBaseParameters>();
+            bp = provider.GetParameters<BaseParameters>();
+            mbp = provider.GetParameters<ModelBaseParameters>(1);
 
             // Get behaviors
-            modeltemp = pool.GetBehavior<ModelTemperatureBehavior>();
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
         }
-
+        
         /// <summary>
         /// Setup the behavior
         /// </summary>

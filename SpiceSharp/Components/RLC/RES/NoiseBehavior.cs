@@ -32,35 +32,30 @@ namespace SpiceSharp.Behaviors.RES
         public NoiseBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Setup behavior
+        /// Setup the behavior
         /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Behavior pool</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            load = pool.GetBehavior<LoadBehavior>();
-        }
-
-        /// <summary>
-        /// Setup noise behavior
-        /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Entity component, Circuit ckt)
-        {
-            var res = component as Resistor;
-
             // Get behaviors
-            load = GetBehavior<LoadBehavior>(component);
+            load = provider.GetBehavior<LoadBehavior>();
+        }
+        
+        /// <summary>
+        /// Connect the noise
+        /// </summary>
+        public void Connect(params int[] pins)
+        {
+            RESposNode = pins[0];
+            RESnegNode = pins[1];
         }
 
         /// <summary>
         /// Connect the noise
         /// </summary>
-        /// <param name="nodes"></param>
-        public void Connect(params int[] pins)
+        public override void ConnectNoise()
         {
-            RESnoise?.Setup(pins[0], pins[1]);
+            RESnoise.Setup(RESposNode, RESnegNode);
         }
 
         /// <summary>

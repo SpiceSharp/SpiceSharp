@@ -7,7 +7,7 @@ namespace SpiceSharp.Behaviors.CAP
     /// <summary>
     /// Temperature behavior for a <see cref="Components.Capacitor"/>
     /// </summary>
-    public class TemperatureBehavior : Behaviors.TemperatureBehavior, IModelBehavior
+    public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {
         /// <summary>
         /// Necessary parameters and behaviors
@@ -24,23 +24,15 @@ namespace SpiceSharp.Behaviors.CAP
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Pool</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            bp = parameters.Get<BaseParameters>();
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+            if (!bp.CAPcapac.Given)
+                mbp = provider.GetParameters<ModelBaseParameters>(1);
         }
-
-        /// <summary>
-        /// Setup model parameters and behaviors
-        /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Behaviors</param>
-        public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
-        {
-            mbp = parameters.Get<ModelBaseParameters>();
-        }
-
+        
         /// <summary>
         /// Execute the behavior
         /// </summary>

@@ -45,8 +45,29 @@ namespace SpiceSharp.Behaviors.VSRC
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public LoadBehavior(Identifier name) : base(name)
+        public LoadBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+
+            // Setup the waveform
+            bp.VSRCwaveform?.Setup();
+
+            // Calculate the voltage source's complex value
+            if (!bp.VSRCdcValue.Given)
+            {
+                // No DC value: either have a transient value or none
+                if (bp.VSRCwaveform != null)
+                    CircuitWarning.Warning(this, $"{Name}: No DC value, transient time 0 value used");
+                else
+                    CircuitWarning.Warning(this, $"{Name}: No value, DC 0 assumed");
+            }
         }
 
         /// <summary>
@@ -65,29 +86,7 @@ namespace SpiceSharp.Behaviors.VSRC
                     return base.CreateGetter(ckt, parameter);
             }
         }
-
-        /// <summary>
-        /// Setup the behavior
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="pool"></param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
-        {
-            bp = parameters.Get<BaseParameters>();
-
-            bp.VSRCwaveform?.Setup();
-
-            // Calculate the voltage source's complex value
-            if (!bp.VSRCdcValue.Given)
-            {
-                // No DC value: either have a transient value or none
-                if (bp.VSRCwaveform != null)
-                    CircuitWarning.Warning(this, $"{Name}: No DC value, transient time 0 value used");
-                else
-                    CircuitWarning.Warning(this, $"{Name}: No value, DC 0 assumed");
-            }
-        }
-
+        
         /// <summary>
         /// Connect the load behavior
         /// </summary>

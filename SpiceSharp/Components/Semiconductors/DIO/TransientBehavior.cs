@@ -11,7 +11,7 @@ namespace SpiceSharp.Behaviors.DIO
     /// <summary>
     /// Transient behavior for a <see cref="Components.Diode"/>
     /// </summary>
-    public class TransientBehavior : Behaviors.TransientBehavior, IConnectedBehavior, IModelBehavior
+    public class TransientBehavior : Behaviors.TransientBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
@@ -56,32 +56,19 @@ namespace SpiceSharp.Behaviors.DIO
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Behaviors</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            bp = parameters.Get<BaseParameters>();
+            bp = provider.GetParameters<BaseParameters>();
+            mbp = provider.GetParameters<ModelBaseParameters>(1);
 
             // Get behaviors
-            load = pool.GetBehavior<LoadBehavior>();
-            temp = pool.GetBehavior<TemperatureBehavior>();
+            load = provider.GetBehavior<LoadBehavior>();
+            temp = provider.GetBehavior<TemperatureBehavior>();
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
         }
-
-        /// <summary>
-        /// Setup model
-        /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Behaviors</param>
-        public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
-        {
-            // Get model parameters
-            mbp = parameters.Get<ModelBaseParameters>();
-
-            // Get behaviors
-            modeltemp = pool.GetBehavior<ModelTemperatureBehavior>();
-        }
-
+        
         /// <summary>
         /// Unsetup the device
         /// </summary>

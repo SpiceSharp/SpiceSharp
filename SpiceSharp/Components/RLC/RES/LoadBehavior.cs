@@ -53,14 +53,16 @@ namespace SpiceSharp.Behaviors.RES
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="pool">The behavior pool</param>
-        /// <param name="parameters">Parameters</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var p = parameters.Get<BaseParameters>();
+            // Get parameters
+            var p = provider.GetParameters<BaseParameters>();
+
+            // Depending on whether or not the resistance is given, get behaviors
             if (!p.RESresist.Given)
             {
-                var temp = pool.GetBehavior<TemperatureBehavior>();
+                var temp = provider.GetBehavior<TemperatureBehavior>();
                 RESconduct = temp.RESconduct;
             }
             else
@@ -71,7 +73,7 @@ namespace SpiceSharp.Behaviors.RES
                     RESconduct = 1.0 / p.RESresist.Value;
             }
         }
-
+        
         /// <summary>
         /// Connect the behavior to nodes
         /// </summary>

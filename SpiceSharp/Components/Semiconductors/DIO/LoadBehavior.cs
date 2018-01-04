@@ -11,7 +11,7 @@ namespace SpiceSharp.Behaviors.DIO
     /// <summary>
     /// General behavior for <see cref="Diode"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior, IModelBehavior
+    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
@@ -20,7 +20,6 @@ namespace SpiceSharp.Behaviors.DIO
         TemperatureBehavior temp;
         BaseParameters bp;
         ModelBaseParameters mbp;
-
 
         /// <summary>
         /// Nodes
@@ -50,6 +49,21 @@ namespace SpiceSharp.Behaviors.DIO
         public LoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
+        /// Setup the behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
+        {
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+            mbp = provider.GetParameters<ModelBaseParameters>(1);
+
+            // Get behaviors
+            temp = provider.GetBehavior<TemperatureBehavior>();
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
+        }
+
+        /// <summary>
         /// Create a getter
         /// </summary>
         /// <param name="ckt">Circuit</param>
@@ -70,21 +84,7 @@ namespace SpiceSharp.Behaviors.DIO
                     return base.CreateGetter(ckt, parameter);
             }
         }
-
-        /// <summary>
-        /// Setup the behavior
-        /// </summary>
-        /// <param name="parameters"></param>
-        /// <param name="pool"></param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
-        {
-            // Get parameters
-            bp = parameters.Get<BaseParameters>();
-
-            // Get behaviors
-            temp = pool.GetBehavior<TemperatureBehavior>();
-        }
-
+        
         /// <summary>
         /// Connect the behavior
         /// </summary>
@@ -94,21 +94,7 @@ namespace SpiceSharp.Behaviors.DIO
             DIOposNode = pins[0];
             DIOnegNode = pins[1];
         }
-
-        /// <summary>
-        /// Get model behaviors and parameters
-        /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Behaviors</param>
-        public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
-        {
-            // Get parameters
-            mbp = parameters.Get<ModelBaseParameters>();
-
-            // Get behaviors
-            modeltemp = pool.GetBehavior<ModelTemperatureBehavior>();
-        }
-
+        
         /// <summary>
         /// Get matrix pointers
         /// </summary>

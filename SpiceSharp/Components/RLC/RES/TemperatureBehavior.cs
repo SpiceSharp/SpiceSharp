@@ -7,7 +7,7 @@ namespace SpiceSharp.Behaviors.RES
     /// <summary>
     /// Temperature behavior for a <see cref="Components.Resistor"/>
     /// </summary>
-    public class TemperatureBehavior : Behaviors.TemperatureBehavior, IModelBehavior
+    public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {
         /// <summary>
         /// Necessary parameters
@@ -29,23 +29,15 @@ namespace SpiceSharp.Behaviors.RES
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Pool of all behaviors</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider"></param>
+        public override void Setup(SetupDataProvider provider)
         {
-            bp = parameters.Get<BaseParameters>();
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+            if (!bp.RESresist.Given)
+                mbp = provider.GetParameters<ModelBaseParameters>(1);
         }
-
-        /// <summary>
-        /// Setup the model of the behavior
-        /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Pool of all behaviors</param>
-        public void SetupModel(ParametersCollection parameters, BehaviorPool pool)
-        {
-            mbp = parameters.Get<ModelBaseParameters>();
-        }
-
+        
         /// <summary>
         /// Execute behavior
         /// </summary>

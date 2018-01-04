@@ -64,14 +64,12 @@ namespace SpiceSharp.Behaviors.ISRC
             }
         }
 
-        /// <summary>
-        /// Setup the behavior
-        /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Behaviors</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        public override void Setup(SetupDataProvider provider)
         {
-            bp = parameters.Get<BaseParameters>();
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+
+            // Give some warnings if no value is given
             if (!bp.ISRCdcValue.Given)
             {
                 // no DC value - either have a transient value or none
@@ -81,7 +79,7 @@ namespace SpiceSharp.Behaviors.ISRC
                     CircuitWarning.Warning(this, $"{Name} has no value, DC 0 assumed");
             }
         }
-
+        
         /// <summary>
         /// Connect the behavior
         /// </summary>

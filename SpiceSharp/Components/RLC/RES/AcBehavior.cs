@@ -60,13 +60,13 @@ namespace SpiceSharp.Behaviors.RES
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Pool of behaviors</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            load = pool.GetBehavior<LoadBehavior>();
+            // Get behaviors
+            load = provider.GetBehavior<LoadBehavior>();
         }
-
+        
         /// <summary>
         /// Get matrix pointers
         /// </summary>

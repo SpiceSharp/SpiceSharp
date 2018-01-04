@@ -39,13 +39,13 @@ namespace SpiceSharp.Behaviors.DIO
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Behaviors</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            mbp = parameters.Get<ModelBaseParameters>();
+            // Get parameters
+            mbp = provider.GetParameters<ModelBaseParameters>();
         }
-
+        
         /// <summary>
         /// Execute behavior
         /// </summary>

@@ -94,16 +94,29 @@ namespace SpiceSharp.Circuits
         {
             if (factories.TryGetValue(typeof(T), out Func<Behavior> factory))
             {
-                // Setup the behavior
+                // Create the behavior
                 Behavior behavior = factory();
-                pool.SetCurrentEntity(Name);
-                behavior.Setup(Parameters, pool);
+
+                // Setup the behavior
+                SetupDataProvider provider = BuildSetupDataProvider(pool);
+                behavior.Setup(provider);
                 return (T)behavior;
             }
-            else
-            {
-                return null;
-            }
+            return null;
+        }
+        
+        /// <summary>
+        /// Build the data provider for setting up a behavior for the entity
+        /// The entity can control which parameters and behaviors are visible to behaviors in this way
+        /// </summary>
+        /// <param name="pool">All behaviors</param>
+        /// <returns></returns>
+        protected virtual SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
+        {
+            // By default, we include the parameters of this entity
+            SetupDataProvider result = new SetupDataProvider();
+            result.Add(Parameters, pool.GetEntityBehaviors(Name));
+            return result;
         }
 
         /// <summary>

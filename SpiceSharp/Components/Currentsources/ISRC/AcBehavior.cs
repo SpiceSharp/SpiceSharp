@@ -27,20 +27,16 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <param name="name">Name</param>
         public AcBehavior(Identifier name) : base(name) { }
 
-        /// <summary>
-        /// Setup the behavior
-        /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <param name="pool">Behaviors</param>
-        public override void Setup(ParametersCollection parameters, BehaviorPool pool)
+        public override void Setup(SetupDataProvider provider)
         {
-            ap = parameters.Get<AcParameters>();
+            // Get parameters
+            ap = provider.GetParameters<AcParameters>();
 
             // Calculate the AC vector
             double radians = ap.ISRCacPhase * Circuit.CONSTPI / 180.0;
             ISRCac = new Complex(ap.ISRCacMag * Math.Cos(radians), ap.ISRCacMag * Math.Sin(radians));
         }
-
+        
         /// <summary>
         /// Connect the behavior
         /// </summary>
