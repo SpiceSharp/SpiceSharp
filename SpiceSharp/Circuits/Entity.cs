@@ -115,7 +115,8 @@ namespace SpiceSharp.Circuits
         {
             // By default, we include the parameters of this entity
             SetupDataProvider result = new SetupDataProvider();
-            result.Add(Parameters, pool.GetEntityBehaviors(Name));
+            result.Add(Parameters);
+            result.Add(pool.GetEntityBehaviors(Name));
             return result;
         }
 

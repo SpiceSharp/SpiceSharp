@@ -14,21 +14,26 @@ namespace SpiceSharp.Behaviors
         List<EntityBehaviors> behaviors = new List<EntityBehaviors>();
 
         /// <summary>
-        /// Available data count
+        /// Available number of parameter collections
         /// </summary>
-        public int Count { get; protected set; }
+        public int ParametersCount { get => parameters.Count; }
 
         /// <summary>
-        /// Add a collection of parameters and behaviors to the data provider
+        /// Available number of entity behaviors
         /// </summary>
-        /// <param name="pc">Parameters collection</param>
+        public int BehaviorsCount { get => behaviors.Count; }
+
+        /// <summary>
+        /// Add a collection of parameters
+        /// </summary>
+        /// <param name="pc">Parameter collection</param>
+        public void Add(ParametersCollection pc) => parameters.Add(pc);
+
+        /// <summary>
+        /// Add entity behaviors
+        /// </summary>
         /// <param name="eb">Entity behaviors</param>
-        public void Add(ParametersCollection pc, EntityBehaviors eb)
-        {
-            parameters.Add(pc);
-            behaviors.Add(eb);
-            Count++;
-        }
+        public void Add(EntityBehaviors eb) => behaviors.Add(eb);
         
         /// <summary>
         /// Get parameters of a specific type
