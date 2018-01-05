@@ -1,27 +1,25 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components;
+using SpiceSharp.Components.CSW;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
+using System;
 
 namespace SpiceSharp.Behaviors.CSW
 {
     /// <summary>
-    /// General behavior for a <see cref="CurrentSwitch"/>
+    /// General behavior for a <see cref="Components.CurrentSwitch"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private ModelLoadBehavior modelload;
+        BaseParameters bp;
+        ModelLoadBehavior modelload;
+        VSRC.LoadBehavior vsrcload;
+        ModelBaseParameters mbp;
 
-        /// <summary>
-        /// Parameters
-        /// </summary>
-        [SpiceName("on"), SpiceInfo("Initially closed")]
-        public void SetOn() { CSWzero_state = true; }
-        [SpiceName("off"), SpiceInfo("Initially open")]
-        public void SetOff() { CSWzero_state = false; }
+
         [SpiceName("i"), SpiceInfo("Switch current")]
         public double GetCurrent(Circuit ckt) => (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) * CSWcond;
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
@@ -43,41 +41,83 @@ namespace SpiceSharp.Behaviors.CSW
         protected MatrixElement CSWnegNegptr { get; private set; }
 
         /// <summary>
-        /// Extra variables
+        /// Gets or sets the old state of the switch
         /// </summary>
-        public bool CSWzero_state { get; protected set; } = false;
-        public int CSWstate { get; protected set; }
+        public bool CSWoldState { get; set; }
+
+        /// <summary>
+        /// Flag for using the old state or not
+        /// </summary>
+        public bool CSWuseOldState { get; set; } = false;
+
+        /// <summary>
+        /// Gets the current state of the switch
+        /// </summary>
+        public bool CSWcurrentState { get; protected set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name"></param>
+        public LoadBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Create an export method
+        /// </summary>
+        /// <param name="state">State</param>
+        /// <param name="parameter">Parameter</param>
+        /// <returns></returns>
+        public override Func<double> CreateExport(State state, string parameter)
+        {
+            switch (parameter)
+            {
+                case "v": return () => state.Solution[CSWposNode] - state.Solution[CSWnegNode];
+                case "i": return () => (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
+                case "p": return () => (state.Solution[CSWposNode] - state.Solution[CSWnegNode])
+                    * (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
+                default: return null;
+            }
+        }
 
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var csw = component as CurrentSwitch;
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+            mbp = provider.GetParameters<ModelBaseParameters>(1);
 
             // Get behaviors
-            modelload = GetBehavior<ModelLoadBehavior>(csw.Model);
-            var vsrcload = GetBehavior<VSRC.LoadBehavior>(csw.CSWcontSource);
+            modelload = provider.GetBehavior<ModelLoadBehavior>(1);
+            vsrcload = provider.GetBehavior<VSRC.LoadBehavior>(2);
+        }
 
-            // Nodes
-            CSWposNode = csw.CSWposNode;
-            CSWnegNode = csw.CSWnegNode;
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            CSWposNode = pins[0];
+            CSWnegNode = pins[1];
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="nodes">Nodes</param>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        {
             CSWcontBranch = vsrcload.VSRCbranch;
-
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
             CSWposPosptr = matrix.GetElement(CSWposNode, CSWposNode);
             CSWposNegptr = matrix.GetElement(CSWposNode, CSWnegNode);
             CSWnegPosptr = matrix.GetElement(CSWnegNode, CSWposNode);
             CSWnegNegptr = matrix.GetElement(CSWnegNode, CSWnegNode);
-
-            // Get states
-            CSWstate = ckt.State.GetState();
         }
-
+        
         /// <summary>
         /// Unsetup the behavior
         /// </summary>
@@ -97,77 +137,53 @@ namespace SpiceSharp.Behaviors.CSW
         {
             double g_now;
             double i_ctrl;
-            double previous_state;
-            double current_state = 0.0;
+            bool previous_state;
+            bool current_state = false;
             var state = ckt.State;
             var rstate = state;
 
             // decide the state of the switch
             if (state.Init == State.InitFlags.InitFix || state.Init == State.InitFlags.InitJct)
             {
-                if (CSWzero_state)
+                if (bp.CSWzero_state)
                 {
                     // Switch specified "on"
-                    state.States[0][CSWstate] = 1.0;
-                    current_state = 1.0;
+                    CSWcurrentState = true;
+                    current_state = true;
                 }
                 else
                 {
                     // Switch specified "off"
-                    state.States[0][CSWstate] = 0.0;
-                    current_state = 0.0;
+                    CSWcurrentState = false;
+                    current_state = false;
                 }
-            }
-            else if (state.UseSmallSignal)
-            {
-                previous_state = state.States[0][CSWstate];
-                current_state = previous_state;
-            }
-            else if (state.UseDC)
-            {
-                // No time-dependence, so use current state instead
-                previous_state = state.States[0][CSWstate];
-                i_ctrl = rstate.Solution[CSWcontBranch];
-                if (i_ctrl > (modelload.CSWthresh + modelload.CSWhyst))
-                    current_state = 1.0;
-                else if (i_ctrl < (modelload.CSWthresh - modelload.CSWhyst))
-                    current_state = 0.0;
-                else
-                    current_state = previous_state;
-
-                // Store the current state
-                if (current_state == 0)
-                    state.States[0][CSWstate] = 0.0;
-                else
-                    state.States[0][CSWstate] = 1.0;
-
-                // Ensure one more iteration
-                if (current_state != previous_state)
-                    state.IsCon = false;
             }
             else
             {
                 // Get the previous state
-                previous_state = state.States[1][CSWstate];
+                if (CSWuseOldState)
+                    previous_state = CSWoldState;
+                else
+                    previous_state = CSWcurrentState;
                 i_ctrl = rstate.Solution[CSWcontBranch];
 
                 // Calculate the current state
-                if (i_ctrl > (modelload.CSWthresh + modelload.CSWhyst))
-                    current_state = 1;
-                else if (i_ctrl < (modelload.CSWthresh - modelload.CSWhyst))
-                    current_state = 0;
+                if (i_ctrl > (mbp.CSWthresh + mbp.CSWhyst))
+                    current_state = true;
+                else if (i_ctrl < (mbp.CSWthresh - mbp.CSWhyst))
+                    current_state = false;
                 else
                     current_state = previous_state;
 
                 // Store the current state
-                if (current_state == 0)
-                    state.States[0][CSWstate] = 0.0;
+                if (current_state == false)
+                    CSWcurrentState = false;
                 else
-                    state.States[0][CSWstate] = 1.0;
+                    CSWcurrentState = true;
             }
 
             // Get the current conduction
-            g_now = current_state != 0.0 ? (modelload.CSWonConduct) : (modelload.CSWoffConduct);
+            g_now = current_state != false ? (modelload.CSWonConduct) : (modelload.CSWoffConduct);
             CSWcond = g_now;
 
             // Load the Y-matrix

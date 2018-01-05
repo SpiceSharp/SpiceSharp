@@ -12,8 +12,8 @@ namespace SpiceSharp.Behaviors.CSW
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
-        private ModelLoadBehavior modelload;
+        LoadBehavior load;
+        ModelLoadBehavior modelload;
 
         /// <summary>
         /// Nodes
@@ -27,6 +27,12 @@ namespace SpiceSharp.Behaviors.CSW
         protected MatrixElement CSWnegPosptr { get; private set; }
         protected MatrixElement CSWposNegptr { get; private set; }
         protected MatrixElement CSWnegNegptr { get; private set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public AcBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior
@@ -60,14 +66,14 @@ namespace SpiceSharp.Behaviors.CSW
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)
         {
-            double current_state;
+            bool current_state;
             double g_now;
             var state = ckt.State;
             var cstate = state;
 
             // Get the current state
-            current_state = state.States[0][load.CSWstate];
-            g_now = current_state > 0.0 ? modelload.CSWonConduct : modelload.CSWoffConduct;
+            current_state = load.CSWcurrentState;
+            g_now = current_state != false ? modelload.CSWonConduct : modelload.CSWoffConduct;
 
             // Load the Y-matrix
             CSWposPosptr.Add(g_now);

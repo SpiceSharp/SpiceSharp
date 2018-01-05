@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors.CSW;
+using SpiceSharp.Components.CSW;
 
 namespace SpiceSharp.Components
 {
@@ -14,12 +15,6 @@ namespace SpiceSharp.Components
         /// Set the model for the current-controlled switch
         /// </summary>
         public void SetModel(CurrentSwitchModel model) => Model = model;
-
-        /// <summary>
-        /// Parameters
-        /// </summary>
-        [SpiceName("control"), SpiceInfo("Name of the controlling source")]
-        public Identifier CSWcontName { get; set; }
         
         /// <summary>
         /// Nodes
@@ -28,6 +23,8 @@ namespace SpiceSharp.Components
         public int CSWposNode { get; internal set; }
         [SpiceName("neg_node"), SpiceInfo("Negative node of the switch")]
         public int CSWnegNode { get; internal set; }
+        [SpiceName("control"), SpiceInfo("Name of the controlling source")]
+        public Identifier CSWcontName { get; set; }
 
         /// <summary>
         /// Get the controlling voltage source
@@ -47,8 +44,13 @@ namespace SpiceSharp.Components
         {
             // Make sure the current switch is processed after voltage sources
             Priority = -1;
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new AcBehavior());
+
+            // Add parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
         }
 
         /// <summary>
@@ -58,11 +60,21 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source</param>
-        public CurrentSwitch(Identifier name, Identifier pos, Identifier neg, Identifier vsource) : base(name, 2)
+        public CurrentSwitch(Identifier name, Identifier pos, Identifier neg, Identifier vsource)
+            : base(name, CSWpinCount)
         {
+            // Make sure the current switch is processed after voltage sources
+            Priority = -1;
+
+            // Add parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+
             Connect(pos, neg);
             CSWcontName = vsource;
-            Priority = -1;
         }
 
         /// <summary>
@@ -78,6 +90,21 @@ namespace SpiceSharp.Components
             // Find the voltage source
             if (ckt.Objects[CSWcontName] is Voltagesource vsrc)
                 CSWcontSource = vsrc;
+        }
+
+        /// <summary>
+        /// Build data provider
+        /// </summary>
+        /// <param name="pool">Behaviors</param>
+        /// <returns></returns>
+        protected override Behaviors.SetupDataProvider BuildSetupDataProvider(Behaviors.BehaviorPool pool)
+        {
+            var provider = base.BuildSetupDataProvider(pool);
+
+            // Add controlling voltage source data
+            provider.Add(pool.GetEntityBehaviors(CSWcontName));
+            provider.Add(CSWcontSource.Parameters);
+            return provider;
         }
     }
 }
