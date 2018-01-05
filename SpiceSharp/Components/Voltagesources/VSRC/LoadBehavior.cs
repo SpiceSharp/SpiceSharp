@@ -71,19 +71,19 @@ namespace SpiceSharp.Behaviors.VSRC
         }
 
         /// <summary>
-        /// Create a getter
+        /// Create an export method
         /// </summary>
         /// <param name="state">State</param>
         /// <param name="parameter">Parameter</param>
         /// <returns></returns>
-        public override Func<double> CreateGetter(State state, string parameter)
+        public override Func<double> CreateExport(State state, string parameter)
         {
             switch (parameter)
             {
                 case "i": return () => state.Solution[VSRCbranch];
                 case "p": return () => (state.Solution[VSRCposNode] - state.Solution[VSRCnegNode]) * -state.Solution[VSRCbranch];
                 default:
-                    return base.CreateGetter(state, parameter);
+                    return base.CreateExport(state, parameter);
             }
         }
         

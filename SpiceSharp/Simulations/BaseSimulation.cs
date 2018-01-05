@@ -528,19 +528,19 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Create a getter for this type of simulation
-        /// The simulation will determine which getter is returned if multiple behaviors implement a getter by the same name
+        /// Create an export method for this type of simulation
+        /// The simulation will determine which export method is returned if multiple behaviors implement a export method by the same name
         /// </summary>
         /// <param name="name">The identifier of the entity</param>
         /// <param name="parameter">The parameter name</param>
         /// <returns></returns>
-        public override Func<double> CreateGetter(Identifier name, string parameter)
+        public override Func<double> CreateExport(Identifier name, string parameter)
         {
             var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
 
             // Most logical place to look for AC analysis: AC behaviors
-            Func<double> getter = eb.Get<LoadBehavior>().CreateGetter(Circuit.State, parameter);
-            return getter;
+            Func<double> export = eb.Get<LoadBehavior>().CreateExport(Circuit.State, parameter);
+            return export;
         }
     }
 }

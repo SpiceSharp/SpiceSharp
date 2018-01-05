@@ -36,7 +36,7 @@ namespace SpiceSharp.Behaviors.VCCS
         /// <param name="state">State</param>
         /// <param name="parameter">Parameter</param>
         /// <returns></returns>
-        public override Func<double> CreateGetter(State state, string parameter)
+        public override Func<double> CreateExport(State state, string parameter)
         {
             switch (parameter)
             {

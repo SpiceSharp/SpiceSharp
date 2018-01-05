@@ -112,13 +112,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Create a getter for this type of simulation
-        /// The simulation will determine which getter is returned if multiple behaviors implement a getter by the same name
+        /// Create an export method for this type of simulation
+        /// The simulation will determine which method is returned if multiple behaviors implement an export method by the same name
         /// </summary>
         /// <param name="name">The identifier of the entity</param>
         /// <param name="parameter">The parameter name</param>
         /// <returns></returns>
-        public abstract Func<double> CreateGetter(Identifier name, string parameter);
+        public abstract Func<double> CreateExport(Identifier name, string parameter);
 
         /// <summary>
         /// Collect behaviors of all circuit objects while also setting them up

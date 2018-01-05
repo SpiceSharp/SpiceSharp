@@ -35,12 +35,12 @@ namespace SpiceSharp.Behaviors.CCCS
         public LoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Create a getter
+        /// Create an export method
         /// </summary>
         /// <param name="state">Circuit</param>
         /// <param name="parameter">Parameter name</param>
         /// <returns></returns>
-        public override Func<double> CreateGetter(State state, string parameter)
+        public override Func<double> CreateExport(State state, string parameter)
         {
             switch (parameter)
             {

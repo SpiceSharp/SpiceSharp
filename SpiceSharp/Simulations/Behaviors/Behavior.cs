@@ -83,8 +83,8 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="state">State</param>
         /// <param name="parameter">Parameter</param>
-        /// <returns>Returns null if there is no getter</returns>
-        public virtual Func<double> CreateGetter(State state, string parameter)
+        /// <returns>Returns null if there is no export method</returns>
+        public virtual Func<double> CreateExport(State state, string parameter)
         {
             return null;
         }
