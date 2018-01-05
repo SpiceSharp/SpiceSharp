@@ -1,6 +1,5 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Diagnostics;
 using System.Numerics;
 
@@ -15,7 +14,6 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
-        /// <param name="config">The configuration</param>
         public AC(string name) : base(name)
         {
         }
@@ -140,26 +138,6 @@ namespace SpiceSharp.Simulations
                         break;
                 }
             }
-        }
-
-        /// <summary>
-        /// Create an export method for this type of simulation
-        /// The simulation will determine which export method is returned if multiple behaviors implement a export method by the same name
-        /// </summary>
-        /// <param name="name">The identifier of the entity</param>
-        /// <param name="parameter">The parameter name</param>
-        /// <returns></returns>
-        public override Func<double> CreateExport(Identifier name, string parameter)
-        {
-            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
-
-            // Most logical place to look for AC analysis: AC behaviors
-            Func<double> export = eb.Get<AcBehavior>().CreateExport(Circuit.State, parameter);
-
-            // Next most logical place is the LoadBehavior
-            if (export == null)
-                export = eb.Get<LoadBehavior>().CreateExport(Circuit.State, parameter);
-            return export;
         }
     }
 }

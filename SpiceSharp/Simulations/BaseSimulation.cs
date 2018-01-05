@@ -539,7 +539,7 @@ namespace SpiceSharp.Simulations
             var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
 
             // Most logical place to look for AC analysis: AC behaviors
-            Func<double> export = eb.Get<LoadBehavior>().CreateExport(Circuit.State, parameter);
+            Func<double> export = eb.Get<LoadBehavior>()?.CreateExport(Circuit.State, parameter);
             return export;
         }
     }

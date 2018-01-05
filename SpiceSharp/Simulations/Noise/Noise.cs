@@ -235,16 +235,16 @@ namespace SpiceSharp.Simulations
         {
             var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
 
-            // Most logical place to look for AC analysis: AC behaviors
-            Func<double> export = eb.Get<NoiseBehavior>().CreateExport(Circuit.State, parameter);
+            // Most logical place to look for noise analysis: noise behaviors
+            Func<double> export = eb.Get<NoiseBehavior>()?.CreateExport(Circuit.State, parameter);
 
             // Next most logical place is the AcBehavior
             if (export == null)
-                export = eb.Get<AcBehavior>().CreateExport(Circuit.State, parameter);
+                export = eb.Get<AcBehavior>()?.CreateExport(Circuit.State, parameter);
 
             // Finally look to the LoadBehavior
             if (export == null)
-                export = eb.Get<LoadBehavior>().CreateExport(Circuit.State, parameter);
+                export = eb.Get<LoadBehavior>()?.CreateExport(Circuit.State, parameter);
             return export;
         }
     }
