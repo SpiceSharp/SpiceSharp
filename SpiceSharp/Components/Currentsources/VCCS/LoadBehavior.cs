@@ -2,78 +2,88 @@
 using SpiceSharp.Components;
 using SpiceSharp.Sparse;
 using SpiceSharp.Circuits;
+using SpiceSharp.Components.VCCS;
+using System;
 
 namespace SpiceSharp.Behaviors.VCCS
 {
     /// <summary>
     /// General behavior for a <see cref="VoltageControlledCurrentsource"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior
+    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Parameters
+        /// Necessary parameters and behaviors
         /// </summary>
-        [SpiceName("gain"), SpiceInfo("Transconductance of the source (gain)")]
-        public Parameter VCCScoeff { get; } = new Parameter();
-        [SpiceName("i"), SpiceInfo("Output current")]
-        public double GetCurrent(Circuit ckt)
-        {
-            return (ckt.State.Solution[VCCScontPosNode] - ckt.State.Solution[VCCScontNegNode]) 
-                * VCCScoeff.Value;
-        }
-        [SpiceName("v"), SpiceInfo("Voltage across output")]
-        public double GetVoltage(Circuit ckt)
-        {
-            return (ckt.State.Solution[VCCSposNode] - ckt.State.Solution[VCCSnegNode]);
-        }
-        [SpiceName("p"), SpiceInfo("Power")]
-        public double GetPower(Circuit ckt)
-        {
-            double current = (ckt.State.Solution[VCCScontPosNode] - ckt.State.Solution[VCCScontNegNode])
-                * VCCScoeff.Value;
-            double voltage = (ckt.State.Solution[VCCSposNode] - ckt.State.Solution[VCCSnegNode]);
-            return voltage * current;
-        }
+        BaseParameters bp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        private int VCCSposNode, VCCSnegNode, VCCScontPosNode, VCCScontNegNode;
-        private MatrixElement VCCSposContPosptr;
-        private MatrixElement VCCSposContNegptr;
-        private MatrixElement VCCSnegContPosptr;
-        private MatrixElement VCCSnegContNegptr;
+        int VCCSposNode, VCCSnegNode, VCCScontPosNode, VCCScontNegNode;
+        protected MatrixElement VCCSposContPosptr { get; private set; }
+        protected MatrixElement VCCSposContNegptr { get; private set; }
+        protected MatrixElement VCCSnegContPosptr { get; private set; }
+        protected MatrixElement VCCSnegContNegptr { get; private set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LoadBehavior()
-        {
-        }
+        /// <param name="name">Name</param>
+        public LoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Constructor
+        /// Create getter
         /// </summary>
-        /// <param name="gain">Gain</param>
-        public LoadBehavior(double gain)
+        /// <param name="state">State</param>
+        /// <param name="parameter">Parameter name</param>
+        /// <returns></returns>
+        public override Func<double> CreateGetter(State state, string parameter)
         {
-            VCCScoeff.Set(gain);
+            switch (parameter)
+            {
+                case "v": return () => state.Solution[VCCSposNode] - state.Solution[VCCSnegNode];
+                case "i":
+                case "c": return () => (state.Solution[VCCSposNode] - state.Solution[VCCSnegNode]) * bp.VCCScoeff;
+                case "p": return () =>
+                    {
+                        double current = (state.Solution[VCCScontPosNode] - state.Solution[VCCScontNegNode]) * bp.VCCScoeff;
+                        double voltage = (state.Solution[VCCSposNode] - state.Solution[VCCSnegNode]);
+                        return voltage * current;
+                    };
+                default: return null;
+            }
         }
 
         /// <summary>
         /// Setup the behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var vccs = component as VoltageControlledCurrentsource;
-            VCCSposNode = vccs.VCCSposNode;
-            VCCSnegNode = vccs.VCCSnegNode;
-            VCCScontPosNode = vccs.VCCScontPosNode;
-            VCCScontNegNode = vccs.VCCScontNegNode;
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+        }
 
-            var matrix = ckt.State.Matrix;
+        /// <summary>
+        /// Connect behavior
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            VCCSposNode = pins[0];
+            VCCSnegNode = pins[1];
+            VCCScontPosNode = pins[2];
+            VCCScontNegNode = pins[3];
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="nodes">Nodes</param>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        {
             VCCSposContPosptr = matrix.GetElement(VCCSposNode, VCCScontPosNode);
             VCCSposContNegptr = matrix.GetElement(VCCSposNode, VCCScontNegNode);
             VCCSnegContPosptr = matrix.GetElement(VCCSnegNode, VCCScontPosNode);
@@ -99,10 +109,10 @@ namespace SpiceSharp.Behaviors.VCCS
         public override void Load(Circuit ckt)
         {
             var rstate = ckt.State;
-            VCCSposContPosptr.Add(VCCScoeff.Value);
-            VCCSposContNegptr.Sub(VCCScoeff.Value);
-            VCCSnegContPosptr.Sub(VCCScoeff.Value);
-            VCCSnegContNegptr.Add(VCCScoeff.Value);
+            VCCSposContPosptr.Add(bp.VCCScoeff);
+            VCCSposContNegptr.Sub(bp.VCCScoeff);
+            VCCSnegContPosptr.Sub(bp.VCCScoeff);
+            VCCSnegContNegptr.Add(bp.VCCScoeff);
         }
     }
 }

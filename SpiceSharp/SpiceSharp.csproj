@@ -49,6 +49,7 @@
     <Compile Include="Components\Currentsources\CCCS\BaseParameters.cs" />
     <Compile Include="Components\Currentsources\ISRC\AcParameters.cs" />
     <Compile Include="Components\Currentsources\ISRC\BaseParameters.cs" />
+    <Compile Include="Components\Currentsources\VCCS\BaseParameters.cs" />
     <Compile Include="Components\RLC\CAP\BaseParameters.cs" />
     <Compile Include="Components\RLC\CAP\ModelBaseParameters.cs" />
     <Compile Include="Components\Semiconductors\DIO\BaseParameters.cs" />

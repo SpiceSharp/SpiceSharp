@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors.VCCS;
+using SpiceSharp.Components.VCCS;
 
 namespace SpiceSharp.Components
 {
@@ -31,10 +32,15 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled current source</param>
-        public VoltageControlledCurrentsource(Identifier name) : base(name, VCCSpinCount)
+        public VoltageControlledCurrentsource(Identifier name) 
+            : base(name, VCCSpinCount)
         {
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new AcBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
         }
 
         /// <summary>
@@ -47,11 +53,14 @@ namespace SpiceSharp.Components
         /// <param name="cont_neg">The negative controlling node</param>
         /// <param name="gain">The transconductance gain</param>
         public VoltageControlledCurrentsource(Identifier name, Identifier pos, Identifier neg, Identifier cont_pos, Identifier cont_neg, double gain) 
-            : this(name)
+            : base(name, VCCSpinCount)
         {
-            // Register behaviors
-            RegisterBehavior(new LoadBehavior(gain));
-            RegisterBehavior(new AcBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters(gain));
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
 
             // Connect
             Connect(pos, neg, cont_pos, cont_neg);
