@@ -45,6 +45,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Execute()
         {
+            // Execute base behavior
+            base.Execute();
+
             var ckt = Circuit;
 
             var state = ckt.State;

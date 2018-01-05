@@ -50,6 +50,11 @@ namespace SpiceSharp.Simulations
             tempbehaviors = SetupBehaviors<TemperatureBehavior>();
             loadbehaviors = SetupBehaviors<LoadBehavior>();
             icbehaviors = SetupBehaviors<IcBehavior>();
+
+            // Setup the load behaviors
+            var matrix = Circuit.State.Matrix;
+            foreach (var behavior in loadbehaviors)
+                behavior.GetMatrixPointers(Circuit.Nodes, matrix);
         }
 
         /// <summary>

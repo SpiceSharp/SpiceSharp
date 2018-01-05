@@ -101,6 +101,11 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors
             acbehaviors = SetupBehaviors<AcBehavior>();
+
+            // Setup AC behaviors
+            var matrix = Circuit.State.Matrix;
+            foreach (var behavior in acbehaviors)
+                behavior.GetMatrixPointers(matrix);
         }
 
         /// <summary>

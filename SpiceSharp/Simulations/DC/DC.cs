@@ -132,19 +132,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Setup
-        /// </summary>
-        protected override void Setup()
-        {
-            base.Setup();
-
-            // Setup the behaviors
-            var matrix = Circuit.State.Matrix;
-            foreach (var behavior in loadbehaviors)
-                behavior.GetMatrixPointers(Circuit.Nodes, matrix);
-        }
-
-        /// <summary>
         /// Execute the DC analysis
         /// </summary>
         protected override void Execute()
