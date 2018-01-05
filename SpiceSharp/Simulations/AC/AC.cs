@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Circuits;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Diagnostics;
 using System.Numerics;
 
@@ -139,6 +140,26 @@ namespace SpiceSharp.Simulations
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Create a getter for this type of simulation
+        /// The simulation will determine which getter is returned if multiple behaviors implement a getter by the same name
+        /// </summary>
+        /// <param name="name">The identifier of the entity</param>
+        /// <param name="parameter">The parameter name</param>
+        /// <returns></returns>
+        public override Func<double> CreateGetter(Identifier name, string parameter)
+        {
+            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
+
+            // Most logical place to look for AC analysis: AC behaviors
+            Func<double> getter = eb.Get<AcBehavior>().CreateGetter(Circuit.State, parameter);
+
+            // Next most logical place is the LoadBehavior
+            if (getter == null)
+                getter = eb.Get<LoadBehavior>().CreateGetter(Circuit.State, parameter);
+            return getter;
         }
     }
 }

@@ -26,8 +26,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<AcceptBehavior> acceptbehaviors;
-        private List<TruncateBehavior> truncatebehaviors;
+        List<AcceptBehavior> acceptbehaviors;
+        List<TruncateBehavior> truncatebehaviors;
 
         /// <summary>
         /// Constructor
@@ -255,6 +255,26 @@ namespace SpiceSharp.Simulations
                 ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Create a getter for this type of simulation
+        /// The simulation will determine which getter is returned if multiple behaviors implement a getter by the same name.
+        /// </summary>
+        /// <param name="name">The identifier of the entity</param>
+        /// <param name="parameter">The parameter name</param>
+        /// <returns></returns>
+        public override Func<double> CreateGetter(Identifier name, string parameter)
+        {
+            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
+
+            // For transient analysis, the most logical would be to ask the Transient behavior (if it exists)
+            Func<double> getter = eb.Get<TransientBehavior>()?.CreateGetter(Circuit.State, parameter);
+
+            // If the transient behavior does not implement the getter, resort to the Load behavior
+            if (getter == null)
+                getter = eb.Get<LoadBehavior>()?.CreateGetter(Circuit.State, parameter);
+            return getter;
         }
     }
 

@@ -40,8 +40,7 @@ namespace Sandbox
             int index = 0;
             dc.InitializeSimulationExport += (object sender, SpiceSharp.Behaviors.BehaviorPool pool) =>
             {
-                var state = ((Simulation)sender).Circuit.State;
-                current = pool.GetEntityBehaviors("V1").Get<SpiceSharp.Behaviors.VSRC.LoadBehavior>().CreateGetter(state, "i");
+                current = ((Simulation)sender).CreateGetter("V1", "i");
             };
             dc.OnExportSimulationData += (object sender, SimulationData data) =>
             {

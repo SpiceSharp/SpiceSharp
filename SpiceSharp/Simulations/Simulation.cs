@@ -53,7 +53,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Pool of all behaviors in the simulation
         /// </summary>
-        BehaviorPool pool = new BehaviorPool();
+        protected BehaviorPool pool { get; } = new BehaviorPool();
 
         /// <summary>
         /// Constructor
@@ -110,6 +110,15 @@ namespace SpiceSharp.Simulations
             SimulationData data = new SimulationData(ckt);
             OnExportSimulationData?.Invoke(this, data);
         }
+
+        /// <summary>
+        /// Create a getter for this type of simulation
+        /// The simulation will determine which getter is returned if multiple behaviors implement a getter by the same name
+        /// </summary>
+        /// <param name="name">The identifier of the entity</param>
+        /// <param name="parameter">The parameter name</param>
+        /// <returns></returns>
+        public abstract Func<double> CreateGetter(Identifier name, string parameter);
 
         /// <summary>
         /// Collect behaviors of all circuit objects while also setting them up
