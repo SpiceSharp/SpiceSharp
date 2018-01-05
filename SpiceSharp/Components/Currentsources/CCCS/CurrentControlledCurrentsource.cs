@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Components.CCCS;
 using SpiceSharp.Behaviors.CCCS;
 
 namespace SpiceSharp.Components
@@ -24,6 +25,7 @@ namespace SpiceSharp.Components
         public int CCCSposNode { get; private set; }
         [SpiceName("neg_node"), SpiceInfo("Negative node of the source")]
         public int CCCSnegNode { get; private set; }
+        [SpiceName("vctrl"), SpiceInfo("Controlling voltage source")]
         public Voltagesource CCCScontSource { get; protected set; }
 
         /// <summary>
@@ -35,12 +37,18 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current controlled current source</param>
-        public CurrentControlledCurrentsource(Identifier name) : base(name, CCCSpinCount)
+        public CurrentControlledCurrentsource(Identifier name) 
+            : base(name, CCCSpinCount)
         {
             // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new AcBehavior());
+
+            // Add parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
         }
 
         /// <summary>
@@ -52,12 +60,17 @@ namespace SpiceSharp.Components
         /// <param name="vsource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
         public CurrentControlledCurrentsource(Identifier name, Identifier pos, Identifier neg, Identifier vsource, double gain)
-            : this(name)
+            : base(name, CCCSpinCount)
         {
             // Register behaviors
             Priority = -1;
-            RegisterBehavior(new LoadBehavior(gain));
-            RegisterBehavior(new AcBehavior());
+
+            // Add parameters
+            Parameters.Register(new BaseParameters(gain));
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
 
             // Connect
             Connect(pos, neg);
@@ -79,6 +92,21 @@ namespace SpiceSharp.Components
                 CCCScontSource = vsrc;
             else
                 throw new CircuitException($"{Name}: Could not find voltage source '{CCCScontName}'");
+        }
+
+        /// <summary>
+        /// Build the data provider
+        /// </summary>
+        /// <param name="pool">Behavior pool</param>
+        /// <returns></returns>
+        protected override Behaviors.SetupDataProvider BuildSetupDataProvider(Behaviors.BehaviorPool pool)
+        {
+            var provider = base.BuildSetupDataProvider(pool);
+
+            // Add behaviors and parameters of the controlling voltage source
+            provider.Add(pool.GetEntityBehaviors(CCCScontName));
+            provider.Add(CCCScontSource.Parameters);
+            return provider;
         }
     }
 }

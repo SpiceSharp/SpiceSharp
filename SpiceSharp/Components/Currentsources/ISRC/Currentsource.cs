@@ -25,7 +25,8 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current source</param>
-        public Currentsource(Identifier name) : base(name, ISRCpinCount)
+        public Currentsource(Identifier name) 
+            : base(name, ISRCpinCount)
         {
             // Add parameters
             Parameters.Register(new BaseParameters());
@@ -45,7 +46,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
         public Currentsource(Identifier name, Identifier pos, Identifier neg, double dc)
-            : this(name)
+            : base(name, ISRCpinCount)
         {
             // Add parameters
             Parameters.Register(new BaseParameters(dc));
@@ -67,7 +68,8 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="w">The Waveform-object</param>
-        public Currentsource(Identifier name, Identifier pos, Identifier neg, Waveform w) : base(name, ISRCpinCount)
+        public Currentsource(Identifier name, Identifier pos, Identifier neg, Waveform w)
+            : base(name, ISRCpinCount)
         {
             // Add parameters
             Parameters.Register(new BaseParameters(w));

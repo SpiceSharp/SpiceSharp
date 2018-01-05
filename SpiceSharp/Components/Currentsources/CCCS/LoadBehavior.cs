@@ -1,57 +1,38 @@
 ﻿using System;
-using SpiceSharp.Components;
 using SpiceSharp.Circuits;
-using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
+using SpiceSharp.Components.CCCS;
 
 namespace SpiceSharp.Behaviors.CCCS
 {
     /// <summary>
-    /// Behavior for a <see cref="CurrentControlledCurrentsource"/>
+    /// Behavior for a <see cref="Components.CurrentControlledCurrentsource"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior
+    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Parameters
+        /// Necessary parameters and behaviors
         /// </summary>
-        [SpiceName("gain"), SpiceInfo("Gain of the source")]
-        public Parameter CCCScoeff { get; } = new Parameter();
-        [SpiceName("i"), SpiceInfo("CCCS output current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Solution[CCCScontBranch] * CCCScoeff;
-        [SpiceName("v"), SpiceInfo("CCCS voltage at output")]
-        public double GetVoltage(Circuit ckt) => ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode];
-        [SpiceName("p"), SpiceInfo("CCCS power")]
-        public double GetPower(Circuit ckt) => ckt.State.Solution[CCCScontBranch] * CCCScoeff *
-            (ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode]);
+        BaseParameters bp;
+        VSRC.LoadBehavior vsrcload;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int CCCScontBranch;
-        protected int CCCSposNode;
-        protected int CCCSnegNode;
+        public int CCCScontBranch { get; protected set; }
+        int CCCSposNode, CCCSnegNode;
 
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected MatrixElement CCCSposContBrptr = null;
-        protected MatrixElement CCCSnegContBrptr = null;
+        protected MatrixElement CCCSposContBrptr { get; private set; }
+        protected MatrixElement CCCSnegContBrptr { get; private set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LoadBehavior()
-        {
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="gain">Gain</param>
-        public LoadBehavior(double gain)
-        {
-            CCCScoeff.Set(gain);
-        }
+        /// <param name="name">Name</param>
+        public LoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Create a getter
@@ -63,48 +44,60 @@ namespace SpiceSharp.Behaviors.CCCS
         {
             switch (parameter)
             {
-                case "i": return () => state.Solution[CCCScontBranch] * CCCScoeff;
+                case "i": return () => state.Solution[CCCScontBranch] * bp.CCCScoeff;
                 case "v": return () => state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
                 case "p": return () =>
                     {
                         double v = state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
-                        return state.Solution[CCCScontBranch] * CCCScoeff * v;
+                        return state.Solution[CCCScontBranch] * bp.CCCScoeff * v;
                     };
-                default:
-                    return base.CreateGetter(state, parameter);
+                default: return null;
             }
         }
 
         /// <summary>
-        /// Setup the behavior
+        /// Setup behavior
         /// </summary>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var cccs = component as CurrentControlledCurrentsource;
-            var matrix = ckt.State.Matrix;
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
 
-            // Get behaviors
-            var vsrcload = GetBehavior<VSRC.LoadBehavior>(cccs.CCCScontSource);
-
-            // Nodes
-            CCCSposNode = cccs.CCCSposNode;
-            CCCSnegNode = cccs.CCCSnegNode;
-            CCCScontBranch = vsrcload.VSRCbranch;
-
-            // Get matrix elements
-            CCCSposContBrptr = matrix.GetElement(cccs.CCCSposNode, CCCScontBranch);
-            CCCSnegContBrptr = matrix.GetElement(cccs.CCCSnegNode, CCCScontBranch);
+            // Get behaviors (0 = CCCS behaviors, 1 = VSRC behaviors)
+            vsrcload = provider.GetBehavior<VSRC.LoadBehavior>(1);
         }
 
+        /// <summary>
+        /// Connect the behavior
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            CCCSposNode = pins[0];
+            CCCSnegNode = pins[1];
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="nodes">Nodes</param>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        {
+            CCCScontBranch = vsrcload.VSRCbranch;
+            CCCSposContBrptr = matrix.GetElement(CCCSposNode, CCCScontBranch);
+            CCCSnegContBrptr = matrix.GetElement(CCCSnegNode, CCCScontBranch);
+        }
+        
         /// <summary>
         /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
         public override void Load(Circuit ckt)
         {
-            CCCSposContBrptr.Add(CCCScoeff.Value);
-            CCCSnegContBrptr.Sub(CCCScoeff.Value);
+            CCCSposContBrptr.Add(bp.CCCScoeff.Value);
+            CCCSnegContBrptr.Sub(bp.CCCScoeff.Value);
         }
     }
 }

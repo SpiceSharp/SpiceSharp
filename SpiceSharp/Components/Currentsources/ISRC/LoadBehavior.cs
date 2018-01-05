@@ -58,6 +58,7 @@ namespace SpiceSharp.Behaviors.ISRC
             {
                 case "v": return () => state.Solution[ISRCposNode] - state.Solution[ISRCnegNode];
                 case "p": return () => (state.Solution[ISRCposNode] - state.Solution[ISRCnegNode]) * -Current;
+                case "i":
                 case "c": return () => Current;
                 default: return null;
             }
