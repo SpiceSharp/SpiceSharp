@@ -75,7 +75,8 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="value">Value</param>
-        public void Set(string name, double value)
+        /// <returns>True if the parameter was set</returns>
+        public bool Set(string name, double value)
         {
             // Get the property by name
             var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public)
@@ -91,15 +92,22 @@ namespace SpiceSharp
                 });
 
             // Set the property if any
+            bool isset = false;
             foreach (var member in members)
             {
                 if (member is PropertyInfo pi)
                 {
                     // Properties
-                    if (pi.PropertyType == typeof(Parameter))
+                    if (pi.PropertyType == typeof(Parameter) && pi.CanRead)
+                    {
                         ((Parameter)pi.GetValue(this)).Set(value);
-                    else if (pi.PropertyType == typeof(double))
+                        isset = true;
+                    }
+                    else if (pi.PropertyType == typeof(double) && pi.CanWrite)
+                    {
                         pi.SetValue(this, value);
+                        isset = true;
+                    }
                 }
                 else if (member is MethodInfo mi)
                 {
@@ -110,10 +118,64 @@ namespace SpiceSharp
                         if (paraminfo.Length == 1 && paraminfo[0].ParameterType == typeof(double))
                         {
                             mi.Invoke(this, new object[] { value });
+                            isset = true;
                         }
                     }
                 }
             }
+            return isset;
+        }
+
+        /// <summary>
+        /// Set a parameter by name
+        /// Use for non-double values, will ignore
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="value">Value</param>
+        /// <returns>Returns true if the parameter was set</returns>
+        public bool Set(string name, object value)
+        {
+            // Get the property by name
+            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public)
+                .Where((MemberInfo mi) => mi.IsDefined(typeof(SpiceName)))
+                .Where((MemberInfo mi) =>
+                {
+                    foreach (var sn in mi.GetCustomAttributes<SpiceName>())
+                    {
+                        if (sn.Name == name)
+                            return true;
+                    }
+                    return false;
+                });
+
+            // Set the property if any
+            bool isset = false;
+            foreach (var member in members)
+            {
+                if (member is PropertyInfo pi)
+                {
+                    // Properties
+                    if (pi.CanWrite)
+                    {
+                        pi.SetValue(this, value);
+                        isset = true;
+                    }
+                }
+                else if (member is MethodInfo mi)
+                {
+                    // Methods
+                    if (mi.ReturnType == typeof(void))
+                    {
+                        var paraminfo = mi.GetParameters();
+                        if (paraminfo.Length == 1)
+                        {
+                            mi.Invoke(this, new object[] { value });
+                            isset = true;
+                        }
+                    }
+                }
+            }
+            return isset;
         }
     }
 }
