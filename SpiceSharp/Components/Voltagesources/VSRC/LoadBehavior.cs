@@ -73,17 +73,17 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <summary>
         /// Create a getter
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="state">State</param>
         /// <param name="parameter">Parameter</param>
         /// <returns></returns>
-        public override Func<double> CreateGetter(Circuit ckt, string parameter)
+        public override Func<double> CreateGetter(State state, string parameter)
         {
             switch (parameter)
             {
-                case "i": return () => ckt.State.Solution[VSRCbranch];
-                case "p": return () => (ckt.State.Solution[VSRCposNode] - ckt.State.Solution[VSRCnegNode]) * -ckt.State.Solution[VSRCbranch];
+                case "i": return () => state.Solution[VSRCbranch];
+                case "p": return () => (state.Solution[VSRCposNode] - state.Solution[VSRCnegNode]) * -state.Solution[VSRCbranch];
                 default:
-                    return base.CreateGetter(ckt, parameter);
+                    return base.CreateGetter(state, parameter);
             }
         }
         

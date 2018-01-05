@@ -66,22 +66,21 @@ namespace SpiceSharp.Behaviors.DIO
         /// <summary>
         /// Create a getter
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="state">State</param>
         /// <param name="parameter">Parameter name</param>
         /// <returns></returns>
-        public override Func<double> CreateGetter(Circuit ckt, string parameter)
+        public override Func<double> CreateGetter(State state, string parameter)
         {
             switch (parameter)
             {
                 case "vd": return () => DIOvoltage;
-                case "v": return () => ckt.State.Solution[DIOposNode] - ckt.State.Solution[DIOnegNode];
+                case "v": return () => state.Solution[DIOposNode] - state.Solution[DIOnegNode];
                 case "i":
                 case "id": return () => DIOcurrent;
                 case "gd": return () => DIOconduct;
-                case "p": return () => (ckt.State.Solution[DIOposNode] - ckt.State.Solution[DIOnegNode]) * -DIOcurrent;
+                case "p": return () => (state.Solution[DIOposNode] - state.Solution[DIOnegNode]) * -DIOcurrent;
                 case "pd": return () => -DIOvoltage * DIOcurrent;
-                default:
-                    return base.CreateGetter(ckt, parameter);
+                default: return null;
             }
         }
         

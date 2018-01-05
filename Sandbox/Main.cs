@@ -29,6 +29,10 @@ namespace Sandbox
 
             ckt.Nodes.IC.Add("OUT", 1.0);
 
+            var bp = ckt.Objects["R1"].Parameters.Get<SpiceSharp.Components.RES.BaseParameters>();
+            var setters = bp.CreateSetters();
+            bp.Set("temp", 100);
+
             Transient tran = new Transient("Transient 1", 1e-6, 10e-6);
             tran.MaxStep = 1e-8;
             tran.OnExportSimulationData += (object sender, SimulationData data) =>

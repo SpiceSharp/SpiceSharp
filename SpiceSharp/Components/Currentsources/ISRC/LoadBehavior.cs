@@ -49,18 +49,17 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <summary>
         /// Create getter
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="state">State</param>
         /// <param name="parameter">Parameter name</param>
         /// <returns></returns>
-        public override Func<double> CreateGetter(Circuit ckt, string parameter)
+        public override Func<double> CreateGetter(State state, string parameter)
         {
             switch (parameter)
             {
-                case "v": return () => ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode];
-                case "p": return () => (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode]) * -Current;
+                case "v": return () => state.Solution[ISRCposNode] - state.Solution[ISRCnegNode];
+                case "p": return () => (state.Solution[ISRCposNode] - state.Solution[ISRCnegNode]) * -Current;
                 case "c": return () => Current;
-                default:
-                    return base.CreateGetter(ckt, parameter);
+                default: return null;
             }
         }
 

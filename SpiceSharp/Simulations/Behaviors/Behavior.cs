@@ -21,11 +21,6 @@ namespace SpiceSharp.Behaviors
         public Identifier Name { get; }
 
         /// <summary>
-        /// A table of named parameters
-        /// </summary>
-        protected Dictionary<string, Parameter> NamedParameters { get; set; } = null;
-
-        /// <summary>
         /// Gets whether or not the behavior is already set up
         /// </summary>
         public bool DataOnly { get; protected set; } = false;
@@ -86,13 +81,12 @@ namespace SpiceSharp.Behaviors
         /// Create a function for extracting data
         /// This function can be used to extract parameters during simulation
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="state">State</param>
         /// <param name="parameter">Parameter</param>
-        /// <returns></returns>
-        public virtual Func<double> CreateGetter(Circuit ckt, string parameter)
+        /// <returns>Returns null if there is no getter</returns>
+        public virtual Func<double> CreateGetter(State state, string parameter)
         {
-            // No gettable parameters by default
-            return () => double.NaN;
+            return null;
         }
 
         /// <summary>

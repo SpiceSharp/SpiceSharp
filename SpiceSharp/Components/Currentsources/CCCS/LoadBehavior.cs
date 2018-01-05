@@ -56,22 +56,22 @@ namespace SpiceSharp.Behaviors.CCCS
         /// <summary>
         /// Create a getter
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="state">Circuit</param>
         /// <param name="parameter">Parameter name</param>
         /// <returns></returns>
-        public override Func<double> CreateGetter(Circuit ckt, string parameter)
+        public override Func<double> CreateGetter(State state, string parameter)
         {
             switch (parameter)
             {
-                case "i": return () => ckt.State.Solution[CCCScontBranch] * CCCScoeff;
-                case "v": return () => ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode];
+                case "i": return () => state.Solution[CCCScontBranch] * CCCScoeff;
+                case "v": return () => state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
                 case "p": return () =>
                     {
-                        double v = ckt.State.Solution[CCCSposNode] - ckt.State.Solution[CCCSnegNode];
-                        return ckt.State.Solution[CCCScontBranch] * CCCScoeff * v;
+                        double v = state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
+                        return state.Solution[CCCScontBranch] * CCCScoeff * v;
                     };
                 default:
-                    return base.CreateGetter(ckt, parameter);
+                    return base.CreateGetter(state, parameter);
             }
         }
 
