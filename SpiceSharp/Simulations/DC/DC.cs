@@ -58,8 +58,7 @@ namespace SpiceSharp.Simulations
                 {
                     if (Math.Sign(Step) * (Stop - Start) < 0)
                         return 0;
-                    else
-                        return (int)Math.Floor((Stop - Start) / Step + 0.25);
+                    return (int)Math.Floor((Stop - Start) / Step + 0.25);
                 }
             }
 
@@ -133,10 +132,26 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Setup
+        /// </summary>
+        protected override void Setup()
+        {
+            base.Setup();
+
+            // Setup the behaviors
+            var matrix = Circuit.State.Matrix;
+            foreach (var behavior in loadbehaviors)
+                behavior.GetMatrixPointers(Circuit.Nodes, matrix);
+        }
+
+        /// <summary>
         /// Execute the DC analysis
         /// </summary>
         protected override void Execute()
         {
+            // Base
+            base.Execute();
+
             var ckt = Circuit;
 
             // Setup the state

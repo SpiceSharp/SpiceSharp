@@ -58,5 +58,37 @@ namespace SpiceSharp
         /// </summary>
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator() => parameters.Values.GetEnumerator();
+
+        /// <summary>
+        /// Set a parameter by name
+        /// </summary>
+        /// <param name="parameter">Parameter name</param>
+        /// <param name="value">Values</param>
+        /// <returns></returns>
+        public bool Set(string parameter, double value)
+        {
+            foreach (var ps in parameters.Values)
+            {
+                if (ps.Set(parameter, value))
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Set a parameter by name
+        /// </summary>
+        /// <param name="parameter">Parameter name</param>
+        /// <param name="value">Value</param>
+        /// <returns></returns>
+        public bool Set(string parameter, object value)
+        {
+            foreach (var ps in parameters.Values)
+            {
+                if (ps.Set(parameter, value))
+                    return true;
+            }
+            return false;
+        }
     }
 }

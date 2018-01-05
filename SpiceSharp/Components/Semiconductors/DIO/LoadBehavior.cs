@@ -211,6 +211,11 @@ namespace SpiceSharp.Behaviors.DIO
                     ckt.State.IsCon = false;
             }
 
+            // Store for next time
+            DIOvoltage = vd;
+            DIOcurrent = cd;
+            DIOconduct = gd;
+
             // Load Rhs vector
             cdeq = cd - gd * vd;
             state.Rhs[DIOnegNode] += cdeq;
@@ -234,7 +239,6 @@ namespace SpiceSharp.Behaviors.DIO
         public override bool IsConvergent(Circuit ckt)
         {
             var state = ckt.State;
-            var config = ckt.Simulation.CurrentConfig;
 
             double delvd, cdhat, cd;
 
@@ -245,7 +249,8 @@ namespace SpiceSharp.Behaviors.DIO
             cd = DIOcurrent;
 
             // check convergence
-            double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsTol;
+            // TODO: Find a way to pass configuration RELTOL and ABSTOL, defaults are used here
+            double tol = 1e-3 * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + 1e-12;
             if (Math.Abs(cdhat - cd) > tol)
             {
                 state.IsCon = false;

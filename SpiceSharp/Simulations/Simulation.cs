@@ -75,7 +75,7 @@ namespace SpiceSharp.Simulations
 
             // Setup the simulation
             Setup();
-            InitializeSimulationExport?.Invoke(this, ckt);
+            InitializeSimulationExport?.Invoke(this, pool);
 
             // Execute the simulation
             Execute();

@@ -2,7 +2,7 @@
 using System.Numerics;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Circuits;
-using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
 {
@@ -213,21 +213,21 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Delegate for initializing a simulation export
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="ckt"></param>
-    public delegate void InitializeSimulationExportEventHandler(object sender, Circuit ckt);
-
+    /// <param name="sender">The object calling the event</param>
+    /// <param name="ckt">The circuit</param>
+    public delegate void InitializeSimulationExportEventHandler(object sender, BehaviorPool ckt);
+    
     /// <summary>
     /// Delegate for exporting simulation data
     /// </summary>
-    /// <param name="sender">The simulation sending the event</param>
+    /// <param name="sender">The object sending the event</param>
     /// <param name="data">The simulation data</param>
     public delegate void ExportSimulationDataEventHandler(object sender, SimulationData data);
 
     /// <summary>
     /// Delegate for finalizing a simulation export
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="ckt"></param>
+    /// <param name="sender">The object sending the event</param>
+    /// <param name="ckt">The simulation data</param>
     public delegate void FinalizeSimulationExportEventHandler(object sender, Circuit ckt);
 }

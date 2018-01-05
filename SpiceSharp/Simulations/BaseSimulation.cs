@@ -43,7 +43,7 @@ namespace SpiceSharp.Simulations
             {
                 o.Setup(Circuit);
             }
-            if (Circuit.Nodes.Count <= 1)
+            if (Circuit.Nodes.Count < 1)
                 throw new CircuitException($"{Name}: No circuit nodes for simulation");
 
             // Setup behaviors
