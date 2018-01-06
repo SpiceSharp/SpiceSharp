@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors.VCVS;
+using SpiceSharp.Components.VCVS;
 
 namespace SpiceSharp.Components
 {
@@ -34,8 +35,12 @@ namespace SpiceSharp.Components
         public VoltageControlledVoltagesource(Identifier name) 
             : base(name, VCVSpinCount)
         {
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new AcBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
         }
 
         /// <summary>
@@ -48,10 +53,16 @@ namespace SpiceSharp.Components
         /// <param name="cont_neg">The negative controlling node</param>
         /// <param name="gain">The voltage gain</param>
         public VoltageControlledVoltagesource(Identifier name, Identifier pos, Identifier neg, Identifier cont_pos, Identifier cont_neg, double gain) 
-            : this(name)
+            : base(name, VCVSpinCount)
         {
+            // Add parameters
+            Parameters.Register(new BaseParameters(gain));
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+
             Connect(pos, neg, cont_pos, cont_neg);
-            Set("gain", gain);
         }
 
         /// <summary>

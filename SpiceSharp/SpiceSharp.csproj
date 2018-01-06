@@ -63,6 +63,7 @@
     <Compile Include="Components\Switches\VSW\BaseParameters.cs" />
     <Compile Include="Components\Switches\VSW\ModelBaseParameters.cs" />
     <Compile Include="Components\Voltagesources\CCVS\BaseParameters.cs" />
+    <Compile Include="Components\Voltagesources\VCVS\BaseParameters.cs" />
     <Compile Include="Simulations\Behaviors\SetupDataProvider.cs" />
     <Compile Include="Simulations\IntegrationMethods\ComponentState.cs" />
     <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsource.cs" />

@@ -1,31 +1,24 @@
-﻿using SpiceSharp.Components;
+﻿using SpiceSharp.Components.VCVS;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Behaviors.VCVS
 {
     /// <summary>
-    /// AC behavior for a <see cref="VoltageControlledVoltagesource"/>
+    /// AC behavior for a <see cref="Components.VoltageControlledVoltagesource"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior
+    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
+        BaseParameters bp;
+        LoadBehavior load;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int VCVSposNode { get; private set; }
-        protected int VCVSnegNode { get; private set; }
-        protected int VCVScontPosNode { get; private set; }
-        protected int VCVScontNegNode { get; private set; }
-        protected int VCVSbranch { get; private set; }
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
+        int VCVSposNode, VCVSnegNode, VCVScontPosNode, VCVScontNegNode, VCVSbranch;
         protected MatrixElement VCVSposIbrptr { get; private set; }
         protected MatrixElement VCVSnegIbrptr { get; private set; }
         protected MatrixElement VCVSibrPosptr { get; private set; }
@@ -34,27 +27,43 @@ namespace SpiceSharp.Behaviors.VCVS
         protected MatrixElement VCVSibrContNegptr { get; private set; }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public AcBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
         /// Setup behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var vcvs = component as VoltageControlledVoltagesource;
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
 
             // Get behaviors
-            load = GetBehavior<LoadBehavior>(component);
+            load = provider.GetBehavior<LoadBehavior>();
+        }
 
-            // Get nodes
-            VCVSposNode = vcvs.VCVSposNode;
-            VCVSnegNode = vcvs.VCVSnegNode;
-            VCVScontPosNode = vcvs.VCVScontPosNode;
-            VCVScontNegNode = vcvs.VCVScontNegNode;
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            VCVSposNode = pins[0];
+            VCVSnegNode = pins[1];
+            VCVScontPosNode = pins[2];
+            VCVScontNegNode = pins[3];
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
             VCVSbranch = load.VCVSbranch;
-
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
             VCVSposIbrptr = matrix.GetElement(VCVSposNode, VCVSbranch);
             VCVSnegIbrptr = matrix.GetElement(VCVSnegNode, VCVSbranch);
             VCVSibrPosptr = matrix.GetElement(VCVSbranch, VCVSposNode);
@@ -87,8 +96,8 @@ namespace SpiceSharp.Behaviors.VCVS
             VCVSibrPosptr.Add(1.0);
             VCVSnegIbrptr.Sub(1.0);
             VCVSibrNegptr.Sub(1.0);
-            VCVSibrContPosptr.Sub(load.VCVScoeff);
-            VCVSibrContNegptr.Add(load.VCVScoeff);
+            VCVSibrContPosptr.Sub(bp.VCVScoeff);
+            VCVSibrContNegptr.Add(bp.VCVScoeff);
         }
     }
 }
