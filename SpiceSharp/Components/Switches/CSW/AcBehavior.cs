@@ -1,13 +1,12 @@
-﻿using SpiceSharp.Components;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Behaviors.CSW
 {
     /// <summary>
-    /// AC behavior for a <see cref="CurrentSwitch"/>
+    /// AC behavior for a <see cref="Components.CurrentSwitch"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior
+    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
@@ -18,11 +17,7 @@ namespace SpiceSharp.Behaviors.CSW
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int CSWposNode, CSWnegNode, CSWcontBranch;
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
+        int CSWposNode, CSWnegNode, CSWcontBranch;
         protected MatrixElement CSWposPosptr { get; private set; }
         protected MatrixElement CSWnegPosptr { get; private set; }
         protected MatrixElement CSWposNegptr { get; private set; }
@@ -35,18 +30,37 @@ namespace SpiceSharp.Behaviors.CSW
         public AcBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Setup the behavior
+        /// Setup behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var csw = component as CurrentSwitch;
-
             // Get behaviors
-            load = GetBehavior<LoadBehavior>(component);
-            modelload = GetBehavior<ModelLoadBehavior>(csw.Model);
+            load = provider.GetBehavior<LoadBehavior>();
+            modelload = provider.GetBehavior<ModelLoadBehavior>(1);
+        }
+        
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            CSWposNode = pins[0];
+            CSWnegNode = pins[1];
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
+            CSWcontBranch = load.CSWcontBranch;
+            CSWposPosptr = matrix.GetElement(CSWposNode, CSWposNode);
+            CSWposNegptr = matrix.GetElement(CSWposNode, CSWnegNode);
+            CSWnegPosptr = matrix.GetElement(CSWnegNode, CSWposNode);
+            CSWnegNegptr = matrix.GetElement(CSWnegNode, CSWnegNode);
         }
 
         /// <summary>

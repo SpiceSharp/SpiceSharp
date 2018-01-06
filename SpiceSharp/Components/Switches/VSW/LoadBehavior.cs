@@ -1,74 +1,95 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components;
-using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
+using SpiceSharp.Components.VSW;
 
 namespace SpiceSharp.Behaviors.VSW
 {
     /// <summary>
-    /// Load behavior for a <see cref="VoltageSwitch"/>
+    /// Load behavior for a <see cref="Components.VoltageSwitch"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior
+    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private ModelLoadBehavior modelload;
+        BaseParameters bp;
+        ModelLoadBehavior modelload;
+        ModelBaseParameters mbp;
 
         /// <summary>
-        /// Parameters
+        /// Gets or sets the previous state
         /// </summary>
-        [SpiceName("on"), SpiceInfo("Switch initially closed")]
-        public void SetOn() { VSWzero_state = true; }
-        [SpiceName("off"), SpiceInfo("Switch initially open")]
-        public void SetOff() { VSWzero_state = false; }
+        public bool VSWoldState { get; set; } = false;
 
-        protected bool VSWzero_state = false;
-        public int VSWstate { get; internal set; }
-        public double VSWcond { get; internal set; }
+        /// <summary>
+        /// Flag for using the previous state or not
+        /// </summary>
+        public bool VSWuseOldState { get; set; } = false;
+
+        /// <summary>
+        /// The current state
+        /// </summary>
+        public bool VSWcurrentState { get; protected set; } = false;
+
+        /// <summary>
+        /// The current conductance
+        /// </summary>
+        public double VSWcond { get; protected set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int VSWposNode, VSWnegNode, VSWcontPosNode, VSWcontNegNode;
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
+        int VSWposNode, VSWnegNode, VSWcontPosNode, VSWcontNegNode;
         protected MatrixElement SWposPosptr { get; private set; }
         protected MatrixElement SWnegPosptr { get; private set; }
         protected MatrixElement SWposNegptr { get; private set; }
         protected MatrixElement SWnegNegptr { get; private set; }
-        
+
         /// <summary>
-        /// Setup the behavior
+        /// Constructor
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="name">Name</param>
+        public LoadBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var vsw = component as VoltageSwitch;
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+            mbp = provider.GetParameters<ModelBaseParameters>(1);
 
             // Get behaviors
-            modelload = GetBehavior<ModelLoadBehavior>(vsw.Model);
+            modelload = provider.GetBehavior<ModelLoadBehavior>(1);
+        }
 
-            // Get nodes
-            VSWposNode = vsw.VSWposNode;
-            VSWnegNode = vsw.VSWnegNode;
-            VSWcontPosNode = vsw.VSWcontPosNode;
-            VSWcontNegNode = vsw.VSWcontNegNode;
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            VSWposNode = pins[0];
+            VSWnegNode = pins[1];
+            VSWcontPosNode = pins[2];
+            VSWcontNegNode = pins[3];
+        }
 
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="nodes"></param>
+        /// <param name="matrix"></param>
+        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        {
             SWposPosptr = matrix.GetElement(VSWposNode, VSWposNode);
             SWposNegptr = matrix.GetElement(VSWposNode, VSWnegNode);
             SWnegPosptr = matrix.GetElement(VSWnegNode, VSWposNode);
             SWnegNegptr = matrix.GetElement(VSWnegNode, VSWnegNode);
-
-            VSWstate = ckt.State.GetState();
         }
-
+        
         /// <summary>
         /// Unsetup
         /// </summary>
@@ -88,76 +109,50 @@ namespace SpiceSharp.Behaviors.VSW
         {
             double g_now;
             double v_ctrl;
-            double previous_state;
-            double current_state = 0.0;
+            bool previous_state;
+            bool current_state = false;
             var state = ckt.State;
-            var rstate = state;
 
             if (state.Init == State.InitFlags.InitFix || state.Init == State.InitFlags.InitJct)
             {
-                if (VSWzero_state)
+                if (bp.VSWzero_state)
                 {
                     // Switch specified "on"
-                    state.States[0][VSWstate] = 1.0;
-                    current_state = 1.0;
+                    VSWcurrentState = true;
+                    current_state = true;
                 }
                 else
                 {
                     // Switch specified "off"
-                    state.States[0][VSWstate] = 0.0;
-                    current_state = 0.0;
+                    VSWcurrentState = false;
+                    current_state = false;
                 }
             }
-            else if (state.UseSmallSignal)
+            else
             {
-                previous_state = state.States[0][VSWstate];
-                current_state = previous_state;
-            }
-            else if (state.UseDC)
-            {
-                // Time-independent calculations: use current state
-                previous_state = state.States[0][VSWstate];
-                v_ctrl = rstate.Solution[VSWcontPosNode] - rstate.Solution[VSWcontNegNode];
+                if (VSWuseOldState)
+                    previous_state = VSWoldState;
+                else
+                    previous_state = VSWcurrentState;
+                v_ctrl = state.Solution[VSWcontPosNode] - state.Solution[VSWcontNegNode];
 
                 // Calculate the current state
-                if (v_ctrl > (modelload.VSWthresh + modelload.VSWhyst))
-                    current_state = 1.0;
-                else if (v_ctrl < (modelload.VSWthresh - modelload.VSWhyst))
-                    current_state = 0.0;
+                if (v_ctrl > (mbp.VSWthresh + mbp.VSWhyst))
+                    current_state = true;
+                else if (v_ctrl < (mbp.VSWthresh - mbp.VSWhyst))
+                    current_state = false;
                 else
                     current_state = previous_state;
 
                 // Store the current state
-                if (current_state == 0.0)
-                    state.States[0][VSWstate] = 0.0;
-                else
-                    state.States[0][VSWstate] = 1.0;
+                VSWcurrentState = current_state;
 
                 // If the state changed, ensure one more iteration
                 if (current_state != previous_state)
                     state.IsCon = false;
             }
-            else
-            {
-                // Get the previous state
-                previous_state = state.States[1][VSWstate];
-                v_ctrl = rstate.Solution[VSWcontPosNode] - rstate.Solution[VSWcontNegNode];
 
-                if (v_ctrl > (modelload.VSWthresh + modelload.VSWhyst))
-                    current_state = 1.0;
-                else if (v_ctrl < (modelload.VSWthresh - modelload.VSWhyst))
-                    current_state = 0.0;
-                else
-                    current_state = previous_state;
-
-                // Store the state
-                if (current_state == 0.0)
-                    state.States[0][VSWstate] = 0.0;
-                else
-                    state.States[0][VSWstate] = 1.0;
-            }
-
-            g_now = current_state > 0.0 ? modelload.VSWonConduct : modelload.VSWoffConduct;
+            g_now = current_state == true ? modelload.VSWonConduct : modelload.VSWoffConduct;
             VSWcond = g_now;
 
             // Load the Y-matrix

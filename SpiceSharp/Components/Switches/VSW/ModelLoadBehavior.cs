@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Attributes;
+using SpiceSharp.Components.VSW;
 
 namespace SpiceSharp.Behaviors.VSW
 {
@@ -9,20 +9,25 @@ namespace SpiceSharp.Behaviors.VSW
     public class ModelLoadBehavior : Behaviors.LoadBehavior
     {
         /// <summary>
-        /// Parameters
+        /// Necessary behaviors and parameters
         /// </summary>
-        [SpiceName("ron"), SpiceInfo("Resistance when closed")]
-        public Parameter VSWon { get; } = new Parameter();
-        [SpiceName("roff"), SpiceInfo("Resistance when off")]
-        public Parameter VSWoff { get; } = new Parameter();
-        [SpiceName("vt"), SpiceInfo("Threshold voltage")]
-        public Parameter VSWthresh { get; } = new Parameter();
-        [SpiceName("vh"), SpiceInfo("Hysteresis voltage")]
-        public Parameter VSWhyst { get; } = new Parameter();
-        [SpiceName("gon"), SpiceInfo("Conductance when closed")]
-        public double VSWonConduct { get; private set; }
-        [SpiceName("goff"), SpiceInfo("Conductance when closed")]
-        public double VSWoffConduct { get; private set; }
+        ModelBaseParameters mbp;
+
+        /// <summary>
+        /// Conductance while on
+        /// </summary>
+        public double VSWonConduct { get; protected set; }
+
+        /// <summary>
+        /// Conductance while off
+        /// </summary>
+        public double VSWoffConduct { get; protected set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public ModelLoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior
@@ -32,21 +37,8 @@ namespace SpiceSharp.Behaviors.VSW
         /// <returns></returns>
         public override void Setup(Entity component, Circuit ckt)
         {
-            if (!VSWon.Given)
-            {
-                VSWonConduct = 1.0;
-                VSWon.Value = 1.0;
-            }
-            else
-                VSWonConduct = 1.0 / VSWon.Value;
-
-            if (!VSWoff.Given)
-            {
-                VSWoffConduct = ckt.State.Gmin;
-                VSWoff.Value = 1.0 / VSWoffConduct;
-            }
-            else
-                VSWoffConduct = 1.0 / VSWoff.Value;
+            VSWonConduct = 1.0 / mbp.VSWon;
+            VSWoffConduct = 1.0 / mbp.VSWoff;
         }
 
         /// <summary>

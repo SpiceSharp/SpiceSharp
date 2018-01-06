@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors.VSW;
+using SpiceSharp.Components.VSW;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
@@ -36,10 +37,16 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled switch</param>
-        public VoltageSwitch(Identifier name) : base(name, SWpinCount)
+        public VoltageSwitch(Identifier name) 
+            : base(name, SWpinCount)
         {
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new AcBehavior());
+            // Register parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
         }
 
         /// <summary>
@@ -51,8 +58,16 @@ namespace SpiceSharp.Components
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
         public VoltageSwitch(Identifier name, Identifier pos, Identifier neg, Identifier cont_pos, Identifier cont_neg) 
-            : this(name)
+            : base(name, SWpinCount)
         {
+            // Register parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
+
             Connect(pos, neg, cont_pos, cont_neg);
         }
 

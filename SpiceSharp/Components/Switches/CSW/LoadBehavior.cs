@@ -30,11 +30,8 @@ namespace SpiceSharp.Behaviors.CSW
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int CSWposNode, CSWnegNode, CSWcontBranch;
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
+        public int CSWcontBranch { get; private set; }
+        protected int CSWposNode, CSWnegNode;
         protected MatrixElement CSWposPosptr { get; private set; }
         protected MatrixElement CSWnegPosptr { get; private set; }
         protected MatrixElement CSWposNegptr { get; private set; }
@@ -176,10 +173,7 @@ namespace SpiceSharp.Behaviors.CSW
                     current_state = previous_state;
 
                 // Store the current state
-                if (current_state == false)
-                    CSWcurrentState = false;
-                else
-                    CSWcurrentState = true;
+                CSWcurrentState = current_state;
             }
 
             // Get the current conduction

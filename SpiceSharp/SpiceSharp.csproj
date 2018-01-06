@@ -59,6 +59,9 @@
     <Compile Include="Components\Switches\CSW\AcceptBehavior.cs" />
     <Compile Include="Components\Switches\CSW\BaseParameters.cs" />
     <Compile Include="Components\Switches\CSW\ModelBaseParameters.cs" />
+    <Compile Include="Components\Switches\VSW\AcceptBehavior.cs" />
+    <Compile Include="Components\Switches\VSW\BaseParameters.cs" />
+    <Compile Include="Components\Switches\VSW\ModelBaseParameters.cs" />
     <Compile Include="Simulations\Behaviors\SetupDataProvider.cs" />
     <Compile Include="Simulations\IntegrationMethods\ComponentState.cs" />
     <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsource.cs" />

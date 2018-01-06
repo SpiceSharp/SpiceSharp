@@ -14,12 +14,6 @@ namespace SpiceSharp.Behaviors.CSW
         ModelBaseParameters mbp;
 
         /// <summary>
-        /// Constants
-        /// </summary>
-        public const double CSWdefOnResistance = 1.0;
-        public const double CSWdefOffResistance = 1e12;
-
-        /// <summary>
         /// Conductance while on
         /// </summary>
         public double CSWonConduct { get; protected set; }

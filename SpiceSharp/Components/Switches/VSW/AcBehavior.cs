@@ -1,61 +1,70 @@
-﻿using SpiceSharp.Components;
-using SpiceSharp.Circuits;
+﻿using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
+using SpiceSharp.Components.VSW;
 
 namespace SpiceSharp.Behaviors.VSW
 {
     /// <summary>
-    /// AC behavior for <see cref="VoltageSwitch"/>
+    /// AC behavior for <see cref="Components.VoltageSwitch"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior
+    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
-        private ModelLoadBehavior modelload;
+        LoadBehavior load;
+        ModelLoadBehavior modelload;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int VSWposNode, VSWnegNode, VSWcontPosNode, VSWcontNegNode;
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
+        int VSWposNode, VSWnegNode, VSWcontPosNode, VSWcontNegNode;
         protected MatrixElement SWposPosptr { get; private set; }
         protected MatrixElement SWnegPosptr { get; private set; }
         protected MatrixElement SWposNegptr { get; private set; }
         protected MatrixElement SWnegNegptr { get; private set; }
 
         /// <summary>
-        /// Setup the behavior
+        /// Constructor
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="name">Name</param>
+        public AcBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var vsw = component as VoltageSwitch;
-
             // Get behaviors
-            load = GetBehavior<LoadBehavior>(component);
-            modelload = GetBehavior<ModelLoadBehavior>(vsw.Model);
+            load = provider.GetBehavior<LoadBehavior>();
+            modelload = provider.GetBehavior<ModelLoadBehavior>(1);
+        }
 
-            // Get nodes
-            VSWposNode = vsw.VSWposNode;
-            VSWnegNode = vsw.VSWnegNode;
-            VSWcontPosNode = vsw.VSWcontPosNode;
-            VSWcontNegNode = vsw.VSWcontNegNode;
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            VSWposNode = pins[0];
+            VSWnegNode = pins[1];
+            VSWcontPosNode = pins[2];
+            VSWcontNegNode = pins[3];
+        }
 
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
             SWposPosptr = matrix.GetElement(VSWposNode, VSWposNode);
             SWposNegptr = matrix.GetElement(VSWposNode, VSWnegNode);
             SWnegPosptr = matrix.GetElement(VSWnegNode, VSWposNode);
             SWnegNegptr = matrix.GetElement(VSWnegNode, VSWnegNode);
         }
-
+        
         /// <summary>
         /// Unsetup the behavior
         /// </summary>
@@ -73,13 +82,12 @@ namespace SpiceSharp.Behaviors.VSW
         /// <param name="ckt"></param>
         public override void Load(Circuit ckt)
         {
-            double current_state, g_now;
+            double g_now;
             var state = ckt.State;
             var cstate = state;
 
             // Get the current state
-            current_state = state.States[0][load.VSWstate];
-            g_now = current_state > 0.0 ? modelload.VSWonConduct : modelload.VSWoffConduct;
+            g_now = load.VSWcurrentState == true ? modelload.VSWonConduct : modelload.VSWoffConduct;
 
             // Load the Y-matrix
             SWposPosptr.Add(g_now);

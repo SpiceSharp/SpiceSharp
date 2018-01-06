@@ -18,6 +18,6 @@ namespace SpiceSharp.Components.CSW
         /// <summary>
         /// The initial state
         /// </summary>
-        public bool CSWzero_state { get; protected set; } = false;
+        public bool CSWzero_state { get; set; } = false;
     }
 }

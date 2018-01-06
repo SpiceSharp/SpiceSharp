@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors.VSW;
+using SpiceSharp.Components.VSW;
 
 namespace SpiceSharp.Components
 {
@@ -12,9 +13,14 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the model</param>
-        public VoltageSwitchModel(Identifier name) : base(name)
+        public VoltageSwitchModel(Identifier name)
+            : base(name)
         {
-            RegisterBehavior(new ModelLoadBehavior());
+            // Add parameters
+            Parameters.Register(new ModelBaseParameters());
+
+            // Add factories
+            AddFactory(typeof(ModelLoadBehavior), () => new ModelLoadBehavior(Name));
         }
     }
 }
