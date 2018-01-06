@@ -1,20 +1,22 @@
-﻿using SpiceSharp.Components;
+﻿using SpiceSharp.Components.CCVS;
 using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
+using System;
 
 namespace SpiceSharp.Behaviors.CCVS
 {
     /// <summary>
-    /// General behavior for <see cref="CurrentControlledVoltagesource"/>
+    /// General behavior for <see cref="Components.CurrentControlledVoltagesource"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior
+    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Parameters
+        /// Necessary behaviors and parameters
         /// </summary>
-        [SpiceName("gain"), SpiceInfo("Transresistance (gain)")]
-        public Parameter CCVScoeff { get; } = new Parameter();
+        BaseParameters bp;
+        VSRC.LoadBehavior vsrcload;
+
         [SpiceName("i"), SpiceInfo("Output current")]
         public double GetCurrent(Circuit ckt) => ckt.State.Solution[CCVSbranch];
         [SpiceName("v"), SpiceInfo("Output voltage")]
@@ -23,8 +25,10 @@ namespace SpiceSharp.Behaviors.CCVS
         public double GetPower(Circuit ckt) => ckt.State.Solution[CCVSbranch] * (ckt.State.Solution[CCVSposNode] - ckt.State.Solution[CCVSnegNode]);
 
         /// <summary>
-        /// Matrix elements
+        /// Nodes
         /// </summary>
+        int CCVSposNode, CCVSnegNode, CCVScontBranch;
+        public int CCVSbranch { get; private set; }
         protected MatrixElement CCVSposIbrptr { get; private set; }
         protected MatrixElement CCVSnegIbrptr { get; private set; }
         protected MatrixElement CCVSibrPosptr { get; private set; }
@@ -32,34 +36,64 @@ namespace SpiceSharp.Behaviors.CCVS
         protected MatrixElement CCVSibrContBrptr { get; private set; }
 
         /// <summary>
-        /// Nodes
+        /// Constructor
         /// </summary>
-        protected int CCVSposNode { get; private set; }
-        protected int CCVSnegNode { get; private set; }
-        public int CCVSbranch { get; private set; }
-        public int CCVScontBranch { get; private set; }
+        /// <param name="name">Name</param>
+        public LoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Setup the behavior
+        /// Create export method
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="state">State</param>
+        /// <param name="parameter">Parameter</param>
         /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        public override Func<double> CreateExport(State state, string parameter)
         {
-            var ccvs = component as CurrentControlledVoltagesource;
+            switch (parameter)
+            {
+                case "v": return () => state.Solution[CCVSposNode] - state.Solution[CCVSnegNode];
+                case "i":
+                case "c": return () => state.Solution[CCVSbranch];
+                case "p": return () => state.Solution[CCVSbranch] * (state.Solution[CCVSposNode] - state.Solution[CCVSnegNode]);
+                default: return null;
+            }
+        }
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
+        {
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
 
             // Get behaviors
-            var vsrcload = GetBehavior<VSRC.LoadBehavior>(ccvs.CCVScontSource);
+            vsrcload = provider.GetBehavior<VSRC.LoadBehavior>(1);
+        }
 
-            // Get nodes
-            CCVSposNode = ccvs.CCVSposNode;
-            CCVSnegNode = ccvs.CCVSnegNode;
-            CCVSbranch = CreateNode(ckt, component.Name.Grow("#branch"), Node.NodeType.Current).Index;
+        /// <summary>
+        /// Connect the behavior
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            CCVSposNode = pins[0];
+            CCVSnegNode = pins[1];
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="nodes">Nodes</param>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        {
+            // Create/get nodes
             CCVScontBranch = vsrcload.VSRCbranch;
+            CCVSbranch = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
 
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
+            // Get matrix pointers
             CCVSposIbrptr = matrix.GetElement(CCVSposNode, CCVSbranch);
             CCVSnegIbrptr = matrix.GetElement(CCVSnegNode, CCVSbranch);
             CCVSibrPosptr = matrix.GetElement(CCVSbranch, CCVSposNode);
@@ -89,7 +123,7 @@ namespace SpiceSharp.Behaviors.CCVS
             CCVSibrPosptr.Add(1.0);
             CCVSnegIbrptr.Sub(1.0);
             CCVSibrNegptr.Sub(1.0);
-            CCVSibrContBrptr.Sub(CCVScoeff);
+            CCVSibrContBrptr.Sub(bp.CCVScoeff);
         }
     }
 }

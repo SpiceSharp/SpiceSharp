@@ -1,30 +1,25 @@
-﻿using SpiceSharp.Components;
+﻿using SpiceSharp.Components.CCVS;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Behaviors.CCVS
 {
     /// <summary>
-    /// AC behavior for <see cref="CurrentControlledVoltagesource"/>
+    /// AC behavior for <see cref="Components.CurrentControlledVoltagesource"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior
+    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
+        BaseParameters bp;
+        LoadBehavior load;
+        VSRC.LoadBehavior vsrcload;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int CCVSposNode { get; private set; }
-        protected int CCVSnegNode { get; private set; }
-        public int CCVSbranch { get; private set; }
-        public int CCVScontBranch { get; private set; }
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
+        int CCVSposNode, CCVSnegNode, CCVSbranch, CCVScontBranch;
         protected MatrixElement CCVSposIbrptr { get; private set; }
         protected MatrixElement CCVSnegIbrptr { get; private set; }
         protected MatrixElement CCVSibrPosptr { get; private set; }
@@ -32,33 +27,53 @@ namespace SpiceSharp.Behaviors.CCVS
         protected MatrixElement CCVSibrContBrptr { get; private set; }
 
         /// <summary>
-        /// Setup the behavior
+        /// Constructor
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="name">Name</param>
+        public AcBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var ccvs = component as CurrentControlledVoltagesource;
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
 
             // Get behaviors
-            load = GetBehavior<LoadBehavior>(component);
+            load = provider.GetBehavior<LoadBehavior>();
+            vsrcload = provider.GetBehavior<VSRC.LoadBehavior>(1);
+        }
 
-            // Get nodes
-            CCVSposNode = ccvs.CCVSposNode;
-            CCVSnegNode = ccvs.CCVSnegNode;
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            CCVSposNode = pins[0];
+            CCVSnegNode = pins[1];
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
+            // Get extra nodes
+            CCVScontBranch = vsrcload.VSRCbranch;
             CCVSbranch = load.CCVSbranch;
-            CCVScontBranch = load.CCVScontBranch;
 
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
+            // Get matrix pointers
             CCVSposIbrptr = matrix.GetElement(CCVSposNode, CCVSbranch);
             CCVSnegIbrptr = matrix.GetElement(CCVSnegNode, CCVSbranch);
             CCVSibrPosptr = matrix.GetElement(CCVSbranch, CCVSposNode);
             CCVSibrNegptr = matrix.GetElement(CCVSbranch, CCVSnegNode);
             CCVSibrContBrptr = matrix.GetElement(CCVSbranch, CCVScontBranch);
         }
-
+        
         /// <summary>
         /// Unsetup the behavior
         /// </summary>
@@ -81,7 +96,7 @@ namespace SpiceSharp.Behaviors.CCVS
             CCVSibrPosptr.Add(1.0);
             CCVSnegIbrptr.Sub(1.0);
             CCVSibrNegptr.Sub(1.0);
-            CCVSibrContBrptr.Sub(load.CCVScoeff);
+            CCVSibrContBrptr.Sub(bp.CCVScoeff);
         }
     }
 }

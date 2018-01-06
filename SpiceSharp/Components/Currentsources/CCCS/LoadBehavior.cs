@@ -21,10 +21,6 @@ namespace SpiceSharp.Behaviors.CCCS
         /// </summary>
         public int CCCScontBranch { get; protected set; }
         int CCCSposNode, CCCSnegNode;
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
         protected MatrixElement CCCSposContBrptr { get; private set; }
         protected MatrixElement CCCSnegContBrptr { get; private set; }
 

@@ -1,8 +1,8 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Sparse;
 using SpiceSharp.Behaviors.CCVS;
+using SpiceSharp.Components.CCVS;
 
 namespace SpiceSharp.Components
 {
@@ -36,10 +36,15 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled current source</param>
-        public CurrentControlledVoltagesource(Identifier name) : base(name, CCVSpinCount)
+        public CurrentControlledVoltagesource(Identifier name) 
+            : base(name, CCVSpinCount)
         {
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new AcBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
         }
 
         /// <summary>
@@ -51,10 +56,16 @@ namespace SpiceSharp.Components
         /// <param name="vsource">The controlling voltage source name</param>
         /// <param name="gain">The transresistance (gain)</param>
         public CurrentControlledVoltagesource(Identifier name, Identifier pos, Identifier neg, Identifier vsource, double gain) 
-            : this(name)
+            : base(name, CCVSpinCount)
         {
+            // Add parameters
+            Parameters.Register(new BaseParameters(gain));
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+
             Connect(pos, neg);
-            Set("gain", gain);
             CCVScontName = vsource;
         }
 
