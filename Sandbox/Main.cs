@@ -17,27 +17,25 @@ namespace Sandbox
         {
             InitializeComponent();
             var plotInput = chMain.Series.Add("Input");
-            plotInput.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            plotInput.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
             var plotOutput = chMain.Series.Add("Output");
             plotOutput.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
 
-            // Create the circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Currentsource("I1", "IN", "0", 0.0),
-                new Voltagesource("Vmeas", "IN", "0", 0.0),
-                new CurrentControlledCurrentsource("H1", "OUT", "IN", "Vmeas", 2.0),
-                new Resistor("R1", "OUT", "0", 1e3));
+                new Voltagesource("V1", "IN", "0", new Pulse(0, 5, 1e-6, 1e-10, 1e-10, 1e-6, 2e-6)),
+                new Resistor("R1", "IN", "OUT", 1e3),
+                new Capacitor("C1", "OUT", "0", 1e-9)
+                );
 
-            // Create and run simulation
-            DC dc = new DC("DC 1");
-            dc.Sweeps.Add(new DC.Sweep("I1", -1e-3, 1e-3, 1e-5));
-            dc.OnExportSimulationData += (object sender, SimulationData data) =>
+            Transient tran = new Transient("Transient 1", 1e-6, 10e-6);
+            tran.MaxStep = 1e-8;
+            tran.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                plotInput.Points.AddXY(dc.Sweeps[0].CurrentValue, dc.Sweeps[0].CurrentValue * 1e3);
-                plotOutput.Points.AddXY(dc.Sweeps[0].CurrentValue, data.GetVoltage("OUT"));
+                plotInput.Points.AddXY(data.GetTime(), data.GetVoltage("IN"));
+                plotOutput.Points.AddXY(data.GetTime(), data.GetVoltage("OUT"));
             };
-            dc.Run(ckt);
+            tran.Run(ckt);
         }
 
         /// <summary>

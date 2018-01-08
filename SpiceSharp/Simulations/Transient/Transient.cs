@@ -59,11 +59,6 @@ namespace SpiceSharp.Simulations
             // Get behaviors
             acceptbehaviors = SetupBehaviors<AcceptBehavior>();
             truncatebehaviors = SetupBehaviors<TruncateBehavior>();
-
-            // Setup the behaviors for usage with our matrix
-            var matrix = Circuit.State.Matrix;
-            foreach (var behavior in loadbehaviors)
-                behavior.GetMatrixPointers(Circuit.Nodes, matrix);
         }
 
         /// <summary>

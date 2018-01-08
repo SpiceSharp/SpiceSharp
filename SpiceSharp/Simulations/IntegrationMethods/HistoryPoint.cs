@@ -11,11 +11,6 @@
         public double[] Values;
 
         /// <summary>
-        /// The derivatives
-        /// </summary>
-        public double[] Derivatives;
-
-        /// <summary>
         /// The next point in history
         /// </summary>
         public HistoryPoint Next;

@@ -151,19 +151,19 @@ namespace SpiceSharp.Behaviors.DIO
             DIOcap = capd;
 
             // Integrate
-            var result = DIOcapCharge.Integrate(capd);
+            var result = DIOcapCharge.Integrate(capd, vd);
 
             // Load Rhs vector
-            double cdeq = DIOcapCharge.Derivative - result.Geq * vd;
-            state.Rhs[DIOnegNode] += cdeq;
-            state.Rhs[DIOposPrimeNode] -= cdeq;
+            double ceq = result.Ceq;
+            state.Rhs[DIOnegNode] += ceq;
+            state.Rhs[DIOposPrimeNode] -= ceq;
 
             // Load Y-matrix
-            double gd = result.Geq;
-            DIOnegNegPtr.Add(gd);
-            DIOposPrimePosPrimePtr.Add(gd);
-            DIOnegPosPrimePtr.Sub(gd);
-            DIOposPrimeNegPtr.Sub(gd);
+            double geq = result.Geq;
+            DIOnegNegPtr.Add(geq);
+            DIOposPrimePosPrimePtr.Add(geq);
+            DIOnegPosPrimePtr.Sub(geq);
+            DIOposPrimeNegPtr.Sub(geq);
         }
 
         /// <summary>

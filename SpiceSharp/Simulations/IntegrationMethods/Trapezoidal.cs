@@ -75,28 +75,52 @@ namespace SpiceSharp.IntegrationMethods
         /// Integrate a variable at a specific index
         /// </summary>
         /// <param name="index">Index</param>
-        /// <param name="cap">Capacitance</param>
         /// <returns></returns>
-        public override Result Integrate(HistoryPoint first, int index, double cap)
+        public override void Integrate(HistoryPoint first, int index)
         {
             switch (Order)
             {
                 case 1:
-                    first.Derivatives[index] = ag[0] * first.Values[index] + ag[1] * first.Previous.Values[index];
+                    first.Values[index] = ag[0] * first.Values[index] + ag[1] * first.Previous.Values[index];
                     break;
 
                 case 2:
-                    first.Derivatives[index] = -first.Previous.Derivatives[index] * ag[1] + ag[0] * (first.Values[index] - first.Previous.Values[index]);
+                    first.Values[index] = -first.Previous.Values[index] * ag[1] + ag[0] * (first.Values[index] - first.Previous.Values[index]);
+                    break;
+
+                default:
+                    throw new CircuitException("Invalid order");
+            }
+        }
+
+        /// <summary>
+        /// Integrate a variable at a specific index
+        /// </summary>
+        /// <param name="first">The current point with state variables</param>
+        /// <param name="index">The index of the state to be used</param>
+        /// <param name="dqdv">The derivative of the state variable w.r.t. a voltage across</param>
+        /// <param name="v">The voltage across</param>
+        /// <returns>The contributions to the Y-matrix and Rhs-vector</returns>
+        public override Result Integrate(HistoryPoint first, int index, double dqdv, double v)
+        {
+            switch (Order)
+            {
+                case 1:
+                    first.Values[index + 1] = ag[0] * first.Values[index] + ag[1] * first.Previous.Values[index];
+                    break;
+
+                case 2:
+                    first.Values[index + 1] = -first.Previous.Values[index] * ag[1] + ag[0] * (first.Values[index] - first.Previous.Values[index]);
                     break;
 
                 default:
                     throw new CircuitException("Invalid order");
             }
 
-            // Create the returned object
-            Result result = new Result();
-            result.Ceq = first.Derivatives[index] - ag[0] * first.Values[index];
-            result.Geq = ag[0] * cap;
+            // Create the contributions
+            var result = new Result();
+            result.Geq = ag[0] * dqdv;
+            result.Ceq = first.Values[index + 1] - result.Geq * v;
             return result;
         }
 
@@ -239,7 +263,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Control local truncation error on a state variable
         /// </summary>
         /// <param name="qcap">Index</param>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">simulation</param>
         /// <param name="timeStep">Timestep</param>
         public override void Terr(int qcap, Simulation sim, ref double timeStep)
         {
@@ -303,7 +327,7 @@ namespace SpiceSharp.IntegrationMethods
 
             // Calculate the tolerance
             // Note: These need to be available in the integration method configuration, defaults are used for now to avoid too much changes
-            double volttol = 1e-12 + 1e-3 * Math.Max(Math.Abs(first.Derivatives[index]), Math.Abs(first.Previous.Derivatives[index]));
+            double volttol = 1e-12 + 1e-3 * Math.Max(Math.Abs(first.Values[index + 1]), Math.Abs(first.Previous.Values[index + 1]));
             double chargetol = Math.Max(Math.Abs(first.Values[index]), Math.Abs(first.Previous.Values[index]));
             chargetol = 1e-3 * Math.Max(chargetol, 1e-14) / Delta;
             double tol = Math.Max(volttol, chargetol);

@@ -337,9 +337,19 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="first">The current point with state variables</param>
         /// <param name="index">The index of the state to be used</param>
-        /// <param name="cap">Capacitance</param>
         /// <returns></returns>
-        public abstract Result Integrate(HistoryPoint first, int index, double cap);
+        public abstract void Integrate(HistoryPoint first, int index);
+
+        /// <summary>
+        /// Integrate a state variable at a specific index
+        /// This method will also calculate contributions for the Y-matrix and Rhs-vector
+        /// </summary>
+        /// <param name="first">The current point with state variables</param>
+        /// <param name="index">The index of the state to be used</param>
+        /// <param name="dqdv">The derivative of the state variable w.r.t. a voltage across</param>
+        /// <param name="v">The voltage across</param>
+        /// <returns>The contributions to the Y-matrix and Rhs-vector</returns>
+        public abstract Result Integrate(HistoryPoint first, int index, double dqdv, double v);
 
         /// <summary>
         /// Integrate a state variable
