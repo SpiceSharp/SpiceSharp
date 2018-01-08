@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors.BJT;
+using SpiceSharp.Behaviors.Bipolar;
 
 namespace SpiceSharp.Components
 {

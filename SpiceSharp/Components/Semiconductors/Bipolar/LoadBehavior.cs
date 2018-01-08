@@ -5,10 +5,10 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Behaviors.BJT
+namespace SpiceSharp.Behaviors.Bipolar
 {
     /// <summary>
-    /// General behavior for <see cref="BJT"/>
+    /// General behavior for <see cref="Bipolar"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior
     {

@@ -3,7 +3,7 @@ using SpiceSharp.Diagnostics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Behaviors.BJT
+namespace SpiceSharp.Behaviors.Bipolar
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Components.BJTModel"/>

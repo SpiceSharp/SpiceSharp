@@ -4,10 +4,10 @@ using SpiceSharp.Components.Noise;
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Behaviors.BJT
+namespace SpiceSharp.Behaviors.Bipolar
 {
     /// <summary>
-    /// Noise behavior for <see cref="BJT"/>
+    /// Noise behavior for <see cref="Bipolar"/>
     /// </summary>
     public class NoiseBehavior : Behaviors.NoiseBehavior
     {

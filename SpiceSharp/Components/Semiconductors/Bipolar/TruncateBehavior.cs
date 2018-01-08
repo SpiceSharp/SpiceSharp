@@ -1,10 +1,10 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.BJT
+namespace SpiceSharp.Behaviors.Bipolar
 {
     /// <summary>
-    /// Truncate behavior for a <see cref="BJT"/>
+    /// Truncate behavior for a <see cref="Bipolar"/>
     /// </summary>
     public class TruncateBehavior : Behaviors.TruncateBehavior
     {

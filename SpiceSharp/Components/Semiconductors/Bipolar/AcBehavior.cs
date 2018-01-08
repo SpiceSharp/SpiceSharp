@@ -3,10 +3,10 @@ using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Behaviors.BJT
+namespace SpiceSharp.Behaviors.Bipolar
 {
     /// <summary>
-    /// AC behavior for <see cref="BJT"/>
+    /// AC behavior for <see cref="Components.BJT"/>
     /// </summary>
     public class AcBehavior : Behaviors.AcBehavior
     {
