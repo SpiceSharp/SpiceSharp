@@ -26,12 +26,6 @@ namespace SpiceSharp.Components
         public int BJTemitNode { get; private set; }
         [SpiceName("substnode"), SpiceInfo("Number of substrate node")]
         public int BJTsubstNode { get; private set; }
-        [SpiceName("colprimenode"), SpiceInfo("Internal collector node")]
-        public int BJTcolPrimeNode { get; private set; }
-        [SpiceName("baseprimenode"), SpiceInfo("Internal base node")]
-        public int BJTbasePrimeNode { get; private set; }
-        [SpiceName("emitprimenode"), SpiceInfo("Internal emitter node")]
-        public int BJTemitPrimeNode { get; private set; }
 
         /// <summary>
         /// Constants
@@ -42,7 +36,8 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BJT(Identifier name) : base(name, BJTpinCount)
+        public BJT(Identifier name) 
+            : base(name, BJTpinCount)
         {
             RegisterBehavior(new LoadBehavior());
             RegisterBehavior(new TemperatureBehavior());

@@ -122,17 +122,17 @@ namespace SpiceSharp.Behaviors.DIO
         }
 
         /// <summary>
-        /// Transient behavior
+        /// Calculate the state values
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Transient(TimeSimulation sim)
+        /// <param name="sim">Simulation</param>
+        public override void GetDCstate(TimeSimulation sim)
         {
             var state = sim.Circuit.State;
-            double arg, czero, sarg, capd, czof2;
+            double arg, sarg, capd;
             double vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
 
             // charge storage elements
-            czero = temp.DIOtJctCap * bp.DIOarea;
+            double czero = temp.DIOtJctCap * bp.DIOarea;
             if (vd < temp.DIOtDepCap)
             {
                 arg = 1 - vd / mbp.DIOjunctionPot;
@@ -143,15 +143,28 @@ namespace SpiceSharp.Behaviors.DIO
             }
             else
             {
-                czof2 = czero / modeltemp.DIOf2;
+                double czof2 = czero / modeltemp.DIOf2;
                 DIOcapCharge.Value = mbp.DIOtransitTime * load.DIOcurrent + czero * temp.DIOtF1 + czof2 * (modeltemp.DIOf3 * (vd -
                     temp.DIOtDepCap) + (mbp.DIOgradingCoeff / (mbp.DIOjunctionPot + mbp.DIOjunctionPot)) * (vd * vd - temp.DIOtDepCap * temp.DIOtDepCap));
                 capd = mbp.DIOtransitTime * load.DIOconduct + czof2 * (modeltemp.DIOf3 + mbp.DIOgradingCoeff * vd / mbp.DIOjunctionPot);
             }
             DIOcap = capd;
+        }
+
+        /// <summary>
+        /// Transient behavior
+        /// </summary>
+        /// <param name="sim">Time-based simulation</param>
+        public override void Transient(TimeSimulation sim)
+        {
+            var state = sim.Circuit.State;
+            double vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
+
+            // This is the same calculation
+            GetDCstate(sim);
 
             // Integrate
-            var result = DIOcapCharge.Integrate(capd, vd);
+            var result = DIOcapCharge.Integrate(DIOcap, vd);
 
             // Load Rhs vector
             double ceq = result.Ceq;

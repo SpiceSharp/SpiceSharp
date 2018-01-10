@@ -52,6 +52,11 @@
     <Compile Include="Components\Currentsources\VCCS\BaseParameters.cs" />
     <Compile Include="Components\RLC\CAP\BaseParameters.cs" />
     <Compile Include="Components\RLC\CAP\ModelBaseParameters.cs" />
+    <Compile Include="Components\Semiconductors\Bipolar\BaseParameters.cs" />
+    <Compile Include="Components\Semiconductors\Bipolar\BJTExcessPhaseEventArgs.cs" />
+    <Compile Include="Components\Semiconductors\Bipolar\ModelBaseParameters.cs" />
+    <Compile Include="Components\Semiconductors\Bipolar\ModelNoiseParameters.cs" />
+    <Compile Include="Components\Semiconductors\Bipolar\TransientBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\BaseParameters.cs" />
     <Compile Include="Components\Semiconductors\DIO\ModelBaseParameters.cs" />
     <Compile Include="Components\Semiconductors\DIO\ModelNoiseParameters.cs" />
@@ -93,7 +98,6 @@
     <Compile Include="Components\RLC\RES\TemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\AcBehavior.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\LoadBehavior.cs" />
-    <Compile Include="Components\Semiconductors\Bipolar\ModelNoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\ModelTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\NoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\TemperatureBehavior.cs" />

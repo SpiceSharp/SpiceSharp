@@ -65,6 +65,13 @@ namespace SpiceSharp.IntegrationMethods
         public double GetPreviousValue(int history = 1) => source.GetPreviousValue(index, history);
 
         /// <summary>
+        /// Get the timestep (in history)
+        /// </summary>
+        /// <param name="history">Number of steps to go back in history (current timestep by default)</param>
+        /// <returns></returns>
+        public double GetTimestep(int history = 0) => source.GetTimestep(history);
+
+        /// <summary>
         /// Integrate the state variable
         /// </summary>
         /// <returns>The last order derivative</returns>

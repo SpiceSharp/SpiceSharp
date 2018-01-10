@@ -4,33 +4,26 @@ using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Components.Bipolar;
 
 namespace SpiceSharp.Behaviors.Bipolar
 {
     /// <summary>
     /// General behavior for <see cref="Bipolar"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior
+    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private ModelTemperatureBehavior modeltemp;
-        private TemperatureBehavior temp;
-
+        BaseParameters bp;
+        ModelBaseParameters mbp;
+        TemperatureBehavior temp;
+        ModelTemperatureBehavior modeltemp;
+        
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("area"), SpiceInfo("Area factor")]
-        public Parameter BJTarea { get; } = new Parameter(1);
-        [SpiceName("off"), SpiceInfo("Device initially off")]
-        public bool BJToff { get; set; }
-        [SpiceName("icvbe"), SpiceInfo("Initial B-E voltage")]
-        public Parameter BJTicVBE { get; } = new Parameter();
-        [SpiceName("icvce"), SpiceInfo("Initial C-E voltage")]
-        public Parameter BJTicVCE { get; } = new Parameter();
-        [SpiceName("sens_area"), SpiceInfo("flag to request sensitivity WRT area")]
-        public bool BJTsenParmNo { get; set; }
         [SpiceName("cpi"), SpiceInfo("Internal base to emitter capactance")]
         public double BJTcapbe { get; internal set; }
         [SpiceName("cmu"), SpiceInfo("Internal base to collector capactiance")]
@@ -43,33 +36,23 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <summary>
         /// Methods
         /// </summary>
-        [SpiceName("ic"), SpiceInfo("Initial condition vector")]
-        public void SetIC(double[] value)
-        {
-            switch (value.Length)
-            {
-                case 2: BJTicVCE.Set(value[1]); goto case 1;
-                case 1: BJTicVBE.Set(value[0]); break;
-                default:
-                    throw new CircuitException("Bad parameter");
-            }
-        }
         [SpiceName("vbe"), SpiceInfo("B-E voltage")]
-        public double GetVBE(Circuit ckt) => ckt.State.States[0][BJTstate + BJTvbe];
+        public double BJTvbe { get; protected set; }
         [SpiceName("vbc"), SpiceInfo("B-C voltage")]
-        public double GetVBC(Circuit ckt) => ckt.State.States[0][BJTstate + BJTvbc];
+        public double BJTvbc { get; protected set; }
         [SpiceName("cc"), SpiceInfo("Current at collector node")]
-        public double GetCC(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcc];
+        public double BJTcc { get; protected set; }
         [SpiceName("cb"), SpiceInfo("Current at base node")]
-        public double GetCB(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcb];
+        public double BJTcb { get; protected set; }
         [SpiceName("gpi"), SpiceInfo("Small signal input conductance - pi")]
-        public double GetGPI(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgpi];
+        public double BJTgpi { get; protected set; }
         [SpiceName("gmu"), SpiceInfo("Small signal conductance - mu")]
-        public double GetGMU(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgmu];
+        public double BJTgmu { get; protected set; }
         [SpiceName("gm"), SpiceInfo("Small signal transconductance")]
-        public double GetGM(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgm];
+        public double BJTgm { get; protected set; }
         [SpiceName("go"), SpiceInfo("Small signal output conductance")]
-        public double GetGO(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgo];
+        public double BJTgo { get; protected set; }
+
         [SpiceName("qbe"), SpiceInfo("Charge storage B-E junction")]
         public double GetQBE(Circuit ckt) => ckt.State.States[0][BJTstate + BJTqbe];
         [SpiceName("cqbe"), SpiceInfo("Cap. due to charge storage in B-E jct.")]
@@ -87,15 +70,15 @@ namespace SpiceSharp.Behaviors.Bipolar
         [SpiceName("cqbx"), SpiceInfo("Cap. due to charge storage in B-X jct.")]
         public double GetCQBX(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcqbx];
         [SpiceName("gx"), SpiceInfo("Conductance from base to internal base")]
-        public double GetGX(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgx];
+        public double BJTgx { get; protected set; }
         [SpiceName("cexbc"), SpiceInfo("Total Capacitance in B-X junction")]
         public double GetCEXBC(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcexbc];
         [SpiceName("geqcb"), SpiceInfo("d(Ibe)/d(Vbc)")]
-        public double GetGEQCB(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgeqcb];
+        public double BJTgeqcb { get; protected set; }
         [SpiceName("gccs"), SpiceInfo("Internal C-S cap. equiv. cond.")]
-        public double GetGCCS(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgccs];
+        public double BJTgccs { get; protected set; }
         [SpiceName("geqbx"), SpiceInfo("Internal C-B-base cap. equiv. cond.")]
-        public double GetGEQBX(Circuit ckt) => ckt.State.States[0][BJTstate + BJTgeqbx];
+        public double BJTgeqbx { get; protected set; }
         [SpiceName("cs"), SpiceInfo("Substrate current")]
         public double GetCS(Circuit ckt)
         {
@@ -137,7 +120,7 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <summary>
         /// Nodes
         /// </summary>
-        private int BJTcolNode, BJTbaseNode, BJTemitNode, BJTsubstNode;
+        int BJTcolNode, BJTbaseNode, BJTemitNode, BJTsubstNode;
         public int BJTcolPrimeNode { get; private set; }
         public int BJTbasePrimeNode { get; private set; }
         public int BJTemitPrimeNode { get; private set; }
@@ -165,17 +148,10 @@ namespace SpiceSharp.Behaviors.Bipolar
         protected MatrixElement BJTbaseColPrimePtr { get; private set; }
         protected MatrixElement BJTcolPrimeBasePtr { get; private set; }
 
+
         /// <summary>
         /// Constants
         /// </summary>
-        public const int BJTvbe = 0;
-        public const int BJTvbc = 1;
-        public const int BJTcc = 2;
-        public const int BJTcb = 3;
-        public const int BJTgpi = 4;
-        public const int BJTgmu = 5;
-        public const int BJTgm = 6;
-        public const int BJTgo = 7;
         public const int BJTqbe = 8;
         public const int BJTcqbe = 9;
         public const int BJTqbc = 10;
@@ -184,54 +160,72 @@ namespace SpiceSharp.Behaviors.Bipolar
         public const int BJTcqcs = 13;
         public const int BJTqbx = 14;
         public const int BJTcqbx = 15;
-        public const int BJTgx = 16;
         public const int BJTcexbc = 17;
-        public const int BJTgeqcb = 18;
-        public const int BJTgccs = 19;
-        public const int BJTgeqbx = 20;
 
         /// <summary>
-        /// Setup the behavior
+        /// Event called when excess phase calculation is needed
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Entity component, Circuit ckt)
+        public event ExcessPhaseEventHandler ExcessPhaseCalculation;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public LoadBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var bjt = component as Components.BJT;
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+            mbp = provider.GetParameters<ModelBaseParameters>(1);
 
-            // Get necessary behaviors
-            temp = GetBehavior<TemperatureBehavior>(component);
-            modeltemp = GetBehavior<ModelTemperatureBehavior>(bjt.Model);
+            // Get behaviors
+            temp = provider.GetBehavior<TemperatureBehavior>();
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
+        }
 
-            // Allocate states
-            BJTstate = ckt.State.GetState(21);
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            BJTcolNode = pins[0];
+            BJTbaseNode = pins[1];
+            BJTemitNode = pins[2];
+            BJTsubstNode = pins[3];
+        }
 
-            // Get connected nodes
-            BJTcolNode = bjt.BJTcolNode;
-            BJTbaseNode = bjt.BJTbaseNode;
-            BJTemitNode = bjt.BJTemitNode;
-            BJTsubstNode = bjt.BJTsubstNode;
-
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="nodes">Nodes</param>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        {
             // Add a series collector node if necessary
-            if (modeltemp.BJTcollectorResist.Value == 0)
+            if (mbp.BJTcollectorResist.Value == 0)
                 BJTcolPrimeNode = BJTcolNode;
             else if (BJTcolPrimeNode == 0)
-                BJTcolPrimeNode = CreateNode(ckt, bjt.Name.Grow("#col")).Index;
+                BJTcolPrimeNode = nodes.Create(Name.Grow("#col")).Index;
 
             // Add a series base node if necessary
-            if (modeltemp.BJTbaseResist.Value == 0)
+            if (mbp.BJTbaseResist.Value == 0)
                 BJTbasePrimeNode = BJTbaseNode;
             else if (BJTbasePrimeNode == 0)
-                BJTbasePrimeNode = CreateNode(ckt, bjt.Name.Grow("#base")).Index;
+                BJTbasePrimeNode = nodes.Create(Name.Grow("#base")).Index;
 
             // Add a series emitter node if necessary
-            if (modeltemp.BJTemitterResist.Value == 0)
+            if (mbp.BJTemitterResist.Value == 0)
                 BJTemitPrimeNode = BJTemitNode;
             else if (BJTemitPrimeNode == 0)
-                BJTemitPrimeNode = CreateNode(ckt, bjt.Name.Grow("#emit")).Index;
+                BJTemitPrimeNode = nodes.Create(Name.Grow("#emit")).Index;
 
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
+            // Get matrix pointers
             BJTcolColPrimePtr = matrix.GetElement(BJTcolNode, BJTcolPrimeNode);
             BJTbaseBasePrimePtr = matrix.GetElement(BJTbaseNode, BJTbasePrimeNode);
             BJTemitEmitPrimePtr = matrix.GetElement(BJTemitNode, BJTemitPrimeNode);
@@ -256,11 +250,10 @@ namespace SpiceSharp.Behaviors.Bipolar
             BJTbaseColPrimePtr = matrix.GetElement(BJTbaseNode, BJTcolPrimeNode);
             BJTcolPrimeBasePtr = matrix.GetElement(BJTcolPrimeNode, BJTbaseNode);
         }
-
+        
         /// <summary>
         /// Unsetup
         /// </summary>
-        /// <param name="ckt">The circuit</param>
         public override void Unsetup()
         {
             // Remove references
@@ -304,11 +297,11 @@ namespace SpiceSharp.Behaviors.Bipolar
             double vce;
             bool ichk1;
             double vtn, evbe, cbe, gbe, gben, evben, cben, evbc, cbc, gbc, gbcn, evbcn, cbcn, q1, dqbdve, dqbdvc, q2, arg, sqarg, qb, cc, cex,
-                gex, arg1, arg2, denom, arg3, cb, gx, gpi, gmu, go, gm, tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps,
-                xms, xtf, ovtf, xjtf, argtf, temp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, capbx = 0.0, czbxf2, capcs = 0.0;
+                gex, arg1, arg2, arg3, cb, gx, gpi, gmu, go, gm, tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps,
+                xms, xtf, ovtf, xjtf, argtf, tmp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, capbx = 0.0, czbxf2, capcs = 0.0;
             double ceqbe, ceqbc, ceq;
 
-            vt = this.temp.BJTtemp * Circuit.CONSTKoverQ;
+            vt = temp.BJTtemp * Circuit.CONSTKoverQ;
 
             gccs = 0;
             ceqcs = 0;
@@ -319,19 +312,18 @@ namespace SpiceSharp.Behaviors.Bipolar
             /* 
 			 * dc model paramters
 			 */
-            csat = this.temp.BJTtSatCur * BJTarea;
-            rbpr = modeltemp.BJTminBaseResist / BJTarea;
-            rbpi = modeltemp.BJTbaseResist / BJTarea - rbpr;
-            gcpr = modeltemp.BJTcollectorConduct * BJTarea;
-            gepr = modeltemp.BJTemitterConduct * BJTarea;
-            oik = modeltemp.BJTinvRollOffF / BJTarea;
-            c2 = this.temp.BJTtBEleakCur * BJTarea;
-            vte = modeltemp.BJTleakBEemissionCoeff * vt;
-            oikr = modeltemp.BJTinvRollOffR / BJTarea;
-            c4 = this.temp.BJTtBCleakCur * BJTarea;
-            vtc = modeltemp.BJTleakBCemissionCoeff * vt;
-            td = modeltemp.BJTexcessPhaseFactor;
-            xjrb = modeltemp.BJTbaseCurrentHalfResist * BJTarea;
+            csat = temp.BJTtSatCur * bp.BJTarea;
+            rbpr = mbp.BJTminBaseResist / bp.BJTarea;
+            rbpi = mbp.BJTbaseResist / bp.BJTarea - rbpr;
+            gcpr = modeltemp.BJTcollectorConduct * bp.BJTarea;
+            gepr = modeltemp.BJTemitterConduct * bp.BJTarea;
+            oik = modeltemp.BJTinvRollOffF / bp.BJTarea;
+            c2 = temp.BJTtBEleakCur * bp.BJTarea;
+            vte = mbp.BJTleakBEemissionCoeff * vt;
+            oikr = modeltemp.BJTinvRollOffR / bp.BJTarea;
+            c4 = temp.BJTtBCleakCur * bp.BJTarea;
+            vtc = mbp.BJTleakBCemissionCoeff * vt;
+            xjrb = mbp.BJTbaseCurrentHalfResist * bp.BJTarea;
 
             /* 
 			* initialization
@@ -339,40 +331,40 @@ namespace SpiceSharp.Behaviors.Bipolar
             icheck = true;
             if (state.UseSmallSignal)
             {
-                vbe = state.States[0][BJTstate + BJTvbe];
-                vbc = state.States[0][BJTstate + BJTvbc];
-                vbx = modeltemp.BJTtype * (rstate.Solution[BJTbaseNode] - rstate.Solution[BJTcolPrimeNode]);
-                vcs = modeltemp.BJTtype * (rstate.Solution[BJTsubstNode] - rstate.Solution[BJTcolPrimeNode]);
+                vbe = BJTvbe;
+                vbc = BJTvbc;
+                vbx = mbp.BJTtype * (rstate.Solution[BJTbaseNode] - rstate.Solution[BJTcolPrimeNode]);
+                vcs = mbp.BJTtype * (rstate.Solution[BJTsubstNode] - rstate.Solution[BJTcolPrimeNode]);
             }
             else if (state.Init == State.InitFlags.InitTransient)
             {
                 vbe = state.States[1][BJTstate + BJTvbe];
                 vbc = state.States[1][BJTstate + BJTvbc];
-                vbx = modeltemp.BJTtype * (rstate.Solution[BJTbaseNode] - rstate.Solution[BJTcolPrimeNode]);
-                vcs = modeltemp.BJTtype * (rstate.Solution[BJTsubstNode] - rstate.Solution[BJTcolPrimeNode]);
+                vbx = mbp.BJTtype * (rstate.Solution[BJTbaseNode] - rstate.Solution[BJTcolPrimeNode]);
+                vcs = mbp.BJTtype * (rstate.Solution[BJTsubstNode] - rstate.Solution[BJTcolPrimeNode]);
                 if (state.UseIC)
                 {
-                    vbx = modeltemp.BJTtype * (BJTicVBE - BJTicVCE);
+                    vbx = mbp.BJTtype * (bp.BJTicVBE - bp.BJTicVCE);
                     vcs = 0;
                 }
                 icheck = false; // EDIT: Spice does not check the first timepoint for convergence, but we do...
             }
             else if (state.Init == State.InitFlags.InitJct && state.Domain == State.DomainTypes.Time && state.UseDC && state.UseIC)
             {
-                vbe = modeltemp.BJTtype * BJTicVBE;
-                vce = modeltemp.BJTtype * BJTicVCE;
+                vbe = mbp.BJTtype * bp.BJTicVBE;
+                vce = mbp.BJTtype * bp.BJTicVCE;
                 vbc = vbe - vce;
                 vbx = vbc;
                 vcs = 0;
             }
-            else if (state.Init == State.InitFlags.InitJct && !BJToff)
+            else if (state.Init == State.InitFlags.InitJct && !bp.BJToff)
             {
-                vbe = this.temp.BJTtVcrit;
+                vbe = temp.BJTtVcrit;
                 vbc = 0;
                 vcs = 0;
                 vbx = 0;
             }
-            else if (state.Init == State.InitFlags.InitJct || (state.Init == State.InitFlags.InitFix && BJToff))
+            else if (state.Init == State.InitFlags.InitJct || (state.Init == State.InitFlags.InitFix && bp.BJToff))
             {
                 vbe = 0;
                 vbc = 0;
@@ -384,17 +376,17 @@ namespace SpiceSharp.Behaviors.Bipolar
                 /* 
                  * compute new nonlinear branch voltages
                  */
-                vbe = modeltemp.BJTtype * (rstate.Solution[BJTbasePrimeNode] - rstate.Solution[BJTemitPrimeNode]);
-                vbc = modeltemp.BJTtype * (rstate.Solution[BJTbasePrimeNode] - rstate.Solution[BJTcolPrimeNode]);
-                vbx = modeltemp.BJTtype * (rstate.Solution[BJTbaseNode] - rstate.Solution[BJTcolPrimeNode]);
-                vcs = modeltemp.BJTtype * (rstate.Solution[BJTsubstNode] - rstate.Solution[BJTcolPrimeNode]);
+                vbe = mbp.BJTtype * (rstate.Solution[BJTbasePrimeNode] - rstate.Solution[BJTemitPrimeNode]);
+                vbc = mbp.BJTtype * (rstate.Solution[BJTbasePrimeNode] - rstate.Solution[BJTcolPrimeNode]);
+                vbx = mbp.BJTtype * (rstate.Solution[BJTbaseNode] - rstate.Solution[BJTcolPrimeNode]);
+                vcs = mbp.BJTtype * (rstate.Solution[BJTsubstNode] - rstate.Solution[BJTcolPrimeNode]);
 
                 /* 
 				 * limit nonlinear branch voltages
 				 */
                 ichk1 = true;
-                vbe = Semiconductor.DEVpnjlim(vbe, state.States[0][BJTstate + BJTvbe], vt, this.temp.BJTtVcrit, ref icheck);
-                vbc = Semiconductor.DEVpnjlim(vbc, state.States[0][BJTstate + BJTvbc], vt, this.temp.BJTtVcrit, ref ichk1);
+                vbe = Semiconductor.DEVpnjlim(vbe, BJTvbe, vt, temp.BJTtVcrit, ref icheck);
+                vbc = Semiconductor.DEVpnjlim(vbc, BJTvbc, vt, temp.BJTtVcrit, ref ichk1);
                 if (ichk1 == true)
                     icheck = true;
             }
@@ -402,7 +394,7 @@ namespace SpiceSharp.Behaviors.Bipolar
             /* 
 			 * determine dc current and derivitives
 			 */
-            vtn = vt * modeltemp.BJTemissionCoeffF;
+            vtn = vt * mbp.BJTemissionCoeffF;
             if (vbe > -5 * vtn)
             {
                 evbe = Math.Exp(vbe / vtn);
@@ -427,7 +419,7 @@ namespace SpiceSharp.Behaviors.Bipolar
                 gben = -c2 / vbe;
                 cben = gben * vbe;
             }
-            vtn = vt * modeltemp.BJTemissionCoeffR;
+            vtn = vt * mbp.BJTemissionCoeffR;
             if (vbc > -5 * vtn)
             {
                 evbc = Math.Exp(vbc / vtn);
@@ -473,37 +465,25 @@ namespace SpiceSharp.Behaviors.Bipolar
                 dqbdve = q1 * (qb * modeltemp.BJTinvEarlyVoltR + oik * gbe / sqarg);
                 dqbdvc = q1 * (qb * modeltemp.BJTinvEarlyVoltF + oikr * gbc / sqarg);
             }
-            /* 
-			 * weil's approx. for excess phase applied with backward - 
-			 * euler integration
-			 */
-            cc = 0;
-            cex = cbe;
-            gex = gbe;
-            if (method != null && td != 0)
+
+            // Excess phase calculation
+            BJTExcessPhaseEventArgs ep = new BJTExcessPhaseEventArgs()
             {
-                arg1 = method.Delta / td;
-                arg2 = 3 * arg1;
-                arg1 = arg2 * arg1;
-                denom = 1 + arg1 + arg2;
-                arg3 = arg1 / denom;
-                if (state.Init == State.InitFlags.InitTransient)
-                {
-                    state.States[1][BJTstate + BJTcexbc] = cbe / qb;
-                    state.States[2][BJTstate + BJTcexbc] = state.States[1][BJTstate + BJTcexbc];
-                }
-                cc = (state.States[1][BJTstate + BJTcexbc] * (1 + method.Delta / method.DeltaOld[1] + arg2) - state.States[2][BJTstate +
-                     BJTcexbc] * method.Delta / method.DeltaOld[1]) / denom;
-                cex = cbe * arg3;
-                gex = gbe * arg3;
-                state.States[0][BJTstate + BJTcexbc] = cc + cex / qb;
-            }
+                cc = 0.0,
+                cex = cbe,
+                gex = gbe,
+                qb = qb
+            };
+            ExcessPhaseCalculation?.Invoke(this, ep);
+            cc = ep.cc;
+            cex = ep.cex;
+            gex = ep.gex;
 
             /* 
 			 * determine dc incremental conductances
 			 */
-            cc = cc + (cex - cbc) / qb - cbc / this.temp.BJTtBetaR - cbcn;
-            cb = cbe / this.temp.BJTtBetaF + cben + cbc / this.temp.BJTtBetaR + cbcn;
+            cc = cc + (cex - cbc) / qb - cbc / temp.BJTtBetaR - cbcn;
+            cb = cbe / temp.BJTtBetaF + cben + cbc / temp.BJTtBetaR + cbcn;
             gx = rbpr + rbpi / qb;
             if (xjrb != 0)
             {
@@ -514,8 +494,8 @@ namespace SpiceSharp.Behaviors.Bipolar
             }
             if (gx != 0)
                 gx = 1 / gx;
-            gpi = gbe / this.temp.BJTtBetaF + gben;
-            gmu = gbc / this.temp.BJTtBetaR + gbcn;
+            gpi = gbe / temp.BJTtBetaF + gben;
+            gmu = gbc / temp.BJTtBetaR + gbcn;
             go = (gbc + (cex - cbc) * dqbdvc / qb) / qb;
             gm = (gex - (cex - cbc) * dqbdve / qb) / qb - go;
 
@@ -524,24 +504,24 @@ namespace SpiceSharp.Behaviors.Bipolar
                 /* 
 				 * charge storage elements
 				 */
-                tf = modeltemp.BJTtransitTimeF;
-                tr = modeltemp.BJTtransitTimeR;
-                czbe = this.temp.BJTtBEcap * BJTarea;
-                pe = this.temp.BJTtBEpot;
-                xme = modeltemp.BJTjunctionExpBE;
-                cdis = modeltemp.BJTbaseFractionBCcap;
-                ctot = this.temp.BJTtBCcap * BJTarea;
+                tf = mbp.BJTtransitTimeF;
+                tr = mbp.BJTtransitTimeR;
+                czbe = temp.BJTtBEcap * bp.BJTarea;
+                pe = temp.BJTtBEpot;
+                xme = mbp.BJTjunctionExpBE;
+                cdis = mbp.BJTbaseFractionBCcap;
+                ctot = temp.BJTtBCcap * bp.BJTarea;
                 czbc = ctot * cdis;
                 czbx = ctot - czbc;
-                pc = this.temp.BJTtBCpot;
-                xmc = modeltemp.BJTjunctionExpBC;
-                fcpe = this.temp.BJTtDepCap;
-                czcs = modeltemp.BJTcapCS * BJTarea;
-                ps = modeltemp.BJTpotentialSubstrate;
-                xms = modeltemp.BJTexponentialSubstrate;
-                xtf = modeltemp.BJTtransitTimeBiasCoeffF;
+                pc = temp.BJTtBCpot;
+                xmc = mbp.BJTjunctionExpBC;
+                fcpe = temp.BJTtDepCap;
+                czcs = mbp.BJTcapCS * bp.BJTarea;
+                ps = mbp.BJTpotentialSubstrate;
+                xms = mbp.BJTexponentialSubstrate;
+                xtf = mbp.BJTtransitTimeBiasCoeffF;
                 ovtf = modeltemp.BJTtransitTimeVBCFactor;
-                xjtf = modeltemp.BJTtransitTimeHighCurrentF * BJTarea;
+                xjtf = mbp.BJTtransitTimeHighCurrentF * bp.BJTarea;
                 if (tf != 0 && vbe > 0)
                 {
                     argtf = 0;
@@ -557,9 +537,9 @@ namespace SpiceSharp.Behaviors.Bipolar
                         arg2 = argtf;
                         if (xjtf != 0)
                         {
-                            temp = cbe / (cbe + xjtf);
-                            argtf = argtf * temp * temp;
-                            arg2 = argtf * (3 - temp - temp);
+                            tmp = cbe / (cbe + xjtf);
+                            argtf = argtf * tmp * tmp;
+                            arg2 = argtf * (3 - tmp - tmp);
                         }
                         arg3 = cbe * argtf * ovtf;
                     }
@@ -576,7 +556,7 @@ namespace SpiceSharp.Behaviors.Bipolar
                 }
                 else
                 {
-                    f1 = this.temp.BJTtf1;
+                    f1 = temp.BJTtf1;
                     f2 = modeltemp.BJTf2;
                     f3 = modeltemp.BJTf3;
                     czbef2 = czbe / f2;
@@ -584,8 +564,8 @@ namespace SpiceSharp.Behaviors.Bipolar
                          fcpe * fcpe));
                     capbe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
                 }
-                fcpc = this.temp.BJTtf4;
-                f1 = this.temp.BJTtf5;
+                fcpc = temp.BJTtf4;
+                f1 = temp.BJTtf5;
                 f2 = modeltemp.BJTf6;
                 f3 = modeltemp.BJTf7;
                 if (vbc < fcpc)
@@ -683,7 +663,7 @@ namespace SpiceSharp.Behaviors.Bipolar
             /* 
 			 * check convergence
 			 */
-            if (state.Init != State.InitFlags.InitFix || !BJToff)
+            if (state.Init != State.InitFlags.InitFix || !bp.BJToff)
             {
                 if (icheck)
                     state.IsCon = false;
@@ -703,29 +683,26 @@ namespace SpiceSharp.Behaviors.Bipolar
                 }
             }
 
-            state.States[0][BJTstate + BJTvbe] = vbe;
-            state.States[0][BJTstate + BJTvbc] = vbc;
-            state.States[0][BJTstate + BJTcc] = cc;
-            state.States[0][BJTstate + BJTcb] = cb;
-            state.States[0][BJTstate + BJTgpi] = gpi;
-            state.States[0][BJTstate + BJTgmu] = gmu;
-            state.States[0][BJTstate + BJTgm] = gm;
-            state.States[0][BJTstate + BJTgo] = go;
-            state.States[0][BJTstate + BJTgx] = gx;
-            state.States[0][BJTstate + BJTgeqcb] = geqcb;
-            state.States[0][BJTstate + BJTgccs] = gccs;
-            state.States[0][BJTstate + BJTgeqbx] = geqbx;
-
-            /* Do not load the Jacobian and the rhs if
-			   perturbation is being carried out */
+            BJTvbe = vbe;
+            BJTvbc = vbc;
+            BJTcc = cc;
+            BJTcb = cb;
+            BJTgpi = gpi;
+            BJTgmu = gmu;
+            BJTgm = gm;
+            BJTgo = go;
+            BJTgx = gx;
+            BJTgeqcb = geqcb;
+            BJTgccs = gccs;
+            BJTgeqbx = geqbx;
 
             /* 
 			 * load current excitation vector
 			 */
-            ceqcs = modeltemp.BJTtype * (state.States[0][BJTstate + BJTcqcs] - vcs * gccs);
-            ceqbx = modeltemp.BJTtype * (state.States[0][BJTstate + BJTcqbx] - vbx * geqbx);
-            ceqbe = modeltemp.BJTtype * (cc + cb - vbe * (gm + go + gpi) + vbc * (go - geqcb));
-            ceqbc = modeltemp.BJTtype * (-cc + vbe * (gm + go) - vbc * (gmu + go));
+            ceqcs = mbp.BJTtype * (state.States[0][BJTstate + BJTcqcs] - vcs * gccs);
+            ceqbx = mbp.BJTtype * (state.States[0][BJTstate + BJTcqbx] - vbx * geqbx);
+            ceqbe = mbp.BJTtype * (cc + cb - vbe * (gm + go + gpi) + vbc * (go - geqcb));
+            ceqbc = mbp.BJTtype * (-cc + vbe * (gm + go) - vbc * (gmu + go));
 
             rstate.Rhs[BJTbaseNode] += (-ceqbx);
             rstate.Rhs[BJTcolPrimeNode] += (ceqcs + ceqbx + ceqbc);
@@ -773,15 +750,14 @@ namespace SpiceSharp.Behaviors.Bipolar
 
             double vbe, vbc, delvbe, delvbc, cchat, cbhat, cc, cb;
 
-            vbe = modeltemp.BJTtype * (state.Solution[BJTbasePrimeNode] - state.Solution[BJTemitPrimeNode]);
-            vbc = modeltemp.BJTtype * (state.Solution[BJTbasePrimeNode] - state.Solution[BJTcolPrimeNode]);
-            delvbe = vbe - state.States[0][BJTstate + BJTvbe];
-            delvbc = vbc - state.States[0][BJTstate + BJTvbc];
-            cchat = state.States[0][BJTstate + BJTcc] + (state.States[0][BJTstate + BJTgm] + state.States[0][BJTstate + BJTgo]) * delvbe -
-                    (state.States[0][BJTstate + BJTgo] + state.States[0][BJTstate + BJTgmu]) * delvbc;
-            cbhat = state.States[0][BJTstate + BJTcb] + state.States[0][BJTstate + BJTgpi] * delvbe + state.States[0][BJTstate + BJTgmu] * delvbc;
-            cc = state.States[0][BJTstate + BJTcc];
-            cb = state.States[0][BJTstate + BJTcb];
+            vbe = mbp.BJTtype * (state.Solution[BJTbasePrimeNode] - state.Solution[BJTemitPrimeNode]);
+            vbc = mbp.BJTtype * (state.Solution[BJTbasePrimeNode] - state.Solution[BJTcolPrimeNode]);
+            delvbe = vbe - BJTvbe;
+            delvbc = vbc - BJTvbe;
+            cchat = BJTcc + (BJTgm + BJTgo) * delvbe - (BJTgo + BJTgmu) * delvbc;
+            cbhat = BJTcb + BJTgpi * delvbe + BJTgmu * delvbc;
+            cc = BJTcc;
+            cb = BJTcb;
 
             /*
              *   check convergence
@@ -804,4 +780,11 @@ namespace SpiceSharp.Behaviors.Bipolar
             return true;
         }
     }
+
+    /// <summary>
+    /// Delegate for excess phase calculation
+    /// </summary>
+    /// <param name="sender">Sender</param>
+    /// <param name="args">Arguments</param>
+    public delegate void ExcessPhaseEventHandler(object sender, BJTExcessPhaseEventArgs args);
 }
