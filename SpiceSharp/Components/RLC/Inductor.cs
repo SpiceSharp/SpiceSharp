@@ -87,8 +87,11 @@ namespace SpiceSharp.Components
             INDstate = ckt.State.GetState(2);
 
             // Clear all events
-            foreach (var inv in UpdateMutualInductance.GetInvocationList())
-                UpdateMutualInductance -= (UpdateMutualInductanceEventHandler)inv;
+            if (UpdateMutualInductance != null)
+            {
+                foreach (var inv in UpdateMutualInductance.GetInvocationList())
+                    UpdateMutualInductance -= (UpdateMutualInductanceEventHandler)inv;
+            }
         }
 
         /// <summary>
