@@ -1,9 +1,9 @@
 ﻿using System;
-using SpiceSharp.Components;
+using SpiceSharp.Components.Mosfet.Level1;
 using SpiceSharp.Components.Noise;
 using SpiceSharp.Circuits;
 
-namespace SpiceSharp.Behaviors.MOS1
+namespace SpiceSharp.Behaviors.Mosfet.Level1
 {
     /// <summary>
     /// Noise behavior for a <see cref="MOS1"/>

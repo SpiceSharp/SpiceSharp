@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors.MOS1;
+using SpiceSharp.Behaviors.Mosfet.Level1;
+using SpiceSharp.Components.Mosfet.Level1;
 
 namespace SpiceSharp.Components
 {
@@ -14,8 +15,12 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public MOS1Model(Identifier name) : base(name)
         {
-            RegisterBehavior(new ModelTemperatureBehavior());
-            RegisterBehavior(new ModelNoiseBehavior());
+            // Add parameters
+            Parameters.Register(new ModelBaseParameters());
+            Parameters.Register(new ModelNoiseParameters());
+
+            // Add factories
+            AddFactory(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));
         }
     }
 }

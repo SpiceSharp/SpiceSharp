@@ -37,6 +37,7 @@ namespace SpiceSharp.Components
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
             AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
             AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
             AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior(Name));

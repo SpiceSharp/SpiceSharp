@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.IntegrationMethods;
@@ -10,7 +11,7 @@ namespace SpiceSharp.Behaviors.Bipolar
     /// <summary>
     /// Transient behavior for a <see cref="Components.BJT"/>
     /// </summary>
-    public class TransientBehavior : Behaviors.TransientBehavior
+    public class TransientBehavior : Behaviors.TransientBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
@@ -92,6 +93,12 @@ namespace SpiceSharp.Behaviors.Bipolar
         protected StateVariable BJTcexbc { get; private set; }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public TransientBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
         /// Setup behavior
         /// </summary>
         /// <param name="provider">Data provider</param>
@@ -105,6 +112,86 @@ namespace SpiceSharp.Behaviors.Bipolar
             temp = provider.GetBehavior<TemperatureBehavior>();
             load = provider.GetBehavior<LoadBehavior>();
             modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
+        }
+
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            BJTcolNode = pins[0];
+            BJTbaseNode = pins[1];
+            BJTemitNode = pins[2];
+            BJTsubstNode = pins[3];
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
+            // Get extra equations
+            BJTcolPrimeNode = load.BJTcolPrimeNode;
+            BJTbasePrimeNode = load.BJTbasePrimeNode;
+            BJTemitPrimeNode = load.BJTemitPrimeNode;
+
+            // Get matrix pointers
+            BJTcolColPrimePtr = matrix.GetElement(BJTcolNode, BJTcolPrimeNode);
+            BJTbaseBasePrimePtr = matrix.GetElement(BJTbaseNode, BJTbasePrimeNode);
+            BJTemitEmitPrimePtr = matrix.GetElement(BJTemitNode, BJTemitPrimeNode);
+            BJTcolPrimeColPtr = matrix.GetElement(BJTcolPrimeNode, BJTcolNode);
+            BJTcolPrimeBasePrimePtr = matrix.GetElement(BJTcolPrimeNode, BJTbasePrimeNode);
+            BJTcolPrimeEmitPrimePtr = matrix.GetElement(BJTcolPrimeNode, BJTemitPrimeNode);
+            BJTbasePrimeBasePtr = matrix.GetElement(BJTbasePrimeNode, BJTbaseNode);
+            BJTbasePrimeColPrimePtr = matrix.GetElement(BJTbasePrimeNode, BJTcolPrimeNode);
+            BJTbasePrimeEmitPrimePtr = matrix.GetElement(BJTbasePrimeNode, BJTemitPrimeNode);
+            BJTemitPrimeEmitPtr = matrix.GetElement(BJTemitPrimeNode, BJTemitNode);
+            BJTemitPrimeColPrimePtr = matrix.GetElement(BJTemitPrimeNode, BJTcolPrimeNode);
+            BJTemitPrimeBasePrimePtr = matrix.GetElement(BJTemitPrimeNode, BJTbasePrimeNode);
+            BJTcolColPtr = matrix.GetElement(BJTcolNode, BJTcolNode);
+            BJTbaseBasePtr = matrix.GetElement(BJTbaseNode, BJTbaseNode);
+            BJTemitEmitPtr = matrix.GetElement(BJTemitNode, BJTemitNode);
+            BJTcolPrimeColPrimePtr = matrix.GetElement(BJTcolPrimeNode, BJTcolPrimeNode);
+            BJTbasePrimeBasePrimePtr = matrix.GetElement(BJTbasePrimeNode, BJTbasePrimeNode);
+            BJTemitPrimeEmitPrimePtr = matrix.GetElement(BJTemitPrimeNode, BJTemitPrimeNode);
+            BJTsubstSubstPtr = matrix.GetElement(BJTsubstNode, BJTsubstNode);
+            BJTcolPrimeSubstPtr = matrix.GetElement(BJTcolPrimeNode, BJTsubstNode);
+            BJTsubstColPrimePtr = matrix.GetElement(BJTsubstNode, BJTcolPrimeNode);
+            BJTbaseColPrimePtr = matrix.GetElement(BJTbaseNode, BJTcolPrimeNode);
+            BJTcolPrimeBasePtr = matrix.GetElement(BJTcolPrimeNode, BJTbaseNode);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        public override void Unsetup()
+        {
+            // Remove references
+            BJTcolColPrimePtr = null;
+            BJTbaseBasePrimePtr = null;
+            BJTemitEmitPrimePtr = null;
+            BJTcolPrimeColPtr = null;
+            BJTcolPrimeBasePrimePtr = null;
+            BJTcolPrimeEmitPrimePtr = null;
+            BJTbasePrimeBasePtr = null;
+            BJTbasePrimeColPrimePtr = null;
+            BJTbasePrimeEmitPrimePtr = null;
+            BJTemitPrimeEmitPtr = null;
+            BJTemitPrimeColPrimePtr = null;
+            BJTemitPrimeBasePrimePtr = null;
+            BJTcolColPtr = null;
+            BJTbaseBasePtr = null;
+            BJTemitEmitPtr = null;
+            BJTcolPrimeColPrimePtr = null;
+            BJTbasePrimeBasePrimePtr = null;
+            BJTemitPrimeEmitPrimePtr = null;
+            BJTsubstSubstPtr = null;
+            BJTcolPrimeSubstPtr = null;
+            BJTsubstColPrimePtr = null;
+            BJTbaseColPrimePtr = null;
+            BJTcolPrimeBasePtr = null;
         }
 
         /// <summary>
