@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Text;
+using System.Text.RegularExpressions;
 using SpiceSharp;
 using SpiceSharp.Simulations;
-using SpiceSharp.Components;
-using SpiceSharp.Parser.Readers;
-using MathNet.Numerics.Interpolation;
+using SpiceSharp.Circuits;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharpTest.Models
 {
@@ -16,44 +15,51 @@ namespace SpiceSharpTest.Models
     public class Framework
     {
         /// <summary>
-        /// Run a netlist using the standard parser
+        /// Apply a parameter definition to an entity
+        /// Parameters are a series of assignments [name]=[value] delimited by spaces.
         /// </summary>
-        /// <param name="lines">The netlist to parse</param>
-        /// <returns></returns>
-        protected Netlist Run(params string[] lines)
+        /// <param name="entity">Entity</param>
+        /// <param name="definition">Definition string</param>
+        protected void ApplyParameters(Entity entity, string definition)
         {
-            string netlist = string.Join(Environment.NewLine, lines);
-            MemoryStream m = new MemoryStream(Encoding.UTF8.GetBytes(netlist));
+            // Get all assignments
+            definition = Regex.Replace(definition, @"\s*\=\s*", "=");
+            string[] assignments = definition.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var assignment in assignments)
+            {
+                // Get the name and value
+                string[] parts = assignment.Split('=');
+                if (parts.Length != 2)
+                    throw new Exception("Invalid assignment");
+                string name = parts[0].ToLower();
+                double value = double.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
 
-            // Create the parser and run it
-            NetlistReader r = new NetlistReader();
-
-            // Add our BSIM transistor models
-            var mosfets = r.Netlist.Readers[StatementType.Component].Find<MosfetReader>().Mosfets;
-            BSIMParser.AddMosfetGenerators(mosfets);
-            var levels = r.Netlist.Readers[StatementType.Model].Find<MosfetModelReader>().Levels;
-            BSIMParser.AddMosfetModelGenerators(levels);
-            r.Parse(m);
-
-            // Return the generated netlist
-            return r.Netlist;
+                // Set the entity parameter
+                entity.Parameters.Set(name, value);
+            }
         }
 
         /// <summary>
-        /// Test using DC simulation
-        /// The netlist should contain one DC simulation. The first exporter is tested to the reference
+        /// Perform a test for a DC analysis
         /// </summary>
-        /// <param name="netlist">Netlist</param>
-        /// <param name="reference">Reference values</param>
-        protected void TestDC(Netlist netlist, double[] reference)
+        /// <param name="sim">Simulation</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="exports">Exports</param>
+        /// <param name="references">References</param>
+        protected void AnalyzeDC(DC sim, Circuit ckt, List<Export> exports, List<double[]> references)
         {
-            double abstol = netlist.Simulations[0].CurrentConfig.AbsTol;
-            double reltol = netlist.Simulations[0].CurrentConfig.RelTol;
+            double abstol = sim.CurrentConfig.AbsTol;
+            double reltol = sim.CurrentConfig.RelTol;
 
             int index = 0;
-            netlist.OnExportSimulationData += (object sender, SimulationData data) =>
+            Func<double> current = null;
+            sim.InitializeSimulationExport += (object sender, BehaviorPool pool) =>
             {
-                double actual = netlist.Exports[0].Extract(data);
+                current = pool.GetEntityBehaviors(source).Get<SpiceSharp.Behaviors.VSRC.LoadBehavior>().CreateExport(ckt.State, "i");
+            };
+            sim.OnExportSimulationData += (object sender, SimulationData data) =>
+            {
+                double actual = current();
                 double expected = reference[index++];
                 double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * reltol + abstol;
 
@@ -63,20 +69,14 @@ namespace SpiceSharpTest.Models
                 }
                 catch (Exception ex)
                 {
-                    // Add some more information in the exception
-                    DC dc = netlist.Simulations[0] as DC;
-                    string msg = ex.Message;
-                    if (dc != null)
-                    {
-                        string[] sweep = new string[dc.Sweeps.Count];
-                        for (int i = 0; i < dc.Sweeps.Count; i++)
-                            sweep[i] = $"{dc.Sweeps[i].ComponentName} at {dc.Sweeps[i].CurrentValue}";
-                        msg += " - " + string.Join(" ; ", sweep);
-                    }
+                    string[] sweeps = new string[sim.Sweeps.Count];
+                    for (int i = 0; i < sim.Sweeps.Count; i++)
+                        sweeps[i] += $"{sim.Sweeps[i].ComponentName}={sim.Sweeps[i].CurrentValue}";
+                    string msg = ex.Message + " : " + string.Join(" ", sweeps);
                     throw new Exception(msg);
                 }
             };
-            netlist.Simulate();
+            sim.Run(ckt);
         }
 
         /// <summary>
