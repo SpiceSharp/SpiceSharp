@@ -49,6 +49,7 @@ namespace SpiceSharp.Behaviors.Bipolar
         protected MatrixElement BJTbaseColPrimePtr { get; private set; }
         protected MatrixElement BJTcolPrimeBasePtr { get; private set; }
 
+        /*
         [SpiceName("qbe"), SpiceInfo("Charge storage B-E junction")]
         public double GetQBE(Circuit ckt) => ckt.State.States[0][BJTstate + BJTqbe];
         [SpiceName("cqbe"), SpiceInfo("Cap. due to charge storage in B-E jct.")]
@@ -67,22 +68,27 @@ namespace SpiceSharp.Behaviors.Bipolar
         public double GetCQBX(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcqbx];
         [SpiceName("cexbc"), SpiceInfo("Total Capacitance in B-X junction")]
         public double GetCEXBC(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcexbc];
+        */
 
         /// <summary>
-        /// Constants
+        /// Parameters
         /// </summary>
-        public const int BJTqbe = 8;
-        public const int BJTcqbe = 9;
-        public const int BJTqbc = 10;
-        public const int BJTcqbc = 11;
-        public const int BJTqcs = 12;
-        public const int BJTcqcs = 13;
-        public const int BJTqbx = 14;
-        public const int BJTcqbx = 15;
+        [SpiceName("cpi"), SpiceInfo("Internal base to emitter capactance")]
+        public double BJTcapbe { get; internal set; }
+        [SpiceName("cmu"), SpiceInfo("Internal base to collector capactiance")]
+        public double BJTcapbc { get; internal set; }
+        [SpiceName("cbx"), SpiceInfo("Base to collector capacitance")]
+        public double BJTcapbx { get; internal set; }
+        [SpiceName("ccs"), SpiceInfo("Collector to substrate capacitance")]
+        public double BJTcapcs { get; internal set; }
 
         /// <summary>
         /// States
         /// </summary>
+        protected StateVariable BJTqbe { get; private set; }
+        protected StateVariable BJTqbc { get; private set; }
+        protected StateVariable BJTqcs { get; private set; }
+        protected StateVariable BJTqbx { get; private set; }
         protected StateVariable BJTcexbc { get; private set; }
 
         /// <summary>
@@ -108,6 +114,10 @@ namespace SpiceSharp.Behaviors.Bipolar
         public override void CreateStates(StatePool states)
         {
             // We just need a history without integration here
+            BJTqbe = states.Create();
+            BJTqbc = states.Create();
+            BJTqcs = states.Create();
+            BJTqbx = states.Create();
             BJTcexbc = states.Create(0);
         }
 
@@ -117,7 +127,7 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="sim">Time-based simulation</param>
         public override void GetDCstate(TimeSimulation sim)
         {
-            // BJTcexbc.Value = load.cbe / load.qb;
+            BJTcexbc.Value = load.cbe / load.qb;
 
             // Register for excess phase calculations
             load.ExcessPhaseCalculation += CalculateExcessPhase;
@@ -129,51 +139,40 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
-            double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps,
-                xms, xtf, ovtf, xjtf, argtf, temp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, czbxf2;
-            double arg, arg1, arg2, arg3, denom;
-            double trancc, trancbe, trangbe;
+            var state = sim.Circuit.State;
+            double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2, arg3, capbx, capcs,
+                xms, xtf, ovtf, xjtf, argtf, tmp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, czbxf2;
+
+            double cbe = load.cbe;
+            double cbc = load.cbc;
+            double gbe = load.gbe;
+            double gbc = load.gbc;
+            double qb = load.qb;
+            double dqbdvc = load.dqbdvc;
+            double dqbdve = load.dqbdve;
+            double geqcb = 0;
 
             double vbe = load.BJTvbe;
             double vbc = load.BJTvbc;
+            double vbx = vbx = mbp.BJTtype * (state.Solution[BJTbaseNode] - state.Solution[BJTcolPrimeNode]);
+            double vcs = mbp.BJTtype * (state.Solution[BJTsubstNode] - state.Solution[BJTcolPrimeNode]);
             double td = modeltemp.BJTexcessPhaseFactor;
-
-            /* 
-             * weil's approx. for excess phase applied with backward - 
-             * euler integration
-             */
-            trancc = 0;
-            trancbe = 0;
-            trangbe = 0;
-            if (td != 0)
-            {
-                arg1 = BJTcexbc.GetTimestep() / td;
-                arg2 = 3 * arg1;
-                arg1 = arg2 * arg1;
-                denom = 1 + arg1 + arg2;
-                arg3 = arg1 / denom - 1.0;
-                trancc = (BJTcexbc.GetPreviousValue() * (1 + BJTcexbc.GetTimestep() / BJTcexbc.GetTimestep(1) + arg2)
-                    - BJTcexbc.GetPreviousValue(2) * BJTcexbc.GetTimestep() / BJTcexbc.GetTimestep(1)) / denom;
-                trancbe = load.cbe * arg3;
-                trangbe = load.gbe * arg3;
-                BJTcexbc.Value = trancc + trancbe / load.qb;
-            }
 
             /* 
              * charge storage elements
              */
             tf = mbp.BJTtransitTimeF;
             tr = mbp.BJTtransitTimeR;
-            czbe = this.temp.BJTtBEcap * bp.BJTarea;
-            pe = this.temp.BJTtBEpot;
+            czbe = temp.BJTtBEcap * bp.BJTarea;
+            pe = temp.BJTtBEpot;
             xme = mbp.BJTjunctionExpBE;
             cdis = mbp.BJTbaseFractionBCcap;
-            ctot = this.temp.BJTtBCcap * bp.BJTarea;
+            ctot = temp.BJTtBCcap * bp.BJTarea;
             czbc = ctot * cdis;
             czbx = ctot - czbc;
-            pc = this.temp.BJTtBCpot;
+            pc = temp.BJTtBCpot;
             xmc = mbp.BJTjunctionExpBC;
-            fcpe = this.temp.BJTtDepCap;
+            fcpe = temp.BJTtDepCap;
             czcs = mbp.BJTcapCS * bp.BJTarea;
             ps = mbp.BJTpotentialSubstrate;
             xms = mbp.BJTexponentialSubstrate;
@@ -195,11 +194,11 @@ namespace SpiceSharp.Behaviors.Bipolar
                     arg2 = argtf;
                     if (xjtf != 0)
                     {
-                        temp = load.cbe / (load.cbe + xjtf);
-                        argtf = argtf * temp * temp;
-                        arg2 = argtf * (3 - temp - temp);
+                        tmp = cbe / (cbe + xjtf);
+                        argtf = argtf * tmp * tmp;
+                        arg2 = argtf * (3 - tmp - tmp);
                     }
-                    arg3 = load.cbe * argtf * ovtf;
+                    arg3 = cbe * argtf * ovtf;
                 }
                 cbe = cbe * (1 + argtf) / qb;
                 gbe = (gbe * (1 + arg2) - cbe * dqbdve) / qb;
@@ -209,34 +208,34 @@ namespace SpiceSharp.Behaviors.Bipolar
             {
                 arg = 1 - vbe / pe;
                 sarg = Math.Exp(-xme * Math.Log(arg));
-                state.States[0][BJTstate + BJTqbe] = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
+                BJTqbe.Value = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
                 capbe = tf * gbe + czbe * sarg;
             }
             else
             {
-                f1 = this.temp.BJTtf1;
+                f1 = temp.BJTtf1;
                 f2 = modeltemp.BJTf2;
                 f3 = modeltemp.BJTf3;
                 czbef2 = czbe / f2;
-                state.States[0][BJTstate + BJTqbe] = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
+                BJTqbe.Value = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
                      fcpe * fcpe));
                 capbe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
             }
-            fcpc = this.temp.BJTtf4;
-            f1 = this.temp.BJTtf5;
+            fcpc = temp.BJTtf4;
+            f1 = temp.BJTtf5;
             f2 = modeltemp.BJTf6;
             f3 = modeltemp.BJTf7;
             if (vbc < fcpc)
             {
                 arg = 1 - vbc / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                state.States[0][BJTstate + BJTqbc] = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
+                BJTqbc.Value = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
                 capbc = tr * gbc + czbc * sarg;
             }
             else
             {
                 czbcf2 = czbc / f2;
-                state.States[0][BJTstate + BJTqbc] = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
+                BJTqbc.Value = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
                      fcpc * fcpc));
                 capbc = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
             }
@@ -244,78 +243,85 @@ namespace SpiceSharp.Behaviors.Bipolar
             {
                 arg = 1 - vbx / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                state.States[0][BJTstate + BJTqbx] = pc * czbx * (1 - arg * sarg) / (1 - xmc);
+                BJTqbx.Value = pc * czbx * (1 - arg * sarg) / (1 - xmc);
                 capbx = czbx * sarg;
             }
             else
             {
                 czbxf2 = czbx / f2;
-                state.States[0][BJTstate + BJTqbx] = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
+                BJTqbx.Value = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
                 capbx = czbxf2 * (f3 + xmc * vbx / pc);
             }
             if (vcs < 0)
             {
                 arg = 1 - vcs / ps;
                 sarg = Math.Exp(-xms * Math.Log(arg));
-                state.States[0][BJTstate + BJTqcs] = ps * czcs * (1 - arg * sarg) / (1 - xms);
+                BJTqcs.Value = ps * czcs * (1 - arg * sarg) / (1 - xms);
                 capcs = czcs * sarg;
             }
             else
             {
-                state.States[0][BJTstate + BJTqcs] = vcs * czcs * (1 + xms * vcs / (2 * ps));
+                BJTqcs.Value = vcs * czcs * (1 + xms * vcs / (2 * ps));
                 capcs = czcs * (1 + xms * vcs / ps);
             }
+
             BJTcapbe = capbe;
             BJTcapbc = capbc;
             BJTcapcs = capcs;
             BJTcapbx = capbx;
 
+            var eqbe = BJTqbe.Integrate(capbe, vbe);
+            geqcb *= eqbe.Geq / capbe; // Note: ugly fix to multiply with method.Slope :-(
+            var eqbc = BJTqbc.Integrate(capbc, vbc);
+
             /* 
-             * store small - signal parameters
+             * charge storage for c - s and b - x junctions
              */
-            if (!(state.Domain == State.DomainTypes.Time && state.UseDC && state.UseIC))
-            {
-                if (state.UseSmallSignal)
-                {
-                    state.States[0][BJTstate + BJTcqbe] = capbe;
-                    state.States[0][BJTstate + BJTcqbc] = capbc;
-                    state.States[0][BJTstate + BJTcqcs] = capcs;
-                    state.States[0][BJTstate + BJTcqbx] = capbx;
-                    state.States[0][BJTstate + BJTcexbc] = geqcb;
+            var eqcs = BJTqcs.Integrate(capcs, vcs);
+            var eqbx = BJTqbx.Integrate(capbx, vbx);
 
-                    /* SENSDEBUG */
-                    return; /* go to 1000 */
-                }
-                /* 
-                 * transient analysis
-                 */
+            /* 
+			 * load current excitation vector
+			 */
+            double ceqcs = mbp.BJTtype * eqbe.Ceq;
+            double ceqbx = mbp.BJTtype * eqbx.Ceq;
+            double ceqbe = mbp.BJTtype * (eqbe.Ceq + vbc * geqcb);
+            double ceqbc = mbp.BJTtype * eqbc.Ceq;
 
-                if (state.Init == State.InitFlags.InitTransient)
-                {
-                    state.States[1][BJTstate + BJTqbe] = state.States[0][BJTstate + BJTqbe];
-                    state.States[1][BJTstate + BJTqbc] = state.States[0][BJTstate + BJTqbc];
-                    state.States[1][BJTstate + BJTqbx] = state.States[0][BJTstate + BJTqbx];
-                    state.States[1][BJTstate + BJTqcs] = state.States[0][BJTstate + BJTqcs];
-                }
+            state.Rhs[BJTbaseNode] -= (-ceqbx);
+            state.Rhs[BJTcolPrimeNode] += (ceqcs + ceqbx + ceqbc);
+            state.Rhs[BJTbasePrimeNode] += (-ceqbe - ceqbc);
+            state.Rhs[BJTemitPrimeNode] += (ceqbe);
+            state.Rhs[BJTsubstNode] += (-ceqcs);
 
-                if (method != null)
-                {
-                    var result = method.Integrate(state, BJTstate + BJTqbe, capbe);
-                    geqcb = geqcb * method.Slope;
-                    gpi = gpi + result.Geq;
-                    result = method.Integrate(state, BJTstate + BJTqbc, capbc);
-                    gmu = gmu + result.Geq;
-                }
-                cb = cb + state.States[0][BJTstate + BJTcqbe];
-                cb = cb + state.States[0][BJTstate + BJTcqbc];
-                cc = cc - state.States[0][BJTstate + BJTcqbc];
+            /* 
+			 * load y matrix
+			 */
+            BJTbaseBasePtr.Add(eqbx.Geq);
+            BJTcolPrimeColPrimePtr.Add(eqbc.Geq + eqcs.Geq + eqbx.Geq);
+            BJTbasePrimeBasePrimePtr.Add(eqbe.Geq + eqbc.Geq + geqcb);
+            BJTemitPrimeEmitPrimePtr.Add(eqbe.Geq);
+            BJTcolPrimeBasePrimePtr.Add(-eqbc.Geq);
+            BJTbasePrimeColPrimePtr.Add(-eqbc.Geq - geqcb);
+            BJTbasePrimeEmitPrimePtr.Add(-eqbe.Geq);
+            BJTemitPrimeColPrimePtr.Add(geqcb);
+            BJTemitPrimeBasePrimePtr.Add(-eqbe.Geq - geqcb);
+            BJTsubstSubstPtr.Add(eqcs.Geq);
+            BJTcolPrimeSubstPtr.Add(-eqcs.Geq);
+            BJTsubstColPrimePtr.Add(-eqcs.Geq);
+            BJTbaseColPrimePtr.Add(-eqbx.Geq);
+            BJTcolPrimeBasePtr.Add(-eqbx.Geq);
+        }
 
-                if (state.Init == State.InitFlags.InitTransient)
-                {
-                    state.States[1][BJTstate + BJTcqbe] = state.States[0][BJTstate + BJTcqbe];
-                    state.States[1][BJTstate + BJTcqbc] = state.States[0][BJTstate + BJTcqbc];
-                }
-            }
+        /// <summary>
+        /// Truncate the timestep
+        /// </summary>
+        /// <param name="timestep">Current timestep</param>
+        public override void Truncate(ref double timestep)
+        {
+            BJTqbe.LocalTruncationError(ref timestep);
+            BJTqbc.LocalTruncationError(ref timestep);
+            BJTqcs.LocalTruncationError(ref timestep);
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
+using SpiceSharp.Components.Bipolar;
 using SpiceSharp.Behaviors.Bipolar;
 
 namespace SpiceSharp.Components
@@ -39,11 +40,14 @@ namespace SpiceSharp.Components
         public BJT(Identifier name) 
             : base(name, BJTpinCount)
         {
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new TemperatureBehavior());
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new TruncateBehavior());
-            RegisterBehavior(new NoiseBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
         }
 
         /// <summary>

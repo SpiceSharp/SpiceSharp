@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
+using SpiceSharp.Components.Bipolar;
 
 namespace SpiceSharp.Behaviors.Bipolar
 {
@@ -12,7 +13,8 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private ModelTemperatureBehavior modeltemp;
+        ModelBaseParameters mbp;
+        ModelTemperatureBehavior modeltemp;
 
         /// <summary>
         /// Parameters
@@ -40,19 +42,24 @@ namespace SpiceSharp.Behaviors.Bipolar
         public double BJTtVcrit { get; protected set; }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        public TemperatureBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
         /// Setup behavior
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var bjt = component as Components.BJT;
+            // Get parameters
+            mbp = provider.GetParameters<ModelBaseParameters>(1);
 
             // Get behaviors
-            modeltemp = GetBehavior<ModelTemperatureBehavior>(bjt.Model);
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
         }
-
+        
         /// <summary>
         /// Execute behavior
         /// </summary>
@@ -70,36 +77,36 @@ namespace SpiceSharp.Behaviors.Bipolar
                  Circuit.CONSTRefTemp));
             pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
 
-            ratlog = Math.Log(BJTtemp / modeltemp.BJTtnom);
-            ratio1 = BJTtemp / modeltemp.BJTtnom - 1;
-            factlog = ratio1 * modeltemp.BJTenergyGap / vt + modeltemp.BJTtempExpIS * ratlog;
+            ratlog = Math.Log(BJTtemp / mbp.BJTtnom);
+            ratio1 = BJTtemp / mbp.BJTtnom - 1;
+            factlog = ratio1 * mbp.BJTenergyGap / vt + mbp.BJTtempExpIS * ratlog;
             factor = Math.Exp(factlog);
-            BJTtSatCur = modeltemp.BJTsatCur * factor;
-            bfactor = Math.Exp(ratlog * modeltemp.BJTbetaExp);
-            BJTtBetaF = modeltemp.BJTbetaF * bfactor;
-            BJTtBetaR = modeltemp.BJTbetaR * bfactor;
-            BJTtBEleakCur = modeltemp.BJTleakBEcurrent * Math.Exp(factlog / modeltemp.BJTleakBEemissionCoeff) / bfactor;
-            BJTtBCleakCur = modeltemp.BJTleakBCcurrent * Math.Exp(factlog / modeltemp.BJTleakBCemissionCoeff) / bfactor;
+            BJTtSatCur = mbp.BJTsatCur * factor;
+            bfactor = Math.Exp(ratlog * mbp.BJTbetaExp);
+            BJTtBetaF = mbp.BJTbetaF * bfactor;
+            BJTtBetaR = mbp.BJTbetaR * bfactor;
+            BJTtBEleakCur = mbp.BJTleakBEcurrent * Math.Exp(factlog / mbp.BJTleakBEemissionCoeff) / bfactor;
+            BJTtBCleakCur = mbp.BJTleakBCcurrent * Math.Exp(factlog / mbp.BJTleakBCemissionCoeff) / bfactor;
 
-            pbo = (modeltemp.BJTpotentialBE - pbfact) / modeltemp.fact1;
-            gmaold = (modeltemp.BJTpotentialBE - pbo) / pbo;
-            BJTtBEcap = modeltemp.BJTdepletionCapBE / (1 + modeltemp.BJTjunctionExpBE * (4e-4 * (modeltemp.BJTtnom - Circuit.CONSTRefTemp) - gmaold));
+            pbo = (mbp.BJTpotentialBE - pbfact) / modeltemp.fact1;
+            gmaold = (mbp.BJTpotentialBE - pbo) / pbo;
+            BJTtBEcap = mbp.BJTdepletionCapBE / (1 + mbp.BJTjunctionExpBE * (4e-4 * (mbp.BJTtnom - Circuit.CONSTRefTemp) - gmaold));
             BJTtBEpot = fact2 * pbo + pbfact;
             gmanew = (BJTtBEpot - pbo) / pbo;
-            BJTtBEcap *= 1 + modeltemp.BJTjunctionExpBE * (4e-4 * (BJTtemp - Circuit.CONSTRefTemp) - gmanew);
+            BJTtBEcap *= 1 + mbp.BJTjunctionExpBE * (4e-4 * (BJTtemp - Circuit.CONSTRefTemp) - gmanew);
 
-            pbo = (modeltemp.BJTpotentialBC - pbfact) / modeltemp.fact1;
-            gmaold = (modeltemp.BJTpotentialBC - pbo) / pbo;
-            BJTtBCcap = modeltemp.BJTdepletionCapBC / (1 + modeltemp.BJTjunctionExpBC * (4e-4 * (modeltemp.BJTtnom - Circuit.CONSTRefTemp) - gmaold));
+            pbo = (mbp.BJTpotentialBC - pbfact) / modeltemp.fact1;
+            gmaold = (mbp.BJTpotentialBC - pbo) / pbo;
+            BJTtBCcap = mbp.BJTdepletionCapBC / (1 + mbp.BJTjunctionExpBC * (4e-4 * (mbp.BJTtnom - Circuit.CONSTRefTemp) - gmaold));
             BJTtBCpot = fact2 * pbo + pbfact;
             gmanew = (BJTtBCpot - pbo) / pbo;
-            BJTtBCcap *= 1 + modeltemp.BJTjunctionExpBC * (4e-4 * (BJTtemp - Circuit.CONSTRefTemp) - gmanew);
+            BJTtBCcap *= 1 + mbp.BJTjunctionExpBC * (4e-4 * (BJTtemp - Circuit.CONSTRefTemp) - gmanew);
 
-            BJTtDepCap = modeltemp.BJTdepletionCapCoeff * BJTtBEpot;
-            BJTtf1 = BJTtBEpot * (1 - Math.Exp((1 - modeltemp.BJTjunctionExpBE) * modeltemp.xfc)) / (1 - modeltemp.BJTjunctionExpBE);
-            BJTtf4 = modeltemp.BJTdepletionCapCoeff * BJTtBCpot;
-            BJTtf5 = BJTtBCpot * (1 - Math.Exp((1 - modeltemp.BJTjunctionExpBC) * modeltemp.xfc)) / (1 - modeltemp.BJTjunctionExpBC);
-            BJTtVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * modeltemp.BJTsatCur));
+            BJTtDepCap = mbp.BJTdepletionCapCoeff * BJTtBEpot;
+            BJTtf1 = BJTtBEpot * (1 - Math.Exp((1 - mbp.BJTjunctionExpBE) * modeltemp.xfc)) / (1 - mbp.BJTjunctionExpBE);
+            BJTtf4 = mbp.BJTdepletionCapCoeff * BJTtBCpot;
+            BJTtf5 = BJTtBCpot * (1 - Math.Exp((1 - mbp.BJTjunctionExpBC) * modeltemp.xfc)) / (1 - mbp.BJTjunctionExpBC);
+            BJTtVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * mbp.BJTsatCur));
         }
     }
 }

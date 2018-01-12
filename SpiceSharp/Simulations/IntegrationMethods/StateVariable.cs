@@ -32,6 +32,19 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
+        /// Gets the first order derivative at the current timepoint
+        /// </summary>
+        public double Derivative
+        {
+            get
+            {
+                if (order > 0)
+                    return source.Values[index + 1];
+                throw new CircuitException("Invalid order");
+            }
+        }
+
+        /// <summary>
         /// Constructor
         /// This constructor should not be used, except for in the <see cref="StatePool"/> class.
         /// </summary>

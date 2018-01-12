@@ -101,7 +101,6 @@
     <Compile Include="Components\Semiconductors\Bipolar\ModelTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\NoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\TemperatureBehavior.cs" />
-    <Compile Include="Components\Semiconductors\Bipolar\TruncateBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\AcBehavior.cs" />
     <Compile Include="Components\Currentsources\ISRC\AcBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\ModelNoiseBehavior.cs" />
