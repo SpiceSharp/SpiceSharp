@@ -117,7 +117,6 @@
     <Compile Include="Components\Semiconductors\MOS\Level1\ModelTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level1\NoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level1\TemperatureBehavior.cs" />
-    <Compile Include="Components\Semiconductors\MOS\Level1\TruncateBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS2\AcBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS2\LoadBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\MOS2\ModelNoiseBehavior.cs" />

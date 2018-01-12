@@ -2,26 +2,29 @@
 using SpiceSharp.Components.Mosfet.Level1;
 using SpiceSharp.Components.Noise;
 using SpiceSharp.Circuits;
+using SpiceSharp.Components;
 
 namespace SpiceSharp.Behaviors.Mosfet.Level1
 {
     /// <summary>
     /// Noise behavior for a <see cref="MOS1"/>
     /// </summary>
-    public class NoiseBehavior : Behaviors.NoiseBehavior
+    public class NoiseBehavior : Behaviors.NoiseBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private TemperatureBehavior temp;
-        private LoadBehavior load;
-        private ModelTemperatureBehavior modeltemp;
-        private ModelNoiseBehavior modelnoise;
+        BaseParameters bp;
+        ModelBaseParameters mbp;
+        TemperatureBehavior temp;
+        LoadBehavior load;
+        ModelTemperatureBehavior modeltemp;
+        ModelNoiseParameters mnp;
 
-        private const int MOS1RDNOIZ = 0;
-        private const int MOS1RSNOIZ = 1;
-        private const int MOS1IDNOIZ = 2;
-        private const int MOS1FLNOIZ = 3;
+        /// <summary>
+        /// Nodes
+        /// </summary>
+        int MOS1dNode, MOS1gNode, MOS1sNode, MOS1bNode, MOS1sNodePrime, MOS1dNodePrime;
 
         /// <summary>
         /// Noise generators
@@ -32,31 +35,60 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             new NoiseThermal("id", 4, 5),
             new NoiseGain("1overf", 4, 5)
             );
+        const int MOS1RDNOIZ = 0;
+        const int MOS1RSNOIZ = 1;
+        const int MOS1IDNOIZ = 2;
+        const int MOS1FLNOIZ = 3;
 
         /// <summary>
-        /// Setup the behavior
+        /// Constructor
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="name">Name</param>
+        public NoiseBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var mos1 = component as Components.MOS1;
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+            mbp = provider.GetParameters<ModelBaseParameters>(1);
+            mnp = provider.GetParameters<ModelNoiseParameters>(1);
 
             // Get behaviors
-            temp = GetBehavior<TemperatureBehavior>(component);
-            load = GetBehavior<LoadBehavior>(component);
-            modeltemp = GetBehavior<ModelTemperatureBehavior>(mos1.Model);
-            modelnoise = GetBehavior<ModelNoiseBehavior>(mos1.Model);
-
-            MOS1noise.Setup(
-                mos1.MOS1dNode,
-                mos1.MOS1gNode,
-                mos1.MOS1sNode,
-                mos1.MOS1bNode,
-                load.MOS1dNodePrime,
-                load.MOS1sNodePrime);
+            temp = provider.GetBehavior<TemperatureBehavior>();
+            load = provider.GetBehavior<LoadBehavior>();
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
         }
 
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            MOS1dNode = pins[0];
+            MOS1gNode = pins[1];
+            MOS1sNode = pins[2];
+            MOS1bNode = pins[3];
+        }
+
+        /// <summary>
+        /// Connect the noise sources
+        /// </summary>
+        public override void ConnectNoise()
+        {
+            // Get extra equations
+            MOS1dNodePrime = load.MOS1dNodePrime;
+            MOS1sNodePrime = load.MOS1sNodePrime;
+
+            // Connect noise
+            MOS1noise.Setup(MOS1dNode, MOS1gNode, MOS1sNode, MOS1bNode,
+                MOS1dNodePrime, MOS1sNodePrime);
+        }
+        
         /// <summary>
         /// Execute behavior
         /// </summary>
@@ -77,8 +109,8 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             MOS1noise.Generators[MOS1RDNOIZ].Set(temp.MOS1drainConductance);
             MOS1noise.Generators[MOS1RSNOIZ].Set(temp.MOS1sourceConductance);
             MOS1noise.Generators[MOS1IDNOIZ].Set(2.0 / 3.0 * Math.Abs(load.MOS1gm));
-            MOS1noise.Generators[MOS1FLNOIZ].Set(modelnoise.MOS1fNcoef * Math.Exp(modelnoise.MOS1fNexp * Math.Log(Math.Max(Math.Abs(load.MOS1cd), 1e-38))) 
-                / (temp.MOS1w * (temp.MOS1l - 2 * modeltemp.MOS1latDiff) * coxSquared) / noise.Freq);
+            MOS1noise.Generators[MOS1FLNOIZ].Set(mnp.MOS1fNcoef * Math.Exp(mnp.MOS1fNexp * Math.Log(Math.Max(Math.Abs(load.MOS1cd), 1e-38))) 
+                / (bp.MOS1w * (bp.MOS1l - 2 * mbp.MOS1latDiff) * coxSquared) / noise.Freq);
 
             // Evaluate noise sources
             MOS1noise.Evaluate(ckt);
