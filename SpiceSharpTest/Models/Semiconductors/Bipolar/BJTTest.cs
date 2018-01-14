@@ -8,11 +8,12 @@ using SpiceSharpTest.Models;
 using SpiceSharp.Circuits;
 using System;
 
-namespace SpiceSharpTest.Components.Semiconductors.BJT
+namespace SpiceSharpTest.Models.Bipolar
 {
     [TestClass]
     public class BJTTest : Framework
     {
+        /*
         [TestMethod]
         public void Emitter_Follower_DC()
         {
@@ -105,5 +106,6 @@ namespace SpiceSharpTest.Components.Semiconductors.BJT
             return netlist;
 
         }
+        */
     }
 }

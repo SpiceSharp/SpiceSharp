@@ -532,15 +532,12 @@ namespace SpiceSharp.Simulations
         /// The simulation will determine which export method is returned if multiple behaviors implement a export method by the same name
         /// </summary>
         /// <param name="name">The identifier of the entity</param>
-        /// <param name="parameter">The parameter name</param>
+        /// <param name="property">The parameter name</param>
         /// <returns></returns>
-        public override Func<double> CreateExport(Identifier name, string parameter)
+        public override Func<State, double> CreateExport(Identifier name, string property)
         {
             var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
-
-            // Most logical place to look for AC analysis: AC behaviors
-            Func<double> export = eb.Get<LoadBehavior>()?.CreateExport(Circuit.State, parameter);
-            return export;
+            return eb.Get<LoadBehavior>()?.CreateExport(property);
         }
     }
 }

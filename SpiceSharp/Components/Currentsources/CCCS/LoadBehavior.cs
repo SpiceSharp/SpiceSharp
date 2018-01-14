@@ -33,16 +33,15 @@ namespace SpiceSharp.Behaviors.CCCS
         /// <summary>
         /// Create an export method
         /// </summary>
-        /// <param name="state">Circuit</param>
-        /// <param name="parameter">Parameter name</param>
+        /// <param name="property">Parameter name</param>
         /// <returns></returns>
-        public override Func<double> CreateExport(State state, string parameter)
+        public override Func<State, double> CreateExport(string property)
         {
-            switch (parameter)
+            switch (property)
             {
-                case "i": return () => state.Solution[CCCScontBranch] * bp.CCCScoeff;
-                case "v": return () => state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
-                case "p": return () =>
+                case "i": return (State state) => state.Solution[CCCScontBranch] * bp.CCCScoeff;
+                case "v": return (State state) => state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
+                case "p": return (State state) =>
                     {
                         double v = state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
                         return state.Solution[CCCScontBranch] * bp.CCCScoeff * v;

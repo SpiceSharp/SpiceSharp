@@ -10,6 +10,7 @@ namespace SpiceSharpTest.Models.Transistors
     [TestClass]
     public class SpiceSharpMOS3Test : Framework
     {
+        /*
         [TestMethod]
         public void TestMOS3_DC()
         {
@@ -101,5 +102,6 @@ namespace SpiceSharpTest.Models.Transistors
                 ".NOISE v(out) V1 dec 10 10 10g");
             TestNoise(netlist, reference_in, reference_out);
         }
+        */
     }
 }

@@ -25,6 +25,8 @@ namespace SpiceSharp.Behaviors.VSRC
         public double GetCurrent(Circuit ckt) => ckt.State.Solution[VSRCbranch];
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
         public double GetPower(Circuit ckt) => (ckt.State.Solution[VSRCposNode] - ckt.State.Solution[VSRCnegNode]) * -ckt.State.Solution[VSRCbranch];
+        [SpiceName("v"), SpiceInfo("Instantaneous voltage")]
+        public double VSRCvoltage { get; protected set; }
 
         /// <summary>
         /// Nodes
@@ -73,17 +75,16 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <summary>
         /// Create an export method
         /// </summary>
-        /// <param name="state">State</param>
         /// <param name="parameter">Parameter</param>
         /// <returns></returns>
-        public override Func<double> CreateExport(State state, string parameter)
+        public override Func<State, double> CreateExport(string parameter)
         {
             switch (parameter)
             {
-                case "i": return () => state.Solution[VSRCbranch];
-                case "p": return () => (state.Solution[VSRCposNode] - state.Solution[VSRCnegNode]) * -state.Solution[VSRCbranch];
-                default:
-                    return base.CreateExport(state, parameter);
+                case "i": return (State state) => state.Solution[VSRCbranch];
+                case "v": return (State state) => VSRCvoltage;
+                case "p": return (State state) => (state.Solution[VSRCposNode] - state.Solution[VSRCnegNode]) * -state.Solution[VSRCbranch];
+                default: return null;
             }
         }
         

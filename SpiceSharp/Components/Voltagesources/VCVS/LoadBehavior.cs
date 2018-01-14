@@ -44,17 +44,16 @@ namespace SpiceSharp.Behaviors.VCVS
         /// <summary>
         /// Create exports
         /// </summary>
-        /// <param name="state">State</param>
-        /// <param name="parameter">Parameter</param>
+        /// <param name="property">Parameter</param>
         /// <returns></returns>
-        public override Func<double> CreateExport(State state, string parameter)
+        public override Func<State, double> CreateExport(string property)
         {
-            switch (parameter)
+            switch (property)
             {
-                case "v": return () => state.Solution[VCVSposNode] - state.Solution[VCVSnegNode];
+                case "v": return (State state) => state.Solution[VCVSposNode] - state.Solution[VCVSnegNode];
                 case "i":
-                case "c": return () => state.Solution[VCVSbranch];
-                case "p": return () => state.Solution[VCVSbranch] * (state.Solution[VCVSposNode] - state.Solution[VCVSnegNode]);
+                case "c": return (State state) => state.Solution[VCVSbranch];
+                case "p": return (State state) => state.Solution[VCVSbranch] * (state.Solution[VCVSposNode] - state.Solution[VCVSnegNode]);
                 default: return null;
             }
         }

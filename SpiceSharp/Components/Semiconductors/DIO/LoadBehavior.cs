@@ -66,20 +66,19 @@ namespace SpiceSharp.Behaviors.DIO
         /// <summary>
         /// Create an export method
         /// </summary>
-        /// <param name="state">State</param>
-        /// <param name="parameter">Parameter name</param>
+        /// <param name="property">Parameter name</param>
         /// <returns></returns>
-        public override Func<double> CreateExport(State state, string parameter)
+        public override Func<State, double> CreateExport(string property)
         {
-            switch (parameter)
+            switch (property)
             {
-                case "vd": return () => DIOvoltage;
-                case "v": return () => state.Solution[DIOposNode] - state.Solution[DIOnegNode];
+                case "vd": return (State state) => DIOvoltage;
+                case "v": return (State state) => state.Solution[DIOposNode] - state.Solution[DIOnegNode];
                 case "i":
-                case "id": return () => DIOcurrent;
-                case "gd": return () => DIOconduct;
-                case "p": return () => (state.Solution[DIOposNode] - state.Solution[DIOnegNode]) * -DIOcurrent;
-                case "pd": return () => -DIOvoltage * DIOcurrent;
+                case "id": return (State state) => DIOcurrent;
+                case "gd": return (State state) => DIOconduct;
+                case "p": return (State state) => (state.Solution[DIOposNode] - state.Solution[DIOnegNode]) * -DIOcurrent;
+                case "pd": return (State state) => -DIOvoltage * DIOcurrent;
                 default: return null;
             }
         }

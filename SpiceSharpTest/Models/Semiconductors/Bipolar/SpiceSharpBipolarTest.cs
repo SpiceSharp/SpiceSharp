@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
 
-namespace SpiceSharpTest.Models
+namespace SpiceSharpTest.Models.Bipolar
 {
     /// <summary>
     /// BJT MJD44H11 (ON Semiconductors)
@@ -11,6 +11,7 @@ namespace SpiceSharpTest.Models
     [TestClass]
     public class SpiceSharpBipolarTest : Framework
     {
+        /*
         [TestMethod]
         public void TestBJT_DC()
         {
@@ -147,5 +148,6 @@ namespace SpiceSharpTest.Models
                 ".NOISE v(out) V1 dec 10 10 10g");
             TestNoise(netlist, reference_in, reference_out);
         }
+        */
     }
 }

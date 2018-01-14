@@ -112,13 +112,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Create an export method for this type of simulation
-        /// The simulation will determine which method is returned if multiple behaviors implement an export method by the same name
+        /// Create an export method
+        /// If multiple behaviors implement the same property, the simulation type will decide which behavior gets precedence
         /// </summary>
-        /// <param name="name">The identifier of the entity</param>
-        /// <param name="parameter">The parameter name</param>
+        /// <param name="name">Entity name</param>
+        /// <param name="property">Property name</param>
         /// <returns></returns>
-        public abstract Func<double> CreateExport(Identifier name, string parameter);
+        public abstract Func<State, double> CreateExport(Identifier name, string property);
 
         /// <summary>
         /// Collect behaviors of all circuit objects while also setting them up

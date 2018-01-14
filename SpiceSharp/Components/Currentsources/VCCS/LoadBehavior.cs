@@ -35,17 +35,16 @@ namespace SpiceSharp.Behaviors.VCCS
         /// <summary>
         /// Create export method
         /// </summary>
-        /// <param name="state">State</param>
-        /// <param name="parameter">Parameter name</param>
+        /// <param name="property">Parameter name</param>
         /// <returns></returns>
-        public override Func<double> CreateExport(State state, string parameter)
+        public override Func<State, double> CreateExport(string property)
         {
-            switch (parameter)
+            switch (property)
             {
-                case "v": return () => state.Solution[VCCSposNode] - state.Solution[VCCSnegNode];
+                case "v": return (State state) => state.Solution[VCCSposNode] - state.Solution[VCCSnegNode];
                 case "i":
-                case "c": return () => (state.Solution[VCCSposNode] - state.Solution[VCCSnegNode]) * bp.VCCScoeff;
-                case "p": return () =>
+                case "c": return (State state) => (state.Solution[VCCSposNode] - state.Solution[VCCSnegNode]) * bp.VCCScoeff;
+                case "p": return (State state) =>
                     {
                         double current = (state.Solution[VCCScontPosNode] - state.Solution[VCCScontNegNode]) * bp.VCCScoeff;
                         double voltage = (state.Solution[VCCSposNode] - state.Solution[VCCSnegNode]);

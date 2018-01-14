@@ -33,17 +33,16 @@ namespace SpiceSharp.Behaviors.VCCS
         /// <summary>
         /// Create export method
         /// </summary>
-        /// <param name="state">State</param>
-        /// <param name="parameter">Parameter</param>
+        /// <param name="property">Parameter</param>
         /// <returns></returns>
-        public override Func<double> CreateExport(State state, string parameter)
+        public override Func<State, double> CreateExport(string property)
         {
-            switch (parameter)
+            switch (property)
             {
-                case "vr": return () => state.Solution[VCCSposNode] - state.Solution[VCCSnegNode];
-                case "vi": return () => state.iSolution[VCCSposNode] - state.iSolution[VCCSnegNode];
-                case "ir": return () => (state.Solution[VCCScontPosNode] - state.Solution[VCCScontNegNode]) * bp.VCCScoeff;
-                case "ii": return () => (state.iSolution[VCCScontPosNode] - state.iSolution[VCCScontNegNode]) * bp.VCCScoeff;
+                case "vr": return (State state) => state.Solution[VCCSposNode] - state.Solution[VCCSnegNode];
+                case "vi": return (State state) => state.iSolution[VCCSposNode] - state.iSolution[VCCSnegNode];
+                case "ir": return (State state) => (state.Solution[VCCScontPosNode] - state.Solution[VCCScontNegNode]) * bp.VCCScoeff;
+                case "ii": return (State state) => (state.iSolution[VCCScontPosNode] - state.iSolution[VCCScontNegNode]) * bp.VCCScoeff;
                 default: return null;
             }
         }

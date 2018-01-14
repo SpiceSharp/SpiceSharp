@@ -32,18 +32,17 @@ namespace SpiceSharp.Behaviors.CCCS
         /// <summary>
         /// Create an export method
         /// </summary>
-        /// <param name="state">State</param>
-        /// <param name="parameter">Parameters</param>
+        /// <param name="property">Parameters</param>
         /// <returns></returns>
-        public override Func<double> CreateExport(State state, string parameter)
+        public override Func<State, double> CreateExport(string property)
         {
-            switch (parameter)
+            switch (property)
             {
-                case "vr": return () => state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
-                case "vi": return () => state.iSolution[CCCSposNode] - state.iSolution[CCCSnegNode];
-                case "ir": return () => state.Solution[CCCScontBranch] * bp.CCCScoeff.Value;
-                case "ii": return () => state.iSolution[CCCScontBranch] * bp.CCCScoeff.Value;
-                case "pr": return () =>
+                case "vr": return (State state) => state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
+                case "vi": return (State state) => state.iSolution[CCCSposNode] - state.iSolution[CCCSnegNode];
+                case "ir": return (State state) => state.Solution[CCCScontBranch] * bp.CCCScoeff.Value;
+                case "ii": return (State state) => state.iSolution[CCCScontBranch] * bp.CCCScoeff.Value;
+                case "pr": return (State state) =>
                     {
                         double vr = state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
                         double vi = state.iSolution[CCCSposNode] - state.iSolution[CCCSnegNode];
@@ -51,7 +50,7 @@ namespace SpiceSharp.Behaviors.CCCS
                         double ii = state.iSolution[CCCScontBranch] * bp.CCCScoeff.Value;
                         return vr * ir - vi * ii;
                     };
-                case "pi": return () =>
+                case "pi": return (State state) =>
                     {
                         double vr = state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
                         double vi = state.iSolution[CCCSposNode] - state.iSolution[CCCSnegNode];

@@ -81,10 +81,9 @@ namespace SpiceSharp.Behaviors
         /// Create a function for extracting data
         /// This function can be used to extract parameters during simulation
         /// </summary>
-        /// <param name="state">State</param>
-        /// <param name="parameter">Parameter</param>
+        /// <param name="property">Parameter</param>
         /// <returns>Returns null if there is no export method</returns>
-        public virtual Func<double> CreateExport(State state, string parameter)
+        public virtual Func<State, double> CreateExport(string property)
         {
             return null;
         }

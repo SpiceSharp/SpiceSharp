@@ -50,18 +50,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Circuits\CircuitCheckTest.cs" />
-    <Compile Include="Components\Currentsources\Currentsource\CurrentsourceTest.cs" />
-    <Compile Include="Components\RLC\Capacitor\CapacitorTest.cs" />
-    <Compile Include="Components\RLC\Resistor\ResistorTest.cs" />
-    <Compile Include="Components\Semiconductors\BJT\BJTTest.cs" />
+    <Compile Include="Models\Currentsources\ISRC\CurrentsourceTest.cs" />
+    <Compile Include="Models\RLC\CAP\CapacitorTest.cs" />
+    <Compile Include="Models\RLC\RES\ResistorTest.cs" />
+    <Compile Include="Models\Semiconductors\Bipolar\BJTTest.cs" />
     <Compile Include="Models\Framework.cs" />
-    <Compile Include="Models\Semiconductors\SpiceSharpBipolarTest.cs" />
-    <Compile Include="Models\Semiconductors\SpiceSharpDiodeTest.cs" />
-    <Compile Include="Models\Transistors\SpiceSharpMOS1Test.cs" />
-    <Compile Include="Models\Transistors\SpiceSharpMOS2Test.cs" />
-    <Compile Include="Models\Transistors\SpiceSharpMOS3Test.cs" />
+    <Compile Include="Models\Semiconductors\Bipolar\SpiceSharpBipolarTest.cs" />
+    <Compile Include="Models\Semiconductors\DIO\SpiceSharpDiodeTest.cs" />
+    <Compile Include="Models\Semiconductors\Mosfet\Level1\SpiceSharpMOS1Test.cs" />
+    <Compile Include="Models\Semiconductors\Mosfet\Level2\SpiceSharpMOS2Test.cs" />
+    <Compile Include="Models\Semiconductors\Mosfet\Level3\SpiceSharpMOS3Test.cs" />
     <Compile Include="Sparse\SparseBuildTest.cs" />
-    <Compile Include="SpiceExpressionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpiceSharpTest.cs" />
     <Compile Include="SpiceSharpCircuitCheckTest.cs" />

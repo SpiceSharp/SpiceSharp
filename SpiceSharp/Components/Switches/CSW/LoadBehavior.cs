@@ -61,16 +61,15 @@ namespace SpiceSharp.Behaviors.CSW
         /// <summary>
         /// Create an export method
         /// </summary>
-        /// <param name="state">State</param>
-        /// <param name="parameter">Parameter</param>
+        /// <param name="property">Parameter</param>
         /// <returns></returns>
-        public override Func<double> CreateExport(State state, string parameter)
+        public override Func<State, double> CreateExport(string property)
         {
-            switch (parameter)
+            switch (property)
             {
-                case "v": return () => state.Solution[CSWposNode] - state.Solution[CSWnegNode];
-                case "i": return () => (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
-                case "p": return () => (state.Solution[CSWposNode] - state.Solution[CSWnegNode])
+                case "v": return (State state) => state.Solution[CSWposNode] - state.Solution[CSWnegNode];
+                case "i": return (State state) => (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
+                case "p": return (State state) => (state.Solution[CSWposNode] - state.Solution[CSWnegNode])
                     * (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
                 default: return null;
             }

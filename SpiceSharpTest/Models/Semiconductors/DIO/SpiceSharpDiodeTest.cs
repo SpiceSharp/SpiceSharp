@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharpTest.Models.Semiconductors
+namespace SpiceSharpTest.Models.DIO
 {
     /// <summary>
     /// From LTSpice
@@ -11,6 +11,7 @@ namespace SpiceSharpTest.Models.Semiconductors
     [TestClass]
     public class SpiceSharpDiodeTest : Framework
     {
+        /*
         [TestMethod]
         public void TestDiodeDC()
         {
@@ -99,5 +100,6 @@ namespace SpiceSharpTest.Models.Semiconductors
                 ".noise v(out) V1 dec 10 10 10g");
             TestNoise(netlist, reference_in, reference_out);
         }
+        */
     }
 }

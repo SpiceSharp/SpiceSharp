@@ -19,21 +19,35 @@ namespace Sandbox
             var plotInput = chMain.Series.Add("Input");
             plotInput.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
             var plotOutput = chMain.Series.Add("Output");
-            plotOutput.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            plotOutput.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
 
+            double dcVoltage = 10;
+            double resistorResistance = 10e3; // 10000;
+            double capacitance = 1e-6; // 0.000001;
+            double tau = resistorResistance * capacitance;
+
+            // Build circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", new Pulse(0, 5, 1e-6, 1e-10, 1e-10, 1e-6, 2e-6)),
-                new Resistor("R1", "IN", "OUT", 1e3),
-                new Capacitor("C1", "OUT", "0", 1e-9)
+                new Capacitor("C1", "OUT", "0", capacitance),
+                new Resistor("R1", "IN", "OUT", resistorResistance),
+                new Voltagesource("V1", "IN", "0", dcVoltage)
                 );
+            ckt.Nodes.IC["OUT"] = 0.0;
 
-            Transient tran = new Transient("Transient 1", 1e-6, 10e-6);
-            tran.MaxStep = 1e-8;
+            // Create simulation, exports and references
+            Transient tran = new Transient("tran", 1e-8, 10e-2);
+            Func<State, double> export = null;
+            Func<double, double> reference = (double t) => dcVoltage * (1.0 - Math.Exp(-t / tau));
+
+            tran.InitializeSimulationExport += (object sender, SpiceSharp.Behaviors.BehaviorPool pool) =>
+            {
+                export = tran.CreateExport("R1", "v");
+            };
             tran.OnExportSimulationData += (object sender, SimulationData data) =>
             {
-                plotInput.Points.AddXY(data.GetTime(), data.GetVoltage("IN"));
-                plotOutput.Points.AddXY(data.GetTime(), data.GetVoltage("OUT"));
+                plotInput.Points.AddXY(data.GetTime(), export(data.Circuit.State));
+                plotOutput.Points.AddXY(data.GetTime(), reference(data.GetTime()));
             };
             tran.Run(ckt);
         }

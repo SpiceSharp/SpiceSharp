@@ -49,17 +49,16 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <summary>
         /// Create an export method
         /// </summary>
-        /// <param name="state">State</param>
-        /// <param name="parameter">Parameter name</param>
+        /// <param name="property">Parameter name</param>
         /// <returns></returns>
-        public override Func<double> CreateExport(State state, string parameter)
+        public override Func<State, double> CreateExport(string property)
         {
-            switch (parameter)
+            switch (property)
             {
-                case "v": return () => state.Solution[ISRCposNode] - state.Solution[ISRCnegNode];
-                case "p": return () => (state.Solution[ISRCposNode] - state.Solution[ISRCnegNode]) * -Current;
+                case "v": return (State state) => state.Solution[ISRCposNode] - state.Solution[ISRCnegNode];
+                case "p": return (State state) => (state.Solution[ISRCposNode] - state.Solution[ISRCnegNode]) * -Current;
                 case "i":
-                case "c": return () => Current;
+                case "c": return (State state) => Current;
                 default: return null;
             }
         }
