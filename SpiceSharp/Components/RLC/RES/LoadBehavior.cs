@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.RES;
+using System;
 
 namespace SpiceSharp.Behaviors.RES
 {
@@ -49,6 +50,22 @@ namespace SpiceSharp.Behaviors.RES
         /// </summary>
         /// <param name="name">Name</param>
         public LoadBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Create export method
+        /// </summary>
+        /// <param name="property">Property</param>
+        /// <returns></returns>
+        public override Func<State, double> CreateExport(string property)
+        {
+            switch (property)
+            {
+                case "v": return (State state) => state.Solution[RESposNode] - state.Solution[RESnegNode];
+                case "c":
+                case "i": return (State state) => (state.Solution[RESposNode] - state.Solution[RESnegNode]) * RESconduct;
+                default: return null;
+            }
+        }
 
         /// <summary>
         /// Setup the behavior
