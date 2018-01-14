@@ -33,8 +33,12 @@ namespace SpiceSharpTest.Models.RLC.CAP
 
             // Create simulation, exports and references
             Transient tran = new Transient("tran", 1e-8, 10e-6);
-            Func<State, double>[] exports = { tran.CreateExport("R1", "v") };
+            Func<State, double>[] exports = new Func<State, double>[1];
             Func<double, double>[] references = { (double t) => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
+            tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
+            {
+                exports[0] = tran.CreateExport("C1", "v");
+            };
 
             // Run
             AnalyseTransient(tran, ckt, exports, references);

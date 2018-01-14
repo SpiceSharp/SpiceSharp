@@ -74,6 +74,7 @@
     <Compile Include="Components\Voltagesources\CCVS\BaseParameters.cs" />
     <Compile Include="Components\Voltagesources\VCVS\BaseParameters.cs" />
     <Compile Include="Simulations\Behaviors\SetupDataProvider.cs" />
+    <Compile Include="Simulations\InitializationDataEventArgs.cs" />
     <Compile Include="Simulations\IntegrationMethods\ComponentState.cs" />
     <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsource.cs" />
     <Compile Include="Components\Currentsources\CCCS\AcBehavior.cs" />

@@ -75,7 +75,8 @@ namespace SpiceSharp.Simulations
 
             // Setup the simulation
             Setup();
-            InitializeSimulationExport?.Invoke(this, pool);
+            var args = new InitializationDataEventArgs(pool);
+            InitializeSimulationExport?.Invoke(this, args);
 
             // Execute the simulation
             Execute();
@@ -107,7 +108,7 @@ namespace SpiceSharp.Simulations
         /// <param name="ckt"></param>
         public virtual void Export(Circuit ckt)
         {
-            SimulationData data = new SimulationData(ckt);
+            SimulationDataEventArgs data = new SimulationDataEventArgs(ckt);
             OnExportSimulationData?.Invoke(this, data);
         }
 

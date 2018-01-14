@@ -9,7 +9,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Exported simulation data. Can be used by simulations to pass exported simulation data as an event argument.
     /// </summary>
-    public class SimulationData : EventArgs
+    public class SimulationDataEventArgs : EventArgs
     {
         /// <summary>
         /// The circuit
@@ -20,7 +20,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="ckt"></param>
-        public SimulationData(Circuit ckt)
+        public SimulationDataEventArgs(Circuit ckt)
         {
             Circuit = ckt;
         }
@@ -209,20 +209,13 @@ namespace SpiceSharp.Simulations
             return Circuit.Objects[name];
         }
     }
-
-    /// <summary>
-    /// Delegate for initializing a simulation export
-    /// </summary>
-    /// <param name="sender">The object calling the event</param>
-    /// <param name="ckt">The circuit</param>
-    public delegate void InitializeSimulationExportEventHandler(object sender, BehaviorPool ckt);
     
     /// <summary>
     /// Delegate for exporting simulation data
     /// </summary>
     /// <param name="sender">The object sending the event</param>
     /// <param name="data">The simulation data</param>
-    public delegate void ExportSimulationDataEventHandler(object sender, SimulationData data);
+    public delegate void ExportSimulationDataEventHandler(object sender, SimulationDataEventArgs data);
 
     /// <summary>
     /// Delegate for finalizing a simulation export

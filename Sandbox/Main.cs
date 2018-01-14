@@ -43,11 +43,11 @@ namespace Sandbox
             Func<State, double> export = null;
             Func<double, double> reference = (double t) => dcVoltage * (1.0 - Math.Exp(-t / tau));
 
-            tran.InitializeSimulationExport += (object sender, SpiceSharp.Behaviors.BehaviorPool pool) =>
+            tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 export = tran.CreateExport("C1", "v");
             };
-            tran.OnExportSimulationData += (object sender, SimulationData data) =>
+            tran.OnExportSimulationData += (object sender, SimulationDataEventArgs data) =>
             {
                 plotInput.Points.AddXY(data.GetTime(), data.GetVoltage("OUT"));
             };

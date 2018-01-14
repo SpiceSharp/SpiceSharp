@@ -33,18 +33,19 @@ namespace SpiceSharpTest.Models.Currentsources.ISRC
              * 1) a current through resistor is 10A
              * 2) the voltage across the current source is 1000V
              */
-            var ckt = CreateResistorCircuit(10, 1000);
+            var ckt = CreateResistorCircuit(10, 1.0e3);
 
             // Create simulation, exports and references
             OP op = new OP("op");
-            Func<State, double>[] exports =
+            Func<State, double>[] exports = new Func<State, double>[2];
+            op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
-                op.CreateExport("I1", "v"),
-                op.CreateExport("R1", "i")
+                exports[0] = op.CreateExport("I1", "v");
+                exports[1] = op.CreateExport("R1", "i");
             };
             double[] references =
             {
-                1000,
+                10.0e3,
                 10
             };
 
@@ -88,19 +89,23 @@ namespace SpiceSharpTest.Models.Currentsources.ISRC
             int resistanceInOhms = 10;
             int resistorCount = 500;
             var ckt = CreateResistorsInSeriesCircuit(resistorCount, currentInAmp, resistanceInOhms);
-
-            // Create simulation, exports and references
             OP op = new OP("op");
+
+            // Create exports
             List<Func<State, double>> exports = new List<Func<State, double>>();
+            op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
+            {
+                for (int i = 1; i <= resistorCount; i++)
+                    exports.Add(op.CreateExport($"R{i}", "i"));
+                exports.Add(op.CreateExport("I1", "v"));
+            };
+            
+            // Add references
             List<double> references = new List<double>();
             for (int i = 1; i <= resistorCount; i++)
-            {
-                exports.Add(op.CreateExport($"R{i}", "i"));
                 references.Add(100);
-            }
-            exports.Add(op.CreateExport("I1", "v"));
             references.Add(currentInAmp * resistanceInOhms * resistorCount);
-
+            
             // Run test
             AnalyseOp(op, ckt, exports, references);
         }

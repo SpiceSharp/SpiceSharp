@@ -15,32 +15,26 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Constants
         /// </summary>
-        private const double PivotAbsTol = 1e-6;
-        private const double PivotRelTol = 1e-3;
+        const double PivotAbsTol = 1e-6;
+        const double PivotRelTol = 1e-3;
 
         /// <summary>
         /// Private variables
         /// </summary>
-        private bool HasSource = false;
-        private bool HasGround = false;
-        private List<Tuple<Component, int, int>> voltagedriven = new List<Tuple<Component, int, int>>();
-        private Dictionary<int, int> connectedgroups = new Dictionary<int, int>();
-        private int cgroup = 0;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public Validator()
-        {
-        }
-
+        bool HasSource;
+        bool HasGround;
+        List<Tuple<Component, int, int>> voltagedriven = new List<Tuple<Component, int, int>>();
+        Dictionary<int, int> connectedgroups = new Dictionary<int, int>();
+        int cgroup;
+        
         /// <summary>
         /// Check a circuit
         /// </summary>
         /// <param name="ckt">The circuit</param>
         public void Check(Circuit ckt)
         {
-            // Connect all objects in the circuit
+            // Connect all objects in the circuit, we need this information to find connectivity issues
+            ckt.Objects.BuildOrderedComponentList();
             foreach (var o in ckt.Objects)
                 o.Setup(ckt);
 
@@ -53,7 +47,7 @@ namespace SpiceSharp.Circuits
 
             // Check all objects
             foreach (var c in ckt.Objects)
-                CheckObject(c);
+                CheckEntity(c);
 
             // Check if a voltage source is available
             if (!HasSource)
@@ -87,7 +81,7 @@ namespace SpiceSharp.Circuits
         /// Deal with a component
         /// </summary>
         /// <param name="c">The circuit object</param>
-        private void CheckObject(Entity c)
+        void CheckEntity(Entity c)
         {
             // Circuit components
             if (c is Component icc)
@@ -159,7 +153,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Find a voltage driver that closes a voltage drive loop
         /// </summary>
-        private Component FindVoltageDriveLoop()
+        Component FindVoltageDriveLoop()
         {
             // Remove the ground node and make a map for reducing the matrix complexity
             int index = 1;
@@ -199,7 +193,7 @@ namespace SpiceSharp.Circuits
         /// Add connected nodes that will be used to find floating nodes
         /// </summary>
         /// <param name="nodes"></param>
-        private void AddConnections(int[] nodes)
+        void AddConnections(int[] nodes)
         {
             if (nodes == null || nodes.Length == 0)
                 return;
@@ -217,7 +211,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        private void AddConnection(int a, int b)
+        void AddConnection(int a, int b)
         {
             if (a == b)
                 return;
@@ -248,7 +242,7 @@ namespace SpiceSharp.Circuits
         /// Find a node that has no path to ground anywhere (open-circuited)
         /// </summary>
         /// <returns></returns>
-        private HashSet<int> FindFloatingNodes()
+        HashSet<int> FindFloatingNodes()
         {
             HashSet<int> unconnected = new HashSet<int>();
 
