@@ -52,7 +52,7 @@ namespace SpiceSharpTest.Models.IND
             Func<double, double>[] references = { (double t) => -amplitude * Math.Sin(omega * t) };
 
             // Run test
-            AnalyseTransient(tran, ckt, exports, references);
+            AnalyzeTransient(tran, ckt, exports, references);
         }
     }
 }

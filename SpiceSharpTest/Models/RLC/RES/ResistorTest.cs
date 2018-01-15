@@ -46,7 +46,7 @@ namespace SpiceSharpTest.Models.RLC.RES
             double[] references = { 0.01 };
 
             // Run
-            AnalyseOp(op, ckt, exports, references);
+            AnalyzeOp(op, ckt, exports, references);
         }
 
         /* NOTE: needs more work
@@ -117,7 +117,7 @@ namespace SpiceSharpTest.Models.RLC.RES
             double[] references = { 100 * 1 / (3 + 1) };
 
             // Run
-            AnalyseOp(op, ckt, exports, references);
+            AnalyzeOp(op, ckt, exports, references);
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace SpiceSharpTest.Models.RLC.RES
             };
 
             // Run
-            AnalyseOp(op, ckt, exports, references);
+            AnalyzeOp(op, ckt, exports, references);
         }
     }
 }

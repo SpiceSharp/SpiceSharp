@@ -41,7 +41,7 @@ namespace SpiceSharpTest.Models.RLC.CAP
             };
 
             // Run
-            AnalyseTransient(tran, ckt, exports, references);
+            AnalyzeTransient(tran, ckt, exports, references);
         }
     }
 }

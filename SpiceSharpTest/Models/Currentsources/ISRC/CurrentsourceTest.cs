@@ -50,7 +50,7 @@ namespace SpiceSharpTest.Models.Currentsources.ISRC
             };
 
             // Run test
-            AnalyseOp(op, ckt, exports, references);
+            AnalyzeOp(op, ckt, exports, references);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace SpiceSharpTest.Models.Currentsources.ISRC
             references.Add(currentInAmp * resistanceInOhms * resistorCount);
             
             // Run test
-            AnalyseOp(op, ckt, exports, references);
+            AnalyzeOp(op, ckt, exports, references);
         }
     }
 }
