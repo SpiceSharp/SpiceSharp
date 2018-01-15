@@ -29,10 +29,10 @@ namespace SpiceSharp.IntegrationMethods
         /// Initialize the trapezoidal integration method
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        /// <param name="truncatebehaviors">Truncation behaviors</param>
-        public override void Initialize(Circuit ckt, List<TruncateBehavior> truncatebehaviors)
+        /// <param name="tranbehaviors">Truncation behaviors</param>
+        public override void Initialize(Circuit ckt, List<TransientBehavior> tranbehaviors)
         {
-            base.Initialize(ckt, truncatebehaviors);
+            base.Initialize(ckt, tranbehaviors);
 
             ag = new double[MaxOrder];
             for (int i = 0; i < MaxOrder; i++)
@@ -91,6 +91,36 @@ namespace SpiceSharp.IntegrationMethods
                 default:
                     throw new CircuitException("Invalid order");
             }
+        }
+
+        /// <summary>
+        /// Integrate a variable at a specific index
+        /// </summary>
+        /// <param name="first">Current timepoint</param>
+        /// <param name="index">Index</param>
+        /// <param name="cap">Capacitance</param>
+        /// <returns></returns>
+        public override Result Integrate(HistoryPoint first, int index, double cap)
+        {
+            switch (Order)
+            {
+                case 1:
+                    first.Values[index + 1] = ag[0] * first.Values[index] + ag[1] * first.Previous.Values[index];
+                    break;
+
+                case 2:
+                    first.Values[index + 1] = -first.Previous.Values[index + 1] * ag[1] + ag[0] * (first.Values[index] - first.Previous.Values[index]);
+                    break;
+
+                default:
+                    throw new CircuitException("Invalid order");
+            }
+
+            // Create the contributions
+            var result = new Result();
+            result.Geq = ag[0] * cap;
+            result.Ceq = first.Values[index + 1] - ag[0] * first.Values[index];
+            return result;
         }
 
         /// <summary>
@@ -168,12 +198,13 @@ namespace SpiceSharp.IntegrationMethods
         /// Uses the Local Truncation Error (LTE) to calculate an approximate timestep.
         /// The method is slightly different from the original Spice 3f5 version.
         /// </summary>
-        /// <param name="ckt">The circuit</param>
+        /// <param name="sender">Sender</param>
+        /// <param name="args">Arguments</param>
         /// <returns></returns>
-        public override double TruncateNodes(TimeSimulation sim)
+        protected override void TruncateNodes(object sender, TruncationEventArgs args)
         {
             // Get the state
-            var ckt = sim.Circuit;
+            var ckt = args.Simulation.Circuit;
             var state = ckt.State;
             double tol, diff, tmp;
             double timetemp = Double.PositiveInfinity;
@@ -229,7 +260,7 @@ namespace SpiceSharp.IntegrationMethods
             }
 
             // Get the minimum timestep
-            return Math.Min(2.0 * Delta, timetemp);
+            args.Delta = timetemp;
         }
 
         /// <summary>

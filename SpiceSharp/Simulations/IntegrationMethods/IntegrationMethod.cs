@@ -101,19 +101,12 @@ namespace SpiceSharp.IntegrationMethods
         /// Private variables
         /// </summary>
         double savetime = double.NaN;
-        List<TruncateBehavior> truncatebehaviors;
+        List<TransientBehavior> tranbehaviors;
 
         /// <summary>
-        /// Delegate for truncation
+        /// Event called when the timestep needs to be truncated
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        /// <returns></returns>
-        public delegate double TruncationMethod(TimeSimulation sim);
-
-        /// <summary>
-        /// Truncate the timestep
-        /// </summary>
-        public TruncationMethod Truncate { get; protected set; } = null;
+        public event TruncationEventHandler Truncate;
 
         /// <summary>
         /// Constructor
@@ -173,8 +166,8 @@ namespace SpiceSharp.IntegrationMethods
         /// Initialize/reset the integration method
         /// </summary>
         /// <param name="ckt">Circuit</param>
-        /// <param name="truncatebehaviors">Truncation behaviors</param>
-        public virtual void Initialize(Circuit ckt, List<TruncateBehavior> truncatebehaviors)
+        /// <param name="tranbehaviors">Truncation behaviors</param>
+        public virtual void Initialize(Circuit ckt, List<TransientBehavior> tranbehaviors)
         {
             // Initialize variables
             Time = 0.0;
@@ -185,22 +178,12 @@ namespace SpiceSharp.IntegrationMethods
             DeltaOld = new double[MaxOrder + 1];
             Solutions = new double[MaxOrder + 1][]; // new Vector<double>[MaxOrder + 1];
 
-            // Choose the truncation method
-            switch (Config.TruncationMethod)
-            {
-                case IntegrationConfiguration.TruncationMethods.PerDevice:
-                    Truncate = TruncateDevices;
-                    this.truncatebehaviors = truncatebehaviors;
-                    break;
-
-                case IntegrationConfiguration.TruncationMethods.PerNode:
-                    Truncate = TruncateNodes;
-                    this.truncatebehaviors = null;
-                    break;
-
-                default:
-                    throw new CircuitException("Invalid truncation method");
-            }
+            // Register default truncation methods
+            this.tranbehaviors = tranbehaviors;
+            if (Config.TruncationMethod.HasFlag(IntegrationConfiguration.TruncationMethods.PerDevice))
+                Truncate += TruncateDevices;
+            if (Config.TruncationMethod.HasFlag(IntegrationConfiguration.TruncationMethods.PerNode))
+                Truncate += TruncateNodes;
 
             // Last point was START so the current point is the point after a breakpoint (start)
             Break = true;
@@ -300,25 +283,33 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns>True if the timestep isn't cut</returns>
         public bool LteControl(TimeSimulation sim)
         {
-            double newdelta = Truncate(sim);
+            // Invoke truncation event
+            TruncationEventArgs args = new TruncationEventArgs(sim, Delta);
+            Truncate?.Invoke(this, args);
+            double newdelta = args.Delta;
+
             if (newdelta > 0.9 * Delta)
             {
                 if (Order == 1)
                 {
                     Order = 2;
-                    newdelta = Truncate(sim);
+
+                    // Invoke truncation event
+                    args = new TruncationEventArgs(sim, Delta);
+                    Truncate?.Invoke(this, args);
+                    newdelta = args.Delta;
+
                     if (newdelta <= 1.05 * Delta)
                         Order = 1;
                 }
                 Delta = newdelta;
                 return true;
             }
-            else
-            {
-                Rollback();
-                Delta = newdelta;
-                return false;
-            }
+
+            // Truncation too strict, we'll have to recalculate the timepoint
+            Rollback();
+            Delta = newdelta;
+            return false;
         }
 
         /// <summary>
@@ -339,6 +330,15 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="index">The index of the state to be used</param>
         /// <returns></returns>
         public abstract void Integrate(HistoryPoint first, int index);
+
+        /// <summary>
+        /// Integrate a state variable at a specific index
+        /// </summary>
+        /// <param name="first">The current piont with the state variables</param>
+        /// <param name="index">The index of the state to be used</param>
+        /// <param name="cap">The capacitance</param>
+        /// <returns></returns>
+        public abstract Result Integrate(HistoryPoint first, int index, double cap);
 
         /// <summary>
         /// Integrate a state variable at a specific index
@@ -378,23 +378,25 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Truncate the timestep based on the nodes
+        /// Do truncation for all nodes
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
+        /// <param name="sender">Sender</param>
+        /// <param name="args">Arguments</param>
         /// <returns></returns>
-        public abstract double TruncateNodes(TimeSimulation sim);
+        protected abstract void TruncateNodes(object sender, TruncationEventArgs args);
 
         /// <summary>
-        /// Do truncation using devices
+        /// Do truncation for all devices
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
+        /// <param name="sender">Sender</param>
+        /// <param name="args">Arguments</param>
         /// <returns></returns>
-        protected double TruncateDevices(TimeSimulation sim)
+        protected void TruncateDevices(object sender, TruncationEventArgs args)
         {
             double timetmp = double.PositiveInfinity;
-            foreach (var behavior in truncatebehaviors)
-                behavior.Truncate(sim, ref timetmp);
-            return Math.Min(Delta * 2.0, timetmp);
+            foreach (var behavior in tranbehaviors)
+                behavior.Truncate(ref timetmp);
+            args.Delta = timetmp;
         }
 
         /// <summary>

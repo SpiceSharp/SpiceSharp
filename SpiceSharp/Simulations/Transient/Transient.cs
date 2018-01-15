@@ -102,7 +102,7 @@ namespace SpiceSharp.Simulations
             state.Gmin = config.Gmin;
 
             // Setup breakpoints
-            Method.Initialize(ckt, truncatebehaviors);
+            Method.Initialize(ckt, tranbehaviors);
             state.Initialize(ckt);
             state.ReinitStates(Method);
 
@@ -110,6 +110,7 @@ namespace SpiceSharp.Simulations
             ckt.Method = null;
             Op(ckt, config.DcMaxIterations);
             ckt.Statistics.TimePoints++;
+            Method = States.Method;
             for (int i = 0; i < Method.DeltaOld.Length; i++)
             {
                 Method.DeltaOld[i] = MaxStep;

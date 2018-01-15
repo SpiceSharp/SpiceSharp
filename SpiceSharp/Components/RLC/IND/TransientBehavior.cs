@@ -1,32 +1,24 @@
-﻿using SpiceSharp.Components;
+﻿using SpiceSharp.Components.IND;
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
+using SpiceSharp.IntegrationMethods;
+using System;
 
 namespace SpiceSharp.Behaviors.IND
 {
     /// <summary>
-    /// General behaviour for a <see cref="Inductor"/>
+    /// General behaviour for a <see cref="Components.Inductor"/>
     /// </summary>
     public class TransientBehavior : Behaviors.TransientBehavior
     {
         /// <summary>
-        /// Parameters
+        /// Necessary behaviors and parameters
         /// </summary>
-        [SpiceName("inductance"), SpiceInfo("Inductance of the inductor", IsPrincipal = true)]
-        public Parameter INDinduct { get; } = new Parameter();
-        [SpiceName("ic"), SpiceInfo("Initial current through the inductor", Interesting = false)]
-        public Parameter INDinitCond { get; } = new Parameter();
-        [SpiceName("flux"), SpiceInfo("Flux through the inductor")]
-        public double GetFlux(Circuit ckt) => ckt.State.States[0][INDstate + INDflux];
-        [SpiceName("v"), SpiceName("volt"), SpiceInfo("Terminal voltage of the inductor")]
-        public double GetVolt(Circuit ckt) => ckt.State.States[0][INDstate + INDvolt];
-        [SpiceName("i"), SpiceName("current"), SpiceInfo("Current through the inductor")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Solution[INDbrEq];
-        [SpiceName("p"), SpiceInfo("Instantaneous power dissipated by the inductor")]
-        public double GetPower(Circuit ckt) => ckt.State.Solution[INDbrEq] * ckt.State.States[0][INDstate + INDvolt];
-
+        BaseParameters bp;
+        LoadBehavior load;
+        
         /// <summary>
         /// Delegate for adding effects of a mutual inductance
         /// </summary>
@@ -42,60 +34,41 @@ namespace SpiceSharp.Behaviors.IND
         /// <summary>
         /// Nodes
         /// </summary>
-        public int INDstate { get; protected set; }
-        public int INDbrEq { get; protected set; }
-        public int INDposNode { get; protected set; }
-        public int INDnegNode { get; protected set; }
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
+        int INDbrEq;
         protected MatrixElement INDibrIbrptr { get; private set; }
-
-        /// <summary>
-        /// Constants
-        /// </summary>
-        public const int INDflux = 0;
-        public const int INDvolt = 1;
+        StateVariable INDflux;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public TransientBehavior()
-        {
-        }
+        /// <param name="name">Name</param>
+        public TransientBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Constructor
+        /// Create export method
         /// </summary>
-        /// <param name="ind">Inductance</param>
-        public TransientBehavior(double ind)
-        {
-            INDinduct.Set(ind);
-        }
-
-        /// <summary>
-        /// Setup the load behavior
-        /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="property">Property</param>
         /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        public override Func<State, double> CreateExport(string property)
         {
-            var ind = component as Inductor;
+            switch (property)
+            {
+                case "flux": return (State state) => INDflux.Value;
+                default: return null;
+            }
+        }
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
+        {
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
 
             // Get behaviors
-            var load = GetBehavior<LoadBehavior>(component);
-
-            // Create branch equation
-            INDbrEq = load.INDbrEq;
-
-            // Create 2 states
-            INDstate = ckt.State.GetState(2);
-
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
-            INDibrIbrptr = matrix.GetElement(INDbrEq, INDbrEq);
+            load = provider.GetBehavior<LoadBehavior>();
 
             // Clear all events
             if (UpdateMutualInductance != null)
@@ -105,6 +78,49 @@ namespace SpiceSharp.Behaviors.IND
             }
         }
 
+        /// <summary>
+        /// Get matrix pointer
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
+            // Get current equation
+            INDbrEq = load.INDbrEq;
+
+            // Get matrix pointers
+            INDibrIbrptr = matrix.GetElement(INDbrEq, INDbrEq);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        public override void Unsetup()
+        {
+            INDibrIbrptr = null;
+        }
+
+        /// <summary>
+        /// Create states
+        /// </summary>
+        /// <param name="states">States</param>
+        public override void CreateStates(StatePool states)
+        {
+            INDflux = states.Create();
+        }
+
+        /// <summary>
+        /// Calculate DC states
+        /// </summary>
+        /// <param name="sim">Time-based simulation</param>
+        public override void GetDCstate(TimeSimulation sim)
+        {
+            // Get the current through
+            if (bp.INDinitCond.Given)
+                INDflux.Value = bp.INDinitCond * bp.INDinduct;
+            else
+                INDflux.Value = sim.Circuit.State.Solution[INDbrEq] * bp.INDinduct;
+        }
+        
         /// <summary>
         /// Update all mutual inductances
         /// </summary>
@@ -122,22 +138,26 @@ namespace SpiceSharp.Behaviors.IND
         {
             var ckt = sim.Circuit;
             var state = ckt.State;
-            var rstate = state;
 
             // Initialize
-            if (state.UseIC && INDinitCond.Given)
-                state.States[0][INDstate + INDflux] = INDinduct * INDinitCond;
-            else
-                state.States[0][INDstate + INDflux] = INDinduct * rstate.Solution[INDbrEq];
+            INDflux.Value = bp.INDinduct * state.Solution[INDbrEq];
 
             // Handle mutual inductances
             UpdateMutualInductances(ckt);
 
             // Finally load the Y-matrix
-            // Note that without an integration method, the result will be a short circuit
-            var result = ckt.Method.Integrate(state, INDstate + INDflux, INDinduct);
-            rstate.Rhs[INDbrEq] += result.Ceq;
-            INDibrIbrptr.Sub(result.Geq);
+            var eq = INDflux.Integrate(bp.INDinduct);
+            state.Rhs[INDbrEq] += eq.Ceq;
+            INDibrIbrptr.Sub(eq.Geq);
+        }
+
+        /// <summary>
+        /// Truncate timestep
+        /// </summary>
+        /// <param name="timestep">Timestep</param>
+        public override void Truncate(ref double timestep)
+        {
+            INDflux.LocalTruncationError(ref timestep);
         }
     }
 }

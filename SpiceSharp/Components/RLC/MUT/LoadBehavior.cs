@@ -1,7 +1,6 @@
 ﻿using System;
-using SpiceSharp.Components;
+using SpiceSharp.Components.MUT;
 using SpiceSharp.Circuits;
-using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Behaviors.MUT
@@ -14,14 +13,10 @@ namespace SpiceSharp.Behaviors.MUT
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private IND.TransientBehavior load1, load2;
+        BaseParameters bp;
+        Components.IND.BaseParameters bp1, bp2;
+        IND.LoadBehavior load1, load2;
 
-        /// <summary>
-        /// Parameters
-        /// </summary>
-        [SpiceName("k"), SpiceName("coefficient"), SpiceInfo("Mutual inductance", IsPrincipal = true)]
-        public Parameter MUTcoupling { get; } = new Parameter();
-        
         /// <summary>
         /// The factor
         /// </summary>
@@ -36,41 +31,40 @@ namespace SpiceSharp.Behaviors.MUT
         /// <summary>
         /// Constructor
         /// </summary>
-        public LoadBehavior()
-        {
-        }
+        /// <param name="name">Name</param>
+        public LoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Constructor
+        /// Setup behavior
         /// </summary>
-        /// <param name="coupling">Mutual inductance</param>
-        public LoadBehavior(double coupling)
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            MUTcoupling.Set(coupling);
-        }
-
-        /// <summary>
-        /// Setup the mutual inductor
-        /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Entity component, Circuit ckt)
-        {
-            var mut = component as MutualInductance;
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+            bp1 = provider.GetParameters<Components.IND.BaseParameters>(1);
+            bp2 = provider.GetParameters<Components.IND.BaseParameters>(2);
 
             // Get behaviors
-            load1 = GetBehavior<IND.TransientBehavior>(mut.Inductor1);
-            load2 = GetBehavior<IND.TransientBehavior>(mut.Inductor2);
-
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
-            MUTbr1br2 = matrix.GetElement(load1.INDbrEq, load2.INDbrEq);
-            MUTbr2br1 = matrix.GetElement(load2.INDbrEq, load1.INDbrEq);
+            load1 = provider.GetBehavior<IND.LoadBehavior>(1);
+            load2 = provider.GetBehavior<IND.LoadBehavior>(2);
 
             // Register events for loading the mutual inductance
-            load1.UpdateMutualInductance += UpdateMutualInductance;
-            load2.UpdateMutualInductance += UpdateMutualInductance;
-            MUTfactor = MUTcoupling * Math.Sqrt(load1.INDinduct * load2.INDinduct);
+            // load1.UpdateMutualInductance += UpdateMutualInductance;
+            // load2.UpdateMutualInductance += UpdateMutualInductance;
+            MUTfactor = bp.MUTcoupling * Math.Sqrt(bp1.INDinduct * bp2.INDinduct);
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="nodes">Nodes</param>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        {
+            // Get matrix pointers
+            MUTbr1br2 = matrix.GetElement(load1.INDbrEq, load2.INDbrEq);
+            MUTbr2br1 = matrix.GetElement(load2.INDbrEq, load1.INDbrEq);
         }
 
         /// <summary>
@@ -80,8 +74,8 @@ namespace SpiceSharp.Behaviors.MUT
         public override void Unsetup()
         {
             // Remove references
-            load1.UpdateMutualInductance -= UpdateMutualInductance;
-            load2.UpdateMutualInductance -= UpdateMutualInductance;
+            // load1.UpdateMutualInductance -= UpdateMutualInductance;
+            // load2.UpdateMutualInductance -= UpdateMutualInductance;
             MUTbr1br2 = null;
             MUTbr2br1 = null;
         }
@@ -94,13 +88,13 @@ namespace SpiceSharp.Behaviors.MUT
         {
             // Do nothing
         }
-
+        /*
         /// <summary>
         /// Update inductor 2
         /// </summary>
         /// <param name="sender">Inductor 2</param>
         /// <param name="ckt">The circuit</param>
-        private void UpdateMutualInductance(IND.TransientBehavior sender, Circuit ckt)
+        void UpdateMutualInductance(IND.TransientBehavior sender, Circuit ckt)
         {
             var state = ckt.State;
             var rstate = ckt.State;
@@ -119,5 +113,6 @@ namespace SpiceSharp.Behaviors.MUT
                 }
             }
         }
+        */
     }
 }

@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors.IND;
+using SpiceSharp.Components.IND;
 
 namespace SpiceSharp.Components
 {
@@ -27,11 +28,13 @@ namespace SpiceSharp.Components
         public Inductor(Identifier name)
             : base(name, INDpinCount)
         {
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new TransientBehavior());
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new AcceptBehavior());
-            RegisterBehavior(new TruncateBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
         }
 
         /// <summary>
@@ -44,12 +47,13 @@ namespace SpiceSharp.Components
         public Inductor(Identifier name, Identifier pos, Identifier neg, double ind) 
             : base(name, INDpinCount)
         {
-            // Register behaviors
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new TransientBehavior(ind));
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new AcceptBehavior());
-            RegisterBehavior(new TruncateBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters(ind));
+
+            // Add factories
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
 
             // Connect
             Connect(pos, neg);

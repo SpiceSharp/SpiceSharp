@@ -1,14 +1,17 @@
-﻿namespace SpiceSharp.IntegrationMethods
+﻿using System;
+
+namespace SpiceSharp.IntegrationMethods
 {
     public class IntegrationConfiguration
     {
         /// <summary>
-        /// Enumeration of possible truncation methods
+        /// Enumeration of default truncation methods
         /// </summary>
+        [Flags]
         public enum TruncationMethods
         {
-            PerNode,
-            PerDevice
+            PerNode = 0x01,
+            PerDevice = 0x02
         }
 
         /// <summary>

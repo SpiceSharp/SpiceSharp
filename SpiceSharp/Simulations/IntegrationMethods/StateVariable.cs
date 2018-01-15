@@ -98,6 +98,20 @@ namespace SpiceSharp.IntegrationMethods
         /// Integrate the state variable
         /// This method will also calculate contributions for the Y-matrix and Rhs-vector
         /// </summary>
+        /// <param name="cap">Capacitance</param>
+        /// <returns></returns>
+        public IntegrationMethod.Result Integrate(double cap)
+        {
+            IntegrationMethod.Result result = null;
+            for (int i = 0; i < order; i++)
+                result = source.Integrate(index + i, cap);
+            return result;
+        }
+
+        /// <summary>
+        /// Integrate the state variable
+        /// This method will also calculate contributions for the Y-matrix and Rhs-vector
+        /// </summary>
         /// <param name="dqdv">The derivative of the state variable w.r.t. a voltage across</param>
         /// <param name="v">The voltage across</param>
         /// <returns>The contributions to the Y-matrix and Rhs-vector</returns>

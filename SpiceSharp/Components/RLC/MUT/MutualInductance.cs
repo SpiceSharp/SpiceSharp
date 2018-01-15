@@ -32,7 +32,7 @@ namespace SpiceSharp.Components
         {
             // Make sure mutual inductances are evaluated AFTER inductors
             Priority = -1;
-            RegisterBehavior(new LoadBehavior());
+            RegisterBehavior(new LoadBehavior(Name));
             RegisterBehavior(new AcBehavior());
         }
 
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components
         {
             // Register behaviors
             Priority = -1;
-            RegisterBehavior(new LoadBehavior(coupling));
+            RegisterBehavior(new LoadBehavior(Name));
             RegisterBehavior(new AcBehavior());
 
             // Connect

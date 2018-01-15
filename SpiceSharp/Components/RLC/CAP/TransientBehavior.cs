@@ -135,8 +135,8 @@ namespace SpiceSharp.Behaviors.CAP
 
             // Integrate
             CAPqcap.Value = bp.CAPcapac * vcap;
-            var result = CAPqcap.Integrate(bp.CAPcapac, vcap);
-
+            var result = CAPqcap.Integrate(bp.CAPcapac);
+            
             // Load matrix
             CAPposPosptr.Add(result.Geq);
             CAPnegNegptr.Add(result.Geq);

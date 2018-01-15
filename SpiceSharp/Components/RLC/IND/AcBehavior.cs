@@ -1,30 +1,25 @@
 ﻿using System.Numerics;
-using SpiceSharp.Components;
+using SpiceSharp.Components.IND;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Behaviors.IND
 {
     /// <summary>
-    /// AC behavior for <see cref="Inductor"/>
+    /// AC behavior for <see cref="Components.Inductor"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior
+    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private TransientBehavior load;
+        BaseParameters bp;
+        LoadBehavior load;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        public int INDbrEq { get; protected set; }
-        public int INDposNode { get; protected set; }
-        public int INDnegNode { get; protected set; }
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
+        int INDposNode, INDnegNode, INDbrEq;
         protected MatrixElement INDposIbrptr { get; private set; }
         protected MatrixElement INDnegIbrptr { get; private set; }
         protected MatrixElement INDibrNegptr { get; private set; }
@@ -32,30 +27,61 @@ namespace SpiceSharp.Behaviors.IND
         protected MatrixElement INDibrIbrptr { get; private set; }
 
         /// <summary>
-        /// Setup the behavior
+        /// Constructor
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="name">Name</param>
+        public AcBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var ind = component as Inductor;
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
 
             // Get behaviors
-            load = GetBehavior<TransientBehavior>(component);
+            load = provider.GetBehavior<LoadBehavior>();
+        }
 
-            // Get nodes
-            INDposNode = ind.INDposNode;
-            INDnegNode = ind.INDnegNode;
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            INDposNode = pins[0];
+            INDnegNode = pins[1];
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
+            // Get current equation
             INDbrEq = load.INDbrEq;
 
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
+            // Get matrix pointers
             INDposIbrptr = matrix.GetElement(INDposNode, INDbrEq);
             INDnegIbrptr = matrix.GetElement(INDnegNode, INDbrEq);
             INDibrNegptr = matrix.GetElement(INDbrEq, INDnegNode);
             INDibrPosptr = matrix.GetElement(INDbrEq, INDposNode);
             INDibrIbrptr = matrix.GetElement(INDbrEq, INDbrEq);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        public override void Unsetup()
+        {
+            INDposIbrptr = null;
+            INDnegIbrptr = null;
+            INDibrPosptr = null;
+            INDibrNegptr = null;
+            INDibrIbrptr = null;
         }
 
         /// <summary>
@@ -65,7 +91,7 @@ namespace SpiceSharp.Behaviors.IND
         public override void Load(Circuit ckt)
         {
             var cstate = ckt.State;
-            Complex val = cstate.Laplace * load.INDinduct.Value;
+            Complex val = cstate.Laplace * bp.INDinduct.Value;
 
             INDposIbrptr.Add(1.0);
             INDnegIbrptr.Sub(1.0);

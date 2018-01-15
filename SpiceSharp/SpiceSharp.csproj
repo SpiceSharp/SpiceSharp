@@ -52,6 +52,8 @@
     <Compile Include="Components\Currentsources\VCCS\BaseParameters.cs" />
     <Compile Include="Components\RLC\CAP\BaseParameters.cs" />
     <Compile Include="Components\RLC\CAP\ModelBaseParameters.cs" />
+    <Compile Include="Components\RLC\IND\BaseParameters.cs" />
+    <Compile Include="Components\RLC\MUT\BaseParameters.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\BaseParameters.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\BJTExcessPhaseEventArgs.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\ModelBaseParameters.cs" />
@@ -94,10 +96,8 @@
     <Compile Include="Components\RLC\CAP\TemperatureBehavior.cs" />
     <Compile Include="Components\RLC\CAP\TransientBehavior.cs" />
     <Compile Include="Components\RLC\IND\AcBehavior.cs" />
-    <Compile Include="Components\RLC\IND\AcceptBehavior.cs" />
     <Compile Include="Components\RLC\IND\LoadBehavior.cs" />
     <Compile Include="Components\RLC\IND\TransientBehavior.cs" />
-    <Compile Include="Components\RLC\IND\TruncateBehavior.cs" />
     <Compile Include="Components\RLC\MUT\AcBehavior.cs" />
     <Compile Include="Components\RLC\MUT\LoadBehavior.cs" />
     <Compile Include="Components\RLC\RES\TemperatureBehavior.cs" />
@@ -156,6 +156,7 @@
     <Compile Include="Simulations\IntegrationMethods\HistoryPoint.cs" />
     <Compile Include="Simulations\IntegrationMethods\StatePool.cs" />
     <Compile Include="Simulations\IntegrationMethods\StateVariable.cs" />
+    <Compile Include="Simulations\IntegrationMethods\TruncationEventArgs.cs" />
     <Compile Include="Simulations\Noise\NoiseBehavior.cs" />
     <Compile Include="Simulations\Behaviors\LoadBehavior.cs" />
     <Compile Include="Simulations\AC\AcBehavior.cs" />

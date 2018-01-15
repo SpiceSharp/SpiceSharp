@@ -107,6 +107,18 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Execute time simulation
+        /// </summary>
+        protected override void Execute()
+        {
+            // Base
+            base.Execute();
+
+            // Get the method
+            Method = States.Method;
+        }
+
+        /// <summary>
         /// Unsetup the simulation
         /// </summary>
         protected override void Unsetup()

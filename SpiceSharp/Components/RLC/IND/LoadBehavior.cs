@@ -1,13 +1,14 @@
 ﻿using SpiceSharp.Sparse;
-using SpiceSharp.Components;
+using SpiceSharp.Components.IND;
 using SpiceSharp.Circuits;
+using System;
 
 namespace SpiceSharp.Behaviors.IND
 {
     /// <summary>
     /// Load behavior for a <see cref="Components.Inductor"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior
+    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Nodes
@@ -25,24 +26,58 @@ namespace SpiceSharp.Behaviors.IND
         protected MatrixElement INDibrPosptr { get; private set; }
 
         /// <summary>
-        /// Setup the load behavior
+        /// Constructor
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="name">Name</param>
+        public LoadBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Create export method
+        /// </summary>
+        /// <param name="property">Property</param>
         /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        public override Func<State, double> CreateExport(string property)
         {
-            var ind = component as Inductor;
+            switch (property)
+            {
+                case "v": return (State state) => state.Solution[INDposNode] - state.Solution[INDnegNode];
+                case "i":
+                case "c": return (State state) => state.Solution[INDbrEq];
+                case "p": return (State state) => (state.Solution[INDposNode] - state.Solution[INDnegNode]) * state.Solution[INDbrEq];
+                default: return null;
+            }
+        }
 
-            // Create branch equation
-            INDbrEq = CreateNode(ckt, ind.Name.Grow("#branch"), Node.NodeType.Current).Index;
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Provider</param>
+        public override void Setup(SetupDataProvider provider)
+        {
+            // We don't need anything, acts like a short circuit
+        }
 
-            // Get nodes
-            INDposNode = ind.INDposNode;
-            INDnegNode = ind.INDnegNode;
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            INDposNode = pins[0];
+            INDnegNode = pins[1];
+        }
 
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="nodes">Nodes</param>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        {
+            // Create current equation
+            INDbrEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
+
+            // Get matrix pointers
             INDposIbrptr = matrix.GetElement(INDposNode, INDbrEq);
             INDnegIbrptr = matrix.GetElement(INDnegNode, INDbrEq);
             INDibrNegptr = matrix.GetElement(INDbrEq, INDnegNode);

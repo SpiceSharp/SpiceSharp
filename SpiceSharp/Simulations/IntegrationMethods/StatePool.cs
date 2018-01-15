@@ -88,7 +88,7 @@
         /// <returns></returns>
         public StateVariable Create(int order = 1)
         {
-            StateVariable result = new StateVariable(this, StateCount, order);
+            StateVariable result = new StateVariable(this, Size, order);
 
             // Increase amount of states
             StateCount++;
@@ -105,6 +105,15 @@
         /// <param name="index">The index</param>
         /// <returns></returns>
         public void Integrate(int index) => Method.Integrate(First, index);
+
+        /// <summary>
+        /// Integrate a state variable
+        /// This method will also calculate contributions for the Y-matrix and Rhs-vector
+        /// </summary>
+        /// <param name="index">Index</param>
+        /// <param name="cap">Capacitance</param>
+        /// <returns></returns>
+        public IntegrationMethod.Result Integrate(int index, double cap) => Method.Integrate(First, index, cap);
 
         /// <summary>
         /// Integrate a state variable
