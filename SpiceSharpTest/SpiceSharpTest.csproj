@@ -52,6 +52,7 @@
     <Compile Include="Circuits\CircuitCheckTest.cs" />
     <Compile Include="Models\Currentsources\ISRC\CurrentsourceTest.cs" />
     <Compile Include="Models\RLC\CAP\CapacitorTest.cs" />
+    <Compile Include="Models\RLC\IND\InductorTest.cs" />
     <Compile Include="Models\RLC\RES\ResistorTest.cs" />
     <Compile Include="Models\Semiconductors\Bipolar\BJTTest.cs" />
     <Compile Include="Models\Framework.cs" />

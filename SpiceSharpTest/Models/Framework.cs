@@ -14,6 +14,16 @@ namespace SpiceSharpTest.Models
     public class Framework
     {
         /// <summary>
+        /// Absolute tolerance used
+        /// </summary>
+        public double AbsTol = 1e-12;
+
+        /// <summary>
+        /// Relative tolerance used
+        /// </summary>
+        public double RelTol = 1e-3;
+
+        /// <summary>
         /// Apply a parameter definition to an entity
         /// Parameters are a series of assignments [name]=[value] delimited by spaces.
         /// </summary>
@@ -47,9 +57,6 @@ namespace SpiceSharpTest.Models
         /// <param name="references">References</param>
         protected void AnalyseOp(OP sim, Circuit ckt, IEnumerable<Func<State, double>> exports, IEnumerable<double> references)
         {
-            double abstol = sim.CurrentConfig.AbsTol;
-            double reltol = sim.CurrentConfig.RelTol;
-
             sim.OnExportSimulationData += (object sender, SimulationDataEventArgs data) =>
             {
                 var export_it = exports.GetEnumerator();
@@ -59,7 +66,7 @@ namespace SpiceSharpTest.Models
                 {
                     double actual = export_it.Current(data.Circuit.State);
                     double expected = references_it.Current;
-                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * reltol + abstol;
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
                     Assert.AreEqual(expected, actual, tol);
                 }
             };
@@ -75,9 +82,6 @@ namespace SpiceSharpTest.Models
         /// <param name="references">References</param>
         protected void AnalyzeDC(DC sim, Circuit ckt, IEnumerable<Func<State, double>> exports, IEnumerable<double[]> references)
         {
-            double abstol = sim.CurrentConfig.AbsTol;
-            double reltol = sim.CurrentConfig.RelTol;
-
             int index = 0;
             sim.OnExportSimulationData += (object sender, SimulationDataEventArgs data) =>
             {
@@ -88,7 +92,7 @@ namespace SpiceSharpTest.Models
                 {
                     double actual = export_it.Current(data.Circuit.State);
                     double expected = references_it.Current[index];
-                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * reltol + abstol;
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
 
                     try
                     {
@@ -128,7 +132,7 @@ namespace SpiceSharpTest.Models
                     // Test export
                     double actual = exports_it.Current(data.Circuit.State);
                     double expected = references_it.Current[index];
-                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-6 + 1e-12;
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
 
                     try
                     {
@@ -154,9 +158,6 @@ namespace SpiceSharpTest.Models
         /// <param name="references">References</param>
         protected void AnalyseTransient(Transient sim, Circuit ckt, IEnumerable<Func<State, double>> exports, IEnumerable<double[]> references)
         {
-            double abstol = sim.CurrentConfig.AbsTol;
-            double reltol = sim.CurrentConfig.RelTol;
-
             int index = 0;
             sim.OnExportSimulationData += (object sender, SimulationDataEventArgs data) =>
             {
@@ -167,7 +168,7 @@ namespace SpiceSharpTest.Models
                 {
                     double actual = exports_it.Current(data.Circuit.State);
                     double expected = references_it.Current[index];
-                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * reltol + abstol;
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
 
                     try
                     {
@@ -193,9 +194,6 @@ namespace SpiceSharpTest.Models
         /// <param name="references">References</param>
         protected void AnalyseTransient(Transient sim, Circuit ckt, IEnumerable<Func<State, double>> exports, IEnumerable<Func<double, double>> references)
         {
-            double abstol = sim.CurrentConfig.AbsTol;
-            double reltol = sim.CurrentConfig.RelTol;
-
             int index = 0;
             sim.OnExportSimulationData += (object sender, SimulationDataEventArgs data) =>
             {
@@ -204,9 +202,10 @@ namespace SpiceSharpTest.Models
 
                 while (exports_it.MoveNext() && references_it.MoveNext())
                 {
+                    double t = data.GetTime();
                     double actual = exports_it.Current(data.Circuit.State);
-                    double expected = references_it.Current(data.GetTime());
-                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * reltol + abstol;
+                    double expected = references_it.Current(t);
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
 
                     try
                     {
