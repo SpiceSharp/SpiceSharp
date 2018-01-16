@@ -31,7 +31,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        private double v1, v2, td, tr, tf, pw, per;
+        double v1, v2, td, tr, tf, pw, per;
 
         /// <summary>
         /// Constructor
@@ -98,12 +98,11 @@ namespace SpiceSharp.Components
 
             if (time <= 0.0 || time >= tr + pw + tf)
                 return v1;
-            else if (time >= tr && time <= tr + pw)
+            if (time >= tr && time <= tr + pw)
                 return v2;
-            else if (time > 0 && time < tr)
+            if (time > 0 && time < tr)
                 return v1 + (v2 - v1) * time / tr;
-            else
-                return v2 + (v1 - v2) * (time - tr - pw) / tf;
+            return v2 + (v1 - v2) * (time - tr - pw) / tf;
         }
 
         /// <summary>
