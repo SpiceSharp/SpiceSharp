@@ -144,8 +144,6 @@ namespace SpiceSharpTest.Models.DIO
         }
 
         /*
-
-
         [TestMethod]
         public void TestDiodeNoise()
         {
