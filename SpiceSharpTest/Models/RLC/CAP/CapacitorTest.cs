@@ -31,8 +31,7 @@ namespace SpiceSharpTest.Models.RLC.CAP
             Func<State, double>[] exports = new Func<State, double>[1];
             op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
-                int node = args.Nodes["OUT"].Index;
-                exports[0] = (State state) => state.Solution[node];
+                exports[0] = op.CreateVoltageExport("OUT");
             };
 
             // Create references

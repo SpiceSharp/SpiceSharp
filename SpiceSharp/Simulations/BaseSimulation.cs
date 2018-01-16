@@ -539,5 +539,20 @@ namespace SpiceSharp.Simulations
             var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
             return eb.Get<LoadBehavior>()?.CreateExport(property);
         }
+
+        /// <summary>
+        /// Create an export method for this type of simulation 
+        /// </summary>
+        /// <param name="pos">Positive voltage</param>
+        /// <param name="neg">Negative voltage</param>
+        /// <returns></returns>
+        public virtual Func<State, double> CreateVoltageExport(Identifier pos, Identifier neg = null)
+        {
+            int node = Circuit.Nodes[pos].Index;
+            if (neg == null)   
+                return (State state) => state.Solution[node];
+            int refnode = Circuit.Nodes[neg].Index;
+            return (State state) => state.Solution[node] - state.Solution[refnode];
+        }
     }
 }

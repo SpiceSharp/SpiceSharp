@@ -200,10 +200,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// 
+        /// Create an export method
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="property"></param>
+        /// <param name="name">Name</param>
+        /// <param name="property">Property</param>
         /// <returns></returns>
         public Func<State, Complex> CreateAcExport(Identifier name, string property)
         {
@@ -211,6 +211,21 @@ namespace SpiceSharp.Simulations
 
             // Only AC behaviors implement these export methods
             return eb.Get<AcBehavior>()?.CreateAcExport(property);
+        }
+
+        /// <summary>
+        /// Create an export method for this type of simulation 
+        /// </summary>
+        /// <param name="pos">Positive voltage</param>
+        /// <param name="neg">Negative voltage</param>
+        /// <returns></returns>
+        public virtual Func<State, Complex> CreateAcVoltageExport(Identifier pos, Identifier neg = null)
+        {
+            int node = Circuit.Nodes[pos].Index;
+            if (neg == null)
+                return (State state) => new Complex(state.Solution[node], state.iSolution[node]);
+            int refnode = Circuit.Nodes[neg].Index;
+            return (State state) => new Complex(state.Solution[node] - state.Solution[refnode], state.iSolution[node] - state.iSolution[refnode]);
         }
     }
 }
