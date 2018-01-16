@@ -46,6 +46,27 @@ namespace SpiceSharp.Behaviors.VSRC
         public AcBehavior(Identifier name) : base(name) { }
 
         /// <summary>
+        /// Create an export method for AC analysis
+        /// </summary>
+        /// <param name="property">Property</param>
+        /// <returns></returns>
+        public override Func<State, Complex> CreateAcExport(string property)
+        {
+            switch (property)
+            {
+                case "v": return (State state) => new Complex(state.Solution[VSRCposNode] - state.Solution[VSRCnegNode], state.iSolution[VSRCposNode] - state.Solution[VSRCnegNode]);
+                case "i": return (State state) => new Complex(state.Solution[VSRCbranch], state.iSolution[VSRCbranch]);
+                case "p": return (State state) =>
+                {
+                    Complex voltage = new Complex(state.Solution[VSRCposNode] - state.Solution[VSRCnegNode], state.iSolution[VSRCposNode] - state.Solution[VSRCnegNode]);
+                    Complex current = new Complex(state.Solution[VSRCbranch], state.iSolution[VSRCbranch]);
+                    return voltage * Complex.Conjugate(current);
+                };
+                default: return null;
+            }
+        }
+
+        /// <summary>
         /// Setup the behavior
         /// </summary>
         /// <param name="provider">Data provider</param>
