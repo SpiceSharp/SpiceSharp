@@ -12,11 +12,42 @@ namespace SpiceSharpTest.Models.RLC.CAP
     public class CapacitorTest : Framework
     {
         [TestMethod]
-        public void Circuit_RC_Transient()
+        public void LowpassRC_DC()
         {
             /*
-             * A test for a RC circuit (DC voltage, resistor, capacitor)
-             * An init voltage on capacitor is 0V
+             * Lowpass RC circuit
+             * The capacitor should act like an open circuit
+             */
+            Circuit ckt = new Circuit();
+            ckt.Objects.Add(
+                new Voltagesource("V1", "IN", "0", 1.0),
+                new Resistor("R1", "IN", "OUT", 10e3),
+                new Capacitor("C1", "OUT", "0", 1e-6));
+
+            // Create simulation
+            OP op = new OP("op");
+
+            // Create exports
+            Func<State, double>[] exports = new Func<State, double>[1];
+            op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
+            {
+                int node = args.Nodes["OUT"].Index;
+                exports[0] = (State state) => state.Solution[node];
+            };
+
+            // Create references
+            double[] references = { 1.0 };
+
+            // Run test
+            AnalyzeOp(op, ckt, exports, references);
+        }
+
+        [TestMethod]
+        public void LowpassRC_Transient()
+        {
+            /*
+             * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
+             * The initial voltage on capacitor is 0V. The result should be an exponential converging to dcVoltage.
              */
             double dcVoltage = 10;
             double resistorResistance = 10e3; // 10000;
@@ -49,7 +80,7 @@ namespace SpiceSharpTest.Models.RLC.CAP
         public void LowpassRC_AC()
         {
             /*
-             * Lowpass RC filter
+             * Lowpass RC filter in the frequency domain should have a single pole at s=-2pi*R*C
              */
             // Create circuit
             double resistance = 1e3;

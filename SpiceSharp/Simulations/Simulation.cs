@@ -75,7 +75,7 @@ namespace SpiceSharp.Simulations
 
             // Setup the simulation
             Setup();
-            var args = new InitializationDataEventArgs(pool);
+            var args = new InitializationDataEventArgs(pool, Circuit.Nodes);
             InitializeSimulationExport?.Invoke(this, args);
 
             // Execute the simulation

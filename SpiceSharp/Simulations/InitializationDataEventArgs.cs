@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -14,12 +15,18 @@ namespace SpiceSharp.Simulations
         public BehaviorPool Behaviors { get; }
 
         /// <summary>
+        /// Gets all nodes
+        /// </summary>
+        public Nodes Nodes { get;}
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="pool">Behaviors</param>
-        public InitializationDataEventArgs(BehaviorPool pool)
+        public InitializationDataEventArgs(BehaviorPool pool, Nodes nodes)
         {
             Behaviors = pool;
+            Nodes = nodes;
         }
     }
     
