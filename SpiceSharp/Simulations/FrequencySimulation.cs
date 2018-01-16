@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
@@ -196,6 +197,20 @@ namespace SpiceSharp.Simulations
             if (export == null)
                 export = eb.Get<LoadBehavior>()?.CreateExport(property);
             return export;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        public Func<State, Complex> CreateAcExport(Identifier name, string property)
+        {
+            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
+
+            // Only AC behaviors implement these export methods
+            return eb.Get<AcBehavior>()?.CreateAcExport(property);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using SpiceSharp.Circuits;
+﻿using System;
+using System.Numerics;
+using SpiceSharp.Circuits;
 using SpiceSharp.Components.CAP;
 using SpiceSharp.Sparse;
 
@@ -28,6 +30,31 @@ namespace SpiceSharp.Behaviors.CAP
         /// </summary>
         /// <param name="name">Name</param>
         public AcBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Export methods for AC behavior
+        /// </summary>
+        /// <param name="property">Property</param>
+        /// <returns></returns>
+        public override Func<State, Complex> CreateAcExport(string property)
+        {
+            switch (property)
+            {
+                case "v": return (State state) => new Complex(state.Solution[CAPposNode] - state.Solution[CAPnegNode], state.iSolution[CAPposNode] - state.iSolution[CAPnegNode]);
+                case "i": return (State state) =>
+                {
+                    Complex voltage = new Complex(state.Solution[CAPposNode] - state.Solution[CAPnegNode], state.iSolution[CAPposNode] - state.iSolution[CAPnegNode]);
+                    return state.Laplace * bp.CAPcapac.Value * voltage;
+                };
+                case "p": return (State state) =>
+                {
+                    Complex voltage = new Complex(state.Solution[CAPposNode] - state.Solution[CAPnegNode], state.iSolution[CAPposNode] - state.iSolution[CAPnegNode]);
+                    Complex current = state.Laplace * bp.CAPcapac.Value * voltage;
+                    return voltage * Complex.Conjugate(current);
+                };
+                default: return null;
+            }
+        }
 
         /// <summary>
         /// Setup the behavior

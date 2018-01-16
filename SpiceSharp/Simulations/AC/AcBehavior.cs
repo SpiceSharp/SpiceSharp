@@ -1,4 +1,6 @@
-﻿using SpiceSharp.Sparse;
+﻿using System;
+using System.Numerics;
+using SpiceSharp.Sparse;
 using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
@@ -14,6 +16,17 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="name">Name</param>
         public AcBehavior(Identifier name = null) : base(name) { }
+
+        /// <summary>
+        /// Create an export method for AC analysis
+        /// </summary>
+        /// <param name="property">Property name</param>
+        /// <returns></returns>
+        public virtual Func<State, Complex> CreateAcExport(string property)
+        {
+            // No AC properties by default
+            return null;
+        }
 
         /// <summary>
         /// Initialize parameters for AC analysis

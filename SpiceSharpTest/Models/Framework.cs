@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using SpiceSharp;
@@ -137,6 +138,88 @@ namespace SpiceSharpTest.Models
                     try
                     {
                         Assert.AreEqual(expected, actual, tol);
+                    }
+                    catch (Exception ex)
+                    {
+                        string msg = $"{ex.Message} at {data.GetFrequency()} Hz";
+                        throw new Exception(msg, ex);
+                    }
+                }
+                index++;
+            };
+            sim.Run(ckt);
+        }
+
+        /// <summary>
+        /// Perform a test for AC analysis
+        /// </summary>
+        /// <param name="sim">Simulation</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="exports">Exports</param>
+        /// <param name="references">References</param>
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Func<State, Complex>> exports, IEnumerable<Complex[]> references)
+        {
+            int index = 0;
+            sim.OnExportSimulationData += (object sender, SimulationDataEventArgs data) =>
+            {
+                var exports_it = exports.GetEnumerator();
+                var references_it = references.GetEnumerator();
+
+                while (exports_it.MoveNext() && references_it.MoveNext())
+                {
+                    // Test export
+                    Complex actual = exports_it.Current(data.Circuit.State);
+                    Complex expected = references_it.Current[index];
+
+                    // Test real part
+                    double rtol = Math.Max(Math.Abs(actual.Real), Math.Abs(expected.Real)) * RelTol + AbsTol;
+                    double itol = Math.Max(Math.Abs(actual.Imaginary), Math.Abs(expected.Imaginary)) * RelTol + AbsTol;
+
+                    try
+                    {
+                        Assert.AreEqual(expected.Real, actual.Real, rtol);
+                        Assert.AreEqual(expected.Imaginary, actual.Imaginary, itol);
+                    }
+                    catch (Exception ex)
+                    {
+                        string msg = $"{ex.Message} at {data.GetFrequency()} Hz";
+                        throw new Exception(msg, ex);
+                    }
+                }
+                index++;
+            };
+            sim.Run(ckt);
+        }
+
+        /// <summary>
+        /// Perform a test for AC analysis
+        /// </summary>
+        /// <param name="sim">Simulation</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="exports">Exports</param>
+        /// <param name="references">References</param>
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Func<State, Complex>> exports, IEnumerable<Func<double, Complex>> references)
+        {
+            int index = 0;
+            sim.OnExportSimulationData += (object sender, SimulationDataEventArgs data) =>
+            {
+                var exports_it = exports.GetEnumerator();
+                var references_it = references.GetEnumerator();
+
+                while (exports_it.MoveNext() && references_it.MoveNext())
+                {
+                    // Test export
+                    Complex actual = exports_it.Current(data.Circuit.State);
+                    Complex expected = references_it.Current(data.GetFrequency());
+
+                    // Test real part
+                    double rtol = Math.Max(Math.Abs(actual.Real), Math.Abs(expected.Real)) * RelTol + AbsTol;
+                    double itol = Math.Max(Math.Abs(actual.Imaginary), Math.Abs(expected.Imaginary)) * RelTol + AbsTol;
+
+                    try
+                    {
+                        Assert.AreEqual(expected.Real, actual.Real, rtol);
+                        Assert.AreEqual(expected.Imaginary, actual.Imaginary, itol);
                     }
                     catch (Exception ex)
                     {

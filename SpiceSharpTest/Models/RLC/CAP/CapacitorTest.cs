@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp;
 using SpiceSharp.Circuits;
@@ -42,6 +43,40 @@ namespace SpiceSharpTest.Models.RLC.CAP
 
             // Run
             AnalyzeTransient(tran, ckt, exports, references);
+        }
+
+        [TestMethod]
+        public void LowpassRC_AC()
+        {
+            /*
+             * Lowpass RC filter
+             */
+            // Create circuit
+            double resistance = 1e3;
+            double capacitance = 1e-6;
+            Circuit ckt = new Circuit();
+            ckt.Objects.Add(
+                new Voltagesource("V1", "IN", "0", 0.0),
+                new Resistor("R1", "IN", "OUT", resistance),
+                new Capacitor("C1", "OUT", "0", capacitance)
+                );
+            ckt.Objects["V1"].Parameters.Set("acmag", 1.0);
+
+            // Create simulation
+            AC ac = new AC("ac", "dec", 10, 0.1, 1.0e6);
+
+            // Create exports
+            Func<State, Complex>[] exports = new Func<State, Complex>[1];
+            ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
+            {
+                exports[0] = ac.CreateAcExport("C1", "v");
+            };
+
+            // Create references
+            Func<double, Complex>[] references = { (double f) => 1.0 / new Complex(1.0, resistance * capacitance * 2 * Math.PI * f) };
+
+            // Run test
+            AnalyzeAC(ac, ckt, exports, references);
         }
     }
 }
