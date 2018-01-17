@@ -2,6 +2,7 @@
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors.MUT;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Components
 {
@@ -65,6 +66,31 @@ namespace SpiceSharp.Components
             // Get the inductors for the mutual inductance
             Inductor1 = ckt.Objects[MUTind1] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{MUTind1}'");
             Inductor2 = ckt.Objects[MUTind2] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{MUTind2}'");
+        }
+
+        /// <summary>
+        /// Add inductances to the data provider for setting up behaviors
+        /// </summary>
+        /// <param name="pool">Behaviors</param>
+        /// <returns></returns>
+        protected override SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
+        {
+            // Base execution (will add entity behaviors and parameters for this mutual inductance)
+            var data = base.BuildSetupDataProvider(pool);
+
+            // Register inductor 1
+            var eb = pool.GetEntityBehaviors(MUTind1) ?? throw new CircuitException($"{Name}: Could not find behaviors for inductor '{MUTind1}'");
+            data.Add(eb);
+            var parameters = Inductor1.Parameters;
+            data.Add(parameters);
+
+            // Register inductor 2
+            eb = pool.GetEntityBehaviors(MUTind2) ?? throw new CircuitException($"{Name}: Could not find behaviors for inductor '{MUTind2}'");
+            data.Add(eb);
+            parameters = Inductor2.Parameters;
+            data.Add(parameters);
+
+            return data;
         }
     }
 }

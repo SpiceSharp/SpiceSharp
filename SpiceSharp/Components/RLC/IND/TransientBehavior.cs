@@ -20,16 +20,10 @@ namespace SpiceSharp.Behaviors.IND
         LoadBehavior load;
         
         /// <summary>
-        /// Delegate for adding effects of a mutual inductance
+        /// An event called when the flux can be updated
+        /// Can be used by mutual inductances
         /// </summary>
-        /// <param name="sender">The inductor that sends the request</param>
-        /// <param name="ckt">The circuit</param>
-        public delegate void UpdateMutualInductanceEventHandler(TransientBehavior sender, Circuit ckt);
-
-        /// <summary>
-        /// An event that is called when mutual inductances need to be included
-        /// </summary>
-        public event UpdateMutualInductanceEventHandler UpdateMutualInductance;
+        public event UpdateFluxEventHandler UpdateFlux;
 
         /// <summary>
         /// Nodes
@@ -71,10 +65,10 @@ namespace SpiceSharp.Behaviors.IND
             load = provider.GetBehavior<LoadBehavior>();
 
             // Clear all events
-            if (UpdateMutualInductance != null)
+            if (UpdateFlux != null)
             {
-                foreach (var inv in UpdateMutualInductance.GetInvocationList())
-                    UpdateMutualInductance -= (UpdateMutualInductanceEventHandler)inv;
+                foreach (var inv in UpdateFlux.GetInvocationList())
+                    UpdateFlux -= (UpdateFluxEventHandler)inv;
             }
         }
 
@@ -120,15 +114,6 @@ namespace SpiceSharp.Behaviors.IND
             else
                 INDflux.Value = sim.Circuit.State.Solution[INDbrEq] * bp.INDinduct;
         }
-        
-        /// <summary>
-        /// Update all mutual inductances
-        /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public void UpdateMutualInductances(Circuit ckt)
-        {
-            UpdateMutualInductance?.Invoke(this, ckt);
-        }
 
         /// <summary>
         /// Execute behaviour
@@ -141,9 +126,14 @@ namespace SpiceSharp.Behaviors.IND
 
             // Initialize
             INDflux.Value = bp.INDinduct * state.Solution[INDbrEq];
-
-            // Handle mutual inductances
-            UpdateMutualInductances(ckt);
+            
+            // Allow alterations of the flux
+            if (UpdateFlux != null)
+            {
+                UpdateFluxEventArgs args = new UpdateFluxEventArgs(bp.INDinduct, state.Solution[INDbrEq], INDflux.Value);
+                UpdateFlux.Invoke(this, args);
+                INDflux.Value = args.Flux;
+            }
 
             // Finally load the Y-matrix
             var eq = INDflux.Integrate(bp.INDinduct);

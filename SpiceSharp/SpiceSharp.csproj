@@ -53,7 +53,9 @@
     <Compile Include="Components\RLC\CAP\BaseParameters.cs" />
     <Compile Include="Components\RLC\CAP\ModelBaseParameters.cs" />
     <Compile Include="Components\RLC\IND\BaseParameters.cs" />
+    <Compile Include="Components\RLC\IND\UpdateFluxEventArgs.cs" />
     <Compile Include="Components\RLC\MUT\BaseParameters.cs" />
+    <Compile Include="Components\RLC\MUT\TransientBehavior.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\BaseParameters.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\BJTExcessPhaseEventArgs.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\ModelBaseParameters.cs" />
