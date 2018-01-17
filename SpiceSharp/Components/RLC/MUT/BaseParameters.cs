@@ -12,5 +12,21 @@ namespace SpiceSharp.Components.MUT
         /// </summary>
         [SpiceName("k"), SpiceName("coefficient"), SpiceInfo("Mutual inductance", IsPrincipal = true)]
         public Parameter MUTcoupling { get; } = new Parameter();
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public BaseParameters()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="k">Mutual inductance</param>
+        public BaseParameters(double k)
+        {
+            MUTcoupling.Set(k);
+        }
     }
 }

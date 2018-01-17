@@ -2,7 +2,7 @@
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors.MUT;
-using SpiceSharp.Behaviors;
+using SpiceSharp.Components.MUT;
 
 namespace SpiceSharp.Components
 {
@@ -35,8 +35,11 @@ namespace SpiceSharp.Components
             Priority = -1;
 
             // Add parameters
-            RegisterBehavior(new LoadBehavior(Name));
-            RegisterBehavior(new AcBehavior());
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
         }
 
         /// <summary>
@@ -49,10 +52,15 @@ namespace SpiceSharp.Components
         public MutualInductance(Identifier name, Identifier ind1, Identifier ind2, double coupling)
             : base(name, 0)
         {
-            // Register behaviors
+            // Make sure mutual inductances are evaluated AFTER inductors
             Priority = -1;
-            RegisterBehavior(new LoadBehavior(Name));
-            RegisterBehavior(new AcBehavior());
+
+            // Add parameters
+            Parameters.Register(new BaseParameters(coupling));
+
+            // Add factories
+            AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
 
             // Connect
             MUTind1 = ind1;
@@ -75,7 +83,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="pool">Behaviors</param>
         /// <returns></returns>
-        protected override SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
+        protected override Behaviors.SetupDataProvider BuildSetupDataProvider(Behaviors.BehaviorPool pool)
         {
             // Base execution (will add entity behaviors and parameters for this mutual inductance)
             var data = base.BuildSetupDataProvider(pool);

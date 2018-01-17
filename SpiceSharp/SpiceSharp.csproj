@@ -101,7 +101,6 @@
     <Compile Include="Components\RLC\IND\LoadBehavior.cs" />
     <Compile Include="Components\RLC\IND\TransientBehavior.cs" />
     <Compile Include="Components\RLC\MUT\AcBehavior.cs" />
-    <Compile Include="Components\RLC\MUT\LoadBehavior.cs" />
     <Compile Include="Components\RLC\RES\TemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\AcBehavior.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\LoadBehavior.cs" />
