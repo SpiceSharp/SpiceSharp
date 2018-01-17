@@ -94,67 +94,6 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Integrate a variable at a specific index
-        /// </summary>
-        /// <param name="first">Current timepoint</param>
-        /// <param name="index">Index</param>
-        /// <param name="cap">Capacitance</param>
-        /// <returns></returns>
-        public override Result Integrate(HistoryPoint first, int index, double cap)
-        {
-            switch (Order)
-            {
-                case 1:
-                    first.Values[index + 1] = ag[0] * first.Values[index] + ag[1] * first.Previous.Values[index];
-                    break;
-
-                case 2:
-                    first.Values[index + 1] = -first.Previous.Values[index + 1] * ag[1] + ag[0] * (first.Values[index] - first.Previous.Values[index]);
-                    break;
-
-                default:
-                    throw new CircuitException("Invalid order");
-            }
-
-            // Create the contributions
-            var result = new Result();
-            result.Geq = ag[0] * cap;
-            result.Ceq = first.Values[index + 1] - ag[0] * first.Values[index];
-            return result;
-        }
-
-        /// <summary>
-        /// Integrate a variable at a specific index
-        /// </summary>
-        /// <param name="first">The current point with state variables</param>
-        /// <param name="index">The index of the state to be used</param>
-        /// <param name="dqdv">The derivative of the state variable w.r.t. a voltage across</param>
-        /// <param name="v">The voltage across</param>
-        /// <returns>The contributions to the Y-matrix and Rhs-vector</returns>
-        public override Result Integrate(HistoryPoint first, int index, double dqdv, double v)
-        {
-            switch (Order)
-            {
-                case 1:
-                    first.Values[index + 1] = ag[0] * first.Values[index] + ag[1] * first.Previous.Values[index];
-                    break;
-
-                case 2:
-                    first.Values[index + 1] = -first.Previous.Values[index + 1] * ag[1] + ag[0] * (first.Values[index] - first.Previous.Values[index]);
-                    break;
-
-                default:
-                    throw new CircuitException("Invalid order");
-            }
-
-            // Create the contributions
-            var result = new Result();
-            result.Geq = ag[0] * dqdv;
-            result.Ceq = first.Values[index + 1] - result.Geq * v;
-            return result;
-        }
-
-        /// <summary>
         /// Predict a new solution based on the previous ones
         /// </summary>
         /// <param name="ckt">The circuit</param>

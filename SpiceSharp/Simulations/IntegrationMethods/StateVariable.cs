@@ -95,33 +95,41 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Integrate the state variable
-        /// This method will also calculate contributions for the Y-matrix and Rhs-vector
+        /// Calculate contribution to the jacobian matrix (or Y-matrix). 
+        /// Using this means the state variable depends on the derivative of an unknown variable (eg.
+        /// the voltage across a capacitor). <paramref name="dqdv"/> is the derivative of the state
+        /// variable w.r.t. the unknown variable.
         /// </summary>
-        /// <param name="cap">Capacitance</param>
+        /// <param name="dqdv">Derivative of the state variable w.r.t. the unknown variable</param>
         /// <returns></returns>
-        public IntegrationMethod.Result Integrate(double cap)
+        public double Jacobian(double dqdv = 1.0)
         {
-            IntegrationMethod.Result result = null;
-            for (int i = 0; i < order; i++)
-                result = source.Integrate(index + i, cap);
-            return result;
+            return dqdv * source.Method.Slope;
         }
 
         /// <summary>
-        /// Integrate the state variable
-        /// This method will also calculate contributions for the Y-matrix and Rhs-vector
+        /// Calculate contribution to the rhs vector (right-hand side vector).
+        /// The state variable can be nonlinearly dependent of the unknown variables
+        /// it is derived of.
         /// </summary>
-        /// <param name="dqdv">The derivative of the state variable w.r.t. a voltage across</param>
-        /// <param name="v">The voltage across</param>
-        /// <returns>The contributions to the Y-matrix and Rhs-vector</returns>
+        /// <param name="geq">Jacobian matrix contribution</param>
+        /// <param name="v">The value of the unknown variable</param>
         /// <returns></returns>
-        public IntegrationMethod.Result Integrate(double dqdv, double v)
+        public double Current(double geq, double v)
         {
-            IntegrationMethod.Result result = null;
-            for (int i = 0; i < order; i++)
-                result = source.Integrate(index + i, dqdv, v);
-            return result;
+            return source.Values[index + 1] - geq * v;
+        }
+
+        /// <summary>
+        /// Calculate contribution to the rhs vector (right-hand side vector).
+        /// The state variable is assumed to be linearly dependent of the unknown variables
+        /// it is derived of. Ie. Q = dqdv * v (v is the unknown)
+        /// variable.
+        /// </summary>
+        /// <returns></returns>
+        public double Current()
+        {
+            return source.Values[index + 1] - source.Method.Slope * source.Values[index];
         }
 
         /// <summary>

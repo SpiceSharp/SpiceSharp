@@ -443,9 +443,11 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             }
 
             // integrate the capacitors and save results
-            var eqbd = MOS1qbd.Integrate(MOS1capbd, vbd);
+            MOS1qbd.Integrate();
+            var eqbd = new IntegrationMethod.Result() { Geq = MOS1qbd.Jacobian(MOS1capbd), Ceq = MOS1qbd.Current(MOS1capbd, vbd) };
             // NOTE: The derivative of MOS1qbd should be added to MOS1cd (drain current). Figure out a way later.
-            var eqbs = MOS1qbs.Integrate(MOS1capbs, vbs);
+            MOS1qbs.Integrate();
+            var eqbs = new IntegrationMethod.Result() { Geq = MOS1qbs.Jacobian(MOS1capbs), Ceq = MOS1qbs.Current(MOS1capbs, vbs) };
 
             /* 
              * calculate meyer's capacitors
@@ -505,9 +507,12 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             ceqgb = ceqgb - gcgb * vgb + method.Slope * state.States[0][MOS1states + MOS1qgb];
             */
 
-            var eqgs = MOS1qgs.Integrate(capgs, vgs);
-            var eqgd = MOS1qgd.Integrate(capgd, vgd);
-            var eqgb = MOS1qgb.Integrate(capgb, vgb);
+            MOS1qgs.Integrate();
+            var eqgs = new IntegrationMethod.Result() { Geq = MOS1qgs.Jacobian(capgs), Ceq = MOS1qgs.Current(capgs, vgs) };
+            MOS1qgd.Integrate();
+            var eqgd = new IntegrationMethod.Result() { Geq = MOS1qgd.Jacobian(capgd), Ceq = MOS1qgd.Current(capgd, vgd) };
+            MOS1qgb.Integrate();
+            var eqgb = new IntegrationMethod.Result() { Geq = MOS1qgb.Jacobian(capgb), Ceq = MOS1qgb.Current(capgb, vgb) };
 
             /* 
 			 * load current vector

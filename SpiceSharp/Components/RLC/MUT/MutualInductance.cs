@@ -33,6 +33,8 @@ namespace SpiceSharp.Components
         {
             // Make sure mutual inductances are evaluated AFTER inductors
             Priority = -1;
+
+            // Add parameters
             RegisterBehavior(new LoadBehavior(Name));
             RegisterBehavior(new AcBehavior());
         }

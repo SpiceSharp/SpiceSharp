@@ -164,15 +164,15 @@ namespace SpiceSharp.Behaviors.DIO
             GetDCstate(sim);
 
             // Integrate
-            var result = DIOcapCharge.Integrate(DIOcap, vd);
+            DIOcapCharge.Integrate();
+            double geq = DIOcapCharge.Jacobian(DIOcap);
+            double ceq = DIOcapCharge.Current(DIOcap, vd);
 
             // Load Rhs vector
-            double ceq = result.Ceq;
             state.Rhs[DIOnegNode] += ceq;
             state.Rhs[DIOposPrimeNode] -= ceq;
 
             // Load Y-matrix
-            double geq = result.Geq;
             DIOnegNegPtr.Add(geq);
             DIOposPrimePosPrimePtr.Add(geq);
             DIOnegPosPrimePtr.Sub(geq);

@@ -357,23 +357,27 @@ namespace SpiceSharp.Behaviors.Bipolar
             BJTcapcs = capcs;
             BJTcapbx = capbx;
 
-            var eqbe = BJTqbe.Integrate(capbe, vbe);
-            geqcb *= eqbe.Geq / capbe; // Note: ugly fix to multiply with method.Slope :-(
-            var eqbc = BJTqbc.Integrate(capbc, vbc);
+            BJTqbe.Integrate();
+            double geqbe = BJTqbe.Jacobian(capbe);
+            double ceqbe = BJTqbe.Current(capbe, vbe);
+            geqcb = BJTqbe.Jacobian(geqcb); // Multiplies geqcb with method.Slope (ag[0])
+            double geqbc = BJTqbc.Jacobian(capbc);
 
             /* 
              * charge storage for c - s and b - x junctions
              */
-            var eqcs = BJTqcs.Integrate(capcs, vcs);
-            var eqbx = BJTqbx.Integrate(capbx, vbx);
+            BJTqcs.Integrate();
+            double geqcs = BJTqcs.Jacobian(capcs);
+            BJTqbx.Integrate();
+            double geqbx = BJTqbx.Jacobian(capbx);
 
             /* 
 			 * load current excitation vector
 			 */
-            double ceqcs = mbp.BJTtype * eqbe.Ceq;
-            double ceqbx = mbp.BJTtype * eqbx.Ceq;
-            double ceqbe = mbp.BJTtype * (eqbe.Ceq + vbc * geqcb);
-            double ceqbc = mbp.BJTtype * eqbc.Ceq;
+            double ceqcs = mbp.BJTtype * ceqbe;
+            double ceqbx = mbp.BJTtype * BJTqbx.Current(capbx, vbx);
+            ceqbe = mbp.BJTtype * (ceqbe + vbc * geqcb);
+            double ceqbc = mbp.BJTtype * BJTqbc.Current(capbc, vbc);
 
             state.Rhs[BJTbaseNode] -= (-ceqbx);
             state.Rhs[BJTcolPrimeNode] += (ceqcs + ceqbx + ceqbc);
@@ -384,20 +388,20 @@ namespace SpiceSharp.Behaviors.Bipolar
             /* 
 			 * load y matrix
 			 */
-            BJTbaseBasePtr.Add(eqbx.Geq);
-            BJTcolPrimeColPrimePtr.Add(eqbc.Geq + eqcs.Geq + eqbx.Geq);
-            BJTbasePrimeBasePrimePtr.Add(eqbe.Geq + eqbc.Geq + geqcb);
-            BJTemitPrimeEmitPrimePtr.Add(eqbe.Geq);
-            BJTcolPrimeBasePrimePtr.Add(-eqbc.Geq);
-            BJTbasePrimeColPrimePtr.Add(-eqbc.Geq - geqcb);
-            BJTbasePrimeEmitPrimePtr.Add(-eqbe.Geq);
+            BJTbaseBasePtr.Add(geqbx);
+            BJTcolPrimeColPrimePtr.Add(geqbc + geqcs + geqbx);
+            BJTbasePrimeBasePrimePtr.Add(geqbe + geqbc + geqcb);
+            BJTemitPrimeEmitPrimePtr.Add(geqbe);
+            BJTcolPrimeBasePrimePtr.Add(-geqbc);
+            BJTbasePrimeColPrimePtr.Add(-geqbc - geqcb);
+            BJTbasePrimeEmitPrimePtr.Add(-geqbe);
             BJTemitPrimeColPrimePtr.Add(geqcb);
-            BJTemitPrimeBasePrimePtr.Add(-eqbe.Geq - geqcb);
-            BJTsubstSubstPtr.Add(eqcs.Geq);
-            BJTcolPrimeSubstPtr.Add(-eqcs.Geq);
-            BJTsubstColPrimePtr.Add(-eqcs.Geq);
-            BJTbaseColPrimePtr.Add(-eqbx.Geq);
-            BJTcolPrimeBasePtr.Add(-eqbx.Geq);
+            BJTemitPrimeBasePrimePtr.Add(-geqbe - geqcb);
+            BJTsubstSubstPtr.Add(geqcs);
+            BJTcolPrimeSubstPtr.Add(-geqcs);
+            BJTsubstColPrimePtr.Add(-geqcs);
+            BJTbaseColPrimePtr.Add(-geqbx);
+            BJTcolPrimeBasePtr.Add(-geqbx);
         }
 
         /// <summary>

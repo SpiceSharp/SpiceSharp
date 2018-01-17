@@ -135,17 +135,19 @@ namespace SpiceSharp.Behaviors.CAP
 
             // Integrate
             CAPqcap.Value = bp.CAPcapac * vcap;
-            var result = CAPqcap.Integrate(bp.CAPcapac);
-            
+            CAPqcap.Integrate();
+            double geq = CAPqcap.Jacobian(bp.CAPcapac);
+            double ceq = CAPqcap.Current();
+
             // Load matrix
-            CAPposPosptr.Add(result.Geq);
-            CAPnegNegptr.Add(result.Geq);
-            CAPposNegptr.Sub(result.Geq);
-            CAPnegPosptr.Sub(result.Geq);
+            CAPposPosptr.Add(geq);
+            CAPnegNegptr.Add(geq);
+            CAPposNegptr.Sub(geq);
+            CAPnegPosptr.Sub(geq);
 
             // Load Rhs vector
-            state.Rhs[CAPposNode] -= result.Ceq;
-            state.Rhs[CAPnegNode] += result.Ceq;
+            state.Rhs[CAPposNode] -= ceq;
+            state.Rhs[CAPnegNode] += ceq;
         }
 
         /// <summary>

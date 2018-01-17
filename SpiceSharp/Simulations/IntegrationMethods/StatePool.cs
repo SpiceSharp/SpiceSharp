@@ -102,29 +102,9 @@
         /// <summary>
         /// Integrate a state variable
         /// </summary>
-        /// <param name="index">The index</param>
-        /// <returns></returns>
+        /// <param name="index">Index</param>
         public void Integrate(int index) => Method.Integrate(First, index);
-
-        /// <summary>
-        /// Integrate a state variable
-        /// This method will also calculate contributions for the Y-matrix and Rhs-vector
-        /// </summary>
-        /// <param name="index">Index</param>
-        /// <param name="cap">Capacitance</param>
-        /// <returns></returns>
-        public IntegrationMethod.Result Integrate(int index, double cap) => Method.Integrate(First, index, cap);
-
-        /// <summary>
-        /// Integrate a state variable
-        /// This method will also calculate contributions for the Y-matrix and Rhs-vector
-        /// </summary>
-        /// <param name="index">Index</param>
-        /// <param name="dqdv">The derivative of the state variable w.r.t. a voltage across</param>
-        /// <param name="v">The voltage across</param>
-        /// <returns>The contributions to the Y-matrix and Rhs-vector</returns>
-        public IntegrationMethod.Result Integrate(int index, double dqdv, double v) => Method.Integrate(First, index, dqdv, v);
-
+        
         /// <summary>
         /// Truncate the timestep based on the LTE (Local Truncation Error)
         /// </summary>

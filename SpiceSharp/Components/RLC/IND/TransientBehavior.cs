@@ -136,9 +136,9 @@ namespace SpiceSharp.Behaviors.IND
             }
 
             // Finally load the Y-matrix
-            var eq = INDflux.Integrate(bp.INDinduct);
-            state.Rhs[INDbrEq] += eq.Ceq;
-            INDibrIbrptr.Sub(eq.Geq);
+            INDflux.Integrate();
+            state.Rhs[INDbrEq] += INDflux.Current();
+            INDibrIbrptr.Sub(INDflux.Jacobian(bp.INDinduct));
         }
 
         /// <summary>
