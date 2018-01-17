@@ -444,10 +444,14 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
 
             // integrate the capacitors and save results
             MOS1qbd.Integrate();
-            var eqbd = new IntegrationMethod.Result() { Geq = MOS1qbd.Jacobian(MOS1capbd), Ceq = MOS1qbd.Current(MOS1capbd, vbd) };
+            var eqbd = new IntegrationMethod.Result();
+            eqbd.Geq = MOS1qbd.Jacobian(MOS1capbd);
+            eqbd.Ceq = MOS1qbd.Current(eqbd.Geq, vbd);
             // NOTE: The derivative of MOS1qbd should be added to MOS1cd (drain current). Figure out a way later.
             MOS1qbs.Integrate();
-            var eqbs = new IntegrationMethod.Result() { Geq = MOS1qbs.Jacobian(MOS1capbs), Ceq = MOS1qbs.Current(MOS1capbs, vbs) };
+            var eqbs = new IntegrationMethod.Result();
+            eqbs.Geq = MOS1qbs.Jacobian(MOS1capbs);
+            eqbs.Ceq = MOS1qbs.Current(eqbs.Geq, vbs);
 
             /* 
              * calculate meyer's capacitors

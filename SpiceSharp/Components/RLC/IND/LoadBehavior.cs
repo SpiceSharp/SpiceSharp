@@ -13,10 +13,9 @@ namespace SpiceSharp.Behaviors.IND
         /// <summary>
         /// Nodes
         /// </summary>
+        int INDposNode, INDnegNode;
         public int INDbrEq { get; protected set; }
-        public int INDposNode { get; protected set; }
-        public int INDnegNode { get; protected set; }
-
+        
         /// <summary>
         /// Matrix elements
         /// </summary>

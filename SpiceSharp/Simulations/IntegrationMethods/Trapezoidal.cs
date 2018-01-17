@@ -81,11 +81,11 @@ namespace SpiceSharp.IntegrationMethods
             switch (Order)
             {
                 case 1:
-                    first.Values[index] = ag[0] * first.Values[index] + ag[1] * first.Previous.Values[index];
+                    first.Values[index + 1] = ag[0] * first.Values[index] + ag[1] * first.Previous.Values[index];
                     break;
 
                 case 2:
-                    first.Values[index] = -first.Previous.Values[index + 1] * ag[1] + ag[0] * (first.Values[index] - first.Previous.Values[index]);
+                    first.Values[index + 1] = -first.Previous.Values[index + 1] * ag[1] + ag[0] * (first.Values[index] - first.Previous.Values[index]);
                     break;
 
                 default:

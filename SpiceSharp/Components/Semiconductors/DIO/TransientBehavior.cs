@@ -166,7 +166,7 @@ namespace SpiceSharp.Behaviors.DIO
             // Integrate
             DIOcapCharge.Integrate();
             double geq = DIOcapCharge.Jacobian(DIOcap);
-            double ceq = DIOcapCharge.Current(DIOcap, vd);
+            double ceq = DIOcapCharge.Current(geq, vd);
 
             // Load Rhs vector
             state.Rhs[DIOnegNode] += ceq;

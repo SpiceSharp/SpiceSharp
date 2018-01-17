@@ -130,9 +130,8 @@ namespace SpiceSharp.Behaviors.IND
             // Allow alterations of the flux
             if (UpdateFlux != null)
             {
-                UpdateFluxEventArgs args = new UpdateFluxEventArgs(bp.INDinduct, state.Solution[INDbrEq], INDflux.Value);
+                UpdateFluxEventArgs args = new UpdateFluxEventArgs(bp.INDinduct, state.Solution[INDbrEq], INDflux, state);
                 UpdateFlux.Invoke(this, args);
-                INDflux.Value = args.Flux;
             }
 
             // Finally load the Y-matrix

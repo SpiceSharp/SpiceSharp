@@ -20,6 +20,7 @@ namespace SpiceSharp.Behaviors.MUT
         /// </summary>
         BaseParameters bp;
         IND.LoadBehavior load1, load2;
+        IND.TransientBehavior tran1, tran2;
 
         /// <summary>
         /// The factor
@@ -29,8 +30,14 @@ namespace SpiceSharp.Behaviors.MUT
         /// <summary>
         /// Nodes
         /// </summary>
+        int INDbrEq1, INDbrEq2;
         protected MatrixElement MUTbr1br2 { get; private set; }
         protected MatrixElement MUTbr2br1 { get; private set; }
+
+        /// <summary>
+        /// Y-matrix contribution
+        /// </summary>
+        protected double geq;
 
         /// <summary>
         /// Constructor
@@ -52,9 +59,38 @@ namespace SpiceSharp.Behaviors.MUT
             // Get behaviors
             load1 = provider.GetBehavior<IND.LoadBehavior>(1);
             load2 = provider.GetBehavior<IND.LoadBehavior>(2);
+            tran1 = provider.GetBehavior<IND.TransientBehavior>(1);
+            tran2 = provider.GetBehavior<IND.TransientBehavior>(2);
 
             // Calculate coupling factor
             MUTfactor = bp.MUTcoupling * Math.Sqrt(bp1.INDinduct * bp2.INDinduct);
+
+            // Register events for modifying the flux through the inductors
+            tran1.UpdateFlux += UpdateFlux1;
+            tran2.UpdateFlux += UpdateFlux2;
+        }
+
+        /// <summary>
+        /// Update the flux through inductor 2
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="args">Arguments</param>
+        void UpdateFlux2(object sender, IND.UpdateFluxEventArgs args)
+        {
+            var state = args.State;
+            args.Flux.Value += MUTfactor * state.Solution[load1.INDbrEq];
+        }
+
+        /// <summary>
+        /// Update the flux through inductor 1
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="args">Arguments</param>
+        void UpdateFlux1(object sender, IND.UpdateFluxEventArgs args)
+        {
+            var state = args.State;
+            geq = args.Flux.Jacobian(MUTfactor);
+            args.Flux.Value += MUTfactor * state.Solution[load2.INDbrEq];
         }
 
         /// <summary>
@@ -64,8 +100,8 @@ namespace SpiceSharp.Behaviors.MUT
         public override void GetMatrixPointers(Matrix matrix)
         {
             // Get extra equations
-            int INDbrEq1 = load1.INDbrEq;
-            int INDbrEq2 = load2.INDbrEq;
+            INDbrEq1 = load1.INDbrEq;
+            INDbrEq2 = load2.INDbrEq;
 
             // Get matrix pointers
             MUTbr1br2 = matrix.GetElement(INDbrEq1, INDbrEq2);
@@ -79,6 +115,10 @@ namespace SpiceSharp.Behaviors.MUT
         {
             MUTbr1br2 = null;
             MUTbr2br1 = null;
+
+            // Remove events
+            tran1.UpdateFlux -= UpdateFlux1;
+            tran2.UpdateFlux -= UpdateFlux2;
         }
 
         /// <summary>
@@ -87,6 +127,9 @@ namespace SpiceSharp.Behaviors.MUT
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
+            // Load Y-matrix
+            MUTbr1br2.Sub(geq);
+            MUTbr2br1.Sub(geq);
         }
     }
 }

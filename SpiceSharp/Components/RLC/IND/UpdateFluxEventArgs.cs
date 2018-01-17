@@ -1,4 +1,6 @@
 ﻿using System;
+using SpiceSharp.IntegrationMethods;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Behaviors.IND
 {
@@ -20,23 +22,30 @@ namespace SpiceSharp.Behaviors.IND
         /// <summary>
         /// Original current through the inductor
         /// </summary>
-        public double OriginalCurrent { get; }
+        public double Current { get; }
 
         /// <summary>
         /// New flux through the inductor (initially set to the original flux)
         /// </summary>
-        public double Flux { get; set; }
+        public StateVariable Flux { get; }
+
+        /// <summary>
+        /// Get the state currently being operated on
+        /// </summary>
+        public State State { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="flux">Flux through the capacitor</param>
-        public UpdateFluxEventArgs(double ind, double i, double flux)
+        /// <param name="ind">Inductor</param>
+        /// <param name="i">Current</param>
+        public UpdateFluxEventArgs(double ind, double i, StateVariable flux, State state)
         {
             Inductance = ind;
-            OriginalCurrent = i;
+            Current = i;
+            OriginalFlux = flux.Value;
             Flux = flux;
-            OriginalFlux = flux;
+            State = state;
         }
     }
 
