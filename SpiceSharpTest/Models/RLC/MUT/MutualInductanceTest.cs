@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp.Circuits;
 using SpiceSharp;
@@ -26,7 +27,7 @@ namespace SpiceSharpTest.Models.MUT
             double k = 0.693;
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", 1.0), // new Pulse(0, 1, 10e-6, 1e-12, 1e-12, 1, 2)),
+                new Voltagesource("V1", "IN", "0", 1.0),
                 new Resistor("R1", "IN", "1", r1),
                 new Inductor("L1", "1", "0", l1),
                 new Inductor("L2", "OUT", "0", l2),
@@ -64,6 +65,55 @@ namespace SpiceSharpTest.Models.MUT
 
             // Run test
             AnalyzeTransient(tran, ckt, exports, references);
+        }
+
+        [TestMethod]
+        public void TransformerLoad_AC()
+        {
+            // Create circuit
+            double r1 = 100.0;
+            double r2 = 500.0;
+            double l1 = 10e-3;
+            double l2 = 2e-3;
+            double k = 0.693;
+            Circuit ckt = new Circuit();
+            ckt.Objects.Add(
+                new Voltagesource("V1", "IN", "0", 0.0),
+                new Resistor("R1", "IN", "1", r1),
+                new Inductor("L1", "1", "0", l1),
+                new Inductor("L2", "OUT", "0", l2),
+                new Resistor("R2", "OUT", "0", r2),
+                new MutualInductance("M1", "L1", "L2", k)
+                );
+            ckt.Objects["V1"].Parameters.Set("acmag", 1.0);
+
+            // Create simulation
+            AC ac = new AC("ac", "dec", 10, 1, 1.0e8);
+
+            // Create exports
+            Func<State, Complex>[] exports = new Func<State, Complex>[1];
+            ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
+            {
+                exports[0] = ac.CreateAcVoltageExport("OUT");
+            };
+
+            // Create references
+            double mut = k * Math.Sqrt(l1 * l2);
+            double a = l1 * l2 - mut * mut;
+            double b = r1 * l2 + r2 * l1;
+            double c = r1 * r2;
+            double num = mut * r2;
+            Func<double, Complex>[] references = {
+                (double f) =>
+                {
+                    Complex s = new Complex(0.0, 2.0 * Math.PI * f);
+                    Complex denom = (a * s + b) * s + c;
+                    return num * s / denom;
+                }
+            };
+
+            // Run simulation
+            AnalyzeAC(ac, ckt, exports, references);
         }
     }
 }
