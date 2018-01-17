@@ -513,8 +513,10 @@ namespace SpiceSharp.Behaviors.Bipolar
             /* 
 			 * load current excitation vector
 			 */
-            ceqcs = mbp.BJTtype * (state.States[0][BJTstate + BJTcqcs] - vcs * gccs);
-            ceqbx = mbp.BJTtype * (state.States[0][BJTstate + BJTcqbx] - vbx * geqbx);
+            // ceqcs = mbp.BJTtype * (state.States[0][BJTstate + BJTcqcs] - vcs * gccs);
+            ceqcs = 0.0;
+            // ceqbx = mbp.BJTtype * (state.States[0][BJTstate + BJTcqbx] - vbx * geqbx);
+            ceqbx = 0.0;
             ceqbe = mbp.BJTtype * (cc + cb - vbe * (gm + go + gpi) + vbc * (go - geqcb));
             ceqbc = mbp.BJTtype * (-cc + vbe * (gm + go) - vbc * (gmu + go));
 
@@ -560,7 +562,6 @@ namespace SpiceSharp.Behaviors.Bipolar
         public override bool IsConvergent(Circuit ckt)
         {
             var state = ckt.State;
-            var config = ckt.Simulation.CurrentConfig;
 
             double vbe, vbc, delvbe, delvbc, cchat, cbhat, cc, cb;
 
@@ -576,20 +577,19 @@ namespace SpiceSharp.Behaviors.Bipolar
             /*
              *   check convergence
              */
-            double tol = config.RelTol * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + config.AbsTol;
+            // NOTE: access configuration in some way here!
+            double tol = 1e-3 * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + 1e-12;
             if (Math.Abs(cchat - cc) > tol)
             {
                 state.IsCon = false;
                 return false;
             }
-            else
+
+            tol = 1e-3 * Math.Max(Math.Abs(cbhat), Math.Abs(cb)) + 1e-12;
+            if (Math.Abs(cbhat - cb) > tol)
             {
-                tol = config.RelTol * Math.Max(Math.Abs(cbhat), Math.Abs(cb)) + config.AbsTol;
-                if (Math.Abs(cbhat - cb) > tol)
-                {
-                    state.IsCon = false;
-                    return false;
-                }
+                state.IsCon = false;
+                return false;
             }
             return true;
         }

@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.Bipolar
             else
                 return "pnp";
         }
-        public double BJTtype { get; internal set; }
+        public double BJTtype { get; internal set; } = NPN;
         [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
         public double BJT_TNOM
         {
