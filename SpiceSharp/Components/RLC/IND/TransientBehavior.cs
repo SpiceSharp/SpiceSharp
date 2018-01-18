@@ -30,7 +30,7 @@ namespace SpiceSharp.Behaviors.IND
         /// </summary>
         int INDbrEq;
         protected MatrixElement INDibrIbrptr { get; private set; }
-        StateVariable INDflux;
+        StateDerivative INDflux;
 
         /// <summary>
         /// Constructor

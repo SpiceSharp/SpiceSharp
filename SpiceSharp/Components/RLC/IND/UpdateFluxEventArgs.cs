@@ -27,7 +27,7 @@ namespace SpiceSharp.Behaviors.IND
         /// <summary>
         /// New flux through the inductor (initially set to the original flux)
         /// </summary>
-        public StateVariable Flux { get; }
+        public StateDerivative Flux { get; }
 
         /// <summary>
         /// Get the state currently being operated on
@@ -39,7 +39,7 @@ namespace SpiceSharp.Behaviors.IND
         /// </summary>
         /// <param name="ind">Inductor</param>
         /// <param name="i">Current</param>
-        public UpdateFluxEventArgs(double ind, double i, StateVariable flux, State state)
+        public UpdateFluxEventArgs(double ind, double i, StateDerivative flux, State state)
         {
             Inductance = ind;
             Current = i;

@@ -22,9 +22,9 @@ namespace SpiceSharp.Behaviors.CAP
         /// Methods
         /// </summary>
         [SpiceName("i"), SpiceInfo("Device current")]
-        public double GetCurrent() => CAPqcap.GetDerivative();
+        public double GetCurrent() => CAPqcap.Derivative;
         [SpiceName("p"), SpiceInfo("Instantaneous device power")]
-        public double GetPower(Circuit ckt) => CAPqcap.GetDerivative() * (ckt.State.Solution[CAPposNode] - ckt.State.Solution[CAPnegNode]);
+        public double GetPower(Circuit ckt) => CAPqcap.Derivative * (ckt.State.Solution[CAPposNode] - ckt.State.Solution[CAPnegNode]);
 
         /// <summary>
         /// Nodes and states
@@ -34,7 +34,7 @@ namespace SpiceSharp.Behaviors.CAP
         MatrixElement CAPnegNegptr;
         MatrixElement CAPposNegptr;
         MatrixElement CAPnegPosptr;
-        StateVariable CAPqcap;
+        StateDerivative CAPqcap;
 
         /// <summary>
         /// Constructor

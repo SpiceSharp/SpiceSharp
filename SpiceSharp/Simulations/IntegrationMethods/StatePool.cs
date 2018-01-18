@@ -82,20 +82,30 @@
         public double GetTimestep(int history = 0) => Method.DeltaOld[history];
 
         /// <summary>
-        /// Create a new state
+        /// Create a state that can be differentiated
         /// </summary>
-        /// <param name="order">Order of the state variable</param>
         /// <returns></returns>
-        public StateVariable Create(int order = 1)
+        public StateDerivative Create()
         {
-            StateVariable result = new StateVariable(this, Size, order);
+            StateDerivative result = new StateDerivative(this, Size);
 
             // Increase amount of states
             StateCount++;
 
             // Increase number of stored values
-            Size += order + 1;
+            Size += 2;
+            return result;
+        }
 
+        /// <summary>
+        /// Create a state that can look back in history
+        /// </summary>
+        /// <returns></returns>
+        public StateHistory CreateHistory()
+        {
+            StateHistory result = new StateHistory(this, Size);
+            StateCount++;
+            Size++;
             return result;
         }
 

@@ -61,17 +61,17 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <summary>
         /// State variables
         /// </summary>
-        protected StateVariable MOS1qgs { get; private set; }
-        protected StateVariable MOS1qgd { get; private set; }
-        protected StateVariable MOS1qgb { get; private set; }
-        protected StateVariable MOS1qbd { get; private set; }
-        protected StateVariable MOS1qbs { get; private set; }
-        protected StateVariable MOS1capgs { get; private set; }
-        protected StateVariable MOS1capgd { get; private set; }
-        protected StateVariable MOS1capgb { get; private set; }
-        protected StateVariable MOS1vgs { get; private set; }
-        protected StateVariable MOS1vds { get; private set; }
-        protected StateVariable MOS1vbs { get; private set; }
+        protected StateDerivative MOS1qgs { get; private set; }
+        protected StateDerivative MOS1qgd { get; private set; }
+        protected StateDerivative MOS1qgb { get; private set; }
+        protected StateDerivative MOS1qbd { get; private set; }
+        protected StateDerivative MOS1qbs { get; private set; }
+        protected StateHistory MOS1capgs { get; private set; }
+        protected StateHistory MOS1capgd { get; private set; }
+        protected StateHistory MOS1capgb { get; private set; }
+        protected StateHistory MOS1vgs { get; private set; }
+        protected StateHistory MOS1vds { get; private set; }
+        protected StateHistory MOS1vbs { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -184,12 +184,12 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             MOS1qbd = states.Create();
             MOS1qbs = states.Create();
 
-            MOS1capgs = states.Create(0);
-            MOS1capgd = states.Create(0);
-            MOS1capgb = states.Create(0);
-            MOS1vgs = states.Create(0);
-            MOS1vds = states.Create(0);
-            MOS1vbs = states.Create(0);
+            MOS1capgs = states.CreateHistory();
+            MOS1capgd = states.CreateHistory();
+            MOS1capgb = states.CreateHistory();
+            MOS1vgs = states.CreateHistory();
+            MOS1vds = states.CreateHistory();
+            MOS1vbs = states.CreateHistory();
         }
 
         /// <summary>

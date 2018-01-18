@@ -33,7 +33,7 @@ namespace SpiceSharp.Behaviors.DIO
         /// <summary>
         /// The charge on the junction capacitance
         /// </summary>
-        public StateVariable DIOcapCharge { get; private set; }
+        public StateDerivative DIOcapCharge { get; private set; }
 
         /// <summary>
         /// Nodes

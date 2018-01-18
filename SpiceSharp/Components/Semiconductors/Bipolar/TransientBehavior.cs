@@ -86,11 +86,11 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <summary>
         /// States
         /// </summary>
-        protected StateVariable BJTqbe { get; private set; }
-        protected StateVariable BJTqbc { get; private set; }
-        protected StateVariable BJTqcs { get; private set; }
-        protected StateVariable BJTqbx { get; private set; }
-        protected StateVariable BJTcexbc { get; private set; }
+        protected StateDerivative BJTqbe { get; private set; }
+        protected StateDerivative BJTqbc { get; private set; }
+        protected StateDerivative BJTqcs { get; private set; }
+        protected StateDerivative BJTqbx { get; private set; }
+        protected StateHistory BJTcexbc { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -205,7 +205,7 @@ namespace SpiceSharp.Behaviors.Bipolar
             BJTqbc = states.Create();
             BJTqcs = states.Create();
             BJTqbx = states.Create();
-            BJTcexbc = states.Create(0);
+            BJTcexbc = states.CreateHistory();
         }
 
         /// <summary>
