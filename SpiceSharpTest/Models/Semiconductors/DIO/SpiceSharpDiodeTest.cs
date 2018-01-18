@@ -35,7 +35,7 @@ namespace SpiceSharpTest.Models.DIO
         }
 
         [TestMethod]
-        public void TestDiodeDC()
+        public void DIO_DC()
         {
             /*
              * DC voltage shunted by a diode
@@ -70,7 +70,7 @@ namespace SpiceSharpTest.Models.DIO
         }
 
         [TestMethod]
-        public void TestDiodeAC()
+        public void DIO_AC()
         {
             /*
              * DC voltage source shunted by a diode
@@ -108,7 +108,7 @@ namespace SpiceSharpTest.Models.DIO
         }
 
         [TestMethod]
-        public void TestDiodeTransient()
+        public void DIO_Transient()
         {
             /*
              * Pulsed voltage source towards a resistive voltage divider between 0V and 5V

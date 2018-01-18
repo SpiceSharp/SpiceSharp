@@ -37,7 +37,7 @@ namespace SpiceSharpTest.Models.Bipolar
         }
 
         [TestMethod]
-        public void TestBJT_DC()
+        public void BJT_DC()
         {
             /*
              * BJT connect to only voltage sources
@@ -87,7 +87,7 @@ namespace SpiceSharpTest.Models.Bipolar
         }
 
         [TestMethod]
-        public void TestBJT_AC()
+        public void BJT_AC()
         {
             // Build circuit
             Circuit ckt = new Circuit();
@@ -135,7 +135,7 @@ namespace SpiceSharpTest.Models.Bipolar
         }
 
         [TestMethod]
-        public void TestBJT_Transient()
+        public void BJT_Transient()
         {
             /*
              * Transient analysis of a BJT common emitter amplifier
