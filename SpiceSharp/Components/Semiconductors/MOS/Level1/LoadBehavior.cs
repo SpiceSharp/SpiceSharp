@@ -516,7 +516,6 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <returns></returns>
         public override bool IsConvergent(Circuit ckt)
         {
-            var config = ckt.Simulation.CurrentConfig;
             var state = ckt.State;
 
             double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat;
@@ -550,7 +549,8 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             /*
              *  check convergence
              */
-            double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(MOS1cd)) + config.AbsTol;
+            // NOTE: relative and absolute tolerances need to be gotten from the configuration, temporarely set to constants here
+            double tol = 1e-3 * Math.Max(Math.Abs(cdhat), Math.Abs(MOS1cd)) + 1e-12;
             if (Math.Abs(cdhat - MOS1cd) >= tol)
             {
                 state.IsCon = false;
@@ -558,7 +558,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             }
             else
             {
-                tol = config.RelTol * Math.Max(Math.Abs(cbhat), Math.Abs(MOS1cbs + MOS1cbd)) + config.AbsTol;
+                tol = 1e-3 * Math.Max(Math.Abs(cbhat), Math.Abs(MOS1cbs + MOS1cbd)) + 1e-12;
                 if (Math.Abs(cbhat - (MOS1cbs + MOS1cbd)) > tol)
                 {
                     state.IsCon = false;
