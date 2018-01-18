@@ -214,18 +214,6 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="sim">Time-based simulation</param>
         public override void GetDCstate(TimeSimulation sim)
         {
-            BJTcexbc.Value = load.cbe / load.qb;
-
-            // Register for excess phase calculations
-            load.ExcessPhaseCalculation += CalculateExcessPhase;
-        }
-
-        /// <summary>
-        /// Transient behavior
-        /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Transient(TimeSimulation sim)
-        {
             var state = sim.Circuit.State;
             double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2, arg3, capbx, capcs,
                 xms, xtf, ovtf, xjtf, argtf, tmp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, czbxf2;
@@ -241,7 +229,146 @@ namespace SpiceSharp.Behaviors.Bipolar
 
             double vbe = load.BJTvbe;
             double vbc = load.BJTvbc;
-            double vbx = vbx = mbp.BJTtype * (state.Solution[BJTbaseNode] - state.Solution[BJTcolPrimeNode]);
+            double vbx = mbp.BJTtype * (state.Solution[BJTbaseNode] - state.Solution[BJTcolPrimeNode]);
+            double vcs = mbp.BJTtype * (state.Solution[BJTsubstNode] - state.Solution[BJTcolPrimeNode]);
+            double td = modeltemp.BJTexcessPhaseFactor;
+
+            BJTcexbc.Value = load.cbe / load.qb;
+
+            /* 
+             * charge storage elements
+             */
+            tf = mbp.BJTtransitTimeF;
+            tr = mbp.BJTtransitTimeR;
+            czbe = temp.BJTtBEcap * bp.BJTarea;
+            pe = temp.BJTtBEpot;
+            xme = mbp.BJTjunctionExpBE;
+            cdis = mbp.BJTbaseFractionBCcap;
+            ctot = temp.BJTtBCcap * bp.BJTarea;
+            czbc = ctot * cdis;
+            czbx = ctot - czbc;
+            pc = temp.BJTtBCpot;
+            xmc = mbp.BJTjunctionExpBC;
+            fcpe = temp.BJTtDepCap;
+            czcs = mbp.BJTcapCS * bp.BJTarea;
+            ps = mbp.BJTpotentialSubstrate;
+            xms = mbp.BJTexponentialSubstrate;
+            xtf = mbp.BJTtransitTimeBiasCoeffF;
+            ovtf = modeltemp.BJTtransitTimeVBCFactor;
+            xjtf = mbp.BJTtransitTimeHighCurrentF * bp.BJTarea;
+            if (tf != 0 && vbe > 0)
+            {
+                argtf = 0;
+                arg2 = 0;
+                arg3 = 0;
+                if (xtf != 0)
+                {
+                    argtf = xtf;
+                    if (ovtf != 0)
+                    {
+                        argtf = argtf * Math.Exp(vbc * ovtf);
+                    }
+                    arg2 = argtf;
+                    if (xjtf != 0)
+                    {
+                        tmp = cbe / (cbe + xjtf);
+                        argtf = argtf * tmp * tmp;
+                        arg2 = argtf * (3 - tmp - tmp);
+                    }
+                    arg3 = cbe * argtf * ovtf;
+                }
+                cbe = cbe * (1 + argtf) / qb;
+                gbe = (gbe * (1 + arg2) - cbe * dqbdve) / qb;
+                geqcb = tf * (arg3 - cbe * dqbdvc) / qb;
+            }
+            if (vbe < fcpe)
+            {
+                arg = 1 - vbe / pe;
+                sarg = Math.Exp(-xme * Math.Log(arg));
+                BJTqbe.Value = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
+            }
+            else
+            {
+                f1 = temp.BJTtf1;
+                f2 = modeltemp.BJTf2;
+                f3 = modeltemp.BJTf3;
+                czbef2 = czbe / f2;
+                BJTqbe.Value = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
+                     fcpe * fcpe));
+            }
+            fcpc = temp.BJTtf4;
+            f1 = temp.BJTtf5;
+            f2 = modeltemp.BJTf6;
+            f3 = modeltemp.BJTf7;
+            if (vbc < fcpc)
+            {
+                arg = 1 - vbc / pc;
+                sarg = Math.Exp(-xmc * Math.Log(arg));
+                BJTqbc.Value = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
+            }
+            else
+            {
+                czbcf2 = czbc / f2;
+                BJTqbc.Value = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
+                     fcpc * fcpc));
+            }
+            if (vbx < fcpc)
+            {
+                arg = 1 - vbx / pc;
+                sarg = Math.Exp(-xmc * Math.Log(arg));
+                BJTqbx.Value = pc * czbx * (1 - arg * sarg) / (1 - xmc);
+            }
+            else
+            {
+                czbxf2 = czbx / f2;
+                BJTqbx.Value = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
+            }
+            if (vcs < 0)
+            {
+                arg = 1 - vcs / ps;
+                sarg = Math.Exp(-xms * Math.Log(arg));
+                BJTqcs.Value = ps * czcs * (1 - arg * sarg) / (1 - xms);
+            }
+            else
+            {
+                BJTqcs.Value = vcs * czcs * (1 + xms * vcs / (2 * ps));
+            }
+
+            // Register for excess phase calculations
+            if (modeltemp.BJTexcessPhaseFactor > 0.0)
+            {
+                load.ExcessPhaseCalculation += CalculateExcessPhase;
+            }
+        }
+
+        /// <summary>
+        /// Transient behavior
+        /// </summary>
+        /// <param name="sim">Time-based simulation</param>
+        public override void Transient(TimeSimulation sim)
+        {
+            var state = sim.Circuit.State;
+            double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2, arg3, capbx, capcs,
+                xms, xtf, ovtf, xjtf, argtf, tmp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, czbxf2;
+            
+
+            double cbe = load.cbe;
+            double cbc = load.cbc;
+            double gbe = load.gbe;
+            double gbc = load.gbc;
+            double qb = load.qb;
+            double dqbdvc = load.dqbdvc;
+            double dqbdve = load.dqbdve;
+            double geqcb = 0;
+
+            double gpi = 0.0;
+            double gmu = 0.0;
+            double cb = 0.0;
+            double cc = 0.0;
+
+            double vbe = load.BJTvbe;
+            double vbc = load.BJTvbc;
+            double vbx = mbp.BJTtype * (state.Solution[BJTbaseNode] - state.Solution[BJTcolPrimeNode]);
             double vcs = mbp.BJTtype * (state.Solution[BJTsubstNode] - state.Solution[BJTcolPrimeNode]);
             double td = modeltemp.BJTexcessPhaseFactor;
 
@@ -358,30 +485,33 @@ namespace SpiceSharp.Behaviors.Bipolar
             BJTcapbx = capbx;
 
             BJTqbe.Integrate();
-            double geqbe = BJTqbe.Jacobian(capbe);
-            double ceqbe = BJTqbe.Current(capbe, vbe);
             geqcb = BJTqbe.Jacobian(geqcb); // Multiplies geqcb with method.Slope (ag[0])
-            double geqbc = BJTqbc.Jacobian(capbc);
+            gpi += BJTqbe.Jacobian(capbe);
+            cb += BJTqbe.Derivative;
+            BJTqbc.Integrate();
+            gmu += BJTqbc.Jacobian(capbc);
+            cb += BJTqbc.Derivative;
+            cc -= BJTqbc.Derivative;
 
             /* 
              * charge storage for c - s and b - x junctions
              */
             BJTqcs.Integrate();
-            double geqcs = BJTqcs.Jacobian(capcs);
+            double gccs = BJTqcs.Jacobian(capcs);
             BJTqbx.Integrate();
             double geqbx = BJTqbx.Jacobian(capbx);
 
             /* 
 			 * load current excitation vector
 			 */
-            double ceqcs = mbp.BJTtype * ceqbe;
-            double ceqbx = mbp.BJTtype * BJTqbx.Current(capbx, vbx);
-            ceqbe = mbp.BJTtype * (ceqbe + vbc * geqcb);
-            double ceqbc = mbp.BJTtype * BJTqbc.Current(capbc, vbc);
-
-            state.Rhs[BJTbaseNode] -= (-ceqbx);
+            double ceqcs = mbp.BJTtype * (BJTqcs.Derivative - vcs * gccs);
+            double ceqbx = mbp.BJTtype * (BJTqbx.Derivative - vbx * geqbx);
+            double ceqbe = mbp.BJTtype * (cc + cb - vbe * gpi + vbc * (-geqcb));
+            double ceqbc = mbp.BJTtype * (-cc + - vbc * gmu);
+            
+            state.Rhs[BJTbaseNode] += (-ceqbx);
             state.Rhs[BJTcolPrimeNode] += (ceqcs + ceqbx + ceqbc);
-            state.Rhs[BJTbasePrimeNode] += (-ceqbe - ceqbc);
+            state.Rhs[BJTbasePrimeNode] += -ceqbe - ceqbc;
             state.Rhs[BJTemitPrimeNode] += (ceqbe);
             state.Rhs[BJTsubstNode] += (-ceqcs);
 
@@ -389,17 +519,17 @@ namespace SpiceSharp.Behaviors.Bipolar
 			 * load y matrix
 			 */
             BJTbaseBasePtr.Add(geqbx);
-            BJTcolPrimeColPrimePtr.Add(geqbc + geqcs + geqbx);
-            BJTbasePrimeBasePrimePtr.Add(geqbe + geqbc + geqcb);
-            BJTemitPrimeEmitPrimePtr.Add(geqbe);
-            BJTcolPrimeBasePrimePtr.Add(-geqbc);
-            BJTbasePrimeColPrimePtr.Add(-geqbc - geqcb);
-            BJTbasePrimeEmitPrimePtr.Add(-geqbe);
+            BJTcolPrimeColPrimePtr.Add(gmu + gccs + geqbx);
+            BJTbasePrimeBasePrimePtr.Add(gpi + gmu + geqcb);
+            BJTemitPrimeEmitPrimePtr.Add(gpi);
+            BJTcolPrimeBasePrimePtr.Add(-gmu);
+            BJTbasePrimeColPrimePtr.Add(-gmu - geqcb);
+            BJTbasePrimeEmitPrimePtr.Add(-gpi);
             BJTemitPrimeColPrimePtr.Add(geqcb);
-            BJTemitPrimeBasePrimePtr.Add(-geqbe - geqcb);
-            BJTsubstSubstPtr.Add(geqcs);
-            BJTcolPrimeSubstPtr.Add(-geqcs);
-            BJTsubstColPrimePtr.Add(-geqcs);
+            BJTemitPrimeBasePrimePtr.Add(-gpi - geqcb);
+            BJTsubstSubstPtr.Add(gccs);
+            BJTcolPrimeSubstPtr.Add(-gccs);
+            BJTsubstColPrimePtr.Add(-gccs);
             BJTbaseColPrimePtr.Add(-geqbx);
             BJTcolPrimeBasePtr.Add(-geqbx);
         }
@@ -424,7 +554,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         {
             double arg1, arg2, denom, arg3;
             double td = modeltemp.BJTexcessPhaseFactor;
-
+            if (td == 0.0)
+                return;
+            
             /* 
              * weil's approx. for excess phase applied with backward - 
              * euler integration
