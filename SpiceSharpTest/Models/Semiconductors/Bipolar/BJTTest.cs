@@ -137,6 +137,10 @@ namespace SpiceSharpTest.Models.Bipolar
         [TestMethod]
         public void TestBJT_Transient()
         {
+            /*
+             * Transient analysis of a BJT common emitter amplifier
+             * Output voltage should behave like the reference. Reference is from Spice 3f5.
+             */
             // Create circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
