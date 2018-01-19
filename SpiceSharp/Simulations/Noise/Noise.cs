@@ -47,6 +47,62 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="input">Input</param>
+        /// <param name="output">Output</param>
+        /// <param name="type">Step type</param>
+        /// <param name="n">Steps</param>
+        /// <param name="start">Start</param>
+        /// <param name="stop">Stop</param>
+        public Noise(Identifier name, Identifier output, Identifier input, string type, int n, double start, double stop) : base(name)
+        {
+            switch (type.ToLower())
+            {
+                case "dec": StepType = StepTypes.Decade; break;
+                case "oct": StepType = StepTypes.Octave; break;
+                case "lin": StepType = StepTypes.Linear; break;
+            }
+            NumberSteps = n;
+            StartFreq = start;
+            StopFreq = stop;
+
+            // Sources
+            Input = input;
+            Output = output;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="input">Input</param>
+        /// <param name="output">Output</param>
+        /// <param name="reference">Output reference</param>
+        /// <param name="type">Type</param>
+        /// <param name="n">Steps</param>
+        /// <param name="start">Start</param>
+        /// <param name="stop">Stop</param>
+        public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, string type, int n, double start, double stop) : base(name)
+        {
+            switch (type.ToLower())
+            {
+                case "dec": StepType = StepTypes.Decade; break;
+                case "oct": StepType = StepTypes.Octave; break;
+                case "lin": StepType = StepTypes.Linear; break;
+            }
+            NumberSteps = n;
+            StartFreq = start;
+            StopFreq = stop;
+
+            // Sources
+            Input = input;
+            Output = output;
+            OutputRef = reference;
+        }
+
+        /// <summary>
         /// Setup the simulation
         /// </summary>
         protected override void Setup()
@@ -76,6 +132,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Execute()
         {
+            base.Execute();
+
             var ckt = Circuit;
             var state = ckt.State;
             var config = CurrentConfig;
@@ -246,6 +304,18 @@ namespace SpiceSharp.Simulations
             if (export == null)
                 export = eb.Get<LoadBehavior>()?.CreateExport(property);
             return export;
+        }
+
+        /// <summary>
+        /// Create an export for the total input density
+        /// </summary>
+        /// <param name="input">True if the noise density has to be input-referred</param>
+        /// <returns></returns>
+        public Func<State, double> CreateNoiseDensityExport(bool input)
+        {
+            if (input)
+                return (State state) => state.Noise.outNdens * state.Noise.GainSqInv;
+            return (State state) => state.Noise.outNdens;
         }
     }
 }
