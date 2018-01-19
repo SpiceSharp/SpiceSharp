@@ -284,9 +284,6 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             MOS1capgs.Value = icapgs;
             MOS1capgd.Value = icapgd;
             MOS1capgb.Value = icapgb;
-            vgs1 = MOS1vgs.GetPreviousValue(1);
-            vgd1 = vgs1 - MOS1vds.GetPreviousValue(1);
-            vgb1 = vgs1 - MOS1vbs.GetPreviousValue(1);
             capgs = 2 * MOS1capgs.Value + GateSourceOverlapCap;
             capgd = 2 * MOS1capgd.Value + GateDrainOverlapCap;
             capgb = 2 * MOS1capgb.Value + GateBulkOverlapCap;
@@ -295,6 +292,11 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             MOS1qgs.Value = vgs * capgs;
             MOS1qgd.Value = vgd * capgd;
             MOS1qgb.Value = vgb * capgb;
+
+            // Store these voltages
+            MOS1vgs.Value = vgs;
+            MOS1vds.Value = vds;
+            MOS1vbs.Value = vbs;
         }
 
         /// <summary>
@@ -320,6 +322,17 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             double GateDrainOverlapCap = mbp.MOS1gateDrainOverlapCapFactor * bp.MOS1w;
             double GateBulkOverlapCap = mbp.MOS1gateBulkOverlapCapFactor * EffectiveLength;
             double OxideCap = modeltemp.MOS1oxideCapFactor * EffectiveLength * bp.MOS1w;
+
+            double MOS1gbd = 0.0;
+            double MOS1cbd = 0.0;
+            double MOS1cd = 0.0;
+            double MOS1gbs = 0.0;
+            double MOS1cbs = 0.0;
+
+            // Store these voltages
+            MOS1vgs.Value = vgs;
+            MOS1vds.Value = vds;
+            MOS1vbs.Value = vbs;
 
             /* 
              * now we do the hard part of the bulk - drain and bulk - source
@@ -444,14 +457,13 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
 
             // integrate the capacitors and save results
             MOS1qbd.Integrate();
-            var eqbd = new IntegrationMethod.Result();
-            eqbd.Geq = MOS1qbd.Jacobian(MOS1capbd);
-            eqbd.Ceq = MOS1qbd.Current(eqbd.Geq, vbd);
+            MOS1gbd += MOS1qbd.Jacobian(MOS1capbd);
+            MOS1cbd += MOS1qbd.Derivative;
+            MOS1cd -= MOS1qbd.Derivative;
             // NOTE: The derivative of MOS1qbd should be added to MOS1cd (drain current). Figure out a way later.
             MOS1qbs.Integrate();
-            var eqbs = new IntegrationMethod.Result();
-            eqbs.Geq = MOS1qbs.Jacobian(MOS1capbs);
-            eqbs.Ceq = MOS1qbs.Current(eqbs.Geq, vbs);
+            MOS1gbs += MOS1qbs.Jacobian(MOS1capbs);
+            MOS1cbs += MOS1qbs.Derivative;
 
             /* 
              * calculate meyer's capacitors
@@ -512,38 +524,42 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             */
 
             MOS1qgs.Integrate();
-            var eqgs = new IntegrationMethod.Result() { Geq = MOS1qgs.Jacobian(capgs), Ceq = MOS1qgs.Current(capgs, vgs) };
+            double gcgs = MOS1qgs.Jacobian(capgs);
+            double ceqgs = MOS1qgs.Current(gcgs, vgs);
             MOS1qgd.Integrate();
-            var eqgd = new IntegrationMethod.Result() { Geq = MOS1qgd.Jacobian(capgd), Ceq = MOS1qgd.Current(capgd, vgd) };
+            double gcgd = MOS1qgd.Jacobian(capgd);
+            double ceqgd = MOS1qgd.Current(gcgd, vgd);
             MOS1qgb.Integrate();
-            var eqgb = new IntegrationMethod.Result() { Geq = MOS1qgb.Jacobian(capgb), Ceq = MOS1qgb.Current(capgb, vgb) };
+            double gcgb = MOS1qgb.Jacobian(capgb);
+            double ceqgb = MOS1qgb.Current(gcgb, vgb);
 
             /* 
 			 * load current vector
 			 */
-            double ceqbs = mbp.MOS1type * eqbs.Ceq;
-            double ceqbd = mbp.MOS1type * eqbd.Ceq;
-            state.Rhs[MOS1gNode] -= mbp.MOS1type * (eqgs.Ceq + eqgb.Ceq + eqgd.Ceq);
-            state.Rhs[MOS1bNode] -= ceqbs + ceqbd;
-            state.Rhs[MOS1dNodePrime] += ceqbd + mbp.MOS1type * eqgd.Ceq;
-            state.Rhs[MOS1sNodePrime] += ceqbs + mbp.MOS1type * eqgs.Ceq;
+            double ceqbs = mbp.MOS1type * (MOS1cbs - MOS1gbs * vbs);
+            double ceqbd = mbp.MOS1type * (MOS1cbd - MOS1gbd * vbd);
+            state.Rhs[MOS1gNode] -= mbp.MOS1type * (ceqgs + ceqgb + ceqgd);
+            state.Rhs[MOS1bNode] -= ceqbs + ceqbd - mbp.MOS1type * ceqgb;
+            state.Rhs[MOS1dNodePrime] += ceqbd + mbp.MOS1type * ceqgd;
+            state.Rhs[MOS1sNodePrime] += ceqbs + mbp.MOS1type * ceqgs;
 
             /* 
 			 * load y matrix
 			 */
-            MOS1BbPtr.Add(eqbd.Geq + eqbs.Geq + eqgb.Geq);
-            MOS1DPdpPtr.Add(eqbd.Geq + eqgd.Geq);
-            MOS1SPspPtr.Add(eqbs.Geq + eqgs.Geq);
-            MOS1GbPtr.Sub(eqgb.Geq);
-            MOS1GdpPtr.Sub(eqgd.Geq);
-            MOS1GspPtr.Sub(eqgs.Geq);
-            MOS1BgPtr.Sub(eqgb.Geq);
-            MOS1BdpPtr.Sub(eqbd.Geq);
-            MOS1BspPtr.Sub(eqbs.Geq);
-            MOS1DPgPtr.Sub(eqgd.Geq);
-            MOS1DPbPtr.Sub(eqbd.Geq);
-            MOS1SPgPtr.Sub(eqgs.Geq);
-            MOS1SPbPtr.Sub(eqbs.Geq);
+            MOS1GgPtr.Add(gcgd + gcgs + gcgb);
+            MOS1BbPtr.Add((MOS1gbd + MOS1gbs + gcgb));
+            MOS1DPdpPtr.Add(MOS1gbd + gcgd);
+            MOS1SPspPtr.Add(MOS1gbs + gcgs);
+            MOS1GbPtr.Sub(gcgb);
+            MOS1GdpPtr.Sub(gcgd);
+            MOS1GspPtr.Sub(gcgs);
+            MOS1BgPtr.Sub(gcgb);
+            MOS1BdpPtr.Sub(MOS1gbd);
+            MOS1BspPtr.Sub(MOS1gbs);
+            MOS1DPgPtr.Sub(gcgd);
+            MOS1DPbPtr.Sub(MOS1gbd);
+            MOS1SPgPtr.Sub(gcgs);
+            MOS1SPbPtr.Sub(MOS1gbs);
         }
 
         /// <summary>

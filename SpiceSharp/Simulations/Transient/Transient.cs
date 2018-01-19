@@ -243,13 +243,13 @@ namespace SpiceSharp.Simulations
                     }
                 }
             }
-            catch (CircuitException)
+            catch (CircuitException ex)
             {
                 // Keep our statistics
                 ckt.Statistics.TransientTime.Stop();
                 ckt.Statistics.TranIter += ckt.Statistics.NumIter - startIters;
                 ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
-                throw;
+                throw new CircuitException($"{Name}: transient terminated", ex);
             }
         }
     }
