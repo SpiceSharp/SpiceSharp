@@ -164,11 +164,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         public override void InitializeParameters(FrequencySimulation sim)
         {
             var state = sim.Circuit.State;
-            double vt, EffectiveLength, DrainSatCur, SourceSatCur, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
-                OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat, von, evbs, evbd,
-                vdsat, cdrain = 0.0, sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs,
-                ceqbd, cdreq;
-            int Check, xnrm, xrev;
+            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
+                OxideCap, vgs, vbs, vbd, vgb, vgd, von,
+                vdsat, sargsw;
 
             vbs = load.MOS2vbs;
             vbd = load.MOS2vbd;
@@ -177,12 +175,6 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
             vgb = load.MOS2vgs - load.MOS2vbs;
             von = load.MOS2von;
             vdsat = load.MOS2vdsat;
-
-            double MOS2gbd = 0.0;
-            double MOS2cbd = 0.0;
-            double MOS2cd = 0.0;
-            double MOS2gbs = 0.0;
-            double MOS2cbs = 0.0;
 
             EffectiveLength = bp.MOS2l - 2 * mbp.MOS2latDiff;
             GateSourceOverlapCap = mbp.MOS2gateSourceOverlapCapFactor * bp.MOS2w;
