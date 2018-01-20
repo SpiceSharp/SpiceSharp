@@ -77,6 +77,22 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         public TransientBehavior(Identifier name) : base(name) { }
 
         /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
+        {
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+            mbp = provider.GetParameters<ModelBaseParameters>(1);
+
+            // Get behaviors
+            temp = provider.GetBehavior<TemperatureBehavior>();
+            load = provider.GetBehavior<LoadBehavior>();
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
+        }
+
+        /// <summary>
         /// Connect
         /// </summary>
         /// <param name="pins">Pins</param>
@@ -154,16 +170,33 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         }
 
         /// <summary>
+        /// Create states
+        /// </summary>
+        /// <param name="states">States</param>
+        public override void CreateStates(StatePool states)
+        {
+            MOS2vbs = states.CreateHistory();
+            MOS2vgs = states.CreateHistory();
+            MOS2vds = states.CreateHistory();
+            MOS2capgs = states.CreateHistory();
+            MOS2capgd = states.CreateHistory();
+            MOS2capgb = states.CreateHistory();
+            MOS2qgs = states.Create();
+            MOS2qgd = states.Create();
+            MOS2qgb = states.Create();
+            MOS2qbd = states.Create();
+            MOS2qbs = states.Create();
+        }
+
+        /// <summary>
         /// Calculate initial states
         /// </summary>
         /// <param name="sim">Simulation</param>
         public override void GetDCstate(TimeSimulation sim)
         {
-            double vt, EffectiveLength, DrainSatCur, SourceSatCur, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
-                OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat, von, evbs, evbd,
-                vdsat, cdrain = 0.0, sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs,
-                ceqbd, cdreq;
-            int Check, xnrm, xrev;
+            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
+                OxideCap, vgs, vbs, vbd, vgb, vgd, von,
+                vdsat, sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0; ;
 
             vbs = load.MOS2vbs;
             vbd = load.MOS2vbd;
@@ -176,12 +209,6 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
             MOS2vds.Value = load.MOS2vds;
             MOS2vbs.Value = vbs;
             MOS2vgs.Value = vgs;
-
-            double MOS2gbd = 0.0;
-            double MOS2cbd = 0.0;
-            double MOS2cd = 0.0;
-            double MOS2gbs = 0.0;
-            double MOS2cbs = 0.0;
 
             EffectiveLength = bp.MOS2l - 2 * mbp.MOS2latDiff;
             GateSourceOverlapCap = mbp.MOS2gateSourceOverlapCapFactor * bp.MOS2w;
