@@ -1,29 +1,28 @@
 ﻿using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
+using SpiceSharp.Components.Mosfet.Level3;
 
-namespace SpiceSharp.Behaviors.MOS3
+namespace SpiceSharp.Behaviors.Mosfet.Level3
 {
     /// <summary>
     /// AC behavior for <see cref="Components.MOS3"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior
+    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
-        private TemperatureBehavior temp;
-        private ModelTemperatureBehavior modeltemp;
+        BaseParameters bp;
+        ModelBaseParameters mbp;
+        LoadBehavior load;
+        TemperatureBehavior temp;
+        ModelTemperatureBehavior modeltemp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int MOS3dNode, MOS3gNode, MOS3sNode, MOS3bNode, MOS3dNodePrime, MOS3sNodePrime;
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
+        int MOS3dNode, MOS3gNode, MOS3sNode, MOS3bNode, MOS3dNodePrime, MOS3sNodePrime;
         protected MatrixElement MOS3DdPtr { get; private set; }
         protected MatrixElement MOS3GgPtr { get; private set; }
         protected MatrixElement MOS3SsPtr { get; private set; }
@@ -48,28 +47,50 @@ namespace SpiceSharp.Behaviors.MOS3
         protected MatrixElement MOS3SPdpPtr { get; private set; }
 
         /// <summary>
-        /// Setup the behavior
+        /// Constructor
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
-        {
-            var mos3 = component as Components.MOS3;
-            load = GetBehavior<LoadBehavior>(component);
-            temp = GetBehavior<TemperatureBehavior>(component);
-            modeltemp = GetBehavior<ModelTemperatureBehavior>(mos3.Model);
+        /// <param name="name">Name</param>
+        public AcBehavior(Identifier name) : base(name) { }
 
-            // Get nodes
-            MOS3dNode = mos3.MOS3dNode;
-            MOS3gNode = mos3.MOS3gNode;
-            MOS3sNode = mos3.MOS3sNode;
-            MOS3bNode = mos3.MOS3bNode;
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
+        {
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+            mbp = provider.GetParameters<ModelBaseParameters>(1);
+
+            // Get behaviors
+            temp = provider.GetBehavior<TemperatureBehavior>();
+            load = provider.GetBehavior<LoadBehavior>();
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
+        }
+
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            MOS3dNode = pins[0];
+            MOS3gNode = pins[1];
+            MOS3sNode = pins[2];
+            MOS3bNode = pins[3];
+        }
+
+        /// <summary>
+        /// Get matrix pionters
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
+            // Get extra equations
             MOS3dNodePrime = load.MOS3dNodePrime;
             MOS3sNodePrime = load.MOS3sNodePrime;
 
-            // Get matrix elements
-            var matrix = ckt.State.Matrix;
+            // Get matrix pointers
             MOS3DdPtr = matrix.GetElement(MOS3dNode, MOS3dNode);
             MOS3GgPtr = matrix.GetElement(MOS3gNode, MOS3gNode);
             MOS3SsPtr = matrix.GetElement(MOS3sNode, MOS3sNode);
@@ -92,6 +113,36 @@ namespace SpiceSharp.Behaviors.MOS3
             MOS3DPbPtr = matrix.GetElement(MOS3dNodePrime, MOS3bNode);
             MOS3SPbPtr = matrix.GetElement(MOS3sNodePrime, MOS3bNode);
             MOS3SPdpPtr = matrix.GetElement(MOS3sNodePrime, MOS3dNodePrime);
+        }
+
+        /// <summary>
+        /// Unsetup
+        /// </summary>
+        public override void Unsetup()
+        {
+            // Remove references
+            MOS3DdPtr = null;
+            MOS3GgPtr = null;
+            MOS3SsPtr = null;
+            MOS3BbPtr = null;
+            MOS3DPdpPtr = null;
+            MOS3SPspPtr = null;
+            MOS3DdpPtr = null;
+            MOS3GbPtr = null;
+            MOS3GdpPtr = null;
+            MOS3GspPtr = null;
+            MOS3SspPtr = null;
+            MOS3BdpPtr = null;
+            MOS3BspPtr = null;
+            MOS3DPspPtr = null;
+            MOS3DPdPtr = null;
+            MOS3BgPtr = null;
+            MOS3DPgPtr = null;
+            MOS3SPgPtr = null;
+            MOS3SPsPtr = null;
+            MOS3DPbPtr = null;
+            MOS3SPbPtr = null;
+            MOS3SPdpPtr = null;
         }
 
         /// <summary>
@@ -120,10 +171,10 @@ namespace SpiceSharp.Behaviors.MOS3
             /* 
 			 * charge oriented model parameters
 			 */
-            EffectiveLength = temp.MOS3l - 2 * modeltemp.MOS3latDiff;
-            GateSourceOverlapCap = modeltemp.MOS3gateSourceOverlapCapFactor * temp.MOS3w;
-            GateDrainOverlapCap = modeltemp.MOS3gateDrainOverlapCapFactor * temp.MOS3w;
-            GateBulkOverlapCap = modeltemp.MOS3gateBulkOverlapCapFactor * EffectiveLength;
+            EffectiveLength = bp.MOS3l - 2 * mbp.MOS3latDiff;
+            GateSourceOverlapCap = mbp.MOS3gateSourceOverlapCapFactor * bp.MOS3w;
+            GateDrainOverlapCap = mbp.MOS3gateDrainOverlapCapFactor * bp.MOS3w;
+            GateBulkOverlapCap = mbp.MOS3gateBulkOverlapCapFactor * EffectiveLength;
 
             /* 
 			 * meyer"s model parameters

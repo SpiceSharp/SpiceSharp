@@ -73,6 +73,10 @@
     <Compile Include="Components\Semiconductors\MOS\Level2\ModelBaseParameters.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level2\ModelNoiseParameters.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level2\TransientBehavior.cs" />
+    <Compile Include="Components\Semiconductors\MOS\Level3\BaseParameters.cs" />
+    <Compile Include="Components\Semiconductors\MOS\Level3\ModelBaseParameters.cs" />
+    <Compile Include="Components\Semiconductors\MOS\Level3\ModelNoiseParameters.cs" />
+    <Compile Include="Components\Semiconductors\MOS\Level3\TransientBehavior.cs" />
     <Compile Include="Components\Switches\CSW\AcceptBehavior.cs" />
     <Compile Include="Components\Switches\CSW\BaseParameters.cs" />
     <Compile Include="Components\Switches\CSW\ModelBaseParameters.cs" />
@@ -130,7 +134,6 @@
     <Compile Include="Components\Semiconductors\MOS\Level2\TemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level3\AcBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level3\LoadBehavior.cs" />
-    <Compile Include="Components\Semiconductors\MOS\Level3\ModelNoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level3\ModelTemperatureBehavior.cs" />
     <Compile Include="Attributes\SpiceParameters.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level3\NoiseBehavior.cs" />
