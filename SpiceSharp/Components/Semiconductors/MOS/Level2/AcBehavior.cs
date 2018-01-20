@@ -1,29 +1,40 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
+using SpiceSharp.Components.Mosfet.Level2;
+using SpiceSharp.Simulations;
+using SpiceSharp.Components.Transistors;
 
-namespace SpiceSharp.Behaviors.MOS2
+namespace SpiceSharp.Behaviors.Mosfet.Level2
 {
     /// <summary>
     /// AC behavior for a <see cref="Components.MOS2"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior
+    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
-        private TemperatureBehavior temp;
-        private ModelTemperatureBehavior modeltemp;
+        BaseParameters bp;
+        ModelBaseParameters mbp;
+        LoadBehavior load;
+        TemperatureBehavior temp;
+        ModelTemperatureBehavior modeltemp;
+
+        /// <summary>
+        /// Shared variables
+        /// </summary>
+        public double MOS2capgs { get; protected set; }
+        public double MOS2capgd { get; protected set; }
+        public double MOS2capgb { get; protected set; }
+        public double MOS2capbd { get; protected set; }
+        public double MOS2capbs { get; protected set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int MOS2dNode, MOS2gNode, MOS2sNode, MOS2bNode, MOS2dNodePrime, MOS2sNodePrime;
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
+        int MOS2dNode, MOS2gNode, MOS2sNode, MOS2bNode, MOS2dNodePrime, MOS2sNodePrime;
         protected MatrixElement MOS2DdPtr { get; private set; }
         protected MatrixElement MOS2GgPtr { get; private set; }
         protected MatrixElement MOS2SsPtr { get; private set; }
@@ -48,30 +59,50 @@ namespace SpiceSharp.Behaviors.MOS2
         protected MatrixElement MOS2SPdpPtr { get; private set; }
 
         /// <summary>
-        /// Setup the behavior
+        /// Constructor
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="name">Name</param>
+        public AcBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var mos2 = component as Components.MOS2;
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+            mbp = provider.GetParameters<ModelBaseParameters>(1);
 
             // Get behaviors
-            load = GetBehavior<LoadBehavior>(component);
-            temp = GetBehavior<TemperatureBehavior>(component);
-            modeltemp = GetBehavior<ModelTemperatureBehavior>(mos2.Model);
+            temp = provider.GetBehavior<TemperatureBehavior>();
+            load = provider.GetBehavior<LoadBehavior>();
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
+        }
 
-            // Get nodes
-            MOS2dNode = mos2.MOS2dNode;
-            MOS2gNode = mos2.MOS2gNode;
-            MOS2sNode = mos2.MOS2sNode;
-            MOS2bNode = mos2.MOS2bNode;
-            MOS2dNodePrime = load.MOS2dNodePrime;
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            MOS2dNode = pins[0];
+            MOS2gNode = pins[1];
+            MOS2sNode = pins[2];
+            MOS2bNode = pins[3];
+        }
+
+        /// <summary>
+        /// Get matrix pointers
+        /// </summary>
+        /// <param name="matrix">Matrix</param>
+        public override void GetMatrixPointers(Matrix matrix)
+        {
+            // Get extra equations
             MOS2sNodePrime = load.MOS2sNodePrime;
+            MOS2dNodePrime = load.MOS2dNodePrime;
 
             // Get matrix elements
-            var matrix = ckt.State.Matrix;
             MOS2DdPtr = matrix.GetElement(MOS2dNode, MOS2dNode);
             MOS2GgPtr = matrix.GetElement(MOS2gNode, MOS2gNode);
             MOS2SsPtr = matrix.GetElement(MOS2sNode, MOS2sNode);
@@ -97,6 +128,195 @@ namespace SpiceSharp.Behaviors.MOS2
         }
 
         /// <summary>
+        /// Unsetup the behavior
+        /// </summary>
+        public override void Unsetup()
+        {
+            // Remove references
+            MOS2DdPtr = null;
+            MOS2GgPtr = null;
+            MOS2SsPtr = null;
+            MOS2BbPtr = null;
+            MOS2DPdpPtr = null;
+            MOS2SPspPtr = null;
+            MOS2DdpPtr = null;
+            MOS2GbPtr = null;
+            MOS2GdpPtr = null;
+            MOS2GspPtr = null;
+            MOS2SspPtr = null;
+            MOS2BdpPtr = null;
+            MOS2BspPtr = null;
+            MOS2DPspPtr = null;
+            MOS2DPdPtr = null;
+            MOS2BgPtr = null;
+            MOS2DPgPtr = null;
+            MOS2SPgPtr = null;
+            MOS2SPsPtr = null;
+            MOS2DPbPtr = null;
+            MOS2SPbPtr = null;
+            MOS2SPdpPtr = null;
+        }
+
+        /// <summary>
+        /// Initialize AC parameters
+        /// </summary>
+        /// <param name="sim"></param>
+        public override void InitializeParameters(FrequencySimulation sim)
+        {
+            var state = sim.Circuit.State;
+            double vt, EffectiveLength, DrainSatCur, SourceSatCur, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
+                OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat, von, evbs, evbd,
+                vdsat, cdrain = 0.0, sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs,
+                ceqbd, cdreq;
+            int Check, xnrm, xrev;
+
+            vbs = load.MOS2vbs;
+            vbd = load.MOS2vbd;
+            vgs = load.MOS2vgs;
+            vgd = load.MOS2vgs - load.MOS2vds;
+            vgb = load.MOS2vgs - load.MOS2vbs;
+            von = load.MOS2von;
+            vdsat = load.MOS2vdsat;
+
+            double MOS2gbd = 0.0;
+            double MOS2cbd = 0.0;
+            double MOS2cd = 0.0;
+            double MOS2gbs = 0.0;
+            double MOS2cbs = 0.0;
+
+            EffectiveLength = bp.MOS2l - 2 * mbp.MOS2latDiff;
+            GateSourceOverlapCap = mbp.MOS2gateSourceOverlapCapFactor * bp.MOS2w;
+            GateDrainOverlapCap = mbp.MOS2gateDrainOverlapCapFactor * bp.MOS2w;
+            GateBulkOverlapCap = mbp.MOS2gateBulkOverlapCapFactor * EffectiveLength;
+            OxideCap = modeltemp.MOS2oxideCapFactor * EffectiveLength * bp.MOS2w;
+
+            /* 
+            * now we do the hard part of the bulk - drain and bulk - source
+            * diode - we evaluate the non - linear capacitance and
+            * charge
+            * 
+            * the basic equations are not hard, but the implementation
+            * is somewhat long in an attempt to avoid log / exponential
+            * evaluations
+            */
+            /* 
+            * charge storage elements
+            * 
+            * .. bulk - drain and bulk - source depletion capacitances
+            */
+            if (vbs < temp.MOS2tDepCap)
+            {
+                double arg = 1 - vbs / temp.MOS2tBulkPot, sarg;
+                /* 
+                * the following block looks somewhat long and messy, 
+                * but since most users use the default grading
+                * coefficients of .5, and sqrt is MUCH faster than an
+                * Math.Exp(Math.Log()) we use this special case code to buy time.
+                * (as much as 10% of total job time!)
+                */
+                if (mbp.MOS2bulkJctBotGradingCoeff.Value == mbp.MOS2bulkJctSideGradingCoeff)
+                {
+                    if (mbp.MOS2bulkJctBotGradingCoeff.Value == .5)
+                    {
+                        sarg = sargsw = 1 / Math.Sqrt(arg);
+                    }
+                    else
+                    {
+                        sarg = sargsw = Math.Exp(-mbp.MOS2bulkJctBotGradingCoeff * Math.Log(arg));
+                    }
+                }
+                else
+                {
+                    if (mbp.MOS2bulkJctBotGradingCoeff.Value == .5)
+                    {
+                        sarg = 1 / Math.Sqrt(arg);
+                    }
+                    else
+                    {
+                        /* NOSQRT */
+                        sarg = Math.Exp(-mbp.MOS2bulkJctBotGradingCoeff * Math.Log(arg));
+                    }
+                    if (mbp.MOS2bulkJctSideGradingCoeff.Value == .5)
+                    {
+                        sargsw = 1 / Math.Sqrt(arg);
+                    }
+                    else
+                    {
+                        /* NOSQRT */
+                        sargsw = Math.Exp(-mbp.MOS2bulkJctSideGradingCoeff * Math.Log(arg));
+                    }
+                }
+                // NOSQRT
+                MOS2capbs = temp.MOS2Cbs * sarg + temp.MOS2Cbssw * sargsw;
+            }
+            else
+            {
+                MOS2capbs = temp.MOS2f2s + temp.MOS2f3s * vbs;
+            }
+
+            if (vbd < temp.MOS2tDepCap)
+            {
+                double arg = 1 - vbd / temp.MOS2tBulkPot, sarg;
+                /* 
+                * the following block looks somewhat long and messy, 
+                * but since most users use the default grading
+                * coefficients of .5, and sqrt is MUCH faster than an
+                * Math.Exp(Math.Log()) we use this special case code to buy time.
+                * (as much as 10% of total job time!)
+                */
+                if (mbp.MOS2bulkJctBotGradingCoeff.Value == .5 && mbp.MOS2bulkJctSideGradingCoeff.Value == .5)
+                {
+                    sarg = sargsw = 1 / Math.Sqrt(arg);
+                }
+                else
+                {
+                    if (mbp.MOS2bulkJctBotGradingCoeff.Value == .5)
+                    {
+                        sarg = 1 / Math.Sqrt(arg);
+                    }
+                    else
+                    {
+                        /* NOSQRT */
+                        sarg = Math.Exp(-mbp.MOS2bulkJctBotGradingCoeff * Math.Log(arg));
+                    }
+                    if (mbp.MOS2bulkJctSideGradingCoeff.Value == .5)
+                    {
+                        sargsw = 1 / Math.Sqrt(arg);
+                    }
+                    else
+                    {
+                        /* NOSQRT */
+                        sargsw = Math.Exp(-mbp.MOS2bulkJctSideGradingCoeff * Math.Log(arg));
+                    }
+                }
+                /* NOSQRT */
+                MOS2capbd = temp.MOS2Cbd * sarg + temp.MOS2Cbdsw * sargsw;
+            }
+            else
+            {
+                MOS2capbd = temp.MOS2f2d + vbd * temp.MOS2f3d;
+            }
+
+            /* 
+             * calculate meyer's capacitors
+             */
+            double icapgs, icapgd, icapgb;
+            if (load.MOS2mode > 0)
+            {
+                Transistor.DEVqmeyer(vgs, vgd, vgb, von, vdsat,
+                    out icapgs, out icapgd, out icapgb, temp.MOS2tPhi, OxideCap);
+            }
+            else
+            {
+                Transistor.DEVqmeyer(vgd, vgs, vgb, von, vdsat,
+                    out icapgd, out icapgs, out icapgb, temp.MOS2tPhi, OxideCap);
+            }
+            MOS2capgs = icapgs;
+            MOS2capgd = icapgd;
+            MOS2capgb = icapgb;
+        }
+
+        /// <summary>
         /// Execute the behavior
         /// </summary>
         /// <param name="ckt"></param>
@@ -119,20 +339,20 @@ namespace SpiceSharp.Behaviors.MOS2
                 xrev = 0;
             }
             /* 
-			* meyer's model parameters
-			*/
-            EffectiveLength = temp.MOS2l - 2 * modeltemp.MOS2latDiff;
-            GateSourceOverlapCap = modeltemp.MOS2gateSourceOverlapCapFactor * temp.MOS2w;
-            GateDrainOverlapCap = modeltemp.MOS2gateDrainOverlapCapFactor * temp.MOS2w;
-            GateBulkOverlapCap = modeltemp.MOS2gateBulkOverlapCapFactor * EffectiveLength;
-            capgs = (state.States[0][load.MOS2states + LoadBehavior.MOS2capgs] + state.States[0][load.MOS2states + LoadBehavior.MOS2capgs] + GateSourceOverlapCap);
-            capgd = (state.States[0][load.MOS2states + LoadBehavior.MOS2capgd] + state.States[0][load.MOS2states + LoadBehavior.MOS2capgd] + GateDrainOverlapCap);
-            capgb = (state.States[0][load.MOS2states + LoadBehavior.MOS2capgb] + state.States[0][load.MOS2states + LoadBehavior.MOS2capgb] + GateBulkOverlapCap);
+			 * meyer's model parameters
+			 */
+            EffectiveLength = bp.MOS2l - 2 * mbp.MOS2latDiff;
+            GateSourceOverlapCap = mbp.MOS2gateSourceOverlapCapFactor * bp.MOS2w;
+            GateDrainOverlapCap = mbp.MOS2gateDrainOverlapCapFactor * bp.MOS2w;
+            GateBulkOverlapCap = mbp.MOS2gateBulkOverlapCapFactor * EffectiveLength;
+            capgs = MOS2capgs + MOS2capgs + GateSourceOverlapCap;
+            capgd = MOS2capgd + MOS2capgd + GateDrainOverlapCap;
+            capgb = MOS2capgb + MOS2capgb + GateBulkOverlapCap;
             xgs = capgs * cstate.Laplace.Imaginary;
             xgd = capgd * cstate.Laplace.Imaginary;
             xgb = capgb * cstate.Laplace.Imaginary;
-            xbd = load.MOS2capbd * cstate.Laplace.Imaginary;
-            xbs = load.MOS2capbs * cstate.Laplace.Imaginary;
+            xbd = MOS2capbd * cstate.Laplace.Imaginary;
+            xbs = MOS2capbs * cstate.Laplace.Imaginary;
 
             /* 
 			 * load matrix

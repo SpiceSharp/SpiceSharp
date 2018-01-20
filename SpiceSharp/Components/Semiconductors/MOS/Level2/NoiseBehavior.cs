@@ -2,29 +2,37 @@
 using SpiceSharp.Components;
 using SpiceSharp.Components.Noise;
 using SpiceSharp.Circuits;
+using SpiceSharp.Components.Mosfet.Level2;
 
-namespace SpiceSharp.Behaviors.MOS2
+namespace SpiceSharp.Behaviors.Mosfet.Level2
 {
     /// <summary>
     /// Noise behavior for <see cref="Components.MOS2"/>
     /// </summary>
-    public class NoiseBehavior : Behaviors.NoiseBehavior
+    public class NoiseBehavior : Behaviors.NoiseBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior load;
-        private TemperatureBehavior temp;
-        private ModelTemperatureBehavior modeltemp;
-        private ModelNoiseBehavior modelnoise;
+        BaseParameters bp;
+        ModelBaseParameters mbp;
+        ModelNoiseParameters mnp;
+        LoadBehavior load;
+        TemperatureBehavior temp;
+        ModelTemperatureBehavior modeltemp;
 
         /// <summary>
         /// Noise generators by their index
         /// </summary>
-        private const int MOS2RDNOIZ = 0;
-        private const int MOS2RSNOIZ = 1;
-        private const int MOS2IDNOIZ = 2;
-        private const int MOS2FLNOIZ = 3;
+        const int MOS2RDNOIZ = 0;
+        const int MOS2RSNOIZ = 1;
+        const int MOS2IDNOIZ = 2;
+        const int MOS2FLNOIZ = 3;
+
+        /// <summary>
+        /// Nodes
+        /// </summary>
+        int MOS2dNode, MOS2gNode, MOS2sNode, MOS2bNode, MOS2sNodePrime, MOS2dNodePrime;
 
         /// <summary>
         /// Noise generators
@@ -37,27 +45,51 @@ namespace SpiceSharp.Behaviors.MOS2
             );
 
         /// <summary>
-        /// Setup the behavior
+        /// Constructor
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="name">Name</param>
+        public NoiseBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
+        public override void Setup(SetupDataProvider provider)
         {
-            var mos2 = component as Components.MOS2;
+            // Get parameters
+            bp = provider.GetParameters<BaseParameters>();
+            mbp = provider.GetParameters<ModelBaseParameters>(1);
+            mnp = provider.GetParameters<ModelNoiseParameters>(1);
 
             // Get behaviors
-            load = GetBehavior<LoadBehavior>(component);
-            temp = GetBehavior<TemperatureBehavior>(component);
-            modeltemp = GetBehavior<ModelTemperatureBehavior>(mos2.Model);
-            modelnoise = GetBehavior<ModelNoiseBehavior>(mos2.Model);
+            temp = provider.GetBehavior<TemperatureBehavior>();
+            load = provider.GetBehavior<LoadBehavior>();
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
+        }
 
-            MOS2noise.Setup(
-                mos2.MOS2dNode,
-                mos2.MOS2gNode,
-                mos2.MOS2sNode,
-                mos2.MOS2bNode,
-                load.MOS2dNodePrime,
-                load.MOS2sNodePrime);
+        /// <summary>
+        /// Connect
+        /// </summary>
+        /// <param name="pins">Pins</param>
+        public void Connect(params int[] pins)
+        {
+            MOS2dNode = pins[0];
+            MOS2gNode = pins[1];
+            MOS2sNode = pins[2];
+            MOS2bNode = pins[3];
+        }
+
+        /// <summary>
+        /// Connect noise sources
+        /// </summary>
+        public override void ConnectNoise()
+        {
+            // Get extra equations
+            MOS2dNodePrime = load.MOS2dNodePrime;
+            MOS2sNodePrime = load.MOS2sNodePrime;
+
+            // Connect noise source
+            MOS2noise.Setup(MOS2dNode, MOS2gNode, MOS2sNode, MOS2bNode, MOS2dNodePrime, MOS2sNodePrime);
         }
 
         /// <summary>
@@ -66,15 +98,14 @@ namespace SpiceSharp.Behaviors.MOS2
         /// <param name="ckt"></param>
         public override void Noise(Circuit ckt)
         {
-            var state = ckt.State;
-            var noise = state.Noise;
+            var noise = ckt.State.Noise;
 
             // Set noise parameters
             MOS2noise.Generators[MOS2RDNOIZ].Set(temp.MOS2drainConductance);
             MOS2noise.Generators[MOS2RSNOIZ].Set(temp.MOS2sourceConductance);
             MOS2noise.Generators[MOS2IDNOIZ].Set(2.0 / 3.0 * Math.Abs(load.MOS2gm));
-            MOS2noise.Generators[MOS2FLNOIZ].Set(modelnoise.MOS2fNcoef * Math.Exp(modelnoise.MOS2fNexp * Math.Log(Math.Max(Math.Abs(load.MOS2cd), 1e-38))) 
-                / (temp.MOS2w * (temp.MOS2l - 2 * modeltemp.MOS2latDiff) * modeltemp.MOS2oxideCapFactor * modeltemp.MOS2oxideCapFactor) / noise.Freq);
+            MOS2noise.Generators[MOS2FLNOIZ].Set(mnp.MOS2fNcoef * Math.Exp(mnp.MOS2fNexp * Math.Log(Math.Max(Math.Abs(load.MOS2cd), 1e-38))) 
+                / (bp.MOS2w * (bp.MOS2l - 2 * mbp.MOS2latDiff) * modeltemp.MOS2oxideCapFactor * modeltemp.MOS2oxideCapFactor) / noise.Freq);
 
             // Evaluate noise sources
             MOS2noise.Evaluate(ckt);

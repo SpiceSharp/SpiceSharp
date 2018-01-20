@@ -3,7 +3,8 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
-using SpiceSharp.Behaviors.MOS2;
+using SpiceSharp.Behaviors.Mosfet.Level2;
+using SpiceSharp.Components.Mosfet.Level2;
 
 namespace SpiceSharp.Components
 {
@@ -42,11 +43,14 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public MOS2(Identifier name) : base(name, MOS2pinCount)
         {
-            RegisterBehavior(new TemperatureBehavior());
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new NoiseBehavior());
-            RegisterBehavior(new TruncateBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
         }
 
         /// <summary>
