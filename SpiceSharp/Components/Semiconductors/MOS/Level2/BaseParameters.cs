@@ -42,7 +42,6 @@ namespace SpiceSharp.Components.Mosfet.Level2
         public Parameter MOS2icVDS { get; } = new Parameter();
         [SpiceName("icvgs"), SpiceInfo("Initial G-S voltage")]
         public Parameter MOS2icVGS { get; } = new Parameter();
-
         [SpiceName("ic"), SpiceInfo("Vector of D-S, G-S, B-S voltages")]
         public void SetIC(double[] value)
         {

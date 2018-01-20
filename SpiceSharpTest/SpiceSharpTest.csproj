@@ -60,7 +60,7 @@
     <Compile Include="Models\Semiconductors\Bipolar\SpiceSharpBipolarTest.cs" />
     <Compile Include="Models\Semiconductors\DIO\SpiceSharpDiodeTest.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level1\MOS1Test.cs" />
-    <Compile Include="Models\Semiconductors\Mosfet\Level2\SpiceSharpMOS2Test.cs" />
+    <Compile Include="Models\Semiconductors\Mosfet\Level2\MOS2Test.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level3\SpiceSharpMOS3Test.cs" />
     <Compile Include="Sparse\SparseBuildTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

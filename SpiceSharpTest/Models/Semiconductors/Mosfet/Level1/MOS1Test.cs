@@ -9,7 +9,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharpTest.Models.Mosfet.Level1
 {
     [TestClass]
-    public class SpiceSharpMOS1Test : Framework
+    public class MOS1Test : Framework
     {
         /// <summary>
         /// Create a MOSFET
