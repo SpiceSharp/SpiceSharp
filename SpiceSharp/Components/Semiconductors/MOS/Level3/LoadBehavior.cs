@@ -24,118 +24,43 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// Shared variables
         /// </summary>
         [SpiceName("von"), SpiceInfo("Turn-on voltage")]
-        public double MOS3von { get; internal set; }
+        public double MOS3von { get; protected set; }
         [SpiceName("vdsat"), SpiceInfo("Saturation drain voltage")]
-        public double MOS3vdsat { get; internal set; }
+        public double MOS3vdsat { get; protected set; }
         [SpiceName("id"), SpiceName("cd"), SpiceInfo("Drain current")]
-        public double MOS3cd { get; internal set; }
+        public double MOS3cd { get; protected set; }
         [SpiceName("ibs"), SpiceInfo("B-S junction current")]
-        public double MOS3cbs { get; internal set; }
+        public double MOS3cbs { get; protected set; }
         [SpiceName("ibd"), SpiceInfo("B-D junction current")]
-        public double MOS3cbd { get; internal set; }
+        public double MOS3cbd { get; protected set; }
         [SpiceName("gmb"), SpiceName("gmbs"), SpiceInfo("Bulk-Source transconductance")]
-        public double MOS3gmbs { get; internal set; }
+        public double MOS3gmbs { get; protected set; }
         [SpiceName("gm"), SpiceInfo("Transconductance")]
-        public double MOS3gm { get; internal set; }
+        public double MOS3gm { get; protected set; }
         [SpiceName("gds"), SpiceInfo("Drain-Source conductance")]
-        public double MOS3gds { get; internal set; }
+        public double MOS3gds { get; protected set; }
         [SpiceName("gbd"), SpiceInfo("Bulk-Drain conductance")]
-        public double MOS3gbd { get; internal set; }
+        public double MOS3gbd { get; protected set; }
         [SpiceName("gbs"), SpiceInfo("Bulk-Source conductance")]
-        public double MOS3gbs { get; internal set; }
-        [SpiceName("cbd"), SpiceInfo("Bulk-Drain capacitance")]
-        public double MOS3capbd { get; internal set; }
-        [SpiceName("cbs"), SpiceInfo("Bulk-Source capacitance")]
-        public double MOS3capbs { get; internal set; }
-
-        /// <summary>
-        /// Methods
-        /// </summary>
-        /// <param name="ckt"></param>
-        /// <returns></returns>
-        [SpiceName("vbd"), SpiceInfo("Bulk-Drain voltage")]
-        public double GetVBD(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3vbd];
-        [SpiceName("vbs"), SpiceInfo("Bulk-Source voltage")]
-        public double GetVBS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3vbs];
-        [SpiceName("vgs"), SpiceInfo("Gate-Source voltage")]
-        public double GetVGS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3vgs];
-        [SpiceName("vds"), SpiceInfo("Drain-Source voltage")]
-        public double GetVDS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3vds];
-        [SpiceName("cgs"), SpiceInfo("Gate-Source capacitance")]
-        public double GetCAPGS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3capgs];
-        [SpiceName("qgs"), SpiceInfo("Gate-Source charge storage")]
-        public double GetQGS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3qgs];
-        [SpiceName("cqgs"), SpiceInfo("Capacitance due to gate-source charge storage")]
-        public double GetCQGS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3cqgs];
-        [SpiceName("cgd"), SpiceInfo("Gate-Drain capacitance")]
-        public double GetCAPGD(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3capgd];
-        [SpiceName("qgd"), SpiceInfo("Gate-Drain charge storage")]
-        public double GetQGD(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3qgd];
-        [SpiceName("cqgd"), SpiceInfo("Capacitance due to gate-drain charge storage")]
-        public double GetCQGD(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3cqgd];
-        [SpiceName("cgb"), SpiceInfo("Gate-Bulk capacitance")]
-        public double GetCAPGB(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3capgb];
-        [SpiceName("qgb"), SpiceInfo("Gate-Bulk charge storage")]
-        public double GetQGB(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3qgb];
-        [SpiceName("cqgb"), SpiceInfo("Capacitance due to gate-bulk charge storage")]
-        public double GetCQGB(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3cqgb];
-        [SpiceName("qbd"), SpiceInfo("Bulk-Drain charge storage")]
-        public double GetQBD(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3qbd];
-        [SpiceName("cqbd"), SpiceInfo("Capacitance due to bulk-drain charge storage")]
-        public double GetCQBD(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3cqbd];
-        [SpiceName("qbs"), SpiceInfo("Bulk-Source charge storage")]
-        public double GetQBS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3qbs];
-        [SpiceName("cqbs"), SpiceInfo("Capacitance due to bulk-source charge storage")]
-        public double GetCQBS(Circuit ckt) => ckt.State.States[0][MOS3states + MOS3cqbs];
-        [SpiceName("ib"), SpiceInfo("Bulk current")]
-        public double GetCB(Circuit ckt) => MOS3cbd + MOS3cbs - ckt.State.States[0][MOS3states + MOS3cqgb];
-        [SpiceName("ig"), SpiceInfo("Gate current")]
-        public double GetCG(Circuit ckt) => ckt.State.UseDC ? 0.0 : ckt.State.States[0][MOS3states + MOS3cqgb] + ckt.State.States[0][MOS3states + MOS3cqgd] +
-            ckt.State.States[0][MOS3states + MOS3cqgs];
-        [SpiceName("is"), SpiceInfo("Source current")]
-        public double GetCS(Circuit ckt)
-        {
-            double value = -MOS3cd;
-            value -= MOS3cbd + MOS3cbs - ckt.State.States[0][MOS3states + MOS3cqgb];
-            if (ckt.State.Domain == State.DomainTypes.Time && !ckt.State.UseDC)
-            {
-                value -= ckt.State.States[0][MOS3states + MOS3cqgb] + ckt.State.States[0][MOS3states + MOS3cqgd] +
-                    ckt.State.States[0][MOS3states + MOS3cqgs];
-            }
-            return value;
-        }
-        [SpiceName("p"), SpiceInfo("Instantaneous power")]
-        public double GetPOWER(Circuit ckt)
-        {
-            double temp;
-
-            double value = MOS3cd * ckt.State.Solution[MOS3dNode];
-            value += (MOS3cbd + MOS3cbs - ckt.State.States[0][MOS3states + MOS3cqgb]) * ckt.State.Solution[MOS3bNode];
-            if (ckt.State.Domain == State.DomainTypes.Time && !ckt.State.UseDC)
-            {
-                value += (ckt.State.States[0][MOS3states + MOS3cqgb] + ckt.State.States[0][MOS3states + MOS3cqgd] +
-                    ckt.State.States[0][MOS3states + MOS3cqgs]) * ckt.State.Solution[MOS3gNode];
-            }
-            temp = -MOS3cd;
-            temp -= MOS3cbd + MOS3cbs;
-            if (ckt.State.Domain == State.DomainTypes.Time && !ckt.State.UseDC)
-            {
-                temp -= ckt.State.States[0][MOS3states + MOS3cqgb] + ckt.State.States[0][MOS3states + MOS3cqgd] +
-                    ckt.State.States[0][MOS3states + MOS3cqgs];
-            }
-            value += temp * ckt.State.Solution[MOS3sNode];
-            return value;
-        }
+        public double MOS3gbs { get; protected set; }
 
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double MOS3mode { get; internal set; }
-        public int MOS3states { get; internal set; }
+        public double MOS3mode { get; protected set; }
+        public double MOS3vbd { get; protected set; }
+        public double MOS3vbs { get; protected set; }
+        public double MOS3vgs { get; protected set; }
+        public double MOS3vds { get; protected set; }
 
         /// <summary>
-        /// Matrix elements
+        /// Nodes
         /// </summary>
+        int MOS3dNode, MOS3gNode, MOS3sNode, MOS3bNode;
+        [SpiceName("dnodeprime"), SpiceInfo("Number of protected drain node")]
+        public int MOS3dNodePrime { get; protected set; }
+        [SpiceName("snodeprime"), SpiceInfo("Number of protected source node")]
+        public int MOS3sNodePrime { get; protected set; }
         protected MatrixElement MOS3DdPtr { get; private set; }
         protected MatrixElement MOS3GgPtr { get; private set; }
         protected MatrixElement MOS3SsPtr { get; private set; }
@@ -158,36 +83,6 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         protected MatrixElement MOS3DPbPtr { get; private set; }
         protected MatrixElement MOS3SPbPtr { get; private set; }
         protected MatrixElement MOS3SPdpPtr { get; private set; }
-
-        /// <summary>
-        /// Constants
-        /// </summary>
-        public const int MOS3vbd = 0;
-        public const int MOS3vbs = 1;
-        public const int MOS3vgs = 2;
-        public const int MOS3vds = 3;
-        public const int MOS3capgs = 4;
-        public const int MOS3qgs = 5;
-        public const int MOS3cqgs = 6;
-        public const int MOS3capgd = 7;
-        public const int MOS3qgd = 8;
-        public const int MOS3cqgd = 9;
-        public const int MOS3capgb = 10;
-        public const int MOS3qgb = 11;
-        public const int MOS3cqgb = 12;
-        public const int MOS3qbd = 13;
-        public const int MOS3cqbd = 14;
-        public const int MOS3qbs = 15;
-        public const int MOS3cqbs = 16;
-
-        /// <summary>
-        /// Nodes
-        /// </summary>
-        protected int MOS3dNode, MOS3gNode, MOS3sNode, MOS3bNode;
-        [SpiceName("dnodeprime"), SpiceInfo("Number of internal drain node")]
-        public int MOS3dNodePrime { get; internal set; }
-        [SpiceName("snodeprime"), SpiceInfo("Number of internal source node")]
-        public int MOS3sNodePrime { get; internal set; }
 
         /// <summary>
         /// Constructor
@@ -336,9 +231,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
                 DrainSatCur = temp.MOS3tSatCurDens * bp.MOS3drainArea;
                 SourceSatCur = temp.MOS3tSatCurDens * bp.MOS3sourceArea;
             }
-            GateSourceOverlapCap = mbp.MOS3gateSourceOverlapCapFactor * bp.MOS3w;
-            GateDrainOverlapCap = mbp.MOS3gateDrainOverlapCapFactor * bp.MOS3w;
-            GateBulkOverlapCap = mbp.MOS3gateBulkOverlapCapFactor * EffectiveLength;
+
             Beta = temp.MOS3tTransconductance * bp.MOS3w / EffectiveLength;
             OxideCap = modeltemp.MOS3oxideCapFactor * EffectiveLength * bp.MOS3w;
 
@@ -367,31 +260,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
 
                 vbd = vbs - vds;
                 vgd = vgs - vds;
-                vgdo = state.States[0][MOS3states + MOS3vgs] - state.States[0][MOS3states + MOS3vds];
-                delvbs = vbs - state.States[0][MOS3states + MOS3vbs];
-                delvbd = vbd - state.States[0][MOS3states + MOS3vbd];
-                delvgs = vgs - state.States[0][MOS3states + MOS3vgs];
-                delvds = vds - state.States[0][MOS3states + MOS3vds];
-                delvgd = vgd - vgdo;
-
-                /* these are needed for convergence testing */
-
-                if (MOS3mode >= 0)
-                {
-                    cdhat = MOS3cd - MOS3gbd * delvbd + MOS3gmbs * delvbs + MOS3gm * delvgs + MOS3gds * delvds;
-                }
-                else
-                {
-                    cdhat = MOS3cd - (MOS3gbd - MOS3gmbs) * delvbd - MOS3gm * delvgd + MOS3gds * delvds;
-                }
-                cbhat = MOS3cbs + MOS3cbd + MOS3gbd * delvbd + MOS3gbs * delvbs;
-
-                /* DETAILPROF */
-                /* NOBYPASS */
-
-                /* DETAILPROF */
-                /* ok - bypass is out, do it the hard way */
-
+                vgdo = MOS3vgs - MOS3vds;
                 von = mbp.MOS3type * MOS3von;
 
                 /* 
@@ -401,28 +270,28 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
 				* and similar rudeness
 				*/
 
-                if (state.States[0][MOS3states + MOS3vds] >= 0)
+                if (MOS3vds >= 0)
                 {
-                    vgs = Transistor.DEVfetlim(vgs, state.States[0][MOS3states + MOS3vgs], von);
+                    vgs = Transistor.DEVfetlim(vgs, MOS3vgs, von);
                     vds = vgs - vgd;
-                    vds = Transistor.DEVlimvds(vds, state.States[0][MOS3states + MOS3vds]);
+                    vds = Transistor.DEVlimvds(vds, MOS3vds);
                     vgd = vgs - vds;
                 }
                 else
                 {
                     vgd = Transistor.DEVfetlim(vgd, vgdo, von);
                     vds = vgs - vgd;
-                    vds = -Transistor.DEVlimvds(-vds, -(state.States[0][MOS3states + MOS3vds]));
+                    vds = -Transistor.DEVlimvds(-vds, -MOS3vds);
                     vgs = vgd + vds;
                 }
                 if (vds >= 0)
                 {
-                    vbs = Transistor.DEVpnjlim(vbs, state.States[0][MOS3states + MOS3vbs], vt, temp.MOS3sourceVcrit, ref Check);
+                    vbs = Transistor.DEVpnjlim(vbs, MOS3vbs, vt, temp.MOS3sourceVcrit, ref Check);
                     vbd = vbs - vds;
                 }
                 else
                 {
-                    vbd = Transistor.DEVpnjlim(vbd, state.States[0][MOS3states + MOS3vbd], vt, temp.MOS3drainVcrit, ref Check);
+                    vbd = Transistor.DEVpnjlim(vbd, MOS3vbd, vt, temp.MOS3drainVcrit, ref Check);
                     vbs = vbd + vds;
                 }
                 /* NODELIMITING */
@@ -857,155 +726,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
 			*/
             MOS3cd = MOS3mode * cdrain - MOS3cbd;
 
-            if (state.Domain == State.DomainTypes.Time || state.UseSmallSignal)
-            {
-                /* 
-				* now we do the hard part of the bulk - drain and bulk - source
-				* diode - we evaluate the non - linear capacitance and
-				* charge
-				* 
-				* the basic equations are not hard, but the implementation
-				* is somewhat long in an attempt to avoid log / exponential
-				* evaluations
-				*/
-                /* 
-				* charge storage elements
-				* 
-				* .. bulk - drain and bulk - source depletion capacitances
-				*/
-                /* CAPBYPASS */
-                {
-                    /* can't bypass the diode capacitance calculations */
-                    /* CAPZEROBYPASS */
-                    if (vbs < temp.MOS3tDepCap)
-                    {
-                        double arg = 1 - vbs / temp.MOS3tBulkPot, sarg;
-                        /* 
-						* the following block looks somewhat long and messy, 
-						* but since most users use the default grading
-						* coefficients of .5, and sqrt is MUCH faster than an
-						* Math.Exp(Math.Log()) we use this special case code to buy time.
-						* (as much as 10% of total job time!)
-						*/
-                        if (mbp.MOS3bulkJctBotGradingCoeff.Value == mbp.MOS3bulkJctSideGradingCoeff)
-                        {
-                            if (mbp.MOS3bulkJctBotGradingCoeff.Value == .5)
-                            {
-                                sarg = sargsw = 1 / Math.Sqrt(arg);
-                            }
-                            else
-                            {
-                                sarg = sargsw = Math.Exp(-mbp.MOS3bulkJctBotGradingCoeff * Math.Log(arg));
-                            }
-                        }
-                        else
-                        {
-                            if (mbp.MOS3bulkJctBotGradingCoeff.Value == .5)
-                            {
-                                sarg = 1 / Math.Sqrt(arg);
-                            }
-                            else
-                            {
-                                /* NOSQRT */
-                                sarg = Math.Exp(-mbp.MOS3bulkJctBotGradingCoeff * Math.Log(arg));
-                            }
-                            if (mbp.MOS3bulkJctSideGradingCoeff.Value == .5)
-                            {
-                                sargsw = 1 / Math.Sqrt(arg);
-                            }
-                            else
-                            {
-                                /* NOSQRT */
-                                sargsw = Math.Exp(-mbp.MOS3bulkJctSideGradingCoeff * Math.Log(arg));
-                            }
-                        }
-                        /* NOSQRT */
-                        state.States[0][MOS3states + MOS3qbs] = temp.MOS3tBulkPot * (temp.MOS3Cbs * (1 - arg * sarg) / (1 - mbp.MOS3bulkJctBotGradingCoeff) +
-                            temp.MOS3Cbssw * (1 - arg * sargsw) / (1 - mbp.MOS3bulkJctSideGradingCoeff));
-                        MOS3capbs = temp.MOS3Cbs * sarg + temp.MOS3Cbssw * sargsw;
-                    }
-                    else
-                    {
-                        state.States[0][MOS3states + MOS3qbs] = temp.MOS3f4s + vbs * (temp.MOS3f2s + vbs * (temp.MOS3f3s / 2));
-                        MOS3capbs = temp.MOS3f2s + temp.MOS3f3s * vbs;
-                    }
-                    /* CAPZEROBYPASS */
-                }
-                /* CAPBYPASS */
-                /* can't bypass the diode capacitance calculations */
-                {
-                    /* CAPZEROBYPASS */
-                    if (vbd < temp.MOS3tDepCap)
-                    {
-                        double arg = 1 - vbd / temp.MOS3tBulkPot, sarg;
-                        /* 
-						* the following block looks somewhat long and messy, 
-						* but since most users use the default grading
-						* coefficients of .5, and sqrt is MUCH faster than an
-						* Math.Exp(Math.Log()) we use this special case code to buy time.
-						* (as much as 10% of total job time!)
-						*/
-                        if (mbp.MOS3bulkJctBotGradingCoeff.Value == .5 && mbp.MOS3bulkJctSideGradingCoeff.Value == .5)
-                        {
-                            sarg = sargsw = 1 / Math.Sqrt(arg);
-                        }
-                        else
-                        {
-                            if (mbp.MOS3bulkJctBotGradingCoeff.Value == .5)
-                            {
-                                sarg = 1 / Math.Sqrt(arg);
-                            }
-                            else
-                            {
-                                /* NOSQRT */
-                                sarg = Math.Exp(-mbp.MOS3bulkJctBotGradingCoeff * Math.Log(arg));
-                            }
-                            if (mbp.MOS3bulkJctSideGradingCoeff.Value == .5)
-                            {
-                                sargsw = 1 / Math.Sqrt(arg);
-                            }
-                            else
-                            {
-                                /* NOSQRT */
-                                sargsw = Math.Exp(-mbp.MOS3bulkJctSideGradingCoeff * Math.Log(arg));
-                            }
-                        }
-                        /* NOSQRT */
-                        state.States[0][MOS3states + MOS3qbd] = temp.MOS3tBulkPot * (temp.MOS3Cbd * (1 - arg * sarg) / (1 - mbp.MOS3bulkJctBotGradingCoeff) +
-                            temp.MOS3Cbdsw * (1 - arg * sargsw) / (1 - mbp.MOS3bulkJctSideGradingCoeff));
-                        MOS3capbd = temp.MOS3Cbd * sarg + temp.MOS3Cbdsw * sargsw;
-                    }
-                    else
-                    {
-                        state.States[0][MOS3states + MOS3qbd] = temp.MOS3f4d + vbd * (temp.MOS3f2d + vbd * temp.MOS3f3d / 2);
-                        MOS3capbd = temp.MOS3f2d + vbd * temp.MOS3f3d;
-                    }
-                    /* CAPZEROBYPASS */
-                }
-                /* DETAILPROF */
 
-                if (method != null)
-                {
-                    /* (above only excludes tranop, since we're only at this
-					* point if tran or tranop)
-					*/
-
-                    /* 
-					* calculate equivalent conductances and currents for
-					* depletion capacitors
-					*/
-
-                    /* integrate the capacitors and save results */
-                    var result = method.Integrate(state, MOS3states + MOS3qbd, MOS3capbd);
-                    MOS3gbd += result.Geq;
-                    MOS3cbd += state.States[0][MOS3states + MOS3cqbd];
-                    MOS3cd -= state.States[0][MOS3states + MOS3cqbd];
-                    result = method.Integrate(state, MOS3states + MOS3qbs, MOS3capbs);
-                    MOS3gbs += result.Geq;
-                    MOS3cbs += state.States[0][MOS3states + MOS3cqbs];
-                }
-            }
-            /* DETAILPROF */
 
             /* 
 			 * check convergence
@@ -1019,119 +740,16 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
             /* DETAILPROF */
 
             /* save things away for next time */
-
-            state.States[0][MOS3states + MOS3vbs] = vbs;
-            state.States[0][MOS3states + MOS3vbd] = vbd;
-            state.States[0][MOS3states + MOS3vgs] = vgs;
-            state.States[0][MOS3states + MOS3vds] = vds;
-
+            MOS3vbs = vbs;
+            MOS3vbd = vbd;
+            MOS3vgs = vgs;
+            MOS3vds = vds;
             /* DETAILPROF */
 
             /* 
 			 * meyer's capacitor model
 			 */
-            if (state.Domain == State.DomainTypes.Time || state.UseSmallSignal)
-            {
-                /* 
-				 * calculate meyer's capacitors
-				 */
-                /* 
-				 * new cmeyer - this just evaluates at the current time, 
-				 * expects you to remember values from previous time
-				 * returns 1 / 2 of non - constant portion of capacitance
-				 * you must add in the other half from previous time
-				 * and the constant part
-				 */
-                double icapgs, icapgd, icapgb;
-                if (MOS3mode > 0)
-                {
-                    Transistor.DEVqmeyer(vgs, vgd, vgb, von, vdsat,
-                        out icapgs, out icapgd, out icapgb, temp.MOS3tPhi, OxideCap);
-                }
-                else
-                {
-                    Transistor.DEVqmeyer(vgd, vgs, vgb, von, vdsat,
-                        out icapgd, out icapgs, out icapgb, temp.MOS3tPhi, OxideCap);
-                }
-                state.States[0][MOS3states + MOS3capgs] = icapgs;
-                state.States[0][MOS3states + MOS3capgd] = icapgd;
-                state.States[0][MOS3states + MOS3capgb] = icapgb;
-                vgs1 = state.States[1][MOS3states + MOS3vgs];
-                vgd1 = vgs1 - state.States[1][MOS3states + MOS3vds];
-                vgb1 = vgs1 - state.States[1][MOS3states + MOS3vbs];
-                if (state.Domain == State.DomainTypes.Time && state.UseDC)
-                {
-                    capgs = 2 * state.States[0][MOS3states + MOS3capgs] + GateSourceOverlapCap;
-                    capgd = 2 * state.States[0][MOS3states + MOS3capgd] + GateDrainOverlapCap;
-                    capgb = 2 * state.States[0][MOS3states + MOS3capgb] + GateBulkOverlapCap;
-                }
-                else
-                {
-                    capgs = (state.States[0][MOS3states + MOS3capgs] + state.States[1][MOS3states + MOS3capgs] + GateSourceOverlapCap);
-                    capgd = (state.States[0][MOS3states + MOS3capgd] + state.States[1][MOS3states + MOS3capgd] + GateDrainOverlapCap);
-                    capgb = (state.States[0][MOS3states + MOS3capgb] + state.States[1][MOS3states + MOS3capgb] + GateBulkOverlapCap);
-                }
 
-                /* DETAILPROF */
-                /* 
-				 * store small - signal parameters (for meyer's model)
-				 * all parameters already stored, so done...
-				 */
-
-                /* PREDICTOR */
-                if (method != null)
-                {
-                    state.States[0][MOS3states + MOS3qgs] = (vgs - vgs1) * capgs + state.States[1][MOS3states + MOS3qgs];
-                    state.States[0][MOS3states + MOS3qgd] = (vgd - vgd1) * capgd + state.States[1][MOS3states + MOS3qgd];
-                    state.States[0][MOS3states + MOS3qgb] = (vgb - vgb1) * capgb + state.States[1][MOS3states + MOS3qgb];
-                }
-                else
-                {
-                    /* TRANOP only */
-                    state.States[0][MOS3states + MOS3qgs] = vgs * capgs;
-                    state.States[0][MOS3states + MOS3qgd] = vgd * capgd;
-                    state.States[0][MOS3states + MOS3qgb] = vgb * capgb;
-                }
-                /* PREDICTOR */
-            }
-
-            /* DETAILPROF */
-
-            if (method == null || state.Init == State.InitFlags.InitTransient)
-            {
-                /* 
-				 * initialize to zero charge conductances 
-				 * and current
-				 */
-                gcgs = 0;
-                ceqgs = 0;
-                gcgd = 0;
-                ceqgd = 0;
-                gcgb = 0;
-                ceqgb = 0;
-            }
-            else
-            {
-                if (capgs == 0)
-                    state.States[0][MOS3states + MOS3cqgs] = 0;
-                if (capgd == 0)
-                    state.States[0][MOS3states + MOS3cqgd] = 0;
-                if (capgb == 0)
-                    state.States[0][MOS3states + MOS3cqgb] = 0;
-                /* 
-				 * calculate equivalent conductances and currents for
-				 * meyer"s capacitors
-				 */
-                method.Integrate(state, out gcgs, out ceqgs, MOS3states + MOS3qgs, capgs);
-                method.Integrate(state, out gcgd, out ceqgd, MOS3states + MOS3qgd, capgd);
-                method.Integrate(state, out gcgb, out ceqgb, MOS3states + MOS3qgb, capgb);
-                ceqgs = ceqgs - gcgs * vgs + method.Slope * state.States[0][MOS3states + MOS3qgs];
-                ceqgd = ceqgd - gcgd * vgd + method.Slope * state.States[0][MOS3states + MOS3qgd];
-                ceqgb = ceqgb - gcgb * vgb + method.Slope * state.States[0][MOS3states + MOS3qgb];
-            }
-            /* 
-			 * store charge storage info for meyer's cap in lx table
-			 */
 
             /* DETAILPROF */
             /* 
@@ -1152,33 +770,27 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
                 cdreq = -(mbp.MOS3type) * (cdrain - MOS3gds * (-vds) - MOS3gm * vgd - MOS3gmbs * vbd);
             }
 
-            rstate.Rhs[MOS3gNode] -= (mbp.MOS3type * (ceqgs + ceqgb + ceqgd));
-            rstate.Rhs[MOS3bNode] -= (ceqbs + ceqbd - mbp.MOS3type * ceqgb);
-            rstate.Rhs[MOS3dNodePrime] += (ceqbd - cdreq + mbp.MOS3type * ceqgd);
-            rstate.Rhs[MOS3sNodePrime] += cdreq + ceqbs + mbp.MOS3type * ceqgs;
+            rstate.Rhs[MOS3bNode] -= (ceqbs + ceqbd);
+            rstate.Rhs[MOS3dNodePrime] += (ceqbd - cdreq);
+            rstate.Rhs[MOS3sNodePrime] += cdreq + ceqbs;
 
             /* 
 			 * load y matrix
 			 */
             MOS3DdPtr.Add(temp.MOS3drainConductance);
-            MOS3GgPtr.Add(gcgd + gcgs + gcgb);
             MOS3SsPtr.Add(temp.MOS3sourceConductance);
-            MOS3BbPtr.Add(MOS3gbd + MOS3gbs + gcgb);
-            MOS3DPdpPtr.Add(temp.MOS3drainConductance + MOS3gds + MOS3gbd + xrev * (MOS3gm + MOS3gmbs) + gcgd);
-            MOS3SPspPtr.Add(temp.MOS3sourceConductance + MOS3gds + MOS3gbs + xnrm * (MOS3gm + MOS3gmbs) + gcgs);
+            MOS3BbPtr.Add(MOS3gbd + MOS3gbs);
+            MOS3DPdpPtr.Add(temp.MOS3drainConductance + MOS3gds + MOS3gbd + xrev * (MOS3gm + MOS3gmbs));
+            MOS3SPspPtr.Add(temp.MOS3sourceConductance + MOS3gds + MOS3gbs + xnrm * (MOS3gm + MOS3gmbs));
             MOS3DdpPtr.Add(-temp.MOS3drainConductance);
-            MOS3GbPtr.Sub(gcgb);
-            MOS3GdpPtr.Sub(gcgd);
-            MOS3GspPtr.Sub(gcgs);
             MOS3SspPtr.Add(-temp.MOS3sourceConductance);
-            MOS3BgPtr.Sub(gcgb);
             MOS3BdpPtr.Sub(MOS3gbd);
             MOS3BspPtr.Sub(MOS3gbs);
             MOS3DPdPtr.Add(-temp.MOS3drainConductance);
-            MOS3DPgPtr.Add((xnrm - xrev) * MOS3gm - gcgd);
+            MOS3DPgPtr.Add((xnrm - xrev) * MOS3gm);
             MOS3DPbPtr.Add(-MOS3gbd + (xnrm - xrev) * MOS3gmbs);
             MOS3DPspPtr.Add(-MOS3gds - xnrm * (MOS3gm + MOS3gmbs));
-            MOS3SPgPtr.Add(-(xnrm - xrev) * MOS3gm - gcgs);
+            MOS3SPgPtr.Add(-(xnrm - xrev) * MOS3gm);
             MOS3SPsPtr.Add(-temp.MOS3sourceConductance);
             MOS3SPbPtr.Add(-MOS3gbs - (xnrm - xrev) * MOS3gmbs);
             MOS3SPdpPtr.Add(-MOS3gds - xrev * (MOS3gm + MOS3gmbs));
@@ -1200,11 +812,11 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
             vds = mbp.MOS3type * (state.Solution[MOS3dNodePrime] - state.Solution[MOS3sNodePrime]);
             vbd = vbs - vds;
             vgd = vgs - vds;
-            vgdo = state.States[0][MOS3states + MOS3vgs] - state.States[0][MOS3states + MOS3vds];
-            delvbs = vbs - state.States[0][MOS3states + MOS3vbs];
-            delvbd = vbd - state.States[0][MOS3states + MOS3vbd];
-            delvgs = vgs - state.States[0][MOS3states + MOS3vgs];
-            delvds = vds - state.States[0][MOS3states + MOS3vds];
+            vgdo = MOS3vgs - MOS3vds;
+            delvbs = vbs - MOS3vbs;
+            delvbd = vbd - MOS3vbd;
+            delvgs = vgs - MOS3vgs;
+            delvds = vds - MOS3vds;
             delvgd = vgd - vgdo;
 
             /* these are needed for convergence testing */

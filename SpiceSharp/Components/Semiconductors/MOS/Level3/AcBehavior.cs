@@ -1,7 +1,10 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.Mosfet.Level3;
+using SpiceSharp.Components.Transistors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.Mosfet.Level3
 {
@@ -18,6 +21,15 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         LoadBehavior load;
         TemperatureBehavior temp;
         ModelTemperatureBehavior modeltemp;
+
+        /// <summary>
+        /// Shared variables
+        /// </summary>
+        public double MOS3capbs { get; protected set; }
+        public double MOS3capbd { get; protected set; }
+        public double MOS3capgs { get; protected set; }
+        public double MOS3capgd { get; protected set; }
+        public double MOS3capgb { get; protected set; }
 
         /// <summary>
         /// Nodes
@@ -146,6 +158,179 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         }
 
         /// <summary>
+        /// Initialize AC parameters
+        /// </summary>
+        /// <param name="sim"></param>
+        public override void InitializeParameters(FrequencySimulation sim)
+        {
+            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
+                OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
+                sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb;
+
+            vbs = load.MOS3vbs;
+            vbd = load.MOS3vbd;
+            vgs = load.MOS3vgs;
+            vds = load.MOS3vds;
+            vgd = vgs - vds;
+            vgb = vgs - vbs;
+            von = load.MOS3von;
+            vdsat = load.MOS3vdsat;
+
+            double MOS3gbd = 0.0;
+            double MOS3cbd = 0.0;
+            double MOS3cd = 0.0;
+            double MOS3gbs = 0.0;
+            double MOS3cbs = 0.0;
+
+            EffectiveLength = bp.MOS3l - 2 * mbp.MOS3latDiff;
+            GateSourceOverlapCap = mbp.MOS3gateSourceOverlapCapFactor * bp.MOS3w;
+            GateDrainOverlapCap = mbp.MOS3gateDrainOverlapCapFactor * bp.MOS3w;
+            GateBulkOverlapCap = mbp.MOS3gateBulkOverlapCapFactor * EffectiveLength;
+            OxideCap = modeltemp.MOS3oxideCapFactor * EffectiveLength * bp.MOS3w;
+
+            /* 
+            * now we do the hard part of the bulk - drain and bulk - source
+            * diode - we evaluate the non - linear capacitance and
+            * charge
+            * 
+            * the basic equations are not hard, but the implementation
+            * is somewhat long in an attempt to avoid log / exponential
+            * evaluations
+            */
+            /* 
+            * charge storage elements
+            * 
+            * .. bulk - drain and bulk - source depletion capacitances
+            */
+            /* CAPBYPASS */
+
+            /* can't bypass the diode capacitance calculations */
+            /* CAPZEROBYPASS */
+            if (vbs < temp.MOS3tDepCap)
+            {
+                double arg = 1 - vbs / temp.MOS3tBulkPot, sarg;
+                /* 
+                * the following block looks somewhat long and messy, 
+                * but since most users use the default grading
+                * coefficients of .5, and sqrt is MUCH faster than an
+                * Math.Exp(Math.Log()) we use this special case code to buy time.
+                * (as much as 10% of total job time!)
+                */
+                if (mbp.MOS3bulkJctBotGradingCoeff.Value == mbp.MOS3bulkJctSideGradingCoeff)
+                {
+                    if (mbp.MOS3bulkJctBotGradingCoeff.Value == .5)
+                    {
+                        sarg = sargsw = 1 / Math.Sqrt(arg);
+                    }
+                    else
+                    {
+                        sarg = sargsw = Math.Exp(-mbp.MOS3bulkJctBotGradingCoeff * Math.Log(arg));
+                    }
+                }
+                else
+                {
+                    if (mbp.MOS3bulkJctBotGradingCoeff.Value == .5)
+                    {
+                        sarg = 1 / Math.Sqrt(arg);
+                    }
+                    else
+                    {
+                        /* NOSQRT */
+                        sarg = Math.Exp(-mbp.MOS3bulkJctBotGradingCoeff * Math.Log(arg));
+                    }
+                    if (mbp.MOS3bulkJctSideGradingCoeff.Value == .5)
+                    {
+                        sargsw = 1 / Math.Sqrt(arg);
+                    }
+                    else
+                    {
+                        /* NOSQRT */
+                        sargsw = Math.Exp(-mbp.MOS3bulkJctSideGradingCoeff * Math.Log(arg));
+                    }
+                }
+                /* NOSQRT */
+                MOS3capbs = temp.MOS3Cbs * sarg + temp.MOS3Cbssw * sargsw;
+            }
+            else
+            {
+                MOS3capbs = temp.MOS3f2s + temp.MOS3f3s * vbs;
+            }
+
+            if (vbd < temp.MOS3tDepCap)
+            {
+                double arg = 1 - vbd / temp.MOS3tBulkPot, sarg;
+                /* 
+                * the following block looks somewhat long and messy, 
+                * but since most users use the default grading
+                * coefficients of .5, and sqrt is MUCH faster than an
+                * Math.Exp(Math.Log()) we use this special case code to buy time.
+                * (as much as 10% of total job time!)
+                */
+                if (mbp.MOS3bulkJctBotGradingCoeff.Value == .5 && mbp.MOS3bulkJctSideGradingCoeff.Value == .5)
+                {
+                    sarg = sargsw = 1 / Math.Sqrt(arg);
+                }
+                else
+                {
+                    if (mbp.MOS3bulkJctBotGradingCoeff.Value == .5)
+                    {
+                        sarg = 1 / Math.Sqrt(arg);
+                    }
+                    else
+                    {
+                        /* NOSQRT */
+                        sarg = Math.Exp(-mbp.MOS3bulkJctBotGradingCoeff * Math.Log(arg));
+                    }
+                    if (mbp.MOS3bulkJctSideGradingCoeff.Value == .5)
+                    {
+                        sargsw = 1 / Math.Sqrt(arg);
+                    }
+                    else
+                    {
+                        /* NOSQRT */
+                        sargsw = Math.Exp(-mbp.MOS3bulkJctSideGradingCoeff * Math.Log(arg));
+                    }
+                }
+                /* NOSQRT */
+                MOS3capbd = temp.MOS3Cbd * sarg + temp.MOS3Cbdsw * sargsw;
+            }
+            else
+            {
+                MOS3capbd = temp.MOS3f2d + vbd * temp.MOS3f3d;
+            }
+            /* CAPZEROBYPASS */
+
+            /* (above only excludes tranop, since we're only at this
+            * point if tran or tranop)
+            */
+
+            /* 
+             * calculate meyer's capacitors
+             */
+            /* 
+             * new cmeyer - this just evaluates at the current time, 
+             * expects you to remember values from previous time
+             * returns 1 / 2 of non - constant portion of capacitance
+             * you must add in the other half from previous time
+             * and the constant part
+             */
+            double icapgs, icapgd, icapgb;
+            if (load.MOS3mode > 0)
+            {
+                Transistor.DEVqmeyer(vgs, vgd, vgb, von, vdsat,
+                    out icapgs, out icapgd, out icapgb, temp.MOS3tPhi, OxideCap);
+            }
+            else
+            {
+                Transistor.DEVqmeyer(vgd, vgs, vgb, von, vdsat,
+                    out icapgd, out icapgs, out icapgb, temp.MOS3tPhi, OxideCap);
+            }
+            MOS3capgs = icapgs;
+            MOS3capgd = icapgd;
+            MOS3capgb = icapgb;
+        }
+
+        /// <summary>
         /// Execute behavior
         /// </summary>
         /// <param name="ckt">Circuit</param>
@@ -179,14 +364,14 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
             /* 
 			 * meyer"s model parameters
 			 */
-            capgs = (state.States[0][load.MOS3states + LoadBehavior.MOS3capgs] + state.States[0][load.MOS3states + LoadBehavior.MOS3capgs] + GateSourceOverlapCap);
-            capgd = (state.States[0][load.MOS3states + LoadBehavior.MOS3capgd] + state.States[0][load.MOS3states + LoadBehavior.MOS3capgd] + GateDrainOverlapCap);
-            capgb = (state.States[0][load.MOS3states + LoadBehavior.MOS3capgb] + state.States[0][load.MOS3states + LoadBehavior.MOS3capgb] + GateBulkOverlapCap);
+            capgs = (MOS3capgs + MOS3capgs + GateSourceOverlapCap);
+            capgd = (MOS3capgd + MOS3capgd + GateDrainOverlapCap);
+            capgb = (MOS3capgb + MOS3capgb + GateBulkOverlapCap);
             xgs = capgs * cstate.Laplace.Imaginary;
             xgd = capgd * cstate.Laplace.Imaginary;
             xgb = capgb * cstate.Laplace.Imaginary;
-            xbd = load.MOS3capbd * cstate.Laplace.Imaginary;
-            xbs = load.MOS3capbs * cstate.Laplace.Imaginary;
+            xbd = MOS3capbd * cstate.Laplace.Imaginary;
+            xbs = MOS3capbs * cstate.Laplace.Imaginary;
 
             /* 
 			 * load matrix

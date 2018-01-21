@@ -116,5 +116,23 @@ namespace SpiceSharp.Components.Mosfet.Level3
         public double MOS3narrowFactor { get; set; }
         public double MOS3type { get; internal set; } = 1.0;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ModelBaseParameters()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="nmos">True for NMOS, false for PMOS</param>
+        public ModelBaseParameters(bool nmos)
+        {
+            if (nmos)
+                MOS3type = 1.0;
+            else
+                MOS3type = -1.0;
+        }
     }
 }

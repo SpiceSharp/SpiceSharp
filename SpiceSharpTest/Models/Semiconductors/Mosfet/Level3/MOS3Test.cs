@@ -1,4 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Numerics;
+using SpiceSharp;
+using SpiceSharp.Circuits;
+using SpiceSharp.Components;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models.Transistors
 {
@@ -8,8 +14,67 @@ namespace SpiceSharpTest.Models.Transistors
     /// .MODEL DMOS PMOS(VTO= -0.7 KP= 3.8E+1 THETA = .25 VMAX= 3.5E5 LEVEL= 3)
     /// </summary>
     [TestClass]
-    public class SpiceSharpMOS3Test : Framework
+    public class MOS3Test : Framework
     {
+        /// <summary>
+        /// Create a MOS3 transistor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="d">Drain</param>
+        /// <param name="g">Gate</param>
+        /// <param name="s">Source</param>
+        /// <param name="b">Bulk</param>
+        /// <param name="modelname">Model name</param>
+        /// <param name="nmos">True for NMOS, false for PMOS</param>
+        /// <param name="modelparams">Model parameters</param>
+        /// <returns></returns>
+        protected MOS3 CreateMOS3(Identifier name, Identifier d, Identifier g, Identifier s, Identifier b,
+            Identifier modelname, bool nmos, string modelparams)
+        {
+            // Create model
+            MOS3Model model = new MOS3Model(modelname, nmos);
+            ApplyParameters(model, modelparams);
+
+            // Create transistor
+            MOS3 mos = new MOS3(name);
+            mos.Connect(d, g, s, b);
+            mos.SetModel(model);
+            return mos;
+        }
+
+        [TestMethod]
+        public void MOS3_DC()
+        {
+            // Create circuit
+            Circuit ckt = new Circuit();
+            ckt.Objects.Add(
+                new Voltagesource("V1", "0", "g", 0),
+                new Voltagesource("V2", "0", "d", 0),
+                CreateMOS3("M1", "d", "g", "0", "0",
+                    "DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
+                );
+            ckt.Objects["M1"].Parameters.Set("w", 1e-6);
+            ckt.Objects["M1"].Parameters.Set("l", 1e-6);
+
+            // Create simulation
+            DC dc = new DC("dc");
+            dc.Sweeps.Add(new DC.Sweep("V2", 0, 1.8, 0.3));
+            dc.Sweeps.Add(new DC.Sweep("V1", 0, 1.8, 0.3));
+
+            // Create exports
+            Func<State, double>[] exports = new Func<State, double>[1];
+            dc.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
+            {
+                exports[0] = dc.CreateExport("V2", "i");
+            };
+
+            // Create references
+            double[][] references = new double[1][];
+            references[0] = new double[] { -1.262177448353619e-29, 0.000000000000000e+00, 0.000000000000000e+00, 0.000000000000000e+00, 0.000000000000000e+00, 0.000000000000000e+00, 0.000000000000000e+00, -4.159905034473416e-13, -4.159905034473416e-13, -4.159905034473416e-13, -7.010973787728751e-01, -3.391621129326464e+00, -5.921232876712748e+00, -8.164781906300902e+00, -8.319810068946831e-13, -8.319810068946831e-13, -8.319810068946831e-13, -7.010973787732908e-01, -3.928205688972319e+00, -8.750000000000831e+00, -1.323794712286243e+01, -1.247971510342025e-12, -1.247971510342025e-12, -1.247971510342025e-12, -7.010973787737074e-01, -3.928205688972735e+00, -9.117778872755419e+00, -1.555322338830710e+01, -1.663962013789366e-12, -1.663962013789366e-12, -1.663962013789366e-12, -7.010973787741221e-01, -3.928205688973152e+00, -9.117778872755839e+00, -1.577264391107695e+01, -2.079952517236708e-12, -2.079952517236708e-12, -2.079952517236708e-12, -7.010973787745387e-01, -3.928205688973566e+00, -9.117778872756254e+00, -1.577264391107736e+01, -2.495943020684050e-12, -2.495943020684050e-12, -2.495943020684050e-12, -7.010973787749553e-01, -3.928205688973984e+00, -9.117778872756670e+00, -1.577264391107778e+01 };
+
+            // Run test
+            AnalyzeDC(dc, ckt, exports, references);
+        }
         /*
         [TestMethod]
         public void TestMOS3_DC()

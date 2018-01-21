@@ -40,11 +40,15 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the device</param>
         public MOS3(Identifier name) : base(name, MOS3pinCount)
         {
-            RegisterBehavior(new TemperatureBehavior());
-            RegisterBehavior(new LoadBehavior());
-            RegisterBehavior(new AcBehavior());
-            RegisterBehavior(new NoiseBehavior());
-            RegisterBehavior(new TruncateBehavior());
+            // Add parameters
+            Parameters.Register(new BaseParameters());
+
+            // Add factories
+            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
+            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
+            AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
         }
 
         /// <summary>

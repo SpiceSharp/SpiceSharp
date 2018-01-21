@@ -22,5 +22,20 @@ namespace SpiceSharp.Components
             // Add factories
             AddFactory(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));
         }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="nmos">True for NMOS transistors, false for PMOS transistors</param>
+        public MOS3Model(Identifier name, bool nmos) : base(name)
+        {
+            // Add parameters
+            Parameters.Register(new ModelBaseParameters(nmos));
+            Parameters.Register(new ModelNoiseParameters());
+
+            // Add factories
+            AddFactory(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));
+        }
     }
 }

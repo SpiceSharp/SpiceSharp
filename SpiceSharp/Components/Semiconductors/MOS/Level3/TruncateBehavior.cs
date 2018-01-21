@@ -32,9 +32,9 @@ namespace SpiceSharp.Behaviors.MOS3
         public override void Truncate(TimeSimulation sim, ref double timestep)
         {
             var method = sim.Circuit.Method;
-            method.Terr(load.MOS3states + LoadBehavior.MOS3qgs, sim, ref timestep);
-            method.Terr(load.MOS3states + LoadBehavior.MOS3qgd, sim, ref timestep);
-            method.Terr(load.MOS3states + LoadBehavior.MOS3qgb, sim, ref timestep);
+            // method.Terr(load.MOS3states + LoadBehavior.MOS3qgs, sim, ref timestep);
+            // method.Terr(load.MOS3states + LoadBehavior.MOS3qgd, sim, ref timestep);
+            // method.Terr(load.MOS3states + LoadBehavior.MOS3qgb, sim, ref timestep);
         }
     }
 }
