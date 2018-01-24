@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.RES;
+using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Behaviors.RES
@@ -14,16 +15,15 @@ namespace SpiceSharp.Behaviors.RES
         /// <summary>
         /// Parameters
         /// </summary>
+        [SpiceName("v"), SpiceInfo("Voltage")]
+        public double GetVoltage(State state) => state.Solution[RESposNode] - state.Solution[RESnegNode];
         [SpiceName("i"), SpiceInfo("Current")]
-        public double GetCurrent(Circuit ckt)
-        {
-            return (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) * RESconduct;
-        }
+        public double GetCurrent(State state) => (state.Solution[RESposNode] - state.Solution[RESnegNode]) * RESconduct;
         [SpiceName("p"), SpiceInfo("Power")]
-        public double GetPower(Circuit ckt)
+        public double GetPower(State state)
         {
-            return (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) *
-                (ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode]) * RESconduct;
+            double v = state.Solution[RESposNode] - state.Solution[RESnegNode];
+            return v * v * RESconduct;
         }
 
         /// <summary>
@@ -60,9 +60,10 @@ namespace SpiceSharp.Behaviors.RES
         {
             switch (property)
             {
-                case "v": return (State state) => state.Solution[RESposNode] - state.Solution[RESnegNode];
+                case "v": return GetVoltage;
                 case "c":
-                case "i": return (State state) => (state.Solution[RESposNode] - state.Solution[RESnegNode]) * RESconduct;
+                case "i": return GetCurrent;
+                case "p": return GetPower;
                 default: return null;
             }
         }
@@ -127,10 +128,10 @@ namespace SpiceSharp.Behaviors.RES
         }
 
         /// <summary>
-        /// Load the matrix
+        /// Execute behavior
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
             RESposPosPtr.Add(RESconduct);
             RESnegNegPtr.Add(RESconduct);

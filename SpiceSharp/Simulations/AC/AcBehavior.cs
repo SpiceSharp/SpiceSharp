@@ -48,7 +48,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Load the Y-matrix and Rhs-vector for AC analysis
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public abstract void Load(Circuit ckt);
+        /// <param name="sim">Frequency-based simulation</param>
+        public abstract void Load(FrequencySimulation sim);
     }
 }

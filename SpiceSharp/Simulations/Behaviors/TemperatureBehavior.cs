@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {
@@ -18,7 +19,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public abstract void Temperature(Circuit ckt);
+        /// <param name="sim">Base simulation</param>
+        public abstract void Temperature(BaseSimulation sim);
     }
 }

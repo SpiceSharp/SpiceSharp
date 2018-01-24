@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components;
+using SpiceSharp.Simulations;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
@@ -9,7 +9,7 @@ using SpiceSharp.Components.VSRC;
 namespace SpiceSharp.Behaviors.VSRC
 {
     /// <summary>
-    /// General behavior for <see cref="Voltagesource"/>
+    /// General behavior for <see cref="Components.Voltagesource"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
@@ -22,9 +22,9 @@ namespace SpiceSharp.Behaviors.VSRC
         /// Methods
         /// </summary>
         [SpiceName("i"), SpiceInfo("Voltage source current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Solution[VSRCbranch];
+        public double GetCurrent(State state) => state.Solution[VSRCbranch];
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Solution[VSRCposNode] - ckt.State.Solution[VSRCnegNode]) * -ckt.State.Solution[VSRCbranch];
+        public double GetPower(State state) => (state.Solution[VSRCposNode] - state.Solution[VSRCnegNode]) * -state.Solution[VSRCbranch];
         [SpiceName("v"), SpiceInfo("Instantaneous voltage")]
         public double VSRCvoltage { get; protected set; }
 
@@ -75,15 +75,15 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <summary>
         /// Create an export method
         /// </summary>
-        /// <param name="parameter">Parameter</param>
+        /// <param name="property">Parameter</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(string parameter)
+        public override Func<State, double> CreateExport(string property)
         {
-            switch (parameter)
+            switch (property)
             {
-                case "i": return (State state) => state.Solution[VSRCbranch];
+                case "i": return GetCurrent;
                 case "v": return (State state) => VSRCvoltage;
-                case "p": return (State state) => (state.Solution[VSRCposNode] - state.Solution[VSRCnegNode]) * -state.Solution[VSRCbranch];
+                case "p": return GetPower;
                 default: return null;
             }
         }
@@ -124,13 +124,12 @@ namespace SpiceSharp.Behaviors.VSRC
         }
 
         /// <summary>
-        /// Execute DC or Transient behavior
+        /// Execute behavior
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
-            var state = ckt.State;
-            var rstate = state;
+            var state = sim.State;
             double time = 0.0;
             double value = 0.0;
 
@@ -141,8 +140,8 @@ namespace SpiceSharp.Behaviors.VSRC
 
             if (state.Domain == State.DomainTypes.Time)
             {
-                if (ckt.Method != null)
-                    time = ckt.Method.Time;
+                if (sim is TimeSimulation tsim)
+                    time = tsim.Method.Time;
 
                 // Use the waveform if possible
                 if (bp.VSRCwaveform != null)
@@ -154,7 +153,7 @@ namespace SpiceSharp.Behaviors.VSRC
             {
                 value = bp.VSRCdcValue * state.SrcFact;
             }
-            rstate.Rhs[VSRCbranch] += value;
+            state.Rhs[VSRCbranch] += value;
         }
     }
 }

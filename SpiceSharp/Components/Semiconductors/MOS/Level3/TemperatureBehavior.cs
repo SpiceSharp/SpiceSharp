@@ -3,6 +3,7 @@ using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.Mosfet.Level3;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.Mosfet.Level3
 {
@@ -107,11 +108,12 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Temperature(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Temperature(BaseSimulation sim)
         {
+            var state = sim.State;
             double vt, ratio, fact2, kt, egfet, arg, pbfact, ratio4, phio, pbo, gmaold, capfact, gmanew, czbd, czbdsw, sarg, sargsw, czbs,
                 czbssw;
 
@@ -119,7 +121,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
 
             if (!bp.MOS3temp.Given)
             {
-                bp.MOS3temp.Value = ckt.State.Temperature;
+                bp.MOS3temp.Value = state.Temperature;
             }
             vt = bp.MOS3temp * Circuit.CONSTKoverQ;
             ratio = bp.MOS3temp / mbp.MOS3tnom;

@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.VSW;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.VSW
 {
@@ -77,13 +77,13 @@ namespace SpiceSharp.Behaviors.VSW
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation sim)
         {
             double g_now;
-            var state = ckt.State;
+            var state = sim.State;
             var cstate = state;
 
             // Get the current state

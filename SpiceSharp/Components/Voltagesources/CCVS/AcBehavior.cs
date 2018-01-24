@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Components.CCVS;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.CCVS
 {
@@ -87,10 +88,10 @@ namespace SpiceSharp.Behaviors.CCVS
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation sim)
         {
             CCVSposIbrptr.Add(1.0);
             CCVSibrPosptr.Add(1.0);

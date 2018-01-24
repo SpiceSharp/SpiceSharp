@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Components;
-using SpiceSharp.Components.Noise;
+using SpiceSharp.Components.NoiseSources;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.RES
 {
@@ -59,13 +60,13 @@ namespace SpiceSharp.Behaviors.RES
         }
 
         /// <summary>
-        /// Execute noise behavior
+        /// Noise calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Noise(Circuit ckt)
+        /// <param name="sim">Noise simulation</param>
+        public override void Noise(Noise sim)
         {
             RESnoise.Generators[0].Set(load.RESconduct);
-            RESnoise.Evaluate(ckt);
+            RESnoise.Evaluate(sim);
         }
     }
 }

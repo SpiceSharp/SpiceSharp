@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Components.Noise
+﻿using SpiceSharp.Simulations;
+
+namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
     /// Thermal noise generator
@@ -29,17 +31,17 @@
         /// <summary>
         /// Calculate the noise quantity
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="param">The conductance of a resistor</param>
+        /// <param name="sim">Noise simulation</param>
         /// <returns></returns>
-        protected override double CalculateNoise(Circuit ckt)
+        protected override double CalculateNoise(Noise sim)
         {
-            var rsol = ckt.State.Solution;
-            var isol = ckt.State.iSolution;
+            var state = sim.State;
+            var rsol = state.Solution;
+            var isol = state.iSolution;
             var rval = rsol[NOISEnodes[0]] - rsol[NOISEnodes[1]];
             var ival = isol[NOISEnodes[0]] - isol[NOISEnodes[1]];
             double gain = rval * rval + ival * ival;
-            return 4.0 * Circuit.CONSTBoltz * ckt.State.Temperature * Conductance * gain;
+            return 4.0 * Circuit.CONSTBoltz * sim.State.Temperature * Conductance * gain;
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System;
 using SpiceSharp.Components;
-using SpiceSharp.Components.Noise;
+using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.Mosfet.Level2;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.Mosfet.Level2
 {
@@ -93,12 +94,12 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Noise calculations
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Noise(Circuit ckt)
+        /// <param name="sim">Noise simulation</param>
+        public override void Noise(Noise sim)
         {
-            var noise = ckt.State.Noise;
+            var noise = sim.State.Noise;
 
             // Set noise parameters
             MOS2noise.Generators[MOS2RDNOIZ].Set(temp.MOS2drainConductance);
@@ -108,7 +109,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
                 / (bp.MOS2w * (bp.MOS2l - 2 * mbp.MOS2latDiff) * modeltemp.MOS2oxideCapFactor * modeltemp.MOS2oxideCapFactor) / noise.Freq);
 
             // Evaluate noise sources
-            MOS2noise.Evaluate(ckt);
+            MOS2noise.Evaluate(sim);
         }
     }
 }

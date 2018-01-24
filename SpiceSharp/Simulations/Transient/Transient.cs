@@ -86,10 +86,10 @@ namespace SpiceSharp.Simulations
         {
             // First do temperature-dependent calculations and IC
             base.Execute();
+            var exportargs = new ExportDataEventArgs(State, Method);
 
             var ckt = Circuit;
-            var state = ckt.State;
-            var rstate = state;
+            var state = State;
             var config = CurrentConfig ?? throw new CircuitException("No configuration");
 
             double delta = Math.Min(FinalTime / 50.0, Step) / 10.0;
@@ -102,14 +102,14 @@ namespace SpiceSharp.Simulations
             state.Gmin = config.Gmin;
 
             // Setup breakpoints
-            Method.Initialize(ckt, tranbehaviors);
+            Method.Initialize(tranbehaviors);
             state.Initialize(ckt);
             state.ReinitStates(Method);
 
             // Calculate the operating point
             ckt.Method = null;
-            Op(ckt, config.DcMaxIterations);
-            ckt.Statistics.TimePoints++;
+            Op(config.DcMaxIterations);
+            Statistics.TimePoints++;
             Method = States.Method;
             for (int i = 0; i < Method.DeltaOld.Length; i++)
             {
@@ -133,9 +133,9 @@ namespace SpiceSharp.Simulations
             States.ClearDC();
 
             // Start our statistics
-            ckt.Statistics.TransientTime.Start();
-            int startIters = ckt.Statistics.NumIter;
-            var startselapsed = ckt.Statistics.SolveTime.Elapsed;
+            Statistics.TransientTime.Start();
+            int startIters = Statistics.NumIter;
+            var startselapsed = Statistics.SolveTime.Elapsed;
 
             try
             {
@@ -146,26 +146,26 @@ namespace SpiceSharp.Simulations
                     // Accept the current timepoint (CKTaccept())
                     foreach (var behavior in acceptbehaviors)
                         behavior.Accept(ckt);
-                    Method.SaveSolution(rstate.Solution);
+                    Method.SaveSolution(state.Solution);
                     // end of CKTaccept()
 
                     // Check if current breakpoint is outdated; if so, clear
                     Method.UpdateBreakpoints();
-                    ckt.Statistics.Accepted++;
+                    Statistics.Accepted++;
 
                     // Export the current timepoint
                     if (Method.Time >= InitTime)
                     {
-                        Export(ckt);
+                        Export(exportargs);
                     }
 
                     // Detect the end of the simulation
                     if (Method.Time >= FinalTime)
                     {
                         // Keep our statistics
-                        ckt.Statistics.TransientTime.Stop();
-                        ckt.Statistics.TranIter += ckt.Statistics.NumIter - startIters;
-                        ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
+                        Statistics.TransientTime.Stop();
+                        Statistics.TranIter += Statistics.NumIter - startIters;
+                        Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
 
                         // Finished!
                         return;
@@ -185,14 +185,14 @@ namespace SpiceSharp.Simulations
                         Method.TryDelta();
 
                         // Compute coefficients and predict a solution and reset states to our previous solution
-                        Method.ComputeCoefficients(ckt);
-                        Method.Predict(ckt);
+                        Method.ComputeCoefficients(this);
+                        Method.Predict(this);
 
                         // Try to solve the new point
                         if (Method.SavedTime == 0.0)
                             state.Init = State.InitFlags.InitTransient;
-                        bool converged = TranIterate(ckt, config.TranMaxIterations);
-                        ckt.Statistics.TimePoints++;
+                        bool converged = TranIterate(config.TranMaxIterations);
+                        Statistics.TimePoints++;
                         if (Method.SavedTime == 0.0)
                         {
                             for (int i = 0; i < state.States[1].Length; i++)
@@ -210,7 +210,7 @@ namespace SpiceSharp.Simulations
                         {
                             // Failed to converge, let's try again with a smaller timestep
                             Method.Rollback();
-                            ckt.Statistics.Rejected++;
+                            Statistics.Rejected++;
                             Method.Delta /= 8.0;
                             Method.CutOrder();
 
@@ -227,7 +227,7 @@ namespace SpiceSharp.Simulations
                             }
                             else
                             {
-                                ckt.Statistics.Rejected++;
+                                Statistics.Rejected++;
                                 var data = new TimestepCutData(ckt, Method.Delta, TimestepCutData.TimestepCutReason.Truncation);
                                 TimestepCut?.Invoke(this, data);
                             }
@@ -246,9 +246,9 @@ namespace SpiceSharp.Simulations
             catch (CircuitException ex)
             {
                 // Keep our statistics
-                ckt.Statistics.TransientTime.Stop();
-                ckt.Statistics.TranIter += ckt.Statistics.NumIter - startIters;
-                ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
+                Statistics.TransientTime.Stop();
+                Statistics.TranIter += Statistics.NumIter - startIters;
+                Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
                 throw new CircuitException($"{Name}: transient terminated", ex);
             }
         }

@@ -3,6 +3,7 @@ using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.MUT;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.MUT
 {
@@ -76,15 +77,15 @@ namespace SpiceSharp.Behaviors.MUT
             MUTbr1br2 = null;
             MUTbr2br1 = null;
         }
-        
+
         /// <summary>
-        /// Execute behavior
+        /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation sim)
         {
-            var cstate = ckt.State;
-            Complex value = cstate.Laplace * MUTfactor;
+            var state = sim.State;
+            Complex value = state.Laplace * MUTfactor;
             MUTbr1br2.Sub(value);
             MUTbr2br1.Sub(value);
         }

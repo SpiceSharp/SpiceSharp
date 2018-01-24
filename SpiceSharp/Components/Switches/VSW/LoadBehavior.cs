@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.VSW;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.VSW
 {
@@ -104,14 +105,14 @@ namespace SpiceSharp.Behaviors.VSW
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
             double g_now;
             double v_ctrl;
             bool previous_state;
             bool current_state = false;
-            var state = ckt.State;
+            var state = sim.State;
 
             if (state.Init == State.InitFlags.InitFix || state.Init == State.InitFlags.InitJct)
             {

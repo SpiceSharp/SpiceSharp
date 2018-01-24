@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Components.CAP;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.CAP
 {
@@ -32,12 +33,12 @@ namespace SpiceSharp.Behaviors.CAP
             if (!bp.CAPcapac.Given)
                 mbp = provider.GetParameters<ModelBaseParameters>(1);
         }
-        
+
         /// <summary>
-        /// Execute the behavior
+        /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Temperature(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Temperature(BaseSimulation sim)
         {
             if (!bp.CAPcapac.Given)
             {

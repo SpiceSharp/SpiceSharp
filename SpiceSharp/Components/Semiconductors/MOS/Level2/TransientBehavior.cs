@@ -363,7 +363,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="sim"></param>
         public override void Transient(TimeSimulation sim)
         {
-            var state = sim.Circuit.State;
+            var state = sim.State;
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
                 OxideCap, vgs, vbs, vbd, vgb, vgd, von,
                 vdsat, sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs,

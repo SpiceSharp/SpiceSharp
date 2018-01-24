@@ -30,9 +30,9 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="ckt">Circuit</param>
         /// <param name="tranbehaviors">Truncation behaviors</param>
-        public override void Initialize(Circuit ckt, List<TransientBehavior> tranbehaviors)
+        public override void Initialize(List<TransientBehavior> tranbehaviors)
         {
-            base.Initialize(ckt, tranbehaviors);
+            base.Initialize(tranbehaviors);
 
             ag = new double[MaxOrder];
             for (int i = 0; i < MaxOrder; i++)
@@ -96,11 +96,11 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Predict a new solution based on the previous ones
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Predict(Circuit ckt)
+        /// <param name="sim">Time-based simulation</param>
+        public override void Predict(TimeSimulation sim)
         {
             // Get the state
-            var state = ckt.State;
+            var state = sim.State;
 
             // Predict a solution
             double a, b;
@@ -143,20 +143,20 @@ namespace SpiceSharp.IntegrationMethods
         protected override void TruncateNodes(object sender, TruncationEventArgs args)
         {
             // Get the state
-            var ckt = args.Simulation.Circuit;
-            var state = ckt.State;
+            var sim = args.Simulation;
+            var state = sim.State;
             double tol, diff, tmp;
             double timetemp = Double.PositiveInfinity;
-            int rows = ckt.Nodes.Count;
+            var nodes = sim.Circuit.Nodes;
             int index = 0;
 
             // In my opinion, the original Spice method is kind of bugged and can be much better...
             switch (Order)
             {
                 case 1:
-                    for (int i = 0; i < ckt.Nodes.Count; i++)
+                    for (int i = 0; i < nodes.Count; i++)
                     {
-                        var node = ckt.Nodes[i];
+                        var node = nodes[i];
                         if (node.Type != Node.NodeType.Voltage)
                             continue;
                         index = node.Index;
@@ -173,9 +173,9 @@ namespace SpiceSharp.IntegrationMethods
                     break;
 
                 case 2:
-                    for (int i = 0; i < ckt.Nodes.Count; i++)
+                    for (int i = 0; i < nodes.Count; i++)
                     {
-                        var node = ckt.Nodes[i];
+                        var node = nodes[i];
                         if (node.Type != Node.NodeType.Voltage)
                             continue;
                         index = node.Index;
@@ -206,7 +206,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Compute the coefficients for Trapezoidal integration
         /// </summary>
         /// <param name="ckt">The circuit</param>
-        public override void ComputeCoefficients(Circuit ckt)
+        public override void ComputeCoefficients(TimeSimulation sim)
         {
             // Integration constants
             switch (Order)
@@ -235,9 +235,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="qcap">Index</param>
         /// <param name="sim">simulation</param>
         /// <param name="timeStep">Timestep</param>
-        public override void Terr(int qcap, Simulation sim, ref double timeStep)
+        public override void Terr(int qcap, TimeSimulation sim, ref double timeStep)
         {
-            var state = sim.Circuit.State;
+            var state = sim.State;
             var config = sim.CurrentConfig ?? Configuration.Default;
             int ccap = qcap + 1;
 

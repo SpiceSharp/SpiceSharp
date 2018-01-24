@@ -49,7 +49,7 @@ namespace SpiceSharp.Simulations
 
             var ckt = Circuit;
 
-            var state = ckt.State;
+            var state = State;
             var cstate = state;
             var config = CurrentConfig;
 
@@ -94,24 +94,25 @@ namespace SpiceSharp.Simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Gmin = config.Gmin;
-            Op(ckt, config.DcMaxIterations);
+            Op(config.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             state.UseDC = false;
             state.UseSmallSignal = true;
             foreach (var behavior in loadbehaviors)
-                behavior.Load(ckt);
+                behavior.Load(this);
             foreach (var behavior in acbehaviors)
                 behavior.InitializeParameters(this);
 
             // Export operating point if requested
+            var exportargs = new ExportDataEventArgs(State);
             if (config.KeepOpInfo)
-                Export(ckt);
+                Export(exportargs);
 
             // Calculate the AC solution
             state.UseDC = false;
             freq = StartFreq;
-            ckt.State.Matrix.Complex = true;
+            state.Matrix.Complex = true;
 
             // Sweep the frequency
             for (int i = 0; i < n; i++)
@@ -123,7 +124,7 @@ namespace SpiceSharp.Simulations
                 AcIterate(ckt);
 
                 // Export the timepoint
-                Export(ckt);
+                Export(exportargs);
 
                 // Increment the frequency
                 switch (StepType)

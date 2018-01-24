@@ -1,4 +1,6 @@
 ﻿using System;
+using SpiceSharp.Simulations;
+using SpiceSharp.Components.NoiseSources;
 
 namespace SpiceSharp.Components
 {
@@ -57,10 +59,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Evaluate all noise source contributions
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public void Evaluate(Circuit ckt)
+        /// <param name="sim">Noise simulation</param>
+        public void Evaluate(Noise sim)
         {
-            var noise = ckt.State.Noise;
+            var noise = sim.State.Noise;
 
             // Calculate the output noise density
             Noise = 0.0;
@@ -68,7 +70,7 @@ namespace SpiceSharp.Components
             OutNoiz = 0.0;
             for (int i = 0; i < Generators.Length; i++)
             {
-                Generators[i].Evaluate(ckt);
+                Generators[i].Evaluate(sim);
                 Noise += Generators[i].Noise;
                 InNoiz += Generators[i].InNoiz;
                 OutNoiz += Generators[i].OutNoiz;

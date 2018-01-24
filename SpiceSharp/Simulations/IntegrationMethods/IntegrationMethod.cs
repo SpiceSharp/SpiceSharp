@@ -165,9 +165,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Initialize/reset the integration method
         /// </summary>
-        /// <param name="ckt">Circuit</param>
         /// <param name="tranbehaviors">Truncation behaviors</param>
-        public virtual void Initialize(Circuit ckt, List<TransientBehavior> tranbehaviors)
+        public virtual void Initialize(List<TransientBehavior> tranbehaviors)
         {
             // Initialize variables
             Time = 0.0;
@@ -382,14 +381,14 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Calculate a prediction based on the current timestep
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public abstract void Predict(Circuit ckt);
+        /// <param name="sim">Time-based simulation</param>
+        public abstract void Predict(TimeSimulation sim);
 
         /// <summary>
         /// Compute the coefficients needed for integration
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public abstract void ComputeCoefficients(Circuit ckt);
+        /// <param name="sim">Time-based simulation</param>
+        public abstract void ComputeCoefficients(TimeSimulation sim);
 
         /// <summary>
         /// LTE control by state variables
@@ -397,7 +396,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="qcap">Index of the state containing the charges</param>
         /// <param name="sim">Simulation</param>
         /// <param name="timeStep">Timestep</param>
-        public abstract void Terr(int qcap, Simulation sim, ref double timeStep);
+        public abstract void Terr(int qcap, TimeSimulation sim, ref double timeStep);
 
         /// <summary>
         /// Calculate the new timestep based on the LTE (local truncation error)

@@ -2,7 +2,7 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
-using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 using SpiceSharp.Components.Transistors;
 using SpiceSharp.Components.Mosfet.Level1;
 
@@ -195,13 +195,11 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
-            var state = ckt.State;
-            var rstate = state;
-            var method = ckt.Method;
-            double vt, EffectiveLength, DrainSatCur, SourceSatCur, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
+            var state = sim.State;
+            double vt, EffectiveLength, DrainSatCur, SourceSatCur, Beta,
                 vgs, vds, vbs, vbd, vgb, vgd, vgdo, von, evbs, evbd, ceqbs, ceqbd,
                 vdsat, cdrain, cdreq;
             int Check, xnrm, xrev;
@@ -241,9 +239,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
                 ((state.Init == State.InitFlags.InitFix) && (!bp.MOS1off)))
             {
                 // general iteration
-                vbs = mbp.MOS1type * (rstate.Solution[MOS1bNode] - rstate.Solution[MOS1sNodePrime]);
-                vgs = mbp.MOS1type * (rstate.Solution[MOS1gNode] - rstate.Solution[MOS1sNodePrime]);
-                vds = mbp.MOS1type * (rstate.Solution[MOS1dNodePrime] - rstate.Solution[MOS1sNodePrime]);
+                vbs = mbp.MOS1type * (state.Solution[MOS1bNode] - state.Solution[MOS1sNodePrime]);
+                vgs = mbp.MOS1type * (state.Solution[MOS1gNode] - state.Solution[MOS1sNodePrime]);
+                vds = mbp.MOS1type * (state.Solution[MOS1dNodePrime] - state.Solution[MOS1sNodePrime]);
 
                 /* now some common crunching for some more useful quantities */
                 vbd = vbs - vds;
@@ -295,7 +293,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
                     vds = mbp.MOS1type * bp.MOS1icVDS;
                     vgs = mbp.MOS1type * bp.MOS1icVGS;
                     vbs = mbp.MOS1type * bp.MOS1icVBS;
-                    if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((method != null || state.UseDC ||
+                    if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((state.UseDC ||
                         state.Domain == State.DomainTypes.None) || (!state.UseIC)))
                     {
                         vbs = -1;
@@ -483,9 +481,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
                 xrev = 1;
                 cdreq = -(mbp.MOS1type) * (cdrain - MOS1gds * (-vds) - MOS1gm * vgd - MOS1gmbs * vbd);
             }
-            rstate.Rhs[MOS1bNode] -= (ceqbs + ceqbd);
-            rstate.Rhs[MOS1dNodePrime] += (ceqbd - cdreq);
-            rstate.Rhs[MOS1sNodePrime] += cdreq + ceqbs;
+            state.Rhs[MOS1bNode] -= (ceqbs + ceqbd);
+            state.Rhs[MOS1dNodePrime] += (ceqbd - cdreq);
+            state.Rhs[MOS1sNodePrime] += cdreq + ceqbs;
 
             /* 
 			 * load y matrix
@@ -512,11 +510,12 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <summary>
         /// Test convergence
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">Base simulation</param>
         /// <returns></returns>
-        public override bool IsConvergent(Circuit ckt)
+        public override bool IsConvergent(BaseSimulation sim)
         {
-            var state = ckt.State;
+            var state = sim.State;
+            var config = sim.CurrentConfig;
 
             double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat;
 
@@ -550,20 +549,18 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
              *  check convergence
              */
             // NOTE: relative and absolute tolerances need to be gotten from the configuration, temporarely set to constants here
-            double tol = 1e-3 * Math.Max(Math.Abs(cdhat), Math.Abs(MOS1cd)) + 1e-12;
+            double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(MOS1cd)) + config.AbsTol;
             if (Math.Abs(cdhat - MOS1cd) >= tol)
             {
                 state.IsCon = false;
                 return false;
             }
-            else
+
+            tol = config.RelTol * Math.Max(Math.Abs(cbhat), Math.Abs(MOS1cbs + MOS1cbd)) + config.AbsTol;
+            if (Math.Abs(cbhat - (MOS1cbs + MOS1cbd)) > tol)
             {
-                tol = 1e-3 * Math.Max(Math.Abs(cbhat), Math.Abs(MOS1cbs + MOS1cbd)) + 1e-12;
-                if (Math.Abs(cbhat - (MOS1cbs + MOS1cbd)) > tol)
-                {
-                    state.IsCon = false;
-                    return false;
-                }
+                state.IsCon = false;
+                return false;
             }
             return true;
         }

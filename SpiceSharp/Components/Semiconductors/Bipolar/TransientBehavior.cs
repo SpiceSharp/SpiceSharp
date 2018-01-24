@@ -214,9 +214,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="sim">Time-based simulation</param>
         public override void GetDCstate(TimeSimulation sim)
         {
-            var state = sim.Circuit.State;
-            double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2, arg3, capbx, capcs,
-                xms, xtf, ovtf, xjtf, argtf, tmp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, czbxf2;
+            var state = sim.State;
+            double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2, arg3,
+                xms, xtf, ovtf, xjtf, argtf, tmp, sarg, f1, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
 
             double cbe = load.cbe;
             double cbc = load.cbc;
@@ -347,7 +347,7 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
-            var state = sim.Circuit.State;
+            var state = sim.State;
             double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2, arg3, capbx, capcs,
                 xms, xtf, ovtf, xjtf, argtf, tmp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, czbxf2;
             

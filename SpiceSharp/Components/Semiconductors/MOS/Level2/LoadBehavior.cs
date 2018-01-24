@@ -4,6 +4,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.Transistors;
 using SpiceSharp.Components.Mosfet.Level2;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.Mosfet.Level2
 {
@@ -204,15 +205,14 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
-            var state = ckt.State;
+            var state = sim.State;
             var rstate = state;
-            var method = ckt.Method;
             double vt, EffectiveLength, DrainSatCur, SourceSatCur, Beta,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, von, evbs, evbd,
-                vdsat, cdrain = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs,
+                vdsat, cdrain = 0.0, ceqbs,
                 ceqbd, cdreq;
             int Check, xnrm, xrev;
 
@@ -291,7 +291,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
                     vds = mbp.MOS2type * bp.MOS2icVDS;
                     vgs = mbp.MOS2type * bp.MOS2icVGS;
                     vbs = mbp.MOS2type * bp.MOS2icVBS;
-                    if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((method != null || state.UseDC ||
+                    if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((state.UseDC ||
                         state.Domain == State.DomainTypes.None) || (!state.UseIC)))
                     {
                         vbs = -1;
@@ -936,11 +936,12 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <summary>
         /// Check convergence
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">Base simulation</param>
         /// <returns></returns>
-        public override bool IsConvergent(Circuit ckt)
+        public override bool IsConvergent(BaseSimulation sim)
         {
-            var state = ckt.State;
+            var state = sim.State;
+            var config = sim.CurrentConfig;
 
             double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat;
 
@@ -973,15 +974,14 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
             /*
              *  check convergence
              */
-            // Note: fixed convergence parameters, need to get them somewhere...
-            double tol = 1e-3 * Math.Max(Math.Abs(cdhat), Math.Abs(MOS2cd)) + 1e-12;
+            double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(MOS2cd)) + config.AbsTol;
             if (Math.Abs(cdhat - MOS2cd) >= tol)
             {
                 state.IsCon = false;
                 return false;
             }
 
-            tol = 1e-3 * Math.Max(Math.Abs(cbhat), Math.Abs(MOS2cbs + MOS2cbd)) + 1e-12;
+            tol = config.RelTol * Math.Max(Math.Abs(cbhat), Math.Abs(MOS2cbs + MOS2cbd)) + config.AbsTol;
             if (Math.Abs(cbhat - (MOS2cbs + MOS2cbd)) > tol)
             {
                 state.IsCon = false;

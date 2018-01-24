@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.CCCS;
+using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Behaviors.CCCS
@@ -28,7 +29,7 @@ namespace SpiceSharp.Behaviors.CCCS
         /// </summary>
         /// <param name="name">Name</param>
         public AcBehavior(Identifier name) : base(name) { }
-
+        
         /// <summary>
         /// Create an export method
         /// </summary>
@@ -107,10 +108,10 @@ namespace SpiceSharp.Behaviors.CCCS
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation sim)
         {
             CCCSposContBrptr.Add(bp.CCCScoeff);
             CCCSnegContBrptr.Sub(bp.CCCScoeff);

@@ -2,6 +2,7 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.CCCS;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.CCCS
 {
@@ -88,8 +89,8 @@ namespace SpiceSharp.Behaviors.CCCS
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
             CCCSposContBrptr.Add(bp.CCCScoeff.Value);
             CCCSnegContBrptr.Sub(bp.CCCScoeff.Value);

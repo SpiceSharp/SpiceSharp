@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {
@@ -24,7 +25,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Noise calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public abstract void Noise(Circuit ckt);
+        /// <param name="sim">Noise simulation</param>
+        public abstract void Noise(Noise sim);
     }
 }

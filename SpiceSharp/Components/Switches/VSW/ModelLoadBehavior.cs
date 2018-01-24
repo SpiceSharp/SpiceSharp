@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Components.VSW;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.VSW
 {
@@ -42,10 +43,10 @@ namespace SpiceSharp.Behaviors.VSW
         }
 
         /// <summary>
-        /// Load behavior
+        /// Execute behavior
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
             // Do nothing
         }

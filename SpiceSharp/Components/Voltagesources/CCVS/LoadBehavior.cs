@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
+using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Behaviors.CCVS
@@ -18,11 +19,11 @@ namespace SpiceSharp.Behaviors.CCVS
         VSRC.LoadBehavior vsrcload;
 
         [SpiceName("i"), SpiceInfo("Output current")]
-        public double GetCurrent(Circuit ckt) => ckt.State.Solution[CCVSbranch];
+        public double GetCurrent(State state) => state.Solution[CCVSbranch];
         [SpiceName("v"), SpiceInfo("Output voltage")]
-        public double GetVoltage(Circuit ckt) => ckt.State.Solution[CCVSposNode] - ckt.State.Solution[CCVSnegNode];
+        public double GetVoltage(State state) => state.Solution[CCVSposNode] - state.Solution[CCVSnegNode];
         [SpiceName("p"), SpiceInfo("Power")]
-        public double GetPower(Circuit ckt) => ckt.State.Solution[CCVSbranch] * (ckt.State.Solution[CCVSposNode] - ckt.State.Solution[CCVSnegNode]);
+        public double GetPower(State state) => state.Solution[CCVSbranch] * (state.Solution[CCVSposNode] - state.Solution[CCVSnegNode]);
 
         /// <summary>
         /// Nodes
@@ -50,10 +51,10 @@ namespace SpiceSharp.Behaviors.CCVS
         {
             switch (property)
             {
-                case "v": return (State state) => state.Solution[CCVSposNode] - state.Solution[CCVSnegNode];
+                case "v": return GetVoltage;
                 case "i":
-                case "c": return (State state) => state.Solution[CCVSbranch];
-                case "p": return (State state) => state.Solution[CCVSbranch] * (state.Solution[CCVSposNode] - state.Solution[CCVSnegNode]);
+                case "c": return GetCurrent;
+                case "p": return GetPower;
                 default: return null;
             }
         }
@@ -115,8 +116,8 @@ namespace SpiceSharp.Behaviors.CCVS
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
             CCVSposIbrptr.Add(1.0);
             CCVSibrPosptr.Add(1.0);

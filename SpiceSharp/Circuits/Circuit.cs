@@ -35,20 +35,7 @@ namespace SpiceSharp
         /// </summary>
         public Nodes Nodes { get; } = new Nodes();
 
-        /// <summary>
-        /// Gets the current simulation that is being run by the circuit
-        /// </summary>
-        public Simulation Simulation { get;  set; } = null;
 
-        /// <summary>
-        /// Gets the current state of the circuit
-        /// </summary>
-        public State State { get; } = new State();
-
-        /// <summary>
-        /// Gets statistics
-        /// </summary>
-        public Statistics Statistics { get; } = new Statistics();
 
         /// <summary>
         /// Gets a collection of all circuit objects
@@ -70,8 +57,6 @@ namespace SpiceSharp
             // Clear all values
             Method = null;
             Nodes.Clear();
-            Simulation = null;
-            State.Destroy();
             Objects.Clear();
         }
 

@@ -1,8 +1,9 @@
 ﻿using System;
 using SpiceSharp.Components.Mosfet.Level1;
-using SpiceSharp.Components.Noise;
+using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.Mosfet.Level1
 {
@@ -88,14 +89,14 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             MOS1noise.Setup(MOS1dNode, MOS1gNode, MOS1sNode, MOS1bNode,
                 MOS1dNodePrime, MOS1sNodePrime);
         }
-        
+
         /// <summary>
-        /// Execute behavior
+        /// Noise calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Noise(Circuit ckt)
+        /// <param name="sim">Noise simulation</param>
+        public override void Noise(Noise sim)
         {
-            var state = ckt.State;
+            var state = sim.State;
             var noise = state.Noise;
 
             double coxSquared;
@@ -113,7 +114,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
                 / (bp.MOS1w * (bp.MOS1l - 2 * mbp.MOS1latDiff) * coxSquared) / noise.Freq);
 
             // Evaluate noise sources
-            MOS1noise.Evaluate(ckt);
+            MOS1noise.Evaluate(sim);
         }
     }
 }

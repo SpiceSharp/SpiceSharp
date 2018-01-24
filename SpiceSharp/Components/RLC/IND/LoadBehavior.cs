@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Sparse;
-using SpiceSharp.Components.IND;
+using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
 using System;
 
@@ -96,10 +96,10 @@ namespace SpiceSharp.Behaviors.IND
         }
 
         /// <summary>
-        /// Load behavior
+        /// Execute behavior
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
             INDposIbrptr.Add(1.0);
             INDnegIbrptr.Sub(1.0);

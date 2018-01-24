@@ -104,7 +104,7 @@ namespace SpiceSharp.Simulations
             acbehaviors = SetupBehaviors<AcBehavior>();
 
             // Setup AC behaviors
-            var matrix = Circuit.State.Matrix;
+            var matrix = State.Matrix;
             foreach (var behavior in acbehaviors)
                 behavior.GetMatrixPointers(matrix);
         }
@@ -129,7 +129,7 @@ namespace SpiceSharp.Simulations
         /// <param name="ckt">Circuit</param>
         protected void AcIterate(Circuit ckt)
         {
-            var state = ckt.State;
+            var state = State;
             var matrix = state.Matrix;
             matrix.Complex = true;
 
@@ -143,7 +143,7 @@ namespace SpiceSharp.Simulations
             // Load AC
             state.Clear();
             foreach (var behavior in acbehaviors)
-                behavior.Load(ckt);
+                behavior.Load(this);
 
             if (state.Sparse.HasFlag(State.SparseFlags.NIACSHOULDREORDER))
             {

@@ -58,25 +58,15 @@ namespace Sandbox
 
             // Execute simulation
             int index = 0;
-            tran.OnExportSimulationData += (object sender, SimulationDataEventArgs args) =>
+            tran.OnExportSimulationData += (object sender, ExportDataEventArgs args) =>
             {
-                double t = args.GetTime();
-                double actual = exports[1](args.Circuit.State);
+                double t = tran.Method.Time;
+                double actual = exports[1](tran.State);
                 double expected = references[1][index++];
-                if (t > 0.95e-6 && t < 1.1e-6)
-                {
-
-                    double log = Math.Log10(Math.Abs(actual - expected));
-                    log = double.IsInfinity(log) ? double.NaN : log;
-                    plotInput.Points.AddXY(t, log);
-                    // plotOutput.Points.AddXY(t, expected - bottom);
-                }
+                plotInput.Points.AddXY(t, actual);
+                plotOutput.Points.AddXY(t, expected);
             };
             tran.Run(ckt);
-
-            // References
-            // for (int i = 0; i < references[0].Length; i++)
-                // plotOutput.Points.AddXY(references[0][i], references[1][i]);
         }
 
         /// <summary>

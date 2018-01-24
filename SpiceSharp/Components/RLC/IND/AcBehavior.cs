@@ -2,6 +2,7 @@
 using SpiceSharp.Components.IND;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.IND
 {
@@ -85,13 +86,13 @@ namespace SpiceSharp.Behaviors.IND
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation sim)
         {
-            var cstate = ckt.State;
-            Complex val = cstate.Laplace * bp.INDinduct.Value;
+            var state = sim.State;
+            Complex val = state.Laplace * bp.INDinduct.Value;
 
             INDposIbrptr.Add(1.0);
             INDnegIbrptr.Sub(1.0);

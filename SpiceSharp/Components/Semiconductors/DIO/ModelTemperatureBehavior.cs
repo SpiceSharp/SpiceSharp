@@ -3,6 +3,7 @@ using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.DIO;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.DIO
 {
@@ -45,16 +46,16 @@ namespace SpiceSharp.Behaviors.DIO
             // Get parameters
             mbp = provider.GetParameters<ModelBaseParameters>();
         }
-        
+
         /// <summary>
-        /// Execute behavior
+        /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Temperature(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Temperature(BaseSimulation sim)
         {
             if (!mbp.DIOnomTemp.Given)
             {
-                mbp.DIOnomTemp.Value = ckt.State.NominalTemperature;
+                mbp.DIOnomTemp.Value = sim.State.NominalTemperature;
             }
             vtnom = Circuit.CONSTKoverQ * mbp.DIOnomTemp;
 

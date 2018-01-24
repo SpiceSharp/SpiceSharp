@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Numerics;
-using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components
+namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
     /// A class that represents a noise generator
@@ -42,7 +41,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        private int[] pins;
+        int[] pins;
 
         /// <summary>
         /// Constructor
@@ -76,12 +75,12 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Evaluate
         /// </summary>
-        public virtual void Evaluate(Circuit ckt)
+        public virtual void Evaluate(Noise sim)
         {
-            var noise = ckt.State.Noise;
+            var noise = sim.State.Noise;
 
             // Calculate the noise
-            Noise = CalculateNoise(ckt);
+            Noise = CalculateNoise(sim);
             double lnNdens = Math.Log(Math.Max(Noise, 1e-38));
 
             // Initialize the integrated noise if we just started
@@ -105,11 +104,10 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Calculate the noise source quantity
+        /// Calculate noise coefficient
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="param">Parameter</param>
+        /// <param name="sim">Noise simulation</param>
         /// <returns></returns>
-        protected abstract double CalculateNoise(Circuit ckt);
+        protected abstract double CalculateNoise(Noise sim);
     }
 }

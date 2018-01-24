@@ -1,7 +1,8 @@
 ﻿using System;
 using SpiceSharp.Components;
 using SpiceSharp.Components.Mosfet.Level3;
-using SpiceSharp.Components.Noise;
+using SpiceSharp.Components.NoiseSources;
+using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Behaviors.Mosfet.Level3
@@ -91,14 +92,14 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
             // Connect noise sources
             MOS3noise.Setup(MOS3dNode, MOS3gNode, MOS3sNode, MOS3bNode, MOS3dNodePrime, MOS3sNodePrime);
         }
-        
+
         /// <summary>
-        /// Execute behavior
+        /// Noise calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Noise(Circuit ckt)
+        /// <param name="sim">Noise simulation</param>
+        public override void Noise(Noise sim)
         {
-            var state = ckt.State;
+            var state = sim.State;
             var noise = state.Noise;
 
             // Set noise parameters
@@ -110,7 +111,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
                 * modeltemp.MOS3oxideCapFactor * modeltemp.MOS3oxideCapFactor) / noise.Freq);
 
             // Evaluate noise sources
-            MOS3noise.Evaluate(ckt);
+            MOS3noise.Evaluate(sim);
         }
     }
 }

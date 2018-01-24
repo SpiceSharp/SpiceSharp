@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {
@@ -26,14 +27,15 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Load the Y-matrix and Rhs-vector
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public abstract void Load(Circuit ckt);
+        /// <param name="sim">Base simulation</param>
+        public abstract void Load(BaseSimulation sim);
 
         /// <summary>
-        /// Test convergence
+        /// Test convergence on device-level
         /// </summary>
+        /// <param name="sim">Base simulation</param>
         /// <returns></returns>
-        public virtual bool IsConvergent(Circuit ckt)
+        public virtual bool IsConvergent(BaseSimulation sim)
         {
             return true;
         }

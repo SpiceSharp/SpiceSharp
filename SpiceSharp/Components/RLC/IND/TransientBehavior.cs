@@ -112,7 +112,7 @@ namespace SpiceSharp.Behaviors.IND
             if (bp.INDinitCond.Given)
                 INDflux.Value = bp.INDinitCond * bp.INDinduct;
             else
-                INDflux.Value = sim.Circuit.State.Solution[INDbrEq] * bp.INDinduct;
+                INDflux.Value = sim.State.Solution[INDbrEq] * bp.INDinduct;
         }
 
         /// <summary>
@@ -121,8 +121,7 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
-            var ckt = sim.Circuit;
-            var state = ckt.State;
+            var state = sim.State;
 
             // Initialize
             INDflux.Value = bp.INDinduct * state.Solution[INDbrEq];

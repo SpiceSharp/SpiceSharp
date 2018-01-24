@@ -24,7 +24,7 @@ namespace SpiceSharp.Behaviors.CAP
         [SpiceName("i"), SpiceInfo("Device current")]
         public double GetCurrent() => CAPqcap.Derivative;
         [SpiceName("p"), SpiceInfo("Instantaneous device power")]
-        public double GetPower(Circuit ckt) => CAPqcap.Derivative * (ckt.State.Solution[CAPposNode] - ckt.State.Solution[CAPnegNode]);
+        public double GetPower(State state) => CAPqcap.Derivative * (state.Solution[CAPposNode] - state.Solution[CAPnegNode]);
 
         /// <summary>
         /// Nodes and states
@@ -106,7 +106,7 @@ namespace SpiceSharp.Behaviors.CAP
         public override void GetDCstate(TimeSimulation sim)
         {
             // Calculate the state for DC
-            var sol = sim.Circuit.State.Solution;
+            var sol = sim.State.Solution;
             if (bp.CAPinitCond.Given)
                 CAPqcap.Value = bp.CAPinitCond;
             else
@@ -130,7 +130,7 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
-            var state = sim.Circuit.State;
+            var state = sim.State;
             double vcap = state.Solution[CAPposNode] - state.Solution[CAPnegNode];
 
             // Integrate

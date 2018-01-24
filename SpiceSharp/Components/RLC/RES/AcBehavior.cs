@@ -2,6 +2,7 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.RES
 {
@@ -13,22 +14,20 @@ namespace SpiceSharp.Behaviors.RES
         /// <summary>
         /// Parameters
         /// </summary>
-        /// <param name="ckt"></param>
-        /// <returns></returns>
         [SpiceName("i"), SpiceInfo("Current")]
-        public Complex GetCurrent(Circuit ckt)
+        public Complex GetCurrent(State state)
         {
             var voltage = new Complex(
-                ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode],
-                ckt.State.iSolution[RESposNode] - ckt.State.iSolution[RESnegNode]);
+                state.Solution[RESposNode] - state.Solution[RESnegNode],
+                state.iSolution[RESposNode] - state.iSolution[RESnegNode]);
             return voltage * load.RESconduct;
         }
         [SpiceName("p"), SpiceInfo("Power")]
-        public Complex GetPower(Circuit ckt)
+        public Complex GetPower(State state)
         {
             var voltage = new Complex(
-                ckt.State.Solution[RESposNode] - ckt.State.Solution[RESnegNode],
-                ckt.State.iSolution[RESposNode] - ckt.State.iSolution[RESnegNode]);
+                state.Solution[RESposNode] - state.Solution[RESnegNode],
+                state.iSolution[RESposNode] - state.iSolution[RESnegNode]);
             return voltage * Complex.Conjugate(voltage) * load.RESconduct;
         }
 
@@ -94,7 +93,7 @@ namespace SpiceSharp.Behaviors.RES
         /// <summary>
         /// Connect behavior
         /// </summary>
-        /// <param name="nodes"></param>
+        /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
             RESposNode = pins[0];
@@ -102,10 +101,10 @@ namespace SpiceSharp.Behaviors.RES
         }
 
         /// <summary>
-        /// Perform AC calculations
+        /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation sim)
         {
             RESposPosPtr.Add(load.RESconduct);
             RESnegNegPtr.Add(load.RESconduct);

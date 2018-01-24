@@ -1,7 +1,6 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Components;
-using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.DIO;
 using SpiceSharp.Components.Semiconductors;
@@ -9,7 +8,7 @@ using SpiceSharp.Components.Semiconductors;
 namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
-    /// General behavior for <see cref="Diode"/>
+    /// General behavior for <see cref="Components.Diode"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
@@ -130,13 +129,12 @@ namespace SpiceSharp.Behaviors.DIO
         }
 
         /// <summary>
-        /// Behavior
+        /// Execute behavior
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
-            var state = ckt.State;
-            var method = ckt.Method;
+            var state = sim.State;
             bool Check;
             double csat, gspr, vt, vte, vd, vdtemp, evd, cd, gd, arg, evrev, cdeq;
 
@@ -207,7 +205,7 @@ namespace SpiceSharp.Behaviors.DIO
             if ((state.Init != State.InitFlags.InitFix) || !bp.DIOoff)
             {
                 if (Check)
-                    ckt.State.IsCon = false;
+                    state.IsCon = false;
             }
 
             // Store for next time
@@ -233,14 +231,13 @@ namespace SpiceSharp.Behaviors.DIO
         /// <summary>
         /// Check convergence for the diode
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">Base simulation</param>
         /// <returns></returns>
-        public override bool IsConvergent(Circuit ckt)
+        public override bool IsConvergent(BaseSimulation sim)
         {
-            var state = ckt.State;
-
+            var state = sim.State;
+            var config = sim.CurrentConfig;
             double delvd, cdhat, cd;
-
             double vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
 
             delvd = vd - DIOvoltage;
@@ -248,8 +245,7 @@ namespace SpiceSharp.Behaviors.DIO
             cd = DIOcurrent;
 
             // check convergence
-            // TODO: Find a way to pass configuration RELTOL and ABSTOL, defaults are used here
-            double tol = 1e-3 * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + 1e-12;
+            double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsTol;
             if (Math.Abs(cdhat - cd) > tol)
             {
                 state.IsCon = false;

@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.Bipolar;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.Bipolar
 {
@@ -59,17 +60,17 @@ namespace SpiceSharp.Behaviors.Bipolar
             // Get behaviors
             modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
         }
-        
+
         /// <summary>
-        /// Execute behavior
+        /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Temperature(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Temperature(BaseSimulation sim)
         {
             double vt, fact2, egfet, arg, pbfact, ratlog, ratio1, factlog, factor, bfactor, pbo, gmaold, gmanew;
 
             if (!BJTtemp.Given)
-                BJTtemp.Value = ckt.State.Temperature;
+                BJTtemp.Value = sim.State.Temperature;
             vt = BJTtemp * Circuit.CONSTKoverQ;
             fact2 = BJTtemp / Circuit.CONSTRefTemp;
             egfet = 1.16 - (7.02e-4 * BJTtemp * BJTtemp) / (BJTtemp + 1108);

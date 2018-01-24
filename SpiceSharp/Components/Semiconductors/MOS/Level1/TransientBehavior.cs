@@ -198,9 +198,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <param name="sim">Time-based simulation</param>
         public override void GetDCstate(TimeSimulation sim)
         {
-            var state = sim.Circuit.State;
+            var state = sim.State;
             double arg, sarg, sargsw;
-            double vgs1, vgd1, vgb1, capgs, capgd, capgb;
+            double capgs, capgd, capgb;
 
             // Get voltages
             double vbd = load.MOS1vbd;
@@ -305,7 +305,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
-            var state = sim.Circuit.State;
+            var state = sim.State;
             double arg, sarg, sargsw;
             double vgs1, vgd1, vgb1, capgs, capgd, capgb;
 

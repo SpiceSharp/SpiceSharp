@@ -319,12 +319,12 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation sim)
         {
-            var state = ckt.State;
+            var state = sim.State;
             var cstate = state;
             int xnrm, xrev;
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, capgs, capgd, capgb, xgs, xgd, xgb, xbd,

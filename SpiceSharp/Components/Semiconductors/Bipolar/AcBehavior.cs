@@ -168,7 +168,7 @@ namespace SpiceSharp.Behaviors.Bipolar
             double geqcb;
 
             // Get voltages
-            var state = sim.Circuit.State;
+            var state = sim.State;
             double vbe = load.BJTvbe;
             double vbc = load.BJTvbc;
             double vbx = vbx = mbp.BJTtype * (state.Solution[BJTbaseNode] - state.Solution[BJTcolPrimeNode]);
@@ -283,14 +283,14 @@ namespace SpiceSharp.Behaviors.Bipolar
         }
 
         /// <summary>
-        /// Execute AC behavior
+        /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation sim)
         {
-            var state = ckt.State;
+            var state = sim.State;
             var cstate = state;
-            double gcpr, gepr, gpi, gmu, go, td, gx, xgm;
+            double gcpr, gepr, gpi, gmu, go, td, gx;
             Complex gm, xcpi, xcmu, xcbx, xccs, xcmcb;
 
             gcpr = modeltemp.BJTcollectorConduct * bp.BJTarea;

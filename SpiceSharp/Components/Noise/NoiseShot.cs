@@ -1,6 +1,7 @@
 ﻿using System;
+using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.Noise
+namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
     /// Shotnoise generator
@@ -31,13 +32,13 @@ namespace SpiceSharp.Components.Noise
         /// <summary>
         /// Calculate the noise contribution
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="param">The DC current in a semiconductor</param>
+        /// <param name="sim">Noise simulation</param>
         /// <returns></returns>
-        protected override double CalculateNoise(Circuit ckt)
+        protected override double CalculateNoise(Noise sim)
         {
-            var sol = ckt.State.Solution;
-            var isol = ckt.State.iSolution;
+            var state = sim.State;
+            var sol = state.Solution;
+            var isol = state.iSolution;
             var rval = sol[NOISEnodes[0]] - sol[NOISEnodes[1]];
             var ival = isol[NOISEnodes[0]] - isol[NOISEnodes[1]];
             double gain = rval * rval + ival * ival;

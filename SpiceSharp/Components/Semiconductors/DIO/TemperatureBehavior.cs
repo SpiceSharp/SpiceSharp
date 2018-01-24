@@ -3,7 +3,7 @@ using SpiceSharp.Components.DIO;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.DIO
 {
@@ -65,16 +65,16 @@ namespace SpiceSharp.Behaviors.DIO
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Temperature(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Temperature(BaseSimulation sim)
         {
             double vt, fact2, egfet, arg, pbfact, egfet1, arg1, fact1, pbfact1, pbo, gmaold, gmanew, vte, cbv, xbv, tol, iter, xcbv = 0.0;
 
             // loop through all the instances
             if (!bp.DIOtemp.Given)
-                bp.DIOtemp.Value = ckt.State.Temperature;
+                bp.DIOtemp.Value = sim.State.Temperature;
             vt = Circuit.CONSTKoverQ * bp.DIOtemp;
 
             // this part gets really ugly - I won't even try to explain these equations
@@ -119,7 +119,7 @@ namespace SpiceSharp.Behaviors.DIO
                 }
                 else
                 {
-                    tol = ckt.Simulation.CurrentConfig.RelTol * cbv;
+                    tol = sim.CurrentConfig.RelTol * cbv;
                     xbv = mbp.DIObreakdownVoltage - vt * Math.Log(1 + cbv / DIOtSatCur);
                     iter = 0;
                     for (iter = 0; iter < 25; iter++)

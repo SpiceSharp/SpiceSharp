@@ -1,6 +1,6 @@
-﻿using System.Numerics;
+﻿using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.Noise
+namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
     /// Noise generator with fixed gain
@@ -28,15 +28,14 @@ namespace SpiceSharp.Components.Noise
         }
 
         /// <summary>
-        /// Calculate the noise contribution
+        /// Calculate noise coefficient
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="param">Parameter (unused)</param>
+        /// <param name="sim">Noise simulation</param>
         /// <returns></returns>
-        protected override double CalculateNoise(Circuit ckt)
+        protected override double CalculateNoise(Noise sim)
         {
-            var sol = ckt.State.Solution;
-            var isol = ckt.State.iSolution;
+            var sol = sim.State.Solution;
+            var isol = sim.State.iSolution;
             var rval = sol[NOISEnodes[0]] - sol[NOISEnodes[1]];
             var ival = isol[NOISEnodes[0]] - isol[NOISEnodes[1]];
             double gain = rval * rval + ival * ival;

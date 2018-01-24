@@ -3,6 +3,7 @@ using SpiceSharp.Diagnostics;
 using SpiceSharp.Components.Transistors;
 using SpiceSharp.Components.Mosfet.Level2;
 using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.Mosfet.Level2
 {
@@ -43,16 +44,16 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Temperature(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Temperature(BaseSimulation sim)
         {
             double kt1, arg1, fermis, wkfng, fermig, wkfngs, vfb = 0.0;
 
             /* now model parameter preprocessing */
             if (!mbp.MOS2tnom.Given)
-                mbp.MOS2tnom.Value = ckt.State.NominalTemperature;
+                mbp.MOS2tnom.Value = sim.State.NominalTemperature;
             fact1 = mbp.MOS2tnom / Circuit.CONSTRefTemp;
             vtnom = mbp.MOS2tnom * Circuit.CONSTKoverQ;
             kt1 = Circuit.CONSTBoltz * mbp.MOS2tnom;

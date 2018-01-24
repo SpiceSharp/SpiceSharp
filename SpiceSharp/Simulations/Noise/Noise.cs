@@ -135,8 +135,9 @@ namespace SpiceSharp.Simulations
             base.Execute();
 
             var ckt = Circuit;
-            var state = ckt.State;
+            var state = State;
             var config = CurrentConfig;
+            var exportargs = new ExportDataEventArgs(State);
 
             // Find the output nodes
             int posOutNode = Output != null ? ckt.Nodes[Output].Index : 0;
@@ -196,16 +197,16 @@ namespace SpiceSharp.Simulations
 
             // Initialize
             state.Initialize(ckt);
-            ckt.State.Noise.Initialize(StartFreq);
+            state.Noise.Initialize(StartFreq);
             state.Laplace = 0;
             state.Domain = State.DomainTypes.Frequency;
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Gmin = config.Gmin;
-            Op(ckt, config.DcMaxIterations);
+            Op(config.DcMaxIterations);
 
-            var data = ckt.State.Noise;
+            var data = state.Noise;
             state.Sparse |= State.SparseFlags.NIACSHOULDREORDER;
 
             // Connect noise sources
@@ -223,16 +224,16 @@ namespace SpiceSharp.Simulations
                 data.GainSqInv = 1.0 / Math.Max(rval * rval + ival * ival, 1e-20);
 
                 // Solve the adjoint system
-                NzIterate(ckt, posOutNode, negOutNode);
+                NzIterate(posOutNode, negOutNode);
 
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit
                 data.outNdens = 0.0;
                 foreach (var behavior in noisebehaviors)
-                    behavior.Noise(ckt);
+                    behavior.Noise(this);
 
                 // Export the data
-                Export(ckt);
+                Export(exportargs);
 
                 // Increment the frequency
                 switch (StepType)
@@ -256,12 +257,11 @@ namespace SpiceSharp.Simulations
         /// hand side vector. The unit-valued current excitation is applied between
         /// nodes posDrive and negDrive.
         /// </summary>
-        /// <param name="ckt">The circuit</param>
         /// <param name="posDrive">The positive driving node</param>
         /// <param name="negDrive">The negative driving node</param>
-        void NzIterate(Circuit ckt, int posDrive, int negDrive)
+        void NzIterate(int posDrive, int negDrive)
         {
-            var state = ckt.State;
+            var state = State;
 
             // Clear out the right hand side vector
             for (int i = 0; i < state.Rhs.Length; i++)

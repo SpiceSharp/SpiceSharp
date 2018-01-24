@@ -3,6 +3,7 @@ using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.CAP;
 using SpiceSharp.Sparse;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.CAP
 {
@@ -91,11 +92,11 @@ namespace SpiceSharp.Behaviors.CAP
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation sim)
         {
-            var cstate = ckt.State;
-            var val = cstate.Laplace * bp.CAPcapac.Value;
+            var state = sim.State;
+            var val = state.Laplace * bp.CAPcapac.Value;
 
             // Load the matrix
             CAPposPosptr.Add(val);

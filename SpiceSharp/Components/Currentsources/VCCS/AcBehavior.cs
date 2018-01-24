@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.VCCS;
+using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Behaviors.VCCS
@@ -94,10 +95,10 @@ namespace SpiceSharp.Behaviors.VCCS
         }
 
         /// <summary>
-        /// Execute the behavior
+        /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation sim)
         {
             VCCSposContPosptr.Add(bp.VCCScoeff);
             VCCSposContNegptr.Sub(bp.VCCScoeff);

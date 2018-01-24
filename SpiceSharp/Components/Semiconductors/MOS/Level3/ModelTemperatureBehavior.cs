@@ -4,6 +4,7 @@ using SpiceSharp.Components.Transistors;
 using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.Mosfet.Level3;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.Mosfet.Level3
 {
@@ -45,18 +46,18 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
             // Get parameters
             mbp = provider.GetParameters<ModelBaseParameters>();
         }
-        
+
         /// <summary>
-        /// Execute the behavior
+        /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Temperature(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Temperature(BaseSimulation sim)
         {
             double kt1, arg1, fermis, wkfng, fermig, wkfngs, vfb;
 
             if (!mbp.MOS3tnom.Given)
             {
-                mbp.MOS3tnom.Value = ckt.State.NominalTemperature;
+                mbp.MOS3tnom.Value = sim.State.NominalTemperature;
             }
             fact1 = mbp.MOS3tnom / Circuit.CONSTRefTemp;
             vtnom = mbp.MOS3tnom * Circuit.CONSTKoverQ;

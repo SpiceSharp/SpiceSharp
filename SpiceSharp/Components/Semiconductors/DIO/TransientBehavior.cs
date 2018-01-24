@@ -127,7 +127,7 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="sim">Simulation</param>
         public override void GetDCstate(TimeSimulation sim)
         {
-            var state = sim.Circuit.State;
+            var state = sim.State;
             double arg, sarg, capd;
             double vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
 
@@ -157,7 +157,7 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
-            var state = sim.Circuit.State;
+            var state = sim.State;
             double vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
 
             // This is the same calculation

@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Components;
+using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 using System;
 using SpiceSharp.Components.ISRC;
@@ -18,20 +18,14 @@ namespace SpiceSharp.Behaviors.ISRC
         BaseParameters bp;
 
         /// <summary>
-        /// Methods
+        /// Get voltage across the voltage source
         /// </summary>
-        /// <param name="ckt"></param>
+        /// <param name="state"></param>
         /// <returns></returns>
         [SpiceName("v"), SpiceInfo("Voltage accross the supply")]
-        public double GetV(Circuit ckt)
-        {
-            return (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCnegNode]);
-        }
+        public double GetV(State state) => (state.Solution[ISRCposNode] - state.Solution[ISRCnegNode]);
         [SpiceName("p"), SpiceInfo("Power supplied by the source")]
-        public double GetP(Circuit ckt)
-        {
-            return (ckt.State.Solution[ISRCposNode] - ckt.State.Solution[ISRCposNode]) * -bp.ISRCdcValue;
-        }
+        public double GetP(State state) => (state.Solution[ISRCposNode] - state.Solution[ISRCposNode]) * -Current;
         [SpiceName("c"), SpiceInfo("Current through current source")]
         public double Current { get; protected set; }
 
@@ -55,14 +49,18 @@ namespace SpiceSharp.Behaviors.ISRC
         {
             switch (property)
             {
-                case "v": return (State state) => state.Solution[ISRCposNode] - state.Solution[ISRCnegNode];
-                case "p": return (State state) => (state.Solution[ISRCposNode] - state.Solution[ISRCnegNode]) * -Current;
+                case "v": return GetV;
+                case "p": return GetP;
                 case "i":
                 case "c": return (State state) => Current;
                 default: return null;
             }
         }
 
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
@@ -88,14 +86,14 @@ namespace SpiceSharp.Behaviors.ISRC
             ISRCposNode = pins[0];
             ISRCnegNode = pins[1];
         }
-        
+
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
-            var state = ckt.State;
+            var state = sim.State;
             var rstate = state;
 
             double value = 0.0;
@@ -104,8 +102,8 @@ namespace SpiceSharp.Behaviors.ISRC
             // Time domain analysis
             if (state.Domain == State.DomainTypes.Time)
             {
-                if (ckt.Method != null)
-                    time = ckt.Method.Time;
+                if (sim is TimeSimulation tsim)
+                    time = tsim.Method.Time;
 
                 // Use the waveform if possible
                 if (bp.ISRCwaveform != null)

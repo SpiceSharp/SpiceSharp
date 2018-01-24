@@ -2,6 +2,7 @@
 using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.ISRC;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.ISRC
 {
@@ -27,6 +28,10 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <param name="name">Name</param>
         public AcBehavior(Identifier name) : base(name) { }
 
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
@@ -46,18 +51,18 @@ namespace SpiceSharp.Behaviors.ISRC
             ISRCposNode = pins[0];
             ISRCnegNode = pins[1];
         }
-        
+
         /// <summary>
-        /// Execute AC behavior
+        /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation sim)
         {
-            var cstate = ckt.State;
-            cstate.Rhs[ISRCposNode] += ISRCac.Real;
-            cstate.iRhs[ISRCposNode] += ISRCac.Imaginary;
-            cstate.Rhs[ISRCnegNode] -= ISRCac.Real;
-            cstate.iRhs[ISRCnegNode] -= ISRCac.Imaginary;
+            var state = sim.State;
+            state.Rhs[ISRCposNode] += ISRCac.Real;
+            state.iRhs[ISRCposNode] += ISRCac.Imaginary;
+            state.Rhs[ISRCnegNode] -= ISRCac.Real;
+            state.iRhs[ISRCnegNode] -= ISRCac.Imaginary;
         }
     }
 }

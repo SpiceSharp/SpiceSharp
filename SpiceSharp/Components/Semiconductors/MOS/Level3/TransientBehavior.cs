@@ -201,7 +201,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
                 sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0;
 
-            var state = sim.Circuit.State;
+            var state = sim.State;
             vbs = load.MOS3vbs;
             vgs = load.MOS3vgs;
             vds = load.MOS3vds;
@@ -384,7 +384,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
-            var state = sim.Circuit.State;
+            var state = sim.State;
             var rstate = state;
             var method = sim.Method;
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,

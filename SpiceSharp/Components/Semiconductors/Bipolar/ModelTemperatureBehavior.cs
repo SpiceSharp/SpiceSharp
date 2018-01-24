@@ -3,6 +3,7 @@ using SpiceSharp.Diagnostics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Components.Bipolar;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.Bipolar
 {
@@ -61,13 +62,13 @@ namespace SpiceSharp.Behaviors.Bipolar
         }
 
         /// <summary>
-        /// Execute behavior
+        /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Temperature(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Temperature(BaseSimulation sim)
         {
             if (!mbp.BJTtnom.Given)
-                mbp.BJTtnom.Value = ckt.State.NominalTemperature;
+                mbp.BJTtnom.Value = sim.State.NominalTemperature;
             fact1 = mbp.BJTtnom / Circuit.CONSTRefTemp;
 
             if (!mbp.BJTleakBEcurrent.Given)

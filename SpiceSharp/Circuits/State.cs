@@ -13,6 +13,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Initialization flags
         /// </summary>
+        [Flags]
         public enum InitFlags
         {
             /// <summary>

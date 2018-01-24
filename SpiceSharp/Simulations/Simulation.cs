@@ -105,11 +105,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Export the data
         /// </summary>
-        /// <param name="ckt"></param>
-        public virtual void Export(Circuit ckt)
+        protected void Export(ExportDataEventArgs args)
         {
-            SimulationDataEventArgs data = new SimulationDataEventArgs(ckt);
-            OnExportSimulationData?.Invoke(this, data);
+            OnExportSimulationData?.Invoke(this, args);
         }
 
         /// <summary>

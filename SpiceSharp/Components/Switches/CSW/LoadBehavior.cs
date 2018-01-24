@@ -2,6 +2,7 @@
 using SpiceSharp.Components.CSW;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
+using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Behaviors.CSW
@@ -19,12 +20,16 @@ namespace SpiceSharp.Behaviors.CSW
         VSRC.LoadBehavior vsrcload;
         ModelBaseParameters mbp;
 
-
+        /// <summary>
+        /// Methods
+        /// </summary>
+        [SpiceName("v"), SpiceInfo("Switch voltage")]
+        public double GetVoltage(State state) => state.Solution[CSWposNode] - state.Solution[CSWnegNode];
         [SpiceName("i"), SpiceInfo("Switch current")]
-        public double GetCurrent(Circuit ckt) => (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) * CSWcond;
+        public double GetCurrent(State state) => (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
         [SpiceName("p"), SpiceInfo("Instantaneous power")]
-        public double GetPower(Circuit ckt) => (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) *
-            (ckt.State.Solution[CSWposNode] - ckt.State.Solution[CSWnegNode]) * CSWcond;
+        public double GetPower(State state) => (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) *
+            (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
         public double CSWcond { get; internal set; }
 
         /// <summary>
@@ -67,8 +72,8 @@ namespace SpiceSharp.Behaviors.CSW
         {
             switch (property)
             {
-                case "v": return (State state) => state.Solution[CSWposNode] - state.Solution[CSWnegNode];
-                case "i": return (State state) => (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
+                case "v": return GetVoltage;
+                case "i": return GetCurrent;
                 case "p": return (State state) => (state.Solution[CSWposNode] - state.Solution[CSWnegNode])
                     * (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
                 default: return null;
@@ -128,15 +133,14 @@ namespace SpiceSharp.Behaviors.CSW
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
             double g_now;
             double i_ctrl;
             bool previous_state;
             bool current_state = false;
-            var state = ckt.State;
-            var rstate = state;
+            var state = sim.State;
 
             // decide the state of the switch
             if (state.Init == State.InitFlags.InitFix || state.Init == State.InitFlags.InitJct)
@@ -161,7 +165,7 @@ namespace SpiceSharp.Behaviors.CSW
                     previous_state = CSWoldState;
                 else
                     previous_state = CSWcurrentState;
-                i_ctrl = rstate.Solution[CSWcontBranch];
+                i_ctrl = state.Solution[CSWcontBranch];
 
                 // Calculate the current state
                 if (i_ctrl > (mbp.CSWthresh + mbp.CSWhyst))

@@ -4,6 +4,7 @@ using SpiceSharp.Components.Transistors;
 using SpiceSharp.Components.Mosfet.Level3;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.Mosfet.Level3
 {
@@ -199,15 +200,13 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
-            var state = ckt.State;
-            var rstate = state;
-            var method = ckt.Method;
-            double vt, EffectiveLength, DrainSatCur, SourceSatCur, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
-                OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat, von, evbs, evbd, vdsat,
-                cdrain, sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs, ceqbd, cdreq;
+            var state = sim.State;
+            double vt, EffectiveLength, DrainSatCur, SourceSatCur, Beta,
+                OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, von, evbs, evbd, vdsat,
+                cdrain, ceqbs, ceqbd, cdreq;
             int Check, xnrm, xrev;
 
             vt = Circuit.CONSTKoverQ * bp.MOS3temp;
@@ -252,9 +251,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
                 ((state.Init == State.InitFlags.InitFix) && (!bp.MOS3off)))
             {
                 // General iteration
-                vbs = mbp.MOS3type * (rstate.Solution[MOS3bNode] - rstate.Solution[MOS3sNodePrime]);
-                vgs = mbp.MOS3type * (rstate.Solution[MOS3gNode] - rstate.Solution[MOS3sNodePrime]);
-                vds = mbp.MOS3type * (rstate.Solution[MOS3dNodePrime] - rstate.Solution[MOS3sNodePrime]);
+                vbs = mbp.MOS3type * (state.Solution[MOS3bNode] - state.Solution[MOS3sNodePrime]);
+                vgs = mbp.MOS3type * (state.Solution[MOS3gNode] - state.Solution[MOS3sNodePrime]);
+                vds = mbp.MOS3type * (state.Solution[MOS3dNodePrime] - state.Solution[MOS3sNodePrime]);
 
                 /* now some common crunching for some more useful quantities */
                 /* DETAILPROF */
@@ -312,7 +311,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
                     vds = mbp.MOS3type * bp.MOS3icVDS;
                     vgs = mbp.MOS3type * bp.MOS3icVGS;
                     vbs = mbp.MOS3type * bp.MOS3icVBS;
-                    if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((method != null || state.UseDC ||
+                    if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((state.UseDC ||
                         state.Domain == State.DomainTypes.None) || (!state.UseIC)))
                     {
                         vbs = -1;
@@ -773,9 +772,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
                 cdreq = -(mbp.MOS3type) * (cdrain - MOS3gds * (-vds) - MOS3gm * vgd - MOS3gmbs * vbd);
             }
 
-            rstate.Rhs[MOS3bNode] -= (ceqbs + ceqbd);
-            rstate.Rhs[MOS3dNodePrime] += (ceqbd - cdreq);
-            rstate.Rhs[MOS3sNodePrime] += cdreq + ceqbs;
+            state.Rhs[MOS3bNode] -= (ceqbs + ceqbd);
+            state.Rhs[MOS3dNodePrime] += (ceqbd - cdreq);
+            state.Rhs[MOS3sNodePrime] += cdreq + ceqbs;
 
             /* 
 			 * load y matrix
@@ -802,11 +801,12 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <summary>
         /// Check convergence
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="sim">Base simulation</param>
         /// <returns></returns>
-        public override bool IsConvergent(Circuit ckt)
+        public override bool IsConvergent(BaseSimulation sim)
         {
-            var state = ckt.State;
+            var state = sim.State;
+            var config = sim.CurrentConfig;
 
             double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat;
 
@@ -839,14 +839,14 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
             /*
              *  check convergence
              */
-            double tol = 1e-3 * Math.Max(Math.Abs(cdhat), Math.Abs(MOS3cd)) + 1e-12;
+            double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(MOS3cd)) + config.AbsTol;
             if (Math.Abs(cdhat - MOS3cd) >= tol)
             {
                 state.IsCon = false;
                 return false;
             }
 
-            tol = 1e-3 * Math.Max(Math.Abs(cbhat), Math.Abs(MOS3cbs + MOS3cbd)) + 1e-12;
+            tol = config.RelTol * Math.Max(Math.Abs(cbhat), Math.Abs(MOS3cbs + MOS3cbd)) + config.AbsTol;
             if (Math.Abs(cbhat - (MOS3cbs + MOS3cbd)) > tol)
             {
                 state.IsCon = false;

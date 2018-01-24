@@ -1,8 +1,9 @@
 ﻿using System;
 using SpiceSharp.Components;
-using SpiceSharp.Components.Noise;
+using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Components.Bipolar;
 using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.Bipolar
 {
@@ -79,6 +80,9 @@ namespace SpiceSharp.Behaviors.Bipolar
             BJTsubstNode = pins[3];
         }
 
+        /// <summary>
+        /// Connect noise sources
+        /// </summary>
         public override void ConnectNoise()
         {
             // Get extra nodes
@@ -92,12 +96,12 @@ namespace SpiceSharp.Behaviors.Bipolar
         }
 
         /// <summary>
-        /// Perform noise simulation
+        /// Noise calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Noise(Circuit ckt)
+        /// <param name="sim">Noise simulation</param>
+        public override void Noise(Noise sim)
         {
-            var state = ckt.State;
+            var state = sim.State;
             var noise = state.Noise;
 
             // Set noise parameters
@@ -109,7 +113,7 @@ namespace SpiceSharp.Behaviors.Bipolar
             BJTnoise.Generators[BJTFLNOIZ].Set(mnp.BJTfNcoef * Math.Exp(mnp.BJTfNexp * Math.Log(Math.Max(Math.Abs(load.BJTcb), 1e-38))) / noise.Freq);
 
             // Evaluate all noise sources
-            BJTnoise.Evaluate(ckt);
+            BJTnoise.Evaluate(sim);
         }
     }
 }

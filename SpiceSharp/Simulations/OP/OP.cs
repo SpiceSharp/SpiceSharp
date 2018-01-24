@@ -24,7 +24,7 @@ namespace SpiceSharp.Simulations
             var ckt = Circuit;
 
             // Setup the state
-            var state = ckt.State;
+            var state = State;
             var rstate = state;
             var config = CurrentConfig;
             state.UseIC = false; // UseIC is only used in transient simulations
@@ -33,8 +33,10 @@ namespace SpiceSharp.Simulations
             state.Domain = State.DomainTypes.None;
             state.Gmin = config.Gmin;
 
-            Op(ckt, config.DcMaxIterations);
-            Export(ckt);
+            Op(config.DcMaxIterations);
+
+            var exportargs = new ExportDataEventArgs(State);
+            Export(exportargs);
         }
     }
 }

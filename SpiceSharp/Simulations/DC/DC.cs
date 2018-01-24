@@ -139,11 +139,11 @@ namespace SpiceSharp.Simulations
             // Base
             base.Execute();
 
+            var exportargs = new ExportDataEventArgs(State);
             var ckt = Circuit;
 
             // Setup the state
-            var state = ckt.State;
-            var rstate = state;
+            var state = State;
             var config = CurrentConfig;
             state.Init = State.InitFlags.InitJct;
             state.Initialize(ckt);
@@ -194,14 +194,14 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Calculate the solution
-                if (!Iterate(ckt, config.SweepMaxIterations))
+                if (!Iterate(config.SweepMaxIterations))
                 {
                     IterationFailed?.Invoke(this, ckt);
-                    Op(ckt, config.DcMaxIterations);
+                    Op(config.DcMaxIterations);
                 }
 
                 // Export data
-                Export(ckt);
+                Export(exportargs);
 
                 // Remove all values that are greater or equal to the maximum value
                 while (level >= 0 && Sweeps[level].CurrentStep >= Sweeps[level].Limit)

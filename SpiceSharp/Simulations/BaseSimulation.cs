@@ -20,6 +20,16 @@ namespace SpiceSharp.Simulations
         protected List<IcBehavior> icbehaviors = null;
 
         /// <summary>
+        /// Gets the current state of the circuit
+        /// </summary>
+        public State State { get; } = new State();
+
+        /// <summary>
+        /// Gets statistics
+        /// </summary>
+        public Statistics Statistics { get; } = new Statistics();
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
@@ -52,7 +62,7 @@ namespace SpiceSharp.Simulations
             icbehaviors = SetupBehaviors<IcBehavior>();
 
             // Setup the load behaviors
-            var matrix = Circuit.State.Matrix;
+            var matrix = State.Matrix;
             foreach (var behavior in loadbehaviors)
                 behavior.GetMatrixPointers(Circuit.Nodes, matrix);
         }
@@ -64,10 +74,10 @@ namespace SpiceSharp.Simulations
         {
             // Do temperature-dependent calculations
             foreach (var behavior in tempbehaviors)
-                behavior.Temperature(Circuit);
+                behavior.Temperature(this);
 
             // Initialize the solution
-            Circuit.State.Initialize(Circuit);
+            State.Initialize(Circuit);
 
             // Do initial conditions
             Ic();
@@ -96,6 +106,9 @@ namespace SpiceSharp.Simulations
             foreach (var o in Circuit.Objects)
                 o.Unsetup(Circuit);
 
+            // Clear the state
+            State.Clear();
+
             // Clear the circuit
             Circuit.Clear();
         }
@@ -103,11 +116,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Calculate the operating point of the circuit
         /// </summary>
-        /// <param name="ckt">Circuit</param>
         /// <param name="maxiter">Maximum iterations</param>
-        protected void Op(Circuit ckt, int maxiter)
+        protected void Op(int maxiter)
         {
-            var state = ckt.State;
+            var state = State;
             var config = CurrentConfig;
             state.Init = State.InitFlags.InitJct;
             state.Matrix.Complex = false;
@@ -115,7 +127,7 @@ namespace SpiceSharp.Simulations
             // First, let's try finding an operating point by using normal iterations
             if (!config.NoOpIter)
             {
-                if (Iterate(ckt, maxiter))
+                if (Iterate(maxiter))
                     return;
             }
 
@@ -123,24 +135,24 @@ namespace SpiceSharp.Simulations
             if (config.NumGminSteps > 1)
             {
                 state.Init = State.InitFlags.InitJct;
-                CircuitWarning.Warning(ckt, "Starting Gmin stepping");
+                CircuitWarning.Warning(this, "Starting Gmin stepping");
                 state.DiagGmin = config.Gmin;
                 for (int i = 0; i < config.NumGminSteps; i++)
                     state.DiagGmin *= 10.0;
                 for (int i = 0; i <= config.NumGminSteps; i++)
                 {
                     state.IsCon = false;
-                    if (!Iterate(ckt, maxiter))
+                    if (!Iterate(maxiter))
                     {
                         state.DiagGmin = 0.0;
-                        CircuitWarning.Warning(ckt, "Gmin step failed");
+                        CircuitWarning.Warning(this, "Gmin step failed");
                         break;
                     }
                     state.DiagGmin /= 10.0;
                     state.Init = State.InitFlags.InitFloat;
                 }
                 state.DiagGmin = 0.0;
-                if (Iterate(ckt, maxiter))
+                if (Iterate(maxiter))
                     return;
             }
 
@@ -148,15 +160,15 @@ namespace SpiceSharp.Simulations
             if (config.NumSrcSteps > 1)
             {
                 state.Init = State.InitFlags.InitJct;
-                CircuitWarning.Warning(ckt, "Starting source stepping");
+                CircuitWarning.Warning(this, "Starting source stepping");
                 for (int i = 0; i <= config.NumSrcSteps; i++)
                 {
                     state.SrcFact = i / (double)config.NumSrcSteps;
-                    if (!Iterate(ckt, maxiter))
+                    if (!Iterate(maxiter))
                     {
                         state.SrcFact = 1.0;
                         // ckt.CurrentAnalysis = AnalysisType.DoingTran;
-                        CircuitWarning.Warning(ckt, "Source stepping failed");
+                        CircuitWarning.Warning(this, "Source stepping failed");
                         return;
                     }
                 }
@@ -169,14 +181,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Solve iteratively for <see cref="OP"/>, <see cref="DC"/> or <see cref="Transient"/> simulations
+        /// Solve iteratively for simulations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
         /// <param name="maxiter">Maximum number of iterations</param>
         /// <returns></returns>
-        protected bool Iterate(Circuit ckt, int maxiter)
+        protected bool Iterate(int maxiter)
         {
-            var state = ckt.State;
+            var state = State;
             var matrix = state.Matrix;
             bool pass = false;
             int iterno = 0;
@@ -186,16 +197,16 @@ namespace SpiceSharp.Simulations
 
             // Initialize the state of the circuit
             if (!state.Initialized)
-                state.Initialize(ckt);
+                state.Initialize(Circuit);
 
             // Ignore operating condition point, just use the solution as-is
-            if (ckt.State.UseIC && ckt.State.Domain == State.DomainTypes.Time)
+            if (state.UseIC && state.Domain == State.DomainTypes.Time)
             {
                 state.StoreSolution();
 
                 // Voltages are set using IC statement on the nodes
                 // Internal initial conditions are calculated by the components
-                Load(ckt);
+                Load();
                 return true;
             }
 
@@ -207,13 +218,13 @@ namespace SpiceSharp.Simulations
 
                 try
                 {
-                    Load(ckt);
+                    Load();
                     iterno++;
                 }
                 catch (CircuitException)
                 {
                     iterno++;
-                    ckt.Statistics.NumIter = iterno;
+                    Statistics.NumIter = iterno;
                     throw;
                 }
 
@@ -231,41 +242,41 @@ namespace SpiceSharp.Simulations
                 // Reorder
                 if (state.Sparse.HasFlag(State.SparseFlags.NISHOULDREORDER))
                 {
-                    ckt.Statistics.ReorderTime.Start();
+                    Statistics.ReorderTime.Start();
                     matrix.Reorder(state.PivotRelTol, state.PivotAbsTol, state.DiagGmin);
-                    ckt.Statistics.ReorderTime.Stop();
+                    Statistics.ReorderTime.Stop();
                     state.Sparse &= ~State.SparseFlags.NISHOULDREORDER;
                 }
                 else
                 {
                     // Decompose
-                    ckt.Statistics.DecompositionTime.Start();
+                    Statistics.DecompositionTime.Start();
                     matrix.Factor(state.DiagGmin);
-                    ckt.Statistics.DecompositionTime.Stop();
+                    Statistics.DecompositionTime.Stop();
                 }
 
                 // Solve the equation
-                ckt.Statistics.SolveTime.Start();
+                Statistics.SolveTime.Start();
                 matrix.Solve(state.Rhs);
-                ckt.Statistics.SolveTime.Stop();
+                Statistics.SolveTime.Stop();
 
                 // The result is now stored in the RHS vector, let's move it to the current solution vector
                 state.StoreSolution();
 
                 // Reset ground nodes
-                ckt.State.Rhs[0] = 0.0;
-                ckt.State.Solution[0] = 0.0;
-                ckt.State.OldSolution[0] = 0.0;
+                state.Rhs[0] = 0.0;
+                state.Solution[0] = 0.0;
+                state.OldSolution[0] = 0.0;
 
                 // Exceeded maximum number of iterations
                 if (iterno > maxiter)
                 {
-                    ckt.Statistics.NumIter += iterno;
+                    Statistics.NumIter += iterno;
                     return false;
                 }
 
                 if (state.IsCon && iterno != 1)
-                    state.IsCon = IsConvergent(ckt);
+                    state.IsCon = IsConvergent();
                 else
                     state.IsCon = false;
 
@@ -280,7 +291,7 @@ namespace SpiceSharp.Simulations
                         }
                         if (state.IsCon)
                         {
-                            ckt.Statistics.NumIter += iterno;
+                            Statistics.NumIter += iterno;
                             return true;
                         }
                         break;
@@ -307,7 +318,7 @@ namespace SpiceSharp.Simulations
                         break;
 
                     default:
-                        ckt.Statistics.NumIter += iterno;
+                        Statistics.NumIter += iterno;
                         throw new CircuitException("Could not find flag");
                 }
             }
@@ -316,22 +327,20 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Load the circuit with the load behaviors
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        protected void Load(Circuit ckt)
+        protected void Load()
         {
-            var state = ckt.State;
-            var rstate = state;
-            var nodes = ckt.Nodes;
+            var state = State;
+            var nodes = Circuit.Nodes;
 
             // Start the stopwatch
-            ckt.Statistics.LoadTime.Start();
+            Statistics.LoadTime.Start();
 
             // Clear rhs and matrix
-            rstate.Clear();
+            state.Clear();
 
             // Load all devices
             foreach (var behavior in loadbehaviors)
-                behavior.Load(ckt);
+                behavior.Load(this);
 
             // Check modes
             if (state.UseDC)
@@ -346,14 +355,14 @@ namespace SpiceSharp.Simulations
                         if (nodes.Nodeset.ContainsKey(node.Name))
                         {
                             double ns = nodes.Nodeset[node.Name];
-                            if (ZeroNoncurRow(rstate.Matrix, nodes, node.Index))
+                            if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
                             {
-                                rstate.Rhs[node.Index] = 1.0e10 * ns;
+                                state.Rhs[node.Index] = 1.0e10 * ns;
                                 node.Diagonal.Value.Real = 1e10;
                             }
                             else
                             {
-                                rstate.Rhs[node.Index] = ns;
+                                state.Rhs[node.Index] = ns;
                                 node.Diagonal.Value.Real = 1.0;
                             }
                         }
@@ -368,14 +377,14 @@ namespace SpiceSharp.Simulations
                         if (nodes.IC.ContainsKey(node.Name))
                         {
                             double ic = nodes.IC[node.Name];
-                            if (ZeroNoncurRow(rstate.Matrix, nodes, node.Index))
+                            if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
                             {
-                                rstate.Rhs[node.Index] = 1.0e10 * ic;
+                                state.Rhs[node.Index] = 1.0e10 * ic;
                                 node.Diagonal.Value.Real = 1e10;
                             }
                             else
                             {
-                                rstate.Rhs[node.Index] = ic;
+                                state.Rhs[node.Index] = ic;
                                 node.Diagonal.Value.Real = 1.0;
                             }
                         }
@@ -384,7 +393,7 @@ namespace SpiceSharp.Simulations
             }
 
             // Keep statistics
-            ckt.Statistics.LoadTime.Stop();
+            Statistics.LoadTime.Stop();
         }
 
         /// <summary>
@@ -393,14 +402,13 @@ namespace SpiceSharp.Simulations
         protected void Ic()
         {
             var ckt = Circuit;
-            var state = ckt.State;
-            var rstate = state;
+            var state = State;
             var nodes = ckt.Nodes;
 
             // Clear the current solution
-            for (int i = 0; i < rstate.Solution.Length; i++)
+            for (int i = 0; i < state.Solution.Length; i++)
             {
-                rstate.Rhs[i] = 0.0;
+                state.Rhs[i] = 0.0;
             }
 
             // Go over all nodes
@@ -409,14 +417,14 @@ namespace SpiceSharp.Simulations
                 var node = nodes[i];
                 if (nodes.Nodeset.ContainsKey(node.Name))
                 {
-                    node.Diagonal = rstate.Matrix.GetElement(node.Index, node.Index);
+                    node.Diagonal = state.Matrix.GetElement(node.Index, node.Index);
                     state.HadNodeset = true;
-                    rstate.Rhs[node.Index] = nodes.Nodeset[node.Name];
+                    state.Rhs[node.Index] = nodes.Nodeset[node.Name];
                 }
                 if (nodes.IC.ContainsKey(node.Name))
                 {
-                    node.Diagonal = rstate.Matrix.GetElement(node.Index, node.Index);
-                    rstate.Rhs[node.Index] = nodes.IC[node.Name];
+                    node.Diagonal = state.Matrix.GetElement(node.Index, node.Index);
+                    state.Rhs[node.Index] = nodes.IC[node.Name];
                 }
             }
 
@@ -435,7 +443,7 @@ namespace SpiceSharp.Simulations
         /// <param name="nodes">The list of nodes</param>
         /// <param name="rownum">The row number</param>
         /// <returns></returns>
-        private bool ZeroNoncurRow(Matrix matrix, Nodes nodes, int rownum)
+        bool ZeroNoncurRow(Matrix matrix, Nodes nodes, int rownum)
         {
             bool currents = false;
             for (int n = 0; n < nodes.Count; n++)
@@ -456,11 +464,11 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Check if we are converging during iterations
         /// </summary>
-        /// <param name="ckt">The circuit</param>
         /// <returns></returns>
-        protected bool IsConvergent(Circuit ckt)
+        protected bool IsConvergent()
         {
-            var rstate = ckt.State;
+            var ckt = Circuit;
+            var rstate = State;
             var config = CurrentConfig;
 
             // Check convergence for each node
@@ -496,7 +504,7 @@ namespace SpiceSharp.Simulations
             // Device-level convergence tests
             foreach (var behavior in loadbehaviors)
             {
-                if (!behavior.IsConvergent(ckt))
+                if (!behavior.IsConvergent(this))
                 {
                     // I believe this should be false, but Spice 3f5 doesn't...
 

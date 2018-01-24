@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Attributes;
-using SpiceSharp.Components;
+﻿using SpiceSharp.Simulations;
 using SpiceSharp.Sparse;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.VCCS;
@@ -8,7 +7,7 @@ using System;
 namespace SpiceSharp.Behaviors.VCCS
 {
     /// <summary>
-    /// General behavior for a <see cref="VoltageControlledCurrentsource"/>
+    /// General behavior for a <see cref="Components.VoltageControlledCurrentsource"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
@@ -104,10 +103,9 @@ namespace SpiceSharp.Behaviors.VCCS
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Load(BaseSimulation sim)
         {
-            var rstate = ckt.State;
             VCCSposContPosptr.Add(bp.VCCScoeff);
             VCCSposContNegptr.Sub(bp.VCCScoeff);
             VCCSnegContPosptr.Sub(bp.VCCScoeff);

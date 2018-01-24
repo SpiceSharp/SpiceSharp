@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Diagnostics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.RES;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.RES
 {
@@ -41,8 +42,8 @@ namespace SpiceSharp.Behaviors.RES
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Temperature(Circuit ckt)
+        /// <param name="sim">Base simulation</param>
+        public override void Temperature(BaseSimulation sim)
         {
             double factor;
             double difference;
@@ -50,7 +51,7 @@ namespace SpiceSharp.Behaviors.RES
 
             // Default Value Processing for Resistor Instance
             if (!bp.REStemp.Given)
-                bp.REStemp.Value = ckt.State.Temperature;
+                bp.REStemp.Value = sim.State.Temperature;
             if (!bp.RESwidth.Given)
                 bp.RESwidth.Value = mbp?.RESdefWidth ?? 0.0;
 

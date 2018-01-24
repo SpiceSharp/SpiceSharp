@@ -2,14 +2,13 @@
 using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components;
 using SpiceSharp.Components.DIO;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.DIO
 {
     /// <summary>
-    /// AC behavior for <see cref="Diode"/>
+    /// AC behavior for <see cref="Components.Diode"/>
     /// </summary>
     public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
@@ -110,7 +109,7 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="sim"></param>
         public override void InitializeParameters(FrequencySimulation sim)
         {
-            var state = sim.Circuit.State;
+            var state = sim.State;
             double arg, czero, sarg, capd, czof2;
             double vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
 
@@ -131,12 +130,12 @@ namespace SpiceSharp.Behaviors.DIO
         }
 
         /// <summary>
-        /// Perform AC analysis
+        /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Load(Circuit ckt)
+        /// <param name="sim">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation sim)
         {
-            var state = ckt.State;
+            var state = sim.State;
             double gspr, geq, xceq;
 
             gspr = modeltemp.DIOconductance * bp.DIOarea;

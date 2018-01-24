@@ -1,8 +1,9 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
-using SpiceSharp.Components.Noise;
+using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Components.DIO;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.DIO
 {
@@ -45,6 +46,10 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="name">Name</param>
         public NoiseBehavior(Identifier name) : base(name) { }
 
+        /// <summary>
+        /// Setup behavior
+        /// </summary>
+        /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
@@ -72,13 +77,13 @@ namespace SpiceSharp.Behaviors.DIO
         }
 
         /// <summary>
-        /// Perform diode noise calculations
+        /// Noise calculations
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Noise(Circuit ckt)
+        /// <param name="sim">Noise simulation</param>
+        public override void Noise(Noise sim)
         {
-            var state = ckt.State;
-            var noise = ckt.State.Noise;
+            var state = sim.State;
+            var noise = state.Noise;
 
             // Set noise parameters
             DIOnoise.Generators[DIORSNOIZ].Set(modeltemp.DIOconductance * bp.DIOarea);
@@ -87,7 +92,7 @@ namespace SpiceSharp.Behaviors.DIO
                 * Math.Log(Math.Max(Math.Abs(load.DIOcurrent), 1e-38))) / noise.Freq);
 
             // Evaluate noise
-            DIOnoise.Evaluate(ckt);
+            DIOnoise.Evaluate(sim);
         }
     }
 }
