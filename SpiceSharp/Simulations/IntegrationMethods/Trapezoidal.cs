@@ -28,7 +28,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Initialize the trapezoidal integration method
         /// </summary>
-        /// <param name="ckt">Circuit</param>
         /// <param name="tranbehaviors">Truncation behaviors</param>
         public override void Initialize(List<TransientBehavior> tranbehaviors)
         {
@@ -37,38 +36,6 @@ namespace SpiceSharp.IntegrationMethods
             ag = new double[MaxOrder];
             for (int i = 0; i < MaxOrder; i++)
                 ag[i] = 0.0;
-        }
-
-        /// <summary>
-        /// Integrate a state variable
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="index">The state index to integrate</param>
-        /// <param name="cap">The capacitance</param>
-        /// <returns></returns>
-        public override Result Integrate(State state, int qcap, double cap)
-        {
-            int ccap = qcap + 1;
-
-            switch (Order)
-            {
-                case 1:
-                    state.States[0][ccap] = ag[0] * state.States[0][qcap] + ag[1] * state.States[1][qcap];
-                    break;
-
-                case 2:
-                    state.States[0][ccap] = -state.States[1][ccap] * ag[1] + ag[0] * (state.States[0][qcap] - state.States[1][qcap]);
-                    break;
-
-                default:
-                    throw new CircuitException("Invalid order");
-            }
-
-            // Create the returned object
-            Result result = new Result();
-            result.Ceq = state.States[0][ccap] - ag[0] * state.States[0][qcap];
-            result.Geq = ag[0] * cap;
-            return result;
         }
 
         /// <summary>
@@ -227,61 +194,6 @@ namespace SpiceSharp.IntegrationMethods
 
             // Store the derivative w.r.t. the current timestep
             Slope = ag[0];
-        }
-
-        /// <summary>
-        /// Control local truncation error on a state variable
-        /// </summary>
-        /// <param name="qcap">Index</param>
-        /// <param name="sim">simulation</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Terr(int qcap, TimeSimulation sim, ref double timeStep)
-        {
-            var state = sim.State;
-            var config = sim.CurrentConfig ?? Configuration.Default;
-            int ccap = qcap + 1;
-
-            double[] diff = new double[state.States.Length];
-            double[] deltmp = new double[DeltaOld.Length];
-
-            // Calculate the tolerance
-            double volttol = config.AbsTol + config.RelTol * Math.Max(Math.Abs(state.States[0][ccap]), Math.Abs(state.States[1][ccap]));
-            double chargetol = Math.Max(Math.Abs(state.States[0][qcap]), Math.Abs(state.States[1][qcap]));
-            chargetol = config.RelTol * Math.Max(chargetol, config.ChgTol) / Delta;
-            double tol = Math.Max(volttol, chargetol);
-
-            // Now divided differences
-            for (int i = 0; i < diff.Length; i++)
-                diff[i] = state.States[i][qcap];
-            for (int i = 0; i < deltmp.Length; i++)
-                deltmp[i] = DeltaOld[i];
-            int j = Order;
-            while (true)
-            {
-                for (int i = 0; i <= j; i++)
-                    diff[i] = (diff[i] - diff[i + 1]) / deltmp[i];
-                if (--j < 0)
-                    break;
-                for (int i = 0; i <= j; i++)
-                    deltmp[i] = deltmp[i + 1] + DeltaOld[i];
-            }
-
-            // Calculate the new timestep
-            double factor;
-            switch (Order)
-            {
-                case 1: factor = 0.5; break;
-                case 2: factor = 0.0833333333; break;
-                default: throw new CircuitException($"Invalid order {Order}");
-            }
-            double del = Config.TrTol * tol / Math.Max(config.AbsTol, factor * Math.Abs(diff[0]));
-            if (Order == 2)
-                del = Math.Sqrt(del);
-            else if (Order > 2)
-                del = Math.Exp(Math.Log(del) / Order);
-
-            // Return the timestep
-            timeStep = Math.Min(timeStep, del);
         }
 
         /// <summary>

@@ -331,32 +331,6 @@ namespace SpiceSharp.IntegrationMethods
         public abstract void Integrate(HistoryPoint first, int index);
 
         /// <summary>
-        /// Integrate a state variable
-        /// Note that the integrated quantity will/should be stored at the next index!
-        /// </summary>
-        /// <param name="state">The state of the circuit</param>
-        /// <param name="index">The index of the variable to be integrated</param>
-        /// <param name="cap">The capacitance</param>
-        /// <returns></returns>
-        public abstract Result Integrate(State state, int index, double cap);
-
-        /// <summary>
-        /// Integrate a state variable
-        /// Note that the integrated quantity will/should be stored at the next index!
-        /// </summary>
-        /// <param name="state">The state of the circuit</param>
-        /// <param name="geq">The Geq parameter</param>
-        /// <param name="ceq">The Ceq parameter</param>
-        /// <param name="index">The index of the variable to be integrated</param>
-        /// <param name="cap">The capacitance</param>
-        public void Integrate(State state, out double geq, out double ceq, int index, double cap)
-        {
-            var result = Integrate(state, index, cap);
-            geq = result.Geq;
-            ceq = result.Ceq;
-        }
-
-        /// <summary>
         /// Do truncation for all nodes
         /// </summary>
         /// <param name="sender">Sender</param>
@@ -389,14 +363,6 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="sim">Time-based simulation</param>
         public abstract void ComputeCoefficients(TimeSimulation sim);
-
-        /// <summary>
-        /// LTE control by state variables
-        /// </summary>
-        /// <param name="qcap">Index of the state containing the charges</param>
-        /// <param name="sim">Simulation</param>
-        /// <param name="timeStep">Timestep</param>
-        public abstract void Terr(int qcap, TimeSimulation sim, ref double timeStep);
 
         /// <summary>
         /// Calculate the new timestep based on the LTE (local truncation error)

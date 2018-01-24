@@ -1,6 +1,6 @@
 ﻿using System;
 using SpiceSharp.IntegrationMethods;
-using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.IND
 {

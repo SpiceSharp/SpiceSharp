@@ -213,17 +213,6 @@ namespace SpiceSharp.Simulations
         public int Order { get; private set; } = 0;
 
         /// <summary>
-        /// The amount of states in the circuit
-        /// </summary>
-        public int NumStates { get; private set; } = 0;
-
-        /// <summary>
-        /// Get the states for this circuit
-        /// Each element in the vector is used by circuit components to store their state
-        /// </summary>
-        public double[][] States { get; private set; } = null;
-
-        /// <summary>
         /// True if already initialized
         /// </summary>
         public bool Initialized { get; private set; } = false;
@@ -249,33 +238,8 @@ namespace SpiceSharp.Simulations
             Solution = new double[Order];
             OldSolution = new double[Order];
             iSolution = new double[Order];
-
             Noise = new StateNoise();
-            if (ckt.Method != null)
-                ReinitStates(ckt.Method);
-            else
-                States = new double[2][];
-
-            // Fill the states
-            NumStates = Math.Max(NumStates, 1);
-            for (int i = 0; i < States.Length; i++)
-                States[i] = new double[NumStates];
-
             Initialized = true;
-        }
-
-        /// <summary>
-        /// Reinitialize states for a method
-        /// </summary>
-        /// <param name="method">The integration method</param>
-        public void ReinitStates(IntegrationMethods.IntegrationMethod method)
-        {
-            // Allocate states
-            // States = new Vector<double>[method.MaxOrder + 2];
-            States = new double[method.MaxOrder + 2][];
-            NumStates = Math.Max(NumStates, 1);
-            for (int i = 0; i < States.Length; i++)
-                States[i] = new double[NumStates];
         }
 
         /// <summary>
@@ -284,7 +248,6 @@ namespace SpiceSharp.Simulations
         public void Destroy()
         {
             Order = 0;
-            NumStates = 0;
             Initialized = false;
 
             Rhs = null;
@@ -292,9 +255,6 @@ namespace SpiceSharp.Simulations
             Solution = null;
             iSolution = null;
             Matrix = null;
-
-            // Remove states
-            States = null;
         }
 
         /// <summary>
@@ -327,42 +287,6 @@ namespace SpiceSharp.Simulations
                 iRhs[i] = 0;
             }
             Matrix.Clear();
-        }
-
-        /// <summary>
-        /// Reserve some states
-        /// </summary>
-        /// <param name="count">The amount of states to be reserved</param>
-        /// <returns></returns>
-        public int GetState(int count = 1)
-        {
-            int index = NumStates;
-            NumStates += count;
-            return index;
-        }
-
-        /// <summary>
-        /// Shift all the states by one place
-        /// The first element can then be used to calculate the new integrated value,
-        /// but it does not guarantee the elements will be cleared
-        /// </summary>
-        public void ShiftStates()
-        {
-            // Reuse the last state vector to save memory and speed (garbage collection)
-            var tmp = States[States.Length - 1];
-            for (int i = States.Length - 1; i > 0; i--)
-                States[i] = States[i - 1];
-            States[0] = tmp;
-        }
-
-        /// <summary>
-        /// Copy state 0 to all other states
-        /// </summary>
-        /// <param name="index"></param>
-        public void CopyDC(int index)
-        {
-            for (int i = 1; i < States.Length; i++)
-                States[i][index] = States[0][index];
         }
         #endregion
     }

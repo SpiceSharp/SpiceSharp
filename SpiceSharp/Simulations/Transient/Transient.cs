@@ -104,7 +104,6 @@ namespace SpiceSharp.Simulations
             // Setup breakpoints
             Method.Initialize(tranbehaviors);
             state.Initialize(ckt);
-            state.ReinitStates(Method);
 
             // Calculate the operating point
             ckt.Method = null;
@@ -124,10 +123,6 @@ namespace SpiceSharp.Simulations
             // Stop calculating a DC solution
             state.UseIC = false;
             state.UseDC = false;
-            for (int i = 0; i < state.States[0].Length; i++)
-            {
-                state.States[1][i] = state.States[0][i];
-            }
             foreach (var behavior in tranbehaviors)
                 behavior.GetDCstate(this);
             States.ClearDC();
@@ -176,7 +171,6 @@ namespace SpiceSharp.Simulations
                     // resume:
                     Method.Delta = Math.Min(Method.Delta, MaxStep);
                     Method.Resume();
-                    state.ShiftStates();
                     States.ShiftStates();
 
                     // Calculate a new solution
@@ -193,14 +187,6 @@ namespace SpiceSharp.Simulations
                             state.Init = State.InitFlags.InitTransient;
                         bool converged = TranIterate(config.TranMaxIterations);
                         Statistics.TimePoints++;
-                        if (Method.SavedTime == 0.0)
-                        {
-                            for (int i = 0; i < state.States[1].Length; i++)
-                            {
-                                state.States[2][i] = state.States[1][i];
-                                state.States[3][i] = state.States[1][i];
-                            }
-                        }
 
                         // Spice copies the states the first time, we're not
                         // I believe this is because Spice treats the first timepoint after the OP as special (MODEINITTRAN)
