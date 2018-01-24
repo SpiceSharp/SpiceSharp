@@ -49,20 +49,6 @@ namespace SpiceSharp.Behaviors.DIO
             // Get behaviors
             modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
         }
-        
-        /// <summary>
-        /// Setup the behavior
-        /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
-        {
-            var dio = component as Diode;
-
-            // Get behaviors
-            modeltemp = GetBehavior<ModelTemperatureBehavior>(dio.Model);
-        }
 
         /// <summary>
         /// Do temperature-dependent calculations

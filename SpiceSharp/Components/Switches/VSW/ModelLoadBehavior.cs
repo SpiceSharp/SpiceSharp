@@ -31,15 +31,13 @@ namespace SpiceSharp.Behaviors.VSW
         public ModelLoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Setup the behavior
+        /// 
         /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public override void Setup(Entity component, Circuit ckt)
+        /// <param name="provider"></param>
+        public override void Setup(SetupDataProvider provider)
         {
-            VSWonConduct = 1.0 / mbp.VSWon;
-            VSWoffConduct = 1.0 / mbp.VSWoff;
+            // Get parameters
+            mbp = provider.GetParameters<ModelBaseParameters>();
         }
 
         /// <summary>
@@ -48,7 +46,8 @@ namespace SpiceSharp.Behaviors.VSW
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            // Do nothing
+            VSWonConduct = 1.0 / mbp.VSWon;
+            VSWoffConduct = 1.0 / mbp.VSWoff;
         }
     }
 }

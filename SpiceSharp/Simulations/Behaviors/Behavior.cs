@@ -22,11 +22,6 @@ namespace SpiceSharp.Behaviors
         public Identifier Name { get; }
 
         /// <summary>
-        /// Gets whether or not the behavior is already set up
-        /// </summary>
-        public bool DataOnly { get; protected set; } = false;
-
-        /// <summary>
         /// Constructor
         /// NOTE: remove default later
         /// </summary>
@@ -56,16 +51,6 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="provider">The data provider</param>
         public virtual void Setup(SetupDataProvider provider)
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Setup the behavior
-        /// </summary>
-        /// <param name="component">Component</param>
-        /// <param name="ckt">Circuit</param>
-        public virtual void Setup(Entity component, Circuit ckt)
         {
             // Do nothing
         }
