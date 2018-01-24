@@ -163,9 +163,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <param name="sim"></param>
         public override void InitializeParameters(FrequencySimulation sim)
         {
-            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
+            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
-                sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb;
+                sargsw;
 
             vbs = load.MOS3vbs;
             vbd = load.MOS3vbd;
@@ -173,14 +173,8 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
             vds = load.MOS3vds;
             vgd = vgs - vds;
             vgb = vgs - vbs;
-            von = load.MOS3von;
-            vdsat = load.MOS3vdsat;
-
-            double MOS3gbd = 0.0;
-            double MOS3cbd = 0.0;
-            double MOS3cd = 0.0;
-            double MOS3gbs = 0.0;
-            double MOS3cbs = 0.0;
+            von = mbp.MOS3type * load.MOS3von;
+            vdsat = mbp.MOS3type * load.MOS3vdsat;
 
             EffectiveLength = bp.MOS3l - 2 * mbp.MOS3latDiff;
             GateSourceOverlapCap = mbp.MOS3gateSourceOverlapCapFactor * bp.MOS3w;

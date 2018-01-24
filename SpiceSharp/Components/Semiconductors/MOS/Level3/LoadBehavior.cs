@@ -213,6 +213,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
             vt = Circuit.CONSTKoverQ * bp.MOS3temp;
             Check = 1;
 
+
             /* DETAILPROF */
 
             /* first, we compute a few useful values - these could be
@@ -270,6 +271,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
 				* and similar rudeness
 				*/
 
+                // NOTE: Spice 3f5 does not write out MOS3vgs during DC analysis, so DEVfetlim may give different results in Spice 3f5
                 if (MOS3vds >= 0)
                 {
                     vgs = Transistor.DEVfetlim(vgs, MOS3vgs, von);
@@ -699,7 +701,8 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
                 goto innerline1000;
                 /* 
 				 * .....special case of vds = 0.0d0 */
-                line900: Beta = Beta * fgate;
+                line900:
+                Beta = Beta * fgate;
                 cdrain = 0.0;
                 MOS3gm = 0.0;
                 MOS3gds = Beta * (vgsx - vth);

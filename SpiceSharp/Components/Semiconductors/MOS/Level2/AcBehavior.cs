@@ -173,8 +173,8 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
             vgs = load.MOS2vgs;
             vgd = load.MOS2vgs - load.MOS2vds;
             vgb = load.MOS2vgs - load.MOS2vbs;
-            von = load.MOS2von;
-            vdsat = load.MOS2vdsat;
+            von = mbp.MOS2type * load.MOS2von;
+            vdsat = mbp.MOS2type * load.MOS2vdsat;
 
             EffectiveLength = bp.MOS2l - 2 * mbp.MOS2latDiff;
             GateSourceOverlapCap = mbp.MOS2gateSourceOverlapCapFactor * bp.MOS2w;

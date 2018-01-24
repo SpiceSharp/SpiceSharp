@@ -203,8 +203,8 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
             vgs = load.MOS2vgs;
             vgd = load.MOS2vgs - load.MOS2vds;
             vgb = load.MOS2vgs - load.MOS2vbs;
-            von = load.MOS2von;
-            vdsat = load.MOS2vdsat;
+            von = mbp.MOS2type * load.MOS2von;
+            vdsat = mbp.MOS2type * load.MOS2vdsat;
 
             MOS2vds.Value = load.MOS2vds;
             MOS2vbs.Value = vbs;
@@ -374,8 +374,8 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
             vgs = load.MOS2vgs;
             vgd = load.MOS2vgs - load.MOS2vds;
             vgb = load.MOS2vgs - load.MOS2vbs;
-            von = load.MOS2von;
-            vdsat = load.MOS2vdsat;
+            von = mbp.MOS2type * load.MOS2von;
+            vdsat = mbp.MOS2type * load.MOS2vdsat;
 
             MOS2vds.Value = load.MOS2vds;
             MOS2vbs.Value = vbs;
@@ -588,25 +588,19 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
             /* 
 			 * load y matrix
 			 */
-            MOS2DdPtr.Add(temp.MOS2drainConductance);
             MOS2GgPtr.Add(gcgd + gcgs + gcgb);
-            MOS2SsPtr.Add(temp.MOS2sourceConductance);
             MOS2BbPtr.Add(MOS2gbd + MOS2gbs + gcgb);
-            MOS2DPdpPtr.Add(temp.MOS2drainConductance + MOS2gbd + gcgd);
-            MOS2SPspPtr.Add(temp.MOS2sourceConductance + MOS2gbs + gcgs);
-            MOS2DdpPtr.Add(-temp.MOS2drainConductance);
+            MOS2DPdpPtr.Add(MOS2gbd + gcgd);
+            MOS2SPspPtr.Add(MOS2gbs + gcgs);
             MOS2GbPtr.Sub(gcgb);
             MOS2GdpPtr.Sub(gcgd);
             MOS2GspPtr.Sub(gcgs);
-            MOS2SspPtr.Add(-temp.MOS2sourceConductance);
             MOS2BgPtr.Sub(gcgb);
             MOS2BdpPtr.Sub(MOS2gbd);
             MOS2BspPtr.Sub(MOS2gbs);
-            MOS2DPdPtr.Add(-temp.MOS2drainConductance);
             MOS2DPgPtr.Add(-gcgd);
             MOS2DPbPtr.Add(-MOS2gbd);
             MOS2SPgPtr.Add(-gcgs);
-            MOS2SPsPtr.Add(-temp.MOS2sourceConductance);
             MOS2SPbPtr.Add(-MOS2gbs);
         }
 

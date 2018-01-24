@@ -138,7 +138,6 @@
     <Compile Include="Attributes\SpiceParameters.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level3\NoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level3\TemperatureBehavior.cs" />
-    <Compile Include="Components\Semiconductors\MOS\Level3\TruncateBehavior.cs" />
     <Compile Include="Components\Switches\CSW\AcBehavior.cs" />
     <Compile Include="Components\Switches\CSW\LoadBehavior.cs" />
     <Compile Include="Components\Switches\CSW\ModelLoadBehavior.cs" />
