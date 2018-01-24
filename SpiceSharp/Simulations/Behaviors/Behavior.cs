@@ -3,6 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
+using System.Reflection;
 
 namespace SpiceSharp.Behaviors
 {
@@ -70,37 +71,78 @@ namespace SpiceSharp.Behaviors
         /// <returns>Returns null if there is no export method</returns>
         public virtual Func<State, double> CreateExport(string property)
         {
+            return CreateExport<State, double>(property);
+        }
+
+        /// <summary>
+        /// Create a method for exporting a property
+        /// </summary>
+        /// <typeparam name="S">Input type</typeparam>
+        /// <typeparam name="R">Return type</typeparam>
+        /// <param name="property">Property name</param>
+        /// <returns></returns>
+        protected Func<S, R> CreateExport<S, R>(string property)
+        {
             // Find methods to create the export
-            var members = GetType().GetMethods(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             foreach (var member in members)
             {
-                // Check the return type (needs to be a double)
-                if (member.ReturnType != typeof(double))
-                    continue;
-
-                // Check the name
-                var names = (SpiceName[])member.GetCustomAttributes(typeof(SpiceName), true);
-                bool found = false;
-                foreach (var name in names)
+                // Use methods
+                if (member is MethodInfo mi)
                 {
-                    if (name.Name == property)
-                    {
-                        found = true;
+                    // Check the return type (needs to be a double)
+                    if (mi.ReturnType != typeof(R))
                         continue;
+
+                    // Check the name
+                    var names = (SpiceName[])member.GetCustomAttributes(typeof(SpiceName), true);
+                    bool found = false;
+                    foreach (var name in names)
+                    {
+                        if (name.Name == property)
+                        {
+                            found = true;
+                            continue;
+                        }
                     }
+                    if (!found)
+                        continue;
+
+                    // Check the parameters
+                    var parameters = mi.GetParameters();
+                    if (parameters.Length != 1)
+                        continue;
+                    if (parameters[0].ParameterType != typeof(S))
+                        continue;
+
+                    // Return a delegate
+                    return (Func<S, R>)mi.CreateDelegate(typeof(Func<S, R>), this);
                 }
-                if (!found)
-                    continue;
 
-                // Check the parameters
-                var parameters = member.GetParameters();
-                if (parameters.Length != 1)
-                    continue;
-                if (parameters[0].ParameterType != typeof(State))
-                    continue;
+                // Use properties
+                if (member is PropertyInfo pi)
+                {
+                    if (pi.PropertyType != typeof(R))
+                        continue;
 
-                // Return a delegate
-                return (Func<State, double>)member.CreateDelegate(typeof(Func<State, double>), this);
+                    // Check the name
+                    var names = (SpiceName[])member.GetCustomAttributes(typeof(SpiceName), true);
+                    bool found = false;
+                    foreach (var name in names)
+                    {
+                        if (name.Name == property)
+                        {
+                            found = true;
+                            continue;
+                        }
+                    }
+                    if (!found)
+                        continue;
+
+                    // Return the getter!
+                    var getmethod = (Func<R>)pi.GetGetMethod().CreateDelegate(typeof(Func<R>), this);
+                    return (S state) => getmethod();
+                }
             }
 
             // Not found

@@ -40,7 +40,7 @@ namespace Sandbox
             Func<State, double>[] exports = new Func<State, double>[2];
             tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
-                exports[0] = (State state) => tran.Method.Time;
+                exports[0] = tran.CreateExport("Vsupply", "v");
                 exports[1] = tran.CreateVoltageExport("out");
             };
 

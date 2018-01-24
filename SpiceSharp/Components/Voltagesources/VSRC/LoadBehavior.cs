@@ -77,7 +77,7 @@ namespace SpiceSharp.Behaviors.VSRC
         /// </summary>
         /// <param name="property">Parameter</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(string property)
+        /* public override Func<State, double> CreateExport(string property)
         {
             // Avoid reflection for common components
             switch (property)
@@ -87,7 +87,7 @@ namespace SpiceSharp.Behaviors.VSRC
                 case "p": return GetPower;
                 default: return null;
             }
-        }
+        } */
         
         /// <summary>
         /// Connect the load behavior

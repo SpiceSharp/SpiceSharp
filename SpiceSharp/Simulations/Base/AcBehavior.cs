@@ -25,41 +25,7 @@ namespace SpiceSharp.Behaviors
         /// <returns></returns>
         public virtual Func<State, Complex> CreateAcExport(string property)
         {
-            // Find methods to create the export
-            var members = GetType().GetMethods(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-            foreach (var member in members)
-            {
-                // Check the return type (needs to be a double)
-                if (member.ReturnType != typeof(Complex))
-                    continue;
-
-                // Check the name
-                var names = (SpiceName[])member.GetCustomAttributes(typeof(SpiceName), true);
-                bool found = false;
-                foreach (var name in names)
-                {
-                    if (name.Name == property)
-                    {
-                        found = true;
-                        continue;
-                    }
-                }
-                if (!found)
-                    continue;
-
-                // Check the parameters
-                var parameters = member.GetParameters();
-                if (parameters.Length != 1)
-                    continue;
-                if (parameters[0].ParameterType != typeof(State))
-                    continue;
-
-                // Return a delegate
-                return (Func<State, Complex>)member.CreateDelegate(typeof(Func<State, Complex>), this);
-            }
-
-            // Not found
-            return null;
+            return CreateExport<State, Complex>(property);
         }
 
         /// <summary>
