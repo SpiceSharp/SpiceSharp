@@ -14,14 +14,6 @@ namespace SpiceSharp.Behaviors.VSRC
     public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
     {
         /// <summary>
-        /// Methods
-        /// </summary>
-        [SpiceName("acreal"), SpiceInfo("A.C. real part")]
-        public double GetAcReal() => VSRCac.Real;
-        [SpiceName("acimag"), SpiceInfo("A.C. imaginary part")]
-        public double GetAcImag() => VSRCac.Imaginary;
-
-        /// <summary>
         /// AC excitation vector
         /// </summary>
         public Complex VSRCac { get; protected set; }
@@ -41,31 +33,39 @@ namespace SpiceSharp.Behaviors.VSRC
         protected MatrixElement VSRCibrIbrptr { get; private set; }
 
         /// <summary>
+        /// Properties
+        /// </summary>
+        [SpiceName("v"), SpiceInfo("Complex voltage")]
+        public Complex GetVoltage(State state)
+        {
+            return new Complex(
+                state.Solution[VSRCposNode] - state.Solution[VSRCnegNode],
+                state.iSolution[VSRCposNode] - state.iSolution[VSRCnegNode]);
+        }
+        [SpiceName("i"), SpiceName("c"), SpiceInfo("Complex current")]
+        public Complex GetCurrent(State state)
+        {
+            return new Complex(
+                state.Solution[VSRCbranch],
+                state.iSolution[VSRCbranch]);
+        }
+        [SpiceName("p"), SpiceInfo("Complex power")]
+        public Complex GetPower(State state)
+        {
+            Complex v = new Complex(
+                state.Solution[VSRCposNode] - state.Solution[VSRCnegNode],
+                state.iSolution[VSRCposNode] - state.iSolution[VSRCnegNode]);
+            Complex i = new Complex(
+                state.Solution[VSRCbranch],
+                state.iSolution[VSRCbranch]);
+            return -v * Complex.Conjugate(i);
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
         public AcBehavior(Identifier name) : base(name) { }
-
-        /// <summary>
-        /// Create an export method for AC analysis
-        /// </summary>
-        /// <param name="property">Property</param>
-        /// <returns></returns>
-        public override Func<State, Complex> CreateAcExport(string property)
-        {
-            switch (property)
-            {
-                case "v": return (State state) => new Complex(state.Solution[VSRCposNode] - state.Solution[VSRCnegNode], state.iSolution[VSRCposNode] - state.Solution[VSRCnegNode]);
-                case "i": return (State state) => new Complex(state.Solution[VSRCbranch], state.iSolution[VSRCbranch]);
-                case "p": return (State state) =>
-                {
-                    Complex voltage = new Complex(state.Solution[VSRCposNode] - state.Solution[VSRCnegNode], state.iSolution[VSRCposNode] - state.Solution[VSRCnegNode]);
-                    Complex current = new Complex(state.Solution[VSRCbranch], state.iSolution[VSRCbranch]);
-                    return voltage * Complex.Conjugate(current);
-                };
-                default: return null;
-            }
-        }
 
         /// <summary>
         /// Setup the behavior

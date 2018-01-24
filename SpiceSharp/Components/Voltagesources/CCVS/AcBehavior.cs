@@ -2,6 +2,8 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
+using System.Numerics;
 
 namespace SpiceSharp.Behaviors.CCVS
 {
@@ -26,6 +28,32 @@ namespace SpiceSharp.Behaviors.CCVS
         protected MatrixElement CCVSibrPosptr { get; private set; }
         protected MatrixElement CCVSibrNegptr { get; private set; }
         protected MatrixElement CCVSibrContBrptr { get; private set; }
+
+        [SpiceName("v"), SpiceInfo("Complex voltage")]
+        public Complex GetVoltage(State state)
+        {
+            return new Complex(
+                state.Solution[CCVSposNode] - state.Solution[CCVSnegNode],
+                state.iSolution[CCVSposNode] - state.iSolution[CCVSnegNode]);
+        }
+        [SpiceName("i"), SpiceName("c"), SpiceInfo("Complex current")]
+        public Complex GetCurrent(State state)
+        {
+            return new Complex(
+                state.Solution[CCVSbranch],
+                state.iSolution[CCVSbranch]);
+        }
+        [SpiceName("p"), SpiceInfo("Complex power")]
+        public Complex GetPower(State state)
+        {
+            Complex v = new Complex(
+                state.Solution[CCVSposNode] - state.Solution[CCVSnegNode],
+                state.iSolution[CCVSposNode] - state.iSolution[CCVSnegNode]);
+            Complex i = new Complex(
+                state.Solution[CCVSbranch],
+                state.iSolution[CCVSbranch]);
+            return -v * Complex.Conjugate(i);
+        }
 
         /// <summary>
         /// Constructor

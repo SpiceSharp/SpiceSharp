@@ -3,6 +3,7 @@ using System.Numerics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.ISRC;
 using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Behaviors.ISRC
 {
@@ -23,10 +24,48 @@ namespace SpiceSharp.Behaviors.ISRC
         Complex ISRCac;
 
         /// <summary>
+        /// Properties
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        [SpiceName("v"), SpiceInfo("Complex voltage")]
+        public Complex GetVoltage(State state)
+        {
+            return new Complex(
+                state.Solution[ISRCposNode] - state.Solution[ISRCnegNode],
+                state.iSolution[ISRCposNode] - state.iSolution[ISRCnegNode]
+                );
+        }
+        [SpiceName("p"), SpiceInfo("Complex power")]
+        public Complex GetPower(State state)
+        {
+            Complex v = new Complex(
+                state.Solution[ISRCposNode] - state.Solution[ISRCnegNode],
+                state.iSolution[ISRCposNode] - state.iSolution[ISRCnegNode]
+                );
+            return -v * Complex.Conjugate(ISRCac);
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
         public AcBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Create delegate for a property
+        /// </summary>
+        /// <param name="property">Property name</param>
+        /// <returns></returns>
+        public override Func<State, Complex> CreateAcExport(string property)
+        {
+            switch (property)
+            {
+                case "i":
+                case "c": return (State state) => ISRCac;
+                default: return base.CreateAcExport(property);
+            }
+        }
 
         /// <summary>
         /// Setup behavior

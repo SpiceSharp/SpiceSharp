@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Numerics;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using SpiceSharp;

@@ -2,7 +2,9 @@
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.CCCS;
 using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
 using System;
+using System.Numerics;
 
 namespace SpiceSharp.Behaviors.CCCS
 {
@@ -18,6 +20,32 @@ namespace SpiceSharp.Behaviors.CCCS
         VSRC.LoadBehavior vsrcload;
 
         /// <summary>
+        /// Properties
+        /// </summary>
+        [SpiceName("v"), SpiceInfo("Complex voltage")]
+        public Complex GetVoltage(State state)
+        {
+            return new Complex(
+                state.Solution[CCCSposNode] - state.Solution[CCCSnegNode],
+                state.iSolution[CCCSposNode] - state.iSolution[CCCSnegNode]);
+        }
+        [SpiceName("i"), SpiceInfo("Complex current")]
+        public Complex GetCurrent(State state)
+        {
+            return new Complex(
+                state.Solution[CCCScontBranch],
+                state.iSolution[CCCScontBranch]
+                ) * bp.CCCScoeff.Value;
+        }
+        [SpiceName("p"), SpiceInfo("Complex power")]
+        public Complex GetPower(State state)
+        {
+            Complex v = new Complex(state.Solution[CCCSposNode], state.iSolution[CCCSnegNode]);
+            Complex i = new Complex(state.Solution[CCCScontBranch], state.iSolution[CCCScontBranch]) * bp.CCCScoeff.Value;
+            return -v * Complex.Conjugate(i);
+        }
+
+        /// <summary>
         /// Nodes
         /// </summary>
         int CCCSposNode, CCCSnegNode, CCCScontBranch;
@@ -29,39 +57,6 @@ namespace SpiceSharp.Behaviors.CCCS
         /// </summary>
         /// <param name="name">Name</param>
         public AcBehavior(Identifier name) : base(name) { }
-        
-        /// <summary>
-        /// Create an export method
-        /// </summary>
-        /// <param name="property">Parameters</param>
-        /// <returns></returns>
-        public override Func<State, double> CreateExport(string property)
-        {
-            switch (property)
-            {
-                case "vr": return (State state) => state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
-                case "vi": return (State state) => state.iSolution[CCCSposNode] - state.iSolution[CCCSnegNode];
-                case "ir": return (State state) => state.Solution[CCCScontBranch] * bp.CCCScoeff.Value;
-                case "ii": return (State state) => state.iSolution[CCCScontBranch] * bp.CCCScoeff.Value;
-                case "pr": return (State state) =>
-                    {
-                        double vr = state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
-                        double vi = state.iSolution[CCCSposNode] - state.iSolution[CCCSnegNode];
-                        double ir = state.Solution[CCCScontBranch] * bp.CCCScoeff.Value;
-                        double ii = state.iSolution[CCCScontBranch] * bp.CCCScoeff.Value;
-                        return vr * ir - vi * ii;
-                    };
-                case "pi": return (State state) =>
-                    {
-                        double vr = state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
-                        double vi = state.iSolution[CCCSposNode] - state.iSolution[CCCSnegNode];
-                        double ir = state.Solution[CCCScontBranch] * bp.CCCScoeff.Value;
-                        double ii = state.iSolution[CCCScontBranch] * bp.CCCScoeff.Value;
-                        return vr * ii + vi * ir;
-                    };
-                default: return null;
-            }
-        }
 
         /// <summary>
         /// Setup the behavior

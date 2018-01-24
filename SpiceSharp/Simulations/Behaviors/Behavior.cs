@@ -100,7 +100,7 @@ namespace SpiceSharp.Behaviors
                     continue;
 
                 // Return a delegate
-                return (Func<State, double>)member.CreateDelegate(typeof(Func<State, double>));
+                return (Func<State, double>)member.CreateDelegate(typeof(Func<State, double>), this);
             }
 
             // Not found

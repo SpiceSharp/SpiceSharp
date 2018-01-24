@@ -2,7 +2,9 @@
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.VCCS;
 using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
 using System;
+using System.Numerics;
 
 namespace SpiceSharp.Behaviors.VCCS
 {
@@ -26,27 +28,39 @@ namespace SpiceSharp.Behaviors.VCCS
         protected MatrixElement VCCSnegContNegptr { get; private set; }
 
         /// <summary>
+        /// Properties
+        /// </summary>
+        [SpiceName("v"), SpiceInfo("Complex voltage")]
+        public Complex GetVoltage(State state)
+        {
+            return new Complex(
+                state.Solution[VCCSposNode] - state.Solution[VCCSnegNode],
+                state.iSolution[VCCSposNode] - state.iSolution[VCCSnegNode]);
+        }
+        [SpiceName("c"), SpiceName("i"), SpiceInfo("Complex current")]
+        public Complex GetCurrent(State state)
+        {
+            return new Complex(
+                state.Solution[VCCScontPosNode] - state.Solution[VCCScontNegNode],
+                state.iSolution[VCCScontPosNode] - state.iSolution[VCCScontNegNode]) * bp.VCCScoeff.Value;
+        }
+        [SpiceName("p"), SpiceInfo("Power")]
+        public Complex GetPower(State state)
+        {
+            Complex v = new Complex(
+                state.Solution[VCCSposNode] - state.Solution[VCCSnegNode],
+                state.iSolution[VCCSposNode] - state.iSolution[VCCSnegNode]);
+            Complex i = new Complex(
+                state.Solution[VCCScontPosNode] - state.Solution[VCCScontNegNode],
+                state.iSolution[VCCScontPosNode] - state.iSolution[VCCScontNegNode]) * bp.VCCScoeff.Value;
+            return -v * Complex.Conjugate(i);
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
         public AcBehavior(Identifier name) : base(name) { }
-
-        /// <summary>
-        /// Create export method
-        /// </summary>
-        /// <param name="property">Parameter</param>
-        /// <returns></returns>
-        public override Func<State, double> CreateExport(string property)
-        {
-            switch (property)
-            {
-                case "vr": return (State state) => state.Solution[VCCSposNode] - state.Solution[VCCSnegNode];
-                case "vi": return (State state) => state.iSolution[VCCSposNode] - state.iSolution[VCCSnegNode];
-                case "ir": return (State state) => (state.Solution[VCCScontPosNode] - state.Solution[VCCScontNegNode]) * bp.VCCScoeff;
-                case "ii": return (State state) => (state.iSolution[VCCScontPosNode] - state.iSolution[VCCScontNegNode]) * bp.VCCScoeff;
-                default: return null;
-            }
-        }
 
         /// <summary>
         /// Setup the behavior
