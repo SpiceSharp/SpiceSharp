@@ -16,7 +16,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="data">Timestep cut data</param>
-        public delegate void TimestepCutEventHandler(object sender, TimestepCutData data);
+        public delegate void TimestepCutEventHandler(object sender, TimestepCutEventArgs data);
 
         /// <summary>
         /// Event that is called when the timestep has been cut due to convergence problems
@@ -43,7 +43,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The name of the simulation</param>
         /// <param name="step">The timestep</param>
         /// <param name="final">The final timepoint</param>
-        public Transient(string name, double step, double final) : base(name)
+        public Transient(Identifier name, double step, double final) : base(name)
         {
             Step = step;
             FinalTime = final;
@@ -200,7 +200,7 @@ namespace SpiceSharp.Simulations
                             Method.Delta /= 8.0;
                             Method.CutOrder();
 
-                            var data = new TimestepCutData(ckt, Method.Delta / 8.0, TimestepCutData.TimestepCutReason.Convergence);
+                            var data = new TimestepCutEventArgs(ckt, Method.Delta / 8.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
                             TimestepCut?.Invoke(this, data);
                         }
                         else
@@ -214,7 +214,7 @@ namespace SpiceSharp.Simulations
                             else
                             {
                                 Statistics.Rejected++;
-                                var data = new TimestepCutData(ckt, Method.Delta, TimestepCutData.TimestepCutReason.Truncation);
+                                var data = new TimestepCutEventArgs(ckt, Method.Delta, TimestepCutEventArgs.TimestepCutReason.Truncation);
                                 TimestepCut?.Invoke(this, data);
                             }
                         }
@@ -237,48 +237,6 @@ namespace SpiceSharp.Simulations
                 Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
                 throw new CircuitException($"{Name}: transient terminated", ex);
             }
-        }
-    }
-
-    /// <summary>
-    /// This class contains all data when a timestep cut event is triggered
-    /// </summary>
-    public class TimestepCutData
-    {
-        /// <summary>
-        /// Enumerations
-        /// </summary>
-        public enum TimestepCutReason
-        {
-            Convergence, // Cut due to convergence problems
-            Truncation // Cut due to the local truncation error
-        }
-
-        /// <summary>
-        /// Get the circuit
-        /// </summary>
-        public Circuit Circuit { get; }
-
-        /// <summary>
-        /// The new timestep that will be tried
-        /// </summary>
-        public double NewDelta { get; }
-
-        /// <summary>
-        /// Gets the reason for cutting the timestep
-        /// </summary>
-        public TimestepCutReason Reason { get; }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="ckt"></param>
-        /// <param name="newdelta"></param>
-        public TimestepCutData(Circuit ckt, double newdelta, TimestepCutReason reason)
-        {
-            Circuit = ckt;
-            NewDelta = newdelta;
-            Reason = reason;
         }
     }
 }
