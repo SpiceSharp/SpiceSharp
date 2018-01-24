@@ -2,7 +2,7 @@
 using System.Numerics;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Container for the state of an electronic circuit.

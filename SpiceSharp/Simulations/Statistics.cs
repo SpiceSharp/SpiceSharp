@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Keeps track of simulation statistics.

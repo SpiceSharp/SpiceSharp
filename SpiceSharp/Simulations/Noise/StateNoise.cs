@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Numerics;
-using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// A class that represents noise
@@ -12,7 +10,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        private double gainsqinv, freq, lstFreq, lnLastFreq, delFreq, delLnFreq, lnFreq;
+        double gainsqinv, freq, lstFreq, lnLastFreq, delFreq, delLnFreq, lnFreq;
 
         /// <summary>
         /// Current frequency point
