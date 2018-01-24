@@ -77,7 +77,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// </summary>
         public virtual void Evaluate(Noise sim)
         {
-            var noise = sim.State.Noise;
+            var noise = sim.NoiseState;
 
             // Calculate the noise
             Noise = CalculateNoise(sim);

@@ -203,11 +203,6 @@ namespace SpiceSharp.Simulations
         public Complex Laplace = new Complex();
 
         /// <summary>
-        /// Noise state
-        /// </summary>
-        public StateNoise Noise { get; private set; } = null;
-
-        /// <summary>
         /// Get the order of the matrix/vectors
         /// </summary>
         public int Order { get; private set; } = 0;
@@ -238,7 +233,6 @@ namespace SpiceSharp.Simulations
             Solution = new double[Order];
             OldSolution = new double[Order];
             iSolution = new double[Order];
-            Noise = new StateNoise();
             Initialized = true;
         }
 

@@ -32,7 +32,12 @@ namespace SpiceSharp.Simulations
         /// </summary>
         [SpiceName("input"), SpiceInfo("Name of the AC source used as input reference")]
         public Identifier Input { get; set; } = null;
-        
+
+        /// <summary>
+        /// Get the noise state
+        /// </summary>
+        public StateNoise NoiseState { get; } = new StateNoise();
+
         /// <summary>
         /// Private variables
         /// </summary>
@@ -196,8 +201,9 @@ namespace SpiceSharp.Simulations
             }
 
             // Initialize
+            var data = NoiseState;
             state.Initialize(ckt);
-            state.Noise.Initialize(StartFreq);
+            data.Initialize(StartFreq);
             state.Laplace = 0;
             state.Domain = State.DomainTypes.Frequency;
             state.UseIC = false;
@@ -205,8 +211,6 @@ namespace SpiceSharp.Simulations
             state.UseSmallSignal = false;
             state.Gmin = config.Gmin;
             Op(config.DcMaxIterations);
-
-            var data = state.Noise;
             state.Sparse |= State.SparseFlags.NIACSHOULDREORDER;
 
             // Connect noise sources
@@ -314,8 +318,8 @@ namespace SpiceSharp.Simulations
         public Func<State, double> CreateNoiseDensityExport(bool input)
         {
             if (input)
-                return (State state) => state.Noise.outNdens * state.Noise.GainSqInv;
-            return (State state) => state.Noise.outNdens;
+                return (State state) => NoiseState.outNdens * NoiseState.GainSqInv;
+            return (State state) => NoiseState.outNdens;
         }
     }
 }

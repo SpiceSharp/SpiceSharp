@@ -97,7 +97,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         public override void Noise(Noise sim)
         {
             var state = sim.State;
-            var noise = state.Noise;
+            var noise = sim.NoiseState;
 
             double coxSquared;
             if (modeltemp.MOS1oxideCapFactor == 0.0)

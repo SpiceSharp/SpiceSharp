@@ -100,7 +100,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         public override void Noise(Noise sim)
         {
             var state = sim.State;
-            var noise = state.Noise;
+            var noise = sim.NoiseState;
 
             // Set noise parameters
             MOS3noise.Generators[MOS3RDNOIZ].Set(temp.MOS3drainConductance);

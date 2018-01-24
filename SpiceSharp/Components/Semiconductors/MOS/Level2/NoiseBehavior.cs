@@ -99,7 +99,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="sim">Noise simulation</param>
         public override void Noise(Noise sim)
         {
-            var noise = sim.State.Noise;
+            var noise = sim.NoiseState;
 
             // Set noise parameters
             MOS2noise.Generators[MOS2RDNOIZ].Set(temp.MOS2drainConductance);

@@ -83,7 +83,7 @@ namespace SpiceSharp.Behaviors.DIO
         public override void Noise(Noise sim)
         {
             var state = sim.State;
-            var noise = state.Noise;
+            var noise = sim.NoiseState;
 
             // Set noise parameters
             DIOnoise.Generators[DIORSNOIZ].Set(modeltemp.DIOconductance * bp.DIOarea);

@@ -62,7 +62,7 @@ namespace SpiceSharp.Components
         /// <param name="sim">Noise simulation</param>
         public void Evaluate(Noise sim)
         {
-            var noise = sim.State.Noise;
+            var noise = sim.NoiseState;
 
             // Calculate the output noise density
             Noise = 0.0;

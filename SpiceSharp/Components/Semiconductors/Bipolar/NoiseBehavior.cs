@@ -102,7 +102,7 @@ namespace SpiceSharp.Behaviors.Bipolar
         public override void Noise(Noise sim)
         {
             var state = sim.State;
-            var noise = state.Noise;
+            var noise = sim.NoiseState;
 
             // Set noise parameters
             BJTnoise.Generators[BJTRCNOIZ].Set(modeltemp.BJTcollectorConduct * bp.BJTarea);
