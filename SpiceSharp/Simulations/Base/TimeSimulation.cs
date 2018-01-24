@@ -16,44 +16,9 @@ namespace SpiceSharp.Simulations
     public abstract class TimeSimulation : BaseSimulation
     {
         /// <summary>
-        /// Gets or sets the initial timepoint that should be exported
+        /// Gets the currently active configuration
         /// </summary>
-        [SpiceName("init"), SpiceName("start"), SpiceInfo("The starting timepoint")]
-        public double InitTime { get; set; } = 0.0;
-
-        /// <summary>
-        /// Gets or sets the final simulation timepoint
-        /// </summary>
-        [SpiceName("final"), SpiceName("stop"), SpiceInfo("The final timepoint")]
-        public double FinalTime { get; set; } = double.NaN;
-
-        /// <summary>
-        /// Gets or sets the step
-        /// </summary>
-        [SpiceName("step"), SpiceInfo("The timestep")]
-        public double Step { get; set; } = double.NaN;
-
-        /// <summary>
-        /// Gets or sets the maximum timestep
-        /// </summary>
-        [SpiceName("maxstep"), SpiceInfo("The maximum allowed timestep")]
-        public double MaxStep
-        {
-            get
-            {
-                if (double.IsNaN(maxstep))
-                    return (FinalTime - InitTime) / 50.0;
-                return maxstep;
-            }
-            set { maxstep = value; }
-        }
-        double maxstep = double.NaN;
-
-        /// <summary>
-        /// Get the minimum timestep allowed
-        /// </summary>
-        [SpiceName("deltamin"), SpiceInfo("The minimum delta for breakpoints")]
-        public double DeltaMin { get { return 1e-13 * MaxStep; } }
+        public TimeConfiguration TimeConfiguration { get; protected set; }
 
         /// <summary>
         /// Gets the integration method
@@ -86,15 +51,17 @@ namespace SpiceSharp.Simulations
             // Get base behaviors
             base.Setup();
 
-            // Also configure the method
-            Method = CurrentConfig.Method ?? throw new CircuitException($"{Name}: No integration method specified");
-            Method.Breaks.Clear();
-            Method.Breaks.SetBreakpoint(InitTime);
-            Method.Breaks.SetBreakpoint(FinalTime);
-            Method.Breaks.MinBreak = MaxStep * 5e-5;
-            
-            // Get behaviors
+            // Get behaviors and configurations
+            var config = Configuration.Get<TimeConfiguration>();
+            TimeConfiguration = config;
             tranbehaviors = SetupBehaviors<TransientBehavior>();
+
+            // Also configure the method
+            Method = TimeConfiguration.Method ?? throw new CircuitException($"{Name}: No integration method specified");
+            Method.Breaks.Clear();
+            Method.Breaks.SetBreakpoint(config.InitTime);
+            Method.Breaks.SetBreakpoint(config.FinalTime);
+            Method.Breaks.MinBreak = config.MaxStep * 5e-5;
 
             // Setup the state pool and register states
             States = new StatePool(Method);

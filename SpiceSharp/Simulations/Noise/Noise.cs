@@ -41,7 +41,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<NoiseBehavior> noisebehaviors;
+        List<NoiseBehavior> noisebehaviors;
 
         /// <summary>
         /// Constructor
@@ -61,18 +61,8 @@ namespace SpiceSharp.Simulations
         /// <param name="n">Steps</param>
         /// <param name="start">Start</param>
         /// <param name="stop">Stop</param>
-        public Noise(Identifier name, Identifier output, Identifier input, string type, int n, double start, double stop) : base(name)
+        public Noise(Identifier name, Identifier output, Identifier input, string type, int n, double start, double stop) : base(name, type, n, start, stop)
         {
-            switch (type.ToLower())
-            {
-                case "dec": StepType = StepTypes.Decade; break;
-                case "oct": StepType = StepTypes.Octave; break;
-                case "lin": StepType = StepTypes.Linear; break;
-            }
-            NumberSteps = n;
-            StartFreq = start;
-            StopFreq = stop;
-
             // Sources
             Input = input;
             Output = output;
@@ -89,18 +79,8 @@ namespace SpiceSharp.Simulations
         /// <param name="n">Steps</param>
         /// <param name="start">Start</param>
         /// <param name="stop">Stop</param>
-        public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, string type, int n, double start, double stop) : base(name)
+        public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, string type, int n, double start, double stop) : base(name, type, n, start, stop)
         {
-            switch (type.ToLower())
-            {
-                case "dec": StepType = StepTypes.Decade; break;
-                case "oct": StepType = StepTypes.Octave; break;
-                case "lin": StepType = StepTypes.Linear; break;
-            }
-            NumberSteps = n;
-            StartFreq = start;
-            StopFreq = stop;
-
             // Sources
             Input = input;
             Output = output;
@@ -141,7 +121,8 @@ namespace SpiceSharp.Simulations
 
             var ckt = Circuit;
             var state = State;
-            var config = CurrentConfig;
+            var config = FrequencyConfiguration;
+            var baseconfig = BaseConfiguration;
             var exportargs = new ExportDataEventArgs(State);
 
             // Find the output nodes
@@ -171,23 +152,23 @@ namespace SpiceSharp.Simulations
             int n = 0;
 
             // Calculate the step
-            switch (StepType)
+            switch (config.StepType)
             {
                 case StepTypes.Decade:
-                    freqdelta = Math.Exp(Math.Log(10.0) / NumberSteps);
-                    n = (int)Math.Floor(Math.Log(StopFreq / StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
+                    freqdelta = Math.Exp(Math.Log(10.0) / config.NumberSteps);
+                    n = (int)Math.Floor(Math.Log(config.StopFreq / config.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
                     break;
 
                 case StepTypes.Octave:
-                    freqdelta = Math.Exp(Math.Log(2.0) / NumberSteps);
-                    n = (int)Math.Floor(Math.Log(StopFreq / StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
+                    freqdelta = Math.Exp(Math.Log(2.0) / config.NumberSteps);
+                    n = (int)Math.Floor(Math.Log(config.StopFreq / config.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
                     break;
 
                 case StepTypes.Linear:
-                    if (NumberSteps > 1)
+                    if (config.NumberSteps > 1)
                     {
-                        freqdelta = (StopFreq - StartFreq) / (NumberSteps - 1);
-                        n = NumberSteps;
+                        freqdelta = (config.StopFreq - config.StartFreq) / (config.NumberSteps - 1);
+                        n = config.NumberSteps;
                     }
                     else
                     {
@@ -203,14 +184,14 @@ namespace SpiceSharp.Simulations
             // Initialize
             var data = NoiseState;
             state.Initialize(ckt);
-            data.Initialize(StartFreq);
+            data.Initialize(config.StartFreq);
             state.Laplace = 0;
             state.Domain = State.DomainTypes.Frequency;
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Gmin = config.Gmin;
-            Op(config.DcMaxIterations);
+            state.Gmin = baseconfig.Gmin;
+            Op(baseconfig.DcMaxIterations);
             state.Sparse |= State.SparseFlags.NIACSHOULDREORDER;
 
             // Connect noise sources
@@ -240,7 +221,7 @@ namespace SpiceSharp.Simulations
                 Export(exportargs);
 
                 // Increment the frequency
-                switch (StepType)
+                switch (config.StepType)
                 {
                     case StepTypes.Decade:
                     case StepTypes.Octave:
@@ -248,7 +229,7 @@ namespace SpiceSharp.Simulations
                         break;
 
                     case StepTypes.Linear:
-                        data.Freq = StartFreq + i * freqdelta;
+                        data.Freq = config.StartFreq + i * freqdelta;
                         break;
                 }
             }

@@ -105,7 +105,7 @@ namespace SpiceSharp.Behaviors.DIO
                 }
                 else
                 {
-                    tol = sim.CurrentConfig.RelTol * cbv;
+                    tol = sim.BaseConfiguration.RelTol * cbv;
                     xbv = mbp.DIObreakdownVoltage - vt * Math.Log(1 + cbv / DIOtSatCur);
                     iter = 0;
                     for (iter = 0; iter < 25; iter++)

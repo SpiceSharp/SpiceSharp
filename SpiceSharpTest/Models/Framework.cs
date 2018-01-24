@@ -103,7 +103,7 @@ namespace SpiceSharpTest.Models
                     {
                         string[] sweeps = new string[sim.Sweeps.Count];
                         for (int k = 0; k < sim.Sweeps.Count; k++)
-                            sweeps[k] += $"{sim.Sweeps[k].ComponentName}={sim.Sweeps[k].CurrentValue}";
+                            sweeps[k] += $"{sim.Sweeps[k].Parameter}={sim.Sweeps[k].CurrentValue}";
                         string msg = ex.Message + " at " + string.Join(" ", sweeps);
                         throw new Exception(msg, ex);
                     }

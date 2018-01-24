@@ -2,7 +2,6 @@
 using System.Numerics;
 using System.Collections.Generic;
 using SpiceSharp.Circuits;
-using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Sparse;
 using SpiceSharp.Behaviors;
@@ -16,69 +15,9 @@ namespace SpiceSharp.Simulations
     public abstract class FrequencySimulation : BaseSimulation
     {
         /// <summary>
-        /// Enumerations
+        /// Gets the currently active frequency configuration
         /// </summary>
-        public enum StepTypes { Decade, Octave, Linear };
-
-        /// <summary>
-        /// Gets or sets the number of steps
-        /// </summary>
-        [SpiceName("steps"), SpiceName("n"), SpiceInfo("The number of steps")]
-        public double Steps
-        {
-            get => NumberSteps;
-            set => NumberSteps = (int)(Math.Round(value) + 0.1);
-        }
-        public int NumberSteps { get; set; } = 10;
-
-        /// <summary>
-        /// Gets or sets the starting frequency
-        /// </summary>
-        [SpiceName("start"), SpiceInfo("Starting frequency")]
-        public double StartFreq { get; set; } = 1.0;
-
-        /// <summary>
-        /// Gets or sets the stopping frequency
-        /// </summary>
-        [SpiceName("stop"), SpiceInfo("Stopping frequency")]
-        public double StopFreq { get; set; } = 1.0e3;
-
-        /// <summary>
-        /// Gets or sets the step type (string version)
-        /// </summary>
-        [SpiceName("type"), SpiceInfo("The step type")]
-        public string _StepType
-        {
-            get
-            {
-                switch (StepType)
-                {
-                    case StepTypes.Linear: return "lin";
-                    case StepTypes.Octave: return "oct";
-                    case StepTypes.Decade: return "dec";
-                }
-                return null;
-            }
-            set
-            {
-                switch (value.ToLower())
-                {
-                    case "linear":
-                    case "lin": StepType = StepTypes.Linear; break;
-                    case "octave":
-                    case "oct": StepType = StepTypes.Octave; break;
-                    case "decade":
-                    case "dec": StepType = StepTypes.Decade; break;
-                    default:
-                        throw new CircuitException($"Invalid step type {value}");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the type of step used
-        /// </summary>
-        public StepTypes StepType { get; set; } = StepTypes.Decade;
+        public FrequencyConfiguration FrequencyConfiguration { get; protected set; }
 
         /// <summary>
         /// Private variables
@@ -91,6 +30,20 @@ namespace SpiceSharp.Simulations
         /// <param name="name">Name</param>
         public FrequencySimulation(Identifier name) : base(name)
         {
+            Configuration.Register(new FrequencyConfiguration());
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Identifier</param>
+        /// <param name="steptype">Step type</param>
+        /// <param name="n">Number of steps</param>
+        /// <param name="start">Starting frequency</param>
+        /// <param name="stop">Final frequency</param>
+        public FrequencySimulation(Identifier name, string steptype, int n, double start, double stop) : base(name)
+        {
+            Configuration.Register(new FrequencyConfiguration(steptype, n, start, stop));
         }
 
         /// <summary>
@@ -103,7 +56,8 @@ namespace SpiceSharp.Simulations
             // Get behaviors
             acbehaviors = SetupBehaviors<AcBehavior>();
 
-            // Setup AC behaviors
+            // Setup AC behaviors and configurations
+            FrequencyConfiguration = Configuration.Get<FrequencyConfiguration>();
             var matrix = State.Matrix;
             foreach (var behavior in acbehaviors)
                 behavior.GetMatrixPointers(matrix);

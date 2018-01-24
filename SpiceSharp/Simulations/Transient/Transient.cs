@@ -32,21 +32,33 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="name">The name of the simulation</param>
+        /// <param name="name">Name</param>
         public Transient(Identifier name) : base(name)
         {
+            Configuration.Register(new TimeConfiguration());
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="name">The name of the simulation</param>
-        /// <param name="step">The timestep</param>
-        /// <param name="final">The final timepoint</param>
+        /// <param name="name">Name</param>
+        /// <param name="step">Step</param>
+        /// <param name="final">Final time</param>
         public Transient(Identifier name, double step, double final) : base(name)
         {
-            Step = step;
-            FinalTime = final;
+            Configuration.Register(new TimeConfiguration(step, final));
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="step">Step</param>
+        /// <param name="final">Final time</param>
+        /// <param name="maxstep">Maximum timestep</param>
+        public Transient(Identifier name, double step, double final, double maxstep) : base(name)
+        {
+            Configuration.Register(new TimeConfiguration(step, final, maxstep));
         }
 
         /// <summary>
@@ -56,7 +68,7 @@ namespace SpiceSharp.Simulations
         {
             base.Setup();
 
-            // Get behaviors
+            // Get behaviors and configurations
             acceptbehaviors = SetupBehaviors<AcceptBehavior>();
             truncatebehaviors = SetupBehaviors<TruncateBehavior>();
         }
@@ -90,16 +102,17 @@ namespace SpiceSharp.Simulations
 
             var ckt = Circuit;
             var state = State;
-            var config = CurrentConfig ?? throw new CircuitException("No configuration");
+            var baseconfig = BaseConfiguration;
+            var config = TimeConfiguration;
 
-            double delta = Math.Min(FinalTime / 50.0, Step) / 10.0;
+            double delta = Math.Min(config.FinalTime / 50.0, config.Step) / 10.0;
 
             // Initialize before starting the simulation
             state.UseIC = config.UseIC;
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Domain = State.DomainTypes.Time;
-            state.Gmin = config.Gmin;
+            state.Gmin = baseconfig.Gmin;
 
             // Setup breakpoints
             Method.Initialize(tranbehaviors);
@@ -107,15 +120,15 @@ namespace SpiceSharp.Simulations
 
             // Calculate the operating point
             ckt.Method = null;
-            Op(config.DcMaxIterations);
+            Op(baseconfig.DcMaxIterations);
             Statistics.TimePoints++;
             Method = States.Method;
             for (int i = 0; i < Method.DeltaOld.Length; i++)
             {
-                Method.DeltaOld[i] = MaxStep;
+                Method.DeltaOld[i] = config.MaxStep;
             }
             Method.Delta = delta;
-            Method.SaveDelta = FinalTime / 50.0;
+            Method.SaveDelta = config.FinalTime / 50.0;
 
             // Initialize the Method
             ckt.Method = Method;
@@ -149,13 +162,13 @@ namespace SpiceSharp.Simulations
                     Statistics.Accepted++;
 
                     // Export the current timepoint
-                    if (Method.Time >= InitTime)
+                    if (Method.Time >= config.InitTime)
                     {
                         Export(exportargs);
                     }
 
                     // Detect the end of the simulation
-                    if (Method.Time >= FinalTime)
+                    if (Method.Time >= config.FinalTime)
                     {
                         // Keep our statistics
                         Statistics.TransientTime.Stop();
@@ -169,7 +182,7 @@ namespace SpiceSharp.Simulations
                     // Pause test - pausing not supported
 
                     // resume:
-                    Method.Delta = Math.Min(Method.Delta, MaxStep);
+                    Method.Delta = Math.Min(Method.Delta, config.MaxStep);
                     Method.Resume();
                     States.ShiftStates();
 
@@ -219,10 +232,10 @@ namespace SpiceSharp.Simulations
                             }
                         }
 
-                        if (Method.Delta <= DeltaMin)
+                        if (Method.Delta <= config.DeltaMin)
                         {
-                            if (Method.OldDelta > DeltaMin)
-                                Method.Delta = DeltaMin;
+                            if (Method.OldDelta > config.DeltaMin)
+                                Method.Delta = config.DeltaMin;
                             else
                                 throw new CircuitException($"Timestep too small at t={Method.SavedTime.ToString("g")}: {Method.Delta.ToString("g")}");
                         }

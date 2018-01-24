@@ -14,100 +14,19 @@ namespace SpiceSharp.Simulations
     public class DC : BaseSimulation
     {
         /// <summary>
-        /// A delegate for when an iteration failed
+        /// Gets the currently active DC configuration
         /// </summary>
-        /// <param name="sender">The object sending the event</param>
-        /// <param name="ckt">The circuit</param>
-        public delegate void IterationFailedEventHandler(object sender, Circuit ckt);
+        public DCConfiguration DCConfiguration { get; protected set; }
+
+        /// <summary>
+        /// Gets the currently active sweeps
+        /// </summary>
+        public NestedSweeps Sweeps { get; protected set; } = null;
 
         /// <summary>
         /// Event that is called when normal iteration failed
         /// </summary>
         public event IterationFailedEventHandler IterationFailed;
-
-        /// <summary>
-        /// A class that describes a job
-        /// </summary>
-        public class Sweep
-        {
-            /// <summary>
-            /// Starting value
-            /// </summary>
-            [SpiceName("start"), SpiceInfo("The starting value")]
-            public double Start { get; set; }
-
-            /// <summary>
-            /// Ending value
-            /// </summary>
-            [SpiceName("stop"), SpiceInfo("The stopping value")]
-            public double Stop { get; set; }
-
-            /// <summary>
-            /// Value step
-            /// </summary>
-            [SpiceName("step"), SpiceInfo("The step")]
-            public double Step { get; set; }
-
-            /// <summary>
-            /// The number of steps
-            /// </summary>
-            [SpiceName("steps"), SpiceName("n"), SpiceInfo("The number of steps")]
-            public int Limit
-            {
-                get
-                {
-                    if (Math.Sign(Step) * (Stop - Start) < 0)
-                        return 0;
-                    return (int)Math.Floor((Stop - Start) / Step + 0.25);
-                }
-            }
-
-            /// <summary>
-            /// The name of the source being varied
-            /// </summary>
-            [SpiceName("source"), SpiceInfo("The name of the swept source")]
-            public Identifier ComponentName { get; set; }
-
-            /// <summary>
-            /// Get the current value
-            /// </summary>
-            public double CurrentValue { get; private set; }
-
-            /// <summary>
-            /// Get the current step index
-            /// </summary>
-            public int CurrentStep { get; private set; }
-
-            /// <summary>
-            /// Calculate the new step value
-            /// </summary>
-            /// <param name="index">The step index</param>
-            public void SetCurrentStep(int index)
-            {
-                CurrentStep = index;
-                CurrentValue = Start + index * Step;
-            }
-
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            /// <param name="name">The name of the source to sweep</param>
-            /// <param name="start">The starting value</param>
-            /// <param name="stop">The stopping value</param>
-            /// <param name="step">The step value</param>
-            public Sweep(Identifier name, double start, double stop, double step) : base()
-            {
-                ComponentName = name;
-                Start = start;
-                Stop = stop;
-                Step = step;
-            }
-        }
-
-        /// <summary>
-        /// Gets the list of sweeps that need to be executed
-        /// </summary>
-        public List<Sweep> Sweeps { get; } = new List<Sweep>();
 
         /// <summary>
         /// Constructor
@@ -127,8 +46,37 @@ namespace SpiceSharp.Simulations
         /// <param name="step">The step value</param>
         public DC(Identifier name, Identifier source, double start, double stop, double step) : base(name)
         {
+            var config = new DCConfiguration();
             Sweep s = new Sweep(source, start, stop, step);
-            Sweeps.Add(s);
+            config.Sweeps.Add(s);
+            Configuration.Register(config);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="sweeps">Sweeps</param>
+        public DC(Identifier name, IEnumerable<Sweep> sweeps) : base(name)
+        {
+            var config = new DCConfiguration();
+            foreach (var sweep in sweeps)
+                config.Sweeps.Add(sweep);
+            Configuration.Register(config);
+        }
+
+        /// <summary>
+        /// Setup simulation
+        /// </summary>
+        protected override void Setup()
+        {
+            base.Setup();
+
+            // Get DC configuration
+            DCConfiguration = Configuration.Get<DCConfiguration>();
+
+            // Get sweeps
+            Sweeps = new NestedSweeps(DCConfiguration.Sweeps);
         }
 
         /// <summary>
@@ -144,27 +92,29 @@ namespace SpiceSharp.Simulations
 
             // Setup the state
             var state = State;
-            var config = CurrentConfig;
+            var config = DCConfiguration;
+            var baseconfig = BaseConfiguration;
             state.Init = State.InitFlags.InitJct;
             state.Initialize(ckt);
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Domain = State.DomainTypes.None;
-            state.Gmin = config.Gmin;
+            state.Gmin = baseconfig.Gmin;
 
             // Initialize
+            Sweeps = new NestedSweeps(config.Sweeps);
             Parameter[] swept = new Parameter[Sweeps.Count];
             Parameter[] original = new Parameter[Sweeps.Count];
 
             // Initialize first time
-            for (int i = 0; i < Sweeps.Count; i++)
+            for (int i = 0; i < config.Sweeps.Count; i++)
             {
                 // Get the component to be swept
                 var sweep = Sweeps[i];
-                if (!Circuit.Objects.Contains(sweep.ComponentName))
-                    throw new CircuitException($"Could not find source {sweep.ComponentName}");
-                var component = Circuit.Objects[sweep.ComponentName];
+                if (!Circuit.Objects.Contains(sweep.Parameter))
+                    throw new CircuitException($"Could not find source {sweep.Parameter}");
+                var component = Circuit.Objects[sweep.Parameter];
 
                 // Get the parameter and save it for restoring later
                 if (component is Voltagesource vsrc)
@@ -174,10 +124,7 @@ namespace SpiceSharp.Simulations
                 else
                     throw new CircuitException("Invalid sweep object");
                 original[i] = (Parameter)swept[i].Clone();
-                swept[i].Set(sweep.Start);
-
-                // Start with the original values
-                sweep.SetCurrentStep(0);
+                swept[i].Set(sweep.Initial);
             }
 
             // Execute the sweeps
@@ -188,7 +135,7 @@ namespace SpiceSharp.Simulations
                 while (level < Sweeps.Count - 1)
                 {
                     level++;
-                    Sweeps[level].SetCurrentStep(0);
+                    Sweeps[level].Reset();
                     swept[level].Set(Sweeps[level].CurrentValue);
                     state.Init = State.InitFlags.InitJct;
                 }
@@ -196,8 +143,9 @@ namespace SpiceSharp.Simulations
                 // Calculate the solution
                 if (!Iterate(config.SweepMaxIterations))
                 {
-                    IterationFailed?.Invoke(this, ckt);
-                    Op(config.DcMaxIterations);
+                    IterationFailedEventArgs args = new IterationFailedEventArgs();
+                    IterationFailed?.Invoke(this, args);
+                    Op(baseconfig.DcMaxIterations);
                 }
 
                 // Export data
@@ -210,7 +158,7 @@ namespace SpiceSharp.Simulations
                 // Go to the next step for the top level
                 if (level >= 0)
                 {
-                    Sweeps[level].SetCurrentStep(Sweeps[level].CurrentStep + 1);
+                    Sweeps[level].Increment();
                     swept[level].Set(Sweeps[level].CurrentValue);
                 }
             }
@@ -218,6 +166,20 @@ namespace SpiceSharp.Simulations
             // Restore all the parameters of the swept components
             for (int i = 0; i < Sweeps.Count; i++)
                 swept[i].CopyFrom(original[i]);
+        }
+
+        /// <summary>
+        /// Unsetup simulation
+        /// </summary>
+        protected override void Unsetup()
+        {
+            // Clear sweeps
+            Sweeps?.Clear();
+            Sweeps = null;
+
+            // Clear configuration
+            DCConfiguration = null;
+            base.Unsetup();
         }
     }
 }

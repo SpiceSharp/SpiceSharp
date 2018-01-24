@@ -806,7 +806,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         public override bool IsConvergent(BaseSimulation sim)
         {
             var state = sim.State;
-            var config = sim.CurrentConfig;
+            var config = sim.BaseConfiguration;
 
             double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat;
 

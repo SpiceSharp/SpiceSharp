@@ -63,9 +63,10 @@ namespace SpiceSharpTest.Models.Bipolar
                 );
 
             // Create simulation
-            DC dc = new DC("dc");
-            dc.Sweeps.Add(new DC.Sweep("V1", 0, 0.8, 0.1));
-            dc.Sweeps.Add(new DC.Sweep("V2", 0, 5, 0.5));
+            DC dc = new DC("dc", new Sweep[] {
+                new Sweep("V1", 0, 0.8, 0.1),
+                new Sweep("V2", 0, 5, 0.5)
+            });
 
             // Create export
             Func<State, double>[] exports = new Func<State, double>[2];

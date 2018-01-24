@@ -236,7 +236,7 @@ namespace SpiceSharp.Behaviors.DIO
         public override bool IsConvergent(BaseSimulation sim)
         {
             var state = sim.State;
-            var config = sim.CurrentConfig;
+            var config = sim.BaseConfiguration;
             double delvd, cdhat, cd;
             double vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
 

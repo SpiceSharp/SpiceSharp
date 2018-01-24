@@ -11,9 +11,9 @@ namespace SpiceSharp.Simulations
     public abstract class Simulation
     {
         /// <summary>
-        /// The configuration
+        /// Simulation configuration
         /// </summary>
-        protected Configuration Config { get; set; } = null;
+        public ParametersCollection Configuration { get; } = new ParametersCollection();
 
         /// <summary>
         /// The node that gives problems
@@ -24,11 +24,6 @@ namespace SpiceSharp.Simulations
         /// The circuit
         /// </summary>
         public Circuit Circuit { get; protected set; }
-
-        /// <summary>
-        /// Get the current configuration (for use in the simulation)
-        /// </summary>
-        public Configuration CurrentConfig => Config ?? Configuration.Default;
 
         /// <summary>
         /// Event that is called for initializing simulation data exports
@@ -60,7 +55,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public Simulation(Identifier name)
         {
-            Config = null;
             Name = name;
         }
 

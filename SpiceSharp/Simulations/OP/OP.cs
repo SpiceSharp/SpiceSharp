@@ -26,7 +26,7 @@ namespace SpiceSharp.Simulations
             // Setup the state
             var state = State;
             var rstate = state;
-            var config = CurrentConfig;
+            var config = BaseConfiguration;
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;
             state.UseSmallSignal = false;

@@ -1,16 +1,20 @@
-﻿using SpiceSharp.IntegrationMethods;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Configuration for simulations
+    /// Configuration for a <see cref="BaseSimulation"/>
     /// </summary>
-    public class Configuration
+    public class BaseConfiguration : Parameters
     {
         /// <summary>
-        /// Get the default simulation configuration
+        /// If true, the operating point calculation immediately skips to the GMIN stepping phase
         /// </summary>
-        public static Configuration Default { get; } = new Configuration();
+        public bool NoOpIter = false;
 
         /// <summary>
         /// The GMIN parameter
@@ -52,38 +56,5 @@ namespace SpiceSharp.Simulations
         /// Number of iterations for DC simulation
         /// </summary>
         public int DcMaxIterations = 100;
-
-        /// <summary>
-        /// Number of iterations for DC sweeps
-        /// </summary>
-        public int SweepMaxIterations = 20;
-
-        /// <summary>
-        /// Maximum number of iterations for each time point
-        /// </summary>
-        public int TranMaxIterations = 10;
-
-        /// <summary>
-        /// Use initial conditions
-        /// </summary>
-        public bool UseIC = false;
-
-        /// <summary>
-        /// Keep operating point information
-        /// </summary>
-        public bool KeepOpInfo = false;
-
-        /// <summary>
-        /// Integration method
-        /// </summary>
-        public IntegrationMethod Method = new Trapezoidal();
-
-        /// <summary>
-        /// Simulation configuration
-        /// </summary>
-        /// <param name="b"></param>
-        public Configuration()
-        {
-        }
     }
 }

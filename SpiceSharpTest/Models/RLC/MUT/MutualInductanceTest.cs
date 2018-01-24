@@ -38,8 +38,7 @@ namespace SpiceSharpTest.Models.MUT
             ckt.Objects["L1"].Parameters.Set("ic", 0);
 
             // Create simulation
-            Transient tran = new Transient("tran", 1e-9, 1e-4);
-            tran.MaxStep = 1e-6;
+            Transient tran = new Transient("tran", 1e-9, 1e-4, 1e-6);
 
             // Create exports
             Func<State, double>[] exports = new Func<State, double>[1];

@@ -459,7 +459,7 @@ namespace SpiceSharp.Behaviors.Bipolar
         public override bool IsConvergent(BaseSimulation sim)
         {
             var state = sim.State;
-            var config = sim.CurrentConfig;
+            var config = sim.BaseConfiguration;
 
             double vbe, vbc, delvbe, delvbc, cchat, cbhat, cc, cb;
 

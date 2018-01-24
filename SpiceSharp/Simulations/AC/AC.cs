@@ -26,17 +26,8 @@ namespace SpiceSharp.Simulations
         /// <param name="n">The number of steps</param>
         /// <param name="start">The starting frequency</param>
         /// <param name="stop">The stopping frequency</param>
-        public AC(Identifier name, string type, int n, double start, double stop) : base(name)
+        public AC(Identifier name, string type, int n, double start, double stop) : base(name, type, n, start, stop)
         {
-            switch (type.ToLower())
-            {
-                case "dec": StepType = StepTypes.Decade; break;
-                case "oct": StepType = StepTypes.Octave; break;
-                case "lin": StepType = StepTypes.Linear; break;
-            }
-            NumberSteps = n;
-            StartFreq = start;
-            StopFreq = stop;
         }
 
         /// <summary>
@@ -51,29 +42,30 @@ namespace SpiceSharp.Simulations
 
             var state = State;
             var cstate = state;
-            var config = CurrentConfig;
+            var baseconfig = BaseConfiguration;
+            var config = FrequencyConfiguration;
 
             double freq = 0.0, freqdelta = 0.0;
             int n = 0;
 
             // Calculate the step
-            switch (StepType)
+            switch (config.StepType)
             {
                 case StepTypes.Decade:
-                    freqdelta = Math.Exp(Math.Log(10.0) / NumberSteps);
-                    n = (int)Math.Floor(Math.Log(StopFreq / StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
+                    freqdelta = Math.Exp(Math.Log(10.0) / config.NumberSteps);
+                    n = (int)Math.Floor(Math.Log(config.StopFreq / config.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
                     break;
 
                 case StepTypes.Octave:
-                    freqdelta = Math.Exp(Math.Log(2.0) / NumberSteps);
-                    n = (int)Math.Floor(Math.Log(StopFreq / StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
+                    freqdelta = Math.Exp(Math.Log(2.0) / config.NumberSteps);
+                    n = (int)Math.Floor(Math.Log(config.StopFreq / config.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
                     break;
 
                 case StepTypes.Linear:
-                    if (NumberSteps > 1)
+                    if (config.NumberSteps > 1)
                     {
-                        freqdelta = (StopFreq - StartFreq) / (NumberSteps - 1);
-                        n = NumberSteps;
+                        freqdelta = (config.StopFreq - config.StartFreq) / (config.NumberSteps - 1);
+                        n = config.NumberSteps;
                     }
                     else
                     {
@@ -93,8 +85,8 @@ namespace SpiceSharp.Simulations
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Gmin = config.Gmin;
-            Op(config.DcMaxIterations);
+            state.Gmin = baseconfig.Gmin;
+            Op(baseconfig.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             state.UseDC = false;
@@ -111,7 +103,7 @@ namespace SpiceSharp.Simulations
 
             // Calculate the AC solution
             state.UseDC = false;
-            freq = StartFreq;
+            freq = config.StartFreq;
             state.Matrix.Complex = true;
 
             // Sweep the frequency
@@ -127,7 +119,7 @@ namespace SpiceSharp.Simulations
                 Export(exportargs);
 
                 // Increment the frequency
-                switch (StepType)
+                switch (config.StepType)
                 {
                     case StepTypes.Decade:
                     case StepTypes.Octave:
@@ -135,7 +127,7 @@ namespace SpiceSharp.Simulations
                         break;
 
                     case StepTypes.Linear:
-                        freq = StartFreq + i * freqdelta;
+                        freq = config.StartFreq + i * freqdelta;
                         break;
                 }
             }

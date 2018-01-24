@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Circuits;
@@ -54,9 +55,10 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
                 );
 
             // Create simulation
-            DC dc = new DC("dc");
-            dc.Sweeps.Add(new DC.Sweep("V2", 0, 5, 0.5));
-            dc.Sweeps.Add(new DC.Sweep("V1", 0, 5, 0.5));
+            DC dc = new DC("dc", new Sweep[] {
+                new Sweep("V2", 0, 5, 0.5),
+                new Sweep("V1", 0, 5, 0.5)
+            });
 
             // Create exports
             Func<State, double>[] exports = new Func<State, double>[1];

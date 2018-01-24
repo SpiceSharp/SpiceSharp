@@ -100,8 +100,7 @@ namespace SpiceSharpTest.Models.IND
             AbsTol = 1e-9;
 
             // Create simulation
-            Transient tran = new Transient("tran", 1e-9, 1e-3);
-            tran.MaxStep = 1e-7;
+            Transient tran = new Transient("tran", 1e-9, 1e-3, 1e-7);
 
             // Create exports
             Func<State, double>[] exports = new Func<State, double>[1];

@@ -13,11 +13,16 @@ namespace SpiceSharp.Simulations
     public abstract class BaseSimulation : Simulation
     {
         /// <summary>
-        /// Necessary behaviors
+        /// Necessary behaviors and configurations
         /// </summary>
         protected List<LoadBehavior> loadbehaviors = null;
         protected List<TemperatureBehavior> tempbehaviors = null;
         protected List<IcBehavior> icbehaviors = null;
+
+        /// <summary>
+        /// Get the currently active configuration for the base simulation
+        /// </summary>
+        public BaseConfiguration BaseConfiguration { get; protected set; }
 
         /// <summary>
         /// Gets the current state of the circuit
@@ -36,6 +41,7 @@ namespace SpiceSharp.Simulations
         public BaseSimulation(Identifier name)
             : base(name)
         {
+            Configuration.Register(new BaseConfiguration());
         }
 
         /// <summary>
@@ -56,7 +62,8 @@ namespace SpiceSharp.Simulations
             if (Circuit.Nodes.Count < 1)
                 throw new CircuitException($"{Name}: No circuit nodes for simulation");
 
-            // Setup behaviors
+            // Setup behaviors and configuration
+            BaseConfiguration = Configuration.Get<BaseConfiguration>();
             tempbehaviors = SetupBehaviors<TemperatureBehavior>();
             loadbehaviors = SetupBehaviors<LoadBehavior>();
             icbehaviors = SetupBehaviors<IcBehavior>();
@@ -96,11 +103,12 @@ namespace SpiceSharp.Simulations
             foreach (var behavior in loadbehaviors)
                 behavior.Unsetup();
 
-            // Remove behavior references
+            // Remove behavior and configuration references
             loadbehaviors.Clear();
             loadbehaviors = null;
             icbehaviors.Clear();
             icbehaviors = null;
+            BaseConfiguration = null;
 
             // Unsetup all objects
             foreach (var o in Circuit.Objects)
@@ -120,7 +128,7 @@ namespace SpiceSharp.Simulations
         protected void Op(int maxiter)
         {
             var state = State;
-            var config = CurrentConfig;
+            var config = BaseConfiguration;
             state.Init = State.InitFlags.InitJct;
             state.Matrix.Complex = false;
 
@@ -469,7 +477,7 @@ namespace SpiceSharp.Simulations
         {
             var ckt = Circuit;
             var rstate = State;
-            var config = CurrentConfig;
+            var config = BaseConfiguration;
 
             // Check convergence for each node
             for (int i = 0; i < ckt.Nodes.Count; i++)

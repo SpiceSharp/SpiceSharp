@@ -61,9 +61,10 @@ namespace SpiceSharpTest.Models.Transistors
             ckt.Objects["M1"].Parameters.Set("l", 1e-6);
 
             // Create simulation
-            DC dc = new DC("dc");
-            dc.Sweeps.Add(new DC.Sweep("V2", 0, 1.8, 0.3));
-            dc.Sweeps.Add(new DC.Sweep("V1", 0, 1.8, 0.3));
+            DC dc = new DC("dc", new Sweep[] {
+                new Sweep("V2", 0, 1.8, 0.3),
+                new Sweep("V1", 0, 1.8, 0.3)
+            });
 
             // Create exports
             Func<State, double>[] exports = new Func<State, double>[1];

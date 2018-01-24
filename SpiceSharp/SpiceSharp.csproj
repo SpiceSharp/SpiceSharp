@@ -85,7 +85,15 @@
     <Compile Include="Components\Switches\VSW\ModelBaseParameters.cs" />
     <Compile Include="Components\Voltagesources\CCVS\BaseParameters.cs" />
     <Compile Include="Components\Voltagesources\VCVS\BaseParameters.cs" />
+    <Compile Include="Simulations\Base\BaseConfiguration.cs" />
+    <Compile Include="Simulations\Base\FrequencyConfiguration.cs" />
+    <Compile Include="Simulations\Base\TimeConfiguration.cs" />
     <Compile Include="Simulations\Behaviors\SetupDataProvider.cs" />
+    <Compile Include="Simulations\DC\DCConfiguration.cs" />
+    <Compile Include="Simulations\DC\IterationFailedEventArgs.cs" />
+    <Compile Include="Simulations\DC\NestedSweeps.cs" />
+    <Compile Include="Simulations\DC\Sweep.cs" />
+    <Compile Include="Simulations\DC\SweepInstance.cs" />
     <Compile Include="Simulations\InitializationDataEventArgs.cs" />
     <Compile Include="Simulations\IntegrationMethods\ComponentState.cs" />
     <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsource.cs" />
