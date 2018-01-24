@@ -19,7 +19,7 @@ namespace SpiceSharp.Behaviors.VSRC
         BaseParameters bp;
 
         /// <summary>
-        /// Methods
+        /// Properties
         /// </summary>
         [SpiceName("i"), SpiceInfo("Voltage source current")]
         public double GetCurrent(State state) => state.Solution[VSRCbranch];
@@ -79,6 +79,7 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <returns></returns>
         public override Func<State, double> CreateExport(string property)
         {
+            // Avoid reflection for common components
             switch (property)
             {
                 case "i": return GetCurrent;

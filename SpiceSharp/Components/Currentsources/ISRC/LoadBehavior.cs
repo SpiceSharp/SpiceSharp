@@ -26,7 +26,7 @@ namespace SpiceSharp.Behaviors.ISRC
         public double GetV(State state) => (state.Solution[ISRCposNode] - state.Solution[ISRCnegNode]);
         [SpiceName("p"), SpiceInfo("Power supplied by the source")]
         public double GetP(State state) => (state.Solution[ISRCposNode] - state.Solution[ISRCposNode]) * -Current;
-        [SpiceName("c"), SpiceInfo("Current through current source")]
+        [SpiceName("c"), SpiceName("i"), SpiceInfo("Current through current source")]
         public double Current { get; protected set; }
 
         /// <summary>
@@ -47,6 +47,7 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <returns></returns>
         public override Func<State, double> CreateExport(string property)
         {
+            // Avoid using reflection for common components
             switch (property)
             {
                 case "v": return GetV;

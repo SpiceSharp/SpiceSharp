@@ -18,6 +18,9 @@ namespace SpiceSharp.Behaviors.CCVS
         BaseParameters bp;
         VSRC.LoadBehavior vsrcload;
 
+        /// <summary>
+        /// Properties
+        /// </summary>
         [SpiceName("i"), SpiceInfo("Output current")]
         public double GetCurrent(State state) => state.Solution[CCVSbranch];
         [SpiceName("v"), SpiceInfo("Output voltage")]
@@ -45,10 +48,11 @@ namespace SpiceSharp.Behaviors.CCVS
         /// <summary>
         /// Create export method
         /// </summary>
-        /// <param name="property">Parameter</param>
+        /// <param name="property">Property</param>
         /// <returns></returns>
         public override Func<State, double> CreateExport(string property)
         {
+            // Avoid reflection for common components
             switch (property)
             {
                 case "v": return GetVoltage;

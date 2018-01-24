@@ -64,23 +64,6 @@ namespace SpiceSharp.Behaviors.CSW
         public LoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Create an export method
-        /// </summary>
-        /// <param name="property">Parameter</param>
-        /// <returns></returns>
-        public override Func<State, double> CreateExport(string property)
-        {
-            switch (property)
-            {
-                case "v": return GetVoltage;
-                case "i": return GetCurrent;
-                case "p": return (State state) => (state.Solution[CSWposNode] - state.Solution[CSWnegNode])
-                    * (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
-                default: return null;
-            }
-        }
-
-        /// <summary>
         /// Setup the behavior
         /// </summary>
         /// <param name="provider">Data provider</param>

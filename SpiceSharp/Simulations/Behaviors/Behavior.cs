@@ -2,6 +2,7 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Behaviors
 {
@@ -78,13 +79,46 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Create a function for extracting data
-        /// This function can be used to extract parameters during simulation
+        /// Create a delegate for extracting data
         /// </summary>
         /// <param name="property">Parameter</param>
         /// <returns>Returns null if there is no export method</returns>
         public virtual Func<State, double> CreateExport(string property)
         {
+            // Find methods to create the export
+            var members = GetType().GetMethods(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            foreach (var member in members)
+            {
+                // Check the return type (needs to be a double)
+                if (member.ReturnType != typeof(double))
+                    continue;
+
+                // Check the name
+                var names = (SpiceName[])member.GetCustomAttributes(typeof(SpiceName), true);
+                bool found = false;
+                foreach (var name in names)
+                {
+                    if (name.Name == property)
+                    {
+                        found = true;
+                        continue;
+                    }
+                }
+                if (!found)
+                    continue;
+
+                // Check the parameters
+                var parameters = member.GetParameters();
+                if (parameters.Length != 1)
+                    continue;
+                if (parameters[0].ParameterType != typeof(State))
+                    continue;
+
+                // Return a delegate
+                return (Func<State, double>)member.CreateDelegate(typeof(Func<State, double>));
+            }
+
+            // Not found
             return null;
         }
 

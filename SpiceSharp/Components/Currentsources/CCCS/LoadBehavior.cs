@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Circuits;
+using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.CCCS;
 using SpiceSharp.Simulations;
@@ -26,6 +27,18 @@ namespace SpiceSharp.Behaviors.CCCS
         protected MatrixElement CCCSnegContBrptr { get; private set; }
 
         /// <summary>
+        /// Properties
+        /// </summary>
+        /// <param name="state">State</param>
+        /// <returns></returns>
+        [SpiceName("i"), SpiceName("c"), SpiceInfo("Current")]
+        public double GetCurrent(State state) => state.Solution[CCCScontBranch] * bp.CCCScoeff;
+        [SpiceName("v"), SpiceInfo("Voltage")]
+        public double GetVoltage(State state) => state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
+        [SpiceName("p"), SpiceInfo("Power")]
+        public double GetPower(State state) => (state.Solution[CCCSposNode] - state.Solution[CCCSnegNode]) * state.Solution[CCCScontBranch] * bp.CCCScoeff;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
@@ -34,19 +47,17 @@ namespace SpiceSharp.Behaviors.CCCS
         /// <summary>
         /// Create an export method
         /// </summary>
-        /// <param name="property">Parameter name</param>
+        /// <param name="property">Property name</param>
         /// <returns></returns>
         public override Func<State, double> CreateExport(string property)
         {
+            // We avoid using reflection for common components
             switch (property)
             {
-                case "i": return (State state) => state.Solution[CCCScontBranch] * bp.CCCScoeff;
-                case "v": return (State state) => state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
-                case "p": return (State state) =>
-                    {
-                        double v = state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
-                        return state.Solution[CCCScontBranch] * bp.CCCScoeff * v;
-                    };
+                case "c":
+                case "i": return GetCurrent;
+                case "v": return GetVoltage;
+                case "p": return GetPower;
                 default: return null;
             }
         }

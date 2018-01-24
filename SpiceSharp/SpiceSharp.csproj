@@ -164,7 +164,7 @@
     <Compile Include="Simulations\IntegrationMethods\TruncationEventArgs.cs" />
     <Compile Include="Simulations\Noise\NoiseBehavior.cs" />
     <Compile Include="Simulations\Base\LoadBehavior.cs" />
-    <Compile Include="Simulations\AC\AcBehavior.cs" />
+    <Compile Include="Simulations\Base\AcBehavior.cs" />
     <Compile Include="Simulations\Behaviors\Behavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\LoadBehavior.cs" />
     <Compile Include="Components\Currentsources\ISRC\LoadBehavior.cs" />

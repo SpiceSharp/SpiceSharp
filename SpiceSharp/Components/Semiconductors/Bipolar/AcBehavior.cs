@@ -4,6 +4,7 @@ using SpiceSharp.Components.Bipolar;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Behaviors.Bipolar
 {
@@ -48,11 +49,19 @@ namespace SpiceSharp.Behaviors.Bipolar
         protected MatrixElement BJTsubstColPrimePtr { get; private set; }
         protected MatrixElement BJTbaseColPrimePtr { get; private set; }
         protected MatrixElement BJTcolPrimeBasePtr { get; private set; }
-
+        
+        /// <summary>
+        /// Properties
+        /// </summary>
+        [SpiceName("cpi"), SpiceInfo("Internal base to emitter capactance")]
         public double BJTcapbe { get; protected set; }
+        [SpiceName("cmu"), SpiceInfo("Internal base to collector capactiance")]
         public double BJTcapbc { get; protected set; }
-        public double BJTcapcs { get; protected set; }
+        [SpiceName("cbx"), SpiceInfo("Base to collector capacitance")]
         public double BJTcapbx { get; protected set; }
+        [SpiceName("ccs"), SpiceInfo("Collector to substrate capacitance")]
+        public double BJTcapcs { get; protected set; }
+
         public double BJTgeqcb { get; protected set; }
 
         /// <summary>

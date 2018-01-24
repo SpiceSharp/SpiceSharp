@@ -20,18 +20,6 @@ namespace SpiceSharp.Behaviors.Bipolar
         ModelBaseParameters mbp;
         TemperatureBehavior temp;
         ModelTemperatureBehavior modeltemp;
-        
-        /// <summary>
-        /// Parameters
-        /// </summary>
-        [SpiceName("cpi"), SpiceInfo("Internal base to emitter capactance")]
-        public double BJTcapbe { get; internal set; }
-        [SpiceName("cmu"), SpiceInfo("Internal base to collector capactiance")]
-        public double BJTcapbc { get; internal set; }
-        [SpiceName("cbx"), SpiceInfo("Base to collector capacitance")]
-        public double BJTcapbx { get; internal set; }
-        [SpiceName("ccs"), SpiceInfo("Collector to substrate capacitance")]
-        public double BJTcapcs { get; internal set; }
 
         /// <summary>
         /// Methods

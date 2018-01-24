@@ -2,6 +2,7 @@
 using SpiceSharp.Sparse;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.VCCS;
+using SpiceSharp.Attributes;
 using System;
 
 namespace SpiceSharp.Behaviors.VCCS
@@ -26,6 +27,20 @@ namespace SpiceSharp.Behaviors.VCCS
         protected MatrixElement VCCSnegContNegptr { get; private set; }
 
         /// <summary>
+        /// Properties
+        /// </summary>
+        [SpiceName("v"), SpiceInfo("Voltage")]
+        public double GetVoltage(State state) => state.Solution[VCCSposNode] - state.Solution[VCCSnegNode];
+        [SpiceName("i"), SpiceName("c"), SpiceInfo("Current")]
+        public double GetCurrent(State state) => (state.Solution[VCCSposNode] - state.Solution[VCCSnegNode]) * bp.VCCScoeff;
+        [SpiceName("p"), SpiceInfo("Power")]
+        public double GetPower(State state)
+        {
+            double v = state.Solution[VCCSposNode] - state.Solution[VCCSnegNode];
+            return v * v * bp.VCCScoeff;
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
@@ -34,21 +49,17 @@ namespace SpiceSharp.Behaviors.VCCS
         /// <summary>
         /// Create export method
         /// </summary>
-        /// <param name="property">Parameter name</param>
+        /// <param name="property">Property name</param>
         /// <returns></returns>
         public override Func<State, double> CreateExport(string property)
         {
+            // Avoid reflection for common components
             switch (property)
             {
-                case "v": return (State state) => state.Solution[VCCSposNode] - state.Solution[VCCSnegNode];
+                case "v": return GetVoltage;
                 case "i":
-                case "c": return (State state) => (state.Solution[VCCSposNode] - state.Solution[VCCSnegNode]) * bp.VCCScoeff;
-                case "p": return (State state) =>
-                    {
-                        double current = (state.Solution[VCCScontPosNode] - state.Solution[VCCScontNegNode]) * bp.VCCScoeff;
-                        double voltage = (state.Solution[VCCSposNode] - state.Solution[VCCSnegNode]);
-                        return voltage * current;
-                    };
+                case "c": return GetCurrent;
+                case "p": return GetPower;
                 default: return null;
             }
         }
