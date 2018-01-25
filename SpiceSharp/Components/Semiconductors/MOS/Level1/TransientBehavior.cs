@@ -26,9 +26,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <summary>
         /// Shared parameters
         /// </summary>
-        [NameAttribute("cbd"), InfoAttribute("Bulk-Drain capacitance")]
+        [PropertyNameAttribute("cbd"), PropertyInfoAttribute("Bulk-Drain capacitance")]
         public double MOS1capbd { get; protected set; }
-        [NameAttribute("cbs"), InfoAttribute("Bulk-Source capacitance")]
+        [PropertyNameAttribute("cbs"), PropertyInfoAttribute("Bulk-Source capacitance")]
         public double MOS1capbs { get; protected set; }
 
         /// <summary>

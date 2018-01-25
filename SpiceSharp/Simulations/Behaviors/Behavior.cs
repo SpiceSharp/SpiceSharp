@@ -95,7 +95,7 @@ namespace SpiceSharp.Behaviors
                         continue;
 
                     // Check the name
-                    var names = (NameAttribute[])member.GetCustomAttributes(typeof(NameAttribute), true);
+                    var names = (PropertyNameAttribute[])member.GetCustomAttributes(typeof(PropertyNameAttribute), true);
                     bool found = false;
                     foreach (var name in names)
                     {
@@ -126,7 +126,7 @@ namespace SpiceSharp.Behaviors
                         continue;
 
                     // Check the name
-                    var names = (NameAttribute[])member.GetCustomAttributes(typeof(NameAttribute), true);
+                    var names = (PropertyNameAttribute[])member.GetCustomAttributes(typeof(PropertyNameAttribute), true);
                     bool found = false;
                     foreach (var name in names)
                     {

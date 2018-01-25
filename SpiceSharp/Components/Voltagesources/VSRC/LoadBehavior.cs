@@ -21,11 +21,11 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <summary>
         /// Properties
         /// </summary>
-        [NameAttribute("i"), InfoAttribute("Voltage source current")]
+        [PropertyNameAttribute("i"), PropertyInfoAttribute("Voltage source current")]
         public double GetCurrent(State state) => state.Solution[VSRCbranch];
-        [NameAttribute("p"), InfoAttribute("Instantaneous power")]
+        [PropertyNameAttribute("p"), PropertyInfoAttribute("Instantaneous power")]
         public double GetPower(State state) => (state.Solution[VSRCposNode] - state.Solution[VSRCnegNode]) * -state.Solution[VSRCbranch];
-        [NameAttribute("v"), InfoAttribute("Instantaneous voltage")]
+        [PropertyNameAttribute("v"), PropertyInfoAttribute("Instantaneous voltage")]
         public double VSRCvoltage { get; protected set; }
 
         /// <summary>

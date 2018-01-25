@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.VCCS
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("gain"), InfoAttribute("Transconductance of the source (gain)")]
+        [PropertyNameAttribute("gain"), PropertyInfoAttribute("Transconductance of the source (gain)")]
         public Parameter VCCScoeff { get; } = new Parameter();
 
         /// <summary>

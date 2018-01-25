@@ -68,9 +68,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <summary>
         /// Shared parameters
         /// </summary>
-        [NameAttribute("cbd"), InfoAttribute("Bulk-Drain capacitance")]
+        [PropertyNameAttribute("cbd"), PropertyInfoAttribute("Bulk-Drain capacitance")]
         public double MOS3capbd { get; internal set; }
-        [NameAttribute("cbs"), InfoAttribute("Bulk-Source capacitance")]
+        [PropertyNameAttribute("cbs"), PropertyInfoAttribute("Bulk-Source capacitance")]
         public double MOS3capbs { get; internal set; }
 
         /// <summary>

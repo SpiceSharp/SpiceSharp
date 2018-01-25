@@ -10,36 +10,36 @@ namespace SpiceSharp.Components.DIO
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("is"), InfoAttribute("Saturation current")]
+        [PropertyNameAttribute("is"), PropertyInfoAttribute("Saturation current")]
         public Parameter DIOsatCur { get; } = new Parameter(1e-14);
-        [NameAttribute("tnom"), InfoAttribute("Parameter measurement temperature")]
+        [PropertyNameAttribute("tnom"), PropertyInfoAttribute("Parameter measurement temperature")]
         public double DIO_TNOM
         {
             get => DIOnomTemp - Circuit.CONSTCtoK;
             set => DIOnomTemp.Set(value + Circuit.CONSTCtoK);
         }
         public Parameter DIOnomTemp { get; } = new Parameter();
-        [NameAttribute("rs"), InfoAttribute("Ohmic resistance")]
+        [PropertyNameAttribute("rs"), PropertyInfoAttribute("Ohmic resistance")]
         public Parameter DIOresist { get; } = new Parameter();
-        [NameAttribute("n"), InfoAttribute("Emission Coefficient")]
+        [PropertyNameAttribute("n"), PropertyInfoAttribute("Emission Coefficient")]
         public Parameter DIOemissionCoeff { get; } = new Parameter(1);
-        [NameAttribute("tt"), InfoAttribute("Transit Time")]
+        [PropertyNameAttribute("tt"), PropertyInfoAttribute("Transit Time")]
         public Parameter DIOtransitTime { get; } = new Parameter();
-        [NameAttribute("cjo"), NameAttribute("cj0"), InfoAttribute("Junction capacitance")]
+        [PropertyNameAttribute("cjo"), PropertyNameAttribute("cj0"), PropertyInfoAttribute("Junction capacitance")]
         public Parameter DIOjunctionCap { get; } = new Parameter();
-        [NameAttribute("vj"), InfoAttribute("Junction potential")]
+        [PropertyNameAttribute("vj"), PropertyInfoAttribute("Junction potential")]
         public Parameter DIOjunctionPot { get; } = new Parameter(1);
-        [NameAttribute("m"), InfoAttribute("Grading coefficient")]
+        [PropertyNameAttribute("m"), PropertyInfoAttribute("Grading coefficient")]
         public Parameter DIOgradingCoeff { get; } = new Parameter(.5);
-        [NameAttribute("eg"), InfoAttribute("Activation energy")]
+        [PropertyNameAttribute("eg"), PropertyInfoAttribute("Activation energy")]
         public Parameter DIOactivationEnergy { get; } = new Parameter(1.11);
-        [NameAttribute("xti"), InfoAttribute("Saturation current temperature exp.")]
+        [PropertyNameAttribute("xti"), PropertyInfoAttribute("Saturation current temperature exp.")]
         public Parameter DIOsaturationCurrentExp { get; } = new Parameter(3);
-        [NameAttribute("fc"), InfoAttribute("Forward bias junction fit parameter")]
+        [PropertyNameAttribute("fc"), PropertyInfoAttribute("Forward bias junction fit parameter")]
         public Parameter DIOdepletionCapCoeff { get; } = new Parameter(.5);
-        [NameAttribute("bv"), InfoAttribute("Reverse breakdown voltage")]
+        [PropertyNameAttribute("bv"), PropertyInfoAttribute("Reverse breakdown voltage")]
         public Parameter DIObreakdownVoltage { get; } = new Parameter();
-        [NameAttribute("ibv"), InfoAttribute("Current at reverse breakdown voltage")]
+        [PropertyNameAttribute("ibv"), PropertyInfoAttribute("Current at reverse breakdown voltage")]
         public Parameter DIObreakdownCurrent { get; } = new Parameter(1e-3);
     }
 }

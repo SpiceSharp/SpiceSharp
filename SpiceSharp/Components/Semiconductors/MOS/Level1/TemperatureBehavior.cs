@@ -22,31 +22,31 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <summary>
         /// Shared variables
         /// </summary>
-        [NameAttribute("sourcevcrit"), InfoAttribute("Critical source voltage")]
+        [PropertyNameAttribute("sourcevcrit"), PropertyInfoAttribute("Critical source voltage")]
         public double MOS1sourceVcrit { get; protected set; }
-        [NameAttribute("drainvcrit"), InfoAttribute("Critical drain voltage")]
+        [PropertyNameAttribute("drainvcrit"), PropertyInfoAttribute("Critical drain voltage")]
         public double MOS1drainVcrit { get; protected set; }
-        [NameAttribute("sourceconductance"), InfoAttribute("Conductance of source")]
+        [PropertyNameAttribute("sourceconductance"), PropertyInfoAttribute("Conductance of source")]
         public double MOS1sourceConductance { get; protected set; }
-        [NameAttribute("drainconductance"), InfoAttribute("Conductance of drain")]
+        [PropertyNameAttribute("drainconductance"), PropertyInfoAttribute("Conductance of drain")]
         public double MOS1drainConductance { get; protected set; }
-        [NameAttribute("cbd0"), InfoAttribute("Zero-Bias B-D junction capacitance")]
+        [PropertyNameAttribute("cbd0"), PropertyInfoAttribute("Zero-Bias B-D junction capacitance")]
         public double MOS1Cbd { get; protected set; }
-        [NameAttribute("cbdsw0"), InfoAttribute(" ")]
+        [PropertyNameAttribute("cbdsw0"), PropertyInfoAttribute(" ")]
         public double MOS1Cbdsw { get; protected set; }
-        [NameAttribute("cbs0"), InfoAttribute("Zero-Bias B-S junction capacitance")]
+        [PropertyNameAttribute("cbs0"), PropertyInfoAttribute("Zero-Bias B-S junction capacitance")]
         public double MOS1Cbs { get; protected set; }
-        [NameAttribute("cbssw0"), InfoAttribute(" ")]
+        [PropertyNameAttribute("cbssw0"), PropertyInfoAttribute(" ")]
         public double MOS1Cbssw { get; protected set; }
 
-        [NameAttribute("rs"), InfoAttribute("Source resistance")]
+        [PropertyNameAttribute("rs"), PropertyInfoAttribute("Source resistance")]
         public double GetSOURCERESIST(Circuit ckt)
         {
             if (MOS1sourceConductance != 0.0)
                 return 1.0 / MOS1sourceConductance;
             return 0.0;
         }
-        [NameAttribute("rd"), InfoAttribute("Drain conductance")]
+        [PropertyNameAttribute("rd"), PropertyInfoAttribute("Drain conductance")]
         public double GetDRAINRESIST(Circuit ckt)
         {
             if (MOS1drainConductance != 0.0)

@@ -143,8 +143,8 @@ namespace SpiceSharp.Circuits
                 {
                     // Get all names
                     var parameter = (Parameter)property.GetValue(obj);
-                    var names = property.GetCustomAttributes<NameAttribute>();
-                    foreach (NameAttribute name in names)
+                    var names = property.GetCustomAttributes<PropertyNameAttribute>();
+                    foreach (PropertyNameAttribute name in names)
                         NamedParameters.Add(name.Name, parameter);
                 }
             }

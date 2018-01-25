@@ -21,9 +21,9 @@ namespace SpiceSharp.Behaviors.CAP
         /// <summary>
         /// Methods
         /// </summary>
-        [NameAttribute("i"), InfoAttribute("Device current")]
+        [PropertyNameAttribute("i"), PropertyInfoAttribute("Device current")]
         public double GetCurrent() => CAPqcap.Derivative;
-        [NameAttribute("p"), InfoAttribute("Instantaneous device power")]
+        [PropertyNameAttribute("p"), PropertyInfoAttribute("Instantaneous device power")]
         public double GetPower(State state) => CAPqcap.Derivative * (state.Solution[CAPposNode] - state.Solution[CAPnegNode]);
 
         /// <summary>

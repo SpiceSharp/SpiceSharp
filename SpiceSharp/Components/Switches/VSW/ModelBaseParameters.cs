@@ -10,13 +10,13 @@ namespace SpiceSharp.Components.VSW
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("ron"), InfoAttribute("Resistance when closed")]
+        [PropertyNameAttribute("ron"), PropertyInfoAttribute("Resistance when closed")]
         public Parameter VSWon { get; } = new Parameter(1.0);
-        [NameAttribute("roff"), InfoAttribute("Resistance when off")]
+        [PropertyNameAttribute("roff"), PropertyInfoAttribute("Resistance when off")]
         public Parameter VSWoff { get; } = new Parameter(1.0e12);
-        [NameAttribute("vt"), InfoAttribute("Threshold voltage")]
+        [PropertyNameAttribute("vt"), PropertyInfoAttribute("Threshold voltage")]
         public Parameter VSWthresh { get; } = new Parameter();
-        [NameAttribute("vh"), InfoAttribute("Hysteresis voltage")]
+        [PropertyNameAttribute("vh"), PropertyInfoAttribute("Hysteresis voltage")]
         public Parameter VSWhyst { get; } = new Parameter();
     }
 }

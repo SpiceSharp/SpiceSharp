@@ -10,9 +10,9 @@ namespace SpiceSharp.Components.ISRC
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("waveform"), InfoAttribute("The waveform object for this source")]
+        [PropertyNameAttribute("waveform"), PropertyInfoAttribute("The waveform object for this source")]
         public Waveform ISRCwaveform { get; set; } = null;
-        [NameAttribute("dc"), InfoAttribute("D.C. source value")]
+        [PropertyNameAttribute("dc"), PropertyInfoAttribute("D.C. source value")]
         public Parameter ISRCdcValue { get; } = new Parameter();
 
         /// <summary>

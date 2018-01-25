@@ -10,9 +10,9 @@ namespace SpiceSharp.Components.Mosfet.Level3
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("kf"), InfoAttribute("Flicker noise coefficient")]
+        [PropertyNameAttribute("kf"), PropertyInfoAttribute("Flicker noise coefficient")]
         public Parameter MOS3fNcoef { get; } = new Parameter();
-        [NameAttribute("af"), InfoAttribute("Flicker noise exponent")]
+        [PropertyNameAttribute("af"), PropertyInfoAttribute("Flicker noise exponent")]
         public Parameter MOS3fNexp { get; } = new Parameter(1);
     }
 }

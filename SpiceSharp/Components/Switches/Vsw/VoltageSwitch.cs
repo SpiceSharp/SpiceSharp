@@ -19,13 +19,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [NameAttribute("pos_node"), InfoAttribute("Positive node of the switch")]
+        [PropertyNameAttribute("pos_node"), PropertyInfoAttribute("Positive node of the switch")]
         public int VSWposNode { get; internal set; }
-        [NameAttribute("neg_node"), InfoAttribute("Negative node of the switch")]
+        [PropertyNameAttribute("neg_node"), PropertyInfoAttribute("Negative node of the switch")]
         public int VSWnegNode { get; internal set; }
-        [NameAttribute("cont_p_node"), InfoAttribute("Positive controlling node of the switch")]
+        [PropertyNameAttribute("cont_p_node"), PropertyInfoAttribute("Positive controlling node of the switch")]
         public int VSWcontPosNode { get; internal set; }
-        [NameAttribute("cont_n_node"), InfoAttribute("Negative controlling node of the switch")]
+        [PropertyNameAttribute("cont_n_node"), PropertyInfoAttribute("Negative controlling node of the switch")]
         public int VSWcontNegNode { get; internal set; }
 
         /// <summary>

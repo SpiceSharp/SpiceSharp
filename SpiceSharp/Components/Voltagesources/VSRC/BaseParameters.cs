@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.VSRC
         /// Parameters
         /// </summary>
         public Waveform VSRCwaveform { get; set; }
-        [NameAttribute("dc"), InfoAttribute("D.C. source value")]
+        [PropertyNameAttribute("dc"), PropertyInfoAttribute("D.C. source value")]
         public Parameter VSRCdcValue { get; } = new Parameter();
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace SpiceSharp.Behaviors.DIO
         /// <summary>
         /// Conductance
         /// </summary>
-        [NameAttribute("cond"), InfoAttribute("Ohmic conductance")]
+        [PropertyNameAttribute("cond"), PropertyInfoAttribute("Ohmic conductance")]
         public double DIOconductance { get; internal set; }
 
         /// <summary>

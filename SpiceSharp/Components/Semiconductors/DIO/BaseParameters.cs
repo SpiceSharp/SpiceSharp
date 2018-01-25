@@ -10,15 +10,15 @@ namespace SpiceSharp.Components.DIO
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("area"), InfoAttribute("Area factor")]
+        [PropertyNameAttribute("area"), PropertyInfoAttribute("Area factor")]
         public Parameter DIOarea { get; } = new Parameter(1);
-        [NameAttribute("off"), InfoAttribute("Initially off")]
+        [PropertyNameAttribute("off"), PropertyInfoAttribute("Initially off")]
         public bool DIOoff { get; set; }
-        [NameAttribute("ic"), InfoAttribute("Initial device voltage")]
+        [PropertyNameAttribute("ic"), PropertyInfoAttribute("Initial device voltage")]
         public double DIOinitCond { get; set; }
-        [NameAttribute("sens_area"), InfoAttribute("flag to request sensitivity WRT area")]
+        [PropertyNameAttribute("sens_area"), PropertyInfoAttribute("flag to request sensitivity WRT area")]
         public bool DIOsenParmNo { get; set; }
-        [NameAttribute("temp"), InfoAttribute("Instance temperature")]
+        [PropertyNameAttribute("temp"), PropertyInfoAttribute("Instance temperature")]
         public double DIO_TEMP
         {
             get => DIOtemp - Circuit.CONSTCtoK;

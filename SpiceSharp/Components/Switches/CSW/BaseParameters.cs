@@ -10,9 +10,9 @@ namespace SpiceSharp.Components.CSW
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("on"), InfoAttribute("Initially closed")]
+        [PropertyNameAttribute("on"), PropertyInfoAttribute("Initially closed")]
         public void SetOn() { CSWzero_state = true; }
-        [NameAttribute("off"), InfoAttribute("Initially open")]
+        [PropertyNameAttribute("off"), PropertyInfoAttribute("Initially open")]
         public void SetOff() { CSWzero_state = false; }
 
         /// <summary>

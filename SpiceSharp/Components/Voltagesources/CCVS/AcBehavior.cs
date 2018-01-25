@@ -29,21 +29,21 @@ namespace SpiceSharp.Behaviors.CCVS
         protected MatrixElement CCVSibrNegptr { get; private set; }
         protected MatrixElement CCVSibrContBrptr { get; private set; }
 
-        [NameAttribute("v"), InfoAttribute("Complex voltage")]
+        [PropertyNameAttribute("v"), PropertyInfoAttribute("Complex voltage")]
         public Complex GetVoltage(State state)
         {
             return new Complex(
                 state.Solution[CCVSposNode] - state.Solution[CCVSnegNode],
                 state.iSolution[CCVSposNode] - state.iSolution[CCVSnegNode]);
         }
-        [NameAttribute("i"), NameAttribute("c"), InfoAttribute("Complex current")]
+        [PropertyNameAttribute("i"), PropertyNameAttribute("c"), PropertyInfoAttribute("Complex current")]
         public Complex GetCurrent(State state)
         {
             return new Complex(
                 state.Solution[CCVSbranch],
                 state.iSolution[CCVSbranch]);
         }
-        [NameAttribute("p"), InfoAttribute("Complex power")]
+        [PropertyNameAttribute("p"), PropertyInfoAttribute("Complex power")]
         public Complex GetPower(State state)
         {
             Complex v = new Complex(

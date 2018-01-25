@@ -7,7 +7,7 @@ namespace SpiceSharp.Attributes
     /// It can be applied to a field, property or method
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
-    public sealed class InfoAttribute : Attribute
+    public sealed class PropertyInfoAttribute : Attribute
     {
         /// <summary>
         /// Get the parameter description
@@ -28,7 +28,7 @@ namespace SpiceSharp.Attributes
         /// Constructor
         /// </summary>
         /// <param name="description"></param>
-        public InfoAttribute(string description)
+        public PropertyInfoAttribute(string description)
         {
             Description = description;
         }

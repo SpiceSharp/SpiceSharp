@@ -17,7 +17,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the number of steps
         /// </summary>
-        [NameAttribute("steps"), NameAttribute("n"), InfoAttribute("The number of steps")]
+        [PropertyNameAttribute("steps"), PropertyNameAttribute("n"), PropertyInfoAttribute("The number of steps")]
         public double Steps
         {
             get => NumberSteps;
@@ -28,19 +28,19 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the starting frequency
         /// </summary>
-        [NameAttribute("start"), InfoAttribute("Starting frequency")]
+        [PropertyNameAttribute("start"), PropertyInfoAttribute("Starting frequency")]
         public double StartFreq { get; set; } = 1.0;
 
         /// <summary>
         /// Gets or sets the stopping frequency
         /// </summary>
-        [NameAttribute("stop"), InfoAttribute("Stopping frequency")]
+        [PropertyNameAttribute("stop"), PropertyInfoAttribute("Stopping frequency")]
         public double StopFreq { get; set; } = 1.0e3;
 
         /// <summary>
         /// Gets or sets the step type (string version)
         /// </summary>
-        [NameAttribute("type"), InfoAttribute("The step type")]
+        [PropertyNameAttribute("type"), PropertyInfoAttribute("The step type")]
         public string _StepType
         {
             get

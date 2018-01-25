@@ -10,19 +10,19 @@ namespace SpiceSharp.Components.Bipolar
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("npn"), InfoAttribute("NPN type device")]
+        [PropertyNameAttribute("npn"), PropertyInfoAttribute("NPN type device")]
         public void SetNPN(bool value)
         {
             if (value)
                 BJTtype = NPN;
         }
-        [NameAttribute("pnp"), InfoAttribute("PNP type device")]
+        [PropertyNameAttribute("pnp"), PropertyInfoAttribute("PNP type device")]
         public void SetPNP(bool value)
         {
             if (value)
                 BJTtype = PNP;
         }
-        [NameAttribute("type"), InfoAttribute("NPN or PNP")]
+        [PropertyNameAttribute("type"), PropertyInfoAttribute("NPN or PNP")]
         public string GetTYPE(Circuit ckt)
         {
             if (BJTtype == NPN)
@@ -31,88 +31,88 @@ namespace SpiceSharp.Components.Bipolar
                 return "pnp";
         }
         public double BJTtype { get; internal set; } = NPN;
-        [NameAttribute("tnom"), InfoAttribute("Parameter measurement temperature")]
+        [PropertyNameAttribute("tnom"), PropertyInfoAttribute("Parameter measurement temperature")]
         public double BJT_TNOM
         {
             get => BJTtnom - Circuit.CONSTCtoK;
             set => BJTtnom.Set(value + Circuit.CONSTCtoK);
         }
         public Parameter BJTtnom { get; } = new Parameter();
-        [NameAttribute("is"), InfoAttribute("Saturation Current")]
+        [PropertyNameAttribute("is"), PropertyInfoAttribute("Saturation Current")]
         public Parameter BJTsatCur { get; } = new Parameter(1e-16);
-        [NameAttribute("bf"), InfoAttribute("Ideal forward beta")]
+        [PropertyNameAttribute("bf"), PropertyInfoAttribute("Ideal forward beta")]
         public Parameter BJTbetaF { get; } = new Parameter(100);
-        [NameAttribute("nf"), InfoAttribute("Forward emission coefficient")]
+        [PropertyNameAttribute("nf"), PropertyInfoAttribute("Forward emission coefficient")]
         public Parameter BJTemissionCoeffF { get; } = new Parameter(1);
-        [NameAttribute("vaf"), NameAttribute("va"), InfoAttribute("Forward Early voltage")]
+        [PropertyNameAttribute("vaf"), PropertyNameAttribute("va"), PropertyInfoAttribute("Forward Early voltage")]
         public Parameter BJTearlyVoltF { get; } = new Parameter();
-        [NameAttribute("ikf"), NameAttribute("ik"), InfoAttribute("Forward beta roll-off corner current")]
+        [PropertyNameAttribute("ikf"), PropertyNameAttribute("ik"), PropertyInfoAttribute("Forward beta roll-off corner current")]
         public Parameter BJTrollOffF { get; } = new Parameter();
-        [NameAttribute("ise"), InfoAttribute("B-E leakage saturation current")]
+        [PropertyNameAttribute("ise"), PropertyInfoAttribute("B-E leakage saturation current")]
         public Parameter BJTleakBEcurrent { get; } = new Parameter();
-        [NameAttribute("ne"), InfoAttribute("B-E leakage emission coefficient")]
+        [PropertyNameAttribute("ne"), PropertyInfoAttribute("B-E leakage emission coefficient")]
         public Parameter BJTleakBEemissionCoeff { get; } = new Parameter(1.5);
-        [NameAttribute("br"), InfoAttribute("Ideal reverse beta")]
+        [PropertyNameAttribute("br"), PropertyInfoAttribute("Ideal reverse beta")]
         public Parameter BJTbetaR { get; } = new Parameter(1);
-        [NameAttribute("nr"), InfoAttribute("Reverse emission coefficient")]
+        [PropertyNameAttribute("nr"), PropertyInfoAttribute("Reverse emission coefficient")]
         public Parameter BJTemissionCoeffR { get; } = new Parameter(1);
-        [NameAttribute("var"), NameAttribute("vb"), InfoAttribute("Reverse Early voltage")]
+        [PropertyNameAttribute("var"), PropertyNameAttribute("vb"), PropertyInfoAttribute("Reverse Early voltage")]
         public Parameter BJTearlyVoltR { get; } = new Parameter();
-        [NameAttribute("ikr"), InfoAttribute("reverse beta roll-off corner current")]
+        [PropertyNameAttribute("ikr"), PropertyInfoAttribute("reverse beta roll-off corner current")]
         public Parameter BJTrollOffR { get; } = new Parameter();
-        [NameAttribute("isc"), InfoAttribute("B-C leakage saturation current")]
+        [PropertyNameAttribute("isc"), PropertyInfoAttribute("B-C leakage saturation current")]
         public Parameter BJTleakBCcurrent { get; } = new Parameter();
-        [NameAttribute("nc"), InfoAttribute("B-C leakage emission coefficient")]
+        [PropertyNameAttribute("nc"), PropertyInfoAttribute("B-C leakage emission coefficient")]
         public Parameter BJTleakBCemissionCoeff { get; } = new Parameter(2);
-        [NameAttribute("rb"), InfoAttribute("Zero bias base resistance")]
+        [PropertyNameAttribute("rb"), PropertyInfoAttribute("Zero bias base resistance")]
         public Parameter BJTbaseResist { get; } = new Parameter();
-        [NameAttribute("irb"), InfoAttribute("Current for base resistance=(rb+rbm)/2")]
+        [PropertyNameAttribute("irb"), PropertyInfoAttribute("Current for base resistance=(rb+rbm)/2")]
         public Parameter BJTbaseCurrentHalfResist { get; } = new Parameter();
-        [NameAttribute("rbm"), InfoAttribute("Minimum base resistance")]
+        [PropertyNameAttribute("rbm"), PropertyInfoAttribute("Minimum base resistance")]
         public Parameter BJTminBaseResist { get; } = new Parameter();
-        [NameAttribute("re"), InfoAttribute("Emitter resistance")]
+        [PropertyNameAttribute("re"), PropertyInfoAttribute("Emitter resistance")]
         public Parameter BJTemitterResist { get; } = new Parameter();
-        [NameAttribute("rc"), InfoAttribute("Collector resistance")]
+        [PropertyNameAttribute("rc"), PropertyInfoAttribute("Collector resistance")]
         public Parameter BJTcollectorResist { get; } = new Parameter();
-        [NameAttribute("cje"), InfoAttribute("Zero bias B-E depletion capacitance")]
+        [PropertyNameAttribute("cje"), PropertyInfoAttribute("Zero bias B-E depletion capacitance")]
         public Parameter BJTdepletionCapBE { get; } = new Parameter();
-        [NameAttribute("vje"), NameAttribute("pe"), InfoAttribute("B-E built in potential")]
+        [PropertyNameAttribute("vje"), PropertyNameAttribute("pe"), PropertyInfoAttribute("B-E built in potential")]
         public Parameter BJTpotentialBE { get; } = new Parameter(0.75);
-        [NameAttribute("mje"), NameAttribute("me"), InfoAttribute("B-E junction grading coefficient")]
+        [PropertyNameAttribute("mje"), PropertyNameAttribute("me"), PropertyInfoAttribute("B-E junction grading coefficient")]
         public Parameter BJTjunctionExpBE { get; } = new Parameter(.33);
-        [NameAttribute("tf"), InfoAttribute("Ideal forward transit time")]
+        [PropertyNameAttribute("tf"), PropertyInfoAttribute("Ideal forward transit time")]
         public Parameter BJTtransitTimeF { get; } = new Parameter();
-        [NameAttribute("xtf"), InfoAttribute("Coefficient for bias dependence of TF")]
+        [PropertyNameAttribute("xtf"), PropertyInfoAttribute("Coefficient for bias dependence of TF")]
         public Parameter BJTtransitTimeBiasCoeffF { get; } = new Parameter();
-        [NameAttribute("vtf"), InfoAttribute("Voltage giving VBC dependence of TF")]
+        [PropertyNameAttribute("vtf"), PropertyInfoAttribute("Voltage giving VBC dependence of TF")]
         public Parameter BJTtransitTimeFVBC { get; } = new Parameter();
-        [NameAttribute("itf"), InfoAttribute("High current dependence of TF")]
+        [PropertyNameAttribute("itf"), PropertyInfoAttribute("High current dependence of TF")]
         public Parameter BJTtransitTimeHighCurrentF { get; } = new Parameter();
-        [NameAttribute("ptf"), InfoAttribute("Excess phase")]
+        [PropertyNameAttribute("ptf"), PropertyInfoAttribute("Excess phase")]
         public Parameter BJTexcessPhase { get; } = new Parameter();
-        [NameAttribute("cjc"), InfoAttribute("Zero bias B-C depletion capacitance")]
+        [PropertyNameAttribute("cjc"), PropertyInfoAttribute("Zero bias B-C depletion capacitance")]
         public Parameter BJTdepletionCapBC { get; } = new Parameter();
-        [NameAttribute("vjc"), NameAttribute("pc"), InfoAttribute("B-C built in potential")]
+        [PropertyNameAttribute("vjc"), PropertyNameAttribute("pc"), PropertyInfoAttribute("B-C built in potential")]
         public Parameter BJTpotentialBC { get; } = new Parameter(0.75);
-        [NameAttribute("mjc"), NameAttribute("mc"), InfoAttribute("B-C junction grading coefficient")]
+        [PropertyNameAttribute("mjc"), PropertyNameAttribute("mc"), PropertyInfoAttribute("B-C junction grading coefficient")]
         public Parameter BJTjunctionExpBC { get; } = new Parameter(.33);
-        [NameAttribute("xcjc"), InfoAttribute("Fraction of B-C cap to internal base")]
+        [PropertyNameAttribute("xcjc"), PropertyInfoAttribute("Fraction of B-C cap to internal base")]
         public Parameter BJTbaseFractionBCcap { get; } = new Parameter(1);
-        [NameAttribute("tr"), InfoAttribute("Ideal reverse transit time")]
+        [PropertyNameAttribute("tr"), PropertyInfoAttribute("Ideal reverse transit time")]
         public Parameter BJTtransitTimeR { get; } = new Parameter();
-        [NameAttribute("cjs"), NameAttribute("ccs"), InfoAttribute("Zero bias C-S capacitance")]
+        [PropertyNameAttribute("cjs"), PropertyNameAttribute("ccs"), PropertyInfoAttribute("Zero bias C-S capacitance")]
         public Parameter BJTcapCS { get; } = new Parameter();
-        [NameAttribute("vjs"), NameAttribute("ps"), InfoAttribute("Substrate junction built in potential")]
+        [PropertyNameAttribute("vjs"), PropertyNameAttribute("ps"), PropertyInfoAttribute("Substrate junction built in potential")]
         public Parameter BJTpotentialSubstrate { get; } = new Parameter(.75);
-        [NameAttribute("mjs"), NameAttribute("ms"), InfoAttribute("Substrate junction grading coefficient")]
+        [PropertyNameAttribute("mjs"), PropertyNameAttribute("ms"), PropertyInfoAttribute("Substrate junction grading coefficient")]
         public Parameter BJTexponentialSubstrate { get; } = new Parameter();
-        [NameAttribute("xtb"), InfoAttribute("Forward and reverse beta temp. exp.")]
+        [PropertyNameAttribute("xtb"), PropertyInfoAttribute("Forward and reverse beta temp. exp.")]
         public Parameter BJTbetaExp { get; } = new Parameter();
-        [NameAttribute("eg"), InfoAttribute("Energy gap for IS temp. dependency")]
+        [PropertyNameAttribute("eg"), PropertyInfoAttribute("Energy gap for IS temp. dependency")]
         public Parameter BJTenergyGap { get; } = new Parameter(1.11);
-        [NameAttribute("xti"), InfoAttribute("Temp. exponent for IS")]
+        [PropertyNameAttribute("xti"), PropertyInfoAttribute("Temp. exponent for IS")]
         public Parameter BJTtempExpIS { get; } = new Parameter(3);
-        [NameAttribute("fc"), InfoAttribute("Forward bias junction fit parameter")]
+        [PropertyNameAttribute("fc"), PropertyInfoAttribute("Forward bias junction fit parameter")]
         public Parameter BJTdepletionCapCoeff { get; } = new Parameter();
 
         public Parameter BJTc2 { get; } = new Parameter();

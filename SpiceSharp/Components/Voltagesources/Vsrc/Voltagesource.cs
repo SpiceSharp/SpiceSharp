@@ -14,9 +14,9 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [NameAttribute("pos_node")]
+        [PropertyNameAttribute("pos_node")]
         public int VSRCposNode { get; private set; }
-        [NameAttribute("neg_node")]
+        [PropertyNameAttribute("neg_node")]
         public int VSRCnegNode { get; private set; }
 
         /// <summary>

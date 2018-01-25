@@ -11,18 +11,18 @@ namespace SpiceSharp.Components.Bipolar
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("area"), InfoAttribute("Area factor")]
+        [PropertyNameAttribute("area"), PropertyInfoAttribute("Area factor")]
         public Parameter BJTarea { get; } = new Parameter(1);
-        [NameAttribute("off"), InfoAttribute("Device initially off")]
+        [PropertyNameAttribute("off"), PropertyInfoAttribute("Device initially off")]
         public bool BJToff { get; set; }
-        [NameAttribute("icvbe"), InfoAttribute("Initial B-E voltage")]
+        [PropertyNameAttribute("icvbe"), PropertyInfoAttribute("Initial B-E voltage")]
         public Parameter BJTicVBE { get; } = new Parameter();
-        [NameAttribute("icvce"), InfoAttribute("Initial C-E voltage")]
+        [PropertyNameAttribute("icvce"), PropertyInfoAttribute("Initial C-E voltage")]
         public Parameter BJTicVCE { get; } = new Parameter();
-        [NameAttribute("sens_area"), InfoAttribute("flag to request sensitivity WRT area")]
+        [PropertyNameAttribute("sens_area"), PropertyInfoAttribute("flag to request sensitivity WRT area")]
         public bool BJTsenParmNo { get; set; }
 
-        [NameAttribute("ic"), InfoAttribute("Initial condition vector")]
+        [PropertyNameAttribute("ic"), PropertyInfoAttribute("Initial condition vector")]
         public void SetIC(double[] value)
         {
             switch (value.Length)

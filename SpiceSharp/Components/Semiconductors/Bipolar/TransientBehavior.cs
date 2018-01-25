@@ -74,13 +74,13 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("cpi"), InfoAttribute("Internal base to emitter capactance")]
+        [PropertyNameAttribute("cpi"), PropertyInfoAttribute("Internal base to emitter capactance")]
         public double BJTcapbe { get; internal set; }
-        [NameAttribute("cmu"), InfoAttribute("Internal base to collector capactiance")]
+        [PropertyNameAttribute("cmu"), PropertyInfoAttribute("Internal base to collector capactiance")]
         public double BJTcapbc { get; internal set; }
-        [NameAttribute("cbx"), InfoAttribute("Base to collector capacitance")]
+        [PropertyNameAttribute("cbx"), PropertyInfoAttribute("Base to collector capacitance")]
         public double BJTcapbx { get; internal set; }
-        [NameAttribute("ccs"), InfoAttribute("Collector to substrate capacitance")]
+        [PropertyNameAttribute("ccs"), PropertyInfoAttribute("Collector to substrate capacitance")]
         public double BJTcapcs { get; internal set; }
 
         /// <summary>

@@ -19,13 +19,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [NameAttribute("colnode"), InfoAttribute("Number of collector node")]
+        [PropertyNameAttribute("colnode"), PropertyInfoAttribute("Number of collector node")]
         public int BJTcolNode { get; private set; }
-        [NameAttribute("basenode"), InfoAttribute("Number of base node")]
+        [PropertyNameAttribute("basenode"), PropertyInfoAttribute("Number of base node")]
         public int BJTbaseNode { get; private set; }
-        [NameAttribute("emitnode"), InfoAttribute("Number of emitter node")]
+        [PropertyNameAttribute("emitnode"), PropertyInfoAttribute("Number of emitter node")]
         public int BJTemitNode { get; private set; }
-        [NameAttribute("substnode"), InfoAttribute("Number of substrate node")]
+        [PropertyNameAttribute("substnode"), PropertyInfoAttribute("Number of substrate node")]
         public int BJTsubstNode { get; private set; }
 
         /// <summary>

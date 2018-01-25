@@ -12,41 +12,24 @@ namespace SpiceSharp.Attributes
         /// <summary>
         /// The pin connected to the positive side of the voltage source
         /// </summary>
-        public int Positive
-        {
-            get
-            {
-                return pos;
-            }
-        }
+        public int Positive { get; }
 
         /// <summary>
         /// The pin connected to the negative side of the voltage source
         /// </summary>
-        public int Negative
-        {
-            get
-            {
-                return neg;
-            }
-        }
-
-        /// <summary>
-        /// Pins that drive the voltage
-        /// </summary>
-        int pos, neg;
+        public int Negative { get; }
 
         /// <summary>
         /// Constructor
         /// This attribute specifies that two nodes are connected by a voltage source. It can
         /// be used for checking voltage loops.
         /// </summary>
-        /// <param name="pos">The positive output pin index</param>
-        /// <param name="neg">The negative output pin index</param>
-        public VoltageDriverAttribute(int pos, int neg)
+        /// <param name="positive">The positive output pin index</param>
+        /// <param name="negative">The negative output pin index</param>
+        public VoltageDriverAttribute(int positive, int negative)
         {
-            this.pos = pos;
-            this.neg = neg;
+            Positive = positive;
+            Negative = negative;
         }
     }
 }

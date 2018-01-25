@@ -28,7 +28,7 @@ namespace SpiceSharp.Behaviors.ISRC
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        [NameAttribute("v"), InfoAttribute("Complex voltage")]
+        [PropertyNameAttribute("v"), PropertyInfoAttribute("Complex voltage")]
         public Complex GetVoltage(State state)
         {
             return new Complex(
@@ -36,7 +36,7 @@ namespace SpiceSharp.Behaviors.ISRC
                 state.iSolution[ISRCposNode] - state.iSolution[ISRCnegNode]
                 );
         }
-        [NameAttribute("p"), InfoAttribute("Complex power")]
+        [PropertyNameAttribute("p"), PropertyInfoAttribute("Complex power")]
         public Complex GetPower(State state)
         {
             Complex v = new Complex(

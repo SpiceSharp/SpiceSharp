@@ -20,7 +20,7 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("temp"), InfoAttribute("Instance temperature")]
+        [PropertyNameAttribute("temp"), PropertyInfoAttribute("Instance temperature")]
         public double BJT_TEMP
         {
             get => BJTtemp - Circuit.CONSTCtoK;

@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.CCCS
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("gain"), InfoAttribute("Gain of the source")]
+        [PropertyNameAttribute("gain"), PropertyInfoAttribute("Gain of the source")]
         public Parameter CCCScoeff { get; } = new Parameter();
 
         /// <summary>

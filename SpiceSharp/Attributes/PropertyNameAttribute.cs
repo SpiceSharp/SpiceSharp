@@ -8,7 +8,7 @@ namespace SpiceSharp.Attributes
     /// This is used to find members using reflection.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
-    public sealed class NameAttribute : Attribute
+    public sealed class PropertyNameAttribute : Attribute
     {
         /// <summary>
         /// Get the name of the parameter
@@ -19,7 +19,7 @@ namespace SpiceSharp.Attributes
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the parameter</param>
-        public NameAttribute(string name)
+        public PropertyNameAttribute(string name)
         {
             Name = name;
         }

@@ -13,19 +13,19 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Parameters
         /// </summary>
-        [NameAttribute("v1"), InfoAttribute("The initial value")]
+        [PropertyNameAttribute("v1"), PropertyInfoAttribute("The initial value")]
         public Parameter V1 { get; } = new Parameter();
-        [NameAttribute("v2"), InfoAttribute("The peak value")]
+        [PropertyNameAttribute("v2"), PropertyInfoAttribute("The peak value")]
         public Parameter V2 { get; } = new Parameter();
-        [NameAttribute("td"), InfoAttribute("The initial delay time in seconds")]
+        [PropertyNameAttribute("td"), PropertyInfoAttribute("The initial delay time in seconds")]
         public Parameter Delay { get; } = new Parameter();
-        [NameAttribute("tr"), InfoAttribute("The rise time in seconds")]
+        [PropertyNameAttribute("tr"), PropertyInfoAttribute("The rise time in seconds")]
         public Parameter RiseTime { get; } = new Parameter();
-        [NameAttribute("tf"), InfoAttribute("The fall time in seconds")]
+        [PropertyNameAttribute("tf"), PropertyInfoAttribute("The fall time in seconds")]
         public Parameter FallTime { get; } = new Parameter();
-        [NameAttribute("pw"), InfoAttribute("The pulse width in seconds")]
+        [PropertyNameAttribute("pw"), PropertyInfoAttribute("The pulse width in seconds")]
         public Parameter PulseWidth { get; } = new Parameter();
-        [NameAttribute("per"), InfoAttribute("The period in seconds")]
+        [PropertyNameAttribute("per"), PropertyInfoAttribute("The period in seconds")]
         public Parameter Period { get; } = new Parameter();
 
         /// <summary>
