@@ -29,8 +29,8 @@ namespace SpiceSharp.Components
             : base(name, ISRCpinCount)
         {
             // Add parameters
-            Parameters.Set(new BaseParameters());
-            Parameters.Set(new AcParameters());
+            Parameters.Add(new BaseParameters());
+            Parameters.Add(new AcParameters());
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -49,8 +49,8 @@ namespace SpiceSharp.Components
             : base(name, ISRCpinCount)
         {
             // Add parameters
-            Parameters.Set(new BaseParameters(dc));
-            Parameters.Set(new AcParameters());
+            Parameters.Add(new BaseParameters(dc));
+            Parameters.Add(new AcParameters());
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -72,8 +72,8 @@ namespace SpiceSharp.Components
             : base(name, ISRCpinCount)
         {
             // Add parameters
-            Parameters.Set(new BaseParameters(w));
-            Parameters.Set(new AcParameters());
+            Parameters.Add(new BaseParameters(w));
+            Parameters.Add(new AcParameters());
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));

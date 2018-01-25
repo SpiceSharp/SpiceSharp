@@ -16,8 +16,8 @@ namespace SpiceSharp.Components
         public MOS3Model(Identifier name) : base(name)
         {
             // Add parameters
-            Parameters.Set(new ModelBaseParameters());
-            Parameters.Set(new ModelNoiseParameters());
+            Parameters.Add(new ModelBaseParameters());
+            Parameters.Add(new ModelNoiseParameters());
 
             // Add factories
             AddFactory(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));
@@ -31,8 +31,8 @@ namespace SpiceSharp.Components
         public MOS3Model(Identifier name, bool nmos) : base(name)
         {
             // Add parameters
-            Parameters.Set(new ModelBaseParameters(nmos));
-            Parameters.Set(new ModelNoiseParameters());
+            Parameters.Add(new ModelBaseParameters(nmos));
+            Parameters.Add(new ModelNoiseParameters());
 
             // Add factories
             AddFactory(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));

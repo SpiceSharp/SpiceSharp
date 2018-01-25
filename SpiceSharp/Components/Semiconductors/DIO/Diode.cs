@@ -33,7 +33,7 @@ namespace SpiceSharp.Components
         public Diode(Identifier name) : base(name, DIOpinCount)
         {
             // Add parameters
-            Parameters.Set(new BaseParameters());
+            Parameters.Add(new BaseParameters());
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));

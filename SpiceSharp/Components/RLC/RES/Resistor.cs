@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
             : base(name, RESpinCount)
         {
             // Register parameters
-            Parameters.Set(new BaseParameters());
+            Parameters.Add(new BaseParameters());
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -55,7 +55,7 @@ namespace SpiceSharp.Components
             : base(name, RESpinCount)
         {
             // Register parameters
-            Parameters.Set(new BaseParameters(res));
+            Parameters.Add(new BaseParameters(res));
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));

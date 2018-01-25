@@ -29,7 +29,7 @@ namespace SpiceSharp.Components
             : base(name, INDpinCount)
         {
             // Add parameters
-            Parameters.Set(new BaseParameters());
+            Parameters.Add(new BaseParameters());
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components
             : base(name, INDpinCount)
         {
             // Add parameters
-            Parameters.Set(new BaseParameters(ind));
+            Parameters.Add(new BaseParameters(ind));
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));

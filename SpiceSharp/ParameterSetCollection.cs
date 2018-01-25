@@ -16,11 +16,11 @@ namespace SpiceSharp
         Dictionary<Type, ParameterSet> parameters = new Dictionary<Type, ParameterSet>();
 
         /// <summary>
-        /// Set parameters in the collection
-        /// If parameters of the same type already exist, they are overwritten
+        /// Set a <see cref="ParameterSet"/> in the collection
+        /// If a set of the same type already exist, they are overwritten
         /// </summary>
         /// <param name="p">Parameters</param>
-        public void Set(ParameterSet p)
+        public void Add(ParameterSet p)
         {
             // Update the parameter of that type
             parameters[p.GetType()] = p;

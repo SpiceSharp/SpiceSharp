@@ -14,7 +14,7 @@ namespace SpiceSharp.Components
         /// <param name="name"></param>
         public ResistorModel(Identifier name) : base(name)
         {
-            Parameters.Set(new ModelBaseParameters());
+            Parameters.Add(new ModelBaseParameters());
         }
     }
 }

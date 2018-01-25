@@ -37,7 +37,7 @@ namespace SpiceSharp.Components
         public Capacitor(Identifier name) : base(name, CAPpinCount)
         {
             // Register parameters
-            Parameters.Set(new BaseParameters());
+            Parameters.Add(new BaseParameters());
 
             // Register factories
             RegisterFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
@@ -56,7 +56,7 @@ namespace SpiceSharp.Components
             : base(name, CAPpinCount)
         {
             // Register parameters
-            Parameters.Set(new BaseParameters(cap));
+            Parameters.Add(new BaseParameters(cap));
 
             // Register factories
             AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
