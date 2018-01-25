@@ -460,7 +460,7 @@ namespace SpiceSharp.Simulations
                 MatrixElement x = matrix.FindElement(rownum, node.Index);
                 if (x != null && x.Value.Real != 0.0)
                 {
-                    if (node.Type == Node.NodeType.Current)
+                    if (node.UnknownType == Node.NodeType.Current)
                         currents = true;
                     else
                         x.Value.Real = 0.0;
@@ -489,7 +489,7 @@ namespace SpiceSharp.Simulations
                 if (double.IsNaN(n))
                     throw new CircuitException($"Non-convergence, node {node} is not a number.");
 
-                if (node.Type == Node.NodeType.Voltage)
+                if (node.UnknownType == Node.NodeType.Voltage)
                 {
                     double tol = config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltTol;
                     if (Math.Abs(n - o) > tol)

@@ -38,7 +38,7 @@ namespace SpiceSharp.Circuits
         public Nodes()
         {
             // Setup the ground node
-            Ground = new Node(new Identifier("0"), Node.NodeType.Voltage);
+            Ground = new Node(new Identifier("0"), 0);
             map.Add(Ground.Name, Ground);
             map.Add(new Identifier("gnd"), Ground);
 

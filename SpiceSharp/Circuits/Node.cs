@@ -13,6 +13,11 @@ namespace SpiceSharp.Circuits
         public enum NodeType
         {
             /// <summary>
+            /// No type
+            /// </summary>
+            None = 0x00,
+
+            /// <summary>
             /// The unknown associated with this node is a voltage
             /// </summary>
             Voltage = 0x03,
@@ -42,18 +47,31 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets the node type
         /// </summary>
-        public NodeType Type { get; }
+        public NodeType UnknownType { get; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="index">Row index</param>
+        public Node(Identifier name, int index)
+        {
+            Name = name;
+            UnknownType = NodeType.Voltage;
+            Index = index;
+        }
 
         /// <summary>
         /// Constructor
         /// Used by <see cref="Nodes"/>
         /// </summary>
-        /// <param name="type">The type of node</param>
-        /// <param name="index">The row index</param>
-        public Node(Identifier name, NodeType type, int index = 0)
+        /// <param name="name">Name</param>
+        /// <param name="type">Unknown type</param>
+        /// <param name="index">Row index</param>
+        public Node(Identifier name, NodeType type, int index)
         {
             Name = name;
-            Type = type;
+            UnknownType = type;
             Index = index;
         }
 

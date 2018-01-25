@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Circuits
 {
@@ -12,7 +13,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Factories for behaviors
         /// </summary>
-        protected Dictionary<Type, BehaviorFactory> factories { get; } = new Dictionary<Type, BehaviorFactory>();
+        protected Dictionary<Type, BehaviorFactory> Factories { get; } = new Dictionary<Type, BehaviorFactory>();
 
         /// <summary>
         /// Get a collection of parameters
@@ -36,14 +37,14 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Add a factory to the behavior factory list
         /// </summary>
-        /// <param name="t">Returned behavior</param>
+        /// <param name="type">Returned behavior type</param>
         /// <param name="factory">Factory method</param>
-        protected void AddFactory(Type t, BehaviorFactory factory)
+        protected void AddFactory(Type type, BehaviorFactory factory)
         {
-            Type mytype = t.BaseType;
+            Type mytype = type.BaseType ?? throw new CircuitException("Invalid type");
             while (mytype != typeof(Behavior))
             {
-                factories.Add(mytype, factory);
+                Factories.Add(mytype, factory);
                 mytype = mytype.BaseType;
             }
         }
@@ -56,7 +57,7 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         public virtual T GetBehavior<T>(BehaviorPool pool) where T : Behavior
         {
-            if (factories.TryGetValue(typeof(T), out BehaviorFactory factory))
+            if (Factories.TryGetValue(typeof(T), out BehaviorFactory factory))
             {
                 // Create the behavior
                 Behavior behavior = factory();
@@ -77,6 +78,9 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         protected virtual SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
         {
+            if (pool == null)
+                throw new ArgumentNullException(nameof(pool));
+
             // By default, we include the parameters of this entity
             SetupDataProvider result = new SetupDataProvider();
             result.Add(Parameters);
@@ -92,14 +96,14 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Setup the component
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public abstract void Setup(Circuit ckt);
+        /// <param name="circuit">Circuit</param>
+        public abstract void Setup(Circuit circuit);
 
         /// <summary>
         /// Unsetup/destroy the component
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public virtual void Unsetup(Circuit ckt)
+        /// <param name="circuit">Circuit</param>
+        public virtual void Unsetup(Circuit circuit)
         {
             // Do nothing
         }
