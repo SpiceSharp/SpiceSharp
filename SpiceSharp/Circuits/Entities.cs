@@ -35,7 +35,6 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param id="path">The path of the object</param>
         /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
         public Entity this[Identifier id] => objects[id];
         
         /// <summary>

@@ -89,7 +89,7 @@ namespace SpiceSharpTest.Models.IND
                 new Inductor("L1", "OUT", "0", inductance),
                 new Capacitor("C1", "OUT", "0", capacitance)
                 );
-            ckt.Nodes.IC["OUT"] = 0.0;
+            ckt.Nodes.InitialConditions["OUT"] = 0.0;
             ckt.Objects["L1"].Parameters.SetProperty("ic", initialCurrent);
 
             /*

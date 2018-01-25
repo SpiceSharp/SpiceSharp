@@ -360,9 +360,9 @@ namespace SpiceSharp.Simulations
                     for (int i = 0; i < nodes.Count; i++)
                     {
                         var node = nodes[i];
-                        if (nodes.Nodeset.ContainsKey(node.Name))
+                        if (nodes.NodeSets.ContainsKey(node.Name))
                         {
-                            double ns = nodes.Nodeset[node.Name];
+                            double ns = nodes.NodeSets[node.Name];
                             if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
                             {
                                 state.Rhs[node.Index] = 1.0e10 * ns;
@@ -382,9 +382,9 @@ namespace SpiceSharp.Simulations
                     for (int i = 0; i < nodes.Count; i++)
                     {
                         var node = nodes[i];
-                        if (nodes.IC.ContainsKey(node.Name))
+                        if (nodes.InitialConditions.ContainsKey(node.Name))
                         {
-                            double ic = nodes.IC[node.Name];
+                            double ic = nodes.InitialConditions[node.Name];
                             if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
                             {
                                 state.Rhs[node.Index] = 1.0e10 * ic;
@@ -423,16 +423,16 @@ namespace SpiceSharp.Simulations
             for (int i = 0; i < nodes.Count; i++)
             {
                 var node = nodes[i];
-                if (nodes.Nodeset.ContainsKey(node.Name))
+                if (nodes.NodeSets.ContainsKey(node.Name))
                 {
                     node.Diagonal = state.Matrix.GetElement(node.Index, node.Index);
                     state.HadNodeset = true;
-                    state.Rhs[node.Index] = nodes.Nodeset[node.Name];
+                    state.Rhs[node.Index] = nodes.NodeSets[node.Name];
                 }
-                if (nodes.IC.ContainsKey(node.Name))
+                if (nodes.InitialConditions.ContainsKey(node.Name))
                 {
                     node.Diagonal = state.Matrix.GetElement(node.Index, node.Index);
-                    state.Rhs[node.Index] = nodes.IC[node.Name];
+                    state.Rhs[node.Index] = nodes.InitialConditions[node.Name];
                 }
             }
 

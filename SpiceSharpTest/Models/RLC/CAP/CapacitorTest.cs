@@ -60,7 +60,7 @@ namespace SpiceSharpTest.Models.RLC.CAP
                 new Resistor("R1", "IN", "OUT", resistorResistance),
                 new Voltagesource("V1", "IN", "0", dcVoltage)
                 );
-            ckt.Nodes.IC["OUT"] = 0.0;
+            ckt.Nodes.InitialConditions["OUT"] = 0.0;
 
             // Create simulation, exports and references
             Transient tran = new Transient("tran", 1e-8, 10e-6);

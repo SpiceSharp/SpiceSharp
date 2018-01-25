@@ -41,7 +41,7 @@ namespace SpiceSharp.Circuits
         /// <param name="factory">Factory method</param>
         protected void AddFactory(Type type, BehaviorFactory factory)
         {
-            Type mytype = type.BaseType ?? throw new CircuitException("Invalid type");
+            Type mytype = type?.BaseType ?? throw new CircuitException("Invalid type");
             while (mytype != typeof(Behavior))
             {
                 Factories.Add(mytype, factory);

@@ -34,7 +34,7 @@ namespace SpiceSharpTest.Models.MUT
                 new Resistor("R2", "OUT", "0", r2),
                 new MutualInductance("M1", "L1", "L2", k)
                 );
-            ckt.Nodes.IC["1"] = 0;
+            ckt.Nodes.InitialConditions["1"] = 0;
             ckt.Objects["L1"].Parameters.SetProperty("ic", 0);
 
             // Create simulation

@@ -19,13 +19,13 @@ namespace SpiceSharp.Circuits
         /// The initial conditions
         /// This is the initial value when simulation starts
         /// </summary>
-        public Dictionary<Identifier, double> IC { get; } = new Dictionary<Identifier, double>();
+        public Dictionary<Identifier, double> InitialConditions { get; } = new Dictionary<Identifier, double>();
 
         /// <summary>
         /// The nodeset values
         /// This value can help convergence
         /// </summary>
-        public Dictionary<Identifier, double> Nodeset { get; } = new Dictionary<Identifier, double>();
+        public Dictionary<Identifier, double> NodeSets { get; } = new Dictionary<Identifier, double>();
 
         /// <summary>
         /// Gets the ground node
