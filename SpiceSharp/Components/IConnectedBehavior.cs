@@ -8,7 +8,7 @@
         /// <summary>
         /// Connect the behavior in the circuit
         /// </summary>
-        /// <param name="nodes">Node indices in order</param>
+        /// <param name="pins">Pin indices in order</param>
         void Connect(params int[] pins);
     }
 }

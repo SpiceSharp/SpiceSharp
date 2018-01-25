@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using System.Numerics;
 

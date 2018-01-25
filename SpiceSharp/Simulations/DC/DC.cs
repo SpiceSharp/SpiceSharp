@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using SpiceSharp.Circuits;
-using SpiceSharp.Attributes;
+﻿using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Components;
-using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
 {

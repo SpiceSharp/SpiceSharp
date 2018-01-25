@@ -35,7 +35,7 @@ namespace SpiceSharp.Circuits
         public int Index { get; }
 
         /// <summary>
-        /// Gets the diagonal matrix element associated with the node
+        /// Gets or sets the diagonal matrix element associated with the node
         /// </summary>
         public MatrixElement Diagonal { get; set; }
 
@@ -61,6 +61,9 @@ namespace SpiceSharp.Circuits
         /// Nice format for nodes
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => "Node " + Name.ToString();
+        public override string ToString()
+        {
+            return $"Node {Name}";
+        }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Sparse;
-using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
-using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Behaviors
 {

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Circuits
 {
@@ -12,9 +11,9 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<Node> nodes = new List<Node>();
-        private Dictionary<Identifier, Node> map = new Dictionary<Identifier, Node>();
-        private bool locked = false;
+        List<Node> nodes = new List<Node>();
+        Dictionary<Identifier, Node> map = new Dictionary<Identifier, Node>();
+        bool locked;
 
         /// <summary>
         /// The initial conditions
@@ -31,16 +30,20 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets the ground node
         /// </summary>
-        public Node Ground { get; private set; }
+        public Node Ground { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public Nodes()
         {
+            // Setup the ground node
             Ground = new Node(new Identifier("0"), Node.NodeType.Voltage);
             map.Add(Ground.Name, Ground);
             map.Add(new Identifier("gnd"), Ground);
+
+            // Unlock
+            locked = false;
         }
 
         /// <summary>
@@ -74,7 +77,7 @@ namespace SpiceSharp.Circuits
         public Node Map(Identifier id, Node.NodeType type = Node.NodeType.Voltage)
         {
             if (locked)
-                throw new CircuitException("Nodes are locked, mapping is not allowed");
+                throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
 
             // Check the node
             if (map.ContainsKey(id))
@@ -121,9 +124,13 @@ namespace SpiceSharp.Circuits
         public void Clear()
         {
             nodes.Clear();
+
+            // Setup ground node
             map.Clear();
             map.Add(Ground.Name, Ground);
             map.Add(new Identifier("gnd"), Ground);
+
+            // Unlock
             locked = false;
         }
     }
