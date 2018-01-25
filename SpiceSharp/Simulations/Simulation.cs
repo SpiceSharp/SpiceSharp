@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Simulation configuration
         /// </summary>
-        public ParametersCollection Parameters { get; } = new ParametersCollection();
+        public ParameterSetCollection Parameters { get; } = new ParameterSetCollection();
 
         /// <summary>
         /// The node that gives problems

@@ -8,7 +8,7 @@ namespace SpiceSharp
     /// A collection of <see cref="ParameterSet"/>
     /// Only one instance of each type is allowed
     /// </summary>
-    public class ParametersCollection : IEnumerable<ParameterSet>
+    public class ParameterSetCollection : IEnumerable<ParameterSet>
     {
         /// <summary>
         /// Collection of parameters

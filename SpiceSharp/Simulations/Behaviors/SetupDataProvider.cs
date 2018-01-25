@@ -10,7 +10,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Available behaviors and parameters
         /// </summary>
-        List<ParametersCollection> parameters = new List<ParametersCollection>();
+        List<ParameterSetCollection> parameters = new List<ParameterSetCollection>();
         List<EntityBehaviors> behaviors = new List<EntityBehaviors>();
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace SpiceSharp.Behaviors
         /// Add a collection of parameters
         /// </summary>
         /// <param name="pc">Parameter collection</param>
-        public void Add(ParametersCollection pc) => parameters.Add(pc);
+        public void Add(ParameterSetCollection pc) => parameters.Add(pc);
 
         /// <summary>
         /// Add entity behaviors

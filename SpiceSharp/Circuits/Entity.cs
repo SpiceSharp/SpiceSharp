@@ -25,7 +25,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Get a collection of parameters
         /// </summary>
-        public ParametersCollection Parameters { get; } = new ParametersCollection();
+        public ParameterSetCollection Parameters { get; } = new ParameterSetCollection();
 
         /// <summary>
         /// A table of named parameters
