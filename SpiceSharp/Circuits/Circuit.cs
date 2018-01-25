@@ -16,8 +16,8 @@ namespace SpiceSharp
         public const double CelsiusKelvin = 273.15;
         public const double Boltzmann = 1.3806226e-23;
         public const double ReferenceTemperature = 300.15; // 27degC
-        public static double Root2 = Math.Sqrt(2); // 1.4142135623730951;
-        public const double Vt0 = Boltzmann * (27.0 + CelsiusKelvin) / Charge;
+        public const double Root2 = 1.4142135623730951;
+        public const double VT0 = Boltzmann * (27.0 + CelsiusKelvin) / Charge;
         public const double KOverQ = Boltzmann / Charge;
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace SpiceSharp
         /// <summary>
         /// Gets a collection of all circuit objects
         /// </summary>
-        public Entities Objects { get; } = new Entities();
+        public EntityCollection Objects { get; } = new EntityCollection();
 
         /// <summary>
         /// Constructor
@@ -43,6 +43,8 @@ namespace SpiceSharp
         /// <param name="entities">Entities</param>
         public Circuit(IEnumerable<Entity> entities)
         {
+            if (entities == null)
+                return;
             foreach (var entity in entities)
             {
                 Objects.Add(entity);

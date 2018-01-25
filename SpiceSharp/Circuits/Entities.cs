@@ -9,7 +9,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Contains and manages a collection circuit objects.
     /// </summary>
-    public class Entities : IEnumerable<Entity>
+    public class EntityCollection : IEnumerable<Entity>
     {
         /// <summary>
         /// Private variables
@@ -20,18 +20,22 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets whether or not the list is already ordered
         /// </summary>
-        bool isordered = false;
+        bool isordered;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Entities() { }
+        public EntityCollection()
+        {
+            isordered = false;
+        }
 
         /// <summary>
         /// Search for an object by path
         /// </summary>
         /// <param id="path">The path of the object</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
         public Entity this[Identifier id] => objects[id];
         
         /// <summary>
@@ -55,10 +59,12 @@ namespace SpiceSharp.Circuits
         /// <param id="cs">The objects that need to be added</param>
         public void Add(params Entity[] cs)
         {
+            if (cs == null)
+                return;
             foreach (var c in cs)
             {
                 if (c == null)
-                    throw new ArgumentNullException(nameof(c));
+                    throw new CircuitException("No entity specified");
                 if (objects.ContainsKey(c.Name))
                     throw new CircuitException($"A component with the id {c.Name} already exists");
                 objects.Add(c.Name, c);
@@ -72,10 +78,12 @@ namespace SpiceSharp.Circuits
         /// <param id="names">Names of the objects that need to be deleted</param>
         public void Remove(params Identifier[] ids)
         {
+            if (ids == null)
+                return;
             foreach (var id in ids)
             {
                 if (id == null)
-                    throw new ArgumentNullException(nameof(id));
+                    throw new CircuitException("No identifier specified");
                 objects.Remove(id);
 
                 // Note: Removing objects does not interfere with the order!
@@ -96,7 +104,7 @@ namespace SpiceSharp.Circuits
         /// <param id="id">Identifier</param>
         /// <param id="obj"></param>
         /// <returns></returns>
-        public bool TryGetObject(Identifier id, out Entity obj) => objects.TryGetValue(id, out obj);
+        public bool TryGetEntity(Identifier id, out Entity obj) => objects.TryGetValue(id, out obj);
 
         /// <summary>
         /// Get all objects of a specific type

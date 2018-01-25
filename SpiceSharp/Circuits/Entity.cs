@@ -12,7 +12,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Factories for behaviors
         /// </summary>
-        protected Dictionary<Type, Func<Behavior>> factories { get; } = new Dictionary<Type, Func<Behavior>>();
+        protected Dictionary<Type, BehaviorFactory> factories { get; } = new Dictionary<Type, BehaviorFactory>();
 
         /// <summary>
         /// Get a collection of parameters
@@ -28,7 +28,7 @@ namespace SpiceSharp.Circuits
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the object</param>
-        public Entity(Identifier name)
+        protected Entity(Identifier name)
         {
             Name = name;
         }
@@ -38,7 +38,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="t">Returned behavior</param>
         /// <param name="factory">Factory method</param>
-        protected void AddFactory(Type t, Func<Behavior> factory)
+        protected void AddFactory(Type t, BehaviorFactory factory)
         {
             Type mytype = t.BaseType;
             while (mytype != typeof(Behavior))
@@ -56,7 +56,7 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         public virtual T GetBehavior<T>(BehaviorPool pool) where T : Behavior
         {
-            if (factories.TryGetValue(typeof(T), out Func<Behavior> factory))
+            if (factories.TryGetValue(typeof(T), out BehaviorFactory factory))
             {
                 // Create the behavior
                 Behavior behavior = factory();
@@ -104,4 +104,10 @@ namespace SpiceSharp.Circuits
             // Do nothing
         }
     }
+
+    /// <summary>
+    /// Delegate for creating a behavior for the entity
+    /// </summary>
+    /// <returns></returns>
+    public delegate Behavior BehaviorFactory();
 }
