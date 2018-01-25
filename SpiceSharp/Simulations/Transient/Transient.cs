@@ -100,7 +100,7 @@ namespace SpiceSharp.Simulations
             base.Execute();
             var exportargs = new ExportDataEventArgs(State, Method);
 
-            var ckt = Circuit;
+            var circuit = Circuit;
             var state = State;
             var baseconfig = BaseConfiguration;
             var timeconfig = TimeConfiguration;
@@ -116,7 +116,7 @@ namespace SpiceSharp.Simulations
 
             // Setup breakpoints
             Method.Initialize(tranbehaviors);
-            state.Initialize(ckt);
+            state.Initialize(circuit);
 
             // Calculate the operating point
             Op(baseconfig.DcMaxIterations);
@@ -208,7 +208,7 @@ namespace SpiceSharp.Simulations
                             Method.Delta /= 8.0;
                             Method.CutOrder();
 
-                            var data = new TimestepCutEventArgs(ckt, Method.Delta / 8.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
+                            var data = new TimestepCutEventArgs(circuit, Method.Delta / 8.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
                             TimestepCut?.Invoke(this, data);
                         }
                         else
@@ -222,7 +222,7 @@ namespace SpiceSharp.Simulations
                             else
                             {
                                 Statistics.Rejected++;
-                                var data = new TimestepCutEventArgs(ckt, Method.Delta, TimestepCutEventArgs.TimestepCutReason.Truncation);
+                                var data = new TimestepCutEventArgs(circuit, Method.Delta, TimestepCutEventArgs.TimestepCutReason.Truncation);
                                 TimestepCut?.Invoke(this, data);
                             }
                         }

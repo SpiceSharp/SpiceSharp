@@ -70,10 +70,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the capacitor
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        /// <param name="circuit">The circuit</param>
+        public override void Setup(Circuit circuit)
         {
-            var nodes = BindNodes(ckt);
+            var nodes = BindNodes(circuit);
             CAPposNode = nodes[0].Index;
             CAPnegNode = nodes[1].Index;
         }

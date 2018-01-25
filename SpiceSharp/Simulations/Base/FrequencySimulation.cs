@@ -80,8 +80,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Calculate the AC solution
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        protected void AcIterate(Circuit ckt)
+        /// <param name="circuit">Circuit</param>
+        protected void AcIterate(Circuit circuit)
         {
             var state = State;
             var matrix = state.Matrix;
@@ -89,7 +89,7 @@ namespace SpiceSharp.Simulations
 
             // Initialize the circuit
             if (!state.Initialized)
-                state.Initialize(ckt);
+                state.Initialize(circuit);
 
             retry:
             state.IsCon = true;

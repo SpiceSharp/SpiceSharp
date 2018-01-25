@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
             // Execute base behavior
             base.Execute();
 
-            var ckt = Circuit;
+            var circuit = Circuit;
 
             var state = State;
             var cstate = state;
@@ -78,7 +78,7 @@ namespace SpiceSharp.Simulations
             }
 
             // Calculate the operating point
-            state.Initialize(ckt);
+            state.Initialize(circuit);
             state.Laplace = 0.0;
             state.Domain = State.DomainTypes.Frequency;
             state.UseIC = false;
@@ -112,7 +112,7 @@ namespace SpiceSharp.Simulations
                 state.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
 
                 // Solve
-                AcIterate(ckt);
+                AcIterate(circuit);
 
                 // Export the timepoint
                 Export(exportargs);

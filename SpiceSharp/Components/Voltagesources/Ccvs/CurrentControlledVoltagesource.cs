@@ -72,15 +72,15 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the current-controlled voltage source
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        /// <param name="circuit">The circuit</param>
+        public override void Setup(Circuit circuit)
         {
-            var nodes = BindNodes(ckt);
+            var nodes = BindNodes(circuit);
             CCVSposNode = nodes[0].Index;
             CCVSnegNode = nodes[1].Index;
 
             // Find the voltage source
-            if (ckt.Objects[CCVScontName] is Voltagesource vsrc)
+            if (circuit.Objects[CCVScontName] is Voltagesource vsrc)
                 CCVScontSource = vsrc;
             else
                 throw new CircuitException($"{Name}: Could not find voltage source '{CCVScontName}'");

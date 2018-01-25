@@ -22,8 +22,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the model
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Circuit ckt)
+        /// <param name="circuit">Circuit</param>
+        public override void Setup(Circuit circuit)
         {
             // Models do not have any nodes to setup
         }

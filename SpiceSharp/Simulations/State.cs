@@ -223,14 +223,14 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initialize the state
         /// </summary>
-        /// <param name="ckt"></param>
-        public void Initialize(Circuit ckt)
+        /// <param name="circuit"></param>
+        public void Initialize(Circuit circuit)
         {
-            if (ckt == null)
-                throw new ArgumentNullException(nameof(ckt));
+            if (circuit == null)
+                throw new ArgumentNullException(nameof(circuit));
 
             // Initialize all matrices
-            Order = ckt.Nodes.Count + 1;
+            Order = circuit.Nodes.Count + 1;
             Rhs = new double[Order];
             iRhs = new double[Order];
             Solution = new double[Order];

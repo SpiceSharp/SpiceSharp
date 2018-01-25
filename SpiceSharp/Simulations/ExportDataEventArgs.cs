@@ -70,6 +70,6 @@ namespace SpiceSharp.Simulations
     /// Delegate for finalizing a simulation export
     /// </summary>
     /// <param name="sender">The object sending the event</param>
-    /// <param name="ckt">The simulation data</param>
-    public delegate void FinalizeSimulationExportEventHandler(object sender, Circuit ckt);
+    /// <param name="circuit">The simulation data</param>
+    public delegate void FinalizeSimulationExportEventHandler(object sender, Circuit circuit);
 }

@@ -42,10 +42,10 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <summary>
         /// Methods
         /// </summary>
-        /// <param name="ckt">Circuit</param>
+        /// <param name="circuit">Circuit</param>
         /// <returns></returns>
         [PropertyName("rs"), PropertyInfo("Source resistance")]
-        public double GetSOURCERESIST(Circuit ckt)
+        public double GetSOURCERESIST(Circuit circuit)
         {
             if (MOS3sourceConductance != 0.0)
                 return 1.0 / MOS3sourceConductance;
@@ -53,7 +53,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
                 return 0.0;
         }
         [PropertyName("rd"), PropertyInfo("Drain resistance")]
-        public double GetDRAINRESIST(Circuit ckt)
+        public double GetDRAINRESIST(Circuit circuit)
         {
             if (MOS3drainConductance != 0.0)
                 return 1.0 / MOS3drainConductance;

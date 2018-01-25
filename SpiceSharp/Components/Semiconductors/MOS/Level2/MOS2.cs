@@ -57,13 +57,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the device
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        /// <param name="circuit">The circuit</param>
+        public override void Setup(Circuit circuit)
         {
             var model = Model as MOS2Model;
 
             // Allocate nodes
-            var nodes = BindNodes(ckt);
+            var nodes = BindNodes(circuit);
             MOS2dNode = nodes[0].Index;
             MOS2gNode = nodes[1].Index;
             MOS2sNode = nodes[2].Index;

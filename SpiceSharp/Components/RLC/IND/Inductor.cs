@@ -62,10 +62,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the inductor
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        /// <param name="circuit">The circuit</param>
+        public override void Setup(Circuit circuit)
         {
-            var nodes = BindNodes(ckt);
+            var nodes = BindNodes(circuit);
             INDposNode = nodes[0].Index;
             INDnegNode = nodes[1].Index;
         }

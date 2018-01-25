@@ -21,7 +21,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Execute()
         {
-            var ckt = Circuit;
+            var circuit = Circuit;
 
             // Setup the state
             var state = State;

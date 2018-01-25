@@ -88,14 +88,14 @@ namespace SpiceSharp.Simulations
             base.Execute();
 
             var exportargs = new ExportDataEventArgs(State);
-            var ckt = Circuit;
+            var circuit = Circuit;
 
             // Setup the state
             var state = State;
             var dcconfig = DCConfiguration;
             var baseconfig = BaseConfiguration;
             state.Init = State.InitFlags.InitJct;
-            state.Initialize(ckt);
+            state.Initialize(circuit);
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;
             state.UseSmallSignal = false;

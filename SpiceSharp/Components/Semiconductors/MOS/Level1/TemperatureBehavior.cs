@@ -40,14 +40,14 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         public double MOS1Cbssw { get; protected set; }
 
         [PropertyName("rs"), PropertyInfo("Source resistance")]
-        public double GetSOURCERESIST(Circuit ckt)
+        public double GetSOURCERESIST(Circuit circuit)
         {
             if (MOS1sourceConductance != 0.0)
                 return 1.0 / MOS1sourceConductance;
             return 0.0;
         }
         [PropertyName("rd"), PropertyInfo("Drain conductance")]
-        public double GetDRAINRESIST(Circuit ckt)
+        public double GetDRAINRESIST(Circuit circuit)
         {
             if (MOS1drainConductance != 0.0)
                 return 1.0 / MOS1drainConductance;

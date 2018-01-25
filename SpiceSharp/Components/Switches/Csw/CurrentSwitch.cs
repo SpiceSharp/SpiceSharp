@@ -80,15 +80,15 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the current-controlled switch
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        /// <param name="circuit">The circuit</param>
+        public override void Setup(Circuit circuit)
         {
-            var nodes = BindNodes(ckt);
+            var nodes = BindNodes(circuit);
             CSWposNode = nodes[0].Index;
             CSWnegNode = nodes[1].Index;
 
             // Find the voltage source
-            if (ckt.Objects[CSWcontName] is Voltagesource vsrc)
+            if (circuit.Objects[CSWcontName] is Voltagesource vsrc)
                 CSWcontSource = vsrc;
         }
 

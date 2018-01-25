@@ -31,16 +31,16 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Check a circuit
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public void Check(Circuit ckt)
+        /// <param name="circuit">The circuit</param>
+        public void Check(Circuit circuit)
         {
-            if (ckt == null)
-                throw new ArgumentNullException(nameof(ckt));
+            if (circuit == null)
+                throw new ArgumentNullException(nameof(circuit));
 
             // Connect all objects in the circuit, we need this information to find connectivity issues
-            ckt.Objects.BuildOrderedComponentList();
-            foreach (var o in ckt.Objects)
-                o.Setup(ckt);
+            circuit.Objects.BuildOrderedComponentList();
+            foreach (var o in circuit.Objects)
+                o.Setup(circuit);
 
             // Initialize
             HasSource = false;
@@ -50,7 +50,7 @@ namespace SpiceSharp.Circuits
             cgroup = 1;
 
             // Check all objects
-            foreach (var c in ckt.Objects)
+            foreach (var c in circuit.Objects)
                 CheckEntity(c);
 
             // Check if a voltage source is available
@@ -71,11 +71,11 @@ namespace SpiceSharp.Circuits
             if (unconnected.Count > 0)
             {
                 List<Identifier> un = new List<Identifier>();
-                for (int i = 0; i < ckt.Nodes.Count; i++)
+                for (int i = 0; i < circuit.Nodes.Count; i++)
                 {
-                    int index = ckt.Nodes[i].Index;
+                    int index = circuit.Nodes[i].Index;
                     if (unconnected.Contains(index))
-                        un.Add(ckt.Nodes[i].Name);
+                        un.Add(circuit.Nodes[i].Name);
                 }
                 throw new CircuitException($"{string.Join(", ", un)}: Floating nodes found");
             }

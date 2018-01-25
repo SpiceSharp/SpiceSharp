@@ -54,13 +54,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the device
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        /// <param name="circuit">The circuit</param>
+        public override void Setup(Circuit circuit)
         {
             BJTModel model = Model as BJTModel;
 
             // Allocate nodes
-            var nodes = BindNodes(ckt);
+            var nodes = BindNodes(circuit);
             BJTcolNode = nodes[0].Index;
             BJTbaseNode = nodes[1].Index;
             BJTemitNode = nodes[2].Index;

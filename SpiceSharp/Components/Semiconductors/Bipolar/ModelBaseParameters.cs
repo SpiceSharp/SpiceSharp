@@ -23,7 +23,7 @@ namespace SpiceSharp.Components.Bipolar
                 BJTtype = PNP;
         }
         [PropertyName("type"), PropertyInfo("NPN or PNP")]
-        public string GetTYPE(Circuit ckt)
+        public string GetTYPE(Circuit circuit)
         {
             if (BJTtype == NPN)
                 return "npn";

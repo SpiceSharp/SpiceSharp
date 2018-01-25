@@ -175,7 +175,7 @@ namespace SpiceSharp.Simulations
                     if (!Iterate(maxiter))
                     {
                         state.SrcFact = 1.0;
-                        // ckt.CurrentAnalysis = AnalysisType.DoingTran;
+                        // circuit.CurrentAnalysis = AnalysisType.DoingTran;
                         CircuitWarning.Warning(this, "Source stepping failed");
                         return;
                     }
@@ -409,9 +409,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void Ic()
         {
-            var ckt = Circuit;
+            var circuit = Circuit;
             var state = State;
-            var nodes = ckt.Nodes;
+            var nodes = circuit.Nodes;
 
             // Clear the current solution
             for (int i = 0; i < state.Solution.Length; i++)
@@ -440,7 +440,7 @@ namespace SpiceSharp.Simulations
             if (state.UseIC)
             {
                 foreach (var behavior in icbehaviors)
-                    behavior.SetIc(ckt);
+                    behavior.SetIc(circuit);
             }
         }
 
@@ -475,14 +475,14 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         protected bool IsConvergent()
         {
-            var ckt = Circuit;
+            var circuit = Circuit;
             var rstate = State;
             var config = BaseConfiguration;
 
             // Check convergence for each node
-            for (int i = 0; i < ckt.Nodes.Count; i++)
+            for (int i = 0; i < circuit.Nodes.Count; i++)
             {
-                var node = ckt.Nodes[i];
+                var node = circuit.Nodes[i];
                 double n = rstate.Solution[node.Index];
                 double o = rstate.OldSolution[node.Index];
 

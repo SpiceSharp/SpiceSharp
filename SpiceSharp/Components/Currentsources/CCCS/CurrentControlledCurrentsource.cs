@@ -80,18 +80,18 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the current controlled current source
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        /// <param name="circuit">The circuit</param>
+        public override void Setup(Circuit circuit)
         {
-            if (ckt == null)
-                throw new ArgumentNullException(nameof(ckt));
+            if (circuit == null)
+                throw new ArgumentNullException(nameof(circuit));
 
-            var nodes = BindNodes(ckt);
+            var nodes = BindNodes(circuit);
             CCCSposNode = nodes[0].Index;
             CCCSnegNode = nodes[1].Index;
 
             // Find the voltage source for which the current is being measured
-            if (ckt.Objects[CCCScontName] is Voltagesource vsrc)
+            if (circuit.Objects[CCCScontName] is Voltagesource vsrc)
                 CCCScontSource = vsrc;
             else
                 throw new CircuitException($"{Name}: Could not find voltage source '{CCCScontName}'");

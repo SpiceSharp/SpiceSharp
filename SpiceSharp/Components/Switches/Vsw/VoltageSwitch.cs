@@ -74,10 +74,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the voltage-controlled switch
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        /// <param name="circuit">The circuit</param>
+        public override void Setup(Circuit circuit)
         {
-            var nodes = BindNodes(ckt);
+            var nodes = BindNodes(circuit);
             VSWposNode = nodes[0].Index;
             VSWnegNode = nodes[1].Index;
             VSWcontPosNode = nodes[2].Index;

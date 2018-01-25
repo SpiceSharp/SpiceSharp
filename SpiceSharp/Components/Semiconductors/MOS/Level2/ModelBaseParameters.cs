@@ -102,7 +102,7 @@ namespace SpiceSharp.Components.Mosfet.Level2
                 MOS2type = -1.0;
         }
         [PropertyName("type"), PropertyInfo("N-channel or P-channel MOS")]
-        public string GetTYPE(Circuit ckt)
+        public string GetTYPE(Circuit circuit)
         {
             if (MOS2type > 0)
                 return "nmos";

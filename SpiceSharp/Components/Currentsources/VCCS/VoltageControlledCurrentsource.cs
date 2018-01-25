@@ -69,10 +69,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the voltage-controlled current source
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Setup(Circuit ckt)
+        /// <param name="circuit">Circuit</param>
+        public override void Setup(Circuit circuit)
         {
-            var nodes = BindNodes(ckt);
+            var nodes = BindNodes(circuit);
             VCCSposNode = nodes[0].Index;
             VCCSnegNode = nodes[1].Index;
             VCCScontPosNode = nodes[2].Index;

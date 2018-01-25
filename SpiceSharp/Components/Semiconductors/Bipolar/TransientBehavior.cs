@@ -52,23 +52,23 @@ namespace SpiceSharp.Behaviors.Bipolar
 
         /*
         [SpiceName("qbe"), SpiceInfo("Charge storage B-E junction")]
-        public double GetQBE(Circuit ckt) => ckt.State.States[0][BJTstate + BJTqbe];
+        public double GetQBE(Circuit circuit) => circuit.State.States[0][BJTstate + BJTqbe];
         [SpiceName("cqbe"), SpiceInfo("Cap. due to charge storage in B-E jct.")]
-        public double GetCQBE(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcqbe];
+        public double GetCQBE(Circuit circuit) => circuit.State.States[0][BJTstate + BJTcqbe];
         [SpiceName("qbc"), SpiceInfo("Charge storage B-C junction")]
-        public double GetQBC(Circuit ckt) => ckt.State.States[0][BJTstate + BJTqbc];
+        public double GetQBC(Circuit circuit) => circuit.State.States[0][BJTstate + BJTqbc];
         [SpiceName("cqbc"), SpiceInfo("Cap. due to charge storage in B-C jct.")]
-        public double GetCQBC(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcqbc];
+        public double GetCQBC(Circuit circuit) => circuit.State.States[0][BJTstate + BJTcqbc];
         [SpiceName("qcs"), SpiceInfo("Charge storage C-S junction")]
-        public double GetQCS(Circuit ckt) => ckt.State.States[0][BJTstate + BJTqcs];
+        public double GetQCS(Circuit circuit) => circuit.State.States[0][BJTstate + BJTqcs];
         [SpiceName("cqcs"), SpiceInfo("Cap. due to charge storage in C-S jct.")]
-        public double GetCQCS(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcqcs];
+        public double GetCQCS(Circuit circuit) => circuit.State.States[0][BJTstate + BJTcqcs];
         [SpiceName("qbx"), SpiceInfo("Charge storage B-X junction")]
-        public double GetQBX(Circuit ckt) => ckt.State.States[0][BJTstate + BJTqbx];
+        public double GetQBX(Circuit circuit) => circuit.State.States[0][BJTstate + BJTqbx];
         [SpiceName("cqbx"), SpiceInfo("Cap. due to charge storage in B-X jct.")]
-        public double GetCQBX(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcqbx];
+        public double GetCQBX(Circuit circuit) => circuit.State.States[0][BJTstate + BJTcqbx];
         [SpiceName("cexbc"), SpiceInfo("Total Capacitance in B-X junction")]
-        public double GetCEXBC(Circuit ckt) => ckt.State.States[0][BJTstate + BJTcexbc];
+        public double GetCEXBC(Circuit circuit) => circuit.State.States[0][BJTstate + BJTcexbc];
         */
 
         /// <summary>

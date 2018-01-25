@@ -54,7 +54,7 @@ namespace SpiceSharp.Components
         public virtual void Connect(params Identifier[] nodes)
         {
             if (nodes == null)
-                throw new ArgumentNullException(nameof(Node));
+                throw new ArgumentNullException(nameof(nodes));
             if (nodes.Length != connections.Length)
                 throw new CircuitException($"{Name}: Node count mismatch. {nodes.Length} given, {connections.Length} expected.");
             for (int i = 0; i < nodes.Length; i++)
@@ -131,18 +131,18 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Helper function for binding nodes to the circuit
         /// </summary>
-        /// <param name="ckt"></param>
+        /// <param name="circuit"></param>
         /// <returns></returns>
-        protected Node[] BindNodes(Circuit ckt)
+        protected Node[] BindNodes(Circuit circuit)
         {
-            if (ckt == null)
-                throw new ArgumentNullException(nameof(ckt));
+            if (circuit == null)
+                throw new ArgumentNullException(nameof(circuit));
 
             // Map connected nodes
             Node[] nodes = new Node[connections.Length];
             for (int i = 0; i < connections.Length; i++)
             {
-                nodes[i] = ckt.Nodes.Map(connections[i]);
+                nodes[i] = circuit.Nodes.Map(connections[i]);
                 indices[i] = nodes[i].Index;
             }
 

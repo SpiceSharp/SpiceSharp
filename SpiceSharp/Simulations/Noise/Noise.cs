@@ -104,7 +104,7 @@ namespace SpiceSharp.Simulations
         {
             base.Execute();
 
-            var ckt = Circuit;
+            var circuit = Circuit;
             var state = State;
             var noiseconfig = NoiseConfiguration;
             var freqconfig = FrequencyConfiguration;
@@ -112,13 +112,13 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(State);
 
             // Find the output nodes
-            int posOutNode = noiseconfig.Output != null ? ckt.Nodes[noiseconfig.Output].Index : 0;
-            int negOutNode = noiseconfig.OutputRef != null ? ckt.Nodes[noiseconfig.OutputRef].Index : 0;
+            int posOutNode = noiseconfig.Output != null ? circuit.Nodes[noiseconfig.Output].Index : 0;
+            int negOutNode = noiseconfig.OutputRef != null ? circuit.Nodes[noiseconfig.OutputRef].Index : 0;
 
             // Check the voltage or current source
             if (noiseconfig.Input == null)
                 throw new CircuitException($"{Name}: No input source specified");
-            Entity source = ckt.Objects[noiseconfig.Input];
+            Entity source = circuit.Objects[noiseconfig.Input];
             if (source is Voltagesource vsource)
             {
                 var ac = vsource.Parameters.Get<Components.VSRC.FrequencyParameters>();
@@ -169,7 +169,7 @@ namespace SpiceSharp.Simulations
 
             // Initialize
             var data = NoiseState;
-            state.Initialize(ckt);
+            state.Initialize(circuit);
             data.Initialize(freqconfig.StartFreq);
             state.Laplace = 0;
             state.Domain = State.DomainTypes.Frequency;
@@ -188,7 +188,7 @@ namespace SpiceSharp.Simulations
             for (int i = 0; i < n; i++)
             {
                 state.Laplace = new Complex(0.0, 2.0 * Math.PI * data.Freq);
-                AcIterate(ckt);
+                AcIterate(circuit);
 
                 double rval = state.Solution[posOutNode] - state.Solution[negOutNode];
                 double ival = state.iSolution[posOutNode] - state.iSolution[negOutNode];

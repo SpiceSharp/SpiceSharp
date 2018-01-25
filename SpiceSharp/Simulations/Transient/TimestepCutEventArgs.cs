@@ -34,11 +34,11 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="ckt"></param>
+        /// <param name="circuit"></param>
         /// <param name="newdelta"></param>
-        public TimestepCutEventArgs(Circuit ckt, double newdelta, TimestepCutReason reason)
+        public TimestepCutEventArgs(Circuit circuit, double newdelta, TimestepCutReason reason)
         {
-            Circuit = ckt;
+            Circuit = circuit;
             NewDelta = newdelta;
             Reason = reason;
         }

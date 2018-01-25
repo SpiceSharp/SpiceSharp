@@ -189,7 +189,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Compute the coefficients for Trapezoidal integration
         /// </summary>
-        /// <param name="ckt">The circuit</param>
+        /// <param name="circuit">The circuit</param>
         public override void ComputeCoefficients(TimeSimulation sim)
         {
             // Integration constants

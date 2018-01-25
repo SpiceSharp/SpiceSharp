@@ -70,10 +70,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the resistor
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Setup(Circuit ckt)
+        /// <param name="circuit"></param>
+        public override void Setup(Circuit circuit)
         {
-            var nodes = BindNodes(ckt);
+            var nodes = BindNodes(circuit);
             RESposNode = nodes[0].Index;
             RESnegNode = nodes[1].Index;
         }

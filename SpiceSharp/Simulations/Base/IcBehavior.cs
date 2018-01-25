@@ -16,7 +16,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Set the initial conditions
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public abstract void SetIc(Circuit ckt);
+        /// <param name="circuit">Circuit</param>
+        public abstract void SetIc(Circuit circuit);
     }
 }

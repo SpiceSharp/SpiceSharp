@@ -61,11 +61,11 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Run the simulation using a circuit
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public virtual void Run(Circuit ckt)
+        /// <param name="circuit">Circuit</param>
+        public virtual void Run(Circuit circuit)
         {
             // Store the circuit
-            Circuit = ckt ?? throw new ArgumentNullException(nameof(ckt));
+            Circuit = circuit ?? throw new ArgumentNullException(nameof(circuit));
 
             // Setup the simulation
             Setup();
@@ -76,7 +76,7 @@ namespace SpiceSharp.Simulations
             Execute();
 
             // Finalize the simulation
-            FinalizeSimulationExport?.Invoke(this, ckt);
+            FinalizeSimulationExport?.Invoke(this, circuit);
             Unsetup();
             Circuit = null;
         }
