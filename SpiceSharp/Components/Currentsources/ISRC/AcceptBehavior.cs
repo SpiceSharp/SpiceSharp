@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Circuits;
-
+﻿using SpiceSharp.Simulations;
 using SpiceSharp.Components.ISRC;
 
 namespace SpiceSharp.Behaviors.ISRC
@@ -29,14 +28,14 @@ namespace SpiceSharp.Behaviors.ISRC
             // Get parameters
             bp = provider.GetParameters<BaseParameters>();
         }
-        
+
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Accept(Circuit ckt)
+        /// <param name="sim">Time-based simulation</param>
+        public override void Accept(TimeSimulation sim)
         {
-            bp.ISRCwaveform?.Accept(ckt);
+            bp.ISRCwaveform?.Accept(sim);
         }
     }
 }

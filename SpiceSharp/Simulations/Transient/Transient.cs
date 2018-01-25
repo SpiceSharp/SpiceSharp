@@ -148,7 +148,7 @@ namespace SpiceSharp.Simulations
 
                     // Accept the current timepoint (CKTaccept())
                     foreach (var behavior in acceptbehaviors)
-                        behavior.Accept(ckt);
+                        behavior.Accept(this);
                     Method.SaveSolution(state.Solution);
                     // end of CKTaccept()
 

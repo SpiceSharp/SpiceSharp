@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Circuits;
-using SpiceSharp.IntegrationMethods;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp
 {
@@ -30,6 +29,34 @@ namespace SpiceSharp
         /// Gets a collection of all circuit objects
         /// </summary>
         public Entities Objects { get; } = new Entities();
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public Circuit()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="entities">Entities</param>
+        public Circuit(IEnumerable<Entity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                Objects.Add(entity);
+            }
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="entities">Entities</param>
+        public Circuit(params Entity[] entities)
+        {
+            Objects.Add(entities);
+        }
 
         /// <summary>
         /// Clear all objects, nodes, etc. in the circuit

@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.VSW
 {
@@ -29,10 +29,10 @@ namespace SpiceSharp.Behaviors.VSW
         }
 
         /// <summary>
-        /// Accept behavior
+        /// Accept the current timepoint
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Accept(Circuit ckt)
+        /// <param name="sim">Time-based simulation</param>
+        public override void Accept(TimeSimulation sim)
         {
             // Flag the load behavior to use our old state
             load.VSWuseOldState = true;

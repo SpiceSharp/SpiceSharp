@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using SpiceSharp.Simulations;
 using SpiceSharp.Components.VSRC;
 
 namespace SpiceSharp.Behaviors.VSRC
@@ -32,10 +32,10 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Accept(Circuit ckt)
+        /// <param name="sim">Time-based simulation</param>
+        public override void Accept(TimeSimulation sim)
         {
-            bp.VSRCwaveform?.Accept(ckt);
+            bp.VSRCwaveform?.Accept(sim);
         }
     }
 }
