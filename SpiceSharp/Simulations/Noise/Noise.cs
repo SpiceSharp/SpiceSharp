@@ -121,7 +121,7 @@ namespace SpiceSharp.Simulations
             Entity source = ckt.Objects[noiseconfig.Input];
             if (source is Voltagesource vsource)
             {
-                var ac = vsource.Parameters.Get<Components.VSRC.AcParameters>();
+                var ac = vsource.Parameters.Get<Components.VSRC.FrequencyParameters>();
                 if (!ac.VSRCacMag.Given || ac.VSRCacMag == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {vsource.Name} has no AC input");
             }

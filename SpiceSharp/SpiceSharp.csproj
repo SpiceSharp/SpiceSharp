@@ -103,12 +103,12 @@
     <Compile Include="Components\Currentsources\CCCS\LoadBehavior.cs" />
     <Compile Include="Components\Currentsources\ISRC\AcceptBehavior.cs" />
     <Compile Include="Components\Currentsources\VCCS\VoltageControlledCurrentsource.cs" />
-    <Compile Include="Components\Currentsources\VCCS\AcBehavior.cs" />
+    <Compile Include="Components\Currentsources\VCCS\FrequencyBehavior.cs" />
     <Compile Include="Components\Currentsources\VCCS\LoadBehavior.cs" />
     <Compile Include="Components\IConnectedBehavior.cs" />
     <Compile Include="Components\RLC\RES\BaseParameters.cs" />
     <Compile Include="Components\RLC\RES\ModelBaseParameters.cs" />
-    <Compile Include="Components\Voltagesources\VSRC\AcParameters.cs" />
+    <Compile Include="Components\Voltagesources\VSRC\FrequencyParameters.cs" />
     <Compile Include="Components\Voltagesources\VSRC\BaseParameters.cs" />
     <Compile Include="ParameterSet.cs" />
     <Compile Include="ParameterSetCollection.cs" />

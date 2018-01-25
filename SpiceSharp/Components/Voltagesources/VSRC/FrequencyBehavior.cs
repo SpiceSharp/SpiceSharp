@@ -77,7 +77,7 @@ namespace SpiceSharp.Behaviors.VSRC
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            var ap = provider.GetParameterSet<AcParameters>(0);
+            var ap = provider.GetParameterSet<FrequencyParameters>(0);
 
             // Calculate AC vector
             double radians = ap.VSRCacPhase * Math.PI / 180.0;

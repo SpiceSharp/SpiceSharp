@@ -32,7 +32,7 @@ namespace SpiceSharp.Components
         {
             // Register parameters
             Parameters.Add(new BaseParameters());
-            Parameters.Add(new AcParameters());
+            Parameters.Add(new FrequencyParameters());
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -52,7 +52,7 @@ namespace SpiceSharp.Components
         {
             // Register parameters
             Parameters.Add(new BaseParameters(dc));
-            Parameters.Add(new AcParameters());
+            Parameters.Add(new FrequencyParameters());
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -75,7 +75,7 @@ namespace SpiceSharp.Components
         {
             // Register parameters
             Parameters.Add(new BaseParameters(w));
-            Parameters.Add(new AcParameters());
+            Parameters.Add(new FrequencyParameters());
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));

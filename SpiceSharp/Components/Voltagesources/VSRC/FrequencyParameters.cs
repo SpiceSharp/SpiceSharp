@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.VSRC
     /// <summary>
     /// Parameters for AC analysis
     /// </summary>
-    public class AcParameters : ParameterSet
+    public class FrequencyParameters : ParameterSet
     {
         /// <summary>
         /// Parameters
