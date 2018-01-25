@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using System;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Components.CAP;
 using SpiceSharp.Simulations;
@@ -28,6 +28,9 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             if (!bp.CAPcapac.Given)
@@ -40,6 +43,9 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="sim">Base simulation</param>
         public override void Temperature(BaseSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             if (!bp.CAPcapac.Given)
             {
                 if (mbp == null)

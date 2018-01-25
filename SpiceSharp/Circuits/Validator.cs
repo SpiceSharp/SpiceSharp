@@ -34,6 +34,9 @@ namespace SpiceSharp.Circuits
         /// <param name="ckt">The circuit</param>
         public void Check(Circuit ckt)
         {
+            if (ckt == null)
+                throw new ArgumentNullException(nameof(ckt));
+
             // Connect all objects in the circuit, we need this information to find connectivity issues
             ckt.Objects.BuildOrderedComponentList();
             foreach (var o in ckt.Objects)

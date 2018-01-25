@@ -22,9 +22,21 @@ namespace SpiceSharp.Behaviors.VSRC
         /// Properties
         /// </summary>
         [PropertyName("i"), PropertyInfo("Voltage source current")]
-        public double GetCurrent(State state) => state.Solution[VSRCbranch];
+        public double GetCurrent(State state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+
+            return state.Solution[VSRCbranch];
+        }
         [PropertyName("p"), PropertyInfo("Instantaneous power")]
-        public double GetPower(State state) => (state.Solution[VSRCposNode] - state.Solution[VSRCnegNode]) * -state.Solution[VSRCbranch];
+        public double GetPower(State state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+
+            return (state.Solution[VSRCposNode] - state.Solution[VSRCnegNode]) * -state.Solution[VSRCbranch];
+        }
         [PropertyName("v"), PropertyInfo("Instantaneous voltage")]
         public double VSRCvoltage { get; protected set; }
 
@@ -55,6 +67,9 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
 
@@ -95,7 +110,10 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
-            // Get nodes
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             VSRCposNode = pins[0];
             VSRCnegNode = pins[1];
         }
@@ -106,6 +124,11 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
         {
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             VSRCbranch = nodes.Create(Name?.Grow("#branch"), Node.NodeType.Current).Index;
             VSRCposIbrptr = matrix.GetElement(VSRCposNode, VSRCbranch);
             VSRCibrPosptr = matrix.GetElement(VSRCbranch, VSRCposNode);
@@ -130,6 +153,9 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
+            if (sim == null)
+                throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             double time = 0.0;
             double value = 0.0;

@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Sparse
+﻿using System;
+
+namespace SpiceSharp.Sparse
 {
     /// <summary>
     /// Methods used to solve matrix equations
@@ -16,6 +18,13 @@
         /// <param name="iSolution">The imaginary values of the solution</param>
         public static void Solve(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+            if (RHS == null)
+                throw new ArgumentNullException(nameof(RHS));
+            if (Solution == null)
+                throw new ArgumentNullException(nameof(Solution));
+
             MatrixElement pElement;
             ElementValue[] Intermediate;
             double Temp;
@@ -90,6 +99,17 @@
         /// <param name="iSolution"></param>
         public static void SolveComplexMatrix(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+            if (RHS == null)
+                throw new ArgumentNullException(nameof(RHS));
+            if (Solution == null)
+                throw new ArgumentNullException(nameof(Solution));
+            if (iRHS == null)
+                throw new ArgumentNullException(nameof(iRHS));
+            if (iSolution == null)
+                throw new ArgumentNullException(nameof(iSolution));
+
             MatrixElement pElement;
             ElementValue[] Intermediate;
             int I, Size;
@@ -166,6 +186,13 @@
         /// <param name="iSolution">The imaginary solution</param>
         public static void SolveTransposed(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+            if (RHS == null)
+                throw new ArgumentNullException(nameof(RHS));
+            if (Solution == null)
+                throw new ArgumentNullException(nameof(Solution));
+
             MatrixElement pElement;
             ElementValue[] Intermediate;
             int I, Size;
@@ -238,6 +265,17 @@
         /// <param name="iSolution">The imaginary values of the solution</param>
         public static void SolveComplexTransposedMatrix(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+            if (RHS == null)
+                throw new ArgumentNullException(nameof(RHS));
+            if (Solution == null)
+                throw new ArgumentNullException(nameof(Solution));
+            if (iRHS == null)
+                throw new ArgumentNullException(nameof(iRHS));
+            if (iSolution == null)
+                throw new ArgumentNullException(nameof(iSolution));
+
             MatrixElement pElement;
             ElementValue[] Intermediate;
             int I, Size;

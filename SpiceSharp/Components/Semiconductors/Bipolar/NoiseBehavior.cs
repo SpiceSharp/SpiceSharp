@@ -59,6 +59,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mnp = provider.GetParameterSet<ModelNoiseParameters>(1);
@@ -74,6 +77,10 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 4)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
             BJTcolNode = pins[0];
             BJTbaseNode = pins[1];
             BJTemitNode = pins[2];
@@ -101,6 +108,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="sim">Noise simulation</param>
         public override void Noise(Noise sim)
         {
+            if (sim == null)
+                throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             var noise = sim.NoiseState;
 

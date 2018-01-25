@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components.Mosfet.Level2
@@ -45,6 +46,9 @@ namespace SpiceSharp.Components.Mosfet.Level2
         [PropertyName("ic"), PropertyInfo("Vector of D-S, G-S, B-S voltages")]
         public void SetIC(double[] value)
         {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
             switch (value.Length)
             {
                 case 3: MOS2icVBS.Set(value[2]); goto case 2;

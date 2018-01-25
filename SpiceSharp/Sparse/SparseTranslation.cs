@@ -59,6 +59,9 @@ namespace SpiceSharp.Sparse
         /// <param name="col">Column index</param>
         public void Translate(Matrix matrix, ref int row, ref int col)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             int IntRow, IntCol, ExtRow, ExtCol;
 
             // Begin `Translate'

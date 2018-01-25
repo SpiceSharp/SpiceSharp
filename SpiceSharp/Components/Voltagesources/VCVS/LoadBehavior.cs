@@ -21,11 +21,29 @@ namespace SpiceSharp.Behaviors.VCVS
         /// Properties
         /// </summary>
         [PropertyName("i"), PropertyInfo("Output current")]
-        public double GetCurrent(State state) => state.Solution[VCVSbranch];
+        public double GetCurrent(State state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+
+            return state.Solution[VCVSbranch];
+        }
         [PropertyName("v"), PropertyInfo("Output current")]
-        public double GetVoltage(State state) => state.Solution[VCVSposNode] - state.Solution[VCVSnegNode];
+        public double GetVoltage(State state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+
+            return state.Solution[VCVSposNode] - state.Solution[VCVSnegNode];
+        }
         [PropertyName("p"), PropertyInfo("Power")]
-        public double GetPower(State state) => state.Solution[VCVSbranch] * (state.Solution[VCVSposNode] - state.Solution[VCVSnegNode]);
+        public double GetPower(State state)
+        { 
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+
+            return state.Solution[VCVSbranch] * (state.Solution[VCVSposNode] - state.Solution[VCVSnegNode]);
+        }
 
         /// <summary>
         /// Nodes
@@ -69,6 +87,9 @@ namespace SpiceSharp.Behaviors.VCVS
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
         }
@@ -79,6 +100,10 @@ namespace SpiceSharp.Behaviors.VCVS
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 4)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
             VCVSposNode = pins[0];
             VCVSnegNode = pins[1];
             VCVScontPosNode = pins[2];
@@ -92,6 +117,11 @@ namespace SpiceSharp.Behaviors.VCVS
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
         {
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             VCVSbranch = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
             VCVSposIbrptr = matrix.GetElement(VCVSposNode, VCVSbranch);
             VCVSnegIbrptr = matrix.GetElement(VCVSnegNode, VCVSbranch);

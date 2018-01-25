@@ -101,6 +101,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
@@ -116,6 +119,10 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 4)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
             BJTcolNode = pins[0];
             BJTbaseNode = pins[1];
             BJTemitNode = pins[2];
@@ -129,6 +136,12 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
         {
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
+            // TODO: Replace == 0 with > 0
             // Add a series collector node if necessary
             if (mbp.BJTcollectorResist.Value == 0)
                 BJTcolPrimeNode = BJTcolNode;
@@ -210,6 +223,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
+            if (sim == null)
+                throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             double vt;
             double ceqcs, ceqbx, csat, rbpr, rbpi, gcpr, gepr, oik, c2, vte, oikr, c4, vtc, xjrb, vbe, vbc, vbx, vcs;
@@ -458,6 +474,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <returns></returns>
         public override bool IsConvergent(BaseSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             var config = sim.BaseConfiguration;
 

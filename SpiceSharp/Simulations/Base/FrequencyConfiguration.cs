@@ -55,6 +55,9 @@ namespace SpiceSharp.Simulations
             }
             set
             {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
                 switch (value.ToLower())
                 {
                     case "linear":

@@ -57,6 +57,9 @@ namespace SpiceSharp
         /// <param name="source"></param>
         public void CopyFrom(Parameter source)
         {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
             Value = source.Value;
             Given = source.Given;
         }
@@ -67,6 +70,9 @@ namespace SpiceSharp
         /// <param name="target"></param>
         public void CopyTo(Parameter target)
         {
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+
             target.Value = Value;
             target.Given = Given;
         }
@@ -84,20 +90,23 @@ namespace SpiceSharp
         /// <summary>
         /// Parameters can be implicitly converted to their base type
         /// </summary>
-        /// <param name="p"></param>
-        public static implicit operator double(Parameter p)
+        /// <param name="parameter"></param>
+        public static implicit operator double(Parameter parameter)
         {
-            return p.Value;
+            if (parameter == null)
+                throw new ArgumentNullException(nameof(parameter));
+
+            return parameter.Value;
         }
 
         /// <summary>
         /// Assignment
         /// Warning: This is the same as calling Set on the parameter!
         /// </summary>
-        /// <param name="p">The double representation</param>
-        public static implicit operator Parameter(double p)
+        /// <param name="parameter">The double representation</param>
+        public static implicit operator Parameter(double parameter)
         {
-            return new Parameter(p) { Given = true };
+            return new Parameter(parameter) { Given = true };
         }
 
         /// <summary>

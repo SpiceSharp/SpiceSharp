@@ -1,5 +1,5 @@
-﻿using SpiceSharp.Diagnostics;
-using SpiceSharp.Circuits;
+﻿using System;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Components.RES;
 using SpiceSharp.Simulations;
 
@@ -33,6 +33,9 @@ namespace SpiceSharp.Behaviors.RES
         /// <param name="provider"></param>
         public override void Setup(SetupDataProvider provider)
         {
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             if (!bp.RESresist.Given)
@@ -45,6 +48,9 @@ namespace SpiceSharp.Behaviors.RES
         /// <param name="sim">Base simulation</param>
         public override void Temperature(BaseSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             double factor;
             double difference;
             double RESresist = bp.RESresist;

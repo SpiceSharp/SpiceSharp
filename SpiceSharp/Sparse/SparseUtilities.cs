@@ -16,6 +16,9 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">Matrix</param>
         public static void PreorderMNA(this Matrix matrix)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             int J, Size;
             MatrixElement pTwin1 = null, pTwin2 = null;
             int Twins, StartAt = 1;
@@ -138,6 +141,9 @@ namespace SpiceSharp.Sparse
         /// <param name="piDeterminant">The imaginary portion of the determinant. It is scaled between 1 and 10.</param>
         public static void Determinant(this Matrix matrix, out int pExponent, out double pDeterminant, out double piDeterminant)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             int I, Size;
             double Norm, nr, ni;
             ElementValue Pivot = new ElementValue(), cDeterminant = new ElementValue();
@@ -281,6 +287,9 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public static string ErrorMessage(this Matrix matrix, string Originator)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             int Row = 0, Col = 0;
             SparseError Error;
             StringBuilder sb = new StringBuilder();

@@ -53,6 +53,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns></returns>
         public override void Integrate(HistoryPoint first, int index)
         {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+
             switch (Order)
             {
                 case 1:
@@ -74,6 +77,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="sim">Time-based simulation</param>
         public override void Predict(TimeSimulation sim)
         {
+            if (sim == null)
+                throw new ArgumentNullException(nameof(sim));
+
             // Get the state
             var state = sim.State;
 
@@ -117,6 +123,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns></returns>
         protected override void TruncateNodes(object sender, TruncationEventArgs args)
         {
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
+
             // Get the state
             var sim = args.Simulation;
             var state = sim.State;
@@ -212,6 +221,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="timestep">Timestep</param>
         public override void LocalTruncateError(HistoryPoint first, int index, ref double timestep)
         {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+
             double[] diff = new double[MaxOrder + 2];
             double[] deltmp = new double[DeltaOld.Length];
 

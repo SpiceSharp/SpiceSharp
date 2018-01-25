@@ -1,6 +1,6 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using SpiceSharp.Components.IND;
-using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 
@@ -39,6 +39,9 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
 
@@ -52,6 +55,10 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             INDposNode = pins[0];
             INDnegNode = pins[1];
         }
@@ -62,6 +69,9 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             // Get current equation
             INDbrEq = load.INDbrEq;
 
@@ -91,6 +101,9 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="sim">Frequency-based simulation</param>
         public override void Load(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             Complex val = state.Laplace * bp.INDinduct.Value;
 

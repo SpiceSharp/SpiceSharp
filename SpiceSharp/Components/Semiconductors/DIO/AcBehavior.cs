@@ -50,6 +50,9 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
@@ -66,6 +69,10 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             DIOposNode = pins[0];
             DIOnegNode = pins[1];
         }
@@ -76,6 +83,9 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             // Get node
             DIOposPrimeNode = load.DIOposPrimeNode;
 
@@ -109,6 +119,9 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="sim"></param>
         public override void InitializeParameters(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             double arg, czero, sarg, capd, czof2;
             double vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
@@ -135,6 +148,9 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="sim">Frequency-based simulation</param>
         public override void Load(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             double gspr, geq, xceq;
 

@@ -53,6 +53,8 @@ namespace SpiceSharp.Components
         /// <param name="nodes"></param>
         public virtual void Connect(params Identifier[] nodes)
         {
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(Node));
             if (nodes.Length != connections.Length)
                 throw new CircuitException($"{Name}: Node count mismatch. {nodes.Length} given, {connections.Length} expected.");
             for (int i = 0; i < nodes.Length; i++)
@@ -88,6 +90,8 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         protected override SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
         {
+            if (pool == null)
+                throw new ArgumentNullException(nameof(pool));
             var provider = base.BuildSetupDataProvider(pool);
 
             // Add our model parameters and behaviors
@@ -131,6 +135,9 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         protected Node[] BindNodes(Circuit ckt)
         {
+            if (ckt == null)
+                throw new ArgumentNullException(nameof(ckt));
+
             // Map connected nodes
             Node[] nodes = new Node[connections.Length];
             for (int i = 0; i < connections.Length; i++)

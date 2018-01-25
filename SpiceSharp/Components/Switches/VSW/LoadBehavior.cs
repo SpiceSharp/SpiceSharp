@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Circuits;
+﻿using System;
+using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.VSW;
 using SpiceSharp.Simulations;
@@ -58,6 +59,9 @@ namespace SpiceSharp.Behaviors.VSW
         /// <param name="provider">Provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
@@ -72,6 +76,10 @@ namespace SpiceSharp.Behaviors.VSW
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 4)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
             VSWposNode = pins[0];
             VSWnegNode = pins[1];
             VSWcontPosNode = pins[2];
@@ -85,6 +93,9 @@ namespace SpiceSharp.Behaviors.VSW
         /// <param name="matrix"></param>
         public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             SWposPosptr = matrix.GetElement(VSWposNode, VSWposNode);
             SWposNegptr = matrix.GetElement(VSWposNode, VSWnegNode);
             SWnegPosptr = matrix.GetElement(VSWnegNode, VSWposNode);
@@ -108,6 +119,9 @@ namespace SpiceSharp.Behaviors.VSW
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
+            if (sim == null)
+                throw new ArgumentNullException(nameof(sim));
+
             double g_now;
             double v_ctrl;
             bool previous_state;

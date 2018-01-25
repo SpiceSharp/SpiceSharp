@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using System;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors.MUT;
@@ -70,12 +70,15 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Setup the mutual inductance
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        /// <param name="circuit">The circuit</param>
+        public override void Setup(Circuit circuit)
         {
+            if (circuit == null)
+                throw new ArgumentNullException(nameof(circuit));
+
             // Get the inductors for the mutual inductance
-            Inductor1 = ckt.Objects[MUTind1] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{MUTind1}'");
-            Inductor2 = ckt.Objects[MUTind2] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{MUTind2}'");
+            Inductor1 = circuit.Objects[MUTind1] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{MUTind1}'");
+            Inductor2 = circuit.Objects[MUTind2] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{MUTind2}'");
         }
 
         /// <summary>

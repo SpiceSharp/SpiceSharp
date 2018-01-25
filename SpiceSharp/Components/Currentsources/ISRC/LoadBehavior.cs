@@ -23,9 +23,21 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <param name="state"></param>
         /// <returns></returns>
         [PropertyName("v"), PropertyInfo("Voltage accross the supply")]
-        public double GetV(State state) => (state.Solution[ISRCposNode] - state.Solution[ISRCnegNode]);
+        public double GetV(State state)
+        {
+			if (state == null)
+				throw new ArgumentNullException(nameof(state));
+
+            return (state.Solution[ISRCposNode] - state.Solution[ISRCnegNode]);
+        }
         [PropertyName("p"), PropertyInfo("Power supplied by the source")]
-        public double GetP(State state) => (state.Solution[ISRCposNode] - state.Solution[ISRCposNode]) * -Current;
+        public double GetP(State state)
+        {
+			if (state == null)
+				throw new ArgumentNullException(nameof(state));
+
+            return (state.Solution[ISRCposNode] - state.Solution[ISRCposNode]) * -Current;
+        }
         [PropertyName("c"), PropertyName("i"), PropertyInfo("Current through current source")]
         public double Current { get; protected set; }
 
@@ -64,6 +76,9 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
 
@@ -84,6 +99,10 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             ISRCposNode = pins[0];
             ISRCnegNode = pins[1];
         }
@@ -94,8 +113,10 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            var state = sim.State;
-            var rstate = state;
+            if (sim == null)
+                throw new ArgumentNullException(nameof(sim));
+
+            var state = sim.State ?? throw new NullReferenceException();
 
             double value = 0.0;
             double time = 0.0;
@@ -118,8 +139,8 @@ namespace SpiceSharp.Behaviors.ISRC
                 value = bp.ISRCdcValue * state.SrcFact;
             }
 
-            rstate.Rhs[ISRCposNode] += value;
-            rstate.Rhs[ISRCnegNode] -= value;
+            state.Rhs[ISRCposNode] += value;
+            state.Rhs[ISRCnegNode] -= value;
             Current = value;
         }
     }

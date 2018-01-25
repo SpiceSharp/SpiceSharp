@@ -18,6 +18,9 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public static SparseError OrderAndFactor(this Matrix matrix, double[] RHS, double RelThreshold, double AbsThreshold, bool DiagPivoting)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             var pivoting = matrix.Pivoting;
             MatrixElement pPivot;
             int Step, Size;
@@ -120,6 +123,9 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public static SparseError Factor(this Matrix matrix)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             var pivoting = matrix.Pivoting;
 
             if (matrix.Factored)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Circuits;
 using SpiceSharp.Components.ISRC;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
@@ -31,6 +30,9 @@ namespace SpiceSharp.Behaviors.ISRC
         [PropertyName("v"), PropertyInfo("Complex voltage")]
         public Complex GetVoltage(State state)
         {
+			if (state == null)
+				throw new ArgumentNullException(nameof(state));
+
             return new Complex(
                 state.Solution[ISRCposNode] - state.Solution[ISRCnegNode],
                 state.iSolution[ISRCposNode] - state.iSolution[ISRCnegNode]
@@ -39,6 +41,9 @@ namespace SpiceSharp.Behaviors.ISRC
         [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(State state)
         {
+			if (state == null)
+				throw new ArgumentNullException(nameof(state));
+
             Complex v = new Complex(
                 state.Solution[ISRCposNode] - state.Solution[ISRCnegNode],
                 state.iSolution[ISRCposNode] - state.iSolution[ISRCnegNode]
@@ -73,6 +78,9 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             ap = provider.GetParameterSet<AcParameters>(0);
 
@@ -87,6 +95,10 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             ISRCposNode = pins[0];
             ISRCnegNode = pins[1];
         }
@@ -97,7 +109,10 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <param name="sim">Frequency-based simulation</param>
         public override void Load(FrequencySimulation sim)
         {
-            var state = sim.State;
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
+            var state = sim?.State ?? throw new NullReferenceException();
             state.Rhs[ISRCposNode] += ISRCac.Real;
             state.iRhs[ISRCposNode] += ISRCac.Imaginary;
             state.Rhs[ISRCnegNode] -= ISRCac.Real;

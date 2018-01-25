@@ -3,7 +3,6 @@ using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Components.CAP;
-using SpiceSharp.Circuits;
 using System;
 
 namespace SpiceSharp.Behaviors.CAP
@@ -24,7 +23,14 @@ namespace SpiceSharp.Behaviors.CAP
         [PropertyName("i"), PropertyInfo("Device current")]
         public double GetCurrent() => CAPqcap.Derivative;
         [PropertyName("p"), PropertyInfo("Instantaneous device power")]
-        public double GetPower(State state) => CAPqcap.Derivative * (state.Solution[CAPposNode] - state.Solution[CAPnegNode]);
+        public double GetPower(State state)
+        {
+			if (state == null)
+				throw new ArgumentNullException(nameof(state));
+
+            return CAPqcap.Derivative * (state.Solution[CAPposNode] - state.Solution[CAPnegNode]);
+        }
+        // TODO: Add voltage property
 
         /// <summary>
         /// Nodes and states
@@ -64,6 +70,9 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
         }
@@ -74,6 +83,10 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             CAPposNode = pins[0];
             CAPnegNode = pins[1];
         }
@@ -84,6 +97,9 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="states">States</param>
         public override void CreateStates(StatePool states)
         {
+			if (states == null)
+				throw new ArgumentNullException(nameof(states));
+
             CAPqcap = states.Create();
         }
 
@@ -93,6 +109,9 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             CAPposPosptr = matrix.GetElement(CAPposNode, CAPposNode);
             CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
             CAPnegPosptr = matrix.GetElement(CAPnegNode, CAPposNode);
@@ -105,6 +124,9 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="sim"></param>
         public override void GetDCstate(TimeSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             // Calculate the state for DC
             var sol = sim.State.Solution;
             if (bp.CAPinitCond.Given)
@@ -130,6 +152,9 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             double vcap = state.Solution[CAPposNode] - state.Solution[CAPnegNode];
 

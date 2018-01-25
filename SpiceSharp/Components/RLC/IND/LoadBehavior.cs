@@ -62,6 +62,10 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             INDposNode = pins[0];
             INDnegNode = pins[1];
         }
@@ -73,6 +77,11 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
         {
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             // Create current equation
             INDbrEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
 

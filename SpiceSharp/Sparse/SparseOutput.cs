@@ -33,6 +33,9 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public static string Print(this Matrix matrix, bool printReordered, bool data, bool header)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             int J = 0;
             int I, Row, Col, Size, Top, StartCol = 1, StopCol, Columns, ElementCount = 0;
             double Magnitude, SmallestDiag, SmallestElement;

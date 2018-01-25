@@ -58,6 +58,9 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
 
@@ -78,6 +81,9 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             // Get current equation
             INDbrEq = load.INDbrEq;
 
@@ -99,6 +105,9 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="states">States</param>
         public override void CreateStates(StatePool states)
         {
+			if (states == null)
+				throw new ArgumentNullException(nameof(states));
+
             INDflux = states.Create();
         }
 
@@ -108,6 +117,9 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="sim">Time-based simulation</param>
         public override void GetDCstate(TimeSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             // Get the current through
             if (bp.INDinitCond.Given)
                 INDflux.Value = bp.INDinitCond * bp.INDinduct;
@@ -121,6 +133,9 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
 
             // Initialize

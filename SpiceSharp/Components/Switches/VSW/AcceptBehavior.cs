@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations;
+﻿using System;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.VSW
 {
@@ -24,6 +25,9 @@ namespace SpiceSharp.Behaviors.VSW
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get behaviors
             load = provider.GetBehavior<LoadBehavior>(0);
         }

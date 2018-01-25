@@ -53,6 +53,9 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
@@ -88,6 +91,10 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             DIOposNode = pins[0];
             DIOnegNode = pins[1];
         }
@@ -98,6 +105,11 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="matrix"></param>
         public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
         {
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+            
             // Create
             if (mbp.DIOresist.Value == 0)
                 DIOposPrimeNode = DIOposNode;
@@ -134,6 +146,9 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
+            if (sim == null)
+                throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             bool Check;
             double csat, gspr, vt, vte, vd, vdtemp, evd, cd, gd, arg, evrev, cdeq;
@@ -235,6 +250,9 @@ namespace SpiceSharp.Behaviors.DIO
         /// <returns></returns>
         public override bool IsConvergent(BaseSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             var config = sim.BaseConfiguration;
             double delvd, cdhat, cd;

@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components.CSW;
+﻿using System;
+using SpiceSharp.Components.CSW;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.CSW
@@ -35,6 +36,9 @@ namespace SpiceSharp.Behaviors.CSW
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             mbp = provider.GetParameterSet<ModelBaseParameters>(0);
         }

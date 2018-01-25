@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components.ISRC
@@ -18,6 +19,8 @@ namespace SpiceSharp.Components.ISRC
         [PropertyName("ac"), PropertyInfo("A.C. magnitude, phase vector")]
         public void SetAc(double[] ac)
         {
+            if (ac == null)
+                throw new ArgumentNullException(nameof(ac));
             switch (ac.Length)
             {
                 case 2: ISRCacPhase.Set(ac[1]); goto case 1;

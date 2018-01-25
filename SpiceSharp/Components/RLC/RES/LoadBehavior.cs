@@ -16,12 +16,25 @@ namespace SpiceSharp.Behaviors.RES
         /// Parameters
         /// </summary>
         [PropertyName("v"), PropertyInfo("Voltage")]
-        public double GetVoltage(State state) => state.Solution[RESposNode] - state.Solution[RESnegNode];
+        public double GetVoltage(State state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            return state.Solution[RESposNode] - state.Solution[RESnegNode];
+        }
         [PropertyName("i"), PropertyInfo("Current")]
-        public double GetCurrent(State state) => (state.Solution[RESposNode] - state.Solution[RESnegNode]) * RESconduct;
+        public double GetCurrent(State state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            return (state.Solution[RESposNode] - state.Solution[RESnegNode]) * RESconduct;
+        }
         [PropertyName("p"), PropertyInfo("Power")]
         public double GetPower(State state)
         {
+			if (state == null)
+				throw new ArgumentNullException(nameof(state));
+
             double v = state.Solution[RESposNode] - state.Solution[RESnegNode];
             return v * v * RESconduct;
         }
@@ -74,6 +87,9 @@ namespace SpiceSharp.Behaviors.RES
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             var p = provider.GetParameterSet<BaseParameters>(0);
 
@@ -98,6 +114,10 @@ namespace SpiceSharp.Behaviors.RES
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             RESposNode = pins[0];
             RESnegNode = pins[1];
         }
@@ -108,6 +128,9 @@ namespace SpiceSharp.Behaviors.RES
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             // Get matrix elements
             RESposPosPtr = matrix.GetElement(RESposNode, RESposNode);
             RESnegNegPtr = matrix.GetElement(RESnegNode, RESnegNode);

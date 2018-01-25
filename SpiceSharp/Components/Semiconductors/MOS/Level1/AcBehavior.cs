@@ -67,6 +67,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
@@ -83,6 +86,10 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 4)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
             MOS1dNode = pins[0];
             MOS1gNode = pins[1];
             MOS1sNode = pins[2];
@@ -95,6 +102,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             // Get extra equations
             MOS1dNodePrime = load.MOS1dNodePrime;
             MOS1sNodePrime = load.MOS1sNodePrime;
@@ -160,6 +170,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <param name="sim"></param>
         public override void InitializeParameters(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             double arg, sarg, sargsw;
 
             // Get voltages
@@ -324,6 +337,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <param name="sim">Frequency-based simulation</param>
         public override void Load(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             var cstate = state;
             int xnrm, xrev;

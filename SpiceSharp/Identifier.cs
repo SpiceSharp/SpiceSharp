@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Diagnostics;
+﻿using System;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp
 {
@@ -36,7 +37,7 @@ namespace SpiceSharp
         /// <summary>
         /// Get the hash value
         /// </summary>
-        private int hash;
+        readonly int hash;
 
         /// <summary>
         /// Constructor
@@ -44,6 +45,9 @@ namespace SpiceSharp
         /// <param name="path">The full path</param>
         public Identifier(params string[] path)
         {
+            if (path == null)
+                throw new ArgumentNullException(nameof(path));
+
             // Check inputs
             if (path.Length == 0)
                 throw new CircuitException("Empty path");
@@ -91,8 +95,7 @@ namespace SpiceSharp
                 }
                 return true;
             }
-            else
-                return false;
+            return false;
         }
 
         /// <summary>
@@ -125,6 +128,9 @@ namespace SpiceSharp
         /// <returns></returns>
         public Identifier Grow(Identifier id)
         {
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
+
             string[] npath = new string[Path.Length + id.Path.Length];
             for (int i = 0; i < Path.Length; i++)
                 npath[i] = Path[i];

@@ -41,6 +41,9 @@ namespace SpiceSharp.Behaviors.MUT
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             var bp1 = provider.GetParameterSet<Components.IND.BaseParameters>(1);
@@ -60,6 +63,9 @@ namespace SpiceSharp.Behaviors.MUT
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             // Get extra equations
             int INDbrEq1 = load1.INDbrEq;
             int INDbrEq2 = load2.INDbrEq;
@@ -84,6 +90,9 @@ namespace SpiceSharp.Behaviors.MUT
         /// <param name="sim">Frequency-based simulation</param>
         public override void Load(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             Complex value = state.Laplace * MUTfactor;
             MUTbr1br2.Sub(value);

@@ -34,6 +34,9 @@ namespace SpiceSharp.Behaviors
         /// <param name="behavior">Behavior</param>
         public void Register(Behavior behavior)
         {
+            if (behavior == null)
+                throw new ArgumentNullException(nameof(behavior));
+
             // Get types
             Type mytype = behavior.GetType();
             Type basetype = mytype.BaseType;

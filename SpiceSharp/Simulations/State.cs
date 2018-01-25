@@ -226,6 +226,9 @@ namespace SpiceSharp.Simulations
         /// <param name="ckt"></param>
         public void Initialize(Circuit ckt)
         {
+            if (ckt == null)
+                throw new ArgumentNullException(nameof(ckt));
+
             // Initialize all matrices
             Order = ckt.Nodes.Count + 1;
             Rhs = new double[Order];

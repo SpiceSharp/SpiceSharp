@@ -37,6 +37,9 @@ namespace SpiceSharp.Simulations
         /// <param name="sweeps">Sweeps to be nested (in order)</param>
         public NestedSweeps(IEnumerable<Sweep> sweeps)
         {
+            if (sweeps == null)
+                throw new ArgumentNullException(nameof(sweeps));
+
             foreach (var sweep in sweeps)
                 Add(sweep);
         }

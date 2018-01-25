@@ -41,11 +41,14 @@ namespace SpiceSharp.Behaviors.IND
         /// <param name="i">Current</param>
         public UpdateFluxEventArgs(double ind, double i, StateDerivative flux, State state)
         {
+            if (flux == null)
+                throw new ArgumentNullException(nameof(flux));
+
             Inductance = ind;
             Current = i;
             OriginalFlux = flux.Value;
             Flux = flux;
-            State = state;
+            State = state ?? throw new ArgumentNullException(nameof(state));
         }
     }
 

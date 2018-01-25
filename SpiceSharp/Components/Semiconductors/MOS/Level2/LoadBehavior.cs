@@ -103,6 +103,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
@@ -122,6 +125,10 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 4)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
             MOS2dNode = pins[0];
             MOS2gNode = pins[1];
             MOS2sNode = pins[2];
@@ -135,6 +142,11 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
         {
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             // Add a series drain node if necessary
             if (mbp.MOS2drainResistance > 0 || (bp.MOS2drainSquares != 0 && mbp.MOS2sheetResistance > 0))
                 MOS2dNodePrime = nodes.Create(Name.Grow("#drain")).Index;
@@ -208,6 +220,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
+            if (sim == null)
+                throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             var rstate = state;
             double vt, EffectiveLength, DrainSatCur, SourceSatCur, Beta,
@@ -940,6 +955,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <returns></returns>
         public override bool IsConvergent(BaseSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             var config = sim.BaseConfiguration;
 

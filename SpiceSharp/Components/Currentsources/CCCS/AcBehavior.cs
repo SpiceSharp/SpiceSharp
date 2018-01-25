@@ -1,8 +1,8 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Sparse;
+﻿using SpiceSharp.Sparse;
 using SpiceSharp.Components.CCCS;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
+using SpiceSharp.Diagnostics;
 using System;
 using System.Numerics;
 
@@ -25,6 +25,9 @@ namespace SpiceSharp.Behaviors.CCCS
         [PropertyName("v"), PropertyInfo("Complex voltage")]
         public Complex GetVoltage(State state)
         {
+			if (state == null)
+				throw new ArgumentNullException(nameof(state));
+
             return new Complex(
                 state.Solution[CCCSposNode] - state.Solution[CCCSnegNode],
                 state.iSolution[CCCSposNode] - state.iSolution[CCCSnegNode]);
@@ -32,6 +35,9 @@ namespace SpiceSharp.Behaviors.CCCS
         [PropertyName("i"), PropertyInfo("Complex current")]
         public Complex GetCurrent(State state)
         {
+			if (state == null)
+				throw new ArgumentNullException(nameof(state));
+
             return new Complex(
                 state.Solution[CCCScontBranch],
                 state.iSolution[CCCScontBranch]
@@ -40,6 +46,9 @@ namespace SpiceSharp.Behaviors.CCCS
         [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(State state)
         {
+			if (state == null)
+				throw new ArgumentNullException(nameof(state));
+
             Complex v = new Complex(state.Solution[CCCSposNode], state.iSolution[CCCSnegNode]);
             Complex i = new Complex(state.Solution[CCCScontBranch], state.iSolution[CCCScontBranch]) * bp.CCCScoeff.Value;
             return -v * Complex.Conjugate(i);
@@ -64,6 +73,9 @@ namespace SpiceSharp.Behaviors.CCCS
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
 
@@ -77,6 +89,10 @@ namespace SpiceSharp.Behaviors.CCCS
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             CCCSposNode = pins[0];
             CCCSnegNode = pins[1];
         }
@@ -87,6 +103,9 @@ namespace SpiceSharp.Behaviors.CCCS
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             CCCScontBranch = vsrcload.VSRCbranch;
             CCCSposContBrptr = matrix.GetElement(CCCSposNode, CCCScontBranch);
             CCCSnegContBrptr = matrix.GetElement(CCCSnegNode, CCCScontBranch);
@@ -108,6 +127,9 @@ namespace SpiceSharp.Behaviors.CCCS
         /// <param name="sim">Frequency-based simulation</param>
         public override void Load(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             CCCSposContBrptr.Add(bp.CCCScoeff);
             CCCSnegContBrptr.Sub(bp.CCCScoeff);
         }

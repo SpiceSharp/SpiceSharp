@@ -70,6 +70,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
@@ -86,6 +89,10 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 4)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
             MOS2dNode = pins[0];
             MOS2gNode = pins[1];
             MOS2sNode = pins[2];
@@ -98,6 +105,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             // Get extra equations
             MOS2sNodePrime = load.MOS2sNodePrime;
             MOS2dNodePrime = load.MOS2dNodePrime;
@@ -163,6 +173,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="sim"></param>
         public override void InitializeParameters(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
                 OxideCap, vgs, vbs, vbd, vgb, vgd, von,
@@ -314,6 +327,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="sim">Frequency-based simulation</param>
         public override void Load(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             var cstate = state;
             int xnrm, xrev;

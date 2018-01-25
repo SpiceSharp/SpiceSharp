@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using System;
 using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Components.CCCS;
@@ -83,6 +83,9 @@ namespace SpiceSharp.Components
         /// <param name="ckt">The circuit</param>
         public override void Setup(Circuit ckt)
         {
+            if (ckt == null)
+                throw new ArgumentNullException(nameof(ckt));
+
             var nodes = BindNodes(ckt);
             CCCSposNode = nodes[0].Index;
             CCCSnegNode = nodes[1].Index;
@@ -101,6 +104,9 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         protected override Behaviors.SetupDataProvider BuildSetupDataProvider(Behaviors.BehaviorPool pool)
         {
+            if (pool == null)
+                throw new ArgumentNullException(nameof(pool));
+
             var provider = base.BuildSetupDataProvider(pool);
 
             // Add behaviors and parameters of the controlling voltage source

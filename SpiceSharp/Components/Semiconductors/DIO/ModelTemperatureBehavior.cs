@@ -43,6 +43,9 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             mbp = provider.GetParameterSet<ModelBaseParameters>(0);
         }
@@ -53,6 +56,9 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="sim">Base simulation</param>
         public override void Temperature(BaseSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             if (!mbp.DIOnomTemp.Given)
             {
                 mbp.DIOnomTemp.Value = sim.State.NominalTemperature;

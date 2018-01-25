@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components.Bipolar
@@ -25,6 +26,9 @@ namespace SpiceSharp.Components.Bipolar
         [PropertyName("ic"), PropertyInfo("Initial condition vector")]
         public void SetIC(double[] value)
         {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
             switch (value.Length)
             {
                 case 2: BJTicVCE.Set(value[1]); goto case 1;

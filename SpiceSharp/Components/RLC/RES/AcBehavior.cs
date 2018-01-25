@@ -1,5 +1,5 @@
-﻿using System.Numerics;
-using SpiceSharp.Circuits;
+﻿using System;
+using System.Numerics;
 using SpiceSharp.Sparse;
 using SpiceSharp.Attributes;
 using SpiceSharp.Simulations;
@@ -17,6 +17,9 @@ namespace SpiceSharp.Behaviors.RES
         [PropertyName("v"), PropertyInfo("Voltage")]
         public Complex GetVoltage(State state)
         {
+			if (state == null)
+				throw new ArgumentNullException(nameof(state));
+
             return new Complex(
                 state.Solution[RESposNode] - state.Solution[RESnegNode],
                 state.iSolution[RESposNode] - state.iSolution[RESnegNode]);
@@ -24,6 +27,9 @@ namespace SpiceSharp.Behaviors.RES
         [PropertyName("i"), PropertyInfo("Current")]
         public Complex GetCurrent(State state)
         {
+			if (state == null)
+				throw new ArgumentNullException(nameof(state));
+
             var voltage = new Complex(
                 state.Solution[RESposNode] - state.Solution[RESnegNode],
                 state.iSolution[RESposNode] - state.iSolution[RESnegNode]);
@@ -32,6 +38,9 @@ namespace SpiceSharp.Behaviors.RES
         [PropertyName("p"), PropertyInfo("Power")]
         public Complex GetPower(State state)
         {
+			if (state == null)
+				throw new ArgumentNullException(nameof(state));
+
             var voltage = new Complex(
                 state.Solution[RESposNode] - state.Solution[RESnegNode],
                 state.iSolution[RESposNode] - state.iSolution[RESnegNode]);
@@ -69,6 +78,9 @@ namespace SpiceSharp.Behaviors.RES
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
             // Get behaviors
             load = provider.GetBehavior<LoadBehavior>(0);
         }
@@ -79,6 +91,9 @@ namespace SpiceSharp.Behaviors.RES
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             RESposPosPtr = matrix.GetElement(RESposNode, RESposNode);
             RESnegNegPtr = matrix.GetElement(RESnegNode, RESnegNode);
             RESposNegPtr = matrix.GetElement(RESposNode, RESnegNode);
@@ -103,6 +118,10 @@ namespace SpiceSharp.Behaviors.RES
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             RESposNode = pins[0];
             RESnegNode = pins[1];
         }
@@ -113,6 +132,9 @@ namespace SpiceSharp.Behaviors.RES
         /// <param name="sim">Frequency-based simulation</param>
         public override void Load(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             RESposPosPtr.Add(load.RESconduct);
             RESnegNegPtr.Add(load.RESconduct);
             RESposNegPtr.Sub(load.RESconduct);

@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations;
+﻿using System;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.NoiseSources
 {
@@ -25,6 +26,8 @@ namespace SpiceSharp.Components.NoiseSources
         /// <param name="values">Values</param>
         public override void Set(params double[] values)
         {
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
             Conductance = values[0];
         }
 
@@ -35,6 +38,9 @@ namespace SpiceSharp.Components.NoiseSources
         /// <returns></returns>
         protected override double CalculateNoise(Noise sim)
         {
+            if (sim == null)
+                throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             var rsol = state.Solution;
             var isol = state.iSolution;

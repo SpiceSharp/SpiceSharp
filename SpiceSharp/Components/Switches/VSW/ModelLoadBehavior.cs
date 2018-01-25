@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using System;
 using SpiceSharp.Components.VSW;
 using SpiceSharp.Simulations;
 
@@ -36,6 +36,9 @@ namespace SpiceSharp.Behaviors.VSW
         /// <param name="provider"></param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             mbp = provider.GetParameterSet<ModelBaseParameters>(0);
         }

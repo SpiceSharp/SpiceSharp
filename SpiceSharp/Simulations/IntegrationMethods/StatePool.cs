@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.IntegrationMethods
+﻿using System;
+
+namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
     /// Class responsible for managing state variables
@@ -41,7 +43,7 @@
         /// <param name="method">The integration method</param>
         public StatePool(IntegrationMethod method)
         {
-            Method = method;
+            Method = method ?? throw new ArgumentNullException(nameof(method));
             HistoryCount = method.MaxOrder + 2;
 
             // Create a linked list for all history points

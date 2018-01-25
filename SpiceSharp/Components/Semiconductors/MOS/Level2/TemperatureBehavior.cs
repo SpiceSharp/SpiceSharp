@@ -87,6 +87,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
@@ -101,6 +104,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <param name="sim">Base simulation</param>
         public override void Temperature(BaseSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             double vt, ratio, fact2, kt, egfet, arg, pbfact, ratio4, phio, pbo, gmaold, capfact, gmanew, czbd, czbdsw, sarg, sargsw, czbs,
                 czbssw;
 

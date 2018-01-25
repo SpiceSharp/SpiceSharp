@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Sparse
+﻿using System;
+
+namespace SpiceSharp.Sparse
 {
     /// <summary>
     /// Helper methods for Sparse matrices
@@ -70,7 +72,6 @@
         /// </summary>
         /// <param name="matrix">The matrix</param>
         /// <param name="RHS">Right hand side</param>
-        /// <param name="Spare">Imaginary values of the right hand side</param>
         public static void Solve(this Matrix matrix, double[] RHS)
         {
             SparseSolve.Solve(matrix, RHS, RHS, null, null);
@@ -83,6 +84,9 @@
         /// <returns></returns>
         public static SparseError PreOrder(this Matrix matrix)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             SparseUtilities.PreorderMNA(matrix);
             return matrix.Error;
         }
@@ -93,9 +97,12 @@
         /// Not recommended
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="Gmin">The conductance to be added on the diagonal</param>
+        /// <param name="gmin">The conductance to be added on the diagonal</param>
         public static void LoadGmin(this Matrix matrix, double gmin)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             MatrixElement[] Diag = matrix.Diag;
 
             if (gmin != 0.0)

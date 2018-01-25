@@ -61,6 +61,8 @@ namespace SpiceSharp.Components.NoiseSources
         /// <param name="nodes">Nodes</param>
         public virtual void Setup(params int[] nodes)
         {
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
             NOISEnodes = new int[pins.Length];
             for (int i = 0; i < pins.Length; i++)
                 NOISEnodes[i] = nodes[pins[i]];
@@ -77,6 +79,8 @@ namespace SpiceSharp.Components.NoiseSources
         /// </summary>
         public virtual void Evaluate(Noise sim)
         {
+            if (sim == null)
+                throw new ArgumentNullException(nameof(sim));
             var noise = sim.NoiseState;
 
             // Calculate the noise

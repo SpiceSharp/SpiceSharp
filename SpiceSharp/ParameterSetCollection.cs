@@ -19,11 +19,14 @@ namespace SpiceSharp
         /// Set a <see cref="ParameterSet"/> in the collection
         /// If a set of the same type already exist, they are overwritten
         /// </summary>
-        /// <param name="p">Parameters</param>
-        public void Add(ParameterSet p)
+        /// <param name="set">Parameters</param>
+        public void Add(ParameterSet set)
         {
+            if (set == null)
+                throw new ArgumentNullException(nameof(set));
+
             // Update the parameter of that type
-            parameters[p.GetType()] = p;
+            parameters[set.GetType()] = set;
         }
 
         /// <summary>

@@ -52,6 +52,9 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mnp = provider.GetParameterSet<ModelNoiseParameters>(1);
@@ -79,6 +82,10 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             DIOposNode = pins[0];
             DIOnegNode = pins[1];
         }
@@ -89,6 +96,9 @@ namespace SpiceSharp.Behaviors.DIO
         /// <param name="sim">Noise simulation</param>
         public override void Noise(Noise sim)
         {
+            if (sim == null)
+                throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             var noise = sim.NoiseState;
 

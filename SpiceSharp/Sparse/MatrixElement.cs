@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace SpiceSharp.Sparse
 {
@@ -71,23 +72,38 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="value"></param>
         public void Sub(Complex value) => Value.Cplx -= value;
-        
+
         /// <summary>
         /// Allow casting to a double
         /// </summary>
         /// <param name="el">Matrix element</param>
-        public static implicit operator double(MatrixElement el) => el.Value.Real;
+        public static implicit operator double(MatrixElement el)
+        {
+            if (el == null)
+                throw new ArgumentNullException(nameof(el));
+            return el.Value.Real;
+        }
 
         /// <summary>
         /// Allow casting to a complex number
         /// </summary>
         /// <param name="el">Matrix element</param>
-        public static implicit operator Complex(MatrixElement el) => el.Value.Cplx;
+        public static implicit operator Complex(MatrixElement el)
+        {
+            if (el == null)
+                throw new ArgumentNullException(nameof(el));
+            return el.Value.Cplx;
+        }
 
         /// <summary>
         /// Allow casting to an value
         /// </summary>
         /// <param name="el"></param>
-        public static implicit operator ElementValue(MatrixElement el) => el.Value;
+        public static implicit operator ElementValue(MatrixElement el)
+        {
+            if (el == null)
+                throw new ArgumentNullException(nameof(el));
+            return el.Value;
+        }
     }
 }

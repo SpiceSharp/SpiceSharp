@@ -76,6 +76,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
@@ -92,6 +95,10 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 4)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
             BJTcolNode = pins[0];
             BJTbaseNode = pins[1];
             BJTemitNode = pins[2];
@@ -104,6 +111,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             // Get extra equations
             BJTcolPrimeNode = load.BJTcolPrimeNode;
             BJTbasePrimeNode = load.BJTbasePrimeNode;
@@ -172,6 +182,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="sim">Frequency-based simulation</param>
         public override void InitializeParameters(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, xms, xtf, ovtf, xjtf;
             double arg, sarg, argtf, arg2, arg3, tmp, f1, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
             double geqcb;
@@ -297,6 +310,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="sim">Frequency-based simulation</param>
         public override void Load(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             var cstate = state;
             double gcpr, gepr, gpi, gmu, go, td, gx;

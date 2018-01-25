@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Components;
 
@@ -55,6 +56,9 @@ namespace SpiceSharp.Simulations
         /// <param name="sweeps">Sweeps</param>
         public DC(Identifier name, IEnumerable<Sweep> sweeps) : base(name)
         {
+            if (sweeps == null)
+                throw new ArgumentNullException(nameof(sweeps));
+
             var dcconfig = new DCConfiguration();
             foreach (var sweep in sweeps)
                 dcconfig.Sweeps.Add(sweep);

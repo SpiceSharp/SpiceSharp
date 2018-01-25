@@ -104,6 +104,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
@@ -120,6 +123,10 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 4)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
             BJTcolNode = pins[0];
             BJTbaseNode = pins[1];
             BJTemitNode = pins[2];
@@ -132,6 +139,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             // Get extra equations
             BJTcolPrimeNode = load.BJTcolPrimeNode;
             BJTbasePrimeNode = load.BJTbasePrimeNode;
@@ -200,6 +210,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="states">Pool of all states</param>
         public override void CreateStates(StatePool states)
         {
+			if (states == null)
+				throw new ArgumentNullException(nameof(states));
+
             // We just need a history without integration here
             BJTqbe = states.Create();
             BJTqbc = states.Create();
@@ -214,6 +227,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="sim">Time-based simulation</param>
         public override void GetDCstate(TimeSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2, arg3,
                 xms, xtf, ovtf, xjtf, argtf, tmp, sarg, f1, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
@@ -347,6 +363,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2, arg3, capbx, capcs,
                 xms, xtf, ovtf, xjtf, argtf, tmp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, czbxf2;
@@ -552,6 +571,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="args">Arguments</param>
         public void CalculateExcessPhase(object sender, BJTExcessPhaseEventArgs args)
         {
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
+
             double arg1, arg2, denom, arg3;
             double td = modeltemp.BJTexcessPhaseFactor;
             if (td == 0.0)

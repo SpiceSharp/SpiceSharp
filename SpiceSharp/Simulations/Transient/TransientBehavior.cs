@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using System;
 using SpiceSharp.Simulations;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Sparse;
@@ -22,6 +22,9 @@ namespace SpiceSharp.Behaviors
         /// <param name="states">States</param>
         public virtual void CreateStates(StatePool states)
         {
+			if (states == null)
+				throw new ArgumentNullException(nameof(states));
+
             // Do nothing (for now)
         }
 
@@ -31,6 +34,9 @@ namespace SpiceSharp.Behaviors
         /// <param name="sim">Time-based simulation</param>
         public virtual void GetDCstate(TimeSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             // Do nothing (for now)
         }
 
@@ -40,6 +46,9 @@ namespace SpiceSharp.Behaviors
         /// <param name="matrix">The matrix</param>
         public virtual void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             // No pointers needed by default
         }
 

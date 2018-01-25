@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using System;
 using SpiceSharp.Components;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
@@ -38,6 +38,9 @@ namespace SpiceSharp.Behaviors.RES
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
             // Get behaviors
             load = provider.GetBehavior<LoadBehavior>(0);
         }
@@ -47,6 +50,10 @@ namespace SpiceSharp.Behaviors.RES
         /// </summary>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             RESposNode = pins[0];
             RESnegNode = pins[1];
         }

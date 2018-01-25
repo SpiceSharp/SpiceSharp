@@ -31,6 +31,9 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         public virtual void InitializeParameters(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             // Nothing to initialize by default
         }
 
@@ -40,6 +43,9 @@ namespace SpiceSharp.Behaviors
         /// <param name="matrix">Matrix</param>
         public virtual void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             // No matrix pointers by default
         }
 

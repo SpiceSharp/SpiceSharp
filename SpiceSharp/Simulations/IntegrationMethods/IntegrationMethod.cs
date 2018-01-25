@@ -139,6 +139,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="solution">The solution</param>
         public void SaveSolution(double[] solution)
         {
+            if (solution == null)
+                throw new ArgumentNullException(nameof(solution));
+
             // Now, move the solution vectors around
             if (Solutions[0] == null)
             {
@@ -346,6 +349,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <returns></returns>
         protected void TruncateDevices(object sender, TruncationEventArgs args)
         {
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
+
             double timetmp = double.PositiveInfinity;
             foreach (var behavior in tranbehaviors)
                 behavior.Truncate(ref timetmp);

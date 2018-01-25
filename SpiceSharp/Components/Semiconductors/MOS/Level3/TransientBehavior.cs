@@ -85,6 +85,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
@@ -101,6 +104,10 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <param name="pins">Pins</param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 4)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
             MOS3dNode = pins[0];
             MOS3gNode = pins[1];
             MOS3sNode = pins[2];
@@ -113,6 +120,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
             // Get extra equations
             MOS3dNodePrime = load.MOS3dNodePrime;
             MOS3sNodePrime = load.MOS3sNodePrime;
@@ -178,6 +188,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <param name="states">States</param>
         public override void CreateStates(StatePool states)
         {
+			if (states == null)
+				throw new ArgumentNullException(nameof(states));
+
             MOS3vgs = states.CreateHistory();
             MOS3vds = states.CreateHistory();
             MOS3vbs = states.CreateHistory();
@@ -197,6 +210,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <param name="sim">Time-based simulation</param>
         public override void GetDCstate(TimeSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
                 sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0;
@@ -384,6 +400,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <param name="sim">Time-based simulation</param>
         public override void Transient(TimeSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             var rstate = state;
             var method = sim.Method;

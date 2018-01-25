@@ -54,6 +54,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
 
@@ -67,6 +70,9 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <param name="sim">Base simulation</param>
         public override void Temperature(BaseSimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             double vt, fact2, egfet, arg, pbfact, ratlog, ratio1, factlog, factor, bfactor, pbo, gmaold, gmanew;
 
             if (!BJTtemp.Given)

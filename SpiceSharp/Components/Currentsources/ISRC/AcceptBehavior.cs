@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations;
+﻿using System;
+using SpiceSharp.Simulations;
 using SpiceSharp.Components.ISRC;
 
 namespace SpiceSharp.Behaviors.ISRC
@@ -25,6 +26,9 @@ namespace SpiceSharp.Behaviors.ISRC
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+            
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
         }

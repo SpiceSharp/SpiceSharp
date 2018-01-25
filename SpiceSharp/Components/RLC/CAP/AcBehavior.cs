@@ -63,6 +63,9 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
+
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
         }
@@ -73,6 +76,10 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="pins"></param>
         public void Connect(params int[] pins)
         {
+            if (pins == null)
+                throw new ArgumentNullException(nameof(pins));
+            if (pins.Length != 2)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
             CAPposNode = pins[0];
             CAPnegNode = pins[1];
         }
@@ -83,6 +90,10 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="matrix">The matrix</param>
         public override void GetMatrixPointers(Matrix matrix)
         {
+			if (matrix == null)
+				throw new ArgumentNullException(nameof(matrix));
+
+
             CAPposPosptr = matrix.GetElement(CAPposNode, CAPposNode);
             CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
             CAPnegPosptr = matrix.GetElement(CAPnegNode, CAPposNode);
@@ -95,6 +106,9 @@ namespace SpiceSharp.Behaviors.CAP
         /// <param name="sim">Frequency-based simulation</param>
         public override void Load(FrequencySimulation sim)
         {
+			if (sim == null)
+				throw new ArgumentNullException(nameof(sim));
+
             var state = sim.State;
             var val = state.Laplace * bp.CAPcapac.Value;
 

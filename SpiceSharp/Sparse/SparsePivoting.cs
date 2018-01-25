@@ -69,6 +69,9 @@ namespace SpiceSharp.Sparse
         /// <param name="Mode">The mode</param>
         public void Partition(Matrix matrix, SparsePartition Mode)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             MatrixElement pElement, pColumn;
             int Step, Size;
             int[] Nc, No;
@@ -157,6 +160,9 @@ namespace SpiceSharp.Sparse
         /// <param name="Step">Current step</param>
         public void CountMarkowitz(Matrix matrix, double[] RHS, int Step)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             int Count, I, Size = matrix.IntSize;
             MatrixElement pElement;
             int ExtRow;
@@ -208,6 +214,9 @@ namespace SpiceSharp.Sparse
         /// <param name="Step"></param>
         public void MarkowitzProducts(Matrix matrix, int Step)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             int I;
             long Product;
             int Size = matrix.IntSize;
@@ -752,6 +761,12 @@ namespace SpiceSharp.Sparse
         /// <param name="pPivot">Pivot element</param>
         public void UpdateMarkowitzNumbers(Matrix matrix, MatrixElement pPivot)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+            if (pPivot == null)
+                throw new ArgumentNullException(nameof(pPivot));
+
+
             int Row, Col;
             MatrixElement ColPtr, RowPtr;
             double Product;

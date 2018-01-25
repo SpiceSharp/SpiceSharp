@@ -112,6 +112,9 @@ namespace SpiceSharp.Components
         /// <param name="sim">Time-based simulation</param>
         public override void Accept(TimeSimulation sim)
         {
+            if (sim == null)
+                throw new ArgumentNullException(nameof(sim));
+
             // Should not be here
             if (sim.Method == null)
                 return;
