@@ -1,34 +1,37 @@
 ﻿using System;
-using SpiceSharp.Components.CCVS;
+using SpiceSharp.Components.VCVS;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 using System.Numerics;
 
-namespace SpiceSharp.Behaviors.CCVS
+namespace SpiceSharp.Behaviors.VCVS
 {
     /// <summary>
-    /// AC behavior for <see cref="Components.CurrentControlledVoltagesource"/>
+    /// AC behavior for a <see cref="Components.VoltageControlledVoltagesource"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
+    public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
         BaseParameters bp;
         LoadBehavior load;
-        VSRC.LoadBehavior vsrcload;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int CCVSposNode, CCVSnegNode, CCVSbranch, CCVScontBranch;
-        protected MatrixElement CCVSposIbrptr { get; private set; }
-        protected MatrixElement CCVSnegIbrptr { get; private set; }
-        protected MatrixElement CCVSibrPosptr { get; private set; }
-        protected MatrixElement CCVSibrNegptr { get; private set; }
-        protected MatrixElement CCVSibrContBrptr { get; private set; }
+        int VCVSposNode, VCVSnegNode, VCVScontPosNode, VCVScontNegNode, VCVSbranch;
+        protected MatrixElement VCVSposIbrptr { get; private set; }
+        protected MatrixElement VCVSnegIbrptr { get; private set; }
+        protected MatrixElement VCVSibrPosptr { get; private set; }
+        protected MatrixElement VCVSibrNegptr { get; private set; }
+        protected MatrixElement VCVSibrContPosptr { get; private set; }
+        protected MatrixElement VCVSibrContNegptr { get; private set; }
 
+        /// <summary>
+        /// Properties
+        /// </summary>
         [PropertyName("v"), PropertyInfo("Complex voltage")]
         public Complex GetVoltage(State state)
         {
@@ -36,8 +39,8 @@ namespace SpiceSharp.Behaviors.CCVS
 				throw new ArgumentNullException(nameof(state));
 
             return new Complex(
-                state.Solution[CCVSposNode] - state.Solution[CCVSnegNode],
-                state.iSolution[CCVSposNode] - state.iSolution[CCVSnegNode]);
+                state.Solution[VCVSposNode] - state.Solution[VCVSnegNode],
+                state.iSolution[VCVSposNode] - state.iSolution[VCVSnegNode]);
         }
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Complex current")]
         public Complex GetCurrent(State state)
@@ -46,8 +49,8 @@ namespace SpiceSharp.Behaviors.CCVS
 				throw new ArgumentNullException(nameof(state));
 
             return new Complex(
-                state.Solution[CCVSbranch],
-                state.iSolution[CCVSbranch]);
+                state.Solution[VCVSbranch],
+                state.iSolution[VCVSbranch]);
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(State state)
@@ -56,11 +59,11 @@ namespace SpiceSharp.Behaviors.CCVS
 				throw new ArgumentNullException(nameof(state));
 
             Complex v = new Complex(
-                state.Solution[CCVSposNode] - state.Solution[CCVSnegNode],
-                state.iSolution[CCVSposNode] - state.iSolution[CCVSnegNode]);
+                state.Solution[VCVSposNode] - state.Solution[VCVSnegNode],
+                state.iSolution[VCVSposNode] - state.iSolution[VCVSnegNode]);
             Complex i = new Complex(
-                state.Solution[CCVSbranch],
-                state.iSolution[CCVSbranch]);
+                state.Solution[VCVSbranch],
+                state.iSolution[VCVSbranch]);
             return -v * Complex.Conjugate(i);
         }
 
@@ -68,7 +71,7 @@ namespace SpiceSharp.Behaviors.CCVS
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup behavior
@@ -84,7 +87,6 @@ namespace SpiceSharp.Behaviors.CCVS
 
             // Get behaviors
             load = provider.GetBehavior<LoadBehavior>(0);
-            vsrcload = provider.GetBehavior<VSRC.LoadBehavior>(1);
         }
 
         /// <summary>
@@ -95,10 +97,12 @@ namespace SpiceSharp.Behaviors.CCVS
         {
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
-            if (pins.Length != 2)
-                throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            CCVSposNode = pins[0];
-            CCVSnegNode = pins[1];
+            if (pins.Length != 4)
+                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
+            VCVSposNode = pins[0];
+            VCVSnegNode = pins[1];
+            VCVScontPosNode = pins[2];
+            VCVScontNegNode = pins[3];
         }
 
         /// <summary>
@@ -110,28 +114,27 @@ namespace SpiceSharp.Behaviors.CCVS
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            // Get extra nodes
-            CCVScontBranch = vsrcload.VSRCbranch;
-            CCVSbranch = load.CCVSbranch;
-
-            // Get matrix pointers
-            CCVSposIbrptr = matrix.GetElement(CCVSposNode, CCVSbranch);
-            CCVSnegIbrptr = matrix.GetElement(CCVSnegNode, CCVSbranch);
-            CCVSibrPosptr = matrix.GetElement(CCVSbranch, CCVSposNode);
-            CCVSibrNegptr = matrix.GetElement(CCVSbranch, CCVSnegNode);
-            CCVSibrContBrptr = matrix.GetElement(CCVSbranch, CCVScontBranch);
+            VCVSbranch = load.VCVSbranch;
+            VCVSposIbrptr = matrix.GetElement(VCVSposNode, VCVSbranch);
+            VCVSnegIbrptr = matrix.GetElement(VCVSnegNode, VCVSbranch);
+            VCVSibrPosptr = matrix.GetElement(VCVSbranch, VCVSposNode);
+            VCVSibrNegptr = matrix.GetElement(VCVSbranch, VCVSnegNode);
+            VCVSibrContPosptr = matrix.GetElement(VCVSbranch, VCVScontPosNode);
+            VCVSibrContNegptr = matrix.GetElement(VCVSbranch, VCVScontNegNode);
         }
-        
+
         /// <summary>
-        /// Unsetup the behavior
+        /// Unsetup
         /// </summary>
         public override void Unsetup()
         {
-            CCVSposIbrptr = null;
-            CCVSnegIbrptr = null;
-            CCVSibrPosptr = null;
-            CCVSibrNegptr = null;
-            CCVSibrContBrptr = null;
+            // Remove references
+            VCVSposIbrptr = null;
+            VCVSnegIbrptr = null;
+            VCVSibrPosptr = null;
+            VCVSibrNegptr = null;
+            VCVSibrContPosptr = null;
+            VCVSibrContNegptr = null;
         }
 
         /// <summary>
@@ -143,11 +146,12 @@ namespace SpiceSharp.Behaviors.CCVS
 			if (sim == null)
 				throw new ArgumentNullException(nameof(sim));
 
-            CCVSposIbrptr.Add(1.0);
-            CCVSibrPosptr.Add(1.0);
-            CCVSnegIbrptr.Sub(1.0);
-            CCVSibrNegptr.Sub(1.0);
-            CCVSibrContBrptr.Sub(bp.CCVScoeff);
+            VCVSposIbrptr.Add(1.0);
+            VCVSibrPosptr.Add(1.0);
+            VCVSnegIbrptr.Sub(1.0);
+            VCVSibrNegptr.Sub(1.0);
+            VCVSibrContPosptr.Sub(bp.VCVScoeff);
+            VCVSibrContNegptr.Add(bp.VCVScoeff);
         }
     }
 }

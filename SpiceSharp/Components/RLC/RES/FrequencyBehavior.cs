@@ -9,7 +9,7 @@ namespace SpiceSharp.Behaviors.RES
     /// <summary>
     /// AC behavior for <see cref="Components.Resistor"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
+    public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Parameters
@@ -70,7 +70,7 @@ namespace SpiceSharp.Behaviors.RES
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior

@@ -9,9 +9,9 @@ using System.Numerics;
 namespace SpiceSharp.Behaviors.CCCS
 {
     /// <summary>
-    /// AC behavior for <see cref="Components.CurrentControlledCurrentsource"/>
+    /// Frequency behavior for <see cref="Components.CurrentControlledCurrentsource"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
+    public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary parameters and behaviors
@@ -65,7 +65,7 @@ namespace SpiceSharp.Behaviors.CCCS
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior

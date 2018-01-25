@@ -9,12 +9,12 @@ namespace SpiceSharp.Behaviors.ISRC
     /// <summary>
     /// Behavior of a currentsource in AC analysis
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
+    public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        AcParameters ap;
+        FrequencyParameters ap;
 
         /// <summary>
         /// Nodes
@@ -55,7 +55,7 @@ namespace SpiceSharp.Behaviors.ISRC
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Create delegate for a property
@@ -82,7 +82,7 @@ namespace SpiceSharp.Behaviors.ISRC
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            ap = provider.GetParameterSet<AcParameters>(0);
+            ap = provider.GetParameterSet<FrequencyParameters>(0);
 
             // Calculate the AC vector
             double radians = ap.ISRCacPhase * Math.PI / 180.0;

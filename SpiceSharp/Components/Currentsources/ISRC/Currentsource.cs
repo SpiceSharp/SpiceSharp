@@ -30,11 +30,11 @@ namespace SpiceSharp.Components
         {
             // Add parameters
             Parameters.Add(new BaseParameters());
-            Parameters.Add(new AcParameters());
+            Parameters.Add(new FrequencyParameters());
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
         }
 
@@ -50,11 +50,11 @@ namespace SpiceSharp.Components
         {
             // Add parameters
             Parameters.Add(new BaseParameters(dc));
-            Parameters.Add(new AcParameters());
+            Parameters.Add(new FrequencyParameters());
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
             // Connect
@@ -73,11 +73,11 @@ namespace SpiceSharp.Components
         {
             // Add parameters
             Parameters.Add(new BaseParameters(w));
-            Parameters.Add(new AcParameters());
+            Parameters.Add(new FrequencyParameters());
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
             // Connect

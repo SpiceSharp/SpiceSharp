@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Attributes;
 using SpiceSharp.Components.VSRC;
@@ -11,7 +10,7 @@ namespace SpiceSharp.Behaviors.VSRC
     /// <summary>
     /// AC behavior for <see cref="Components.Voltagesource"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
+    public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// AC excitation vector
@@ -66,7 +65,7 @@ namespace SpiceSharp.Behaviors.VSRC
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior

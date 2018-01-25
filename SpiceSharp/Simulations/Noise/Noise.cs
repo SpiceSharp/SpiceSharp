@@ -127,7 +127,7 @@ namespace SpiceSharp.Simulations
             }
             else if (source is Currentsource isource)
             {
-                var ac = isource.Parameters.Get<Components.ISRC.AcParameters>();
+                var ac = isource.Parameters.Get<Components.ISRC.FrequencyParameters>();
                 if (!ac.ISRCacMag.Given || ac.ISRCacMag == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {isource.Name} has not AC input");
             }
@@ -269,7 +269,7 @@ namespace SpiceSharp.Simulations
 
             // Next most logical place is the AcBehavior
             if (export == null)
-                export = eb.Get<AcBehavior>()?.CreateExport(property);
+                export = eb.Get<FrequencyBehavior>()?.CreateExport(property);
 
             // Finally look to the LoadBehavior
             if (export == null)

@@ -45,7 +45,7 @@ namespace SpiceSharp.Components
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
         }
 
@@ -65,7 +65,7 @@ namespace SpiceSharp.Components
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
             Connect(pos, neg, cont_pos, cont_neg);

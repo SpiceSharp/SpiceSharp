@@ -36,7 +36,7 @@ namespace SpiceSharp.Components
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
         }
 
@@ -56,7 +56,7 @@ namespace SpiceSharp.Components
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
             // Connect the device
@@ -79,7 +79,7 @@ namespace SpiceSharp.Components
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
             // Connect the device

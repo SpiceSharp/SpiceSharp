@@ -41,7 +41,7 @@ namespace SpiceSharp.Components
 
             // Register factories
             AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
         }
 
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components
 
             // Register factories
             AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
 
             // Connect

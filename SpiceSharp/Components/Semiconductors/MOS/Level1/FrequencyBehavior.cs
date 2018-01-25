@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.Mosfet.Level1;
 using SpiceSharp.Components.Transistors;
@@ -11,7 +10,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
     /// <summary>
     /// AC behavior for a <see cref="Components.MOS1"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
+    public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters
@@ -59,7 +58,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

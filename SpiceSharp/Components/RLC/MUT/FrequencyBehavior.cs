@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Components.MUT;
 using SpiceSharp.Simulations;
@@ -10,7 +9,7 @@ namespace SpiceSharp.Behaviors.MUT
     /// <summary>
     /// AC behavior for <see cref="Components.MutualInductance"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior
+    public class FrequencyBehavior : Behaviors.FrequencyBehavior
     {
         /// <summary>
         /// Necessary behaviors
@@ -33,7 +32,7 @@ namespace SpiceSharp.Behaviors.MUT
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

@@ -44,7 +44,7 @@ namespace SpiceSharp.Components
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace SpiceSharp.Components
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             Connect(pos, neg);
             CCVScontName = vsource;

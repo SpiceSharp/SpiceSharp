@@ -7,7 +7,7 @@ namespace SpiceSharp.Behaviors.VSW
     /// <summary>
     /// AC behavior for <see cref="Components.VoltageSwitch"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
+    public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
@@ -28,7 +28,7 @@ namespace SpiceSharp.Behaviors.VSW
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup behavior

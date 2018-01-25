@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Circuits;
 using SpiceSharp.Components.CAP;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
@@ -10,7 +9,7 @@ namespace SpiceSharp.Behaviors.CAP
     /// <summary>
     /// AC behavior for <see cref="Components.Capacitor"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
+    public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary paramters and behaviors
@@ -30,7 +29,7 @@ namespace SpiceSharp.Behaviors.CAP
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Export methods for AC behavior

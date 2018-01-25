@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.ISRC
     /// <summary>
     /// AC parameters for a <see cref="Currentsource"/>
     /// </summary>
-    public class AcParameters : ParameterSet
+    public class FrequencyParameters : ParameterSet
     {
         /// <summary>
         /// Parameters
@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.ISRC
         /// <summary>
         /// Constructor
         /// </summary>
-        public AcParameters()
+        public FrequencyParameters()
         {
         }
 
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.ISRC
         /// </summary>
         /// <param name="mag">Magnitude</param>
         /// <param name="ph">Phase</param>
-        public AcParameters(double mag, double ph)
+        public FrequencyParameters(double mag, double ph)
         {
             ISRCacMag.Set(mag);
             ISRCacPhase.Set(ph);

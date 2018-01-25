@@ -22,7 +22,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        protected List<AcBehavior> acbehaviors = null;
+        protected List<FrequencyBehavior> acbehaviors = null;
 
         /// <summary>
         /// Constructor
@@ -54,7 +54,7 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get behaviors
-            acbehaviors = SetupBehaviors<AcBehavior>();
+            acbehaviors = SetupBehaviors<FrequencyBehavior>();
 
             // Setup AC behaviors and configurations
             FrequencyConfiguration = Parameters.Get<FrequencyConfiguration>();
@@ -145,7 +145,7 @@ namespace SpiceSharp.Simulations
             var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
 
             // Most logical place to look for frequency analysis: AC behaviors
-            var export = eb.Get<AcBehavior>()?.CreateExport(property);
+            var export = eb.Get<FrequencyBehavior>()?.CreateExport(property);
 
             // Next most logical place is the LoadBehavior
             if (export == null)
@@ -164,7 +164,7 @@ namespace SpiceSharp.Simulations
             var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
 
             // Only AC behaviors implement these export methods
-            return eb.Get<AcBehavior>()?.CreateAcExport(property);
+            return eb.Get<FrequencyBehavior>()?.CreateAcExport(property);
         }
 
         /// <summary>

@@ -39,7 +39,7 @@ namespace SpiceSharp.Components
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
             AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
         }
@@ -59,7 +59,7 @@ namespace SpiceSharp.Components
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(AcBehavior), () => new AcBehavior(Name));
+            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
             AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
 

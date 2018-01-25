@@ -1,34 +1,37 @@
 ﻿using System;
+using System.Numerics;
+using SpiceSharp.Components.IND;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.CSW
+namespace SpiceSharp.Behaviors.IND
 {
     /// <summary>
-    /// AC behavior for a <see cref="Components.CurrentSwitch"/>
+    /// AC behavior for <see cref="Components.Inductor"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
+    public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
         /// </summary>
+        BaseParameters bp;
         LoadBehavior load;
-        ModelLoadBehavior modelload;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int CSWposNode, CSWnegNode, CSWcontBranch;
-        protected MatrixElement CSWposPosptr { get; private set; }
-        protected MatrixElement CSWnegPosptr { get; private set; }
-        protected MatrixElement CSWposNegptr { get; private set; }
-        protected MatrixElement CSWnegNegptr { get; private set; }
+        int INDposNode, INDnegNode, INDbrEq;
+        protected MatrixElement INDposIbrptr { get; private set; }
+        protected MatrixElement INDnegIbrptr { get; private set; }
+        protected MatrixElement INDibrNegptr { get; private set; }
+        protected MatrixElement INDibrPosptr { get; private set; }
+        protected MatrixElement INDibrIbrptr { get; private set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup behavior
@@ -36,14 +39,16 @@ namespace SpiceSharp.Behaviors.CSW
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
-            if (provider == null)
-                throw new ArgumentNullException(nameof(provider));
+			if (provider == null)
+				throw new ArgumentNullException(nameof(provider));
+
+            // Get parameters
+            bp = provider.GetParameterSet<BaseParameters>(0);
 
             // Get behaviors
             load = provider.GetBehavior<LoadBehavior>(0);
-            modelload = provider.GetBehavior<ModelLoadBehavior>(1);
         }
-        
+
         /// <summary>
         /// Connect
         /// </summary>
@@ -54,8 +59,8 @@ namespace SpiceSharp.Behaviors.CSW
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            CSWposNode = pins[0];
-            CSWnegNode = pins[1];
+            INDposNode = pins[0];
+            INDnegNode = pins[1];
         }
 
         /// <summary>
@@ -67,22 +72,27 @@ namespace SpiceSharp.Behaviors.CSW
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            CSWcontBranch = load.CSWcontBranch;
-            CSWposPosptr = matrix.GetElement(CSWposNode, CSWposNode);
-            CSWposNegptr = matrix.GetElement(CSWposNode, CSWnegNode);
-            CSWnegPosptr = matrix.GetElement(CSWnegNode, CSWposNode);
-            CSWnegNegptr = matrix.GetElement(CSWnegNode, CSWnegNode);
+            // Get current equation
+            INDbrEq = load.INDbrEq;
+
+            // Get matrix pointers
+            INDposIbrptr = matrix.GetElement(INDposNode, INDbrEq);
+            INDnegIbrptr = matrix.GetElement(INDnegNode, INDbrEq);
+            INDibrNegptr = matrix.GetElement(INDbrEq, INDnegNode);
+            INDibrPosptr = matrix.GetElement(INDbrEq, INDposNode);
+            INDibrIbrptr = matrix.GetElement(INDbrEq, INDbrEq);
         }
 
         /// <summary>
-        /// Unsetup the behavior
+        /// Unsetup
         /// </summary>
         public override void Unsetup()
         {
-            CSWposPosptr = null;
-            CSWnegNegptr = null;
-            CSWposNegptr = null;
-            CSWnegPosptr = null;
+            INDposIbrptr = null;
+            INDnegIbrptr = null;
+            INDibrPosptr = null;
+            INDibrNegptr = null;
+            INDibrIbrptr = null;
         }
 
         /// <summary>
@@ -94,20 +104,14 @@ namespace SpiceSharp.Behaviors.CSW
 			if (sim == null)
 				throw new ArgumentNullException(nameof(sim));
 
-            bool current_state;
-            double g_now;
             var state = sim.State;
-            var cstate = state;
+            Complex val = state.Laplace * bp.INDinduct.Value;
 
-            // Get the current state
-            current_state = load.CSWcurrentState;
-            g_now = current_state != false ? modelload.CSWonConduct : modelload.CSWoffConduct;
-
-            // Load the Y-matrix
-            CSWposPosptr.Add(g_now);
-            CSWposNegptr.Sub(g_now);
-            CSWnegPosptr.Sub(g_now);
-            CSWnegNegptr.Add(g_now);
+            INDposIbrptr.Add(1.0);
+            INDnegIbrptr.Sub(1.0);
+            INDibrNegptr.Sub(1.0);
+            INDibrPosptr.Add(1.0);
+            INDibrIbrptr.Sub(val);
         }
     }
 }

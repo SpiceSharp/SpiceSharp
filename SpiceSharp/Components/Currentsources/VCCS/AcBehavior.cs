@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Sparse;
+﻿using SpiceSharp.Sparse;
 using SpiceSharp.Components.VCCS;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
@@ -11,7 +10,7 @@ namespace SpiceSharp.Behaviors.VCCS
     /// <summary>
     /// AC behavior for a <see cref="Components.VoltageControlledCurrentsource"/>
     /// </summary>
-    public class AcBehavior : Behaviors.AcBehavior, IConnectedBehavior
+    public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
@@ -69,7 +68,7 @@ namespace SpiceSharp.Behaviors.VCCS
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcBehavior(Identifier name) : base(name) { }
+        public FrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior
