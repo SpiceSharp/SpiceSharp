@@ -103,12 +103,12 @@ namespace SpiceSharp.Simulations
             var ckt = Circuit;
             var state = State;
             var baseconfig = BaseConfiguration;
-            var config = TimeConfiguration;
+            var timeconfig = TimeConfiguration;
 
-            double delta = Math.Min(config.FinalTime / 50.0, config.Step) / 10.0;
+            double delta = Math.Min(timeconfig.FinalTime / 50.0, timeconfig.Step) / 10.0;
 
             // Initialize before starting the simulation
-            state.UseIC = config.UseIC;
+            state.UseIC = timeconfig.UseIC;
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Domain = State.DomainTypes.Time;
@@ -125,10 +125,10 @@ namespace SpiceSharp.Simulations
             Method = States.Method;
             for (int i = 0; i < Method.DeltaOld.Length; i++)
             {
-                Method.DeltaOld[i] = config.MaxStep;
+                Method.DeltaOld[i] = timeconfig.MaxStep;
             }
             Method.Delta = delta;
-            Method.SaveDelta = config.FinalTime / 50.0;
+            Method.SaveDelta = timeconfig.FinalTime / 50.0;
 
             // Initialize the Method
             ckt.Method = Method;
@@ -162,13 +162,13 @@ namespace SpiceSharp.Simulations
                     Statistics.Accepted++;
 
                     // Export the current timepoint
-                    if (Method.Time >= config.InitTime)
+                    if (Method.Time >= timeconfig.InitTime)
                     {
                         Export(exportargs);
                     }
 
                     // Detect the end of the simulation
-                    if (Method.Time >= config.FinalTime)
+                    if (Method.Time >= timeconfig.FinalTime)
                     {
                         // Keep our statistics
                         Statistics.TransientTime.Stop();
@@ -182,7 +182,7 @@ namespace SpiceSharp.Simulations
                     // Pause test - pausing not supported
 
                     // resume:
-                    Method.Delta = Math.Min(Method.Delta, config.MaxStep);
+                    Method.Delta = Math.Min(Method.Delta, timeconfig.MaxStep);
                     Method.Resume();
                     States.ShiftStates();
 
@@ -198,7 +198,7 @@ namespace SpiceSharp.Simulations
                         // Try to solve the new point
                         if (Method.SavedTime == 0.0)
                             state.Init = State.InitFlags.InitTransient;
-                        bool converged = TranIterate(config.TranMaxIterations);
+                        bool converged = TranIterate(timeconfig.TranMaxIterations);
                         Statistics.TimePoints++;
 
                         // Spice copies the states the first time, we're not
@@ -232,10 +232,10 @@ namespace SpiceSharp.Simulations
                             }
                         }
 
-                        if (Method.Delta <= config.DeltaMin)
+                        if (Method.Delta <= timeconfig.DeltaMin)
                         {
-                            if (Method.OldDelta > config.DeltaMin)
-                                Method.Delta = config.DeltaMin;
+                            if (Method.OldDelta > timeconfig.DeltaMin)
+                                Method.Delta = timeconfig.DeltaMin;
                             else
                                 throw new CircuitException($"Timestep too small at t={Method.SavedTime.ToString("g")}: {Method.Delta.ToString("g")}");
                         }

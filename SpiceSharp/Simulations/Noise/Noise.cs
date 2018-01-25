@@ -16,22 +16,9 @@ namespace SpiceSharp.Simulations
     public class Noise : FrequencySimulation
     {
         /// <summary>
-        /// Gets or sets the noise output node
+        /// Gets the currently active noise configuration
         /// </summary>
-        [SpiceName("output"), SpiceInfo("Noise output summation node")]
-        public Identifier Output { get; set; } = null;
-
-        /// <summary>
-        /// Gets or sets the noise output reference node
-        /// </summary>
-        [SpiceName("outputref"), SpiceInfo("Noise output reference node")]
-        public Identifier OutputRef { get; set; } = null;
-
-        /// <summary>
-        /// Gets or sets the name of the AC source used as input reference
-        /// </summary>
-        [SpiceName("input"), SpiceInfo("Name of the AC source used as input reference")]
-        public Identifier Input { get; set; } = null;
+        public NoiseConfiguration NoiseConfiguration { get; protected set; }
 
         /// <summary>
         /// Get the noise state
@@ -49,6 +36,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">Name</param>
         public Noise(Identifier name) : base(name)
         {
+            Configuration.Register(new NoiseConfiguration());
         }
 
         /// <summary>
@@ -63,9 +51,7 @@ namespace SpiceSharp.Simulations
         /// <param name="stop">Stop</param>
         public Noise(Identifier name, Identifier output, Identifier input, string type, int n, double start, double stop) : base(name, type, n, start, stop)
         {
-            // Sources
-            Input = input;
-            Output = output;
+            Configuration.Register(new NoiseConfiguration(output, null, input));
         }
 
         /// <summary>
@@ -81,10 +67,7 @@ namespace SpiceSharp.Simulations
         /// <param name="stop">Stop</param>
         public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, string type, int n, double start, double stop) : base(name, type, n, start, stop)
         {
-            // Sources
-            Input = input;
-            Output = output;
-            OutputRef = reference;
+            Configuration.Register(new NoiseConfiguration(output, reference, input));
         }
 
         /// <summary>
@@ -94,7 +77,8 @@ namespace SpiceSharp.Simulations
         {
             base.Setup();
 
-            // Get behaviors
+            // Get behaviors and configurations
+            NoiseConfiguration = Configuration.Get<NoiseConfiguration>();
             noisebehaviors = SetupBehaviors<NoiseBehavior>();
         }
 
@@ -108,6 +92,7 @@ namespace SpiceSharp.Simulations
                 behavior.Unsetup();
             noisebehaviors.Clear();
             noisebehaviors = null;
+            NoiseConfiguration = null;
 
             base.Unsetup();
         }
@@ -121,18 +106,19 @@ namespace SpiceSharp.Simulations
 
             var ckt = Circuit;
             var state = State;
-            var config = FrequencyConfiguration;
+            var noiseconfig = NoiseConfiguration;
+            var freqconfig = FrequencyConfiguration;
             var baseconfig = BaseConfiguration;
             var exportargs = new ExportDataEventArgs(State);
 
             // Find the output nodes
-            int posOutNode = Output != null ? ckt.Nodes[Output].Index : 0;
-            int negOutNode = OutputRef != null ? ckt.Nodes[OutputRef].Index : 0;
+            int posOutNode = noiseconfig.Output != null ? ckt.Nodes[noiseconfig.Output].Index : 0;
+            int negOutNode = noiseconfig.OutputRef != null ? ckt.Nodes[noiseconfig.OutputRef].Index : 0;
 
             // Check the voltage or current source
-            if (Input == null)
+            if (noiseconfig.Input == null)
                 throw new CircuitException($"{Name}: No input source specified");
-            Entity source = ckt.Objects[Input];
+            Entity source = ckt.Objects[noiseconfig.Input];
             if (source is Voltagesource vsource)
             {
                 var ac = vsource.Parameters.Get<Components.VSRC.AcParameters>();
@@ -152,23 +138,23 @@ namespace SpiceSharp.Simulations
             int n = 0;
 
             // Calculate the step
-            switch (config.StepType)
+            switch (freqconfig.StepType)
             {
                 case StepTypes.Decade:
-                    freqdelta = Math.Exp(Math.Log(10.0) / config.NumberSteps);
-                    n = (int)Math.Floor(Math.Log(config.StopFreq / config.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
+                    freqdelta = Math.Exp(Math.Log(10.0) / freqconfig.NumberSteps);
+                    n = (int)Math.Floor(Math.Log(freqconfig.StopFreq / freqconfig.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
                     break;
 
                 case StepTypes.Octave:
-                    freqdelta = Math.Exp(Math.Log(2.0) / config.NumberSteps);
-                    n = (int)Math.Floor(Math.Log(config.StopFreq / config.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
+                    freqdelta = Math.Exp(Math.Log(2.0) / freqconfig.NumberSteps);
+                    n = (int)Math.Floor(Math.Log(freqconfig.StopFreq / freqconfig.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
                     break;
 
                 case StepTypes.Linear:
-                    if (config.NumberSteps > 1)
+                    if (freqconfig.NumberSteps > 1)
                     {
-                        freqdelta = (config.StopFreq - config.StartFreq) / (config.NumberSteps - 1);
-                        n = config.NumberSteps;
+                        freqdelta = (freqconfig.StopFreq - freqconfig.StartFreq) / (freqconfig.NumberSteps - 1);
+                        n = freqconfig.NumberSteps;
                     }
                     else
                     {
@@ -184,7 +170,7 @@ namespace SpiceSharp.Simulations
             // Initialize
             var data = NoiseState;
             state.Initialize(ckt);
-            data.Initialize(config.StartFreq);
+            data.Initialize(freqconfig.StartFreq);
             state.Laplace = 0;
             state.Domain = State.DomainTypes.Frequency;
             state.UseIC = false;
@@ -221,7 +207,7 @@ namespace SpiceSharp.Simulations
                 Export(exportargs);
 
                 // Increment the frequency
-                switch (config.StepType)
+                switch (freqconfig.StepType)
                 {
                     case StepTypes.Decade:
                     case StepTypes.Octave:
@@ -229,7 +215,7 @@ namespace SpiceSharp.Simulations
                         break;
 
                     case StepTypes.Linear:
-                        data.Freq = config.StartFreq + i * freqdelta;
+                        data.Freq = freqconfig.StartFreq + i * freqdelta;
                         break;
                 }
             }

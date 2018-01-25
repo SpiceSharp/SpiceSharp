@@ -43,29 +43,29 @@ namespace SpiceSharp.Simulations
             var state = State;
             var cstate = state;
             var baseconfig = BaseConfiguration;
-            var config = FrequencyConfiguration;
+            var freqconfig = FrequencyConfiguration;
 
             double freq = 0.0, freqdelta = 0.0;
             int n = 0;
 
             // Calculate the step
-            switch (config.StepType)
+            switch (freqconfig.StepType)
             {
                 case StepTypes.Decade:
-                    freqdelta = Math.Exp(Math.Log(10.0) / config.NumberSteps);
-                    n = (int)Math.Floor(Math.Log(config.StopFreq / config.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
+                    freqdelta = Math.Exp(Math.Log(10.0) / freqconfig.NumberSteps);
+                    n = (int)Math.Floor(Math.Log(freqconfig.StopFreq / freqconfig.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
                     break;
 
                 case StepTypes.Octave:
-                    freqdelta = Math.Exp(Math.Log(2.0) / config.NumberSteps);
-                    n = (int)Math.Floor(Math.Log(config.StopFreq / config.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
+                    freqdelta = Math.Exp(Math.Log(2.0) / freqconfig.NumberSteps);
+                    n = (int)Math.Floor(Math.Log(freqconfig.StopFreq / freqconfig.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
                     break;
 
                 case StepTypes.Linear:
-                    if (config.NumberSteps > 1)
+                    if (freqconfig.NumberSteps > 1)
                     {
-                        freqdelta = (config.StopFreq - config.StartFreq) / (config.NumberSteps - 1);
-                        n = config.NumberSteps;
+                        freqdelta = (freqconfig.StopFreq - freqconfig.StartFreq) / (freqconfig.NumberSteps - 1);
+                        n = freqconfig.NumberSteps;
                     }
                     else
                     {
@@ -98,12 +98,12 @@ namespace SpiceSharp.Simulations
 
             // Export operating point if requested
             var exportargs = new ExportDataEventArgs(State);
-            if (config.KeepOpInfo)
+            if (freqconfig.KeepOpInfo)
                 Export(exportargs);
 
             // Calculate the AC solution
             state.UseDC = false;
-            freq = config.StartFreq;
+            freq = freqconfig.StartFreq;
             state.Matrix.Complex = true;
 
             // Sweep the frequency
@@ -119,7 +119,7 @@ namespace SpiceSharp.Simulations
                 Export(exportargs);
 
                 // Increment the frequency
-                switch (config.StepType)
+                switch (freqconfig.StepType)
                 {
                     case StepTypes.Decade:
                     case StepTypes.Octave:
@@ -127,7 +127,7 @@ namespace SpiceSharp.Simulations
                         break;
 
                     case StepTypes.Linear:
-                        freq = config.StartFreq + i * freqdelta;
+                        freq = freqconfig.StartFreq + i * freqdelta;
                         break;
                 }
             }

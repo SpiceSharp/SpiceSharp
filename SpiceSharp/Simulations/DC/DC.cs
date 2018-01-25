@@ -59,10 +59,10 @@ namespace SpiceSharp.Simulations
         /// <param name="sweeps">Sweeps</param>
         public DC(Identifier name, IEnumerable<Sweep> sweeps) : base(name)
         {
-            var config = new DCConfiguration();
+            var dcconfig = new DCConfiguration();
             foreach (var sweep in sweeps)
-                config.Sweeps.Add(sweep);
-            Configuration.Register(config);
+                dcconfig.Sweeps.Add(sweep);
+            Configuration.Register(dcconfig);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace SpiceSharp.Simulations
 
             // Setup the state
             var state = State;
-            var config = DCConfiguration;
+            var dcconfig = DCConfiguration;
             var baseconfig = BaseConfiguration;
             state.Init = State.InitFlags.InitJct;
             state.Initialize(ckt);
@@ -103,12 +103,12 @@ namespace SpiceSharp.Simulations
             state.Gmin = baseconfig.Gmin;
 
             // Initialize
-            Sweeps = new NestedSweeps(config.Sweeps);
+            Sweeps = new NestedSweeps(dcconfig.Sweeps);
             Parameter[] swept = new Parameter[Sweeps.Count];
             Parameter[] original = new Parameter[Sweeps.Count];
 
             // Initialize first time
-            for (int i = 0; i < config.Sweeps.Count; i++)
+            for (int i = 0; i < dcconfig.Sweeps.Count; i++)
             {
                 // Get the component to be swept
                 var sweep = Sweeps[i];
@@ -141,7 +141,7 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Calculate the solution
-                if (!Iterate(config.SweepMaxIterations))
+                if (!Iterate(dcconfig.SweepMaxIterations))
                 {
                     IterationFailedEventArgs args = new IterationFailedEventArgs();
                     IterationFailed?.Invoke(this, args);

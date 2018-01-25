@@ -182,6 +182,7 @@
     <Compile Include="Components\RLC\RES\NoiseBehavior.cs" />
     <Compile Include="Circuits\Validator.cs" />
     <Compile Include="Circuits\Identifier.cs" />
+    <Compile Include="Simulations\Noise\NoiseConfiguration.cs" />
     <Compile Include="Simulations\Noise\StateNoise.cs" />
     <Compile Include="Components\Model.cs" />
     <Compile Include="Components\Currentsources\ISRC\Currentsource.cs" />
