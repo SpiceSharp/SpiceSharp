@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.Bipolar
     /// <summary>
     /// Base parameters for a <see cref="BJTModel"/>
     /// </summary>
-    public class ModelBaseParameters : Parameters
+    public class ModelBaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

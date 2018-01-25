@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.CAP
     /// <summary>
     /// Parameters for the capacitor model
     /// </summary>
-    public class ModelBaseParameters : Parameters
+    public class ModelBaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

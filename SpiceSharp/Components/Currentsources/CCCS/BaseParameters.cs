@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.CCCS
     /// <summary>
     /// Base parameters for a <see cref="CurrentControlledCurrentsource"/>
     /// </summary>
-    public class BaseParameters : Parameters
+    public class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

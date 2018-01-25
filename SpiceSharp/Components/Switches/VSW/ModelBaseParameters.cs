@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.VSW
     /// <summary>
     /// Base parameters for a <see cref="VoltageSwitchModel"/>
     /// </summary>
-    public class ModelBaseParameters : Parameters
+    public class ModelBaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

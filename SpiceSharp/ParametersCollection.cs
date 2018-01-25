@@ -5,22 +5,22 @@ using System.Collections.Generic;
 namespace SpiceSharp
 {
     /// <summary>
-    /// A collection of <see cref="Parameters"/>
+    /// A collection of <see cref="ParameterSet"/>
     /// Only one instance of each type is allowed
     /// </summary>
-    public class ParametersCollection : IEnumerable<Parameters>
+    public class ParametersCollection : IEnumerable<ParameterSet>
     {
         /// <summary>
         /// Collection of parameters
         /// </summary>
-        Dictionary<Type, Parameters> parameters = new Dictionary<Type, Parameters>();
+        Dictionary<Type, ParameterSet> parameters = new Dictionary<Type, ParameterSet>();
 
         /// <summary>
         /// Set parameters in the collection
         /// If parameters of the same type already exist, they are overwritten
         /// </summary>
         /// <param name="p">Parameters</param>
-        public void Set(Parameters p)
+        public void Set(ParameterSet p)
         {
             // Update the parameter of that type
             parameters[p.GetType()] = p;
@@ -31,9 +31,9 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="T">Parameters</typeparam>
         /// <returns></returns>
-        public T Get<T>() where T : Parameters
+        public T Get<T>() where T : ParameterSet
         {
-            if (parameters.TryGetValue(typeof(T), out Parameters result))
+            if (parameters.TryGetValue(typeof(T), out ParameterSet result))
                 return (T)result;
             return null;
         }
@@ -59,7 +59,7 @@ namespace SpiceSharp
         /// Get an enumerator
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<Parameters> GetEnumerator() => parameters.Values.GetEnumerator();
+        public IEnumerator<ParameterSet> GetEnumerator() => parameters.Values.GetEnumerator();
 
         /// <summary>
         /// Get an enumerator

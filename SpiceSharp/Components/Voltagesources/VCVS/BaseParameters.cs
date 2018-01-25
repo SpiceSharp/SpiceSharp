@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.VCVS
     /// <summary>
     /// Base parameters for a <see cref="VoltageControlledVoltagesource"/>
     /// </summary>
-    public class BaseParameters : Parameters
+    public class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

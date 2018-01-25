@@ -108,7 +108,7 @@
     <Compile Include="Components\RLC\RES\ModelBaseParameters.cs" />
     <Compile Include="Components\Voltagesources\VSRC\AcParameters.cs" />
     <Compile Include="Components\Voltagesources\VSRC\BaseParameters.cs" />
-    <Compile Include="Parameters.cs" />
+    <Compile Include="ParameterSet.cs" />
     <Compile Include="ParametersCollection.cs" />
     <Compile Include="Components\RLC\CAP\AcBehavior.cs" />
     <Compile Include="Components\RLC\CAP\TemperatureBehavior.cs" />

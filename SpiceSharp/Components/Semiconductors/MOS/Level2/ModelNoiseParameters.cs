@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.Mosfet.Level2
     /// <summary>
     /// Noise parameters for a <see cref="MOS2Model"/>
     /// </summary>
-    public class ModelNoiseParameters : Parameters
+    public class ModelNoiseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

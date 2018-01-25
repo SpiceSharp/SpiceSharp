@@ -41,7 +41,7 @@ namespace SpiceSharp.Behaviors
         /// <typeparam name="T">The type of Parameters</typeparam>
         /// <param name="index">The index in the provider (first one by default)</param>
         /// <returns></returns>
-        public T GetParameters<T>(int index = 0) where T : Parameters => parameters[index].Get<T>();
+        public T GetParameters<T>(int index = 0) where T : ParameterSet => parameters[index].Get<T>();
 
         /// <summary>
         /// Get behaviors of a specific type

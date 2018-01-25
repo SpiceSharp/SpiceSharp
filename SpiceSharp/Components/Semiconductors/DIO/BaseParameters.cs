@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.DIO
     /// <summary>
     /// Base parameters for a <see cref="Diode"/>
     /// </summary>
-    public class BaseParameters : Parameters
+    public class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

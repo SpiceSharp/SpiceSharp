@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.IND
     /// <summary>
     /// Base parameters for a <see cref="Inductor"/>
     /// </summary>
-    public class BaseParameters : Parameters
+    public class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

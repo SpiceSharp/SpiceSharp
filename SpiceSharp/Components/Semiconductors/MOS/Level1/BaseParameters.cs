@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.Mosfet.Level1
     /// <summary>
     /// Base parameters for a <see cref="MOS1"/>
     /// </summary>
-    public class BaseParameters : Parameters
+    public class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

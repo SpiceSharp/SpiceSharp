@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Configuration for a <see cref="TimeConfiguration"/>
     /// </summary>
-    public class TimeConfiguration : Parameters
+    public class TimeConfiguration : ParameterSet
     {
         /// <summary>
         /// Gets or sets the integration method

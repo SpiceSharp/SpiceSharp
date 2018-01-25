@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.RES
     /// <summary>
     /// Parameters for a <see cref="ResistorModel"/>
     /// </summary>
-    public class ModelBaseParameters : Parameters
+    public class ModelBaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

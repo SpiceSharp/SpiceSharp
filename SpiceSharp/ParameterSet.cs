@@ -9,7 +9,7 @@ namespace SpiceSharp
     /// <summary>
     /// Base class for parameters
     /// </summary>
-    public abstract class Parameters
+    public abstract class ParameterSet
     {
         /// <summary>
         /// Create a dictionary of setters for the parameters object using reflection

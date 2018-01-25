@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.Bipolar
     /// <summary>
     /// Noise parameters for a <see cref="BJTModel"/>
     /// </summary>
-    public class ModelNoiseParameters : Parameters
+    public class ModelNoiseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

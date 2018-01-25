@@ -9,7 +9,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Configuration for a <see cref="BaseSimulation"/>
     /// </summary>
-    public class BaseConfiguration : Parameters
+    public class BaseConfiguration : ParameterSet
     {
         /// <summary>
         /// If true, the operating point calculation immediately skips to the GMIN stepping phase

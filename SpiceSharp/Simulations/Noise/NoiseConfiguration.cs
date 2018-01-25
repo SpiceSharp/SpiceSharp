@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Configuration for a <see cref="Noise"/> analysis
     /// </summary>
-    public class NoiseConfiguration : Parameters
+    public class NoiseConfiguration : ParameterSet
     {
         /// <summary>
         /// Gets or sets the noise output node

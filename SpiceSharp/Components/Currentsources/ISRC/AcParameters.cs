@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.ISRC
     /// <summary>
     /// AC parameters for a <see cref="Currentsource"/>
     /// </summary>
-    public class AcParameters : Parameters
+    public class AcParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

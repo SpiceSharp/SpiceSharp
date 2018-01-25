@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.VSRC
     /// <summary>
     /// Parameters for a <see cref="Voltagesource"/>
     /// </summary>
-    public class BaseParameters : Parameters
+    public class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

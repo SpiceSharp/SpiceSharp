@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.ISRC
     /// <summary>
     /// Base parameters for a <see cref="Currentsource"/>
     /// </summary>
-    public class BaseParameters : Parameters
+    public class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

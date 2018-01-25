@@ -7,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Parameters for a <see cref="FrequencySimulation"/>
     /// </summary>
-    public class FrequencyConfiguration : Parameters
+    public class FrequencyConfiguration : ParameterSet
     {
         /// <summary>
         /// Keep operating point information

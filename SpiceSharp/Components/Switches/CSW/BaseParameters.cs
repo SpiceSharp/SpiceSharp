@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.CSW
     /// <summary>
     /// Base parameters for a <see cref="CurrentSwitch"/>
     /// </summary>
-    public class BaseParameters : Parameters
+    public class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

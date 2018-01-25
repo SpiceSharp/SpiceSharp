@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.MUT
     /// <summary>
     /// Base parameters for a <see cref="MutualInductance"/>
     /// </summary>
-    public class BaseParameters : Parameters
+    public class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters

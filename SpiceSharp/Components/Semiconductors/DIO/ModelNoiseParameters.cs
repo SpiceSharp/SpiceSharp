@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.DIO
     /// <summary>
     /// Noise parameters for a <see cref="DiodeModel"/>
     /// </summary>
-    public class ModelNoiseParameters : Parameters
+    public class ModelNoiseParameters : ParameterSet
     {
         /// <summary>
         /// Parameters
