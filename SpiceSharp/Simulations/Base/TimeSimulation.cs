@@ -52,7 +52,7 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get behaviors and configurations
-            var config = Configuration.Get<TimeConfiguration>();
+            var config = Parameters.Get<TimeConfiguration>();
             TimeConfiguration = config;
             tranbehaviors = SetupBehaviors<TransientBehavior>();
 

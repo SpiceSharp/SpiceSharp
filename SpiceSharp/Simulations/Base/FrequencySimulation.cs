@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">Name</param>
         public FrequencySimulation(Identifier name) : base(name)
         {
-            Configuration.Register(new FrequencyConfiguration());
+            Parameters.Register(new FrequencyConfiguration());
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace SpiceSharp.Simulations
         /// <param name="stop">Final frequency</param>
         public FrequencySimulation(Identifier name, string steptype, int n, double start, double stop) : base(name)
         {
-            Configuration.Register(new FrequencyConfiguration(steptype, n, start, stop));
+            Parameters.Register(new FrequencyConfiguration(steptype, n, start, stop));
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace SpiceSharp.Simulations
             acbehaviors = SetupBehaviors<AcBehavior>();
 
             // Setup AC behaviors and configurations
-            FrequencyConfiguration = Configuration.Get<FrequencyConfiguration>();
+            FrequencyConfiguration = Parameters.Get<FrequencyConfiguration>();
             var matrix = State.Matrix;
             foreach (var behavior in acbehaviors)
                 behavior.GetMatrixPointers(matrix);

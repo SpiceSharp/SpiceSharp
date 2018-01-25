@@ -36,7 +36,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">Name</param>
         public Noise(Identifier name) : base(name)
         {
-            Configuration.Register(new NoiseConfiguration());
+            Parameters.Register(new NoiseConfiguration());
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace SpiceSharp.Simulations
         /// <param name="stop">Stop</param>
         public Noise(Identifier name, Identifier output, Identifier input, string type, int n, double start, double stop) : base(name, type, n, start, stop)
         {
-            Configuration.Register(new NoiseConfiguration(output, null, input));
+            Parameters.Register(new NoiseConfiguration(output, null, input));
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace SpiceSharp.Simulations
         /// <param name="stop">Stop</param>
         public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, string type, int n, double start, double stop) : base(name, type, n, start, stop)
         {
-            Configuration.Register(new NoiseConfiguration(output, reference, input));
+            Parameters.Register(new NoiseConfiguration(output, reference, input));
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get behaviors and configurations
-            NoiseConfiguration = Configuration.Get<NoiseConfiguration>();
+            NoiseConfiguration = Parameters.Get<NoiseConfiguration>();
             noisebehaviors = SetupBehaviors<NoiseBehavior>();
         }
 

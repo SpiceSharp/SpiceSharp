@@ -41,7 +41,7 @@ namespace SpiceSharp.Simulations
         public BaseSimulation(Identifier name)
             : base(name)
         {
-            Configuration.Register(new BaseConfiguration());
+            Parameters.Register(new BaseConfiguration());
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException($"{Name}: No circuit nodes for simulation");
 
             // Setup behaviors and configuration
-            BaseConfiguration = Configuration.Get<BaseConfiguration>();
+            BaseConfiguration = Parameters.Get<BaseConfiguration>();
             tempbehaviors = SetupBehaviors<TemperatureBehavior>();
             loadbehaviors = SetupBehaviors<LoadBehavior>();
             icbehaviors = SetupBehaviors<IcBehavior>();
