@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Attributes
 {
@@ -6,7 +7,7 @@ namespace SpiceSharp.Attributes
     /// Specifies the pins for a circuit component that extends <see cref="Components.Component"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class PinsAttribute : Attribute
+    public sealed class PinsAttribute : Attribute
     {
         /// <summary>
         /// Get a pin name
@@ -16,6 +17,14 @@ namespace SpiceSharp.Attributes
         public string this[int index]
         {
             get => nodes[index];
+        }
+
+        /// <summary>
+        /// Get node names
+        /// </summary>
+        public IEnumerable<string> Nodes
+        {
+            get => nodes;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Attributes
 {
@@ -18,6 +19,14 @@ namespace SpiceSharp.Attributes
         public int this[int index]
         {
             get => pins[index];
+        }
+
+        /// <summary>
+        /// Get all pins
+        /// </summary>
+        public IEnumerable<int> Pins
+        {
+            get => pins;
         }
 
         /// <summary>

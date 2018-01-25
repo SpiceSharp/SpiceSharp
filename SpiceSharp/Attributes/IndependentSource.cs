@@ -8,7 +8,7 @@ namespace SpiceSharp.Attributes
     /// least one independent source.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class IndependentSourceAttribute : Attribute
+    public sealed class IndependentSourceAttribute : Attribute
     {
     }
 }

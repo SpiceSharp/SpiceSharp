@@ -1,23 +1,40 @@
 ﻿using System;
 
-namespace SpiceSharp.Components
+namespace SpiceSharp.Attributes
 {
     /// <summary>
     /// Indicates that two nodes are driven by a voltage source. This attribute can
-    /// be applied to a <see cref="ICircuitComponent"/> to check for voltage loops.
+    /// be applied to a <see cref="Components.Component"/> to check for voltage loops.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class VoltageDriver : Attribute
+    public sealed class VoltageDriverAttribute : Attribute
     {
         /// <summary>
         /// The pin connected to the positive side of the voltage source
         /// </summary>
-        public int Positive { get; }
+        public int Positive
+        {
+            get
+            {
+                return pos;
+            }
+        }
 
         /// <summary>
         /// The pin connected to the negative side of the voltage source
         /// </summary>
-        public int Negative { get; }
+        public int Negative
+        {
+            get
+            {
+                return neg;
+            }
+        }
+
+        /// <summary>
+        /// Pins that drive the voltage
+        /// </summary>
+        int pos, neg;
 
         /// <summary>
         /// Constructor
@@ -26,10 +43,10 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="pos">The positive output pin index</param>
         /// <param name="neg">The negative output pin index</param>
-        public VoltageDriver(int pos, int neg)
+        public VoltageDriverAttribute(int pos, int neg)
         {
-            Positive = pos;
-            Negative = neg;
+            this.pos = pos;
+            this.neg = neg;
         }
     }
 }

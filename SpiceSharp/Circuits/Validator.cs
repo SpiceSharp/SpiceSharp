@@ -128,7 +128,7 @@ namespace SpiceSharp.Circuits
                 foreach (var attr in attributes)
                 {
                     // Voltage driven nodes are checked for voltage loops
-                    if (attr is VoltageDriver vd)
+                    if (attr is VoltageDriverAttribute vd)
                         voltagedriven.Add(new Tuple<Component, int, int>(icc, nodes[vd.Positive], nodes[vd.Negative]));
 
                     // At least one source needs to be available

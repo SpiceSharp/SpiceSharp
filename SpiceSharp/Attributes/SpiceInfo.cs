@@ -7,7 +7,7 @@ namespace SpiceSharp.Attributes
     /// It can be applied to a field, property or method
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
-    public class InfoAttribute : Attribute
+    public sealed class InfoAttribute : Attribute
     {
         /// <summary>
         /// Get the parameter description
