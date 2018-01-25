@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {
@@ -16,7 +16,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public abstract void Accept(Circuit ckt);
+        /// <param name="sim">Time-based simulation</param>
+        public abstract void Accept(TimeSimulation sim);
     }
 }

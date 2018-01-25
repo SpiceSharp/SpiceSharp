@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -25,12 +26,14 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        private double vo, va, freq, td, theta;
+        double vo, va, freq, td, theta;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Sine() : base() { }
+        public Sine()
+        {
+        }
 
         /// <summary>
         /// Constructor
@@ -82,8 +85,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Accept(Circuit ckt)
+        /// <param name="sim">Time-based simulation</param>
+        public override void Accept(TimeSimulation sim)
         {
             // Do nothing
         }

@@ -10,8 +10,9 @@ namespace SpiceSharp
     /// </summary>
     public class Circuit
     {
-        #region Constants
-        // Constants that can be used in Spice models
+        /// <summary>
+        /// Common constants
+        /// </summary>
         public const double Charge = 1.6021918e-19;
         public const double CelsiusKelvin = 273.15;
         public const double Boltzmann = 1.3806226e-23;
@@ -19,13 +20,6 @@ namespace SpiceSharp
         public static double Root2 = Math.Sqrt(2); // 1.4142135623730951;
         public const double Vt0 = Boltzmann * (27.0 + CelsiusKelvin) / Charge;
         public const double KOverQ = Boltzmann / Charge;
-        #endregion
-
-        /// <summary>
-        /// Gets or sets the integration method used in transient simulations
-        /// It should be set by the simulation
-        /// </summary>
-        public IntegrationMethod Method { get; set; }
 
         /// <summary>
         /// Gets the nodes in the circuit
@@ -38,19 +32,11 @@ namespace SpiceSharp
         public Entities Objects { get; } = new Entities();
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        public Circuit()
-        {
-        }
-
-        /// <summary>
         /// Clear all objects, nodes, etc. in the circuit
         /// </summary>
         public void Clear()
         {
             // Clear all values
-            Method = null;
             Nodes.Clear();
             Objects.Clear();
         }

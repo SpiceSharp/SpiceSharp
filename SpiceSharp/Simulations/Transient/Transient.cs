@@ -119,19 +119,14 @@ namespace SpiceSharp.Simulations
             state.Initialize(ckt);
 
             // Calculate the operating point
-            ckt.Method = null;
             Op(baseconfig.DcMaxIterations);
             Statistics.TimePoints++;
-            Method = States.Method;
             for (int i = 0; i < Method.DeltaOld.Length; i++)
             {
                 Method.DeltaOld[i] = timeconfig.MaxStep;
             }
             Method.Delta = delta;
             Method.SaveDelta = timeconfig.FinalTime / 50.0;
-
-            // Initialize the Method
-            ckt.Method = Method;
 
             // Stop calculating a DC solution
             state.UseIC = false;

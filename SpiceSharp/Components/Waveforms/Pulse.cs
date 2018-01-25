@@ -2,6 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.IntegrationMethods;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -36,7 +37,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constructor
         /// </summary>
-        public Pulse() : base()
+        public Pulse()
         {
         }
 
@@ -108,15 +109,15 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Accept the current time point
         /// </summary>
-        /// <param name="ckt"></param>
-        public override void Accept(Circuit ckt)
+        /// <param name="sim">Time-based simulation</param>
+        public override void Accept(TimeSimulation sim)
         {
             // Should not be here
-            if (ckt.Method == null)
+            if (sim.Method == null)
                 return;
 
             // Are we at a breakpoint?
-            IntegrationMethod method = ckt.Method;
+            IntegrationMethod method = sim.Method;
             var breaks = method.Breaks;
             if (!method.Break)
                 return;
@@ -138,7 +139,7 @@ namespace SpiceSharp.Components
                     breaks.SetBreakpoint(basetime + tr + td);
                 else if (Math.Abs(tr + pw + tf - time) <= tol)
                     breaks.SetBreakpoint(basetime + per + td);
-                else if ((time == -td))
+                else if ((time <= -td))
                     breaks.SetBreakpoint(basetime + td);
                 else if (Math.Abs(per - time) <= tol)
                     breaks.SetBreakpoint(basetime + td + tr + per);

@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Components
+﻿using SpiceSharp.Simulations;
+
+namespace SpiceSharp.Components
 {
     /// <summary>
     /// Provides values in function of time. This is an abstract class.
@@ -8,7 +10,7 @@
         /// <summary>
         /// Constructor
         /// </summary>
-        public Waveform() : base()
+        public Waveform()
         {
         }
 
@@ -27,7 +29,7 @@
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public abstract void Accept(Circuit ckt);
+        /// <param name="sim">Time-based simulation</param>
+        public abstract void Accept(TimeSimulation sim);
     }
 }
