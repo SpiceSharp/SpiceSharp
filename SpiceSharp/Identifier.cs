@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Circuits
+namespace SpiceSharp
 {
     /// <summary>
     /// An identifier for a circuit object
