@@ -24,25 +24,25 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <summary>
         /// Shared variables
         /// </summary>
-        [PropertyNameAttribute("von"), PropertyInfoAttribute("Turn-on voltage")]
+        [PropertyName("von"), PropertyInfo("Turn-on voltage")]
         public double MOS3von { get; protected set; }
-        [PropertyNameAttribute("vdsat"), PropertyInfoAttribute("Saturation drain voltage")]
+        [PropertyName("vdsat"), PropertyInfo("Saturation drain voltage")]
         public double MOS3vdsat { get; protected set; }
-        [PropertyNameAttribute("id"), PropertyNameAttribute("cd"), PropertyInfoAttribute("Drain current")]
+        [PropertyName("id"), PropertyName("cd"), PropertyInfo("Drain current")]
         public double MOS3cd { get; protected set; }
-        [PropertyNameAttribute("ibs"), PropertyInfoAttribute("B-S junction current")]
+        [PropertyName("ibs"), PropertyInfo("B-S junction current")]
         public double MOS3cbs { get; protected set; }
-        [PropertyNameAttribute("ibd"), PropertyInfoAttribute("B-D junction current")]
+        [PropertyName("ibd"), PropertyInfo("B-D junction current")]
         public double MOS3cbd { get; protected set; }
-        [PropertyNameAttribute("gmb"), PropertyNameAttribute("gmbs"), PropertyInfoAttribute("Bulk-Source transconductance")]
+        [PropertyName("gmb"), PropertyName("gmbs"), PropertyInfo("Bulk-Source transconductance")]
         public double MOS3gmbs { get; protected set; }
-        [PropertyNameAttribute("gm"), PropertyInfoAttribute("Transconductance")]
+        [PropertyName("gm"), PropertyInfo("Transconductance")]
         public double MOS3gm { get; protected set; }
-        [PropertyNameAttribute("gds"), PropertyInfoAttribute("Drain-Source conductance")]
+        [PropertyName("gds"), PropertyInfo("Drain-Source conductance")]
         public double MOS3gds { get; protected set; }
-        [PropertyNameAttribute("gbd"), PropertyInfoAttribute("Bulk-Drain conductance")]
+        [PropertyName("gbd"), PropertyInfo("Bulk-Drain conductance")]
         public double MOS3gbd { get; protected set; }
-        [PropertyNameAttribute("gbs"), PropertyInfoAttribute("Bulk-Source conductance")]
+        [PropertyName("gbs"), PropertyInfo("Bulk-Source conductance")]
         public double MOS3gbs { get; protected set; }
 
         /// <summary>
@@ -58,9 +58,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// Nodes
         /// </summary>
         int MOS3dNode, MOS3gNode, MOS3sNode, MOS3bNode;
-        [PropertyNameAttribute("dnodeprime"), PropertyInfoAttribute("Number of protected drain node")]
+        [PropertyName("dnodeprime"), PropertyInfo("Number of protected drain node")]
         public int MOS3dNodePrime { get; protected set; }
-        [PropertyNameAttribute("snodeprime"), PropertyInfoAttribute("Number of protected source node")]
+        [PropertyName("snodeprime"), PropertyInfo("Number of protected source node")]
         public int MOS3sNodePrime { get; protected set; }
         protected MatrixElement MOS3DdPtr { get; private set; }
         protected MatrixElement MOS3GgPtr { get; private set; }

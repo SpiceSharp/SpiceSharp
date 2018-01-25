@@ -24,21 +24,21 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <summary>
         /// Methods
         /// </summary>
-        [PropertyNameAttribute("vbe"), PropertyInfoAttribute("B-E voltage")]
+        [PropertyName("vbe"), PropertyInfo("B-E voltage")]
         public double BJTvbe { get; protected set; }
-        [PropertyNameAttribute("vbc"), PropertyInfoAttribute("B-C voltage")]
+        [PropertyName("vbc"), PropertyInfo("B-C voltage")]
         public double BJTvbc { get; protected set; }
-        [PropertyNameAttribute("cc"), PropertyInfoAttribute("Current at collector node")]
+        [PropertyName("cc"), PropertyInfo("Current at collector node")]
         public double BJTcc { get; protected set; }
-        [PropertyNameAttribute("cb"), PropertyInfoAttribute("Current at base node")]
+        [PropertyName("cb"), PropertyInfo("Current at base node")]
         public double BJTcb { get; protected set; }
-        [PropertyNameAttribute("gpi"), PropertyInfoAttribute("Small signal input conductance - pi")]
+        [PropertyName("gpi"), PropertyInfo("Small signal input conductance - pi")]
         public double BJTgpi { get; protected set; }
-        [PropertyNameAttribute("gmu"), PropertyInfoAttribute("Small signal conductance - mu")]
+        [PropertyName("gmu"), PropertyInfo("Small signal conductance - mu")]
         public double BJTgmu { get; protected set; }
-        [PropertyNameAttribute("gm"), PropertyInfoAttribute("Small signal transconductance")]
+        [PropertyName("gm"), PropertyInfo("Small signal transconductance")]
         public double BJTgm { get; protected set; }
-        [PropertyNameAttribute("go"), PropertyInfoAttribute("Small signal output conductance")]
+        [PropertyName("go"), PropertyInfo("Small signal output conductance")]
         public double BJTgo { get; protected set; }
         public double BJTgx { get; protected set; }
 

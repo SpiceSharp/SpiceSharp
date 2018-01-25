@@ -20,21 +20,21 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <summary>
         /// Shared parameters
         /// </summary>
-        [PropertyNameAttribute("invearlyvoltf"), PropertyInfoAttribute("Inverse early voltage:forward")]
+        [PropertyName("invearlyvoltf"), PropertyInfo("Inverse early voltage:forward")]
         public double BJTinvEarlyVoltF { get; internal set; }
-        [PropertyNameAttribute("invearlyvoltr"), PropertyInfoAttribute("Inverse early voltage:reverse")]
+        [PropertyName("invearlyvoltr"), PropertyInfo("Inverse early voltage:reverse")]
         public double BJTinvEarlyVoltR { get; internal set; }
-        [PropertyNameAttribute("invrollofff"), PropertyInfoAttribute("Inverse roll off - forward")]
+        [PropertyName("invrollofff"), PropertyInfo("Inverse roll off - forward")]
         public double BJTinvRollOffF { get; internal set; }
-        [PropertyNameAttribute("invrolloffr"), PropertyInfoAttribute("Inverse roll off - reverse")]
+        [PropertyName("invrolloffr"), PropertyInfo("Inverse roll off - reverse")]
         public double BJTinvRollOffR { get; internal set; }
-        [PropertyNameAttribute("collectorconduct"), PropertyInfoAttribute("Collector conductance")]
+        [PropertyName("collectorconduct"), PropertyInfo("Collector conductance")]
         public double BJTcollectorConduct { get; internal set; }
-        [PropertyNameAttribute("emitterconduct"), PropertyInfoAttribute("Emitter conductance")]
+        [PropertyName("emitterconduct"), PropertyInfo("Emitter conductance")]
         public double BJTemitterConduct { get; internal set; }
-        [PropertyNameAttribute("transtimevbcfact"), PropertyInfoAttribute("Transit time VBC factor")]
+        [PropertyName("transtimevbcfact"), PropertyInfo("Transit time VBC factor")]
         public double BJTtransitTimeVBCFactor { get; internal set; }
-        [PropertyNameAttribute("excessphasefactor"), PropertyInfoAttribute("Excess phase fact.")]
+        [PropertyName("excessphasefactor"), PropertyInfo("Excess phase fact.")]
         public double BJTexcessPhaseFactor { get; internal set; }
         
         public double fact1 { get; protected set; }

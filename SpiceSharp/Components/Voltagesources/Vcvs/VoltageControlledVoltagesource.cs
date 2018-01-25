@@ -14,13 +14,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [PropertyNameAttribute("pos_node"), PropertyInfoAttribute("Positive node of the source")]
+        [PropertyName("pos_node"), PropertyInfo("Positive node of the source")]
         public int VCVSposNode { get; internal set; }
-        [PropertyNameAttribute("neg_node"), PropertyInfoAttribute("Negative node of the source")]
+        [PropertyName("neg_node"), PropertyInfo("Negative node of the source")]
         public int VCVSnegNode { get; internal set; }
-        [PropertyNameAttribute("cont_p_node"), PropertyInfoAttribute("Positive controlling node of the source")]
+        [PropertyName("cont_p_node"), PropertyInfo("Positive controlling node of the source")]
         public int VCVScontPosNode { get; internal set; }
-        [PropertyNameAttribute("cont_n_node"), PropertyInfoAttribute("Negative controlling node of the source")]
+        [PropertyName("cont_n_node"), PropertyInfo("Negative controlling node of the source")]
         public int VCVScontNegNode { get; internal set; }
 
         /// <summary>

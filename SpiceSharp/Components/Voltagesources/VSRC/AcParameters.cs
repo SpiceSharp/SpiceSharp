@@ -11,11 +11,11 @@ namespace SpiceSharp.Components.VSRC
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyNameAttribute("acmag"), PropertyInfoAttribute("A.C. Magnitude")]
+        [PropertyName("acmag"), PropertyInfo("A.C. Magnitude")]
         public Parameter VSRCacMag { get; } = new Parameter();
-        [PropertyNameAttribute("acphase"), PropertyInfoAttribute("A.C. Phase")]
+        [PropertyName("acphase"), PropertyInfo("A.C. Phase")]
         public Parameter VSRCacPhase { get; } = new Parameter();
-        [PropertyNameAttribute("ac"), PropertyInfoAttribute("A.C. magnitude, phase vector")]
+        [PropertyName("ac"), PropertyInfo("A.C. magnitude, phase vector")]
         public void SetAc(double[] ac)
         {
             switch (ac?.Length ?? -1)

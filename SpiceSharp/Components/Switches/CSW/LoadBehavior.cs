@@ -23,11 +23,11 @@ namespace SpiceSharp.Behaviors.CSW
         /// <summary>
         /// Methods
         /// </summary>
-        [PropertyNameAttribute("v"), PropertyInfoAttribute("Switch voltage")]
+        [PropertyName("v"), PropertyInfo("Switch voltage")]
         public double GetVoltage(State state) => state.Solution[CSWposNode] - state.Solution[CSWnegNode];
-        [PropertyNameAttribute("i"), PropertyInfoAttribute("Switch current")]
+        [PropertyName("i"), PropertyInfo("Switch current")]
         public double GetCurrent(State state) => (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
-        [PropertyNameAttribute("p"), PropertyInfoAttribute("Instantaneous power")]
+        [PropertyName("p"), PropertyInfo("Instantaneous power")]
         public double GetPower(State state) => (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) *
             (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
         public double CSWcond { get; internal set; }

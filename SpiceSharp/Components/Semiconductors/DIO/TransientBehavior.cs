@@ -25,7 +25,7 @@ namespace SpiceSharp.Behaviors.DIO
         /// <summary>
         /// Diode capacitance
         /// </summary>
-        [PropertyNameAttribute("cd"), PropertyInfoAttribute("Diode capacitance")]
+        [PropertyName("cd"), PropertyInfo("Diode capacitance")]
         public double DIOcap { get; protected set; }
         public double DIOcurrent { get; protected set; }
         public double DIOconduct { get; protected set; }

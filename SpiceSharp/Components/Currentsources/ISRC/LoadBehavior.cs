@@ -22,11 +22,11 @@ namespace SpiceSharp.Behaviors.ISRC
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        [PropertyNameAttribute("v"), PropertyInfoAttribute("Voltage accross the supply")]
+        [PropertyName("v"), PropertyInfo("Voltage accross the supply")]
         public double GetV(State state) => (state.Solution[ISRCposNode] - state.Solution[ISRCnegNode]);
-        [PropertyNameAttribute("p"), PropertyInfoAttribute("Power supplied by the source")]
+        [PropertyName("p"), PropertyInfo("Power supplied by the source")]
         public double GetP(State state) => (state.Solution[ISRCposNode] - state.Solution[ISRCposNode]) * -Current;
-        [PropertyNameAttribute("c"), PropertyNameAttribute("i"), PropertyInfoAttribute("Current through current source")]
+        [PropertyName("c"), PropertyName("i"), PropertyInfo("Current through current source")]
         public double Current { get; protected set; }
 
         /// <summary>

@@ -15,11 +15,11 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [PropertyNameAttribute("pos_node"), PropertyInfoAttribute("Positive node of the source")]
+        [PropertyName("pos_node"), PropertyInfo("Positive node of the source")]
         public int CCVSposNode { get; internal set; }
-        [PropertyNameAttribute("neg_node"), PropertyInfoAttribute("Negative node of the source")]
+        [PropertyName("neg_node"), PropertyInfo("Negative node of the source")]
         public int CCVSnegNode { get; internal set; }
-        [PropertyNameAttribute("control"), PropertyInfoAttribute("Controlling voltage source")]
+        [PropertyName("control"), PropertyInfo("Controlling voltage source")]
         public Identifier CCVScontName { get; set; }
 
         /// <summary>

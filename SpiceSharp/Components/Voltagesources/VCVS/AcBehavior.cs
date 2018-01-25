@@ -32,21 +32,21 @@ namespace SpiceSharp.Behaviors.VCVS
         /// <summary>
         /// Properties
         /// </summary>
-        [PropertyNameAttribute("v"), PropertyInfoAttribute("Complex voltage")]
+        [PropertyName("v"), PropertyInfo("Complex voltage")]
         public Complex GetVoltage(State state)
         {
             return new Complex(
                 state.Solution[VCVSposNode] - state.Solution[VCVSnegNode],
                 state.iSolution[VCVSposNode] - state.iSolution[VCVSnegNode]);
         }
-        [PropertyNameAttribute("i"), PropertyNameAttribute("c"), PropertyInfoAttribute("Complex current")]
+        [PropertyName("i"), PropertyName("c"), PropertyInfo("Complex current")]
         public Complex GetCurrent(State state)
         {
             return new Complex(
                 state.Solution[VCVSbranch],
                 state.iSolution[VCVSbranch]);
         }
-        [PropertyNameAttribute("p"), PropertyInfoAttribute("Complex power")]
+        [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(State state)
         {
             Complex v = new Complex(

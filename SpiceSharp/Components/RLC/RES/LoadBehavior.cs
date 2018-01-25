@@ -15,11 +15,11 @@ namespace SpiceSharp.Behaviors.RES
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyNameAttribute("v"), PropertyInfoAttribute("Voltage")]
+        [PropertyName("v"), PropertyInfo("Voltage")]
         public double GetVoltage(State state) => state.Solution[RESposNode] - state.Solution[RESnegNode];
-        [PropertyNameAttribute("i"), PropertyInfoAttribute("Current")]
+        [PropertyName("i"), PropertyInfo("Current")]
         public double GetCurrent(State state) => (state.Solution[RESposNode] - state.Solution[RESnegNode]) * RESconduct;
-        [PropertyNameAttribute("p"), PropertyInfoAttribute("Power")]
+        [PropertyName("p"), PropertyInfo("Power")]
         public double GetPower(State state)
         {
             double v = state.Solution[RESposNode] - state.Solution[RESnegNode];

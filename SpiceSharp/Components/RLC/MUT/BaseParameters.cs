@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.MUT
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyNameAttribute("k"), PropertyNameAttribute("coefficient"), PropertyInfoAttribute("Mutual inductance", IsPrincipal = true)]
+        [PropertyName("k"), PropertyName("coefficient"), PropertyInfo("Mutual inductance", IsPrincipal = true)]
         public Parameter MUTcoupling { get; } = new Parameter();
 
         /// <summary>

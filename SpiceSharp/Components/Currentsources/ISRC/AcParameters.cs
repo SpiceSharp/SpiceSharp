@@ -11,11 +11,11 @@ namespace SpiceSharp.Components.ISRC
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyNameAttribute("acmag"), PropertyInfoAttribute("A.C. magnitude value")]
+        [PropertyName("acmag"), PropertyInfo("A.C. magnitude value")]
         public Parameter ISRCacMag { get; } = new Parameter();
-        [PropertyNameAttribute("acphase"), PropertyInfoAttribute("A.C. phase value")]
+        [PropertyName("acphase"), PropertyInfo("A.C. phase value")]
         public Parameter ISRCacPhase { get; } = new Parameter();
-        [PropertyNameAttribute("ac"), PropertyInfoAttribute("A.C. magnitude, phase vector")]
+        [PropertyName("ac"), PropertyInfo("A.C. magnitude, phase vector")]
         public void SetAc(double[] ac)
         {
             switch (ac.Length)

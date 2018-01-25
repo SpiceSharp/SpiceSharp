@@ -11,19 +11,19 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the noise output node
         /// </summary>
-        [PropertyNameAttribute("output"), PropertyInfoAttribute("Noise output summation node")]
+        [PropertyName("output"), PropertyInfo("Noise output summation node")]
         public Identifier Output { get; set; } = null;
 
         /// <summary>
         /// Gets or sets the noise output reference node
         /// </summary>
-        [PropertyNameAttribute("outputref"), PropertyInfoAttribute("Noise output reference node")]
+        [PropertyName("outputref"), PropertyInfo("Noise output reference node")]
         public Identifier OutputRef { get; set; } = null;
 
         /// <summary>
         /// Gets or sets the name of the AC source used as input reference
         /// </summary>
-        [PropertyNameAttribute("input"), PropertyInfoAttribute("Name of the AC source used as input reference")]
+        [PropertyName("input"), PropertyInfo("Name of the AC source used as input reference")]
         public Identifier Input { get; set; } = null;
 
         /// <summary>

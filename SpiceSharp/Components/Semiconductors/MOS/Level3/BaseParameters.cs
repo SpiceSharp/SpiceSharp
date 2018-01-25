@@ -11,23 +11,23 @@ namespace SpiceSharp.Components.Mosfet.Level3
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyNameAttribute("w"), PropertyInfoAttribute("Width")]
+        [PropertyName("w"), PropertyInfo("Width")]
         public Parameter MOS3w { get; } = new Parameter(1e-4);
-        [PropertyNameAttribute("l"), PropertyInfoAttribute("Length")]
+        [PropertyName("l"), PropertyInfo("Length")]
         public Parameter MOS3l { get; } = new Parameter(1e-4);
-        [PropertyNameAttribute("as"), PropertyInfoAttribute("Source area")]
+        [PropertyName("as"), PropertyInfo("Source area")]
         public Parameter MOS3sourceArea { get; } = new Parameter();
-        [PropertyNameAttribute("ad"), PropertyInfoAttribute("Drain area")]
+        [PropertyName("ad"), PropertyInfo("Drain area")]
         public Parameter MOS3drainArea { get; } = new Parameter();
-        [PropertyNameAttribute("ps"), PropertyInfoAttribute("Source perimeter")]
+        [PropertyName("ps"), PropertyInfo("Source perimeter")]
         public Parameter MOS3sourcePerimiter { get; } = new Parameter();
-        [PropertyNameAttribute("pd"), PropertyInfoAttribute("Drain perimeter")]
+        [PropertyName("pd"), PropertyInfo("Drain perimeter")]
         public Parameter MOS3drainPerimiter { get; } = new Parameter();
-        [PropertyNameAttribute("nrs"), PropertyInfoAttribute("Source squares")]
+        [PropertyName("nrs"), PropertyInfo("Source squares")]
         public Parameter MOS3sourceSquares { get; } = new Parameter(1);
-        [PropertyNameAttribute("nrd"), PropertyInfoAttribute("Drain squares")]
+        [PropertyName("nrd"), PropertyInfo("Drain squares")]
         public Parameter MOS3drainSquares { get; } = new Parameter(1);
-        [PropertyNameAttribute("temp"), PropertyInfoAttribute("Instance operating temperature")]
+        [PropertyName("temp"), PropertyInfo("Instance operating temperature")]
         public double MOS3_TEMP
         {
             get => MOS3temp - Circuit.CONSTCtoK;
@@ -35,19 +35,19 @@ namespace SpiceSharp.Components.Mosfet.Level3
         }
         public Parameter MOS3temp { get; } = new Parameter();
 
-        [PropertyNameAttribute("off"), PropertyInfoAttribute("Device initially off")]
+        [PropertyName("off"), PropertyInfo("Device initially off")]
         public bool MOS3off { get; set; }
-        [PropertyNameAttribute("icvbs"), PropertyInfoAttribute("Initial B-S voltage")]
+        [PropertyName("icvbs"), PropertyInfo("Initial B-S voltage")]
         public Parameter MOS3icVBS { get; } = new Parameter();
-        [PropertyNameAttribute("icvds"), PropertyInfoAttribute("Initial D-S voltage")]
+        [PropertyName("icvds"), PropertyInfo("Initial D-S voltage")]
         public Parameter MOS3icVDS { get; } = new Parameter();
-        [PropertyNameAttribute("icvgs"), PropertyInfoAttribute("Initial G-S voltage")]
+        [PropertyName("icvgs"), PropertyInfo("Initial G-S voltage")]
         public Parameter MOS3icVGS { get; } = new Parameter();
 
         /// <summary>
         /// Methods
         /// </summary>
-        [PropertyNameAttribute("ic"), PropertyInfoAttribute("Vector of D-S, G-S, B-S voltages")]
+        [PropertyName("ic"), PropertyInfo("Vector of D-S, G-S, B-S voltages")]
         public void SetIC(double[] value)
         {
             switch (value.Length)

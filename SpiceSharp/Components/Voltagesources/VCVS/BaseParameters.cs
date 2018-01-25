@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.VCVS
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyNameAttribute("gain"), PropertyInfoAttribute("Voltage gain")]
+        [PropertyName("gain"), PropertyInfo("Voltage gain")]
         public Parameter VCVScoeff { get; } = new Parameter();
 
         /// <summary>

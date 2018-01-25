@@ -20,9 +20,9 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [PropertyNameAttribute("pos"), PropertyInfoAttribute("Positive terminal of the capacitor")]
+        [PropertyName("pos"), PropertyInfo("Positive terminal of the capacitor")]
         public int CAPposNode { get; private set; }
-        [PropertyNameAttribute("neg"), PropertyInfoAttribute("Negative terminal of the capacitor")]
+        [PropertyName("neg"), PropertyInfo("Negative terminal of the capacitor")]
         public int CAPnegNode { get; private set; }
 
         /// <summary>

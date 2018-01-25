@@ -22,21 +22,21 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <summary>
         /// Shared parameters
         /// </summary>
-        [PropertyNameAttribute("sourceconductance"), PropertyInfoAttribute("Source conductance")]
+        [PropertyName("sourceconductance"), PropertyInfo("Source conductance")]
         public double MOS3sourceConductance { get; internal set; }
-        [PropertyNameAttribute("drainconductance"), PropertyInfoAttribute("Drain conductance")]
+        [PropertyName("drainconductance"), PropertyInfo("Drain conductance")]
         public double MOS3drainConductance { get; internal set; }
-        [PropertyNameAttribute("sourcevcrit"), PropertyInfoAttribute("Critical source voltage")]
+        [PropertyName("sourcevcrit"), PropertyInfo("Critical source voltage")]
         public double MOS3sourceVcrit { get; internal set; }
-        [PropertyNameAttribute("drainvcrit"), PropertyInfoAttribute("Critical drain voltage")]
+        [PropertyName("drainvcrit"), PropertyInfo("Critical drain voltage")]
         public double MOS3drainVcrit { get; internal set; }
-        [PropertyNameAttribute("cbd0"), PropertyInfoAttribute("Zero-Bias B-D junction capacitance")]
+        [PropertyName("cbd0"), PropertyInfo("Zero-Bias B-D junction capacitance")]
         public double MOS3Cbd { get; internal set; }
-        [PropertyNameAttribute("cbdsw0"), PropertyInfoAttribute("Zero-Bias B-D sidewall capacitance")]
+        [PropertyName("cbdsw0"), PropertyInfo("Zero-Bias B-D sidewall capacitance")]
         public double MOS3Cbdsw { get; internal set; }
-        [PropertyNameAttribute("cbs0"), PropertyInfoAttribute("Zero-Bias B-S junction capacitance")]
+        [PropertyName("cbs0"), PropertyInfo("Zero-Bias B-S junction capacitance")]
         public double MOS3Cbs { get; internal set; }
-        [PropertyNameAttribute("cbssw0"), PropertyInfoAttribute("Zero-Bias B-S sidewall capacitance")]
+        [PropertyName("cbssw0"), PropertyInfo("Zero-Bias B-S sidewall capacitance")]
         public double MOS3Cbssw { get; internal set; }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// </summary>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        [PropertyNameAttribute("rs"), PropertyInfoAttribute("Source resistance")]
+        [PropertyName("rs"), PropertyInfo("Source resistance")]
         public double GetSOURCERESIST(Circuit ckt)
         {
             if (MOS3sourceConductance != 0.0)
@@ -52,7 +52,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
             else
                 return 0.0;
         }
-        [PropertyNameAttribute("rd"), PropertyInfoAttribute("Drain resistance")]
+        [PropertyName("rd"), PropertyInfo("Drain resistance")]
         public double GetDRAINRESIST(Circuit ckt)
         {
             if (MOS3drainConductance != 0.0)

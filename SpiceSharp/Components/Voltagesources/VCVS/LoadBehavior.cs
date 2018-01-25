@@ -20,11 +20,11 @@ namespace SpiceSharp.Behaviors.VCVS
         /// <summary>
         /// Properties
         /// </summary>
-        [PropertyNameAttribute("i"), PropertyInfoAttribute("Output current")]
+        [PropertyName("i"), PropertyInfo("Output current")]
         public double GetCurrent(State state) => state.Solution[VCVSbranch];
-        [PropertyNameAttribute("v"), PropertyInfoAttribute("Output current")]
+        [PropertyName("v"), PropertyInfo("Output current")]
         public double GetVoltage(State state) => state.Solution[VCVSposNode] - state.Solution[VCVSnegNode];
-        [PropertyNameAttribute("p"), PropertyInfoAttribute("Power")]
+        [PropertyName("p"), PropertyInfo("Power")]
         public double GetPower(State state) => state.Solution[VCVSbranch] * (state.Solution[VCVSposNode] - state.Solution[VCVSnegNode]);
 
         /// <summary>

@@ -10,18 +10,18 @@ namespace SpiceSharp.Components.RES
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyNameAttribute("resistance"), PropertyInfoAttribute("Resistance", IsPrincipal = true)]
+        [PropertyName("resistance"), PropertyInfo("Resistance", IsPrincipal = true)]
         public Parameter RESresist { get; } = new Parameter();
-        [PropertyNameAttribute("temp"), PropertyInfoAttribute("Instance operating temperature", Interesting = false)]
+        [PropertyName("temp"), PropertyInfo("Instance operating temperature", Interesting = false)]
         public double RES_TEMP
         {
             get => REStemp - Circuit.CONSTCtoK;
             set => REStemp.Set(value + Circuit.CONSTCtoK);
         }
         public Parameter REStemp { get; } = new Parameter(300.15);
-        [PropertyNameAttribute("w"), PropertyInfoAttribute("Width", Interesting = false)]
+        [PropertyName("w"), PropertyInfo("Width", Interesting = false)]
         public Parameter RESwidth { get; } = new Parameter();
-        [PropertyNameAttribute("l"), PropertyInfoAttribute("Length", Interesting = false)]
+        [PropertyName("l"), PropertyInfo("Length", Interesting = false)]
         public Parameter RESlength { get; } = new Parameter();
 
         /// <summary>

@@ -26,9 +26,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         public double egfet1 { get; protected set; }
         public double pbfact1 { get; protected set; }
         public double MOS3oxideCapFactor { get; internal set; }
-        [PropertyNameAttribute("xd"), PropertyInfoAttribute("Depletion layer width")]
+        [PropertyName("xd"), PropertyInfo("Depletion layer width")]
         public double MOS3coeffDepLayWidth { get; internal set; }
-        [PropertyNameAttribute("alpha"), PropertyInfoAttribute("Alpha")]
+        [PropertyName("alpha"), PropertyInfo("Alpha")]
         public double MOS3alpha { get; internal set; }
 
         /// <summary>

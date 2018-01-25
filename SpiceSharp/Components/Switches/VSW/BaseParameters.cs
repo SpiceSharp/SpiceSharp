@@ -10,9 +10,9 @@ namespace SpiceSharp.Components.VSW
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyNameAttribute("on"), PropertyInfoAttribute("Switch initially closed")]
+        [PropertyName("on"), PropertyInfo("Switch initially closed")]
         public void SetOn() { VSWzero_state = true; }
-        [PropertyNameAttribute("off"), PropertyInfoAttribute("Switch initially open")]
+        [PropertyName("off"), PropertyInfo("Switch initially open")]
         public void SetOff() { VSWzero_state = false; }
 
         /// <summary>

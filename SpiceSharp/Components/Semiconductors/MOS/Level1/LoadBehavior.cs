@@ -28,25 +28,25 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         public int MOS1dNodePrime { get; protected set; }
         public int MOS1sNodePrime { get; protected set; }
 
-        [PropertyNameAttribute("von"), PropertyInfoAttribute(" ")]
+        [PropertyName("von"), PropertyInfo(" ")]
         public double MOS1von { get; protected set; } = 0.0;
-        [PropertyNameAttribute("vdsat"), PropertyInfoAttribute("Saturation drain voltage")]
+        [PropertyName("vdsat"), PropertyInfo("Saturation drain voltage")]
         public double MOS1vdsat { get; protected set; } = 0.0;
-        [PropertyNameAttribute("id"), PropertyInfoAttribute("Drain current")]
+        [PropertyName("id"), PropertyInfo("Drain current")]
         public double MOS1cd { get; protected set; }
-        [PropertyNameAttribute("ibs"), PropertyInfoAttribute("B-S junction current")]
+        [PropertyName("ibs"), PropertyInfo("B-S junction current")]
         public double MOS1cbs { get; protected set; }
-        [PropertyNameAttribute("ibd"), PropertyInfoAttribute("B-D junction current")]
+        [PropertyName("ibd"), PropertyInfo("B-D junction current")]
         public double MOS1cbd { get; protected set; }
-        [PropertyNameAttribute("gmb"), PropertyNameAttribute("gmbs"), PropertyInfoAttribute("Bulk-Source transconductance")]
+        [PropertyName("gmb"), PropertyName("gmbs"), PropertyInfo("Bulk-Source transconductance")]
         public double MOS1gmbs { get; protected set; }
-        [PropertyNameAttribute("gm"), PropertyInfoAttribute("Transconductance")]
+        [PropertyName("gm"), PropertyInfo("Transconductance")]
         public double MOS1gm { get; protected set; }
-        [PropertyNameAttribute("gds"), PropertyInfoAttribute("Drain-Source conductance")]
+        [PropertyName("gds"), PropertyInfo("Drain-Source conductance")]
         public double MOS1gds { get; protected set; }
-        [PropertyNameAttribute("gbd"), PropertyInfoAttribute("Bulk-Drain conductance")]
+        [PropertyName("gbd"), PropertyInfo("Bulk-Drain conductance")]
         public double MOS1gbd { get; protected set; }
-        [PropertyNameAttribute("gbs"), PropertyInfoAttribute("Bulk-Source conductance")]
+        [PropertyName("gbs"), PropertyInfo("Bulk-Source conductance")]
         public double MOS1gbs { get; protected set; }
 
         /// <summary>

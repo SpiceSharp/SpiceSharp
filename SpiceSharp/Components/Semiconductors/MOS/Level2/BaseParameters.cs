@@ -11,38 +11,38 @@ namespace SpiceSharp.Components.Mosfet.Level2
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyNameAttribute("temp"), PropertyInfoAttribute("Instance operating temperature")]
+        [PropertyName("temp"), PropertyInfo("Instance operating temperature")]
         public double MOS2_TEMP
         {
             get => MOS2temp - Circuit.CONSTCtoK;
             set => MOS2temp.Set(value + Circuit.CONSTCtoK);
         }
         public Parameter MOS2temp { get; } = new Parameter();
-        [PropertyNameAttribute("w"), PropertyInfoAttribute("Width")]
+        [PropertyName("w"), PropertyInfo("Width")]
         public Parameter MOS2w { get; } = new Parameter(1e-4);
-        [PropertyNameAttribute("l"), PropertyInfoAttribute("Length")]
+        [PropertyName("l"), PropertyInfo("Length")]
         public Parameter MOS2l { get; } = new Parameter(1e-4);
-        [PropertyNameAttribute("as"), PropertyInfoAttribute("Source area")]
+        [PropertyName("as"), PropertyInfo("Source area")]
         public Parameter MOS2sourceArea { get; } = new Parameter();
-        [PropertyNameAttribute("ad"), PropertyInfoAttribute("Drain area")]
+        [PropertyName("ad"), PropertyInfo("Drain area")]
         public Parameter MOS2drainArea { get; } = new Parameter();
-        [PropertyNameAttribute("ps"), PropertyInfoAttribute("Source perimeter")]
+        [PropertyName("ps"), PropertyInfo("Source perimeter")]
         public Parameter MOS2sourcePerimiter { get; } = new Parameter();
-        [PropertyNameAttribute("pd"), PropertyInfoAttribute("Drain perimeter")]
+        [PropertyName("pd"), PropertyInfo("Drain perimeter")]
         public Parameter MOS2drainPerimiter { get; } = new Parameter();
-        [PropertyNameAttribute("nrs"), PropertyInfoAttribute("Source squares")]
+        [PropertyName("nrs"), PropertyInfo("Source squares")]
         public Parameter MOS2sourceSquares { get; } = new Parameter(1);
-        [PropertyNameAttribute("nrd"), PropertyInfoAttribute("Drain squares")]
+        [PropertyName("nrd"), PropertyInfo("Drain squares")]
         public Parameter MOS2drainSquares { get; } = new Parameter(1);
-        [PropertyNameAttribute("off"), PropertyInfoAttribute("Device initially off")]
+        [PropertyName("off"), PropertyInfo("Device initially off")]
         public bool MOS2off { get; set; }
-        [PropertyNameAttribute("icvbs"), PropertyInfoAttribute("Initial B-S voltage")]
+        [PropertyName("icvbs"), PropertyInfo("Initial B-S voltage")]
         public Parameter MOS2icVBS { get; } = new Parameter();
-        [PropertyNameAttribute("icvds"), PropertyInfoAttribute("Initial D-S voltage")]
+        [PropertyName("icvds"), PropertyInfo("Initial D-S voltage")]
         public Parameter MOS2icVDS { get; } = new Parameter();
-        [PropertyNameAttribute("icvgs"), PropertyInfoAttribute("Initial G-S voltage")]
+        [PropertyName("icvgs"), PropertyInfo("Initial G-S voltage")]
         public Parameter MOS2icVGS { get; } = new Parameter();
-        [PropertyNameAttribute("ic"), PropertyInfoAttribute("Vector of D-S, G-S, B-S voltages")]
+        [PropertyName("ic"), PropertyInfo("Vector of D-S, G-S, B-S voltages")]
         public void SetIC(double[] value)
         {
             switch (value.Length)

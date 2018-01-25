@@ -30,25 +30,25 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <summary>
         /// Shared parameters
         /// </summary>
-        [PropertyNameAttribute("von"), PropertyInfoAttribute(" ")]
+        [PropertyName("von"), PropertyInfo(" ")]
         public double MOS2von { get; internal set; }
-        [PropertyNameAttribute("vdsat"), PropertyInfoAttribute("Saturation drain voltage")]
+        [PropertyName("vdsat"), PropertyInfo("Saturation drain voltage")]
         public double MOS2vdsat { get; internal set; }
-        [PropertyNameAttribute("id"), PropertyNameAttribute("cd"), PropertyInfoAttribute("Drain current")]
+        [PropertyName("id"), PropertyName("cd"), PropertyInfo("Drain current")]
         public double MOS2cd { get; internal set; }
-        [PropertyNameAttribute("ibs"), PropertyInfoAttribute("B-S junction current")]
+        [PropertyName("ibs"), PropertyInfo("B-S junction current")]
         public double MOS2cbs { get; internal set; }
-        [PropertyNameAttribute("ibd"), PropertyInfoAttribute("B-D junction current")]
+        [PropertyName("ibd"), PropertyInfo("B-D junction current")]
         public double MOS2cbd { get; internal set; }
-        [PropertyNameAttribute("gmb"), PropertyNameAttribute("gmbs"), PropertyInfoAttribute("Bulk-Source transconductance")]
+        [PropertyName("gmb"), PropertyName("gmbs"), PropertyInfo("Bulk-Source transconductance")]
         public double MOS2gmbs { get; internal set; }
-        [PropertyNameAttribute("gm"), PropertyInfoAttribute("Transconductance")]
+        [PropertyName("gm"), PropertyInfo("Transconductance")]
         public double MOS2gm { get; internal set; }
-        [PropertyNameAttribute("gds"), PropertyInfoAttribute("Drain-Source conductance")]
+        [PropertyName("gds"), PropertyInfo("Drain-Source conductance")]
         public double MOS2gds { get; internal set; }
-        [PropertyNameAttribute("gbd"), PropertyInfoAttribute("Bulk-Drain conductance")]
+        [PropertyName("gbd"), PropertyInfo("Bulk-Drain conductance")]
         public double MOS2gbd { get; internal set; }
-        [PropertyNameAttribute("gbs"), PropertyInfoAttribute("Bulk-Source conductance")]
+        [PropertyName("gbs"), PropertyInfo("Bulk-Source conductance")]
         public double MOS2gbs { get; internal set; }
         
         /// <summary>
@@ -64,9 +64,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// Nodes
         /// </summary>
         int MOS2dNode, MOS2gNode, MOS2sNode, MOS2bNode;
-        [PropertyNameAttribute("dnodeprime"), PropertyInfoAttribute("Number of internal drain node")]
+        [PropertyName("dnodeprime"), PropertyInfo("Number of internal drain node")]
         public int MOS2dNodePrime { get; private set; }
-        [PropertyNameAttribute("snodeprime"), PropertyInfoAttribute("Number of internal source node")]
+        [PropertyName("snodeprime"), PropertyInfo("Number of internal source node")]
         public int MOS2sNodePrime { get; private set; }
         protected MatrixElement MOS2DdPtr { get; private set; }
         protected MatrixElement MOS2GgPtr { get; private set; }

@@ -20,13 +20,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [PropertyNameAttribute("dnode"), PropertyInfoAttribute("Number of drain node")]
+        [PropertyName("dnode"), PropertyInfo("Number of drain node")]
         public int MOS3dNode { get; internal set; }
-        [PropertyNameAttribute("gnode"), PropertyInfoAttribute("Number of gate node")]
+        [PropertyName("gnode"), PropertyInfo("Number of gate node")]
         public int MOS3gNode { get; internal set; }
-        [PropertyNameAttribute("snode"), PropertyInfoAttribute("Number of source node")]
+        [PropertyName("snode"), PropertyInfo("Number of source node")]
         public int MOS3sNode { get; internal set; }
-        [PropertyNameAttribute("bnode"), PropertyInfoAttribute("Number of bulk node")]
+        [PropertyName("bnode"), PropertyInfo("Number of bulk node")]
         public int MOS3bNode { get; internal set; }
 
         /// <summary>

@@ -11,15 +11,15 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Parameters
         /// </summary>
-        [PropertyNameAttribute("vo"), PropertyInfoAttribute("The offset of the sine wave")]
+        [PropertyName("vo"), PropertyInfo("The offset of the sine wave")]
         public Parameter VO { get; } = new Parameter();
-        [PropertyNameAttribute("va"), PropertyInfoAttribute("The amplitude of the sine wave")]
+        [PropertyName("va"), PropertyInfo("The amplitude of the sine wave")]
         public Parameter VA { get; } = new Parameter();
-        [PropertyNameAttribute("freq"), PropertyInfoAttribute("The frequency in Hz")]
+        [PropertyName("freq"), PropertyInfo("The frequency in Hz")]
         public Parameter Freq { get; } = new Parameter();
-        [PropertyNameAttribute("td"), PropertyInfoAttribute("The delay in seconds")]
+        [PropertyName("td"), PropertyInfo("The delay in seconds")]
         public Parameter Delay { get; } = new Parameter();
-        [PropertyNameAttribute("theta"), PropertyInfoAttribute("The damping factor")]
+        [PropertyName("theta"), PropertyInfo("The damping factor")]
         public Parameter Theta { get; } = new Parameter();
 
         /// <summary>
