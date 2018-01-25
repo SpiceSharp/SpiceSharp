@@ -41,7 +41,7 @@ namespace SpiceSharp.Components
         public MOS3(Identifier name) : base(name, MOS3pinCount)
         {
             // Add parameters
-            Parameters.Register(new BaseParameters());
+            Parameters.Set(new BaseParameters());
 
             // Add factories
             AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));

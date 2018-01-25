@@ -17,7 +17,7 @@ namespace SpiceSharp.Components
             : base(name)
         {
             // Add parameters
-            Parameters.Register(new ModelBaseParameters());
+            Parameters.Set(new ModelBaseParameters());
 
             // Add factories
             AddFactory(typeof(ModelLoadBehavior), () => new ModelLoadBehavior(Name));

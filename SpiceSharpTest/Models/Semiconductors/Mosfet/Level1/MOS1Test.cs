@@ -93,7 +93,7 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
                 CreateMOS1("M1", "out", "g", "0", "0",
                     "MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
                 );
-            ckt.Objects["V1"].Parameters.Set("acmag", 1.0);
+            ckt.Objects["V1"].Parameters.SetProperty("acmag", 1.0);
 
             // Create simulation
             AC ac = new AC("ac", "dec", 5, 10, 10e9);
@@ -163,9 +163,9 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
                 CreateMOS1("M1", "out", "g", "0", "0",
                     "MM", "IS = 1e-32 VTO = 3.03646 LAMBDA = 0 KP = 5.28747 CGSO = 6.5761e-06 CGDO = 1e-11 KF = 1e-25")
                 );
-            ckt.Objects["V1"].Parameters.Set("acmag", 1.0);
-            ckt.Objects["M1"].Parameters.Set("w", 100e-6);
-            ckt.Objects["M1"].Parameters.Set("l", 100e-6);
+            ckt.Objects["V1"].Parameters.SetProperty("acmag", 1.0);
+            ckt.Objects["M1"].Parameters.SetProperty("w", 100e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("l", 100e-6);
 
             // Create simulation
             Noise noise = new Noise("noise", "out", "V1", "dec", 10, 10.0, 10e9);

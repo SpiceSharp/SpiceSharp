@@ -16,11 +16,11 @@ namespace SpiceSharp
         Dictionary<Type, Parameters> parameters = new Dictionary<Type, Parameters>();
 
         /// <summary>
-        /// Register parameters in the collection
+        /// Set parameters in the collection
         /// If parameters of the same type already exist, they are overwritten
         /// </summary>
         /// <param name="p">Parameters</param>
-        public void Register(Parameters p)
+        public void Set(Parameters p)
         {
             // Update the parameter of that type
             parameters[p.GetType()] = p;
@@ -39,12 +39,20 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Remove parameters
+        /// Remove parameters of a specific type
         /// </summary>
         /// <param name="t">The parameters type</param>
         public void Remove(Type t)
         {
             parameters.Remove(t);
+        }
+
+        /// <summary>
+        /// Clear all parameters
+        /// </summary>
+        public void Clear()
+        {
+            parameters.Clear();
         }
 
         /// <summary>
@@ -61,15 +69,16 @@ namespace SpiceSharp
 
         /// <summary>
         /// Set a parameter by name
+        /// If multiple parameters
         /// </summary>
-        /// <param name="parameter">Parameter name</param>
-        /// <param name="value">Values</param>
+        /// <param name="property">Property name</param>
+        /// <param name="value">Value</param>
         /// <returns></returns>
-        public bool Set(string parameter, double value)
+        public bool SetProperty(string property, double value)
         {
             foreach (var ps in parameters.Values)
             {
-                if (ps.Set(parameter, value))
+                if (ps.Set(property, value))
                     return true;
             }
             return false;
@@ -78,14 +87,14 @@ namespace SpiceSharp
         /// <summary>
         /// Set a parameter by name
         /// </summary>
-        /// <param name="parameter">Parameter name</param>
+        /// <param name="property">Property name</param>
         /// <param name="value">Value</param>
         /// <returns></returns>
-        public bool Set(string parameter, object value)
+        public bool SetProperty(string property, object value)
         {
             foreach (var ps in parameters.Values)
             {
-                if (ps.Set(parameter, value))
+                if (ps.Set(property, value))
                     return true;
             }
             return false;

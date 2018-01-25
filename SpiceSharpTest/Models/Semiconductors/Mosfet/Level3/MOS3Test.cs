@@ -57,8 +57,8 @@ namespace SpiceSharpTest.Models.Transistors
                 CreateMOS3("M1", "d", "g", "0", "0",
                     "DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
                 );
-            ckt.Objects["M1"].Parameters.Set("w", 1e-6);
-            ckt.Objects["M1"].Parameters.Set("l", 1e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("w", 1e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("l", 1e-6);
 
             // Create simulation
             DC dc = new DC("dc", new Sweep[] {
@@ -99,9 +99,9 @@ namespace SpiceSharpTest.Models.Transistors
                 CreateMOS3("M1", "out", "g", "vdd", "vdd",
                     "DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
                 );
-            ckt.Objects["Vin"].Parameters.Set("acmag", 1.0);
-            ckt.Objects["M1"].Parameters.Set("w", 1e-6);
-            ckt.Objects["M1"].Parameters.Set("l", 1e-6);
+            ckt.Objects["Vin"].Parameters.SetProperty("acmag", 1.0);
+            ckt.Objects["M1"].Parameters.SetProperty("w", 1e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("l", 1e-6);
 
             // Create simulation
             AC ac = new AC("ac", "dec", 5, 10, 10e9);
@@ -138,8 +138,8 @@ namespace SpiceSharpTest.Models.Transistors
                 CreateMOS3("M1", "out", "in", "vdd", "vdd",
                     "DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
                 );
-            ckt.Objects["M1"].Parameters.Set("w", 1e-6);
-            ckt.Objects["M1"].Parameters.Set("l", 1e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("w", 1e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("l", 1e-6);
 
             // Create simulation
             Transient tran = new Transient("tran", 1e-9, 10e-6);

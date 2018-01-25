@@ -46,7 +46,7 @@ namespace SpiceSharp.Components
             Priority = -1;
 
             // Add parameters
-            Parameters.Register(new BaseParameters());
+            Parameters.Set(new BaseParameters());
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components
             Priority = -1;
 
             // Add parameters
-            Parameters.Register(new BaseParameters());
+            Parameters.Set(new BaseParameters());
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));

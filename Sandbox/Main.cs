@@ -30,8 +30,8 @@ namespace Sandbox
                 new Voltagesource("Vsupply", "vdd", "0", 1.8),
                 new Voltagesource("V1", "in", "0", new Pulse(0, 1.8, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6))
                 );
-            ckt.Objects["M1"].Parameters.Set("w", 1e-6);
-            ckt.Objects["M1"].Parameters.Set("l", 1e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("w", 1e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("l", 1e-6);
 
             // Create simulation
             Transient tran = new Transient("tran", 1e-9, 10e-6);
@@ -114,7 +114,7 @@ namespace Sandbox
                 double value = double.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
 
                 // Set the entity parameter
-                entity.Parameters.Set(name, value);
+                entity.Parameters.SetProperty(name, value);
             }
         }
     }

@@ -41,7 +41,7 @@ namespace SpiceSharp.Simulations
         public BaseSimulation(Identifier name)
             : base(name)
         {
-            Parameters.Register(new BaseConfiguration());
+            Parameters.Set(new BaseConfiguration());
         }
 
         /// <summary>

@@ -16,8 +16,8 @@ namespace SpiceSharp.Components
         public DiodeModel(Identifier name) : base(name)
         {
             // Add parameters
-            Parameters.Register(new ModelBaseParameters());
-            Parameters.Register(new ModelNoiseParameters());
+            Parameters.Set(new ModelBaseParameters());
+            Parameters.Set(new ModelNoiseParameters());
 
             // Add factories
             AddFactory(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));

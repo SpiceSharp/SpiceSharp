@@ -40,7 +40,7 @@ namespace SpiceSharp.Components
             : base(name, CCVSpinCount)
         {
             // Add parameters
-            Parameters.Register(new BaseParameters());
+            Parameters.Set(new BaseParameters());
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -59,7 +59,7 @@ namespace SpiceSharp.Components
             : base(name, CCVSpinCount)
         {
             // Add parameters
-            Parameters.Register(new BaseParameters(gain));
+            Parameters.Set(new BaseParameters(gain));
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));

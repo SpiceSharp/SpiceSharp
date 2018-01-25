@@ -31,8 +31,8 @@ namespace SpiceSharp.Components
         public Voltagesource(Identifier name) : base(name, VSRCpinCount)
         {
             // Register parameters
-            Parameters.Register(new BaseParameters());
-            Parameters.Register(new AcParameters());
+            Parameters.Set(new BaseParameters());
+            Parameters.Set(new AcParameters());
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -51,8 +51,8 @@ namespace SpiceSharp.Components
             : base(name, VSRCpinCount)
         {
             // Register parameters
-            Parameters.Register(new BaseParameters(dc));
-            Parameters.Register(new AcParameters());
+            Parameters.Set(new BaseParameters(dc));
+            Parameters.Set(new AcParameters());
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -74,8 +74,8 @@ namespace SpiceSharp.Components
             : base(name, VSRCpinCount)
         {
             // Register parameters
-            Parameters.Register(new BaseParameters(w));
-            Parameters.Register(new AcParameters());
+            Parameters.Set(new BaseParameters(w));
+            Parameters.Set(new AcParameters());
 
             // Register factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));

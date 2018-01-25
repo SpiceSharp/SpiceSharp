@@ -56,8 +56,8 @@ namespace SpiceSharpTest.Models.Transistors
                 CreateMOS2("M1", "out", "in", "0", "0",
                     "NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9")
                 );
-            ckt.Objects["M1"].Parameters.Set("l", 6e-6);
-            ckt.Objects["M1"].Parameters.Set("w", 1e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("l", 6e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("w", 1e-6);
 
             // Create simulation
             DC dc = new DC("dc", new Sweep[] {
@@ -98,9 +98,9 @@ namespace SpiceSharpTest.Models.Transistors
                 CreateMOS2("M1", "out", "g", "0", "0",
                     "NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9")
                 );
-            ckt.Objects["V1"].Parameters.Set("acmag", 1.0);
-            ckt.Objects["M1"].Parameters.Set("l", 6e-6);
-            ckt.Objects["M1"].Parameters.Set("w", 1e-6);
+            ckt.Objects["V1"].Parameters.SetProperty("acmag", 1.0);
+            ckt.Objects["M1"].Parameters.SetProperty("l", 6e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("w", 1e-6);
 
             // Create simulation
             AC ac = new AC("ac", "dec", 5, 10, 10e9);
@@ -141,8 +141,8 @@ namespace SpiceSharpTest.Models.Transistors
                 CreateMOS2("M1", "out", "in", "0", "0",
                     "NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9")
                 );
-            ckt.Objects["M1"].Parameters.Set("l", 6e-6);
-            ckt.Objects["M1"].Parameters.Set("w", 1e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("l", 6e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("w", 1e-6);
 
             // Create simulation
             Transient tran = new Transient("tran", 1e-9, 10e-6);
@@ -178,9 +178,9 @@ namespace SpiceSharpTest.Models.Transistors
                 CreateMOS2("M1", "out", "g", "0", "0",
                     "NFET", "VTO = -1.44 KP = 8.64E-6 NSUB = 1e17 TOX = 20e-9 KF = 0.5e-25")
                 );
-            ckt.Objects["V1"].Parameters.Set("acmag", 1.0);
-            ckt.Objects["M1"].Parameters.Set("l", 6e-6);
-            ckt.Objects["M1"].Parameters.Set("w", 1e-6);
+            ckt.Objects["V1"].Parameters.SetProperty("acmag", 1.0);
+            ckt.Objects["M1"].Parameters.SetProperty("l", 6e-6);
+            ckt.Objects["M1"].Parameters.SetProperty("w", 1e-6);
 
             // Create simulation
             Noise noise = new Noise("noise", "out", "V1", "dec", 10, 10.0, 10.0e9);

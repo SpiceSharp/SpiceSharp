@@ -49,7 +49,7 @@ namespace SpiceSharp.Simulations
             var config = new DCConfiguration();
             Sweep s = new Sweep(source, start, stop, step);
             config.Sweeps.Add(s);
-            Parameters.Register(config);
+            Parameters.Set(config);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SpiceSharp.Simulations
             var dcconfig = new DCConfiguration();
             foreach (var sweep in sweeps)
                 dcconfig.Sweeps.Add(sweep);
-            Parameters.Register(dcconfig);
+            Parameters.Set(dcconfig);
         }
 
         /// <summary>

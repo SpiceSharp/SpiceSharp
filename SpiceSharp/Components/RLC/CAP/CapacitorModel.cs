@@ -15,7 +15,7 @@ namespace SpiceSharp.Components
         public CapacitorModel(Identifier name) : base(name)
         {
             // Register parameters
-            Parameters.Register(new ModelBaseParameters());
+            Parameters.Set(new ModelBaseParameters());
         }
     }
 }

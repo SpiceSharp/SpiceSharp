@@ -110,7 +110,7 @@ namespace SpiceSharpTest.Models.Bipolar
                     "FC = 0.533878 CJS = 0 VJS = 0.75 MJS = 0.5",
                     "TR = 2.73328e-08 PTF = 0 KF = 0 AF = 1"))
                 );
-            ckt.Objects["V1"].Parameters.Set("acmag", 1.0);
+            ckt.Objects["V1"].Parameters.SetProperty("acmag", 1.0);
 
             // Create simulation
             AC ac = new AC("ac", "dec", 5, 10, 10.0e9);

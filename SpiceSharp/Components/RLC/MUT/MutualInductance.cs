@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
             Priority = -1;
 
             // Add parameters
-            Parameters.Register(new BaseParameters());
+            Parameters.Set(new BaseParameters());
 
             // Add factories
             AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
@@ -56,7 +56,7 @@ namespace SpiceSharp.Components
             Priority = -1;
 
             // Add parameters
-            Parameters.Register(new BaseParameters(coupling));
+            Parameters.Set(new BaseParameters(coupling));
 
             // Add factories
             AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));

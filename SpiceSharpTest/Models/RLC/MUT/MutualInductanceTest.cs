@@ -35,7 +35,7 @@ namespace SpiceSharpTest.Models.MUT
                 new MutualInductance("M1", "L1", "L2", k)
                 );
             ckt.Nodes.IC["1"] = 0;
-            ckt.Objects["L1"].Parameters.Set("ic", 0);
+            ckt.Objects["L1"].Parameters.SetProperty("ic", 0);
 
             // Create simulation
             Transient tran = new Transient("tran", 1e-9, 1e-4, 1e-6);
@@ -84,7 +84,7 @@ namespace SpiceSharpTest.Models.MUT
                 new Resistor("R2", "OUT", "0", r2),
                 new MutualInductance("M1", "L1", "L2", k)
                 );
-            ckt.Objects["V1"].Parameters.Set("acmag", 1.0);
+            ckt.Objects["V1"].Parameters.SetProperty("acmag", 1.0);
 
             // Create simulation
             AC ac = new AC("ac", "dec", 10, 1, 1.0e8);
