@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="Attributes\ConnectedAttribute.cs" />
     <Compile Include="Attributes\IndependentSource.cs" />
-    <Compile Include="Attributes\VoltageDriver.cs" />
+    <Compile Include="Attributes\VoltageDriverAttribute.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\Currentsources\CCCS\BaseParameters.cs" />
     <Compile Include="Components\Currentsources\ISRC\AcParameters.cs" />
@@ -198,7 +198,7 @@
     <Compile Include="Components\Semiconductors\MOS\Level3\MOS3.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level3\MOS3Model.cs" />
     <Compile Include="Components\Semiconductors\MOS\Transistor.cs" />
-    <Compile Include="Attributes\SpicePins.cs" />
+    <Compile Include="Attributes\PinsAttribute.cs" />
     <Compile Include="Simulations\Base\TimeSimulation.cs" />
     <Compile Include="Simulations\IntegrationMethods\IntegrationConfiguration.cs" />
     <Compile Include="Components\RLC\IND\Inductor.cs" />
@@ -219,8 +219,8 @@
     <Compile Include="Diagnostics\BadParameterException.cs" />
     <Compile Include="Simulations\IntegrationMethods\Breakpoints.cs" />
     <Compile Include="Simulations\IntegrationMethods\Trapezoidal.cs" />
-    <Compile Include="Attributes\SpiceInfo.cs" />
-    <Compile Include="Attributes\SpiceName.cs" />
+    <Compile Include="Attributes\InfoAttribute.cs" />
+    <Compile Include="Attributes\NameAttribute.cs" />
     <Compile Include="Circuits\Entities.cs" />
     <Compile Include="Circuits\Circuit.cs" />
     <Compile Include="Circuits\Node.cs" />
