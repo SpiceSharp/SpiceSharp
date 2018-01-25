@@ -247,7 +247,7 @@ namespace SpiceSharp.Simulations
 
             state.Matrix.SolveTransposed(state.Rhs, state.iRhs);
 
-            state.StoreSolution(true);
+            state.StoreComplexSolution();
 
             state.Solution[0] = 0.0;
             state.iSolution[0] = 0.0;

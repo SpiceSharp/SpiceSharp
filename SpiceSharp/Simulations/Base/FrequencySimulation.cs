@@ -130,7 +130,7 @@ namespace SpiceSharp.Simulations
             state.iSolution[0] = 0.0;
 
             // Store them in the solution
-            state.StoreSolution(true);
+            state.StoreComplexSolution();
         }
 
         /// <summary>
@@ -170,16 +170,26 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Create an export method for this type of simulation 
         /// </summary>
-        /// <param name="pos">Positive voltage</param>
-        /// <param name="neg">Negative voltage</param>
+        /// <param name="pos">Positive node</param>
+        /// <param name="neg">Negative node</param>
         /// <returns></returns>
-        public virtual Func<State, Complex> CreateAcVoltageExport(Identifier pos, Identifier neg = null)
+        public virtual Func<State, Complex> CreateAcVoltageExport(Identifier pos, Identifier neg)
         {
             int node = Circuit.Nodes[pos].Index;
             if (neg == null)
                 return (State state) => new Complex(state.Solution[node], state.iSolution[node]);
             int refnode = Circuit.Nodes[neg].Index;
             return (State state) => new Complex(state.Solution[node] - state.Solution[refnode], state.iSolution[node] - state.iSolution[refnode]);
+        }
+
+        /// <summary>
+        /// Create an export method for this type of simulation
+        /// </summary>
+        /// <param name="pos">Positive node</param>
+        /// <returns></returns>
+        public virtual Func<State, Complex> CreateAcVoltageExport(Identifier pos)
+        {
+            return CreateAcVoltageExport(pos, null);
         }
     }
 }

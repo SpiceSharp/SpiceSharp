@@ -11,7 +11,7 @@ namespace SpiceSharp.Behaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public AcceptBehavior(Identifier name = null) : base(name) { }
+        public AcceptBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Accept the current timepoint

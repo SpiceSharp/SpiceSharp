@@ -69,14 +69,14 @@ namespace SpiceSharp.Behaviors.VSRC
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            var ap = provider.GetParameters<AcParameters>();
+            var ap = provider.GetParameterSet<AcParameters>(0);
 
             // Calculate AC vector
             double radians = ap.VSRCacPhase * Math.PI / 180.0;
             VSRCac = new Complex(ap.VSRCacMag * Math.Cos(radians), ap.VSRCacMag * Math.Sin(radians));
 
             // Get behaviors
-            var load = provider.GetBehavior<LoadBehavior>();
+            var load = provider.GetBehavior<LoadBehavior>(0);
             VSRCbranch = load.VSRCbranch;
         }
         

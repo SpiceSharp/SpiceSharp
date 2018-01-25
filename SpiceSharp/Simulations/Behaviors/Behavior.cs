@@ -27,7 +27,7 @@ namespace SpiceSharp.Behaviors
         /// NOTE: remove default later
         /// </summary>
         /// <param name="name">Name of the behavior</param>
-        public Behavior(Identifier name = null)
+        public Behavior(Identifier name)
         {
             Name = name;
         }
@@ -132,18 +132,6 @@ namespace SpiceSharp.Behaviors
 
             // Not found
             return null;
-        }
-
-        /// <summary>
-        /// Helper function for binding an extra equation in a circuit
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="type">The type</param>
-        /// <returns></returns>
-        protected Node CreateNode(Circuit ckt, Identifier name, Node.NodeType type = Node.NodeType.Voltage)
-        {
-            // Map the extra equations
-            return ckt.Nodes.Create(name, type);
         }
     }
 }

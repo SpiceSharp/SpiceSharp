@@ -39,15 +39,15 @@
         /// <summary>
         /// Get a value of the state variable in history
         /// </summary>
-        /// <param name="history">Number of points to go back in history (last point by default)</param>
+        /// <param name="history">Number of points to go back in history</param>
         /// <returns></returns>
-        public double GetPreviousValue(int history = 1) => source.GetPreviousValue(index, history);
+        public double GetPreviousValue(int history) => source.GetPreviousValue(index, history);
 
         /// <summary>
         /// Get the timestep (in history)
         /// </summary>
-        /// <param name="history">Number of steps to go back in history (current timestep by default)</param>
+        /// <param name="history">Number of steps to go back in history</param>
         /// <returns></returns>
-        public double GetTimestep(int history = 0) => source.GetTimestep(history);
+        public double GetTimestep(int history) => source.GetTimestep(history);
     }
 }

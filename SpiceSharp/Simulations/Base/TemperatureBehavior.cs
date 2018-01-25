@@ -12,7 +12,7 @@ namespace SpiceSharp.Behaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the behavior</param>
-        public TemperatureBehavior(Identifier name = null) : base(name)
+        public TemperatureBehavior(Identifier name) : base(name)
         {
         }
 

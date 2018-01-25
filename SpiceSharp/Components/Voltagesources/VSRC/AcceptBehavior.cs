@@ -26,7 +26,7 @@ namespace SpiceSharp.Behaviors.VSRC
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            bp = provider.GetParameters<BaseParameters>();
+            bp = provider.GetParameterSet<BaseParameters>(0);
         }
 
         /// <summary>

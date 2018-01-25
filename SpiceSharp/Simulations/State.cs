@@ -252,22 +252,28 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Store the solution stored in Rhs
+        /// Store the solution
         /// </summary>
-        /// <param name="imaginary"></param>
-        public void StoreSolution(bool imaginary = false)
+        public void StoreSolution()
         {
             var tmp = Rhs;
             Rhs = OldSolution;
             OldSolution = Solution;
             Solution = tmp;
+        }
 
-            if (imaginary)
-            {
-                tmp = iRhs;
-                iRhs = iSolution;
-                iSolution = tmp;
-            }
+        /// <summary>
+        /// Store the solution
+        /// </summary>
+        public void StoreComplexSolution()
+        {
+            var tmp = Rhs;
+            Rhs = OldSolution;
+            OldSolution = Solution;
+            Solution = tmp;
+            tmp = iRhs;
+            iRhs = iSolution;
+            iSolution = tmp;
         }
 
         /// <summary>

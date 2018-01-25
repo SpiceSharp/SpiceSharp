@@ -20,7 +20,15 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Constructor
         /// </summary>
-        public Trapezoidal(IntegrationConfiguration config = null)
+        public Trapezoidal()
+            : base(new IntegrationConfiguration(), 2)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public Trapezoidal(IntegrationConfiguration config)
             : base(config, 2)
         {
         }

@@ -37,7 +37,7 @@ namespace SpiceSharp.Behaviors.VSW
         public override void Setup(SetupDataProvider provider)
         {
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>();
+            load = provider.GetBehavior<LoadBehavior>(0);
             modelload = provider.GetBehavior<ModelLoadBehavior>(1);
         }
 

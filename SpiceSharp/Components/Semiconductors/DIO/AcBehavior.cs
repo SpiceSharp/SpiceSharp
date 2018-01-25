@@ -51,12 +51,12 @@ namespace SpiceSharp.Behaviors.DIO
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            bp = provider.GetParameters<BaseParameters>();
-            mbp = provider.GetParameters<ModelBaseParameters>(1);
+            bp = provider.GetParameterSet<BaseParameters>(0);
+            mbp = provider.GetParameterSet<ModelBaseParameters>(1);
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>();
-            temp = provider.GetBehavior<TemperatureBehavior>();
+            load = provider.GetBehavior<LoadBehavior>(0);
+            temp = provider.GetBehavior<TemperatureBehavior>(0);
             modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
         }
         

@@ -69,7 +69,7 @@ namespace SpiceSharp.Behaviors.CCCS
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            bp = provider.GetParameters<BaseParameters>();
+            bp = provider.GetParameterSet<BaseParameters>(0);
 
             // Get behaviors (0 = CCCS behaviors, 1 = VSRC behaviors)
             vsrcload = provider.GetBehavior<VSRC.LoadBehavior>(1);

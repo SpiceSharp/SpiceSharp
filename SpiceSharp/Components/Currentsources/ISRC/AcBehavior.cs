@@ -74,7 +74,7 @@ namespace SpiceSharp.Behaviors.ISRC
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            ap = provider.GetParameters<AcParameters>();
+            ap = provider.GetParameterSet<AcParameters>(0);
 
             // Calculate the AC vector
             double radians = ap.ISRCacPhase * Math.PI / 180.0;

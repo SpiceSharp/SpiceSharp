@@ -34,7 +34,7 @@
         /// </summary>
         /// <param name="dqdv">Derivative of the state variable w.r.t. the unknown variable</param>
         /// <returns></returns>
-        public double Jacobian(double dqdv = 1.0)
+        public double Jacobian(double dqdv)
         {
             return dqdv * source.Method.Slope;
         }

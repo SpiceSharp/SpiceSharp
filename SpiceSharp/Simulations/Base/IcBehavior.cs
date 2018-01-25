@@ -11,7 +11,7 @@ namespace SpiceSharp.Behaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public IcBehavior(Identifier name = null) : base(name) { }
+        public IcBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Set the initial conditions

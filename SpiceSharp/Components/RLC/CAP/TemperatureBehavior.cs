@@ -29,9 +29,9 @@ namespace SpiceSharp.Behaviors.CAP
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            bp = provider.GetParameters<BaseParameters>();
+            bp = provider.GetParameterSet<BaseParameters>(0);
             if (!bp.CAPcapac.Given)
-                mbp = provider.GetParameters<ModelBaseParameters>(1);
+                mbp = provider.GetParameterSet<ModelBaseParameters>(1);
         }
 
         /// <summary>

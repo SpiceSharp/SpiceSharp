@@ -75,12 +75,12 @@ namespace SpiceSharp.Behaviors.RES
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            var p = provider.GetParameters<BaseParameters>();
+            var p = provider.GetParameterSet<BaseParameters>(0);
 
             // Depending on whether or not the resistance is given, get behaviors
             if (!p.RESresist.Given)
             {
-                var temp = provider.GetBehavior<TemperatureBehavior>();
+                var temp = provider.GetBehavior<TemperatureBehavior>(0);
                 RESconduct = temp.RESconduct;
             }
             else

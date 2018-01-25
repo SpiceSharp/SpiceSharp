@@ -55,7 +55,7 @@ namespace SpiceSharp.Behaviors.Bipolar
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            mbp = provider.GetParameters<ModelBaseParameters>(1);
+            mbp = provider.GetParameterSet<ModelBaseParameters>(1);
 
             // Get behaviors
             modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);

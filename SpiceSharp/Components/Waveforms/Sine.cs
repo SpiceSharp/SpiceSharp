@@ -38,20 +38,31 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="vo">The offset of the sine wave</param>
-        /// <param name="va">The amplitude of the sine wave</param>
-        /// <param name="freq">The frequency in Hz</param>
-        /// <param name="td">The delay in seconds</param>
-        /// <param name="theta">The damping factor</param>
-        public Sine(double vo, double va, double freq, double td = double.NaN, double theta = double.NaN) : base()
+        /// <param name="vo">Offset</param>
+        /// <param name="va">Amplitude</param>
+        /// <param name="freq">Frequency (Hz)</param>
+        /// <param name="td">Delay (s)</param>
+        /// <param name="theta">Damping factor</param>
+        public Sine(double vo, double va, double freq, double td, double theta)
         {
             VO.Set(vo);
             VA.Set(va);
             Freq.Set(freq);
-            if (!double.IsNaN(td))
-                Delay.Set(td);
-            if (!double.IsNaN(theta))
-                Theta.Set(theta);
+            Delay.Set(td);
+            Theta.Set(theta);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="vo">Offset</param>
+        /// <param name="va">Amplitude</param>
+        /// <param name="freq">Frequency (Hz)</param>
+        public Sine(double vo, double va, double freq)
+        {
+            VO.Set(vo);
+            VA.Set(va);
+            Freq.Set(freq);
         }
 
         /// <summary>

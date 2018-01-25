@@ -66,7 +66,7 @@
         /// <param name="index">Index</param>
         /// <param name="history">Number of points to go back in time</param>
         /// <returns></returns>
-        public double GetPreviousValue(int index, int history = 1)
+        public double GetPreviousValue(int index, int history)
         {
             HistoryPoint hp = First;
             for (int i = 0; i < history; i++)
@@ -79,7 +79,7 @@
         /// </summary>
         /// <param name="history">The number of timesteps to go back in history (current timestep by default)</param>
         /// <returns></returns>
-        public double GetTimestep(int history = 0) => Method.DeltaOld[history];
+        public double GetTimestep(int history) => Method.DeltaOld[history];
 
         /// <summary>
         /// Create a state that can be differentiated

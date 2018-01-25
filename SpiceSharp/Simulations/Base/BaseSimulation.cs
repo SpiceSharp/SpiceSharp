@@ -557,18 +557,28 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Create an export method for this type of simulation 
+        /// Create an export method
         /// </summary>
-        /// <param name="pos">Positive voltage</param>
-        /// <param name="neg">Negative voltage</param>
+        /// <param name="pos">Positive node</param>
+        /// <param name="neg">Negative node</param>
         /// <returns></returns>
-        public virtual Func<State, double> CreateVoltageExport(Identifier pos, Identifier neg = null)
+        public virtual Func<State, double> CreateVoltageExport(Identifier pos, Identifier neg)
         {
             int node = Circuit.Nodes[pos].Index;
             if (neg == null)   
                 return (State state) => state.Solution[node];
             int refnode = Circuit.Nodes[neg].Index;
             return (State state) => state.Solution[node] - state.Solution[refnode];
+        }
+
+        /// <summary>
+        /// Create an export method
+        /// </summary>
+        /// <param name="pos">Positive node</param>
+        /// <returns></returns>
+        public virtual Func<State, double> CreateVoltageExport(Identifier pos)
+        {
+            return CreateVoltageExport(pos, null);
         }
     }
 }

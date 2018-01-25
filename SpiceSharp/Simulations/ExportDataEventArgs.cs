@@ -22,7 +22,19 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
-        public ExportDataEventArgs(State state, IntegrationMethod method = null)
+        /// <param name="state">State</param>
+        public ExportDataEventArgs(State state)
+        {
+            State = state;
+            Method = null;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="state">State</param>
+        /// <param name="method">Method</param>
+        public ExportDataEventArgs(State state, IntegrationMethod method)
         {
             State = state;
             Method = method;

@@ -70,7 +70,7 @@ namespace SpiceSharp.Behaviors.RES
         public override void Setup(SetupDataProvider provider)
         {
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>();
+            load = provider.GetBehavior<LoadBehavior>(0);
         }
         
         /// <summary>

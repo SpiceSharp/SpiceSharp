@@ -42,9 +42,9 @@ namespace SpiceSharp.Behaviors.MUT
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            bp = provider.GetParameters<BaseParameters>();
-            var bp1 = provider.GetParameters<Components.IND.BaseParameters>(1);
-            var bp2 = provider.GetParameters<Components.IND.BaseParameters>(2);
+            bp = provider.GetParameterSet<BaseParameters>(0);
+            var bp1 = provider.GetParameterSet<Components.IND.BaseParameters>(1);
+            var bp2 = provider.GetParameterSet<Components.IND.BaseParameters>(2);
 
             // Get behaviors
             load1 = provider.GetBehavior<IND.LoadBehavior>(1);

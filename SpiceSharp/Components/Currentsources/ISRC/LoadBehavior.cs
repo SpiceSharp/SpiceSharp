@@ -65,7 +65,7 @@ namespace SpiceSharp.Behaviors.ISRC
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            bp = provider.GetParameters<BaseParameters>();
+            bp = provider.GetParameterSet<BaseParameters>(0);
 
             // Give some warnings if no value is given
             if (!bp.ISRCdcValue.Given)

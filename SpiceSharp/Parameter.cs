@@ -21,8 +21,17 @@ namespace SpiceSharp
         /// <summary>
         /// Constructor
         /// </summary>
+        public Parameter()
+        {
+            Value = 0.0;
+            Given = false;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         /// <param name="defvalue">The default value</param>
-        public Parameter(double defvalue = 0.0)
+        public Parameter(double defvalue)
         {
             Value = defvalue;
             Given = false;
