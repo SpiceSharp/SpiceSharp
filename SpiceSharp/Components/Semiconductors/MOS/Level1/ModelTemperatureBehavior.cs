@@ -23,7 +23,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         public double vtnom { get; protected set; }
         public double egfet1 { get; protected set; }
         public double pbfact1 { get; protected set; }
-        public double MOS1oxideCapFactor { get; internal set; }
+        public double MOS1oxideCapFactor { get; protected set; }
 
         /// <summary>
         /// Constructor

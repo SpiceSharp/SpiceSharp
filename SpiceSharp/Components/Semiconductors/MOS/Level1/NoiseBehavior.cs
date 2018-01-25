@@ -110,11 +110,10 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             var noise = sim.NoiseState;
 
             double coxSquared;
-            // TODO: Avoid == 0
-            if (modeltemp.MOS1oxideCapFactor == 0.0)
-                coxSquared = 3.9 * 8.854214871e-12 / 1e-7;
-            else
+            if (modeltemp.MOS1oxideCapFactor > 0.0)
                 coxSquared = modeltemp.MOS1oxideCapFactor;
+            else
+                coxSquared = 3.9 * 8.854214871e-12 / 1e-7;
             coxSquared *= coxSquared;
 
             // Set noise parameters

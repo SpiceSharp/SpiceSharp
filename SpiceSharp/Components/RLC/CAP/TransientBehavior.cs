@@ -30,7 +30,13 @@ namespace SpiceSharp.Behaviors.CAP
 
             return CAPqcap.Derivative * (state.Solution[CAPposNode] - state.Solution[CAPnegNode]);
         }
-        // TODO: Add voltage property
+        [PropertyName("v"), PropertyInfo("Voltage")]
+        public double GetVoltage(State state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            return state.Solution[CAPposNode] - state.Solution[CAPnegNode];
+        }
 
         /// <summary>
         /// Nodes and states
@@ -47,22 +53,6 @@ namespace SpiceSharp.Behaviors.CAP
         /// </summary>
         /// <param name="name">Name of the behavior</param>
         public TransientBehavior(Identifier name) : base(name) { }
-
-        /// <summary>
-        /// Create export method
-        /// </summary>
-        /// <param name="property">Property</param>
-        /// <returns></returns>
-        public override Func<State, double> CreateExport(string property)
-        {
-            switch (property)
-            {
-                case "v": return (State state) => state.Solution[CAPposNode] - state.Solution[CAPnegNode];
-                case "c":
-                case "i": return (State state) => CAPqcap.Derivative;
-                default: return null;
-            }
-        }
 
         /// <summary>
         /// Setup behavior

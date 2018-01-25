@@ -137,15 +137,14 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
-            // TODO: Avoid == 0
             // Add series drain node if necessary
-            if (mbp.MOS1drainResistance != 0 || (mbp.MOS1sheetResistance != 0 && bp.MOS1drainSquares != 0))
+            if (mbp.MOS1drainResistance > 0 || (mbp.MOS1sheetResistance > 0 && bp.MOS1drainSquares > 0))
                 MOS1dNodePrime = nodes.Create(Name.Grow("#drain")).Index;
             else
                 MOS1dNodePrime = MOS1dNode;
 
             // Add series source node if necessary
-            if (mbp.MOS1sourceResistance != 0 || (mbp.MOS1sheetResistance != 0 && bp.MOS1sourceSquares != 0))
+            if (mbp.MOS1sourceResistance > 0 || (mbp.MOS1sheetResistance > 0 && bp.MOS1sourceSquares > 0))
                 MOS1sNodePrime = nodes.Create(Name.Grow("#source")).Index;
             else
                 MOS1sNodePrime = MOS1sNode;

@@ -141,24 +141,23 @@ namespace SpiceSharp.Behaviors.Bipolar
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
-            // TODO: Replace == 0 with > 0
             // Add a series collector node if necessary
-            if (mbp.BJTcollectorResist.Value == 0)
-                BJTcolPrimeNode = BJTcolNode;
-            else if (BJTcolPrimeNode == 0)
+            if (mbp.BJTcollectorResist.Value > 0)
                 BJTcolPrimeNode = nodes.Create(Name.Grow("#col")).Index;
+            else
+                BJTcolPrimeNode = BJTcolNode;
 
             // Add a series base node if necessary
-            if (mbp.BJTbaseResist.Value == 0)
-                BJTbasePrimeNode = BJTbaseNode;
-            else if (BJTbasePrimeNode == 0)
+            if (mbp.BJTbaseResist.Value > 0)
                 BJTbasePrimeNode = nodes.Create(Name.Grow("#base")).Index;
+            else
+                BJTbasePrimeNode = BJTbaseNode;
 
             // Add a series emitter node if necessary
-            if (mbp.BJTemitterResist.Value == 0)
-                BJTemitPrimeNode = BJTemitNode;
-            else if (BJTemitPrimeNode == 0)
+            if (mbp.BJTemitterResist.Value > 0)
                 BJTemitPrimeNode = nodes.Create(Name.Grow("#emit")).Index;
+            else
+                BJTemitPrimeNode = BJTemitNode;
 
             // Get matrix pointers
             BJTcolColPrimePtr = matrix.GetElement(BJTcolNode, BJTcolPrimeNode);
