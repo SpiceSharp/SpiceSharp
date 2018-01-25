@@ -31,22 +31,7 @@ namespace SpiceSharp.Behaviors
         {
             Name = name;
         }
-
-        /// <summary>
-        /// Get a behavior of a specific type
-        /// </summary>
-        /// <typeparam name="T">The circuit behavior we want to ask</typeparam>
-        /// <param name="co">The circuit object with the behaviors</param>
-        /// <returns></returns>
-        protected T GetBehavior<T>(Entity co) where T : Behavior
-        {
-            // Get base class
-            var behavior = co.GetBehavior(typeof(T).BaseType) as T;
-            if (behavior == null)
-                throw new CircuitException($"{co.Name}: Could not find behavior \"{typeof(T).Name}\"");
-            return behavior;
-        }
-
+        
         /// <summary>
         /// Setup the behavior
         /// </summary>

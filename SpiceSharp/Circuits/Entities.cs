@@ -14,13 +14,13 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        private Dictionary<Identifier, Entity> objects = new Dictionary<Identifier, Entity>();
-        private List<Entity> ordered = new List<Entity>();
+        Dictionary<Identifier, Entity> objects = new Dictionary<Identifier, Entity>();
+        List<Entity> ordered = new List<Entity>();
 
         /// <summary>
         /// Gets whether or not the list is already ordered
         /// </summary>
-        private bool isordered = false;
+        bool isordered = false;
 
         /// <summary>
         /// Constructor
