@@ -60,11 +60,18 @@ namespace SpiceSharp.Behaviors.DIO
             load = provider.GetBehavior<LoadBehavior>();
             modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
         }
-        
+
         /// <summary>
         /// Connect the noise source
         /// </summary>
-        public override void ConnectNoise() => DIOnoise.Setup(DIOposNode, DIOposPrimeNode, DIOnegNode);
+        public override void ConnectNoise()
+        {
+            // Get extra equations
+            DIOposPrimeNode = load.DIOposPrimeNode;
+
+            // Connect noise sources
+            DIOnoise.Setup(DIOposNode, DIOposPrimeNode, DIOnegNode);
+        }
         
         /// <summary>
         /// Connect the behavior

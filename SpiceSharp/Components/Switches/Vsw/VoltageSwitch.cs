@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A voltage-controlled switch
     /// </summary>
-    [SpicePins("S+", "S-", "SC+", "SC-"), ConnectedPins(0, 1)]
+    [SpicePins("S+", "S-", "SC+", "SC-"), ConnectedAttribute(0, 1)]
     public class VoltageSwitch : Component
     {
         /// <summary>

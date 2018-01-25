@@ -134,7 +134,7 @@ namespace SpiceSharp.Circuits
                     if (attr is IndependentSource)
                         HasSource = true;
 
-                    if (attr is ConnectedPins conn)
+                    if (attr is ConnectedAttribute conn)
                     {
                         int[] tmp = new int[conn.Pins.Length];
                         for (int i = 0; i < conn.Pins.Length; i++)

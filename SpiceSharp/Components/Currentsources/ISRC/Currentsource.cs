@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// An independent current source
     /// </summary>
-    [SpicePins("I+", "I-"), IndependentSource, ConnectedPins()]
+    [SpicePins("I+", "I-"), IndependentSource, ConnectedAttribute()]
     public class Currentsource : Component
     {
         /// <summary>

@@ -36,6 +36,7 @@ namespace SpiceSharp.Behaviors.CSW
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
+            // Get parameters
             CSWonConduct = 1.0 / mbp.CSWon;
             CSWoffConduct = 1.0 / mbp.CSWoff;
         }

@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// A MOS1 Mosfet.
     /// Level 1, Shichman-Hodges.
     /// </summary>
-    [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
+    [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedAttribute(0, 2, 3)]
     public class MOS1 : Component
     {
         /// <summary>

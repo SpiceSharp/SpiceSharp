@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A capacitor
     /// </summary>
-    [SpicePins("C+", "C-"), ConnectedPins()]
+    [SpicePins("C+", "C-"), ConnectedAttribute()]
     public class Capacitor : Component
     {
         /// <summary>

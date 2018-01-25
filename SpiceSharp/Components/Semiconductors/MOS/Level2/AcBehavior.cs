@@ -164,7 +164,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         public override void InitializeParameters(FrequencySimulation sim)
         {
             var state = sim.State;
-            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, Beta,
+            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
                 OxideCap, vgs, vbs, vbd, vgb, vgd, von,
                 vdsat, sargsw;
 
