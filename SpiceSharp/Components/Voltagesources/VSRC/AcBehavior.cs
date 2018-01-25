@@ -35,16 +35,16 @@ namespace SpiceSharp.Behaviors.VSRC
         /// <summary>
         /// Properties
         /// </summary>
-        [SpiceName("v"), SpiceInfo("Complex voltage")]
+        [NameAttribute("v"), InfoAttribute("Complex voltage")]
         public Complex Voltage => VSRCac;
-        [SpiceName("i"), SpiceName("c"), SpiceInfo("Complex current")]
+        [NameAttribute("i"), NameAttribute("c"), InfoAttribute("Complex current")]
         public Complex GetCurrent(State state)
         {
             return new Complex(
                 state.Solution[VSRCbranch],
                 state.iSolution[VSRCbranch]);
         }
-        [SpiceName("p"), SpiceInfo("Complex power")]
+        [NameAttribute("p"), InfoAttribute("Complex power")]
         public Complex GetPower(State state)
         {
             Complex v = new Complex(

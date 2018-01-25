@@ -24,11 +24,11 @@ namespace SpiceSharp
             foreach (var property in properties)
             {
                 // Skip properties without a SpiceName attribute
-                if (!property.IsDefined(typeof(SpiceName), true))
+                if (!property.IsDefined(typeof(NameAttribute), true))
                     continue;
 
                 // Get the names
-                var names = property.GetCustomAttributes<SpiceName>();
+                var names = property.GetCustomAttributes<NameAttribute>();
 
                 // Create setter
                 Action<double> setter = null;
@@ -80,10 +80,10 @@ namespace SpiceSharp
         {
             // Get the property by name
             var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public)
-                .Where((MemberInfo mi) => mi.IsDefined(typeof(SpiceName)))
+                .Where((MemberInfo mi) => mi.IsDefined(typeof(NameAttribute)))
                 .Where((MemberInfo mi) =>
                 {
-                    foreach (var sn in mi.GetCustomAttributes<SpiceName>())
+                    foreach (var sn in mi.GetCustomAttributes<NameAttribute>())
                     {
                         if (sn.Name == name)
                             return true;
@@ -137,10 +137,10 @@ namespace SpiceSharp
         {
             // Get the property by name
             var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public)
-                .Where((MemberInfo mi) => mi.IsDefined(typeof(SpiceName)))
+                .Where((MemberInfo mi) => mi.IsDefined(typeof(NameAttribute)))
                 .Where((MemberInfo mi) =>
                 {
-                    foreach (var sn in mi.GetCustomAttributes<SpiceName>())
+                    foreach (var sn in mi.GetCustomAttributes<NameAttribute>())
                     {
                         if (sn.Name == name)
                             return true;

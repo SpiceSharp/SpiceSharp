@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// A MOS1 Mosfet.
     /// Level 1, Shichman-Hodges.
     /// </summary>
-    [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedAttribute(0, 2, 3)]
+    [PinsAttribute("Drain", "Gate", "Source", "Bulk"), ConnectedAttribute(0, 2, 3)]
     public class MOS1 : Component
     {
         /// <summary>
@@ -20,13 +20,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [SpiceName("dnode"), SpiceInfo("Number of the drain node ")]
+        [NameAttribute("dnode"), InfoAttribute("Number of the drain node ")]
         public int MOS1dNode { get; protected set; }
-        [SpiceName("gnode"), SpiceInfo("Number of the gate node ")]
+        [NameAttribute("gnode"), InfoAttribute("Number of the gate node ")]
         public int MOS1gNode { get; protected set; }
-        [SpiceName("snode"), SpiceInfo("Number of the source node ")]
+        [NameAttribute("snode"), InfoAttribute("Number of the source node ")]
         public int MOS1sNode { get; protected set; }
-        [SpiceName("bnode"), SpiceInfo("Number of the node ")]
+        [NameAttribute("bnode"), InfoAttribute("Number of the node ")]
         public int MOS1bNode { get; protected set; }
 
         /// <summary>

@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A voltage-controlled switch
     /// </summary>
-    [SpicePins("S+", "S-", "SC+", "SC-"), ConnectedAttribute(0, 1)]
+    [PinsAttribute("S+", "S-", "SC+", "SC-"), ConnectedAttribute(0, 1)]
     public class VoltageSwitch : Component
     {
         /// <summary>
@@ -19,13 +19,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [SpiceName("pos_node"), SpiceInfo("Positive node of the switch")]
+        [NameAttribute("pos_node"), InfoAttribute("Positive node of the switch")]
         public int VSWposNode { get; internal set; }
-        [SpiceName("neg_node"), SpiceInfo("Negative node of the switch")]
+        [NameAttribute("neg_node"), InfoAttribute("Negative node of the switch")]
         public int VSWnegNode { get; internal set; }
-        [SpiceName("cont_p_node"), SpiceInfo("Positive controlling node of the switch")]
+        [NameAttribute("cont_p_node"), InfoAttribute("Positive controlling node of the switch")]
         public int VSWcontPosNode { get; internal set; }
-        [SpiceName("cont_n_node"), SpiceInfo("Negative controlling node of the switch")]
+        [NameAttribute("cont_n_node"), InfoAttribute("Negative controlling node of the switch")]
         public int VSWcontNegNode { get; internal set; }
 
         /// <summary>

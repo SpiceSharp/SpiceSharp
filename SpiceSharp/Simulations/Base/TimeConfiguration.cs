@@ -16,25 +16,25 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the initial timepoint that should be exported
         /// </summary>
-        [SpiceName("init"), SpiceName("start"), SpiceInfo("The starting timepoint")]
+        [NameAttribute("init"), NameAttribute("start"), InfoAttribute("The starting timepoint")]
         public double InitTime { get; set; } = 0.0;
 
         /// <summary>
         /// Gets or sets the final simulation timepoint
         /// </summary>
-        [SpiceName("final"), SpiceName("stop"), SpiceInfo("The final timepoint")]
+        [NameAttribute("final"), NameAttribute("stop"), InfoAttribute("The final timepoint")]
         public double FinalTime { get; set; } = double.NaN;
 
         /// <summary>
         /// Gets or sets the step
         /// </summary>
-        [SpiceName("step"), SpiceInfo("The timestep")]
+        [NameAttribute("step"), InfoAttribute("The timestep")]
         public double Step { get; set; } = double.NaN;
 
         /// <summary>
         /// Gets or sets the maximum timestep
         /// </summary>
-        [SpiceName("maxstep"), SpiceInfo("The maximum allowed timestep")]
+        [NameAttribute("maxstep"), InfoAttribute("The maximum allowed timestep")]
         public double MaxStep
         {
             get
@@ -50,7 +50,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get the minimum timestep allowed
         /// </summary>
-        [SpiceName("deltamin"), SpiceInfo("The minimum delta for breakpoints")]
+        [NameAttribute("deltamin"), InfoAttribute("The minimum delta for breakpoints")]
         public double DeltaMin { get { return 1e-13 * MaxStep; } }
 
         /// <summary>

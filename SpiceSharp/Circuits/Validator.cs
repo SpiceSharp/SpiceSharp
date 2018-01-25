@@ -136,9 +136,9 @@ namespace SpiceSharp.Circuits
 
                     if (attr is ConnectedAttribute conn)
                     {
-                        int[] tmp = new int[conn.Pins.Length];
-                        for (int i = 0; i < conn.Pins.Length; i++)
-                            tmp[i] = nodes[conn.Pins[i]];
+                        int[] tmp = new int[conn.Count];
+                        for (int i = 0; i < conn.Count; i++)
+                            tmp[i] = nodes[conn[i]];
                         AddConnections(tmp);
                         hasconnections = true;
                     }

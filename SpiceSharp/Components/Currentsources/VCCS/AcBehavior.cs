@@ -30,21 +30,21 @@ namespace SpiceSharp.Behaviors.VCCS
         /// <summary>
         /// Properties
         /// </summary>
-        [SpiceName("v"), SpiceInfo("Complex voltage")]
+        [NameAttribute("v"), InfoAttribute("Complex voltage")]
         public Complex GetVoltage(State state)
         {
             return new Complex(
                 state.Solution[VCCSposNode] - state.Solution[VCCSnegNode],
                 state.iSolution[VCCSposNode] - state.iSolution[VCCSnegNode]);
         }
-        [SpiceName("c"), SpiceName("i"), SpiceInfo("Complex current")]
+        [NameAttribute("c"), NameAttribute("i"), InfoAttribute("Complex current")]
         public Complex GetCurrent(State state)
         {
             return new Complex(
                 state.Solution[VCCScontPosNode] - state.Solution[VCCScontNegNode],
                 state.iSolution[VCCScontPosNode] - state.iSolution[VCCScontNegNode]) * bp.VCCScoeff.Value;
         }
-        [SpiceName("p"), SpiceInfo("Power")]
+        [NameAttribute("p"), InfoAttribute("Power")]
         public Complex GetPower(State state)
         {
             Complex v = new Complex(

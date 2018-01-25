@@ -14,9 +14,9 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("inductor1"), SpiceInfo("First coupled inductor")]
+        [NameAttribute("inductor1"), InfoAttribute("First coupled inductor")]
         public Identifier MUTind1 { get; set; }
-        [SpiceName("inductor2"), SpiceInfo("Second coupled inductor")]
+        [NameAttribute("inductor2"), InfoAttribute("Second coupled inductor")]
         public Identifier MUTind2 { get; set; }
 
         /// <summary>

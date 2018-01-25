@@ -10,9 +10,9 @@ namespace SpiceSharp.Components.DIO
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("kf"), SpiceInfo("flicker noise coefficient")]
+        [NameAttribute("kf"), InfoAttribute("flicker noise coefficient")]
         public Parameter DIOfNcoef { get; } = new Parameter();
-        [SpiceName("af"), SpiceInfo("flicker noise exponent")]
+        [NameAttribute("af"), InfoAttribute("flicker noise exponent")]
         public Parameter DIOfNexp { get; } = new Parameter(1.0);
     }
 }

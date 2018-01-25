@@ -22,21 +22,21 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <summary>
         /// Shared parameters
         /// </summary>
-        [SpiceName("sourceconductance"), SpiceInfo("Source conductance")]
+        [NameAttribute("sourceconductance"), InfoAttribute("Source conductance")]
         public double MOS3sourceConductance { get; internal set; }
-        [SpiceName("drainconductance"), SpiceInfo("Drain conductance")]
+        [NameAttribute("drainconductance"), InfoAttribute("Drain conductance")]
         public double MOS3drainConductance { get; internal set; }
-        [SpiceName("sourcevcrit"), SpiceInfo("Critical source voltage")]
+        [NameAttribute("sourcevcrit"), InfoAttribute("Critical source voltage")]
         public double MOS3sourceVcrit { get; internal set; }
-        [SpiceName("drainvcrit"), SpiceInfo("Critical drain voltage")]
+        [NameAttribute("drainvcrit"), InfoAttribute("Critical drain voltage")]
         public double MOS3drainVcrit { get; internal set; }
-        [SpiceName("cbd0"), SpiceInfo("Zero-Bias B-D junction capacitance")]
+        [NameAttribute("cbd0"), InfoAttribute("Zero-Bias B-D junction capacitance")]
         public double MOS3Cbd { get; internal set; }
-        [SpiceName("cbdsw0"), SpiceInfo("Zero-Bias B-D sidewall capacitance")]
+        [NameAttribute("cbdsw0"), InfoAttribute("Zero-Bias B-D sidewall capacitance")]
         public double MOS3Cbdsw { get; internal set; }
-        [SpiceName("cbs0"), SpiceInfo("Zero-Bias B-S junction capacitance")]
+        [NameAttribute("cbs0"), InfoAttribute("Zero-Bias B-S junction capacitance")]
         public double MOS3Cbs { get; internal set; }
-        [SpiceName("cbssw0"), SpiceInfo("Zero-Bias B-S sidewall capacitance")]
+        [NameAttribute("cbssw0"), InfoAttribute("Zero-Bias B-S sidewall capacitance")]
         public double MOS3Cbssw { get; internal set; }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// </summary>
         /// <param name="ckt">Circuit</param>
         /// <returns></returns>
-        [SpiceName("rs"), SpiceInfo("Source resistance")]
+        [NameAttribute("rs"), InfoAttribute("Source resistance")]
         public double GetSOURCERESIST(Circuit ckt)
         {
             if (MOS3sourceConductance != 0.0)
@@ -52,7 +52,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
             else
                 return 0.0;
         }
-        [SpiceName("rd"), SpiceInfo("Drain resistance")]
+        [NameAttribute("rd"), InfoAttribute("Drain resistance")]
         public double GetDRAINRESIST(Circuit ckt)
         {
             if (MOS3drainConductance != 0.0)

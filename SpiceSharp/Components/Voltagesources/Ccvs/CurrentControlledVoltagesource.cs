@@ -9,17 +9,17 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A current-controlled voltage source
     /// </summary>
-    [SpicePins("H+", "H-"), VoltageDriver(0, 1)]
+    [PinsAttribute("H+", "H-"), VoltageDriver(0, 1)]
     public class CurrentControlledVoltagesource : Component
     {
         /// <summary>
         /// Nodes
         /// </summary>
-        [SpiceName("pos_node"), SpiceInfo("Positive node of the source")]
+        [NameAttribute("pos_node"), InfoAttribute("Positive node of the source")]
         public int CCVSposNode { get; internal set; }
-        [SpiceName("neg_node"), SpiceInfo("Negative node of the source")]
+        [NameAttribute("neg_node"), InfoAttribute("Negative node of the source")]
         public int CCVSnegNode { get; internal set; }
-        [SpiceName("control"), SpiceInfo("Controlling voltage source")]
+        [NameAttribute("control"), InfoAttribute("Controlling voltage source")]
         public Identifier CCVScontName { get; set; }
 
         /// <summary>

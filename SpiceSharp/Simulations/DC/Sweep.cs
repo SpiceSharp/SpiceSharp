@@ -12,25 +12,25 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Starting value
         /// </summary>
-        [SpiceName("start"), SpiceInfo("The starting value")]
+        [NameAttribute("start"), InfoAttribute("The starting value")]
         public double Start { get; set; }
 
         /// <summary>
         /// Ending value
         /// </summary>
-        [SpiceName("stop"), SpiceInfo("The stopping value")]
+        [NameAttribute("stop"), InfoAttribute("The stopping value")]
         public double Stop { get; set; }
 
         /// <summary>
         /// Value step
         /// </summary>
-        [SpiceName("step"), SpiceInfo("The step")]
+        [NameAttribute("step"), InfoAttribute("The step")]
         public double Step { get; set; }
 
         /// <summary>
         /// The name of the source being varied
         /// </summary>
-        [SpiceName("source"), SpiceInfo("The name of the swept source")]
+        [NameAttribute("source"), InfoAttribute("The name of the swept source")]
         public Identifier ComponentName { get; set; }
 
         /// <summary>

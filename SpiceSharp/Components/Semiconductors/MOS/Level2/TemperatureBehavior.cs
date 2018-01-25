@@ -22,30 +22,30 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
         /// <summary>
         /// Extra variables
         /// </summary>
-        [SpiceName("sourceconductance"), SpiceInfo("Source conductance")]
+        [NameAttribute("sourceconductance"), InfoAttribute("Source conductance")]
         public double MOS2sourceConductance { get; internal set; }
-        [SpiceName("drainconductance"), SpiceInfo("Drain conductance")]
+        [NameAttribute("drainconductance"), InfoAttribute("Drain conductance")]
         public double MOS2drainConductance { get; internal set; }
-        [SpiceName("sourcevcrit"), SpiceInfo("Critical source voltage")]
+        [NameAttribute("sourcevcrit"), InfoAttribute("Critical source voltage")]
         public double MOS2sourceVcrit { get; internal set; }
-        [SpiceName("drainvcrit"), SpiceInfo("Critical drain voltage")]
+        [NameAttribute("drainvcrit"), InfoAttribute("Critical drain voltage")]
         public double MOS2drainVcrit { get; internal set; }
-        [SpiceName("cbd0"), SpiceInfo("Zero-Bias B-D junction capacitance")]
+        [NameAttribute("cbd0"), InfoAttribute("Zero-Bias B-D junction capacitance")]
         public double MOS2Cbd { get; internal set; }
-        [SpiceName("cbdsw0"), SpiceInfo(" ")]
+        [NameAttribute("cbdsw0"), InfoAttribute(" ")]
         public double MOS2Cbdsw { get; internal set; }
-        [SpiceName("cbs0"), SpiceInfo("Zero-Bias B-S junction capacitance")]
+        [NameAttribute("cbs0"), InfoAttribute("Zero-Bias B-S junction capacitance")]
         public double MOS2Cbs { get; internal set; }
-        [SpiceName("cbssw0"), SpiceInfo(" ")]
+        [NameAttribute("cbssw0"), InfoAttribute(" ")]
         public double MOS2Cbssw { get; internal set; }
-        [SpiceName("rs"), SpiceInfo("Source resistance")]
+        [NameAttribute("rs"), InfoAttribute("Source resistance")]
         public double GetSOURCERESIST()
         {
             if (MOS2sourceConductance > 0.0)
                 return 1.0 / MOS2sourceConductance;
             return 0.0;
         }
-        [SpiceName("rd"), SpiceInfo("Drain resistance")]
+        [NameAttribute("rd"), InfoAttribute("Drain resistance")]
         public double GetDRAINRESIST()
         {
             if (MOS2drainConductance > 0.0)

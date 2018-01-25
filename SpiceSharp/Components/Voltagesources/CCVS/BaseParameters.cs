@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.CCVS
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("gain"), SpiceInfo("Transresistance (gain)")]
+        [NameAttribute("gain"), InfoAttribute("Transresistance (gain)")]
         public Parameter CCVScoeff { get; } = new Parameter();
 
         /// <summary>

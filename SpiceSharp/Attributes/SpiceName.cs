@@ -7,7 +7,7 @@ namespace SpiceSharp.Attributes
     /// It can be applied to a field, property or method. Multiple names are allowed.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
-    public class SpiceName : Attribute
+    public class NameAttribute : Attribute
     {
         /// <summary>
         /// Get the name of the parameter
@@ -18,7 +18,7 @@ namespace SpiceSharp.Attributes
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the parameter</param>
-        public SpiceName(string name)
+        public NameAttribute(string name)
         {
             Name = name;
         }

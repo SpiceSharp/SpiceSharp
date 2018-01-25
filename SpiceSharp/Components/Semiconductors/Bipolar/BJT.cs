@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A bipolar junction transistor (BJT)
     /// </summary>
-    [SpicePins("Collector", "Base", "Emitter", "Substrate")]
+    [PinsAttribute("Collector", "Base", "Emitter", "Substrate")]
     public class BJT : Component
     {
         /// <summary>
@@ -19,13 +19,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [SpiceName("colnode"), SpiceInfo("Number of collector node")]
+        [NameAttribute("colnode"), InfoAttribute("Number of collector node")]
         public int BJTcolNode { get; private set; }
-        [SpiceName("basenode"), SpiceInfo("Number of base node")]
+        [NameAttribute("basenode"), InfoAttribute("Number of base node")]
         public int BJTbaseNode { get; private set; }
-        [SpiceName("emitnode"), SpiceInfo("Number of emitter node")]
+        [NameAttribute("emitnode"), InfoAttribute("Number of emitter node")]
         public int BJTemitNode { get; private set; }
-        [SpiceName("substnode"), SpiceInfo("Number of substrate node")]
+        [NameAttribute("substnode"), InfoAttribute("Number of substrate node")]
         public int BJTsubstNode { get; private set; }
 
         /// <summary>

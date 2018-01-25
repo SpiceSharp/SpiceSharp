@@ -11,7 +11,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the list of sweeps that need to be executed
         /// </summary>
-        [SpiceName("sweeps"), SpiceInfo("List of sweeps")]
+        [NameAttribute("sweeps"), InfoAttribute("List of sweeps")]
         public List<Sweep> Sweeps { get; } = new List<Sweep>();
 
         /// <summary>

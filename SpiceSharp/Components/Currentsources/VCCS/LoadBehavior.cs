@@ -29,11 +29,11 @@ namespace SpiceSharp.Behaviors.VCCS
         /// <summary>
         /// Properties
         /// </summary>
-        [SpiceName("v"), SpiceInfo("Voltage")]
+        [NameAttribute("v"), InfoAttribute("Voltage")]
         public double GetVoltage(State state) => state.Solution[VCCSposNode] - state.Solution[VCCSnegNode];
-        [SpiceName("i"), SpiceName("c"), SpiceInfo("Current")]
+        [NameAttribute("i"), NameAttribute("c"), InfoAttribute("Current")]
         public double GetCurrent(State state) => (state.Solution[VCCSposNode] - state.Solution[VCCSnegNode]) * bp.VCCScoeff;
-        [SpiceName("p"), SpiceInfo("Power")]
+        [NameAttribute("p"), InfoAttribute("Power")]
         public double GetPower(State state)
         {
             double v = state.Solution[VCCSposNode] - state.Solution[VCCSnegNode];

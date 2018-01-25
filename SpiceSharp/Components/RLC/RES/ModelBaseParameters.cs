@@ -10,22 +10,22 @@ namespace SpiceSharp.Components.RES
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature", Interesting = false)]
+        [NameAttribute("tnom"), InfoAttribute("Parameter measurement temperature", Interesting = false)]
         public double RES_TNOM
         {
             get => REStnom - Circuit.CONSTCtoK;
             set => REStnom.Set(value + Circuit.CONSTCtoK);
         }
         public Parameter REStnom { get; } = new Parameter(300.15);
-        [SpiceName("tc1"), SpiceInfo("First order temperature coefficient")]
+        [NameAttribute("tc1"), InfoAttribute("First order temperature coefficient")]
         public Parameter REStempCoeff1 { get; } = new Parameter();
-        [SpiceName("tc2"), SpiceInfo("Second order temperature oefficient")]
+        [NameAttribute("tc2"), InfoAttribute("Second order temperature oefficient")]
         public Parameter REStempCoeff2 { get; } = new Parameter();
-        [SpiceName("rsh"), SpiceInfo("Sheet resistance")]
+        [NameAttribute("rsh"), InfoAttribute("Sheet resistance")]
         public Parameter RESsheetRes { get; } = new Parameter();
-        [SpiceName("defw"), SpiceInfo("Default device width")]
+        [NameAttribute("defw"), InfoAttribute("Default device width")]
         public Parameter RESdefWidth { get; } = new Parameter(10.0e-6);
-        [SpiceName("narrow"), SpiceInfo("Narrowing of resistor")]
+        [NameAttribute("narrow"), InfoAttribute("Narrowing of resistor")]
         public Parameter RESnarrow { get; } = new Parameter();
     }
 }

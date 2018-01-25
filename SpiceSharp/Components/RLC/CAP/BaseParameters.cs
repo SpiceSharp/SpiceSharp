@@ -10,13 +10,13 @@ namespace SpiceSharp.Components.CAP
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("capacitance"), SpiceInfo("Device capacitance", IsPrincipal = true)]
+        [NameAttribute("capacitance"), InfoAttribute("Device capacitance", IsPrincipal = true)]
         public Parameter CAPcapac { get; } = new Parameter();
-        [SpiceName("ic"), SpiceInfo("Initial capacitor voltage", Interesting = false)]
+        [NameAttribute("ic"), InfoAttribute("Initial capacitor voltage", Interesting = false)]
         public Parameter CAPinitCond { get; } = new Parameter();
-        [SpiceName("w"), SpiceInfo("Device width", Interesting = false)]
+        [NameAttribute("w"), InfoAttribute("Device width", Interesting = false)]
         public Parameter CAPwidth { get; } = new Parameter();
-        [SpiceName("l"), SpiceInfo("Device length", Interesting = false)]
+        [NameAttribute("l"), InfoAttribute("Device length", Interesting = false)]
         public Parameter CAPlength { get; } = new Parameter();
 
         /// <summary>

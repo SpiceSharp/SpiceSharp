@@ -11,42 +11,42 @@ namespace SpiceSharp.Components.Mosfet.Level1
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("off"), SpiceInfo("Device initially off")]
+        [NameAttribute("off"), InfoAttribute("Device initially off")]
         public bool MOS1off { get; set; }
-        [SpiceName("icvbs"), SpiceInfo("Initial B-S voltage")]
+        [NameAttribute("icvbs"), InfoAttribute("Initial B-S voltage")]
         public Parameter MOS1icVBS { get; } = new Parameter();
-        [SpiceName("icvds"), SpiceInfo("Initial D-S voltage")]
+        [NameAttribute("icvds"), InfoAttribute("Initial D-S voltage")]
         public Parameter MOS1icVDS { get; } = new Parameter();
-        [SpiceName("icvgs"), SpiceInfo("Initial G-S voltage")]
+        [NameAttribute("icvgs"), InfoAttribute("Initial G-S voltage")]
         public Parameter MOS1icVGS { get; } = new Parameter();
-        [SpiceName("temp"), SpiceInfo("Instance temperature")]
+        [NameAttribute("temp"), InfoAttribute("Instance temperature")]
         public double MOS1_TEMP
         {
             get => MOS1temp - Circuit.CONSTCtoK;
             set => MOS1temp.Set(value + Circuit.CONSTCtoK);
         }
         public Parameter MOS1temp { get; } = new Parameter();
-        [SpiceName("w"), SpiceInfo("Width")]
+        [NameAttribute("w"), InfoAttribute("Width")]
         public Parameter MOS1w { get; } = new Parameter(1e-4);
-        [SpiceName("l"), SpiceInfo("Length")]
+        [NameAttribute("l"), InfoAttribute("Length")]
         public Parameter MOS1l { get; } = new Parameter(1e-4);
-        [SpiceName("as"), SpiceInfo("Source area")]
+        [NameAttribute("as"), InfoAttribute("Source area")]
         public Parameter MOS1sourceArea { get; } = new Parameter();
-        [SpiceName("ad"), SpiceInfo("Drain area")]
+        [NameAttribute("ad"), InfoAttribute("Drain area")]
         public Parameter MOS1drainArea { get; } = new Parameter();
-        [SpiceName("ps"), SpiceInfo("Source perimeter")]
+        [NameAttribute("ps"), InfoAttribute("Source perimeter")]
         public Parameter MOS1sourcePerimiter { get; } = new Parameter();
-        [SpiceName("pd"), SpiceInfo("Drain perimeter")]
+        [NameAttribute("pd"), InfoAttribute("Drain perimeter")]
         public Parameter MOS1drainPerimiter { get; } = new Parameter();
-        [SpiceName("nrs"), SpiceInfo("Source squares")]
+        [NameAttribute("nrs"), InfoAttribute("Source squares")]
         public Parameter MOS1sourceSquares { get; } = new Parameter(1);
-        [SpiceName("nrd"), SpiceInfo("Drain squares")]
+        [NameAttribute("nrd"), InfoAttribute("Drain squares")]
         public Parameter MOS1drainSquares { get; } = new Parameter(1);
 
         /// <summary>
         /// Methods
         /// </summary>
-        [SpiceName("ic"), SpiceInfo("Vector of D-S, G-S, B-S voltages")]
+        [NameAttribute("ic"), InfoAttribute("Vector of D-S, G-S, B-S voltages")]
         public void SetIC(double[] value)
         {
             switch (value.Length)

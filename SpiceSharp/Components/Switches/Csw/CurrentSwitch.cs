@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A current-controlled switch
     /// </summary>
-    [SpicePins("W+", "W-")]
+    [PinsAttribute("W+", "W-")]
     public class CurrentSwitch : Component
     {
         /// <summary>
@@ -19,11 +19,11 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [SpiceName("pos_node"), SpiceInfo("Positive node of the switch")]
+        [NameAttribute("pos_node"), InfoAttribute("Positive node of the switch")]
         public int CSWposNode { get; internal set; }
-        [SpiceName("neg_node"), SpiceInfo("Negative node of the switch")]
+        [NameAttribute("neg_node"), InfoAttribute("Negative node of the switch")]
         public int CSWnegNode { get; internal set; }
-        [SpiceName("control"), SpiceInfo("Name of the controlling source")]
+        [NameAttribute("control"), InfoAttribute("Name of the controlling source")]
         public Identifier CSWcontName { get; set; }
 
         /// <summary>

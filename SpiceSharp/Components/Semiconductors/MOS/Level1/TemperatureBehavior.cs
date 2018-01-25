@@ -22,31 +22,31 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         /// <summary>
         /// Shared variables
         /// </summary>
-        [SpiceName("sourcevcrit"), SpiceInfo("Critical source voltage")]
+        [NameAttribute("sourcevcrit"), InfoAttribute("Critical source voltage")]
         public double MOS1sourceVcrit { get; protected set; }
-        [SpiceName("drainvcrit"), SpiceInfo("Critical drain voltage")]
+        [NameAttribute("drainvcrit"), InfoAttribute("Critical drain voltage")]
         public double MOS1drainVcrit { get; protected set; }
-        [SpiceName("sourceconductance"), SpiceInfo("Conductance of source")]
+        [NameAttribute("sourceconductance"), InfoAttribute("Conductance of source")]
         public double MOS1sourceConductance { get; protected set; }
-        [SpiceName("drainconductance"), SpiceInfo("Conductance of drain")]
+        [NameAttribute("drainconductance"), InfoAttribute("Conductance of drain")]
         public double MOS1drainConductance { get; protected set; }
-        [SpiceName("cbd0"), SpiceInfo("Zero-Bias B-D junction capacitance")]
+        [NameAttribute("cbd0"), InfoAttribute("Zero-Bias B-D junction capacitance")]
         public double MOS1Cbd { get; protected set; }
-        [SpiceName("cbdsw0"), SpiceInfo(" ")]
+        [NameAttribute("cbdsw0"), InfoAttribute(" ")]
         public double MOS1Cbdsw { get; protected set; }
-        [SpiceName("cbs0"), SpiceInfo("Zero-Bias B-S junction capacitance")]
+        [NameAttribute("cbs0"), InfoAttribute("Zero-Bias B-S junction capacitance")]
         public double MOS1Cbs { get; protected set; }
-        [SpiceName("cbssw0"), SpiceInfo(" ")]
+        [NameAttribute("cbssw0"), InfoAttribute(" ")]
         public double MOS1Cbssw { get; protected set; }
 
-        [SpiceName("rs"), SpiceInfo("Source resistance")]
+        [NameAttribute("rs"), InfoAttribute("Source resistance")]
         public double GetSOURCERESIST(Circuit ckt)
         {
             if (MOS1sourceConductance != 0.0)
                 return 1.0 / MOS1sourceConductance;
             return 0.0;
         }
-        [SpiceName("rd"), SpiceInfo("Drain conductance")]
+        [NameAttribute("rd"), InfoAttribute("Drain conductance")]
         public double GetDRAINRESIST(Circuit ckt)
         {
             if (MOS1drainConductance != 0.0)

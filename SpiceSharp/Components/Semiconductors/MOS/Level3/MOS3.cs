@@ -9,7 +9,7 @@ namespace SpiceSharp.Components
     /// A MOS3 Mosfet
     /// Level 3, a semi-empirical model(see reference for level 3).
     /// </summary>
-    [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedAttribute(0, 2, 3)]
+    [PinsAttribute("Drain", "Gate", "Source", "Bulk"), ConnectedAttribute(0, 2, 3)]
     public class MOS3 : Component
     {
         /// <summary>
@@ -20,13 +20,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [SpiceName("dnode"), SpiceInfo("Number of drain node")]
+        [NameAttribute("dnode"), InfoAttribute("Number of drain node")]
         public int MOS3dNode { get; internal set; }
-        [SpiceName("gnode"), SpiceInfo("Number of gate node")]
+        [NameAttribute("gnode"), InfoAttribute("Number of gate node")]
         public int MOS3gNode { get; internal set; }
-        [SpiceName("snode"), SpiceInfo("Number of source node")]
+        [NameAttribute("snode"), InfoAttribute("Number of source node")]
         public int MOS3sNode { get; internal set; }
-        [SpiceName("bnode"), SpiceInfo("Number of bulk node")]
+        [NameAttribute("bnode"), InfoAttribute("Number of bulk node")]
         public int MOS3bNode { get; internal set; }
 
         /// <summary>

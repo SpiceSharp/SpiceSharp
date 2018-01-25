@@ -10,13 +10,13 @@ namespace SpiceSharp.Components.CAP
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("cj"), SpiceInfo("Bottom capacitance per area")]
+        [NameAttribute("cj"), InfoAttribute("Bottom capacitance per area")]
         public Parameter CAPcj { get; } = new Parameter();
-        [SpiceName("cjsw"), SpiceInfo("Sidewall capacitance per meter")]
+        [NameAttribute("cjsw"), InfoAttribute("Sidewall capacitance per meter")]
         public Parameter CAPcjsw { get; } = new Parameter();
-        [SpiceName("defw"), SpiceInfo("Default width")]
+        [NameAttribute("defw"), InfoAttribute("Default width")]
         public Parameter CAPdefWidth { get; } = new Parameter(10.0e-6);
-        [SpiceName("narrow"), SpiceInfo("Width correction factor")]
+        [NameAttribute("narrow"), InfoAttribute("Width correction factor")]
         public Parameter CAPnarrow { get; } = new Parameter();
     }
 }

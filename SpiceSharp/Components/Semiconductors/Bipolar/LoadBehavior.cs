@@ -24,21 +24,21 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <summary>
         /// Methods
         /// </summary>
-        [SpiceName("vbe"), SpiceInfo("B-E voltage")]
+        [NameAttribute("vbe"), InfoAttribute("B-E voltage")]
         public double BJTvbe { get; protected set; }
-        [SpiceName("vbc"), SpiceInfo("B-C voltage")]
+        [NameAttribute("vbc"), InfoAttribute("B-C voltage")]
         public double BJTvbc { get; protected set; }
-        [SpiceName("cc"), SpiceInfo("Current at collector node")]
+        [NameAttribute("cc"), InfoAttribute("Current at collector node")]
         public double BJTcc { get; protected set; }
-        [SpiceName("cb"), SpiceInfo("Current at base node")]
+        [NameAttribute("cb"), InfoAttribute("Current at base node")]
         public double BJTcb { get; protected set; }
-        [SpiceName("gpi"), SpiceInfo("Small signal input conductance - pi")]
+        [NameAttribute("gpi"), InfoAttribute("Small signal input conductance - pi")]
         public double BJTgpi { get; protected set; }
-        [SpiceName("gmu"), SpiceInfo("Small signal conductance - mu")]
+        [NameAttribute("gmu"), InfoAttribute("Small signal conductance - mu")]
         public double BJTgmu { get; protected set; }
-        [SpiceName("gm"), SpiceInfo("Small signal transconductance")]
+        [NameAttribute("gm"), InfoAttribute("Small signal transconductance")]
         public double BJTgm { get; protected set; }
-        [SpiceName("go"), SpiceInfo("Small signal output conductance")]
+        [NameAttribute("go"), InfoAttribute("Small signal output conductance")]
         public double BJTgo { get; protected set; }
         public double BJTgx { get; protected set; }
 

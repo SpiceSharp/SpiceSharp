@@ -22,14 +22,14 @@ namespace SpiceSharp.Behaviors.CCCS
         /// <summary>
         /// Properties
         /// </summary>
-        [SpiceName("v"), SpiceInfo("Complex voltage")]
+        [NameAttribute("v"), InfoAttribute("Complex voltage")]
         public Complex GetVoltage(State state)
         {
             return new Complex(
                 state.Solution[CCCSposNode] - state.Solution[CCCSnegNode],
                 state.iSolution[CCCSposNode] - state.iSolution[CCCSnegNode]);
         }
-        [SpiceName("i"), SpiceInfo("Complex current")]
+        [NameAttribute("i"), InfoAttribute("Complex current")]
         public Complex GetCurrent(State state)
         {
             return new Complex(
@@ -37,7 +37,7 @@ namespace SpiceSharp.Behaviors.CCCS
                 state.iSolution[CCCScontBranch]
                 ) * bp.CCCScoeff.Value;
         }
-        [SpiceName("p"), SpiceInfo("Complex power")]
+        [NameAttribute("p"), InfoAttribute("Complex power")]
         public Complex GetPower(State state)
         {
             Complex v = new Complex(state.Solution[CCCSposNode], state.iSolution[CCCSnegNode]);

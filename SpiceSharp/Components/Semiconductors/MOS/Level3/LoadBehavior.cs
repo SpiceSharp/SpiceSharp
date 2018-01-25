@@ -24,25 +24,25 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// <summary>
         /// Shared variables
         /// </summary>
-        [SpiceName("von"), SpiceInfo("Turn-on voltage")]
+        [NameAttribute("von"), InfoAttribute("Turn-on voltage")]
         public double MOS3von { get; protected set; }
-        [SpiceName("vdsat"), SpiceInfo("Saturation drain voltage")]
+        [NameAttribute("vdsat"), InfoAttribute("Saturation drain voltage")]
         public double MOS3vdsat { get; protected set; }
-        [SpiceName("id"), SpiceName("cd"), SpiceInfo("Drain current")]
+        [NameAttribute("id"), NameAttribute("cd"), InfoAttribute("Drain current")]
         public double MOS3cd { get; protected set; }
-        [SpiceName("ibs"), SpiceInfo("B-S junction current")]
+        [NameAttribute("ibs"), InfoAttribute("B-S junction current")]
         public double MOS3cbs { get; protected set; }
-        [SpiceName("ibd"), SpiceInfo("B-D junction current")]
+        [NameAttribute("ibd"), InfoAttribute("B-D junction current")]
         public double MOS3cbd { get; protected set; }
-        [SpiceName("gmb"), SpiceName("gmbs"), SpiceInfo("Bulk-Source transconductance")]
+        [NameAttribute("gmb"), NameAttribute("gmbs"), InfoAttribute("Bulk-Source transconductance")]
         public double MOS3gmbs { get; protected set; }
-        [SpiceName("gm"), SpiceInfo("Transconductance")]
+        [NameAttribute("gm"), InfoAttribute("Transconductance")]
         public double MOS3gm { get; protected set; }
-        [SpiceName("gds"), SpiceInfo("Drain-Source conductance")]
+        [NameAttribute("gds"), InfoAttribute("Drain-Source conductance")]
         public double MOS3gds { get; protected set; }
-        [SpiceName("gbd"), SpiceInfo("Bulk-Drain conductance")]
+        [NameAttribute("gbd"), InfoAttribute("Bulk-Drain conductance")]
         public double MOS3gbd { get; protected set; }
-        [SpiceName("gbs"), SpiceInfo("Bulk-Source conductance")]
+        [NameAttribute("gbs"), InfoAttribute("Bulk-Source conductance")]
         public double MOS3gbs { get; protected set; }
 
         /// <summary>
@@ -58,9 +58,9 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
         /// Nodes
         /// </summary>
         int MOS3dNode, MOS3gNode, MOS3sNode, MOS3bNode;
-        [SpiceName("dnodeprime"), SpiceInfo("Number of protected drain node")]
+        [NameAttribute("dnodeprime"), InfoAttribute("Number of protected drain node")]
         public int MOS3dNodePrime { get; protected set; }
-        [SpiceName("snodeprime"), SpiceInfo("Number of protected source node")]
+        [NameAttribute("snodeprime"), InfoAttribute("Number of protected source node")]
         public int MOS3sNodePrime { get; protected set; }
         protected MatrixElement MOS3DdPtr { get; private set; }
         protected MatrixElement MOS3GgPtr { get; private set; }

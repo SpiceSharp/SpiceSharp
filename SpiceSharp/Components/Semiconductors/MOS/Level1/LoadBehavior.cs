@@ -28,25 +28,25 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
         public int MOS1dNodePrime { get; protected set; }
         public int MOS1sNodePrime { get; protected set; }
 
-        [SpiceName("von"), SpiceInfo(" ")]
+        [NameAttribute("von"), InfoAttribute(" ")]
         public double MOS1von { get; protected set; } = 0.0;
-        [SpiceName("vdsat"), SpiceInfo("Saturation drain voltage")]
+        [NameAttribute("vdsat"), InfoAttribute("Saturation drain voltage")]
         public double MOS1vdsat { get; protected set; } = 0.0;
-        [SpiceName("id"), SpiceInfo("Drain current")]
+        [NameAttribute("id"), InfoAttribute("Drain current")]
         public double MOS1cd { get; protected set; }
-        [SpiceName("ibs"), SpiceInfo("B-S junction current")]
+        [NameAttribute("ibs"), InfoAttribute("B-S junction current")]
         public double MOS1cbs { get; protected set; }
-        [SpiceName("ibd"), SpiceInfo("B-D junction current")]
+        [NameAttribute("ibd"), InfoAttribute("B-D junction current")]
         public double MOS1cbd { get; protected set; }
-        [SpiceName("gmb"), SpiceName("gmbs"), SpiceInfo("Bulk-Source transconductance")]
+        [NameAttribute("gmb"), NameAttribute("gmbs"), InfoAttribute("Bulk-Source transconductance")]
         public double MOS1gmbs { get; protected set; }
-        [SpiceName("gm"), SpiceInfo("Transconductance")]
+        [NameAttribute("gm"), InfoAttribute("Transconductance")]
         public double MOS1gm { get; protected set; }
-        [SpiceName("gds"), SpiceInfo("Drain-Source conductance")]
+        [NameAttribute("gds"), InfoAttribute("Drain-Source conductance")]
         public double MOS1gds { get; protected set; }
-        [SpiceName("gbd"), SpiceInfo("Bulk-Drain conductance")]
+        [NameAttribute("gbd"), InfoAttribute("Bulk-Drain conductance")]
         public double MOS1gbd { get; protected set; }
-        [SpiceName("gbs"), SpiceInfo("Bulk-Source conductance")]
+        [NameAttribute("gbs"), InfoAttribute("Bulk-Source conductance")]
         public double MOS1gbs { get; protected set; }
 
         /// <summary>

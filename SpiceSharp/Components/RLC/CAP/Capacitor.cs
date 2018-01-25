@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A capacitor
     /// </summary>
-    [SpicePins("C+", "C-"), ConnectedAttribute()]
+    [PinsAttribute("C+", "C-"), ConnectedAttribute()]
     public class Capacitor : Component
     {
         /// <summary>
@@ -20,9 +20,9 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        [SpiceName("pos"), SpiceInfo("Positive terminal of the capacitor")]
+        [NameAttribute("pos"), InfoAttribute("Positive terminal of the capacitor")]
         public int CAPposNode { get; private set; }
-        [SpiceName("neg"), SpiceInfo("Negative terminal of the capacitor")]
+        [NameAttribute("neg"), InfoAttribute("Negative terminal of the capacitor")]
         public int CAPnegNode { get; private set; }
 
         /// <summary>

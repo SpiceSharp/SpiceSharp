@@ -31,11 +31,11 @@ namespace SpiceSharp.Behaviors.CCCS
         /// </summary>
         /// <param name="state">State</param>
         /// <returns></returns>
-        [SpiceName("i"), SpiceName("c"), SpiceInfo("Current")]
+        [NameAttribute("i"), NameAttribute("c"), InfoAttribute("Current")]
         public double GetCurrent(State state) => state.Solution[CCCScontBranch] * bp.CCCScoeff;
-        [SpiceName("v"), SpiceInfo("Voltage")]
+        [NameAttribute("v"), InfoAttribute("Voltage")]
         public double GetVoltage(State state) => state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
-        [SpiceName("p"), SpiceInfo("Power")]
+        [NameAttribute("p"), InfoAttribute("Power")]
         public double GetPower(State state) => (state.Solution[CCCSposNode] - state.Solution[CCCSnegNode]) * state.Solution[CCCScontBranch] * bp.CCCScoeff;
 
         /// <summary>

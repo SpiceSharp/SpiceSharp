@@ -14,14 +14,14 @@ namespace SpiceSharp.Behaviors.RES
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("v"), SpiceInfo("Voltage")]
+        [NameAttribute("v"), InfoAttribute("Voltage")]
         public Complex GetVoltage(State state)
         {
             return new Complex(
                 state.Solution[RESposNode] - state.Solution[RESnegNode],
                 state.iSolution[RESposNode] - state.iSolution[RESnegNode]);
         }
-        [SpiceName("i"), SpiceInfo("Current")]
+        [NameAttribute("i"), InfoAttribute("Current")]
         public Complex GetCurrent(State state)
         {
             var voltage = new Complex(
@@ -29,7 +29,7 @@ namespace SpiceSharp.Behaviors.RES
                 state.iSolution[RESposNode] - state.iSolution[RESnegNode]);
             return voltage * load.RESconduct;
         }
-        [SpiceName("p"), SpiceInfo("Power")]
+        [NameAttribute("p"), InfoAttribute("Power")]
         public Complex GetPower(State state)
         {
             var voltage = new Complex(

@@ -10,84 +10,84 @@ namespace SpiceSharp.Components.Mosfet.Level1
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("tnom"), SpiceInfo("Parameter measurement temperature")]
+        [NameAttribute("tnom"), InfoAttribute("Parameter measurement temperature")]
         public double MOS1_TNOM
         {
             get => MOS1tnom - Circuit.CONSTCtoK;
             set => MOS1tnom.Set(value + Circuit.CONSTCtoK);
         }
         public Parameter MOS1tnom { get; } = new Parameter();
-        [SpiceName("vto"), SpiceName("vt0"), SpiceInfo("Threshold voltage")]
+        [NameAttribute("vto"), NameAttribute("vt0"), InfoAttribute("Threshold voltage")]
         public Parameter MOS1vt0 { get; } = new Parameter();
-        [SpiceName("kp"), SpiceInfo("Transconductance parameter")]
+        [NameAttribute("kp"), InfoAttribute("Transconductance parameter")]
         public Parameter MOS1transconductance { get; } = new Parameter(2e-5);
-        [SpiceName("gamma"), SpiceInfo("Bulk threshold parameter")]
+        [NameAttribute("gamma"), InfoAttribute("Bulk threshold parameter")]
         public Parameter MOS1gamma { get; } = new Parameter();
-        [SpiceName("phi"), SpiceInfo("Surface potential")]
+        [NameAttribute("phi"), InfoAttribute("Surface potential")]
         public Parameter MOS1phi { get; } = new Parameter(.6);
-        [SpiceName("lambda"), SpiceInfo("Channel length modulation")]
+        [NameAttribute("lambda"), InfoAttribute("Channel length modulation")]
         public Parameter MOS1lambda { get; } = new Parameter();
-        [SpiceName("rd"), SpiceInfo("Drain ohmic resistance")]
+        [NameAttribute("rd"), InfoAttribute("Drain ohmic resistance")]
         public Parameter MOS1drainResistance { get; } = new Parameter();
-        [SpiceName("rs"), SpiceInfo("Source ohmic resistance")]
+        [NameAttribute("rs"), InfoAttribute("Source ohmic resistance")]
         public Parameter MOS1sourceResistance { get; } = new Parameter();
-        [SpiceName("cbd"), SpiceInfo("B-D junction capacitance")]
+        [NameAttribute("cbd"), InfoAttribute("B-D junction capacitance")]
         public Parameter MOS1capBD { get; } = new Parameter();
-        [SpiceName("cbs"), SpiceInfo("B-S junction capacitance")]
+        [NameAttribute("cbs"), InfoAttribute("B-S junction capacitance")]
         public Parameter MOS1capBS { get; } = new Parameter();
-        [SpiceName("is"), SpiceInfo("Bulk junction sat. current")]
+        [NameAttribute("is"), InfoAttribute("Bulk junction sat. current")]
         public Parameter MOS1jctSatCur { get; } = new Parameter(1e-14);
-        [SpiceName("pb"), SpiceInfo("Bulk junction potential")]
+        [NameAttribute("pb"), InfoAttribute("Bulk junction potential")]
         public Parameter MOS1bulkJctPotential { get; } = new Parameter(.8);
-        [SpiceName("cgso"), SpiceInfo("Gate-source overlap cap.")]
+        [NameAttribute("cgso"), InfoAttribute("Gate-source overlap cap.")]
         public Parameter MOS1gateSourceOverlapCapFactor { get; } = new Parameter();
-        [SpiceName("cgdo"), SpiceInfo("Gate-drain overlap cap.")]
+        [NameAttribute("cgdo"), InfoAttribute("Gate-drain overlap cap.")]
         public Parameter MOS1gateDrainOverlapCapFactor { get; } = new Parameter();
-        [SpiceName("cgbo"), SpiceInfo("Gate-bulk overlap cap.")]
+        [NameAttribute("cgbo"), InfoAttribute("Gate-bulk overlap cap.")]
         public Parameter MOS1gateBulkOverlapCapFactor { get; } = new Parameter();
-        [SpiceName("cj"), SpiceInfo("Bottom junction cap per area")]
+        [NameAttribute("cj"), InfoAttribute("Bottom junction cap per area")]
         public Parameter MOS1bulkCapFactor { get; } = new Parameter();
-        [SpiceName("mj"), SpiceInfo("Bottom grading coefficient")]
+        [NameAttribute("mj"), InfoAttribute("Bottom grading coefficient")]
         public Parameter MOS1bulkJctBotGradingCoeff { get; } = new Parameter(.5);
-        [SpiceName("cjsw"), SpiceInfo("Side junction cap per area")]
+        [NameAttribute("cjsw"), InfoAttribute("Side junction cap per area")]
         public Parameter MOS1sideWallCapFactor { get; } = new Parameter();
-        [SpiceName("mjsw"), SpiceInfo("Side grading coefficient")]
+        [NameAttribute("mjsw"), InfoAttribute("Side grading coefficient")]
         public Parameter MOS1bulkJctSideGradingCoeff { get; } = new Parameter(.5);
-        [SpiceName("js"), SpiceInfo("Bulk jct. sat. current density")]
+        [NameAttribute("js"), InfoAttribute("Bulk jct. sat. current density")]
         public Parameter MOS1jctSatCurDensity { get; } = new Parameter();
-        [SpiceName("tox"), SpiceInfo("Oxide thickness")]
+        [NameAttribute("tox"), InfoAttribute("Oxide thickness")]
         public Parameter MOS1oxideThickness { get; } = new Parameter();
-        [SpiceName("ld"), SpiceInfo("Lateral diffusion")]
+        [NameAttribute("ld"), InfoAttribute("Lateral diffusion")]
         public Parameter MOS1latDiff { get; } = new Parameter();
-        [SpiceName("rsh"), SpiceInfo("Sheet resistance")]
+        [NameAttribute("rsh"), InfoAttribute("Sheet resistance")]
         public Parameter MOS1sheetResistance { get; } = new Parameter();
-        [SpiceName("u0"), SpiceName("uo"), SpiceInfo("Surface mobility")]
+        [NameAttribute("u0"), NameAttribute("uo"), InfoAttribute("Surface mobility")]
         public Parameter MOS1surfaceMobility { get; } = new Parameter();
-        [SpiceName("fc"), SpiceInfo("Forward bias jct. fit parm.")]
+        [NameAttribute("fc"), InfoAttribute("Forward bias jct. fit parm.")]
         public Parameter MOS1fwdCapDepCoeff { get; } = new Parameter(.5);
-        [SpiceName("nss"), SpiceInfo("Surface state density")]
+        [NameAttribute("nss"), InfoAttribute("Surface state density")]
         public Parameter MOS1surfaceStateDensity { get; } = new Parameter();
-        [SpiceName("nsub"), SpiceInfo("Substrate doping")]
+        [NameAttribute("nsub"), InfoAttribute("Substrate doping")]
         public Parameter MOS1substrateDoping { get; } = new Parameter();
-        [SpiceName("tpg"), SpiceInfo("Gate type")]
+        [NameAttribute("tpg"), InfoAttribute("Gate type")]
         public Parameter MOS1gateType { get; } = new Parameter();
 
         /// <summary>
         /// Methods
         /// </summary>
-        [SpiceName("nmos"), SpiceInfo("N type MOSfet model")]
+        [NameAttribute("nmos"), InfoAttribute("N type MOSfet model")]
         public void SetNMOS(bool value)
         {
             if (value)
                 MOS1type = 1.0;
         }
-        [SpiceName("pmos"), SpiceInfo("P type MOSfet model")]
+        [NameAttribute("pmos"), InfoAttribute("P type MOSfet model")]
         public void SetPMOS(bool value)
         {
             if (value)
                 MOS1type = -1.0;
         }
-        [SpiceName("type"), SpiceInfo("N-channel or P-channel MOS")]
+        [NameAttribute("type"), InfoAttribute("N-channel or P-channel MOS")]
         public string GetTYPE()
         {
             if (MOS1type > 0)

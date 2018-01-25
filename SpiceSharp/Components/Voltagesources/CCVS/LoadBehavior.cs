@@ -21,11 +21,11 @@ namespace SpiceSharp.Behaviors.CCVS
         /// <summary>
         /// Properties
         /// </summary>
-        [SpiceName("i"), SpiceInfo("Output current")]
+        [NameAttribute("i"), InfoAttribute("Output current")]
         public double GetCurrent(State state) => state.Solution[CCVSbranch];
-        [SpiceName("v"), SpiceInfo("Output voltage")]
+        [NameAttribute("v"), InfoAttribute("Output voltage")]
         public double GetVoltage(State state) => state.Solution[CCVSposNode] - state.Solution[CCVSnegNode];
-        [SpiceName("p"), SpiceInfo("Power")]
+        [NameAttribute("p"), InfoAttribute("Power")]
         public double GetPower(State state) => state.Solution[CCVSbranch] * (state.Solution[CCVSposNode] - state.Solution[CCVSnegNode]);
 
         /// <summary>

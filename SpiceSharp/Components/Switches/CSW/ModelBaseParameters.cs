@@ -10,17 +10,17 @@ namespace SpiceSharp.Components.CSW
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("ron"), SpiceInfo("Closed resistance")]
+        [NameAttribute("ron"), InfoAttribute("Closed resistance")]
         public Parameter CSWon { get; } = new Parameter(1.0);
-        [SpiceName("roff"), SpiceInfo("Open resistance")]
+        [NameAttribute("roff"), InfoAttribute("Open resistance")]
         public Parameter CSWoff { get; } = new Parameter(1.0e12);
-        [SpiceName("it"), SpiceInfo("Threshold current")]
+        [NameAttribute("it"), InfoAttribute("Threshold current")]
         public Parameter CSWthresh { get; } = new Parameter();
-        [SpiceName("ih"), SpiceInfo("Hysteresis current")]
+        [NameAttribute("ih"), InfoAttribute("Hysteresis current")]
         public Parameter CSWhyst { get; } = new Parameter();
-        [SpiceName("gon"), SpiceInfo("Closed conductance")]
+        [NameAttribute("gon"), InfoAttribute("Closed conductance")]
         public double CSWonConduct { get; private set; }
-        [SpiceName("goff"), SpiceInfo("Open conductance")]
+        [NameAttribute("goff"), InfoAttribute("Open conductance")]
         public double CSWoffConduct { get; private set; }
     }
 }

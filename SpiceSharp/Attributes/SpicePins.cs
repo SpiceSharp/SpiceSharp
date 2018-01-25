@@ -1,25 +1,40 @@
 ﻿using System;
 
-namespace SpiceSharp.Components
+namespace SpiceSharp.Attributes
 {
     /// <summary>
-    /// Specifies the pins for a circuit component that extends <see cref="CircuitComponent{T}"/>.
+    /// Specifies the pins for a circuit component that extends <see cref="Components.Component"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class SpicePins : Attribute
+    public class PinsAttribute : Attribute
     {
         /// <summary>
-        /// Gets the nodes of the component
+        /// Get a pin name
         /// </summary>
-        public string[] Nodes { get; }
+        /// <param name="index">Index</param>
+        /// <returns></returns>
+        public string this[int index]
+        {
+            get => nodes[index];
+        }
+
+        /// <summary>
+        /// Get number of pins
+        /// </summary>
+        public int Count { get => nodes.Length; }
+
+        /// <summary>
+        /// Nodes
+        /// </summary>
+        string[] nodes;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="nodes">The nodes (in order) of the circuit component</param>
-        public SpicePins(params string[] nodes)
+        public PinsAttribute(params string[] nodes)
         {
-            Nodes = nodes;
+            this.nodes = nodes;
         }
     }
 }

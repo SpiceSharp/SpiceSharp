@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Attributes\ConnectedAttribute.cs" />
     <Compile Include="Attributes\IndependentSource.cs" />
-    <Compile Include="Attributes\SpiceParameter.cs" />
     <Compile Include="Attributes\VoltageDriver.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\Currentsources\CCCS\BaseParameters.cs" />
@@ -145,7 +144,6 @@
     <Compile Include="Components\Semiconductors\MOS\Level3\AcBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level3\LoadBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level3\ModelTemperatureBehavior.cs" />
-    <Compile Include="Attributes\SpiceParameters.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level3\NoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level3\TemperatureBehavior.cs" />
     <Compile Include="Components\Switches\CSW\AcBehavior.cs" />

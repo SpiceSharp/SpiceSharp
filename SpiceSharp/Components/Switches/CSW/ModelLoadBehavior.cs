@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components.CSW;
+﻿using SpiceSharp.Components.CSW;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors.CSW
@@ -37,8 +36,7 @@ namespace SpiceSharp.Behaviors.CSW
         public override void Setup(SetupDataProvider provider)
         {
             // Get parameters
-            CSWonConduct = 1.0 / mbp.CSWon;
-            CSWoffConduct = 1.0 / mbp.CSWoff;
+            mbp = provider.GetParameters<ModelBaseParameters>();
         }
 
         /// <summary>
@@ -47,7 +45,8 @@ namespace SpiceSharp.Behaviors.CSW
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            // Do nothing
+            CSWonConduct = 1.0 / mbp.CSWon;
+            CSWoffConduct = 1.0 / mbp.CSWoff;
         }
     }
 }

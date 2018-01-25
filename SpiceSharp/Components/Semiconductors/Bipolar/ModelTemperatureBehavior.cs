@@ -20,21 +20,21 @@ namespace SpiceSharp.Behaviors.Bipolar
         /// <summary>
         /// Shared parameters
         /// </summary>
-        [SpiceName("invearlyvoltf"), SpiceInfo("Inverse early voltage:forward")]
+        [NameAttribute("invearlyvoltf"), InfoAttribute("Inverse early voltage:forward")]
         public double BJTinvEarlyVoltF { get; internal set; }
-        [SpiceName("invearlyvoltr"), SpiceInfo("Inverse early voltage:reverse")]
+        [NameAttribute("invearlyvoltr"), InfoAttribute("Inverse early voltage:reverse")]
         public double BJTinvEarlyVoltR { get; internal set; }
-        [SpiceName("invrollofff"), SpiceInfo("Inverse roll off - forward")]
+        [NameAttribute("invrollofff"), InfoAttribute("Inverse roll off - forward")]
         public double BJTinvRollOffF { get; internal set; }
-        [SpiceName("invrolloffr"), SpiceInfo("Inverse roll off - reverse")]
+        [NameAttribute("invrolloffr"), InfoAttribute("Inverse roll off - reverse")]
         public double BJTinvRollOffR { get; internal set; }
-        [SpiceName("collectorconduct"), SpiceInfo("Collector conductance")]
+        [NameAttribute("collectorconduct"), InfoAttribute("Collector conductance")]
         public double BJTcollectorConduct { get; internal set; }
-        [SpiceName("emitterconduct"), SpiceInfo("Emitter conductance")]
+        [NameAttribute("emitterconduct"), InfoAttribute("Emitter conductance")]
         public double BJTemitterConduct { get; internal set; }
-        [SpiceName("transtimevbcfact"), SpiceInfo("Transit time VBC factor")]
+        [NameAttribute("transtimevbcfact"), InfoAttribute("Transit time VBC factor")]
         public double BJTtransitTimeVBCFactor { get; internal set; }
-        [SpiceName("excessphasefactor"), SpiceInfo("Excess phase fact.")]
+        [NameAttribute("excessphasefactor"), InfoAttribute("Excess phase fact.")]
         public double BJTexcessPhaseFactor { get; internal set; }
         
         public double fact1 { get; protected set; }

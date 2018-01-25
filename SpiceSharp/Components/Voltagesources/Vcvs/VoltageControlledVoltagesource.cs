@@ -8,19 +8,19 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A voltage-controlled current-source
     /// </summary>
-    [SpicePins("V+", "V-", "VC+", "VC-"), VoltageDriver(0, 1), ConnectedAttribute(0, 1)]
+    [PinsAttribute("V+", "V-", "VC+", "VC-"), VoltageDriver(0, 1), ConnectedAttribute(0, 1)]
     public class VoltageControlledVoltagesource : Component
     {
         /// <summary>
         /// Nodes
         /// </summary>
-        [SpiceName("pos_node"), SpiceInfo("Positive node of the source")]
+        [NameAttribute("pos_node"), InfoAttribute("Positive node of the source")]
         public int VCVSposNode { get; internal set; }
-        [SpiceName("neg_node"), SpiceInfo("Negative node of the source")]
+        [NameAttribute("neg_node"), InfoAttribute("Negative node of the source")]
         public int VCVSnegNode { get; internal set; }
-        [SpiceName("cont_p_node"), SpiceInfo("Positive controlling node of the source")]
+        [NameAttribute("cont_p_node"), InfoAttribute("Positive controlling node of the source")]
         public int VCVScontPosNode { get; internal set; }
-        [SpiceName("cont_n_node"), SpiceInfo("Negative controlling node of the source")]
+        [NameAttribute("cont_n_node"), InfoAttribute("Negative controlling node of the source")]
         public int VCVScontNegNode { get; internal set; }
 
         /// <summary>
