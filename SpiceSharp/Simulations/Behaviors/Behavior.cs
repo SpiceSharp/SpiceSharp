@@ -102,7 +102,7 @@ namespace SpiceSharp.Behaviors
                         if (name.Name == property)
                         {
                             found = true;
-                            continue;
+                            break;
                         }
                     }
                     if (!found)
