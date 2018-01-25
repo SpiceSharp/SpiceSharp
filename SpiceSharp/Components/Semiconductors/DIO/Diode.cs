@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors.DIO;
 using SpiceSharp.Components.DIO;
 
@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A diode
     /// </summary>
-    [PinsAttribute("D+", "D-")]
+    [Pins("D+", "D-")]
     public class Diode : Component
     {
         /// <summary>

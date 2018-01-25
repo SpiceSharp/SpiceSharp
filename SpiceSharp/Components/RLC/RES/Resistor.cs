@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.RES;
 using SpiceSharp.Behaviors.RES;
 
@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A resistor
     /// </summary>
-    [PinsAttribute("R+", "R-")]
+    [Pins("R+", "R-")]
     public class Resistor : Component
     {
         /// <summary>

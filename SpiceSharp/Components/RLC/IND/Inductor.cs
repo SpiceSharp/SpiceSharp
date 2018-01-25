@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Circuits;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors.IND;
 using SpiceSharp.Components.IND;
 
@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// An inductor
     /// </summary>
-    [PinsAttribute("L+", "L-")]
+    [Pins("L+", "L-")]
     public class Inductor : Component
     {
         /// <summary>

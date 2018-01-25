@@ -3,10 +3,11 @@
 namespace SpiceSharp.Attributes
 {
     /// <summary>
-    /// Specifies the name for a parameter of a class that extends <see cref="Parameterized{T}"/>.
-    /// It can be applied to a field, property or method. Multiple names are allowed.
+    /// Specifies the name for a member.
+    /// It can be applied to properties or method. Multiple names are allowed.
+    /// This is used to find members using reflection.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
     public class NameAttribute : Attribute
     {
         /// <summary>

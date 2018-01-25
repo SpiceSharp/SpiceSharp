@@ -1,13 +1,13 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors.ISRC;
+﻿using SpiceSharp.Behaviors.ISRC;
 using SpiceSharp.Components.ISRC;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// An independent current source
     /// </summary>
-    [PinsAttribute("I+", "I-"), IndependentSource, ConnectedAttribute()]
+    [Pins("I+", "I-"), IndependentSource, Connected]
     public class Currentsource : Component
     {
         /// <summary>

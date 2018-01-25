@@ -4,6 +4,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 using System.Linq;
 using SpiceSharp.Sparse;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Circuits
 {
@@ -131,7 +132,7 @@ namespace SpiceSharp.Circuits
                         voltagedriven.Add(new Tuple<Component, int, int>(icc, nodes[vd.Positive], nodes[vd.Negative]));
 
                     // At least one source needs to be available
-                    if (attr is IndependentSource)
+                    if (attr is IndependentSourceAttribute)
                         HasSource = true;
 
                     if (attr is ConnectedAttribute conn)
