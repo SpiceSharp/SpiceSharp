@@ -110,13 +110,13 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
                 bp.MOS2temp.Value = sim.State.Temperature;
             }
 
-            vt = bp.MOS2temp * Circuit.CONSTKoverQ;
+            vt = bp.MOS2temp * Circuit.KOverQ;
             ratio = bp.MOS2temp / mbp.MOS2tnom;
-            fact2 = bp.MOS2temp / Circuit.CONSTRefTemp;
-            kt = bp.MOS2temp * Circuit.CONSTBoltz;
+            fact2 = bp.MOS2temp / Circuit.ReferenceTemperature;
+            kt = bp.MOS2temp * Circuit.Boltzmann;
             egfet = 1.16 - (7.02e-4 * bp.MOS2temp * bp.MOS2temp) / (bp.MOS2temp + 1108);
-            arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
-            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
+            arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
+            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
 
             if (mbp.MOS2drainResistance.Given)
             {
@@ -185,30 +185,30 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
             MOS2tSatCurDens = mbp.MOS2jctSatCurDensity * Math.Exp(-egfet / vt + modeltemp.egfet1 / modeltemp.vtnom);
             pbo = (mbp.MOS2bulkJctPotential - modeltemp.pbfact1) / modeltemp.fact1;
             gmaold = (mbp.MOS2bulkJctPotential - pbo) / pbo;
-            capfact = 1 / (1 + mbp.MOS2bulkJctBotGradingCoeff * (4e-4 * (mbp.MOS2tnom - Circuit.CONSTRefTemp) - gmaold));
+            capfact = 1 / (1 + mbp.MOS2bulkJctBotGradingCoeff * (4e-4 * (mbp.MOS2tnom - Circuit.ReferenceTemperature) - gmaold));
             MOS2tCbd = mbp.MOS2capBD * capfact;
             MOS2tCbs = mbp.MOS2capBS * capfact;
             MOS2tCj = mbp.MOS2bulkCapFactor * capfact;
-            capfact = 1 / (1 + mbp.MOS2bulkJctSideGradingCoeff * (4e-4 * (mbp.MOS2tnom - Circuit.CONSTRefTemp) - gmaold));
+            capfact = 1 / (1 + mbp.MOS2bulkJctSideGradingCoeff * (4e-4 * (mbp.MOS2tnom - Circuit.ReferenceTemperature) - gmaold));
             MOS2tCjsw = mbp.MOS2sideWallCapFactor * capfact;
             MOS2tBulkPot = fact2 * pbo + pbfact;
             gmanew = (MOS2tBulkPot - pbo) / pbo;
-            capfact = (1 + mbp.MOS2bulkJctBotGradingCoeff * (4e-4 * (bp.MOS2temp - Circuit.CONSTRefTemp) - gmanew));
+            capfact = (1 + mbp.MOS2bulkJctBotGradingCoeff * (4e-4 * (bp.MOS2temp - Circuit.ReferenceTemperature) - gmanew));
             MOS2tCbd *= capfact;
             MOS2tCbs *= capfact;
             MOS2tCj *= capfact;
-            capfact = (1 + mbp.MOS2bulkJctSideGradingCoeff * (4e-4 * (bp.MOS2temp - Circuit.CONSTRefTemp) - gmanew));
+            capfact = (1 + mbp.MOS2bulkJctSideGradingCoeff * (4e-4 * (bp.MOS2temp - Circuit.ReferenceTemperature) - gmanew));
             MOS2tCjsw *= capfact;
             MOS2tDepCap = mbp.MOS2fwdCapDepCoeff * MOS2tBulkPot;
 
             if ((MOS2tSatCurDens == 0) || (bp.MOS2drainArea.Value == 0) || (bp.MOS2sourceArea.Value == 0))
             {
-                MOS2sourceVcrit = MOS2drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS2tSatCur));
+                MOS2sourceVcrit = MOS2drainVcrit = vt * Math.Log(vt / (Circuit.Root2 * MOS2tSatCur));
             }
             else
             {
-                MOS2drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS2tSatCurDens * bp.MOS2drainArea));
-                MOS2sourceVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS2tSatCurDens * bp.MOS2sourceArea));
+                MOS2drainVcrit = vt * Math.Log(vt / (Circuit.Root2 * MOS2tSatCurDens * bp.MOS2drainArea));
+                MOS2sourceVcrit = vt * Math.Log(vt / (Circuit.Root2 * MOS2tSatCurDens * bp.MOS2sourceArea));
             }
             if (mbp.MOS2capBD.Given)
             {

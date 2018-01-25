@@ -69,7 +69,7 @@ namespace SpiceSharp.Behaviors.Bipolar
         {
             if (!mbp.BJTtnom.Given)
                 mbp.BJTtnom.Value = sim.State.NominalTemperature;
-            fact1 = mbp.BJTtnom / Circuit.CONSTRefTemp;
+            fact1 = mbp.BJTtnom / Circuit.ReferenceTemperature;
 
             if (!mbp.BJTleakBEcurrent.Given)
             {
@@ -128,7 +128,7 @@ namespace SpiceSharp.Behaviors.Bipolar
                 BJTtransitTimeVBCFactor = 1 / (mbp.BJTtransitTimeFVBC * 1.44);
             else
                 BJTtransitTimeVBCFactor = 0;
-            BJTexcessPhaseFactor = (mbp.BJTexcessPhase / (180.0 / Circuit.CONSTPI)) * mbp.BJTtransitTimeF;
+            BJTexcessPhaseFactor = (mbp.BJTexcessPhase / (180.0 / Math.PI)) * mbp.BJTtransitTimeF;
             if (mbp.BJTdepletionCapCoeff.Given)
             {
                 if (mbp.BJTdepletionCapCoeff > 0.9999)

@@ -114,13 +114,13 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             {
                 bp.MOS1temp.Value = sim.State.Temperature;
             }
-            vt = bp.MOS1temp * Circuit.CONSTKoverQ;
+            vt = bp.MOS1temp * Circuit.KOverQ;
             ratio = bp.MOS1temp / mbp.MOS1tnom;
-            fact2 = bp.MOS1temp / Circuit.CONSTRefTemp;
-            kt = bp.MOS1temp * Circuit.CONSTBoltz;
+            fact2 = bp.MOS1temp / Circuit.ReferenceTemperature;
+            kt = bp.MOS1temp * Circuit.Boltzmann;
             egfet = 1.16 - (7.02e-4 * bp.MOS1temp * bp.MOS1temp) / (bp.MOS1temp + 1108);
-            arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
-            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
+            arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
+            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
 
             if (bp.MOS1l - 2 * mbp.MOS1latDiff <= 0)
                 CircuitWarning.Warning(this, $"{Name}: effective channel length less than zero");
@@ -136,29 +136,29 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             MOS1tSatCurDens = mbp.MOS1jctSatCurDensity * Math.Exp(-egfet / vt + modeltemp.egfet1 / modeltemp.vtnom);
             pbo = (mbp.MOS1bulkJctPotential - modeltemp.pbfact1) / modeltemp.fact1;
             gmaold = (mbp.MOS1bulkJctPotential - pbo) / pbo;
-            capfact = 1 / (1 + mbp.MOS1bulkJctBotGradingCoeff * (4e-4 * (mbp.MOS1tnom - Circuit.CONSTRefTemp) - gmaold));
+            capfact = 1 / (1 + mbp.MOS1bulkJctBotGradingCoeff * (4e-4 * (mbp.MOS1tnom - Circuit.ReferenceTemperature) - gmaold));
             MOS1tCbd = mbp.MOS1capBD * capfact;
             MOS1tCbs = mbp.MOS1capBS * capfact;
             MOS1tCj = mbp.MOS1bulkCapFactor * capfact;
-            capfact = 1 / (1 + mbp.MOS1bulkJctSideGradingCoeff * (4e-4 * (mbp.MOS1tnom - Circuit.CONSTRefTemp) - gmaold));
+            capfact = 1 / (1 + mbp.MOS1bulkJctSideGradingCoeff * (4e-4 * (mbp.MOS1tnom - Circuit.ReferenceTemperature) - gmaold));
             MOS1tCjsw = mbp.MOS1sideWallCapFactor * capfact;
             MOS1tBulkPot = fact2 * pbo + pbfact;
             gmanew = (MOS1tBulkPot - pbo) / pbo;
-            capfact = (1 + mbp.MOS1bulkJctBotGradingCoeff * (4e-4 * (bp.MOS1temp - Circuit.CONSTRefTemp) - gmanew));
+            capfact = (1 + mbp.MOS1bulkJctBotGradingCoeff * (4e-4 * (bp.MOS1temp - Circuit.ReferenceTemperature) - gmanew));
             MOS1tCbd *= capfact;
             MOS1tCbs *= capfact;
             MOS1tCj *= capfact;
-            capfact = (1 + mbp.MOS1bulkJctSideGradingCoeff * (4e-4 * (bp.MOS1temp - Circuit.CONSTRefTemp) - gmanew));
+            capfact = (1 + mbp.MOS1bulkJctSideGradingCoeff * (4e-4 * (bp.MOS1temp - Circuit.ReferenceTemperature) - gmanew));
             MOS1tCjsw *= capfact;
             MOS1tDepCap = mbp.MOS1fwdCapDepCoeff * MOS1tBulkPot;
             if ((MOS1tSatCurDens == 0) || (bp.MOS1drainArea.Value == 0) || (bp.MOS1sourceArea.Value == 0))
             {
-                MOS1sourceVcrit = MOS1drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS1tSatCur));
+                MOS1sourceVcrit = MOS1drainVcrit = vt * Math.Log(vt / (Circuit.Root2 * MOS1tSatCur));
             }
             else
             {
-                MOS1drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS1tSatCurDens * bp.MOS1drainArea));
-                MOS1sourceVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * MOS1tSatCurDens * bp.MOS1sourceArea));
+                MOS1drainVcrit = vt * Math.Log(vt / (Circuit.Root2 * MOS1tSatCurDens * bp.MOS1drainArea));
+                MOS1sourceVcrit = vt * Math.Log(vt / (Circuit.Root2 * MOS1tSatCurDens * bp.MOS1sourceArea));
             }
 
             if (mbp.MOS1capBD.Given)

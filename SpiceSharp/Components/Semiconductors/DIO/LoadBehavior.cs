@@ -143,7 +143,7 @@ namespace SpiceSharp.Behaviors.DIO
              */
             csat = temp.DIOtSatCur * bp.DIOarea;
             gspr = modeltemp.DIOconductance * bp.DIOarea;
-            vt = Circuit.CONSTKoverQ * bp.DIOtemp;
+            vt = Circuit.KOverQ * bp.DIOtemp;
             vte = mbp.DIOemissionCoeff * vt;
 
             // Initialization
@@ -188,7 +188,7 @@ namespace SpiceSharp.Behaviors.DIO
             else if (temp.DIOtBrkdwnV == 0.0 || vd >= -temp.DIOtBrkdwnV)
             {
                 // Reverse bias
-                arg = 3 * vte / (vd * Circuit.CONSTE);
+                arg = 3 * vte / (vd * Math.E);
                 arg = arg * arg * arg;
                 cd = -csat * (1 + arg) + state.Gmin * vd;
                 gd = csat * 3 * arg / vd + state.Gmin;

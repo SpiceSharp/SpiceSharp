@@ -13,8 +13,8 @@ namespace SpiceSharp.Components.Mosfet.Level1
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]
         public double MOS1_TNOM
         {
-            get => MOS1tnom - Circuit.CONSTCtoK;
-            set => MOS1tnom.Set(value + Circuit.CONSTCtoK);
+            get => MOS1tnom - Circuit.CelsiusKelvin;
+            set => MOS1tnom.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter MOS1tnom { get; } = new Parameter();
         [PropertyName("vto"), PropertyName("vt0"), PropertyInfo("Threshold voltage")]

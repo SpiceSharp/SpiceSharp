@@ -216,7 +216,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
                 ceqbd, cdreq;
             int Check, xnrm, xrev;
 
-            vt = Circuit.CONSTKoverQ * bp.MOS2temp;
+            vt = Circuit.KOverQ * bp.MOS2temp;
             Check = 1;
 
             EffectiveLength = bp.MOS2l - 2 * mbp.MOS2latDiff;
@@ -427,7 +427,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
 				*/
 
                 /* XXX constant per device */
-                factor = 0.125 * mbp.MOS2narrowFactor * 2.0 * Circuit.CONSTPI * Transistor.EPSSIL / OxideCap * EffectiveLength;
+                factor = 0.125 * mbp.MOS2narrowFactor * 2.0 * Math.PI * Transistor.EPSSIL / OxideCap * EffectiveLength;
                 /* XXX constant per device */
                 eta = 1.0 + factor;
                 vbin = temp.MOS2tVbi * mbp.MOS2type + factor * phiMinVbs;
@@ -492,7 +492,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
                 if (mbp.MOS2fastSurfaceStateDensity != 0.0 && OxideCap != 0.0)
                 {
                     /* XXX constant per model */
-                    cfs = Circuit.CHARGE * mbp.MOS2fastSurfaceStateDensity * 1e4 /* (cm *  * 2 / m *  * 2) */ ;
+                    cfs = Circuit.Charge * mbp.MOS2fastSurfaceStateDensity * 1e4 /* (cm *  * 2 / m *  * 2) */ ;
                     cdonco = -(gamasd * dsrgdb + dgddvb * sarg) + factor;
                     xn = 1.0 + cfs / OxideCap * bp.MOS2w * EffectiveLength + cdonco;
                     tmp = vt * xn;

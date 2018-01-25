@@ -110,7 +110,7 @@ namespace SpiceSharp.Simulations
             for (int i = 0; i < n; i++)
             {
                 // Calculate the current frequency
-                state.Laplace = new Complex(0.0, 2.0 * Circuit.CONSTPI * freq);
+                state.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
 
                 // Solve
                 AcIterate(ckt);

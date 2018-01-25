@@ -72,7 +72,7 @@ namespace SpiceSharp.Behaviors.VSRC
             var ap = provider.GetParameters<AcParameters>();
 
             // Calculate AC vector
-            double radians = ap.VSRCacPhase * Circuit.CONSTPI / 180.0;
+            double radians = ap.VSRCacPhase * Math.PI / 180.0;
             VSRCac = new Complex(ap.VSRCacMag * Math.Cos(radians), ap.VSRCacMag * Math.Sin(radians));
 
             // Get behaviors

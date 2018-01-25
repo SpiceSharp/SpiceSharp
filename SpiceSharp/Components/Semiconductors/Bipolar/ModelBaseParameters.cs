@@ -34,8 +34,8 @@ namespace SpiceSharp.Components.Bipolar
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]
         public double BJT_TNOM
         {
-            get => BJTtnom - Circuit.CONSTCtoK;
-            set => BJTtnom.Set(value + Circuit.CONSTCtoK);
+            get => BJTtnom - Circuit.CelsiusKelvin;
+            set => BJTtnom.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter BJTtnom { get; } = new Parameter();
         [PropertyName("is"), PropertyInfo("Saturation Current")]

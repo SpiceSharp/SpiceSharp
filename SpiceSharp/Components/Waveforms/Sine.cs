@@ -75,7 +75,7 @@ namespace SpiceSharp.Components
             if (time <= 0.0)
                 result = vo;
             else
-                result = vo + va * Math.Sin(freq * time * 2.0 * Circuit.CONSTPI);
+                result = vo + va * Math.Sin(freq * time * 2.0 * Math.PI);
             return result;
         }
 

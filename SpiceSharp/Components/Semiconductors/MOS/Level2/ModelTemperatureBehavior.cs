@@ -54,12 +54,12 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
             /* now model parameter preprocessing */
             if (!mbp.MOS2tnom.Given)
                 mbp.MOS2tnom.Value = sim.State.NominalTemperature;
-            fact1 = mbp.MOS2tnom / Circuit.CONSTRefTemp;
-            vtnom = mbp.MOS2tnom * Circuit.CONSTKoverQ;
-            kt1 = Circuit.CONSTBoltz * mbp.MOS2tnom;
+            fact1 = mbp.MOS2tnom / Circuit.ReferenceTemperature;
+            vtnom = mbp.MOS2tnom * Circuit.KOverQ;
+            kt1 = Circuit.Boltzmann * mbp.MOS2tnom;
             egfet1 = 1.16 - (7.02e-4 * mbp.MOS2tnom * mbp.MOS2tnom) / (mbp.MOS2tnom + 1108);
-            arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
-            pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Circuit.CHARGE * arg1);
+            arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
+            pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
 
             if (!mbp.MOS2oxideThickness.Given)
             {
@@ -94,20 +94,20 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
                     wkfngs = wkfng - (3.25 + .5 * egfet1 + fermis);
                     if (!mbp.MOS2gamma.Given)
                     {
-                        mbp.MOS2gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.CHARGE * mbp.MOS2substrateDoping * 1e6) / MOS2oxideCapFactor;
+                        mbp.MOS2gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.Charge * mbp.MOS2substrateDoping * 1e6) / MOS2oxideCapFactor;
                     }
                     if (!mbp.MOS2vt0.Given)
                     {
                         if (!mbp.MOS2surfaceStateDensity.Given)
                             mbp.MOS2surfaceStateDensity.Value = 0;
-                        vfb = wkfngs - mbp.MOS2surfaceStateDensity * 1e4 * Circuit.CHARGE / MOS2oxideCapFactor;
+                        vfb = wkfngs - mbp.MOS2surfaceStateDensity * 1e4 * Circuit.Charge / MOS2oxideCapFactor;
                         mbp.MOS2vt0.Value = vfb + mbp.MOS2type * (mbp.MOS2gamma * Math.Sqrt(mbp.MOS2phi) + mbp.MOS2phi);
                     }
                     else
                     {
                         vfb = mbp.MOS2vt0 - mbp.MOS2type * (mbp.MOS2gamma * Math.Sqrt(mbp.MOS2phi) + mbp.MOS2phi);
                     }
-                    MOS2xd = Math.Sqrt((Transistor.EPSSIL + Transistor.EPSSIL) / (Circuit.CHARGE * mbp.MOS2substrateDoping * 1e6));
+                    MOS2xd = Math.Sqrt((Transistor.EPSSIL + Transistor.EPSSIL) / (Circuit.Charge * mbp.MOS2substrateDoping * 1e6));
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level2
             }
             if (!mbp.MOS2bulkCapFactor.Given)
             {
-                mbp.MOS2bulkCapFactor.Value = Math.Sqrt(Transistor.EPSSIL * Circuit.CHARGE * mbp.MOS2substrateDoping * 1e6 /* cm**3/m**3 */  / (2 *
+                mbp.MOS2bulkCapFactor.Value = Math.Sqrt(Transistor.EPSSIL * Circuit.Charge * mbp.MOS2substrateDoping * 1e6 /* cm**3/m**3 */  / (2 *
                     mbp.MOS2bulkJctPotential));
             }
         }

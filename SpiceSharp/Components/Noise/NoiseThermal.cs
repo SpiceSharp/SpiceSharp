@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.NoiseSources
             var rval = rsol[NOISEnodes[0]] - rsol[NOISEnodes[1]];
             var ival = isol[NOISEnodes[0]] - isol[NOISEnodes[1]];
             double gain = rval * rval + ival * ival;
-            return 4.0 * Circuit.CONSTBoltz * sim.State.Temperature * Conductance * gain;
+            return 4.0 * Circuit.Boltzmann * sim.State.Temperature * Conductance * gain;
         }
     }
 }

@@ -77,7 +77,7 @@ namespace SpiceSharp.Behaviors.ISRC
             ap = provider.GetParameters<AcParameters>();
 
             // Calculate the AC vector
-            double radians = ap.ISRCacPhase * Circuit.CONSTPI / 180.0;
+            double radians = ap.ISRCacPhase * Math.PI / 180.0;
             ISRCac = new Complex(ap.ISRCacMag * Math.Cos(radians), ap.ISRCacMag * Math.Sin(radians));
         }
         

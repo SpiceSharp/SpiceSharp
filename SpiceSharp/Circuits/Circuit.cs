@@ -12,15 +12,13 @@ namespace SpiceSharp
     {
         #region Constants
         // Constants that can be used in Spice models
-        public const double CHARGE = 1.6021918e-19;
-        public const double CONSTCtoK = 273.15;
-        public const double CONSTBoltz = 1.3806226e-23;
-        public const double CONSTRefTemp = 300.15; // 27degC
-        public static double CONSTroot2 = Math.Sqrt(2); // 1.4142135623730951;
-        public const double CONSTvt0 = CONSTBoltz * (27.0 + CONSTCtoK) / CHARGE;
-        public const double CONSTKoverQ = CONSTBoltz / CHARGE;
-        public static double CONSTE = Math.Exp(1.0);
-        public const double CONSTPI = Math.PI;
+        public const double Charge = 1.6021918e-19;
+        public const double CelsiusKelvin = 273.15;
+        public const double Boltzmann = 1.3806226e-23;
+        public const double ReferenceTemperature = 300.15; // 27degC
+        public static double Root2 = Math.Sqrt(2); // 1.4142135623730951;
+        public const double Vt0 = Boltzmann * (27.0 + CelsiusKelvin) / Charge;
+        public const double KOverQ = Boltzmann / Charge;
         #endregion
 
         /// <summary>
@@ -30,12 +28,9 @@ namespace SpiceSharp
         public IntegrationMethod Method { get; set; }
 
         /// <summary>
-        /// Get all nodes in the circuit
-        /// Using nodes is only valid after calling <see cref="Setup"/>
+        /// Gets the nodes in the circuit
         /// </summary>
         public Nodes Nodes { get; } = new Nodes();
-
-
 
         /// <summary>
         /// Gets a collection of all circuit objects

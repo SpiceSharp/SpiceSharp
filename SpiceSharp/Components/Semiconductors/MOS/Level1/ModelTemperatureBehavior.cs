@@ -53,12 +53,12 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
             if (!mbp.MOS1tnom.Given)
                 mbp.MOS1tnom.Value = sim.State.NominalTemperature;
 
-            fact1 = mbp.MOS1tnom / Circuit.CONSTRefTemp;
-            vtnom = mbp.MOS1tnom * Circuit.CONSTKoverQ;
-            kt1 = Circuit.CONSTBoltz * mbp.MOS1tnom;
+            fact1 = mbp.MOS1tnom / Circuit.ReferenceTemperature;
+            vtnom = mbp.MOS1tnom * Circuit.KOverQ;
+            kt1 = Circuit.Boltzmann * mbp.MOS1tnom;
             egfet1 = 1.16 - (7.02e-4 * mbp.MOS1tnom * mbp.MOS1tnom) / (mbp.MOS1tnom + 1108);
-            arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
-            pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Circuit.CHARGE * arg1);
+            arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
+            pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
 
             /* now model parameter preprocessing */
 
@@ -98,13 +98,13 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
                         wkfngs = wkfng - (3.25 + .5 * egfet1 + fermis);
                         if (!mbp.MOS1gamma.Given)
                         {
-                            mbp.MOS1gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.CHARGE * mbp.MOS1substrateDoping * 1e6) / MOS1oxideCapFactor;
+                            mbp.MOS1gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.Charge * mbp.MOS1substrateDoping * 1e6) / MOS1oxideCapFactor;
                         }
                         if (!mbp.MOS1vt0.Given)
                         {
                             if (!mbp.MOS1surfaceStateDensity.Given)
                                 mbp.MOS1surfaceStateDensity.Value = 0;
-                            vfb = wkfngs - mbp.MOS1surfaceStateDensity * 1e4 * Circuit.CHARGE / MOS1oxideCapFactor;
+                            vfb = wkfngs - mbp.MOS1surfaceStateDensity * 1e4 * Circuit.Charge / MOS1oxideCapFactor;
                             mbp.MOS1vt0.Value = vfb + mbp.MOS1type * (mbp.MOS1gamma * Math.Sqrt(mbp.MOS1phi) + mbp.MOS1phi);
                         }
                     }

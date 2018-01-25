@@ -15,8 +15,8 @@ namespace SpiceSharp.Components.RES
         [PropertyName("temp"), PropertyInfo("Instance operating temperature", Interesting = false)]
         public double RES_TEMP
         {
-            get => REStemp - Circuit.CONSTCtoK;
-            set => REStemp.Set(value + Circuit.CONSTCtoK);
+            get => REStemp - Circuit.CelsiusKelvin;
+            set => REStemp.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter REStemp { get; } = new Parameter(300.15);
         [PropertyName("w"), PropertyInfo("Width", Interesting = false)]

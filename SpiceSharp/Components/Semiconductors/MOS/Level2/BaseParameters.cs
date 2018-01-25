@@ -14,8 +14,8 @@ namespace SpiceSharp.Components.Mosfet.Level2
         [PropertyName("temp"), PropertyInfo("Instance operating temperature")]
         public double MOS2_TEMP
         {
-            get => MOS2temp - Circuit.CONSTCtoK;
-            set => MOS2temp.Set(value + Circuit.CONSTCtoK);
+            get => MOS2temp - Circuit.CelsiusKelvin;
+            set => MOS2temp.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter MOS2temp { get; } = new Parameter();
         [PropertyName("w"), PropertyInfo("Width")]

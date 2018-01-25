@@ -204,7 +204,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level1
                 vdsat, cdrain, cdreq;
             int Check, xnrm, xrev;
 
-            vt = Circuit.CONSTKoverQ * bp.MOS1temp;
+            vt = Circuit.KOverQ * bp.MOS1temp;
             Check = 1;
 
             /* DETAILPROF */

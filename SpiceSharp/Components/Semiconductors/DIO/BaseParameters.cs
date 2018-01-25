@@ -21,8 +21,8 @@ namespace SpiceSharp.Components.DIO
         [PropertyName("temp"), PropertyInfo("Instance temperature")]
         public double DIO_TEMP
         {
-            get => DIOtemp - Circuit.CONSTCtoK;
-            set => DIOtemp.Set(value + Circuit.CONSTCtoK);
+            get => DIOtemp - Circuit.CelsiusKelvin;
+            set => DIOtemp.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter DIOtemp { get; } = new Parameter();
     }

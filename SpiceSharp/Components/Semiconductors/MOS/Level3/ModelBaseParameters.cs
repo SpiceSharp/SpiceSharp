@@ -77,8 +77,8 @@ namespace SpiceSharp.Components.Mosfet.Level3
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]
         public double MOS3_TNOM
         {
-            get => MOS3tnom - Circuit.CONSTCtoK;
-            set => MOS3tnom.Set(value + Circuit.CONSTCtoK);
+            get => MOS3tnom - Circuit.CelsiusKelvin;
+            set => MOS3tnom.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter MOS3tnom { get; } = new Parameter();
 

@@ -61,24 +61,24 @@ namespace SpiceSharp.Behaviors.DIO
             // loop through all the instances
             if (!bp.DIOtemp.Given)
                 bp.DIOtemp.Value = sim.State.Temperature;
-            vt = Circuit.CONSTKoverQ * bp.DIOtemp;
+            vt = Circuit.KOverQ * bp.DIOtemp;
 
             // this part gets really ugly - I won't even try to explain these equations
-            fact2 = bp.DIOtemp / Circuit.CONSTRefTemp;
+            fact2 = bp.DIOtemp / Circuit.ReferenceTemperature;
             egfet = 1.16 - (7.02e-4 * bp.DIOtemp * bp.DIOtemp) / (bp.DIOtemp + 1108);
-            arg = -egfet / (2 * Circuit.CONSTBoltz * bp.DIOtemp) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp +
-                Circuit.CONSTRefTemp));
-            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
+            arg = -egfet / (2 * Circuit.Boltzmann * bp.DIOtemp) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
+                Circuit.ReferenceTemperature));
+            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
             egfet1 = 1.16 - (7.02e-4 * mbp.DIOnomTemp * mbp.DIOnomTemp) / (mbp.DIOnomTemp + 1108);
-            arg1 = -egfet1 / (Circuit.CONSTBoltz * 2 * mbp.DIOnomTemp) + 1.1150877 / (2 * Circuit.CONSTBoltz * Circuit.CONSTRefTemp);
-            fact1 = mbp.DIOnomTemp / Circuit.CONSTRefTemp;
-            pbfact1 = -2 * modeltemp.vtnom * (1.5 * Math.Log(fact1) + Circuit.CHARGE * arg1);
+            arg1 = -egfet1 / (Circuit.Boltzmann * 2 * mbp.DIOnomTemp) + 1.1150877 / (2 * Circuit.Boltzmann * Circuit.ReferenceTemperature);
+            fact1 = mbp.DIOnomTemp / Circuit.ReferenceTemperature;
+            pbfact1 = -2 * modeltemp.vtnom * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
             pbo = (mbp.DIOjunctionPot - pbfact1) / fact1;
             gmaold = (mbp.DIOjunctionPot - pbo) / pbo;
-            DIOtJctCap = mbp.DIOjunctionCap / (1 + mbp.DIOgradingCoeff * (400e-6 * (mbp.DIOnomTemp - Circuit.CONSTRefTemp) - gmaold));
+            DIOtJctCap = mbp.DIOjunctionCap / (1 + mbp.DIOgradingCoeff * (400e-6 * (mbp.DIOnomTemp - Circuit.ReferenceTemperature) - gmaold));
             DIOtJctPot = pbfact + fact2 * pbo;
             gmanew = (DIOtJctPot - pbo) / pbo;
-            DIOtJctCap *= 1 + mbp.DIOgradingCoeff * (400e-6 * (bp.DIOtemp - Circuit.CONSTRefTemp) - gmanew);
+            DIOtJctCap *= 1 + mbp.DIOgradingCoeff * (400e-6 * (bp.DIOtemp - Circuit.ReferenceTemperature) - gmanew);
 
             DIOtSatCur = mbp.DIOsatCur * Math.Exp(((bp.DIOtemp / mbp.DIOnomTemp) - 1) * mbp.DIOactivationEnergy /
                 (mbp.DIOemissionCoeff * vt) + mbp.DIOsaturationCurrentExp / mbp.DIOemissionCoeff * Math.Log(bp.DIOtemp / mbp.DIOnomTemp));
@@ -91,7 +91,7 @@ namespace SpiceSharp.Behaviors.DIO
             
             // and Vcrit
             vte = mbp.DIOemissionCoeff * vt;
-            DIOtVcrit = vte * Math.Log(vte / (Circuit.CONSTroot2 * DIOtSatCur));
+            DIOtVcrit = vte * Math.Log(vte / (Circuit.Root2 * DIOtSatCur));
 
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
             if (mbp.DIObreakdownVoltage.Given)

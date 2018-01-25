@@ -57,7 +57,7 @@ namespace SpiceSharp.Behaviors.DIO
             {
                 mbp.DIOnomTemp.Value = sim.State.NominalTemperature;
             }
-            vtnom = Circuit.CONSTKoverQ * mbp.DIOnomTemp;
+            vtnom = Circuit.KOverQ * mbp.DIOnomTemp;
 
             // limit grading coeff to max of .9
             if (mbp.DIOgradingCoeff > .9)

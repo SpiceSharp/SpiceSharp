@@ -123,13 +123,13 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
             {
                 bp.MOS3temp.Value = state.Temperature;
             }
-            vt = bp.MOS3temp * Circuit.CONSTKoverQ;
+            vt = bp.MOS3temp * Circuit.KOverQ;
             ratio = bp.MOS3temp / mbp.MOS3tnom;
-            fact2 = bp.MOS3temp / Circuit.CONSTRefTemp;
-            kt = bp.MOS3temp * Circuit.CONSTBoltz;
+            fact2 = bp.MOS3temp / Circuit.ReferenceTemperature;
+            kt = bp.MOS3temp * Circuit.Boltzmann;
             egfet = 1.16 - (7.02e-4 * bp.MOS3temp * bp.MOS3temp) / (bp.MOS3temp + 1108);
-            arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.CONSTBoltz * (Circuit.CONSTRefTemp + Circuit.CONSTRefTemp));
-            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.CHARGE * arg);
+            arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
+            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
 
             if (mbp.MOS3drainResistance.Given)
             {
@@ -198,30 +198,30 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
             MOS3tSatCurDens = mbp.MOS3jctSatCurDensity * Math.Exp(-egfet / vt + modeltemp.egfet1 / modeltemp.vtnom);
             pbo = (mbp.MOS3bulkJctPotential - modeltemp.pbfact1) / modeltemp.fact1;
             gmaold = (mbp.MOS3bulkJctPotential - pbo) / pbo;
-            capfact = 1 / (1 + mbp.MOS3bulkJctBotGradingCoeff * (4e-4 * (mbp.MOS3tnom - Circuit.CONSTRefTemp) - gmaold));
+            capfact = 1 / (1 + mbp.MOS3bulkJctBotGradingCoeff * (4e-4 * (mbp.MOS3tnom - Circuit.ReferenceTemperature) - gmaold));
             MOS3tCbd = mbp.MOS3capBD * capfact;
             MOS3tCbs = mbp.MOS3capBS * capfact;
             MOS3tCj = mbp.MOS3bulkCapFactor * capfact;
-            capfact = 1 / (1 + mbp.MOS3bulkJctSideGradingCoeff * (4e-4 * (mbp.MOS3tnom - Circuit.CONSTRefTemp) - gmaold));
+            capfact = 1 / (1 + mbp.MOS3bulkJctSideGradingCoeff * (4e-4 * (mbp.MOS3tnom - Circuit.ReferenceTemperature) - gmaold));
             MOS3tCjsw = mbp.MOS3sideWallCapFactor * capfact;
             MOS3tBulkPot = fact2 * pbo + pbfact;
             gmanew = (MOS3tBulkPot - pbo) / pbo;
-            capfact = (1 + mbp.MOS3bulkJctBotGradingCoeff * (4e-4 * (bp.MOS3temp - Circuit.CONSTRefTemp) - gmanew));
+            capfact = (1 + mbp.MOS3bulkJctBotGradingCoeff * (4e-4 * (bp.MOS3temp - Circuit.ReferenceTemperature) - gmanew));
             MOS3tCbd *= capfact;
             MOS3tCbs *= capfact;
             MOS3tCj *= capfact;
-            capfact = (1 + mbp.MOS3bulkJctSideGradingCoeff * (4e-4 * (bp.MOS3temp - Circuit.CONSTRefTemp) - gmanew));
+            capfact = (1 + mbp.MOS3bulkJctSideGradingCoeff * (4e-4 * (bp.MOS3temp - Circuit.ReferenceTemperature) - gmanew));
             MOS3tCjsw *= capfact;
             MOS3tDepCap = mbp.MOS3fwdCapDepCoeff * MOS3tBulkPot;
 
             if ((mbp.MOS3jctSatCurDensity.Value == 0) || (bp.MOS3drainArea.Value == 0) || (bp.MOS3sourceArea.Value == 0))
             {
-                MOS3sourceVcrit = MOS3drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * mbp.MOS3jctSatCur));
+                MOS3sourceVcrit = MOS3drainVcrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.MOS3jctSatCur));
             }
             else
             {
-                MOS3drainVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * mbp.MOS3jctSatCurDensity * bp.MOS3drainArea));
-                MOS3sourceVcrit = vt * Math.Log(vt / (Circuit.CONSTroot2 * mbp.MOS3jctSatCurDensity * bp.MOS3sourceArea));
+                MOS3drainVcrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.MOS3jctSatCurDensity * bp.MOS3drainArea));
+                MOS3sourceVcrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.MOS3jctSatCurDensity * bp.MOS3sourceArea));
             }
             if (mbp.MOS3capBD.Given)
             {

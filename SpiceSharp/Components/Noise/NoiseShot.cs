@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.NoiseSources
             var rval = sol[NOISEnodes[0]] - sol[NOISEnodes[1]];
             var ival = isol[NOISEnodes[0]] - isol[NOISEnodes[1]];
             double gain = rval * rval + ival * ival;
-            return 2.0 * Circuit.CHARGE * Math.Abs(Current) * gain;
+            return 2.0 * Circuit.Charge * Math.Abs(Current) * gain;
         }
     }
 }

@@ -30,8 +30,8 @@ namespace SpiceSharp.Components.Mosfet.Level3
         [PropertyName("temp"), PropertyInfo("Instance operating temperature")]
         public double MOS3_TEMP
         {
-            get => MOS3temp - Circuit.CONSTCtoK;
-            set => MOS3temp.Set(value + Circuit.CONSTCtoK);
+            get => MOS3temp - Circuit.CelsiusKelvin;
+            set => MOS3temp.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter MOS3temp { get; } = new Parameter();
 

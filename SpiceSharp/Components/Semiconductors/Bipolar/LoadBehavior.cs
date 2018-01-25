@@ -220,7 +220,7 @@ namespace SpiceSharp.Behaviors.Bipolar
                 gex, arg1, arg2, cb, gx, gpi, gmu, go, gm;
             double ceqbe, ceqbc;
 
-            vt = temp.BJTtemp * Circuit.CONSTKoverQ;
+            vt = temp.BJTtemp * Circuit.KOverQ;
 
             ceqcs = 0;
             ceqbx = 0;

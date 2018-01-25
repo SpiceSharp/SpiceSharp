@@ -209,7 +209,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
                 cdrain, ceqbs, ceqbd, cdreq;
             int Check, xnrm, xrev;
 
-            vt = Circuit.CONSTKoverQ * bp.MOS3temp;
+            vt = Circuit.KOverQ * bp.MOS3temp;
             Check = 1;
 
 
@@ -503,7 +503,7 @@ namespace SpiceSharp.Behaviors.Mosfet.Level3
                 von = vth;
                 if (mbp.MOS3fastSurfaceStateDensity != 0.0)
                 {
-                    csonco = Circuit.CHARGE * mbp.MOS3fastSurfaceStateDensity * 1e4 /* (cm *  * 2 / m *  * 2) */  * EffectiveLength * bp.MOS3w /
+                    csonco = Circuit.Charge * mbp.MOS3fastSurfaceStateDensity * 1e4 /* (cm *  * 2 / m *  * 2) */  * EffectiveLength * bp.MOS3w /
                         OxideCap;
                     cdonco = qbonco / (phibs + phibs);
                     xn = 1.0 + csonco + cdonco;

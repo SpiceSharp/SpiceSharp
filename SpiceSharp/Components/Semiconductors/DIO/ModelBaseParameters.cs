@@ -15,8 +15,8 @@ namespace SpiceSharp.Components.DIO
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]
         public double DIO_TNOM
         {
-            get => DIOnomTemp - Circuit.CONSTCtoK;
-            set => DIOnomTemp.Set(value + Circuit.CONSTCtoK);
+            get => DIOnomTemp - Circuit.CelsiusKelvin;
+            set => DIOnomTemp.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter DIOnomTemp { get; } = new Parameter();
         [PropertyName("rs"), PropertyInfo("Ohmic resistance")]

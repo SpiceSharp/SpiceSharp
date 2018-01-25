@@ -13,8 +13,8 @@ namespace SpiceSharp.Components.RES
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature", Interesting = false)]
         public double RES_TNOM
         {
-            get => REStnom - Circuit.CONSTCtoK;
-            set => REStnom.Set(value + Circuit.CONSTCtoK);
+            get => REStnom - Circuit.CelsiusKelvin;
+            set => REStnom.Set(value + Circuit.CelsiusKelvin);
         }
         public Parameter REStnom { get; } = new Parameter(300.15);
         [PropertyName("tc1"), PropertyInfo("First order temperature coefficient")]
