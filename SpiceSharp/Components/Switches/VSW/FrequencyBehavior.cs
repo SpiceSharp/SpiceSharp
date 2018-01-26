@@ -1,11 +1,12 @@
 ﻿using System;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.VSW
+namespace SpiceSharp.Components.VoltageSwitchBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="Components.VoltageSwitch"/>
+    /// AC behavior for <see cref="VoltageSwitch"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {

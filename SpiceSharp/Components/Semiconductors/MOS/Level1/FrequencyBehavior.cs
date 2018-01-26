@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.Transistors;
+using SpiceSharp.Components.MosfetBehaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
 

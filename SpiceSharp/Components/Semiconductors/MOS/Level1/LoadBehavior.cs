@@ -3,7 +3,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
-using SpiceSharp.Components.Transistors;
+using SpiceSharp.Components.MosfetBehaviors;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level1

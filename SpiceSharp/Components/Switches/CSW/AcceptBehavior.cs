@@ -1,10 +1,11 @@
 ﻿using System;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.CSW
+namespace SpiceSharp.Components.CurrentSwitchBehaviors
 {
     /// <summary>
-    /// Accept behavior for a <see cref="Components.CurrentSwitch"/>
+    /// Accept behavior for a <see cref="CurrentSwitch"/>
     /// </summary>
     public class AcceptBehavior : Behaviors.AcceptBehavior
     {

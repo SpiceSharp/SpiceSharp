@@ -2,6 +2,7 @@
 using System.Numerics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Components.CurrentsourceBehaviors
 {

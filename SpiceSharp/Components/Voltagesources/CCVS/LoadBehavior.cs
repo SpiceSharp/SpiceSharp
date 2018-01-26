@@ -1,14 +1,14 @@
-﻿using SpiceSharp.Components.CCVS;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 using System;
 
-namespace SpiceSharp.Behaviors.CCVS
+namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 {
     /// <summary>
-    /// General behavior for <see cref="Components.CurrentControlledVoltagesource"/>
+    /// General behavior for <see cref="CurrentControlledVoltagesource"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
@@ -16,7 +16,7 @@ namespace SpiceSharp.Behaviors.CCVS
         /// Necessary behaviors and parameters
         /// </summary>
         BaseParameters bp;
-        VSRC.LoadBehavior vsrcload;
+        VoltagesourceBehaviors.LoadBehavior vsrcload;
 
         /// <summary>
         /// Properties
@@ -94,7 +94,7 @@ namespace SpiceSharp.Behaviors.CCVS
             bp = provider.GetParameterSet<BaseParameters>(0);
 
             // Get behaviors
-            vsrcload = provider.GetBehavior<VSRC.LoadBehavior>(1);
+            vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>(1);
         }
 
         /// <summary>

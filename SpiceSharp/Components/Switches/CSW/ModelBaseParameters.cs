@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.CSW
+namespace SpiceSharp.Components.CurrentSwitchBehaviors
 {
     /// <summary>
     /// Base parameters for a <see cref="CurrentSwitchModel"/>

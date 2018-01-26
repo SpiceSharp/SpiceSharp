@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Components.Transistors
+namespace SpiceSharp.Components.MosfetBehaviors
 {
     /// <summary>
     /// A class with static methods for Mosfet transistors

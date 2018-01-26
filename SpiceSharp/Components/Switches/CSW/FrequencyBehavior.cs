@@ -1,11 +1,12 @@
 ﻿using System;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.CSW
+namespace SpiceSharp.Components.CurrentSwitchBehaviors
 {
     /// <summary>
-    /// AC behavior for a <see cref="Components.CurrentSwitch"/>
+    /// AC behavior for a <see cref="CurrentSwitch"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {

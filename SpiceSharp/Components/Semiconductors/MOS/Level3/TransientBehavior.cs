@@ -1,16 +1,14 @@
 ﻿using System;
-using SpiceSharp.Components.Mosfet.Level3;
-using SpiceSharp.Components.Transistors;
-using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.IntegrationMethods;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.Mosfet.Level3
+namespace SpiceSharp.Components.MosfetBehaviors.Level3
 {
     /// <summary>
-    /// Transient behavior for a <see cref="Components.MOS3"/>
+    /// Transient behavior for a <see cref="MOS3"/>
     /// </summary>
     public class TransientBehavior : Behaviors.TransientBehavior, IConnectedBehavior
     {

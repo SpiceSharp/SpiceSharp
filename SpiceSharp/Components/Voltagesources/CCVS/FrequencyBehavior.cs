@@ -1,14 +1,14 @@
 ﻿using System;
-using SpiceSharp.Components.CCVS;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 using System.Numerics;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.CCVS
+namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="Components.CurrentControlledVoltagesource"/>
+    /// AC behavior for <see cref="CurrentControlledVoltagesource"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
@@ -17,7 +17,7 @@ namespace SpiceSharp.Behaviors.CCVS
         /// </summary>
         BaseParameters bp;
         LoadBehavior load;
-        VSRC.LoadBehavior vsrcload;
+        VoltagesourceBehaviors.LoadBehavior vsrcload;
 
         /// <summary>
         /// Nodes
@@ -84,7 +84,7 @@ namespace SpiceSharp.Behaviors.CCVS
 
             // Get behaviors
             load = provider.GetBehavior<LoadBehavior>(0);
-            vsrcload = provider.GetBehavior<VSRC.LoadBehavior>(1);
+            vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>(1);
         }
 
         /// <summary>

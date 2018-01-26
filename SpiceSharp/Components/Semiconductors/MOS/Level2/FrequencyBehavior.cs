@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.Mosfet.Level2;
 using SpiceSharp.Simulations;
-using SpiceSharp.Components.Transistors;
+using SpiceSharp.Components.MosfetBehaviors;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.Mosfet.Level2
+namespace SpiceSharp.Components.MosfetBehaviors.Level2
 {
     /// <summary>
-    /// AC behavior for a <see cref="Components.MOS2"/>
+    /// AC behavior for a <see cref="MOS2"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {

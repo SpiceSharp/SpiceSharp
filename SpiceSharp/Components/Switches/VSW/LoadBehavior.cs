@@ -1,13 +1,13 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.VSW;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.VSW
+namespace SpiceSharp.Components.VoltageSwitchBehaviors
 {
     /// <summary>
-    /// Load behavior for a <see cref="Components.VoltageSwitch"/>
+    /// Load behavior for a <see cref="VoltageSwitch"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {

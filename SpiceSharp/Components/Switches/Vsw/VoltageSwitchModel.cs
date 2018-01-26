@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors.VSW;
-using SpiceSharp.Components.VSW;
+﻿using SpiceSharp.Components.VoltageSwitchBehaviors;
 
 namespace SpiceSharp.Components
 {

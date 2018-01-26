@@ -1,12 +1,10 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Components.Transistors;
 using SpiceSharp.Attributes;
-using SpiceSharp.Circuits;
-using SpiceSharp.Components.Mosfet.Level3;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.Mosfet.Level3
+namespace SpiceSharp.Components.MosfetBehaviors.Level3
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Components.MOS3Model"/>

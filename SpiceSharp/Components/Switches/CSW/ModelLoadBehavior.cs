@@ -1,11 +1,11 @@
 ﻿using System;
-using SpiceSharp.Components.CSW;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.CSW
+namespace SpiceSharp.Components.CurrentSwitchBehaviors
 {
     /// <summary>
-    /// Load behavior for a <see cref="Components.CurrentSwitchModel"/>
+    /// Load behavior for a <see cref="CurrentSwitchModel"/>
     /// </summary>
     public class ModelLoadBehavior : Behaviors.LoadBehavior
     {

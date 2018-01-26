@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.VSW
+namespace SpiceSharp.Components.VoltageSwitchBehaviors
 {
     /// <summary>
     /// Base parameters for a <see cref="VoltageSwitch"/>

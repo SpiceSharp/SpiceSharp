@@ -1,11 +1,11 @@
 ﻿using System;
-using SpiceSharp.Components.VSW;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.VSW
+namespace SpiceSharp.Components.VoltageSwitchBehaviors
 {
     /// <summary>
-    /// Load behavior for a <see cref="Components.VoltageSwitchModel"/>
+    /// Load behavior for a <see cref="VoltageSwitchModel"/>
     /// </summary>
     public class ModelLoadBehavior : Behaviors.LoadBehavior
     {

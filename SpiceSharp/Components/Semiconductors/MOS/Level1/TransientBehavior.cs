@@ -4,7 +4,7 @@ using SpiceSharp.Simulations;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Sparse;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.Transistors;
+using SpiceSharp.Components.MosfetBehaviors;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {

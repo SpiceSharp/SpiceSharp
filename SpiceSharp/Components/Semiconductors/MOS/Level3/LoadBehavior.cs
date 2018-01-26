@@ -1,15 +1,14 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Components.Transistors;
-using SpiceSharp.Components.Mosfet.Level3;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.Mosfet.Level3
+namespace SpiceSharp.Components.MosfetBehaviors.Level3
 {
     /// <summary>
-    /// General behavior for a <see cref="Components.MOS3"/>
+    /// General behavior for a <see cref="MOS3"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {

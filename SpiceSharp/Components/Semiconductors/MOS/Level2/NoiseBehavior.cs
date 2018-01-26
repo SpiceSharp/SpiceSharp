@@ -1,14 +1,12 @@
 ﻿using System;
-using SpiceSharp.Components;
 using SpiceSharp.Components.NoiseSources;
-using SpiceSharp.Circuits;
-using SpiceSharp.Components.Mosfet.Level2;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.Mosfet.Level2
+namespace SpiceSharp.Components.MosfetBehaviors.Level2
 {
     /// <summary>
-    /// Noise behavior for <see cref="Components.MOS2"/>
+    /// Noise behavior for <see cref="MOS2"/>
     /// </summary>
     public class NoiseBehavior : Behaviors.NoiseBehavior, IConnectedBehavior
     {

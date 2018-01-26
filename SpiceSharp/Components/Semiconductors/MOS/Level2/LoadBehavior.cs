@@ -2,14 +2,13 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.Transistors;
-using SpiceSharp.Components.Mosfet.Level2;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.Mosfet.Level2
+namespace SpiceSharp.Components.MosfetBehaviors.Level2
 {
     /// <summary>
-    /// General behavior of a <see cref="Components.MOS2"/>
+    /// General behavior of a <see cref="MOS2"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {

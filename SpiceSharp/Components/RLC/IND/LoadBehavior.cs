@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
+using SpiceSharp.Behaviors;
 using System;
 
 namespace SpiceSharp.Components.InductorBehaviors

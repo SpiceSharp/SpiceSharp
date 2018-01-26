@@ -1,14 +1,13 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
-using SpiceSharp.Circuits;
-using SpiceSharp.Components.DiodeBehaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Components.DiodeBehaviors
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="Components.DiodeModel"/>
+    /// Temperature behavior for a <see cref="DiodeModel"/>
     /// </summary>
     public class ModelTemperatureBehavior : Behaviors.TemperatureBehavior
     {

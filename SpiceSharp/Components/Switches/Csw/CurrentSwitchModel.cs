@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors.CSW;
-using SpiceSharp.Components.CSW;
+﻿using SpiceSharp.Components.CurrentSwitchBehaviors;
 
 namespace SpiceSharp.Components
 {

@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors.Mosfet.Level3;
-using SpiceSharp.Components.Mosfet.Level3;
+﻿using SpiceSharp.Components.MosfetBehaviors.Level3;
 
 namespace SpiceSharp.Components
 {

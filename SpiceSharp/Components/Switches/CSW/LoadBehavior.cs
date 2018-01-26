@@ -1,14 +1,14 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components.CSW;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 using System;
 
-namespace SpiceSharp.Behaviors.CSW
+namespace SpiceSharp.Components.CurrentSwitchBehaviors
 {
     /// <summary>
-    /// General behavior for a <see cref="Components.CurrentSwitch"/>
+    /// General behavior for a <see cref="CurrentSwitch"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior
     {
@@ -17,7 +17,7 @@ namespace SpiceSharp.Behaviors.CSW
         /// </summary>
         BaseParameters bp;
         ModelLoadBehavior modelload;
-        VSRC.LoadBehavior vsrcload;
+        VoltagesourceBehaviors.LoadBehavior vsrcload;
         ModelBaseParameters mbp;
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace SpiceSharp.Behaviors.CSW
 
             // Get behaviors
             modelload = provider.GetBehavior<ModelLoadBehavior>(1);
-            vsrcload = provider.GetBehavior<VSRC.LoadBehavior>(2);
+            vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>(2);
         }
 
         /// <summary>

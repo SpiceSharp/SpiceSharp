@@ -1,9 +1,7 @@
 ﻿using System;
-using SpiceSharp.Components;
 using SpiceSharp.Components.NoiseSources;
-using SpiceSharp.Components.BipolarBehaviors;
-using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Components.BipolarBehaviors
 {

@@ -1,10 +1,11 @@
 ﻿using System;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.VSW
+namespace SpiceSharp.Components.VoltageSwitchBehaviors
 {
     /// <summary>
-    /// Accept behavior for a <see cref="Components.VoltageSwitch"/>
+    /// Accept behavior for a <see cref="VoltageSwitch"/>
     /// </summary>
     public class AcceptBehavior : Behaviors.AcceptBehavior
     {

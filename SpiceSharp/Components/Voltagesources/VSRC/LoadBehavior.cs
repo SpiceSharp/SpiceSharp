@@ -6,7 +6,7 @@ using SpiceSharp.Sparse;
 using SpiceSharp.Behaviors;
 using System;
 
-namespace SpiceSharp.Components.VoltagesourceModel
+namespace SpiceSharp.Components.VoltagesourceBehaviors
 {
     /// <summary>
     /// General behavior for <see cref="Voltagesource"/>
