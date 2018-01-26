@@ -12,20 +12,20 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        public int INDposNode { get; internal set; }
-        public int INDnegNode { get; internal set; }
+        public int PosNode { get; internal set; }
+        public int NegNode { get; internal set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        public const int INDpinCount = 2;
+        public const int InductorPinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the inductor</param>
         public Inductor(Identifier name)
-            : base(name, INDpinCount)
+            : base(name, InductorPinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters());
@@ -44,7 +44,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="ind">The inductance</param>
         public Inductor(Identifier name, Identifier pos, Identifier neg, double ind) 
-            : base(name, INDpinCount)
+            : base(name, InductorPinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters(ind));
@@ -65,8 +65,8 @@ namespace SpiceSharp.Components
         public override void Setup(Circuit circuit)
         {
             var nodes = BindNodes(circuit);
-            INDposNode = nodes[0].Index;
-            INDnegNode = nodes[1].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
         }
     }
 }

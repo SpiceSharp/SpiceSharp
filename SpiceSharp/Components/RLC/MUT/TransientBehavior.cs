@@ -20,14 +20,14 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// The factor
         /// </summary>
-        public double MUTfactor { get; protected set; }
+        public double Factor { get; protected set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int INDbrEq1, INDbrEq2;
-        protected MatrixElement MUTbr1br2 { get; private set; }
-        protected MatrixElement MUTbr2br1 { get; private set; }
+        int BranchEq1, BranchEq2;
+        protected MatrixElement Br1Br2 { get; private set; }
+        protected MatrixElement Br2Br1 { get; private set; }
 
         /// <summary>
         /// Y-matrix contribution
@@ -61,7 +61,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             tran2 = provider.GetBehavior<InductorBehaviors.TransientBehavior>(2);
 
             // Calculate coupling factor
-            MUTfactor = bp.MUTcoupling * Math.Sqrt(bp1.INDinduct * bp2.INDinduct);
+            Factor = bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);
 
             // Register events for modifying the flux through the inductors
             tran1.UpdateFlux += UpdateFlux1;
@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void UpdateFlux2(object sender, InductorBehaviors.UpdateFluxEventArgs args)
         {
             var state = args.State;
-            args.Flux.Value += MUTfactor * state.Solution[load1.INDbrEq];
+            args.Flux.Value += Factor * state.Solution[load1.BranchEq];
         }
 
         /// <summary>
@@ -87,8 +87,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void UpdateFlux1(object sender, InductorBehaviors.UpdateFluxEventArgs args)
         {
             var state = args.State;
-            geq = args.Flux.Jacobian(MUTfactor);
-            args.Flux.Value += MUTfactor * state.Solution[load2.INDbrEq];
+            geq = args.Flux.Jacobian(Factor);
+            args.Flux.Value += Factor * state.Solution[load2.BranchEq];
         }
 
         /// <summary>
@@ -101,12 +101,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
             // Get extra equations
-            INDbrEq1 = load1.INDbrEq;
-            INDbrEq2 = load2.INDbrEq;
+            BranchEq1 = load1.BranchEq;
+            BranchEq2 = load2.BranchEq;
 
             // Get matrix pointers
-            MUTbr1br2 = matrix.GetElement(INDbrEq1, INDbrEq2);
-            MUTbr2br1 = matrix.GetElement(INDbrEq2, INDbrEq1);
+            Br1Br2 = matrix.GetElement(BranchEq1, BranchEq2);
+            Br2Br1 = matrix.GetElement(BranchEq2, BranchEq1);
         }
 
         /// <summary>
@@ -114,8 +114,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            MUTbr1br2 = null;
-            MUTbr2br1 = null;
+            Br1Br2 = null;
+            Br2Br1 = null;
 
             // Remove events
             tran1.UpdateFlux -= UpdateFlux1;
@@ -132,8 +132,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(sim));
 
             // Load Y-matrix
-            MUTbr1br2.Sub(geq);
-            MUTbr2br1.Sub(geq);
+            Br1Br2.Sub(geq);
+            Br2Br1.Sub(geq);
         }
     }
 }

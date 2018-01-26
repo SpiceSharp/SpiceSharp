@@ -14,9 +14,9 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [PropertyName("inductor1"), PropertyInfo("First coupled inductor")]
-        public Identifier MUTind1 { get; set; }
+        public Identifier InductorName1 { get; set; }
         [PropertyName("inductor2"), PropertyInfo("Second coupled inductor")]
-        public Identifier MUTind2 { get; set; }
+        public Identifier InductorName2 { get; set; }
 
         /// <summary>
         /// Private variables
@@ -62,8 +62,8 @@ namespace SpiceSharp.Components
             AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             // Connect
-            MUTind1 = ind1;
-            MUTind2 = ind2;
+            InductorName1 = ind1;
+            InductorName2 = ind2;
         }
 
         /// <summary>
@@ -76,8 +76,8 @@ namespace SpiceSharp.Components
                 throw new ArgumentNullException(nameof(circuit));
 
             // Get the inductors for the mutual inductance
-            Inductor1 = circuit.Objects[MUTind1] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{MUTind1}'");
-            Inductor2 = circuit.Objects[MUTind2] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{MUTind2}'");
+            Inductor1 = circuit.Objects[InductorName1] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{InductorName1}'");
+            Inductor2 = circuit.Objects[InductorName2] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{InductorName2}'");
         }
 
         /// <summary>
@@ -91,13 +91,13 @@ namespace SpiceSharp.Components
             var data = base.BuildSetupDataProvider(pool);
 
             // Register inductor 1
-            var eb = pool.GetEntityBehaviors(MUTind1) ?? throw new CircuitException($"{Name}: Could not find behaviors for inductor '{MUTind1}'");
+            var eb = pool.GetEntityBehaviors(InductorName1) ?? throw new CircuitException($"{Name}: Could not find behaviors for inductor '{InductorName1}'");
             data.Add(eb);
             var parameters = Inductor1.Parameters;
             data.Add(parameters);
 
             // Register inductor 2
-            eb = pool.GetEntityBehaviors(MUTind2) ?? throw new CircuitException($"{Name}: Could not find behaviors for inductor '{MUTind2}'");
+            eb = pool.GetEntityBehaviors(InductorName2) ?? throw new CircuitException($"{Name}: Could not find behaviors for inductor '{InductorName2}'");
             data.Add(eb);
             parameters = Inductor2.Parameters;
             data.Add(parameters);

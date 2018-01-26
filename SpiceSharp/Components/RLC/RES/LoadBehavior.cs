@@ -20,14 +20,14 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[RESposNode] - state.Solution[RESnegNode];
+            return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [PropertyName("i"), PropertyInfo("Current")]
         public double GetCurrent(State state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return (state.Solution[RESposNode] - state.Solution[RESnegNode]) * RESconduct;
+            return (state.Solution[PosNode] - state.Solution[NegNode]) * Conductance;
         }
         [PropertyName("p"), PropertyInfo("Power")]
         public double GetPower(State state)
@@ -35,28 +35,23 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            double v = state.Solution[RESposNode] - state.Solution[RESnegNode];
-            return v * v * RESconduct;
+            double v = state.Solution[PosNode] - state.Solution[NegNode];
+            return v * v * Conductance;
         }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        public int RESposNode { get; protected set; }
-        public int RESnegNode { get; protected set; }
+        int PosNode, NegNode;
+        protected MatrixElement PosPosPtr { get; private set; }
+        protected MatrixElement NegNegPtr { get; private set; }
+        protected MatrixElement PosNegPtr { get; private set; }
+        protected MatrixElement NegPosPtr { get; private set; }
 
         /// <summary>
         /// Conductance
         /// </summary>
-        public double RESconduct { get; protected set; }
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
-        protected MatrixElement RESposPosPtr { get; private set; }
-        protected MatrixElement RESnegNegPtr { get; private set; }
-        protected MatrixElement RESposNegPtr { get; private set; }
-        protected MatrixElement RESnegPosPtr { get; private set; }
+        public double Conductance { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -94,17 +89,17 @@ namespace SpiceSharp.Components.ResistorBehaviors
             var p = provider.GetParameterSet<BaseParameters>(0);
 
             // Depending on whether or not the resistance is given, get behaviors
-            if (!p.RESresist.Given)
+            if (!p.Resistance.Given)
             {
                 var temp = provider.GetBehavior<TemperatureBehavior>(0);
-                RESconduct = temp.RESconduct;
+                Conductance = temp.Conductance;
             }
             else
             {
-                if (p.RESresist.Value < 1e-12)
-                    RESconduct = 1e12;
+                if (p.Resistance.Value < 1e-12)
+                    Conductance = 1e12;
                 else
-                    RESconduct = 1.0 / p.RESresist.Value;
+                    Conductance = 1.0 / p.Resistance.Value;
             }
         }
         
@@ -118,8 +113,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            RESposNode = pins[0];
-            RESnegNode = pins[1];
+            PosNode = pins[0];
+            NegNode = pins[1];
         }
         
         /// <summary>
@@ -132,10 +127,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 throw new ArgumentNullException(nameof(matrix));
 
             // Get matrix elements
-            RESposPosPtr = matrix.GetElement(RESposNode, RESposNode);
-            RESnegNegPtr = matrix.GetElement(RESnegNode, RESnegNode);
-            RESposNegPtr = matrix.GetElement(RESposNode, RESnegNode);
-            RESnegPosPtr = matrix.GetElement(RESnegNode, RESposNode);
+            PosPosPtr = matrix.GetElement(PosNode, PosNode);
+            NegNegPtr = matrix.GetElement(NegNode, NegNode);
+            PosNegPtr = matrix.GetElement(PosNode, NegNode);
+            NegPosPtr = matrix.GetElement(NegNode, PosNode);
         }
         
         /// <summary>
@@ -144,10 +139,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public override void Unsetup()
         {
             // Remove references
-            RESposPosPtr = null;
-            RESnegNegPtr = null;
-            RESposNegPtr = null;
-            RESnegPosPtr = null;
+            PosPosPtr = null;
+            NegNegPtr = null;
+            PosNegPtr = null;
+            NegPosPtr = null;
         }
 
         /// <summary>
@@ -156,10 +151,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            RESposPosPtr.Add(RESconduct);
-            RESnegNegPtr.Add(RESconduct);
-            RESposNegPtr.Sub(RESconduct);
-            RESnegPosPtr.Sub(RESconduct);
+            PosPosPtr.Add(Conductance);
+            NegNegPtr.Add(Conductance);
+            PosNegPtr.Sub(Conductance);
+            NegPosPtr.Sub(Conductance);
         }
     }
 }

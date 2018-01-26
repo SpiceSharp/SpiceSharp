@@ -8,7 +8,7 @@ using System;
 namespace SpiceSharp.Components.CapacitorBehaviors
 {
     /// <summary>
-    /// General behavior for <see cref="Components.Capacitor"/>
+    /// General behavior for <see cref="Capacitor"/>
     /// </summary>
     public class TransientBehavior : Behaviors.TransientBehavior, IConnectedBehavior
     {
@@ -21,32 +21,32 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Methods
         /// </summary>
         [PropertyName("i"), PropertyInfo("Device current")]
-        public double GetCurrent() => CAPqcap.Derivative;
+        public double GetCurrent() => QCap.Derivative;
         [PropertyName("p"), PropertyInfo("Instantaneous device power")]
         public double GetPower(State state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return CAPqcap.Derivative * (state.Solution[CAPposNode] - state.Solution[CAPnegNode]);
+            return QCap.Derivative * (state.Solution[posNode] - state.Solution[negNode]);
         }
         [PropertyName("v"), PropertyInfo("Voltage")]
         public double GetVoltage(State state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[CAPposNode] - state.Solution[CAPnegNode];
+            return state.Solution[posNode] - state.Solution[negNode];
         }
 
         /// <summary>
         /// Nodes and states
         /// </summary>
-        int CAPposNode, CAPnegNode;
-        MatrixElement CAPposPosptr;
-        MatrixElement CAPnegNegptr;
-        MatrixElement CAPposNegptr;
-        MatrixElement CAPnegPosptr;
-        StateDerivative CAPqcap;
+        int posNode, negNode;
+        MatrixElement PosPosptr;
+        MatrixElement NegNegptr;
+        MatrixElement PosNegptr;
+        MatrixElement NegPosptr;
+        StateDerivative QCap;
 
         /// <summary>
         /// Constructor
@@ -77,8 +77,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            CAPposNode = pins[0];
-            CAPnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 			if (states == null)
 				throw new ArgumentNullException(nameof(states));
 
-            CAPqcap = states.Create();
+            QCap = states.Create();
         }
 
         /// <summary>
@@ -102,10 +102,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            CAPposPosptr = matrix.GetElement(CAPposNode, CAPposNode);
-            CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
-            CAPnegPosptr = matrix.GetElement(CAPnegNode, CAPposNode);
-            CAPposNegptr = matrix.GetElement(CAPposNode, CAPnegNode);
+            PosPosptr = matrix.GetElement(posNode, posNode);
+            NegNegptr = matrix.GetElement(negNode, negNode);
+            NegPosptr = matrix.GetElement(negNode, posNode);
+            PosNegptr = matrix.GetElement(posNode, negNode);
         }
 
         /// <summary>
@@ -119,10 +119,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 
             // Calculate the state for DC
             var sol = sim.State.Solution;
-            if (bp.CAPinitCond.Given)
-                CAPqcap.Value = bp.CAPinitCond;
+            if (bp.InitialCondition.Given)
+                QCap.Value = bp.InitialCondition;
             else
-                CAPqcap.Value = bp.CAPcapac * (sol[CAPposNode] - sol[CAPnegNode]);
+                QCap.Value = bp.Capacitance * (sol[posNode] - sol[negNode]);
         }
         
         /// <summary>
@@ -130,10 +130,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            CAPposPosptr = null;
-            CAPnegNegptr = null;
-            CAPnegPosptr = null;
-            CAPposNegptr = null;
+            PosPosptr = null;
+            NegNegptr = null;
+            NegPosptr = null;
+            PosNegptr = null;
         }
 
         /// <summary>
@@ -146,23 +146,23 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 				throw new ArgumentNullException(nameof(sim));
 
             var state = sim.State;
-            double vcap = state.Solution[CAPposNode] - state.Solution[CAPnegNode];
+            double vcap = state.Solution[posNode] - state.Solution[negNode];
 
             // Integrate
-            CAPqcap.Value = bp.CAPcapac * vcap;
-            CAPqcap.Integrate();
-            double geq = CAPqcap.Jacobian(bp.CAPcapac);
-            double ceq = CAPqcap.Current();
+            QCap.Value = bp.Capacitance * vcap;
+            QCap.Integrate();
+            double geq = QCap.Jacobian(bp.Capacitance);
+            double ceq = QCap.Current();
 
             // Load matrix
-            CAPposPosptr.Add(geq);
-            CAPnegNegptr.Add(geq);
-            CAPposNegptr.Sub(geq);
-            CAPnegPosptr.Sub(geq);
+            PosPosptr.Add(geq);
+            NegNegptr.Add(geq);
+            PosNegptr.Sub(geq);
+            NegPosptr.Sub(geq);
 
             // Load Rhs vector
-            state.Rhs[CAPposNode] -= ceq;
-            state.Rhs[CAPnegNode] += ceq;
+            state.Rhs[posNode] -= ceq;
+            state.Rhs[negNode] += ceq;
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="timestep">Timestep</param>
         public override void Truncate(ref double timestep)
         {
-            CAPqcap.LocalTruncationError(ref timestep);
+            QCap.LocalTruncationError(ref timestep);
         }
     }
 }

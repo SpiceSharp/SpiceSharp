@@ -13,19 +13,19 @@ namespace SpiceSharp.Components.ResistorBehaviors
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature", Interesting = false)]
         public double RES_TNOM
         {
-            get => REStnom - Circuit.CelsiusKelvin;
-            set => REStnom.Set(value + Circuit.CelsiusKelvin);
+            get => NominalTemperature - Circuit.CelsiusKelvin;
+            set => NominalTemperature.Set(value + Circuit.CelsiusKelvin);
         }
-        public Parameter REStnom { get; } = new Parameter(300.15);
+        public Parameter NominalTemperature { get; } = new Parameter(300.15);
         [PropertyName("tc1"), PropertyInfo("First order temperature coefficient")]
-        public Parameter REStempCoeff1 { get; } = new Parameter();
+        public Parameter TemperatureCoefficient1 { get; } = new Parameter();
         [PropertyName("tc2"), PropertyInfo("Second order temperature oefficient")]
-        public Parameter REStempCoeff2 { get; } = new Parameter();
+        public Parameter TemperatureCoefficient2 { get; } = new Parameter();
         [PropertyName("rsh"), PropertyInfo("Sheet resistance")]
-        public Parameter RESsheetRes { get; } = new Parameter();
+        public Parameter SheetResistance { get; } = new Parameter();
         [PropertyName("defw"), PropertyInfo("Default device width")]
-        public Parameter RESdefWidth { get; } = new Parameter(10.0e-6);
+        public Parameter DefWidth { get; } = new Parameter(10.0e-6);
         [PropertyName("narrow"), PropertyInfo("Narrowing of resistor")]
-        public Parameter RESnarrow { get; } = new Parameter();
+        public Parameter Narrow { get; } = new Parameter();
     }
 }

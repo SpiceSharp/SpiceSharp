@@ -26,9 +26,9 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int INDbrEq;
-        protected MatrixElement INDibrIbrptr { get; private set; }
-        StateDerivative INDflux;
+        int BranchEq;
+        protected MatrixElement IbrIbrptr { get; private set; }
+        StateDerivative flux;
 
         /// <summary>
         /// Constructor
@@ -45,7 +45,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             switch (property)
             {
-                case "flux": return (State state) => INDflux.Value;
+                case "flux": return (State state) => flux.Value;
                 default: return null;
             }
         }
@@ -83,10 +83,10 @@ namespace SpiceSharp.Components.InductorBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
             // Get current equation
-            INDbrEq = load.INDbrEq;
+            BranchEq = load.BranchEq;
 
             // Get matrix pointers
-            INDibrIbrptr = matrix.GetElement(INDbrEq, INDbrEq);
+            IbrIbrptr = matrix.GetElement(BranchEq, BranchEq);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            INDibrIbrptr = null;
+            IbrIbrptr = null;
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace SpiceSharp.Components.InductorBehaviors
 			if (states == null)
 				throw new ArgumentNullException(nameof(states));
 
-            INDflux = states.Create();
+            flux = states.Create();
         }
 
         /// <summary>
@@ -119,10 +119,10 @@ namespace SpiceSharp.Components.InductorBehaviors
 				throw new ArgumentNullException(nameof(sim));
 
             // Get the current through
-            if (bp.INDinitCond.Given)
-                INDflux.Value = bp.INDinitCond * bp.INDinduct;
+            if (bp.InitialCondition.Given)
+                flux.Value = bp.InitialCondition * bp.Inductance;
             else
-                INDflux.Value = sim.State.Solution[INDbrEq] * bp.INDinduct;
+                flux.Value = sim.State.Solution[BranchEq] * bp.Inductance;
         }
 
         /// <summary>
@@ -137,19 +137,19 @@ namespace SpiceSharp.Components.InductorBehaviors
             var state = sim.State;
 
             // Initialize
-            INDflux.Value = bp.INDinduct * state.Solution[INDbrEq];
+            flux.Value = bp.Inductance * state.Solution[BranchEq];
             
             // Allow alterations of the flux
             if (UpdateFlux != null)
             {
-                UpdateFluxEventArgs args = new UpdateFluxEventArgs(bp.INDinduct, state.Solution[INDbrEq], INDflux, state);
+                UpdateFluxEventArgs args = new UpdateFluxEventArgs(bp.Inductance, state.Solution[BranchEq], flux, state);
                 UpdateFlux.Invoke(this, args);
             }
 
             // Finally load the Y-matrix
-            INDflux.Integrate();
-            state.Rhs[INDbrEq] += INDflux.Current();
-            INDibrIbrptr.Sub(INDflux.Jacobian(bp.INDinduct));
+            flux.Integrate();
+            state.Rhs[BranchEq] += flux.Current();
+            IbrIbrptr.Sub(flux.Jacobian(bp.Inductance));
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="timestep">Timestep</param>
         public override void Truncate(ref double timestep)
         {
-            INDflux.LocalTruncationError(ref timestep);
+            flux.LocalTruncationError(ref timestep);
         }
     }
 }

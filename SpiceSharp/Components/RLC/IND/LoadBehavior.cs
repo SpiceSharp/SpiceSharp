@@ -14,16 +14,16 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int INDposNode, INDnegNode;
-        public int INDbrEq { get; protected set; }
+        int posNode, negNode;
+        public int BranchEq { get; protected set; }
         
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected MatrixElement INDposIbrptr { get; private set; }
-        protected MatrixElement INDnegIbrptr { get; private set; }
-        protected MatrixElement INDibrNegptr { get; private set; }
-        protected MatrixElement INDibrPosptr { get; private set; }
+        protected MatrixElement PosIbrptr { get; private set; }
+        protected MatrixElement NegIbrptr { get; private set; }
+        protected MatrixElement IbrNegptr { get; private set; }
+        protected MatrixElement IbrPosptr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -40,10 +40,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             switch (property)
             {
-                case "v": return (State state) => state.Solution[INDposNode] - state.Solution[INDnegNode];
+                case "v": return (State state) => state.Solution[posNode] - state.Solution[negNode];
                 case "i":
-                case "c": return (State state) => state.Solution[INDbrEq];
-                case "p": return (State state) => (state.Solution[INDposNode] - state.Solution[INDnegNode]) * state.Solution[INDbrEq];
+                case "c": return (State state) => state.Solution[BranchEq];
+                case "p": return (State state) => (state.Solution[posNode] - state.Solution[negNode]) * state.Solution[BranchEq];
                 default: return null;
             }
         }
@@ -67,8 +67,8 @@ namespace SpiceSharp.Components.InductorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            INDposNode = pins[0];
-            INDnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -84,13 +84,13 @@ namespace SpiceSharp.Components.InductorBehaviors
                 throw new ArgumentNullException(nameof(matrix));
 
             // Create current equation
-            INDbrEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
+            BranchEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
 
             // Get matrix pointers
-            INDposIbrptr = matrix.GetElement(INDposNode, INDbrEq);
-            INDnegIbrptr = matrix.GetElement(INDnegNode, INDbrEq);
-            INDibrNegptr = matrix.GetElement(INDbrEq, INDnegNode);
-            INDibrPosptr = matrix.GetElement(INDbrEq, INDposNode);
+            PosIbrptr = matrix.GetElement(posNode, BranchEq);
+            NegIbrptr = matrix.GetElement(negNode, BranchEq);
+            IbrNegptr = matrix.GetElement(BranchEq, negNode);
+            IbrPosptr = matrix.GetElement(BranchEq, posNode);
         }
 
         /// <summary>
@@ -99,10 +99,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         public override void Unsetup()
         {
             // Remove references
-            INDposIbrptr = null;
-            INDnegIbrptr = null;
-            INDibrNegptr = null;
-            INDibrPosptr = null;
+            PosIbrptr = null;
+            NegIbrptr = null;
+            IbrNegptr = null;
+            IbrPosptr = null;
         }
 
         /// <summary>
@@ -111,10 +111,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            INDposIbrptr.Add(1.0);
-            INDnegIbrptr.Sub(1.0);
-            INDibrPosptr.Add(1.0);
-            INDibrNegptr.Sub(1.0);
+            PosIbrptr.Add(1.0);
+            NegIbrptr.Sub(1.0);
+            IbrPosptr.Add(1.0);
+            IbrNegptr.Sub(1.0);
         }
     }
 }

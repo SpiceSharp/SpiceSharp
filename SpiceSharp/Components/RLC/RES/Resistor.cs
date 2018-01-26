@@ -18,20 +18,20 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        public int RESposNode { get; private set; }
-        public int RESnegNode { get; private set; }
+        public int PosNode { get; private set; }
+        public int NegNode { get; private set; }
         
         /// <summary>
         /// Constants
         /// </summary>
-        public const int RESpinCount = 2;
+        public const int ResistorPinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the resistor</param>
         public Resistor(Identifier name) 
-            : base(name, RESpinCount)
+            : base(name, ResistorPinCount)
         {
             // Register parameters
             Parameters.Add(new BaseParameters());
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="res">The resistance</param>
         public Resistor(Identifier name, Identifier pos, Identifier neg, double res) 
-            : base(name, RESpinCount)
+            : base(name, ResistorPinCount)
         {
             // Register parameters
             Parameters.Add(new BaseParameters(res));
@@ -73,8 +73,8 @@ namespace SpiceSharp.Components
         public override void Setup(Circuit circuit)
         {
             var nodes = BindNodes(circuit);
-            RESposNode = nodes[0].Index;
-            RESnegNode = nodes[1].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
         }
     }
 }

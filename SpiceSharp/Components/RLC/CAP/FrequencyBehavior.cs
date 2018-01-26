@@ -7,7 +7,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.CapacitorBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="Components.Capacitor"/>
+    /// AC behavior for <see cref="Capacitor"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
@@ -19,11 +19,11 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int CAPposNode, CAPnegNode;
-        MatrixElement CAPposPosptr;
-        MatrixElement CAPnegNegptr;
-        MatrixElement CAPposNegptr;
-        MatrixElement CAPnegPosptr;
+        int posNode, negNode;
+        MatrixElement PosPosptr;
+        MatrixElement NegNegptr;
+        MatrixElement PosNegptr;
+        MatrixElement NegPosptr;
 
         /// <summary>
         /// Constructor
@@ -40,16 +40,16 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             switch (property)
             {
-                case "v": return (State state) => new Complex(state.Solution[CAPposNode] - state.Solution[CAPnegNode], state.iSolution[CAPposNode] - state.iSolution[CAPnegNode]);
+                case "v": return (State state) => new Complex(state.Solution[posNode] - state.Solution[negNode], state.iSolution[posNode] - state.iSolution[negNode]);
                 case "i": return (State state) =>
                 {
-                    Complex voltage = new Complex(state.Solution[CAPposNode] - state.Solution[CAPnegNode], state.iSolution[CAPposNode] - state.iSolution[CAPnegNode]);
-                    return state.Laplace * bp.CAPcapac.Value * voltage;
+                    Complex voltage = new Complex(state.Solution[posNode] - state.Solution[negNode], state.iSolution[posNode] - state.iSolution[negNode]);
+                    return state.Laplace * bp.Capacitance.Value * voltage;
                 };
                 case "p": return (State state) =>
                 {
-                    Complex voltage = new Complex(state.Solution[CAPposNode] - state.Solution[CAPnegNode], state.iSolution[CAPposNode] - state.iSolution[CAPnegNode]);
-                    Complex current = state.Laplace * bp.CAPcapac.Value * voltage;
+                    Complex voltage = new Complex(state.Solution[posNode] - state.Solution[negNode], state.iSolution[posNode] - state.iSolution[negNode]);
+                    Complex current = state.Laplace * bp.Capacitance.Value * voltage;
                     return voltage * Complex.Conjugate(current);
                 };
                 default: return null;
@@ -79,8 +79,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            CAPposNode = pins[0];
-            CAPnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -93,10 +93,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
 
-            CAPposPosptr = matrix.GetElement(CAPposNode, CAPposNode);
-            CAPnegNegptr = matrix.GetElement(CAPnegNode, CAPnegNode);
-            CAPnegPosptr = matrix.GetElement(CAPnegNode, CAPposNode);
-            CAPposNegptr = matrix.GetElement(CAPposNode, CAPnegNode);
+            PosPosptr = matrix.GetElement(posNode, posNode);
+            NegNegptr = matrix.GetElement(negNode, negNode);
+            NegPosptr = matrix.GetElement(negNode, posNode);
+            PosNegptr = matrix.GetElement(posNode, negNode);
         }
         
         /// <summary>
@@ -109,13 +109,13 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 				throw new ArgumentNullException(nameof(sim));
 
             var state = sim.State;
-            var val = state.Laplace * bp.CAPcapac.Value;
+            var val = state.Laplace * bp.Capacitance.Value;
 
             // Load the matrix
-            CAPposPosptr.Add(val);
-            CAPnegNegptr.Add(val);
-            CAPposNegptr.Sub(val);
-            CAPnegPosptr.Sub(val);
+            PosPosptr.Add(val);
+            NegNegptr.Add(val);
+            PosNegptr.Sub(val);
+            NegPosptr.Sub(val);
         }
     }
 }

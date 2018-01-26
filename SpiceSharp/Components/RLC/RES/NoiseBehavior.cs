@@ -18,13 +18,12 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        public int RESposNode { get; protected set; }
-        public int RESnegNode { get; protected set; }
+        int posNode, negNode;
 
         /// <summary>
         /// Get resistor noise sources
         /// </summary>
-        public ComponentNoise RESnoise { get; private set; } = new ComponentNoise(new NoiseThermal("thermal", 0, 1));
+        public ComponentNoise ResistorNoise { get; private set; } = new ComponentNoise(new NoiseThermal("thermal", 0, 1));
 
         /// <summary>
         /// Constructor
@@ -54,8 +53,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            RESposNode = pins[0];
-            RESnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -63,7 +62,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         public override void ConnectNoise()
         {
-            RESnoise.Setup(RESposNode, RESnegNode);
+            ResistorNoise.Setup(posNode, negNode);
         }
 
         /// <summary>
@@ -72,8 +71,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="sim">Noise simulation</param>
         public override void Noise(Noise sim)
         {
-            RESnoise.Generators[0].Set(load.RESconduct);
-            RESnoise.Evaluate(sim);
+            ResistorNoise.Generators[0].Set(load.Conductance);
+            ResistorNoise.Evaluate(sim);
         }
     }
 }

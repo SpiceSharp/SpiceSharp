@@ -11,9 +11,9 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("inductance"), PropertyInfo("Inductance of the inductor", IsPrincipal = true)]
-        public Parameter INDinduct { get; } = new Parameter();
+        public Parameter Inductance { get; } = new Parameter();
         [PropertyName("ic"), PropertyInfo("Initial current through the inductor", Interesting = false)]
-        public Parameter INDinitCond { get; } = new Parameter();
+        public Parameter InitialCondition { get; } = new Parameter();
 
         /// <summary>
         /// Constructor
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="ind">Inductor</param>
         public BaseParameters(double ind)
         {
-            INDinduct.Set(ind);
+            Inductance.Set(ind);
         }
     }
 }

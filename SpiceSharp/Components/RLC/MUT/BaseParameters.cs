@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("k"), PropertyName("coefficient"), PropertyInfo("Mutual inductance", IsPrincipal = true)]
-        public Parameter MUTcoupling { get; } = new Parameter();
+        public Parameter Coupling { get; } = new Parameter();
 
         /// <summary>
         /// Constructor
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="k">Mutual inductance</param>
         public BaseParameters(double k)
         {
-            MUTcoupling.Set(k);
+            Coupling.Set(k);
         }
     }
 }

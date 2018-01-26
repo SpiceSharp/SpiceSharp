@@ -19,20 +19,20 @@ namespace SpiceSharp.Components
         /// Nodes
         /// </summary>
         [PropertyName("pos"), PropertyInfo("Positive terminal of the capacitor")]
-        public int CAPposNode { get; private set; }
+        public int PosNode { get; private set; }
         [PropertyName("neg"), PropertyInfo("Negative terminal of the capacitor")]
-        public int CAPnegNode { get; private set; }
+        public int NegNode { get; private set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        public const int CAPpinCount = 2;
+        public const int CapacitorPinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public Capacitor(Identifier name) : base(name, CAPpinCount)
+        public Capacitor(Identifier name) : base(name, CapacitorPinCount)
         {
             // Register parameters
             Parameters.Add(new BaseParameters());
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="cap">The capacitance</param>
         public Capacitor(Identifier name, Identifier pos, Identifier neg, double cap) 
-            : base(name, CAPpinCount)
+            : base(name, CapacitorPinCount)
         {
             // Register parameters
             Parameters.Add(new BaseParameters(cap));
@@ -72,8 +72,8 @@ namespace SpiceSharp.Components
         public override void Setup(Circuit circuit)
         {
             var nodes = BindNodes(circuit);
-            CAPposNode = nodes[0].Index;
-            CAPnegNode = nodes[1].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
         }
     }
 }

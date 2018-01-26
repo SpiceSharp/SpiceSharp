@@ -20,8 +20,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected MatrixElement MUTbr1br2 { get; private set; }
-        protected MatrixElement MUTbr2br1 { get; private set; }
+        protected MatrixElement Br1Br2 { get; private set; }
+        protected MatrixElement Br2Br1 { get; private set; }
 
         /// <summary>
         /// Shared parameters
@@ -53,7 +53,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             load2 = provider.GetBehavior<InductorBehaviors.LoadBehavior>(2);
 
             // Calculate coupling factor
-            MUTfactor = bp.MUTcoupling * Math.Sqrt(bp1.INDinduct * bp2.INDinduct);
+            MUTfactor = bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);
         }
 
         /// <summary>
@@ -66,12 +66,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
             // Get extra equations
-            int INDbrEq1 = load1.INDbrEq;
-            int INDbrEq2 = load2.INDbrEq;
+            int INDbrEq1 = load1.BranchEq;
+            int INDbrEq2 = load2.BranchEq;
 
             // Get matrix equations
-            MUTbr1br2 = matrix.GetElement(INDbrEq1, INDbrEq2);
-            MUTbr2br1 = matrix.GetElement(INDbrEq2, INDbrEq1);
+            Br1Br2 = matrix.GetElement(INDbrEq1, INDbrEq2);
+            Br2Br1 = matrix.GetElement(INDbrEq2, INDbrEq1);
         }
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            MUTbr1br2 = null;
-            MUTbr2br1 = null;
+            Br1Br2 = null;
+            Br2Br1 = null;
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 
             var state = sim.State;
             Complex value = state.Laplace * MUTfactor;
-            MUTbr1br2.Sub(value);
-            MUTbr2br1.Sub(value);
+            Br1Br2.Sub(value);
+            Br2Br1.Sub(value);
         }
     }
 }

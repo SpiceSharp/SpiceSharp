@@ -6,7 +6,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.CapacitorBehaviors
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="Components.Capacitor"/>
+    /// Temperature behavior for a <see cref="Capacitor"/>
     /// </summary>
     public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {
@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
-            if (!bp.CAPcapac.Given)
+            if (!bp.Capacitance.Given)
                 mbp = provider.GetParameterSet<ModelBaseParameters>(1);
         }
 
@@ -46,18 +46,18 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 			if (sim == null)
 				throw new ArgumentNullException(nameof(sim));
 
-            if (!bp.CAPcapac.Given)
+            if (!bp.Capacitance.Given)
             {
                 if (mbp == null)
                     throw new CircuitException("No model specified");
 
-                double width = bp.CAPwidth.Given ? bp.CAPwidth.Value : mbp.CAPdefWidth.Value;
-                bp.CAPcapac.Value = mbp.CAPcj *
-                    (bp.CAPwidth - mbp.CAPnarrow) *
-                    (bp.CAPlength - mbp.CAPnarrow) +
-                    mbp.CAPcjsw * 2 * (
-                    (bp.CAPlength - mbp.CAPnarrow) +
-                    (bp.CAPwidth - mbp.CAPnarrow));
+                double width = bp.Width.Given ? bp.Width.Value : mbp.DefWidth.Value;
+                bp.Capacitance.Value = mbp.Cj *
+                    (bp.Width - mbp.Narrow) *
+                    (bp.Length - mbp.Narrow) +
+                    mbp.Cjsw * 2 * (
+                    (bp.Length - mbp.Narrow) +
+                    (bp.Width - mbp.Narrow));
             }
         }
     }
