@@ -110,10 +110,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var noise = simulation.NoiseState;
 
             // Set noise parameters
-            MOS2Noise.Generators[RdNoise].Set(temp.DrainConductance);
-            MOS2Noise.Generators[RsNoise].Set(temp.SourceConductance);
-            MOS2Noise.Generators[IdNoise].Set(2.0 / 3.0 * Math.Abs(load.Gm));
-            MOS2Noise.Generators[FlickerNoise].Set(mnp.FNcoef * Math.Exp(mnp.FNexp * Math.Log(Math.Max(Math.Abs(load.Cd), 1e-38))) 
+            MOS2Noise.Generators[RdNoise].SetCoefficients(temp.DrainConductance);
+            MOS2Noise.Generators[RsNoise].SetCoefficients(temp.SourceConductance);
+            MOS2Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(load.Gm));
+            MOS2Noise.Generators[FlickerNoise].SetCoefficients(mnp.FNcoef * Math.Exp(mnp.FNexp * Math.Log(Math.Max(Math.Abs(load.Cd), 1e-38))) 
                 / (bp.Width * (bp.Length - 2 * mbp.LatDiff) * modeltemp.OxideCapFactor * modeltemp.OxideCapFactor) / noise.Freq);
 
             // Evaluate noise sources

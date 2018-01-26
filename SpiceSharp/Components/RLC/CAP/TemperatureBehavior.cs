@@ -51,7 +51,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 if (mbp == null)
                     throw new CircuitException("No model specified");
 
-                double width = bp.Width.Given ? bp.Width.Value : mbp.DefWidth.Value;
+
+                // TODO: width is not used, check if this is right...
+                double width = bp.Width.Given ? bp.Width.Value : mbp.DefaultWidth.Value;
                 bp.Capacitance.Value = mbp.Cj *
                     (bp.Width - mbp.Narrow) *
                     (bp.Length - mbp.Narrow) +

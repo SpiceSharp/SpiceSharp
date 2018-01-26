@@ -115,10 +115,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             coxSquared *= coxSquared;
 
             // Set noise parameters
-            MOS1Noise.Generators[RdNoise].Set(temp.DrainConductance);
-            MOS1Noise.Generators[RsNoise].Set(temp.SourceConductance);
-            MOS1Noise.Generators[IdNoise].Set(2.0 / 3.0 * Math.Abs(load.Gm));
-            MOS1Noise.Generators[FlickerNoise].Set(mnp.FnCoef * Math.Exp(mnp.FnExp * Math.Log(Math.Max(Math.Abs(load.Cd), 1e-38))) 
+            MOS1Noise.Generators[RdNoise].SetCoefficients(temp.DrainConductance);
+            MOS1Noise.Generators[RsNoise].SetCoefficients(temp.SourceConductance);
+            MOS1Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(load.Gm));
+            MOS1Noise.Generators[FlickerNoise].SetCoefficients(mnp.FnCoef * Math.Exp(mnp.FnExp * Math.Log(Math.Max(Math.Abs(load.Cd), 1e-38))) 
                 / (bp.Width * (bp.Length - 2 * mbp.LatDiff) * coxSquared) / noise.Freq);
 
             // Evaluate noise sources

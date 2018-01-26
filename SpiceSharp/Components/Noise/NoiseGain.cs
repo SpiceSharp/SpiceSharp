@@ -17,13 +17,13 @@ namespace SpiceSharp.Components.NoiseSources
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the noise source</param>
-        public NoiseGain(string name, int a, int b) : base(name, a, b) { }
+        public NoiseGain(string name, int node1, int node2) : base(name, node1, node2) { }
 
         /// <summary>
         /// Set the values for the noise source
         /// </summary>
         /// <param name="values">Values</param>
-        public override void Set(params double[] values)
+        public override void SetCoefficients(params double[] values)
         {
             if (values == null)
                 throw new ArgumentNullException(nameof(values));
@@ -41,8 +41,8 @@ namespace SpiceSharp.Components.NoiseSources
                 throw new ArgumentNullException(nameof(simulation));
             var sol = simulation.State.Solution;
             var isol = simulation.State.iSolution;
-            var rval = sol[NOISEnodes[0]] - sol[NOISEnodes[1]];
-            var ival = isol[NOISEnodes[0]] - isol[NOISEnodes[1]];
+            var rval = sol[Nodes[0]] - sol[Nodes[1]];
+            var ival = isol[Nodes[0]] - isol[Nodes[1]];
             double gain = rval * rval + ival * ival;
             return gain * Gain;
         }

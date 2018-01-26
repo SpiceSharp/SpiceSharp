@@ -71,7 +71,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="simulation">Noise simulation</param>
         public override void Noise(Noise simulation)
         {
-            ResistorNoise.Generators[0].Set(load.Conductance);
+            ResistorNoise.Generators[0].SetCoefficients(load.Conductance);
             ResistorNoise.Evaluate(simulation);
         }
     }

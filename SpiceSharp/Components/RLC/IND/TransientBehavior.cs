@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// An event called when the flux can be updated
         /// Can be used by mutual inductances
         /// </summary>
-        public event UpdateFluxEventHandler UpdateFlux;
+        public event EventHandler<UpdateFluxEventArgs> UpdateFlux;
 
         /// <summary>
         /// Nodes
@@ -69,7 +69,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             if (UpdateFlux != null)
             {
                 foreach (var inv in UpdateFlux.GetInvocationList())
-                    UpdateFlux -= (UpdateFluxEventHandler)inv;
+                    UpdateFlux -= (EventHandler<UpdateFluxEventArgs>)inv;
             }
         }
 

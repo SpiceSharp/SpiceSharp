@@ -18,17 +18,17 @@ namespace SpiceSharp.Components.NoiseSources
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the noise source</param>
-        public NoiseThermal(string name, int a, int b) : base(name, a, b) { }
+        public NoiseThermal(string name, int node1, int node2) : base(name, node1, node2) { }
 
         /// <summary>
         /// Set the parameters for the thermal noise
         /// </summary>
-        /// <param name="values">Values</param>
-        public override void Set(params double[] values)
+        /// <param name="coefficients">Values</param>
+        public override void SetCoefficients(params double[] coefficients)
         {
-            if (values == null)
-                throw new ArgumentNullException(nameof(values));
-            Conductance = values[0];
+            if (coefficients == null)
+                throw new ArgumentNullException(nameof(coefficients));
+            Conductance = coefficients[0];
         }
 
         /// <summary>
@@ -44,8 +44,8 @@ namespace SpiceSharp.Components.NoiseSources
             var state = simulation.State;
             var rsol = state.Solution;
             var isol = state.iSolution;
-            var rval = rsol[NOISEnodes[0]] - rsol[NOISEnodes[1]];
-            var ival = isol[NOISEnodes[0]] - isol[NOISEnodes[1]];
+            var rval = rsol[Nodes[0]] - rsol[Nodes[1]];
+            var ival = isol[Nodes[0]] - isol[Nodes[1]];
             double gain = rval * rval + ival * ival;
             return 4.0 * Circuit.Boltzmann * simulation.State.Temperature * Conductance * gain;
         }

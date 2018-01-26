@@ -76,8 +76,8 @@ namespace SpiceSharp.Components
             {
                 Generators[i].Evaluate(simulation);
                 Noise += Generators[i].Noise;
-                TotalInNoise += Generators[i].InNoiz;
-                TotalOutNoise += Generators[i].OutNoiz;
+                TotalInNoise += Generators[i].TotalInputNoise;
+                TotalOutNoise += Generators[i].TotalOutputNoise;
             }
 
             // Log of the output noise density

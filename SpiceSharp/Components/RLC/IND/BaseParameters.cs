@@ -25,10 +25,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="ind">Inductor</param>
-        public BaseParameters(double ind)
+        /// <param name="inductance">Inductor</param>
+        public BaseParameters(double inductance)
         {
-            Inductance.Set(ind);
+            Inductance.Set(inductance);
         }
     }
 }

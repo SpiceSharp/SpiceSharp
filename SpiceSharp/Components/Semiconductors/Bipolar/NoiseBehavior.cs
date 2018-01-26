@@ -113,12 +113,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var noise = simulation.NoiseState;
 
             // Set noise parameters
-            BipolarJunctionTransistorNoise.Generators[RcNoise].Set(modeltemp.CollectorConduct * bp.Area);
-            BipolarJunctionTransistorNoise.Generators[RbNoise].Set(load.Gx);
-            BipolarJunctionTransistorNoise.Generators[ReNoise].Set(modeltemp.EmitterConduct * bp.Area);
-            BipolarJunctionTransistorNoise.Generators[IcNoise].Set(load.Cc);
-            BipolarJunctionTransistorNoise.Generators[IbNoise].Set(load.Cb);
-            BipolarJunctionTransistorNoise.Generators[FlickerNoise].Set(mnp.FnCoefficient * Math.Exp(mnp.FnExp * Math.Log(Math.Max(Math.Abs(load.Cb), 1e-38))) / noise.Freq);
+            BipolarJunctionTransistorNoise.Generators[RcNoise].SetCoefficients(modeltemp.CollectorConduct * bp.Area);
+            BipolarJunctionTransistorNoise.Generators[RbNoise].SetCoefficients(load.Gx);
+            BipolarJunctionTransistorNoise.Generators[ReNoise].SetCoefficients(modeltemp.EmitterConduct * bp.Area);
+            BipolarJunctionTransistorNoise.Generators[IcNoise].SetCoefficients(load.Cc);
+            BipolarJunctionTransistorNoise.Generators[IbNoise].SetCoefficients(load.Cb);
+            BipolarJunctionTransistorNoise.Generators[FlickerNoise].SetCoefficients(mnp.FnCoefficient * Math.Exp(mnp.FnExp * Math.Log(Math.Max(Math.Abs(load.Cb), 1e-38))) / noise.Freq);
 
             // Evaluate all noise sources
             BipolarJunctionTransistorNoise.Evaluate(simulation);

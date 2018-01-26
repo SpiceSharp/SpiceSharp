@@ -41,12 +41,12 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="mag">Magnitude</param>
-        /// <param name="ph">Phase</param>
-        public FrequencyParameters(double mag, double ph)
+        /// <param name="magnitude">Magnitude</param>
+        /// <param name="phase">Phase</param>
+        public FrequencyParameters(double magnitude, double phase)
         {
-            AcMagnitude.Set(mag);
-            AcPhase.Set(ph);
+            AcMagnitude.Set(magnitude);
+            AcPhase.Set(phase);
         }
     }
 }

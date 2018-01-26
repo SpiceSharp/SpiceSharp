@@ -42,11 +42,11 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Nodes and states
         /// </summary>
         int posNode, negNode;
-        MatrixElement PosPosPtr;
-        MatrixElement NegNegPtr;
-        MatrixElement PosNegPtr;
-        MatrixElement NegPosPtr;
-        StateDerivative QCap;
+        protected MatrixElement PosPosPtr { get; private set; }
+        protected MatrixElement NegNegPtr { get; private set; }
+        protected MatrixElement PosNegPtr { get; private set; }
+        protected MatrixElement NegPosPtr { get; private set; }
+        protected StateDerivative QCap { get; private set; }
 
         /// <summary>
         /// Constructor

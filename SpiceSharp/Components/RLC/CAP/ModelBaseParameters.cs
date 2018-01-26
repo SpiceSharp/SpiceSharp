@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         [PropertyName("cjsw"), PropertyInfo("Sidewall capacitance per meter")]
         public Parameter Cjsw { get; } = new Parameter();
         [PropertyName("defw"), PropertyInfo("Default width")]
-        public Parameter DefWidth { get; } = new Parameter(10.0e-6);
+        public Parameter DefaultWidth { get; } = new Parameter(10.0e-6);
         [PropertyName("narrow"), PropertyInfo("Width correction factor")]
         public Parameter Narrow { get; } = new Parameter();
     }

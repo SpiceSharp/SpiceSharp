@@ -37,26 +37,18 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="ind">Inductor</param>
-        /// <param name="i">Current</param>
-        public UpdateFluxEventArgs(double ind, double i, StateDerivative flux, State state)
+        /// <param name="inductance">Inductor</param>
+        /// <param name="current">Current</param>
+        public UpdateFluxEventArgs(double inductance, double current, StateDerivative flux, State state)
         {
             if (flux == null)
                 throw new ArgumentNullException(nameof(flux));
 
-            Inductance = ind;
-            Current = i;
+            Inductance = inductance;
+            Current = current;
             OriginalFlux = flux.Value;
             Flux = flux;
             State = state ?? throw new ArgumentNullException(nameof(state));
         }
     }
-
-    /// <summary>
-    /// Delegate used for updating flux
-    /// </summary>
-    /// <param name="sender">Behavior</param>
-    /// <param name="args">Arguments</param>
-    /// <returns></returns>
-    public delegate void UpdateFluxEventHandler(object sender, UpdateFluxEventArgs args);
 }

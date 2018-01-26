@@ -21,22 +21,22 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Get the log of the calculated noise density
         /// </summary>
-        public double LnNoise { get; private set; }
+        public double LogNoise { get; private set; }
 
         /// <summary>
         /// Integrated output noise
         /// </summary>
-        public double OutNoiz { get; private set; }
+        public double TotalOutputNoise { get; private set; }
 
         /// <summary>
         /// Integrated input noise
         /// </summary>
-        public double InNoiz { get; private set; }
+        public double TotalInputNoise { get; private set; }
 
         /// <summary>
         /// Gets the nodes this noise generator is connected to
         /// </summary>
-        public int[] NOISEnodes { get; private set; }
+        public int[] Nodes { get; private set; }
 
         /// <summary>
         /// Private variables
@@ -63,16 +63,16 @@ namespace SpiceSharp.Components.NoiseSources
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
-            NOISEnodes = new int[pins.Length];
+            Nodes = new int[pins.Length];
             for (int i = 0; i < pins.Length; i++)
-                NOISEnodes[i] = nodes[pins[i]];
+                Nodes[i] = nodes[pins[i]];
         }
 
         /// <summary>
         /// Set the values for evaluating the noise generator
         /// </summary>
-        /// <param name="values"></param>
-        public abstract void Set(params double[] values);
+        /// <param name="coefficients">Coefficients</param>
+        public abstract void SetCoefficients(params double[] coefficients);
 
         /// <summary>
         /// Evaluate
@@ -90,20 +90,20 @@ namespace SpiceSharp.Components.NoiseSources
             // Initialize the integrated noise if we just started
             if (noise.DelFreq == 0.0)
             {
-                LnNoise = lnNdens;
-                OutNoiz = 0.0;
-                InNoiz = 0.0;
+                LogNoise = lnNdens;
+                TotalOutputNoise = 0.0;
+                TotalInputNoise = 0.0;
             }
             else
             {
                 // Integrate the output noise
-                double tempOnoise = noise.Integrate(Noise, lnNdens, LnNoise);
-                double tempInoise = noise.Integrate(Noise * noise.GainSqInv, lnNdens + noise.LnGainInv, LnNoise + noise.LnGainInv);
-                LnNoise = lnNdens;
+                double tempOnoise = noise.Integrate(Noise, lnNdens, LogNoise);
+                double tempInoise = noise.Integrate(Noise * noise.GainSqInv, lnNdens + noise.LnGainInv, LogNoise + noise.LnGainInv);
+                LogNoise = lnNdens;
 
                 // Add integrated quantity
-                OutNoiz += tempOnoise;
-                InNoiz += tempInoise;
+                TotalOutputNoise += tempOnoise;
+                TotalInputNoise += tempInoise;
             }
         }
 

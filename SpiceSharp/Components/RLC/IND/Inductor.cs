@@ -42,12 +42,12 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the inductor</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="ind">The inductance</param>
-        public Inductor(Identifier name, Identifier pos, Identifier neg, double ind) 
+        /// <param name="inductance">The inductance</param>
+        public Inductor(Identifier name, Identifier pos, Identifier neg, double inductance) 
             : base(name, InductorPinCount)
         {
             // Add parameters
-            Parameters.Add(new BaseParameters(ind));
+            Parameters.Add(new BaseParameters(inductance));
 
             // Add factories
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
