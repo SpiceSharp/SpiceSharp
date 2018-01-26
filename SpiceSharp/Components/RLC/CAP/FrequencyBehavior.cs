@@ -20,10 +20,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode;
-        MatrixElement PosPosptr;
-        MatrixElement NegNegptr;
-        MatrixElement PosNegptr;
-        MatrixElement NegPosptr;
+        MatrixElement PosPosPtr;
+        MatrixElement NegNegPtr;
+        MatrixElement PosNegPtr;
+        MatrixElement NegPosPtr;
 
         /// <summary>
         /// Constructor
@@ -93,10 +93,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
 
-            PosPosptr = matrix.GetElement(posNode, posNode);
-            NegNegptr = matrix.GetElement(negNode, negNode);
-            NegPosptr = matrix.GetElement(negNode, posNode);
-            PosNegptr = matrix.GetElement(posNode, negNode);
+            PosPosPtr = matrix.GetElement(posNode, posNode);
+            NegNegPtr = matrix.GetElement(negNode, negNode);
+            NegPosPtr = matrix.GetElement(negNode, posNode);
+            PosNegPtr = matrix.GetElement(posNode, negNode);
         }
         
         /// <summary>
@@ -112,10 +112,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             var val = state.Laplace * bp.Capacitance.Value;
 
             // Load the matrix
-            PosPosptr.Add(val);
-            NegNegptr.Add(val);
-            PosNegptr.Sub(val);
-            NegPosptr.Sub(val);
+            PosPosPtr.Add(val);
+            NegNegPtr.Add(val);
+            PosNegPtr.Sub(val);
+            NegPosPtr.Sub(val);
         }
     }
 }

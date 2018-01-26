@@ -58,8 +58,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, contBranch;
-        protected MatrixElement PosContBrptr { get; private set; }
-        protected MatrixElement NegContBrptr { get; private set; }
+        protected MatrixElement PosControlBranchPtr { get; private set; }
+        protected MatrixElement NegControlBranchPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -107,8 +107,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
             contBranch = vsrcload.BranchEq;
-            PosContBrptr = matrix.GetElement(posNode, contBranch);
-            NegContBrptr = matrix.GetElement(negNode, contBranch);
+            PosControlBranchPtr = matrix.GetElement(posNode, contBranch);
+            NegControlBranchPtr = matrix.GetElement(negNode, contBranch);
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         public override void Unsetup()
         {
             // Remove references
-            PosContBrptr = null;
-            NegContBrptr = null;
+            PosControlBranchPtr = null;
+            NegControlBranchPtr = null;
         }
 
         /// <summary>
@@ -130,8 +130,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 			if (sim == null)
 				throw new ArgumentNullException(nameof(sim));
 
-            PosContBrptr.Add(bp.Coefficient);
-            NegContBrptr.Sub(bp.Coefficient);
+            PosControlBranchPtr.Add(bp.Coefficient);
+            NegControlBranchPtr.Sub(bp.Coefficient);
         }
     }
 }

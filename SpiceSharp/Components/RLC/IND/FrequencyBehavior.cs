@@ -21,11 +21,11 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, branchEq;
-        protected MatrixElement PosIbrptr { get; private set; }
-        protected MatrixElement NegIbrptr { get; private set; }
-        protected MatrixElement IbrNegptr { get; private set; }
-        protected MatrixElement IbrPosptr { get; private set; }
-        protected MatrixElement IbrIbrptr { get; private set; }
+        protected MatrixElement PosIbrPtr { get; private set; }
+        protected MatrixElement NegIbrPtr { get; private set; }
+        protected MatrixElement IbrNegPtr { get; private set; }
+        protected MatrixElement IbrPosPtr { get; private set; }
+        protected MatrixElement IbrIbrPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -76,11 +76,11 @@ namespace SpiceSharp.Components.InductorBehaviors
             branchEq = load.BranchEq;
 
             // Get matrix pointers
-            PosIbrptr = matrix.GetElement(posNode, branchEq);
-            NegIbrptr = matrix.GetElement(negNode, branchEq);
-            IbrNegptr = matrix.GetElement(branchEq, negNode);
-            IbrPosptr = matrix.GetElement(branchEq, posNode);
-            IbrIbrptr = matrix.GetElement(branchEq, branchEq);
+            PosIbrPtr = matrix.GetElement(posNode, branchEq);
+            NegIbrPtr = matrix.GetElement(negNode, branchEq);
+            IbrNegPtr = matrix.GetElement(branchEq, negNode);
+            IbrPosPtr = matrix.GetElement(branchEq, posNode);
+            IbrIbrPtr = matrix.GetElement(branchEq, branchEq);
         }
 
         /// <summary>
@@ -88,11 +88,11 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            PosIbrptr = null;
-            NegIbrptr = null;
-            IbrPosptr = null;
-            IbrNegptr = null;
-            IbrIbrptr = null;
+            PosIbrPtr = null;
+            NegIbrPtr = null;
+            IbrPosPtr = null;
+            IbrNegPtr = null;
+            IbrIbrPtr = null;
         }
 
         /// <summary>
@@ -107,11 +107,11 @@ namespace SpiceSharp.Components.InductorBehaviors
             var state = sim.State;
             Complex val = state.Laplace * bp.Inductance.Value;
 
-            PosIbrptr.Add(1.0);
-            NegIbrptr.Sub(1.0);
-            IbrNegptr.Sub(1.0);
-            IbrPosptr.Add(1.0);
-            IbrIbrptr.Sub(val);
+            PosIbrPtr.Add(1.0);
+            NegIbrPtr.Sub(1.0);
+            IbrNegPtr.Sub(1.0);
+            IbrPosPtr.Add(1.0);
+            IbrIbrPtr.Sub(val);
         }
     }
 }

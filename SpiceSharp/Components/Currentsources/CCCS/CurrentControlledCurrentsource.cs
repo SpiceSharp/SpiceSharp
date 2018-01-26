@@ -15,7 +15,7 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [PropertyName("control"), PropertyInfo("Name of the controlling source")]
-        public Identifier ContactName { get; set; }
+        public Identifier ControllingName { get; set; }
 
         /// <summary>
         /// Nodes
@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         [PropertyName("neg_node"), PropertyInfo("Negative node of the source")]
         public int NegNode { get; private set; }
         [PropertyName("vctrl"), PropertyInfo("Controlling voltage source")]
-        public VoltageSource ContactSource { get; protected set; }
+        public VoltageSource ControllingSource { get; protected set; }
 
         /// <summary>
         /// Constants
@@ -56,9 +56,9 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the current controlled current source</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="vsource">The name of the voltage source</param>
+        /// <param name="voltageSource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
-        public CurrentControlledCurrentSource(Identifier name, Identifier pos, Identifier neg, Identifier vsource, double gain)
+        public CurrentControlledCurrentSource(Identifier name, Identifier pos, Identifier neg, Identifier voltageSource, double gain)
             : base(name, CurrentControlledCurrentSourcePinCount)
         {
             // Register behaviors
@@ -73,7 +73,7 @@ namespace SpiceSharp.Components
 
             // Connect
             Connect(pos, neg);
-            ContactName = vsource;
+            ControllingName = voltageSource;
         }
 
         /// <summary>
@@ -90,10 +90,10 @@ namespace SpiceSharp.Components
             NegNode = nodes[1].Index;
 
             // Find the voltage source for which the current is being measured
-            if (circuit.Objects[ContactName] is VoltageSource vsrc)
-                ContactSource = vsrc;
+            if (circuit.Objects[ControllingName] is VoltageSource vsrc)
+                ControllingSource = vsrc;
             else
-                throw new CircuitException($"{Name}: Could not find voltage source '{ContactName}'");
+                throw new CircuitException($"{Name}: Could not find voltage source '{ControllingName}'");
         }
 
         /// <summary>
@@ -109,8 +109,8 @@ namespace SpiceSharp.Components
             var provider = base.BuildSetupDataProvider(pool);
 
             // Add behaviors and parameters of the controlling voltage source
-            provider.Add(pool.GetEntityBehaviors(ContactName));
-            provider.Add(ContactSource.Parameters);
+            provider.Add(pool.GetEntityBehaviors(ControllingName));
+            provider.Add(ControllingSource.Parameters);
             return provider;
         }
     }

@@ -20,10 +20,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected MatrixElement PosIbrptr { get; private set; }
-        protected MatrixElement NegIbrptr { get; private set; }
-        protected MatrixElement IbrNegptr { get; private set; }
-        protected MatrixElement IbrPosptr { get; private set; }
+        protected MatrixElement PosIbrPtr { get; private set; }
+        protected MatrixElement NegIbrPtr { get; private set; }
+        protected MatrixElement IbrNegPtr { get; private set; }
+        protected MatrixElement IbrPosPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -87,10 +87,10 @@ namespace SpiceSharp.Components.InductorBehaviors
             BranchEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
 
             // Get matrix pointers
-            PosIbrptr = matrix.GetElement(posNode, BranchEq);
-            NegIbrptr = matrix.GetElement(negNode, BranchEq);
-            IbrNegptr = matrix.GetElement(BranchEq, negNode);
-            IbrPosptr = matrix.GetElement(BranchEq, posNode);
+            PosIbrPtr = matrix.GetElement(posNode, BranchEq);
+            NegIbrPtr = matrix.GetElement(negNode, BranchEq);
+            IbrNegPtr = matrix.GetElement(BranchEq, negNode);
+            IbrPosPtr = matrix.GetElement(BranchEq, posNode);
         }
 
         /// <summary>
@@ -99,10 +99,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         public override void Unsetup()
         {
             // Remove references
-            PosIbrptr = null;
-            NegIbrptr = null;
-            IbrNegptr = null;
-            IbrPosptr = null;
+            PosIbrPtr = null;
+            NegIbrPtr = null;
+            IbrNegPtr = null;
+            IbrPosPtr = null;
         }
 
         /// <summary>
@@ -111,10 +111,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            PosIbrptr.Add(1.0);
-            NegIbrptr.Sub(1.0);
-            IbrPosptr.Add(1.0);
-            IbrNegptr.Sub(1.0);
+            PosIbrPtr.Add(1.0);
+            NegIbrPtr.Sub(1.0);
+            IbrPosPtr.Add(1.0);
+            IbrNegPtr.Sub(1.0);
         }
     }
 }

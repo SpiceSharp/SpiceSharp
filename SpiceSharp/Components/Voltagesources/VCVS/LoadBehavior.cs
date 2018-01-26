@@ -50,12 +50,12 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// </summary>
         int posNode, negNode, contPosNode, contNegNode;
         public int BranchEq { get; private set; }
-        protected MatrixElement PosIbrptr { get; private set; }
-        protected MatrixElement NegIbrptr { get; private set; }
-        protected MatrixElement IbrPosptr { get; private set; }
-        protected MatrixElement IbrNegptr { get; private set; }
-        protected MatrixElement IbrContPosptr { get; private set; }
-        protected MatrixElement IbrContNegptr { get; private set; }
+        protected MatrixElement PosIbrPtr { get; private set; }
+        protected MatrixElement NegIbrPtr { get; private set; }
+        protected MatrixElement IbrPosPtr { get; private set; }
+        protected MatrixElement IbrNegPtr { get; private set; }
+        protected MatrixElement IbrControlPosPtr { get; private set; }
+        protected MatrixElement IbrControlNegPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -123,12 +123,12 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(matrix));
 
             BranchEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
-            PosIbrptr = matrix.GetElement(posNode, BranchEq);
-            NegIbrptr = matrix.GetElement(negNode, BranchEq);
-            IbrPosptr = matrix.GetElement(BranchEq, posNode);
-            IbrNegptr = matrix.GetElement(BranchEq, negNode);
-            IbrContPosptr = matrix.GetElement(BranchEq, contPosNode);
-            IbrContNegptr = matrix.GetElement(BranchEq, contNegNode);
+            PosIbrPtr = matrix.GetElement(posNode, BranchEq);
+            NegIbrPtr = matrix.GetElement(negNode, BranchEq);
+            IbrPosPtr = matrix.GetElement(BranchEq, posNode);
+            IbrNegPtr = matrix.GetElement(BranchEq, negNode);
+            IbrControlPosPtr = matrix.GetElement(BranchEq, contPosNode);
+            IbrControlNegPtr = matrix.GetElement(BranchEq, contNegNode);
         }
         
         /// <summary>
@@ -137,12 +137,12 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         public override void Unsetup()
         {
             // Remove references
-            PosIbrptr = null;
-            NegIbrptr = null;
-            IbrPosptr = null;
-            IbrNegptr = null;
-            IbrContPosptr = null;
-            IbrContNegptr = null;
+            PosIbrPtr = null;
+            NegIbrPtr = null;
+            IbrPosPtr = null;
+            IbrNegPtr = null;
+            IbrControlPosPtr = null;
+            IbrControlNegPtr = null;
         }
 
         /// <summary>
@@ -151,12 +151,12 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            PosIbrptr.Add(1.0);
-            IbrPosptr.Add(1.0);
-            NegIbrptr.Sub(1.0);
-            IbrNegptr.Sub(1.0);
-            IbrContPosptr.Sub(bp.Coefficient);
-            IbrContNegptr.Add(bp.Coefficient);
+            PosIbrPtr.Add(1.0);
+            IbrPosPtr.Add(1.0);
+            NegIbrPtr.Sub(1.0);
+            IbrNegPtr.Sub(1.0);
+            IbrControlPosPtr.Sub(bp.Coefficient);
+            IbrControlNegPtr.Add(bp.Coefficient);
         }
     }
 }

@@ -21,10 +21,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, contPosNode, contNegNode;
-        protected MatrixElement PosContPosptr { get; private set; }
-        protected MatrixElement PosContNegptr { get; private set; }
-        protected MatrixElement NegContPosptr { get; private set; }
-        protected MatrixElement NegContNegptr { get; private set; }
+        protected MatrixElement PosControlPosPtr { get; private set; }
+        protected MatrixElement PosControlNegPtr { get; private set; }
+        protected MatrixElement NegControlPosPtr { get; private set; }
+        protected MatrixElement NegControlNegPtr { get; private set; }
 
         /// <summary>
         /// Properties
@@ -117,10 +117,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            PosContPosptr = matrix.GetElement(posNode, contPosNode);
-            PosContNegptr = matrix.GetElement(posNode, contNegNode);
-            NegContPosptr = matrix.GetElement(negNode, contPosNode);
-            NegContNegptr = matrix.GetElement(negNode, contNegNode);
+            PosControlPosPtr = matrix.GetElement(posNode, contPosNode);
+            PosControlNegPtr = matrix.GetElement(posNode, contNegNode);
+            NegControlPosPtr = matrix.GetElement(negNode, contPosNode);
+            NegControlNegPtr = matrix.GetElement(negNode, contNegNode);
         }
 
         /// <summary>
@@ -129,10 +129,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         public override void Unsetup()
         {
             // Remove references
-            PosContPosptr = null;
-            PosContNegptr = null;
-            NegContPosptr = null;
-            NegContNegptr = null;
+            PosControlPosPtr = null;
+            PosControlNegPtr = null;
+            NegControlPosPtr = null;
+            NegControlNegPtr = null;
         }
 
         /// <summary>
@@ -141,10 +141,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            PosContPosptr.Add(bp.Coefficient);
-            PosContNegptr.Sub(bp.Coefficient);
-            NegContPosptr.Sub(bp.Coefficient);
-            NegContNegptr.Add(bp.Coefficient);
+            PosControlPosPtr.Add(bp.Coefficient);
+            PosControlNegPtr.Sub(bp.Coefficient);
+            NegControlPosPtr.Sub(bp.Coefficient);
+            NegControlNegPtr.Add(bp.Coefficient);
         }
     }
 }

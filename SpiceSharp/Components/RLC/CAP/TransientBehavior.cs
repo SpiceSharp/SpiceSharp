@@ -42,10 +42,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Nodes and states
         /// </summary>
         int posNode, negNode;
-        MatrixElement PosPosptr;
-        MatrixElement NegNegptr;
-        MatrixElement PosNegptr;
-        MatrixElement NegPosptr;
+        MatrixElement PosPosPtr;
+        MatrixElement NegNegPtr;
+        MatrixElement PosNegPtr;
+        MatrixElement NegPosPtr;
         StateDerivative QCap;
 
         /// <summary>
@@ -102,10 +102,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            PosPosptr = matrix.GetElement(posNode, posNode);
-            NegNegptr = matrix.GetElement(negNode, negNode);
-            NegPosptr = matrix.GetElement(negNode, posNode);
-            PosNegptr = matrix.GetElement(posNode, negNode);
+            PosPosPtr = matrix.GetElement(posNode, posNode);
+            NegNegPtr = matrix.GetElement(negNode, negNode);
+            NegPosPtr = matrix.GetElement(negNode, posNode);
+            PosNegPtr = matrix.GetElement(posNode, negNode);
         }
 
         /// <summary>
@@ -130,10 +130,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            PosPosptr = null;
-            NegNegptr = null;
-            NegPosptr = null;
-            PosNegptr = null;
+            PosPosPtr = null;
+            NegNegPtr = null;
+            NegPosPtr = null;
+            PosNegPtr = null;
         }
 
         /// <summary>
@@ -155,10 +155,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             double ceq = QCap.Current();
 
             // Load matrix
-            PosPosptr.Add(geq);
-            NegNegptr.Add(geq);
-            PosNegptr.Sub(geq);
-            NegPosptr.Sub(geq);
+            PosPosPtr.Add(geq);
+            NegNegPtr.Add(geq);
+            PosNegPtr.Sub(geq);
+            NegPosPtr.Sub(geq);
 
             // Load Rhs vector
             state.Rhs[posNode] -= ceq;

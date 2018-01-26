@@ -45,11 +45,11 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// </summary>
         protected int posNode, negNode;
         public int BranchEq { get; protected set; }
-        protected MatrixElement PosIbrptr { get; private set; }
-        protected MatrixElement NegIbrptr { get; private set; }
-        protected MatrixElement IbrPosptr { get; private set; }
-        protected MatrixElement IbrNegptr { get; private set; }
-        protected MatrixElement IbrIbrptr { get; private set; }
+        protected MatrixElement PosIbrPtr { get; private set; }
+        protected MatrixElement NegIbrPtr { get; private set; }
+        protected MatrixElement IbrPosPtr { get; private set; }
+        protected MatrixElement IbrNegPtr { get; private set; }
+        protected MatrixElement IbrIbrPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -126,10 +126,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(matrix));
 
             BranchEq = nodes.Create(Name?.Grow("#branch"), Node.NodeType.Current).Index;
-            PosIbrptr = matrix.GetElement(posNode, BranchEq);
-            IbrPosptr = matrix.GetElement(BranchEq, posNode);
-            NegIbrptr = matrix.GetElement(negNode, BranchEq);
-            IbrNegptr = matrix.GetElement(BranchEq, negNode);
+            PosIbrPtr = matrix.GetElement(posNode, BranchEq);
+            IbrPosPtr = matrix.GetElement(BranchEq, posNode);
+            NegIbrPtr = matrix.GetElement(negNode, BranchEq);
+            IbrNegPtr = matrix.GetElement(BranchEq, negNode);
         }
 
         /// <summary>
@@ -137,10 +137,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            PosIbrptr = null;
-            IbrPosptr = null;
-            NegIbrptr = null;
-            IbrNegptr = null;
+            PosIbrPtr = null;
+            IbrPosPtr = null;
+            NegIbrPtr = null;
+            IbrNegPtr = null;
         }
 
         /// <summary>
@@ -156,10 +156,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             double time = 0.0;
             double value = 0.0;
 
-            PosIbrptr.Value.Real += 1.0;
-            IbrPosptr.Value.Real += 1.0;
-            NegIbrptr.Value.Real -= 1.0;
-            IbrNegptr.Value.Real -= 1.0;
+            PosIbrPtr.Value.Real += 1.0;
+            IbrPosPtr.Value.Real += 1.0;
+            NegIbrPtr.Value.Real -= 1.0;
+            IbrNegPtr.Value.Real -= 1.0;
 
             if (state.Domain == State.DomainTypes.Time)
             {

@@ -25,11 +25,11 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected MatrixElement PosIbrptr { get; private set; }
-        protected MatrixElement NegIbrptr { get; private set; }
-        protected MatrixElement IbrPosptr { get; private set; }
-        protected MatrixElement IbrNegptr { get; private set; }
-        protected MatrixElement IbrIbrptr { get; private set; }
+        protected MatrixElement PosIbrPtr { get; private set; }
+        protected MatrixElement NegIbrPtr { get; private set; }
+        protected MatrixElement IbrPosPtr { get; private set; }
+        protected MatrixElement IbrNegPtr { get; private set; }
+        protected MatrixElement IbrIbrPtr { get; private set; }
 
         /// <summary>
         /// Properties
@@ -111,10 +111,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            PosIbrptr = matrix.GetElement(posNode, branchEq);
-            IbrPosptr = matrix.GetElement(branchEq, posNode);
-            NegIbrptr = matrix.GetElement(negNode, branchEq);
-            IbrNegptr = matrix.GetElement(branchEq, negNode);
+            PosIbrPtr = matrix.GetElement(posNode, branchEq);
+            IbrPosPtr = matrix.GetElement(branchEq, posNode);
+            NegIbrPtr = matrix.GetElement(negNode, branchEq);
+            IbrNegPtr = matrix.GetElement(branchEq, negNode);
         }
 
         /// <summary>
@@ -122,10 +122,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            PosIbrptr = null;
-            IbrPosptr = null;
-            NegIbrptr = null;
-            IbrNegptr = null;
+            PosIbrPtr = null;
+            IbrPosPtr = null;
+            NegIbrPtr = null;
+            IbrNegPtr = null;
         }
 
         /// <summary>
@@ -138,10 +138,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(sim));
 
             var cstate = sim.State;
-            PosIbrptr.Value.Real += 1.0;
-            IbrPosptr.Value.Real += 1.0;
-            NegIbrptr.Value.Real -= 1.0;
-            IbrNegptr.Value.Real -= 1.0;
+            PosIbrPtr.Value.Real += 1.0;
+            IbrPosPtr.Value.Real += 1.0;
+            NegIbrPtr.Value.Real -= 1.0;
+            IbrNegPtr.Value.Real -= 1.0;
             cstate.Rhs[branchEq] += Ac.Real;
             cstate.iRhs[branchEq] += Ac.Imaginary;
         }

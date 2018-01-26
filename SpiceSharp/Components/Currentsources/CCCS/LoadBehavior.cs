@@ -21,10 +21,10 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        public int ContBranch { get; protected set; }
+        public int ControlBranchEq { get; protected set; }
         int posNode, negNode;
-        protected MatrixElement PosContBrptr { get; private set; }
-        protected MatrixElement NegContBrptr { get; private set; }
+        protected MatrixElement PosControlBranchPtr { get; private set; }
+        protected MatrixElement NegControlBranchPtr { get; private set; }
 
         /// <summary>
         /// Properties
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[ContBranch] * bp.Coefficient;
+            return state.Solution[ControlBranchEq] * bp.Coefficient;
         }
         [PropertyName("v"), PropertyInfo("Voltage")]
         public double GetVoltage(State state)
@@ -53,7 +53,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[posNode] - state.Solution[negNode]) * state.Solution[ContBranch] * bp.Coefficient;
+            return (state.Solution[posNode] - state.Solution[negNode]) * state.Solution[ControlBranchEq] * bp.Coefficient;
         }
 
         /// <summary>
@@ -119,9 +119,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            ContBranch = vsrcload.BranchEq;
-            PosContBrptr = matrix.GetElement(posNode, ContBranch);
-            NegContBrptr = matrix.GetElement(negNode, ContBranch);
+            ControlBranchEq = vsrcload.BranchEq;
+            PosControlBranchPtr = matrix.GetElement(posNode, ControlBranchEq);
+            NegControlBranchPtr = matrix.GetElement(negNode, ControlBranchEq);
         }
         
         /// <summary>
@@ -130,8 +130,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            PosContBrptr.Add(bp.Coefficient.Value);
-            NegContBrptr.Sub(bp.Coefficient.Value);
+            PosControlBranchPtr.Add(bp.Coefficient.Value);
+            NegControlBranchPtr.Sub(bp.Coefficient.Value);
         }
     }
 }

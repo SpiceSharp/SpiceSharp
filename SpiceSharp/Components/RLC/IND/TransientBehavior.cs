@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Nodes
         /// </summary>
         int BranchEq;
-        protected MatrixElement IbrIbrptr { get; private set; }
+        protected MatrixElement IbrIbrPtr { get; private set; }
         StateDerivative flux;
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             BranchEq = load.BranchEq;
 
             // Get matrix pointers
-            IbrIbrptr = matrix.GetElement(BranchEq, BranchEq);
+            IbrIbrPtr = matrix.GetElement(BranchEq, BranchEq);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            IbrIbrptr = null;
+            IbrIbrPtr = null;
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             // Finally load the Y-matrix
             flux.Integrate();
             state.Rhs[BranchEq] += flux.Current();
-            IbrIbrptr.Sub(flux.Jacobian(bp.Inductance));
+            IbrIbrPtr.Sub(flux.Jacobian(bp.Inductance));
         }
 
         /// <summary>

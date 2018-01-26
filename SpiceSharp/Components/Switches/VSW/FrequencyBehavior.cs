@@ -20,10 +20,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, contPosNode, contNegNode;
-        protected MatrixElement PosPosptr { get; private set; }
-        protected MatrixElement NegPosptr { get; private set; }
-        protected MatrixElement PosNegptr { get; private set; }
-        protected MatrixElement NegNegptr { get; private set; }
+        protected MatrixElement PosPosPtr { get; private set; }
+        protected MatrixElement NegPosPtr { get; private set; }
+        protected MatrixElement PosNegPtr { get; private set; }
+        protected MatrixElement NegNegPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -70,10 +70,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            PosPosptr = matrix.GetElement(posNode, posNode);
-            PosNegptr = matrix.GetElement(posNode, negNode);
-            NegPosptr = matrix.GetElement(negNode, posNode);
-            NegNegptr = matrix.GetElement(negNode, negNode);
+            PosPosPtr = matrix.GetElement(posNode, posNode);
+            PosNegPtr = matrix.GetElement(posNode, negNode);
+            NegPosPtr = matrix.GetElement(negNode, posNode);
+            NegNegPtr = matrix.GetElement(negNode, negNode);
         }
         
         /// <summary>
@@ -81,10 +81,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            PosPosptr = null;
-            NegNegptr = null;
-            PosNegptr = null;
-            NegPosptr = null;
+            PosPosPtr = null;
+            NegNegPtr = null;
+            PosNegPtr = null;
+            NegPosPtr = null;
         }
 
         /// <summary>
@@ -104,10 +104,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             g_now = load.CurrentState == true ? modelload.OnConductance : modelload.OffConductance;
 
             // Load the Y-matrix
-            PosPosptr.Add(g_now);
-            PosNegptr.Sub(g_now);
-            NegPosptr.Sub(g_now);
-            NegNegptr.Add(g_now);
+            PosPosPtr.Add(g_now);
+            PosNegPtr.Sub(g_now);
+            NegPosPtr.Sub(g_now);
+            NegNegPtr.Add(g_now);
         }
     }
 }
