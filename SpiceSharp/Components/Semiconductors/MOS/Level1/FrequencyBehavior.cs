@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.MosfetBehaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
 
@@ -21,38 +20,38 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         LoadBehavior load;
         ModelTemperatureBehavior modeltemp;
 
-        public double MOS1capgs { get; protected set; }
-        public double MOS1capgd { get; protected set; }
-        public double MOS1capbs { get; protected set; }
-        public double MOS1capbd { get; protected set; }
-        public double MOS1capgb { get; protected set; }
+        public double Capgs { get; protected set; }
+        public double Capgd { get; protected set; }
+        public double Capbs { get; protected set; }
+        public double Capbd { get; protected set; }
+        public double Capgb { get; protected set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int MOS1dNode, MOS1gNode, MOS1sNode, MOS1bNode, MOS1sNodePrime, MOS1dNodePrime;
-        protected MatrixElement MOS1DdPtr { get; private set; }
-        protected MatrixElement MOS1GgPtr { get; private set; }
-        protected MatrixElement MOS1SsPtr { get; private set; }
-        protected MatrixElement MOS1BbPtr { get; private set; }
-        protected MatrixElement MOS1DPdpPtr { get; private set; }
-        protected MatrixElement MOS1SPspPtr { get; private set; }
-        protected MatrixElement MOS1DdpPtr { get; private set; }
-        protected MatrixElement MOS1GbPtr { get; private set; }
-        protected MatrixElement MOS1GdpPtr { get; private set; }
-        protected MatrixElement MOS1GspPtr { get; private set; }
-        protected MatrixElement MOS1SspPtr { get; private set; }
-        protected MatrixElement MOS1BdpPtr { get; private set; }
-        protected MatrixElement MOS1BspPtr { get; private set; }
-        protected MatrixElement MOS1DPspPtr { get; private set; }
-        protected MatrixElement MOS1DPdPtr { get; private set; }
-        protected MatrixElement MOS1BgPtr { get; private set; }
-        protected MatrixElement MOS1DPgPtr { get; private set; }
-        protected MatrixElement MOS1SPgPtr { get; private set; }
-        protected MatrixElement MOS1SPsPtr { get; private set; }
-        protected MatrixElement MOS1DPbPtr { get; private set; }
-        protected MatrixElement MOS1SPbPtr { get; private set; }
-        protected MatrixElement MOS1SPdpPtr { get; private set; }
+        int dNode, gNode, sNode, bNode, sNodePrime, dNodePrime;
+        protected MatrixElement DdPtr { get; private set; }
+        protected MatrixElement GgPtr { get; private set; }
+        protected MatrixElement SsPtr { get; private set; }
+        protected MatrixElement BbPtr { get; private set; }
+        protected MatrixElement DPdpPtr { get; private set; }
+        protected MatrixElement SPspPtr { get; private set; }
+        protected MatrixElement DdpPtr { get; private set; }
+        protected MatrixElement GbPtr { get; private set; }
+        protected MatrixElement GdpPtr { get; private set; }
+        protected MatrixElement GspPtr { get; private set; }
+        protected MatrixElement SspPtr { get; private set; }
+        protected MatrixElement BdpPtr { get; private set; }
+        protected MatrixElement BspPtr { get; private set; }
+        protected MatrixElement DPspPtr { get; private set; }
+        protected MatrixElement DPdPtr { get; private set; }
+        protected MatrixElement BgPtr { get; private set; }
+        protected MatrixElement DPgPtr { get; private set; }
+        protected MatrixElement SPgPtr { get; private set; }
+        protected MatrixElement SPsPtr { get; private set; }
+        protected MatrixElement DPbPtr { get; private set; }
+        protected MatrixElement SPbPtr { get; private set; }
+        protected MatrixElement SPdpPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -89,10 +88,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
-            MOS1dNode = pins[0];
-            MOS1gNode = pins[1];
-            MOS1sNode = pins[2];
-            MOS1bNode = pins[3];
+            dNode = pins[0];
+            gNode = pins[1];
+            sNode = pins[2];
+            bNode = pins[3];
         }
 
         /// <summary>
@@ -105,32 +104,32 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 				throw new ArgumentNullException(nameof(matrix));
 
             // Get extra equations
-            MOS1dNodePrime = load.MOS1dNodePrime;
-            MOS1sNodePrime = load.MOS1sNodePrime;
+            dNodePrime = load.DrainNodePrime;
+            sNodePrime = load.SourceNodePrime;
 
             // Get matrix pointers
-            MOS1DdPtr = matrix.GetElement(MOS1dNode, MOS1dNode);
-            MOS1GgPtr = matrix.GetElement(MOS1gNode, MOS1gNode);
-            MOS1SsPtr = matrix.GetElement(MOS1sNode, MOS1sNode);
-            MOS1BbPtr = matrix.GetElement(MOS1bNode, MOS1bNode);
-            MOS1DPdpPtr = matrix.GetElement(MOS1dNodePrime, MOS1dNodePrime);
-            MOS1SPspPtr = matrix.GetElement(MOS1sNodePrime, MOS1sNodePrime);
-            MOS1DdpPtr = matrix.GetElement(MOS1dNode, MOS1dNodePrime);
-            MOS1GbPtr = matrix.GetElement(MOS1gNode, MOS1bNode);
-            MOS1GdpPtr = matrix.GetElement(MOS1gNode, MOS1dNodePrime);
-            MOS1GspPtr = matrix.GetElement(MOS1gNode, MOS1sNodePrime);
-            MOS1SspPtr = matrix.GetElement(MOS1sNode, MOS1sNodePrime);
-            MOS1BdpPtr = matrix.GetElement(MOS1bNode, MOS1dNodePrime);
-            MOS1BspPtr = matrix.GetElement(MOS1bNode, MOS1sNodePrime);
-            MOS1DPspPtr = matrix.GetElement(MOS1dNodePrime, MOS1sNodePrime);
-            MOS1DPdPtr = matrix.GetElement(MOS1dNodePrime, MOS1dNode);
-            MOS1BgPtr = matrix.GetElement(MOS1bNode, MOS1gNode);
-            MOS1DPgPtr = matrix.GetElement(MOS1dNodePrime, MOS1gNode);
-            MOS1SPgPtr = matrix.GetElement(MOS1sNodePrime, MOS1gNode);
-            MOS1SPsPtr = matrix.GetElement(MOS1sNodePrime, MOS1sNode);
-            MOS1DPbPtr = matrix.GetElement(MOS1dNodePrime, MOS1bNode);
-            MOS1SPbPtr = matrix.GetElement(MOS1sNodePrime, MOS1bNode);
-            MOS1SPdpPtr = matrix.GetElement(MOS1sNodePrime, MOS1dNodePrime);
+            DdPtr = matrix.GetElement(dNode, dNode);
+            GgPtr = matrix.GetElement(gNode, gNode);
+            SsPtr = matrix.GetElement(sNode, sNode);
+            BbPtr = matrix.GetElement(bNode, bNode);
+            DPdpPtr = matrix.GetElement(dNodePrime, dNodePrime);
+            SPspPtr = matrix.GetElement(sNodePrime, sNodePrime);
+            DdpPtr = matrix.GetElement(dNode, dNodePrime);
+            GbPtr = matrix.GetElement(gNode, bNode);
+            GdpPtr = matrix.GetElement(gNode, dNodePrime);
+            GspPtr = matrix.GetElement(gNode, sNodePrime);
+            SspPtr = matrix.GetElement(sNode, sNodePrime);
+            BdpPtr = matrix.GetElement(bNode, dNodePrime);
+            BspPtr = matrix.GetElement(bNode, sNodePrime);
+            DPspPtr = matrix.GetElement(dNodePrime, sNodePrime);
+            DPdPtr = matrix.GetElement(dNodePrime, dNode);
+            BgPtr = matrix.GetElement(bNode, gNode);
+            DPgPtr = matrix.GetElement(dNodePrime, gNode);
+            SPgPtr = matrix.GetElement(sNodePrime, gNode);
+            SPsPtr = matrix.GetElement(sNodePrime, sNode);
+            DPbPtr = matrix.GetElement(dNodePrime, bNode);
+            SPbPtr = matrix.GetElement(sNodePrime, bNode);
+            SPdpPtr = matrix.GetElement(sNodePrime, dNodePrime);
         }
 
         /// <summary>
@@ -139,28 +138,28 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public override void Unsetup()
         {
             // Remove references
-            MOS1DdPtr = null;
-            MOS1GgPtr = null;
-            MOS1SsPtr = null;
-            MOS1BbPtr = null;
-            MOS1DPdpPtr = null;
-            MOS1SPspPtr = null;
-            MOS1DdpPtr = null;
-            MOS1GbPtr = null;
-            MOS1GdpPtr = null;
-            MOS1GspPtr = null;
-            MOS1SspPtr = null;
-            MOS1BdpPtr = null;
-            MOS1BspPtr = null;
-            MOS1DPspPtr = null;
-            MOS1DPdPtr = null;
-            MOS1BgPtr = null;
-            MOS1DPgPtr = null;
-            MOS1SPgPtr = null;
-            MOS1SPsPtr = null;
-            MOS1DPbPtr = null;
-            MOS1SPbPtr = null;
-            MOS1SPdpPtr = null;
+            DdPtr = null;
+            GgPtr = null;
+            SsPtr = null;
+            BbPtr = null;
+            DPdpPtr = null;
+            SPspPtr = null;
+            DdpPtr = null;
+            GbPtr = null;
+            GdpPtr = null;
+            GspPtr = null;
+            SspPtr = null;
+            BdpPtr = null;
+            BspPtr = null;
+            DPspPtr = null;
+            DPdPtr = null;
+            BgPtr = null;
+            DPgPtr = null;
+            SPgPtr = null;
+            SPsPtr = null;
+            DPbPtr = null;
+            SPbPtr = null;
+            SPdpPtr = null;
         }
 
         /// <summary>
@@ -175,18 +174,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double arg, sarg, sargsw;
 
             // Get voltages
-            double vbd = load.MOS1vbd;
-            double vbs = load.MOS1vbs;
-            double vgs = load.MOS1vgs;
-            double vds = load.MOS1vds;
+            double vbd = load.Vbd;
+            double vbs = load.Vbs;
+            double vgs = load.Vgs;
+            double vds = load.Vds;
             double vgd = vgs - vds;
             double vgb = vgs - vbs;
 
-            double EffectiveLength = bp.MOS1l - 2 * mbp.MOS1latDiff;
-            double GateSourceOverlapCap = mbp.MOS1gateSourceOverlapCapFactor * bp.MOS1w;
-            double GateDrainOverlapCap = mbp.MOS1gateDrainOverlapCapFactor * bp.MOS1w;
-            double GateBulkOverlapCap = mbp.MOS1gateBulkOverlapCapFactor * EffectiveLength;
-            double OxideCap = modeltemp.MOS1oxideCapFactor * EffectiveLength * bp.MOS1w;
+            double EffectiveLength = bp.Length - 2 * mbp.LatDiff;
+            double GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;
+            double GateDrainOverlapCap = mbp.GateDrainOverlapCapFactor * bp.Width;
+            double GateBulkOverlapCap = mbp.GateBulkOverlapCapFactor * EffectiveLength;
+            double OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
 
             /* 
              * now we do the hard part of the bulk - drain and bulk - source
@@ -206,9 +205,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             /* can't bypass the diode capacitance calculations */
             /* CAPZEROBYPASS */
-            if (vbs < temp.MOS1tDepCap)
+            if (vbs < temp.TDepCap)
             {
-                arg = 1 - vbs / temp.MOS1tBulkPot;
+                arg = 1 - vbs / temp.TBulkPot;
                 /* 
                  * the following block looks somewhat long and messy, 
                  * but since most users use the default grading
@@ -216,52 +215,52 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                  * Math.Exp(Math.Log()) we use this special case code to buy time.
                  * (as much as 10% of total job time!)
                  */
-                if (mbp.MOS1bulkJctBotGradingCoeff.Value == mbp.MOS1bulkJctSideGradingCoeff.Value)
+                if (mbp.BulkJctBotGradingCoeff.Value == mbp.BulkJctSideGradingCoeff.Value)
                 {
-                    if (mbp.MOS1bulkJctBotGradingCoeff.Value == .5)
+                    if (mbp.BulkJctBotGradingCoeff.Value == .5)
                     {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
-                        sarg = sargsw = Math.Exp(-mbp.MOS1bulkJctBotGradingCoeff * Math.Log(arg));
+                        sarg = sargsw = Math.Exp(-mbp.BulkJctBotGradingCoeff * Math.Log(arg));
                     }
                 }
                 else
                 {
-                    if (mbp.MOS1bulkJctBotGradingCoeff.Value == .5)
+                    if (mbp.BulkJctBotGradingCoeff.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.MOS1bulkJctBotGradingCoeff * Math.Log(arg));
+                        sarg = Math.Exp(-mbp.BulkJctBotGradingCoeff * Math.Log(arg));
                     }
-                    if (mbp.MOS1bulkJctSideGradingCoeff.Value == .5)
+                    if (mbp.BulkJctSideGradingCoeff.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.MOS1bulkJctSideGradingCoeff * Math.Log(arg));
+                        sargsw = Math.Exp(-mbp.BulkJctSideGradingCoeff * Math.Log(arg));
                     }
                 }
 
-                MOS1capbs = temp.MOS1Cbs * sarg + temp.MOS1Cbssw * sargsw;
+                Capbs = temp.Cbs * sarg + temp.Cbssw * sargsw;
             }
             else
             {
-                MOS1capbs = temp.MOS1f2s + temp.MOS1f3s * vbs;
+                Capbs = temp.F2s + temp.F3s * vbs;
             }
 
             /* can't bypass the diode capacitance calculations */
 
             /* CAPZEROBYPASS */
-            if (vbd < temp.MOS1tDepCap)
+            if (vbd < temp.TDepCap)
             {
-                arg = 1 - vbd / temp.MOS1tBulkPot;
+                arg = 1 - vbd / temp.TBulkPot;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -269,37 +268,37 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.MOS1bulkJctBotGradingCoeff.Value == .5 && mbp.MOS1bulkJctSideGradingCoeff.Value == .5)
+                if (mbp.BulkJctBotGradingCoeff.Value == .5 && mbp.BulkJctSideGradingCoeff.Value == .5)
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 }
                 else
                 {
-                    if (mbp.MOS1bulkJctBotGradingCoeff.Value == .5)
+                    if (mbp.BulkJctBotGradingCoeff.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.MOS1bulkJctBotGradingCoeff * Math.Log(arg));
+                        sarg = Math.Exp(-mbp.BulkJctBotGradingCoeff * Math.Log(arg));
                     }
-                    if (mbp.MOS1bulkJctSideGradingCoeff.Value == .5)
+                    if (mbp.BulkJctSideGradingCoeff.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.MOS1bulkJctSideGradingCoeff * Math.Log(arg));
+                        sargsw = Math.Exp(-mbp.BulkJctSideGradingCoeff * Math.Log(arg));
                     }
                 }
                 /* NOSQRT */
-                MOS1capbd = temp.MOS1Cbd * sarg + temp.MOS1Cbdsw * sargsw;
+                Capbd = temp.Cbd * sarg + temp.Cbdsw * sargsw;
             }
             else
             {
-                MOS1capbd = temp.MOS1f2d + vbd * temp.MOS1f3d;
+                Capbd = temp.F2d + vbd * temp.F3d;
             }
 
             /* 
@@ -313,21 +312,21 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
              * and the constant part
              */
             double icapgs, icapgd, icapgb;
-            if (load.MOS1mode > 0)
+            if (load.Mode > 0)
             {
-                Transistor.DEVqmeyer(vgs, vgd, vgb, mbp.MOS1type * load.MOS1von, mbp.MOS1type * load.MOS1vdsat,
+                Transistor.DEVqmeyer(vgs, vgd, vgb, mbp.Type * load.Von, mbp.Type * load.Vdsat,
                     out icapgs, out icapgd, out icapgb,
-                    temp.MOS1tPhi, OxideCap);
+                    temp.TPhi, OxideCap);
             }
             else
             {
-                Transistor.DEVqmeyer(vgd, vgs, vgb, mbp.MOS1type * load.MOS1von, mbp.MOS1type * load.MOS1vdsat,
+                Transistor.DEVqmeyer(vgd, vgs, vgb, mbp.Type * load.Von, mbp.Type * load.Vdsat,
                     out icapgd, out icapgs, out icapgb,
-                    temp.MOS1tPhi, OxideCap);
+                    temp.TPhi, OxideCap);
             }
-            MOS1capgs = icapgs;
-            MOS1capgd = icapgd;
-            MOS1capgb = icapgb;
+            Capgs = icapgs;
+            Capgd = icapgd;
+            Capgb = icapgb;
         }
 
         /// <summary>
@@ -345,7 +344,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, capgs, capgd, capgb, xgs, xgd, xgb, xbd,
                 xbs;
 
-            if (load.MOS1mode < 0)
+            if (load.Mode < 0)
             {
                 xnrm = 0;
                 xrev = 1;
@@ -359,44 +358,44 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             /* 
 			 * meyer's model parameters
 			 */
-            EffectiveLength = bp.MOS1l - 2 * mbp.MOS1latDiff;
-            GateSourceOverlapCap = mbp.MOS1gateSourceOverlapCapFactor * bp.MOS1w;
-            GateDrainOverlapCap = mbp.MOS1gateDrainOverlapCapFactor * bp.MOS1w;
-            GateBulkOverlapCap = mbp.MOS1gateBulkOverlapCapFactor * EffectiveLength;
-            capgs = (MOS1capgs + MOS1capgs + GateSourceOverlapCap);
-            capgd = (MOS1capgd + MOS1capgd + GateDrainOverlapCap);
-            capgb = (MOS1capgb + MOS1capgb + GateBulkOverlapCap);
+            EffectiveLength = bp.Length - 2 * mbp.LatDiff;
+            GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;
+            GateDrainOverlapCap = mbp.GateDrainOverlapCapFactor * bp.Width;
+            GateBulkOverlapCap = mbp.GateBulkOverlapCapFactor * EffectiveLength;
+            capgs = (Capgs + Capgs + GateSourceOverlapCap);
+            capgd = (Capgd + Capgd + GateDrainOverlapCap);
+            capgb = (Capgb + Capgb + GateBulkOverlapCap);
             xgs = capgs * cstate.Laplace.Imaginary;
             xgd = capgd * cstate.Laplace.Imaginary;
             xgb = capgb * cstate.Laplace.Imaginary;
-            xbd = MOS1capbd * cstate.Laplace.Imaginary;
-            xbs = MOS1capbs * cstate.Laplace.Imaginary;
+            xbd = Capbd * cstate.Laplace.Imaginary;
+            xbs = Capbs * cstate.Laplace.Imaginary;
 
             /* 
 			 * load matrix
 			 */
-            MOS1GgPtr.Add(new Complex(0.0, xgd + xgs + xgb));
-            MOS1BbPtr.Add(new Complex(load.MOS1gbd + load.MOS1gbs, xgb + xbd + xbs));
-            MOS1DPdpPtr.Add(new Complex(temp.MOS1drainConductance + load.MOS1gds + load.MOS1gbd + xrev * (load.MOS1gm + load.MOS1gmbs), xgd + xbd));
-            MOS1SPspPtr.Add(new Complex(temp.MOS1sourceConductance + load.MOS1gds + load.MOS1gbs + xnrm * (load.MOS1gm + load.MOS1gmbs), xgs + xbs));
-            MOS1GbPtr.Sub(new Complex(0.0, xgb));
-            MOS1GdpPtr.Sub(new Complex(0.0, xgd));
-            MOS1GspPtr.Sub(new Complex(0.0, xgs));
-            MOS1BgPtr.Sub(new Complex(0.0, xgb));
-            MOS1BdpPtr.Sub(new Complex(load.MOS1gbd, xbd));
-            MOS1BspPtr.Sub(new Complex(load.MOS1gbs, xbs));
-            MOS1DPgPtr.Add(new Complex((xnrm - xrev) * load.MOS1gm, -xgd));
-            MOS1DPbPtr.Add(new Complex(-load.MOS1gbd + (xnrm - xrev) * load.MOS1gmbs, -xbd));
-            MOS1SPgPtr.Sub(new Complex((xnrm - xrev) * load.MOS1gm, xgs));
-            MOS1SPbPtr.Sub(new Complex(load.MOS1gbs + (xnrm - xrev) * load.MOS1gmbs, xbs));
-            MOS1DdPtr.Add(temp.MOS1drainConductance);
-            MOS1SsPtr.Add(temp.MOS1sourceConductance);
-            MOS1DdpPtr.Sub(temp.MOS1drainConductance);
-            MOS1SspPtr.Sub(temp.MOS1sourceConductance);
-            MOS1DPdPtr.Sub(temp.MOS1drainConductance);
-            MOS1DPspPtr.Sub(load.MOS1gds + xnrm * (load.MOS1gm + load.MOS1gmbs));
-            MOS1SPsPtr.Sub(temp.MOS1sourceConductance);
-            MOS1SPdpPtr.Sub(load.MOS1gds + xrev * (load.MOS1gm + load.MOS1gmbs));
+            GgPtr.Add(new Complex(0.0, xgd + xgs + xgb));
+            BbPtr.Add(new Complex(load.Gbd + load.Gbs, xgb + xbd + xbs));
+            DPdpPtr.Add(new Complex(temp.DrainConductance + load.Gds + load.Gbd + xrev * (load.Gm + load.Gmbs), xgd + xbd));
+            SPspPtr.Add(new Complex(temp.SourceConductance + load.Gds + load.Gbs + xnrm * (load.Gm + load.Gmbs), xgs + xbs));
+            GbPtr.Sub(new Complex(0.0, xgb));
+            GdpPtr.Sub(new Complex(0.0, xgd));
+            GspPtr.Sub(new Complex(0.0, xgs));
+            BgPtr.Sub(new Complex(0.0, xgb));
+            BdpPtr.Sub(new Complex(load.Gbd, xbd));
+            BspPtr.Sub(new Complex(load.Gbs, xbs));
+            DPgPtr.Add(new Complex((xnrm - xrev) * load.Gm, -xgd));
+            DPbPtr.Add(new Complex(-load.Gbd + (xnrm - xrev) * load.Gmbs, -xbd));
+            SPgPtr.Sub(new Complex((xnrm - xrev) * load.Gm, xgs));
+            SPbPtr.Sub(new Complex(load.Gbs + (xnrm - xrev) * load.Gmbs, xbs));
+            DdPtr.Add(temp.DrainConductance);
+            SsPtr.Add(temp.SourceConductance);
+            DdpPtr.Sub(temp.DrainConductance);
+            SspPtr.Sub(temp.SourceConductance);
+            DPdPtr.Sub(temp.DrainConductance);
+            DPspPtr.Sub(load.Gds + xnrm * (load.Gm + load.Gmbs));
+            SPsPtr.Sub(temp.SourceConductance);
+            SPdpPtr.Sub(load.Gds + xrev * (load.Gm + load.Gmbs));
         }
     }
 }

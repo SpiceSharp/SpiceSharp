@@ -23,23 +23,22 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int DIOposNode, DIOnegNode;
-        public int DIOposPrimeNode { get; private set; }
-        protected MatrixElement DIOposPosPrimePtr { get; private set; }
-        protected MatrixElement DIOnegPosPrimePtr { get; private set; }
-        protected MatrixElement DIOposPrimePosPtr { get; private set; }
-        protected MatrixElement DIOposPrimeNegPtr { get; private set; }
-        protected MatrixElement DIOposPosPtr { get; private set; }
-        protected MatrixElement DIOnegNegPtr { get; private set; }
-        protected MatrixElement DIOposPrimePosPrimePtr { get; private set; }
+        int posNode, negNode;
+        public int PosPrimeNode { get; private set; }
+        protected MatrixElement PosPosPrimePtr { get; private set; }
+        protected MatrixElement NegPosPrimePtr { get; private set; }
+        protected MatrixElement PosPrimePosPtr { get; private set; }
+        protected MatrixElement PosPrimeNegPtr { get; private set; }
+        protected MatrixElement PosPosPtr { get; private set; }
+        protected MatrixElement NegNegPtr { get; private set; }
+        protected MatrixElement PosPrimePosPrimePtr { get; private set; }
 
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double DIOvoltage { get; protected set; }
-        public double DIOcurrent { get; protected set; }
-        public double DIOconduct { get; protected set; }
-        public int DIOstate { get; protected set; }
+        public double Voltage { get; protected set; }
+        public double Current { get; protected set; }
+        public double Conduct { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -74,13 +73,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             switch (property)
             {
-                case "vd": return (State state) => DIOvoltage;
-                case "v": return (State state) => state.Solution[DIOposNode] - state.Solution[DIOnegNode];
+                case "vd": return (State state) => Voltage;
+                case "v": return (State state) => state.Solution[posNode] - state.Solution[negNode];
                 case "i":
-                case "id": return (State state) => DIOcurrent;
-                case "gd": return (State state) => DIOconduct;
-                case "p": return (State state) => (state.Solution[DIOposNode] - state.Solution[DIOnegNode]) * -DIOcurrent;
-                case "pd": return (State state) => -DIOvoltage * DIOcurrent;
+                case "id": return (State state) => Current;
+                case "gd": return (State state) => Conduct;
+                case "p": return (State state) => (state.Solution[posNode] - state.Solution[negNode]) * -Current;
+                case "pd": return (State state) => -Voltage * Current;
                 default: return null;
             }
         }
@@ -95,8 +94,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            DIOposNode = pins[0];
-            DIOnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
         
         /// <summary>
@@ -111,19 +110,19 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(matrix));
             
             // Create
-            if (mbp.DIOresist.Value == 0)
-                DIOposPrimeNode = DIOposNode;
+            if (mbp.Resist.Value == 0)
+                PosPrimeNode = posNode;
             else
-                DIOposPrimeNode = nodes.Create(Name.Grow("#pos")).Index;
+                PosPrimeNode = nodes.Create(Name.Grow("#pos")).Index;
 
             // Get matrix pointers
-            DIOposPosPrimePtr = matrix.GetElement(DIOposNode, DIOposPrimeNode);
-            DIOnegPosPrimePtr = matrix.GetElement(DIOnegNode, DIOposPrimeNode);
-            DIOposPrimePosPtr = matrix.GetElement(DIOposPrimeNode, DIOposNode);
-            DIOposPrimeNegPtr = matrix.GetElement(DIOposPrimeNode, DIOnegNode);
-            DIOposPosPtr = matrix.GetElement(DIOposNode, DIOposNode);
-            DIOnegNegPtr = matrix.GetElement(DIOnegNode, DIOnegNode);
-            DIOposPrimePosPrimePtr = matrix.GetElement(DIOposPrimeNode, DIOposPrimeNode);
+            PosPosPrimePtr = matrix.GetElement(posNode, PosPrimeNode);
+            NegPosPrimePtr = matrix.GetElement(negNode, PosPrimeNode);
+            PosPrimePosPtr = matrix.GetElement(PosPrimeNode, posNode);
+            PosPrimeNegPtr = matrix.GetElement(PosPrimeNode, negNode);
+            PosPosPtr = matrix.GetElement(posNode, posNode);
+            NegNegPtr = matrix.GetElement(negNode, negNode);
+            PosPrimePosPrimePtr = matrix.GetElement(PosPrimeNode, PosPrimeNode);
         }
 
         /// <summary>
@@ -131,13 +130,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            DIOposPosPrimePtr = null;
-            DIOnegPosPrimePtr = null;
-            DIOposPrimePosPtr = null;
-            DIOposPrimeNegPtr = null;
-            DIOposPosPtr = null;
-            DIOnegNegPtr = null;
-            DIOposPrimePosPrimePtr = null;
+            PosPosPrimePtr = null;
+            NegPosPrimePtr = null;
+            PosPrimePosPtr = null;
+            PosPrimeNegPtr = null;
+            PosPosPtr = null;
+            NegNegPtr = null;
+            PosPrimePosPrimePtr = null;
         }
 
         /// <summary>
@@ -156,39 +155,39 @@ namespace SpiceSharp.Components.DiodeBehaviors
             /* 
              * this routine loads diodes for dc and transient analyses.
              */
-            csat = temp.DIOtSatCur * bp.DIOarea;
-            gspr = modeltemp.DIOconductance * bp.DIOarea;
-            vt = Circuit.KOverQ * bp.DIOtemp;
-            vte = mbp.DIOemissionCoeff * vt;
+            csat = temp.TSatCur * bp.Area;
+            gspr = modeltemp.Conductance * bp.Area;
+            vt = Circuit.KOverQ * bp.Temperature;
+            vte = mbp.EmissionCoeff * vt;
 
             // Initialization
             Check = false;
             if (state.Init == State.InitFlags.InitJct)
             {
-                if (bp.DIOoff)
+                if (bp.Off)
                     vd = 0.0;
                 else
-                    vd = temp.DIOtVcrit;
+                    vd = temp.TVcrit;
             }
-            else if (state.Init == State.InitFlags.InitFix && bp.DIOoff)
+            else if (state.Init == State.InitFlags.InitFix && bp.Off)
             {
                 vd = 0.0;
             }
             else
             {
                 // Get voltage over the diode (without series resistance)
-                vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
+                vd = state.Solution[PosPrimeNode] - state.Solution[negNode];
 
                 // limit new junction voltage
-                if ((mbp.DIObreakdownVoltage.Given) && (vd < Math.Min(0, -temp.DIOtBrkdwnV + 10 * vte)))
+                if ((mbp.BreakdownVoltage.Given) && (vd < Math.Min(0, -temp.TBrkdwnV + 10 * vte)))
                 {
-                    vdtemp = -(vd + temp.DIOtBrkdwnV);
-                    vdtemp = Semiconductor.DEVpnjlim(vdtemp, -(DIOvoltage + temp.DIOtBrkdwnV), vte, temp.DIOtVcrit, ref Check);
-                    vd = -(vdtemp + temp.DIOtBrkdwnV);
+                    vdtemp = -(vd + temp.TBrkdwnV);
+                    vdtemp = Semiconductor.DEVpnjlim(vdtemp, -(Voltage + temp.TBrkdwnV), vte, temp.TVcrit, ref Check);
+                    vd = -(vdtemp + temp.TBrkdwnV);
                 }
                 else
                 {
-                    vd = Semiconductor.DEVpnjlim(vd, DIOvoltage, vte, temp.DIOtVcrit, ref Check);
+                    vd = Semiconductor.DEVpnjlim(vd, Voltage, vte, temp.TVcrit, ref Check);
                 }
             }
 
@@ -200,7 +199,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 cd = csat * (evd - 1) + state.Gmin * vd;
                 gd = csat * evd / vte + state.Gmin;
             }
-            else if (temp.DIOtBrkdwnV == 0.0 || vd >= -temp.DIOtBrkdwnV)
+            else if (temp.TBrkdwnV == 0.0 || vd >= -temp.TBrkdwnV)
             {
                 // Reverse bias
                 arg = 3 * vte / (vd * Math.E);
@@ -211,36 +210,36 @@ namespace SpiceSharp.Components.DiodeBehaviors
             else
             {
                 // Reverse breakdown
-                evrev = Math.Exp(-(temp.DIOtBrkdwnV + vd) / vte);
+                evrev = Math.Exp(-(temp.TBrkdwnV + vd) / vte);
                 cd = -csat * evrev + state.Gmin * vd;
                 gd = csat * evrev / vte + state.Gmin;
             }
 
             // Check convergence
-            if ((state.Init != State.InitFlags.InitFix) || !bp.DIOoff)
+            if ((state.Init != State.InitFlags.InitFix) || !bp.Off)
             {
                 if (Check)
                     state.IsCon = false;
             }
 
             // Store for next time
-            DIOvoltage = vd;
-            DIOcurrent = cd;
-            DIOconduct = gd;
+            Voltage = vd;
+            Current = cd;
+            Conduct = gd;
 
             // Load Rhs vector
             cdeq = cd - gd * vd;
-            state.Rhs[DIOnegNode] += cdeq;
-            state.Rhs[DIOposPrimeNode] -= cdeq;
+            state.Rhs[negNode] += cdeq;
+            state.Rhs[PosPrimeNode] -= cdeq;
 
             // Load Y-matrix
-            DIOposPosPtr.Add(gspr);
-            DIOnegNegPtr.Add(gd);
-            DIOposPrimePosPrimePtr.Add(gd + gspr);
-            DIOposPosPrimePtr.Sub(gspr);
-            DIOposPrimePosPtr.Sub(gspr);
-            DIOnegPosPrimePtr.Sub(gd);
-            DIOposPrimeNegPtr.Sub(gd);
+            PosPosPtr.Add(gspr);
+            NegNegPtr.Add(gd);
+            PosPrimePosPrimePtr.Add(gd + gspr);
+            PosPosPrimePtr.Sub(gspr);
+            PosPrimePosPtr.Sub(gspr);
+            NegPosPrimePtr.Sub(gd);
+            PosPrimeNegPtr.Sub(gd);
         }
 
         /// <summary>
@@ -256,11 +255,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var state = sim.State;
             var config = sim.BaseConfiguration;
             double delvd, cdhat, cd;
-            double vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
+            double vd = state.Solution[PosPrimeNode] - state.Solution[negNode];
 
-            delvd = vd - DIOvoltage;
-            cdhat = DIOcurrent + DIOconduct * delvd;
-            cd = DIOcurrent;
+            delvd = vd - Voltage;
+            cdhat = Current + Conduct * delvd;
+            cd = Current;
 
             // check convergence
             double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsTol;

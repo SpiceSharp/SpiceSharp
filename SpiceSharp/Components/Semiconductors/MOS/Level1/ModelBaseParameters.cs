@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
-    /// Base parameters for a <see cref="MOS1Model"/>
+    /// Base parameters for a <see cref="Model"/>
     /// </summary>
     public class ModelBaseParameters : ParameterSet
     {
@@ -11,66 +11,66 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Parameters
         /// </summary>
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]
-        public double MOS1_TNOM
+        public double _TNOM
         {
-            get => MOS1tnom - Circuit.CelsiusKelvin;
-            set => MOS1tnom.Set(value + Circuit.CelsiusKelvin);
+            get => NominalTemperature - Circuit.CelsiusKelvin;
+            set => NominalTemperature.Set(value + Circuit.CelsiusKelvin);
         }
-        public Parameter MOS1tnom { get; } = new Parameter();
+        public Parameter NominalTemperature { get; } = new Parameter();
         [PropertyName("vto"), PropertyName("vt0"), PropertyInfo("Threshold voltage")]
-        public Parameter MOS1vt0 { get; } = new Parameter();
+        public Parameter Vt0 { get; } = new Parameter();
         [PropertyName("kp"), PropertyInfo("Transconductance parameter")]
-        public Parameter MOS1transconductance { get; } = new Parameter(2e-5);
+        public Parameter Transconductance { get; } = new Parameter(2e-5);
         [PropertyName("gamma"), PropertyInfo("Bulk threshold parameter")]
-        public Parameter MOS1gamma { get; } = new Parameter();
+        public Parameter Gamma { get; } = new Parameter();
         [PropertyName("phi"), PropertyInfo("Surface potential")]
-        public Parameter MOS1phi { get; } = new Parameter(.6);
+        public Parameter Phi { get; } = new Parameter(.6);
         [PropertyName("lambda"), PropertyInfo("Channel length modulation")]
-        public Parameter MOS1lambda { get; } = new Parameter();
+        public Parameter Lambda { get; } = new Parameter();
         [PropertyName("rd"), PropertyInfo("Drain ohmic resistance")]
-        public Parameter MOS1drainResistance { get; } = new Parameter();
+        public Parameter DrainResistance { get; } = new Parameter();
         [PropertyName("rs"), PropertyInfo("Source ohmic resistance")]
-        public Parameter MOS1sourceResistance { get; } = new Parameter();
+        public Parameter SourceResistance { get; } = new Parameter();
         [PropertyName("cbd"), PropertyInfo("B-D junction capacitance")]
-        public Parameter MOS1capBD { get; } = new Parameter();
+        public Parameter CapBD { get; } = new Parameter();
         [PropertyName("cbs"), PropertyInfo("B-S junction capacitance")]
-        public Parameter MOS1capBS { get; } = new Parameter();
+        public Parameter CapBS { get; } = new Parameter();
         [PropertyName("is"), PropertyInfo("Bulk junction sat. current")]
-        public Parameter MOS1jctSatCur { get; } = new Parameter(1e-14);
+        public Parameter JctSatCur { get; } = new Parameter(1e-14);
         [PropertyName("pb"), PropertyInfo("Bulk junction potential")]
-        public Parameter MOS1bulkJctPotential { get; } = new Parameter(.8);
+        public Parameter BulkJctPotential { get; } = new Parameter(.8);
         [PropertyName("cgso"), PropertyInfo("Gate-source overlap cap.")]
-        public Parameter MOS1gateSourceOverlapCapFactor { get; } = new Parameter();
+        public Parameter GateSourceOverlapCapFactor { get; } = new Parameter();
         [PropertyName("cgdo"), PropertyInfo("Gate-drain overlap cap.")]
-        public Parameter MOS1gateDrainOverlapCapFactor { get; } = new Parameter();
+        public Parameter GateDrainOverlapCapFactor { get; } = new Parameter();
         [PropertyName("cgbo"), PropertyInfo("Gate-bulk overlap cap.")]
-        public Parameter MOS1gateBulkOverlapCapFactor { get; } = new Parameter();
+        public Parameter GateBulkOverlapCapFactor { get; } = new Parameter();
         [PropertyName("cj"), PropertyInfo("Bottom junction cap per area")]
-        public Parameter MOS1bulkCapFactor { get; } = new Parameter();
+        public Parameter BulkCapFactor { get; } = new Parameter();
         [PropertyName("mj"), PropertyInfo("Bottom grading coefficient")]
-        public Parameter MOS1bulkJctBotGradingCoeff { get; } = new Parameter(.5);
+        public Parameter BulkJctBotGradingCoeff { get; } = new Parameter(.5);
         [PropertyName("cjsw"), PropertyInfo("Side junction cap per area")]
-        public Parameter MOS1sideWallCapFactor { get; } = new Parameter();
+        public Parameter SideWallCapFactor { get; } = new Parameter();
         [PropertyName("mjsw"), PropertyInfo("Side grading coefficient")]
-        public Parameter MOS1bulkJctSideGradingCoeff { get; } = new Parameter(.5);
+        public Parameter BulkJctSideGradingCoeff { get; } = new Parameter(.5);
         [PropertyName("js"), PropertyInfo("Bulk jct. sat. current density")]
-        public Parameter MOS1jctSatCurDensity { get; } = new Parameter();
+        public Parameter JctSatCurDensity { get; } = new Parameter();
         [PropertyName("tox"), PropertyInfo("Oxide thickness")]
-        public Parameter MOS1oxideThickness { get; } = new Parameter();
+        public Parameter OxideThickness { get; } = new Parameter();
         [PropertyName("ld"), PropertyInfo("Lateral diffusion")]
-        public Parameter MOS1latDiff { get; } = new Parameter();
+        public Parameter LatDiff { get; } = new Parameter();
         [PropertyName("rsh"), PropertyInfo("Sheet resistance")]
-        public Parameter MOS1sheetResistance { get; } = new Parameter();
+        public Parameter SheetResistance { get; } = new Parameter();
         [PropertyName("u0"), PropertyName("uo"), PropertyInfo("Surface mobility")]
-        public Parameter MOS1surfaceMobility { get; } = new Parameter();
+        public Parameter SurfaceMobility { get; } = new Parameter();
         [PropertyName("fc"), PropertyInfo("Forward bias jct. fit parm.")]
-        public Parameter MOS1fwdCapDepCoeff { get; } = new Parameter(.5);
+        public Parameter FwdCapDepCoeff { get; } = new Parameter(.5);
         [PropertyName("nss"), PropertyInfo("Surface state density")]
-        public Parameter MOS1surfaceStateDensity { get; } = new Parameter();
+        public Parameter SurfaceStateDensity { get; } = new Parameter();
         [PropertyName("nsub"), PropertyInfo("Substrate doping")]
-        public Parameter MOS1substrateDoping { get; } = new Parameter();
+        public Parameter SubstrateDoping { get; } = new Parameter();
         [PropertyName("tpg"), PropertyInfo("Gate type")]
-        public Parameter MOS1gateType { get; } = new Parameter();
+        public Parameter GateType { get; } = new Parameter();
 
         /// <summary>
         /// Methods
@@ -79,22 +79,22 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public void SetNMOS(bool value)
         {
             if (value)
-                MOS1type = 1.0;
+                Type = 1.0;
         }
         [PropertyName("pmos"), PropertyInfo("P type MOSfet model")]
         public void SetPMOS(bool value)
         {
             if (value)
-                MOS1type = -1.0;
+                Type = -1.0;
         }
         [PropertyName("type"), PropertyInfo("N-channel or P-channel MOS")]
         public string GetTYPE()
         {
-            if (MOS1type > 0)
+            if (Type > 0)
                 return "nmos";
             return "pmos";
         }
-        public double MOS1type { get; protected set; } = 1.0;
+        public double Type { get; protected set; } = 1.0;
 
     }
 }

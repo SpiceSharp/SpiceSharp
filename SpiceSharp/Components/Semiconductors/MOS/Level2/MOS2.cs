@@ -13,30 +13,30 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Set the model for the MOS2 Mosfet.
         /// </summary>
-        public void SetModel(MOS2Model model) => Model = model;
+        public void SetModel(Model model) => Model = model;
 
         /// <summary>
         /// Nodes
         /// </summary>
         [PropertyName("dnode"), PropertyInfo("Number of drain node")]
-        public int MOS2dNode { get; internal set; }
+        public int DrainNode { get; internal set; }
         [PropertyName("gnode"), PropertyInfo("Number of gate node")]
-        public int MOS2gNode { get; internal set; }
+        public int GateNode { get; internal set; }
         [PropertyName("snode"), PropertyInfo("Number of source node")]
-        public int MOS2sNode { get; internal set; }
+        public int SourceNode { get; internal set; }
         [PropertyName("bnode"), PropertyInfo("Number of bulk node")]
-        public int MOS2bNode { get; internal set; }
+        public int BulkNode { get; internal set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        public const int MOS2pinCount = 4;
+        public const int MOS2PinCount = 4;
         
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS2(Identifier name) : base(name, MOS2pinCount)
+        public MOS2(Identifier name) : base(name, MOS2PinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters());
@@ -55,14 +55,14 @@ namespace SpiceSharp.Components
         /// <param name="circuit">The circuit</param>
         public override void Setup(Circuit circuit)
         {
-            var model = Model as MOS2Model;
+            var model = Model as Model;
 
             // Allocate nodes
             var nodes = BindNodes(circuit);
-            MOS2dNode = nodes[0].Index;
-            MOS2gNode = nodes[1].Index;
-            MOS2sNode = nodes[2].Index;
-            MOS2bNode = nodes[3].Index;
+            DrainNode = nodes[0].Index;
+            GateNode = nodes[1].Index;
+            SourceNode = nodes[2].Index;
+            BulkNode = nodes[3].Index;
         }
     }
 }

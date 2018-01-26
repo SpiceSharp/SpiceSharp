@@ -21,17 +21,17 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Noise sources by their index
         /// </summary>
-        const int BJTRCNOIZ = 0;
-        const int BJTRBNOIZ = 1;
-        const int BJT_RE_NOISE = 2;
-        const int BJTICNOIZ = 3;
-        const int BJTIBNOIZ = 4;
-        const int BJTFLNOIZ = 5;
+        const int RcNoise = 0;
+        const int RbNoise = 1;
+        const int ReNoise = 2;
+        const int IcNoise = 3;
+        const int IbNoise = 4;
+        const int FlickerNoise = 5;
 
         /// <summary>
         /// Noise generators
         /// </summary>
-        public ComponentNoise BJTnoise { get; } = new ComponentNoise(
+        public ComponentNoise BipolarJunctionTransistorNoise { get; } = new ComponentNoise(
             new NoiseThermal("rc", 0, 4),
             new NoiseThermal("rb", 1, 5),
             new NoiseThermal("re", 2, 6),
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int BJTcolNode, BJTbaseNode, BJTemitNode, BJTsubstNode, BJTcolPrimeNode, BJTbasePrimeNode, BJTemitPrimeNode;
+        int colNode, baseNode, emitNode, substNode, colPrimeNode, basePrimeNode, emitPrimeNode;
 
         /// <summary>
         /// Constructor
@@ -79,10 +79,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
-            BJTcolNode = pins[0];
-            BJTbaseNode = pins[1];
-            BJTemitNode = pins[2];
-            BJTsubstNode = pins[3];
+            colNode = pins[0];
+            baseNode = pins[1];
+            emitNode = pins[2];
+            substNode = pins[3];
         }
 
         /// <summary>
@@ -91,13 +91,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void ConnectNoise()
         {
             // Get extra nodes
-            BJTcolPrimeNode = load.BJTcolPrimeNode;
-            BJTbasePrimeNode = load.BJTbasePrimeNode;
-            BJTemitPrimeNode = load.BJTemitPrimeNode;
+            colPrimeNode = load.ColPrimeNode;
+            basePrimeNode = load.BasePrimeNode;
+            emitPrimeNode = load.EmitPrimeNode;
 
             // Connect noise
-            BJTnoise.Setup(BJTcolNode, BJTbaseNode, BJTemitNode, BJTsubstNode,
-                BJTcolPrimeNode, BJTbasePrimeNode, BJTemitPrimeNode);
+            BipolarJunctionTransistorNoise.Setup(colNode, baseNode, emitNode, substNode,
+                colPrimeNode, basePrimeNode, emitPrimeNode);
         }
 
         /// <summary>
@@ -113,15 +113,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var noise = sim.NoiseState;
 
             // Set noise parameters
-            BJTnoise.Generators[BJTRCNOIZ].Set(modeltemp.BJTcollectorConduct * bp.BJTarea);
-            BJTnoise.Generators[BJTRBNOIZ].Set(load.BJTgx);
-            BJTnoise.Generators[BJT_RE_NOISE].Set(modeltemp.BJTemitterConduct * bp.BJTarea);
-            BJTnoise.Generators[BJTICNOIZ].Set(load.BJTcc);
-            BJTnoise.Generators[BJTIBNOIZ].Set(load.BJTcb);
-            BJTnoise.Generators[BJTFLNOIZ].Set(mnp.BJTfNcoef * Math.Exp(mnp.BJTfNexp * Math.Log(Math.Max(Math.Abs(load.BJTcb), 1e-38))) / noise.Freq);
+            BipolarJunctionTransistorNoise.Generators[RcNoise].Set(modeltemp.CollectorConduct * bp.Area);
+            BipolarJunctionTransistorNoise.Generators[RbNoise].Set(load.Gx);
+            BipolarJunctionTransistorNoise.Generators[ReNoise].Set(modeltemp.EmitterConduct * bp.Area);
+            BipolarJunctionTransistorNoise.Generators[IcNoise].Set(load.Cc);
+            BipolarJunctionTransistorNoise.Generators[IbNoise].Set(load.Cb);
+            BipolarJunctionTransistorNoise.Generators[FlickerNoise].Set(mnp.FnCoefficient * Math.Exp(mnp.FnExp * Math.Log(Math.Max(Math.Abs(load.Cb), 1e-38))) / noise.Freq);
 
             // Evaluate all noise sources
-            BJTnoise.Evaluate(sim);
+            BipolarJunctionTransistorNoise.Evaluate(sim);
         }
     }
 }

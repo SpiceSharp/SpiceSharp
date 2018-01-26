@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// Event arguments for modifying charges and currents
     /// </summary>
-    public class BJTExcessPhaseEventArgs : EventArgs
+    public class ExcessPhaseEventArgs : EventArgs
     {
         /// <summary>
         /// Collector current

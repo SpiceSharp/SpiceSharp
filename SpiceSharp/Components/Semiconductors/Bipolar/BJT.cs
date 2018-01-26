@@ -18,25 +18,25 @@ namespace SpiceSharp.Components
         /// Nodes
         /// </summary>
         [PropertyName("colnode"), PropertyInfo("Number of collector node")]
-        public int BJTcolNode { get; private set; }
+        public int CollectorNode { get; private set; }
         [PropertyName("basenode"), PropertyInfo("Number of base node")]
-        public int BJTbaseNode { get; private set; }
+        public int BaseNode { get; private set; }
         [PropertyName("emitnode"), PropertyInfo("Number of emitter node")]
-        public int BJTemitNode { get; private set; }
+        public int EmitterNode { get; private set; }
         [PropertyName("substnode"), PropertyInfo("Number of substrate node")]
-        public int BJTsubstNode { get; private set; }
+        public int SubstrateNode { get; private set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        public const int BJTpinCount = 4;
+        public const int BipolarJunctionTransistorPinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
         public BJT(Identifier name) 
-            : base(name, BJTpinCount)
+            : base(name, BipolarJunctionTransistorPinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters());
@@ -59,10 +59,10 @@ namespace SpiceSharp.Components
 
             // Allocate nodes
             var nodes = BindNodes(circuit);
-            BJTcolNode = nodes[0].Index;
-            BJTbaseNode = nodes[1].Index;
-            BJTemitNode = nodes[2].Index;
-            BJTsubstNode = nodes[3].Index;
+            CollectorNode = nodes[0].Index;
+            BaseNode = nodes[1].Index;
+            EmitterNode = nodes[2].Index;
+            SubstrateNode = nodes[3].Index;
         }
     }
 }

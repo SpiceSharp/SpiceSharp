@@ -17,19 +17,19 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Extra variables
         /// </summary>
-        public int DIOposNode { get; private set; }
-        public int DIOnegNode { get; private set; }
+        public int PosNode { get; private set; }
+        public int NegNode { get; private set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        public const int DIOpinCount = 2;
+        public const int DiodePinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public Diode(Identifier name) : base(name, DIOpinCount)
+        public Diode(Identifier name) : base(name, DiodePinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters());
@@ -52,8 +52,8 @@ namespace SpiceSharp.Components
 
             // Allocate nodes
             var nodes = BindNodes(circuit);
-            DIOposNode = nodes[0].Index;
-            DIOnegNode = nodes[1].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
         }
     }
 }

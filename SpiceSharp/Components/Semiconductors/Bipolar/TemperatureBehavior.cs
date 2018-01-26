@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -13,33 +12,27 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
+        BaseParameters bp;
         ModelBaseParameters mbp;
         ModelTemperatureBehavior modeltemp;
 
         /// <summary>
-        /// Parameters
+        /// Shared parameters
         /// </summary>
-        [PropertyName("temp"), PropertyInfo("Instance temperature")]
-        public double BJT_TEMP
-        {
-            get => BJTtemp - Circuit.CelsiusKelvin;
-            set => BJTtemp.Set(value + Circuit.CelsiusKelvin);
-        }
-        public Parameter BJTtemp { get; } = new Parameter(300.15);
-        public double BJTtSatCur { get; protected set; }
-        public double BJTtBetaF { get; protected set; }
-        public double BJTtBetaR { get; protected set; }
-        public double BJTtBEleakCur { get; protected set; }
-        public double BJTtBCleakCur { get; protected set; }
-        public double BJTtBEcap { get; protected set; }
-        public double BJTtBEpot { get; protected set; }
-        public double BJTtBCcap { get; protected set; }
-        public double BJTtBCpot { get; protected set; }
-        public double BJTtDepCap { get; protected set; }
-        public double BJTtf1 { get; protected set; }
-        public double BJTtf4 { get; protected set; }
-        public double BJTtf5 { get; protected set; }
-        public double BJTtVcrit { get; protected set; }
+        public double TSatCur { get; protected set; }
+        public double TBetaF { get; protected set; }
+        public double TBetaR { get; protected set; }
+        public double TBEleakCur { get; protected set; }
+        public double TBCleakCur { get; protected set; }
+        public double TBEcap { get; protected set; }
+        public double TBEpot { get; protected set; }
+        public double TBCcap { get; protected set; }
+        public double TBCpot { get; protected set; }
+        public double TDepCap { get; protected set; }
+        public double Tf1 { get; protected set; }
+        public double Tf4 { get; protected set; }
+        public double Tf5 { get; protected set; }
+        public double TVcrit { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -57,6 +50,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
+            bp = provider.GetParameterSet<BaseParameters>(0);
             mbp = provider.GetParameterSet<ModelBaseParameters>(1);
 
             // Get behaviors
@@ -74,45 +68,45 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             double vt, fact2, egfet, arg, pbfact, ratlog, ratio1, factlog, factor, bfactor, pbo, gmaold, gmanew;
 
-            if (!BJTtemp.Given)
-                BJTtemp.Value = sim.State.Temperature;
-            vt = BJTtemp * Circuit.KOverQ;
-            fact2 = BJTtemp / Circuit.ReferenceTemperature;
-            egfet = 1.16 - (7.02e-4 * BJTtemp * BJTtemp) / (BJTtemp + 1108);
-            arg = -egfet / (2 * Circuit.Boltzmann * BJTtemp) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
+            if (!bp.Temperature.Given)
+                bp.Temperature.Value = sim.State.Temperature;
+            vt = bp.Temperature * Circuit.KOverQ;
+            fact2 = bp.Temperature / Circuit.ReferenceTemperature;
+            egfet = 1.16 - (7.02e-4 * bp.Temperature * bp.Temperature) / (bp.Temperature + 1108);
+            arg = -egfet / (2 * Circuit.Boltzmann * bp.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
                  Circuit.ReferenceTemperature));
             pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
 
-            ratlog = Math.Log(BJTtemp / mbp.BJTtnom);
-            ratio1 = BJTtemp / mbp.BJTtnom - 1;
-            factlog = ratio1 * mbp.BJTenergyGap / vt + mbp.BJTtempExpIS * ratlog;
+            ratlog = Math.Log(bp.Temperature / mbp.NominalTemperature);
+            ratio1 = bp.Temperature / mbp.NominalTemperature - 1;
+            factlog = ratio1 * mbp.EnergyGap / vt + mbp.TempExpIS * ratlog;
             factor = Math.Exp(factlog);
-            BJTtSatCur = mbp.BJTsatCur * factor;
-            bfactor = Math.Exp(ratlog * mbp.BJTbetaExp);
-            BJTtBetaF = mbp.BJTbetaF * bfactor;
-            BJTtBetaR = mbp.BJTbetaR * bfactor;
-            BJTtBEleakCur = mbp.BJTleakBEcurrent * Math.Exp(factlog / mbp.BJTleakBEemissionCoeff) / bfactor;
-            BJTtBCleakCur = mbp.BJTleakBCcurrent * Math.Exp(factlog / mbp.BJTleakBCemissionCoeff) / bfactor;
+            TSatCur = mbp.SatCur * factor;
+            bfactor = Math.Exp(ratlog * mbp.BetaExp);
+            TBetaF = mbp.BetaF * bfactor;
+            TBetaR = mbp.BetaR * bfactor;
+            TBEleakCur = mbp.LeakBEcurrent * Math.Exp(factlog / mbp.LeakBEemissionCoeff) / bfactor;
+            TBCleakCur = mbp.LeakBCcurrent * Math.Exp(factlog / mbp.LeakBCemissionCoeff) / bfactor;
 
-            pbo = (mbp.BJTpotentialBE - pbfact) / modeltemp.fact1;
-            gmaold = (mbp.BJTpotentialBE - pbo) / pbo;
-            BJTtBEcap = mbp.BJTdepletionCapBE / (1 + mbp.BJTjunctionExpBE * (4e-4 * (mbp.BJTtnom - Circuit.ReferenceTemperature) - gmaold));
-            BJTtBEpot = fact2 * pbo + pbfact;
-            gmanew = (BJTtBEpot - pbo) / pbo;
-            BJTtBEcap *= 1 + mbp.BJTjunctionExpBE * (4e-4 * (BJTtemp - Circuit.ReferenceTemperature) - gmanew);
+            pbo = (mbp.PotentialBE - pbfact) / modeltemp.Fact1;
+            gmaold = (mbp.PotentialBE - pbo) / pbo;
+            TBEcap = mbp.DepletionCapBE / (1 + mbp.JunctionExpBE * (4e-4 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            TBEpot = fact2 * pbo + pbfact;
+            gmanew = (TBEpot - pbo) / pbo;
+            TBEcap *= 1 + mbp.JunctionExpBE * (4e-4 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
-            pbo = (mbp.BJTpotentialBC - pbfact) / modeltemp.fact1;
-            gmaold = (mbp.BJTpotentialBC - pbo) / pbo;
-            BJTtBCcap = mbp.BJTdepletionCapBC / (1 + mbp.BJTjunctionExpBC * (4e-4 * (mbp.BJTtnom - Circuit.ReferenceTemperature) - gmaold));
-            BJTtBCpot = fact2 * pbo + pbfact;
-            gmanew = (BJTtBCpot - pbo) / pbo;
-            BJTtBCcap *= 1 + mbp.BJTjunctionExpBC * (4e-4 * (BJTtemp - Circuit.ReferenceTemperature) - gmanew);
+            pbo = (mbp.PotentialBC - pbfact) / modeltemp.Fact1;
+            gmaold = (mbp.PotentialBC - pbo) / pbo;
+            TBCcap = mbp.DepletionCapBC / (1 + mbp.JunctionExpBC * (4e-4 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            TBCpot = fact2 * pbo + pbfact;
+            gmanew = (TBCpot - pbo) / pbo;
+            TBCcap *= 1 + mbp.JunctionExpBC * (4e-4 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
-            BJTtDepCap = mbp.BJTdepletionCapCoeff * BJTtBEpot;
-            BJTtf1 = BJTtBEpot * (1 - Math.Exp((1 - mbp.BJTjunctionExpBE) * modeltemp.xfc)) / (1 - mbp.BJTjunctionExpBE);
-            BJTtf4 = mbp.BJTdepletionCapCoeff * BJTtBCpot;
-            BJTtf5 = BJTtBCpot * (1 - Math.Exp((1 - mbp.BJTjunctionExpBC) * modeltemp.xfc)) / (1 - mbp.BJTjunctionExpBC);
-            BJTtVcrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.BJTsatCur));
+            TDepCap = mbp.DepletionCapCoeff * TBEpot;
+            Tf1 = TBEpot * (1 - Math.Exp((1 - mbp.JunctionExpBE) * modeltemp.Xfc)) / (1 - mbp.JunctionExpBE);
+            Tf4 = mbp.DepletionCapCoeff * TBCpot;
+            Tf5 = TBCpot * (1 - Math.Exp((1 - mbp.JunctionExpBC) * modeltemp.Xfc)) / (1 - mbp.JunctionExpBC);
+            TVcrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.SatCur));
         }
     }
 }

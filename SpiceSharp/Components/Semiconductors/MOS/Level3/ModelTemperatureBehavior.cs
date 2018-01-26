@@ -7,7 +7,7 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Components.MosfetBehaviors.Level3
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="Components.MOS3Model"/>
+    /// Temperature behavior for a <see cref="Components.Model"/>
     /// </summary>
     public class ModelTemperatureBehavior : Behaviors.TemperatureBehavior
     {
@@ -19,15 +19,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double fact1 { get; protected set; }
-        public double vtnom { get; protected set; }
-        public double egfet1 { get; protected set; }
-        public double pbfact1 { get; protected set; }
-        public double MOS3oxideCapFactor { get; internal set; }
+        public double Fact1 { get; protected set; }
+        public double Vtnom { get; protected set; }
+        public double Egfet1 { get; protected set; }
+        public double Pbfact1 { get; protected set; }
+        public double OxideCapFactor { get; internal set; }
         [PropertyName("xd"), PropertyInfo("Depletion layer width")]
-        public double MOS3coeffDepLayWidth { get; internal set; }
+        public double CoeffDepLayWidth { get; internal set; }
         [PropertyName("alpha"), PropertyInfo("Alpha")]
-        public double MOS3alpha { get; internal set; }
+        public double Alpha { get; internal set; }
 
         /// <summary>
         /// Constructor
@@ -59,70 +59,70 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 
             double kt1, arg1, fermis, wkfng, fermig, wkfngs, vfb;
 
-            if (!mbp.MOS3tnom.Given)
+            if (!mbp.NominalTemperature.Given)
             {
-                mbp.MOS3tnom.Value = sim.State.NominalTemperature;
+                mbp.NominalTemperature.Value = sim.State.NominalTemperature;
             }
-            fact1 = mbp.MOS3tnom / Circuit.ReferenceTemperature;
-            vtnom = mbp.MOS3tnom * Circuit.KOverQ;
-            kt1 = Circuit.Boltzmann * mbp.MOS3tnom;
-            egfet1 = 1.16 - (7.02e-4 * mbp.MOS3tnom * mbp.MOS3tnom) / (mbp.MOS3tnom + 1108);
-            arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
-            pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
+            Fact1 = mbp.NominalTemperature / Circuit.ReferenceTemperature;
+            Vtnom = mbp.NominalTemperature * Circuit.KOverQ;
+            kt1 = Circuit.Boltzmann * mbp.NominalTemperature;
+            Egfet1 = 1.16 - (7.02e-4 * mbp.NominalTemperature * mbp.NominalTemperature) / (mbp.NominalTemperature + 1108);
+            arg1 = -Egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
+            Pbfact1 = -2 * Vtnom * (1.5 * Math.Log(Fact1) + Circuit.Charge * arg1);
 
-            MOS3oxideCapFactor = 3.9 * 8.854214871e-12 / mbp.MOS3oxideThickness;
-            if (!mbp.MOS3surfaceMobility.Given)
-                mbp.MOS3surfaceMobility.Value = 600;
-            if (!mbp.MOS3transconductance.Given)
+            OxideCapFactor = 3.9 * 8.854214871e-12 / mbp.OxideThickness;
+            if (!mbp.SurfaceMobility.Given)
+                mbp.SurfaceMobility.Value = 600;
+            if (!mbp.Transconductance.Given)
             {
-                mbp.MOS3transconductance.Value = mbp.MOS3surfaceMobility * MOS3oxideCapFactor * 1e-4;
+                mbp.Transconductance.Value = mbp.SurfaceMobility * OxideCapFactor * 1e-4;
             }
-            if (mbp.MOS3substrateDoping.Given)
+            if (mbp.SubstrateDoping.Given)
             {
-                if (mbp.MOS3substrateDoping * 1e6 /* (cm**3 / m**3) */ > 1.45e16)
+                if (mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */ > 1.45e16)
                 {
-                    if (!mbp.MOS3phi.Given)
+                    if (!mbp.Phi.Given)
                     {
-                        mbp.MOS3phi.Value = 2 * vtnom * Math.Log(mbp.MOS3substrateDoping * 1e6 /* (cm *  * 3 / m *  * 3) */  / 1.45e16);
-                        mbp.MOS3phi.Value = Math.Max(.1, mbp.MOS3phi);
+                        mbp.Phi.Value = 2 * Vtnom * Math.Log(mbp.SubstrateDoping * 1e6 /* (cm *  * 3 / m *  * 3) */  / 1.45e16);
+                        mbp.Phi.Value = Math.Max(.1, mbp.Phi);
                     }
-                    fermis = mbp.MOS3type * .5 * mbp.MOS3phi;
+                    fermis = mbp.Type * .5 * mbp.Phi;
                     wkfng = 3.2;
-                    if (!mbp.MOS3gateType.Given)
-                        mbp.MOS3gateType.Value = 1;
-                    if (mbp.MOS3gateType != 0)
+                    if (!mbp.GateType.Given)
+                        mbp.GateType.Value = 1;
+                    if (mbp.GateType != 0)
                     {
-                        fermig = mbp.MOS3type * mbp.MOS3gateType * .5 * egfet1;
-                        wkfng = 3.25 + .5 * egfet1 - fermig;
+                        fermig = mbp.Type * mbp.GateType * .5 * Egfet1;
+                        wkfng = 3.25 + .5 * Egfet1 - fermig;
                     }
-                    wkfngs = wkfng - (3.25 + .5 * egfet1 + fermis);
-                    if (!mbp.MOS3gamma.Given)
+                    wkfngs = wkfng - (3.25 + .5 * Egfet1 + fermis);
+                    if (!mbp.Gamma.Given)
                     {
-                        mbp.MOS3gamma.Value = Math.Sqrt(2 * Transistor.EPSSIL * Circuit.Charge * mbp.MOS3substrateDoping * 1e6 /* (cm**3 / m**3) */) /
-                            MOS3oxideCapFactor;
+                        mbp.Gamma.Value = Math.Sqrt(2 * Transistor.EPSSIL * Circuit.Charge * mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */) /
+                            OxideCapFactor;
                     }
-                    if (!mbp.MOS3vt0.Given)
+                    if (!mbp.Vt0.Given)
                     {
-                        if (!mbp.MOS3surfaceStateDensity.Given)
-                            mbp.MOS3surfaceStateDensity.Value = 0;
-                        vfb = wkfngs - mbp.MOS3surfaceStateDensity * 1e4 * Circuit.Charge / MOS3oxideCapFactor;
-                        mbp.MOS3vt0.Value = vfb + mbp.MOS3type * (mbp.MOS3gamma * Math.Sqrt(mbp.MOS3phi) + mbp.MOS3phi);
+                        if (!mbp.SurfaceStateDensity.Given)
+                            mbp.SurfaceStateDensity.Value = 0;
+                        vfb = wkfngs - mbp.SurfaceStateDensity * 1e4 * Circuit.Charge / OxideCapFactor;
+                        mbp.Vt0.Value = vfb + mbp.Type * (mbp.Gamma * Math.Sqrt(mbp.Phi) + mbp.Phi);
                     }
                     else
                     {
-                        vfb = mbp.MOS3vt0 - mbp.MOS3type * (mbp.MOS3gamma * Math.Sqrt(mbp.MOS3phi) + mbp.MOS3phi);
+                        vfb = mbp.Vt0 - mbp.Type * (mbp.Gamma * Math.Sqrt(mbp.Phi) + mbp.Phi);
                     }
-                    MOS3alpha = (Transistor.EPSSIL + Transistor.EPSSIL) / (Circuit.Charge * mbp.MOS3substrateDoping * 1e6 /* (cm**3 / m**3) */);
-                    MOS3coeffDepLayWidth = Math.Sqrt(MOS3alpha);
+                    Alpha = (Transistor.EPSSIL + Transistor.EPSSIL) / (Circuit.Charge * mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */);
+                    CoeffDepLayWidth = Math.Sqrt(Alpha);
                 }
                 else
                 {
-                    mbp.MOS3substrateDoping.Value = 0;
+                    mbp.SubstrateDoping.Value = 0;
                     throw new CircuitException($"{Name}: Nsub < Ni");
                 }
             }
             /* now model parameter preprocessing */
-            mbp.MOS3narrowFactor = mbp.MOS3delta * 0.5 * Math.PI * Transistor.EPSSIL / MOS3oxideCapFactor;
+            mbp.NarrowFactor = mbp.Delta * 0.5 * Math.PI * Transistor.EPSSIL / OxideCapFactor;
         }
     }
 }

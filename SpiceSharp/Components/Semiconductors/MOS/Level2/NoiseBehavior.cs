@@ -23,20 +23,20 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Noise generators by their index
         /// </summary>
-        const int MOS2RDNOIZ = 0;
-        const int MOS2RSNOIZ = 1;
-        const int MOS2IDNOIZ = 2;
-        const int MOS2FLNOIZ = 3;
+        const int RdNoise = 0;
+        const int RsNoise = 1;
+        const int IdNoise = 2;
+        const int FlickerNoise = 3;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int MOS2dNode, MOS2gNode, MOS2sNode, MOS2bNode, MOS2sNodePrime, MOS2dNodePrime;
+        int dNode, gNode, sNode, bNode, sNodePrime, dNodePrime;
 
         /// <summary>
         /// Noise generators
         /// </summary>
-        public ComponentNoise MOS2noise { get; } = new ComponentNoise(
+        public ComponentNoise MOS2Noise { get; } = new ComponentNoise(
             new NoiseThermal("rd", 0, 4),
             new NoiseThermal("rs", 2, 5),
             new NoiseThermal("id", 4, 5),
@@ -79,10 +79,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
-            MOS2dNode = pins[0];
-            MOS2gNode = pins[1];
-            MOS2sNode = pins[2];
-            MOS2bNode = pins[3];
+            dNode = pins[0];
+            gNode = pins[1];
+            sNode = pins[2];
+            bNode = pins[3];
         }
 
         /// <summary>
@@ -91,11 +91,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public override void ConnectNoise()
         {
             // Get extra equations
-            MOS2dNodePrime = load.MOS2dNodePrime;
-            MOS2sNodePrime = load.MOS2sNodePrime;
+            dNodePrime = load.DrainNodePrime;
+            sNodePrime = load.SourceNodePrime;
 
             // Connect noise source
-            MOS2noise.Setup(MOS2dNode, MOS2gNode, MOS2sNode, MOS2bNode, MOS2dNodePrime, MOS2sNodePrime);
+            MOS2Noise.Setup(dNode, gNode, sNode, bNode, dNodePrime, sNodePrime);
         }
 
         /// <summary>
@@ -110,14 +110,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var noise = sim.NoiseState;
 
             // Set noise parameters
-            MOS2noise.Generators[MOS2RDNOIZ].Set(temp.MOS2drainConductance);
-            MOS2noise.Generators[MOS2RSNOIZ].Set(temp.MOS2sourceConductance);
-            MOS2noise.Generators[MOS2IDNOIZ].Set(2.0 / 3.0 * Math.Abs(load.MOS2gm));
-            MOS2noise.Generators[MOS2FLNOIZ].Set(mnp.MOS2fNcoef * Math.Exp(mnp.MOS2fNexp * Math.Log(Math.Max(Math.Abs(load.MOS2cd), 1e-38))) 
-                / (bp.MOS2w * (bp.MOS2l - 2 * mbp.MOS2latDiff) * modeltemp.MOS2oxideCapFactor * modeltemp.MOS2oxideCapFactor) / noise.Freq);
+            MOS2Noise.Generators[RdNoise].Set(temp.DrainConductance);
+            MOS2Noise.Generators[RsNoise].Set(temp.SourceConductance);
+            MOS2Noise.Generators[IdNoise].Set(2.0 / 3.0 * Math.Abs(load.Gm));
+            MOS2Noise.Generators[FlickerNoise].Set(mnp.FNcoef * Math.Exp(mnp.FNexp * Math.Log(Math.Max(Math.Abs(load.Cd), 1e-38))) 
+                / (bp.Width * (bp.Length - 2 * mbp.LatDiff) * modeltemp.OxideCapFactor * modeltemp.OxideCapFactor) / noise.Freq);
 
             // Evaluate noise sources
-            MOS2noise.Evaluate(sim);
+            MOS2Noise.Evaluate(sim);
         }
     }
 }

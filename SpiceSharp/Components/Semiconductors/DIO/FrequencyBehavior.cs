@@ -23,19 +23,19 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int DIOposNode, DIOnegNode, DIOposPrimeNode;
-        protected MatrixElement DIOposPosPrimePtr { get; private set; }
-        protected MatrixElement DIOnegPosPrimePtr { get; private set; }
-        protected MatrixElement DIOposPrimePosPtr { get; private set; }
-        protected MatrixElement DIOposPrimeNegPtr { get; private set; }
-        protected MatrixElement DIOposPosPtr { get; private set; }
-        protected MatrixElement DIOnegNegPtr { get; private set; }
-        protected MatrixElement DIOposPrimePosPrimePtr { get; private set; }
+        int posNode, negNode, posPrimeNode;
+        protected MatrixElement PosPosPrimePtr { get; private set; }
+        protected MatrixElement NegPosPrimePtr { get; private set; }
+        protected MatrixElement PosPrimePosPtr { get; private set; }
+        protected MatrixElement PosPrimeNegPtr { get; private set; }
+        protected MatrixElement PosPosPtr { get; private set; }
+        protected MatrixElement NegNegPtr { get; private set; }
+        protected MatrixElement PosPrimePosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the junction capacitance
         /// </summary>
-        public double DIOcap { get; protected set; }
+        public double Cap { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -72,8 +72,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            DIOposNode = pins[0];
-            DIOnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
         
         /// <summary>
@@ -86,16 +86,16 @@ namespace SpiceSharp.Components.DiodeBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
             // Get node
-            DIOposPrimeNode = load.DIOposPrimeNode;
+            posPrimeNode = load.PosPrimeNode;
 
             // Get matrix pointers
-            DIOposPosPrimePtr = matrix.GetElement(DIOposNode, DIOposPrimeNode);
-            DIOnegPosPrimePtr = matrix.GetElement(DIOnegNode, DIOposPrimeNode);
-            DIOposPrimePosPtr = matrix.GetElement(DIOposPrimeNode, DIOposNode);
-            DIOposPrimeNegPtr = matrix.GetElement(DIOposPrimeNode, DIOnegNode);
-            DIOposPosPtr = matrix.GetElement(DIOposNode, DIOposNode);
-            DIOnegNegPtr = matrix.GetElement(DIOnegNode, DIOnegNode);
-            DIOposPrimePosPrimePtr = matrix.GetElement(DIOposPrimeNode, DIOposPrimeNode);
+            PosPosPrimePtr = matrix.GetElement(posNode, posPrimeNode);
+            NegPosPrimePtr = matrix.GetElement(negNode, posPrimeNode);
+            PosPrimePosPtr = matrix.GetElement(posPrimeNode, posNode);
+            PosPrimeNegPtr = matrix.GetElement(posPrimeNode, negNode);
+            PosPosPtr = matrix.GetElement(posNode, posNode);
+            NegNegPtr = matrix.GetElement(negNode, negNode);
+            PosPrimePosPrimePtr = matrix.GetElement(posPrimeNode, posPrimeNode);
         }
 
         /// <summary>
@@ -103,13 +103,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            DIOposPosPrimePtr = null;
-            DIOnegPosPrimePtr = null;
-            DIOposPrimePosPtr = null;
-            DIOposPrimeNegPtr = null;
-            DIOposPosPtr = null;
-            DIOnegNegPtr = null;
-            DIOposPrimePosPrimePtr = null;
+            PosPosPrimePtr = null;
+            NegPosPrimePtr = null;
+            PosPrimePosPtr = null;
+            PosPrimeNegPtr = null;
+            PosPosPtr = null;
+            NegNegPtr = null;
+            PosPrimePosPrimePtr = null;
         }
 
         /// <summary>
@@ -123,22 +123,22 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             var state = sim.State;
             double arg, czero, sarg, capd, czof2;
-            double vd = state.Solution[DIOposPrimeNode] - state.Solution[DIOnegNode];
+            double vd = state.Solution[posPrimeNode] - state.Solution[negNode];
 
             // charge storage elements
-            czero = temp.DIOtJctCap * bp.DIOarea;
-            if (vd < temp.DIOtDepCap)
+            czero = temp.TJctCap * bp.Area;
+            if (vd < temp.TDepCap)
             {
-                arg = 1 - vd / mbp.DIOjunctionPot;
-                sarg = Math.Exp(-mbp.DIOgradingCoeff * Math.Log(arg));
-                capd = mbp.DIOtransitTime * load.DIOconduct + czero * sarg;
+                arg = 1 - vd / mbp.JunctionPot;
+                sarg = Math.Exp(-mbp.GradingCoeff * Math.Log(arg));
+                capd = mbp.TransitTime * load.Conduct + czero * sarg;
             }
             else
             {
-                czof2 = czero / modeltemp.DIOf2;
-                capd = mbp.DIOtransitTime * load.DIOconduct + czof2 * (modeltemp.DIOf3 + mbp.DIOgradingCoeff * vd / mbp.DIOjunctionPot);
+                czof2 = czero / modeltemp.F2;
+                capd = mbp.TransitTime * load.Conduct + czof2 * (modeltemp.F3 + mbp.GradingCoeff * vd / mbp.JunctionPot);
             }
-            DIOcap = capd;
+            Cap = capd;
         }
 
         /// <summary>
@@ -153,20 +153,20 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var state = sim.State;
             double gspr, geq, xceq;
 
-            gspr = modeltemp.DIOconductance * bp.DIOarea;
-            geq = load.DIOconduct;
-            xceq = DIOcap * state.Laplace.Imaginary;
+            gspr = modeltemp.Conductance * bp.Area;
+            geq = load.Conduct;
+            xceq = Cap * state.Laplace.Imaginary;
 
-            DIOposPosPtr.Value.Real += gspr;
-            DIOnegNegPtr.Value.Cplx += new Complex(geq, xceq);
+            PosPosPtr.Value.Real += gspr;
+            NegNegPtr.Value.Cplx += new Complex(geq, xceq);
 
-            DIOposPrimePosPrimePtr.Value.Cplx += new Complex(geq + gspr, xceq);
+            PosPrimePosPrimePtr.Value.Cplx += new Complex(geq + gspr, xceq);
 
-            DIOposPosPrimePtr.Value.Real -= gspr;
-            DIOnegPosPrimePtr.Value.Cplx -= new Complex(geq, xceq);
+            PosPosPrimePtr.Value.Real -= gspr;
+            NegPosPrimePtr.Value.Cplx -= new Complex(geq, xceq);
 
-            DIOposPrimePosPtr.Value.Real -= gspr;
-            DIOposPrimeNegPtr.Value.Cplx -= new Complex(geq, xceq);
+            PosPrimePosPtr.Value.Real -= gspr;
+            PosPrimeNegPtr.Value.Cplx -= new Complex(geq, xceq);
         }
     }
 }

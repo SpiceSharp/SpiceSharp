@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.MosfetBehaviors.Level3
 {
     /// <summary>
-    /// Noise parameters for a <see cref="MOS2Model"/>
+    /// Noise parameters for a <see cref="Model"/>
     /// </summary>
     public class ModelNoiseParameters : ParameterSet
     {
@@ -11,8 +11,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// Parameters
         /// </summary>
         [PropertyName("kf"), PropertyInfo("Flicker noise coefficient")]
-        public Parameter MOS3fNcoef { get; } = new Parameter();
+        public Parameter FnCoef { get; } = new Parameter();
         [PropertyName("af"), PropertyInfo("Flicker noise exponent")]
-        public Parameter MOS3fNexp { get; } = new Parameter(1);
+        public Parameter FnExp { get; } = new Parameter(1);
     }
 }

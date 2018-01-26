@@ -13,36 +13,36 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Parameters
         /// </summary>
         [PropertyName("off"), PropertyInfo("Device initially off")]
-        public bool MOS1off { get; set; }
+        public bool Off { get; set; }
         [PropertyName("icvbs"), PropertyInfo("Initial B-S voltage")]
-        public Parameter MOS1icVBS { get; } = new Parameter();
+        public Parameter InitialVBS { get; } = new Parameter();
         [PropertyName("icvds"), PropertyInfo("Initial D-S voltage")]
-        public Parameter MOS1icVDS { get; } = new Parameter();
+        public Parameter InitialVDS { get; } = new Parameter();
         [PropertyName("icvgs"), PropertyInfo("Initial G-S voltage")]
-        public Parameter MOS1icVGS { get; } = new Parameter();
+        public Parameter InitialVGS { get; } = new Parameter();
         [PropertyName("temp"), PropertyInfo("Instance temperature")]
-        public double MOS1_TEMP
+        public double _TEMP
         {
-            get => MOS1temp - Circuit.CelsiusKelvin;
-            set => MOS1temp.Set(value + Circuit.CelsiusKelvin);
+            get => Temperature - Circuit.CelsiusKelvin;
+            set => Temperature.Set(value + Circuit.CelsiusKelvin);
         }
-        public Parameter MOS1temp { get; } = new Parameter();
+        public Parameter Temperature { get; } = new Parameter();
         [PropertyName("w"), PropertyInfo("Width")]
-        public Parameter MOS1w { get; } = new Parameter(1e-4);
+        public Parameter Width { get; } = new Parameter(1e-4);
         [PropertyName("l"), PropertyInfo("Length")]
-        public Parameter MOS1l { get; } = new Parameter(1e-4);
+        public Parameter Length { get; } = new Parameter(1e-4);
         [PropertyName("as"), PropertyInfo("Source area")]
-        public Parameter MOS1sourceArea { get; } = new Parameter();
+        public Parameter SourceArea { get; } = new Parameter();
         [PropertyName("ad"), PropertyInfo("Drain area")]
-        public Parameter MOS1drainArea { get; } = new Parameter();
+        public Parameter DrainArea { get; } = new Parameter();
         [PropertyName("ps"), PropertyInfo("Source perimeter")]
-        public Parameter MOS1sourcePerimiter { get; } = new Parameter();
+        public Parameter SourcePerimiter { get; } = new Parameter();
         [PropertyName("pd"), PropertyInfo("Drain perimeter")]
-        public Parameter MOS1drainPerimiter { get; } = new Parameter();
+        public Parameter DrainPerimiter { get; } = new Parameter();
         [PropertyName("nrs"), PropertyInfo("Source squares")]
-        public Parameter MOS1sourceSquares { get; } = new Parameter(1);
+        public Parameter SourceSquares { get; } = new Parameter(1);
         [PropertyName("nrd"), PropertyInfo("Drain squares")]
-        public Parameter MOS1drainSquares { get; } = new Parameter(1);
+        public Parameter DrainSquares { get; } = new Parameter(1);
 
         /// <summary>
         /// Methods
@@ -55,9 +55,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             switch (value.Length)
             {
-                case 3: MOS1icVBS.Set(value[2]); goto case 2;
-                case 2: MOS1icVGS.Set(value[1]); goto case 1;
-                case 1: MOS1icVDS.Set(value[0]); break;
+                case 3: InitialVBS.Set(value[2]); goto case 2;
+                case 2: InitialVGS.Set(value[1]); goto case 1;
+                case 1: InitialVDS.Set(value[0]); break;
                 default:
                     throw new CircuitException("Bad parameter");
             }

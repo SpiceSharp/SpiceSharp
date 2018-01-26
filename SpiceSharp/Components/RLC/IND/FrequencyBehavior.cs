@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.InductorBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
             // Get current equation
-            branchEq = load.INDbrEq;
+            branchEq = load.BranchEq;
 
             // Get matrix pointers
             PosIbrptr = matrix.GetElement(posNode, branchEq);

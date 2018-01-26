@@ -19,24 +19,24 @@ namespace SpiceSharp.Components
         /// Nodes
         /// </summary>
         [PropertyName("dnode"), PropertyInfo("Number of the drain node ")]
-        public int MOS1dNode { get; protected set; }
+        public int DrainNode { get; protected set; }
         [PropertyName("gnode"), PropertyInfo("Number of the gate node ")]
-        public int MOS1gNode { get; protected set; }
+        public int GateNode { get; protected set; }
         [PropertyName("snode"), PropertyInfo("Number of the source node ")]
-        public int MOS1sNode { get; protected set; }
+        public int SourceNode { get; protected set; }
         [PropertyName("bnode"), PropertyInfo("Number of the node ")]
-        public int MOS1bNode { get; protected set; }
+        public int BulkNode { get; protected set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        public const int MOS1pinCount = 4;
+        public const int MOS1PinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS1(Identifier name) : base(name, MOS1pinCount)
+        public MOS1(Identifier name) : base(name, MOS1PinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters());
@@ -57,10 +57,10 @@ namespace SpiceSharp.Components
         {
             // Allocate nodes
             var nodes = BindNodes(circuit);
-            MOS1dNode = nodes[0].Index;
-            MOS1gNode = nodes[1].Index;
-            MOS1sNode = nodes[2].Index;
-            MOS1bNode = nodes[3].Index;
+            DrainNode = nodes[0].Index;
+            GateNode = nodes[1].Index;
+            SourceNode = nodes[2].Index;
+            BulkNode = nodes[3].Index;
         }
     }
 }

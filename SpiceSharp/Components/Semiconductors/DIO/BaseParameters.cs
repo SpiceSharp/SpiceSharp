@@ -11,19 +11,19 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("area"), PropertyInfo("Area factor")]
-        public Parameter DIOarea { get; } = new Parameter(1);
+        public Parameter Area { get; } = new Parameter(1);
         [PropertyName("off"), PropertyInfo("Initially off")]
-        public bool DIOoff { get; set; }
+        public bool Off { get; set; }
         [PropertyName("ic"), PropertyInfo("Initial device voltage")]
-        public double DIOinitCond { get; set; }
+        public double InitCond { get; set; }
         [PropertyName("sens_area"), PropertyInfo("flag to request sensitivity WRT area")]
-        public bool DIOsenParmNo { get; set; }
+        public bool Sensitivity { get; set; }
         [PropertyName("temp"), PropertyInfo("Instance temperature")]
-        public double DIO_TEMP
+        public double _TEMP
         {
-            get => DIOtemp - Circuit.CelsiusKelvin;
-            set => DIOtemp.Set(value + Circuit.CelsiusKelvin);
+            get => Temperature - Circuit.CelsiusKelvin;
+            set => Temperature.Set(value + Circuit.CelsiusKelvin);
         }
-        public Parameter DIOtemp { get; } = new Parameter();
+        public Parameter Temperature { get; } = new Parameter();
     }
 }

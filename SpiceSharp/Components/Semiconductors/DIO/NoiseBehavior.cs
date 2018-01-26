@@ -21,19 +21,19 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int DIOposNode, DIOnegNode, DIOposPrimeNode;
+        int posNode, negNode, posPrimeNode;
 
         /// <summary>
         /// Noise sources by their index
         /// </summary>
-        const int DIORSNOIZ = 0;
-        const int DIOIDNOIZ = 1;
-        const int DIOFLNOIZ = 2;
+        const int RsNoise = 0;
+        const int IdNoise = 1;
+        const int FlickerNoise = 2;
 
         /// <summary>
         /// Noise generators
         /// </summary>
-        public ComponentNoise DIOnoise { get; } = new ComponentNoise(
+        public ComponentNoise DiodeNoise { get; } = new ComponentNoise(
             new NoiseThermal("rs", 0, 1),
             new NoiseShot("id", 1, 2),
             new NoiseGain("1overf", 1, 2));
@@ -68,10 +68,10 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public override void ConnectNoise()
         {
             // Get extra equations
-            DIOposPrimeNode = load.DIOposPrimeNode;
+            posPrimeNode = load.PosPrimeNode;
 
             // Connect noise sources
-            DIOnoise.Setup(DIOposNode, DIOposPrimeNode, DIOnegNode);
+            DiodeNoise.Setup(posNode, posPrimeNode, negNode);
         }
         
         /// <summary>
@@ -84,8 +84,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            DIOposNode = pins[0];
-            DIOnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -101,13 +101,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var noise = sim.NoiseState;
 
             // Set noise parameters
-            DIOnoise.Generators[DIORSNOIZ].Set(modeltemp.DIOconductance * bp.DIOarea);
-            DIOnoise.Generators[DIOIDNOIZ].Set(load.DIOcurrent);
-            DIOnoise.Generators[DIOFLNOIZ].Set(mnp.DIOfNcoef * Math.Exp(mnp.DIOfNexp 
-                * Math.Log(Math.Max(Math.Abs(load.DIOcurrent), 1e-38))) / noise.Freq);
+            DiodeNoise.Generators[RsNoise].Set(modeltemp.Conductance * bp.Area);
+            DiodeNoise.Generators[IdNoise].Set(load.Current);
+            DiodeNoise.Generators[FlickerNoise].Set(mnp.FnCoef * Math.Exp(mnp.FnExp 
+                * Math.Log(Math.Max(Math.Abs(load.Current), 1e-38))) / noise.Freq);
 
             // Evaluate noise
-            DIOnoise.Evaluate(sim);
+            DiodeNoise.Evaluate(sim);
         }
     }
 }

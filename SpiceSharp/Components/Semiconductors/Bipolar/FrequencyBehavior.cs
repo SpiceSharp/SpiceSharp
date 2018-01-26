@@ -24,44 +24,44 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int BJTcolNode, BJTbaseNode, BJTemitNode, BJTsubstNode, BJTcolPrimeNode, BJTbasePrimeNode, BJTemitPrimeNode;
-        protected MatrixElement BJTcolColPrimePtr { get; private set; }
-        protected MatrixElement BJTbaseBasePrimePtr { get; private set; }
-        protected MatrixElement BJTemitEmitPrimePtr { get; private set; }
-        protected MatrixElement BJTcolPrimeColPtr { get; private set; }
-        protected MatrixElement BJTcolPrimeBasePrimePtr { get; private set; }
-        protected MatrixElement BJTcolPrimeEmitPrimePtr { get; private set; }
-        protected MatrixElement BJTbasePrimeBasePtr { get; private set; }
-        protected MatrixElement BJTbasePrimeColPrimePtr { get; private set; }
-        protected MatrixElement BJTbasePrimeEmitPrimePtr { get; private set; }
-        protected MatrixElement BJTemitPrimeEmitPtr { get; private set; }
-        protected MatrixElement BJTemitPrimeColPrimePtr { get; private set; }
-        protected MatrixElement BJTemitPrimeBasePrimePtr { get; private set; }
-        protected MatrixElement BJTcolColPtr { get; private set; }
-        protected MatrixElement BJTbaseBasePtr { get; private set; }
-        protected MatrixElement BJTemitEmitPtr { get; private set; }
-        protected MatrixElement BJTcolPrimeColPrimePtr { get; private set; }
-        protected MatrixElement BJTbasePrimeBasePrimePtr { get; private set; }
-        protected MatrixElement BJTemitPrimeEmitPrimePtr { get; private set; }
-        protected MatrixElement BJTsubstSubstPtr { get; private set; }
-        protected MatrixElement BJTcolPrimeSubstPtr { get; private set; }
-        protected MatrixElement BJTsubstColPrimePtr { get; private set; }
-        protected MatrixElement BJTbaseColPrimePtr { get; private set; }
-        protected MatrixElement BJTcolPrimeBasePtr { get; private set; }
+        int colNode, baseNode, emitNode, substNode, colPrimeNode, basePrimeNode, emitPrimeNode;
+        protected MatrixElement ColColPrimePtr { get; private set; }
+        protected MatrixElement BaseBasePrimePtr { get; private set; }
+        protected MatrixElement EmitEmitPrimePtr { get; private set; }
+        protected MatrixElement ColPrimeColPtr { get; private set; }
+        protected MatrixElement ColPrimeBasePrimePtr { get; private set; }
+        protected MatrixElement ColPrimeEmitPrimePtr { get; private set; }
+        protected MatrixElement BasePrimeBasePtr { get; private set; }
+        protected MatrixElement BasePrimeColPrimePtr { get; private set; }
+        protected MatrixElement BasePrimeEmitPrimePtr { get; private set; }
+        protected MatrixElement EmitPrimeEmitPtr { get; private set; }
+        protected MatrixElement EmitPrimeColPrimePtr { get; private set; }
+        protected MatrixElement EmitPrimeBasePrimePtr { get; private set; }
+        protected MatrixElement ColColPtr { get; private set; }
+        protected MatrixElement BaseBasePtr { get; private set; }
+        protected MatrixElement EmitEmitPtr { get; private set; }
+        protected MatrixElement ColPrimeColPrimePtr { get; private set; }
+        protected MatrixElement BasePrimeBasePrimePtr { get; private set; }
+        protected MatrixElement EmitPrimeEmitPrimePtr { get; private set; }
+        protected MatrixElement SubstSubstPtr { get; private set; }
+        protected MatrixElement ColPrimeSubstPtr { get; private set; }
+        protected MatrixElement SubstColPrimePtr { get; private set; }
+        protected MatrixElement BaseColPrimePtr { get; private set; }
+        protected MatrixElement ColPrimeBasePtr { get; private set; }
         
         /// <summary>
         /// Properties
         /// </summary>
         [PropertyName("cpi"), PropertyInfo("Internal base to emitter capactance")]
-        public double BJTcapbe { get; protected set; }
+        public double Capbe { get; protected set; }
         [PropertyName("cmu"), PropertyInfo("Internal base to collector capactiance")]
-        public double BJTcapbc { get; protected set; }
+        public double Capbc { get; protected set; }
         [PropertyName("cbx"), PropertyInfo("Base to collector capacitance")]
-        public double BJTcapbx { get; protected set; }
+        public double Capbx { get; protected set; }
         [PropertyName("ccs"), PropertyInfo("Collector to substrate capacitance")]
-        public double BJTcapcs { get; protected set; }
+        public double Capcs { get; protected set; }
 
-        public double BJTgeqcb { get; protected set; }
+        public double Geqcb { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -98,10 +98,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
-            BJTcolNode = pins[0];
-            BJTbaseNode = pins[1];
-            BJTemitNode = pins[2];
-            BJTsubstNode = pins[3];
+            colNode = pins[0];
+            baseNode = pins[1];
+            emitNode = pins[2];
+            substNode = pins[3];
         }
 
         /// <summary>
@@ -114,34 +114,34 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
             // Get extra equations
-            BJTcolPrimeNode = load.BJTcolPrimeNode;
-            BJTbasePrimeNode = load.BJTbasePrimeNode;
-            BJTemitPrimeNode = load.BJTemitPrimeNode;
+            colPrimeNode = load.ColPrimeNode;
+            basePrimeNode = load.BasePrimeNode;
+            emitPrimeNode = load.EmitPrimeNode;
 
             // Get matrix pointers
-            BJTcolColPrimePtr = matrix.GetElement(BJTcolNode, BJTcolPrimeNode);
-            BJTbaseBasePrimePtr = matrix.GetElement(BJTbaseNode, BJTbasePrimeNode);
-            BJTemitEmitPrimePtr = matrix.GetElement(BJTemitNode, BJTemitPrimeNode);
-            BJTcolPrimeColPtr = matrix.GetElement(BJTcolPrimeNode, BJTcolNode);
-            BJTcolPrimeBasePrimePtr = matrix.GetElement(BJTcolPrimeNode, BJTbasePrimeNode);
-            BJTcolPrimeEmitPrimePtr = matrix.GetElement(BJTcolPrimeNode, BJTemitPrimeNode);
-            BJTbasePrimeBasePtr = matrix.GetElement(BJTbasePrimeNode, BJTbaseNode);
-            BJTbasePrimeColPrimePtr = matrix.GetElement(BJTbasePrimeNode, BJTcolPrimeNode);
-            BJTbasePrimeEmitPrimePtr = matrix.GetElement(BJTbasePrimeNode, BJTemitPrimeNode);
-            BJTemitPrimeEmitPtr = matrix.GetElement(BJTemitPrimeNode, BJTemitNode);
-            BJTemitPrimeColPrimePtr = matrix.GetElement(BJTemitPrimeNode, BJTcolPrimeNode);
-            BJTemitPrimeBasePrimePtr = matrix.GetElement(BJTemitPrimeNode, BJTbasePrimeNode);
-            BJTcolColPtr = matrix.GetElement(BJTcolNode, BJTcolNode);
-            BJTbaseBasePtr = matrix.GetElement(BJTbaseNode, BJTbaseNode);
-            BJTemitEmitPtr = matrix.GetElement(BJTemitNode, BJTemitNode);
-            BJTcolPrimeColPrimePtr = matrix.GetElement(BJTcolPrimeNode, BJTcolPrimeNode);
-            BJTbasePrimeBasePrimePtr = matrix.GetElement(BJTbasePrimeNode, BJTbasePrimeNode);
-            BJTemitPrimeEmitPrimePtr = matrix.GetElement(BJTemitPrimeNode, BJTemitPrimeNode);
-            BJTsubstSubstPtr = matrix.GetElement(BJTsubstNode, BJTsubstNode);
-            BJTcolPrimeSubstPtr = matrix.GetElement(BJTcolPrimeNode, BJTsubstNode);
-            BJTsubstColPrimePtr = matrix.GetElement(BJTsubstNode, BJTcolPrimeNode);
-            BJTbaseColPrimePtr = matrix.GetElement(BJTbaseNode, BJTcolPrimeNode);
-            BJTcolPrimeBasePtr = matrix.GetElement(BJTcolPrimeNode, BJTbaseNode);
+            ColColPrimePtr = matrix.GetElement(colNode, colPrimeNode);
+            BaseBasePrimePtr = matrix.GetElement(baseNode, basePrimeNode);
+            EmitEmitPrimePtr = matrix.GetElement(emitNode, emitPrimeNode);
+            ColPrimeColPtr = matrix.GetElement(colPrimeNode, colNode);
+            ColPrimeBasePrimePtr = matrix.GetElement(colPrimeNode, basePrimeNode);
+            ColPrimeEmitPrimePtr = matrix.GetElement(colPrimeNode, emitPrimeNode);
+            BasePrimeBasePtr = matrix.GetElement(basePrimeNode, baseNode);
+            BasePrimeColPrimePtr = matrix.GetElement(basePrimeNode, colPrimeNode);
+            BasePrimeEmitPrimePtr = matrix.GetElement(basePrimeNode, emitPrimeNode);
+            EmitPrimeEmitPtr = matrix.GetElement(emitPrimeNode, emitNode);
+            EmitPrimeColPrimePtr = matrix.GetElement(emitPrimeNode, colPrimeNode);
+            EmitPrimeBasePrimePtr = matrix.GetElement(emitPrimeNode, basePrimeNode);
+            ColColPtr = matrix.GetElement(colNode, colNode);
+            BaseBasePtr = matrix.GetElement(baseNode, baseNode);
+            EmitEmitPtr = matrix.GetElement(emitNode, emitNode);
+            ColPrimeColPrimePtr = matrix.GetElement(colPrimeNode, colPrimeNode);
+            BasePrimeBasePrimePtr = matrix.GetElement(basePrimeNode, basePrimeNode);
+            EmitPrimeEmitPrimePtr = matrix.GetElement(emitPrimeNode, emitPrimeNode);
+            SubstSubstPtr = matrix.GetElement(substNode, substNode);
+            ColPrimeSubstPtr = matrix.GetElement(colPrimeNode, substNode);
+            SubstColPrimePtr = matrix.GetElement(substNode, colPrimeNode);
+            BaseColPrimePtr = matrix.GetElement(baseNode, colPrimeNode);
+            ColPrimeBasePtr = matrix.GetElement(colPrimeNode, baseNode);
         }
 
         /// <summary>
@@ -150,29 +150,29 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void Unsetup()
         {
             // Remove references
-            BJTcolColPrimePtr = null;
-            BJTbaseBasePrimePtr = null;
-            BJTemitEmitPrimePtr = null;
-            BJTcolPrimeColPtr = null;
-            BJTcolPrimeBasePrimePtr = null;
-            BJTcolPrimeEmitPrimePtr = null;
-            BJTbasePrimeBasePtr = null;
-            BJTbasePrimeColPrimePtr = null;
-            BJTbasePrimeEmitPrimePtr = null;
-            BJTemitPrimeEmitPtr = null;
-            BJTemitPrimeColPrimePtr = null;
-            BJTemitPrimeBasePrimePtr = null;
-            BJTcolColPtr = null;
-            BJTbaseBasePtr = null;
-            BJTemitEmitPtr = null;
-            BJTcolPrimeColPrimePtr = null;
-            BJTbasePrimeBasePrimePtr = null;
-            BJTemitPrimeEmitPrimePtr = null;
-            BJTsubstSubstPtr = null;
-            BJTcolPrimeSubstPtr = null;
-            BJTsubstColPrimePtr = null;
-            BJTbaseColPrimePtr = null;
-            BJTcolPrimeBasePtr = null;
+            ColColPrimePtr = null;
+            BaseBasePrimePtr = null;
+            EmitEmitPrimePtr = null;
+            ColPrimeColPtr = null;
+            ColPrimeBasePrimePtr = null;
+            ColPrimeEmitPrimePtr = null;
+            BasePrimeBasePtr = null;
+            BasePrimeColPrimePtr = null;
+            BasePrimeEmitPrimePtr = null;
+            EmitPrimeEmitPtr = null;
+            EmitPrimeColPrimePtr = null;
+            EmitPrimeBasePrimePtr = null;
+            ColColPtr = null;
+            BaseBasePtr = null;
+            EmitEmitPtr = null;
+            ColPrimeColPrimePtr = null;
+            BasePrimeBasePrimePtr = null;
+            EmitPrimeEmitPrimePtr = null;
+            SubstSubstPtr = null;
+            ColPrimeSubstPtr = null;
+            SubstColPrimePtr = null;
+            BaseColPrimePtr = null;
+            ColPrimeBasePtr = null;
         }
 
         /// <summary>
@@ -190,41 +190,41 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             // Get voltages
             var state = sim.State;
-            double vbe = load.BJTvbe;
-            double vbc = load.BJTvbc;
-            double vbx = vbx = mbp.BJTtype * (state.Solution[BJTbaseNode] - state.Solution[BJTcolPrimeNode]);
-            double vcs = mbp.BJTtype * (state.Solution[BJTsubstNode] - state.Solution[BJTcolPrimeNode]);
+            double vbe = load.Vbe;
+            double vbc = load.Vbc;
+            double vbx = vbx = mbp.Type * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
+            double vcs = mbp.Type * (state.Solution[substNode] - state.Solution[colPrimeNode]);
 
             // Get shared parameters
-            double cbe = load.cbe;
-            double gbe = load.gbe;
-            double cbc = load.cbc;
-            double gbc = load.gbc;
-            double qb = load.qb;
-            double dqbdvc = load.dqbdvc;
-            double dqbdve = load.dqbdve;
+            double cbe = load.Cbe;
+            double gbe = load.Gbe;
+            double cbc = load.Cbc;
+            double gbc = load.Gbc;
+            double qb = load.Qb;
+            double dqbdvc = load.DqbDvc;
+            double dqbdve = load.DqbDve;
 
             /* 
              * charge storage elements
              */
-            tf = mbp.BJTtransitTimeF;
-            tr = mbp.BJTtransitTimeR;
-            czbe = temp.BJTtBEcap * bp.BJTarea;
-            pe = temp.BJTtBEpot;
-            xme = mbp.BJTjunctionExpBE;
-            cdis = mbp.BJTbaseFractionBCcap;
-            ctot = temp.BJTtBCcap * bp.BJTarea;
+            tf = mbp.TransitTimeF;
+            tr = mbp.TransitTimeR;
+            czbe = temp.TBEcap * bp.Area;
+            pe = temp.TBEpot;
+            xme = mbp.JunctionExpBE;
+            cdis = mbp.BaseFractionBCcap;
+            ctot = temp.TBCcap * bp.Area;
             czbc = ctot * cdis;
             czbx = ctot - czbc;
-            pc = temp.BJTtBCpot;
-            xmc = mbp.BJTjunctionExpBC;
-            fcpe = temp.BJTtDepCap;
-            czcs = mbp.BJTcapCS * bp.BJTarea;
-            ps = mbp.BJTpotentialSubstrate;
-            xms = mbp.BJTexponentialSubstrate;
-            xtf = mbp.BJTtransitTimeBiasCoeffF;
-            ovtf = modeltemp.BJTtransitTimeVBCFactor;
-            xjtf = mbp.BJTtransitTimeHighCurrentF * bp.BJTarea;
+            pc = temp.TBCpot;
+            xmc = mbp.JunctionExpBC;
+            fcpe = temp.TDepCap;
+            czcs = mbp.CapCS * bp.Area;
+            ps = mbp.PotentialSubstrate;
+            xms = mbp.ExponentialSubstrate;
+            xtf = mbp.TransitTimeBiasCoeffF;
+            ovtf = modeltemp.TransitTimeVBCFactor;
+            xjtf = mbp.TransitTimeHighCurrentF * bp.Area;
             if (tf != 0 && vbe > 0)
             {
                 argtf = 0;
@@ -254,52 +254,52 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbe / pe;
                 sarg = Math.Exp(-xme * Math.Log(arg));
-                BJTcapbe = tf * gbe + czbe * sarg;
+                Capbe = tf * gbe + czbe * sarg;
             }
             else
             {
-                f1 = temp.BJTtf1;
-                f2 = modeltemp.BJTf2;
-                f3 = modeltemp.BJTf3;
+                f1 = temp.Tf1;
+                f2 = modeltemp.F2;
+                f3 = modeltemp.F3;
                 czbef2 = czbe / f2;
-                BJTcapbe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
+                Capbe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
             }
 
-            fcpc = temp.BJTtf4;
-            f1 = temp.BJTtf5;
-            f2 = modeltemp.BJTf6;
-            f3 = modeltemp.BJTf7;
+            fcpc = temp.Tf4;
+            f1 = temp.Tf5;
+            f2 = modeltemp.F6;
+            f3 = modeltemp.F7;
             if (vbc < fcpc)
             {
                 arg = 1 - vbc / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                BJTcapbc = tr * gbc + czbc * sarg;
+                Capbc = tr * gbc + czbc * sarg;
             }
             else
             {
                 czbcf2 = czbc / f2;
-                BJTcapbc = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
+                Capbc = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
             }
             if (vbx < fcpc)
             {
                 arg = 1 - vbx / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                BJTcapbx = czbx * sarg;
+                Capbx = czbx * sarg;
             }
             else
             {
                 czbxf2 = czbx / f2;
-                BJTcapbx = czbxf2 * (f3 + xmc * vbx / pc);
+                Capbx = czbxf2 * (f3 + xmc * vbx / pc);
             }
             if (vcs < 0)
             {
                 arg = 1 - vcs / ps;
                 sarg = Math.Exp(-xms * Math.Log(arg));
-                BJTcapcs = czcs * sarg;
+                Capcs = czcs * sarg;
             }
             else
             {
-                BJTcapcs = czcs * (1 + xms * vcs / ps);
+                Capcs = czcs * (1 + xms * vcs / ps);
             }
         }
 
@@ -317,13 +317,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double gcpr, gepr, gpi, gmu, go, td, gx;
             Complex gm, xcpi, xcmu, xcbx, xccs, xcmcb;
 
-            gcpr = modeltemp.BJTcollectorConduct * bp.BJTarea;
-            gepr = modeltemp.BJTemitterConduct * bp.BJTarea;
-            gpi = load.BJTgpi;
-            gmu = load.BJTgmu;
-            gm = load.BJTgm;
-            go = load.BJTgo;
-            td = modeltemp.BJTexcessPhaseFactor;
+            gcpr = modeltemp.CollectorConduct * bp.Area;
+            gepr = modeltemp.EmitterConduct * bp.Area;
+            gpi = load.Gpi;
+            gmu = load.Gmu;
+            gm = load.Gm;
+            go = load.Go;
+            td = modeltemp.ExcessPhaseFactor;
             if (td != 0)
             {
                 Complex arg = td * cstate.Laplace;
@@ -332,36 +332,36 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 gm = gm * Complex.Exp(-arg);
                 gm = gm - go;
             }
-            gx = load.BJTgx;
-            xcpi = BJTcapbe * cstate.Laplace;
-            xcmu = BJTcapbc * cstate.Laplace;
-            xcbx = BJTcapbx * cstate.Laplace;
-            xccs = BJTcapcs * cstate.Laplace;
-            xcmcb = BJTgeqcb * cstate.Laplace;
+            gx = load.Gx;
+            xcpi = Capbe * cstate.Laplace;
+            xcmu = Capbc * cstate.Laplace;
+            xcbx = Capbx * cstate.Laplace;
+            xccs = Capcs * cstate.Laplace;
+            xcmcb = Geqcb * cstate.Laplace;
 
-            BJTcolColPtr.Add(gcpr);
-            BJTbaseBasePtr.Add(gx + xcbx);
-            BJTemitEmitPtr.Add(gepr);
-            BJTcolPrimeColPrimePtr.Add(gmu + go + gcpr + xcmu + xccs + xcbx);
-            BJTbasePrimeBasePrimePtr.Add(gx + gpi + gmu + xcpi + xcmu + xcmcb);
-            BJTemitPrimeEmitPrimePtr.Add(gpi + gepr + gm + go + xcpi);
-            BJTcolColPrimePtr.Add(-gcpr);
-            BJTbaseBasePrimePtr.Add(-gx);
-            BJTemitEmitPrimePtr.Add(-gepr);
-            BJTcolPrimeColPtr.Add(-gcpr);
-            BJTcolPrimeBasePrimePtr.Add(-gmu + gm - xcmu);
-            BJTcolPrimeEmitPrimePtr.Add(-gm - go);
-            BJTbasePrimeBasePtr.Add(-gx);
-            BJTbasePrimeColPrimePtr.Add(-gmu - xcmu - xcmcb);
-            BJTbasePrimeEmitPrimePtr.Add(-gpi - xcpi);
-            BJTemitPrimeEmitPtr.Add(-gepr);
-            BJTemitPrimeColPrimePtr.Add(-go + xcmcb);
-            BJTemitPrimeBasePrimePtr.Add(-gpi - gm - xcpi - xcmcb);
-            BJTsubstSubstPtr.Add(xccs);
-            BJTcolPrimeSubstPtr.Add(-xccs);
-            BJTsubstColPrimePtr.Add(-xccs);
-            BJTbaseColPrimePtr.Add(-xcbx);
-            BJTcolPrimeBasePtr.Add(-xcbx);
+            ColColPtr.Add(gcpr);
+            BaseBasePtr.Add(gx + xcbx);
+            EmitEmitPtr.Add(gepr);
+            ColPrimeColPrimePtr.Add(gmu + go + gcpr + xcmu + xccs + xcbx);
+            BasePrimeBasePrimePtr.Add(gx + gpi + gmu + xcpi + xcmu + xcmcb);
+            EmitPrimeEmitPrimePtr.Add(gpi + gepr + gm + go + xcpi);
+            ColColPrimePtr.Add(-gcpr);
+            BaseBasePrimePtr.Add(-gx);
+            EmitEmitPrimePtr.Add(-gepr);
+            ColPrimeColPtr.Add(-gcpr);
+            ColPrimeBasePrimePtr.Add(-gmu + gm - xcmu);
+            ColPrimeEmitPrimePtr.Add(-gm - go);
+            BasePrimeBasePtr.Add(-gx);
+            BasePrimeColPrimePtr.Add(-gmu - xcmu - xcmcb);
+            BasePrimeEmitPrimePtr.Add(-gpi - xcpi);
+            EmitPrimeEmitPtr.Add(-gepr);
+            EmitPrimeColPrimePtr.Add(-go + xcmcb);
+            EmitPrimeBasePrimePtr.Add(-gpi - gm - xcpi - xcmcb);
+            SubstSubstPtr.Add(xccs);
+            ColPrimeSubstPtr.Add(-xccs);
+            SubstColPrimePtr.Add(-xccs);
+            BaseColPrimePtr.Add(-xcbx);
+            ColPrimeBasePtr.Add(-xcbx);
         }
     }
 }

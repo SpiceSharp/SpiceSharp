@@ -20,15 +20,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Conductance
         /// </summary>
         [PropertyName("cond"), PropertyInfo("Ohmic conductance")]
-        public double DIOconductance { get; internal set; }
+        public double Conductance { get; internal set; }
 
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double vtnom { get; protected set; }
-        public double xfc { get; protected set; }
-        public double DIOf2 { get; internal set; }
-        public double DIOf3 { get; internal set; }
+        public double Vtnom { get; protected set; }
+        public double Xfc { get; protected set; }
+        public double F2 { get; internal set; }
+        public double F3 { get; internal set; }
 
         /// <summary>
         /// Constructor
@@ -58,41 +58,41 @@ namespace SpiceSharp.Components.DiodeBehaviors
 			if (sim == null)
 				throw new ArgumentNullException(nameof(sim));
 
-            if (!mbp.DIOnomTemp.Given)
+            if (!mbp.NominalTemperature.Given)
             {
-                mbp.DIOnomTemp.Value = sim.State.NominalTemperature;
+                mbp.NominalTemperature.Value = sim.State.NominalTemperature;
             }
-            vtnom = Circuit.KOverQ * mbp.DIOnomTemp;
+            Vtnom = Circuit.KOverQ * mbp.NominalTemperature;
 
             // limit grading coeff to max of .9
-            if (mbp.DIOgradingCoeff > .9)
+            if (mbp.GradingCoeff > .9)
             {
-                mbp.DIOgradingCoeff.Value = 0.9;
+                mbp.GradingCoeff.Value = 0.9;
                 CircuitWarning.Warning(this, $"{Name}: grading coefficient too large, limited to 0.9");
             }
 
             // limit activation energy to min of .1
-            if (mbp.DIOactivationEnergy < .1)
+            if (mbp.ActivationEnergy < .1)
             {
-                mbp.DIOactivationEnergy.Value = 0.1;
+                mbp.ActivationEnergy.Value = 0.1;
                 CircuitWarning.Warning(this, $"{Name}: activation energy too small, limited to 0.1");
             }
 
             // limit depletion cap coeff to max of .95
-            if (mbp.DIOdepletionCapCoeff > .95)
+            if (mbp.DepletionCapCoeff > .95)
             {
-                mbp.DIOdepletionCapCoeff.Value = 0.95;
+                mbp.DepletionCapCoeff.Value = 0.95;
                 CircuitWarning.Warning(this, $"{Name}: coefficient Fc too large, limited to 0.95");
             }
 
-            if (!mbp.DIOresist.Given || mbp.DIOresist.Value == 0)
-                DIOconductance = 0;
+            if (!mbp.Resist.Given || mbp.Resist.Value == 0)
+                Conductance = 0;
             else
-                DIOconductance = 1 / mbp.DIOresist;
-            xfc = Math.Log(1 - mbp.DIOdepletionCapCoeff);
+                Conductance = 1 / mbp.Resist;
+            Xfc = Math.Log(1 - mbp.DepletionCapCoeff);
 
-            DIOf2 = Math.Exp((1 + mbp.DIOgradingCoeff) * xfc);
-            DIOf3 = 1 - mbp.DIOdepletionCapCoeff * (1 + mbp.DIOgradingCoeff);
+            F2 = Math.Exp((1 + mbp.GradingCoeff) * Xfc);
+            F3 = 1 - mbp.DepletionCapCoeff * (1 + mbp.GradingCoeff);
         }
     }
 }
