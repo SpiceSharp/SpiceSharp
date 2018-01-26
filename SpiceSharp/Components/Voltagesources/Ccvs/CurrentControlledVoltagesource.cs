@@ -14,16 +14,16 @@ namespace SpiceSharp.Components
         /// Nodes
         /// </summary>
         [PropertyName("pos_node"), PropertyInfo("Positive node of the source")]
-        public int CCVSposNode { get; internal set; }
+        public int PosNode { get; internal set; }
         [PropertyName("neg_node"), PropertyInfo("Negative node of the source")]
-        public int CCVSnegNode { get; internal set; }
+        public int NegNode { get; internal set; }
         [PropertyName("control"), PropertyInfo("Controlling voltage source")]
-        public Identifier CCVScontName { get; set; }
+        public Identifier ContactName { get; set; }
 
         /// <summary>
         /// Get the controlling voltage source
         /// </summary>
-        public Voltagesource CCVScontSource { get; protected set; }
+        public Voltagesource ContactSource { get; protected set; }
 
         /// <summary>
         /// Constants
@@ -64,7 +64,7 @@ namespace SpiceSharp.Components
             AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             Connect(pos, neg);
-            CCVScontName = vsource;
+            ContactName = vsource;
         }
 
         /// <summary>
@@ -74,14 +74,14 @@ namespace SpiceSharp.Components
         public override void Setup(Circuit circuit)
         {
             var nodes = BindNodes(circuit);
-            CCVSposNode = nodes[0].Index;
-            CCVSnegNode = nodes[1].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
 
             // Find the voltage source
-            if (circuit.Objects[CCVScontName] is Voltagesource vsrc)
-                CCVScontSource = vsrc;
+            if (circuit.Objects[ContactName] is Voltagesource vsrc)
+                ContactSource = vsrc;
             else
-                throw new CircuitException($"{Name}: Could not find voltage source '{CCVScontName}'");
+                throw new CircuitException($"{Name}: Could not find voltage source '{ContactName}'");
         }
     }
 }

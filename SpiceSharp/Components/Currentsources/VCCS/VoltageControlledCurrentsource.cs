@@ -7,31 +7,31 @@ namespace SpiceSharp.Components
     /// A voltage-controlled current source
     /// </summary>
     [PinsAttribute("V+", "V-", "VC+", "VC-"), ConnectedAttribute(0, 1)]
-    public class VoltageControlledCurrentsource : Component
+    public class VoltageControlledCurrentSource : Component
     {
         /// <summary>
         /// Nodes
         /// </summary>
         [PropertyName("pos_node"), PropertyInfo("Positive node of the source")]
-        public int VCCSposNode { get; private set; }
+        public int PosNode { get; private set; }
         [PropertyName("neg_node"), PropertyInfo("Negative node of the source")]
-        public int VCCSnegNode { get; private set; }
+        public int NegNode { get; private set; }
         [PropertyName("cont_p_node"), PropertyInfo("Positive node of the controlling source voltage")]
-        public int VCCScontPosNode { get; private set; }
+        public int ContPosNode { get; private set; }
         [PropertyName("cont_n_node"), PropertyInfo("Negative node of the controlling source voltage")]
-        public int VCCScontNegNode { get; private set; }
+        public int ContNegNode { get; private set; }
 
         /// <summary>
         /// Private constants
         /// </summary>
-        public const int VCCSpinCount = 4;
+        public const int VoltageControlledCurrentSourcePinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled current source</param>
-        public VoltageControlledCurrentsource(Identifier name) 
-            : base(name, VCCSpinCount)
+        public VoltageControlledCurrentSource(Identifier name)
+            : base(name, VoltageControlledCurrentSourcePinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters());
@@ -50,8 +50,8 @@ namespace SpiceSharp.Components
         /// <param name="cont_pos">The positive controlling node</param>
         /// <param name="cont_neg">The negative controlling node</param>
         /// <param name="gain">The transconductance gain</param>
-        public VoltageControlledCurrentsource(Identifier name, Identifier pos, Identifier neg, Identifier cont_pos, Identifier cont_neg, double gain) 
-            : base(name, VCCSpinCount)
+        public VoltageControlledCurrentSource(Identifier name, Identifier pos, Identifier neg, Identifier cont_pos, Identifier cont_neg, double gain)
+            : base(name, VoltageControlledCurrentSourcePinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters(gain));
@@ -71,10 +71,10 @@ namespace SpiceSharp.Components
         public override void Setup(Circuit circuit)
         {
             var nodes = BindNodes(circuit);
-            VCCSposNode = nodes[0].Index;
-            VCCSnegNode = nodes[1].Index;
-            VCCScontPosNode = nodes[2].Index;
-            VCCScontNegNode = nodes[3].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
+            ContPosNode = nodes[2].Index;
+            ContNegNode = nodes[3].Index;
         }
     }
 }

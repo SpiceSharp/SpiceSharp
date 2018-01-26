@@ -9,35 +9,35 @@ namespace SpiceSharp.Components
     /// A current-controlled current source
     /// </summary>
     [PinsAttribute("F+", "F-"), Connected()]
-    public class CurrentControlledCurrentsource : Component
+    public class CurrentControlledCurrentSource : Component
     {
         /// <summary>
         /// Parameters
         /// </summary>
         [PropertyName("control"), PropertyInfo("Name of the controlling source")]
-        public Identifier CCCScontName { get; set; }
+        public Identifier ContactName { get; set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
         [PropertyName("pos_node"), PropertyInfo("Positive node of the source")]
-        public int CCCSposNode { get; private set; }
+        public int PosNode { get; private set; }
         [PropertyName("neg_node"), PropertyInfo("Negative node of the source")]
-        public int CCCSnegNode { get; private set; }
+        public int NegNode { get; private set; }
         [PropertyName("vctrl"), PropertyInfo("Controlling voltage source")]
-        public Voltagesource CCCScontSource { get; protected set; }
+        public Voltagesource ContactSource { get; protected set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        public const int CCCSpinCount = 2;
+        public const int CurrentControlledCurrentSourcePinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current controlled current source</param>
-        public CurrentControlledCurrentsource(Identifier name) 
-            : base(name, CCCSpinCount)
+        public CurrentControlledCurrentSource(Identifier name) 
+            : base(name, CurrentControlledCurrentSourcePinCount)
         {
             // Make sure the current controlled current source happens after voltage sources
             Priority = -1;
@@ -58,8 +58,8 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The name of the voltage source</param>
         /// <param name="gain">The current gain</param>
-        public CurrentControlledCurrentsource(Identifier name, Identifier pos, Identifier neg, Identifier vsource, double gain)
-            : base(name, CCCSpinCount)
+        public CurrentControlledCurrentSource(Identifier name, Identifier pos, Identifier neg, Identifier vsource, double gain)
+            : base(name, CurrentControlledCurrentSourcePinCount)
         {
             // Register behaviors
             Priority = -1;
@@ -73,7 +73,7 @@ namespace SpiceSharp.Components
 
             // Connect
             Connect(pos, neg);
-            CCCScontName = vsource;
+            ContactName = vsource;
         }
 
         /// <summary>
@@ -86,14 +86,14 @@ namespace SpiceSharp.Components
                 throw new ArgumentNullException(nameof(circuit));
 
             var nodes = BindNodes(circuit);
-            CCCSposNode = nodes[0].Index;
-            CCCSnegNode = nodes[1].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
 
             // Find the voltage source for which the current is being measured
-            if (circuit.Objects[CCCScontName] is Voltagesource vsrc)
-                CCCScontSource = vsrc;
+            if (circuit.Objects[ContactName] is Voltagesource vsrc)
+                ContactSource = vsrc;
             else
-                throw new CircuitException($"{Name}: Could not find voltage source '{CCCScontName}'");
+                throw new CircuitException($"{Name}: Could not find voltage source '{ContactName}'");
         }
 
         /// <summary>
@@ -109,8 +109,8 @@ namespace SpiceSharp.Components
             var provider = base.BuildSetupDataProvider(pool);
 
             // Add behaviors and parameters of the controlling voltage source
-            provider.Add(pool.GetEntityBehaviors(CCCScontName));
-            provider.Add(CCCScontSource.Parameters);
+            provider.Add(pool.GetEntityBehaviors(ContactName));
+            provider.Add(ContactSource.Parameters);
             return provider;
         }
     }

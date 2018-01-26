@@ -11,9 +11,9 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("waveform"), PropertyInfo("The waveform object for this source")]
-        public Waveform ISRCwaveform { get; set; } = null;
+        public Waveform Waveform { get; set; } = null;
         [PropertyName("dc"), PropertyInfo("D.C. source value")]
-        public Parameter ISRCdcValue { get; } = new Parameter();
+        public Parameter DcValue { get; } = new Parameter();
 
         /// <summary>
         /// Constructor
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <param name="dc">DC value</param>
         public BaseParameters(double dc)
         {
-            ISRCdcValue.Set(dc);
+            DcValue.Set(dc);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <param name="w">Waveform</param>
         public BaseParameters(Waveform w)
         {
-            ISRCwaveform = w;
+            Waveform = w;
         }
     }
 }

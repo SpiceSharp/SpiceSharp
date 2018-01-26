@@ -12,20 +12,20 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        public int ISRCposNode { get; private set; }
-        public int ISRCnegNode { get; private set; }
+        public int PosNode { get; private set; }
+        public int NegNode { get; private set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        private const int ISRCpinCount = 2;
+        public const int CurrentsourcePinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current source</param>
         public Currentsource(Identifier name) 
-            : base(name, ISRCpinCount)
+            : base(name, CurrentsourcePinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters());
@@ -45,7 +45,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
         public Currentsource(Identifier name, Identifier pos, Identifier neg, double dc)
-            : base(name, ISRCpinCount)
+            : base(name, CurrentsourcePinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters(dc));
@@ -68,7 +68,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="w">The Waveform-object</param>
         public Currentsource(Identifier name, Identifier pos, Identifier neg, Waveform w)
-            : base(name, ISRCpinCount)
+            : base(name, CurrentsourcePinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters(w));
@@ -90,8 +90,8 @@ namespace SpiceSharp.Components
         public override void Setup(Circuit circuit)
         {
             var nodes = BindNodes(circuit);
-            ISRCposNode = nodes[0].Index;
-            ISRCnegNode = nodes[1].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
         }
     }
 }

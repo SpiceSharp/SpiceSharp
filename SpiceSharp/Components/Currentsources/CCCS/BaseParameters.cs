@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 {
     /// <summary>
-    /// Base parameters for a <see cref="CurrentControlledCurrentsource"/>
+    /// Base parameters for a <see cref="CurrentControlledCurrentSource"/>
     /// </summary>
     public class BaseParameters : ParameterSet
     {
@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("gain"), PropertyInfo("Gain of the source")]
-        public Parameter CCCScoeff { get; } = new Parameter();
+        public Parameter Coefficient { get; } = new Parameter();
 
         /// <summary>
         /// Constructor
@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <param name="gain">Gain</param>
         public BaseParameters(double gain)
         {
-            CCCScoeff.Set(gain);
+            Coefficient.Set(gain);
         }
     }
 }

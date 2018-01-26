@@ -98,11 +98,11 @@
     <Compile Include="Simulations\DC\SweepInstance.cs" />
     <Compile Include="Simulations\InitializationDataEventArgs.cs" />
     <Compile Include="Simulations\IntegrationMethods\ComponentState.cs" />
-    <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentsource.cs" />
+    <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentSource.cs" />
     <Compile Include="Components\Currentsources\CCCS\FrequencyBehavior.cs" />
     <Compile Include="Components\Currentsources\CCCS\LoadBehavior.cs" />
     <Compile Include="Components\Currentsources\ISRC\AcceptBehavior.cs" />
-    <Compile Include="Components\Currentsources\VCCS\VoltageControlledCurrentsource.cs" />
+    <Compile Include="Components\Currentsources\VCCS\VoltageControlledCurrentSource.cs" />
     <Compile Include="Components\Currentsources\VCCS\FrequencyBehavior.cs" />
     <Compile Include="Components\Currentsources\VCCS\LoadBehavior.cs" />
     <Compile Include="Components\IConnectedBehavior.cs" />

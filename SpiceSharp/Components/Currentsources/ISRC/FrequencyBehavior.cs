@@ -19,8 +19,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int ISRCposNode, ISRCnegNode;
-        Complex ISRCac;
+        int posNode, negNode;
+        Complex ac;
 
         /// <summary>
         /// Properties
@@ -34,8 +34,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             return new Complex(
-                state.Solution[ISRCposNode] - state.Solution[ISRCnegNode],
-                state.iSolution[ISRCposNode] - state.iSolution[ISRCnegNode]
+                state.Solution[posNode] - state.Solution[negNode],
+                state.iSolution[posNode] - state.iSolution[negNode]
                 );
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
@@ -45,10 +45,10 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             Complex v = new Complex(
-                state.Solution[ISRCposNode] - state.Solution[ISRCnegNode],
-                state.iSolution[ISRCposNode] - state.iSolution[ISRCnegNode]
+                state.Solution[posNode] - state.Solution[negNode],
+                state.iSolution[posNode] - state.iSolution[negNode]
                 );
-            return -v * Complex.Conjugate(ISRCac);
+            return -v * Complex.Conjugate(ac);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             switch (property)
             {
                 case "i":
-                case "c": return (State state) => ISRCac;
+                case "c": return (State state) => ac;
                 default: return base.CreateAcExport(property);
             }
         }
@@ -85,8 +85,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             ap = provider.GetParameterSet<FrequencyParameters>(0);
 
             // Calculate the AC vector
-            double radians = ap.ISRCacPhase * Math.PI / 180.0;
-            ISRCac = new Complex(ap.ISRCacMag * Math.Cos(radians), ap.ISRCacMag * Math.Sin(radians));
+            double radians = ap.AcPhase * Math.PI / 180.0;
+            ac = new Complex(ap.AcMagnitude * Math.Cos(radians), ap.AcMagnitude * Math.Sin(radians));
         }
         
         /// <summary>
@@ -99,8 +99,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            ISRCposNode = pins[0];
-            ISRCnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -113,10 +113,10 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 				throw new ArgumentNullException(nameof(sim));
 
             var state = sim?.State ?? throw new NullReferenceException();
-            state.Rhs[ISRCposNode] += ISRCac.Real;
-            state.iRhs[ISRCposNode] += ISRCac.Imaginary;
-            state.Rhs[ISRCnegNode] -= ISRCac.Real;
-            state.iRhs[ISRCnegNode] -= ISRCac.Imaginary;
+            state.Rhs[posNode] += ac.Real;
+            state.iRhs[posNode] += ac.Imaginary;
+            state.Rhs[negNode] -= ac.Real;
+            state.iRhs[negNode] -= ac.Imaginary;
         }
     }
 }

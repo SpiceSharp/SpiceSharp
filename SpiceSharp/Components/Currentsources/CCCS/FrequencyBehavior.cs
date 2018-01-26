@@ -9,7 +9,7 @@ using System.Numerics;
 namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 {
     /// <summary>
-    /// Frequency behavior for <see cref="Components.CurrentControlledCurrentsource"/>
+    /// Frequency behavior for <see cref="CurrentControlledCurrentSource"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
@@ -29,8 +29,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             return new Complex(
-                state.Solution[CCCSposNode] - state.Solution[CCCSnegNode],
-                state.iSolution[CCCSposNode] - state.iSolution[CCCSnegNode]);
+                state.Solution[posNode] - state.Solution[negNode],
+                state.iSolution[posNode] - state.iSolution[negNode]);
         }
         [PropertyName("i"), PropertyInfo("Complex current")]
         public Complex GetCurrent(State state)
@@ -39,9 +39,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             return new Complex(
-                state.Solution[CCCScontBranch],
-                state.iSolution[CCCScontBranch]
-                ) * bp.CCCScoeff.Value;
+                state.Solution[contBranch],
+                state.iSolution[contBranch]
+                ) * bp.Coefficient.Value;
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(State state)
@@ -49,17 +49,17 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = new Complex(state.Solution[CCCSposNode], state.iSolution[CCCSnegNode]);
-            Complex i = new Complex(state.Solution[CCCScontBranch], state.iSolution[CCCScontBranch]) * bp.CCCScoeff.Value;
+            Complex v = new Complex(state.Solution[posNode], state.iSolution[negNode]);
+            Complex i = new Complex(state.Solution[contBranch], state.iSolution[contBranch]) * bp.Coefficient.Value;
             return -v * Complex.Conjugate(i);
         }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int CCCSposNode, CCCSnegNode, CCCScontBranch;
-        protected MatrixElement CCCSposContBrptr { get; private set; }
-        protected MatrixElement CCCSnegContBrptr { get; private set; }
+        int posNode, negNode, contBranch;
+        protected MatrixElement PosContBrptr { get; private set; }
+        protected MatrixElement NegContBrptr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -93,8 +93,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            CCCSposNode = pins[0];
-            CCCSnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -106,9 +106,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            CCCScontBranch = vsrcload.VSRCbranch;
-            CCCSposContBrptr = matrix.GetElement(CCCSposNode, CCCScontBranch);
-            CCCSnegContBrptr = matrix.GetElement(CCCSnegNode, CCCScontBranch);
+            contBranch = vsrcload.VSRCbranch;
+            PosContBrptr = matrix.GetElement(posNode, contBranch);
+            NegContBrptr = matrix.GetElement(negNode, contBranch);
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         public override void Unsetup()
         {
             // Remove references
-            CCCSposContBrptr = null;
-            CCCSnegContBrptr = null;
+            PosContBrptr = null;
+            NegContBrptr = null;
         }
 
         /// <summary>
@@ -130,8 +130,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 			if (sim == null)
 				throw new ArgumentNullException(nameof(sim));
 
-            CCCSposContBrptr.Add(bp.CCCScoeff);
-            CCCSnegContBrptr.Sub(bp.CCCScoeff);
+            PosContBrptr.Add(bp.Coefficient);
+            NegContBrptr.Sub(bp.Coefficient);
         }
     }
 }

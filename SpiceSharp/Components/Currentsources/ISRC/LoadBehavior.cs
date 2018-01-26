@@ -7,7 +7,7 @@ using System;
 namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
     /// <summary>
-    /// Current source behavior for DC and Transient analysis
+    /// General behavior for a <see cref="Currentsource"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[ISRCposNode] - state.Solution[ISRCnegNode]);
+            return (state.Solution[posNode] - state.Solution[negNode]);
         }
         [PropertyName("p"), PropertyInfo("Power supplied by the source")]
         public double GetP(State state)
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[ISRCposNode] - state.Solution[ISRCposNode]) * -Current;
+            return (state.Solution[posNode] - state.Solution[posNode]) * -Current;
         }
         [PropertyName("c"), PropertyName("i"), PropertyInfo("Current through current source")]
         public double Current { get; protected set; }
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int ISRCposNode, ISRCnegNode;
+        int posNode, negNode;
 
         /// <summary>
         /// Constructor
@@ -82,10 +82,10 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             bp = provider.GetParameterSet<BaseParameters>(0);
 
             // Give some warnings if no value is given
-            if (!bp.ISRCdcValue.Given)
+            if (!bp.DcValue.Given)
             {
                 // no DC value - either have a transient value or none
-                if (bp.ISRCwaveform != null)
+                if (bp.Waveform != null)
                     CircuitWarning.Warning(this, $"{Name} has no DC value, transient time 0 value used");
                 else
                     CircuitWarning.Warning(this, $"{Name} has no value, DC 0 assumed");
@@ -102,8 +102,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            ISRCposNode = pins[0];
-            ISRCnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -127,19 +127,19 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                     time = tsim.Method.Time;
 
                 // Use the waveform if possible
-                if (bp.ISRCwaveform != null)
-                    value = bp.ISRCwaveform.At(time);
+                if (bp.Waveform != null)
+                    value = bp.Waveform.At(time);
                 else
-                    value = bp.ISRCdcValue * state.SrcFact;
+                    value = bp.DcValue * state.SrcFact;
             }
             else
             {
                 // AC or DC analysis use the DC value
-                value = bp.ISRCdcValue * state.SrcFact;
+                value = bp.DcValue * state.SrcFact;
             }
 
-            state.Rhs[ISRCposNode] += value;
-            state.Rhs[ISRCnegNode] -= value;
+            state.Rhs[posNode] += value;
+            state.Rhs[negNode] -= value;
             Current = value;
         }
     }

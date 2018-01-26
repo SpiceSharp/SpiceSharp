@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <param name="sim">Time-based simulation</param>
         public override void Accept(TimeSimulation sim)
         {
-            bp.ISRCwaveform?.Accept(sim);
+            bp.Waveform?.Accept(sim);
         }
     }
 }

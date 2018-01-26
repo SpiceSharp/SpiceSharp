@@ -8,7 +8,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 {
     /// <summary>
-    /// Behavior for a <see cref="Components.CurrentControlledCurrentsource"/>
+    /// Behavior for a <see cref="CurrentControlledCurrentSource"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
@@ -21,10 +21,10 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        public int CCCScontBranch { get; protected set; }
-        int CCCSposNode, CCCSnegNode;
-        protected MatrixElement CCCSposContBrptr { get; private set; }
-        protected MatrixElement CCCSnegContBrptr { get; private set; }
+        public int ContBranch { get; protected set; }
+        int posNode, negNode;
+        protected MatrixElement PosContBrptr { get; private set; }
+        protected MatrixElement NegContBrptr { get; private set; }
 
         /// <summary>
         /// Properties
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[CCCScontBranch] * bp.CCCScoeff;
+            return state.Solution[ContBranch] * bp.Coefficient;
         }
         [PropertyName("v"), PropertyInfo("Voltage")]
         public double GetVoltage(State state)
@@ -45,7 +45,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[CCCSposNode] - state.Solution[CCCSnegNode];
+            return state.Solution[posNode] - state.Solution[negNode];
         }
         [PropertyName("p"), PropertyInfo("Power")]
         public double GetPower(State state)
@@ -53,7 +53,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[CCCSposNode] - state.Solution[CCCSnegNode]) * state.Solution[CCCScontBranch] * bp.CCCScoeff;
+            return (state.Solution[posNode] - state.Solution[negNode]) * state.Solution[ContBranch] * bp.Coefficient;
         }
 
         /// <summary>
@@ -106,8 +106,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            CCCSposNode = pins[0];
-            CCCSnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -119,9 +119,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            CCCScontBranch = vsrcload.VSRCbranch;
-            CCCSposContBrptr = matrix.GetElement(CCCSposNode, CCCScontBranch);
-            CCCSnegContBrptr = matrix.GetElement(CCCSnegNode, CCCScontBranch);
+            ContBranch = vsrcload.VSRCbranch;
+            PosContBrptr = matrix.GetElement(posNode, ContBranch);
+            NegContBrptr = matrix.GetElement(negNode, ContBranch);
         }
         
         /// <summary>
@@ -130,8 +130,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            CCCSposContBrptr.Add(bp.CCCScoeff.Value);
-            CCCSnegContBrptr.Sub(bp.CCCScoeff.Value);
+            PosContBrptr.Add(bp.Coefficient.Value);
+            NegContBrptr.Sub(bp.Coefficient.Value);
         }
     }
 }
