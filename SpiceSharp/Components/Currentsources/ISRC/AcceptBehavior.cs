@@ -1,11 +1,11 @@
 ﻿using System;
 using SpiceSharp.Simulations;
-using SpiceSharp.Components.ISRC;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.ISRC
+namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
     /// <summary>
-    /// Accept behavior for a <see cref="Components.Currentsource"/>
+    /// Accept behavior for a <see cref="Currentsource"/>
     /// </summary>
     public class AcceptBehavior : Behaviors.AcceptBehavior
     {

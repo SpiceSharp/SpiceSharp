@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.ISRC
+namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
     /// <summary>
     /// Base parameters for a <see cref="Currentsource"/>

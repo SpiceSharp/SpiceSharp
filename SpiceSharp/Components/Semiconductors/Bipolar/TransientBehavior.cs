@@ -1,15 +1,14 @@
 ﻿using System;
-using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
-using SpiceSharp.Components.Bipolar;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.Bipolar
+namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
-    /// Transient behavior for a <see cref="Components.BJT"/>
+    /// Transient behavior for a <see cref="BJT"/>
     /// </summary>
     public class TransientBehavior : Behaviors.TransientBehavior, IConnectedBehavior
     {

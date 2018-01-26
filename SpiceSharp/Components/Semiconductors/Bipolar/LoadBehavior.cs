@@ -4,12 +4,12 @@ using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
-using SpiceSharp.Components.Bipolar;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.Bipolar
+namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
-    /// General behavior for <see cref="Components.BJT"/>
+    /// General behavior for <see cref="BJT"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {

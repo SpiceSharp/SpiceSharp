@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.DIO;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.DIO
+namespace SpiceSharp.Components.DiodeBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="Components.Diode"/>
+    /// AC behavior for <see cref="Diode"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {

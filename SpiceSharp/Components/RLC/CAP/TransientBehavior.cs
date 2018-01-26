@@ -2,10 +2,10 @@
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 using SpiceSharp.IntegrationMethods;
-using SpiceSharp.Components.CAP;
+using SpiceSharp.Behaviors;
 using System;
 
-namespace SpiceSharp.Behaviors.CAP
+namespace SpiceSharp.Components.CapacitorBehaviors
 {
     /// <summary>
     /// General behavior for <see cref="Components.Capacitor"/>

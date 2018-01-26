@@ -1,7 +1,5 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors.VCCS;
-using SpiceSharp.Components.VCCS;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors;
 
 namespace SpiceSharp.Components
 {

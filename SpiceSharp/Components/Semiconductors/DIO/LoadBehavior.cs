@@ -2,13 +2,13 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.DIO;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 
-namespace SpiceSharp.Behaviors.DIO
+namespace SpiceSharp.Components.DiodeBehaviors
 {
     /// <summary>
-    /// General behavior for <see cref="Components.Diode"/>
+    /// General behavior for <see cref="Diode"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {

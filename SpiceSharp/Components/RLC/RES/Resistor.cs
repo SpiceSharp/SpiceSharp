@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Components.RES;
-using SpiceSharp.Behaviors.RES;
+using SpiceSharp.Components.ResistorBehaviors;
 
 namespace SpiceSharp.Components
 {

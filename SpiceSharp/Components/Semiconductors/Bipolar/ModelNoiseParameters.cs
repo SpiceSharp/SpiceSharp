@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.Bipolar
+namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
     /// Noise parameters for a <see cref="BJTModel"/>

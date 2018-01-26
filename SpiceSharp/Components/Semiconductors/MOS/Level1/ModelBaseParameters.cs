@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.Mosfet.Level1
+namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
     /// Base parameters for a <see cref="MOS1Model"/>

@@ -1,14 +1,14 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.RES;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System;
 
-namespace SpiceSharp.Behaviors.RES
+namespace SpiceSharp.Components.ResistorBehaviors
 {
     /// <summary>
-    /// General behavior for <see cref="Components.Resistor"/>
+    /// General behavior for <see cref="Resistor"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {

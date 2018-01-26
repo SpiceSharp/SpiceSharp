@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors.Bipolar;
-using SpiceSharp.Components.Bipolar;
+﻿using SpiceSharp.Components.BipolarBehaviors;
 
 namespace SpiceSharp.Components
 {

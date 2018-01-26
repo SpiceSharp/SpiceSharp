@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.MUT
+namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
     /// <summary>
     /// Base parameters for a <see cref="MutualInductance"/>

@@ -12,7 +12,7 @@ namespace SpiceSharp.Attributes
     public sealed class ConnectedAttribute : Attribute
     {
         /// <summary>
-        /// Get a connect pin
+        /// Get a connected pin
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>

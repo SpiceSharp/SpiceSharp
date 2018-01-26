@@ -121,13 +121,13 @@ namespace SpiceSharp.Simulations
             Entity source = circuit.Objects[noiseconfig.Input];
             if (source is Voltagesource vsource)
             {
-                var ac = vsource.Parameters.Get<Components.VSRC.FrequencyParameters>();
+                var ac = vsource.Parameters.Get<Components.VoltagesourceModel.FrequencyParameters>();
                 if (!ac.VSRCacMag.Given || ac.VSRCacMag == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {vsource.Name} has no AC input");
             }
             else if (source is Currentsource isource)
             {
-                var ac = isource.Parameters.Get<Components.ISRC.FrequencyParameters>();
+                var ac = isource.Parameters.Get<Components.CurrentsourceBehaviors.FrequencyParameters>();
                 if (!ac.ISRCacMag.Given || ac.ISRCacMag == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {isource.Name} has not AC input");
             }

@@ -1,8 +1,7 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors.MUT;
-using SpiceSharp.Components.MUT;
+using SpiceSharp.Components.MutualInductanceBehaviors;
 
 namespace SpiceSharp.Components
 {

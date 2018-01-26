@@ -1,8 +1,7 @@
 ﻿using System;
 using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Components.CCCS;
-using SpiceSharp.Behaviors.CCCS;
+using SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors;
 
 namespace SpiceSharp.Components
 {

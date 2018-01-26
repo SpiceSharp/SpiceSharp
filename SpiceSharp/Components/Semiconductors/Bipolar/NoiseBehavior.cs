@@ -1,14 +1,14 @@
 ﻿using System;
 using SpiceSharp.Components;
 using SpiceSharp.Components.NoiseSources;
-using SpiceSharp.Components.Bipolar;
+using SpiceSharp.Components.BipolarBehaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.Bipolar
+namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
-    /// Noise behavior for <see cref="Bipolar"/>
+    /// Noise behavior for <see cref="BJT"/>
     /// </summary>
     public class NoiseBehavior : Behaviors.NoiseBehavior, IConnectedBehavior
     {

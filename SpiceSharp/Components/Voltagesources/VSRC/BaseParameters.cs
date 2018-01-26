@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.VSRC
+namespace SpiceSharp.Components.VoltagesourceModel
 {
     /// <summary>
     /// Parameters for a <see cref="Voltagesource"/>

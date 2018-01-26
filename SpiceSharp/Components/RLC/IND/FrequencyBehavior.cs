@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Components.IND;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.IND
+namespace SpiceSharp.Components.InductorBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="Components.Inductor"/>
+    /// AC behavior for <see cref="Inductor"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {

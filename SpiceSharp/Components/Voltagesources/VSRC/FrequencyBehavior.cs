@@ -2,13 +2,13 @@
 using System.Numerics;
 using SpiceSharp.Sparse;
 using SpiceSharp.Attributes;
-using SpiceSharp.Components.VSRC;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.VSRC
+namespace SpiceSharp.Components.VoltagesourceModel
 {
     /// <summary>
-    /// AC behavior for <see cref="Components.Voltagesource"/>
+    /// AC behavior for <see cref="Voltagesource"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {

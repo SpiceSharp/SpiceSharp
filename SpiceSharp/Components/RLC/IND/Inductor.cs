@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors.IND;
-using SpiceSharp.Components.IND;
+using SpiceSharp.Components.InductorBehaviors;
 
 namespace SpiceSharp.Components
 {

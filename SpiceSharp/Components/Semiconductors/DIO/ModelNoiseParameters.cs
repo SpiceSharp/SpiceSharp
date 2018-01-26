@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.DIO
+namespace SpiceSharp.Components.DiodeBehaviors
 {
     /// <summary>
     /// Noise parameters for a <see cref="DiodeModel"/>

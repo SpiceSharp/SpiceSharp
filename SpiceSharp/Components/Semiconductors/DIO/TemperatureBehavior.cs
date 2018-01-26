@@ -1,11 +1,9 @@
 ﻿using System;
-using SpiceSharp.Components.DIO;
-using SpiceSharp.Components;
-using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.DIO
+namespace SpiceSharp.Components.DiodeBehaviors
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Diode"/>

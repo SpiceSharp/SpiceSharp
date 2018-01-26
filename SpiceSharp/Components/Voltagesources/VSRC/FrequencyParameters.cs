@@ -2,7 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Components.VSRC
+namespace SpiceSharp.Components.VoltagesourceModel
 {
     /// <summary>
     /// Parameters for AC analysis

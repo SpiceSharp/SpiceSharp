@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.CAP
+namespace SpiceSharp.Components.CapacitorBehaviors
 {
     /// <summary>
     /// Base parameters for a capacitor

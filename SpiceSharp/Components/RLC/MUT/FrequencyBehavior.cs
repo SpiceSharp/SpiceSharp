@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.MUT;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.MUT
+namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="Components.MutualInductance"/>
+    /// AC behavior for <see cref="MutualInductance"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior
     {
@@ -15,7 +15,7 @@ namespace SpiceSharp.Behaviors.MUT
         /// Necessary behaviors
         /// </summary>
         BaseParameters bp;
-        IND.LoadBehavior load1, load2;
+        InductorBehaviors.LoadBehavior load1, load2;
 
         /// <summary>
         /// Matrix elements
@@ -45,12 +45,12 @@ namespace SpiceSharp.Behaviors.MUT
 
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
-            var bp1 = provider.GetParameterSet<Components.IND.BaseParameters>(1);
-            var bp2 = provider.GetParameterSet<Components.IND.BaseParameters>(2);
+            var bp1 = provider.GetParameterSet<InductorBehaviors.BaseParameters>(1);
+            var bp2 = provider.GetParameterSet<InductorBehaviors.BaseParameters>(2);
 
             // Get behaviors
-            load1 = provider.GetBehavior<IND.LoadBehavior>(1);
-            load2 = provider.GetBehavior<IND.LoadBehavior>(2);
+            load1 = provider.GetBehavior<InductorBehaviors.LoadBehavior>(1);
+            load2 = provider.GetBehavior<InductorBehaviors.LoadBehavior>(2);
 
             // Calculate coupling factor
             MUTfactor = bp.MUTcoupling * Math.Sqrt(bp1.INDinduct * bp2.INDinduct);

@@ -1,4 +1,4 @@
-﻿namespace SpiceSharp.Behaviors
+﻿namespace SpiceSharp.Components
 {
     /// <summary>
     /// Behaviors for component behaviors that can be connected in the circuit

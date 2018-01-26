@@ -1,14 +1,14 @@
 ﻿using SpiceSharp.Simulations;
 using SpiceSharp.Sparse;
 using SpiceSharp.Circuits;
-using SpiceSharp.Components.VCCS;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Attributes;
 using System;
 
-namespace SpiceSharp.Behaviors.VCCS
+namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
 {
     /// <summary>
-    /// General behavior for a <see cref="Components.VoltageControlledCurrentsource"/>
+    /// General behavior for a <see cref="VoltageControlledCurrentsource"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {

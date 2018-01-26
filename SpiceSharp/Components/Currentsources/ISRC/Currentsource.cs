@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Behaviors.ISRC;
-using SpiceSharp.Components.ISRC;
+﻿using SpiceSharp.Components.CurrentsourceBehaviors;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components

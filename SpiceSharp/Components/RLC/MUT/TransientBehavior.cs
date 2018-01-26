@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.MUT;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.MUT
+namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
     /// <summary>
     /// Transient behavior for a <see cref="Components.MutualInductance"/>
@@ -19,8 +14,8 @@ namespace SpiceSharp.Behaviors.MUT
         /// Necessary behaviors
         /// </summary>
         BaseParameters bp;
-        IND.LoadBehavior load1, load2;
-        IND.TransientBehavior tran1, tran2;
+        InductorBehaviors.LoadBehavior load1, load2;
+        InductorBehaviors.TransientBehavior tran1, tran2;
 
         /// <summary>
         /// The factor
@@ -56,14 +51,14 @@ namespace SpiceSharp.Behaviors.MUT
 
             // Get parameters
             bp = provider.GetParameterSet<BaseParameters>(0);
-            var bp1 = provider.GetParameterSet<Components.IND.BaseParameters>(1);
-            var bp2 = provider.GetParameterSet<Components.IND.BaseParameters>(2);
+            var bp1 = provider.GetParameterSet<Components.InductorBehaviors.BaseParameters>(1);
+            var bp2 = provider.GetParameterSet<Components.InductorBehaviors.BaseParameters>(2);
 
             // Get behaviors
-            load1 = provider.GetBehavior<IND.LoadBehavior>(1);
-            load2 = provider.GetBehavior<IND.LoadBehavior>(2);
-            tran1 = provider.GetBehavior<IND.TransientBehavior>(1);
-            tran2 = provider.GetBehavior<IND.TransientBehavior>(2);
+            load1 = provider.GetBehavior<InductorBehaviors.LoadBehavior>(1);
+            load2 = provider.GetBehavior<InductorBehaviors.LoadBehavior>(2);
+            tran1 = provider.GetBehavior<InductorBehaviors.TransientBehavior>(1);
+            tran2 = provider.GetBehavior<InductorBehaviors.TransientBehavior>(2);
 
             // Calculate coupling factor
             MUTfactor = bp.MUTcoupling * Math.Sqrt(bp1.INDinduct * bp2.INDinduct);
@@ -78,7 +73,7 @@ namespace SpiceSharp.Behaviors.MUT
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="args">Arguments</param>
-        void UpdateFlux2(object sender, IND.UpdateFluxEventArgs args)
+        void UpdateFlux2(object sender, InductorBehaviors.UpdateFluxEventArgs args)
         {
             var state = args.State;
             args.Flux.Value += MUTfactor * state.Solution[load1.INDbrEq];
@@ -89,7 +84,7 @@ namespace SpiceSharp.Behaviors.MUT
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="args">Arguments</param>
-        void UpdateFlux1(object sender, IND.UpdateFluxEventArgs args)
+        void UpdateFlux1(object sender, InductorBehaviors.UpdateFluxEventArgs args)
         {
             var state = args.State;
             geq = args.Flux.Jacobian(MUTfactor);

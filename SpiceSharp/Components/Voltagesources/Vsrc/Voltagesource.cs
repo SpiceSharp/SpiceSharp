@@ -1,7 +1,5 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Circuits;
-using SpiceSharp.Behaviors.VSRC;
-using SpiceSharp.Components.VSRC;
+using SpiceSharp.Components.VoltagesourceModel;
 
 namespace SpiceSharp.Components
 {

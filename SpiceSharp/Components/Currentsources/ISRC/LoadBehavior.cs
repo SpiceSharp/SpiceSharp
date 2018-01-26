@@ -1,11 +1,10 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using System;
-using SpiceSharp.Components.ISRC;
 
-namespace SpiceSharp.Behaviors.ISRC
+namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
     /// <summary>
     /// Current source behavior for DC and Transient analysis

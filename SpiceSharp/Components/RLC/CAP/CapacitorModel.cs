@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components.CAP;
+using SpiceSharp.Components.CapacitorBehaviors;
 
 namespace SpiceSharp.Components
 {

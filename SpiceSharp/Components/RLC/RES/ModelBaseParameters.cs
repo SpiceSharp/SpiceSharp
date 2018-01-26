@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.RES
+namespace SpiceSharp.Components.ResistorBehaviors
 {
     /// <summary>
     /// Parameters for a <see cref="ResistorModel"/>

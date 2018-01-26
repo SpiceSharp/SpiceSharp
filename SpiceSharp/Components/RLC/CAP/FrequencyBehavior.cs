@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Components.CAP;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.CAP
+namespace SpiceSharp.Components.CapacitorBehaviors
 {
     /// <summary>
     /// AC behavior for <see cref="Components.Capacitor"/>

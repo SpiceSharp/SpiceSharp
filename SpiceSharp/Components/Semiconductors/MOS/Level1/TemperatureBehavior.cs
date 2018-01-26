@@ -1,14 +1,13 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
-using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
-using SpiceSharp.Components.Mosfet.Level1;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.Mosfet.Level1
+namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="Components.MOS1"/>
+    /// Temperature behavior for a <see cref="MOS1"/>
     /// </summary>
     public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {

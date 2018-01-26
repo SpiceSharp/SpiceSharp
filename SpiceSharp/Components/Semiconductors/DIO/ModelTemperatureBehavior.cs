@@ -2,10 +2,10 @@
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
-using SpiceSharp.Components.DIO;
+using SpiceSharp.Components.DiodeBehaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.DIO
+namespace SpiceSharp.Components.DiodeBehaviors
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Components.DiodeModel"/>

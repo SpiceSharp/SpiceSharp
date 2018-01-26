@@ -2,10 +2,10 @@
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.IND
+namespace SpiceSharp.Components.InductorBehaviors
 {
     /// <summary>
-    /// Arguments used to modify flux through an inductor
+    /// Arguments used to modify flux through an <see cref="Inductor"/>
     /// </summary>
     public class UpdateFluxEventArgs : EventArgs
     {

@@ -1,12 +1,13 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.CCCS
+namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 {
     /// <summary>
     /// Base parameters for a <see cref="CurrentControlledCurrentsource"/>
     /// </summary>
     public class BaseParameters : ParameterSet
     {
+        // TODO: Correct spelling for device parameters
         /// <summary>
         /// Parameters
         /// </summary>

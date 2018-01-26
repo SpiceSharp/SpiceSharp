@@ -1,11 +1,9 @@
 ﻿using System;
-using SpiceSharp.Circuits;
-using SpiceSharp.Components;
 using SpiceSharp.Components.NoiseSources;
-using SpiceSharp.Components.DIO;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.DIO
+namespace SpiceSharp.Components.DiodeBehaviors
 {
     /// <summary>
     /// Noise behavior for <see cref="Diode"/>

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Components.ISRC;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Behaviors.ISRC
+namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
     /// <summary>
     /// Behavior of a currentsource in AC analysis

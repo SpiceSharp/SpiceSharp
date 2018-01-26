@@ -26,14 +26,14 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the component</param>
-        protected Component(Identifier name, int nodecount)
+        protected Component(Identifier name, int nodeCount)
             : base(name)
         {
             // Initialize
-            if (nodecount > 0)
+            if (nodeCount > 0)
             {
-                connections = new Identifier[nodecount];
-                indices = new int[nodecount];
+                connections = new Identifier[nodeCount];
+                indices = new int[nodeCount];
             }
             else
             {
@@ -107,25 +107,25 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Get the connection of the component
         /// </summary>
-        /// <param name="i">The index</param>
+        /// <param name="index">The index</param>
         /// <returns></returns>
-        public virtual Identifier GetNode(int i)
+        public virtual Identifier GetNode(int index)
         {
-            if (i < 0 || i >= connections.Length)
+            if (index < 0 || index >= connections.Length)
                 throw new IndexOutOfRangeException();
-            return connections[i];
+            return connections[index];
         }
 
         /// <summary>
         /// Get the node index of the component
         /// </summary>
-        /// <param name="i">The index</param>
+        /// <param name="index">The index</param>
         /// <returns></returns>
-        public virtual int GetNodeIndex(int i)
+        public virtual int GetNodeIndex(int index)
         {
-            if (i < 0 || i >= connections.Length)
+            if (index < 0 || index >= connections.Length)
                 throw new IndexOutOfRangeException();
-            return indices[i];
+            return indices[index];
         }
 
         /// <summary>

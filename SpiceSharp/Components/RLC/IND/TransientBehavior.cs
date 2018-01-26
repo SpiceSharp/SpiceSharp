@@ -1,15 +1,13 @@
-﻿using SpiceSharp.Components.IND;
-using SpiceSharp.Circuits;
-using SpiceSharp.Attributes;
-using SpiceSharp.Sparse;
+﻿using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 using SpiceSharp.IntegrationMethods;
+using SpiceSharp.Behaviors;
 using System;
 
-namespace SpiceSharp.Behaviors.IND
+namespace SpiceSharp.Components.InductorBehaviors
 {
     /// <summary>
-    /// General behaviour for a <see cref="Components.Inductor"/>
+    /// General behaviour for a <see cref="Inductor"/>
     /// </summary>
     public class TransientBehavior : Behaviors.TransientBehavior
     {

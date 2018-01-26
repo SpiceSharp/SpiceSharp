@@ -1,9 +1,9 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Components.CAP;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.CAP
+namespace SpiceSharp.Components.CapacitorBehaviors
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Components.Capacitor"/>

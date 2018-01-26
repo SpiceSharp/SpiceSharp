@@ -1,11 +1,11 @@
 ﻿using System;
 using SpiceSharp.Simulations;
-using SpiceSharp.Components.VSRC;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.VSRC
+namespace SpiceSharp.Components.VoltagesourceModel
 {
     /// <summary>
-    /// Accept behavior for a <see cref="Components.Voltagesource"/>
+    /// Accept behavior for a <see cref="Voltagesource"/>
     /// </summary>
     public class AcceptBehavior : Behaviors.AcceptBehavior
     {

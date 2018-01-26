@@ -1,14 +1,14 @@
 ﻿using SpiceSharp.Sparse;
-using SpiceSharp.Components.VCCS;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using System;
 using System.Numerics;
 
-namespace SpiceSharp.Behaviors.VCCS
+namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
 {
     /// <summary>
-    /// AC behavior for a <see cref="Components.VoltageControlledCurrentsource"/>
+    /// AC behavior for a <see cref="VoltageControlledCurrentsource"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {

@@ -1,12 +1,12 @@
 ﻿using SpiceSharp.Sparse;
-using SpiceSharp.Components.CCCS;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Behaviors;
 using System;
 using System.Numerics;
 
-namespace SpiceSharp.Behaviors.CCCS
+namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 {
     /// <summary>
     /// Frequency behavior for <see cref="Components.CurrentControlledCurrentsource"/>
@@ -17,7 +17,7 @@ namespace SpiceSharp.Behaviors.CCCS
         /// Necessary parameters and behaviors
         /// </summary>
         BaseParameters bp;
-        VSRC.LoadBehavior vsrcload;
+        VoltagesourceModel.LoadBehavior vsrcload;
 
         /// <summary>
         /// Properties
@@ -80,7 +80,7 @@ namespace SpiceSharp.Behaviors.CCCS
             bp = provider.GetParameterSet<BaseParameters>(0);
 
             // Get behaviors
-            vsrcload = provider.GetBehavior<VSRC.LoadBehavior>(1);
+            vsrcload = provider.GetBehavior<VoltagesourceModel.LoadBehavior>(1);
         }
 
         /// <summary>

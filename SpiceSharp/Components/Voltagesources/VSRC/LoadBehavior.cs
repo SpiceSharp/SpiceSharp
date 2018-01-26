@@ -3,13 +3,13 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
+using SpiceSharp.Behaviors;
 using System;
-using SpiceSharp.Components.VSRC;
 
-namespace SpiceSharp.Behaviors.VSRC
+namespace SpiceSharp.Components.VoltagesourceModel
 {
     /// <summary>
-    /// General behavior for <see cref="Components.Voltagesource"/>
+    /// General behavior for <see cref="Voltagesource"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {

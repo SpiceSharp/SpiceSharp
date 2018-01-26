@@ -3,11 +3,12 @@ using System.Numerics;
 using SpiceSharp.Sparse;
 using SpiceSharp.Attributes;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.RES
+namespace SpiceSharp.Components.ResistorBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="Components.Resistor"/>
+    /// AC behavior for <see cref="Resistor"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {

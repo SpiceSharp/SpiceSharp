@@ -1,9 +1,9 @@
 ﻿using System;
-using SpiceSharp.Components;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
+using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Behaviors.RES
+namespace SpiceSharp.Components.ResistorBehaviors
 {
     /// <summary>
     /// Noise behavior for <see cref="Resistor"/>

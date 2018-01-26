@@ -2,7 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Components.ISRC
+namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
     /// <summary>
     /// AC parameters for a <see cref="Currentsource"/>

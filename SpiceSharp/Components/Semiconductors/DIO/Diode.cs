@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors.DIO;
-using SpiceSharp.Components.DIO;
+using SpiceSharp.Components.DiodeBehaviors;
 
 namespace SpiceSharp.Components
 {

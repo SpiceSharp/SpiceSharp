@@ -2,7 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Components.Bipolar
+namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
     /// Base parameters for a <see cref="BJT"/>

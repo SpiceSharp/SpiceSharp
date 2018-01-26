@@ -1,14 +1,13 @@
 ﻿using System;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
-using SpiceSharp.Components.Bipolar;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.Bipolar
+namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="Components.BJTModel"/>
+    /// Temperature behavior for a <see cref="BJTModel"/>
     /// </summary>
     public class ModelTemperatureBehavior : Behaviors.TemperatureBehavior
     {

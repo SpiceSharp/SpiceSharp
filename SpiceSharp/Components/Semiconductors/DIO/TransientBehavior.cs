@@ -1,15 +1,14 @@
 ﻿using System;
-using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
-using SpiceSharp.Components.DIO;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Sparse;
 using SpiceSharp.IntegrationMethods;
 
-namespace SpiceSharp.Behaviors.DIO
+namespace SpiceSharp.Components.DiodeBehaviors
 {
     /// <summary>
-    /// Transient behavior for a <see cref="Components.Diode"/>
+    /// Transient behavior for a <see cref="Diode"/>
     /// </summary>
     public class TransientBehavior : Behaviors.TransientBehavior, IConnectedBehavior
     {

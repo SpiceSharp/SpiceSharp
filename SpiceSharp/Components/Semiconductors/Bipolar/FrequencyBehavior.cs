@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Components.Bipolar;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Behaviors.Bipolar
+namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="Components.BJT"/>
+    /// AC behavior for <see cref="BJT"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {

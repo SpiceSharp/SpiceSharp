@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.IND
+namespace SpiceSharp.Components.InductorBehaviors
 {
     /// <summary>
     /// Base parameters for a <see cref="Inductor"/>

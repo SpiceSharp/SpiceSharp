@@ -3,10 +3,10 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
 using System;
 
-namespace SpiceSharp.Behaviors.IND
+namespace SpiceSharp.Components.InductorBehaviors
 {
     /// <summary>
-    /// Load behavior for a <see cref="Components.Inductor"/>
+    /// Load behavior for a <see cref="Inductor"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {

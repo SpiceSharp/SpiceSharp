@@ -2,10 +2,10 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
 using SpiceSharp.Sparse;
-using SpiceSharp.Components.CCCS;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Behaviors.CCCS
+namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 {
     /// <summary>
     /// Behavior for a <see cref="Components.CurrentControlledCurrentsource"/>
@@ -16,7 +16,7 @@ namespace SpiceSharp.Behaviors.CCCS
         /// Necessary parameters and behaviors
         /// </summary>
         BaseParameters bp;
-        VSRC.LoadBehavior vsrcload;
+        VoltagesourceModel.LoadBehavior vsrcload;
 
         /// <summary>
         /// Nodes
@@ -93,7 +93,7 @@ namespace SpiceSharp.Behaviors.CCCS
             bp = provider.GetParameterSet<BaseParameters>(0);
 
             // Get behaviors (0 = CCCS behaviors, 1 = VSRC behaviors)
-            vsrcload = provider.GetBehavior<VSRC.LoadBehavior>(1);
+            vsrcload = provider.GetBehavior<VoltagesourceModel.LoadBehavior>(1);
         }
 
         /// <summary>
