@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
     /// <summary>
-    /// Base parameters for a <see cref="Currentsource"/>
+    /// Base parameters for a <see cref="CurrentSource"/>
     /// </summary>
     public class BaseParameters : ParameterSet
     {

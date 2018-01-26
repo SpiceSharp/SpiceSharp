@@ -7,7 +7,7 @@ using System;
 namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
     /// <summary>
-    /// General behavior for a <see cref="Currentsource"/>
+    /// General behavior for a <see cref="CurrentSource"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {

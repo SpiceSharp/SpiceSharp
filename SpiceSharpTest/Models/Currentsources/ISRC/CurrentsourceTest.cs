@@ -19,7 +19,7 @@ namespace SpiceSharpTest.Models.Currentsources.ISRC
         {
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Currentsource("I1", "IN", "0", current),
+                new CurrentSource("I1", "IN", "0", current),
                 new Resistor("R1", "IN", "0", resistance));
             return ckt;
         }
@@ -65,7 +65,7 @@ namespace SpiceSharpTest.Models.Currentsources.ISRC
             Assert.IsTrue(count > 1);
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Currentsource("I1", "IN", "0", current),
+                new CurrentSource("I1", "IN", "0", current),
                 new Resistor("R1", "IN", "B1", resistance),
                 new Resistor($"R{count}", $"B{count - 1}", "0", resistance)
                 );

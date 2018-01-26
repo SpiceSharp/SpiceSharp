@@ -5,7 +5,7 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
     /// <summary>
-    /// Accept behavior for a <see cref="Currentsource"/>
+    /// Accept behavior for a <see cref="CurrentSource"/>
     /// </summary>
     public class AcceptBehavior : Behaviors.AcceptBehavior
     {

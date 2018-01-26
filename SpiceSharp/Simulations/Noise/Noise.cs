@@ -125,7 +125,7 @@ namespace SpiceSharp.Simulations
                 if (!ac.AcMagnitude.Given || ac.AcMagnitude == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {vsource.Name} has no AC input");
             }
-            else if (source is Currentsource isource)
+            else if (source is CurrentSource isource)
             {
                 var ac = isource.Parameters.Get<Components.CurrentsourceBehaviors.FrequencyParameters>();
                 if (!ac.AcMagnitude.Given || ac.AcMagnitude == 0.0)

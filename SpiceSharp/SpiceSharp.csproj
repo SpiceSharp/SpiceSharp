@@ -186,7 +186,7 @@
     <Compile Include="Simulations\Noise\NoiseConfiguration.cs" />
     <Compile Include="Simulations\Noise\StateNoise.cs" />
     <Compile Include="Components\Model.cs" />
-    <Compile Include="Components\Currentsources\ISRC\Currentsource.cs" />
+    <Compile Include="Components\Currentsources\ISRC\CurrentSource.cs" />
     <Compile Include="Circuits\Entity.cs" />
     <Compile Include="Components\Noise\NoiseGain.cs" />
     <Compile Include="Components\Noise\NoiseGenerator.cs" />

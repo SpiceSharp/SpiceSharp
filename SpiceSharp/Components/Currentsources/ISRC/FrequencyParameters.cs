@@ -5,7 +5,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
     /// <summary>
-    /// AC parameters for a <see cref="Currentsource"/>
+    /// AC parameters for a <see cref="CurrentSource"/>
     /// </summary>
     public class FrequencyParameters : ParameterSet
     {

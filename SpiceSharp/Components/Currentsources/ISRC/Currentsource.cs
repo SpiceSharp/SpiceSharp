@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// An independent current source
     /// </summary>
     [Pins("I+", "I-"), IndependentSource, Connected]
-    public class Currentsource : Component
+    public class CurrentSource : Component
     {
         /// <summary>
         /// Nodes
@@ -24,7 +24,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current source</param>
-        public Currentsource(Identifier name) 
+        public CurrentSource(Identifier name) 
             : base(name, CurrentsourcePinCount)
         {
             // Add parameters
@@ -44,7 +44,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public Currentsource(Identifier name, Identifier pos, Identifier neg, double dc)
+        public CurrentSource(Identifier name, Identifier pos, Identifier neg, double dc)
             : base(name, CurrentsourcePinCount)
         {
             // Add parameters
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="w">The Waveform-object</param>
-        public Currentsource(Identifier name, Identifier pos, Identifier neg, Waveform w)
+        public CurrentSource(Identifier name, Identifier pos, Identifier neg, Waveform w)
             : base(name, CurrentsourcePinCount)
         {
             // Add parameters
