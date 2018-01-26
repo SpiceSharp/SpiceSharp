@@ -27,7 +27,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Get the controlling voltage source
         /// </summary>
-        public Voltagesource ControllingSource { get; protected set; }
+        public VoltageSource ControllingSource { get; protected set; }
 
         /// <summary>
         /// Constants
@@ -86,7 +86,7 @@ namespace SpiceSharp.Components
             NegNode = nodes[1].Index;
 
             // Find the voltage source
-            if (circuit.Objects[ControllingName] is Voltagesource vsrc)
+            if (circuit.Objects[ControllingName] is VoltageSource vsrc)
                 ControllingSource = vsrc;
         }
 

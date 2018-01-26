@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         [PropertyName("neg_node"), PropertyInfo("Negative node of the source")]
         public int NegNode { get; private set; }
         [PropertyName("vctrl"), PropertyInfo("Controlling voltage source")]
-        public Voltagesource ContactSource { get; protected set; }
+        public VoltageSource ContactSource { get; protected set; }
 
         /// <summary>
         /// Constants
@@ -90,7 +90,7 @@ namespace SpiceSharp.Components
             NegNode = nodes[1].Index;
 
             // Find the voltage source for which the current is being measured
-            if (circuit.Objects[ContactName] is Voltagesource vsrc)
+            if (circuit.Objects[ContactName] is VoltageSource vsrc)
                 ContactSource = vsrc;
             else
                 throw new CircuitException($"{Name}: Could not find voltage source '{ContactName}'");

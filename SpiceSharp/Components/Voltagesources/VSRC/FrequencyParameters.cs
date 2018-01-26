@@ -13,9 +13,9 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("acmag"), PropertyInfo("A.C. Magnitude")]
-        public Parameter VSRCacMag { get; } = new Parameter();
+        public Parameter AcMagnitude { get; } = new Parameter();
         [PropertyName("acphase"), PropertyInfo("A.C. Phase")]
-        public Parameter VSRCacPhase { get; } = new Parameter();
+        public Parameter AcPhase { get; } = new Parameter();
         [PropertyName("ac"), PropertyInfo("A.C. magnitude, phase vector")]
         public void SetAc(double[] ac)
         {
@@ -24,9 +24,9 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 
             switch (ac?.Length ?? -1)
             {
-                case 2: VSRCacPhase.Set(ac[1]); goto case 1;
-                case 1: VSRCacMag.Set(ac[0]); break;
-                case 0: VSRCacMag.Set(0.0); break;
+                case 2: AcPhase.Set(ac[1]); goto case 1;
+                case 1: AcMagnitude.Set(ac[0]); break;
+                case 0: AcMagnitude.Set(0.0); break;
                 default:
                     throw new BadParameterException("ac");
             }

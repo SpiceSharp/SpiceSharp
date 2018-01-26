@@ -119,10 +119,10 @@ namespace SpiceSharp.Simulations
             if (noiseconfig.Input == null)
                 throw new CircuitException($"{Name}: No input source specified");
             Entity source = circuit.Objects[noiseconfig.Input];
-            if (source is Voltagesource vsource)
+            if (source is VoltageSource vsource)
             {
                 var ac = vsource.Parameters.Get<Components.VoltagesourceBehaviors.FrequencyParameters>();
-                if (!ac.VSRCacMag.Given || ac.VSRCacMag == 0.0)
+                if (!ac.AcMagnitude.Given || ac.AcMagnitude == 0.0)
                     throw new CircuitException($"{Name}: Noise input source {vsource.Name} has no AC input");
             }
             else if (source is Currentsource isource)

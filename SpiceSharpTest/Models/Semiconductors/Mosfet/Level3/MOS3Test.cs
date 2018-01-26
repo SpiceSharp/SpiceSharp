@@ -52,8 +52,8 @@ namespace SpiceSharpTest.Models.Transistors
             // Create circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "0", "g", 0),
-                new Voltagesource("V2", "0", "d", 0),
+                new VoltageSource("V1", "0", "g", 0),
+                new VoltageSource("V2", "0", "d", 0),
                 CreateMOS3("M1", "d", "g", "0", "0",
                     "DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
                 );
@@ -91,8 +91,8 @@ namespace SpiceSharpTest.Models.Transistors
             // Create circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("Vsupply", "vdd", "0", 1.8),
-                new Voltagesource("Vin", "in", "0", 0.0),
+                new VoltageSource("Vsupply", "vdd", "0", 1.8),
+                new VoltageSource("Vin", "in", "0", 0.0),
                 new Resistor("R1", "out", "0", 100e3),
                 new Resistor("R2", "g", "out", 10e3),
                 new Capacitor("C1", "in", "g", 1e-6),
@@ -132,8 +132,8 @@ namespace SpiceSharpTest.Models.Transistors
             // Create circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "in", "0", new Pulse(0, 1.8, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
-                new Voltagesource("Vsupply", "vdd", "0", 1.8),
+                new VoltageSource("V1", "in", "0", new Pulse(0, 1.8, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
+                new VoltageSource("Vsupply", "vdd", "0", 1.8),
                 new Resistor("R1", "out", "0", 100e3),
                 CreateMOS3("M1", "out", "in", "vdd", "vdd",
                     "DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")

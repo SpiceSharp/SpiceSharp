@@ -20,7 +20,7 @@ namespace SpiceSharpTest.Models.RLC.RES
         {
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", dcVoltage),
+                new VoltageSource("V1", "IN", "0", dcVoltage),
                 new Resistor("R1", "IN", "0", resistance)
             );
             return ckt;
@@ -89,7 +89,7 @@ namespace SpiceSharpTest.Models.RLC.RES
         {
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", dcVoltage),
+                new VoltageSource("V1", "IN", "0", dcVoltage),
                 new Resistor("R1", "IN", "OUT", resistance1),
                 new Resistor("R2", "OUT", "0", resistance2)
             );
@@ -131,7 +131,7 @@ namespace SpiceSharpTest.Models.RLC.RES
         {
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", dcVoltage),
+                new VoltageSource("V1", "IN", "0", dcVoltage),
                 new Resistor("R1", "IN", "0", resistance1),
                 new Resistor("R2", "IN", "0", resistance2)
             );

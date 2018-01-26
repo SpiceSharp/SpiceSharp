@@ -8,7 +8,7 @@ using System;
 namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
 {
     /// <summary>
-    /// General behavior for a <see cref="VoltageControlledVoltagesource"/>
+    /// General behavior for a <see cref="VoltageControlledVoltageSource"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior
     {
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[VCVSbranch];
+            return state.Solution[BranchEq];
         }
         [PropertyName("v"), PropertyInfo("Output current")]
         public double GetVoltage(State state)
@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[VCVSposNode] - state.Solution[VCVSnegNode];
+            return state.Solution[posNode] - state.Solution[negNode];
         }
         [PropertyName("p"), PropertyInfo("Power")]
         public double GetPower(State state)
@@ -42,20 +42,20 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[VCVSbranch] * (state.Solution[VCVSposNode] - state.Solution[VCVSnegNode]);
+            return state.Solution[BranchEq] * (state.Solution[posNode] - state.Solution[negNode]);
         }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int VCVSposNode, VCVSnegNode, VCVScontPosNode, VCVScontNegNode;
-        public int VCVSbranch { get; private set; }
-        protected MatrixElement VCVSposIbrptr { get; private set; }
-        protected MatrixElement VCVSnegIbrptr { get; private set; }
-        protected MatrixElement VCVSibrPosptr { get; private set; }
-        protected MatrixElement VCVSibrNegptr { get; private set; }
-        protected MatrixElement VCVSibrContPosptr { get; private set; }
-        protected MatrixElement VCVSibrContNegptr { get; private set; }
+        int posNode, negNode, contPosNode, contNegNode;
+        public int BranchEq { get; private set; }
+        protected MatrixElement PosIbrptr { get; private set; }
+        protected MatrixElement NegIbrptr { get; private set; }
+        protected MatrixElement IbrPosptr { get; private set; }
+        protected MatrixElement IbrNegptr { get; private set; }
+        protected MatrixElement IbrContPosptr { get; private set; }
+        protected MatrixElement IbrContNegptr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -104,10 +104,10 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
-            VCVSposNode = pins[0];
-            VCVSnegNode = pins[1];
-            VCVScontPosNode = pins[2];
-            VCVScontNegNode = pins[3];
+            posNode = pins[0];
+            negNode = pins[1];
+            contPosNode = pins[2];
+            contNegNode = pins[3];
         }
 
         /// <summary>
@@ -122,13 +122,13 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
-            VCVSbranch = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
-            VCVSposIbrptr = matrix.GetElement(VCVSposNode, VCVSbranch);
-            VCVSnegIbrptr = matrix.GetElement(VCVSnegNode, VCVSbranch);
-            VCVSibrPosptr = matrix.GetElement(VCVSbranch, VCVSposNode);
-            VCVSibrNegptr = matrix.GetElement(VCVSbranch, VCVSnegNode);
-            VCVSibrContPosptr = matrix.GetElement(VCVSbranch, VCVScontPosNode);
-            VCVSibrContNegptr = matrix.GetElement(VCVSbranch, VCVScontNegNode);
+            BranchEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
+            PosIbrptr = matrix.GetElement(posNode, BranchEq);
+            NegIbrptr = matrix.GetElement(negNode, BranchEq);
+            IbrPosptr = matrix.GetElement(BranchEq, posNode);
+            IbrNegptr = matrix.GetElement(BranchEq, negNode);
+            IbrContPosptr = matrix.GetElement(BranchEq, contPosNode);
+            IbrContNegptr = matrix.GetElement(BranchEq, contNegNode);
         }
         
         /// <summary>
@@ -137,12 +137,12 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         public override void Unsetup()
         {
             // Remove references
-            VCVSposIbrptr = null;
-            VCVSnegIbrptr = null;
-            VCVSibrPosptr = null;
-            VCVSibrNegptr = null;
-            VCVSibrContPosptr = null;
-            VCVSibrContNegptr = null;
+            PosIbrptr = null;
+            NegIbrptr = null;
+            IbrPosptr = null;
+            IbrNegptr = null;
+            IbrContPosptr = null;
+            IbrContNegptr = null;
         }
 
         /// <summary>
@@ -151,12 +151,12 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            VCVSposIbrptr.Add(1.0);
-            VCVSibrPosptr.Add(1.0);
-            VCVSnegIbrptr.Sub(1.0);
-            VCVSibrNegptr.Sub(1.0);
-            VCVSibrContPosptr.Sub(bp.VCVScoeff);
-            VCVSibrContNegptr.Add(bp.VCVScoeff);
+            PosIbrptr.Add(1.0);
+            IbrPosptr.Add(1.0);
+            NegIbrptr.Sub(1.0);
+            IbrNegptr.Sub(1.0);
+            IbrContPosptr.Sub(bp.Coefficient);
+            IbrContNegptr.Add(bp.Coefficient);
         }
     }
 }

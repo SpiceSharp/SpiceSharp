@@ -27,8 +27,8 @@ namespace Sandbox
                 CreateMOS3("M1", "out", "in", "vdd", "vdd",
                     "DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5"),
                 new Resistor("R1", "out", "0", 100e3),
-                new Voltagesource("Vsupply", "vdd", "0", 1.8),
-                new Voltagesource("V1", "in", "0", new Pulse(0, 1.8, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6))
+                new VoltageSource("Vsupply", "vdd", "0", 1.8),
+                new VoltageSource("V1", "in", "0", new Pulse(0, 1.8, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6))
                 );
             ckt.Objects["M1"].Parameters.SetProperty("w", 1e-6);
             ckt.Objects["M1"].Parameters.SetProperty("l", 1e-6);

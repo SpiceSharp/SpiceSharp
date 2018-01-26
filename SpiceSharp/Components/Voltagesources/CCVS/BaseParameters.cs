@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 {
     /// <summary>
-    /// Base parameters for a <see cref="CurrentControlledVoltagesource"/>
+    /// Base parameters for a <see cref="CurrentControlledVoltageSource"/>
     /// </summary>
     public class BaseParameters : ParameterSet
     {
@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("gain"), PropertyInfo("Transresistance (gain)")]
-        public Parameter CCVScoeff { get; } = new Parameter();
+        public Parameter Coefficient { get; } = new Parameter();
 
         /// <summary>
         /// Constructor
@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// <param name="gain"></param>
         public BaseParameters(double gain)
         {
-            CCVScoeff.Set(gain);
+            Coefficient.Set(gain);
         }
     }
 }

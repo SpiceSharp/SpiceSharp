@@ -5,7 +5,7 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Components.VoltagesourceBehaviors
 {
     /// <summary>
-    /// Accept behavior for a <see cref="Voltagesource"/>
+    /// Accept behavior for a <see cref="VoltageSource"/>
     /// </summary>
     public class AcceptBehavior : Behaviors.AcceptBehavior
     {
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <param name="sim">Time-based simulation</param>
         public override void Accept(TimeSimulation sim)
         {
-            bp.VSRCwaveform?.Accept(sim);
+            bp.Waveform?.Accept(sim);
         }
     }
 }

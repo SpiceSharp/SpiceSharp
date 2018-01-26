@@ -20,7 +20,7 @@ namespace SpiceSharpTest.Models.IND
              */
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", 1.0),
+                new VoltageSource("V1", "IN", "0", 1.0),
                 new Inductor("L1", "IN", "OUT", 1e-3),
                 new Resistor("R1", "OUT", "0", 1.0e3));
 
@@ -52,7 +52,7 @@ namespace SpiceSharpTest.Models.IND
             double inductance = 1e-3;
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", 0.0),
+                new VoltageSource("V1", "IN", "0", 0.0),
                 new Inductor("L1", "IN", "OUT", inductance),
                 new Resistor("R1", "OUT", "0", resistance));
             ckt.Objects["V1"].Parameters.SetProperty("acmag", 1.0);

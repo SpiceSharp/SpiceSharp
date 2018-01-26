@@ -27,7 +27,7 @@ namespace SpiceSharpTest.Models.MUT
             double k = 0.693;
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", 1.0),
+                new VoltageSource("V1", "IN", "0", 1.0),
                 new Resistor("R1", "IN", "1", r1),
                 new Inductor("L1", "1", "0", l1),
                 new Inductor("L2", "OUT", "0", l2),
@@ -77,7 +77,7 @@ namespace SpiceSharpTest.Models.MUT
             double k = 0.693;
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", 0.0),
+                new VoltageSource("V1", "IN", "0", 0.0),
                 new Resistor("R1", "IN", "1", r1),
                 new Inductor("L1", "1", "0", l1),
                 new Inductor("L2", "OUT", "0", l2),

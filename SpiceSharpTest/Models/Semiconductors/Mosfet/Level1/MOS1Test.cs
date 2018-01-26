@@ -48,8 +48,8 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
             // Create circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "g", "0", 0.0),
-                new Voltagesource("V2", "d", "0", 0),
+                new VoltageSource("V1", "g", "0", 0.0),
+                new VoltageSource("V2", "d", "0", 0),
                 CreateMOS1("M1", "d", "g", "0", "0",
                     "MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
                 );
@@ -85,8 +85,8 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
             // Build circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "in", "0", 0.0),
-                new Voltagesource("V2", "vdd", "0", 5.0),
+                new VoltageSource("V1", "in", "0", 0.0),
+                new VoltageSource("V2", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10.0e3),
                 new Resistor("R2", "out", "g", 10.0e3),
                 new Capacitor("Cin", "in", "g", 1e-6),
@@ -124,8 +124,8 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
             // Create circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "in", "0", new Pulse(1, 5, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
-                new Voltagesource("Vsupply", "vdd", "0", 5),
+                new VoltageSource("V1", "in", "0", new Pulse(1, 5, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
+                new VoltageSource("Vsupply", "vdd", "0", 5),
                 new Resistor("R1", "out", "vdd", 1.0e3),
                 CreateMOS1("M1", "out", "in", "0", "0",
                     "MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
@@ -155,8 +155,8 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
             // Create circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "in", "0", 0.0),
-                new Voltagesource("V2", "vdd", "0", 5.0),
+                new VoltageSource("V1", "in", "0", 0.0),
+                new VoltageSource("V2", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10e3),
                 new Resistor("R2", "out", "g", 10e3),
                 new Capacitor("Cin", "in", "g", 1e-6),

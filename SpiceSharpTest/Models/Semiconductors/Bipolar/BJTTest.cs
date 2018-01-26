@@ -47,8 +47,8 @@ namespace SpiceSharpTest.Models.Bipolar
             // Build circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "b", "0", 0),
-                new Voltagesource("V2", "c", "0", 0),
+                new VoltageSource("V1", "b", "0", 0),
+                new VoltageSource("V2", "c", "0", 0),
                 CreateBJT("Q1", "c", "b", "0", "0", "mjd44h11", string.Join(" ",
                     "IS = 1.45468e-14 BF = 135.617 NF = 0.85 VAF = 10",
                     "IKF = 5.15565 ISE = 2.02483e-13 NE = 3.99964 BR = 13.5617",
@@ -93,8 +93,8 @@ namespace SpiceSharpTest.Models.Bipolar
             // Build circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "in", "0", 0.0),
-                new Voltagesource("Vsupply", "vdd", "0", 5.0),
+                new VoltageSource("V1", "in", "0", 0.0),
+                new VoltageSource("Vsupply", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 1.0e3),
                 new Resistor("R2", "out", "b", 10.0e3),
                 new Capacitor("Cin", "in", "b", 1e-6),
@@ -145,8 +145,8 @@ namespace SpiceSharpTest.Models.Bipolar
             // Create circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "in", "0", new Pulse(0, 5, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
-                new Voltagesource("Vsupply", "vdd", "0", 5.0),
+                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
+                new VoltageSource("Vsupply", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10.0e3),
                 new Resistor("R2", "in", "b", 1.0e3),
                 CreateBJT("Q1", "out", "b", "0", "0", "mjd44h11", string.Join(" ",

@@ -44,7 +44,7 @@ namespace SpiceSharpTest.Circuits
         {
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", groundNodeName, 1.0),
+                new VoltageSource("V1", "IN", groundNodeName, 1.0),
                 new Resistor("R1", "IN", groundNodeName, 1.0e3));
             return ckt;
         }

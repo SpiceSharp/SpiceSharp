@@ -8,34 +8,34 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.VoltagesourceBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="Voltagesource"/>
+    /// AC behavior for <see cref="VoltageSource"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// AC excitation vector
         /// </summary>
-        public Complex VSRCac { get; protected set; }
+        public Complex Ac { get; protected set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int VSRCposNode, VSRCnegNode, VSRCbranch;
+        protected int posNode, negNode, branchEq;
 
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected MatrixElement VSRCposIbrptr { get; private set; }
-        protected MatrixElement VSRCnegIbrptr { get; private set; }
-        protected MatrixElement VSRCibrPosptr { get; private set; }
-        protected MatrixElement VSRCibrNegptr { get; private set; }
-        protected MatrixElement VSRCibrIbrptr { get; private set; }
+        protected MatrixElement PosIbrptr { get; private set; }
+        protected MatrixElement NegIbrptr { get; private set; }
+        protected MatrixElement IbrPosptr { get; private set; }
+        protected MatrixElement IbrNegptr { get; private set; }
+        protected MatrixElement IbrIbrptr { get; private set; }
 
         /// <summary>
         /// Properties
         /// </summary>
         [PropertyName("v"), PropertyInfo("Complex voltage")]
-        public Complex Voltage => VSRCac;
+        public Complex Voltage => Ac;
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Complex current")]
         public Complex GetCurrent(State state)
         {
@@ -43,8 +43,8 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             return new Complex(
-                state.Solution[VSRCbranch],
-                state.iSolution[VSRCbranch]);
+                state.Solution[branchEq],
+                state.iSolution[branchEq]);
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(State state)
@@ -53,11 +53,11 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             Complex v = new Complex(
-                state.Solution[VSRCposNode] - state.Solution[VSRCnegNode],
-                state.iSolution[VSRCposNode] - state.iSolution[VSRCnegNode]);
+                state.Solution[posNode] - state.Solution[negNode],
+                state.iSolution[posNode] - state.iSolution[negNode]);
             Complex i = new Complex(
-                state.Solution[VSRCbranch],
-                state.iSolution[VSRCbranch]);
+                state.Solution[branchEq],
+                state.iSolution[branchEq]);
             return -v * Complex.Conjugate(i);
         }
 
@@ -80,12 +80,12 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             var ap = provider.GetParameterSet<FrequencyParameters>(0);
 
             // Calculate AC vector
-            double radians = ap.VSRCacPhase * Math.PI / 180.0;
-            VSRCac = new Complex(ap.VSRCacMag * Math.Cos(radians), ap.VSRCacMag * Math.Sin(radians));
+            double radians = ap.AcPhase * Math.PI / 180.0;
+            Ac = new Complex(ap.AcMagnitude * Math.Cos(radians), ap.AcMagnitude * Math.Sin(radians));
 
             // Get behaviors
             var load = provider.GetBehavior<LoadBehavior>(0);
-            VSRCbranch = load.VSRCbranch;
+            branchEq = load.BranchEq;
         }
         
         /// <summary>
@@ -98,8 +98,8 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            VSRCposNode = pins[0];
-            VSRCnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -111,10 +111,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            VSRCposIbrptr = matrix.GetElement(VSRCposNode, VSRCbranch);
-            VSRCibrPosptr = matrix.GetElement(VSRCbranch, VSRCposNode);
-            VSRCnegIbrptr = matrix.GetElement(VSRCnegNode, VSRCbranch);
-            VSRCibrNegptr = matrix.GetElement(VSRCbranch, VSRCnegNode);
+            PosIbrptr = matrix.GetElement(posNode, branchEq);
+            IbrPosptr = matrix.GetElement(branchEq, posNode);
+            NegIbrptr = matrix.GetElement(negNode, branchEq);
+            IbrNegptr = matrix.GetElement(branchEq, negNode);
         }
 
         /// <summary>
@@ -122,10 +122,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            VSRCposIbrptr = null;
-            VSRCibrPosptr = null;
-            VSRCnegIbrptr = null;
-            VSRCibrNegptr = null;
+            PosIbrptr = null;
+            IbrPosptr = null;
+            NegIbrptr = null;
+            IbrNegptr = null;
         }
 
         /// <summary>
@@ -138,12 +138,12 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(sim));
 
             var cstate = sim.State;
-            VSRCposIbrptr.Value.Real += 1.0;
-            VSRCibrPosptr.Value.Real += 1.0;
-            VSRCnegIbrptr.Value.Real -= 1.0;
-            VSRCibrNegptr.Value.Real -= 1.0;
-            cstate.Rhs[VSRCbranch] += VSRCac.Real;
-            cstate.iRhs[VSRCbranch] += VSRCac.Imaginary;
+            PosIbrptr.Value.Real += 1.0;
+            IbrPosptr.Value.Real += 1.0;
+            NegIbrptr.Value.Real -= 1.0;
+            IbrNegptr.Value.Real -= 1.0;
+            cstate.Rhs[branchEq] += Ac.Real;
+            cstate.iRhs[branchEq] += Ac.Imaginary;
         }
     }
 }

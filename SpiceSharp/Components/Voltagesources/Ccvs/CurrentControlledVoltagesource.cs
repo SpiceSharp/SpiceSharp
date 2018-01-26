@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// A current-controlled voltage source
     /// </summary>
     [PinsAttribute("H+", "H-"), VoltageDriverAttribute(0, 1)]
-    public class CurrentControlledVoltagesource : Component
+    public class CurrentControlledVoltageSource : Component
     {
         /// <summary>
         /// Nodes
@@ -18,24 +18,24 @@ namespace SpiceSharp.Components
         [PropertyName("neg_node"), PropertyInfo("Negative node of the source")]
         public int NegNode { get; internal set; }
         [PropertyName("control"), PropertyInfo("Controlling voltage source")]
-        public Identifier ContactName { get; set; }
+        public Identifier ControllingName { get; set; }
 
         /// <summary>
         /// Get the controlling voltage source
         /// </summary>
-        public Voltagesource ContactSource { get; protected set; }
+        public VoltageSource ControllingSource { get; protected set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        public const int CCVSpinCount = 2;
+        public const int CurrentControlledVoltageSourcePinCount = 2;
         
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the current-controlled current source</param>
-        public CurrentControlledVoltagesource(Identifier name) 
-            : base(name, CCVSpinCount)
+        public CurrentControlledVoltageSource(Identifier name) 
+            : base(name, CurrentControlledVoltageSourcePinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters());
@@ -53,8 +53,8 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="vsource">The controlling voltage source name</param>
         /// <param name="gain">The transresistance (gain)</param>
-        public CurrentControlledVoltagesource(Identifier name, Identifier pos, Identifier neg, Identifier vsource, double gain) 
-            : base(name, CCVSpinCount)
+        public CurrentControlledVoltageSource(Identifier name, Identifier pos, Identifier neg, Identifier vsource, double gain) 
+            : base(name, CurrentControlledVoltageSourcePinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters(gain));
@@ -64,7 +64,7 @@ namespace SpiceSharp.Components
             AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             Connect(pos, neg);
-            ContactName = vsource;
+            ControllingName = vsource;
         }
 
         /// <summary>
@@ -78,10 +78,10 @@ namespace SpiceSharp.Components
             NegNode = nodes[1].Index;
 
             // Find the voltage source
-            if (circuit.Objects[ContactName] is Voltagesource vsrc)
-                ContactSource = vsrc;
+            if (circuit.Objects[ControllingName] is VoltageSource vsrc)
+                ControllingSource = vsrc;
             else
-                throw new CircuitException($"{Name}: Could not find voltage source '{ContactName}'");
+                throw new CircuitException($"{Name}: Could not find voltage source '{ControllingName}'");
         }
     }
 }

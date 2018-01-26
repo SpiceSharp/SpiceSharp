@@ -7,26 +7,26 @@ namespace SpiceSharp.Components
     /// An independent voltage source
     /// </summary>
     [PinsAttribute("V+", "V-"), VoltageDriverAttribute(0, 1), IndependentSourceAttribute]
-    public class Voltagesource : Component
+    public class VoltageSource : Component
     {
         /// <summary>
         /// Nodes
         /// </summary>
         [PropertyName("pos_node")]
-        public int VSRCposNode { get; private set; }
+        public int PosNode { get; private set; }
         [PropertyName("neg_node")]
-        public int VSRCnegNode { get; private set; }
+        public int NegNode { get; private set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        public const int VSRCpinCount = 2;
+        public const int VoltageSourcePinCount = 2;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name</param>
-        public Voltagesource(Identifier name) : base(name, VSRCpinCount)
+        public VoltageSource(Identifier name) : base(name, VoltageSourcePinCount)
         {
             // Register parameters
             Parameters.Add(new BaseParameters());
@@ -45,8 +45,8 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
-        public Voltagesource(Identifier name, Identifier pos, Identifier neg, double dc)
-            : base(name, VSRCpinCount)
+        public VoltageSource(Identifier name, Identifier pos, Identifier neg, double dc)
+            : base(name, VoltageSourcePinCount)
         {
             // Register parameters
             Parameters.Add(new BaseParameters(dc));
@@ -68,8 +68,8 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="w">The waveform</param>
-        public Voltagesource(Identifier name, Identifier pos, Identifier neg, Waveform w) 
-            : base(name, VSRCpinCount)
+        public VoltageSource(Identifier name, Identifier pos, Identifier neg, Waveform w) 
+            : base(name, VoltageSourcePinCount)
         {
             // Register parameters
             Parameters.Add(new BaseParameters(w));
@@ -92,8 +92,8 @@ namespace SpiceSharp.Components
         {
             // Bind the nodes
             var nodes = BindNodes(circuit);
-            VSRCposNode = nodes[0].Index;
-            VSRCnegNode = nodes[1].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
         }
     }
 }

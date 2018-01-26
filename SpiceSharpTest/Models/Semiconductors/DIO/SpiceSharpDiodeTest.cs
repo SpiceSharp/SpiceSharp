@@ -46,7 +46,7 @@ namespace SpiceSharpTest.Models.DIO
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
                 CreateDiode("D1", "OUT", "0", "1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
-                new Voltagesource("V1", "OUT", "0", 0.0)
+                new VoltageSource("V1", "OUT", "0", 0.0)
                 );
 
             // Create simulation
@@ -80,7 +80,7 @@ namespace SpiceSharpTest.Models.DIO
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
                 CreateDiode("D1", "0", "OUT", "1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
-                new Voltagesource("V1", "OUT", "0", 1.0)
+                new VoltageSource("V1", "OUT", "0", 1.0)
                 );
             ckt.Objects["V1"].Parameters.SetProperty("acmag", 1.0);
 
@@ -117,8 +117,8 @@ namespace SpiceSharpTest.Models.DIO
             // Build circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
-                new Voltagesource("Vsupply", "vdd", "0", 5.0),
+                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
+                new VoltageSource("Vsupply", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10.0e3),
                 new Resistor("R2", "out", "0", 10.0e3),
                 CreateDiode("D1", "in", "out", "1N914", "Is = 2.52e-9 Rs = 0.568 N = 1.752 Cjo = 4e-12 M = 0.4 tt = 20e-9"));

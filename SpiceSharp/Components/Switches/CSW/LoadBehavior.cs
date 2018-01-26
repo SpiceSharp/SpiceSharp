@@ -123,7 +123,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
-            ControllingBranch = vsrcload.VSRCbranch;
+            ControllingBranch = vsrcload.BranchEq;
             PosPosptr = matrix.GetElement(posNode, posNode);
             PosNegptr = matrix.GetElement(posNode, negNode);
             NegPosptr = matrix.GetElement(negNode, posNode);

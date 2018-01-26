@@ -212,8 +212,8 @@
     <Compile Include="Components\Switches\CSW\CurrentSwitchModel.cs" />
     <Compile Include="Components\Switches\VSW\VoltageSwitch.cs" />
     <Compile Include="Components\Switches\VSW\VoltageSwitchModel.cs" />
-    <Compile Include="Components\Voltagesources\CCVS\CurrentControlledVoltagesource.cs" />
-    <Compile Include="Components\Voltagesources\VCVS\VoltageControlledVoltagesource.cs" />
+    <Compile Include="Components\Voltagesources\CCVS\CurrentControlledVoltageSource.cs" />
+    <Compile Include="Components\Voltagesources\VCVS\VoltageControlledVoltageSource.cs" />
     <Compile Include="Components\Waveforms\Pulse.cs" />
     <Compile Include="Components\Waveforms\Sine.cs" />
     <Compile Include="Diagnostics\BadParameterException.cs" />

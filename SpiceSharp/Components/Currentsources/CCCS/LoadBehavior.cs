@@ -119,7 +119,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            ContBranch = vsrcload.VSRCbranch;
+            ContBranch = vsrcload.BranchEq;
             PosContBrptr = matrix.GetElement(posNode, ContBranch);
             NegContBrptr = matrix.GetElement(negNode, ContBranch);
         }

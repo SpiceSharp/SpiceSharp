@@ -117,8 +117,8 @@ namespace SpiceSharp.Simulations
                 var component = Circuit.Objects[sweep.Parameter];
 
                 // Get the parameter and save it for restoring later
-                if (component is Voltagesource vsrc)
-                    swept[i] = vsrc.Parameters.Get<Components.VoltagesourceBehaviors.BaseParameters>().VSRCdcValue;
+                if (component is VoltageSource vsrc)
+                    swept[i] = vsrc.Parameters.Get<Components.VoltagesourceBehaviors.BaseParameters>().DcValue;
                 else if (component is Currentsource isrc)
                     swept[i] = isrc.Parameters.Get<Components.CurrentsourceBehaviors.BaseParameters>().DcValue;
                 else

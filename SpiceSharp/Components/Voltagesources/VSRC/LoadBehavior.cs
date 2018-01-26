@@ -9,7 +9,7 @@ using System;
 namespace SpiceSharp.Components.VoltagesourceBehaviors
 {
     /// <summary>
-    /// General behavior for <see cref="Voltagesource"/>
+    /// General behavior for <see cref="VoltageSource"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[VSRCbranch];
+            return state.Solution[BranchEq];
         }
         [PropertyName("p"), PropertyInfo("Instantaneous power")]
         public double GetPower(State state)
@@ -35,25 +35,21 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[VSRCposNode] - state.Solution[VSRCnegNode]) * -state.Solution[VSRCbranch];
+            return (state.Solution[posNode] - state.Solution[negNode]) * -state.Solution[BranchEq];
         }
         [PropertyName("v"), PropertyInfo("Instantaneous voltage")]
-        public double VSRCvoltage { get; protected set; }
+        public double Voltage { get; protected set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int VSRCposNode, VSRCnegNode;
-        public int VSRCbranch { get; protected set; }
-
-        /// <summary>
-        /// Matrix elements
-        /// </summary>
-        protected MatrixElement VSRCposIbrptr { get; private set; }
-        protected MatrixElement VSRCnegIbrptr { get; private set; }
-        protected MatrixElement VSRCibrPosptr { get; private set; }
-        protected MatrixElement VSRCibrNegptr { get; private set; }
-        protected MatrixElement VSRCibrIbrptr { get; private set; }
+        protected int posNode, negNode;
+        public int BranchEq { get; protected set; }
+        protected MatrixElement PosIbrptr { get; private set; }
+        protected MatrixElement NegIbrptr { get; private set; }
+        protected MatrixElement IbrPosptr { get; private set; }
+        protected MatrixElement IbrNegptr { get; private set; }
+        protected MatrixElement IbrIbrptr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -74,13 +70,13 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             bp = provider.GetParameterSet<BaseParameters>(0);
 
             // Setup the waveform
-            bp.VSRCwaveform?.Setup();
+            bp.Waveform?.Setup();
 
             // Calculate the voltage source's complex value
-            if (!bp.VSRCdcValue.Given)
+            if (!bp.DcValue.Given)
             {
                 // No DC value: either have a transient value or none
-                if (bp.VSRCwaveform != null)
+                if (bp.Waveform != null)
                     CircuitWarning.Warning(this, $"{Name}: No DC value, transient time 0 value used");
                 else
                     CircuitWarning.Warning(this, $"{Name}: No value, DC 0 assumed");
@@ -98,7 +94,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             switch (property)
             {
                 case "i": return GetCurrent;
-                case "v": return (State state) => VSRCvoltage;
+                case "v": return (State state) => Voltage;
                 case "p": return GetPower;
                 default: return null;
             }
@@ -114,8 +110,8 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            VSRCposNode = pins[0];
-            VSRCnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -129,11 +125,11 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
-            VSRCbranch = nodes.Create(Name?.Grow("#branch"), Node.NodeType.Current).Index;
-            VSRCposIbrptr = matrix.GetElement(VSRCposNode, VSRCbranch);
-            VSRCibrPosptr = matrix.GetElement(VSRCbranch, VSRCposNode);
-            VSRCnegIbrptr = matrix.GetElement(VSRCnegNode, VSRCbranch);
-            VSRCibrNegptr = matrix.GetElement(VSRCbranch, VSRCnegNode);
+            BranchEq = nodes.Create(Name?.Grow("#branch"), Node.NodeType.Current).Index;
+            PosIbrptr = matrix.GetElement(posNode, BranchEq);
+            IbrPosptr = matrix.GetElement(BranchEq, posNode);
+            NegIbrptr = matrix.GetElement(negNode, BranchEq);
+            IbrNegptr = matrix.GetElement(BranchEq, negNode);
         }
 
         /// <summary>
@@ -141,10 +137,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            VSRCposIbrptr = null;
-            VSRCibrPosptr = null;
-            VSRCnegIbrptr = null;
-            VSRCibrNegptr = null;
+            PosIbrptr = null;
+            IbrPosptr = null;
+            NegIbrptr = null;
+            IbrNegptr = null;
         }
 
         /// <summary>
@@ -160,10 +156,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             double time = 0.0;
             double value = 0.0;
 
-            VSRCposIbrptr.Value.Real += 1.0;
-            VSRCibrPosptr.Value.Real += 1.0;
-            VSRCnegIbrptr.Value.Real -= 1.0;
-            VSRCibrNegptr.Value.Real -= 1.0;
+            PosIbrptr.Value.Real += 1.0;
+            IbrPosptr.Value.Real += 1.0;
+            NegIbrptr.Value.Real -= 1.0;
+            IbrNegptr.Value.Real -= 1.0;
 
             if (state.Domain == State.DomainTypes.Time)
             {
@@ -171,16 +167,16 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                     time = tsim.Method.Time;
 
                 // Use the waveform if possible
-                if (bp.VSRCwaveform != null)
-                    value = bp.VSRCwaveform.At(time);
+                if (bp.Waveform != null)
+                    value = bp.Waveform.At(time);
                 else
-                    value = bp.VSRCdcValue * state.SrcFact;
+                    value = bp.DcValue * state.SrcFact;
             }
             else
             {
-                value = bp.VSRCdcValue * state.SrcFact;
+                value = bp.DcValue * state.SrcFact;
             }
-            state.Rhs[VSRCbranch] += value;
+            state.Rhs[BranchEq] += value;
         }
     }
 }

@@ -8,7 +8,7 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="CurrentControlledVoltagesource"/>
+    /// AC behavior for <see cref="CurrentControlledVoltageSource"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {
@@ -22,12 +22,12 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int CCVSposNode, CCVSnegNode, CCVSbranch, CCVScontBranch;
-        protected MatrixElement CCVSposIbrptr { get; private set; }
-        protected MatrixElement CCVSnegIbrptr { get; private set; }
-        protected MatrixElement CCVSibrPosptr { get; private set; }
-        protected MatrixElement CCVSibrNegptr { get; private set; }
-        protected MatrixElement CCVSibrContBrptr { get; private set; }
+        int posNode, negNode, branchEq, contBranchEq;
+        protected MatrixElement PosIbrptr { get; private set; }
+        protected MatrixElement NegIbrptr { get; private set; }
+        protected MatrixElement IbrPosptr { get; private set; }
+        protected MatrixElement IbrNegptr { get; private set; }
+        protected MatrixElement IbrContBrptr { get; private set; }
 
         [PropertyName("v"), PropertyInfo("Complex voltage")]
         public Complex GetVoltage(State state)
@@ -36,8 +36,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             return new Complex(
-                state.Solution[CCVSposNode] - state.Solution[CCVSnegNode],
-                state.iSolution[CCVSposNode] - state.iSolution[CCVSnegNode]);
+                state.Solution[posNode] - state.Solution[negNode],
+                state.iSolution[posNode] - state.iSolution[negNode]);
         }
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Complex current")]
         public Complex GetCurrent(State state)
@@ -46,8 +46,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             return new Complex(
-                state.Solution[CCVSbranch],
-                state.iSolution[CCVSbranch]);
+                state.Solution[branchEq],
+                state.iSolution[branchEq]);
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(State state)
@@ -56,11 +56,11 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             Complex v = new Complex(
-                state.Solution[CCVSposNode] - state.Solution[CCVSnegNode],
-                state.iSolution[CCVSposNode] - state.iSolution[CCVSnegNode]);
+                state.Solution[posNode] - state.Solution[negNode],
+                state.iSolution[posNode] - state.iSolution[negNode]);
             Complex i = new Complex(
-                state.Solution[CCVSbranch],
-                state.iSolution[CCVSbranch]);
+                state.Solution[branchEq],
+                state.iSolution[branchEq]);
             return -v * Complex.Conjugate(i);
         }
 
@@ -97,8 +97,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            CCVSposNode = pins[0];
-            CCVSnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -111,15 +111,15 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
             // Get extra nodes
-            CCVScontBranch = vsrcload.VSRCbranch;
-            CCVSbranch = load.CCVSbranch;
+            contBranchEq = vsrcload.BranchEq;
+            branchEq = load.BranchEq;
 
             // Get matrix pointers
-            CCVSposIbrptr = matrix.GetElement(CCVSposNode, CCVSbranch);
-            CCVSnegIbrptr = matrix.GetElement(CCVSnegNode, CCVSbranch);
-            CCVSibrPosptr = matrix.GetElement(CCVSbranch, CCVSposNode);
-            CCVSibrNegptr = matrix.GetElement(CCVSbranch, CCVSnegNode);
-            CCVSibrContBrptr = matrix.GetElement(CCVSbranch, CCVScontBranch);
+            PosIbrptr = matrix.GetElement(posNode, branchEq);
+            NegIbrptr = matrix.GetElement(negNode, branchEq);
+            IbrPosptr = matrix.GetElement(branchEq, posNode);
+            IbrNegptr = matrix.GetElement(branchEq, negNode);
+            IbrContBrptr = matrix.GetElement(branchEq, contBranchEq);
         }
         
         /// <summary>
@@ -127,11 +127,11 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            CCVSposIbrptr = null;
-            CCVSnegIbrptr = null;
-            CCVSibrPosptr = null;
-            CCVSibrNegptr = null;
-            CCVSibrContBrptr = null;
+            PosIbrptr = null;
+            NegIbrptr = null;
+            IbrPosptr = null;
+            IbrNegptr = null;
+            IbrContBrptr = null;
         }
 
         /// <summary>
@@ -143,11 +143,11 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 			if (sim == null)
 				throw new ArgumentNullException(nameof(sim));
 
-            CCVSposIbrptr.Add(1.0);
-            CCVSibrPosptr.Add(1.0);
-            CCVSnegIbrptr.Sub(1.0);
-            CCVSibrNegptr.Sub(1.0);
-            CCVSibrContBrptr.Sub(bp.CCVScoeff);
+            PosIbrptr.Add(1.0);
+            IbrPosptr.Add(1.0);
+            NegIbrptr.Sub(1.0);
+            IbrNegptr.Sub(1.0);
+            IbrContBrptr.Sub(bp.Coefficient);
         }
     }
 }

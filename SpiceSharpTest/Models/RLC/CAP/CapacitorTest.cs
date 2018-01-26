@@ -20,7 +20,7 @@ namespace SpiceSharpTest.Models.RLC.CAP
              */
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", 1.0),
+                new VoltageSource("V1", "IN", "0", 1.0),
                 new Resistor("R1", "IN", "OUT", 10e3),
                 new Capacitor("C1", "OUT", "0", 1e-6));
 
@@ -58,7 +58,7 @@ namespace SpiceSharpTest.Models.RLC.CAP
             ckt.Objects.Add(
                 new Capacitor("C1", "OUT", "0", capacitance),
                 new Resistor("R1", "IN", "OUT", resistorResistance),
-                new Voltagesource("V1", "IN", "0", dcVoltage)
+                new VoltageSource("V1", "IN", "0", dcVoltage)
                 );
             ckt.Nodes.InitialConditions["OUT"] = 0.0;
 
@@ -86,7 +86,7 @@ namespace SpiceSharpTest.Models.RLC.CAP
             double capacitance = 1e-6;
             Circuit ckt = new Circuit();
             ckt.Objects.Add(
-                new Voltagesource("V1", "IN", "0", 0.0),
+                new VoltageSource("V1", "IN", "0", 0.0),
                 new Resistor("R1", "IN", "OUT", resistance),
                 new Capacitor("C1", "OUT", "0", capacitance)
                 );
