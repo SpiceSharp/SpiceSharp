@@ -18,13 +18,13 @@ namespace SpiceSharp.Components
         /// Nodes
         /// </summary>
         [PropertyName("pos_node"), PropertyInfo("Positive node of the switch")]
-        public int VSWposNode { get; internal set; }
+        public int PosNode { get; internal set; }
         [PropertyName("neg_node"), PropertyInfo("Negative node of the switch")]
-        public int VSWnegNode { get; internal set; }
+        public int NegNode { get; internal set; }
         [PropertyName("cont_p_node"), PropertyInfo("Positive controlling node of the switch")]
-        public int VSWcontPosNode { get; internal set; }
+        public int ContPosNode { get; internal set; }
         [PropertyName("cont_n_node"), PropertyInfo("Negative controlling node of the switch")]
-        public int VSWcontNegNode { get; internal set; }
+        public int ContNegNode { get; internal set; }
 
         /// <summary>
         /// Constants
@@ -76,10 +76,10 @@ namespace SpiceSharp.Components
         public override void Setup(Circuit circuit)
         {
             var nodes = BindNodes(circuit);
-            VSWposNode = nodes[0].Index;
-            VSWnegNode = nodes[1].Index;
-            VSWcontPosNode = nodes[2].Index;
-            VSWcontNegNode = nodes[3].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
+            ContPosNode = nodes[2].Index;
+            ContNegNode = nodes[3].Index;
         }
     }
 }

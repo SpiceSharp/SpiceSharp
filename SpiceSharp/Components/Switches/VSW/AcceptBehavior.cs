@@ -40,10 +40,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         public override void Accept(TimeSimulation sim)
         {
             // Flag the load behavior to use our old state
-            load.VSWuseOldState = true;
+            load.UseOldState = true;
 
             // Copy the current state to the old state
-            load.VSWoldState = load.VSWcurrentState;
+            load.OldState = load.CurrentState;
         }
     }
 }

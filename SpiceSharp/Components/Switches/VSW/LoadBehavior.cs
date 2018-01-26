@@ -21,31 +21,31 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Gets or sets the previous state
         /// </summary>
-        public bool VSWoldState { get; set; } = false;
+        public bool OldState { get; set; } = false;
 
         /// <summary>
         /// Flag for using the previous state or not
         /// </summary>
-        public bool VSWuseOldState { get; set; } = false;
+        public bool UseOldState { get; set; } = false;
 
         /// <summary>
         /// The current state
         /// </summary>
-        public bool VSWcurrentState { get; protected set; } = false;
+        public bool CurrentState { get; protected set; } = false;
 
         /// <summary>
         /// The current conductance
         /// </summary>
-        public double VSWcond { get; protected set; }
+        public double Cond { get; protected set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int VSWposNode, VSWnegNode, VSWcontPosNode, VSWcontNegNode;
-        protected MatrixElement SWposPosptr { get; private set; }
-        protected MatrixElement SWnegPosptr { get; private set; }
-        protected MatrixElement SWposNegptr { get; private set; }
-        protected MatrixElement SWnegNegptr { get; private set; }
+        int posNode, negNode, contPosNode, contNegNode;
+        protected MatrixElement PosPosptr { get; private set; }
+        protected MatrixElement NegPosptr { get; private set; }
+        protected MatrixElement PosNegptr { get; private set; }
+        protected MatrixElement NegNegptr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -80,10 +80,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
-            VSWposNode = pins[0];
-            VSWnegNode = pins[1];
-            VSWcontPosNode = pins[2];
-            VSWcontNegNode = pins[3];
+            posNode = pins[0];
+            negNode = pins[1];
+            contPosNode = pins[2];
+            contNegNode = pins[3];
         }
 
         /// <summary>
@@ -96,10 +96,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
-            SWposPosptr = matrix.GetElement(VSWposNode, VSWposNode);
-            SWposNegptr = matrix.GetElement(VSWposNode, VSWnegNode);
-            SWnegPosptr = matrix.GetElement(VSWnegNode, VSWposNode);
-            SWnegNegptr = matrix.GetElement(VSWnegNode, VSWnegNode);
+            PosPosptr = matrix.GetElement(posNode, posNode);
+            PosNegptr = matrix.GetElement(posNode, negNode);
+            NegPosptr = matrix.GetElement(negNode, posNode);
+            NegNegptr = matrix.GetElement(negNode, negNode);
         }
         
         /// <summary>
@@ -107,10 +107,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            SWposPosptr = null;
-            SWposNegptr = null;
-            SWnegPosptr = null;
-            SWnegNegptr = null;
+            PosPosptr = null;
+            PosNegptr = null;
+            NegPosptr = null;
+            NegNegptr = null;
         }
 
         /// <summary>
@@ -130,51 +130,51 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
 
             if (state.Init == State.InitFlags.InitFix || state.Init == State.InitFlags.InitJct)
             {
-                if (bp.VSWzero_state)
+                if (bp.ZeroState)
                 {
                     // Switch specified "on"
-                    VSWcurrentState = true;
+                    CurrentState = true;
                     current_state = true;
                 }
                 else
                 {
                     // Switch specified "off"
-                    VSWcurrentState = false;
+                    CurrentState = false;
                     current_state = false;
                 }
             }
             else
             {
-                if (VSWuseOldState)
-                    previous_state = VSWoldState;
+                if (UseOldState)
+                    previous_state = OldState;
                 else
-                    previous_state = VSWcurrentState;
-                v_ctrl = state.Solution[VSWcontPosNode] - state.Solution[VSWcontNegNode];
+                    previous_state = CurrentState;
+                v_ctrl = state.Solution[contPosNode] - state.Solution[contNegNode];
 
                 // Calculate the current state
-                if (v_ctrl > (mbp.VSWthresh + mbp.VSWhyst))
+                if (v_ctrl > (mbp.Threshold + mbp.Hysteresis))
                     current_state = true;
-                else if (v_ctrl < (mbp.VSWthresh - mbp.VSWhyst))
+                else if (v_ctrl < (mbp.Threshold - mbp.Hysteresis))
                     current_state = false;
                 else
                     current_state = previous_state;
 
                 // Store the current state
-                VSWcurrentState = current_state;
+                CurrentState = current_state;
 
                 // If the state changed, ensure one more iteration
                 if (current_state != previous_state)
                     state.IsCon = false;
             }
 
-            g_now = current_state == true ? modelload.VSWonConduct : modelload.VSWoffConduct;
-            VSWcond = g_now;
+            g_now = current_state == true ? modelload.OnConductance : modelload.OffConductance;
+            Cond = g_now;
 
             // Load the Y-matrix
-            SWposPosptr.Add(g_now);
-            SWposNegptr.Sub(g_now);
-            SWnegPosptr.Sub(g_now);
-            SWnegNegptr.Add(g_now);
+            PosPosptr.Add(g_now);
+            PosNegptr.Sub(g_now);
+            NegPosptr.Sub(g_now);
+            NegNegptr.Add(g_now);
         }
 
     }

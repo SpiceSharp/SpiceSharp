@@ -17,12 +17,12 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Conductance while on
         /// </summary>
-        public double CSWonConduct { get; protected set; }
+        public double OnConductance { get; protected set; }
 
         /// <summary>
         /// Conductance while off
         /// </summary>
-        public double CSWoffConduct { get; protected set; }
+        public double OffConductance { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -49,8 +49,8 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            CSWonConduct = 1.0 / mbp.CSWon;
-            CSWoffConduct = 1.0 / mbp.CSWoff;
+            OnConductance = 1.0 / mbp.OnResistance;
+            OffConductance = 1.0 / mbp.OffResistance;
         }
     }
 }

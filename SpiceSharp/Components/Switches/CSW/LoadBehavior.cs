@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[CSWposNode] - state.Solution[CSWnegNode];
+            return state.Solution[posNode] - state.Solution[negNode];
         }
         [PropertyName("i"), PropertyInfo("Switch current")]
         public double GetCurrent(State state)
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
+            return (state.Solution[posNode] - state.Solution[negNode]) * Cond;
         }
         [PropertyName("p"), PropertyInfo("Instantaneous power")]
         public double GetPower(State state)
@@ -45,35 +45,35 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) *
-            (state.Solution[CSWposNode] - state.Solution[CSWnegNode]) * CSWcond;
+            return (state.Solution[posNode] - state.Solution[negNode]) *
+            (state.Solution[posNode] - state.Solution[negNode]) * Cond;
         }
-        public double CSWcond { get; internal set; }
+        public double Cond { get; internal set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        public int CSWcontBranch { get; private set; }
-        protected int CSWposNode, CSWnegNode;
-        protected MatrixElement CSWposPosptr { get; private set; }
-        protected MatrixElement CSWnegPosptr { get; private set; }
-        protected MatrixElement CSWposNegptr { get; private set; }
-        protected MatrixElement CSWnegNegptr { get; private set; }
+        public int ControllingBranch { get; private set; }
+        protected int posNode, negNode;
+        protected MatrixElement PosPosptr { get; private set; }
+        protected MatrixElement NegPosptr { get; private set; }
+        protected MatrixElement PosNegptr { get; private set; }
+        protected MatrixElement NegNegptr { get; private set; }
 
         /// <summary>
         /// Gets or sets the old state of the switch
         /// </summary>
-        public bool CSWoldState { get; set; }
+        public bool OldState { get; set; }
 
         /// <summary>
         /// Flag for using the old state or not
         /// </summary>
-        public bool CSWuseOldState { get; set; } = false;
+        public bool UseOldState { get; set; } = false;
 
         /// <summary>
         /// Gets the current state of the switch
         /// </summary>
-        public bool CSWcurrentState { get; protected set; }
+        public bool CurrentState { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -109,8 +109,8 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            CSWposNode = pins[0];
-            CSWnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -123,11 +123,11 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
-            CSWcontBranch = vsrcload.VSRCbranch;
-            CSWposPosptr = matrix.GetElement(CSWposNode, CSWposNode);
-            CSWposNegptr = matrix.GetElement(CSWposNode, CSWnegNode);
-            CSWnegPosptr = matrix.GetElement(CSWnegNode, CSWposNode);
-            CSWnegNegptr = matrix.GetElement(CSWnegNode, CSWnegNode);
+            ControllingBranch = vsrcload.VSRCbranch;
+            PosPosptr = matrix.GetElement(posNode, posNode);
+            PosNegptr = matrix.GetElement(posNode, negNode);
+            NegPosptr = matrix.GetElement(negNode, posNode);
+            NegNegptr = matrix.GetElement(negNode, negNode);
         }
         
         /// <summary>
@@ -135,10 +135,10 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            CSWposPosptr = null;
-            CSWposNegptr = null;
-            CSWnegPosptr = null;
-            CSWnegNegptr = null;
+            PosPosptr = null;
+            PosNegptr = null;
+            NegPosptr = null;
+            NegNegptr = null;
         }
 
         /// <summary>
@@ -159,49 +159,49 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             // decide the state of the switch
             if (state.Init == State.InitFlags.InitFix || state.Init == State.InitFlags.InitJct)
             {
-                if (bp.CSWzero_state)
+                if (bp.ZeroState)
                 {
                     // Switch specified "on"
-                    CSWcurrentState = true;
+                    CurrentState = true;
                     current_state = true;
                 }
                 else
                 {
                     // Switch specified "off"
-                    CSWcurrentState = false;
+                    CurrentState = false;
                     current_state = false;
                 }
             }
             else
             {
                 // Get the previous state
-                if (CSWuseOldState)
-                    previous_state = CSWoldState;
+                if (UseOldState)
+                    previous_state = OldState;
                 else
-                    previous_state = CSWcurrentState;
-                i_ctrl = state.Solution[CSWcontBranch];
+                    previous_state = CurrentState;
+                i_ctrl = state.Solution[ControllingBranch];
 
                 // Calculate the current state
-                if (i_ctrl > (mbp.CSWthresh + mbp.CSWhyst))
+                if (i_ctrl > (mbp.Threshold + mbp.Hysteresis))
                     current_state = true;
-                else if (i_ctrl < (mbp.CSWthresh - mbp.CSWhyst))
+                else if (i_ctrl < (mbp.Threshold - mbp.Hysteresis))
                     current_state = false;
                 else
                     current_state = previous_state;
 
                 // Store the current state
-                CSWcurrentState = current_state;
+                CurrentState = current_state;
             }
 
             // Get the current conduction
-            g_now = current_state != false ? (modelload.CSWonConduct) : (modelload.CSWoffConduct);
-            CSWcond = g_now;
+            g_now = current_state != false ? (modelload.OnConductance) : (modelload.OffConductance);
+            Cond = g_now;
 
             // Load the Y-matrix
-            CSWposPosptr.Add(g_now);
-            CSWposNegptr.Sub(g_now);
-            CSWnegPosptr.Sub(g_now);
-            CSWnegNegptr.Add(g_now);
+            PosPosptr.Add(g_now);
+            PosNegptr.Sub(g_now);
+            NegPosptr.Sub(g_now);
+            NegNegptr.Add(g_now);
         }
     }
 }

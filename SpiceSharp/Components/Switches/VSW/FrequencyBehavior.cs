@@ -19,11 +19,11 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int VSWposNode, VSWnegNode, VSWcontPosNode, VSWcontNegNode;
-        protected MatrixElement SWposPosptr { get; private set; }
-        protected MatrixElement SWnegPosptr { get; private set; }
-        protected MatrixElement SWposNegptr { get; private set; }
-        protected MatrixElement SWnegNegptr { get; private set; }
+        int posNode, negNode, contPosNode, contNegNode;
+        protected MatrixElement PosPosptr { get; private set; }
+        protected MatrixElement NegPosptr { get; private set; }
+        protected MatrixElement PosNegptr { get; private set; }
+        protected MatrixElement NegNegptr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -55,10 +55,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
-            VSWposNode = pins[0];
-            VSWnegNode = pins[1];
-            VSWcontPosNode = pins[2];
-            VSWcontNegNode = pins[3];
+            posNode = pins[0];
+            negNode = pins[1];
+            contPosNode = pins[2];
+            contNegNode = pins[3];
         }
 
         /// <summary>
@@ -70,10 +70,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            SWposPosptr = matrix.GetElement(VSWposNode, VSWposNode);
-            SWposNegptr = matrix.GetElement(VSWposNode, VSWnegNode);
-            SWnegPosptr = matrix.GetElement(VSWnegNode, VSWposNode);
-            SWnegNegptr = matrix.GetElement(VSWnegNode, VSWnegNode);
+            PosPosptr = matrix.GetElement(posNode, posNode);
+            PosNegptr = matrix.GetElement(posNode, negNode);
+            NegPosptr = matrix.GetElement(negNode, posNode);
+            NegNegptr = matrix.GetElement(negNode, negNode);
         }
         
         /// <summary>
@@ -81,10 +81,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            SWposPosptr = null;
-            SWnegNegptr = null;
-            SWposNegptr = null;
-            SWnegPosptr = null;
+            PosPosptr = null;
+            NegNegptr = null;
+            PosNegptr = null;
+            NegPosptr = null;
         }
 
         /// <summary>
@@ -101,13 +101,13 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             var cstate = state;
 
             // Get the current state
-            g_now = load.VSWcurrentState == true ? modelload.VSWonConduct : modelload.VSWoffConduct;
+            g_now = load.CurrentState == true ? modelload.OnConductance : modelload.OffConductance;
 
             // Load the Y-matrix
-            SWposPosptr.Add(g_now);
-            SWposNegptr.Sub(g_now);
-            SWnegPosptr.Sub(g_now);
-            SWnegNegptr.Add(g_now);
+            PosPosptr.Add(g_now);
+            PosNegptr.Sub(g_now);
+            NegPosptr.Sub(g_now);
+            NegNegptr.Add(g_now);
         }
     }
 }

@@ -19,11 +19,11 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int CSWposNode, CSWnegNode, CSWcontBranch;
-        protected MatrixElement CSWposPosptr { get; private set; }
-        protected MatrixElement CSWnegPosptr { get; private set; }
-        protected MatrixElement CSWposNegptr { get; private set; }
-        protected MatrixElement CSWnegNegptr { get; private set; }
+        int posNode, negNode, contBranch;
+        protected MatrixElement PosPosptr { get; private set; }
+        protected MatrixElement NegPosptr { get; private set; }
+        protected MatrixElement PosNegptr { get; private set; }
+        protected MatrixElement NegNegptr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -55,8 +55,8 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
-            CSWposNode = pins[0];
-            CSWnegNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -68,11 +68,11 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            CSWcontBranch = load.CSWcontBranch;
-            CSWposPosptr = matrix.GetElement(CSWposNode, CSWposNode);
-            CSWposNegptr = matrix.GetElement(CSWposNode, CSWnegNode);
-            CSWnegPosptr = matrix.GetElement(CSWnegNode, CSWposNode);
-            CSWnegNegptr = matrix.GetElement(CSWnegNode, CSWnegNode);
+            contBranch = load.ControllingBranch;
+            PosPosptr = matrix.GetElement(posNode, posNode);
+            PosNegptr = matrix.GetElement(posNode, negNode);
+            NegPosptr = matrix.GetElement(negNode, posNode);
+            NegNegptr = matrix.GetElement(negNode, negNode);
         }
 
         /// <summary>
@@ -80,10 +80,10 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            CSWposPosptr = null;
-            CSWnegNegptr = null;
-            CSWposNegptr = null;
-            CSWnegPosptr = null;
+            PosPosptr = null;
+            NegNegptr = null;
+            PosNegptr = null;
+            NegPosptr = null;
         }
 
         /// <summary>
@@ -101,14 +101,14 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             var cstate = state;
 
             // Get the current state
-            current_state = load.CSWcurrentState;
-            g_now = current_state != false ? modelload.CSWonConduct : modelload.CSWoffConduct;
+            current_state = load.CurrentState;
+            g_now = current_state != false ? modelload.OnConductance : modelload.OffConductance;
 
             // Load the Y-matrix
-            CSWposPosptr.Add(g_now);
-            CSWposNegptr.Sub(g_now);
-            CSWnegPosptr.Sub(g_now);
-            CSWnegNegptr.Add(g_now);
+            PosPosptr.Add(g_now);
+            PosNegptr.Sub(g_now);
+            NegPosptr.Sub(g_now);
+            NegNegptr.Add(g_now);
         }
     }
 }

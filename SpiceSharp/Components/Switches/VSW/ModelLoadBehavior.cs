@@ -17,12 +17,12 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Conductance while on
         /// </summary>
-        public double VSWonConduct { get; protected set; }
+        public double OnConductance { get; protected set; }
 
         /// <summary>
         /// Conductance while off
         /// </summary>
-        public double VSWoffConduct { get; protected set; }
+        public double OffConductance { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -49,8 +49,8 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <param name="sim">Base simulation</param>
         public override void Load(BaseSimulation sim)
         {
-            VSWonConduct = 1.0 / mbp.VSWon;
-            VSWoffConduct = 1.0 / mbp.VSWoff;
+            OnConductance = 1.0 / mbp.OnResistance;
+            OffConductance = 1.0 / mbp.OffResistance;
         }
     }
 }

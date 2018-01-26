@@ -40,10 +40,10 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         public override void Accept(TimeSimulation sim)
         {
             // Flag the load behavior to use our previous state
-            load.CSWuseOldState = true;
+            load.UseOldState = true;
 
             // Store the last state
-            load.CSWoldState = load.CSWcurrentState;
+            load.OldState = load.CurrentState;
         }
     }
 }

@@ -11,13 +11,13 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("on"), PropertyInfo("Switch initially closed")]
-        public void SetOn() { VSWzero_state = true; }
+        public void SetOn() { ZeroState = true; }
         [PropertyName("off"), PropertyInfo("Switch initially open")]
-        public void SetOff() { VSWzero_state = false; }
+        public void SetOff() { ZeroState = false; }
 
         /// <summary>
         /// Get the default state
         /// </summary>
-        public bool VSWzero_state { get; set; } = false;
+        public bool ZeroState { get; set; } = false;
     }
 }
