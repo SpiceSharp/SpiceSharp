@@ -29,7 +29,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public abstract void Accept(TimeSimulation sim);
+        /// <param name="simulation">Time-based simulation</param>
+        public abstract void Accept(TimeSimulation simulation);
     }
 }

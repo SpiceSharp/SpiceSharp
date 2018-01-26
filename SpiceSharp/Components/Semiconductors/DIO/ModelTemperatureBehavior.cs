@@ -52,15 +52,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Temperature(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Temperature(BaseSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             if (!mbp.NominalTemperature.Given)
             {
-                mbp.NominalTemperature.Value = sim.State.NominalTemperature;
+                mbp.NominalTemperature.Value = simulation.State.NominalTemperature;
             }
             Vtnom = Circuit.KOverQ * mbp.NominalTemperature;
 

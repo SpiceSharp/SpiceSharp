@@ -205,17 +205,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Get DC states
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void GetDCstate(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void GetDCstate(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
                 sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0;
 
-            var state = sim.State;
+            var state = simulation.State;
             vbs = load.Vbs;
             vgs = load.Vgs;
             vds = load.Vds;
@@ -395,15 +395,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Transient behavior
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Transient(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Transient(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             var rstate = state;
-            var method = sim.Method;
+            var method = simulation.Method;
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
                 sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs, ceqbd;

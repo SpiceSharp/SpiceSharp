@@ -142,13 +142,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Load(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Load(BaseSimulation simulation)
         {
-            if (sim == null)
-                throw new ArgumentNullException(nameof(sim));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             bool Check;
             double csat, gspr, vt, vte, vd, vdtemp, evd, cd, gd, arg, evrev, cdeq;
 
@@ -245,15 +245,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Check convergence for the diode
         /// </summary>
-        /// <param name="sim">Base simulation</param>
+        /// <param name="simulation">Base simulation</param>
         /// <returns></returns>
-        public override bool IsConvergent(BaseSimulation sim)
+        public override bool IsConvergent(BaseSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
-            var config = sim.BaseConfiguration;
+            var state = simulation.State;
+            var config = simulation.BaseConfiguration;
             double delvd, cdhat, cd;
             double vd = state.Solution[PosPrimeNode] - state.Solution[negNode];
 

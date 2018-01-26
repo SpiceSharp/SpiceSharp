@@ -20,10 +20,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected MatrixElement PosIbrPtr { get; private set; }
-        protected MatrixElement NegIbrPtr { get; private set; }
-        protected MatrixElement IbrNegPtr { get; private set; }
-        protected MatrixElement IbrPosPtr { get; private set; }
+        protected MatrixElement PosBranchPtr { get; private set; }
+        protected MatrixElement NegBranchPtr { get; private set; }
+        protected MatrixElement BranchNegPtr { get; private set; }
+        protected MatrixElement BranchPosPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -87,10 +87,10 @@ namespace SpiceSharp.Components.InductorBehaviors
             BranchEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
 
             // Get matrix pointers
-            PosIbrPtr = matrix.GetElement(posNode, BranchEq);
-            NegIbrPtr = matrix.GetElement(negNode, BranchEq);
-            IbrNegPtr = matrix.GetElement(BranchEq, negNode);
-            IbrPosPtr = matrix.GetElement(BranchEq, posNode);
+            PosBranchPtr = matrix.GetElement(posNode, BranchEq);
+            NegBranchPtr = matrix.GetElement(negNode, BranchEq);
+            BranchNegPtr = matrix.GetElement(BranchEq, negNode);
+            BranchPosPtr = matrix.GetElement(BranchEq, posNode);
         }
 
         /// <summary>
@@ -99,22 +99,22 @@ namespace SpiceSharp.Components.InductorBehaviors
         public override void Unsetup()
         {
             // Remove references
-            PosIbrPtr = null;
-            NegIbrPtr = null;
-            IbrNegPtr = null;
-            IbrPosPtr = null;
+            PosBranchPtr = null;
+            NegBranchPtr = null;
+            BranchNegPtr = null;
+            BranchPosPtr = null;
         }
 
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Load(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Load(BaseSimulation simulation)
         {
-            PosIbrPtr.Add(1.0);
-            NegIbrPtr.Sub(1.0);
-            IbrPosPtr.Add(1.0);
-            IbrNegPtr.Sub(1.0);
+            PosBranchPtr.Add(1.0);
+            NegBranchPtr.Sub(1.0);
+            BranchPosPtr.Add(1.0);
+            BranchNegPtr.Sub(1.0);
         }
     }
 }

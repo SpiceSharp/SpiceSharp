@@ -54,17 +54,17 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Temperature(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Temperature(BaseSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             double vt, fact2, egfet, arg, pbfact, egfet1, arg1, fact1, pbfact1, pbo, gmaold, gmanew, vte, cbv, xbv, tol, iter, xcbv = 0.0;
 
             // loop through all the instances
             if (!bp.Temperature.Given)
-                bp.Temperature.Value = sim.State.Temperature;
+                bp.Temperature.Value = simulation.State.Temperature;
             vt = Circuit.KOverQ * bp.Temperature;
 
             // this part gets really ugly - I won't even try to explain these equations
@@ -109,7 +109,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 }
                 else
                 {
-                    tol = sim.BaseConfiguration.RelTol * cbv;
+                    tol = simulation.BaseConfiguration.RelTol * cbv;
                     xbv = mbp.BreakdownVoltage - vt * Math.Log(1 + cbv / TSatCur);
                     iter = 0;
                     for (iter = 0; iter < 25; iter++)

@@ -136,13 +136,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Calculate the state values
         /// </summary>
-        /// <param name="sim">Simulation</param>
-        public override void GetDCstate(TimeSimulation sim)
+        /// <param name="simulation">Simulation</param>
+        public override void GetDCstate(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             double arg, sarg, capd;
             double vd = state.Solution[posPrimeNode] - state.Solution[negNode];
 
@@ -169,17 +169,17 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Transient behavior
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Transient(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Transient(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             double vd = state.Solution[posPrimeNode] - state.Solution[negNode];
 
             // This is the same calculation
-            GetDCstate(sim);
+            GetDCstate(simulation);
 
             // Integrate
             CapCharge.Integrate();

@@ -127,8 +127,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Load(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Load(BaseSimulation simulation)
         {
             PosControlBranchPtr.Add(bp.Coefficient.Value);
             NegControlBranchPtr.Sub(bp.Coefficient.Value);

@@ -89,15 +89,15 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="sim">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation sim)
+        /// <param name="simulation">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             bool current_state;
             double g_now;
-            var state = sim.State;
+            var state = simulation.State;
             var cstate = state;
 
             // Get the current state

@@ -111,14 +111,14 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Calculate the state for DC
         /// </summary>
-        /// <param name="sim"></param>
-        public override void GetDCstate(TimeSimulation sim)
+        /// <param name="simulation"></param>
+        public override void GetDCstate(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             // Calculate the state for DC
-            var sol = sim.State.Solution;
+            var sol = simulation.State.Solution;
             if (bp.InitialCondition.Given)
                 QCap.Value = bp.InitialCondition;
             else
@@ -139,13 +139,13 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Execute behavior for DC and Transient analysis
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Transient(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Transient(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             double vcap = state.Solution[posNode] - state.Solution[negNode];
 
             // Integrate

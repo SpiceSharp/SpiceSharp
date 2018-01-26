@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Nodes
         /// </summary>
         int BranchEq;
-        protected MatrixElement IbrIbrPtr { get; private set; }
+        protected MatrixElement BranchBranchPtr { get; private set; }
         StateDerivative flux;
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             BranchEq = load.BranchEq;
 
             // Get matrix pointers
-            IbrIbrPtr = matrix.GetElement(BranchEq, BranchEq);
+            BranchBranchPtr = matrix.GetElement(BranchEq, BranchEq);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            IbrIbrPtr = null;
+            BranchBranchPtr = null;
         }
 
         /// <summary>
@@ -112,29 +112,29 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Calculate DC states
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void GetDCstate(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void GetDCstate(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             // Get the current through
             if (bp.InitialCondition.Given)
                 flux.Value = bp.InitialCondition * bp.Inductance;
             else
-                flux.Value = sim.State.Solution[BranchEq] * bp.Inductance;
+                flux.Value = simulation.State.Solution[BranchEq] * bp.Inductance;
         }
 
         /// <summary>
         /// Execute behaviour
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Transient(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Transient(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
 
             // Initialize
             flux.Value = bp.Inductance * state.Solution[BranchEq];
@@ -149,7 +149,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             // Finally load the Y-matrix
             flux.Integrate();
             state.Rhs[BranchEq] += flux.Current();
-            IbrIbrPtr.Sub(flux.Jacobian(bp.Inductance));
+            BranchBranchPtr.Sub(flux.Jacobian(bp.Inductance));
         }
 
         /// <summary>

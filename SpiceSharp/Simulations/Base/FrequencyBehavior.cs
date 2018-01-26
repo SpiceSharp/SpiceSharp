@@ -29,10 +29,10 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Initialize parameters for AC analysis
         /// </summary>
-        public virtual void InitializeParameters(FrequencySimulation sim)
+        public virtual void InitializeParameters(FrequencySimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             // Nothing to initialize by default
         }
@@ -52,7 +52,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Load the Y-matrix and Rhs-vector for AC analysis
         /// </summary>
-        /// <param name="sim">Frequency-based simulation</param>
-        public abstract void Load(FrequencySimulation sim);
+        /// <param name="simulation">Frequency-based simulation</param>
+        public abstract void Load(FrequencySimulation simulation);
     }
 }

@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the model</param>
-        public Model(Identifier name)
+        protected Model(Identifier name)
             : base(name)
         {
             // Make sure the models are evaluated before the actual components

@@ -36,8 +36,8 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Accept(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Accept(TimeSimulation simulation)
         {
             // Flag the load behavior to use our old state
             load.UseOldState = true;

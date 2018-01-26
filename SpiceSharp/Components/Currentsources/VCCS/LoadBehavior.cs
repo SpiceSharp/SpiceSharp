@@ -138,8 +138,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Load(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Load(BaseSimulation simulation)
         {
             PosControlPosPtr.Add(bp.Coefficient);
             PosControlNegPtr.Sub(bp.Coefficient);

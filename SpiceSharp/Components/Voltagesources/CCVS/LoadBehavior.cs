@@ -51,11 +51,11 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// </summary>
         int posNode, negNode, contBranchEq;
         public int BranchEq { get; private set; }
-        protected MatrixElement PosIbrPtr { get; private set; }
-        protected MatrixElement NegIbrPtr { get; private set; }
-        protected MatrixElement IbrPosPtr { get; private set; }
-        protected MatrixElement IbrNegPtr { get; private set; }
-        protected MatrixElement IbrControlBranchPtr { get; private set; }
+        protected MatrixElement PosBranchPtr { get; private set; }
+        protected MatrixElement NegBranchPtr { get; private set; }
+        protected MatrixElement BranchPosPtr { get; private set; }
+        protected MatrixElement BranchNegPtr { get; private set; }
+        protected MatrixElement BranchControlBranchPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -128,11 +128,11 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
             BranchEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
 
             // Get matrix pointers
-            PosIbrPtr = matrix.GetElement(posNode, BranchEq);
-            NegIbrPtr = matrix.GetElement(negNode, BranchEq);
-            IbrPosPtr = matrix.GetElement(BranchEq, posNode);
-            IbrNegPtr = matrix.GetElement(BranchEq, negNode);
-            IbrControlBranchPtr = matrix.GetElement(BranchEq, contBranchEq);
+            PosBranchPtr = matrix.GetElement(posNode, BranchEq);
+            NegBranchPtr = matrix.GetElement(negNode, BranchEq);
+            BranchPosPtr = matrix.GetElement(BranchEq, posNode);
+            BranchNegPtr = matrix.GetElement(BranchEq, negNode);
+            BranchControlBranchPtr = matrix.GetElement(BranchEq, contBranchEq);
         }
         
         /// <summary>
@@ -140,24 +140,24 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            PosIbrPtr = null;
-            NegIbrPtr = null;
-            IbrPosPtr = null;
-            IbrNegPtr = null;
-            IbrControlBranchPtr = null;
+            PosBranchPtr = null;
+            NegBranchPtr = null;
+            BranchPosPtr = null;
+            BranchNegPtr = null;
+            BranchControlBranchPtr = null;
         }
 
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Load(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Load(BaseSimulation simulation)
         {
-            PosIbrPtr.Add(1.0);
-            IbrPosPtr.Add(1.0);
-            NegIbrPtr.Sub(1.0);
-            IbrNegPtr.Sub(1.0);
-            IbrControlBranchPtr.Sub(bp.Coefficient);
+            PosBranchPtr.Add(1.0);
+            BranchPosPtr.Add(1.0);
+            NegBranchPtr.Sub(1.0);
+            BranchNegPtr.Sub(1.0);
+            BranchControlBranchPtr.Sub(bp.Coefficient);
         }
     }
 }

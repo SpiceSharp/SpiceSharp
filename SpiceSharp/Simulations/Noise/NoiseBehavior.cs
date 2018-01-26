@@ -25,7 +25,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Noise calculations
         /// </summary>
-        /// <param name="sim">Noise simulation</param>
-        public abstract void Noise(Noise sim);
+        /// <param name="simulation">Noise simulation</param>
+        public abstract void Noise(Noise simulation);
     }
 }

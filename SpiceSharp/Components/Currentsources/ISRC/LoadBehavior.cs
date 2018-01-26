@@ -109,13 +109,13 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Load(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Load(BaseSimulation simulation)
         {
-            if (sim == null)
-                throw new ArgumentNullException(nameof(sim));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State ?? throw new NullReferenceException();
+            var state = simulation.State;
 
             double value = 0.0;
             double time = 0.0;
@@ -123,7 +123,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             // Time domain analysis
             if (state.Domain == State.DomainTypes.Time)
             {
-                if (sim is TimeSimulation tsim)
+                if (simulation is TimeSimulation tsim)
                     time = tsim.Method.Time;
 
                 // Use the waveform if possible

@@ -34,14 +34,14 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Calculate the noise contribution
         /// </summary>
-        /// <param name="sim">Noise simulation</param>
+        /// <param name="simulation">Noise simulation</param>
         /// <returns></returns>
-        protected override double CalculateNoise(Noise sim)
+        protected override double CalculateNoise(Noise simulation)
         {
-            if (sim == null)
-                throw new ArgumentNullException(nameof(sim));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             var sol = state.Solution;
             var isol = state.iSolution;
             var rval = sol[NOISEnodes[0]] - sol[NOISEnodes[1]];

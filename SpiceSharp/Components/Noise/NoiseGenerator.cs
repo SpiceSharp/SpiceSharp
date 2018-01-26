@@ -77,14 +77,14 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Evaluate
         /// </summary>
-        public virtual void Evaluate(Noise sim)
+        public virtual void Evaluate(Noise simulation)
         {
-            if (sim == null)
-                throw new ArgumentNullException(nameof(sim));
-            var noise = sim.NoiseState;
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+            var noise = simulation.NoiseState;
 
             // Calculate the noise
-            Noise = CalculateNoise(sim);
+            Noise = CalculateNoise(simulation);
             double lnNdens = Math.Log(Math.Max(Noise, 1e-38));
 
             // Initialize the integrated noise if we just started
@@ -110,8 +110,8 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Calculate noise coefficient
         /// </summary>
-        /// <param name="sim">Noise simulation</param>
+        /// <param name="simulation">Noise simulation</param>
         /// <returns></returns>
-        protected abstract double CalculateNoise(Noise sim);
+        protected abstract double CalculateNoise(Noise simulation);
     }
 }

@@ -25,11 +25,11 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected MatrixElement PosIbrPtr { get; private set; }
-        protected MatrixElement NegIbrPtr { get; private set; }
-        protected MatrixElement IbrPosPtr { get; private set; }
-        protected MatrixElement IbrNegPtr { get; private set; }
-        protected MatrixElement IbrIbrPtr { get; private set; }
+        protected MatrixElement PosBranchPtr { get; private set; }
+        protected MatrixElement NegBranchPtr { get; private set; }
+        protected MatrixElement BranchPosPtr { get; private set; }
+        protected MatrixElement BranchNegPtr { get; private set; }
+        protected MatrixElement BranchBranchPtr { get; private set; }
 
         /// <summary>
         /// Properties
@@ -111,10 +111,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            PosIbrPtr = matrix.GetElement(posNode, branchEq);
-            IbrPosPtr = matrix.GetElement(branchEq, posNode);
-            NegIbrPtr = matrix.GetElement(negNode, branchEq);
-            IbrNegPtr = matrix.GetElement(branchEq, negNode);
+            PosBranchPtr = matrix.GetElement(posNode, branchEq);
+            BranchPosPtr = matrix.GetElement(branchEq, posNode);
+            NegBranchPtr = matrix.GetElement(negNode, branchEq);
+            BranchNegPtr = matrix.GetElement(branchEq, negNode);
         }
 
         /// <summary>
@@ -122,26 +122,26 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            PosIbrPtr = null;
-            IbrPosPtr = null;
-            NegIbrPtr = null;
-            IbrNegPtr = null;
+            PosBranchPtr = null;
+            BranchPosPtr = null;
+            NegBranchPtr = null;
+            BranchNegPtr = null;
         }
 
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="sim">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation sim)
+        /// <param name="simulation">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var cstate = sim.State;
-            PosIbrPtr.Value.Real += 1.0;
-            IbrPosPtr.Value.Real += 1.0;
-            NegIbrPtr.Value.Real -= 1.0;
-            IbrNegPtr.Value.Real -= 1.0;
+            var cstate = simulation.State;
+            PosBranchPtr.Value.Real += 1.0;
+            BranchPosPtr.Value.Real += 1.0;
+            NegBranchPtr.Value.Real -= 1.0;
+            BranchNegPtr.Value.Real -= 1.0;
             cstate.Rhs[branchEq] += Ac.Real;
             cstate.iRhs[branchEq] += Ac.Imaginary;
         }

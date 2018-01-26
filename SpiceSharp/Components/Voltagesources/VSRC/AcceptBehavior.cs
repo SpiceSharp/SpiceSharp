@@ -36,10 +36,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Accept(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Accept(TimeSimulation simulation)
         {
-            bp.Waveform?.Accept(sim);
+            bp.Waveform?.Accept(simulation);
         }
     }
 }

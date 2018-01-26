@@ -148,8 +148,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Load(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Load(BaseSimulation simulation)
         {
             PosPosPtr.Add(Conductance);
             NegNegPtr.Add(Conductance);

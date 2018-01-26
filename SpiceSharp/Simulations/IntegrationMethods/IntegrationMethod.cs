@@ -281,12 +281,12 @@ namespace SpiceSharp.IntegrationMethods
         /// The result is stored in Delta
         /// Note: This method does not advance time!
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
+        /// <param name="simulation">Time-based simulation</param>
         /// <returns>True if the timestep isn't cut</returns>
-        public bool LteControl(TimeSimulation sim)
+        public bool LteControl(TimeSimulation simulation)
         {
             // Invoke truncation event
-            TruncationEventArgs args = new TruncationEventArgs(sim, Delta);
+            TruncationEventArgs args = new TruncationEventArgs(simulation, Delta);
             Truncate?.Invoke(this, args);
             double newdelta = args.Delta;
 
@@ -297,7 +297,7 @@ namespace SpiceSharp.IntegrationMethods
                     Order = 2;
 
                     // Invoke truncation event
-                    args = new TruncationEventArgs(sim, Delta);
+                    args = new TruncationEventArgs(simulation, Delta);
                     Truncate?.Invoke(this, args);
                     newdelta = args.Delta;
 
@@ -361,14 +361,14 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Calculate a prediction based on the current timestep
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public abstract void Predict(TimeSimulation sim);
+        /// <param name="simulation">Time-based simulation</param>
+        public abstract void Predict(TimeSimulation simulation);
 
         /// <summary>
         /// Compute the coefficients needed for integration
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public abstract void ComputeCoefficients(TimeSimulation sim);
+        /// <param name="simulation">Time-based simulation</param>
+        public abstract void ComputeCoefficients(TimeSimulation simulation);
 
         /// <summary>
         /// Calculate the new timestep based on the LTE (local truncation error)

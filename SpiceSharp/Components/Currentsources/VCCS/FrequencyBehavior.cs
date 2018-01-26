@@ -129,11 +129,11 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="sim">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation sim)
+        /// <param name="simulation">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             PosControlPosPtr.Add(bp.Coefficient);
             PosControlNegPtr.Sub(bp.Coefficient);

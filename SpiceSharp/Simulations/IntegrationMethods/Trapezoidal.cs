@@ -74,14 +74,14 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Predict a new solution based on the previous ones
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Predict(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Predict(TimeSimulation simulation)
         {
-            if (sim == null)
-                throw new ArgumentNullException(nameof(sim));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             // Get the state
-            var state = sim.State;
+            var state = simulation.State;
 
             // Predict a solution
             double a, b;
@@ -127,11 +127,11 @@ namespace SpiceSharp.IntegrationMethods
                 throw new ArgumentNullException(nameof(args));
 
             // Get the state
-            var sim = args.Simulation;
-            var state = sim.State;
+            var simulation = args.Simulation;
+            var state = simulation.State;
             double tol, diff, tmp;
             double timetemp = Double.PositiveInfinity;
-            var nodes = sim.Circuit.Nodes;
+            var nodes = simulation.Circuit.Nodes;
             int index = 0;
 
             // In my opinion, the original Spice method is kind of bugged and can be much better...
@@ -190,7 +190,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Compute the coefficients for Trapezoidal integration
         /// </summary>
         /// <param name="circuit">The circuit</param>
-        public override void ComputeCoefficients(TimeSimulation sim)
+        public override void ComputeCoefficients(TimeSimulation simulation)
         {
             // Integration constants
             switch (Order)

@@ -91,14 +91,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Noise calculations
         /// </summary>
-        /// <param name="sim">Noise simulation</param>
-        public override void Noise(Noise sim)
+        /// <param name="simulation">Noise simulation</param>
+        public override void Noise(Noise simulation)
         {
-            if (sim == null)
-                throw new ArgumentNullException(nameof(sim));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
-            var noise = sim.NoiseState;
+            var state = simulation.State;
+            var noise = simulation.NoiseState;
 
             // Set noise parameters
             DiodeNoise.Generators[RsNoise].Set(modeltemp.Conductance * bp.Area);
@@ -107,7 +107,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 * Math.Log(Math.Max(Math.Abs(load.Current), 1e-38))) / noise.Freq);
 
             // Evaluate noise
-            DiodeNoise.Evaluate(sim);
+            DiodeNoise.Evaluate(simulation);
         }
     }
 }

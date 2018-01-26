@@ -178,18 +178,18 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Initialize AC parameters
         /// </summary>
-        /// <param name="sim">Frequency-based simulation</param>
-        public override void InitializeParameters(FrequencySimulation sim)
+        /// <param name="simulation">Frequency-based simulation</param>
+        public override void InitializeParameters(FrequencySimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, xms, xtf, ovtf, xjtf;
             double arg, sarg, argtf, arg2, arg3, tmp, f1, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
             double geqcb;
 
             // Get voltages
-            var state = sim.State;
+            var state = simulation.State;
             double vbe = load.Vbe;
             double vbc = load.Vbc;
             double vbx = vbx = mbp.Type * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
@@ -306,13 +306,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="sim">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation sim)
+        /// <param name="simulation">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             var cstate = state;
             double gcpr, gepr, gpi, gmu, go, td, gx;
             Complex gm, xcpi, xcmu, xcbx, xccs, xcmcb;

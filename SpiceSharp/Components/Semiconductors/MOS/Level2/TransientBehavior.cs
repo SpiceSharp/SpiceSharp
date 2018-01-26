@@ -202,11 +202,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Calculate initial states
         /// </summary>
-        /// <param name="sim">Simulation</param>
-        public override void GetDCstate(TimeSimulation sim)
+        /// <param name="simulation">Simulation</param>
+        public override void GetDCstate(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
                 OxideCap, vgs, vbs, vbd, vgb, vgd, von,
@@ -374,13 +374,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Transient behavior
         /// </summary>
-        /// <param name="sim"></param>
-        public override void Transient(TimeSimulation sim)
+        /// <param name="simulation"></param>
+        public override void Transient(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
                 OxideCap, vgs, vbs, vbd, vgb, vgd, von,
                 vdsat, sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs,

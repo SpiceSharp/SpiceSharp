@@ -207,13 +207,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Calculate DC state variables
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void GetDCstate(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void GetDCstate(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             double arg, sarg, sargsw;
             double capgs, capgd, capgb;
 
@@ -317,13 +317,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Transient behavior
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Transient(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Transient(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             double arg, sarg, sargsw;
             double vgs1, vgd1, vgb1, capgs, capgd, capgb;
 

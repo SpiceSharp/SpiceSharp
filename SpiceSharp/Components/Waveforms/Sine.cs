@@ -96,8 +96,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Accept(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Accept(TimeSimulation simulation)
         {
             // Do nothing
         }

@@ -45,11 +45,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Temperature(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Temperature(BaseSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             double factor;
             double difference;
@@ -57,7 +57,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 
             // Default Value Processing for Resistor Instance
             if (!bp.Temperature.Given)
-                bp.Temperature.Value = sim.State.Temperature;
+                bp.Temperature.Value = simulation.State.Temperature;
             if (!bp.Width.Given)
                 bp.Width.Value = mbp?.DefWidth ?? 0.0;
 

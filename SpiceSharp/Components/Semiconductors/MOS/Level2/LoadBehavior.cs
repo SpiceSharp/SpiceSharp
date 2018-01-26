@@ -216,13 +216,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Load(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Load(BaseSimulation simulation)
         {
-            if (sim == null)
-                throw new ArgumentNullException(nameof(sim));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             var rstate = state;
             double vt, EffectiveLength, DrainSatCur, SourceSatCur, Beta,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, von, evbs, evbd,
@@ -950,15 +950,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Check convergence
         /// </summary>
-        /// <param name="sim">Base simulation</param>
+        /// <param name="simulation">Base simulation</param>
         /// <returns></returns>
-        public override bool IsConvergent(BaseSimulation sim)
+        public override bool IsConvergent(BaseSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
-            var config = sim.BaseConfiguration;
+            var state = simulation.State;
+            var config = simulation.BaseConfiguration;
 
             double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat;
 

@@ -19,7 +19,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public abstract void Temperature(BaseSimulation sim);
+        /// <param name="simulation">Base simulation</param>
+        public abstract void Temperature(BaseSimulation simulation);
     }
 }

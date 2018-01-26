@@ -51,17 +51,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Temperature(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Temperature(BaseSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             double kt1, arg1, fermis, wkfng, fermig, wkfngs, vfb;
 
             if (!mbp.NominalTemperature.Given)
             {
-                mbp.NominalTemperature.Value = sim.State.NominalTemperature;
+                mbp.NominalTemperature.Value = simulation.State.NominalTemperature;
             }
             Fact1 = mbp.NominalTemperature / Circuit.ReferenceTemperature;
             Vtnom = mbp.NominalTemperature * Circuit.KOverQ;

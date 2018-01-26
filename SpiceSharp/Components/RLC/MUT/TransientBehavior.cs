@@ -125,11 +125,11 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Transient behavior
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Transient(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Transient(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             // Load Y-matrix
             Br1Br2.Sub(geq);

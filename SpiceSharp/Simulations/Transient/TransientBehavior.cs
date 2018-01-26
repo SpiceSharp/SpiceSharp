@@ -31,11 +31,11 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Calculate the state values from the DC solution
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public virtual void GetDCstate(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public virtual void GetDCstate(TimeSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             // Do nothing (for now)
         }
@@ -55,8 +55,8 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Transient calculations
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public abstract void Transient(TimeSimulation sim);
+        /// <param name="simulation">Time-based simulation</param>
+        public abstract void Transient(TimeSimulation simulation);
 
         /// <summary>
         /// Truncate the timestep based on the LTE (Local Truncation Error)

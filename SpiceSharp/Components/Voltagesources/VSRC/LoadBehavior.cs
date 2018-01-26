@@ -45,11 +45,11 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// </summary>
         protected int posNode, negNode;
         public int BranchEq { get; protected set; }
-        protected MatrixElement PosIbrPtr { get; private set; }
-        protected MatrixElement NegIbrPtr { get; private set; }
-        protected MatrixElement IbrPosPtr { get; private set; }
-        protected MatrixElement IbrNegPtr { get; private set; }
-        protected MatrixElement IbrIbrPtr { get; private set; }
+        protected MatrixElement PosBranchPtr { get; private set; }
+        protected MatrixElement NegBranchPtr { get; private set; }
+        protected MatrixElement BranchPosPtr { get; private set; }
+        protected MatrixElement BranchNegPtr { get; private set; }
+        protected MatrixElement BranchBranchPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -126,10 +126,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(matrix));
 
             BranchEq = nodes.Create(Name?.Grow("#branch"), Node.NodeType.Current).Index;
-            PosIbrPtr = matrix.GetElement(posNode, BranchEq);
-            IbrPosPtr = matrix.GetElement(BranchEq, posNode);
-            NegIbrPtr = matrix.GetElement(negNode, BranchEq);
-            IbrNegPtr = matrix.GetElement(BranchEq, negNode);
+            PosBranchPtr = matrix.GetElement(posNode, BranchEq);
+            BranchPosPtr = matrix.GetElement(BranchEq, posNode);
+            NegBranchPtr = matrix.GetElement(negNode, BranchEq);
+            BranchNegPtr = matrix.GetElement(BranchEq, negNode);
         }
 
         /// <summary>
@@ -137,33 +137,33 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            PosIbrPtr = null;
-            IbrPosPtr = null;
-            NegIbrPtr = null;
-            IbrNegPtr = null;
+            PosBranchPtr = null;
+            BranchPosPtr = null;
+            NegBranchPtr = null;
+            BranchNegPtr = null;
         }
 
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Load(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Load(BaseSimulation simulation)
         {
-            if (sim == null)
-                throw new ArgumentNullException(nameof(sim));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             double time = 0.0;
             double value = 0.0;
 
-            PosIbrPtr.Value.Real += 1.0;
-            IbrPosPtr.Value.Real += 1.0;
-            NegIbrPtr.Value.Real -= 1.0;
-            IbrNegPtr.Value.Real -= 1.0;
+            PosBranchPtr.Value.Real += 1.0;
+            BranchPosPtr.Value.Real += 1.0;
+            NegBranchPtr.Value.Real -= 1.0;
+            BranchNegPtr.Value.Real -= 1.0;
 
             if (state.Domain == State.DomainTypes.Time)
             {
-                if (sim is TimeSimulation tsim)
+                if (simulation is TimeSimulation tsim)
                     time = tsim.Method.Time;
 
                 // Use the waveform if possible

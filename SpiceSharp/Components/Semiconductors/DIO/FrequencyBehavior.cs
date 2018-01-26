@@ -115,13 +115,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Calculate AC parameters
         /// </summary>
-        /// <param name="sim"></param>
-        public override void InitializeParameters(FrequencySimulation sim)
+        /// <param name="simulation"></param>
+        public override void InitializeParameters(FrequencySimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             double arg, czero, sarg, capd, czof2;
             double vd = state.Solution[posPrimeNode] - state.Solution[negNode];
 
@@ -144,13 +144,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="sim">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation sim)
+        /// <param name="simulation">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             double gspr, geq, xceq;
 
             gspr = modeltemp.Conductance * bp.Area;

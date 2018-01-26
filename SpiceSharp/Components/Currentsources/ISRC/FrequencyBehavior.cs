@@ -106,13 +106,13 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="sim">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation sim)
+        /// <param name="simulation">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim?.State ?? throw new NullReferenceException();
+            var state = simulation.State;
             state.Rhs[posNode] += ac.Real;
             state.iRhs[posNode] += ac.Imaginary;
             state.Rhs[negNode] -= ac.Real;

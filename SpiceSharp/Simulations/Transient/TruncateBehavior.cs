@@ -17,8 +17,8 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Truncate the current timestep
         /// </summary>
-        /// <param name="sim">Simulation</param>
+        /// <param name="simulation">Simulation</param>
         /// <param name="timestep">Timestep</param>
-        public abstract void Truncate(TimeSimulation sim, ref double timestep);
+        public abstract void Truncate(TimeSimulation simulation, ref double timestep);
     }
 }

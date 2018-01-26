@@ -4,6 +4,9 @@
     <Recognized>
       <Word>Pos</Word>
       <Word>Neg</Word>
+      <Word>Eq</Word>
+      <Word>Dc</Word>
+      <Word>Ac</Word>
     </Recognized>
   </Words>
 </Dictionary>

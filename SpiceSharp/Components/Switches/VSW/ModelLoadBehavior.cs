@@ -46,8 +46,8 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Load(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Load(BaseSimulation simulation)
         {
             OnConductance = 1.0 / mbp.OnResistance;
             OffConductance = 1.0 / mbp.OffResistance;

@@ -21,11 +21,11 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, branchEq;
-        protected MatrixElement PosIbrPtr { get; private set; }
-        protected MatrixElement NegIbrPtr { get; private set; }
-        protected MatrixElement IbrNegPtr { get; private set; }
-        protected MatrixElement IbrPosPtr { get; private set; }
-        protected MatrixElement IbrIbrPtr { get; private set; }
+        protected MatrixElement PosBranchPtr { get; private set; }
+        protected MatrixElement NegBranchPtr { get; private set; }
+        protected MatrixElement BranchNegPtr { get; private set; }
+        protected MatrixElement BranchPosPtr { get; private set; }
+        protected MatrixElement BranchBranchPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -76,11 +76,11 @@ namespace SpiceSharp.Components.InductorBehaviors
             branchEq = load.BranchEq;
 
             // Get matrix pointers
-            PosIbrPtr = matrix.GetElement(posNode, branchEq);
-            NegIbrPtr = matrix.GetElement(negNode, branchEq);
-            IbrNegPtr = matrix.GetElement(branchEq, negNode);
-            IbrPosPtr = matrix.GetElement(branchEq, posNode);
-            IbrIbrPtr = matrix.GetElement(branchEq, branchEq);
+            PosBranchPtr = matrix.GetElement(posNode, branchEq);
+            NegBranchPtr = matrix.GetElement(negNode, branchEq);
+            BranchNegPtr = matrix.GetElement(branchEq, negNode);
+            BranchPosPtr = matrix.GetElement(branchEq, posNode);
+            BranchBranchPtr = matrix.GetElement(branchEq, branchEq);
         }
 
         /// <summary>
@@ -88,30 +88,30 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            PosIbrPtr = null;
-            NegIbrPtr = null;
-            IbrPosPtr = null;
-            IbrNegPtr = null;
-            IbrIbrPtr = null;
+            PosBranchPtr = null;
+            NegBranchPtr = null;
+            BranchPosPtr = null;
+            BranchNegPtr = null;
+            BranchBranchPtr = null;
         }
 
         /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
-        /// <param name="sim">Frequency-based simulation</param>
-        public override void Load(FrequencySimulation sim)
+        /// <param name="simulation">Frequency-based simulation</param>
+        public override void Load(FrequencySimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
+            var state = simulation.State;
             Complex val = state.Laplace * bp.Inductance.Value;
 
-            PosIbrPtr.Add(1.0);
-            NegIbrPtr.Sub(1.0);
-            IbrNegPtr.Sub(1.0);
-            IbrPosPtr.Add(1.0);
-            IbrIbrPtr.Sub(val);
+            PosBranchPtr.Add(1.0);
+            NegBranchPtr.Sub(1.0);
+            BranchNegPtr.Sub(1.0);
+            BranchPosPtr.Add(1.0);
+            BranchBranchPtr.Sub(val);
         }
     }
 }

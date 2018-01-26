@@ -27,15 +27,15 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Load the Y-matrix and Rhs-vector
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public abstract void Load(BaseSimulation sim);
+        /// <param name="simulation">Base simulation</param>
+        public abstract void Load(BaseSimulation simulation);
 
         /// <summary>
         /// Test convergence on device-level
         /// </summary>
-        /// <param name="sim">Base simulation</param>
+        /// <param name="simulation">Base simulation</param>
         /// <returns></returns>
-        public virtual bool IsConvergent(BaseSimulation sim)
+        public virtual bool IsConvergent(BaseSimulation simulation)
         {
             return true;
         }

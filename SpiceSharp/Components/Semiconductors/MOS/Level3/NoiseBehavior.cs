@@ -101,14 +101,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Noise calculations
         /// </summary>
-        /// <param name="sim">Noise simulation</param>
-        public override void Noise(Noise sim)
+        /// <param name="simulation">Noise simulation</param>
+        public override void Noise(Noise simulation)
         {
-            if (sim == null)
-                throw new ArgumentNullException(nameof(sim));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
-            var state = sim.State;
-            var noise = sim.NoiseState;
+            var state = simulation.State;
+            var noise = simulation.NoiseState;
 
             // Set noise parameters
             MOS3Noise.Generators[RdNoise].Set(temp.DrainConductance);
@@ -119,7 +119,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 * modeltemp.OxideCapFactor * modeltemp.OxideCapFactor) / noise.Freq);
 
             // Evaluate noise sources
-            MOS3Noise.Evaluate(sim);
+            MOS3Noise.Evaluate(simulation);
         }
     }
 }

@@ -144,17 +144,17 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Execute behavior
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Load(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Load(BaseSimulation simulation)
         {
-            if (sim == null)
-                throw new ArgumentNullException(nameof(sim));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             double g_now;
             double i_ctrl;
             bool previous_state;
             bool current_state = false;
-            var state = sim.State;
+            var state = simulation.State;
 
             // decide the state of the switch
             if (state.Init == State.InitFlags.InitFix || state.Init == State.InitFlags.InitJct)

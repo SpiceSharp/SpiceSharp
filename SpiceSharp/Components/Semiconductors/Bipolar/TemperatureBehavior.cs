@@ -60,16 +60,16 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Do temperature-dependent calculations
         /// </summary>
-        /// <param name="sim">Base simulation</param>
-        public override void Temperature(BaseSimulation sim)
+        /// <param name="simulation">Base simulation</param>
+        public override void Temperature(BaseSimulation simulation)
         {
-			if (sim == null)
-				throw new ArgumentNullException(nameof(sim));
+			if (simulation == null)
+				throw new ArgumentNullException(nameof(simulation));
 
             double vt, fact2, egfet, arg, pbfact, ratlog, ratio1, factlog, factor, bfactor, pbo, gmaold, gmanew;
 
             if (!bp.Temperature.Given)
-                bp.Temperature.Value = sim.State.Temperature;
+                bp.Temperature.Value = simulation.State.Temperature;
             vt = bp.Temperature * Circuit.KOverQ;
             fact2 = bp.Temperature / Circuit.ReferenceTemperature;
             egfet = 1.16 - (7.02e-4 * bp.Temperature * bp.Temperature) / (bp.Temperature + 1108);

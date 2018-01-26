@@ -17,17 +17,17 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Get the log of the total output-referred noise density
         /// </summary>
-        public double LnNoise { get; private set; }
+        public double LogNoise { get; private set; }
 
         /// <summary>
         /// Gets the total integrated output-referred noise
         /// </summary>
-        public double OutNoiz { get; private set; }
+        public double TotalOutNoise { get; private set; }
 
         /// <summary>
         /// Gets the total integrated input-referred noise
         /// </summary>
-        public double InNoiz { get; private set; }
+        public double TotalInNoise { get; private set; }
 
         /// <summary>
         /// Get all generators
@@ -61,36 +61,36 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Evaluate all noise source contributions
         /// </summary>
-        /// <param name="sim">Noise simulation</param>
-        public void Evaluate(Noise sim)
+        /// <param name="simulation">Noise simulation</param>
+        public void Evaluate(Noise simulation)
         {
-            if (sim == null)
-                throw new ArgumentNullException(nameof(sim));
-            var noise = sim.NoiseState;
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+            var noise = simulation.NoiseState;
 
             // Calculate the output noise density
             Noise = 0.0;
-            InNoiz = 0.0;
-            OutNoiz = 0.0;
+            TotalInNoise = 0.0;
+            TotalOutNoise = 0.0;
             for (int i = 0; i < Generators.Length; i++)
             {
-                Generators[i].Evaluate(sim);
+                Generators[i].Evaluate(simulation);
                 Noise += Generators[i].Noise;
-                InNoiz += Generators[i].InNoiz;
-                OutNoiz += Generators[i].OutNoiz;
+                TotalInNoise += Generators[i].InNoiz;
+                TotalOutNoise += Generators[i].OutNoiz;
             }
 
             // Log of the output noise density
-            LnNoise = Math.Log(Math.Max(Noise, 1e-38));
+            LogNoise = Math.Log(Math.Max(Noise, 1e-38));
 
             // Output noise density
             noise.outNdens += Noise;
 
             // Integrated input referred noise
-            noise.inNoise += InNoiz;
+            noise.inNoise += TotalInNoise;
 
             // Integrated output referred noise
-            noise.outNoiz += OutNoiz;
+            noise.outNoiz += TotalOutNoise;
         }
     }
 }

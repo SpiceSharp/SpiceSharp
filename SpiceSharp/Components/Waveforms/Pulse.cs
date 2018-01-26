@@ -109,18 +109,18 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Accept the current time point
         /// </summary>
-        /// <param name="sim">Time-based simulation</param>
-        public override void Accept(TimeSimulation sim)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Accept(TimeSimulation simulation)
         {
-            if (sim == null)
-                throw new ArgumentNullException(nameof(sim));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             // Should not be here
-            if (sim.Method == null)
+            if (simulation.Method == null)
                 return;
 
             // Are we at a breakpoint?
-            IntegrationMethod method = sim.Method;
+            IntegrationMethod method = simulation.Method;
             var breaks = method.Breaks;
             if (!method.Break)
                 return;
