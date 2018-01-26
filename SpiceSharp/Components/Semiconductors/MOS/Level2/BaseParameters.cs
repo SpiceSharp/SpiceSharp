@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Parameters
         /// </summary>
         [PropertyName("temp"), PropertyInfo("Instance operating temperature")]
-        public double _TEMP
+        public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Set(value + Circuit.CelsiusKelvin);

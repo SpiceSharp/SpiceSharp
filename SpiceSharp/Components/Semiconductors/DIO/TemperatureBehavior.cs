@@ -77,24 +77,24 @@ namespace SpiceSharp.Components.DiodeBehaviors
             arg1 = -egfet1 / (Circuit.Boltzmann * 2 * mbp.NominalTemperature) + 1.1150877 / (2 * Circuit.Boltzmann * Circuit.ReferenceTemperature);
             fact1 = mbp.NominalTemperature / Circuit.ReferenceTemperature;
             pbfact1 = -2 * modeltemp.Vtnom * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
-            pbo = (mbp.JunctionPot - pbfact1) / fact1;
-            gmaold = (mbp.JunctionPot - pbo) / pbo;
-            TJctCap = mbp.JunctionCap / (1 + mbp.GradingCoeff * (400e-6 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            pbo = (mbp.JunctionPotential - pbfact1) / fact1;
+            gmaold = (mbp.JunctionPotential - pbo) / pbo;
+            TJctCap = mbp.JunctionCap / (1 + mbp.GradingCoefficient * (400e-6 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
             TJctPot = pbfact + fact2 * pbo;
             gmanew = (TJctPot - pbo) / pbo;
-            TJctCap *= 1 + mbp.GradingCoeff * (400e-6 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
+            TJctCap *= 1 + mbp.GradingCoefficient * (400e-6 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
             TSatCur = mbp.SaturationCurrent * Math.Exp(((bp.Temperature / mbp.NominalTemperature) - 1) * mbp.ActivationEnergy /
-                (mbp.EmissionCoeff * vt) + mbp.SaturationCurrentExp / mbp.EmissionCoeff * Math.Log(bp.Temperature / mbp.NominalTemperature));
+                (mbp.EmissionCoeffient * vt) + mbp.SaturationCurrentExp / mbp.EmissionCoeffient * Math.Log(bp.Temperature / mbp.NominalTemperature));
 
             // the defintion of f1, just recompute after temperature adjusting all the variables used in it
-            TF1 = TJctPot * (1 - Math.Exp((1 - mbp.GradingCoeff) * modeltemp.Xfc)) / (1 - mbp.GradingCoeff);
+            TF1 = TJctPot * (1 - Math.Exp((1 - mbp.GradingCoefficient) * modeltemp.Xfc)) / (1 - mbp.GradingCoefficient);
 
             // same for Depletion Capacitance
-            TDepCap = mbp.DepletionCapCoeff * TJctPot;
+            TDepCap = mbp.DepletionCapCoefficient * TJctPot;
             
             // and Vcrit
-            vte = mbp.EmissionCoeff * vt;
+            vte = mbp.EmissionCoeffient * vt;
             TVcrit = vte * Math.Log(vte / (Circuit.Root2 * TSatCur));
 
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters

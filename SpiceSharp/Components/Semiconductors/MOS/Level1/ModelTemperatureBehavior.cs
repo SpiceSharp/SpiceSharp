@@ -91,13 +91,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                             mbp.Phi.Value = 2 * Vtnom * Math.Log(mbp.SubstrateDoping * 1e6 / 1.45e16);
                             mbp.Phi.Value = Math.Max(.1, mbp.Phi);
                         }
-                        fermis = mbp.Type * .5 * mbp.Phi;
+                        fermis = mbp.MosfetType * .5 * mbp.Phi;
                         wkfng = 3.2;
                         if (!mbp.GateType.Given)
                             mbp.GateType.Value = 1;
                         if (mbp.GateType != 0)
                         {
-                            fermig = mbp.Type * mbp.GateType * .5 * Egfet1;
+                            fermig = mbp.MosfetType * mbp.GateType * .5 * Egfet1;
                             wkfng = 3.25 + .5 * Egfet1 - fermig;
                         }
                         wkfngs = wkfng - (3.25 + .5 * Egfet1 + fermis);
@@ -110,7 +110,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                             if (!mbp.SurfaceStateDensity.Given)
                                 mbp.SurfaceStateDensity.Value = 0;
                             vfb = wkfngs - mbp.SurfaceStateDensity * 1e4 * Circuit.Charge / OxideCapFactor;
-                            mbp.Vt0.Value = vfb + mbp.Type * (mbp.Gamma * Math.Sqrt(mbp.Phi) + mbp.Phi);
+                            mbp.Vt0.Value = vfb + mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi) + mbp.Phi);
                         }
                     }
                     else

@@ -96,14 +96,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
-
-            var state = simulation.State;
             var noise = simulation.NoiseState;
 
             // Set noise parameters
             DiodeNoise.Generators[RsNoise].SetCoefficients(modeltemp.Conductance * bp.Area);
             DiodeNoise.Generators[IdNoise].SetCoefficients(load.Current);
-            DiodeNoise.Generators[FlickerNoise].SetCoefficients(mnp.FnCoef * Math.Exp(mnp.FnExp 
+            DiodeNoise.Generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent 
                 * Math.Log(Math.Max(Math.Abs(load.Current), 1e-38))) / noise.Freq);
 
             // Evaluate noise

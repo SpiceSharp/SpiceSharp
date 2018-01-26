@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Parameters
         /// </summary>
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]
-        public double _TNOM
+        public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;
             set => NominalTemperature.Set(value + Circuit.CelsiusKelvin);

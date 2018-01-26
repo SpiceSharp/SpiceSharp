@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         [PropertyName("sens_area"), PropertyInfo("flag to request sensitivity WRT area")]
         public bool Sensitivity { get; set; }
         [PropertyName("temp"), PropertyInfo("Instance temperature")]
-        public double _TEMP
+        public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Set(value + Circuit.CelsiusKelvin);

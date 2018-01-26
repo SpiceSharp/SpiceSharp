@@ -129,14 +129,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
             czero = temp.TJctCap * bp.Area;
             if (vd < temp.TDepCap)
             {
-                arg = 1 - vd / mbp.JunctionPot;
-                sarg = Math.Exp(-mbp.GradingCoeff * Math.Log(arg));
+                arg = 1 - vd / mbp.JunctionPotential;
+                sarg = Math.Exp(-mbp.GradingCoefficient * Math.Log(arg));
                 capd = mbp.TransitTime * load.Conduct + czero * sarg;
             }
             else
             {
                 czof2 = czero / modeltemp.F2;
-                capd = mbp.TransitTime * load.Conduct + czof2 * (modeltemp.F3 + mbp.GradingCoeff * vd / mbp.JunctionPot);
+                capd = mbp.TransitTime * load.Conduct + czof2 * (modeltemp.F3 + mbp.GradingCoefficient * vd / mbp.JunctionPotential);
             }
             Cap = capd;
         }

@@ -150,18 +150,18 @@ namespace SpiceSharp.Components.DiodeBehaviors
             double czero = temp.TJctCap * bp.Area;
             if (vd < temp.TDepCap)
             {
-                arg = 1 - vd / mbp.JunctionPot;
-                sarg = Math.Exp(-mbp.GradingCoeff * Math.Log(arg));
-                CapCharge.Value = mbp.TransitTime * load.Current + mbp.JunctionPot * czero * (1 - arg * sarg) / (1 -
-                        mbp.GradingCoeff);
+                arg = 1 - vd / mbp.JunctionPotential;
+                sarg = Math.Exp(-mbp.GradingCoefficient * Math.Log(arg));
+                CapCharge.Value = mbp.TransitTime * load.Current + mbp.JunctionPotential * czero * (1 - arg * sarg) / (1 -
+                        mbp.GradingCoefficient);
                 capd = mbp.TransitTime * load.Conduct + czero * sarg;
             }
             else
             {
                 double czof2 = czero / modeltemp.F2;
                 CapCharge.Value = mbp.TransitTime * load.Current + czero * temp.TF1 + czof2 * (modeltemp.F3 * (vd -
-                    temp.TDepCap) + (mbp.GradingCoeff / (mbp.JunctionPot + mbp.JunctionPot)) * (vd * vd - temp.TDepCap * temp.TDepCap));
-                capd = mbp.TransitTime * load.Conduct + czof2 * (modeltemp.F3 + mbp.GradingCoeff * vd / mbp.JunctionPot);
+                    temp.TDepCap) + (mbp.GradingCoefficient / (mbp.JunctionPotential + mbp.JunctionPotential)) * (vd * vd - temp.TDepCap * temp.TDepCap));
+                capd = mbp.TransitTime * load.Conduct + czof2 * (modeltemp.F3 + mbp.GradingCoefficient * vd / mbp.JunctionPotential);
             }
             Cap = capd;
         }

@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("temp"), PropertyInfo("Instance temperature")]
-        public double _TEMP
+        public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Set(value + Circuit.CelsiusKelvin);

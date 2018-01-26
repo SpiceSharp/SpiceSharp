@@ -75,7 +75,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         [PropertyName("xj"), PropertyInfo("Junction depth")]
         public Parameter JunctionDepth { get; } = new Parameter();
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]
-        public double _TNOM
+        public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;
             set => NominalTemperature.Set(value + Circuit.CelsiusKelvin);

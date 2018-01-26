@@ -182,9 +182,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double vgb = vgs - vbs;
 
             double EffectiveLength = bp.Length - 2 * mbp.LatDiff;
-            double GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;
-            double GateDrainOverlapCap = mbp.GateDrainOverlapCapFactor * bp.Width;
-            double GateBulkOverlapCap = mbp.GateBulkOverlapCapFactor * EffectiveLength;
             double OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
 
             /* 
@@ -314,13 +311,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double icapgs, icapgd, icapgb;
             if (load.Mode > 0)
             {
-                Transistor.DEVqmeyer(vgs, vgd, vgb, mbp.Type * load.Von, mbp.Type * load.Vdsat,
+                Transistor.DEVqmeyer(vgs, vgd, vgb, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
                     out icapgs, out icapgd, out icapgb,
                     temp.TPhi, OxideCap);
             }
             else
             {
-                Transistor.DEVqmeyer(vgd, vgs, vgb, mbp.Type * load.Von, mbp.Type * load.Vdsat,
+                Transistor.DEVqmeyer(vgd, vgs, vgb, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
                     out icapgd, out icapgs, out icapgb,
                     temp.TPhi, OxideCap);
             }

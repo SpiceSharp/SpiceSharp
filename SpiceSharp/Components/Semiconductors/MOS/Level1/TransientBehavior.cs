@@ -286,13 +286,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double icapgs, icapgd, icapgb;
             if (load.Mode > 0)
             {
-                Transistor.DEVqmeyer(vgs, vgd, vgb, mbp.Type * load.Von, mbp.Type * load.Vdsat,
+                Transistor.DEVqmeyer(vgs, vgd, vgb, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
                     out icapgs, out icapgd, out icapgb,
                     temp.TPhi, OxideCap);
             }
             else
             {
-                Transistor.DEVqmeyer(vgd, vgs, vgb, mbp.Type * load.Von, mbp.Type * load.Vdsat,
+                Transistor.DEVqmeyer(vgd, vgs, vgb, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
                     out icapgd, out icapgs, out icapgb,
                     temp.TPhi, OxideCap);
             }
@@ -496,13 +496,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double icapgs, icapgd, icapgb;
             if (load.Mode > 0)
             {
-                Transistor.DEVqmeyer(vgs, vgd, vgb, mbp.Type * load.Von, mbp.Type * load.Vdsat,
+                Transistor.DEVqmeyer(vgs, vgd, vgb, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
                     out icapgs, out icapgd, out icapgb,
                     temp.TPhi, OxideCap);
             }
             else
             {
-                Transistor.DEVqmeyer(vgd, vgs, vgb, mbp.Type * load.Von, mbp.Type * load.Vdsat,
+                Transistor.DEVqmeyer(vgd, vgs, vgb, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
                     out icapgd, out icapgs, out icapgb,
                     temp.TPhi, OxideCap);
             }
@@ -554,12 +554,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             /* 
 			 * load current vector
 			 */
-            double ceqbs = mbp.Type * (Cbs - Gbs * vbs);
-            double ceqbd = mbp.Type * (Cbd - Gbd * vbd);
-            state.Rhs[gNode] -= mbp.Type * (ceqgs + ceqgb + ceqgd);
-            state.Rhs[bNode] -= ceqbs + ceqbd - mbp.Type * ceqgb;
-            state.Rhs[dNodePrime] += ceqbd + mbp.Type * ceqgd;
-            state.Rhs[sNodePrime] += ceqbs + mbp.Type * ceqgs;
+            double ceqbs = mbp.MosfetType * (Cbs - Gbs * vbs);
+            double ceqbd = mbp.MosfetType * (Cbd - Gbd * vbd);
+            state.Rhs[gNode] -= mbp.MosfetType * (ceqgs + ceqgb + ceqgd);
+            state.Rhs[bNode] -= ceqbs + ceqbd - mbp.MosfetType * ceqgb;
+            state.Rhs[dNodePrime] += ceqbd + mbp.MosfetType * ceqgd;
+            state.Rhs[sNodePrime] += ceqbs + mbp.MosfetType * ceqgs;
 
             /* 
 			 * load y matrix

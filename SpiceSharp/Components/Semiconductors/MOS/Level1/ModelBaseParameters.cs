@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Parameters
         /// </summary>
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]
-        public double _TNOM
+        public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;
             set => NominalTemperature.Set(value + Circuit.CelsiusKelvin);
@@ -76,25 +76,25 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Methods
         /// </summary>
         [PropertyName("nmos"), PropertyInfo("N type MOSfet model")]
-        public void SetNMOS(bool value)
+        public void SetNmos(bool value)
         {
             if (value)
-                Type = 1.0;
+                MosfetType = 1.0;
         }
         [PropertyName("pmos"), PropertyInfo("P type MOSfet model")]
-        public void SetPMOS(bool value)
+        public void SetPmos(bool value)
         {
             if (value)
-                Type = -1.0;
+                MosfetType = -1.0;
         }
         [PropertyName("type"), PropertyInfo("N-channel or P-channel MOS")]
-        public string GetTYPE()
+        public string GetMosfetType()
         {
-            if (Type > 0)
+            if (MosfetType > 0)
                 return "nmos";
             return "pmos";
         }
-        public double Type { get; protected set; } = 1.0;
+        public double MosfetType { get; protected set; } = 1.0;
 
     }
 }

@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
         public double Type { get; internal set; } = NPN;
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]
-        public double _TNOM
+        public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;
             set => NominalTemperature.Set(value + Circuit.CelsiusKelvin);

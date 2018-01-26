@@ -15,13 +15,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         [PropertyName("off"), PropertyInfo("Device initially off")]
         public bool Off { get; set; }
         [PropertyName("icvbs"), PropertyInfo("Initial B-S voltage")]
-        public Parameter InitialVBS { get; } = new Parameter();
+        public Parameter InitialVbs { get; } = new Parameter();
         [PropertyName("icvds"), PropertyInfo("Initial D-S voltage")]
-        public Parameter InitialVDS { get; } = new Parameter();
+        public Parameter InitialVds { get; } = new Parameter();
         [PropertyName("icvgs"), PropertyInfo("Initial G-S voltage")]
-        public Parameter InitialVGS { get; } = new Parameter();
+        public Parameter InitialVgs { get; } = new Parameter();
         [PropertyName("temp"), PropertyInfo("Instance temperature")]
-        public double _TEMP
+        public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Set(value + Circuit.CelsiusKelvin);
@@ -36,9 +36,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         [PropertyName("ad"), PropertyInfo("Drain area")]
         public Parameter DrainArea { get; } = new Parameter();
         [PropertyName("ps"), PropertyInfo("Source perimeter")]
-        public Parameter SourcePerimiter { get; } = new Parameter();
+        public Parameter SourcePerimeter { get; } = new Parameter();
         [PropertyName("pd"), PropertyInfo("Drain perimeter")]
-        public Parameter DrainPerimiter { get; } = new Parameter();
+        public Parameter DrainPerimeter { get; } = new Parameter();
         [PropertyName("nrs"), PropertyInfo("Source squares")]
         public Parameter SourceSquares { get; } = new Parameter(1);
         [PropertyName("nrd"), PropertyInfo("Drain squares")]
@@ -55,9 +55,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             switch (value.Length)
             {
-                case 3: InitialVBS.Set(value[2]); goto case 2;
-                case 2: InitialVGS.Set(value[1]); goto case 1;
-                case 1: InitialVDS.Set(value[0]); break;
+                case 3: InitialVbs.Set(value[2]); goto case 2;
+                case 2: InitialVgs.Set(value[1]); goto case 1;
+                case 1: InitialVds.Set(value[0]); break;
                 default:
                     throw new CircuitException("Bad parameter");
             }

@@ -18,7 +18,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         BaseParameters bp;
         TemperatureBehavior temp;
         ModelBaseParameters mbp;
-        ModelTemperatureBehavior modeltemp;
 
         /// <summary>
         /// Nodes
@@ -105,7 +104,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             // Get behaviors
             temp = provider.GetBehavior<TemperatureBehavior>(0);
-            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
         }
 
         /// <summary>
@@ -253,15 +251,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 ((state.Init == State.InitFlags.InitFix) && (!bp.Off)))
             {
                 // general iteration
-                vbs = mbp.Type * (state.Solution[bNode] - state.Solution[SourceNodePrime]);
-                vgs = mbp.Type * (state.Solution[gNode] - state.Solution[SourceNodePrime]);
-                vds = mbp.Type * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
+                vbs = mbp.MosfetType * (state.Solution[bNode] - state.Solution[SourceNodePrime]);
+                vgs = mbp.MosfetType * (state.Solution[gNode] - state.Solution[SourceNodePrime]);
+                vds = mbp.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
 
                 /* now some common crunching for some more useful quantities */
                 vbd = vbs - vds;
                 vgd = vgs - vds;
                 vgdo = Vgs - Vds;
-                von = mbp.Type * Von;
+                von = mbp.MosfetType * Von;
 
                 /* 
 				 * limiting
@@ -304,14 +302,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
                 if ((state.Init == State.InitFlags.InitJct) && !bp.Off)
                 {
-                    vds = mbp.Type * bp.InitialVDS;
-                    vgs = mbp.Type * bp.InitialVGS;
-                    vbs = mbp.Type * bp.InitialVBS;
+                    vds = mbp.MosfetType * bp.InitialVds;
+                    vgs = mbp.MosfetType * bp.InitialVgs;
+                    vbs = mbp.MosfetType * bp.InitialVbs;
                     if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((state.UseDC ||
                         state.Domain == State.DomainTypes.None) || (!state.UseIC)))
                     {
                         vbs = -1;
-                        vgs = mbp.Type * temp.TVto;
+                        vgs = mbp.MosfetType * temp.TVto;
                         vds = 0;
                     }
                 }
@@ -402,7 +400,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                     sarg = sarg - (Mode > 0 ? vbs : vbd) / (sarg + sarg);
                     sarg = Math.Max(0, sarg);
                 }
-                von = (temp.TVbi * mbp.Type) + mbp.Gamma * sarg;
+                von = (temp.TVbi * mbp.MosfetType) + mbp.Gamma * sarg;
                 vgst = (Mode > 0 ? vgs : vgd) - von;
                 vdsat = Math.Max(vgst, 0);
                 if (sarg <= 0)
@@ -453,8 +451,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             }
 
             /* now deal with n vs p polarity */
-            Von = mbp.Type * von;
-            Vdsat = mbp.Type * vdsat;
+            Von = mbp.MosfetType * von;
+            Vdsat = mbp.MosfetType * vdsat;
             /* line 490 */
             /* 
 			 * COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
@@ -481,19 +479,19 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             /* 
 			 * load current vector
 			 */
-            ceqbs = mbp.Type * (Cbs - (Gbs - state.Gmin) * vbs);
-            ceqbd = mbp.Type * (Cbd - (Gbd - state.Gmin) * vbd);
+            ceqbs = mbp.MosfetType * (Cbs - (Gbs - state.Gmin) * vbs);
+            ceqbd = mbp.MosfetType * (Cbd - (Gbd - state.Gmin) * vbd);
             if (Mode >= 0)
             {
                 xnrm = 1;
                 xrev = 0;
-                cdreq = mbp.Type * (cdrain - Gds * vds - Gm * vgs - Gmbs * vbs);
+                cdreq = mbp.MosfetType * (cdrain - Gds * vds - Gm * vgs - Gmbs * vbs);
             }
             else
             {
                 xnrm = 0;
                 xrev = 1;
-                cdreq = -(mbp.Type) * (cdrain - Gds * (-vds) - Gm * vgd - Gmbs * vbd);
+                cdreq = -(mbp.MosfetType) * (cdrain - Gds * (-vds) - Gm * vgd - Gmbs * vbd);
             }
             state.Rhs[bNode] -= (ceqbs + ceqbd);
             state.Rhs[DrainNodePrime] += (ceqbd - cdreq);
@@ -536,9 +534,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat;
 
-            vbs = mbp.Type * (state.Solution[bNode] - state.Solution[SourceNodePrime]);
-            vgs = mbp.Type * (state.Solution[gNode] - state.Solution[SourceNodePrime]);
-            vds = mbp.Type * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
+            vbs = mbp.MosfetType * (state.Solution[bNode] - state.Solution[SourceNodePrime]);
+            vgs = mbp.MosfetType * (state.Solution[gNode] - state.Solution[SourceNodePrime]);
+            vds = mbp.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
             vbd = vbs - vds;
             vgd = vgs - vds;
             vgdo = Vgs - Vds;

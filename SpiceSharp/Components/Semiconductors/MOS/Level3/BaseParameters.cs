@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         [PropertyName("nrd"), PropertyInfo("Drain squares")]
         public Parameter DrainSquares { get; } = new Parameter(1);
         [PropertyName("temp"), PropertyInfo("Instance operating temperature")]
-        public double _TEMP
+        public double TemperatureCelsius
         {
             get => Temperature - Circuit.CelsiusKelvin;
             set => Temperature.Set(value + Circuit.CelsiusKelvin);

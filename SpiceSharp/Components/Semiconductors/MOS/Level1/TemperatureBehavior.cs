@@ -134,9 +134,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             TSurfMob = mbp.SurfaceMobility / ratio4;
             phio = (mbp.Phi - modeltemp.Pbfact1) / modeltemp.Fact1;
             TPhi = fact2 * phio + pbfact;
-            TVbi = mbp.Vt0 - mbp.Type * (mbp.Gamma * Math.Sqrt(mbp.Phi)) + .5 * (modeltemp.Egfet1 - egfet) +
-                mbp.Type * .5 * (TPhi - mbp.Phi);
-            TVto = TVbi + mbp.Type * mbp.Gamma * Math.Sqrt(TPhi);
+            TVbi = mbp.Vt0 - mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi)) + .5 * (modeltemp.Egfet1 - egfet) +
+                mbp.MosfetType * .5 * (TPhi - mbp.Phi);
+            TVto = TVbi + mbp.MosfetType * mbp.Gamma * Math.Sqrt(TPhi);
             TSatCur = mbp.JctSatCur * Math.Exp(-egfet / vt + modeltemp.Egfet1 / modeltemp.Vtnom);
             TSatCurDens = mbp.JctSatCurDensity * Math.Exp(-egfet / vt + modeltemp.Egfet1 / modeltemp.Vtnom);
             pbo = (mbp.BulkJctPotential - modeltemp.Pbfact1) / modeltemp.Fact1;
@@ -183,7 +183,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             }
             if (mbp.SideWallCapFactor.Given)
             {
-                czbdsw = TCjsw * bp.DrainPerimiter;
+                czbdsw = TCjsw * bp.DrainPerimeter;
             }
             else
             {
@@ -217,7 +217,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             }
             if (mbp.SideWallCapFactor.Given)
             {
-                czbssw = TCjsw * bp.SourcePerimiter;
+                czbssw = TCjsw * bp.SourcePerimeter;
             }
             else
             {

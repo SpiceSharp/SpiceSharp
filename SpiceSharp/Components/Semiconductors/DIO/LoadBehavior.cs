@@ -110,7 +110,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(matrix));
             
             // Create
-            if (mbp.Resist.Value == 0)
+            if (mbp.Resistance.Value == 0)
                 PosPrimeNode = posNode;
             else
                 PosPrimeNode = nodes.Create(Name.Grow("#pos")).Index;
@@ -158,7 +158,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             csat = temp.TSatCur * bp.Area;
             gspr = modeltemp.Conductance * bp.Area;
             vt = Circuit.KOverQ * bp.Temperature;
-            vte = mbp.EmissionCoeff * vt;
+            vte = mbp.EmissionCoeffient * vt;
 
             // Initialization
             Check = false;
