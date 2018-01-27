@@ -44,9 +44,13 @@ namespace SpiceSharp.Sparse
             Col = col;
         }
 
+        /// <summary>
+        /// Convert to string
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
-            return $"({Row}, {Col}) = {Value}";
+            return "({0}, {1}) = {2}".FormatString(Row, Col, Value);
         }
 
         /// <summary>

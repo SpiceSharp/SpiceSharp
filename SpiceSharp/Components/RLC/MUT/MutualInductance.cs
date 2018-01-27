@@ -76,8 +76,8 @@ namespace SpiceSharp.Components
                 throw new ArgumentNullException(nameof(circuit));
 
             // Get the inductors for the mutual inductance
-            Inductor1 = circuit.Objects[InductorName1] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{InductorName1}'");
-            Inductor2 = circuit.Objects[InductorName2] as Inductor ?? throw new CircuitException($"{Name}: Could not find inductor '{InductorName2}'");
+            Inductor1 = circuit.Objects[InductorName1] as Inductor ?? throw new CircuitException("{0}: Could not find inductor '{1}'".FormatString(Name, InductorName1));
+            Inductor2 = circuit.Objects[InductorName2] as Inductor ?? throw new CircuitException("{0}: Could not find inductor '{1}'".FormatString(Name, InductorName2));
         }
 
         /// <summary>
@@ -91,13 +91,13 @@ namespace SpiceSharp.Components
             var data = base.BuildSetupDataProvider(pool);
 
             // Register inductor 1
-            var eb = pool.GetEntityBehaviors(InductorName1) ?? throw new CircuitException($"{Name}: Could not find behaviors for inductor '{InductorName1}'");
+            var eb = pool.GetEntityBehaviors(InductorName1) ?? throw new CircuitException("{0}: Could not find behaviors for inductor '{1}'".FormatString(Name, InductorName1));
             data.Add(eb);
             var parameters = Inductor1.Parameters;
             data.Add(parameters);
 
             // Register inductor 2
-            eb = pool.GetEntityBehaviors(InductorName2) ?? throw new CircuitException($"{Name}: Could not find behaviors for inductor '{InductorName2}'");
+            eb = pool.GetEntityBehaviors(InductorName2) ?? throw new CircuitException("{0}: Could not find behaviors for inductor '{1}'".FormatString(Name, InductorName2));
             data.Add(eb);
             parameters = Inductor2.Parameters;
             data.Add(parameters);

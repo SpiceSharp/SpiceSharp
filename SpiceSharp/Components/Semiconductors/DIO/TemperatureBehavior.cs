@@ -104,7 +104,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 if (cbv < TSatCur * mbp.BreakdownVoltage / vt)
                 {
                     cbv = TSatCur * mbp.BreakdownVoltage / vt;
-                    CircuitWarning.Warning(this, $"{Name}: breakdown current increased to {cbv.ToString("g")} to resolve incompatability with specified saturation current");
+                    CircuitWarning.Warning(this, "{0}: breakdown current increased to {1:g} to resolve incompatability with specified saturation current".FormatString(Name, cbv));
                     xbv = mbp.BreakdownVoltage;
                 }
                 else
@@ -120,7 +120,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                             break;
                     }
                     if (iter >= 25)
-                        CircuitWarning.Warning(this, $"{Name}: unable to match forward and reverse diode regions: bv = {xbv.ToString("g")}, ibv = {xcbv.ToString("g")}");
+                        CircuitWarning.Warning(this, "{0}: unable to match forward and reverse diode regions: bv = {1:g}, ibv = {2:g}".FormatString(Name, xbv, xcbv));
                 }
                 TBrkdwnV = xbv;
             }

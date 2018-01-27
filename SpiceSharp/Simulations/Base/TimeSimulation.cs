@@ -57,7 +57,7 @@ namespace SpiceSharp.Simulations
             tranbehaviors = SetupBehaviors<TransientBehavior>();
 
             // Also configure the method
-            Method = TimeConfiguration.Method ?? throw new CircuitException($"{Name}: No integration method specified");
+            Method = TimeConfiguration.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
             Method.Breaks.Clear();
             Method.Breaks.SetBreakpoint(config.InitTime);
             Method.Breaks.SetBreakpoint(config.FinalTime);
@@ -255,7 +255,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public override Func<State, double> CreateExport(Identifier name, string property)
         {
-            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
+            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
             // For transient analysis, the most logical would be to ask the Transient behavior (if it exists)
             var export = eb.Get<TransientBehavior>()?.CreateExport(property);

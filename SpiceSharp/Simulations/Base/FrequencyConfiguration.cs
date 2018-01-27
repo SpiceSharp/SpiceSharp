@@ -67,7 +67,7 @@ namespace SpiceSharp.Simulations
                     case "decade":
                     case "dec": StepType = StepTypes.Decade; break;
                     default:
-                        throw new CircuitException($"Invalid step type {value}");
+                        throw new CircuitException("Invalid step type {0}".FormatString(value));
                 }
             }
         }
@@ -101,7 +101,7 @@ namespace SpiceSharp.Simulations
                 case "oct":
                 case "octave": StepType = StepTypes.Octave; break;
                 default:
-                    throw new CircuitException($"Invalid step type \"{steptype}\"");
+                    throw new CircuitException("Invalid step type \"{0}\"".FormatString(steptype));
             }
 
             NumberSteps = n;

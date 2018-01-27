@@ -139,7 +139,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 if (mbp.DepletionCapCoeff > 0.9999)
                 {
                     mbp.DepletionCapCoeff.Value = 0.9999;
-                    throw new CircuitException($"BJT model {Name}, parameter fc limited to 0.9999");
+                    throw new CircuitException("BJT model {0}, parameter fc limited to 0.9999".FormatString(Name));
                 }
             }
             else

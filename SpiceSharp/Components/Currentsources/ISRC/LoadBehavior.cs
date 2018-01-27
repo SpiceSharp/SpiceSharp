@@ -86,9 +86,9 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             {
                 // no DC value - either have a transient value or none
                 if (bp.Waveform != null)
-                    CircuitWarning.Warning(this, $"{Name} has no DC value, transient time 0 value used");
+                    CircuitWarning.Warning(this, "{0} has no DC value, transient time 0 value used".FormatString(Name));
                 else
-                    CircuitWarning.Warning(this, $"{Name} has no value, DC 0 assumed");
+                    CircuitWarning.Warning(this, "{0} has no value, DC 0 assumed".FormatString(Name));
             }
         }
         
@@ -101,7 +101,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
-                throw new CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
+                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
             posNode = pins[0];
             negNode = pins[1];
         }

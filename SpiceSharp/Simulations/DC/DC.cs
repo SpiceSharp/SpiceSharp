@@ -113,7 +113,7 @@ namespace SpiceSharp.Simulations
                 // Get the component to be swept
                 var sweep = Sweeps[i];
                 if (!Circuit.Objects.Contains(sweep.Parameter))
-                    throw new CircuitException($"Could not find source {sweep.Parameter}");
+                    throw new CircuitException("Could not find source {0}".FormatString(sweep.Parameter));
                 var component = Circuit.Objects[sweep.Parameter];
 
                 // Get the parameter and save it for restoring later

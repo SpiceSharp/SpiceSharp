@@ -190,7 +190,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             }
 
             if (bp.Length - 2 * mbp.LatDiff <= 0)
-                throw new CircuitException($"{Name}: effective channel length less than zero");
+                throw new CircuitException("{0}: effective channel length less than zero".FormatString(Name));
             ratio4 = ratio * Math.Sqrt(ratio);
             TTransconductance = mbp.Transconductance / ratio4;
             TSurfMob = mbp.SurfaceMobility / ratio4;

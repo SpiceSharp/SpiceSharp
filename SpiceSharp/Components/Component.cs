@@ -56,7 +56,7 @@ namespace SpiceSharp.Components
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
             if (nodes.Length != connections.Length)
-                throw new CircuitException($"{Name}: Node count mismatch. {nodes.Length} given, {connections.Length} expected.");
+                throw new CircuitException("{0}: Node count mismatch. {1} given, {2} expected.".FormatString(Name, nodes.Length, connections.Length));
             for (int i = 0; i < nodes.Length; i++)
             {
                 if (nodes[i] == null)

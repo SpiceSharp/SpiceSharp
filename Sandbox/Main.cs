@@ -21,6 +21,9 @@ namespace Sandbox
             var plotOutput = chMain.Series.Add("Output");
             plotOutput.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
 
+            double v = Math.PI * 1e-4;
+            MessageBox.Show(string.Format("{0:g}", v) + " =? " + v.ToString("g"));
+
             // Create circuit
             Circuit ckt = new Circuit();
             ckt.Objects.Add(

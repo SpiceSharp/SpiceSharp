@@ -125,7 +125,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
-                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
+                throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             colNode = pins[0];
             baseNode = pins[1];
             emitNode = pins[2];

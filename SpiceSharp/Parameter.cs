@@ -116,8 +116,8 @@ namespace SpiceSharp
         public override string ToString()
         {
             if (Given)
-                return Value.ToString() + " (set)";
-            return Value.ToString();
+                return "{0} (set)".FormatString(Value);
+            return "{0} (not set)".FormatString(Value);
         }
     }
 }

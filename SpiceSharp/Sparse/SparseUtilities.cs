@@ -300,7 +300,7 @@ namespace SpiceSharp.Sparse
             if (Originator == null)
                 Originator = "sparse";
             if (Originator != null)
-                sb.Append($"{Originator.ToString()}: ");
+                sb.Append("{0}: ".FormatString(Originator.ToString()));
             if ((int)Error >= (int)SparseError.Fatal)
                 sb.Append("fatal error, ");
             else
@@ -313,12 +313,12 @@ namespace SpiceSharp.Sparse
             else if (Error == SparseError.Singular)
             {
                 matrix.SingularAt(out Row, out Col);
-                sb.Append($"singular matrix detected at row {Row} and column {Col}.");
+                sb.Append("singular matrix detected at row {0} and column {1}.".FormatString(Row, Col));
             }
             else if (Error == SparseError.ZeroDiagonal)
             {
                 matrix.SingularAt(out Row, out Col);
-                sb.Append($"zero diagonal detected at row {Row} and column {Col}.");
+                sb.Append("zero diagonal detected at row {0} and column {1}.".FormatString(Row, Col));
             }
             else if (Error == SparseError.SmallPivot)
             {

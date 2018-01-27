@@ -93,7 +93,7 @@ namespace SpiceSharp.Components
             if (circuit.Objects[ControllingName] is VoltageSource vsrc)
                 ControllingSource = vsrc;
             else
-                throw new CircuitException($"{Name}: Could not find voltage source '{ControllingName}'");
+                throw new CircuitException("{0}: Could not find voltage source '{1}'".FormatString(Name, ControllingName));
         }
 
         /// <summary>

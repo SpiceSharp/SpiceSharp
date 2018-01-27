@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
                     RESresist = mbp.SheetResistance * (bp.Length - mbp.Narrow) / (bp.Width - mbp.Narrow);
                 else
                 {
-                    CircuitWarning.Warning(this, $"{Name}: resistance=0, set to 1000");
+                    CircuitWarning.Warning(this, "{0}: resistance=0, set to 1000".FormatString(Name));
                     RESresist = 1000;
                 }
 

@@ -117,22 +117,22 @@ namespace SpiceSharp.Simulations
 
             // Check the voltage or current source
             if (noiseconfig.Input == null)
-                throw new CircuitException($"{Name}: No input source specified");
+                throw new CircuitException("{0}: No input source specified".FormatString(Name));
             Entity source = circuit.Objects[noiseconfig.Input];
             if (source is VoltageSource vsource)
             {
                 var ac = vsource.Parameters.Get<Components.VoltagesourceBehaviors.FrequencyParameters>();
                 if (!ac.AcMagnitude.Given || ac.AcMagnitude == 0.0)
-                    throw new CircuitException($"{Name}: Noise input source {vsource.Name} has no AC input");
+                    throw new CircuitException("{0}: Noise input source {1} has no AC input".FormatString(Name, vsource.Name));
             }
             else if (source is CurrentSource isource)
             {
                 var ac = isource.Parameters.Get<Components.CurrentsourceBehaviors.FrequencyParameters>();
                 if (!ac.AcMagnitude.Given || ac.AcMagnitude == 0.0)
-                    throw new CircuitException($"{Name}: Noise input source {isource.Name} has not AC input");
+                    throw new CircuitException("{0}: Noise input source {1} has not AC input".FormatString(Name, isource.Name));
             }
             else
-                throw new CircuitException($"{Name}: No input source");
+                throw new CircuitException("{0}: No input source".FormatString(Name));
 
             double freqdelta = 0.0;
             int n = 0;
@@ -262,7 +262,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public override Func<State, double> CreateExport(Identifier name, string property)
         {
-            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
+            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
             // Most logical place to look for noise analysis: noise behaviors
             var export = eb.Get<NoiseBehavior>()?.CreateExport(property);

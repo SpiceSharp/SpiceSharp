@@ -262,6 +262,7 @@
     <Compile Include="Sparse\SparseHelper.cs" />
     <Compile Include="Sparse\SparseSolve.cs" />
     <Compile Include="Sparse\SparseUtilities.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="api\index.md" />

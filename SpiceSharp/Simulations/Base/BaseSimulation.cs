@@ -51,7 +51,7 @@ namespace SpiceSharp.Simulations
         {
             // No use simulating an empty circuit
             if (Circuit.Objects.Count == 0)
-                throw new CircuitException($"{Name}: No circuit objects for simulation");
+                throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
 
             // Setup all objects
             Circuit.Objects.BuildOrderedComponentList();
@@ -60,7 +60,7 @@ namespace SpiceSharp.Simulations
                 o.Setup(Circuit);
             }
             if (Circuit.Nodes.Count < 1)
-                throw new CircuitException($"{Name}: No circuit nodes for simulation");
+                throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
 
             // Setup behaviors and configuration
             BaseConfiguration = Parameters.Get<BaseConfiguration>();
@@ -112,7 +112,7 @@ namespace SpiceSharp.Simulations
 
             // Unsetup all objects
             foreach (var o in Circuit.Objects)
-                o.UnSetup(Circuit);
+                o.Unsetup(Circuit);
 
             // Clear the state
             State.Clear();
@@ -487,7 +487,7 @@ namespace SpiceSharp.Simulations
                 double o = rstate.OldSolution[node.Index];
 
                 if (double.IsNaN(n))
-                    throw new CircuitException($"Non-convergence, node {node} is not a number.");
+                    throw new CircuitException("Non-convergence, node {0} is not a number.".FormatString(node));
 
                 if (node.UnknownType == Node.NodeType.Voltage)
                 {
@@ -552,7 +552,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public override Func<State, double> CreateExport(Identifier name, string property)
         {
-            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
+            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
             return eb.Get<LoadBehavior>()?.CreateExport(property);
         }
 

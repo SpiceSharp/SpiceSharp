@@ -232,7 +232,7 @@ namespace SpiceSharp.Simulations
                             if (Method.OldDelta > timeconfig.DeltaMin)
                                 Method.Delta = timeconfig.DeltaMin;
                             else
-                                throw new CircuitException($"Timestep too small at t={Method.SavedTime.ToString("g")}: {Method.Delta.ToString("g")}");
+                                throw new CircuitException("Timestep too small at t={0:g}: {1:g}".FormatString(Method.SavedTime, Method.Delta));
                         }
                     }
                 }
@@ -243,7 +243,7 @@ namespace SpiceSharp.Simulations
                 Statistics.TransientTime.Stop();
                 Statistics.TranIter += Statistics.NumIter - startIters;
                 Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
-                throw new CircuitException($"{Name}: transient terminated", ex);
+                throw new CircuitException("{0}: transient terminated".FormatString(Name), ex);
             }
         }
     }

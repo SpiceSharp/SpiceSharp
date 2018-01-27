@@ -75,7 +75,7 @@ namespace SpiceSharp.Sparse
             if (header)
             {
                 sb.Append("MATRIX SUMMARY" + Environment.NewLine + Environment.NewLine);
-                sb.Append($"Size of matrix = {Size} x {Size}.{Environment.NewLine}");
+                sb.Append("Size of matrix = {0} x {0}.{1}".FormatString(Size, Environment.NewLine));
                 if (matrix.Reordered && printReordered)
                     sb.Append("Matrix has been reordered." + Environment.NewLine);
                 sb.Append(Environment.NewLine);
@@ -122,9 +122,12 @@ namespace SpiceSharp.Sparse
                     else
                     {
                         if (printReordered)
-                            sb.Append($"Columns {StartCol} to {StopCol}.{Environment.NewLine}");
+                            sb.Append("Columns {0} to {1}.{2}".FormatString(StartCol, StopCol, Environment.NewLine));
                         else
-                            sb.Append($"Columns {matrix.Translation.IntToExtColMap[PrintOrdToIntColMap[StartCol]]} to {matrix.Translation.IntToExtColMap[PrintOrdToIntColMap[StopCol]]}.{Environment.NewLine}");
+                            sb.Append("Columns {0} to {1}.{2}".FormatString(
+                                matrix.Translation.IntToExtColMap[PrintOrdToIntColMap[StartCol]],
+                                matrix.Translation.IntToExtColMap[PrintOrdToIntColMap[StopCol]],
+                                Environment.NewLine));
                     }
                 }
 
@@ -166,7 +169,7 @@ namespace SpiceSharp.Sparse
 
                             // Case where element exists
                             if (data)
-                                sb.AppendFormat("{0,10}", pElement.Value.Real.ToString("G3"));
+                                sb.AppendFormat("{0:G3,10}", pElement.Value.Real);
                             else
                                 sb.Append('x');
 
@@ -195,7 +198,7 @@ namespace SpiceSharp.Sparse
                         {
                             if (pImagElements[J - StartCol] != null)
                             {
-                                sb.AppendFormat("{0,9}j",pImagElements[J - StartCol].Value.Imag.ToString("G3"));
+                                sb.AppendFormat("{0:G3,9}j", pImagElements[J - StartCol].Value.Imag);
                             }
                             else sb.Append("          ");
                         }
@@ -210,8 +213,8 @@ namespace SpiceSharp.Sparse
             }
             if (header)
             {
-                sb.Append($"{Environment.NewLine}Largest element in matrix = {LargestElement}.{Environment.NewLine}");
-                sb.Append($"Smallest element in matrix = {SmallestElement}.{Environment.NewLine}");
+                sb.Append("{1}Largest element in matrix = {0}.{1}".FormatString(LargestElement, Environment.NewLine));
+                sb.Append("Smallest element in matrix = {0}.{1}".FormatString(SmallestElement, Environment.NewLine));
 
                 // Search for largest and smallest diagonal values
                 for (I = 1; I <= Size; I++)
@@ -227,19 +230,22 @@ namespace SpiceSharp.Sparse
                 // Print the largest and smallest diagonal values
                 if (matrix.Factored)
                 {
-                    sb.Append($"{Environment.NewLine}Largest diagonal element = {LargestDiag}.{Environment.NewLine}");
-                    sb.Append($"Smallest diagonal element = {SmallestDiag}.{Environment.NewLine}");
+                    sb.Append("{1}Largest diagonal element = {0}.{1}".FormatString(LargestDiag, Environment.NewLine));
+                    sb.Append("Smallest diagonal element = {0}.{1}".FormatString(SmallestDiag, Environment.NewLine));
                 }
                 else
                 {
-                    sb.Append($"{Environment.NewLine}Largest pivot element = {LargestDiag}.{Environment.NewLine}");
-                    sb.Append($"Smallest pivot element = {SmallestDiag}.{Environment.NewLine}");
+                    sb.Append("{1}Largest pivot element = {0}.{1}".FormatString(LargestDiag, Environment.NewLine));
+                    sb.Append("Smallest pivot element = {0}.{1}".FormatString(SmallestDiag, Environment.NewLine));
                 }
 
                 // Calculate and print sparsity and number of fill-ins created
-                sb.Append($"{Environment.NewLine}Density = {(double)(ElementCount * 100) / (double)(Size * Size)}%.{Environment.NewLine}");
+                sb.Append("{1}Density = {0}%.{1}".FormatString(
+                    ElementCount * 100.0 / (Size * Size),
+                    Environment.NewLine
+                    ));
                 if (!matrix.NeedsOrdering)
-                    sb.Append($"Number of fill-ins = {matrix.Fillins}.{Environment.NewLine}");
+                    sb.Append("Number of fill-ins = {0}.{1}".FormatString(matrix.Fillins, Environment.NewLine));
             }
             sb.Append(Environment.NewLine);
 

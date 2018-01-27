@@ -64,7 +64,7 @@ namespace SpiceSharp.Circuits
             // Check if a voltage driver is closing a loop
             var icc = FindVoltageDriveLoop();
             if (icc != null)
-                throw new CircuitException($"{icc.Name} closes a loop of voltage sources");
+                throw new CircuitException("{0} closes a loop of voltage sources".FormatString(icc.Name));
 
             // Check for floating nodes
             var unconnected = FindFloatingNodes();
@@ -77,7 +77,7 @@ namespace SpiceSharp.Circuits
                     if (unconnected.Contains(index))
                         un.Add(circuit.Nodes[i].Name);
                 }
-                throw new CircuitException($"{string.Join(", ", un)}: Floating nodes found");
+                throw new CircuitException("{0}: Floating nodes found".FormatString(string.Join(",", un)));
             }
         }
 
@@ -114,7 +114,7 @@ namespace SpiceSharp.Circuits
                     }
                 }
                 if (sc)
-                    throw new CircuitException($"{icc.Name}: All pins have been short-circuited");
+                    throw new CircuitException("{0}: All pins have been short-circuited".FormatString(icc.Name));
 
                 // Get the node indices for each pin
                 int[] nodes = new int[icc.PinCount];

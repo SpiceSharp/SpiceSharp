@@ -54,9 +54,9 @@ namespace SpiceSharp.Sparse
         public override string ToString()
         {
             if (Imag == 0.0)
-                return Real.ToString();
+                return "{0}".FormatString(Real);
             else
-                return $"({Real}; {Imag})";
+                return "({0}; {1})".FormatString(Real, Imag);
         }
 
         /// <summary>

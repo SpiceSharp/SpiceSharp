@@ -81,7 +81,7 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         public override string ToString()
         {
-            return $"Node {Name}";
+            return "Node {0}".FormatString(Name);
         }
     }
 }

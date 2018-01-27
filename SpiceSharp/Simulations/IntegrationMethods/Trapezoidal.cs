@@ -206,7 +206,7 @@ namespace SpiceSharp.IntegrationMethods
                     break;
 
                 default:
-                    throw new CircuitException($"Invalid order {Order}");
+                    throw new CircuitException("Invalid order {0}".FormatString(Order));
             }
 
             // Store the derivative w.r.t. the current timestep
@@ -260,7 +260,7 @@ namespace SpiceSharp.IntegrationMethods
             {
                 case 1: factor = 0.5; break;
                 case 2: factor = 0.0833333333; break;
-                default: throw new CircuitException($"Invalid order {Order}");
+                default: throw new CircuitException("Invalid order {0}".FormatString(Order));
             }
             double del = Config.TrTol * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
             if (Order == 2)

@@ -79,7 +79,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
-                throw new Diagnostics.CircuitException($"Pin count mismatch: 4 pins expected, {pins.Length} given");
+                throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             posNode = pins[0];
             negNode = pins[1];
             contPosNode = pins[2];

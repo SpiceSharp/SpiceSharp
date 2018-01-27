@@ -51,6 +51,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param id="id">Identifier</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
         public Node this[Identifier id]
         {
             get => map[id];

@@ -142,7 +142,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public override Func<State, double> CreateExport(Identifier name, string property)
         {
-            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
+            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
             // Most logical place to look for frequency analysis: AC behaviors
             var export = eb.Get<FrequencyBehavior>()?.CreateExport(property);
@@ -161,7 +161,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public Func<State, Complex> CreateAcExport(Identifier name, string property)
         {
-            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException($"{Name}: Could not find behaviors of {name}");
+            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
             // Only AC behaviors implement these export methods
             return eb.Get<FrequencyBehavior>()?.CreateAcExport(property);

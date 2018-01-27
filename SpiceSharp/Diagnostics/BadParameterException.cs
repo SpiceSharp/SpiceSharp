@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="param"></param>
         public BadParameterException(string param)
-            : base($"Invalid parameter value for '{param}'")
+            : base("Invalid parameter value for '{0}'".FormatString(param))
         {
         }
     }

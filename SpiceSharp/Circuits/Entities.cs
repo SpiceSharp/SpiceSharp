@@ -57,7 +57,6 @@ namespace SpiceSharp.Circuits
         /// Add one or more circuit objects
         /// </summary>
         /// <param id="cs">The objects that need to be added</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
         public void Add(params Entity[] cs)
         {
             if (cs == null)
@@ -67,7 +66,7 @@ namespace SpiceSharp.Circuits
                 if (c == null)
                     throw new CircuitException("No entity specified");
                 if (objects.ContainsKey(c.Name))
-                    throw new CircuitException($"A component with the id {c.Name} already exists");
+                    throw new CircuitException("A component with the id {0} already exists".FormatString(c.Name));
                 objects.Add(c.Name, c);
                 isordered = false;
             }

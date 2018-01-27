@@ -77,7 +77,7 @@ namespace SpiceSharp.Components
 
             // Some checks
             if (per <= tr + pw + tf)
-                throw new CircuitException($"Invalid pulse specification: Period {per} is too small");
+                throw new CircuitException("Invalid pulse specification: Period {0} is too small".FormatString(per));
         }
 
         /// <summary>

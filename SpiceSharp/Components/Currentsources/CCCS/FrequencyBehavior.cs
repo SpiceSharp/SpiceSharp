@@ -92,7 +92,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
-                throw new CircuitException($"Pin count mismatch: 2 pins expected, {pins.Length} given");
+                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
             posNode = pins[0];
             negNode = pins[1];
         }
