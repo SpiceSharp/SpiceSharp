@@ -89,9 +89,9 @@ namespace SpiceSharp.Simulations
             // Load all in order to calculate the AC info for all devices
             state.UseDC = false;
             state.UseSmallSignal = true;
-            foreach (var behavior in loadbehaviors)
+            foreach (var behavior in LoadBehaviors)
                 behavior.Load(this);
-            foreach (var behavior in acbehaviors)
+            foreach (var behavior in FrequencyBehaviors)
                 behavior.InitializeParameters(this);
 
             // Export operating point if requested

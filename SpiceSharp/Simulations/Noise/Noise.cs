@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Numerics;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
@@ -26,9 +26,9 @@ namespace SpiceSharp.Simulations
         public StateNoise NoiseState { get; } = new StateNoise();
 
         /// <summary>
-        /// Private variables
+        /// Noise behaviors
         /// </summary>
-        List<NoiseBehavior> noisebehaviors;
+        protected Collection<NoiseBehavior> NoiseBehaviors { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -79,7 +79,7 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors and configurations
             NoiseConfiguration = Parameters.Get<NoiseConfiguration>();
-            noisebehaviors = SetupBehaviors<NoiseBehavior>();
+            NoiseBehaviors = SetupBehaviors<NoiseBehavior>();
         }
 
         /// <summary>
@@ -88,10 +88,10 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            foreach (var behavior in noisebehaviors)
+            foreach (var behavior in NoiseBehaviors)
                 behavior.Unsetup();
-            noisebehaviors.Clear();
-            noisebehaviors = null;
+            NoiseBehaviors.Clear();
+            NoiseBehaviors = null;
             NoiseConfiguration = null;
 
             base.Unsetup();
@@ -181,7 +181,7 @@ namespace SpiceSharp.Simulations
             state.Sparse |= State.SparseFlags.NIACSHOULDREORDER;
 
             // Connect noise sources
-            foreach (var behavior in noisebehaviors)
+            foreach (var behavior in NoiseBehaviors)
                 behavior.ConnectNoise();
 
             // Loop through noise figures
@@ -200,7 +200,7 @@ namespace SpiceSharp.Simulations
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit
                 data.outNdens = 0.0;
-                foreach (var behavior in noisebehaviors)
+                foreach (var behavior in NoiseBehaviors)
                     behavior.Noise(this);
 
                 // Export the data

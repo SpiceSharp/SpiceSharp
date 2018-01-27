@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SpiceSharp.Diagnostics
 {
@@ -11,7 +12,12 @@ namespace SpiceSharp.Diagnostics
         /// <summary>
         /// Get a list of all warnings
         /// </summary>
-        public static List<string> Warnings { get; } = new List<string>();
+        public static ReadOnlyCollection<string> Warnings { get => warnings.AsReadOnly(); }
+
+        /// <summary>
+        /// All warnings
+        /// </summary>
+        static List<string> warnings = new List<string>();
 
         /// <summary>
         /// The event called when a warning is added
@@ -25,7 +31,7 @@ namespace SpiceSharp.Diagnostics
         public static void Warning(object sender, string msg)
         {
             WarningArgs arg = new WarningArgs(msg);
-            Warnings.Add(msg);
+            warnings.Add(msg);
             WarningGenerated?.Invoke(sender, arg);
         }
     }

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Attributes;
 using SpiceSharp.IntegrationMethods;
@@ -33,7 +33,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Time-domain behaviors
         /// </summary>
-        protected List<TransientBehavior> tranbehaviors;
+        protected Collection<TransientBehavior> TransientBehaviors { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -54,7 +54,7 @@ namespace SpiceSharp.Simulations
             // Get behaviors and configurations
             var config = Parameters.Get<TimeConfiguration>();
             TimeConfiguration = config;
-            tranbehaviors = SetupBehaviors<TransientBehavior>();
+            TransientBehaviors = SetupBehaviors<TransientBehavior>();
 
             // Also configure the method
             Method = TimeConfiguration.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
@@ -65,7 +65,7 @@ namespace SpiceSharp.Simulations
 
             // Setup the state pool and register states
             States = new StatePool(Method);
-            foreach (var behavior in tranbehaviors)
+            foreach (var behavior in TransientBehaviors)
             {
                 behavior.GetMatrixPointers(State.Matrix);
                 behavior.CreateStates(States);
@@ -91,10 +91,10 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            foreach (var behavior in tranbehaviors)
+            foreach (var behavior in TransientBehaviors)
                 behavior.Unsetup();
-            tranbehaviors.Clear();
-            tranbehaviors = null;
+            TransientBehaviors.Clear();
+            TransientBehaviors = null;
             Method = null;
 
             base.Unsetup();
@@ -139,7 +139,7 @@ namespace SpiceSharp.Simulations
                 {
                     // Load the Y-matrix and Rhs-vector for DC and transients
                     Load();
-                    foreach (var behavior in tranbehaviors)
+                    foreach (var behavior in TransientBehaviors)
                         behavior.Transient(this);
                     iterno++;
                 }

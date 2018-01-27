@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
@@ -36,10 +36,10 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Initialize the trapezoidal integration method
         /// </summary>
-        /// <param name="tranbehaviors">Truncation behaviors</param>
-        public override void Initialize(List<TransientBehavior> tranbehaviors)
+        /// <param name="transientBehaviors">Truncation behaviors</param>
+        public override void Initialize(Collection<TransientBehavior> transientBehaviors)
         {
-            base.Initialize(tranbehaviors);
+            base.Initialize(transientBehaviors);
 
             ag = new double[MaxOrder];
             for (int i = 0; i < MaxOrder; i++)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
-using System.Collections.Generic;
-using SpiceSharp.Circuits;
+using System.Collections.ObjectModel;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Sparse;
 using SpiceSharp.Behaviors;
@@ -22,7 +21,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        protected List<FrequencyBehavior> acbehaviors = null;
+        protected Collection<FrequencyBehavior> FrequencyBehaviors { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -54,12 +53,12 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get behaviors
-            acbehaviors = SetupBehaviors<FrequencyBehavior>();
+            FrequencyBehaviors = SetupBehaviors<FrequencyBehavior>();
 
             // Setup AC behaviors and configurations
             FrequencyConfiguration = Parameters.Get<FrequencyConfiguration>();
             var matrix = State.Matrix;
-            foreach (var behavior in acbehaviors)
+            foreach (var behavior in FrequencyBehaviors)
                 behavior.GetMatrixPointers(matrix);
         }
 
@@ -69,10 +68,10 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            foreach (var behavior in acbehaviors)
+            foreach (var behavior in FrequencyBehaviors)
                 behavior.Unsetup();
-            acbehaviors.Clear();
-            acbehaviors = null;
+            FrequencyBehaviors.Clear();
+            FrequencyBehaviors = null;
 
             base.Unsetup();
         }
@@ -96,7 +95,7 @@ namespace SpiceSharp.Simulations
 
             // Load AC
             state.Clear();
-            foreach (var behavior in acbehaviors)
+            foreach (var behavior in FrequencyBehaviors)
                 behavior.Load(this);
 
             if (state.Sparse.HasFlag(State.SparseFlags.NIACSHOULDREORDER))

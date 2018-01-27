@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Sparse;
@@ -15,9 +16,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Necessary behaviors and configurations
         /// </summary>
-        protected List<LoadBehavior> loadbehaviors = null;
-        protected List<TemperatureBehavior> tempbehaviors = null;
-        protected List<IcBehavior> icbehaviors = null;
+        protected Collection<LoadBehavior> LoadBehaviors { get; private set; }
+        protected Collection<TemperatureBehavior> TemperatureBehaviors { get; private set; }
+        protected Collection<IcBehavior> InitialConditionBehaviors { get; private set; }
 
         /// <summary>
         /// Get the currently active configuration for the base simulation
@@ -64,13 +65,13 @@ namespace SpiceSharp.Simulations
 
             // Setup behaviors and configuration
             BaseConfiguration = Parameters.Get<BaseConfiguration>();
-            tempbehaviors = SetupBehaviors<TemperatureBehavior>();
-            loadbehaviors = SetupBehaviors<LoadBehavior>();
-            icbehaviors = SetupBehaviors<IcBehavior>();
+            TemperatureBehaviors = SetupBehaviors<TemperatureBehavior>();
+            LoadBehaviors = SetupBehaviors<LoadBehavior>();
+            InitialConditionBehaviors = SetupBehaviors<IcBehavior>();
 
             // Setup the load behaviors
             var matrix = State.Matrix;
-            foreach (var behavior in loadbehaviors)
+            foreach (var behavior in LoadBehaviors)
                 behavior.GetMatrixPointers(Circuit.Nodes, matrix);
         }
 
@@ -80,7 +81,7 @@ namespace SpiceSharp.Simulations
         protected override void Execute()
         {
             // Do temperature-dependent calculations
-            foreach (var behavior in tempbehaviors)
+            foreach (var behavior in TemperatureBehaviors)
                 behavior.Temperature(this);
 
             // Initialize the solution
@@ -96,18 +97,18 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Unsetup all behaviors
-            foreach (var behavior in icbehaviors)
+            foreach (var behavior in InitialConditionBehaviors)
                 behavior.Unsetup();
-            foreach (var behavior in tempbehaviors)
+            foreach (var behavior in TemperatureBehaviors)
                 behavior.Unsetup();
-            foreach (var behavior in loadbehaviors)
+            foreach (var behavior in LoadBehaviors)
                 behavior.Unsetup();
 
             // Remove behavior and configuration references
-            loadbehaviors.Clear();
-            loadbehaviors = null;
-            icbehaviors.Clear();
-            icbehaviors = null;
+            LoadBehaviors.Clear();
+            LoadBehaviors = null;
+            InitialConditionBehaviors.Clear();
+            InitialConditionBehaviors = null;
             BaseConfiguration = null;
 
             // Unsetup all objects
@@ -347,7 +348,7 @@ namespace SpiceSharp.Simulations
             state.Clear();
 
             // Load all devices
-            foreach (var behavior in loadbehaviors)
+            foreach (var behavior in LoadBehaviors)
                 behavior.Load(this);
 
             // Check modes
@@ -439,7 +440,7 @@ namespace SpiceSharp.Simulations
             // Use initial conditions
             if (state.UseIC)
             {
-                foreach (var behavior in icbehaviors)
+                foreach (var behavior in InitialConditionBehaviors)
                     behavior.SetIc(circuit);
             }
         }
@@ -510,7 +511,7 @@ namespace SpiceSharp.Simulations
             }
 
             // Device-level convergence tests
-            foreach (var behavior in loadbehaviors)
+            foreach (var behavior in LoadBehaviors)
             {
                 if (!behavior.IsConvergent(this))
                 {

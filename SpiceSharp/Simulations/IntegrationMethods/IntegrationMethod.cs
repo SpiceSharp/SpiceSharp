@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using SpiceSharp.Circuits;
+using System.Collections.ObjectModel;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -101,7 +100,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Private variables
         /// </summary>
         double savetime = double.NaN;
-        List<TransientBehavior> tranbehaviors;
+        Collection<TransientBehavior> transientBehaviors;
 
         /// <summary>
         /// Event called when the timestep needs to be truncated
@@ -168,8 +167,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Initialize/reset the integration method
         /// </summary>
-        /// <param name="tranbehaviors">Truncation behaviors</param>
-        public virtual void Initialize(List<TransientBehavior> tranbehaviors)
+        /// <param name="transientBehaviors">Truncation behaviors</param>
+        public virtual void Initialize(Collection<TransientBehavior> transientBehaviors)
         {
             // Initialize variables
             Time = 0.0;
@@ -181,7 +180,7 @@ namespace SpiceSharp.IntegrationMethods
             Solutions = new double[MaxOrder + 1][]; // new Vector<double>[MaxOrder + 1];
 
             // Register default truncation methods
-            this.tranbehaviors = tranbehaviors;
+            this.transientBehaviors = transientBehaviors;
             if (Config.TruncationMethod.HasFlag(IntegrationConfiguration.TruncationMethods.PerDevice))
                 Truncate += TruncateDevices;
             if (Config.TruncationMethod.HasFlag(IntegrationConfiguration.TruncationMethods.PerNode))
@@ -353,7 +352,7 @@ namespace SpiceSharp.IntegrationMethods
                 throw new ArgumentNullException(nameof(args));
 
             double timetmp = double.PositiveInfinity;
-            foreach (var behavior in tranbehaviors)
+            foreach (var behavior in transientBehaviors)
                 behavior.Truncate(ref timetmp);
             args.Delta = timetmp;
         }

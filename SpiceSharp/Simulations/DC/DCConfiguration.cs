@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
         /// Gets the list of sweeps that need to be executed
         /// </summary>
         [PropertyName("sweeps"), PropertyInfo("List of sweeps")]
-        public List<Sweep> Sweeps { get; } = new List<Sweep>();
+        public Collection<Sweep> Sweeps { get; } = new Collection<Sweep>();
 
         /// <summary>
         /// Number of iterations for DC sweeps

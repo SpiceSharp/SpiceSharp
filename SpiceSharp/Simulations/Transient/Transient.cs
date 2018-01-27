@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Simulations
@@ -24,10 +23,10 @@ namespace SpiceSharp.Simulations
         public event TimestepCutEventHandler TimestepCut;
 
         /// <summary>
-        /// Private variables
+        /// Behavior for accepting a timepoint
         /// </summary>
-        List<AcceptBehavior> acceptbehaviors;
-        List<TruncateBehavior> truncatebehaviors;
+        protected Collection<AcceptBehavior> AcceptBehaviors { get; private set; }
+        protected Collection<TruncateBehavior> truncatebehaviors { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -69,7 +68,7 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get behaviors and configurations
-            acceptbehaviors = SetupBehaviors<AcceptBehavior>();
+            AcceptBehaviors = SetupBehaviors<AcceptBehavior>();
             truncatebehaviors = SetupBehaviors<TruncateBehavior>();
         }
 
@@ -81,12 +80,12 @@ namespace SpiceSharp.Simulations
             // Remove references
             foreach (var behavior in truncatebehaviors)
                 behavior.Unsetup();
-            foreach (var behavior in acceptbehaviors)
+            foreach (var behavior in AcceptBehaviors)
                 behavior.Unsetup();
             truncatebehaviors.Clear();
             truncatebehaviors = null;
-            acceptbehaviors.Clear();
-            acceptbehaviors = null;
+            AcceptBehaviors.Clear();
+            AcceptBehaviors = null;
 
             base.Unsetup();
         }
@@ -115,7 +114,7 @@ namespace SpiceSharp.Simulations
             state.Gmin = baseconfig.Gmin;
 
             // Setup breakpoints
-            Method.Initialize(tranbehaviors);
+            Method.Initialize(TransientBehaviors);
             state.Initialize(circuit);
 
             // Calculate the operating point
@@ -131,7 +130,7 @@ namespace SpiceSharp.Simulations
             // Stop calculating a DC solution
             state.UseIC = false;
             state.UseDC = false;
-            foreach (var behavior in tranbehaviors)
+            foreach (var behavior in TransientBehaviors)
                 behavior.GetDCstate(this);
             States.ClearDC();
 
@@ -147,7 +146,7 @@ namespace SpiceSharp.Simulations
                     // nextTime:
 
                     // Accept the current timepoint (CKTaccept())
-                    foreach (var behavior in acceptbehaviors)
+                    foreach (var behavior in AcceptBehaviors)
                         behavior.Accept(this);
                     Method.SaveSolution(state.Solution);
                     // end of CKTaccept()

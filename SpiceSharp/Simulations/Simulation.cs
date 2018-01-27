@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 
@@ -118,7 +118,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <typeparam name="T">Base behavior</typeparam>
         /// <returns></returns>
-        protected List<T> SetupBehaviors<T>() where T : Behavior
+        protected Collection<T> SetupBehaviors<T>() where T : Behavior
         {
             // Register all behaviors
             foreach (var o in Circuit.Objects)
@@ -128,20 +128,6 @@ namespace SpiceSharp.Simulations
                     pool.Add(o.Name, behavior);
             }
             return pool.GetBehaviorList<T>();
-
-            /*
-            foreach (var o in Circuit.Objects)
-            {
-                if (o.TryGetBehavior(typeof(T), out Behavior behavior))
-                {
-                    // The object returned a behavior, so we can setup and collect it
-                    behavior.Setup(o, Circuit);
-                    if (!behavior.DataOnly)
-                        result.Add((T)behavior);
-                }
-            }
-            */
-            // return result;
         }
     }
 }

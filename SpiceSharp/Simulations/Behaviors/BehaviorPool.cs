@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.Circuits;
+using System.Collections.ObjectModel;
 
 namespace SpiceSharp.Behaviors
 {
@@ -51,11 +51,11 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <typeparam name="T">Behavior type</typeparam>
         /// <returns></returns>
-        public List<T> GetBehaviorList<T>() where T : Behavior
+        public Collection<T> GetBehaviorList<T>() where T : Behavior
         {
             if (behaviors.TryGetValue(typeof(T), out List<Behavior> list))
-                return list.ConvertAll((Behavior b) => (T)b);
-            return new List<T>();
+                return new Collection<T>(list.ConvertAll((Behavior b) => (T)b));
+            return new Collection<T>();
         }
 
         /// <summary>
