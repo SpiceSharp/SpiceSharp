@@ -42,11 +42,4 @@ namespace SpiceSharp.IntegrationMethods
             delta = double.PositiveInfinity;
         }
     }
-
-    /// <summary>
-    /// Event handler for when the timestep needs to be truncated
-    /// </summary>
-    /// <param name="sender">Sender</param>
-    /// <param name="args">Arguments</param>
-    public delegate void TruncationEventHandler(object sender, TruncationEventArgs args);
 }

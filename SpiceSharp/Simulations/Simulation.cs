@@ -28,7 +28,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event that is called for initializing simulation data exports
         /// </summary>
-        public event InitializeSimulationExportEventHandler InitializeSimulationExport;
+        public event EventHandler<InitializationDataEventArgs> InitializeSimulationExport;
 
         /// <summary>
         /// Event that is called when new simulation data is available

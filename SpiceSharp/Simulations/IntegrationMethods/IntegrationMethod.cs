@@ -105,7 +105,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Event called when the timestep needs to be truncated
         /// </summary>
-        public event TruncationEventHandler Truncate;
+        public event EventHandler<TruncationEventArgs> Truncate;
 
         /// <summary>
         /// Constructor
