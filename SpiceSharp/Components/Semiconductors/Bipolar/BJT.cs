@@ -55,9 +55,6 @@ namespace SpiceSharp.Components
         /// <param name="circuit">The circuit</param>
         public override void Setup(Circuit circuit)
         {
-            BJTModel model = Model as BJTModel;
-
-            // Allocate nodes
             var nodes = BindNodes(circuit);
             CollectorNode = nodes[0].Index;
             BaseNode = nodes[1].Index;

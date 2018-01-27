@@ -183,9 +183,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             TSurfMob = mbp.SurfaceMobility / ratio4;
             phio = (mbp.Phi - modeltemp.pbfact1) / modeltemp.fact1;
             TPhi = fact2 * phio + pbfact;
-            TVbi = mbp.Vt0 - mbp.Type * (mbp.Gamma * Math.Sqrt(mbp.Phi)) + .5 * (modeltemp.egfet1 - egfet) +
-                mbp.Type * .5 * (TPhi - mbp.Phi);
-            TVto = TVbi + mbp.Type * mbp.Gamma * Math.Sqrt(TPhi);
+            TVbi = mbp.Vt0 - mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi)) + .5 * (modeltemp.egfet1 - egfet) +
+                mbp.MosfetType * .5 * (TPhi - mbp.Phi);
+            TVto = TVbi + mbp.MosfetType * mbp.Gamma * Math.Sqrt(TPhi);
             TSatCur = mbp.JctSatCur * Math.Exp(-egfet / vt + modeltemp.egfet1 / modeltemp.vtnom);
             TSatCurDens = mbp.JctSatCurDensity * Math.Exp(-egfet / vt + modeltemp.egfet1 / modeltemp.vtnom);
             pbo = (mbp.BulkJctPotential - modeltemp.pbfact1) / modeltemp.fact1;
@@ -195,7 +195,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             TCbs = mbp.CapBS * capfact;
             TCj = mbp.BulkCapFactor * capfact;
             capfact = 1 / (1 + mbp.BulkJctSideGradingCoeff * (4e-4 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
-            TCjsw = mbp.SideWallCapFactor * capfact;
+            TCjsw = mbp.SidewallCapFactor * capfact;
             TBulkPot = fact2 * pbo + pbfact;
             gmanew = (TBulkPot - pbo) / pbo;
             capfact = (1 + mbp.BulkJctBotGradingCoeff * (4e-4 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew));
@@ -230,7 +230,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     czbd = 0;
                 }
             }
-            if (mbp.SideWallCapFactor.Given)
+            if (mbp.SidewallCapFactor.Given)
             {
                 czbdsw = TCjsw * bp.DrainPerimiter;
             }
@@ -264,7 +264,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     czbs = 0;
                 }
             }
-            if (mbp.SideWallCapFactor.Given)
+            if (mbp.SidewallCapFactor.Given)
             {
                 czbssw = TCjsw * bp.SourcePerimiter;
             }

@@ -192,8 +192,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var state = simulation.State;
             double vbe = load.Vbe;
             double vbc = load.Vbc;
-            double vbx = vbx = mbp.Type * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
-            double vcs = mbp.Type * (state.Solution[substNode] - state.Solution[colPrimeNode]);
+            double vbx = vbx = mbp.MosfetType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
+            double vcs = mbp.MosfetType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
 
             // Get shared parameters
             double cbe = load.Cbe;

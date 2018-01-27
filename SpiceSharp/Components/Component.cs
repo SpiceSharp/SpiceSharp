@@ -112,7 +112,7 @@ namespace SpiceSharp.Components
         public virtual Identifier GetNode(int index)
         {
             if (index < 0 || index >= connections.Length)
-                throw new IndexOutOfRangeException();
+                throw new CircuitException("Invalid node {0}".FormatString(index));
             return connections[index];
         }
 
@@ -124,7 +124,7 @@ namespace SpiceSharp.Components
         public virtual int GetNodeIndex(int index)
         {
             if (index < 0 || index >= connections.Length)
-                throw new IndexOutOfRangeException();
+                throw new CircuitException("Invalid node {0}".FormatString(index));
             return indices[index];
         }
 

@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature", Interesting = false)]
-        public double RES_TNOM
+        public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Circuit.CelsiusKelvin;
             set => NominalTemperature.Set(value + Circuit.CelsiusKelvin);
@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         [PropertyName("rsh"), PropertyInfo("Sheet resistance")]
         public Parameter SheetResistance { get; } = new Parameter();
         [PropertyName("defw"), PropertyInfo("Default device width")]
-        public Parameter DefWidth { get; } = new Parameter(10.0e-6);
+        public Parameter DefaultWidth { get; } = new Parameter(10.0e-6);
         [PropertyName("narrow"), PropertyInfo("Narrowing of resistor")]
         public Parameter Narrow { get; } = new Parameter();
     }

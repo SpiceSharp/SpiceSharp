@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Y-matrix contribution
         /// </summary>
-        protected double geq;
+        protected double Geq { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -87,7 +87,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void UpdateFlux1(object sender, InductorBehaviors.UpdateFluxEventArgs args)
         {
             var state = args.State;
-            geq = args.Flux.Jacobian(Factor);
+            Geq = args.Flux.Jacobian(Factor);
             args.Flux.Value += Factor * state.Solution[load2.BranchEq];
         }
 
@@ -132,8 +132,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             // Load Y-matrix
-            Br1Br2.Sub(geq);
-            Br2Br1.Sub(geq);
+            Br1Br2.Sub(Geq);
+            Br2Br1.Sub(Geq);
         }
     }
 }

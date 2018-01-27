@@ -45,10 +45,10 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        /// <param name="ind1">Inductor 1</param>
-        /// <param name="ind2">Inductor 2</param>
+        /// <param name="inductorName1">Inductor 1</param>
+        /// <param name="inductorName2">Inductor 2</param>
         /// <param name="coupling">Mutual inductance</param>
-        public MutualInductance(Identifier name, Identifier ind1, Identifier ind2, double coupling)
+        public MutualInductance(Identifier name, Identifier inductorName1, Identifier inductorName2, double coupling)
             : base(name, 0)
         {
             // Make sure mutual inductances are evaluated AFTER inductors
@@ -62,8 +62,8 @@ namespace SpiceSharp.Components
             AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             // Connect
-            InductorName1 = ind1;
-            InductorName2 = ind2;
+            InductorName1 = inductorName1;
+            InductorName2 = inductorName2;
         }
 
         /// <summary>

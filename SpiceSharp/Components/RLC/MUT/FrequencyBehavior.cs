@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double MUTfactor { get; protected set; }
+        public double Factor { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -53,7 +53,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             load2 = provider.GetBehavior<InductorBehaviors.LoadBehavior>(2);
 
             // Calculate coupling factor
-            MUTfactor = bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);
+            Factor = bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.State;
-            Complex value = state.Laplace * MUTfactor;
+            Complex value = state.Laplace * Factor;
             Br1Br2.Sub(value);
             Br2Br1.Sub(value);
         }

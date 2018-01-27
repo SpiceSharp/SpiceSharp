@@ -184,8 +184,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             vds = load.Vds;
             vgd = vgs - vds;
             vgb = vgs - vbs;
-            von = mbp.Type * load.Von;
-            vdsat = mbp.Type * load.Vdsat;
+            von = mbp.MosfetType * load.Von;
+            vdsat = mbp.MosfetType * load.Vdsat;
 
             EffectiveLength = bp.Length - 2 * mbp.LatDiff;
             GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;

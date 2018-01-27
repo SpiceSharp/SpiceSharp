@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         [PropertyName("rs"), PropertyInfo("Ohmic resistance")]
         public Parameter Resistance { get; } = new Parameter();
         [PropertyName("n"), PropertyInfo("Emission Coefficient")]
-        public Parameter EmissionCoeffient { get; } = new Parameter(1);
+        public Parameter EmissionCoefficient { get; } = new Parameter(1);
         [PropertyName("tt"), PropertyInfo("Transit Time")]
         public Parameter TransitTime { get; } = new Parameter();
         [PropertyName("cjo"), PropertyName("cj0"), PropertyInfo("Junction capacitance")]

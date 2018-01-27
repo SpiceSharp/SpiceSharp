@@ -244,8 +244,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             double vbe = load.Vbe;
             double vbc = load.Vbc;
-            double vbx = mbp.Type * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
-            double vcs = mbp.Type * (state.Solution[substNode] - state.Solution[colPrimeNode]);
+            double vbx = mbp.MosfetType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
+            double vcs = mbp.MosfetType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
             double td = modeltemp.ExcessPhaseFactor;
 
             Cexbc.Value = load.Cbe / load.Qb;
@@ -386,8 +386,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             double vbe = load.Vbe;
             double vbc = load.Vbc;
-            double vbx = mbp.Type * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
-            double vcs = mbp.Type * (state.Solution[substNode] - state.Solution[colPrimeNode]);
+            double vbx = mbp.MosfetType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
+            double vcs = mbp.MosfetType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
             double td = modeltemp.ExcessPhaseFactor;
 
             /* 
@@ -522,10 +522,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             /* 
 			 * load current excitation vector
 			 */
-            double ceqcs = mbp.Type * (Qcs.Derivative - vcs * gccs);
-            double ceqbx = mbp.Type * (Qbx.Derivative - vbx * geqbx);
-            double ceqbe = mbp.Type * (cc + cb - vbe * gpi + vbc * (-geqcb));
-            double ceqbc = mbp.Type * (-cc + - vbc * gmu);
+            double ceqcs = mbp.MosfetType * (Qcs.Derivative - vcs * gccs);
+            double ceqbx = mbp.MosfetType * (Qbx.Derivative - vbx * geqbx);
+            double ceqbe = mbp.MosfetType * (cc + cb - vbe * gpi + vbc * (-geqcb));
+            double ceqbc = mbp.MosfetType * (-cc + - vbc * gmu);
             
             state.Rhs[baseNode] += (-ceqbx);
             state.Rhs[colPrimeNode] += (ceqcs + ceqbx + ceqbc);

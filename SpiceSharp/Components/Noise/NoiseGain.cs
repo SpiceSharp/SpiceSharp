@@ -22,12 +22,12 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Set the values for the noise source
         /// </summary>
-        /// <param name="values">Values</param>
-        public override void SetCoefficients(params double[] values)
+        /// <param name="coefficients">Values</param>
+        public override void SetCoefficients(params double[] coefficients)
         {
-            if (values == null)
-                throw new ArgumentNullException(nameof(values));
-            Gain = values[0];
+            if (coefficients == null)
+                throw new ArgumentNullException(nameof(coefficients));
+            Gain = coefficients[0];
         }
 
         /// <summary>

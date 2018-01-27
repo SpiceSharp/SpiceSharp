@@ -158,7 +158,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             csat = temp.TSatCur * bp.Area;
             gspr = modeltemp.Conductance * bp.Area;
             vt = Circuit.KOverQ * bp.Temperature;
-            vte = mbp.EmissionCoeffient * vt;
+            vte = mbp.EmissionCoefficient * vt;
 
             // Initialization
             Check = false;

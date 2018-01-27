@@ -239,7 +239,7 @@ namespace SpiceSharp.Simulations
                 // Preorder matrix
                 if (!state.Sparse.HasFlag(State.SparseFlags.NIDIDPREORDER))
                 {
-                    matrix.PreOrder();
+                    matrix.Preorder();
                     state.Sparse |= State.SparseFlags.NIDIDPREORDER;
                 }
                 if (state.Init == State.InitFlags.InitJct || state.Init == State.InitFlags.InitTransient)

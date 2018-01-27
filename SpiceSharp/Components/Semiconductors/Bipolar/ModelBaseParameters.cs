@@ -14,22 +14,22 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public void SetNPN(bool value)
         {
             if (value)
-                Type = NPN;
+                MosfetType = NPN;
         }
         [PropertyName("pnp"), PropertyInfo("PNP type device")]
         public void SetPNP(bool value)
         {
             if (value)
-                Type = PNP;
+                MosfetType = PNP;
         }
         [PropertyName("type"), PropertyInfo("NPN or PNP")]
-        public string GetMosfetType()
+        public string GetTypeName()
         {
-            if (Type > 0)
+            if (MosfetType > 0)
                 return "npn";
             return "pnp";
         }
-        public double Type { get; internal set; } = NPN;
+        public double MosfetType { get; internal set; } = NPN;
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]
         public double NominalTemperatureCelsius
         {

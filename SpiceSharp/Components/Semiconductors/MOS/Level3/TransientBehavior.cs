@@ -222,8 +222,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             vbd = vbs - vds;
             vgd = vgs - vds;
             vgb = vgs - vbs;
-            von = mbp.Type * load.Von;
-            vdsat = mbp.Type * load.Vdsat;
+            von = mbp.MosfetType * load.Von;
+            vdsat = mbp.MosfetType * load.Vdsat;
 
             Vgs.Value = vgs;
             Vbs.Value = vbs;
@@ -414,8 +414,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             vds = load.Vds;
             vgd = load.Vgs - load.Vds;
             vgb = load.Vgs - load.Vbs;
-            von = mbp.Type * load.Von;
-            vdsat = mbp.Type * load.Vdsat;
+            von = mbp.MosfetType * load.Von;
+            vdsat = mbp.MosfetType * load.Vdsat;
 
             Vds.Value = vds;
             Vbs.Value = vbs;
@@ -619,12 +619,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             /* 
              * load current vector
              */
-            ceqbs = mbp.Type * (Cbs - Gbs * vbs);
-            ceqbd = mbp.Type * (Cbd - Gbd * vbd);
-            rstate.Rhs[gNode] -= (mbp.Type * (ceqgs + ceqgb + ceqgd));
-            rstate.Rhs[bNode] -= (ceqbs + ceqbd - mbp.Type * ceqgb);
-            rstate.Rhs[dNodePrime] += (ceqbd + mbp.Type * ceqgd);
-            rstate.Rhs[sNodePrime] += ceqbs + mbp.Type * ceqgs;
+            ceqbs = mbp.MosfetType * (Cbs - Gbs * vbs);
+            ceqbd = mbp.MosfetType * (Cbd - Gbd * vbd);
+            rstate.Rhs[gNode] -= (mbp.MosfetType * (ceqgs + ceqgb + ceqgd));
+            rstate.Rhs[bNode] -= (ceqbs + ceqbd - mbp.MosfetType * ceqgb);
+            rstate.Rhs[dNodePrime] += (ceqbd + mbp.MosfetType * ceqgd);
+            rstate.Rhs[sNodePrime] += ceqbs + mbp.MosfetType * ceqgs;
 
             /* 
 			 * load y matrix

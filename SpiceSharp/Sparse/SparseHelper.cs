@@ -82,7 +82,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">The matrix</param>
         /// <returns></returns>
-        public static SparseError PreOrder(this Matrix matrix)
+        public static SparseError Preorder(this Matrix matrix)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));

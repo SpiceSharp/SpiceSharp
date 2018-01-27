@@ -23,10 +23,10 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="k">Mutual inductance</param>
-        public BaseParameters(double k)
+        /// <param name="coupling">Mutual inductance</param>
+        public BaseParameters(double coupling)
         {
-            Coupling.Set(k);
+            Coupling.Set(coupling);
         }
     }
 }

@@ -146,7 +146,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             TCbs = mbp.CapBS * capfact;
             TCj = mbp.BulkCapFactor * capfact;
             capfact = 1 / (1 + mbp.BulkJctSideGradingCoeff * (4e-4 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
-            TCjsw = mbp.SideWallCapFactor * capfact;
+            TCjsw = mbp.SidewallCapFactor * capfact;
             TBulkPot = fact2 * pbo + pbfact;
             gmanew = (TBulkPot - pbo) / pbo;
             capfact = (1 + mbp.BulkJctBotGradingCoeff * (4e-4 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew));
@@ -181,7 +181,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                     czbd = 0;
                 }
             }
-            if (mbp.SideWallCapFactor.Given)
+            if (mbp.SidewallCapFactor.Given)
             {
                 czbdsw = TCjsw * bp.DrainPerimeter;
             }
@@ -215,7 +215,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                     czbs = 0;
                 }
             }
-            if (mbp.SideWallCapFactor.Given)
+            if (mbp.SidewallCapFactor.Given)
             {
                 czbssw = TCjsw * bp.SourcePerimeter;
             }

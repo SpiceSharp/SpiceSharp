@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         [PropertyName("mj"), PropertyInfo("Bottom grading coefficient")]
         public Parameter BulkJctBotGradingCoeff { get; } = new Parameter(.5);
         [PropertyName("cjsw"), PropertyInfo("Side junction cap per area")]
-        public Parameter SideWallCapFactor { get; } = new Parameter();
+        public Parameter SidewallCapFactor { get; } = new Parameter();
         [PropertyName("mjsw"), PropertyInfo("Side grading coefficient")]
         public Parameter BulkJctSideGradingCoeff { get; } = new Parameter(.33);
         [PropertyName("js"), PropertyInfo("Bulk jct. sat. current density")]
@@ -93,22 +93,22 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public void SetNMOS(bool value)
         {
             if (value)
-                Type = 1.0;
+                MosfetType = 1.0;
         }
         [PropertyName("pmos"), PropertyInfo("P type MOSfet model")]
         public void SetPMOS(bool value)
         {
             if (value)
-                Type = -1.0;
+                MosfetType = -1.0;
         }
         [PropertyName("type"), PropertyInfo("N-channel or P-channel MOS")]
-        public string GetMosfetType()
+        public string GetTypeName()
         {
-            if (Type > 0)
+            if (MosfetType > 0)
                 return "nmos";
             return "pmos";
         }
-        public double Type { get; internal set; } = 1.0;
+        public double MosfetType { get; internal set; } = 1.0;
 
     }
 }

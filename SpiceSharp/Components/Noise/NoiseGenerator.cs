@@ -1,5 +1,6 @@
 ﻿using System;
 using SpiceSharp.Simulations;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components.NoiseSources
 {
@@ -36,7 +37,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Gets the nodes this noise generator is connected to
         /// </summary>
-        public int[] Nodes { get; private set; }
+        public NodeCollection Nodes { get; private set; }
 
         /// <summary>
         /// Private variables
@@ -52,6 +53,7 @@ namespace SpiceSharp.Components.NoiseSources
         {
             Name = name;
             this.pins = pins;
+            Nodes = null;
         }
 
         /// <summary>
@@ -62,9 +64,21 @@ namespace SpiceSharp.Components.NoiseSources
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
-            Nodes = new int[pins.Length];
+
+            // Get the nodes
+            int[] mapped = new int[nodes.Length];
             for (int i = 0; i < pins.Length; i++)
-                Nodes[i] = nodes[pins[i]];
+            {
+                if (pins[i] >= nodes.Length)
+                    throw new CircuitException("Not enough pins to find node {0}".FormatString(pins[i]));
+                mapped[i] = nodes[pins[i]];
+            }
+            Nodes = new NodeCollection(mapped);
+        }
+
+        public virtual void Unsetup()
+        {
+            Nodes = null;
         }
 
         /// <summary>

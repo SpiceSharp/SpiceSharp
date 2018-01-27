@@ -66,12 +66,12 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the current source</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="w">The Waveform-object</param>
-        public CurrentSource(Identifier name, Identifier pos, Identifier neg, Waveform w)
+        /// <param name="waveform">The Waveform-object</param>
+        public CurrentSource(Identifier name, Identifier pos, Identifier neg, Waveform waveform)
             : base(name, CurrentSourcePinCount)
         {
             // Add parameters
-            Parameters.Add(new BaseParameters(w));
+            Parameters.Add(new BaseParameters(waveform));
             Parameters.Add(new FrequencyParameters());
 
             // Add factories

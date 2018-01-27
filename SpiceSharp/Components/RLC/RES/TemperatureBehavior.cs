@@ -59,7 +59,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             if (!bp.Temperature.Given)
                 bp.Temperature.Value = simulation.State.Temperature;
             if (!bp.Width.Given)
-                bp.Width.Value = mbp?.DefWidth ?? 0.0;
+                bp.Width.Value = mbp?.DefaultWidth ?? 0.0;
 
             if (mbp != null)
             {

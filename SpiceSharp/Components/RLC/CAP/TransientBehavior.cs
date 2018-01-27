@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Methods
         /// </summary>
         [PropertyName("i"), PropertyInfo("Device current")]
-        public double GetCurrent() => QCap.Derivative;
+        public double Current => QCap.Derivative;
         [PropertyName("p"), PropertyInfo("Instantaneous device power")]
         public double GetPower(State state)
         {

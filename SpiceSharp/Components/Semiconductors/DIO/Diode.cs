@@ -48,9 +48,6 @@ namespace SpiceSharp.Components
         /// <param name="circuit">The circuit</param>
         public override void Setup(Circuit circuit)
         {
-            var model = Model as DiodeModel;
-
-            // Allocate nodes
             var nodes = BindNodes(circuit);
             PosNode = nodes[0].Index;
             NegNode = nodes[1].Index;

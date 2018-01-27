@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components.NoiseSources;
 
@@ -32,20 +33,28 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Get all generators
         /// </summary>
-        public NoiseGenerator[] Generators { get; }
+        public NoiseGeneratorCollection Generators { get; }
 
         /// <summary>
         /// Constructor
-        /// One generator is always added at the end for the total noise density
         /// </summary>
         /// <param name="generators">Names of the generators</param>
         public ComponentNoise(params NoiseGenerator[] generators)
         {
             if (generators == null)
                 throw new ArgumentNullException(nameof(generators));
-            Generators = new NoiseGenerator[generators.Length];
-            for (int i = 0; i < generators.Length; i++)
-                Generators[i] = generators[i];
+            Generators = new NoiseGeneratorCollection(generators);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="generators"></param>
+        public ComponentNoise(IEnumerable<NoiseGenerator> generators)
+        {
+            if (generators == null)
+                throw new ArgumentNullException(nameof(generators));
+            Generators = new NoiseGeneratorCollection(generators);
         }
 
         /// <summary>
@@ -54,8 +63,8 @@ namespace SpiceSharp.Components
         /// <param name="pins">The pin indices</param>
         public void Setup(params int[] pins)
         {
-            for (int i = 0; i < Generators.Length; i++)
-                Generators[i].Setup(pins);
+            foreach (var generator in Generators)
+                generator.Setup(pins);
         }
 
         /// <summary>
@@ -72,12 +81,12 @@ namespace SpiceSharp.Components
             Noise = 0.0;
             TotalInNoise = 0.0;
             TotalOutNoise = 0.0;
-            for (int i = 0; i < Generators.Length; i++)
+            foreach (var generator in Generators)
             {
-                Generators[i].Evaluate(simulation);
-                Noise += Generators[i].Noise;
-                TotalInNoise += Generators[i].TotalInputNoise;
-                TotalOutNoise += Generators[i].TotalOutputNoise;
+                generator.Evaluate(simulation);
+                Noise += generator.Noise;
+                TotalInNoise += generator.TotalInputNoise;
+                TotalOutNoise += generator.TotalOutputNoise;
             }
 
             // Log of the output noise density
