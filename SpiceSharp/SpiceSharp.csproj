@@ -87,6 +87,7 @@
     <Compile Include="Components\Switches\VSW\ModelBaseParameters.cs" />
     <Compile Include="Components\Voltagesources\CCVS\BaseParameters.cs" />
     <Compile Include="Components\Voltagesources\VCVS\BaseParameters.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Simulations\Base\BaseConfiguration.cs" />
     <Compile Include="Simulations\Base\FrequencyConfiguration.cs" />
     <Compile Include="Simulations\Base\TimeConfiguration.cs" />

@@ -47,9 +47,8 @@ namespace SpiceSharp.Components.NoiseSources
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the noise source</param>
-        /// <param name="a">Pin A</param>
-        /// <param name="b">Pin B</param>
-        public NoiseGenerator(string name, params int[] pins)
+        /// <param name="pins">Pins</param>
+        protected NoiseGenerator(string name, params int[] pins)
         {
             Name = name;
             this.pins = pins;

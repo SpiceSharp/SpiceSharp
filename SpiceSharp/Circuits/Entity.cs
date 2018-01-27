@@ -103,7 +103,7 @@ namespace SpiceSharp.Circuits
         /// Unsetup/destroy the component
         /// </summary>
         /// <param name="circuit">Circuit</param>
-        public virtual void Unsetup(Circuit circuit)
+        public virtual void UnSetup(Circuit circuit)
         {
             // Do nothing
         }

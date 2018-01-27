@@ -112,7 +112,7 @@ namespace SpiceSharp.Simulations
 
             // Unsetup all objects
             foreach (var o in Circuit.Objects)
-                o.Unsetup(Circuit);
+                o.UnSetup(Circuit);
 
             // Clear the state
             State.Clear();

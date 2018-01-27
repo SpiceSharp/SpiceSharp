@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp;
-using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
 

@@ -35,6 +35,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param id="path">The path of the object</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
         public Entity this[Identifier id] => objects[id];
         
         /// <summary>
@@ -56,6 +57,7 @@ namespace SpiceSharp.Circuits
         /// Add one or more circuit objects
         /// </summary>
         /// <param id="cs">The objects that need to be added</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
         public void Add(params Entity[] cs)
         {
             if (cs == null)

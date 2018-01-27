@@ -10,6 +10,9 @@
       <Word>Cap</Word>
       <Word>Res</Word>
       <Word>Transconductance</Word>
+      <Word>Mos</Word>
+      <Word>Mosfet</Word>
+      <Word>Fet</Word>
     </Recognized>
   </Words>
 </Dictionary>
