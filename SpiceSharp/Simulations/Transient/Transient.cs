@@ -11,22 +11,19 @@ namespace SpiceSharp.Simulations
     public class Transient : TimeSimulation
     {
         /// <summary>
-        /// Event handler when cutting a timestep
-        /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="data">Timestep cut data</param>
-        public delegate void TimestepCutEventHandler(object sender, TimestepCutEventArgs data);
-
-        /// <summary>
         /// Event that is called when the timestep has been cut due to convergence problems
         /// </summary>
-        public event TimestepCutEventHandler TimestepCut;
+        public event EventHandler<TimestepCutEventArgs> TimestepCut;
 
         /// <summary>
-        /// Behavior for accepting a timepoint
+        /// Behaviors for accepting a timepoint
         /// </summary>
         protected Collection<AcceptBehavior> AcceptBehaviors { get; private set; }
-        protected Collection<TruncateBehavior> truncatebehaviors { get; private set; }
+
+        /// <summary>
+        /// Behaviors for truncating the timestep
+        /// </summary>
+        protected Collection<TruncateBehavior> TruncateBehaviors { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -69,7 +66,7 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors and configurations
             AcceptBehaviors = SetupBehaviors<AcceptBehavior>();
-            truncatebehaviors = SetupBehaviors<TruncateBehavior>();
+            TruncateBehaviors = SetupBehaviors<TruncateBehavior>();
         }
 
         /// <summary>
@@ -78,12 +75,12 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            foreach (var behavior in truncatebehaviors)
+            foreach (var behavior in TruncateBehaviors)
                 behavior.Unsetup();
             foreach (var behavior in AcceptBehaviors)
                 behavior.Unsetup();
-            truncatebehaviors.Clear();
-            truncatebehaviors = null;
+            TruncateBehaviors.Clear();
+            TruncateBehaviors = null;
             AcceptBehaviors.Clear();
             AcceptBehaviors = null;
 

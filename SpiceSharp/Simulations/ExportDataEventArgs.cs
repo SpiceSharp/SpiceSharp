@@ -58,13 +58,6 @@ namespace SpiceSharp.Simulations
             return Method.Time;
         }
     }
-    
-    /// <summary>
-    /// Delegate for exporting simulation data
-    /// </summary>
-    /// <param name="sender">The object sending the event</param>
-    /// <param name="data">The simulation data</param>
-    public delegate void ExportSimulationDataEventHandler(object sender, ExportDataEventArgs data);
 
     /// <summary>
     /// Delegate for finalizing a simulation export

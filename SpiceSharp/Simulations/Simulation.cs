@@ -33,7 +33,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event that is called when new simulation data is available
         /// </summary>
-        public event ExportSimulationDataEventHandler OnExportSimulationData;
+        public event EventHandler<ExportDataEventArgs> OnExportSimulationData;
 
         /// <summary>
         /// Event that is called for finalizing simulation data exports

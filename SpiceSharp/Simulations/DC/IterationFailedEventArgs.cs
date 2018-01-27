@@ -8,11 +8,4 @@ namespace SpiceSharp.Simulations
     public class IterationFailedEventArgs : EventArgs
     {
     }
-
-    /// <summary>
-    /// A delegate for when an iteration failed
-    /// </summary>
-    /// <param name="sender">The object sending the event</param>
-    /// <param name="args">Arguments</param>
-    public delegate void IterationFailedEventHandler(object sender, IterationFailedEventArgs args);
 }

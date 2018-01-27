@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event that is called when normal iteration failed
         /// </summary>
-        public event IterationFailedEventHandler IterationFailed;
+        public event EventHandler<IterationFailedEventArgs> IterationFailed;
 
         /// <summary>
         /// Constructor

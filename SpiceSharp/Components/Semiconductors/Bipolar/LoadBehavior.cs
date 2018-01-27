@@ -87,7 +87,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Event called when excess phase calculation is needed
         /// </summary>
-        public event ExcessPhaseEventHandler ExcessPhaseCalculation;
+        public event EventHandler<ExcessPhaseEventArgs> ExcessPhaseCalculation;
 
         /// <summary>
         /// Constructor
@@ -502,11 +502,4 @@ namespace SpiceSharp.Components.BipolarBehaviors
             return true;
         }
     }
-
-    /// <summary>
-    /// Delegate for excess phase calculation
-    /// </summary>
-    /// <param name="sender">Sender</param>
-    /// <param name="args">Arguments</param>
-    public delegate void ExcessPhaseEventHandler(object sender, ExcessPhaseEventArgs args);
 }
