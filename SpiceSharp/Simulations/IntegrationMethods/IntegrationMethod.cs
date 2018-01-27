@@ -12,15 +12,6 @@ namespace SpiceSharp.IntegrationMethods
     public abstract class IntegrationMethod
     {
         /// <summary>
-        /// This class represents the result of integration
-        /// </summary>
-        public class Result
-        {
-            public double Geq = 0.0;
-            public double Ceq = 0.0;
-        }
-
-        /// <summary>
         /// Gets the configuration for the integration method
         /// </summary>
         public IntegrationConfiguration Config { get; } = new IntegrationConfiguration();

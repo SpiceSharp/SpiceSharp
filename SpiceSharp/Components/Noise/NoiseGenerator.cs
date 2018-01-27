@@ -101,7 +101,7 @@ namespace SpiceSharp.Components.NoiseSources
             double lnNdens = Math.Log(Math.Max(Noise, 1e-38));
 
             // Initialize the integrated noise if we just started
-            if (noise.DelFreq == 0.0)
+            if (noise.DeltaFrequency == 0.0)
             {
                 LogNoise = lnNdens;
                 TotalOutputNoise = 0.0;
@@ -111,7 +111,7 @@ namespace SpiceSharp.Components.NoiseSources
             {
                 // Integrate the output noise
                 double tempOnoise = noise.Integrate(Noise, lnNdens, LogNoise);
-                double tempInoise = noise.Integrate(Noise * noise.GainSqInv, lnNdens + noise.LnGainInv, LogNoise + noise.LnGainInv);
+                double tempInoise = noise.Integrate(Noise * noise.GainInverseSquared, lnNdens + noise.LogInverseGain, LogNoise + noise.LogInverseGain);
                 LogNoise = lnNdens;
 
                 // Add integrated quantity

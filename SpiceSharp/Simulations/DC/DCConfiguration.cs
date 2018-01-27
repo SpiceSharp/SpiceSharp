@@ -17,7 +17,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Number of iterations for DC sweeps
         /// </summary>
-        public int SweepMaxIterations = 20;
-
+        public int SweepMaxIterations { get; set; } = 20;
     }
 }

@@ -157,16 +157,16 @@ namespace SpiceSharp.Components.DiodeBehaviors
             geq = load.Conduct;
             xceq = Cap * state.Laplace.Imaginary;
 
-            PosPosPtr.Value.Real += gspr;
-            NegNegPtr.Value.Cplx += new Complex(geq, xceq);
+            PosPosPtr.Add(gspr);
+            NegNegPtr.Add(new Complex(geq, xceq));
 
-            PosPrimePosPrimePtr.Value.Cplx += new Complex(geq + gspr, xceq);
+            PosPrimePosPrimePtr.Add(new Complex(geq + gspr, xceq));
 
-            PosPosPrimePtr.Value.Real -= gspr;
-            NegPosPrimePtr.Value.Cplx -= new Complex(geq, xceq);
+            PosPosPrimePtr.Sub(gspr);
+            NegPosPrimePtr.Sub(new Complex(geq, xceq));
 
-            PosPrimePosPtr.Value.Real -= gspr;
-            PosPrimeNegPtr.Value.Cplx -= new Complex(geq, xceq);
+            PosPrimePosPtr.Sub(gspr);
+            PosPrimeNegPtr.Sub(new Complex(geq, xceq));
         }
     }
 }

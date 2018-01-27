@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Keep operating point information
         /// </summary>
-        public bool KeepOpInfo = false;
+        public bool KeepOpInfo { get; set; } = false;
 
         /// <summary>
         /// Gets or sets the number of steps

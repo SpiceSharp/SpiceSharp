@@ -16,74 +16,66 @@ namespace SpiceSharp.Simulations
         /// The GMIN parameter
         /// This is an extra conductance added in parallel to PN junction to improve convergence
         /// </summary>
-        public double Gmin = 1e-12;
+        public double Gmin { get; set; } = 1e-12;
 
         /// <summary>
         /// The number of steps when using GMIN stepping to improve convergence
         /// </summary>
-        public int NumGminSteps = 10;
+        public int NumGminSteps { get; set; } = 10;
 
         /// <summary>
         /// The number of steps when using SOURCE stepping to improve convergence
         /// </summary>
-        public int NumSrcSteps = 10;
+        public int NumSrcSteps { get; set; } = 10;
 
         /// <summary>
         /// Relative tolerance
         /// </summary>
-        public double RelTol = 1e-3;
+        public double RelTol { get; set; } = 1e-3;
 
         /// <summary>
         /// Absolute tolerance on voltages
         /// </summary>
-        public double VoltTol = 1e-6;
+        public double VoltTol { get; set; } = 1e-6;
 
         /// <summary>
         /// Absolute tolerance
         /// </summary>
-        public double AbsTol = 1e-12;
+        public double AbsTol { get; set; } = 1e-12;
 
         /// <summary>
         /// Charge tolerance
         /// </summary>
-        public double ChgTol = 1e-14;
+        public double ChgTol { get; set; } = 1e-14;
 
         /// <summary>
         /// Number of iterations for DC simulation
         /// </summary>
-        public int DcMaxIterations = 100;
+        public int DcMaxIterations { get; set; } = 100;
 
         /// <summary>
         /// Number of iterations for DC sweeps
         /// </summary>
-        public int SweepMaxIterations = 20;
+        public int SweepMaxIterations { get; set; } = 20;
 
         /// <summary>
         /// Maximum number of iterations for each time point
         /// </summary>
-        public int TranMaxIterations = 10;
+        public int TranMaxIterations { get; set; } = 10;
 
         /// <summary>
         /// Use initial conditions
         /// </summary>
-        public bool UseIC = false;
+        public bool UseIC { get; set; } = false;
 
         /// <summary>
         /// Keep operating point information
         /// </summary>
-        public bool KeepOpInfo = false;
+        public bool KeepOpInfo { get; set; } = false;
 
         /// <summary>
         /// Integration method
         /// </summary>
-        public IntegrationMethod Method = new Trapezoidal();
-
-        /// <summary>
-        /// Simulation configuration
-        /// </summary>
-        /// <param name="b"></param>
-        public Configuration()
-        {
-        }
+        public IntegrationMethod Method { get; set; } = new Trapezoidal();
     }
 }

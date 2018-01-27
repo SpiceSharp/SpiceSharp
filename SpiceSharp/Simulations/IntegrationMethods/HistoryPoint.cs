@@ -8,16 +8,16 @@
         /// <summary>
         /// The values
         /// </summary>
-        public double[] Values;
+        public double[] Values { get; set; }
 
         /// <summary>
         /// The next point in history
         /// </summary>
-        public HistoryPoint Next;
+        public HistoryPoint Next { get; set; } = null;
 
         /// <summary>
         /// The previous point in history
         /// </summary>
-        public HistoryPoint Previous;
+        public HistoryPoint Previous { get; set; } = null;
     }
 }

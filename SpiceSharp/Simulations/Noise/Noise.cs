@@ -192,14 +192,14 @@ namespace SpiceSharp.Simulations
 
                 double rval = state.Solution[posOutNode] - state.Solution[negOutNode];
                 double ival = state.iSolution[posOutNode] - state.iSolution[negOutNode];
-                data.GainSqInv = 1.0 / Math.Max(rval * rval + ival * ival, 1e-20);
+                data.GainInverseSquared = 1.0 / Math.Max(rval * rval + ival * ival, 1e-20);
 
                 // Solve the adjoint system
                 NzIterate(posOutNode, negOutNode);
 
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit
-                data.outNdens = 0.0;
+                data.OutputNoiseDensity = 0.0;
                 foreach (var behavior in NoiseBehaviors)
                     behavior.Noise(this);
 
@@ -285,8 +285,8 @@ namespace SpiceSharp.Simulations
         public Func<State, double> CreateNoiseDensityExport(bool input)
         {
             if (input)
-                return (State state) => NoiseState.outNdens * NoiseState.GainSqInv;
-            return (State state) => NoiseState.outNdens;
+                return (State state) => NoiseState.OutputNoiseDensity * NoiseState.GainInverseSquared;
+            return (State state) => NoiseState.OutputNoiseDensity;
         }
     }
 }

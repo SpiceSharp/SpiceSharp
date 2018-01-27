@@ -93,7 +93,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Extra conductance that is added to all nodes to ground to aid convergence
         /// </summary>
-        public double DiagGmin = 0;
+        public double DiagGmin { get; set; } = 0;
 
         /// <summary>
         /// Gets or sets the initialization flag
@@ -200,7 +200,7 @@ namespace SpiceSharp.Simulations
         /// Gets or sets the current laplace variable
         /// Using a purely imaginary variable here will give you the steady-state frequency response
         /// </summary>
-        public Complex Laplace = new Complex();
+        public Complex Laplace { get; set; } = new Complex();
 
         /// <summary>
         /// Get the order of the matrix/vectors

@@ -10,67 +10,67 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        double gainsqinv, freq, lstFreq, lnLastFreq, delFreq, delLnFreq, lnFreq;
+        double gainSquareInverted, frequency, lastFrequency, logLastFrequency, deltaFrequency, deltaLogFrequency, logFrequency;
 
         /// <summary>
         /// Current frequency point
         /// </summary>
         public double Freq
         {
-            get => freq;
+            get => frequency;
             set
             {
                 // Shift current frequency to last frequency
-                lstFreq = freq;
-                lnLastFreq = lnFreq;
+                lastFrequency = frequency;
+                logLastFrequency = logFrequency;
 
                 // Update new values
-                freq = value;
-                lnFreq = Math.Log(Math.Max(freq, 1e-38));
+                frequency = value;
+                logFrequency = Math.Log(Math.Max(frequency, 1e-38));
 
                 // Delta
-                delFreq = freq - lstFreq;
-                delLnFreq = lnFreq - lnLastFreq;
+                deltaFrequency = frequency - lastFrequency;
+                deltaLogFrequency = logFrequency - logLastFrequency;
             }
         }
 
         /// <summary>
         /// Get the frequency step
         /// </summary>
-        public double DelFreq { get => delFreq; }
+        public double DeltaFrequency { get => deltaFrequency; }
 
         /// <summary>
         /// Output referred noise
         /// </summary>
-        public double outNoiz = 0.0;
+        public double OutputNoise { get; set; } = 0.0;
 
         /// <summary>
         /// Input referred noise
         /// </summary>
-        public double inNoise = 0.0;
+        public double InputNoise { get; set; } = 0.0;
 
         /// <summary>
         /// Output noise density
         /// </summary>
-        public double outNdens = 0.0;
+        public double OutputNoiseDensity { get; set; } = 0.0;
 
         /// <summary>
         /// Gets or sets the inverse squared gain
         /// </summary>
-        public double GainSqInv
+        public double GainInverseSquared
         {
-            get => gainsqinv;
+            get => gainSquareInverted;
             set
             {
-                gainsqinv = value;
-                LnGainInv = Math.Log(value);
+                gainSquareInverted = value;
+                LogInverseGain = Math.Log(value);
             }
         }
 
         /// <summary>
         /// Gets the logarithm of the gain squared
         /// </summary>
-        public double LnGainInv { get; private set; } = 0.0;
+        public double LogInverseGain { get; private set; } = 0.0;
 
         /// <summary>
         /// Initialize
@@ -78,11 +78,11 @@ namespace SpiceSharp.Simulations
         /// <param name="freq">Starting frequency</param>
         public void Initialize(double freq)
         {
-            this.freq = freq;
-            lstFreq = freq;
+            this.frequency = freq;
+            lastFrequency = freq;
 
-            outNoiz = 0.0;
-            inNoise = 0.0;
+            OutputNoise = 0.0;
+            InputNoise = 0.0;
         }
         
         /// <summary>
@@ -99,17 +99,17 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public double Integrate(double noizDens, double lnNdens, double lnNlstDens)
         {
-            double exponent = (lnNdens - lnNlstDens) / delLnFreq;
+            double exponent = (lnNdens - lnNlstDens) / deltaLogFrequency;
             if (Math.Abs(exponent) < 1e-10)
-                return noizDens * delFreq;
+                return noizDens * deltaFrequency;
             else
             {
-                double a = Math.Exp(lnNdens - exponent * lnFreq);
+                double a = Math.Exp(lnNdens - exponent * logFrequency);
                 exponent += 1.0;
                 if (Math.Abs(exponent) < 1e-10)
-                    return a * (lnFreq - lnLastFreq);
+                    return a * (logFrequency - logLastFrequency);
                 else
-                    return a * (Math.Exp(exponent * lnFreq) - Math.Exp(exponent * lnLastFreq)) / exponent;
+                    return a * (Math.Exp(exponent * logFrequency) - Math.Exp(exponent * logLastFrequency)) / exponent;
             }
         }
     }

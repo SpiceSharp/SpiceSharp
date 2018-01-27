@@ -53,8 +53,8 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
+        int posNode, negNode;
         public int ControllingBranch { get; private set; }
-        protected int posNode, negNode;
         protected MatrixElement PosPosPtr { get; private set; }
         protected MatrixElement NegPosPtr { get; private set; }
         protected MatrixElement PosNegPtr { get; private set; }

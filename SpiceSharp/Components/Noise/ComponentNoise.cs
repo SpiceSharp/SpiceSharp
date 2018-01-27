@@ -93,13 +93,13 @@ namespace SpiceSharp.Components
             LogNoise = Math.Log(Math.Max(Noise, 1e-38));
 
             // Output noise density
-            noise.outNdens += Noise;
+            noise.OutputNoiseDensity += Noise;
 
             // Integrated input referred noise
-            noise.inNoise += TotalInNoise;
+            noise.InputNoise += TotalInNoise;
 
             // Integrated output referred noise
-            noise.outNoiz += TotalOutNoise;
+            noise.OutputNoise += TotalOutNoise;
         }
     }
 }

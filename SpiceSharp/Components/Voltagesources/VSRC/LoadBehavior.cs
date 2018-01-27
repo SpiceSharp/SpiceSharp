@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int posNode, negNode;
+        int posNode, negNode;
         public int BranchEq { get; protected set; }
         protected MatrixElement PosBranchPtr { get; private set; }
         protected MatrixElement NegBranchPtr { get; private set; }
@@ -156,10 +156,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             double time = 0.0;
             double value = 0.0;
 
-            PosBranchPtr.Value.Real += 1.0;
-            BranchPosPtr.Value.Real += 1.0;
-            NegBranchPtr.Value.Real -= 1.0;
-            BranchNegPtr.Value.Real -= 1.0;
+            PosBranchPtr.Add(1.0);
+            BranchPosPtr.Add(1.0);
+            NegBranchPtr.Sub(1.0);
+            BranchNegPtr.Sub(1.0);
 
             if (state.Domain == State.DomainTypes.Time)
             {

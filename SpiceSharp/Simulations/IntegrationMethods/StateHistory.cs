@@ -8,20 +8,20 @@
         /// <summary>
         /// The source of all variables
         /// </summary>
-        protected StatePool source;
+        protected StatePool Source { get; private set; }
 
         /// <summary>
         /// The identifier/index for the state variable
         /// </summary>
-        protected int index;
+        protected int Index { get; private set; }
 
         /// <summary>
         /// Gets or sets the value of the state at the current timepoint
         /// </summary>
         public double Value
         {
-            get => source.Values[index];
-            set => source.Values[index] = value;
+            get => Source.Values[Index];
+            set => Source.Values[Index] = value;
         }
 
         /// <summary>
@@ -32,8 +32,8 @@
         /// <param name="index">The index/identifier of the state variable</param>
         internal StateHistory(StatePool source, int index)
         {
-            this.source = source;
-            this.index = index;
+            Source = source;
+            Index = index;
         }
 
         /// <summary>
@@ -41,13 +41,13 @@
         /// </summary>
         /// <param name="history">Number of points to go back in history</param>
         /// <returns></returns>
-        public double GetPreviousValue(int history) => source.GetPreviousValue(index, history);
+        public double GetPreviousValue(int history) => Source.GetPreviousValue(Index, history);
 
         /// <summary>
         /// Get the timestep (in history)
         /// </summary>
         /// <param name="history">Number of steps to go back in history</param>
         /// <returns></returns>
-        public double GetTimestep(int history) => source.GetTimestep(history);
+        public double GetTimestep(int history) => Source.GetTimestep(history);
     }
 }

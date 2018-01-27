@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        protected int posNode, negNode, branchEq;
+        int posNode, negNode, branchEq;
 
         /// <summary>
         /// Matrix elements
@@ -138,10 +138,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var cstate = simulation.State;
-            PosBranchPtr.Value.Real += 1.0;
-            BranchPosPtr.Value.Real += 1.0;
-            NegBranchPtr.Value.Real -= 1.0;
-            BranchNegPtr.Value.Real -= 1.0;
+            PosBranchPtr.Add(1.0);
+            BranchPosPtr.Add(1.0);
+            NegBranchPtr.Sub(1.0);
+            BranchNegPtr.Sub(1.0);
             cstate.Rhs[branchEq] += Ac.Real;
             cstate.iRhs[branchEq] += Ac.Imaginary;
         }

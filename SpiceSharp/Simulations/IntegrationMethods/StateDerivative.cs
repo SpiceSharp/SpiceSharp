@@ -8,7 +8,7 @@
         /// <summary>
         /// Gets the first order derivative at the current timepoint
         /// </summary>
-        public double Derivative => source.Values[index + 1];
+        public double Derivative => Source.Values[Index + 1];
 
         /// <summary>
         /// Constructor
@@ -24,7 +24,7 @@
         /// Integrate the state variable
         /// </summary>
         /// <returns>The last order derivative</returns>
-        public void Integrate() => source.Integrate(index);
+        public void Integrate() => Source.Integrate(Index);
 
         /// <summary>
         /// Calculate contribution to the jacobian matrix (or Y-matrix). 
@@ -36,7 +36,7 @@
         /// <returns></returns>
         public double Jacobian(double dqdv)
         {
-            return dqdv * source.Method.Slope;
+            return dqdv * Source.Method.Slope;
         }
 
         /// <summary>
@@ -49,7 +49,7 @@
         /// <returns></returns>
         public double Current(double geq, double v)
         {
-            return source.Values[index + 1] - geq * v;
+            return Source.Values[Index + 1] - geq * v;
         }
 
         /// <summary>
@@ -61,13 +61,13 @@
         /// <returns></returns>
         public double Current()
         {
-            return source.Values[index + 1] - source.Method.Slope * source.Values[index];
+            return Source.Values[Index + 1] - Source.Method.Slope * Source.Values[Index];
         }
 
         /// <summary>
         /// Truncate the timestep based on the LTE (Local Truncation Error)
         /// </summary>
         /// <param name="timestep">Timestep</param>
-        public void LocalTruncationError(ref double timestep) => source.LocalTruncationError(index, ref timestep);
+        public void LocalTruncationError(ref double timestep) => Source.LocalTruncationError(Index, ref timestep);
     }
 }

@@ -56,12 +56,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Maximum number of iterations for each time point
         /// </summary>
-        public int TranMaxIterations = 10;
+        public int TranMaxIterations { get; set; } = 10;
 
         /// <summary>
         /// Use initial conditions
         /// </summary>
-        public bool UseIC = false;
+        public bool UseIC { get; set; } = false;
 
         /// <summary>
         /// Constructor
