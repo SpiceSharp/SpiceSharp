@@ -1,51 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Attributes
 {
     /// <summary>
-    /// Indicates that pins are connected by a finite impedance at DC. This attribute can be
+    /// Indicates that two pins are connected by a finite impedance at DC. This attribute can be
     /// applied to a <see cref="Components.Component"/> to check for floating nodes.
-    /// If multiple attributes are specified, they are treated as separately connected pins.
+    /// If this attribute is not applied, then all pins are assumed to be connected.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class ConnectedAttribute : Attribute
     {
         /// <summary>
-        /// Get a connected pin
+        /// First connected pin
         /// </summary>
-        /// <param name="index">Index</param>
-        /// <returns></returns>
-        public int this[int index]
-        {
-            get => pins[index];
-        }
+        public int Pin1 { get; }
 
         /// <summary>
-        /// Get all pins
+        /// Second connected pin
         /// </summary>
-        public IEnumerable<int> Pins
-        {
-            get => pins;
-        }
-
-        /// <summary>
-        /// Gets the number of pins
-        /// </summary>
-        public int Count { get => pins.Length; }
-
-        /// <summary>
-        /// Private variables
-        /// </summary>
-        int[] pins;
+        public int Pin2 { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="pins">The internally connected pins</param>
-        public ConnectedAttribute(params int[] pins)
+        /// <param name="pin1">First pin</param>
+        /// <param name="pin2">Second pin</param>
+        public ConnectedAttribute(int pin1, int pin2)
         {
-            this.pins = pins;
+            Pin1 = pin1;
+            Pin2 = pin2;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// No parameters mean no pins are connected
+        /// </summary>
+        public ConnectedAttribute()
+        {
+            Pin1 = -1;
+            Pin2 = -1;
         }
     }
 }

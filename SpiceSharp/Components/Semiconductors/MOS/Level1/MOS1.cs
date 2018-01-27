@@ -4,10 +4,10 @@ using SpiceSharp.Components.MosfetBehaviors.Level1;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A MOS1 Mosfet.
+    /// A Mosfet.
     /// Level 1, Shichman-Hodges.
     /// </summary>
-    [PinsAttribute("Drain", "Gate", "Source", "Bulk"), ConnectedAttribute(0, 2, 3)]
+    [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk"), Connected(0, 2), Connected(0, 3)]
     public class MOS1 : Component
     {
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Circuits;
 using SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors;
 
 namespace SpiceSharp.Components
@@ -7,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A voltage-controlled current-source
     /// </summary>
-    [PinsAttribute("V+", "V-", "VC+", "VC-"), VoltageDriverAttribute(0, 1), ConnectedAttribute(0, 1)]
+    [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-"), VoltageDriver(0, 1), Connected(0, 1)]
     public class VoltageControlledVoltageSource : Component
     {
         /// <summary>

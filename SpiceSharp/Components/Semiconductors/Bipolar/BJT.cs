@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A bipolar junction transistor (BJT)
     /// </summary>
-    [PinsAttribute("Collector", "Base", "Emitter", "Substrate")]
+    [Pin(0, "Collector"), Pin(1, "Base"), Pin(2, "Emitter"), Pin(3, "Substrate")]
     public class BJT : Component
     {
         /// <summary>

@@ -23,12 +23,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 Type = PNP;
         }
         [PropertyName("type"), PropertyInfo("NPN or PNP")]
-        public string GetTYPE(Circuit circuit)
+        public string GetMosfetType()
         {
-            if (Type == NPN)
+            if (Type > 0)
                 return "npn";
-            else
-                return "pnp";
+            return "pnp";
         }
         public double Type { get; internal set; } = NPN;
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]

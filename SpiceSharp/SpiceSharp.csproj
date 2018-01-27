@@ -199,7 +199,7 @@
     <Compile Include="Components\Semiconductors\MOS\Level3\MOS3.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level3\MOS3Model.cs" />
     <Compile Include="Components\Semiconductors\MOS\Transistor.cs" />
-    <Compile Include="Attributes\PinsAttribute.cs" />
+    <Compile Include="Attributes\PinAttribute.cs" />
     <Compile Include="Simulations\Base\TimeSimulation.cs" />
     <Compile Include="Simulations\IntegrationMethods\IntegrationConfiguration.cs" />
     <Compile Include="Components\RLC\IND\Inductor.cs" />

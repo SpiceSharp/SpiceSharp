@@ -41,7 +41,7 @@ namespace SpiceSharp.Simulations
         /// Gets or sets the step type (string version)
         /// </summary>
         [PropertyName("type"), PropertyInfo("The step type")]
-        public string _StepType
+        public string StepTypeName
         {
             get
             {

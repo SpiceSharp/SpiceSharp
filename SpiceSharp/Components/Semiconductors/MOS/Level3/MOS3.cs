@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// A MOS3 Mosfet
     /// Level 3, a semi-empirical model(see reference for level 3).
     /// </summary>
-    [PinsAttribute("Drain", "Gate", "Source", "Bulk"), ConnectedAttribute(0, 2, 3)]
+    [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk"), Connected(0, 2), Connected(0, 3)]
     public class MOS3 : Component
     {
         /// <summary>

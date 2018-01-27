@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A voltage-controlled current source
     /// </summary>
-    [PinsAttribute("V+", "V-", "VC+", "VC-"), ConnectedAttribute(0, 1)]
+    [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-"), Connected(0, 1)]
     public class VoltageControlledCurrentSource : Component
     {
         /// <summary>

@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A diode
     /// </summary>
-    [Pins("D+", "D-")]
+    [Pin(0, "D+"), Pin(1, "D-")]
     public class Diode : Component
     {
         /// <summary>

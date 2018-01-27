@@ -86,7 +86,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// Methods
         /// </summary>
         [PropertyName("delta"), PropertyInfo("Width effect on threshold")]
-        public double DELTA
+        public double DeltaWidth
         {
             get => NarrowFactor;
             set => Delta = value;
@@ -104,7 +104,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 Type = -1.0;
         }
         [PropertyName("type"), PropertyInfo("N-channel or P-channel MOS")]
-        public string GetTYPE()
+        public string GetMosfetType()
         {
             if (Type > 0)
                 return "nmos";

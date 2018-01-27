@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// An inductor
     /// </summary>
-    [Pins("L+", "L-")]
+    [Pin(0, "L+"), Pin(1, "L-")]
     public class Inductor : Component
     {
         /// <summary>

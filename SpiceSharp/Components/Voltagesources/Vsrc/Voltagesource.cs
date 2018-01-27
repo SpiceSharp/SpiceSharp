@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// An independent voltage source
     /// </summary>
-    [PinsAttribute("V+", "V-"), VoltageDriverAttribute(0, 1), IndependentSourceAttribute]
+    [Pin(0, "V+"), Pin(1, "V-"), VoltageDriver(0, 1), IndependentSource]
     public class VoltageSource : Component
     {
         /// <summary>

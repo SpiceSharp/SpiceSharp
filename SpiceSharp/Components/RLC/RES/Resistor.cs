@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A resistor
     /// </summary>
-    [Pins("R+", "R-")]
+    [Pin(0, "R+"), Pin(1, "R-")]
     public class Resistor : Component
     {
         /// <summary>

@@ -6,7 +6,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A current-controlled switch
     /// </summary>
-    [PinsAttribute("W+", "W-")]
+    [Pin(0, "W+"), Pin(1, "W-")]
     public class CurrentSwitch : Component
     {
         /// <summary>
