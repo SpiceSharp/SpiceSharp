@@ -107,7 +107,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
             var noise = simulation.NoiseState;
 
             // Set noise parameters

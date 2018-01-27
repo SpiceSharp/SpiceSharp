@@ -219,7 +219,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 
             var state = simulation.State;
             double vt, EffectiveLength, DrainSatCur, SourceSatCur, Beta,
-                OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, von, evbs, evbd, vdsat,
+                OxideCap, vgs, vds, vbs, vbd, vgd, vgdo, von, evbs, evbd, vdsat,
                 cdrain, ceqbs, ceqbd, cdreq;
             int Check, xnrm, xrev;
 
@@ -346,7 +346,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 			*/
             vbd = vbs - vds;
             vgd = vgs - vds;
-            vgb = vgs - vbs;
 
             /* 
 			* bulk - source and bulk - drain diodes

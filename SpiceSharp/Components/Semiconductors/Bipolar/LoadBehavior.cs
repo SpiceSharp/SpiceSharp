@@ -227,7 +227,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             var state = simulation.State;
             double vt;
-            double ceqcs, ceqbx, csat, rbpr, rbpi, gcpr, gepr, oik, c2, vte, oikr, c4, vtc, xjrb, vbe, vbc, vbx, vcs;
+            double ceqcs, ceqbx, csat, rbpr, rbpi, gcpr, gepr, oik, c2, vte, oikr, c4, vtc, xjrb, vbe, vbc;
             bool icheck;
             double vce;
             bool ichk1;
@@ -265,22 +265,16 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 vbe = mbp.MosfetType * bp.InitialVBE;
                 vce = mbp.MosfetType * bp.InitialVCE;
                 vbc = vbe - vce;
-                vbx = vbc;
-                vcs = 0;
             }
             else if (state.Init == State.InitFlags.InitJct && !bp.Off)
             {
                 vbe = temp.TVcrit;
                 vbc = 0;
-                vcs = 0;
-                vbx = 0;
             }
             else if (state.Init == State.InitFlags.InitJct || (state.Init == State.InitFlags.InitFix && bp.Off))
             {
                 vbe = 0;
                 vbc = 0;
-                vcs = 0;
-                vbx = 0;
             }
             else
             {
@@ -289,8 +283,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
                  */
                 vbe = mbp.MosfetType * (state.Solution[BasePrimeNode] - state.Solution[EmitPrimeNode]);
                 vbc = mbp.MosfetType * (state.Solution[BasePrimeNode] - state.Solution[ColPrimeNode]);
-                vbx = mbp.MosfetType * (state.Solution[baseNode] - state.Solution[ColPrimeNode]);
-                vcs = mbp.MosfetType * (state.Solution[substNode] - state.Solution[ColPrimeNode]);
 
                 /* 
 				 * limit nonlinear branch voltages

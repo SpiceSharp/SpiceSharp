@@ -11,7 +11,6 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
-        /// <param name="config">Configuration</param>
         public OP(Identifier name) : base(name)
         {
         }
@@ -21,8 +20,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Execute()
         {
-            var circuit = Circuit;
-
             // Setup the state
             var state = State;
             var baseconfig = BaseConfiguration;

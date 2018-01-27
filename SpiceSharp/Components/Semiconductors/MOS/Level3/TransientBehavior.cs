@@ -211,11 +211,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
+            double EffectiveLength,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
-                sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0;
+                sargsw, capgs = 0.0, capgd = 0.0, capgb = 0.0;
 
-            var state = simulation.State;
             vbs = load.Vbs;
             vgs = load.Vgs;
             vds = load.Vds;
@@ -230,9 +229,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             Vds.Value = vds;
 
             EffectiveLength = bp.Length - 2 * mbp.LatDiff;
-            GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;
-            GateDrainOverlapCap = mbp.GateDrainOverlapCapFactor * bp.Width;
-            GateBulkOverlapCap = mbp.GateBulkOverlapCapFactor * EffectiveLength;
             OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
 
             /* 
@@ -373,18 +369,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             Capgs.Value = icapgs;
             Capgd.Value = icapgd;
             Capgb.Value = icapgb;
-            vgs1 = Vgs.GetPreviousValue(1);
-            vgd1 = vgs1 - Vds.GetPreviousValue(1);
-            vgb1 = vgs1 - Vbs.GetPreviousValue(1);
-            capgs = 2 * Capgs.Value + GateSourceOverlapCap;
-            capgd = 2 * Capgd.Value + GateDrainOverlapCap;
-            capgb = 2 * Capgb.Value + GateBulkOverlapCap;
-
-            /* DETAILPROF */
-            /* 
-             * store small - signal parameters (for meyer's model)
-             * all parameters already stored, so done...
-             */
 
             /* TRANOP only */
             Qgs.Value = vgs * capgs;
@@ -403,7 +387,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 
             var state = simulation.State;
             var rstate = state;
-            var method = simulation.Method;
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
                 sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs, ceqbd;

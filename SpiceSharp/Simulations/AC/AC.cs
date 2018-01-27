@@ -40,7 +40,6 @@ namespace SpiceSharp.Simulations
             var circuit = Circuit;
 
             var state = State;
-            var cstate = state;
             var baseconfig = BaseConfiguration;
             var freqconfig = FrequencyConfiguration;
 

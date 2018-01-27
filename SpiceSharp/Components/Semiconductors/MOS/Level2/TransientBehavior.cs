@@ -210,7 +210,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
                 OxideCap, vgs, vbs, vbd, vgb, vgd, von,
-                vdsat, sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0;
+                vdsat, sargsw, capgs = 0.0, capgd = 0.0, capgb = 0.0;
 
             vbs = load.Vbs;
             vbd = load.Vbd;
@@ -356,10 +356,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             Capgs.Value = icapgs;
             Capgd.Value = icapgd;
             Capgb.Value = icapgb;
-
-            vgs1 = Vgs.GetPreviousValue(1);
-            vgd1 = vgs1 - Vds.GetPreviousValue(1);
-            vgb1 = vgs1 - Vbs.GetPreviousValue(1);
 
             capgs = 2 * Capgs.Value + GateSourceOverlapCap;
             capgd = 2 * Capgd.Value + GateDrainOverlapCap;

@@ -230,23 +230,19 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.State;
-            double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2, arg3,
+            double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2,
                 xms, xtf, ovtf, xjtf, argtf, tmp, sarg, f1, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
 
             double cbe = load.Cbe;
             double cbc = load.Cbc;
             double gbe = load.Gbe;
-            double gbc = load.Gbc;
             double qb = load.Qb;
-            double dqbdvc = load.DqbDvc;
             double dqbdve = load.DqbDve;
-            double geqcb = 0;
 
             double vbe = load.Vbe;
             double vbc = load.Vbc;
             double vbx = mbp.MosfetType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
             double vcs = mbp.MosfetType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
-            double td = modeltemp.ExcessPhaseFactor;
 
             Cexbc.Value = load.Cbe / load.Qb;
 
@@ -275,7 +271,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 argtf = 0;
                 arg2 = 0;
-                arg3 = 0;
                 if (xtf != 0)
                 {
                     argtf = xtf;
@@ -290,11 +285,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
                         argtf = argtf * tmp * tmp;
                         arg2 = argtf * (3 - tmp - tmp);
                     }
-                    arg3 = cbe * argtf * ovtf;
                 }
                 cbe = cbe * (1 + argtf) / qb;
                 gbe = (gbe * (1 + arg2) - cbe * dqbdve) / qb;
-                geqcb = tf * (arg3 - cbe * dqbdvc) / qb;
             }
             if (vbe < fcpe)
             {
@@ -388,7 +381,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double vbc = load.Vbc;
             double vbx = mbp.MosfetType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
             double vcs = mbp.MosfetType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
-            double td = modeltemp.ExcessPhaseFactor;
 
             /* 
              * charge storage elements

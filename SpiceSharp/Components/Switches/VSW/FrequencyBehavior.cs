@@ -97,8 +97,6 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             double g_now;
-            var state = simulation.State;
-            var cstate = state;
 
             // Get the current state
             g_now = load.CurrentState == true ? modelload.OnConductance : modelload.OffConductance;

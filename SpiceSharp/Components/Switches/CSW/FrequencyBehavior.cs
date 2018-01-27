@@ -97,8 +97,6 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
 
             bool current_state;
             double g_now;
-            var state = simulation.State;
-            var cstate = state;
 
             // Get the current state
             current_state = load.CurrentState;

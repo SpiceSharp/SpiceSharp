@@ -174,7 +174,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
+            double EffectiveLength,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
                 sargsw;
 
@@ -188,9 +188,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             vdsat = mbp.MosfetType * load.Vdsat;
 
             EffectiveLength = bp.Length - 2 * mbp.LatDiff;
-            GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;
-            GateDrainOverlapCap = mbp.GateDrainOverlapCapFactor * bp.Width;
-            GateBulkOverlapCap = mbp.GateBulkOverlapCapFactor * EffectiveLength;
             OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
 
             /* 

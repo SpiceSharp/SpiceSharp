@@ -225,7 +225,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var state = simulation.State;
             var rstate = state;
             double vt, EffectiveLength, DrainSatCur, SourceSatCur, Beta,
-                OxideCap, vgs, vds, vbs, vbd, vgb, vgd, vgdo, von, evbs, evbd,
+                OxideCap, vgs, vds, vbs, vbd, vgd, vgdo, von, evbs, evbd,
                 vdsat, cdrain = 0.0, ceqbs,
                 ceqbd, cdreq;
             int Check, xnrm, xrev;
@@ -322,10 +322,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             /* now all the preliminaries are over - we can start doing the
 			* real work 
 			*/
-
             vbd = vbs - vds;
             vgd = vgs - vds;
-            vgb = vgs - vbs;
 
             /* bulk - source and bulk - drain doides
 			* here we just evaluate the ideal diode current and the

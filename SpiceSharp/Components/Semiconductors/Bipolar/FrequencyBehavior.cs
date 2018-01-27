@@ -185,8 +185,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, xms, xtf, ovtf, xjtf;
-            double arg, sarg, argtf, arg2, arg3, tmp, f1, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
-            double geqcb;
+            double arg, sarg, argtf, arg2, tmp, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
 
             // Get voltages
             var state = simulation.State;
@@ -198,10 +197,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             // Get shared parameters
             double cbe = load.Cbe;
             double gbe = load.Gbe;
-            double cbc = load.Cbc;
             double gbc = load.Gbc;
             double qb = load.Qb;
-            double dqbdvc = load.DqbDvc;
             double dqbdve = load.DqbDve;
 
             /* 
@@ -229,7 +226,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 argtf = 0;
                 arg2 = 0;
-                arg3 = 0;
                 if (xtf != 0)
                 {
                     argtf = xtf;
@@ -244,11 +240,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
                         argtf = argtf * tmp * tmp;
                         arg2 = argtf * (3 - tmp - tmp);
                     }
-                    arg3 = cbe * argtf * ovtf;
                 }
                 cbe = cbe * (1 + argtf) / qb;
                 gbe = (gbe * (1 + arg2) - cbe * dqbdve) / qb;
-                geqcb = tf * (arg3 - cbe * dqbdvc) / qb;
             }
             if (vbe < fcpe)
             {
@@ -258,7 +252,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                f1 = temp.Tf1;
                 f2 = modeltemp.F2;
                 f3 = modeltemp.F3;
                 czbef2 = czbe / f2;
@@ -266,7 +259,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
 
             fcpc = temp.Tf4;
-            f1 = temp.Tf5;
             f2 = modeltemp.F6;
             f3 = modeltemp.F7;
             if (vbc < fcpc)

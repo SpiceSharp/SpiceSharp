@@ -80,9 +80,6 @@ namespace SpiceSharp.IntegrationMethods
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            // Get the state
-            var state = simulation.State;
-
             // Predict a solution
             double a, b;
             switch (Order)
