@@ -53,7 +53,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
-        public Simulation(Identifier name)
+        protected Simulation(Identifier name)
         {
             Name = name;
         }

@@ -8,13 +8,6 @@ namespace SpiceSharp.Components
     public abstract class Waveform
     {
         /// <summary>
-        /// Constructor
-        /// </summary>
-        public Waveform()
-        {
-        }
-
-        /// <summary>
         /// Setup the waveform
         /// </summary>
         public abstract void Setup();

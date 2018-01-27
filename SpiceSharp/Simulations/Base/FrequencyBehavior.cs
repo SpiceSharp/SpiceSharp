@@ -14,7 +14,7 @@ namespace SpiceSharp.Behaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public FrequencyBehavior(Identifier name) : base(name) { }
+        protected FrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Create an export method for AC analysis

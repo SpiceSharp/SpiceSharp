@@ -27,7 +27,7 @@ namespace SpiceSharp.Behaviors
         /// NOTE: remove default later
         /// </summary>
         /// <param name="name">Name of the behavior</param>
-        public Behavior(Identifier name)
+        protected Behavior(Identifier name)
         {
             Name = name;
         }

@@ -27,7 +27,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public FrequencySimulation(Identifier name) : base(name)
+        protected FrequencySimulation(Identifier name) : base(name)
         {
             Parameters.Add(new FrequencyConfiguration());
         }
@@ -40,7 +40,7 @@ namespace SpiceSharp.Simulations
         /// <param name="n">Number of steps</param>
         /// <param name="start">Starting frequency</param>
         /// <param name="stop">Final frequency</param>
-        public FrequencySimulation(Identifier name, string steptype, int n, double start, double stop) : base(name)
+        protected FrequencySimulation(Identifier name, string steptype, int n, double start, double stop) : base(name)
         {
             Parameters.Add(new FrequencyConfiguration(steptype, n, start, stop));
         }

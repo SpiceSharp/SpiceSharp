@@ -39,7 +39,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public BaseSimulation(Identifier name)
+        protected BaseSimulation(Identifier name)
             : base(name)
         {
             Parameters.Add(new BaseConfiguration());

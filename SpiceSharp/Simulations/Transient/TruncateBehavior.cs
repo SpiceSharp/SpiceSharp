@@ -12,7 +12,7 @@ namespace SpiceSharp.Behaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public TruncateBehavior(Identifier name) : base(name) { }
+        protected TruncateBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Truncate the current timestep

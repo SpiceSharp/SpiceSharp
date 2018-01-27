@@ -39,7 +39,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public TimeSimulation(Identifier name) : base(name)
+        protected TimeSimulation(Identifier name) : base(name)
         {
         }
 

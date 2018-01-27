@@ -12,7 +12,7 @@ namespace SpiceSharp.Behaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public NoiseBehavior(Identifier name) : base(name) { }
+        protected NoiseBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Connect noise sources

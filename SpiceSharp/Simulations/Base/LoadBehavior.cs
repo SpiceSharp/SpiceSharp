@@ -13,7 +13,7 @@ namespace SpiceSharp.Behaviors
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public LoadBehavior(Identifier name) : base(name) { }
+        protected LoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior for usage with a matrix

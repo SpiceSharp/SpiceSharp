@@ -14,7 +14,7 @@ namespace SpiceSharp.Behaviors
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public TransientBehavior(Identifier name) : base(name) { }
+        protected TransientBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Register states

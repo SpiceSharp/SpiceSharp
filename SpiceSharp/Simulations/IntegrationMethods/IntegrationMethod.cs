@@ -112,7 +112,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="config">The configuration</param>
         /// <param name="maxorder">Maximum integration order</param>
-        public IntegrationMethod(IntegrationConfiguration config, int maxorder)
+        protected IntegrationMethod(IntegrationConfiguration config, int maxorder)
         {
             MaxOrder = maxorder;
             Config = config ?? new IntegrationConfiguration();
@@ -124,7 +124,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Constructor
         /// </summary>
         /// <param name="maxorder">Maximum integration order</param>
-        public IntegrationMethod(int maxorder)
+        protected IntegrationMethod(int maxorder)
         {
             MaxOrder = maxorder;
             Config = new IntegrationConfiguration();
