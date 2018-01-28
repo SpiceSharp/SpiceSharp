@@ -44,7 +44,7 @@ namespace SpiceSharp.Simulations
         public DC(Identifier name, Identifier source, double start, double stop, double step) : base(name)
         {
             var config = new DCConfiguration();
-            Sweep s = new Sweep(source, start, stop, step);
+            SweepConfiguration s = new SweepConfiguration(source, start, stop, step);
             config.Sweeps.Add(s);
             Parameters.Add(config);
         }
@@ -54,7 +54,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="sweeps">Sweeps</param>
-        public DC(Identifier name, IEnumerable<Sweep> sweeps) : base(name)
+        public DC(Identifier name, IEnumerable<SweepConfiguration> sweeps) : base(name)
         {
             if (sweeps == null)
                 throw new ArgumentNullException(nameof(sweeps));

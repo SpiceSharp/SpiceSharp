@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="sweeps">Sweeps to be nested (in order)</param>
-        public NestedSweeps(IEnumerable<Sweep> sweeps)
+        public NestedSweeps(IEnumerable<SweepConfiguration> sweeps)
         {
             if (sweeps == null)
                 throw new ArgumentNullException(nameof(sweeps));
@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
         /// Add a sweep
         /// </summary>
         /// <param name="sweep">Sweep</param>
-        void Add(Sweep sweep)
+        void Add(SweepConfiguration sweep)
         {
             instances.Add(new SweepInstance(sweep.ComponentName, sweep.Start, sweep.Stop, sweep.Step));
         }

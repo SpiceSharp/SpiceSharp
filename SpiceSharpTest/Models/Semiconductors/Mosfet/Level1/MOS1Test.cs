@@ -55,9 +55,9 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
                 );
 
             // Create simulation
-            DC dc = new DC("dc", new Sweep[] {
-                new Sweep("V2", 0, 5, 0.5),
-                new Sweep("V1", 0, 5, 0.5)
+            DC dc = new DC("dc", new SweepConfiguration[] {
+                new SweepConfiguration("V2", 0, 5, 0.5),
+                new SweepConfiguration("V1", 0, 5, 0.5)
             });
 
             // Create exports
@@ -96,7 +96,7 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
             ckt.Objects["V1"].Parameters.SetProperty("acmag", 1.0);
 
             // Create simulation
-            AC ac = new AC("ac", "dec", 5, 10, 10e9);
+            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 5));
 
             // Create exports
             Func<State, Complex>[] exports = new Func<State, Complex>[1];
@@ -168,7 +168,7 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
             ckt.Objects["M1"].Parameters.SetProperty("l", 100e-6);
 
             // Create simulation
-            Noise noise = new Noise("noise", "out", "V1", "dec", 10, 10.0, 10e9);
+            Noise noise = new Noise("noise", "out", "V1", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 10));
 
             // Create exports
             Func<State, double>[] exports = new Func<State, double>[2];

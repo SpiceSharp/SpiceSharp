@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
         /// Gets the list of sweeps that need to be executed
         /// </summary>
         [PropertyName("sweeps"), PropertyInfo("List of sweeps")]
-        public Collection<Sweep> Sweeps { get; } = new Collection<Sweep>();
+        public Collection<SweepConfiguration> Sweeps { get; } = new Collection<SweepConfiguration>();
 
         /// <summary>
         /// Number of iterations for DC sweeps

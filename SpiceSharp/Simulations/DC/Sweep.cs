@@ -7,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A class that describes a job
     /// </summary>
-    public class Sweep
+    public class SweepConfiguration
     {
         /// <summary>
         /// Starting value
@@ -40,7 +40,7 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The starting value</param>
         /// <param name="stop">The stopping value</param>
         /// <param name="step">The step value</param>
-        public Sweep(Identifier name, double start, double stop, double step) : base()
+        public SweepConfiguration(Identifier name, double start, double stop, double step) : base()
         {
             ComponentName = name;
             Start = start;

@@ -63,9 +63,9 @@ namespace SpiceSharpTest.Models.Bipolar
                 );
 
             // Create simulation
-            DC dc = new DC("dc", new Sweep[] {
-                new Sweep("V1", 0, 0.8, 0.1),
-                new Sweep("V2", 0, 5, 0.5)
+            DC dc = new DC("dc", new SweepConfiguration[] {
+                new SweepConfiguration("V1", 0, 0.8, 0.1),
+                new SweepConfiguration("V2", 0, 5, 0.5)
             });
 
             // Create export
@@ -113,7 +113,7 @@ namespace SpiceSharpTest.Models.Bipolar
             ckt.Objects["V1"].Parameters.SetProperty("acmag", 1.0);
 
             // Create simulation
-            AC ac = new AC("ac", "dec", 5, 10, 10.0e9);
+            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 5));
 
             // Create exports
             Func<State, Complex>[] exports = new Func<State, Complex>[1];

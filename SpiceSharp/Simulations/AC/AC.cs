@@ -20,12 +20,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="name">The name of the simulation</param>
-        /// <param name="type">The simulation type: lin, oct or dec</param>
-        /// <param name="n">The number of steps</param>
-        /// <param name="start">The starting frequency</param>
-        /// <param name="stop">The stopping frequency</param>
-        public AC(Identifier name, string type, int n, double start, double stop) : base(name, type, n, start, stop)
+        /// <param name="name">Name</param>
+        /// <param name="frequencySweep">Frequency sweep</param>
+        public AC(Identifier name, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
         }
 
@@ -71,7 +68,7 @@ namespace SpiceSharp.Simulations
             state.Matrix.Complex = true;
 
             // Sweep the frequency
-            foreach (double freq in Frequencies)
+            foreach (double freq in FrequencySweep.Points)
             {
                 // Calculate the current frequency
                 state.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);

@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {

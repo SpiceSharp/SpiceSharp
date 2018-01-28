@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Collections.ObjectModel;
 using SpiceSharp.Diagnostics;
@@ -33,16 +32,18 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// The sweep for frequency points
+        /// </summary>
+        protected Sweep<double> FrequencySweep { get; private set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="name">Identifier</param>
-        /// <param name="steptype">Step type</param>
-        /// <param name="n">Number of steps</param>
-        /// <param name="start">Starting frequency</param>
-        /// <param name="stop">Final frequency</param>
-        protected FrequencySimulation(Identifier name, string steptype, int n, double start, double stop) : base(name)
+        /// <param name="name">Name</param>
+        /// <param name="frequencySweep">Sweep for the frequency points</param>
+        protected FrequencySimulation(Identifier name, Sweep<double> frequencySweep) : base(name)
         {
-            Parameters.Add(new FrequencyConfiguration(steptype, n, start, stop));
+            Parameters.Add(new FrequencyConfiguration(frequencySweep));
         }
 
         /// <summary>
@@ -54,12 +55,13 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors
             FrequencyBehaviors = SetupBehaviors<FrequencyBehavior>();
-
-            // Setup AC behaviors and configurations
-            FrequencyConfiguration = Parameters.Get<FrequencyConfiguration>();
             var matrix = State.Matrix;
             foreach (var behavior in FrequencyBehaviors)
                 behavior.GetMatrixPointers(matrix);
+
+            // Setup parameters
+            FrequencyConfiguration = Parameters.Get<FrequencyConfiguration>() ?? throw new CircuitException("No frequency configuration found");
+            FrequencySweep = FrequencyConfiguration.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
         }
 
         /// <summary>
@@ -72,74 +74,12 @@ namespace SpiceSharp.Simulations
                 behavior.Unsetup();
             FrequencyBehaviors.Clear();
             FrequencyBehaviors = null;
+            FrequencyConfiguration = null;
+            FrequencySweep = null;
 
             base.Unsetup();
         }
-
-        /// <summary>
-        /// Gets all frequency points
-        /// </summary>
-        protected IEnumerable<double> Frequencies
-        {
-            get
-            {
-                double freqdelta;
-                int n;
-                var freqconfig = FrequencyConfiguration;
-
-                // Calculate the step
-                switch (freqconfig.StepType)
-                {
-                    case StepTypes.Decade:
-                        freqdelta = Math.Exp(Math.Log(10.0) / freqconfig.NumberSteps);
-                        n = (int)Math.Floor(Math.Log(freqconfig.StopFreq / freqconfig.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
-                        break;
-
-                    case StepTypes.Octave:
-                        freqdelta = Math.Exp(Math.Log(2.0) / freqconfig.NumberSteps);
-                        n = (int)Math.Floor(Math.Log(freqconfig.StopFreq / freqconfig.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
-                        break;
-
-                    case StepTypes.Linear:
-                        if (freqconfig.NumberSteps > 1)
-                        {
-                            freqdelta = (freqconfig.StopFreq - freqconfig.StartFreq) / (freqconfig.NumberSteps - 1);
-                            n = freqconfig.NumberSteps;
-                        }
-                        else
-                        {
-                            freqdelta = double.PositiveInfinity;
-                            n = 1;
-                        }
-                        break;
-
-                    default:
-                        throw new CircuitException("Invalid step type");
-                }
-
-                // Iterate through the frequency points
-                double freq = freqconfig.StartFreq;
-                for (int i = 0; i < n; i++)
-                {
-                    // Use the frequency point
-                    yield return freq;
-
-                    // Go to the next frequency
-                    switch (freqconfig.StepType)
-                    {
-                        case StepTypes.Decade:
-                        case StepTypes.Octave:
-                            freq = freq * freqdelta;
-                            break;
-
-                        case StepTypes.Linear:
-                            freq = freqconfig.StartFreq + i * freqdelta;
-                            break;
-                    }
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Calculate the AC solution
         /// </summary>

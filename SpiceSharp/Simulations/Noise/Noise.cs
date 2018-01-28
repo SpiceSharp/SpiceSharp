@@ -42,13 +42,10 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        /// <param name="input">Input</param>
-        /// <param name="output">Output</param>
-        /// <param name="type">Step type</param>
-        /// <param name="n">Steps</param>
-        /// <param name="start">Start</param>
-        /// <param name="stop">Stop</param>
-        public Noise(Identifier name, Identifier output, Identifier input, string type, int n, double start, double stop) : base(name, type, n, start, stop)
+        /// <param name="output">Output node</param>
+        /// <param name="input">Input source</param>
+        /// <param name="frequencySweep">Frequency sweep</param>
+        public Noise(Identifier name, Identifier output, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
             Parameters.Add(new NoiseConfiguration(output, null, input));
         }
@@ -57,14 +54,11 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
+        /// <param name="output">Output node</param>
+        /// <param name="reference">Reference output node</param>
         /// <param name="input">Input</param>
-        /// <param name="output">Output</param>
-        /// <param name="reference">Output reference</param>
-        /// <param name="type">Type</param>
-        /// <param name="n">Steps</param>
-        /// <param name="start">Start</param>
-        /// <param name="stop">Stop</param>
-        public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, string type, int n, double start, double stop) : base(name, type, n, start, stop)
+        /// <param name="frequencySweep">Frequency sweep</param>
+        public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
             Parameters.Add(new NoiseConfiguration(output, reference, input));
         }
@@ -115,28 +109,12 @@ namespace SpiceSharp.Simulations
             int negOutNode = noiseconfig.OutputRef != null ? circuit.Nodes[noiseconfig.OutputRef].Index : 0;
 
             // Check the voltage or current source
-            if (noiseconfig.Input == null)
-                throw new CircuitException("{0}: No input source specified".FormatString(Name));
-            Entity source = circuit.Objects[noiseconfig.Input];
-            if (source is VoltageSource vsource)
-            {
-                var ac = vsource.Parameters.Get<Components.VoltagesourceBehaviors.FrequencyParameters>();
-                if (!ac.AcMagnitude.Given || ac.AcMagnitude == 0.0)
-                    throw new CircuitException("{0}: Noise input source {1} has no AC input".FormatString(Name, vsource.Name));
-            }
-            else if (source is CurrentSource isource)
-            {
-                var ac = isource.Parameters.Get<Components.CurrentsourceBehaviors.FrequencyParameters>();
-                if (!ac.AcMagnitude.Given || ac.AcMagnitude == 0.0)
-                    throw new CircuitException("{0}: Noise input source {1} has not AC input".FormatString(Name, isource.Name));
-            }
-            else
-                throw new CircuitException("{0}: No input source".FormatString(Name));
+            var source = FindInputSource(noiseconfig.Input);
             
             // Initialize
             var data = NoiseState;
             state.Initialize(circuit);
-            data.Initialize(freqconfig.StartFreq);
+            data.Initialize(FrequencySweep.Initial);
             state.Laplace = 0;
             state.Domain = State.DomainTypes.Frequency;
             state.UseIC = false;
@@ -151,16 +129,14 @@ namespace SpiceSharp.Simulations
                 behavior.ConnectNoise();
 
             // Loop through noise figures
-            foreach (double freq in Frequencies)
+            foreach (double freq in FrequencySweep.Points)
             {
                 data.Freq = freq;
-                state.Laplace = new Complex(0.0, 2.0 * Math.PI * data.Freq);
+                state.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
                 AcIterate(circuit);
 
                 Complex val = state.ComplexSolution[posOutNode] - state.ComplexSolution[negOutNode];
-                double rval = val.Real;
-                double ival = val.Imaginary;
-                data.GainInverseSquared = 1.0 / Math.Max(rval * rval + ival * ival, 1e-20);
+                data.GainInverseSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
 
                 // Solve the adjoint system
                 NzIterate(posOutNode, negOutNode);
@@ -174,6 +150,35 @@ namespace SpiceSharp.Simulations
                 // Export the data
                 Export(exportargs);
             }
+        }
+
+        /// <summary>
+        /// Find the input source used for calculating the input noise
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <returns></returns>
+        Entity FindInputSource(Identifier name)
+        {
+            if (name == null)
+                throw new CircuitException("{0}: No input source specified".FormatString(Name));
+
+            Entity source = Circuit.Objects[name];
+            if (source is VoltageSource vsource)
+            {
+                var ac = vsource.Parameters.Get<Components.VoltagesourceBehaviors.FrequencyParameters>();
+                if (!ac.AcMagnitude.Given || ac.AcMagnitude == 0.0)
+                    throw new CircuitException("{0}: Noise input source {1} has no AC input".FormatString(Name, vsource.Name));
+            }
+            else if (source is CurrentSource isource)
+            {
+                var ac = isource.Parameters.Get<Components.CurrentsourceBehaviors.FrequencyParameters>();
+                if (!ac.AcMagnitude.Given || ac.AcMagnitude == 0.0)
+                    throw new CircuitException("{0}: Noise input source {1} has not AC input".FormatString(Name, isource.Name));
+            }
+            else
+                throw new CircuitException("{0}: No input source".FormatString(Name));
+
+            return source;
         }
 
         /// <summary>

@@ -1,8 +1,4 @@
-﻿using System;
-using SpiceSharp.Attributes;
-using SpiceSharp.Diagnostics;
-
-namespace SpiceSharp.Simulations
+﻿namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Parameters for a <see cref="FrequencySimulation"/>
@@ -15,102 +11,26 @@ namespace SpiceSharp.Simulations
         public bool KeepOpInfo { get; set; } = false;
 
         /// <summary>
-        /// Gets or sets the number of steps
+        /// The sweep used for the frequency
         /// </summary>
-        [PropertyName("steps"), PropertyName("n"), PropertyInfo("The number of steps")]
-        public double Steps
-        {
-            get => NumberSteps;
-            set => NumberSteps = (int)(Math.Round(value) + 0.1);
-        }
-        public int NumberSteps { get; set; } = 10;
-
-        /// <summary>
-        /// Gets or sets the starting frequency
-        /// </summary>
-        [PropertyName("start"), PropertyInfo("Starting frequency")]
-        public double StartFreq { get; set; } = 1.0;
-
-        /// <summary>
-        /// Gets or sets the stopping frequency
-        /// </summary>
-        [PropertyName("stop"), PropertyInfo("Stopping frequency")]
-        public double StopFreq { get; set; } = 1.0e3;
-
-        /// <summary>
-        /// Gets or sets the step type (string version)
-        /// </summary>
-        [PropertyName("type"), PropertyInfo("The step type")]
-        public string StepTypeName
-        {
-            get
-            {
-                switch (StepType)
-                {
-                    case StepTypes.Linear: return "lin";
-                    case StepTypes.Octave: return "oct";
-                    case StepTypes.Decade: return "dec";
-                }
-                return null;
-            }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-
-                switch (value.ToLower())
-                {
-                    case "linear":
-                    case "lin": StepType = StepTypes.Linear; break;
-                    case "octave":
-                    case "oct": StepType = StepTypes.Octave; break;
-                    case "decade":
-                    case "dec": StepType = StepTypes.Decade; break;
-                    default:
-                        throw new CircuitException("Invalid step type {0}".FormatString(value));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the type of step used
-        /// </summary>
-        public StepTypes StepType { get; set; } = StepTypes.Decade;
+        public Sweep<double> FrequencySweep { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public FrequencyConfiguration()
         {
+            // Default frequency-sweep
+            FrequencySweep = new Sweeps.DecadeSweep(1, 100, 10);
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="n">Number of steps</param>
-        /// <param name="start">Starting frequency</param>
-        /// <param name="stop">Stopping frequency</param>
-        public FrequencyConfiguration(string steptype, int n, double start, double stop)
+        /// <param name="frequencySweep">Sweep used for the frequency points</param>
+        public FrequencyConfiguration(Sweep<double> frequencySweep)
         {
-            switch (steptype)
-            {
-                case "lin":
-                case "linear": StepType = StepTypes.Linear; break;
-                case "dec":
-                case "decade": StepType = StepTypes.Decade; break;
-                case "oct":
-                case "octave": StepType = StepTypes.Octave; break;
-                default:
-                    throw new CircuitException("Invalid step type \"{0}\"".FormatString(steptype));
-            }
-
-            NumberSteps = n;
-            StartFreq = start;
-            StopFreq = stop;
+            FrequencySweep = frequencySweep;
         }
     }
-    /// <summary>
-    /// Enumerations
-    /// </summary>
-    public enum StepTypes { Decade, Octave, Linear };
 }
