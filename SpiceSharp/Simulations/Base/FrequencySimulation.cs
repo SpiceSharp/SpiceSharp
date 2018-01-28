@@ -10,7 +10,6 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A base class for frequency-dependent analysis
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public abstract class FrequencySimulation : BaseSimulation
     {
         /// <summary>

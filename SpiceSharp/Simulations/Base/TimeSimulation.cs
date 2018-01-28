@@ -12,7 +12,6 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A base class for time-domain analysis
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public abstract class TimeSimulation : BaseSimulation
     {
         /// <summary>

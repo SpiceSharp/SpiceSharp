@@ -111,7 +111,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     {
                         vfb = mbp.Vt0 - mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi) + mbp.Phi);
                     }
-                    Xd = Math.Sqrt((Transistor.EPSSIL + Transistor.EPSSIL) / (Circuit.Charge * mbp.SubstrateDoping * 1e6));
+                    Xd = Math.Sqrt((Transistor.EpsilonSilicon + Transistor.EpsilonSilicon) / (Circuit.Charge * mbp.SubstrateDoping * 1e6));
                 }
                 else
                 {
@@ -121,7 +121,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             }
             if (!mbp.BulkCapFactor.Given)
             {
-                mbp.BulkCapFactor.Value = Math.Sqrt(Transistor.EPSSIL * Circuit.Charge * mbp.SubstrateDoping * 1e6 /* cm**3/m**3 */  / (2 *
+                mbp.BulkCapFactor.Value = Math.Sqrt(Transistor.EpsilonSilicon * Circuit.Charge * mbp.SubstrateDoping * 1e6 /* cm**3/m**3 */  / (2 *
                     mbp.BulkJctPotential));
             }
         }

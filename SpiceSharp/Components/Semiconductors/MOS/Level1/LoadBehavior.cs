@@ -341,7 +341,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             }
             else
             {
-                evbs = Math.Exp(Math.Min(Transistor.MAX_EXP_ARG, vbs / vt));
+                evbs = Math.Exp(Math.Min(Transistor.MaximumExponentArgument, vbs / vt));
                 Gbs = SourceSatCur * evbs / vt + state.Gmin;
                 Cbs = SourceSatCur * (evbs - 1);
             }
@@ -353,7 +353,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             }
             else
             {
-                evbd = Math.Exp(Math.Min(Transistor.MAX_EXP_ARG, vbd / vt));
+                evbd = Math.Exp(Math.Min(Transistor.MaximumExponentArgument, vbd / vt));
                 Gbd = DrainSatCur * evbd / vt + state.Gmin;
                 Cbd = DrainSatCur * (evbd - 1);
             }

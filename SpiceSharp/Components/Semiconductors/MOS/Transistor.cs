@@ -10,30 +10,29 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// <summary>
         /// Static variables
         /// </summary>
-        public static double MAX_EXP_ARG = 709.0;
-        public static double EPSSIL = 11.7 * 8.854214871e-12;
-        public static double MAX_EXP = 5.834617425e14;
-        public static double MIN_EXP = 1.713908431e-15;
-        public static double EXP_THRESHOLD = 34.0;
-        public static double SMOOTHFACTOR = 0.1;
-        public static double EPSOX = 3.453133e-11;
-        public static double EPSSI = 1.03594e-10;
-        public static double PI = 3.141592654;
-        public static double Charge_q = 1.60219e-19;
-        public static double Meter2Micron = 1.0e6;
-        public static double Kb = 1.3806226e-23;
-        public static double KboQ = 8.617087e-5;  /* Kb / q  where q = 1.60219e-19 */
-        public static double DELTA = 1.0E-9;
-        public static double DELTA_1 = 0.02;
-        public static double DELTA_2 = 0.02;
-        public static double DELTA_3 = 0.02;
-        public static double DELTA_4 = 0.02;
-        public static double EPS0 = 8.85418e-12;
-        public static double MM = 3;
+        public const double MaximumExponentArgument = 709.0;
+        public const double EpsilonSilicon = 11.7 * 8.854214871e-12;
+        public const double MaximumExponent = 5.834617425e14;
+        public const double MinimumExponent = 1.713908431e-15;
+        public const double ExponentThreshold = 34.0;
+        public const double SmoothingFactor = 0.1;
+        public const double EpsilonOxide = 3.453133e-11;
+        // public static double EPSSI = 1.03594e-10; Duplicate of EpsilonSilicon
+        // public static double Charge_q = 1.60219e-19; Duplicate of Circuit.Charge
+        public const double MeterMicron = 1.0e6;
+        // public static double Kb = 1.3806226e-23; Duplicate to Circuit.Boltzmann
+        // public static double KboQ = 8.617087e-5;  /* Kb / q  where q = 1.60219e-19 */ Duplicate of Circuit.KOverQ
+        public const double Delta = 1.0E-9;
+        public const double Delta1 = 0.02;
+        public const double Delta2 = 0.02;
+        public const double Delta3 = 0.02;
+        public const double Delta4 = 0.02;
+        public const double EPS0 = 8.85418e-12;
+        // public const double MM = 3; Seems to be unused
 
-        public static double MAX_EXPL = 2.688117142e+43;
-        public static double MIN_EXPL = 3.720075976e-44;
-        public static double EXPL_THRESHOLD = 100.0;
+        public const double MaximumLongExponent = 2.688117142e+43;
+        public const double MinimumLongExponent = 3.720075976e-44;
+        public const double LongExponentThreshold = 100.0;
 
         /// <summary>
         /// Limiting function FET

@@ -98,7 +98,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     wkfngs = wkfng - (3.25 + .5 * Egfet1 + fermis);
                     if (!mbp.Gamma.Given)
                     {
-                        mbp.Gamma.Value = Math.Sqrt(2 * Transistor.EPSSIL * Circuit.Charge * mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */) /
+                        mbp.Gamma.Value = Math.Sqrt(2 * Transistor.EpsilonSilicon * Circuit.Charge * mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */) /
                             OxideCapFactor;
                     }
                     if (!mbp.Vt0.Given)
@@ -112,7 +112,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     {
                         vfb = mbp.Vt0 - mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi) + mbp.Phi);
                     }
-                    Alpha = (Transistor.EPSSIL + Transistor.EPSSIL) / (Circuit.Charge * mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */);
+                    Alpha = (Transistor.EpsilonSilicon + Transistor.EpsilonSilicon) / (Circuit.Charge * mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */);
                     CoeffDepLayWidth = Math.Sqrt(Alpha);
                 }
                 else
@@ -122,7 +122,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 }
             }
             /* now model parameter preprocessing */
-            mbp.NarrowFactor = mbp.Delta * 0.5 * Math.PI * Transistor.EPSSIL / OxideCapFactor;
+            mbp.NarrowFactor = mbp.Delta * 0.5 * Math.PI * Transistor.EpsilonSilicon / OxideCapFactor;
         }
     }
 }

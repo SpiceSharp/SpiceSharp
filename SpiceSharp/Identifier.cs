@@ -11,12 +11,12 @@ namespace SpiceSharp
         /// <summary>
         /// Gets or sets the separator for displaying path names
         /// </summary>
-        public static string Separator = ".";
+        public static string Separator { get; set; } = ".";
 
         /// <summary>
         /// Gets or sets case insensitivity
         /// </summary>
-        public static bool CaseInsensitive = false;
+        public static bool CaseInsensitive { get; set; } = false;
 
         /// <summary>
         /// Used for hashing

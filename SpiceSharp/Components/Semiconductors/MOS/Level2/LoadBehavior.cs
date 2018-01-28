@@ -439,7 +439,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				*/
 
                 /* XXX constant per device */
-                factor = 0.125 * mbp.NarrowFactor * 2.0 * Math.PI * Transistor.EPSSIL / OxideCap * EffectiveLength;
+                factor = 0.125 * mbp.NarrowFactor * 2.0 * Math.PI * Transistor.EpsilonSilicon / OxideCap * EffectiveLength;
                 /* XXX constant per device */
                 eta = 1.0 + factor;
                 vbin = temp.TVbi * mbp.MosfetType + factor * phiMinVbs;
@@ -551,7 +551,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 line400:
                 if (OxideCap <= 0.0) goto line410;
                 udenom = vgst;
-                tmp = mbp.CritField * 100 /* cm / m */  * Transistor.EPSSIL / modeltemp.OxideCapFactor;
+                tmp = mbp.CritField * 100 /* cm / m */  * Transistor.EpsilonSilicon / modeltemp.OxideCapFactor;
                 if (udenom <= tmp) goto line410;
                 ufact = Math.Exp(mbp.CritFieldExp * Math.Log(tmp / udenom));
                 ueff = mbp.SurfaceMobility * 1e-4 /* (m *  * 2 / cm *  * 2) */  * ufact;

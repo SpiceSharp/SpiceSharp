@@ -11,7 +11,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Maximum width for strings
         /// </summary>
-        public static int Printer_Width = 80;
+        public static int Printer_Width { get; set; } = 80;
 
         /// <summary>
         /// Nicely print the matrix
