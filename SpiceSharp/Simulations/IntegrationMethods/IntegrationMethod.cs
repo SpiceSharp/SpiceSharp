@@ -13,11 +13,6 @@ namespace SpiceSharp.IntegrationMethods
     public abstract class IntegrationMethod
     {
         /// <summary>
-        /// Constants
-        /// </summary>
-        public const int MaximumOrder = 32;
-
-        /// <summary>
         /// Gets the configuration for the integration method
         /// </summary>
         public IntegrationConfiguration Configuration { get; } = new IntegrationConfiguration();
@@ -70,12 +65,12 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Get the old time steps
         /// </summary>
-        public double[] DeltaOld { get; protected set; } = null;
+        public History<double> DeltaOld { get; }
 
         /// <summary>
         /// Get the old solutions
         /// </summary>
-        public Vector<double>[] Solutions { get; protected set; } = null;
+        public History<Vector<double>> Solutions { get; } = null;
 
         /// <summary>
         /// Get the prediction for the next timestep
@@ -111,15 +106,15 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="maxOrder">Maximum integration order</param>
         protected IntegrationMethod(IntegrationConfiguration configuration, int maxOrder)
         {
-            if (maxOrder < 0 || maxOrder > MaximumOrder)
+            if (maxOrder < 1)
                 throw new CircuitException("Invalid order {0}".FormatString(maxOrder));
             MaxOrder = maxOrder;
 
             // Allocate history of timesteps
-            DeltaOld = new double[maxOrder + 2];
+            DeltaOld = new History<double>(maxOrder + 2);
 
             // Allocate history of solutions
-            Solutions = new Vector<double>[maxOrder + 1];
+            Solutions = new History<Vector<double>>(maxOrder + 1);
 
             // Create configuration if necessary
             Configuration = configuration ?? new IntegrationConfiguration();
@@ -131,15 +126,15 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="maxOrder">Maximum integration order</param>
         protected IntegrationMethod(int maxOrder)
         {
-            if (maxOrder < 0 || maxOrder > MaximumOrder)
+            if (maxOrder < 0)
                 throw new CircuitException("Invalid order {0}".FormatString(maxOrder));
             MaxOrder = maxOrder;
 
             // Allocate history of timesteps
-            DeltaOld = new double[maxOrder + 2];
+            DeltaOld = new History<double>(maxOrder + 2);
 
             // Allocate history of solutions
-            Solutions = new Vector<double>[maxOrder + 1];
+            Solutions = new History<Vector<double>>(maxOrder + 1);
 
             // Create configuration
             Configuration = new IntegrationConfiguration();
@@ -158,18 +153,14 @@ namespace SpiceSharp.IntegrationMethods
             if (Solutions[0] == null)
             {
                 // No solutions yet, so allocate vectors
-                for (int i = 0; i < Solutions.Length; i++)
-                    Solutions[i] = new Vector<double>(solution.Length);
+                Solutions.Clear((int index) => new Vector<double>(solution.Length));
                 Prediction = new Vector<double>(solution.Length);
                 solution.CopyTo(Solutions[0]);
             }
             else
             {
                 // Cycle through solutions
-                var tmp = Solutions[Solutions.Length - 1];
-                for (int i = Solutions.Length - 1; i > 0; i--)
-                    Solutions[i] = Solutions[i - 1];
-                Solutions[0] = tmp;
+                Solutions.Store();
                 solution.CopyTo(Solutions[0]);
             }
         }
@@ -186,8 +177,8 @@ namespace SpiceSharp.IntegrationMethods
             Delta = 0.0;
             Order = 1;
             Prediction = null;
-            DeltaOld = new double[MaxOrder + 1];
-            Solutions = new Vector<double>[MaxOrder + 1];
+            DeltaOld.Clear(0.0);
+            Solutions.Clear((Vector<double>)null);
 
             // Register default truncation methods
             this.transientBehaviors = transientBehaviors;
@@ -234,9 +225,7 @@ namespace SpiceSharp.IntegrationMethods
             }
 
             // Update old delta's with the current delta
-            for (int i = DeltaOld.Length - 2; i >= 0; i--)
-                DeltaOld[i + 1] = DeltaOld[i];
-            DeltaOld[0] = Delta;
+            DeltaOld.Store(Delta);
         }
 
         /// <summary>
@@ -251,7 +240,7 @@ namespace SpiceSharp.IntegrationMethods
             OldDelta = Delta;
             savetime = Time;
             Time += Delta;
-            DeltaOld[0] = Delta;
+            DeltaOld.Value = Delta;
         }
 
         /// <summary>
@@ -278,7 +267,7 @@ namespace SpiceSharp.IntegrationMethods
 
             // Update all the variables
             Delta = delta;
-            DeltaOld[0] = delta;
+            DeltaOld.Value = delta;
             Time = savetime + delta;
 
             // Cut the integration order

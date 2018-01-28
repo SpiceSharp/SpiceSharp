@@ -117,10 +117,7 @@ namespace SpiceSharp.Simulations
             // Calculate the operating point
             Op(baseconfig.DcMaxIterations);
             Statistics.TimePoints++;
-            for (int i = 0; i < Method.DeltaOld.Length; i++)
-            {
-                Method.DeltaOld[i] = timeconfig.MaxStep;
-            }
+            Method.DeltaOld.Clear(timeconfig.MaxStep);
             Method.Delta = delta;
             Method.SaveDelta = timeconfig.FinalTime / 50.0;
 

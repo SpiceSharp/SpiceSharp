@@ -173,6 +173,7 @@
     <Compile Include="Simulations\IntegrationMethods\StateHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\StatePool.cs" />
     <Compile Include="Simulations\IntegrationMethods\StateDerivative.cs" />
+    <Compile Include="Simulations\IntegrationMethods\History.cs" />
     <Compile Include="Simulations\IntegrationMethods\TruncationEventArgs.cs" />
     <Compile Include="Simulations\Noise\NoiseBehavior.cs" />
     <Compile Include="Simulations\Base\LoadBehavior.cs" />

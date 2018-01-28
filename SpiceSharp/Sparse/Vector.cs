@@ -57,6 +57,8 @@ namespace SpiceSharp.Sparse
         /// <param name="values">Values</param>
         protected Vector(T[] values)
         {
+            if (values == null)
+                throw new ArgumentNullException(nameof(values));
             Length = values.Length;
             this.values = (T[])values.Clone();
         }
@@ -67,6 +69,8 @@ namespace SpiceSharp.Sparse
         /// <param name="vector">Vector</param>
         public void CopyTo(Vector<T> vector)
         {
+            if (vector == null)
+                throw new ArgumentNullException(nameof(vector));
             if (vector.Length != Length)
                 throw new SparseException("Vector lengths do not match");
             for (int i = 0; i < Length; i++)
@@ -79,6 +83,8 @@ namespace SpiceSharp.Sparse
         /// <param name="vector"></param>
         public void CopyFrom(Vector<T> vector)
         {
+            if (vector == null)
+                throw new ArgumentNullException(nameof(vector));
             if (vector.Length != Length)
                 throw new SparseException("Vector lengths do not match");
             for (int i = 0; i < Length; i++)
