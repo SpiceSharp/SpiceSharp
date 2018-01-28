@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.NoiseSources
@@ -39,11 +40,10 @@ namespace SpiceSharp.Components.NoiseSources
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
-            var sol = simulation.State.Solution;
-            var isol = simulation.State.iSolution;
-            var rval = sol[Nodes[0]] - sol[Nodes[1]];
-            var ival = isol[Nodes[0]] - isol[Nodes[1]];
-            double gain = rval * rval + ival * ival;
+            
+            var state = simulation.State;
+            Complex val = state.ComplexSolution[Nodes[0]] - state.ComplexSolution[Nodes[1]];
+            double gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
             return gain * Gain;
         }
     }

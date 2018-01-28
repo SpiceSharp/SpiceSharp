@@ -119,13 +119,11 @@ namespace SpiceSharp.Simulations
             }
 
             // Solve
-            matrix.Solve(state.Rhs, state.iRhs);
+            matrix.Solve(state.ComplexRhs, state.ComplexRhs);
 
             // Reset values
-            state.Rhs[0] = 0.0;
-            state.iRhs[0] = 0.0;
-            state.Solution[0] = 0.0;
-            state.iSolution[0] = 0.0;
+            state.ComplexRhs[0] = 0.0;
+            state.ComplexSolution[0] = 0.0;
 
             // Store them in the solution
             state.StoreComplexSolution();
@@ -175,9 +173,9 @@ namespace SpiceSharp.Simulations
         {
             int node = Circuit.Nodes[pos].Index;
             if (neg == null)
-                return (State state) => new Complex(state.Solution[node], state.iSolution[node]);
+                return (State state) => state.ComplexSolution[node];
             int refnode = Circuit.Nodes[neg].Index;
-            return (State state) => new Complex(state.Solution[node] - state.Solution[refnode], state.iSolution[node] - state.iSolution[refnode]);
+            return (State state) => state.ComplexSolution[node] - state.ComplexSolution[refnode];
         }
 
         /// <summary>

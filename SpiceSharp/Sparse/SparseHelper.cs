@@ -51,10 +51,10 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">The matrix</param>
         /// <param name="RHS">The right hand side</param>
         /// <param name="iRHS">The imaginary values of the right hand side</param>
-        public static void SolveTransposed(this Matrix matrix, double[] RHS, double[] iRHS)
+        /* public static void SolveTransposed(this Matrix matrix, double[] RHS, double[] iRHS)
         {
             SparseSolve.SolveTransposed(matrix, RHS, RHS, iRHS, iRHS);
-        }
+        } */
 
         /// <summary>
         /// SMPcSolve
@@ -62,20 +62,20 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">The matrix</param>
         /// <param name="RHS">Right hand side</param>
         /// <param name="iRHS">Imaginary values of the right hand side</param>
-        public static void Solve(this Matrix matrix, double[] RHS, double[] iRHS)
+        /* public static void Solve(this Matrix matrix, double[] RHS, double[] iRHS)
         {
             SparseSolve.Solve(matrix, RHS, RHS, iRHS, iRHS);
-        }
+        } */
 
         /// <summary>
         /// SMPsolve
         /// </summary>
         /// <param name="matrix">The matrix</param>
         /// <param name="RHS">Right hand side</param>
-        public static void Solve(this Matrix matrix, double[] RHS)
+        /* public static void Solve(this Matrix matrix, double[] RHS)
         {
             SparseSolve.Solve(matrix, RHS, RHS, null, null);
-        }
+        } */
         
         /// <summary>
         /// SMPpreOrder

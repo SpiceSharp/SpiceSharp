@@ -172,29 +172,29 @@ namespace SpiceSharp.Simulations
         public Matrix Matrix { get; private set; } = null;
 
         /// <summary>
-        /// Gets the real part of the RHS vector
+        /// Get the real right-hand-side vector
         /// </summary>
-        public double[] Rhs { get; private set; } = null;
+        public Vector<double> Rhs { get; private set; } = null;
 
         /// <summary>
-        /// Gets the imaginary part of the RHS vector
+        /// Get the real solution vector
         /// </summary>
-        public double[] iRhs { get; private set; } = null;
+        public Vector<double> Solution { get; private set; } = null;
 
         /// <summary>
-        /// Gets the (real part of the) solution vector
+        /// Get the complex right-hand-side vector
         /// </summary>
-        public double[] Solution { get; private set; } = null;
+        public Vector<Complex> ComplexRhs { get; private set; } = null;
 
         /// <summary>
-        /// Gets the imaginary part of the solution vector
+        /// Get the complex solution vector
         /// </summary>
-        public double[] iSolution { get; private set; } = null;
-
+        public Vector<Complex> ComplexSolution { get; private set; } = null;
+        
         /// <summary>
         /// Gets the old solution
         /// </summary>
-        public double[] OldSolution { get; private set; } = null;
+        public Vector<double> OldSolution { get; private set; } = null;
 
         /// <summary>
         /// Gets or sets the current laplace variable
@@ -231,11 +231,11 @@ namespace SpiceSharp.Simulations
 
             // Initialize all matrices
             Order = circuit.Nodes.Count + 1;
-            Rhs = new double[Order];
-            iRhs = new double[Order];
-            Solution = new double[Order];
-            OldSolution = new double[Order];
-            iSolution = new double[Order];
+            Rhs = new Vector<double>(Order);
+            ComplexRhs = new Vector<Complex>(Order);
+            Solution = new Vector<double>(Order);
+            ComplexSolution = new Vector<Complex>(Order);
+            OldSolution = new Vector<double>(Order);
             Initialized = true;
         }
 
@@ -248,9 +248,9 @@ namespace SpiceSharp.Simulations
             Initialized = false;
 
             Rhs = null;
-            iRhs = null;
+            ComplexRhs = null;
             Solution = null;
-            iSolution = null;
+            ComplexSolution = null;
             Matrix = null;
         }
 
@@ -270,13 +270,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public void StoreComplexSolution()
         {
-            var tmp = Rhs;
-            Rhs = OldSolution;
-            OldSolution = Solution;
-            Solution = tmp;
-            tmp = iRhs;
-            iRhs = iSolution;
-            iSolution = tmp;
+            var tmp = ComplexRhs;
+            ComplexRhs = ComplexSolution;
+            ComplexSolution = tmp;
         }
 
         /// <summary>
@@ -287,7 +283,7 @@ namespace SpiceSharp.Simulations
             for (int i = 0; i < Order; i++)
             {
                 Rhs[i] = 0;
-                iRhs[i] = 0;
+                ComplexRhs[i] = 0.0;
             }
             Matrix.Clear();
         }

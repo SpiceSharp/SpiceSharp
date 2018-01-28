@@ -11,12 +11,12 @@ namespace SpiceSharp.Sparse
         /// Order and factor the matrix
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        /// <param name="RHS">Right-Hand Side</param>
+        /// <param name="rhs">Right-Hand Side</param>
         /// <param name="RelThreshold">Relative threshold for pivot selection</param>
         /// <param name="AbsThreshold">Absolute threshold for pivot selection</param>
         /// <param name="DiagPivoting">Use diagonal pivoting</param>
         /// <returns></returns>
-        public static SparseError OrderAndFactor(this Matrix matrix, double[] RHS, double RelThreshold, double AbsThreshold, bool DiagPivoting)
+        public static SparseError OrderAndFactor(this Matrix matrix, Vector<double> rhs, double RelThreshold, double AbsThreshold, bool DiagPivoting)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -87,7 +87,7 @@ namespace SpiceSharp.Sparse
             }
 
             // Form initial Markowitz products. 
-            pivoting.CountMarkowitz(matrix, RHS, Step);
+            pivoting.CountMarkowitz(matrix, rhs, Step);
             pivoting.MarkowitzProducts(matrix, Step);
             matrix.MaxRowCountInLowerTri = -1;
 

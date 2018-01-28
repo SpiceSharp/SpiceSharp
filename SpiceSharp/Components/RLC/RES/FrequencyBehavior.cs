@@ -21,9 +21,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return new Complex(
-                state.Solution[posNode] - state.Solution[negNode],
-                state.iSolution[posNode] - state.iSolution[negNode]);
+            return state.ComplexSolution[posNode] - state.Solution[negNode];
         }
         [PropertyName("i"), PropertyInfo("Current")]
         public Complex GetCurrent(State state)
@@ -31,9 +29,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            var voltage = new Complex(
-                state.Solution[posNode] - state.Solution[negNode],
-                state.iSolution[posNode] - state.iSolution[negNode]);
+            var voltage = state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
             return voltage * load.Conductance;
         }
         [PropertyName("p"), PropertyInfo("Power")]
@@ -42,9 +38,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            var voltage = new Complex(
-                state.Solution[posNode] - state.Solution[negNode],
-                state.iSolution[posNode] - state.iSolution[negNode]);
+            var voltage = state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
             return voltage * Complex.Conjugate(voltage) * load.Conductance;
         }
 

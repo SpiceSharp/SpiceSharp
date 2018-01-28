@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
@@ -20,41 +21,41 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode;
-        MatrixElement PosPosPtr;
-        MatrixElement NegNegPtr;
-        MatrixElement PosNegPtr;
-        MatrixElement NegPosPtr;
+        protected MatrixElement PosPosPtr { get; private set; }
+        protected MatrixElement NegNegPtr { get; private set; }
+        protected MatrixElement PosNegPtr { get; private set; }
+        protected MatrixElement NegPosPtr { get; private set; }
+
+        [PropertyName("v"), PropertyInfo("Capacitor voltage")]
+        public Complex GetVoltage(State state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            return state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
+        }
+        [PropertyName("i"), PropertyName("c"), PropertyInfo("Capacitor current")]
+        public Complex GetCurrent(State state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            Complex conductance = state.Laplace * bp.Capacitance.Value;
+            return (state.ComplexSolution[posNode] - state.ComplexSolution[negNode]) * conductance;
+        }
+        [PropertyName("p"), PropertyInfo("Capacitor power")]
+        public Complex GetPower(State state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            Complex conductance = state.Laplace * bp.Capacitance.Value;
+            Complex voltage = state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
+            return voltage * Complex.Conjugate(voltage * conductance);
+        }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
         public FrequencyBehavior(Identifier name) : base(name) { }
-
-        /// <summary>
-        /// Export methods for AC behavior
-        /// </summary>
-        /// <param name="property">Property</param>
-        /// <returns></returns>
-        public override Func<State, Complex> CreateAcExport(string property)
-        {
-            switch (property)
-            {
-                case "v": return (State state) => new Complex(state.Solution[posNode] - state.Solution[negNode], state.iSolution[posNode] - state.iSolution[negNode]);
-                case "i": return (State state) =>
-                {
-                    Complex voltage = new Complex(state.Solution[posNode] - state.Solution[negNode], state.iSolution[posNode] - state.iSolution[negNode]);
-                    return state.Laplace * bp.Capacitance.Value * voltage;
-                };
-                case "p": return (State state) =>
-                {
-                    Complex voltage = new Complex(state.Solution[posNode] - state.Solution[negNode], state.iSolution[posNode] - state.iSolution[negNode]);
-                    Complex current = state.Laplace * bp.Capacitance.Value * voltage;
-                    return voltage * Complex.Conjugate(current);
-                };
-                default: return null;
-            }
-        }
 
         /// <summary>
         /// Setup the behavior

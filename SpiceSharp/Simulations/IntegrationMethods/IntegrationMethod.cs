@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -148,7 +149,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Save a solution for future integrations
         /// </summary>
         /// <param name="solution">The solution</param>
-        public void SaveSolution(double[] solution)
+        public void SaveSolution(Vector<double> solution)
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));

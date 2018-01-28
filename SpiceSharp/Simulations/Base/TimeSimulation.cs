@@ -178,7 +178,7 @@ namespace SpiceSharp.Simulations
 
                 // Solve the equation
                 Statistics.SolveTime.Start();
-                matrix.Solve(state.Rhs);
+                matrix.Solve(state.Rhs, state.Rhs);
                 Statistics.SolveTime.Stop();
 
                 // The result is now stored in the RHS vector, let's move it to the current solution vector

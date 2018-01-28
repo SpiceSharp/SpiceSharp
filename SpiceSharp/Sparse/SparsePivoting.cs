@@ -158,9 +158,9 @@ namespace SpiceSharp.Sparse
         /// Count markowitz
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="RHS">Right hand side</param>
+        /// <param name="rhs">Right hand side</param>
         /// <param name="Step">Current step</param>
-        public void CountMarkowitz(Matrix matrix, double[] RHS, int Step)
+        public void CountMarkowitz(Matrix matrix, Vector<double> rhs, int Step)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -186,9 +186,11 @@ namespace SpiceSharp.Sparse
                 // Include nonzero elements in the RHS vector
                 ExtRow = matrix.Translation.IntToExtRowMap[I];
 
-                if (RHS != null)
-                    if (RHS[ExtRow] != 0.0)
+                if (rhs != null)
+                {
+                    if (rhs[ExtRow] != 0.0)
                         Count++;
+                }
                 MarkowitzRow[I] = Count;
             }
 

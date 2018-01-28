@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 namespace SpiceSharp.Sparse
 {
@@ -12,18 +13,16 @@ namespace SpiceSharp.Sparse
         /// This method can solve in-place
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="RHS">The right hand side</param>
-        /// <param name="Solution">The solution</param>
-        /// <param name="iRHS">The imaginary values of the right hand side</param>
-        /// <param name="iSolution">The imaginary values of the solution</param>
-        public static void Solve(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
+        /// <param name="rhs">The right hand side</param>
+        /// <param name="solution">The solution</param>
+        public static void Solve(this Matrix matrix, Vector<double> rhs, Vector<double> solution)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            if (RHS == null)
-                throw new ArgumentNullException(nameof(RHS));
-            if (Solution == null)
-                throw new ArgumentNullException(nameof(Solution));
+            if (rhs == null)
+                throw new ArgumentNullException(nameof(rhs));
+            if (solution == null)
+                throw new ArgumentNullException(nameof(solution));
 
             MatrixElement pElement;
             ElementValue[] Intermediate;
@@ -36,11 +35,11 @@ namespace SpiceSharp.Sparse
             if (!(matrix.Factored && !matrix.NeedsOrdering))
                 throw new SparseException("Matrix is not refactored or needs ordering");
 
-            if (matrix.Complex)
+            /* if (matrix.Complex)
             {
                 SolveComplexMatrix(matrix, RHS, Solution, iRHS, iSolution);
                 return;
-            }
+            } */
 
             Intermediate = matrix.Pivoting.Intermediate;
             Size = matrix.IntSize;
@@ -48,7 +47,7 @@ namespace SpiceSharp.Sparse
             // Initialize Intermediate vector. 
             pExtOrder = matrix.Translation.IntToExtRowMap;
             for (I = Size; I > 0; I--)
-                Intermediate[I].Real = RHS[pExtOrder[I]];
+                Intermediate[I].Real = rhs[pExtOrder[I]];
 
             // Forward elimination. Solves Lc = b.
             for (I = 1; I <= Size; I++)
@@ -84,31 +83,25 @@ namespace SpiceSharp.Sparse
             // Unscramble Intermediate vector while placing data in to Solution vector. 
             pExtOrder = matrix.Translation.IntToExtColMap;
             for (I = Size; I > 0; I--)
-                Solution[pExtOrder[I]] = Intermediate[I];
+                solution[pExtOrder[I]] = Intermediate[I];
 
             return;
         }
 
         /// <summary>
-        /// SolveComplexMatrix
+        /// Solve the matrix using complex numbers
         /// </summary>
-        /// <param name="matrix"></param>
-        /// <param name="RHS"></param>
-        /// <param name="Solution"></param>
-        /// <param name="iRHS"></param>
-        /// <param name="iSolution"></param>
-        public static void SolveComplexMatrix(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
+        /// <param name="matrix">The matrix</param>
+        /// <param name="rhs">The right hand side</param>
+        /// <param name="solution">The solution</param>
+        public static void Solve(this Matrix matrix, Vector<Complex> rhs, Vector<Complex> solution)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            if (RHS == null)
-                throw new ArgumentNullException(nameof(RHS));
-            if (Solution == null)
-                throw new ArgumentNullException(nameof(Solution));
-            if (iRHS == null)
-                throw new ArgumentNullException(nameof(iRHS));
-            if (iSolution == null)
-                throw new ArgumentNullException(nameof(iSolution));
+            if (rhs == null)
+                throw new ArgumentNullException(nameof(rhs));
+            if (solution == null)
+                throw new ArgumentNullException(nameof(solution));
 
             MatrixElement pElement;
             ElementValue[] Intermediate;
@@ -123,10 +116,7 @@ namespace SpiceSharp.Sparse
             // Initialize Intermediate vector. 
             pExtOrder = matrix.Translation.IntToExtRowMap;
             for (I = Size; I > 0; I--)
-            {
-                Intermediate[I].Real = RHS[pExtOrder[I]];
-                Intermediate[I].Imag = iRHS[pExtOrder[I]];
-            }
+                Intermediate[I].Cplx = rhs[pExtOrder[I]];
 
             // Forward substitution. Solves Lc = b.
             for (I = 1; I <= Size; I++)
@@ -168,10 +158,7 @@ namespace SpiceSharp.Sparse
             // Unscramble Intermediate vector while placing data in to Solution vector.
             pExtOrder = matrix.Translation.IntToExtColMap;
             for (I = Size; I > 0; I--)
-            {
-                Solution[pExtOrder[I]] = Intermediate[I].Real;
-                iSolution[pExtOrder[I]] = Intermediate[I].Imag;
-            }
+                solution[pExtOrder[I]] = Intermediate[I].Cplx;
 
             return;
         }
@@ -180,18 +167,16 @@ namespace SpiceSharp.Sparse
         /// spSolveTransposed
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="RHS">The right hand side</param>
-        /// <param name="Solution">The solution</param>
-        /// <param name="iRHS">The imaginary values of the right-hand side</param>
-        /// <param name="iSolution">The imaginary solution</param>
-        public static void SolveTransposed(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
+        /// <param name="rhs">The right hand side</param>
+        /// <param name="solution">The solution</param>
+        public static void SolveTransposed(this Matrix matrix, Vector<double> rhs, Vector<double> solution)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            if (RHS == null)
-                throw new ArgumentNullException(nameof(RHS));
-            if (Solution == null)
-                throw new ArgumentNullException(nameof(Solution));
+            if (rhs == null)
+                throw new ArgumentNullException(nameof(rhs));
+            if (solution == null)
+                throw new ArgumentNullException(nameof(solution));
 
             MatrixElement pElement;
             ElementValue[] Intermediate;
@@ -203,11 +188,11 @@ namespace SpiceSharp.Sparse
             if (!matrix.Factored)
                 throw new SparseException("Matrix is not factored");
 
-            if (matrix.Complex)
+            /* if (matrix.Complex)
             {
                 SolveComplexTransposedMatrix(matrix, RHS, Solution, iRHS, iSolution);
                 return;
-            }
+            } */
 
             Size = matrix.IntSize;
             Intermediate = matrix.Pivoting.Intermediate;
@@ -215,7 +200,7 @@ namespace SpiceSharp.Sparse
             // Initialize Intermediate vector. 
             pExtOrder = matrix.Translation.IntToExtColMap;
             for (I = Size; I > 0; I--)
-                Intermediate[I].Real = RHS[pExtOrder[I]];
+                Intermediate[I].Real = rhs[pExtOrder[I]];
 
             // Forward elimination. 
             for (I = 1; I <= Size; I++)
@@ -250,31 +235,25 @@ namespace SpiceSharp.Sparse
             // Unscramble Intermediate vector while placing data in to Solution vector. 
             pExtOrder = matrix.Translation.IntToExtRowMap;
             for (I = Size; I > 0; I--)
-                Solution[pExtOrder[I]] = Intermediate[I];
+                solution[pExtOrder[I]] = Intermediate[I];
 
             return;
         }
 
         /// <summary>
-        /// SolveComplexTransposedMatrix
+        /// Solve transposed matrix using complex numbers
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="RHS">The right hand side</param>
-        /// <param name="Solution">The solution</param>
-        /// <param name="iRHS">The imaginary values of the right hand side</param>
-        /// <param name="iSolution">The imaginary values of the solution</param>
-        public static void SolveComplexTransposedMatrix(Matrix matrix, double[] RHS, double[] Solution, double[] iRHS, double[] iSolution)
+        /// <param name="rhs">The right hand side</param>
+        /// <param name="solution">The solution</param>
+        public static void SolveTransposed(this Matrix matrix, Vector<Complex> rhs, Vector<Complex> solution)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            if (RHS == null)
-                throw new ArgumentNullException(nameof(RHS));
-            if (Solution == null)
-                throw new ArgumentNullException(nameof(Solution));
-            if (iRHS == null)
-                throw new ArgumentNullException(nameof(iRHS));
-            if (iSolution == null)
-                throw new ArgumentNullException(nameof(iSolution));
+            if (rhs == null)
+                throw new ArgumentNullException(nameof(rhs));
+            if (solution == null)
+                throw new ArgumentNullException(nameof(solution));
 
             MatrixElement pElement;
             ElementValue[] Intermediate;
@@ -291,10 +270,7 @@ namespace SpiceSharp.Sparse
             // Initialize Intermediate vector. 
             pExtOrder = matrix.Translation.IntToExtColMap;
             for (I = Size; I > 0; I--)
-            {
-                Intermediate[I].Real = RHS[pExtOrder[I]];
-                Intermediate[I].Imag = iRHS[pExtOrder[I]];
-            }
+                Intermediate[I].Cplx = rhs[pExtOrder[I]];
 
             // Forward elimination. 
             for (I = 1; I <= Size; I++)
@@ -335,10 +311,7 @@ namespace SpiceSharp.Sparse
             // Unscramble Intermediate vector while placing data in to Solution vector. 
             pExtOrder = matrix.Translation.IntToExtRowMap;
             for (I = Size; I > 0; I--)
-            {
-                Solution[pExtOrder[I]] = Intermediate[I].Real;
-                iSolution[pExtOrder[I]] = Intermediate[I].Imag;
-            }
+                solution[pExtOrder[I]] = Intermediate[I].Cplx;
 
             return;
         }

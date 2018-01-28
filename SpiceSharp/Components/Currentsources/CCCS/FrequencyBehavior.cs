@@ -27,10 +27,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-
-            return new Complex(
-                state.Solution[posNode] - state.Solution[negNode],
-                state.iSolution[posNode] - state.iSolution[negNode]);
+            return state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
         }
         [PropertyName("i"), PropertyInfo("Complex current")]
         public Complex GetCurrent(State state)
@@ -38,10 +35,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return new Complex(
-                state.Solution[contBranch],
-                state.iSolution[contBranch]
-                ) * bp.Coefficient.Value;
+            return state.ComplexSolution[contBranch] * bp.Coefficient.Value;
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(State state)
@@ -49,8 +43,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = new Complex(state.Solution[posNode], state.iSolution[negNode]);
-            Complex i = new Complex(state.Solution[contBranch], state.iSolution[contBranch]) * bp.Coefficient.Value;
+            Complex v = state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
+            Complex i = state.ComplexSolution[contBranch] * bp.Coefficient.Value;
             return -v * Complex.Conjugate(i);
         }
 

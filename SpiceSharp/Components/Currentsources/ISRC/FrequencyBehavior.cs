@@ -32,11 +32,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-
-            return new Complex(
-                state.Solution[posNode] - state.Solution[negNode],
-                state.iSolution[posNode] - state.iSolution[negNode]
-                );
+            return state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(State state)
@@ -44,10 +40,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = new Complex(
-                state.Solution[posNode] - state.Solution[negNode],
-                state.iSolution[posNode] - state.iSolution[negNode]
-                );
+            Complex v = state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
             return -v * Complex.Conjugate(ac);
         }
 
@@ -113,10 +106,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.State;
-            state.Rhs[posNode] += ac.Real;
-            state.iRhs[posNode] += ac.Imaginary;
-            state.Rhs[negNode] -= ac.Real;
-            state.iRhs[negNode] -= ac.Imaginary;
+            state.ComplexRhs[posNode] += ac;
+            state.ComplexRhs[negNode] -= ac;
         }
     }
 }

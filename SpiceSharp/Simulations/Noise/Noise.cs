@@ -190,8 +190,9 @@ namespace SpiceSharp.Simulations
                 state.Laplace = new Complex(0.0, 2.0 * Math.PI * data.Freq);
                 AcIterate(circuit);
 
-                double rval = state.Solution[posOutNode] - state.Solution[negOutNode];
-                double ival = state.iSolution[posOutNode] - state.iSolution[negOutNode];
+                Complex val = state.ComplexSolution[posOutNode] - state.ComplexSolution[negOutNode];
+                double rval = val.Real;
+                double ival = val.Imaginary;
                 data.GainInverseSquared = 1.0 / Math.Max(rval * rval + ival * ival, 1e-20);
 
                 // Solve the adjoint system
@@ -236,21 +237,17 @@ namespace SpiceSharp.Simulations
 
             // Clear out the right hand side vector
             for (int i = 0; i < state.Rhs.Length; i++)
-            {
-                state.Rhs[i] = 0.0;
-                state.iRhs[i] = 0.0;
-            }
+                state.ComplexRhs[i] = 0.0;
 
             // Apply unit current excitation
-            state.Rhs[posDrive] = 1.0;
-            state.Rhs[negDrive] = -1.0;
+            state.ComplexRhs[posDrive] = 1.0;
+            state.ComplexRhs[negDrive] = -1.0;
 
-            state.Matrix.SolveTransposed(state.Rhs, state.iRhs);
+            state.Matrix.SolveTransposed(state.ComplexRhs, state.ComplexRhs);
 
             state.StoreComplexSolution();
 
-            state.Solution[0] = 0.0;
-            state.iSolution[0] = 0.0;
+            state.ComplexSolution[0] = 0.0;
         }
 
         /// <summary>

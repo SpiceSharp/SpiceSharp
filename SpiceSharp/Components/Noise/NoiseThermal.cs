@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.NoiseSources
@@ -42,11 +43,8 @@ namespace SpiceSharp.Components.NoiseSources
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.State;
-            var rsol = state.Solution;
-            var isol = state.iSolution;
-            var rval = rsol[Nodes[0]] - rsol[Nodes[1]];
-            var ival = isol[Nodes[0]] - isol[Nodes[1]];
-            double gain = rval * rval + ival * ival;
+            Complex val = state.ComplexRhs[Nodes[0]] - state.ComplexRhs[Nodes[1]];
+            double gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
             return 4.0 * Circuit.Boltzmann * simulation.State.Temperature * Conductance * gain;
         }
     }
