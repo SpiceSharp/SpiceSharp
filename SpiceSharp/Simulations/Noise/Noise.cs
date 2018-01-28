@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Numerics;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Behaviors;
@@ -133,40 +132,7 @@ namespace SpiceSharp.Simulations
             }
             else
                 throw new CircuitException("{0}: No input source".FormatString(Name));
-
-            double freqdelta = 0.0;
-            int n = 0;
-
-            // Calculate the step
-            switch (freqconfig.StepType)
-            {
-                case StepTypes.Decade:
-                    freqdelta = Math.Exp(Math.Log(10.0) / freqconfig.NumberSteps);
-                    n = (int)Math.Floor(Math.Log(freqconfig.StopFreq / freqconfig.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
-                    break;
-
-                case StepTypes.Octave:
-                    freqdelta = Math.Exp(Math.Log(2.0) / freqconfig.NumberSteps);
-                    n = (int)Math.Floor(Math.Log(freqconfig.StopFreq / freqconfig.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
-                    break;
-
-                case StepTypes.Linear:
-                    if (freqconfig.NumberSteps > 1)
-                    {
-                        freqdelta = (freqconfig.StopFreq - freqconfig.StartFreq) / (freqconfig.NumberSteps - 1);
-                        n = freqconfig.NumberSteps;
-                    }
-                    else
-                    {
-                        freqdelta = double.PositiveInfinity;
-                        n = 1;
-                    }
-                    break;
-
-                default:
-                    throw new CircuitException("Invalid step type");
-            }
-
+            
             // Initialize
             var data = NoiseState;
             state.Initialize(circuit);
@@ -185,8 +151,9 @@ namespace SpiceSharp.Simulations
                 behavior.ConnectNoise();
 
             // Loop through noise figures
-            for (int i = 0; i < n; i++)
+            foreach (double freq in Frequencies)
             {
+                data.Freq = freq;
                 state.Laplace = new Complex(0.0, 2.0 * Math.PI * data.Freq);
                 AcIterate(circuit);
 
@@ -206,19 +173,6 @@ namespace SpiceSharp.Simulations
 
                 // Export the data
                 Export(exportargs);
-
-                // Increment the frequency
-                switch (freqconfig.StepType)
-                {
-                    case StepTypes.Decade:
-                    case StepTypes.Octave:
-                        data.Freq = data.Freq * freqdelta;
-                        break;
-
-                    case StepTypes.Linear:
-                        data.Freq = freqconfig.StartFreq + i * freqdelta;
-                        break;
-                }
             }
         }
 

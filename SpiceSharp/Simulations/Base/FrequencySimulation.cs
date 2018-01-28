@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Collections.ObjectModel;
 using SpiceSharp.Diagnostics;
@@ -73,6 +74,70 @@ namespace SpiceSharp.Simulations
             FrequencyBehaviors = null;
 
             base.Unsetup();
+        }
+
+        /// <summary>
+        /// Gets all frequency points
+        /// </summary>
+        protected IEnumerable<double> Frequencies
+        {
+            get
+            {
+                double freqdelta;
+                int n;
+                var freqconfig = FrequencyConfiguration;
+
+                // Calculate the step
+                switch (freqconfig.StepType)
+                {
+                    case StepTypes.Decade:
+                        freqdelta = Math.Exp(Math.Log(10.0) / freqconfig.NumberSteps);
+                        n = (int)Math.Floor(Math.Log(freqconfig.StopFreq / freqconfig.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
+                        break;
+
+                    case StepTypes.Octave:
+                        freqdelta = Math.Exp(Math.Log(2.0) / freqconfig.NumberSteps);
+                        n = (int)Math.Floor(Math.Log(freqconfig.StopFreq / freqconfig.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
+                        break;
+
+                    case StepTypes.Linear:
+                        if (freqconfig.NumberSteps > 1)
+                        {
+                            freqdelta = (freqconfig.StopFreq - freqconfig.StartFreq) / (freqconfig.NumberSteps - 1);
+                            n = freqconfig.NumberSteps;
+                        }
+                        else
+                        {
+                            freqdelta = double.PositiveInfinity;
+                            n = 1;
+                        }
+                        break;
+
+                    default:
+                        throw new CircuitException("Invalid step type");
+                }
+
+                // Iterate through the frequency points
+                double freq = freqconfig.StartFreq;
+                for (int i = 0; i < n; i++)
+                {
+                    // Use the frequency point
+                    yield return freq;
+
+                    // Go to the next frequency
+                    switch (freqconfig.StepType)
+                    {
+                        case StepTypes.Decade:
+                        case StepTypes.Octave:
+                            freq = freq * freqdelta;
+                            break;
+
+                        case StepTypes.Linear:
+                            freq = freqconfig.StartFreq + i * freqdelta;
+                            break;
+                    }
+                }
+            }
         }
 
         /// <summary>

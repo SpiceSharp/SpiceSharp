@@ -42,40 +42,7 @@ namespace SpiceSharp.Simulations
             var state = State;
             var baseconfig = BaseConfiguration;
             var freqconfig = FrequencyConfiguration;
-
-            double freq = 0.0, freqdelta = 0.0;
-            int n = 0;
-
-            // Calculate the step
-            switch (freqconfig.StepType)
-            {
-                case StepTypes.Decade:
-                    freqdelta = Math.Exp(Math.Log(10.0) / freqconfig.NumberSteps);
-                    n = (int)Math.Floor(Math.Log(freqconfig.StopFreq / freqconfig.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
-                    break;
-
-                case StepTypes.Octave:
-                    freqdelta = Math.Exp(Math.Log(2.0) / freqconfig.NumberSteps);
-                    n = (int)Math.Floor(Math.Log(freqconfig.StopFreq / freqconfig.StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
-                    break;
-
-                case StepTypes.Linear:
-                    if (freqconfig.NumberSteps > 1)
-                    {
-                        freqdelta = (freqconfig.StopFreq - freqconfig.StartFreq) / (freqconfig.NumberSteps - 1);
-                        n = freqconfig.NumberSteps;
-                    }
-                    else
-                    {
-                        freqdelta = double.PositiveInfinity;
-                        n = 1;
-                    }
-                    break;
-
-                default:
-                    throw new CircuitException("Invalid step type");
-            }
-
+            
             // Calculate the operating point
             state.Initialize(circuit);
             state.Laplace = 0.0;
@@ -101,11 +68,10 @@ namespace SpiceSharp.Simulations
 
             // Calculate the AC solution
             state.UseDC = false;
-            freq = freqconfig.StartFreq;
             state.Matrix.Complex = true;
 
             // Sweep the frequency
-            for (int i = 0; i < n; i++)
+            foreach (double freq in Frequencies)
             {
                 // Calculate the current frequency
                 state.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
@@ -115,19 +81,6 @@ namespace SpiceSharp.Simulations
 
                 // Export the timepoint
                 Export(exportargs);
-
-                // Increment the frequency
-                switch (freqconfig.StepType)
-                {
-                    case StepTypes.Decade:
-                    case StepTypes.Octave:
-                        freq = freq * freqdelta;
-                        break;
-
-                    case StepTypes.Linear:
-                        freq = freqconfig.StartFreq + i * freqdelta;
-                        break;
-                }
             }
         }
     }
