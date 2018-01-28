@@ -55,15 +55,18 @@ namespace SpiceSharp.IntegrationMethods
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
+            int derivativeIndex = index + 1;
+            if (index < 0 || derivativeIndex >= first.Values.Length)
+                throw new CircuitException("Invalid state index {0}".FormatString(index));
 
             switch (Order)
             {
                 case 1:
-                    first.Values[index + 1] = ag[0] * first.Values[index] + ag[1] * first.Previous.Values[index];
+                    first.Values[derivativeIndex] = ag[0] * first.Values[index] + ag[1] * first.Previous.Values[index];
                     break;
 
                 case 2:
-                    first.Values[index + 1] = -first.Previous.Values[index + 1] * ag[1] + ag[0] * (first.Values[index] - first.Previous.Values[index]);
+                    first.Values[derivativeIndex] = -first.Previous.Values[derivativeIndex] * ag[1] + ag[0] * (first.Values[index] - first.Previous.Values[index]);
                     break;
 
                 default:
@@ -146,8 +149,8 @@ namespace SpiceSharp.IntegrationMethods
                         diff = state.Solution[index] - Prediction[index];
                         if (diff != 0.0)
                         {
-                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
-                            tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(2.0 * Config.TrTol * tol / diff));
+                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Configuration.LteRelTol + Configuration.LteAbsTol;
+                            tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(2.0 * Configuration.TrTol * tol / diff));
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
@@ -168,8 +171,8 @@ namespace SpiceSharp.IntegrationMethods
 
                         if (deriv != 0.0)
                         {
-                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
-                            tmp = DeltaOld[0] * Math.Pow(Math.Abs(12.0 * Config.TrTol * tol / deriv), 1.0 / 3.0);
+                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Configuration.LteRelTol + Configuration.LteAbsTol;
+                            tmp = DeltaOld[0] * Math.Pow(Math.Abs(12.0 * Configuration.TrTol * tol / deriv), 1.0 / 3.0);
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
@@ -220,13 +223,16 @@ namespace SpiceSharp.IntegrationMethods
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
+            int derivativeIndex = index + 1;
+            if (index < 0 || derivativeIndex >= first.Values.Length)
+                throw new CircuitException("Invalid state index {0}".FormatString(index));
 
             double[] diff = new double[MaxOrder + 2];
             double[] deltmp = new double[DeltaOld.Length];
 
             // Calculate the tolerance
             // Note: These need to be available in the integration method configuration, defaults are used for now to avoid too much changes
-            double volttol = 1e-12 + 1e-3 * Math.Max(Math.Abs(first.Values[index + 1]), Math.Abs(first.Previous.Values[index + 1]));
+            double volttol = 1e-12 + 1e-3 * Math.Max(Math.Abs(first.Values[derivativeIndex]), Math.Abs(first.Previous.Values[derivativeIndex]));
             double chargetol = Math.Max(Math.Abs(first.Values[index]), Math.Abs(first.Previous.Values[index]));
             chargetol = 1e-3 * Math.Max(chargetol, 1e-14) / Delta;
             double tol = Math.Max(volttol, chargetol);
@@ -259,7 +265,7 @@ namespace SpiceSharp.IntegrationMethods
                 case 2: factor = 0.0833333333; break;
                 default: throw new CircuitException("Invalid order {0}".FormatString(Order));
             }
-            double del = Config.TrTol * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
+            double del = Configuration.TrTol * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
             if (Order == 2)
                 del = Math.Sqrt(del);
             else if (Order > 2)

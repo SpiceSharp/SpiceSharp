@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp
@@ -26,7 +27,12 @@ namespace SpiceSharp
         /// <summary>
         /// Gets the full path of the circuit object
         /// </summary>
-        public string[] Path { get; }
+        public IEnumerable<string> Elements { get => idPath; }
+
+        /// <summary>
+        /// Gets the number of elements in the path
+        /// </summary>
+        public int PathCount { get => idPath.Length; }
 
         /// <summary>
         /// Gets the local name of the circuit object
@@ -38,6 +44,11 @@ namespace SpiceSharp
         /// Get the hash value
         /// </summary>
         readonly int hash;
+
+        /// <summary>
+        /// The path of the identifier
+        /// </summary>
+        string[] idPath;
 
         /// <summary>
         /// Constructor
@@ -59,7 +70,7 @@ namespace SpiceSharp
                     path[i] = path[i].ToLowerInvariant();
             }
 
-            Path = path;
+            idPath = path;
             Name = path[path.Length - 1];
 
             // Compute a hash code
@@ -84,13 +95,13 @@ namespace SpiceSharp
             if (obj is Identifier con)
             {
                 // Check lengths
-                if (Path.Length != con.Path.Length)
+                if (idPath.Length != con.idPath.Length)
                     return false;
 
                 // Check each value
-                for (int i = 0; i < con.Path.Length; i++)
+                for (int i = 0; i < con.idPath.Length; i++)
                 {
-                    if (Path[i] != con.Path[i])
+                    if (idPath[i] != con.idPath[i])
                         return false;
                 }
                 return true;
@@ -104,7 +115,7 @@ namespace SpiceSharp
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Join(Separator, Path);
+            return string.Join(Separator, idPath);
         }
 
         /// <summary>
@@ -114,10 +125,10 @@ namespace SpiceSharp
         /// <returns></returns>
         public Identifier Grow(string id)
         {
-            string[] npath = new string[Path.Length + 1];
-            for (int i = 0; i < Path.Length; i++)
-                npath[i] = Path[i];
-            npath[Path.Length] = id;
+            string[] npath = new string[idPath.Length + 1];
+            for (int i = 0; i < idPath.Length; i++)
+                npath[i] = idPath[i];
+            npath[idPath.Length] = id;
             return new Identifier(npath);
         }
 
@@ -131,11 +142,11 @@ namespace SpiceSharp
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            string[] npath = new string[Path.Length + id.Path.Length];
-            for (int i = 0; i < Path.Length; i++)
-                npath[i] = Path[i];
-            for (int i = 0; i < id.Path.Length; i++)
-                npath[i + Path.Length] = id.Path[i];
+            string[] npath = new string[idPath.Length + id.idPath.Length];
+            for (int i = 0; i < idPath.Length; i++)
+                npath[i] = idPath[i];
+            for (int i = 0; i < id.idPath.Length; i++)
+                npath[i + idPath.Length] = id.idPath[i];
             return new Identifier(npath);
         }
 
@@ -146,13 +157,13 @@ namespace SpiceSharp
         public Identifier Shrink()
         {
             // Cannot shrink any more
-            if (Path.Length == 1)
+            if (idPath.Length == 1)
                 return null;
 
             // Remove the second last item from the path
-            string[] npath = new string[Path.Length - 1];
+            string[] npath = new string[idPath.Length - 1];
             for (int i = 0; i < npath.Length - 1; i++)
-                npath[i] = Path[i];
+                npath[i] = idPath[i];
             npath[npath.Length - 1] = Name;
             return new Identifier(npath);
         }
@@ -160,7 +171,7 @@ namespace SpiceSharp
         /// <summary>
         /// Implicitely convert a string array to a path for a circuit object
         /// </summary>
-        /// <param name="path">Path</param>
+        /// <param name="path">idPath</param>
         public static implicit operator Identifier(string[] path) => new Identifier(path);
 
         /// <summary>

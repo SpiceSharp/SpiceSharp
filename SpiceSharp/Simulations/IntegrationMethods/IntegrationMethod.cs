@@ -12,9 +12,14 @@ namespace SpiceSharp.IntegrationMethods
     public abstract class IntegrationMethod
     {
         /// <summary>
+        /// Constants
+        /// </summary>
+        public const int MaximumOrder = 32;
+
+        /// <summary>
         /// Gets the configuration for the integration method
         /// </summary>
-        public IntegrationConfiguration Config { get; } = new IntegrationConfiguration();
+        public IntegrationConfiguration Configuration { get; } = new IntegrationConfiguration();
 
         /// <summary>
         /// The breakpoints
@@ -101,26 +106,42 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="config">The configuration</param>
-        /// <param name="maxorder">Maximum integration order</param>
-        protected IntegrationMethod(IntegrationConfiguration config, int maxorder)
+        /// <param name="configuration">The configuration</param>
+        /// <param name="maxOrder">Maximum integration order</param>
+        protected IntegrationMethod(IntegrationConfiguration configuration, int maxOrder)
         {
-            MaxOrder = maxorder;
-            Config = config ?? new IntegrationConfiguration();
-            DeltaOld = new double[maxorder + 2];
-            Solutions = new double[maxorder + 1][]; // new Vector<double>[MaxOrder + 1];
+            if (maxOrder < 0 || maxOrder > MaximumOrder)
+                throw new CircuitException("Invalid order {0}".FormatString(maxOrder));
+            MaxOrder = maxOrder;
+
+            // Allocate history of timesteps
+            DeltaOld = new double[maxOrder + 2];
+
+            // Allocate history of solutions
+            Solutions = new double[maxOrder + 1][];
+
+            // Create configuration if necessary
+            Configuration = configuration ?? new IntegrationConfiguration();
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="maxorder">Maximum integration order</param>
-        protected IntegrationMethod(int maxorder)
+        /// <param name="maxOrder">Maximum integration order</param>
+        protected IntegrationMethod(int maxOrder)
         {
-            MaxOrder = maxorder;
-            Config = new IntegrationConfiguration();
-            DeltaOld = new double[maxorder + 2];
-            Solutions = new double[maxorder + 1][]; // new Vector<double>[MaxOrder + 1];
+            if (maxOrder < 0 || maxOrder > MaximumOrder)
+                throw new CircuitException("Invalid order {0}".FormatString(maxOrder));
+            MaxOrder = maxOrder;
+
+            // Allocate history of timesteps
+            DeltaOld = new double[maxOrder + 2];
+
+            // Allocate history of solutions
+            Solutions = new double[maxOrder + 1][];
+
+            // Create configuration
+            Configuration = new IntegrationConfiguration();
         }
 
         /// <summary>
@@ -172,9 +193,9 @@ namespace SpiceSharp.IntegrationMethods
 
             // Register default truncation methods
             this.transientBehaviors = transientBehaviors;
-            if (Config.TruncationMethod.HasFlag(IntegrationConfiguration.TruncationMethods.PerDevice))
+            if (Configuration.TruncationMethod.HasFlag(IntegrationConfiguration.TruncationMethods.PerDevice))
                 Truncate += TruncateDevices;
-            if (Config.TruncationMethod.HasFlag(IntegrationConfiguration.TruncationMethods.PerNode))
+            if (Configuration.TruncationMethod.HasFlag(IntegrationConfiguration.TruncationMethods.PerNode))
                 Truncate += TruncateNodes;
 
             // Last point was START so the current point is the point after a breakpoint (start)

@@ -40,9 +40,11 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Create internal vectors
         /// </summary>
-        /// <param name="matrix">The matrix</param>
         public void CreateInternalVectors(int size)
         {
+            if (size < 0)
+                throw new SparseException("Invalid size {0}".FormatString(size));
+
             if (MarkowitzRow == null)
                 MarkowitzRow = new int[size + 1];
             if (MarkowitzCol == null)
@@ -311,7 +313,7 @@ namespace SpiceSharp.Sparse
             MatrixElement ChosenPivot;
             int I;
             long[] pMarkowitzProduct;
-            int Singletons;
+            int singletons;
             double PivotMag;
 
             // Initialize pointer that is to scan through MarkowitzProduct vector. 
@@ -321,14 +323,14 @@ namespace SpiceSharp.Sparse
 
             // Decrement the count of available singletons, on the assumption that an
             // acceptable one will be found
-            Singletons = this.Singletons--;
+            singletons = Singletons--;
 
             // Assure that following while loop will always terminate, this is just
             // preventive medicine, if things are working right this should never
             // be needed.
             MarkowitzProd[Step - 1] = 0;
 
-            while (Singletons-- > 0)
+            while (singletons-- > 0)
             {
                 // Singletons exist, find them. 
 
