@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.IntegrationMethods
+﻿using SpiceSharp.Sparse;
+
+namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
     /// Class for points in history
@@ -8,7 +10,7 @@
         /// <summary>
         /// The values
         /// </summary>
-        public double[] Values { get; set; }
+        public Vector<double> Values { get; set; }
 
         /// <summary>
         /// The next point in history

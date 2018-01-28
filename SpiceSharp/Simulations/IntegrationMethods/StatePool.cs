@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -35,7 +36,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Get the values
         /// </summary>
-        public double[] Values { get => First.Values; }
+        public Vector<double> Values { get => First.Values; }
         
         /// <summary>
         /// Constructor
@@ -132,7 +133,7 @@ namespace SpiceSharp.IntegrationMethods
             HistoryPoint current = First;
             do
             {
-                current.Values = new double[Size];
+                current.Values = new Vector<double>(Size);
                 current = current.Next;
             }
             while (current != First);
