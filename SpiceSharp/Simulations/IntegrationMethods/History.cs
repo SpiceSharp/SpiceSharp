@@ -74,6 +74,8 @@ namespace SpiceSharp.IntegrationMethods
         public History(int length, Func<int, T> generator)
             : this(length)
         {
+            if (generator == null)
+                throw new ArgumentNullException(nameof(generator));
             for (int i = 0; i < length; i++)
                 history[i] = generator(i);
         }
@@ -118,6 +120,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="generator">Generator</param>
         public void Clear(Func<int, T> generator)
         {
+            if (generator == null)
+                throw new ArgumentNullException(nameof(generator));
             for (int i = 0; i < Length; i++)
                 history[i] = generator(i);
         }
