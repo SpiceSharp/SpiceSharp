@@ -242,7 +242,7 @@ namespace SpiceSharp.Sparse
                 return ZeroPivot(matrix, 1);
 
             // Cmplx expr: *pPivot = 1.0 / *pPivot
-            SparseDefinitions.CMPLX_RECIPROCAL(ref pElement.Value, pElement);
+            pElement.Value.CopyReciprocal(pElement);
 
             // Start factorization
             for (Step = 2; Step <= Size; Step++)
@@ -267,12 +267,12 @@ namespace SpiceSharp.Sparse
                         pElement = matrix.Diag[pColumn.Row];
 
                         // Cmplx expr: Mult = Dest[pColumn.Row] * (1.0 / *pPivot)
-                        SparseDefinitions.CMPLX_MULT(ref Mult, Dest[pColumn.Row], pElement);
-                        SparseDefinitions.CMPLX_ASSIGN(ref pColumn.Value, Mult);
+                        Mult.CopyMultiply(Dest[pColumn.Row], pElement);
+                        pColumn.Value.CopyFrom(Mult);
                         while ((pElement = pElement.NextInCol) != null)
                         {
                             // Cmplx expr: Dest[pElement.Row] -= Mult * pElement
-                            SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref Dest[pElement.Row], Mult, pElement);
+                            Dest[pElement.Row].SubtractMultiply(Mult, pElement);
                         }
                         pColumn = pColumn.NextInCol;
                     }
@@ -288,9 +288,9 @@ namespace SpiceSharp.Sparse
 
                     // Check for singular matrix
                     Pivot = Dest[Step];
-                    if (SparseDefinitions.CMPLX_1_NORM(Pivot) == 0.0)
+                    if (Pivot.Magnitude.Equals(0.0))
                         return ZeroPivot(matrix, Step);
-                    SparseDefinitions.CMPLX_RECIPROCAL(ref matrix.Diag[Step].Value, Pivot);
+                    matrix.Diag[Step].Value.CopyReciprocal(Pivot);
                 }
                 else
                 {
@@ -312,12 +312,12 @@ namespace SpiceSharp.Sparse
                         pElement = matrix.Diag[pColumn.Row];
 
                         // Cmplx expr: Mult = *pDest[pColumn.Row] * (1.0 / *pPivot)
-                        SparseDefinitions.CMPLX_MULT(ref Mult, pDest[pColumn.Row], pElement);
-                        SparseDefinitions.CMPLX_ASSIGN(ref pDest[pColumn.Row].Value, Mult);
+                        Mult.CopyMultiply(pDest[pColumn.Row], pElement);
+                        pDest[pColumn.Row].Value.CopyFrom(Mult);
                         while ((pElement = pElement.NextInCol) != null)
                         {
                             // Cmplx expr: *pDest[pElement.Row] -= Mult * pElement
-                            SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref pDest[pElement.Row].Value, Mult, pElement);
+                            pDest[pElement.Row].Value.SubtractMultiply(Mult, pElement);
                         }
                         pColumn = pColumn.NextInCol;
                     }
@@ -326,7 +326,7 @@ namespace SpiceSharp.Sparse
                     pElement = matrix.Diag[Step];
                     if (pElement.Value.Magnitude.Equals(0.0))
                         return ZeroPivot(matrix, Step);
-                    SparseDefinitions.CMPLX_RECIPROCAL(ref pElement.Value, pElement);
+                    pElement.Value.CopyReciprocal(pElement);
                 }
             }
 
@@ -895,14 +895,14 @@ namespace SpiceSharp.Sparse
                 MatrixIsSingular(matrix, pPivot.Row);
                 return;
             }
-            SparseDefinitions.CMPLX_RECIPROCAL(ref pPivot.Value, pPivot);
+            pPivot.Value.CopyReciprocal(pPivot);
 
             pUpper = pPivot.NextInRow;
             while (pUpper != null)
             {
                 // Calculate upper triangular element. 
                 // Cmplx expr: *pUpper = *pUpper * (1.0 / *pPivot)
-                SparseDefinitions.CMPLX_MULT_ASSIGN(ref pUpper.Value, pPivot);
+                pUpper.Value.Multiply(pPivot);
 
                 pSub = pUpper.NextInCol;
                 pLower = pPivot.NextInCol;
@@ -921,7 +921,7 @@ namespace SpiceSharp.Sparse
                     }
 
                     // Cmplx expr: pElement -= *pUpper * pLower
-                    SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref pSub.Value, pUpper, pLower);
+                    pSub.Value.SubtractMultiply(pUpper, pLower);
                     pSub = pSub.NextInCol;
                     pLower = pLower.NextInCol;
                 }

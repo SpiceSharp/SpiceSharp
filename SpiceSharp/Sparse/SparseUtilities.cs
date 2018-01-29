@@ -174,8 +174,8 @@ namespace SpiceSharp.Sparse
 
                 while (++I <= Size)
                 {
-                    SparseDefinitions.CMPLX_RECIPROCAL(ref Pivot, matrix.Diag[I]);
-                    SparseDefinitions.CMPLX_MULT_ASSIGN(ref cDeterminant, Pivot);
+                    Pivot.CopyReciprocal(matrix.Diag[I]);
+                    cDeterminant.Multiply(Pivot);
 
                     // Scale Determinant.
                     nr = Math.Abs(cDeterminant.Real);
@@ -230,7 +230,7 @@ namespace SpiceSharp.Sparse
                     }
                 }
                 if (matrix.NumberOfInterchangesIsOdd)
-                    SparseDefinitions.CMPLX_NEGATE(ref cDeterminant);
+                    cDeterminant.Negate();
 
                 pDeterminant = cDeterminant.Real;
                 piDeterminant = cDeterminant.Imag;

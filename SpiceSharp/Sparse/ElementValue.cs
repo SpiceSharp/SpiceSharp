@@ -81,5 +81,88 @@ namespace SpiceSharp.Sparse
         /// Magnitude (sum of absolute values)
         /// </summary>
         public double Magnitude => Math.Abs(Real) + Math.Abs(Imag);
+
+        /// <summary>
+        /// Copy from another value
+        /// </summary>
+        /// <param name="value">Value</param>
+        public void CopyFrom(ElementValue value)
+        {
+            Real = value.Real;
+            Imag = value.Imag;
+        }
+
+        /// <summary>
+        /// Negate the value
+        /// </summary>
+        public void Negate()
+        {
+            Real = -Real;
+            Imag = -Imag;
+        }
+
+        /// <summary>
+        /// Assign the multiplication of two elements
+        /// </summary>
+        /// <param name="first">First argument</param>
+        /// <param name="second">Second argument</param>
+        public void CopyMultiply(ElementValue first, ElementValue second)
+        {
+            Real = first.Real * second.Real - first.Imag * second.Imag;
+            Imag = first.Real * second.Imag + first.Imag * second.Real;
+        }
+
+        /// <summary>
+        /// Multiply two values and adds the result
+        /// </summary>
+        /// <param name="first">First argument</param>
+        /// <param name="second">Second argument</param>
+        public void AddMultiply(ElementValue first, ElementValue second)
+        {
+            Real += first.Real * second.Real - first.Imag * second.Imag;
+            Imag += first.Real * second.Imag + first.Imag * second.Real;
+        }
+
+        /// <summary>
+        /// Multiply two values and subtract the result
+        /// </summary>
+        /// <param name="first">First argument</param>
+        /// <param name="second">Second argument</param>
+        public void SubtractMultiply(ElementValue first, ElementValue second)
+        {
+            Real -= first.Real * second.Real - first.Imag * second.Imag;
+            Imag -= first.Real * second.Imag + first.Imag * second.Real;
+        }
+
+        /// <summary>
+        /// Multiply with another factor
+        /// </summary>
+        /// <param name="factor">factor</param>
+        public void Multiply(ElementValue factor)
+        {
+            double toReal = Real;
+            Real = toReal * factor.Real - Imag * factor.Imag;
+            Imag = toReal * factor.Imag + Imag * factor.Real;
+        }
+
+        /// <summary>
+        /// Assign
+        /// </summary>
+        /// <param name="den">Denominator</param>
+        public void CopyReciprocal(ElementValue den)
+        {
+            double r;
+            if ((den.Real >= den.Imag && den.Real > -den.Imag) ||
+                (den.Real < den.Imag && den.Real <= -den.Imag))
+            {
+                r = den.Imag / den.Real;
+                Imag = -r * (Real = 1.0 / (den.Real + r * den.Imag));
+            }
+            else
+            {
+                r = den.Real / den.Imag;
+                Real = -r * (Imag = -1.0 / (den.Imag + r * den.Real));
+            }
+        }
     }
 }

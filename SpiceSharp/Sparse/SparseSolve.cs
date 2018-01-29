@@ -128,13 +128,13 @@ namespace SpiceSharp.Sparse
                 {
                     pPivot = matrix.Diag[I];
                     // Cmplx expr: Temp *= (1.0 / Pivot). 
-                    SparseDefinitions.CMPLX_MULT_ASSIGN(ref Temp, pPivot);
+                    Temp.Multiply(pPivot);
                     Intermediate[I] = Temp;
                     pElement = pPivot.NextInCol;
                     while (pElement != null)
                     {
-                        // Cmplx expr: Intermediate[Element.Row] -= Temp * *Element. 
-                        SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref Intermediate[pElement.Row], Temp, pElement);
+                        // Cmplx expr: Intermediate[Element.Row] -= Temp * *Element
+                        Intermediate[pElement.Row].SubtractMultiply(Temp, pElement);
                         pElement = pElement.NextInCol;
                     }
                 }
@@ -148,8 +148,8 @@ namespace SpiceSharp.Sparse
 
                 while (pElement != null)
                 {
-                    // Cmplx expr: Temp -= *Element * Intermediate[Element.Col]. 
-                    SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref Temp, pElement, Intermediate[pElement.Col]);
+                    // Cmplx expr: Temp -= *Element * Intermediate[Element.Col]
+                    Temp.SubtractMultiply(pElement, Intermediate[pElement.Col]);
                     pElement = pElement.NextInRow;
                 }
                 Intermediate[I] = Temp;
@@ -283,8 +283,8 @@ namespace SpiceSharp.Sparse
                     pElement = matrix.Diag[I].NextInRow;
                     while (pElement != null)
                     {
-                        // Cmplx expr: Intermediate[Element.Col] -= Temp * *Element. 
-                        SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref Intermediate[pElement.Col], Temp, pElement);
+                        // Cmplx expr: Intermediate[Element.Col] -= Temp * *Element
+                        Intermediate[pElement.Col].SubtractMultiply(Temp, pElement);
                         pElement = pElement.NextInRow;
                     }
                 }
@@ -299,13 +299,13 @@ namespace SpiceSharp.Sparse
 
                 while (pElement != null)
                 {
-                    // Cmplx expr: Temp -= Intermediate[Element.Row] * *Element. 
-                    SparseDefinitions.CMPLX_MULT_SUBT_ASSIGN(ref Temp, Intermediate[pElement.Row], pElement);
+                    // Cmplx expr: Temp -= Intermediate[Element.Row] * *Element
+                    Temp.SubtractMultiply(Intermediate[pElement.Row], pElement);
 
                     pElement = pElement.NextInCol;
                 }
-                // Cmplx expr: Intermediate = Temp * (1.0 / *pPivot). 
-                SparseDefinitions.CMPLX_MULT(ref Intermediate[I], Temp, pPivot);
+                // Cmplx expr: Intermediate = Temp * (1.0 / *pPivot).
+                Intermediate[I].CopyMultiply(Temp, pPivot);
             }
 
             // Unscramble Intermediate vector while placing data in to Solution vector. 
