@@ -100,7 +100,6 @@
     <Compile Include="Simulations\DC\Sweep.cs" />
     <Compile Include="Simulations\DC\SweepInstance.cs" />
     <Compile Include="Simulations\InitializationDataEventArgs.cs" />
-    <Compile Include="Simulations\IntegrationMethods\ComponentState.cs" />
     <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentSource.cs" />
     <Compile Include="Components\Currentsources\CCCS\FrequencyBehavior.cs" />
     <Compile Include="Components\Currentsources\CCCS\LoadBehavior.cs" />
@@ -172,7 +171,6 @@
     <Compile Include="Simulations\IntegrationMethods\Histories\ArrayHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\NodeHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\ReadOnlyHistory.cs" />
-    <Compile Include="Simulations\IntegrationMethods\HistoryPoint.cs" />
     <Compile Include="Simulations\IntegrationMethods\Variables\StateHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\StatePool.cs" />
     <Compile Include="Simulations\IntegrationMethods\Variables\StateDerivative.cs" />

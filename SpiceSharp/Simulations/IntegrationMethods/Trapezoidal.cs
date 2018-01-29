@@ -221,7 +221,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Calculate the timestep based on the LTE (Local Truncation Error)
         /// </summary>
-        /// <param name="first">History point</param>
+        /// <param name="history">History</param>
         /// <param name="index">Index</param>
         /// <param name="timestep">Timestep</param>
         public override void LocalTruncateError(History<Vector<double>> history, int index, ref double timestep)
