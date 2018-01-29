@@ -14,30 +14,20 @@ namespace SpiceSharp.IntegrationMethods
         public IntegrationMethod Method { get; }
 
         /// <summary>
-        /// The current point
+        /// Get the history
         /// </summary>
-        protected HistoryPoint First { get; private set; }
-
+        public History<Vector<double>> History { get; }
+        
         /// <summary>
         /// Number of states in the pool
         /// </summary>
-        public int StateCount { get; private set; }
+        public int States { get; private set; }
 
         /// <summary>
         /// Number of states and derivatives in the pool
         /// </summary>
-        public int Size { get; private set; }
+        protected int Size { get; set; }
 
-        /// <summary>
-        /// Get the number of points in history
-        /// </summary>
-        public int HistoryCount { get; }
-
-        /// <summary>
-        /// Get the values
-        /// </summary>
-        public Vector<double> Values { get => First.Values; }
-        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -45,55 +35,20 @@ namespace SpiceSharp.IntegrationMethods
         public StatePool(IntegrationMethod method)
         {
             Method = method ?? throw new ArgumentNullException(nameof(method));
-            HistoryCount = method.MaxOrder + 2;
-
-            // Create a linked list for all history points
-            First = new HistoryPoint();
-            HistoryPoint current = First;
-            for (int i = 0; i < HistoryCount; i++)
-            {
-                HistoryPoint next = new HistoryPoint();
-                next.Previous = current;
-                current.Next = next;
-                current = next;
-            }
-
-            // Close the loop
-            First.Previous = current;
-            current.Next = First;
+            int count = method.MaxOrder + 2;
+            History = new ArrayHistory<Vector<double>>(count, (Vector<double>)null);
         }
-
-        /// <summary>
-        /// Get a state variable value in history
-        /// </summary>
-        /// <param name="index">Index</param>
-        /// <param name="history">Number of points to go back in time</param>
-        /// <returns></returns>
-        public double GetPreviousValue(int index, int history)
-        {
-            HistoryPoint hp = First;
-            for (int i = 0; i < history; i++)
-                hp = hp.Previous;
-            return hp.Values[index];
-        }
-
-        /// <summary>
-        /// Get a timestep
-        /// </summary>
-        /// <param name="history">The number of timesteps to go back in history (current timestep by default)</param>
-        /// <returns></returns>
-        public double GetTimestep(int history) => Method.DeltaOld[history];
 
         /// <summary>
         /// Create a state that can be differentiated
         /// </summary>
         /// <returns></returns>
-        public StateDerivative Create()
+        public StateDerivative CreateDerivative()
         {
             StateDerivative result = new StateDerivative(this, Size);
 
             // Increase amount of states
-            StateCount++;
+            States++;
 
             // Increase number of stored values
             Size += 2;
@@ -107,56 +62,40 @@ namespace SpiceSharp.IntegrationMethods
         public StateHistory CreateHistory()
         {
             StateHistory result = new StateHistory(this, Size);
-            StateCount++;
+            States++;
             Size++;
             return result;
         }
 
         /// <summary>
-        /// Integrate a state variable
-        /// </summary>
-        /// <param name="index">Index</param>
-        public void Integrate(int index) => Method.Integrate(First, index);
-        
-        /// <summary>
-        /// Truncate the timestep based on the LTE (Local Truncation Error)
-        /// </summary>
-        /// <param name="index">Index</param>
-        /// <param name="timestep">Timestep</param>
-        public void LocalTruncationError(int index, ref double timestep) => Method.LocalTruncateError(First, index, ref timestep);
-        
-        /// <summary>
         /// Build the arrays for all history points
         /// </summary>
-        public void BuildStates()
-        {
-            HistoryPoint current = First;
-            do
-            {
-                current.Values = new Vector<double>(Size);
-                current = current.Next;
-            }
-            while (current != First);
-        }
+        public void BuildStates() => History.Clear((int index) => new Vector<double>(Size));
+
+        /// <summary>
+        /// Integrate a state variable
+        /// </summary>
+        /// <param name="index">State index</param>
+        public void Integrate(int index) => Method.Integrate(History, index);
+
+        /// <summary>
+        /// Truncate timestep
+        /// </summary>
+        /// <param name="index"></param>
+        public void LocalTruncationError(int index, ref double timestep) => Method.LocalTruncateError(History, index, ref timestep);
 
         /// <summary>
         /// Clear all states for DC
         /// </summary>
         public void ClearDC()
         {
-            // Copy values to all other states
-            HistoryPoint current = First.Next;
-            while (current != First)
+            // Copy current values to all other states
+            var current = History.Current;
+            foreach (var states in History)
             {
-                for (int i = 0; i < StateCount; i++)
-                    current.Values[i] = First.Values[i];
-                current = current.Next;
+                if (states != current)
+                    current.CopyTo(states);
             }
         }
-
-        /// <summary>
-        /// Shift states
-        /// </summary>
-        public void ShiftStates() => First = First.Next;
     }
 }

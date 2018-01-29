@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void UpdateFlux2(object sender, InductorBehaviors.UpdateFluxEventArgs args)
         {
             var state = args.State;
-            args.Flux.Value += Factor * state.Solution[load1.BranchEq];
+            args.Flux.Current += Factor * state.Solution[load1.BranchEq];
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         {
             var state = args.State;
             Geq = args.Flux.Jacobian(Factor);
-            args.Flux.Value += Factor * state.Solution[load2.BranchEq];
+            args.Flux.Current += Factor * state.Solution[load2.BranchEq];
         }
 
         /// <summary>

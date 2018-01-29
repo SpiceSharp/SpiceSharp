@@ -90,7 +90,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 			if (states == null)
 				throw new ArgumentNullException(nameof(states));
 
-            QCap = states.Create();
+            QCap = states.CreateDerivative();
         }
 
         /// <summary>
@@ -120,9 +120,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             // Calculate the state for DC
             var sol = simulation.State.Solution;
             if (bp.InitialCondition.Given)
-                QCap.Value = bp.InitialCondition;
+                QCap.Current = bp.InitialCondition;
             else
-                QCap.Value = bp.Capacitance * (sol[posNode] - sol[negNode]);
+                QCap.Current = bp.Capacitance * (sol[posNode] - sol[negNode]);
         }
         
         /// <summary>
@@ -149,10 +149,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             double vcap = state.Solution[posNode] - state.Solution[negNode];
 
             // Integrate
-            QCap.Value = bp.Capacitance * vcap;
+            QCap.Current = bp.Capacitance * vcap;
             QCap.Integrate();
             double geq = QCap.Jacobian(bp.Capacitance);
-            double ceq = QCap.Current();
+            double ceq = QCap.RhsCurrent();
 
             // Load matrix
             PosPosPtr.Add(geq);

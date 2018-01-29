@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// History of timesteps
+    /// History of objects using an array
     /// </summary>
-    public class History<T>
+    public class ArrayHistory<T> : History<T>
     {
         /// <summary>
         /// Gets or sets the current value
         /// </summary>
-        public T Value
+        public override T Current
         {
             get => history[0];
             set => history[0] = value;
@@ -22,7 +23,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
-        public T this[int index]
+        public override T this[int index]
         {
             get
             {
@@ -31,12 +32,7 @@ namespace SpiceSharp.IntegrationMethods
                 return history[index];
             }
         }
-
-        /// <summary>
-        /// Gets the number of timesteps stored
-        /// </summary>
-        public int Length { get; }
-
+        
         /// <summary>
         /// Timesteps in history
         /// </summary>
@@ -46,11 +42,9 @@ namespace SpiceSharp.IntegrationMethods
         /// Constructor
         /// </summary>
         /// <param name="length">Length</param>
-        public History(int length)
+        public ArrayHistory(int length)
+            : base(length)
         {
-            if (length < 1)
-                throw new CircuitException("Not enough points");
-            Length = length;
             history = new T[length];
         }
 
@@ -59,9 +53,10 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="length">Length</param>
         /// <param name="defaultValue">Default value</param>
-        public History(int length, T defaultValue)
-            : this(length)
+        public ArrayHistory(int length, T defaultValue)
+            : base(length)
         {
+            history = new T[length];
             for (int i = 0; i < length; i++)
                 history[i] = defaultValue;
         }
@@ -71,11 +66,12 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="length">Length</param>
         /// <param name="generator">Default value generator</param>
-        public History(int length, Func<int, T> generator)
-            : this(length)
+        public ArrayHistory(int length, Func<int, T> generator)
+            : base(length)
         {
             if (generator == null)
                 throw new ArgumentNullException(nameof(generator));
+
             for (int i = 0; i < length; i++)
                 history[i] = generator(i);
         }
@@ -83,9 +79,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Store the current value
         /// </summary>
-        public void Store()
+        public override void Cycle()
         {
-            // Shift the history
             T tmp = history[Length - 1];
             for (int i = Length - 1; i > 0; i--)
                 history[i] = history[i - 1];
@@ -96,7 +91,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Store a new value
         /// </summary>
         /// <param name="newValue"></param>
-        public void Store(T newValue)
+        public override void Store(T newValue)
         {
             // Shift the history
             for (int i = Length - 1; i > 0; i--)
@@ -108,7 +103,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Clear the whole history with the same value
         /// </summary>
         /// <param name="value">Value</param>
-        public void Clear(T value)
+        public override void Clear(T value)
         {
             for (int i = 0; i < Length; i++)
                 history[i] = value;
@@ -118,12 +113,18 @@ namespace SpiceSharp.IntegrationMethods
         /// Clear the history using a generator
         /// </summary>
         /// <param name="generator">Generator</param>
-        public void Clear(Func<int, T> generator)
+        public override void Clear(Func<int, T> generator)
         {
             if (generator == null)
                 throw new ArgumentNullException(nameof(generator));
+
             for (int i = 0; i < Length; i++)
                 history[i] = generator(i);
         }
+
+        /// <summary>
+        /// Get enumerable version
+        /// </summary>
+        protected override IEnumerable<T> Points => history;
     }
 }

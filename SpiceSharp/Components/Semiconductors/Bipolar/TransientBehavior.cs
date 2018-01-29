@@ -213,10 +213,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(states));
 
             // We just need a history without integration here
-            Qbe = states.Create();
-            Qbc = states.Create();
-            Qcs = states.Create();
-            Qbx = states.Create();
+            Qbe = states.CreateDerivative();
+            Qbc = states.CreateDerivative();
+            Qcs = states.CreateDerivative();
+            Qbx = states.CreateDerivative();
             Cexbc = states.CreateHistory();
         }
 
@@ -244,7 +244,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double vbx = mbp.MosfetType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
             double vcs = mbp.MosfetType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
 
-            Cexbc.Value = load.Cbe / load.Qb;
+            Cexbc.Current = load.Cbe / load.Qb;
 
             /* 
              * charge storage elements
@@ -293,7 +293,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbe / pe;
                 sarg = Math.Exp(-xme * Math.Log(arg));
-                Qbe.Value = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
+                Qbe.Current = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
             }
             else
             {
@@ -301,7 +301,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 f2 = modeltemp.F2;
                 f3 = modeltemp.F3;
                 czbef2 = czbe / f2;
-                Qbe.Value = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
+                Qbe.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
                      fcpe * fcpe));
             }
             fcpc = temp.Tf4;
@@ -312,34 +312,34 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbc / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                Qbc.Value = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
+                Qbc.Current = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
             }
             else
             {
                 czbcf2 = czbc / f2;
-                Qbc.Value = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
+                Qbc.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
                      fcpc * fcpc));
             }
             if (vbx < fcpc)
             {
                 arg = 1 - vbx / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                Qbx.Value = pc * czbx * (1 - arg * sarg) / (1 - xmc);
+                Qbx.Current = pc * czbx * (1 - arg * sarg) / (1 - xmc);
             }
             else
             {
                 czbxf2 = czbx / f2;
-                Qbx.Value = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
+                Qbx.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
             }
             if (vcs < 0)
             {
                 arg = 1 - vcs / ps;
                 sarg = Math.Exp(-xms * Math.Log(arg));
-                Qcs.Value = ps * czcs * (1 - arg * sarg) / (1 - xms);
+                Qcs.Current = ps * czcs * (1 - arg * sarg) / (1 - xms);
             }
             else
             {
-                Qcs.Value = vcs * czcs * (1 + xms * vcs / (2 * ps));
+                Qcs.Current = vcs * czcs * (1 + xms * vcs / (2 * ps));
             }
 
             // Register for excess phase calculations
@@ -432,7 +432,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbe / pe;
                 sarg = Math.Exp(-xme * Math.Log(arg));
-                Qbe.Value = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
+                Qbe.Current = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
                 capbe = tf * gbe + czbe * sarg;
             }
             else
@@ -441,7 +441,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 f2 = modeltemp.F2;
                 f3 = modeltemp.F3;
                 czbef2 = czbe / f2;
-                Qbe.Value = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
+                Qbe.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
                      fcpe * fcpe));
                 capbe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
             }
@@ -453,13 +453,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbc / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                Qbc.Value = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
+                Qbc.Current = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
                 capbc = tr * gbc + czbc * sarg;
             }
             else
             {
                 czbcf2 = czbc / f2;
-                Qbc.Value = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
+                Qbc.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
                      fcpc * fcpc));
                 capbc = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
             }
@@ -467,25 +467,25 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbx / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                Qbx.Value = pc * czbx * (1 - arg * sarg) / (1 - xmc);
+                Qbx.Current = pc * czbx * (1 - arg * sarg) / (1 - xmc);
                 capbx = czbx * sarg;
             }
             else
             {
                 czbxf2 = czbx / f2;
-                Qbx.Value = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
+                Qbx.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
                 capbx = czbxf2 * (f3 + xmc * vbx / pc);
             }
             if (vcs < 0)
             {
                 arg = 1 - vcs / ps;
                 sarg = Math.Exp(-xms * Math.Log(arg));
-                Qcs.Value = ps * czcs * (1 - arg * sarg) / (1 - xms);
+                Qcs.Current = ps * czcs * (1 - arg * sarg) / (1 - xms);
                 capcs = czcs * sarg;
             }
             else
             {
-                Qcs.Value = vcs * czcs * (1 + xms * vcs / (2 * ps));
+                Qcs.Current = vcs * czcs * (1 + xms * vcs / (2 * ps));
                 capcs = czcs * (1 + xms * vcs / ps);
             }
 
@@ -577,8 +577,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double cbe = args.cex;
             double gbe = args.gex;
 
-            double delta = Cexbc.GetTimestep(0);
-            double prevdelta = Cexbc.GetTimestep(1);
+            double delta = Cexbc.Timesteps[0];
+            double prevdelta = Cexbc.Timesteps[1];
             arg1 = delta / td;
             arg2 = 3 * arg1;
             arg1 = arg2 * arg1;
@@ -590,11 +590,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 state.States[1][State + Cexbc] = cbe / qb;
                 state.States[2][State + Cexbc] = state.States[1][State + Cexbc];
             } */
-            args.cc = (Cexbc.GetPreviousValue(1) * (1 + delta / prevdelta + arg2) 
-                - Cexbc.GetPreviousValue(2) * delta / prevdelta) / denom;
+            args.cc = (Cexbc[1] * (1 + delta / prevdelta + arg2) 
+                - Cexbc[2] * delta / prevdelta) / denom;
             args.cex = cbe * arg3;
             args.gex = gbe * arg3;
-            Cexbc.Value = args.cc + args.cex / args.qb;
+            Cexbc.Current = args.cc + args.cex / args.qb;
         }
     }
 }

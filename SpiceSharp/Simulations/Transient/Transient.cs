@@ -172,7 +172,7 @@ namespace SpiceSharp.Simulations
                     // resume:
                     Method.Delta = Math.Min(Method.Delta, timeconfig.MaxStep);
                     Method.Resume();
-                    States.ShiftStates();
+                    States.History.Cycle();
 
                     // Calculate a new solution
                     while (true)

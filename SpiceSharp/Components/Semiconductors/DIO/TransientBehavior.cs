@@ -130,7 +130,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 			if (states == null)
 				throw new ArgumentNullException(nameof(states));
 
-            CapCharge = states.Create();
+            CapCharge = states.CreateDerivative();
         }
 
         /// <summary>
@@ -152,14 +152,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
             {
                 arg = 1 - vd / mbp.JunctionPotential;
                 sarg = Math.Exp(-mbp.GradingCoefficient * Math.Log(arg));
-                CapCharge.Value = mbp.TransitTime * load.Current + mbp.JunctionPotential * czero * (1 - arg * sarg) / (1 -
+                CapCharge.Current = mbp.TransitTime * load.Current + mbp.JunctionPotential * czero * (1 - arg * sarg) / (1 -
                         mbp.GradingCoefficient);
                 capd = mbp.TransitTime * load.Conduct + czero * sarg;
             }
             else
             {
                 double czof2 = czero / modeltemp.F2;
-                CapCharge.Value = mbp.TransitTime * load.Current + czero * temp.TF1 + czof2 * (modeltemp.F3 * (vd -
+                CapCharge.Current = mbp.TransitTime * load.Current + czero * temp.TF1 + czof2 * (modeltemp.F3 * (vd -
                     temp.TDepCap) + (mbp.GradingCoefficient / (mbp.JunctionPotential + mbp.JunctionPotential)) * (vd * vd - temp.TDepCap * temp.TDepCap));
                 capd = mbp.TransitTime * load.Conduct + czof2 * (modeltemp.F3 + mbp.GradingCoefficient * vd / mbp.JunctionPotential);
             }
@@ -184,7 +184,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             // Integrate
             CapCharge.Integrate();
             double geq = CapCharge.Jacobian(Cap);
-            double ceq = CapCharge.Current(geq, vd);
+            double ceq = CapCharge.RhsCurrent(geq, vd);
 
             // Load Rhs vector
             state.Rhs[negNode] += ceq;

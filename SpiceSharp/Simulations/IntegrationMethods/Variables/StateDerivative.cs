@@ -6,17 +6,21 @@
     public class StateDerivative : StateHistory
     {
         /// <summary>
-        /// Gets the first order derivative at the current timepoint
+        /// Gets the current derivative
         /// </summary>
-        public double Derivative => Source.Values[Index + 1];
-
+        public double Derivative
+        {
+            get => Source.History.Current[StateIndex + 1];
+        }
+        
         /// <summary>
         /// Constructor
         /// This constructor should not be used, except for in the <see cref="StatePool"/> class.
         /// </summary>
         /// <param name="source">Pool of states instantiating the variable</param>
         /// <param name="index">The index/identifier of the state variable</param>
-        internal StateDerivative(StatePool source, int index) : base(source, index)
+        public StateDerivative(StatePool source, int index)
+            : base(source, index)
         {
         }
 
@@ -24,7 +28,7 @@
         /// Integrate the state variable
         /// </summary>
         /// <returns>The last order derivative</returns>
-        public void Integrate() => Source.Integrate(Index);
+        public void Integrate() => Source.Integrate(StateIndex);
 
         /// <summary>
         /// Calculate contribution to the jacobian matrix (or Y-matrix). 
@@ -47,9 +51,9 @@
         /// <param name="geq">Jacobian matrix contribution</param>
         /// <param name="v">The value of the unknown variable</param>
         /// <returns></returns>
-        public double Current(double geq, double v)
+        public double RhsCurrent(double geq, double v)
         {
-            return Source.Values[Index + 1] - geq * v;
+            return Source.History.Current[StateIndex + 1] - geq * v;
         }
 
         /// <summary>
@@ -59,15 +63,16 @@
         /// variable.
         /// </summary>
         /// <returns></returns>
-        public double Current()
+        public double RhsCurrent()
         {
-            return Source.Values[Index + 1] - Source.Method.Slope * Source.Values[Index];
+            var history = Source.History;
+            return history.Current[StateIndex + 1] - Source.Method.Slope * history.Current[StateIndex];
         }
 
         /// <summary>
         /// Truncate the timestep based on the LTE (Local Truncation Error)
         /// </summary>
         /// <param name="timestep">Timestep</param>
-        public void LocalTruncationError(ref double timestep) => Source.LocalTruncationError(Index, ref timestep);
+        public void LocalTruncationError(ref double timestep) => Source.LocalTruncationError(StateIndex, ref timestep);
     }
 }

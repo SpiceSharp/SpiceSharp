@@ -4,6 +4,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -51,22 +52,26 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
-        public override void Integrate(HistoryPoint first, int index)
+        public override void Integrate(History<Vector<double>> history, int index)
         {
-            if (first == null)
-                throw new ArgumentNullException(nameof(first));
+            if (history == null)
+                throw new ArgumentNullException(nameof(history));
             int derivativeIndex = index + 1;
-            if (index < 0 || derivativeIndex >= first.Values.Length)
+            if (index < 0 || derivativeIndex >= history.Current.Length)
                 throw new CircuitException("Invalid state index {0}".FormatString(index));
+
+            var current = history.Current;
+            var previous = history[1];
+
 
             switch (Order)
             {
                 case 1:
-                    first.Values[derivativeIndex] = ag[0] * first.Values[index] + ag[1] * first.Previous.Values[index];
+                    current[derivativeIndex] = ag[0] * current[index] + ag[1] * previous[index];
                     break;
 
                 case 2:
-                    first.Values[derivativeIndex] = -first.Previous.Values[derivativeIndex] * ag[1] + ag[0] * (first.Values[index] - first.Previous.Values[index]);
+                    current[derivativeIndex] = -previous[derivativeIndex] * ag[1] + ag[0] * (current[index] - previous[index]);
                     break;
 
                 default:
@@ -189,7 +194,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Compute the coefficients for Trapezoidal integration
         /// </summary>
-        /// <param name="circuit">The circuit</param>
+        /// <param name="simulation">Time-based simulation</param>
         public override void ComputeCoefficients(TimeSimulation simulation)
         {
             // Integration constants
@@ -219,34 +224,39 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="first">History point</param>
         /// <param name="index">Index</param>
         /// <param name="timestep">Timestep</param>
-        public override void LocalTruncateError(HistoryPoint first, int index, ref double timestep)
+        public override void LocalTruncateError(History<Vector<double>> history, int index, ref double timestep)
         {
-            if (first == null)
-                throw new ArgumentNullException(nameof(first));
+            if (history == null)
+                throw new ArgumentNullException(nameof(history));
             int derivativeIndex = index + 1;
-            if (index < 0 || derivativeIndex >= first.Values.Length)
+            if (index < 0 || derivativeIndex >= history.Current.Length)
                 throw new CircuitException("Invalid state index {0}".FormatString(index));
+            var current = history.Current;
+            var previous = history[1];
 
             double[] diff = new double[MaxOrder + 2];
             double[] deltmp = new double[DeltaOld.Length];
 
             // Calculate the tolerance
             // Note: These need to be available in the integration method configuration, defaults are used for now to avoid too much changes
-            double volttol = 1e-12 + 1e-3 * Math.Max(Math.Abs(first.Values[derivativeIndex]), Math.Abs(first.Previous.Values[derivativeIndex]));
-            double chargetol = Math.Max(Math.Abs(first.Values[index]), Math.Abs(first.Previous.Values[index]));
+            double volttol = 1e-12 + 1e-3 * Math.Max(Math.Abs(current[derivativeIndex]), Math.Abs(previous[derivativeIndex]));
+            double chargetol = Math.Max(Math.Abs(current[index]), Math.Abs(previous[index]));
             chargetol = 1e-3 * Math.Max(chargetol, 1e-14) / Delta;
             double tol = Math.Max(volttol, chargetol);
 
             // Now divided differences
-            var current = first;
+            /* var current = first;
             for (int i = 0; i < diff.Length; i++)
             {
                 diff[i] = current.Values[index];
                 current = current.Previous;
-            }
+            } */
+            int j = 0;
+            foreach (var states in history)
+                diff[j++] = states[index];
             for (int i = 0; i < deltmp.Length; i++)
                 deltmp[i] = DeltaOld[i];
-            int j = Order;
+            j = Order;
             while (true)
             {
                 for (int i = 0; i <= j; i++)

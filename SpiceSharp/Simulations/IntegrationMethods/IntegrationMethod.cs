@@ -111,10 +111,10 @@ namespace SpiceSharp.IntegrationMethods
             MaxOrder = maxOrder;
 
             // Allocate history of timesteps
-            DeltaOld = new History<double>(maxOrder + 2);
+            DeltaOld = new ArrayHistory<double>(maxOrder + 2);
 
             // Allocate history of solutions
-            Solutions = new History<Vector<double>>(maxOrder + 1);
+            Solutions = new ArrayHistory<Vector<double>>(maxOrder + 1);
 
             // Create configuration if necessary
             Configuration = configuration ?? new IntegrationConfiguration();
@@ -131,10 +131,10 @@ namespace SpiceSharp.IntegrationMethods
             MaxOrder = maxOrder;
 
             // Allocate history of timesteps
-            DeltaOld = new History<double>(maxOrder + 2);
+            DeltaOld = new ArrayHistory<double>(maxOrder + 2);
 
             // Allocate history of solutions
-            Solutions = new History<Vector<double>>(maxOrder + 1);
+            Solutions = new ArrayHistory<Vector<double>>(maxOrder + 1);
 
             // Create configuration
             Configuration = new IntegrationConfiguration();
@@ -160,7 +160,7 @@ namespace SpiceSharp.IntegrationMethods
             else
             {
                 // Cycle through solutions
-                Solutions.Store();
+                Solutions.Cycle();
                 solution.CopyTo(Solutions[0]);
             }
         }
@@ -240,7 +240,7 @@ namespace SpiceSharp.IntegrationMethods
             OldDelta = Delta;
             savetime = Time;
             Time += Delta;
-            DeltaOld.Value = Delta;
+            DeltaOld.Current = Delta;
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace SpiceSharp.IntegrationMethods
 
             // Update all the variables
             Delta = delta;
-            DeltaOld.Value = delta;
+            DeltaOld.Current = delta;
             Time = savetime + delta;
 
             // Cut the integration order
@@ -326,10 +326,10 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Integrate a state variable at a specific index
         /// </summary>
-        /// <param name="first">The current point with state variables</param>
+        /// <param name="history">The history</param>
         /// <param name="index">The index of the state to be used</param>
         /// <returns></returns>
-        public abstract void Integrate(HistoryPoint first, int index);
+        public abstract void Integrate(History<Vector<double>> history, int index);
 
         /// <summary>
         /// Do truncation for all nodes
@@ -371,9 +371,9 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Calculate the new timestep based on the LTE (local truncation error)
         /// </summary>
-        /// <param name="first">First point</param>
+        /// <param name="history">The history of states</param>
         /// <param name="index">Index</param>
         /// <param name="timestep">Timestep</param>
-        public abstract void LocalTruncateError(HistoryPoint first, int index, ref double timestep);
+        public abstract void LocalTruncateError(History<Vector<double>> history, int index, ref double timestep);
     }
 }

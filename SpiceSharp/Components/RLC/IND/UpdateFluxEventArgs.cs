@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.InductorBehaviors
 
             Inductance = inductance;
             Current = current;
-            OriginalFlux = flux.Value;
+            OriginalFlux = flux.Current;
             Flux = flux;
             State = state ?? throw new ArgumentNullException(nameof(state));
         }

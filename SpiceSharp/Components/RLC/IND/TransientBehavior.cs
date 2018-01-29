@@ -45,7 +45,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             switch (property)
             {
-                case "flux": return (State state) => flux.Value;
+                case "flux": return (State state) => flux.Current;
                 default: return null;
             }
         }
@@ -106,7 +106,7 @@ namespace SpiceSharp.Components.InductorBehaviors
 			if (states == null)
 				throw new ArgumentNullException(nameof(states));
 
-            flux = states.Create();
+            flux = states.CreateDerivative();
         }
 
         /// <summary>
@@ -120,9 +120,9 @@ namespace SpiceSharp.Components.InductorBehaviors
 
             // Get the current through
             if (bp.InitialCondition.Given)
-                flux.Value = bp.InitialCondition * bp.Inductance;
+                flux.Current = bp.InitialCondition * bp.Inductance;
             else
-                flux.Value = simulation.State.Solution[BranchEq] * bp.Inductance;
+                flux.Current = simulation.State.Solution[BranchEq] * bp.Inductance;
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             var state = simulation.State;
 
             // Initialize
-            flux.Value = bp.Inductance * state.Solution[BranchEq];
+            flux.Current = bp.Inductance * state.Solution[BranchEq];
             
             // Allow alterations of the flux
             if (UpdateFlux != null)
@@ -148,7 +148,7 @@ namespace SpiceSharp.Components.InductorBehaviors
 
             // Finally load the Y-matrix
             flux.Integrate();
-            state.Rhs[BranchEq] += flux.Current();
+            state.Rhs[BranchEq] += flux.RhsCurrent();
             BranchBranchPtr.Sub(flux.Jacobian(bp.Inductance));
         }
 
