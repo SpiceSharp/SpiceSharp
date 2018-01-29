@@ -122,7 +122,7 @@ namespace SpiceSharp.Simulations
             state.UseSmallSignal = false;
             state.Gmin = baseconfig.Gmin;
             Op(baseconfig.DcMaxIterations);
-            state.Sparse |= State.SparseFlags.NIACSHOULDREORDER;
+            state.Sparse |= State.SparseFlags.AcShouldReorder;
 
             // Connect noise sources
             foreach (var behavior in NoiseBehaviors)
@@ -218,7 +218,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public override Func<State, double> CreateExport(Identifier name, string propertyName)
         {
-            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
+            var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
             // Most logical place to look for noise analysis: noise behaviors
             var export = eb.Get<NoiseBehavior>()?.CreateExport(propertyName);

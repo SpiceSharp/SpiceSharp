@@ -167,7 +167,7 @@
     <Compile Include="Simulations\Behaviors\EntityBehaviors.cs" />
     <Compile Include="Simulations\Base\TemperatureBehavior.cs" />
     <Compile Include="Simulations\Base\FrequencySimulation.cs" />
-    <Compile Include="Simulations\Base\IcBehavior.cs" />
+    <Compile Include="Simulations\Base\InitialConditionBehavior.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\ArrayHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\NodeHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\ReadOnlyHistory.cs" />

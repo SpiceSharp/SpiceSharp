@@ -47,10 +47,10 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the voltage-controlled voltage source</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="cont_pos">The positive controlling node</param>
-        /// <param name="cont_neg">The negative controlling node</param>
+        /// <param name="controlPos">The positive controlling node</param>
+        /// <param name="controlNeg">The negative controlling node</param>
         /// <param name="gain">The voltage gain</param>
-        public VoltageControlledVoltageSource(Identifier name, Identifier pos, Identifier neg, Identifier cont_pos, Identifier cont_neg, double gain) 
+        public VoltageControlledVoltageSource(Identifier name, Identifier pos, Identifier neg, Identifier controlPos, Identifier controlNeg, double gain) 
             : base(name, VoltageControlledVoltageSourcePinCount)
         {
             // Add parameters
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components
             AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
             AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
-            Connect(pos, neg, cont_pos, cont_neg);
+            Connect(pos, neg, controlPos, controlNeg);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace SpiceSharp.Components
         /// <param name="circuit">The circuit</param>
         public override void Setup(Circuit circuit)
         {
-            var nodes = BindrainNodes(circuit);
+            var nodes = BindNodes(circuit);
             PosourceNode = nodes[0].Index;
             NegateNode = nodes[1].Index;
             ControlPosourceNode = nodes[2].Index;

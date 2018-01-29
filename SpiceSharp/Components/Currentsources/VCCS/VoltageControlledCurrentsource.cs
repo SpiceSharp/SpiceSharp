@@ -70,7 +70,7 @@ namespace SpiceSharp.Components
         /// <param name="circuit">Circuit</param>
         public override void Setup(Circuit circuit)
         {
-            var nodes = BindrainNodes(circuit);
+            var nodes = BindNodes(circuit);
             PosourceNode = nodes[0].Index;
             NegateNode = nodes[1].Index;
             ControlPosourceNode = nodes[2].Index;

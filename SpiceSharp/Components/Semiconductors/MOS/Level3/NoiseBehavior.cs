@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Noise generators
         /// </summary>
-        public ComponentNoise MOS3Noise { get; } = new ComponentNoise(
+        public ComponentNoise Mosfet3Noise { get; } = new ComponentNoise(
             new NoiseThermal("rd", 0, 4),
             new NoiseThermal("rs", 2, 5),
             new NoiseThermal("id", 4, 5),
@@ -95,7 +95,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             sourceNodePrime = load.SourceNodePrime;
 
             // Connect noise sources
-            MOS3Noise.Setup(drainNode, gateNode, sourceNode, bulkNode, drainNodePrime, sourceNodePrime);
+            Mosfet3Noise.Setup(drainNode, gateNode, sourceNode, bulkNode, drainNodePrime, sourceNodePrime);
         }
 
         /// <summary>
@@ -110,15 +110,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             var noise = simulation.NoiseState;
 
             // Set noise parameters
-            MOS3Noise.Generators[RdNoise].SetCoefficients(temp.DrainConductance);
-            MOS3Noise.Generators[RsNoise].SetCoefficients(temp.SourceConductance);
-            MOS3Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(load.Gm));
-            MOS3Noise.Generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent 
+            Mosfet3Noise.Generators[RdNoise].SetCoefficients(temp.DrainConductance);
+            Mosfet3Noise.Generators[RsNoise].SetCoefficients(temp.SourceConductance);
+            Mosfet3Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(load.Gm));
+            Mosfet3Noise.Generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent 
                 * Math.Log(Math.Max(Math.Abs(load.Cd), 1e-38))) / (bp.Width * (bp.Length - 2 * mbp.LatDiff) 
                 * modeltemp.OxideCapFactor * modeltemp.OxideCapFactor) / noise.Freq);
 
             // Evaluate noise sources
-            MOS3Noise.Evaluate(simulation);
+            Mosfet3Noise.Evaluate(simulation);
         }
     }
 }

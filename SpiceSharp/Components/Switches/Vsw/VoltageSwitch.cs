@@ -53,9 +53,9 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the voltage-controlled switch</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="cont_pos">The positive controlling node</param>
-        /// <param name="cont_neg">The negative controlling node</param>
-        public VoltageSwitch(Identifier name, Identifier pos, Identifier neg, Identifier cont_pos, Identifier cont_neg) 
+        /// <param name="controlPos">The positive controlling node</param>
+        /// <param name="controlNeg">The negative controlling node</param>
+        public VoltageSwitch(Identifier name, Identifier pos, Identifier neg, Identifier controlPos, Identifier controlNeg) 
             : base(name, SWpinCount)
         {
             // Register parameters
@@ -66,7 +66,7 @@ namespace SpiceSharp.Components
             AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
             AddFactory(typeof(AcceptBehavior), () => new AcceptBehavior(Name));
 
-            Connect(pos, neg, cont_pos, cont_neg);
+            Connect(pos, neg, controlPos, controlNeg);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace SpiceSharp.Components
         /// <param name="circuit">The circuit</param>
         public override void Setup(Circuit circuit)
         {
-            var nodes = BindrainNodes(circuit);
+            var nodes = BindNodes(circuit);
             PosourceNode = nodes[0].Index;
             NegateNode = nodes[1].Index;
             ControlPosourceNode = nodes[2].Index;

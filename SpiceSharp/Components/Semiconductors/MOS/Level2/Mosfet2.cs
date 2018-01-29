@@ -30,13 +30,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constants
         /// </summary>
-        public const int MOS2PinCount = 4;
+        public const int Mosfet2PinCount = 4;
         
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public Mosfet2(Identifier name) : base(name, MOS2PinCount)
+        public Mosfet2(Identifier name) : base(name, Mosfet2PinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters());
@@ -55,7 +55,7 @@ namespace SpiceSharp.Components
         /// <param name="circuit">The circuit</param>
         public override void Setup(Circuit circuit)
         {
-            var nodes = BindrainNodes(circuit);
+            var nodes = BindNodes(circuit);
             DrainNode = nodes[0].Index;
             GateNode = nodes[1].Index;
             SourceNode = nodes[2].Index;

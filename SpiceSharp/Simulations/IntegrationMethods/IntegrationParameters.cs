@@ -21,7 +21,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Gets or sets the transient tolerance
         /// Used for timestep truncation
         /// </summary>
-        public double TrTol { get; set; } = 7.0;
+        public double TruncationTol { get; set; } = 7.0;
 
         /// <summary>
         /// Gets or sets the local truncation error relative tolerance

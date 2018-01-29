@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Noise generators
         /// </summary>
-        public ComponentNoise MOS2Noise { get; } = new ComponentNoise(
+        public ComponentNoise Mosfet2Noise { get; } = new ComponentNoise(
             new NoiseThermal("rd", 0, 4),
             new NoiseThermal("rs", 2, 5),
             new NoiseThermal("id", 4, 5),
@@ -95,7 +95,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             sourceNodePrime = load.SourceNodePrime;
 
             // Connect noise source
-            MOS2Noise.Setup(drainNode, gateNode, sourceNode, bulkNode, drainNodePrime, sourceNodePrime);
+            Mosfet2Noise.Setup(drainNode, gateNode, sourceNode, bulkNode, drainNodePrime, sourceNodePrime);
         }
 
         /// <summary>
@@ -110,14 +110,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var noise = simulation.NoiseState;
 
             // Set noise parameters
-            MOS2Noise.Generators[RdNoise].SetCoefficients(temp.DrainConductance);
-            MOS2Noise.Generators[RsNoise].SetCoefficients(temp.SourceConductance);
-            MOS2Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(load.Gm));
-            MOS2Noise.Generators[FlickerNoise].SetCoefficients(mnp.FNcoef * Math.Exp(mnp.FNexp * Math.Log(Math.Max(Math.Abs(load.Cd), 1e-38))) 
+            Mosfet2Noise.Generators[RdNoise].SetCoefficients(temp.DrainConductance);
+            Mosfet2Noise.Generators[RsNoise].SetCoefficients(temp.SourceConductance);
+            Mosfet2Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(load.Gm));
+            Mosfet2Noise.Generators[FlickerNoise].SetCoefficients(mnp.FNcoef * Math.Exp(mnp.FNexp * Math.Log(Math.Max(Math.Abs(load.Cd), 1e-38))) 
                 / (bp.Width * (bp.Length - 2 * mbp.LatDiff) * modeltemp.OxideCapFactor * modeltemp.OxideCapFactor) / noise.Freq);
 
             // Evaluate noise sources
-            MOS2Noise.Evaluate(simulation);
+            Mosfet2Noise.Evaluate(simulation);
         }
     }
 }

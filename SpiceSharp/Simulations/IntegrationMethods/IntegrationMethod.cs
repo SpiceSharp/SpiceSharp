@@ -173,8 +173,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Initialize/reset the integration method
         /// </summary>
-        /// <param name="transientBehaviors">Truncation behaviors</param>
-        public virtual void Initialize(Collection<TransientBehavior> transientBehaviors)
+        /// <param name="behaviors">Truncation behaviors</param>
+        public virtual void Initialize(Collection<TransientBehavior> behaviors)
         {
             // Initialize variables
             Time = 0.0;
@@ -189,7 +189,7 @@ namespace SpiceSharp.IntegrationMethods
             BaseParameters = Parameters.Get<IntegrationParameters>();
 
             // Register default truncation methods
-            this.transientBehaviors = transientBehaviors;
+            transientBehaviors = behaviors;
             if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerDevice))
                 Truncate += TruncateDevices;
             if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerNode))

@@ -55,7 +55,7 @@ namespace SpiceSharp.Components
         /// <param name="circuit">The circuit</param>
         public override void Setup(Circuit circuit)
         {
-            var nodes = BindrainNodes(circuit);
+            var nodes = BindNodes(circuit);
             CollectorNode = nodes[0].Index;
             BaseNode = nodes[1].Index;
             EmitterNode = nodes[2].Index;

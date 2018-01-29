@@ -67,7 +67,7 @@ namespace SpiceSharp
             if (CaseInsensitive)
             {
                 for (int i = 0; i < path.Length; i++)
-                    path[i] = path[i].ToLowerInvariant();
+                    path[i] = path[i].ToUpperInvariant();
             }
 
             idPath = path;

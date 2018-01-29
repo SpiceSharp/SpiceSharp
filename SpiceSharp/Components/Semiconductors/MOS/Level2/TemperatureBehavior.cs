@@ -38,18 +38,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         [PropertyName("cbssw0"), PropertyInfo(" ")]
         public double Cbssw { get; internal set; }
         [PropertyName("rs"), PropertyInfo("Source resistance")]
-        public double GetSOURCERESIST()
+        public double SourceResistance
         {
-            if (SourceConductance > 0.0)
-                return 1.0 / SourceConductance;
-            return 0.0;
+            get
+            {
+                if (SourceConductance > 0.0)
+                    return 1.0 / SourceConductance;
+                return 0.0;
+            }
         }
         [PropertyName("rd"), PropertyInfo("Drain resistance")]
-        public double GetDRAINRESIST()
+        public double DrainResistance
         {
-            if (DrainConductance > 0.0)
-                return 1.0 / DrainConductance;
-            return 0.0;
+            get
+            {
+                if (DrainConductance > 0.0)
+                    return 1.0 / DrainConductance;
+                return 0.0;
+            }
         }
         public double TTransconductance { get; protected set; }
         public double TSurfMob { get; protected set; }

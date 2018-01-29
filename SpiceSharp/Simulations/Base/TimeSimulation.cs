@@ -150,23 +150,23 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Preorder matrix
-                if (!state.Sparse.HasFlag(State.SparseFlags.NIDIDPREORDER))
+                if (!state.Sparse.HasFlag(State.SparseFlags.DidPreorder))
                 {
                     matrix.Preorder();
-                    state.Sparse |= State.SparseFlags.NIDIDPREORDER;
+                    state.Sparse |= State.SparseFlags.DidPreorder;
                 }
                 if (state.Init == State.InitFlags.InitJct || state.Init == State.InitFlags.InitTransient)
                 {
-                    state.Sparse |= State.SparseFlags.NISHOULDREORDER;
+                    state.Sparse |= State.SparseFlags.ShouldReorder;
                 }
 
                 // Reorder
-                if (state.Sparse.HasFlag(State.SparseFlags.NISHOULDREORDER))
+                if (state.Sparse.HasFlag(State.SparseFlags.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
                     matrix.Reorder(state.PivotRelTol, state.PivotAbsTol, state.DiagGmin);
                     Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~State.SparseFlags.NISHOULDREORDER;
+                    state.Sparse &= ~State.SparseFlags.ShouldReorder;
                 }
                 else
                 {
@@ -219,7 +219,7 @@ namespace SpiceSharp.Simulations
 
                     case State.InitFlags.InitJct:
                         state.Init = State.InitFlags.InitFix;
-                        state.Sparse |= State.SparseFlags.NISHOULDREORDER;
+                        state.Sparse |= State.SparseFlags.ShouldReorder;
                         break;
 
                     case State.InitFlags.InitFix:
@@ -230,7 +230,7 @@ namespace SpiceSharp.Simulations
 
                     case State.InitFlags.InitTransient:
                         if (iterno <= 1)
-                            state.Sparse = State.SparseFlags.NISHOULDREORDER;
+                            state.Sparse = State.SparseFlags.ShouldReorder;
                         state.Init = State.InitFlags.InitFloat;
                         break;
 
@@ -254,7 +254,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public override Func<State, double> CreateExport(Identifier name, string propertyName)
         {
-            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
+            var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
             // For transient analysis, the most logical would be to ask the Transient behavior (if it exists)
             var export = eb.Get<TransientBehavior>()?.CreateExport(propertyName);

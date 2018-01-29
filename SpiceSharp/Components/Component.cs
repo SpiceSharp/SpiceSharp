@@ -133,7 +133,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="circuit"></param>
         /// <returns></returns>
-        protected Node[] BindrainNodes(Circuit circuit)
+        protected Node[] BindNodes(Circuit circuit)
         {
             if (circuit == null)
                 throw new ArgumentNullException(nameof(circuit));

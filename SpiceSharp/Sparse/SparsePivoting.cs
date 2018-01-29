@@ -68,8 +68,8 @@ namespace SpiceSharp.Sparse
         /// Partition the matrix
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="Mode">The mode</param>
-        public void Partition(Matrix matrix, SparsePartition Mode)
+        /// <param name="mode">The mode</param>
+        public void Partition(Matrix matrix, SparsePartition mode)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -85,9 +85,9 @@ namespace SpiceSharp.Sparse
             Partitioned = true;
 
             // If partition is specified by the user, this is easy
-            if (Mode == SparsePartition.Default)
-                Mode = Matrix.DEFAULT_PARTITION;
-            if (Mode == SparsePartition.Direct)
+            if (mode == SparsePartition.Default)
+                mode = Matrix.DEFAULT_PARTITION;
+            if (mode == SparsePartition.Direct)
             {
                 for (Step = 1; Step <= Size; Step++)
                 {
@@ -96,7 +96,7 @@ namespace SpiceSharp.Sparse
                 }
                 return;
             }
-            else if (Mode == SparsePartition.Indirect)
+            else if (mode == SparsePartition.Indirect)
             {
                 for (Step = 1; Step <= Size; Step++)
                 {
@@ -105,7 +105,7 @@ namespace SpiceSharp.Sparse
                 }
                 return;
             }
-            else if (Mode != SparsePartition.Auto)
+            else if (mode != SparsePartition.Auto)
                 throw new SparseException("Invalid partition mode");
 
             // Otherwise, count all operations needed in when factoring matrix
@@ -159,8 +159,8 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">The matrix</param>
         /// <param name="rhs">Right hand side</param>
-        /// <param name="Step">Current step</param>
-        public void CountMarkowitz(Matrix matrix, Vector<double> rhs, int Step)
+        /// <param name="step">Current step</param>
+        public void CountMarkowitz(Matrix matrix, Vector<double> rhs, int step)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -170,12 +170,12 @@ namespace SpiceSharp.Sparse
             int ExtRow;
 
             // Generate MarkowitzRow Count for each row
-            for (I = Step; I <= Size; I++)
+            for (I = step; I <= Size; I++)
             {
                 // Set Count to -1 initially to remove count due to pivot element
                 Count = -1;
                 pElement = matrix.FirstInRow[I];
-                while (pElement != null && pElement.Col < Step)
+                while (pElement != null && pElement.Col < step)
                     pElement = pElement.NextInRow;
                 while (pElement != null)
                 {
@@ -195,12 +195,12 @@ namespace SpiceSharp.Sparse
             }
 
             // Generate the MarkowitzCol count for each column
-            for (I = Step; I <= Size; I++)
+            for (I = step; I <= Size; I++)
             {
                 // Set Count to -1 initially to remove count due to pivot element
                 Count = -1;
                 pElement = matrix.FirstInCol[I];
-                while (pElement != null && pElement.Row < Step)
+                while (pElement != null && pElement.Row < step)
                     pElement = pElement.NextInCol;
                 while (pElement != null)
                 {
@@ -215,8 +215,8 @@ namespace SpiceSharp.Sparse
         /// Calculate markowitz products
         /// </summary>
         /// <param name="matrix"></param>
-        /// <param name="Step"></param>
-        public void MarkowitzProducts(Matrix matrix, int Step)
+        /// <param name="step"></param>
+        public void MarkowitzProducts(Matrix matrix, int step)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -228,7 +228,7 @@ namespace SpiceSharp.Sparse
 
             Singletons = 0;
 
-            for (I = Step; I <= Size; I++)
+            for (I = step; I <= Size; I++)
             {
                 // If chance of overflow, use real numbers. 
                 if ((MarkowitzRow[I] > short.MaxValue && MarkowitzCol[I] != 0) ||
@@ -253,17 +253,17 @@ namespace SpiceSharp.Sparse
         /// Search for a pivot in the matrix
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="Step">Step</param>
-        /// <param name="DiagPivoting">Use the diagonal for searching a pivot</param>
+        /// <param name="step">Step</param>
+        /// <param name="diagPivoting">Use the diagonal for searching a pivot</param>
         /// <returns></returns>
-        public MatrixElement SearchForPivot(Matrix matrix, int Step, bool DiagPivoting)
+        public MatrixElement SearchForPivot(Matrix matrix, int step, bool diagPivoting)
         {
             MatrixElement ChosenPivot;
 
             // If singletons exist, look for an acceptable one to use as pivot. 
             if (Singletons != 0)
             {
-                ChosenPivot = SearchForSingleton(matrix, Step);
+                ChosenPivot = SearchForSingleton(matrix, step);
                 if (ChosenPivot != null)
                 {
                     PivotSelectionMethod = 's';
@@ -271,7 +271,7 @@ namespace SpiceSharp.Sparse
                 }
             }
 
-            if (DiagPivoting)
+            if (diagPivoting)
             {
 
                 // Either no singletons exist or they weren't acceptable.  Take quick first
@@ -279,7 +279,7 @@ namespace SpiceSharp.Sparse
                 // remaining submatrix with smallest Markowitz product, then check to see
                 // if it okay numerically.  If not, QuicklySearchDiagonal fails.
 
-                ChosenPivot = QuicklySearchDiagonal(matrix, Step);
+                ChosenPivot = QuicklySearchDiagonal(matrix, step);
                 if (ChosenPivot != null)
                 {
                     PivotSelectionMethod = 'q';
@@ -289,7 +289,7 @@ namespace SpiceSharp.Sparse
                 // Quick search of diagonal failed, carefully search diagonal and check each
                 // pivot candidate numerically before even tentatively accepting it.
 
-                ChosenPivot = SearchDiagonal(matrix, Step);
+                ChosenPivot = SearchDiagonal(matrix, step);
                 if (ChosenPivot != null)
                 {
                     PivotSelectionMethod = 'd';
@@ -298,7 +298,7 @@ namespace SpiceSharp.Sparse
             }
 
             // No acceptable pivot found yet, search entire matrix. 
-            ChosenPivot = SearchEntireMatrix(matrix, Step);
+            ChosenPivot = SearchEntireMatrix(matrix, step);
             PivotSelectionMethod = 'e';
 
             return ChosenPivot;

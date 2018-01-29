@@ -14,7 +14,7 @@ namespace SpiceSharp.Sparse
         /// Preordering for Modified Nodal Analysis
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public static void PreorderMNA(this Matrix matrix)
+        public static void PreorderModifiedNodalAnalysis(this Matrix matrix)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -283,9 +283,9 @@ namespace SpiceSharp.Sparse
         /// Get an error message
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        /// <param name="Originator">Name of the source</param>
+        /// <param name="originator">Name of the source</param>
         /// <returns></returns>
-        public static string ErrorMessage(this Matrix matrix, string Originator)
+        public static string ErrorMessage(this Matrix matrix, string originator)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -297,10 +297,10 @@ namespace SpiceSharp.Sparse
             Error = matrix.Error;
             if (Error == SparseError.Okay)
                 return null;
-            if (Originator == null)
-                Originator = "sparse";
-            if (Originator != null)
-                sb.Append("{0}: ".FormatString(Originator.ToString()));
+            if (originator == null)
+                originator = "sparse";
+            if (originator != null)
+                sb.Append("{0}: ".FormatString(originator));
             if ((int)Error >= (int)SparseError.Fatal)
                 sb.Append("fatal error, ");
             else

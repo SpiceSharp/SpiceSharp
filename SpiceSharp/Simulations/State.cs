@@ -54,19 +54,19 @@ namespace SpiceSharp.Simulations
             /// Indicates that the matrix should be reordered
             /// </summary>
             /// <remarks>Pivoting is necessary to minimize numerical errors and to factorize a matrix using LU decomposition.</remarks>
-            NISHOULDREORDER = 0x01,
+            ShouldReorder = 0x01,
 
             /// <summary>
             /// Indicates that the matrix is preordered
             /// </summary>
             /// <remarks>Preordering uses common observations in matrices for Modifed Nodal Analysis (MNA) to reorder the matrix before running any analysis.</remarks>
-            NIDIDPREORDER = 0x100,
+            DidPreorder = 0x100,
 
             /// <summary>
             /// Indicates that the matrix should be reordered for AC analysis
             /// </summary>
             /// <remarks>Pivoting is necessary to minimize numerical errors and to factorize a matrix using LU decomposition.</remarks>
-            NIACSHOULDREORDER = 0x10
+            AcShouldReorder = 0x10
         }
 
         /// <summary>

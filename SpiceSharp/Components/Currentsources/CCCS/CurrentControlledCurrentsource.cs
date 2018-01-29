@@ -85,7 +85,7 @@ namespace SpiceSharp.Components
             if (circuit == null)
                 throw new ArgumentNullException(nameof(circuit));
 
-            var nodes = BindrainNodes(circuit);
+            var nodes = BindNodes(circuit);
             PosourceNode = nodes[0].Index;
             NegateNode = nodes[1].Index;
 

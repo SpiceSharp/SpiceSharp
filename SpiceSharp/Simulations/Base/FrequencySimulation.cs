@@ -102,10 +102,10 @@ namespace SpiceSharp.Simulations
             foreach (var behavior in FrequencyBehaviors)
                 behavior.Load(this);
 
-            if (state.Sparse.HasFlag(State.SparseFlags.NIACSHOULDREORDER))
+            if (state.Sparse.HasFlag(State.SparseFlags.AcShouldReorder))
             {
                 var error = matrix.Reorder(state.PivotAbsTol, state.PivotRelTol);
-                state.Sparse &= ~State.SparseFlags.NIACSHOULDREORDER;
+                state.Sparse &= ~State.SparseFlags.AcShouldReorder;
                 if (error != SparseError.Okay)
                     throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
             }
@@ -116,7 +116,7 @@ namespace SpiceSharp.Simulations
                 {
                     if (error == SparseError.Singular)
                     {
-                        state.Sparse |= State.SparseFlags.NIACSHOULDREORDER;
+                        state.Sparse |= State.SparseFlags.AcShouldReorder;
                         goto retry;
                     }
                     throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
@@ -143,7 +143,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public override Func<State, double> CreateExport(Identifier name, string propertyName)
         {
-            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
+            var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
             // Most logical place to look for frequency analysis: AC behaviors
             var export = eb.Get<FrequencyBehavior>()?.CreateExport(propertyName);
@@ -162,7 +162,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public Func<State, Complex> CreateAcExport(Identifier name, string property)
         {
-            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
+            var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
             // Only AC behaviors implement these export methods
             return eb.Get<FrequencyBehavior>()?.CreateAcExport(property);

@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Pool of all behaviors in the simulation
         /// </summary>
-        protected BehaviorPool pool { get; } = new BehaviorPool();
+        protected BehaviorPool Pool { get; } = new BehaviorPool();
 
         /// <summary>
         /// Constructor
@@ -69,7 +69,7 @@ namespace SpiceSharp.Simulations
 
             // Setup the simulation
             Setup();
-            var args = new InitializationDataEventArgs(pool);
+            var args = new InitializationDataEventArgs(Pool);
             InitializeSimulationExport?.Invoke(this, args);
 
             // Execute the simulation
@@ -123,11 +123,11 @@ namespace SpiceSharp.Simulations
             // Register all behaviors
             foreach (var o in Circuit.Objects)
             {
-                T behavior = o.GetBehavior<T>(pool);
+                T behavior = o.GetBehavior<T>(Pool);
                 if (behavior != null)
-                    pool.Add(o.Name, behavior);
+                    Pool.Add(o.Name, behavior);
             }
-            return pool.GetBehaviorList<T>();
+            return Pool.GetBehaviorList<T>();
         }
     }
 }

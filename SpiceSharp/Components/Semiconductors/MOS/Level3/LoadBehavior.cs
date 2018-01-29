@@ -322,9 +322,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 
                 if ((state.Init == State.InitFlags.InitJct) && !bp.Off)
                 {
-                    vds = mbp.MosfetType * bp.InitialVDS;
-                    vgs = mbp.MosfetType * bp.InitialVGS;
-                    vbs = mbp.MosfetType * bp.InitialVBS;
+                    vds = mbp.MosfetType * bp.InitialVds;
+                    vgs = mbp.MosfetType * bp.InitialVgs;
+                    vbs = mbp.MosfetType * bp.InitialVbs;
                     if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((state.UseDC ||
                         state.Domain == State.DomainType.None) || (!state.UseIC)))
                     {

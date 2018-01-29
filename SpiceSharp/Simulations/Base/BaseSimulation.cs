@@ -18,7 +18,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected Collection<LoadBehavior> LoadBehaviors { get; private set; }
         protected Collection<TemperatureBehavior> TemperatureBehaviors { get; private set; }
-        protected Collection<IcBehavior> InitialConditionBehaviors { get; private set; }
+        protected Collection<InitialConditionBehavior> InitialConditionBehaviors { get; private set; }
 
         /// <summary>
         /// Get the currently active configuration for the base simulation
@@ -67,7 +67,7 @@ namespace SpiceSharp.Simulations
             BaseConfiguration = Parameters.Get<BaseConfiguration>();
             TemperatureBehaviors = SetupBehaviors<TemperatureBehavior>();
             LoadBehaviors = SetupBehaviors<LoadBehavior>();
-            InitialConditionBehaviors = SetupBehaviors<IcBehavior>();
+            InitialConditionBehaviors = SetupBehaviors<InitialConditionBehavior>();
 
             // Setup the load behaviors
             var matrix = State.Matrix;
@@ -88,7 +88,7 @@ namespace SpiceSharp.Simulations
             State.Initialize(Circuit);
 
             // Do initial conditions
-            Ic();
+            InitialConditions();
         }
 
         /// <summary>
@@ -238,23 +238,23 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Preorder matrix
-                if (!state.Sparse.HasFlag(State.SparseFlags.NIDIDPREORDER))
+                if (!state.Sparse.HasFlag(State.SparseFlags.DidPreorder))
                 {
                     matrix.Preorder();
-                    state.Sparse |= State.SparseFlags.NIDIDPREORDER;
+                    state.Sparse |= State.SparseFlags.DidPreorder;
                 }
                 if (state.Init == State.InitFlags.InitJct || state.Init == State.InitFlags.InitTransient)
                 {
-                    state.Sparse |= State.SparseFlags.NISHOULDREORDER;
+                    state.Sparse |= State.SparseFlags.ShouldReorder;
                 }
 
                 // Reorder
-                if (state.Sparse.HasFlag(State.SparseFlags.NISHOULDREORDER))
+                if (state.Sparse.HasFlag(State.SparseFlags.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
                     matrix.Reorder(state.PivotRelTol, state.PivotAbsTol, state.DiagGmin);
                     Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~State.SparseFlags.NISHOULDREORDER;
+                    state.Sparse &= ~State.SparseFlags.ShouldReorder;
                 }
                 else
                 {
@@ -307,7 +307,7 @@ namespace SpiceSharp.Simulations
 
                     case State.InitFlags.InitJct:
                         state.Init = State.InitFlags.InitFix;
-                        state.Sparse |= State.SparseFlags.NISHOULDREORDER;
+                        state.Sparse |= State.SparseFlags.ShouldReorder;
                         break;
 
                     case State.InitFlags.InitFix:
@@ -318,7 +318,7 @@ namespace SpiceSharp.Simulations
 
                     case State.InitFlags.InitTransient:
                         if (iterno <= 1)
-                            state.Sparse = State.SparseFlags.NISHOULDREORDER;
+                            state.Sparse = State.SparseFlags.ShouldReorder;
                         state.Init = State.InitFlags.InitFloat;
                         break;
 
@@ -408,7 +408,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Set the initial conditions
         /// </summary>
-        protected void Ic()
+        protected void InitialConditions()
         {
             var circuit = Circuit;
             var state = State;
@@ -441,7 +441,7 @@ namespace SpiceSharp.Simulations
             if (state.UseIC)
             {
                 foreach (var behavior in InitialConditionBehaviors)
-                    behavior.SetIc(circuit);
+                    behavior.SetInitialCondition(circuit);
             }
         }
 
@@ -553,7 +553,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public override Func<State, double> CreateExport(Identifier name, string propertyName)
         {
-            var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
+            var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
             return eb.Get<LoadBehavior>()?.CreateExport(propertyName);
         }
 

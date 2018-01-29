@@ -11,7 +11,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Maximum width for strings
         /// </summary>
-        public static int Printer_Width { get; set; } = 80;
+        public static int PrinterWidth { get; set; } = 80;
 
         /// <summary>
         /// Nicely print the matrix
@@ -46,7 +46,7 @@ namespace SpiceSharp.Sparse
 
             StringBuilder sb = new StringBuilder();
             Size = matrix.IntSize;
-            pImagElements = new MatrixElement[Printer_Width / 10 + 1];
+            pImagElements = new MatrixElement[PrinterWidth / 10 + 1];
 
             // Create a packed external to internal row and column translation array
             Top = matrix.AllocatedExtSize;
@@ -89,7 +89,7 @@ namespace SpiceSharp.Sparse
             SmallestDiag = SmallestElement;
 
             // Determine how many columns to use
-            Columns = Printer_Width;
+            Columns = PrinterWidth;
             if (header) Columns -= 5;
             if (data) Columns = (Columns + 1) / 10;
 
