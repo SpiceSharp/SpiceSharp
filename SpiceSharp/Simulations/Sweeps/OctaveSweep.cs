@@ -45,7 +45,7 @@ namespace SpiceSharp.Simulations.Sweeps
 
             Initial = initial;
             Final = final;
-            freqDelta = Math.Exp(Math.Log(10.0) / steps);
+            freqDelta = Math.Exp(Math.Log(2.0) / steps);
             Count = (int)Math.Floor(Math.Log(final / initial) / Math.Log(freqDelta) + 0.25) + 1;
         }
     }
