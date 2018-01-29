@@ -118,7 +118,7 @@ namespace SpiceSharp.Simulations
                 state.Initialize(Circuit);
 
             // Ignore operating condition point, just use the solution as-is
-            if (state.UseIC && state.Domain == State.DomainTypes.Time)
+            if (state.UseIC && state.Domain == State.DomainType.Time)
             {
                 state.StoreSolution();
 

@@ -53,15 +53,15 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Create delegate for a property
         /// </summary>
-        /// <param name="property">Property name</param>
+        /// <param name="propertyName">Property name</param>
         /// <returns></returns>
-        public override Func<State, Complex> CreateAcExport(string property)
+        public override Func<State, Complex> CreateAcExport(string propertyName)
         {
-            switch (property)
+            switch (propertyName)
             {
                 case "i":
                 case "c": return (State state) => ac;
-                default: return base.CreateAcExport(property);
+                default: return base.CreateAcExport(propertyName);
             }
         }
 

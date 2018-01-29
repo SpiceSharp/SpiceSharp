@@ -67,11 +67,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Create an export method
         /// </summary>
-        /// <param name="property">Parameter name</param>
+        /// <param name="propertyName">Parameter name</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(string property)
+        public override Func<State, double> CreateExport(string propertyName)
         {
-            switch (property)
+            switch (propertyName)
             {
                 case "vd": return (State state) => Voltage;
                 case "v": return (State state) => state.Solution[posNode] - state.Solution[negNode];

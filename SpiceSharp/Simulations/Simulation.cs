@@ -109,9 +109,9 @@ namespace SpiceSharp.Simulations
         /// If multiple behaviors implement the same property, the simulation type will decide which behavior gets precedence
         /// </summary>
         /// <param name="name">Entity name</param>
-        /// <param name="property">Property name</param>
+        /// <param name="propertyName">Property name</param>
         /// <returns></returns>
-        public abstract Func<State, double> CreateExport(Identifier name, string property);
+        public abstract Func<State, double> CreateExport(Identifier name, string propertyName);
 
         /// <summary>
         /// Collect behaviors of all circuit objects while also setting them up

@@ -65,12 +65,12 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Create an export method
         /// </summary>
-        /// <param name="property">Property name</param>
+        /// <param name="propertyName">Property name</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(string property)
+        public override Func<State, double> CreateExport(string propertyName)
         {
             // We avoid using reflection for common components
-            switch (property)
+            switch (propertyName)
             {
                 case "c":
                 case "i": return GetCurrent;

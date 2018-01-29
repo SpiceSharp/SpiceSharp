@@ -179,7 +179,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double vgs = load.Vgs;
             double vds = load.Vds;
             double vgd = vgs - vds;
-            double vgb = vgs - vbs;
 
             double EffectiveLength = bp.Length - 2 * mbp.LatDiff;
             double OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;

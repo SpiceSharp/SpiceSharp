@@ -54,12 +54,12 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Create an export method
         /// </summary>
-        /// <param name="property">Parameter name</param>
+        /// <param name="propertyName">Parameter name</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(string property)
+        public override Func<State, double> CreateExport(string propertyName)
         {
             // Avoid using reflection for common components
-            switch (property)
+            switch (propertyName)
             {
                 case "v": return GetV;
                 case "p": return GetP;
@@ -121,7 +121,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             double time = 0.0;
 
             // Time domain analysis
-            if (state.Domain == State.DomainTypes.Time)
+            if (state.Domain == State.DomainType.Time)
             {
                 if (simulation is TimeSimulation tsim)
                     time = tsim.Method.Time;

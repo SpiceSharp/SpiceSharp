@@ -247,7 +247,6 @@
     <Compile Include="Simulations\Simulation.cs" />
     <Compile Include="Simulations\AC\AC.cs" />
     <Compile Include="Simulations\DC\DC.cs" />
-    <Compile Include="Simulations\Configuration.cs" />
     <Compile Include="Simulations\ExportDataEventArgs.cs" />
     <Compile Include="Simulations\Sweeps\DecadeSweep.cs" />
     <Compile Include="Simulations\Sweeps\LinearSweep.cs" />

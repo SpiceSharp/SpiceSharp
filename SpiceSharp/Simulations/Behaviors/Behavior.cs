@@ -52,11 +52,11 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Create a delegate for extracting data
         /// </summary>
-        /// <param name="property">Parameter</param>
+        /// <param name="propertyName">Parameter</param>
         /// <returns>Returns null if there is no export method</returns>
-        public virtual Func<State, double> CreateExport(string property)
+        public virtual Func<State, double> CreateExport(string propertyName)
         {
-            return CreateExport<State, double>(property);
+            return CreateExport<State, double>(propertyName);
         }
 
         /// <summary>

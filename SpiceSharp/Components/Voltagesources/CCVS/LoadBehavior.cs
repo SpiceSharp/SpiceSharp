@@ -66,12 +66,12 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// <summary>
         /// Create export method
         /// </summary>
-        /// <param name="property">Property</param>
+        /// <param name="propertyName">Property</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(string property)
+        public override Func<State, double> CreateExport(string propertyName)
         {
             // Avoid reflection for common components
-            switch (property)
+            switch (propertyName)
             {
                 case "v": return GetVoltage;
                 case "i":

@@ -100,7 +100,6 @@ namespace SpiceSharp.Simulations
             var circuit = Circuit;
             var state = State;
             var noiseconfig = NoiseConfiguration;
-            var freqconfig = FrequencyConfiguration;
             var baseconfig = BaseConfiguration;
             var exportargs = new ExportDataEventArgs(State);
 
@@ -109,14 +108,15 @@ namespace SpiceSharp.Simulations
             int negOutNode = noiseconfig.OutputRef != null ? circuit.Nodes[noiseconfig.OutputRef].Index : 0;
 
             // Check the voltage or current source
-            var source = FindInputSource(noiseconfig.Input);
+            // TODO: Note used? Check this!
+            // var source = FindInputSource(noiseconfig.Input);
             
             // Initialize
             var data = NoiseState;
             state.Initialize(circuit);
             data.Initialize(FrequencySweep.Initial);
             state.Laplace = 0;
-            state.Domain = State.DomainTypes.Frequency;
+            state.Domain = State.DomainType.Frequency;
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;

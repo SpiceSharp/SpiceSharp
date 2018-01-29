@@ -209,7 +209,7 @@ namespace SpiceSharp.Simulations
                 state.Initialize(Circuit);
 
             // Ignore operating condition point, just use the solution as-is
-            if (state.UseIC && state.Domain == State.DomainTypes.Time)
+            if (state.UseIC && state.Domain == State.DomainType.Time)
             {
                 state.StoreSolution();
 
@@ -378,7 +378,7 @@ namespace SpiceSharp.Simulations
                     }
                 }
 
-                if (state.Domain == State.DomainTypes.Time && !state.UseIC)
+                if (state.Domain == State.DomainType.Time && !state.UseIC)
                 {
                     for (int i = 0; i < nodes.Count; i++)
                     {
@@ -549,12 +549,12 @@ namespace SpiceSharp.Simulations
         /// The simulation will determine which export method is returned if multiple behaviors implement a export method by the same name
         /// </summary>
         /// <param name="name">The identifier of the entity</param>
-        /// <param name="property">The parameter name</param>
+        /// <param name="propertyName">The parameter name</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(Identifier name, string property)
+        public override Func<State, double> CreateExport(Identifier name, string propertyName)
         {
             var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
-            return eb.Get<LoadBehavior>()?.CreateExport(property);
+            return eb.Get<LoadBehavior>()?.CreateExport(propertyName);
         }
 
         /// <summary>

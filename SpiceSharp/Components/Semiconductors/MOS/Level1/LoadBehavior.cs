@@ -306,7 +306,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                     vgs = mbp.MosfetType * bp.InitialVgs;
                     vbs = mbp.MosfetType * bp.InitialVbs;
                     if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((state.UseDC ||
-                        state.Domain == State.DomainTypes.None) || (!state.UseIC)))
+                        state.Domain == State.DomainType.None) || (!state.UseIC)))
                     {
                         vbs = -1;
                         vgs = mbp.MosfetType * temp.TVto;

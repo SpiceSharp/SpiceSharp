@@ -72,7 +72,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// All possible domain types
         /// </summary>
-        public enum DomainTypes
+        public enum DomainType
         {
             None,
             Time,
@@ -108,7 +108,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the current domain for simulation
         /// </summary>
-        public DomainTypes Domain { get; set; }
+        public DomainType Domain { get; set; }
 
         /// <summary>
         /// Gets or sets the flag for calculating small signal parameters

@@ -86,12 +86,12 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Create an export method
         /// </summary>
-        /// <param name="property">Parameter</param>
+        /// <param name="propertyName">Parameter</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(string property)
+        public override Func<State, double> CreateExport(string propertyName)
         {
             // Avoid reflection for common components
-            switch (property)
+            switch (propertyName)
             {
                 case "i": return GetCurrent;
                 case "v": return (State state) => Voltage;
@@ -161,7 +161,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             NegBranchPtr.Sub(1.0);
             BranchNegPtr.Sub(1.0);
 
-            if (state.Domain == State.DomainTypes.Time)
+            if (state.Domain == State.DomainType.Time)
             {
                 if (simulation is TimeSimulation tsim)
                     time = tsim.Method.Time;

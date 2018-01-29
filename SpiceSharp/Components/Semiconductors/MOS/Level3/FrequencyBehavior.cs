@@ -175,7 +175,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 				throw new ArgumentNullException(nameof(simulation));
 
             double EffectiveLength,
-                OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
+                OxideCap, vgs, vds, vbs, vbd, vgd, von, vdsat,
                 sargsw;
 
             vbs = load.Vbs;
@@ -183,7 +183,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             vgs = load.Vgs;
             vds = load.Vds;
             vgd = vgs - vds;
-            vgb = vgs - vbs;
             von = mbp.MosfetType * load.Von;
             vdsat = mbp.MosfetType * load.Vdsat;
 

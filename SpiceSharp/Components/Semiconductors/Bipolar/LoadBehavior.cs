@@ -260,7 +260,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			* initialization
 			*/
             icheck = false;
-            if (state.Init == State.InitFlags.InitJct && state.Domain == State.DomainTypes.Time && state.UseDC && state.UseIC)
+            if (state.Init == State.InitFlags.InitJct && state.Domain == State.DomainType.Time && state.UseDC && state.UseIC)
             {
                 vbe = mbp.MosfetType * bp.InitialVBE;
                 vce = mbp.MosfetType * bp.InitialVCE;

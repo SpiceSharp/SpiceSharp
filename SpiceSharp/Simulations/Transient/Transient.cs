@@ -107,7 +107,7 @@ namespace SpiceSharp.Simulations
             state.UseIC = timeconfig.UseIC;
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Domain = State.DomainTypes.Time;
+            state.Domain = State.DomainType.Time;
             state.Gmin = baseconfig.Gmin;
 
             // Setup breakpoints
