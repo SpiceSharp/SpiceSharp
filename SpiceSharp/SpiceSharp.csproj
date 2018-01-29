@@ -172,7 +172,7 @@
     <Compile Include="Simulations\IntegrationMethods\Histories\NodeHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\ReadOnlyHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\Variables\StateHistory.cs" />
-    <Compile Include="Simulations\IntegrationMethods\StatePool.cs" />
+    <Compile Include="Simulations\IntegrationMethods\Variables\StatePool.cs" />
     <Compile Include="Simulations\IntegrationMethods\Variables\StateDerivative.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\History.cs" />
     <Compile Include="Simulations\IntegrationMethods\TruncationEventArgs.cs" />
@@ -205,7 +205,7 @@
     <Compile Include="Components\Semiconductors\MOS\Transistor.cs" />
     <Compile Include="Attributes\PinAttribute.cs" />
     <Compile Include="Simulations\Base\TimeSimulation.cs" />
-    <Compile Include="Simulations\IntegrationMethods\IntegrationConfiguration.cs" />
+    <Compile Include="Simulations\IntegrationMethods\IntegrationParameters.cs" />
     <Compile Include="Components\RLC\IND\Inductor.cs" />
     <Compile Include="Components\RLC\MUT\MutualInductance.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\BJT.cs" />

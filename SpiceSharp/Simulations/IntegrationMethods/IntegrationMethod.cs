@@ -13,9 +13,14 @@ namespace SpiceSharp.IntegrationMethods
     public abstract class IntegrationMethod
     {
         /// <summary>
-        /// Gets the configuration for the integration method
+        /// Gets the parameters for the integration method
         /// </summary>
-        public IntegrationConfiguration Configuration { get; } = new IntegrationConfiguration();
+        public ParameterSetCollection Parameters { get; } = new ParameterSetCollection();
+
+        /// <summary>
+        /// Get the base parameters for the integration method
+        /// </summary>
+        protected IntegrationParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// The breakpoints
@@ -104,7 +109,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="configuration">The configuration</param>
         /// <param name="maxOrder">Maximum integration order</param>
-        protected IntegrationMethod(IntegrationConfiguration configuration, int maxOrder)
+        protected IntegrationMethod(IntegrationParameters configuration, int maxOrder)
         {
             if (maxOrder < 1)
                 throw new CircuitException("Invalid order {0}".FormatString(maxOrder));
@@ -117,7 +122,7 @@ namespace SpiceSharp.IntegrationMethods
             Solutions = new ArrayHistory<Vector<double>>(maxOrder + 1);
 
             // Create configuration if necessary
-            Configuration = configuration ?? new IntegrationConfiguration();
+            Parameters.Add(configuration ?? new IntegrationParameters());
         }
 
         /// <summary>
@@ -137,7 +142,7 @@ namespace SpiceSharp.IntegrationMethods
             Solutions = new ArrayHistory<Vector<double>>(maxOrder + 1);
 
             // Create configuration
-            Configuration = new IntegrationConfiguration();
+            Parameters.Add(new IntegrationParameters());
         }
 
         /// <summary>
@@ -180,11 +185,14 @@ namespace SpiceSharp.IntegrationMethods
             DeltaOld.Clear(0.0);
             Solutions.Clear((Vector<double>)null);
 
+            // Get parameters
+            BaseParameters = Parameters.Get<IntegrationParameters>();
+
             // Register default truncation methods
             this.transientBehaviors = transientBehaviors;
-            if (Configuration.TruncationMethod.HasFlag(IntegrationConfiguration.TruncationMethods.PerDevice))
+            if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerDevice))
                 Truncate += TruncateDevices;
-            if (Configuration.TruncationMethod.HasFlag(IntegrationConfiguration.TruncationMethods.PerNode))
+            if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerNode))
                 Truncate += TruncateNodes;
 
             // Last point was START so the current point is the point after a breakpoint (start)

@@ -2,7 +2,10 @@
 
 namespace SpiceSharp.IntegrationMethods
 {
-    public class IntegrationConfiguration
+    /// <summary>
+    /// Default parameters for an integration configuration
+    /// </summary>
+    public class IntegrationParameters : ParameterSet
     {
         /// <summary>
         /// Enumeration of default truncation methods

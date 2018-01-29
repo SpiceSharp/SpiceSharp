@@ -22,14 +22,14 @@ namespace SpiceSharp.IntegrationMethods
         /// Constructor
         /// </summary>
         public Trapezoidal()
-            : base(new IntegrationConfiguration(), 2)
+            : base(new IntegrationParameters(), 2)
         {
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Trapezoidal(IntegrationConfiguration config)
+        public Trapezoidal(IntegrationParameters config)
             : base(config, 2)
         {
         }
@@ -154,8 +154,8 @@ namespace SpiceSharp.IntegrationMethods
                         diff = state.Solution[index] - Prediction[index];
                         if (diff != 0.0)
                         {
-                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Configuration.LteRelTol + Configuration.LteAbsTol;
-                            tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(2.0 * Configuration.TrTol * tol / diff));
+                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * BaseParameters.LteRelTol + BaseParameters.LteAbsTol;
+                            tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(2.0 * BaseParameters.TrTol * tol / diff));
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
@@ -176,8 +176,8 @@ namespace SpiceSharp.IntegrationMethods
 
                         if (deriv != 0.0)
                         {
-                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Configuration.LteRelTol + Configuration.LteAbsTol;
-                            tmp = DeltaOld[0] * Math.Pow(Math.Abs(12.0 * Configuration.TrTol * tol / deriv), 1.0 / 3.0);
+                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * BaseParameters.LteRelTol + BaseParameters.LteAbsTol;
+                            tmp = DeltaOld[0] * Math.Pow(Math.Abs(12.0 * BaseParameters.TrTol * tol / deriv), 1.0 / 3.0);
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
@@ -245,12 +245,6 @@ namespace SpiceSharp.IntegrationMethods
             double tol = Math.Max(volttol, chargetol);
 
             // Now divided differences
-            /* var current = first;
-            for (int i = 0; i < diff.Length; i++)
-            {
-                diff[i] = current.Values[index];
-                current = current.Previous;
-            } */
             int j = 0;
             foreach (var states in history)
                 diff[j++] = states[index];
@@ -275,7 +269,7 @@ namespace SpiceSharp.IntegrationMethods
                 case 2: factor = 0.0833333333; break;
                 default: throw new CircuitException("Invalid order {0}".FormatString(Order));
             }
-            double del = Configuration.TrTol * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
+            double del = BaseParameters.TrTol * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
             if (Order == 2)
                 del = Math.Sqrt(del);
             else if (Order > 2)
