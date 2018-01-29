@@ -215,7 +215,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// <param name="capgb">Gate-bulk capacitance</param>
         /// <param name="phi">Phi</param>
         /// <param name="cox">Cox</param>
-        public static void DEVqmeyer(double vgs, double vgd, double vgb, double von, double vdsat, out double capgs, out double capgd, out double capgb, double phi, double cox)
+        public static void DEVqmeyer(double vgs, double vgd, double von, double vdsat, out double capgs, out double capgd, out double capgb, double phi, double cox)
         {
             double vds;
             double vddif;

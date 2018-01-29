@@ -62,11 +62,11 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Create a method for exporting a property
         /// </summary>
-        /// <typeparam name="S">Input type</typeparam>
-        /// <typeparam name="R">Return type</typeparam>
+        /// <typeparam name="T">Input type</typeparam>
+        /// <typeparam name="TResult">Return type</typeparam>
         /// <param name="property">Property name</param>
         /// <returns></returns>
-        protected Func<S, R> CreateExport<S, R>(string property)
+        protected Func<T, TResult> CreateExport<T, TResult>(string property)
         {
             // Find methods to create the export
             var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
@@ -76,7 +76,7 @@ namespace SpiceSharp.Behaviors
                 if (member is MethodInfo mi)
                 {
                     // Check the return type (needs to be a double)
-                    if (mi.ReturnType != typeof(R))
+                    if (mi.ReturnType != typeof(TResult))
                         continue;
 
                     // Check the name
@@ -97,17 +97,17 @@ namespace SpiceSharp.Behaviors
                     var parameters = mi.GetParameters();
                     if (parameters.Length != 1)
                         continue;
-                    if (parameters[0].ParameterType != typeof(S))
+                    if (parameters[0].ParameterType != typeof(T))
                         continue;
 
                     // Return a delegate
-                    return (Func<S, R>)mi.CreateDelegate(typeof(Func<S, R>), this);
+                    return (Func<T, TResult>)mi.CreateDelegate(typeof(Func<T, TResult>), this);
                 }
 
                 // Use properties
                 if (member is PropertyInfo pi)
                 {
-                    if (pi.PropertyType != typeof(R))
+                    if (pi.PropertyType != typeof(TResult))
                         continue;
 
                     // Check the name
@@ -125,8 +125,8 @@ namespace SpiceSharp.Behaviors
                         continue;
 
                     // Return the getter!
-                    var getmethod = (Func<R>)pi.GetGetMethod().CreateDelegate(typeof(Func<R>), this);
-                    return (S state) => getmethod();
+                    var getmethod = (Func<TResult>)pi.GetGetMethod().CreateDelegate(typeof(Func<TResult>), this);
+                    return (T state) => getmethod();
                 }
             }
 

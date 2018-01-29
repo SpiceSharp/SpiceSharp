@@ -48,7 +48,7 @@ namespace SpiceSharp.Sparse
                 for (Step = 1; Step <= Size; Step++)
                 {
                     pPivot = matrix.Diag[Step];
-                    LargestInCol = pivoting.FindLargestInCol(pPivot.NextInCol);
+                    LargestInCol = SparsePivoting.FindLargestInCol(pPivot.NextInCol);
                     if (LargestInCol * RelThreshold < SparseDefinitions.ELEMENT_MAG(pPivot))
                     {
                         if (matrix.Complex)

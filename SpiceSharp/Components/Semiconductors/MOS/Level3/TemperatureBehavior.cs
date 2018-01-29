@@ -38,26 +38,25 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         [PropertyName("cbssw0"), PropertyInfo("Zero-Bias B-S sidewall capacitance")]
         public double Cbssw { get; internal set; }
 
-        /// <summary>
-        /// Methods
-        /// </summary>
-        /// <param name="circuit">Circuit</param>
-        /// <returns></returns>
         [PropertyName("rs"), PropertyInfo("Source resistance")]
-        public double GetSOURCERESIST(Circuit circuit)
+        public double SourceResistance
         {
-            if (SourceConductance != 0.0)
-                return 1.0 / SourceConductance;
-            else
+            get
+            {
+                if (SourceConductance > 0.0)
+                    return 1.0 / SourceConductance;
                 return 0.0;
+            }
         }
         [PropertyName("rd"), PropertyInfo("Drain resistance")]
-        public double GetDRAINRESIST(Circuit circuit)
+        public double DrainResistance
         {
-            if (DrainConductance != 0.0)
-                return 1.0 / DrainConductance;
-            else
+            get
+            {
+                if (DrainConductance > 0.0)
+                    return 1.0 / DrainConductance;
                 return 0.0;
+            }
         }
 
         /// <summary>

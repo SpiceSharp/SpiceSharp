@@ -285,13 +285,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double icapgs, icapgd, icapgb;
             if (load.Mode > 0)
             {
-                Transistor.DEVqmeyer(vgs, vgd, vgb, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
+                Transistor.DEVqmeyer(vgs, vgd, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
                     out icapgs, out icapgd, out icapgb,
                     temp.TPhi, OxideCap);
             }
             else
             {
-                Transistor.DEVqmeyer(vgd, vgs, vgb, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
+                Transistor.DEVqmeyer(vgd, vgs, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
                     out icapgd, out icapgs, out icapgb,
                     temp.TPhi, OxideCap);
             }
@@ -495,13 +495,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double icapgs, icapgd, icapgb;
             if (load.Mode > 0)
             {
-                Transistor.DEVqmeyer(vgs, vgd, vgb, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
+                Transistor.DEVqmeyer(vgs, vgd,  mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
                     out icapgs, out icapgd, out icapgb,
                     temp.TPhi, OxideCap);
             }
             else
             {
-                Transistor.DEVqmeyer(vgd, vgs, vgb, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
+                Transistor.DEVqmeyer(vgd, vgs, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
                     out icapgd, out icapgs, out icapgb,
                     temp.TPhi, OxideCap);
             }

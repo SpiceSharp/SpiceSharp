@@ -345,12 +345,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             double icapgs, icapgd, icapgb;
             if (load.Mode > 0)
             {
-                Transistor.DEVqmeyer(vgs, vgd, vgb, von, vdsat,
+                Transistor.DEVqmeyer(vgs, vgd, von, vdsat,
                     out icapgs, out icapgd, out icapgb, temp.TPhi, OxideCap);
             }
             else
             {
-                Transistor.DEVqmeyer(vgd, vgs, vgb, von, vdsat,
+                Transistor.DEVqmeyer(vgd, vgs, von, vdsat,
                     out icapgd, out icapgs, out icapgb, temp.TPhi, OxideCap);
             }
             Capgs.Current = icapgs;
@@ -542,12 +542,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             double icapgs, icapgd, icapgb;
             if (load.Mode > 0)
             {
-                Transistor.DEVqmeyer(vgs, vgd, vgb, von, vdsat,
+                Transistor.DEVqmeyer(vgs, vgd, von, vdsat,
                     out icapgs, out icapgd, out icapgb, temp.TPhi, OxideCap);
             }
             else
             {
-                Transistor.DEVqmeyer(vgd, vgs, vgb, von, vdsat,
+                Transistor.DEVqmeyer(vgd, vgs, von, vdsat,
                     out icapgd, out icapgs, out icapgb, temp.TPhi, OxideCap);
             }
             Capgs.Current = icapgs;

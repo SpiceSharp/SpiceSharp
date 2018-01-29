@@ -22,7 +22,7 @@ namespace SpiceSharp.Diagnostics
         /// <summary>
         /// The event called when a warning is added
         /// </summary>
-        public static event EventHandler<WarningArgs> WarningGenerated;
+        public static event EventHandler<WarningEventArgs> WarningGenerated;
 
         /// <summary>
         /// Add a warning
@@ -30,7 +30,7 @@ namespace SpiceSharp.Diagnostics
         /// <param name="msg"></param>
         public static void Warning(object sender, string msg)
         {
-            WarningArgs arg = new WarningArgs(msg);
+            WarningEventArgs arg = new WarningEventArgs(msg);
             warnings.Add(msg);
             WarningGenerated?.Invoke(sender, arg);
         }
@@ -39,7 +39,7 @@ namespace SpiceSharp.Diagnostics
     /// <summary>
     /// Warning arguments
     /// </summary>
-    public class WarningArgs : EventArgs
+    public class WarningEventArgs : EventArgs
     {
         /// <summary>
         /// Get the message
@@ -50,7 +50,7 @@ namespace SpiceSharp.Diagnostics
         /// Constructor
         /// </summary>
         /// <param name="msg"></param>
-        public WarningArgs(string msg)
+        public WarningEventArgs(string msg)
         {
             Message = msg;
         }
