@@ -21,16 +21,16 @@ namespace SpiceSharpTest.Models.Bipolar
         /// <param name="subst">Substrate</param>
         /// <param name="model">Model name</param>
         /// <param name="modelparams">Model parameters</param>
-        BJT CreateBJT(Identifier name, 
+        BipolarJunctionTransistor CreateBJT(Identifier name, 
             Identifier c, Identifier b, Identifier e, Identifier subst, 
             Identifier model, string modelparams)
         {
             // Create the model
-            BJTModel bjtmodel = new BJTModel(model);
+            BipolarJunctionTransistorModel bjtmodel = new BipolarJunctionTransistorModel(model);
             ApplyParameters(bjtmodel, modelparams);
 
             // Create the transistor
-            BJT bjt = new BJT(name);
+            BipolarJunctionTransistor bjt = new BipolarJunctionTransistor(name);
             bjt.Connect(c, b, e, subst);
             bjt.SetModel(bjtmodel);
             return bjt;

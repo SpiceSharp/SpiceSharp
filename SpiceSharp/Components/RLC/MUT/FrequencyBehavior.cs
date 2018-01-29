@@ -20,8 +20,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected MatrixElement Br1Br2 { get; private set; }
-        protected MatrixElement Br2Br1 { get; private set; }
+        protected MatrixElement Branch1Branch2Ptr { get; private set; }
+        protected MatrixElement Branch2Branch1Ptr { get; private set; }
 
         /// <summary>
         /// Shared parameters
@@ -70,8 +70,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             int INDbrEq2 = load2.BranchEq;
 
             // Get matrix equations
-            Br1Br2 = matrix.GetElement(INDbrEq1, INDbrEq2);
-            Br2Br1 = matrix.GetElement(INDbrEq2, INDbrEq1);
+            Branch1Branch2Ptr = matrix.GetElement(INDbrEq1, INDbrEq2);
+            Branch2Branch1Ptr = matrix.GetElement(INDbrEq2, INDbrEq1);
         }
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            Br1Br2 = null;
-            Br2Br1 = null;
+            Branch1Branch2Ptr = null;
+            Branch2Branch1Ptr = null;
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 
             var state = simulation.State;
             Complex value = state.Laplace * Factor;
-            Br1Br2.Sub(value);
-            Br2Br1.Sub(value);
+            Branch1Branch2Ptr.Sub(value);
+            Branch2Branch1Ptr.Sub(value);
         }
     }
 }

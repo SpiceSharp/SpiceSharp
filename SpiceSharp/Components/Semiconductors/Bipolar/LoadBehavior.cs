@@ -9,7 +9,7 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
-    /// General behavior for <see cref="BJT"/>
+    /// General behavior for <see cref="BipolarJunctionTransistor"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
@@ -262,8 +262,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             icheck = false;
             if (state.Init == State.InitFlags.InitJct && state.Domain == State.DomainType.Time && state.UseDC && state.UseIC)
             {
-                vbe = mbp.MosfetType * bp.InitialVBE;
-                vce = mbp.MosfetType * bp.InitialVCE;
+                vbe = mbp.MosfetType * bp.InitialVbe;
+                vce = mbp.MosfetType * bp.InitialVce;
                 vbc = vbe - vce;
             }
             else if (state.Init == State.InitFlags.InitJct && !bp.Off)

@@ -7,12 +7,12 @@ namespace SpiceSharp.Components
     /// A bipolar junction transistor (BJT)
     /// </summary>
     [Pin(0, "Collector"), Pin(1, "Base"), Pin(2, "Emitter"), Pin(3, "Substrate")]
-    public class BJT : Component
+    public class BipolarJunctionTransistor : Component
     {
         /// <summary>
         /// Set the model for the BJT
         /// </summary>
-        public void SetModel(BJTModel model) => Model = model;
+        public void SetModel(BipolarJunctionTransistorModel model) => Model = model;
 
         /// <summary>
         /// Nodes
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BJT(Identifier name) 
+        public BipolarJunctionTransistor(Identifier name) 
             : base(name, BipolarJunctionTransistorPinCount)
         {
             // Add parameters

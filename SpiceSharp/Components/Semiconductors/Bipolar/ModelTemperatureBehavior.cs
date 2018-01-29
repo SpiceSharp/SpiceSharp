@@ -7,7 +7,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="BJTModel"/>
+    /// Temperature behavior for a <see cref="BipolarJunctionTransistorModel"/>
     /// </summary>
     public class ModelTemperatureBehavior : Behaviors.TemperatureBehavior
     {

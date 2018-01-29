@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
-    /// Base parameters for a <see cref="BJTModel"/>
+    /// Base parameters for a <see cref="BipolarJunctionTransistorModel"/>
     /// </summary>
     public class ModelBaseParameters : ParameterSet
     {

@@ -8,7 +8,7 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
-    /// Transient behavior for a <see cref="BJT"/>
+    /// Transient behavior for a <see cref="BipolarJunctionTransistor"/>
     /// </summary>
     public class TransientBehavior : Behaviors.TransientBehavior, IConnectedBehavior
     {

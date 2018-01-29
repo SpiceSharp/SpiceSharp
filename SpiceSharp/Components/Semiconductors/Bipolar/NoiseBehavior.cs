@@ -6,7 +6,7 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
-    /// Noise behavior for <see cref="BJT"/>
+    /// Noise behavior for <see cref="BipolarJunctionTransistor"/>
     /// </summary>
     public class NoiseBehavior : Behaviors.NoiseBehavior, IConnectedBehavior
     {

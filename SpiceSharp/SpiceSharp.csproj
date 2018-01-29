@@ -61,7 +61,7 @@
     <Compile Include="Components\RLC\MUT\BaseParameters.cs" />
     <Compile Include="Components\RLC\MUT\TransientBehavior.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\BaseParameters.cs" />
-    <Compile Include="Components\Semiconductors\Bipolar\BJTExcessPhaseEventArgs.cs" />
+    <Compile Include="Components\Semiconductors\Bipolar\ExcessPhaseEventArgs.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\ModelBaseParameters.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\ModelNoiseParameters.cs" />
     <Compile Include="Components\Semiconductors\Bipolar\TransientBehavior.cs" />
@@ -208,8 +208,8 @@
     <Compile Include="Simulations\IntegrationMethods\IntegrationParameters.cs" />
     <Compile Include="Components\RLC\IND\Inductor.cs" />
     <Compile Include="Components\RLC\MUT\MutualInductance.cs" />
-    <Compile Include="Components\Semiconductors\Bipolar\BJT.cs" />
-    <Compile Include="Components\Semiconductors\Bipolar\BJTModel.cs" />
+    <Compile Include="Components\Semiconductors\Bipolar\BipolarJunctionTransistor.cs" />
+    <Compile Include="Components\Semiconductors\Bipolar\BipolarJunctionTransistorModel.cs" />
     <Compile Include="Components\Semiconductors\DIO\Diode.cs" />
     <Compile Include="Components\Semiconductors\DIO\DiodeModel.cs" />
     <Compile Include="Components\Semiconductors\Semiconductor.cs" />

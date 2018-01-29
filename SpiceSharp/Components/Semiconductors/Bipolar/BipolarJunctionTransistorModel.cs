@@ -3,15 +3,15 @@
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A model for a <see cref="BJT"/>
+    /// A model for a <see cref="BipolarJunctionTransistor"/>
     /// </summary>
-    public class BJTModel : Model
+    public class BipolarJunctionTransistorModel : Model
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BJTModel(Identifier name) : base(name)
+        public BipolarJunctionTransistorModel(Identifier name) : base(name)
         {
             // Add parameters
             Parameters.Add(new ModelBaseParameters());

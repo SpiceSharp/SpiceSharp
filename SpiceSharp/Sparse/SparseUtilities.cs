@@ -121,8 +121,8 @@ namespace SpiceSharp.Sparse
         {
             int Col1 = pTwin1.Col, Col2 = pTwin2.Col;
 
-            SparseDefinitions.SWAP(ref matrix.FirstInCol[Col1], ref matrix.FirstInCol[Col2]);
-            SparseDefinitions.SWAP(ref matrix.Translation.IntToExtColMap[Col1], ref matrix.Translation.IntToExtColMap[Col2]);
+            SparseDefinitions.Swap(ref matrix.FirstInCol[Col1], ref matrix.FirstInCol[Col2]);
+            SparseDefinitions.Swap(ref matrix.Translation.IntToExtColMap[Col1], ref matrix.Translation.IntToExtColMap[Col2]);
             matrix.Translation.ExtToIntColMap[matrix.Translation.IntToExtColMap[Col2]] = Col2;
             matrix.Translation.ExtToIntColMap[matrix.Translation.IntToExtColMap[Col1]] = Col1;
 

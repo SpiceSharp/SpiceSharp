@@ -12,7 +12,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="first">First argument</param>
         /// <param name="second">Second argument</param>
-        internal static void SWAP(ref int first, ref int second)
+        internal static void Swap(ref int first, ref int second)
         {
             int swapx = first;
             first = second;
@@ -24,7 +24,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="first">First argument</param>
         /// <param name="second">Second argument</param>
-        internal static void SWAP(ref long first, ref long second)
+        internal static void Swap(ref long first, ref long second)
         {
             long swapx = first;
             first = second;
@@ -36,7 +36,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="first">First argument</param>
         /// <param name="second">Second argument</param>
-        internal static void SWAP(ref double first, ref double second)
+        internal static void Swap(ref double first, ref double second)
         {
             double swapx = first;
             first = second;
@@ -48,7 +48,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="first">First argument</param>
         /// <param name="second">Second argument</param>
-        internal static void SWAP(ref ElementValue first, ref ElementValue second)
+        internal static void Swap(ref ElementValue first, ref ElementValue second)
         {
             ElementValue swapx = first;
             first = second;
@@ -60,7 +60,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="first">First argument</param>
         /// <param name="second">Second argument</param>
-        internal static void SWAP(ref MatrixElement first, ref MatrixElement second)
+        internal static void Swap(ref MatrixElement first, ref MatrixElement second)
         {
             MatrixElement swapx = first;
             first = second;

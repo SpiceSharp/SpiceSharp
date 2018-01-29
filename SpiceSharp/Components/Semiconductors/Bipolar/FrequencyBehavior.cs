@@ -8,7 +8,7 @@ using SpiceSharp.Attributes;
 namespace SpiceSharp.Components.BipolarBehaviors
 {
     /// <summary>
-    /// AC behavior for <see cref="BJT"/>
+    /// AC behavior for <see cref="BipolarJunctionTransistor"/>
     /// </summary>
     public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
     {

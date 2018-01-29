@@ -358,8 +358,8 @@ namespace SpiceSharp.Sparse
             {
                 RowExchange(matrix, Step, Row);
                 ColExchange(matrix, Step, Col);
-                SparseDefinitions.SWAP(ref pivoting.MarkowitzProd[Step], ref pivoting.MarkowitzProd[Row]);
-                SparseDefinitions.SWAP(ref matrix.Diag[Row], ref matrix.Diag[Step]);
+                SparseDefinitions.Swap(ref pivoting.MarkowitzProd[Step], ref pivoting.MarkowitzProd[Row]);
+                SparseDefinitions.Swap(ref matrix.Diag[Row], ref matrix.Diag[Step]);
             }
             else
             {
@@ -436,7 +436,7 @@ namespace SpiceSharp.Sparse
             MatrixElement Element1, Element2;
 
             if (Row1 > Row2)
-                SparseDefinitions.SWAP(ref Row1, ref Row2);
+                SparseDefinitions.Swap(ref Row1, ref Row2);
 
             Row1Ptr = matrix.FirstInRow[Row1];
             Row2Ptr = matrix.FirstInRow[Row2];
@@ -484,9 +484,9 @@ namespace SpiceSharp.Sparse
             }  // end of while(Row1Ptr != null ||  Row2Ptr != null) 
 
             if (matrix.Pivoting.InternalVectorsAllocated)
-                SparseDefinitions.SWAP(ref matrix.Pivoting.MarkowitzRow[Row1], ref matrix.Pivoting.MarkowitzRow[Row2]);
-            SparseDefinitions.SWAP(ref matrix.FirstInRow[Row1], ref matrix.FirstInRow[Row2]);
-            SparseDefinitions.SWAP(ref matrix.Translation.IntToExtRowMap[Row1], ref matrix.Translation.IntToExtRowMap[Row2]);
+                SparseDefinitions.Swap(ref matrix.Pivoting.MarkowitzRow[Row1], ref matrix.Pivoting.MarkowitzRow[Row2]);
+            SparseDefinitions.Swap(ref matrix.FirstInRow[Row1], ref matrix.FirstInRow[Row2]);
+            SparseDefinitions.Swap(ref matrix.Translation.IntToExtRowMap[Row1], ref matrix.Translation.IntToExtRowMap[Row2]);
             matrix.Translation.ExtToIntRowMap[matrix.Translation.IntToExtRowMap[Row1]] = Row1;
             matrix.Translation.ExtToIntRowMap[matrix.Translation.IntToExtRowMap[Row2]] = Row2;
         }
@@ -505,7 +505,7 @@ namespace SpiceSharp.Sparse
 
             // Begin `spcColExchange'
             if (Col1 > Col2)
-                SparseDefinitions.SWAP(ref Col1, ref Col2);
+                SparseDefinitions.Swap(ref Col1, ref Col2);
 
             Col1Ptr = matrix.FirstInCol[Col1];
             Col2Ptr = matrix.FirstInCol[Col2];
@@ -553,10 +553,10 @@ namespace SpiceSharp.Sparse
             }  // end of while(Col1Ptr != null || Col2Ptr != null)
 
             if (matrix.Pivoting.InternalVectorsAllocated)
-                SparseDefinitions.SWAP(ref matrix.Pivoting.MarkowitzCol[Col1], ref matrix.Pivoting.MarkowitzCol[Col2]);
+                SparseDefinitions.Swap(ref matrix.Pivoting.MarkowitzCol[Col1], ref matrix.Pivoting.MarkowitzCol[Col2]);
 
-            SparseDefinitions.SWAP(ref matrix.FirstInCol[Col1], ref matrix.FirstInCol[Col2]);
-            SparseDefinitions.SWAP(ref matrix.Translation.IntToExtColMap[Col1], ref matrix.Translation.IntToExtColMap[Col2]);
+            SparseDefinitions.Swap(ref matrix.FirstInCol[Col1], ref matrix.FirstInCol[Col2]);
+            SparseDefinitions.Swap(ref matrix.Translation.IntToExtColMap[Col1], ref matrix.Translation.IntToExtColMap[Col2]);
             matrix.Translation.ExtToIntColMap[matrix.Translation.IntToExtColMap[Col1]] = Col1;
             matrix.Translation.ExtToIntColMap[matrix.Translation.IntToExtColMap[Col2]] = Col2;
 
