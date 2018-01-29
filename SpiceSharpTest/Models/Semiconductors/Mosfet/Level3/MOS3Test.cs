@@ -28,15 +28,15 @@ namespace SpiceSharpTest.Models.Transistors
         /// <param name="nmos">True for NMOS, false for PMOS</param>
         /// <param name="modelparams">Model parameters</param>
         /// <returns></returns>
-        protected MOS3 CreateMOS3(Identifier name, Identifier d, Identifier g, Identifier s, Identifier b,
+        protected Mosfet3 CreateMOS3(Identifier name, Identifier d, Identifier g, Identifier s, Identifier b,
             Identifier modelname, bool nmos, string modelparams)
         {
             // Create model
-            MOS3Model model = new MOS3Model(modelname, nmos);
+            Mosfet3Model model = new Mosfet3Model(modelname, nmos);
             ApplyParameters(model, modelparams);
 
             // Create transistor
-            MOS3 mos = new MOS3(name);
+            Mosfet3 mos = new Mosfet3(name);
             mos.Connect(d, g, s, b);
             mos.SetModel(model);
             return mos;

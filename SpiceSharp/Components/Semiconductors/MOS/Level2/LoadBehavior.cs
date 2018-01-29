@@ -8,7 +8,7 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Components.MosfetBehaviors.Level2
 {
     /// <summary>
-    /// General behavior of a <see cref="MOS2"/>
+    /// General behavior of a <see cref="Mosfet2"/>
     /// </summary>
     public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {

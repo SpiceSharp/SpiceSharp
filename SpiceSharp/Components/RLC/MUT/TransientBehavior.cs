@@ -26,8 +26,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// Nodes
         /// </summary>
         int BranchEq1, BranchEq2;
-        protected MatrixElement Br1Br2 { get; private set; }
-        protected MatrixElement Br2Br1 { get; private set; }
+        protected MatrixElement Branch1Branch2 { get; private set; }
+        protected MatrixElement Branch2Branch1 { get; private set; }
 
         /// <summary>
         /// Y-matrix contribution
@@ -105,8 +105,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             BranchEq2 = load2.BranchEq;
 
             // Get matrix pointers
-            Br1Br2 = matrix.GetElement(BranchEq1, BranchEq2);
-            Br2Br1 = matrix.GetElement(BranchEq2, BranchEq1);
+            Branch1Branch2 = matrix.GetElement(BranchEq1, BranchEq2);
+            Branch2Branch1 = matrix.GetElement(BranchEq2, BranchEq1);
         }
 
         /// <summary>
@@ -114,8 +114,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         public override void Unsetup()
         {
-            Br1Br2 = null;
-            Br2Br1 = null;
+            Branch1Branch2 = null;
+            Branch2Branch1 = null;
 
             // Remove events
             tran1.UpdateFlux -= UpdateFlux1;
@@ -132,8 +132,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             // Load Y-matrix
-            Br1Br2.Sub(Geq);
-            Br2Br1.Sub(Geq);
+            Branch1Branch2.Sub(Geq);
+            Branch2Branch1.Sub(Geq);
         }
     }
 }

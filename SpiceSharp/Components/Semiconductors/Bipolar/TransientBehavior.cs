@@ -265,7 +265,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             ps = mbp.PotentialSubstrate;
             xms = mbp.ExponentialSubstrate;
             xtf = mbp.TransitTimeBiasCoeffF;
-            ovtf = modeltemp.TransitTimeVBCFactor;
+            ovtf = modeltemp.TransitTimeVbcFactor;
             xjtf = mbp.TransitTimeHighCurrentF * bp.Area;
             if (tf != 0 && vbe > 0)
             {
@@ -401,7 +401,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             ps = mbp.PotentialSubstrate;
             xms = mbp.ExponentialSubstrate;
             xtf = mbp.TransitTimeBiasCoeffF;
-            ovtf = modeltemp.TransitTimeVBCFactor;
+            ovtf = modeltemp.TransitTimeVbcFactor;
             xjtf = mbp.TransitTimeHighCurrentF * bp.Area;
             if (tf != 0 && vbe > 0)
             {

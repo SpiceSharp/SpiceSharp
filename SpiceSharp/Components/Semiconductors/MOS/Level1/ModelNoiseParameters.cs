@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
-    /// Noise parameters for a <see cref="MOS1"/>
+    /// Noise parameters for a <see cref="Mosfet1"/>
     /// </summary>
     public class ModelNoiseParameters : ParameterSet
     {

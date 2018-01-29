@@ -131,10 +131,10 @@
     <Compile Include="Components\Currentsources\ISRC\FrequencyBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\ModelTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\TemperatureBehavior.cs" />
-    <Compile Include="Components\Semiconductors\MOS\Level1\MOS1.cs" />
+    <Compile Include="Components\Semiconductors\MOS\Level1\Mosfet1.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level1\FrequencyBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level1\LoadBehavior.cs" />
-    <Compile Include="Components\Semiconductors\MOS\Level1\MOS1Model.cs" />
+    <Compile Include="Components\Semiconductors\MOS\Level1\Mosfet1Model.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level1\ModelTemperatureBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level1\NoiseBehavior.cs" />
     <Compile Include="Components\Semiconductors\MOS\Level1\TemperatureBehavior.cs" />
@@ -198,10 +198,10 @@
     <Compile Include="Components\Noise\ComponentNoise.cs" />
     <Compile Include="Components\Noise\NoiseShot.cs" />
     <Compile Include="Components\Noise\NoiseThermal.cs" />
-    <Compile Include="Components\Semiconductors\MOS\Level2\MOS2.cs" />
-    <Compile Include="Components\Semiconductors\MOS\Level2\MOS2Model.cs" />
-    <Compile Include="Components\Semiconductors\MOS\Level3\MOS3.cs" />
-    <Compile Include="Components\Semiconductors\MOS\Level3\MOS3Model.cs" />
+    <Compile Include="Components\Semiconductors\MOS\Level2\Mosfet2.cs" />
+    <Compile Include="Components\Semiconductors\MOS\Level2\Mosfet2Model.cs" />
+    <Compile Include="Components\Semiconductors\MOS\Level3\Mosfet3.cs" />
+    <Compile Include="Components\Semiconductors\MOS\Level3\Mosfet3Model.cs" />
     <Compile Include="Components\Semiconductors\MOS\Transistor.cs" />
     <Compile Include="Attributes\PinAttribute.cs" />
     <Compile Include="Simulations\Base\TimeSimulation.cs" />

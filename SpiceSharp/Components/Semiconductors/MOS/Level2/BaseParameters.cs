@@ -5,7 +5,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.Components.MosfetBehaviors.Level2
 {
     /// <summary>
-    /// Base parameters for a <see cref="MOS2"/>
+    /// Base parameters for a <see cref="Mosfet2"/>
     /// </summary>
     public class BaseParameters : ParameterSet
     {

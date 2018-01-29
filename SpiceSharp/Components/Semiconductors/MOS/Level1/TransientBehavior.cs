@@ -9,7 +9,7 @@ using SpiceSharp.Components.MosfetBehaviors;
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
-    /// Transient behavior for a <see cref="MOS1"/>
+    /// Transient behavior for a <see cref="Mosfet1"/>
     /// </summary>
     public class TransientBehavior : Behaviors.TransientBehavior, IConnectedBehavior
     {

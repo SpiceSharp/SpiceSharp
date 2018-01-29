@@ -1,17 +1,17 @@
-﻿using SpiceSharp.Components.MosfetBehaviors.Level1;
+﻿using SpiceSharp.Components.MosfetBehaviors.Level2;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A model for a <see cref="MOS1"/>
+    /// A model for a <see cref="Mosfet2"/>
     /// </summary>
-    public class MOS1Model : Model
+    public class Mosfet2Model : Model
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS1Model(Identifier name) : base(name)
+        public Mosfet2Model(Identifier name) : base(name)
         {
             // Add parameters
             Parameters.Add(new ModelBaseParameters());

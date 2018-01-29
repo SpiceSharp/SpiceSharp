@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.MosfetBehaviors.Level3
 {
     /// <summary>
-    /// Base parameters for a <see cref="MOS3Model"/>
+    /// Base parameters for a <see cref="Mosfet3Model"/>
     /// </summary>
     public class ModelBaseParameters : ParameterSet
     {

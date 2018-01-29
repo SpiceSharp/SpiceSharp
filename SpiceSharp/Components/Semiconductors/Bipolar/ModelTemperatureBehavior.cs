@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [PropertyName("emitterconduct"), PropertyInfo("Emitter conductance")]
         public double EmitterConduct { get; internal set; }
         [PropertyName("transtimevbcfact"), PropertyInfo("Transit time VBC factor")]
-        public double TransitTimeVBCFactor { get; internal set; }
+        public double TransitTimeVbcFactor { get; internal set; }
         [PropertyName("excessphasefactor"), PropertyInfo("Excess phase fact.")]
         public double ExcessPhaseFactor { get; internal set; }
         
@@ -130,9 +130,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
             else
                 EmitterConduct = 0;
             if (mbp.TransitTimeFVBC.Given && mbp.TransitTimeFVBC != 0)
-                TransitTimeVBCFactor = 1 / (mbp.TransitTimeFVBC * 1.44);
+                TransitTimeVbcFactor = 1 / (mbp.TransitTimeFVBC * 1.44);
             else
-                TransitTimeVBCFactor = 0;
+                TransitTimeVbcFactor = 0;
             ExcessPhaseFactor = (mbp.ExcessPhase / (180.0 / Math.PI)) * mbp.TransitTimeF;
             if (mbp.DepletionCapCoeff.Given)
             {

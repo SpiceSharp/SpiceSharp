@@ -27,15 +27,15 @@ namespace SpiceSharpTest.Models.Transistors
         /// <param name="modelname">Model name</param>
         /// <param name="modelparams">Model parameters</param>
         /// <returns></returns>
-        protected MOS2 CreateMOS2(Identifier name, Identifier d, Identifier g, Identifier s, Identifier b,
+        protected Mosfet2 CreateMOS2(Identifier name, Identifier d, Identifier g, Identifier s, Identifier b,
             Identifier modelname, string modelparams)
         {
             // Create model
-            MOS2Model model = new MOS2Model(modelname);
+            Mosfet2Model model = new Mosfet2Model(modelname);
             ApplyParameters(model, modelparams);
 
             // Create transistor
-            MOS2 mos = new MOS2(name);
+            Mosfet2 mos = new Mosfet2(name);
             mos.Connect(d, g, s, b);
             mos.SetModel(model);
             return mos;

@@ -7,7 +7,7 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="MOS1"/>
+    /// Temperature behavior for a <see cref="Mosfet1"/>
     /// </summary>
     public class TemperatureBehavior : Behaviors.TemperatureBehavior
     {

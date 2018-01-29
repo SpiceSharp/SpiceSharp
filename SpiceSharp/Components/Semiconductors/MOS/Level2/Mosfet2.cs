@@ -1,19 +1,19 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Components.MosfetBehaviors.Level3;
+using SpiceSharp.Components.MosfetBehaviors.Level2;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A MOS3 Mosfet
-    /// Level 3, a semi-empirical model(see reference for level 3).
+    /// A MOS2 Mosfet.
+    /// Level 2, A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits Using SPICE2, ERL Memo No. M80/7, Electronics Research Laboratory University of California, Berkeley, October 1980.
     /// </summary>
     [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk"), Connected(0, 2), Connected(0, 3)]
-    public class MOS3 : Component
+    public class Mosfet2 : Component
     {
         /// <summary>
-        /// Set the model for the MOS3 model
+        /// Set the model for the MOS2 Mosfet.
         /// </summary>
-        public void SetModel(MOS3Model model) => Model = model;
+        public void SetModel(Model model) => Model = model;
 
         /// <summary>
         /// Nodes
@@ -30,13 +30,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constants
         /// </summary>
-        public const int MOS3PinCount = 4;
-
+        public const int MOS2PinCount = 4;
+        
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public MOS3(Identifier name) : base(name, MOS3PinCount)
+        public Mosfet2(Identifier name) : base(name, MOS2PinCount)
         {
             // Add parameters
             Parameters.Add(new BaseParameters());
@@ -55,7 +55,6 @@ namespace SpiceSharp.Components
         /// <param name="circuit">The circuit</param>
         public override void Setup(Circuit circuit)
         {
-            // Allocate nodes
             var nodes = BindNodes(circuit);
             DrainNode = nodes[0].Index;
             GateNode = nodes[1].Index;

@@ -23,15 +23,15 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
         /// <param name="modelname">Model name</param>
         /// <param name="modelparams">Model parameters</param>
         /// <returns></returns>
-        protected MOS1 CreateMOS1(Identifier name, Identifier d, Identifier g, Identifier s, Identifier b,
+        protected Mosfet1 CreateMOS1(Identifier name, Identifier d, Identifier g, Identifier s, Identifier b,
             Identifier modelname, string modelparams)
         {
             // Create model
-            MOS1Model model = new MOS1Model(modelname);
+            Mosfet1Model model = new Mosfet1Model(modelname);
             ApplyParameters(model, modelparams);
 
             // Create mosfet
-            MOS1 mos = new MOS1(name);
+            Mosfet1 mos = new Mosfet1(name);
             mos.SetModel(model);
             mos.Connect(d, g, s, b);
             return mos;

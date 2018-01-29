@@ -6,7 +6,7 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
-    /// Noise behavior for a <see cref="MOS1"/>
+    /// Noise behavior for a <see cref="Mosfet1"/>
     /// </summary>
     public class NoiseBehavior : Behaviors.NoiseBehavior, IConnectedBehavior
     {
