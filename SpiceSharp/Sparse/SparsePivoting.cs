@@ -703,7 +703,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="pElement">Element where we need to start searching</param>
         /// <returns></returns>
-        public double FindLargestInCol(MatrixElement pElement)
+        public static double FindLargestInCol(MatrixElement pElement)
         {
             double Magnitude, Largest = 0.0;
 
@@ -725,7 +725,7 @@ namespace SpiceSharp.Sparse
         /// <param name="pElement">Element</param>
         /// <param name="Step">Step</param>
         /// <returns></returns>
-        private double FindBiggestInColExclude(Matrix matrix, MatrixElement pElement, int Step)
+        static double FindBiggestInColExclude(Matrix matrix, MatrixElement pElement, int Step)
         {
             int Row;
             int Col;

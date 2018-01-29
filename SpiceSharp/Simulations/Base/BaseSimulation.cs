@@ -452,7 +452,7 @@ namespace SpiceSharp.Simulations
         /// <param name="nodes">The list of nodes</param>
         /// <param name="rownum">The row number</param>
         /// <returns></returns>
-        bool ZeroNoncurRow(Matrix matrix, Nodes nodes, int rownum)
+        static bool ZeroNoncurRow(Matrix matrix, Nodes nodes, int rownum)
         {
             bool currents = false;
             for (int n = 0; n < nodes.Count; n++)

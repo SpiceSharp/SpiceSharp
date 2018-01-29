@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, contPosNode, contNegNode;
+        int posNode, negNode;
         protected MatrixElement PosPosPtr { get; private set; }
         protected MatrixElement NegPosPtr { get; private set; }
         protected MatrixElement PosNegPtr { get; private set; }
@@ -57,8 +57,6 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             posNode = pins[0];
             negNode = pins[1];
-            contPosNode = pins[2];
-            contNegNode = pins[3];
         }
 
         /// <summary>

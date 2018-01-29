@@ -5,6 +5,7 @@ namespace SpiceSharp.Sparse
     /// <summary>
     /// Exception for Sparse matrix methods
     /// </summary>
+    [Serializable]
     public class SparseException : Exception
     {
         /// <summary>

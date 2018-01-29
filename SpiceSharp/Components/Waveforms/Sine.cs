@@ -85,12 +85,20 @@ namespace SpiceSharp.Components
         public override double At(double time)
         {
             time -= td;
+
+            // Calculate sine wave result (no offset)
             double result = 0.0;
             if (time <= 0.0)
-                result = vo;
+                result = 0.0;
             else
-                result = vo + va * Math.Sin(freq * time * 2.0 * Math.PI);
-            return result;
+                result = va * Math.Sin(freq * time * 2.0 * Math.PI);
+
+            // Modify with theta
+            if (Theta.Given)
+                result *= Math.Exp(-(time - td) / theta);
+
+            // Return result (with offset)
+            return vo + result;
         }
 
         /// <summary>

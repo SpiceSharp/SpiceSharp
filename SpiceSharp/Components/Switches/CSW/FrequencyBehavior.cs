@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, contBranch;
+        int posNode, negNode;
         protected MatrixElement PosPosPtr { get; private set; }
         protected MatrixElement NegPosPtr { get; private set; }
         protected MatrixElement PosNegPtr { get; private set; }
@@ -68,7 +68,6 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            contBranch = load.ControllingBranch;
             PosPosPtr = matrix.GetElement(posNode, posNode);
             PosNegPtr = matrix.GetElement(posNode, negNode);
             NegPosPtr = matrix.GetElement(negNode, posNode);
