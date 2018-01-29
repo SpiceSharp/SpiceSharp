@@ -214,22 +214,22 @@ namespace SpiceSharp.Simulations
         /// The simulation will determine which export method is returned if multiple behaviors implement a export method by the same name
         /// </summary>
         /// <param name="name">The identifier of the entity</param>
-        /// <param name="property">The parameter name</param>
+        /// <param name="propertyName">The parameter name</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(Identifier name, string property)
+        public override Func<State, double> CreateExport(Identifier name, string propertyName)
         {
             var eb = pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
             // Most logical place to look for noise analysis: noise behaviors
-            var export = eb.Get<NoiseBehavior>()?.CreateExport(property);
+            var export = eb.Get<NoiseBehavior>()?.CreateExport(propertyName);
 
             // Next most logical place is the AcBehavior
             if (export == null)
-                export = eb.Get<FrequencyBehavior>()?.CreateExport(property);
+                export = eb.Get<FrequencyBehavior>()?.CreateExport(propertyName);
 
             // Finally look to the LoadBehavior
             if (export == null)
-                export = eb.Get<LoadBehavior>()?.CreateExport(property);
+                export = eb.Get<LoadBehavior>()?.CreateExport(propertyName);
             return export;
         }
 

@@ -49,7 +49,7 @@ namespace SpiceSharp.Sparse
                 {
                     pPivot = matrix.Diag[Step];
                     LargestInCol = SparsePivoting.FindLargestInCol(pPivot.NextInCol);
-                    if (LargestInCol * RelThreshold < SparseDefinitions.ELEMENT_MAG(pPivot))
+                    if (LargestInCol * RelThreshold < pPivot.Value.Magnitude)
                     {
                         if (matrix.Complex)
                             ComplexRowColElimination(matrix, pPivot);
@@ -238,7 +238,7 @@ namespace SpiceSharp.Sparse
 
             Size = matrix.IntSize;
             pElement = matrix.Diag[1];
-            if (SparseDefinitions.ELEMENT_MAG(pElement) == 0.0)
+            if (pElement.Value.Magnitude.Equals(0.0))
                 return ZeroPivot(matrix, 1);
 
             // Cmplx expr: *pPivot = 1.0 / *pPivot
@@ -324,7 +324,7 @@ namespace SpiceSharp.Sparse
 
                     // Check for singular matrix
                     pElement = matrix.Diag[Step];
-                    if (SparseDefinitions.ELEMENT_MAG(pElement) == 0.0)
+                    if (pElement.Value.Magnitude.Equals(0.0))
                         return ZeroPivot(matrix, Step);
                     SparseDefinitions.CMPLX_RECIPROCAL(ref pElement.Value, pElement);
                 }
@@ -890,7 +890,7 @@ namespace SpiceSharp.Sparse
             MatrixElement pLower, pUpper;
 
             // Test for zero pivot. 
-            if (SparseDefinitions.ELEMENT_MAG(pPivot) == 0.0)
+            if (pPivot.Value.Magnitude.Equals(0.0))
             {
                 MatrixIsSingular(matrix, pPivot.Row);
                 return;

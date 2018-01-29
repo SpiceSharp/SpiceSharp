@@ -1,31 +1,38 @@
-﻿using System.Numerics;
-using System.Runtime.InteropServices;
+﻿using System;
+using System.Numerics;
 
 namespace SpiceSharp.Sparse
 {
     /// <summary>
     /// A value for a matrix element
     /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
     public struct ElementValue
     {
         /// <summary>
         /// The real value
         /// </summary>
-        [FieldOffset(0)]
-        public double Real;
+        public double Real { get; set; }
 
         /// <summary>
         /// The imaginary value
         /// </summary>
-        [FieldOffset(8)]
-        public double Imag;
+        public double Imag { get; set; }
 
         /// <summary>
         /// The complex representation
         /// </summary>
-        [FieldOffset(0)]
-        public Complex Cplx;
+        public Complex Cplx
+        {
+            get
+            {
+                return new Complex(Real, Imag);
+            }
+            set
+            {
+                Real = value.Real;
+                Imag = value.Imaginary;
+            }
+        }
 
         /// <summary>
         /// Constructor
@@ -53,10 +60,9 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public override string ToString()
         {
-            if (Imag == 0.0)
+            if (Imag.Equals(0.0))
                 return "{0}".FormatString(Real);
-            else
-                return "({0}; {1})".FormatString(Real, Imag);
+            return "({0}; {1})".FormatString(Real, Imag);
         }
 
         /// <summary>
@@ -70,5 +76,10 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="value"></param>
         public static implicit operator Complex(ElementValue value) => value.Cplx;
+
+        /// <summary>
+        /// Magnitude (sum of absolute values)
+        /// </summary>
+        public double Magnitude => Math.Abs(Real) + Math.Abs(Imag);
     }
 }

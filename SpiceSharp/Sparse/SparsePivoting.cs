@@ -370,7 +370,7 @@ namespace SpiceSharp.Sparse
                 if ((ChosenPivot = matrix.Diag[I]) != null)
                 {
                     // Singleton lies on the diagonal. 
-                    PivotMag = SparseDefinitions.ELEMENT_MAG(ChosenPivot);
+                    PivotMag = ChosenPivot.Value.Magnitude;
                     if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                         return ChosenPivot;
                 }
@@ -387,7 +387,7 @@ namespace SpiceSharp.Sparse
                             // Reduced column has no elements, matrix is singular. 
                             break;
                         }
-                        PivotMag = SparseDefinitions.ELEMENT_MAG(ChosenPivot);
+                        PivotMag = ChosenPivot.Value.Magnitude;
                         if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                             return ChosenPivot;
                         else
@@ -402,7 +402,7 @@ namespace SpiceSharp.Sparse
                                     // Reduced row has no elements, matrix is singular. 
                                     break;
                                 }
-                                PivotMag = SparseDefinitions.ELEMENT_MAG(ChosenPivot);
+                                PivotMag = ChosenPivot.Value.Magnitude;
                                 if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                                     return ChosenPivot;
                             }
@@ -417,7 +417,7 @@ namespace SpiceSharp.Sparse
                         {   // Reduced row has no elements, matrix is singular. 
                             break;
                         }
-                        PivotMag = SparseDefinitions.ELEMENT_MAG(ChosenPivot);
+                        PivotMag = ChosenPivot.Value.Magnitude;
                         if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                             return ChosenPivot;
                     }
@@ -489,7 +489,7 @@ namespace SpiceSharp.Sparse
 
                 if ((pDiag = matrix.Diag[I]) == null)
                     continue; // Endless for loop 
-                if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pDiag)) <= matrix.AbsThreshold)
+                if ((Magnitude = pDiag.Value.Magnitude) <= matrix.AbsThreshold)
                     continue; // Endless for loop 
 
                 if (MarkowitzProd[index] == 1)
@@ -523,7 +523,7 @@ namespace SpiceSharp.Sparse
                     {
                         if (pOtherInRow.Col == pOtherInCol.Row)
                         {
-                            LargestOffDiagonal = Math.Max(SparseDefinitions.ELEMENT_MAG(pOtherInRow), SparseDefinitions.ELEMENT_MAG(pOtherInCol));
+                            LargestOffDiagonal = Math.Max(pOtherInRow.Value.Magnitude, pOtherInCol.Value.Magnitude);
                             if (Magnitude >= LargestOffDiagonal)
                             {
                                 // Accept pivot, it is unlikely to contribute excess error. 
@@ -540,7 +540,7 @@ namespace SpiceSharp.Sparse
             if (ChosenPivot != null)
             {
                 LargestInCol = FindBiggestInColExclude(matrix, ChosenPivot, Step);
-                if (SparseDefinitions.ELEMENT_MAG(ChosenPivot) <= matrix.RelThreshold * LargestInCol)
+                if (ChosenPivot.Value.Magnitude <= matrix.RelThreshold * LargestInCol)
                     ChosenPivot = null;
             }
             return ChosenPivot;
@@ -580,7 +580,7 @@ namespace SpiceSharp.Sparse
                     I = J;
                 if ((pDiag = matrix.Diag[I]) == null)
                     continue; // for loop 
-                if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pDiag)) <= matrix.AbsThreshold)
+                if ((Magnitude = pDiag.Value.Magnitude) <= matrix.AbsThreshold)
                     continue; // for loop 
 
                 // Test to see if diagonal's magnitude is acceptable. 
@@ -647,7 +647,7 @@ namespace SpiceSharp.Sparse
                 {
                     /* Check to see if element is the largest encountered so far.  If so, record
                        its magnitude and address. */
-                    if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pElement)) > LargestElementMag)
+                    if ((Magnitude = pElement.Value.Magnitude) > LargestElementMag)
                     {
                         LargestElementMag = Magnitude;
                         pLargestElement = pElement;
@@ -710,7 +710,7 @@ namespace SpiceSharp.Sparse
             // Search column for largest element beginning at Element. 
             while (pElement != null)
             {
-                if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pElement)) > Largest)
+                if ((Magnitude = pElement.Value.Magnitude) > Largest)
                     Largest = Magnitude;
                 pElement = pElement.NextInCol;
             }
@@ -741,14 +741,14 @@ namespace SpiceSharp.Sparse
 
             // Initialize the variable Largest. 
             if (pElement.Row != Row)
-                Largest = SparseDefinitions.ELEMENT_MAG(pElement);
+                Largest = pElement.Value.Magnitude;
             else
                 Largest = 0.0;
 
             // Search rest of column for largest element, avoiding excluded element. 
             while ((pElement = pElement.NextInCol) != null)
             {
-                if ((Magnitude = SparseDefinitions.ELEMENT_MAG(pElement)) > Largest)
+                if ((Magnitude = pElement.Value.Magnitude) > Largest)
                 {
                     if (pElement.Row != Row)
                         Largest = Magnitude;

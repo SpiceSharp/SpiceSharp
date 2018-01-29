@@ -7,9 +7,6 @@ namespace SpiceSharp.Sparse
     /// </summary>
     public static class SparseDefinitions
     {
-        internal static double ELEMENT_MAG(this ElementValue Ptr) => Math.Abs(Ptr.Real) + Math.Abs(Ptr.Imag);
-        internal static double ELEMENT_MAG(this MatrixElement Ptr) => Math.Abs(Ptr.Value.Real) + Math.Abs(Ptr.Value.Imag);
-
         // Complex assignment statements.
         internal static void CMPLX_ASSIGN(ref ElementValue to, ElementValue from)
         {
