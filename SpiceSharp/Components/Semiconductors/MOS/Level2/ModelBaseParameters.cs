@@ -90,13 +90,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Methods
         /// </summary>
         [PropertyName("nmos"), PropertyInfo("N type MOSfet model")]
-        public void SetNMOS(bool value)
+        public void SetNmos(bool value)
         {
             if (value)
                 MosfetType = 1.0;
         }
         [PropertyName("pmos"), PropertyInfo("P type MOSfet model")]
-        public void SetPMOS(bool value)
+        public void SetPmos(bool value)
         {
             if (value)
                 MosfetType = -1.0;

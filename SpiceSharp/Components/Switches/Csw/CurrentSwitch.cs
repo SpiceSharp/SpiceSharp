@@ -18,9 +18,9 @@ namespace SpiceSharp.Components
         /// Nodes
         /// </summary>
         [PropertyName("pos_node"), PropertyInfo("Positive node of the switch")]
-        public int PosNode { get; internal set; }
+        public int PosourceNode { get; internal set; }
         [PropertyName("neg_node"), PropertyInfo("Negative node of the switch")]
-        public int NegNode { get; internal set; }
+        public int NegateNode { get; internal set; }
         [PropertyName("control"), PropertyInfo("Name of the controlling source")]
         public Identifier ControllingName { get; set; }
 
@@ -81,9 +81,9 @@ namespace SpiceSharp.Components
         /// <param name="circuit">The circuit</param>
         public override void Setup(Circuit circuit)
         {
-            var nodes = BindNodes(circuit);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
+            var nodes = BindrainNodes(circuit);
+            PosourceNode = nodes[0].Index;
+            NegateNode = nodes[1].Index;
 
             // Find the voltage source
             if (circuit.Objects[ControllingName] is VoltageSource vsrc)

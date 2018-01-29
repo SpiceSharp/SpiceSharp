@@ -38,11 +38,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         [PropertyName("off"), PropertyInfo("Device initially off")]
         public bool Off { get; set; }
         [PropertyName("icvbs"), PropertyInfo("Initial B-S voltage")]
-        public Parameter InitialVBS { get; } = new Parameter();
+        public Parameter InitialVbs { get; } = new Parameter();
         [PropertyName("icvds"), PropertyInfo("Initial D-S voltage")]
-        public Parameter InitialVDS { get; } = new Parameter();
+        public Parameter InitialVds { get; } = new Parameter();
         [PropertyName("icvgs"), PropertyInfo("Initial G-S voltage")]
-        public Parameter InitialVGS { get; } = new Parameter();
+        public Parameter InitialVgs { get; } = new Parameter();
         [PropertyName("ic"), PropertyInfo("Vector of D-S, G-S, B-S voltages")]
         public void SetIC(double[] value)
         {
@@ -51,9 +51,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 
             switch (value.Length)
             {
-                case 3: InitialVBS.Set(value[2]); goto case 2;
-                case 2: InitialVGS.Set(value[1]); goto case 1;
-                case 1: InitialVDS.Set(value[0]); break;
+                case 3: InitialVbs.Set(value[2]); goto case 2;
+                case 2: InitialVgs.Set(value[1]); goto case 1;
+                case 1: InitialVds.Set(value[0]); break;
                 default:
                     throw new BadParameterException("ic");
             }

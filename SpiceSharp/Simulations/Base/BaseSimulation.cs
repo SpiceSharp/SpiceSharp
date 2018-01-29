@@ -292,7 +292,7 @@ namespace SpiceSharp.Simulations
                 switch (state.Init)
                 {
                     case State.InitFlags.InitFloat:
-                        if (state.UseDC && state.HadNodeset)
+                        if (state.UseDC && state.HadrainNodeset)
                         {
                             if (pass)
                                 state.IsCon = false;
@@ -427,7 +427,7 @@ namespace SpiceSharp.Simulations
                 if (nodes.NodeSets.ContainsKey(node.Name))
                 {
                     node.Diagonal = state.Matrix.GetElement(node.Index, node.Index);
-                    state.HadNodeset = true;
+                    state.HadrainNodeset = true;
                     state.Rhs[node.Index] = nodes.NodeSets[node.Name];
                 }
                 if (nodes.InitialConditions.ContainsKey(node.Name))

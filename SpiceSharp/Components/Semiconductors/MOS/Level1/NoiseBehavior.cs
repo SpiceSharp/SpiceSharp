@@ -23,12 +23,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Nodes
         /// </summary>
-        int dNode, gNode, sNode, bNode, sNodePrime, dNodePrime;
+        int drainNode, gateNode, sourceNode, bulkNode, sourceNodePrime, drainNodePrime;
 
         /// <summary>
         /// Noise generators
         /// </summary>
-        public ComponentNoise MOS1Noise { get; } = new ComponentNoise(
+        public ComponentNoise Mosfet1Noise { get; } = new ComponentNoise(
             new NoiseThermal("rd", 0, 4),
             new NoiseThermal("rs", 2, 5),
             new NoiseThermal("id", 4, 5),
@@ -75,10 +75,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            dNode = pins[0];
-            gNode = pins[1];
-            sNode = pins[2];
-            bNode = pins[3];
+            drainNode = pins[0];
+            gateNode = pins[1];
+            sourceNode = pins[2];
+            bulkNode = pins[3];
         }
 
         /// <summary>
@@ -87,12 +87,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public override void ConnectNoise()
         {
             // Get extra equations
-            dNodePrime = load.DrainNodePrime;
-            sNodePrime = load.SourceNodePrime;
+            drainNodePrime = load.DrainNodePrime;
+            sourceNodePrime = load.SourceNodePrime;
 
             // Connect noise
-            MOS1Noise.Setup(dNode, gNode, sNode, bNode,
-                dNodePrime, sNodePrime);
+            Mosfet1Noise.Setup(drainNode, gateNode, sourceNode, bulkNode,
+                drainNodePrime, sourceNodePrime);
         }
 
         /// <summary>
@@ -114,14 +114,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             coxSquared *= coxSquared;
 
             // Set noise parameters
-            MOS1Noise.Generators[RdNoise].SetCoefficients(temp.DrainConductance);
-            MOS1Noise.Generators[RsNoise].SetCoefficients(temp.SourceConductance);
-            MOS1Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(load.Gm));
-            MOS1Noise.Generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent * Math.Log(Math.Max(Math.Abs(load.Cd), 1e-38))) 
+            Mosfet1Noise.Generators[RdNoise].SetCoefficients(temp.DrainConductance);
+            Mosfet1Noise.Generators[RsNoise].SetCoefficients(temp.SourceConductance);
+            Mosfet1Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(load.Gm));
+            Mosfet1Noise.Generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent * Math.Log(Math.Max(Math.Abs(load.Cd), 1e-38))) 
                 / (bp.Width * (bp.Length - 2 * mbp.LatDiff) * coxSquared) / noise.Freq);
 
             // Evaluate noise sources
-            MOS1Noise.Evaluate(simulation);
+            Mosfet1Noise.Evaluate(simulation);
         }
     }
 }

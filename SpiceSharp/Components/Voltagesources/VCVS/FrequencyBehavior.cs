@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, contPosNode, contNegNode, branchEq;
+        int posourceNode, negateNode, contPosourceNode, contNegateNode, branchEq;
         protected MatrixElement PosBranchPtr { get; private set; }
         protected MatrixElement NegBranchPtr { get; private set; }
         protected MatrixElement BranchPosPtr { get; private set; }
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
+            return state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
         }
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Complex current")]
         public Complex GetCurrent(State state)
@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
+            Complex v = state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
             Complex i = state.ComplexSolution[branchEq];
             return -v * Complex.Conjugate(i);
         }
@@ -91,10 +91,10 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
-            contPosNode = pins[2];
-            contNegNode = pins[3];
+            posourceNode = pins[0];
+            negateNode = pins[1];
+            contPosourceNode = pins[2];
+            contNegateNode = pins[3];
         }
 
         /// <summary>
@@ -107,12 +107,12 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
             branchEq = load.BranchEq;
-            PosBranchPtr = matrix.GetElement(posNode, branchEq);
-            NegBranchPtr = matrix.GetElement(negNode, branchEq);
-            BranchPosPtr = matrix.GetElement(branchEq, posNode);
-            BranchNegPtr = matrix.GetElement(branchEq, negNode);
-            BranchControlPosPtr = matrix.GetElement(branchEq, contPosNode);
-            BranchControlNegPtr = matrix.GetElement(branchEq, contNegNode);
+            PosBranchPtr = matrix.GetElement(posourceNode, branchEq);
+            NegBranchPtr = matrix.GetElement(negateNode, branchEq);
+            BranchPosPtr = matrix.GetElement(branchEq, posourceNode);
+            BranchNegPtr = matrix.GetElement(branchEq, negateNode);
+            BranchControlPosPtr = matrix.GetElement(branchEq, contPosourceNode);
+            BranchControlNegPtr = matrix.GetElement(branchEq, contNegateNode);
         }
 
         /// <summary>

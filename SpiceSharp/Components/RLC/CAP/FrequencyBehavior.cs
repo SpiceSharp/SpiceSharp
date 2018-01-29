@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int posourceNode, negateNode;
         protected MatrixElement PosPosPtr { get; private set; }
         protected MatrixElement NegNegPtr { get; private set; }
         protected MatrixElement PosNegPtr { get; private set; }
@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
+            return state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
         }
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Capacitor current")]
         public Complex GetCurrent(State state)
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             Complex conductance = state.Laplace * bp.Capacitance.Value;
-            return (state.ComplexSolution[posNode] - state.ComplexSolution[negNode]) * conductance;
+            return (state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode]) * conductance;
         }
         [PropertyName("p"), PropertyInfo("Capacitor power")]
         public Complex GetPower(State state)
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             Complex conductance = state.Laplace * bp.Capacitance.Value;
-            Complex voltage = state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
+            Complex voltage = state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
             return voltage * Complex.Conjugate(voltage * conductance);
         }
 
@@ -80,8 +80,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            posourceNode = pins[0];
+            negateNode = pins[1];
         }
 
         /// <summary>
@@ -94,10 +94,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
 
-            PosPosPtr = matrix.GetElement(posNode, posNode);
-            NegNegPtr = matrix.GetElement(negNode, negNode);
-            NegPosPtr = matrix.GetElement(negNode, posNode);
-            PosNegPtr = matrix.GetElement(posNode, negNode);
+            PosPosPtr = matrix.GetElement(posourceNode, posourceNode);
+            NegNegPtr = matrix.GetElement(negateNode, negateNode);
+            NegPosPtr = matrix.GetElement(negateNode, posourceNode);
+            PosNegPtr = matrix.GetElement(posourceNode, negateNode);
         }
         
         /// <summary>

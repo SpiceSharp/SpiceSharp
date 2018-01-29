@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, branchEq;
+        int posourceNode, negateNode, branchEq;
 
         /// <summary>
         /// Matrix elements
@@ -49,7 +49,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.ComplexSolution[posNode] - state.ComplexSolution[negNode];
+            Complex v = state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
             Complex i = state.ComplexSolution[branchEq];
             return -v * Complex.Conjugate(i);
         }
@@ -91,8 +91,8 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            posourceNode = pins[0];
+            negateNode = pins[1];
         }
 
         /// <summary>
@@ -104,10 +104,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            PosBranchPtr = matrix.GetElement(posNode, branchEq);
-            BranchPosPtr = matrix.GetElement(branchEq, posNode);
-            NegBranchPtr = matrix.GetElement(negNode, branchEq);
-            BranchNegPtr = matrix.GetElement(branchEq, negNode);
+            PosBranchPtr = matrix.GetElement(posourceNode, branchEq);
+            BranchPosPtr = matrix.GetElement(branchEq, posourceNode);
+            NegBranchPtr = matrix.GetElement(negateNode, branchEq);
+            BranchNegPtr = matrix.GetElement(branchEq, negateNode);
         }
 
         /// <summary>

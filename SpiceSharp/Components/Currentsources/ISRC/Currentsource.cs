@@ -12,8 +12,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Nodes
         /// </summary>
-        public int PosNode { get; private set; }
-        public int NegNode { get; private set; }
+        public int PosourceNode { get; private set; }
+        public int NegateNode { get; private set; }
 
         /// <summary>
         /// Constants
@@ -89,9 +89,9 @@ namespace SpiceSharp.Components
         /// <param name="circuit">The circuit</param>
         public override void Setup(Circuit circuit)
         {
-            var nodes = BindNodes(circuit);
-            PosNode = nodes[0].Index;
-            NegNode = nodes[1].Index;
+            var nodes = BindrainNodes(circuit);
+            PosourceNode = nodes[0].Index;
+            NegateNode = nodes[1].Index;
         }
     }
 }

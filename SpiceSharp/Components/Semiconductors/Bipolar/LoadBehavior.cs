@@ -262,8 +262,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             icheck = false;
             if (state.Init == State.InitFlags.InitJct && state.Domain == State.DomainType.Time && state.UseDC && state.UseIC)
             {
-                vbe = mbp.MosfetType * bp.InitialVbe;
-                vce = mbp.MosfetType * bp.InitialVce;
+                vbe = mbp.BipolarType * bp.InitialVbe;
+                vce = mbp.BipolarType * bp.InitialVce;
                 vbc = vbe - vce;
             }
             else if (state.Init == State.InitFlags.InitJct && !bp.Off)
@@ -281,8 +281,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 /* 
                  * compute new nonlinear branch voltages
                  */
-                vbe = mbp.MosfetType * (state.Solution[BasePrimeNode] - state.Solution[EmitPrimeNode]);
-                vbc = mbp.MosfetType * (state.Solution[BasePrimeNode] - state.Solution[ColPrimeNode]);
+                vbe = mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitPrimeNode]);
+                vbc = mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[ColPrimeNode]);
 
                 /* 
 				 * limit nonlinear branch voltages
@@ -426,8 +426,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             /* 
 			 * load current excitation vector
 			 */
-            ceqbe = mbp.MosfetType * (cc + cb - vbe * (gm + go + gpi) + vbc * go);
-            ceqbc = mbp.MosfetType * (-cc + vbe * (gm + go) - vbc * (gmu + go));
+            ceqbe = mbp.BipolarType * (cc + cb - vbe * (gm + go + gpi) + vbc * go);
+            ceqbc = mbp.BipolarType * (-cc + vbe * (gm + go) - vbc * (gmu + go));
 
             state.Rhs[baseNode] += (-ceqbx);
             state.Rhs[ColPrimeNode] += (ceqcs + ceqbx + ceqbc);
@@ -473,8 +473,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             double vbe, vbc, delvbe, delvbc, cchat, cbhat, cc, cb;
 
-            vbe = mbp.MosfetType * (state.Solution[BasePrimeNode] - state.Solution[EmitPrimeNode]);
-            vbc = mbp.MosfetType * (state.Solution[BasePrimeNode] - state.Solution[ColPrimeNode]);
+            vbe = mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitPrimeNode]);
+            vbc = mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[ColPrimeNode]);
             delvbe = vbe - Vbe;
             delvbc = vbc - Vbe;
             cchat = Cc + (Gm + Go) * delvbe - (Go + Gmu) * delvbc;

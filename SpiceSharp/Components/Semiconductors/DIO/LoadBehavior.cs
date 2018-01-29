@@ -23,7 +23,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int posourceNode, negateNode;
         public int PosPrimeNode { get; private set; }
         protected MatrixElement PosPosPrimePtr { get; private set; }
         protected MatrixElement NegPosPrimePtr { get; private set; }
@@ -74,11 +74,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
             switch (propertyName)
             {
                 case "vd": return (State state) => Voltage;
-                case "v": return (State state) => state.Solution[posNode] - state.Solution[negNode];
+                case "v": return (State state) => state.Solution[posourceNode] - state.Solution[negateNode];
                 case "i":
                 case "id": return (State state) => Current;
                 case "gd": return (State state) => Conduct;
-                case "p": return (State state) => (state.Solution[posNode] - state.Solution[negNode]) * -Current;
+                case "p": return (State state) => (state.Solution[posourceNode] - state.Solution[negateNode]) * -Current;
                 case "pd": return (State state) => -Voltage * Current;
                 default: return null;
             }
@@ -94,8 +94,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            posourceNode = pins[0];
+            negateNode = pins[1];
         }
         
         /// <summary>
@@ -111,17 +111,17 @@ namespace SpiceSharp.Components.DiodeBehaviors
             
             // Create
             if (mbp.Resistance.Value == 0)
-                PosPrimeNode = posNode;
+                PosPrimeNode = posourceNode;
             else
                 PosPrimeNode = nodes.Create(Name.Grow("#pos")).Index;
 
             // Get matrix pointers
-            PosPosPrimePtr = matrix.GetElement(posNode, PosPrimeNode);
-            NegPosPrimePtr = matrix.GetElement(negNode, PosPrimeNode);
-            PosPrimePosPtr = matrix.GetElement(PosPrimeNode, posNode);
-            PosPrimeNegPtr = matrix.GetElement(PosPrimeNode, negNode);
-            PosPosPtr = matrix.GetElement(posNode, posNode);
-            NegNegPtr = matrix.GetElement(negNode, negNode);
+            PosPosPrimePtr = matrix.GetElement(posourceNode, PosPrimeNode);
+            NegPosPrimePtr = matrix.GetElement(negateNode, PosPrimeNode);
+            PosPrimePosPtr = matrix.GetElement(PosPrimeNode, posourceNode);
+            PosPrimeNegPtr = matrix.GetElement(PosPrimeNode, negateNode);
+            PosPosPtr = matrix.GetElement(posourceNode, posourceNode);
+            NegNegPtr = matrix.GetElement(negateNode, negateNode);
             PosPrimePosPrimePtr = matrix.GetElement(PosPrimeNode, PosPrimeNode);
         }
 
@@ -176,7 +176,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             else
             {
                 // Get voltage over the diode (without series resistance)
-                vd = state.Solution[PosPrimeNode] - state.Solution[negNode];
+                vd = state.Solution[PosPrimeNode] - state.Solution[negateNode];
 
                 // limit new junction voltage
                 if ((mbp.BreakdownVoltage.Given) && (vd < Math.Min(0, -temp.TBrkdwnV + 10 * vte)))
@@ -229,7 +229,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // Load Rhs vector
             cdeq = cd - gd * vd;
-            state.Rhs[negNode] += cdeq;
+            state.Rhs[negateNode] += cdeq;
             state.Rhs[PosPrimeNode] -= cdeq;
 
             // Load Y-matrix
@@ -255,7 +255,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var state = simulation.State;
             var config = simulation.BaseConfiguration;
             double delvd, cdhat, cd;
-            double vd = state.Solution[PosPrimeNode] - state.Solution[negNode];
+            double vd = state.Solution[PosPrimeNode] - state.Solution[negateNode];
 
             delvd = vd - Voltage;
             cdhat = Current + Conduct * delvd;

@@ -204,7 +204,7 @@ namespace SpiceSharp.Simulations
                 switch (state.Init)
                 {
                     case State.InitFlags.InitFloat:
-                        if (state.UseDC && state.HadNodeset)
+                        if (state.UseDC && state.HadrainNodeset)
                         {
                             if (pass)
                                 state.IsCon = false;

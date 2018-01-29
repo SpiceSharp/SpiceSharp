@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int posourceNode, negateNode;
         protected MatrixElement PosPosPtr { get; private set; }
         protected MatrixElement NegPosPtr { get; private set; }
         protected MatrixElement PosNegPtr { get; private set; }
@@ -55,8 +55,8 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            posourceNode = pins[0];
+            negateNode = pins[1];
         }
 
         /// <summary>
@@ -68,10 +68,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            PosPosPtr = matrix.GetElement(posNode, posNode);
-            PosNegPtr = matrix.GetElement(posNode, negNode);
-            NegPosPtr = matrix.GetElement(negNode, posNode);
-            NegNegPtr = matrix.GetElement(negNode, negNode);
+            PosPosPtr = matrix.GetElement(posourceNode, posourceNode);
+            PosNegPtr = matrix.GetElement(posourceNode, negateNode);
+            NegPosPtr = matrix.GetElement(negateNode, posourceNode);
+            NegNegPtr = matrix.GetElement(negateNode, negateNode);
         }
         
         /// <summary>

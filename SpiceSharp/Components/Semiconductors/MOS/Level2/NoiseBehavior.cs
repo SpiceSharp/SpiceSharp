@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Nodes
         /// </summary>
-        int dNode, gNode, sNode, bNode, sNodePrime, dNodePrime;
+        int drainNode, gateNode, sourceNode, bulkNode, sourceNodePrime, drainNodePrime;
 
         /// <summary>
         /// Noise generators
@@ -79,10 +79,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            dNode = pins[0];
-            gNode = pins[1];
-            sNode = pins[2];
-            bNode = pins[3];
+            drainNode = pins[0];
+            gateNode = pins[1];
+            sourceNode = pins[2];
+            bulkNode = pins[3];
         }
 
         /// <summary>
@@ -91,11 +91,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public override void ConnectNoise()
         {
             // Get extra equations
-            dNodePrime = load.DrainNodePrime;
-            sNodePrime = load.SourceNodePrime;
+            drainNodePrime = load.DrainNodePrime;
+            sourceNodePrime = load.SourceNodePrime;
 
             // Connect noise source
-            MOS2Noise.Setup(dNode, gNode, sNode, bNode, dNodePrime, sNodePrime);
+            MOS2Noise.Setup(drainNode, gateNode, sourceNode, bulkNode, drainNodePrime, sourceNodePrime);
         }
 
         /// <summary>

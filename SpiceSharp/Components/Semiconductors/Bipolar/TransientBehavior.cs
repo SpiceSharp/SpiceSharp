@@ -241,8 +241,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             double vbe = load.Vbe;
             double vbc = load.Vbc;
-            double vbx = mbp.MosfetType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
-            double vcs = mbp.MosfetType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
+            double vbx = mbp.BipolarType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
+            double vcs = mbp.BipolarType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
 
             Cexbc.Current = load.Cbe / load.Qb;
 
@@ -379,8 +379,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             double vbe = load.Vbe;
             double vbc = load.Vbc;
-            double vbx = mbp.MosfetType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
-            double vcs = mbp.MosfetType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
+            double vbx = mbp.BipolarType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
+            double vcs = mbp.BipolarType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
 
             /* 
              * charge storage elements
@@ -514,10 +514,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             /* 
 			 * load current excitation vector
 			 */
-            double ceqcs = mbp.MosfetType * (Qcs.Derivative - vcs * gccs);
-            double ceqbx = mbp.MosfetType * (Qbx.Derivative - vbx * geqbx);
-            double ceqbe = mbp.MosfetType * (cc + cb - vbe * gpi + vbc * (-geqcb));
-            double ceqbc = mbp.MosfetType * (-cc + - vbc * gmu);
+            double ceqcs = mbp.BipolarType * (Qcs.Derivative - vcs * gccs);
+            double ceqbx = mbp.BipolarType * (Qbx.Derivative - vbx * geqbx);
+            double ceqbe = mbp.BipolarType * (cc + cb - vbe * gpi + vbc * (-geqcb));
+            double ceqbc = mbp.BipolarType * (-cc + - vbc * gmu);
             
             state.Rhs[baseNode] += (-ceqbx);
             state.Rhs[colPrimeNode] += (ceqcs + ceqbx + ceqbc);

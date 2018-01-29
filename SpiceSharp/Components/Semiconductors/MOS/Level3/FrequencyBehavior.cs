@@ -32,29 +32,29 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Nodes
         /// </summary>
-        int dNode, gNode, sNode, bNode, dNodePrime, sNodePrime;
-        protected MatrixElement DdPtr { get; private set; }
-        protected MatrixElement GgPtr { get; private set; }
-        protected MatrixElement SsPtr { get; private set; }
-        protected MatrixElement BbPtr { get; private set; }
-        protected MatrixElement DPdpPtr { get; private set; }
-        protected MatrixElement SPspPtr { get; private set; }
-        protected MatrixElement DdpPtr { get; private set; }
-        protected MatrixElement GbPtr { get; private set; }
-        protected MatrixElement GdpPtr { get; private set; }
-        protected MatrixElement GspPtr { get; private set; }
-        protected MatrixElement SspPtr { get; private set; }
-        protected MatrixElement BdpPtr { get; private set; }
-        protected MatrixElement BspPtr { get; private set; }
-        protected MatrixElement DPspPtr { get; private set; }
-        protected MatrixElement DPdPtr { get; private set; }
-        protected MatrixElement BgPtr { get; private set; }
-        protected MatrixElement DPgPtr { get; private set; }
-        protected MatrixElement SPgPtr { get; private set; }
-        protected MatrixElement SPsPtr { get; private set; }
-        protected MatrixElement DPbPtr { get; private set; }
-        protected MatrixElement SPbPtr { get; private set; }
-        protected MatrixElement SPdpPtr { get; private set; }
+        int drainNode, gateNode, sourceNode, bulkNode, drainNodePrime, sourceNodePrime;
+        protected MatrixElement DrainDrainPtr { get; private set; }
+        protected MatrixElement GateGatePtr { get; private set; }
+        protected MatrixElement SourceSourcePtr { get; private set; }
+        protected MatrixElement BulkBulkPtr { get; private set; }
+        protected MatrixElement DrainPrimeDrainPrimePtr { get; private set; }
+        protected MatrixElement SourcePrimeSourcePrimePtr { get; private set; }
+        protected MatrixElement DrainDrainPrimePtr { get; private set; }
+        protected MatrixElement GateBulkPtr { get; private set; }
+        protected MatrixElement GateDrainPrimePtr { get; private set; }
+        protected MatrixElement GateSourcePrimePtr { get; private set; }
+        protected MatrixElement SourceSourcePrimePtr { get; private set; }
+        protected MatrixElement BulkDrainPrimePtr { get; private set; }
+        protected MatrixElement BulkSourcePrimePtr { get; private set; }
+        protected MatrixElement DrainPrimeSourcePrimePtr { get; private set; }
+        protected MatrixElement DrainPrimeDrainPtr { get; private set; }
+        protected MatrixElement BulkGatePtr { get; private set; }
+        protected MatrixElement DrainPrimeGatePtr { get; private set; }
+        protected MatrixElement SourcePrimeGatePtr { get; private set; }
+        protected MatrixElement SourcePrimeSourcePtr { get; private set; }
+        protected MatrixElement DrainPrimeBulkPtr { get; private set; }
+        protected MatrixElement SourcePrimeBulkPtr { get; private set; }
+        protected MatrixElement SourcePrimeDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -91,10 +91,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            dNode = pins[0];
-            gNode = pins[1];
-            sNode = pins[2];
-            bNode = pins[3];
+            drainNode = pins[0];
+            gateNode = pins[1];
+            sourceNode = pins[2];
+            bulkNode = pins[3];
         }
 
         /// <summary>
@@ -107,32 +107,32 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 				throw new ArgumentNullException(nameof(matrix));
 
             // Get extra equations
-            dNodePrime = load.DrainNodePrime;
-            sNodePrime = load.SourceNodePrime;
+            drainNodePrime = load.DrainNodePrime;
+            sourceNodePrime = load.SourceNodePrime;
 
             // Get matrix pointers
-            DdPtr = matrix.GetElement(dNode, dNode);
-            GgPtr = matrix.GetElement(gNode, gNode);
-            SsPtr = matrix.GetElement(sNode, sNode);
-            BbPtr = matrix.GetElement(bNode, bNode);
-            DPdpPtr = matrix.GetElement(dNodePrime, dNodePrime);
-            SPspPtr = matrix.GetElement(sNodePrime, sNodePrime);
-            DdpPtr = matrix.GetElement(dNode, dNodePrime);
-            GbPtr = matrix.GetElement(gNode, bNode);
-            GdpPtr = matrix.GetElement(gNode, dNodePrime);
-            GspPtr = matrix.GetElement(gNode, sNodePrime);
-            SspPtr = matrix.GetElement(sNode, sNodePrime);
-            BdpPtr = matrix.GetElement(bNode, dNodePrime);
-            BspPtr = matrix.GetElement(bNode, sNodePrime);
-            DPspPtr = matrix.GetElement(dNodePrime, sNodePrime);
-            DPdPtr = matrix.GetElement(dNodePrime, dNode);
-            BgPtr = matrix.GetElement(bNode, gNode);
-            DPgPtr = matrix.GetElement(dNodePrime, gNode);
-            SPgPtr = matrix.GetElement(sNodePrime, gNode);
-            SPsPtr = matrix.GetElement(sNodePrime, sNode);
-            DPbPtr = matrix.GetElement(dNodePrime, bNode);
-            SPbPtr = matrix.GetElement(sNodePrime, bNode);
-            SPdpPtr = matrix.GetElement(sNodePrime, dNodePrime);
+            DrainDrainPtr = matrix.GetElement(drainNode, drainNode);
+            GateGatePtr = matrix.GetElement(gateNode, gateNode);
+            SourceSourcePtr = matrix.GetElement(sourceNode, sourceNode);
+            BulkBulkPtr = matrix.GetElement(bulkNode, bulkNode);
+            DrainPrimeDrainPrimePtr = matrix.GetElement(drainNodePrime, drainNodePrime);
+            SourcePrimeSourcePrimePtr = matrix.GetElement(sourceNodePrime, sourceNodePrime);
+            DrainDrainPrimePtr = matrix.GetElement(drainNode, drainNodePrime);
+            GateBulkPtr = matrix.GetElement(gateNode, bulkNode);
+            GateDrainPrimePtr = matrix.GetElement(gateNode, drainNodePrime);
+            GateSourcePrimePtr = matrix.GetElement(gateNode, sourceNodePrime);
+            SourceSourcePrimePtr = matrix.GetElement(sourceNode, sourceNodePrime);
+            BulkDrainPrimePtr = matrix.GetElement(bulkNode, drainNodePrime);
+            BulkSourcePrimePtr = matrix.GetElement(bulkNode, sourceNodePrime);
+            DrainPrimeSourcePrimePtr = matrix.GetElement(drainNodePrime, sourceNodePrime);
+            DrainPrimeDrainPtr = matrix.GetElement(drainNodePrime, drainNode);
+            BulkGatePtr = matrix.GetElement(bulkNode, gateNode);
+            DrainPrimeGatePtr = matrix.GetElement(drainNodePrime, gateNode);
+            SourcePrimeGatePtr = matrix.GetElement(sourceNodePrime, gateNode);
+            SourcePrimeSourcePtr = matrix.GetElement(sourceNodePrime, sourceNode);
+            DrainPrimeBulkPtr = matrix.GetElement(drainNodePrime, bulkNode);
+            SourcePrimeBulkPtr = matrix.GetElement(sourceNodePrime, bulkNode);
+            SourcePrimeDrainPrimePtr = matrix.GetElement(sourceNodePrime, drainNodePrime);
         }
 
         /// <summary>
@@ -141,28 +141,28 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public override void Unsetup()
         {
             // Remove references
-            DdPtr = null;
-            GgPtr = null;
-            SsPtr = null;
-            BbPtr = null;
-            DPdpPtr = null;
-            SPspPtr = null;
-            DdpPtr = null;
-            GbPtr = null;
-            GdpPtr = null;
-            GspPtr = null;
-            SspPtr = null;
-            BdpPtr = null;
-            BspPtr = null;
-            DPspPtr = null;
-            DPdPtr = null;
-            BgPtr = null;
-            DPgPtr = null;
-            SPgPtr = null;
-            SPsPtr = null;
-            DPbPtr = null;
-            SPbPtr = null;
-            SPdpPtr = null;
+            DrainDrainPtr = null;
+            GateGatePtr = null;
+            SourceSourcePtr = null;
+            BulkBulkPtr = null;
+            DrainPrimeDrainPrimePtr = null;
+            SourcePrimeSourcePrimePtr = null;
+            DrainDrainPrimePtr = null;
+            GateBulkPtr = null;
+            GateDrainPrimePtr = null;
+            GateSourcePrimePtr = null;
+            SourceSourcePrimePtr = null;
+            BulkDrainPrimePtr = null;
+            BulkSourcePrimePtr = null;
+            DrainPrimeSourcePrimePtr = null;
+            DrainPrimeDrainPtr = null;
+            BulkGatePtr = null;
+            DrainPrimeGatePtr = null;
+            SourcePrimeGatePtr = null;
+            SourcePrimeSourcePtr = null;
+            DrainPrimeBulkPtr = null;
+            SourcePrimeBulkPtr = null;
+            SourcePrimeDrainPrimePtr = null;
         }
 
         /// <summary>
@@ -380,28 +380,28 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             /* 
 			 * load matrix
 			 */
-            GgPtr.Add(new Complex(0.0, xgd + xgs + xgb));
-            BbPtr.Add(new Complex(load.Gbd + load.Gbs, xgb + xbd + xbs));
-            DPdpPtr.Add(new Complex(temp.DrainConductance + load.Gds + load.Gbd + xrev * (load.Gm + load.Gmbs), xgd + xbd));
-            SPspPtr.Add(new Complex(temp.SourceConductance + load.Gds + load.Gbs + xnrm * (load.Gm + load.Gmbs), xgs + xbs));
-            GbPtr.Sub(new Complex(0.0, xgb));
-            GdpPtr.Sub(new Complex(0.0, xgd));
-            GspPtr.Sub(new Complex(0.0, xgs));
-            BgPtr.Sub(new Complex(0.0, xgb));
-            BdpPtr.Sub(new Complex(load.Gbd, xbd));
-            BspPtr.Sub(new Complex(load.Gbs, xbs));
-            DPgPtr.Add(new Complex((xnrm - xrev) * load.Gm, -xgd));
-            DPbPtr.Add(new Complex(-load.Gbd + (xnrm - xrev) * load.Gmbs, -xbd));
-            SPgPtr.Sub(new Complex((xnrm - xrev) * load.Gm, xgs));
-            SPbPtr.Sub(new Complex(load.Gbs + (xnrm - xrev) * load.Gmbs, xbs));
-            DdPtr.Add(temp.DrainConductance);
-            SsPtr.Add(temp.SourceConductance);
-            DdpPtr.Sub(temp.DrainConductance);
-            SspPtr.Sub(temp.SourceConductance);
-            DPdPtr.Sub(temp.DrainConductance);
-            DPspPtr.Sub(load.Gds + xnrm * (load.Gm + load.Gmbs));
-            SPsPtr.Sub(temp.SourceConductance);
-            SPdpPtr.Sub(load.Gds + xrev * (load.Gm + load.Gmbs));
+            GateGatePtr.Add(new Complex(0.0, xgd + xgs + xgb));
+            BulkBulkPtr.Add(new Complex(load.Gbd + load.Gbs, xgb + xbd + xbs));
+            DrainPrimeDrainPrimePtr.Add(new Complex(temp.DrainConductance + load.Gds + load.Gbd + xrev * (load.Gm + load.Gmbs), xgd + xbd));
+            SourcePrimeSourcePrimePtr.Add(new Complex(temp.SourceConductance + load.Gds + load.Gbs + xnrm * (load.Gm + load.Gmbs), xgs + xbs));
+            GateBulkPtr.Sub(new Complex(0.0, xgb));
+            GateDrainPrimePtr.Sub(new Complex(0.0, xgd));
+            GateSourcePrimePtr.Sub(new Complex(0.0, xgs));
+            BulkGatePtr.Sub(new Complex(0.0, xgb));
+            BulkDrainPrimePtr.Sub(new Complex(load.Gbd, xbd));
+            BulkSourcePrimePtr.Sub(new Complex(load.Gbs, xbs));
+            DrainPrimeGatePtr.Add(new Complex((xnrm - xrev) * load.Gm, -xgd));
+            DrainPrimeBulkPtr.Add(new Complex(-load.Gbd + (xnrm - xrev) * load.Gmbs, -xbd));
+            SourcePrimeGatePtr.Sub(new Complex((xnrm - xrev) * load.Gm, xgs));
+            SourcePrimeBulkPtr.Sub(new Complex(load.Gbs + (xnrm - xrev) * load.Gmbs, xbs));
+            DrainDrainPtr.Add(temp.DrainConductance);
+            SourceSourcePtr.Add(temp.SourceConductance);
+            DrainDrainPrimePtr.Sub(temp.DrainConductance);
+            SourceSourcePrimePtr.Sub(temp.SourceConductance);
+            DrainPrimeDrainPtr.Sub(temp.DrainConductance);
+            DrainPrimeSourcePrimePtr.Sub(load.Gds + xnrm * (load.Gm + load.Gmbs));
+            SourcePrimeSourcePtr.Sub(temp.SourceConductance);
+            SourcePrimeDrainPrimePtr.Sub(load.Gds + xrev * (load.Gm + load.Gmbs));
         }
     }
 }

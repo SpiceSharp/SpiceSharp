@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[posNode] - state.Solution[negNode]);
+            return (state.Solution[posourceNode] - state.Solution[negateNode]);
         }
         [PropertyName("p"), PropertyInfo("Power supplied by the source")]
         public double GetP(State state)
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[posNode] - state.Solution[posNode]) * -Current;
+            return (state.Solution[posourceNode] - state.Solution[posourceNode]) * -Current;
         }
         [PropertyName("c"), PropertyName("i"), PropertyInfo("Current through current source")]
         public double Current { get; protected set; }
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int posourceNode, negateNode;
 
         /// <summary>
         /// Constructor
@@ -102,8 +102,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            posourceNode = pins[0];
+            negateNode = pins[1];
         }
 
         /// <summary>
@@ -138,8 +138,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 value = bp.DcValue * state.SrcFact;
             }
 
-            state.Rhs[posNode] += value;
-            state.Rhs[negNode] -= value;
+            state.Rhs[posourceNode] += value;
+            state.Rhs[negateNode] -= value;
             Current = value;
         }
     }

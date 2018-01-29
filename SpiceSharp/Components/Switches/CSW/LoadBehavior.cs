@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[posNode] - state.Solution[negNode];
+            return state.Solution[posourceNode] - state.Solution[negateNode];
         }
         [PropertyName("i"), PropertyInfo("Switch current")]
         public double GetCurrent(State state)
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[posNode] - state.Solution[negNode]) * Cond;
+            return (state.Solution[posourceNode] - state.Solution[negateNode]) * Cond;
         }
         [PropertyName("p"), PropertyInfo("Instantaneous power")]
         public double GetPower(State state)
@@ -45,15 +45,15 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[posNode] - state.Solution[negNode]) *
-            (state.Solution[posNode] - state.Solution[negNode]) * Cond;
+            return (state.Solution[posourceNode] - state.Solution[negateNode]) *
+            (state.Solution[posourceNode] - state.Solution[negateNode]) * Cond;
         }
         public double Cond { get; internal set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int posourceNode, negateNode;
         public int ControllingBranch { get; private set; }
         protected MatrixElement PosPosPtr { get; private set; }
         protected MatrixElement NegPosPtr { get; private set; }
@@ -109,8 +109,8 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            posourceNode = pins[0];
+            negateNode = pins[1];
         }
 
         /// <summary>
@@ -124,10 +124,10 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(matrix));
 
             ControllingBranch = vsrcload.BranchEq;
-            PosPosPtr = matrix.GetElement(posNode, posNode);
-            PosNegPtr = matrix.GetElement(posNode, negNode);
-            NegPosPtr = matrix.GetElement(negNode, posNode);
-            NegNegPtr = matrix.GetElement(negNode, negNode);
+            PosPosPtr = matrix.GetElement(posourceNode, posourceNode);
+            PosNegPtr = matrix.GetElement(posourceNode, negateNode);
+            NegPosPtr = matrix.GetElement(negateNode, posourceNode);
+            NegNegPtr = matrix.GetElement(negateNode, negateNode);
         }
         
         /// <summary>

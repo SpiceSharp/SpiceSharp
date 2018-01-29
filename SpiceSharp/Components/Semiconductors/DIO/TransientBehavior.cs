@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, posPrimeNode;
+        int posourceNode, negateNode, posPrimeNode;
         protected MatrixElement PosPosPrimePtr { get; private set; }
         protected MatrixElement NegPosPrimePtr { get; private set; }
         protected MatrixElement PosPrimePosPtr { get; private set; }
@@ -95,8 +95,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            posourceNode = pins[0];
+            negateNode = pins[1];
         }
 
         /// <summary>
@@ -112,12 +112,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
             posPrimeNode = load.PosPrimeNode;
 
             // Get matrix pointers
-            PosPosPrimePtr = matrix.GetElement(posNode, posPrimeNode);
-            NegPosPrimePtr = matrix.GetElement(negNode, posPrimeNode);
-            PosPrimePosPtr = matrix.GetElement(posPrimeNode, posNode);
-            PosPrimeNegPtr = matrix.GetElement(posPrimeNode, negNode);
-            PosPosPtr = matrix.GetElement(posNode, posNode);
-            NegNegPtr = matrix.GetElement(negNode, negNode);
+            PosPosPrimePtr = matrix.GetElement(posourceNode, posPrimeNode);
+            NegPosPrimePtr = matrix.GetElement(negateNode, posPrimeNode);
+            PosPrimePosPtr = matrix.GetElement(posPrimeNode, posourceNode);
+            PosPrimeNegPtr = matrix.GetElement(posPrimeNode, negateNode);
+            PosPosPtr = matrix.GetElement(posourceNode, posourceNode);
+            NegNegPtr = matrix.GetElement(negateNode, negateNode);
             PosPrimePosPrimePtr = matrix.GetElement(posPrimeNode, posPrimeNode);
         }
 
@@ -144,7 +144,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             var state = simulation.State;
             double arg, sarg, capd;
-            double vd = state.Solution[posPrimeNode] - state.Solution[negNode];
+            double vd = state.Solution[posPrimeNode] - state.Solution[negateNode];
 
             // charge storage elements
             double czero = temp.TJctCap * bp.Area;
@@ -176,7 +176,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.State;
-            double vd = state.Solution[posPrimeNode] - state.Solution[negNode];
+            double vd = state.Solution[posPrimeNode] - state.Solution[negateNode];
 
             // This is the same calculation
             GetDCstate(simulation);
@@ -187,7 +187,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             double ceq = CapCharge.RhsCurrent(geq, vd);
 
             // Load Rhs vector
-            state.Rhs[negNode] += ceq;
+            state.Rhs[negateNode] += ceq;
             state.Rhs[posPrimeNode] -= ceq;
 
             // Load Y-matrix

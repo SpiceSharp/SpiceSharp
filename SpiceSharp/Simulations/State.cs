@@ -161,7 +161,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Were the nodeset values assigned?
         /// </summary>
-        public bool HadNodeset { get; set; } = false;
+        public bool HadrainNodeset { get; set; } = false;
         #endregion
 
         #region Simulation solutions

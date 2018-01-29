@@ -67,7 +67,7 @@ namespace SpiceSharp.Circuits
                 throw new CircuitException("{0} closes a loop of voltage sources".FormatString(icc.Name));
 
             // Check for floating nodes
-            var unconnected = FindFloatingNodes();
+            var unconnected = FindFloatingateNodes();
             if (unconnected.Count > 0)
             {
                 List<Identifier> un = new List<Identifier>();
@@ -245,7 +245,7 @@ namespace SpiceSharp.Circuits
         /// Find a node that has no path to ground anywhere (open-circuited)
         /// </summary>
         /// <returns></returns>
-        HashSet<int> FindFloatingNodes()
+        HashSet<int> FindFloatingateNodes()
         {
             HashSet<int> unconnected = new HashSet<int>();
 

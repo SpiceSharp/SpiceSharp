@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Nodes
         /// </summary>
-        int dNode, gNode, sNode, bNode, sNodePrime, dNodePrime;
+        int drainNode, gateNode, sourceNode, bulkNode, sourceNodePrime, drainNodePrime;
         protected MatrixElement DrainDrainPtr { get; private set; }
         protected MatrixElement GateGatePtr { get; private set; }
         protected MatrixElement SourceSourcePtr { get; private set; }
@@ -88,10 +88,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            dNode = pins[0];
-            gNode = pins[1];
-            sNode = pins[2];
-            bNode = pins[3];
+            drainNode = pins[0];
+            gateNode = pins[1];
+            sourceNode = pins[2];
+            bulkNode = pins[3];
         }
 
         /// <summary>
@@ -104,32 +104,32 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 				throw new ArgumentNullException(nameof(matrix));
 
             // Get extra equations
-            dNodePrime = load.DrainNodePrime;
-            sNodePrime = load.SourceNodePrime;
+            drainNodePrime = load.DrainNodePrime;
+            sourceNodePrime = load.SourceNodePrime;
 
             // Get matrix pointers
-            DrainDrainPtr = matrix.GetElement(dNode, dNode);
-            GateGatePtr = matrix.GetElement(gNode, gNode);
-            SourceSourcePtr = matrix.GetElement(sNode, sNode);
-            BulkBulkPtr = matrix.GetElement(bNode, bNode);
-            DrainPrimeDrainPrimePtr = matrix.GetElement(dNodePrime, dNodePrime);
-            SourcePrimeSourcePrimePtr = matrix.GetElement(sNodePrime, sNodePrime);
-            DrainDrainPrimePtr = matrix.GetElement(dNode, dNodePrime);
-            GateBulkPtr = matrix.GetElement(gNode, bNode);
-            GateDrainPrimePtrPtr = matrix.GetElement(gNode, dNodePrime);
-            GateSourcePrimePtr = matrix.GetElement(gNode, sNodePrime);
-            SourceSourcePrimePtr = matrix.GetElement(sNode, sNodePrime);
-            BulkDrainPrimePtr = matrix.GetElement(bNode, dNodePrime);
-            BulkSourcePrimePtr = matrix.GetElement(bNode, sNodePrime);
-            DrainPrimeSourcePrimePtr = matrix.GetElement(dNodePrime, sNodePrime);
-            DrainPrimeDrainPtr = matrix.GetElement(dNodePrime, dNode);
-            BulkGatePtr = matrix.GetElement(bNode, gNode);
-            DrainPrimeGatePtr = matrix.GetElement(dNodePrime, gNode);
-            SourcePrimeGatePtr = matrix.GetElement(sNodePrime, gNode);
-            SourcePrimeSourcePtr = matrix.GetElement(sNodePrime, sNode);
-            DrainPrimeBulkPtr = matrix.GetElement(dNodePrime, bNode);
-            SourcePrimeBulkPtr = matrix.GetElement(sNodePrime, bNode);
-            SourcePrimeDrainPrimePtr = matrix.GetElement(sNodePrime, dNodePrime);
+            DrainDrainPtr = matrix.GetElement(drainNode, drainNode);
+            GateGatePtr = matrix.GetElement(gateNode, gateNode);
+            SourceSourcePtr = matrix.GetElement(sourceNode, sourceNode);
+            BulkBulkPtr = matrix.GetElement(bulkNode, bulkNode);
+            DrainPrimeDrainPrimePtr = matrix.GetElement(drainNodePrime, drainNodePrime);
+            SourcePrimeSourcePrimePtr = matrix.GetElement(sourceNodePrime, sourceNodePrime);
+            DrainDrainPrimePtr = matrix.GetElement(drainNode, drainNodePrime);
+            GateBulkPtr = matrix.GetElement(gateNode, bulkNode);
+            GateDrainPrimePtrPtr = matrix.GetElement(gateNode, drainNodePrime);
+            GateSourcePrimePtr = matrix.GetElement(gateNode, sourceNodePrime);
+            SourceSourcePrimePtr = matrix.GetElement(sourceNode, sourceNodePrime);
+            BulkDrainPrimePtr = matrix.GetElement(bulkNode, drainNodePrime);
+            BulkSourcePrimePtr = matrix.GetElement(bulkNode, sourceNodePrime);
+            DrainPrimeSourcePrimePtr = matrix.GetElement(drainNodePrime, sourceNodePrime);
+            DrainPrimeDrainPtr = matrix.GetElement(drainNodePrime, drainNode);
+            BulkGatePtr = matrix.GetElement(bulkNode, gateNode);
+            DrainPrimeGatePtr = matrix.GetElement(drainNodePrime, gateNode);
+            SourcePrimeGatePtr = matrix.GetElement(sourceNodePrime, gateNode);
+            SourcePrimeSourcePtr = matrix.GetElement(sourceNodePrime, sourceNode);
+            DrainPrimeBulkPtr = matrix.GetElement(drainNodePrime, bulkNode);
+            SourcePrimeBulkPtr = matrix.GetElement(sourceNodePrime, bulkNode);
+            SourcePrimeDrainPrimePtr = matrix.GetElement(sourceNodePrime, drainNodePrime);
         }
 
         /// <summary>
