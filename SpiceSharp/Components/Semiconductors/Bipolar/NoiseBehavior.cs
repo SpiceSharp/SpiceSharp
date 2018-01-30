@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int colNode, baseNode, emitNode, substNode, colPrimeNode, basePrimeNode, emitPrimeNode;
+        int collectorNode, baseNode, emitterNode, substrateNode, colPrimeNode, basePrimeNode, emitPrimeNode;
 
         /// <summary>
         /// Constructor
@@ -79,10 +79,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            colNode = pins[0];
+            collectorNode = pins[0];
             baseNode = pins[1];
-            emitNode = pins[2];
-            substNode = pins[3];
+            emitterNode = pins[2];
+            substrateNode = pins[3];
         }
 
         /// <summary>
@@ -91,12 +91,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void ConnectNoise()
         {
             // Get extra nodes
-            colPrimeNode = load.ColPrimeNode;
+            colPrimeNode = load.CollectorPrimeNode;
             basePrimeNode = load.BasePrimeNode;
-            emitPrimeNode = load.EmitPrimeNode;
+            emitPrimeNode = load.EmitterPrimeNode;
 
             // Connect noise
-            BipolarJunctionTransistorNoise.Setup(colNode, baseNode, emitNode, substNode,
+            BipolarJunctionTransistorNoise.Setup(collectorNode, baseNode, emitterNode, substrateNode,
                 colPrimeNode, basePrimeNode, emitPrimeNode);
         }
 

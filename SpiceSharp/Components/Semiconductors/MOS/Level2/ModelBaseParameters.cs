@@ -48,23 +48,23 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         [PropertyName("cj"), PropertyInfo("Bottom junction cap per area")]
         public Parameter BulkCapFactor { get; } = new Parameter();
         [PropertyName("mj"), PropertyInfo("Bottom grading coefficient")]
-        public Parameter BulkJctBotGradingCoeff { get; } = new Parameter(.5);
+        public Parameter BulkJctBotGradingCoefficient { get; } = new Parameter(.5);
         [PropertyName("cjsw"), PropertyInfo("Side junction cap per area")]
         public Parameter SidewallCapFactor { get; } = new Parameter();
         [PropertyName("mjsw"), PropertyInfo("Side grading coefficient")]
-        public Parameter BulkJctSideGradingCoeff { get; } = new Parameter(.33);
+        public Parameter BulkJctSideGradingCoefficient { get; } = new Parameter(.33);
         [PropertyName("js"), PropertyInfo("Bulk jct. sat. current density")]
         public Parameter JctSatCurDensity { get; } = new Parameter();
         [PropertyName("tox"), PropertyInfo("Oxide thickness")]
         public Parameter OxideThickness { get; } = new Parameter();
         [PropertyName("ld"), PropertyInfo("Lateral diffusion")]
-        public Parameter LatDiff { get; } = new Parameter();
+        public Parameter LateralDiffusion { get; } = new Parameter();
         [PropertyName("rsh"), PropertyInfo("Sheet resistance")]
         public Parameter SheetResistance { get; } = new Parameter();
         [PropertyName("u0"), PropertyName("uo"), PropertyInfo("Surface mobility")]
         public Parameter SurfaceMobility { get; } = new Parameter();
         [PropertyName("fc"), PropertyInfo("Forward bias jct. fit parm.")]
-        public Parameter FwdCapDepCoeff { get; } = new Parameter(.5);
+        public Parameter ForwardCapDepCoefficient { get; } = new Parameter(.5);
         [PropertyName("nsub"), PropertyInfo("Substrate doping")]
         public Parameter SubstrateDoping { get; } = new Parameter();
         [PropertyName("tpg"), PropertyInfo("Gate type")]

@@ -20,11 +20,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         LoadBehavior load;
         ModelTemperatureBehavior modeltemp;
 
-        public double Capgs { get; protected set; }
-        public double Capgd { get; protected set; }
-        public double Capbs { get; protected set; }
-        public double Capbd { get; protected set; }
-        public double Capgb { get; protected set; }
+        public double CapGS { get; protected set; }
+        public double CapGD { get; protected set; }
+        public double CapBS { get; protected set; }
+        public double CapBD { get; protected set; }
+        public double CapGB { get; protected set; }
 
         /// <summary>
         /// Nodes
@@ -180,7 +180,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double vds = load.Vds;
             double vgd = vgs - vds;
 
-            double EffectiveLength = bp.Length - 2 * mbp.LatDiff;
+            double EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
             double OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
 
             /* 
@@ -211,44 +211,44 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                  * Math.Exp(Math.Log()) we use this special case code to buy time.
                  * (as much as 10% of total job time!)
                  */
-                if (mbp.BulkJctBotGradingCoeff.Value == mbp.BulkJctSideGradingCoeff.Value)
+                if (mbp.BulkJctBotGradingCoefficient.Value == mbp.BulkJctSideGradingCoefficient.Value)
                 {
-                    if (mbp.BulkJctBotGradingCoeff.Value == .5)
+                    if (mbp.BulkJctBotGradingCoefficient.Value == .5)
                     {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
-                        sarg = sargsw = Math.Exp(-mbp.BulkJctBotGradingCoeff * Math.Log(arg));
+                        sarg = sargsw = Math.Exp(-mbp.BulkJctBotGradingCoefficient * Math.Log(arg));
                     }
                 }
                 else
                 {
-                    if (mbp.BulkJctBotGradingCoeff.Value == .5)
+                    if (mbp.BulkJctBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJctBotGradingCoeff * Math.Log(arg));
+                        sarg = Math.Exp(-mbp.BulkJctBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJctSideGradingCoeff.Value == .5)
+                    if (mbp.BulkJctSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJctSideGradingCoeff * Math.Log(arg));
+                        sargsw = Math.Exp(-mbp.BulkJctSideGradingCoefficient * Math.Log(arg));
                     }
                 }
 
-                Capbs = temp.Cbs * sarg + temp.Cbssw * sargsw;
+                CapBS = temp.Cbs * sarg + temp.Cbssw * sargsw;
             }
             else
             {
-                Capbs = temp.F2s + temp.F3s * vbs;
+                CapBS = temp.F2s + temp.F3s * vbs;
             }
 
             /* can't bypass the diode capacitance calculations */
@@ -264,37 +264,37 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJctBotGradingCoeff.Value == .5 && mbp.BulkJctSideGradingCoeff.Value == .5)
+                if (mbp.BulkJctBotGradingCoefficient.Value == .5 && mbp.BulkJctSideGradingCoefficient.Value == .5)
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 }
                 else
                 {
-                    if (mbp.BulkJctBotGradingCoeff.Value == .5)
+                    if (mbp.BulkJctBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJctBotGradingCoeff * Math.Log(arg));
+                        sarg = Math.Exp(-mbp.BulkJctBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJctSideGradingCoeff.Value == .5)
+                    if (mbp.BulkJctSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJctSideGradingCoeff * Math.Log(arg));
+                        sargsw = Math.Exp(-mbp.BulkJctSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 /* NOSQRT */
-                Capbd = temp.Cbd * sarg + temp.Cbdsw * sargsw;
+                CapBD = temp.Cbd * sarg + temp.Cbdsw * sargsw;
             }
             else
             {
-                Capbd = temp.F2d + vbd * temp.F3d;
+                CapBD = temp.F2d + vbd * temp.F3d;
             }
 
             /* 
@@ -320,9 +320,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                     out icapgd, out icapgs, out icapgb,
                     temp.TPhi, OxideCap);
             }
-            Capgs = icapgs;
-            Capgd = icapgd;
-            Capgb = icapgb;
+            CapGS = icapgs;
+            CapGD = icapgd;
+            CapGB = icapgb;
         }
 
         /// <summary>
@@ -354,18 +354,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             /* 
 			 * meyer's model parameters
 			 */
-            EffectiveLength = bp.Length - 2 * mbp.LatDiff;
+            EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
             GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;
             GateDrainOverlapCap = mbp.GateDrainOverlapCapFactor * bp.Width;
             GateBulkOverlapCap = mbp.GateBulkOverlapCapFactor * EffectiveLength;
-            capgs = (Capgs + Capgs + GateSourceOverlapCap);
-            capgd = (Capgd + Capgd + GateDrainOverlapCap);
-            capgb = (Capgb + Capgb + GateBulkOverlapCap);
+            capgs = (CapGS + CapGS + GateSourceOverlapCap);
+            capgd = (CapGD + CapGD + GateDrainOverlapCap);
+            capgb = (CapGB + CapGB + GateBulkOverlapCap);
             xgs = capgs * cstate.Laplace.Imaginary;
             xgd = capgd * cstate.Laplace.Imaginary;
             xgb = capgb * cstate.Laplace.Imaginary;
-            xbd = Capbd * cstate.Laplace.Imaginary;
-            xbs = Capbs * cstate.Laplace.Imaginary;
+            xbd = CapBD * cstate.Laplace.Imaginary;
+            xbs = CapBS * cstate.Laplace.Imaginary;
 
             /* 
 			 * load matrix

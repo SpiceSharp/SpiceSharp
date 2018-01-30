@@ -21,7 +21,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// The column index
         /// </summary>
-        public int Col = 0;
+        public int Column = 0;
 
         /// <summary>
         /// Next matrix element in the same row
@@ -31,17 +31,17 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Next matrix element in the same column
         /// </summary>
-        internal MatrixElement NextInCol = null;
+        internal MatrixElement NextInColumn = null;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="row">Row</param>
-        /// <param name="col">Column</param>
-        public MatrixElement(int row, int col)
+        /// <param name="column">Column</param>
+        public MatrixElement(int row, int column)
         {
             Row = row;
-            Col = col;
+            Column = column;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public override string ToString()
         {
-            return "({0}, {1}) = {2}".FormatString(Row, Col, Value);
+            return "({0}, {1}) = {2}".FormatString(Row, Column, Value);
         }
 
         /// <summary>

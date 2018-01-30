@@ -102,8 +102,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Iterate for time-domain analysis
         /// </summary>
-        /// <param name="maxiter">Maximum iterations</param>
-        protected bool TranIterate(int maxiter)
+        /// <param name="maxIterations">Maximum iterations</param>
+        protected bool TranIterate(int maxIterations)
         {
             var state = State;
             var matrix = state.Matrix;
@@ -190,7 +190,7 @@ namespace SpiceSharp.Simulations
                 state.OldSolution[0] = 0.0;
 
                 // Exceeded maximum number of iterations
-                if (iterno > maxiter)
+                if (iterno > maxIterations)
                 {
                     Statistics.NumIter += iterno;
                     return false;

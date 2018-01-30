@@ -243,7 +243,7 @@ namespace SpiceSharp.IntegrationMethods
         {
             // Check for invalid timeSteps
             if (double.IsNaN(Delta))
-                throw new CircuitException("Invalid timeStep");
+                throw new CircuitException("Invalid time step");
 
             OldDelta = Delta;
             savetime = Time;
@@ -269,7 +269,7 @@ namespace SpiceSharp.IntegrationMethods
         public void Retry(double delta)
         {
             if (delta > Delta)
-                throw new CircuitException("The timeStep can only shrink when retrying a new timeStep");
+                throw new CircuitException("The time step can only shrink when retrying a new timeStep");
             if (delta < DeltaMin)
                 delta = DeltaMin;
 

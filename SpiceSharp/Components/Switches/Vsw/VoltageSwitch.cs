@@ -29,14 +29,14 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constants
         /// </summary>
-        public const int SWpinCount = 4;
+        public const int VoltageSwitchPinCount = 4;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the voltage-controlled switch</param>
         public VoltageSwitch(Identifier name) 
-            : base(name, SWpinCount)
+            : base(name, VoltageSwitchPinCount)
         {
             // Register parameters
             Parameters.Add(new BaseParameters());
@@ -56,7 +56,7 @@ namespace SpiceSharp.Components
         /// <param name="controlPos">The positive controlling node</param>
         /// <param name="controlNeg">The negative controlling node</param>
         public VoltageSwitch(Identifier name, Identifier pos, Identifier neg, Identifier controlPos, Identifier controlNeg) 
-            : base(name, SWpinCount)
+            : base(name, VoltageSwitchPinCount)
         {
             // Register parameters
             Parameters.Add(new BaseParameters());

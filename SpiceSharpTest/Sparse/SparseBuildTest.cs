@@ -111,7 +111,7 @@ namespace SpiceSharpTest.Sparse
                     if (oddrow && !oddcol || !oddrow && oddcol)
                     {
                         Assert.AreEqual(elt.Value.Cplx, new Complex(r, c));
-                        elt = elt.NextInCol;
+                        elt = elt.NextInColumn;
                     }
                 }
             }

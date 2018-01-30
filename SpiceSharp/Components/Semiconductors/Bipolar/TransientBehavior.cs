@@ -24,30 +24,30 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int colNode, baseNode, emitNode, substNode, colPrimeNode, basePrimeNode, emitPrimeNode;
-        protected MatrixElement ColColPrimePtr { get; private set; }
+        int collectorNode, baseNode, emitterNode, substrateNode, colPrimeNode, basePrimeNode, emitPrimeNode;
+        protected MatrixElement CollectorCollectorPrimePtr { get; private set; }
         protected MatrixElement BaseBasePrimePtr { get; private set; }
-        protected MatrixElement EmitEmitPrimePtr { get; private set; }
-        protected MatrixElement ColPrimeColPtr { get; private set; }
-        protected MatrixElement ColPrimeBasePrimePtr { get; private set; }
-        protected MatrixElement ColPrimeEmitPrimePtr { get; private set; }
+        protected MatrixElement EmitterEmitterPrimePtr { get; private set; }
+        protected MatrixElement CollectorPrimeCollectorPtr { get; private set; }
+        protected MatrixElement CollectorPrimeBasePrimePtr { get; private set; }
+        protected MatrixElement CollectorPrimeEmitterPrimePtr { get; private set; }
         protected MatrixElement BasePrimeBasePtr { get; private set; }
-        protected MatrixElement BasePrimeColPrimePtr { get; private set; }
-        protected MatrixElement BasePrimeEmitPrimePtr { get; private set; }
-        protected MatrixElement EmitPrimeEmitPtr { get; private set; }
-        protected MatrixElement EmitPrimeColPrimePtr { get; private set; }
-        protected MatrixElement EmitPrimeBasePrimePtr { get; private set; }
-        protected MatrixElement ColColPtr { get; private set; }
+        protected MatrixElement BasePrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement BasePrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement EmitterPrimeEmitterPtr { get; private set; }
+        protected MatrixElement EmitterPrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement EmitterPrimeBasePrimePtr { get; private set; }
+        protected MatrixElement CollectorCollectorPtr { get; private set; }
         protected MatrixElement BaseBasePtr { get; private set; }
-        protected MatrixElement EmitEmitPtr { get; private set; }
-        protected MatrixElement ColPrimeColPrimePtr { get; private set; }
+        protected MatrixElement EmitterEmitterPtr { get; private set; }
+        protected MatrixElement CollectorPrimeCollectorPrimePtr { get; private set; }
         protected MatrixElement BasePrimeBasePrimePtr { get; private set; }
-        protected MatrixElement EmitPrimeEmitPrimePtr { get; private set; }
-        protected MatrixElement SubstSubstPtr { get; private set; }
-        protected MatrixElement ColPrimeSubstPtr { get; private set; }
-        protected MatrixElement SubstColPrimePtr { get; private set; }
-        protected MatrixElement BaseColPrimePtr { get; private set; }
-        protected MatrixElement ColPrimeBasePtr { get; private set; }
+        protected MatrixElement EmitterPrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement SubstrateSubstratePtr { get; private set; }
+        protected MatrixElement CollectorPrimeSubstratePtr { get; private set; }
+        protected MatrixElement SubstrateCollectorPrimePtr { get; private set; }
+        protected MatrixElement BaseCollectorPrimePtr { get; private set; }
+        protected MatrixElement CollectorPrimeBasePtr { get; private set; }
 
         /*
         [SpiceName("qbe"), SpiceInfo("Charge storage B-E junction")]
@@ -74,22 +74,22 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("cpi"), PropertyInfo("Internal base to emitter capactance")]
-        public double Capbe { get; internal set; }
+        public double CapBE { get; internal set; }
         [PropertyName("cmu"), PropertyInfo("Internal base to collector capactiance")]
-        public double Capbc { get; internal set; }
+        public double CapBC { get; internal set; }
         [PropertyName("cbx"), PropertyInfo("Base to collector capacitance")]
-        public double Capbx { get; internal set; }
+        public double CapBX { get; internal set; }
         [PropertyName("ccs"), PropertyInfo("Collector to substrate capacitance")]
-        public double Capcs { get; internal set; }
+        public double CapCS { get; internal set; }
 
         /// <summary>
         /// States
         /// </summary>
-        protected StateDerivative Qbe { get; private set; }
-        protected StateDerivative Qbc { get; private set; }
-        protected StateDerivative Qcs { get; private set; }
-        protected StateDerivative Qbx { get; private set; }
-        protected StateHistory Cexbc { get; private set; }
+        protected StateDerivative ChargeBE { get; private set; }
+        protected StateDerivative ChargeBC { get; private set; }
+        protected StateDerivative ChargeCS { get; private set; }
+        protected StateDerivative ChargeBX { get; private set; }
+        protected StateHistory CexBC { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -126,10 +126,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            colNode = pins[0];
+            collectorNode = pins[0];
             baseNode = pins[1];
-            emitNode = pins[2];
-            substNode = pins[3];
+            emitterNode = pins[2];
+            substrateNode = pins[3];
         }
 
         /// <summary>
@@ -142,34 +142,34 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
             // Get extra equations
-            colPrimeNode = load.ColPrimeNode;
+            colPrimeNode = load.CollectorPrimeNode;
             basePrimeNode = load.BasePrimeNode;
-            emitPrimeNode = load.EmitPrimeNode;
+            emitPrimeNode = load.EmitterPrimeNode;
 
             // Get matrix pointers
-            ColColPrimePtr = matrix.GetElement(colNode, colPrimeNode);
+            CollectorCollectorPrimePtr = matrix.GetElement(collectorNode, colPrimeNode);
             BaseBasePrimePtr = matrix.GetElement(baseNode, basePrimeNode);
-            EmitEmitPrimePtr = matrix.GetElement(emitNode, emitPrimeNode);
-            ColPrimeColPtr = matrix.GetElement(colPrimeNode, colNode);
-            ColPrimeBasePrimePtr = matrix.GetElement(colPrimeNode, basePrimeNode);
-            ColPrimeEmitPrimePtr = matrix.GetElement(colPrimeNode, emitPrimeNode);
+            EmitterEmitterPrimePtr = matrix.GetElement(emitterNode, emitPrimeNode);
+            CollectorPrimeCollectorPtr = matrix.GetElement(colPrimeNode, collectorNode);
+            CollectorPrimeBasePrimePtr = matrix.GetElement(colPrimeNode, basePrimeNode);
+            CollectorPrimeEmitterPrimePtr = matrix.GetElement(colPrimeNode, emitPrimeNode);
             BasePrimeBasePtr = matrix.GetElement(basePrimeNode, baseNode);
-            BasePrimeColPrimePtr = matrix.GetElement(basePrimeNode, colPrimeNode);
-            BasePrimeEmitPrimePtr = matrix.GetElement(basePrimeNode, emitPrimeNode);
-            EmitPrimeEmitPtr = matrix.GetElement(emitPrimeNode, emitNode);
-            EmitPrimeColPrimePtr = matrix.GetElement(emitPrimeNode, colPrimeNode);
-            EmitPrimeBasePrimePtr = matrix.GetElement(emitPrimeNode, basePrimeNode);
-            ColColPtr = matrix.GetElement(colNode, colNode);
+            BasePrimeCollectorPrimePtr = matrix.GetElement(basePrimeNode, colPrimeNode);
+            BasePrimeEmitterPrimePtr = matrix.GetElement(basePrimeNode, emitPrimeNode);
+            EmitterPrimeEmitterPtr = matrix.GetElement(emitPrimeNode, emitterNode);
+            EmitterPrimeCollectorPrimePtr = matrix.GetElement(emitPrimeNode, colPrimeNode);
+            EmitterPrimeBasePrimePtr = matrix.GetElement(emitPrimeNode, basePrimeNode);
+            CollectorCollectorPtr = matrix.GetElement(collectorNode, collectorNode);
             BaseBasePtr = matrix.GetElement(baseNode, baseNode);
-            EmitEmitPtr = matrix.GetElement(emitNode, emitNode);
-            ColPrimeColPrimePtr = matrix.GetElement(colPrimeNode, colPrimeNode);
+            EmitterEmitterPtr = matrix.GetElement(emitterNode, emitterNode);
+            CollectorPrimeCollectorPrimePtr = matrix.GetElement(colPrimeNode, colPrimeNode);
             BasePrimeBasePrimePtr = matrix.GetElement(basePrimeNode, basePrimeNode);
-            EmitPrimeEmitPrimePtr = matrix.GetElement(emitPrimeNode, emitPrimeNode);
-            SubstSubstPtr = matrix.GetElement(substNode, substNode);
-            ColPrimeSubstPtr = matrix.GetElement(colPrimeNode, substNode);
-            SubstColPrimePtr = matrix.GetElement(substNode, colPrimeNode);
-            BaseColPrimePtr = matrix.GetElement(baseNode, colPrimeNode);
-            ColPrimeBasePtr = matrix.GetElement(colPrimeNode, baseNode);
+            EmitterPrimeEmitterPrimePtr = matrix.GetElement(emitPrimeNode, emitPrimeNode);
+            SubstrateSubstratePtr = matrix.GetElement(substrateNode, substrateNode);
+            CollectorPrimeSubstratePtr = matrix.GetElement(colPrimeNode, substrateNode);
+            SubstrateCollectorPrimePtr = matrix.GetElement(substrateNode, colPrimeNode);
+            BaseCollectorPrimePtr = matrix.GetElement(baseNode, colPrimeNode);
+            CollectorPrimeBasePtr = matrix.GetElement(colPrimeNode, baseNode);
         }
 
         /// <summary>
@@ -178,29 +178,29 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void Unsetup()
         {
             // Remove references
-            ColColPrimePtr = null;
+            CollectorCollectorPrimePtr = null;
             BaseBasePrimePtr = null;
-            EmitEmitPrimePtr = null;
-            ColPrimeColPtr = null;
-            ColPrimeBasePrimePtr = null;
-            ColPrimeEmitPrimePtr = null;
+            EmitterEmitterPrimePtr = null;
+            CollectorPrimeCollectorPtr = null;
+            CollectorPrimeBasePrimePtr = null;
+            CollectorPrimeEmitterPrimePtr = null;
             BasePrimeBasePtr = null;
-            BasePrimeColPrimePtr = null;
-            BasePrimeEmitPrimePtr = null;
-            EmitPrimeEmitPtr = null;
-            EmitPrimeColPrimePtr = null;
-            EmitPrimeBasePrimePtr = null;
-            ColColPtr = null;
+            BasePrimeCollectorPrimePtr = null;
+            BasePrimeEmitterPrimePtr = null;
+            EmitterPrimeEmitterPtr = null;
+            EmitterPrimeCollectorPrimePtr = null;
+            EmitterPrimeBasePrimePtr = null;
+            CollectorCollectorPtr = null;
             BaseBasePtr = null;
-            EmitEmitPtr = null;
-            ColPrimeColPrimePtr = null;
+            EmitterEmitterPtr = null;
+            CollectorPrimeCollectorPrimePtr = null;
             BasePrimeBasePrimePtr = null;
-            EmitPrimeEmitPrimePtr = null;
-            SubstSubstPtr = null;
-            ColPrimeSubstPtr = null;
-            SubstColPrimePtr = null;
-            BaseColPrimePtr = null;
-            ColPrimeBasePtr = null;
+            EmitterPrimeEmitterPrimePtr = null;
+            SubstrateSubstratePtr = null;
+            CollectorPrimeSubstratePtr = null;
+            SubstrateCollectorPrimePtr = null;
+            BaseCollectorPrimePtr = null;
+            CollectorPrimeBasePtr = null;
         }
 
         /// <summary>
@@ -213,11 +213,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(states));
 
             // We just need a history without integration here
-            Qbe = states.CreateDerivative();
-            Qbc = states.CreateDerivative();
-            Qcs = states.CreateDerivative();
-            Qbx = states.CreateDerivative();
-            Cexbc = states.CreateHistory();
+            ChargeBE = states.CreateDerivative();
+            ChargeBC = states.CreateDerivative();
+            ChargeCS = states.CreateDerivative();
+            ChargeBX = states.CreateDerivative();
+            CexBC = states.CreateHistory();
         }
 
         /// <summary>
@@ -242,19 +242,19 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double vbe = load.Vbe;
             double vbc = load.Vbc;
             double vbx = mbp.BipolarType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
-            double vcs = mbp.BipolarType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
+            double vcs = mbp.BipolarType * (state.Solution[substrateNode] - state.Solution[colPrimeNode]);
 
-            Cexbc.Current = load.Cbe / load.Qb;
+            CexBC.Current = load.Cbe / load.Qb;
 
             /* 
              * charge storage elements
              */
-            tf = mbp.TransitTimeF;
-            tr = mbp.TransitTimeR;
+            tf = mbp.TransitTimeForward;
+            tr = mbp.TransitTimeReverse;
             czbe = temp.TBEcap * bp.Area;
             pe = temp.TBEpot;
             xme = mbp.JunctionExpBE;
-            cdis = mbp.BaseFractionBCcap;
+            cdis = mbp.BaseFractionBCCap;
             ctot = temp.TBCcap * bp.Area;
             czbc = ctot * cdis;
             czbx = ctot - czbc;
@@ -264,7 +264,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             czcs = mbp.CapCS * bp.Area;
             ps = mbp.PotentialSubstrate;
             xms = mbp.ExponentialSubstrate;
-            xtf = mbp.TransitTimeBiasCoeffF;
+            xtf = mbp.TransitTimeBiasCoefficientForward;
             ovtf = modeltemp.TransitTimeVbcFactor;
             xjtf = mbp.TransitTimeHighCurrentF * bp.Area;
             if (tf != 0 && vbe > 0)
@@ -293,7 +293,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbe / pe;
                 sarg = Math.Exp(-xme * Math.Log(arg));
-                Qbe.Current = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
+                ChargeBE.Current = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
             }
             else
             {
@@ -301,7 +301,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 f2 = modeltemp.F2;
                 f3 = modeltemp.F3;
                 czbef2 = czbe / f2;
-                Qbe.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
+                ChargeBE.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
                      fcpe * fcpe));
             }
             fcpc = temp.Tf4;
@@ -312,34 +312,34 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbc / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                Qbc.Current = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
+                ChargeBC.Current = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
             }
             else
             {
                 czbcf2 = czbc / f2;
-                Qbc.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
+                ChargeBC.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
                      fcpc * fcpc));
             }
             if (vbx < fcpc)
             {
                 arg = 1 - vbx / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                Qbx.Current = pc * czbx * (1 - arg * sarg) / (1 - xmc);
+                ChargeBX.Current = pc * czbx * (1 - arg * sarg) / (1 - xmc);
             }
             else
             {
                 czbxf2 = czbx / f2;
-                Qbx.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
+                ChargeBX.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
             }
             if (vcs < 0)
             {
                 arg = 1 - vcs / ps;
                 sarg = Math.Exp(-xms * Math.Log(arg));
-                Qcs.Current = ps * czcs * (1 - arg * sarg) / (1 - xms);
+                ChargeCS.Current = ps * czcs * (1 - arg * sarg) / (1 - xms);
             }
             else
             {
-                Qcs.Current = vcs * czcs * (1 + xms * vcs / (2 * ps));
+                ChargeCS.Current = vcs * czcs * (1 + xms * vcs / (2 * ps));
             }
 
             // Register for excess phase calculations
@@ -380,17 +380,17 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double vbe = load.Vbe;
             double vbc = load.Vbc;
             double vbx = mbp.BipolarType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
-            double vcs = mbp.BipolarType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
+            double vcs = mbp.BipolarType * (state.Solution[substrateNode] - state.Solution[colPrimeNode]);
 
             /* 
              * charge storage elements
              */
-            tf = mbp.TransitTimeF;
-            tr = mbp.TransitTimeR;
+            tf = mbp.TransitTimeForward;
+            tr = mbp.TransitTimeReverse;
             czbe = temp.TBEcap * bp.Area;
             pe = temp.TBEpot;
             xme = mbp.JunctionExpBE;
-            cdis = mbp.BaseFractionBCcap;
+            cdis = mbp.BaseFractionBCCap;
             ctot = temp.TBCcap * bp.Area;
             czbc = ctot * cdis;
             czbx = ctot - czbc;
@@ -400,7 +400,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             czcs = mbp.CapCS * bp.Area;
             ps = mbp.PotentialSubstrate;
             xms = mbp.ExponentialSubstrate;
-            xtf = mbp.TransitTimeBiasCoeffF;
+            xtf = mbp.TransitTimeBiasCoefficientForward;
             ovtf = modeltemp.TransitTimeVbcFactor;
             xjtf = mbp.TransitTimeHighCurrentF * bp.Area;
             if (tf != 0 && vbe > 0)
@@ -432,7 +432,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbe / pe;
                 sarg = Math.Exp(-xme * Math.Log(arg));
-                Qbe.Current = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
+                ChargeBE.Current = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
                 capbe = tf * gbe + czbe * sarg;
             }
             else
@@ -441,7 +441,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 f2 = modeltemp.F2;
                 f3 = modeltemp.F3;
                 czbef2 = czbe / f2;
-                Qbe.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
+                ChargeBE.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
                      fcpe * fcpe));
                 capbe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
             }
@@ -453,13 +453,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbc / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                Qbc.Current = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
+                ChargeBC.Current = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
                 capbc = tr * gbc + czbc * sarg;
             }
             else
             {
                 czbcf2 = czbc / f2;
-                Qbc.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
+                ChargeBC.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
                      fcpc * fcpc));
                 capbc = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
             }
@@ -467,55 +467,55 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbx / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                Qbx.Current = pc * czbx * (1 - arg * sarg) / (1 - xmc);
+                ChargeBX.Current = pc * czbx * (1 - arg * sarg) / (1 - xmc);
                 capbx = czbx * sarg;
             }
             else
             {
                 czbxf2 = czbx / f2;
-                Qbx.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
+                ChargeBX.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
                 capbx = czbxf2 * (f3 + xmc * vbx / pc);
             }
             if (vcs < 0)
             {
                 arg = 1 - vcs / ps;
                 sarg = Math.Exp(-xms * Math.Log(arg));
-                Qcs.Current = ps * czcs * (1 - arg * sarg) / (1 - xms);
+                ChargeCS.Current = ps * czcs * (1 - arg * sarg) / (1 - xms);
                 capcs = czcs * sarg;
             }
             else
             {
-                Qcs.Current = vcs * czcs * (1 + xms * vcs / (2 * ps));
+                ChargeCS.Current = vcs * czcs * (1 + xms * vcs / (2 * ps));
                 capcs = czcs * (1 + xms * vcs / ps);
             }
 
-            Capbe = capbe;
-            Capbc = capbc;
-            Capcs = capcs;
-            Capbx = capbx;
+            CapBE = capbe;
+            CapBC = capbc;
+            CapCS = capcs;
+            CapBX = capbx;
 
-            Qbe.Integrate();
-            geqcb = Qbe.Jacobian(geqcb); // Multiplies geqcb with method.Slope (ag[0])
-            gpi += Qbe.Jacobian(capbe);
-            cb += Qbe.Derivative;
-            Qbc.Integrate();
-            gmu += Qbc.Jacobian(capbc);
-            cb += Qbc.Derivative;
-            cc -= Qbc.Derivative;
+            ChargeBE.Integrate();
+            geqcb = ChargeBE.Jacobian(geqcb); // Multiplies geqcb with method.Slope (ag[0])
+            gpi += ChargeBE.Jacobian(capbe);
+            cb += ChargeBE.Derivative;
+            ChargeBC.Integrate();
+            gmu += ChargeBC.Jacobian(capbc);
+            cb += ChargeBC.Derivative;
+            cc -= ChargeBC.Derivative;
 
             /* 
              * charge storage for c - s and b - x junctions
              */
-            Qcs.Integrate();
-            double gccs = Qcs.Jacobian(capcs);
-            Qbx.Integrate();
-            double geqbx = Qbx.Jacobian(capbx);
+            ChargeCS.Integrate();
+            double gccs = ChargeCS.Jacobian(capcs);
+            ChargeBX.Integrate();
+            double geqbx = ChargeBX.Jacobian(capbx);
 
             /* 
 			 * load current excitation vector
 			 */
-            double ceqcs = mbp.BipolarType * (Qcs.Derivative - vcs * gccs);
-            double ceqbx = mbp.BipolarType * (Qbx.Derivative - vbx * geqbx);
+            double ceqcs = mbp.BipolarType * (ChargeCS.Derivative - vcs * gccs);
+            double ceqbx = mbp.BipolarType * (ChargeBX.Derivative - vbx * geqbx);
             double ceqbe = mbp.BipolarType * (cc + cb - vbe * gpi + vbc * (-geqcb));
             double ceqbc = mbp.BipolarType * (-cc + - vbc * gmu);
             
@@ -523,25 +523,25 @@ namespace SpiceSharp.Components.BipolarBehaviors
             state.Rhs[colPrimeNode] += (ceqcs + ceqbx + ceqbc);
             state.Rhs[basePrimeNode] += -ceqbe - ceqbc;
             state.Rhs[emitPrimeNode] += (ceqbe);
-            state.Rhs[substNode] += (-ceqcs);
+            state.Rhs[substrateNode] += (-ceqcs);
 
             /* 
 			 * load y matrix
 			 */
             BaseBasePtr.Add(geqbx);
-            ColPrimeColPrimePtr.Add(gmu + gccs + geqbx);
+            CollectorPrimeCollectorPrimePtr.Add(gmu + gccs + geqbx);
             BasePrimeBasePrimePtr.Add(gpi + gmu + geqcb);
-            EmitPrimeEmitPrimePtr.Add(gpi);
-            ColPrimeBasePrimePtr.Add(-gmu);
-            BasePrimeColPrimePtr.Add(-gmu - geqcb);
-            BasePrimeEmitPrimePtr.Add(-gpi);
-            EmitPrimeColPrimePtr.Add(geqcb);
-            EmitPrimeBasePrimePtr.Add(-gpi - geqcb);
-            SubstSubstPtr.Add(gccs);
-            ColPrimeSubstPtr.Add(-gccs);
-            SubstColPrimePtr.Add(-gccs);
-            BaseColPrimePtr.Add(-geqbx);
-            ColPrimeBasePtr.Add(-geqbx);
+            EmitterPrimeEmitterPrimePtr.Add(gpi);
+            CollectorPrimeBasePrimePtr.Add(-gmu);
+            BasePrimeCollectorPrimePtr.Add(-gmu - geqcb);
+            BasePrimeEmitterPrimePtr.Add(-gpi);
+            EmitterPrimeCollectorPrimePtr.Add(geqcb);
+            EmitterPrimeBasePrimePtr.Add(-gpi - geqcb);
+            SubstrateSubstratePtr.Add(gccs);
+            CollectorPrimeSubstratePtr.Add(-gccs);
+            SubstrateCollectorPrimePtr.Add(-gccs);
+            BaseCollectorPrimePtr.Add(-geqbx);
+            CollectorPrimeBasePtr.Add(-geqbx);
         }
 
         /// <summary>
@@ -550,9 +550,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="timeStep">Current timeStep</param>
         public override void Truncate(ref double timeStep)
         {
-            Qbe.LocalTruncationError(ref timeStep);
-            Qbc.LocalTruncationError(ref timeStep);
-            Qcs.LocalTruncationError(ref timeStep);
+            ChargeBE.LocalTruncationError(ref timeStep);
+            ChargeBC.LocalTruncationError(ref timeStep);
+            ChargeCS.LocalTruncationError(ref timeStep);
         }
 
         /// <summary>
@@ -577,8 +577,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double cbe = args.cex;
             double gbe = args.gex;
 
-            double delta = Cexbc.TimeSteps[0];
-            double prevdelta = Cexbc.TimeSteps[1];
+            double delta = CexBC.TimeSteps[0];
+            double prevdelta = CexBC.TimeSteps[1];
             arg1 = delta / td;
             arg2 = 3 * arg1;
             arg1 = arg2 * arg1;
@@ -590,11 +590,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 state.States[1][State + Cexbc] = cbe / qb;
                 state.States[2][State + Cexbc] = state.States[1][State + Cexbc];
             } */
-            args.cc = (Cexbc[1] * (1 + delta / prevdelta + arg2) 
-                - Cexbc[2] * delta / prevdelta) / denom;
+            args.cc = (CexBC[1] * (1 + delta / prevdelta + arg2) 
+                - CexBC[2] * delta / prevdelta) / denom;
             args.cex = cbe * arg3;
             args.gex = gbe * arg3;
-            Cexbc.Current = args.cc + args.cex / args.qb;
+            CexBC.Current = args.cc + args.cex / args.qb;
         }
     }
 }

@@ -19,8 +19,14 @@
       <!-- Numerical method abbreviations -->
       <Word>Rhs</Word>
       <Word>Fillin</Word>
-      <Word>Rel</Word>
-      <Word>Abs</Word>
+      <Word>Fillins</Word>
+      <Word>Rel</Word> <!-- Relative -->
+      <Word>Abs</Word> <!-- Absolute -->
+      <Word>Lte</Word> <!-- Local Truncation Error -->
+      <Word>Tol</Word> <!-- Tolerance -->
+      <Word>Diag</Word> <!-- Diagonal -->
+      <Word>Gmin</Word> <!-- Minimum conductance -->
+      <Word>Jacobian</Word>
       
       <!-- Bipolar junction transistor -->
       <Word>Npn</Word>
@@ -29,7 +35,9 @@
       <Word>Vbc</Word>
       <Word>Vce</Word>
       <Word>Cbe</Word>
-      <Word></Word>
+      <Word>Gm</Word>
+      <Word>Gmu</Word>
+      <Word>Gpi</Word>
       
       <!-- Mosfet -->
       <Word>Mos</Word>
@@ -38,9 +46,10 @@
       <Word>Nmos</Word>
       <Word>Pmos</Word>
       <Word>Vgs</Word>
+      <Word>Vgd</Word>
       <Word>Vds</Word>
       <Word>Vbs</Word>
-      <Word>Gm</Word>
+      <Word>Gmbs</Word>
       <Word>Cgs</Word>
       <Word>Cgd</Word>
       <Word>Cgb</Word>
@@ -48,4 +57,22 @@
       <Word>Cbd</Word>
     </Recognized>
   </Words>
+  <Acronyms>
+    <CasingExceptions>
+      <!-- Bipolar junction transistor abbreviations -->
+      <Acronym>BE</Acronym> <!-- Base-Emitter -->
+      <Acronym>CE</Acronym> <!-- Collector-Emitter -->
+      <Acronym>BC</Acronym> <!-- Base-Collector -->
+      <Acronym>CS</Acronym> <!-- Collector-Substrate -->
+      <Acronym>BX</Acronym> <!-- Base-X-Collector -->
+
+      <!-- Mosfet abbreviations -->
+      <Acronym>GS</Acronym> <!-- Gate-Source -->
+      <Acronym>GD</Acronym> <!-- Gate-Drain -->
+      <Acronym>GB</Acronym> <!-- Gate-Bulk -->
+      <Acronym>DS</Acronym> <!-- Drain-Source -->
+      <Acronym>BS</Acronym> <!-- Bulk-Source -->
+      <Acronym>BD</Acronym> <!-- Bulk-Drain -->
+    </CasingExceptions>
+  </Acronyms>
 </Dictionary>

@@ -55,14 +55,14 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="vo">Offset</param>
-        /// <param name="va">Amplitude</param>
-        /// <param name="freq">Frequency (Hz)</param>
-        public Sine(double vo, double va, double freq)
+        /// <param name="offset">Offset</param>
+        /// <param name="amplitude">Amplitude</param>
+        /// <param name="frequency">Frequency (Hz)</param>
+        public Sine(double offset, double amplitude, double frequency)
         {
-            Offset.Set(vo);
-            Amplitude.Set(va);
-            Frequency.Set(freq);
+            Offset.Set(offset);
+            Amplitude.Set(amplitude);
+            Frequency.Set(frequency);
         }
 
         /// <summary>

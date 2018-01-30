@@ -48,7 +48,7 @@ namespace SpiceSharp.Sparse
                 for (Step = 1; Step <= Size; Step++)
                 {
                     pPivot = matrix.Diag[Step];
-                    LargestInCol = SparsePivoting.FindLargestInCol(pPivot.NextInCol);
+                    LargestInCol = SparsePivoting.FindLargestInCol(pPivot.NextInColumn);
                     if (LargestInCol * relThreshold < pPivot.Value.Magnitude)
                     {
                         if (matrix.Complex)
@@ -158,7 +158,7 @@ namespace SpiceSharp.Sparse
                     while (pElement != null)
                     {
                         Dest[pElement.Row] = pElement;
-                        pElement = pElement.NextInCol;
+                        pElement = pElement.NextInColumn;
                     }
 
                     // Update column
@@ -167,17 +167,17 @@ namespace SpiceSharp.Sparse
                     {
                         pElement = matrix.Diag[pColumn.Row];
                         pColumn.Value.Real = Dest[pColumn.Row] * pElement.Value.Real;
-                        while ((pElement = pElement.NextInCol) != null)
+                        while ((pElement = pElement.NextInColumn) != null)
                             Dest[pElement.Row].Real -= pColumn.Value.Real * pElement.Value.Real;
-                        pColumn = pColumn.NextInCol;
+                        pColumn = pColumn.NextInColumn;
                     }
 
                     // Gather
-                    pElement = matrix.Diag[Step].NextInCol;
+                    pElement = matrix.Diag[Step].NextInColumn;
                     while (pElement != null)
                     {
                         pElement.Value.Real = Dest[pElement.Row];
-                        pElement = pElement.NextInCol;
+                        pElement = pElement.NextInColumn;
                     }
 
                     // Check for singular matrix
@@ -195,7 +195,7 @@ namespace SpiceSharp.Sparse
                     while (pElement != null)
                     {
                         pDest[pElement.Row] = pElement;
-                        pElement = pElement.NextInCol;
+                        pElement = pElement.NextInColumn;
                     }
 
                     // Update column
@@ -204,9 +204,9 @@ namespace SpiceSharp.Sparse
                     {
                         pElement = matrix.Diag[pColumn.Row];
                         double Mult = (pDest[pColumn.Row].Value.Real *= pElement.Value.Real);
-                        while ((pElement = pElement.NextInCol) != null)
+                        while ((pElement = pElement.NextInColumn) != null)
                             pDest[pElement.Row].Value.Real -= Mult * pElement.Value.Real;
-                        pColumn = pColumn.NextInCol;
+                        pColumn = pColumn.NextInColumn;
                     }
 
                     // Check for singular matrix
@@ -257,7 +257,7 @@ namespace SpiceSharp.Sparse
                     while (pElement != null)
                     {
                         Dest[pElement.Row] = pElement;
-                        pElement = pElement.NextInCol;
+                        pElement = pElement.NextInColumn;
                     }
 
                     // Update column
@@ -269,21 +269,21 @@ namespace SpiceSharp.Sparse
                         // Cmplx expr: Mult = Dest[pColumn.Row] * (1.0 / *pPivot)
                         Mult.CopyMultiply(Dest[pColumn.Row], pElement);
                         pColumn.Value.CopyFrom(Mult);
-                        while ((pElement = pElement.NextInCol) != null)
+                        while ((pElement = pElement.NextInColumn) != null)
                         {
                             // Cmplx expr: Dest[pElement.Row] -= Mult * pElement
                             Dest[pElement.Row].SubtractMultiply(Mult, pElement);
                         }
-                        pColumn = pColumn.NextInCol;
+                        pColumn = pColumn.NextInColumn;
                     }
 
                     // Gather
-                    pElement = matrix.Diag[Step].NextInCol;
+                    pElement = matrix.Diag[Step].NextInColumn;
                     while (pElement != null)
                     {
                         pElement.Value.Real = Dest[pElement.Row].Real;
                         pElement.Value.Imag = Dest[pElement.Row].Imag;
-                        pElement = pElement.NextInCol;
+                        pElement = pElement.NextInColumn;
                     }
 
                     // Check for singular matrix
@@ -302,7 +302,7 @@ namespace SpiceSharp.Sparse
                     while (pElement != null)
                     {
                         pDest[pElement.Row] = pElement;
-                        pElement = pElement.NextInCol;
+                        pElement = pElement.NextInColumn;
                     }
 
                     // Update column
@@ -314,12 +314,12 @@ namespace SpiceSharp.Sparse
                         // Cmplx expr: Mult = *pDest[pColumn.Row] * (1.0 / *pPivot)
                         Mult.CopyMultiply(pDest[pColumn.Row], pElement);
                         pDest[pColumn.Row].Value.CopyFrom(Mult);
-                        while ((pElement = pElement.NextInCol) != null)
+                        while ((pElement = pElement.NextInColumn) != null)
                         {
                             // Cmplx expr: *pDest[pElement.Row] -= Mult * pElement
                             pDest[pElement.Row].Value.SubtractMultiply(Mult, pElement);
                         }
-                        pColumn = pColumn.NextInCol;
+                        pColumn = pColumn.NextInColumn;
                     }
 
                     // Check for singular matrix
@@ -347,7 +347,7 @@ namespace SpiceSharp.Sparse
             long OldMarkowitzProd_Step, OldMarkowitzProd_Row, OldMarkowitzProd_Col;
 
             Row = pPivot.Row;
-            Col = pPivot.Col;
+            Col = pPivot.Column;
             pivoting.PivotsOriginalRow = Row;
             pivoting.PivotsOriginalCol = Col;
 
@@ -445,35 +445,35 @@ namespace SpiceSharp.Sparse
                 // Exchange elements in rows while traveling from left to right. 
                 if (Row1Ptr == null)
                 {
-                    Column = Row2Ptr.Col;
+                    Column = Row2Ptr.Column;
                     Element1 = null;
                     Element2 = Row2Ptr;
                     Row2Ptr = Row2Ptr.NextInRow;
                 }
                 else if (Row2Ptr == null)
                 {
-                    Column = Row1Ptr.Col;
+                    Column = Row1Ptr.Column;
                     Element1 = Row1Ptr;
                     Element2 = null;
                     Row1Ptr = Row1Ptr.NextInRow;
                 }
-                else if (Row1Ptr.Col < Row2Ptr.Col)
+                else if (Row1Ptr.Column < Row2Ptr.Column)
                 {
-                    Column = Row1Ptr.Col;
+                    Column = Row1Ptr.Column;
                     Element1 = Row1Ptr;
                     Element2 = null;
                     Row1Ptr = Row1Ptr.NextInRow;
                 }
-                else if (Row1Ptr.Col > Row2Ptr.Col)
+                else if (Row1Ptr.Column > Row2Ptr.Column)
                 {
-                    Column = Row2Ptr.Col;
+                    Column = Row2Ptr.Column;
                     Element1 = null;
                     Element2 = Row2Ptr;
                     Row2Ptr = Row2Ptr.NextInRow;
                 }
                 else   // Row1Ptr.Col == Row2Ptr.Col 
                 {
-                    Column = Row1Ptr.Col;
+                    Column = Row1Ptr.Column;
                     Element1 = Row1Ptr;
                     Element2 = Row2Ptr;
                     Row1Ptr = Row1Ptr.NextInRow;
@@ -517,36 +517,36 @@ namespace SpiceSharp.Sparse
                     Row = Col2Ptr.Row;
                     Element1 = null;
                     Element2 = Col2Ptr;
-                    Col2Ptr = Col2Ptr.NextInCol;
+                    Col2Ptr = Col2Ptr.NextInColumn;
                 }
                 else if (Col2Ptr == null)
                 {
                     Row = Col1Ptr.Row;
                     Element1 = Col1Ptr;
                     Element2 = null;
-                    Col1Ptr = Col1Ptr.NextInCol;
+                    Col1Ptr = Col1Ptr.NextInColumn;
                 }
                 else if (Col1Ptr.Row < Col2Ptr.Row)
                 {
                     Row = Col1Ptr.Row;
                     Element1 = Col1Ptr;
                     Element2 = null;
-                    Col1Ptr = Col1Ptr.NextInCol;
+                    Col1Ptr = Col1Ptr.NextInColumn;
                 }
                 else if (Col1Ptr.Row > Col2Ptr.Row)
                 {
                     Row = Col2Ptr.Row;
                     Element1 = null;
                     Element2 = Col2Ptr;
-                    Col2Ptr = Col2Ptr.NextInCol;
+                    Col2Ptr = Col2Ptr.NextInColumn;
                 }
                 else   // Col1Ptr.Row == Col2Ptr.Row
                 {
                     Row = Col1Ptr.Row;
                     Element1 = Col1Ptr;
                     Element2 = Col2Ptr;
-                    Col1Ptr = Col1Ptr.NextInCol;
-                    Col2Ptr = Col2Ptr.NextInCol;
+                    Col1Ptr = Col1Ptr.NextInColumn;
+                    Col2Ptr = Col2Ptr.NextInColumn;
                 }
 
                 ExchangeRowElements(matrix, Col1, Element1, Col2, Element2, Row);
@@ -585,11 +585,11 @@ namespace SpiceSharp.Sparse
             while (pElement.Row < Row1)
             {
                 ElementAboveRow1 = pElement; // &(pElement.NextInCol);
-                pElement = pElement.NextInCol; // *ElementAboveRow1;
+                pElement = pElement.NextInColumn; // *ElementAboveRow1;
             }
             if (Element1 != null)
             {
-                ElementBelowRow1 = Element1.NextInCol;
+                ElementBelowRow1 = Element1.NextInColumn;
                 if (Element2 == null)
                 {
                     // Element2 does not exist, move Element1 down to Row2. 
@@ -597,7 +597,7 @@ namespace SpiceSharp.Sparse
                     {
                         // Element1 must be removed from linked list and moved.
                         if (ElementAboveRow1 != null)
-                            ElementAboveRow1.NextInCol = ElementBelowRow1;
+                            ElementAboveRow1.NextInColumn = ElementBelowRow1;
                         else
                             matrix.FirstInCol[Column] = ElementBelowRow1;
                         // *ElementAboveRow1 = ElementBelowRow1;
@@ -607,18 +607,18 @@ namespace SpiceSharp.Sparse
                         do
                         {
                             ElementAboveRow2 = pElement; // &(pElement.NextInCol);
-                            pElement = pElement.NextInCol; // *ElementAboveRow2;
+                            pElement = pElement.NextInColumn; // *ElementAboveRow2;
                         } while (pElement != null && pElement.Row < Row2);
 
                         // Place Element1 in Row2
                         if (ElementAboveRow2 != null)
-                            ElementAboveRow2.NextInCol = Element1;
+                            ElementAboveRow2.NextInColumn = Element1;
                         else
                             matrix.FirstInCol[Column] = Element1;
                         // *ElementAboveRow2 = Element1;
-                        Element1.NextInCol = pElement;
+                        Element1.NextInColumn = pElement;
                         if (ElementAboveRow1 != null)
-                            ElementAboveRow1.NextInCol = ElementBelowRow1;
+                            ElementAboveRow1.NextInColumn = ElementBelowRow1;
                         else
                             matrix.FirstInCol[Column] = ElementBelowRow1;
                         // *ElementAboveRow1 =ElementBelowRow1;
@@ -631,10 +631,10 @@ namespace SpiceSharp.Sparse
                     if (ElementBelowRow1.Row == Row2)
                     {
                         // Element2 is just below Element1, exchange them. 
-                        Element1.NextInCol = Element2.NextInCol;
-                        Element2.NextInCol = Element1;
+                        Element1.NextInColumn = Element2.NextInColumn;
+                        Element2.NextInColumn = Element1;
                         if (ElementAboveRow1 != null)
-                            ElementAboveRow1.NextInCol = Element2;
+                            ElementAboveRow1.NextInColumn = Element2;
                         else
                             matrix.FirstInCol[Column] = Element2;
                         // *ElementAboveRow1 = Element2;
@@ -646,24 +646,24 @@ namespace SpiceSharp.Sparse
                         do
                         {
                             ElementAboveRow2 = pElement; // &(pElement.NextInCol);
-                            pElement = pElement.NextInCol; // *ElementAboveRow2;
+                            pElement = pElement.NextInColumn; // *ElementAboveRow2;
                         } while (pElement.Row < Row2);
 
-                        ElementBelowRow2 = Element2.NextInCol;
+                        ElementBelowRow2 = Element2.NextInColumn;
 
                         // Switch Element1 and Element2
                         if (ElementAboveRow1 != null)
-                            ElementAboveRow1.NextInCol = Element2;
+                            ElementAboveRow1.NextInColumn = Element2;
                         else
                             matrix.FirstInCol[Column] = Element2;
                         // *ElementAboveRow1 = Element2;
-                        Element2.NextInCol = ElementBelowRow1;
+                        Element2.NextInColumn = ElementBelowRow1;
                         if (ElementAboveRow2 != null)
-                            ElementAboveRow2.NextInCol = Element1;
+                            ElementAboveRow2.NextInColumn = Element1;
                         else
                             matrix.FirstInCol[Column] = Element1;
                         // *ElementAboveRow2 = Element1;
-                        Element1.NextInCol = ElementBelowRow2;
+                        Element1.NextInColumn = ElementBelowRow2;
                     }
                     Element1.Row = Row2;
                     Element2.Row = Row1;
@@ -680,23 +680,23 @@ namespace SpiceSharp.Sparse
                     do
                     {
                         ElementAboveRow2 = pElement; // &(pElement.NextInCol);
-                        pElement = pElement.NextInCol; // *ElementAboveRow2;
+                        pElement = pElement.NextInColumn; // *ElementAboveRow2;
                     } while (pElement.Row < Row2);
 
-                    ElementBelowRow2 = Element2.NextInCol;
+                    ElementBelowRow2 = Element2.NextInColumn;
 
                     // Move Element2 to Row1
                     if (ElementAboveRow2 != null)
-                        ElementAboveRow2.NextInCol = Element2.NextInCol;
+                        ElementAboveRow2.NextInColumn = Element2.NextInColumn;
                     else
-                        matrix.FirstInCol[Column] = Element2.NextInCol;
+                        matrix.FirstInCol[Column] = Element2.NextInColumn;
                     // *ElementAboveRow2 = Element2.NextInCol;
                     if (ElementAboveRow1 != null)
-                        ElementAboveRow1.NextInCol = Element2;
+                        ElementAboveRow1.NextInColumn = Element2;
                     else
                         matrix.FirstInCol[Column] = Element2;
                     // *ElementAboveRow1 = Element2;
-                    Element2.NextInCol = ElementBelowRow1;
+                    Element2.NextInColumn = ElementBelowRow1;
                 }
                 Element2.Row = Row1;
             }
@@ -723,7 +723,7 @@ namespace SpiceSharp.Sparse
             // Search to find the element left of Col1
             ElementLeftOfCol1 = null;
             pElement = matrix.FirstInRow[Row];
-            while (pElement.Col < Col1)
+            while (pElement.Column < Col1)
             {
                 ElementLeftOfCol1 = pElement;
                 pElement = pElement.NextInRow;
@@ -736,7 +736,7 @@ namespace SpiceSharp.Sparse
                 if (Element2 == null)
                 {
                     // Element2 does not exist, remove Element1 and splice it in at Col2
-                    if (ElementRightOfCol1 != null && ElementRightOfCol1.Col < Col2)
+                    if (ElementRightOfCol1 != null && ElementRightOfCol1.Column < Col2)
                     {
                         // Remove Element1
                         if (ElementLeftOfCol1 != null)
@@ -750,18 +750,18 @@ namespace SpiceSharp.Sparse
                         {
                             ElementLeftOfCol2 = pElement;
                             pElement = pElement.NextInRow;
-                        } while (pElement != null && pElement.Col < Col2);
+                        } while (pElement != null && pElement.Column < Col2);
 
                         // Place Element1 in Col2. 
                         ElementLeftOfCol2.NextInRow = Element1;
                         Element1.NextInRow = pElement;
                     }
-                    Element1.Col = Col2;
+                    Element1.Column = Col2;
                 }
                 else
                 {
                     // Element2 does exist, and the two elements must be exchanged. 
-                    if (ElementRightOfCol1.Col == Col2)
+                    if (ElementRightOfCol1.Column == Col2)
                     {
                         // Element1 and Element2 are next to each other
                         Element1.NextInRow = Element2.NextInRow;
@@ -780,7 +780,7 @@ namespace SpiceSharp.Sparse
                         {
                             ElementLeftOfCol2 = pElement;
                             pElement = pElement.NextInRow;
-                        } while (pElement.Col < Col2);
+                        } while (pElement.Column < Col2);
                         ElementRightOfCol2 = Element2.NextInRow;
 
                         // Switch Element1 and Element2
@@ -793,22 +793,22 @@ namespace SpiceSharp.Sparse
                         ElementLeftOfCol2.NextInRow = Element1; // Cannot be null
                         Element1.NextInRow = ElementRightOfCol2;
                     }
-                    Element1.Col = Col2;
-                    Element2.Col = Col1;
+                    Element1.Column = Col2;
+                    Element2.Column = Col1;
                 }
             }
             else
             {
                 // Remove Element2 and insert it at Col1
                 ElementRightOfCol1 = pElement;
-                if (ElementRightOfCol1.Col != Col2)
+                if (ElementRightOfCol1.Column != Col2)
                 {
                     // Find the elements next to Element2 to remove it
                     do
                     {
                         ElementLeftOfCol2 = pElement;
                         pElement = pElement.NextInRow;
-                    } while (pElement.Col < Col2);
+                    } while (pElement.Column < Col2);
                     ElementRightOfCol2 = Element2.NextInRow;
 
                     // Move Element2 to Col1. 
@@ -825,7 +825,7 @@ namespace SpiceSharp.Sparse
                     // *ElementLeftOfCol1 = Element2;
                     Element2.NextInRow = ElementRightOfCol1;
                 }
-                Element2.Col = Col1;
+                Element2.Column = Col1;
             }
             return;
         }
@@ -855,24 +855,24 @@ namespace SpiceSharp.Sparse
                 // Calculate upper triangular element. 
                 pUpper.Value.Real *= pPivot.Value.Real;
 
-                pSub = pUpper.NextInCol;
-                pLower = pPivot.NextInCol;
+                pSub = pUpper.NextInColumn;
+                pLower = pPivot.NextInColumn;
                 while (pLower != null)
                 {
                     Row = pLower.Row;
 
                     // Find element in row that lines up with current lower triangular element. 
                     while (pSub != null && pSub.Row < Row)
-                        pSub = pSub.NextInCol;
+                        pSub = pSub.NextInColumn;
 
                     // Test to see if desired element was not found, if not, create fill-in. 
                     if (pSub == null || pSub.Row > Row)
                     {
-                        pSub = matrix.CreateFillin(Row, pUpper.Col);
+                        pSub = matrix.CreateFillin(Row, pUpper.Column);
                     }
                     pSub.Value.Real -= pUpper.Value.Real * pLower.Value.Real;
-                    pSub = pSub.NextInCol;
-                    pLower = pLower.NextInCol;
+                    pSub = pSub.NextInColumn;
+                    pLower = pLower.NextInColumn;
                 }
                 pUpper = pUpper.NextInRow;
             }
@@ -904,26 +904,26 @@ namespace SpiceSharp.Sparse
                 // Cmplx expr: *pUpper = *pUpper * (1.0 / *pPivot)
                 pUpper.Value.Multiply(pPivot);
 
-                pSub = pUpper.NextInCol;
-                pLower = pPivot.NextInCol;
+                pSub = pUpper.NextInColumn;
+                pLower = pPivot.NextInColumn;
                 while (pLower != null)
                 {
                     Row = pLower.Row;
 
                     // Find element in row that lines up with current lower triangular element. 
                     while (pSub != null && pSub.Row < Row)
-                        pSub = pSub.NextInCol;
+                        pSub = pSub.NextInColumn;
 
                     // Test to see if desired element was not found, if not, create fill-in. 
                     if (pSub == null || pSub.Row > Row)
                     {
-                        pSub = matrix.CreateFillin(Row, pUpper.Col);
+                        pSub = matrix.CreateFillin(Row, pUpper.Column);
                     }
 
                     // Cmplx expr: pElement -= *pUpper * pLower
                     pSub.Value.SubtractMultiply(pUpper, pLower);
-                    pSub = pSub.NextInCol;
-                    pLower = pLower.NextInCol;
+                    pSub = pSub.NextInColumn;
+                    pLower = pLower.NextInColumn;
                 }
                 pUpper = pUpper.NextInRow;
             }

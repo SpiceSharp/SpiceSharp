@@ -58,11 +58,11 @@ namespace SpiceSharp.Sparse
                     pPivot = matrix.Diag[I];
                     Intermediate[I].Real = (Temp *= pPivot.Value.Real);
 
-                    pElement = pPivot.NextInCol;
+                    pElement = pPivot.NextInColumn;
                     while (pElement != null)
                     {
                         Intermediate[pElement.Row].Real -= Temp * pElement.Value.Real;
-                        pElement = pElement.NextInCol;
+                        pElement = pElement.NextInColumn;
                     }
                 }
             }
@@ -74,7 +74,7 @@ namespace SpiceSharp.Sparse
                 pElement = matrix.Diag[I].NextInRow;
                 while (pElement != null)
                 {
-                    Temp -= pElement.Value.Real * Intermediate[pElement.Col];
+                    Temp -= pElement.Value.Real * Intermediate[pElement.Column];
                     pElement = pElement.NextInRow;
                 }
                 Intermediate[I].Real = Temp;
@@ -130,12 +130,12 @@ namespace SpiceSharp.Sparse
                     // Cmplx expr: Temp *= (1.0 / Pivot). 
                     Temp.Multiply(pPivot);
                     Intermediate[I] = Temp;
-                    pElement = pPivot.NextInCol;
+                    pElement = pPivot.NextInColumn;
                     while (pElement != null)
                     {
                         // Cmplx expr: Intermediate[Element.Row] -= Temp * *Element
                         Intermediate[pElement.Row].SubtractMultiply(Temp, pElement);
-                        pElement = pElement.NextInCol;
+                        pElement = pElement.NextInColumn;
                     }
                 }
             }
@@ -149,7 +149,7 @@ namespace SpiceSharp.Sparse
                 while (pElement != null)
                 {
                     // Cmplx expr: Temp -= *Element * Intermediate[Element.Col]
-                    Temp.SubtractMultiply(pElement, Intermediate[pElement.Col]);
+                    Temp.SubtractMultiply(pElement, Intermediate[pElement.Column]);
                     pElement = pElement.NextInRow;
                 }
                 Intermediate[I] = Temp;
@@ -211,7 +211,7 @@ namespace SpiceSharp.Sparse
                     pElement = matrix.Diag[I].NextInRow;
                     while (pElement != null)
                     {
-                        Intermediate[pElement.Col].Real -= Temp * pElement.Value.Real;
+                        Intermediate[pElement.Column].Real -= Temp * pElement.Value.Real;
                         pElement = pElement.NextInRow;
                     }
 
@@ -223,11 +223,11 @@ namespace SpiceSharp.Sparse
             {
                 pPivot = matrix.Diag[I];
                 Temp = Intermediate[I];
-                pElement = pPivot.NextInCol;
+                pElement = pPivot.NextInColumn;
                 while (pElement != null)
                 {
                     Temp -= pElement.Value.Real * Intermediate[pElement.Row];
-                    pElement = pElement.NextInCol;
+                    pElement = pElement.NextInColumn;
                 }
                 Intermediate[I].Real = Temp * pPivot.Value.Real;
             }
@@ -284,7 +284,7 @@ namespace SpiceSharp.Sparse
                     while (pElement != null)
                     {
                         // Cmplx expr: Intermediate[Element.Col] -= Temp * *Element
-                        Intermediate[pElement.Col].SubtractMultiply(Temp, pElement);
+                        Intermediate[pElement.Column].SubtractMultiply(Temp, pElement);
                         pElement = pElement.NextInRow;
                     }
                 }
@@ -295,14 +295,14 @@ namespace SpiceSharp.Sparse
             {
                 pPivot = matrix.Diag[I];
                 Temp = Intermediate[I];
-                pElement = pPivot.NextInCol;
+                pElement = pPivot.NextInColumn;
 
                 while (pElement != null)
                 {
                     // Cmplx expr: Temp -= Intermediate[Element.Row] * *Element
                     Temp.SubtractMultiply(Intermediate[pElement.Row], pElement);
 
-                    pElement = pElement.NextInCol;
+                    pElement = pElement.NextInColumn;
                 }
                 // Cmplx expr: Intermediate = Temp * (1.0 / *pPivot).
                 Intermediate[I].CopyMultiply(Temp, pPivot);

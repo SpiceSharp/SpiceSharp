@@ -262,7 +262,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             cd = Current;
 
             // check convergence
-            double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsTol;
+            double tol = config.RelTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsTolerance;
             if (Math.Abs(cdhat - cd) > tol)
             {
                 state.IsCon = false;

@@ -25,7 +25,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public double Pbfact1 { get; protected set; }
         public double OxideCapFactor { get; internal set; }
         [PropertyName("xd"), PropertyInfo("Depletion layer width")]
-        public double CoeffDepLayWidth { get; internal set; }
+        public double CoefficientDepLayWidth { get; internal set; }
         [PropertyName("alpha"), PropertyInfo("Alpha")]
         public double Alpha { get; internal set; }
 
@@ -113,7 +113,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                         vfb = mbp.Vt0 - mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi) + mbp.Phi);
                     }
                     Alpha = (Transistor.EpsilonSilicon + Transistor.EpsilonSilicon) / (Circuit.Charge * mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */);
-                    CoeffDepLayWidth = Math.Sqrt(Alpha);
+                    CoefficientDepLayWidth = Math.Sqrt(Alpha);
                 }
                 else
                 {

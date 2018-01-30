@@ -159,7 +159,7 @@ namespace SpiceSharp.Sparse
 
                         pElement = matrix.FirstInCol[Col];
                         while (pElement != null && pElement.Row != Row)
-                            pElement = pElement.NextInCol;
+                            pElement = pElement.NextInColumn;
 
                         if (data)
                             pImagElements[J - StartCol] = pElement;

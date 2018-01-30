@@ -109,7 +109,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 }
                 else
                 {
-                    tol = simulation.BaseConfiguration.RelTol * cbv;
+                    tol = simulation.BaseConfiguration.RelTolerance * cbv;
                     xbv = mbp.BreakdownVoltage - vt * Math.Log(1 + cbv / TSatCur);
                     iter = 0;
                     for (iter = 0; iter < 25; iter++)

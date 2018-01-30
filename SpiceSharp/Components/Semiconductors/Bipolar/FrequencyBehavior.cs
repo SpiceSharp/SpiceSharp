@@ -24,30 +24,30 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int colNode, baseNode, emitNode, substNode, colPrimeNode, basePrimeNode, emitPrimeNode;
-        protected MatrixElement ColColPrimePtr { get; private set; }
+        int collectorNode, baseNode, emitterNode, substrateNode, colPrimeNode, basePrimeNode, emitPrimeNode;
+        protected MatrixElement CollectorCollectorPrimePtr { get; private set; }
         protected MatrixElement BaseBasePrimePtr { get; private set; }
-        protected MatrixElement EmitEmitPrimePtr { get; private set; }
-        protected MatrixElement ColPrimeColPtr { get; private set; }
-        protected MatrixElement ColPrimeBasePrimePtr { get; private set; }
-        protected MatrixElement ColPrimeEmitPrimePtr { get; private set; }
+        protected MatrixElement EmitterEmitterPrimePtr { get; private set; }
+        protected MatrixElement CollectorPrimeCollectorPtr { get; private set; }
+        protected MatrixElement CollectorPrimeBasePrimePtr { get; private set; }
+        protected MatrixElement CollectorPrimeEmitterPrimePtr { get; private set; }
         protected MatrixElement BasePrimeBasePtr { get; private set; }
-        protected MatrixElement BasePrimeColPrimePtr { get; private set; }
-        protected MatrixElement BasePrimeEmitPrimePtr { get; private set; }
-        protected MatrixElement EmitPrimeEmitPtr { get; private set; }
-        protected MatrixElement EmitPrimeColPrimePtr { get; private set; }
-        protected MatrixElement EmitPrimeBasePrimePtr { get; private set; }
-        protected MatrixElement ColColPtr { get; private set; }
+        protected MatrixElement BasePrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement BasePrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement EmitterPrimeEmitterPtr { get; private set; }
+        protected MatrixElement EmitterPrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement EmitterPrimeBasePrimePtr { get; private set; }
+        protected MatrixElement CollectorCollectorPtr { get; private set; }
         protected MatrixElement BaseBasePtr { get; private set; }
-        protected MatrixElement EmitEmitPtr { get; private set; }
-        protected MatrixElement ColPrimeColPrimePtr { get; private set; }
+        protected MatrixElement EmitterEmitterPtr { get; private set; }
+        protected MatrixElement CollectorPrimeCollectorPrimePtr { get; private set; }
         protected MatrixElement BasePrimeBasePrimePtr { get; private set; }
-        protected MatrixElement EmitPrimeEmitPrimePtr { get; private set; }
-        protected MatrixElement SubstSubstPtr { get; private set; }
-        protected MatrixElement ColPrimeSubstPtr { get; private set; }
-        protected MatrixElement SubstColPrimePtr { get; private set; }
-        protected MatrixElement BaseColPrimePtr { get; private set; }
-        protected MatrixElement ColPrimeBasePtr { get; private set; }
+        protected MatrixElement EmitterPrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement SubstrateSubstratePtr { get; private set; }
+        protected MatrixElement CollectorPrimeSubstratePtr { get; private set; }
+        protected MatrixElement SubstrateCollectorPrimePtr { get; private set; }
+        protected MatrixElement BaseCollectorPrimePtr { get; private set; }
+        protected MatrixElement CollectorPrimeBasePtr { get; private set; }
         
         /// <summary>
         /// Properties
@@ -98,10 +98,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            colNode = pins[0];
+            collectorNode = pins[0];
             baseNode = pins[1];
-            emitNode = pins[2];
-            substNode = pins[3];
+            emitterNode = pins[2];
+            substrateNode = pins[3];
         }
 
         /// <summary>
@@ -114,34 +114,34 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
             // Get extra equations
-            colPrimeNode = load.ColPrimeNode;
+            colPrimeNode = load.CollectorPrimeNode;
             basePrimeNode = load.BasePrimeNode;
-            emitPrimeNode = load.EmitPrimeNode;
+            emitPrimeNode = load.EmitterPrimeNode;
 
             // Get matrix pointers
-            ColColPrimePtr = matrix.GetElement(colNode, colPrimeNode);
+            CollectorCollectorPrimePtr = matrix.GetElement(collectorNode, colPrimeNode);
             BaseBasePrimePtr = matrix.GetElement(baseNode, basePrimeNode);
-            EmitEmitPrimePtr = matrix.GetElement(emitNode, emitPrimeNode);
-            ColPrimeColPtr = matrix.GetElement(colPrimeNode, colNode);
-            ColPrimeBasePrimePtr = matrix.GetElement(colPrimeNode, basePrimeNode);
-            ColPrimeEmitPrimePtr = matrix.GetElement(colPrimeNode, emitPrimeNode);
+            EmitterEmitterPrimePtr = matrix.GetElement(emitterNode, emitPrimeNode);
+            CollectorPrimeCollectorPtr = matrix.GetElement(colPrimeNode, collectorNode);
+            CollectorPrimeBasePrimePtr = matrix.GetElement(colPrimeNode, basePrimeNode);
+            CollectorPrimeEmitterPrimePtr = matrix.GetElement(colPrimeNode, emitPrimeNode);
             BasePrimeBasePtr = matrix.GetElement(basePrimeNode, baseNode);
-            BasePrimeColPrimePtr = matrix.GetElement(basePrimeNode, colPrimeNode);
-            BasePrimeEmitPrimePtr = matrix.GetElement(basePrimeNode, emitPrimeNode);
-            EmitPrimeEmitPtr = matrix.GetElement(emitPrimeNode, emitNode);
-            EmitPrimeColPrimePtr = matrix.GetElement(emitPrimeNode, colPrimeNode);
-            EmitPrimeBasePrimePtr = matrix.GetElement(emitPrimeNode, basePrimeNode);
-            ColColPtr = matrix.GetElement(colNode, colNode);
+            BasePrimeCollectorPrimePtr = matrix.GetElement(basePrimeNode, colPrimeNode);
+            BasePrimeEmitterPrimePtr = matrix.GetElement(basePrimeNode, emitPrimeNode);
+            EmitterPrimeEmitterPtr = matrix.GetElement(emitPrimeNode, emitterNode);
+            EmitterPrimeCollectorPrimePtr = matrix.GetElement(emitPrimeNode, colPrimeNode);
+            EmitterPrimeBasePrimePtr = matrix.GetElement(emitPrimeNode, basePrimeNode);
+            CollectorCollectorPtr = matrix.GetElement(collectorNode, collectorNode);
             BaseBasePtr = matrix.GetElement(baseNode, baseNode);
-            EmitEmitPtr = matrix.GetElement(emitNode, emitNode);
-            ColPrimeColPrimePtr = matrix.GetElement(colPrimeNode, colPrimeNode);
+            EmitterEmitterPtr = matrix.GetElement(emitterNode, emitterNode);
+            CollectorPrimeCollectorPrimePtr = matrix.GetElement(colPrimeNode, colPrimeNode);
             BasePrimeBasePrimePtr = matrix.GetElement(basePrimeNode, basePrimeNode);
-            EmitPrimeEmitPrimePtr = matrix.GetElement(emitPrimeNode, emitPrimeNode);
-            SubstSubstPtr = matrix.GetElement(substNode, substNode);
-            ColPrimeSubstPtr = matrix.GetElement(colPrimeNode, substNode);
-            SubstColPrimePtr = matrix.GetElement(substNode, colPrimeNode);
-            BaseColPrimePtr = matrix.GetElement(baseNode, colPrimeNode);
-            ColPrimeBasePtr = matrix.GetElement(colPrimeNode, baseNode);
+            EmitterPrimeEmitterPrimePtr = matrix.GetElement(emitPrimeNode, emitPrimeNode);
+            SubstrateSubstratePtr = matrix.GetElement(substrateNode, substrateNode);
+            CollectorPrimeSubstratePtr = matrix.GetElement(colPrimeNode, substrateNode);
+            SubstrateCollectorPrimePtr = matrix.GetElement(substrateNode, colPrimeNode);
+            BaseCollectorPrimePtr = matrix.GetElement(baseNode, colPrimeNode);
+            CollectorPrimeBasePtr = matrix.GetElement(colPrimeNode, baseNode);
         }
 
         /// <summary>
@@ -150,29 +150,29 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void Unsetup()
         {
             // Remove references
-            ColColPrimePtr = null;
+            CollectorCollectorPrimePtr = null;
             BaseBasePrimePtr = null;
-            EmitEmitPrimePtr = null;
-            ColPrimeColPtr = null;
-            ColPrimeBasePrimePtr = null;
-            ColPrimeEmitPrimePtr = null;
+            EmitterEmitterPrimePtr = null;
+            CollectorPrimeCollectorPtr = null;
+            CollectorPrimeBasePrimePtr = null;
+            CollectorPrimeEmitterPrimePtr = null;
             BasePrimeBasePtr = null;
-            BasePrimeColPrimePtr = null;
-            BasePrimeEmitPrimePtr = null;
-            EmitPrimeEmitPtr = null;
-            EmitPrimeColPrimePtr = null;
-            EmitPrimeBasePrimePtr = null;
-            ColColPtr = null;
+            BasePrimeCollectorPrimePtr = null;
+            BasePrimeEmitterPrimePtr = null;
+            EmitterPrimeEmitterPtr = null;
+            EmitterPrimeCollectorPrimePtr = null;
+            EmitterPrimeBasePrimePtr = null;
+            CollectorCollectorPtr = null;
             BaseBasePtr = null;
-            EmitEmitPtr = null;
-            ColPrimeColPrimePtr = null;
+            EmitterEmitterPtr = null;
+            CollectorPrimeCollectorPrimePtr = null;
             BasePrimeBasePrimePtr = null;
-            EmitPrimeEmitPrimePtr = null;
-            SubstSubstPtr = null;
-            ColPrimeSubstPtr = null;
-            SubstColPrimePtr = null;
-            BaseColPrimePtr = null;
-            ColPrimeBasePtr = null;
+            EmitterPrimeEmitterPrimePtr = null;
+            SubstrateSubstratePtr = null;
+            CollectorPrimeSubstratePtr = null;
+            SubstrateCollectorPrimePtr = null;
+            BaseCollectorPrimePtr = null;
+            CollectorPrimeBasePtr = null;
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double vbe = load.Vbe;
             double vbc = load.Vbc;
             double vbx = vbx = mbp.BipolarType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
-            double vcs = mbp.BipolarType * (state.Solution[substNode] - state.Solution[colPrimeNode]);
+            double vcs = mbp.BipolarType * (state.Solution[substrateNode] - state.Solution[colPrimeNode]);
 
             // Get shared parameters
             double cbe = load.Cbe;
@@ -204,12 +204,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
             /* 
              * charge storage elements
              */
-            tf = mbp.TransitTimeF;
-            tr = mbp.TransitTimeR;
+            tf = mbp.TransitTimeForward;
+            tr = mbp.TransitTimeReverse;
             czbe = temp.TBEcap * bp.Area;
             pe = temp.TBEpot;
             xme = mbp.JunctionExpBE;
-            cdis = mbp.BaseFractionBCcap;
+            cdis = mbp.BaseFractionBCCap;
             ctot = temp.TBCcap * bp.Area;
             czbc = ctot * cdis;
             czbx = ctot - czbc;
@@ -219,7 +219,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             czcs = mbp.CapCS * bp.Area;
             ps = mbp.PotentialSubstrate;
             xms = mbp.ExponentialSubstrate;
-            xtf = mbp.TransitTimeBiasCoeffF;
+            xtf = mbp.TransitTimeBiasCoefficientForward;
             ovtf = modeltemp.TransitTimeVbcFactor;
             xjtf = mbp.TransitTimeHighCurrentF * bp.Area;
             if (tf != 0 && vbe > 0)
@@ -331,29 +331,29 @@ namespace SpiceSharp.Components.BipolarBehaviors
             xccs = Capcs * cstate.Laplace;
             xcmcb = Geqcb * cstate.Laplace;
 
-            ColColPtr.Add(gcpr);
+            CollectorCollectorPtr.Add(gcpr);
             BaseBasePtr.Add(gx + xcbx);
-            EmitEmitPtr.Add(gepr);
-            ColPrimeColPrimePtr.Add(gmu + go + gcpr + xcmu + xccs + xcbx);
+            EmitterEmitterPtr.Add(gepr);
+            CollectorPrimeCollectorPrimePtr.Add(gmu + go + gcpr + xcmu + xccs + xcbx);
             BasePrimeBasePrimePtr.Add(gx + gpi + gmu + xcpi + xcmu + xcmcb);
-            EmitPrimeEmitPrimePtr.Add(gpi + gepr + gm + go + xcpi);
-            ColColPrimePtr.Add(-gcpr);
+            EmitterPrimeEmitterPrimePtr.Add(gpi + gepr + gm + go + xcpi);
+            CollectorCollectorPrimePtr.Add(-gcpr);
             BaseBasePrimePtr.Add(-gx);
-            EmitEmitPrimePtr.Add(-gepr);
-            ColPrimeColPtr.Add(-gcpr);
-            ColPrimeBasePrimePtr.Add(-gmu + gm - xcmu);
-            ColPrimeEmitPrimePtr.Add(-gm - go);
+            EmitterEmitterPrimePtr.Add(-gepr);
+            CollectorPrimeCollectorPtr.Add(-gcpr);
+            CollectorPrimeBasePrimePtr.Add(-gmu + gm - xcmu);
+            CollectorPrimeEmitterPrimePtr.Add(-gm - go);
             BasePrimeBasePtr.Add(-gx);
-            BasePrimeColPrimePtr.Add(-gmu - xcmu - xcmcb);
-            BasePrimeEmitPrimePtr.Add(-gpi - xcpi);
-            EmitPrimeEmitPtr.Add(-gepr);
-            EmitPrimeColPrimePtr.Add(-go + xcmcb);
-            EmitPrimeBasePrimePtr.Add(-gpi - gm - xcpi - xcmcb);
-            SubstSubstPtr.Add(xccs);
-            ColPrimeSubstPtr.Add(-xccs);
-            SubstColPrimePtr.Add(-xccs);
-            BaseColPrimePtr.Add(-xcbx);
-            ColPrimeBasePtr.Add(-xcbx);
+            BasePrimeCollectorPrimePtr.Add(-gmu - xcmu - xcmcb);
+            BasePrimeEmitterPrimePtr.Add(-gpi - xcpi);
+            EmitterPrimeEmitterPtr.Add(-gepr);
+            EmitterPrimeCollectorPrimePtr.Add(-go + xcmcb);
+            EmitterPrimeBasePrimePtr.Add(-gpi - gm - xcpi - xcmcb);
+            SubstrateSubstratePtr.Add(xccs);
+            CollectorPrimeSubstratePtr.Add(-xccs);
+            SubstrateCollectorPrimePtr.Add(-xccs);
+            BaseCollectorPrimePtr.Add(-xcbx);
+            CollectorPrimeBasePtr.Add(-xcbx);
         }
     }
 }

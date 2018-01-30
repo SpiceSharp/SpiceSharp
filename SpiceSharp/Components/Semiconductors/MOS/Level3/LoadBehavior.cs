@@ -468,9 +468,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 /* 
 				 * .....short channel effect factor
 				 */
-                if ((mbp.JunctionDepth != 0.0) && (modeltemp.CoeffDepLayWidth != 0.0))
+                if ((mbp.JunctionDepth != 0.0) && (modeltemp.CoefficientDepLayWidth != 0.0))
                 {
-                    wps = modeltemp.CoeffDepLayWidth * sqphbs;
+                    wps = modeltemp.CoefficientDepLayWidth * sqphbs;
                     oneoverxj = 1.0 / mbp.JunctionDepth;
                     xjonxl = mbp.JunctionDepth * oneoverxl;
                     djonxj = mbp.LatDiff * oneoverxj;
@@ -480,7 +480,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     argc = wponxj / (1.0 + wponxj);
                     argb = Math.Sqrt(1.0 - argc * argc);
                     fshort = 1.0 - xjonxl * (arga * argb - djonxj);
-                    dwpdvb = modeltemp.CoeffDepLayWidth * dsqdvb;
+                    dwpdvb = modeltemp.CoefficientDepLayWidth * dsqdvb;
                     dadvb = (coeff1 + coeff2 * (wponxj + wponxj)) * dwpdvb * oneoverxj;
                     dbdvb = -argc * argc * (1.0 - argc) * dwpdvb / (argb * wps);
                     dfsdvb = -xjonxl * (dadvb * argb + arga * dbdvb);
@@ -855,14 +855,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             /*
              *  check convergence
              */
-            double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(Cd)) + config.AbsTol;
+            double tol = config.RelTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(Cd)) + config.AbsTolerance;
             if (Math.Abs(cdhat - Cd) >= tol)
             {
                 state.IsCon = false;
                 return false;
             }
 
-            tol = config.RelTol * Math.Max(Math.Abs(cbhat), Math.Abs(Cbs + Cbd)) + config.AbsTol;
+            tol = config.RelTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(Cbs + Cbd)) + config.AbsTolerance;
             if (Math.Abs(cbhat - (Cbs + Cbd)) > tol)
             {
                 state.IsCon = false;

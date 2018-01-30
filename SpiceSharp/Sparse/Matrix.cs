@@ -171,7 +171,7 @@ namespace SpiceSharp.Sparse
                 while (elt != null)
                 {
                     elt.Value.Cplx = 0.0;
-                    elt = elt.NextInCol;
+                    elt = elt.NextInColumn;
                 }
             }
 
@@ -236,7 +236,7 @@ namespace SpiceSharp.Sparse
                 if (elt.Row < row)
                 {
                     // Next one maybe?
-                    elt = elt.NextInCol;
+                    elt = elt.NextInColumn;
                 }
                 else if (elt.Row == row)
                 {
@@ -280,7 +280,7 @@ namespace SpiceSharp.Sparse
             {
                 // There are no elements yet in the column
                 elt = new MatrixElement(row, col);
-                elt.NextInCol = FirstInCol[col];
+                elt.NextInColumn = FirstInCol[col];
                 FirstInCol[col] = elt;
                 if (row == col)
                     Diag[row] = elt;
@@ -294,15 +294,15 @@ namespace SpiceSharp.Sparse
                 while (elt != null && elt.Row < row)
                 {
                     last = elt;
-                    elt = elt.NextInCol;
+                    elt = elt.NextInColumn;
                 }
 
                 // If the element does not exist yet, create it
                 if (elt == null || elt.Row != row)
                 {
                     elt = new MatrixElement(row, col);
-                    elt.NextInCol = last.NextInCol;
-                    last.NextInCol = elt;
+                    elt.NextInColumn = last.NextInColumn;
+                    last.NextInColumn = elt;
 
                     if (row == col)
                         Diag[row] = elt;
@@ -348,10 +348,10 @@ namespace SpiceSharp.Sparse
 
                 while (pElement != null)
                 {
-                    pElement.Col = Col;
+                    pElement.Column = Col;
                     pElement.NextInRow = FirstInRow[pElement.Row];
                     FirstInRow[pElement.Row] = pElement;
-                    pElement = pElement.NextInCol;
+                    pElement = pElement.NextInColumn;
                 }
             }
             RowsLinked = true;
@@ -365,17 +365,17 @@ namespace SpiceSharp.Sparse
         private void SpliceInRows(MatrixElement elt)
         {
             int row = elt.Row;
-            int col = elt.Col;
+            int col = elt.Column;
 
             MatrixElement splice = FirstInRow[row];
-            if (splice == null || splice.Col > col)
+            if (splice == null || splice.Column > col)
             {
                 elt.NextInRow = FirstInRow[row];
                 FirstInRow[row] = elt;
             }
             else
             {
-                while (splice.NextInRow != null && splice.NextInRow.Col < col)
+                while (splice.NextInRow != null && splice.NextInRow.Column < col)
                     splice = splice.NextInRow;
                 elt.NextInRow = splice.NextInRow;
                 splice.NextInRow = elt;

@@ -233,7 +233,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             vt = Circuit.KOverQ * bp.Temperature;
             Check = 1;
 
-            EffectiveLength = bp.Length - 2 * mbp.LatDiff;
+            EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
             if ((temp.TSatCurDens == 0) || (bp.DrainArea.Value == 0) || (bp.SourceArea.Value == 0))
             {
                 DrainSatCur = temp.TSatCur;
@@ -989,14 +989,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             /*
              *  check convergence
              */
-            double tol = config.RelTol * Math.Max(Math.Abs(cdhat), Math.Abs(Cd)) + config.AbsTol;
+            double tol = config.RelTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(Cd)) + config.AbsTolerance;
             if (Math.Abs(cdhat - Cd) >= tol)
             {
                 state.IsCon = false;
                 return false;
             }
 
-            tol = config.RelTol * Math.Max(Math.Abs(cbhat), Math.Abs(Cbs + Cbd)) + config.AbsTol;
+            tol = config.RelTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(Cbs + Cbd)) + config.AbsTolerance;
             if (Math.Abs(cbhat - (Cbs + Cbd)) > tol)
             {
                 state.IsCon = false;

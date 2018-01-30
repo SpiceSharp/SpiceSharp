@@ -32,8 +32,8 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Add entity behaviors
         /// </summary>
-        /// <param name="eb">Entity behaviors</param>
-        public void Add(EntityBehaviors eb) => behaviors.Add(eb);
+        /// <param name="behaviors">Entity behaviors</param>
+        public void Add(EntityBehaviors behaviors) => this.behaviors.Add(behaviors);
         
         /// <summary>
         /// Get parameters of a specific type

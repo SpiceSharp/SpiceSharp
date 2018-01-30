@@ -125,8 +125,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Calculate the operating point of the circuit
         /// </summary>
-        /// <param name="maxiter">Maximum iterations</param>
-        protected void Op(int maxiter)
+        /// <param name="maxIterations">Maximum iterations</param>
+        protected void Op(int maxIterations)
         {
             var state = State;
             var config = BaseConfiguration;
@@ -136,7 +136,7 @@ namespace SpiceSharp.Simulations
             // First, let's try finding an operating point by using normal iterations
             if (!config.NoOperatingPointIterations)
             {
-                if (Iterate(maxiter))
+                if (Iterate(maxIterations))
                     return;
             }
 
@@ -151,7 +151,7 @@ namespace SpiceSharp.Simulations
                 for (int i = 0; i <= config.NumGminSteps; i++)
                 {
                     state.IsCon = false;
-                    if (!Iterate(maxiter))
+                    if (!Iterate(maxIterations))
                     {
                         state.DiagGmin = 0.0;
                         CircuitWarning.Warning(this, "Gmin step failed");
@@ -161,7 +161,7 @@ namespace SpiceSharp.Simulations
                     state.Init = State.InitializationStates.InitFloat;
                 }
                 state.DiagGmin = 0.0;
-                if (Iterate(maxiter))
+                if (Iterate(maxIterations))
                     return;
             }
 
@@ -173,7 +173,7 @@ namespace SpiceSharp.Simulations
                 for (int i = 0; i <= config.NumSrcSteps; i++)
                 {
                     state.SrcFact = i / (double)config.NumSrcSteps;
-                    if (!Iterate(maxiter))
+                    if (!Iterate(maxIterations))
                     {
                         state.SrcFact = 1.0;
                         // circuit.CurrentAnalysis = AnalysisType.DoingTran;
@@ -192,9 +192,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Solve iteratively for simulations
         /// </summary>
-        /// <param name="maxiter">Maximum number of iterations</param>
+        /// <param name="maxIterations">Maximum number of iterations</param>
         /// <returns></returns>
-        protected bool Iterate(int maxiter)
+        protected bool Iterate(int maxIterations)
         {
             var state = State;
             var matrix = state.Matrix;
@@ -278,7 +278,7 @@ namespace SpiceSharp.Simulations
                 state.OldSolution[0] = 0.0;
 
                 // Exceeded maximum number of iterations
-                if (iterno > maxiter)
+                if (iterno > maxIterations)
                 {
                     Statistics.NumIter += iterno;
                     return false;
@@ -492,7 +492,7 @@ namespace SpiceSharp.Simulations
 
                 if (node.UnknownType == Node.NodeType.Voltage)
                 {
-                    double tol = config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltTol;
+                    double tol = config.RelTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltTol;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemNode = node;
@@ -501,7 +501,7 @@ namespace SpiceSharp.Simulations
                 }
                 else
                 {
-                    double tol = config.RelTol * Math.Max(Math.Abs(n), Math.Abs(o)) + config.AbsTol;
+                    double tol = config.RelTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.AbsTolerance;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemNode = node;

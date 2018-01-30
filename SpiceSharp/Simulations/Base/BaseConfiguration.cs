@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Relative tolerance
         /// </summary>
-        public double RelTol { get; set; } = 1e-3;
+        public double RelTolerance { get; set; } = 1e-3;
 
         /// <summary>
         /// Absolute tolerance on voltages
@@ -45,12 +45,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Absolute tolerance
         /// </summary>
-        public double AbsTol { get; set; } = 1e-12;
+        public double AbsTolerance { get; set; } = 1e-12;
 
         /// <summary>
         /// Charge tolerance
         /// </summary>
-        public double ChgTol { get; set; } = 1e-14;
+        public double ChargeTolerance { get; set; } = 1e-14;
 
         /// <summary>
         /// Number of iterations for DC simulation

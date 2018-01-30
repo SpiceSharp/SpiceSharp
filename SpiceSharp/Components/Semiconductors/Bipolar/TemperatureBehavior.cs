@@ -82,11 +82,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
             factlog = ratio1 * mbp.EnergyGap / vt + mbp.TempExpIS * ratlog;
             factor = Math.Exp(factlog);
             TSatCur = mbp.SatCur * factor;
-            bfactor = Math.Exp(ratlog * mbp.BetaExp);
+            bfactor = Math.Exp(ratlog * mbp.BetaExponent);
             TBetaF = mbp.BetaF * bfactor;
             TBetaR = mbp.BetaR * bfactor;
-            TBEleakCur = mbp.LeakBEcurrent * Math.Exp(factlog / mbp.LeakBEemissionCoeff) / bfactor;
-            TBCleakCur = mbp.LeakBCcurrent * Math.Exp(factlog / mbp.LeakBCemissionCoeff) / bfactor;
+            TBEleakCur = mbp.LeakBEcurrent * Math.Exp(factlog / mbp.LeakBEEmissionCoefficient) / bfactor;
+            TBCleakCur = mbp.LeakBCCurrent * Math.Exp(factlog / mbp.LeakBCEmissionCoefficient) / bfactor;
 
             pbo = (mbp.PotentialBE - pbfact) / modeltemp.Fact1;
             gmaold = (mbp.PotentialBE - pbo) / pbo;
@@ -102,9 +102,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
             gmanew = (TBCpot - pbo) / pbo;
             TBCcap *= 1 + mbp.JunctionExpBC * (4e-4 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
-            TDepCap = mbp.DepletionCapCoeff * TBEpot;
+            TDepCap = mbp.DepletionCapCoefficient * TBEpot;
             Tf1 = TBEpot * (1 - Math.Exp((1 - mbp.JunctionExpBE) * modeltemp.Xfc)) / (1 - mbp.JunctionExpBE);
-            Tf4 = mbp.DepletionCapCoeff * TBCpot;
+            Tf4 = mbp.DepletionCapCoefficient * TBCpot;
             Tf5 = TBCpot * (1 - Math.Exp((1 - mbp.JunctionExpBC) * modeltemp.Xfc)) / (1 - mbp.JunctionExpBC);
             TVcrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.SatCur));
         }

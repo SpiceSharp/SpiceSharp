@@ -123,7 +123,7 @@ namespace SpiceSharp.Sparse
                 while (pElement != null)
                 {
                     Nc[Step]++;
-                    pElement = pElement.NextInCol;
+                    pElement = pElement.NextInColumn;
                 }
 
                 pColumn = matrix.FirstInCol[Step];
@@ -131,9 +131,9 @@ namespace SpiceSharp.Sparse
                 {
                     pElement = matrix.Diag[pColumn.Row];
                     Nm[Step]++;
-                    while ((pElement = pElement.NextInCol) != null)
+                    while ((pElement = pElement.NextInColumn) != null)
                         No[Step]++;
-                    pColumn = pColumn.NextInCol;
+                    pColumn = pColumn.NextInColumn;
                 }
             }
 
@@ -175,7 +175,7 @@ namespace SpiceSharp.Sparse
                 // Set Count to -1 initially to remove count due to pivot element
                 Count = -1;
                 pElement = matrix.FirstInRow[I];
-                while (pElement != null && pElement.Col < step)
+                while (pElement != null && pElement.Column < step)
                     pElement = pElement.NextInRow;
                 while (pElement != null)
                 {
@@ -201,11 +201,11 @@ namespace SpiceSharp.Sparse
                 Count = -1;
                 pElement = matrix.FirstInCol[I];
                 while (pElement != null && pElement.Row < step)
-                    pElement = pElement.NextInCol;
+                    pElement = pElement.NextInColumn;
                 while (pElement != null)
                 {
                     Count++;
-                    pElement = pElement.NextInCol;
+                    pElement = pElement.NextInColumn;
                 }
                 MarkowitzCol[I] = Count;
             }
@@ -381,7 +381,7 @@ namespace SpiceSharp.Sparse
                     {
                         ChosenPivot = matrix.FirstInCol[I];
                         while ((ChosenPivot != null) && (ChosenPivot.Row < Step))
-                            ChosenPivot = ChosenPivot.NextInCol;
+                            ChosenPivot = ChosenPivot.NextInColumn;
                         if (ChosenPivot != null)
                         {
                             // Reduced column has no elements, matrix is singular. 
@@ -395,7 +395,7 @@ namespace SpiceSharp.Sparse
                             if (MarkowitzRow[I] == 0)
                             {
                                 ChosenPivot = matrix.FirstInRow[I];
-                                while ((ChosenPivot != null) && (ChosenPivot.Col < Step))
+                                while ((ChosenPivot != null) && (ChosenPivot.Column < Step))
                                     ChosenPivot = ChosenPivot.NextInRow;
                                 if (ChosenPivot != null)
                                 {
@@ -411,7 +411,7 @@ namespace SpiceSharp.Sparse
                     else
                     {
                         ChosenPivot = matrix.FirstInRow[I];
-                        while ((ChosenPivot != null) && (ChosenPivot.Col < Step))
+                        while ((ChosenPivot != null) && (ChosenPivot.Column < Step))
                             ChosenPivot = ChosenPivot.NextInRow;
                         if (ChosenPivot != null)
                         {   // Reduced row has no elements, matrix is singular. 
@@ -498,13 +498,13 @@ namespace SpiceSharp.Sparse
 
                     // Find off-diagonal elements. 
                     pOtherInRow = pDiag.NextInRow;
-                    pOtherInCol = pDiag.NextInCol;
+                    pOtherInCol = pDiag.NextInColumn;
                     if (pOtherInRow == null && pOtherInCol == null)
                     {
                         pOtherInRow = matrix.FirstInRow[I];
                         while (pOtherInRow != null)
                         {
-                            if (pOtherInRow.Col >= Step && pOtherInRow.Col != I)
+                            if (pOtherInRow.Column >= Step && pOtherInRow.Column != I)
                                 break;
                             pOtherInRow = pOtherInRow.NextInRow;
                         }
@@ -513,7 +513,7 @@ namespace SpiceSharp.Sparse
                         {
                             if (pOtherInCol.Row >= Step && pOtherInCol.Row != I)
                                 break;
-                            pOtherInCol = pOtherInCol.NextInCol;
+                            pOtherInCol = pOtherInCol.NextInColumn;
                         }
                     }
 
@@ -521,7 +521,7 @@ namespace SpiceSharp.Sparse
                     // off-diagonals are placed symmetricly. */
                     if (pOtherInRow != null && pOtherInCol != null)
                     {
-                        if (pOtherInRow.Col == pOtherInCol.Row)
+                        if (pOtherInRow.Column == pOtherInCol.Row)
                         {
                             LargestOffDiagonal = Math.Max(pOtherInRow.Value.Magnitude, pOtherInCol.Value.Magnitude);
                             if (Magnitude >= LargestOffDiagonal)
@@ -638,7 +638,7 @@ namespace SpiceSharp.Sparse
                 pElement = matrix.FirstInCol[I];
 
                 while (pElement != null && pElement.Row < Step)
-                    pElement = pElement.NextInCol;
+                    pElement = pElement.NextInColumn;
 
                 if ((LargestInCol = FindLargestInCol(pElement)) == 0.0)
                     continue; // for loop 
@@ -653,7 +653,7 @@ namespace SpiceSharp.Sparse
                         pLargestElement = pElement;
                     }
                     // Calculate element's MarkowitzProduct. 
-                    Product = MarkowitzRow[pElement.Row] * MarkowitzCol[pElement.Col];
+                    Product = MarkowitzRow[pElement.Row] * MarkowitzCol[pElement.Column];
 
                     // Test to see if element is acceptable as a pivot candidate. 
                     if ((Product <= MinMarkowitzProduct) && (Magnitude > matrix.RelThreshold * LargestInCol) && (Magnitude > matrix.AbsThreshold))
@@ -682,7 +682,7 @@ namespace SpiceSharp.Sparse
                                 return ChosenPivot;
                         }
                     }
-                    pElement = pElement.NextInCol;
+                    pElement = pElement.NextInColumn;
                 }  // End of while(pElement != null) 
             } // End of for(Step) 
 
@@ -712,7 +712,7 @@ namespace SpiceSharp.Sparse
             {
                 if ((Magnitude = element.Value.Magnitude) > Largest)
                     Largest = Magnitude;
-                element = element.NextInCol;
+                element = element.NextInColumn;
             }
 
             return Largest;
@@ -732,12 +732,12 @@ namespace SpiceSharp.Sparse
             double Largest, Magnitude;
 
             Row = pElement.Row;
-            Col = pElement.Col;
+            Col = pElement.Column;
             pElement = matrix.FirstInCol[Col];
 
             // Travel down column until reduced submatrix is entered. 
             while ((pElement != null) && (pElement.Row < Step))
-                pElement = pElement.NextInCol;
+                pElement = pElement.NextInColumn;
 
             // Initialize the variable Largest. 
             if (pElement.Row != Row)
@@ -746,7 +746,7 @@ namespace SpiceSharp.Sparse
                 Largest = 0.0;
 
             // Search rest of column for largest element, avoiding excluded element. 
-            while ((pElement = pElement.NextInCol) != null)
+            while ((pElement = pElement.NextInColumn) != null)
             {
                 if ((Magnitude = pElement.Value.Magnitude) > Largest)
                 {
@@ -776,7 +776,7 @@ namespace SpiceSharp.Sparse
             double Product;
 
             // Update Markowitz numbers. 
-            for (ColPtr = pivot.NextInCol; ColPtr != null; ColPtr = ColPtr.NextInCol)
+            for (ColPtr = pivot.NextInColumn; ColPtr != null; ColPtr = ColPtr.NextInColumn)
             {
                 Row = ColPtr.Row;
                 --MarkowitzRow[Row];
@@ -799,7 +799,7 @@ namespace SpiceSharp.Sparse
 
             for (RowPtr = pivot.NextInRow; RowPtr != null; RowPtr = RowPtr.NextInRow)
             {
-                Col = RowPtr.Col;
+                Col = RowPtr.Column;
                 --MarkowitzCol[Col];
 
                 // Form Markowitz product while being cautious of overflows. 
