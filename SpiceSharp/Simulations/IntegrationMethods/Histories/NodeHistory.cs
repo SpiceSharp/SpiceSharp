@@ -54,9 +54,6 @@ namespace SpiceSharp.IntegrationMethods
         {
             get
             {
-                if (index < 0 || index >= Length)
-                    throw new CircuitException("Invalid index {0}".FormatString(index));
-
                 // Find the matching node
                 var point = currentPoint;
                 for (int i = 0; i < index; i++)

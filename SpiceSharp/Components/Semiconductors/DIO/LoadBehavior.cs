@@ -162,14 +162,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // Initialization
             Check = false;
-            if (state.Init == State.InitFlags.InitJct)
+            if (state.Init == State.InitializationState.InitJct)
             {
                 if (bp.Off)
                     vd = 0.0;
                 else
                     vd = temp.TVcrit;
             }
-            else if (state.Init == State.InitFlags.InitFix && bp.Off)
+            else if (state.Init == State.InitializationState.InitFix && bp.Off)
             {
                 vd = 0.0;
             }
@@ -216,7 +216,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             }
 
             // Check convergence
-            if ((state.Init != State.InitFlags.InitFix) || !bp.Off)
+            if ((state.Init != State.InitializationState.InitFix) || !bp.Off)
             {
                 if (Check)
                     state.IsCon = false;

@@ -247,8 +247,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 			 * step or the general iteration step and they
 			 * share some code, so we put them first - others later on
 			 */
-            if ((state.Init == State.InitFlags.InitFloat || state.UseSmallSignal || (state.Init == State.InitFlags.InitTransient)) ||
-                ((state.Init == State.InitFlags.InitFix) && (!bp.Off)))
+            if ((state.Init == State.InitializationState.InitFloat || state.UseSmallSignal || (state.Init == State.InitializationState.InitTransient)) ||
+                ((state.Init == State.InitializationState.InitFix) && (!bp.Off)))
             {
                 // general iteration
                 vbs = mbp.MosfetType * (state.Solution[bulkNode] - state.Solution[SourceNodePrime]);
@@ -300,7 +300,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 				 * called.  We still just initialize the three voltages
 				 */
 
-                if ((state.Init == State.InitFlags.InitJct) && !bp.Off)
+                if ((state.Init == State.InitializationState.InitJct) && !bp.Off)
                 {
                     vds = mbp.MosfetType * bp.InitialVds;
                     vgs = mbp.MosfetType * bp.InitialVgs;
@@ -461,7 +461,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             /* 
 			 * check convergence
 			 */
-            if (!bp.Off || (!(state.Init == State.InitFlags.InitFix || state.UseSmallSignal)))
+            if (!bp.Off || (!(state.Init == State.InitializationState.InitFix || state.UseSmallSignal)))
             {
                 if (Check == 1)
                     state.IsCon = false;

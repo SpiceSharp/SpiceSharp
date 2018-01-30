@@ -122,7 +122,7 @@ namespace SpiceSharp.Simulations
             state.UseSmallSignal = false;
             state.Gmin = baseconfig.Gmin;
             Op(baseconfig.DcMaxIterations);
-            state.Sparse |= State.SparseFlags.AcShouldReorder;
+            state.Sparse |= State.SparseState.AcShouldReorder;
 
             // Connect noise sources
             foreach (var behavior in NoiseBehaviors)

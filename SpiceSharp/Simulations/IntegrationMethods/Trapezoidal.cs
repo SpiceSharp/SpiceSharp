@@ -37,10 +37,10 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Initialize the trapezoidal integration method
         /// </summary>
-        /// <param name="transientBehaviors">Truncation behaviors</param>
-        public override void Initialize(Collection<TransientBehavior> transientBehaviors)
+        /// <param name="behaviors">Truncation behaviors</param>
+        public override void Initialize(Collection<TransientBehavior> behaviors)
         {
-            base.Initialize(transientBehaviors);
+            base.Initialize(behaviors);
 
             ag = new double[MaxOrder];
             for (int i = 0; i < MaxOrder; i++)

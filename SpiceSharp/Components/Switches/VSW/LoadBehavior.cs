@@ -128,7 +128,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             bool current_state = false;
             var state = simulation.State;
 
-            if (state.Init == State.InitFlags.InitFix || state.Init == State.InitFlags.InitJct)
+            if (state.Init == State.InitializationState.InitFix || state.Init == State.InitializationState.InitJct)
             {
                 if (bp.ZeroState)
                 {

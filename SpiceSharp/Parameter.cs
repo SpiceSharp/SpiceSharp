@@ -94,8 +94,7 @@ namespace SpiceSharp
         public static implicit operator double(Parameter parameter)
         {
             if (parameter == null)
-                throw new ArgumentNullException(nameof(parameter));
-
+                return double.NaN;
             return parameter.Value;
         }
 

@@ -14,7 +14,7 @@ namespace SpiceSharp.Simulations
         /// Initialization flags
         /// </summary>
         [Flags]
-        public enum InitFlags
+        public enum InitializationState
         {
             /// <summary>
             /// Default state
@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
         /// Sparse matrix flags
         /// </summary>
         [Flags]
-        public enum SparseFlags
+        public enum SparseState
         {
             /// <summary>
             /// Indicates that the matrix should be reordered
@@ -98,12 +98,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the initialization flag
         /// </summary>
-        public InitFlags Init { get; set; }
+        public InitializationState Init { get; set; }
 
         /// <summary>
         /// Gets or sets the sparse matrix flags
         /// </summary>
-        public SparseFlags Sparse { get; set; }
+        public SparseState Sparse { get; set; }
 
         /// <summary>
         /// Gets or sets the current domain for simulation

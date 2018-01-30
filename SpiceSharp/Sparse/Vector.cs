@@ -18,13 +18,13 @@ namespace SpiceSharp.Sparse
             get
             {
                 if (index < 0 || index >= Length)
-                    throw new SparseException("Invalid index {0}".FormatString(index));
+                    throw new ArgumentException("Invalid index {0}".FormatString(index));
                 return values[index];
             }
             set
             {
                 if (index < 0 || index >= Length)
-                    throw new SparseException("Invalid index {0}".FormatString(index));
+                    throw new ArgumentException("Invalid index {0}".FormatString(index));
                 values[index] = value;
             }
         }

@@ -150,23 +150,23 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Preorder matrix
-                if (!state.Sparse.HasFlag(State.SparseFlags.DidPreorder))
+                if (!state.Sparse.HasFlag(State.SparseState.DidPreorder))
                 {
                     matrix.Preorder();
-                    state.Sparse |= State.SparseFlags.DidPreorder;
+                    state.Sparse |= State.SparseState.DidPreorder;
                 }
-                if (state.Init == State.InitFlags.InitJct || state.Init == State.InitFlags.InitTransient)
+                if (state.Init == State.InitializationState.InitJct || state.Init == State.InitializationState.InitTransient)
                 {
-                    state.Sparse |= State.SparseFlags.ShouldReorder;
+                    state.Sparse |= State.SparseState.ShouldReorder;
                 }
 
                 // Reorder
-                if (state.Sparse.HasFlag(State.SparseFlags.ShouldReorder))
+                if (state.Sparse.HasFlag(State.SparseState.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
                     matrix.Reorder(state.PivotRelTol, state.PivotAbsTol, state.DiagGmin);
                     Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~State.SparseFlags.ShouldReorder;
+                    state.Sparse &= ~State.SparseState.ShouldReorder;
                 }
                 else
                 {
@@ -203,7 +203,7 @@ namespace SpiceSharp.Simulations
 
                 switch (state.Init)
                 {
-                    case State.InitFlags.InitFloat:
+                    case State.InitializationState.InitFloat:
                         if (state.UseDC && state.HadrainNodeset)
                         {
                             if (pass)
@@ -217,25 +217,25 @@ namespace SpiceSharp.Simulations
                         }
                         break;
 
-                    case State.InitFlags.InitJct:
-                        state.Init = State.InitFlags.InitFix;
-                        state.Sparse |= State.SparseFlags.ShouldReorder;
+                    case State.InitializationState.InitJct:
+                        state.Init = State.InitializationState.InitFix;
+                        state.Sparse |= State.SparseState.ShouldReorder;
                         break;
 
-                    case State.InitFlags.InitFix:
+                    case State.InitializationState.InitFix:
                         if (state.IsCon)
-                            state.Init = State.InitFlags.InitFloat;
+                            state.Init = State.InitializationState.InitFloat;
                         pass = true;
                         break;
 
-                    case State.InitFlags.InitTransient:
+                    case State.InitializationState.InitTransient:
                         if (iterno <= 1)
-                            state.Sparse = State.SparseFlags.ShouldReorder;
-                        state.Init = State.InitFlags.InitFloat;
+                            state.Sparse = State.SparseState.ShouldReorder;
+                        state.Init = State.InitializationState.InitFloat;
                         break;
 
-                    case State.InitFlags.Init:
-                        state.Init = State.InitFlags.InitFloat;
+                    case State.InitializationState.Init:
+                        state.Init = State.InitializationState.InitFloat;
                         break;
 
                     default:

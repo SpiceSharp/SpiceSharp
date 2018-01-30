@@ -164,5 +164,64 @@ namespace SpiceSharp.Sparse
                 Real = -r * (Imag = -1.0 / (den.Imag + r * den.Real));
             }
         }
+
+        /// <summary>
+        /// Equals
+        /// </summary>
+        /// <param name="obj">Object</param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+            if (obj is ElementValue ev)
+            {
+                if (Real.Equals(ev.Real) && Imag.Equals(ev.Imag))
+                    return true;
+                return false;
+            }
+            if (obj is Complex c)
+            {
+                if (Real.Equals(c.Real) && Imag.Equals(c.Imaginary))
+                    return true;
+                return false;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Hash
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return Cplx.GetHashCode();
+        }
+
+        /// <summary>
+        /// Equality operator override
+        /// </summary>
+        /// <param name="left">Left hand side</param>
+        /// <param name="right">Right hand side</param>
+        /// <returns></returns>
+        public static bool operator ==(ElementValue left, ElementValue right)
+        {
+            if (left.Real.Equals(right.Real) && left.Imag.Equals(right.Imag))
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Inequality operator override
+        /// </summary>
+        /// <param name="left">Left hand side</param>
+        /// <param name="right">Right hand side</param>
+        /// <returns></returns>
+        public static bool operator !=(ElementValue left, ElementValue right)
+        {
+            if (left.Real.Equals(right.Real) && left.Imag.Equals(right.Imag))
+                return false;
+            return true;
+        }
     }
 }

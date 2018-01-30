@@ -157,7 +157,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             var state = simulation.State;
 
             // decide the state of the switch
-            if (state.Init == State.InitFlags.InitFix || state.Init == State.InitFlags.InitJct)
+            if (state.Init == State.InitializationState.InitFix || state.Init == State.InitializationState.InitJct)
             {
                 if (bp.ZeroState)
                 {

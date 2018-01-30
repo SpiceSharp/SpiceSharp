@@ -84,7 +84,7 @@ namespace SpiceSharp.Sparse
         public static implicit operator double(MatrixElement el)
         {
             if (el == null)
-                throw new ArgumentNullException(nameof(el));
+                return 0.0;
             return el.Value.Real;
         }
 
@@ -95,7 +95,7 @@ namespace SpiceSharp.Sparse
         public static implicit operator Complex(MatrixElement el)
         {
             if (el == null)
-                throw new ArgumentNullException(nameof(el));
+                return new Complex();
             return el.Value.Cplx;
         }
 
@@ -106,7 +106,7 @@ namespace SpiceSharp.Sparse
         public static implicit operator ElementValue(MatrixElement el)
         {
             if (el == null)
-                throw new ArgumentNullException(nameof(el));
+                return new ElementValue();
             return el.Value;
         }
     }
