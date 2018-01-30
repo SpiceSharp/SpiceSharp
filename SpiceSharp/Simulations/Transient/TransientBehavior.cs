@@ -59,10 +59,10 @@ namespace SpiceSharp.Behaviors
         public abstract void Transient(TimeSimulation simulation);
 
         /// <summary>
-        /// Truncate the timestep based on the LTE (Local Truncation Error)
+        /// Truncate the timeStep based on the LTE (Local Truncation Error)
         /// </summary>
-        /// <param name="timestep">Timestep</param>
-        public virtual void Truncate(ref double timestep)
+        /// <param name="timeStep">TimeStep</param>
+        public virtual void Truncate(ref double timeStep)
         {
             // Do nothing (yet)
         }

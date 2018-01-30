@@ -122,7 +122,7 @@ namespace SpiceSharp.Simulations
             state.UseSmallSignal = false;
             state.Gmin = baseconfig.Gmin;
             Op(baseconfig.DcMaxIterations);
-            state.Sparse |= State.SparseState.AcShouldReorder;
+            state.Sparse |= State.SparseStates.AcShouldReorder;
 
             // Connect noise sources
             foreach (var behavior in NoiseBehaviors)
@@ -131,7 +131,7 @@ namespace SpiceSharp.Simulations
             // Loop through noise figures
             foreach (double freq in FrequencySweep.Points)
             {
-                data.Freq = freq;
+                data.Frequency = freq;
                 state.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
                 AcIterate(circuit);
 

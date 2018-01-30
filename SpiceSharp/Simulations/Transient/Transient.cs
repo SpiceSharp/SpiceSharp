@@ -11,9 +11,9 @@ namespace SpiceSharp.Simulations
     public class Transient : TimeSimulation
     {
         /// <summary>
-        /// Event that is called when the timestep has been cut due to convergence problems
+        /// Event that is called when the timeStep has been cut due to convergence problems
         /// </summary>
-        public event EventHandler<TimestepCutEventArgs> TimestepCut;
+        public event EventHandler<TimeStepCutEventArgs> TimeStepCut;
 
         /// <summary>
         /// Behaviors for accepting a timepoint
@@ -21,7 +21,7 @@ namespace SpiceSharp.Simulations
         protected Collection<AcceptBehavior> AcceptBehaviors { get; private set; }
 
         /// <summary>
-        /// Behaviors for truncating the timestep
+        /// Behaviors for truncating the timeStep
         /// </summary>
         protected Collection<TruncateBehavior> TruncateBehaviors { get; private set; }
 
@@ -51,10 +51,10 @@ namespace SpiceSharp.Simulations
         /// <param name="name">Name</param>
         /// <param name="step">Step</param>
         /// <param name="final">Final time</param>
-        /// <param name="maxstep">Maximum timestep</param>
-        public Transient(Identifier name, double step, double final, double maxstep) : base(name)
+        /// <param name="maxStep">Maximum timeStep</param>
+        public Transient(Identifier name, double step, double final, double maxStep) : base(name)
         {
-            Parameters.Add(new TimeConfiguration(step, final, maxstep));
+            Parameters.Add(new TimeConfiguration(step, final, maxStep));
         }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace SpiceSharp.Simulations
 
                         // Try to solve the new point
                         if (Method.SavedTime == 0.0)
-                            state.Init = State.InitializationState.InitTransient;
+                            state.Init = State.InitializationStates.InitTransient;
                         bool converged = TranIterate(timeconfig.TranMaxIterations);
                         Statistics.TimePoints++;
 
@@ -195,14 +195,14 @@ namespace SpiceSharp.Simulations
 
                         if (!converged)
                         {
-                            // Failed to converge, let's try again with a smaller timestep
+                            // Failed to converge, let's try again with a smaller timeStep
                             Method.Rollback();
                             Statistics.Rejected++;
                             Method.Delta /= 8.0;
                             Method.CutOrder();
 
-                            var data = new TimestepCutEventArgs(circuit, Method.Delta / 8.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
-                            TimestepCut?.Invoke(this, data);
+                            var data = new TimeStepCutEventArgs(circuit, Method.Delta / 8.0, TimeStepCutEventArgs.TimeStepCutReason.Convergence);
+                            TimeStepCut?.Invoke(this, data);
                         }
                         else
                         {
@@ -215,8 +215,8 @@ namespace SpiceSharp.Simulations
                             else
                             {
                                 Statistics.Rejected++;
-                                var data = new TimestepCutEventArgs(circuit, Method.Delta, TimestepCutEventArgs.TimestepCutReason.Truncation);
-                                TimestepCut?.Invoke(this, data);
+                                var data = new TimeStepCutEventArgs(circuit, Method.Delta, TimeStepCutEventArgs.TimeStepCutReason.Truncation);
+                                TimeStepCut?.Invoke(this, data);
                             }
                         }
 
@@ -225,7 +225,7 @@ namespace SpiceSharp.Simulations
                             if (Method.OldDelta > timeconfig.DeltaMin)
                                 Method.Delta = timeconfig.DeltaMin;
                             else
-                                throw new CircuitException("Timestep too small at t={0:g}: {1:g}".FormatString(Method.SavedTime, Method.Delta));
+                                throw new CircuitException("TimeStep too small at t={0:g}: {1:g}".FormatString(Method.SavedTime, Method.Delta));
                         }
                     }
                 }

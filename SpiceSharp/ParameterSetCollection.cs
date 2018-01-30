@@ -42,12 +42,12 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Remove parameters of a specific type
+        /// Remove a set of parameters of a specific type
         /// </summary>
-        /// <param name="t">The parameters type</param>
-        public void Remove(Type t)
+        /// <param name="parameterSetType">The parameters type</param>
+        public void Remove(Type parameterSetType)
         {
-            parameters.Remove(t);
+            parameters.Remove(parameterSetType);
         }
 
         /// <summary>

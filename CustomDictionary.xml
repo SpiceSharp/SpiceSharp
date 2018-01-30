@@ -2,6 +2,8 @@
 <Dictionary>
   <Words>
     <Recognized>
+      
+      <!-- Common abbreviations -->
       <Word>Pos</Word>
       <Word>Neg</Word>
       <Word>Eq</Word>
@@ -10,11 +12,40 @@
       <Word>Cap</Word>
       <Word>Res</Word>
       <Word>Transconductance</Word>
-      <Word>Mos</Word>
-      <Word>Mosfet</Word>
-      <Word>Fet</Word>
+      <Word>Transresistance</Word>
       <Word>Unsetup</Word>
       <Word>Exp</Word>
+      
+      <!-- Numerical method abbreviations -->
+      <Word>Rhs</Word>
+      <Word>Fillin</Word>
+      <Word>Rel</Word>
+      <Word>Abs</Word>
+      
+      <!-- Bipolar junction transistor -->
+      <Word>Npn</Word>
+      <Word>Pnp</Word>
+      <Word>Vbe</Word>
+      <Word>Vbc</Word>
+      <Word>Vce</Word>
+      <Word>Cbe</Word>
+      <Word></Word>
+      
+      <!-- Mosfet -->
+      <Word>Mos</Word>
+      <Word>Fet</Word>
+      <Word>Mosfet</Word>
+      <Word>Nmos</Word>
+      <Word>Pmos</Word>
+      <Word>Vgs</Word>
+      <Word>Vds</Word>
+      <Word>Vbs</Word>
+      <Word>Gm</Word>
+      <Word>Cgs</Word>
+      <Word>Cgd</Word>
+      <Word>Cgb</Word>
+      <Word>Cbs</Word>
+      <Word>Cbd</Word>
     </Recognized>
   </Words>
 </Dictionary>

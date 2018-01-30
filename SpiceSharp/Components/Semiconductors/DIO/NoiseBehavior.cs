@@ -102,7 +102,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             DiodeNoise.Generators[RsNoise].SetCoefficients(modeltemp.Conductance * bp.Area);
             DiodeNoise.Generators[IdNoise].SetCoefficients(load.Current);
             DiodeNoise.Generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent 
-                * Math.Log(Math.Max(Math.Abs(load.Current), 1e-38))) / noise.Freq);
+                * Math.Log(Math.Max(Math.Abs(load.Current), 1e-38))) / noise.Frequency);
 
             // Evaluate noise
             DiodeNoise.Evaluate(simulation);

@@ -30,10 +30,10 @@ namespace SpiceSharp
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="defvalue">The default value</param>
-        public Parameter(double defvalue)
+        /// <param name="defaultValue">The default value</param>
+        public Parameter(double defaultValue)
         {
-            Value = defvalue;
+            Value = defaultValue;
             Given = false;
         }
 

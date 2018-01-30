@@ -260,18 +260,18 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			* initialization
 			*/
             icheck = false;
-            if (state.Init == State.InitializationState.InitJct && state.Domain == State.DomainType.Time && state.UseDC && state.UseIC)
+            if (state.Init == State.InitializationStates.InitJct && state.Domain == State.DomainType.Time && state.UseDC && state.UseIC)
             {
                 vbe = mbp.BipolarType * bp.InitialVbe;
                 vce = mbp.BipolarType * bp.InitialVce;
                 vbc = vbe - vce;
             }
-            else if (state.Init == State.InitializationState.InitJct && !bp.Off)
+            else if (state.Init == State.InitializationStates.InitJct && !bp.Off)
             {
                 vbe = temp.TVcrit;
                 vbc = 0;
             }
-            else if (state.Init == State.InitializationState.InitJct || (state.Init == State.InitializationState.InitFix && bp.Off))
+            else if (state.Init == State.InitializationStates.InitJct || (state.Init == State.InitializationStates.InitFix && bp.Off))
             {
                 vbe = 0;
                 vbc = 0;
@@ -407,7 +407,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             /* 
 			 * check convergence
 			 */
-            if (state.Init != State.InitializationState.InitFix || !bp.Off)
+            if (state.Init != State.InitializationStates.InitFix || !bp.Off)
             {
                 if (icheck)
                     state.IsCon = false;

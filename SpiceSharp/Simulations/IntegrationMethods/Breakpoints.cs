@@ -37,24 +37,24 @@ namespace SpiceSharp.IntegrationMethods
         /// Wrapper for CKTsetBreak in cktsetbk.c
         /// Add a breakpoint to the list
         /// </summary>
-        /// <param name="bp"></param>
-        public void SetBreakpoint(double bp)
+        /// <param name="timePoint">Time point</param>
+        public void SetBreakpoint(double timePoint)
         {
             // Insert
             for (int i = 0; i < bps.Count; i++)
             {
                 // Same breakpoint, return without setting it
-                if (Math.Abs(bps[i] - bp) <= MinBreak)
+                if (Math.Abs(bps[i] - timePoint) <= MinBreak)
                     return;
 
                 // Check if we need to insert the breakpoint here
-                if (bp < bps[i])
+                if (timePoint < bps[i])
                 {
-                    bps.Insert(i, bp);
+                    bps.Insert(i, timePoint);
                     if (i == 0)
                     {
-                        First = bp;
-                        Delta = First - bp;
+                        First = timePoint;
+                        Delta = First - timePoint;
                         return;
                     }
                     else
@@ -67,7 +67,7 @@ namespace SpiceSharp.IntegrationMethods
             }
 
             // Since we got here, it just needs to be added to the end
-            bps.Add(bp);
+            bps.Add(timePoint);
         }
 
         /// <summary>

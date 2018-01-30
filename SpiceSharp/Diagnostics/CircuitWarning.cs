@@ -27,11 +27,11 @@ namespace SpiceSharp.Diagnostics
         /// <summary>
         /// Add a warning
         /// </summary>
-        /// <param name="msg"></param>
-        public static void Warning(object sender, string msg)
+        /// <param name="message">Message</param>
+        public static void Warning(object sender, string message)
         {
-            WarningEventArgs arg = new WarningEventArgs(msg);
-            warnings.Add(msg);
+            WarningEventArgs arg = new WarningEventArgs(message);
+            warnings.Add(message);
             WarningGenerated?.Invoke(sender, arg);
         }
     }
@@ -49,10 +49,10 @@ namespace SpiceSharp.Diagnostics
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="msg"></param>
-        public WarningEventArgs(string msg)
+        /// <param name="message"></param>
+        public WarningEventArgs(string message)
         {
-            Message = msg;
+            Message = message;
         }
     }
 }

@@ -33,10 +33,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="w">Waveform</param>
-        public BaseParameters(Waveform w)
+        /// <param name="waveform">Waveform</param>
+        public BaseParameters(Waveform waveform)
         {
-            Waveform = w;
+            Waveform = waveform;
         }
     }
 }

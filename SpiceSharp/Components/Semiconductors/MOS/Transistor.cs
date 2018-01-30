@@ -135,7 +135,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// <param name="vcrit">Critical</param>
         /// <param name="check">Checking variable</param>
         /// <returns></returns>
-        public static double DEVpnjlim(double vnew, double vold, double vt, double vcrit, ref int icheck)
+        public static double DEVpnjlim(double vnew, double vold, double vt, double vcrit, ref int check)
         {
             double arg;
 
@@ -157,11 +157,11 @@ namespace SpiceSharp.Components.MosfetBehaviors
                 {
                     vnew = vt * Math.Log(vnew / vt);
                 }
-                icheck = 1;
+                check = 1;
             }
             else
             {
-                icheck = 0;
+                check = 0;
             }
             return (vnew);
         }

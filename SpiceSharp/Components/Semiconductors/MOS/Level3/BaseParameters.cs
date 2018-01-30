@@ -21,9 +21,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         [PropertyName("ad"), PropertyInfo("Drain area")]
         public Parameter DrainArea { get; } = new Parameter();
         [PropertyName("ps"), PropertyInfo("Source perimeter")]
-        public Parameter SourcePerimiter { get; } = new Parameter();
+        public Parameter SourcePerimeter { get; } = new Parameter();
         [PropertyName("pd"), PropertyInfo("Drain perimeter")]
-        public Parameter DrainPerimiter { get; } = new Parameter();
+        public Parameter DrainPerimeter { get; } = new Parameter();
         [PropertyName("nrs"), PropertyInfo("Source squares")]
         public Parameter SourceSquares { get; } = new Parameter(1);
         [PropertyName("nrd"), PropertyInfo("Drain squares")]

@@ -14,7 +14,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// If true, the operating point calculation immediately skips to the GMIN stepping phase
         /// </summary>
-        public bool NoOpIter { get; set; } = false;
+        public bool NoOperatingPointIterations { get; set; } = false;
 
         /// <summary>
         /// The GMIN parameter

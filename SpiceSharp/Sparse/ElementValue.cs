@@ -37,21 +37,21 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="re">Real part</param>
-        /// <param name="im">Imaginary part</param>
-        public ElementValue(double re, double im) : this()
+        /// <param name="real">Real part</param>
+        /// <param name="imaginary">Imaginary part</param>
+        public ElementValue(double real, double imaginary) : this()
         {
-            Real = re;
-            Imag = im;
+            Real = real;
+            Imag = imaginary;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="cplx">Complex number</param>
-        public ElementValue(Complex cplx) : this()
+        /// <param name="complexValue">Complex number</param>
+        public ElementValue(Complex complexValue) : this()
         {
-            Cplx = cplx;
+            Cplx = complexValue;
         }
 
         /// <summary>

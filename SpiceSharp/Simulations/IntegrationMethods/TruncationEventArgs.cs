@@ -4,7 +4,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// Event arguments for truncating the timestep
+    /// Event arguments for truncating the timeStep
     /// </summary>
     public class TruncationEventArgs : EventArgs
     {
@@ -21,7 +21,7 @@ namespace SpiceSharp.IntegrationMethods
         double delta;
 
         /// <summary>
-        /// Gets the current timestep
+        /// Gets the current timeStep
         /// </summary>
         public double CurrentDelta { get; }
         
@@ -34,11 +34,11 @@ namespace SpiceSharp.IntegrationMethods
         /// Constructor
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        /// <param name="currentdelta">Initial timestep</param>
-        public TruncationEventArgs(TimeSimulation simulation, double currentdelta)
+        /// <param name="currentDelta">Initial timeStep</param>
+        public TruncationEventArgs(TimeSimulation simulation, double currentDelta)
         {
             Simulation = simulation;
-            CurrentDelta = currentdelta;
+            CurrentDelta = currentDelta;
             delta = double.PositiveInfinity;
         }
     }

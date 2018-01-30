@@ -4,7 +4,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Behavior for truncating the current timestep
+    /// Behavior for truncating the current timeStep
     /// </summary>
     public abstract class TruncateBehavior : Behavior
     {
@@ -15,10 +15,10 @@ namespace SpiceSharp.Behaviors
         protected TruncateBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Truncate the current timestep
+        /// Truncate the current timeStep
         /// </summary>
         /// <param name="simulation">Simulation</param>
-        /// <param name="timestep">Timestep</param>
-        public abstract void Truncate(TimeSimulation simulation, ref double timestep);
+        /// <param name="timeStep">TimeStep</param>
+        public abstract void Truncate(TimeSimulation simulation, ref double timeStep);
     }
 }

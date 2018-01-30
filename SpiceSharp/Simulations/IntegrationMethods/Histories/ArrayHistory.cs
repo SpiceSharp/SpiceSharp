@@ -34,7 +34,7 @@ namespace SpiceSharp.IntegrationMethods
         }
         
         /// <summary>
-        /// Timesteps in history
+        /// TimeSteps in history
         /// </summary>
         T[] history;
 

@@ -701,18 +701,18 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Find largest element in the column
         /// </summary>
-        /// <param name="pElement">Element where we need to start searching</param>
+        /// <param name="element">Element where we need to start searching</param>
         /// <returns></returns>
-        public static double FindLargestInCol(MatrixElement pElement)
+        public static double FindLargestInCol(MatrixElement element)
         {
             double Magnitude, Largest = 0.0;
 
             // Search column for largest element beginning at Element. 
-            while (pElement != null)
+            while (element != null)
             {
-                if ((Magnitude = pElement.Value.Magnitude) > Largest)
+                if ((Magnitude = element.Value.Magnitude) > Largest)
                     Largest = Magnitude;
-                pElement = pElement.NextInCol;
+                element = element.NextInCol;
             }
 
             return Largest;
@@ -762,13 +762,13 @@ namespace SpiceSharp.Sparse
         /// Update Markowitz numbers
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="pPivot">Pivot element</param>
-        public void UpdateMarkowitzNumbers(Matrix matrix, MatrixElement pPivot)
+        /// <param name="pivot">Pivot element</param>
+        public void UpdateMarkowitzNumbers(Matrix matrix, MatrixElement pivot)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            if (pPivot == null)
-                throw new ArgumentNullException(nameof(pPivot));
+            if (pivot == null)
+                throw new ArgumentNullException(nameof(pivot));
 
 
             int Row, Col;
@@ -776,7 +776,7 @@ namespace SpiceSharp.Sparse
             double Product;
 
             // Update Markowitz numbers. 
-            for (ColPtr = pPivot.NextInCol; ColPtr != null; ColPtr = ColPtr.NextInCol)
+            for (ColPtr = pivot.NextInCol; ColPtr != null; ColPtr = ColPtr.NextInCol)
             {
                 Row = ColPtr.Row;
                 --MarkowitzRow[Row];
@@ -797,7 +797,7 @@ namespace SpiceSharp.Sparse
                     Singletons++;
             }
 
-            for (RowPtr = pPivot.NextInRow; RowPtr != null; RowPtr = RowPtr.NextInRow)
+            for (RowPtr = pivot.NextInRow; RowPtr != null; RowPtr = RowPtr.NextInRow)
             {
                 Col = RowPtr.Col;
                 --MarkowitzCol[Col];

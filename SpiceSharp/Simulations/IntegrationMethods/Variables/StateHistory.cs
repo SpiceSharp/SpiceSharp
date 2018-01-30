@@ -35,9 +35,9 @@
         }
 
         /// <summary>
-        /// Get the timesteps in history
+        /// Get the timeSteps in history
         /// </summary>
-        public ReadOnlyHistory<double> Timesteps
+        public ReadOnlyHistory<double> TimeSteps
         {
             get => new ReadOnlyHistory<double>(Source.Method.DeltaOld);
         }

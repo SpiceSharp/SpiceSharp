@@ -114,7 +114,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             Mosfet2Noise.Generators[RsNoise].SetCoefficients(temp.SourceConductance);
             Mosfet2Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(load.Gm));
             Mosfet2Noise.Generators[FlickerNoise].SetCoefficients(mnp.FNcoef * Math.Exp(mnp.FNexp * Math.Log(Math.Max(Math.Abs(load.Cd), 1e-38))) 
-                / (bp.Width * (bp.Length - 2 * mbp.LatDiff) * modeltemp.OxideCapFactor * modeltemp.OxideCapFactor) / noise.Freq);
+                / (bp.Width * (bp.Length - 2 * mbp.LatDiff) * modeltemp.OxideCapFactor * modeltemp.OxideCapFactor) / noise.Frequency);
 
             // Evaluate noise sources
             Mosfet2Noise.Evaluate(simulation);

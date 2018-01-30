@@ -23,26 +23,26 @@ namespace SpiceSharp.Sparse
         /// SMPcReorder
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="pivTol">Pivot tolerance</param>
-        /// <param name="pivRel">Pivot relative tolerance</param>
+        /// <param name="pivotTol">Pivot tolerance</param>
+        /// <param name="pivotRel">Pivot relative tolerance</param>
         /// <returns></returns>
-        public static SparseError Reorder(this Matrix matrix, double pivTol, double pivRel)
+        public static SparseError Reorder(this Matrix matrix, double pivotTol, double pivotRel)
         {
-            return matrix.OrderAndFactor(null, pivRel, pivTol, true);
+            return matrix.OrderAndFactor(null, pivotRel, pivotTol, true);
         }
 
         /// <summary>
         /// SMPreorder
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="pivTol">Pivot tolerance</param>
-        /// <param name="pivRel">Pivot relative tolerance</param>
+        /// <param name="pivotTol">Pivot tolerance</param>
+        /// <param name="pivotRel">Pivot relative tolerance</param>
         /// <param name="gMin">Minimum conductance on the diagonal</param>
         /// <returns></returns>
-        public static SparseError Reorder(this Matrix matrix, double pivTol, double pivRel, double gMin)
+        public static SparseError Reorder(this Matrix matrix, double pivotTol, double pivotRel, double gMin)
         {
             matrix.LoadGmin(gMin);
-            return matrix.OrderAndFactor(null, pivRel, pivTol, true);
+            return matrix.OrderAndFactor(null, pivotRel, pivotTol, true);
         }
         
         /// <summary>

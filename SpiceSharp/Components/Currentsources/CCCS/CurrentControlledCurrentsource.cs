@@ -21,9 +21,9 @@ namespace SpiceSharp.Components
         /// Nodes
         /// </summary>
         [PropertyName("pos_node"), PropertyInfo("Positive node of the source")]
-        public int PosourceNode { get; private set; }
+        public int PosNode { get; private set; }
         [PropertyName("neg_node"), PropertyInfo("Negative node of the source")]
-        public int NegateNode { get; private set; }
+        public int NegNode { get; private set; }
         [PropertyName("vctrl"), PropertyInfo("Controlling voltage source")]
         public VoltageSource ControllingSource { get; protected set; }
 
@@ -86,8 +86,8 @@ namespace SpiceSharp.Components
                 throw new ArgumentNullException(nameof(circuit));
 
             var nodes = BindNodes(circuit);
-            PosourceNode = nodes[0].Index;
-            NegateNode = nodes[1].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
 
             // Find the voltage source for which the current is being measured
             if (circuit.Objects[ControllingName] is VoltageSource vsrc)

@@ -238,7 +238,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             }
             if (mbp.SidewallCapFactor.Given)
             {
-                czbdsw = TCjsw * bp.DrainPerimiter;
+                czbdsw = TCjsw * bp.DrainPerimeter;
             }
             else
             {
@@ -272,7 +272,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             }
             if (mbp.SidewallCapFactor.Given)
             {
-                czbssw = TCjsw * bp.SourcePerimiter;
+                czbssw = TCjsw * bp.SourcePerimeter;
             }
             else
             {

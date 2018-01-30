@@ -14,7 +14,7 @@ namespace SpiceSharp.Simulations
         /// Initialization flags
         /// </summary>
         [Flags]
-        public enum InitializationState
+        public enum InitializationStates
         {
             /// <summary>
             /// Default state
@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
         /// Sparse matrix flags
         /// </summary>
         [Flags]
-        public enum SparseState
+        public enum SparseStates
         {
             /// <summary>
             /// Indicates that the matrix should be reordered
@@ -98,12 +98,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the initialization flag
         /// </summary>
-        public InitializationState Init { get; set; }
+        public InitializationStates Init { get; set; }
 
         /// <summary>
         /// Gets or sets the sparse matrix flags
         /// </summary>
-        public SparseState Sparse { get; set; }
+        public SparseStates Sparse { get; set; }
 
         /// <summary>
         /// Gets or sets the current domain for simulation
@@ -161,7 +161,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Were the nodeset values assigned?
         /// </summary>
-        public bool HadrainNodeset { get; set; } = false;
+        public bool HadNodeSet { get; set; } = false;
         #endregion
 
         #region Simulation solutions

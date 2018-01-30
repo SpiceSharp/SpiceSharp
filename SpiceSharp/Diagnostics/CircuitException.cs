@@ -11,14 +11,14 @@ namespace SpiceSharp.Diagnostics
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="msg">Message</param>
-        public CircuitException(string msg) : base(msg) { }
+        /// <param name="message">Message</param>
+        public CircuitException(string message) : base(message) { }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="msg">Message</param>
+        /// <param name="message">Message</param>
         /// <param name="innerException">Inner exception</param>
-        public CircuitException(string msg, Exception innerException) : base(msg, innerException) { }
+        public CircuitException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

@@ -15,7 +15,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Current frequency point
         /// </summary>
-        public double Freq
+        public double Frequency
         {
             get => frequency;
             set
@@ -75,11 +75,11 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initialize
         /// </summary>
-        /// <param name="freq">Starting frequency</param>
-        public void Initialize(double freq)
+        /// <param name="frequency">Starting frequency</param>
+        public void Initialize(double frequency)
         {
-            this.frequency = freq;
-            lastFrequency = freq;
+            this.frequency = frequency;
+            lastFrequency = frequency;
 
             OutputNoise = 0.0;
             InputNoise = 0.0;
@@ -93,18 +93,18 @@ namespace SpiceSharp.Simulations
         /// If it isn't, a more complicated expression must be used.
         /// Note that EXPONENT = -1 gives a different equation than EXPONENT != -1.
         /// </summary>
-        /// <param name="noizDens">Noise density</param>
-        /// <param name="lnNdens">Last noise density</param>
-        /// <param name="lnNlstDens">Last log noise density</param>
+        /// <param name="noiseDensity">Noise density</param>
+        /// <param name="logNoiseDensity">Last noise density</param>
+        /// <param name="lastLogNoiseDensity">Last log noise density</param>
         /// <returns></returns>
-        public double Integrate(double noizDens, double lnNdens, double lnNlstDens)
+        public double Integrate(double noiseDensity, double logNoiseDensity, double lastLogNoiseDensity)
         {
-            double exponent = (lnNdens - lnNlstDens) / deltaLogFrequency;
+            double exponent = (logNoiseDensity - lastLogNoiseDensity) / deltaLogFrequency;
             if (Math.Abs(exponent) < 1e-10)
-                return noizDens * deltaFrequency;
+                return noiseDensity * deltaFrequency;
             else
             {
-                double a = Math.Exp(lnNdens - exponent * logFrequency);
+                double a = Math.Exp(logNoiseDensity - exponent * logFrequency);
                 exponent += 1.0;
                 if (Math.Abs(exponent) < 1e-10)
                     return a * (logFrequency - logLastFrequency);

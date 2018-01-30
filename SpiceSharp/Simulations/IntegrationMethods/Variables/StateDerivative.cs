@@ -33,14 +33,14 @@
         /// <summary>
         /// Calculate contribution to the jacobian matrix (or Y-matrix). 
         /// Using this means the state variable depends on the derivative of an unknown variable (eg.
-        /// the voltage across a capacitor). <paramref name="dqdv"/> is the derivative of the state
+        /// the voltage across a capacitor). <paramref name="derivative"/> is the derivative of the state
         /// variable w.r.t. the unknown variable.
         /// </summary>
-        /// <param name="dqdv">Derivative of the state variable w.r.t. the unknown variable</param>
+        /// <param name="derivative">Derivative of the state variable w.r.t. the unknown variable</param>
         /// <returns></returns>
-        public double Jacobian(double dqdv)
+        public double Jacobian(double derivative)
         {
-            return dqdv * Source.Method.Slope;
+            return derivative * Source.Method.Slope;
         }
 
         /// <summary>
@@ -70,9 +70,9 @@
         }
 
         /// <summary>
-        /// Truncate the timestep based on the LTE (Local Truncation Error)
+        /// Truncate the timeStep based on the LTE (Local Truncation Error)
         /// </summary>
-        /// <param name="timestep">Timestep</param>
-        public void LocalTruncationError(ref double timestep) => Source.LocalTruncationError(StateIndex, ref timestep);
+        /// <param name="timeStep">TimeStep</param>
+        public void LocalTruncationError(ref double timeStep) => Source.LocalTruncationError(StateIndex, ref timeStep);
     }
 }

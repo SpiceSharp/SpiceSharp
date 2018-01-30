@@ -102,10 +102,10 @@ namespace SpiceSharp.Simulations
             foreach (var behavior in FrequencyBehaviors)
                 behavior.Load(this);
 
-            if (state.Sparse.HasFlag(State.SparseState.AcShouldReorder))
+            if (state.Sparse.HasFlag(State.SparseStates.AcShouldReorder))
             {
                 var error = matrix.Reorder(state.PivotAbsTol, state.PivotRelTol);
-                state.Sparse &= ~State.SparseState.AcShouldReorder;
+                state.Sparse &= ~State.SparseStates.AcShouldReorder;
                 if (error != SparseError.Okay)
                     throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
             }
@@ -116,7 +116,7 @@ namespace SpiceSharp.Simulations
                 {
                     if (error == SparseError.Singular)
                     {
-                        state.Sparse |= State.SparseState.AcShouldReorder;
+                        state.Sparse |= State.SparseStates.AcShouldReorder;
                         goto retry;
                     }
                     throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));

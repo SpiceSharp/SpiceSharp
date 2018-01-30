@@ -198,12 +198,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
         }
 
         /// <summary>
-        /// Use local truncation error to cut timestep
+        /// Use local truncation error to cut timeStep
         /// </summary>
-        /// <param name="timestep">Timestep</param>
-        public override void Truncate(ref double timestep)
+        /// <param name="timeStep">TimeStep</param>
+        public override void Truncate(ref double timeStep)
         {
-            CapCharge.LocalTruncationError(ref timestep);
+            CapCharge.LocalTruncationError(ref timeStep);
         }
     }
 }

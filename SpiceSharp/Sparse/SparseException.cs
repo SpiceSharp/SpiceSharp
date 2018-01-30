@@ -11,7 +11,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="msg">Message</param>
-        public SparseException(string msg) : base(msg) { }
+        /// <param name="message">Message</param>
+        public SparseException(string message) : base(message) { }
     }
 }

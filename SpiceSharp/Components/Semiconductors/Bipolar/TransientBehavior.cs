@@ -545,14 +545,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         /// <summary>
-        /// Truncate the timestep
+        /// Truncate the timeStep
         /// </summary>
-        /// <param name="timestep">Current timestep</param>
-        public override void Truncate(ref double timestep)
+        /// <param name="timeStep">Current timeStep</param>
+        public override void Truncate(ref double timeStep)
         {
-            Qbe.LocalTruncationError(ref timestep);
-            Qbc.LocalTruncationError(ref timestep);
-            Qcs.LocalTruncationError(ref timestep);
+            Qbe.LocalTruncationError(ref timeStep);
+            Qbc.LocalTruncationError(ref timeStep);
+            Qcs.LocalTruncationError(ref timeStep);
         }
 
         /// <summary>
@@ -577,8 +577,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double cbe = args.cex;
             double gbe = args.gex;
 
-            double delta = Cexbc.Timesteps[0];
-            double prevdelta = Cexbc.Timesteps[1];
+            double delta = Cexbc.TimeSteps[0];
+            double prevdelta = Cexbc.TimeSteps[1];
             arg1 = delta / td;
             arg2 = 3 * arg1;
             arg1 = arg2 * arg1;

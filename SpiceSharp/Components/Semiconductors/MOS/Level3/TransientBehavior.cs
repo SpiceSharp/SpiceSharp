@@ -629,14 +629,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         }
 
         /// <summary>
-        /// Truncate timestep
+        /// Truncate timeStep
         /// </summary>
-        /// <param name="timestep">Timestep</param>
-        public override void Truncate(ref double timestep)
+        /// <param name="timeStep">TimeStep</param>
+        public override void Truncate(ref double timeStep)
         {
-            Qgs.LocalTruncationError(ref timestep);
-            Qgd.LocalTruncationError(ref timestep);
-            Qgb.LocalTruncationError(ref timestep);
+            Qgs.LocalTruncationError(ref timeStep);
+            Qgd.LocalTruncationError(ref timeStep);
+            Qgb.LocalTruncationError(ref timeStep);
         }
     }
 }

@@ -15,9 +15,9 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [PropertyName("v1"), PropertyInfo("The initial value")]
-        public Parameter V1 { get; } = new Parameter();
+        public Parameter Value1 { get; } = new Parameter();
         [PropertyName("v2"), PropertyInfo("The peak value")]
-        public Parameter V2 { get; } = new Parameter();
+        public Parameter Value2 { get; } = new Parameter();
         [PropertyName("td"), PropertyInfo("The initial delay time in seconds")]
         public Parameter Delay { get; } = new Parameter();
         [PropertyName("tr"), PropertyInfo("The rise time in seconds")]
@@ -44,22 +44,22 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="v1">The initial value</param>
-        /// <param name="v2">The peak value</param>
-        /// <param name="td">The initial delay time in seconds</param>
-        /// <param name="tr">The rise time in seconds</param>
-        /// <param name="tf">The fall time in seconds</param>
-        /// <param name="pw">The pulse width in seconds</param>
-        /// <param name="per">The period in seconds</param>
-        public Pulse(double v1, double v2, double td, double tr, double tf, double pw, double per) : base()
+        /// <param name="value1">The initial value</param>
+        /// <param name="value2">The peak value</param>
+        /// <param name="delay">The initial delay time in seconds</param>
+        /// <param name="riseTime">The rise time in seconds</param>
+        /// <param name="fallTime">The fall time in seconds</param>
+        /// <param name="pulseWidth">The pulse width in seconds</param>
+        /// <param name="period">The period in seconds</param>
+        public Pulse(double value1, double value2, double delay, double riseTime, double fallTime, double pulseWidth, double period)
         {
-            V1.Set(v1);
-            V2.Set(v2);
-            Delay.Set(td);
-            RiseTime.Set(tr);
-            FallTime.Set(tf);
-            PulseWidth.Set(pw);
-            Period.Set(per);
+            Value1.Set(value1);
+            Value2.Set(value2);
+            Delay.Set(delay);
+            RiseTime.Set(riseTime);
+            FallTime.Set(fallTime);
+            PulseWidth.Set(pulseWidth);
+            Period.Set(period);
         }
 
         /// <summary>
@@ -67,8 +67,8 @@ namespace SpiceSharp.Components
         /// </summary>
         public override void Setup()
         {
-            v1 = V1;
-            v2 = V2;
+            v1 = Value1;
+            v2 = Value2;
             td = Delay;
             tr = RiseTime;
             tf = FallTime;

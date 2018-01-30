@@ -130,11 +130,11 @@ namespace SpiceSharp.Simulations
         {
             var state = State;
             var config = BaseConfiguration;
-            state.Init = State.InitializationState.InitJct;
+            state.Init = State.InitializationStates.InitJct;
             state.Matrix.Complex = false;
 
             // First, let's try finding an operating point by using normal iterations
-            if (!config.NoOpIter)
+            if (!config.NoOperatingPointIterations)
             {
                 if (Iterate(maxiter))
                     return;
@@ -143,7 +143,7 @@ namespace SpiceSharp.Simulations
             // No convergence, try Gmin stepping
             if (config.NumGminSteps > 1)
             {
-                state.Init = State.InitializationState.InitJct;
+                state.Init = State.InitializationStates.InitJct;
                 CircuitWarning.Warning(this, "Starting Gmin stepping");
                 state.DiagGmin = config.Gmin;
                 for (int i = 0; i < config.NumGminSteps; i++)
@@ -158,7 +158,7 @@ namespace SpiceSharp.Simulations
                         break;
                     }
                     state.DiagGmin /= 10.0;
-                    state.Init = State.InitializationState.InitFloat;
+                    state.Init = State.InitializationStates.InitFloat;
                 }
                 state.DiagGmin = 0.0;
                 if (Iterate(maxiter))
@@ -168,7 +168,7 @@ namespace SpiceSharp.Simulations
             // Nope, still not converging, let's try source stepping
             if (config.NumSrcSteps > 1)
             {
-                state.Init = State.InitializationState.InitJct;
+                state.Init = State.InitializationStates.InitJct;
                 CircuitWarning.Warning(this, "Starting source stepping");
                 for (int i = 0; i <= config.NumSrcSteps; i++)
                 {
@@ -238,23 +238,23 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Preorder matrix
-                if (!state.Sparse.HasFlag(State.SparseState.DidPreorder))
+                if (!state.Sparse.HasFlag(State.SparseStates.DidPreorder))
                 {
                     matrix.Preorder();
-                    state.Sparse |= State.SparseState.DidPreorder;
+                    state.Sparse |= State.SparseStates.DidPreorder;
                 }
-                if (state.Init == State.InitializationState.InitJct || state.Init == State.InitializationState.InitTransient)
+                if (state.Init == State.InitializationStates.InitJct || state.Init == State.InitializationStates.InitTransient)
                 {
-                    state.Sparse |= State.SparseState.ShouldReorder;
+                    state.Sparse |= State.SparseStates.ShouldReorder;
                 }
 
                 // Reorder
-                if (state.Sparse.HasFlag(State.SparseState.ShouldReorder))
+                if (state.Sparse.HasFlag(State.SparseStates.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
                     matrix.Reorder(state.PivotRelTol, state.PivotAbsTol, state.DiagGmin);
                     Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~State.SparseState.ShouldReorder;
+                    state.Sparse &= ~State.SparseStates.ShouldReorder;
                 }
                 else
                 {
@@ -291,8 +291,8 @@ namespace SpiceSharp.Simulations
 
                 switch (state.Init)
                 {
-                    case State.InitializationState.InitFloat:
-                        if (state.UseDC && state.HadrainNodeset)
+                    case State.InitializationStates.InitFloat:
+                        if (state.UseDC && state.HadNodeSet)
                         {
                             if (pass)
                                 state.IsCon = false;
@@ -305,25 +305,25 @@ namespace SpiceSharp.Simulations
                         }
                         break;
 
-                    case State.InitializationState.InitJct:
-                        state.Init = State.InitializationState.InitFix;
-                        state.Sparse |= State.SparseState.ShouldReorder;
+                    case State.InitializationStates.InitJct:
+                        state.Init = State.InitializationStates.InitFix;
+                        state.Sparse |= State.SparseStates.ShouldReorder;
                         break;
 
-                    case State.InitializationState.InitFix:
+                    case State.InitializationStates.InitFix:
                         if (state.IsCon)
-                            state.Init = State.InitializationState.InitFloat;
+                            state.Init = State.InitializationStates.InitFloat;
                         pass = true;
                         break;
 
-                    case State.InitializationState.InitTransient:
+                    case State.InitializationStates.InitTransient:
                         if (iterno <= 1)
-                            state.Sparse = State.SparseState.ShouldReorder;
-                        state.Init = State.InitializationState.InitFloat;
+                            state.Sparse = State.SparseStates.ShouldReorder;
+                        state.Init = State.InitializationStates.InitFloat;
                         break;
 
-                    case State.InitializationState.Init:
-                        state.Init = State.InitializationState.InitFloat;
+                    case State.InitializationStates.Init:
+                        state.Init = State.InitializationStates.InitFloat;
                         break;
 
                     default:
@@ -355,7 +355,7 @@ namespace SpiceSharp.Simulations
             if (state.UseDC)
             {
                 // Consider doing nodeset & ic assignments
-                if ((state.Init & (State.InitializationState.InitJct | State.InitializationState.InitFix)) != 0)
+                if ((state.Init & (State.InitializationStates.InitJct | State.InitializationStates.InitFix)) != 0)
                 {
                     // Do nodesets
                     for (int i = 0; i < nodes.Count; i++)
@@ -427,7 +427,7 @@ namespace SpiceSharp.Simulations
                 if (nodes.NodeSets.ContainsKey(node.Name))
                 {
                     node.Diagonal = state.Matrix.GetElement(node.Index, node.Index);
-                    state.HadrainNodeset = true;
+                    state.HadNodeSet = true;
                     state.Rhs[node.Index] = nodes.NodeSets[node.Name];
                 }
                 if (nodes.InitialConditions.ContainsKey(node.Name))

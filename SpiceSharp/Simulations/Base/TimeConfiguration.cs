@@ -28,13 +28,13 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the step
         /// </summary>
-        [PropertyName("step"), PropertyInfo("The timestep")]
+        [PropertyName("step"), PropertyInfo("The timeStep")]
         public double Step { get; set; } = double.NaN;
 
         /// <summary>
-        /// Gets or sets the maximum timestep
+        /// Gets or sets the maximum timeStep
         /// </summary>
-        [PropertyName("maxstep"), PropertyInfo("The maximum allowed timestep")]
+        [PropertyName("maxstep"), PropertyInfo("The maximum allowed timeStep")]
         public double MaxStep
         {
             get
@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
         double maxstep = double.NaN;
 
         /// <summary>
-        /// Get the minimum timestep allowed
+        /// Get the minimum timeStep allowed
         /// </summary>
         [PropertyName("deltamin"), PropertyInfo("The minimum delta for breakpoints")]
         public double DeltaMin { get { return 1e-13 * MaxStep; } }
@@ -86,7 +86,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="step">Step</param>
         /// <param name="stop">Stop</param>
-        /// <param name="max">Maximum timestep</param>
+        /// <param name="max">Maximum timeStep</param>
         public TimeConfiguration(double step, double stop, double max)
         {
             Step = step;

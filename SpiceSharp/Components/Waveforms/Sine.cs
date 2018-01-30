@@ -13,11 +13,11 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [PropertyName("vo"), PropertyInfo("The offset of the sine wave")]
-        public Parameter VO { get; } = new Parameter();
+        public Parameter Offset { get; } = new Parameter();
         [PropertyName("va"), PropertyInfo("The amplitude of the sine wave")]
-        public Parameter VA { get; } = new Parameter();
+        public Parameter Amplitude { get; } = new Parameter();
         [PropertyName("freq"), PropertyInfo("The frequency in Hz")]
-        public Parameter Freq { get; } = new Parameter();
+        public Parameter Frequency { get; } = new Parameter();
         [PropertyName("td"), PropertyInfo("The delay in seconds")]
         public Parameter Delay { get; } = new Parameter();
         [PropertyName("theta"), PropertyInfo("The damping factor")]
@@ -38,17 +38,17 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="vo">Offset</param>
-        /// <param name="va">Amplitude</param>
-        /// <param name="freq">Frequency (Hz)</param>
-        /// <param name="td">Delay (s)</param>
+        /// <param name="offset">Offset</param>
+        /// <param name="amplitude">Amplitude</param>
+        /// <param name="frequency">Frequency (Hz)</param>
+        /// <param name="delay">Delay (s)</param>
         /// <param name="theta">Damping factor</param>
-        public Sine(double vo, double va, double freq, double td, double theta)
+        public Sine(double offset, double amplitude, double frequency, double delay, double theta)
         {
-            VO.Set(vo);
-            VA.Set(va);
-            Freq.Set(freq);
-            Delay.Set(td);
+            Offset.Set(offset);
+            Amplitude.Set(amplitude);
+            Frequency.Set(frequency);
+            Delay.Set(delay);
             Theta.Set(theta);
         }
 
@@ -60,9 +60,9 @@ namespace SpiceSharp.Components
         /// <param name="freq">Frequency (Hz)</param>
         public Sine(double vo, double va, double freq)
         {
-            VO.Set(vo);
-            VA.Set(va);
-            Freq.Set(freq);
+            Offset.Set(vo);
+            Amplitude.Set(va);
+            Frequency.Set(freq);
         }
 
         /// <summary>
@@ -70,9 +70,9 @@ namespace SpiceSharp.Components
         /// </summary>
         public override void Setup()
         {
-            vo = VO;
-            va = VA;
-            freq = Freq;
+            vo = Offset;
+            va = Amplitude;
+            freq = Frequency;
             td = Delay;
             theta = Theta;
         }

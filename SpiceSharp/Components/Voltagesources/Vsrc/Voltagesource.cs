@@ -13,9 +13,9 @@ namespace SpiceSharp.Components
         /// Nodes
         /// </summary>
         [PropertyName("pos_node")]
-        public int PosourceNode { get; private set; }
+        public int PosNode { get; private set; }
         [PropertyName("neg_node")]
-        public int NegateNode { get; private set; }
+        public int NegNode { get; private set; }
 
         /// <summary>
         /// Constants
@@ -67,12 +67,12 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the voltage source</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="w">The waveform</param>
-        public VoltageSource(Identifier name, Identifier pos, Identifier neg, Waveform w) 
+        /// <param name="waveform">The waveform</param>
+        public VoltageSource(Identifier name, Identifier pos, Identifier neg, Waveform waveform) 
             : base(name, VoltageSourcePinCount)
         {
             // Register parameters
-            Parameters.Add(new BaseParameters(w));
+            Parameters.Add(new BaseParameters(waveform));
             Parameters.Add(new FrequencyParameters());
 
             // Register factories
@@ -92,8 +92,8 @@ namespace SpiceSharp.Components
         {
             // Bind the nodes
             var nodes = BindNodes(circuit);
-            PosourceNode = nodes[0].Index;
-            NegateNode = nodes[1].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
         }
     }
 }

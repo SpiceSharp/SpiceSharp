@@ -166,12 +166,12 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         }
 
         /// <summary>
-        /// Truncate the timestep
+        /// Truncate the timeStep
         /// </summary>
-        /// <param name="timestep">Timestep</param>
-        public override void Truncate(ref double timestep)
+        /// <param name="timeStep">TimeStep</param>
+        public override void Truncate(ref double timeStep)
         {
-            QCap.LocalTruncationError(ref timestep);
+            QCap.LocalTruncationError(ref timeStep);
         }
     }
 }

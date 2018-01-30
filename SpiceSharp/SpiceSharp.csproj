@@ -253,7 +253,7 @@
     <Compile Include="Simulations\Sweeps\OctaveSweep.cs" />
     <Compile Include="Simulations\Sweeps\Sweep.cs" />
     <Compile Include="Simulations\Transient\AcceptBehavior.cs" />
-    <Compile Include="Simulations\Transient\TimestepCutEventArgs.cs" />
+    <Compile Include="Simulations\Transient\TimeStepCutEventArgs.cs" />
     <Compile Include="Simulations\Transient\Transient.cs" />
     <Compile Include="Simulations\Transient\TransientBehavior.cs" />
     <Compile Include="Simulations\Transient\TruncateBehavior.cs" />

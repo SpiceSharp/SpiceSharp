@@ -14,9 +14,9 @@ namespace SpiceSharp.Components
         /// Nodes
         /// </summary>
         [PropertyName("pos_node"), PropertyInfo("Positive node of the source")]
-        public int PosourceNode { get; internal set; }
+        public int PosNode { get; internal set; }
         [PropertyName("neg_node"), PropertyInfo("Negative node of the source")]
-        public int NegateNode { get; internal set; }
+        public int NegNode { get; internal set; }
         [PropertyName("control"), PropertyInfo("Controlling voltage source")]
         public Identifier ControllingName { get; set; }
 
@@ -51,9 +51,9 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the current-controlled current source</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="vsource">The controlling voltage source name</param>
+        /// <param name="controllingSource">The controlling voltage source name</param>
         /// <param name="gain">The transresistance (gain)</param>
-        public CurrentControlledVoltageSource(Identifier name, Identifier pos, Identifier neg, Identifier vsource, double gain) 
+        public CurrentControlledVoltageSource(Identifier name, Identifier pos, Identifier neg, Identifier controllingSource, double gain) 
             : base(name, CurrentControlledVoltageSourcePinCount)
         {
             // Add parameters
@@ -64,7 +64,7 @@ namespace SpiceSharp.Components
             AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             Connect(pos, neg);
-            ControllingName = vsource;
+            ControllingName = controllingSource;
         }
 
         /// <summary>
@@ -74,8 +74,8 @@ namespace SpiceSharp.Components
         public override void Setup(Circuit circuit)
         {
             var nodes = BindNodes(circuit);
-            PosourceNode = nodes[0].Index;
-            NegateNode = nodes[1].Index;
+            PosNode = nodes[0].Index;
+            NegNode = nodes[1].Index;
 
             // Find the voltage source
             if (circuit.Objects[ControllingName] is VoltageSource vsrc)
