@@ -141,7 +141,7 @@ namespace SpiceSharpTest.Models
                     }
                     catch (Exception ex)
                     {
-                        string msg = $"{ex.Message} at {data.GetFrequency()} Hz";
+                        string msg = $"{ex.Message} at {data.Frequency} Hz";
                         throw new Exception(msg, ex);
                     }
                 }
@@ -182,7 +182,7 @@ namespace SpiceSharpTest.Models
                     }
                     catch (Exception ex)
                     {
-                        string msg = $"{ex.Message} at {data.GetFrequency()} Hz";
+                        string msg = $"{ex.Message} at {data.Frequency} Hz";
                         throw new Exception(msg, ex);
                     }
                 }
@@ -210,7 +210,7 @@ namespace SpiceSharpTest.Models
                 {
                     // Test export
                     Complex actual = exports_it.Current(data.State);
-                    Complex expected = references_it.Current(data.GetFrequency());
+                    Complex expected = references_it.Current(data.Frequency);
 
                     // Test real part
                     double rtol = Math.Max(Math.Abs(actual.Real), Math.Abs(expected.Real)) * RelTol + AbsTol;
@@ -223,7 +223,7 @@ namespace SpiceSharpTest.Models
                     }
                     catch (Exception ex)
                     {
-                        string msg = $"{ex.Message} at {data.GetFrequency()} Hz";
+                        string msg = $"{ex.Message} at {data.Frequency} Hz";
                         throw new Exception(msg, ex);
                     }
                 }
@@ -259,7 +259,7 @@ namespace SpiceSharpTest.Models
                     }
                     catch (Exception ex)
                     {
-                        string msg = $"{ex.Message} at t={data.GetTime()} s";
+                        string msg = $"{ex.Message} at t={data.Time} s";
                         throw new Exception(msg, ex);
                     }
                 }
@@ -285,7 +285,7 @@ namespace SpiceSharpTest.Models
 
                 while (exports_it.MoveNext() && references_it.MoveNext())
                 {
-                    double t = data.GetTime();
+                    double t = data.Time;
                     double actual = exports_it.Current(data.State);
                     double expected = references_it.Current(t);
                     double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
@@ -296,7 +296,7 @@ namespace SpiceSharpTest.Models
                     }
                     catch (Exception ex)
                     {
-                        string msg = $"{ex.Message} at t={data.GetTime()} s";
+                        string msg = $"{ex.Message} at t={data.Time} s";
                         throw new Exception(msg, ex);
                     }
                 }
@@ -333,7 +333,7 @@ namespace SpiceSharpTest.Models
                     }
                     catch (Exception ex)
                     {
-                        string msg = $"{ex.Message} at {data.GetFrequency()} Hz";
+                        string msg = $"{ex.Message} at {data.Frequency} Hz";
                         throw new Exception(msg, ex);
                     }
                 }

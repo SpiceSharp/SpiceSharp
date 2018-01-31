@@ -57,7 +57,7 @@ namespace Sandbox
             int index = 0;
             noise.OnExportSimulationData += (object sender, ExportDataEventArgs args) =>
             {
-                double freq = args.GetFrequency();
+                double freq = args.Frequency;
                 double actual = exports[0](args.State);
                 double expected = references[0][index++];
                 plotInput.Points.AddXY(freq, 20 * Math.Log10(actual));

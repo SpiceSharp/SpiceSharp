@@ -102,11 +102,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 MosfetType = -1.0;
         }
         [PropertyName("type"), PropertyInfo("N-channel or P-channel MOS")]
-        public string GetTypeName()
+        public string TypeName
         {
-            if (MosfetType > 0)
-                return "nmos";
-            return "pmos";
+            get
+            {
+                if (MosfetType > 0)
+                    return "nmos";
+                return "pmos";
+            }
         }
         public double MosfetType { get; internal set; } = 1.0;
 

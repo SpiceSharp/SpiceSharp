@@ -23,11 +23,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 BipolarType = PNP;
         }
         [PropertyName("type"), PropertyInfo("NPN or PNP")]
-        public string GetTypeName()
+        public string TypeName
         {
-            if (BipolarType > 0)
-                return "npn";
-            return "pnp";
+            get
+            {
+                if (BipolarType > 0)
+                    return "npn";
+                return "pnp";
+            }
         }
         public double BipolarType { get; internal set; } = NPN;
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]

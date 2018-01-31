@@ -44,19 +44,13 @@ namespace SpiceSharp.Simulations
         /// Get the frequency
         /// </summary>
         /// <returns></returns>
-        public double GetFrequency()
-        {
-            return State.Laplace.Imaginary / (2.0 * Math.PI);
-        }
+        public double Frequency => State.Laplace.Imaginary / (2.0 * Math.PI);
 
         /// <summary>
         /// Get the current time
         /// </summary>
         /// <returns></returns>
-        public double GetTime()
-        {
-            return Method.Time;
-        }
+        public double Time => Method.Time;
     }
 
     /// <summary>
