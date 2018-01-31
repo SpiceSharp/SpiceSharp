@@ -108,7 +108,7 @@ namespace SpiceSharp.Sparse
             int I, Size;
             int[] pExtOrder;
             MatrixElement pPivot;
-            ElementValue Temp;
+            ElementValue Temp = new ElementValue();
 
             Size = matrix.IntSize;
             Intermediate = matrix.Pivoting.Intermediate;
@@ -116,12 +116,12 @@ namespace SpiceSharp.Sparse
             // Initialize Intermediate vector. 
             pExtOrder = matrix.Translation.IntToExtRowMap;
             for (I = Size; I > 0; I--)
-                Intermediate[I].Value = rhs[pExtOrder[I]];
+                Intermediate[I].Complex = rhs[pExtOrder[I]];
 
             // Forward substitution. Solves Lc = b.
             for (I = 1; I <= Size; I++)
             {
-                Temp = Intermediate[I];
+                Temp.CopyFrom(Intermediate[I]);
 
                 // This step of the substitution is skipped if Temp equals zero. 
                 if ((Temp.Real != 0.0) || (Temp.Imaginary != 0.0))
@@ -129,7 +129,7 @@ namespace SpiceSharp.Sparse
                     pPivot = matrix.Diag[I];
                     // Cmplx expr: Temp *= (1.0 / Pivot). 
                     Temp.Multiply(pPivot);
-                    Intermediate[I] = Temp;
+                    Intermediate[I].CopyFrom(Temp);
                     pElement = pPivot.NextInColumn;
                     while (pElement != null)
                     {
@@ -143,7 +143,7 @@ namespace SpiceSharp.Sparse
             // Backward Substitution. Solves Ux = c.
             for (I = Size; I > 0; I--)
             {
-                Temp = Intermediate[I];
+                Temp.CopyFrom(Intermediate[I]);
                 pElement = matrix.Diag[I].NextInRow;
 
                 while (pElement != null)
@@ -152,13 +152,13 @@ namespace SpiceSharp.Sparse
                     Temp.SubtractMultiply(pElement, Intermediate[pElement.Column]);
                     pElement = pElement.NextInRow;
                 }
-                Intermediate[I] = Temp;
+                Intermediate[I].CopyFrom(Temp);
             }
 
             // Unscramble Intermediate vector while placing data in to Solution vector.
             pExtOrder = matrix.Translation.IntToExtColMap;
             for (I = Size; I > 0; I--)
-                solution[pExtOrder[I]] = Intermediate[I].Value;
+                solution[pExtOrder[I]] = Intermediate[I].Complex;
 
             return;
         }
@@ -260,7 +260,7 @@ namespace SpiceSharp.Sparse
             int I, Size;
             int[] pExtOrder;
             MatrixElement pPivot;
-            ElementValue Temp;
+            ElementValue Temp = new ElementValue();
 
             // Begin `SolveComplexTransposedMatrix'. 
 
@@ -270,12 +270,12 @@ namespace SpiceSharp.Sparse
             // Initialize Intermediate vector. 
             pExtOrder = matrix.Translation.IntToExtColMap;
             for (I = Size; I > 0; I--)
-                Intermediate[I].Value = rhs[pExtOrder[I]];
+                Intermediate[I].Complex = rhs[pExtOrder[I]];
 
             // Forward elimination. 
             for (I = 1; I <= Size; I++)
             {
-                Temp = Intermediate[I];
+                Temp.CopyFrom(Intermediate[I]);
 
                 // This step of the elimination is skipped if Temp equals zero. 
                 if ((Temp.Real != 0.0) || (Temp.Imaginary != 0.0))
@@ -294,7 +294,7 @@ namespace SpiceSharp.Sparse
             for (I = Size; I > 0; I--)
             {
                 pPivot = matrix.Diag[I];
-                Temp = Intermediate[I];
+                Temp.CopyFrom(Intermediate[I]);
                 pElement = pPivot.NextInColumn;
 
                 while (pElement != null)
@@ -311,7 +311,7 @@ namespace SpiceSharp.Sparse
             // Unscramble Intermediate vector while placing data in to Solution vector. 
             pExtOrder = matrix.Translation.IntToExtRowMap;
             for (I = Size; I > 0; I--)
-                solution[pExtOrder[I]] = Intermediate[I].Value;
+                solution[pExtOrder[I]] = Intermediate[I].Complex;
 
             return;
         }

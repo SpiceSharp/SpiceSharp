@@ -11,27 +11,27 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Gets or sets the value
         /// </summary>
-        public ElementValue Value;
+        public ElementValue Value { get; }
 
         /// <summary>
         /// The row index
         /// </summary>
-        public int Row = 0;
+        public int Row { get; set; }
 
         /// <summary>
         /// The column index
         /// </summary>
-        public int Column = 0;
+        public int Column { get; set; }
 
         /// <summary>
         /// Next matrix element in the same row
         /// </summary>
-        internal MatrixElement NextInRow = null;
+        internal MatrixElement NextInRow { get; set; }
 
         /// <summary>
         /// Next matrix element in the same column
         /// </summary>
-        internal MatrixElement NextInColumn = null;
+        internal MatrixElement NextInColumn { get; set; }
 
         /// <summary>
         /// Constructor
@@ -40,6 +40,7 @@ namespace SpiceSharp.Sparse
         /// <param name="column">Column</param>
         public MatrixElement(int row, int column)
         {
+            Value = new ElementValue();
             Row = row;
             Column = column;
         }
@@ -69,13 +70,13 @@ namespace SpiceSharp.Sparse
         /// Overload addition
         /// </summary>
         /// <param name="value"></param>
-        public void Add(Complex value) => Value.Value += value;
+        public void Add(Complex value) => Value.Complex += value;
 
         /// <summary>
         /// Overload subtraction
         /// </summary>
         /// <param name="value"></param>
-        public void Sub(Complex value) => Value.Value -= value;
+        public void Sub(Complex value) => Value.Complex -= value;
 
         /// <summary>
         /// Allow casting to a double
@@ -96,7 +97,7 @@ namespace SpiceSharp.Sparse
         {
             if (el == null)
                 return new Complex();
-            return el.Value.Value;
+            return el.Value.Complex;
         }
 
         /// <summary>

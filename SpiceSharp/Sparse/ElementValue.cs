@@ -7,7 +7,7 @@ namespace SpiceSharp.Sparse
     /// A value for a matrix element
     /// As opposed to Complex, Real and Imaginary can be worked with separately
     /// </summary>
-    public struct ElementValue
+    public class ElementValue
     {
         /// <summary>
         /// The real value
@@ -22,7 +22,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// The complex representation
         /// </summary>
-        public Complex Value
+        public Complex Complex
         {
             get
             {
@@ -38,9 +38,18 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Constructor
         /// </summary>
+        public ElementValue()
+        {
+            Real = 0;
+            Imaginary = 0;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         /// <param name="real">Real part</param>
         /// <param name="imaginary">Imaginary part</param>
-        public ElementValue(double real, double imaginary) : this()
+        public ElementValue(double real, double imaginary)
         {
             Real = real;
             Imaginary = imaginary;
@@ -50,9 +59,9 @@ namespace SpiceSharp.Sparse
         /// Constructor
         /// </summary>
         /// <param name="complexValue">Complex number</param>
-        public ElementValue(Complex complexValue) : this()
+        public ElementValue(Complex complexValue)
         {
-            Value = complexValue;
+            Complex = complexValue;
         }
 
         /// <summary>
@@ -76,7 +85,7 @@ namespace SpiceSharp.Sparse
         /// Convert value implicitely to a complex value
         /// </summary>
         /// <param name="value"></param>
-        public static implicit operator Complex(ElementValue value) => value.Value;
+        public static implicit operator Complex(ElementValue value) => value.Complex;
 
         /// <summary>
         /// Magnitude (sum of absolute values)
@@ -196,7 +205,7 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return Value.GetHashCode();
+            return Complex.GetHashCode();
         }
 
         /// <summary>

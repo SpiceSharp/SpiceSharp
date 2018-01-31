@@ -150,7 +150,7 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
         }
 
         [TestMethod]
-        public void TestMOS1_Noise()
+        public void MOS1_Noise()
         {
             // Create circuit
             Circuit ckt = new Circuit();

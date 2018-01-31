@@ -170,13 +170,13 @@ namespace SpiceSharp.Sparse
                 MatrixElement elt = FirstInCol[i];
                 while (elt != null)
                 {
-                    elt.Value.Value = 0.0;
+                    elt.Value.Complex = 0.0;
                     elt = elt.NextInColumn;
                 }
             }
 
             // Empty the trash
-            TrashCan.Value.Value = 0.0;
+            TrashCan.Value.Complex = 0.0;
 
             // Reset flags
             Error = SparseError.Okay;

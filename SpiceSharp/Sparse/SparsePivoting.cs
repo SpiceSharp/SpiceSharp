@@ -60,7 +60,11 @@ namespace SpiceSharp.Sparse
 
             // Create Intermediate vectors for use in MatrixSolve
             if (Intermediate == null)
+            {
                 Intermediate = new ElementValue[size + 1];
+                for (int i = 0; i < Intermediate.Length; i++)
+                    Intermediate[i] = new ElementValue();
+            }
             InternalVectorsAllocated = true;
         }
 
