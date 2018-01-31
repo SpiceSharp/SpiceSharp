@@ -84,7 +84,7 @@ namespace SpiceSharp.Simulations
         /// Calculate the AC solution
         /// </summary>
         /// <param name="circuit">Circuit</param>
-        protected void AcIterate(Circuit circuit)
+        protected void ACIterate(Circuit circuit)
         {
             var state = State;
             var matrix = state.Matrix;
@@ -102,10 +102,10 @@ namespace SpiceSharp.Simulations
             foreach (var behavior in FrequencyBehaviors)
                 behavior.Load(this);
 
-            if (state.Sparse.HasFlag(State.SparseStates.AcShouldReorder))
+            if (state.Sparse.HasFlag(State.SparseStates.ACShouldReorder))
             {
-                var error = matrix.Reorder(state.PivotAbsTol, state.PivotRelTol);
-                state.Sparse &= ~State.SparseStates.AcShouldReorder;
+                var error = matrix.Reorder(state.PivotAbsoluteTolerance, state.PivotRelativeTolerance);
+                state.Sparse &= ~State.SparseStates.ACShouldReorder;
                 if (error != SparseError.Okay)
                     throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
             }
@@ -116,7 +116,7 @@ namespace SpiceSharp.Simulations
                 {
                     if (error == SparseError.Singular)
                     {
-                        state.Sparse |= State.SparseStates.AcShouldReorder;
+                        state.Sparse |= State.SparseStates.ACShouldReorder;
                         goto retry;
                     }
                     throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
@@ -160,12 +160,12 @@ namespace SpiceSharp.Simulations
         /// <param name="name">Name</param>
         /// <param name="property">Property</param>
         /// <returns></returns>
-        public Func<State, Complex> CreateAcExport(Identifier name, string property)
+        public Func<State, Complex> CreateACExport(Identifier name, string property)
         {
             var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
             // Only AC behaviors implement these export methods
-            return eb.Get<FrequencyBehavior>()?.CreateAcExport(property);
+            return eb.Get<FrequencyBehavior>()?.CreateACExport(property);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace SpiceSharp.Simulations
         /// <param name="pos">Positive node</param>
         /// <param name="neg">Negative node</param>
         /// <returns></returns>
-        public virtual Func<State, Complex> CreateAcVoltageExport(Identifier pos, Identifier neg)
+        public virtual Func<State, Complex> CreateVoltageACExport(Identifier pos, Identifier neg)
         {
             int node = Circuit.Nodes[pos].Index;
             if (neg == null)
@@ -188,9 +188,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="pos">Positive node</param>
         /// <returns></returns>
-        public virtual Func<State, Complex> CreateAcVoltageExport(Identifier pos)
+        public virtual Func<State, Complex> CreateVoltageACExport(Identifier pos)
         {
-            return CreateAcVoltageExport(pos, null);
+            return CreateVoltageACExport(pos, null);
         }
     }
 }

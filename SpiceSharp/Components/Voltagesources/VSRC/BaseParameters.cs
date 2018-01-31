@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// </summary>
         public Waveform Waveform { get; set; }
         [PropertyName("dc"), PropertyInfo("D.C. source value")]
-        public Parameter DcValue { get; } = new Parameter();
+        public Parameter DCValue { get; } = new Parameter();
 
         /// <summary>
         /// Constructor
@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <param name="dc">DC value</param>
         public BaseParameters(double dc)
         {
-            DcValue.Set(dc);
+            DCValue.Set(dc);
         }
 
         /// <summary>

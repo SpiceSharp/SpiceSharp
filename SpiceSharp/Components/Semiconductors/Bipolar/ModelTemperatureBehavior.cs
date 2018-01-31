@@ -32,12 +32,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [PropertyName("emitterconduct"), PropertyInfo("Emitter conductance")]
         public double EmitterConduct { get; internal set; }
         [PropertyName("transtimevbcfact"), PropertyInfo("Transit time VBC factor")]
-        public double TransitTimeVbcFactor { get; internal set; }
+        public double TransitTimeVoltageBCFactor { get; internal set; }
         [PropertyName("excessphasefactor"), PropertyInfo("Excess phase fact.")]
         public double ExcessPhaseFactor { get; internal set; }
         
         public double Factor1 { get; protected set; }
-        public double XFC { get; protected set; }
+        public double Xfc { get; protected set; }
 
         public double F2 { get; protected set; }
         public double F3 { get; protected set; }
@@ -129,10 +129,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 EmitterConduct = 1 / mbp.EmitterResistance;
             else
                 EmitterConduct = 0;
-            if (mbp.TransitTimeForwardVbc.Given && mbp.TransitTimeForwardVbc != 0)
-                TransitTimeVbcFactor = 1 / (mbp.TransitTimeForwardVbc * 1.44);
+            if (mbp.TransitTimeForwardVoltageBC.Given && mbp.TransitTimeForwardVoltageBC != 0)
+                TransitTimeVoltageBCFactor = 1 / (mbp.TransitTimeForwardVoltageBC * 1.44);
             else
-                TransitTimeVbcFactor = 0;
+                TransitTimeVoltageBCFactor = 0;
             ExcessPhaseFactor = (mbp.ExcessPhase / (180.0 / Math.PI)) * mbp.TransitTimeForward;
             if (mbp.DepletionCapCoefficient.Given)
             {
@@ -146,10 +146,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 mbp.DepletionCapCoefficient.Value = .5;
             }
-            XFC = Math.Log(1 - mbp.DepletionCapCoefficient);
-            F2 = Math.Exp((1 + mbp.JunctionExpBE) * XFC);
+            Xfc = Math.Log(1 - mbp.DepletionCapCoefficient);
+            F2 = Math.Exp((1 + mbp.JunctionExpBE) * Xfc);
             F3 = 1 - mbp.DepletionCapCoefficient * (1 + mbp.JunctionExpBE);
-            F6 = Math.Exp((1 + mbp.JunctionExpBC) * XFC);
+            F6 = Math.Exp((1 + mbp.JunctionExpBC) * Xfc);
             F7 = 1 - mbp.DepletionCapCoefficient * (1 + mbp.JunctionExpBC);
         }
     }

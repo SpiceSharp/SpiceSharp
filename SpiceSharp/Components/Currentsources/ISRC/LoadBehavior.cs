@@ -82,7 +82,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             bp = provider.GetParameterSet<BaseParameters>(0);
 
             // Give some warnings if no value is given
-            if (!bp.DcValue.Given)
+            if (!bp.DCValue.Given)
             {
                 // no DC value - either have a transient value or none
                 if (bp.Waveform != null)
@@ -130,12 +130,12 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 if (bp.Waveform != null)
                     value = bp.Waveform.At(time);
                 else
-                    value = bp.DcValue * state.SourceFactor;
+                    value = bp.DCValue * state.SourceFactor;
             }
             else
             {
                 // AC or DC analysis use the DC value
-                value = bp.DcValue * state.SourceFactor;
+                value = bp.DCValue * state.SourceFactor;
             }
 
             state.Rhs[posourceNode] += value;

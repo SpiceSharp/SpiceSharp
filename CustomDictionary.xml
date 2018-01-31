@@ -3,80 +3,46 @@
   <Words>
     <Recognized>
       
-      <!-- Common abbreviations -->
-      <Word>Pos</Word> <!-- Positive -->
-      <Word>Neg</Word> <!-- Negative -->
-      <Word>Eq</Word> <!-- Equation -->
-      <Word>Dc</Word> <!-- Direct Current -->
-      <Word>Ac</Word> <!-- Alternating Current -->
-      <Word>Cap</Word> <!-- Capacitance -->
-      <Word>Res</Word> <!-- Reistance -->
+      <!-- Common words -->
       <Word>Transconductance</Word>
       <Word>Transresistance</Word>
       <Word>Unsetup</Word>
-      <Word>Exp</Word> <!-- Exponent -->
-      <Acronym>Cond</Acronym> <!-- Conduction -->
 
-      <!-- Numerical method abbreviations -->
-      <Word>Rhs</Word> <!-- Right-Hand Side -->
+      <!-- Numerical method words -->
       <Word>Fillin</Word>
       <Word>Fillins</Word>
-      <Word>Rel</Word> <!-- Relative -->
-      <Word>Abs</Word> <!-- Absolute -->
-      <Word>Lte</Word> <!-- Local Truncation Error -->
-      <Word>Tol</Word> <!-- Tolerance -->
-      <Word>Diag</Word> <!-- Diagonal -->
-      <Word>Gmin</Word> <!-- Minimum conductance -->
       <Word>Jacobian</Word>
       <Word>Timestep</Word>
       <Word>Timesteps</Word>
-      
-      <!-- Bipolar junction transistor -->
-      <Word>Npn</Word>
-      <Word>Pnp</Word>
-      <Word>Vbe</Word>
-      <Word>Vbc</Word>
-      <Word>Vce</Word>
-      <Word>Gm</Word>
-      <Word>Gmu</Word>
-      <Word>Gpi</Word>
-      <Word>Go</Word>
-      <Word>Gx</Word>
-      
-      <!-- Mosfet -->
-      <Word>Mos</Word>
-      <Word>Fet</Word>
+
+      <!-- Abbreviations to be treated as words -->
+      <Word>Rhs</Word> <!-- Right-Hand Side -->
       <Word>Mosfet</Word>
+      <Word>Fet</Word>
       <Word>Nmos</Word>
       <Word>Pmos</Word>
+      <Word>Cond</Word> <!-- Conduction or Conductance -->
+      <Word>Cap</Word> <!-- Capacitance -->
+      <Word>Res</Word> <!-- Resistance -->
+      <Word>Exp</Word> <!-- Exponent -->
+      <Word>Pos</Word> <!-- Positive -->
+      <Word>Neg</Word> <!-- Negative -->
+      <Word>Eq</Word> <!-- Equation -->
+      <Word>Gmin</Word> <!-- Minimum conductance -->
+      <Word>Mu</Word> <!-- Greek letter -->
+      <Word>Lte</Word> <!-- Local Truncation Error -->
+      <Word>Vt</Word> <!-- Thermal voltage -->
+
+      <!-- Mosfet -->
       <Word>Vgs</Word>
       <Word>Vgd</Word>
-      <Word>Vds</Word>
-      <Word>Vbs</Word>
-      <Word>Vbd</Word>
-      <Word>Gmbs</Word>
+      <Word>Vdsat</Word>
     </Recognized>
   </Words>
   <Acronyms>
     <CasingExceptions>
-      
-      <!-- Bipolar junction transistor abbreviations -->
-      <Acronym>BE</Acronym> <!-- Base-Emitter -->
-      <Acronym>CE</Acronym> <!-- Collector-Emitter -->
-      <Acronym>BC</Acronym> <!-- Base-Collector -->
-      <Acronym>CS</Acronym> <!-- Collector-Substrate -->
-      <Acronym>BX</Acronym> <!-- Base-X-Collector -->
-      <Acronym>Eg</Acronym> <!-- Bandgap energy -->
-      <Acronym>Pb</Acronym> <!-- TBH. I have no idea what they mean with this... -->
-      <Acronym>Vt</Acronym> <!-- Thermal Voltage -->
-
-      <!-- Mosfet abbreviations -->
-      <Acronym>GS</Acronym> <!-- Gate-Source -->
-      <Acronym>GD</Acronym> <!-- Gate-Drain -->
-      <Acronym>GB</Acronym> <!-- Gate-Bulk -->
-      <Acronym>DS</Acronym> <!-- Drain-Source -->
-      <Acronym>BS</Acronym> <!-- Bulk-Source -->
-      <Acronym>BD</Acronym> <!-- Bulk-Drain -->
+      <Acronym>NPN</Acronym>
+      <Acronym>PNP</Acronym>
     </CasingExceptions>
   </Acronyms>
 </Dictionary>

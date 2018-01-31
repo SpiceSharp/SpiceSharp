@@ -29,7 +29,7 @@ namespace SpiceSharp.Simulations
             state.Domain = State.DomainType.None;
             state.Gmin = baseconfig.Gmin;
 
-            Op(baseconfig.DcMaxIterations);
+            Op(baseconfig.DCMaxIterations);
 
             var exportargs = new ExportDataEventArgs(State);
             Export(exportargs);

@@ -69,13 +69,13 @@ namespace SpiceSharp.Sparse
         /// Overload addition
         /// </summary>
         /// <param name="value"></param>
-        public void Add(Complex value) => Value.Cplx += value;
+        public void Add(Complex value) => Value.Value += value;
 
         /// <summary>
         /// Overload subtraction
         /// </summary>
         /// <param name="value"></param>
-        public void Sub(Complex value) => Value.Cplx -= value;
+        public void Sub(Complex value) => Value.Value -= value;
 
         /// <summary>
         /// Allow casting to a double
@@ -96,7 +96,7 @@ namespace SpiceSharp.Sparse
         {
             if (el == null)
                 return new Complex();
-            return el.Value.Cplx;
+            return el.Value.Value;
         }
 
         /// <summary>

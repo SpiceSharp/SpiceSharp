@@ -141,38 +141,38 @@ namespace SpiceSharp.Simulations
             }
 
             // No convergence, try Gmin stepping
-            if (config.NumGminSteps > 1)
+            if (config.GminSteps > 1)
             {
                 state.Init = State.InitializationStates.InitJunction;
                 CircuitWarning.Warning(this, "Starting Gmin stepping");
-                state.DiagGmin = config.Gmin;
-                for (int i = 0; i < config.NumGminSteps; i++)
-                    state.DiagGmin *= 10.0;
-                for (int i = 0; i <= config.NumGminSteps; i++)
+                state.DiagonalGmin = config.Gmin;
+                for (int i = 0; i < config.GminSteps; i++)
+                    state.DiagonalGmin *= 10.0;
+                for (int i = 0; i <= config.GminSteps; i++)
                 {
                     state.IsCon = false;
                     if (!Iterate(maxIterations))
                     {
-                        state.DiagGmin = 0.0;
+                        state.DiagonalGmin = 0.0;
                         CircuitWarning.Warning(this, "Gmin step failed");
                         break;
                     }
-                    state.DiagGmin /= 10.0;
+                    state.DiagonalGmin /= 10.0;
                     state.Init = State.InitializationStates.InitFloat;
                 }
-                state.DiagGmin = 0.0;
+                state.DiagonalGmin = 0.0;
                 if (Iterate(maxIterations))
                     return;
             }
 
             // Nope, still not converging, let's try source stepping
-            if (config.NumSourceSteps > 1)
+            if (config.SourceSteps > 1)
             {
                 state.Init = State.InitializationStates.InitJunction;
                 CircuitWarning.Warning(this, "Starting source stepping");
-                for (int i = 0; i <= config.NumSourceSteps; i++)
+                for (int i = 0; i <= config.SourceSteps; i++)
                 {
-                    state.SourceFactor = i / (double)config.NumSourceSteps;
+                    state.SourceFactor = i / (double)config.SourceSteps;
                     if (!Iterate(maxIterations))
                     {
                         state.SourceFactor = 1.0;
@@ -252,7 +252,7 @@ namespace SpiceSharp.Simulations
                 if (state.Sparse.HasFlag(State.SparseStates.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
-                    matrix.Reorder(state.PivotRelTol, state.PivotAbsTol, state.DiagGmin);
+                    matrix.Reorder(state.PivotRelativeTolerance, state.PivotAbsoluteTolerance, state.DiagonalGmin);
                     Statistics.ReorderTime.Stop();
                     state.Sparse &= ~State.SparseStates.ShouldReorder;
                 }
@@ -260,7 +260,7 @@ namespace SpiceSharp.Simulations
                 {
                     // Decompose
                     Statistics.DecompositionTime.Start();
-                    matrix.Factor(state.DiagGmin);
+                    matrix.Factor(state.DiagonalGmin);
                     Statistics.DecompositionTime.Stop();
                 }
 
@@ -492,7 +492,7 @@ namespace SpiceSharp.Simulations
 
                 if (node.UnknownType == Node.NodeType.Voltage)
                 {
-                    double tol = config.RelTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltTol;
+                    double tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.VoltageTolerance;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemNode = node;
@@ -501,7 +501,7 @@ namespace SpiceSharp.Simulations
                 }
                 else
                 {
-                    double tol = config.RelTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.AbsTolerance;
+                    double tol = config.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + config.AbsoluteTolerance;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemNode = node;

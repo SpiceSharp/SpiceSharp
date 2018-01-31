@@ -112,7 +112,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             // Set noise parameters
             Mosfet3Noise.Generators[RdNoise].SetCoefficients(temp.DrainConductance);
             Mosfet3Noise.Generators[RsNoise].SetCoefficients(temp.SourceConductance);
-            Mosfet3Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(load.Gm));
+            Mosfet3Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(load.Transconductance));
             Mosfet3Noise.Generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent 
                 * Math.Log(Math.Max(Math.Abs(load.DrainCurrent), 1e-38))) / (bp.Width * (bp.Length - 2 * mbp.LateralDiffusion) 
                 * modeltemp.OxideCapFactor * modeltemp.OxideCapFactor) / noise.Frequency);

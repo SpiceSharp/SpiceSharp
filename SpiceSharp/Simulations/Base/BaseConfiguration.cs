@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SpiceSharp.Simulations
+﻿namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Configuration for a <see cref="BaseSimulation"/>
@@ -25,27 +19,27 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// The number of steps when using GMIN stepping to improve convergence
         /// </summary>
-        public int NumGminSteps { get; set; } = 10;
+        public int GminSteps { get; set; } = 10;
 
         /// <summary>
         /// The number of steps when using SOURCE stepping to improve convergence
         /// </summary>
-        public int NumSourceSteps { get; set; } = 10;
+        public int SourceSteps { get; set; } = 10;
 
         /// <summary>
         /// Relative tolerance
         /// </summary>
-        public double RelTolerance { get; set; } = 1e-3;
+        public double RelativeTolerance { get; set; } = 1e-3;
 
         /// <summary>
         /// Absolute tolerance on voltages
         /// </summary>
-        public double VoltTol { get; set; } = 1e-6;
+        public double VoltageTolerance { get; set; } = 1e-6;
 
         /// <summary>
         /// Absolute tolerance
         /// </summary>
-        public double AbsTolerance { get; set; } = 1e-12;
+        public double AbsoluteTolerance { get; set; } = 1e-12;
 
         /// <summary>
         /// Charge tolerance
@@ -55,6 +49,6 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Number of iterations for DC simulation
         /// </summary>
-        public int DcMaxIterations { get; set; } = 100;
+        public int DCMaxIterations { get; set; } = 100;
     }
 }

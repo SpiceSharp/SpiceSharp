@@ -20,8 +20,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// </summary>
         public double Fact1 { get; protected set; }
         public double VtNominal { get; protected set; }
-        public double Egfet1 { get; protected set; }
-        public double Pbfact1 { get; protected set; }
+        public double EgFet1 { get; protected set; }
+        public double PbFactor1 { get; protected set; }
         public double OxideCapFactor { get; protected set; }
 
         /// <summary>
@@ -61,9 +61,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             Fact1 = mbp.NominalTemperature / Circuit.ReferenceTemperature;
             VtNominal = mbp.NominalTemperature * Circuit.KOverQ;
             kt1 = Circuit.Boltzmann * mbp.NominalTemperature;
-            Egfet1 = 1.16 - (7.02e-4 * mbp.NominalTemperature * mbp.NominalTemperature) / (mbp.NominalTemperature + 1108);
-            arg1 = -Egfet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
-            Pbfact1 = -2 * VtNominal * (1.5 * Math.Log(Fact1) + Circuit.Charge * arg1);
+            EgFet1 = 1.16 - (7.02e-4 * mbp.NominalTemperature * mbp.NominalTemperature) / (mbp.NominalTemperature + 1108);
+            arg1 = -EgFet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
+            PbFactor1 = -2 * VtNominal * (1.5 * Math.Log(Fact1) + Circuit.Charge * arg1);
 
             /* now model parameter preprocessing */
 
@@ -97,10 +97,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                             mbp.GateType.Value = 1;
                         if (mbp.GateType != 0)
                         {
-                            fermig = mbp.MosfetType * mbp.GateType * .5 * Egfet1;
-                            wkfng = 3.25 + .5 * Egfet1 - fermig;
+                            fermig = mbp.MosfetType * mbp.GateType * .5 * EgFet1;
+                            wkfng = 3.25 + .5 * EgFet1 - fermig;
                         }
-                        wkfngs = wkfng - (3.25 + .5 * Egfet1 + fermis);
+                        wkfngs = wkfng - (3.25 + .5 * EgFet1 + fermis);
                         if (!mbp.Gamma.Given)
                         {
                             mbp.Gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.Charge * mbp.SubstrateDoping * 1e6) / OxideCapFactor;

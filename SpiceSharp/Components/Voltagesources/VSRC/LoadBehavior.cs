@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             bp.Waveform?.Setup();
 
             // Calculate the voltage source's complex value
-            if (!bp.DcValue.Given)
+            if (!bp.DCValue.Given)
             {
                 // No DC value: either have a transient value or none
                 if (bp.Waveform != null)
@@ -170,11 +170,11 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                 if (bp.Waveform != null)
                     value = bp.Waveform.At(time);
                 else
-                    value = bp.DcValue * state.SourceFactor;
+                    value = bp.DCValue * state.SourceFactor;
             }
             else
             {
-                value = bp.DcValue * state.SourceFactor;
+                value = bp.DCValue * state.SourceFactor;
             }
             state.Rhs[BranchEq] += value;
         }

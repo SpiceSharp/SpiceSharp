@@ -64,7 +64,7 @@ namespace SpiceSharpTest.Models.IND
             Func<State, Complex>[] exports = new Func<State, Complex>[1];
             ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
-                exports[0] = ac.CreateAcVoltageExport("OUT");
+                exports[0] = ac.CreateACVoltageExport("OUT");
             };
 
             // Create references

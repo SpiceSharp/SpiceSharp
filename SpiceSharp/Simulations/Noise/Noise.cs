@@ -121,8 +121,8 @@ namespace SpiceSharp.Simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Gmin = baseconfig.Gmin;
-            Op(baseconfig.DcMaxIterations);
-            state.Sparse |= State.SparseStates.AcShouldReorder;
+            Op(baseconfig.DCMaxIterations);
+            state.Sparse |= State.SparseStates.ACShouldReorder;
 
             // Connect noise sources
             foreach (var behavior in NoiseBehaviors)
@@ -133,7 +133,7 @@ namespace SpiceSharp.Simulations
             {
                 data.Frequency = freq;
                 state.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
-                AcIterate(circuit);
+                ACIterate(circuit);
 
                 Complex val = state.ComplexSolution[posOutNode] - state.ComplexSolution[negOutNode];
                 data.GainInverseSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
@@ -166,13 +166,13 @@ namespace SpiceSharp.Simulations
             if (source is VoltageSource vsource)
             {
                 var ac = vsource.Parameters.Get<Components.VoltagesourceBehaviors.FrequencyParameters>();
-                if (!ac.AcMagnitude.Given || ac.AcMagnitude == 0.0)
+                if (!ac.ACMagnitude.Given || ac.ACMagnitude == 0.0)
                     throw new CircuitException("{0}: Noise input source {1} has no AC input".FormatString(Name, vsource.Name));
             }
             else if (source is CurrentSource isource)
             {
                 var ac = isource.Parameters.Get<Components.CurrentsourceBehaviors.FrequencyParameters>();
-                if (!ac.AcMagnitude.Given || ac.AcMagnitude == 0.0)
+                if (!ac.ACMagnitude.Given || ac.ACMagnitude == 0.0)
                     throw new CircuitException("{0}: Noise input source {1} has not AC input".FormatString(Name, isource.Name));
             }
             else

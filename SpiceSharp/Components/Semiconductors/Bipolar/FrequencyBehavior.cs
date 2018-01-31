@@ -61,7 +61,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [PropertyName("ccs"), PropertyInfo("Collector to substrate capacitance")]
         public double CapCS { get; protected set; }
 
-        public double GeqCB { get; protected set; }
+        public double CondCB { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -189,8 +189,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             // Get voltages
             var state = simulation.State;
-            double vbe = load.Vbe;
-            double vbc = load.Vbc;
+            double vbe = load.VoltageBE;
+            double vbc = load.VoltageBC;
             double vbx = vbx = mbp.BipolarType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
             double vcs = mbp.BipolarType * (state.Solution[substrateNode] - state.Solution[colPrimeNode]);
 
@@ -199,7 +199,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double gbe = load.CondBE;
             double gbc = load.CondBC;
             double qb = load.BaseCharge;
-            double dqbdve = load.DqbDve;
+            double dqbdve = load.Dqbdve;
 
             /* 
              * charge storage elements
@@ -220,7 +220,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             ps = mbp.PotentialSubstrate;
             xms = mbp.ExponentialSubstrate;
             xtf = mbp.TransitTimeBiasCoefficientForward;
-            ovtf = modeltemp.TransitTimeVbcFactor;
+            ovtf = modeltemp.TransitTimeVoltageBCFactor;
             xjtf = mbp.TransitTimeHighCurrentForward * bp.Area;
             if (tf != 0 && vbe > 0)
             {
@@ -311,10 +311,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             gcpr = modeltemp.CollectorConduct * bp.Area;
             gepr = modeltemp.EmitterConduct * bp.Area;
-            gpi = load.Gpi;
-            gmu = load.Gmu;
-            gm = load.Gm;
-            go = load.Go;
+            gpi = load.ConductancePi;
+            gmu = load.ConductanceMu;
+            gm = load.Transconductance;
+            go = load.OutputConductance;
             td = modeltemp.ExcessPhaseFactor;
             if (td != 0)
             {
@@ -324,12 +324,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 gm = gm * Complex.Exp(-arg);
                 gm = gm - go;
             }
-            gx = load.Gx;
+            gx = load.ConductanceX;
             xcpi = CapBE * cstate.Laplace;
             xcmu = CapBC * cstate.Laplace;
             xcbx = CapBX * cstate.Laplace;
             xccs = CapCS * cstate.Laplace;
-            xcmcb = GeqCB * cstate.Laplace;
+            xcmcb = CondCB * cstate.Laplace;
 
             CollectorCollectorPtr.Add(gcpr);
             BaseBasePtr.Add(gx + xcbx);

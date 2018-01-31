@@ -11,11 +11,11 @@ namespace SpiceSharp.Sparse
         /// SMPluFac
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="gMin">Value added on the diagonal</param>
+        /// <param name="gmin">Value added on the diagonal</param>
         /// <returns></returns>
-        public static SparseError Factor(this Matrix matrix, double gMin)
+        public static SparseError Factor(this Matrix matrix, double gmin)
         {
-            matrix.LoadGmin(gMin);
+            matrix.LoadGmin(gmin);
             return matrix.Factor();
         }
 
@@ -23,26 +23,26 @@ namespace SpiceSharp.Sparse
         /// SMPcReorder
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="pivotTol">Pivot tolerance</param>
-        /// <param name="pivotRel">Pivot relative tolerance</param>
+        /// <param name="pivotTolerance">Pivot tolerance</param>
+        /// <param name="pivotRelativeTolerance">Pivot relative tolerance</param>
         /// <returns></returns>
-        public static SparseError Reorder(this Matrix matrix, double pivotTol, double pivotRel)
+        public static SparseError Reorder(this Matrix matrix, double pivotTolerance, double pivotRelativeTolerance)
         {
-            return matrix.OrderAndFactor(null, pivotRel, pivotTol, true);
+            return matrix.OrderAndFactor(null, pivotRelativeTolerance, pivotTolerance, true);
         }
 
         /// <summary>
         /// SMPreorder
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="pivotTol">Pivot tolerance</param>
-        /// <param name="pivotRel">Pivot relative tolerance</param>
-        /// <param name="gMin">Minimum conductance on the diagonal</param>
+        /// <param name="pivotTolerance">Pivot tolerance</param>
+        /// <param name="pivotRelativeTolerance">Pivot relative tolerance</param>
+        /// <param name="gmin">Minimum conductance on the diagonal</param>
         /// <returns></returns>
-        public static SparseError Reorder(this Matrix matrix, double pivotTol, double pivotRel, double gMin)
+        public static SparseError Reorder(this Matrix matrix, double pivotTolerance, double pivotRelativeTolerance, double gmin)
         {
-            matrix.LoadGmin(gMin);
-            return matrix.OrderAndFactor(null, pivotRel, pivotTol, true);
+            matrix.LoadGmin(gmin);
+            return matrix.OrderAndFactor(null, pivotRelativeTolerance, pivotTolerance, true);
         }
         
         /// <summary>
@@ -65,20 +65,20 @@ namespace SpiceSharp.Sparse
         /// Not recommended
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="gMin">The conductance to be added on the diagonal</param>
-        public static void LoadGmin(this Matrix matrix, double gMin)
+        /// <param name="gmin">The conductance to be added on the diagonal</param>
+        public static void LoadGmin(this Matrix matrix, double gmin)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
             MatrixElement[] Diag = matrix.Diag;
 
-            if (gMin != 0.0)
+            if (gmin != 0.0)
             {
                 for (int i = 1; i < matrix.IntSize; i++)
                 {
                     if (Diag[i] != null)
-                        Diag[i].Value.Real += gMin;
+                        Diag[i].Value.Real += gmin;
                 }
             }
             return;

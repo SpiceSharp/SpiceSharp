@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public double TempFactor1 { get; protected set; }
         public double TempFactor4 { get; protected set; }
         public double TempFactor5 { get; protected set; }
-        public double TempVCrit { get; protected set; }
+        public double TempVCritical { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -103,10 +103,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             TempBCCap *= 1 + mbp.JunctionExpBC * (4e-4 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
             TempDepletionCap = mbp.DepletionCapCoefficient * TempBEPotential;
-            TempFactor1 = TempBEPotential * (1 - Math.Exp((1 - mbp.JunctionExpBE) * modeltemp.XFC)) / (1 - mbp.JunctionExpBE);
+            TempFactor1 = TempBEPotential * (1 - Math.Exp((1 - mbp.JunctionExpBE) * modeltemp.Xfc)) / (1 - mbp.JunctionExpBE);
             TempFactor4 = mbp.DepletionCapCoefficient * TempBCPotential;
-            TempFactor5 = TempBCPotential * (1 - Math.Exp((1 - mbp.JunctionExpBC) * modeltemp.XFC)) / (1 - mbp.JunctionExpBC);
-            TempVCrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.SatCur));
+            TempFactor5 = TempBCPotential * (1 - Math.Exp((1 - mbp.JunctionExpBC) * modeltemp.Xfc)) / (1 - mbp.JunctionExpBC);
+            TempVCritical = vt * Math.Log(vt / (Circuit.Root2 * mbp.SatCur));
         }
     }
 }

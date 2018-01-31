@@ -25,7 +25,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double Vtnom { get; protected set; }
+        public double VtNominal { get; protected set; }
         public double Xfc { get; protected set; }
         public double F2 { get; internal set; }
         public double F3 { get; internal set; }
@@ -62,7 +62,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             {
                 mbp.NominalTemperature.Value = simulation.State.NominalTemperature;
             }
-            Vtnom = Circuit.KOverQ * mbp.NominalTemperature;
+            VtNominal = Circuit.KOverQ * mbp.NominalTemperature;
 
             // limit grading coeff to max of .9
             if (mbp.GradingCoefficient > .9)

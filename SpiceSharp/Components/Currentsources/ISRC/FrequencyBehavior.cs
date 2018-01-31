@@ -55,13 +55,13 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// </summary>
         /// <param name="propertyName">Property name</param>
         /// <returns></returns>
-        public override Func<State, Complex> CreateAcExport(string propertyName)
+        public override Func<State, Complex> CreateACExport(string propertyName)
         {
             switch (propertyName)
             {
                 case "i":
                 case "c": return (State state) => ac;
-                default: return base.CreateAcExport(propertyName);
+                default: return base.CreateACExport(propertyName);
             }
         }
 
@@ -78,8 +78,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             ap = provider.GetParameterSet<FrequencyParameters>(0);
 
             // Calculate the AC vector
-            double radians = ap.AcPhase * Math.PI / 180.0;
-            ac = new Complex(ap.AcMagnitude * Math.Cos(radians), ap.AcMagnitude * Math.Sin(radians));
+            double radians = ap.ACPhase * Math.PI / 180.0;
+            ac = new Complex(ap.ACMagnitude * Math.Cos(radians), ap.ACMagnitude * Math.Sin(radians));
         }
         
         /// <summary>

@@ -98,7 +98,7 @@ namespace SpiceSharpTest.Models.RLC.CAP
             Func<State, Complex>[] exports = new Func<State, Complex>[1];
             ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
-                exports[0] = ac.CreateAcExport("C1", "v");
+                exports[0] = ac.CreateACExport("C1", "v");
             };
 
             // Create references

@@ -215,14 +215,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
                 sargsw, capgs = 0.0, capgd = 0.0, capgb = 0.0;
 
-            vbs = load.Vbs;
-            vgs = load.Vgs;
-            vds = load.Vds;
+            vbs = load.VoltageBS;
+            vgs = load.VoltageGS;
+            vds = load.VoltageDS;
             vbd = vbs - vds;
             vgd = vgs - vds;
             vgb = vgs - vbs;
             von = mbp.MosfetType * load.Von;
-            vdsat = mbp.MosfetType * load.Vdsat;
+            vdsat = mbp.MosfetType * load.SaturationVoltageDS;
 
             Vgs.Current = vgs;
             Vbs.Current = vbs;
@@ -391,14 +391,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
                 sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs, ceqbd;
 
-            vbs = load.Vbs;
-            vbd = load.Vbd;
-            vgs = load.Vgs;
-            vds = load.Vds;
-            vgd = load.Vgs - load.Vds;
-            vgb = load.Vgs - load.Vbs;
+            vbs = load.VoltageBS;
+            vbd = load.VoltageBD;
+            vgs = load.VoltageGS;
+            vds = load.VoltageDS;
+            vgd = load.VoltageGS - load.VoltageDS;
+            vgb = load.VoltageGS - load.VoltageBS;
             von = mbp.MosfetType * load.Von;
-            vdsat = mbp.MosfetType * load.Vdsat;
+            vdsat = mbp.MosfetType * load.SaturationVoltageDS;
 
             Vds.Current = vds;
             Vbs.Current = vbs;

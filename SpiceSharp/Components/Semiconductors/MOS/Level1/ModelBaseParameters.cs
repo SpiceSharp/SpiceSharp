@@ -75,19 +75,19 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Methods
         /// </summary>
-        [PropertyName("nmos"), PropertyInfo("N type MOSfet model")]
+        [PropertyName("nmos"), PropertyInfo("N type mosfet model")]
         public void SetNmos(bool value)
         {
             if (value)
                 MosfetType = 1.0;
         }
-        [PropertyName("pmos"), PropertyInfo("P type MOSfet model")]
+        [PropertyName("pmos"), PropertyInfo("P type mosfet model")]
         public void SetPmos(bool value)
         {
             if (value)
                 MosfetType = -1.0;
         }
-        [PropertyName("type"), PropertyInfo("N-channel or P-channel MOS")]
+        [PropertyName("type"), PropertyInfo("N-channel or P-channel mosfet")]
         public string GetTypeName()
         {
             if (MosfetType > 0)
@@ -95,6 +95,5 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             return "pmos";
         }
         public double MosfetType { get; protected set; } = 1.0;
-
     }
 }

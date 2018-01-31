@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public double TempTransconductance { get; protected set; }
         public double TempSurfaceMobility { get; protected set; }
         public double TempPhi { get; protected set; }
-        public double TempVbi { get; protected set; }
+        public double TempVoltageBI { get; protected set; }
         public double TempVt0 { get; protected set; }
         public double TempSaturationCurrent { get; protected set; }
         public double TempSaturationCurrentDensity { get; protected set; }
@@ -195,9 +195,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             TempSurfaceMobility = mbp.SurfaceMobility / ratio4;
             phio = (mbp.Phi - modeltemp.PbFactor1) / modeltemp.Fact1;
             TempPhi = fact2 * phio + pbfact;
-            TempVbi = mbp.VT0 - mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi)) + .5 * (modeltemp.EgFet1 - egfet) +
+            TempVoltageBI = mbp.VT0 - mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi)) + .5 * (modeltemp.EgFet1 - egfet) +
                 mbp.MosfetType * .5 * (TempPhi - mbp.Phi);
-            TempVt0 = TempVbi + mbp.MosfetType * mbp.Gamma * Math.Sqrt(TempPhi);
+            TempVt0 = TempVoltageBI + mbp.MosfetType * mbp.Gamma * Math.Sqrt(TempPhi);
             TempSaturationCurrent = mbp.JunctionSatCur * Math.Exp(-egfet / vt + modeltemp.EgFet1 / modeltemp.VtNominal);
             TempSaturationCurrentDensity = mbp.JunctionSatCurDensity * Math.Exp(-egfet / vt + modeltemp.EgFet1 / modeltemp.VtNominal);
             pbo = (mbp.BulkJunctionPotential - modeltemp.PbFactor1) / modeltemp.Fact1;

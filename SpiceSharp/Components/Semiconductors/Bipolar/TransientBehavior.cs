@@ -237,10 +237,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double cbc = load.CurrentBC;
             double gbe = load.CondBE;
             double qb = load.BaseCharge;
-            double dqbdve = load.DqbDve;
+            double dqbdve = load.Dqbdve;
 
-            double vbe = load.Vbe;
-            double vbc = load.Vbc;
+            double vbe = load.VoltageBE;
+            double vbc = load.VoltageBC;
             double vbx = mbp.BipolarType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
             double vcs = mbp.BipolarType * (state.Solution[substrateNode] - state.Solution[colPrimeNode]);
 
@@ -265,7 +265,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             ps = mbp.PotentialSubstrate;
             xms = mbp.ExponentialSubstrate;
             xtf = mbp.TransitTimeBiasCoefficientForward;
-            ovtf = modeltemp.TransitTimeVbcFactor;
+            ovtf = modeltemp.TransitTimeVoltageBCFactor;
             xjtf = mbp.TransitTimeHighCurrentForward * bp.Area;
             if (tf != 0 && vbe > 0)
             {
@@ -368,8 +368,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double gbe = load.CondBE;
             double gbc = load.CondBC;
             double qb = load.BaseCharge;
-            double dqbdvc = load.DqbDvc;
-            double dqbdve = load.DqbDve;
+            double dqbdvc = load.Dqbdvc;
+            double dqbdve = load.Dqbdve;
             double geqcb = 0;
 
             double gpi = 0.0;
@@ -377,8 +377,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double cb = 0.0;
             double cc = 0.0;
 
-            double vbe = load.Vbe;
-            double vbc = load.Vbc;
+            double vbe = load.VoltageBE;
+            double vbc = load.VoltageBC;
             double vbx = mbp.BipolarType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
             double vcs = mbp.BipolarType * (state.Solution[substrateNode] - state.Solution[colPrimeNode]);
 
@@ -401,7 +401,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             ps = mbp.PotentialSubstrate;
             xms = mbp.ExponentialSubstrate;
             xtf = mbp.TransitTimeBiasCoefficientForward;
-            ovtf = modeltemp.TransitTimeVbcFactor;
+            ovtf = modeltemp.TransitTimeVoltageBCFactor;
             xjtf = mbp.TransitTimeHighCurrentForward * bp.Area;
             if (tf != 0 && vbe > 0)
             {

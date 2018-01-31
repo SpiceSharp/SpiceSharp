@@ -12,11 +12,11 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Right-Hand Side</param>
-        /// <param name="relThreshold">Relative threshold for pivot selection</param>
-        /// <param name="absThreshold">Absolute threshold for pivot selection</param>
-        /// <param name="diagPivoting">Use diagonal pivoting</param>
+        /// <param name="relativeThreshold">Relative threshold for pivot selection</param>
+        /// <param name="absoluteThreshold">Absolute threshold for pivot selection</param>
+        /// <param name="diagonalPivoting">Use diagonal pivoting</param>
         /// <returns></returns>
-        public static SparseError OrderAndFactor(this Matrix matrix, Vector<double> rhs, double relThreshold, double absThreshold, bool diagPivoting)
+        public static SparseError OrderAndFactor(this Matrix matrix, Vector<double> rhs, double relativeThreshold, double absoluteThreshold, bool diagonalPivoting)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -32,14 +32,14 @@ namespace SpiceSharp.Sparse
 
             matrix.Error = SparseError.Okay;
             Size = matrix.IntSize;
-            if (relThreshold <= 0.0)
-                relThreshold = matrix.RelThreshold;
-            if (relThreshold > 1.0)
-                relThreshold = matrix.RelThreshold;
-            matrix.RelThreshold = relThreshold;
-            if (absThreshold < 0.0)
-                absThreshold = matrix.AbsThreshold;
-            matrix.AbsThreshold = absThreshold;
+            if (relativeThreshold <= 0.0)
+                relativeThreshold = matrix.RelThreshold;
+            if (relativeThreshold > 1.0)
+                relativeThreshold = matrix.RelThreshold;
+            matrix.RelThreshold = relativeThreshold;
+            if (absoluteThreshold < 0.0)
+                absoluteThreshold = matrix.AbsThreshold;
+            matrix.AbsThreshold = absoluteThreshold;
             ReorderingRequired = false;
 
             if (!matrix.NeedsOrdering)
@@ -49,7 +49,7 @@ namespace SpiceSharp.Sparse
                 {
                     pPivot = matrix.Diag[Step];
                     LargestInCol = SparsePivoting.FindLargestInCol(pPivot.NextInColumn);
-                    if (LargestInCol * relThreshold < pPivot.Value.Magnitude)
+                    if (LargestInCol * relativeThreshold < pPivot.Value.Magnitude)
                     {
                         if (matrix.Complex)
                             ComplexRowColElimination(matrix, pPivot);
@@ -94,7 +94,7 @@ namespace SpiceSharp.Sparse
             // Perform reordering and factorization. 
             for (; Step <= Size; Step++)
             {
-                pPivot = pivoting.SearchForPivot(matrix, Step, diagPivoting);
+                pPivot = pivoting.SearchForPivot(matrix, Step, diagonalPivoting);
                 if (pPivot == null)
                     return MatrixIsSingular(matrix, Step);
                 ExchangeRowsAndCols(matrix, pPivot, Step);

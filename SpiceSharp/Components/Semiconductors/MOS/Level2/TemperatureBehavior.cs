@@ -26,9 +26,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         [PropertyName("drainconductance"), PropertyInfo("Drain conductance")]
         public double DrainConductance { get; internal set; }
         [PropertyName("sourcevcrit"), PropertyInfo("Critical source voltage")]
-        public double SourceVcrit { get; internal set; }
+        public double SourceVCritical { get; internal set; }
         [PropertyName("drainvcrit"), PropertyInfo("Critical drain voltage")]
-        public double DrainVcrit { get; internal set; }
+        public double DrainVCritical { get; internal set; }
         [PropertyName("cbd0"), PropertyInfo("Zero-Bias B-D junction capacitance")]
         public double CapBD { get; internal set; }
         [PropertyName("cbdsw0"), PropertyInfo(" ")]
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         public double TempTransconductance { get; protected set; }
         public double TempSurfaceMobility { get; protected set; }
         public double TempPhi { get; protected set; }
-        public double TempVbi { get; protected set; }
+        public double TempVoltageBI { get; protected set; }
         public double TempVt0 { get; protected set; }
         public double TempSaturationCurrent { get; protected set; }
         public double TempSaturationCurrentDensity { get; protected set; }
@@ -189,9 +189,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             TempSurfaceMobility = mbp.SurfaceMobility / ratio4;
             phio = (mbp.Phi - modeltemp.PbFactor1) / modeltemp.Factor1;
             TempPhi = fact2 * phio + pbfact;
-            TempVbi = mbp.VT0 - mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi)) + .5 * (modeltemp.EgFet1 - egfet) +
+            TempVoltageBI = mbp.VT0 - mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi)) + .5 * (modeltemp.EgFet1 - egfet) +
                 mbp.MosfetType * .5 * (TempPhi - mbp.Phi);
-            TempVt0 = TempVbi + mbp.MosfetType * mbp.Gamma * Math.Sqrt(TempPhi);
+            TempVt0 = TempVoltageBI + mbp.MosfetType * mbp.Gamma * Math.Sqrt(TempPhi);
             TempSaturationCurrent = mbp.JunctionSatCur * Math.Exp(-egfet / vt + modeltemp.EgFet1 / modeltemp.VtNominal);
             TempSaturationCurrentDensity = mbp.JunctionSatCurDensity * Math.Exp(-egfet / vt + modeltemp.EgFet1 / modeltemp.VtNominal);
             pbo = (mbp.BulkJunctionPotential - modeltemp.PbFactor1) / modeltemp.Factor1;
@@ -214,12 +214,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 
             if ((TempSaturationCurrentDensity == 0) || (bp.DrainArea.Value == 0) || (bp.SourceArea.Value == 0))
             {
-                SourceVcrit = DrainVcrit = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrent));
+                SourceVCritical = DrainVCritical = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrent));
             }
             else
             {
-                DrainVcrit = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrentDensity * bp.DrainArea));
-                SourceVcrit = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrentDensity * bp.SourceArea));
+                DrainVCritical = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrentDensity * bp.DrainArea));
+                SourceVCritical = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrentDensity * bp.SourceArea));
             }
             if (mbp.CapBD.Given)
             {

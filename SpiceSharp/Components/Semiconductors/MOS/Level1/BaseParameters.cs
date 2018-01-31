@@ -15,11 +15,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         [PropertyName("off"), PropertyInfo("Device initially off")]
         public bool Off { get; set; }
         [PropertyName("icvbs"), PropertyInfo("Initial B-S voltage")]
-        public Parameter InitialVbs { get; } = new Parameter();
+        public Parameter InitialVoltageBS { get; } = new Parameter();
         [PropertyName("icvds"), PropertyInfo("Initial D-S voltage")]
-        public Parameter InitialVds { get; } = new Parameter();
+        public Parameter InitialVoltageDS { get; } = new Parameter();
         [PropertyName("icvgs"), PropertyInfo("Initial G-S voltage")]
-        public Parameter InitialVgs { get; } = new Parameter();
+        public Parameter InitialVoltageGS { get; } = new Parameter();
         [PropertyName("temp"), PropertyInfo("Instance temperature")]
         public double TemperatureCelsius
         {
@@ -55,9 +55,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             switch (value.Length)
             {
-                case 3: InitialVbs.Set(value[2]); goto case 2;
-                case 2: InitialVgs.Set(value[1]); goto case 1;
-                case 1: InitialVds.Set(value[0]); break;
+                case 3: InitialVoltageBS.Set(value[2]); goto case 2;
+                case 2: InitialVoltageGS.Set(value[1]); goto case 1;
+                case 1: InitialVoltageDS.Set(value[0]); break;
                 default:
                     throw new CircuitException("Bad parameter");
             }

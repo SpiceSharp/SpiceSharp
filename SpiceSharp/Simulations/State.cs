@@ -66,7 +66,7 @@ namespace SpiceSharp.Simulations
             /// Indicates that the matrix should be reordered for AC analysis
             /// </summary>
             /// <remarks>Pivoting is necessary to minimize numerical errors and to factorize a matrix using LU decomposition.</remarks>
-            AcShouldReorder = 0x10
+            ACShouldReorder = 0x10
         }
 
         /// <summary>
@@ -83,17 +83,17 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// TEMPORARY: Pivot absolute tolerance
         /// </summary>
-        public double PivotAbsTol { get; set; } = 1e-13;
+        public double PivotAbsoluteTolerance { get; set; } = 1e-13;
 
         /// <summary>
         /// TEMPORARY: Pivot relative tolerance
         /// </summary>
-        public double PivotRelTol { get; set; } = 1e-3;
+        public double PivotRelativeTolerance { get; set; } = 1e-3;
 
         /// <summary>
         /// Extra conductance that is added to all nodes to ground to aid convergence
         /// </summary>
-        public double DiagGmin { get; set; } = 0;
+        public double DiagonalGmin { get; set; } = 0;
 
         /// <summary>
         /// Gets or sets the initialization flag

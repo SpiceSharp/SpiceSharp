@@ -154,8 +154,8 @@ namespace SpiceSharp.IntegrationMethods
                         diff = state.Solution[index] - Prediction[index];
                         if (diff != 0.0)
                         {
-                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * BaseParameters.LteRelTol + BaseParameters.LteAbsTol;
-                            tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(2.0 * BaseParameters.TruncationTol * tol / diff));
+                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * BaseParameters.LteRelativeTolerance + BaseParameters.LteAbsoluteTolerance;
+                            tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(2.0 * BaseParameters.TruncationTolerance * tol / diff));
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
@@ -176,8 +176,8 @@ namespace SpiceSharp.IntegrationMethods
 
                         if (deriv != 0.0)
                         {
-                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * BaseParameters.LteRelTol + BaseParameters.LteAbsTol;
-                            tmp = DeltaOld[0] * Math.Pow(Math.Abs(12.0 * BaseParameters.TruncationTol * tol / deriv), 1.0 / 3.0);
+                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * BaseParameters.LteRelativeTolerance + BaseParameters.LteAbsoluteTolerance;
+                            tmp = DeltaOld[0] * Math.Pow(Math.Abs(12.0 * BaseParameters.TruncationTolerance * tol / deriv), 1.0 / 3.0);
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
@@ -269,7 +269,7 @@ namespace SpiceSharp.IntegrationMethods
                 case 2: factor = 0.0833333333; break;
                 default: throw new CircuitException("Invalid order {0}".FormatString(Order));
             }
-            double del = BaseParameters.TruncationTol * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
+            double del = BaseParameters.TruncationTolerance * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
             if (Order == 2)
                 del = Math.Sqrt(del);
             else if (Order > 2)

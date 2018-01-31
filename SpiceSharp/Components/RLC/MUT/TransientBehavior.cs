@@ -6,7 +6,7 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
     /// <summary>
-    /// Transient behavior for a <see cref="Components.MutualInductance"/>
+    /// Transient behavior for a <see cref="MutualInductance"/>
     /// </summary>
     public class TransientBehavior : Behaviors.TransientBehavior
     {
@@ -30,9 +30,9 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         protected MatrixElement Branch2Branch1 { get; private set; }
 
         /// <summary>
-        /// Y-matrix contribution
+        /// Conductance
         /// </summary>
-        protected double Geq { get; private set; }
+        protected double Cond { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -87,7 +87,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void UpdateFlux1(object sender, InductorBehaviors.UpdateFluxEventArgs args)
         {
             var state = args.State;
-            Geq = args.Flux.Jacobian(Factor);
+            Cond = args.Flux.Jacobian(Factor);
             args.Flux.Current += Factor * state.Solution[load2.BranchEq];
         }
 
@@ -132,8 +132,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             // Load Y-matrix
-            Branch1Branch2.Sub(Geq);
-            Branch2Branch1.Sub(Geq);
+            Branch1Branch2.Sub(Cond);
+            Branch2Branch1.Sub(Cond);
         }
     }
 }

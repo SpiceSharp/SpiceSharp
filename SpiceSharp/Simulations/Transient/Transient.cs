@@ -115,7 +115,7 @@ namespace SpiceSharp.Simulations
             state.Initialize(circuit);
 
             // Calculate the operating point
-            Op(baseconfig.DcMaxIterations);
+            Op(baseconfig.DCMaxIterations);
             Statistics.TimePoints++;
             Method.DeltaOld.Clear(timeconfig.MaxStep);
             Method.Delta = delta;

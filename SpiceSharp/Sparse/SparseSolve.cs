@@ -116,7 +116,7 @@ namespace SpiceSharp.Sparse
             // Initialize Intermediate vector. 
             pExtOrder = matrix.Translation.IntToExtRowMap;
             for (I = Size; I > 0; I--)
-                Intermediate[I].Cplx = rhs[pExtOrder[I]];
+                Intermediate[I].Value = rhs[pExtOrder[I]];
 
             // Forward substitution. Solves Lc = b.
             for (I = 1; I <= Size; I++)
@@ -158,7 +158,7 @@ namespace SpiceSharp.Sparse
             // Unscramble Intermediate vector while placing data in to Solution vector.
             pExtOrder = matrix.Translation.IntToExtColMap;
             for (I = Size; I > 0; I--)
-                solution[pExtOrder[I]] = Intermediate[I].Cplx;
+                solution[pExtOrder[I]] = Intermediate[I].Value;
 
             return;
         }
@@ -270,7 +270,7 @@ namespace SpiceSharp.Sparse
             // Initialize Intermediate vector. 
             pExtOrder = matrix.Translation.IntToExtColMap;
             for (I = Size; I > 0; I--)
-                Intermediate[I].Cplx = rhs[pExtOrder[I]];
+                Intermediate[I].Value = rhs[pExtOrder[I]];
 
             // Forward elimination. 
             for (I = 1; I <= Size; I++)
@@ -311,7 +311,7 @@ namespace SpiceSharp.Sparse
             // Unscramble Intermediate vector while placing data in to Solution vector. 
             pExtOrder = matrix.Translation.IntToExtRowMap;
             for (I = Size; I > 0; I--)
-                solution[pExtOrder[I]] = Intermediate[I].Cplx;
+                solution[pExtOrder[I]] = Intermediate[I].Value;
 
             return;
         }

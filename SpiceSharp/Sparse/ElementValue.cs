@@ -22,7 +22,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// The complex representation
         /// </summary>
-        public Complex Cplx
+        public Complex Value
         {
             get
             {
@@ -52,7 +52,7 @@ namespace SpiceSharp.Sparse
         /// <param name="complexValue">Complex number</param>
         public ElementValue(Complex complexValue) : this()
         {
-            Cplx = complexValue;
+            Value = complexValue;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace SpiceSharp.Sparse
         /// Convert value implicitely to a complex value
         /// </summary>
         /// <param name="value"></param>
-        public static implicit operator Complex(ElementValue value) => value.Cplx;
+        public static implicit operator Complex(ElementValue value) => value.Value;
 
         /// <summary>
         /// Magnitude (sum of absolute values)
@@ -196,7 +196,7 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return Cplx.GetHashCode();
+            return Value.GetHashCode();
         }
 
         /// <summary>

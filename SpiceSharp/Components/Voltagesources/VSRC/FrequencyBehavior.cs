@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// AC excitation vector
         /// </summary>
-        public Complex Ac { get; protected set; }
+        public Complex AC { get; protected set; }
 
         /// <summary>
         /// Nodes
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// Properties
         /// </summary>
         [PropertyName("v"), PropertyInfo("Complex voltage")]
-        public Complex Voltage => Ac;
+        public Complex Voltage => AC;
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Complex current")]
         public Complex GetCurrent(State state)
         {
@@ -73,8 +73,8 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             var ap = provider.GetParameterSet<FrequencyParameters>(0);
 
             // Calculate AC vector
-            double radians = ap.AcPhase * Math.PI / 180.0;
-            Ac = new Complex(ap.AcMagnitude * Math.Cos(radians), ap.AcMagnitude * Math.Sin(radians));
+            double radians = ap.ACPhase * Math.PI / 180.0;
+            AC = new Complex(ap.ACMagnitude * Math.Cos(radians), ap.ACMagnitude * Math.Sin(radians));
 
             // Get behaviors
             var load = provider.GetBehavior<LoadBehavior>(0);
@@ -135,7 +135,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             BranchPosPtr.Add(1.0);
             NegBranchPtr.Sub(1.0);
             BranchNegPtr.Sub(1.0);
-            state.ComplexRhs[branchEq] += Ac;
+            state.ComplexRhs[branchEq] += AC;
         }
     }
 }

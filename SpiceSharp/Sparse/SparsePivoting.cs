@@ -254,9 +254,9 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">The matrix</param>
         /// <param name="step">Step</param>
-        /// <param name="diagPivoting">Use the diagonal for searching a pivot</param>
+        /// <param name="diagonalPivoting">Use the diagonal for searching a pivot</param>
         /// <returns></returns>
-        public MatrixElement SearchForPivot(Matrix matrix, int step, bool diagPivoting)
+        public MatrixElement SearchForPivot(Matrix matrix, int step, bool diagonalPivoting)
         {
             MatrixElement ChosenPivot;
 
@@ -271,7 +271,7 @@ namespace SpiceSharp.Sparse
                 }
             }
 
-            if (diagPivoting)
+            if (diagonalPivoting)
             {
 
                 // Either no singletons exist or they weren't acceptable.  Take quick first

@@ -167,7 +167,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 if (bp.Off)
                     vd = 0.0;
                 else
-                    vd = temp.TempVcrit;
+                    vd = temp.TempVCritical;
             }
             else if (state.Init == State.InitializationStates.InitFix && bp.Off)
             {
@@ -182,12 +182,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 if ((mbp.BreakdownVoltage.Given) && (vd < Math.Min(0, -temp.TempBreakdownVoltage + 10 * vte)))
                 {
                     vdtemp = -(vd + temp.TempBreakdownVoltage);
-                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(Voltage + temp.TempBreakdownVoltage), vte, temp.TempVcrit, ref Check);
+                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(Voltage + temp.TempBreakdownVoltage), vte, temp.TempVCritical, ref Check);
                     vd = -(vdtemp + temp.TempBreakdownVoltage);
                 }
                 else
                 {
-                    vd = Semiconductor.LimitJunction(vd, Voltage, vte, temp.TempVcrit, ref Check);
+                    vd = Semiconductor.LimitJunction(vd, Voltage, vte, temp.TempVCritical, ref Check);
                 }
             }
 
@@ -262,7 +262,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             cd = Current;
 
             // check convergence
-            double tol = config.RelTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsTolerance;
+            double tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsoluteTolerance;
             if (Math.Abs(cdhat - cd) > tol)
             {
                 state.IsCon = false;

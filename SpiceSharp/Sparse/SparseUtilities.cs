@@ -138,8 +138,8 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">Matrix</param>
         /// <param name="exponent">The logarithm base 10 for the determinant</param>
         /// <param name="result">The real portion of the determinant. It is scaled between 1 and 10.</param>
-        /// <param name="iResult">The imaginary portion of the determinant. It is scaled between 1 and 10.</param>
-        public static void Determinant(this Matrix matrix, out int exponent, out double result, out double iResult)
+        /// <param name="resultImaginary">The imaginary portion of the determinant. It is scaled between 1 and 10.</param>
+        public static void Determinant(this Matrix matrix, out int exponent, out double result, out double resultImaginary)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -147,7 +147,7 @@ namespace SpiceSharp.Sparse
             int I, Size;
             double Norm, nr, ni;
             ElementValue Pivot = new ElementValue(), cDeterminant = new ElementValue();
-            iResult = 0.0;
+            resultImaginary = 0.0;
             result = 0.0;
             exponent = 0;
 
@@ -160,7 +160,7 @@ namespace SpiceSharp.Sparse
             if (matrix.Error == SparseError.Singular)
             {
                 result = 0.0;
-                iResult = 0.0;
+                resultImaginary = 0.0;
                 return;
             }
 
@@ -233,7 +233,7 @@ namespace SpiceSharp.Sparse
                     cDeterminant.Negate();
 
                 result = cDeterminant.Real;
-                iResult = cDeterminant.Imaginary;
+                resultImaginary = cDeterminant.Imaginary;
             }
             else
             {

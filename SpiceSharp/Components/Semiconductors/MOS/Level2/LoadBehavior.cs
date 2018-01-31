@@ -30,42 +30,42 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Shared parameters
         /// </summary>
         [PropertyName("von"), PropertyInfo(" ")]
-        public double Von { get; internal set; }
+        public double Von { get; protected set; }
         [PropertyName("vdsat"), PropertyInfo("Saturation drain voltage")]
-        public double Vdsat { get; internal set; }
+        public double SaturationVoltageDS { get; protected set; }
         [PropertyName("id"), PropertyName("cd"), PropertyInfo("Drain current")]
-        public double DrainCurrent { get; internal set; }
+        public double DrainCurrent { get; protected set; }
         [PropertyName("ibs"), PropertyInfo("B-S junction current")]
-        public double BSCurrent { get; internal set; }
+        public double BSCurrent { get; protected set; }
         [PropertyName("ibd"), PropertyInfo("B-D junction current")]
-        public double BDCurrent { get; internal set; }
+        public double BDCurrent { get; protected set; }
         [PropertyName("gmb"), PropertyName("gmbs"), PropertyInfo("Bulk-Source transconductance")]
-        public double Gmbs { get; internal set; }
+        public double TransconductanceBS { get; protected set; }
         [PropertyName("gm"), PropertyInfo("Transconductance")]
-        public double Gm { get; internal set; }
+        public double Transconductance { get; protected set; }
         [PropertyName("gds"), PropertyInfo("Drain-Source conductance")]
-        public double Gds { get; internal set; }
+        public double CondDS { get; protected set; }
         [PropertyName("gbd"), PropertyInfo("Bulk-Drain conductance")]
-        public double Gbd { get; internal set; }
+        public double CondBD { get; protected set; }
         [PropertyName("gbs"), PropertyInfo("Bulk-Source conductance")]
-        public double Gbs { get; internal set; }
+        public double CondBS { get; protected set; }
         
         /// <summary>
         /// Extra variables
         /// </summary>
         public double Mode { get; protected set; }
-        public double Vgs { get; protected set; }
-        public double Vds { get; protected set; }
-        public double Vbs { get; protected set; }
-        public double Vbd { get; protected set; }
+        public double VoltageGS { get; protected set; }
+        public double VoltageDS { get; protected set; }
+        public double VoltageBS { get; protected set; }
+        public double VoltageBD { get; protected set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
         int drainNode, gateNode, sourceNode, bulkNode;
-        [PropertyName("dnodeprime"), PropertyInfo("Number of internal drain node")]
+        [PropertyName("dnodeprime"), PropertyInfo("Number of protected drain node")]
         public int DrainNodePrime { get; private set; }
-        [PropertyName("snodeprime"), PropertyInfo("Number of internal source node")]
+        [PropertyName("snodeprime"), PropertyInfo("Number of protected source node")]
         public int SourceNodePrime { get; private set; }
         protected MatrixElement DrainDrainPtr { get; private set; }
         protected MatrixElement GateGatePtr { get; private set; }
@@ -114,7 +114,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
 
             // Reset
-            Vdsat = 0.0;
+            SaturationVoltageDS = 0.0;
             Von = 0.0;
         }
 
@@ -259,7 +259,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 // now some common crunching for some more useful quantities
                 vbd = vbs - vds;
                 vgd = vgs - vds;
-                vgdo = Vgs - Vds;
+                vgdo = VoltageGS - VoltageDS;
 
                 von = mbp.MosfetType * Von;
 
@@ -269,28 +269,28 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				* so fast that the exponentials churn out overflows 
 				* and similar rudeness
 				*/
-                if (Vds >= 0)
+                if (VoltageDS >= 0)
                 {
-                    vgs = Transistor.LimitFet(vgs, Vgs, von);
+                    vgs = Transistor.LimitFet(vgs, VoltageGS, von);
                     vds = vgs - vgd;
-                    vds = Transistor.LimitVds(vds, Vds);
+                    vds = Transistor.LimitVoltageDS(vds, VoltageDS);
                     vgd = vgs - vds;
                 }
                 else
                 {
                     vgd = Transistor.LimitFet(vgd, vgdo, von);
                     vds = vgs - vgd;
-                    vds = -Transistor.LimitVds(-vds, -Vds);
+                    vds = -Transistor.LimitVoltageDS(-vds, -VoltageDS);
                     vgs = vgd + vds;
                 }
                 if (vds >= 0)
                 {
-                    vbs = Transistor.LimitJunction(vbs, Vbs, vt, temp.SourceVcrit, ref Check);
+                    vbs = Transistor.LimitJunction(vbs, VoltageBS, vt, temp.SourceVCritical, ref Check);
                     vbd = vbs - vds;
                 }
                 else
                 {
-                    vbd = Transistor.LimitJunction(vbd, Vbd, vt, temp.DrainVcrit, ref Check);
+                    vbd = Transistor.LimitJunction(vbd, VoltageBD, vt, temp.DrainVCritical, ref Check);
                     vbs = vbd + vds;
                 }
             }
@@ -302,9 +302,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 
                 if ((state.Init == State.InitializationStates.InitJunction) && !bp.Off)
                 {
-                    vds = mbp.MosfetType * bp.InitialVds;
-                    vgs = mbp.MosfetType * bp.InitialVgs;
-                    vbs = mbp.MosfetType * bp.InitialVbs;
+                    vds = mbp.MosfetType * bp.InitialVoltageDS;
+                    vgs = mbp.MosfetType * bp.InitialVoltageGS;
+                    vbs = mbp.MosfetType * bp.InitialVoltageBS;
                     if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((state.UseDC ||
                         state.Domain == State.DomainType.None) || (!state.UseIC)))
                     {
@@ -332,26 +332,26 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 
             if (vbs <= 0)
             {
-                Gbs = SourceSatCur / vt;
-                BSCurrent = Gbs * vbs;
-                Gbs += state.Gmin;
+                CondBS = SourceSatCur / vt;
+                BSCurrent = CondBS * vbs;
+                CondBS += state.Gmin;
             }
             else
             {
                 evbs = Math.Exp(vbs / vt);
-                Gbs = SourceSatCur * evbs / vt + state.Gmin;
+                CondBS = SourceSatCur * evbs / vt + state.Gmin;
                 BSCurrent = SourceSatCur * (evbs - 1);
             }
             if (vbd <= 0)
             {
-                Gbd = DrainSatCur / vt;
-                BDCurrent = Gbd * vbd;
-                Gbd += state.Gmin;
+                CondBD = DrainSatCur / vt;
+                BDCurrent = CondBD * vbd;
+                CondBD += state.Gmin;
             }
             else
             {
                 evbd = Math.Exp(vbd / vt);
-                Gbd = DrainSatCur * evbd / vt + state.Gmin;
+                CondBD = DrainSatCur * evbd / vt + state.Gmin;
                 BDCurrent = DrainSatCur * (evbd - 1);
             }
             if (vds >= 0)
@@ -442,7 +442,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 factor = 0.125 * mbp.NarrowFactor * 2.0 * Math.PI * Transistor.EpsilonSilicon / OxideCap * EffectiveLength;
                 /* XXX constant per device */
                 eta = 1.0 + factor;
-                vbin = temp.TempVbi * mbp.MosfetType + factor * phiMinVbs;
+                vbin = temp.TempVoltageBI * mbp.MosfetType + factor * phiMinVbs;
                 if ((mbp.Gamma > 0.0) || (mbp.SubstrateDoping > 0.0))
                 {
                     xwd = modeltemp.XD * barg;
@@ -520,7 +520,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                         /* 
 						* cutoff region
 						*/
-                        Gds = 0.0;
+                        CondDS = 0.0;
                         goto line1050;
                     }
                 }
@@ -787,15 +787,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     {
                         if ((mbp.FastSurfaceStateDensity.Value == 0.0) || (OxideCap == 0.0))
                         {
-                            Gds = 0.0;
+                            CondDS = 0.0;
                             goto line1050;
                         }
 
-                        Gds = beta1 * (von - vbin - gammad * sarg) * Math.Exp(argg * (lvgs - von));
+                        CondDS = beta1 * (von - vbin - gammad * sarg) * Math.Exp(argg * (lvgs - von));
                         goto line1050;
                     }
 
-                    Gds = beta1 * (lvgs - vbin - gammad * sarg);
+                    CondDS = beta1 * (lvgs - vbin - gammad * sarg);
                     goto line1050;
                 }
 
@@ -806,7 +806,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				*/
                 if (vdsat <= 0)
                 {
-                    Gds = 0.0;
+                    CondDS = 0.0;
                     if (lvgs > vth)
                         goto doneval;
                     goto line1050;
@@ -830,12 +830,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 expg = Math.Exp(argg * (lvgs - von));
                 cdrain = cdson * expg;
                 gmw = cdrain * argg;
-                Gm = gmw;
+                Transconductance = gmw;
                 if (lvds > vdsat)
-                    Gm = gmw + didvds * dsdvgs * expg;
+                    Transconductance = gmw + didvds * dsdvgs * expg;
                 tmp = gmw * (lvgs - von) / xn;
-                Gds = gdson * expg - Gm * dodvds - tmp * dxndvd;
-                Gmbs = gbson * expg - Gm * dodvbs - tmp * dxndvb;
+                CondDS = gdson * expg - Transconductance * dodvds - tmp * dxndvd;
+                TransconductanceBS = gbson * expg - Transconductance * dodvbs - tmp * dxndvb;
                 goto doneval;
 
                 line900:
@@ -846,11 +846,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 					*/
                     cdrain = beta1 * ((lvgs - vbin - eta * lvds / 2.0) * lvds - gammad * body / 1.5);
                     arg = cdrain * (dudvgs / ufact - dldvgs / clfact);
-                    Gm = arg + beta1 * lvds;
+                    Transconductance = arg + beta1 * lvds;
                     arg = cdrain * (dudvds / ufact - dldvds / clfact);
-                    Gds = arg + beta1 * (lvgs - vbin - eta * lvds - gammad * barg - dgdvds * body / 1.5);
+                    CondDS = arg + beta1 * (lvgs - vbin - eta * lvds - gammad * barg - dgdvds * body / 1.5);
                     arg = cdrain * (dudvbs / ufact - dldvbs / clfact);
-                    Gmbs = arg - beta1 * (gdbdv + dgdvbs * body / 1.5 - factor * lvds);
+                    TransconductanceBS = arg - beta1 * (gdbdv + dgdvbs * body / 1.5 - factor * lvds);
                 }
                 else
                 {
@@ -859,10 +859,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 					*/
                     cdrain = beta1 * ((lvgs - vbin - eta * vdsat / 2.0) * vdsat - gammad * bodys / 1.5);
                     arg = cdrain * (dudvgs / ufact - dldvgs / clfact);
-                    Gm = arg + beta1 * vdsat + beta1 * (lvgs - vbin - eta * vdsat - gammad * bsarg) * dsdvgs;
-                    Gds = -cdrain * dldvds / clfact - beta1 * dgdvds * bodys / 1.5;
+                    Transconductance = arg + beta1 * vdsat + beta1 * (lvgs - vbin - eta * vdsat - gammad * bsarg) * dsdvgs;
+                    CondDS = -cdrain * dldvds / clfact - beta1 * dgdvds * bodys / 1.5;
                     arg = cdrain * (dudvbs / ufact - dldvbs / clfact);
-                    Gmbs = arg - beta1 * (gdbdvs + dgdvbs * bodys / 1.5 - factor * vdsat) + beta1 * (lvgs - vbin - eta * vdsat - gammad *
+                    TransconductanceBS = arg - beta1 * (gdbdvs + dgdvbs * bodys / 1.5 - factor * vdsat) + beta1 * (lvgs - vbin - eta * vdsat - gammad *
                         bsarg) * dsdvbs;
                 }
                 /* 
@@ -874,8 +874,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				*/
                 line1050:
                 cdrain = 0.0;
-                Gm = 0.0;
-                Gmbs = 0.0;
+                Transconductance = 0.0;
+                TransconductanceBS = 0.0;
                 /* 
 				* finished
 				*/
@@ -883,7 +883,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             }
             doneval:
             Von = mbp.MosfetType * von;
-            Vdsat = mbp.MosfetType * vdsat;
+            SaturationVoltageDS = mbp.MosfetType * vdsat;
             /* 
 			* COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
 			*/
@@ -897,27 +897,27 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 if (Check == 1)
                     state.IsCon = false;
             }
-            Vbs = vbs;
-            Vbd = vbd;
-            Vgs = vgs;
-            Vds = vds;
+            VoltageBS = vbs;
+            VoltageBD = vbd;
+            VoltageGS = vgs;
+            VoltageDS = vds;
 
             /* 
 			* load current vector
 			*/
-            ceqbs = mbp.MosfetType * (BSCurrent - (Gbs - state.Gmin) * vbs);
-            ceqbd = mbp.MosfetType * (BDCurrent - (Gbd - state.Gmin) * vbd);
+            ceqbs = mbp.MosfetType * (BSCurrent - (CondBS - state.Gmin) * vbs);
+            ceqbd = mbp.MosfetType * (BDCurrent - (CondBD - state.Gmin) * vbd);
             if (Mode >= 0)
             {
                 xnrm = 1;
                 xrev = 0;
-                cdreq = mbp.MosfetType * (cdrain - Gds * vds - Gm * vgs - Gmbs * vbs);
+                cdreq = mbp.MosfetType * (cdrain - CondDS * vds - Transconductance * vgs - TransconductanceBS * vbs);
             }
             else
             {
                 xnrm = 0;
                 xrev = 1;
-                cdreq = -(mbp.MosfetType) * (cdrain - Gds * (-vds) - Gm * vgd - Gmbs * vbd);
+                cdreq = -(mbp.MosfetType) * (cdrain - CondDS * (-vds) - Transconductance * vgd - TransconductanceBS * vbd);
             }
             rstate.Rhs[bulkNode] -= (ceqbs + ceqbd);
             rstate.Rhs[DrainNodePrime] += (ceqbd - cdreq);
@@ -928,21 +928,21 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 			 */
             DrainDrainPtr.Add(temp.DrainConductance);
             SourceSourcePtr.Add(temp.SourceConductance);
-            BulkBulkPtr.Add(Gbd + Gbs);
-            DrainPrimeDrainPrimePtr.Add(temp.DrainConductance + Gds + Gbd + xrev * (Gm + Gmbs));
-            SourcePrimeSourcePrimePtr.Add(temp.SourceConductance + Gds + Gbs + xnrm * (Gm + Gmbs));
+            BulkBulkPtr.Add(CondBD + CondBS);
+            DrainPrimeDrainPrimePtr.Add(temp.DrainConductance + CondDS + CondBD + xrev * (Transconductance + TransconductanceBS));
+            SourcePrimeSourcePrimePtr.Add(temp.SourceConductance + CondDS + CondBS + xnrm * (Transconductance + TransconductanceBS));
             DrainDrainPrimePtr.Add(-temp.DrainConductance);
             SourceSourcePrimePtr.Add(-temp.SourceConductance);
-            BulkDrainPrimePtr.Sub(Gbd);
-            BulkSourcePrimePtr.Sub(Gbs);
+            BulkDrainPrimePtr.Sub(CondBD);
+            BulkSourcePrimePtr.Sub(CondBS);
             DrainPrimeDrainPtr.Add(-temp.DrainConductance);
-            DrainPrimeGatePtr.Add((xnrm - xrev) * Gm);
-            DrainPrimeBulkPtr.Add(-Gbd + (xnrm - xrev) * Gmbs);
-            DrainPrimeSourcePrimePtr.Add(-Gds - xnrm * (Gm + Gmbs));
-            SourcePrimeGatePtr.Add(-(xnrm - xrev) * Gm);
+            DrainPrimeGatePtr.Add((xnrm - xrev) * Transconductance);
+            DrainPrimeBulkPtr.Add(-CondBD + (xnrm - xrev) * TransconductanceBS);
+            DrainPrimeSourcePrimePtr.Add(-CondDS - xnrm * (Transconductance + TransconductanceBS));
+            SourcePrimeGatePtr.Add(-(xnrm - xrev) * Transconductance);
             SourcePrimeSourcePtr.Add(-temp.SourceConductance);
-            SourcePrimeBulkPtr.Add(-Gbs - (xnrm - xrev) * Gmbs);
-            SourcePrimeDrainPrimePtr.Add(-Gds - xrev * (Gm + Gmbs));
+            SourcePrimeBulkPtr.Add(-CondBS - (xnrm - xrev) * TransconductanceBS);
+            SourcePrimeDrainPrimePtr.Add(-CondDS - xrev * (Transconductance + TransconductanceBS));
         }
 
         /// <summary>
@@ -965,38 +965,38 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             vds = mbp.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
             vbd = vbs - vds;
             vgd = vgs - vds;
-            vgdo = Vgs - Vds;
-            delvbs = vbs - Vbs;
-            delvbd = vbd - Vbd;
-            delvgs = vgs - Vgs;
-            delvds = vds - Vds;
+            vgdo = VoltageGS - VoltageDS;
+            delvbs = vbs - VoltageBS;
+            delvbd = vbd - VoltageBD;
+            delvgs = vgs - VoltageGS;
+            delvds = vds - VoltageDS;
             delvgd = vgd - vgdo;
 
             /* these are needed for convergence testing */
 
             if (Mode >= 0)
             {
-                cdhat = DrainCurrent - Gbd * delvbd + Gmbs * delvbs +
-                    Gm * delvgs + Gds * delvds;
+                cdhat = DrainCurrent - CondBD * delvbd + TransconductanceBS * delvbs +
+                    Transconductance * delvgs + CondDS * delvds;
             }
             else
             {
-                cdhat = DrainCurrent - (Gbd - Gmbs) * delvbd -
-                    Gm * delvgd + Gds * delvds;
+                cdhat = DrainCurrent - (CondBD - TransconductanceBS) * delvbd -
+                    Transconductance * delvgd + CondDS * delvds;
             }
-            cbhat = BSCurrent + BDCurrent + Gbd * delvbd + Gbs * delvbs;
+            cbhat = BSCurrent + BDCurrent + CondBD * delvbd + CondBS * delvbs;
 
             /*
              *  check convergence
              */
-            double tol = config.RelTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + config.AbsTolerance;
+            double tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + config.AbsoluteTolerance;
             if (Math.Abs(cdhat - DrainCurrent) >= tol)
             {
                 state.IsCon = false;
                 return false;
             }
 
-            tol = config.RelTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(BSCurrent + BDCurrent)) + config.AbsTolerance;
+            tol = config.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(BSCurrent + BDCurrent)) + config.AbsoluteTolerance;
             if (Math.Abs(cbhat - (BSCurrent + BDCurrent)) > tol)
             {
                 state.IsCon = false;

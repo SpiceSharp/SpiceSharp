@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Gmin = baseconfig.Gmin;
-            Op(baseconfig.DcMaxIterations);
+            Op(baseconfig.DCMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             state.UseDC = false;
@@ -74,7 +74,7 @@ namespace SpiceSharp.Simulations
                 state.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
 
                 // Solve
-                AcIterate(circuit);
+                ACIterate(circuit);
 
                 // Export the timepoint
                 Export(exportargs);

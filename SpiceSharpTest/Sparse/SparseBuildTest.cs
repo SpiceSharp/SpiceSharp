@@ -44,7 +44,7 @@ namespace SpiceSharpTest.Sparse
             {
                 for (int c = 1; c < 100; c++)
                 {
-                    matrix.GetElement(r, c).Value.Cplx = new Complex(r, c);
+                    matrix.GetElement(r, c).Value.Value = new Complex(r, c);
                 }
             }
 
@@ -75,7 +75,7 @@ namespace SpiceSharpTest.Sparse
                     bool oddcol = c % 2 == 0;
 
                     if (oddrow && !oddcol || !oddrow && oddcol)
-                        matrix.GetElement(r, c).Value.Cplx = new Complex(r, c);
+                        matrix.GetElement(r, c).Value.Value = new Complex(r, c);
                 }
             }
             matrix.LinkRows();
@@ -93,7 +93,7 @@ namespace SpiceSharpTest.Sparse
 
                     if (oddrow && !oddcol || !oddrow && oddcol)
                     {
-                        Assert.AreEqual(elt.Value.Cplx, new Complex(r, c));
+                        Assert.AreEqual(elt.Value.Value, new Complex(r, c));
                         elt = elt.NextInRow;
                     }
                 }
@@ -110,7 +110,7 @@ namespace SpiceSharpTest.Sparse
 
                     if (oddrow && !oddcol || !oddrow && oddcol)
                     {
-                        Assert.AreEqual(elt.Value.Cplx, new Complex(r, c));
+                        Assert.AreEqual(elt.Value.Value, new Complex(r, c));
                         elt = elt.NextInColumn;
                     }
                 }

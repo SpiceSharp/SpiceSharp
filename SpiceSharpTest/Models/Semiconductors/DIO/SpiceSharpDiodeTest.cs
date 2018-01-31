@@ -91,7 +91,7 @@ namespace SpiceSharpTest.Models.DIO
             Func<State, Complex>[] exports = new Func<State, Complex>[1];
             ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
-                exports[0] = ac.CreateAcExport("V1", "i");
+                exports[0] = ac.CreateACExport("V1", "i");
             };
 
             // Create references

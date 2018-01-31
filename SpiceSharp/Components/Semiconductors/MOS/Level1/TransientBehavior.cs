@@ -68,9 +68,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         protected StateHistory CapGS { get; private set; }
         protected StateHistory CapGD { get; private set; }
         protected StateHistory CapGB { get; private set; }
-        protected StateHistory Vgs { get; private set; }
-        protected StateHistory Vds { get; private set; }
-        protected StateHistory Vbs { get; private set; }
+        protected StateHistory VoltageGS { get; private set; }
+        protected StateHistory VoltageDS { get; private set; }
+        protected StateHistory VoltageBS { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -199,9 +199,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             CapGS = states.CreateHistory();
             CapGD = states.CreateHistory();
             CapGB = states.CreateHistory();
-            Vgs = states.CreateHistory();
-            Vds = states.CreateHistory();
-            Vbs = states.CreateHistory();
+            VoltageGS = states.CreateHistory();
+            VoltageDS = states.CreateHistory();
+            VoltageBS = states.CreateHistory();
         }
 
         /// <summary>
@@ -217,10 +217,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double capgs, capgd, capgb;
 
             // Get voltages
-            double vbd = load.Vbd;
-            double vbs = load.Vbs;
-            double vgs = load.Vgs;
-            double vds = load.Vds;
+            double vbd = load.VoltageBD;
+            double vbs = load.VoltageBS;
+            double vgs = load.VoltageGS;
+            double vds = load.VoltageDS;
             double vgd = vgs - vds;
             double vgb = vgs - vbs;
 
@@ -285,13 +285,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double icapgs, icapgd, icapgb;
             if (load.Mode > 0)
             {
-                Transistor.MeyerCharges(vgs, vgd, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
+                Transistor.MeyerCharges(vgs, vgd, mbp.MosfetType * load.Von, mbp.MosfetType * load.SaturationVoltageDS,
                     out icapgs, out icapgd, out icapgb,
                     temp.TempPhi, OxideCap);
             }
             else
             {
-                Transistor.MeyerCharges(vgd, vgs, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
+                Transistor.MeyerCharges(vgd, vgs, mbp.MosfetType * load.Von, mbp.MosfetType * load.SaturationVoltageDS,
                     out icapgd, out icapgs, out icapgb,
                     temp.TempPhi, OxideCap);
             }
@@ -308,9 +308,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             ChargeGB.Current = vgb * capgb;
 
             // Store these voltages
-            Vgs.Current = vgs;
-            Vds.Current = vds;
-            Vbs.Current = vbs;
+            VoltageGS.Current = vgs;
+            VoltageDS.Current = vds;
+            VoltageBS.Current = vbs;
         }
 
         /// <summary>
@@ -327,10 +327,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double vgs1, vgd1, vgb1, capgs, capgd, capgb;
 
             // Get voltages
-            double vbd = load.Vbd;
-            double vbs = load.Vbs;
-            double vgs = load.Vgs;
-            double vds = load.Vds;
+            double vbd = load.VoltageBD;
+            double vbs = load.VoltageBS;
+            double vgs = load.VoltageGS;
+            double vds = load.VoltageDS;
             double vgd = vgs - vds;
             double vgb = vgs - vbs;
 
@@ -347,9 +347,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double Cbs = 0.0;
 
             // Store these voltages
-            Vgs.Current = vgs;
-            Vds.Current = vds;
-            Vbs.Current = vbs;
+            VoltageGS.Current = vgs;
+            VoltageDS.Current = vds;
+            VoltageBS.Current = vbs;
 
             /* 
              * now we do the hard part of the bulk - drain and bulk - source
@@ -495,22 +495,22 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double icapgs, icapgd, icapgb;
             if (load.Mode > 0)
             {
-                Transistor.MeyerCharges(vgs, vgd,  mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
+                Transistor.MeyerCharges(vgs, vgd,  mbp.MosfetType * load.Von, mbp.MosfetType * load.SaturationVoltageDS,
                     out icapgs, out icapgd, out icapgb,
                     temp.TempPhi, OxideCap);
             }
             else
             {
-                Transistor.MeyerCharges(vgd, vgs, mbp.MosfetType * load.Von, mbp.MosfetType * load.Vdsat,
+                Transistor.MeyerCharges(vgd, vgs, mbp.MosfetType * load.Von, mbp.MosfetType * load.SaturationVoltageDS,
                     out icapgd, out icapgs, out icapgb,
                     temp.TempPhi, OxideCap);
             }
             CapGS.Current = icapgs;
             CapGD.Current = icapgd;
             CapGB.Current = icapgb;
-            vgs1 = Vgs[1];
-            vgd1 = vgs1 - Vds[1];
-            vgb1 = vgs1 - Vbs[1];
+            vgs1 = VoltageGS[1];
+            vgd1 = vgs1 - VoltageDS[1];
+            vgb1 = vgs1 - VoltageBS[1];
             capgs = CapGS.Current + CapGS[1] + GateSourceOverlapCap;
             capgd = CapGD.Current + CapGD[1] + GateDrainOverlapCap;
             capgb = CapGB.Current + CapGB[1] + GateBulkOverlapCap;

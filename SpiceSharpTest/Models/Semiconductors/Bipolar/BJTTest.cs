@@ -119,7 +119,7 @@ namespace SpiceSharpTest.Models.Bipolar
             Func<State, Complex>[] exports = new Func<State, Complex>[1];
             ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
-                exports[0] = ac.CreateAcVoltageExport("out");
+                exports[0] = ac.CreateACVoltageExport("out");
             };
 
             // Create references

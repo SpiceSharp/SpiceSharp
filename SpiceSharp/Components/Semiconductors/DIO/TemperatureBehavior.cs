@@ -25,7 +25,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public double TempSaturationCurrent { get; protected set; }
         public double TempFactor1 { get; protected set; }
         public double TempDepletionCap { get; protected set; }
-        public double TempVcrit { get; protected set; }
+        public double TempVCritical { get; protected set; }
         public double TempBreakdownVoltage { get; protected set; }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             egfet1 = 1.16 - (7.02e-4 * mbp.NominalTemperature * mbp.NominalTemperature) / (mbp.NominalTemperature + 1108);
             arg1 = -egfet1 / (Circuit.Boltzmann * 2 * mbp.NominalTemperature) + 1.1150877 / (2 * Circuit.Boltzmann * Circuit.ReferenceTemperature);
             fact1 = mbp.NominalTemperature / Circuit.ReferenceTemperature;
-            pbfact1 = -2 * modeltemp.Vtnom * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
+            pbfact1 = -2 * modeltemp.VtNominal * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
             pbo = (mbp.JunctionPotential - pbfact1) / fact1;
             gmaold = (mbp.JunctionPotential - pbo) / pbo;
             TempJunctionCap = mbp.JunctionCap / (1 + mbp.GradingCoefficient * (400e-6 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
@@ -95,7 +95,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             
             // and Vcrit
             vte = mbp.EmissionCoefficient * vt;
-            TempVcrit = vte * Math.Log(vte / (Circuit.Root2 * TempSaturationCurrent));
+            TempVCritical = vte * Math.Log(vte / (Circuit.Root2 * TempSaturationCurrent));
 
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
             if (mbp.BreakdownVoltage.Given)
@@ -109,7 +109,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 }
                 else
                 {
-                    tol = simulation.BaseConfiguration.RelTolerance * cbv;
+                    tol = simulation.BaseConfiguration.RelativeTolerance * cbv;
                     xbv = mbp.BreakdownVoltage - vt * Math.Log(1 + cbv / TempSaturationCurrent);
                     iter = 0;
                     for (iter = 0; iter < 25; iter++)

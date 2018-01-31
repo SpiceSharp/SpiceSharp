@@ -11,16 +11,16 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("npn"), PropertyInfo("NPN type device")]
-        public void SetNpn(bool value)
+        public void SetNPN(bool value)
         {
             if (value)
-                BipolarType = Npn;
+                BipolarType = NPN;
         }
         [PropertyName("pnp"), PropertyInfo("PNP type device")]
-        public void SetPnp(bool value)
+        public void SetPNP(bool value)
         {
             if (value)
-                BipolarType = Pnp;
+                BipolarType = PNP;
         }
         [PropertyName("type"), PropertyInfo("NPN or PNP")]
         public string GetTypeName()
@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 return "npn";
             return "pnp";
         }
-        public double BipolarType { get; internal set; } = Npn;
+        public double BipolarType { get; internal set; } = NPN;
         [PropertyName("tnom"), PropertyInfo("Parameter measurement temperature")]
         public double NominalTemperatureCelsius
         {
@@ -84,7 +84,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [PropertyName("xtf"), PropertyInfo("Coefficient for bias dependence of TF")]
         public Parameter TransitTimeBiasCoefficientForward { get; } = new Parameter();
         [PropertyName("vtf"), PropertyInfo("Voltage giving VBC dependence of TF")]
-        public Parameter TransitTimeForwardVbc { get; } = new Parameter();
+        public Parameter TransitTimeForwardVoltageBC { get; } = new Parameter();
         [PropertyName("itf"), PropertyInfo("High current dependence of TF")]
         public Parameter TransitTimeHighCurrentForward { get; } = new Parameter();
         [PropertyName("ptf"), PropertyInfo("Excess phase")]
@@ -120,7 +120,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Constants
         /// </summary>
-        public const int Npn = 1;
-        public const int Pnp = -1;
+        public const int NPN = 1;
+        public const int PNP = -1;
     }
 }

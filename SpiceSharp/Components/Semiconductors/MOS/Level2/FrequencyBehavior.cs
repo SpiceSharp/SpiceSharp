@@ -178,12 +178,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 OxideCap, vgs, vbs, vbd, vgd, von,
                 vdsat, sargsw;
 
-            vbs = load.Vbs;
-            vbd = load.Vbd;
-            vgs = load.Vgs;
-            vgd = load.Vgs - load.Vds;
+            vbs = load.VoltageBS;
+            vbd = load.VoltageBD;
+            vgs = load.VoltageGS;
+            vgd = load.VoltageGS - load.VoltageDS;
             von = mbp.MosfetType * load.Von;
-            vdsat = mbp.MosfetType * load.Vdsat;
+            vdsat = mbp.MosfetType * load.SaturationVoltageDS;
 
             EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
             OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
@@ -359,27 +359,27 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 			 * load matrix
 			 */
             GateGatePtr.Add(new Complex(0.0, xgd + xgs + xgb));
-            BulkBulkPtr.Add(new Complex(load.Gbd + load.Gbs, xgb + xbd + xbs));
-            DrainPrimeDrainPrimePtr.Add(new Complex(temp.DrainConductance + load.Gds + load.Gbd + xrev * (load.Gm + load.Gmbs), xgd + xbd));
-            SourcePrimeSourcePrimePtr.Add(new Complex(temp.SourceConductance + load.Gds + load.Gbs + xnrm * (load.Gm + load.Gmbs), xgs + xbs));
+            BulkBulkPtr.Add(new Complex(load.CondBD + load.CondBS, xgb + xbd + xbs));
+            DrainPrimeDrainPrimePtr.Add(new Complex(temp.DrainConductance + load.CondDS + load.CondBD + xrev * (load.Transconductance + load.TransconductanceBS), xgd + xbd));
+            SourcePrimeSourcePrimePtr.Add(new Complex(temp.SourceConductance + load.CondDS + load.CondBS + xnrm * (load.Transconductance + load.TransconductanceBS), xgs + xbs));
             GateBulkPtr.Sub(new Complex(0.0, xgb));
             GateDrainPrimePtr.Sub(new Complex(0.0, xgd));
             GateSourcePrimePtr.Sub(new Complex(0.0, xgs));
             BulkGatePtr.Sub(new Complex(0.0, xgb));
-            BulkDrainPrimePtr.Sub(new Complex(load.Gbd, xbd));
-            BulkSourcePrimePtr.Sub(new Complex(load.Gbs, xbs));
-            DrainPrimeGatePtr.Add(new Complex((xnrm - xrev) * load.Gm, -xgd));
-            DrainPrimeBulkPtr.Add(new Complex(-load.Gbd + (xnrm - xrev) * load.Gmbs, -xbd));
-            SourcePrimeGatePtr.Sub(new Complex((xnrm - xrev) * load.Gm, xgs));
-            SourcePrimeBulkPtr.Sub(new Complex(load.Gbs + (xnrm - xrev) * load.Gmbs, xbs));
+            BulkDrainPrimePtr.Sub(new Complex(load.CondBD, xbd));
+            BulkSourcePrimePtr.Sub(new Complex(load.CondBS, xbs));
+            DrainPrimeGatePtr.Add(new Complex((xnrm - xrev) * load.Transconductance, -xgd));
+            DrainPrimeBulkPtr.Add(new Complex(-load.CondBD + (xnrm - xrev) * load.TransconductanceBS, -xbd));
+            SourcePrimeGatePtr.Sub(new Complex((xnrm - xrev) * load.Transconductance, xgs));
+            SourcePrimeBulkPtr.Sub(new Complex(load.CondBS + (xnrm - xrev) * load.TransconductanceBS, xbs));
             DrainDrainPtr.Add(temp.DrainConductance);
             SourceSourcePtr.Add(temp.SourceConductance);
             DrainDrainPrimePtr.Sub(temp.DrainConductance);
             SourceSourcePrimePtr.Sub(temp.SourceConductance);
             DrainPrimeDrainPtr.Sub(temp.DrainConductance);
-            DrainPrimeSourcePrimePtr.Sub(load.Gds + xnrm * (load.Gm + load.Gmbs));
+            DrainPrimeSourcePrimePtr.Sub(load.CondDS + xnrm * (load.Transconductance + load.TransconductanceBS));
             SourcePrimeSourcePtr.Sub(temp.SourceConductance);
-            SourcePrimeDrainPrimePtr.Sub(load.Gds + xrev * (load.Gm + load.Gmbs));
+            SourcePrimeDrainPrimePtr.Sub(load.CondDS + xrev * (load.Transconductance + load.TransconductanceBS));
         }
     }
 }

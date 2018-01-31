@@ -25,22 +25,22 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Methods
         /// </summary>
         [PropertyName("vbe"), PropertyInfo("B-E voltage")]
-        public double Vbe { get; protected set; }
+        public double VoltageBE { get; protected set; }
         [PropertyName("vbc"), PropertyInfo("B-C voltage")]
-        public double Vbc { get; protected set; }
+        public double VoltageBC { get; protected set; }
         [PropertyName("cc"), PropertyInfo("Current at collector node")]
-        public double CurrentC { get; protected set; }
+        public double CollectorCurrent { get; protected set; }
         [PropertyName("cb"), PropertyInfo("Current at base node")]
-        public double CurrentB { get; protected set; }
+        public double BaseCurrent { get; protected set; }
         [PropertyName("gpi"), PropertyInfo("Small signal input conductance - pi")]
-        public double Gpi { get; protected set; }
+        public double ConductancePi { get; protected set; }
         [PropertyName("gmu"), PropertyInfo("Small signal conductance - mu")]
-        public double Gmu { get; protected set; }
+        public double ConductanceMu { get; protected set; }
         [PropertyName("gm"), PropertyInfo("Small signal transconductance")]
-        public double Gm { get; protected set; }
+        public double Transconductance { get; protected set; }
         [PropertyName("go"), PropertyInfo("Small signal output conductance")]
-        public double Go { get; protected set; }
-        public double Gx { get; protected set; }
+        public double OutputConductance { get; protected set; }
+        public double ConductanceX { get; protected set; }
 
         /// <summary>
         /// Nodes
@@ -81,8 +81,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public double CurrentBC { get; protected set; }
         public double CondBC { get; protected set; }
         public double BaseCharge { get; protected set; }
-        public double DqbDvc { get; protected set; }
-        public double DqbDve { get; protected set; }
+        public double Dqbdvc { get; protected set; }
+        public double Dqbdve { get; protected set; }
 
         /// <summary>
         /// Event called when excess phase calculation is needed
@@ -262,13 +262,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
             icheck = false;
             if (state.Init == State.InitializationStates.InitJunction && state.Domain == State.DomainType.Time && state.UseDC && state.UseIC)
             {
-                vbe = mbp.BipolarType * bp.InitialVbe;
-                vce = mbp.BipolarType * bp.InitialVce;
+                vbe = mbp.BipolarType * bp.InitialVoltageBE;
+                vce = mbp.BipolarType * bp.InitialVoltageCE;
                 vbc = vbe - vce;
             }
             else if (state.Init == State.InitializationStates.InitJunction && !bp.Off)
             {
-                vbe = temp.TempVCrit;
+                vbe = temp.TempVCritical;
                 vbc = 0;
             }
             else if (state.Init == State.InitializationStates.InitJunction || (state.Init == State.InitializationStates.InitFix && bp.Off))
@@ -288,8 +288,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				 * limit nonlinear branch voltages
 				 */
                 ichk1 = true;
-                vbe = Semiconductor.LimitJunction(vbe, Vbe, vt, temp.TempVCrit, ref icheck);
-                vbc = Semiconductor.LimitJunction(vbc, Vbc, vt, temp.TempVCrit, ref ichk1);
+                vbe = Semiconductor.LimitJunction(vbe, VoltageBE, vt, temp.TempVCritical, ref icheck);
+                vbc = Semiconductor.LimitJunction(vbc, VoltageBC, vt, temp.TempVCritical, ref ichk1);
                 if (ichk1 == true)
                     icheck = true;
             }
@@ -356,8 +356,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (oik == 0 && oikr == 0)
             {
                 BaseCharge = q1;
-                DqbDve = q1 * BaseCharge * modeltemp.InverseEarlyVoltReverse;
-                DqbDvc = q1 * BaseCharge * modeltemp.InverseEarlyVoltForward;
+                Dqbdve = q1 * BaseCharge * modeltemp.InverseEarlyVoltReverse;
+                Dqbdvc = q1 * BaseCharge * modeltemp.InverseEarlyVoltForward;
             }
             else
             {
@@ -367,8 +367,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 if (arg != 0)
                     sqarg = Math.Sqrt(arg);
                 BaseCharge = q1 * (1 + sqarg) / 2;
-                DqbDve = q1 * (BaseCharge * modeltemp.InverseEarlyVoltReverse + oik * CondBE / sqarg);
-                DqbDvc = q1 * (BaseCharge * modeltemp.InverseEarlyVoltForward + oikr * CondBC / sqarg);
+                Dqbdve = q1 * (BaseCharge * modeltemp.InverseEarlyVoltReverse + oik * CondBE / sqarg);
+                Dqbdvc = q1 * (BaseCharge * modeltemp.InverseEarlyVoltForward + oikr * CondBC / sqarg);
             }
 
             // Excess phase calculation
@@ -401,8 +401,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 gx = 1 / gx;
             gpi = CondBE / temp.TempBetaForward + gben;
             gmu = CondBC / temp.TempBetaReverse + gbcn;
-            go = (CondBC + (cex - CurrentBC) * DqbDvc / BaseCharge) / BaseCharge;
-            gm = (gex - (cex - CurrentBC) * DqbDve / BaseCharge) / BaseCharge - go;
+            go = (CondBC + (cex - CurrentBC) * Dqbdvc / BaseCharge) / BaseCharge;
+            gm = (gex - (cex - CurrentBC) * Dqbdve / BaseCharge) / BaseCharge - go;
 
             /* 
 			 * check convergence
@@ -413,15 +413,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
                     state.IsCon = false;
             }
 
-            Vbe = vbe;
-            Vbc = vbc;
-            CurrentC = cc;
-            CurrentB = cb;
-            Gpi = gpi;
-            Gmu = gmu;
-            Gm = gm;
-            Go = go;
-            Gx = gx;
+            VoltageBE = vbe;
+            VoltageBC = vbc;
+            CollectorCurrent = cc;
+            BaseCurrent = cb;
+            ConductancePi = gpi;
+            ConductanceMu = gmu;
+            Transconductance = gm;
+            OutputConductance = go;
+            ConductanceX = gx;
 
             /* 
 			 * load current excitation vector
@@ -475,25 +475,25 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             vbe = mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitterPrimeNode]);
             vbc = mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
-            delvbe = vbe - Vbe;
-            delvbc = vbc - Vbe;
-            cchat = CurrentC + (Gm + Go) * delvbe - (Go + Gmu) * delvbc;
-            cbhat = CurrentB + Gpi * delvbe + Gmu * delvbc;
-            cc = CurrentC;
-            cb = CurrentB;
+            delvbe = vbe - VoltageBE;
+            delvbc = vbc - VoltageBE;
+            cchat = CollectorCurrent + (Transconductance + OutputConductance) * delvbe - (OutputConductance + ConductanceMu) * delvbc;
+            cbhat = BaseCurrent + ConductancePi * delvbe + ConductanceMu * delvbc;
+            cc = CollectorCurrent;
+            cb = BaseCurrent;
 
             /*
              *   check convergence
              */
             // NOTE: access configuration in some way here!
-            double tol = config.RelTolerance * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + config.AbsTolerance;
+            double tol = config.RelativeTolerance * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + config.AbsoluteTolerance;
             if (Math.Abs(cchat - cc) > tol)
             {
                 state.IsCon = false;
                 return false;
             }
 
-            tol = config.RelTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(cb)) + config.AbsTolerance;
+            tol = config.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(cb)) + config.AbsoluteTolerance;
             if (Math.Abs(cbhat - cb) > tol)
             {
                 state.IsCon = false;

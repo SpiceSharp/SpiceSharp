@@ -56,9 +56,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Constants
         /// </summary>
-        protected StateHistory Vbs { get; private set; }
-        protected StateHistory Vgs { get; private set; }
-        protected StateHistory Vds { get; private set; }
+        protected StateHistory VoltageBS { get; private set; }
+        protected StateHistory VoltageGS { get; private set; }
+        protected StateHistory VoltageDS { get; private set; }
         protected StateHistory CapGS { get; private set; }
         protected StateHistory CapGD { get; private set; }
         protected StateHistory CapGB { get; private set; }
@@ -186,9 +186,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 			if (states == null)
 				throw new ArgumentNullException(nameof(states));
 
-            Vbs = states.CreateHistory();
-            Vgs = states.CreateHistory();
-            Vds = states.CreateHistory();
+            VoltageBS = states.CreateHistory();
+            VoltageGS = states.CreateHistory();
+            VoltageDS = states.CreateHistory();
             CapGS = states.CreateHistory();
             CapGD = states.CreateHistory();
             CapGB = states.CreateHistory();
@@ -212,17 +212,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 OxideCap, vgs, vbs, vbd, vgb, vgd, von,
                 vdsat, sargsw, capgs = 0.0, capgd = 0.0, capgb = 0.0;
 
-            vbs = load.Vbs;
-            vbd = load.Vbd;
-            vgs = load.Vgs;
-            vgd = load.Vgs - load.Vds;
-            vgb = load.Vgs - load.Vbs;
+            vbs = load.VoltageBS;
+            vbd = load.VoltageBD;
+            vgs = load.VoltageGS;
+            vgd = load.VoltageGS - load.VoltageDS;
+            vgb = load.VoltageGS - load.VoltageBS;
             von = mbp.MosfetType * load.Von;
-            vdsat = mbp.MosfetType * load.Vdsat;
+            vdsat = mbp.MosfetType * load.SaturationVoltageDS;
 
-            Vds.Current = load.Vds;
-            Vbs.Current = vbs;
-            Vgs.Current = vgs;
+            VoltageDS.Current = load.VoltageDS;
+            VoltageBS.Current = vbs;
+            VoltageGS.Current = vgs;
 
             EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
             GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;
@@ -382,17 +382,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 vdsat, sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs,
                 ceqbd;
 
-            vbs = load.Vbs;
-            vbd = load.Vbd;
-            vgs = load.Vgs;
-            vgd = load.Vgs - load.Vds;
-            vgb = load.Vgs - load.Vbs;
+            vbs = load.VoltageBS;
+            vbd = load.VoltageBD;
+            vgs = load.VoltageGS;
+            vgd = load.VoltageGS - load.VoltageDS;
+            vgb = load.VoltageGS - load.VoltageBS;
             von = mbp.MosfetType * load.Von;
-            vdsat = mbp.MosfetType * load.Vdsat;
+            vdsat = mbp.MosfetType * load.SaturationVoltageDS;
 
-            Vds.Current = load.Vds;
-            Vbs.Current = vbs;
-            Vgs.Current = vgs;
+            VoltageDS.Current = load.VoltageDS;
+            VoltageBS.Current = vbs;
+            VoltageGS.Current = vgs;
 
             double Gbd = 0.0;
             double Cbd = 0.0;
@@ -554,9 +554,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             CapGD.Current = icapgd;
             CapGB.Current = icapgb;
 
-            vgs1 = Vgs[1];
-            vgd1 = vgs1 - Vds[1];
-            vgb1 = vgs1 - Vbs[1];
+            vgs1 = VoltageGS[1];
+            vgd1 = vgs1 - VoltageDS[1];
+            vgb1 = vgs1 - VoltageBS[1];
             capgs = CapGS.Current + CapGS[1] + GateSourceOverlapCap;
             capgd = CapGD.Current + CapGD[1] + GateDrainOverlapCap;
             capgb = CapGB.Current + CapGB[1] + GateBulkOverlapCap;
