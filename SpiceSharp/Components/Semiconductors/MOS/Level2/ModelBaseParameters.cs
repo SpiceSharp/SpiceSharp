@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         [PropertyName("u0"), PropertyName("uo"), PropertyInfo("Surface mobility")]
         public Parameter SurfaceMobility { get; } = new Parameter();
         [PropertyName("fc"), PropertyInfo("Forward bias jct. fit parm.")]
-        public Parameter ForwardCapDepCoefficient { get; } = new Parameter(.5);
+        public Parameter ForwardCapDepletionCoefficient { get; } = new Parameter(.5);
         [PropertyName("nsub"), PropertyInfo("Substrate doping")]
         public Parameter SubstrateDoping { get; } = new Parameter();
         [PropertyName("tpg"), PropertyInfo("Gate type")]
@@ -76,9 +76,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         [PropertyName("delta"), PropertyInfo("Width effect on threshold")]
         public Parameter NarrowFactor { get; } = new Parameter();
         [PropertyName("uexp"), PropertyInfo("Crit. field exp for mob. deg.")]
-        public Parameter CritFieldExp { get; } = new Parameter();
+        public Parameter CriticalFieldExp { get; } = new Parameter();
         [PropertyName("vmax"), PropertyInfo("Maximum carrier drift velocity")]
-        public Parameter MaxDriftVel { get; } = new Parameter();
+        public Parameter MaxDriftVelocity { get; } = new Parameter();
         [PropertyName("xj"), PropertyInfo("Junction depth")]
         public Parameter JunctionDepth { get; } = new Parameter();
         [PropertyName("neff"), PropertyInfo("Total channel charge coeff.")]

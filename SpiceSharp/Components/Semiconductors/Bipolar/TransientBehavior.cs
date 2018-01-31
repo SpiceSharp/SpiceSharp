@@ -224,7 +224,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Calculate state variables
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        public override void GetDCstate(TimeSimulation simulation)
+        public override void GetDCState(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));

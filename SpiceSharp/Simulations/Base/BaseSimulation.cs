@@ -172,16 +172,16 @@ namespace SpiceSharp.Simulations
                 CircuitWarning.Warning(this, "Starting source stepping");
                 for (int i = 0; i <= config.NumSrcSteps; i++)
                 {
-                    state.SrcFact = i / (double)config.NumSrcSteps;
+                    state.SourceFactor = i / (double)config.NumSrcSteps;
                     if (!Iterate(maxIterations))
                     {
-                        state.SrcFact = 1.0;
+                        state.SourceFactor = 1.0;
                         // circuit.CurrentAnalysis = AnalysisType.DoingTran;
                         CircuitWarning.Warning(this, "Source stepping failed");
                         return;
                     }
                 }
-                state.SrcFact = 1.0;
+                state.SourceFactor = 1.0;
                 return;
             }
 

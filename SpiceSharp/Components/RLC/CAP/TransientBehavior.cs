@@ -112,7 +112,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Calculate the state for DC
         /// </summary>
         /// <param name="simulation"></param>
-        public override void GetDCstate(TimeSimulation simulation)
+        public override void GetDCState(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));

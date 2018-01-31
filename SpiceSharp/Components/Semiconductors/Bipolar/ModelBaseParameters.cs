@@ -84,7 +84,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [PropertyName("xtf"), PropertyInfo("Coefficient for bias dependence of TF")]
         public Parameter TransitTimeBiasCoefficientForward { get; } = new Parameter();
         [PropertyName("vtf"), PropertyInfo("Voltage giving VBC dependence of TF")]
-        public Parameter TransitTimeForwardVBC { get; } = new Parameter();
+        public Parameter TransitTimeForwardVbc { get; } = new Parameter();
         [PropertyName("itf"), PropertyInfo("High current dependence of TF")]
         public Parameter TransitTimeHighCurrentForward { get; } = new Parameter();
         [PropertyName("ptf"), PropertyInfo("Excess phase")]

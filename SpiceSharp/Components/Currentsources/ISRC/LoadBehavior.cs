@@ -130,12 +130,12 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 if (bp.Waveform != null)
                     value = bp.Waveform.At(time);
                 else
-                    value = bp.DcValue * state.SrcFact;
+                    value = bp.DcValue * state.SourceFactor;
             }
             else
             {
                 // AC or DC analysis use the DC value
-                value = bp.DcValue * state.SrcFact;
+                value = bp.DcValue * state.SourceFactor;
             }
 
             state.Rhs[posourceNode] += value;

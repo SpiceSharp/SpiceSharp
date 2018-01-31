@@ -139,7 +139,7 @@ namespace SpiceSharp.Simulations
         /// The current source factor
         /// This parameter is changed when doing source stepping for aiding convergence
         /// </summary>
-        public double SrcFact { get; set; } = 1.0;
+        public double SourceFactor { get; set; } = 1.0;
 
         /// <summary>
         /// Is the current iteration convergent?

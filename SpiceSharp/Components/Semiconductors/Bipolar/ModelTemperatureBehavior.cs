@@ -20,9 +20,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Shared parameters
         /// </summary>
         [PropertyName("invearlyvoltf"), PropertyInfo("Inverse early voltage:forward")]
-        public double InvEarlyVoltForward { get; internal set; }
+        public double InverseEarlyVoltForward { get; internal set; }
         [PropertyName("invearlyvoltr"), PropertyInfo("Inverse early voltage:reverse")]
-        public double InvEarlyVoltReverse { get; internal set; }
+        public double InverseEarlyVoltReverse { get; internal set; }
         [PropertyName("invrollofff"), PropertyInfo("Inverse roll off - forward")]
         public double InverseRollOffForward { get; internal set; }
         [PropertyName("invrolloffr"), PropertyInfo("Inverse roll off - reverse")]
@@ -106,17 +106,17 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			 */
 
             if (mbp.EarlyVoltageForward.Given && mbp.EarlyVoltageForward != 0)
-                InvEarlyVoltForward = 1 / mbp.EarlyVoltageForward;
+                InverseEarlyVoltForward = 1 / mbp.EarlyVoltageForward;
             else
-                InvEarlyVoltForward = 0;
+                InverseEarlyVoltForward = 0;
             if (mbp.RollOffForward.Given && mbp.RollOffForward != 0)
                 InverseRollOffForward = 1 / mbp.RollOffForward;
             else
                 InverseRollOffForward = 0;
             if (mbp.EarlyVoltageReverse.Given && mbp.EarlyVoltageReverse != 0)
-                InvEarlyVoltReverse = 1 / mbp.EarlyVoltageReverse;
+                InverseEarlyVoltReverse = 1 / mbp.EarlyVoltageReverse;
             else
-                InvEarlyVoltReverse = 0;
+                InverseEarlyVoltReverse = 0;
             if (mbp.RollOffReverse.Given && mbp.RollOffReverse != 0)
                 InverseRollOffReverse = 1 / mbp.RollOffReverse;
             else
@@ -129,8 +129,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 EmitterConduct = 1 / mbp.EmitterResistance;
             else
                 EmitterConduct = 0;
-            if (mbp.TransitTimeForwardVBC.Given && mbp.TransitTimeForwardVBC != 0)
-                TransitTimeVbcFactor = 1 / (mbp.TransitTimeForwardVBC * 1.44);
+            if (mbp.TransitTimeForwardVbc.Given && mbp.TransitTimeForwardVbc != 0)
+                TransitTimeVbcFactor = 1 / (mbp.TransitTimeForwardVbc * 1.44);
             else
                 TransitTimeVbcFactor = 0;
             ExcessPhaseFactor = (mbp.ExcessPhase / (180.0 / Math.PI)) * mbp.TransitTimeForward;

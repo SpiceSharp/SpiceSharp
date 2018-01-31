@@ -170,11 +170,11 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                 if (bp.Waveform != null)
                     value = bp.Waveform.At(time);
                 else
-                    value = bp.DcValue * state.SrcFact;
+                    value = bp.DcValue * state.SourceFactor;
             }
             else
             {
-                value = bp.DcValue * state.SrcFact;
+                value = bp.DcValue * state.SourceFactor;
             }
             state.Rhs[BranchEq] += value;
         }

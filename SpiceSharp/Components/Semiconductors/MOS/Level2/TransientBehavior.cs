@@ -203,7 +203,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Calculate initial states
         /// </summary>
         /// <param name="simulation">Simulation</param>
-        public override void GetDCstate(TimeSimulation simulation)
+        public override void GetDCState(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
@@ -244,9 +244,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             * 
             * .. bulk - drain and bulk - source depletion capacitances
             */
-            if (vbs < temp.TDepCap)
+            if (vbs < temp.TempDepletionCap)
             {
-                double arg = 1 - vbs / temp.TBulkPot, sarg;
+                double arg = 1 - vbs / temp.TempBulkPotential, sarg;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -287,17 +287,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     }
                 }
                 // NOSQRT
-                ChargeBS.Current = temp.TBulkPot * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                ChargeBS.Current = temp.TempBulkPotential * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
                     temp.Cbssw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
             }
             else
             {
-                ChargeBS.Current = temp.F4s + vbs * (temp.F2s + vbs * (temp.F3s / 2));
+                ChargeBS.Current = temp.F4S + vbs * (temp.F2S + vbs * (temp.F3S / 2));
             }
 
-            if (vbd < temp.TDepCap)
+            if (vbd < temp.TempDepletionCap)
             {
-                double arg = 1 - vbd / temp.TBulkPot, sarg;
+                double arg = 1 - vbd / temp.TempBulkPotential, sarg;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -331,12 +331,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     }
                 }
                 /* NOSQRT */
-                ChargeBD.Current = temp.TBulkPot * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                ChargeBD.Current = temp.TempBulkPotential * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
                     temp.Cbdsw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
             }
             else
             {
-                ChargeBD.Current = temp.F4d + vbd * (temp.F2d + vbd * temp.F3d / 2);
+                ChargeBD.Current = temp.F4D + vbd * (temp.F2D + vbd * temp.F3D / 2);
             }
 
             /* 
@@ -346,12 +346,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             if (load.Mode > 0)
             {
                 Transistor.DEVqmeyer(vgs, vgd, von, vdsat,
-                    out icapgs, out icapgd, out icapgb, temp.TPhi, OxideCap);
+                    out icapgs, out icapgd, out icapgb, temp.TempPhi, OxideCap);
             }
             else
             {
                 Transistor.DEVqmeyer(vgd, vgs, von, vdsat,
-                    out icapgd, out icapgs, out icapgb, temp.TPhi, OxideCap);
+                    out icapgd, out icapgs, out icapgb, temp.TempPhi, OxideCap);
             }
             CapGS.Current = icapgs;
             CapGD.Current = icapgd;
@@ -420,9 +420,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             * 
             * .. bulk - drain and bulk - source depletion capacitances
             */
-            if (vbs < temp.TDepCap)
+            if (vbs < temp.TempDepletionCap)
             {
-                double arg = 1 - vbs / temp.TBulkPot, sarg;
+                double arg = 1 - vbs / temp.TempBulkPotential, sarg;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -463,19 +463,19 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     }
                 }
                 // NOSQRT
-                ChargeBS.Current = temp.TBulkPot * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                ChargeBS.Current = temp.TempBulkPotential * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
                     temp.Cbssw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
                 CapBS = temp.Cbs * sarg + temp.Cbssw * sargsw;
             }
             else
             {
-                ChargeBS.Current = temp.F4s + vbs * (temp.F2s + vbs * (temp.F3s / 2));
-                CapBS = temp.F2s + temp.F3s * vbs;
+                ChargeBS.Current = temp.F4S + vbs * (temp.F2S + vbs * (temp.F3S / 2));
+                CapBS = temp.F2S + temp.F3S * vbs;
             }
 
-            if (vbd < temp.TDepCap)
+            if (vbd < temp.TempDepletionCap)
             {
-                double arg = 1 - vbd / temp.TBulkPot, sarg;
+                double arg = 1 - vbd / temp.TempBulkPotential, sarg;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -509,14 +509,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     }
                 }
                 /* NOSQRT */
-                ChargeBD.Current = temp.TBulkPot * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                ChargeBD.Current = temp.TempBulkPotential * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
                     temp.Cbdsw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
                 CapBD = temp.Cbd * sarg + temp.Cbdsw * sargsw;
             }
             else
             {
-                ChargeBD.Current = temp.F4d + vbd * (temp.F2d + vbd * temp.F3d / 2);
-                CapBD = temp.F2d + vbd * temp.F3d;
+                ChargeBD.Current = temp.F4D + vbd * (temp.F2D + vbd * temp.F3D / 2);
+                CapBD = temp.F2D + vbd * temp.F3D;
             }
 
             /* (above only excludes tranop, since we're only at this
@@ -543,12 +543,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             if (load.Mode > 0)
             {
                 Transistor.DEVqmeyer(vgs, vgd, von, vdsat,
-                    out icapgs, out icapgd, out icapgb, temp.TPhi, OxideCap);
+                    out icapgs, out icapgd, out icapgb, temp.TempPhi, OxideCap);
             }
             else
             {
                 Transistor.DEVqmeyer(vgd, vgs, von, vdsat,
-                    out icapgd, out icapgs, out icapgb, temp.TPhi, OxideCap);
+                    out icapgd, out icapgs, out icapgb, temp.TempPhi, OxideCap);
             }
             CapGS.Current = icapgs;
             CapGD.Current = icapgd;

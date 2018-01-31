@@ -20,13 +20,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double TJunctionCap { get; protected set; }
-        public double TJunctionPot { get; protected set; }
-        public double TSatCur { get; protected set; }
-        public double TF1 { get; protected set; }
-        public double TDepCap { get; protected set; }
-        public double TVcrit { get; protected set; }
-        public double TBrkdwnV { get; protected set; }
+        public double TempJunctionCap { get; protected set; }
+        public double TempJunctionPot { get; protected set; }
+        public double TempSaturationCurrent { get; protected set; }
+        public double TempFactor1 { get; protected set; }
+        public double TempDepletionCap { get; protected set; }
+        public double TempVcrit { get; protected set; }
+        public double TempBreakdownVoltage { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -79,50 +79,50 @@ namespace SpiceSharp.Components.DiodeBehaviors
             pbfact1 = -2 * modeltemp.Vtnom * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
             pbo = (mbp.JunctionPotential - pbfact1) / fact1;
             gmaold = (mbp.JunctionPotential - pbo) / pbo;
-            TJunctionCap = mbp.JunctionCap / (1 + mbp.GradingCoefficient * (400e-6 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
-            TJunctionPot = pbfact + fact2 * pbo;
-            gmanew = (TJunctionPot - pbo) / pbo;
-            TJunctionCap *= 1 + mbp.GradingCoefficient * (400e-6 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
+            TempJunctionCap = mbp.JunctionCap / (1 + mbp.GradingCoefficient * (400e-6 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            TempJunctionPot = pbfact + fact2 * pbo;
+            gmanew = (TempJunctionPot - pbo) / pbo;
+            TempJunctionCap *= 1 + mbp.GradingCoefficient * (400e-6 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
-            TSatCur = mbp.SaturationCurrent * Math.Exp(((bp.Temperature / mbp.NominalTemperature) - 1) * mbp.ActivationEnergy /
+            TempSaturationCurrent = mbp.SaturationCurrent * Math.Exp(((bp.Temperature / mbp.NominalTemperature) - 1) * mbp.ActivationEnergy /
                 (mbp.EmissionCoefficient * vt) + mbp.SaturationCurrentExp / mbp.EmissionCoefficient * Math.Log(bp.Temperature / mbp.NominalTemperature));
 
             // the defintion of f1, just recompute after temperature adjusting all the variables used in it
-            TF1 = TJunctionPot * (1 - Math.Exp((1 - mbp.GradingCoefficient) * modeltemp.Xfc)) / (1 - mbp.GradingCoefficient);
+            TempFactor1 = TempJunctionPot * (1 - Math.Exp((1 - mbp.GradingCoefficient) * modeltemp.Xfc)) / (1 - mbp.GradingCoefficient);
 
             // same for Depletion Capacitance
-            TDepCap = mbp.DepletionCapCoefficient * TJunctionPot;
+            TempDepletionCap = mbp.DepletionCapCoefficient * TempJunctionPot;
             
             // and Vcrit
             vte = mbp.EmissionCoefficient * vt;
-            TVcrit = vte * Math.Log(vte / (Circuit.Root2 * TSatCur));
+            TempVcrit = vte * Math.Log(vte / (Circuit.Root2 * TempSaturationCurrent));
 
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
             if (mbp.BreakdownVoltage.Given)
             {
                 cbv = mbp.BreakdownCurrent;
-                if (cbv < TSatCur * mbp.BreakdownVoltage / vt)
+                if (cbv < TempSaturationCurrent * mbp.BreakdownVoltage / vt)
                 {
-                    cbv = TSatCur * mbp.BreakdownVoltage / vt;
+                    cbv = TempSaturationCurrent * mbp.BreakdownVoltage / vt;
                     CircuitWarning.Warning(this, "{0}: breakdown current increased to {1:g} to resolve incompatability with specified saturation current".FormatString(Name, cbv));
                     xbv = mbp.BreakdownVoltage;
                 }
                 else
                 {
                     tol = simulation.BaseConfiguration.RelTolerance * cbv;
-                    xbv = mbp.BreakdownVoltage - vt * Math.Log(1 + cbv / TSatCur);
+                    xbv = mbp.BreakdownVoltage - vt * Math.Log(1 + cbv / TempSaturationCurrent);
                     iter = 0;
                     for (iter = 0; iter < 25; iter++)
                     {
-                        xbv = mbp.BreakdownVoltage - vt * Math.Log(cbv / TSatCur + 1 - xbv / vt);
-                        xcbv = TSatCur * (Math.Exp((mbp.BreakdownVoltage - xbv) / vt) - 1 + xbv / vt);
+                        xbv = mbp.BreakdownVoltage - vt * Math.Log(cbv / TempSaturationCurrent + 1 - xbv / vt);
+                        xcbv = TempSaturationCurrent * (Math.Exp((mbp.BreakdownVoltage - xbv) / vt) - 1 + xbv / vt);
                         if (Math.Abs(xcbv - cbv) <= tol)
                             break;
                     }
                     if (iter >= 25)
                         CircuitWarning.Warning(this, "{0}: unable to match forward and reverse diode regions: bv = {1:g}, ibv = {2:g}".FormatString(Name, xbv, xcbv));
                 }
-                TBrkdwnV = xbv;
+                TempBreakdownVoltage = xbv;
             }
         }
     }

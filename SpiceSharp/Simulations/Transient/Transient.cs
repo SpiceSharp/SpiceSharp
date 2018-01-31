@@ -125,7 +125,7 @@ namespace SpiceSharp.Simulations
             state.UseIC = false;
             state.UseDC = false;
             foreach (var behavior in TransientBehaviors)
-                behavior.GetDCstate(this);
+                behavior.GetDCState(this);
             States.ClearDC();
 
             // Start our statistics

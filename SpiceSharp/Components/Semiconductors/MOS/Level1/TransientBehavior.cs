@@ -26,9 +26,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Shared parameters
         /// </summary>
         [PropertyName("cbd"), PropertyInfo("Bulk-Drain capacitance")]
-        public double Capbd { get; protected set; }
+        public double CapBD { get; protected set; }
         [PropertyName("cbs"), PropertyInfo("Bulk-Source capacitance")]
-        public double Capbs { get; protected set; }
+        public double CapBS { get; protected set; }
 
         /// <summary>
         /// Nodes
@@ -208,7 +208,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Calculate DC state variables
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        public override void GetDCstate(TimeSimulation simulation)
+        public override void GetDCState(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
@@ -251,11 +251,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                     else
                         sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                 }
-                ChargeBS.Current = temp.TempBulkPotential * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.Cbssw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                ChargeBS.Current = temp.TempBulkPotential * (temp.CapBS * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.CapBSSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
             }
             else
-                ChargeBS.Current = temp.F4s + vbs * (temp.F2S + vbs * (temp.F3S / 2));
+                ChargeBS.Current = temp.F4S + vbs * (temp.F2S + vbs * (temp.F3S / 2));
 
             if (vbd < temp.TempDepletionCap)
             {
@@ -273,8 +273,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                     else
                         sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                 }
-                ChargeBD.Current = temp.TempBulkPotential * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.Cbdsw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                ChargeBD.Current = temp.TempBulkPotential * (temp.CapBD * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.CapBDSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
             }
             else
                 ChargeBD.Current = temp.F4D + vbd * (temp.F2D + vbd * temp.F3D / 2);
@@ -413,14 +413,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 }
 
                 /* NOSQRT */
-                ChargeBS.Current = temp.TempBulkPotential * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.Cbssw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
-                Capbs = temp.Cbs * sarg + temp.Cbssw * sargsw;
+                ChargeBS.Current = temp.TempBulkPotential * (temp.CapBS * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.CapBSSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                CapBS = temp.CapBS * sarg + temp.CapBSSidewall * sargsw;
             }
             else
             {
-                ChargeBS.Current = temp.F4s + vbs * (temp.F2S + vbs * (temp.F3S / 2));
-                Capbs = temp.F2S + temp.F3S * vbs;
+                ChargeBS.Current = temp.F4S + vbs * (temp.F2S + vbs * (temp.F3S / 2));
+                CapBS = temp.F2S + temp.F3S * vbs;
             }
 
             /* can't bypass the diode capacitance calculations */
@@ -462,24 +462,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                     }
                 }
                 /* NOSQRT */
-                ChargeBD.Current = temp.TempBulkPotential * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.Cbdsw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
-                Capbd = temp.Cbd * sarg + temp.Cbdsw * sargsw;
+                ChargeBD.Current = temp.TempBulkPotential * (temp.CapBD * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.CapBDSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                CapBD = temp.CapBD * sarg + temp.CapBDSidewall * sargsw;
             }
             else
             {
                 ChargeBD.Current = temp.F4D + vbd * (temp.F2D + vbd * temp.F3D / 2);
-                Capbd = temp.F2D + vbd * temp.F3D;
+                CapBD = temp.F2D + vbd * temp.F3D;
             }
 
             // integrate the capacitors and save results
             ChargeBD.Integrate();
-            Gbd += ChargeBD.Jacobian(Capbd);
+            Gbd += ChargeBD.Jacobian(CapBD);
             Cbd += ChargeBD.Derivative;
             Cd -= ChargeBD.Derivative;
             // NOTE: The derivative of Qbd should be added to Cd (drain current). Figure out a way later.
             ChargeBS.Integrate();
-            Gbs += ChargeBS.Jacobian(Capbs);
+            Gbs += ChargeBS.Jacobian(CapBS);
             Cbs += ChargeBS.Derivative;
 
             /* 

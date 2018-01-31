@@ -234,18 +234,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             Check = 1;
 
             EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
-            if ((temp.TSatCurDens == 0) || (bp.DrainArea.Value == 0) || (bp.SourceArea.Value == 0))
+            if ((temp.TempSaturationCurrentDensity == 0) || (bp.DrainArea.Value == 0) || (bp.SourceArea.Value == 0))
             {
-                DrainSatCur = temp.TSatCur;
-                SourceSatCur = temp.TSatCur;
+                DrainSatCur = temp.TempSaturationCurrent;
+                SourceSatCur = temp.TempSaturationCurrent;
             }
             else
             {
-                DrainSatCur = temp.TSatCurDens * bp.DrainArea;
-                SourceSatCur = temp.TSatCurDens * bp.SourceArea;
+                DrainSatCur = temp.TempSaturationCurrentDensity * bp.DrainArea;
+                SourceSatCur = temp.TempSaturationCurrentDensity * bp.SourceArea;
             }
 
-            Beta = temp.TTransconductance * bp.Width / EffectiveLength;
+            Beta = temp.TempTransconductance * bp.Width / EffectiveLength;
             OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
 
             if ((state.Init == State.InitializationStates.InitFloat || state.UseSmallSignal || (state.Init == State.InitializationStates.InitTransient)) ||
@@ -309,7 +309,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                         state.Domain == State.DomainType.None) || (!state.UseIC)))
                     {
                         vbs = -1;
-                        vgs = mbp.MosfetType * temp.TVto;
+                        vgs = mbp.MosfetType * temp.TempVto;
                         vds = 0;
                     }
                 }
@@ -396,7 +396,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 double lvbs = Mode  > 0 ? vbs : vbd;
                 double lvds = Mode * vds;
                 double lvgs = Mode > 0 ? vgs : vgd;
-                double phiMinVbs = temp.TPhi - lvbs;
+                double phiMinVbs = temp.TempPhi - lvbs;
                 double tmp; /* a temporary variable, not used for more than */
                             /* about 10 lines at a time */
                 int iknt, jknt, i, j;
@@ -413,9 +413,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 }
                 else
                 {
-                    sphi = Math.Sqrt(temp.TPhi);
-                    sphi3 = temp.TPhi * sphi;
-                    sarg = sphi / (1.0 + 0.5 * lvbs / temp.TPhi);
+                    sphi = Math.Sqrt(temp.TempPhi);
+                    sphi3 = temp.TempPhi * sphi;
+                    sarg = sphi / (1.0 + 0.5 * lvbs / temp.TempPhi);
                     tmp = sarg / sphi3;
                     dsrgdb = -0.5 * sarg * tmp;
                     d2sdb2 = -dsrgdb * tmp;
@@ -428,7 +428,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 }
                 else
                 {
-                    barg = sphi / (1.0 + 0.5 * (lvbs - lvds) / temp.TPhi);
+                    barg = sphi / (1.0 + 0.5 * (lvbs - lvds) / temp.TempPhi);
                     tmp = barg / sphi3;
                     dbrgdb = -0.5 * barg * tmp;
                     d2bdb2 = -dbrgdb * tmp;
@@ -442,7 +442,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 factor = 0.125 * mbp.NarrowFactor * 2.0 * Math.PI * Transistor.EpsilonSilicon / OxideCap * EffectiveLength;
                 /* XXX constant per device */
                 eta = 1.0 + factor;
-                vbin = temp.TVbi * mbp.MosfetType + factor * phiMinVbs;
+                vbin = temp.TempVbi * mbp.MosfetType + factor * phiMinVbs;
                 if ((mbp.Gamma > 0.0) || (mbp.SubstrateDoping > 0.0))
                 {
                     xwd = modeltemp.Xd * barg;
@@ -531,7 +531,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 
                 sarg3 = sarg * sarg * sarg;
                 /* XXX constant per model */
-                sbiarg = Math.Sqrt(temp.TBulkPot);
+                sbiarg = Math.Sqrt(temp.TempBulkPotential);
                 gammad = gamasd;
                 dgdvbs = dgddvb;
                 body = barg * barg * barg - sarg3;
@@ -553,11 +553,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 udenom = vgst;
                 tmp = mbp.CritField * 100 /* cm / m */  * Transistor.EpsilonSilicon / modeltemp.OxideCapFactor;
                 if (udenom <= tmp) goto line410;
-                ufact = Math.Exp(mbp.CritFieldExp * Math.Log(tmp / udenom));
+                ufact = Math.Exp(mbp.CriticalFieldExp * Math.Log(tmp / udenom));
                 ueff = mbp.SurfaceMobility * 1e-4 /* (m *  * 2 / cm *  * 2) */  * ufact;
-                dudvgs = -ufact * mbp.CritFieldExp / udenom;
+                dudvgs = -ufact * mbp.CriticalFieldExp / udenom;
                 dudvds = 0.0;
-                dudvbs = mbp.CritFieldExp * ufact * dodvbs / vgst;
+                dudvbs = mbp.CriticalFieldExp * ufact * dodvbs / vgst;
                 goto line500;
                 line410:
                 ufact = 1.0;
@@ -603,7 +603,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     dsdvgs = 1.0;
                     dsdvbs = 0.0;
                 }
-                if (mbp.MaxDriftVel > 0)
+                if (mbp.MaxDriftVelocity > 0)
                 {
                     /* 
 					 * evaluate saturation voltage and its derivatives 
@@ -613,7 +613,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     gammd2 = gammad * gammad;
                     v1 = (vgsx - vbin) / eta + phiMinVbs;
                     v2 = phiMinVbs;
-                    xv = mbp.MaxDriftVel * EffectiveLength / ueff;
+                    xv = mbp.MaxDriftVelocity * EffectiveLength / ueff;
                     a1 = gammad / 0.75;
                     b1 = -2.0 * (v1 + xv);
                     c1 = -2.0 * gammad * xv;
@@ -696,12 +696,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     }
                     else
                     {
-                        bsarg = sphi / (1.0 + 0.5 * (lvbs - vdsat) / temp.TPhi);
+                        bsarg = sphi / (1.0 + 0.5 * (lvbs - vdsat) / temp.TempPhi);
                         dbsrdb = -0.5 * bsarg * bsarg / sphi3;
                     }
                     bodys = bsarg * bsarg * bsarg - sarg3;
                     gdbdvs = 2.0 * gammad * (bsarg * bsarg * dbsrdb - sarg * sarg * dsrgdb);
-                    if (mbp.MaxDriftVel <= 0)
+                    if (mbp.MaxDriftVelocity <= 0)
                     {
                         if (mbp.SubstrateDoping.Value == 0.0)
                             goto line610;
@@ -718,10 +718,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     {
                         argv = (vgsx - vbin) / eta - vdsat;
                         xdv = modeltemp.Xd / Math.Sqrt(mbp.ChannelCharge);
-                        xlv = mbp.MaxDriftVel * xdv / (2.0 * ueff);
+                        xlv = mbp.MaxDriftVelocity * xdv / (2.0 * ueff);
                         vqchan = argv - gammad * bsarg;
                         dqdsat = -1.0 + gammad * dbsrdb;
-                        vl = mbp.MaxDriftVel * EffectiveLength;
+                        vl = mbp.MaxDriftVelocity * EffectiveLength;
                         dfunds = vl * dqdsat - ueff * vqchan;
                         dfundg = (vl - ueff * vdsat) / eta;
                         dfundb = -vl * (1.0 + dqdsat - factor / eta) + ueff * (gdbdvs - dgdvbs * bodys / 1.5) / eta;

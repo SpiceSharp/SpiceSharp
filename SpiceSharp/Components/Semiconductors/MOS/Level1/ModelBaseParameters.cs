@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         }
         public Parameter NominalTemperature { get; } = new Parameter();
         [PropertyName("vto"), PropertyName("vt0"), PropertyInfo("Threshold voltage")]
-        public Parameter Vt0 { get; } = new Parameter();
+        public Parameter VT0 { get; } = new Parameter();
         [PropertyName("kp"), PropertyInfo("Transconductance parameter")]
         public Parameter Transconductance { get; } = new Parameter(2e-5);
         [PropertyName("gamma"), PropertyInfo("Bulk threshold parameter")]
@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         [PropertyName("u0"), PropertyName("uo"), PropertyInfo("Surface mobility")]
         public Parameter SurfaceMobility { get; } = new Parameter();
         [PropertyName("fc"), PropertyInfo("Forward bias jct. fit parm.")]
-        public Parameter ForwardCapDepCoefficient { get; } = new Parameter(.5);
+        public Parameter ForwardCapDepletionCoefficient { get; } = new Parameter(.5);
         [PropertyName("nss"), PropertyInfo("Surface state density")]
         public Parameter SurfaceStateDensity { get; } = new Parameter();
         [PropertyName("nsub"), PropertyInfo("Substrate doping")]

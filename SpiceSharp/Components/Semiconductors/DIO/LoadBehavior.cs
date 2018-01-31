@@ -155,7 +155,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             /* 
              * this routine loads diodes for dc and transient analyses.
              */
-            csat = temp.TSatCur * bp.Area;
+            csat = temp.TempSaturationCurrent * bp.Area;
             gspr = modeltemp.Conductance * bp.Area;
             vt = Circuit.KOverQ * bp.Temperature;
             vte = mbp.EmissionCoefficient * vt;
@@ -167,7 +167,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 if (bp.Off)
                     vd = 0.0;
                 else
-                    vd = temp.TVcrit;
+                    vd = temp.TempVcrit;
             }
             else if (state.Init == State.InitializationStates.InitFix && bp.Off)
             {
@@ -179,15 +179,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 vd = state.Solution[PosPrimeNode] - state.Solution[negateNode];
 
                 // limit new junction voltage
-                if ((mbp.BreakdownVoltage.Given) && (vd < Math.Min(0, -temp.TBrkdwnV + 10 * vte)))
+                if ((mbp.BreakdownVoltage.Given) && (vd < Math.Min(0, -temp.TempBreakdownVoltage + 10 * vte)))
                 {
-                    vdtemp = -(vd + temp.TBrkdwnV);
-                    vdtemp = Semiconductor.DEVpnjlim(vdtemp, -(Voltage + temp.TBrkdwnV), vte, temp.TVcrit, ref Check);
-                    vd = -(vdtemp + temp.TBrkdwnV);
+                    vdtemp = -(vd + temp.TempBreakdownVoltage);
+                    vdtemp = Semiconductor.DEVpnjlim(vdtemp, -(Voltage + temp.TempBreakdownVoltage), vte, temp.TempVcrit, ref Check);
+                    vd = -(vdtemp + temp.TempBreakdownVoltage);
                 }
                 else
                 {
-                    vd = Semiconductor.DEVpnjlim(vd, Voltage, vte, temp.TVcrit, ref Check);
+                    vd = Semiconductor.DEVpnjlim(vd, Voltage, vte, temp.TempVcrit, ref Check);
                 }
             }
 
@@ -199,7 +199,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 cd = csat * (evd - 1) + state.Gmin * vd;
                 gd = csat * evd / vte + state.Gmin;
             }
-            else if (temp.TBrkdwnV == 0.0 || vd >= -temp.TBrkdwnV)
+            else if (temp.TempBreakdownVoltage == 0.0 || vd >= -temp.TempBreakdownVoltage)
             {
                 // Reverse bias
                 arg = 3 * vte / (vd * Math.E);
@@ -210,7 +210,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             else
             {
                 // Reverse breakdown
-                evrev = Math.Exp(-(temp.TBrkdwnV + vd) / vte);
+                evrev = Math.Exp(-(temp.TempBreakdownVoltage + vd) / vte);
                 cd = -csat * evrev + state.Gmin * vd;
                 gd = csat * evrev / vte + state.Gmin;
             }

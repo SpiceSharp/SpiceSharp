@@ -105,12 +105,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                         {
                             mbp.Gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.Charge * mbp.SubstrateDoping * 1e6) / OxideCapFactor;
                         }
-                        if (!mbp.Vt0.Given)
+                        if (!mbp.VT0.Given)
                         {
                             if (!mbp.SurfaceStateDensity.Given)
                                 mbp.SurfaceStateDensity.Value = 0;
                             vfb = wkfngs - mbp.SurfaceStateDensity * 1e4 * Circuit.Charge / OxideCapFactor;
-                            mbp.Vt0.Value = vfb + mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi) + mbp.Phi);
+                            mbp.VT0.Value = vfb + mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi) + mbp.Phi);
                         }
                     }
                     else

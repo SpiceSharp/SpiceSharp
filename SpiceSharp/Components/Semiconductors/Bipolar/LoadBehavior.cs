@@ -352,12 +352,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
             /* 
 			 * determine base charge terms
 			 */
-            q1 = 1 / (1 - modeltemp.InvEarlyVoltForward * vbc - modeltemp.InvEarlyVoltReverse * vbe);
+            q1 = 1 / (1 - modeltemp.InverseEarlyVoltForward * vbc - modeltemp.InverseEarlyVoltReverse * vbe);
             if (oik == 0 && oikr == 0)
             {
                 BaseCharge = q1;
-                DqbDve = q1 * BaseCharge * modeltemp.InvEarlyVoltReverse;
-                DqbDvc = q1 * BaseCharge * modeltemp.InvEarlyVoltForward;
+                DqbDve = q1 * BaseCharge * modeltemp.InverseEarlyVoltReverse;
+                DqbDvc = q1 * BaseCharge * modeltemp.InverseEarlyVoltForward;
             }
             else
             {
@@ -367,8 +367,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 if (arg != 0)
                     sqarg = Math.Sqrt(arg);
                 BaseCharge = q1 * (1 + sqarg) / 2;
-                DqbDve = q1 * (BaseCharge * modeltemp.InvEarlyVoltReverse + oik * CondBE / sqarg);
-                DqbDvc = q1 * (BaseCharge * modeltemp.InvEarlyVoltForward + oikr * CondBC / sqarg);
+                DqbDve = q1 * (BaseCharge * modeltemp.InverseEarlyVoltReverse + oik * CondBE / sqarg);
+                DqbDvc = q1 * (BaseCharge * modeltemp.InverseEarlyVoltForward + oikr * CondBC / sqarg);
             }
 
             // Excess phase calculation

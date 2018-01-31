@@ -137,7 +137,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Calculate the state values
         /// </summary>
         /// <param name="simulation">Simulation</param>
-        public override void GetDCstate(TimeSimulation simulation)
+        public override void GetDCState(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
@@ -147,8 +147,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
             double vd = state.Solution[posPrimeNode] - state.Solution[negateNode];
 
             // charge storage elements
-            double czero = temp.TJunctionCap * bp.Area;
-            if (vd < temp.TDepCap)
+            double czero = temp.TempJunctionCap * bp.Area;
+            if (vd < temp.TempDepletionCap)
             {
                 arg = 1 - vd / mbp.JunctionPotential;
                 sarg = Math.Exp(-mbp.GradingCoefficient * Math.Log(arg));
@@ -159,8 +159,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
             else
             {
                 double czof2 = czero / modeltemp.F2;
-                CapCharge.Current = mbp.TransitTime * load.Current + czero * temp.TF1 + czof2 * (modeltemp.F3 * (vd -
-                    temp.TDepCap) + (mbp.GradingCoefficient / (mbp.JunctionPotential + mbp.JunctionPotential)) * (vd * vd - temp.TDepCap * temp.TDepCap));
+                CapCharge.Current = mbp.TransitTime * load.Current + czero * temp.TempFactor1 + czof2 * (modeltemp.F3 * (vd -
+                    temp.TempDepletionCap) + (mbp.GradingCoefficient / (mbp.JunctionPotential + mbp.JunctionPotential)) * (vd * vd - temp.TempDepletionCap * temp.TempDepletionCap));
                 capd = mbp.TransitTime * load.Conduct + czof2 * (modeltemp.F3 + mbp.GradingCoefficient * vd / mbp.JunctionPotential);
             }
             Cap = capd;
@@ -179,7 +179,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             double vd = state.Solution[posPrimeNode] - state.Solution[negateNode];
 
             // This is the same calculation
-            GetDCstate(simulation);
+            GetDCState(simulation);
 
             // Integrate
             CapCharge.Integrate();

@@ -23,11 +23,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Shared variables
         /// </summary>
-        public double Capbs { get; protected set; }
-        public double Capbd { get; protected set; }
-        public double Capgs { get; protected set; }
-        public double Capgd { get; protected set; }
-        public double Capgb { get; protected set; }
+        public double CapBS { get; protected set; }
+        public double CapBD { get; protected set; }
+        public double CapGS { get; protected set; }
+        public double CapGD { get; protected set; }
+        public double CapGB { get; protected set; }
 
         /// <summary>
         /// Nodes
@@ -207,9 +207,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 
             /* can't bypass the diode capacitance calculations */
             /* CAPZEROBYPASS */
-            if (vbs < temp.TDepCap)
+            if (vbs < temp.TempDepletionCap)
             {
-                double arg = 1 - vbs / temp.TBulkPot, sarg;
+                double arg = 1 - vbs / temp.TempBulkPotential, sarg;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -250,16 +250,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     }
                 }
                 /* NOSQRT */
-                Capbs = temp.Cbs * sarg + temp.Cbssw * sargsw;
+                CapBS = temp.Cbs * sarg + temp.Cbssw * sargsw;
             }
             else
             {
-                Capbs = temp.F2s + temp.F3s * vbs;
+                CapBS = temp.F2S + temp.F3S * vbs;
             }
 
-            if (vbd < temp.TDepCap)
+            if (vbd < temp.TempDepletionCap)
             {
-                double arg = 1 - vbd / temp.TBulkPot, sarg;
+                double arg = 1 - vbd / temp.TempBulkPotential, sarg;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -293,11 +293,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     }
                 }
                 /* NOSQRT */
-                Capbd = temp.Cbd * sarg + temp.Cbdsw * sargsw;
+                CapBD = temp.Cbd * sarg + temp.Cbdsw * sargsw;
             }
             else
             {
-                Capbd = temp.F2d + vbd * temp.F3d;
+                CapBD = temp.F2D + vbd * temp.F3D;
             }
             /* CAPZEROBYPASS */
 
@@ -319,16 +319,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             if (load.Mode > 0)
             {
                 Transistor.DEVqmeyer(vgs, vgd, von, vdsat,
-                    out icapgs, out icapgd, out icapgb, temp.TPhi, OxideCap);
+                    out icapgs, out icapgd, out icapgb, temp.TempPhi, OxideCap);
             }
             else
             {
                 Transistor.DEVqmeyer(vgd, vgs, von, vdsat,
-                    out icapgd, out icapgs, out icapgb, temp.TPhi, OxideCap);
+                    out icapgd, out icapgs, out icapgb, temp.TempPhi, OxideCap);
             }
-            Capgs = icapgs;
-            Capgd = icapgd;
-            Capgb = icapgb;
+            CapGS = icapgs;
+            CapGD = icapgd;
+            CapGB = icapgb;
         }
 
         /// <summary>
@@ -368,14 +368,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             /* 
 			 * meyer"s model parameters
 			 */
-            capgs = (Capgs + Capgs + GateSourceOverlapCap);
-            capgd = (Capgd + Capgd + GateDrainOverlapCap);
-            capgb = (Capgb + Capgb + GateBulkOverlapCap);
+            capgs = (CapGS + CapGS + GateSourceOverlapCap);
+            capgd = (CapGD + CapGD + GateDrainOverlapCap);
+            capgb = (CapGB + CapGB + GateBulkOverlapCap);
             xgs = capgs * cstate.Laplace.Imaginary;
             xgd = capgd * cstate.Laplace.Imaginary;
             xgb = capgb * cstate.Laplace.Imaginary;
-            xbd = Capbd * cstate.Laplace.Imaginary;
-            xbs = Capbs * cstate.Laplace.Imaginary;
+            xbd = CapBD * cstate.Laplace.Imaginary;
+            xbs = CapBS * cstate.Laplace.Imaginary;
 
             /* 
 			 * load matrix

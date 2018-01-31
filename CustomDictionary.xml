@@ -28,6 +28,7 @@
       <Word>Gmin</Word> <!-- Minimum conductance -->
       <Word>Jacobian</Word>
       <Word>Timestep</Word>
+      <Word>Timesteps</Word>
       
       <!-- Bipolar junction transistor -->
       <Word>Npn</Word>
@@ -50,6 +51,7 @@
       <Word>Vgd</Word>
       <Word>Vds</Word>
       <Word>Vbs</Word>
+      <Word>Vbd</Word>
       <Word>Gmbs</Word>
       <Word>Cgs</Word>
       <Word>Cgd</Word>
@@ -68,6 +70,7 @@
       <Acronym>BC</Acronym> <!-- Base-Collector -->
       <Acronym>CS</Acronym> <!-- Collector-Substrate -->
       <Acronym>BX</Acronym> <!-- Base-X-Collector -->
+      <Acronym>Eg</Acronym> <!-- Bandgap energy -->
 
       <!-- Mosfet abbreviations -->
       <Acronym>GS</Acronym> <!-- Gate-Source -->

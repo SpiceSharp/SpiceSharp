@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
         public const double Delta2 = 0.02;
         public const double Delta3 = 0.02;
         public const double Delta4 = 0.02;
-        public const double EPS0 = 8.85418e-12;
+        public const double Epsilon0 = 8.85418e-12;
         // public const double MM = 3; Seems to be unused
 
         public const double MaximumLongExponent = 2.688117142e+43;

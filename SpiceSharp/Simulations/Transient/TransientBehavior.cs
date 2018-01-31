@@ -32,7 +32,7 @@ namespace SpiceSharp.Behaviors
         /// Calculate the state values from the DC solution
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        public virtual void GetDCstate(TimeSimulation simulation)
+        public virtual void GetDCState(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
