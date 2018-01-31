@@ -10,26 +10,26 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        double gainSquareInverted, frequency, lastFrequency, logLastFrequency, deltaFrequency, deltaLogFrequency, logFrequency;
+        double gainSquareInverted, currentFrequency, lastFrequency, logLastFrequency, deltaFrequency, deltaLogFrequency, logFrequency;
 
         /// <summary>
         /// Current frequency point
         /// </summary>
         public double Frequency
         {
-            get => frequency;
+            get => currentFrequency;
             set
             {
                 // Shift current frequency to last frequency
-                lastFrequency = frequency;
+                lastFrequency = currentFrequency;
                 logLastFrequency = logFrequency;
 
                 // Update new values
-                frequency = value;
-                logFrequency = Math.Log(Math.Max(frequency, 1e-38));
+                currentFrequency = value;
+                logFrequency = Math.Log(Math.Max(currentFrequency, 1e-38));
 
                 // Delta
-                deltaFrequency = frequency - lastFrequency;
+                deltaFrequency = currentFrequency - lastFrequency;
                 deltaLogFrequency = logFrequency - logLastFrequency;
             }
         }
@@ -78,7 +78,7 @@ namespace SpiceSharp.Simulations
         /// <param name="frequency">Starting frequency</param>
         public void Initialize(double frequency)
         {
-            this.frequency = frequency;
+            currentFrequency = frequency;
             lastFrequency = frequency;
 
             OutputNoise = 0.0;

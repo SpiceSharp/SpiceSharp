@@ -31,7 +31,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Constructor
         /// </summary>
         /// <param name="length">Length</param>
-        public History(int length)
+        protected History(int length)
         {
             if (length < 1)
                 throw new CircuitException("Not enough points");

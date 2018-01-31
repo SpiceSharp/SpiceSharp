@@ -79,13 +79,23 @@ namespace SpiceSharp.Sparse
         /// Convert value implicitely to a double
         /// </summary>
         /// <param name="value"></param>
-        public static implicit operator double(ElementValue value) => value.Real;
+        public static implicit operator double(ElementValue value)
+        {
+            if (value == null)
+                return double.NaN;
+            return value.Real;
+        }
 
         /// <summary>
         /// Convert value implicitely to a complex value
         /// </summary>
         /// <param name="value"></param>
-        public static implicit operator Complex(ElementValue value) => value.Complex;
+        public static implicit operator Complex(ElementValue value)
+        {
+            if (value == null)
+                return new Complex(double.NaN, double.NaN);
+            return value.Complex;
+        }
 
         /// <summary>
         /// Magnitude (sum of absolute values)
@@ -98,6 +108,9 @@ namespace SpiceSharp.Sparse
         /// <param name="value">Value</param>
         public void CopyFrom(ElementValue value)
         {
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
             Real = value.Real;
             Imaginary = value.Imaginary;
         }
@@ -118,6 +131,11 @@ namespace SpiceSharp.Sparse
         /// <param name="second">Second argument</param>
         public void CopyMultiply(ElementValue first, ElementValue second)
         {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+
             Real = first.Real * second.Real - first.Imaginary * second.Imaginary;
             Imaginary = first.Real * second.Imaginary + first.Imaginary * second.Real;
         }
@@ -129,6 +147,11 @@ namespace SpiceSharp.Sparse
         /// <param name="second">Second argument</param>
         public void AddMultiply(ElementValue first, ElementValue second)
         {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+
             Real += first.Real * second.Real - first.Imaginary * second.Imaginary;
             Imaginary += first.Real * second.Imaginary + first.Imaginary * second.Real;
         }
@@ -140,6 +163,11 @@ namespace SpiceSharp.Sparse
         /// <param name="second">Second argument</param>
         public void SubtractMultiply(ElementValue first, ElementValue second)
         {
+            if (first == null)
+                throw new ArgumentNullException(nameof(first));
+            if (second == null)
+                throw new ArgumentNullException(nameof(second));
+
             Real -= first.Real * second.Real - first.Imaginary * second.Imaginary;
             Imaginary -= first.Real * second.Imaginary + first.Imaginary * second.Real;
         }
@@ -150,6 +178,9 @@ namespace SpiceSharp.Sparse
         /// <param name="factor">factor</param>
         public void Multiply(ElementValue factor)
         {
+            if (factor == null)
+                throw new ArgumentNullException(nameof(factor));
+
             double toReal = Real;
             Real = toReal * factor.Real - Imaginary * factor.Imaginary;
             Imaginary = toReal * factor.Imaginary + Imaginary * factor.Real;
@@ -161,6 +192,9 @@ namespace SpiceSharp.Sparse
         /// <param name="den">Denominator</param>
         public void CopyReciprocal(ElementValue den)
         {
+            if (den == null)
+                throw new ArgumentNullException(nameof(den));
+
             double r;
             if ((den.Real >= den.Imaginary && den.Real > -den.Imaginary) ||
                 (den.Real < den.Imaginary && den.Real <= -den.Imaginary))
@@ -206,32 +240,6 @@ namespace SpiceSharp.Sparse
         public override int GetHashCode()
         {
             return Complex.GetHashCode();
-        }
-
-        /// <summary>
-        /// Equality operator override
-        /// </summary>
-        /// <param name="left">Left hand side</param>
-        /// <param name="right">Right hand side</param>
-        /// <returns></returns>
-        public static bool operator ==(ElementValue left, ElementValue right)
-        {
-            if (left.Real.Equals(right.Real) && left.Imaginary.Equals(right.Imaginary))
-                return true;
-            return false;
-        }
-
-        /// <summary>
-        /// Inequality operator override
-        /// </summary>
-        /// <param name="left">Left hand side</param>
-        /// <param name="right">Right hand side</param>
-        /// <returns></returns>
-        public static bool operator !=(ElementValue left, ElementValue right)
-        {
-            if (left.Real.Equals(right.Real) && left.Imaginary.Equals(right.Imaginary))
-                return false;
-            return true;
         }
     }
 }
