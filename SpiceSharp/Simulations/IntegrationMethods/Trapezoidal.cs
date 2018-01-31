@@ -52,7 +52,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
-        public override void Integrate(History<Vector<double>> history, int index)
+        public override void Integrate(History<RealSolution> history, int index)
         {
             if (history == null)
                 throw new ArgumentNullException(nameof(history));
@@ -224,7 +224,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="history">History</param>
         /// <param name="index">Index</param>
         /// <param name="timestep">Timestep</param>
-        public override void LocalTruncateError(History<Vector<double>> history, int index, ref double timestep)
+        public override void LocalTruncateError(History<RealSolution> history, int index, ref double timestep)
         {
             if (history == null)
                 throw new ArgumentNullException(nameof(history));

@@ -174,12 +174,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get the real right-hand-side vector
         /// </summary>
-        public Vector<double> Rhs { get; private set; } = null;
+        public RealSolution Rhs { get; private set; } = null;
 
         /// <summary>
         /// Get the real solution vector
         /// </summary>
-        public Vector<double> Solution { get; private set; } = null;
+        public RealSolution Solution { get; private set; } = null;
 
         /// <summary>
         /// Get the complex right-hand-side vector
@@ -194,7 +194,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the old solution
         /// </summary>
-        public Vector<double> OldSolution { get; private set; } = null;
+        public RealSolution OldSolution { get; private set; } = null;
 
         /// <summary>
         /// Gets or sets the current laplace variable
@@ -231,11 +231,11 @@ namespace SpiceSharp.Simulations
 
             // Initialize all matrices
             Order = circuit.Nodes.Count + 1;
-            Rhs = new Vector<double>(Order);
+            Rhs = new RealSolution(Order);
             ComplexRhs = new Vector<Complex>(Order);
-            Solution = new Vector<double>(Order);
+            Solution = new RealSolution(Order);
             ComplexSolution = new Vector<Complex>(Order);
-            OldSolution = new Vector<double>(Order);
+            OldSolution = new RealSolution(Order);
             Initialized = true;
         }
 

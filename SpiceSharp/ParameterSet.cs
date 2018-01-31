@@ -12,12 +12,18 @@ namespace SpiceSharp
     public abstract class ParameterSet
     {
         /// <summary>
+        /// Delegate for setting a parameter value
+        /// </summary>
+        /// <param name="value">Value</param>
+        public delegate void ParameterSetter(double value);
+
+        /// <summary>
         /// Create a dictionary of setters for the parameters object using reflection
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, Action<double>> CreateSetters()
+        public Dictionary<string, ParameterSetter> CreateSetters()
         {
-            Dictionary<string, Action<double>> result = new Dictionary<string, Action<double>>();
+            Dictionary<string, ParameterSetter> result = new Dictionary<string, ParameterSetter>();
 
             // Get all properties with the SpiceName attribute
             var properties = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public);
@@ -31,7 +37,7 @@ namespace SpiceSharp
                 var names = property.GetCustomAttributes<PropertyNameAttribute>();
 
                 // Create setter
-                Action<double> setter = null;
+                ParameterSetter setter = null;
                 if (property is PropertyInfo pi)
                 {
                     // Properties
@@ -42,7 +48,7 @@ namespace SpiceSharp
                     }
                     else if (pi.PropertyType == typeof(double))
                     {
-                        setter = (Action<double>)Delegate.CreateDelegate(typeof(Action<double>), this, pi.GetSetMethod());
+                        setter = (ParameterSetter)Delegate.CreateDelegate(typeof(ParameterSetter), this, pi.GetSetMethod());
                     }
                 }
                 else if (property is MethodInfo mi)
@@ -53,7 +59,7 @@ namespace SpiceSharp
                         var paraminfo = mi.GetParameters();
                         if (paraminfo.Length == 1 && paraminfo[0].ParameterType == typeof(double))
                         {
-                            setter = (Action<double>)mi.CreateDelegate(typeof(Action<double>));
+                            setter = (ParameterSetter)mi.CreateDelegate(typeof(ParameterSetter));
                         }
                     }
                 }

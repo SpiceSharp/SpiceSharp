@@ -91,8 +91,10 @@
     <Compile Include="Components\Voltagesources\VCVS\BaseParameters.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Simulations\Base\BaseConfiguration.cs" />
-    <Compile Include="Simulations\Base\FrequencyConfiguration.cs" />
-    <Compile Include="Simulations\Base\TimeConfiguration.cs" />
+    <Compile Include="Simulations\Base\ComplexSolution.cs" />
+    <Compile Include="Simulations\Base\Frequency\FrequencyConfiguration.cs" />
+    <Compile Include="Simulations\Base\RealSolution.cs" />
+    <Compile Include="Simulations\Base\Time\TimeConfiguration.cs" />
     <Compile Include="Simulations\Behaviors\SetupDataProvider.cs" />
     <Compile Include="Simulations\DC\DCConfiguration.cs" />
     <Compile Include="Simulations\DC\IterationFailedEventArgs.cs" />
@@ -166,7 +168,7 @@
     <Compile Include="Simulations\Behaviors\BehaviorPool.cs" />
     <Compile Include="Simulations\Behaviors\EntityBehaviors.cs" />
     <Compile Include="Simulations\Base\TemperatureBehavior.cs" />
-    <Compile Include="Simulations\Base\FrequencySimulation.cs" />
+    <Compile Include="Simulations\Base\Frequency\FrequencySimulation.cs" />
     <Compile Include="Simulations\Base\InitialConditionBehavior.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\ArrayHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\NodeHistory.cs" />
@@ -178,7 +180,7 @@
     <Compile Include="Simulations\IntegrationMethods\TruncationEventArgs.cs" />
     <Compile Include="Simulations\Noise\NoiseBehavior.cs" />
     <Compile Include="Simulations\Base\LoadBehavior.cs" />
-    <Compile Include="Simulations\Base\FrequencyBehavior.cs" />
+    <Compile Include="Simulations\Base\Frequency\FrequencyBehavior.cs" />
     <Compile Include="Simulations\Behaviors\Behavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\LoadBehavior.cs" />
     <Compile Include="Components\Currentsources\ISRC\LoadBehavior.cs" />
@@ -204,7 +206,7 @@
     <Compile Include="Components\Semiconductors\MOS\Level3\Mosfet3Model.cs" />
     <Compile Include="Components\Semiconductors\MOS\Transistor.cs" />
     <Compile Include="Attributes\PinAttribute.cs" />
-    <Compile Include="Simulations\Base\TimeSimulation.cs" />
+    <Compile Include="Simulations\Base\Time\TimeSimulation.cs" />
     <Compile Include="Simulations\IntegrationMethods\IntegrationParameters.cs" />
     <Compile Include="Components\RLC\IND\Inductor.cs" />
     <Compile Include="Components\RLC\MUT\MutualInductance.cs" />

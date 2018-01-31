@@ -1,5 +1,5 @@
 ﻿using System;
-using SpiceSharp.Sparse;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -16,7 +16,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Get the history
         /// </summary>
-        public History<Vector<double>> History { get; }
+        public History<RealSolution> History { get; }
         
         /// <summary>
         /// Number of states in the pool
@@ -36,7 +36,7 @@ namespace SpiceSharp.IntegrationMethods
         {
             Method = method ?? throw new ArgumentNullException(nameof(method));
             int count = method.MaxOrder + 2;
-            History = new ArrayHistory<Vector<double>>(count, (Vector<double>)null);
+            History = new ArrayHistory<RealSolution>(count, (RealSolution)null);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Build the arrays for all history points
         /// </summary>
-        public void BuildStates() => History.Clear((int index) => new Vector<double>(Size));
+        public void BuildStates() => History.Clear((int index) => new RealSolution(Size));
 
         /// <summary>
         /// Integrate a state variable
