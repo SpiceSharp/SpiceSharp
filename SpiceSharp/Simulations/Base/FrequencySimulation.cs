@@ -174,7 +174,7 @@ namespace SpiceSharp.Simulations
         /// <param name="pos">Positive node</param>
         /// <param name="neg">Negative node</param>
         /// <returns></returns>
-        public virtual Func<State, Complex> CreateVoltageACExport(Identifier pos, Identifier neg)
+        public virtual Func<State, Complex> CreateACVoltageExport(Identifier pos, Identifier neg)
         {
             int node = Circuit.Nodes[pos].Index;
             if (neg == null)
@@ -188,9 +188,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="pos">Positive node</param>
         /// <returns></returns>
-        public virtual Func<State, Complex> CreateVoltageACExport(Identifier pos)
+        public virtual Func<State, Complex> CreateACVoltageExport(Identifier pos)
         {
-            return CreateVoltageACExport(pos, null);
+            return CreateACVoltageExport(pos, null);
         }
     }
 }
