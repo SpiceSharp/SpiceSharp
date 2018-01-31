@@ -228,7 +228,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             Vbs.Current = vbs;
             Vds.Current = vds;
 
-            EffectiveLength = bp.Length - 2 * mbp.LatDiff;
+            EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
             OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
 
             /* 
@@ -288,9 +288,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     }
                 }
                 /* NOSQRT */
-                Qbs.Current = temp.TempBulkPotential * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.Cbssw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
-                CapBS = temp.Cbs * sarg + temp.Cbssw * sargsw;
+                Qbs.Current = temp.TempBulkPotential * (temp.CapBS * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.CapBSSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                CapBS = temp.CapBS * sarg + temp.CapBSSidewall * sargsw;
             }
             else
             {
@@ -334,9 +334,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     }
                 }
                 /* NOSQRT */
-                Qbd.Current = temp.TempBulkPotential * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.Cbdsw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
-                CapBD = temp.Cbd * sarg + temp.Cbdsw * sargsw;
+                Qbd.Current = temp.TempBulkPotential * (temp.CapBD * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.CapBDSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                CapBD = temp.CapBD * sarg + temp.CapBDSidewall * sargsw;
             }
             else
             {
@@ -410,7 +410,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             double Gbs = 0.0;
             double Cbs = 0.0;
 
-            EffectiveLength = bp.Length - 2 * mbp.LatDiff;
+            EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
             GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;
             GateDrainOverlapCap = mbp.GateDrainOverlapCapFactor * bp.Width;
             GateBulkOverlapCap = mbp.GateBulkOverlapCapFactor * EffectiveLength;
@@ -474,9 +474,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     }
                 }
                 /* NOSQRT */
-                Qbs.Current = temp.TempBulkPotential * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.Cbssw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
-                CapBS = temp.Cbs * sarg + temp.Cbssw * sargsw;
+                Qbs.Current = temp.TempBulkPotential * (temp.CapBS * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.CapBSSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                CapBS = temp.CapBS * sarg + temp.CapBSSidewall * sargsw;
             }
             else
             {
@@ -520,9 +520,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     }
                 }
                 /* NOSQRT */
-                Qbd.Current = temp.TempBulkPotential * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.Cbdsw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
-                CapBD = temp.Cbd * sarg + temp.Cbdsw * sargsw;
+                Qbd.Current = temp.TempBulkPotential * (temp.CapBD * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.CapBDSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                CapBD = temp.CapBD * sarg + temp.CapBDSidewall * sargsw;
             }
             else
             {

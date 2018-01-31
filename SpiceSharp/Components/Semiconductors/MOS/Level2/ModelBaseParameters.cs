@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         }
         public Parameter NominalTemperature { get; } = new Parameter();
         [PropertyName("vto"), PropertyName("vt0"), PropertyInfo("Threshold voltage")]
-        public Parameter Vt0 { get; } = new Parameter();
+        public Parameter VT0 { get; } = new Parameter();
         [PropertyName("kp"), PropertyInfo("Transconductance parameter")]
         public Parameter Transconductance { get; } = new Parameter();
         [PropertyName("gamma"), PropertyInfo("Bulk threshold parameter")]
@@ -84,7 +84,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         [PropertyName("neff"), PropertyInfo("Total channel charge coeff.")]
         public Parameter ChannelCharge { get; } = new Parameter(1);
         [PropertyName("ucrit"), PropertyInfo("Crit. field for mob. degradation")]
-        public Parameter CritField { get; } = new Parameter(1e4);
+        public Parameter CriticalField { get; } = new Parameter(1e4);
 
         /// <summary>
         /// Methods

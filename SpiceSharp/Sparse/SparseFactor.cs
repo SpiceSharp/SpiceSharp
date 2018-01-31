@@ -282,7 +282,7 @@ namespace SpiceSharp.Sparse
                     while (pElement != null)
                     {
                         pElement.Value.Real = Dest[pElement.Row].Real;
-                        pElement.Value.Imag = Dest[pElement.Row].Imag;
+                        pElement.Value.Imaginary = Dest[pElement.Row].Imaginary;
                         pElement = pElement.NextInColumn;
                     }
 

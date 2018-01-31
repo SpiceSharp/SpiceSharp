@@ -186,7 +186,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             von = mbp.MosfetType * load.Von;
             vdsat = mbp.MosfetType * load.Vdsat;
 
-            EffectiveLength = bp.Length - 2 * mbp.LatDiff;
+            EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
             OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
 
             /* 
@@ -250,7 +250,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     }
                 }
                 /* NOSQRT */
-                CapBS = temp.Cbs * sarg + temp.Cbssw * sargsw;
+                CapBS = temp.CapBS * sarg + temp.CapBSSidewall * sargsw;
             }
             else
             {
@@ -293,7 +293,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     }
                 }
                 /* NOSQRT */
-                CapBD = temp.Cbd * sarg + temp.Cbdsw * sargsw;
+                CapBD = temp.CapBD * sarg + temp.CapBDSidewall * sargsw;
             }
             else
             {
@@ -360,7 +360,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             /* 
 			 * charge oriented model parameters
 			 */
-            EffectiveLength = bp.Length - 2 * mbp.LatDiff;
+            EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
             GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;
             GateDrainOverlapCap = mbp.GateDrainOverlapCapFactor * bp.Width;
             GateBulkOverlapCap = mbp.GateBulkOverlapCapFactor * EffectiveLength;

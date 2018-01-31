@@ -36,8 +36,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [PropertyName("excessphasefactor"), PropertyInfo("Excess phase fact.")]
         public double ExcessPhaseFactor { get; internal set; }
         
-        public double Fact1 { get; protected set; }
-        public double Xfc { get; protected set; }
+        public double Factor1 { get; protected set; }
+        public double XFC { get; protected set; }
 
         public double F2 { get; protected set; }
         public double F3 { get; protected set; }
@@ -74,7 +74,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             if (!mbp.NominalTemperature.Given)
                 mbp.NominalTemperature.Value = simulation.State.NominalTemperature;
-            Fact1 = mbp.NominalTemperature / Circuit.ReferenceTemperature;
+            Factor1 = mbp.NominalTemperature / Circuit.ReferenceTemperature;
 
             if (!mbp.LeakBECurrent.Given)
             {
@@ -146,10 +146,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 mbp.DepletionCapCoefficient.Value = .5;
             }
-            Xfc = Math.Log(1 - mbp.DepletionCapCoefficient);
-            F2 = Math.Exp((1 + mbp.JunctionExpBE) * Xfc);
+            XFC = Math.Log(1 - mbp.DepletionCapCoefficient);
+            F2 = Math.Exp((1 + mbp.JunctionExpBE) * XFC);
             F3 = 1 - mbp.DepletionCapCoefficient * (1 + mbp.JunctionExpBE);
-            F6 = Math.Exp((1 + mbp.JunctionExpBC) * Xfc);
+            F6 = Math.Exp((1 + mbp.JunctionExpBC) * XFC);
             F7 = 1 - mbp.DepletionCapCoefficient * (1 + mbp.JunctionExpBC);
         }
     }

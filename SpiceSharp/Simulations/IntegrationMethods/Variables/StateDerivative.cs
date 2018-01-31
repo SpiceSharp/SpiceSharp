@@ -48,12 +48,12 @@
         /// The state variable can be nonlinearly dependent of the unknown variables
         /// it is derived of.
         /// </summary>
-        /// <param name="geq">Jacobian matrix contribution</param>
-        /// <param name="v">The value of the unknown variable</param>
+        /// <param name="jacobianValue">Jacobian matrix contribution</param>
+        /// <param name="currentValue">The current value of the unknown variable</param>
         /// <returns></returns>
-        public double RhsCurrent(double geq, double v)
+        public double RhsCurrent(double jacobianValue, double currentValue)
         {
-            return Source.History.Current[StateIndex + 1] - geq * v;
+            return Source.History.Current[StateIndex + 1] - jacobianValue * currentValue;
         }
 
         /// <summary>

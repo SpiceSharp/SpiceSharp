@@ -5,6 +5,7 @@ namespace SpiceSharp.Sparse
 {
     /// <summary>
     /// A value for a matrix element
+    /// As opposed to Complex, Real and Imaginary can be worked with separately
     /// </summary>
     public struct ElementValue
     {
@@ -16,7 +17,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// The imaginary value
         /// </summary>
-        public double Imag { get; set; }
+        public double Imaginary { get; set; }
 
         /// <summary>
         /// The complex representation
@@ -25,12 +26,12 @@ namespace SpiceSharp.Sparse
         {
             get
             {
-                return new Complex(Real, Imag);
+                return new Complex(Real, Imaginary);
             }
             set
             {
                 Real = value.Real;
-                Imag = value.Imaginary;
+                Imaginary = value.Imaginary;
             }
         }
 
@@ -42,7 +43,7 @@ namespace SpiceSharp.Sparse
         public ElementValue(double real, double imaginary) : this()
         {
             Real = real;
-            Imag = imaginary;
+            Imaginary = imaginary;
         }
 
         /// <summary>
@@ -60,9 +61,9 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public override string ToString()
         {
-            if (Imag.Equals(0.0))
+            if (Imaginary.Equals(0.0))
                 return "{0}".FormatString(Real);
-            return "({0}; {1})".FormatString(Real, Imag);
+            return "({0}; {1})".FormatString(Real, Imaginary);
         }
 
         /// <summary>
@@ -80,7 +81,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Magnitude (sum of absolute values)
         /// </summary>
-        public double Magnitude => Math.Abs(Real) + Math.Abs(Imag);
+        public double Magnitude => Math.Abs(Real) + Math.Abs(Imaginary);
 
         /// <summary>
         /// Copy from another value
@@ -89,7 +90,7 @@ namespace SpiceSharp.Sparse
         public void CopyFrom(ElementValue value)
         {
             Real = value.Real;
-            Imag = value.Imag;
+            Imaginary = value.Imaginary;
         }
 
         /// <summary>
@@ -98,7 +99,7 @@ namespace SpiceSharp.Sparse
         public void Negate()
         {
             Real = -Real;
-            Imag = -Imag;
+            Imaginary = -Imaginary;
         }
 
         /// <summary>
@@ -108,8 +109,8 @@ namespace SpiceSharp.Sparse
         /// <param name="second">Second argument</param>
         public void CopyMultiply(ElementValue first, ElementValue second)
         {
-            Real = first.Real * second.Real - first.Imag * second.Imag;
-            Imag = first.Real * second.Imag + first.Imag * second.Real;
+            Real = first.Real * second.Real - first.Imaginary * second.Imaginary;
+            Imaginary = first.Real * second.Imaginary + first.Imaginary * second.Real;
         }
 
         /// <summary>
@@ -119,8 +120,8 @@ namespace SpiceSharp.Sparse
         /// <param name="second">Second argument</param>
         public void AddMultiply(ElementValue first, ElementValue second)
         {
-            Real += first.Real * second.Real - first.Imag * second.Imag;
-            Imag += first.Real * second.Imag + first.Imag * second.Real;
+            Real += first.Real * second.Real - first.Imaginary * second.Imaginary;
+            Imaginary += first.Real * second.Imaginary + first.Imaginary * second.Real;
         }
 
         /// <summary>
@@ -130,8 +131,8 @@ namespace SpiceSharp.Sparse
         /// <param name="second">Second argument</param>
         public void SubtractMultiply(ElementValue first, ElementValue second)
         {
-            Real -= first.Real * second.Real - first.Imag * second.Imag;
-            Imag -= first.Real * second.Imag + first.Imag * second.Real;
+            Real -= first.Real * second.Real - first.Imaginary * second.Imaginary;
+            Imaginary -= first.Real * second.Imaginary + first.Imaginary * second.Real;
         }
 
         /// <summary>
@@ -141,8 +142,8 @@ namespace SpiceSharp.Sparse
         public void Multiply(ElementValue factor)
         {
             double toReal = Real;
-            Real = toReal * factor.Real - Imag * factor.Imag;
-            Imag = toReal * factor.Imag + Imag * factor.Real;
+            Real = toReal * factor.Real - Imaginary * factor.Imaginary;
+            Imaginary = toReal * factor.Imaginary + Imaginary * factor.Real;
         }
 
         /// <summary>
@@ -152,16 +153,16 @@ namespace SpiceSharp.Sparse
         public void CopyReciprocal(ElementValue den)
         {
             double r;
-            if ((den.Real >= den.Imag && den.Real > -den.Imag) ||
-                (den.Real < den.Imag && den.Real <= -den.Imag))
+            if ((den.Real >= den.Imaginary && den.Real > -den.Imaginary) ||
+                (den.Real < den.Imaginary && den.Real <= -den.Imaginary))
             {
-                r = den.Imag / den.Real;
-                Imag = -r * (Real = 1.0 / (den.Real + r * den.Imag));
+                r = den.Imaginary / den.Real;
+                Imaginary = -r * (Real = 1.0 / (den.Real + r * den.Imaginary));
             }
             else
             {
-                r = den.Real / den.Imag;
-                Real = -r * (Imag = -1.0 / (den.Imag + r * den.Real));
+                r = den.Real / den.Imaginary;
+                Real = -r * (Imaginary = -1.0 / (den.Imaginary + r * den.Real));
             }
         }
 
@@ -176,13 +177,13 @@ namespace SpiceSharp.Sparse
                 return false;
             if (obj is ElementValue ev)
             {
-                if (Real.Equals(ev.Real) && Imag.Equals(ev.Imag))
+                if (Real.Equals(ev.Real) && Imaginary.Equals(ev.Imaginary))
                     return true;
                 return false;
             }
             if (obj is Complex c)
             {
-                if (Real.Equals(c.Real) && Imag.Equals(c.Imaginary))
+                if (Real.Equals(c.Real) && Imaginary.Equals(c.Imaginary))
                     return true;
                 return false;
             }
@@ -206,7 +207,7 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public static bool operator ==(ElementValue left, ElementValue right)
         {
-            if (left.Real.Equals(right.Real) && left.Imag.Equals(right.Imag))
+            if (left.Real.Equals(right.Real) && left.Imaginary.Equals(right.Imaginary))
                 return true;
             return false;
         }
@@ -219,7 +220,7 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public static bool operator !=(ElementValue left, ElementValue right)
         {
-            if (left.Real.Equals(right.Real) && left.Imag.Equals(right.Imag))
+            if (left.Real.Equals(right.Real) && left.Imaginary.Equals(right.Imaginary))
                 return false;
             return true;
         }

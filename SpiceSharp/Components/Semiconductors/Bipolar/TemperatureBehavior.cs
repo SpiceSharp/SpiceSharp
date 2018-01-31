@@ -88,14 +88,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
             TempBELeakageCurrent = mbp.LeakBECurrent * Math.Exp(factlog / mbp.LeakBEEmissionCoefficient) / bfactor;
             TempBCLeakageCurrent = mbp.LeakBCCurrent * Math.Exp(factlog / mbp.LeakBCEmissionCoefficient) / bfactor;
 
-            pbo = (mbp.PotentialBE - pbfact) / modeltemp.Fact1;
+            pbo = (mbp.PotentialBE - pbfact) / modeltemp.Factor1;
             gmaold = (mbp.PotentialBE - pbo) / pbo;
             TempBECap = mbp.DepletionCapBE / (1 + mbp.JunctionExpBE * (4e-4 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
             TempBEPotential = fact2 * pbo + pbfact;
             gmanew = (TempBEPotential - pbo) / pbo;
             TempBECap *= 1 + mbp.JunctionExpBE * (4e-4 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
-            pbo = (mbp.PotentialBC - pbfact) / modeltemp.Fact1;
+            pbo = (mbp.PotentialBC - pbfact) / modeltemp.Factor1;
             gmaold = (mbp.PotentialBC - pbo) / pbo;
             TempBCCap = mbp.DepletionCapBC / (1 + mbp.JunctionExpBC * (4e-4 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
             TempBCPotential = fact2 * pbo + pbfact;
@@ -103,9 +103,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
             TempBCCap *= 1 + mbp.JunctionExpBC * (4e-4 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
             TempDepletionCap = mbp.DepletionCapCoefficient * TempBEPotential;
-            TempFactor1 = TempBEPotential * (1 - Math.Exp((1 - mbp.JunctionExpBE) * modeltemp.Xfc)) / (1 - mbp.JunctionExpBE);
+            TempFactor1 = TempBEPotential * (1 - Math.Exp((1 - mbp.JunctionExpBE) * modeltemp.XFC)) / (1 - mbp.JunctionExpBE);
             TempFactor4 = mbp.DepletionCapCoefficient * TempBCPotential;
-            TempFactor5 = TempBCPotential * (1 - Math.Exp((1 - mbp.JunctionExpBC) * modeltemp.Xfc)) / (1 - mbp.JunctionExpBC);
+            TempFactor5 = TempBCPotential * (1 - Math.Exp((1 - mbp.JunctionExpBC) * modeltemp.XFC)) / (1 - mbp.JunctionExpBC);
             TempVCrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.SatCur));
         }
     }

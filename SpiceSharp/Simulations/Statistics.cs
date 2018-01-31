@@ -11,7 +11,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get the total number of iterations
         /// </summary>
-        public int NumIterations { get; set; } = 0;
+        public int Iterations { get; set; } = 0;
 
         /// <summary>
         /// The total time spent solving equations
@@ -73,7 +73,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public void Clear()
         {
-            NumIterations = 0;
+            Iterations = 0;
             SolveTime.Reset();
             LoadTime.Reset();
             TimePoints = 0;

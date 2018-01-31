@@ -124,7 +124,7 @@ namespace SpiceSharp.Sparse
                 Temp = Intermediate[I];
 
                 // This step of the substitution is skipped if Temp equals zero. 
-                if ((Temp.Real != 0.0) || (Temp.Imag != 0.0))
+                if ((Temp.Real != 0.0) || (Temp.Imaginary != 0.0))
                 {
                     pPivot = matrix.Diag[I];
                     // Cmplx expr: Temp *= (1.0 / Pivot). 
@@ -278,7 +278,7 @@ namespace SpiceSharp.Sparse
                 Temp = Intermediate[I];
 
                 // This step of the elimination is skipped if Temp equals zero. 
-                if ((Temp.Real != 0.0) || (Temp.Imag != 0.0))
+                if ((Temp.Real != 0.0) || (Temp.Imaginary != 0.0))
                 {
                     pElement = matrix.Diag[I].NextInRow;
                     while (pElement != null)

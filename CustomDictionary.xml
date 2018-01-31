@@ -37,7 +37,6 @@
       <Word>Vbe</Word>
       <Word>Vbc</Word>
       <Word>Vce</Word>
-      <Word>Cbe</Word>
       <Word>Gm</Word>
       <Word>Gmu</Word>
       <Word>Gpi</Word>
@@ -56,11 +55,6 @@
       <Word>Vbs</Word>
       <Word>Vbd</Word>
       <Word>Gmbs</Word>
-      <Word>Cgs</Word>
-      <Word>Cgd</Word>
-      <Word>Cgb</Word>
-      <Word>Cbs</Word>
-      <Word>Cbd</Word>
     </Recognized>
   </Words>
   <Acronyms>
@@ -73,6 +67,8 @@
       <Acronym>CS</Acronym> <!-- Collector-Substrate -->
       <Acronym>BX</Acronym> <!-- Base-X-Collector -->
       <Acronym>Eg</Acronym> <!-- Bandgap energy -->
+      <Acronym>Pb</Acronym> <!-- TBH. I have no idea what they mean with this... -->
+      <Acronym>Vt</Acronym> <!-- Thermal Voltage -->
 
       <!-- Mosfet abbreviations -->
       <Acronym>GS</Acronym> <!-- Gate-Source -->

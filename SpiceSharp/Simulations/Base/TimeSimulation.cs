@@ -145,7 +145,7 @@ namespace SpiceSharp.Simulations
                 catch (CircuitException)
                 {
                     iterno++;
-                    Statistics.NumIterations = iterno;
+                    Statistics.Iterations = iterno;
                     throw;
                 }
 
@@ -192,7 +192,7 @@ namespace SpiceSharp.Simulations
                 // Exceeded maximum number of iterations
                 if (iterno > maxIterations)
                 {
-                    Statistics.NumIterations += iterno;
+                    Statistics.Iterations += iterno;
                     return false;
                 }
 
@@ -212,7 +212,7 @@ namespace SpiceSharp.Simulations
                         }
                         if (state.IsCon)
                         {
-                            Statistics.NumIterations += iterno;
+                            Statistics.Iterations += iterno;
                             return true;
                         }
                         break;
@@ -239,7 +239,7 @@ namespace SpiceSharp.Simulations
                         break;
 
                     default:
-                        Statistics.NumIterations += iterno;
+                        Statistics.Iterations += iterno;
                         throw new CircuitException("Could not find flag");
                 }
             }

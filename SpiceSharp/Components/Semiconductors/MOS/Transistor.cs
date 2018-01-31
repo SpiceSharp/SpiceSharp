@@ -208,13 +208,13 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// <param name="vgs">Gate-source voltage</param>
         /// <param name="vgd">Gate-drain voltage</param>
         /// <param name="von">Von</param>
-        /// <param name="vdsat">Vdsat</param>
+        /// <param name="vdsSaturation">Saturation voltage</param>
         /// <param name="capGS">Gate-source capacitance</param>
         /// <param name="capGD">Gate-drain capacitance</param>
         /// <param name="capGB">Gate-bulk capacitance</param>
         /// <param name="phi">Phi</param>
         /// <param name="cox">Cox</param>
-        public static void MeyerCharges(double vgs, double vgd, double von, double vdsat, out double capGS, out double capGD, out double capGB, double phi, double cox)
+        public static void MeyerCharges(double vgs, double vgd, double von, double vdsSaturation, out double capGS, out double capGD, out double capGB, double phi, double cox)
         {
             double vds;
             double vddif;
@@ -245,7 +245,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
             else
             {
                 vds = vgs - vgd;
-                if (vdsat <= vds)
+                if (vdsSaturation <= vds)
                 {
                     capGS = cox / 3;
                     capGD = 0;
@@ -253,10 +253,10 @@ namespace SpiceSharp.Components.MosfetBehaviors
                 }
                 else
                 {
-                    vddif = 2.0 * vdsat - vds;
-                    vddif1 = vdsat - vds/*-1.0e-12*/;
+                    vddif = 2.0 * vdsSaturation - vds;
+                    vddif1 = vdsSaturation - vds/*-1.0e-12*/;
                     vddif2 = vddif * vddif;
-                    capGD = cox * (1.0 - vdsat * vdsat / vddif2) / 3;
+                    capGD = cox * (1.0 - vdsSaturation * vdsSaturation / vddif2) / 3;
                     capGS = cox * (1.0 - vddif1 * vddif1 / vddif2) / 3;
                     capGB = 0;
                 }

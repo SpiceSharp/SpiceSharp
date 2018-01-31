@@ -287,8 +287,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     }
                 }
                 // NOSQRT
-                ChargeBS.Current = temp.TempBulkPotential * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.Cbssw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                ChargeBS.Current = temp.TempBulkPotential * (temp.CapBS * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.CapBSSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
             }
             else
             {
@@ -331,8 +331,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     }
                 }
                 /* NOSQRT */
-                ChargeBD.Current = temp.TempBulkPotential * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.Cbdsw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                ChargeBD.Current = temp.TempBulkPotential * (temp.CapBD * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.CapBDSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
             }
             else
             {
@@ -463,9 +463,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     }
                 }
                 // NOSQRT
-                ChargeBS.Current = temp.TempBulkPotential * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.Cbssw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
-                CapBS = temp.Cbs * sarg + temp.Cbssw * sargsw;
+                ChargeBS.Current = temp.TempBulkPotential * (temp.CapBS * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.CapBSSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                CapBS = temp.CapBS * sarg + temp.CapBSSidewall * sargsw;
             }
             else
             {
@@ -509,9 +509,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     }
                 }
                 /* NOSQRT */
-                ChargeBD.Current = temp.TempBulkPotential * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.Cbdsw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
-                CapBD = temp.Cbd * sarg + temp.Cbdsw * sargsw;
+                ChargeBD.Current = temp.TempBulkPotential * (temp.CapBD * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.CapBDSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                CapBD = temp.CapBD * sarg + temp.CapBDSidewall * sargsw;
             }
             else
             {

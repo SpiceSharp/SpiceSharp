@@ -284,12 +284,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 }
                 if (vds >= 0)
                 {
-                    vbs = Transistor.LimitJunction(vbs, Vbs, vt, temp.SourceVcrit, ref Check);
+                    vbs = Transistor.LimitJunction(vbs, Vbs, vt, temp.SourceVCritical, ref Check);
                     vbd = vbs - vds;
                 }
                 else
                 {
-                    vbd = Transistor.LimitJunction(vbd, Vbd, vt, temp.DrainVcrit, ref Check);
+                    vbd = Transistor.LimitJunction(vbd, Vbd, vt, temp.DrainVCritical, ref Check);
                     vbs = vbd + vds;
                 }
             }
@@ -309,7 +309,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                         state.Domain == State.DomainType.None) || (!state.UseIC)))
                     {
                         vbs = -1;
-                        vgs = mbp.MosfetType * temp.TempVto;
+                        vgs = mbp.MosfetType * temp.TempVt0;
                         vds = 0;
                     }
                 }

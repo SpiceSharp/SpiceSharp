@@ -174,7 +174,7 @@ namespace SpiceSharp.Sparse
                                 sb.Append('x');
 
                             // Update status variables
-                            if ((Magnitude = (Math.Abs(pElement.Value.Real) + Math.Abs(pElement.Value.Imag))) > LargestElement)
+                            if ((Magnitude = (Math.Abs(pElement.Value.Real) + Math.Abs(pElement.Value.Imaginary))) > LargestElement)
                                 LargestElement = Magnitude;
                             if ((Magnitude < SmallestElement) && (Magnitude != 0.0))
                                 SmallestElement = Magnitude;
@@ -198,7 +198,7 @@ namespace SpiceSharp.Sparse
                         {
                             if (pImagElements[J - StartCol] != null)
                             {
-                                sb.AppendFormat("{0:G3,9}j", pImagElements[J - StartCol].Value.Imag);
+                                sb.AppendFormat("{0:G3,9}j", pImagElements[J - StartCol].Value.Imaginary);
                             }
                             else sb.Append("          ");
                         }
@@ -221,7 +221,7 @@ namespace SpiceSharp.Sparse
                 {
                     if (matrix.Diag[I] != null)
                     {
-                        Magnitude = (Math.Abs(matrix.Diag[I].Value.Real) + Math.Abs(matrix.Diag[I].Value.Imag));
+                        Magnitude = (Math.Abs(matrix.Diag[I].Value.Real) + Math.Abs(matrix.Diag[I].Value.Imaginary));
                         if (Magnitude > LargestDiag) LargestDiag = Magnitude;
                         if (Magnitude < SmallestDiag) SmallestDiag = Magnitude;
                     }

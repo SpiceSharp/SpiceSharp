@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// Parameters
         /// </summary>
         [PropertyName("vto"), PropertyName("vt0"), PropertyInfo("Threshold voltage")]
-        public Parameter Vt0 { get; } = new Parameter();
+        public Parameter VT0 { get; } = new Parameter();
         [PropertyName("kp"), PropertyInfo("Transconductance parameter")]
         public Parameter Transconductance { get; } = new Parameter(2e-5);
         [PropertyName("gamma"), PropertyInfo("Bulk threshold parameter")]
@@ -51,11 +51,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         [PropertyName("tox"), PropertyInfo("Oxide thickness")]
         public Parameter OxideThickness { get; } = new Parameter(1e-7);
         [PropertyName("ld"), PropertyInfo("Lateral diffusion")]
-        public Parameter LatDiff { get; } = new Parameter();
+        public Parameter LateralDiffusion { get; } = new Parameter();
         [PropertyName("u0"), PropertyName("uo"), PropertyInfo("Surface mobility")]
         public Parameter SurfaceMobility { get; } = new Parameter();
         [PropertyName("fc"), PropertyInfo("Forward bias jct. fit parm.")]
-        public Parameter ForwardCapDepCoefficient { get; } = new Parameter(.5);
+        public Parameter ForwardCapDepletionCoefficient { get; } = new Parameter(.5);
         [PropertyName("nsub"), PropertyInfo("Substrate doping")]
         public Parameter SubstrateDoping { get; } = new Parameter();
         [PropertyName("tpg"), PropertyInfo("Gate type")]
@@ -69,7 +69,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         [PropertyName("theta"), PropertyInfo("Vgs dependence on mobility")]
         public Parameter Theta { get; } = new Parameter();
         [PropertyName("vmax"), PropertyInfo("Maximum carrier drift velocity")]
-        public Parameter MaxDriftVel { get; } = new Parameter();
+        public Parameter MaxDriftVelocity { get; } = new Parameter();
         [PropertyName("kappa"), PropertyInfo("Kappa")]
         public Parameter Kappa { get; } = new Parameter(.2);
         [PropertyName("xj"), PropertyInfo("Junction depth")]

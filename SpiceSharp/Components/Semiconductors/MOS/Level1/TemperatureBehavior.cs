@@ -22,9 +22,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Shared variables
         /// </summary>
         [PropertyName("sourcevcrit"), PropertyInfo("Critical source voltage")]
-        public double SourceVcrit { get; protected set; }
+        public double SourceVCritical { get; protected set; }
         [PropertyName("drainvcrit"), PropertyInfo("Critical drain voltage")]
-        public double DrainVcrit { get; protected set; }
+        public double DrainVCritical { get; protected set; }
         [PropertyName("sourceconductance"), PropertyInfo("Conductance of source")]
         public double SourceConductance { get; protected set; }
         [PropertyName("drainconductance"), PropertyInfo("Conductance of drain")]
@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public double TempSurfMob { get; protected set; }
         public double TempPhi { get; protected set; }
         public double TempVbi { get; protected set; }
-        public double TempVto { get; protected set; }
+        public double TempVt0 { get; protected set; }
         public double TempSaturationCurrent { get; protected set; }
         public double TempSaturationCurrentDensity { get; protected set; }
         public double TempCapBD { get; protected set; }
@@ -81,9 +81,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public double F2S { get; protected set; }
         public double F3S { get; protected set; }
         public double F4S { get; protected set; }
-        public double Cgs { get; protected set; }
-        public double Cgd { get; protected set; }
-        public double Cgb { get; protected set; }
+        public double CapGS { get; protected set; }
+        public double CapGD { get; protected set; }
+        public double CapGB { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -142,9 +142,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             TempPhi = fact2 * phio + pbfact;
             TempVbi = mbp.VT0 - mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi)) + .5 * (modeltemp.Egfet1 - egfet) +
                 mbp.MosfetType * .5 * (TempPhi - mbp.Phi);
-            TempVto = TempVbi + mbp.MosfetType * mbp.Gamma * Math.Sqrt(TempPhi);
-            TempSaturationCurrent = mbp.JunctionSatCur * Math.Exp(-egfet / vt + modeltemp.Egfet1 / modeltemp.Vtnom);
-            TempSaturationCurrentDensity = mbp.JunctionSatCurDensity * Math.Exp(-egfet / vt + modeltemp.Egfet1 / modeltemp.Vtnom);
+            TempVt0 = TempVbi + mbp.MosfetType * mbp.Gamma * Math.Sqrt(TempPhi);
+            TempSaturationCurrent = mbp.JunctionSatCur * Math.Exp(-egfet / vt + modeltemp.Egfet1 / modeltemp.VtNominal);
+            TempSaturationCurrentDensity = mbp.JunctionSatCurDensity * Math.Exp(-egfet / vt + modeltemp.Egfet1 / modeltemp.VtNominal);
             pbo = (mbp.BulkJunctionPotential - modeltemp.Pbfact1) / modeltemp.Fact1;
             gmaold = (mbp.BulkJunctionPotential - pbo) / pbo;
             capfact = 1 / (1 + mbp.BulkJunctionBotGradingCoefficient * (4e-4 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
@@ -164,12 +164,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             TempDepletionCap = mbp.ForwardCapDepletionCoefficient * TempBulkPotential;
             if ((TempSaturationCurrentDensity == 0) || (bp.DrainArea.Value == 0) || (bp.SourceArea.Value == 0))
             {
-                SourceVcrit = DrainVcrit = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrent));
+                SourceVCritical = DrainVCritical = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrent));
             }
             else
             {
-                DrainVcrit = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrentDensity * bp.DrainArea));
-                SourceVcrit = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrentDensity * bp.SourceArea));
+                DrainVCritical = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrentDensity * bp.DrainArea));
+                SourceVCritical = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrentDensity * bp.SourceArea));
             }
 
             if (mbp.CapBD.Given)

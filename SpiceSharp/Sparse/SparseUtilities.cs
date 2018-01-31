@@ -170,7 +170,7 @@ namespace SpiceSharp.Sparse
             if (matrix.Complex)        // Complex Case. 
             {
                 cDeterminant.Real = 1.0;
-                cDeterminant.Imag = 0.0;
+                cDeterminant.Imaginary = 0.0;
 
                 while (++I <= Size)
                 {
@@ -179,26 +179,26 @@ namespace SpiceSharp.Sparse
 
                     // Scale Determinant.
                     nr = Math.Abs(cDeterminant.Real);
-                    ni = Math.Abs(cDeterminant.Imag);
+                    ni = Math.Abs(cDeterminant.Imaginary);
                     Norm = Math.Max(nr, ni);
                     if (Norm != 0.0)
                     {
                         while (Norm >= 1.0e12)
                         {
                             cDeterminant.Real *= 1.0e-12;
-                            cDeterminant.Imag *= 1.0e-12;
+                            cDeterminant.Imaginary *= 1.0e-12;
                             exponent += 12;
                             nr = Math.Abs(cDeterminant.Real);
-                            ni = Math.Abs(cDeterminant.Imag);
+                            ni = Math.Abs(cDeterminant.Imaginary);
                             Norm = Math.Max(nr, ni);
                         }
                         while (Norm < 1.0e-12)
                         {
                             cDeterminant.Real *= 1.0e12;
-                            cDeterminant.Imag *= 1.0e12;
+                            cDeterminant.Imaginary *= 1.0e12;
                             exponent -= 12;
                             nr = Math.Abs(cDeterminant.Real);
-                            ni = Math.Abs(cDeterminant.Imag);
+                            ni = Math.Abs(cDeterminant.Imaginary);
                             Norm = Math.Max(nr, ni);
                         }
                     }
@@ -206,26 +206,26 @@ namespace SpiceSharp.Sparse
 
                 // Scale Determinant again, this time to be between 1.0 <= x < 10.0. 
                 nr = Math.Abs(cDeterminant.Real);
-                ni = Math.Abs(cDeterminant.Imag);
+                ni = Math.Abs(cDeterminant.Imaginary);
                 Norm = Math.Max(nr, ni);
                 if (Norm != 0.0)
                 {
                     while (Norm >= 10.0)
                     {
                         cDeterminant.Real *= 0.1;
-                        cDeterminant.Imag *= 0.1;
+                        cDeterminant.Imaginary *= 0.1;
                         exponent++;
                         nr = Math.Abs(cDeterminant.Real);
-                        ni = Math.Abs(cDeterminant.Imag);
+                        ni = Math.Abs(cDeterminant.Imaginary);
                         Norm = Math.Max(nr, ni);
                     }
                     while (Norm < 1.0)
                     {
                         cDeterminant.Real *= 10.0;
-                        cDeterminant.Imag *= 10.0;
+                        cDeterminant.Imaginary *= 10.0;
                         exponent--;
                         nr = Math.Abs(cDeterminant.Real);
-                        ni = Math.Abs(cDeterminant.Imag);
+                        ni = Math.Abs(cDeterminant.Imaginary);
                         Norm = Math.Max(nr, ni);
                     }
                 }
@@ -233,7 +233,7 @@ namespace SpiceSharp.Sparse
                     cDeterminant.Negate();
 
                 result = cDeterminant.Real;
-                iResult = cDeterminant.Imag;
+                iResult = cDeterminant.Imaginary;
             }
             else
             {

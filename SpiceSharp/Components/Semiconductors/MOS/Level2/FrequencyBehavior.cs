@@ -245,7 +245,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     }
                 }
                 // NOSQRT
-                CapBS = temp.Cbs * sarg + temp.Cbssw * sargsw;
+                CapBS = temp.CapBS * sarg + temp.CapBSSidewall * sargsw;
             }
             else
             {
@@ -288,7 +288,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     }
                 }
                 /* NOSQRT */
-                CapBD = temp.Cbd * sarg + temp.Cbdsw * sargsw;
+                CapBD = temp.CapBD * sarg + temp.CapBDSidewall * sargsw;
             }
             else
             {

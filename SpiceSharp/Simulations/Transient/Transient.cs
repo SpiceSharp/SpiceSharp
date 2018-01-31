@@ -130,7 +130,7 @@ namespace SpiceSharp.Simulations
 
             // Start our statistics
             Statistics.TransientTime.Start();
-            int startIters = Statistics.NumIterations;
+            int startIters = Statistics.Iterations;
             var startselapsed = Statistics.SolveTime.Elapsed;
 
             try
@@ -160,7 +160,7 @@ namespace SpiceSharp.Simulations
                     {
                         // Keep our statistics
                         Statistics.TransientTime.Stop();
-                        Statistics.TransientIterations += Statistics.NumIterations - startIters;
+                        Statistics.TransientIterations += Statistics.Iterations - startIters;
                         Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
 
                         // Finished!
@@ -234,7 +234,7 @@ namespace SpiceSharp.Simulations
             {
                 // Keep our statistics
                 Statistics.TransientTime.Stop();
-                Statistics.TransientIterations += Statistics.NumIterations - startIters;
+                Statistics.TransientIterations += Statistics.Iterations - startIters;
                 Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
                 throw new CircuitException("{0}: transient terminated".FormatString(Name), ex);
             }
