@@ -11,31 +11,31 @@ namespace SpiceSharp.Components.Semiconductors
         /// Limit the per-iteration change of PN junction voltages
         /// Defined as DEVpnjlim in devsup.c
         /// </summary>
-        /// <param name="vnew">The new voltage</param>
-        /// <param name="vold">The old voltage</param>
-        /// <param name="vt">Vt</param>
-        /// <param name="vcrit">The critical voltage</param>
+        /// <param name="newVoltage">New voltage</param>
+        /// <param name="oldVoltage">Old voltage</param>
+        /// <param name="thermalVoltage">Thermal voltage</param>
+        /// <param name="criticalVoltage">Critical voltage</param>
         /// <returns></returns>
-        public static double DEVpnjlim(double vnew, double vold, double vt, double vcrit, ref bool limited)
+        public static double LimitJunction(double newVoltage, double oldVoltage, double thermalVoltage, double criticalVoltage, ref bool limited)
         {
             double arg;
-            if ((vnew > vcrit) && (Math.Abs(vnew - vold) > (vt + vt)))
+            if ((newVoltage > criticalVoltage) && (Math.Abs(newVoltage - oldVoltage) > (thermalVoltage + thermalVoltage)))
             {
-                if (vold > 0)
+                if (oldVoltage > 0)
                 {
-                    arg = 1 + (vnew - vold) / vt;
+                    arg = 1 + (newVoltage - oldVoltage) / thermalVoltage;
                     if (arg > 0)
-                        vnew = vold + vt * Math.Log(arg);
+                        newVoltage = oldVoltage + thermalVoltage * Math.Log(arg);
                     else
-                        vnew = vcrit;
+                        newVoltage = criticalVoltage;
                 }
                 else
-                    vnew = vt * Math.Log(vnew / vt);
+                    newVoltage = thermalVoltage * Math.Log(newVoltage / thermalVoltage);
                 limited = true;
             }
             else
                 limited = false;
-            return vnew;
+            return newVoltage;
         }
     }
 }

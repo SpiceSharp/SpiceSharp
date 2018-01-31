@@ -11,7 +11,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get the total number of iterations
         /// </summary>
-        public int NumIter { get; set; } = 0;
+        public int NumIterations { get; set; } = 0;
 
         /// <summary>
         /// The total time spent solving equations
@@ -46,7 +46,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get or sets the total number of transient iterations
         /// </summary>
-        public int TranIter { get; set; } = 0;
+        public int TransientIterations { get; set; } = 0;
 
         /// <summary>
         /// The total time spent executing transient simulations
@@ -73,11 +73,11 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public void Clear()
         {
-            NumIter = 0;
+            NumIterations = 0;
             SolveTime.Reset();
             LoadTime.Reset();
             TimePoints = 0;
-            TranIter = 0;
+            TransientIterations = 0;
             TransientTime.Reset();
             TransientSolveTime = TimeSpan.Zero;
             Accepted = 0;

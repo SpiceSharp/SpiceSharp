@@ -288,8 +288,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				 * limit nonlinear branch voltages
 				 */
                 ichk1 = true;
-                vbe = Semiconductor.DEVpnjlim(vbe, Vbe, vt, temp.TempVCrit, ref icheck);
-                vbc = Semiconductor.DEVpnjlim(vbc, Vbc, vt, temp.TempVCrit, ref ichk1);
+                vbe = Semiconductor.LimitJunction(vbe, Vbe, vt, temp.TempVCrit, ref icheck);
+                vbc = Semiconductor.LimitJunction(vbc, Vbc, vt, temp.TempVCrit, ref ichk1);
                 if (ichk1 == true)
                     icheck = true;
             }

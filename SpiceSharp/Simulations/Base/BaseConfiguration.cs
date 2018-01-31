@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// The number of steps when using SOURCE stepping to improve convergence
         /// </summary>
-        public int NumSrcSteps { get; set; } = 10;
+        public int NumSourceSteps { get; set; } = 10;
 
         /// <summary>
         /// Relative tolerance

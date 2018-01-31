@@ -182,12 +182,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 if ((mbp.BreakdownVoltage.Given) && (vd < Math.Min(0, -temp.TempBreakdownVoltage + 10 * vte)))
                 {
                     vdtemp = -(vd + temp.TempBreakdownVoltage);
-                    vdtemp = Semiconductor.DEVpnjlim(vdtemp, -(Voltage + temp.TempBreakdownVoltage), vte, temp.TempVcrit, ref Check);
+                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(Voltage + temp.TempBreakdownVoltage), vte, temp.TempVcrit, ref Check);
                     vd = -(vdtemp + temp.TempBreakdownVoltage);
                 }
                 else
                 {
-                    vd = Semiconductor.DEVpnjlim(vd, Voltage, vte, temp.TempVcrit, ref Check);
+                    vd = Semiconductor.LimitJunction(vd, Voltage, vte, temp.TempVcrit, ref Check);
                 }
             }
 

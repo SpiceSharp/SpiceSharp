@@ -4,20 +4,21 @@
     <Recognized>
       
       <!-- Common abbreviations -->
-      <Word>Pos</Word>
-      <Word>Neg</Word>
-      <Word>Eq</Word>
-      <Word>Dc</Word>
-      <Word>Ac</Word>
-      <Word>Cap</Word>
-      <Word>Res</Word>
+      <Word>Pos</Word> <!-- Positive -->
+      <Word>Neg</Word> <!-- Negative -->
+      <Word>Eq</Word> <!-- Equation -->
+      <Word>Dc</Word> <!-- Direct Current -->
+      <Word>Ac</Word> <!-- Alternating Current -->
+      <Word>Cap</Word> <!-- Capacitance -->
+      <Word>Res</Word> <!-- Reistance -->
       <Word>Transconductance</Word>
       <Word>Transresistance</Word>
       <Word>Unsetup</Word>
-      <Word>Exp</Word>
-      
+      <Word>Exp</Word> <!-- Exponent -->
+      <Acronym>Cond</Acronym> <!-- Conduction -->
+
       <!-- Numerical method abbreviations -->
-      <Word>Rhs</Word>
+      <Word>Rhs</Word> <!-- Right-Hand Side -->
       <Word>Fillin</Word>
       <Word>Fillins</Word>
       <Word>Rel</Word> <!-- Relative -->
@@ -40,6 +41,8 @@
       <Word>Gm</Word>
       <Word>Gmu</Word>
       <Word>Gpi</Word>
+      <Word>Go</Word>
+      <Word>Gx</Word>
       
       <!-- Mosfet -->
       <Word>Mos</Word>
@@ -62,7 +65,6 @@
   </Words>
   <Acronyms>
     <CasingExceptions>
-      <Acronym>Cond</Acronym> <!-- Conduction -->
       
       <!-- Bipolar junction transistor abbreviations -->
       <Acronym>BE</Acronym> <!-- Base-Emitter -->

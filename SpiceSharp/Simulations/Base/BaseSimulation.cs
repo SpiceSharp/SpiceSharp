@@ -166,13 +166,13 @@ namespace SpiceSharp.Simulations
             }
 
             // Nope, still not converging, let's try source stepping
-            if (config.NumSrcSteps > 1)
+            if (config.NumSourceSteps > 1)
             {
                 state.Init = State.InitializationStates.InitJunction;
                 CircuitWarning.Warning(this, "Starting source stepping");
-                for (int i = 0; i <= config.NumSrcSteps; i++)
+                for (int i = 0; i <= config.NumSourceSteps; i++)
                 {
-                    state.SourceFactor = i / (double)config.NumSrcSteps;
+                    state.SourceFactor = i / (double)config.NumSourceSteps;
                     if (!Iterate(maxIterations))
                     {
                         state.SourceFactor = 1.0;
@@ -233,7 +233,7 @@ namespace SpiceSharp.Simulations
                 catch (CircuitException)
                 {
                     iterno++;
-                    Statistics.NumIter = iterno;
+                    Statistics.NumIterations = iterno;
                     throw;
                 }
 
@@ -280,7 +280,7 @@ namespace SpiceSharp.Simulations
                 // Exceeded maximum number of iterations
                 if (iterno > maxIterations)
                 {
-                    Statistics.NumIter += iterno;
+                    Statistics.NumIterations += iterno;
                     return false;
                 }
 
@@ -300,7 +300,7 @@ namespace SpiceSharp.Simulations
                         }
                         if (state.IsCon)
                         {
-                            Statistics.NumIter += iterno;
+                            Statistics.NumIterations += iterno;
                             return true;
                         }
                         break;
@@ -327,7 +327,7 @@ namespace SpiceSharp.Simulations
                         break;
 
                     default:
-                        Statistics.NumIter += iterno;
+                        Statistics.NumIterations += iterno;
                         throw new CircuitException("Could not find flag");
                 }
             }

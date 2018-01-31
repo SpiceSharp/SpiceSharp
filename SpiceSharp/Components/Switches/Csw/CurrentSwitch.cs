@@ -57,8 +57,8 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the current-controlled switch</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
-        /// <param name="vsource">The controlling voltage source</param>
-        public CurrentSwitch(Identifier name, Identifier pos, Identifier neg, Identifier vsource)
+        /// <param name="controllingSource">The controlling voltage source</param>
+        public CurrentSwitch(Identifier name, Identifier pos, Identifier neg, Identifier controllingSource)
             : base(name, CurrentSwitchPinCount)
         {
             // Make sure the current switch is processed after voltage sources
@@ -72,7 +72,7 @@ namespace SpiceSharp.Components
             AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             Connect(pos, neg);
-            ControllingName = vsource;
+            ControllingName = controllingSource;
         }
 
         /// <summary>

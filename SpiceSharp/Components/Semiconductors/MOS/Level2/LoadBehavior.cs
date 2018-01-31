@@ -271,26 +271,26 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				*/
                 if (Vds >= 0)
                 {
-                    vgs = Transistor.DEVfetlim(vgs, Vgs, von);
+                    vgs = Transistor.LimitFet(vgs, Vgs, von);
                     vds = vgs - vgd;
-                    vds = Transistor.DEVlimvds(vds, Vds);
+                    vds = Transistor.LimitVds(vds, Vds);
                     vgd = vgs - vds;
                 }
                 else
                 {
-                    vgd = Transistor.DEVfetlim(vgd, vgdo, von);
+                    vgd = Transistor.LimitFet(vgd, vgdo, von);
                     vds = vgs - vgd;
-                    vds = -Transistor.DEVlimvds(-vds, -Vds);
+                    vds = -Transistor.LimitVds(-vds, -Vds);
                     vgs = vgd + vds;
                 }
                 if (vds >= 0)
                 {
-                    vbs = Transistor.DEVpnjlim(vbs, Vbs, vt, temp.SourceVcrit, ref Check);
+                    vbs = Transistor.LimitJunction(vbs, Vbs, vt, temp.SourceVcrit, ref Check);
                     vbd = vbs - vds;
                 }
                 else
                 {
-                    vbd = Transistor.DEVpnjlim(vbd, Vbd, vt, temp.DrainVcrit, ref Check);
+                    vbd = Transistor.LimitJunction(vbd, Vbd, vt, temp.DrainVcrit, ref Check);
                     vbs = vbd + vds;
                 }
             }

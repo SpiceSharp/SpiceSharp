@@ -318,12 +318,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             double icapgs, icapgd, icapgb;
             if (load.Mode > 0)
             {
-                Transistor.DEVqmeyer(vgs, vgd, von, vdsat,
+                Transistor.MeyerCharges(vgs, vgd, von, vdsat,
                     out icapgs, out icapgd, out icapgb, temp.TempPhi, OxideCap);
             }
             else
             {
-                Transistor.DEVqmeyer(vgd, vgs, von, vdsat,
+                Transistor.MeyerCharges(vgd, vgs, von, vdsat,
                     out icapgd, out icapgs, out icapgb, temp.TempPhi, OxideCap);
             }
             CapGS = icapgs;

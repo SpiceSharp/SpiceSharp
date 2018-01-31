@@ -37,11 +37,11 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// <summary>
         /// Limiting function FET
         /// </summary>
-        /// <param name="vnew">New voltage</param>
-        /// <param name="vold">Olt voltage</param>
-        /// <param name="vto">Threshold</param>
+        /// <param name="newVoltage">New voltage</param>
+        /// <param name="oldVoltage">Olt voltage</param>
+        /// <param name="threshold">Threshold</param>
         /// <returns></returns>
-        public static double DEVfetlim(double vnew, double vold, double vto)
+        public static double LimitFet(double newVoltage, double oldVoltage, double threshold)
         {
             double vtsthi;
             double vtstlo;
@@ -49,28 +49,28 @@ namespace SpiceSharp.Components.MosfetBehaviors
             double delv;
             double vtemp;
 
-            vtsthi = Math.Abs(2 * (vold - vto)) + 2;
+            vtsthi = Math.Abs(2 * (oldVoltage - threshold)) + 2;
             vtstlo = vtsthi / 2 + 2;
-            vtox = vto + 3.5;
-            delv = vnew - vold;
+            vtox = threshold + 3.5;
+            delv = newVoltage - oldVoltage;
 
-            if (vold >= vto)
+            if (oldVoltage >= threshold)
             {
-                if (vold >= vtox)
+                if (oldVoltage >= vtox)
                 {
                     if (delv <= 0)
                     {
                         /* going off */
-                        if (vnew >= vtox)
+                        if (newVoltage >= vtox)
                         {
                             if (-delv > vtstlo)
                             {
-                                vnew = vold - vtstlo;
+                                newVoltage = oldVoltage - vtstlo;
                             }
                         }
                         else
                         {
-                            vnew = Math.Max(vnew, vto + 2);
+                            newVoltage = Math.Max(newVoltage, threshold + 2);
                         }
                     }
                     else
@@ -78,7 +78,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
                         /* staying on */
                         if (delv >= vtsthi)
                         {
-                            vnew = vold + vtsthi;
+                            newVoltage = oldVoltage + vtsthi;
                         }
                     }
                 }
@@ -88,12 +88,12 @@ namespace SpiceSharp.Components.MosfetBehaviors
                     if (delv <= 0)
                     {
                         /* decreasing */
-                        vnew = Math.Max(vnew, vto - .5);
+                        newVoltage = Math.Max(newVoltage, threshold - .5);
                     }
                     else
                     {
                         /* increasing */
-                        vnew = Math.Min(vnew, vto + 4);
+                        newVoltage = Math.Min(newVoltage, threshold + 4);
                     }
                 }
             }
@@ -104,58 +104,58 @@ namespace SpiceSharp.Components.MosfetBehaviors
                 {
                     if (-delv > vtsthi)
                     {
-                        vnew = vold - vtsthi;
+                        newVoltage = oldVoltage - vtsthi;
                     }
                 }
                 else
                 {
-                    vtemp = vto + .5;
-                    if (vnew <= vtemp)
+                    vtemp = threshold + .5;
+                    if (newVoltage <= vtemp)
                     {
                         if (delv > vtstlo)
                         {
-                            vnew = vold + vtstlo;
+                            newVoltage = oldVoltage + vtstlo;
                         }
                     }
                     else
                     {
-                        vnew = vtemp;
+                        newVoltage = vtemp;
                     }
                 }
             }
-            return (vnew);
+            return (newVoltage);
         }
 
         /// <summary>
         /// Limiting function PN
         /// </summary>
-        /// <param name="vnew">New voltage</param>
-        /// <param name="vold">Old voltage</param>
-        /// <param name="vt">Threshold</param>
-        /// <param name="vcrit">Critical</param>
+        /// <param name="newVoltage">New voltage</param>
+        /// <param name="oldVoltage">Old voltage</param>
+        /// <param name="thermalVoltage">Thermal voltage</param>
+        /// <param name="criticalVoltage">Critical voltage</param>
         /// <param name="check">Checking variable</param>
         /// <returns></returns>
-        public static double DEVpnjlim(double vnew, double vold, double vt, double vcrit, ref int check)
+        public static double LimitJunction(double newVoltage, double oldVoltage, double thermalVoltage, double criticalVoltage, ref int check)
         {
             double arg;
 
-            if ((vnew > vcrit) && (Math.Abs(vnew - vold) > (vt + vt)))
+            if ((newVoltage > criticalVoltage) && (Math.Abs(newVoltage - oldVoltage) > (thermalVoltage + thermalVoltage)))
             {
-                if (vold > 0)
+                if (oldVoltage > 0)
                 {
-                    arg = 1 + (vnew - vold) / vt;
+                    arg = 1 + (newVoltage - oldVoltage) / thermalVoltage;
                     if (arg > 0)
                     {
-                        vnew = vold + vt * Math.Log(arg);
+                        newVoltage = oldVoltage + thermalVoltage * Math.Log(arg);
                     }
                     else
                     {
-                        vnew = vcrit;
+                        newVoltage = criticalVoltage;
                     }
                 }
                 else
                 {
-                    vnew = vt * Math.Log(vnew / vt);
+                    newVoltage = thermalVoltage * Math.Log(newVoltage / thermalVoltage);
                 }
                 check = 1;
             }
@@ -163,43 +163,43 @@ namespace SpiceSharp.Components.MosfetBehaviors
             {
                 check = 0;
             }
-            return (vnew);
+            return (newVoltage);
         }
 
         /// <summary>
         /// Limiting function VDS
         /// </summary>
-        /// <param name="vnew">New voltage</param>
-        /// <param name="vold">Old voltage</param>
+        /// <param name="newVoltage">New voltage</param>
+        /// <param name="oldVoltage">Old voltage</param>
         /// <returns></returns>
-        public static double DEVlimvds(double vnew, double vold)
+        public static double LimitVds(double newVoltage, double oldVoltage)
         {
-            if (vold >= 3.5)
+            if (oldVoltage >= 3.5)
             {
-                if (vnew > vold)
+                if (newVoltage > oldVoltage)
                 {
-                    vnew = Math.Min(vnew, (3 * vold) + 2);
+                    newVoltage = Math.Min(newVoltage, (3 * oldVoltage) + 2);
                 }
                 else
                 {
-                    if (vnew < 3.5)
+                    if (newVoltage < 3.5)
                     {
-                        vnew = Math.Max(vnew, 2);
+                        newVoltage = Math.Max(newVoltage, 2);
                     }
                 }
             }
             else
             {
-                if (vnew > vold)
+                if (newVoltage > oldVoltage)
                 {
-                    vnew = Math.Min(vnew, 4);
+                    newVoltage = Math.Min(newVoltage, 4);
                 }
                 else
                 {
-                    vnew = Math.Max(vnew, -.5);
+                    newVoltage = Math.Max(newVoltage, -.5);
                 }
             }
-            return (vnew);
+            return (newVoltage);
         }
 
         /// <summary>
@@ -207,15 +207,14 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// </summary>
         /// <param name="vgs">Gate-source voltage</param>
         /// <param name="vgd">Gate-drain voltage</param>
-        /// <param name="vgb">Gate-bulk voltage</param>
         /// <param name="von">Von</param>
         /// <param name="vdsat">Vdsat</param>
-        /// <param name="capgs">Gate-source capacitance</param>
-        /// <param name="capgd">Gate-drain capacitance</param>
-        /// <param name="capgb">Gate-bulk capacitance</param>
+        /// <param name="capGS">Gate-source capacitance</param>
+        /// <param name="capGD">Gate-drain capacitance</param>
+        /// <param name="capGB">Gate-bulk capacitance</param>
         /// <param name="phi">Phi</param>
         /// <param name="cox">Cox</param>
-        public static void DEVqmeyer(double vgs, double vgd, double von, double vdsat, out double capgs, out double capgd, out double capgb, double phi, double cox)
+        public static void MeyerCharges(double vgs, double vgd, double von, double vdsat, out double capGS, out double capGD, out double capGB, double phi, double cox)
         {
             double vds;
             double vddif;
@@ -227,39 +226,39 @@ namespace SpiceSharp.Components.MosfetBehaviors
             vgst = vgs - von;
             if (vgst <= -phi)
             {
-                capgb = cox / 2;
-                capgs = 0;
-                capgd = 0;
+                capGB = cox / 2;
+                capGS = 0;
+                capGD = 0;
             }
             else if (vgst <= -phi / 2)
             {
-                capgb = -vgst * cox / (2 * phi);
-                capgs = 0;
-                capgd = 0;
+                capGB = -vgst * cox / (2 * phi);
+                capGS = 0;
+                capGD = 0;
             }
             else if (vgst <= 0)
             {
-                capgb = -vgst * cox / (2 * phi);
-                capgs = vgst * cox / (1.5 * phi) + cox / 3;
-                capgd = 0;
+                capGB = -vgst * cox / (2 * phi);
+                capGS = vgst * cox / (1.5 * phi) + cox / 3;
+                capGD = 0;
             }
             else
             {
                 vds = vgs - vgd;
                 if (vdsat <= vds)
                 {
-                    capgs = cox / 3;
-                    capgd = 0;
-                    capgb = 0;
+                    capGS = cox / 3;
+                    capGD = 0;
+                    capGB = 0;
                 }
                 else
                 {
                     vddif = 2.0 * vdsat - vds;
                     vddif1 = vdsat - vds/*-1.0e-12*/;
                     vddif2 = vddif * vddif;
-                    capgd = cox * (1.0 - vdsat * vdsat / vddif2) / 3;
-                    capgs = cox * (1.0 - vddif1 * vddif1 / vddif2) / 3;
-                    capgb = 0;
+                    capGD = cox * (1.0 - vdsat * vdsat / vddif2) / 3;
+                    capGS = cox * (1.0 - vddif1 * vddif1 / vddif2) / 3;
+                    capGB = 0;
                 }
             }
         }
