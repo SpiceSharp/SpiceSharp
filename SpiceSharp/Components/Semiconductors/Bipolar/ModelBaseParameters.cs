@@ -44,11 +44,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [PropertyName("nf"), PropertyInfo("Forward emission coefficient")]
         public Parameter EmissionCoefficientForward { get; } = new Parameter(1);
         [PropertyName("vaf"), PropertyName("va"), PropertyInfo("Forward Early voltage")]
-        public Parameter EarlyVoltagForward { get; } = new Parameter();
+        public Parameter EarlyVoltageForward { get; } = new Parameter();
         [PropertyName("ikf"), PropertyName("ik"), PropertyInfo("Forward beta roll-off corner current")]
         public Parameter RollOffForward { get; } = new Parameter();
         [PropertyName("ise"), PropertyInfo("B-E leakage saturation current")]
-        public Parameter LeakBEcurrent { get; } = new Parameter();
+        public Parameter LeakBECurrent { get; } = new Parameter();
         [PropertyName("ne"), PropertyInfo("B-E leakage emission coefficient")]
         public Parameter LeakBEEmissionCoefficient { get; } = new Parameter(1.5);
         [PropertyName("br"), PropertyInfo("Ideal reverse beta")]
@@ -84,9 +84,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [PropertyName("xtf"), PropertyInfo("Coefficient for bias dependence of TF")]
         public Parameter TransitTimeBiasCoefficientForward { get; } = new Parameter();
         [PropertyName("vtf"), PropertyInfo("Voltage giving VBC dependence of TF")]
-        public Parameter TransitTimeFVBC { get; } = new Parameter();
+        public Parameter TransitTimeForwardVBC { get; } = new Parameter();
         [PropertyName("itf"), PropertyInfo("High current dependence of TF")]
-        public Parameter TransitTimeHighCurrentF { get; } = new Parameter();
+        public Parameter TransitTimeHighCurrentForward { get; } = new Parameter();
         [PropertyName("ptf"), PropertyInfo("Excess phase")]
         public Parameter ExcessPhase { get; } = new Parameter();
         [PropertyName("cjc"), PropertyInfo("Zero bias B-C depletion capacitance")]

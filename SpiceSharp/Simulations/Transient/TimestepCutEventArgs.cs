@@ -3,14 +3,14 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// This class contains all data when a timeStep cut event is triggered
+    /// This class contains all data when a timestep cut event is triggered
     /// </summary>
-    public class TimeStepCutEventArgs : EventArgs
+    public class TimestepCutEventArgs : EventArgs
     {
         /// <summary>
         /// Enumerations
         /// </summary>
-        public enum TimeStepCutReason
+        public enum TimestepCutReason
         {
             Convergence, // Cut due to convergence problems
             Truncation // Cut due to the local truncation error
@@ -22,21 +22,21 @@ namespace SpiceSharp.Simulations
         public Circuit Circuit { get; }
 
         /// <summary>
-        /// The new timeStep that will be tried
+        /// The new timestep that will be tried
         /// </summary>
         public double NewDelta { get; }
 
         /// <summary>
-        /// Gets the reason for cutting the timeStep
+        /// Gets the reason for cutting the timestep
         /// </summary>
-        public TimeStepCutReason Reason { get; }
+        public TimestepCutReason Reason { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="circuit"></param>
         /// <param name="newDelta"></param>
-        public TimeStepCutEventArgs(Circuit circuit, double newDelta, TimeStepCutReason reason)
+        public TimestepCutEventArgs(Circuit circuit, double newDelta, TimestepCutReason reason)
         {
             Circuit = circuit;
             NewDelta = newDelta;

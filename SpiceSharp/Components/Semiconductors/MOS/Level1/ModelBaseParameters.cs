@@ -36,9 +36,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         [PropertyName("cbs"), PropertyInfo("B-S junction capacitance")]
         public Parameter CapBS { get; } = new Parameter();
         [PropertyName("is"), PropertyInfo("Bulk junction sat. current")]
-        public Parameter JctSatCur { get; } = new Parameter(1e-14);
+        public Parameter JunctionSatCur { get; } = new Parameter(1e-14);
         [PropertyName("pb"), PropertyInfo("Bulk junction potential")]
-        public Parameter BulkJctPotential { get; } = new Parameter(.8);
+        public Parameter BulkJunctionPotential { get; } = new Parameter(.8);
         [PropertyName("cgso"), PropertyInfo("Gate-source overlap cap.")]
         public Parameter GateSourceOverlapCapFactor { get; } = new Parameter();
         [PropertyName("cgdo"), PropertyInfo("Gate-drain overlap cap.")]
@@ -48,13 +48,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         [PropertyName("cj"), PropertyInfo("Bottom junction cap per area")]
         public Parameter BulkCapFactor { get; } = new Parameter();
         [PropertyName("mj"), PropertyInfo("Bottom grading coefficient")]
-        public Parameter BulkJctBotGradingCoefficient { get; } = new Parameter(.5);
+        public Parameter BulkJunctionBotGradingCoefficient { get; } = new Parameter(.5);
         [PropertyName("cjsw"), PropertyInfo("Side junction cap per area")]
         public Parameter SidewallCapFactor { get; } = new Parameter();
         [PropertyName("mjsw"), PropertyInfo("Side grading coefficient")]
-        public Parameter BulkJctSideGradingCoefficient { get; } = new Parameter(.5);
+        public Parameter BulkJunctionSideGradingCoefficient { get; } = new Parameter(.5);
         [PropertyName("js"), PropertyInfo("Bulk jct. sat. current density")]
-        public Parameter JctSatCurDensity { get; } = new Parameter();
+        public Parameter JunctionSatCurDensity { get; } = new Parameter();
         [PropertyName("tox"), PropertyInfo("Oxide thickness")]
         public Parameter OxideThickness { get; } = new Parameter();
         [PropertyName("ld"), PropertyInfo("Lateral diffusion")]

@@ -31,11 +31,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         [PropertyName("vdsat"), PropertyInfo("Saturation drain voltage")]
         public double Vdsat { get; protected set; } = 0.0;
         [PropertyName("id"), PropertyInfo("Drain current")]
-        public double Cd { get; protected set; }
+        public double DrainCurrent { get; protected set; }
         [PropertyName("ibs"), PropertyInfo("B-S junction current")]
-        public double Cbs { get; protected set; }
+        public double BSCurrent { get; protected set; }
         [PropertyName("ibd"), PropertyInfo("B-D junction current")]
-        public double Cbd { get; protected set; }
+        public double BDCurrent { get; protected set; }
         [PropertyName("gmb"), PropertyName("gmbs"), PropertyInfo("Bulk-Source transconductance")]
         public double Gmbs { get; protected set; }
         [PropertyName("gm"), PropertyInfo("Transconductance")]
@@ -226,18 +226,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 			 * here.  They may be moved at the expense of instance size
 			 */
             EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
-            if ((temp.TSatCurDens == 0) || (bp.DrainArea.Value == 0) || (bp.SourceArea.Value == 0))
+            if ((temp.TempSaturationCurrentDensity == 0) || (bp.DrainArea.Value == 0) || (bp.SourceArea.Value == 0))
             {
-                DrainSatCur = temp.TSatCur;
-                SourceSatCur = temp.TSatCur;
+                DrainSatCur = temp.TempSaturationCurrent;
+                SourceSatCur = temp.TempSaturationCurrent;
             }
             else
             {
-                DrainSatCur = temp.TSatCurDens * bp.DrainArea;
-                SourceSatCur = temp.TSatCurDens * bp.SourceArea;
+                DrainSatCur = temp.TempSaturationCurrentDensity * bp.DrainArea;
+                SourceSatCur = temp.TempSaturationCurrentDensity * bp.SourceArea;
             }
 
-            Beta = temp.TTransconductance * bp.Width / EffectiveLength;
+            Beta = temp.TempTransconductance * bp.Width / EffectiveLength;
             /* 
 			 * ok - now to do the start - up operations
 			 * 
@@ -300,7 +300,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 				 * called.  We still just initialize the three voltages
 				 */
 
-                if ((state.Init == State.InitializationStates.InitJct) && !bp.Off)
+                if ((state.Init == State.InitializationStates.InitJunction) && !bp.Off)
                 {
                     vds = mbp.MosfetType * bp.InitialVds;
                     vgs = mbp.MosfetType * bp.InitialVgs;
@@ -309,7 +309,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                         state.Domain == State.DomainType.None) || (!state.UseIC)))
                     {
                         vbs = -1;
-                        vgs = mbp.MosfetType * temp.TVto;
+                        vgs = mbp.MosfetType * temp.TempVto;
                         vds = 0;
                     }
                 }
@@ -336,26 +336,26 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             if (vbs <= 0)
             {
                 Gbs = SourceSatCur / vt;
-                Cbs = Gbs * vbs;
+                BSCurrent = Gbs * vbs;
                 Gbs += state.Gmin;
             }
             else
             {
                 evbs = Math.Exp(Math.Min(Transistor.MaximumExponentArgument, vbs / vt));
                 Gbs = SourceSatCur * evbs / vt + state.Gmin;
-                Cbs = SourceSatCur * (evbs - 1);
+                BSCurrent = SourceSatCur * (evbs - 1);
             }
             if (vbd <= 0)
             {
                 Gbd = DrainSatCur / vt;
-                Cbd = Gbd * vbd;
+                BDCurrent = Gbd * vbd;
                 Gbd += state.Gmin;
             }
             else
             {
                 evbd = Math.Exp(Math.Min(Transistor.MaximumExponentArgument, vbd / vt));
                 Gbd = DrainSatCur * evbd / vt + state.Gmin;
-                Cbd = DrainSatCur * (evbd - 1);
+                BDCurrent = DrainSatCur * (evbd - 1);
             }
 
             /* now to determine whether the user was able to correctly
@@ -391,15 +391,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
                 if ((Mode > 0 ? vbs : vbd) <= 0)
                 {
-                    sarg = Math.Sqrt(temp.TPhi - (Mode > 0 ? vbs : vbd));
+                    sarg = Math.Sqrt(temp.TempPhi - (Mode > 0 ? vbs : vbd));
                 }
                 else
                 {
-                    sarg = Math.Sqrt(temp.TPhi);
+                    sarg = Math.Sqrt(temp.TempPhi);
                     sarg = sarg - (Mode > 0 ? vbs : vbd) / (sarg + sarg);
                     sarg = Math.Max(0, sarg);
                 }
-                von = (temp.TVbi * mbp.MosfetType) + mbp.Gamma * sarg;
+                von = (temp.TempVbi * mbp.MosfetType) + mbp.Gamma * sarg;
                 vgst = (Mode > 0 ? vgs : vgd) - von;
                 vdsat = Math.Max(vgst, 0);
                 if (sarg <= 0)
@@ -456,7 +456,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             /* 
 			 * COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
 			 */
-            Cd = Mode * cdrain - Cbd;
+            DrainCurrent = Mode * cdrain - BDCurrent;
 
             /* 
 			 * check convergence
@@ -478,8 +478,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             /* 
 			 * load current vector
 			 */
-            ceqbs = mbp.MosfetType * (Cbs - (Gbs - state.Gmin) * vbs);
-            ceqbd = mbp.MosfetType * (Cbd - (Gbd - state.Gmin) * vbd);
+            ceqbs = mbp.MosfetType * (BSCurrent - (Gbs - state.Gmin) * vbs);
+            ceqbd = mbp.MosfetType * (BDCurrent - (Gbd - state.Gmin) * vbd);
             if (Mode >= 0)
             {
                 xnrm = 1;
@@ -549,29 +549,29 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             // NOTE: Cd does not include contributions for transient simulations... Should check for a way to include them!
             if (Mode >= 0)
             {
-                cdhat = Cd - Gbd * delvbd + Gmbs * delvbs +
+                cdhat = DrainCurrent - Gbd * delvbd + Gmbs * delvbs +
                     Gm * delvgs + Gds * delvds;
             }
             else
             {
-                cdhat = Cd - (Gbd - Gmbs) * delvbd -
+                cdhat = DrainCurrent - (Gbd - Gmbs) * delvbd -
                     Gm * delvgd + Gds * delvds;
             }
-            cbhat = Cbs + Cbd + Gbd * delvbd + Gbs * delvbs;
+            cbhat = BSCurrent + BDCurrent + Gbd * delvbd + Gbs * delvbs;
 
             /*
              *  check convergence
              */
             // NOTE: relative and absolute tolerances need to be gotten from the configuration, temporarely set to constants here
-            double tol = config.RelTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(Cd)) + config.AbsTolerance;
-            if (Math.Abs(cdhat - Cd) >= tol)
+            double tol = config.RelTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + config.AbsTolerance;
+            if (Math.Abs(cdhat - DrainCurrent) >= tol)
             {
                 state.IsCon = false;
                 return false;
             }
 
-            tol = config.RelTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(Cbs + Cbd)) + config.AbsTolerance;
-            if (Math.Abs(cbhat - (Cbs + Cbd)) > tol)
+            tol = config.RelTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(BSCurrent + BDCurrent)) + config.AbsTolerance;
+            if (Math.Abs(cbhat - (BSCurrent + BDCurrent)) > tol)
             {
                 state.IsCon = false;
                 return false;

@@ -162,7 +162,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // Initialization
             Check = false;
-            if (state.Init == State.InitializationStates.InitJct)
+            if (state.Init == State.InitializationStates.InitJunction)
             {
                 if (bp.Off)
                     vd = 0.0;

@@ -29,9 +29,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [PropertyName("vbc"), PropertyInfo("B-C voltage")]
         public double Vbc { get; protected set; }
         [PropertyName("cc"), PropertyInfo("Current at collector node")]
-        public double Cc { get; protected set; }
+        public double CurrentC { get; protected set; }
         [PropertyName("cb"), PropertyInfo("Current at base node")]
-        public double Cb { get; protected set; }
+        public double CurrentB { get; protected set; }
         [PropertyName("gpi"), PropertyInfo("Small signal input conductance - pi")]
         public double Gpi { get; protected set; }
         [PropertyName("gmu"), PropertyInfo("Small signal conductance - mu")]
@@ -76,11 +76,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Shared parameters
         /// </summary>
-        public double Cbe { get; protected set; }
-        public double Gbe { get; protected set; }
-        public double Cbc { get; protected set; }
-        public double Gbc { get; protected set; }
-        public double Qb { get; protected set; }
+        public double CurrentBE { get; protected set; }
+        public double CondBE { get; protected set; }
+        public double CurrentBC { get; protected set; }
+        public double CondBC { get; protected set; }
+        public double BaseCharge { get; protected set; }
         public double DqbDvc { get; protected set; }
         public double DqbDve { get; protected set; }
 
@@ -243,16 +243,16 @@ namespace SpiceSharp.Components.BipolarBehaviors
             /* 
 			 * dc model paramters
 			 */
-            csat = temp.TSatCur * bp.Area;
+            csat = temp.TempSaturationCurrent * bp.Area;
             rbpr = mbp.MinimumBaseResistance / bp.Area;
             rbpi = mbp.BaseResist / bp.Area - rbpr;
             gcpr = modeltemp.CollectorConduct * bp.Area;
             gepr = modeltemp.EmitterConduct * bp.Area;
             oik = modeltemp.InverseRollOffForward / bp.Area;
-            c2 = temp.TBEleakCur * bp.Area;
+            c2 = temp.TempBELeakageCurrent * bp.Area;
             vte = mbp.LeakBEEmissionCoefficient * vt;
             oikr = modeltemp.InverseRollOffReverse / bp.Area;
-            c4 = temp.TBCleakCur * bp.Area;
+            c4 = temp.TempBCLeakageCurrent * bp.Area;
             vtc = mbp.LeakBCEmissionCoefficient * vt;
             xjrb = mbp.BaseCurrentHalfResist * bp.Area;
 
@@ -260,18 +260,18 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			* initialization
 			*/
             icheck = false;
-            if (state.Init == State.InitializationStates.InitJct && state.Domain == State.DomainType.Time && state.UseDC && state.UseIC)
+            if (state.Init == State.InitializationStates.InitJunction && state.Domain == State.DomainType.Time && state.UseDC && state.UseIC)
             {
                 vbe = mbp.BipolarType * bp.InitialVbe;
                 vce = mbp.BipolarType * bp.InitialVce;
                 vbc = vbe - vce;
             }
-            else if (state.Init == State.InitializationStates.InitJct && !bp.Off)
+            else if (state.Init == State.InitializationStates.InitJunction && !bp.Off)
             {
-                vbe = temp.TVcrit;
+                vbe = temp.TempVCrit;
                 vbc = 0;
             }
-            else if (state.Init == State.InitializationStates.InitJct || (state.Init == State.InitializationStates.InitFix && bp.Off))
+            else if (state.Init == State.InitializationStates.InitJunction || (state.Init == State.InitializationStates.InitFix && bp.Off))
             {
                 vbe = 0;
                 vbc = 0;
@@ -288,8 +288,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				 * limit nonlinear branch voltages
 				 */
                 ichk1 = true;
-                vbe = Semiconductor.DEVpnjlim(vbe, Vbe, vt, temp.TVcrit, ref icheck);
-                vbc = Semiconductor.DEVpnjlim(vbc, Vbc, vt, temp.TVcrit, ref ichk1);
+                vbe = Semiconductor.DEVpnjlim(vbe, Vbe, vt, temp.TempVCrit, ref icheck);
+                vbc = Semiconductor.DEVpnjlim(vbc, Vbc, vt, temp.TempVCrit, ref ichk1);
                 if (ichk1 == true)
                     icheck = true;
             }
@@ -301,8 +301,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (vbe > -5 * vtn)
             {
                 evbe = Math.Exp(vbe / vtn);
-                Cbe = csat * (evbe - 1) + state.Gmin * vbe;
-                Gbe = csat * evbe / vtn + state.Gmin;
+                CurrentBE = csat * (evbe - 1) + state.Gmin * vbe;
+                CondBE = csat * evbe / vtn + state.Gmin;
                 if (c2 == 0)
                 {
                     cben = 0;
@@ -317,8 +317,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                Gbe = -csat / vbe + state.Gmin;
-                Cbe = Gbe * vbe;
+                CondBE = -csat / vbe + state.Gmin;
+                CurrentBE = CondBE * vbe;
                 gben = -c2 / vbe;
                 cben = gben * vbe;
             }
@@ -327,8 +327,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (vbc > -5 * vtn)
             {
                 evbc = Math.Exp(vbc / vtn);
-                Cbc = csat * (evbc - 1) + state.Gmin * vbc;
-                Gbc = csat * evbc / vtn + state.Gmin;
+                CurrentBC = csat * (evbc - 1) + state.Gmin * vbc;
+                CondBC = csat * evbc / vtn + state.Gmin;
                 if (c4 == 0)
                 {
                     cbcn = 0;
@@ -343,8 +343,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                Gbc = -csat / vbc + state.Gmin;
-                Cbc = Gbc * vbc;
+                CondBC = -csat / vbc + state.Gmin;
+                CurrentBC = CondBC * vbc;
                 gbcn = -c4 / vbc;
                 cbcn = gbcn * vbc;
             }
@@ -355,41 +355,41 @@ namespace SpiceSharp.Components.BipolarBehaviors
             q1 = 1 / (1 - modeltemp.InvEarlyVoltForward * vbc - modeltemp.InvEarlyVoltReverse * vbe);
             if (oik == 0 && oikr == 0)
             {
-                Qb = q1;
-                DqbDve = q1 * Qb * modeltemp.InvEarlyVoltReverse;
-                DqbDvc = q1 * Qb * modeltemp.InvEarlyVoltForward;
+                BaseCharge = q1;
+                DqbDve = q1 * BaseCharge * modeltemp.InvEarlyVoltReverse;
+                DqbDvc = q1 * BaseCharge * modeltemp.InvEarlyVoltForward;
             }
             else
             {
-                q2 = oik * Cbe + oikr * Cbc;
+                q2 = oik * CurrentBE + oikr * CurrentBC;
                 arg = Math.Max(0, 1 + 4 * q2);
                 sqarg = 1;
                 if (arg != 0)
                     sqarg = Math.Sqrt(arg);
-                Qb = q1 * (1 + sqarg) / 2;
-                DqbDve = q1 * (Qb * modeltemp.InvEarlyVoltReverse + oik * Gbe / sqarg);
-                DqbDvc = q1 * (Qb * modeltemp.InvEarlyVoltForward + oikr * Gbc / sqarg);
+                BaseCharge = q1 * (1 + sqarg) / 2;
+                DqbDve = q1 * (BaseCharge * modeltemp.InvEarlyVoltReverse + oik * CondBE / sqarg);
+                DqbDvc = q1 * (BaseCharge * modeltemp.InvEarlyVoltForward + oikr * CondBC / sqarg);
             }
 
             // Excess phase calculation
             ExcessPhaseEventArgs ep = new ExcessPhaseEventArgs()
             {
-                cc = 0.0,
-                cex = Cbe,
-                gex = Gbe,
-                qb = Qb
+                CollectorCurrent = 0.0,
+                ExcessPhaseCurrent = CurrentBE,
+                ExcessPhaseConduct = CondBE,
+                BaseCharge = BaseCharge
             };
             ExcessPhaseCalculation?.Invoke(this, ep);
-            cc = ep.cc;
-            cex = ep.cex;
-            gex = ep.gex;
+            cc = ep.CollectorCurrent;
+            cex = ep.ExcessPhaseCurrent;
+            gex = ep.ExcessPhaseConduct;
 
             /* 
 			 * determine dc incremental conductances
 			 */
-            cc = cc + (cex - Cbc) / Qb - Cbc / temp.TBetaR - cbcn;
-            cb = Cbe / temp.TBetaF + cben + Cbc / temp.TBetaR + cbcn;
-            gx = rbpr + rbpi / Qb;
+            cc = cc + (cex - CurrentBC) / BaseCharge - CurrentBC / temp.TempBetaReverse - cbcn;
+            cb = CurrentBE / temp.TempBetaForward + cben + CurrentBC / temp.TempBetaReverse + cbcn;
+            gx = rbpr + rbpi / BaseCharge;
             if (xjrb != 0)
             {
                 arg1 = Math.Max(cb / xjrb, 1e-9);
@@ -399,10 +399,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             if (gx != 0)
                 gx = 1 / gx;
-            gpi = Gbe / temp.TBetaF + gben;
-            gmu = Gbc / temp.TBetaR + gbcn;
-            go = (Gbc + (cex - Cbc) * DqbDvc / Qb) / Qb;
-            gm = (gex - (cex - Cbc) * DqbDve / Qb) / Qb - go;
+            gpi = CondBE / temp.TempBetaForward + gben;
+            gmu = CondBC / temp.TempBetaReverse + gbcn;
+            go = (CondBC + (cex - CurrentBC) * DqbDvc / BaseCharge) / BaseCharge;
+            gm = (gex - (cex - CurrentBC) * DqbDve / BaseCharge) / BaseCharge - go;
 
             /* 
 			 * check convergence
@@ -415,8 +415,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             Vbe = vbe;
             Vbc = vbc;
-            Cc = cc;
-            Cb = cb;
+            CurrentC = cc;
+            CurrentB = cb;
             Gpi = gpi;
             Gmu = gmu;
             Gm = gm;
@@ -477,10 +477,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             vbc = mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
             delvbe = vbe - Vbe;
             delvbc = vbc - Vbe;
-            cchat = Cc + (Gm + Go) * delvbe - (Go + Gmu) * delvbc;
-            cbhat = Cb + Gpi * delvbe + Gmu * delvbc;
-            cc = Cc;
-            cb = Cb;
+            cchat = CurrentC + (Gm + Go) * delvbe - (Go + Gmu) * delvbc;
+            cbhat = CurrentB + Gpi * delvbe + Gmu * delvbc;
+            cc = CurrentC;
+            cb = CurrentB;
 
             /*
              *   check convergence

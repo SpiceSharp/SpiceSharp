@@ -217,36 +217,36 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJctBotGradingCoefficient.Value == mbp.BulkJctSideGradingCoefficient)
+                if (mbp.BulkJunctionBotGradingCoefficient.Value == mbp.BulkJunctionSideGradingCoefficient)
                 {
-                    if (mbp.BulkJctBotGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
-                        sarg = sargsw = Math.Exp(-mbp.BulkJctBotGradingCoefficient * Math.Log(arg));
+                        sarg = sargsw = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
                 }
                 else
                 {
-                    if (mbp.BulkJctBotGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJctBotGradingCoefficient * Math.Log(arg));
+                        sarg = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJctSideGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJctSideGradingCoefficient * Math.Log(arg));
+                        sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 /* NOSQRT */
@@ -267,29 +267,29 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJctBotGradingCoefficient.Value == .5 && mbp.BulkJctSideGradingCoefficient.Value == .5)
+                if (mbp.BulkJunctionBotGradingCoefficient.Value == .5 && mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 }
                 else
                 {
-                    if (mbp.BulkJctBotGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJctBotGradingCoefficient * Math.Log(arg));
+                        sarg = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJctSideGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJctSideGradingCoefficient * Math.Log(arg));
+                        sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 /* NOSQRT */

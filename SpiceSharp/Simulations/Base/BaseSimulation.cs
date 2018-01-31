@@ -130,7 +130,7 @@ namespace SpiceSharp.Simulations
         {
             var state = State;
             var config = BaseConfiguration;
-            state.Init = State.InitializationStates.InitJct;
+            state.Init = State.InitializationStates.InitJunction;
             state.Matrix.Complex = false;
 
             // First, let's try finding an operating point by using normal iterations
@@ -143,7 +143,7 @@ namespace SpiceSharp.Simulations
             // No convergence, try Gmin stepping
             if (config.NumGminSteps > 1)
             {
-                state.Init = State.InitializationStates.InitJct;
+                state.Init = State.InitializationStates.InitJunction;
                 CircuitWarning.Warning(this, "Starting Gmin stepping");
                 state.DiagGmin = config.Gmin;
                 for (int i = 0; i < config.NumGminSteps; i++)
@@ -168,7 +168,7 @@ namespace SpiceSharp.Simulations
             // Nope, still not converging, let's try source stepping
             if (config.NumSrcSteps > 1)
             {
-                state.Init = State.InitializationStates.InitJct;
+                state.Init = State.InitializationStates.InitJunction;
                 CircuitWarning.Warning(this, "Starting source stepping");
                 for (int i = 0; i <= config.NumSrcSteps; i++)
                 {
@@ -243,7 +243,7 @@ namespace SpiceSharp.Simulations
                     matrix.Preorder();
                     state.Sparse |= State.SparseStates.DidPreorder;
                 }
-                if (state.Init == State.InitializationStates.InitJct || state.Init == State.InitializationStates.InitTransient)
+                if (state.Init == State.InitializationStates.InitJunction || state.Init == State.InitializationStates.InitTransient)
                 {
                     state.Sparse |= State.SparseStates.ShouldReorder;
                 }
@@ -305,7 +305,7 @@ namespace SpiceSharp.Simulations
                         }
                         break;
 
-                    case State.InitializationStates.InitJct:
+                    case State.InitializationStates.InitJunction:
                         state.Init = State.InitializationStates.InitFix;
                         state.Sparse |= State.SparseStates.ShouldReorder;
                         break;
@@ -355,7 +355,7 @@ namespace SpiceSharp.Simulations
             if (state.UseDC)
             {
                 // Consider doing nodeset & ic assignments
-                if ((state.Init & (State.InitializationStates.InitJct | State.InitializationStates.InitFix)) != 0)
+                if ((state.Init & (State.InitializationStates.InitJunction | State.InitializationStates.InitFix)) != 0)
                 {
                     // Do nodesets
                     for (int i = 0; i < nodes.Count; i++)

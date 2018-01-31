@@ -20,8 +20,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Extra variables
         /// </summary>
-        public double TJctCap { get; protected set; }
-        public double TJctPot { get; protected set; }
+        public double TJunctionCap { get; protected set; }
+        public double TJunctionPot { get; protected set; }
         public double TSatCur { get; protected set; }
         public double TF1 { get; protected set; }
         public double TDepCap { get; protected set; }
@@ -79,19 +79,19 @@ namespace SpiceSharp.Components.DiodeBehaviors
             pbfact1 = -2 * modeltemp.Vtnom * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
             pbo = (mbp.JunctionPotential - pbfact1) / fact1;
             gmaold = (mbp.JunctionPotential - pbo) / pbo;
-            TJctCap = mbp.JunctionCap / (1 + mbp.GradingCoefficient * (400e-6 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
-            TJctPot = pbfact + fact2 * pbo;
-            gmanew = (TJctPot - pbo) / pbo;
-            TJctCap *= 1 + mbp.GradingCoefficient * (400e-6 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
+            TJunctionCap = mbp.JunctionCap / (1 + mbp.GradingCoefficient * (400e-6 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            TJunctionPot = pbfact + fact2 * pbo;
+            gmanew = (TJunctionPot - pbo) / pbo;
+            TJunctionCap *= 1 + mbp.GradingCoefficient * (400e-6 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
             TSatCur = mbp.SaturationCurrent * Math.Exp(((bp.Temperature / mbp.NominalTemperature) - 1) * mbp.ActivationEnergy /
                 (mbp.EmissionCoefficient * vt) + mbp.SaturationCurrentExp / mbp.EmissionCoefficient * Math.Log(bp.Temperature / mbp.NominalTemperature));
 
             // the defintion of f1, just recompute after temperature adjusting all the variables used in it
-            TF1 = TJctPot * (1 - Math.Exp((1 - mbp.GradingCoefficient) * modeltemp.Xfc)) / (1 - mbp.GradingCoefficient);
+            TF1 = TJunctionPot * (1 - Math.Exp((1 - mbp.GradingCoefficient) * modeltemp.Xfc)) / (1 - mbp.GradingCoefficient);
 
             // same for Depletion Capacitance
-            TDepCap = mbp.DepletionCapCoefficient * TJctPot;
+            TDepCap = mbp.DepletionCapCoefficient * TJunctionPot;
             
             // and Vcrit
             vte = mbp.EmissionCoefficient * vt;

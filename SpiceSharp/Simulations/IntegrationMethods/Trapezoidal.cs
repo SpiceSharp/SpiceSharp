@@ -102,7 +102,7 @@ namespace SpiceSharp.IntegrationMethods
                     break;
 
                 case 2:
-                    // Adams-Bashforth method (second order for variable timeSteps)
+                    // Adams-Bashforth method (second order for variable timesteps)
                     b = -DeltaOld[0] / (2.0 * DeltaOld[1]);
                     a = 1 - b;
                     for (int i = 0; i < Solutions[0].Length; i++)
@@ -119,8 +119,8 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Truncate the timeStep
-        /// Uses the Local Truncation Error (LTE) to calculate an approximate timeStep.
+        /// Truncate the timestep
+        /// Uses the Local Truncation Error (LTE) to calculate an approximate timestep.
         /// The method is slightly different from the original Spice 3f5 version.
         /// </summary>
         /// <param name="sender">Sender</param>
@@ -187,7 +187,7 @@ namespace SpiceSharp.IntegrationMethods
                     throw new CircuitException("Invalid order");
             }
 
-            // Get the minimum timeStep
+            // Get the minimum timestep
             args.Delta = timetemp;
         }
 
@@ -214,17 +214,17 @@ namespace SpiceSharp.IntegrationMethods
                     throw new CircuitException("Invalid order {0}".FormatString(Order));
             }
 
-            // Store the derivative w.r.t. the current timeStep
+            // Store the derivative w.r.t. the current timestep
             Slope = ag[0];
         }
 
         /// <summary>
-        /// Calculate the timeStep based on the LTE (Local Truncation Error)
+        /// Calculate the timestep based on the LTE (Local Truncation Error)
         /// </summary>
         /// <param name="history">History</param>
         /// <param name="index">Index</param>
-        /// <param name="timeStep">TimeStep</param>
-        public override void LocalTruncateError(History<Vector<double>> history, int index, ref double timeStep)
+        /// <param name="timestep">Timestep</param>
+        public override void LocalTruncateError(History<Vector<double>> history, int index, ref double timestep)
         {
             if (history == null)
                 throw new ArgumentNullException(nameof(history));
@@ -261,7 +261,7 @@ namespace SpiceSharp.IntegrationMethods
                     deltmp[i] = deltmp[i + 1] + DeltaOld[i];
             }
 
-            // Calculate the new timeStep
+            // Calculate the new timestep
             double factor;
             switch (Order)
             {
@@ -275,8 +275,8 @@ namespace SpiceSharp.IntegrationMethods
             else if (Order > 2)
                 del = Math.Exp(Math.Log(del) / Order);
 
-            // Return the timeStep
-            timeStep = Math.Min(timeStep, del);
+            // Return the timestep
+            timestep = Math.Min(timestep, del);
         }
     }
 }

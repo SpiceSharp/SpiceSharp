@@ -89,7 +89,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         protected StateDerivative ChargeBC { get; private set; }
         protected StateDerivative ChargeCS { get; private set; }
         protected StateDerivative ChargeBX { get; private set; }
-        protected StateHistory CexBC { get; private set; }
+        protected StateHistory ExcessPhaseCurrentBC { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -217,7 +217,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             ChargeBC = states.CreateDerivative();
             ChargeCS = states.CreateDerivative();
             ChargeBX = states.CreateDerivative();
-            CexBC = states.CreateHistory();
+            ExcessPhaseCurrentBC = states.CreateHistory();
         }
 
         /// <summary>
@@ -233,10 +233,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2,
                 xms, xtf, ovtf, xjtf, argtf, tmp, sarg, f1, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
 
-            double cbe = load.Cbe;
-            double cbc = load.Cbc;
-            double gbe = load.Gbe;
-            double qb = load.Qb;
+            double cbe = load.CurrentBE;
+            double cbc = load.CurrentBC;
+            double gbe = load.CondBE;
+            double qb = load.BaseCharge;
             double dqbdve = load.DqbDve;
 
             double vbe = load.Vbe;
@@ -244,29 +244,29 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double vbx = mbp.BipolarType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
             double vcs = mbp.BipolarType * (state.Solution[substrateNode] - state.Solution[colPrimeNode]);
 
-            CexBC.Current = load.Cbe / load.Qb;
+            ExcessPhaseCurrentBC.Current = load.CurrentBE / load.BaseCharge;
 
             /* 
              * charge storage elements
              */
             tf = mbp.TransitTimeForward;
             tr = mbp.TransitTimeReverse;
-            czbe = temp.TBEcap * bp.Area;
-            pe = temp.TBEpot;
+            czbe = temp.TempBECap * bp.Area;
+            pe = temp.TempBEPotential;
             xme = mbp.JunctionExpBE;
             cdis = mbp.BaseFractionBCCap;
-            ctot = temp.TBCcap * bp.Area;
+            ctot = temp.TempBCCap * bp.Area;
             czbc = ctot * cdis;
             czbx = ctot - czbc;
-            pc = temp.TBCpot;
+            pc = temp.TempBCPotential;
             xmc = mbp.JunctionExpBC;
-            fcpe = temp.TDepCap;
+            fcpe = temp.TempDepletionCap;
             czcs = mbp.CapCS * bp.Area;
             ps = mbp.PotentialSubstrate;
             xms = mbp.ExponentialSubstrate;
             xtf = mbp.TransitTimeBiasCoefficientForward;
             ovtf = modeltemp.TransitTimeVbcFactor;
-            xjtf = mbp.TransitTimeHighCurrentF * bp.Area;
+            xjtf = mbp.TransitTimeHighCurrentForward * bp.Area;
             if (tf != 0 && vbe > 0)
             {
                 argtf = 0;
@@ -297,15 +297,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                f1 = temp.Tf1;
+                f1 = temp.TempFactor1;
                 f2 = modeltemp.F2;
                 f3 = modeltemp.F3;
                 czbef2 = czbe / f2;
                 ChargeBE.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
                      fcpe * fcpe));
             }
-            fcpc = temp.Tf4;
-            f1 = temp.Tf5;
+            fcpc = temp.TempFactor4;
+            f1 = temp.TempFactor5;
             f2 = modeltemp.F6;
             f3 = modeltemp.F7;
             if (vbc < fcpc)
@@ -363,11 +363,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 xms, xtf, ovtf, xjtf, argtf, tmp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, czbxf2;
             
 
-            double cbe = load.Cbe;
-            double cbc = load.Cbc;
-            double gbe = load.Gbe;
-            double gbc = load.Gbc;
-            double qb = load.Qb;
+            double cbe = load.CurrentBE;
+            double cbc = load.CurrentBC;
+            double gbe = load.CondBE;
+            double gbc = load.CondBC;
+            double qb = load.BaseCharge;
             double dqbdvc = load.DqbDvc;
             double dqbdve = load.DqbDve;
             double geqcb = 0;
@@ -387,22 +387,22 @@ namespace SpiceSharp.Components.BipolarBehaviors
              */
             tf = mbp.TransitTimeForward;
             tr = mbp.TransitTimeReverse;
-            czbe = temp.TBEcap * bp.Area;
-            pe = temp.TBEpot;
+            czbe = temp.TempBECap * bp.Area;
+            pe = temp.TempBEPotential;
             xme = mbp.JunctionExpBE;
             cdis = mbp.BaseFractionBCCap;
-            ctot = temp.TBCcap * bp.Area;
+            ctot = temp.TempBCCap * bp.Area;
             czbc = ctot * cdis;
             czbx = ctot - czbc;
-            pc = temp.TBCpot;
+            pc = temp.TempBCPotential;
             xmc = mbp.JunctionExpBC;
-            fcpe = temp.TDepCap;
+            fcpe = temp.TempDepletionCap;
             czcs = mbp.CapCS * bp.Area;
             ps = mbp.PotentialSubstrate;
             xms = mbp.ExponentialSubstrate;
             xtf = mbp.TransitTimeBiasCoefficientForward;
             ovtf = modeltemp.TransitTimeVbcFactor;
-            xjtf = mbp.TransitTimeHighCurrentF * bp.Area;
+            xjtf = mbp.TransitTimeHighCurrentForward * bp.Area;
             if (tf != 0 && vbe > 0)
             {
                 argtf = 0;
@@ -437,7 +437,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                f1 = temp.Tf1;
+                f1 = temp.TempFactor1;
                 f2 = modeltemp.F2;
                 f3 = modeltemp.F3;
                 czbef2 = czbe / f2;
@@ -445,8 +445,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
                      fcpe * fcpe));
                 capbe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
             }
-            fcpc = temp.Tf4;
-            f1 = temp.Tf5;
+            fcpc = temp.TempFactor4;
+            f1 = temp.TempFactor5;
             f2 = modeltemp.F6;
             f3 = modeltemp.F7;
             if (vbc < fcpc)
@@ -545,14 +545,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         /// <summary>
-        /// Truncate the timeStep
+        /// Truncate the timestep
         /// </summary>
-        /// <param name="timeStep">Current timeStep</param>
-        public override void Truncate(ref double timeStep)
+        /// <param name="timestep">Current timestep</param>
+        public override void Truncate(ref double timestep)
         {
-            ChargeBE.LocalTruncationError(ref timeStep);
-            ChargeBC.LocalTruncationError(ref timeStep);
-            ChargeCS.LocalTruncationError(ref timeStep);
+            ChargeBE.LocalTruncationError(ref timestep);
+            ChargeBC.LocalTruncationError(ref timestep);
+            ChargeCS.LocalTruncationError(ref timestep);
         }
 
         /// <summary>
@@ -574,11 +574,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
              * weil's approx. for excess phase applied with backward - 
              * euler integration
              */
-            double cbe = args.cex;
-            double gbe = args.gex;
+            double cbe = args.ExcessPhaseCurrent;
+            double gbe = args.ExcessPhaseConduct;
 
-            double delta = CexBC.TimeSteps[0];
-            double prevdelta = CexBC.TimeSteps[1];
+            double delta = ExcessPhaseCurrentBC.Timesteps[0];
+            double prevdelta = ExcessPhaseCurrentBC.Timesteps[1];
             arg1 = delta / td;
             arg2 = 3 * arg1;
             arg1 = arg2 * arg1;
@@ -590,11 +590,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 state.States[1][State + Cexbc] = cbe / qb;
                 state.States[2][State + Cexbc] = state.States[1][State + Cexbc];
             } */
-            args.cc = (CexBC[1] * (1 + delta / prevdelta + arg2) 
-                - CexBC[2] * delta / prevdelta) / denom;
-            args.cex = cbe * arg3;
-            args.gex = gbe * arg3;
-            CexBC.Current = args.cc + args.cex / args.qb;
+            args.CollectorCurrent = (ExcessPhaseCurrentBC[1] * (1 + delta / prevdelta + arg2) 
+                - ExcessPhaseCurrentBC[2] * delta / prevdelta) / denom;
+            args.ExcessPhaseCurrent = cbe * arg3;
+            args.ExcessPhaseConduct = gbe * arg3;
+            ExcessPhaseCurrentBC.Current = args.CollectorCurrent + args.ExcessPhaseCurrent / args.BaseCharge;
         }
     }
 }

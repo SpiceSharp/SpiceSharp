@@ -76,12 +76,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 mbp.NominalTemperature.Value = simulation.State.NominalTemperature;
             Fact1 = mbp.NominalTemperature / Circuit.ReferenceTemperature;
 
-            if (!mbp.LeakBEcurrent.Given)
+            if (!mbp.LeakBECurrent.Given)
             {
                 if (mbp.C2.Given)
-                    mbp.LeakBEcurrent.Value = mbp.C2 * mbp.SatCur;
+                    mbp.LeakBECurrent.Value = mbp.C2 * mbp.SatCur;
                 else
-                    mbp.LeakBEcurrent.Value = 0;
+                    mbp.LeakBECurrent.Value = 0;
             }
             if (!mbp.LeakBCCurrent.Given)
             {
@@ -105,8 +105,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			 * leakage saturation current).   TQ  6 / 29 / 84
 			 */
 
-            if (mbp.EarlyVoltagForward.Given && mbp.EarlyVoltagForward != 0)
-                InvEarlyVoltForward = 1 / mbp.EarlyVoltagForward;
+            if (mbp.EarlyVoltageForward.Given && mbp.EarlyVoltageForward != 0)
+                InvEarlyVoltForward = 1 / mbp.EarlyVoltageForward;
             else
                 InvEarlyVoltForward = 0;
             if (mbp.RollOffForward.Given && mbp.RollOffForward != 0)
@@ -129,8 +129,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 EmitterConduct = 1 / mbp.EmitterResistance;
             else
                 EmitterConduct = 0;
-            if (mbp.TransitTimeFVBC.Given && mbp.TransitTimeFVBC != 0)
-                TransitTimeVbcFactor = 1 / (mbp.TransitTimeFVBC * 1.44);
+            if (mbp.TransitTimeForwardVBC.Given && mbp.TransitTimeForwardVBC != 0)
+                TransitTimeVbcFactor = 1 / (mbp.TransitTimeForwardVBC * 1.44);
             else
                 TransitTimeVbcFactor = 0;
             ExcessPhaseFactor = (mbp.ExcessPhase / (180.0 / Math.PI)) * mbp.TransitTimeForward;

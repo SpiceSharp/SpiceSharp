@@ -198,34 +198,34 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             TVbi = mbp.Vt0 - mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi)) + .5 * (modeltemp.Egfet1 - egfet) +
                 mbp.MosfetType * .5 * (TPhi - mbp.Phi);
             TVto = TVbi + mbp.MosfetType * mbp.Gamma * Math.Sqrt(TPhi);
-            TSatCur = mbp.JctSatCur * Math.Exp(-egfet / vt + modeltemp.Egfet1 / modeltemp.Vtnom);
-            TSatCurDens = mbp.JctSatCurDensity * Math.Exp(-egfet / vt + modeltemp.Egfet1 / modeltemp.Vtnom);
-            pbo = (mbp.BulkJctPotential - modeltemp.Pbfact1) / modeltemp.Fact1;
-            gmaold = (mbp.BulkJctPotential - pbo) / pbo;
-            capfact = 1 / (1 + mbp.BulkJctBotGradingCoefficient * (4e-4 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            TSatCur = mbp.JunctionSatCur * Math.Exp(-egfet / vt + modeltemp.Egfet1 / modeltemp.Vtnom);
+            TSatCurDens = mbp.JunctionSatCurDensity * Math.Exp(-egfet / vt + modeltemp.Egfet1 / modeltemp.Vtnom);
+            pbo = (mbp.BulkJunctionPotential - modeltemp.Pbfact1) / modeltemp.Fact1;
+            gmaold = (mbp.BulkJunctionPotential - pbo) / pbo;
+            capfact = 1 / (1 + mbp.BulkJunctionBotGradingCoefficient * (4e-4 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
             TCbd = mbp.CapBD * capfact;
             TCbs = mbp.CapBS * capfact;
             TCj = mbp.BulkCapFactor * capfact;
-            capfact = 1 / (1 + mbp.BulkJctSideGradingCoefficient * (4e-4 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            capfact = 1 / (1 + mbp.BulkJunctionSideGradingCoefficient * (4e-4 * (mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
             TCjsw = mbp.SidewallCapFactor * capfact;
             TBulkPot = fact2 * pbo + pbfact;
             gmanew = (TBulkPot - pbo) / pbo;
-            capfact = (1 + mbp.BulkJctBotGradingCoefficient * (4e-4 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew));
+            capfact = (1 + mbp.BulkJunctionBotGradingCoefficient * (4e-4 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew));
             TCbd *= capfact;
             TCbs *= capfact;
             TCj *= capfact;
-            capfact = (1 + mbp.BulkJctSideGradingCoefficient * (4e-4 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew));
+            capfact = (1 + mbp.BulkJunctionSideGradingCoefficient * (4e-4 * (bp.Temperature - Circuit.ReferenceTemperature) - gmanew));
             TCjsw *= capfact;
             TDepCap = mbp.ForwardCapDepCoefficient * TBulkPot;
 
-            if ((mbp.JctSatCurDensity.Value == 0) || (bp.DrainArea.Value == 0) || (bp.SourceArea.Value == 0))
+            if ((mbp.JunctionSatCurDensity.Value == 0) || (bp.DrainArea.Value == 0) || (bp.SourceArea.Value == 0))
             {
-                SourceVcrit = DrainVcrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.JctSatCur));
+                SourceVcrit = DrainVcrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.JunctionSatCur));
             }
             else
             {
-                DrainVcrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.JctSatCurDensity * bp.DrainArea));
-                SourceVcrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.JctSatCurDensity * bp.SourceArea));
+                DrainVcrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.JunctionSatCurDensity * bp.DrainArea));
+                SourceVcrit = vt * Math.Log(vt / (Circuit.Root2 * mbp.JunctionSatCurDensity * bp.SourceArea));
             }
             if (mbp.CapBD.Given)
             {
@@ -251,16 +251,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 czbdsw = 0;
             }
             arg = 1 - mbp.ForwardCapDepCoefficient;
-            sarg = Math.Exp((-mbp.BulkJctBotGradingCoefficient) * Math.Log(arg));
-            sargsw = Math.Exp((-mbp.BulkJctSideGradingCoefficient) * Math.Log(arg));
+            sarg = Math.Exp((-mbp.BulkJunctionBotGradingCoefficient) * Math.Log(arg));
+            sargsw = Math.Exp((-mbp.BulkJunctionSideGradingCoefficient) * Math.Log(arg));
             Cbd = czbd;
             Cbdsw = czbdsw;
-            F2d = czbd * (1 - mbp.ForwardCapDepCoefficient * (1 + mbp.BulkJctBotGradingCoefficient)) * sarg / arg + czbdsw * (1 -
-                mbp.ForwardCapDepCoefficient * (1 + mbp.BulkJctSideGradingCoefficient)) * sargsw / arg;
-            F3d = czbd * mbp.BulkJctBotGradingCoefficient * sarg / arg / mbp.BulkJctPotential + czbdsw *
-                mbp.BulkJctSideGradingCoefficient * sargsw / arg / mbp.BulkJctPotential;
-            F4d = czbd * mbp.BulkJctPotential * (1 - arg * sarg) / (1 - mbp.BulkJctBotGradingCoefficient) + czbdsw *
-                mbp.BulkJctPotential * (1 - arg * sargsw) / (1 - mbp.BulkJctSideGradingCoefficient) - F3d / 2 * (TDepCap *
+            F2d = czbd * (1 - mbp.ForwardCapDepCoefficient * (1 + mbp.BulkJunctionBotGradingCoefficient)) * sarg / arg + czbdsw * (1 -
+                mbp.ForwardCapDepCoefficient * (1 + mbp.BulkJunctionSideGradingCoefficient)) * sargsw / arg;
+            F3d = czbd * mbp.BulkJunctionBotGradingCoefficient * sarg / arg / mbp.BulkJunctionPotential + czbdsw *
+                mbp.BulkJunctionSideGradingCoefficient * sargsw / arg / mbp.BulkJunctionPotential;
+            F4d = czbd * mbp.BulkJunctionPotential * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) + czbdsw *
+                mbp.BulkJunctionPotential * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient) - F3d / 2 * (TDepCap *
                 TDepCap) - TDepCap * F2d;
             if (mbp.CapBS.Given)
             {
@@ -286,16 +286,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 czbssw = 0;
             }
             arg = 1 - mbp.ForwardCapDepCoefficient;
-            sarg = Math.Exp((-mbp.BulkJctBotGradingCoefficient) * Math.Log(arg));
-            sargsw = Math.Exp((-mbp.BulkJctSideGradingCoefficient) * Math.Log(arg));
+            sarg = Math.Exp((-mbp.BulkJunctionBotGradingCoefficient) * Math.Log(arg));
+            sargsw = Math.Exp((-mbp.BulkJunctionSideGradingCoefficient) * Math.Log(arg));
             Cbs = czbs;
             Cbssw = czbssw;
-            F2s = czbs * (1 - mbp.ForwardCapDepCoefficient * (1 + mbp.BulkJctBotGradingCoefficient)) * sarg / arg + czbssw * (1 -
-                mbp.ForwardCapDepCoefficient * (1 + mbp.BulkJctSideGradingCoefficient)) * sargsw / arg;
-            F3s = czbs * mbp.BulkJctBotGradingCoefficient * sarg / arg / mbp.BulkJctPotential + czbssw *
-                mbp.BulkJctSideGradingCoefficient * sargsw / arg / mbp.BulkJctPotential;
-            F4s = czbs * mbp.BulkJctPotential * (1 - arg * sarg) / (1 - mbp.BulkJctBotGradingCoefficient) + czbssw *
-                mbp.BulkJctPotential * (1 - arg * sargsw) / (1 - mbp.BulkJctSideGradingCoefficient) - F3s / 2 * (TBulkPot *
+            F2s = czbs * (1 - mbp.ForwardCapDepCoefficient * (1 + mbp.BulkJunctionBotGradingCoefficient)) * sarg / arg + czbssw * (1 -
+                mbp.ForwardCapDepCoefficient * (1 + mbp.BulkJunctionSideGradingCoefficient)) * sargsw / arg;
+            F3s = czbs * mbp.BulkJunctionBotGradingCoefficient * sarg / arg / mbp.BulkJunctionPotential + czbssw *
+                mbp.BulkJunctionSideGradingCoefficient * sargsw / arg / mbp.BulkJunctionPotential;
+            F4s = czbs * mbp.BulkJunctionPotential * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) + czbssw *
+                mbp.BulkJunctionPotential * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient) - F3s / 2 * (TBulkPot *
                 TBulkPot) - TBulkPot * F2s;
         }
     }

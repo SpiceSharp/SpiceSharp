@@ -155,7 +155,7 @@ namespace SpiceSharp.Simulations
                     matrix.Preorder();
                     state.Sparse |= State.SparseStates.DidPreorder;
                 }
-                if (state.Init == State.InitializationStates.InitJct || state.Init == State.InitializationStates.InitTransient)
+                if (state.Init == State.InitializationStates.InitJunction || state.Init == State.InitializationStates.InitTransient)
                 {
                     state.Sparse |= State.SparseStates.ShouldReorder;
                 }
@@ -217,7 +217,7 @@ namespace SpiceSharp.Simulations
                         }
                         break;
 
-                    case State.InitializationStates.InitJct:
+                    case State.InitializationStates.InitJunction:
                         state.Init = State.InitializationStates.InitFix;
                         state.Sparse |= State.SparseStates.ShouldReorder;
                         break;

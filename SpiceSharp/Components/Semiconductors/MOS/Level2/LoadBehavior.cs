@@ -300,7 +300,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				* look at other possibilities 
 				*/
 
-                if ((state.Init == State.InitializationStates.InitJct) && !bp.Off)
+                if ((state.Init == State.InitializationStates.InitJunction) && !bp.Off)
                 {
                     vds = mbp.MosfetType * bp.InitialVds;
                     vgs = mbp.MosfetType * bp.InitialVgs;

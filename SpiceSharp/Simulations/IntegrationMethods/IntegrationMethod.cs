@@ -48,22 +48,22 @@ namespace SpiceSharp.IntegrationMethods
         public double Time { get; protected set; } = 0.0;
 
         /// <summary>
-        /// Gets or sets the current timeStep
+        /// Gets or sets the current timestep
         /// </summary>
         public double Delta { get; set; } = 0.0;
 
         /// <summary>
-        /// Gets or sets the saved timeStep
+        /// Gets or sets the saved timestep
         /// </summary>
         public double SaveDelta { get; set; } = 0.0;
 
         /// <summary>
-        /// Gets or sets the old timeStep
+        /// Gets or sets the old timestep
         /// </summary>
         public double OldDelta { get; set; } = 0.0;
 
         /// <summary>
-        /// Gets or sets the minimum delta timeStep
+        /// Gets or sets the minimum delta timestep
         /// </summary>
         public double DeltaMin { get; set; } = 1e-12;
 
@@ -78,13 +78,13 @@ namespace SpiceSharp.IntegrationMethods
         public History<Vector<double>> Solutions { get; } = null;
 
         /// <summary>
-        /// Get the prediction for the next timeStep
+        /// Get the prediction for the next timestep
         /// </summary>
         public Vector<double> Prediction { get; protected set; } = null;
 
         /// <summary>
         /// The first order derivative of any variable that is
-        /// dependent on the timeStep
+        /// dependent on the timestep
         /// </summary>
         public double Slope { get; protected set; } = 0.0;
 
@@ -100,7 +100,7 @@ namespace SpiceSharp.IntegrationMethods
         Collection<TransientBehavior> transientBehaviors;
 
         /// <summary>
-        /// Event called when the timeStep needs to be truncated
+        /// Event called when the timestep needs to be truncated
         /// </summary>
         public event EventHandler<TruncationEventArgs> Truncate;
 
@@ -115,7 +115,7 @@ namespace SpiceSharp.IntegrationMethods
                 throw new CircuitException("Invalid order {0}".FormatString(maxOrder));
             MaxOrder = maxOrder;
 
-            // Allocate history of timeSteps
+            // Allocate history of timesteps
             DeltaOld = new ArrayHistory<double>(maxOrder + 2);
 
             // Allocate history of solutions
@@ -135,7 +135,7 @@ namespace SpiceSharp.IntegrationMethods
                 throw new CircuitException("Invalid order {0}".FormatString(maxOrder));
             MaxOrder = maxOrder;
 
-            // Allocate history of timeSteps
+            // Allocate history of timesteps
             DeltaOld = new ArrayHistory<double>(maxOrder + 2);
 
             // Allocate history of solutions
@@ -200,8 +200,8 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Advance the time with the specified timeStep for the first time
-        /// The actual timeStep may be smaller due to breakpoints
+        /// Advance the time with the specified timestep for the first time
+        /// The actual timestep may be smaller due to breakpoints
         /// </summary>
         public void Resume()
         {
@@ -211,7 +211,7 @@ namespace SpiceSharp.IntegrationMethods
                 // First timepoint after a breakpoint: cut integration order
                 Order = 1;
 
-                // Limit the next timeStep if there is a breakpoint
+                // Limit the next timestep if there is a breakpoint
                 double mt = Math.Min(SaveDelta, Breaks.Delta);
                 Delta = Math.Min(Delta, 0.1 * mt);
 
@@ -241,7 +241,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         public void TryDelta()
         {
-            // Check for invalid timeSteps
+            // Check for invalid timesteps
             if (double.IsNaN(Delta))
                 throw new CircuitException("Invalid time step");
 
@@ -262,14 +262,14 @@ namespace SpiceSharp.IntegrationMethods
         public void CutOrder() => Order = 1;
 
         /// <summary>
-        /// Retry a new timeStep after the current one failed
-        /// Will cut the order and cut the timeStep
+        /// Retry a new timestep after the current one failed
+        /// Will cut the order and cut the timestep
         /// </summary>
-        /// <param name="delta">The new timeStep</param>
+        /// <param name="delta">The new timestep</param>
         public void Retry(double delta)
         {
             if (delta > Delta)
-                throw new CircuitException("The time step can only shrink when retrying a new timeStep");
+                throw new CircuitException("The time step can only shrink when retrying a new timestep");
             if (delta < DeltaMin)
                 delta = DeltaMin;
 
@@ -288,7 +288,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Note: This method does not advance time!
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        /// <returns>True if the timeStep isn't cut</returns>
+        /// <returns>True if the timestep isn't cut</returns>
         public bool LteControl(TimeSimulation simulation)
         {
             // Invoke truncation event
@@ -365,7 +365,7 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Calculate a prediction based on the current timeStep
+        /// Calculate a prediction based on the current timestep
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
         public abstract void Predict(TimeSimulation simulation);
@@ -377,11 +377,11 @@ namespace SpiceSharp.IntegrationMethods
         public abstract void ComputeCoefficients(TimeSimulation simulation);
 
         /// <summary>
-        /// Calculate the new timeStep based on the LTE (local truncation error)
+        /// Calculate the new timestep based on the LTE (local truncation error)
         /// </summary>
         /// <param name="history">The history of states</param>
         /// <param name="index">Index</param>
-        /// <param name="timeStep">TimeStep</param>
-        public abstract void LocalTruncateError(History<Vector<double>> history, int index, ref double timeStep);
+        /// <param name="timestep">Timestep</param>
+        public abstract void LocalTruncateError(History<Vector<double>> history, int index, ref double timestep);
     }
 }

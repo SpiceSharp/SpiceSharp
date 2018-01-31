@@ -320,7 +320,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 				* called.  We still just initialize the three voltages
 				*/
 
-                if ((state.Init == State.InitializationStates.InitJct) && !bp.Off)
+                if ((state.Init == State.InitializationStates.InitJunction) && !bp.Off)
                 {
                     vds = mbp.MosfetType * bp.InitialVds;
                     vgs = mbp.MosfetType * bp.InitialVgs;

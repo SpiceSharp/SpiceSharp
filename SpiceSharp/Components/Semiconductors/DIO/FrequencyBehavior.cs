@@ -126,7 +126,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             double vd = state.Solution[posPrimeNode] - state.Solution[negateNode];
 
             // charge storage elements
-            czero = temp.TJctCap * bp.Area;
+            czero = temp.TJunctionCap * bp.Area;
             if (vd < temp.TDepCap)
             {
                 arg = 1 - vd / mbp.JunctionPotential;

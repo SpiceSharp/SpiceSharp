@@ -27,6 +27,7 @@
       <Word>Diag</Word> <!-- Diagonal -->
       <Word>Gmin</Word> <!-- Minimum conductance -->
       <Word>Jacobian</Word>
+      <Word>Timestep</Word>
       
       <!-- Bipolar junction transistor -->
       <Word>Npn</Word>
@@ -59,6 +60,8 @@
   </Words>
   <Acronyms>
     <CasingExceptions>
+      <Acronym>Cond</Acronym> <!-- Conduction -->
+      
       <!-- Bipolar junction transistor abbreviations -->
       <Acronym>BE</Acronym> <!-- Base-Emitter -->
       <Acronym>CE</Acronym> <!-- Collector-Emitter -->

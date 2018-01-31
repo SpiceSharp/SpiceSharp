@@ -10,21 +10,21 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Collector current
         /// </summary>
-        public double cc { get; set; }
+        public double CollectorCurrent { get; set; }
 
         /// <summary>
         /// Charges on the base
         /// </summary>
-        public double qb { get; set; }
+        public double BaseCharge { get; set; }
 
         /// <summary>
         /// Excess phase current
         /// </summary>
-        public double cex { get; set; }
+        public double ExcessPhaseCurrent { get; set; }
 
         /// <summary>
         /// Excess phase conductance
         /// </summary>
-        public double gex { get; set; }
+        public double ExcessPhaseConduct { get; set; }
     }
 }

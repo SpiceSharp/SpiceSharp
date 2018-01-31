@@ -254,41 +254,41 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJctBotGradingCoefficient.Value == mbp.BulkJctSideGradingCoefficient)
+                if (mbp.BulkJunctionBotGradingCoefficient.Value == mbp.BulkJunctionSideGradingCoefficient)
                 {
-                    if (mbp.BulkJctBotGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
-                        sarg = sargsw = Math.Exp(-mbp.BulkJctBotGradingCoefficient * Math.Log(arg));
+                        sarg = sargsw = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
                 }
                 else
                 {
-                    if (mbp.BulkJctBotGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJctBotGradingCoefficient * Math.Log(arg));
+                        sarg = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJctSideGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJctSideGradingCoefficient * Math.Log(arg));
+                        sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 // NOSQRT
-                ChargeBS.Current = temp.TBulkPot * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJctBotGradingCoefficient) +
-                    temp.Cbssw * (1 - arg * sargsw) / (1 - mbp.BulkJctSideGradingCoefficient));
+                ChargeBS.Current = temp.TBulkPot * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.Cbssw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
             }
             else
             {
@@ -305,34 +305,34 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJctBotGradingCoefficient.Value == .5 && mbp.BulkJctSideGradingCoefficient.Value == .5)
+                if (mbp.BulkJunctionBotGradingCoefficient.Value == .5 && mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 }
                 else
                 {
-                    if (mbp.BulkJctBotGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJctBotGradingCoefficient * Math.Log(arg));
+                        sarg = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJctSideGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJctSideGradingCoefficient * Math.Log(arg));
+                        sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 /* NOSQRT */
-                ChargeBD.Current = temp.TBulkPot * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJctBotGradingCoefficient) +
-                    temp.Cbdsw * (1 - arg * sargsw) / (1 - mbp.BulkJctSideGradingCoefficient));
+                ChargeBD.Current = temp.TBulkPot * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.Cbdsw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
             }
             else
             {
@@ -430,41 +430,41 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJctBotGradingCoefficient.Value == mbp.BulkJctSideGradingCoefficient)
+                if (mbp.BulkJunctionBotGradingCoefficient.Value == mbp.BulkJunctionSideGradingCoefficient)
                 {
-                    if (mbp.BulkJctBotGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
-                        sarg = sargsw = Math.Exp(-mbp.BulkJctBotGradingCoefficient * Math.Log(arg));
+                        sarg = sargsw = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
                 }
                 else
                 {
-                    if (mbp.BulkJctBotGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJctBotGradingCoefficient * Math.Log(arg));
+                        sarg = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJctSideGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJctSideGradingCoefficient * Math.Log(arg));
+                        sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 // NOSQRT
-                ChargeBS.Current = temp.TBulkPot * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJctBotGradingCoefficient) +
-                    temp.Cbssw * (1 - arg * sargsw) / (1 - mbp.BulkJctSideGradingCoefficient));
+                ChargeBS.Current = temp.TBulkPot * (temp.Cbs * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.Cbssw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
                 CapBS = temp.Cbs * sarg + temp.Cbssw * sargsw;
             }
             else
@@ -483,34 +483,34 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJctBotGradingCoefficient.Value == .5 && mbp.BulkJctSideGradingCoefficient.Value == .5)
+                if (mbp.BulkJunctionBotGradingCoefficient.Value == .5 && mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 }
                 else
                 {
-                    if (mbp.BulkJctBotGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJctBotGradingCoefficient * Math.Log(arg));
+                        sarg = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJctSideGradingCoefficient.Value == .5)
+                    if (mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJctSideGradingCoefficient * Math.Log(arg));
+                        sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 /* NOSQRT */
-                ChargeBD.Current = temp.TBulkPot * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJctBotGradingCoefficient) +
-                    temp.Cbdsw * (1 - arg * sargsw) / (1 - mbp.BulkJctSideGradingCoefficient));
+                ChargeBD.Current = temp.TBulkPot * (temp.Cbd * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
+                    temp.Cbdsw * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
                 CapBD = temp.Cbd * sarg + temp.Cbdsw * sargsw;
             }
             else
@@ -618,14 +618,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         }
 
         /// <summary>
-        /// Truncate timeStep
+        /// Truncate timestep
         /// </summary>
-        /// <param name="timeStep">TimeStep</param>
-        public override void Truncate(ref double timeStep)
+        /// <param name="timestep">Timestep</param>
+        public override void Truncate(ref double timestep)
         {
-            ChargeGS.LocalTruncationError(ref timeStep);
-            ChargeGD.LocalTruncationError(ref timeStep);
-            ChargeGB.LocalTruncationError(ref timeStep);
+            ChargeGS.LocalTruncationError(ref timestep);
+            ChargeGD.LocalTruncationError(ref timestep);
+            ChargeGB.LocalTruncationError(ref timestep);
         }
     }
 }

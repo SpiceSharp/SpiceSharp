@@ -79,10 +79,10 @@ namespace SpiceSharp.IntegrationMethods
         public void Integrate(int index) => Method.Integrate(History, index);
 
         /// <summary>
-        /// Truncate timeStep
+        /// Truncate timestep
         /// </summary>
         /// <param name="index"></param>
-        public void LocalTruncationError(int index, ref double timeStep) => Method.LocalTruncateError(History, index, ref timeStep);
+        public void LocalTruncationError(int index, ref double timestep) => Method.LocalTruncateError(History, index, ref timestep);
 
         /// <summary>
         /// Clear all states for DC

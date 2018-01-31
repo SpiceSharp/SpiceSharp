@@ -147,7 +147,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             double vd = state.Solution[posPrimeNode] - state.Solution[negateNode];
 
             // charge storage elements
-            double czero = temp.TJctCap * bp.Area;
+            double czero = temp.TJunctionCap * bp.Area;
             if (vd < temp.TDepCap)
             {
                 arg = 1 - vd / mbp.JunctionPotential;
@@ -198,12 +198,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
         }
 
         /// <summary>
-        /// Use local truncation error to cut timeStep
+        /// Use local truncation error to cut timestep
         /// </summary>
-        /// <param name="timeStep">TimeStep</param>
-        public override void Truncate(ref double timeStep)
+        /// <param name="timestep">Timestep</param>
+        public override void Truncate(ref double timestep)
         {
-            CapCharge.LocalTruncationError(ref timeStep);
+            CapCharge.LocalTruncationError(ref timestep);
         }
     }
 }

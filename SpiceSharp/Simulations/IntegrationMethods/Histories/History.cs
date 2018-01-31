@@ -6,7 +6,7 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp.IntegrationMethods
 {
     /// <summary>
-    /// History of timeSteps
+    /// History of timesteps
     /// </summary>
     public abstract class History<T> : IEnumerable<T>
     {
@@ -23,7 +23,7 @@ namespace SpiceSharp.IntegrationMethods
         public abstract T this[int index] { get; }
 
         /// <summary>
-        /// Gets the number of timeSteps stored
+        /// Gets the number of timesteps stored
         /// </summary>
         public int Length { get; }
 

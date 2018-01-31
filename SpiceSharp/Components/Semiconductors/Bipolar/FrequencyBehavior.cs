@@ -53,15 +53,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Properties
         /// </summary>
         [PropertyName("cpi"), PropertyInfo("Internal base to emitter capactance")]
-        public double Capbe { get; protected set; }
+        public double CapBE { get; protected set; }
         [PropertyName("cmu"), PropertyInfo("Internal base to collector capactiance")]
-        public double Capbc { get; protected set; }
+        public double CapBC { get; protected set; }
         [PropertyName("cbx"), PropertyInfo("Base to collector capacitance")]
-        public double Capbx { get; protected set; }
+        public double CapBX { get; protected set; }
         [PropertyName("ccs"), PropertyInfo("Collector to substrate capacitance")]
-        public double Capcs { get; protected set; }
+        public double CapCS { get; protected set; }
 
-        public double Geqcb { get; protected set; }
+        public double GeqCB { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -195,10 +195,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double vcs = mbp.BipolarType * (state.Solution[substrateNode] - state.Solution[colPrimeNode]);
 
             // Get shared parameters
-            double cbe = load.Cbe;
-            double gbe = load.Gbe;
-            double gbc = load.Gbc;
-            double qb = load.Qb;
+            double cbe = load.CurrentBE;
+            double gbe = load.CondBE;
+            double gbc = load.CondBC;
+            double qb = load.BaseCharge;
             double dqbdve = load.DqbDve;
 
             /* 
@@ -206,22 +206,22 @@ namespace SpiceSharp.Components.BipolarBehaviors
              */
             tf = mbp.TransitTimeForward;
             tr = mbp.TransitTimeReverse;
-            czbe = temp.TBEcap * bp.Area;
-            pe = temp.TBEpot;
+            czbe = temp.TempBECap * bp.Area;
+            pe = temp.TempBEPotential;
             xme = mbp.JunctionExpBE;
             cdis = mbp.BaseFractionBCCap;
-            ctot = temp.TBCcap * bp.Area;
+            ctot = temp.TempBCCap * bp.Area;
             czbc = ctot * cdis;
             czbx = ctot - czbc;
-            pc = temp.TBCpot;
+            pc = temp.TempBCPotential;
             xmc = mbp.JunctionExpBC;
-            fcpe = temp.TDepCap;
+            fcpe = temp.TempDepletionCap;
             czcs = mbp.CapCS * bp.Area;
             ps = mbp.PotentialSubstrate;
             xms = mbp.ExponentialSubstrate;
             xtf = mbp.TransitTimeBiasCoefficientForward;
             ovtf = modeltemp.TransitTimeVbcFactor;
-            xjtf = mbp.TransitTimeHighCurrentF * bp.Area;
+            xjtf = mbp.TransitTimeHighCurrentForward * bp.Area;
             if (tf != 0 && vbe > 0)
             {
                 argtf = 0;
@@ -248,50 +248,50 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbe / pe;
                 sarg = Math.Exp(-xme * Math.Log(arg));
-                Capbe = tf * gbe + czbe * sarg;
+                CapBE = tf * gbe + czbe * sarg;
             }
             else
             {
                 f2 = modeltemp.F2;
                 f3 = modeltemp.F3;
                 czbef2 = czbe / f2;
-                Capbe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
+                CapBE = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
             }
 
-            fcpc = temp.Tf4;
+            fcpc = temp.TempFactor4;
             f2 = modeltemp.F6;
             f3 = modeltemp.F7;
             if (vbc < fcpc)
             {
                 arg = 1 - vbc / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                Capbc = tr * gbc + czbc * sarg;
+                CapBC = tr * gbc + czbc * sarg;
             }
             else
             {
                 czbcf2 = czbc / f2;
-                Capbc = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
+                CapBC = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
             }
             if (vbx < fcpc)
             {
                 arg = 1 - vbx / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                Capbx = czbx * sarg;
+                CapBX = czbx * sarg;
             }
             else
             {
                 czbxf2 = czbx / f2;
-                Capbx = czbxf2 * (f3 + xmc * vbx / pc);
+                CapBX = czbxf2 * (f3 + xmc * vbx / pc);
             }
             if (vcs < 0)
             {
                 arg = 1 - vcs / ps;
                 sarg = Math.Exp(-xms * Math.Log(arg));
-                Capcs = czcs * sarg;
+                CapCS = czcs * sarg;
             }
             else
             {
-                Capcs = czcs * (1 + xms * vcs / ps);
+                CapCS = czcs * (1 + xms * vcs / ps);
             }
         }
 
@@ -325,11 +325,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 gm = gm - go;
             }
             gx = load.Gx;
-            xcpi = Capbe * cstate.Laplace;
-            xcmu = Capbc * cstate.Laplace;
-            xcbx = Capbx * cstate.Laplace;
-            xccs = Capcs * cstate.Laplace;
-            xcmcb = Geqcb * cstate.Laplace;
+            xcpi = CapBE * cstate.Laplace;
+            xcmu = CapBC * cstate.Laplace;
+            xcbx = CapBX * cstate.Laplace;
+            xccs = CapCS * cstate.Laplace;
+            xcmcb = GeqCB * cstate.Laplace;
 
             CollectorCollectorPtr.Add(gcpr);
             BaseBasePtr.Add(gx + xcbx);

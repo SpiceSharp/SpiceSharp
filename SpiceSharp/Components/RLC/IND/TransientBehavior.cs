@@ -153,12 +153,12 @@ namespace SpiceSharp.Components.InductorBehaviors
         }
 
         /// <summary>
-        /// Truncate timeStep
+        /// Truncate timestep
         /// </summary>
-        /// <param name="timeStep">TimeStep</param>
-        public override void Truncate(ref double timeStep)
+        /// <param name="timestep">Timestep</param>
+        public override void Truncate(ref double timestep)
         {
-            flux.LocalTruncationError(ref timeStep);
+            flux.LocalTruncationError(ref timestep);
         }
     }
 }

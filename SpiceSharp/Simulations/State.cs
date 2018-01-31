@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations
             /// Indicates that PN junctions should be initialized to a specific voltage
             /// </summary>
             /// <remarks>PN junction often don't behave well in iterative methods. A good initial value can be critical.</remarks>
-            InitJct,
+            InitJunction,
 
             /// <summary>
             /// Indicates that an initial iteration has been done and that we need to fix it to check for convergence

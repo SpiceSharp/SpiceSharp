@@ -115,9 +115,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
             BipolarJunctionTransistorNoise.Generators[RcNoise].SetCoefficients(modeltemp.CollectorConduct * bp.Area);
             BipolarJunctionTransistorNoise.Generators[RbNoise].SetCoefficients(load.Gx);
             BipolarJunctionTransistorNoise.Generators[ReNoise].SetCoefficients(modeltemp.EmitterConduct * bp.Area);
-            BipolarJunctionTransistorNoise.Generators[IcNoise].SetCoefficients(load.Cc);
-            BipolarJunctionTransistorNoise.Generators[IbNoise].SetCoefficients(load.Cb);
-            BipolarJunctionTransistorNoise.Generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent * Math.Log(Math.Max(Math.Abs(load.Cb), 1e-38))) / noise.Frequency);
+            BipolarJunctionTransistorNoise.Generators[IcNoise].SetCoefficients(load.CurrentC);
+            BipolarJunctionTransistorNoise.Generators[IbNoise].SetCoefficients(load.CurrentB);
+            BipolarJunctionTransistorNoise.Generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent * Math.Log(Math.Max(Math.Abs(load.CurrentB), 1e-38))) / noise.Frequency);
 
             // Evaluate all noise sources
             BipolarJunctionTransistorNoise.Evaluate(simulation);
