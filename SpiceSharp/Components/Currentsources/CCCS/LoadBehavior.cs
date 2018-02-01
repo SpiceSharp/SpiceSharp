@@ -23,8 +23,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         public int ControlBranchEq { get; protected set; }
         int posourceNode, negateNode;
-        protected MatrixElement PosControlBranchPtr { get; private set; }
-        protected MatrixElement NegControlBranchPtr { get; private set; }
+        protected ElementValue PosControlBranchPtr { get; private set; }
+        protected ElementValue NegControlBranchPtr { get; private set; }
 
         /// <summary>
         /// Properties

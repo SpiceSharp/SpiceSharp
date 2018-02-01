@@ -21,11 +21,11 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Nodes
         /// </summary>
         int posourceNode, negateNode, branchEq;
-        protected MatrixElement PosBranchPtr { get; private set; }
-        protected MatrixElement NegBranchPtr { get; private set; }
-        protected MatrixElement BranchNegPtr { get; private set; }
-        protected MatrixElement BranchPosPtr { get; private set; }
-        protected MatrixElement BranchBranchPtr { get; private set; }
+        protected ElementValue PosBranchPtr { get; private set; }
+        protected ElementValue NegBranchPtr { get; private set; }
+        protected ElementValue BranchNegPtr { get; private set; }
+        protected ElementValue BranchPosPtr { get; private set; }
+        protected ElementValue BranchBranchPtr { get; private set; }
 
         /// <summary>
         /// Constructor

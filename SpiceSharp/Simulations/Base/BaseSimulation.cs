@@ -373,12 +373,12 @@ namespace SpiceSharp.Simulations
                             if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
                             {
                                 state.Rhs[node.Index] = 1.0e10 * ns;
-                                node.Diagonal.Value.Real = 1e10;
+                                node.Diagonal.Real = 1e10;
                             }
                             else
                             {
                                 state.Rhs[node.Index] = ns;
-                                node.Diagonal.Value.Real = 1.0;
+                                node.Diagonal.Real = 1.0;
                             }
                         }
                     }
@@ -395,12 +395,12 @@ namespace SpiceSharp.Simulations
                             if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
                             {
                                 state.Rhs[node.Index] = 1.0e10 * ic;
-                                node.Diagonal.Value.Real = 1e10;
+                                node.Diagonal.Real = 1e10;
                             }
                             else
                             {
                                 state.Rhs[node.Index] = ic;
-                                node.Diagonal.Value.Real = 1.0;
+                                node.Diagonal.Real = 1.0;
                             }
                         }
                     }

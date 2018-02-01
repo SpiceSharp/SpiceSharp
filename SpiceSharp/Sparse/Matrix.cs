@@ -192,7 +192,7 @@ namespace SpiceSharp.Sparse
         /// <param name="row">Row</param>
         /// <param name="col">Column</param>
         /// <returns></returns>
-        public MatrixElement GetElement(int row, int col)
+        public ElementValue GetElement(int row, int col)
         {
             if (row < 0 || col < 0)
                 throw new SparseException("Index out of bounds");

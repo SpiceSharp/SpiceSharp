@@ -20,8 +20,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected MatrixElement Branch1Branch2Ptr { get; private set; }
-        protected MatrixElement Branch2Branch1Ptr { get; private set; }
+        protected ElementValue Branch1Branch2Ptr { get; private set; }
+        protected ElementValue Branch2Branch1Ptr { get; private set; }
 
         /// <summary>
         /// Shared parameters

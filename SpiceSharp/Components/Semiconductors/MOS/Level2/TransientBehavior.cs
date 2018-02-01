@@ -24,28 +24,28 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Nodes
         /// </summary>
         int drainNode, gateNode, sourceNode, bulkNode, drainNodePrime, sourceNodePrime;
-        protected MatrixElement DrainDrainPtr { get; private set; }
-        protected MatrixElement GateGatePtr { get; private set; }
-        protected MatrixElement SourceSourcePtr { get; private set; }
-        protected MatrixElement BulkBulkPtr { get; private set; }
-        protected MatrixElement DrainPrimeDrainPrimePtr { get; private set; }
-        protected MatrixElement SourcePrimeSourcePrimePtr { get; private set; }
-        protected MatrixElement DrainDrainPrimePtr { get; private set; }
-        protected MatrixElement GateBulkPtr { get; private set; }
-        protected MatrixElement GateDrainPrimePtr { get; private set; }
-        protected MatrixElement GateSourcePrimePtr { get; private set; }
-        protected MatrixElement SourceSourcePrimePtr { get; private set; }
-        protected MatrixElement BulkDrainPrimePtr { get; private set; }
-        protected MatrixElement BulkSourcePrimePtr { get; private set; }
-        protected MatrixElement DrainPrimeSourcePrimePtr { get; private set; }
-        protected MatrixElement DrainPrimeDrainPtr { get; private set; }
-        protected MatrixElement BulkGatePtr { get; private set; }
-        protected MatrixElement DrainPrimeGatePtr { get; private set; }
-        protected MatrixElement SourcePrimeGatePtr { get; private set; }
-        protected MatrixElement SourcePrimeSourcePtr { get; private set; }
-        protected MatrixElement DrainPrimeBulkPtr { get; private set; }
-        protected MatrixElement SourcePrimeBulkPtr { get; private set; }
-        protected MatrixElement SourcePrimeDrainPrimePtr { get; private set; }
+        protected ElementValue DrainDrainPtr { get; private set; }
+        protected ElementValue GateGatePtr { get; private set; }
+        protected ElementValue SourceSourcePtr { get; private set; }
+        protected ElementValue BulkBulkPtr { get; private set; }
+        protected ElementValue DrainPrimeDrainPrimePtr { get; private set; }
+        protected ElementValue SourcePrimeSourcePrimePtr { get; private set; }
+        protected ElementValue DrainDrainPrimePtr { get; private set; }
+        protected ElementValue GateBulkPtr { get; private set; }
+        protected ElementValue GateDrainPrimePtr { get; private set; }
+        protected ElementValue GateSourcePrimePtr { get; private set; }
+        protected ElementValue SourceSourcePrimePtr { get; private set; }
+        protected ElementValue BulkDrainPrimePtr { get; private set; }
+        protected ElementValue BulkSourcePrimePtr { get; private set; }
+        protected ElementValue DrainPrimeSourcePrimePtr { get; private set; }
+        protected ElementValue DrainPrimeDrainPtr { get; private set; }
+        protected ElementValue BulkGatePtr { get; private set; }
+        protected ElementValue DrainPrimeGatePtr { get; private set; }
+        protected ElementValue SourcePrimeGatePtr { get; private set; }
+        protected ElementValue SourcePrimeSourcePtr { get; private set; }
+        protected ElementValue DrainPrimeBulkPtr { get; private set; }
+        protected ElementValue SourcePrimeBulkPtr { get; private set; }
+        protected ElementValue SourcePrimeDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Shared variables

@@ -21,10 +21,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// Nodes
         /// </summary>
         int posourceNode, negateNode, contPosourceNode, contNegateNode;
-        protected MatrixElement PosControlPosPtr { get; private set; }
-        protected MatrixElement PosControlNegPtr { get; private set; }
-        protected MatrixElement NegControlPosPtr { get; private set; }
-        protected MatrixElement NegControlNegPtr { get; private set; }
+        protected ElementValue PosControlPosPtr { get; private set; }
+        protected ElementValue PosControlNegPtr { get; private set; }
+        protected ElementValue NegControlPosPtr { get; private set; }
+        protected ElementValue NegControlNegPtr { get; private set; }
 
         /// <summary>
         /// Properties

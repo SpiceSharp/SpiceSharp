@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Nodes
         /// </summary>
         int BranchEq;
-        protected MatrixElement BranchBranchPtr { get; private set; }
+        protected ElementValue BranchBranchPtr { get; private set; }
         StateDerivative flux;
 
         /// <summary>

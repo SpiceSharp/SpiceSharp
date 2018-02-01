@@ -49,29 +49,29 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public int CollectorPrimeNode { get; private set; }
         public int BasePrimeNode { get; private set; }
         public int EmitterPrimeNode { get; private set; }
-        protected MatrixElement CollectorCollectorPrimePtr { get; private set; }
-        protected MatrixElement BaseBasePrimePtr { get; private set; }
-        protected MatrixElement EmitterEmitterPrimePtr { get; private set; }
-        protected MatrixElement CollectorPrimeCollectorPtr { get; private set; }
-        protected MatrixElement CollectorPrimeBasePrimePtr { get; private set; }
-        protected MatrixElement CollectorPrimeEmitterPrimePtr { get; private set; }
-        protected MatrixElement BasePrimeBasePtr { get; private set; }
-        protected MatrixElement BasePrimeCollectorPrimePtr { get; private set; }
-        protected MatrixElement BasePrimeEmitterPrimePtr { get; private set; }
-        protected MatrixElement EmitterPrimeEmitterPtr { get; private set; }
-        protected MatrixElement EmitterPrimeCollectorPrimePtr { get; private set; }
-        protected MatrixElement EmitterPrimeBasePrimePtr { get; private set; }
-        protected MatrixElement CollectorCollectorPtr { get; private set; }
-        protected MatrixElement BaseBasePtr { get; private set; }
-        protected MatrixElement EmitterEmitterPtr { get; private set; }
-        protected MatrixElement CollectorPrimeCollectorPrimePtr { get; private set; }
-        protected MatrixElement BasePrimeBasePrimePtr { get; private set; }
-        protected MatrixElement EmitterPrimeEmitterPrimePtr { get; private set; }
-        protected MatrixElement SubstrateSubstratePtr { get; private set; }
-        protected MatrixElement CollectorPrimeSubstratePtr { get; private set; }
-        protected MatrixElement SubstrateCollectorPrimePtr { get; private set; }
-        protected MatrixElement BaseCollectorPrimePtr { get; private set; }
-        protected MatrixElement CollectorPrimeBasePtr { get; private set; }
+        protected ElementValue CollectorCollectorPrimePtr { get; private set; }
+        protected ElementValue BaseBasePrimePtr { get; private set; }
+        protected ElementValue EmitterEmitterPrimePtr { get; private set; }
+        protected ElementValue CollectorPrimeCollectorPtr { get; private set; }
+        protected ElementValue CollectorPrimeBasePrimePtr { get; private set; }
+        protected ElementValue CollectorPrimeEmitterPrimePtr { get; private set; }
+        protected ElementValue BasePrimeBasePtr { get; private set; }
+        protected ElementValue BasePrimeCollectorPrimePtr { get; private set; }
+        protected ElementValue BasePrimeEmitterPrimePtr { get; private set; }
+        protected ElementValue EmitterPrimeEmitterPtr { get; private set; }
+        protected ElementValue EmitterPrimeCollectorPrimePtr { get; private set; }
+        protected ElementValue EmitterPrimeBasePrimePtr { get; private set; }
+        protected ElementValue CollectorCollectorPtr { get; private set; }
+        protected ElementValue BaseBasePtr { get; private set; }
+        protected ElementValue EmitterEmitterPtr { get; private set; }
+        protected ElementValue CollectorPrimeCollectorPrimePtr { get; private set; }
+        protected ElementValue BasePrimeBasePrimePtr { get; private set; }
+        protected ElementValue EmitterPrimeEmitterPrimePtr { get; private set; }
+        protected ElementValue SubstrateSubstratePtr { get; private set; }
+        protected ElementValue CollectorPrimeSubstratePtr { get; private set; }
+        protected ElementValue SubstrateCollectorPrimePtr { get; private set; }
+        protected ElementValue BaseCollectorPrimePtr { get; private set; }
+        protected ElementValue CollectorPrimeBasePtr { get; private set; }
 
         /// <summary>
         /// Shared parameters

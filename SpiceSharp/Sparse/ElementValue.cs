@@ -116,6 +116,38 @@ namespace SpiceSharp.Sparse
         }
 
         /// <summary>
+        /// Add
+        /// </summary>
+        /// <param name="operand">Operand</param>
+        public void Add(double operand) => Real += operand;
+
+        /// <summary>
+        /// Add
+        /// </summary>
+        /// <param name="operand">Operand</param>
+        public void Add(Complex operand)
+        {
+            Real += operand.Real;
+            Imaginary += operand.Imaginary;
+        }
+
+        /// <summary>
+        /// Subtract
+        /// </summary>
+        /// <param name="operand">Operand</param>
+        public void Sub(double operand) => Real -= operand;
+
+        /// <summary>
+        /// Subtract
+        /// </summary>
+        /// <param name="operand">Operand</param>
+        public void Sub(Complex operand)
+        {
+            Real -= operand.Real;
+            Imaginary -= operand.Imaginary;
+        }
+
+        /// <summary>
         /// Negate the value
         /// </summary>
         public void Negate()

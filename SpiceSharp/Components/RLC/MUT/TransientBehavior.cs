@@ -26,8 +26,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// Nodes
         /// </summary>
         int BranchEq1, BranchEq2;
-        protected MatrixElement Branch1Branch2 { get; private set; }
-        protected MatrixElement Branch2Branch1 { get; private set; }
+        protected ElementValue Branch1Branch2 { get; private set; }
+        protected ElementValue Branch2Branch1 { get; private set; }
 
         /// <summary>
         /// Conductance

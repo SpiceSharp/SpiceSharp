@@ -25,13 +25,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         int posourceNode, negateNode;
         public int PosPrimeNode { get; private set; }
-        protected MatrixElement PosPosPrimePtr { get; private set; }
-        protected MatrixElement NegPosPrimePtr { get; private set; }
-        protected MatrixElement PosPrimePosPtr { get; private set; }
-        protected MatrixElement PosPrimeNegPtr { get; private set; }
-        protected MatrixElement PosPosPtr { get; private set; }
-        protected MatrixElement NegNegPtr { get; private set; }
-        protected MatrixElement PosPrimePosPrimePtr { get; private set; }
+        protected ElementValue PosPosPrimePtr { get; private set; }
+        protected ElementValue NegPosPrimePtr { get; private set; }
+        protected ElementValue PosPrimePosPtr { get; private set; }
+        protected ElementValue PosPrimeNegPtr { get; private set; }
+        protected ElementValue PosPosPtr { get; private set; }
+        protected ElementValue NegNegPtr { get; private set; }
+        protected ElementValue PosPrimePosPrimePtr { get; private set; }
 
         /// <summary>
         /// Extra variables

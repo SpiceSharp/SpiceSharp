@@ -16,11 +16,11 @@ namespace SpiceSharpTest.Sparse
         public void TestBasic1()
         {
             Matrix matrix = new Matrix();
-            matrix.GetElement(1, 1).Value.Real = 1.0;
-            matrix.GetElement(1, 2).Value.Real = 2.0;
-            matrix.GetElement(3, 3).Value.Real = 3.0;
-            matrix.GetElement(2, 3).Value.Real = 4.0;
-            matrix.GetElement(3, 1).Value.Real = 5.0;
+            matrix.GetElement(1, 1).Real = 1.0;
+            matrix.GetElement(1, 2).Real = 2.0;
+            matrix.GetElement(3, 3).Real = 3.0;
+            matrix.GetElement(2, 3).Real = 4.0;
+            matrix.GetElement(3, 1).Real = 5.0;
 
             Assert.AreEqual(1.0, matrix.FindReorderedElement(1, 1).Value.Real);
             Assert.AreEqual(2.0, matrix.FindReorderedElement(1, 2).Value.Real);
@@ -44,7 +44,7 @@ namespace SpiceSharpTest.Sparse
             {
                 for (int c = 1; c < 100; c++)
                 {
-                    matrix.GetElement(r, c).Value.Complex = new Complex(r, c);
+                    matrix.GetElement(r, c).Complex = new Complex(r, c);
                 }
             }
 
@@ -75,7 +75,7 @@ namespace SpiceSharpTest.Sparse
                     bool oddcol = c % 2 == 0;
 
                     if (oddrow && !oddcol || !oddrow && oddcol)
-                        matrix.GetElement(r, c).Value.Complex = new Complex(r, c);
+                        matrix.GetElement(r, c).Complex = new Complex(r, c);
                 }
             }
             matrix.LinkRows();

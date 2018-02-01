@@ -21,10 +21,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Nodes
         /// </summary>
         int posourceNode, negateNode;
-        protected MatrixElement PosPosPtr { get; private set; }
-        protected MatrixElement NegNegPtr { get; private set; }
-        protected MatrixElement PosNegPtr { get; private set; }
-        protected MatrixElement NegPosPtr { get; private set; }
+        protected ElementValue PosPosPtr { get; private set; }
+        protected ElementValue NegNegPtr { get; private set; }
+        protected ElementValue PosNegPtr { get; private set; }
+        protected ElementValue NegPosPtr { get; private set; }
 
         [PropertyName("v"), PropertyInfo("Capacitor voltage")]
         public Complex GetVoltage(ComplexState state)
