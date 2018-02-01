@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp
+﻿using System;
+
+namespace SpiceSharp
 {
     /// <summary>
     /// A collection of <see cref="ParameterSet"/>
@@ -18,7 +20,13 @@
         /// Add a parameter set
         /// </summary>
         /// <param name="set"></param>
-        public void Add(ParameterSet set) => Add(set.GetType(), set);
+        public void Add(ParameterSet set)
+        {
+            if (set == null)
+                throw new ArgumentNullException(nameof(set));
+
+            Add(set.GetType(), set);
+        }
 
         /// <summary>
         /// Get a parameter set if it exists, else returns null

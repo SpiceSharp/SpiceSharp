@@ -114,6 +114,9 @@ namespace SpiceSharp.Simulations
         /// <param name="circuit"></param>
         public void Initialize(Circuit circuit)
         {
+            if (circuit == null)
+                throw new ArgumentNullException(nameof(circuit));
+
             Order = circuit.Nodes.Count + 1;
             Rhs = new ComplexSolution(Order);
             Solution = new ComplexSolution(Order);

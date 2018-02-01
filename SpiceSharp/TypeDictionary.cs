@@ -78,6 +78,9 @@ namespace SpiceSharp
         /// <param name="value">Value</param>
         public virtual void Add(Type key, T value)
         {
+            if (key == null)
+                throw new ArgumentNullException(nameof(key));
+
             Type currentType = key;
             while (currentType != BaseClass)
             {

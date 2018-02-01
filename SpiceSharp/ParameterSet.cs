@@ -12,12 +12,6 @@ namespace SpiceSharp
     public abstract class ParameterSet
     {
         /// <summary>
-        /// Delegate for setting a parameter value
-        /// </summary>
-        /// <param name="value">Value</param>
-        public delegate void ParameterSetter(double value);
-
-        /// <summary>
         /// Create a dictionary of setters for the parameters object using reflection
         /// </summary>
         /// <returns></returns>
@@ -184,4 +178,10 @@ namespace SpiceSharp
             return isset;
         }
     }
+
+    /// <summary>
+    /// Delegate for setting a parameter value
+    /// </summary>
+    /// <param name="value">Value</param>
+    public delegate void ParameterSetter(double value);
 }
