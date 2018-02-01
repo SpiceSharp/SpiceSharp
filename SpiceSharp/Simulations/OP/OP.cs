@@ -21,7 +21,7 @@ namespace SpiceSharp.Simulations
         protected override void Execute()
         {
             // Setup the state
-            var state = State;
+            var state = RealState;
             var baseconfig = BaseConfiguration;
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;
@@ -31,7 +31,7 @@ namespace SpiceSharp.Simulations
 
             Op(baseconfig.DCMaxIterations);
 
-            var exportargs = new ExportDataEventArgs(State);
+            var exportargs = new ExportDataEventArgs(RealState);
             Export(exportargs);
         }
     }

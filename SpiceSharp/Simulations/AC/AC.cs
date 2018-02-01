@@ -36,7 +36,7 @@ namespace SpiceSharp.Simulations
 
             var circuit = Circuit;
 
-            var state = State;
+            var state = RealState;
             var cstate = ComplexState;
             var baseconfig = BaseConfiguration;
             var freqconfig = FrequencyConfiguration;
@@ -60,7 +60,7 @@ namespace SpiceSharp.Simulations
                 behavior.InitializeParameters(this);
 
             // Export operating point if requested
-            var exportargs = new ExportDataEventArgs(State, ComplexState);
+            var exportargs = new ExportDataEventArgs(RealState, ComplexState);
             if (freqconfig.KeepOpInfo)
                 Export(exportargs);
 

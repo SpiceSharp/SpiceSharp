@@ -121,7 +121,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             double arg, czero, sarg, capd, czof2;
             double vd = state.Solution[posPrimeNode] - state.Solution[negateNode];
 

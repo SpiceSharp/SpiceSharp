@@ -385,7 +385,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             var rstate = state;
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
                 OxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,

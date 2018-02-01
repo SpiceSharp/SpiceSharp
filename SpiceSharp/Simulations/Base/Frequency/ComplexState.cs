@@ -7,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// State in the complex domain
     /// </summary>
-    public class ComplexState
+    public class ComplexState : State
     {
         /// <summary>
         /// Did the solution converge?

@@ -94,10 +94,10 @@ namespace SpiceSharp.Simulations
         {
             // First do temperature-dependent calculations and IC
             base.Execute();
-            var exportargs = new ExportDataEventArgs(State, Method);
+            var exportargs = new ExportDataEventArgs(RealState, Method);
 
             var circuit = Circuit;
-            var state = State;
+            var state = RealState;
             var baseconfig = BaseConfiguration;
             var timeconfig = TimeConfiguration;
 

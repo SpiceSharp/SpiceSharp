@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Container for the state of an electronic circuit.
     /// </summary>
-    public class RealState
+    public class RealState : State
     {
         #region Simulation parameters
         /// <summary>

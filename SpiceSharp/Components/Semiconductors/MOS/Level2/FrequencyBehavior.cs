@@ -323,7 +323,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             var cstate = simulation.ComplexState;
             int xnrm, xrev;
             double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, capgs, capgd, capgb, xgs, xgd, xgb, xbd,

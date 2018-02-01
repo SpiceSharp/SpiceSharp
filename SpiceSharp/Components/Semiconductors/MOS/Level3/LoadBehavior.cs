@@ -217,7 +217,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             double vt, EffectiveLength, DrainSatCur, SourceSatCur, Beta,
                 OxideCap, vgs, vds, vbs, vbd, vgd, vgdo, von, evbs, evbd, vdsat,
                 cdrain, ceqbs, ceqbd, cdreq;
@@ -821,7 +821,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             var config = simulation.BaseConfiguration;
 
             double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat;

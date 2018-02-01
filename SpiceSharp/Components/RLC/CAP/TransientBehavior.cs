@@ -118,7 +118,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             // Calculate the state for DC
-            var sol = simulation.State.Solution;
+            var sol = simulation.RealState.Solution;
             if (bp.InitialCondition.Given)
                 QCap.Current = bp.InitialCondition;
             else
@@ -145,7 +145,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             double vcap = state.Solution[posourceNode] - state.Solution[negateNode];
 
             // Integrate

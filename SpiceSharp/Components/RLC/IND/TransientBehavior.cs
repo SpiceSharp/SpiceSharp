@@ -122,7 +122,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             if (bp.InitialCondition.Given)
                 flux.Current = bp.InitialCondition * bp.Inductance;
             else
-                flux.Current = simulation.State.Solution[BranchEq] * bp.Inductance;
+                flux.Current = simulation.RealState.Solution[BranchEq] * bp.Inductance;
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace SpiceSharp.Components.InductorBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
 
             // Initialize
             flux.Current = bp.Inductance * state.Solution[BranchEq];

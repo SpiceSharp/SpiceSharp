@@ -229,7 +229,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2,
                 xms, xtf, ovtf, xjtf, argtf, tmp, sarg, f1, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
 
@@ -358,7 +358,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2, arg3, capbx, capcs,
                 xms, xtf, ovtf, xjtf, argtf, tmp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, czbxf2;
             

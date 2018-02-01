@@ -16,9 +16,9 @@ namespace SpiceSharp.Simulations
         public ParameterSetCollection Parameters { get; } = new ParameterSetCollection();
 
         /// <summary>
-        /// The node that gives problems
+        /// States of the simulation
         /// </summary>
-        public Node ProblemNode { get; protected set; }
+        public StateCollection States { get; } = new StateCollection();
 
         /// <summary>
         /// The circuit

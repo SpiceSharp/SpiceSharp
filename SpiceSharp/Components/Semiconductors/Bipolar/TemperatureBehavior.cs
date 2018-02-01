@@ -69,7 +69,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double vt, fact2, egfet, arg, pbfact, ratlog, ratio1, factlog, factor, bfactor, pbo, gmaold, gmanew;
 
             if (!bp.Temperature.Given)
-                bp.Temperature.Value = simulation.State.Temperature;
+                bp.Temperature.Value = simulation.RealState.Temperature;
             vt = bp.Temperature * Circuit.KOverQ;
             fact2 = bp.Temperature / Circuit.ReferenceTemperature;
             egfet = 1.16 - (7.02e-4 * bp.Temperature * bp.Temperature) / (bp.Temperature + 1108);

@@ -152,7 +152,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             double time = 0.0;
             double value = 0.0;
 

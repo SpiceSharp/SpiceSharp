@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             if (!mbp.NominalTemperature.Given)
             {
-                mbp.NominalTemperature.Value = simulation.State.NominalTemperature;
+                mbp.NominalTemperature.Value = simulation.RealState.NominalTemperature;
             }
             VtNominal = Circuit.KOverQ * mbp.NominalTemperature;
 

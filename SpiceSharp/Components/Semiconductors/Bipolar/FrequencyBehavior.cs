@@ -188,7 +188,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double arg, sarg, argtf, arg2, tmp, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
 
             // Get voltages
-            var state = simulation.State;
+            var state = simulation.RealState;
             double vbe = load.VoltageBE;
             double vbc = load.VoltageBC;
             double vbx = vbx = mbp.BipolarType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
@@ -304,7 +304,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             var cstate = simulation.ComplexState;
             double gcpr, gepr, gpi, gmu, go, td, gx;
             Complex gm, xcpi, xcmu, xcbx, xccs, xcmcb;

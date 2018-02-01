@@ -225,7 +225,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             double vt;
             double ceqcs, ceqbx, csat, rbpr, rbpi, gcpr, gepr, oik, c2, vte, oikr, c4, vtc, xjrb, vbe, vbc;
             bool icheck;
@@ -468,7 +468,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             var config = simulation.BaseConfiguration;
 
             double vbe, vbc, delvbe, delvbc, cchat, cbhat, cc, cb;

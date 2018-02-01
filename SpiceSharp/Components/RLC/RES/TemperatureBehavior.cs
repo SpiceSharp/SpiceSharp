@@ -57,7 +57,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 
             // Default Value Processing for Resistor Instance
             if (!bp.Temperature.Given)
-                bp.Temperature.Value = simulation.State.Temperature;
+                bp.Temperature.Value = simulation.RealState.Temperature;
             if (!bp.Width.Given)
                 bp.Width.Value = mbp?.DefaultWidth ?? 0.0;
 

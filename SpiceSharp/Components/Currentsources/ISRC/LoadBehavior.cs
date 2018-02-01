@@ -115,7 +115,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
 
             double value = 0.0;
             double time = 0.0;

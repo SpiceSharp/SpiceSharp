@@ -25,7 +25,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the complex state
         /// </summary>
-        public ComplexState ComplexState { get; }
+        public ComplexState ComplexState { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -35,8 +35,9 @@ namespace SpiceSharp.Simulations
         {
             Parameters.Add(new FrequencyConfiguration());
 
-            // Initialize the complex state to reuse the real state matrix (which can do both)
-            ComplexState = new ComplexState(State.Matrix);
+            // Create a complex state with shared matrix
+            var realState = States.Get<RealState>();
+            States.Add(new ComplexState(realState.Matrix));
         }
 
         /// <summary>
@@ -53,8 +54,9 @@ namespace SpiceSharp.Simulations
         {
             Parameters.Add(new FrequencyConfiguration(frequencySweep));
 
-            // Initialize the complex state to reuse the real state matrix (which can do both)
-            ComplexState = new ComplexState(State.Matrix);
+            // Create a complex state with shared matrix
+            var realState = States.Get<RealState>();
+            States.Add(new ComplexState(realState.Matrix));
         }
 
         /// <summary>
@@ -63,19 +65,16 @@ namespace SpiceSharp.Simulations
         protected override void Setup()
         {
             base.Setup();
-            
-            // Setup complex state
-            ComplexState.Initialize(Circuit);
 
-            // Get behaviors
+            // Get behaviors, configurations and states
+            ComplexState = States.Get<ComplexState>() ?? throw new CircuitException("No complex state found");
+            FrequencyConfiguration = Parameters.Get<FrequencyConfiguration>() ?? throw new CircuitException("No frequency configuration found");
+            FrequencySweep = FrequencyConfiguration.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
+
             FrequencyBehaviors = SetupBehaviors<FrequencyBehavior>();
             var matrix = ComplexState.Matrix;
             foreach (var behavior in FrequencyBehaviors)
                 behavior.GetMatrixPointers(matrix);
-
-            // Setup parameters
-            FrequencyConfiguration = Parameters.Get<FrequencyConfiguration>() ?? throw new CircuitException("No frequency configuration found");
-            FrequencySweep = FrequencyConfiguration.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
         }
 
         /// <summary>
@@ -88,11 +87,15 @@ namespace SpiceSharp.Simulations
                 behavior.Unsetup();
             FrequencyBehaviors.Clear();
             FrequencyBehaviors = null;
+
+            // Remove the state
+            ComplexState.Clear();
+            ComplexState.Destroy();
+            ComplexState = null;
+
+            // Configuration
             FrequencyConfiguration = null;
             FrequencySweep = null;
-            
-            // Destroy complex state
-            ComplexState.Destroy();
 
             base.Unsetup();
         }

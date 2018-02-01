@@ -322,7 +322,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             double arg, sarg, sargsw;
             double vgs1, vgd1, vgb1, capgs, capgd, capgb;
 

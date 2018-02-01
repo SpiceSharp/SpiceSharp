@@ -56,7 +56,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             /* perform model defaulting */
             if (!mbp.NominalTemperature.Given)
-                mbp.NominalTemperature.Value = simulation.State.NominalTemperature;
+                mbp.NominalTemperature.Value = simulation.RealState.NominalTemperature;
 
             Fact1 = mbp.NominalTemperature / Circuit.ReferenceTemperature;
             VtNominal = mbp.NominalTemperature * Circuit.KOverQ;

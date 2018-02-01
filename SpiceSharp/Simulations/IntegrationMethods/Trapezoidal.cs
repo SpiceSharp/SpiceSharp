@@ -133,7 +133,7 @@ namespace SpiceSharp.IntegrationMethods
 
             // Get the state
             var simulation = args.Simulation;
-            var state = simulation.State;
+            var state = simulation.RealState;
             double tol, diff, tmp;
             double timetemp = Double.PositiveInfinity;
             var nodes = simulation.Circuit.Nodes;

@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             if (!mbp.NominalTemperature.Given)
-                mbp.NominalTemperature.Value = simulation.State.NominalTemperature;
+                mbp.NominalTemperature.Value = simulation.RealState.NominalTemperature;
             Factor1 = mbp.NominalTemperature / Circuit.ReferenceTemperature;
 
             if (!mbp.LeakBECurrent.Given)

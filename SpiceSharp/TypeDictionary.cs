@@ -6,10 +6,11 @@ using SpiceSharp.Diagnostics;
 namespace SpiceSharp
 {
     /// <summary>
-    /// Class for storing classes
+    /// Class for storing classes by their type
+    /// It also trackes inheritance, so you can retrieve classes by their base class
     /// </summary>
     /// <typeparam name="T">Type</typeparam>
-    public abstract class TypeDictionary<T> : IDictionary<Type, T>
+    public abstract class TypeDictionary<T> : IDictionary<Type, T> where T : class
     {
         /// <summary>
         /// Dictionary with our types
@@ -89,6 +90,18 @@ namespace SpiceSharp
                 if (currentType == typeof(object))
                     throw new CircuitException("Type {0} is not derived from {1}".FormatString(key, BaseClass));
             }
+        }
+
+        /// <summary>
+        /// Get a strongly typed value from the dictionary
+        /// </summary>
+        /// <typeparam name="R">Return type</typeparam>
+        /// <returns></returns>
+        public R Get<R>() where R : T
+        {
+            if (Dictionary.TryGetValue(typeof(R), out var value))
+                return (R)value;
+            return default(R);
         }
 
         /// <summary>

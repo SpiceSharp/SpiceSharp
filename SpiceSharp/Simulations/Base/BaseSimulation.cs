@@ -21,19 +21,24 @@ namespace SpiceSharp.Simulations
         protected Collection<InitialConditionBehavior> InitialConditionBehaviors { get; private set; }
 
         /// <summary>
-        /// Get the currently active configuration for the base simulation
+        /// Gets the currently active configuration
         /// </summary>
         public BaseConfiguration BaseConfiguration { get; protected set; }
 
         /// <summary>
-        /// Gets the current state of the circuit
+        /// Gets the currently active state
         /// </summary>
-        public RealState State { get; } = new RealState();
+        public RealState RealState { get; protected set; }
 
         /// <summary>
         /// Gets statistics
         /// </summary>
         public Statistics Statistics { get; } = new Statistics();
+
+        /// <summary>
+        /// The node that gives problems
+        /// </summary>
+        public Node ProblemNode { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -43,6 +48,7 @@ namespace SpiceSharp.Simulations
             : base(name)
         {
             Parameters.Add(new BaseConfiguration());
+            States.Add(new RealState());
         }
 
         /// <summary>
@@ -63,14 +69,15 @@ namespace SpiceSharp.Simulations
             if (Circuit.Nodes.Count < 1)
                 throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
 
-            // Setup behaviors and configuration
+            // Setup behaviors, configurations and states
             BaseConfiguration = Parameters.Get<BaseConfiguration>();
+            RealState = States.Get<RealState>();
             TemperatureBehaviors = SetupBehaviors<TemperatureBehavior>();
             LoadBehaviors = SetupBehaviors<LoadBehavior>();
             InitialConditionBehaviors = SetupBehaviors<InitialConditionBehavior>();
 
             // Setup the load behaviors
-            var matrix = State.Matrix;
+            var matrix = RealState.Matrix;
             foreach (var behavior in LoadBehaviors)
                 behavior.GetMatrixPointers(Circuit.Nodes, matrix);
         }
@@ -85,7 +92,7 @@ namespace SpiceSharp.Simulations
                 behavior.Temperature(this);
 
             // Initialize the solution
-            State.Initialize(Circuit);
+            RealState.Initialize(Circuit);
 
             // Do initial conditions
             InitialConditions();
@@ -99,10 +106,15 @@ namespace SpiceSharp.Simulations
             // Unsetup all behaviors
             foreach (var behavior in InitialConditionBehaviors)
                 behavior.Unsetup();
-            foreach (var behavior in TemperatureBehaviors)
-                behavior.Unsetup();
             foreach (var behavior in LoadBehaviors)
                 behavior.Unsetup();
+            foreach (var behavior in TemperatureBehaviors)
+                behavior.Unsetup();
+
+            // Clear the state
+            RealState.Clear();
+            RealState.Destroy();
+            RealState = null;
 
             // Remove behavior and configuration references
             LoadBehaviors.Clear();
@@ -114,12 +126,6 @@ namespace SpiceSharp.Simulations
             // Unsetup all objects
             foreach (var o in Circuit.Objects)
                 o.Unsetup(Circuit);
-
-            // Clear the state
-            State.Clear();
-
-            // Clear the circuit
-            Circuit.Clear();
         }
 
         /// <summary>
@@ -128,7 +134,7 @@ namespace SpiceSharp.Simulations
         /// <param name="maxIterations">Maximum iterations</param>
         protected void Op(int maxIterations)
         {
-            var state = State;
+            var state = RealState;
             var config = BaseConfiguration;
             state.Init = RealState.InitializationStates.InitJunction;
             state.Matrix.Complex = false;
@@ -196,7 +202,7 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         protected bool Iterate(int maxIterations)
         {
-            var state = State;
+            var state = RealState;
             var matrix = state.Matrix;
             bool pass = false;
             int iterno = 0;
@@ -338,7 +344,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void Load()
         {
-            var state = State;
+            var state = RealState;
             var nodes = Circuit.Nodes;
 
             // Start the stopwatch
@@ -411,7 +417,7 @@ namespace SpiceSharp.Simulations
         protected void InitialConditions()
         {
             var circuit = Circuit;
-            var state = State;
+            var state = RealState;
             var nodes = circuit.Nodes;
 
             // Clear the current solution
@@ -477,7 +483,7 @@ namespace SpiceSharp.Simulations
         protected bool IsConvergent()
         {
             var circuit = Circuit;
-            var rstate = State;
+            var rstate = RealState;
             var config = BaseConfiguration;
 
             // Check convergence for each node

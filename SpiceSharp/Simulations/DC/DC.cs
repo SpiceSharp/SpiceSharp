@@ -87,11 +87,11 @@ namespace SpiceSharp.Simulations
             // Base
             base.Execute();
 
-            var exportargs = new ExportDataEventArgs(State);
+            var exportargs = new ExportDataEventArgs(RealState);
             var circuit = Circuit;
 
             // Setup the state
-            var state = State;
+            var state = RealState;
             var dcconfig = DCConfiguration;
             var baseconfig = BaseConfiguration;
             state.Init = RealState.InitializationStates.InitJunction;

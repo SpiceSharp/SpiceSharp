@@ -148,7 +148,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             bool Check;
             double csat, gspr, vt, vte, vd, vdtemp, evd, cd, gd, arg, evrev, cdeq;
 
@@ -252,7 +252,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             var config = simulation.BaseConfiguration;
             double delvd, cdhat, cd;
             double vd = state.Solution[PosPrimeNode] - state.Solution[negateNode];

@@ -123,7 +123,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             /* perform the parameter defaulting */
             if (!bp.Temperature.Given)
             {
-                bp.Temperature.Value = simulation.State.Temperature;
+                bp.Temperature.Value = simulation.RealState.Temperature;
             }
             vt = bp.Temperature * Circuit.KOverQ;
             ratio = bp.Temperature / mbp.NominalTemperature;

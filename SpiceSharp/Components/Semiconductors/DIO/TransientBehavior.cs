@@ -142,7 +142,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             double arg, sarg, capd;
             double vd = state.Solution[posPrimeNode] - state.Solution[negateNode];
 
@@ -175,7 +175,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.RealState;
             double vd = state.Solution[posPrimeNode] - state.Solution[negateNode];
 
             // This is the same calculation

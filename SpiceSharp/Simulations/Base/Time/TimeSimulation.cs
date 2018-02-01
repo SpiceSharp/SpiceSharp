@@ -64,7 +64,7 @@ namespace SpiceSharp.Simulations
             States = new StatePool(Method);
             foreach (var behavior in TransientBehaviors)
             {
-                behavior.GetMatrixPointers(State.Matrix);
+                behavior.GetMatrixPointers(RealState.Matrix);
                 behavior.CreateStates(States);
             }
             States.BuildStates();
@@ -103,7 +103,7 @@ namespace SpiceSharp.Simulations
         /// <param name="maxIterations">Maximum iterations</param>
         protected bool TranIterate(int maxIterations)
         {
-            var state = State;
+            var state = RealState;
             var matrix = state.Matrix;
             bool pass = false;
             int iterno = 0;

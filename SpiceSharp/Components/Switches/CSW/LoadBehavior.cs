@@ -154,7 +154,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             double i_ctrl;
             bool previous_state;
             bool current_state = false;
-            var state = simulation.State;
+            var state = simulation.RealState;
 
             // decide the state of the switch
             if (state.Init == RealState.InitializationStates.InitFix || state.Init == RealState.InitializationStates.InitJunction)
