@@ -28,19 +28,19 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <param name="state"></param>
         /// <returns></returns>
         [PropertyName("v"), PropertyInfo("Complex voltage")]
-        public Complex GetVoltage(State state)
+        public Complex GetVoltage(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-            return state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
+            return state.Solution[posourceNode] - state.Solution[negateNode];
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
-        public Complex GetPower(State state)
+        public Complex GetPower(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
+            Complex v = state.Solution[posourceNode] - state.Solution[negateNode];
             return -v * Complex.Conjugate(ac);
         }
 
@@ -55,12 +55,12 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// </summary>
         /// <param name="propertyName">Property name</param>
         /// <returns></returns>
-        public override Func<State, Complex> CreateACExport(string propertyName)
+        public override Func<ComplexState, Complex> CreateACExport(string propertyName)
         {
             switch (propertyName)
             {
                 case "i":
-                case "c": return (State state) => ac;
+                case "c": return (ComplexState state) => ac;
                 default: return base.CreateACExport(propertyName);
             }
         }
@@ -105,9 +105,9 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
-            state.ComplexRhs[posourceNode] += ac;
-            state.ComplexRhs[negateNode] -= ac;
+            var state = simulation.ComplexState;
+            state.Rhs[posourceNode] += ac;
+            state.Rhs[negateNode] -= ac;
         }
     }
 }

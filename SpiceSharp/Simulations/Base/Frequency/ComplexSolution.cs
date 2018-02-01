@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using SpiceSharp.Sparse;
 
-namespace SpiceSharp.Simulations.Base
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Complex solution vector

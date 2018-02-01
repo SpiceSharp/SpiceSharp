@@ -305,7 +305,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.State;
-            var cstate = state;
+            var cstate = simulation.ComplexState;
             double gcpr, gepr, gpi, gmu, go, td, gx;
             Complex gm, xcpi, xcmu, xcbx, xccs, xcmcb;
 

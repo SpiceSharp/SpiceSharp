@@ -33,29 +33,29 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// Properties
         /// </summary>
         [PropertyName("v"), PropertyInfo("Complex voltage")]
-        public Complex GetVoltage(State state)
+        public Complex GetVoltage(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
+            return state.Solution[posourceNode] - state.Solution[negateNode];
         }
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Complex current")]
-        public Complex GetCurrent(State state)
+        public Complex GetCurrent(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.ComplexSolution[branchEq];
+            return state.Solution[branchEq];
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
-        public Complex GetPower(State state)
+        public Complex GetPower(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
-            Complex i = state.ComplexSolution[branchEq];
+            Complex v = state.Solution[posourceNode] - state.Solution[negateNode];
+            Complex i = state.Solution[branchEq];
             return -v * Complex.Conjugate(i);
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
@@ -164,8 +163,6 @@ namespace SpiceSharp.Simulations
         public bool HadNodeSet { get; set; } = false;
         #endregion
 
-        #region Simulation solutions
-
         /// <summary>
         /// Get the equation matrix
         /// </summary>
@@ -182,25 +179,9 @@ namespace SpiceSharp.Simulations
         public RealSolution Solution { get; private set; } = null;
 
         /// <summary>
-        /// Get the complex right-hand-side vector
-        /// </summary>
-        public Vector<Complex> ComplexRhs { get; private set; } = null;
-
-        /// <summary>
-        /// Get the complex solution vector
-        /// </summary>
-        public Vector<Complex> ComplexSolution { get; private set; } = null;
-        
-        /// <summary>
         /// Gets the old solution
         /// </summary>
         public RealSolution OldSolution { get; private set; } = null;
-
-        /// <summary>
-        /// Gets or sets the current laplace variable
-        /// Using a purely imaginary variable here will give you the steady-state frequency response
-        /// </summary>
-        public Complex Laplace { get; set; } = new Complex();
 
         /// <summary>
         /// Get the order of the matrix/vectors
@@ -232,9 +213,7 @@ namespace SpiceSharp.Simulations
             // Initialize all matrices
             Order = circuit.Nodes.Count + 1;
             Rhs = new RealSolution(Order);
-            ComplexRhs = new Vector<Complex>(Order);
             Solution = new RealSolution(Order);
-            ComplexSolution = new Vector<Complex>(Order);
             OldSolution = new RealSolution(Order);
             Initialized = true;
         }
@@ -248,9 +227,7 @@ namespace SpiceSharp.Simulations
             Initialized = false;
 
             Rhs = null;
-            ComplexRhs = null;
             Solution = null;
-            ComplexSolution = null;
             Matrix = null;
         }
 
@@ -266,27 +243,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Store the solution
-        /// </summary>
-        public void StoreComplexSolution()
-        {
-            var tmp = ComplexRhs;
-            ComplexRhs = ComplexSolution;
-            ComplexSolution = tmp;
-        }
-
-        /// <summary>
         /// Clear the matrix and Rhs vector
         /// </summary>
         public void Clear()
         {
             for (int i = 0; i < Order; i++)
-            {
                 Rhs[i] = 0;
-                ComplexRhs[i] = 0.0;
-            }
             Matrix.Clear();
         }
-        #endregion
     }
 }

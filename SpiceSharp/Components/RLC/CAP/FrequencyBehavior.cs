@@ -27,27 +27,27 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         protected MatrixElement NegPosPtr { get; private set; }
 
         [PropertyName("v"), PropertyInfo("Capacitor voltage")]
-        public Complex GetVoltage(State state)
+        public Complex GetVoltage(ComplexState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
+            return state.Solution[posourceNode] - state.Solution[negateNode];
         }
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Capacitor current")]
-        public Complex GetCurrent(State state)
+        public Complex GetCurrent(ComplexState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             Complex conductance = state.Laplace * bp.Capacitance.Value;
-            return (state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode]) * conductance;
+            return (state.Solution[posourceNode] - state.Solution[negateNode]) * conductance;
         }
         [PropertyName("p"), PropertyInfo("Capacitor power")]
-        public Complex GetPower(State state)
+        public Complex GetPower(ComplexState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             Complex conductance = state.Laplace * bp.Capacitance.Value;
-            Complex voltage = state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
+            Complex voltage = state.Solution[posourceNode] - state.Solution[negateNode];
             return voltage * Complex.Conjugate(voltage * conductance);
         }
 
@@ -109,7 +109,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.ComplexState;
             var val = state.Laplace * bp.Capacitance.Value;
 
             // Load the matrix

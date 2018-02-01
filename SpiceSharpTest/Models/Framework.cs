@@ -120,7 +120,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Func<State, double>> exports, IEnumerable<double[]> references)
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Func<ComplexState, double>> exports, IEnumerable<double[]> references)
         {
             int index = 0;
             sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
@@ -131,7 +131,7 @@ namespace SpiceSharpTest.Models
                 while (exports_it.MoveNext() && references_it.MoveNext())
                 {
                     // Test export
-                    double actual = exports_it.Current(data.State);
+                    double actual = exports_it.Current(data.ComplexState);
                     double expected = references_it.Current[index];
                     double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
 
@@ -157,7 +157,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Func<State, Complex>> exports, IEnumerable<Complex[]> references)
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Func<ComplexState, Complex>> exports, IEnumerable<Complex[]> references)
         {
             int index = 0;
             sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
@@ -168,7 +168,7 @@ namespace SpiceSharpTest.Models
                 while (exports_it.MoveNext() && references_it.MoveNext())
                 {
                     // Test export
-                    Complex actual = exports_it.Current(data.State);
+                    Complex actual = exports_it.Current(data.ComplexState);
                     Complex expected = references_it.Current[index];
 
                     // Test real part
@@ -198,7 +198,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Func<State, Complex>> exports, IEnumerable<Func<double, Complex>> references)
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Func<ComplexState, Complex>> exports, IEnumerable<Func<double, Complex>> references)
         {
             int index = 0;
             sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
@@ -209,7 +209,7 @@ namespace SpiceSharpTest.Models
                 while (exports_it.MoveNext() && references_it.MoveNext())
                 {
                     // Test export
-                    Complex actual = exports_it.Current(data.State);
+                    Complex actual = exports_it.Current(data.ComplexState);
                     Complex expected = references_it.Current(data.Frequency);
 
                     // Test real part

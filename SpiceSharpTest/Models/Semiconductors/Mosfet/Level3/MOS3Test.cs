@@ -107,7 +107,7 @@ namespace SpiceSharpTest.Models.Transistors
             AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 5));
 
             // Create exports
-            Func<State, Complex>[] exports = new Func<State, Complex>[1];
+            Func<ComplexState, Complex>[] exports = new Func<ComplexState, Complex>[1];
             ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = ac.CreateACVoltageExport("out");

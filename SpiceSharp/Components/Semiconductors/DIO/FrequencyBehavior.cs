@@ -150,7 +150,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.ComplexState;
             double gspr, geq, xceq;
 
             gspr = modeltemp.Conductance * bp.Area;

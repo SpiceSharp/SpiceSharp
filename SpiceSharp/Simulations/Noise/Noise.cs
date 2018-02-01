@@ -99,9 +99,10 @@ namespace SpiceSharp.Simulations
 
             var circuit = Circuit;
             var state = State;
+            var cstate = ComplexState;
             var noiseconfig = NoiseConfiguration;
             var baseconfig = BaseConfiguration;
-            var exportargs = new ExportDataEventArgs(State);
+            var exportargs = new ExportDataEventArgs(State, ComplexState);
 
             // Find the output nodes
             int posOutNode = noiseconfig.Output != null ? circuit.Nodes[noiseconfig.Output].Index : 0;
@@ -115,7 +116,7 @@ namespace SpiceSharp.Simulations
             var data = NoiseState;
             state.Initialize(circuit);
             data.Initialize(FrequencySweep.Initial);
-            state.Laplace = 0;
+            cstate.Laplace = 0;
             state.Domain = State.DomainType.Frequency;
             state.UseIC = false;
             state.UseDC = true;
@@ -132,10 +133,10 @@ namespace SpiceSharp.Simulations
             foreach (double freq in FrequencySweep.Points)
             {
                 data.Frequency = freq;
-                state.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
+                cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
                 ACIterate(circuit);
 
-                Complex val = state.ComplexSolution[posOutNode] - state.ComplexSolution[negOutNode];
+                Complex val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
                 data.GainInverseSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
 
                 // Solve the adjoint system
@@ -192,21 +193,19 @@ namespace SpiceSharp.Simulations
         /// <param name="negDrive">The negative driving node</param>
         void NzIterate(int posDrive, int negDrive)
         {
-            var state = State;
+            var state = ComplexState;
 
             // Clear out the right hand side vector
             for (int i = 0; i < state.Rhs.Length; i++)
-                state.ComplexRhs[i] = 0.0;
+                state.Rhs[i] = 0.0;
 
             // Apply unit current excitation
-            state.ComplexRhs[posDrive] = 1.0;
-            state.ComplexRhs[negDrive] = -1.0;
+            state.Rhs[posDrive] = 1.0;
+            state.Rhs[negDrive] = -1.0;
 
-            state.Matrix.SolveTransposed(state.ComplexRhs, state.ComplexRhs);
-
-            state.StoreComplexSolution();
-
-            state.ComplexSolution[0] = 0.0;
+            state.Matrix.SolveTransposed(state.Rhs, state.Rhs);
+            state.StoreSolution();
+            state.Solution[0] = 0.0;
         }
 
         /// <summary>

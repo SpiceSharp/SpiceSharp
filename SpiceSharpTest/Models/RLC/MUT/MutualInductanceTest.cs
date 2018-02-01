@@ -90,7 +90,7 @@ namespace SpiceSharpTest.Models.MUT
             AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1, 1e8, 10));
 
             // Create exports
-            Func<State, Complex>[] exports = new Func<State, Complex>[1];
+            Func<ComplexState, Complex>[] exports = new Func<ComplexState, Complex>[1];
             ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = ac.CreateACVoltageExport("OUT");

@@ -42,8 +42,8 @@ namespace SpiceSharp.Components.NoiseSources
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
-            Complex val = state.ComplexSolution[Nodes[0]] - state.ComplexSolution[Nodes[1]];
+            var state = simulation.ComplexState;
+            Complex val = state.Solution[Nodes[0]] - state.Solution[Nodes[1]];
             double gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
             return 2.0 * Circuit.Charge * Math.Abs(Current) * gain;
         }

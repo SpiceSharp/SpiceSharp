@@ -14,6 +14,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public State State { get; }
 
+        public ComplexState ComplexState { get; }
+
         /// <summary>
         /// Get the integration method if any
         /// </summary>
@@ -41,10 +43,21 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="state">State</param>
+        /// <param name="complexState">Complex state</param>
+        public ExportDataEventArgs(State state, ComplexState complexState)
+        {
+            State = state;
+            ComplexState = complexState;
+        }
+
+        /// <summary>
         /// Get the frequency
         /// </summary>
         /// <returns></returns>
-        public double Frequency => State.Laplace.Imaginary / (2.0 * Math.PI);
+        public double Frequency => ComplexState.Laplace.Imaginary / (2.0 * Math.PI);
 
         /// <summary>
         /// Get the current time

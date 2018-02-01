@@ -92,7 +92,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.ComplexState;
             Complex value = state.Laplace * Factor;
             Branch1Branch2Ptr.Sub(value);
             Branch2Branch1Ptr.Sub(value);

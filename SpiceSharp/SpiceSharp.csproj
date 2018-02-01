@@ -91,7 +91,8 @@
     <Compile Include="Components\Voltagesources\VCVS\BaseParameters.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Simulations\Base\BaseConfiguration.cs" />
-    <Compile Include="Simulations\Base\ComplexSolution.cs" />
+    <Compile Include="Simulations\Base\Frequency\ComplexSolution.cs" />
+    <Compile Include="Simulations\Base\Frequency\ComplexState.cs" />
     <Compile Include="Simulations\Base\Frequency\FrequencyConfiguration.cs" />
     <Compile Include="Simulations\Base\RealSolution.cs" />
     <Compile Include="Simulations\Base\Time\TimeConfiguration.cs" />

@@ -30,29 +30,29 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// Properties
         /// </summary>
         [PropertyName("v"), PropertyInfo("Complex voltage")]
-        public Complex GetVoltage(State state)
+        public Complex GetVoltage(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
+            return state.Solution[posourceNode] - state.Solution[negateNode];
         }
         [PropertyName("c"), PropertyName("i"), PropertyInfo("Complex current")]
-        public Complex GetCurrent(State state)
+        public Complex GetCurrent(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.ComplexSolution[contPosourceNode] - state.ComplexSolution[contNegateNode]) * bp.Coefficient.Value;
+            return (state.Solution[contPosourceNode] - state.Solution[contNegateNode]) * bp.Coefficient.Value;
         }
         [PropertyName("p"), PropertyInfo("Power")]
-        public Complex GetPower(State state)
+        public Complex GetPower(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
-            Complex i = (state.ComplexSolution[contPosourceNode] - state.ComplexSolution[contNegateNode]) * bp.Coefficient.Value;
+            Complex v = state.Solution[posourceNode] - state.Solution[negateNode];
+            Complex i = (state.Solution[contPosourceNode] - state.Solution[contNegateNode]) * bp.Coefficient.Value;
             return -v * Complex.Conjugate(i);
         }
 

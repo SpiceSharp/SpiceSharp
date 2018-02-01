@@ -23,12 +23,20 @@ namespace SpiceSharp.Simulations
         protected Collection<FrequencyBehavior> FrequencyBehaviors { get; private set; }
 
         /// <summary>
+        /// Gets the complex state
+        /// </summary>
+        public ComplexState ComplexState { get; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
         protected FrequencySimulation(Identifier name) : base(name)
         {
             Parameters.Add(new FrequencyConfiguration());
+
+            // Initialize the complex state to reuse the real state matrix (which can do both)
+            ComplexState = new ComplexState(State.Matrix);
         }
 
         /// <summary>
@@ -44,6 +52,9 @@ namespace SpiceSharp.Simulations
         protected FrequencySimulation(Identifier name, Sweep<double> frequencySweep) : base(name)
         {
             Parameters.Add(new FrequencyConfiguration(frequencySweep));
+
+            // Initialize the complex state to reuse the real state matrix (which can do both)
+            ComplexState = new ComplexState(State.Matrix);
         }
 
         /// <summary>
@@ -52,10 +63,13 @@ namespace SpiceSharp.Simulations
         protected override void Setup()
         {
             base.Setup();
+            
+            // Setup complex state
+            ComplexState.Initialize(Circuit);
 
             // Get behaviors
             FrequencyBehaviors = SetupBehaviors<FrequencyBehavior>();
-            var matrix = State.Matrix;
+            var matrix = ComplexState.Matrix;
             foreach (var behavior in FrequencyBehaviors)
                 behavior.GetMatrixPointers(matrix);
 
@@ -76,6 +90,9 @@ namespace SpiceSharp.Simulations
             FrequencyBehaviors = null;
             FrequencyConfiguration = null;
             FrequencySweep = null;
+            
+            // Destroy complex state
+            ComplexState.Destroy();
 
             base.Unsetup();
         }
@@ -86,28 +103,28 @@ namespace SpiceSharp.Simulations
         /// <param name="circuit">Circuit</param>
         protected void ACIterate(Circuit circuit)
         {
-            var state = State;
-            var matrix = state.Matrix;
+            var cstate = ComplexState;
+            var matrix = cstate.Matrix;
             matrix.Complex = true;
 
             // Initialize the circuit
-            if (!state.Initialized)
-                state.Initialize(circuit);
+            if (!cstate.Initialized)
+                cstate.Initialize(circuit);
 
             retry:
-            state.IsCon = true;
+            cstate.IsCon = true;
 
             // Load AC
-            state.Clear();
+            cstate.Clear();
             foreach (var behavior in FrequencyBehaviors)
                 behavior.Load(this);
 
-            if (state.Sparse.HasFlag(State.SparseStates.ACShouldReorder))
+            if (cstate.Sparse.HasFlag(ComplexState.SparseStates.ACShouldReorder))
             {
-                var error = matrix.Reorder(state.PivotAbsoluteTolerance, state.PivotRelativeTolerance);
-                state.Sparse &= ~State.SparseStates.ACShouldReorder;
+                var error = matrix.Reorder(cstate.PivotAbsoluteTolerance, cstate.PivotRelativeTolerance);
+                cstate.Sparse &= ~ComplexState.SparseStates.ACShouldReorder;
                 if (error != SparseError.Okay)
-                    throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
+                    throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(cstate.Matrix, "AC"));
             }
             else
             {
@@ -116,22 +133,22 @@ namespace SpiceSharp.Simulations
                 {
                     if (error == SparseError.Singular)
                     {
-                        state.Sparse |= State.SparseStates.ACShouldReorder;
+                        cstate.Sparse |= ComplexState.SparseStates.ACShouldReorder;
                         goto retry;
                     }
-                    throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(state.Matrix, "AC"));
+                    throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(cstate.Matrix, "AC"));
                 }
             }
 
             // Solve
-            matrix.Solve(state.ComplexRhs, state.ComplexRhs);
+            matrix.Solve(cstate.Rhs, cstate.Rhs);
 
             // Reset values
-            state.ComplexRhs[0] = 0.0;
-            state.ComplexSolution[0] = 0.0;
+            cstate.Rhs[0] = 0.0;
+            cstate.Rhs[0] = 0.0;
 
             // Store them in the solution
-            state.StoreComplexSolution();
+            cstate.StoreSolution();
         }
 
         /// <summary>
@@ -160,7 +177,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">Name</param>
         /// <param name="property">Property</param>
         /// <returns></returns>
-        public Func<State, Complex> CreateACExport(Identifier name, string property)
+        public Func<ComplexState, Complex> CreateACExport(Identifier name, string property)
         {
             var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
@@ -174,13 +191,13 @@ namespace SpiceSharp.Simulations
         /// <param name="pos">Positive node</param>
         /// <param name="neg">Negative node</param>
         /// <returns></returns>
-        public virtual Func<State, Complex> CreateACVoltageExport(Identifier pos, Identifier neg)
+        public virtual Func<ComplexState, Complex> CreateACVoltageExport(Identifier pos, Identifier neg)
         {
             int node = Circuit.Nodes[pos].Index;
             if (neg == null)
-                return (State state) => state.ComplexSolution[node];
+                return (ComplexState state) => state.Solution[node];
             int refnode = Circuit.Nodes[neg].Index;
-            return (State state) => state.ComplexSolution[node] - state.ComplexSolution[refnode];
+            return (ComplexState state) => state.Solution[node] - state.Solution[refnode];
         }
 
         /// <summary>
@@ -188,7 +205,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="pos">Positive node</param>
         /// <returns></returns>
-        public virtual Func<State, Complex> CreateACVoltageExport(Identifier pos)
+        public virtual Func<ComplexState, Complex> CreateACVoltageExport(Identifier pos)
         {
             return CreateACVoltageExport(pos, null);
         }

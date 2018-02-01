@@ -37,12 +37,13 @@ namespace SpiceSharp.Simulations
             var circuit = Circuit;
 
             var state = State;
+            var cstate = ComplexState;
             var baseconfig = BaseConfiguration;
             var freqconfig = FrequencyConfiguration;
             
             // Calculate the operating point
             state.Initialize(circuit);
-            state.Laplace = 0.0;
+            cstate.Laplace = 0.0;
             state.Domain = State.DomainType.Frequency;
             state.UseIC = false;
             state.UseDC = true;
@@ -59,7 +60,7 @@ namespace SpiceSharp.Simulations
                 behavior.InitializeParameters(this);
 
             // Export operating point if requested
-            var exportargs = new ExportDataEventArgs(State);
+            var exportargs = new ExportDataEventArgs(State, ComplexState);
             if (freqconfig.KeepOpInfo)
                 Export(exportargs);
 
@@ -71,7 +72,7 @@ namespace SpiceSharp.Simulations
             foreach (double freq in FrequencySweep.Points)
             {
                 // Calculate the current frequency
-                state.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
+                cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
 
                 // Solve
                 ACIterate(circuit);

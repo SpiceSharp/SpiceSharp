@@ -37,20 +37,20 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         [PropertyName("v"), PropertyInfo("Complex voltage")]
         public Complex Voltage => AC;
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Complex current")]
-        public Complex GetCurrent(State state)
+        public Complex GetCurrent(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-            return state.ComplexSolution[branchEq];
+            return state.Solution[branchEq];
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
-        public Complex GetPower(State state)
+        public Complex GetPower(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.ComplexSolution[posourceNode] - state.ComplexSolution[negateNode];
-            Complex i = state.ComplexSolution[branchEq];
+            Complex v = state.Solution[posourceNode] - state.Solution[negateNode];
+            Complex i = state.Solution[branchEq];
             return -v * Complex.Conjugate(i);
         }
 
@@ -130,12 +130,12 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.ComplexState;
             PosBranchPtr.Add(1.0);
             BranchPosPtr.Add(1.0);
             NegBranchPtr.Sub(1.0);
             BranchNegPtr.Sub(1.0);
-            state.ComplexRhs[branchEq] += AC;
+            state.Rhs[branchEq] += AC;
         }
     }
 }

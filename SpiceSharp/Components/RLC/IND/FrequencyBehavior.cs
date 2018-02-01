@@ -104,7 +104,7 @@ namespace SpiceSharp.Components.InductorBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.State;
+            var state = simulation.ComplexState;
             Complex val = state.Laplace * bp.Inductance.Value;
 
             PosBranchPtr.Add(1.0);
