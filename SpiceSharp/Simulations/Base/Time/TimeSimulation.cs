@@ -23,9 +23,9 @@ namespace SpiceSharp.Simulations
         public IntegrationMethod Method { get; protected set; }
 
         /// <summary>
-        /// Gets all states in the simulation
+        /// Gets the state pool
         /// </summary>
-        public StatePool States { get; protected set; }
+        public StatePool StatePool { get; private set; }
 
         /// <summary>
         /// Time-domain behaviors
@@ -61,13 +61,13 @@ namespace SpiceSharp.Simulations
             Method.Breaks.MinBreak = config.MaxStep * 5e-5;
 
             // Setup the state pool and register states
-            States = new StatePool(Method);
+            StatePool = new StatePool(Method);
             foreach (var behavior in TransientBehaviors)
             {
                 behavior.GetMatrixPointers(RealState.Matrix);
-                behavior.CreateStates(States);
+                behavior.CreateStates(StatePool);
             }
-            States.BuildStates();
+            StatePool.BuildStates();
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace SpiceSharp.Simulations
             base.Execute();
 
             // Get the method
-            Method = States.Method;
+            Method = StatePool.Method;
         }
 
         /// <summary>

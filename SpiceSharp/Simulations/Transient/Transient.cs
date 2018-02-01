@@ -126,7 +126,7 @@ namespace SpiceSharp.Simulations
             state.UseDC = false;
             foreach (var behavior in TransientBehaviors)
                 behavior.GetDCState(this);
-            States.ClearDC();
+            StatePool.ClearDC();
 
             // Start our statistics
             Statistics.TransientTime.Start();
@@ -172,7 +172,7 @@ namespace SpiceSharp.Simulations
                     // resume:
                     Method.Delta = Math.Min(Method.Delta, timeconfig.MaxStep);
                     Method.Resume();
-                    States.History.Cycle();
+                    StatePool.History.Cycle();
 
                     // Calculate a new solution
                     while (true)

@@ -39,17 +39,5 @@ namespace SpiceSharp.Behaviors
             Dictionary[mytype] = behavior;
             Dictionary[basetype] = behavior;
         }
-
-        /// <summary>
-        /// Get a behavior
-        /// </summary>
-        /// <typeparam name="T">Behavior type</typeparam>
-        /// <returns></returns>
-        public T Get<T>() where T : Behavior
-        {
-            if (Dictionary.TryGetValue(typeof(T), out Behavior behavior))
-                return (T)behavior;
-            return null;
-        }
     }
 }

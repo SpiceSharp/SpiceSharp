@@ -86,11 +86,6 @@ namespace SpiceSharp.Simulations
         public int Order { get; private set; }
 
         /// <summary>
-        /// True if already initialized
-        /// </summary>
-        public bool Initialized { get; private set; } = false;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         public ComplexState()
@@ -112,7 +107,7 @@ namespace SpiceSharp.Simulations
         /// Initialize circuit
         /// </summary>
         /// <param name="circuit"></param>
-        public void Initialize(Circuit circuit)
+        public override void Initialize(Circuit circuit)
         {
             if (circuit == null)
                 throw new ArgumentNullException(nameof(circuit));
@@ -120,19 +115,21 @@ namespace SpiceSharp.Simulations
             Order = circuit.Nodes.Count + 1;
             Rhs = new ComplexSolution(Order);
             Solution = new ComplexSolution(Order);
-            Initialized = true;
+
+            base.Initialize(circuit);
         }
 
         /// <summary>
         /// Destroy/clear the state
         /// </summary>
-        public void Destroy()
+        public override void Destroy()
         {
             Order = 0;
-            Initialized = false;
             Rhs = null;
             Solution = null;
             Matrix = null;
+
+            base.Destroy();
         }
 
         /// <summary>

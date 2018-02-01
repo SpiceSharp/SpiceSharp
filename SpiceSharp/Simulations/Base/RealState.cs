@@ -189,11 +189,6 @@ namespace SpiceSharp.Simulations
         public int Order { get; private set; } = 0;
 
         /// <summary>
-        /// True if already initialized
-        /// </summary>
-        public bool Initialized { get; private set; } = false;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         public RealState()
@@ -205,7 +200,7 @@ namespace SpiceSharp.Simulations
         /// Initialize the state
         /// </summary>
         /// <param name="circuit"></param>
-        public void Initialize(Circuit circuit)
+        public override void Initialize(Circuit circuit)
         {
             if (circuit == null)
                 throw new ArgumentNullException(nameof(circuit));
@@ -215,20 +210,21 @@ namespace SpiceSharp.Simulations
             Rhs = new RealSolution(Order);
             Solution = new RealSolution(Order);
             OldSolution = new RealSolution(Order);
-            Initialized = true;
+
+            base.Initialize(circuit);
         }
 
         /// <summary>
         /// Destroy/clear the state
         /// </summary>
-        public void Destroy()
+        public override void Destroy()
         {
             Order = 0;
-            Initialized = false;
-
             Rhs = null;
             Solution = null;
             Matrix = null;
+
+            base.Destroy();
         }
 
         /// <summary>

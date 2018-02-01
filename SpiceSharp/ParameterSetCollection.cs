@@ -27,18 +27,6 @@ namespace SpiceSharp
 
             Add(set.GetType(), set);
         }
-
-        /// <summary>
-        /// Get a parameter set if it exists, else returns null
-        /// </summary>
-        /// <typeparam name="T">Parameters</typeparam>
-        /// <returns></returns>
-        public T Get<T>() where T : ParameterSet
-        {
-            if (TryGetValue(typeof(T), out ParameterSet result))
-                return (T)result;
-            return null;
-        }
         
         /// <summary>
         /// Set a parameter by name
