@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posourceNode, negateNode;
+        int posNode, negNode;
         Complex ac;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-            return state.Solution[posourceNode] - state.Solution[negateNode];
+            return state.Solution[posNode] - state.Solution[negNode];
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(ComplexState state)
@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.Solution[posourceNode] - state.Solution[negateNode];
+            Complex v = state.Solution[posNode] - state.Solution[negNode];
             return -v * Complex.Conjugate(ac);
         }
 
@@ -92,8 +92,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posourceNode = pins[0];
-            negateNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -106,8 +106,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.ComplexState;
-            state.Rhs[posourceNode] += ac;
-            state.Rhs[negateNode] -= ac;
+            state.Rhs[posNode] += ac;
+            state.Rhs[negNode] -= ac;
         }
     }
 }

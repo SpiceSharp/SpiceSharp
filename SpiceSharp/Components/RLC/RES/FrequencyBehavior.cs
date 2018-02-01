@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[posourceNode] - state.Solution[negateNode];
+            return state.Solution[posNode] - state.Solution[negNode];
         }
         [PropertyName("i"), PropertyInfo("Current")]
         public Complex GetCurrent(ComplexState state)
@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            var voltage = state.Solution[posourceNode] - state.Solution[negateNode];
+            var voltage = state.Solution[posNode] - state.Solution[negNode];
             return voltage * load.Conductance;
         }
         [PropertyName("p"), PropertyInfo("Power")]
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            var voltage = state.Solution[posourceNode] - state.Solution[negateNode];
+            var voltage = state.Solution[posNode] - state.Solution[negNode];
             return voltage * Complex.Conjugate(voltage) * load.Conductance;
         }
 
@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posourceNode, negateNode;
+        int posNode, negNode;
         protected ElementValue PosPosPtr { get; private set; }
         protected ElementValue NegNegPtr { get; private set; }
         protected ElementValue PosNegPtr { get; private set; }
@@ -84,10 +84,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            PosPosPtr = matrix.GetElement(posourceNode, posourceNode);
-            NegNegPtr = matrix.GetElement(negateNode, negateNode);
-            PosNegPtr = matrix.GetElement(posourceNode, negateNode);
-            NegPosPtr = matrix.GetElement(negateNode, posourceNode);
+            PosPosPtr = matrix.GetElement(posNode, posNode);
+            NegNegPtr = matrix.GetElement(negNode, negNode);
+            PosNegPtr = matrix.GetElement(posNode, negNode);
+            NegPosPtr = matrix.GetElement(negNode, posNode);
         }
 
         /// <summary>
@@ -112,8 +112,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posourceNode = pins[0];
-            negateNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>

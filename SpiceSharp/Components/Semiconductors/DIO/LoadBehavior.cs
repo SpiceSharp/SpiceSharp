@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 using SpiceSharp.Sparse;
@@ -23,7 +24,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posourceNode, negateNode;
+        int posNode, negNode;
         public int PosPrimeNode { get; private set; }
         protected ElementValue PosPosPrimePtr { get; private set; }
         protected ElementValue NegPosPrimePtr { get; private set; }
@@ -36,9 +37,16 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Extra variables
         /// </summary>
+        [PropertyName("vd"), PropertyInfo("Voltage across the internal diode")]
         public double Voltage { get; protected set; }
+        [PropertyName("v"), PropertyInfo("Voltage across the diode")]
+        public double GetVoltage(RealState state) => state.Solution[posNode] - state.Solution[negNode];
+        [PropertyName("i"), PropertyName("id"), PropertyInfo("Current through the diode")]
         public double Current { get; protected set; }
+        [PropertyName("gd"), PropertyInfo("Small-signal conductance")]
         public double Conduct { get; protected set; }
+        [PropertyName("p"), PropertyName("pd"), PropertyInfo("Power")]
+        public double GetPower(RealState state) => (state.Solution[posNode] - state.Solution[negNode]) * -Current;
 
         /// <summary>
         /// Constructor
@@ -65,26 +73,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
         }
 
         /// <summary>
-        /// Create an export method
-        /// </summary>
-        /// <param name="propertyName">Parameter name</param>
-        /// <returns></returns>
-        public override Func<RealState, double> CreateExport(string propertyName)
-        {
-            switch (propertyName)
-            {
-                case "vd": return (RealState state) => Voltage;
-                case "v": return (RealState state) => state.Solution[posourceNode] - state.Solution[negateNode];
-                case "i":
-                case "id": return (RealState state) => Current;
-                case "gd": return (RealState state) => Conduct;
-                case "p": return (RealState state) => (state.Solution[posourceNode] - state.Solution[negateNode]) * -Current;
-                case "pd": return (RealState state) => -Voltage * Current;
-                default: return null;
-            }
-        }
-        
-        /// <summary>
         /// Connect the behavior
         /// </summary>
         /// <param name="pins">Pins</param>
@@ -94,8 +82,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posourceNode = pins[0];
-            negateNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
         
         /// <summary>
@@ -108,20 +96,20 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(nodes));
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
-            
-            // Create
-            if (mbp.Resistance.Value == 0)
-                PosPrimeNode = posourceNode;
-            else
-                PosPrimeNode = nodes.Create(Name.Grow("#pos")).Index;
 
-            // Get matrix pointers
-            PosPosPrimePtr = matrix.GetElement(posourceNode, PosPrimeNode);
-            NegPosPrimePtr = matrix.GetElement(negateNode, PosPrimeNode);
-            PosPrimePosPtr = matrix.GetElement(PosPrimeNode, posourceNode);
-            PosPrimeNegPtr = matrix.GetElement(PosPrimeNode, negateNode);
-            PosPosPtr = matrix.GetElement(posourceNode, posourceNode);
-            NegNegPtr = matrix.GetElement(negateNode, negateNode);
+            // Create
+            if (mbp.Resistance > 0)
+                PosPrimeNode = nodes.Create(Name.Grow("#pos")).Index;
+            else
+                PosPrimeNode = posNode;
+
+            // Get matrix elements
+            PosPosPrimePtr = matrix.GetElement(posNode, PosPrimeNode);
+            NegPosPrimePtr = matrix.GetElement(negNode, PosPrimeNode);
+            PosPrimePosPtr = matrix.GetElement(PosPrimeNode, posNode);
+            PosPrimeNegPtr = matrix.GetElement(PosPrimeNode, negNode);
+            PosPosPtr = matrix.GetElement(posNode, posNode);
+            NegNegPtr = matrix.GetElement(negNode, negNode);
             PosPrimePosPrimePtr = matrix.GetElement(PosPrimeNode, PosPrimeNode);
         }
 
@@ -176,7 +164,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             else
             {
                 // Get voltage over the diode (without series resistance)
-                vd = state.Solution[PosPrimeNode] - state.Solution[negateNode];
+                vd = state.Solution[PosPrimeNode] - state.Solution[negNode];
 
                 // limit new junction voltage
                 if ((mbp.BreakdownVoltage.Given) && (vd < Math.Min(0, -temp.TempBreakdownVoltage + 10 * vte)))
@@ -199,7 +187,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 cd = csat * (evd - 1) + state.Gmin * vd;
                 gd = csat * evd / vte + state.Gmin;
             }
-            else if (temp.TempBreakdownVoltage == 0.0 || vd >= -temp.TempBreakdownVoltage)
+            else if (!mbp.BreakdownVoltage.Given || vd >= -temp.TempBreakdownVoltage)
             {
                 // Reverse bias
                 arg = 3 * vte / (vd * Math.E);
@@ -229,7 +217,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // Load Rhs vector
             cdeq = cd - gd * vd;
-            state.Rhs[negateNode] += cdeq;
+            state.Rhs[negNode] += cdeq;
             state.Rhs[PosPrimeNode] -= cdeq;
 
             // Load Y-matrix
@@ -255,7 +243,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var state = simulation.RealState;
             var config = simulation.BaseConfiguration;
             double delvd, cdhat, cd;
-            double vd = state.Solution[PosPrimeNode] - state.Solution[negateNode];
+            double vd = state.Solution[PosPrimeNode] - state.Solution[negNode];
 
             delvd = vd - Voltage;
             cdhat = Current + Conduct * delvd;

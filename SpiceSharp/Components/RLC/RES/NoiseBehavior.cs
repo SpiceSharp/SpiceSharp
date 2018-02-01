@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posourceNode, negateNode;
+        int posNode, negNode;
 
         /// <summary>
         /// Get resistor noise sources
@@ -53,8 +53,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posourceNode = pins[0];
-            negateNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         public override void ConnectNoise()
         {
-            ResistorNoise.Setup(posourceNode, negateNode);
+            ResistorNoise.Setup(posNode, negNode);
         }
 
         /// <summary>

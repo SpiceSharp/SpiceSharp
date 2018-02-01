@@ -64,31 +64,31 @@ namespace SpiceSharp.Components.DiodeBehaviors
             }
             VtNominal = Circuit.KOverQ * mbp.NominalTemperature;
 
-            // limit grading coeff to max of .9
-            if (mbp.GradingCoefficient > .9)
+            // limit grading coeff to max of 0.9
+            if (mbp.GradingCoefficient > 0.9)
             {
                 mbp.GradingCoefficient.Value = 0.9;
                 CircuitWarning.Warning(this, "{0}: grading coefficient too large, limited to 0.9".FormatString(Name));
             }
 
-            // limit activation energy to min of .1
-            if (mbp.ActivationEnergy < .1)
+            // limit activation energy to min of 0.1
+            if (mbp.ActivationEnergy < 0.1)
             {
                 mbp.ActivationEnergy.Value = 0.1;
                 CircuitWarning.Warning(this, "{0}: activation energy too small, limited to 0.1".FormatString(Name));
             }
 
             // limit depletion cap coeff to max of .95
-            if (mbp.DepletionCapCoefficient > .95)
+            if (mbp.DepletionCapCoefficient > 0.95)
             {
                 mbp.DepletionCapCoefficient.Value = 0.95;
                 CircuitWarning.Warning(this, "{0}: coefficient Fc too large, limited to 0.95".FormatString(Name));
             }
 
-            if (!mbp.Resistance.Given || mbp.Resistance.Value == 0)
-                Conductance = 0;
-            else
+            if (mbp.Resistance > 0)
                 Conductance = 1 / mbp.Resistance;
+            else
+                Conductance = 0;
             Xfc = Math.Log(1 - mbp.DepletionCapCoefficient);
 
             F2 = Math.Exp((1 + mbp.GradingCoefficient) * Xfc);

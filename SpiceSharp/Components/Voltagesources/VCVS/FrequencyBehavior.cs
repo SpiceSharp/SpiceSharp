@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posourceNode, negateNode, contPosourceNode, contNegateNode, branchEq;
+        int posNode, negNode, contPosourceNode, contNegateNode, branchEq;
         protected ElementValue PosBranchPtr { get; private set; }
         protected ElementValue NegBranchPtr { get; private set; }
         protected ElementValue BranchPosPtr { get; private set; }
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[posourceNode] - state.Solution[negateNode];
+            return state.Solution[posNode] - state.Solution[negNode];
         }
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Complex current")]
         public Complex GetCurrent(ComplexState state)
@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.Solution[posourceNode] - state.Solution[negateNode];
+            Complex v = state.Solution[posNode] - state.Solution[negNode];
             Complex i = state.Solution[branchEq];
             return -v * Complex.Conjugate(i);
         }
@@ -91,8 +91,8 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            posourceNode = pins[0];
-            negateNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
             contPosourceNode = pins[2];
             contNegateNode = pins[3];
         }
@@ -107,10 +107,10 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(matrix));
 
             branchEq = load.BranchEq;
-            PosBranchPtr = matrix.GetElement(posourceNode, branchEq);
-            NegBranchPtr = matrix.GetElement(negateNode, branchEq);
-            BranchPosPtr = matrix.GetElement(branchEq, posourceNode);
-            BranchNegPtr = matrix.GetElement(branchEq, negateNode);
+            PosBranchPtr = matrix.GetElement(posNode, branchEq);
+            NegBranchPtr = matrix.GetElement(negNode, branchEq);
+            BranchPosPtr = matrix.GetElement(branchEq, posNode);
+            BranchNegPtr = matrix.GetElement(branchEq, negNode);
             BranchControlPosPtr = matrix.GetElement(branchEq, contPosourceNode);
             BranchControlNegPtr = matrix.GetElement(branchEq, contNegateNode);
         }

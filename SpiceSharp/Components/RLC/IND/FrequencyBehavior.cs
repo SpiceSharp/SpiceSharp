@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posourceNode, negateNode, branchEq;
+        int posNode, negNode, branchEq;
         protected ElementValue PosBranchPtr { get; private set; }
         protected ElementValue NegBranchPtr { get; private set; }
         protected ElementValue BranchNegPtr { get; private set; }
@@ -59,8 +59,8 @@ namespace SpiceSharp.Components.InductorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posourceNode = pins[0];
-            negateNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -76,10 +76,10 @@ namespace SpiceSharp.Components.InductorBehaviors
             branchEq = load.BranchEq;
 
             // Get matrix pointers
-            PosBranchPtr = matrix.GetElement(posourceNode, branchEq);
-            NegBranchPtr = matrix.GetElement(negateNode, branchEq);
-            BranchNegPtr = matrix.GetElement(branchEq, negateNode);
-            BranchPosPtr = matrix.GetElement(branchEq, posourceNode);
+            PosBranchPtr = matrix.GetElement(posNode, branchEq);
+            NegBranchPtr = matrix.GetElement(negNode, branchEq);
+            BranchNegPtr = matrix.GetElement(branchEq, negNode);
+            BranchPosPtr = matrix.GetElement(branchEq, posNode);
             BranchBranchPtr = matrix.GetElement(branchEq, branchEq);
         }
 

@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posourceNode, negateNode, branchEq, contBranchEq;
+        int posNode, negNode, branchEq, contBranchEq;
         protected ElementValue PosBranchPtr { get; private set; }
         protected ElementValue NegBranchPtr { get; private set; }
         protected ElementValue BranchPosPtr { get; private set; }
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[posourceNode] - state.Solution[negateNode];
+            return state.Solution[posNode] - state.Solution[negNode];
         }
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Complex current")]
         public Complex GetCurrent(ComplexState state)
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.Solution[posourceNode] - state.Solution[negateNode];
+            Complex v = state.Solution[posNode] - state.Solution[negNode];
             Complex i = state.Solution[branchEq];
             return -v * Complex.Conjugate(i);
         }
@@ -89,8 +89,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posourceNode = pins[0];
-            negateNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -107,10 +107,10 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
             branchEq = load.BranchEq;
 
             // Get matrix pointers
-            PosBranchPtr = matrix.GetElement(posourceNode, branchEq);
-            NegBranchPtr = matrix.GetElement(negateNode, branchEq);
-            BranchPosPtr = matrix.GetElement(branchEq, posourceNode);
-            BranchNegPtr = matrix.GetElement(branchEq, negateNode);
+            PosBranchPtr = matrix.GetElement(posNode, branchEq);
+            NegBranchPtr = matrix.GetElement(negNode, branchEq);
+            BranchPosPtr = matrix.GetElement(branchEq, posNode);
+            BranchNegPtr = matrix.GetElement(branchEq, negNode);
             BranchControlBranchPtr = matrix.GetElement(branchEq, contBranchEq);
         }
         

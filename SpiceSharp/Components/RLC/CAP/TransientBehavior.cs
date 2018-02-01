@@ -28,20 +28,20 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return QCap.Derivative * (state.Solution[posourceNode] - state.Solution[negateNode]);
+            return QCap.Derivative * (state.Solution[posNode] - state.Solution[negNode]);
         }
         [PropertyName("v"), PropertyInfo("Voltage")]
         public double GetVoltage(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[posourceNode] - state.Solution[negateNode];
+            return state.Solution[posNode] - state.Solution[negNode];
         }
 
         /// <summary>
         /// Nodes and states
         /// </summary>
-        int posourceNode, negateNode;
+        int posNode, negNode;
         protected ElementValue PosPosPtr { get; private set; }
         protected ElementValue NegNegPtr { get; private set; }
         protected ElementValue PosNegPtr { get; private set; }
@@ -77,8 +77,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posourceNode = pins[0];
-            negateNode = pins[1];
+            posNode = pins[0];
+            negNode = pins[1];
         }
 
         /// <summary>
@@ -102,10 +102,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
 
-            PosPosPtr = matrix.GetElement(posourceNode, posourceNode);
-            NegNegPtr = matrix.GetElement(negateNode, negateNode);
-            NegPosPtr = matrix.GetElement(negateNode, posourceNode);
-            PosNegPtr = matrix.GetElement(posourceNode, negateNode);
+            PosPosPtr = matrix.GetElement(posNode, posNode);
+            NegNegPtr = matrix.GetElement(negNode, negNode);
+            NegPosPtr = matrix.GetElement(negNode, posNode);
+            PosNegPtr = matrix.GetElement(posNode, negNode);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             if (bp.InitialCondition.Given)
                 QCap.Current = bp.InitialCondition;
             else
-                QCap.Current = bp.Capacitance * (sol[posourceNode] - sol[negateNode]);
+                QCap.Current = bp.Capacitance * (sol[posNode] - sol[negNode]);
         }
         
         /// <summary>
@@ -146,7 +146,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double vcap = state.Solution[posourceNode] - state.Solution[negateNode];
+            double vcap = state.Solution[posNode] - state.Solution[negNode];
 
             // Integrate
             QCap.Current = bp.Capacitance * vcap;
@@ -161,8 +161,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             NegPosPtr.Sub(geq);
 
             // Load Rhs vector
-            state.Rhs[posourceNode] -= ceq;
-            state.Rhs[negateNode] += ceq;
+            state.Rhs[posNode] -= ceq;
+            state.Rhs[negNode] += ceq;
         }
 
         /// <summary>
