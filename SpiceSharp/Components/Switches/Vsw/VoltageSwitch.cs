@@ -39,7 +39,7 @@ namespace SpiceSharp.Components
             : base(name, VoltageSwitchPinCount)
         {
             // Register parameters
-            Parameters.Add(new BaseParameters());
+            ParameterSets.Add(new BaseParameters());
 
             // Add factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -59,7 +59,7 @@ namespace SpiceSharp.Components
             : base(name, VoltageSwitchPinCount)
         {
             // Register parameters
-            Parameters.Add(new BaseParameters());
+            ParameterSets.Add(new BaseParameters());
 
             // Add factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));

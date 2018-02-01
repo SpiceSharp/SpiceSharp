@@ -46,7 +46,7 @@ namespace SpiceSharp.Simulations
             var config = new DCConfiguration();
             SweepConfiguration s = new SweepConfiguration(source, start, stop, step);
             config.Sweeps.Add(s);
-            Parameters.Add(config);
+            ParameterSets.Add(config);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SpiceSharp.Simulations
             var dcconfig = new DCConfiguration();
             foreach (var sweep in sweeps)
                 dcconfig.Sweeps.Add(sweep);
-            Parameters.Add(dcconfig);
+            ParameterSets.Add(dcconfig);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get DC configuration
-            DCConfiguration = Parameters.Get<DCConfiguration>();
+            DCConfiguration = ParameterSets.Get<DCConfiguration>();
 
             // Get sweeps
             Sweeps = new NestedSweeps(DCConfiguration.Sweeps);
@@ -118,9 +118,9 @@ namespace SpiceSharp.Simulations
 
                 // Get the parameter and save it for restoring later
                 if (component is VoltageSource vsrc)
-                    swept[i] = vsrc.Parameters.Get<Components.VoltagesourceBehaviors.BaseParameters>().DCValue;
+                    swept[i] = vsrc.ParameterSets.Get<Components.VoltagesourceBehaviors.BaseParameters>().DCValue;
                 else if (component is CurrentSource isrc)
-                    swept[i] = isrc.Parameters.Get<Components.CurrentsourceBehaviors.BaseParameters>().DCValue;
+                    swept[i] = isrc.ParameterSets.Get<Components.CurrentsourceBehaviors.BaseParameters>().DCValue;
                 else
                     throw new CircuitException("Invalid sweep object");
                 original[i] = (Parameter)swept[i].Clone();

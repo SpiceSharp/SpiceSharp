@@ -14,8 +14,8 @@ namespace SpiceSharp.Components
         public Mosfet2Model(Identifier name) : base(name)
         {
             // Add parameters
-            Parameters.Add(new ModelBaseParameters());
-            Parameters.Add(new ModelNoiseParameters());
+            ParameterSets.Add(new ModelBaseParameters());
+            ParameterSets.Add(new ModelNoiseParameters());
 
             // Add factories
             Behaviors.Add(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));

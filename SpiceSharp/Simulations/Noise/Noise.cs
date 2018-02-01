@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">Name</param>
         public Noise(Identifier name) : base(name)
         {
-            Parameters.Add(new NoiseConfiguration());
+            ParameterSets.Add(new NoiseConfiguration());
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace SpiceSharp.Simulations
         /// <param name="frequencySweep">Frequency sweep</param>
         public Noise(Identifier name, Identifier output, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
-            Parameters.Add(new NoiseConfiguration(output, null, input));
+            ParameterSets.Add(new NoiseConfiguration(output, null, input));
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace SpiceSharp.Simulations
         /// <param name="frequencySweep">Frequency sweep</param>
         public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
-            Parameters.Add(new NoiseConfiguration(output, reference, input));
+            ParameterSets.Add(new NoiseConfiguration(output, reference, input));
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get behaviors and configurations
-            NoiseConfiguration = Parameters.Get<NoiseConfiguration>();
+            NoiseConfiguration = ParameterSets.Get<NoiseConfiguration>();
             NoiseBehaviors = SetupBehaviors<NoiseBehavior>();
         }
 
@@ -166,13 +166,13 @@ namespace SpiceSharp.Simulations
             Entity source = Circuit.Objects[name];
             if (source is VoltageSource vsource)
             {
-                var ac = vsource.Parameters.Get<Components.VoltagesourceBehaviors.FrequencyParameters>();
+                var ac = vsource.ParameterSets.Get<Components.VoltagesourceBehaviors.FrequencyParameters>();
                 if (!ac.ACMagnitude.Given || ac.ACMagnitude == 0.0)
                     throw new CircuitException("{0}: Noise input source {1} has no AC input".FormatString(Name, vsource.Name));
             }
             else if (source is CurrentSource isource)
             {
-                var ac = isource.Parameters.Get<Components.CurrentsourceBehaviors.FrequencyParameters>();
+                var ac = isource.ParameterSets.Get<Components.CurrentsourceBehaviors.FrequencyParameters>();
                 if (!ac.ACMagnitude.Given || ac.ACMagnitude == 0.0)
                     throw new CircuitException("{0}: Noise input source {1} has not AC input".FormatString(Name, isource.Name));
             }

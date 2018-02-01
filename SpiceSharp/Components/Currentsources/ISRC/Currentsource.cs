@@ -28,8 +28,8 @@ namespace SpiceSharp.Components
             : base(name, CurrentSourcePinCount)
         {
             // Add parameters
-            Parameters.Add(new BaseParameters());
-            Parameters.Add(new FrequencyParameters());
+            ParameterSets.Add(new BaseParameters());
+            ParameterSets.Add(new FrequencyParameters());
 
             // Add factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -48,8 +48,8 @@ namespace SpiceSharp.Components
             : base(name, CurrentSourcePinCount)
         {
             // Add parameters
-            Parameters.Add(new BaseParameters(dc));
-            Parameters.Add(new FrequencyParameters());
+            ParameterSets.Add(new BaseParameters(dc));
+            ParameterSets.Add(new FrequencyParameters());
 
             // Add factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -71,8 +71,8 @@ namespace SpiceSharp.Components
             : base(name, CurrentSourcePinCount)
         {
             // Add parameters
-            Parameters.Add(new BaseParameters(waveform));
-            Parameters.Add(new FrequencyParameters());
+            ParameterSets.Add(new BaseParameters(waveform));
+            ParameterSets.Add(new FrequencyParameters());
 
             // Add factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));

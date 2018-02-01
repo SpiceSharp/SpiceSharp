@@ -38,7 +38,7 @@ namespace SpiceSharp.Components
             : base(name, CurrentControlledVoltageSourcePinCount)
         {
             // Add parameters
-            Parameters.Add(new BaseParameters());
+            ParameterSets.Add(new BaseParameters());
 
             // Add factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -57,7 +57,7 @@ namespace SpiceSharp.Components
             : base(name, CurrentControlledVoltageSourcePinCount)
         {
             // Add parameters
-            Parameters.Add(new BaseParameters(gain));
+            ParameterSets.Add(new BaseParameters(gain));
 
             // Add factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));

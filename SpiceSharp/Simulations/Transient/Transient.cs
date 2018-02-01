@@ -31,7 +31,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">Name</param>
         public Transient(Identifier name) : base(name)
         {
-            Parameters.Add(new TimeConfiguration());
+            ParameterSets.Add(new TimeConfiguration());
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace SpiceSharp.Simulations
         /// <param name="final">Final time</param>
         public Transient(Identifier name, double step, double final) : base(name)
         {
-            Parameters.Add(new TimeConfiguration(step, final));
+            ParameterSets.Add(new TimeConfiguration(step, final));
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace SpiceSharp.Simulations
         /// <param name="maxStep">Maximum timestep</param>
         public Transient(Identifier name, double step, double final, double maxStep) : base(name)
         {
-            Parameters.Add(new TimeConfiguration(step, final, maxStep));
+            ParameterSets.Add(new TimeConfiguration(step, final, maxStep));
         }
 
         /// <summary>

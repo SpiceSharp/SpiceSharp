@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -13,7 +12,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Simulation configuration
         /// </summary>
-        public ParameterSetCollection Parameters { get; } = new ParameterSetCollection();
+        public ParameterSetCollection ParameterSets { get; } = new ParameterSetCollection();
 
         /// <summary>
         /// States of the simulation

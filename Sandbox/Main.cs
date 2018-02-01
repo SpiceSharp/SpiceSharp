@@ -42,7 +42,7 @@ namespace Sandbox
                     "FC = 0.533878 CJS = 0 VJS = 0.75 MJS = 0.5",
                     "TR = 2.73328e-08 PTF = 0 KF = 0 AF = 1"))
                 );
-            ckt.Objects["V1"].Parameters.SetProperty("acmag", 1.0);
+            ckt.Objects["V1"].ParameterSets.SetProperty("acmag", 1.0);
 
             // Create simulation
             AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 5));
@@ -120,7 +120,7 @@ namespace Sandbox
                 double value = double.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
 
                 // Set the entity parameter
-                entity.Parameters.SetProperty(name, value);
+                entity.ParameterSets.SetProperty(name, value);
             }
         }
     }

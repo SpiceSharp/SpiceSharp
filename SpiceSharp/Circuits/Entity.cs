@@ -16,7 +16,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Get a collection of parameters
         /// </summary>
-        public ParameterSetCollection Parameters { get; } = new ParameterSetCollection();
+        public ParameterSetCollection ParameterSets { get; } = new ParameterSetCollection();
 
         /// <summary>
         /// Get the name of the object
@@ -66,7 +66,7 @@ namespace SpiceSharp.Circuits
 
             // By default, we include the parameters of this entity
             SetupDataProvider result = new SetupDataProvider();
-            result.Add(Parameters);
+            result.Add(ParameterSets);
             result.Add(pool.GetEntityBehaviors(Name));
             return result;
         }

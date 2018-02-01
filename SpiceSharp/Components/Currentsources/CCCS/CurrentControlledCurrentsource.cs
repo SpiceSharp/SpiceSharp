@@ -43,7 +43,7 @@ namespace SpiceSharp.Components
             Priority = -1;
 
             // Add parameters
-            Parameters.Add(new BaseParameters());
+            ParameterSets.Add(new BaseParameters());
 
             // Add factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -65,7 +65,7 @@ namespace SpiceSharp.Components
             Priority = -1;
 
             // Add parameters
-            Parameters.Add(new BaseParameters(gain));
+            ParameterSets.Add(new BaseParameters(gain));
 
             // Add factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -110,7 +110,7 @@ namespace SpiceSharp.Components
 
             // Add behaviors and parameters of the controlling voltage source
             provider.Add(pool.GetEntityBehaviors(ControllingName));
-            provider.Add(ControllingSource.Parameters);
+            provider.Add(ControllingSource.ParameterSets);
             return provider;
         }
     }

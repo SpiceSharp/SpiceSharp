@@ -82,7 +82,7 @@ namespace SpiceSharpTest.Models.DIO
                 CreateDiode("D1", "0", "OUT", "1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
                 new VoltageSource("V1", "OUT", "0", 1.0)
                 );
-            ckt.Objects["V1"].Parameters.SetProperty("acmag", 1.0);
+            ckt.Objects["V1"].ParameterSets.SetProperty("acmag", 1.0);
 
             // Create simulation
             AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1e3, 10e6, 5));

@@ -28,7 +28,7 @@ namespace SpiceSharp.Components
             : base(name, InductorPinCount)
         {
             // Add parameters
-            Parameters.Add(new BaseParameters());
+            ParameterSets.Add(new BaseParameters());
 
             // Add factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components
             : base(name, InductorPinCount)
         {
             // Add parameters
-            Parameters.Add(new BaseParameters(inductance));
+            ParameterSets.Add(new BaseParameters(inductance));
 
             // Add factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));

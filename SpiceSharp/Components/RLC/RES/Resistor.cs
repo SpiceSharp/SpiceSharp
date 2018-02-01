@@ -34,7 +34,7 @@ namespace SpiceSharp.Components
             : base(name, ResistorPinCount)
         {
             // Register parameters
-            Parameters.Add(new BaseParameters());
+            ParameterSets.Add(new BaseParameters());
 
             // Register factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
@@ -54,7 +54,7 @@ namespace SpiceSharp.Components
             : base(name, ResistorPinCount)
         {
             // Register parameters
-            Parameters.Add(new BaseParameters(res));
+            ParameterSets.Add(new BaseParameters(res));
 
             // Register factories
             Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));

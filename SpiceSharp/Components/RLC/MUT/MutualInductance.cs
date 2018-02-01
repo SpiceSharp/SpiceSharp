@@ -34,7 +34,7 @@ namespace SpiceSharp.Components
             Priority = -1;
 
             // Add parameters
-            Parameters.Add(new BaseParameters());
+            ParameterSets.Add(new BaseParameters());
 
             // Add factories
             Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
@@ -55,7 +55,7 @@ namespace SpiceSharp.Components
             Priority = -1;
 
             // Add parameters
-            Parameters.Add(new BaseParameters(coupling));
+            ParameterSets.Add(new BaseParameters(coupling));
 
             // Add factories
             Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
@@ -93,13 +93,13 @@ namespace SpiceSharp.Components
             // Register inductor 1
             var eb = pool.GetEntityBehaviors(InductorName1) ?? throw new CircuitException("{0}: Could not find behaviors for inductor '{1}'".FormatString(Name, InductorName1));
             data.Add(eb);
-            var parameters = Inductor1.Parameters;
+            var parameters = Inductor1.ParameterSets;
             data.Add(parameters);
 
             // Register inductor 2
             eb = pool.GetEntityBehaviors(InductorName2) ?? throw new CircuitException("{0}: Could not find behaviors for inductor '{1}'".FormatString(Name, InductorName2));
             data.Add(eb);
-            parameters = Inductor2.Parameters;
+            parameters = Inductor2.ParameterSets;
             data.Add(parameters);
 
             return data;

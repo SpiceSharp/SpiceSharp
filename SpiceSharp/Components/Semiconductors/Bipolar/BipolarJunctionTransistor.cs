@@ -39,7 +39,7 @@ namespace SpiceSharp.Components
             : base(name, BipolarJunctionTransistorPinCount)
         {
             // Add parameters
-            Parameters.Add(new BaseParameters());
+            ParameterSets.Add(new BaseParameters());
 
             // Add factories
             Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));

@@ -39,7 +39,7 @@ namespace SpiceSharp.Components
         public Mosfet1(Identifier name) : base(name, Mosfet1PinCount)
         {
             // Add parameters
-            Parameters.Add(new BaseParameters());
+            ParameterSets.Add(new BaseParameters());
 
             // Add factories
             Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
