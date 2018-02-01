@@ -111,7 +111,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">Entity name</param>
         /// <param name="propertyName">Property name</param>
         /// <returns></returns>
-        public abstract Func<State, double> CreateExport(Identifier name, string propertyName);
+        public abstract Func<RealState, double> CreateExport(Identifier name, string propertyName);
 
         /// <summary>
         /// Collect behaviors of all circuit objects while also setting them up

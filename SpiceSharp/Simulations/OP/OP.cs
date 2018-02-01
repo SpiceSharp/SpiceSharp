@@ -26,7 +26,7 @@ namespace SpiceSharp.Simulations
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Domain = State.DomainType.None;
+            state.Domain = RealState.DomainType.None;
             state.Gmin = baseconfig.Gmin;
 
             Op(baseconfig.DCMaxIterations);

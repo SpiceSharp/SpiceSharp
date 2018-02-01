@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Container for the state of an electronic circuit.
     /// </summary>
-    public class State
+    public class RealState
     {
         #region Simulation parameters
         /// <summary>
@@ -196,7 +196,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
-        public State()
+        public RealState()
         {
             Matrix = new Matrix();
         }

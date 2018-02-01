@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <param name="state"></param>
         /// <returns></returns>
         [PropertyName("v"), PropertyInfo("Voltage accross the supply")]
-        public double GetV(State state)
+        public double GetV(RealState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             return (state.Solution[posourceNode] - state.Solution[negateNode]);
         }
         [PropertyName("p"), PropertyInfo("Power supplied by the source")]
-        public double GetP(State state)
+        public double GetP(RealState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -56,7 +56,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// </summary>
         /// <param name="propertyName">Parameter name</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(string propertyName)
+        public override Func<RealState, double> CreateExport(string propertyName)
         {
             // Avoid using reflection for common components
             switch (propertyName)
@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 case "v": return GetV;
                 case "p": return GetP;
                 case "i":
-                case "c": return (State state) => Current;
+                case "c": return (RealState state) => Current;
                 default: return null;
             }
         }
@@ -121,7 +121,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             double time = 0.0;
 
             // Time domain analysis
-            if (state.Domain == State.DomainType.Time)
+            if (state.Domain == RealState.DomainType.Time)
             {
                 if (simulation is TimeSimulation tsim)
                     time = tsim.Method.Time;

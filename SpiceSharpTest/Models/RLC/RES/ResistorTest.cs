@@ -38,7 +38,7 @@ namespace SpiceSharpTest.Models.RLC.RES
 
             // Create simulation, exports and references
             OP op = new OP("op");
-            Func<State, double>[] exports = new Func<State, double>[1];
+            Func<RealState, double>[] exports = new Func<RealState, double>[1];
             op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = op.CreateExport("R1", "i");
@@ -109,7 +109,7 @@ namespace SpiceSharpTest.Models.RLC.RES
 
             // Create simulation, exports and references
             OP op = new OP("op");
-            Func<State, double>[] exports = new Func<State, double>[1];
+            Func<RealState, double>[] exports = new Func<RealState, double>[1];
             op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = op.CreateExport("R2", "v");
@@ -153,7 +153,7 @@ namespace SpiceSharpTest.Models.RLC.RES
 
             // Create simulation, exports and references
             OP op = new OP("op");
-            Func<State, double>[] exports = new Func<State, double>[2];
+            Func<RealState, double>[] exports = new Func<RealState, double>[2];
             double[] references = { dc / r1, dc / r2 };
             op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {

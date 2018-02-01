@@ -54,9 +54,9 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="propertyName">Parameter</param>
         /// <returns>Returns null if there is no export method</returns>
-        public virtual Func<State, double> CreateExport(string propertyName)
+        public virtual Func<RealState, double> CreateExport(string propertyName)
         {
-            return CreateExport<State, double>(propertyName);
+            return CreateExport<RealState, double>(propertyName);
         }
 
         /// <summary>

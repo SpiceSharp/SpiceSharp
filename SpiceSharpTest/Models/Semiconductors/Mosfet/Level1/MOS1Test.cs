@@ -61,7 +61,7 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
             });
 
             // Create exports
-            Func<State, double>[] exports = new Func<State, double>[1];
+            Func<RealState, double>[] exports = new Func<RealState, double>[1];
             dc.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = dc.CreateExport("V2", "i");
@@ -135,7 +135,7 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
             Transient tran = new Transient("tran", 1e-9, 10e-6);
 
             // Create exports
-            Func<State, double>[] exports = new Func<State, double>[1];
+            Func<RealState, double>[] exports = new Func<RealState, double>[1];
             tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = tran.CreateVoltageExport("out");
@@ -171,7 +171,7 @@ namespace SpiceSharpTest.Models.Mosfet.Level1
             Noise noise = new Noise("noise", "out", "V1", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 10));
 
             // Create exports
-            Func<State, double>[] exports = new Func<State, double>[2];
+            Func<RealState, double>[] exports = new Func<RealState, double>[2];
             noise.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = noise.CreateNoiseDensityExport(true);

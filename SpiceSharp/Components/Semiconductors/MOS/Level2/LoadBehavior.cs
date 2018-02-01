@@ -248,8 +248,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             Beta = temp.TempTransconductance * bp.Width / EffectiveLength;
             OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
 
-            if ((state.Init == State.InitializationStates.InitFloat || state.UseSmallSignal || (state.Init == State.InitializationStates.InitTransient)) ||
-                ((state.Init == State.InitializationStates.InitFix) && (!bp.Off)))
+            if ((state.Init == RealState.InitializationStates.InitFloat || state.UseSmallSignal || (state.Init == RealState.InitializationStates.InitTransient)) ||
+                ((state.Init == RealState.InitializationStates.InitFix) && (!bp.Off)))
             {
                 // general iteration
                 vbs = mbp.MosfetType * (rstate.Solution[bulkNode] - rstate.Solution[SourceNodePrime]);
@@ -300,13 +300,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				* look at other possibilities 
 				*/
 
-                if ((state.Init == State.InitializationStates.InitJunction) && !bp.Off)
+                if ((state.Init == RealState.InitializationStates.InitJunction) && !bp.Off)
                 {
                     vds = mbp.MosfetType * bp.InitialVoltageDS;
                     vgs = mbp.MosfetType * bp.InitialVoltageGS;
                     vbs = mbp.MosfetType * bp.InitialVoltageBS;
                     if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((state.UseDC ||
-                        state.Domain == State.DomainType.None) || (!state.UseIC)))
+                        state.Domain == RealState.DomainType.None) || (!state.UseIC)))
                     {
                         vbs = -1;
                         vgs = mbp.MosfetType * temp.TempVt0;
@@ -892,7 +892,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             /* 
 			 * check convergence
 			 */
-            if (!bp.Off || (!(state.Init == State.InitializationStates.InitFix || state.UseSmallSignal)))
+            if (!bp.Off || (!(state.Init == RealState.InitializationStates.InitFix || state.UseSmallSignal)))
             {
                 if (Check == 1)
                     state.IsCon = false;

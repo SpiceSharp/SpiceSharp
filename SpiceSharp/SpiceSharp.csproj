@@ -233,7 +233,7 @@
     <Compile Include="Circuits\Entities.cs" />
     <Compile Include="Circuits\Circuit.cs" />
     <Compile Include="Circuits\Node.cs" />
-    <Compile Include="Simulations\State.cs" />
+    <Compile Include="Simulations\Base\RealState.cs" />
     <Compile Include="Simulations\Statistics.cs" />
     <Compile Include="Circuits\Nodes.cs" />
     <Compile Include="Components\RLC\CAP\Capacitor.cs" />

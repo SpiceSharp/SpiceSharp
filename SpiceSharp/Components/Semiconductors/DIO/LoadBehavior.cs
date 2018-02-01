@@ -69,17 +69,17 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         /// <param name="propertyName">Parameter name</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(string propertyName)
+        public override Func<RealState, double> CreateExport(string propertyName)
         {
             switch (propertyName)
             {
-                case "vd": return (State state) => Voltage;
-                case "v": return (State state) => state.Solution[posourceNode] - state.Solution[negateNode];
+                case "vd": return (RealState state) => Voltage;
+                case "v": return (RealState state) => state.Solution[posourceNode] - state.Solution[negateNode];
                 case "i":
-                case "id": return (State state) => Current;
-                case "gd": return (State state) => Conduct;
-                case "p": return (State state) => (state.Solution[posourceNode] - state.Solution[negateNode]) * -Current;
-                case "pd": return (State state) => -Voltage * Current;
+                case "id": return (RealState state) => Current;
+                case "gd": return (RealState state) => Conduct;
+                case "p": return (RealState state) => (state.Solution[posourceNode] - state.Solution[negateNode]) * -Current;
+                case "pd": return (RealState state) => -Voltage * Current;
                 default: return null;
             }
         }
@@ -162,14 +162,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // Initialization
             Check = false;
-            if (state.Init == State.InitializationStates.InitJunction)
+            if (state.Init == RealState.InitializationStates.InitJunction)
             {
                 if (bp.Off)
                     vd = 0.0;
                 else
                     vd = temp.TempVCritical;
             }
-            else if (state.Init == State.InitializationStates.InitFix && bp.Off)
+            else if (state.Init == RealState.InitializationStates.InitFix && bp.Off)
             {
                 vd = 0.0;
             }
@@ -216,7 +216,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             }
 
             // Check convergence
-            if ((state.Init != State.InitializationStates.InitFix) || !bp.Off)
+            if ((state.Init != RealState.InitializationStates.InitFix) || !bp.Off)
             {
                 if (Check)
                     state.IsCon = false;

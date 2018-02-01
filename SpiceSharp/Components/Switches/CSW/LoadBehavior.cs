@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// Methods
         /// </summary>
         [PropertyName("v"), PropertyInfo("Switch voltage")]
-        public double GetVoltage(State state)
+        public double GetVoltage(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             return state.Solution[posourceNode] - state.Solution[negateNode];
         }
         [PropertyName("i"), PropertyInfo("Switch current")]
-        public double GetCurrent(State state)
+        public double GetCurrent(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             return (state.Solution[posourceNode] - state.Solution[negateNode]) * Cond;
         }
         [PropertyName("p"), PropertyInfo("Instantaneous power")]
-        public double GetPower(State state)
+        public double GetPower(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -157,7 +157,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             var state = simulation.State;
 
             // decide the state of the switch
-            if (state.Init == State.InitializationStates.InitFix || state.Init == State.InitializationStates.InitJunction)
+            if (state.Init == RealState.InitializationStates.InitFix || state.Init == RealState.InitializationStates.InitJunction)
             {
                 if (bp.ZeroState)
                 {

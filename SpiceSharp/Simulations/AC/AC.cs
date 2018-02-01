@@ -44,7 +44,7 @@ namespace SpiceSharp.Simulations
             // Calculate the operating point
             state.Initialize(circuit);
             cstate.Laplace = 0.0;
-            state.Domain = State.DomainType.Frequency;
+            state.Domain = RealState.DomainType.Frequency;
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;

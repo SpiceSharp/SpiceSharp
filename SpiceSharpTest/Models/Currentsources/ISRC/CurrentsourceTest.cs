@@ -36,7 +36,7 @@ namespace SpiceSharpTest.Models.Currentsources.ISRC
 
             // Create simulation, exports and references
             OP op = new OP("op");
-            Func<State, double>[] exports = new Func<State, double>[2];
+            Func<RealState, double>[] exports = new Func<RealState, double>[2];
             op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = op.CreateExport("I1", "v");
@@ -91,7 +91,7 @@ namespace SpiceSharpTest.Models.Currentsources.ISRC
             OP op = new OP("op");
 
             // Create exports
-            List<Func<State, double>> exports = new List<Func<State, double>>();
+            List<Func<RealState, double>> exports = new List<Func<RealState, double>>();
             op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 for (int i = 1; i <= resistorCount; i++)

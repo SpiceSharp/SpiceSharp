@@ -53,7 +53,7 @@ namespace SpiceSharpTest.Models.DIO
             DC dc = new DC("DC", "V1", -1.0, 1.0, 10e-3);
 
             // Create exports
-            Func<State, double>[] exports = new Func<State, double>[1];
+            Func<RealState, double>[] exports = new Func<RealState, double>[1];
             dc.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = dc.CreateExport("V1", "i");
@@ -127,7 +127,7 @@ namespace SpiceSharpTest.Models.DIO
             Transient tran = new Transient("tran", 1e-9, 10e-6);
 
             // Create exports
-            Func<State, double>[] exports = new Func<State, double>[1];
+            Func<RealState, double>[] exports = new Func<RealState, double>[1];
             tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = tran.CreateVoltageExport("out");

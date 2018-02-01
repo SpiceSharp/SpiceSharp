@@ -117,13 +117,13 @@ namespace SpiceSharp.Simulations
             state.Initialize(circuit);
             data.Initialize(FrequencySweep.Initial);
             cstate.Laplace = 0;
-            state.Domain = State.DomainType.Frequency;
+            state.Domain = RealState.DomainType.Frequency;
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;
             state.Gmin = baseconfig.Gmin;
             Op(baseconfig.DCMaxIterations);
-            state.Sparse |= State.SparseStates.ACShouldReorder;
+            state.Sparse |= RealState.SparseStates.ACShouldReorder;
 
             // Connect noise sources
             foreach (var behavior in NoiseBehaviors)
@@ -215,7 +215,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the entity</param>
         /// <param name="propertyName">The parameter name</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(Identifier name, string propertyName)
+        public override Func<RealState, double> CreateExport(Identifier name, string propertyName)
         {
             var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
@@ -237,11 +237,11 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="input">True if the noise density has to be input-referred</param>
         /// <returns></returns>
-        public Func<State, double> CreateNoiseDensityExport(bool input)
+        public Func<RealState, double> CreateNoiseDensityExport(bool input)
         {
             if (input)
-                return (State state) => NoiseState.OutputNoiseDensity * NoiseState.GainInverseSquared;
-            return (State state) => NoiseState.OutputNoiseDensity;
+                return (RealState state) => NoiseState.OutputNoiseDensity * NoiseState.GainInverseSquared;
+            return (RealState state) => NoiseState.OutputNoiseDensity;
         }
     }
 }

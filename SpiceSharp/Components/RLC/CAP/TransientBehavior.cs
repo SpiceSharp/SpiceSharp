@@ -23,7 +23,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         [PropertyName("i"), PropertyInfo("Device current")]
         public double Current => QCap.Derivative;
         [PropertyName("p"), PropertyInfo("Instantaneous device power")]
-        public double GetPower(State state)
+        public double GetPower(RealState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             return QCap.Derivative * (state.Solution[posourceNode] - state.Solution[negateNode]);
         }
         [PropertyName("v"), PropertyInfo("Voltage")]
-        public double GetVoltage(State state)
+        public double GetVoltage(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));

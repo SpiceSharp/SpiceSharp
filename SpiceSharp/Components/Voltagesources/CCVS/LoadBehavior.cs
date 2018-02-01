@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// Properties
         /// </summary>
         [PropertyName("i"), PropertyInfo("Output current")]
-        public double GetCurrent(State state)
+        public double GetCurrent(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
             return state.Solution[BranchEq];
         }
         [PropertyName("v"), PropertyInfo("Output voltage")]
-        public double GetVoltage(State state)
+        public double GetVoltage(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
             return state.Solution[posourceNode] - state.Solution[negateNode];
         }
         [PropertyName("p"), PropertyInfo("Power")]
-        public double GetPower(State state)
+        public double GetPower(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
@@ -68,7 +68,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// </summary>
         /// <param name="propertyName">Property</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(string propertyName)
+        public override Func<RealState, double> CreateExport(string propertyName)
         {
             // Avoid reflection for common components
             switch (propertyName)

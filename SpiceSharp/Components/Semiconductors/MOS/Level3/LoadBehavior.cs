@@ -261,8 +261,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 			* share some code, so we put them first - others later on
 			*/
 
-            if ((state.Init == State.InitializationStates.InitFloat || state.UseSmallSignal || (state.Init == State.InitializationStates.InitTransient)) ||
-                ((state.Init == State.InitializationStates.InitFix) && (!bp.Off)))
+            if ((state.Init == RealState.InitializationStates.InitFloat || state.UseSmallSignal || (state.Init == RealState.InitializationStates.InitTransient)) ||
+                ((state.Init == RealState.InitializationStates.InitFix) && (!bp.Off)))
             {
                 // General iteration
                 vbs = mbp.MosfetType * (state.Solution[bulkNode] - state.Solution[SourceNodePrime]);
@@ -320,13 +320,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 				* called.  We still just initialize the three voltages
 				*/
 
-                if ((state.Init == State.InitializationStates.InitJunction) && !bp.Off)
+                if ((state.Init == RealState.InitializationStates.InitJunction) && !bp.Off)
                 {
                     vds = mbp.MosfetType * bp.InitialVoltageDS;
                     vgs = mbp.MosfetType * bp.InitialVoltageGS;
                     vbs = mbp.MosfetType * bp.InitialVoltageBS;
                     if ((vds == 0) && (vgs == 0) && (vbs == 0) && ((state.UseDC ||
-                        state.Domain == State.DomainType.None) || (!state.UseIC)))
+                        state.Domain == RealState.DomainType.None) || (!state.UseIC)))
                     {
                         vbs = -1;
                         vgs = mbp.MosfetType * temp.TempVt0;
@@ -746,7 +746,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             /* 
 			 * check convergence
 			 */
-            if (!bp.Off || (!(state.Init == State.InitializationStates.InitFix || state.UseSmallSignal)))
+            if (!bp.Off || (!(state.Init == RealState.InitializationStates.InitFix || state.UseSmallSignal)))
             {
                 if (Check == 1)
                     state.IsCon = false;

@@ -67,7 +67,7 @@ namespace SpiceSharpTest.Models.Transistors
             });
 
             // Create exports
-            Func<State, double>[] exports = new Func<State, double>[1];
+            Func<RealState, double>[] exports = new Func<RealState, double>[1];
             dc.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = dc.CreateExport("V2", "i");
@@ -145,10 +145,10 @@ namespace SpiceSharpTest.Models.Transistors
             Transient tran = new Transient("tran", 1e-9, 10e-6);
 
             // Create exports
-            Func<State, double>[] exports = new Func<State, double>[2];
+            Func<RealState, double>[] exports = new Func<RealState, double>[2];
             tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
-                exports[0] = (State state) => tran.Method.Time;
+                exports[0] = (RealState state) => tran.Method.Time;
                 exports[1] = tran.CreateVoltageExport("out");
             };
 

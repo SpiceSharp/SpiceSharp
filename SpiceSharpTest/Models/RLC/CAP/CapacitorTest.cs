@@ -27,7 +27,7 @@ namespace SpiceSharpTest.Models.RLC.CAP
             OP op = new OP("op");
 
             // Create exports
-            Func<State, double>[] exports = new Func<State, double>[1];
+            Func<RealState, double>[] exports = new Func<RealState, double>[1];
             op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = op.CreateVoltageExport("OUT");
@@ -63,7 +63,7 @@ namespace SpiceSharpTest.Models.RLC.CAP
 
             // Create simulation, exports and references
             Transient tran = new Transient("tran", 1e-8, 10e-6);
-            Func<State, double>[] exports = new Func<State, double>[1];
+            Func<RealState, double>[] exports = new Func<RealState, double>[1];
             Func<double, double>[] references = { (double t) => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
             tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {

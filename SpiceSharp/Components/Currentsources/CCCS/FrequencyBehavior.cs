@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             return state.Solution[contBranch] * bp.Coefficient.Value;
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
-        public Complex GetPower(State state)
+        public Complex GetPower(RealState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));

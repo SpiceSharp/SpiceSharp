@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get the state
         /// </summary>
-        public State State { get; }
+        public RealState State { get; }
 
         public ComplexState ComplexState { get; }
 
@@ -25,7 +25,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="state">State</param>
-        public ExportDataEventArgs(State state)
+        public ExportDataEventArgs(RealState state)
         {
             State = state;
             Method = null;
@@ -36,7 +36,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="state">State</param>
         /// <param name="method">Method</param>
-        public ExportDataEventArgs(State state, IntegrationMethod method)
+        public ExportDataEventArgs(RealState state, IntegrationMethod method)
         {
             State = state;
             Method = method;
@@ -47,7 +47,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="state">State</param>
         /// <param name="complexState">Complex state</param>
-        public ExportDataEventArgs(State state, ComplexState complexState)
+        public ExportDataEventArgs(RealState state, ComplexState complexState)
         {
             State = state;
             ComplexState = complexState;

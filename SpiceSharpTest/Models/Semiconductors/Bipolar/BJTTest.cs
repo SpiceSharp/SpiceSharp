@@ -69,7 +69,7 @@ namespace SpiceSharpTest.Models.Bipolar
             });
 
             // Create export
-            Func<State, double>[] exports = new Func<State, double>[2];
+            Func<RealState, double>[] exports = new Func<RealState, double>[2];
             dc.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = dc.CreateExport("V2", "i");
@@ -166,7 +166,7 @@ namespace SpiceSharpTest.Models.Bipolar
             Transient tran = new Transient("tran", 1e-9, 10e-6);
 
             // Create exports
-            Func<State, double>[] exports = new Func<State, double>[1];
+            Func<RealState, double>[] exports = new Func<RealState, double>[1];
             tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = tran.CreateVoltageExport("out");

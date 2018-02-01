@@ -94,12 +94,12 @@ namespace SpiceSharp.Simulations
             var state = State;
             var dcconfig = DCConfiguration;
             var baseconfig = BaseConfiguration;
-            state.Init = State.InitializationStates.InitJunction;
+            state.Init = RealState.InitializationStates.InitJunction;
             state.Initialize(circuit);
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Domain = State.DomainType.None;
+            state.Domain = RealState.DomainType.None;
             state.Gmin = baseconfig.Gmin;
 
             // Initialize
@@ -137,7 +137,7 @@ namespace SpiceSharp.Simulations
                     level++;
                     Sweeps[level].Reset();
                     swept[level].Set(Sweeps[level].CurrentValue);
-                    state.Init = State.InitializationStates.InitJunction;
+                    state.Init = RealState.InitializationStates.InitJunction;
                 }
 
                 // Calculate the solution

@@ -28,7 +28,7 @@ namespace SpiceSharpTest.Models.IND
             OP op = new OP("op");
 
             // Create exports
-            Func<State, double>[] exports = new Func<State, double>[1];
+            Func<RealState, double>[] exports = new Func<RealState, double>[1];
             op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = op.CreateVoltageExport("OUT");
@@ -103,7 +103,7 @@ namespace SpiceSharpTest.Models.IND
             Transient tran = new Transient("tran", 1e-9, 1e-3, 1e-7);
 
             // Create exports
-            Func<State, double>[] exports = new Func<State, double>[1];
+            Func<RealState, double>[] exports = new Func<RealState, double>[1];
             tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
             {
                 exports[0] = tran.CreateExport("C1", "v");

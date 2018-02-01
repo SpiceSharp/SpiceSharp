@@ -107,7 +107,7 @@ namespace SpiceSharp.Simulations
             state.UseIC = timeconfig.UseIC;
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Domain = State.DomainType.Time;
+            state.Domain = RealState.DomainType.Time;
             state.Gmin = baseconfig.Gmin;
 
             // Setup breakpoints
@@ -185,7 +185,7 @@ namespace SpiceSharp.Simulations
 
                         // Try to solve the new point
                         if (Method.SavedTime == 0.0)
-                            state.Init = State.InitializationStates.InitTransient;
+                            state.Init = RealState.InitializationStates.InitTransient;
                         bool converged = TranIterate(timeconfig.TranMaxIterations);
                         Statistics.TimePoints++;
 

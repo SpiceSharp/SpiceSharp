@@ -16,21 +16,21 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Parameters
         /// </summary>
         [PropertyName("v"), PropertyInfo("Voltage")]
-        public double GetVoltage(State state)
+        public double GetVoltage(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             return state.Solution[PosNode] - state.Solution[NegNode];
         }
         [PropertyName("i"), PropertyInfo("Current")]
-        public double GetCurrent(State state)
+        public double GetCurrent(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             return (state.Solution[PosNode] - state.Solution[NegNode]) * Conductance;
         }
         [PropertyName("p"), PropertyInfo("Power")]
-        public double GetPower(State state)
+        public double GetPower(RealState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         /// <param name="propertyName">Property</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(string propertyName)
+        public override Func<RealState, double> CreateExport(string propertyName)
         {
             switch (propertyName)
             {

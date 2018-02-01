@@ -158,7 +158,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the entity</param>
         /// <param name="propertyName">The parameter name</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(Identifier name, string propertyName)
+        public override Func<RealState, double> CreateExport(Identifier name, string propertyName)
         {
             var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 

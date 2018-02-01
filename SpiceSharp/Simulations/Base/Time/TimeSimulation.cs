@@ -116,7 +116,7 @@ namespace SpiceSharp.Simulations
                 state.Initialize(Circuit);
 
             // Ignore operating condition point, just use the solution as-is
-            if (state.UseIC && state.Domain == State.DomainType.Time)
+            if (state.UseIC && state.Domain == RealState.DomainType.Time)
             {
                 state.StoreSolution();
 
@@ -148,23 +148,23 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Preorder matrix
-                if (!state.Sparse.HasFlag(State.SparseStates.DidPreorder))
+                if (!state.Sparse.HasFlag(RealState.SparseStates.DidPreorder))
                 {
                     matrix.Preorder();
-                    state.Sparse |= State.SparseStates.DidPreorder;
+                    state.Sparse |= RealState.SparseStates.DidPreorder;
                 }
-                if (state.Init == State.InitializationStates.InitJunction || state.Init == State.InitializationStates.InitTransient)
+                if (state.Init == RealState.InitializationStates.InitJunction || state.Init == RealState.InitializationStates.InitTransient)
                 {
-                    state.Sparse |= State.SparseStates.ShouldReorder;
+                    state.Sparse |= RealState.SparseStates.ShouldReorder;
                 }
 
                 // Reorder
-                if (state.Sparse.HasFlag(State.SparseStates.ShouldReorder))
+                if (state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
                     matrix.Reorder(state.PivotRelativeTolerance, state.PivotAbsoluteTolerance, state.DiagonalGmin);
                     Statistics.ReorderTime.Stop();
-                    state.Sparse &= ~State.SparseStates.ShouldReorder;
+                    state.Sparse &= ~RealState.SparseStates.ShouldReorder;
                 }
                 else
                 {
@@ -201,7 +201,7 @@ namespace SpiceSharp.Simulations
 
                 switch (state.Init)
                 {
-                    case State.InitializationStates.InitFloat:
+                    case RealState.InitializationStates.InitFloat:
                         if (state.UseDC && state.HadNodeSet)
                         {
                             if (pass)
@@ -215,25 +215,25 @@ namespace SpiceSharp.Simulations
                         }
                         break;
 
-                    case State.InitializationStates.InitJunction:
-                        state.Init = State.InitializationStates.InitFix;
-                        state.Sparse |= State.SparseStates.ShouldReorder;
+                    case RealState.InitializationStates.InitJunction:
+                        state.Init = RealState.InitializationStates.InitFix;
+                        state.Sparse |= RealState.SparseStates.ShouldReorder;
                         break;
 
-                    case State.InitializationStates.InitFix:
+                    case RealState.InitializationStates.InitFix:
                         if (state.IsCon)
-                            state.Init = State.InitializationStates.InitFloat;
+                            state.Init = RealState.InitializationStates.InitFloat;
                         pass = true;
                         break;
 
-                    case State.InitializationStates.InitTransient:
+                    case RealState.InitializationStates.InitTransient:
                         if (iterno <= 1)
-                            state.Sparse = State.SparseStates.ShouldReorder;
-                        state.Init = State.InitializationStates.InitFloat;
+                            state.Sparse = RealState.SparseStates.ShouldReorder;
+                        state.Init = RealState.InitializationStates.InitFloat;
                         break;
 
-                    case State.InitializationStates.Init:
-                        state.Init = State.InitializationStates.InitFloat;
+                    case RealState.InitializationStates.Init:
+                        state.Init = RealState.InitializationStates.InitFloat;
                         break;
 
                     default:
@@ -250,7 +250,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The identifier of the entity</param>
         /// <param name="propertyName">The parameter name</param>
         /// <returns></returns>
-        public override Func<State, double> CreateExport(Identifier name, string propertyName)
+        public override Func<RealState, double> CreateExport(Identifier name, string propertyName)
         {
             var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
 
