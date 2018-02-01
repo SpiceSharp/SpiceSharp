@@ -115,7 +115,7 @@ namespace SpiceSharp.Simulations
                 cstate.Initialize(circuit);
 
             retry:
-            cstate.IsCon = true;
+            cstate.IsConvergent = true;
 
             // Load AC
             cstate.Clear();

@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Did the solution converge?
         /// </summary>
-        public bool IsCon { get; set; }
+        public bool IsConvergent { get; set; }
 
         /// <summary>
         /// Sparse matrix flags
