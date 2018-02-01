@@ -410,7 +410,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (state.Init != RealState.InitializationStates.InitFix || !bp.Off)
             {
                 if (icheck)
-                    state.IsCon = false;
+                    state.IsConvergent = false;
             }
 
             VoltageBE = vbe;
@@ -489,14 +489,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double tol = config.RelativeTolerance * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + config.AbsoluteTolerance;
             if (Math.Abs(cchat - cc) > tol)
             {
-                state.IsCon = false;
+                state.IsConvergent = false;
                 return false;
             }
 
             tol = config.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(cb)) + config.AbsoluteTolerance;
             if (Math.Abs(cbhat - cb) > tol)
             {
-                state.IsCon = false;
+                state.IsConvergent = false;
                 return false;
             }
             return true;

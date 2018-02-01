@@ -130,7 +130,7 @@ namespace SpiceSharp.Simulations
             while (true)
             {
                 // Reset convergence flag
-                state.IsCon = true;
+                state.IsConvergent = true;
 
                 try
                 {
@@ -194,10 +194,10 @@ namespace SpiceSharp.Simulations
                     return false;
                 }
 
-                if (state.IsCon && iterno != 1)
-                    state.IsCon = IsConvergent();
+                if (state.IsConvergent && iterno != 1)
+                    state.IsConvergent = IsConvergent();
                 else
-                    state.IsCon = false;
+                    state.IsConvergent = false;
 
                 switch (state.Init)
                 {
@@ -205,10 +205,10 @@ namespace SpiceSharp.Simulations
                         if (state.UseDC && state.HadNodeSet)
                         {
                             if (pass)
-                                state.IsCon = false;
+                                state.IsConvergent = false;
                             pass = false;
                         }
-                        if (state.IsCon)
+                        if (state.IsConvergent)
                         {
                             Statistics.Iterations += iterno;
                             return true;
@@ -221,7 +221,7 @@ namespace SpiceSharp.Simulations
                         break;
 
                     case RealState.InitializationStates.InitFix:
-                        if (state.IsCon)
+                        if (state.IsConvergent)
                             state.Init = RealState.InitializationStates.InitFloat;
                         pass = true;
                         break;

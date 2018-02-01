@@ -219,7 +219,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if ((state.Init != RealState.InitializationStates.InitFix) || !bp.Off)
             {
                 if (Check)
-                    state.IsCon = false;
+                    state.IsConvergent = false;
             }
 
             // Store for next time
@@ -265,7 +265,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             double tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsoluteTolerance;
             if (Math.Abs(cdhat - cd) > tol)
             {
-                state.IsCon = false;
+                state.IsConvergent = false;
                 return false;
             }
             return true;

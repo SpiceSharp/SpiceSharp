@@ -164,7 +164,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
 
                 // If the state changed, ensure one more iteration
                 if (current_state != previous_state)
-                    state.IsCon = false;
+                    state.IsConvergent = false;
             }
 
             g_now = current_state == true ? modelload.OnConductance : modelload.OffConductance;

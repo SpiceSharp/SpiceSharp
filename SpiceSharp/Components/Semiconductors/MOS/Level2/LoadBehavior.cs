@@ -895,7 +895,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             if (!bp.Off || (!(state.Init == RealState.InitializationStates.InitFix || state.UseSmallSignal)))
             {
                 if (Check == 1)
-                    state.IsCon = false;
+                    state.IsConvergent = false;
             }
             VoltageBS = vbs;
             VoltageBD = vbd;
@@ -992,14 +992,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             double tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + config.AbsoluteTolerance;
             if (Math.Abs(cdhat - DrainCurrent) >= tol)
             {
-                state.IsCon = false;
+                state.IsConvergent = false;
                 return false;
             }
 
             tol = config.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(BSCurrent + BDCurrent)) + config.AbsoluteTolerance;
             if (Math.Abs(cbhat - (BSCurrent + BDCurrent)) > tol)
             {
-                state.IsCon = false;
+                state.IsConvergent = false;
                 return false;
             }
             return true;

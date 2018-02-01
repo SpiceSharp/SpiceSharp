@@ -144,7 +144,7 @@ namespace SpiceSharp.Simulations
         /// Is the current iteration convergent?
         /// This parameter is used to communicate convergence
         /// </summary>
-        public bool IsCon { get; set; } = true;
+        public bool IsConvergent { get; set; } = true;
 
         /// <summary>
         /// The temperature for this circuit
