@@ -1,75 +1,37 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace SpiceSharp
+﻿namespace SpiceSharp
 {
     /// <summary>
     /// A collection of <see cref="ParameterSet"/>
     /// Only one instance of each type is allowed
     /// </summary>
-    public class ParameterSetCollection : IEnumerable<ParameterSet>
+    public class ParameterSetCollection : TypeDictionary<ParameterSet>
     {
         /// <summary>
-        /// Collection of parameters
+        /// Constructor
         /// </summary>
-        Dictionary<Type, ParameterSet> parameters = new Dictionary<Type, ParameterSet>();
-
-        /// <summary>
-        /// Set a <see cref="ParameterSet"/> in the collection
-        /// If a set of the same type already exist, they are overwritten
-        /// </summary>
-        /// <param name="set">Parameters</param>
-        public void Add(ParameterSet set)
+        public ParameterSetCollection()
+            : base(typeof(ParameterSet))
         {
-            if (set == null)
-                throw new ArgumentNullException(nameof(set));
-
-            // Update the parameter of that type
-            parameters[set.GetType()] = set;
         }
 
         /// <summary>
-        /// Get parameters
+        /// Add a parameter set
+        /// </summary>
+        /// <param name="set"></param>
+        public void Add(ParameterSet set) => Add(set.GetType(), set);
+
+        /// <summary>
+        /// Get a parameter set if it exists, else returns null
         /// </summary>
         /// <typeparam name="T">Parameters</typeparam>
         /// <returns></returns>
         public T Get<T>() where T : ParameterSet
         {
-            if (parameters.TryGetValue(typeof(T), out ParameterSet result))
+            if (TryGetValue(typeof(T), out ParameterSet result))
                 return (T)result;
             return null;
         }
-
-        /// <summary>
-        /// Remove a set of parameters of a specific type
-        /// </summary>
-        /// <param name="parameterSetType">The parameters type</param>
-        public void Remove(Type parameterSetType)
-        {
-            parameters.Remove(parameterSetType);
-        }
-
-        /// <summary>
-        /// Clear all parameters
-        /// </summary>
-        public void Clear()
-        {
-            parameters.Clear();
-        }
-
-        /// <summary>
-        /// Get an enumerator
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<ParameterSet> GetEnumerator() => parameters.Values.GetEnumerator();
-
-        /// <summary>
-        /// Get an enumerator
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator() => parameters.Values.GetEnumerator();
-
+        
         /// <summary>
         /// Set a parameter by name
         /// If multiple parameters
@@ -79,7 +41,7 @@ namespace SpiceSharp
         /// <returns></returns>
         public bool SetProperty(string property, double value)
         {
-            foreach (var ps in parameters.Values)
+            foreach (var ps in Values)
             {
                 if (ps.Set(property, value))
                     return true;
@@ -95,7 +57,7 @@ namespace SpiceSharp
         /// <returns></returns>
         public bool SetProperty(string property, object value)
         {
-            foreach (var ps in parameters.Values)
+            foreach (var ps in Values)
             {
                 if (ps.Set(property, value))
                     return true;
