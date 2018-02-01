@@ -13,7 +13,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Behaviors indexed by the entity that created them
         /// </summary>
-        Dictionary<Identifier, EntityBehaviors> entitybehaviors = new Dictionary<Identifier, EntityBehaviors>();
+        Dictionary<Identifier, EntityBehaviors> entityBehaviors = new Dictionary<Identifier, EntityBehaviors>();
 
         /// <summary>
         /// Lists of behaviors
@@ -28,10 +28,10 @@ namespace SpiceSharp.Behaviors
         public void Add(Identifier creator, Behavior behavior)
         {
             EntityBehaviors eb;
-            if (!entitybehaviors.TryGetValue(creator, out eb))
+            if (!entityBehaviors.TryGetValue(creator, out eb))
             {
                 eb = new EntityBehaviors(creator);
-                entitybehaviors.Add(creator, eb);
+                entityBehaviors.Add(creator, eb);
             }
             eb.Register(behavior);
 
@@ -65,7 +65,7 @@ namespace SpiceSharp.Behaviors
         /// <returns></returns>
         public EntityBehaviors GetEntityBehaviors(Identifier name)
         {
-            if (entitybehaviors.TryGetValue(name, out EntityBehaviors result))
+            if (entityBehaviors.TryGetValue(name, out EntityBehaviors result))
                 return result;
             return null;
         }

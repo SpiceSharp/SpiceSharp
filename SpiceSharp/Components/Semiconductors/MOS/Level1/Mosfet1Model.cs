@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
             Parameters.Add(new ModelNoiseParameters());
 
             // Add factories
-            AddFactory(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));
+            Behaviors.Add(typeof(ModelTemperatureBehavior), () => new ModelTemperatureBehavior(Name));
         }
     }
 }

@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Component behaviors
     /// </summary>
-    public class EntityBehaviors
+    public class EntityBehaviors : TypeDictionary<Behavior>
     {
         /// <summary>
         /// Source entity
@@ -15,15 +13,11 @@ namespace SpiceSharp.Behaviors
         public Identifier Source { get; }
 
         /// <summary>
-        /// Behavior lists (in order of registration)
-        /// </summary>
-        Dictionary<Type, Behavior> behaviors = new Dictionary<Type, Behavior>();
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="source">The source of the behaviors</param>
         public EntityBehaviors(Identifier source)
+            : base(typeof(Func<Behavior>))
         {
             Source = source;
         }
@@ -42,8 +36,8 @@ namespace SpiceSharp.Behaviors
             Type basetype = mytype.BaseType;
 
             // Register types
-            behaviors[mytype] = behavior;
-            behaviors[basetype] = behavior;
+            Dictionary[mytype] = behavior;
+            Dictionary[basetype] = behavior;
         }
 
         /// <summary>
@@ -53,7 +47,7 @@ namespace SpiceSharp.Behaviors
         /// <returns></returns>
         public T Get<T>() where T : Behavior
         {
-            if (behaviors.TryGetValue(typeof(T), out Behavior behavior))
+            if (Dictionary.TryGetValue(typeof(T), out Behavior behavior))
                 return (T)behavior;
             return null;
         }

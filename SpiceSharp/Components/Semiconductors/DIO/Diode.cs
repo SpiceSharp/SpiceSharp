@@ -35,11 +35,11 @@ namespace SpiceSharp.Components
             Parameters.Add(new BaseParameters());
 
             // Add factories
-            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
-            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
+            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
+            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
         }
 
         /// <summary>

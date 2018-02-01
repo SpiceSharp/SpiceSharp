@@ -85,7 +85,7 @@ namespace SpiceSharp
             while (currentType != BaseClass)
             {
                 Dictionary.Add(currentType, value);
-                currentType = key.BaseType;
+                currentType = currentType.BaseType;
                 if (currentType == typeof(object))
                     throw new CircuitException("Type {0} is not derived from {1}".FormatString(key, BaseClass));
             }

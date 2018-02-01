@@ -96,6 +96,7 @@
     <Compile Include="Simulations\Base\Frequency\FrequencyConfiguration.cs" />
     <Compile Include="Simulations\Base\RealSolution.cs" />
     <Compile Include="Simulations\Base\Time\TimeConfiguration.cs" />
+    <Compile Include="Simulations\Behaviors\BehaviorFactory.cs" />
     <Compile Include="Simulations\Behaviors\SetupDataProvider.cs" />
     <Compile Include="Simulations\DC\DCConfiguration.cs" />
     <Compile Include="Simulations\DC\IterationFailedEventArgs.cs" />

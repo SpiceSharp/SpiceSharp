@@ -46,8 +46,8 @@ namespace SpiceSharp.Components
             Parameters.Add(new BaseParameters());
 
             // Add factories
-            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace SpiceSharp.Components
             Parameters.Add(new BaseParameters(gain));
 
             // Add factories
-            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             // Connect
             Connect(pos, neg);

@@ -37,8 +37,8 @@ namespace SpiceSharp.Components
             Parameters.Add(new BaseParameters());
 
             // Add factories
-            AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace SpiceSharp.Components
             Parameters.Add(new BaseParameters(coupling));
 
             // Add factories
-            AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
 
             // Connect
             InductorName1 = inductorName1;

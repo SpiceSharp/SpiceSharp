@@ -37,10 +37,10 @@ namespace SpiceSharp.Components
             Parameters.Add(new BaseParameters());
 
             // Register factories
-            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
-            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
+            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
+            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
         }
 
         /// <summary>
@@ -57,10 +57,10 @@ namespace SpiceSharp.Components
             Parameters.Add(new BaseParameters(res));
 
             // Register factories
-            AddFactory(typeof(LoadBehavior), () => new LoadBehavior(Name));
-            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            AddFactory(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
-            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
+            Behaviors.Add(typeof(LoadBehavior), () => new LoadBehavior(Name));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            Behaviors.Add(typeof(NoiseBehavior), () => new NoiseBehavior(Name));
+            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
 
             // Connect
             Connect(pos, neg);

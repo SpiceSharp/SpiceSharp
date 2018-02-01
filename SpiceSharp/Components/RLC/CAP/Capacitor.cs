@@ -38,9 +38,9 @@ namespace SpiceSharp.Components
             Parameters.Add(new BaseParameters());
 
             // Register factories
-            AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
+            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
         }
 
         /// <summary>
@@ -57,9 +57,9 @@ namespace SpiceSharp.Components
             Parameters.Add(new BaseParameters(cap));
 
             // Register factories
-            AddFactory(typeof(TransientBehavior), () => new TransientBehavior(Name));
-            AddFactory(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
-            AddFactory(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
+            Behaviors.Add(typeof(TransientBehavior), () => new TransientBehavior(Name));
+            Behaviors.Add(typeof(FrequencyBehavior), () => new FrequencyBehavior(Name));
+            Behaviors.Add(typeof(TemperatureBehavior), () => new TemperatureBehavior(Name));
 
             // Connect
             Connect(pos, neg);

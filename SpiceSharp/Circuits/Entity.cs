@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Circuits
 {
@@ -13,7 +11,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Factories for behaviors
         /// </summary>
-        protected Dictionary<Type, BehaviorFactory> Factories { get; } = new Dictionary<Type, BehaviorFactory>();
+        protected BehaviorFactory Behaviors { get; } = new BehaviorFactory();
 
         /// <summary>
         /// Get a collection of parameters
@@ -35,21 +33,6 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Add a factory to the behavior factory list
-        /// </summary>
-        /// <param name="type">Returned behavior type</param>
-        /// <param name="factory">Factory method</param>
-        protected void AddFactory(Type type, BehaviorFactory factory)
-        {
-            Type mytype = type?.BaseType ?? throw new CircuitException("Invalid type");
-            while (mytype != typeof(Behavior))
-            {
-                Factories.Add(mytype, factory);
-                mytype = mytype.BaseType;
-            }
-        }
-
-        /// <summary>
         /// Get a behavior from the entity
         /// </summary>
         /// <typeparam name="T">Behavior base type</typeparam>
@@ -57,7 +40,7 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         public virtual T GetBehavior<T>(BehaviorPool pool) where T : Behavior
         {
-            if (Factories.TryGetValue(typeof(T), out BehaviorFactory factory))
+            if (Behaviors.TryGetValue(typeof(T), out var factory))
             {
                 // Create the behavior
                 Behavior behavior = factory();
@@ -108,10 +91,4 @@ namespace SpiceSharp.Circuits
             // Do nothing
         }
     }
-
-    /// <summary>
-    /// Delegate for creating a behavior for the entity
-    /// </summary>
-    /// <returns></returns>
-    public delegate Behavior BehaviorFactory();
 }
