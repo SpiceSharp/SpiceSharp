@@ -7,7 +7,7 @@ namespace SpiceSharp.Attributes
     /// It can be applied to properties or method. Multiple names are allowed.
     /// This is used to find members using reflection.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method | AttributeTargets.Field, AllowMultiple = true)]
     public sealed class PropertyNameAttribute : Attribute
     {
         /// <summary>

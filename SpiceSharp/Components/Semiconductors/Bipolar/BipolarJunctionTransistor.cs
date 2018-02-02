@@ -29,7 +29,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constants
         /// </summary>
-        public const int BipolarJunctionTransistorPinCount = 4;
+        [PropertyName("pincount"), PropertyInfo("Number of pins")]
+		public const int BipolarJunctionTransistorPinCount = 4;
 
         /// <summary>
         /// Constructor

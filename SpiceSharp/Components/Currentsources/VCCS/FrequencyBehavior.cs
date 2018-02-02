@@ -97,8 +97,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
-			if (matrix == null)
-				throw new ArgumentNullException(nameof(matrix));
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
 
             PosControlPosPtr = matrix.GetElement(posNode, contPosourceNode);
             PosControlNegPtr = matrix.GetElement(posNode, contNegateNode);

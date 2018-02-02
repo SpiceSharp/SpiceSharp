@@ -32,7 +32,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constants
         /// </summary>
-        public const int CurrentSwitchPinCount = 2;
+        [PropertyName("pincount"), PropertyInfo("Number of pins")]
+		public const int CurrentSwitchPinCount = 2;
 
         /// <summary>
         /// Constructor

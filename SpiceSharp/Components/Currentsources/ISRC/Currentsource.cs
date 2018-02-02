@@ -18,7 +18,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constants
         /// </summary>
-        public const int CurrentSourcePinCount = 2;
+        [PropertyName("pincount"), PropertyInfo("Number of pins")]
+		public const int CurrentSourcePinCount = 2;
 
         /// <summary>
         /// Constructor

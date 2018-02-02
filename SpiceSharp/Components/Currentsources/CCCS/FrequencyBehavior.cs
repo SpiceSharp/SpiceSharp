@@ -97,8 +97,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
-			if (matrix == null)
-				throw new ArgumentNullException(nameof(matrix));
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
 
             contBranch = vsrcload.BranchEq;
             PosControlBranchPtr = matrix.GetElement(posNode, contBranch);
@@ -121,8 +121,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <param name="simulation">Frequency-based simulation</param>
         public override void Load(FrequencySimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             PosControlBranchPtr.Add((Complex)bp.Coefficient.Value);
             NegControlBranchPtr.Sub(bp.Coefficient.Value);

@@ -30,7 +30,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constants
         /// </summary>
-        public const int Mosfet3PinCount = 4;
+        [PropertyName("pincount"), PropertyInfo("Number of pins")]
+		public const int Mosfet3PinCount = 4;
 
         /// <summary>
         /// Constructor

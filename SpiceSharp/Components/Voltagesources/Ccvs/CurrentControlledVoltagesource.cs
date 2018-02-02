@@ -28,7 +28,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constants
         /// </summary>
-        public const int CurrentControlledVoltageSourcePinCount = 2;
+        [PropertyName("pincount"), PropertyInfo("Number of pins")]
+		public const int CurrentControlledVoltageSourcePinCount = 2;
         
         /// <summary>
         /// Constructor

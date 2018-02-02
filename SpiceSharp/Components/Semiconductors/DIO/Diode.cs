@@ -23,7 +23,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constants
         /// </summary>
-        public const int DiodePinCount = 2;
+        [PropertyName("pincount"), PropertyInfo("Number of pins")]
+		public const int DiodePinCount = 2;
 
         /// <summary>
         /// Constructor
