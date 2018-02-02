@@ -10,7 +10,7 @@ namespace SpiceSharp.Simulations.Sweeps
     public class DecadeSweep : Sweep<double>
     {
         /// <summary>
-        /// Get the points
+        /// Gets the points
         /// </summary>
         public override IEnumerable<double> Points
         {

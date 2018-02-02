@@ -188,7 +188,7 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Get all points in history
+        /// Gets all points in history
         /// </summary>
         protected override IEnumerable<T> Points
         {

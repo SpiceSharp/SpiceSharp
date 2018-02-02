@@ -8,7 +8,7 @@ namespace SpiceSharp.Sparse
     public sealed class RealElement : Element<double>
     {
         /// <summary>
-        /// Get the equivalent of 1.0
+        /// Gets the equivalent of 1.0
         /// </summary>
         public override double One => 1.0;
 

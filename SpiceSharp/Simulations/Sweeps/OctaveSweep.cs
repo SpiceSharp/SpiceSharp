@@ -7,7 +7,7 @@ namespace SpiceSharp.Simulations.Sweeps
     public class OctaveSweep : Sweep<double>
     {
         /// <summary>
-        /// Get the points
+        /// Gets the points
         /// </summary>
         public override IEnumerable<double> Points
         {

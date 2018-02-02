@@ -9,7 +9,7 @@ namespace SpiceSharp.Sparse
     public sealed class ComplexElement : Element<Complex>
     {
         /// <summary>
-        /// Get the equivalent of One
+        /// Gets the equivalent of One
         /// </summary>
         public override Complex One => new Complex(1.0, 0.0);
 

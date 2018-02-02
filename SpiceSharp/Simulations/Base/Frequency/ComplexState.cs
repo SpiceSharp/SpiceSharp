@@ -60,12 +60,12 @@ namespace SpiceSharp.Simulations
         public SparseStates Sparse { get; set; }
 
         /// <summary>
-        /// Get the complex right-hand-side vector
+        /// Gets the complex right-hand-side vector
         /// </summary>
         public ComplexSolution Rhs { get; private set; } = null;
 
         /// <summary>
-        /// Get the complex solution vector
+        /// Gets the complex solution vector
         /// </summary>
         public ComplexSolution Solution { get; private set; } = null;
 
@@ -76,7 +76,7 @@ namespace SpiceSharp.Simulations
         public Complex Laplace { get; set; } = new Complex();
 
         /// <summary>
-        /// Get the equation matrix
+        /// Gets the equation matrix
         /// </summary>
         public Matrix<Complex> Matrix { get; private set; } = null;
 

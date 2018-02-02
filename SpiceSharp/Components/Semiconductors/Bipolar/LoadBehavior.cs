@@ -130,7 +130,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         /// <summary>
-        /// Get matrix pointers
+        /// Gets matrix pointers
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="matrix">Matrix</param>

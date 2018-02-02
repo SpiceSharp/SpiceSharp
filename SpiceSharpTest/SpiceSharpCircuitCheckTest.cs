@@ -22,7 +22,7 @@ namespace SpiceSharpTest
                 );
 
             Validator check = new Validator();
-            check.Check(ckt);
+            check.Validate(ckt);
         }
 
         [TestMethod]
@@ -43,7 +43,7 @@ namespace SpiceSharpTest
                 new VoltageSource(new Identifier("V10"), new Identifier("I"), new Identifier("0"), 1.0)
                 );
             Validator check = new Validator();
-            check.Check(ckt);
+            check.Validate(ckt);
         }
 
         [TestMethod]
@@ -57,7 +57,7 @@ namespace SpiceSharpTest
                 new Capacitor(new Identifier("C2"), new Identifier("out"), new Identifier("gnd"), 1e-12)
                 );
             Validator check = new Validator();
-            check.Check(ckt);
+            check.Validate(ckt);
         }
 
         [TestMethod]
@@ -71,7 +71,7 @@ namespace SpiceSharpTest
                 new VoltageControlledVoltageSource(new Identifier("E2"), new Identifier("out2"), new Identifier("gnd"), new Identifier("out"), new Identifier("gnd"), 1.0)
                 );
             Validator check = new Validator();
-            check.Check(ckt);
+            check.Validate(ckt);
         }
     }
 }

@@ -10,14 +10,14 @@ namespace SpiceSharp.Simulations
     public class ExportDataEventArgs : EventArgs
     {
         /// <summary>
-        /// Get the state
+        /// Gets the state
         /// </summary>
         public RealState State { get; }
 
         public ComplexState ComplexState { get; }
 
         /// <summary>
-        /// Get the integration method if any
+        /// Gets the integration method if any
         /// </summary>
         public IntegrationMethod Method { get; }
 
@@ -54,13 +54,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Get the frequency
+        /// Gets the frequency
         /// </summary>
         /// <returns></returns>
         public double Frequency => ComplexState.Laplace.Imaginary / (2.0 * Math.PI);
 
         /// <summary>
-        /// Get the current time
+        /// Gets the current time
         /// </summary>
         /// <returns></returns>
         public double Time => Method.Time;

@@ -14,12 +14,12 @@ namespace SpiceSharp.Circuits
         protected BehaviorFactory Behaviors { get; } = new BehaviorFactory();
 
         /// <summary>
-        /// Get a collection of parameters
+        /// Gets a collection of parameters
         /// </summary>
         public ParameterSetCollection ParameterSets { get; } = new ParameterSetCollection();
 
         /// <summary>
-        /// Get the name of the object
+        /// Gets the name of the object
         /// </summary>
         public Identifier Name { get; }
 
@@ -33,7 +33,7 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Get a behavior from the entity
+        /// Gets a behavior from the entity
         /// </summary>
         /// <typeparam name="T">Behavior base type</typeparam>
         /// <param name="pool">Pool of all behaviors</param>
@@ -72,7 +72,7 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Get the priority of this object
+        /// Gets the priority of this object
         /// </summary>
         public int Priority { get; protected set; } = 0;
 

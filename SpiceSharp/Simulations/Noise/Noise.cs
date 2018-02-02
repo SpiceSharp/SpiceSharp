@@ -20,7 +20,7 @@ namespace SpiceSharp.Simulations
         public NoiseConfiguration NoiseConfiguration { get; protected set; }
 
         /// <summary>
-        /// Get the noise state
+        /// Gets the noise state
         /// </summary>
         public StateNoise NoiseState { get; } = new StateNoise();
 

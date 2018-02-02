@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Get the frequency step
+        /// Gets the frequency step
         /// </summary>
         public double DeltaFrequency { get => deltaFrequency; }
 

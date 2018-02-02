@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         public void SetZeroStateOff() { ZeroState = false; }
 
         /// <summary>
-        /// Get the default state
+        /// Gets the default state
         /// </summary>
         public bool ZeroState { get; set; } = false;
     }

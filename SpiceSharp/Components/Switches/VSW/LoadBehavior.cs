@@ -87,7 +87,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         }
 
         /// <summary>
-        /// Get matrix pointers
+        /// Gets matrix pointers
         /// </summary>
         /// <param name="nodes"></param>
         /// <param name="matrix"></param>

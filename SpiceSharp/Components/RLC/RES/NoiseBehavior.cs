@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         int posNode, negNode;
 
         /// <summary>
-        /// Get resistor noise sources
+        /// Gets resistor noise sources
         /// </summary>
         public ComponentNoise ResistorNoise { get; private set; } = new ComponentNoise(new NoiseThermal("thermal", 0, 1));
 

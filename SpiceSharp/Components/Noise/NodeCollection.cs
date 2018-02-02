@@ -15,12 +15,12 @@ namespace SpiceSharp.Components.NoiseSources
         List<int> nodes = new List<int>();
 
         /// <summary>
-        /// Get number of nodes
+        /// Gets number of nodes
         /// </summary>
         public int Count => nodes.Count;
 
         /// <summary>
-        /// Get node
+        /// Gets node
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
@@ -43,13 +43,13 @@ namespace SpiceSharp.Components.NoiseSources
         }
 
         /// <summary>
-        /// Get enumerator
+        /// Gets enumerator
         /// </summary>
         /// <returns></returns>
         public IEnumerator<int> GetEnumerator() => nodes.GetEnumerator();
 
         /// <summary>
-        /// Get enumerator
+        /// Gets enumerator
         /// </summary>
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator() => nodes.GetEnumerator();

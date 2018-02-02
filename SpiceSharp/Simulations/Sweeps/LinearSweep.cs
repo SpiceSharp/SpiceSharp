@@ -9,7 +9,7 @@ namespace SpiceSharp.Simulations.Sweeps
     public class LinearSweep : Sweep<double>
     {
         /// <summary>
-        /// Get all points in the sweep
+        /// Gets all points in the sweep
         /// </summary>
         public override IEnumerable<double> Points
         {

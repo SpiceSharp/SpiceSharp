@@ -213,7 +213,7 @@ namespace SpiceSharp.Sparse
         }
 
         /// <summary>
-        /// Get an error message
+        /// Gets an error message
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="originator">Name of the source</param>

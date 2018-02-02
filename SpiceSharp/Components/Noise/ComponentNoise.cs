@@ -11,12 +11,12 @@ namespace SpiceSharp.Components
     public class ComponentNoise
     {
         /// <summary>
-        /// Get the total output-referred noise density
+        /// Gets the total output-referred noise density
         /// </summary>
         public double Noise { get; private set; }
 
         /// <summary>
-        /// Get the log of the total output-referred noise density
+        /// Gets the log of the total output-referred noise density
         /// </summary>
         public double LogNoise { get; private set; }
 
@@ -31,7 +31,7 @@ namespace SpiceSharp.Components
         public double TotalInNoise { get; private set; }
 
         /// <summary>
-        /// Get all generators
+        /// Gets all generators
         /// </summary>
         public NoiseGeneratorCollection Generators { get; }
 

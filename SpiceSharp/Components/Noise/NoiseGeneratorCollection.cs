@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.NoiseSources
         List<NoiseGenerator> generators = new List<NoiseGenerator>();
 
         /// <summary>
-        /// Get a noise generator
+        /// Gets a noise generator
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.NoiseSources
         }
 
         /// <summary>
-        /// Get the number of noise generators
+        /// Gets the number of noise generators
         /// </summary>
         public int Count { get => generators.Count; }
         
@@ -46,13 +46,13 @@ namespace SpiceSharp.Components.NoiseSources
         }
 
         /// <summary>
-        /// Get enumerator
+        /// Gets enumerator
         /// </summary>
         /// <returns></returns>
         public IEnumerator<NoiseGenerator> GetEnumerator() => generators.GetEnumerator();
 
         /// <summary>
-        /// Get enumerator
+        /// Gets enumerator
         /// </summary>
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator() => generators.GetEnumerator();

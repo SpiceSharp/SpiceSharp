@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
     public class NestedSweeps
     {
         /// <summary>
-        /// Get a sweep instance
+        /// Gets a sweep instance
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
@@ -22,7 +22,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Get the amount of nested sweeps
+        /// Gets the amount of nested sweeps
         /// </summary>
         public int Count { get => instances.Count; }
 

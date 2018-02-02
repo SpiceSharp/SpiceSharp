@@ -113,7 +113,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         }
 
         /// <summary>
-        /// Get matrix pointers
+        /// Gets matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix<double> matrix)
@@ -203,7 +203,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         }
 
         /// <summary>
-        /// Get DC states
+        /// Gets DC states
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
         public override void GetDCState(TimeSimulation simulation)

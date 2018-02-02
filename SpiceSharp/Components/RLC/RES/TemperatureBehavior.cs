@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         BaseParameters bp;
 
         /// <summary>
-        /// Get the default conductance for this model
+        /// Gets the default conductance for this model
         /// </summary>
         public double Conductance { get; protected set; }
 

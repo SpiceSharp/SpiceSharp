@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         public StateDerivative Flux { get; }
 
         /// <summary>
-        /// Get the state currently being operated on
+        /// Gets the state currently being operated on
         /// </summary>
         public RealState State { get; }
 

@@ -98,7 +98,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         }
 
         /// <summary>
-        /// Get matrix pointers
+        /// Gets matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix<Complex> matrix)

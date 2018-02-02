@@ -36,7 +36,7 @@ namespace SpiceSharp.Behaviors
         public void Add(EntityBehaviors behaviors) => this.behaviors.Add(behaviors);
         
         /// <summary>
-        /// Get parameters of a specific type
+        /// Gets parameters of a specific type
         /// </summary>
         /// <typeparam name="T">The type of Parameters</typeparam>
         /// <param name="index">The index in the provider (first one by default)</param>
@@ -44,7 +44,7 @@ namespace SpiceSharp.Behaviors
         public T GetParameterSet<T>(int index) where T : ParameterSet => parameters[index].Get<T>();
 
         /// <summary>
-        /// Get behaviors of a specific type
+        /// Gets behaviors of a specific type
         /// </summary>
         /// <typeparam name="T">The type of Behavior</typeparam>
         /// <param name="index">The index in the provider (first on by default)</param>

@@ -17,7 +17,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Get the circuit
+        /// Gets the circuit
         /// </summary>
         public Circuit Circuit { get; }
 

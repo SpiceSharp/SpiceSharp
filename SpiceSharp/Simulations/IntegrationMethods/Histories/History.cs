@@ -62,19 +62,19 @@ namespace SpiceSharp.IntegrationMethods
         public abstract void Clear(Func<int, T> generator);
 
         /// <summary>
-        /// Get enumerator
+        /// Gets enumerator
         /// </summary>
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator() => Points.GetEnumerator();
 
         /// <summary>
-        /// Get enumerator
+        /// Gets enumerator
         /// </summary>
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator() => Points.GetEnumerator();
 
         /// <summary>
-        /// Get all points in the history
+        /// Gets all points in the history
         /// </summary>
         protected abstract IEnumerable<T> Points { get; }
     }

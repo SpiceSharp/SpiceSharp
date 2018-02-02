@@ -123,7 +123,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         }
 
         /// <summary>
-        /// Get matrix pointers
+        /// Gets matrix pointers
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="matrix">Matrix</param>

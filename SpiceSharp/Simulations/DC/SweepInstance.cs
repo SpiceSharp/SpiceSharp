@@ -10,12 +10,12 @@ namespace SpiceSharp.Simulations
     public class SweepInstance
     {
         /// <summary>
-        /// Get the current value
+        /// Gets the current value
         /// </summary>
         public double CurrentValue { get; private set; }
 
         /// <summary>
-        /// Get the current step index
+        /// Gets the current step index
         /// </summary>
         public int CurrentStep { get; private set; }
 

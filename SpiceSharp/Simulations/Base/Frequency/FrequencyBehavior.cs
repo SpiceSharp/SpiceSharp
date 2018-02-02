@@ -38,7 +38,7 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Get matrix pointers
+        /// Gets matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
         public virtual void GetMatrixPointers(Matrix<Complex> matrix)

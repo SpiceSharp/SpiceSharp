@@ -20,14 +20,14 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets whether or not the list is already ordered
         /// </summary>
-        bool isordered;
+        bool isOrdered;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public EntityCollection()
         {
-            isordered = false;
+            isOrdered = false;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace SpiceSharp.Circuits
         {
             objects.Clear();
             ordered.Clear();
-            isordered = false;
+            isOrdered = false;
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace SpiceSharp.Circuits
                 if (objects.ContainsKey(c.Name))
                     throw new CircuitException("A component with the id {0} already exists".FormatString(c.Name));
                 objects.Add(c.Name, c);
-                isordered = false;
+                isOrdered = false;
             }
         }
 
@@ -99,7 +99,7 @@ namespace SpiceSharp.Circuits
         public bool Contains(Identifier id) => objects.ContainsKey(id);
 
         /// <summary>
-        /// Get a circuit object
+        /// Gets a circuit object
         /// </summary>
         /// <param id="id">Identifier</param>
         /// <param id="obj"></param>
@@ -107,7 +107,7 @@ namespace SpiceSharp.Circuits
         public bool TryGetEntity(Identifier id, out Entity obj) => objects.TryGetValue(id, out obj);
 
         /// <summary>
-        /// Get all objects of a specific type
+        /// Gets all objects of a specific type
         /// </summary>
         /// <param id="type">The type of objects you wish to find</param>
         /// <returns></returns>
@@ -128,7 +128,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         public void BuildOrderedComponentList()
         {
-            if (isordered)
+            if (isOrdered)
                 return;
 
             // Initialize
@@ -158,17 +158,17 @@ namespace SpiceSharp.Circuits
             ordered.Sort((Entity a, Entity b) => {
                 return b.Priority.CompareTo(a.Priority);
             });
-            isordered = true;
+            isOrdered = true;
         }
 
         /// <summary>
-        /// Get enumerator
+        /// Gets enumerator
         /// </summary>
         /// <returns></returns>
         public IEnumerator<Entity> GetEnumerator() => ordered.GetEnumerator();
 
         /// <summary>
-        /// Get enumerator
+        /// Gets enumerator
         /// </summary>
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator() => ordered.GetEnumerator();

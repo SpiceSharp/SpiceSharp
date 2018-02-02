@@ -10,7 +10,7 @@ namespace SpiceSharp.Attributes
     public sealed class PropertyInfoAttribute : Attribute
     {
         /// <summary>
-        /// Get the parameter description
+        /// Gets the parameter description
         /// </summary>
         public string Description { get; }
 

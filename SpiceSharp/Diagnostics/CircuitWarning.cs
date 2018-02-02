@@ -10,7 +10,7 @@ namespace SpiceSharp.Diagnostics
     public static class CircuitWarning
     {
         /// <summary>
-        /// Get a list of all warnings
+        /// Gets a list of all warnings
         /// </summary>
         public static ReadOnlyCollection<string> Warnings { get => warnings.AsReadOnly(); }
 
@@ -42,7 +42,7 @@ namespace SpiceSharp.Diagnostics
     public class WarningEventArgs : EventArgs
     {
         /// <summary>
-        /// Get the message
+        /// Gets the message
         /// </summary>
         public string Message { get; }
 

@@ -87,7 +87,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         }
         
         /// <summary>
-        /// Get matrix pointers
+        /// Gets matrix pointers
         /// </summary>
         /// <param name="matrix"></param>
         public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)

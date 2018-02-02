@@ -18,7 +18,7 @@ namespace SpiceSharp.Behaviors
         protected Entity Component { get; private set; }
         
         /// <summary>
-        /// Get the name of the behavior
+        /// Gets the name of the behavior
         /// </summary>
         public Identifier Name { get; }
 

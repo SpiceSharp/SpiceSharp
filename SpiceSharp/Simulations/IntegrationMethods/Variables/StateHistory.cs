@@ -25,7 +25,7 @@
         }
 
         /// <summary>
-        /// Get a point in history
+        /// Gets a point in history
         /// </summary>
         /// <param name="index">Steps to go back in history</param>
         /// <returns></returns>
@@ -35,7 +35,7 @@
         }
 
         /// <summary>
-        /// Get the timesteps in history
+        /// Gets the timesteps in history
         /// </summary>
         public ReadOnlyHistory<double> Timesteps
         {

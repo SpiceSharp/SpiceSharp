@@ -13,7 +13,7 @@ namespace SpiceSharp.Sparse
     public abstract class Element<T> : IElement
     {
         /// <summary>
-        /// Get the equivalent of 1.0 for the element
+        /// Gets the equivalent of 1.0 for the element
         /// </summary>
         public abstract T One { get; }
 

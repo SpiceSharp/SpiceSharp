@@ -7,7 +7,7 @@
     public class ReadOnlyHistory<T>
     {
         /// <summary>
-        /// Get the base history
+        /// Gets the base history
         /// </summary>
         protected History<T> History { get; }
 

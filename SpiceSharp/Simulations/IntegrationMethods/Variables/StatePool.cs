@@ -9,12 +9,12 @@ namespace SpiceSharp.IntegrationMethods
     public class StatePool
     {
         /// <summary>
-        /// Get the integration method for the state pool
+        /// Gets the integration method for the state pool
         /// </summary>
         public IntegrationMethod Method { get; }
 
         /// <summary>
-        /// Get the history
+        /// Gets the history
         /// </summary>
         public History<RealSolution> History { get; }
         

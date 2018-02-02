@@ -14,7 +14,7 @@ namespace SpiceSharp.Simulations
         public abstract IEnumerable<T> Points { get; }
 
         /// <summary>
-        /// Get the current value
+        /// Gets the current value
         /// </summary>
         public T Current { get; protected set; }
 

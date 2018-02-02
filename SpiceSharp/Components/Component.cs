@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
         int[] indices;
 
         /// <summary>
-        /// Get the number of nodes
+        /// Gets the number of nodes
         /// </summary>
         public virtual int PinCount => connections.Length;
 
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Get the model of the circuit component (if any)
+        /// Gets the model of the circuit component (if any)
         /// </summary>
         public Entity Model { get; protected set; } = null;
 
@@ -66,7 +66,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Get a behavior
+        /// Gets a behavior
         /// </summary>
         /// <typeparam name="T">Base behavior</typeparam>
         /// <param name="pool">Pool of all behaviors</param>
@@ -105,7 +105,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Get the connection of the component
+        /// Gets the connection of the component
         /// </summary>
         /// <param name="index">The index</param>
         /// <returns></returns>
@@ -117,7 +117,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Get the node index of the component
+        /// Gets the node index of the component
         /// </summary>
         /// <param name="index">The index</param>
         /// <returns></returns>

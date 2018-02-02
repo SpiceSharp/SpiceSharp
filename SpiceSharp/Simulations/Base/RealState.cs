@@ -164,17 +164,17 @@ namespace SpiceSharp.Simulations
         #endregion
 
         /// <summary>
-        /// Get the equation matrix
+        /// Gets the equation matrix
         /// </summary>
         public Matrix<double> Matrix { get; private set; } = null;
 
         /// <summary>
-        /// Get the real right-hand-side vector
+        /// Gets the real right-hand-side vector
         /// </summary>
         public RealSolution Rhs { get; private set; } = null;
 
         /// <summary>
-        /// Get the real solution vector
+        /// Gets the real solution vector
         /// </summary>
         public RealSolution Solution { get; private set; } = null;
 
@@ -184,7 +184,7 @@ namespace SpiceSharp.Simulations
         public RealSolution OldSolution { get; private set; } = null;
 
         /// <summary>
-        /// Get the order of the matrix/vectors
+        /// Gets the order of the matrix/vectors
         /// </summary>
         public int Order { get; private set; } = 0;
 

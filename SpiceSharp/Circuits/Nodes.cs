@@ -47,7 +47,7 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Get a node by identifier
+        /// Gets a node by identifier
         /// </summary>
         /// <param id="id">Identifier</param>
         /// <returns></returns>
@@ -65,7 +65,7 @@ namespace SpiceSharp.Circuits
         public Node this[int index] => nodes[index];
 
         /// <summary>
-        /// Get the node count
+        /// Gets the node count
         /// </summary>
         public int Count => nodes.Count;
 

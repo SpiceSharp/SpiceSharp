@@ -41,7 +41,7 @@ namespace SpiceSharp
         public string Name { get; }
 
         /// <summary>
-        /// Get the hash value
+        /// Gets the hash value
         /// </summary>
         readonly int hash;
 

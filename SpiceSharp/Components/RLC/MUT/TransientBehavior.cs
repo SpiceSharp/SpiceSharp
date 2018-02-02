@@ -92,7 +92,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         }
 
         /// <summary>
-        /// Get matrix pointers
+        /// Gets matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix<double> matrix)

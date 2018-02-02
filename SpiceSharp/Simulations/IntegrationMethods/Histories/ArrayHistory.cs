@@ -123,7 +123,7 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Get enumerable version
+        /// Gets enumerable version
         /// </summary>
         protected override IEnumerable<T> Points => history;
     }

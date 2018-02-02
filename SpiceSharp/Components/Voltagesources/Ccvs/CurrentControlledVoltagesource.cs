@@ -21,7 +21,7 @@ namespace SpiceSharp.Components
         public Identifier ControllingName { get; set; }
 
         /// <summary>
-        /// Get the controlling voltage source
+        /// Gets the controlling voltage source
         /// </summary>
         public VoltageSource ControllingSource { get; protected set; }
 

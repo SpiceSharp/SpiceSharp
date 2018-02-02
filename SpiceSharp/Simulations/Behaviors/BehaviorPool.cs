@@ -47,7 +47,7 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Get a list of behaviors
+        /// Gets a list of behaviors
         /// </summary>
         /// <typeparam name="T">Behavior type</typeparam>
         /// <returns></returns>
@@ -59,7 +59,7 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Get the entity behaviors for a specific name
+        /// Gets the entity behaviors for a specific name
         /// </summary>
         /// <param name="name">Name</param>
         /// <returns></returns>

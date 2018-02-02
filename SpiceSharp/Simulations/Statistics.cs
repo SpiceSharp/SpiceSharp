@@ -9,7 +9,7 @@ namespace SpiceSharp.Simulations
     public class Statistics
     {
         /// <summary>
-        /// Get the total number of iterations
+        /// Gets the total number of iterations
         /// </summary>
         public int Iterations { get; set; } = 0;
 
@@ -44,7 +44,7 @@ namespace SpiceSharp.Simulations
         public int TimePoints { get; set; } = 0;
 
         /// <summary>
-        /// Get or sets the total number of transient iterations
+        /// Gets or sets the total number of transient iterations
         /// </summary>
         public int TransientIterations { get; set; } = 0;
 
@@ -54,17 +54,17 @@ namespace SpiceSharp.Simulations
         public Stopwatch TransientTime { get; } = new Stopwatch();
 
         /// <summary>
-        /// Get or sets the total solving time during transient simulations
+        /// Gets or sets the total solving time during transient simulations
         /// </summary>
         public TimeSpan TransientSolveTime { get; set; } = new TimeSpan();
 
         /// <summary>
-        /// Get the number of accepted timepoints
+        /// Gets the number of accepted timepoints
         /// </summary>
         public int Accepted { get; set; } = 0;
 
         /// <summary>
-        /// Get the number of rejected timepoints
+        /// Gets the number of rejected timepoints
         /// </summary>
         public int Rejected { get; set; } = 0;
 

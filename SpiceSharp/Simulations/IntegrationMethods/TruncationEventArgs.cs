@@ -26,7 +26,7 @@ namespace SpiceSharp.IntegrationMethods
         public double CurrentDelta { get; }
         
         /// <summary>
-        /// Get the simulation where the truncation event is called
+        /// Gets the simulation where the truncation event is called
         /// </summary>
         public TimeSimulation Simulation { get; }
 

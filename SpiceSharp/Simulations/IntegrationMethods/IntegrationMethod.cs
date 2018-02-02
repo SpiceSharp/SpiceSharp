@@ -18,7 +18,7 @@ namespace SpiceSharp.IntegrationMethods
         public ParameterSetCollection Parameters { get; } = new ParameterSetCollection();
 
         /// <summary>
-        /// Get the base parameters for the integration method
+        /// Gets the base parameters for the integration method
         /// </summary>
         protected IntegrationParameters BaseParameters { get; private set; }
 
@@ -33,7 +33,7 @@ namespace SpiceSharp.IntegrationMethods
         public bool Break { get; protected set; }
 
         /// <summary>
-        /// Get the maximum order for the integration method
+        /// Gets the maximum order for the integration method
         /// </summary>
         public int MaxOrder { get; }
 
@@ -68,17 +68,17 @@ namespace SpiceSharp.IntegrationMethods
         public double DeltaMin { get; set; } = 1e-12;
 
         /// <summary>
-        /// Get the old time steps
+        /// Gets the old time steps
         /// </summary>
         public History<double> DeltaOld { get; }
 
         /// <summary>
-        /// Get the old solutions
+        /// Gets the old solutions
         /// </summary>
         public History<RealSolution> Solutions { get; } = null;
 
         /// <summary>
-        /// Get the prediction for the next timestep
+        /// Gets the prediction for the next timestep
         /// </summary>
         public RealSolution Prediction { get; protected set; } = null;
 
@@ -89,7 +89,7 @@ namespace SpiceSharp.IntegrationMethods
         public double Slope { get; protected set; } = 0.0;
 
         /// <summary>
-        /// Get the last time point that was accepted
+        /// Gets the last time point that was accepted
         /// </summary>
         public double SavedTime { get { return savetime; } }
         

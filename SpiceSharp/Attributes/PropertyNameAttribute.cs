@@ -11,7 +11,7 @@ namespace SpiceSharp.Attributes
     public sealed class PropertyNameAttribute : Attribute
     {
         /// <summary>
-        /// Get the name of the parameter
+        /// Gets the name of the parameter
         /// </summary>
         public string Name { get; }
 

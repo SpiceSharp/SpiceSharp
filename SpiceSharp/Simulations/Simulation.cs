@@ -40,7 +40,7 @@ namespace SpiceSharp.Simulations
         public event FinalizeSimulationExportEventHandler FinalizeSimulationExport;
 
         /// <summary>
-        /// Get the name of the simulation
+        /// Gets the name of the simulation
         /// </summary>
         public Identifier Name { get; }
 

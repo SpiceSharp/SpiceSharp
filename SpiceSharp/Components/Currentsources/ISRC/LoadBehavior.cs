@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         BaseParameters bp;
 
         /// <summary>
-        /// Get voltage across the voltage source
+        /// Gets voltage across the voltage source
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>

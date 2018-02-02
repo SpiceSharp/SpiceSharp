@@ -15,12 +15,12 @@ namespace SpiceSharp.Components.NoiseSources
         public string Name { get; }
 
         /// <summary>
-        /// Get the calculated noise density
+        /// Gets the calculated noise density
         /// </summary>
         public double Noise { get; private set; }
 
         /// <summary>
-        /// Get the log of the calculated noise density
+        /// Gets the log of the calculated noise density
         /// </summary>
         public double LogNoise { get; private set; }
 

@@ -93,7 +93,7 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Get a strongly typed value from the dictionary
+        /// Gets a strongly typed value from the dictionary
         /// </summary>
         /// <typeparam name="R">Return type</typeparam>
         /// <returns></returns>
@@ -138,13 +138,13 @@ namespace SpiceSharp
         public void Clear() => Dictionary.Clear();
 
         /// <summary>
-        /// Get enumerator
+        /// Gets enumerator
         /// </summary>
         /// <returns></returns>
         public IEnumerator<KeyValuePair<Type, T>> GetEnumerator() => Dictionary.GetEnumerator();
 
         /// <summary>
-        /// Get enumerator
+        /// Gets enumerator
         /// </summary>
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator() => Dictionary.GetEnumerator();

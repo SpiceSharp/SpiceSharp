@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
         double maxstep = double.NaN;
 
         /// <summary>
-        /// Get the minimum timestep allowed
+        /// Gets the minimum timestep allowed
         /// </summary>
         [PropertyName("deltamin"), PropertyInfo("The minimum delta for breakpoints")]
         public double DeltaMin { get { return 1e-13 * MaxStep; } }

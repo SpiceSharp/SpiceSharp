@@ -74,7 +74,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         }
 
         /// <summary>
-        /// Get matrix pointer
+        /// Gets matrix pointer
         /// </summary>
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix<double> matrix)

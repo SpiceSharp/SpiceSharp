@@ -179,7 +179,7 @@ namespace SpiceSharp.Sparse
         }
 
         /// <summary>
-        /// Get an element from the matrix
+        /// Gets an element from the matrix
         /// If it does not find the element in the matrix, it will create it!
         /// </summary>
         /// <param name="row">Row</param>
