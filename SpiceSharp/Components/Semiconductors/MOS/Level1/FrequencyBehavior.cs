@@ -30,28 +30,28 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Nodes
         /// </summary>
         int drainNode, gateNode, sourceNode, bulkNode, sourceNodePrime, drainNodePrime;
-        protected ElementValue DrainDrainPtr { get; private set; }
-        protected ElementValue GateGatePtr { get; private set; }
-        protected ElementValue SourceSourcePtr { get; private set; }
-        protected ElementValue BulkBulkPtr { get; private set; }
-        protected ElementValue DrainPrimeDrainPrimePtr { get; private set; }
-        protected ElementValue SourcePrimeSourcePrimePtr { get; private set; }
-        protected ElementValue DrainDrainPrimePtr { get; private set; }
-        protected ElementValue GateBulkPtr { get; private set; }
-        protected ElementValue GateDrainPrimePtrPtr { get; private set; }
-        protected ElementValue GateSourcePrimePtr { get; private set; }
-        protected ElementValue SourceSourcePrimePtr { get; private set; }
-        protected ElementValue BulkDrainPrimePtr { get; private set; }
-        protected ElementValue BulkSourcePrimePtr { get; private set; }
-        protected ElementValue DrainPrimeSourcePrimePtr { get; private set; }
-        protected ElementValue DrainPrimeDrainPtr { get; private set; }
-        protected ElementValue BulkGatePtr { get; private set; }
-        protected ElementValue DrainPrimeGatePtr { get; private set; }
-        protected ElementValue SourcePrimeGatePtr { get; private set; }
-        protected ElementValue SourcePrimeSourcePtr { get; private set; }
-        protected ElementValue DrainPrimeBulkPtr { get; private set; }
-        protected ElementValue SourcePrimeBulkPtr { get; private set; }
-        protected ElementValue SourcePrimeDrainPrimePtr { get; private set; }
+        protected Element<Complex> DrainDrainPtr { get; private set; }
+        protected Element<Complex> GateGatePtr { get; private set; }
+        protected Element<Complex> SourceSourcePtr { get; private set; }
+        protected Element<Complex> BulkBulkPtr { get; private set; }
+        protected Element<Complex> DrainPrimeDrainPrimePtr { get; private set; }
+        protected Element<Complex> SourcePrimeSourcePrimePtr { get; private set; }
+        protected Element<Complex> DrainDrainPrimePtr { get; private set; }
+        protected Element<Complex> GateBulkPtr { get; private set; }
+        protected Element<Complex> GateDrainPrimePtrPtr { get; private set; }
+        protected Element<Complex> GateSourcePrimePtr { get; private set; }
+        protected Element<Complex> SourceSourcePrimePtr { get; private set; }
+        protected Element<Complex> BulkDrainPrimePtr { get; private set; }
+        protected Element<Complex> BulkSourcePrimePtr { get; private set; }
+        protected Element<Complex> DrainPrimeSourcePrimePtr { get; private set; }
+        protected Element<Complex> DrainPrimeDrainPtr { get; private set; }
+        protected Element<Complex> BulkGatePtr { get; private set; }
+        protected Element<Complex> DrainPrimeGatePtr { get; private set; }
+        protected Element<Complex> SourcePrimeGatePtr { get; private set; }
+        protected Element<Complex> SourcePrimeSourcePtr { get; private set; }
+        protected Element<Complex> DrainPrimeBulkPtr { get; private set; }
+        protected Element<Complex> SourcePrimeBulkPtr { get; private set; }
+        protected Element<Complex> SourcePrimeDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -98,7 +98,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
@@ -384,8 +384,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             DrainPrimeBulkPtr.Add(new Complex(-load.CondBD + (xnrm - xrev) * load.TransconductanceBS, -xbd));
             SourcePrimeGatePtr.Sub(new Complex((xnrm - xrev) * load.Transconductance, xgs));
             SourcePrimeBulkPtr.Sub(new Complex(load.CondBS + (xnrm - xrev) * load.TransconductanceBS, xbs));
-            DrainDrainPtr.Add(temp.DrainConductance);
-            SourceSourcePtr.Add(temp.SourceConductance);
+            DrainDrainPtr.Add((Complex)temp.DrainConductance);
+            SourceSourcePtr.Add((Complex)temp.SourceConductance);
             DrainDrainPrimePtr.Sub(temp.DrainConductance);
             SourceSourcePrimePtr.Sub(temp.SourceConductance);
             DrainPrimeDrainPtr.Sub(temp.DrainConductance);

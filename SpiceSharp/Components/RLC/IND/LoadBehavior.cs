@@ -20,10 +20,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected ElementValue PosBranchPtr { get; private set; }
-        protected ElementValue NegBranchPtr { get; private set; }
-        protected ElementValue BranchNegPtr { get; private set; }
-        protected ElementValue BranchPosPtr { get; private set; }
+        protected Element<double> PosBranchPtr { get; private set; }
+        protected Element<double> NegBranchPtr { get; private set; }
+        protected Element<double> BranchNegPtr { get; private set; }
+        protected Element<double> BranchPosPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));

@@ -9,6 +9,11 @@ namespace SpiceSharp.Sparse
     public sealed class ComplexElement : Element<Complex>
     {
         /// <summary>
+        /// Get the equivalent of One
+        /// </summary>
+        public override Complex One => new Complex(1.0, 0.0);
+
+        /// <summary>
         /// Gets or sets the real part
         /// </summary>
         public double Real { get; set; }
@@ -101,6 +106,16 @@ namespace SpiceSharp.Sparse
         public override void Multiply(Complex factor) => Value *= factor;
 
         /// <summary>
+        /// Scalar multiplication
+        /// </summary>
+        /// <param name="scalar">Scalar</param>
+        public override void Scalar(double scalar)
+        {
+            Real *= scalar;
+            Imaginary *= scalar;
+        }
+
+        /// <summary>
         /// Assign reciprocal
         /// </summary>
         /// <param name="denominator">Denominator</param>
@@ -118,6 +133,32 @@ namespace SpiceSharp.Sparse
                 r = denominator.Real / denominator.Imaginary;
                 Real = -r * (Imaginary = -1.0 / (denominator.Imaginary + r * denominator.Real));
             }
+        }
+
+        /// <summary>
+        /// Check for identity multiplier
+        /// </summary>
+        /// <returns></returns>
+        public override bool EqualsOne()
+        {
+            if (!Imaginary.Equals(0.0))
+                return false;
+            if (Math.Abs(Real).Equals(1.0))
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Check if the element is 0
+        /// </summary>
+        /// <returns></returns>
+        public override bool EqualsZero()
+        {
+            if (!Real.Equals(0))
+                return false;
+            if (!Imaginary.Equals(0))
+                return false;
+            return true;
         }
 
         /// <summary>

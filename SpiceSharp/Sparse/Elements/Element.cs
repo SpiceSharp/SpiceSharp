@@ -10,8 +10,13 @@ namespace SpiceSharp.Sparse
     /// Represents an element in a matrix
     /// </summary>
     /// <typeparam name="T">Base type</typeparam>
-    public abstract class Element<T> where T : struct
+    public abstract class Element<T> : IElement
     {
+        /// <summary>
+        /// Get the equivalent of 1.0 for the element
+        /// </summary>
+        public abstract T One { get; }
+
         /// <summary>
         /// Gets or sets the value of the element
         /// </summary>
@@ -67,6 +72,12 @@ namespace SpiceSharp.Sparse
         public abstract void Multiply(T factor);
 
         /// <summary>
+        /// Multiply with a scalar
+        /// </summary>
+        /// <param name="scalar">Scalar</param>
+        public abstract void Scalar(double scalar);
+
+        /// <summary>
         /// Assign reciprocal
         /// </summary>
         /// <param name="denominator">Denominator</param>
@@ -94,6 +105,24 @@ namespace SpiceSharp.Sparse
                 return default(T);
             return element.Value;
         }
+
+        /// <summary>
+        /// Check if the value equals 1.0 or -1.0
+        /// Used for finding identity multipliers in the matrix
+        /// </summary>
+        /// <returns></returns>
+        public abstract bool EqualsOne();
+
+        /// <summary>
+        /// Check if the value equals 0.0
+        /// </summary>
+        /// <returns></returns>
+        public abstract bool EqualsZero();
+
+        /// <summary>
+        /// Clear the element value
+        /// </summary>
+        public virtual void Clear() => Value = default(T);
 
         /// <summary>
         /// Override hash code

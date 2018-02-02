@@ -166,7 +166,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get the equation matrix
         /// </summary>
-        public Matrix Matrix { get; private set; } = null;
+        public Matrix<double> Matrix { get; private set; } = null;
 
         /// <summary>
         /// Get the real right-hand-side vector
@@ -193,7 +193,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public RealState()
         {
-            Matrix = new Matrix();
+            Matrix = new Matrix<double>();
         }
 
         /// <summary>

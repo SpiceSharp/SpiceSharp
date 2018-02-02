@@ -22,12 +22,12 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, contPosourceNode, contNegateNode, branchEq;
-        protected ElementValue PosBranchPtr { get; private set; }
-        protected ElementValue NegBranchPtr { get; private set; }
-        protected ElementValue BranchPosPtr { get; private set; }
-        protected ElementValue BranchNegPtr { get; private set; }
-        protected ElementValue BranchControlPosPtr { get; private set; }
-        protected ElementValue BranchControlNegPtr { get; private set; }
+        protected Element<Complex> PosBranchPtr { get; private set; }
+        protected Element<Complex> NegBranchPtr { get; private set; }
+        protected Element<Complex> BranchPosPtr { get; private set; }
+        protected Element<Complex> BranchNegPtr { get; private set; }
+        protected Element<Complex> BranchControlPosPtr { get; private set; }
+        protected Element<Complex> BranchControlNegPtr { get; private set; }
 
         /// <summary>
         /// Properties
@@ -101,7 +101,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
@@ -138,12 +138,12 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            PosBranchPtr.Add(1.0);
-            BranchPosPtr.Add(1.0);
+            PosBranchPtr.Add((Complex)1.0);
+            BranchPosPtr.Add((Complex)1.0);
             NegBranchPtr.Sub(1.0);
             BranchNegPtr.Sub(1.0);
-            BranchControlPosPtr.Sub(bp.Coefficient);
-            BranchControlNegPtr.Add(bp.Coefficient);
+            BranchControlPosPtr.Sub(bp.Coefficient.Value);
+            BranchControlNegPtr.Add(bp.Coefficient.Value);
         }
     }
 }

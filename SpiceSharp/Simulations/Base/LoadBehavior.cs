@@ -19,7 +19,7 @@ namespace SpiceSharp.Behaviors
         /// Setup the behavior for usage with a matrix
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        public virtual void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        public virtual void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
         {
             // No pointers needed by default
         }

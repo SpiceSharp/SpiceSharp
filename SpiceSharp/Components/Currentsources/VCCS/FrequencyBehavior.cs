@@ -21,10 +21,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, contPosourceNode, contNegateNode;
-        protected ElementValue PosControlPosPtr { get; private set; }
-        protected ElementValue PosControlNegPtr { get; private set; }
-        protected ElementValue NegControlPosPtr { get; private set; }
-        protected ElementValue NegControlNegPtr { get; private set; }
+        protected Element<Complex> PosControlPosPtr { get; private set; }
+        protected Element<Complex> PosControlNegPtr { get; private set; }
+        protected Element<Complex> NegControlPosPtr { get; private set; }
+        protected Element<Complex> NegControlNegPtr { get; private set; }
 
         /// <summary>
         /// Properties
@@ -95,7 +95,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
@@ -127,10 +127,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            PosControlPosPtr.Add(bp.Coefficient);
-            PosControlNegPtr.Sub(bp.Coefficient);
-            NegControlPosPtr.Sub(bp.Coefficient);
-            NegControlNegPtr.Add(bp.Coefficient);
+            PosControlPosPtr.Add(bp.Coefficient.Value);
+            PosControlNegPtr.Sub(bp.Coefficient.Value);
+            NegControlPosPtr.Sub(bp.Coefficient.Value);
+            NegControlNegPtr.Add(bp.Coefficient.Value);
         }
     }
 }

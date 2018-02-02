@@ -61,28 +61,28 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public int DrainNodePrime { get; protected set; }
         [PropertyName("snodeprime"), PropertyInfo("Number of protected source node")]
         public int SourceNodePrime { get; protected set; }
-        protected ElementValue DrainDrainPtr { get; private set; }
-        protected ElementValue GateGatePtr { get; private set; }
-        protected ElementValue SourceSourcePtr { get; private set; }
-        protected ElementValue BulkBulkPtr { get; private set; }
-        protected ElementValue DrainPrimeDrainPrimePtr { get; private set; }
-        protected ElementValue SourcePrimeSourcePrimePtr { get; private set; }
-        protected ElementValue DrainDrainPrimePtr { get; private set; }
-        protected ElementValue GateBulkPtr { get; private set; }
-        protected ElementValue GateDrainPrimePtr { get; private set; }
-        protected ElementValue GateSourcePrimePtr { get; private set; }
-        protected ElementValue SourceSourcePrimePtr { get; private set; }
-        protected ElementValue BulkDrainPrimePtr { get; private set; }
-        protected ElementValue BulkSourcePrimePtr { get; private set; }
-        protected ElementValue DrainPrimeSourcePrimePtr { get; private set; }
-        protected ElementValue DrainPrimeDrainPtr { get; private set; }
-        protected ElementValue BulkGatePtr { get; private set; }
-        protected ElementValue DrainPrimeGatePtr { get; private set; }
-        protected ElementValue SourcePrimeGatePtr { get; private set; }
-        protected ElementValue SourcePrimeSourcePtr { get; private set; }
-        protected ElementValue DrainPrimeBulkPtr { get; private set; }
-        protected ElementValue SourcePrimeBulkPtr { get; private set; }
-        protected ElementValue SourcePrimeDrainPrimePtr { get; private set; }
+        protected Element<double> DrainDrainPtr { get; private set; }
+        protected Element<double> GateGatePtr { get; private set; }
+        protected Element<double> SourceSourcePtr { get; private set; }
+        protected Element<double> BulkBulkPtr { get; private set; }
+        protected Element<double> DrainPrimeDrainPrimePtr { get; private set; }
+        protected Element<double> SourcePrimeSourcePrimePtr { get; private set; }
+        protected Element<double> DrainDrainPrimePtr { get; private set; }
+        protected Element<double> GateBulkPtr { get; private set; }
+        protected Element<double> GateDrainPrimePtr { get; private set; }
+        protected Element<double> GateSourcePrimePtr { get; private set; }
+        protected Element<double> SourceSourcePrimePtr { get; private set; }
+        protected Element<double> BulkDrainPrimePtr { get; private set; }
+        protected Element<double> BulkSourcePrimePtr { get; private set; }
+        protected Element<double> DrainPrimeSourcePrimePtr { get; private set; }
+        protected Element<double> DrainPrimeDrainPtr { get; private set; }
+        protected Element<double> BulkGatePtr { get; private set; }
+        protected Element<double> DrainPrimeGatePtr { get; private set; }
+        protected Element<double> SourcePrimeGatePtr { get; private set; }
+        protected Element<double> SourcePrimeSourcePtr { get; private set; }
+        protected Element<double> DrainPrimeBulkPtr { get; private set; }
+        protected Element<double> SourcePrimeBulkPtr { get; private set; }
+        protected Element<double> SourcePrimeDrainPrimePtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -134,7 +134,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));

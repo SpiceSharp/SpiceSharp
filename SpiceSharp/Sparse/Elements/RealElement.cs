@@ -8,6 +8,11 @@ namespace SpiceSharp.Sparse
     public sealed class RealElement : Element<double>
     {
         /// <summary>
+        /// Get the equivalent of 1.0
+        /// </summary>
+        public override double One => 1.0;
+
+        /// <summary>
         /// Gets or sets the value
         /// </summary>
         public override double Value { get; set; }
@@ -79,10 +84,34 @@ namespace SpiceSharp.Sparse
         public override void Multiply(double factor) => Value *= factor;
 
         /// <summary>
+        /// Multiply with a scalar
+        /// </summary>
+        /// <param name="scalar">Scalar</param>
+        public override void Scalar(double scalar) => Value *= scalar;
+
+        /// <summary>
         /// Assign reciprocal
         /// </summary>
         /// <param name="denominator">Denominator</param>
         public override void AssignReciprocal(double denominator) => Value = 1.0 / denominator;
+
+        /// <summary>
+        /// Check for identity multiplier
+        /// </summary>
+        /// <returns></returns>
+        public override bool EqualsOne()
+        {
+            return Math.Abs(Value).Equals(1.0);
+        }
+
+        /// <summary>
+        /// Check for 0
+        /// </summary>
+        /// <returns></returns>
+        public override bool EqualsZero()
+        {
+            return Value.Equals(0);
+        }
 
         /// <summary>
         /// Convert to string

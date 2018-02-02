@@ -6,7 +6,7 @@ namespace SpiceSharp.Sparse
     /// A vector with real values
     /// </summary>
     [Serializable]
-    public class Vector<T> : ICloneable where T : struct
+    public class Vector<T> : ICloneable
     {
         /// <summary>
         /// Gets or sets a value

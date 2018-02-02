@@ -42,10 +42,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, contPosourceNode, contNegateNode;
-        protected ElementValue PosPosPtr { get; private set; }
-        protected ElementValue NegPosPtr { get; private set; }
-        protected ElementValue PosNegPtr { get; private set; }
-        protected ElementValue NegNegPtr { get; private set; }
+        protected Element<double> PosPosPtr { get; private set; }
+        protected Element<double> NegPosPtr { get; private set; }
+        protected Element<double> PosNegPtr { get; private set; }
+        protected Element<double> NegNegPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -91,7 +91,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// </summary>
         /// <param name="nodes"></param>
         /// <param name="matrix"></param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));

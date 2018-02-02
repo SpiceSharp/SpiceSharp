@@ -373,12 +373,12 @@ namespace SpiceSharp.Simulations
                             if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
                             {
                                 state.Rhs[node.Index] = 1.0e10 * ns;
-                                node.Diagonal.Real = 1e10;
+                                node.Diagonal.Value = 1.0e10;
                             }
                             else
                             {
                                 state.Rhs[node.Index] = ns;
-                                node.Diagonal.Real = 1.0;
+                                node.Diagonal.Value = 1.0;
                             }
                         }
                     }
@@ -395,12 +395,12 @@ namespace SpiceSharp.Simulations
                             if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
                             {
                                 state.Rhs[node.Index] = 1.0e10 * ic;
-                                node.Diagonal.Real = 1e10;
+                                node.Diagonal.Value = 1.0e10;
                             }
                             else
                             {
                                 state.Rhs[node.Index] = ic;
-                                node.Diagonal.Real = 1.0;
+                                node.Diagonal.Value = 1.0;
                             }
                         }
                     }
@@ -458,19 +458,19 @@ namespace SpiceSharp.Simulations
         /// <param name="nodes">The list of nodes</param>
         /// <param name="rownum">The row number</param>
         /// <returns></returns>
-        static bool ZeroNoncurRow(Matrix matrix, Nodes nodes, int rownum)
+        static bool ZeroNoncurRow(Matrix<double> matrix, Nodes nodes, int rownum)
         {
             bool currents = false;
             for (int n = 0; n < nodes.Count; n++)
             {
                 var node = nodes[n];
-                MatrixElement x = matrix.FindElement(rownum, node.Index);
-                if (x != null && x.Value.Real != 0.0)
+                MatrixElement<double> x = matrix.FindElement(rownum, node.Index);
+                if (x != null && x.Element.Value != 0.0)
                 {
                     if (node.UnknownType == Node.NodeType.Current)
                         currents = true;
                     else
-                        x.Value.Real = 0.0;
+                        x.Element.Value = 0.0;
                 }
             }
             return currents;

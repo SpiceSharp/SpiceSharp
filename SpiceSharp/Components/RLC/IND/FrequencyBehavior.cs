@@ -21,11 +21,11 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, branchEq;
-        protected ElementValue PosBranchPtr { get; private set; }
-        protected ElementValue NegBranchPtr { get; private set; }
-        protected ElementValue BranchNegPtr { get; private set; }
-        protected ElementValue BranchPosPtr { get; private set; }
-        protected ElementValue BranchBranchPtr { get; private set; }
+        protected Element<Complex> PosBranchPtr { get; private set; }
+        protected Element<Complex> NegBranchPtr { get; private set; }
+        protected Element<Complex> BranchNegPtr { get; private set; }
+        protected Element<Complex> BranchPosPtr { get; private set; }
+        protected Element<Complex> BranchBranchPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
@@ -107,10 +107,10 @@ namespace SpiceSharp.Components.InductorBehaviors
             var state = simulation.ComplexState;
             Complex val = state.Laplace * bp.Inductance.Value;
 
-            PosBranchPtr.Add(1.0);
+            PosBranchPtr.Add((Complex)1.0);
             NegBranchPtr.Sub(1.0);
             BranchNegPtr.Sub(1.0);
-            BranchPosPtr.Add(1.0);
+            BranchPosPtr.Add((Complex)1.0);
             BranchBranchPtr.Sub(val);
         }
     }

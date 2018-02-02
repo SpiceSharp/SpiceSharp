@@ -20,8 +20,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected ElementValue Branch1Branch2Ptr { get; private set; }
-        protected ElementValue Branch2Branch1Ptr { get; private set; }
+        protected Element<Complex> Branch1Branch2Ptr { get; private set; }
+        protected Element<Complex> Branch2Branch1Ptr { get; private set; }
 
         /// <summary>
         /// Shared parameters
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));

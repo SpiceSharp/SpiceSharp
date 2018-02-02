@@ -48,9 +48,9 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="first">First argument</param>
         /// <param name="second">Second argument</param>
-        internal static void Swap(ref ElementValue first, ref ElementValue second)
+        internal static void Swap<T>(ref Element<T> first, ref Element<T> second)
         {
-            ElementValue swapx = first;
+            Element<T> swapx = first;
             first = second;
             second = swapx;
         }
@@ -60,9 +60,9 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="first">First argument</param>
         /// <param name="second">Second argument</param>
-        internal static void Swap(ref MatrixElement first, ref MatrixElement second)
+        internal static void Swap<T>(ref MatrixElement<T> first, ref MatrixElement<T> second)
         {
-            MatrixElement swapx = first;
+            MatrixElement<T> swapx = first;
             first = second;
             second = swapx;
         }

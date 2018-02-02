@@ -28,24 +28,15 @@ namespace SpiceSharp.Sparse
     }
 
     /// <summary>
-    /// A sparse matrix representation for SpiceSharp
+    /// Sparse matrix
     /// </summary>
-    public class Matrix
+    public class Matrix<T> : IMatrix
     {
         /// <summary>
         /// Constants
         /// </summary>
         internal const double DEFAULT_THRESHOLD = 1.0e-3;
-        internal const bool DIAG_PIVOTING_AS_DEFAULT = true;
         internal const int MINIMUM_ALLOCATED_SIZE = 6;
-        internal const float EXPANSION_FACTOR = 1.5f;
-        internal const int TIES_MULTIPLIER = 5;
-        internal const SparsePartition DEFAULT_PARTITION = SparsePartition.Auto;
-
-        /// <summary>
-        /// Flag for indicating if he matrix uses complex numbers or not
-        /// </summary>
-        public bool Complex { get; set; }
 
         /// <summary>
         /// Gets the number of fillins
@@ -62,6 +53,8 @@ namespace SpiceSharp.Sparse
         /// </summary>
         public int Size { get; internal set; }
 
+        public bool Complex { get; set; }
+
         /// <summary>
         /// Internal variables
         /// </summary>
@@ -73,10 +66,10 @@ namespace SpiceSharp.Sparse
         internal int AllocatedExtSize;
         internal int CurrentSize;
 
-        internal MatrixElement[] Diag;
-        internal MatrixElement[] FirstInCol;
-        internal MatrixElement[] FirstInRow;
-        internal MatrixElement TrashCan;
+        internal MatrixElement<T>[] Diag;
+        internal MatrixElement<T>[] FirstInCol;
+        internal MatrixElement<T>[] FirstInRow;
+        internal MatrixElement<T> TrashCan;
 
         internal bool Factored;
 
@@ -101,7 +94,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Pivoting
         /// </summary>
-        public SparsePivoting Pivoting { get; }
+        public SparsePivoting<T> Pivoting { get; }
 
         /// <summary>
         /// Constructor
@@ -145,18 +138,18 @@ namespace SpiceSharp.Sparse
             AbsThreshold = 0.0;
 
             // Take out the trash
-            TrashCan = new MatrixElement(0, 0);
+            TrashCan = new MatrixElement<T>(0, 0);
 
             // Allocate space in memory for Diag pointer vector
-            Diag = new MatrixElement[sizeplusone];
+            Diag = new MatrixElement<T>[sizeplusone];
 
             // Allocate space in memory for FirstInRow/Col pointer vectors
-            FirstInCol = new MatrixElement[sizeplusone];
-            FirstInRow = new MatrixElement[sizeplusone];
+            FirstInCol = new MatrixElement<T>[sizeplusone];
+            FirstInRow = new MatrixElement<T>[sizeplusone];
 
             Translation = new SparseTranslation(sizeplusone);
 
-            Pivoting = new SparsePivoting();
+            Pivoting = new SparsePivoting<T>();
 
         }
 
@@ -167,16 +160,16 @@ namespace SpiceSharp.Sparse
         {
             for (int i = 1; i <= IntSize; i++)
             {
-                MatrixElement elt = FirstInCol[i];
+                MatrixElement<T> elt = FirstInCol[i];
                 while (elt != null)
                 {
-                    elt.Value.Complex = 0.0;
+                    elt.Element.Clear();
                     elt = elt.NextInColumn;
                 }
             }
 
             // Empty the trash
-            TrashCan.Value.Complex = 0.0;
+            TrashCan.Element.Clear();
 
             // Reset flags
             Error = SparseError.Okay;
@@ -192,7 +185,7 @@ namespace SpiceSharp.Sparse
         /// <param name="row">Row</param>
         /// <param name="col">Column</param>
         /// <returns></returns>
-        public ElementValue GetElement(int row, int col)
+        public Element<T> GetElement(int row, int col)
         {
             if (row < 0 || col < 0)
                 throw new SparseException("Index out of bounds");
@@ -205,7 +198,7 @@ namespace SpiceSharp.Sparse
             Translation.Translate(this, ref row, ref col);
 
             // Quickly access diagonal
-            MatrixElement elt;
+            MatrixElement<T> elt;
             if (row != col || (elt = Diag[row]) == null)
             {
                 // We have to find the element or create it!
@@ -221,7 +214,7 @@ namespace SpiceSharp.Sparse
         /// <param name="row">Row</param>
         /// <param name="col">Column</param>
         /// <returns></returns>
-        public MatrixElement FindReorderedElement(int row, int col)
+        public MatrixElement<T> FindReorderedElement(int row, int col)
         {
             if (row < 0 || col < 0)
                 throw new SparseException("Index out of bounds");
@@ -230,7 +223,7 @@ namespace SpiceSharp.Sparse
                 return TrashCan;
 
             // Find the element at the right place
-            MatrixElement elt = FirstInCol[col];
+            MatrixElement<T> elt = FirstInCol[col];
             while (elt != null)
             {
                 if (elt.Row < row)
@@ -258,7 +251,7 @@ namespace SpiceSharp.Sparse
         /// <param name="row">Row</param>
         /// <param name="col">Column</param>
         /// <returns></returns>
-        public MatrixElement FindElement(int row, int col)
+        public MatrixElement<T> FindElement(int row, int col)
         {
             Translation.Translate(this, ref row, ref col);
             return FindReorderedElement(row, col);
@@ -271,15 +264,15 @@ namespace SpiceSharp.Sparse
         /// <param name="row">Row</param>
         /// <param name="col">Column</param>
         /// <returns></returns>
-        private MatrixElement CreateElement(int row, int col)
+        MatrixElement<T> CreateElement(int row, int col)
         {
-            MatrixElement elt = FirstInCol[col], last = null;
+            MatrixElement<T> elt = FirstInCol[col], last = null;
 
             // Splice into the column vector while also searching for an existing element
             if (elt == null || elt.Row > row)
             {
                 // There are no elements yet in the column
-                elt = new MatrixElement(row, col);
+                elt = new MatrixElement<T>(row, col);
                 elt.NextInColumn = FirstInCol[col];
                 FirstInCol[col] = elt;
                 if (row == col)
@@ -300,7 +293,7 @@ namespace SpiceSharp.Sparse
                 // If the element does not exist yet, create it
                 if (elt == null || elt.Row != row)
                 {
-                    elt = new MatrixElement(row, col);
+                    elt = new MatrixElement<T>(row, col);
                     elt.NextInColumn = last.NextInColumn;
                     last.NextInColumn = elt;
 
@@ -321,10 +314,10 @@ namespace SpiceSharp.Sparse
         /// <param name="Row">Row</param>
         /// <param name="Col">Column</param>
         /// <returns></returns>
-        internal MatrixElement CreateFillin(int Row, int Col)
+        internal MatrixElement<T> CreateFillin(int Row, int Col)
         {
             // End of search, create the element. 
-            MatrixElement pElement = CreateElement(Row, Col);
+            MatrixElement<T> pElement = CreateElement(Row, Col);
 
             // Update Markowitz counts and products
             Pivoting.MarkowitzProd[Row] = ++Pivoting.MarkowitzRow[Row] * Pivoting.MarkowitzCol[Row];
@@ -344,7 +337,7 @@ namespace SpiceSharp.Sparse
             for (int Col = IntSize; Col >= 1; Col--)
             {
                 // Generate row links for the elements in the Col'th column
-                MatrixElement pElement = FirstInCol[Col];
+                MatrixElement<T> pElement = FirstInCol[Col];
 
                 while (pElement != null)
                 {
@@ -362,12 +355,12 @@ namespace SpiceSharp.Sparse
         /// Splice a matrix element in the row vectors
         /// </summary>
         /// <param name="elt">Element</param>
-        private void SpliceInRows(MatrixElement elt)
+        void SpliceInRows(MatrixElement<T> elt)
         {
             int row = elt.Row;
             int col = elt.Column;
 
-            MatrixElement splice = FirstInRow[row];
+            MatrixElement<T> splice = FirstInRow[row];
             if (splice == null || splice.Column > col)
             {
                 elt.NextInRow = FirstInRow[row];

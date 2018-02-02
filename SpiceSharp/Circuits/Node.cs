@@ -42,7 +42,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets or sets the diagonal matrix element associated with the node
         /// </summary>
-        public ElementValue Diagonal { get; set; }
+        public Element<double> Diagonal { get; set; }
 
         /// <summary>
         /// Gets the node type

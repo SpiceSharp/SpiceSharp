@@ -1,17 +1,14 @@
-﻿using System;
-using System.Numerics;
-
-namespace SpiceSharp.Sparse
+﻿namespace SpiceSharp.Sparse
 {
     /// <summary>
     /// A matrix element
     /// </summary>
-    public class MatrixElement
+    public class MatrixElement<T> : IMatrixElement<T>
     {
         /// <summary>
         /// Gets or sets the value
         /// </summary>
-        public ElementValue Value { get; }
+        public Element<T> Element { get; }
 
         /// <summary>
         /// The row index
@@ -26,12 +23,12 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Next matrix element in the same row
         /// </summary>
-        internal MatrixElement NextInRow { get; set; }
+        internal MatrixElement<T> NextInRow { get; set; }
 
         /// <summary>
         /// Next matrix element in the same column
         /// </summary>
-        internal MatrixElement NextInColumn { get; set; }
+        internal MatrixElement<T> NextInColumn { get; set; }
 
         /// <summary>
         /// Constructor
@@ -40,7 +37,7 @@ namespace SpiceSharp.Sparse
         /// <param name="column">Column</param>
         public MatrixElement(int row, int column)
         {
-            Value = new ElementValue();
+            Element = ElementFactory.Create<T>();
             Row = row;
             Column = column;
         }
@@ -51,18 +48,18 @@ namespace SpiceSharp.Sparse
         /// <returns></returns>
         public override string ToString()
         {
-            return "({0}, {1}) = {2}".FormatString(Row, Column, Value);
+            return "({0}, {1}) = {2}".FormatString(Row, Column, Element);
         }
 
         /// <summary>
         /// Allow casting to an value
         /// </summary>
         /// <param name="el"></param>
-        public static implicit operator ElementValue(MatrixElement el)
+        public static implicit operator Element<T>(MatrixElement<T> el)
         {
             if (el == null)
-                return new ElementValue();
-            return el.Value;
+                return null;
+            return el.Element;
         }
     }
 }

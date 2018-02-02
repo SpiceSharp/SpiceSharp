@@ -24,13 +24,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, posPrimeNode;
-        protected ElementValue PosPosPrimePtr { get; private set; }
-        protected ElementValue NegPosPrimePtr { get; private set; }
-        protected ElementValue PosPrimePosPtr { get; private set; }
-        protected ElementValue PosPrimeNegPtr { get; private set; }
-        protected ElementValue PosPosPtr { get; private set; }
-        protected ElementValue NegNegPtr { get; private set; }
-        protected ElementValue PosPrimePosPrimePtr { get; private set; }
+        protected Element<Complex> PosPosPrimePtr { get; private set; }
+        protected Element<Complex> NegPosPrimePtr { get; private set; }
+        protected Element<Complex> PosPrimePosPtr { get; private set; }
+        protected Element<Complex> PosPrimeNegPtr { get; private set; }
+        protected Element<Complex> PosPosPtr { get; private set; }
+        protected Element<Complex> NegNegPtr { get; private set; }
+        protected Element<Complex> PosPrimePosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the junction capacitance
@@ -80,7 +80,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
@@ -157,7 +157,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             geq = load.Conduct;
             xceq = Cap * state.Laplace.Imaginary;
 
-            PosPosPtr.Add(gspr);
+            PosPosPtr.Add((Complex)gspr);
             NegNegPtr.Add(new Complex(geq, xceq));
 
             PosPrimePosPrimePtr.Add(new Complex(geq + gspr, xceq));

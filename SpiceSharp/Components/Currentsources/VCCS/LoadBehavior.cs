@@ -21,10 +21,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, contPosourceNode, contNegateNode;
-        protected ElementValue PosControlPosPtr { get; private set; }
-        protected ElementValue PosControlNegPtr { get; private set; }
-        protected ElementValue NegControlPosPtr { get; private set; }
-        protected ElementValue NegControlNegPtr { get; private set; }
+        protected Element<double> PosControlPosPtr { get; private set; }
+        protected Element<double> PosControlNegPtr { get; private set; }
+        protected Element<double> NegControlPosPtr { get; private set; }
+        protected Element<double> NegControlNegPtr { get; private set; }
 
         /// <summary>
         /// Properties
@@ -113,7 +113,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));

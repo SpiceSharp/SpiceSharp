@@ -177,7 +177,7 @@ namespace SpiceSharp.Circuits
             }
 
             // Determine the rank of the matrix
-            Matrix conn = new Matrix(Math.Max(voltagedriven.Count, map.Count), false);
+            Matrix<double> conn = new Matrix<double>(Math.Max(voltagedriven.Count, map.Count), false);
             for (int i = 0; i < voltagedriven.Count; i++)
             {
                 var pins = voltagedriven[i];

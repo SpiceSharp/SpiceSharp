@@ -25,29 +25,29 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Nodes
         /// </summary>
         int collectorNode, baseNode, emitterNode, substrateNode, colPrimeNode, basePrimeNode, emitPrimeNode;
-        protected ElementValue CollectorCollectorPrimePtr { get; private set; }
-        protected ElementValue BaseBasePrimePtr { get; private set; }
-        protected ElementValue EmitterEmitterPrimePtr { get; private set; }
-        protected ElementValue CollectorPrimeCollectorPtr { get; private set; }
-        protected ElementValue CollectorPrimeBasePrimePtr { get; private set; }
-        protected ElementValue CollectorPrimeEmitterPrimePtr { get; private set; }
-        protected ElementValue BasePrimeBasePtr { get; private set; }
-        protected ElementValue BasePrimeCollectorPrimePtr { get; private set; }
-        protected ElementValue BasePrimeEmitterPrimePtr { get; private set; }
-        protected ElementValue EmitterPrimeEmitterPtr { get; private set; }
-        protected ElementValue EmitterPrimeCollectorPrimePtr { get; private set; }
-        protected ElementValue EmitterPrimeBasePrimePtr { get; private set; }
-        protected ElementValue CollectorCollectorPtr { get; private set; }
-        protected ElementValue BaseBasePtr { get; private set; }
-        protected ElementValue EmitterEmitterPtr { get; private set; }
-        protected ElementValue CollectorPrimeCollectorPrimePtr { get; private set; }
-        protected ElementValue BasePrimeBasePrimePtr { get; private set; }
-        protected ElementValue EmitterPrimeEmitterPrimePtr { get; private set; }
-        protected ElementValue SubstrateSubstratePtr { get; private set; }
-        protected ElementValue CollectorPrimeSubstratePtr { get; private set; }
-        protected ElementValue SubstrateCollectorPrimePtr { get; private set; }
-        protected ElementValue BaseCollectorPrimePtr { get; private set; }
-        protected ElementValue CollectorPrimeBasePtr { get; private set; }
+        protected Element<double> CollectorCollectorPrimePtr { get; private set; }
+        protected Element<double> BaseBasePrimePtr { get; private set; }
+        protected Element<double> EmitterEmitterPrimePtr { get; private set; }
+        protected Element<double> CollectorPrimeCollectorPtr { get; private set; }
+        protected Element<double> CollectorPrimeBasePrimePtr { get; private set; }
+        protected Element<double> CollectorPrimeEmitterPrimePtr { get; private set; }
+        protected Element<double> BasePrimeBasePtr { get; private set; }
+        protected Element<double> BasePrimeCollectorPrimePtr { get; private set; }
+        protected Element<double> BasePrimeEmitterPrimePtr { get; private set; }
+        protected Element<double> EmitterPrimeEmitterPtr { get; private set; }
+        protected Element<double> EmitterPrimeCollectorPrimePtr { get; private set; }
+        protected Element<double> EmitterPrimeBasePrimePtr { get; private set; }
+        protected Element<double> CollectorCollectorPtr { get; private set; }
+        protected Element<double> BaseBasePtr { get; private set; }
+        protected Element<double> EmitterEmitterPtr { get; private set; }
+        protected Element<double> CollectorPrimeCollectorPrimePtr { get; private set; }
+        protected Element<double> BasePrimeBasePrimePtr { get; private set; }
+        protected Element<double> EmitterPrimeEmitterPrimePtr { get; private set; }
+        protected Element<double> SubstrateSubstratePtr { get; private set; }
+        protected Element<double> CollectorPrimeSubstratePtr { get; private set; }
+        protected Element<double> SubstrateCollectorPrimePtr { get; private set; }
+        protected Element<double> BaseCollectorPrimePtr { get; private set; }
+        protected Element<double> CollectorPrimeBasePtr { get; private set; }
 
         /// <summary>
         /// Properties
@@ -133,7 +133,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<double> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));

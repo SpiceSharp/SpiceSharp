@@ -8,6 +8,11 @@ namespace SpiceSharp.Sparse
     public class SparseTranslation
     {
         /// <summary>
+        /// Constants
+        /// </summary>
+        const float EXPANSION_FACTOR = 1.5f;
+
+        /// <summary>
         /// Internal to external column index map
         /// </summary>
         internal int[] IntToExtColMap = null;
@@ -57,7 +62,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">Matrix</param>
         /// <param name="row">Row index</param>
         /// <param name="col">Column index</param>
-        public void Translate(Matrix matrix, ref int row, ref int col)
+        public void Translate<T>(Matrix<T> matrix, ref int row, ref int col)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -119,7 +124,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="newsize">Matrix size</param>
-        void ExpandTranslationArrays(Matrix matrix, int newsize)
+        void ExpandTranslationArrays<T>(Matrix<T> matrix, int newsize)
         {
             int OldAllocatedSize = matrix.AllocatedExtSize;
             matrix.Size = newsize;
@@ -128,7 +133,7 @@ namespace SpiceSharp.Sparse
                 return;
 
             // Expand the translation arrays ExtToIntRowMap and ExtToIntColMap
-            newsize = Math.Max(newsize, (int)(Matrix.EXPANSION_FACTOR * OldAllocatedSize));
+            newsize = Math.Max(newsize, (int)(EXPANSION_FACTOR * OldAllocatedSize));
             matrix.AllocatedExtSize = newsize;
 
             Array.Resize(ref ExtToIntRowMap, newsize + 1);
@@ -149,7 +154,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="newsize">Matrix size</param>
-        void EnlargeMatrix(Matrix matrix, int newsize)
+        void EnlargeMatrix<T>(Matrix<T> matrix, int newsize)
         {
             int OldAllocatedSize = matrix.AllocatedSize;
             matrix.IntSize = newsize;
@@ -158,7 +163,7 @@ namespace SpiceSharp.Sparse
                 return;
 
             // Expand the matrix frame
-            newsize = Math.Max(newsize, (int)(Matrix.EXPANSION_FACTOR * OldAllocatedSize));
+            newsize = Math.Max(newsize, (int)(EXPANSION_FACTOR * OldAllocatedSize));
             matrix.AllocatedSize = newsize;
 
             Array.Resize(ref IntToExtColMap, newsize + 1);

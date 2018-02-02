@@ -25,29 +25,29 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Nodes
         /// </summary>
         int collectorNode, baseNode, emitterNode, substrateNode, colPrimeNode, basePrimeNode, emitPrimeNode;
-        protected ElementValue CollectorCollectorPrimePtr { get; private set; }
-        protected ElementValue BaseBasePrimePtr { get; private set; }
-        protected ElementValue EmitterEmitterPrimePtr { get; private set; }
-        protected ElementValue CollectorPrimeCollectorPtr { get; private set; }
-        protected ElementValue CollectorPrimeBasePrimePtr { get; private set; }
-        protected ElementValue CollectorPrimeEmitterPrimePtr { get; private set; }
-        protected ElementValue BasePrimeBasePtr { get; private set; }
-        protected ElementValue BasePrimeCollectorPrimePtr { get; private set; }
-        protected ElementValue BasePrimeEmitterPrimePtr { get; private set; }
-        protected ElementValue EmitterPrimeEmitterPtr { get; private set; }
-        protected ElementValue EmitterPrimeCollectorPrimePtr { get; private set; }
-        protected ElementValue EmitterPrimeBasePrimePtr { get; private set; }
-        protected ElementValue CollectorCollectorPtr { get; private set; }
-        protected ElementValue BaseBasePtr { get; private set; }
-        protected ElementValue EmitterEmitterPtr { get; private set; }
-        protected ElementValue CollectorPrimeCollectorPrimePtr { get; private set; }
-        protected ElementValue BasePrimeBasePrimePtr { get; private set; }
-        protected ElementValue EmitterPrimeEmitterPrimePtr { get; private set; }
-        protected ElementValue SubstrateSubstratePtr { get; private set; }
-        protected ElementValue CollectorPrimeSubstratePtr { get; private set; }
-        protected ElementValue SubstrateCollectorPrimePtr { get; private set; }
-        protected ElementValue BaseCollectorPrimePtr { get; private set; }
-        protected ElementValue CollectorPrimeBasePtr { get; private set; }
+        protected Element<Complex> CollectorCollectorPrimePtr { get; private set; }
+        protected Element<Complex> BaseBasePrimePtr { get; private set; }
+        protected Element<Complex> EmitterEmitterPrimePtr { get; private set; }
+        protected Element<Complex> CollectorPrimeCollectorPtr { get; private set; }
+        protected Element<Complex> CollectorPrimeBasePrimePtr { get; private set; }
+        protected Element<Complex> CollectorPrimeEmitterPrimePtr { get; private set; }
+        protected Element<Complex> BasePrimeBasePtr { get; private set; }
+        protected Element<Complex> BasePrimeCollectorPrimePtr { get; private set; }
+        protected Element<Complex> BasePrimeEmitterPrimePtr { get; private set; }
+        protected Element<Complex> EmitterPrimeEmitterPtr { get; private set; }
+        protected Element<Complex> EmitterPrimeCollectorPrimePtr { get; private set; }
+        protected Element<Complex> EmitterPrimeBasePrimePtr { get; private set; }
+        protected Element<Complex> CollectorCollectorPtr { get; private set; }
+        protected Element<Complex> BaseBasePtr { get; private set; }
+        protected Element<Complex> EmitterEmitterPtr { get; private set; }
+        protected Element<Complex> CollectorPrimeCollectorPrimePtr { get; private set; }
+        protected Element<Complex> BasePrimeBasePrimePtr { get; private set; }
+        protected Element<Complex> EmitterPrimeEmitterPrimePtr { get; private set; }
+        protected Element<Complex> SubstrateSubstratePtr { get; private set; }
+        protected Element<Complex> CollectorPrimeSubstratePtr { get; private set; }
+        protected Element<Complex> SubstrateCollectorPrimePtr { get; private set; }
+        protected Element<Complex> BaseCollectorPrimePtr { get; private set; }
+        protected Element<Complex> CollectorPrimeBasePtr { get; private set; }
         
         /// <summary>
         /// Properties
@@ -108,7 +108,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
@@ -333,22 +333,22 @@ namespace SpiceSharp.Components.BipolarBehaviors
             xccs = CapCS * cstate.Laplace;
             xcmcb = CondCB * cstate.Laplace;
 
-            CollectorCollectorPtr.Add(gcpr);
+            CollectorCollectorPtr.Add((Complex)gcpr);
             BaseBasePtr.Add(gx + xcbx);
-            EmitterEmitterPtr.Add(gepr);
+            EmitterEmitterPtr.Add((Complex)gepr);
             CollectorPrimeCollectorPrimePtr.Add(gmu + go + gcpr + xcmu + xccs + xcbx);
             BasePrimeBasePrimePtr.Add(gx + gpi + gmu + xcpi + xcmu + xcmcb);
             EmitterPrimeEmitterPrimePtr.Add(gpi + gepr + gm + go + xcpi);
-            CollectorCollectorPrimePtr.Add(-gcpr);
-            BaseBasePrimePtr.Add(-gx);
-            EmitterEmitterPrimePtr.Add(-gepr);
-            CollectorPrimeCollectorPtr.Add(-gcpr);
+            CollectorCollectorPrimePtr.Add((Complex)(-gcpr));
+            BaseBasePrimePtr.Add((Complex)(-gx));
+            EmitterEmitterPrimePtr.Add((Complex)(-gepr));
+            CollectorPrimeCollectorPtr.Add((Complex)(-gcpr));
             CollectorPrimeBasePrimePtr.Add(-gmu + gm - xcmu);
             CollectorPrimeEmitterPrimePtr.Add(-gm - go);
-            BasePrimeBasePtr.Add(-gx);
+            BasePrimeBasePtr.Add((Complex)(-gx));
             BasePrimeCollectorPrimePtr.Add(-gmu - xcmu - xcmcb);
             BasePrimeEmitterPrimePtr.Add(-gpi - xcpi);
-            EmitterPrimeEmitterPtr.Add(-gepr);
+            EmitterPrimeEmitterPtr.Add((Complex)(-gepr));
             EmitterPrimeCollectorPrimePtr.Add(-go + xcmcb);
             EmitterPrimeBasePrimePtr.Add(-gpi - gm - xcpi - xcmcb);
             SubstrateSubstratePtr.Add(xccs);

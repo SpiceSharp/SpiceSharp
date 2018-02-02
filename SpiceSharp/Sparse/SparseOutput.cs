@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Text;
 
 namespace SpiceSharp.Sparse
@@ -18,7 +19,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix"></param>
         /// <returns></returns>
-        public static string Print(this Matrix matrix)
+        public static string Print<T>(this Matrix<T> matrix)
         {
             return Print(matrix, false, true, true);
         }
@@ -31,7 +32,7 @@ namespace SpiceSharp.Sparse
         /// <param name="data">True if the actual values should be shown</param>
         /// <param name="header">True if the header is shown</param>
         /// <returns></returns>
-        public static string Print(this Matrix matrix, bool printReordered, bool data, bool header)
+        public static string Print<T>(this Matrix<T> matrix, bool printReordered, bool data, bool header)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -40,13 +41,13 @@ namespace SpiceSharp.Sparse
             int I, Row, Col, Size, Top, StartCol = 1, StopCol, Columns, ElementCount = 0;
             double Magnitude, SmallestDiag, SmallestElement;
             double LargestElement = 0.0, LargestDiag = 0.0;
-            MatrixElement pElement;
-            MatrixElement[] pImagElements;
+            MatrixElement<T> pElement;
+            MatrixElement<T>[] pImagElements;
             int[] PrintOrdToIntRowMap, PrintOrdToIntColMap;
 
             StringBuilder sb = new StringBuilder();
             Size = matrix.IntSize;
-            pImagElements = new MatrixElement[PrinterWidth / 10 + 1];
+            pImagElements = new MatrixElement<T>[PrinterWidth / 10 + 1];
 
             // Create a packed external to internal row and column translation array
             Top = matrix.AllocatedExtSize;
@@ -169,12 +170,15 @@ namespace SpiceSharp.Sparse
 
                             // Case where element exists
                             if (data)
-                                sb.AppendFormat("{0:G3,10}", pElement.Value.Real);
+                            {
+                                if (typeof(T) == typeof(double))
+                                    sb.AppendFormat("{0:G3,10}", pElement.Element.Value);
+                            }
                             else
                                 sb.Append('x');
 
                             // Update status variables
-                            if ((Magnitude = (Math.Abs(pElement.Value.Real) + Math.Abs(pElement.Value.Imaginary))) > LargestElement)
+                            if ((Magnitude = pElement.Element.Magnitude) > LargestElement)
                                 LargestElement = Magnitude;
                             if ((Magnitude < SmallestElement) && (Magnitude != 0.0))
                                 SmallestElement = Magnitude;
@@ -198,7 +202,8 @@ namespace SpiceSharp.Sparse
                         {
                             if (pImagElements[J - StartCol] != null)
                             {
-                                sb.AppendFormat("{0:G3,9}j", pImagElements[J - StartCol].Value.Imaginary);
+                                if (pImagElements[J - StartCol].Element is Element<Complex> e)
+                                    sb.AppendFormat("{0:G3,9}j", e.Value.Imaginary);
                             }
                             else sb.Append("          ");
                         }
@@ -221,7 +226,7 @@ namespace SpiceSharp.Sparse
                 {
                     if (matrix.Diag[I] != null)
                     {
-                        Magnitude = (Math.Abs(matrix.Diag[I].Value.Real) + Math.Abs(matrix.Diag[I].Value.Imaginary));
+                        Magnitude = matrix.Diag[I].Element.Magnitude;
                         if (Magnitude > LargestDiag) LargestDiag = Magnitude;
                         if (Magnitude < SmallestDiag) SmallestDiag = Magnitude;
                     }

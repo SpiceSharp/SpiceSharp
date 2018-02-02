@@ -5,8 +5,11 @@ namespace SpiceSharp.Sparse
     /// <summary>
     /// A class that handles finding pivots in the matrix
     /// </summary>
-    public class SparsePivoting
+    public class SparsePivoting<T>
     {
+        internal const SparsePartition DEFAULT_PARTITION = SparsePartition.Auto;
+        internal const int TIES_MULTIPLIER = 5;
+
         internal bool[] DoCmplxDirect = null;
         internal bool[] DoRealDirect = null;
         internal int[] MarkowitzRow = null;
@@ -21,7 +24,7 @@ namespace SpiceSharp.Sparse
         internal int PivotsOriginalRow = 0;
 
         // This kind of should not be here...
-        internal ElementValue[] Intermediate;
+        internal Element<T>[] Intermediate;
 
         /// <summary>
         /// Clear all vectors
@@ -61,9 +64,9 @@ namespace SpiceSharp.Sparse
             // Create Intermediate vectors for use in MatrixSolve
             if (Intermediate == null)
             {
-                Intermediate = new ElementValue[size + 1];
+                Intermediate = new Element<T>[size + 1];
                 for (int i = 0; i < Intermediate.Length; i++)
-                    Intermediate[i] = new ElementValue();
+                    Intermediate[i] = ElementFactory.Create<T>();
             }
             InternalVectorsAllocated = true;
         }
@@ -73,12 +76,12 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">The matrix</param>
         /// <param name="mode">The mode</param>
-        public void Partition(Matrix matrix, SparsePartition mode)
+        public void Partition(Matrix<T> matrix, SparsePartition mode)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
-            MatrixElement pElement, pColumn;
+            MatrixElement<T> pElement, pColumn;
             int Step, Size;
             int[] Nc, No;
             long[] Nm;
@@ -90,7 +93,7 @@ namespace SpiceSharp.Sparse
 
             // If partition is specified by the user, this is easy
             if (mode == SparsePartition.Default)
-                mode = Matrix.DEFAULT_PARTITION;
+                mode = DEFAULT_PARTITION;
             if (mode == SparsePartition.Direct)
             {
                 for (Step = 1; Step <= Size; Step++)
@@ -164,13 +167,13 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">The matrix</param>
         /// <param name="rhs">Right hand side</param>
         /// <param name="step">Current step</param>
-        public void CountMarkowitz(Matrix matrix, Vector<double> rhs, int step)
+        public void CountMarkowitz(Matrix<T> matrix, Vector<double> rhs, int step)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
             int Count, I, Size = matrix.IntSize;
-            MatrixElement pElement;
+            MatrixElement<T> pElement;
             int ExtRow;
 
             // Generate MarkowitzRow Count for each row
@@ -220,7 +223,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix"></param>
         /// <param name="step"></param>
-        public void MarkowitzProducts(Matrix matrix, int step)
+        public void MarkowitzProducts(Matrix<T> matrix, int step)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -260,9 +263,9 @@ namespace SpiceSharp.Sparse
         /// <param name="step">Step</param>
         /// <param name="diagonalPivoting">Use the diagonal for searching a pivot</param>
         /// <returns></returns>
-        public MatrixElement SearchForPivot(Matrix matrix, int step, bool diagonalPivoting)
+        public MatrixElement<T> SearchForPivot(Matrix<T> matrix, int step, bool diagonalPivoting)
         {
-            MatrixElement ChosenPivot;
+            MatrixElement<T> ChosenPivot;
 
             // If singletons exist, look for an acceptable one to use as pivot. 
             if (Singletons != 0)
@@ -314,9 +317,9 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">The matrix</param>
         /// <param name="Step">The current step</param>
         /// <returns></returns>
-        private MatrixElement SearchForSingleton(Matrix matrix, int Step)
+        private MatrixElement<T> SearchForSingleton(Matrix<T> matrix, int Step)
         {
-            MatrixElement ChosenPivot;
+            MatrixElement<T> ChosenPivot;
             int I;
             long[] pMarkowitzProduct;
             int singletons;
@@ -374,7 +377,7 @@ namespace SpiceSharp.Sparse
                 if ((ChosenPivot = matrix.Diag[I]) != null)
                 {
                     // Singleton lies on the diagonal. 
-                    PivotMag = ChosenPivot.Value.Magnitude;
+                    PivotMag = ChosenPivot.Element.Magnitude;
                     if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                         return ChosenPivot;
                 }
@@ -391,7 +394,7 @@ namespace SpiceSharp.Sparse
                             // Reduced column has no elements, matrix is singular. 
                             break;
                         }
-                        PivotMag = ChosenPivot.Value.Magnitude;
+                        PivotMag = ChosenPivot.Element.Magnitude;
                         if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                             return ChosenPivot;
                         else
@@ -406,7 +409,7 @@ namespace SpiceSharp.Sparse
                                     // Reduced row has no elements, matrix is singular. 
                                     break;
                                 }
-                                PivotMag = ChosenPivot.Value.Magnitude;
+                                PivotMag = ChosenPivot.Element.Magnitude;
                                 if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                                     return ChosenPivot;
                             }
@@ -421,7 +424,7 @@ namespace SpiceSharp.Sparse
                         {   // Reduced row has no elements, matrix is singular. 
                             break;
                         }
-                        PivotMag = ChosenPivot.Value.Magnitude;
+                        PivotMag = ChosenPivot.Element.Magnitude;
                         if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                             return ChosenPivot;
                     }
@@ -441,13 +444,13 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">The matrix</param>
         /// <param name="Step">The current step</param>
         /// <returns></returns>
-        private MatrixElement QuicklySearchDiagonal(Matrix matrix, int Step)
+        private MatrixElement<T> QuicklySearchDiagonal(Matrix<T> matrix, int Step)
         {
             long MinMarkowitzProduct;
             // long pMarkowitzProduct;
-            MatrixElement pDiag;
+            MatrixElement<T> pDiag;
             int I;
-            MatrixElement ChosenPivot, pOtherInRow, pOtherInCol;
+            MatrixElement<T> ChosenPivot, pOtherInRow, pOtherInCol;
             double Magnitude, LargestInCol, LargestOffDiagonal;
 
             ChosenPivot = null;
@@ -493,7 +496,7 @@ namespace SpiceSharp.Sparse
 
                 if ((pDiag = matrix.Diag[I]) == null)
                     continue; // Endless for loop 
-                if ((Magnitude = pDiag.Value.Magnitude) <= matrix.AbsThreshold)
+                if ((Magnitude = pDiag.Element.Magnitude) <= matrix.AbsThreshold)
                     continue; // Endless for loop 
 
                 if (MarkowitzProd[index] == 1)
@@ -527,7 +530,7 @@ namespace SpiceSharp.Sparse
                     {
                         if (pOtherInRow.Column == pOtherInCol.Row)
                         {
-                            LargestOffDiagonal = Math.Max(pOtherInRow.Value.Magnitude, pOtherInCol.Value.Magnitude);
+                            LargestOffDiagonal = Math.Max(pOtherInRow.Element.Magnitude, pOtherInCol.Element.Magnitude);
                             if (Magnitude >= LargestOffDiagonal)
                             {
                                 // Accept pivot, it is unlikely to contribute excess error. 
@@ -544,7 +547,7 @@ namespace SpiceSharp.Sparse
             if (ChosenPivot != null)
             {
                 LargestInCol = FindBiggestInColExclude(matrix, ChosenPivot, Step);
-                if (ChosenPivot.Value.Magnitude <= matrix.RelThreshold * LargestInCol)
+                if (ChosenPivot.Element.Magnitude <= matrix.RelThreshold * LargestInCol)
                     ChosenPivot = null;
             }
             return ChosenPivot;
@@ -556,15 +559,15 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">Matrix</param>
         /// <param name="Step">Step</param>
         /// <returns></returns>
-        private MatrixElement SearchDiagonal(Matrix matrix, int Step)
+        private MatrixElement<T> SearchDiagonal(Matrix<T> matrix, int Step)
         {
             int J;
             long MinMarkowitzProduct;
             //, *pMarkowitzProduct;
             int I;
-            MatrixElement pDiag;
+            MatrixElement<T> pDiag;
             int NumberOfTies = 0, Size = matrix.IntSize;
-            MatrixElement ChosenPivot;
+            MatrixElement<T> ChosenPivot;
             double Magnitude, Ratio, RatioOfAccepted = 0, LargestInCol;
 
             ChosenPivot = null;
@@ -584,7 +587,7 @@ namespace SpiceSharp.Sparse
                     I = J;
                 if ((pDiag = matrix.Diag[I]) == null)
                     continue; // for loop 
-                if ((Magnitude = pDiag.Value.Magnitude) <= matrix.AbsThreshold)
+                if ((Magnitude = pDiag.Element.Magnitude) <= matrix.AbsThreshold)
                     continue; // for loop 
 
                 // Test to see if diagonal's magnitude is acceptable. 
@@ -610,7 +613,7 @@ namespace SpiceSharp.Sparse
                         ChosenPivot = pDiag;
                         RatioOfAccepted = Ratio;
                     }
-                    if (NumberOfTies >= MinMarkowitzProduct * Matrix.TIES_MULTIPLIER)
+                    if (NumberOfTies >= MinMarkowitzProduct * TIES_MULTIPLIER)
                         return ChosenPivot;
                 }
             } // End of for(Step) 
@@ -623,13 +626,13 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">The matrix</param>
         /// <param name="Step">Current step</param>
         /// <returns></returns>
-        private MatrixElement SearchEntireMatrix(Matrix matrix, int Step)
+        private MatrixElement<T> SearchEntireMatrix(Matrix<T> matrix, int Step)
         {
             int I, Size = matrix.IntSize;
-            MatrixElement pElement;
+            MatrixElement<T> pElement;
             int NumberOfTies = 0;
             long Product, MinMarkowitzProduct;
-            MatrixElement ChosenPivot, pLargestElement = null;
+            MatrixElement<T> ChosenPivot, pLargestElement = null;
             double Magnitude, LargestElementMag, Ratio, RatioOfAccepted = 0, LargestInCol;
 
             ChosenPivot = null;
@@ -651,7 +654,7 @@ namespace SpiceSharp.Sparse
                 {
                     /* Check to see if element is the largest encountered so far.  If so, record
                        its magnitude and address. */
-                    if ((Magnitude = pElement.Value.Magnitude) > LargestElementMag)
+                    if ((Magnitude = pElement.Element.Magnitude) > LargestElementMag)
                     {
                         LargestElementMag = Magnitude;
                         pLargestElement = pElement;
@@ -682,7 +685,7 @@ namespace SpiceSharp.Sparse
                                 ChosenPivot = pElement;
                                 RatioOfAccepted = Ratio;
                             }
-                            if (NumberOfTies >= MinMarkowitzProduct * Matrix.TIES_MULTIPLIER)
+                            if (NumberOfTies >= MinMarkowitzProduct * TIES_MULTIPLIER)
                                 return ChosenPivot;
                         }
                     }
@@ -707,14 +710,14 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="element">Element where we need to start searching</param>
         /// <returns></returns>
-        public static double FindLargestInCol(MatrixElement element)
+        public static double FindLargestInCol(MatrixElement<T> element)
         {
             double Magnitude, Largest = 0.0;
 
             // Search column for largest element beginning at Element. 
             while (element != null)
             {
-                if ((Magnitude = element.Value.Magnitude) > Largest)
+                if ((Magnitude = element.Element.Magnitude) > Largest)
                     Largest = Magnitude;
                 element = element.NextInColumn;
             }
@@ -729,7 +732,7 @@ namespace SpiceSharp.Sparse
         /// <param name="pElement">Element</param>
         /// <param name="Step">Step</param>
         /// <returns></returns>
-        static double FindBiggestInColExclude(Matrix matrix, MatrixElement pElement, int Step)
+        static double FindBiggestInColExclude(Matrix<T> matrix, MatrixElement<T> pElement, int Step)
         {
             int Row;
             int Col;
@@ -745,14 +748,14 @@ namespace SpiceSharp.Sparse
 
             // Initialize the variable Largest. 
             if (pElement.Row != Row)
-                Largest = pElement.Value.Magnitude;
+                Largest = pElement.Element.Magnitude;
             else
                 Largest = 0.0;
 
             // Search rest of column for largest element, avoiding excluded element. 
             while ((pElement = pElement.NextInColumn) != null)
             {
-                if ((Magnitude = pElement.Value.Magnitude) > Largest)
+                if ((Magnitude = pElement.Element.Magnitude) > Largest)
                 {
                     if (pElement.Row != Row)
                         Largest = Magnitude;
@@ -767,7 +770,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">The matrix</param>
         /// <param name="pivot">Pivot element</param>
-        public void UpdateMarkowitzNumbers(Matrix matrix, MatrixElement pivot)
+        public void UpdateMarkowitzNumbers(Matrix<T> matrix, MatrixElement<T> pivot)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -776,7 +779,7 @@ namespace SpiceSharp.Sparse
 
 
             int Row, Col;
-            MatrixElement ColPtr, RowPtr;
+            MatrixElement<T> ColPtr, RowPtr;
             double Product;
 
             // Update Markowitz numbers. 

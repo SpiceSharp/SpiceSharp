@@ -25,6 +25,7 @@
     <DocumentationFile>
     </DocumentationFile>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +36,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>
     </CodeAnalysisRuleSet>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -265,13 +267,17 @@
     <Compile Include="Simulations\Transient\TruncateBehavior.cs" />
     <Compile Include="Sparse\Elements\ComplexElement.cs" />
     <Compile Include="Sparse\Elements\Element.cs" />
+    <Compile Include="Sparse\Elements\ElementFactory.cs" />
+    <Compile Include="Sparse\Elements\IElement.cs" />
     <Compile Include="Sparse\Elements\RealElement.cs" />
     <Compile Include="Sparse\ElementValue.cs" />
-    <Compile Include="Sparse\Matrix.cs" />
-    <Compile Include="Sparse\MatrixElement.cs" />
+    <Compile Include="Sparse\Matrix\IMatrix.cs" />
+    <Compile Include="Sparse\Matrix\IMatrixElement.cs" />
+    <Compile Include="Sparse\Matrix\Matrix.cs" />
+    <Compile Include="Sparse\Matrix\MatrixElement.cs" />
     <Compile Include="Sparse\SparseException.cs" />
     <Compile Include="Sparse\SparsePivoting.cs" />
-    <Compile Include="Sparse\SparseTranslation.cs" />
+    <Compile Include="Sparse\Matrix\SparseTranslation.cs" />
     <Compile Include="Sparse\SparseDefinitions.cs" />
     <Compile Include="Sparse\SparseFactor.cs" />
     <Compile Include="Sparse\SparseOutput.cs" />

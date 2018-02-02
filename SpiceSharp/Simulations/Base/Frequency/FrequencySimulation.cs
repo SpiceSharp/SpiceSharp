@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
 
             // Create a complex state with shared matrix
             var realState = States.Get<RealState>();
-            States.Add(new ComplexState(realState.Matrix));
+            States.Add(new ComplexState());
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace SpiceSharp.Simulations
 
             // Create a complex state with shared matrix
             var realState = States.Get<RealState>();
-            States.Add(new ComplexState(realState.Matrix));
+            States.Add(new ComplexState());
         }
 
         /// <summary>

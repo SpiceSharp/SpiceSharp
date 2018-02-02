@@ -44,7 +44,7 @@ namespace SpiceSharp.Behaviors
         /// Setup the behavior for usage with a matrix
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        public virtual void GetMatrixPointers(Matrix matrix)
+        public virtual void GetMatrixPointers(Matrix<double> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));

@@ -26,13 +26,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         int posNode, negNode;
         public int PosPrimeNode { get; private set; }
-        protected ElementValue PosPosPrimePtr { get; private set; }
-        protected ElementValue NegPosPrimePtr { get; private set; }
-        protected ElementValue PosPrimePosPtr { get; private set; }
-        protected ElementValue PosPrimeNegPtr { get; private set; }
-        protected ElementValue PosPosPtr { get; private set; }
-        protected ElementValue NegNegPtr { get; private set; }
-        protected ElementValue PosPrimePosPrimePtr { get; private set; }
+        protected Element<double> PosPosPrimePtr { get; private set; }
+        protected Element<double> NegPosPrimePtr { get; private set; }
+        protected Element<double> PosPrimePosPtr { get; private set; }
+        protected Element<double> PosPrimeNegPtr { get; private set; }
+        protected Element<double> PosPosPtr { get; private set; }
+        protected Element<double> NegNegPtr { get; private set; }
+        protected Element<double> PosPrimePosPrimePtr { get; private set; }
 
         /// <summary>
         /// Extra variables
@@ -90,7 +90,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix"></param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));

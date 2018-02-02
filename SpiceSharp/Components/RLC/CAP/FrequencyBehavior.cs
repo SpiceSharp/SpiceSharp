@@ -21,10 +21,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode;
-        protected ElementValue PosPosPtr { get; private set; }
-        protected ElementValue NegNegPtr { get; private set; }
-        protected ElementValue PosNegPtr { get; private set; }
-        protected ElementValue NegPosPtr { get; private set; }
+        protected Element<Complex> PosPosPtr { get; private set; }
+        protected Element<Complex> NegNegPtr { get; private set; }
+        protected Element<Complex> PosNegPtr { get; private set; }
+        protected Element<Complex> NegPosPtr { get; private set; }
 
         [PropertyName("v"), PropertyInfo("Capacitor voltage")]
         public Complex GetVoltage(ComplexState state)
@@ -88,7 +88,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));

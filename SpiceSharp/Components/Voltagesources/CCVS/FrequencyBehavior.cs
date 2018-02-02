@@ -23,11 +23,11 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, branchEq, contBranchEq;
-        protected ElementValue PosBranchPtr { get; private set; }
-        protected ElementValue NegBranchPtr { get; private set; }
-        protected ElementValue BranchPosPtr { get; private set; }
-        protected ElementValue BranchNegPtr { get; private set; }
-        protected ElementValue BranchControlBranchPtr { get; private set; }
+        protected Element<Complex> PosBranchPtr { get; private set; }
+        protected Element<Complex> NegBranchPtr { get; private set; }
+        protected Element<Complex> BranchPosPtr { get; private set; }
+        protected Element<Complex> BranchNegPtr { get; private set; }
+        protected Element<Complex> BranchControlBranchPtr { get; private set; }
 
         [PropertyName("v"), PropertyInfo("Complex voltage")]
         public Complex GetVoltage(ComplexState state)
@@ -97,7 +97,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
@@ -135,11 +135,11 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            PosBranchPtr.Add(1.0);
-            BranchPosPtr.Add(1.0);
+            PosBranchPtr.Add((Complex)1.0);
+            BranchPosPtr.Add((Complex)1.0);
             NegBranchPtr.Sub(1.0);
             BranchNegPtr.Sub(1.0);
-            BranchControlBranchPtr.Sub(bp.Coefficient);
+            BranchControlBranchPtr.Sub(bp.Coefficient.Value);
         }
     }
 }

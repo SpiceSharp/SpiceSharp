@@ -42,10 +42,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Nodes and states
         /// </summary>
         int posNode, negNode;
-        protected ElementValue PosPosPtr { get; private set; }
-        protected ElementValue NegNegPtr { get; private set; }
-        protected ElementValue PosNegPtr { get; private set; }
-        protected ElementValue NegPosPtr { get; private set; }
+        protected Element<double> PosPosPtr { get; private set; }
+        protected Element<double> NegNegPtr { get; private set; }
+        protected Element<double> PosNegPtr { get; private set; }
+        protected Element<double> NegPosPtr { get; private set; }
         protected StateDerivative QCap { get; private set; }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<double> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));

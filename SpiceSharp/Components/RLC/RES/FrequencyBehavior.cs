@@ -51,10 +51,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode;
-        protected ElementValue PosPosPtr { get; private set; }
-        protected ElementValue NegNegPtr { get; private set; }
-        protected ElementValue PosNegPtr { get; private set; }
-        protected ElementValue NegPosPtr { get; private set; }
+        protected Element<Complex> PosPosPtr { get; private set; }
+        protected Element<Complex> NegNegPtr { get; private set; }
+        protected Element<Complex> PosNegPtr { get; private set; }
+        protected Element<Complex> NegPosPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -79,7 +79,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
@@ -125,8 +125,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            PosPosPtr.Add(load.Conductance);
-            NegNegPtr.Add(load.Conductance);
+            PosPosPtr.Add((Complex)load.Conductance);
+            NegNegPtr.Add((Complex)load.Conductance);
             PosNegPtr.Sub(load.Conductance);
             NegPosPtr.Sub(load.Conductance);
         }

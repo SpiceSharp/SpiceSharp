@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Nodes
         /// </summary>
         int BranchEq;
-        protected ElementValue BranchBranchPtr { get; private set; }
+        protected Element<double> BranchBranchPtr { get; private set; }
         StateDerivative flux;
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Get matrix pointer
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<double> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));

@@ -7,6 +7,8 @@ namespace SpiceSharp.Sparse
     /// </summary>
     public static class SparseFactor
     {
+        internal const bool DIAG_PIVOTING_AS_DEFAULT = true;
+
         /// <summary>
         /// Order and factor the matrix
         /// </summary>
@@ -16,13 +18,13 @@ namespace SpiceSharp.Sparse
         /// <param name="absoluteThreshold">Absolute threshold for pivot selection</param>
         /// <param name="diagonalPivoting">Use diagonal pivoting</param>
         /// <returns></returns>
-        public static SparseError OrderAndFactor(this Matrix matrix, Vector<double> rhs, double relativeThreshold, double absoluteThreshold, bool diagonalPivoting)
+        public static SparseError OrderAndFactor<T>(this Matrix<T> matrix, Vector<double> rhs, double relativeThreshold, double absoluteThreshold, bool diagonalPivoting)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
             var pivoting = matrix.Pivoting;
-            MatrixElement pPivot;
+            MatrixElement<T> pPivot;
             int Step, Size;
             bool ReorderingRequired;
             double LargestInCol;
@@ -48,13 +50,10 @@ namespace SpiceSharp.Sparse
                 for (Step = 1; Step <= Size; Step++)
                 {
                     pPivot = matrix.Diag[Step];
-                    LargestInCol = SparsePivoting.FindLargestInCol(pPivot.NextInColumn);
-                    if (LargestInCol * relativeThreshold < pPivot.Value.Magnitude)
+                    LargestInCol = SparsePivoting<T>.FindLargestInCol(pPivot.NextInColumn);
+                    if (LargestInCol * relativeThreshold < pPivot.Element.Magnitude)
                     {
-                        if (matrix.Complex)
-                            ComplexRowColElimination(matrix, pPivot);
-                        else
-                            RealRowColElimination(matrix, pPivot);
+                        ComplexRowColElimination(matrix, pPivot);
                     }
                     else
                     {
@@ -99,10 +98,7 @@ namespace SpiceSharp.Sparse
                     return MatrixIsSingular(matrix, Step);
                 ExchangeRowsAndCols(matrix, pPivot, Step);
 
-                if (matrix.Complex)
-                    ComplexRowColElimination(matrix, pPivot);
-                else
-                    RealRowColElimination(matrix, pPivot);
+                ComplexRowColElimination(matrix, pPivot);
 
                 if ((int)matrix.Error >= (int)SparseError.Fatal)
                     return matrix.Error;
@@ -121,7 +117,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <returns></returns>
-        public static SparseError Factor(this Matrix matrix)
+        public static SparseError Factor<T>(this Matrix<T> matrix)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -130,119 +126,24 @@ namespace SpiceSharp.Sparse
 
             if (matrix.Factored)
                 throw new SparseException("Matrix is factored");
-            MatrixElement pElement, pColumn;
 
             if (matrix.NeedsOrdering)
-                return OrderAndFactor(matrix, null, 0.0, 0.0, Matrix.DIAG_PIVOTING_AS_DEFAULT);
+                return OrderAndFactor(matrix, null, 0.0, 0.0, DIAG_PIVOTING_AS_DEFAULT);
             if (!pivoting.Partitioned)
                 pivoting.Partition(matrix, SparsePartition.Default);
-            if (matrix.Complex)
-                return FactorComplexMatrix(matrix);
 
-            int Size = matrix.IntSize;
-
-            if (matrix.Diag[1].Value.Real == 0.0)
-                return ZeroPivot(matrix, 1);
-            matrix.Diag[1].Value.Real = 1.0 / matrix.Diag[1].Value.Real;
-
-            // Start factorization
-            for (int Step = 2; Step <= Size; Step++)
-            {
-                if (pivoting.DoRealDirect[Step])
-                {
-                    // Update column using direct addressing scatter-gather
-                    ElementValue[] Dest = pivoting.Intermediate;
-
-                    // Scatter
-                    pElement = matrix.FirstInCol[Step];
-                    while (pElement != null)
-                    {
-                        Dest[pElement.Row] = pElement;
-                        pElement = pElement.NextInColumn;
-                    }
-
-                    // Update column
-                    pColumn = matrix.FirstInCol[Step];
-                    while (pColumn.Row < Step)
-                    {
-                        pElement = matrix.Diag[pColumn.Row];
-                        pColumn.Value.Real = Dest[pColumn.Row] * pElement.Value.Real;
-                        while ((pElement = pElement.NextInColumn) != null)
-                            Dest[pElement.Row].Real -= pColumn.Value.Real * pElement.Value.Real;
-                        pColumn = pColumn.NextInColumn;
-                    }
-
-                    // Gather
-                    pElement = matrix.Diag[Step].NextInColumn;
-                    while (pElement != null)
-                    {
-                        pElement.Value.Real = Dest[pElement.Row];
-                        pElement = pElement.NextInColumn;
-                    }
-
-                    // Check for singular matrix
-                    if (Dest[Step] == 0.0)
-                        return ZeroPivot(matrix, Step);
-                    matrix.Diag[Step].Value.Real = 1.0 / Dest[Step];
-                }
-                else
-                {
-                    // Update column using indirect addressing scatter-gather
-                    MatrixElement[] pDest = new MatrixElement[matrix.Diag.Length];
-
-                    // Scatter
-                    pElement = matrix.FirstInCol[Step];
-                    while (pElement != null)
-                    {
-                        pDest[pElement.Row] = pElement;
-                        pElement = pElement.NextInColumn;
-                    }
-
-                    // Update column
-                    pColumn = matrix.FirstInCol[Step];
-                    while (pColumn.Row < Step)
-                    {
-                        pElement = matrix.Diag[pColumn.Row];
-                        double Mult = (pDest[pColumn.Row].Value.Real *= pElement.Value.Real);
-                        while ((pElement = pElement.NextInColumn) != null)
-                            pDest[pElement.Row].Value.Real -= Mult * pElement.Value.Real;
-                        pColumn = pColumn.NextInColumn;
-                    }
-
-                    // Check for singular matrix
-                    if (matrix.Diag[Step].Value.Real == 0.0)
-                        return ZeroPivot(matrix, Step);
-                    matrix.Diag[Step].Value.Real = 1.0 / matrix.Diag[Step].Value.Real;
-                }
-            }
-
-            matrix.Factored = true;
-            return (matrix.Error = SparseError.Okay);
-        }
-
-        /// <summary>
-        /// Factor the matrix in the complex domain
-        /// </summary>
-        /// <param name="matrix">Matrix</param>
-        /// <returns></returns>
-        private static SparseError FactorComplexMatrix(Matrix matrix)
-        {
-            var pivoting = matrix.Pivoting;
-            MatrixElement pElement, pColumn;
+            MatrixElement<T> pElement, pColumn;
             int Step, Size;
-            ElementValue Mult = new ElementValue();
-            ElementValue Pivot;
-
-            if (!matrix.Complex)
-                throw new SparseException("Matrix is not complex");
+            Element<T> Mult = ElementFactory.Create<T>();
+            Element<T> Pivot;
 
             Size = matrix.IntSize;
             pElement = matrix.Diag[1];
-            if (pElement.Value.Magnitude.Equals(0.0))
+            if (pElement.Element.Magnitude.Equals(0.0))
                 return ZeroPivot(matrix, 1);
 
             // Cmplx expr: *pPivot = 1.0 / *pPivot
-            pElement.Value.CopyReciprocal(pElement);
+            pElement.Element.AssignReciprocal(pElement.Element);
 
             // Start factorization
             for (Step = 2; Step <= Size; Step++)
@@ -250,13 +151,13 @@ namespace SpiceSharp.Sparse
                 if (pivoting.DoCmplxDirect[Step])
                 {
                     // Update column using direct addressing scatter-gather
-                    ElementValue[] Dest = pivoting.Intermediate;
+                    Element<T>[] Dest = pivoting.Intermediate;
 
                     // Scatter
                     pElement = matrix.FirstInCol[Step];
                     while (pElement != null)
                     {
-                        Dest[pElement.Row] = pElement;
+                        Dest[pElement.Row] = pElement.Element;
                         pElement = pElement.NextInColumn;
                     }
 
@@ -267,12 +168,12 @@ namespace SpiceSharp.Sparse
                         pElement = matrix.Diag[pColumn.Row];
 
                         // Cmplx expr: Mult = Dest[pColumn.Row] * (1.0 / *pPivot)
-                        Mult.CopyMultiply(Dest[pColumn.Row], pElement);
-                        pColumn.Value.CopyFrom(Mult);
+                        Mult.AssignMultiply(Dest[pColumn.Row], pElement.Element);
+                        pColumn.Element.CopyFrom(Mult);
                         while ((pElement = pElement.NextInColumn) != null)
                         {
                             // Cmplx expr: Dest[pElement.Row] -= Mult * pElement
-                            Dest[pElement.Row].SubtractMultiply(Mult, pElement);
+                            Dest[pElement.Row].SubtractMultiply(Mult, pElement.Element);
                         }
                         pColumn = pColumn.NextInColumn;
                     }
@@ -281,8 +182,9 @@ namespace SpiceSharp.Sparse
                     pElement = matrix.Diag[Step].NextInColumn;
                     while (pElement != null)
                     {
-                        pElement.Value.Real = Dest[pElement.Row].Real;
-                        pElement.Value.Imaginary = Dest[pElement.Row].Imaginary;
+                        pElement.Element.CopyFrom(Dest[pElement.Row]);
+                        // pElement.Value.Real = Dest[pElement.Row].Real;
+                        // pElement.Value.Imaginary = Dest[pElement.Row].Imaginary;
                         pElement = pElement.NextInColumn;
                     }
 
@@ -290,12 +192,12 @@ namespace SpiceSharp.Sparse
                     Pivot = Dest[Step];
                     if (Pivot.Magnitude.Equals(0.0))
                         return ZeroPivot(matrix, Step);
-                    matrix.Diag[Step].Value.CopyReciprocal(Pivot);
+                    matrix.Diag[Step].Element.AssignReciprocal(Pivot);
                 }
                 else
                 {
                     // Update column using direct addressing scatter-gather
-                    MatrixElement[] pDest = new MatrixElement[pivoting.Intermediate.Length];
+                    MatrixElement<T>[] pDest = new MatrixElement<T>[pivoting.Intermediate.Length];
 
                     // Scatter
                     pElement = matrix.FirstInCol[Step];
@@ -312,21 +214,21 @@ namespace SpiceSharp.Sparse
                         pElement = matrix.Diag[pColumn.Row];
 
                         // Cmplx expr: Mult = *pDest[pColumn.Row] * (1.0 / *pPivot)
-                        Mult.CopyMultiply(pDest[pColumn.Row], pElement);
-                        pDest[pColumn.Row].Value.CopyFrom(Mult);
+                        Mult.AssignMultiply(pDest[pColumn.Row].Element, pElement.Element);
+                        pDest[pColumn.Row].Element.CopyFrom(Mult);
                         while ((pElement = pElement.NextInColumn) != null)
                         {
                             // Cmplx expr: *pDest[pElement.Row] -= Mult * pElement
-                            pDest[pElement.Row].Value.SubtractMultiply(Mult, pElement);
+                            pDest[pElement.Row].Element.SubtractMultiply(Mult, pElement.Element);
                         }
                         pColumn = pColumn.NextInColumn;
                     }
 
                     // Check for singular matrix
                     pElement = matrix.Diag[Step];
-                    if (pElement.Value.Magnitude.Equals(0.0))
+                    if (pElement.Element.Magnitude.Equals(0.0))
                         return ZeroPivot(matrix, Step);
-                    pElement.Value.CopyReciprocal(pElement);
+                    pElement.Element.AssignReciprocal(pElement.Element);
                 }
             }
 
@@ -340,7 +242,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">Matrix</param>
         /// <param name="pPivot">Pivot</param>
         /// <param name="Step">Current step</param>
-        private static void ExchangeRowsAndCols(Matrix matrix, MatrixElement pPivot, int Step)
+        static void ExchangeRowsAndCols<T>(Matrix<T> matrix, MatrixElement<T> pPivot, int Step)
         {
             var pivoting = matrix.Pivoting;
             int Row, Col;
@@ -429,11 +331,11 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">Matrix</param>
         /// <param name="Row1">Row 1</param>
         /// <param name="Row2">Row 2</param>
-        private static void RowExchange(this Matrix matrix, int Row1, int Row2)
+        static void RowExchange<T>(this Matrix<T> matrix, int Row1, int Row2)
         {
-            MatrixElement Row1Ptr, Row2Ptr;
+            MatrixElement<T> Row1Ptr, Row2Ptr;
             int Column;
-            MatrixElement Element1, Element2;
+            MatrixElement<T> Element1, Element2;
 
             if (Row1 > Row2)
                 SparseDefinitions.Swap(ref Row1, ref Row2);
@@ -497,11 +399,11 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">Matrix</param>
         /// <param name="Col1">Column 1</param>
         /// <param name="Col2">Column 2</param>
-        private static void ColExchange(Matrix matrix, int Col1, int Col2)
+        static void ColExchange<T>(Matrix<T> matrix, int Col1, int Col2)
         {
-            MatrixElement Col1Ptr, Col2Ptr;
+            MatrixElement<T> Col1Ptr, Col2Ptr;
             int Row;
-            MatrixElement Element1, Element2;
+            MatrixElement<T> Element1, Element2;
 
             // Begin `spcColExchange'
             if (Col1 > Col2)
@@ -572,11 +474,11 @@ namespace SpiceSharp.Sparse
         /// <param name="Row2">Row of the second element</param>
         /// <param name="Element2">Second element</param>
         /// <param name="Column">Column</param>
-        private static void ExchangeColElements(Matrix matrix, int Row1, MatrixElement Element1, int Row2, MatrixElement Element2, int Column)
+        static void ExchangeColElements<T>(Matrix<T> matrix, int Row1, MatrixElement<T> Element1, int Row2, MatrixElement<T> Element2, int Column)
         {
-            MatrixElement ElementAboveRow1, ElementAboveRow2;
-            MatrixElement ElementBelowRow1, ElementBelowRow2;
-            MatrixElement pElement;
+            MatrixElement<T> ElementAboveRow1, ElementAboveRow2;
+            MatrixElement<T> ElementBelowRow1, ElementBelowRow2;
+            MatrixElement<T> pElement;
 
             // Begin `ExchangeColElements'. 
             // Search to find the ElementAboveRow1. 
@@ -712,11 +614,11 @@ namespace SpiceSharp.Sparse
         /// <param name="Col2">Column of the second element</param>
         /// <param name="Element2">Second element</param>
         /// <param name="Row">Row</param>
-        private static void ExchangeRowElements(Matrix matrix, int Col1, MatrixElement Element1, int Col2, MatrixElement Element2, int Row)
+        private static void ExchangeRowElements<T>(Matrix<T> matrix, int Col1, MatrixElement<T> Element1, int Col2, MatrixElement<T> Element2, int Row)
         {
-            MatrixElement ElementLeftOfCol1, ElementLeftOfCol2;
-            MatrixElement ElementRightOfCol1, ElementRightOfCol2;
-            MatrixElement pElement;
+            MatrixElement<T> ElementLeftOfCol1, ElementLeftOfCol2;
+            MatrixElement<T> ElementRightOfCol1, ElementRightOfCol2;
+            MatrixElement<T> pElement;
 
             // Begin `ExchangeRowElements'. 
 
@@ -829,80 +731,32 @@ namespace SpiceSharp.Sparse
             }
             return;
         }
-
-        /// <summary>
-        /// Eliminate a row with real numbers
-        /// </summary>
-        /// <param name="matrix">Matrix</param>
-        /// <param name="pPivot">Current pivot</param>
-        private static void RealRowColElimination(Matrix matrix, MatrixElement pPivot)
-        {
-            MatrixElement pSub;
-            int Row;
-            MatrixElement pLower, pUpper;
-
-            // Test for zero pivot. 
-            if (Math.Abs(pPivot.Value.Real) == 0.0)
-            {
-                MatrixIsSingular(matrix, pPivot.Row);
-                return;
-            }
-            pPivot.Value.Real = 1.0 / pPivot.Value.Real;
-
-            pUpper = pPivot.NextInRow;
-            while (pUpper != null)
-            {
-                // Calculate upper triangular element. 
-                pUpper.Value.Real *= pPivot.Value.Real;
-
-                pSub = pUpper.NextInColumn;
-                pLower = pPivot.NextInColumn;
-                while (pLower != null)
-                {
-                    Row = pLower.Row;
-
-                    // Find element in row that lines up with current lower triangular element. 
-                    while (pSub != null && pSub.Row < Row)
-                        pSub = pSub.NextInColumn;
-
-                    // Test to see if desired element was not found, if not, create fill-in. 
-                    if (pSub == null || pSub.Row > Row)
-                    {
-                        pSub = matrix.CreateFillin(Row, pUpper.Column);
-                    }
-                    pSub.Value.Real -= pUpper.Value.Real * pLower.Value.Real;
-                    pSub = pSub.NextInColumn;
-                    pLower = pLower.NextInColumn;
-                }
-                pUpper = pUpper.NextInRow;
-            }
-        }
-
+        
         /// <summary>
         /// Eliminate a row with complex numbers
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="pPivot">Current pivot</param>
-        private static void ComplexRowColElimination(Matrix matrix, MatrixElement pPivot)
+        static void ComplexRowColElimination<T>(Matrix<T> matrix, MatrixElement<T> pPivot)
         {
-            MatrixElement pSub;
+            MatrixElement<T> pSub;
             int Row;
-            MatrixElement pLower, pUpper;
+            MatrixElement<T> pLower, pUpper;
 
             // Test for zero pivot. 
-            if (pPivot.Value.Magnitude.Equals(0.0))
+            if (pPivot.Element.Magnitude.Equals(0.0))
             {
                 MatrixIsSingular(matrix, pPivot.Row);
                 return;
             }
-            pPivot.Value.CopyReciprocal(pPivot);
+            pPivot.Element.AssignReciprocal(pPivot.Element);
 
             pUpper = pPivot.NextInRow;
             while (pUpper != null)
             {
                 // Calculate upper triangular element. 
                 // Cmplx expr: *pUpper = *pUpper * (1.0 / *pPivot)
-                pUpper.Value.Multiply(pPivot);
+                pUpper.Element.Multiply(pPivot.Element);
 
                 pSub = pUpper.NextInColumn;
                 pLower = pPivot.NextInColumn;
@@ -921,7 +775,7 @@ namespace SpiceSharp.Sparse
                     }
 
                     // Cmplx expr: pElement -= *pUpper * pLower
-                    pSub.Value.SubtractMultiply(pUpper, pLower);
+                    pSub.Element.SubtractMultiply(pUpper.Element, pLower.Element);
                     pSub = pSub.NextInColumn;
                     pLower = pLower.NextInColumn;
                 }
@@ -935,7 +789,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">Matrix</param>
         /// <param name="Step">Current step</param>
         /// <returns></returns>
-        private static SparseError MatrixIsSingular(Matrix matrix, int Step)
+        static SparseError MatrixIsSingular<T>(Matrix<T> matrix, int Step)
         {
             matrix.SingularRow = matrix.Translation.IntToExtRowMap[Step];
             matrix.SingularCol = matrix.Translation.IntToExtColMap[Step];
@@ -948,7 +802,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">Matrix</param>
         /// <param name="Step">Current step</param>
         /// <returns></returns>
-        private static SparseError ZeroPivot(Matrix matrix, int Step)
+        static SparseError ZeroPivot<T>(Matrix<T> matrix, int Step)
         {
             matrix.SingularRow = matrix.Translation.IntToExtRowMap[Step];
             matrix.SingularCol = matrix.Translation.IntToExtColMap[Step];

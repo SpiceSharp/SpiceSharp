@@ -52,8 +52,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, contBranch;
-        protected ElementValue PosControlBranchPtr { get; private set; }
-        protected ElementValue NegControlBranchPtr { get; private set; }
+        protected Element<Complex> PosControlBranchPtr { get; private set; }
+        protected Element<Complex> NegControlBranchPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -95,7 +95,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
@@ -124,8 +124,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            PosControlBranchPtr.Add(bp.Coefficient);
-            NegControlBranchPtr.Sub(bp.Coefficient);
+            PosControlBranchPtr.Add((Complex)bp.Coefficient.Value);
+            NegControlBranchPtr.Sub(bp.Coefficient.Value);
         }
     }
 }

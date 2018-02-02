@@ -13,7 +13,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">The matrix</param>
         /// <param name="gmin">Value added on the diagonal</param>
         /// <returns></returns>
-        public static SparseError Factor(this Matrix matrix, double gmin)
+        public static SparseError Factor(this Matrix<double> matrix, double gmin)
         {
             matrix.LoadGmin(gmin);
             return matrix.Factor();
@@ -26,7 +26,7 @@ namespace SpiceSharp.Sparse
         /// <param name="pivotTolerance">Pivot tolerance</param>
         /// <param name="pivotRelativeTolerance">Pivot relative tolerance</param>
         /// <returns></returns>
-        public static SparseError Reorder(this Matrix matrix, double pivotTolerance, double pivotRelativeTolerance)
+        public static SparseError Reorder<T>(this Matrix<T> matrix, double pivotTolerance, double pivotRelativeTolerance)
         {
             return matrix.OrderAndFactor(null, pivotRelativeTolerance, pivotTolerance, true);
         }
@@ -39,7 +39,7 @@ namespace SpiceSharp.Sparse
         /// <param name="pivotRelativeTolerance">Pivot relative tolerance</param>
         /// <param name="gmin">Minimum conductance on the diagonal</param>
         /// <returns></returns>
-        public static SparseError Reorder(this Matrix matrix, double pivotTolerance, double pivotRelativeTolerance, double gmin)
+        public static SparseError Reorder(this Matrix<double> matrix, double pivotTolerance, double pivotRelativeTolerance, double gmin)
         {
             matrix.LoadGmin(gmin);
             return matrix.OrderAndFactor(null, pivotRelativeTolerance, pivotTolerance, true);
@@ -50,7 +50,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">The matrix</param>
         /// <returns></returns>
-        public static SparseError Preorder(this Matrix matrix)
+        public static SparseError Preorder<T>(this Matrix<T> matrix)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -66,19 +66,19 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">The matrix</param>
         /// <param name="gmin">The conductance to be added on the diagonal</param>
-        public static void LoadGmin(this Matrix matrix, double gmin)
+        public static void LoadGmin(this Matrix<double> matrix, double gmin)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
-            MatrixElement[] Diag = matrix.Diag;
+            MatrixElement<double>[] Diag = matrix.Diag;
 
-            if (gmin != 0.0)
+            if (!gmin.Equals(0)) // Skip if no change is necessary
             {
                 for (int i = 1; i < matrix.IntSize; i++)
                 {
                     if (Diag[i] != null)
-                        Diag[i].Value.Real += gmin;
+                        Diag[i].Element.Value += gmin;
                 }
             }
             return;

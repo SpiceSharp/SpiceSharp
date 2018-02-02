@@ -25,11 +25,11 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected ElementValue PosBranchPtr { get; private set; }
-        protected ElementValue NegBranchPtr { get; private set; }
-        protected ElementValue BranchPosPtr { get; private set; }
-        protected ElementValue BranchNegPtr { get; private set; }
-        protected ElementValue BranchBranchPtr { get; private set; }
+        protected Element<Complex> PosBranchPtr { get; private set; }
+        protected Element<Complex> NegBranchPtr { get; private set; }
+        protected Element<Complex> BranchPosPtr { get; private set; }
+        protected Element<Complex> BranchNegPtr { get; private set; }
+        protected Element<Complex> BranchBranchPtr { get; private set; }
 
         /// <summary>
         /// Properties
@@ -99,7 +99,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// Get matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix matrix)
+        public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
 			if (matrix == null)
 				throw new ArgumentNullException(nameof(matrix));
@@ -131,8 +131,8 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.ComplexState;
-            PosBranchPtr.Add(1.0);
-            BranchPosPtr.Add(1.0);
+            PosBranchPtr.Add((Complex)1.0);
+            BranchPosPtr.Add((Complex)1.0);
             NegBranchPtr.Sub(1.0);
             BranchNegPtr.Sub(1.0);
             state.Rhs[branchEq] += AC;

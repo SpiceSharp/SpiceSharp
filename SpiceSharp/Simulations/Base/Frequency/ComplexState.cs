@@ -78,7 +78,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Get the equation matrix
         /// </summary>
-        public Matrix Matrix { get; private set; } = null;
+        public Matrix<Complex> Matrix { get; private set; } = null;
 
         /// <summary>
         /// Gets the order
@@ -90,17 +90,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public ComplexState()
         {
-            Matrix = new Matrix();
-        }
-
-        /// <summary>
-        /// Constructor
-        /// Can be used to share a matrix
-        /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public ComplexState(Matrix matrix)
-        {
-            Matrix = matrix;
+            Matrix = new Matrix<Complex>();
         }
 
         /// <summary>

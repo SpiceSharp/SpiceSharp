@@ -23,8 +23,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         public int ControlBranchEq { get; protected set; }
         int posNode, negNode;
-        protected ElementValue PosControlBranchPtr { get; private set; }
-        protected ElementValue NegControlBranchPtr { get; private set; }
+        protected Element<double> PosControlBranchPtr { get; private set; }
+        protected Element<double> NegControlBranchPtr { get; private set; }
 
         /// <summary>
         /// Properties
@@ -115,7 +115,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));

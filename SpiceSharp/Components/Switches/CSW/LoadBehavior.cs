@@ -55,10 +55,10 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// </summary>
         int posNode, negNode;
         public int ControllingBranch { get; private set; }
-        protected ElementValue PosPosPtr { get; private set; }
-        protected ElementValue NegPosPtr { get; private set; }
-        protected ElementValue PosNegPtr { get; private set; }
-        protected ElementValue NegNegPtr { get; private set; }
+        protected Element<double> PosPosPtr { get; private set; }
+        protected Element<double> NegPosPtr { get; private set; }
+        protected Element<double> PosNegPtr { get; private set; }
+        protected Element<double> NegNegPtr { get; private set; }
 
         /// <summary>
         /// Gets or sets the old state of the switch
@@ -118,7 +118,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix matrix)
+        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
