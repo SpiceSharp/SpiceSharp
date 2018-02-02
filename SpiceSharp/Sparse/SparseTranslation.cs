@@ -119,7 +119,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="newsize">Matrix size</param>
-        private void ExpandTranslationArrays(Matrix matrix, int newsize)
+        void ExpandTranslationArrays(Matrix matrix, int newsize)
         {
             int OldAllocatedSize = matrix.AllocatedExtSize;
             matrix.Size = newsize;
@@ -149,7 +149,7 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="newsize">Matrix size</param>
-        private void EnlargeMatrix(Matrix matrix, int newsize)
+        void EnlargeMatrix(Matrix matrix, int newsize)
         {
             int OldAllocatedSize = matrix.AllocatedSize;
             matrix.IntSize = newsize;

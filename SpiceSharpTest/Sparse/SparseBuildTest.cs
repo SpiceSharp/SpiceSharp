@@ -52,7 +52,7 @@ namespace SpiceSharpTest.Sparse
             {
                 for (int c = 1; c < 100; c++)
                 {
-                    Assert.AreEqual(new Complex(r, c), matrix.FindReorderedElement(r, c));
+                    Assert.AreEqual(new Complex(r, c), matrix.FindReorderedElement(r, c).Value);
                 }
             }
         }
