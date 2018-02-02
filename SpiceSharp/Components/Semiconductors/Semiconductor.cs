@@ -33,8 +33,6 @@ namespace SpiceSharp.Components.Semiconductors
                     newVoltage = thermalVoltage * Math.Log(newVoltage / thermalVoltage);
                 limited = true;
             }
-            else
-                limited = false;
             return newVoltage;
         }
     }

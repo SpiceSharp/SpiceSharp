@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public double CapBX { get; protected set; }
         [PropertyName("ccs"), PropertyInfo("Collector to substrate capacitance")]
         public double CapCS { get; protected set; }
-
+        [PropertyName("gcb"), PropertyInfo("Conductance of the C-B junction")]
         public double CondCB { get; protected set; }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, xms, xtf, ovtf, xjtf;
-            double arg, sarg, argtf, arg2, tmp, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
+            double arg, sarg, argtf, arg2, arg3, tmp, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
 
             // Get voltages
             var state = simulation.RealState;
@@ -200,10 +200,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double gbc = load.CondBC;
             double qb = load.BaseCharge;
             double dqbdve = load.Dqbdve;
+            double dqbdvc = load.Dqbdvc;
 
-            /* 
-             * charge storage elements
-             */
+            // Charge storage elements
             tf = mbp.TransitTimeForward;
             tr = mbp.TransitTimeReverse;
             czbe = temp.TempBECap * bp.Area;
@@ -222,27 +221,30 @@ namespace SpiceSharp.Components.BipolarBehaviors
             xtf = mbp.TransitTimeBiasCoefficientForward;
             ovtf = modeltemp.TransitTimeVoltageBCFactor;
             xjtf = mbp.TransitTimeHighCurrentForward * bp.Area;
-            if (tf != 0 && vbe > 0)
+            if (!tf.Equals(0) && vbe > 0) // Avoid computations
             {
                 argtf = 0;
                 arg2 = 0;
-                if (xtf != 0)
+                arg3 = 0;
+                if (!xtf.Equals(0)) // Avoid computations
                 {
                     argtf = xtf;
-                    if (ovtf != 0)
+                    if (!ovtf.Equals(0)) // Avoid expensive Exp()
                     {
                         argtf = argtf * Math.Exp(vbc * ovtf);
                     }
                     arg2 = argtf;
-                    if (xjtf != 0)
+                    if (!xjtf.Equals(0)) // Avoid computations
                     {
                         tmp = cbe / (cbe + xjtf);
                         argtf = argtf * tmp * tmp;
                         arg2 = argtf * (3 - tmp - tmp);
                     }
+                    arg3 = cbe * argtf * ovtf;
                 }
                 cbe = cbe * (1 + argtf) / qb;
                 gbe = (gbe * (1 + arg2) - cbe * dqbdve) / qb;
+                CondCB = tf * (arg3 - cbe * dqbdvc) / qb;
             }
             if (vbe < fcpe)
             {
@@ -316,7 +318,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             gm = load.Transconductance;
             go = load.OutputConductance;
             td = modeltemp.ExcessPhaseFactor;
-            if (td != 0)
+            if (!td.Equals(0)) // Avoid computations
             {
                 Complex arg = td * cstate.Laplace;
 

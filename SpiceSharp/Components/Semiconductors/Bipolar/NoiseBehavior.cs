@@ -110,14 +110,16 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var noise = simulation.NoiseState;
+            var generators = BipolarJunctionTransistorNoise.Generators;
 
             // Set noise parameters
-            BipolarJunctionTransistorNoise.Generators[RcNoise].SetCoefficients(modeltemp.CollectorConduct * bp.Area);
-            BipolarJunctionTransistorNoise.Generators[RbNoise].SetCoefficients(load.ConductanceX);
-            BipolarJunctionTransistorNoise.Generators[ReNoise].SetCoefficients(modeltemp.EmitterConduct * bp.Area);
-            BipolarJunctionTransistorNoise.Generators[IcNoise].SetCoefficients(load.CollectorCurrent);
-            BipolarJunctionTransistorNoise.Generators[IbNoise].SetCoefficients(load.BaseCurrent);
-            BipolarJunctionTransistorNoise.Generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent * Math.Log(Math.Max(Math.Abs(load.BaseCurrent), 1e-38))) / noise.Frequency);
+            generators[RcNoise].SetCoefficients(modeltemp.CollectorConduct * bp.Area);
+            generators[RbNoise].SetCoefficients(load.ConductanceX);
+            generators[ReNoise].SetCoefficients(modeltemp.EmitterConduct * bp.Area);
+            generators[IcNoise].SetCoefficients(load.CollectorCurrent);
+            generators[IbNoise].SetCoefficients(load.BaseCurrent);
+            generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent 
+                * Math.Log(Math.Max(Math.Abs(load.BaseCurrent), 1e-38))) / noise.Frequency);
 
             // Evaluate all noise sources
             BipolarJunctionTransistorNoise.Evaluate(simulation);

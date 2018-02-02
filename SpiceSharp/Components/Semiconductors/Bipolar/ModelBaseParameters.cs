@@ -117,7 +117,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [PropertyName("fc"), PropertyInfo("Forward bias junction fit parameter")]
         public Parameter DepletionCapCoefficient { get; } = new Parameter();
 
+        /// <summary>
+        /// Parameter that is not accessible in Spice 3f5
+        /// </summary>
         public Parameter C2 { get; } = new Parameter();
+
+        /// <summary>
+        /// Parameter that is not accessible in Spice 3f5
+        /// </summary>
         public Parameter C4 { get; } = new Parameter();
 
         /// <summary>

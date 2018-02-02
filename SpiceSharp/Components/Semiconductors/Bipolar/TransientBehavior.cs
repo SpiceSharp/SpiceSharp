@@ -49,30 +49,27 @@ namespace SpiceSharp.Components.BipolarBehaviors
         protected ElementValue BaseCollectorPrimePtr { get; private set; }
         protected ElementValue CollectorPrimeBasePtr { get; private set; }
 
-        /*
-        [SpiceName("qbe"), SpiceInfo("Charge storage B-E junction")]
-        public double GetQBE(Circuit circuit) => circuit.State.States[0][State + Qbe];
-        [SpiceName("cqbe"), SpiceInfo("Cap. due to charge storage in B-E jct.")]
-        public double GetCQBE(Circuit circuit) => circuit.State.States[0][State + Cqbe];
-        [SpiceName("qbc"), SpiceInfo("Charge storage B-C junction")]
-        public double GetQBC(Circuit circuit) => circuit.State.States[0][State + Qbc];
-        [SpiceName("cqbc"), SpiceInfo("Cap. due to charge storage in B-C jct.")]
-        public double GetCQBC(Circuit circuit) => circuit.State.States[0][State + Cqbc];
-        [SpiceName("qcs"), SpiceInfo("Charge storage C-S junction")]
-        public double GetQCS(Circuit circuit) => circuit.State.States[0][State + Qcs];
-        [SpiceName("cqcs"), SpiceInfo("Cap. due to charge storage in C-S jct.")]
-        public double GetCQCS(Circuit circuit) => circuit.State.States[0][State + Cqcs];
-        [SpiceName("qbx"), SpiceInfo("Charge storage B-X junction")]
-        public double GetQBX(Circuit circuit) => circuit.State.States[0][State + Qbx];
-        [SpiceName("cqbx"), SpiceInfo("Cap. due to charge storage in B-X jct.")]
-        public double GetCQBX(Circuit circuit) => circuit.State.States[0][State + Cqbx];
-        [SpiceName("cexbc"), SpiceInfo("Total Capacitance in B-X junction")]
-        public double GetCEXBC(Circuit circuit) => circuit.State.States[0][State + Cexbc];
-        */
-
         /// <summary>
-        /// Parameters
+        /// Properties
         /// </summary>
+        [PropertyName("qbe"), PropertyInfo("Charge storage B-E junction")]
+        public double ChargeBE => stateChargeBE.Current;
+        [PropertyName("cqbe"), PropertyInfo("Capacitance current due to charges in the B-E junction")]
+        public double CurrentBE => stateChargeBE.Derivative;
+        [PropertyName("qbc"), PropertyInfo("Charge storage B-C junction")]
+        public double ChargeBC => stateChargeBC.Current;
+        [PropertyName("cqbc"), PropertyInfo("Capacitance current due to charges in the B-C junction")]
+        public double CurrentBC => stateChargeBC.Derivative;
+        [PropertyName("qcs"), PropertyInfo("Charge storage C-S junction")]
+        public double ChargeCS => stateChargeCS.Current;
+        [PropertyName("cqcs"), PropertyInfo("Capacitance current due to charges in the C-S junction")]
+        public double CurrentCS => stateChargeCS.Derivative;
+        [PropertyName("qbx"), PropertyInfo("Charge storage B-X junction")]
+        public double ChargeBX => stateChargeBX.Current;
+        [PropertyName("cqbx"), PropertyInfo("Capacitance current due to charges in the B-X junction")]
+        public double CurrentBX => stateChargeBX.Derivative;
+        [PropertyName("cexbc"), PropertyInfo("Total capacitance in B-X junction")]
+        public double CurrentExBC => stateExcessPhaseCurrentBC.Current;
         [PropertyName("cpi"), PropertyInfo("Internal base to emitter capactance")]
         public double CapBE { get; internal set; }
         [PropertyName("cmu"), PropertyInfo("Internal base to collector capactiance")]
@@ -85,11 +82,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// States
         /// </summary>
-        protected StateDerivative ChargeBE { get; private set; }
-        protected StateDerivative ChargeBC { get; private set; }
-        protected StateDerivative ChargeCS { get; private set; }
-        protected StateDerivative ChargeBX { get; private set; }
-        protected StateHistory ExcessPhaseCurrentBC { get; private set; }
+        protected StateDerivative stateChargeBE { get; private set; }
+        protected StateDerivative stateChargeBC { get; private set; }
+        protected StateDerivative stateChargeCS { get; private set; }
+        protected StateDerivative stateChargeBX { get; private set; }
+        protected StateHistory stateExcessPhaseCurrentBC { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -213,11 +210,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(states));
 
             // We just need a history without integration here
-            ChargeBE = states.CreateDerivative();
-            ChargeBC = states.CreateDerivative();
-            ChargeCS = states.CreateDerivative();
-            ChargeBX = states.CreateDerivative();
-            ExcessPhaseCurrentBC = states.CreateHistory();
+            stateChargeBE = states.CreateDerivative();
+            stateChargeBC = states.CreateDerivative();
+            stateChargeCS = states.CreateDerivative();
+            stateChargeBX = states.CreateDerivative();
+            stateExcessPhaseCurrentBC = states.CreateHistory();
         }
 
         /// <summary>
@@ -244,11 +241,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double vbx = mbp.BipolarType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
             double vcs = mbp.BipolarType * (state.Solution[substrateNode] - state.Solution[colPrimeNode]);
 
-            ExcessPhaseCurrentBC.Current = load.CurrentBE / load.BaseCharge;
+            stateExcessPhaseCurrentBC.Current = load.CurrentBE / load.BaseCharge;
 
-            /* 
-             * charge storage elements
-             */
+            // Charge storage elements
             tf = mbp.TransitTimeForward;
             tr = mbp.TransitTimeReverse;
             czbe = temp.TempBECap * bp.Area;
@@ -267,19 +262,19 @@ namespace SpiceSharp.Components.BipolarBehaviors
             xtf = mbp.TransitTimeBiasCoefficientForward;
             ovtf = modeltemp.TransitTimeVoltageBCFactor;
             xjtf = mbp.TransitTimeHighCurrentForward * bp.Area;
-            if (tf != 0 && vbe > 0)
+            if (!tf.Equals(0) && vbe > 0) // Avoid computations
             {
                 argtf = 0;
                 arg2 = 0;
-                if (xtf != 0)
+                if (!xtf.Equals(0)) // Avoid computations
                 {
                     argtf = xtf;
-                    if (ovtf != 0)
+                    if (!ovtf.Equals(0)) // Avoid expensive Exp()
                     {
                         argtf = argtf * Math.Exp(vbc * ovtf);
                     }
                     arg2 = argtf;
-                    if (xjtf != 0)
+                    if (!xjtf.Equals(0)) // Avoid computations
                     {
                         tmp = cbe / (cbe + xjtf);
                         argtf = argtf * tmp * tmp;
@@ -293,7 +288,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbe / pe;
                 sarg = Math.Exp(-xme * Math.Log(arg));
-                ChargeBE.Current = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
+                stateChargeBE.Current = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
             }
             else
             {
@@ -301,7 +296,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 f2 = modeltemp.F2;
                 f3 = modeltemp.F3;
                 czbef2 = czbe / f2;
-                ChargeBE.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
+                stateChargeBE.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
                      fcpe * fcpe));
             }
             fcpc = temp.TempFactor4;
@@ -312,34 +307,34 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbc / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                ChargeBC.Current = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
+                stateChargeBC.Current = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
             }
             else
             {
                 czbcf2 = czbc / f2;
-                ChargeBC.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
+                stateChargeBC.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
                      fcpc * fcpc));
             }
             if (vbx < fcpc)
             {
                 arg = 1 - vbx / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                ChargeBX.Current = pc * czbx * (1 - arg * sarg) / (1 - xmc);
+                stateChargeBX.Current = pc * czbx * (1 - arg * sarg) / (1 - xmc);
             }
             else
             {
                 czbxf2 = czbx / f2;
-                ChargeBX.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
+                stateChargeBX.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
             }
             if (vcs < 0)
             {
                 arg = 1 - vcs / ps;
                 sarg = Math.Exp(-xms * Math.Log(arg));
-                ChargeCS.Current = ps * czcs * (1 - arg * sarg) / (1 - xms);
+                stateChargeCS.Current = ps * czcs * (1 - arg * sarg) / (1 - xms);
             }
             else
             {
-                ChargeCS.Current = vcs * czcs * (1 + xms * vcs / (2 * ps));
+                stateChargeCS.Current = vcs * czcs * (1 + xms * vcs / (2 * ps));
             }
 
             // Register for excess phase calculations
@@ -359,9 +354,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2, arg3, capbx, capcs,
-                xms, xtf, ovtf, xjtf, argtf, tmp, sarg, capbe, f1, f2, f3, czbef2, fcpc, capbc, czbcf2, czbxf2;
-            
+            double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2, arg3,
+                xms, xtf, ovtf, xjtf, argtf, tmp, sarg, f1, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
 
             double cbe = load.CurrentBE;
             double cbc = load.CurrentBC;
@@ -382,9 +376,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double vbx = mbp.BipolarType * (state.Solution[baseNode] - state.Solution[colPrimeNode]);
             double vcs = mbp.BipolarType * (state.Solution[substrateNode] - state.Solution[colPrimeNode]);
 
-            /* 
-             * charge storage elements
-             */
+            // Charge storage elements
             tf = mbp.TransitTimeForward;
             tr = mbp.TransitTimeReverse;
             czbe = temp.TempBECap * bp.Area;
@@ -403,20 +395,20 @@ namespace SpiceSharp.Components.BipolarBehaviors
             xtf = mbp.TransitTimeBiasCoefficientForward;
             ovtf = modeltemp.TransitTimeVoltageBCFactor;
             xjtf = mbp.TransitTimeHighCurrentForward * bp.Area;
-            if (tf != 0 && vbe > 0)
+            if (!tf.Equals(0) && vbe > 0) // Avoid computations
             {
                 argtf = 0;
                 arg2 = 0;
                 arg3 = 0;
-                if (xtf != 0)
+                if (!xtf.Equals(0)) // Avoid computations
                 {
                     argtf = xtf;
-                    if (ovtf != 0)
+                    if (!ovtf.Equals(0)) // Avoid expensive Exp()
                     {
                         argtf = argtf * Math.Exp(vbc * ovtf);
                     }
                     arg2 = argtf;
-                    if (xjtf != 0)
+                    if (!xjtf.Equals(0)) // Avoid computations
                     {
                         tmp = cbe / (cbe + xjtf);
                         argtf = argtf * tmp * tmp;
@@ -425,15 +417,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
                     arg3 = cbe * argtf * ovtf;
                 }
                 cbe = cbe * (1 + argtf) / qb;
-                gbe = (gbe * (1 + arg2) - cbe * dqbdve) / qb;
+                gbe = (gbe * (1 + arg2) - cbe * load.Dqbdve) / qb;
                 geqcb = tf * (arg3 - cbe * dqbdvc) / qb;
             }
             if (vbe < fcpe)
             {
                 arg = 1 - vbe / pe;
                 sarg = Math.Exp(-xme * Math.Log(arg));
-                ChargeBE.Current = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
-                capbe = tf * gbe + czbe * sarg;
+                stateChargeBE.Current = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
+                CapBE = tf * gbe + czbe * sarg;
             }
             else
             {
@@ -441,9 +433,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 f2 = modeltemp.F2;
                 f3 = modeltemp.F3;
                 czbef2 = czbe / f2;
-                ChargeBE.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
+                stateChargeBE.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
                      fcpe * fcpe));
-                capbe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
+                CapBE = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
             }
             fcpc = temp.TempFactor4;
             f1 = temp.TempFactor5;
@@ -453,69 +445,60 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 arg = 1 - vbc / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                ChargeBC.Current = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
-                capbc = tr * gbc + czbc * sarg;
+                stateChargeBC.Current = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
+                CapBC = tr * gbc + czbc * sarg;
             }
             else
             {
                 czbcf2 = czbc / f2;
-                ChargeBC.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
+                stateChargeBC.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
                      fcpc * fcpc));
-                capbc = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
+                CapBC = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
             }
             if (vbx < fcpc)
             {
                 arg = 1 - vbx / pc;
                 sarg = Math.Exp(-xmc * Math.Log(arg));
-                ChargeBX.Current = pc * czbx * (1 - arg * sarg) / (1 - xmc);
-                capbx = czbx * sarg;
+                stateChargeBX.Current = pc * czbx * (1 - arg * sarg) / (1 - xmc);
+                CapBX = czbx * sarg;
             }
             else
             {
                 czbxf2 = czbx / f2;
-                ChargeBX.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
-                capbx = czbxf2 * (f3 + xmc * vbx / pc);
+                stateChargeBX.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
+                CapBX = czbxf2 * (f3 + xmc * vbx / pc);
             }
             if (vcs < 0)
             {
                 arg = 1 - vcs / ps;
                 sarg = Math.Exp(-xms * Math.Log(arg));
-                ChargeCS.Current = ps * czcs * (1 - arg * sarg) / (1 - xms);
-                capcs = czcs * sarg;
+                stateChargeCS.Current = ps * czcs * (1 - arg * sarg) / (1 - xms);
+                CapCS = czcs * sarg;
             }
             else
             {
-                ChargeCS.Current = vcs * czcs * (1 + xms * vcs / (2 * ps));
-                capcs = czcs * (1 + xms * vcs / ps);
+                stateChargeCS.Current = vcs * czcs * (1 + xms * vcs / (2 * ps));
+                CapCS = czcs * (1 + xms * vcs / ps);
             }
 
-            CapBE = capbe;
-            CapBC = capbc;
-            CapCS = capcs;
-            CapBX = capbx;
+            stateChargeBE.Integrate();
+            geqcb = stateChargeBE.Jacobian(geqcb); // Multiplies geqcb with method.Slope (ag[0])
+            gpi += stateChargeBE.Jacobian(CapBE);
+            cb += stateChargeBE.Derivative;
+            stateChargeBC.Integrate();
+            gmu += stateChargeBC.Jacobian(CapBC);
+            cb += stateChargeBC.Derivative;
+            cc -= stateChargeBC.Derivative;
 
-            ChargeBE.Integrate();
-            geqcb = ChargeBE.Jacobian(geqcb); // Multiplies geqcb with method.Slope (ag[0])
-            gpi += ChargeBE.Jacobian(capbe);
-            cb += ChargeBE.Derivative;
-            ChargeBC.Integrate();
-            gmu += ChargeBC.Jacobian(capbc);
-            cb += ChargeBC.Derivative;
-            cc -= ChargeBC.Derivative;
+            // Charge storage for c-s and b-x junctions
+            stateChargeCS.Integrate();
+            double gccs = stateChargeCS.Jacobian(CapCS);
+            stateChargeBX.Integrate();
+            double geqbx = stateChargeBX.Jacobian(CapBX);
 
-            /* 
-             * charge storage for c - s and b - x junctions
-             */
-            ChargeCS.Integrate();
-            double gccs = ChargeCS.Jacobian(capcs);
-            ChargeBX.Integrate();
-            double geqbx = ChargeBX.Jacobian(capbx);
-
-            /* 
-			 * load current excitation vector
-			 */
-            double ceqcs = mbp.BipolarType * (ChargeCS.Derivative - vcs * gccs);
-            double ceqbx = mbp.BipolarType * (ChargeBX.Derivative - vbx * geqbx);
+            // Load current excitation vector
+            double ceqcs = mbp.BipolarType * (stateChargeCS.Derivative - vcs * gccs);
+            double ceqbx = mbp.BipolarType * (stateChargeBX.Derivative - vbx * geqbx);
             double ceqbe = mbp.BipolarType * (cc + cb - vbe * gpi + vbc * (-geqcb));
             double ceqbc = mbp.BipolarType * (-cc + - vbc * gmu);
             
@@ -525,9 +508,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             state.Rhs[emitPrimeNode] += (ceqbe);
             state.Rhs[substrateNode] += (-ceqcs);
 
-            /* 
-			 * load y matrix
-			 */
+            // Load y matrix
             BaseBasePtr.Add(geqbx);
             CollectorPrimeCollectorPrimePtr.Add(gmu + gccs + geqbx);
             BasePrimeBasePrimePtr.Add(gpi + gmu + geqcb);
@@ -550,9 +531,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <param name="timestep">Current timestep</param>
         public override void Truncate(ref double timestep)
         {
-            ChargeBE.LocalTruncationError(ref timestep);
-            ChargeBC.LocalTruncationError(ref timestep);
-            ChargeCS.LocalTruncationError(ref timestep);
+            stateChargeBE.LocalTruncationError(ref timestep);
+            stateChargeBC.LocalTruncationError(ref timestep);
+            stateChargeCS.LocalTruncationError(ref timestep);
         }
 
         /// <summary>
@@ -564,11 +545,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             if (args == null)
                 throw new ArgumentNullException(nameof(args));
-
+            
             double arg1, arg2, denom, arg3;
             double td = modeltemp.ExcessPhaseFactor;
-            if (td == 0.0)
+            if (td.Equals(0))
+            {
+                stateExcessPhaseCurrentBC.Current = args.ExcessPhaseCurrent;
                 return;
+            }
             
             /* 
              * weil's approx. for excess phase applied with backward - 
@@ -577,8 +561,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double cbe = args.ExcessPhaseCurrent;
             double gbe = args.ExcessPhaseConduct;
 
-            double delta = ExcessPhaseCurrentBC.Timesteps[0];
-            double prevdelta = ExcessPhaseCurrentBC.Timesteps[1];
+            double delta = stateExcessPhaseCurrentBC.Timesteps[0];
+            double prevdelta = stateExcessPhaseCurrentBC.Timesteps[1];
             arg1 = delta / td;
             arg2 = 3 * arg1;
             arg1 = arg2 * arg1;
@@ -590,11 +574,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 state.States[1][State + Cexbc] = cbe / qb;
                 state.States[2][State + Cexbc] = state.States[1][State + Cexbc];
             } */
-            args.CollectorCurrent = (ExcessPhaseCurrentBC[1] * (1 + delta / prevdelta + arg2) 
-                - ExcessPhaseCurrentBC[2] * delta / prevdelta) / denom;
+            args.CollectorCurrent = (stateExcessPhaseCurrentBC[1] * (1 + delta / prevdelta + arg2) 
+                - stateExcessPhaseCurrentBC[2] * delta / prevdelta) / denom;
             args.ExcessPhaseCurrent = cbe * arg3;
             args.ExcessPhaseConduct = gbe * arg3;
-            ExcessPhaseCurrentBC.Current = args.CollectorCurrent + args.ExcessPhaseCurrent / args.BaseCharge;
+            stateExcessPhaseCurrentBC.Current = args.CollectorCurrent + args.ExcessPhaseCurrent / args.BaseCharge;
         }
     }
 }
