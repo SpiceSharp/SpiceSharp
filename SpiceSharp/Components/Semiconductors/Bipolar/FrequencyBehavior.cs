@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         protected Element<Complex> CollectorPrimeBasePtr { get; private set; }
         
         /// <summary>
-        /// Properties
+        /// Device methods and properties
         /// </summary>
         [PropertyName("cpi"), PropertyInfo("Internal base to emitter capactance")]
         public double CapBE { get; protected set; }

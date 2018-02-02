@@ -13,7 +13,7 @@ namespace SpiceSharp.Circuits
         public enum NodeType
         {
             /// <summary>
-            /// No type
+            /// The unknown associated with this node does not fall into a category
             /// </summary>
             None = 0x00,
 

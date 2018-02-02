@@ -23,10 +23,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         Complex ac;
 
         /// <summary>
-        /// Properties
+        /// Device methods and properties
         /// </summary>
-        /// <param name="state"></param>
-        /// <returns></returns>
         [PropertyName("v"), PropertyInfo("Complex voltage")]
         public Complex GetVoltage(ComplexState state)
         {

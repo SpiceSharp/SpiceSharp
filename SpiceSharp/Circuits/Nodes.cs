@@ -40,7 +40,7 @@ namespace SpiceSharp.Circuits
             // Setup the ground node
             Ground = new Node(new Identifier("0"), 0);
             map.Add(Ground.Name, Ground);
-            map.Add(new Identifier("gnd"), Ground);
+            map.Add(new Identifier("GND"), Ground);
 
             // Unlock
             locked = false;
@@ -143,7 +143,7 @@ namespace SpiceSharp.Circuits
             // Setup ground node
             map.Clear();
             map.Add(Ground.Name, Ground);
-            map.Add(new Identifier("gnd"), Ground);
+            map.Add(new Identifier("GND"), Ground);
 
             // Unlock
             locked = false;

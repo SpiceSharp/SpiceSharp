@@ -7,7 +7,6 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
     /// </summary>
     public class BaseParameters : ParameterSet
     {
-        // TODO: Correct spelling for device parameters
         /// <summary>
         /// Parameters
         /// </summary>

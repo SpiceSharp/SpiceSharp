@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         protected Element<Complex> BranchBranchPtr { get; private set; }
 
         /// <summary>
-        /// Properties
+        /// Device methods and properties
         /// </summary>
         [PropertyName("v"), PropertyInfo("Complex voltage")]
         public Complex Voltage => AC;

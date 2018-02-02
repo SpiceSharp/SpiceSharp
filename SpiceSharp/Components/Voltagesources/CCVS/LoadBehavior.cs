@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         VoltagesourceBehaviors.LoadBehavior vsrcload;
 
         /// <summary>
-        /// Properties
+        /// Device methods and properties
         /// </summary>
         [PropertyName("i"), PropertyInfo("Output current")]
         public double GetCurrent(RealState state)

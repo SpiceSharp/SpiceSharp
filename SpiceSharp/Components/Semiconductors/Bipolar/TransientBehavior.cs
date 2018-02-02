@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         protected Element<double> CollectorPrimeBasePtr { get; private set; }
 
         /// <summary>
-        /// Properties
+        /// Device methods and properties
         /// </summary>
         [PropertyName("qbe"), PropertyInfo("Charge storage B-E junction")]
         public double ChargeBE => stateChargeBE.Current;

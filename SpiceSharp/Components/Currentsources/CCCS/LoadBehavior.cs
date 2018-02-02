@@ -27,10 +27,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         protected Element<double> NegControlBranchPtr { get; private set; }
 
         /// <summary>
-        /// Properties
+        /// Device methods and properties
         /// </summary>
-        /// <param name="state">State</param>
-        /// <returns></returns>
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Current")]
         public double GetCurrent(RealState state)
         {

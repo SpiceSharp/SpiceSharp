@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         protected Element<Complex> NegControlNegPtr { get; private set; }
 
         /// <summary>
-        /// Properties
+        /// Device methods and properties
         /// </summary>
         [PropertyName("v"), PropertyInfo("Complex voltage")]
         public Complex GetVoltage(ComplexState state)

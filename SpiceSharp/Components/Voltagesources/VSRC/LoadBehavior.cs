@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         BaseParameters bp;
 
         /// <summary>
-        /// Properties
+        /// Device methods and properties
         /// </summary>
         [PropertyName("i"), PropertyInfo("Voltage source current")]
         public double GetCurrent(RealState state)

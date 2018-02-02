@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         VoltagesourceBehaviors.LoadBehavior vsrcload;
 
         /// <summary>
-        /// Properties
+        /// Device methods and properties 
         /// </summary>
         [PropertyName("v"), PropertyInfo("Complex voltage")]
         public Complex GetVoltage(ComplexState state)
