@@ -7,8 +7,11 @@ namespace SpiceSharp.Sparse
     /// </summary>
     public class SparsePivoting<T>
     {
-        internal const SparsePartition DEFAULT_PARTITION = SparsePartition.Auto;
-        internal const int TIES_MULTIPLIER = 5;
+        /// <summary>
+        /// Constants
+        /// </summary>
+        const SparsePartition DEFAULT_PARTITION = SparsePartition.Auto;
+        const int TIES_MULTIPLIER = 5;
 
         internal bool[] DoCmplxDirect = null;
         internal bool[] DoRealDirect = null;
