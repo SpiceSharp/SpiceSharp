@@ -127,6 +127,14 @@ namespace SpiceSharp.Circuits
         public bool Contains(Identifier id) => map.ContainsKey(id);
 
         /// <summary>
+        /// Try to get a node
+        /// </summary>
+        /// <param name="id">Identifier</param>
+        /// <param name="node">Node</param>
+        /// <returns></returns>
+        public bool TryGetNode(Identifier id, out Node node) => map.TryGetValue(id, out node);
+
+        /// <summary>
         /// Avoid changing to the internal structure by locking the node list
         /// </summary>
         public void Lock()
