@@ -66,11 +66,7 @@ namespace SpiceSharpTest.Models.Transistors
             });
 
             // Create exports
-            Func<RealState, double>[] exports = new Func<RealState, double>[1];
-            dc.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = dc.CreateExport("V2", "i");
-            };
+            Export<double>[] exports = { new RealPropertyExport(dc, "V2", "i") };
 
             // Create references
             double[][] references = new double[1][];
@@ -106,11 +102,7 @@ namespace SpiceSharpTest.Models.Transistors
             AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 5));
 
             // Create exports
-            Func<ComplexState, Complex>[] exports = new Func<ComplexState, Complex>[1];
-            ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = ac.CreateACVoltageExport("out");
-            };
+            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
 
             // Create references
             double[] riref = { 2.701114568959397e-01, 2.297592026993491e-01, 3.614367501477384e-01, 1.939823511070750e-01, 4.176532699259306e-01, 1.414313855763639e-01, 4.452214249772693e-01, 9.512747415960789e-02, 4.572366767698547e-01, 6.164118367404970e-02, 4.622024752123699e-01, 3.931535278467341e-02, 4.642095432402752e-01, 2.491402951340239e-02, 4.650134308270042e-01, 1.574691222820917e-02, 4.653342396231024e-01, 9.942484429536930e-03, 4.654620791267926e-01, 6.275007008504113e-03, 4.655129925001772e-01, 3.959694832353351e-03, 4.655332645790356e-01, 2.498507336198679e-03, 4.655413355303657e-01, 1.576478884956591e-03, 4.655445487118463e-01, 9.946977962705516e-04, 4.655458279147781e-01, 6.276136046196179e-04, 4.655463371765942e-01, 3.959978465130569e-04, 4.655465399176849e-01, 2.498578584664746e-04, 4.655466206304160e-01, 1.576496782075489e-04, 4.655466527627409e-01, 9.947022918549027e-05, 4.655466655548509e-01, 6.276147338624847e-05, 4.655466706474820e-01, 3.959981301663537e-05, 4.655466726748949e-01, 2.498579297169927e-05, 4.655466734820225e-01, 1.576496961048729e-05, 4.655466738033459e-01, 9.947023368109509e-06, 4.655466739312669e-01, 6.276147451549338e-06, 4.655466739821933e-01, 3.959981330028886e-06, 4.655466740024674e-01, 2.498579304294980e-06, 4.655466740105386e-01, 1.576496962838461e-06, 4.655466740137518e-01, 9.947023372605108e-07, 4.655466740150311e-01, 6.276147452678582e-07, 4.655466740155403e-01, 3.959981330312538e-07, 4.655466740157432e-01, 2.498579304366230e-07, 4.655466740158237e-01, 1.576496962856358e-07, 4.655466740158559e-01, 9.947023372650060e-08, 4.655466740158686e-01, 6.276147452689869e-08, 4.655466740158738e-01, 3.959981330315371e-08, 4.655466740158758e-01, 2.498579304366941e-08, 4.655466740158766e-01, 1.576496962856536e-08, 4.655466740158769e-01, 9.947023372650503e-09, 4.655466740158770e-01, 6.276147452689979e-09, 4.655466740158772e-01, 3.959981330315399e-09, 4.655466740158772e-01, 2.498579304366946e-09, 4.655466740158771e-01, 1.576496962856537e-09, 4.655466740158772e-01, 9.947023372650507e-10, 4.655466740158772e-01, 6.276147452689978e-10, 4.655466740158771e-01, 3.959981330315396e-10 };
@@ -148,12 +140,7 @@ namespace SpiceSharpTest.Models.Transistors
             Transient tran = new Transient("tran", 1e-9, 10e-6);
 
             // Create exports
-            Func<RealState, double>[] exports = new Func<RealState, double>[2];
-            tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = (RealState state) => tran.Method.Time;
-                exports[1] = tran.CreateVoltageExport("out");
-            };
+            Export<double>[] exports = { new GenericExport<double>(tran, () => tran.Method.Time), new RealVoltageExport(tran, "out") };
 
             // Create references
             double[][] references = new double[2][];
@@ -186,11 +173,9 @@ namespace SpiceSharpTest.Models.Transistors
             Noise noise = new Noise("noise", "out", "V1", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 10));
 
             // Create exports
-            Func<RealState, double>[] exports = new Func<RealState, double>[2];
-            noise.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = noise.CreateNoiseDensityExport(true);
-                exports[1] = noise.CreateNoiseDensityExport(false);
+            Export<double>[] exports = {
+                new GenericExport<double>(noise, () => noise.NoiseState.OutputNoiseDensity * noise.NoiseState.GainInverseSquared),
+                new GenericExport<double>(noise, () => noise.NoiseState.OutputNoiseDensity)
             };
 
             // Create references

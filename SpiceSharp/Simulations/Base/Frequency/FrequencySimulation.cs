@@ -153,44 +153,5 @@ namespace SpiceSharp.Simulations
             // Store them in the solution
             cstate.StoreSolution();
         }
-
-        /// <summary>
-        /// Create an export method
-        /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="property">Property</param>
-        /// <returns></returns>
-        public Func<ComplexState, Complex> CreateACExport(Identifier name, string property)
-        {
-            var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
-
-            // Only AC behaviors implement these export methods
-            return eb.Get<FrequencyBehavior>()?.CreateACExport(property);
-        }
-
-        /// <summary>
-        /// Create an export method for this type of simulation 
-        /// </summary>
-        /// <param name="pos">Positive node</param>
-        /// <param name="neg">Negative node</param>
-        /// <returns></returns>
-        public virtual Func<ComplexState, Complex> CreateACVoltageExport(Identifier pos, Identifier neg)
-        {
-            int node = Circuit.Nodes[pos].Index;
-            if (neg == null)
-                return (ComplexState state) => state.Solution[node];
-            int refnode = Circuit.Nodes[neg].Index;
-            return (ComplexState state) => state.Solution[node] - state.Solution[refnode];
-        }
-
-        /// <summary>
-        /// Create an export method for this type of simulation
-        /// </summary>
-        /// <param name="pos">Positive node</param>
-        /// <returns></returns>
-        public virtual Func<ComplexState, Complex> CreateACVoltageExport(Identifier pos)
-        {
-            return CreateACVoltageExport(pos, null);
-        }
     }
 }
