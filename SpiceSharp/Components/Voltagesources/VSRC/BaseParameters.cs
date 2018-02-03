@@ -10,6 +10,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Parameters
         /// </summary>
+        [PropertyName("waveform"), PropertyInfo("Waveform shape")]
         public Waveform Waveform { get; set; }
         [PropertyName("dc"), PropertyInfo("D.C. source value")]
         public Parameter DCValue { get; } = new Parameter();

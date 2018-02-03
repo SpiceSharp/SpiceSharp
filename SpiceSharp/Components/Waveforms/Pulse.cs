@@ -15,9 +15,9 @@ namespace SpiceSharp.Components
         /// Parameters
         /// </summary>
         [PropertyName("v1"), PropertyInfo("The initial value")]
-        public Parameter Value1 { get; } = new Parameter();
+        public Parameter InitialValue { get; } = new Parameter();
         [PropertyName("v2"), PropertyInfo("The peak value")]
-        public Parameter Value2 { get; } = new Parameter();
+        public Parameter PulsedValue { get; } = new Parameter();
         [PropertyName("td"), PropertyInfo("The initial delay time in seconds")]
         public Parameter Delay { get; } = new Parameter();
         [PropertyName("tr"), PropertyInfo("The rise time in seconds")]
@@ -44,17 +44,17 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="value1">The initial value</param>
-        /// <param name="value2">The peak value</param>
+        /// <param name="initialValue">The initial value</param>
+        /// <param name="pulsedValue">The peak value</param>
         /// <param name="delay">The initial delay time in seconds</param>
         /// <param name="riseTime">The rise time in seconds</param>
         /// <param name="fallTime">The fall time in seconds</param>
         /// <param name="pulseWidth">The pulse width in seconds</param>
         /// <param name="period">The period in seconds</param>
-        public Pulse(double value1, double value2, double delay, double riseTime, double fallTime, double pulseWidth, double period)
+        public Pulse(double initialValue, double pulsedValue, double delay, double riseTime, double fallTime, double pulseWidth, double period)
         {
-            Value1.Set(value1);
-            Value2.Set(value2);
+            InitialValue.Set(initialValue);
+            PulsedValue.Set(pulsedValue);
             Delay.Set(delay);
             RiseTime.Set(riseTime);
             FallTime.Set(fallTime);
@@ -67,8 +67,8 @@ namespace SpiceSharp.Components
         /// </summary>
         public override void Setup()
         {
-            v1 = Value1;
-            v2 = Value2;
+            v1 = InitialValue;
+            v2 = PulsedValue;
             td = Delay;
             tr = RiseTime;
             tf = FallTime;

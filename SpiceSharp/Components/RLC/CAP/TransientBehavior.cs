@@ -142,8 +142,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="simulation">Time-based simulation</param>
         public override void Transient(TimeSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
             double vcap = state.Solution[posNode] - state.Solution[negNode];

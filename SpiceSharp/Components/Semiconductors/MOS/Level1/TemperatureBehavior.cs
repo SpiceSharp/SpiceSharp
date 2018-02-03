@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         public double TempBulkPotential { get; protected set; }
         public double TempDepletionCap { get; protected set; }
         public double F2D { get; protected set; }
-        public double F3D{ get; protected set; }
+        public double F3D { get; protected set; }
         public double F4D { get; protected set; }
         public double F2S { get; protected set; }
         public double F3S { get; protected set; }
@@ -114,8 +114,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <param name="simulation">Base simulation</param>
         public override void Temperature(BaseSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             double vt, ratio, fact2, kt, egfet, arg, pbfact, ratio4, phio, pbo, gmaold, capfact, gmanew, czbd, czbdsw, sarg, sargsw, czbs,
                 czbssw;
