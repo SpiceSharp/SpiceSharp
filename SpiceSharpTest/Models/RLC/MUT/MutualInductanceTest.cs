@@ -41,11 +41,8 @@ namespace SpiceSharpTest.Models.MUT
             Transient tran = new Transient("tran", 1e-9, 1e-4, 1e-6);
 
             // Create exports
-            Func<RealState, double>[] exports = new Func<RealState, double>[1];
-            tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = tran.CreateVoltageExport("OUT");
-            };
+            Export<double>[] exports = new Export<double>[1];
+            exports[0] = new RealVoltageExport(tran, "OUT");
 
             // Create references
             double mut = k * Math.Sqrt(l1 * l2);
@@ -90,11 +87,8 @@ namespace SpiceSharpTest.Models.MUT
             AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1, 1e8, 10));
 
             // Create exports
-            Func<ComplexState, Complex>[] exports = new Func<ComplexState, Complex>[1];
-            ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = ac.CreateACVoltageExport("OUT");
-            };
+            Export<Complex>[] exports = new Export<Complex>[1];
+            exports[0] = new ComplexVoltageExport(ac, "OUT");
 
             // Create references
             double mut = k * Math.Sqrt(l1 * l2);

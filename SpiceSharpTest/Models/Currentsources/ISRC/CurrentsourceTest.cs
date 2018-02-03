@@ -36,12 +36,9 @@ namespace SpiceSharpTest.Models.Currentsources.ISRC
 
             // Create simulation, exports and references
             OP op = new OP("op");
-            Func<RealState, double>[] exports = new Func<RealState, double>[2];
-            op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = op.CreateExport("I1", "v");
-                exports[1] = op.CreateExport("R1", "i");
-            };
+            Export<double>[] exports = new Export<double>[2];
+            exports[0] = new RealPropertyExport(op, "I1", "v");
+            exports[1] = new RealPropertyExport(op, "R1", "i");
             double[] references =
             {
                 10.0e3,
@@ -91,13 +88,10 @@ namespace SpiceSharpTest.Models.Currentsources.ISRC
             OP op = new OP("op");
 
             // Create exports
-            List<Func<RealState, double>> exports = new List<Func<RealState, double>>();
-            op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                for (int i = 1; i <= resistorCount; i++)
-                    exports.Add(op.CreateExport($"R{i}", "i"));
-                exports.Add(op.CreateExport("I1", "v"));
-            };
+            List<Export<double>> exports = new List<Export<double>>();
+            for (int i = 1; i <= resistorCount; i++)
+                exports.Add(new RealPropertyExport(op, $"R{i}", "i"));
+            exports.Add(new RealPropertyExport(op, "I1", "v"));
             
             // Add references
             List<double> references = new List<double>();

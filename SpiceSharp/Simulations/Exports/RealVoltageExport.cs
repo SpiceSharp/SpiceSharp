@@ -21,9 +21,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="posNode">Positive node</param>
         /// <param name="simulation">Simulation</param>
-        public RealVoltageExport(Identifier posNode, Simulation simulation)
+        /// <param name="posNode">Positive node</param>
+        public RealVoltageExport(Simulation simulation, Identifier posNode)
             : base(simulation)
         {
             PosNode = posNode ?? throw new ArgumentNullException(nameof(posNode));
@@ -33,10 +33,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="simulation">Simulation</param>
         /// <param name="posNode">Positive node</param>
         /// <param name="negNode">Negative (reference) node</param>
-        /// <param name="simulation">Simulation</param>
-        public RealVoltageExport(Identifier posNode, Identifier negNode, Simulation simulation)
+        public RealVoltageExport(Simulation simulation, Identifier posNode, Identifier negNode)
             : base(simulation)
         {
             PosNode = posNode ?? throw new ArgumentNullException(nameof(posNode));

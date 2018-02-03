@@ -108,6 +108,7 @@
     <Compile Include="Simulations\Exports\ComplexPropertyExport.cs" />
     <Compile Include="Simulations\Exports\ComplexVoltageExport.cs" />
     <Compile Include="Simulations\Exports\Export.cs" />
+    <Compile Include="Simulations\Exports\GenericExport.cs" />
     <Compile Include="Simulations\Exports\RealPropertyExport.cs" />
     <Compile Include="Simulations\Exports\RealVoltageExport.cs" />
     <Compile Include="Simulations\InitializationDataEventArgs.cs" />

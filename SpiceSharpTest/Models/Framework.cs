@@ -56,7 +56,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeOp(OP sim, Circuit ckt, IEnumerable<Func<RealState, double>> exports, IEnumerable<double> references)
+        protected void AnalyzeOp(OP sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double> references)
         {
             sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
             {
@@ -65,7 +65,7 @@ namespace SpiceSharpTest.Models
 
                 while (export_it.MoveNext() && references_it.MoveNext())
                 {
-                    double actual = export_it.Current(data.State);
+                    double actual = export_it.Current.Value;
                     double expected = references_it.Current;
                     double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
                     Assert.AreEqual(expected, actual, tol);
@@ -81,7 +81,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeDC(DC sim, Circuit ckt, IEnumerable<Func<RealState, double>> exports, IEnumerable<double[]> references)
+        protected void AnalyzeDC(DC sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
         {
             int index = 0;
             sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
@@ -91,7 +91,7 @@ namespace SpiceSharpTest.Models
 
                 while (export_it.MoveNext() && references_it.MoveNext())
                 {
-                    double actual = export_it.Current(data.State);
+                    double actual = export_it.Current.Value;
                     double expected = references_it.Current[index];
                     double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
 
@@ -120,7 +120,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Func<ComplexState, double>> exports, IEnumerable<double[]> references)
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
         {
             int index = 0;
             sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
@@ -131,7 +131,7 @@ namespace SpiceSharpTest.Models
                 while (exports_it.MoveNext() && references_it.MoveNext())
                 {
                     // Test export
-                    double actual = exports_it.Current(data.ComplexState);
+                    double actual = exports_it.Current.Value;
                     double expected = references_it.Current[index];
                     double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
 
@@ -157,7 +157,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Func<ComplexState, Complex>> exports, IEnumerable<Complex[]> references)
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<Complex>> exports, IEnumerable<Complex[]> references)
         {
             int index = 0;
             sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
@@ -168,7 +168,7 @@ namespace SpiceSharpTest.Models
                 while (exports_it.MoveNext() && references_it.MoveNext())
                 {
                     // Test export
-                    Complex actual = exports_it.Current(data.ComplexState);
+                    Complex actual = exports_it.Current.Value;
                     Complex expected = references_it.Current[index];
 
                     // Test real part
@@ -198,7 +198,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Func<ComplexState, Complex>> exports, IEnumerable<Func<double, Complex>> references)
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<Complex>> exports, IEnumerable<Func<double, Complex>> references)
         {
             int index = 0;
             sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
@@ -209,7 +209,7 @@ namespace SpiceSharpTest.Models
                 while (exports_it.MoveNext() && references_it.MoveNext())
                 {
                     // Test export
-                    Complex actual = exports_it.Current(data.ComplexState);
+                    Complex actual = exports_it.Current.Value;
                     Complex expected = references_it.Current(data.Frequency);
 
                     // Test real part
@@ -239,7 +239,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<Func<RealState, double>> exports, IEnumerable<double[]> references)
+        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
         {
             int index = 0;
             sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
@@ -249,7 +249,7 @@ namespace SpiceSharpTest.Models
 
                 while (exports_it.MoveNext() && references_it.MoveNext())
                 {
-                    double actual = exports_it.Current(data.State);
+                    double actual = exports_it.Current.Value;
                     double expected = references_it.Current[index];
                     double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
 
@@ -275,7 +275,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<Func<RealState, double>> exports, IEnumerable<Func<double, double>> references)
+        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<Func<double, double>> references)
         {
             int index = 0;
             sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
@@ -286,7 +286,7 @@ namespace SpiceSharpTest.Models
                 while (exports_it.MoveNext() && references_it.MoveNext())
                 {
                     double t = data.Time;
-                    double actual = exports_it.Current(data.State);
+                    double actual = exports_it.Current.Value;
                     double expected = references_it.Current(t);
                     double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
 
@@ -312,7 +312,7 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeNoise(Noise sim, Circuit ckt, IEnumerable<Func<RealState, double>> exports, IEnumerable<double[]> references)
+        protected void AnalyzeNoise(Noise sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
         {
             int index = 0;
             sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
@@ -323,7 +323,7 @@ namespace SpiceSharpTest.Models
                 while (exports_it.MoveNext() && references_it.MoveNext())
                 {
                     // Test export
-                    double actual = exports_it.Current(data.State);
+                    double actual = exports_it.Current.Value;
                     double expected = references_it.Current[index];
                     double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-6 + 1e-12;
 

@@ -19,10 +19,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="simulation">Simulation</param>
         /// <param name="entityName">Entity name</param>
         /// <param name="propertyName">Property name</param>
-        /// <param name="simulation">Simulation</param>
-        public ComplexPropertyExport(Identifier entityName, string propertyName, Simulation simulation)
+        public ComplexPropertyExport(Simulation simulation, Identifier entityName, string propertyName)
             : base(simulation)
         {
             EntityName = entityName ?? throw new ArgumentNullException(nameof(entityName));
@@ -37,18 +37,18 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, InitializationDataEventArgs e)
         {
             var eb = e.Behaviors.GetEntityBehaviors(EntityName);
-            Func<RealState, double> stateExtractor = null;
+            Func<ComplexState, Complex> stateExtractor = null;
 
             // Get the necessary behavior in order:
             // 1) First try transient analysis
-            Behavior behavior = eb.Get<FrequencyBehavior>();
+            var behavior = eb.Get<FrequencyBehavior>();
             if (behavior != null)
-                stateExtractor = behavior.CreateExport(PropertyName);
+                stateExtractor = behavior.CreateACExport(PropertyName);
             
             // Create the extractor
             if (stateExtractor != null)
             {
-                var state = Simulation.States.Get<RealState>();
+                var state = Simulation.States.Get<ComplexState>();
                 Extractor = () => stateExtractor(state);
             }
         }

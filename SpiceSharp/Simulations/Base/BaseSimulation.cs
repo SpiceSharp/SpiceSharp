@@ -549,43 +549,5 @@ namespace SpiceSharp.Simulations
             // Convergence succeeded
             return true;
         }
-
-        /// <summary>
-        /// Create an export method for this type of simulation
-        /// The simulation will determine which export method is returned if multiple behaviors implement a export method by the same name
-        /// </summary>
-        /// <param name="name">The identifier of the entity</param>
-        /// <param name="propertyName">The parameter name</param>
-        /// <returns></returns>
-        public override Func<RealState, double> CreateExport(Identifier name, string propertyName)
-        {
-            var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
-            return eb.Get<LoadBehavior>()?.CreateExport(propertyName);
-        }
-
-        /// <summary>
-        /// Create an export method
-        /// </summary>
-        /// <param name="pos">Positive node</param>
-        /// <param name="neg">Negative node</param>
-        /// <returns></returns>
-        public virtual Func<RealState, double> CreateVoltageExport(Identifier pos, Identifier neg)
-        {
-            int node = Circuit.Nodes[pos].Index;
-            if (neg == null)   
-                return (RealState state) => state.Solution[node];
-            int refnode = Circuit.Nodes[neg].Index;
-            return (RealState state) => state.Solution[node] - state.Solution[refnode];
-        }
-
-        /// <summary>
-        /// Create an export method
-        /// </summary>
-        /// <param name="pos">Positive node</param>
-        /// <returns></returns>
-        public virtual Func<RealState, double> CreateVoltageExport(Identifier pos)
-        {
-            return CreateVoltageExport(pos, null);
-        }
     }
 }

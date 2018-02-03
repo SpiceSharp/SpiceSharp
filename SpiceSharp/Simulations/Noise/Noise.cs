@@ -209,30 +209,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Create an export method for this type of simulation
-        /// The simulation will determine which export method is returned if multiple behaviors implement a export method by the same name
-        /// </summary>
-        /// <param name="name">The identifier of the entity</param>
-        /// <param name="propertyName">The parameter name</param>
-        /// <returns></returns>
-        public override Func<RealState, double> CreateExport(Identifier name, string propertyName)
-        {
-            var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
-
-            // Most logical place to look for noise analysis: noise behaviors
-            var export = eb.Get<NoiseBehavior>()?.CreateExport(propertyName);
-
-            // Next most logical place is the AcBehavior
-            if (export == null)
-                export = eb.Get<FrequencyBehavior>()?.CreateExport(propertyName);
-
-            // Finally look to the LoadBehavior
-            if (export == null)
-                export = eb.Get<LoadBehavior>()?.CreateExport(propertyName);
-            return export;
-        }
-
-        /// <summary>
         /// Create an export for the total input density
         /// </summary>
         /// <param name="input">True if the noise density has to be input-referred</param>

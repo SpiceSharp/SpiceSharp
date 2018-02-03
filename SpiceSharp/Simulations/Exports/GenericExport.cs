@@ -1,0 +1,36 @@
+﻿using System;
+
+namespace SpiceSharp.Simulations
+{
+    /// <summary>
+    /// Generic export class
+    /// </summary>
+    /// <typeparam name="T">Return type</typeparam>
+    public class GenericExport<T> : Export<T>
+    {
+        /// <summary>
+        /// Private extractor
+        /// </summary>
+        Func<T> myExtractor;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="simulation">Simulation</param>
+        public GenericExport(Simulation simulation, Func<T> extractor)
+            : base(simulation)
+        {
+            myExtractor = extractor;
+        }
+
+        /// <summary>
+        /// Initialize
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Arguments</param>
+        protected override void Initialize(object sender, InitializationDataEventArgs e)
+        {
+            Extractor = myExtractor;
+        }
+    }
+}

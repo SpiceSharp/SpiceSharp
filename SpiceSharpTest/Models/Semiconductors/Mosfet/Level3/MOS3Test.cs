@@ -67,11 +67,7 @@ namespace SpiceSharpTest.Models.Transistors
             });
 
             // Create exports
-            Func<RealState, double>[] exports = new Func<RealState, double>[1];
-            dc.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = dc.CreateExport("V2", "i");
-            };
+            Export<double>[] exports = { new RealPropertyExport(dc, "V2", "i") };
 
             // Create references
             double[][] references = new double[1][];
@@ -107,11 +103,7 @@ namespace SpiceSharpTest.Models.Transistors
             AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 5));
 
             // Create exports
-            Func<ComplexState, Complex>[] exports = new Func<ComplexState, Complex>[1];
-            ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = ac.CreateACVoltageExport("out");
-            };
+            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
 
             // Create references
             double[] riref = { -1.448857719884684e-03, -6.260007108126745e-01, -3.639336573643311e-03, -9.921362299670315e-01, -9.141414195176988e-03, -1.572397969565666e+00, -2.296102101289896e-02, -2.491955503154010e+00, -5.766807563860867e-02, -3.948976475444068e+00, -1.448089774772143e-01, -6.256689086075871e+00, -3.634495125691141e-01, -9.908163806423953e+00, -9.110929278146982e-01, -1.567154314632532e+01, -2.276965858631552e+00, -2.471186973228724e+01, -5.647598782046568e+00, -3.867345058089153e+01, -1.375199410745549e+01, -5.941755334708798e+01, -3.207763017324329e+01, -8.744829839823841e+01, -6.832438160737344e+01, -1.175235216537343e+02, -1.241920646766530e+02, -1.347854256329389e+02, -1.841315808238452e+02, -1.260890489248231e+02, -2.279253114275959e+02, -9.847854969308602e+01, -2.517636926413673e+02, -6.863445460602944e+01, -2.627019332545188e+02, -4.518688001997734e+01, -2.673256909888647e+02, -2.901280942253893e+01, -2.692120585123498e+02, -1.843501927536817e+01, -2.699704646985724e+02, -1.166447888431620e+01, -2.702735821604205e+02, -7.368052045702465e+00, -2.703944449090613e+02, -4.651005490826149e+00, -2.704425913243499e+02, -2.935108605838326e+00, -2.704617635295234e+02, -1.852059618528605e+00, -2.704693968784006e+02, -1.168603599754638e+00, -2.704724358892379e+02, -7.373473088379656e-01, -2.704736457602495e+02, -4.652367810210625e-01, -2.704741274215870e+02, -2.935450866537507e-01, -2.704743191748967e+02, -1.852145596684913e-01, -2.704743955133399e+02, -1.168625197106691e-01, -2.704744259042335e+02, -7.373527339090884e-02, -2.704744380030681e+02, -4.652381437434735e-02, -2.704744428197012e+02, -2.935454289547597e-02, -2.704744447372374e+02, -1.852146456506789e-02, -2.704744455006224e+02, -1.168625413084242e-02, -2.704744458045314e+02, -7.373527881602024e-03, -2.704744459255197e+02, -4.652381573707377e-03, -2.704744459736860e+02, -2.935454323777736e-03, -2.704744459928614e+02, -1.852146465105010e-03, -2.704744460004952e+02, -1.168625415244017e-03, -2.704744460035343e+02, -7.373527887027131e-04, -2.704744460047443e+02, -4.652381575070101e-04, -2.704744460052259e+02, -2.935454324120037e-04, -2.704744460054176e+02, -1.852146465190992e-04, -2.704744460054940e+02, -1.168625415265614e-04 };
@@ -145,12 +137,7 @@ namespace SpiceSharpTest.Models.Transistors
             Transient tran = new Transient("tran", 1e-9, 10e-6);
 
             // Create exports
-            Func<RealState, double>[] exports = new Func<RealState, double>[2];
-            tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = (RealState state) => tran.Method.Time;
-                exports[1] = tran.CreateVoltageExport("out");
-            };
+            Export<double>[] exports = { new GenericExport<double>(tran, () => tran.Method.Time), new RealVoltageExport(tran, "out") };
 
             // Create references
             double[][] references = new double[2][];

@@ -1,7 +1,7 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Simulations.Exports
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Export for real properties
@@ -21,10 +21,10 @@ namespace SpiceSharp.Simulations.Exports
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="simulation">Simulation</param>
         /// <param name="entityName">Entity name</param>
         /// <param name="propertyName">Property name</param>
-        /// <param name="simulation">Simulation</param>
-        public RealPropertyExport(Identifier entityName, string propertyName, Simulation simulation)
+        public RealPropertyExport(Simulation simulation, Identifier entityName, string propertyName)
             : base(simulation)
         {
             EntityName = entityName ?? throw new ArgumentNullException(nameof(entityName));

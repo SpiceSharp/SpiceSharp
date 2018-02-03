@@ -242,25 +242,5 @@ namespace SpiceSharp.Simulations
                 }
             }
         }
-
-        /// <summary>
-        /// Create an export method for this type of simulation
-        /// The simulation will determine which export method is returned if multiple behaviors implement an export method by the same name.
-        /// </summary>
-        /// <param name="name">The identifier of the entity</param>
-        /// <param name="propertyName">The parameter name</param>
-        /// <returns></returns>
-        public override Func<RealState, double> CreateExport(Identifier name, string propertyName)
-        {
-            var eb = Pool.GetEntityBehaviors(name) ?? throw new CircuitException("{0}: Could not find behaviors of {1}".FormatString(Name, name));
-
-            // For transient analysis, the most logical would be to ask the Transient behavior (if it exists)
-            var export = eb.Get<TransientBehavior>()?.CreateExport(propertyName);
-
-            // If the transient behavior does not implement the export method, resort to the Load behavior
-            if (export == null)
-                export = eb.Get<LoadBehavior>()?.CreateExport(propertyName);
-            return export;
-        }
     }
 }

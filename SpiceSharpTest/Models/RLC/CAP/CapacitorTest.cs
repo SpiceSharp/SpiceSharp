@@ -27,11 +27,8 @@ namespace SpiceSharpTest.Models.RLC.CAP
             OP op = new OP("op");
 
             // Create exports
-            Func<RealState, double>[] exports = new Func<RealState, double>[1];
-            op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = op.CreateVoltageExport("OUT");
-            };
+            Export<double>[] exports = new Export<double>[1];
+            exports[0] = new RealVoltageExport(op, "OUT");
 
             // Create references
             double[] references = { 1.0 };
@@ -63,12 +60,8 @@ namespace SpiceSharpTest.Models.RLC.CAP
 
             // Create simulation, exports and references
             Transient tran = new Transient("tran", 1e-8, 10e-6);
-            Func<RealState, double>[] exports = new Func<RealState, double>[1];
+            Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { (double t) => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
-            tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = tran.CreateExport("C1", "v");
-            };
 
             // Run
             AnalyzeTransient(tran, ckt, exports, references);
@@ -95,11 +88,7 @@ namespace SpiceSharpTest.Models.RLC.CAP
             AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(0.1, 1.0e6, 10));
 
             // Create exports
-            Func<ComplexState, Complex>[] exports = new Func<ComplexState, Complex>[1];
-            ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = ac.CreateACExport("C1", "v");
-            };
+            Export<Complex>[] exports = { new ComplexPropertyExport(ac, "C1", "v") };
 
             // Create references
             Func<double, Complex>[] references = { (double f) => 1.0 / new Complex(1.0, resistance * capacitance * 2 * Math.PI * f) };

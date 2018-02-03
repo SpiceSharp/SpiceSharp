@@ -28,11 +28,8 @@ namespace SpiceSharpTest.Models.IND
             OP op = new OP("op");
 
             // Create exports
-            Func<RealState, double>[] exports = new Func<RealState, double>[1];
-            op.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = op.CreateVoltageExport("OUT");
-            };
+            Export<double>[] exports = new Export<double>[1];
+            exports[0] = new RealVoltageExport(op, "OUT");
 
             // Create references
             double[] references = { 1.0 };
@@ -61,11 +58,8 @@ namespace SpiceSharpTest.Models.IND
             AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(0.1, 1e6, 10));
 
             // Create exports
-            Func<ComplexState, Complex>[] exports = new Func<ComplexState, Complex>[1];
-            ac.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = ac.CreateACVoltageExport("OUT");
-            };
+            Export<Complex>[] exports = new Export<Complex>[1];
+            exports[0] = new ComplexVoltageExport(ac, "OUT");
 
             // Create references
             Func<double, Complex>[] references = { (double f) => 1.0 / new Complex(1.0, inductance / resistance * 2 * Math.PI * f) };
@@ -103,11 +97,8 @@ namespace SpiceSharpTest.Models.IND
             Transient tran = new Transient("tran", 1e-9, 1e-3, 1e-7);
 
             // Create exports
-            Func<RealState, double>[] exports = new Func<RealState, double>[1];
-            tran.InitializeSimulationExport += (object sender, InitializationDataEventArgs args) =>
-            {
-                exports[0] = tran.CreateExport("C1", "v");
-            };
+            Export<double>[] exports = new Export<double>[1];
+            exports[0] = new RealPropertyExport(tran, "C1", "v");
 
             // Create reference function
             double amplitude = Math.Sqrt(inductance / capacitance) * initialCurrent;
