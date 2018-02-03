@@ -1,11 +1,12 @@
-﻿using SpiceSharp.Sparse;
+﻿using System;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Circuits
 {
     /// <summary>
     /// Describes a node in an electronic circuit.
     /// </summary>
-    public class Node
+    public class Node : ICloneable
     {
         /// <summary>
         /// Enumeration of unknown types
@@ -82,6 +83,16 @@ namespace SpiceSharp.Circuits
         public override string ToString()
         {
             return "Node {0}".FormatString(Name);
+        }
+
+        /// <summary>
+        /// Clone the node
+        /// </summary>
+        /// <returns></returns>
+        public object Clone()
+        {
+            var node = new Node(Name, UnknownType, Index);
+            return node;
         }
     }
 }

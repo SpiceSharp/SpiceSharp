@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Circuits
@@ -6,7 +7,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Contains and manages circuit nodes.
     /// </summary>
-    public class Nodes
+    public class Nodes : ICloneable
     {
         /// <summary>
         /// Private variables
@@ -147,6 +148,32 @@ namespace SpiceSharp.Circuits
 
             // Unlock
             locked = false;
+        }
+
+        /// <summary>
+        /// Clone the nodes
+        /// </summary>
+        /// <returns></returns>
+        public object Clone()
+        {
+            // Create a new object
+            var cloned = new Nodes();
+
+            // Copy node list and map
+            foreach (var node in nodes)
+            {
+                var clonedNode = (Node)node.Clone();
+                cloned.nodes.Add(clonedNode);
+                cloned.map.Add(clonedNode.Name, clonedNode);
+            }
+
+            // Clone initial conditions and nodesets
+            foreach (var ic in InitialConditions)
+                cloned.InitialConditions.Add(ic.Key, ic.Value);
+            foreach (var ns in NodeSets)
+                cloned.NodeSets.Add(ns.Key, ns.Value);
+
+            return cloned;
         }
     }
 }
