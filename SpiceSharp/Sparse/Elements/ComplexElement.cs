@@ -126,12 +126,14 @@ namespace SpiceSharp.Sparse
                 (denominator.Real < denominator.Imaginary && denominator.Real <= -denominator.Imaginary))
             {
                 r = denominator.Imaginary / denominator.Real;
-                Imaginary = -r * (Real = 1.0 / (denominator.Real + r * denominator.Imaginary));
+                Real = 1.0 / (denominator.Real + r * denominator.Imaginary);
+                Imaginary = -r * Real;
             }
             else
             {
                 r = denominator.Real / denominator.Imaginary;
-                Real = -r * (Imaginary = -1.0 / (denominator.Imaginary + r * denominator.Real));
+                Imaginary = -1.0 / (denominator.Imaginary + r * denominator.Real);
+                Real = -r * Imaginary;
             }
         }
 
