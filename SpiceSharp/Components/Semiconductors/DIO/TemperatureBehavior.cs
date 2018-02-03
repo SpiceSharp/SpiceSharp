@@ -44,11 +44,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>(0);
-            mbp = provider.GetParameterSet<ModelBaseParameters>(1);
+            bp = provider.GetParameterSet<BaseParameters>("entity");
+            mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>
@@ -57,8 +57,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="simulation">Base simulation</param>
         public override void Temperature(BaseSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             double vt, fact2, egfet, arg, pbfact, egfet1, arg1, fact1, pbfact1, pbo, gmaold, gmanew, vte, cbv, xbv, tol, iter, xcbv = 0.0;
 
@@ -92,7 +92,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // same for Depletion Capacitance
             TempDepletionCap = mbp.DepletionCapCoefficient * TempJunctionPot;
-            
+
             // and Vcrit
             vte = mbp.EmissionCoefficient * vt;
             TempVCritical = vte * Math.Log(vte / (Circuit.Root2 * TempSaturationCurrent));

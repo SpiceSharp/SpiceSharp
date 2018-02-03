@@ -32,9 +32,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>(0);
+            bp = provider.GetParameterSet<BaseParameters>("entity");
             if (!bp.Capacitance.Given)
-                mbp = provider.GetParameterSet<ModelBaseParameters>(1);
+                mbp = provider.GetParameterSet<ModelBaseParameters>("model");
         }
 
         /// <summary>
@@ -43,8 +43,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="simulation">Base simulation</param>
         public override void Temperature(BaseSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             if (!bp.Capacitance.Given)
             {

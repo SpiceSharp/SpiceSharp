@@ -70,14 +70,14 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            var ap = provider.GetParameterSet<FrequencyParameters>(0);
+            var ap = provider.GetParameterSet<FrequencyParameters>("entity");
 
             // Calculate AC vector
             double radians = ap.ACPhase * Math.PI / 180.0;
             AC = new Complex(ap.ACMagnitude * Math.Cos(radians), ap.ACMagnitude * Math.Sin(radians));
 
             // Get behaviors
-            var load = provider.GetBehavior<LoadBehavior>(0);
+            var load = provider.GetBehavior<LoadBehavior>("entity");
             branchEq = load.BranchEq;
         }
         

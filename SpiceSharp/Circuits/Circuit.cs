@@ -73,7 +73,7 @@ namespace SpiceSharp
         /// <summary>
         /// Check the circuit for floating nodes, voltage loops and more
         /// </summary>
-        public void Check()
+        public void Validate()
         {
             Validator validator = new Validator();
             validator.Validate(this);

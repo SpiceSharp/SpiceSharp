@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>(0);
+            load = provider.GetBehavior<LoadBehavior>("entity");
         }
         
         /// <summary>

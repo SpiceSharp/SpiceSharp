@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>(0);
+            bp = provider.GetParameterSet<BaseParameters>("entity");
         }
         
         /// <summary>

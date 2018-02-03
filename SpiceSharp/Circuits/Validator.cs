@@ -90,41 +90,39 @@ namespace SpiceSharp.Circuits
             // Circuit components
             if (c is Component icc)
             {
-                // Check for ground node
-                for (int i = 0; i < icc.PinCount; i++)
-                {
-                    var id = icc.GetNode(i);
-                    if (id.Name == "0" || id.Name == "gnd")
-                    {
-                        HasGround = true;
-                    }
-                }
-
-                // Check for short-circuited components
+                // Check for ground node and for short-circuited components
                 int n = -1;
-                bool sc = true;
+                bool isShortcircuit = false;
+                int[] nodes = new int[icc.PinCount];
                 for (int i = 0; i < icc.PinCount; i++)
                 {
+                    var index = icc.GetNodeIndex(i);
+
+                    // Check for a connection to ground
+                    if (index == 0)
+                        HasGround = true;
+
+                    // Check for short-circuited devices
                     if (n < 0)
-                        n = icc.GetNodeIndex(i);
-                    else if (n != icc.GetNodeIndex(i))
                     {
-                        sc = false;
-                        break;
+                        // We have at least one node, so we potentially have a short-circuited component
+                        n = index;
+                        isShortcircuit = true;
                     }
-                }
-                if (sc)
-                    throw new CircuitException("{0}: All pins have been short-circuited".FormatString(icc.Name));
+                    else if (n != index)
+                    {
+                        // Is not short-circuited, so OK!
+                        isShortcircuit = false;
+                    }
 
-                // Get the node indices for each pin
-                int[] nodes = new int[icc.PinCount];
-                for (int i = 0; i < nodes.Length; i++)
-                {
-                    nodes[i] = icc.GetNodeIndex(i);
-                    if (!connectedGroups.ContainsKey(nodes[i]))
-                        connectedGroups.Add(nodes[i], cgroup++);
+                    // Group indices
+                    nodes[i] = index;
+                    if (!connectedGroups.ContainsKey(index))
+                        connectedGroups.Add(index, cgroup++);
                 }
-
+                if (isShortcircuit)
+                    throw new CircuitException("{0}: All pins are short-circuited".FormatString(icc.Name));
+                
                 // Use attributes for checking properties
                 var attributes = c.GetType().GetCustomAttributes(false);
                 bool hasconnections = false;

@@ -42,8 +42,8 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>(0);
-            modelload = provider.GetBehavior<ModelLoadBehavior>(1);
+            load = provider.GetBehavior<LoadBehavior>("entity");
+            modelload = provider.GetBehavior<ModelLoadBehavior>("model");
         }
         
         /// <summary>

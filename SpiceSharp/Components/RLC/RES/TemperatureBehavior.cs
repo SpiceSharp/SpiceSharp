@@ -37,9 +37,9 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>(0);
+            bp = provider.GetParameterSet<BaseParameters>("entity");
             if (!bp.Resistance.Given)
-                mbp = provider.GetParameterSet<ModelBaseParameters>(1);
+                mbp = provider.GetParameterSet<ModelBaseParameters>("model");
         }
         
         /// <summary>

@@ -60,11 +60,11 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>(0);
+            bp = provider.GetParameterSet<BaseParameters>("entity");
         }
         
         /// <summary>
@@ -99,8 +99,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix<double> matrix)
         {
-			if (matrix == null)
-				throw new ArgumentNullException(nameof(matrix));
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
 
             PosPosPtr = matrix.GetElement(posNode, posNode);
             NegNegPtr = matrix.GetElement(negNode, negNode);
@@ -114,8 +114,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <param name="simulation"></param>
         public override void GetDCState(TimeSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             // Calculate the state for DC
             var sol = simulation.RealState.Solution;

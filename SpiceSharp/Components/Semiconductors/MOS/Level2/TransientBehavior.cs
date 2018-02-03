@@ -84,13 +84,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>(0);
-            mbp = provider.GetParameterSet<ModelBaseParameters>(1);
+            bp = provider.GetParameterSet<BaseParameters>("entity");
+            mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            temp = provider.GetBehavior<TemperatureBehavior>(0);
-            load = provider.GetBehavior<LoadBehavior>(0);
-            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
+            temp = provider.GetBehavior<TemperatureBehavior>("entity");
+            load = provider.GetBehavior<LoadBehavior>("entity");
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>

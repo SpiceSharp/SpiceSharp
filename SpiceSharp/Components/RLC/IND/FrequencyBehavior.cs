@@ -39,14 +39,14 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="provider">Data provider</param>
         public override void Setup(SetupDataProvider provider)
         {
-			if (provider == null)
-				throw new ArgumentNullException(nameof(provider));
+            if (provider == null)
+                throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>(0);
+            bp = provider.GetParameterSet<BaseParameters>("entity");
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>(0);
+            load = provider.GetBehavior<LoadBehavior>("entity");
         }
 
         /// <summary>

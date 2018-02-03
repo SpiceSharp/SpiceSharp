@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            mbp = provider.GetParameterSet<ModelBaseParameters>(0);
+            mbp = provider.GetParameterSet<ModelBaseParameters>("entity");
         }
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="simulation">Base simulation</param>
         public override void Temperature(BaseSimulation simulation)
         {
-			if (simulation == null)
-				throw new ArgumentNullException(nameof(simulation));
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             if (!mbp.NominalTemperature.Given)
             {

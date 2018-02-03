@@ -92,15 +92,15 @@ namespace SpiceSharp.Components
 
             // Register inductor 1
             var eb = pool.GetEntityBehaviors(InductorName1) ?? throw new CircuitException("{0}: Could not find behaviors for inductor '{1}'".FormatString(Name, InductorName1));
-            data.Add(eb);
+            data.Add("inductor1", eb);
             var parameters = Inductor1.ParameterSets;
-            data.Add(parameters);
+            data.Add("inductor1", parameters);
 
             // Register inductor 2
             eb = pool.GetEntityBehaviors(InductorName2) ?? throw new CircuitException("{0}: Could not find behaviors for inductor '{1}'".FormatString(Name, InductorName2));
-            data.Add(eb);
+            data.Add("inductor2", eb);
             parameters = Inductor2.ParameterSets;
-            data.Add(parameters);
+            data.Add("inductor2", parameters);
 
             return data;
         }

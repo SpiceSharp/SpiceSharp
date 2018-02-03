@@ -72,17 +72,17 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>(0);
+            load = provider.GetBehavior<LoadBehavior>("entity");
         }
-        
+
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
         /// <param name="matrix">Matrix</param>
         public override void GetMatrixPointers(Matrix<Complex> matrix)
         {
-			if (matrix == null)
-				throw new ArgumentNullException(nameof(matrix));
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
 
             PosPosPtr = matrix.GetElement(posNode, posNode);
             NegNegPtr = matrix.GetElement(negNode, negNode);

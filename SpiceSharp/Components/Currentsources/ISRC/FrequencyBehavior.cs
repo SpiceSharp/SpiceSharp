@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            ap = provider.GetParameterSet<FrequencyParameters>(0);
+            ap = provider.GetParameterSet<FrequencyParameters>("entity");
 
             // Calculate the AC vector
             double radians = ap.ACPhase * Math.PI / 180.0;

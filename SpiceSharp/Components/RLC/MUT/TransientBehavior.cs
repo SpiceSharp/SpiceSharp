@@ -50,15 +50,15 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>(0);
-            var bp1 = provider.GetParameterSet<Components.InductorBehaviors.BaseParameters>(1);
-            var bp2 = provider.GetParameterSet<Components.InductorBehaviors.BaseParameters>(2);
+            bp = provider.GetParameterSet<BaseParameters>("entity");
+            var bp1 = provider.GetParameterSet<Components.InductorBehaviors.BaseParameters>("inductor1");
+            var bp2 = provider.GetParameterSet<Components.InductorBehaviors.BaseParameters>("inductor2");
 
             // Get behaviors
-            load1 = provider.GetBehavior<InductorBehaviors.LoadBehavior>(1);
-            load2 = provider.GetBehavior<InductorBehaviors.LoadBehavior>(2);
-            tran1 = provider.GetBehavior<InductorBehaviors.TransientBehavior>(1);
-            tran2 = provider.GetBehavior<InductorBehaviors.TransientBehavior>(2);
+            load1 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor1");
+            load2 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor2");
+            tran1 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
+            tran2 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor2");
 
             // Calculate coupling factor
             Factor = bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);

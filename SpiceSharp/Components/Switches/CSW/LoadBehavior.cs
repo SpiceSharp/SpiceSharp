@@ -91,12 +91,12 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>(0);
-            mbp = provider.GetParameterSet<ModelBaseParameters>(1);
+            bp = provider.GetParameterSet<BaseParameters>("entity");
+            mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            modelload = provider.GetBehavior<ModelLoadBehavior>(1);
-            vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>(2);
+            modelload = provider.GetBehavior<ModelLoadBehavior>("model");
+            vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>("control");
         }
 
         /// <summary>

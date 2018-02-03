@@ -86,12 +86,12 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            var p = provider.GetParameterSet<BaseParameters>(0);
+            var p = provider.GetParameterSet<BaseParameters>("entity");
 
             // Depending on whether or not the resistance is given, get behaviors
             if (!p.Resistance.Given)
             {
-                var temp = provider.GetBehavior<TemperatureBehavior>(0);
+                var temp = provider.GetBehavior<TemperatureBehavior>("entity");
                 Conductance = temp.Conductance;
             }
             else

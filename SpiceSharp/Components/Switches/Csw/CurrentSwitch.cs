@@ -101,8 +101,8 @@ namespace SpiceSharp.Components
             var provider = base.BuildSetupDataProvider(pool);
 
             // Add controlling voltage source data
-            provider.Add(pool.GetEntityBehaviors(ControllingName));
-            provider.Add(ControllingSource.ParameterSets);
+            provider.Add("control", pool.GetEntityBehaviors(ControllingName));
+            provider.Add("control", ControllingSource.ParameterSets);
             return provider;
         }
     }

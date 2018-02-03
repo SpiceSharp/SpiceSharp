@@ -14,16 +14,16 @@ namespace SpiceSharpTest.Circuits
         public void BadGroundNodeName()
         {
             // Verifies that CircuitException is thrown during Check when circuit has a ground node called "GND"
-            var ckt = CreateCircuit("GND");
-            ckt.Check();
+            var ckt = CreateCircuit("gnd");
+            ckt.Validate();
         }
 
         [TestMethod]
         public void CorrectGroundNodeName()
         {
             // Verifies that CircuitException is not thrown during Check when circuit has a ground node called "gnd"
-            var ckt = CreateCircuit("gnd");
-            ckt.Check();
+            var ckt = CreateCircuit("GND");
+            ckt.Validate();
         }
 
         [TestMethod]
@@ -31,7 +31,7 @@ namespace SpiceSharpTest.Circuits
         {
             // Verifies that CircuitException is not thrown during Check when circuit has a ground node called "0"
             var ckt = CreateCircuit("0");
-            ckt.Check();
+            ckt.Validate();
         }
 
         /// <summary>

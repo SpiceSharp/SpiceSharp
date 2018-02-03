@@ -53,13 +53,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>(0);
-            mbp = provider.GetParameterSet<ModelBaseParameters>(1);
+            bp = provider.GetParameterSet<BaseParameters>("entity");
+            mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>(0);
-            temp = provider.GetBehavior<TemperatureBehavior>(0);
-            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>(1);
+            load = provider.GetBehavior<LoadBehavior>("entity");
+            temp = provider.GetBehavior<TemperatureBehavior>("entity");
+            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
         
         /// <summary>

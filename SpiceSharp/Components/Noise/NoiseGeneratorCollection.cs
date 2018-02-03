@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// Gets a noise generator
         /// </summary>
         /// <param name="index">Index</param>
-        /// <returns></returns>
+        /// <returns>Noise source</returns>
         public NoiseGenerator this[int index]
         {
             get

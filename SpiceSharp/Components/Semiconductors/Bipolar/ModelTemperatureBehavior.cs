@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            mbp = provider.GetParameterSet<ModelBaseParameters>(0);
+            mbp = provider.GetParameterSet<ModelBaseParameters>("entity");
         }
 
         /// <summary>

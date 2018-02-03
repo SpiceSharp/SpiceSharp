@@ -84,5 +84,21 @@ namespace SpiceSharp.Components
             else
                 throw new CircuitException("{0}: Could not find voltage source '{1}'".FormatString(Name, ControllingName));
         }
+
+        /// <summary>
+        /// Setup data provider
+        /// </summary>
+        /// <param name="pool">Pool</param>
+        /// <returns></returns>
+        protected override Behaviors.SetupDataProvider BuildSetupDataProvider(Behaviors.BehaviorPool pool)
+        {
+            var provider = base.BuildSetupDataProvider(pool);
+
+            // Add the controlling source
+            provider.Add("control", pool.GetEntityBehaviors(ControllingName));
+            provider.Add("control", ControllingSource.ParameterSets);
+
+            return provider;
+        }
     }
 }
