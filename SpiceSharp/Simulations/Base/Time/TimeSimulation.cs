@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Diagnostics;
@@ -38,6 +37,32 @@ namespace SpiceSharp.Simulations
         /// <param name="name">Name</param>
         protected TimeSimulation(Identifier name) : base(name)
         {
+            ParameterSets.Add(new TimeConfiguration());
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="step">Timestep</param>
+        /// <param name="final">Final time</param>
+        protected TimeSimulation(Identifier name, double step, double final)
+            : base(name)
+        {
+            ParameterSets.Add(new TimeConfiguration(step, final));
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="step">Timstep</param>
+        /// <param name="stop">Stop</param>
+        /// <param name="maxStep">Maximum timestep</param>
+        protected TimeSimulation(Identifier name, double step, double stop, double maxStep)
+            : base(name)
+        {
+            ParameterSets.Add(new TimeConfiguration(step, stop, maxStep));
         }
 
         /// <summary>
@@ -49,16 +74,10 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get behaviors and configurations
-            var config = ParameterSets.Get<TimeConfiguration>();
+            var config = ParameterSets.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
             TimeConfiguration = config;
+            Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
             TransientBehaviors = SetupBehaviors<TransientBehavior>();
-
-            // Also configure the method
-            Method = TimeConfiguration.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
-            Method.Breaks.Clear();
-            Method.Breaks.SetBreakpoint(config.InitTime);
-            Method.Breaks.SetBreakpoint(config.FinalTime);
-            Method.Breaks.MinBreak = config.MaxStep * 5e-5;
 
             // Setup the state pool and register states
             StatePool = new StatePool(Method);
@@ -78,8 +97,12 @@ namespace SpiceSharp.Simulations
             // Base
             base.Execute();
 
-            // Get the method
-            Method = StatePool.Method;
+            // Initialize the method
+            Method.Initialize(TransientBehaviors);
+            Method.Breaks.Clear();
+            Method.Breaks.SetBreakpoint(TimeConfiguration.InitTime);
+            Method.Breaks.SetBreakpoint(TimeConfiguration.FinalTime);
+            Method.Breaks.MinBreak = TimeConfiguration.MaxStep * 5e-5;
         }
 
         /// <summary>

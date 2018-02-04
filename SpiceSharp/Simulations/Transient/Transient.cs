@@ -29,10 +29,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public Transient(Identifier name) : base(name)
-        {
-            ParameterSets.Add(new TimeConfiguration());
-        }
+        public Transient(Identifier name) : base(name) { }
 
         /// <summary>
         /// Constructor
@@ -40,9 +37,9 @@ namespace SpiceSharp.Simulations
         /// <param name="name">Name</param>
         /// <param name="step">Step</param>
         /// <param name="final">Final time</param>
-        public Transient(Identifier name, double step, double final) : base(name)
+        public Transient(Identifier name, double step, double final) 
+            : base(name, step, final)
         {
-            ParameterSets.Add(new TimeConfiguration(step, final));
         }
 
         /// <summary>
@@ -52,9 +49,9 @@ namespace SpiceSharp.Simulations
         /// <param name="step">Step</param>
         /// <param name="final">Final time</param>
         /// <param name="maxStep">Maximum timestep</param>
-        public Transient(Identifier name, double step, double final, double maxStep) : base(name)
+        public Transient(Identifier name, double step, double final, double maxStep) 
+            : base(name, step, final, maxStep)
         {
-            ParameterSets.Add(new TimeConfiguration(step, final, maxStep));
         }
 
         /// <summary>
@@ -96,30 +93,23 @@ namespace SpiceSharp.Simulations
             base.Execute();
             var exportargs = new ExportDataEventArgs(RealState, Method);
 
-            var circuit = Circuit;
             var state = RealState;
-            var baseconfig = BaseConfiguration;
-            var timeconfig = TimeConfiguration;
+            var baseConfig = BaseConfiguration;
+            var timeConfig = TimeConfiguration;
 
-            double delta = Math.Min(timeconfig.FinalTime / 50.0, timeconfig.Step) / 10.0;
+            double delta = Math.Min(timeConfig.FinalTime / 50.0, timeConfig.Step) / 10.0;
 
             // Initialize before starting the simulation
-            state.UseIC = timeconfig.UseIC;
-            state.UseDC = true;
-            state.UseSmallSignal = false;
+            state.UseIC = timeConfig.UseIC;
             state.Domain = RealState.DomainType.Time;
-            state.Gmin = baseconfig.Gmin;
-
-            // Setup breakpoints
-            Method.Initialize(TransientBehaviors);
-            state.Initialize(circuit);
+            state.Gmin = baseConfig.Gmin;
 
             // Calculate the operating point
-            Op(baseconfig.DCMaxIterations);
+            Op(baseConfig.DCMaxIterations);
             Statistics.TimePoints++;
-            Method.DeltaOld.Clear(timeconfig.MaxStep);
+            Method.DeltaOld.Clear(timeConfig.MaxStep);
             Method.Delta = delta;
-            Method.SaveDelta = timeconfig.FinalTime / 50.0;
+            Method.SaveDelta = timeConfig.FinalTime / 50.0;
 
             // Stop calculating a DC solution
             state.UseIC = false;
@@ -150,13 +140,13 @@ namespace SpiceSharp.Simulations
                     Statistics.Accepted++;
 
                     // Export the current timepoint
-                    if (Method.Time >= timeconfig.InitTime)
+                    if (Method.Time >= timeConfig.InitTime)
                     {
                         Export(exportargs);
                     }
 
                     // Detect the end of the simulation
-                    if (Method.Time >= timeconfig.FinalTime)
+                    if (Method.Time >= timeConfig.FinalTime)
                     {
                         // Keep our statistics
                         Statistics.TransientTime.Stop();
@@ -170,7 +160,7 @@ namespace SpiceSharp.Simulations
                     // Pause test - pausing not supported
 
                     // resume:
-                    Method.Delta = Math.Min(Method.Delta, timeconfig.MaxStep);
+                    Method.Delta = Math.Min(Method.Delta, timeConfig.MaxStep);
                     Method.Resume();
                     StatePool.History.Cycle();
 
@@ -186,7 +176,7 @@ namespace SpiceSharp.Simulations
                         // Try to solve the new point
                         if (Method.SavedTime == 0.0)
                             state.Init = RealState.InitializationStates.InitTransient;
-                        bool converged = TranIterate(timeconfig.TranMaxIterations);
+                        bool converged = TranIterate(timeConfig.TranMaxIterations);
                         Statistics.TimePoints++;
 
                         // Spice copies the states the first time, we're not
@@ -201,7 +191,7 @@ namespace SpiceSharp.Simulations
                             Method.Delta /= 8.0;
                             Method.CutOrder();
 
-                            var data = new TimestepCutEventArgs(circuit, Method.Delta / 8.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
+                            var data = new TimestepCutEventArgs(Circuit, Method.Delta / 8.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
                             TimestepCut?.Invoke(this, data);
                         }
                         else
@@ -215,15 +205,15 @@ namespace SpiceSharp.Simulations
                             else
                             {
                                 Statistics.Rejected++;
-                                var data = new TimestepCutEventArgs(circuit, Method.Delta, TimestepCutEventArgs.TimestepCutReason.Truncation);
+                                var data = new TimestepCutEventArgs(Circuit, Method.Delta, TimestepCutEventArgs.TimestepCutReason.Truncation);
                                 TimestepCut?.Invoke(this, data);
                             }
                         }
 
-                        if (Method.Delta <= timeconfig.DeltaMin)
+                        if (Method.Delta <= timeConfig.DeltaMin)
                         {
-                            if (Method.OldDelta > timeconfig.DeltaMin)
-                                Method.Delta = timeconfig.DeltaMin;
+                            if (Method.OldDelta > timeConfig.DeltaMin)
+                                Method.Delta = timeConfig.DeltaMin;
                             else
                                 throw new CircuitException("Timestep too small at t={0:g}: {1:g}".FormatString(Method.SavedTime, Method.Delta));
                         }

@@ -211,6 +211,15 @@ namespace SpiceSharp.Simulations
             Solution = new RealSolution(Order);
             OldSolution = new RealSolution(Order);
 
+            // Initialize all states and parameters
+            Init = InitializationStates.None;
+            Sparse = SparseStates.ShouldReorder;
+            Domain = DomainType.None;
+            DiagonalGmin = 0;
+            UseDC = true;
+            UseIC = false;
+            UseSmallSignal = false;
+
             base.Initialize(circuit);
         }
 
