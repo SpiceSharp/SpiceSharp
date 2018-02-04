@@ -5,7 +5,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// <summary>
     /// Truncate behavior for a <see cref="BSIM1"/>
     /// </summary>
-    public class BSIM1TruncateBehavior : CircuitObjectBehaviorTruncate
+    public class BSIM1TruncateBehavior : TruncateBehavior
     {
         /// <summary>
         /// Truncate

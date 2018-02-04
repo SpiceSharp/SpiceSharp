@@ -32,7 +32,7 @@ namespace SpiceSharp.Parser.Readers.Exports
             if (st.Parameters.Count != 1 || (st.Parameters[0].kind != WORD && st.Parameters[0].kind != IDENTIFIER))
                 return false;
 
-            CircuitIdentifier component = new CircuitIdentifier(st.Name.image.Substring(1));
+            Identifier component = new Identifier(st.Name.image.Substring(1));
             string parameter = st.Parameters[0].image.ToLower();
 
             var pe = new ParameterExport(component, parameter);
@@ -50,7 +50,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// <summary>
         /// The component
         /// </summary>
-        public CircuitIdentifier Component { get; }
+        public Identifier Component { get; }
 
         /// <summary>
         /// The parameter name
@@ -62,7 +62,7 @@ namespace SpiceSharp.Parser.Readers.Exports
         /// </summary>
         /// <param name="component">The component name</param>
         /// <param name="parameter">The parameter name</param>
-        public ParameterExport(CircuitIdentifier component, string parameter)
+        public ParameterExport(Identifier component, string parameter)
         {
             Component = component;
             Parameter = parameter;

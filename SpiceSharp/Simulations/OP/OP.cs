@@ -5,14 +5,13 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Operating Point analysis
     /// </summary>
-    public class OP : Simulation
+    public class OP : BaseSimulation
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
-        /// <param name="config">Configuration</param>
-        public OP(string name) : base(name)
+        public OP(Identifier name) : base(name)
         {
         }
 
@@ -21,22 +20,19 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Execute()
         {
-            var ckt = Circuit;
-
             // Setup the state
-            var state = ckt.State;
-            var rstate = state;
-            var config = CurrentConfig;
+            var state = RealState;
+            var baseconfig = BaseConfiguration;
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Domain = CircuitState.DomainTypes.None;
-            state.Gmin = config.Gmin;
+            state.Domain = RealState.DomainType.None;
+            state.Gmin = baseconfig.Gmin;
 
-            Initialize(ckt);
-            Op(ckt, config.DcMaxIterations);
-            Export(ckt);
-            Finalize(ckt);
+            Op(baseconfig.DCMaxIterations);
+
+            var exportargs = new ExportDataEventArgs(RealState);
+            Export(exportargs);
         }
     }
 }

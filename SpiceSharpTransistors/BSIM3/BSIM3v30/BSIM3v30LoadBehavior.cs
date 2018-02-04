@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// <summary>
     /// General behaviour for a <see cref="BSIM3v30"/>
     /// </summary>
-    public class BSIM3v30LoadBehavior : CircuitObjectBehaviorLoad
+    public class BSIM3v30LoadBehavior : LoadBehavior
     {
         /// <summary>
         /// Execute behaviour
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             double cqdef;
             double ceqqg, cqcheq, cqgate, cqbulk, cqdrn, ceqqb, ceqqd, Gmbs, FwdSum, RevSum, cdreq, ceqbd, ceqbs, gbbdp, gbbsp, gbdpg, gbdpdp, gbdpb, gbdpsp,
                         gbspg, gbspdp, gbspb, gbspsp;
-            bool ChargeComputationNeeded = (method != null || state.UseSmallSignal) || (state.Domain == CircuitState.DomainTypes.Time && state.UseDC && state.UseIC);
+            bool ChargeComputationNeeded = (method != null || state.UseSmallSignal) || (state.Domain == State.DomainTypes.Time && state.UseDC && state.UseIC);
 
             Check = 1;
             if (state.UseSmallSignal)
@@ -56,14 +56,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 vds = state.States[0][bsim3.BSIM3states + BSIM3v30.BSIM3vds];
                 qdef = state.States[0][bsim3.BSIM3states + BSIM3v30.BSIM3qdef];
             }
-            else if (state.Init == CircuitState.InitFlags.InitTransient)
+            else if (state.Init == State.InitFlags.InitTransient)
             {
                 vbs = state.States[1][bsim3.BSIM3states + BSIM3v30.BSIM3vbs];
                 vgs = state.States[1][bsim3.BSIM3states + BSIM3v30.BSIM3vgs];
                 vds = state.States[1][bsim3.BSIM3states + BSIM3v30.BSIM3vds];
                 qdef = state.States[1][bsim3.BSIM3states + BSIM3v30.BSIM3qdef];
             }
-            else if (state.Init == CircuitState.InitFlags.InitJct && !bsim3.BSIM3off)
+            else if (state.Init == State.InitFlags.InitJct && !bsim3.BSIM3off)
             {
                 vds = model.BSIM3type * bsim3.BSIM3icVDS;
                 vgs = model.BSIM3type * bsim3.BSIM3icVGS;
@@ -71,14 +71,14 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 qdef = 0.0;
 
                 if ((vds == 0.0) && (vgs == 0.0) && (vbs == 0.0) &&
-                            (method != null || state.UseDC || state.Domain == CircuitState.DomainTypes.None || !state.UseIC))
+                            (method != null || state.UseDC || state.Domain == State.DomainTypes.None || !state.UseIC))
                 {
                     vbs = 0.0;
                     vgs = model.BSIM3type * bsim3.pParam.BSIM3vth0 + 0.1;
                     vds = 0.1;
                 }
             }
-            else if ((state.Init == CircuitState.InitFlags.InitJct || state.Init == CircuitState.InitFlags.InitFix) && bsim3.BSIM3off)
+            else if ((state.Init == State.InitFlags.InitJct || state.Init == State.InitFlags.InitFix) && bsim3.BSIM3off)
             {
                 qdef = vbs = vgs = vds = 0.0;
             }
@@ -2127,7 +2127,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             /* 
             * check convergence
             */
-            if (!bsim3.BSIM3off || state.Init != CircuitState.InitFlags.InitFix)
+            if (!bsim3.BSIM3off || state.Init != State.InitFlags.InitFix)
             {
                 if (Check == 1)
                     state.IsCon = false;
@@ -2470,7 +2470,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
             if (!ChargeComputationNeeded)
                 goto line850;
 
-            if (state.Init == CircuitState.InitFlags.InitTransient)
+            if (state.Init == State.InitFlags.InitTransient)
             {
                 state.States[1][bsim3.BSIM3states + BSIM3v30.BSIM3qb] = state.States[0][bsim3.BSIM3states + BSIM3v30.BSIM3qb];
                 state.States[1][bsim3.BSIM3states + BSIM3v30.BSIM3qg] = state.States[0][bsim3.BSIM3states + BSIM3v30.BSIM3qg];
@@ -2540,7 +2540,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
                 cqcheq = state.States[0][bsim3.BSIM3states + BSIM3v30.BSIM3cqcheq] - (gcqgb * vgb - gcqdb * vbd - gcqsb * vbs) + T0;
             }
 
-            if (state.Init == CircuitState.InitFlags.InitTransient)
+            if (state.Init == State.InitFlags.InitTransient)
             {
                 state.States[1][bsim3.BSIM3states + BSIM3v30.BSIM3cqb] = state.States[0][bsim3.BSIM3states + BSIM3v30.BSIM3cqb];
                 state.States[1][bsim3.BSIM3states + BSIM3v30.BSIM3cqg] = state.States[0][bsim3.BSIM3states + BSIM3v30.BSIM3cqg];

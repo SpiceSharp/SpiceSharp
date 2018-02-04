@@ -22,7 +22,7 @@ namespace SpiceSharp.Parser.Readers
         /// <param name="name">The model name</param>
         /// <param name="type">The type</param>
         /// <returns></returns>
-        protected override ICircuitObject GenerateModel(CircuitIdentifier name, string type)
+        protected override Entity GenerateModel(Identifier name, string type)
         {
             switch (type)
             {

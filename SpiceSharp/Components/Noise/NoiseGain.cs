@@ -1,6 +1,8 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
+using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.Noise
+namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
     /// Noise generator with fixed gain
@@ -16,30 +18,32 @@ namespace SpiceSharp.Components.Noise
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the noise source</param>
-        public NoiseGain(string name, int a, int b) : base(name, a, b) { }
+        public NoiseGain(string name, int node1, int node2) : base(name, node1, node2) { }
 
         /// <summary>
         /// Set the values for the noise source
         /// </summary>
-        /// <param name="values">Values</param>
-        public override void Set(params double[] values)
+        /// <param name="coefficients">Values</param>
+        public override void SetCoefficients(params double[] coefficients)
         {
-            Gain = values[0];
+            if (coefficients == null)
+                throw new ArgumentNullException(nameof(coefficients));
+            Gain = coefficients[0];
         }
 
         /// <summary>
-        /// Calculate the noise contribution
+        /// Calculate noise coefficient
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="param">Parameter (unused)</param>
+        /// <param name="simulation">Noise simulation</param>
         /// <returns></returns>
-        protected override double CalculateNoise(Circuit ckt)
+        protected override double CalculateNoise(Noise simulation)
         {
-            var sol = ckt.State.Solution;
-            var isol = ckt.State.iSolution;
-            var rval = sol[NOISEnodes[0]] - sol[NOISEnodes[1]];
-            var ival = isol[NOISEnodes[0]] - isol[NOISEnodes[1]];
-            double gain = rval * rval + ival * ival;
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+            
+            var state = simulation.ComplexState;
+            Complex val = state.Solution[Nodes[0]] - state.Solution[Nodes[1]];
+            double gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
             return gain * Gain;
         }
     }

@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -12,27 +16,31 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Private variables
         /// </summary>
-        private double[] ag = new double[2];
-
-        /// <summary>
-        /// Get the maximum order for the trapezoidal rule
-        /// </summary>
-        public override int MaxOrder => 2;
+        double[] ag = new double[2];
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Trapezoidal(IntegrationConfiguration config = null)
-            : base(config)
+        public Trapezoidal()
+            : base(new IntegrationParameters(), 2)
         {
         }
 
         /// <summary>
-        /// Initialize
+        /// Constructor
         /// </summary>
-        public override void Initialize(Circuit ckt)
+        public Trapezoidal(IntegrationParameters config)
+            : base(config, 2)
         {
-            base.Initialize(ckt);
+        }
+        
+        /// <summary>
+        /// Initialize the trapezoidal integration method
+        /// </summary>
+        /// <param name="behaviors">Truncation behaviors</param>
+        public override void Initialize(Collection<TransientBehavior> behaviors)
+        {
+            base.Initialize(behaviors);
 
             ag = new double[MaxOrder];
             for (int i = 0; i < MaxOrder; i++)
@@ -40,45 +48,45 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Integrate a state variable
+        /// Integrate a variable at a specific index
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="index">The state index to integrate</param>
-        /// <param name="cap">The capacitance</param>
+        /// <param name="index">Index</param>
         /// <returns></returns>
-        public override Result Integrate(CircuitState state, int qcap, double cap)
+        public override void Integrate(History<RealSolution> history, int index)
         {
-            int ccap = qcap + 1;
+            if (history == null)
+                throw new ArgumentNullException(nameof(history));
+            int derivativeIndex = index + 1;
+            if (index < 0 || derivativeIndex >= history.Current.Length)
+                throw new CircuitException("Invalid state index {0}".FormatString(index));
+
+            var current = history.Current;
+            var previous = history[1];
+
 
             switch (Order)
             {
                 case 1:
-                    state.States[0][ccap] = ag[0] * state.States[0][qcap] + ag[1] * state.States[1][qcap];
+                    current[derivativeIndex] = ag[0] * current[index] + ag[1] * previous[index];
                     break;
 
                 case 2:
-                    state.States[0][ccap] = -state.States[1][ccap] * ag[1] + ag[0] * (state.States[0][qcap] - state.States[1][qcap]);
+                    current[derivativeIndex] = -previous[derivativeIndex] * ag[1] + ag[0] * (current[index] - previous[index]);
                     break;
 
                 default:
                     throw new CircuitException("Invalid order");
             }
-
-            // Create the returned object
-            Result result = new Result();
-            result.Ceq = state.States[0][ccap] - ag[0] * state.States[0][qcap];
-            result.Geq = ag[0] * cap;
-            return result;
         }
 
         /// <summary>
         /// Predict a new solution based on the previous ones
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Predict(Circuit ckt)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Predict(TimeSimulation simulation)
         {
-            // Get the state
-            var state = ckt.State;
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
 
             // Predict a solution
             double a, b;
@@ -115,25 +123,30 @@ namespace SpiceSharp.IntegrationMethods
         /// Uses the Local Truncation Error (LTE) to calculate an approximate timestep.
         /// The method is slightly different from the original Spice 3f5 version.
         /// </summary>
-        /// <param name="ckt">The circuit</param>
+        /// <param name="sender">Sender</param>
+        /// <param name="args">Arguments</param>
         /// <returns></returns>
-        public override double TruncateNodes(Circuit ckt)
+        protected override void TruncateNodes(object sender, TruncationEventArgs args)
         {
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
+
             // Get the state
-            var state = ckt.State;
+            var simulation = args.Simulation;
+            var state = simulation.RealState;
             double tol, diff, tmp;
             double timetemp = Double.PositiveInfinity;
-            int rows = ckt.Nodes.Count;
+            var nodes = simulation.Circuit.Nodes;
             int index = 0;
 
             // In my opinion, the original Spice method is kind of bugged and can be much better...
             switch (Order)
             {
                 case 1:
-                    for (int i = 0; i < ckt.Nodes.Count; i++)
+                    for (int i = 0; i < nodes.Count; i++)
                     {
-                        var node = ckt.Nodes[i];
-                        if (node.Type != CircuitNode.NodeType.Voltage)
+                        var node = nodes[i];
+                        if (node.UnknownType != Node.NodeType.Voltage)
                             continue;
                         index = node.Index;
 
@@ -141,18 +154,18 @@ namespace SpiceSharp.IntegrationMethods
                         diff = state.Solution[index] - Prediction[index];
                         if (diff != 0.0)
                         {
-                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
-                            tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(2.0 * Config.TrTol * tol / diff));
+                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * BaseParameters.LteRelativeTolerance + BaseParameters.LteAbsoluteTolerance;
+                            tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(2.0 * BaseParameters.TruncationTolerance * tol / diff));
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
                     break;
 
                 case 2:
-                    for (int i = 0; i < ckt.Nodes.Count; i++)
+                    for (int i = 0; i < nodes.Count; i++)
                     {
-                        var node = ckt.Nodes[i];
-                        if (node.Type != CircuitNode.NodeType.Voltage)
+                        var node = nodes[i];
+                        if (node.UnknownType != Node.NodeType.Voltage)
                             continue;
                         index = node.Index;
 
@@ -163,8 +176,8 @@ namespace SpiceSharp.IntegrationMethods
 
                         if (deriv != 0.0)
                         {
-                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * Config.LteRelTol + Config.LteAbsTol;
-                            tmp = DeltaOld[0] * Math.Pow(Math.Abs(12.0 * Config.TrTol * tol / deriv), 1.0 / 3.0);
+                            tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * BaseParameters.LteRelativeTolerance + BaseParameters.LteAbsoluteTolerance;
+                            tmp = DeltaOld[0] * Math.Pow(Math.Abs(12.0 * BaseParameters.TruncationTolerance * tol / deriv), 1.0 / 3.0);
                             timetemp = Math.Min(timetemp, tmp);
                         }
                     }
@@ -175,14 +188,14 @@ namespace SpiceSharp.IntegrationMethods
             }
 
             // Get the minimum timestep
-            return Math.Min(2.0 * Delta, timetemp);
+            args.Delta = timetemp;
         }
 
         /// <summary>
         /// Compute the coefficients for Trapezoidal integration
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void ComputeCoefficients(Circuit ckt)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void ComputeCoefficients(TimeSimulation simulation)
         {
             // Integration constants
             switch (Order)
@@ -198,7 +211,7 @@ namespace SpiceSharp.IntegrationMethods
                     break;
 
                 default:
-                    throw new CircuitException($"Invalid order {Order}");
+                    throw new CircuitException("Invalid order {0}".FormatString(Order));
             }
 
             // Store the derivative w.r.t. the current timestep
@@ -206,32 +219,38 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Control local truncation error on a state variable
+        /// Calculate the timestep based on the LTE (Local Truncation Error)
         /// </summary>
-        /// <param name="qcap">Index</param>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public override void Terr(int qcap, Circuit ckt, ref double timeStep)
+        /// <param name="history">History</param>
+        /// <param name="index">Index</param>
+        /// <param name="timestep">Timestep</param>
+        public override void LocalTruncateError(History<RealSolution> history, int index, ref double timestep)
         {
-            var state = ckt.State;
-            var config = ckt.Simulation.CurrentConfig ?? Simulations.SimulationConfiguration.Default;
-            int ccap = qcap + 1;
+            if (history == null)
+                throw new ArgumentNullException(nameof(history));
+            int derivativeIndex = index + 1;
+            if (index < 0 || derivativeIndex >= history.Current.Length)
+                throw new CircuitException("Invalid state index {0}".FormatString(index));
+            var current = history.Current;
+            var previous = history[1];
 
-            double[] diff = new double[state.States.Length];
+            double[] diff = new double[MaxOrder + 2];
             double[] deltmp = new double[DeltaOld.Length];
 
             // Calculate the tolerance
-            double volttol = config.AbsTol + config.RelTol * Math.Max(Math.Abs(state.States[0][ccap]), Math.Abs(state.States[1][ccap]));
-            double chargetol = Math.Max(Math.Abs(state.States[0][qcap]), Math.Abs(state.States[1][qcap]));
-            chargetol = config.RelTol * Math.Max(chargetol, config.ChgTol) / Delta;
+            // Note: These need to be available in the integration method configuration, defaults are used for now to avoid too much changes
+            double volttol = 1e-12 + 1e-3 * Math.Max(Math.Abs(current[derivativeIndex]), Math.Abs(previous[derivativeIndex]));
+            double chargetol = Math.Max(Math.Abs(current[index]), Math.Abs(previous[index]));
+            chargetol = 1e-3 * Math.Max(chargetol, 1e-14) / Delta;
             double tol = Math.Max(volttol, chargetol);
 
             // Now divided differences
-            for (int i = 0; i < diff.Length; i++)
-                diff[i] = state.States[i][qcap];
+            int j = 0;
+            foreach (var states in history)
+                diff[j++] = states[index];
             for (int i = 0; i < deltmp.Length; i++)
                 deltmp[i] = DeltaOld[i];
-            int j = Order;
+            j = Order;
             while (true)
             {
                 for (int i = 0; i <= j; i++)
@@ -248,16 +267,16 @@ namespace SpiceSharp.IntegrationMethods
             {
                 case 1: factor = 0.5; break;
                 case 2: factor = 0.0833333333; break;
-                default: throw new CircuitException($"Invalid order {Order}");
+                default: throw new CircuitException("Invalid order {0}".FormatString(Order));
             }
-            double del = Config.TrTol * tol / Math.Max(config.AbsTol, factor * Math.Abs(diff[0]));
+            double del = BaseParameters.TruncationTolerance * tol / Math.Max(1e-12, factor * Math.Abs(diff[0]));
             if (Order == 2)
                 del = Math.Sqrt(del);
             else if (Order > 2)
                 del = Math.Exp(Math.Log(del) / Order);
 
             // Return the timestep
-            timeStep = Math.Min(timeStep, del);
+            timestep = Math.Min(timestep, del);
         }
     }
 }

@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.Transistors
             {
                 ChargeComputationNeeded = true;
             }
-            else if (ckt.State.Domain == CircuitState.DomainTypes.Time && ckt.State.UseDC && ckt.State.UseIC)
+            else if (ckt.State.Domain == State.DomainTypes.Time && ckt.State.UseDC && ckt.State.UseIC)
             {
                 ChargeComputationNeeded = true;
             }

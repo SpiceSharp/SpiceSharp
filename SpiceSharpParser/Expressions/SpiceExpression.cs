@@ -146,7 +146,7 @@ namespace SpiceSharp.Parser.Expressions
         /// <summary>
         /// The parameters for expressions
         /// </summary>
-        public Dictionary<CircuitIdentifier, double> Parameters { get; set; }
+        public Dictionary<Identifier, double> Parameters { get; set; }
 
         /// <summary>
         /// Functions
@@ -361,7 +361,7 @@ namespace SpiceSharp.Parser.Expressions
                         }
                         else if (Parameters != null)
                         {
-                            CircuitIdentifier id = new CircuitIdentifier(sb.ToString());
+                            Identifier id = new Identifier(sb.ToString());
                             output.Push(Parameters[id]);
                             infixPostfix = true;
                         }

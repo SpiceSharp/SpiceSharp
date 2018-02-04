@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
     /// BSIM2 model device
     /// </summary>
     [SpicePins("Drain", "Gate", "Source", "Bulk"), ConnectedPins(0, 2, 3)]
-    public class BSIM2 : CircuitComponent
+    public class BSIM2 : Component
     {
         /// <summary>
         /// Register default behaviours
@@ -27,7 +27,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets or sets the device model
         /// </summary>
-        public void SetModel(BSIM2Model model) => Model = (ICircuitObject)model;
+        public void SetModel(BSIM2Model model) => Model = (Entity)model;
 
         /// <summary>
         /// Sizes
@@ -148,7 +148,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM2(CircuitIdentifier name) : base(name, B2pinCount)
+        public BSIM2(Identifier name) : base(name, B2pinCount)
         {
         }
 

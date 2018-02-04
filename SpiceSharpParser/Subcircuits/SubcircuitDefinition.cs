@@ -11,17 +11,17 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <summary>
         /// The name of the definition
         /// </summary>
-        public CircuitIdentifier Name { get; }
+        public Identifier Name { get; }
 
         /// <summary>
         /// The pins of the subcircuit definition
         /// </summary>
-        public List<CircuitIdentifier> Pins { get; } = new List<CircuitIdentifier>();
+        public List<Identifier> Pins { get; } = new List<Identifier>();
 
         /// <summary>
         /// The default parameters for this subcircuit definition
         /// </summary>
-        public Dictionary<CircuitIdentifier, Token> Defaults { get; } = new Dictionary<CircuitIdentifier, Token>();
+        public Dictionary<Identifier, Token> Defaults { get; } = new Dictionary<Identifier, Token>();
 
         /// <summary>
         /// The subcircuit definition body
@@ -33,7 +33,7 @@ namespace SpiceSharp.Parser.Subcircuits
         /// </summary>
         /// <param name="name">Name of the subcircuit definition</param>
         /// <param name="body">The statements</param>
-        public SubcircuitDefinition(CircuitIdentifier name, StatementsToken body)
+        public SubcircuitDefinition(Identifier name, StatementsToken body)
         {
             Name = name ?? throw new ParseException("Invalid subcircuit identifier");
             Body = body ?? throw new ParseException("Invalid subcircuit body");

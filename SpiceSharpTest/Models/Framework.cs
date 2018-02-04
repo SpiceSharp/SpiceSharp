@@ -1,11 +1,10 @@
 ﻿using System;
-using System.IO;
-using System.Text;
+using System.Numerics;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using SpiceSharp;
 using SpiceSharp.Simulations;
-using SpiceSharp.Components;
-using SpiceSharp.Parser.Readers;
-using MathNet.Numerics.Interpolation;
+using SpiceSharp.Circuits;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SpiceSharpTest.Models
@@ -16,144 +15,331 @@ namespace SpiceSharpTest.Models
     public class Framework
     {
         /// <summary>
-        /// Run a netlist using the standard parser
+        /// Absolute tolerance used
         /// </summary>
-        /// <param name="lines">The netlist to parse</param>
-        /// <returns></returns>
-        protected Netlist Run(params string[] lines)
+        public double AbsTol = 1e-12;
+
+        /// <summary>
+        /// Relative tolerance used
+        /// </summary>
+        public double RelTol = 1e-3;
+
+        /// <summary>
+        /// Apply a parameter definition to an entity
+        /// Parameters are a series of assignments [name]=[value] delimited by spaces.
+        /// </summary>
+        /// <param name="entity">Entity</param>
+        /// <param name="definition">Definition string</param>
+        protected void ApplyParameters(Entity entity, string definition)
         {
-            string netlist = string.Join(Environment.NewLine, lines);
-            MemoryStream m = new MemoryStream(Encoding.UTF8.GetBytes(netlist));
+            // Get all assignments
+            definition = Regex.Replace(definition, @"\s*\=\s*", "=");
+            string[] assignments = definition.Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var assignment in assignments)
+            {
+                // Get the name and value
+                string[] parts = assignment.Split('=');
+                if (parts.Length != 2)
+                    throw new Exception("Invalid assignment");
+                string name = parts[0].ToLower();
+                double value = double.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
 
-            // Create the parser and run it
-            NetlistReader r = new NetlistReader();
-
-            // Add our BSIM transistor models
-            var mosfets = r.Netlist.Readers[StatementType.Component].Find<MosfetReader>().Mosfets;
-            BSIMParser.AddMosfetGenerators(mosfets);
-            var levels = r.Netlist.Readers[StatementType.Model].Find<MosfetModelReader>().Levels;
-            BSIMParser.AddMosfetModelGenerators(levels);
-            r.Parse(m);
-
-            // Return the generated netlist
-            return r.Netlist;
+                // Set the entity parameter
+                entity.ParameterSets.SetProperty(name, value);
+            }
         }
 
         /// <summary>
-        /// Test using DC simulation
-        /// The netlist should contain one DC simulation. The first exporter is tested to the reference
+        /// Perform a test for OP analysis
         /// </summary>
-        /// <param name="netlist">Netlist</param>
-        /// <param name="reference">Reference values</param>
-        protected void TestDC(Netlist netlist, double[] reference)
+        /// <param name="sim">Simulation</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="exports">Exports</param>
+        /// <param name="references">References</param>
+        protected void AnalyzeOp(OP sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double> references)
         {
-            double abstol = netlist.Simulations[0].CurrentConfig.AbsTol;
-            double reltol = netlist.Simulations[0].CurrentConfig.RelTol;
-
-            int index = 0;
-            netlist.OnExportSimulationData += (object sender, SimulationData data) =>
+            sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
             {
-                double actual = netlist.Exports[0].Extract(data);
-                double expected = reference[index++];
-                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * reltol + abstol;
+                var export_it = exports.GetEnumerator();
+                var references_it = references.GetEnumerator();
 
-                try
+                while (export_it.MoveNext() && references_it.MoveNext())
                 {
+                    double actual = export_it.Current.Value;
+                    double expected = references_it.Current;
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
                     Assert.AreEqual(expected, actual, tol);
                 }
-                catch (Exception ex)
+            };
+            sim.Run(ckt);
+        }
+
+        /// <summary>
+        /// Perform a test for DC analysis
+        /// </summary>
+        /// <param name="sim">Simulation</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="exports">Exports</param>
+        /// <param name="references">References</param>
+        protected void AnalyzeDC(DC sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
+        {
+            int index = 0;
+            sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
+            {
+                var export_it = exports.GetEnumerator();
+                var references_it = references.GetEnumerator();
+
+                while (export_it.MoveNext() && references_it.MoveNext())
                 {
-                    // Add some more information in the exception
-                    DC dc = netlist.Simulations[0] as DC;
-                    string msg = ex.Message;
-                    if (dc != null)
+                    double actual = export_it.Current.Value;
+                    double expected = references_it.Current[index];
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
+
+                    try
                     {
-                        string[] sweep = new string[dc.Sweeps.Count];
-                        for (int i = 0; i < dc.Sweeps.Count; i++)
-                            sweep[i] = $"{dc.Sweeps[i].ComponentName} at {dc.Sweeps[i].CurrentValue}";
-                        msg += " - " + string.Join(" ; ", sweep);
+                        Assert.AreEqual(expected, actual, tol);
                     }
-                    throw new Exception(msg);
+                    catch (Exception ex)
+                    {
+                        string[] sweeps = new string[sim.Sweeps.Count];
+                        for (int k = 0; k < sim.Sweeps.Count; k++)
+                            sweeps[k] += $"{sim.Sweeps[k].Parameter}={sim.Sweeps[k].CurrentValue}";
+                        string msg = ex.Message + " at " + string.Join(" ", sweeps);
+                        throw new Exception(msg, ex);
+                    }
                 }
-            };
-            netlist.Simulate();
-        }
-
-        /// <summary>
-        /// Test using AC analysis
-        /// The netlist should contain one AC analysis and two exporters. The first exporter is the real part,
-        /// the second exporter the second part. The reference is the real part followed by the imaginary part for each datapoint.
-        /// </summary>
-        /// <param name="netlist">Netlist</param>
-        /// <param name="reference">Reference values</param>
-        protected void TestAC(Netlist netlist, double[] reference)
-        {
-            int index = 0;
-            netlist.OnExportSimulationData += (object sender, SimulationData data) =>
-            {
-                // Test real part
-                double actual = netlist.Exports[0].Extract(data);
-                double expected = reference[index++];
-                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-6 + 1e-12;
-                Assert.AreEqual(expected, actual, tol);
-
-                // Test the imaginary part
-                actual = netlist.Exports[1].Extract(data);
-                expected = reference[index++];
-                tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-6 + 1e-12;
-                Assert.AreEqual(expected, actual, tol);
-            };
-            netlist.Simulate();
-        }
-
-        /// <summary>
-        /// Test using transient simulation
-        /// The netlist should contain a transient simulation. The first exporter is tested to the reference
-        /// </summary>
-        /// <param name="netlist">Netlist</param>
-        /// <param name="reft">Reference time values</param>
-        /// <param name="refv">Reference values</param>
-        protected void TestTransient(Netlist netlist, double[] reft, double[] refv)
-        {
-            var interpolation = LinearSpline.Interpolate(reft, refv);
-            int index = 0;
-            netlist.OnExportSimulationData += (object sender, SimulationData data) =>
-            {
-                double time = data.GetTime();
-                double actual = netlist.Exports[0].Extract(data);
-                double expected = refv[index]; // interpolation.Interpolate(time);
-                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-5 + 1e-9;
-                Assert.AreEqual(expected, actual, tol);
                 index++;
             };
-            netlist.Simulate();
+            sim.Run(ckt);
         }
 
         /// <summary>
-        /// Test using the noise simulation
-        /// The netlist should contain a noise simulation. Input and output referred noise density are checked
+        /// Perform a test for AC analysis
         /// </summary>
-        /// <param name="netlist">Netlist</param>
-        /// <param name="reference">Reference values</param>
-        protected void TestNoise(Netlist netlist, double[] reference_in, double[] reference_out)
+        /// <param name="sim">Simulation</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="exports">Exports</param>
+        /// <param name="references">References</param>
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
         {
             int index = 0;
-            netlist.OnExportSimulationData += (object sender, SimulationData data) =>
+            sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
             {
-                double freq = data.GetFrequency();
-                double actual = Math.Log(data.GetInputNoiseDensity());
-                double expected = Math.Log(reference_in[index]);
-                double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
-                Assert.AreEqual(expected, actual, tol);
+                var exports_it = exports.GetEnumerator();
+                var references_it = references.GetEnumerator();
 
-                actual = Math.Log(data.GetOutputNoiseDensity());
-                expected = Math.Log(reference_out[index]);
-                tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-3 + 1e-12;
-                Assert.AreEqual(expected, actual, tol);
+                while (exports_it.MoveNext() && references_it.MoveNext())
+                {
+                    // Test export
+                    double actual = exports_it.Current.Value;
+                    double expected = references_it.Current[index];
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
 
+                    try
+                    {
+                        Assert.AreEqual(expected, actual, tol);
+                    }
+                    catch (Exception ex)
+                    {
+                        string msg = $"{ex.Message} at {data.Frequency} Hz";
+                        throw new Exception(msg, ex);
+                    }
+                }
                 index++;
             };
-            netlist.Simulate();
+            sim.Run(ckt);
+        }
+
+        /// <summary>
+        /// Perform a test for AC analysis
+        /// </summary>
+        /// <param name="sim">Simulation</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="exports">Exports</param>
+        /// <param name="references">References</param>
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<Complex>> exports, IEnumerable<Complex[]> references)
+        {
+            int index = 0;
+            sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
+            {
+                var exports_it = exports.GetEnumerator();
+                var references_it = references.GetEnumerator();
+
+                while (exports_it.MoveNext() && references_it.MoveNext())
+                {
+                    // Test export
+                    Complex actual = exports_it.Current.Value;
+                    Complex expected = references_it.Current[index];
+
+                    // Test real part
+                    double rtol = Math.Max(Math.Abs(actual.Real), Math.Abs(expected.Real)) * RelTol + AbsTol;
+                    double itol = Math.Max(Math.Abs(actual.Imaginary), Math.Abs(expected.Imaginary)) * RelTol + AbsTol;
+
+                    try
+                    {
+                        Assert.AreEqual(expected.Real, actual.Real, rtol);
+                        Assert.AreEqual(expected.Imaginary, actual.Imaginary, itol);
+                    }
+                    catch (Exception ex)
+                    {
+                        string msg = $"{ex.Message} at {data.Frequency} Hz";
+                        throw new Exception(msg, ex);
+                    }
+                }
+                index++;
+            };
+            sim.Run(ckt);
+        }
+
+        /// <summary>
+        /// Perform a test for AC analysis
+        /// </summary>
+        /// <param name="sim">Simulation</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="exports">Exports</param>
+        /// <param name="references">References</param>
+        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<Export<Complex>> exports, IEnumerable<Func<double, Complex>> references)
+        {
+            int index = 0;
+            sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
+            {
+                var exports_it = exports.GetEnumerator();
+                var references_it = references.GetEnumerator();
+
+                while (exports_it.MoveNext() && references_it.MoveNext())
+                {
+                    // Test export
+                    Complex actual = exports_it.Current.Value;
+                    Complex expected = references_it.Current(data.Frequency);
+
+                    // Test real part
+                    double rtol = Math.Max(Math.Abs(actual.Real), Math.Abs(expected.Real)) * RelTol + AbsTol;
+                    double itol = Math.Max(Math.Abs(actual.Imaginary), Math.Abs(expected.Imaginary)) * RelTol + AbsTol;
+
+                    try
+                    {
+                        Assert.AreEqual(expected.Real, actual.Real, rtol);
+                        Assert.AreEqual(expected.Imaginary, actual.Imaginary, itol);
+                    }
+                    catch (Exception ex)
+                    {
+                        string msg = $"{ex.Message} at {data.Frequency} Hz";
+                        throw new Exception(msg, ex);
+                    }
+                }
+                index++;
+            };
+            sim.Run(ckt);
+        }
+
+        /// <summary>
+        /// Perform a test for transient analysis
+        /// </summary>
+        /// <param name="sim">Simulation</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="exports">Exports</param>
+        /// <param name="references">References</param>
+        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
+        {
+            int index = 0;
+            sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
+            {
+                var exports_it = exports.GetEnumerator();
+                var references_it = references.GetEnumerator();
+
+                while (exports_it.MoveNext() && references_it.MoveNext())
+                {
+                    double actual = exports_it.Current.Value;
+                    double expected = references_it.Current[index];
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
+
+                    try
+                    {
+                        Assert.AreEqual(expected, actual, tol);
+                    }
+                    catch (Exception ex)
+                    {
+                        string msg = $"{ex.Message} at t={data.Time} s";
+                        throw new Exception(msg, ex);
+                    }
+                }
+                index++;
+            };
+            sim.Run(ckt);
+        }
+
+        /// <summary>
+        /// Perform a test for transient analysis where the reference is a function in time
+        /// </summary>
+        /// <param name="sim">Simulation</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="exports">Exports</param>
+        /// <param name="references">References</param>
+        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<Func<double, double>> references)
+        {
+            int index = 0;
+            sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
+            {
+                var exports_it = exports.GetEnumerator();
+                var references_it = references.GetEnumerator();
+
+                while (exports_it.MoveNext() && references_it.MoveNext())
+                {
+                    double t = data.Time;
+                    double actual = exports_it.Current.Value;
+                    double expected = references_it.Current(t);
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
+
+                    try
+                    {
+                        Assert.AreEqual(expected, actual, tol);
+                    }
+                    catch (Exception ex)
+                    {
+                        string msg = $"{ex.Message} at t={data.Time} s";
+                        throw new Exception(msg, ex);
+                    }
+                }
+                index++;
+            };
+            sim.Run(ckt);
+        }
+
+        /// <summary>
+        /// Perform a test for noise analysis
+        /// </summary>
+        /// <param name="sim">Simulation</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="exports">Exports</param>
+        /// <param name="references">References</param>
+        protected void AnalyzeNoise(Noise sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<double[]> references)
+        {
+            int index = 0;
+            sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
+            {
+                var exports_it = exports.GetEnumerator();
+                var references_it = references.GetEnumerator();
+
+                while (exports_it.MoveNext() && references_it.MoveNext())
+                {
+                    // Test export
+                    double actual = exports_it.Current.Value;
+                    double expected = references_it.Current[index];
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * 1e-6 + 1e-12;
+
+                    try
+                    {
+                        Assert.AreEqual(expected, actual, tol);
+                    }
+                    catch (Exception ex)
+                    {
+                        string msg = $"{ex.Message} at {data.Frequency} Hz";
+                        throw new Exception(msg, ex);
+                    }
+                }
+                index++;
+            };
+            sim.Run(ckt);
         }
     }
 }

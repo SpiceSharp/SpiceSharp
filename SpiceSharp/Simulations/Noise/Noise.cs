@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Numerics;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Parameters;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Behaviors;
@@ -16,164 +15,171 @@ namespace SpiceSharp.Simulations
     public class Noise : FrequencySimulation
     {
         /// <summary>
-        /// Gets or sets the noise output node
+        /// Gets the currently active noise configuration
         /// </summary>
-        [SpiceName("output"), SpiceInfo("Noise output summation node")]
-        public CircuitIdentifier Output { get; set; } = null;
+        public NoiseConfiguration NoiseConfiguration { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the noise output reference node
+        /// Gets the noise state
         /// </summary>
-        [SpiceName("outputref"), SpiceInfo("Noise output reference node")]
-        public CircuitIdentifier OutputRef { get; set; } = null;
+        public StateNoise NoiseState { get; } = new StateNoise();
 
         /// <summary>
-        /// Gets or sets the name of the AC source used as input reference
+        /// Noise behaviors
         /// </summary>
-        [SpiceName("input"), SpiceInfo("Name of the AC source used as input reference")]
-        public CircuitIdentifier Input { get; set; } = null;
-        
-        /// <summary>
-        /// Private variables
-        /// </summary>
-        private List<CircuitObjectBehaviorNoise> noisebehaviors;
+        protected Collection<NoiseBehavior> NoiseBehaviors { get; private set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        public Noise(string name) : base(name)
+        public Noise(Identifier name) : base(name)
         {
+            ParameterSets.Add(new NoiseConfiguration());
         }
 
         /// <summary>
-        /// Initialize the noise simulation
+        /// Constructor
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Initialize(Circuit ckt)
+        /// <param name="name">Name</param>
+        /// <param name="output">Output node</param>
+        /// <param name="input">Input source</param>
+        /// <param name="frequencySweep">Frequency sweep</param>
+        public Noise(Identifier name, Identifier output, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
-            // Get all behaviors necessary for noise analysis
-            noisebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorNoise>(ckt);
-            base.Initialize(ckt);
+            ParameterSets.Add(new NoiseConfiguration(output, null, input));
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="output">Output node</param>
+        /// <param name="reference">Reference output node</param>
+        /// <param name="input">Input</param>
+        /// <param name="frequencySweep">Frequency sweep</param>
+        public Noise(Identifier name, Identifier output, Identifier reference, Identifier input, Sweep<double> frequencySweep) : base(name, frequencySweep)
+        {
+            ParameterSets.Add(new NoiseConfiguration(output, reference, input));
+        }
+
+        /// <summary>
+        /// Setup the simulation
+        /// </summary>
+        protected override void Setup()
+        {
+            base.Setup();
+
+            // Get behaviors and configurations
+            NoiseConfiguration = ParameterSets.Get<NoiseConfiguration>();
+            NoiseBehaviors = SetupBehaviors<NoiseBehavior>();
+        }
+
+        /// <summary>
+        /// Unsetup the simulation
+        /// </summary>
+        protected override void Unsetup()
+        {
+            // Remove references
+            foreach (var behavior in NoiseBehaviors)
+                behavior.Unsetup();
+            NoiseBehaviors.Clear();
+            NoiseBehaviors = null;
+            NoiseConfiguration = null;
+
+            base.Unsetup();
+        }
 
         /// <summary>
         /// Execute the noise analysis
         /// </summary>
-        /// <param name="ckt">The circuit</param>
         protected override void Execute()
         {
-            var ckt = Circuit;
-            var state = ckt.State;
-            var config = CurrentConfig;
+            base.Execute();
+
+            var circuit = Circuit;
+            var state = RealState;
+            var cstate = ComplexState;
+            var noiseconfig = NoiseConfiguration;
+            var baseconfig = BaseConfiguration;
+            var exportargs = new ExportDataEventArgs(RealState, ComplexState);
 
             // Find the output nodes
-            int posOutNode = Output != null ? ckt.Nodes[Output].Index : 0;
-            int negOutNode = OutputRef != null ? ckt.Nodes[OutputRef].Index : 0;
+            int posOutNode = noiseconfig.Output != null ? circuit.Nodes[noiseconfig.Output].Index : 0;
+            int negOutNode = noiseconfig.OutputRef != null ? circuit.Nodes[noiseconfig.OutputRef].Index : 0;
 
             // Check the voltage or current source
-            if (Input == null)
-                throw new CircuitException($"{Name}: No input source specified");
-            ICircuitObject source = ckt.Objects[Input];
-            if (source is Voltagesource vsource)
-            {
-                if (!vsource.VSRCacMag.Given || vsource.VSRCacMag == 0.0)
-                    throw new CircuitException($"{Name}: Noise input source {vsource.Name} has no AC input");
-            }
-            else if (source is Currentsource isource)
-            {
-                if (!isource.ISRCacMag.Given || isource.ISRCacMag == 0.0)
-                    throw new CircuitException($"{Name}: Noise input source {isource.Name} has not AC input");
-            }
-            else
-                throw new CircuitException($"{Name}: No input source");
-
-            double freqdelta = 0.0;
-            int n = 0;
-
-            // Calculate the step
-            switch (StepType)
-            {
-                case StepTypes.Decade:
-                    freqdelta = Math.Exp(Math.Log(10.0) / NumberSteps);
-                    n = (int)Math.Floor(Math.Log(StopFreq / StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
-                    break;
-
-                case StepTypes.Octave:
-                    freqdelta = Math.Exp(Math.Log(2.0) / NumberSteps);
-                    n = (int)Math.Floor(Math.Log(StopFreq / StartFreq) / Math.Log(freqdelta) + 0.25) + 1;
-                    break;
-
-                case StepTypes.Linear:
-                    if (NumberSteps > 1)
-                    {
-                        freqdelta = (StopFreq - StartFreq) / (NumberSteps - 1);
-                        n = NumberSteps;
-                    }
-                    else
-                    {
-                        freqdelta = double.PositiveInfinity;
-                        n = 1;
-                    }
-                    break;
-
-                default:
-                    throw new CircuitException("Invalid step type");
-            }
-
+            // TODO: Note used? Check this!
+            // var source = FindInputSource(noiseconfig.Input);
+            
             // Initialize
-            state.Initialize(ckt);
-            ckt.State.Noise.Initialize(StartFreq);
-            state.Laplace = 0;
-            state.Domain = CircuitState.DomainTypes.Frequency;
+            var data = NoiseState;
+            state.Initialize(circuit);
+            data.Initialize(FrequencySweep.Initial);
+            cstate.Laplace = 0;
+            state.Domain = RealState.DomainType.Frequency;
             state.UseIC = false;
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Gmin = config.Gmin;
-            Initialize(ckt);
-            Op(ckt, config.DcMaxIterations);
+            state.Gmin = baseconfig.Gmin;
+            Op(baseconfig.DCMaxIterations);
+            state.Sparse |= RealState.SparseStates.ACShouldReorder;
 
-            var data = ckt.State.Noise;
-            state.Sparse |= CircuitState.SparseFlags.NIACSHOULDREORDER;
+            // Connect noise sources
+            foreach (var behavior in NoiseBehaviors)
+                behavior.ConnectNoise();
 
             // Loop through noise figures
-            for (int i = 0; i < n; i++)
+            foreach (double freq in FrequencySweep.Points)
             {
-                state.Laplace = new Complex(0.0, 2.0 * Math.PI * data.Freq);
-                AcIterate(ckt);
+                data.Frequency = freq;
+                cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
+                ACIterate(circuit);
 
-                double rval = state.Solution[posOutNode] - state.Solution[negOutNode];
-                double ival = state.iSolution[posOutNode] - state.iSolution[negOutNode];
-                data.GainSqInv = 1.0 / Math.Max(rval * rval + ival * ival, 1e-20);
+                Complex val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
+                data.GainInverseSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
 
                 // Solve the adjoint system
-                NzIterate(ckt, posOutNode, negOutNode);
+                NzIterate(posOutNode, negOutNode);
 
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit
-                data.outNdens = 0.0;
-                foreach (var behaviour in noisebehaviors)
-                    behaviour.Noise(ckt);
+                data.OutputNoiseDensity = 0.0;
+                foreach (var behavior in NoiseBehaviors)
+                    behavior.Noise(this);
 
                 // Export the data
-                Export(ckt);
-
-                // Increment the frequency
-                switch (StepType)
-                {
-                    case StepTypes.Decade:
-                    case StepTypes.Octave:
-                        data.Freq = data.Freq * freqdelta;
-                        break;
-
-                    case StepTypes.Linear:
-                        data.Freq = StartFreq + i * freqdelta;
-                        break;
-                }
+                Export(exportargs);
             }
+        }
 
-            Finalize(ckt);
+        /// <summary>
+        /// Find the input source used for calculating the input noise
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <returns></returns>
+        Entity FindInputSource(Identifier name)
+        {
+            if (name == null)
+                throw new CircuitException("{0}: No input source specified".FormatString(Name));
+
+            Entity source = Circuit.Objects[name];
+            if (source is VoltageSource vsource)
+            {
+                var ac = vsource.ParameterSets.Get<Components.VoltagesourceBehaviors.FrequencyParameters>();
+                if (!ac.ACMagnitude.Given || ac.ACMagnitude == 0.0)
+                    throw new CircuitException("{0}: Noise input source {1} has no AC input".FormatString(Name, vsource.Name));
+            }
+            else if (source is CurrentSource isource)
+            {
+                var ac = isource.ParameterSets.Get<Components.CurrentsourceBehaviors.FrequencyParameters>();
+                if (!ac.ACMagnitude.Given || ac.ACMagnitude == 0.0)
+                    throw new CircuitException("{0}: Noise input source {1} has not AC input".FormatString(Name, isource.Name));
+            }
+            else
+                throw new CircuitException("{0}: No input source".FormatString(Name));
+
+            return source;
         }
 
         /// <summary>
@@ -183,30 +189,35 @@ namespace SpiceSharp.Simulations
         /// hand side vector. The unit-valued current excitation is applied between
         /// nodes posDrive and negDrive.
         /// </summary>
-        /// <param name="ckt">The circuit</param>
         /// <param name="posDrive">The positive driving node</param>
         /// <param name="negDrive">The negative driving node</param>
-        private void NzIterate(Circuit ckt, int posDrive, int negDrive)
+        void NzIterate(int posDrive, int negDrive)
         {
-            var state = ckt.State;
+            var state = ComplexState;
 
             // Clear out the right hand side vector
             for (int i = 0; i < state.Rhs.Length; i++)
-            {
                 state.Rhs[i] = 0.0;
-                state.iRhs[i] = 0.0;
-            }
 
             // Apply unit current excitation
             state.Rhs[posDrive] = 1.0;
             state.Rhs[negDrive] = -1.0;
 
-            state.Matrix.SolveTransposed(state.Rhs, state.iRhs);
-
-            state.StoreSolution(true);
-
+            state.Matrix.SolveTransposed(state.Rhs, state.Rhs);
+            state.StoreSolution();
             state.Solution[0] = 0.0;
-            state.iSolution[0] = 0.0;
+        }
+
+        /// <summary>
+        /// Create an export for the total input density
+        /// </summary>
+        /// <param name="input">True if the noise density has to be input-referred</param>
+        /// <returns></returns>
+        public Func<RealState, double> CreateNoiseDensityExport(bool input)
+        {
+            if (input)
+                return (RealState state) => NoiseState.OutputNoiseDensity * NoiseState.GainInverseSquared;
+            return (RealState state) => NoiseState.OutputNoiseDensity;
         }
     }
 }

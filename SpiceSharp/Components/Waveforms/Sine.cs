@@ -1,5 +1,6 @@
 ﻿using System;
-using SpiceSharp.Parameters;
+using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -11,55 +12,67 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Parameters
         /// </summary>
-        [SpiceName("vo"), SpiceInfo("The offset of the sine wave")]
-        public Parameter VO { get; } = new Parameter();
-        [SpiceName("va"), SpiceInfo("The amplitude of the sine wave")]
-        public Parameter VA { get; } = new Parameter();
-        [SpiceName("freq"), SpiceInfo("The frequency in Hz")]
-        public Parameter Freq { get; } = new Parameter();
-        [SpiceName("td"), SpiceInfo("The delay in seconds")]
+        [PropertyName("vo"), PropertyInfo("The offset of the sine wave")]
+        public Parameter Offset { get; } = new Parameter();
+        [PropertyName("va"), PropertyInfo("The amplitude of the sine wave")]
+        public Parameter Amplitude { get; } = new Parameter();
+        [PropertyName("freq"), PropertyInfo("The frequency in Hz")]
+        public Parameter Frequency { get; } = new Parameter();
+        [PropertyName("td"), PropertyInfo("The delay in seconds")]
         public Parameter Delay { get; } = new Parameter();
-        [SpiceName("theta"), SpiceInfo("The damping factor")]
+        [PropertyName("theta"), PropertyInfo("The damping factor")]
         public Parameter Theta { get; } = new Parameter();
 
         /// <summary>
         /// Private variables
         /// </summary>
-        private double vo, va, freq, td, theta;
+        double vo, va, freq, td, theta;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Sine() : base() { }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="vo">The offset of the sine wave</param>
-        /// <param name="va">The amplitude of the sine wave</param>
-        /// <param name="freq">The frequency in Hz</param>
-        /// <param name="td">The delay in seconds</param>
-        /// <param name="theta">The damping factor</param>
-        public Sine(double vo, double va, double freq, double td = double.NaN, double theta = double.NaN) : base()
+        public Sine()
         {
-            VO.Set(vo);
-            VA.Set(va);
-            Freq.Set(freq);
-            if (!double.IsNaN(td))
-                Delay.Set(td);
-            if (!double.IsNaN(theta))
-                Theta.Set(theta);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="offset">Offset</param>
+        /// <param name="amplitude">Amplitude</param>
+        /// <param name="frequency">Frequency (Hz)</param>
+        /// <param name="delay">Delay (s)</param>
+        /// <param name="theta">Damping factor</param>
+        public Sine(double offset, double amplitude, double frequency, double delay, double theta)
+        {
+            Offset.Set(offset);
+            Amplitude.Set(amplitude);
+            Frequency.Set(frequency);
+            Delay.Set(delay);
+            Theta.Set(theta);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="offset">Offset</param>
+        /// <param name="amplitude">Amplitude</param>
+        /// <param name="frequency">Frequency (Hz)</param>
+        public Sine(double offset, double amplitude, double frequency)
+        {
+            Offset.Set(offset);
+            Amplitude.Set(amplitude);
+            Frequency.Set(frequency);
         }
 
         /// <summary>
         /// Setup the sine wave
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Setup(Circuit ckt)
+        public override void Setup()
         {
-            vo = VO;
-            va = VA;
-            freq = Freq;
+            vo = Offset;
+            va = Amplitude;
+            freq = Frequency;
             td = Delay;
             theta = Theta;
         }
@@ -72,19 +85,27 @@ namespace SpiceSharp.Components
         public override double At(double time)
         {
             time -= td;
+
+            // Calculate sine wave result (no offset)
             double result = 0.0;
             if (time <= 0.0)
-                result = vo;
+                result = 0.0;
             else
-                result = vo + va * Math.Sin(freq * time * 2.0 * Circuit.CONSTPI);
-            return result;
+                result = va * Math.Sin(freq * time * 2.0 * Math.PI);
+
+            // Modify with theta
+            if (Theta.Given)
+                result *= Math.Exp(-(time - td) / theta);
+
+            // Return result (with offset)
+            return vo + result;
         }
 
         /// <summary>
         /// Accept the current timepoint
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public override void Accept(Circuit ckt)
+        /// <param name="simulation">Time-based simulation</param>
+        public override void Accept(TimeSimulation simulation)
         {
             // Do nothing
         }

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Simulations
@@ -12,54 +11,80 @@ namespace SpiceSharp.Simulations
     public class Transient : TimeSimulation
     {
         /// <summary>
-        /// An event handler for when the timestep has been cut
-        /// </summary>
-        /// <param name="sender">The simulation that sends the event</param>
-        /// <param name="ckt">The circuit</param>
-        /// <param name="newstep">The timestep that will be tried next</param>
-        public delegate void TimestepCutEventHandler(object sender, TimestepCutData data);
-
-        /// <summary>
         /// Event that is called when the timestep has been cut due to convergence problems
         /// </summary>
-        public event TimestepCutEventHandler TimestepCut;
+        public event EventHandler<TimestepCutEventArgs> TimestepCut;
 
         /// <summary>
-        /// Private variables
+        /// Behaviors for accepting a timepoint
         /// </summary>
-        private List<CircuitObjectBehaviorAccept> acceptbehaviors;
-        private List<CircuitObjectBehaviorTruncate> truncatebehaviors;
+        protected Collection<AcceptBehavior> AcceptBehaviors { get; private set; }
+
+        /// <summary>
+        /// Behaviors for truncating the timestep
+        /// </summary>
+        protected Collection<TruncateBehavior> TruncateBehaviors { get; private set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="name">The name of the simulation</param>
-        /// <param name="config">The configuration</param>
-        public Transient(string name) : base(name)
+        /// <param name="name">Name</param>
+        public Transient(Identifier name) : base(name)
         {
+            ParameterSets.Add(new TimeConfiguration());
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="name">The name of the simulation</param>
-        /// <param name="step">The timestep</param>
-        /// <param name="final">The final timepoint</param>
-        public Transient(string name, double step, double final) : base(name)
+        /// <param name="name">Name</param>
+        /// <param name="step">Step</param>
+        /// <param name="final">Final time</param>
+        public Transient(Identifier name, double step, double final) : base(name)
         {
-            Step = step;
-            FinalTime = final;
+            ParameterSets.Add(new TimeConfiguration(step, final));
         }
 
         /// <summary>
-        /// Initialize the transient analysis
+        /// Constructor
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        public override void Initialize(Circuit ckt)
+        /// <param name="name">Name</param>
+        /// <param name="step">Step</param>
+        /// <param name="final">Final time</param>
+        /// <param name="maxStep">Maximum timestep</param>
+        public Transient(Identifier name, double step, double final, double maxStep) : base(name)
         {
-            acceptbehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorAccept>(ckt);
-            truncatebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTruncate>(ckt);
-            base.Initialize(ckt);
+            ParameterSets.Add(new TimeConfiguration(step, final, maxStep));
+        }
+
+        /// <summary>
+        /// Setup the simulation
+        /// </summary>
+        protected override void Setup()
+        {
+            base.Setup();
+
+            // Get behaviors and configurations
+            AcceptBehaviors = SetupBehaviors<AcceptBehavior>();
+            TruncateBehaviors = SetupBehaviors<TruncateBehavior>();
+        }
+
+        /// <summary>
+        /// Unsetup the behavior
+        /// </summary>
+        protected override void Unsetup()
+        {
+            // Remove references
+            foreach (var behavior in TruncateBehaviors)
+                behavior.Unsetup();
+            foreach (var behavior in AcceptBehaviors)
+                behavior.Unsetup();
+            TruncateBehaviors.Clear();
+            TruncateBehaviors = null;
+            AcceptBehaviors.Clear();
+            AcceptBehaviors = null;
+
+            base.Unsetup();
         }
 
         /// <summary>
@@ -67,59 +92,46 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Execute()
         {
-            var ckt = Circuit;
-            var state = ckt.State;
-            var rstate = state;
-            var config = CurrentConfig ?? throw new CircuitException("No configuration");
+            // First do temperature-dependent calculations and IC
+            base.Execute();
+            var exportargs = new ExportDataEventArgs(RealState, Method);
 
-            double delta = Math.Min(FinalTime / 50.0, Step) / 10.0;
+            var circuit = Circuit;
+            var state = RealState;
+            var baseconfig = BaseConfiguration;
+            var timeconfig = TimeConfiguration;
 
-            // Setup breakpoints
-            method.Breaks.Clear();
-            method.Breaks.SetBreakpoint(0.0);
-            method.Breaks.SetBreakpoint(FinalTime);
-            method.Breaks.MinBreak = MaxStep * 5e-5;
+            double delta = Math.Min(timeconfig.FinalTime / 50.0, timeconfig.Step) / 10.0;
 
             // Initialize before starting the simulation
-            state.UseIC = config.UseIC;
+            state.UseIC = timeconfig.UseIC;
             state.UseDC = true;
             state.UseSmallSignal = false;
-            state.Domain = CircuitState.DomainTypes.Time;
-            state.Gmin = config.Gmin;
+            state.Domain = RealState.DomainType.Time;
+            state.Gmin = baseconfig.Gmin;
 
             // Setup breakpoints
-            method.Initialize(ckt);
-            state.ReinitStates(method);
-
-            // Call events for initializing the simulation
-            Initialize(ckt);
+            Method.Initialize(TransientBehaviors);
+            state.Initialize(circuit);
 
             // Calculate the operating point
-            ckt.Method = null;
-            Op(ckt, config.DcMaxIterations);
-            ckt.Statistics.TimePoints++;
-            for (int i = 0; i < method.DeltaOld.Length; i++)
-            {
-                method.DeltaOld[i] = MaxStep;
-            }
-            method.Delta = delta;
-            method.SaveDelta = FinalTime / 50.0;
-
-            // Initialize the method
-            ckt.Method = method;
+            Op(baseconfig.DCMaxIterations);
+            Statistics.TimePoints++;
+            Method.DeltaOld.Clear(timeconfig.MaxStep);
+            Method.Delta = delta;
+            Method.SaveDelta = timeconfig.FinalTime / 50.0;
 
             // Stop calculating a DC solution
             state.UseIC = false;
             state.UseDC = false;
-            for (int i = 0; i < state.States[0].Length; i++)
-            {
-                state.States[1][i] = state.States[0][i];
-            }
+            foreach (var behavior in TransientBehaviors)
+                behavior.GetDCState(this);
+            StatePool.ClearDC();
 
             // Start our statistics
-            ckt.Statistics.TransientTime.Start();
-            int startIters = ckt.Statistics.NumIter;
-            var startselapsed = ckt.Statistics.SolveTime.Elapsed;
+            Statistics.TransientTime.Start();
+            int startIters = Statistics.Iterations;
+            var startselapsed = Statistics.SolveTime.Elapsed;
 
             try
             {
@@ -128,63 +140,54 @@ namespace SpiceSharp.Simulations
                     // nextTime:
 
                     // Accept the current timepoint (CKTaccept())
-                    foreach (var behavior in acceptbehaviors)
-                        behavior.Accept(ckt);
-                    method.SaveSolution(rstate.Solution);
+                    foreach (var behavior in AcceptBehaviors)
+                        behavior.Accept(this);
+                    Method.SaveSolution(state.Solution);
                     // end of CKTaccept()
 
                     // Check if current breakpoint is outdated; if so, clear
-                    method.UpdateBreakpoints();
-                    ckt.Statistics.Accepted++;
+                    Method.UpdateBreakpoints();
+                    Statistics.Accepted++;
 
                     // Export the current timepoint
-                    if (method.Time >= InitTime)
+                    if (Method.Time >= timeconfig.InitTime)
                     {
-                        Export(ckt);
+                        Export(exportargs);
                     }
 
                     // Detect the end of the simulation
-                    if (method.Time >= FinalTime)
+                    if (Method.Time >= timeconfig.FinalTime)
                     {
                         // Keep our statistics
-                        ckt.Statistics.TransientTime.Stop();
-                        ckt.Statistics.TranIter += ckt.Statistics.NumIter - startIters;
-                        ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
+                        Statistics.TransientTime.Stop();
+                        Statistics.TransientIterations += Statistics.Iterations - startIters;
+                        Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
 
                         // Finished!
-                        Finalize(ckt);
                         return;
                     }
 
                     // Pause test - pausing not supported
 
                     // resume:
-                    method.Delta = Math.Min(method.Delta, MaxStep);
-                    method.Resume();
-                    state.ShiftStates();
+                    Method.Delta = Math.Min(Method.Delta, timeconfig.MaxStep);
+                    Method.Resume();
+                    StatePool.History.Cycle();
 
                     // Calculate a new solution
                     while (true)
                     {
-                        method.TryDelta();
+                        Method.TryDelta();
 
                         // Compute coefficients and predict a solution and reset states to our previous solution
-                        method.ComputeCoefficients(ckt);
-                        method.Predict(ckt);
+                        Method.ComputeCoefficients(this);
+                        Method.Predict(this);
 
                         // Try to solve the new point
-                        if (method.SavedTime == 0.0)
-                            state.Init = CircuitState.InitFlags.InitTransient;
-                        bool converged = TranIterate(ckt, config.TranMaxIterations);
-                        ckt.Statistics.TimePoints++;
-                        if (method.SavedTime == 0.0)
-                        {
-                            for (int i = 0; i < state.States[1].Length; i++)
-                            {
-                                state.States[2][i] = state.States[1][i];
-                                state.States[3][i] = state.States[1][i];
-                            }
-                        }
+                        if (Method.SavedTime == 0.0)
+                            state.Init = RealState.InitializationStates.InitTransient;
+                        bool converged = TranIterate(timeconfig.TranMaxIterations);
+                        Statistics.TimePoints++;
 
                         // Spice copies the states the first time, we're not
                         // I believe this is because Spice treats the first timepoint after the OP as special (MODEINITTRAN)
@@ -193,90 +196,48 @@ namespace SpiceSharp.Simulations
                         if (!converged)
                         {
                             // Failed to converge, let's try again with a smaller timestep
-                            method.Rollback();
-                            ckt.Statistics.Rejected++;
-                            method.Delta /= 8.0;
-                            method.CutOrder();
+                            Method.Rollback();
+                            Statistics.Rejected++;
+                            Method.Delta /= 8.0;
+                            Method.CutOrder();
 
-                            var data = new TimestepCutData(ckt, method.Delta / 8.0, TimestepCutData.TimestepCutReason.Convergence);
+                            var data = new TimestepCutEventArgs(circuit, Method.Delta / 8.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
                             TimestepCut?.Invoke(this, data);
                         }
                         else
                         {
                             // Do not check the first time point
-                            if (method.SavedTime == 0.0 || method.LteControl(ckt))
+                            if (Method.SavedTime == 0.0 || Method.LteControl(this))
                             {
                                 // goto nextTime;
                                 break;
                             }
                             else
                             {
-                                ckt.Statistics.Rejected++;
-                                var data = new TimestepCutData(ckt, method.Delta, TimestepCutData.TimestepCutReason.Truncation);
+                                Statistics.Rejected++;
+                                var data = new TimestepCutEventArgs(circuit, Method.Delta, TimestepCutEventArgs.TimestepCutReason.Truncation);
                                 TimestepCut?.Invoke(this, data);
                             }
                         }
 
-                        if (method.Delta <= DeltaMin)
+                        if (Method.Delta <= timeconfig.DeltaMin)
                         {
-                            if (method.OldDelta > DeltaMin)
-                                method.Delta = DeltaMin;
+                            if (Method.OldDelta > timeconfig.DeltaMin)
+                                Method.Delta = timeconfig.DeltaMin;
                             else
-                                throw new CircuitException($"Timestep too small at t={method.SavedTime.ToString("g")}: {method.Delta.ToString("g")}");
+                                throw new CircuitException("Timestep too small at t={0:g}: {1:g}".FormatString(Method.SavedTime, Method.Delta));
                         }
                     }
                 }
             }
-            catch (CircuitException)
+            catch (CircuitException ex)
             {
                 // Keep our statistics
-                ckt.Statistics.TransientTime.Stop();
-                ckt.Statistics.TranIter += ckt.Statistics.NumIter - startIters;
-                ckt.Statistics.TransientSolveTime += ckt.Statistics.SolveTime.Elapsed - startselapsed;
-                throw;
+                Statistics.TransientTime.Stop();
+                Statistics.TransientIterations += Statistics.Iterations - startIters;
+                Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
+                throw new CircuitException("{0}: transient terminated".FormatString(Name), ex);
             }
-        }
-    }
-
-    /// <summary>
-    /// This class contains all data when a timestep cut event is triggered
-    /// </summary>
-    public class TimestepCutData
-    {
-        /// <summary>
-        /// Enumerations
-        /// </summary>
-        public enum TimestepCutReason
-        {
-            Convergence, // Cut due to convergence problems
-            Truncation // Cut due to the local truncation error
-        }
-
-        /// <summary>
-        /// Get the circuit
-        /// </summary>
-        public Circuit Circuit { get; }
-
-        /// <summary>
-        /// The new timestep that will be tried
-        /// </summary>
-        public double NewDelta { get; }
-
-        /// <summary>
-        /// Gets the reason for cutting the timestep
-        /// </summary>
-        public TimestepCutReason Reason { get; }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="ckt"></param>
-        /// <param name="newdelta"></param>
-        public TimestepCutData(Circuit ckt, double newdelta, TimestepCutReason reason)
-        {
-            Circuit = ckt;
-            NewDelta = newdelta;
-            Reason = reason;
         }
     }
 }

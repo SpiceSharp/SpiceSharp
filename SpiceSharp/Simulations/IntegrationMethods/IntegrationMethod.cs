@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using SpiceSharp.Circuits;
+using System.Collections.ObjectModel;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations;
+using SpiceSharp.Sparse;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -12,18 +13,14 @@ namespace SpiceSharp.IntegrationMethods
     public abstract class IntegrationMethod
     {
         /// <summary>
-        /// This class represents the result of integration
+        /// Gets the parameters for the integration method
         /// </summary>
-        public class Result
-        {
-            public double Geq = 0.0;
-            public double Ceq = 0.0;
-        }
+        public ParameterSetCollection Parameters { get; } = new ParameterSetCollection();
 
         /// <summary>
-        /// Gets the configuration for the integration method
+        /// Gets the base parameters for the integration method
         /// </summary>
-        public IntegrationConfiguration Config { get; } = new IntegrationConfiguration();
+        protected IntegrationParameters BaseParameters { get; private set; }
 
         /// <summary>
         /// The breakpoints
@@ -36,9 +33,9 @@ namespace SpiceSharp.IntegrationMethods
         public bool Break { get; protected set; }
 
         /// <summary>
-        /// Get the maximum order for the integration method
+        /// Gets the maximum order for the integration method
         /// </summary>
-        public abstract int MaxOrder { get; }
+        public int MaxOrder { get; }
 
         /// <summary>
         /// Gets the current order
@@ -71,19 +68,19 @@ namespace SpiceSharp.IntegrationMethods
         public double DeltaMin { get; set; } = 1e-12;
 
         /// <summary>
-        /// Get the old time steps
+        /// Gets the old time steps
         /// </summary>
-        public double[] DeltaOld { get; protected set; } = null;
+        public History<double> DeltaOld { get; }
 
         /// <summary>
-        /// Get the old solutions
+        /// Gets the old solutions
         /// </summary>
-        public double[][] Solutions { get; protected set; } = null;
+        public History<RealSolution> Solutions { get; } = null;
 
         /// <summary>
-        /// Get the prediction for the next timestep
+        /// Gets the prediction for the next timestep
         /// </summary>
-        public double[] Prediction { get; protected set; } = null;
+        public RealSolution Prediction { get; protected set; } = null;
 
         /// <summary>
         /// The first order derivative of any variable that is
@@ -92,72 +89,92 @@ namespace SpiceSharp.IntegrationMethods
         public double Slope { get; protected set; } = 0.0;
 
         /// <summary>
-        /// Get the last time point that was accepted
+        /// Gets the last time point that was accepted
         /// </summary>
         public double SavedTime { get { return savetime; } }
-
+        
         /// <summary>
         /// Private variables
         /// </summary>
-        private double savetime = double.NaN;
-        private List<CircuitObjectBehaviorTruncate> truncatebehaviors;
+        double savetime = double.NaN;
+        Collection<TransientBehavior> transientBehaviors;
 
         /// <summary>
-        /// Delegate for a truncation method
+        /// Event called when the timestep needs to be truncated
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <returns></returns>
-        public delegate double TruncationMethod(Circuit ckt);
-
-        /// <summary>
-        /// Truncate the timestep
-        /// </summary>
-        public TruncationMethod Truncate { get; protected set; } = null;
+        public event EventHandler<TruncationEventArgs> Truncate;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="config">The configuration</param>
-        public IntegrationMethod(IntegrationConfiguration config = null)
+        /// <param name="configuration">The configuration</param>
+        /// <param name="maxOrder">Maximum integration order</param>
+        protected IntegrationMethod(IntegrationParameters configuration, int maxOrder)
         {
-            Config = config ?? new IntegrationConfiguration();
-            DeltaOld = new double[MaxOrder + 2];
-            Solutions = new double[MaxOrder + 1][]; // new Vector<double>[MaxOrder + 1];
+            if (maxOrder < 1)
+                throw new CircuitException("Invalid order {0}".FormatString(maxOrder));
+            MaxOrder = maxOrder;
+
+            // Allocate history of timesteps
+            DeltaOld = new ArrayHistory<double>(maxOrder + 2);
+
+            // Allocate history of solutions
+            Solutions = new ArrayHistory<RealSolution>(maxOrder + 1);
+
+            // Create configuration if necessary
+            Parameters.Add(configuration ?? new IntegrationParameters());
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="maxOrder">Maximum integration order</param>
+        protected IntegrationMethod(int maxOrder)
+        {
+            if (maxOrder < 0)
+                throw new CircuitException("Invalid order {0}".FormatString(maxOrder));
+            MaxOrder = maxOrder;
+
+            // Allocate history of timesteps
+            DeltaOld = new ArrayHistory<double>(maxOrder + 2);
+
+            // Allocate history of solutions
+            Solutions = new ArrayHistory<RealSolution>(maxOrder + 1);
+
+            // Create configuration
+            Parameters.Add(new IntegrationParameters());
         }
 
         /// <summary>
         /// Save a solution for future integrations
         /// </summary>
         /// <param name="solution">The solution</param>
-        public void SaveSolution(double[] solution)
+        public void SaveSolution(RealSolution solution)
         {
+            if (solution == null)
+                throw new ArgumentNullException(nameof(solution));
+
             // Now, move the solution vectors around
             if (Solutions[0] == null)
             {
                 // No solutions yet, so allocate vectors
-                for (int i = 0; i < Solutions.Length; i++)
-                    Solutions[i] = new double[solution.Length]; // new DenseVector(solution.Count);
-                Prediction = new double[solution.Length];
-                // solution.CopyTo(Solutions[0]);
-                for (int i = 0; i < solution.Length; i++)
-                    Solutions[0][i] = solution[i];
+                Solutions.Clear((int index) => new RealSolution(solution.Length));
+                Prediction = new RealSolution(solution.Length);
+                solution.CopyTo(Solutions[0]);
             }
             else
             {
                 // Cycle through solutions
-                var tmp = Solutions[Solutions.Length - 1];
-                for (int i = Solutions.Length - 1; i > 0; i--)
-                    Solutions[i] = Solutions[i - 1];
-                Solutions[0] = tmp;
-                for (int i = 0; i < solution.Length; i++)
-                    Solutions[0][i] = solution[i];
+                Solutions.Cycle();
+                solution.CopyTo(Solutions[0]);
             }
         }
 
         /// <summary>
         /// Initialize/reset the integration method
         /// </summary>
-        public virtual void Initialize(Circuit ckt)
+        /// <param name="behaviors">Truncation behaviors</param>
+        public virtual void Initialize(Collection<TransientBehavior> behaviors)
         {
             // Initialize variables
             Time = 0.0;
@@ -165,25 +182,18 @@ namespace SpiceSharp.IntegrationMethods
             Delta = 0.0;
             Order = 1;
             Prediction = null;
-            DeltaOld = new double[MaxOrder + 1];
-            Solutions = new double[MaxOrder + 1][]; // new Vector<double>[MaxOrder + 1];
+            DeltaOld.Clear(0.0);
+            Solutions.Clear((RealSolution)null);
 
-            // Choose the truncation method
-            switch (Config.TruncationMethod)
-            {
-                case IntegrationConfiguration.TruncationMethods.PerDevice:
-                    Truncate = TruncateDevices;
-                    truncatebehaviors = Behaviors.Behaviors.CreateBehaviors<CircuitObjectBehaviorTruncate>(ckt);
-                    break;
+            // Get parameters
+            BaseParameters = Parameters.Get<IntegrationParameters>();
 
-                case IntegrationConfiguration.TruncationMethods.PerNode:
-                    Truncate = TruncateNodes;
-                    truncatebehaviors = null;
-                    break;
-
-                default:
-                    throw new CircuitException("Invalid truncation method");
-            }
+            // Register default truncation methods
+            transientBehaviors = behaviors;
+            if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerDevice))
+                Truncate += TruncateDevices;
+            if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerNode))
+                Truncate += TruncateNodes;
 
             // Last point was START so the current point is the point after a breakpoint (start)
             Break = true;
@@ -193,7 +203,6 @@ namespace SpiceSharp.IntegrationMethods
         /// Advance the time with the specified timestep for the first time
         /// The actual timestep may be smaller due to breakpoints
         /// </summary>
-        /// <param name="delta">The timestep</param>
         public void Resume()
         {
             // Are we at a breakpoint, or indistinguishably close?
@@ -224,9 +233,7 @@ namespace SpiceSharp.IntegrationMethods
             }
 
             // Update old delta's with the current delta
-            for (int i = DeltaOld.Length - 2; i >= 0; i--)
-                DeltaOld[i + 1] = DeltaOld[i];
-            DeltaOld[0] = Delta;
+            DeltaOld.Store(Delta);
         }
 
         /// <summary>
@@ -236,12 +243,12 @@ namespace SpiceSharp.IntegrationMethods
         {
             // Check for invalid timesteps
             if (double.IsNaN(Delta))
-                throw new CircuitException("Invalid timestep");
+                throw new CircuitException("Invalid time step");
 
             OldDelta = Delta;
             savetime = Time;
             Time += Delta;
-            DeltaOld[0] = Delta;
+            DeltaOld.Current = Delta;
         }
 
         /// <summary>
@@ -262,13 +269,13 @@ namespace SpiceSharp.IntegrationMethods
         public void Retry(double delta)
         {
             if (delta > Delta)
-                throw new CircuitException("The timestep can only shrink when retrying a new timestep");
+                throw new CircuitException("The time step can only shrink when retrying a new timestep");
             if (delta < DeltaMin)
                 delta = DeltaMin;
 
             // Update all the variables
             Delta = delta;
-            DeltaOld[0] = delta;
+            DeltaOld.Current = delta;
             Time = savetime + delta;
 
             // Cut the integration order
@@ -280,29 +287,37 @@ namespace SpiceSharp.IntegrationMethods
         /// The result is stored in Delta
         /// Note: This method does not advance time!
         /// </summary>
-        /// <param name="ckt">The circuit</param>
+        /// <param name="simulation">Time-based simulation</param>
         /// <returns>True if the timestep isn't cut</returns>
-        public bool LteControl(Circuit ckt)
+        public bool LteControl(TimeSimulation simulation)
         {
-            double newdelta = Truncate(ckt);
+            // Invoke truncation event
+            TruncationEventArgs args = new TruncationEventArgs(simulation, Delta);
+            Truncate?.Invoke(this, args);
+            double newdelta = args.Delta;
+
             if (newdelta > 0.9 * Delta)
             {
                 if (Order == 1)
                 {
                     Order = 2;
-                    newdelta = Truncate(ckt);
+
+                    // Invoke truncation event
+                    args = new TruncationEventArgs(simulation, Delta);
+                    Truncate?.Invoke(this, args);
+                    newdelta = args.Delta;
+
                     if (newdelta <= 1.05 * Delta)
                         Order = 1;
                 }
                 Delta = newdelta;
                 return true;
             }
-            else
-            {
-                Rollback();
-                Delta = newdelta;
-                return false;
-            }
+
+            // Truncation too strict, we'll have to recalculate the timepoint
+            Rollback();
+            Delta = newdelta;
+            return false;
         }
 
         /// <summary>
@@ -317,69 +332,56 @@ namespace SpiceSharp.IntegrationMethods
         }
 
         /// <summary>
-        /// Integrate a state variable
-        /// Note that the integrated quantity will/should be stored at the next index!
+        /// Integrate a state variable at a specific index
         /// </summary>
-        /// <param name="state">The state of the circuit</param>
-        /// <param name="index">The index of the variable to be integrated</param>
-        /// <param name="cap">The capacitance</param>
+        /// <param name="history">The history</param>
+        /// <param name="index">The index of the state to be used</param>
         /// <returns></returns>
-        public abstract Result Integrate(CircuitState state, int index, double cap);
+        public abstract void Integrate(History<RealSolution> history, int index);
 
         /// <summary>
-        /// Integrate a state variable
-        /// Note that the integrated quantity will/should be stored at the next index!
+        /// Do truncation for all nodes
         /// </summary>
-        /// <param name="state">The state of the circuit</param>
-        /// <param name="geq">The Geq parameter</param>
-        /// <param name="ceq">The Ceq parameter</param>
-        /// <param name="index">The index of the variable to be integrated</param>
-        /// <param name="cap">The capacitance</param>
-        public void Integrate(CircuitState state, out double geq, out double ceq, int index, double cap)
+        /// <param name="sender">Sender</param>
+        /// <param name="args">Arguments</param>
+        /// <returns></returns>
+        protected abstract void TruncateNodes(object sender, TruncationEventArgs args);
+
+        /// <summary>
+        /// Do truncation for all devices
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="args">Arguments</param>
+        /// <returns></returns>
+        protected void TruncateDevices(object sender, TruncationEventArgs args)
         {
-            var result = Integrate(state, index, cap);
-            geq = result.Geq;
-            ceq = result.Ceq;
-        }
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
 
-        /// <summary>
-        /// Truncate the timestep based on the nodes
-        /// </summary>
-        /// <param name="ckt">The circuit</param>
-        /// <returns></returns>
-        public abstract double TruncateNodes(Circuit ckt);
-
-        /// <summary>
-        /// Do truncation using devices
-        /// </summary>
-        /// <param name="ckt"></param>
-        /// <returns></returns>
-        protected double TruncateDevices(Circuit ckt)
-        {
             double timetmp = double.PositiveInfinity;
-            foreach (var behavior in truncatebehaviors)
-                behavior.Truncate(ckt, ref timetmp);
-            return Math.Min(Delta * 2.0, timetmp);
+            foreach (var behavior in transientBehaviors)
+                behavior.Truncate(ref timetmp);
+            args.Delta = timetmp;
         }
 
         /// <summary>
         /// Calculate a prediction based on the current timestep
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public abstract void Predict(Circuit ckt);
+        /// <param name="simulation">Time-based simulation</param>
+        public abstract void Predict(TimeSimulation simulation);
 
         /// <summary>
         /// Compute the coefficients needed for integration
         /// </summary>
-        /// <param name="ckt">The circuit</param>
-        public abstract void ComputeCoefficients(Circuit ckt);
+        /// <param name="simulation">Time-based simulation</param>
+        public abstract void ComputeCoefficients(TimeSimulation simulation);
 
         /// <summary>
-        /// LTE control by state variables
+        /// Calculate the new timestep based on the LTE (local truncation error)
         /// </summary>
-        /// <param name="qcap">Index of the state containing the charges</param>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="timeStep">Timestep</param>
-        public abstract void Terr(int qcap, Circuit ckt, ref double timeStep);
+        /// <param name="history">The history of states</param>
+        /// <param name="index">Index</param>
+        /// <param name="timestep">Timestep</param>
+        public abstract void LocalTruncateError(History<RealSolution> history, int index, ref double timestep);
     }
 }

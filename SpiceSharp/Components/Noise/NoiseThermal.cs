@@ -1,4 +1,8 @@
-﻿namespace SpiceSharp.Components.Noise
+﻿using System;
+using System.Numerics;
+using SpiceSharp.Simulations;
+
+namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
     /// Thermal noise generator
@@ -15,31 +19,33 @@
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the noise source</param>
-        public NoiseThermal(string name, int a, int b) : base(name, a, b) { }
+        public NoiseThermal(string name, int node1, int node2) : base(name, node1, node2) { }
 
         /// <summary>
         /// Set the parameters for the thermal noise
         /// </summary>
-        /// <param name="values">Values</param>
-        public override void Set(params double[] values)
+        /// <param name="coefficients">Values</param>
+        public override void SetCoefficients(params double[] coefficients)
         {
-            Conductance = values[0];
+            if (coefficients == null)
+                throw new ArgumentNullException(nameof(coefficients));
+            Conductance = coefficients[0];
         }
 
         /// <summary>
         /// Calculate the noise quantity
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="param">The conductance of a resistor</param>
+        /// <param name="simulation">Noise simulation</param>
         /// <returns></returns>
-        protected override double CalculateNoise(Circuit ckt)
+        protected override double CalculateNoise(Noise simulation)
         {
-            var rsol = ckt.State.Solution;
-            var isol = ckt.State.iSolution;
-            var rval = rsol[NOISEnodes[0]] - rsol[NOISEnodes[1]];
-            var ival = isol[NOISEnodes[0]] - isol[NOISEnodes[1]];
-            double gain = rval * rval + ival * ival;
-            return 4.0 * Circuit.CONSTBoltz * ckt.State.Temperature * Conductance * gain;
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+
+            var state = simulation.ComplexState;
+            Complex val = state.Solution[Nodes[0]] - state.Solution[Nodes[1]];
+            double gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
+            return 4.0 * Circuit.Boltzmann * simulation.RealState.Temperature * Conductance * gain;
         }
     }
 }

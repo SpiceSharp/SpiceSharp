@@ -53,7 +53,7 @@ namespace SpiceSharp
         /// <summary>
         /// Get all subcircuit definitions
         /// </summary>
-        public Dictionary<CircuitIdentifier, SubcircuitDefinition> Definitions { get; } = new Dictionary<CircuitIdentifier, SubcircuitDefinition>();
+        public Dictionary<Identifier, SubcircuitDefinition> Definitions { get; } = new Dictionary<Identifier, SubcircuitDefinition>();
 
         /// <summary>
         /// Event called before a new simulation is started

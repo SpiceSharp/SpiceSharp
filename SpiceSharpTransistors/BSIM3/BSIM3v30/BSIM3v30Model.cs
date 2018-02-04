@@ -10,7 +10,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// The BSIM3v30 Model
     /// </summary>
-    public class BSIM3v30Model : CircuitModel
+    public class BSIM3v30Model : Model
     {
         /// <summary>
         /// Register default behaviours
@@ -957,7 +957,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the device</param>
-        public BSIM3v30Model(CircuitIdentifier name) : base(name)
+        public BSIM3v30Model(Identifier name) : base(name)
         {
         }
 

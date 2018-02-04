@@ -42,7 +42,7 @@ namespace SpiceSharp.Parser.Readers
             for (int i = 0; i < count; i++)
             {
                 DC.Sweep sweep = new DC.Sweep(
-                    new CircuitIdentifier(st.Parameters[i * 4].image),
+                    new Identifier(st.Parameters[i * 4].image),
                     netlist.ParseDouble(st.Parameters[i * 4 + 1]),
                     netlist.ParseDouble(st.Parameters[i * 4 + 2]),
                     netlist.ParseDouble(st.Parameters[i * 4 + 3]));

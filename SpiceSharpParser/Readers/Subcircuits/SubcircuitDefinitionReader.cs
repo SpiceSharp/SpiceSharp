@@ -26,7 +26,7 @@ namespace SpiceSharp.Parser.Readers
                 throw new ParseException(st.Name, "Subcircuit name expected", false);
 
             // Create the identifier of the subcircuit definition
-            CircuitIdentifier name = new CircuitIdentifier(st.Parameters[0].image);
+            Identifier name = new Identifier(st.Parameters[0].image);
             if (netlist.Path.DefinitionPath != null)
                 name = netlist.Path.DefinitionPath.Grow(name);
 
@@ -49,17 +49,17 @@ namespace SpiceSharp.Parser.Readers
                     {
                         mode = false;
                         AssignmentToken at = st.Parameters[i] as AssignmentToken;
-                        definition.Defaults.Add(new CircuitIdentifier(at.Name.image), at.Value);
+                        definition.Defaults.Add(new Identifier(at.Name.image), at.Value);
                     }
 
                     // Still reading nodes
                     else if (ReaderExtension.IsNode(st.Parameters[i]))
-                        definition.Pins.Add(new CircuitIdentifier(st.Parameters[i].image));
+                        definition.Pins.Add(new Identifier(st.Parameters[i].image));
                 }
                 else if (st.Parameters[i].kind == ASSIGNMENT)
                 {
                     AssignmentToken at = st.Parameters[i] as AssignmentToken;
-                    definition.Defaults.Add(new CircuitIdentifier(at.Name.image), at.Value);
+                    definition.Defaults.Add(new Identifier(at.Name.image), at.Value);
                 }
             }
 

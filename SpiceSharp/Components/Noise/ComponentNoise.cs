@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using SpiceSharp.Simulations;
+using SpiceSharp.Components.NoiseSources;
 
 namespace SpiceSharp.Components
 {
@@ -8,85 +11,95 @@ namespace SpiceSharp.Components
     public class ComponentNoise
     {
         /// <summary>
-        /// Get the total output-referred noise density
+        /// Gets the total output-referred noise density
         /// </summary>
         public double Noise { get; private set; }
 
         /// <summary>
-        /// Get the log of the total output-referred noise density
+        /// Gets the log of the total output-referred noise density
         /// </summary>
-        public double LnNoise { get; private set; }
+        public double LogNoise { get; private set; }
 
         /// <summary>
         /// Gets the total integrated output-referred noise
         /// </summary>
-        public double OutNoiz { get; private set; }
+        public double TotalOutNoise { get; private set; }
 
         /// <summary>
         /// Gets the total integrated input-referred noise
         /// </summary>
-        public double InNoiz { get; private set; }
+        public double TotalInNoise { get; private set; }
 
         /// <summary>
-        /// Get all generators
+        /// Gets all generators
         /// </summary>
-        public NoiseGenerator[] Generators { get; }
+        public NoiseGeneratorCollection Generators { get; }
 
         /// <summary>
         /// Constructor
-        /// One generator is always added at the end for the total noise density
         /// </summary>
         /// <param name="generators">Names of the generators</param>
         public ComponentNoise(params NoiseGenerator[] generators)
         {
-            Generators = new NoiseGenerator[generators.Length];
-            for (int i = 0; i < generators.Length; i++)
-                Generators[i] = generators[i];
+            if (generators == null)
+                throw new ArgumentNullException(nameof(generators));
+            Generators = new NoiseGeneratorCollection(generators);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="generators"></param>
+        public ComponentNoise(IEnumerable<NoiseGenerator> generators)
+        {
+            if (generators == null)
+                throw new ArgumentNullException(nameof(generators));
+            Generators = new NoiseGeneratorCollection(generators);
         }
 
         /// <summary>
         /// Setup the component noise
         /// </summary>
-        /// <param name="ckt">The circuit</param>
         /// <param name="pins">The pin indices</param>
-        public void Setup(Circuit ckt, params int[] pins)
+        public void Setup(params int[] pins)
         {
-            for (int i = 0; i < Generators.Length; i++)
-                Generators[i].Setup(ckt, pins);
+            foreach (var generator in Generators)
+                generator.Setup(pins);
         }
 
         /// <summary>
         /// Evaluate all noise source contributions
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="parameters">Parameters</param>
-        public void Evaluate(Circuit ckt)
+        /// <param name="simulation">Noise simulation</param>
+        public void Evaluate(Noise simulation)
         {
-            var noise = ckt.State.Noise;
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+            var noise = simulation.NoiseState;
 
             // Calculate the output noise density
             Noise = 0.0;
-            InNoiz = 0.0;
-            OutNoiz = 0.0;
-            for (int i = 0; i < Generators.Length; i++)
+            TotalInNoise = 0.0;
+            TotalOutNoise = 0.0;
+            foreach (var generator in Generators)
             {
-                Generators[i].Evaluate(ckt);
-                Noise += Generators[i].Noise;
-                InNoiz += Generators[i].InNoiz;
-                OutNoiz += Generators[i].OutNoiz;
+                generator.Evaluate(simulation);
+                Noise += generator.Noise;
+                TotalInNoise += generator.TotalInputNoise;
+                TotalOutNoise += generator.TotalOutputNoise;
             }
 
             // Log of the output noise density
-            LnNoise = Math.Log(Math.Max(Noise, 1e-38));
+            LogNoise = Math.Log(Math.Max(Noise, 1e-38));
 
             // Output noise density
-            noise.outNdens += Noise;
+            noise.OutputNoiseDensity += Noise;
 
             // Integrated input referred noise
-            noise.inNoise += InNoiz;
+            noise.InputNoise += TotalInNoise;
 
             // Integrated output referred noise
-            noise.outNoiz += OutNoiz;
+            noise.OutputNoise += TotalOutNoise;
         }
     }
 }

@@ -39,33 +39,33 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <summary>
         /// Gets or sets the current instance path
         /// </summary>
-        public CircuitIdentifier InstancePath { get; }
+        public Identifier InstancePath { get; }
 
         /// <summary>
         /// Gets or sets the current subcircuit definition path
         /// </summary>
-        public CircuitIdentifier DefinitionPath { get; }
+        public Identifier DefinitionPath { get; }
 
         /// <summary>
         /// The current parameters
         /// If no parameters are active, the global parameters are returned
         /// </summary>
-        public Dictionary<CircuitIdentifier, double> Parameters { get; }
+        public Dictionary<Identifier, double> Parameters { get; }
 
         /// <summary>
         /// Gets the currently active node map
         /// </summary>
-        public Dictionary<CircuitIdentifier, CircuitIdentifier> NodeMap { get; }
+        public Dictionary<Identifier, Identifier> NodeMap { get; }
 
         /// <summary>
         /// Get the global variables
         /// </summary>
-        public HashSet<CircuitIdentifier> Globals { get; }
+        public HashSet<Identifier> Globals { get; }
 
         /// <summary>
         /// Private variables
         /// </summary>
-        private Dictionary<CircuitIdentifier, double> globalparameters;
+        private Dictionary<Identifier, double> globalparameters;
 
         /// <summary>
         /// Constructor for the root path
@@ -73,13 +73,13 @@ namespace SpiceSharp.Parser.Subcircuits
         public SubcircuitPath()
         {
             // Root path? Ignore all other parameters
-            globalparameters = new Dictionary<CircuitIdentifier, double>();
+            globalparameters = new Dictionary<Identifier, double>();
             Parameters = globalparameters;
             InstancePath = null;
             DefinitionPath = null;
-            NodeMap = new Dictionary<CircuitIdentifier, CircuitIdentifier>();
-            Globals = new HashSet<CircuitIdentifier>();
-            Globals.Add(new CircuitIdentifier("0"));
+            NodeMap = new Dictionary<Identifier, Identifier>();
+            Globals = new HashSet<Identifier>();
+            Globals.Add(new Identifier("0"));
 
             // Add globals to the nodemap
             foreach (var id in Globals)
@@ -164,11 +164,11 @@ namespace SpiceSharp.Parser.Subcircuits
         /// </summary>
         /// <param name="id">Identifier of the model</param>
         /// <returns></returns>
-        public T FindModel<T>(CircuitObjects obj, CircuitIdentifier id) where T : class, ICircuitObject
+        public T FindModel<T>(Entities obj, Identifier id) where T : class, Entity
         {
-            ICircuitObject co;
+            Entity co;
             T model = null;
-            CircuitIdentifier orig = id;
+            Identifier orig = id;
 
             switch (ModelScope)
             {
@@ -203,7 +203,7 @@ namespace SpiceSharp.Parser.Subcircuits
                     // Find the model globally
                     if (id.Path.Length > 1)
                     {
-                        id = new CircuitIdentifier(id.Name);
+                        id = new Identifier(id.Name);
                         if (obj.TryGetObject(id, out co))
                         {
                             model = co as T;
@@ -222,10 +222,10 @@ namespace SpiceSharp.Parser.Subcircuits
         /// </summary>
         /// <param name="id">Subcircuit definition identifier</param>
         /// <returns></returns>
-        public SubcircuitDefinition FindDefinition(Dictionary<CircuitIdentifier, SubcircuitDefinition> definitions, CircuitIdentifier id)
+        public SubcircuitDefinition FindDefinition(Dictionary<Identifier, SubcircuitDefinition> definitions, Identifier id)
         {
             SubcircuitDefinition result = null;
-            CircuitIdentifier orig = id;
+            Identifier orig = id;
 
             switch (DefinitionScope)
             {
@@ -251,7 +251,7 @@ namespace SpiceSharp.Parser.Subcircuits
                     // Try to find the definition globally
                     if (id.Path.Length > 1)
                     {
-                        id = new CircuitIdentifier(id.Name);
+                        id = new Identifier(id.Name);
                         if (definitions.TryGetValue(id, out result))
                             return result;
                     }
@@ -266,10 +266,10 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <param name="definition">Subcircuit definition</param>
         /// <param name="parameters">Parameters</param>
         /// <returns></returns>
-        private Dictionary<CircuitIdentifier, double> GenerateParameters(Netlist netlist, SubcircuitDefinition definition, Dictionary<CircuitIdentifier, Token> parameters)
+        private Dictionary<Identifier, double> GenerateParameters(Netlist netlist, SubcircuitDefinition definition, Dictionary<Identifier, Token> parameters)
         {
             // Our new parameters
-            Dictionary<CircuitIdentifier, double> np = new Dictionary<CircuitIdentifier, double>();
+            Dictionary<Identifier, double> np = new Dictionary<Identifier, double>();
 
             // Add local parameters
             if (parameters != null)
@@ -325,10 +325,10 @@ namespace SpiceSharp.Parser.Subcircuits
         /// <param name="definition">Subcircuit definition</param>
         /// <param name="pins">The new pins</param>
         /// <returns></returns>
-        private Dictionary<CircuitIdentifier, CircuitIdentifier> GenerateNodeMap(SubcircuitDefinition definition, List<CircuitIdentifier> pins)
+        private Dictionary<Identifier, Identifier> GenerateNodeMap(SubcircuitDefinition definition, List<Identifier> pins)
         {
             // Initialize
-            Dictionary<CircuitIdentifier, CircuitIdentifier> nodemap = new Dictionary<CircuitIdentifier, CircuitIdentifier>();
+            Dictionary<Identifier, Identifier> nodemap = new Dictionary<Identifier, Identifier>();
 
             // This is actually simple, just a one on one relation
             for (int i = 0; i < pins.Count; i++)

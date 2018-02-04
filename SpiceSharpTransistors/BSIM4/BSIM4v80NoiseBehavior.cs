@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
     /// <summary>
     /// Noise behavior for a <see cref="BSIM4v80"/>
     /// </summary>
-    public class BSIM4v80NoiseBehavior : CircuitObjectBehaviorNoise
+    public class BSIM4v80NoiseBehavior : NoiseBehavior
     {
         /// <summary>
         /// Nodes as used by BSIM4noise
@@ -68,7 +68,7 @@ namespace SpiceSharp.Components.ComponentBehaviors
         /// </summary>
         /// <param name="component">Component</param>
         /// <param name="ckt">Circuit</param>
-        public override void Setup(ICircuitObject component, Circuit ckt)
+        public override void Setup(Entity component, Circuit ckt)
         {
             base.Setup(component, ckt);
             var bsim4 = ComponentTyped<BSIM4v80>();

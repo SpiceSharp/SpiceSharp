@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Numerics;
-using SpiceSharp.Circuits;
+using SpiceSharp.Simulations;
+using SpiceSharp.Diagnostics;
 
-namespace SpiceSharp.Components
+namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
     /// A class that represents a noise generator
@@ -15,102 +15,116 @@ namespace SpiceSharp.Components
         public string Name { get; }
 
         /// <summary>
-        /// Get the calculated noise density
+        /// Gets the calculated noise density
         /// </summary>
         public double Noise { get; private set; }
 
         /// <summary>
-        /// Get the log of the calculated noise density
+        /// Gets the log of the calculated noise density
         /// </summary>
-        public double LnNoise { get; private set; }
+        public double LogNoise { get; private set; }
 
         /// <summary>
         /// Integrated output noise
         /// </summary>
-        public double OutNoiz { get; private set; }
+        public double TotalOutputNoise { get; private set; }
 
         /// <summary>
         /// Integrated input noise
         /// </summary>
-        public double InNoiz { get; private set; }
+        public double TotalInputNoise { get; private set; }
 
         /// <summary>
         /// Gets the nodes this noise generator is connected to
         /// </summary>
-        public int[] NOISEnodes { get; private set; }
+        public NodeCollection Nodes { get; private set; }
 
         /// <summary>
         /// Private variables
         /// </summary>
-        private int[] pins;
+        int[] pins;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the noise source</param>
-        /// <param name="a">Pin A</param>
-        /// <param name="b">Pin B</param>
-        public NoiseGenerator(string name, params int[] pins)
+        /// <param name="pins">Pins</param>
+        protected NoiseGenerator(string name, params int[] pins)
         {
             Name = name;
             this.pins = pins;
+            Nodes = null;
         }
 
         /// <summary>
         /// Connect the noise generator in the circuit
         /// </summary>
-        /// <param name="ckt">Circuit</param>
         /// <param name="nodes">Nodes</param>
-        public virtual void Setup(Circuit ckt, params int[] nodes)
+        public virtual void Setup(params int[] nodes)
         {
-            NOISEnodes = new int[pins.Length];
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+
+            // Get the nodes
+            int[] mapped = new int[nodes.Length];
             for (int i = 0; i < pins.Length; i++)
-                NOISEnodes[i] = nodes[pins[i]];
+            {
+                if (pins[i] >= nodes.Length)
+                    throw new CircuitException("Not enough pins to find node {0}".FormatString(pins[i]));
+                mapped[i] = nodes[pins[i]];
+            }
+            Nodes = new NodeCollection(mapped);
+        }
+
+        public virtual void Unsetup()
+        {
+            Nodes = null;
         }
 
         /// <summary>
         /// Set the values for evaluating the noise generator
         /// </summary>
-        /// <param name="values"></param>
-        public abstract void Set(params double[] values);
+        /// <param name="coefficients">Coefficients</param>
+        public abstract void SetCoefficients(params double[] coefficients);
 
         /// <summary>
         /// Evaluate
         /// </summary>
-        public virtual void Evaluate(Circuit ckt)
+        public virtual void Evaluate(Noise simulation)
         {
-            var noise = ckt.State.Noise;
+            if (simulation == null)
+                throw new ArgumentNullException(nameof(simulation));
+            var noise = simulation.NoiseState;
 
             // Calculate the noise
-            Noise = CalculateNoise(ckt);
+            Noise = CalculateNoise(simulation);
             double lnNdens = Math.Log(Math.Max(Noise, 1e-38));
 
             // Initialize the integrated noise if we just started
-            if (noise.DelFreq == 0.0)
+            if (noise.DeltaFrequency == 0.0)
             {
-                LnNoise = lnNdens;
-                OutNoiz = 0.0;
-                InNoiz = 0.0;
+                LogNoise = lnNdens;
+                TotalOutputNoise = 0.0;
+                TotalInputNoise = 0.0;
             }
             else
             {
                 // Integrate the output noise
-                double tempOnoise = noise.Integrate(Noise, lnNdens, LnNoise);
-                double tempInoise = noise.Integrate(Noise * noise.GainSqInv, lnNdens + noise.LnGainInv, LnNoise + noise.LnGainInv);
-                LnNoise = lnNdens;
+                double tempOnoise = noise.Integrate(Noise, lnNdens, LogNoise);
+                double tempInoise = noise.Integrate(Noise * noise.GainInverseSquared, lnNdens + noise.LogInverseGain, LogNoise + noise.LogInverseGain);
+                LogNoise = lnNdens;
 
                 // Add integrated quantity
-                OutNoiz += tempOnoise;
-                InNoiz += tempInoise;
+                TotalOutputNoise += tempOnoise;
+                TotalInputNoise += tempInoise;
             }
         }
 
         /// <summary>
-        /// Calculate the noise source quantity
+        /// Calculate noise coefficient
         /// </summary>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="param">Parameter</param>
+        /// <param name="simulation">Noise simulation</param>
         /// <returns></returns>
-        protected abstract double CalculateNoise(Circuit ckt);
+        protected abstract double CalculateNoise(Noise simulation);
     }
 }
