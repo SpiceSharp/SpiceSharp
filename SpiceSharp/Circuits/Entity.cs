@@ -11,12 +11,12 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Factories for behaviors
         /// </summary>
-        protected BehaviorFactory Behaviors { get; } = new BehaviorFactory();
+        protected BehaviorFactoryDictionary Behaviors { get; } = new BehaviorFactoryDictionary();
 
         /// <summary>
         /// Gets a collection of parameters
         /// </summary>
-        public ParameterSetCollection ParameterSets { get; } = new ParameterSetCollection();
+        public ParameterSetDictionary ParameterSets { get; } = new ParameterSetDictionary();
 
         /// <summary>
         /// Gets the name of the object

@@ -51,14 +51,14 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="e">Event arguments</param>
-        protected abstract void Initialize(object sender, InitializationDataEventArgs e);
+        protected abstract void Initialize(object sender, InitializeSimulationEventArgs e);
 
         /// <summary>
         /// Finalize the export
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="e">Event arguments</param>
-        protected virtual void Finalize(object sender, Circuit e)
+        protected virtual void Finalize(object sender, FinalizeSimulationEventArgs e)
         {
             Extractor = null;
         }

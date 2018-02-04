@@ -15,7 +15,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the parameters for the integration method
         /// </summary>
-        public ParameterSetCollection Parameters { get; } = new ParameterSetCollection();
+        public ParameterSetDictionary Parameters { get; } = new ParameterSetDictionary();
 
         /// <summary>
         /// Gets the base parameters for the integration method

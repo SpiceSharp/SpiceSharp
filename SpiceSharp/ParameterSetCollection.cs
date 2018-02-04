@@ -6,12 +6,12 @@ namespace SpiceSharp
     /// A collection of <see cref="ParameterSet"/>
     /// Only one instance of each type is allowed
     /// </summary>
-    public class ParameterSetCollection : TypeDictionary<ParameterSet>
+    public class ParameterSetDictionary : TypeDictionary<ParameterSet>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ParameterSetCollection()
+        public ParameterSetDictionary()
             : base(typeof(ParameterSet))
         {
         }

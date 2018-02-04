@@ -17,9 +17,19 @@ namespace SpiceSharp.Diagnostics
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="parameterName"></param>
+        /// <param name="parameterName">Parameter name</param>
         public BadParameterException(string parameterName)
             : base("Invalid parameter value for '{0}'".FormatString(parameterName))
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="parameterName">Parameter name</param>
+        /// <param name="innerException">Inner exception</param>
+        public BadParameterException(string parameterName, Exception innerException)
+            : base("Invalid parameter value for '{0}'".FormatString(parameterName), innerException)
         {
         }
 

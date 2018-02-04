@@ -95,13 +95,13 @@ namespace SpiceSharp
         /// <summary>
         /// Gets a strongly typed value from the dictionary
         /// </summary>
-        /// <typeparam name="R">Return type</typeparam>
+        /// <typeparam name="TResult">Return type</typeparam>
         /// <returns></returns>
-        public R Get<R>() where R : T
+        public TResult Get<TResult>() where TResult : T
         {
-            if (Dictionary.TryGetValue(typeof(R), out var value))
-                return (R)value;
-            return default(R);
+            if (Dictionary.TryGetValue(typeof(TResult), out var value))
+                return (TResult)value;
+            return default;
         }
 
         /// <summary>

@@ -38,15 +38,25 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Extra variables
         /// </summary>
         [PropertyName("vd"), PropertyInfo("Voltage across the internal diode")]
-        public double Voltage { get; protected set; }
+        public double InternalVoltage { get; protected set; }
         [PropertyName("v"), PropertyInfo("Voltage across the diode")]
-        public double GetVoltage(RealState state) => state.Solution[posNode] - state.Solution[negNode];
+        public double GetVoltage(RealState state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            return state.Solution[posNode] - state.Solution[negNode];
+        }
         [PropertyName("i"), PropertyName("id"), PropertyInfo("Current through the diode")]
         public double Current { get; protected set; }
         [PropertyName("gd"), PropertyInfo("Small-signal conductance")]
         public double Conduct { get; protected set; }
         [PropertyName("p"), PropertyName("pd"), PropertyInfo("Power")]
-        public double GetPower(RealState state) => (state.Solution[posNode] - state.Solution[negNode]) * -Current;
+        public double GetPower(RealState state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            return (state.Solution[posNode] - state.Solution[negNode]) * -Current;
+        }
 
         /// <summary>
         /// Constructor
@@ -170,12 +180,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 if ((mbp.BreakdownVoltage.Given) && (vd < Math.Min(0, -temp.TempBreakdownVoltage + 10 * vte)))
                 {
                     vdtemp = -(vd + temp.TempBreakdownVoltage);
-                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(Voltage + temp.TempBreakdownVoltage), vte, temp.TempVCritical, ref Check);
+                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(InternalVoltage + temp.TempBreakdownVoltage), vte, temp.TempVCritical, ref Check);
                     vd = -(vdtemp + temp.TempBreakdownVoltage);
                 }
                 else
                 {
-                    vd = Semiconductor.LimitJunction(vd, Voltage, vte, temp.TempVCritical, ref Check);
+                    vd = Semiconductor.LimitJunction(vd, InternalVoltage, vte, temp.TempVCritical, ref Check);
                 }
             }
 
@@ -211,7 +221,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             }
 
             // Store for next time
-            Voltage = vd;
+            InternalVoltage = vd;
             Current = cd;
             Conduct = gd;
 
@@ -245,7 +255,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             double delvd, cdhat, cd;
             double vd = state.Solution[PosPrimeNode] - state.Solution[negNode];
 
-            delvd = vd - Voltage;
+            delvd = vd - InternalVoltage;
             cdhat = Current + Conduct * delvd;
             cd = Current;
 

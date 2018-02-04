@@ -18,7 +18,7 @@ namespace SpiceSharp.Simulations
             /// <summary>
             /// Default state
             /// </summary>
-            Init,
+            None,
 
             /// <summary>
             /// Indicates that nodes may still be everywhere, and a first solution should be calculated

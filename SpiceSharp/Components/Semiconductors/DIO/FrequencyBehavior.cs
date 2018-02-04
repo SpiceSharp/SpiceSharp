@@ -39,12 +39,25 @@ namespace SpiceSharp.Components.DiodeBehaviors
         [PropertyName("cd"), PropertyInfo("Diode capacitance")]
         public double Capacitance { get; protected set; }
         [PropertyName("vd"), PropertyInfo("Voltage across the internal diode")]
-        public Complex GetDiodeVoltage(ComplexState state) => state.Solution[posPrimeNode] - state.Solution[negNode];
+        public Complex GetDiodeVoltage(ComplexState state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            return state.Solution[posPrimeNode] - state.Solution[negNode];
+        }
         [PropertyName("v"), PropertyInfo("Voltage across the diode")]
-        public Complex GetVoltage(ComplexState state) => state.Solution[posNode] - state.Solution[negNode];
+        public Complex GetVoltage(ComplexState state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            return state.Solution[posNode] - state.Solution[negNode];
+        }
         [PropertyName("i"), PropertyName("id"), PropertyInfo("Current through the diode")]
         public Complex GetCurrent(ComplexState state)
         {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+
             Complex geq = Capacitance * state.Laplace + load.Conduct;
             Complex voltage = state.Solution[posPrimeNode] - state.Solution[negNode];
             return voltage * geq;
@@ -52,6 +65,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         [PropertyName("p"), PropertyName("pd"), PropertyInfo("Power")]
         public Complex GetPower(ComplexState state)
         {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+
             Complex geq = Capacitance * state.Laplace + load.Conduct;
             Complex current = (state.Solution[posPrimeNode] - state.Solution[negNode]) * geq;
             Complex voltage = (state.Solution[posNode] - state.Solution[negNode]);

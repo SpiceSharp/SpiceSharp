@@ -23,6 +23,16 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="message">Message</param>
+        /// <param name="innerException">Inner exception</param>
+        public SparseException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         /// <param name="info">Info</param>
         /// <param name="context">Context</param>
         protected SparseException(SerializationInfo info, StreamingContext context) : base(info, context) { }

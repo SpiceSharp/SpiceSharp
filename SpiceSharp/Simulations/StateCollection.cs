@@ -5,12 +5,12 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Collection
     /// </summary>
-    public class StateCollection : TypeDictionary<State>
+    public class StateDictionary : TypeDictionary<State>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public StateCollection()
+        public StateDictionary()
             : base(typeof(State))
         {
         }

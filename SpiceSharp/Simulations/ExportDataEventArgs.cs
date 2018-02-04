@@ -1,5 +1,4 @@
 ﻿using System;
-using SpiceSharp.Circuits;
 using SpiceSharp.IntegrationMethods;
 
 namespace SpiceSharp.Simulations
@@ -10,14 +9,17 @@ namespace SpiceSharp.Simulations
     public class ExportDataEventArgs : EventArgs
     {
         /// <summary>
-        /// Gets the state
+        /// Gets the state (null if not available)
         /// </summary>
         public RealState State { get; }
 
+        /// <summary>
+        /// Gets the complex state (null if not available)
+        /// </summary>
         public ComplexState ComplexState { get; }
 
         /// <summary>
-        /// Gets the integration method if any
+        /// Gets the integration method (null if not available)
         /// </summary>
         public IntegrationMethod Method { get; }
 
@@ -65,11 +67,4 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public double Time => Method.Time;
     }
-
-    /// <summary>
-    /// Delegate for finalizing a simulation export
-    /// </summary>
-    /// <param name="sender">The object sending the event</param>
-    /// <param name="circuit">The simulation data</param>
-    public delegate void FinalizeSimulationExportEventHandler(object sender, Circuit circuit);
 }

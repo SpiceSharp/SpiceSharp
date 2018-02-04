@@ -34,8 +34,11 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="e">Arguments</param>
-        protected override void Initialize(object sender, InitializationDataEventArgs e)
+        protected override void Initialize(object sender, InitializeSimulationEventArgs e)
         {
+            if (e == null)
+                throw new ArgumentNullException(nameof(e));
+
             var eb = e.Behaviors.GetEntityBehaviors(EntityName);
             Func<ComplexState, Complex> stateExtractor = null;
 
@@ -44,7 +47,7 @@ namespace SpiceSharp.Simulations
             var behavior = eb.Get<FrequencyBehavior>();
             if (behavior != null)
                 stateExtractor = behavior.CreateACExport(PropertyName);
-            
+
             // Create the extractor
             if (stateExtractor != null)
             {

@@ -138,8 +138,8 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="exponent">The logarithm base 10 for the determinant</param>
-        /// <param name="determinant">The determinant. It is scaled between 1 and 10.</param>
-        public static void Determinant<T>(this Matrix<T> matrix, out int exponent, out Element<T> determinant)
+        /// <param name="result">The determinant. It is scaled between 1 and 10.</param>
+        public static void Determinant<T>(this Matrix<T> matrix, out int exponent, out Element<T> result)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -147,7 +147,7 @@ namespace SpiceSharp.Sparse
             int I, Size;
             double Norm;
             Element<T> Pivot = ElementFactory.Create<T>();
-            determinant = ElementFactory.Create<T>();
+            result = ElementFactory.Create<T>() ?? throw new SparseException("Could not create element");
             exponent = 0;
 
             // Begin `spDeterminant'. 
@@ -158,58 +158,58 @@ namespace SpiceSharp.Sparse
 
             if (matrix.Error == SparseError.Singular)
             {
-                determinant.Clear();
+                result.Clear();
                 return;
             }
 
             Size = matrix.IntSize;
             I = 0;
 
-            determinant.Value = determinant.One;
+            result.Value = result.One;
 
             while (++I <= Size)
             {
                 Pivot.AssignReciprocal(matrix.Diag[I].Element);
-                determinant.Multiply(Pivot);
+                result.Multiply(Pivot);
 
                 // Scale Determinant.
-                Norm = determinant.Magnitude;
+                Norm = result.Magnitude;
                 if (!Norm.Equals(0))
                 {
                     while (Norm >= 1.0e12)
                     {
-                        determinant.Scalar(1e-12);
+                        result.Scalar(1e-12);
                         exponent += 12;
-                        Norm = determinant.Magnitude;
+                        Norm = result.Magnitude;
                     }
                     while (Norm < 1.0e-12)
                     {
-                        determinant.Scalar(1e12);
+                        result.Scalar(1e12);
                         exponent -= 12;
-                        Norm = determinant.Magnitude;
+                        Norm = result.Magnitude;
                     }
                 }
             }
 
             // Scale Determinant again, this time to be between 1.0 <= x < 10.0. 
-            Norm = determinant.Magnitude;
+            Norm = result.Magnitude;
             if (!Norm.Equals(0))
             {
                 while (Norm >= 10.0)
                 {
-                    determinant.Scalar(0.1);
+                    result.Scalar(0.1);
                     exponent++;
-                    Norm = determinant.Magnitude;
+                    Norm = result.Magnitude;
                 }
                 while (Norm < 1.0)
                 {
-                    determinant.Scalar(10.0);
+                    result.Scalar(10.0);
                     exponent--;
-                    Norm = determinant.Magnitude;
+                    Norm = result.Magnitude;
                 }
             }
             if (matrix.NumberOfInterchangesIsOdd)
-                determinant.Negate();
+                result.Negate();
         }
 
         /// <summary>

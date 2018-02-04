@@ -328,7 +328,7 @@ namespace SpiceSharp.Simulations
                         state.Init = RealState.InitializationStates.InitFloat;
                         break;
 
-                    case RealState.InitializationStates.Init:
+                    case RealState.InitializationStates.None:
                         state.Init = RealState.InitializationStates.InitFloat;
                         break;
 

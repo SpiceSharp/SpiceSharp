@@ -12,12 +12,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Simulation configuration
         /// </summary>
-        public ParameterSetCollection ParameterSets { get; } = new ParameterSetCollection();
+        public ParameterSetDictionary ParameterSets { get; } = new ParameterSetDictionary();
 
         /// <summary>
         /// States of the simulation
         /// </summary>
-        public StateCollection States { get; } = new StateCollection();
+        public StateDictionary States { get; } = new StateDictionary();
 
         /// <summary>
         /// The circuit
@@ -27,7 +27,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event that is called for initializing simulation data exports
         /// </summary>
-        public event EventHandler<InitializationDataEventArgs> InitializeSimulationExport;
+        public event EventHandler<InitializeSimulationEventArgs> InitializeSimulationExport;
 
         /// <summary>
         /// Event that is called when new simulation data is available
@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event that is called for finalizing simulation data exports
         /// </summary>
-        public event FinalizeSimulationExportEventHandler FinalizeSimulationExport;
+        public event EventHandler<FinalizeSimulationEventArgs> FinalizeSimulationExport;
 
         /// <summary>
         /// Gets the name of the simulation
@@ -68,14 +68,15 @@ namespace SpiceSharp.Simulations
 
             // Setup the simulation
             Setup();
-            var args = new InitializationDataEventArgs(Pool);
-            InitializeSimulationExport?.Invoke(this, args);
+            var initArgs = new InitializeSimulationEventArgs(Pool);
+            InitializeSimulationExport?.Invoke(this, initArgs);
 
             // Execute the simulation
             Execute();
 
             // Finalize the simulation
-            FinalizeSimulationExport?.Invoke(this, circuit);
+            var finalArgs = new FinalizeSimulationEventArgs();
+            FinalizeSimulationExport?.Invoke(this, finalArgs);
             Unsetup();
             Circuit = null;
         }

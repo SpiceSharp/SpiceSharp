@@ -1,17 +1,14 @@
-﻿using System;
-using SpiceSharp.Diagnostics;
-
-namespace SpiceSharp.Behaviors
+﻿namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Factory for behaviors
     /// </summary>
-    public class BehaviorFactory : TypeDictionary<BehaviorFactoryDelegate>
+    public class BehaviorFactoryDictionary : TypeDictionary<BehaviorFactoryMethod>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public BehaviorFactory()
+        public BehaviorFactoryDictionary()
             : base(typeof(Behavior))
         {
         }
@@ -20,5 +17,5 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Delegate
     /// </summary>
-    public delegate Behavior BehaviorFactoryDelegate();
+    public delegate Behavior BehaviorFactoryMethod();
 }

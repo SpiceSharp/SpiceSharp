@@ -10,8 +10,8 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Available behaviors and parameters
         /// </summary>
-        Dictionary<string, ParameterSetCollection> parameterSets = new Dictionary<string, ParameterSetCollection>();
-        Dictionary<string, EntityBehaviors> entityBehaviors = new Dictionary<string, EntityBehaviors>();
+        Dictionary<string, ParameterSetDictionary> parameterSets = new Dictionary<string, ParameterSetDictionary>();
+        Dictionary<string, EntityBehaviorDictionary> entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>();
 
         /// <summary>
         /// Available number of parameter collections
@@ -27,13 +27,13 @@ namespace SpiceSharp.Behaviors
         /// Add a collection of parameters
         /// </summary>
         /// <param name="pc">Parameter collection</param>
-        public void Add(string name, ParameterSetCollection pc) => parameterSets.Add(name, pc);
+        public void Add(string name, ParameterSetDictionary pc) => parameterSets.Add(name, pc);
 
         /// <summary>
         /// Add entity behaviors
         /// </summary>
         /// <param name="behaviors">Entity behaviors</param>
-        public void Add(string name, EntityBehaviors behaviors) => entityBehaviors.Add(name, behaviors);
+        public void Add(string name, EntityBehaviorDictionary behaviors) => entityBehaviors.Add(name, behaviors);
         
         /// <summary>
         /// Gets a parameter set for a certain name

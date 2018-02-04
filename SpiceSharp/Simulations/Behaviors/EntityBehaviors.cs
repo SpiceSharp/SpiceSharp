@@ -5,7 +5,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Component behaviors
     /// </summary>
-    public class EntityBehaviors : TypeDictionary<Behavior>
+    public class EntityBehaviorDictionary : TypeDictionary<Behavior>
     {
         /// <summary>
         /// Source entity
@@ -16,7 +16,7 @@ namespace SpiceSharp.Behaviors
         /// Constructor
         /// </summary>
         /// <param name="source">The source of the behaviors</param>
-        public EntityBehaviors(Identifier source)
+        public EntityBehaviorDictionary(Identifier source)
             : base(typeof(Func<Behavior>))
         {
             Source = source;

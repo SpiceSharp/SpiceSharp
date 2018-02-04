@@ -36,7 +36,6 @@ namespace SpiceSharp.Simulations
             ParameterSets.Add(new FrequencyConfiguration());
 
             // Create a complex state with shared matrix
-            var realState = States.Get<RealState>();
             States.Add(new ComplexState());
         }
 
@@ -55,7 +54,6 @@ namespace SpiceSharp.Simulations
             ParameterSets.Add(new FrequencyConfiguration(frequencySweep));
 
             // Create a complex state with shared matrix
-            var realState = States.Get<RealState>();
             States.Add(new ComplexState());
         }
 

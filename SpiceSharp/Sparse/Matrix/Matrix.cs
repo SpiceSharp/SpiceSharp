@@ -30,7 +30,7 @@ namespace SpiceSharp.Sparse
     /// <summary>
     /// Sparse matrix
     /// </summary>
-    public class Matrix<T> : IMatrix
+    public class Matrix<T>
     {
         /// <summary>
         /// Constants

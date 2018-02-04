@@ -108,11 +108,11 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Scalar multiplication
         /// </summary>
-        /// <param name="scalar">Scalar</param>
-        public override void Scalar(double scalar)
+        /// <param name="factor">Scalar factor</param>
+        public override void Scalar(double factor)
         {
-            Real *= scalar;
-            Imaginary *= scalar;
+            Real *= factor;
+            Imaginary *= factor;
         }
 
         /// <summary>

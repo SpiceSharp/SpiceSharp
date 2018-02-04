@@ -86,8 +86,8 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Multiply with a scalar
         /// </summary>
-        /// <param name="scalar">Scalar</param>
-        public override void Scalar(double scalar) => Value *= scalar;
+        /// <param name="factor">Scalar factor</param>
+        public override void Scalar(double factor) => Value *= factor;
 
         /// <summary>
         /// Assign reciprocal

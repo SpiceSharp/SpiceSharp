@@ -28,7 +28,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="e">Arguments</param>
-        protected override void Initialize(object sender, InitializationDataEventArgs e)
+        protected override void Initialize(object sender, InitializeSimulationEventArgs e)
         {
             Extractor = myExtractor;
         }
