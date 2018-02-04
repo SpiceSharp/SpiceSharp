@@ -5,7 +5,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A class that represents noise
     /// </summary>
-    public class StateNoise
+    public class NoiseState : State
     {
         /// <summary>
         /// Private variables
@@ -73,16 +73,18 @@ namespace SpiceSharp.Simulations
         public double LogInverseGain { get; private set; } = 0.0;
 
         /// <summary>
-        /// Initialize
+        /// Reset frequency
         /// </summary>
-        /// <param name="frequency">Starting frequency</param>
-        public void Initialize(double frequency)
+        /// <param name="frequency"></param>
+        public void Reset(double frequency)
         {
+            // Set the current and last frequency
             currentFrequency = frequency;
             lastFrequency = frequency;
 
-            OutputNoise = 0.0;
-            InputNoise = 0.0;
+            // Reset integrated noise
+            OutputNoise = 0;
+            InputNoise = 0;
         }
         
         /// <summary>

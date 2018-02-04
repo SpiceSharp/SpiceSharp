@@ -202,7 +202,6 @@
     <Compile Include="Circuits\Validator.cs" />
     <Compile Include="Identifier.cs" />
     <Compile Include="Simulations\Noise\NoiseConfiguration.cs" />
-    <Compile Include="Simulations\Noise\StateNoise.cs" />
     <Compile Include="Components\Model.cs" />
     <Compile Include="Components\Currentsources\ISRC\CurrentSource.cs" />
     <Compile Include="Circuits\Entity.cs" />
@@ -243,6 +242,7 @@
     <Compile Include="Circuits\Circuit.cs" />
     <Compile Include="Circuits\Node.cs" />
     <Compile Include="Simulations\Base\RealState.cs" />
+    <Compile Include="Simulations\Noise\NoiseState.cs" />
     <Compile Include="Simulations\State.cs" />
     <Compile Include="Simulations\StateCollection.cs" />
     <Compile Include="Simulations\Statistics.cs" />
