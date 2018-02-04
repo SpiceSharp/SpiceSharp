@@ -25,9 +25,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Diode capacitance
         /// </summary>
         [PropertyName("cd"), PropertyInfo("Diode capacitance")]
-        public double Cap { get; protected set; }
+        public double Capacitance { get; protected set; }
+        [PropertyName("id"), PropertyName("c"), PropertyInfo("Diode current")]
         public double Current { get; protected set; }
-        public double Conduct { get; protected set; }
 
         /// <summary>
         /// The charge on the junction capacitance
@@ -163,7 +163,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                     temp.TempDepletionCap) + (mbp.GradingCoefficient / (mbp.JunctionPotential + mbp.JunctionPotential)) * (vd * vd - temp.TempDepletionCap * temp.TempDepletionCap));
                 capd = mbp.TransitTime * load.Conduct + czof2 * (modeltemp.F3 + mbp.GradingCoefficient * vd / mbp.JunctionPotential);
             }
-            Cap = capd;
+            Capacitance = capd;
         }
 
         /// <summary>
@@ -183,8 +183,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // Integrate
             CapCharge.Integrate();
-            double geq = CapCharge.Jacobian(Cap);
+            double geq = CapCharge.Jacobian(Capacitance);
             double ceq = CapCharge.RhsCurrent(geq, vd);
+
+            // Store the current
+            Current = load.Current + CapCharge.Derivative;
 
             // Load Rhs vector
             state.Rhs[negNode] += ceq;

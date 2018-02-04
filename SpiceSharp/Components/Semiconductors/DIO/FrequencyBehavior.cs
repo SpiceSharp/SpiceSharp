@@ -3,6 +3,7 @@ using System.Numerics;
 using SpiceSharp.Sparse;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.DiodeBehaviors
 {
@@ -35,7 +36,27 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the junction capacitance
         /// </summary>
-        public double Cap { get; protected set; }
+        [PropertyName("cd"), PropertyInfo("Diode capacitance")]
+        public double Capacitance { get; protected set; }
+        [PropertyName("vd"), PropertyInfo("Voltage across the internal diode")]
+        public Complex GetDiodeVoltage(ComplexState state) => state.Solution[posPrimeNode] - state.Solution[negNode];
+        [PropertyName("v"), PropertyInfo("Voltage across the diode")]
+        public Complex GetVoltage(ComplexState state) => state.Solution[posNode] - state.Solution[negNode];
+        [PropertyName("i"), PropertyName("id"), PropertyInfo("Current through the diode")]
+        public Complex GetCurrent(ComplexState state)
+        {
+            Complex geq = Capacitance * state.Laplace + load.Conduct;
+            Complex voltage = state.Solution[posPrimeNode] - state.Solution[negNode];
+            return voltage * geq;
+        }
+        [PropertyName("p"), PropertyName("pd"), PropertyInfo("Power")]
+        public Complex GetPower(ComplexState state)
+        {
+            Complex geq = Capacitance * state.Laplace + load.Conduct;
+            Complex current = (state.Solution[posPrimeNode] - state.Solution[negNode]) * geq;
+            Complex voltage = (state.Solution[posNode] - state.Solution[negNode]);
+            return voltage * -Complex.Conjugate(current);
+        }
 
         /// <summary>
         /// Constructor
@@ -138,7 +159,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 czof2 = czero / modeltemp.F2;
                 capd = mbp.TransitTime * load.Conduct + czof2 * (modeltemp.F3 + mbp.GradingCoefficient * vd / mbp.JunctionPotential);
             }
-            Cap = capd;
+            Capacitance = capd;
         }
 
         /// <summary>
@@ -155,9 +176,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             gspr = modeltemp.Conductance * bp.Area;
             geq = load.Conduct;
-            xceq = Cap * state.Laplace.Imaginary;
+            xceq = Capacitance * state.Laplace.Imaginary;
 
-            PosPosPtr.Add((Complex)gspr);
+            PosPosPtr.Add(gspr);
             NegNegPtr.Add(new Complex(geq, xceq));
 
             PosPrimePosPrimePtr.Add(new Complex(geq + gspr, xceq));
