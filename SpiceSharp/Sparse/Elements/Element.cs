@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpiceSharp.Sparse
 {
@@ -49,27 +45,27 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="first">First factor</param>
         /// <param name="second">Second factor</param>
-        public abstract void AssignMultiply(T first, T second);
+        public abstract void AssignMultiply(Element<T> first, Element<T> second);
 
         /// <summary>
         /// Add the result of the multiplication
         /// </summary>
         /// <param name="first">First factor</param>
         /// <param name="second">Second factor</param>
-        public abstract void AddMultiply(T first, T second);
+        public abstract void AddMultiply(Element<T> first, Element<T> second);
 
         /// <summary>
         /// Subtract the result of the multiplication
         /// </summary>
         /// <param name="first">First factor</param>
         /// <param name="second">Second factor</param>
-        public abstract void SubtractMultiply(T first, T second);
+        public abstract void SubtractMultiply(Element<T> first, Element<T> second);
 
         /// <summary>
         /// Multiply with a factor
         /// </summary>
         /// <param name="factor">Factor</param>
-        public abstract void Multiply(T factor);
+        public abstract void Multiply(Element<T> factor);
 
         /// <summary>
         /// Multiply with a scalar
@@ -81,7 +77,7 @@ namespace SpiceSharp.Sparse
         /// Assign reciprocal
         /// </summary>
         /// <param name="denominator">Denominator</param>
-        public abstract void AssignReciprocal(T denominator);
+        public abstract void AssignReciprocal(Element<T> denominator);
 
         /// <summary>
         /// Copy values from another source
@@ -93,17 +89,6 @@ namespace SpiceSharp.Sparse
                 throw new ArgumentNullException(nameof(source));
 
             Value = source.Value;
-        }
-
-        /// <summary>
-        /// Implicit conversion to the base type
-        /// </summary>
-        /// <param name="element">Element</param>
-        public static implicit operator T(Element<T> element)
-        {
-            if (element == null)
-                return default(T);
-            return element.Value;
         }
 
         /// <summary>

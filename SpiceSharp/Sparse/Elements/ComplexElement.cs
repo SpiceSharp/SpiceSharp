@@ -83,27 +83,68 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="first">First factor</param>
         /// <param name="second">Second factor</param>
-        public override void AssignMultiply(Complex first, Complex second) => Value = first * second;
+        public override void AssignMultiply(Element<Complex> first, Element<Complex> second)
+        {
+            if (first == null || second == null)
+            {
+                Real = 0;
+                Imaginary = 0;
+            }
+            else
+            {
+                var fValue = first.Value;
+                var sValue = second.Value;
+                Real = fValue.Real * sValue.Real - fValue.Imaginary * sValue.Imaginary;
+                Imaginary = fValue.Real * sValue.Imaginary + fValue.Imaginary * sValue.Real;
+            }
+        }
 
         /// <summary>
         /// Add the result of the multiplication
         /// </summary>
         /// <param name="first">First factor</param>
         /// <param name="second">Second factor</param>
-        public override void AddMultiply(Complex first, Complex second) => Value += first * second;
+        public override void AddMultiply(Element<Complex> first, Element<Complex> second)
+        {
+            if (first == null || second == null)
+                return;
+            var fValue = first.Value;
+            var sValue = second.Value;
+            Real += fValue.Real * sValue.Real - fValue.Imaginary * sValue.Imaginary;
+            Imaginary += fValue.Real * sValue.Imaginary + fValue.Imaginary * sValue.Real;
+        }
 
         /// <summary>
         /// Subtract the result of the multiplication
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
-        public override void SubtractMultiply(Complex first, Complex second) => Value -= first * second;
+        public override void SubtractMultiply(Element<Complex> first, Element<Complex> second)
+        {
+            if (first == null || second == null)
+                return;
+            var fValue = first.Value;
+            var sValue = second.Value;
+            Real -= fValue.Real * sValue.Real - fValue.Imaginary * sValue.Imaginary;
+            Imaginary -= fValue.Real * sValue.Imaginary + fValue.Imaginary * sValue.Real;
+        }
 
         /// <summary>
         /// Multiply with a factor
         /// </summary>
         /// <param name="factor">Factor</param>
-        public override void Multiply(Complex factor) => Value *= factor;
+        public override void Multiply(Element<Complex> factor)
+        {
+            if (factor == null)
+                Value = 0.0;
+            else
+            {
+                var fValue = factor.Value;
+                double r = Real;
+                Real = r * fValue.Real - Imaginary * fValue.Imaginary;
+                Imaginary = r * fValue.Imaginary + Imaginary * fValue.Real;
+            }
+        }
 
         /// <summary>
         /// Scalar multiplication
@@ -119,20 +160,27 @@ namespace SpiceSharp.Sparse
         /// Assign reciprocal
         /// </summary>
         /// <param name="denominator">Denominator</param>
-        public override void AssignReciprocal(Complex denominator)
+        public override void AssignReciprocal(Element<Complex> denominator)
         {
-            double r;
-            if ((denominator.Real >= denominator.Imaginary && denominator.Real > -denominator.Imaginary) ||
-                (denominator.Real < denominator.Imaginary && denominator.Real <= -denominator.Imaginary))
+            if (denominator == null)
             {
-                r = denominator.Imaginary / denominator.Real;
-                Real = 1.0 / (denominator.Real + r * denominator.Imaginary);
+                Value = double.NaN;
+                return;
+            }
+
+            double r;
+            Complex value = denominator.Value;
+            if ((value.Real >= value.Imaginary && value.Real > -value.Imaginary) ||
+                (value.Real < value.Imaginary && value.Real <= -value.Imaginary))
+            {
+                r = value.Imaginary / value.Real;
+                Real = 1.0 / (value.Real + r * value.Imaginary);
                 Imaginary = -r * Real;
             }
             else
             {
-                r = denominator.Real / denominator.Imaginary;
-                Imaginary = -1.0 / (denominator.Imaginary + r * denominator.Real);
+                r = value.Real / value.Imaginary;
+                Imaginary = -1.0 / (value.Imaginary + r * value.Real);
                 Real = -r * Imaginary;
             }
         }

@@ -23,12 +23,12 @@
         /// <summary>
         /// Next matrix element in the same row
         /// </summary>
-        internal MatrixElement<T> NextInRow { get; set; }
+        public MatrixElement<T> NextInRow { get; set; }
 
         /// <summary>
         /// Next matrix element in the same column
         /// </summary>
-        internal MatrixElement<T> NextInColumn { get; set; }
+        public MatrixElement<T> NextInColumn { get; set; }
 
         /// <summary>
         /// Constructor

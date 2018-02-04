@@ -61,27 +61,49 @@ namespace SpiceSharp.Sparse
         /// </summary>
         /// <param name="first">First factor</param>
         /// <param name="second">Second factor</param>
-        public override void AssignMultiply(double first, double second) => Value = first * second;
+        public override void AssignMultiply(Element<double> first, Element<double> second)
+        {
+            if (first == null || second == null)
+                Value = 0.0;
+            else
+                Value = first.Value * second.Value;
+        }
 
         /// <summary>
         /// Add the result of the multiplication
         /// </summary>
         /// <param name="first">First factor</param>
         /// <param name="second">Second factor</param>
-        public override void AddMultiply(double first, double second) => Value += first * second;
+        public override void AddMultiply(Element<double> first, Element<double> second)
+        {
+            if (first == null || second == null)
+                return;
+            Value += first.Value * second.Value;
+        }
 
         /// <summary>
         /// Subtract the result of the multiplication
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
-        public override void SubtractMultiply(double first, double second) => Value -= first * second;
+        public override void SubtractMultiply(Element<double> first, Element<double> second)
+        {
+            if (first == null || second == null)
+                return;
+            Value -= first.Value * second.Value;
+        }
 
         /// <summary>
         /// Multiply with a factor
         /// </summary>
         /// <param name="factor">Factor</param>
-        public override void Multiply(double factor) => Value *= factor;
+        public override void Multiply(Element<double> factor)
+        {
+            if (factor == null)
+                Value = 0.0;
+            else
+                Value *= factor.Value;
+        }
 
         /// <summary>
         /// Multiply with a scalar
@@ -93,7 +115,13 @@ namespace SpiceSharp.Sparse
         /// Assign reciprocal
         /// </summary>
         /// <param name="denominator">Denominator</param>
-        public override void AssignReciprocal(double denominator) => Value = 1.0 / denominator;
+        public override void AssignReciprocal(Element<double> denominator)
+        {
+            if (denominator == null)
+                Value = double.NaN;
+            else
+                Value = 1.0 / denominator.Value;
+        }
 
         /// <summary>
         /// Check for identity multiplier
