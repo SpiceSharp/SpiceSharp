@@ -277,7 +277,6 @@
     <Compile Include="Sparse\Elements\ElementFactory.cs" />
     <Compile Include="Sparse\Elements\IElement.cs" />
     <Compile Include="Sparse\Elements\RealElement.cs" />
-    <Compile Include="Sparse\Matrix\IMatrixElement.cs" />
     <Compile Include="Sparse\Matrix\Matrix.cs" />
     <Compile Include="Sparse\Matrix\MatrixElement.cs" />
     <Compile Include="Sparse\SparseException.cs" />

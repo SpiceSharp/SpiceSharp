@@ -3,7 +3,7 @@
     /// <summary>
     /// A matrix element
     /// </summary>
-    public class MatrixElement<T> : IMatrixElement<T>
+    public class MatrixElement<T>
     {
         /// <summary>
         /// Gets or sets the value
