@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
+﻿using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharpTest.Models.Transistors
+namespace SpiceSharpTest.Models
 {
     /// <summary>
     /// Taken from https://ecee.colorado.edu/~bart/book/book/chapter7/ch7_5.htm
