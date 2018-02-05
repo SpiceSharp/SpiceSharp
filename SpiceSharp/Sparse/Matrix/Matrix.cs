@@ -53,8 +53,6 @@ namespace SpiceSharp.Sparse
         /// </summary>
         public int Size { get; internal set; }
 
-        public bool Complex { get; set; }
-
         /// <summary>
         /// Internal variables
         /// </summary>
@@ -99,7 +97,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Constructor
         /// </summary>
-        public Matrix() : this(0, true)
+        public Matrix() : this(0)
         {
         }
 
@@ -107,8 +105,7 @@ namespace SpiceSharp.Sparse
         /// Constructor
         /// </summary>
         /// <param name="size">Matrix size</param>
-        /// <param name="complex">Is complex</param>
-        public Matrix(int size, bool complex)
+        public Matrix(int size)
         {
             if (size < 0)
                 throw new SparseException("Invalid size");
@@ -118,7 +115,6 @@ namespace SpiceSharp.Sparse
             int sizeplusone = allocated + 1;
 
             // Initialize matrix
-            Complex = complex;
             Factored = false;
             Elements = 0;
             Error = SparseError.Okay;

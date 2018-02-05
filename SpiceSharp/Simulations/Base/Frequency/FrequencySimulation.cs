@@ -114,7 +114,6 @@ namespace SpiceSharp.Simulations
         {
             var cstate = ComplexState;
             var matrix = cstate.Matrix;
-            matrix.Complex = true;
 
             retry:
             cstate.IsConvergent = true;

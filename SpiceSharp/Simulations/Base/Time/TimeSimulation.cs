@@ -131,9 +131,6 @@ namespace SpiceSharp.Simulations
             bool pass = false;
             int iterno = 0;
 
-            // Make sure we're using real numbers!
-            matrix.Complex = false;
-
             // Ignore operating condition point, just use the solution as-is
             if (state.UseIC && state.Domain == RealState.DomainType.Time)
             {

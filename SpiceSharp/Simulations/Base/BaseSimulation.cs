@@ -146,7 +146,6 @@ namespace SpiceSharp.Simulations
             var state = RealState;
             var config = BaseConfiguration;
             state.Init = RealState.InitializationStates.InitJunction;
-            state.Matrix.Complex = false;
 
             // First, let's try finding an operating point by using normal iterations
             if (!config.NoOperatingPointIterations)
@@ -219,9 +218,6 @@ namespace SpiceSharp.Simulations
             var matrix = state.Matrix;
             bool pass = false;
             int iterno = 0;
-
-            // Make sure we're using real numbers!
-            matrix.Complex = false;
 
             // Ignore operating condition point, just use the solution as-is
             if (state.UseIC && state.Domain == RealState.DomainType.Time)

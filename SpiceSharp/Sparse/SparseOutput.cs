@@ -180,7 +180,7 @@ namespace SpiceSharp.Sparse
                             // Update status variables
                             if ((Magnitude = pElement.Element.Magnitude) > LargestElement)
                                 LargestElement = Magnitude;
-                            if ((Magnitude < SmallestElement) && (Magnitude != 0.0))
+                            if ((Magnitude < SmallestElement) && !Magnitude.Equals(0)) // Do not include exact 0.0
                                 SmallestElement = Magnitude;
                             ElementCount++;
                         }
@@ -195,7 +195,7 @@ namespace SpiceSharp.Sparse
                     }
                     sb.Append(Environment.NewLine);
 
-                    if (matrix.Complex && data)
+                    if (typeof(T) == typeof(Complex))
                     {
                         sb.Append("     ");
                         for (J = StartCol; J <= StopCol; J++)
