@@ -134,10 +134,6 @@ namespace SpiceSharp.Simulations
             // Make sure we're using real numbers!
             matrix.Complex = false;
 
-            // Initialize the state of the circuit
-            if (!state.Initialized)
-                state.Initialize(Circuit);
-
             // Ignore operating condition point, just use the solution as-is
             if (state.UseIC && state.Domain == RealState.DomainType.Time)
             {

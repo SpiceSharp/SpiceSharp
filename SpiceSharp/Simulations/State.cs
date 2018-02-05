@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Simulations
+﻿using SpiceSharp.Circuits;
+
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Class representing a state
@@ -14,7 +16,7 @@
         /// Initialize
         /// </summary>
         /// <param name="circuit">The circuit</param>
-        public virtual void Initialize(Circuit circuit)
+        public virtual void Initialize(Nodes circuit)
         {
             Initialized = true;
         }

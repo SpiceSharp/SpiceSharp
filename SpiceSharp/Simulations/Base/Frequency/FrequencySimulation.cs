@@ -81,7 +81,7 @@ namespace SpiceSharp.Simulations
             base.Execute();
 
             // Initialize the state
-            ComplexState.Initialize(Circuit);
+            ComplexState.Initialize(Circuit.Nodes);
         }
 
         /// <summary>

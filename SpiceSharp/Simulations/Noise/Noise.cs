@@ -77,6 +77,7 @@ namespace SpiceSharp.Simulations
             NoiseConfiguration = ParameterSets.Get<NoiseConfiguration>();
             NoiseBehaviors = SetupBehaviors<NoiseBehavior>();
             NoiseState = States.Get<NoiseState>();
+            NoiseState.Initialize(Circuit.Nodes);
         }
 
         /// <summary>
@@ -85,6 +86,8 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
+            NoiseState.Destroy();
+            NoiseState = null;
             foreach (var behavior in NoiseBehaviors)
                 behavior.Unsetup();
             NoiseBehaviors.Clear();
@@ -118,7 +121,6 @@ namespace SpiceSharp.Simulations
             // var source = FindInputSource(noiseconfig.Input);
             
             // Initialize
-            nstate.Initialize(Circuit);
             nstate.Reset(FrequencySweep.Initial);
             cstate.Laplace = 0;
             state.Domain = RealState.DomainType.Frequency;

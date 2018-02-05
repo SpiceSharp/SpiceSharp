@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
@@ -193,14 +194,14 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initialize the state
         /// </summary>
-        /// <param name="circuit"></param>
-        public override void Initialize(Circuit circuit)
+        /// <param name="nodes">Nodes</param>
+        public override void Initialize(Nodes nodes)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
 
             // Initialize all matrices
-            Order = circuit.Nodes.Count + 1;
+            Order = nodes.Count + 1;
             Rhs = new RealSolution(Order);
             Solution = new RealSolution(Order);
             OldSolution = new RealSolution(Order);
@@ -213,7 +214,7 @@ namespace SpiceSharp.Simulations
             UseDC = true;
             UseIC = false;
 
-            base.Initialize(circuit);
+            base.Initialize(nodes);
         }
 
         /// <summary>

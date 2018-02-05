@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using SpiceSharp.Circuits;
 using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
@@ -96,17 +97,17 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initialize circuit
         /// </summary>
-        /// <param name="circuit"></param>
-        public override void Initialize(Circuit circuit)
+        /// <param name="nodes">Nodes</param>
+        public override void Initialize(Nodes nodes)
         {
-            if (circuit == null)
-                throw new ArgumentNullException(nameof(circuit));
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
 
-            Order = circuit.Nodes.Count + 1;
+            Order = nodes.Count + 1;
             Rhs = new ComplexSolution(Order);
             Solution = new ComplexSolution(Order);
 
-            base.Initialize(circuit);
+            base.Initialize(nodes);
         }
 
         /// <summary>

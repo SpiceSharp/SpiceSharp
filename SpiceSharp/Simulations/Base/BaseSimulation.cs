@@ -76,15 +76,16 @@ namespace SpiceSharp.Simulations
 
             // Setup behaviors, configurations and states
             BaseConfiguration = ParameterSets.Get<BaseConfiguration>();
-            RealState = States.Get<RealState>();
             TemperatureBehaviors = SetupBehaviors<TemperatureBehavior>();
             LoadBehaviors = SetupBehaviors<LoadBehavior>();
             InitialConditionBehaviors = SetupBehaviors<InitialConditionBehavior>();
 
             // Setup the load behaviors
+            RealState = States.Get<RealState>();
             var matrix = RealState.Matrix;
             foreach (var behavior in LoadBehaviors)
                 behavior.GetMatrixPointers(Circuit.Nodes, matrix);
+            RealState.Initialize(Circuit.Nodes);
 
             // Allow nodesets to help convergence
             OnLoad += LoadNodesets;
@@ -98,9 +99,6 @@ namespace SpiceSharp.Simulations
             // Do temperature-dependent calculations
             foreach (var behavior in TemperatureBehaviors)
                 behavior.Temperature(this);
-
-            // Initialize the solution
-            RealState.Initialize(Circuit);
 
             // Do initial conditions
             InitialConditions();
@@ -224,10 +222,6 @@ namespace SpiceSharp.Simulations
 
             // Make sure we're using real numbers!
             matrix.Complex = false;
-
-            // Initialize the state of the circuit
-            if (!state.Initialized)
-                state.Initialize(Circuit);
 
             // Ignore operating condition point, just use the solution as-is
             if (state.UseIC && state.Domain == RealState.DomainType.Time)
