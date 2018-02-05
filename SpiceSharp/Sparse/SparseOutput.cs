@@ -172,7 +172,7 @@ namespace SpiceSharp.Sparse
                             if (data)
                             {
                                 if (typeof(T) == typeof(double))
-                                    sb.AppendFormat("{0:G3,10}", pElement.Element.Value);
+                                    sb.AppendFormat("{0,10:G3}", pElement.Element.Value);
                             }
                             else
                                 sb.Append('x');
@@ -203,7 +203,7 @@ namespace SpiceSharp.Sparse
                             if (pImagElements[J - StartCol] != null)
                             {
                                 if (pImagElements[J - StartCol].Element is Element<Complex> e)
-                                    sb.AppendFormat("{0:G3,9}j", e.Value.Imaginary);
+                                    sb.AppendFormat("{0,9:G3}j", e.Value.Imaginary);
                             }
                             else sb.Append("          ");
                         }

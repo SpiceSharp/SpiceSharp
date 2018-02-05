@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SpiceSharp.Circuits;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharpTest.Models.MUT
+namespace SpiceSharpTest.Models
 {
     [TestClass]
     public class MutualInductanceTest : Framework

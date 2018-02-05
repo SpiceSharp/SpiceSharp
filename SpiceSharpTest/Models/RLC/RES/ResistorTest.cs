@@ -1,11 +1,9 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp;
-using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharpTest.Models.RLC.RES
+namespace SpiceSharpTest.Models
 {
     [TestClass]
     public class ResistorTest : Framework
@@ -27,7 +25,7 @@ namespace SpiceSharpTest.Models.RLC.RES
         }
 
         [TestMethod]
-        public void SingleResistorOnDcVoltage_Op()
+        public void SingleResistorOnDcVoltage_OP()
         {
             /*
              * A circuit contains a DC voltage source 10V and resistor 1000 Ohms
@@ -94,7 +92,7 @@ namespace SpiceSharpTest.Models.RLC.RES
         }
 
         [TestMethod]
-        public void VoltageDividerDcVoltage_Op()
+        public void VoltageDividerDcVoltage_OP()
         {
             /*
              * A circuit contains a DC voltage source 100V and two resistors in series (1 and 3 Ohms). 
@@ -132,7 +130,7 @@ namespace SpiceSharpTest.Models.RLC.RES
         }
 
         [TestMethod]
-        public void ParallelResistorsDcVoltage_Op()
+        public void ParallelResistorsDcVoltage_OP()
         {
             /*
              * A circuit contains a DC voltage source 100V and two resistors in parallel (1 and 2 Ohms). 

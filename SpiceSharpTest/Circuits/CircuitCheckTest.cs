@@ -1,10 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp;
-using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 
-namespace SpiceSharpTest.Circuits
+namespace SpiceSharpTest.Validation
 {
     [TestClass]
     public class CircuitCheckTest

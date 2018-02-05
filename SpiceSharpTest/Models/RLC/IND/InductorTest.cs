@@ -3,10 +3,9 @@ using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using SpiceSharp.Circuits;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace SpiceSharpTest.Models.IND
+namespace SpiceSharpTest.Models
 {
     [TestClass]
     public class InductorTest : Framework

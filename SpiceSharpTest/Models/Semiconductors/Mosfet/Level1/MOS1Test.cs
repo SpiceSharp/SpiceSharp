@@ -1,13 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.Numerics;
 using SpiceSharp;
-using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharpTest.Models.Mosfet.Level1
+namespace SpiceSharpTest.Models
 {
     [TestClass]
     public class MOS1Test : Framework

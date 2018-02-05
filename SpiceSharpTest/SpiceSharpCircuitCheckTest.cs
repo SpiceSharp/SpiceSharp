@@ -5,7 +5,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 
-namespace SpiceSharpTest
+namespace SpiceSharpTest.Validation
 {
     [TestClass]
     public class SpiceSharpCircuitCheckTest

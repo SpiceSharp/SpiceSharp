@@ -5,13 +5,13 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharpTest.Models.RLC.CAP
+namespace SpiceSharpTest.Models
 {
     [TestClass]
     public class CapacitorTest : Framework
     {
         [TestMethod]
-        public void LowpassRC_DC()
+        public void LowpassRC_OP()
         {
             /*
              * Lowpass RC circuit

@@ -2,11 +2,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp;
 using SpiceSharp.Simulations;
-using SpiceSharp.Circuits;
-using System;
 using SpiceSharp.Components;
 
-namespace SpiceSharpTest.Models.Bipolar
+namespace SpiceSharpTest.Models
 {
     [TestClass]
     public class BJTTest : Framework

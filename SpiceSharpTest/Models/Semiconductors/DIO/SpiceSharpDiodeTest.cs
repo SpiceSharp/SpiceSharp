@@ -1,12 +1,10 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharpTest.Models.DIO
+namespace SpiceSharpTest.Models
 {
     /// <summary>
     /// From LTSpice

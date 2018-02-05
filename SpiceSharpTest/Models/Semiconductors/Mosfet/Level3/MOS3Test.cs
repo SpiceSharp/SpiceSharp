@@ -1,12 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Numerics;
 using SpiceSharp;
-using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharpTest.Models.Transistors
+namespace SpiceSharpTest.Models
 {
     /// <summary>
     /// Model part of the FDC604P (ONSemi)

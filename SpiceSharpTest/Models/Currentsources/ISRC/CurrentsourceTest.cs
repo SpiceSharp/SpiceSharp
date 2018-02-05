@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
 
-namespace SpiceSharpTest.Models.Currentsources.ISRC
+namespace SpiceSharpTest.Models
 {
     [TestClass]
     public class CurrentsourceTest : Framework
@@ -24,7 +23,7 @@ namespace SpiceSharpTest.Models.Currentsources.ISRC
         }
 
         [TestMethod]
-        public void SingleResistorOnCurrentSource_Op()
+        public void SingleResistorOnCurrentSource_OP()
         {
             /*
              * A circuit contains a current source 10A and resistor 1000 Ohms
@@ -73,7 +72,7 @@ namespace SpiceSharpTest.Models.Currentsources.ISRC
         }
 
         [TestMethod]
-        public void ResistorsInSeriesOnCurrentSource_Op()
+        public void ResistorsInSeriesOnCurrentSource_OP()
         {
             /*
              * A circuit contains a current source 100A and 500 resistor 1000 Ohms
