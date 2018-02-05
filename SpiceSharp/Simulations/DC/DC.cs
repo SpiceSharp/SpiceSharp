@@ -98,7 +98,6 @@ namespace SpiceSharp.Simulations
             state.Initialize(circuit);
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;
-            state.UseSmallSignal = false;
             state.Domain = RealState.DomainType.None;
             state.Gmin = baseconfig.Gmin;
 

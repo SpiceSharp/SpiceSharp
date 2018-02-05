@@ -101,7 +101,6 @@ namespace SpiceSharp.Simulations
         {
             base.Execute();
 
-            var circuit = Circuit;
             var state = RealState;
             var cstate = ComplexState;
             var nstate = NoiseState;
@@ -111,21 +110,20 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(RealState, ComplexState);
 
             // Find the output nodes
-            int posOutNode = noiseconfig.Output != null ? circuit.Nodes[noiseconfig.Output].Index : 0;
-            int negOutNode = noiseconfig.OutputRef != null ? circuit.Nodes[noiseconfig.OutputRef].Index : 0;
+            int posOutNode = noiseconfig.Output != null ? Circuit.Nodes[noiseconfig.Output].Index : 0;
+            int negOutNode = noiseconfig.OutputRef != null ? Circuit.Nodes[noiseconfig.OutputRef].Index : 0;
 
             // Check the voltage or current source
             // TODO: Note used? Check this!
             // var source = FindInputSource(noiseconfig.Input);
             
             // Initialize
-            nstate.Initialize(circuit);
+            nstate.Initialize(Circuit);
             nstate.Reset(FrequencySweep.Initial);
             cstate.Laplace = 0;
             state.Domain = RealState.DomainType.Frequency;
             state.UseIC = false;
             state.UseDC = true;
-            state.UseSmallSignal = false;
             Op(baseconfig.DCMaxIterations);
             state.Sparse |= RealState.SparseStates.ACShouldReorder;
 
@@ -138,7 +136,7 @@ namespace SpiceSharp.Simulations
             {
                 nstate.Frequency = freq;
                 cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
-                ACIterate(circuit);
+                ACIterate();
 
                 Complex val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
                 nstate.GainInverseSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);

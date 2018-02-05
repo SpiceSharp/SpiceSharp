@@ -261,7 +261,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 			* share some code, so we put them first - others later on
 			*/
 
-            if ((state.Init == RealState.InitializationStates.InitFloat || state.UseSmallSignal || (state.Init == RealState.InitializationStates.InitTransient)) ||
+            if ((state.Init == RealState.InitializationStates.InitFloat || (state.Init == RealState.InitializationStates.InitTransient)) ||
                 ((state.Init == RealState.InitializationStates.InitFix) && (!bp.Off)))
             {
                 // General iteration
@@ -746,7 +746,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             /* 
 			 * check convergence
 			 */
-            if (!bp.Off || (!(state.Init == RealState.InitializationStates.InitFix || state.UseSmallSignal)))
+            if (!bp.Off || (!(state.Init == RealState.InitializationStates.InitFix)))
             {
                 if (Check == 1)
                     state.IsConvergent = false;

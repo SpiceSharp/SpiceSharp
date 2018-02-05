@@ -110,12 +110,6 @@ namespace SpiceSharp.Simulations
         public DomainType Domain { get; set; }
 
         /// <summary>
-        /// Gets or sets the flag for calculating small signal parameters
-        /// If false, small signal parameters are not calculated
-        /// </summary>
-        public bool UseSmallSignal { get; set; }
-
-        /// <summary>
         /// Gets or sets the flag for ignoring time-related effects
         /// If true, each device should assume the circuit is in rest
         /// </summary>
@@ -218,7 +212,6 @@ namespace SpiceSharp.Simulations
             DiagonalGmin = 0;
             UseDC = true;
             UseIC = false;
-            UseSmallSignal = false;
 
             base.Initialize(circuit);
         }

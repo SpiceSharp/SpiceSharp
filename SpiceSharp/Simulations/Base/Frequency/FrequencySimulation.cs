@@ -1,6 +1,4 @@
-﻿using System;
-using System.Numerics;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Sparse;
 using SpiceSharp.Behaviors;
@@ -112,8 +110,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Calculate the AC solution
         /// </summary>
-        /// <param name="circuit">Circuit</param>
-        protected void ACIterate(Circuit circuit)
+        protected void ACIterate()
         {
             var cstate = ComplexState;
             var matrix = cstate.Matrix;

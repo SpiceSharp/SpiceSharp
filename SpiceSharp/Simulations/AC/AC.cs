@@ -65,7 +65,7 @@ namespace SpiceSharp.Simulations
                 cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
 
                 // Solve
-                ACIterate(circuit);
+                ACIterate();
 
                 // Export the timepoint
                 Export(exportargs);

@@ -248,7 +248,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             Beta = temp.TempTransconductance * bp.Width / EffectiveLength;
             OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
 
-            if ((state.Init == RealState.InitializationStates.InitFloat || state.UseSmallSignal || (state.Init == RealState.InitializationStates.InitTransient)) ||
+            if ((state.Init == RealState.InitializationStates.InitFloat || (state.Init == RealState.InitializationStates.InitTransient)) ||
                 ((state.Init == RealState.InitializationStates.InitFix) && (!bp.Off)))
             {
                 // general iteration
@@ -892,7 +892,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             /* 
 			 * check convergence
 			 */
-            if (!bp.Off || (!(state.Init == RealState.InitializationStates.InitFix || state.UseSmallSignal)))
+            if (!bp.Off || (!(state.Init == RealState.InitializationStates.InitFix)))
             {
                 if (Check == 1)
                     state.IsConvergent = false;
