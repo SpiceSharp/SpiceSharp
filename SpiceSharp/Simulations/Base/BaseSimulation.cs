@@ -41,6 +41,11 @@ namespace SpiceSharp.Simulations
         public Node ProblemNode { get; protected set; }
 
         /// <summary>
+        /// Event called when the state is loaded
+        /// </summary>
+        public event EventHandler<LoadStateEventArgs> OnLoad;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
@@ -80,6 +85,9 @@ namespace SpiceSharp.Simulations
             var matrix = RealState.Matrix;
             foreach (var behavior in LoadBehaviors)
                 behavior.GetMatrixPointers(Circuit.Nodes, matrix);
+
+            // Allow nodesets to help convergence
+            OnLoad += LoadNodesets;
         }
 
         /// <summary>
@@ -103,6 +111,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected override void Unsetup()
         {
+            // Remove nodeset
+            OnLoad -= LoadNodesets;
+
             // Unsetup all behaviors
             foreach (var behavior in InitialConditionBehaviors)
                 behavior.Unsetup();
@@ -143,7 +154,9 @@ namespace SpiceSharp.Simulations
             if (!config.NoOperatingPointIterations)
             {
                 if (Iterate(maxIterations))
+                {
                     return;
+                }
             }
 
             // No convergence, try Gmin stepping
@@ -168,7 +181,9 @@ namespace SpiceSharp.Simulations
                 }
                 state.DiagonalGmin = 0.0;
                 if (Iterate(maxIterations))
+                {
                     return;
+                }
             }
 
             // Nope, still not converging, let's try source stepping
@@ -357,55 +372,9 @@ namespace SpiceSharp.Simulations
             foreach (var behavior in LoadBehaviors)
                 behavior.Load(this);
 
-            // Check modes
-            if (state.UseDC)
-            {
-                // Consider doing nodeset & ic assignments
-                if ((state.Init & (RealState.InitializationStates.InitJunction | RealState.InitializationStates.InitFix)) != 0)
-                {
-                    // Do nodesets
-                    for (int i = 0; i < nodes.Count; i++)
-                    {
-                        var node = nodes[i];
-                        if (nodes.NodeSets.ContainsKey(node.Name))
-                        {
-                            double ns = nodes.NodeSets[node.Name];
-                            if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
-                            {
-                                state.Rhs[node.Index] = 1.0e10 * ns;
-                                node.Diagonal.Value = 1.0e10;
-                            }
-                            else
-                            {
-                                state.Rhs[node.Index] = ns;
-                                node.Diagonal.Value = 1.0;
-                            }
-                        }
-                    }
-                }
-
-                if (state.Domain == RealState.DomainType.Time && !state.UseIC)
-                {
-                    for (int i = 0; i < nodes.Count; i++)
-                    {
-                        var node = nodes[i];
-                        if (nodes.InitialConditions.ContainsKey(node.Name))
-                        {
-                            double ic = nodes.InitialConditions[node.Name];
-                            if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
-                            {
-                                state.Rhs[node.Index] = 1.0e10 * ic;
-                                node.Diagonal.Value = 1.0e10;
-                            }
-                            else
-                            {
-                                state.Rhs[node.Index] = ic;
-                                node.Diagonal.Value = 1.0;
-                            }
-                        }
-                    }
-                }
-            }
+            // Call events
+            var args = new LoadStateEventArgs(RealState);
+            OnLoad?.Invoke(this, args);
 
             // Keep statistics
             Statistics.LoadTime.Stop();
@@ -452,13 +421,48 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Apply nodesets
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Arguments</param>
+        protected void LoadNodesets(object sender, LoadStateEventArgs e)
+        {
+            var state = RealState;
+            var nodes = Circuit.Nodes;
+
+            // Consider doing nodeset & ic assignments
+            if ((state.Init & (RealState.InitializationStates.InitJunction | RealState.InitializationStates.InitFix)) != 0)
+            {
+                // Do nodesets
+                for (int i = 0; i < nodes.Count; i++)
+                {
+                    var node = nodes[i];
+                    if (nodes.NodeSets.ContainsKey(node.Name))
+                    {
+                        double ns = nodes.NodeSets[node.Name];
+                        if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
+                        {
+                            state.Rhs[node.Index] = 1.0e10 * ns;
+                            node.Diagonal.Value = 1.0e10;
+                        }
+                        else
+                        {
+                            state.Rhs[node.Index] = ns;
+                            node.Diagonal.Value = 1.0;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Reset the row to 0.0 and return true if the row is a current equation
         /// </summary>
         /// <param name="matrix">The matrix</param>
         /// <param name="nodes">The list of nodes</param>
         /// <param name="rownum">The row number</param>
         /// <returns></returns>
-        static bool ZeroNoncurRow(Matrix<double> matrix, Nodes nodes, int rownum)
+        protected static bool ZeroNoncurRow(Matrix<double> matrix, Nodes nodes, int rownum)
         {
             bool currents = false;
             for (int n = 0; n < nodes.Count; n++)

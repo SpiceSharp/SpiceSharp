@@ -95,7 +95,6 @@ namespace SpiceSharp.Simulations
             var dcconfig = DCConfiguration;
             var baseconfig = BaseConfiguration;
             state.Init = RealState.InitializationStates.InitJunction;
-            state.Initialize(circuit);
             state.UseIC = false; // UseIC is only used in transient simulations
             state.UseDC = true;
             state.Domain = RealState.DomainType.None;

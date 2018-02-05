@@ -104,6 +104,10 @@ namespace SpiceSharp.Simulations
             state.Domain = RealState.DomainType.Time;
             state.Gmin = baseConfig.Gmin;
 
+            // Use node initial conditions if device initial conditions are not used
+            if (!timeConfig.UseIC)
+                OnLoad += LoadInitialConditions;
+
             // Calculate the operating point
             Op(baseConfig.DCMaxIterations);
             Statistics.TimePoints++;
@@ -117,6 +121,7 @@ namespace SpiceSharp.Simulations
             foreach (var behavior in TransientBehaviors)
                 behavior.GetDCState(this);
             StatePool.ClearDC();
+            OnLoad -= LoadInitialConditions;
 
             // Start our statistics
             Statistics.TransientTime.Start();
@@ -154,6 +159,7 @@ namespace SpiceSharp.Simulations
                         Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
 
                         // Finished!
+                        OnLoad -= LoadInitialConditions;
                         return;
                     }
 
@@ -227,6 +233,36 @@ namespace SpiceSharp.Simulations
                 Statistics.TransientIterations += Statistics.Iterations - startIters;
                 Statistics.TransientSolveTime += Statistics.SolveTime.Elapsed - startselapsed;
                 throw new CircuitException("{0}: transient terminated".FormatString(Name), ex);
+            }
+        }
+
+        /// <summary>
+        /// Load initial conditions
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Arguments</param>
+        protected void LoadInitialConditions(object sender, LoadStateEventArgs e)
+        {
+            var state = RealState;
+            var nodes = Circuit.Nodes;
+
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                var node = nodes[i];
+                if (nodes.InitialConditions.ContainsKey(node.Name))
+                {
+                    double ic = nodes.InitialConditions[node.Name];
+                    if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
+                    {
+                        state.Rhs[node.Index] = 1.0e10 * ic;
+                        node.Diagonal.Value = 1.0e10;
+                    }
+                    else
+                    {
+                        state.Rhs[node.Index] = ic;
+                        node.Diagonal.Value = 1.0;
+                    }
+                }
             }
         }
     }
