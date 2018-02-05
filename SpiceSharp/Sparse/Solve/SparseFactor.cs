@@ -7,18 +7,19 @@ namespace SpiceSharp.Sparse
     /// </summary>
     public static class SparseFactor
     {
-        internal const bool DIAG_PIVOTING_AS_DEFAULT = true;
+        /// <summary>
+        /// Constants
+        /// </summary>
+        const bool DIAG_PIVOTING_AS_DEFAULT = true;
 
         /// <summary>
         /// Order and factor the matrix
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Right-Hand Side</param>
-        /// <param name="relativeThreshold">Relative threshold for pivot selection</param>
-        /// <param name="absoluteThreshold">Absolute threshold for pivot selection</param>
         /// <param name="diagonalPivoting">Use diagonal pivoting</param>
         /// <returns></returns>
-        public static SparseError OrderAndFactor<T>(this Matrix<T> matrix, Vector<double> rhs, double relativeThreshold, double absoluteThreshold, bool diagonalPivoting)
+        public static SparseError OrderAndFactor<T>(this Matrix<T> matrix, Vector<double> rhs, bool diagonalPivoting)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -34,14 +35,6 @@ namespace SpiceSharp.Sparse
 
             matrix.Error = SparseError.Okay;
             Size = matrix.IntSize;
-            if (relativeThreshold <= 0.0)
-                relativeThreshold = matrix.RelThreshold;
-            if (relativeThreshold > 1.0)
-                relativeThreshold = matrix.RelThreshold;
-            matrix.RelThreshold = relativeThreshold;
-            if (absoluteThreshold < 0.0)
-                absoluteThreshold = matrix.AbsThreshold;
-            matrix.AbsThreshold = absoluteThreshold;
             ReorderingRequired = false;
 
             if (!matrix.NeedsOrdering)
@@ -51,7 +44,7 @@ namespace SpiceSharp.Sparse
                 {
                     pPivot = matrix.Diag[Step];
                     LargestInCol = SparsePivoting<T>.FindLargestInCol(pPivot.NextInColumn);
-                    if (LargestInCol * relativeThreshold < pPivot.Element.Magnitude)
+                    if (LargestInCol * pivoting.RelThreshold < pPivot.Element.Magnitude)
                     {
                         ComplexRowColElimination(matrix, pPivot);
                     }
@@ -128,7 +121,7 @@ namespace SpiceSharp.Sparse
                 throw new SparseException("Matrix is factored");
 
             if (matrix.NeedsOrdering)
-                return OrderAndFactor(matrix, null, 0.0, 0.0, DIAG_PIVOTING_AS_DEFAULT);
+                return OrderAndFactor(matrix, null, DIAG_PIVOTING_AS_DEFAULT);
             if (!pivoting.Partitioned)
                 pivoting.Partition(matrix, SparsePartition.Default);
 

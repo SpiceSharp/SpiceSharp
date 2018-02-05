@@ -81,16 +81,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// TEMPORARY: Pivot absolute tolerance
-        /// </summary>
-        public double PivotAbsoluteTolerance { get; set; } = 1e-13;
-
-        /// <summary>
-        /// TEMPORARY: Pivot relative tolerance
-        /// </summary>
-        public double PivotRelativeTolerance { get; set; } = 1e-3;
-
-        /// <summary>
         /// Extra conductance that is added to all nodes to ground to aid convergence
         /// </summary>
         public double DiagonalGmin { get; set; } = 0;

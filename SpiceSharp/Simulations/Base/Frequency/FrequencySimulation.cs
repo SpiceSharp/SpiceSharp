@@ -125,7 +125,7 @@ namespace SpiceSharp.Simulations
 
             if (cstate.Sparse.HasFlag(ComplexState.SparseStates.ACShouldReorder))
             {
-                var error = matrix.Reorder(cstate.PivotAbsoluteTolerance, cstate.PivotRelativeTolerance);
+                var error = matrix.Reorder();
                 cstate.Sparse &= ~ComplexState.SparseStates.ACShouldReorder;
                 if (error != SparseError.Okay)
                     throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(cstate.Matrix, "AC"));

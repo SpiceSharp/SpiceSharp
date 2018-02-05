@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 
 namespace SpiceSharp.Sparse
 {
@@ -56,8 +55,7 @@ namespace SpiceSharp.Sparse
         /// <summary>
         /// Internal variables
         /// </summary>
-        internal double AbsThreshold;
-        internal double RelThreshold;
+
 
         internal int IntSize;
         internal int AllocatedSize;
@@ -130,8 +128,6 @@ namespace SpiceSharp.Sparse
             Size = size;
             AllocatedExtSize = allocated;
             CurrentSize = 0;
-            RelThreshold = DEFAULT_THRESHOLD;
-            AbsThreshold = 0.0;
 
             // Take out the trash
             TrashCan = new MatrixElement<T>(0, 0);

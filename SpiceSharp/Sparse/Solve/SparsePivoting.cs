@@ -26,6 +26,16 @@ namespace SpiceSharp.Sparse
         internal int PivotsOriginalCol = 0;
         internal int PivotsOriginalRow = 0;
 
+        /// <summary>
+        /// Absolute threshold for pivoting
+        /// </summary>
+        public double AbsThreshold { get; set; } = 1e-13;
+
+        /// <summary>
+        /// Relative threshold for pivoting
+        /// </summary>
+        public double RelThreshold { get; set; } = 1e-3;
+
         // This kind of should not be here...
         internal Element<T>[] Intermediate;
 
@@ -320,8 +330,9 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">The matrix</param>
         /// <param name="Step">The current step</param>
         /// <returns></returns>
-        private MatrixElement<T> SearchForSingleton(Matrix<T> matrix, int Step)
+        MatrixElement<T> SearchForSingleton(Matrix<T> matrix, int Step)
         {
+            var pivoting = matrix.Pivoting;
             MatrixElement<T> ChosenPivot;
             int I;
             long[] pMarkowitzProduct;
@@ -381,7 +392,7 @@ namespace SpiceSharp.Sparse
                 {
                     // Singleton lies on the diagonal. 
                     PivotMag = ChosenPivot.Element.Magnitude;
-                    if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
+                    if (PivotMag > pivoting.AbsThreshold && PivotMag > pivoting.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                         return ChosenPivot;
                 }
                 else
@@ -398,7 +409,7 @@ namespace SpiceSharp.Sparse
                             break;
                         }
                         PivotMag = ChosenPivot.Element.Magnitude;
-                        if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
+                        if (PivotMag > pivoting.AbsThreshold && PivotMag > pivoting.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                             return ChosenPivot;
                         else
                         {
@@ -413,7 +424,7 @@ namespace SpiceSharp.Sparse
                                     break;
                                 }
                                 PivotMag = ChosenPivot.Element.Magnitude;
-                                if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
+                                if (PivotMag > pivoting.AbsThreshold && PivotMag > pivoting.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                                     return ChosenPivot;
                             }
                         }
@@ -428,7 +439,7 @@ namespace SpiceSharp.Sparse
                             break;
                         }
                         PivotMag = ChosenPivot.Element.Magnitude;
-                        if (PivotMag > matrix.AbsThreshold && PivotMag > matrix.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
+                        if (PivotMag > pivoting.AbsThreshold && PivotMag > pivoting.RelThreshold * FindBiggestInColExclude(matrix, ChosenPivot, Step))
                             return ChosenPivot;
                     }
                 }
@@ -437,7 +448,7 @@ namespace SpiceSharp.Sparse
 
             // All singletons were unacceptable.  Restore matrix.Singletons count.
             // Initial assumption that an acceptable singleton would be found was wrong.
-            this.Singletons++;
+            Singletons++;
             return null;
         }
 
@@ -447,7 +458,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">The matrix</param>
         /// <param name="Step">The current step</param>
         /// <returns></returns>
-        private MatrixElement<T> QuicklySearchDiagonal(Matrix<T> matrix, int Step)
+        MatrixElement<T> QuicklySearchDiagonal(Matrix<T> matrix, int Step)
         {
             long MinMarkowitzProduct;
             // long pMarkowitzProduct;
@@ -499,7 +510,7 @@ namespace SpiceSharp.Sparse
 
                 if ((pDiag = matrix.Diag[I]) == null)
                     continue; // Endless for loop 
-                if ((Magnitude = pDiag.Element.Magnitude) <= matrix.AbsThreshold)
+                if ((Magnitude = pDiag.Element.Magnitude) <= AbsThreshold)
                     continue; // Endless for loop 
 
                 if (MarkowitzProd[index] == 1)
@@ -550,7 +561,7 @@ namespace SpiceSharp.Sparse
             if (ChosenPivot != null)
             {
                 LargestInCol = FindBiggestInColExclude(matrix, ChosenPivot, Step);
-                if (ChosenPivot.Element.Magnitude <= matrix.RelThreshold * LargestInCol)
+                if (ChosenPivot.Element.Magnitude <= RelThreshold * LargestInCol)
                     ChosenPivot = null;
             }
             return ChosenPivot;
@@ -562,7 +573,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">Matrix</param>
         /// <param name="Step">Step</param>
         /// <returns></returns>
-        private MatrixElement<T> SearchDiagonal(Matrix<T> matrix, int Step)
+        MatrixElement<T> SearchDiagonal(Matrix<T> matrix, int Step)
         {
             int J;
             long MinMarkowitzProduct;
@@ -590,12 +601,12 @@ namespace SpiceSharp.Sparse
                     I = J;
                 if ((pDiag = matrix.Diag[I]) == null)
                     continue; // for loop 
-                if ((Magnitude = pDiag.Element.Magnitude) <= matrix.AbsThreshold)
+                if ((Magnitude = pDiag.Element.Magnitude) <= AbsThreshold)
                     continue; // for loop 
 
                 // Test to see if diagonal's magnitude is acceptable. 
                 LargestInCol = FindBiggestInColExclude(matrix, pDiag, Step);
-                if (Magnitude <= matrix.RelThreshold * LargestInCol)
+                if (Magnitude <= RelThreshold * LargestInCol)
                     continue; // for loop 
 
                 if (MarkowitzProd[index] < MinMarkowitzProduct)
@@ -629,7 +640,7 @@ namespace SpiceSharp.Sparse
         /// <param name="matrix">The matrix</param>
         /// <param name="Step">Current step</param>
         /// <returns></returns>
-        private MatrixElement<T> SearchEntireMatrix(Matrix<T> matrix, int Step)
+        MatrixElement<T> SearchEntireMatrix(Matrix<T> matrix, int Step)
         {
             int I, Size = matrix.IntSize;
             MatrixElement<T> pElement;
@@ -666,7 +677,7 @@ namespace SpiceSharp.Sparse
                     Product = MarkowitzRow[pElement.Row] * MarkowitzCol[pElement.Column];
 
                     // Test to see if element is acceptable as a pivot candidate. 
-                    if ((Product <= MinMarkowitzProduct) && (Magnitude > matrix.RelThreshold * LargestInCol) && (Magnitude > matrix.AbsThreshold))
+                    if ((Product <= MinMarkowitzProduct) && (Magnitude > RelThreshold * LargestInCol) && (Magnitude > AbsThreshold))
                     {
                         /* Test to see if element has lowest MarkowitzProduct yet found, or whether it
                            is tied with an element found earlier. */
@@ -698,7 +709,7 @@ namespace SpiceSharp.Sparse
 
             if (ChosenPivot != null) return ChosenPivot;
 
-            if (LargestElementMag == 0.0)
+            if (LargestElementMag.Equals(0)) // Matrix is singular!
             {
                 matrix.Error = SparseError.Singular;
                 return null;

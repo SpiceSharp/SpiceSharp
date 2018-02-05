@@ -23,26 +23,22 @@ namespace SpiceSharp.Sparse
         /// SMPcReorder
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="pivotTolerance">Pivot tolerance</param>
-        /// <param name="pivotRelativeTolerance">Pivot relative tolerance</param>
         /// <returns></returns>
-        public static SparseError Reorder<T>(this Matrix<T> matrix, double pivotTolerance, double pivotRelativeTolerance)
+        public static SparseError Reorder<T>(this Matrix<T> matrix)
         {
-            return matrix.OrderAndFactor(null, pivotRelativeTolerance, pivotTolerance, true);
+            return matrix.OrderAndFactor(null, true);
         }
 
         /// <summary>
         /// SMPreorder
         /// </summary>
         /// <param name="matrix">The matrix</param>
-        /// <param name="pivotTolerance">Pivot tolerance</param>
-        /// <param name="pivotRelativeTolerance">Pivot relative tolerance</param>
         /// <param name="gmin">Minimum conductance on the diagonal</param>
         /// <returns></returns>
-        public static SparseError Reorder(this Matrix<double> matrix, double pivotTolerance, double pivotRelativeTolerance, double gmin)
+        public static SparseError Reorder(this Matrix<double> matrix, double gmin)
         {
             matrix.LoadGmin(gmin);
-            return matrix.OrderAndFactor(null, pivotRelativeTolerance, pivotTolerance, true);
+            return matrix.OrderAndFactor(null, true);
         }
         
         /// <summary>

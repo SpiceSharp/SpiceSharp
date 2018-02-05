@@ -263,7 +263,7 @@ namespace SpiceSharp.Simulations
                 if (state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
-                    matrix.Reorder(state.PivotRelativeTolerance, state.PivotAbsoluteTolerance, state.DiagonalGmin);
+                    matrix.Reorder(state.DiagonalGmin);
                     Statistics.ReorderTime.Stop();
                     state.Sparse &= ~RealState.SparseStates.ShouldReorder;
                 }

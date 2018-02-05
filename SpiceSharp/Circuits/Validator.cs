@@ -14,12 +14,6 @@ namespace SpiceSharp.Circuits
     public class Validator
     {
         /// <summary>
-        /// Constants
-        /// </summary>
-        const double PivotAbsTol = 1e-6;
-        const double PivotRelTol = 1e-3;
-
-        /// <summary>
         /// Private variables
         /// </summary>
         bool HasSource;
@@ -175,14 +169,14 @@ namespace SpiceSharp.Circuits
             }
 
             // Determine the rank of the matrix
-            Matrix<double> conn = new Matrix<double>(Math.Max(voltageDriven.Count, map.Count), false);
+            Matrix<double> conn = new Matrix<double>(Math.Max(voltageDriven.Count, map.Count));
             for (int i = 0; i < voltageDriven.Count; i++)
             {
                 var pins = voltageDriven[i];
                 conn.GetElement(i + 1, map[pins.Item2]).Add(1.0);
                 conn.GetElement(i + 1, map[pins.Item3]).Add(1.0);
             }
-            var error = conn.OrderAndFactor(null, PivotRelTol, PivotAbsTol, true);
+            var error = conn.OrderAndFactor(null, true);
             conn.SingularAt(out int row, out _);
             row--;
             if (error == SparseError.Singular && row < voltageDriven.Count)
