@@ -42,18 +42,12 @@ namespace SpiceSharp.Simulations
             var freqconfig = FrequencyConfiguration;
             
             // Calculate the operating point
-            state.Initialize(circuit);
             cstate.Laplace = 0.0;
             state.Domain = RealState.DomainType.Frequency;
-            state.UseIC = false;
-            state.UseDC = true;
-            state.UseSmallSignal = false;
             state.Gmin = baseconfig.Gmin;
             Op(baseconfig.DCMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
-            state.UseDC = false;
-            state.UseSmallSignal = true;
             foreach (var behavior in LoadBehaviors)
                 behavior.Load(this);
             foreach (var behavior in FrequencyBehaviors)
@@ -63,10 +57,6 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(RealState, ComplexState);
             if (freqconfig.KeepOpInfo)
                 Export(exportargs);
-
-            // Calculate the AC solution
-            state.UseDC = false;
-            state.Matrix.Complex = true;
 
             // Sweep the frequency
             foreach (double freq in FrequencySweep.Points)

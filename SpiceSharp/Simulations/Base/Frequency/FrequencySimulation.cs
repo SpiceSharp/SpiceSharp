@@ -76,6 +76,17 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Execute
+        /// </summary>
+        protected override void Execute()
+        {
+            base.Execute();
+
+            // Initialize the state
+            ComplexState.Initialize(Circuit);
+        }
+
+        /// <summary>
         /// Unsetup the simulation
         /// </summary>
         protected override void Unsetup()
@@ -107,10 +118,6 @@ namespace SpiceSharp.Simulations
             var cstate = ComplexState;
             var matrix = cstate.Matrix;
             matrix.Complex = true;
-
-            // Initialize the circuit
-            if (!cstate.Initialized)
-                cstate.Initialize(circuit);
 
             retry:
             cstate.IsConvergent = true;
