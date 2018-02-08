@@ -148,7 +148,39 @@ namespace SpiceSharp.NewSparse
         /// <param name="row">Row</param>
         /// <param name="column">Column</param>
         /// <returns></returns>
-        public MatrixIterator<T> GetMatrixIterator(int row, int column)
+        public MatrixIterator<T> GetIterator(int row, int column)
+        {
+            if (row < 0 || column < 0)
+                throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));
+            if (row == 0 || column == 0)
+                return new MatrixIterator<T>(trashCan);
+
+            // Expand our matrix if it is necessary!
+            if (row > Size || column > Size)
+                ExpandMatrix(Math.Max(row, column));
+
+            // Quick access to diagonals
+            if (row == column && diagonal[row] != null)
+                return new MatrixIterator<T>(diagonal[row]);
+
+            MatrixElement<T> element;
+            if (!rows[row].CreateGetElement(row, column, out element))
+            {
+                columns[column].Insert(element);
+                if (row == column)
+                    diagonal[row] = element;
+            }
+
+            return new MatrixIterator<T>(element);
+        }
+
+        /// <summary>
+        /// Find an iterator
+        /// </summary>
+        /// <param name="row">Row</param>
+        /// <param name="column">Column</param>
+        /// <returns></returns>
+        public MatrixIterator<T> FindIterator(int row, int column)
         {
             if (row < 0 || column < 0)
                 throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));
@@ -158,6 +190,36 @@ namespace SpiceSharp.NewSparse
                 return new MatrixIterator<T>(trashCan);
             return new MatrixIterator<T>(rows[row].Find(column));
         }
+
+        /// <summary>
+        /// Get a matrix iterator
+        /// </summary>
+        /// <param name="diagonalIndex">Diagonal index</param>
+        /// <returns></returns>
+        public MatrixIterator<T> GetMatrixIterator(int diagonalIndex)
+        {
+            if (diagonalIndex < 0)
+                throw new ArgumentException("Invalid diagonal index {0}".FormatString(diagonalIndex));
+            if (diagonalIndex > Size)
+                return null;
+            if (diagonalIndex == 0)
+                return new MatrixIterator<T>(trashCan);
+            return new MatrixIterator<T>(diagonal[diagonalIndex]);
+        }
+
+        /// <summary>
+        /// Get the first element in a row
+        /// </summary>
+        /// <param name="row">Row</param>
+        /// <returns></returns>
+        public MatrixIterator<T> GetFirstInRow(int row) => new MatrixIterator<T>(rows[row].FirstInRow);
+
+        /// <summary>
+        /// Get the first element in a column
+        /// </summary>
+        /// <param name="column"></param>
+        /// <returns></returns>
+        public MatrixIterator<T> GetFirstInColumn(int column) => new MatrixIterator<T>(columns[column].FirstInColumn);
 
         /// <summary>
         /// Swap rows in the matrix
@@ -186,26 +248,41 @@ namespace SpiceSharp.NewSparse
                 if (row2Element == null)
                 {
                     columns[row1Element.Column].Swap(row1Element, null, row1, row2);
+                    if (row1Element.Column == row2)
+                        diagonal[row1Element.Column] = row1Element;
                     row1Element = row1Element.NextInRow;
                 }
                 else if (row1Element == null)
                 {
-                    columns[row2Element.Column].Swap(null, row1Element, row1, row2);
+                    columns[row2Element.Column].Swap(null, row2Element, row1, row2);
+                    if (row2Element.Column == row1)
+                        diagonal[row2Element.Column] = row2Element;
                     row2Element = row2Element.NextInRow;
                 }
                 else if (row1Element.Column < row2Element.Column)
                 {
                     columns[row1Element.Column].Swap(row1Element, null, row1, row2);
+                    if (row1Element.Column == row2)
+                        diagonal[row1Element.Column] = row1Element;
                     row1Element = row1Element.NextInRow;
                 }
                 else if (row2Element.Column < row1Element.Column)
                 {
                     columns[row2Element.Column].Swap(null, row2Element, row1, row2);
+                    if (row2Element.Column == row1)
+                        diagonal[row2Element.Column] = row2Element;
                     row2Element = row2Element.NextInRow;
                 }
                 else
                 {
                     columns[row1Element.Column].Swap(row1Element, row2Element, row1, row2);
+
+                    // Update diagonals
+                    if (row1Element.Column == row2)
+                        diagonal[row1Element.Column] = row1Element;
+                    else if (row2Element.Column == row1)
+                        diagonal[row2Element.Column] = row2Element;
+
                     row1Element = row1Element.NextInRow;
                     row2Element = row2Element.NextInRow;
                 }
@@ -239,26 +316,41 @@ namespace SpiceSharp.NewSparse
                 if (column2Element == null)
                 {
                     rows[column1Element.Row].Swap(column1Element, null, column1, column2);
+                    if (column1Element.Row == column2)
+                        diagonal[column1Element.Row] = column1Element;
                     column1Element = column1Element.NextInColumn;
                 }
                 else if (column1Element == null)
                 {
                     rows[column2Element.Row].Swap(null, column2Element, column1, column2);
+                    if (column2Element.Row == column1)
+                        diagonal[column2Element.Row] = column2Element;
                     column2Element = column2Element.NextInColumn;
                 }
                 else if (column1Element.Row < column2Element.Row)
                 {
                     rows[column1Element.Row].Swap(column1Element, null, column1, column2);
+                    if (column1Element.Row == column2)
+                        diagonal[column1Element.Row] = column1Element;
                     column1Element = column1Element.NextInColumn;
                 }
                 else if (column2Element.Row < column1Element.Row)
                 {
                     rows[column2Element.Row].Swap(null, column2Element, column1, column2);
+                    if (column2Element.Row == column1)
+                        diagonal[column2Element.Row] = column2Element;
                     column2Element = column2Element.NextInColumn;
                 }
                 else
                 {
                     rows[column1Element.Row].Swap(column1Element, column2Element, column1, column2);
+
+                    // Update diagonal
+                    if (column1Element.Row == column2)
+                        diagonal[column1Element.Row] = column1Element;
+                    if (column2Element.Row == column1)
+                        diagonal[column2Element.Row] = column2Element;
+
                     column1Element = column1Element.NextInColumn;
                     column2Element = column2Element.NextInColumn;
                 }

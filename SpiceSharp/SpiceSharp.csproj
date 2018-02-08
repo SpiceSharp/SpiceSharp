@@ -97,6 +97,8 @@
     <Compile Include="NewSparse\Matrix\MatrixElement.cs" />
     <Compile Include="NewSparse\Matrix\MatrixElementColumn.cs" />
     <Compile Include="NewSparse\Matrix\MatrixElementRow.cs" />
+    <Compile Include="NewSparse\Solve\Pivoting.cs" />
+    <Compile Include="NewSparse\Solve\Solver.cs" />
     <Compile Include="Simulations\Base\BaseConfiguration.cs" />
     <Compile Include="Simulations\Base\Frequency\ComplexSolution.cs" />
     <Compile Include="Simulations\Base\Frequency\ComplexState.cs" />
@@ -299,6 +301,7 @@
     <Compile Include="Sparse\SparseHelper.cs" />
     <Compile Include="Sparse\Solve\SparseSolve.cs" />
     <Compile Include="Sparse\SparseUtilities.cs" />
+    <Compile Include="NewSparse\Vector.cs" />
     <Compile Include="Sparse\Vector.cs" />
     <Compile Include="TypeDictionary.cs" />
     <Compile Include="Utility.cs" />

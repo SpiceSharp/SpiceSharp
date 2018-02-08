@@ -30,7 +30,7 @@ namespace SpiceSharpTest.Sparse
             MatrixIterator<double> iterator;
             for (int r = 0; r < size; r++)
             {
-                iterator = matrix.GetMatrixIterator(r + 1, 1);
+                iterator = matrix.GetIterator(r + 1, 1);
                 for (int c = 0; c < size; c++)
                 {
                     int expected = r * size + c + 1;
@@ -42,7 +42,7 @@ namespace SpiceSharpTest.Sparse
             // Check links from right to left
             for (int r = 0; r < size; r++)
             {
-                iterator = matrix.GetMatrixIterator(r + 1, size);
+                iterator = matrix.GetIterator(r + 1, size);
                 for (int c = size - 1; c >= 0; c--)
                 {
                     int expected = r * size + c + 1;
@@ -54,7 +54,7 @@ namespace SpiceSharpTest.Sparse
             // Check links from top to bottom
             for (int c = 0; c < size; c++)
             {
-                iterator = matrix.GetMatrixIterator(1, c + 1);
+                iterator = matrix.GetIterator(1, c + 1);
                 for (int r = 0; r < size; r++)
                 {
                     int expected = r * size + c + 1;
@@ -66,7 +66,7 @@ namespace SpiceSharpTest.Sparse
             // Check links from bottom to top
             for (int c = 0; c < size; c++)
             {
-                iterator = matrix.GetMatrixIterator(size, c + 1);
+                iterator = matrix.GetIterator(size, c + 1);
                 for (int r = size - 1; r >= 0; r--)
                 {
                     int expected = r * size + c + 1;

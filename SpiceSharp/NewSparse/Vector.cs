@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace SpiceSharp.Sparse
+namespace SpiceSharp.NewSparse
 {
     /// <summary>
     /// A vector with real values
@@ -47,7 +47,7 @@ namespace SpiceSharp.Sparse
         public Vector(int length)
         {
             if (length < 1)
-                throw new SparseException("Invalid vector length {0}".FormatString(length));
+                throw new Exception("Invalid vector length {0}".FormatString(length));
             Length = length;
             values = new T[length];
         }
@@ -73,7 +73,7 @@ namespace SpiceSharp.Sparse
             if (vector == null)
                 throw new ArgumentNullException(nameof(vector));
             if (vector.Length != Length)
-                throw new SparseException("Vector lengths do not match");
+                throw new Exception("Vector lengths do not match");
             for (int i = 0; i < Length; i++)
                 vector.values[i] = values[i];
         }
@@ -87,7 +87,7 @@ namespace SpiceSharp.Sparse
             if (vector == null)
                 throw new ArgumentNullException(nameof(vector));
             if (vector.Length != Length)
-                throw new SparseException("Vector lengths do not match");
+                throw new Exception("Vector lengths do not match");
             for (int i = 0; i < Length; i++)
                 values[i] = vector.values[i];
         }

@@ -59,5 +59,25 @@
         /// </summary>
         /// <returns></returns>
         public MatrixIterator<T> Branch() => new MatrixIterator<T>(matrixElement);
+
+        /// <summary>
+        /// Branch to the left
+        /// </summary>
+        public MatrixIterator<T> BranchLeft() => new MatrixIterator<T>(matrixElement.PreviousInRow);
+
+        /// <summary>
+        /// Branch to the right
+        /// </summary>
+        public MatrixIterator<T> BranchRight() => new MatrixIterator<T>(matrixElement.NextInRow);
+
+        /// <summary>
+        /// Branch to the top
+        /// </summary>
+        public MatrixIterator<T> BranchTop() => new MatrixIterator<T>(matrixElement.PreviousInColumn);
+
+        /// <summary>
+        /// Branch to the bottom
+        /// </summary>
+        public MatrixIterator<T> BranchDown() => new MatrixIterator<T>(matrixElement.NextInColumn);
     }
 }

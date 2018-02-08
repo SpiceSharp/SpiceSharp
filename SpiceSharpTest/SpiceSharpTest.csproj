@@ -67,6 +67,7 @@
     <Compile Include="Sparse\NewSparseTest.cs" />
     <Compile Include="Sparse\SparseBuildTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sparse\SparseFactorTest.cs" />
     <Compile Include="SpiceSharpTest.cs" />
     <Compile Include="SpiceSharpCircuitCheckTest.cs" />
     <Compile Include="Utils\AssertExtensions.cs" />
