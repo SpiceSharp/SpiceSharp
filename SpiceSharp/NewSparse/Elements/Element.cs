@@ -6,7 +6,7 @@ namespace SpiceSharp.NewSparse
     /// Represents an element in a matrix
     /// </summary>
     /// <typeparam name="T">Base type</typeparam>
-    public abstract class Element<T> : IElement, IFormattable
+    public abstract class Element<T> : BaseElement, IFormattable
     {
         /// <summary>
         /// Gets the equivalent of 1.0 for the element
@@ -19,11 +19,6 @@ namespace SpiceSharp.NewSparse
         public abstract T Value { get; set; }
 
         /// <summary>
-        /// Gets the magnitude of the element
-        /// </summary>
-        public abstract double Magnitude { get; }
-
-        /// <summary>
         /// Add a value
         /// </summary>
         /// <param name="operand">Operand</param>
@@ -34,11 +29,6 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         /// <param name="operand">Operand</param>
         public abstract void Sub(T operand);
-
-        /// <summary>
-        /// Negate the value
-        /// </summary>
-        public abstract void Negate();
 
         /// <summary>
         /// Store the result of the multiplication
@@ -68,12 +58,6 @@ namespace SpiceSharp.NewSparse
         public abstract void Multiply(Element<T> factor);
 
         /// <summary>
-        /// Multiply with a scalar
-        /// </summary>
-        /// <param name="factor">Scalar factor</param>
-        public abstract void Scalar(double factor);
-
-        /// <summary>
         /// Assign reciprocal
         /// </summary>
         /// <param name="denominator">Denominator</param>
@@ -90,19 +74,6 @@ namespace SpiceSharp.NewSparse
 
             Value = source.Value;
         }
-
-        /// <summary>
-        /// Check if the value equals 1.0 or -1.0
-        /// Used for finding identity multipliers in the matrix
-        /// </summary>
-        /// <returns></returns>
-        public abstract bool EqualsOne();
-
-        /// <summary>
-        /// Check if the value equals 0.0
-        /// </summary>
-        /// <returns></returns>
-        public abstract bool EqualsZero();
 
         /// <summary>
         /// Clear the element value

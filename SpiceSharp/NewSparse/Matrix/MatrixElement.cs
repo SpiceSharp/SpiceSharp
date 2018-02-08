@@ -25,22 +25,22 @@
         /// <summary>
         /// Next element in the row
         /// </summary>
-        public MatrixElement<T> NextInRow;
+        public MatrixElement<T> NextInRow { get; set; }
 
         /// <summary>
         /// Next element in the column
         /// </summary>
-        public MatrixElement<T> NextInColumn;
+        public MatrixElement<T> NextInColumn { get; set; }
 
         /// <summary>
         /// Previous element in the row
         /// </summary>
-        public MatrixElement<T> PreviousInRow;
+        public MatrixElement<T> PreviousInRow { get; set; }
 
         /// <summary>
         /// Previous element in the column
         /// </summary>
-        public MatrixElement<T> PreviousInColumn;
+        public MatrixElement<T> PreviousInColumn { get; set; }
         
         /// <summary>
         /// Constructor

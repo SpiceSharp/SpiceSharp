@@ -12,7 +12,7 @@ namespace SpiceSharp.NewSparse
         /// <summary>
         /// Dictionary with factories
         /// </summary>
-        static readonly Dictionary<Type, Func<IElement>> dict = new Dictionary<Type, Func<IElement>>()
+        static readonly Dictionary<Type, Func<BaseElement>> dict = new Dictionary<Type, Func<BaseElement>>()
         {
             { typeof(double), () => new RealElement() },
             { typeof(Complex), () => new ComplexElement() }
@@ -23,7 +23,7 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         /// <param name="type">Type</param>
         /// <param name="func">Function</param>
-        public static void Register(Type type, Func<IElement> func) => dict.Add(type, func);
+        public static void Register(Type type, Func<BaseElement> func) => dict.Add(type, func);
 
         /// <summary>
         /// Remove a type

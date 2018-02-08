@@ -92,6 +92,7 @@
     <Compile Include="Components\Voltagesources\CCVS\BaseParameters.cs" />
     <Compile Include="Components\Voltagesources\VCVS\BaseParameters.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="NewSparse\Elements\BaseElement.cs" />
     <Compile Include="NewSparse\Matrix\ElementIterator.cs" />
     <Compile Include="NewSparse\Matrix\Matrix.cs" />
     <Compile Include="NewSparse\Matrix\MatrixElement.cs" />
@@ -283,7 +284,6 @@
     <Compile Include="NewSparse\Elements\ComplexElement.cs" />
     <Compile Include="NewSparse\Elements\Element.cs" />
     <Compile Include="NewSparse\Elements\ElementFactory.cs" />
-    <Compile Include="NewSparse\Elements\IElement.cs" />
     <Compile Include="NewSparse\Elements\RealElement.cs" />
     <Compile Include="Sparse\Elements\ComplexElement.cs" />
     <Compile Include="Sparse\Elements\Element.cs" />
