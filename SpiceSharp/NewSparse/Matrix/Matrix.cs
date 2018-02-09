@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using SpiceSharp.NewSparse.Matrix;
 
 namespace SpiceSharp.NewSparse
 {
@@ -10,8 +8,8 @@ namespace SpiceSharp.NewSparse
     /// Matrix using a sparse representation
     /// The matrix is always kept square!
     /// </summary>
-    /// <typeparam name="T">Base type</typeparam>
-    public class Matrix<T> : IFormattable
+    /// <typeparam name="T">Type for the element</typeparam>
+    public class Matrix<T> where T : IFormattable
     {
         /// <summary>
         /// Constants
@@ -27,8 +25,8 @@ namespace SpiceSharp.NewSparse
         /// <summary>
         /// Private variables
         /// </summary>
-        MatrixElementRow<T>[] rows;
-        MatrixElementColumn<T>[] columns;
+        Row<T>[] rows;
+        Column<T>[] columns;
         MatrixElement<T>[] diagonal;
         MatrixElement<T> trashCan;
         int allocatedSize;
@@ -40,7 +38,32 @@ namespace SpiceSharp.NewSparse
         /// <param name="row">Row</param>
         /// <param name="column">Column</param>
         /// <returns></returns>
-        public Element<T> this[int row, int column] => FindElement(row, column);
+        public T this[int row, int column]
+        {
+            get
+            {
+                var element = FindElement(row, column);
+                if (element == null)
+                    return default;
+                return element.Value;
+            }
+            set
+            {
+                if (value.Equals(default))
+                {
+                    // We don't need to create a new element unnecessarily
+                    var element = FindElement(row, column);
+                    if (element != null)
+                        element.Value = default;
+                }
+                else
+                {
+                    // We have to create an element if it doesn't exist yet
+                    var element = GetElement(row, column);
+                    element.Value = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Constructor
@@ -51,14 +74,14 @@ namespace SpiceSharp.NewSparse
             allocatedSize = InitialSize;
 
             // Allocate rows
-            rows = new MatrixElementRow<T>[InitialSize + 1];
+            rows = new Row<T>[InitialSize + 1];
             for (int i = 1; i <= InitialSize; i++)
-                rows[i] = new MatrixElementRow<T>();
+                rows[i] = new Row<T>();
 
             // Allocate columns
-            columns = new MatrixElementColumn<T>[InitialSize + 1];
+            columns = new Column<T>[InitialSize + 1];
             for (int i = 1; i <= InitialSize; i++)
-                columns[i] = new MatrixElementColumn<T>();
+                columns[i] = new Column<T>();
 
             // Other
             diagonal = new MatrixElement<T>[InitialSize + 1];
@@ -77,14 +100,14 @@ namespace SpiceSharp.NewSparse
             allocatedSize = Math.Max(InitialSize, size);
 
             // Allocate rows
-            rows = new MatrixElementRow<T>[allocatedSize + 1];
+            rows = new Row<T>[allocatedSize + 1];
             for (int i = 1; i <= allocatedSize; i++)
-                rows[i] = new MatrixElementRow<T>();
+                rows[i] = new Row<T>();
 
             // Allocate columns
-            columns = new MatrixElementColumn<T>[allocatedSize + 1];
+            columns = new Column<T>[allocatedSize + 1];
             for (int i = 1; i <= allocatedSize; i++)
-                columns[i] = new MatrixElementColumn<T>();
+                columns[i] = new Column<T>();
 
             // Other
             diagonal = new MatrixElement<T>[allocatedSize + 1];
@@ -103,7 +126,7 @@ namespace SpiceSharp.NewSparse
             if (row < 0 || column < 0)
                 throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));
             if (row == 0 || column == 0)
-                return trashCan.Element;
+                return trashCan;
 
             // Expand our matrix if it is necessary!
             if (row > Size || column > Size)
@@ -111,7 +134,7 @@ namespace SpiceSharp.NewSparse
 
             // Quick access to diagonals
             if (row == column && diagonal[row] != null)
-                return diagonal[row].Element;
+                return diagonal[row];
 
             MatrixElement<T> element;
             if (!rows[row].CreateGetElement(row, column, out element))
@@ -121,8 +144,15 @@ namespace SpiceSharp.NewSparse
                     diagonal[row] = element;
             }
 
-            return element.Element;
+            return element;
         }
+
+        /// <summary>
+        /// Get a diagonal element
+        /// </summary>
+        /// <param name="index">Index</param>
+        /// <returns></returns>
+        public Element<T> GetDiagonalElement(int index) => diagonal[index];
         
         /// <summary>
         /// Find an element
@@ -136,75 +166,12 @@ namespace SpiceSharp.NewSparse
             if (row < 0 || column < 0)
                 throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));
             if (row > Size || column > Size)
-                return null;
+                return default;
             if (row == 0 || column == 0)
-                return trashCan.Element;
-            return rows[row].Find(column)?.Element;
-        }
+                return trashCan;
 
-        /// <summary>
-        /// Get a matrix iterator
-        /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
-        public MatrixIterator<T> GetIterator(int row, int column)
-        {
-            if (row < 0 || column < 0)
-                throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));
-            if (row == 0 || column == 0)
-                return new MatrixIterator<T>(trashCan);
-
-            // Expand our matrix if it is necessary!
-            if (row > Size || column > Size)
-                ExpandMatrix(Math.Max(row, column));
-
-            // Quick access to diagonals
-            if (row == column && diagonal[row] != null)
-                return new MatrixIterator<T>(diagonal[row]);
-
-            MatrixElement<T> element;
-            if (!rows[row].CreateGetElement(row, column, out element))
-            {
-                columns[column].Insert(element);
-                if (row == column)
-                    diagonal[row] = element;
-            }
-
-            return new MatrixIterator<T>(element);
-        }
-
-        /// <summary>
-        /// Find an iterator
-        /// </summary>
-        /// <param name="row">Row</param>
-        /// <param name="column">Column</param>
-        /// <returns></returns>
-        public MatrixIterator<T> FindIterator(int row, int column)
-        {
-            if (row < 0 || column < 0)
-                throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));
-            if (row > Size || column > Size)
-                return null;
-            if (row == 0 || column == 0)
-                return new MatrixIterator<T>(trashCan);
-            return new MatrixIterator<T>(rows[row].Find(column));
-        }
-
-        /// <summary>
-        /// Get a matrix iterator
-        /// </summary>
-        /// <param name="diagonalIndex">Diagonal index</param>
-        /// <returns></returns>
-        public MatrixIterator<T> GetMatrixIterator(int diagonalIndex)
-        {
-            if (diagonalIndex < 0)
-                throw new ArgumentException("Invalid diagonal index {0}".FormatString(diagonalIndex));
-            if (diagonalIndex > Size)
-                return null;
-            if (diagonalIndex == 0)
-                return new MatrixIterator<T>(trashCan);
-            return new MatrixIterator<T>(diagonal[diagonalIndex]);
+            // Find the element
+            return rows[row].Find(column);
         }
 
         /// <summary>
@@ -212,14 +179,14 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         /// <param name="row">Row</param>
         /// <returns></returns>
-        public MatrixIterator<T> GetFirstInRow(int row) => new MatrixIterator<T>(rows[row].FirstInRow);
+        public Element<T> GetFirstInRow(int row) => rows[row].FirstInRow;
 
         /// <summary>
         /// Get the first element in a column
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
-        public MatrixIterator<T> GetFirstInColumn(int column) => new MatrixIterator<T>(columns[column].FirstInColumn);
+        public Element<T> GetFirstInColumn(int column) => columns[column].FirstInColumn;
 
         /// <summary>
         /// Swap rows in the matrix
@@ -377,12 +344,12 @@ namespace SpiceSharp.NewSparse
             // Resize rows
             Array.Resize(ref rows, newSize + 1);
             for (int i = oldAllocatedSize + 1; i <= newSize; i++)
-                rows[i] = new MatrixElementRow<T>();
+                rows[i] = new Row<T>();
 
             // Resize columns
             Array.Resize(ref columns, newSize + 1);
             for (int i = oldAllocatedSize + 1; i <= newSize; i++)
-                columns[i] = new MatrixElementColumn<T>();
+                columns[i] = new Column<T>();
 
             // Other
             Array.Resize(ref diagonal, newSize + 1);
@@ -425,7 +392,7 @@ namespace SpiceSharp.NewSparse
                     if (element == null || element.Column != c)
                         displayData[r - 1][c - 1] = "...";
                     else
-                        displayData[r - 1][c - 1] = element.Element.ToString(format, formatProvider);
+                        displayData[r - 1][c - 1] = element.Value.ToString(format, formatProvider);
                     columnWidths[c - 1] = Math.Max(columnWidths[c - 1], displayData[r - 1][c - 1].Length);
                 }
             }

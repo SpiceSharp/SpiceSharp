@@ -20,34 +20,32 @@ namespace Sandbox
             double[][] matrixElements =
             {
                 new double[] { 1, 1, 1 },
-                new double[] { 0, 0, 3 },
+                new double[] { 0, 5, 3 },
                 new double[] { 0, 2, 3 }
             };
             double[] rhs = { 1, 1, 1 };
 
             // Build the matrix for new sparse
             sw.Start();
-            SpiceSharp.NewSparse.Matrix<double> nmatrix = new SpiceSharp.NewSparse.Matrix<double>();
-            SpiceSharp.NewSparse.Vector<double> nrhs = new SpiceSharp.NewSparse.Vector<double>(4);
+            Solver<double> solver = new RealSolver();
             for (int r = 0; r < matrixElements.Length; r++)
                 for (int c = 0; c < matrixElements[r].Length; c++)
-                    nmatrix.GetElement(r + 1, c + 1).Value = matrixElements[r][c];
-            for (int i = 1; i < nrhs.Length; i++)
-                nrhs[i] = rhs[i - 1];
+                    solver.Matrix.GetElement(r + 1, c + 1).Value = matrixElements[r][c];
+            for (int i = 0; i < rhs.Length; i++)
+                solver.Rhs[i + 1] = rhs[i];
             sw.Stop();
 
             Console.WriteLine($"New matrix setup: {sw.ElapsedTicks} ticks");
-            Console.WriteLine(nmatrix);
+            Console.WriteLine(solver.Matrix);
             SpiceSharp.NewSparse.Vector<double> nsolution = new SpiceSharp.NewSparse.Vector<double>(4);
 
             sw.Restart();
-            Solver<double> solver = new Solver<double>(nmatrix);
-            // solver.Factor();
-            // solver.SolveTransposed(nrhs, nsolution);
+            solver.Factor();
+            solver.SolveTransposed(nsolution);
             sw.Stop();
 
             Console.WriteLine($"New matrix solve: {sw.ElapsedTicks} ticks");
-            Console.WriteLine(nmatrix);
+            Console.WriteLine(solver.Matrix);
             Console.WriteLine(nsolution);
             Console.WriteLine();
 
@@ -67,7 +65,7 @@ namespace Sandbox
             SpiceSharp.Sparse.Vector<double> osolution = new SpiceSharp.Sparse.Vector<double>(4);
 
             sw.Restart();
-            omatrix.OrderAndFactor(orhs, true);
+            omatrix.Factor();
             omatrix.SolveTransposed(orhs, osolution);
             sw.Stop();
 

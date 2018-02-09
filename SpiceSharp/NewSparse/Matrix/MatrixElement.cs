@@ -1,26 +1,31 @@
-﻿namespace SpiceSharp.NewSparse
+﻿using System;
+
+namespace SpiceSharp.NewSparse
 {
     /// <summary>
     /// Element in a matrix
     /// Used by <see cref="Matrix{T}"/> to store values
     /// </summary>
     /// <typeparam name="T">Base type</typeparam>
-    public class MatrixElement<T>
+    class MatrixElement<T> : Element<T> where T : IFormattable
     {
-        /// <summary>
-        /// Gets or sets the value
-        /// </summary>
-        public Element<T> Element { get; }
-
         /// <summary>
         /// Gets or sets the row index
         /// </summary>
-        public int Row { get; set; }
+        public new int Row
+        {
+            get => base.Row;
+            set => base.Row = value;
+        }
 
         /// <summary>
         /// Gets or sets the column index
         /// </summary>
-        public int Column { get; set; }
+        public new int Column
+        {
+            get => base.Column;
+            set => base.Column = value;
+        }
 
         /// <summary>
         /// Next element in the row
@@ -49,10 +54,30 @@
         /// <param name="column">Column index</param>
         public MatrixElement(int row, int column)
         {
-            Element = ElementFactory.Create<T>();
+            Value = default;
             Row = row;
             Column = column;
         }
+
+        /// <summary>
+        /// Get the element above (same column)
+        /// </summary>
+        public override Element<T> Above => PreviousInColumn;
+
+        /// <summary>
+        /// Get the element below (same column)
+        /// </summary>
+        public override Element<T> Below => NextInColumn;
+
+        /// <summary>
+        /// Get the element on the right (same row)
+        /// </summary>
+        public override Element<T> Right => NextInRow;
+
+        /// <summary>
+        /// Get the element on the left (same row)
+        /// </summary>
+        public override Element<T> Left => PreviousInRow;
 
         /// <summary>
         /// Convert to a string
@@ -60,7 +85,7 @@
         /// <returns></returns>
         public override string ToString()
         {
-            return "({0}, {1}) = {2}".FormatString(Row, Column, Element);
+            return "({0}, {1}) = {2}".FormatString(Row, Column, Value);
         }
     }
 }

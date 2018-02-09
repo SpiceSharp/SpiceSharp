@@ -27,51 +27,51 @@ namespace SpiceSharpTest.Sparse
             }
 
             // Check links from left to right
-            MatrixIterator<double> iterator;
+            Element<double> element;
             for (int r = 0; r < size; r++)
             {
-                iterator = matrix.GetIterator(r + 1, 1);
+                element = matrix.GetElement(r + 1, 1);
                 for (int c = 0; c < size; c++)
                 {
                     int expected = r * size + c + 1;
-                    Assert.AreEqual(expected, iterator.Element.Value, 1e-12);
-                    iterator.MoveRight();
+                    Assert.AreEqual(expected, element.Value, 1e-12);
+                    element = element.Right;
                 }
             }
 
             // Check links from right to left
             for (int r = 0; r < size; r++)
             {
-                iterator = matrix.GetIterator(r + 1, size);
+                element = matrix.GetElement(r + 1, size);
                 for (int c = size - 1; c >= 0; c--)
                 {
                     int expected = r * size + c + 1;
-                    Assert.AreEqual(expected, iterator.Element.Value, 1e-12);
-                    iterator.MoveLeft();
+                    Assert.AreEqual(expected, element.Value, 1e-12);
+                    element = element.Left;
                 }
             }
 
             // Check links from top to bottom
             for (int c = 0; c < size; c++)
             {
-                iterator = matrix.GetIterator(1, c + 1);
+                element = matrix.GetElement(1, c + 1);
                 for (int r = 0; r < size; r++)
                 {
                     int expected = r * size + c + 1;
-                    Assert.AreEqual(expected, iterator.Element.Value, 1e-12);
-                    iterator.MoveDown();
+                    Assert.AreEqual(expected, element.Value, 1e-12);
+                    element = element.Below;
                 }
             }
 
             // Check links from bottom to top
             for (int c = 0; c < size; c++)
             {
-                iterator = matrix.GetIterator(size, c + 1);
+                element = matrix.GetElement(size, c + 1);
                 for (int r = size - 1; r >= 0; r--)
                 {
                     int expected = r * size + c + 1;
-                    Assert.AreEqual(expected, iterator.Element.Value, 1e-12);
-                    iterator.MoveUp();
+                    Assert.AreEqual(expected, element.Value, 1e-12);
+                    element = element.Above;
                 }
             }
         }
@@ -118,7 +118,7 @@ namespace SpiceSharpTest.Sparse
                     if ((fill & 0x01) != 0)
                     {
                         int expected = k * 32 + i + 1;
-                        Assert.AreEqual(expected, matrix.FindElement(crow, i + 1)?.Value);
+                        Assert.AreEqual(expected, matrix[crow, i + 1], 1e-12);
                     }
                     else
                         Assert.AreEqual(null, matrix.FindElement(crow, i + 1));
@@ -169,7 +169,7 @@ namespace SpiceSharpTest.Sparse
                     if ((fill & 0x01) != 0)
                     {
                         int expected = k * 32 + i + 1;
-                        Assert.AreEqual(expected, matrix.FindElement(i + 1, ccolumn)?.Value);
+                        Assert.AreEqual(expected, matrix[i + 1, ccolumn], 1e-12);
                     }
                     else
                         Assert.AreEqual(null, matrix.FindElement(i + 1, ccolumn));

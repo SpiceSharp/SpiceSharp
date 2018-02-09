@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 
-namespace SpiceSharp.NewSparse
+namespace SpiceSharp.NewSparse.Matrix
 {
     /// <summary>
     /// A class keeping track of a linked list of matrix elements
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class MatrixElementRow<T> : IEnumerable<MatrixElement<T>>
+    class Row<T> where T : IFormattable
     {
         /// <summary>
         /// Gets the first element in the row
@@ -226,25 +224,5 @@ namespace SpiceSharp.NewSparse
                 }
             }
         }
-
-        /// <summary>
-        /// Get enumerator
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<MatrixElement<T>> GetEnumerator()
-        {
-            MatrixElement<T> element = FirstInRow;
-            while (element != null)
-            {
-                yield return element;
-                element = element.NextInRow;
-            }
-        }
-
-        /// <summary>
-        /// Get enumerator
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

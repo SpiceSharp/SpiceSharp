@@ -23,19 +23,18 @@ namespace SpiceSharpTest.Sparse
             };
 
             // Create matrix
-            Matrix<double> matrix = new Matrix<double>();
+            var solver = new RealSolver();
             for (int r = 0; r < matrixElements.Length; r++)
                 for (int c = 0; c < matrixElements[r].Length; c++)
-                    matrix.GetElement(r + 1, c + 1).Value = matrixElements[r][c];
+                    solver.Matrix.GetElement(r + 1, c + 1).Value = matrixElements[r][c];
 
             // Factor
-            var solver = new Solver<double>(matrix);
             solver.Factor();
 
             // compare
             for (int r = 0; r < matrixElements.Length; r++)
                 for (int c = 0; c < matrixElements[r].Length; c++)
-                    Assert.AreEqual(expected[r][c], matrix.FindElement(r + 1, c + 1).Value, 1e-12);
+                    Assert.AreEqual(expected[r][c], solver.Matrix[r + 1, c + 1], 1e-12);
         }
     }
 }
