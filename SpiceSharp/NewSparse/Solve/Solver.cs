@@ -1,5 +1,6 @@
 ﻿using System;
-using SpiceSharp.NewSparse.Matrix;
+using System.Diagnostics;
+using SpiceSharp.NewSparse.Solve;
 
 namespace SpiceSharp.NewSparse
 {
@@ -18,6 +19,20 @@ namespace SpiceSharp.NewSparse
         /// Gets or sets a flag that reordering is required
         /// </summary>
         public bool NeedsReordering { get; set; }
+
+        /// <summary>
+        /// Relative threshold for pivots
+        /// </summary>
+        public double RelativePivotThreshold { get; set; } = 1e-3;
+
+        /// <summary>
+        /// Absolute threshold for pivots
+        /// </summary>
+        public double AbsolutePivotThreshold { get; set; } = 0.0;
+
+        protected Stopwatch swPivot = new Stopwatch();
+        protected Stopwatch swExchange = new Stopwatch();
+        protected Stopwatch swEliminate = new Stopwatch();
 
         /// <summary>
         /// Gets the matrix to work on
@@ -39,12 +54,19 @@ namespace SpiceSharp.NewSparse
         Vector<T> rhs;
 
         /// <summary>
+        /// Gets the pivot strategy used
+        /// </summary>
+        public PivotStrategy<T> Strategy { get; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
-        public Solver()
+        public Solver(PivotStrategy<T> strategy)
         {
             Matrix = new Matrix<T>();
             rhs = new Vector<T>(1);
+            NeedsReordering = true;
+            Strategy = strategy;
         }
 
         /// <summary>
@@ -68,6 +90,39 @@ namespace SpiceSharp.NewSparse
         /// Order and factor the matrix
         /// </summary>
         public abstract void OrderAndFactor();
+
+        /// <summary>
+        /// Move a chosen pivot to (step, step)
+        /// </summary>
+        /// <param name="pivot">Pivot</param>
+        /// <param name="step">Step</param>
+        protected void MovePivot(Element<T> pivot, int step)
+        {
+            swPivot.Start();
+            Strategy.MovePivot(Matrix, Rhs, pivot, step);
+            swPivot.Stop();
+
+            swExchange.Start();
+            // Move the pivot in the matrix
+            int row = pivot.Row;
+            int column = pivot.Column;
+            if (row != step)
+            {
+                Matrix.SwapRows(row, step);
+
+                // Swap Right-hand side vector elements
+                var tmp = Rhs[step];
+                Rhs[step] = Rhs[row];
+                Rhs[row] = tmp;
+            }
+            if (column != step)
+                Matrix.SwapColumns(column, step);
+            swExchange.Stop();
+
+            swPivot.Start();
+            Strategy.Update(Matrix, pivot, step);
+            swPivot.Stop();
+        }
 
         /// <summary>
         /// Create a fillin

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp.NewSparse;
+using System;
 
 namespace SpiceSharpTest.Sparse
 {
@@ -23,7 +24,7 @@ namespace SpiceSharpTest.Sparse
             };
 
             // Create matrix
-            var solver = new RealSolver();
+            var solver = new RealSolver(new SpiceSharp.NewSparse.Solve.Markowitz<double>(Math.Abs));
             for (int r = 0; r < matrixElements.Length; r++)
                 for (int c = 0; c < matrixElements[r].Length; c++)
                     solver.Matrix.GetElement(r + 1, c + 1).Value = matrixElements[r][c];

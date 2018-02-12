@@ -97,6 +97,14 @@
     <Compile Include="NewSparse\Matrix\Matrix.cs" />
     <Compile Include="NewSparse\Matrix\MatrixElement.cs" />
     <Compile Include="NewSparse\Matrix\Row.cs" />
+    <Compile Include="NewSparse\Solve\Markowitz\Markowitz.cs" />
+    <Compile Include="NewSparse\Solve\Markowitz\MarkowitzEntireMatrix.cs" />
+    <Compile Include="NewSparse\Solve\Markowitz\MarkowitzSearchStrategy.cs" />
+    <Compile Include="NewSparse\Solve\Markowitz\MarkowitzSingleton.cs" />
+    <Compile Include="NewSparse\Solve\MovePivotEventArgs.cs" />
+    <Compile Include="NewSparse\Solve\PivotSearchEventArgs.cs" />
+    <Compile Include="NewSparse\Solve\PivotSetupEventArgs.cs" />
+    <Compile Include="NewSparse\Solve\PivotStrategy.cs" />
     <Compile Include="NewSparse\Solve\RealSolver.cs" />
     <Compile Include="NewSparse\Solve\Solver.cs" />
     <Compile Include="Simulations\Base\BaseConfiguration.cs" />

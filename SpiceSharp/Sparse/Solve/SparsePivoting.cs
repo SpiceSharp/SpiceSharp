@@ -677,7 +677,9 @@ namespace SpiceSharp.Sparse
                     Product = MarkowitzRow[pElement.Row] * MarkowitzCol[pElement.Column];
 
                     // Test to see if element is acceptable as a pivot candidate. 
-                    if ((Product <= MinMarkowitzProduct) && (Magnitude > RelThreshold * LargestInCol) && (Magnitude > AbsThreshold))
+                    if ((Product <= MinMarkowitzProduct) 
+                        && (Magnitude > RelThreshold * LargestInCol) 
+                        && (Magnitude > AbsThreshold))
                     {
                         /* Test to see if element has lowest MarkowitzProduct yet found, or whether it
                            is tied with an element found earlier. */

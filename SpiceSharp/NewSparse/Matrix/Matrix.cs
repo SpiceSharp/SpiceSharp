@@ -175,18 +175,32 @@ namespace SpiceSharp.NewSparse
         }
 
         /// <summary>
-        /// Get the first element in a row
+        /// Gets the first element in a row
         /// </summary>
         /// <param name="row">Row</param>
         /// <returns></returns>
         public Element<T> GetFirstInRow(int row) => rows[row].FirstInRow;
 
         /// <summary>
-        /// Get the first element in a column
+        /// Gets the last element in a row
         /// </summary>
-        /// <param name="column"></param>
+        /// <param name="row">Row</param>
+        /// <returns></returns>
+        public Element<T> GetLastInRow(int row) => rows[row].LastInRow;
+
+        /// <summary>
+        /// Gets the first element in a column
+        /// </summary>
+        /// <param name="column">Column</param>
         /// <returns></returns>
         public Element<T> GetFirstInColumn(int column) => columns[column].FirstInColumn;
+
+        /// <summary>
+        /// Gets the last element in a column
+        /// </summary>
+        /// <param name="column">Column</param>
+        /// <returns></returns>
+        public Element<T> GetLastInColumn(int column) => columns[column].LastInColumn;
 
         /// <summary>
         /// Swap rows in the matrix
@@ -199,6 +213,12 @@ namespace SpiceSharp.NewSparse
                 throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row1, row2));
             if (row1 == row2)
                 return;
+            if (row2 < row1)
+            {
+                var tmp = row1;
+                row1 = row2;
+                row2 = tmp;
+            }
 
             // Get the two elements
             MatrixElement<T> row1Element = rows[row1].FirstInRow;

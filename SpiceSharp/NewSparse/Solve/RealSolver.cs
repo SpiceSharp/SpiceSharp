@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using SpiceSharp.NewSparse.Solve;
 
 namespace SpiceSharp.NewSparse
 {
@@ -8,14 +10,13 @@ namespace SpiceSharp.NewSparse
     public class RealSolver : Solver<double>
     {
         /// <summary>
-        /// Absolute threshold for pivoting
+        /// Constructor
         /// </summary>
-        public double AbsolutePivotThreshold { get; set; } = 0;
-
-        /// <summary>
-        /// Relative threshold for pivoting
-        /// </summary>
-        public double RelativePivotThreshold { get; set; } = 1e-3;
+        /// <param name="strategy">Strategy</param>
+        public RealSolver(PivotStrategy<double> strategy)
+            : base(strategy)
+        {
+        }
 
         /// <summary>
         /// Factor the matrix
@@ -198,17 +199,21 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         public override void OrderAndFactor()
         {
+            int step = 1;
             if (!NeedsReordering)
             {
                 // Matrix has been factored before and reordering is not required
-                for (int step = 1; step <= Matrix.Size; step++)
+                for (step = 1; step <= Matrix.Size; step++)
                 {
                     var pivot = Matrix.GetDiagonalElement(step);
                     double largest = LargestInColumn(pivot.Below);
                     if (largest * RelativePivotThreshold < Math.Abs(pivot.Value))
                         Elimination(pivot);
                     else
+                    {
                         NeedsReordering = true;
+                        break;
+                    }
                 }
 
                 // Done!
@@ -216,11 +221,34 @@ namespace SpiceSharp.NewSparse
                     return;
             }
 
-            // Perform reordering and factorization
-            if (NeedsReordering)
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            // Setup for reordering
+            Strategy.Setup(Matrix, Rhs, step);
+            sw.Stop();
+            Console.WriteLine($"Setup: {sw.ElapsedTicks} ticks");
+
+            // Perform reordering and factorization starting from where we stopped last time
+            for (; step <= Matrix.Size; step++)
             {
-                throw new Exception("Cannot reorder yet");
+                swPivot.Start();
+                var pivot = Strategy.FindPivot(Matrix, step);
+                if (pivot == null)
+                    throw new Exception("Singular matrix");
+                swPivot.Stop();
+
+                // Move the pivot to the current diagonal
+                MovePivot(pivot, step);
+
+                swEliminate.Start();
+                // Elimination
+                Elimination(pivot);
+                swEliminate.Stop();
             }
+
+            Console.WriteLine($"Pivot {swPivot.ElapsedTicks} ticks");
+            Console.WriteLine($"Exchange {swExchange.ElapsedTicks} ticks");
+            Console.WriteLine($"Eliminate {swEliminate.ElapsedTicks} ticks");
         }
 
         /// <summary>

@@ -14,6 +14,11 @@ namespace SpiceSharp.NewSparse.Matrix
         public MatrixElement<T> FirstInColumn { get; private set; }
 
         /// <summary>
+        /// Gets the last element in the column
+        /// </summary>
+        public MatrixElement<T> LastInColumn { get; private set; }
+
+        /// <summary>
         /// Insert an element in the column
         /// This method assumes an element does not exist at its indices!
         /// </summary>
@@ -38,7 +43,9 @@ namespace SpiceSharp.NewSparse.Matrix
             newElement.PreviousInColumn = lastElement;
 
             // Update links for next element
-            if (element != null)
+            if (element == null)
+                LastInColumn = newElement;
+            else
                 element.PreviousInColumn = newElement;
             newElement.NextInColumn = element;
         }
@@ -77,7 +84,9 @@ namespace SpiceSharp.NewSparse.Matrix
             result.PreviousInColumn = lastElement;
 
             // Update links for next element
-            if (element != null)
+            if (element == null)
+                LastInColumn = result;
+            else
                 element.PreviousInColumn = result;
             result.NextInColumn = element;
 
@@ -113,7 +122,9 @@ namespace SpiceSharp.NewSparse.Matrix
                 FirstInColumn = element.NextInColumn;
             else
                 element.PreviousInColumn.NextInColumn = element.NextInColumn;
-            if (element.NextInColumn != null)
+            if (element.NextInColumn == null)
+                LastInColumn = element.PreviousInColumn;
+            else
                 element.NextInColumn.PreviousInColumn = element.PreviousInColumn;
         }
 
@@ -169,7 +180,9 @@ namespace SpiceSharp.NewSparse.Matrix
                         element = element.NextInColumn;
 
                     // We now have the first element above the insertion point
-                    if (element.NextInColumn != null)
+                    if (element.NextInColumn == null)
+                        LastInColumn = first;
+                    else
                         element.NextInColumn.PreviousInColumn = first;
                     first.NextInColumn = element.NextInColumn;
                     element.PreviousInColumn = element;
@@ -187,7 +200,9 @@ namespace SpiceSharp.NewSparse.Matrix
                         FirstInColumn = second;
                     else
                         first.PreviousInColumn.NextInColumn = second;
-                    if (second.NextInColumn != null)
+                    if (second.NextInColumn == null)
+                        LastInColumn = first;
+                    else
                         second.NextInColumn.PreviousInColumn = first;
 
                     // Correct element links
@@ -206,7 +221,9 @@ namespace SpiceSharp.NewSparse.Matrix
                     else
                         first.PreviousInColumn.NextInColumn = second;
                     first.NextInColumn.PreviousInColumn = second;
-                    if (second.NextInColumn != null)
+                    if (second.NextInColumn == null)
+                        LastInColumn = first;
+                    else
                         second.NextInColumn.PreviousInColumn = first;
                     second.PreviousInColumn.NextInColumn = first;
 
