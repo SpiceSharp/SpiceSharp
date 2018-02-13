@@ -85,7 +85,7 @@ namespace SpiceSharp.NewSparse
 
             // TODO: Maybe we should cache intermediate
             // Scramble
-            var intermediate = new double[Rhs.Length];
+            var intermediate = new double[Rhs.Length + 1];
             var rhsElement = Rhs.First;
             while (rhsElement != null)
             {

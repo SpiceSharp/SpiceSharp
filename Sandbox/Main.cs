@@ -27,8 +27,21 @@ namespace Sandbox
         {
             InitializeComponent();
 
-            SolveNewSpaceMatrix();
+            int count = 500000;
 
+            SolveOldSpaceMatrix();
+            sw.Reset();
+            for (int i = 0; i < count; i++)
+                SolveOldSpaceMatrix();
+            sw.Stop();
+            Console.WriteLine($"OLD: {sw.ElapsedMilliseconds} ms");
+
+            SolveNewSpaceMatrix();
+            sw.Reset();
+            for (int i = 0; i < count; i++)
+                SolveNewSpaceMatrix();
+            sw.Stop();
+            Console.WriteLine($"NEW: {sw.ElapsedMilliseconds} ms");
         }
 
         /// <summary>
@@ -48,11 +61,11 @@ namespace Sandbox
             for (int r = 0; r < rhs.Length; r++)
                 solver.Rhs[r + 1] = rhs[r];
 
+            var solution = new DenseVector<double>(solver.Rhs.Length);
+
             sw.Start();
             solver.OrderAndFactor();
             sw.Stop();
-
-            Console.WriteLine(solver);
         }
 
         /// <summary>
@@ -70,7 +83,9 @@ namespace Sandbox
             var orhs = new SpiceSharp.Sparse.Vector<double>(matrixElements.Length + 1);
             for (int i = 0; i < rhs.Length; i++)
                 orhs[i + 1] = rhs[i];
-            
+
+            var solution = new SpiceSharp.Sparse.Vector<double>(4);
+
             sw.Start();
             omatrix.OrderAndFactor(orhs, false);
             sw.Stop();
