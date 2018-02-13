@@ -14,7 +14,7 @@ namespace SpiceSharpTest.Sparse
             int rStep = 7;
             int cStep = 11;
 
-            var matrix = new Matrix<double>();
+            var matrix = new SparseMatrix<double>();
             for (int c = 0; c < rStep * size; c += rStep)
             {
                 for (int r = 0; r < cStep * size; r += cStep)
@@ -80,7 +80,7 @@ namespace SpiceSharpTest.Sparse
         public void TestSwapRows()
         {
             // Build the matrix
-            Matrix<double> matrix = new Matrix<double>();
+            SparseMatrix<double> matrix = new SparseMatrix<double>();
 
             // We want to test all possible combinations for the row! We need 5 elements to be able to test it
             for (int i = 0; i < 32; i++)
@@ -131,7 +131,7 @@ namespace SpiceSharpTest.Sparse
         public void TestSwapColumns()
         {
             // Build the matrix
-            Matrix<double> matrix = new Matrix<double>();
+            SparseMatrix<double> matrix = new SparseMatrix<double>();
 
             // We want to test all possible combinations for the row! We need 5 elements to be able to test it
             for (int i = 0; i < 32; i++)

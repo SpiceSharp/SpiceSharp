@@ -6,7 +6,7 @@ namespace SpiceSharp.NewSparse.Solve
     /// A search strategy for finding pivots
     /// </summary>
     /// <typeparam name="T">Base type</typeparam>
-    public abstract class MarkowitzSearchStrategy<T> where T : IFormattable
+    public abstract class MarkowitzSearchStrategy<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
         /// Find a pivot
@@ -15,6 +15,6 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="step">Step</param>
         /// <returns></returns>
-        public abstract Element<T> FindPivot(Markowitz<T> markowitz, Matrix<T> matrix, int step);
+        public abstract Element<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step);
     }
 }

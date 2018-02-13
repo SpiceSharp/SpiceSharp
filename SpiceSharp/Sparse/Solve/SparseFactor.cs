@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace SpiceSharp.Sparse
 {
@@ -30,7 +29,6 @@ namespace SpiceSharp.Sparse
             int Step, Size;
             bool ReorderingRequired;
             double LargestInCol;
-            Stopwatch sw = new Stopwatch();
 
             if (matrix.Factored)
                 throw new SparseException("Matrix is already factored");
@@ -72,57 +70,36 @@ namespace SpiceSharp.Sparse
                 // than a partial reordering, which occurs during a failure of a fast
                 // factorization.
                 Step = 1;
-                sw.Start();
                 if (!matrix.RowsLinked)
                     matrix.LinkRows();
                 if (!matrix.Pivoting.InternalVectorsAllocated)
                     matrix.Pivoting.CreateInternalVectors(matrix.IntSize);
                 if ((int)matrix.Error >= (int)SparseError.Fatal)
                     return matrix.Error;
-                sw.Stop();
             }
 
-            sw.Start();
-            // Form initial Markowitz products. 
+            // Form initial Markowitz products.
             pivoting.CountMarkowitz(matrix, rhs, Step);
             pivoting.MarkowitzProducts(matrix, Step);
+
             matrix.MaxRowCountInLowerTri = -1;
-            sw.Stop();
-
-            Console.WriteLine($"Setup: {sw.ElapsedTicks} ticks");
-
-            Stopwatch swPivot = new Stopwatch();
-            Stopwatch swExchange = new Stopwatch();
-            Stopwatch swEliminate = new Stopwatch();
 
             // Perform reordering and factorization. 
             for (; Step <= Size; Step++)
             {
-                swPivot.Start();
                 pPivot = pivoting.SearchForPivot(matrix, Step, diagonalPivoting);
                 if (pPivot == null)
                     return MatrixIsSingular(matrix, Step);
-                swPivot.Stop();
 
-                swExchange.Start();
                 ExchangeRowsAndCols(matrix, pPivot, Step);
-                swExchange.Stop();
 
-                swEliminate.Start();
                 ComplexRowColElimination(matrix, pPivot);
-                swEliminate.Stop();
 
                 if ((int)matrix.Error >= (int)SparseError.Fatal)
                     return matrix.Error;
 
-                swPivot.Start();
                 pivoting.UpdateMarkowitzNumbers(matrix, pPivot);
-                swPivot.Stop();
             }
-
-            Console.WriteLine($"Pivot {swPivot.ElapsedTicks} ticks");
-            Console.WriteLine($"Exchange {swExchange.ElapsedTicks} ticks");
-            Console.WriteLine($"Eliminate {swEliminate.ElapsedTicks} ticks");
 
             Done:
             matrix.NeedsOrdering = false;

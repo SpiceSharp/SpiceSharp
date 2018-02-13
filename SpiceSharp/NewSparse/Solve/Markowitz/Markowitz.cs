@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SpiceSharp.NewSparse.Solve
 {
@@ -7,7 +7,7 @@ namespace SpiceSharp.NewSparse.Solve
     /// Markowitz
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Markowitz<T> : PivotStrategy<T> where T : IFormattable
+    public class Markowitz<T> : PivotStrategy<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
         /// Gets the relative pivot threshold
@@ -20,19 +20,28 @@ namespace SpiceSharp.NewSparse.Solve
         public double AbsolutePivotThreshold { get; private set; } = 0;
 
         /// <summary>
+        /// The maximum Markowitz count that will not result in Int32 overflow when squared
+        /// Markowitz counts are capped at this quantity
+        /// </summary>
+        const int MaxMarkowitzCount = 46340;
+
+        /// <summary>
         /// Gets the Markowitz row counts
         /// </summary>
-        public Vector<int> Row { get; private set; }
+        public int RowCount(int row) => markowitzRow[row];
+        int[] markowitzRow;
 
         /// <summary>
         /// Gets the Markowitz column counts
         /// </summary>
-        public Vector<int> Column { get; private set; }
+        public int ColumnCount(int column) => markowitzColumn[column];
+        int[] markowitzColumn;
 
         /// <summary>
         /// Gets the Markowitz products
         /// </summary>
-        public Vector<long> Product { get; private set; }
+        public int Product(int index) => markowitzProduct[index];
+        int[] markowitzProduct;
 
         /// <summary>
         /// Gets the number of singletons
@@ -47,7 +56,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// <summary>
         /// Private variables
         /// </summary>
-        List<MarkowitzSearchStrategy<T>> strategies = new List<MarkowitzSearchStrategy<T>>();
+        public Collection<MarkowitzSearchStrategy<T>> Strategies { get; } = new Collection<MarkowitzSearchStrategy<T>>();
         
         /// <summary>
         /// Constructor
@@ -59,37 +68,23 @@ namespace SpiceSharp.NewSparse.Solve
             Magnitude = magnitude;
 
             // Register default strategies
-            strategies.Add(new MarkowitzSingleton<T>());
-            strategies.Add(new MarkowitzEntireMatrix<T>());
+            Strategies.Add(new MarkowitzSingleton<T>());
+            Strategies.Add(new MarkowitzEntireMatrix<T>());
         }
-
-        /// <summary>
-        /// Add a strategy for finding a pivot using Markowitz products
-        /// </summary>
-        /// <param name="strategy">Strategy</param>
-        public void AddStrategy(MarkowitzSearchStrategy<T> strategy) => strategies.Insert(0, strategy);
-
-        /// <summary>
-        /// Remove a strategy for find pivots
-        /// </summary>
-        /// <param name="strategy"></param>
-        public void RemoveStrategy(MarkowitzSearchStrategy<T> strategy) => strategies.Remove(strategy);
-
-        /// <summary>
-        /// Clear all strategies for pivots
-        /// </summary>
-        public void ClearStrategies() => strategies.Clear();
 
         /// <summary>
         /// Initialize
         /// </summary>
         /// <param name="matrix">Matrix</param>
-        public void Initialize(Matrix<T> matrix)
+        public void Initialize(SparseMatrix<T> matrix)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             // Allocate arrays
-            Row = new Vector<int>(matrix.Size + 1);
-            Column = new Vector<int>(matrix.Size + 1);
-            Product = new Vector<long>(matrix.Size + 2);
+            markowitzRow = new int[matrix.Size + 1];
+            markowitzColumn = new int[matrix.Size + 1];
+            markowitzProduct = new int[matrix.Size + 2];
         }
 
         /// <summary>
@@ -98,7 +93,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Right-hand side</param>
         /// <param name="step">Step</param>
-        void Count(Matrix<T> matrix, Vector<T> rhs, int step)
+        void Count(SparseMatrix<T> matrix, DenseVector<T> rhs, int step)
         {
             Element<T> element;
 
@@ -117,9 +112,9 @@ namespace SpiceSharp.NewSparse.Solve
                 }
 
                 // Include nonzero elements in the rhs vector
-                if (rhs != null && !rhs[i].Equals(default(T)))
-                    count++;
-                Row[i] = count;
+                if (rhs != null && !rhs[i].Equals(default))
+                     count++;
+                markowitzRow[i] = Math.Min(count, MaxMarkowitzCount);
             }
             
             // Generate Markowitz column count
@@ -135,7 +130,7 @@ namespace SpiceSharp.NewSparse.Solve
                     count++;
                     element = element.Below;
                 }
-                Column[i] = count;
+                markowitzColumn[i] = Math.Min(count, MaxMarkowitzCount);
             }
         }
 
@@ -144,13 +139,15 @@ namespace SpiceSharp.NewSparse.Solve
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="step">Step</param>
-        void Products(Matrix<T> matrix, int step)
+        void Products(SparseMatrix<T> matrix, int step)
         {
             Singletons = 0;
-            for (int i = step; i <= matrix.Size; i++)
+            var size = matrix.Size;
+            for (int i = step; i <= size; i++)
             {
-                UpdateMarkowitzProduct(i);
-                if (Product[i] == 0)
+                // UpdateMarkowitzProduct(i);
+                markowitzProduct[i] = markowitzRow[i] * markowitzColumn[i];
+                if (markowitzProduct[i] == 0)
                     Singletons++;
             }
         }
@@ -161,10 +158,13 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Rhs</param>
         /// <param name="step">Step</param>
-        public override void Setup(Matrix<T> matrix, Vector<T> rhs, int step)
+        public override void Setup(SparseMatrix<T> matrix, DenseVector<T> rhs, int step)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             // Initialize Markowitz row, column and product vectors if necessary
-            if (Row == null || Row.Length != matrix.Size + 1)
+            if (markowitzRow == null || markowitzRow.Length != matrix.Size + 1)
                 Initialize(matrix);
 
             Count(matrix, rhs, step);
@@ -178,41 +178,37 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="rhs">Rhs</param>
         /// <param name="pivot">Pivot</param>
         /// <param name="step">Step</param>
-        public override void MovePivot(Matrix<T> matrix, Vector<T> rhs, Element<T> pivot, int step)
+        public override void MovePivot(SparseMatrix<T> matrix, DenseVector<T> rhs, Element<T> pivot, int step)
         {
+            if (pivot == null)
+                throw new ArgumentNullException(nameof(pivot));
+
             int row = pivot.Row;
             int column = pivot.Column;
 
-            // Exchange rows and column
-            if (row == column)
-            {
-                // Swap row values
-                var tmp = Product[step];
-                Product[step] = Product[row];
-                Product[row] = tmp;
-            }
-            else
-            {
-                // Exchange rows
-                if (pivot.Row != step)
-                {
-                    // Swap row Markowitz numbers
-                    int tmp = Row[row];
-                    Row[row] = Row[step];
-                    Row[step] = tmp;
-                }
+            // Did we just pivot a singleton element?
+            if (markowitzRow[row] == 0 || markowitzColumn[column] == 0)
+                Singletons--;
 
-                // Exchange columns
-                if (column != step)
-                {
-                    // Swap column Markowitz numbers
-                    int tmp = Column[column];
-                    Column[column] = Column[step];
-                    Column[step] = tmp;
-                }
-
-                // We will update the Markowtiz products later after the pivot has moved
+            // Exchange rows
+            if (pivot.Row != step)
+            {
+                // Swap row Markowitz numbers
+                int tmp = markowitzRow[row];
+                markowitzRow[row] = markowitzRow[step];
+                markowitzRow[step] = tmp;
             }
+
+            // Exchange columns
+            if (column != step)
+            {
+                // Swap column Markowitz numbers
+                int tmp = markowitzColumn[column];
+                markowitzColumn[column] = markowitzColumn[step];
+                markowitzColumn[step] = tmp;
+            }
+
+            // We will update the Markowtiz products later after the pivot has moved
         }
 
         /// <summary>
@@ -221,19 +217,22 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="pivot">Pivot</param>
         /// <param name="step">Step</param>
-        public override void Update(Matrix<T> matrix, Element<T> pivot, int step)
+        public override void Update(SparseMatrix<T> matrix, Element<T> pivot, int step)
         {
-            // TODO: Check this method because I'm sceptical for its correctness
+            if (pivot == null)
+                throw new ArgumentNullException(nameof(pivot));
 
             // Go through all elements below the pivot. If they exist, then we can subtract 1 from the Markowitz row vector!
             for (Element<T> column = pivot.Below; column != null; column = column.Below)
             {
                 int row = column.Row;
-                --Row[row];
+                --markowitzRow[row];
 
                 // Update the Markowitz product
-                UpdateMarkowitzProduct(row);
-                if (Row[row] == 0)
+                markowitzProduct[row] = markowitzRow[row] * markowitzColumn[row];
+
+                // If we reached 0, then the row just turned to a singleton row
+                if (markowitzRow[row] == 0)
                     Singletons++;
             }
 
@@ -241,36 +240,16 @@ namespace SpiceSharp.NewSparse.Solve
             for (Element<T> row = pivot.Right; row != null; row = row.Right)
             {
                 int column = row.Column;
-                --Column[column];
+                --markowitzColumn[column];
 
                 // Update the Markowitz product
-                UpdateMarkowitzProduct(column);
-                if (Column[column] == 0 && Row[column] != 0)
+                markowitzProduct[column] = markowitzRow[column] * markowitzColumn[column];
+
+                // If we reached 0, then the column just turned to a singleton column
+                // This only adds a singleton if the row wasn't detected as a singleton row first
+                if (markowitzColumn[column] == 0 && markowitzRow[column] != 0)
                     Singletons++;
             }
-        }
-
-        /// <summary>
-        /// Calculate the Markowitz product for a specific index
-        /// </summary>
-        /// <param name="index">Index</param>
-        void UpdateMarkowitzProduct(int index)
-        {
-            int rowCount = Row[index];
-            int columnCount = Column[index];
-
-            // Make sure there is no overflow
-            if ((rowCount > short.MaxValue && columnCount != 0)
-                || (columnCount > short.MaxValue && rowCount != 0))
-            {
-                double product = (double)columnCount * rowCount;
-                if (product >= long.MaxValue)
-                    Product[index] = long.MaxValue;
-                else
-                    Product[index] = (long)product;
-            }
-            else
-                Product[index] = rowCount * columnCount;
         }
 
         /// <summary>
@@ -279,9 +258,9 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="step">Step</param>
         /// <returns></returns>
-        public override Element<T> FindPivot(Matrix<T> matrix, int step)
+        public override Element<T> FindPivot(SparseMatrix<T> matrix, int step)
         {
-            foreach (var strategy in strategies)
+            foreach (var strategy in Strategies)
             {
                 Element<T> chosen = strategy.FindPivot(this, matrix, step);
                 if (chosen != null)

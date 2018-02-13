@@ -9,7 +9,7 @@ namespace SpiceSharp.NewSparse
     /// The matrix is always kept square!
     /// </summary>
     /// <typeparam name="T">Type for the element</typeparam>
-    public class Matrix<T> where T : IFormattable
+    public class SparseMatrix<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
         /// Constants
@@ -68,7 +68,7 @@ namespace SpiceSharp.NewSparse
         /// <summary>
         /// Constructor
         /// </summary>
-        public Matrix()
+        public SparseMatrix()
         {
             Size = 1;
             allocatedSize = InitialSize;
@@ -92,7 +92,7 @@ namespace SpiceSharp.NewSparse
         /// Constructor
         /// </summary>
         /// <param name="size">Size</param>
-        public Matrix(int size)
+        public SparseMatrix(int size)
         {
             if (size < 0)
                 throw new ArgumentException("Invalid size {0}".FormatString(size));
@@ -287,6 +287,12 @@ namespace SpiceSharp.NewSparse
                 throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(column1, column2));
             if (column1 == column2)
                 return;
+            if (column2 < column1)
+            {
+                var tmp = column1;
+                column1 = column2;
+                column2 = tmp;
+            }
 
             // Get the two elements
             MatrixElement<T> column1Element = columns[column1].FirstInColumn;

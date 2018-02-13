@@ -4,7 +4,7 @@ namespace SpiceSharp.NewSparse
 {
     /// <summary>
     /// Element in a matrix
-    /// Used by <see cref="Matrix{T}"/> to store values
+    /// Used by <see cref="SparseMatrix{T}"/> to store values
     /// </summary>
     /// <typeparam name="T">Base type</typeparam>
     class MatrixElement<T> : Element<T> where T : IFormattable

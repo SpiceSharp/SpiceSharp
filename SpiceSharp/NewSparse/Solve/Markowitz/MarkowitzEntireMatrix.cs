@@ -6,7 +6,7 @@ namespace SpiceSharp.NewSparse.Solve
     /// A pivot strategy that can be used for any generic type
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class MarkowitzEntireMatrix<T> : MarkowitzSearchStrategy<T> where T : IFormattable
+    public class MarkowitzEntireMatrix<T> : MarkowitzSearchStrategy<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
         /// Constants
@@ -21,8 +21,13 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="step">Step</param>
         /// <returns></returns>
-        public override Element<T> FindPivot(Markowitz<T> markowitz, Matrix<T> matrix, int step)
+        public override Element<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step)
         {
+            if (markowitz == null)
+                throw new ArgumentNullException(nameof(markowitz));
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             Element<T> chosen = null;
             long minMarkowitzProduct = long.MaxValue;
             double largestMagnitude = 0.0, acceptedRatio = 0.0;
@@ -32,28 +37,31 @@ namespace SpiceSharp.NewSparse.Solve
             // Start search of matrix on column by column basis
             for (int i = step; i <= matrix.Size; i++)
             {
-                var element = matrix.GetFirstInColumn(i);
-                while (element != null && element.Row < step)
-                    element = element.Below;
-
-                // Are there no elements?
-                double largest = LargestInColumn(markowitz, element);
+                // Find the biggest magnitude in the column for checking valid pivots later
+                double largest = 0.0;
+                var element = matrix.GetLastInColumn(i);
+                while (element != null && element.Row >= step)
+                {
+                    largest = Math.Max(largest, markowitz.Magnitude(element.Value));
+                    element = element.Above;
+                }
                 if (largest.Equals(0.0))
                     continue;
 
-                while (element != null)
+                // Restart search for a pivot
+                element = matrix.GetLastInColumn(i);
+                while (element != null && element.Row > step)
                 {
-                    // Check to see if the element is the largest encountered so far. If so, record its
-                    // magnitude and address
+                    // Find the magnitude and Markowitz product
                     double magnitude = markowitz.Magnitude(element.Value);
+                    int product = markowitz.RowCount(element.Row) * markowitz.ColumnCount(element.Column);
+
+                    // In the case no valid pivot is available, at least return the largest element
                     if (magnitude > largestMagnitude)
                     {
                         largestElement = element;
                         largestMagnitude = magnitude;
                     }
-
-                    // Calculate element's Markowitz product
-                    long product = markowitz.Row[element.Row] * markowitz.Column[element.Column];
 
                     // test to see if the element is acceptable as a pivot candidate
                     if (product <= minMarkowitzProduct
@@ -86,7 +94,7 @@ namespace SpiceSharp.NewSparse.Solve
                         }
                     }
 
-                    element = element.Below;
+                    element = element.Above;
                 }
             }
 
@@ -95,30 +103,10 @@ namespace SpiceSharp.NewSparse.Solve
                 return chosen;
 
             if (largestElement.Equals(0.0))
-                throw new Exception("Singular");
+                throw new SparseException("Singular");
 
             // TODO: Notify that the pivot is too small
             return largestElement;
-        }
-
-        /// <summary>
-        /// Find the largest magnitude in the column at or below <paramref name="element"/>
-        /// </summary>
-        /// <param name="element">Element</param>
-        /// <returns></returns>
-        double LargestInColumn(Markowitz<T> markowitz, Element<T> element)
-        {
-            double magnitude, largest = 0;
-
-            // Search the column for the largest element beginning at element
-            while (element != null)
-            {
-                magnitude = markowitz.Magnitude(element.Value);
-                if (magnitude > largest)
-                    largest = magnitude;
-                element = element.Below;
-            }
-            return largest;
         }
     }
 }

@@ -2,81 +2,89 @@
 using System.Windows.Forms;
 using SpiceSharp.Sparse;
 using SpiceSharp.NewSparse;
+using SpiceSharp.NewSparse.Solve;
 using System.Diagnostics;
 
 namespace Sandbox
 {
     public partial class Main : Form
     {
+        // Reference
+        double[][] matrixElements =
+        {
+                new double[] { 1, 1, 1 },
+                new double[] { 0, 0, 3 },
+                new double[] { 0, 2, 3 }
+            };
+        double[] rhs = { 1, 2, 3 };
+
+        Stopwatch sw = new Stopwatch();
+
         /// <summary>
         /// Constructor
         /// </summary>
         public Main()
         {
             InitializeComponent();
-            Stopwatch sw = new Stopwatch();
 
-            // Reference
-            double[][] matrixElements =
-            {
-                new double[] { 1, 1, 1 },
-                new double[] { 0, 0, 3 },
-                new double[] { 0, 2, 3 }
-            };
-            double[] rhs = { 1, 1, 1 };
+            int count = 500000;
 
-            // Build the matrix for new sparse
-            sw.Start();
-            var markowitz = new SpiceSharp.NewSparse.Solve.Markowitz<double>(Math.Abs);
-            Solver<double> solver = new RealSolver(markowitz);
+            // Old sparse matrix
+            SolveOldSpaceMatrix();
+            sw.Reset();
+            for (int i = 0; i < count; i++)
+                SolveOldSpaceMatrix();
+            Console.WriteLine($"Old sparse matrix solver: {sw.ElapsedMilliseconds} ms");
+
+            // New sparse matrix
+            SolveNewSpaceMatrix();
+            sw.Reset();
+            for (int i = 0; i < count; i++)
+                SolveNewSpaceMatrix();
+            Console.WriteLine($"New sparse matrix solver: {sw.ElapsedMilliseconds} ms");
+        }
+
+        /// <summary>
+        /// New sparse matrix
+        /// </summary>
+        void SolveNewSpaceMatrix()
+        {
+            // Create the solver
+            var markowitz = new Markowitz<double>(Math.Abs);
+            var solver = new RealSolver(markowitz);
+
+            // Setup the matrix
             for (int r = 0; r < matrixElements.Length; r++)
                 for (int c = 0; c < matrixElements[r].Length; c++)
-                {
-                    if (matrixElements[r][c] != 0.0)
+                    if (!matrixElements[r][c].Equals(0.0))
                         solver.Matrix.GetElement(r + 1, c + 1).Value = matrixElements[r][c];
-                }
-            for (int i = 0; i < rhs.Length; i++)
-                solver.Rhs[i + 1] = rhs[i];
-            sw.Stop();
+            for (int r = 0; r < rhs.Length; r++)
+                solver.Rhs[r + 1] = rhs[r];
 
-            Console.WriteLine($"New matrix setup: {sw.ElapsedTicks} ticks");
-            Console.WriteLine(solver.Matrix);
-            SpiceSharp.NewSparse.Vector<double> nsolution = new SpiceSharp.NewSparse.Vector<double>(4);
-
-            sw.Restart();
+            sw.Start();
             solver.OrderAndFactor();
             sw.Stop();
+        }
 
-            Console.WriteLine($"New matrix solve: {sw.ElapsedTicks} ticks");
-            Console.WriteLine(solver.Matrix);
-            Console.WriteLine(nsolution);
-            Console.WriteLine();
-
-            // Build the matrix for old sparse
-            sw.Restart();
-            SpiceSharp.Sparse.Matrix<double> omatrix = new SpiceSharp.Sparse.Matrix<double>();
-            SpiceSharp.Sparse.Vector<double> orhs = new SpiceSharp.Sparse.Vector<double>(4);
+        /// <summary>
+        /// Old sparse matrix
+        /// </summary>
+        void SolveOldSpaceMatrix()
+        {
+            // Create the solver
+            var omatrix = new SpiceSharp.Sparse.Matrix<double>();
             for (int r = 0; r < matrixElements.Length; r++)
                 for (int c = 0; c < matrixElements[r].Length; c++)
-                {
-                    if (matrixElements[r][c] != 0.0)
+                    if (!matrixElements[r][c].Equals(0.0))
                         omatrix.GetElement(r + 1, c + 1).Value = matrixElements[r][c];
-                }
-            for (int i = 1; i < orhs.Length; i++)
-                orhs[i] = rhs[i - 1];
-            sw.Stop();
 
-            Console.WriteLine($"Old matrix setup: {sw.ElapsedTicks} ticks");
-            Console.WriteLine(omatrix);
-            SpiceSharp.Sparse.Vector<double> osolution = new SpiceSharp.Sparse.Vector<double>(4);
-
-            sw.Restart();
+            var orhs = new SpiceSharp.Sparse.Vector<double>(matrixElements.Length + 1);
+            for (int i = 0; i < rhs.Length; i++)
+                orhs[i + 1] = rhs[i];
+            
+            sw.Start();
             omatrix.OrderAndFactor(orhs, false);
             sw.Stop();
-
-            Console.WriteLine($"Old matrix solve: {sw.ElapsedTicks} ticks");
-            Console.WriteLine(omatrix);
-            Console.WriteLine(osolution);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using SpiceSharp.NewSparse.Solve;
 
 namespace SpiceSharp.NewSparse
@@ -28,7 +27,7 @@ namespace SpiceSharp.NewSparse
             // Get the diagonal
             element = Matrix.GetDiagonalElement(1);
             if (element.Value.Equals(0))
-                throw new Exception("Zero pivot");
+                throw new SparseException("Zero pivot");
 
             // pivot = 1 / pivot
             element.Value = 1.0 / element.Value;
@@ -70,7 +69,7 @@ namespace SpiceSharp.NewSparse
                 // Check for a singular matrix
                 element = Matrix.GetDiagonalElement(step);
                 if (element == null || element.Value.Equals(0.0))
-                    throw new Exception("Zero pivot");
+                    throw new SparseException("Zero pivot");
                 element.Value = 1.0 / element.Value;
             }
         }
@@ -79,7 +78,7 @@ namespace SpiceSharp.NewSparse
         /// Find the solution for a factored matrix and a right-hand-side
         /// </summary>
         /// <param name="solution">Solution vector</param>
-        public override void Solve(Vector<double> solution)
+        public override void Solve(DenseVector<double> solution)
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));
@@ -140,7 +139,7 @@ namespace SpiceSharp.NewSparse
         /// Find the solution for a factored matrix and a right-hand-side (transposed)
         /// </summary>
         /// <param name="solution">Solution vector</param>
-        public override void SolveTransposed(Vector<double> solution)
+        public override void SolveTransposed(DenseVector<double> solution)
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));
@@ -206,7 +205,17 @@ namespace SpiceSharp.NewSparse
                 for (step = 1; step <= Matrix.Size; step++)
                 {
                     var pivot = Matrix.GetDiagonalElement(step);
-                    double largest = LargestInColumn(pivot.Below);
+
+                    // Get the largest element
+                    double largest = 0.0;
+                    var element = pivot.Below;
+                    while (element != null)
+                    {
+                        largest = Math.Max(largest, Math.Abs(element.Value));
+                        element = element.Below;
+                    }
+
+                    // Check validity of the pivot
                     if (largest * RelativePivotThreshold < Math.Abs(pivot.Value))
                         Elimination(pivot);
                     else
@@ -221,34 +230,22 @@ namespace SpiceSharp.NewSparse
                     return;
             }
 
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             // Setup for reordering
             Strategy.Setup(Matrix, Rhs, step);
-            sw.Stop();
-            Console.WriteLine($"Setup: {sw.ElapsedTicks} ticks");
 
             // Perform reordering and factorization starting from where we stopped last time
             for (; step <= Matrix.Size; step++)
             {
-                swPivot.Start();
                 var pivot = Strategy.FindPivot(Matrix, step);
                 if (pivot == null)
-                    throw new Exception("Singular matrix");
-                swPivot.Stop();
+                    throw new SparseException("Singular matrix");
 
                 // Move the pivot to the current diagonal
                 MovePivot(pivot, step);
 
-                swEliminate.Start();
                 // Elimination
                 Elimination(pivot);
-                swEliminate.Stop();
             }
-
-            Console.WriteLine($"Pivot {swPivot.ElapsedTicks} ticks");
-            Console.WriteLine($"Exchange {swExchange.ElapsedTicks} ticks");
-            Console.WriteLine($"Eliminate {swEliminate.ElapsedTicks} ticks");
         }
 
         /// <summary>
@@ -259,7 +256,7 @@ namespace SpiceSharp.NewSparse
         {
             // Test for zero pivot
             if (pivot.Value.Equals(0.0))
-                throw new Exception("Matrix is singular");
+                throw new SparseException("Matrix is singular");
             pivot.Value = 1.0 / pivot.Value;
 
             var upper = pivot.Right;
@@ -290,26 +287,6 @@ namespace SpiceSharp.NewSparse
                 }
                 upper = upper.Right;
             }
-        }
-
-        /// <summary>
-        /// Find the largest magnitude in the column at or below <paramref name="element"/>
-        /// </summary>
-        /// <param name="element">Element</param>
-        /// <returns></returns>
-        double LargestInColumn(Element<double> element)
-        {
-            double magnitude, largest = 0;
-
-            // Search the column for the largest element beginning at element
-            while (element != null)
-            {
-                magnitude = Math.Abs(element.Value);
-                if (magnitude > largest)
-                    largest = magnitude;
-                element = element.Below;
-            }
-            return largest;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.NewSparse
 {
@@ -14,6 +15,11 @@ namespace SpiceSharp.NewSparse
         public T Value { get; set; }
 
         /// <summary>
+        /// Test for zero
+        /// </summary>
+        public bool IsZero { get => EqualityComparer<T>.Default.Equals(Value, default); }
+
+        /// <summary>
         /// Gets the row of the element
         /// </summary>
         public int Row { get; protected set; }
@@ -26,7 +32,7 @@ namespace SpiceSharp.NewSparse
         /// <summary>
         /// Constructor
         /// </summary>
-        public Element()
+        protected Element()
         {
             Value = default;
         }

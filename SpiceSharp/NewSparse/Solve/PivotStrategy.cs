@@ -6,7 +6,7 @@ namespace SpiceSharp.NewSparse.Solve
     /// A pivot strategy used by a <see cref="Solver{T}"/>
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class PivotStrategy<T> where T : IFormattable
+    public abstract class PivotStrategy<T> where T : IFormattable, IEquatable<T>
     {
 
         /// <summary>
@@ -15,7 +15,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Rhs</param>
         /// <param name="step">Step</param>
-        public abstract void Setup(Matrix<T> matrix, Vector<T> rhs, int step);
+        public abstract void Setup(SparseMatrix<T> matrix, DenseVector<T> rhs, int step);
 
         /// <summary>
         /// Update the strategy before the pivot is moved
@@ -24,7 +24,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="rhs">Right-hand side</param>
         /// <param name="pivot">Pivot</param>
         /// <param name="step">Step</param>
-        public abstract void MovePivot(Matrix<T> matrix, Vector<T> rhs, Element<T> pivot, int step);
+        public abstract void MovePivot(SparseMatrix<T> matrix, DenseVector<T> rhs, Element<T> pivot, int step);
 
         /// <summary>
         /// Update the strategy after the pivot is moved
@@ -32,7 +32,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="pivot">Pivot</param>
         /// <param name="step">Step</param>
-        public abstract void Update(Matrix<T> matrix,Element<T> pivot, int step);
+        public abstract void Update(SparseMatrix<T> matrix,Element<T> pivot, int step);
 
         /// <summary>
         /// Find a pivot
@@ -40,6 +40,6 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="step">Step</param>
         /// <returns></returns>
-        public abstract Element<T> FindPivot(Matrix<T> matrix, int step);
+        public abstract Element<T> FindPivot(SparseMatrix<T> matrix, int step);
     }
 }
