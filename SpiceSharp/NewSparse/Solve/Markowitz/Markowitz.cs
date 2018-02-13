@@ -69,6 +69,8 @@ namespace SpiceSharp.NewSparse.Solve
 
             // Register default strategies
             Strategies.Add(new MarkowitzSingleton<T>());
+            Strategies.Add(new MarkowitzQuickDiagonal<T>());
+            Strategies.Add(new MarkowitzDiagonal<T>());
             Strategies.Add(new MarkowitzEntireMatrix<T>());
         }
 
