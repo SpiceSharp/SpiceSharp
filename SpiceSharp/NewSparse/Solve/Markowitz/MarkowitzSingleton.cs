@@ -17,7 +17,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="step">Step</param>
         /// <returns></returns>
-        public override Element<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step)
+        public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step)
         {
             if (markowitz == null)
                 throw new ArgumentNullException(nameof(markowitz));
@@ -54,7 +54,7 @@ namespace SpiceSharp.NewSparse.Solve
                  */
 
                 // Find the singleton element
-                Element<T> chosen = null;
+                MatrixElement<T> chosen = null;
                 if (markowitz.ColumnCount(index) == 0)
                 {
                     // The last element in the column is the singleton element!
@@ -73,7 +73,7 @@ namespace SpiceSharp.NewSparse.Solve
                     chosen = matrix.GetLastInRow(index);
 
                     // First find the biggest magnitude in the column, not counting the pivot candidate
-                    Element<T> element = chosen.Above;
+                    MatrixElement<T> element = chosen.Above;
                     double largest = 0.0;
                     while (element != null && element.Row >= step)
                     {

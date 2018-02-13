@@ -11,22 +11,22 @@ namespace SpiceSharp.NewSparse.Matrix
         /// <summary>
         /// Gets the first element in the row
         /// </summary>
-        public MatrixElement<T> FirstInRow { get; private set; }
+        public SparseMatrixElement<T> FirstInRow { get; private set; }
 
         /// <summary>
         /// Gets the last element in the row
         /// </summary>
-        public MatrixElement<T> LastInRow { get; private set; }
+        public SparseMatrixElement<T> LastInRow { get; private set; }
 
         /// <summary>
         /// Insert an element in the row
         /// This method assumes an element does not exist at its indices!
         /// </summary>
         /// <param name="newElement">New element</param>
-        public void Insert(MatrixElement<T> newElement)
+        public void Insert(SparseMatrixElement<T> newElement)
         {
             int column = newElement.Column;
-            MatrixElement<T> element = FirstInRow, lastElement = null;
+            SparseMatrixElement<T> element = FirstInRow, lastElement = null;
             while (element != null)
             {
                 if (element.Column > column)
@@ -57,10 +57,10 @@ namespace SpiceSharp.NewSparse.Matrix
         /// <param name="column">Column</param>
         /// <param name="result">The found or created element</param>
         /// <returns>True if the element was found, false if it was created</returns>
-        public bool CreateGetElement(int row, int column, out MatrixElement<T> result)
+        public bool CreateGetElement(int row, int column, out SparseMatrixElement<T> result)
         {
             result = null;
-            MatrixElement<T> element = FirstInRow, lastElement = null;
+            SparseMatrixElement<T> element = FirstInRow, lastElement = null;
             while (element != null)
             {
                 if (element.Column > column)
@@ -76,7 +76,7 @@ namespace SpiceSharp.NewSparse.Matrix
             }
 
             // Create a new element
-            result = new MatrixElement<T>(row, column);
+            result = new SparseMatrixElement<T>(row, column);
 
             // Update links for last element
             if (lastElement == null)
@@ -100,9 +100,9 @@ namespace SpiceSharp.NewSparse.Matrix
         /// Find an element in the row without creating it, returns null if it doesn't exist
         /// </summary>
         /// <param name="column">Column</param>
-        public MatrixElement<T> Find(int column)
+        public SparseMatrixElement<T> Find(int column)
         {
-            MatrixElement<T> element = FirstInRow;
+            SparseMatrixElement<T> element = FirstInRow;
             while (element != null)
             {
                 if (element.Column == column)
@@ -118,7 +118,7 @@ namespace SpiceSharp.NewSparse.Matrix
         /// Remove an element from the row
         /// </summary>
         /// <param name="element">Element</param>
-        public void Remove(MatrixElement<T> element)
+        public void Remove(SparseMatrixElement<T> element)
         {
             if (element.PreviousInRow == null)
                 FirstInRow = element.NextInRow;
@@ -136,7 +136,7 @@ namespace SpiceSharp.NewSparse.Matrix
         /// </summary>
         /// <param name="first">First</param>
         /// <param name="second">Second</param>
-        public void Swap(MatrixElement<T> first, MatrixElement<T> second, int columnFirst, int columnSecond)
+        public void Swap(SparseMatrixElement<T> first, SparseMatrixElement<T> second, int columnFirst, int columnSecond)
         {
             if (first == null && second == null)
                 throw new ArgumentException("Both matrix elements cannot be null");
@@ -151,7 +151,7 @@ namespace SpiceSharp.NewSparse.Matrix
                 }
 
                 // Move the element back
-                MatrixElement<T> element = second.PreviousInRow;
+                SparseMatrixElement<T> element = second.PreviousInRow;
                 Remove(second);
                 while (element.PreviousInRow != null && element.PreviousInRow.Column > columnFirst)
                     element = element.PreviousInRow;
@@ -172,25 +172,24 @@ namespace SpiceSharp.NewSparse.Matrix
                 if (first.NextInRow == null || first.NextInRow.Column > columnSecond)
                 {
                     first.Column = columnSecond;
+                    return;
                 }
-                else
-                {
-                    // Move the element forward
-                    MatrixElement<T> element = first.NextInRow;
-                    Remove(first);
-                    while (element.NextInRow != null && element.NextInRow.Column < columnSecond)
-                        element = element.NextInRow;
 
-                    // We now have the first element above the insertion point
-                    if (element.NextInRow == null)
-                        LastInRow = first;
-                    else
-                        element.NextInRow.PreviousInRow = first;
-                    first.NextInRow = element.NextInRow;
-                    element.PreviousInRow = element;
-                    element.NextInRow = first;
-                    first.Column = columnSecond;
-                }
+                // Move the element forward
+                SparseMatrixElement<T> element = first.NextInRow;
+                Remove(first);
+                while (element.NextInRow != null && element.NextInRow.Column < columnSecond)
+                    element = element.NextInRow;
+
+                // We now have the first element above the insertion point
+                if (element.NextInRow == null)
+                    LastInRow = first;
+                else
+                    element.NextInRow.PreviousInRow = first;
+                first.NextInRow = element.NextInRow;
+                element.NextInRow = first;
+                first.PreviousInRow = element;
+                first.Column = columnSecond;
             }
             else
             {
@@ -230,9 +229,10 @@ namespace SpiceSharp.NewSparse.Matrix
                     second.PreviousInRow.NextInRow = first;
 
                     // Swap element links
-                    MatrixElement<T> element = first.PreviousInRow;
+                    SparseMatrixElement<T> element = first.PreviousInRow;
                     first.PreviousInRow = second.PreviousInRow;
                     second.PreviousInRow = element;
+
                     element = first.NextInRow;
                     first.NextInRow = second.NextInRow;
                     second.NextInRow = element;

@@ -10,7 +10,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// <summary>
         /// Maps
         /// </summary>
-        int[] extToInt, intToExt;
+        int[] extToInt;
 
         /// <summary>
         /// Constructor
@@ -19,13 +19,8 @@ namespace SpiceSharp.NewSparse.Solve
         public Translation(int size)
         {
             extToInt = new int[size];
-            intToExt = new int[size];
-
             for (int i = 0; i < size; i++)
-            {
-                intToExt[i] = i;
                 extToInt[i] = i;
-            }
         }
 
         /// <summary>
@@ -47,21 +42,6 @@ namespace SpiceSharp.NewSparse.Solve
         }
 
         /// <summary>
-        /// Find external index based on the internal index
-        /// </summary>
-        /// <param name="index">Internal index</param>
-        /// <returns></returns>
-        public int Reverse(int index)
-        {
-            // Zero is mapped to zero
-            if (index == 0)
-                return 0;
-            if (index >= intToExt.Length)
-                throw new ArgumentException("Invalid index");
-            return intToExt[index];
-        }
-
-        /// <summary>
         /// Swap two (internal) indices
         /// </summary>
         /// <param name="index1">Index 1</param>
@@ -69,14 +49,9 @@ namespace SpiceSharp.NewSparse.Solve
         public void Swap(int index1, int index2)
         {
             // The extToInt indices need to be swapped
-            var intIndex1 = extToInt[index1];
-            var intIndex2 = extToInt[index2];
-            extToInt[index2] = intIndex1;
-            extToInt[index1] = intIndex2;
-
-            // Update the intToExt indices
-            intToExt[intIndex1] = index2;
-            intToExt[intIndex2] = index1;
+            var tmp = extToInt[index1];
+            extToInt[index1] = extToInt[index2];
+            extToInt[index2] = tmp;
         }
 
         /// <summary>
@@ -85,7 +60,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// <typeparam name="T">Base type</typeparam>
         /// <param name="source">Source</param>
         /// <param name="target">Target</param>
-        public void Scramble<T>(DenseVector<T> source, DenseVector<T> target)
+        public void Scramble<T>(DenseVector<T> source, DenseVector<T> target) where T : IFormattable
         {
             for (int i = 1; i < extToInt.Length; i++)
                 target[extToInt[i]] = source[i];
@@ -97,7 +72,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// <typeparam name="T">Base type</typeparam>
         /// <param name="source">Source</param>
         /// <param name="target">Target</param>
-        public void Unscramble<T>(DenseVector<T> source, DenseVector<T> target)
+        public void Unscramble<T>(T[] source, DenseVector<T> target) where T : IFormattable
         {
             for (int i = 1; i < extToInt.Length; i++)
                 target[i] = source[extToInt[i]];

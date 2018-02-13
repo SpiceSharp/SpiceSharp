@@ -16,7 +16,7 @@ namespace Sandbox
                 new double[] { 0, 0, 3 },
                 new double[] { 0, 2, 3 }
             };
-        double[] rhs = { 1, 2, 3 };
+        double[] rhs = { 1, 0, 3 };
 
         Stopwatch sw = new Stopwatch();
 
@@ -27,21 +27,8 @@ namespace Sandbox
         {
             InitializeComponent();
 
-            int count = 500000;
-
-            // Old sparse matrix
-            SolveOldSpaceMatrix();
-            sw.Reset();
-            for (int i = 0; i < count; i++)
-                SolveOldSpaceMatrix();
-            Console.WriteLine($"Old sparse matrix solver: {sw.ElapsedMilliseconds} ms");
-
-            // New sparse matrix
             SolveNewSpaceMatrix();
-            sw.Reset();
-            for (int i = 0; i < count; i++)
-                SolveNewSpaceMatrix();
-            Console.WriteLine($"New sparse matrix solver: {sw.ElapsedMilliseconds} ms");
+
         }
 
         /// <summary>
@@ -64,6 +51,8 @@ namespace Sandbox
             sw.Start();
             solver.OrderAndFactor();
             sw.Stop();
+
+            Console.WriteLine(solver);
         }
 
         /// <summary>

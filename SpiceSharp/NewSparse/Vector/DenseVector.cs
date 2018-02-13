@@ -7,14 +7,14 @@ namespace SpiceSharp.NewSparse
     /// A vector with real values
     /// </summary>
     [Serializable]
-    public class DenseVector<T> : ICloneable
+    public class DenseVector<T> : Vector<T>, IFormattable where T : IFormattable
     {
         /// <summary>
         /// Gets or sets a value
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
-        public T this[int index]
+        public override T this[int index]
         {
             get
             {
@@ -31,11 +31,6 @@ namespace SpiceSharp.NewSparse
         }
 
         /// <summary>
-        /// Gets the length of the vector
-        /// </summary>
-        public int Length { get; }
-
-        /// <summary>
         /// Values
         /// </summary>
         T[] values;
@@ -45,11 +40,9 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         /// <param name="length">Length</param>
         public DenseVector(int length)
+            : base(length)
         {
-            if (length < 1)
-                throw new SparseException("Invalid vector length {0}".FormatString(length));
-            Length = length;
-            values = new T[length];
+            values = new T[length + 1];
         }
 
         /// <summary>
@@ -57,10 +50,8 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         /// <param name="values">Values</param>
         protected DenseVector(T[] values)
+            : base(values?.Length - 1 ?? 0)
         {
-            if (values == null)
-                throw new ArgumentNullException(nameof(values));
-            Length = values.Length;
             this.values = (T[])values.Clone();
         }
 
@@ -93,15 +84,6 @@ namespace SpiceSharp.NewSparse
         }
 
         /// <summary>
-        /// Clone the vector
-        /// </summary>
-        /// <returns></returns>
-        public object Clone()
-        {
-            return new DenseVector<T>(values);
-        }
-
-        /// <summary>
         /// Convert to string
         /// </summary>
         /// <returns></returns>
@@ -109,8 +91,24 @@ namespace SpiceSharp.NewSparse
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("[");
-            for (int i = 1; i < Length; i++)
+            for (int i = 1; i <= Length; i++)
                 sb.AppendLine(values[i].ToString());
+            sb.AppendLine("]");
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Convert to string
+        /// </summary>
+        /// <param name="format">Format</param>
+        /// <param name="formatProvider">Format provider</param>
+        /// <returns></returns>
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("[");
+            for (int i = 1; i <= Length; i++)
+                sb.AppendLine(values[i].ToString(format, formatProvider));
             sb.AppendLine("]");
             return sb.ToString();
         }

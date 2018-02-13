@@ -51,19 +51,10 @@ namespace SpiceSharp.NewSparse
         public SparseMatrix<T> Matrix { get; }
 
         /// <summary>
-        /// Gets the right-hand side
+        /// Gets the right-hand side vector
         /// </summary>
-        public DenseVector<T> Rhs
-        {
-            get
-            {
-                if (rhs.Length != Matrix.Size + 1)
-                    rhs = new DenseVector<T>(Matrix.Size + 1);
-                return rhs;
-            }
-        }
-        DenseVector<T> rhs;
-
+        public SparseVector<T> Rhs { get; }
+        
         /// <summary>
         /// Gets the pivot strategy used
         /// </summary>
@@ -75,7 +66,7 @@ namespace SpiceSharp.NewSparse
         protected Solver(PivotStrategy<T> strategy)
         {
             Matrix = new SparseMatrix<T>();
-            rhs = new DenseVector<T>(1);
+            Rhs = new SparseVector<T>();
             NeedsReordering = true;
             TranslationSetup = false;
             Strategy = strategy;
@@ -108,7 +99,7 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         /// <param name="pivot">Pivot</param>
         /// <param name="step">Step</param>
-        protected void MovePivot(Element<T> pivot, int step)
+        protected void MovePivot(MatrixElement<T> pivot, int step)
         {
             if (pivot == null)
                 throw new ArgumentNullException(nameof(pivot));
@@ -129,9 +120,7 @@ namespace SpiceSharp.NewSparse
                 Matrix.SwapRows(row, step);
 
                 // Swap Right-hand side vector elements
-                var tmp = Rhs[step];
-                Rhs[step] = Rhs[row];
-                Rhs[row] = tmp;
+                Rhs.Swap(row, step);
 
                 // Swap translation indices
                 Row.Swap(row, step);
@@ -153,7 +142,7 @@ namespace SpiceSharp.NewSparse
         /// <param name="row">Row</param>
         /// <param name="column">Column</param>
         /// <returns></returns>
-        protected virtual Element<T> CreateFillin(int row, int column)
+        protected virtual MatrixElement<T> CreateFillin(int row, int column)
         {
             var result = Matrix.GetElement(row, column);
             Fillins++;
@@ -177,17 +166,26 @@ namespace SpiceSharp.NewSparse
         /// <returns></returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
+            // Get the external indices based on the internal indices
+            int[] extRowMap = new int[Matrix.Size + 1];
+            for (int i = 1; i <= Matrix.Size; i++)
+                extRowMap[Row[i]] = i - 1;
+            int[] extColumnMap = new int[Matrix.Size + 1];
+            for (int i = 1; i <= Matrix.Size; i++)
+                extColumnMap[Column[i]] = i - 1;
+
             string[][] displayData = new string[Matrix.Size][];
             int[] columnWidths = new int[Matrix.Size + 1];
+            var rhsElement = Rhs.First;
             for (int r = 1; r <= Matrix.Size; r++)
             {
-                int extRow = Row.Reverse(r) - 1;
+                int extRow = extRowMap[r];
                 var element = Matrix.GetFirstInRow(r);
                 displayData[extRow] = new string[Matrix.Size + 1];
                 
                 for (int c = 1; c <= Matrix.Size; c++)
                 {
-                    int extColumn = Column.Reverse(c) - 1;
+                    int extColumn = extColumnMap[c];
 
                     // go to the next element if necessary
                     if (element != null && element.Column < c)
@@ -202,7 +200,13 @@ namespace SpiceSharp.NewSparse
                 }
 
                 // Rhs vector
-                displayData[extRow][Matrix.Size] = Rhs[r].ToString(format, formatProvider);
+                if (rhsElement != null && rhsElement.Index < r)
+                    rhsElement = rhsElement.Next;
+                if (rhsElement != null && rhsElement.Index == r)
+                    displayData[extRow][Matrix.Size] = Rhs[r].ToString(format, formatProvider);
+                else
+                    displayData[extRow][Matrix.Size] = "...";
+                columnWidths[Matrix.Size] = Math.Max(columnWidths[Matrix.Size], displayData[extRow][Matrix.Size].Length);
             }
 
             // Build the string

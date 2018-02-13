@@ -22,7 +22,7 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         public override void Factor()
         {
-            Element<double> element, column;
+            MatrixElement<double> element, column;
 
             // Get the diagonal
             element = Matrix.GetDiagonalElement(1);
@@ -33,7 +33,7 @@ namespace SpiceSharp.NewSparse
             element.Value = 1.0 / element.Value;
 
             // TODO: maybe we should cache this
-            Element<double>[] dest = new Element<double>[Matrix.Size + 1];
+            MatrixElement<double>[] dest = new MatrixElement<double>[Matrix.Size + 1];
 
             // Start factorization
             double mult;
@@ -86,9 +86,11 @@ namespace SpiceSharp.NewSparse
             // TODO: Maybe we should cache intermediate
             // Scramble
             var intermediate = new double[Rhs.Length];
-            for (int i = 0; i < Rhs.Length; i++)
+            var rhsElement = Rhs.First;
+            while (rhsElement != null)
             {
-                intermediate[i] = Rhs[i];
+                intermediate[rhsElement.Index] = rhsElement.Value;
+                rhsElement = rhsElement.Next;
             }
 
             // Forward substitution
@@ -131,8 +133,7 @@ namespace SpiceSharp.NewSparse
             }
 
             // Unscrable
-            for (int i = Matrix.Size; i > 0; i--)
-                solution[i] = intermediate[i];
+            Column.Unscramble(intermediate, solution);
         }
 
         /// <summary>
@@ -147,9 +148,11 @@ namespace SpiceSharp.NewSparse
             // TODO: Maybe we should cache intermediate
             // Scramble
             var intermediate = new double[Rhs.Length];
-            for (int i = 0; i < intermediate.Length; i++)
+            var rhsElement = Rhs.First;
+            while (rhsElement != null)
             {
-                intermediate[i] = Rhs[i];
+                intermediate[Column[rhsElement.Index]] = rhsElement.Value;
+                rhsElement = rhsElement.Next;
             }
 
             // Forward elimination
@@ -189,8 +192,7 @@ namespace SpiceSharp.NewSparse
             }
 
             // Unscramble
-            for (int i = Matrix.Size; i > 0; i--)
-                solution[i] = intermediate[i];
+            Row.Unscramble(intermediate, solution);
         }
 
         /// <summary>
@@ -252,7 +254,7 @@ namespace SpiceSharp.NewSparse
         /// Eliminate a row
         /// </summary>
         /// <param name="pivot">Current pivot</param>
-        void Elimination(Element<double> pivot)
+        void Elimination(MatrixElement<double> pivot)
         {
             // Test for zero pivot
             if (pivot.Value.Equals(0.0))

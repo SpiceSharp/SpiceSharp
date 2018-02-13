@@ -1,91 +1,60 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.NewSparse
 {
     /// <summary>
-    /// Element in a matrix
-    /// Used by <see cref="SparseMatrix{T}"/> to store values
+    /// Class for matrix elements
     /// </summary>
     /// <typeparam name="T">Base type</typeparam>
-    class MatrixElement<T> : Element<T> where T : IFormattable
+    public abstract class MatrixElement<T> where T : IFormattable
     {
         /// <summary>
-        /// Gets or sets the row index
+        /// Gets or sets the value of the element
         /// </summary>
-        public new int Row
-        {
-            get => base.Row;
-            set => base.Row = value;
-        }
+        public T Value { get; set; }
 
         /// <summary>
-        /// Gets or sets the column index
+        /// Test for zero
         /// </summary>
-        public new int Column
-        {
-            get => base.Column;
-            set => base.Column = value;
-        }
+        public bool IsZero { get => EqualityComparer<T>.Default.Equals(Value, default); }
 
         /// <summary>
-        /// Next element in the row
+        /// Gets the row of the element
         /// </summary>
-        public MatrixElement<T> NextInRow { get; set; }
+        public int Row { get; protected set; }
 
         /// <summary>
-        /// Next element in the column
+        /// Gets the column of the element
         /// </summary>
-        public MatrixElement<T> NextInColumn { get; set; }
+        public int Column { get; protected set; }
 
-        /// <summary>
-        /// Previous element in the row
-        /// </summary>
-        public MatrixElement<T> PreviousInRow { get; set; }
-
-        /// <summary>
-        /// Previous element in the column
-        /// </summary>
-        public MatrixElement<T> PreviousInColumn { get; set; }
-        
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="row">Row index</param>
-        /// <param name="column">Column index</param>
-        public MatrixElement(int row, int column)
+        protected MatrixElement()
         {
             Value = default;
-            Row = row;
-            Column = column;
         }
 
         /// <summary>
-        /// Get the element above (same column)
+        /// Gets the element below (same column)
         /// </summary>
-        public override Element<T> Above => PreviousInColumn;
+        public abstract MatrixElement<T> Below { get; }
 
         /// <summary>
-        /// Get the element below (same column)
+        /// Gets the element above (same column)
         /// </summary>
-        public override Element<T> Below => NextInColumn;
+        public abstract MatrixElement<T> Above { get; }
 
         /// <summary>
-        /// Get the element on the right (same row)
+        /// Gets the element on the right
         /// </summary>
-        public override Element<T> Right => NextInRow;
+        public abstract MatrixElement<T> Right { get; }
 
         /// <summary>
-        /// Get the element on the left (same row)
+        /// Gets the element on the left
         /// </summary>
-        public override Element<T> Left => PreviousInRow;
-
-        /// <summary>
-        /// Convert to a string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return "({0}, {1}) = {2}".FormatString(Row, Column, Value);
-        }
+        public abstract MatrixElement<T> Left { get; }
     }
 }

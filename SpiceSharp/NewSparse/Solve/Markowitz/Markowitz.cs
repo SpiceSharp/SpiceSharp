@@ -93,12 +93,15 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Right-hand side</param>
         /// <param name="step">Step</param>
-        void Count(SparseMatrix<T> matrix, DenseVector<T> rhs, int step)
+        void Count(SparseMatrix<T> matrix, SparseVector<T> rhs, int step)
         {
-            Element<T> element;
+            MatrixElement<T> element;
+
+            // Get the first element in the vector
+            var rhsElement = rhs.First;
 
             // Generate Markowitz row count
-            for (int i = step; i <= matrix.Size; i++)
+            for (int i = matrix.Size; i >= step; i--)
             {
                 // Set count to -1 initially to remove count due to pivot element
                 int count = -1;
@@ -111,9 +114,12 @@ namespace SpiceSharp.NewSparse.Solve
                     element = element.Right;
                 }
 
-                // Include nonzero elements in the rhs vector
-                if (rhs != null && !rhs[i].Equals(default))
-                     count++;
+                // Include elements on the Rhs vector
+                while (rhsElement != null && rhsElement.Index < step)
+                    rhsElement = rhsElement.Next;
+                if (rhsElement != null && rhsElement.Index == i)
+                    count++;
+                
                 markowitzRow[i] = Math.Min(count, MaxMarkowitzCount);
             }
             
@@ -158,7 +164,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Rhs</param>
         /// <param name="step">Step</param>
-        public override void Setup(SparseMatrix<T> matrix, DenseVector<T> rhs, int step)
+        public override void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int step)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
@@ -178,7 +184,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="rhs">Rhs</param>
         /// <param name="pivot">Pivot</param>
         /// <param name="step">Step</param>
-        public override void MovePivot(SparseMatrix<T> matrix, DenseVector<T> rhs, Element<T> pivot, int step)
+        public override void MovePivot(SparseMatrix<T> matrix, SparseVector<T> rhs, MatrixElement<T> pivot, int step)
         {
             if (pivot == null)
                 throw new ArgumentNullException(nameof(pivot));
@@ -217,13 +223,13 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="pivot">Pivot</param>
         /// <param name="step">Step</param>
-        public override void Update(SparseMatrix<T> matrix, Element<T> pivot, int step)
+        public override void Update(SparseMatrix<T> matrix, MatrixElement<T> pivot, int step)
         {
             if (pivot == null)
                 throw new ArgumentNullException(nameof(pivot));
 
             // Go through all elements below the pivot. If they exist, then we can subtract 1 from the Markowitz row vector!
-            for (Element<T> column = pivot.Below; column != null; column = column.Below)
+            for (MatrixElement<T> column = pivot.Below; column != null; column = column.Below)
             {
                 int row = column.Row;
                 --markowitzRow[row];
@@ -237,7 +243,7 @@ namespace SpiceSharp.NewSparse.Solve
             }
 
             // go through all elements right of the pivot. For every element, we can subtract 1 from the Markowitz column vector!
-            for (Element<T> row = pivot.Right; row != null; row = row.Right)
+            for (MatrixElement<T> row = pivot.Right; row != null; row = row.Right)
             {
                 int column = row.Column;
                 --markowitzColumn[column];
@@ -258,11 +264,11 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="step">Step</param>
         /// <returns></returns>
-        public override Element<T> FindPivot(SparseMatrix<T> matrix, int step)
+        public override MatrixElement<T> FindPivot(SparseMatrix<T> matrix, int step)
         {
             foreach (var strategy in Strategies)
             {
-                Element<T> chosen = strategy.FindPivot(this, matrix, step);
+                MatrixElement<T> chosen = strategy.FindPivot(this, matrix, step);
                 if (chosen != null)
                     return chosen;
             }

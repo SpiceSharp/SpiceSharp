@@ -9,7 +9,7 @@ namespace SpiceSharp.NewSparse
     /// The matrix is always kept square!
     /// </summary>
     /// <typeparam name="T">Type for the element</typeparam>
-    public class SparseMatrix<T> where T : IFormattable, IEquatable<T>
+    public class SparseMatrix<T> : Matrix<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
         /// Constants
@@ -18,17 +18,12 @@ namespace SpiceSharp.NewSparse
         const float ExpansionFactor = 1.5f;
 
         /// <summary>
-        /// Gets the matrix size
-        /// </summary>
-        public int Size { get; private set; }
-
-        /// <summary>
         /// Private variables
         /// </summary>
         Row<T>[] rows;
         Column<T>[] columns;
-        MatrixElement<T>[] diagonal;
-        MatrixElement<T> trashCan;
+        SparseMatrixElement<T>[] diagonal;
+        SparseMatrixElement<T> trashCan;
         int allocatedSize;
 
         /// <summary>
@@ -38,7 +33,7 @@ namespace SpiceSharp.NewSparse
         /// <param name="row">Row</param>
         /// <param name="column">Column</param>
         /// <returns></returns>
-        public T this[int row, int column]
+        public override T this[int row, int column]
         {
             get
             {
@@ -69,8 +64,8 @@ namespace SpiceSharp.NewSparse
         /// Constructor
         /// </summary>
         public SparseMatrix()
+            : base(1)
         {
-            Size = 1;
             allocatedSize = InitialSize;
 
             // Allocate rows
@@ -84,8 +79,8 @@ namespace SpiceSharp.NewSparse
                 columns[i] = new Column<T>();
 
             // Other
-            diagonal = new MatrixElement<T>[InitialSize + 1];
-            trashCan = new MatrixElement<T>(0, 0);
+            diagonal = new SparseMatrixElement<T>[InitialSize + 1];
+            trashCan = new SparseMatrixElement<T>(0, 0);
         }
 
         /// <summary>
@@ -93,10 +88,8 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         /// <param name="size">Size</param>
         public SparseMatrix(int size)
+            : base(size)
         {
-            if (size < 0)
-                throw new ArgumentException("Invalid size {0}".FormatString(size));
-            Size = size;
             allocatedSize = Math.Max(InitialSize, size);
 
             // Allocate rows
@@ -110,8 +103,8 @@ namespace SpiceSharp.NewSparse
                 columns[i] = new Column<T>();
 
             // Other
-            diagonal = new MatrixElement<T>[allocatedSize + 1];
-            trashCan = new MatrixElement<T>(0, 0);
+            diagonal = new SparseMatrixElement<T>[allocatedSize + 1];
+            trashCan = new SparseMatrixElement<T>(0, 0);
         }
 
         /// <summary>
@@ -121,7 +114,7 @@ namespace SpiceSharp.NewSparse
         /// <param name="row">Row</param>
         /// <param name="column">Column</param>
         /// <returns></returns>
-        public Element<T> GetElement(int row, int column)
+        public MatrixElement<T> GetElement(int row, int column)
         {
             if (row < 0 || column < 0)
                 throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));
@@ -136,7 +129,7 @@ namespace SpiceSharp.NewSparse
             if (row == column && diagonal[row] != null)
                 return diagonal[row];
 
-            MatrixElement<T> element;
+            SparseMatrixElement<T> element;
             if (!rows[row].CreateGetElement(row, column, out element))
             {
                 columns[column].Insert(element);
@@ -152,7 +145,7 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
-        public Element<T> GetDiagonalElement(int index) => diagonal[index];
+        public MatrixElement<T> GetDiagonalElement(int index) => diagonal[index];
         
         /// <summary>
         /// Find an element
@@ -161,12 +154,12 @@ namespace SpiceSharp.NewSparse
         /// <param name="row">Row</param>
         /// <param name="column">Column</param>
         /// <returns></returns>
-        public Element<T> FindElement(int row, int column)
+        public MatrixElement<T> FindElement(int row, int column)
         {
             if (row < 0 || column < 0)
                 throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));
             if (row > Size || column > Size)
-                return default;
+                return null;
             if (row == 0 || column == 0)
                 return trashCan;
 
@@ -179,28 +172,28 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         /// <param name="row">Row</param>
         /// <returns></returns>
-        public Element<T> GetFirstInRow(int row) => rows[row].FirstInRow;
+        public MatrixElement<T> GetFirstInRow(int row) => rows[row].FirstInRow;
 
         /// <summary>
         /// Gets the last element in a row
         /// </summary>
         /// <param name="row">Row</param>
         /// <returns></returns>
-        public Element<T> GetLastInRow(int row) => rows[row].LastInRow;
+        public MatrixElement<T> GetLastInRow(int row) => rows[row].LastInRow;
 
         /// <summary>
         /// Gets the first element in a column
         /// </summary>
         /// <param name="column">Column</param>
         /// <returns></returns>
-        public Element<T> GetFirstInColumn(int column) => columns[column].FirstInColumn;
+        public MatrixElement<T> GetFirstInColumn(int column) => columns[column].FirstInColumn;
 
         /// <summary>
         /// Gets the last element in a column
         /// </summary>
         /// <param name="column">Column</param>
         /// <returns></returns>
-        public Element<T> GetLastInColumn(int column) => columns[column].LastInColumn;
+        public MatrixElement<T> GetLastInColumn(int column) => columns[column].LastInColumn;
 
         /// <summary>
         /// Swap rows in the matrix
@@ -221,8 +214,8 @@ namespace SpiceSharp.NewSparse
             }
 
             // Get the two elements
-            MatrixElement<T> row1Element = rows[row1].FirstInRow;
-            MatrixElement<T> row2Element = rows[row2].FirstInRow;
+            SparseMatrixElement<T> row1Element = rows[row1].FirstInRow;
+            SparseMatrixElement<T> row2Element = rows[row2].FirstInRow;
 
             // Swap the two rows
             var tmpRow = rows[row1];
@@ -295,8 +288,8 @@ namespace SpiceSharp.NewSparse
             }
 
             // Get the two elements
-            MatrixElement<T> column1Element = columns[column1].FirstInColumn;
-            MatrixElement<T> column2Element = columns[column2].FirstInColumn;
+            SparseMatrixElement<T> column1Element = columns[column1].FirstInColumn;
+            SparseMatrixElement<T> column2Element = columns[column2].FirstInColumn;
 
             // Swap the two rows
             var tmpColumn = columns[column1];

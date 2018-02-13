@@ -15,6 +15,6 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="step">Step</param>
         /// <returns></returns>
-        public abstract Element<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step);
+        public abstract MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step);
     }
 }

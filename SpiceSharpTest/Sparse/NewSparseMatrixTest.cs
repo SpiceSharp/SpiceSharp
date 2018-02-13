@@ -5,7 +5,7 @@ using SpiceSharp.NewSparse;
 namespace SpiceSharpTest.Sparse
 {
     [TestClass]
-    public class NewSparseTest
+    public class NewSparseMatrixTest
     {
         [TestMethod]
         public void TestSparseLinks()
@@ -27,7 +27,7 @@ namespace SpiceSharpTest.Sparse
             }
 
             // Check links from left to right
-            Element<double> element;
+            MatrixElement<double> element;
             for (int r = 0; r < size; r++)
             {
                 element = matrix.GetFirstInRow(r + 1);

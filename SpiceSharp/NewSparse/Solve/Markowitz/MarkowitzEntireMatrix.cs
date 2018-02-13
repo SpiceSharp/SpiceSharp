@@ -21,17 +21,17 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="step">Step</param>
         /// <returns></returns>
-        public override Element<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step)
+        public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step)
         {
             if (markowitz == null)
                 throw new ArgumentNullException(nameof(markowitz));
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
 
-            Element<T> chosen = null;
+            MatrixElement<T> chosen = null;
             long minMarkowitzProduct = long.MaxValue;
             double largestMagnitude = 0.0, acceptedRatio = 0.0;
-            Element<T> largestElement = null;
+            MatrixElement<T> largestElement = null;
             int ties = 0;
 
             // Start search of matrix on column by column basis
@@ -50,7 +50,7 @@ namespace SpiceSharp.NewSparse.Solve
 
                 // Restart search for a pivot
                 element = matrix.GetLastInColumn(i);
-                while (element != null && element.Row > step)
+                while (element != null && element.Row >= step)
                 {
                     // Find the magnitude and Markowitz product
                     double magnitude = markowitz.Magnitude(element.Value);
