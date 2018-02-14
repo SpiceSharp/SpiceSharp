@@ -51,7 +51,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// <summary>
         /// Gets the magnitude method
         /// </summary>
-        public Func<T, double> Magnitude { get; }
+        public Func<T, double> Magnitude { get; private set; }
 
         /// <summary>
         /// Private variables
@@ -61,12 +61,8 @@ namespace SpiceSharp.NewSparse.Solve
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="magnitude">Magnitude</param>
-        public Markowitz(Func<T, double> magnitude)
+        public Markowitz()
         {
-            // Magnitude method
-            Magnitude = magnitude;
-
             // Register default strategies
             Strategies.Add(new MarkowitzSingleton<T>());
             Strategies.Add(new MarkowitzQuickDiagonal<T>());
@@ -166,10 +162,12 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Rhs</param>
         /// <param name="step">Step</param>
-        public override void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int step)
+        public override void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int step, Func<T, double> magnitude)
         {
             if (matrix == null)
                 throw new ArgumentNullException(nameof(matrix));
+
+            Magnitude = magnitude;
 
             // Initialize Markowitz row, column and product vectors if necessary
             if (markowitzRow == null || markowitzRow.Length != matrix.Size + 1)

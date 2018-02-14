@@ -24,7 +24,7 @@ namespace SpiceSharpTest.Sparse
             };
 
             // Create matrix
-            var solver = new RealSolver(new SpiceSharp.NewSparse.Solve.Markowitz<double>(Math.Abs));
+            var solver = new RealSolver();
             for (int r = 0; r < matrixElements.Length; r++)
                 for (int c = 0; c < matrixElements[r].Length; c++)
                     solver.Matrix.GetElement(r + 1, c + 1).Value = matrixElements[r][c];

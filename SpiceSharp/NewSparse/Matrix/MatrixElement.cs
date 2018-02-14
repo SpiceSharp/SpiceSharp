@@ -56,5 +56,14 @@ namespace SpiceSharp.NewSparse
         /// Gets the element on the left
         /// </summary>
         public abstract MatrixElement<T> Left { get; }
+
+        /// <summary>
+        /// Convert to a string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return "({0}, {1}) = {2}".FormatString(Row, Column, Value);
+        }
     }
 }

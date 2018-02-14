@@ -50,8 +50,7 @@ namespace Sandbox
         void SolveNewSpaceMatrix()
         {
             // Create the solver
-            var markowitz = new Markowitz<double>(Math.Abs);
-            var solver = new RealSolver(markowitz);
+            var solver = new RealSolver();
 
             // Setup the matrix
             for (int r = 0; r < matrixElements.Length; r++)

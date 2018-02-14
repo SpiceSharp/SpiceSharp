@@ -8,14 +8,13 @@ namespace SpiceSharp.NewSparse.Solve
     /// <typeparam name="T"></typeparam>
     public abstract class PivotStrategy<T> where T : IFormattable, IEquatable<T>
     {
-
         /// <summary>
         /// Setup the pivot strategy
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Rhs</param>
         /// <param name="step">Step</param>
-        public abstract void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int step);
+        public abstract void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int step, Func<T, double> magnitude);
 
         /// <summary>
         /// Update the strategy before the pivot is moved

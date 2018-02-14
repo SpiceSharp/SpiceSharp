@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using SpiceSharp.NewSparse.Solve;
 
 namespace SpiceSharp.NewSparse
@@ -6,13 +7,13 @@ namespace SpiceSharp.NewSparse
     /// <summary>
     /// Class for solving real matrices
     /// </summary>
-    public class RealSolver : Solver<double>
+    public class ComplexSolver : Solver<Complex>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public RealSolver()
-            : base(new Markowitz<double>())
+        public ComplexSolver()
+            : base(new Markowitz<Complex>())
         {
         }
 
@@ -20,8 +21,8 @@ namespace SpiceSharp.NewSparse
         /// Constructor
         /// </summary>
         /// <param name="size">Matrix size</param>
-        public RealSolver(int size)
-            : base(new Markowitz<double>(), size)
+        public ComplexSolver(int size)
+            : base(new Markowitz<Complex>(), size)
         {
         }
 
@@ -30,7 +31,7 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         /// <param name="size">Size</param>
         /// <param name="strategy">Strategy</param>
-        public RealSolver(int size, PivotStrategy<double> strategy)
+        public ComplexSolver(int size, PivotStrategy<Complex> strategy)
             : base(strategy, size)
         {
         }
@@ -40,7 +41,7 @@ namespace SpiceSharp.NewSparse
         /// </summary>
         public override void Factor()
         {
-            MatrixElement<double> element, column;
+            MatrixElement<Complex> element, column;
 
             // Get the diagonal
             element = Matrix.GetDiagonalElement(1);
@@ -48,13 +49,13 @@ namespace SpiceSharp.NewSparse
                 throw new SparseException("Zero pivot");
 
             // pivot = 1 / pivot
-            element.Value = 1.0 / element.Value;
+            element.Value = Inverse(element.Value);
 
             // TODO: maybe we should cache this
-            MatrixElement<double>[] dest = new MatrixElement<double>[Matrix.Size + 1];
+            MatrixElement<Complex>[] dest = new MatrixElement<Complex>[Matrix.Size + 1];
 
             // Start factorization
-            double mult;
+            Complex mult;
             for (int step = 2; step <= Matrix.Size; step++)
             {
                 // Scatter
@@ -88,7 +89,7 @@ namespace SpiceSharp.NewSparse
                 element = Matrix.GetDiagonalElement(step);
                 if (element == null || element.Value.Equals(0.0))
                     throw new SparseException("Zero pivot");
-                element.Value = 1.0 / element.Value;
+                element.Value = Inverse(element.Value);
             }
         }
 
@@ -96,14 +97,14 @@ namespace SpiceSharp.NewSparse
         /// Find the solution for a factored matrix and a right-hand-side
         /// </summary>
         /// <param name="solution">Solution vector</param>
-        public override void Solve(DenseVector<double> solution)
+        public override void Solve(DenseVector<Complex> solution)
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));
 
             // TODO: Maybe we should cache intermediate
             // Scramble
-            var intermediate = new double[Rhs.Length + 1];
+            var intermediate = new Complex[Rhs.Length + 1];
             var rhsElement = Rhs.First;
             while (rhsElement != null)
             {
@@ -114,7 +115,7 @@ namespace SpiceSharp.NewSparse
             // Forward substitution
             for (int i = 1; i <= Matrix.Size; i++)
             {
-                double temp = intermediate[i];
+                Complex temp = intermediate[i];
 
                 // This step of the substitution is skipped if temp == 0.0
                 if (!temp.Equals(0.0))
@@ -137,7 +138,7 @@ namespace SpiceSharp.NewSparse
             // Backward substitution
             for (int i = Matrix.Size; i > 0; i--)
             {
-                double temp = intermediate[i];
+                Complex temp = intermediate[i];
                 var pivot = Matrix.GetDiagonalElement(i);
                 var element = pivot.Right;
 
@@ -158,14 +159,14 @@ namespace SpiceSharp.NewSparse
         /// Find the solution for a factored matrix and a right-hand-side (transposed)
         /// </summary>
         /// <param name="solution">Solution vector</param>
-        public override void SolveTransposed(DenseVector<double> solution)
+        public override void SolveTransposed(DenseVector<Complex> solution)
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));
 
             // TODO: Maybe we should cache intermediate
             // Scramble
-            var intermediate = new double[Rhs.Length];
+            var intermediate = new Complex[Rhs.Length];
             var rhsElement = Rhs.First;
             while (rhsElement != null)
             {
@@ -176,7 +177,7 @@ namespace SpiceSharp.NewSparse
             // Forward elimination
             for (int i = 1; i <= Matrix.Size; i++)
             {
-                double temp = intermediate[i];
+                Complex temp = intermediate[i];
 
                 // This step of the elimination is skipped if temp equals 0
                 if (!temp.Equals(0.0))
@@ -194,7 +195,7 @@ namespace SpiceSharp.NewSparse
             // Backward substitution
             for (int i = Matrix.Size; i > 0; i--)
             {
-                double temp = intermediate[i];
+                Complex temp = intermediate[i];
 
                 var pivot = Matrix.GetDiagonalElement(i);
                 var element = pivot.Below;
@@ -231,12 +232,12 @@ namespace SpiceSharp.NewSparse
                     var element = pivot.Below;
                     while (element != null)
                     {
-                        largest = Math.Max(largest, Math.Abs(element.Value));
+                        largest = Math.Max(largest, Magnitude(element.Value));
                         element = element.Below;
                     }
 
                     // Check validity of the pivot
-                    if (largest * RelativePivotThreshold < Math.Abs(pivot.Value))
+                    if (largest * RelativePivotThreshold < Magnitude(element.Value))
                         Elimination(pivot);
                     else
                     {
@@ -251,7 +252,7 @@ namespace SpiceSharp.NewSparse
             }
 
             // Setup for reordering
-            Strategy.Setup(Matrix, Rhs, step, Math.Abs);
+            Strategy.Setup(Matrix, Rhs, step, Magnitude);
 
             // Perform reordering and factorization starting from where we stopped last time
             for (; step <= Matrix.Size; step++)
@@ -272,12 +273,12 @@ namespace SpiceSharp.NewSparse
         /// Eliminate a row
         /// </summary>
         /// <param name="pivot">Current pivot</param>
-        void Elimination(MatrixElement<double> pivot)
+        void Elimination(MatrixElement<Complex> pivot)
         {
             // Test for zero pivot
             if (pivot.Value.Equals(0.0))
                 throw new SparseException("Matrix is singular");
-            pivot.Value = 1.0 / pivot.Value;
+            pivot.Value = Inverse(pivot.Value);
 
             var upper = pivot.Right;
             while (upper != null)
@@ -307,6 +308,38 @@ namespace SpiceSharp.NewSparse
                 }
                 upper = upper.Right;
             }
+        }
+
+        /// <summary>
+        /// Magnitude method
+        /// </summary>
+        /// <param name="value">Value</param>
+        /// <returns></returns>
+        static double Magnitude(Complex value) => Math.Abs(value.Real) + Math.Abs(value.Imaginary);
+
+        /// <summary>
+        /// Calculate inverse of a complex number
+        /// </summary>
+        /// <param name="value">Value</param>
+        /// <returns></returns>
+        static Complex Inverse(Complex value)
+        {
+            double real, imaginary;
+            double r;
+            if ((value.Real >= value.Imaginary && value.Real > -value.Imaginary) ||
+                (value.Real < value.Imaginary && value.Real <= -value.Imaginary))
+            {
+                r = value.Imaginary / value.Real;
+                real = 1.0 / (value.Real + r * value.Imaginary);
+                imaginary = -r * real;
+            }
+            else
+            {
+                r = value.Real / value.Imaginary;
+                imaginary = -1.0 / (value.Imaginary + r * value.Real);
+                real = -r * imaginary;
+            }
+            return new Complex(real, imaginary);
         }
     }
 }

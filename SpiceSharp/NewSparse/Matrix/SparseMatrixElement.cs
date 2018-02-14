@@ -78,14 +78,5 @@ namespace SpiceSharp.NewSparse
         /// Get the element on the left (same row)
         /// </summary>
         public override MatrixElement<T> Left => PreviousInRow;
-
-        /// <summary>
-        /// Convert to a string
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return "({0}, {1}) = {2}".FormatString(Row, Column, Value);
-        }
     }
 }

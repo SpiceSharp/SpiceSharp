@@ -63,10 +63,25 @@ namespace SpiceSharp.NewSparse
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="strategy">Strategy</param>
         protected Solver(PivotStrategy<T> strategy)
         {
             Matrix = new SparseMatrix<T>();
             Rhs = new SparseVector<T>();
+            NeedsReordering = true;
+            TranslationSetup = false;
+            Strategy = strategy;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="strategy">Strategy</param>
+        /// <param name="size">Size</param>
+        protected Solver(PivotStrategy<T> strategy, int size)
+        {
+            Matrix = new SparseMatrix<T>(size);
+            Rhs = new SparseVector<T>(size);
             NeedsReordering = true;
             TranslationSetup = false;
             Strategy = strategy;
