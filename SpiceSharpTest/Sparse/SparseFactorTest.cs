@@ -27,7 +27,7 @@ namespace SpiceSharpTest.Sparse
             var solver = new RealSolver();
             for (int r = 0; r < matrixElements.Length; r++)
                 for (int c = 0; c < matrixElements[r].Length; c++)
-                    solver.Matrix.GetElement(r + 1, c + 1).Value = matrixElements[r][c];
+                    solver.GetMatrixElement(r + 1, c + 1).Value = matrixElements[r][c];
 
             // Factor
             solver.Factor();
@@ -35,7 +35,7 @@ namespace SpiceSharpTest.Sparse
             // compare
             for (int r = 0; r < matrixElements.Length; r++)
                 for (int c = 0; c < matrixElements[r].Length; c++)
-                    Assert.AreEqual(expected[r][c], solver.Matrix[r + 1, c + 1], 1e-12);
+                    Assert.AreEqual(expected[r][c], solver.GetMatrixElement(r + 1, c + 1).Value, 1e-12);
         }
     }
 }

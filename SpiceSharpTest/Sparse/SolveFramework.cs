@@ -46,7 +46,7 @@ namespace SpiceSharpTest.Sparse
                     double value = double.Parse(match.Groups["value"].Value, System.Globalization.CultureInfo.InvariantCulture);
 
                     // Set the value in the matrix
-                    result.Matrix.GetElement(row, column).Value = value;
+                    result.GetMatrixElement(row, column).Value = value;
                 }
             }
 

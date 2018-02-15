@@ -132,8 +132,8 @@ namespace SpiceSharp.NewSparse.Solve
             int oldAllocated = allocated;
             allocated = Math.Max(newLength, (int)(allocated * ExpansionFactor));
 
-            Array.Resize(ref extToInt, allocated);
-            for (int i = oldAllocated; i < newLength; i++)
+            Array.Resize(ref extToInt, allocated + 1);
+            for (int i = oldAllocated; i <= allocated; i++)
                 extToInt[i] = i;
             Length = newLength;
         }
