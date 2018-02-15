@@ -16,6 +16,11 @@ namespace SpiceSharp.NewSparse
         public int Fillins { get; private set; }
 
         /// <summary>
+        /// Gets the order of the matrix (matrix size)
+        /// </summary>
+        public int Order { get => Matrix.Size; }
+
+        /// <summary>
         /// Gets or sets a flag that reordering is required
         /// </summary>
         public bool NeedsReordering { get; set; }
@@ -33,27 +38,22 @@ namespace SpiceSharp.NewSparse
         /// <summary>
         /// Gets the row translation
         /// </summary>
-        public Translation Row { get; private set; }
+        public Translation Row { get; } = new Translation();
 
         /// <summary>
         /// Gets the column translation
         /// </summary>
-        public Translation Column { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a flag that the translation has been set up
-        /// </summary>
-        protected bool TranslationSetup { get; set; }
+        public Translation Column { get; } = new Translation();
 
         /// <summary>
         /// Gets the matrix to work on
         /// </summary>
-        public SparseMatrix<T> Matrix { get; }
+        protected SparseMatrix<T> Matrix { get; }
 
         /// <summary>
         /// Gets the right-hand side vector
         /// </summary>
-        public SparseVector<T> Rhs { get; }
+        protected SparseVector<T> Rhs { get; }
         
         /// <summary>
         /// Gets the pivot strategy used
@@ -69,7 +69,6 @@ namespace SpiceSharp.NewSparse
             Matrix = new SparseMatrix<T>();
             Rhs = new SparseVector<T>();
             NeedsReordering = true;
-            TranslationSetup = false;
             Strategy = strategy;
         }
 
@@ -83,7 +82,6 @@ namespace SpiceSharp.NewSparse
             Matrix = new SparseMatrix<T>(size);
             Rhs = new SparseVector<T>(size);
             NeedsReordering = true;
-            TranslationSetup = false;
             Strategy = strategy;
         }
 
@@ -110,6 +108,30 @@ namespace SpiceSharp.NewSparse
         public abstract void OrderAndFactor();
 
         /// <summary>
+        /// Get matrix element
+        /// </summary>
+        /// <param name="row">Row</param>
+        /// <param name="column">Column</param>
+        /// <returns></returns>
+        public MatrixElement<T> GetMatrixElement(int row, int column)
+        {
+            row = Row[row];
+            column = Column[column];
+            return Matrix.GetElement(row, column);
+        }
+
+        /// <summary>
+        /// Get right-hand side element
+        /// </summary>
+        /// <param name="index">Index</param>
+        /// <returns></returns>
+        public VectorElement<T> GetRhsElement(int index)
+        {
+            index = Row[index];
+            return Rhs.GetElement(index);
+        }
+
+        /// <summary>
         /// Move a chosen pivot to (step, step)
         /// </summary>
         /// <param name="pivot">Pivot</param>
@@ -118,13 +140,6 @@ namespace SpiceSharp.NewSparse
         {
             if (pivot == null)
                 throw new ArgumentNullException(nameof(pivot));
-            if (!TranslationSetup)
-            {
-                Row = new Translation(Matrix.Size + 1);
-                Column = new Translation(Matrix.Size + 1);
-                TranslationSetup = true;
-            }
-
             Strategy.MovePivot(Matrix, Rhs, pivot, step);
 
             // Move the pivot in the matrix

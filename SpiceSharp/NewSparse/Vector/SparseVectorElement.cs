@@ -6,6 +6,7 @@ namespace SpiceSharp.NewSparse
     /// Sparse vector element
     /// </summary>
     /// <typeparam name="T">Base type</typeparam>
+    [Serializable]
     class SparseVectorElement<T> : VectorElement<T> where T : IFormattable
     {
         /// <summary>

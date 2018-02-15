@@ -42,6 +42,8 @@ namespace SpiceSharp.NewSparse
         public DenseVector(int length)
             : base(length)
         {
+            if (length < 0 && length > int.MaxValue - 1)
+                throw new ArgumentException("Invalid length {0}".FormatString(length));
             values = new T[length + 1];
         }
 
@@ -52,7 +54,10 @@ namespace SpiceSharp.NewSparse
         protected DenseVector(T[] values)
             : base(values?.Length - 1 ?? 0)
         {
-            this.values = (T[])values.Clone();
+            if (values == null)
+                this.values = new T[1];
+            else
+                this.values = (T[])values.Clone();
         }
 
         /// <summary>

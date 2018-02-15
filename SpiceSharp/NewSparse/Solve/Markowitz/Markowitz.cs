@@ -186,6 +186,8 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="step">Step</param>
         public override void MovePivot(SparseMatrix<T> matrix, SparseVector<T> rhs, MatrixElement<T> pivot, int step)
         {
+            if (markowitzRow == null)
+                return;
             if (pivot == null)
                 throw new ArgumentNullException(nameof(pivot));
 

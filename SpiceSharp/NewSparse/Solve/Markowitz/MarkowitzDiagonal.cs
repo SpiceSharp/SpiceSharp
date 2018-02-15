@@ -22,6 +22,11 @@ namespace SpiceSharp.NewSparse.Solve
         /// <returns></returns>
         public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step)
         {
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+            if (markowitz == null)
+                throw new ArgumentNullException(nameof(markowitz));
+
             int minMarkowitzProduct = int.MaxValue;
             MatrixElement<T> chosen = null;
             double ratioOfAccepted = 0.0;

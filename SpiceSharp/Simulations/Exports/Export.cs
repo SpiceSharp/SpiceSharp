@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations
             get
             {
                 if (Extractor == null)
-                    throw new ArgumentException("Export value is not valid");
+                    return default;
                 return Extractor();
             }
         }

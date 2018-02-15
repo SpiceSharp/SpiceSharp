@@ -17,11 +17,21 @@ namespace SpiceSharp.NewSparse.Solve
         /// <returns></returns>
         public override MatrixElement<T> FindPivot(Markowitz<T> markowitz, SparseMatrix<T> matrix, int step)
         {
+            if (markowitz == null)
+                throw new ArgumentNullException(nameof(markowitz));
+            if (matrix == null)
+                throw new ArgumentNullException(nameof(matrix));
+
             int minMarkowitzProduct = int.MaxValue;
             MatrixElement<T> chosen = null;
 
             for (int i = step; i <= matrix.Size; i++)
             {
+                // Skip diagonal elements with a Markowitz product worse than already found
+                int product = markowitz.Product(i);
+                if (product >= minMarkowitzProduct)
+                    continue;
+
                 // Get the diagonal item
                 var diagonal = matrix.GetDiagonalElement(i);
                 if (diagonal == null)
@@ -32,7 +42,7 @@ namespace SpiceSharp.NewSparse.Solve
                 if (magnitude <= markowitz.AbsolutePivotThreshold)
                     continue;
 
-                if (markowitz.Product(i) == 1)
+                if (product == 1)
                 {
                     // Find the off-diagonal elements
                     var otherInRow = diagonal.Right ?? diagonal.Left;

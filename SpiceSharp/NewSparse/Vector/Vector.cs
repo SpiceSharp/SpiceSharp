@@ -24,7 +24,7 @@ namespace SpiceSharp.NewSparse
         /// Constructor
         /// </summary>
         /// <param name="length">Length</param>
-        public Vector(int length)
+        protected Vector(int length)
         {
             if (length < 1)
                 throw new SparseException("Invalid vector length {0}".FormatString(length));

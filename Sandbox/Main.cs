@@ -56,11 +56,11 @@ namespace Sandbox
             for (int r = 0; r < matrixElements.Length; r++)
                 for (int c = 0; c < matrixElements[r].Length; c++)
                     if (!matrixElements[r][c].Equals(0.0))
-                        solver.Matrix.GetElement(r + 1, c + 1).Value = matrixElements[r][c];
+                        solver.GetMatrixElement(r + 1, c + 1).Value = matrixElements[r][c];
             for (int r = 0; r < rhs.Length; r++)
-                solver.Rhs[r + 1] = rhs[r];
+                solver.GetRhsElement(r + 1).Value = rhs[r];
 
-            var solution = new DenseVector<double>(solver.Rhs.Length);
+            var solution = new DenseVector<double>(solver.Order);
 
             sw.Start();
             solver.OrderAndFactor();

@@ -6,6 +6,7 @@ namespace SpiceSharp.NewSparse
     /// Class for vector elements
     /// </summary>
     /// <typeparam name="T">Base type</typeparam>
+    [Serializable]
     public abstract class VectorElement<T> where T : IFormattable
     {
         /// <summary>

@@ -23,7 +23,7 @@
         /// Constructor
         /// </summary>
         /// <param name="size">Size</param>
-        public Matrix(int size)
+        protected Matrix(int size)
         {
             if (size < 0)
                 throw new SparseException("Invalid matrix size {0}".FormatString(size)); 

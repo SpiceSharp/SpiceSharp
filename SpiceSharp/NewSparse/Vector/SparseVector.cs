@@ -213,6 +213,19 @@ namespace SpiceSharp.NewSparse
                 element = element.NextInVector;
             }
 
+            // Swap these elements
+            Swap(first, second, index1, index2);
+        }
+
+        /// <summary>
+        /// Swap two elements in the vector
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <param name="index1"></param>
+        /// <param name="index2"></param>
+        void Swap(SparseVectorElement<T> first, SparseVectorElement<T> second, int index1, int index2)
+        {
             // Nothing to do
             if (first == null && second == null)
                 return;
@@ -228,7 +241,7 @@ namespace SpiceSharp.NewSparse
                 }
 
                 // Move the element back
-                element = second.PreviousInVector;
+                var element = second.PreviousInVector;
                 Remove(second);
                 while (element.PreviousInVector != null && element.PreviousInVector.Index > index1)
                     element = element.PreviousInVector;
@@ -253,7 +266,7 @@ namespace SpiceSharp.NewSparse
                 }
 
                 // Move element forward
-                element = first.NextInVector;
+                var element = first.NextInVector;
                 Remove(first);
                 while (element.NextInVector != null && element.NextInVector.Index < index2)
                     element = element.NextInVector;
@@ -306,7 +319,7 @@ namespace SpiceSharp.NewSparse
                     second.PreviousInVector.NextInVector = first;
 
                     // Swap element links
-                    element = first.PreviousInVector;
+                    var element = first.PreviousInVector;
                     first.PreviousInVector = second.PreviousInVector;
                     second.PreviousInVector = element;
 
