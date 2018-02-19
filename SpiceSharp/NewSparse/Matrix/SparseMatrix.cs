@@ -27,8 +27,7 @@ namespace SpiceSharp.NewSparse
         int allocatedSize;
 
         /// <summary>
-        /// Finds an element in the matrix
-        /// It does not create one if it doesn't exist. Use <see cref="GetElement(int, int)"/> instead to create elements.
+        /// Gets or sets an element
         /// </summary>
         /// <param name="row">Row</param>
         /// <param name="column">Column</param>

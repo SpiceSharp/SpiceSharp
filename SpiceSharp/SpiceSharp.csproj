@@ -97,6 +97,7 @@
     <Compile Include="NewSparse\Solve\ComplexSolver.cs" />
     <Compile Include="NewSparse\Solve\Markowitz\MarkowitzDiagonal.cs" />
     <Compile Include="NewSparse\Solve\Markowitz\MarkowitzQuickDiagonal.cs" />
+    <Compile Include="NewSparse\Solve\SparseLinearSystem.cs" />
     <Compile Include="NewSparse\Vector\DenseVector.cs" />
     <Compile Include="NewSparse\Matrix\Column.cs" />
     <Compile Include="NewSparse\Matrix\Matrix.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Simulations\Base\TemperatureBehavior.cs" />
     <Compile Include="Simulations\Base\Frequency\FrequencySimulation.cs" />
     <Compile Include="Simulations\Base\InitialConditionBehavior.cs" />
+    <Compile Include="Simulations\Helper.cs" />
     <Compile Include="Simulations\InitializeSimulationEventArgs.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\ArrayHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\NodeHistory.cs" />

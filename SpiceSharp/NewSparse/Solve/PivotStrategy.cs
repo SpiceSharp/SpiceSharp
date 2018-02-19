@@ -9,6 +9,14 @@ namespace SpiceSharp.NewSparse.Solve
     public abstract class PivotStrategy<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
+        /// Check that the current pivot is valid
+        /// It checks for the submatrix right/below of the pivot.
+        /// </summary>
+        /// <param name="pivot">Pivot</param>
+        /// <returns></returns>
+        public abstract bool IsValidPivot(MatrixElement<T> pivot);
+
+        /// <summary>
         /// Setup the pivot strategy
         /// </summary>
         /// <param name="matrix">Matrix</param>

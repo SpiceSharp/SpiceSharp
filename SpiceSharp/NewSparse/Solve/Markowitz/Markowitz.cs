@@ -71,6 +71,34 @@ namespace SpiceSharp.NewSparse.Solve
         }
 
         /// <summary>
+        /// Check that the pivot is valid
+        /// </summary>
+        /// <param name="pivot">Pivot</param>
+        /// <returns></returns>
+        public override bool IsValidPivot(MatrixElement<T> pivot)
+        {
+            if (pivot == null)
+                throw new ArgumentNullException(nameof(pivot));
+
+            // Get the magnitude of the current pivot
+            double magnitude = Magnitude(pivot.Value);
+
+            // Search for the largest element below the pivot
+            var element = pivot.Below;
+            double largest = 0.0;
+            while (element != null)
+            {
+                largest = Math.Max(largest, Magnitude(element.Value));
+                element = element.Below;
+            }
+
+            // Check the validity
+            if (largest * RelativePivotThreshold < magnitude)
+                return true;
+            return false;
+        }
+
+        /// <summary>
         /// Initialize
         /// </summary>
         /// <param name="matrix">Matrix</param>

@@ -226,18 +226,7 @@ namespace SpiceSharp.NewSparse
                 for (step = 1; step <= Matrix.Size; step++)
                 {
                     var pivot = Matrix.GetDiagonalElement(step);
-
-                    // Get the largest element
-                    double largest = 0.0;
-                    var element = pivot.Below;
-                    while (element != null)
-                    {
-                        largest = Math.Max(largest, Magnitude(element.Value));
-                        element = element.Below;
-                    }
-
-                    // Check validity of the pivot
-                    if (largest * RelativePivotThreshold < Magnitude(element.Value))
+                    if (Strategy.IsValidPivot(pivot))
                         Elimination(pivot);
                     else
                     {
