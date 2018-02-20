@@ -90,7 +90,7 @@ namespace SpiceSharp.NewSparse.Solve
                     chosen = null;
             }
 
-            return null;
+            return chosen;
         }
     }
 }

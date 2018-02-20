@@ -222,7 +222,7 @@ namespace SpiceSharp.NewSparse.Solve
             int row = pivot.Row;
             int column = pivot.Column;
 
-            // Did we just pivot a singleton element?
+            // Decrease singletons if we are using one as a pivot!
             if (markowitzRow[row] == 0 || markowitzColumn[column] == 0)
                 Singletons--;
 
@@ -233,6 +233,20 @@ namespace SpiceSharp.NewSparse.Solve
                 int tmp = markowitzRow[row];
                 markowitzRow[row] = markowitzRow[step];
                 markowitzRow[step] = tmp;
+
+                // Update the Markowitz product
+                int oldProduct = markowitzProduct[row];
+                markowitzProduct[row] = markowitzRow[row] * markowitzColumn[row];
+                if (oldProduct == 0)
+                {
+                    if (markowitzProduct[row] != 0)
+                        Singletons--;
+                }
+                else
+                {
+                    if (markowitzProduct[row] == 0)
+                        Singletons++;
+                }
             }
 
             // Exchange columns
@@ -242,9 +256,21 @@ namespace SpiceSharp.NewSparse.Solve
                 int tmp = markowitzColumn[column];
                 markowitzColumn[column] = markowitzColumn[step];
                 markowitzColumn[step] = tmp;
-            }
 
-            // We will update the Markowtiz products later after the pivot has moved
+                // Update the Markowitz product
+                int oldProduct = markowitzProduct[column];
+                markowitzProduct[column] = markowitzRow[column] * markowitzColumn[column];
+                if (oldProduct == 0)
+                {
+                    if (markowitzProduct[column] != 0)
+                        Singletons--;
+                }
+                else
+                {
+                    if (markowitzProduct[column] == 0)
+                        Singletons++;
+                }
+            }
         }
 
         /// <summary>
@@ -262,10 +288,10 @@ namespace SpiceSharp.NewSparse.Solve
             for (MatrixElement<T> column = pivot.Below; column != null; column = column.Below)
             {
                 int row = column.Row;
-                --markowitzRow[row];
-
+                
                 // Update the Markowitz product
-                markowitzProduct[row] = markowitzRow[row] * markowitzColumn[row];
+                markowitzProduct[row] -= markowitzColumn[row];
+                --markowitzRow[row];
 
                 // If we reached 0, then the row just turned to a singleton row
                 if (markowitzRow[row] == 0)
@@ -276,10 +302,10 @@ namespace SpiceSharp.NewSparse.Solve
             for (MatrixElement<T> row = pivot.Right; row != null; row = row.Right)
             {
                 int column = row.Column;
-                --markowitzColumn[column];
-
+                
                 // Update the Markowitz product
-                markowitzProduct[column] = markowitzRow[column] * markowitzColumn[column];
+                markowitzProduct[column] -= markowitzRow[column];
+                --markowitzColumn[column];
 
                 // If we reached 0, then the column just turned to a singleton column
                 // This only adds a singleton if the row wasn't detected as a singleton row first
