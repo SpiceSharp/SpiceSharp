@@ -102,10 +102,9 @@ namespace SpiceSharp.NewSparse.Solve
             if (chosen != null)
                 return chosen;
 
+            // Singular matrix
             if (largestElement.Equals(0.0))
-                throw new SparseException("Singular");
-
-            // TODO: Notify that the pivot is too small
+                return null;
             return largestElement;
         }
     }
