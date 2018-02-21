@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 using System.Linq;
-using SpiceSharp.Sparse;
+using SpiceSharp.NewSparse;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Circuits
@@ -169,18 +169,31 @@ namespace SpiceSharp.Circuits
             }
 
             // Determine the rank of the matrix
-            Matrix<double> conn = new Matrix<double>(Math.Max(voltageDriven.Count, map.Count));
+            RealSolver solver = new RealSolver(Math.Max(voltageDriven.Count, map.Count));
             for (int i = 0; i < voltageDriven.Count; i++)
             {
                 var pins = voltageDriven[i];
-                conn.GetElement(i + 1, map[pins.Item2]).Add(1.0);
-                conn.GetElement(i + 1, map[pins.Item3]).Add(1.0);
+                solver.GetMatrixElement(i + 1, map[pins.Item2]).Value += 1.0;
+                solver.GetMatrixElement(i + 1, map[pins.Item3]).Value += 1.0;
             }
-            var error = conn.OrderAndFactor(null, true);
-            conn.SingularAt(out int row, out _);
-            row--;
-            if (error == SparseError.Singular && row < voltageDriven.Count)
-                return voltageDriven[row].Item1;
+            try
+            {
+                // Try refactoring the matrix
+                solver.OrderAndFactor();
+            }
+            catch (SingularException exception)
+            {
+                /*
+                 * If the rank of the matrix is lower than the number of driven nodes, then
+                 * the matrix is not solvable for those nodes. This means that there are
+                 * voltage sources driving nodes in such a way that they cannot be solved.
+                 */
+                if (exception.Index <= voltageDriven.Count)
+                {
+                    var indices = solver.InternalToExternal(new Tuple<int, int>(exception.Index, exception.Index));
+                    return voltageDriven[indices.Item1 - 1].Item1;
+                }
+            }
             return null;
         }
 

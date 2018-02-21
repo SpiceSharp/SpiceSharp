@@ -38,8 +38,8 @@ namespace SpiceSharp.NewSparse
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
+        /// <param name="info">Info</param>
+        /// <param name="context">Context</param>
         protected SparseException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {

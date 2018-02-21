@@ -99,6 +99,30 @@ namespace SpiceSharp.NewSparse.Solve
         public MatrixElement<T> ReorderedDiagonal(int index) => Matrix.GetDiagonalElement(index);
 
         /// <summary>
+        /// Map external indices to internal indices
+        /// </summary>
+        /// <param name="externalIndices">External indices</param>
+        /// <returns></returns>
+        public Tuple<int, int> ExternalToInternal(Tuple<int, int> externalIndices)
+        {
+            int row = Row[externalIndices.Item1];
+            int column = Column[externalIndices.Item2];
+            return new Tuple<int, int>(row, column);
+        }
+
+        /// <summary>
+        /// Map internal indices to external indices
+        /// </summary>
+        /// <param name="internalIndices">Internal indices</param>
+        /// <returns></returns>
+        public Tuple<int, int> InternalToExternal(Tuple<int, int> internalIndices)
+        {
+            int row = Row.Reverse(internalIndices.Item1);
+            int column = Column.Reverse(internalIndices.Item2);
+            return new Tuple<int, int>(row, column);
+        }
+
+        /// <summary>
         /// Swap (internal) rows in the system
         /// </summary>
         /// <param name="row1">Row 1</param>

@@ -61,7 +61,8 @@ namespace SpiceSharp.NewSparse
         /// <summary>
         /// Factor the matrix
         /// </summary>
-        public abstract void Factor();
+        /// <returns>True if factoring was successful</returns>
+        public abstract bool Factor();
 
         /// <summary>
         /// Order and factor the matrix

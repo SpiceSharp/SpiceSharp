@@ -38,14 +38,14 @@ namespace SpiceSharp.NewSparse
         /// <summary>
         /// Factor the matrix
         /// </summary>
-        public override void Factor()
+        public override bool Factor()
         {
             MatrixElement<double> element, column;
 
             // Get the diagonal
             element = Matrix.GetDiagonalElement(1);
-            if (element.Value.Equals(0))
-                throw new SparseException("Zero pivot");
+            if (element == null || element.Value.Equals(0))
+                return false;
 
             // pivot = 1 / pivot
             element.Value = 1.0 / element.Value;
@@ -87,9 +87,10 @@ namespace SpiceSharp.NewSparse
                 // Check for a singular matrix
                 element = Matrix.GetDiagonalElement(step);
                 if (element == null || element.Value.Equals(0.0))
-                    throw new SparseException("Zero pivot");
+                    return false;
                 element.Value = 1.0 / element.Value;
             }
+            return true;
         }
 
         /// <summary>

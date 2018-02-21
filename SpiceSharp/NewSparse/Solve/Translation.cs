@@ -62,6 +62,24 @@ namespace SpiceSharp.NewSparse.Solve
         }
 
         /// <summary>
+        /// Find the external index matching the internal index.
+        /// Finding the external index is relatively slow. Use with care.
+        /// </summary>
+        /// <param name="index">Internal index</param>
+        /// <returns></returns>
+        public int Reverse(int index)
+        {
+            if (index > Length)
+                return index;
+            for (int i = 0; i <= Length; i++)
+            {
+                if (extToInt[i] == index)
+                    return i;
+            }
+            throw new SparseException("Invalid index");
+        }
+
+        /// <summary>
         /// Swap two (internal) indices
         /// </summary>
         /// <param name="index1">Index 1</param>

@@ -98,13 +98,14 @@ namespace SpiceSharp.NewSparse.Solve
                 }
             }
 
-            // Return the chosen pivot
+            // If a valid pivot was found, return it
             if (chosen != null)
                 return chosen;
 
             // Singular matrix
-            if (largestElement.Equals(0.0))
-                return null;
+            // If we can't find it while searching the entire matrix, then we definitely have a singular matrix...
+            if (largestElement == null || largestElement.Equals(0.0))
+                throw new SingularException(step);
             return largestElement;
         }
     }

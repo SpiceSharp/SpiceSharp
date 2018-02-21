@@ -94,10 +94,10 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="NewSparse\Matrix\MatrixElement.cs" />
     <Compile Include="NewSparse\Matrix\SparseMatrixElement.cs" />
+    <Compile Include="NewSparse\SingularException.cs" />
     <Compile Include="NewSparse\Solve\ComplexSolver.cs" />
     <Compile Include="NewSparse\Solve\Markowitz\MarkowitzDiagonal.cs" />
     <Compile Include="NewSparse\Solve\Markowitz\MarkowitzQuickDiagonal.cs" />
-    <Compile Include="NewSparse\Solve\SolveFlags.cs" />
     <Compile Include="NewSparse\Solve\SparseLinearSystem.cs" />
     <Compile Include="NewSparse\Vector\DenseVector.cs" />
     <Compile Include="NewSparse\Matrix\Column.cs" />
