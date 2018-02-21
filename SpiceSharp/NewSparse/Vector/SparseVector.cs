@@ -68,6 +68,7 @@ namespace SpiceSharp.NewSparse
         public SparseVector()
             : base(1)
         {
+            trashCan = new SparseVectorElement<T>(0);
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Sparse;
+using SpiceSharp.NewSparse;
 
 namespace SpiceSharp.Simulations
 {
@@ -149,37 +149,19 @@ namespace SpiceSharp.Simulations
         #endregion
 
         /// <summary>
-        /// Gets the equation matrix
+        /// Solver
         /// </summary>
-        public Matrix<double> Matrix { get; private set; } = null;
-
-        /// <summary>
-        /// Gets the real right-hand-side vector
-        /// </summary>
-        public RealSolution Rhs { get; private set; } = null;
+        public RealSolver Solver { get; } = new RealSolver();
 
         /// <summary>
         /// Gets the real solution vector
         /// </summary>
-        public RealSolution Solution { get; private set; } = null;
+        public Vector<double> Solution { get; private set; } = null;
 
         /// <summary>
         /// Gets the old solution
         /// </summary>
-        public RealSolution OldSolution { get; private set; } = null;
-
-        /// <summary>
-        /// Gets the order of the matrix/vectors
-        /// </summary>
-        public int Order { get; private set; } = 0;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public RealState()
-        {
-            Matrix = new Matrix<double>();
-        }
+        public Vector<double> OldSolution { get; private set; } = null;
 
         /// <summary>
         /// Initialize the state
@@ -191,10 +173,8 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(nodes));
 
             // Initialize all matrices
-            Order = nodes.Count + 1;
-            Rhs = new RealSolution(Order);
-            Solution = new RealSolution(Order);
-            OldSolution = new RealSolution(Order);
+            Solution = new DenseVector<double>(Solver.Order);
+            OldSolution = new DenseVector<double>(Solver.Order);
 
             // Initialize all states and parameters
             Init = InitializationStates.None;
@@ -212,11 +192,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public override void Destroy()
         {
-            Order = 0;
-            Rhs = null;
             Solution = null;
-            Matrix = null;
-
+            OldSolution = null;
             base.Destroy();
         }
 
@@ -225,20 +202,9 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public void StoreSolution()
         {
-            var tmp = Rhs;
-            Rhs = OldSolution;
+            var tmp = OldSolution;
             OldSolution = Solution;
             Solution = tmp;
-        }
-
-        /// <summary>
-        /// Clear the matrix and Rhs vector
-        /// </summary>
-        public void Clear()
-        {
-            for (int i = 0; i < Order; i++)
-                Rhs[i] = 0;
-            Matrix.Clear();
         }
     }
 }

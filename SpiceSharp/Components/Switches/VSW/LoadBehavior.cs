@@ -1,6 +1,6 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Sparse;
+using SpiceSharp.NewSparse;
 using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
 
@@ -42,10 +42,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, contPosourceNode, contNegateNode;
-        protected Element<double> PosPosPtr { get; private set; }
-        protected Element<double> NegPosPtr { get; private set; }
-        protected Element<double> PosNegPtr { get; private set; }
-        protected Element<double> NegNegPtr { get; private set; }
+        protected MatrixElement<double> PosPosPtr { get; private set; }
+        protected MatrixElement<double> NegPosPtr { get; private set; }
+        protected MatrixElement<double> PosNegPtr { get; private set; }
+        protected MatrixElement<double> NegNegPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -89,17 +89,17 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="nodes"></param>
-        /// <param name="matrix"></param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
+        /// <param name="nodes">Nodes</param>
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
         {
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
 
-            PosPosPtr = matrix.GetElement(posNode, posNode);
-            PosNegPtr = matrix.GetElement(posNode, negNode);
-            NegPosPtr = matrix.GetElement(negNode, posNode);
-            NegNegPtr = matrix.GetElement(negNode, negNode);
+            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
+            PosNegPtr = solver.GetMatrixElement(posNode, negNode);
+            NegPosPtr = solver.GetMatrixElement(negNode, posNode);
+            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
         }
         
         /// <summary>
@@ -171,10 +171,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             Cond = g_now;
 
             // Load the Y-matrix
-            PosPosPtr.Add(g_now);
-            PosNegPtr.Sub(g_now);
-            NegPosPtr.Sub(g_now);
-            NegNegPtr.Add(g_now);
+            PosPosPtr.Value += g_now;
+            PosNegPtr.Value -= g_now;
+            NegPosPtr.Value -= g_now;
+            NegNegPtr.Value += g_now;
         }
 
     }

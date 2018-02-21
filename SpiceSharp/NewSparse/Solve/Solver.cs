@@ -50,13 +50,13 @@ namespace SpiceSharp.NewSparse
         /// Solve
         /// </summary>
         /// <param name="solution">Solution vector</param>
-        public abstract void Solve(DenseVector<T> solution);
+        public abstract void Solve(Vector<T> solution);
 
         /// <summary>
         /// Solve the transposed problem
         /// </summary>
         /// <param name="solution">Solution vector</param>
-        public abstract void SolveTransposed(DenseVector<T> solution);
+        public abstract void SolveTransposed(Vector<T> solution);
 
         /// <summary>
         /// Factor the matrix
@@ -86,7 +86,7 @@ namespace SpiceSharp.NewSparse
             if (row != step)
                 SwapRows(row, step);
             if (column != step)
-                SwapColumns(row, step);
+                SwapColumns(column, step);
 
             Strategy.Update(Matrix, pivot, step);
         }

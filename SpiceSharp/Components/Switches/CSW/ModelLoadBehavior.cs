@@ -1,6 +1,8 @@
 ﻿using System;
 using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
+using SpiceSharp.NewSparse;
 
 namespace SpiceSharp.Components.CurrentSwitchBehaviors
 {
@@ -29,6 +31,16 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// </summary>
         /// <param name="name">Name</param>
         public ModelLoadBehavior(Identifier name) : base(name) { }
+
+        /// <summary>
+        /// Get equation pointers
+        /// </summary>
+        /// <param name="nodes">Nodes</param>
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
+        {
+            // Do nothing
+        }
 
         /// <summary>
         /// Setup the behavior

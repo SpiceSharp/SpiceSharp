@@ -1,7 +1,7 @@
 ﻿using System;
 using SpiceSharp.Simulations;
 using SpiceSharp.IntegrationMethods;
-using SpiceSharp.Sparse;
+using SpiceSharp.NewSparse;
 
 namespace SpiceSharp.Behaviors
 {
@@ -43,14 +43,8 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Setup the behavior for usage with a matrix
         /// </summary>
-        /// <param name="matrix">The matrix</param>
-        public virtual void GetMatrixPointers(Matrix<double> matrix)
-        {
-			if (matrix == null)
-				throw new ArgumentNullException(nameof(matrix));
-
-            // No pointers needed by default
-        }
+        /// <param name="solver">The matrix</param>
+        public abstract void GetEquationPointers(Solver<double> solver);
 
         /// <summary>
         /// Transient calculations

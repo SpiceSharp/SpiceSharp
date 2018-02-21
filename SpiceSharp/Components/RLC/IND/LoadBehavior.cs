@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Sparse;
+﻿using SpiceSharp.NewSparse;
 using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
@@ -20,10 +20,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected Element<double> PosBranchPtr { get; private set; }
-        protected Element<double> NegBranchPtr { get; private set; }
-        protected Element<double> BranchNegPtr { get; private set; }
-        protected Element<double> BranchPosPtr { get; private set; }
+        protected MatrixElement<double> PosBranchPtr { get; private set; }
+        protected MatrixElement<double> NegBranchPtr { get; private set; }
+        protected MatrixElement<double> BranchNegPtr { get; private set; }
+        protected MatrixElement<double> BranchPosPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -75,22 +75,22 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="nodes">Nodes</param>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
 
             // Create current equation
             BranchEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
 
             // Get matrix pointers
-            PosBranchPtr = matrix.GetElement(posNode, BranchEq);
-            NegBranchPtr = matrix.GetElement(negNode, BranchEq);
-            BranchNegPtr = matrix.GetElement(BranchEq, negNode);
-            BranchPosPtr = matrix.GetElement(BranchEq, posNode);
+            PosBranchPtr = solver.GetMatrixElement(posNode, BranchEq);
+            NegBranchPtr = solver.GetMatrixElement(negNode, BranchEq);
+            BranchNegPtr = solver.GetMatrixElement(BranchEq, negNode);
+            BranchPosPtr = solver.GetMatrixElement(BranchEq, posNode);
         }
 
         /// <summary>
@@ -111,10 +111,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="simulation">Base simulation</param>
         public override void Load(BaseSimulation simulation)
         {
-            PosBranchPtr.Add(1.0);
-            NegBranchPtr.Sub(1.0);
-            BranchPosPtr.Add(1.0);
-            BranchNegPtr.Sub(1.0);
+            PosBranchPtr.Value += 1;
+            NegBranchPtr.Value -= 1;
+            BranchPosPtr.Value += 1;
+            BranchNegPtr.Value -= 1;
         }
     }
 }

@@ -67,6 +67,20 @@ namespace SpiceSharp.NewSparse.Solve
         }
 
         /// <summary>
+        /// Find a matrix element
+        /// Returns null if no element is found
+        /// </summary>
+        /// <param name="row">Row</param>
+        /// <param name="column">Column</param>
+        /// <returns></returns>
+        public MatrixElement<T> FindMatrixElement(int row, int column)
+        {
+            row = Row[row];
+            column = Column[column];
+            return Matrix.FindElement(row, column);
+        }
+
+        /// <summary>
         /// Get right-hand side element
         /// </summary>
         /// <param name="index">Index</param>
@@ -97,6 +111,12 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="index">Index</param>
         /// <returns></returns>
         public MatrixElement<T> ReorderedDiagonal(int index) => Matrix.GetDiagonalElement(index);
+
+        /// <summary>
+        /// Gets the first element in the reordered Right-Hand Side vector
+        /// </summary>
+        /// <returns></returns>
+        public VectorElement<T> FirstInReorderedRhs() => Rhs.First;
 
         /// <summary>
         /// Map external indices to internal indices
@@ -143,6 +163,32 @@ namespace SpiceSharp.NewSparse.Solve
         {
             Matrix.SwapColumns(column1, column2);
             Column.Swap(column1, column2);
+        }
+
+        /// <summary>
+        /// Clear the matrix and right-hand side vector
+        /// </summary>
+        public virtual void Clear()
+        {
+            // Clear all matrix elements
+            Matrix.FindElement(0, 0).Value = default;
+            for (int r = 1; r <= Matrix.Size; r++)
+            {
+                var element = Matrix.GetFirstInRow(r);
+                while (element != null)
+                {
+                    element.Value = default;
+                    element = element.Right;
+                }
+            }
+
+            // Clear all right-hand side elements
+            var rhsElement = Rhs.First;
+            while (rhsElement != null)
+            {
+                rhsElement.Value = default;
+                rhsElement = rhsElement.Next;
+            }
         }
 
         /// <summary>

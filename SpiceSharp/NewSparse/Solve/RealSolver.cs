@@ -97,14 +97,14 @@ namespace SpiceSharp.NewSparse
         /// Find the solution for a factored matrix and a right-hand-side
         /// </summary>
         /// <param name="solution">Solution vector</param>
-        public override void Solve(DenseVector<double> solution)
+        public override void Solve(Vector<double> solution)
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));
 
             // TODO: Maybe we should cache intermediate
             // Scramble
-            var intermediate = new double[Rhs.Length + 1];
+            var intermediate = new double[Matrix.Size + 1];
             var rhsElement = Rhs.First;
             while (rhsElement != null)
             {
@@ -159,7 +159,7 @@ namespace SpiceSharp.NewSparse
         /// Find the solution for a factored matrix and a right-hand-side (transposed)
         /// </summary>
         /// <param name="solution">Solution vector</param>
-        public override void SolveTransposed(DenseVector<double> solution)
+        public override void SolveTransposed(Vector<double> solution)
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));

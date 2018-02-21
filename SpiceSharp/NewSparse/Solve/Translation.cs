@@ -101,36 +101,45 @@ namespace SpiceSharp.NewSparse.Solve
         /// <typeparam name="T">Base type</typeparam>
         /// <param name="source">Source</param>
         /// <param name="target">Target</param>
-        public void Scramble<T>(DenseVector<T> source, DenseVector<T> target) where T : IFormattable
+        public void Scramble<T>(Vector<T> source, Vector<T> target) where T : IFormattable
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
+            if (source.Length != target.Length)
+                throw new ArgumentException("Length of inputs does not match");
+
+            // Expand translation vectors if necessary
+            if (allocated < source.Length || allocated < target.Length)
+                ExpandTranslation(Math.Max(source.Length, target.Length));
 
             for (int i = 1; i < extToInt.Length; i++)
                 target[extToInt[i]] = source[i];
-            for (int i = extToInt.Length; i < target.Length; i++)
-                target[i] = source[i];
         }
 
         /// <summary>
         /// Unscramble a vector
+        /// The first index of the array is ignored
         /// </summary>
         /// <typeparam name="T">Base type</typeparam>
         /// <param name="source">Source</param>
         /// <param name="target">Target</param>
-        public void Unscramble<T>(T[] source, DenseVector<T> target) where T : IFormattable
+        public void Unscramble<T>(T[] source, Vector<T> target) where T : IFormattable
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
+            if (source.Length != target.Length + 1)
+                throw new ArgumentException("Length of inputs does not match");
 
-            for (int i = 1; i < extToInt.Length; i++)
-                target[i] = source[extToInt[i]];
-            for (int i = extToInt.Length; i < target.Length; i++)
-                target[i] = source[i];
+            // Expand translation vectors if necessary
+            if (allocated < source.Length || allocated < target.Length)
+                ExpandTranslation(Math.Max(source.Length, target.Length));
+
+            for (int i = 1; i < source.Length; i++)
+                target[extToInt[i]] = source[i];
         }
 
         /// <summary>

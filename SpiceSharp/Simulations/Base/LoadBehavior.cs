@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Circuits;
-using SpiceSharp.Sparse;
+using SpiceSharp.NewSparse;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
@@ -16,13 +16,10 @@ namespace SpiceSharp.Behaviors
         protected LoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
-        /// Setup the behavior for usage with a matrix
+        /// Setup the behavior for usage with a solver
         /// </summary>
-        /// <param name="matrix">The matrix</param>
-        public virtual void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
-        {
-            // No pointers needed by default
-        }
+        /// <param name="solver">Solver</param>
+        public abstract void GetEquationPointers(Nodes nodes, Solver<double> solver);
 
         /// <summary>
         /// Load the Y-matrix and Rhs-vector

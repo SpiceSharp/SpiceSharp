@@ -1,25 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
-using SpiceSharp.Sparse;
+using SpiceSharp;
+using SpiceSharp.Components;
+using SpiceSharp.Simulations;
 using SpiceSharp.NewSparse;
-using SpiceSharp.NewSparse.Solve;
-using System.Diagnostics;
 
 namespace Sandbox
 {
     public partial class Main : Form
     {
-        // Reference
-        double[][] matrixElements =
-        {
-                new double[] { 1, 1, 1 },
-                new double[] { 0, 0, 3 },
-                new double[] { 0, 2, 3 }
-            };
-        double[] rhs = { 1, 0, 3 };
-
-        Stopwatch sw = new Stopwatch();
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -27,67 +17,37 @@ namespace Sandbox
         {
             InitializeComponent();
 
-            int count = 500000;
+            var output = chMain.Series.Add("Output");
+            output.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
 
-            SolveOldSpaceMatrix();
-            sw.Reset();
-            for (int i = 0; i < count; i++)
-                SolveOldSpaceMatrix();
-            sw.Stop();
-            Console.WriteLine($"OLD: {sw.ElapsedMilliseconds} ms");
+            /*
+             * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
+             * The initial voltage on capacitor is 0V. The result should be an exponential converging to dcVoltage.
+             */
+            double dcVoltage = 10;
+            double resistorResistance = 10e3; // 10000;
+            double capacitance = 1e-6; // 0.000001;
+            double tau = resistorResistance * capacitance;
 
-            SolveNewSpaceMatrix();
-            sw.Reset();
-            for (int i = 0; i < count; i++)
-                SolveNewSpaceMatrix();
-            sw.Stop();
-            Console.WriteLine($"NEW: {sw.ElapsedMilliseconds} ms");
-        }
+            // Build circuit
+            Circuit ckt = new Circuit();
+            ckt.Objects.Add(
+                new Capacitor("C1", "OUT", "0", capacitance),
+                new Resistor("R1", "IN", "OUT", resistorResistance),
+                new VoltageSource("V1", "IN", "0", dcVoltage)
+                );
+            ckt.Nodes.InitialConditions["OUT"] = 0.0;
 
-        /// <summary>
-        /// New sparse matrix
-        /// </summary>
-        void SolveNewSpaceMatrix()
-        {
-            // Create the solver
-            var solver = new RealSolver();
+            // Create simulation, exports and references
+            Transient tran = new Transient("tran", 1e-8, 10e-6);
+            Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
+            Func<double, double>[] references = { (double t) => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
 
-            // Setup the matrix
-            for (int r = 0; r < matrixElements.Length; r++)
-                for (int c = 0; c < matrixElements[r].Length; c++)
-                    if (!matrixElements[r][c].Equals(0.0))
-                        solver.GetMatrixElement(r + 1, c + 1).Value = matrixElements[r][c];
-            for (int r = 0; r < rhs.Length; r++)
-                solver.GetRhsElement(r + 1).Value = rhs[r];
-
-            var solution = new DenseVector<double>(solver.Order);
-
-            sw.Start();
-            solver.OrderAndFactor();
-            sw.Stop();
-        }
-
-        /// <summary>
-        /// Old sparse matrix
-        /// </summary>
-        void SolveOldSpaceMatrix()
-        {
-            // Create the solver
-            var omatrix = new SpiceSharp.Sparse.Matrix<double>();
-            for (int r = 0; r < matrixElements.Length; r++)
-                for (int c = 0; c < matrixElements[r].Length; c++)
-                    if (!matrixElements[r][c].Equals(0.0))
-                        omatrix.GetElement(r + 1, c + 1).Value = matrixElements[r][c];
-
-            var orhs = new SpiceSharp.Sparse.Vector<double>(matrixElements.Length + 1);
-            for (int i = 0; i < rhs.Length; i++)
-                orhs[i + 1] = rhs[i];
-
-            var solution = new SpiceSharp.Sparse.Vector<double>(4);
-
-            sw.Start();
-            omatrix.OrderAndFactor(orhs, false);
-            sw.Stop();
+            tran.OnExportSimulationData += (object sender, ExportDataEventArgs args) =>
+            {
+                output.Points.AddXY(args.Time, exports[0].Value);
+            };
+            tran.Run(ckt);
         }
     }
 }

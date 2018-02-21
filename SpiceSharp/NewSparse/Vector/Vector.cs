@@ -30,5 +30,17 @@ namespace SpiceSharp.NewSparse
                 throw new SparseException("Invalid vector length {0}".FormatString(length));
             Length = length;
         }
+
+        /// <summary>
+        /// Copy the vector contents to another vector
+        /// </summary>
+        /// <param name="target">Target</param>
+        public void CopyTo(Vector<T> target)
+        {
+            if (target.Length != Length)
+                throw new ArgumentException("Vector lengths do not match");
+            for (int i = 1; i <= Length; i++)
+                target[i] = this[i];
+        }
     }
 }

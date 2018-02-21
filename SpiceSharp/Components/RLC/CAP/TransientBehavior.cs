@@ -1,9 +1,9 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Sparse;
 using SpiceSharp.Simulations;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Behaviors;
 using System;
+using SpiceSharp.NewSparse;
 
 namespace SpiceSharp.Components.CapacitorBehaviors
 {
@@ -42,10 +42,12 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Nodes and states
         /// </summary>
         int posNode, negNode;
-        protected Element<double> PosPosPtr { get; private set; }
-        protected Element<double> NegNegPtr { get; private set; }
-        protected Element<double> PosNegPtr { get; private set; }
-        protected Element<double> NegPosPtr { get; private set; }
+        protected MatrixElement<double> PosPosPtr { get; private set; }
+        protected MatrixElement<double> NegNegPtr { get; private set; }
+        protected MatrixElement<double> PosNegPtr { get; private set; }
+        protected MatrixElement<double> NegPosPtr { get; private set; }
+        protected VectorElement<double> PosPtr { get; private set; }
+        protected VectorElement<double> NegPtr { get; private set; }
         protected StateDerivative QCap { get; private set; }
 
         /// <summary>
@@ -96,16 +98,21 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix<double> matrix)
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Solver<double> solver)
         {
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
 
-            PosPosPtr = matrix.GetElement(posNode, posNode);
-            NegNegPtr = matrix.GetElement(negNode, negNode);
-            NegPosPtr = matrix.GetElement(negNode, posNode);
-            PosNegPtr = matrix.GetElement(posNode, negNode);
+            // Get matrix elements
+            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
+            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
+            NegPosPtr = solver.GetMatrixElement(negNode, posNode);
+            PosNegPtr = solver.GetMatrixElement(posNode, negNode);
+
+            // Get rhs elements
+            PosPtr = solver.GetRhsElement(posNode);
+            NegPtr = solver.GetRhsElement(negNode);
         }
 
         /// <summary>
@@ -155,14 +162,14 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             double ceq = QCap.RhsCurrent();
 
             // Load matrix
-            PosPosPtr.Add(geq);
-            NegNegPtr.Add(geq);
-            PosNegPtr.Sub(geq);
-            NegPosPtr.Sub(geq);
+            PosPosPtr.Value += geq;
+            NegNegPtr.Value += geq;
+            PosNegPtr.Value -= geq;
+            NegPosPtr.Value -= geq;
 
             // Load Rhs vector
-            state.Rhs[posNode] -= ceq;
-            state.Rhs[negNode] += ceq;
+            PosPtr.Value -= ceq;
+            NegPtr.Value += ceq;
         }
 
         /// <summary>

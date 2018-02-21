@@ -98,7 +98,7 @@ namespace SpiceSharp.NewSparse
         /// Find the solution for a factored matrix and a right-hand-side
         /// </summary>
         /// <param name="solution">Solution vector</param>
-        public override void Solve(DenseVector<Complex> solution)
+        public override void Solve(Vector<Complex> solution)
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));
@@ -160,7 +160,7 @@ namespace SpiceSharp.NewSparse
         /// Find the solution for a factored matrix and a right-hand-side (transposed)
         /// </summary>
         /// <param name="solution">Solution vector</param>
-        public override void SolveTransposed(DenseVector<Complex> solution)
+        public override void SolveTransposed(Vector<Complex> solution)
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));

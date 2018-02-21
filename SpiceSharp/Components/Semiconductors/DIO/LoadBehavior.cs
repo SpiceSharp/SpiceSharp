@@ -2,7 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
-using SpiceSharp.Sparse;
+using SpiceSharp.NewSparse;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 
@@ -26,13 +26,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// </summary>
         int posNode, negNode;
         public int PosPrimeNode { get; private set; }
-        protected Element<double> PosPosPrimePtr { get; private set; }
-        protected Element<double> NegPosPrimePtr { get; private set; }
-        protected Element<double> PosPrimePosPtr { get; private set; }
-        protected Element<double> PosPrimeNegPtr { get; private set; }
-        protected Element<double> PosPosPtr { get; private set; }
-        protected Element<double> NegNegPtr { get; private set; }
-        protected Element<double> PosPrimePosPrimePtr { get; private set; }
+        protected MatrixElement<double> PosPosPrimePtr { get; private set; }
+        protected MatrixElement<double> NegPosPrimePtr { get; private set; }
+        protected MatrixElement<double> PosPrimePosPtr { get; private set; }
+        protected MatrixElement<double> PosPrimeNegPtr { get; private set; }
+        protected MatrixElement<double> PosPosPtr { get; private set; }
+        protected MatrixElement<double> NegNegPtr { get; private set; }
+        protected MatrixElement<double> PosPrimePosPrimePtr { get; private set; }
+        protected VectorElement<double> PosPrimePtr { get; private set; }
+        protected VectorElement<double> NegPtr { get; private set; }
 
         /// <summary>
         /// Extra variables
@@ -95,17 +97,18 @@ namespace SpiceSharp.Components.DiodeBehaviors
             posNode = pins[0];
             negNode = pins[1];
         }
-        
+
         /// <summary>
-        /// Gets matrix pointers
+        /// Get equation pointers
         /// </summary>
-        /// <param name="matrix"></param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
+        /// <param name="nodes">Nodes</param>
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
 
             // Create
             if (mbp.Resistance > 0)
@@ -113,14 +116,16 @@ namespace SpiceSharp.Components.DiodeBehaviors
             else
                 PosPrimeNode = posNode;
 
-            // Get matrix elements
-            PosPosPrimePtr = matrix.GetElement(posNode, PosPrimeNode);
-            NegPosPrimePtr = matrix.GetElement(negNode, PosPrimeNode);
-            PosPrimePosPtr = matrix.GetElement(PosPrimeNode, posNode);
-            PosPrimeNegPtr = matrix.GetElement(PosPrimeNode, negNode);
-            PosPosPtr = matrix.GetElement(posNode, posNode);
-            NegNegPtr = matrix.GetElement(negNode, negNode);
-            PosPrimePosPrimePtr = matrix.GetElement(PosPrimeNode, PosPrimeNode);
+            // Get solver elements
+            PosPosPrimePtr = solver.GetMatrixElement(posNode, PosPrimeNode);
+            NegPosPrimePtr = solver.GetMatrixElement(negNode, PosPrimeNode);
+            PosPrimePosPtr = solver.GetMatrixElement(PosPrimeNode, posNode);
+            PosPrimeNegPtr = solver.GetMatrixElement(PosPrimeNode, negNode);
+            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
+            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
+            PosPrimePosPrimePtr = solver.GetMatrixElement(PosPrimeNode, PosPrimeNode);
+            PosPrimePtr = solver.GetRhsElement(PosPrimeNode);
+            NegPtr = solver.GetRhsElement(negNode);
         }
 
         /// <summary>
@@ -227,17 +232,17 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // Load Rhs vector
             cdeq = cd - gd * vd;
-            state.Rhs[negNode] += cdeq;
-            state.Rhs[PosPrimeNode] -= cdeq;
+            NegPtr.Value += cdeq;
+            PosPrimePtr.Value -= cdeq;
 
             // Load Y-matrix
-            PosPosPtr.Add(gspr);
-            NegNegPtr.Add(gd);
-            PosPrimePosPrimePtr.Add(gd + gspr);
-            PosPosPrimePtr.Sub(gspr);
-            PosPrimePosPtr.Sub(gspr);
-            NegPosPrimePtr.Sub(gd);
-            PosPrimeNegPtr.Sub(gd);
+            PosPosPtr.Value += gspr;
+            NegNegPtr.Value += gd;
+            PosPrimePosPrimePtr.Value += gd + gspr;
+            PosPosPrimePtr.Value -= gspr;
+            PosPrimePosPtr.Value -= gspr;
+            NegPosPrimePtr.Value -= gd;
+            PosPrimeNegPtr.Value -= gd;
         }
 
         /// <summary>

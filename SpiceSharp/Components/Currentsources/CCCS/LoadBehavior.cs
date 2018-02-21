@@ -1,7 +1,7 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
-using SpiceSharp.Sparse;
+using SpiceSharp.NewSparse;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
@@ -23,8 +23,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         public int ControlBranchEq { get; protected set; }
         int posNode, negNode;
-        protected Element<double> PosControlBranchPtr { get; private set; }
-        protected Element<double> NegControlBranchPtr { get; private set; }
+        protected MatrixElement<double> PosControlBranchPtr { get; private set; }
+        protected MatrixElement<double> NegControlBranchPtr { get; private set; }
 
         /// <summary>
         /// Device methods and properties
@@ -112,14 +112,14 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="nodes">Nodes</param>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
         {
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
             ControlBranchEq = vsrcload.BranchEq;
-            PosControlBranchPtr = matrix.GetElement(posNode, ControlBranchEq);
-            NegControlBranchPtr = matrix.GetElement(negNode, ControlBranchEq);
+            PosControlBranchPtr = solver.GetMatrixElement(posNode, ControlBranchEq);
+            NegControlBranchPtr = solver.GetMatrixElement(negNode, ControlBranchEq);
         }
         
         /// <summary>
@@ -128,8 +128,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <param name="simulation">Base simulation</param>
         public override void Load(BaseSimulation simulation)
         {
-            PosControlBranchPtr.Add(bp.Coefficient.Value);
-            NegControlBranchPtr.Sub(bp.Coefficient.Value);
+            PosControlBranchPtr.Value += bp.Coefficient.Value;
+            NegControlBranchPtr.Value -= bp.Coefficient.Value;
         }
     }
 }

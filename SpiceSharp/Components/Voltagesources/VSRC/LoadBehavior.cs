@@ -2,7 +2,7 @@
 using SpiceSharp.Simulations;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
-using SpiceSharp.Sparse;
+using SpiceSharp.NewSparse;
 using SpiceSharp.Behaviors;
 using System;
 
@@ -45,11 +45,12 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// </summary>
         int posNode, negNode;
         public int BranchEq { get; protected set; }
-        protected Element<double> PosBranchPtr { get; private set; }
-        protected Element<double> NegBranchPtr { get; private set; }
-        protected Element<double> BranchPosPtr { get; private set; }
-        protected Element<double> BranchNegPtr { get; private set; }
-        protected Element<double> BranchBranchPtr { get; private set; }
+        protected MatrixElement<double> PosBranchPtr { get; private set; }
+        protected MatrixElement<double> NegBranchPtr { get; private set; }
+        protected MatrixElement<double> BranchPosPtr { get; private set; }
+        protected MatrixElement<double> BranchNegPtr { get; private set; }
+        protected MatrixElement<double> BranchBranchPtr { get; private set; }
+        protected VectorElement<double> BranchPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -117,19 +118,24 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
 
             BranchEq = nodes.Create(Name?.Grow("#branch"), Node.NodeType.Current).Index;
-            PosBranchPtr = matrix.GetElement(posNode, BranchEq);
-            BranchPosPtr = matrix.GetElement(BranchEq, posNode);
-            NegBranchPtr = matrix.GetElement(negNode, BranchEq);
-            BranchNegPtr = matrix.GetElement(BranchEq, negNode);
+
+            // Get matrix elements
+            PosBranchPtr = solver.GetMatrixElement(posNode, BranchEq);
+            BranchPosPtr = solver.GetMatrixElement(BranchEq, posNode);
+            NegBranchPtr = solver.GetMatrixElement(negNode, BranchEq);
+            BranchNegPtr = solver.GetMatrixElement(BranchEq, negNode);
+
+            // Get rhs elements
+            BranchPtr = solver.GetRhsElement(BranchEq);
         }
 
         /// <summary>
@@ -156,10 +162,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             double time = 0.0;
             double value = 0.0;
 
-            PosBranchPtr.Add(1.0);
-            BranchPosPtr.Add(1.0);
-            NegBranchPtr.Sub(1.0);
-            BranchNegPtr.Sub(1.0);
+            PosBranchPtr.Value += 1;
+            BranchPosPtr.Value += 1;
+            NegBranchPtr.Value -= 1;
+            BranchNegPtr.Value -= 1;
 
             if (state.Domain == RealState.DomainType.Time)
             {
@@ -176,7 +182,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             {
                 value = bp.DCValue * state.SourceFactor;
             }
-            state.Rhs[BranchEq] += value;
+            BranchPtr.Value += value;
         }
     }
 }
