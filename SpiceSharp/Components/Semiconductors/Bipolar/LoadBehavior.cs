@@ -186,6 +186,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
             SubstrateCollectorPrimePtr = solver.GetMatrixElement(substrateNode, CollectorPrimeNode);
             BaseCollectorPrimePtr = solver.GetMatrixElement(baseNode, CollectorPrimeNode);
             CollectorPrimeBasePtr = solver.GetMatrixElement(CollectorPrimeNode, baseNode);
+
+            // Get RHS pointers
+            CollectorPrimePtr = solver.GetRhsElement(CollectorPrimeNode);
+            BasePrimePtr = solver.GetRhsElement(BasePrimeNode);
+            EmitterPrimePtr = solver.GetRhsElement(EmitterPrimeNode);
         }
         
         /// <summary>

@@ -172,6 +172,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             DrainPrimeBulkPtr = solver.GetMatrixElement(DrainNodePrime, bulkNode);
             SourcePrimeBulkPtr = solver.GetMatrixElement(SourceNodePrime, bulkNode);
             SourcePrimeDrainPrimePtr = solver.GetMatrixElement(SourceNodePrime, DrainNodePrime);
+
+            // Get rhs pointers
+            BulkPtr = solver.GetRhsElement(bulkNode);
+            DrainPrimePtr = solver.GetRhsElement(DrainNodePrime);
+            SourcePrimePtr = solver.GetRhsElement(SourceNodePrime);
         }
 
         /// <summary>

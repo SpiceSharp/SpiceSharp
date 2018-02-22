@@ -214,7 +214,8 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="step">Step</param>
         public override void MovePivot(SparseMatrix<T> matrix, SparseVector<T> rhs, MatrixElement<T> pivot, int step)
         {
-            if (markowitzRow == null)
+            // If we haven't setup, just skip
+            if (markowitzProduct == null)
                 return;
             if (pivot == null)
                 throw new ArgumentNullException(nameof(pivot));
@@ -281,6 +282,9 @@ namespace SpiceSharp.NewSparse.Solve
         /// <param name="step">Step</param>
         public override void Update(SparseMatrix<T> matrix, MatrixElement<T> pivot, int step)
         {
+            // If we haven't setup, just skip
+            if (markowitzProduct == null)
+                return;
             if (pivot == null)
                 throw new ArgumentNullException(nameof(pivot));
 

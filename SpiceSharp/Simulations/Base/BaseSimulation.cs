@@ -275,13 +275,13 @@ namespace SpiceSharp.Simulations
                     Statistics.DecompositionTime.Stop();
                 }
 
+                // The current solution becomes the old solution
+                state.StoreSolution();
+
                 // Solve the equation
                 Statistics.SolveTime.Start();
                 solver.Solve(state.Solution);
                 Statistics.SolveTime.Stop();
-
-                // The result is now stored in the RHS vector, let's move it to the current solution vector
-                state.StoreSolution();
 
                 // Reset ground nodes
                 solver.GetRhsElement(0).Value = 0.0;
