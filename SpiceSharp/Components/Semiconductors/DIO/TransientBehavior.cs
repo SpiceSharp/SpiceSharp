@@ -113,7 +113,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             // Get extra nodes
             posPrimeNode = load.PosPrimeNode;
 
-            // Get solver pointers
+            // Get matrix elements
             PosPosPrimePtr = solver.GetMatrixElement(posNode, posPrimeNode);
             NegPosPrimePtr = solver.GetMatrixElement(negNode, posPrimeNode);
             PosPrimePosPtr = solver.GetMatrixElement(posPrimeNode, posNode);
@@ -121,6 +121,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
             PosPosPtr = solver.GetMatrixElement(posNode, posNode);
             NegNegPtr = solver.GetMatrixElement(negNode, negNode);
             PosPrimePosPrimePtr = solver.GetMatrixElement(posPrimeNode, posPrimeNode);
+
+            // Get RHS elements
             PosPrimePtr = solver.GetRhsElement(posPrimeNode);
             NegPtr = solver.GetRhsElement(negNode);
         }

@@ -136,7 +136,7 @@ namespace SpiceSharp.NewSparse.Solve
 
             // Expand translation vectors if necessary
             if (allocated < source.Length || allocated < target.Length)
-                ExpandTranslation(Math.Max(source.Length, target.Length));
+                ExpandTranslation(Math.Max(source.Length - 1, target.Length));
 
             for (int i = 1; i < source.Length; i++)
                 target[extToInt[i]] = source[i];
@@ -160,7 +160,7 @@ namespace SpiceSharp.NewSparse.Solve
             allocated = Math.Max(newLength, (int)(allocated * ExpansionFactor));
 
             Array.Resize(ref extToInt, allocated + 1);
-            for (int i = oldAllocated; i <= allocated; i++)
+            for (int i = oldAllocated + 1; i <= allocated; i++)
                 extToInt[i] = i;
             Length = newLength;
         }
