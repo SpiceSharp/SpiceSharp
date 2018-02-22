@@ -39,7 +39,7 @@ namespace Sandbox
             ckt.Nodes.InitialConditions["OUT"] = 0.0;
 
             // Create simulation, exports and references
-            Transient tran = new Transient("tran", 1e-8, 10e-6);
+            Transient tran = new Transient("tran", 1e-8, 5e-2);
             Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
             Func<double, double>[] references = { (double t) => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
 

@@ -337,7 +337,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="history">The history</param>
         /// <param name="index">The index of the state to be used</param>
         /// <returns></returns>
-        public abstract void Integrate(History<RealSolution> history, int index);
+        public abstract void Integrate(History<Vector<double>> history, int index);
 
         /// <summary>
         /// Do truncation for all nodes
@@ -382,6 +382,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="history">The history of states</param>
         /// <param name="index">Index</param>
         /// <param name="timestep">Timestep</param>
-        public abstract void LocalTruncateError(History<RealSolution> history, int index, ref double timestep);
+        public abstract void LocalTruncateError(History<Vector<double>> history, int index, ref double timestep);
     }
 }

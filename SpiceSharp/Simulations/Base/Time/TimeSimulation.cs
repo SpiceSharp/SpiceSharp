@@ -189,20 +189,25 @@ namespace SpiceSharp.Simulations
                     // Decompose
                     Statistics.DecompositionTime.Start();
                     // TODO: Add diagGmin to diagonal elements
-                    solver.Factor();
+                    bool success = solver.Factor();
                     Statistics.DecompositionTime.Stop();
+
+                    if (!success)
+                    {
+                        state.Sparse |= RealState.SparseStates.ShouldReorder;
+                        continue;
+                    }
                 }
+
+                // The current solution becomes the old solution
+                state.StoreSolution();
 
                 // Solve the equation
                 Statistics.SolveTime.Start();
                 solver.Solve(state.Solution);
                 Statistics.SolveTime.Stop();
 
-                // The result is now stored in the RHS vector, let's move it to the current solution vector
-                state.StoreSolution();
-
                 // Reset ground nodes
-                state.Solver.GetRhsElement(0).Value = 0.0;
                 state.Solution[0] = 0.0;
                 state.OldSolution[0] = 0.0;
 
