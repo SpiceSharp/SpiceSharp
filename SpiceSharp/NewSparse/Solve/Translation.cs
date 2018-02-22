@@ -16,6 +16,7 @@ namespace SpiceSharp.NewSparse.Solve
         /// Private variable
         /// </summary>
         int[] extToInt;
+        int[] intToExt;
         int allocated;
 
         /// <summary>
@@ -30,8 +31,12 @@ namespace SpiceSharp.NewSparse.Solve
         public Translation(int size)
         {
             extToInt = new int[size + 1];
+            intToExt = new int[size + 1];
             for (int i = 1; i <= size; i++)
+            {
                 extToInt[i] = i;
+                intToExt[i] = i;
+            }
             allocated = size;
         }
 
@@ -62,21 +67,17 @@ namespace SpiceSharp.NewSparse.Solve
         }
 
         /// <summary>
-        /// Find the external index matching the internal index.
-        /// Finding the external index is relatively slow. Use with care.
+        /// Reverse lookup for the translation
         /// </summary>
         /// <param name="index">Internal index</param>
         /// <returns></returns>
         public int Reverse(int index)
         {
-            if (index > Length)
-                return index;
-            for (int i = 0; i <= Length; i++)
-            {
-                if (extToInt[i] == index)
-                    return i;
-            }
-            throw new SparseException("Invalid index");
+            if (index == 0)
+                return 0;
+            if (index > allocated)
+                ExpandTranslation(index);
+            return intToExt[index];
         }
 
         /// <summary>
@@ -89,10 +90,14 @@ namespace SpiceSharp.NewSparse.Solve
             if (index1 > Length || index2 > Length)
                 ExpandTranslation(Math.Max(index1, index2));
 
-            // The extToInt indices need to be swapped
-            var tmp = extToInt[index1];
-            extToInt[index1] = extToInt[index2];
-            extToInt[index2] = tmp;
+            // Get the matching external indices
+            var tmp = intToExt[index1];
+            intToExt[index1] = intToExt[index2];
+            intToExt[index2] = tmp;
+
+            // Update the external indices
+            extToInt[intToExt[index1]] = index1;
+            extToInt[intToExt[index2]] = index2;
         }
 
         /// <summary>
@@ -139,7 +144,7 @@ namespace SpiceSharp.NewSparse.Solve
                 ExpandTranslation(Math.Max(source.Length - 1, target.Length));
 
             for (int i = 1; i < source.Length; i++)
-                target[extToInt[i]] = source[i];
+                target[intToExt[i]] = source[i];
         }
 
         /// <summary>
@@ -160,8 +165,12 @@ namespace SpiceSharp.NewSparse.Solve
             allocated = Math.Max(newLength, (int)(allocated * ExpansionFactor));
 
             Array.Resize(ref extToInt, allocated + 1);
+            Array.Resize(ref intToExt, allocated + 1);
             for (int i = oldAllocated + 1; i <= allocated; i++)
+            {
                 extToInt[i] = i;
+                intToExt[i] = i;
+            }
             Length = newLength;
         }
     }

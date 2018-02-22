@@ -208,26 +208,23 @@ namespace SpiceSharp.NewSparse.Solve
         /// <returns></returns>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            // Get the external indices based on the internal indices
-            int[] extRowMap = new int[Matrix.Size + 1];
-            for (int i = 1; i <= Matrix.Size; i++)
-                extRowMap[Row[i]] = i - 1;
-            int[] extColumnMap = new int[Matrix.Size + 1];
-            for (int i = 1; i <= Matrix.Size; i++)
-                extColumnMap[Column[i]] = i - 1;
-
+            // Build a matrix of strings for each element of the matrix
             string[][] displayData = new string[Matrix.Size][];
             int[] columnWidths = new int[Matrix.Size + 1];
+
             var rhsElement = Rhs.First;
             for (int r = 1; r <= Matrix.Size; r++)
             {
-                int extRow = extRowMap[r];
                 var element = Matrix.GetFirstInRow(r);
+
+                // Get the matching external row index
+                int extRow = Row.Reverse(r) - 1;
                 displayData[extRow] = new string[Matrix.Size + 1];
 
                 for (int c = 1; c <= Matrix.Size; c++)
                 {
-                    int extColumn = extColumnMap[c];
+                    // Get the matching external column index
+                    int extColumn = Column.Reverse(c) - 1;
 
                     // go to the next element if necessary
                     if (element != null && element.Column < c)
@@ -241,11 +238,12 @@ namespace SpiceSharp.NewSparse.Solve
                     columnWidths[extColumn] = Math.Max(columnWidths[extColumn], displayData[extRow][extColumn].Length);
                 }
 
-                // Rhs vector
                 if (rhsElement != null && rhsElement.Index < r)
                     rhsElement = rhsElement.Next;
+
+                // Show the element
                 if (rhsElement != null && rhsElement.Index == r)
-                    displayData[extRow][Matrix.Size] = Rhs[r].ToString(format, formatProvider);
+                    displayData[extRow][Matrix.Size] = rhsElement.Value.ToString(format, formatProvider);
                 else
                     displayData[extRow][Matrix.Size] = "...";
                 columnWidths[Matrix.Size] = Math.Max(columnWidths[Matrix.Size], displayData[extRow][Matrix.Size].Length);
