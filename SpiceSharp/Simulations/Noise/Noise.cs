@@ -5,7 +5,6 @@ using SpiceSharp.Diagnostics;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
 {

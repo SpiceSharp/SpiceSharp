@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
 {

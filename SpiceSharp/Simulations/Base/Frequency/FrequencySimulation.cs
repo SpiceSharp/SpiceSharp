@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Sparse;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
