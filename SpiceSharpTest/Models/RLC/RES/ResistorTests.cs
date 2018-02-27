@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
@@ -6,7 +8,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharpTest.Models
 {
     [TestClass]
-    public class ResistorTest : Framework
+    public class ResistorTests : Framework
     {
         /// <summary>
         /// Create a voltage source shunted by a resistor
@@ -25,7 +27,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void SingleResistorOnDcVoltage_OP()
+        public void When_ResistorOperatingPoint_Expect_Reference()
         {
             /*
              * A circuit contains a DC voltage source 10V and resistor 1000 Ohms
@@ -44,34 +46,24 @@ namespace SpiceSharpTest.Models
             AnalyzeOp(op, ckt, exports, references);
         }
 
-        /* NOTE: needs more work
         [TestMethod]
-        public void SingleResistorOnDcVoltage_Ac()
+        public void When_ResistorDividerSmallSignal_Expect_Reference()
         {
             /*
              * A circuit contains a DC voltage source 10V and resistor 1000 Ohms
              * The test verifies that after AC simulation:
              * 1) a current through resistor is 0.01 A (Ohms law)
-             * /
+             */
             var ckt = CreateResistorDcCircuit(10, 1000);
+            ckt.Objects["V1"].ParameterSets.SetProperty("acmag", 1.0);
 
             // Create simulation, exports and references
-            AC ac = new AC("ac");
-            Func<State, double>[] exports = { ac.CreateExport("R1", "ir"), ac.CreateExport("R1", "ii") };
-
-            ckt.Method = new Trapezoidal();
-            AC simulation = new AC("Simulation", "lin", 10, 1, 1001);
-            simulation.OnExportSimulationData += (object sender, SimulationData data) =>
-            {
-                var R1 = ckt.Objects["R_1"];
-                var current = ((SpiceSharp.Components.Resistor)R1).GetCurrent(ckt);
-                Assert.That.AreEqualWithTol(0.0, current, 0, 1e-8);
-            };
-
-            simulation.Circuit = ckt;
-            simulation.SetupAndExecute();
+            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.LinearSweep(1.0, 10001, 10));
+            Export<Complex>[] exports = { new ComplexPropertyExport(ac, "R1", "i") };
+            Func<double, Complex>[] references = { (double f) => 1e-3 };
+            AnalyzeAC(ac, ckt, exports, references);
         }
-        */
+
 
         /// <summary>
         /// Create a voltage divider circuit
@@ -92,7 +84,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void VoltageDividerDcVoltage_OP()
+        public void When_ResistorDividerOperatingPoint_Expect_Reference()
         {
             /*
              * A circuit contains a DC voltage source 100V and two resistors in series (1 and 3 Ohms). 
@@ -130,7 +122,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void ParallelResistorsDcVoltage_OP()
+        public void When_ResistorParallelOperatingPoint_Expect_Reference()
         {
             /*
              * A circuit contains a DC voltage source 100V and two resistors in parallel (1 and 2 Ohms). 

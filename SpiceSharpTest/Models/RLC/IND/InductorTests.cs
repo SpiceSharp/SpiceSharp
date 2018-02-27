@@ -8,10 +8,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace SpiceSharpTest.Models
 {
     [TestClass]
-    public class InductorTest : Framework
+    public class InductorTests : Framework
     {
         [TestMethod]
-        public void LowpassRL_DC()
+        public void When_Inductor_LowpassRLOperatingPoint_Expect_Reference()
         {
             /*
              * Lowpass RL circuit
@@ -38,7 +38,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void LowpassRL_AC()
+        public void When_Inductor_LowpassRLSmallSignal_Expect_Reference()
         {
             /*
              * Lowpass RL filter in the frequency domain should have a single pole at s=-2pi*R/L
@@ -68,7 +68,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void LCTank_Transient()
+        public void When_Inductor_LCTankTransient_Expect_Reference()
         {
             /*
              * Test for LC tank circuit, an inductor parallel with a capacitor will resonate at a frequency of 1/(2*pi*sqrt(LC))

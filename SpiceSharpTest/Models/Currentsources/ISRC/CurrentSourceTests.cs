@@ -7,7 +7,7 @@ using SpiceSharp.Components;
 namespace SpiceSharpTest.Models
 {
     [TestClass]
-    public class CurrentsourceTest : Framework
+    public class CurrentSourceTests : Framework
     {
         /// <summary>
         /// Creates a circuit with a resistor and a voltage source which is connected to IN
@@ -23,7 +23,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void SingleResistorOnCurrentSource_OP()
+        public void When_CurrentSource_ResistorOperatingPoint_Expect_Reference()
         {
             /*
              * A circuit contains a current source 10A and resistor 1000 Ohms
@@ -72,7 +72,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void ResistorsInSeriesOnCurrentSource_OP()
+        public void When_CurrentSource_ResistorsInSeriesOperatingPoint_Expect_Reference()
         {
             /*
              * A circuit contains a current source 100A and 500 resistor 1000 Ohms

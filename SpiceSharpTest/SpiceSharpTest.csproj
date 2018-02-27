@@ -52,11 +52,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Circuits\ValidatorTests.cs" />
-    <Compile Include="Models\Currentsources\ISRC\CurrentsourceTest.cs" />
-    <Compile Include="Models\RLC\CAP\CapacitorTest.cs" />
-    <Compile Include="Models\RLC\IND\InductorTest.cs" />
-    <Compile Include="Models\RLC\MUT\MutualInductanceTest.cs" />
-    <Compile Include="Models\RLC\RES\ResistorTest.cs" />
+    <Compile Include="Models\Currentsources\ISRC\CurrentSourceTests.cs" />
+    <Compile Include="Models\RLC\CAP\CapacitorTests.cs" />
+    <Compile Include="Models\RLC\IND\InductorTests.cs" />
+    <Compile Include="Models\RLC\MUT\MutualInductanceTests.cs" />
+    <Compile Include="Models\RLC\RES\ResistorTests.cs" />
     <Compile Include="Models\Semiconductors\Bipolar\BJTTest.cs" />
     <Compile Include="Models\Framework.cs" />
     <Compile Include="Models\Semiconductors\Bipolar\SpiceSharpBipolarTest.cs" />

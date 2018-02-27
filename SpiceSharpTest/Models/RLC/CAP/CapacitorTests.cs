@@ -8,10 +8,10 @@ using SpiceSharp.Simulations;
 namespace SpiceSharpTest.Models
 {
     [TestClass]
-    public class CapacitorTest : Framework
+    public class CapacitorTests : Framework
     {
         [TestMethod]
-        public void LowpassRC_OP()
+        public void When_Capacitor_LowpassRCOperatingPoint_Expect_Reference()
         {
             /*
              * Lowpass RC circuit
@@ -38,7 +38,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void LowpassRC_Transient()
+        public void When_Capacitor_LowpassRCTransient_Expect_Reference()
         {
             /*
              * A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
@@ -68,7 +68,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void LowpassRC_AC()
+        public void When_Capacitor_LowpassRCSmallSignal_Expect_Reference()
         {
             /*
              * Lowpass RC filter in the frequency domain should have a single pole at s=-2pi*R*C

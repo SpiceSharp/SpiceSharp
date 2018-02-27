@@ -8,10 +8,10 @@ using SpiceSharp.Simulations;
 namespace SpiceSharpTest.Models
 {
     [TestClass]
-    public class MutualInductanceTest : Framework
+    public class MutualInductanceTests : Framework
     {
         [TestMethod]
-        public void TransformerLoad_Transient()
+        public void When_MutualInductanceTransient_Expect_Reference()
         {
             /*
              * Step function generator connect to a resistor-inductor in series, coupled to an inductor shunted by another resistor.
@@ -63,7 +63,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void TransformerLoad_AC()
+        public void When_MutualInductanceSmallSignal_Expect_Reference()
         {
             // Create circuit
             double r1 = 100.0;
