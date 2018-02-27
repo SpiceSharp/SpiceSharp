@@ -2,7 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.IntegrationMethods;
 
 namespace SpiceSharp.Components.DiodeBehaviors

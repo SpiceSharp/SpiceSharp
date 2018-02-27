@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.NewSparse.Solve
+namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
     /// A pivot strategy used by a <see cref="Solver{T}"/>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 using System.Linq;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Circuits

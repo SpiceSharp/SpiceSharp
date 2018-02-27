@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using SpiceSharp.NewSparse.Matrix;
+using SpiceSharp.Algebra.Matrix;
 
-namespace SpiceSharp.NewSparse
+namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// Matrix using a sparse representation

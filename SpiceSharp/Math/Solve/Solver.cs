@@ -1,7 +1,7 @@
 ﻿using System;
-using SpiceSharp.NewSparse.Solve;
+using SpiceSharp.Algebra.Solve;
 
-namespace SpiceSharp.NewSparse
+namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// Template for a solver

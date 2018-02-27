@@ -1,5 +1,5 @@
 ﻿using System;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Circuits
 {

@@ -4,7 +4,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.IntegrationMethods
 {

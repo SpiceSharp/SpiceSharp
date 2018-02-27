@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.NewSparse.Matrix
+namespace SpiceSharp.Algebra.Matrix
 {
     /// <summary>
     /// A class keeping track of a linked list of matrix elements

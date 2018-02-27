@@ -2,7 +2,7 @@
 using System.Numerics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CapacitorBehaviors

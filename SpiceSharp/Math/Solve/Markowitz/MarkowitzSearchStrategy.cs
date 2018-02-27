@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.NewSparse.Solve
+namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
     /// A search strategy for finding pivots

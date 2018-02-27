@@ -2,7 +2,7 @@
 using SpiceSharp.Simulations;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using System;
 

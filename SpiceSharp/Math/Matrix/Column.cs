@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.NewSparse.Matrix
+namespace SpiceSharp.Algebra.Matrix
 {
     /// <summary>
     /// Column class

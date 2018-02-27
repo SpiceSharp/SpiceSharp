@@ -1,4 +1,4 @@
-﻿namespace SpiceSharp.NewSparse.Matrix
+﻿namespace SpiceSharp.Algebra.Matrix
 {
     /// <summary>
     /// Base class for matrices

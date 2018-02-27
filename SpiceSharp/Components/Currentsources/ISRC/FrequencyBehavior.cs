@@ -3,7 +3,7 @@ using System.Numerics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.CurrentsourceBehaviors
 {

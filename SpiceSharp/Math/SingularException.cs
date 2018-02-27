@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace SpiceSharp.NewSparse
+namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// Exception thrown when a matrix is singular

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.NewSparse.Solve;
+using SpiceSharp.Algebra.Solve;
 
-namespace SpiceSharp.NewSparse
+namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// Class for solving real matrices

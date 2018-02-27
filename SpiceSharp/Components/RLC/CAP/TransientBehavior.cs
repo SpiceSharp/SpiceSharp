@@ -3,7 +3,7 @@ using SpiceSharp.Simulations;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Behaviors;
 using System;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.CapacitorBehaviors
 {

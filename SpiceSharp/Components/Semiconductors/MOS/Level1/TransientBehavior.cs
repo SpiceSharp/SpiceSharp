@@ -2,7 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Simulations;
 using SpiceSharp.IntegrationMethods;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level1

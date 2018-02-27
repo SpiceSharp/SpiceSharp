@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 using System;
 
 namespace SpiceSharpTest.Sparse

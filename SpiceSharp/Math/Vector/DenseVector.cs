@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace SpiceSharp.NewSparse
+namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// A vector with real values

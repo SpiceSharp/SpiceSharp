@@ -2,7 +2,7 @@
 using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 

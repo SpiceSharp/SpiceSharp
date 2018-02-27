@@ -2,7 +2,7 @@
 using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.VoltageSwitchBehaviors
 {

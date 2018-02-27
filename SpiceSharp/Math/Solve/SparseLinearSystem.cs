@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace SpiceSharp.NewSparse.Solve
+namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
     /// A system of linear equations

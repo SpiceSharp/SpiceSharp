@@ -6,7 +6,7 @@ using SpiceSharp;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using SpiceSharp.NewSparse;
+using SpiceSharp.Algebra;
 
 namespace Sandbox
 {
