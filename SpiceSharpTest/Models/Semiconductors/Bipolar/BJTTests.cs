@@ -7,7 +7,7 @@ using SpiceSharp.Components;
 namespace SpiceSharpTest.Models
 {
     [TestClass]
-    public class BJTTest : Framework
+    public class BJTTests : Framework
     {
         /// <summary>
         /// Create a BJT with a model
@@ -35,7 +35,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void BJT_DC()
+        public void When_BJTDC_Expect_Spice3f5Reference()
         {
             /*
              * BJT connect to only voltage sources
@@ -81,7 +81,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void BJT_AC()
+        public void When_BJTSmallSignal_Expect_Spice3f5Reference()
         {
             // Build circuit
             Circuit ckt = new Circuit();
@@ -125,7 +125,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void BJT_Transient()
+        public void When_BJTTransient_Expect_Spice3f5Reference()
         {
             /*
              * Transient analysis of a BJT common emitter amplifier

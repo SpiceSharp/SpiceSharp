@@ -57,10 +57,9 @@
     <Compile Include="Models\RLC\IND\InductorTests.cs" />
     <Compile Include="Models\RLC\MUT\MutualInductanceTests.cs" />
     <Compile Include="Models\RLC\RES\ResistorTests.cs" />
-    <Compile Include="Models\Semiconductors\Bipolar\BJTTest.cs" />
     <Compile Include="Models\Framework.cs" />
-    <Compile Include="Models\Semiconductors\Bipolar\SpiceSharpBipolarTest.cs" />
-    <Compile Include="Models\Semiconductors\DIO\SpiceSharpDiodeTest.cs" />
+    <Compile Include="Models\Semiconductors\Bipolar\BJTTests.cs" />
+    <Compile Include="Models\Semiconductors\DIO\DiodeTests.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level1\MOS1Test.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level2\MOS2Test.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level3\MOS3Test.cs" />
