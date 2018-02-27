@@ -5,10 +5,10 @@ using SpiceSharp.Algebra;
 namespace SpiceSharpTest.Sparse
 {
     [TestClass]
-    public class NewSparseVectorTest
+    public class SparseVectorTest
     {
         [TestMethod]
-        public void TestSwap()
+        public void When_SwappingVectorElements_Expect_Reference()
         {
             // Test swapping of elements in all possible combinations
 

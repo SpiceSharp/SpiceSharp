@@ -8,7 +8,7 @@ namespace SpiceSharpTest.Sparse
     public class SparseFactorTest
     {
         [TestMethod]
-        public void TestFactor1()
+        public void When_Factoring_Expect_Reference()
         {
             double[][] matrixElements =
             {

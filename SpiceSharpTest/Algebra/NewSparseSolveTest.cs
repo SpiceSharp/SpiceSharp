@@ -5,23 +5,23 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace SpiceSharpTest.Sparse
 {
     [TestClass]
-    public class NewSparseSolveTest : SolveFramework
+    public class SparseSolveTest : SolveFramework
     {
         [TestMethod]
-        public void TestFidapm05_mtx()
+        public void When_BigMatrix_Expect_NoException()
         {
             /*
              * Test factoring a big matrix
              */
 
-            var solver = ReadMtxFile("Sparse/Matrices/fidapm05.mtx");
+            var solver = ReadMtxFile("Algebra/Matrices/fidapm05.mtx");
 
             // Order and factor this larger matrix
             solver.OrderAndFactor();
         }
 
         [TestMethod]
-        public void TestSingletonPivot()
+        public void When_SingletonPivoting_Expect_NoException()
         {
             // Build the solver with only the singleton pivoting
             var solver = new RealSolver();
@@ -54,7 +54,7 @@ namespace SpiceSharpTest.Sparse
         }
 
         [TestMethod]
-        public void TestQuickDiagonalPivot()
+        public void When_QuickDiagonalPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
             var solver = new RealSolver();
@@ -87,7 +87,7 @@ namespace SpiceSharpTest.Sparse
         }
 
         [TestMethod]
-        public void TestDiagonalPivot()
+        public void When_DiagonalPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
             var solver = new RealSolver();
@@ -120,7 +120,7 @@ namespace SpiceSharpTest.Sparse
         }
 
         [TestMethod]
-        public void TestEntireMatrixPivot()
+        public void When_EntireMatrixPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
             var solver = new RealSolver();
