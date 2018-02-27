@@ -34,8 +34,6 @@ namespace SpiceSharp.Simulations
             // Execute base behavior
             base.Execute();
 
-            var circuit = Circuit;
-
             var state = RealState;
             var cstate = ComplexState;
             var baseconfig = BaseConfiguration;

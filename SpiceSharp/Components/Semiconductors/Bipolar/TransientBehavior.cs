@@ -48,11 +48,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
         protected MatrixElement<double> SubstrateCollectorPrimePtr { get; private set; }
         protected MatrixElement<double> BaseCollectorPrimePtr { get; private set; }
         protected MatrixElement<double> CollectorPrimeBasePtr { get; private set; }
-        protected VectorElement<double> basePtr { get; private set; }
-        protected VectorElement<double> substratePtr { get; private set; }
-        protected VectorElement<double> colPrimePtr { get; private set; }
-        protected VectorElement<double> basePrimePtr { get; private set; }
-        protected VectorElement<double> emitPrimePtr { get; private set; }
+        protected VectorElement<double> BasePtr { get; private set; }
+        protected VectorElement<double> SubstratePtr { get; private set; }
+        protected VectorElement<double> CollectorPrimePtr { get; private set; }
+        protected VectorElement<double> BasePrimePtr { get; private set; }
+        protected VectorElement<double> EmitterPrimePtr { get; private set; }
 
         /// <summary>
         /// Device methods and properties
@@ -174,11 +174,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
             CollectorPrimeBasePtr = solver.GetMatrixElement(colPrimeNode, baseNode);
 
             // Get rhs pointers
-            basePtr = solver.GetRhsElement(baseNode);
-            substratePtr = solver.GetRhsElement(substrateNode);
-            colPrimePtr = solver.GetRhsElement(colPrimeNode);
-            basePrimePtr = solver.GetRhsElement(basePrimeNode);
-            emitPrimePtr = solver.GetRhsElement(emitPrimeNode);
+            BasePtr = solver.GetRhsElement(baseNode);
+            SubstratePtr = solver.GetRhsElement(substrateNode);
+            CollectorPrimePtr = solver.GetRhsElement(colPrimeNode);
+            BasePrimePtr = solver.GetRhsElement(basePrimeNode);
+            EmitterPrimePtr = solver.GetRhsElement(emitPrimeNode);
         }
 
         /// <summary>
@@ -513,11 +513,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double ceqbc = mbp.BipolarType * (-cc + - vbc * gmu);
 
             // Load Rhs-vector
-            basePtr.Value += -ceqbx;
-            colPrimePtr.Value += (ceqcs + ceqbx + ceqbc);
-            basePrimePtr.Value += -ceqbe - ceqbc;
-            emitPrimePtr.Value += (ceqbe);
-            substratePtr.Value += (-ceqcs);
+            BasePtr.Value += -ceqbx;
+            CollectorPrimePtr.Value += (ceqcs + ceqbx + ceqbc);
+            BasePrimePtr.Value += -ceqbe - ceqbc;
+            EmitterPrimePtr.Value += (ceqbe);
+            SubstratePtr.Value += (-ceqcs);
 
             // Load Y-matrix
             BaseBasePtr.Value += geqbx;

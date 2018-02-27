@@ -116,6 +116,9 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <param name="solver"></param>
         public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
         {
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
+
             posPtr = solver.GetRhsElement(posNode);
             negPtr = solver.GetRhsElement(negNode);
         }

@@ -87,7 +87,7 @@ namespace SpiceSharp.Simulations
             RealState.Initialize(Circuit.Nodes);
 
             // Allow nodesets to help convergence
-            OnLoad += LoadNodesets;
+            OnLoad += LoadNodeSets;
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove nodeset
-            OnLoad -= LoadNodesets;
+            OnLoad -= LoadNodeSets;
 
             // Unsetup all behaviors
             foreach (var behavior in InitialConditionBehaviors)
@@ -249,7 +249,7 @@ namespace SpiceSharp.Simulations
                 // Preorder matrix
                 if (!state.Sparse.HasFlag(RealState.SparseStates.DidPreorder))
                 {
-                    Helper<double>.PreorderModifiedNodalAnalysis(solver, Math.Abs);
+                    solver.PreorderModifiedNodalAnalysis(Math.Abs);
                     state.Sparse |= RealState.SparseStates.DidPreorder;
                 }
                 if (state.Init == RealState.InitializationStates.InitJunction || state.Init == RealState.InitializationStates.InitTransient)
@@ -350,7 +350,6 @@ namespace SpiceSharp.Simulations
         protected void Load()
         {
             var state = RealState;
-            var nodes = Circuit.Nodes;
 
             // Start the stopwatch
             Statistics.LoadTime.Start();
@@ -424,7 +423,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="e">Arguments</param>
-        protected void LoadNodesets(object sender, LoadStateEventArgs e)
+        protected void LoadNodeSets(object sender, LoadStateEventArgs e)
         {
             var state = RealState;
             var nodes = Circuit.Nodes;
@@ -439,7 +438,7 @@ namespace SpiceSharp.Simulations
                     if (nodes.NodeSets.ContainsKey(node.Name))
                     {
                         double ns = nodes.NodeSets[node.Name];
-                        if (ZeroNoncurRow(state.Solver, nodes, node.Index))
+                        if (ZeroNoncurrentRow(state.Solver, nodes, node.Index))
                         {
                             if (!ns.Equals(0.0))
                                 state.Solver.GetRhsElement(node.Index).Value = 1.0e10 * ns;
@@ -461,15 +460,20 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="solver">Solver</param>
         /// <param name="nodes">List of nodes</param>
-        /// <param name="rownum">Row number</param>
+        /// <param name="rowIndex">Row number</param>
         /// <returns></returns>
-        protected static bool ZeroNoncurRow(Solver<double> solver, Nodes nodes, int rownum)
+        protected static bool ZeroNoncurrentRow(SparseLinearSystem<double> solver, Nodes nodes, int rowIndex)
         {
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+
             bool currents = false;
             for (int n = 0; n < nodes.Count; n++)
             {
                 var node = nodes[n];
-                MatrixElement<double> x = solver.FindMatrixElement(rownum, node.Index);
+                MatrixElement<double> x = solver.FindMatrixElement(rowIndex, node.Index);
                 if (x != null && !x.Value.Equals(0.0))
                 {
                     if (node.UnknownType == Node.NodeType.Current)

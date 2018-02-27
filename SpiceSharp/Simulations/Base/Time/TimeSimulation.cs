@@ -166,7 +166,7 @@ namespace SpiceSharp.Simulations
                 // Preorder matrix
                 if (!state.Sparse.HasFlag(RealState.SparseStates.DidPreorder))
                 {
-                    Helper<double>.PreorderModifiedNodalAnalysis(solver, Math.Abs);
+                    solver.PreorderModifiedNodalAnalysis(Math.Abs);
                     state.Sparse |= RealState.SparseStates.DidPreorder;
                 }
                 if (state.Init == RealState.InitializationStates.InitJunction || state.Init == RealState.InitializationStates.InitTransient)

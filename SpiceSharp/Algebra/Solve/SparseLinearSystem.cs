@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Text;
+using SpiceSharp.Algebra.Solve;
 
-namespace SpiceSharp.Algebra.Solve
+namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// A system of linear equations
@@ -121,24 +122,30 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Map external indices to internal indices
         /// </summary>
-        /// <param name="externalIndices">External indices</param>
+        /// <param name="externalIndexes">External indices</param>
         /// <returns></returns>
-        public Tuple<int, int> ExternalToInternal(Tuple<int, int> externalIndices)
+        public Tuple<int, int> ExternalToInternal(Tuple<int, int> externalIndexes)
         {
-            int row = Row[externalIndices.Item1];
-            int column = Column[externalIndices.Item2];
+            if (externalIndexes == null)
+                throw new ArgumentNullException(nameof(externalIndexes));
+
+            int row = Row[externalIndexes.Item1];
+            int column = Column[externalIndexes.Item2];
             return new Tuple<int, int>(row, column);
         }
 
         /// <summary>
         /// Map internal indices to external indices
         /// </summary>
-        /// <param name="internalIndices">Internal indices</param>
+        /// <param name="internalIndexes">Internal indices</param>
         /// <returns></returns>
-        public Tuple<int, int> InternalToExternal(Tuple<int, int> internalIndices)
+        public Tuple<int, int> InternalToExternal(Tuple<int, int> internalIndexes)
         {
-            int row = Row.Reverse(internalIndices.Item1);
-            int column = Column.Reverse(internalIndices.Item2);
+            if (internalIndexes == null)
+                throw new ArgumentNullException(nameof(internalIndexes));
+
+            int row = Row.Reverse(internalIndexes.Item1);
+            int column = Column.Reverse(internalIndexes.Item2);
             return new Tuple<int, int>(row, column);
         }
 

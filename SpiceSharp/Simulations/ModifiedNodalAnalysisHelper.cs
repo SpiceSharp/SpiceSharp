@@ -6,14 +6,14 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Helper class
     /// </summary>
-    public static class Helper<T> where T : IFormattable, IEquatable<T>
+    public static class ModifiedNodalAnalysisHelper
     {
         /// <summary>
         /// Method for preordering a matrix used in Modified Nodal Analysis (MNA)
         /// </summary>
         /// <typeparam name="T">Base type</typeparam>
         /// <param name="solver">Solver</param>
-        public static void PreorderModifiedNodalAnalysis(Solver<T> solver, Func<T, double> magnitude)
+        public static void PreorderModifiedNodalAnalysis<T>(this Solver<T> solver, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
             /*
              * MNA often has patterns that we can already use for pivoting
@@ -89,7 +89,7 @@ namespace SpiceSharp.Simulations
         /// <param name="twin1">First twin element</param>
         /// <param name="twin2">Second twin element</param>
         /// <returns></returns>
-        static int CountTwins(Solver<T> solver, int column, ref MatrixElement<T> twin1, ref MatrixElement<T> twin2, Func<T, double> magnitude)
+        static int CountTwins<T>(Solver<T> solver, int column, ref MatrixElement<T> twin1, ref MatrixElement<T> twin2, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
             int row, twins = 0;
             MatrixElement<T> cTwin1, cTwin2;

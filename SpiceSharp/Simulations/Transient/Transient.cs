@@ -253,7 +253,7 @@ namespace SpiceSharp.Simulations
                 if (nodes.InitialConditions.ContainsKey(node.Name))
                 {
                     double ic = nodes.InitialConditions[node.Name];
-                    if (ZeroNoncurRow(solver, nodes, node.Index))
+                    if (ZeroNoncurrentRow(solver, nodes, node.Index))
                     {
                         // Avoid creating sparse elements if it is not necessary
                         if (!ic.Equals(0.0))

@@ -204,7 +204,6 @@
     <Compile Include="Simulations\Base\TemperatureBehavior.cs" />
     <Compile Include="Simulations\Base\Frequency\FrequencySimulation.cs" />
     <Compile Include="Simulations\Base\InitialConditionBehavior.cs" />
-    <Compile Include="Simulations\Helper.cs" />
     <Compile Include="Simulations\InitializeSimulationEventArgs.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\ArrayHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\NodeHistory.cs" />
@@ -214,6 +213,7 @@
     <Compile Include="Simulations\IntegrationMethods\Variables\StateDerivative.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\History.cs" />
     <Compile Include="Simulations\IntegrationMethods\TruncationEventArgs.cs" />
+    <Compile Include="Simulations\ModifiedNodalAnalysisHelper.cs" />
     <Compile Include="Simulations\Noise\NoiseBehavior.cs" />
     <Compile Include="Simulations\Base\LoadBehavior.cs" />
     <Compile Include="Simulations\Base\Frequency\FrequencyBehavior.cs" />

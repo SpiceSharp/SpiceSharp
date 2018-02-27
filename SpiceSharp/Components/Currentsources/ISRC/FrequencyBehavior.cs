@@ -103,6 +103,9 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <param name="solver">Solver</param>
         public override void GetEquationPointers(Solver<Complex> solver)
         {
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
+
             PosPtr = solver.GetRhsElement(posNode);
             NegPtr = solver.GetRhsElement(negNode);
         }
@@ -116,7 +119,6 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.ComplexState;
             PosPtr.Value += ac;
             NegPtr.Value -= ac;
         }

@@ -134,7 +134,6 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
-            var state = simulation.ComplexState;
 
             // Load Y-matrix
             PosBranchPtr.Value += 1.0;
