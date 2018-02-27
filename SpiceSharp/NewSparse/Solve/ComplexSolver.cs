@@ -75,12 +75,10 @@ namespace SpiceSharp.NewSparse
                     // Mult = dest[row] / pivot
                     mult = dest[column.Row].Value * element.Value;
                     dest[column.Row].Value = mult;
-                    element = element.Below;
-                    while (element != null)
+                    while ((element = element.Below) != null)
                     {
                         // dest[element.Row] -= mult * element
                         dest[element.Row].Value -= mult * element.Value;
-                        element = element.Below;
                     }
                     column = column.Below;
                 }
@@ -105,7 +103,7 @@ namespace SpiceSharp.NewSparse
 
             // TODO: Maybe we should cache intermediate
             // Scramble
-            var intermediate = new Complex[Rhs.Length + 1];
+            var intermediate = new Complex[Matrix.Size + 1];
             var rhsElement = Rhs.First;
             while (rhsElement != null)
             {
@@ -167,7 +165,7 @@ namespace SpiceSharp.NewSparse
 
             // TODO: Maybe we should cache intermediate
             // Scramble
-            var intermediate = new Complex[Rhs.Length];
+            var intermediate = new Complex[Matrix.Size + 1];
             var rhsElement = Rhs.First;
             while (rhsElement != null)
             {

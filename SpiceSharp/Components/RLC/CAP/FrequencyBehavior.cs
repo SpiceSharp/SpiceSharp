@@ -2,7 +2,7 @@
 using System.Numerics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Sparse;
+using SpiceSharp.NewSparse;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CapacitorBehaviors
@@ -21,10 +21,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode;
-        protected Element<Complex> PosPosPtr { get; private set; }
-        protected Element<Complex> NegNegPtr { get; private set; }
-        protected Element<Complex> PosNegPtr { get; private set; }
-        protected Element<Complex> NegPosPtr { get; private set; }
+        protected MatrixElement<Complex> PosPosPtr { get; private set; }
+        protected MatrixElement<Complex> NegNegPtr { get; private set; }
+        protected MatrixElement<Complex> PosNegPtr { get; private set; }
+        protected MatrixElement<Complex> NegPosPtr { get; private set; }
 
         [PropertyName("v"), PropertyInfo("Capacitor voltage")]
         public Complex GetVoltage(ComplexState state)
@@ -87,17 +87,17 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="matrix">The matrix</param>
-        public override void GetMatrixPointers(Matrix<Complex> matrix)
+        /// <param name="solver">The matrix</param>
+        public override void GetEquationPointers(Solver<Complex> solver)
         {
-			if (matrix == null)
-				throw new ArgumentNullException(nameof(matrix));
+			if (solver == null)
+				throw new ArgumentNullException(nameof(solver));
 
-
-            PosPosPtr = matrix.GetElement(posNode, posNode);
-            NegNegPtr = matrix.GetElement(negNode, negNode);
-            NegPosPtr = matrix.GetElement(negNode, posNode);
-            PosNegPtr = matrix.GetElement(posNode, negNode);
+            // Get matrix pointers
+            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
+            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
+            NegPosPtr = solver.GetMatrixElement(negNode, posNode);
+            PosNegPtr = solver.GetMatrixElement(posNode, negNode);
         }
         
         /// <summary>
@@ -112,11 +112,11 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             var state = simulation.ComplexState;
             var val = state.Laplace * bp.Capacitance.Value;
 
-            // Load the matrix
-            PosPosPtr.Add(val);
-            NegNegPtr.Add(val);
-            PosNegPtr.Sub(val);
-            NegPosPtr.Sub(val);
+            // Load the Y-matrix
+            PosPosPtr.Value += val;
+            NegNegPtr.Value += val;
+            PosNegPtr.Value -= val;
+            NegPosPtr.Value -= val;
         }
     }
 }

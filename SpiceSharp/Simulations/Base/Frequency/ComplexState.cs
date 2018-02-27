@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Circuits;
-using SpiceSharp.Sparse;
+using SpiceSharp.NewSparse;
 
 namespace SpiceSharp.Simulations
 {
@@ -61,38 +61,20 @@ namespace SpiceSharp.Simulations
         public SparseStates Sparse { get; set; }
 
         /// <summary>
-        /// Gets the complex right-hand-side vector
+        /// The complex solver
         /// </summary>
-        public ComplexSolution Rhs { get; private set; } = null;
+        public ComplexSolver Solver { get; } = new ComplexSolver();
 
         /// <summary>
-        /// Gets the complex solution vector
+        /// Gets the solution
         /// </summary>
-        public ComplexSolution Solution { get; private set; } = null;
+        public Vector<Complex> Solution { get; private set; }
 
         /// <summary>
         /// Gets or sets the current laplace variable
         /// Using a purely imaginary variable here will give you the steady-state frequency response
         /// </summary>
         public Complex Laplace { get; set; } = new Complex();
-
-        /// <summary>
-        /// Gets the equation matrix
-        /// </summary>
-        public Matrix<Complex> Matrix { get; private set; } = null;
-
-        /// <summary>
-        /// Gets the order
-        /// </summary>
-        public int Order { get; private set; }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public ComplexState()
-        {
-            Matrix = new Matrix<Complex>();
-        }
 
         /// <summary>
         /// Initialize circuit
@@ -102,11 +84,7 @@ namespace SpiceSharp.Simulations
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
-
-            Order = nodes.Count + 1;
-            Rhs = new ComplexSolution(Order);
-            Solution = new ComplexSolution(Order);
-
+            Solution = new DenseVector<Complex>(Solver.Order);
             base.Initialize(nodes);
         }
 
@@ -115,32 +93,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public override void Destroy()
         {
-            Order = 0;
-            Rhs = null;
             Solution = null;
-            Matrix = null;
-
             base.Destroy();
-        }
-
-        /// <summary>
-        /// Store the solution
-        /// </summary>
-        public void StoreSolution()
-        {
-            var tmp = Rhs;
-            Rhs = Solution;
-            Solution = tmp;
-        }
-
-        /// <summary>
-        /// Clear the matrix and Rhs vector
-        /// </summary>
-        public void Clear()
-        {
-            for (int i = 0; i < Order; i++)
-                Rhs[i] = 0;
-            Matrix.Clear();
         }
     }
 }

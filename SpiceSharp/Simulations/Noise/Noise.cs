@@ -197,19 +197,22 @@ namespace SpiceSharp.Simulations
         /// <param name="negDrive">The negative driving node</param>
         void NzIterate(int posDrive, int negDrive)
         {
-            var state = ComplexState;
+            var solver = ComplexState.Solver;
 
             // Clear out the right hand side vector
-            for (int i = 0; i < state.Rhs.Length; i++)
-                state.Rhs[i] = 0.0;
+            var element = solver.FirstInReorderedRhs();
+            while (element != null)
+            {
+                element.Value = 0.0;
+                element = element.Next;
+            }
 
             // Apply unit current excitation
-            state.Rhs[posDrive] = 1.0;
-            state.Rhs[negDrive] = -1.0;
+            solver.GetRhsElement(posDrive).Value = 1.0;
+            solver.GetRhsElement(negDrive).Value = -1.0;
 
-            state.Matrix.SolveTransposed(state.Rhs, state.Rhs);
-            state.StoreSolution();
-            state.Solution[0] = 0.0;
+            solver.SolveTransposed(ComplexState.Solution);
+            ComplexState.Solution[0] = 0.0;
         }
 
         /// <summary>

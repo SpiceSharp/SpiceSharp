@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Sparse;
+using SpiceSharp.NewSparse;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
@@ -25,13 +25,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, posPrimeNode;
-        protected Element<Complex> PosPosPrimePtr { get; private set; }
-        protected Element<Complex> NegPosPrimePtr { get; private set; }
-        protected Element<Complex> PosPrimePosPtr { get; private set; }
-        protected Element<Complex> PosPrimeNegPtr { get; private set; }
-        protected Element<Complex> PosPosPtr { get; private set; }
-        protected Element<Complex> NegNegPtr { get; private set; }
-        protected Element<Complex> PosPrimePosPrimePtr { get; private set; }
+        protected MatrixElement<Complex> PosPosPrimePtr { get; private set; }
+        protected MatrixElement<Complex> NegPosPrimePtr { get; private set; }
+        protected MatrixElement<Complex> PosPrimePosPtr { get; private set; }
+        protected MatrixElement<Complex> PosPrimeNegPtr { get; private set; }
+        protected MatrixElement<Complex> PosPosPtr { get; private set; }
+        protected MatrixElement<Complex> NegNegPtr { get; private set; }
+        protected MatrixElement<Complex> PosPrimePosPrimePtr { get; private set; }
 
         /// <summary>
         /// Gets the junction capacitance
@@ -112,27 +112,27 @@ namespace SpiceSharp.Components.DiodeBehaviors
             posNode = pins[0];
             negNode = pins[1];
         }
-        
+
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix<Complex> matrix)
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Solver<Complex> solver)
         {
-			if (matrix == null)
-				throw new ArgumentNullException(nameof(matrix));
+			if (solver == null)
+				throw new ArgumentNullException(nameof(solver));
 
             // Get node
             posPrimeNode = load.PosPrimeNode;
 
             // Get matrix pointers
-            PosPosPrimePtr = matrix.GetElement(posNode, posPrimeNode);
-            NegPosPrimePtr = matrix.GetElement(negNode, posPrimeNode);
-            PosPrimePosPtr = matrix.GetElement(posPrimeNode, posNode);
-            PosPrimeNegPtr = matrix.GetElement(posPrimeNode, negNode);
-            PosPosPtr = matrix.GetElement(posNode, posNode);
-            NegNegPtr = matrix.GetElement(negNode, negNode);
-            PosPrimePosPrimePtr = matrix.GetElement(posPrimeNode, posPrimeNode);
+            PosPosPrimePtr = solver.GetMatrixElement(posNode, posPrimeNode);
+            NegPosPrimePtr = solver.GetMatrixElement(negNode, posPrimeNode);
+            PosPrimePosPtr = solver.GetMatrixElement(posPrimeNode, posNode);
+            PosPrimeNegPtr = solver.GetMatrixElement(posPrimeNode, negNode);
+            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
+            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
+            PosPrimePosPrimePtr = solver.GetMatrixElement(posPrimeNode, posPrimeNode);
         }
 
         /// <summary>
@@ -194,16 +194,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
             geq = load.Conduct;
             xceq = Capacitance * state.Laplace.Imaginary;
 
-            PosPosPtr.Add(gspr);
-            NegNegPtr.Add(new Complex(geq, xceq));
-
-            PosPrimePosPrimePtr.Add(new Complex(geq + gspr, xceq));
-
-            PosPosPrimePtr.Sub(gspr);
-            NegPosPrimePtr.Sub(new Complex(geq, xceq));
-
-            PosPrimePosPtr.Sub(gspr);
-            PosPrimeNegPtr.Sub(new Complex(geq, xceq));
+            // Load Y-matrix
+            PosPosPtr.Value += gspr;
+            NegNegPtr.Value += new Complex(geq, xceq);
+            PosPrimePosPrimePtr.Value += new Complex(geq + gspr, xceq);
+            PosPosPrimePtr.Value -= gspr;
+            NegPosPrimePtr.Value -= new Complex(geq, xceq);
+            PosPrimePosPtr.Value -= gspr;
+            PosPrimeNegPtr.Value -= new Complex(geq, xceq);
         }
     }
 }

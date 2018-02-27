@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Sparse;
+using SpiceSharp.NewSparse;
 using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
 
@@ -20,8 +20,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Matrix elements
         /// </summary>
-        protected Element<Complex> Branch1Branch2Ptr { get; private set; }
-        protected Element<Complex> Branch2Branch1Ptr { get; private set; }
+        protected MatrixElement<Complex> Branch1Branch2Ptr { get; private set; }
+        protected MatrixElement<Complex> Branch2Branch1Ptr { get; private set; }
 
         /// <summary>
         /// Shared parameters
@@ -59,19 +59,19 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix<Complex> matrix)
+        /// <param name="solver">Matrix</param>
+        public override void GetEquationPointers(Solver<Complex> solver)
         {
-			if (matrix == null)
-				throw new ArgumentNullException(nameof(matrix));
+			if (solver == null)
+				throw new ArgumentNullException(nameof(solver));
 
             // Get extra equations
             int INDbrEq1 = load1.BranchEq;
             int INDbrEq2 = load2.BranchEq;
 
             // Get matrix equations
-            Branch1Branch2Ptr = matrix.GetElement(INDbrEq1, INDbrEq2);
-            Branch2Branch1Ptr = matrix.GetElement(INDbrEq2, INDbrEq1);
+            Branch1Branch2Ptr = solver.GetMatrixElement(INDbrEq1, INDbrEq2);
+            Branch2Branch1Ptr = solver.GetMatrixElement(INDbrEq2, INDbrEq1);
         }
 
         /// <summary>
@@ -94,8 +94,10 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 
             var state = simulation.ComplexState;
             Complex value = state.Laplace * Factor;
-            Branch1Branch2Ptr.Sub(value);
-            Branch2Branch1Ptr.Sub(value);
+
+            // Load Y-matrix
+            Branch1Branch2Ptr.Value -= value;
+            Branch2Branch1Ptr.Value -= value;
         }
     }
 }

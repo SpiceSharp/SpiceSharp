@@ -37,6 +37,7 @@ namespace SpiceSharp.NewSparse
 
         /// <summary>
         /// Factor the matrix
+        /// Assumes that pivoting has been done
         /// </summary>
         public override bool Factor()
         {
@@ -52,7 +53,7 @@ namespace SpiceSharp.NewSparse
 
             // TODO: maybe we should cache this
             MatrixElement<double>[] dest = new MatrixElement<double>[Matrix.Size + 1];
-
+            
             // Start factorization
             double mult;
             for (int step = 2; step <= Matrix.Size; step++)
@@ -74,12 +75,10 @@ namespace SpiceSharp.NewSparse
                     // Mult = dest[row] / pivot
                     mult = dest[column.Row].Value * element.Value;
                     dest[column.Row].Value = mult;
-                    element = element.Below;
-                    while (element != null)
+                    while ((element = element.Below) != null)
                     {
                         // dest[element.Row] -= mult * element
                         dest[element.Row].Value -= mult * element.Value;
-                        element = element.Below;
                     }
                     column = column.Below;
                 }
