@@ -51,7 +51,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Circuits\CircuitCheckTest.cs" />
+    <Compile Include="Circuits\ValidatorTests.cs" />
     <Compile Include="Models\Currentsources\ISRC\CurrentsourceTest.cs" />
     <Compile Include="Models\RLC\CAP\CapacitorTest.cs" />
     <Compile Include="Models\RLC\IND\InductorTest.cs" />
@@ -71,7 +71,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sparse\SparseFactorTest.cs" />
     <Compile Include="SpiceSharpTest.cs" />
-    <Compile Include="SpiceSharpCircuitCheckTest.cs" />
+    <Compile Include="Circuits\SpiceSharpCircuitCheckTest.cs" />
     <Compile Include="Utils\AssertExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
