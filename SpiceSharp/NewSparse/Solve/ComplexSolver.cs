@@ -169,7 +169,8 @@ namespace SpiceSharp.NewSparse
             var rhsElement = Rhs.First;
             while (rhsElement != null)
             {
-                intermediate[Column[rhsElement.Index]] = rhsElement.Value;
+                int newIndex = Column[Row.Reverse(rhsElement.Index)];
+                intermediate[newIndex] = rhsElement.Value;
                 rhsElement = rhsElement.Next;
             }
 
@@ -195,7 +196,6 @@ namespace SpiceSharp.NewSparse
             for (int i = Matrix.Size; i > 0; i--)
             {
                 Complex temp = intermediate[i];
-
                 var pivot = Matrix.GetDiagonalElement(i);
                 var element = pivot.Below;
                 while (element != null)
@@ -206,7 +206,7 @@ namespace SpiceSharp.NewSparse
                 }
 
                 // intermediate = temp / pivot
-                intermediate[i] *= pivot.Value;
+                intermediate[i] = temp * pivot.Value;
             }
 
             // Unscramble

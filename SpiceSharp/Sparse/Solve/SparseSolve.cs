@@ -145,7 +145,6 @@ namespace SpiceSharp.Sparse
                 {
                     // Cmplx expr: Temp -= Intermediate[Element.Row] * *Element
                     Temp.SubtractMultiply(Intermediate[pElement.Row], pElement.Element);
-
                     pElement = pElement.NextInColumn;
                 }
                 // Cmplx expr: Intermediate = Temp * (1.0 / *pPivot).

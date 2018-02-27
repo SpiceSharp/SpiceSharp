@@ -165,11 +165,12 @@ namespace SpiceSharp.NewSparse
 
             // TODO: Maybe we should cache intermediate
             // Scramble
-            var intermediate = new double[Rhs.Length];
+            var intermediate = new double[Matrix.Size + 1];
             var rhsElement = Rhs.First;
             while (rhsElement != null)
             {
-                intermediate[Column[rhsElement.Index]] = rhsElement.Value;
+                int newIndex = Column[Row.Reverse(rhsElement.Index)];
+                intermediate[newIndex] = rhsElement.Value;
                 rhsElement = rhsElement.Next;
             }
 
@@ -206,7 +207,7 @@ namespace SpiceSharp.NewSparse
                 }
 
                 // intermediate = temp / pivot
-                intermediate[i] *= pivot.Value;
+                intermediate[i] = temp * pivot.Value;
             }
 
             // Unscramble
