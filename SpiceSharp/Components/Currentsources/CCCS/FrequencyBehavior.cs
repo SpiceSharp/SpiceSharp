@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Sparse;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
@@ -52,8 +52,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, contBranch;
-        protected Element<Complex> PosControlBranchPtr { get; private set; }
-        protected Element<Complex> NegControlBranchPtr { get; private set; }
+        protected MatrixElement<Complex> PosControlBranchPtr { get; private set; }
+        protected MatrixElement<Complex> NegControlBranchPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -94,15 +94,15 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix<Complex> matrix)
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Solver<Complex> solver)
         {
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
 
             contBranch = vsrcload.BranchEq;
-            PosControlBranchPtr = matrix.GetElement(posNode, contBranch);
-            NegControlBranchPtr = matrix.GetElement(negNode, contBranch);
+            PosControlBranchPtr = solver.GetMatrixElement(posNode, contBranch);
+            NegControlBranchPtr = solver.GetMatrixElement(negNode, contBranch);
         }
 
         /// <summary>
@@ -124,8 +124,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            PosControlBranchPtr.Add((Complex)bp.Coefficient.Value);
-            NegControlBranchPtr.Sub(bp.Coefficient.Value);
+            // Load the Y-matrix
+            PosControlBranchPtr.Value += bp.Coefficient.Value;
+            NegControlBranchPtr.Value -= bp.Coefficient.Value;
         }
     }
 }

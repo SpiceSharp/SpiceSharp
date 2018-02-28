@@ -4,7 +4,7 @@ using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Sparse;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -52,17 +52,16 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
-        public override void Integrate(History<RealSolution> history, int index)
+        public override void Integrate(History<Vector<double>> history, int index)
         {
             if (history == null)
                 throw new ArgumentNullException(nameof(history));
             int derivativeIndex = index + 1;
-            if (index < 0 || derivativeIndex >= history.Current.Length)
+            if (index < 0 || derivativeIndex > history.Current.Length)
                 throw new CircuitException("Invalid state index {0}".FormatString(index));
 
             var current = history.Current;
             var previous = history[1];
-
 
             switch (Order)
             {
@@ -94,7 +93,7 @@ namespace SpiceSharp.IntegrationMethods
             {
                 case 1:
                     // Divided difference approach
-                    for (int i = 0; i < Solutions[0].Length; i++)
+                    for (int i = 1; i <= Solutions[0].Length; i++)
                     {
                         double dd0 = (Solutions[0][i] - Solutions[1][i]) / DeltaOld[1];
                         Prediction[i] = Solutions[0][i] + DeltaOld[0] * dd0;
@@ -105,7 +104,7 @@ namespace SpiceSharp.IntegrationMethods
                     // Adams-Bashforth method (second order for variable timesteps)
                     b = -DeltaOld[0] / (2.0 * DeltaOld[1]);
                     a = 1 - b;
-                    for (int i = 0; i < Solutions[0].Length; i++)
+                    for (int i = 1; i <= Solutions[0].Length; i++)
                     {
                         double dd0 = (Solutions[0][i] - Solutions[1][i]) / DeltaOld[1];
                         double dd1 = (Solutions[1][i] - Solutions[2][i]) / DeltaOld[2];
@@ -224,12 +223,12 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="history">History</param>
         /// <param name="index">Index</param>
         /// <param name="timestep">Timestep</param>
-        public override void LocalTruncateError(History<RealSolution> history, int index, ref double timestep)
+        public override void LocalTruncateError(History<Vector<double>> history, int index, ref double timestep)
         {
             if (history == null)
                 throw new ArgumentNullException(nameof(history));
             int derivativeIndex = index + 1;
-            if (index < 0 || derivativeIndex >= history.Current.Length)
+            if (index < 0 || derivativeIndex > history.Current.Length)
                 throw new CircuitException("Invalid state index {0}".FormatString(index));
             var current = history.Current;
             var previous = history[1];

@@ -221,7 +221,7 @@ namespace SpiceSharp.Simulations
                             if (Method.OldDelta > timeConfig.DeltaMin)
                                 Method.Delta = timeConfig.DeltaMin;
                             else
-                                throw new CircuitException("Timestep too small at t={0:g}: {1:g}".FormatString(Method.SavedTime, Method.Delta));
+                                throw new CircuitException("Timestep too small at t={0:e}: {1:e}".FormatString(Method.SavedTime, Method.Delta));
                         }
                     }
                 }
@@ -245,6 +245,7 @@ namespace SpiceSharp.Simulations
         {
             var state = RealState;
             var nodes = Circuit.Nodes;
+            var solver = state.Solver;
 
             for (int i = 0; i < nodes.Count; i++)
             {
@@ -252,14 +253,18 @@ namespace SpiceSharp.Simulations
                 if (nodes.InitialConditions.ContainsKey(node.Name))
                 {
                     double ic = nodes.InitialConditions[node.Name];
-                    if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
+                    if (ZeroNoncurrentRow(solver, nodes, node.Index))
                     {
-                        state.Rhs[node.Index] = 1.0e10 * ic;
+                        // Avoid creating sparse elements if it is not necessary
+                        if (!ic.Equals(0.0))
+                            solver.GetRhsElement(node.Index).Value = 1.0e10 * ic;
                         node.Diagonal.Value = 1.0e10;
                     }
                     else
                     {
-                        state.Rhs[node.Index] = ic;
+                        // Avoid creating sparse elements if it is not necessary
+                        if (!ic.Equals(0.0))
+                            solver.GetRhsElement(node.Index).Value = ic;
                         node.Diagonal.Value = 1.0;
                     }
                 }

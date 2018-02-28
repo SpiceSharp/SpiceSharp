@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Sparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
@@ -82,13 +82,12 @@ namespace SpiceSharp.Simulations
 
             // Setup the load behaviors
             RealState = States.Get<RealState>();
-            var matrix = RealState.Matrix;
             foreach (var behavior in LoadBehaviors)
-                behavior.GetMatrixPointers(Circuit.Nodes, matrix);
+                behavior.GetEquationPointers(Circuit.Nodes, RealState.Solver);
             RealState.Initialize(Circuit.Nodes);
 
             // Allow nodesets to help convergence
-            OnLoad += LoadNodesets;
+            OnLoad += LoadNodeSets;
         }
 
         /// <summary>
@@ -110,7 +109,7 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove nodeset
-            OnLoad -= LoadNodesets;
+            OnLoad -= LoadNodeSets;
 
             // Unsetup all behaviors
             foreach (var behavior in InitialConditionBehaviors)
@@ -121,7 +120,6 @@ namespace SpiceSharp.Simulations
                 behavior.Unsetup();
 
             // Clear the state
-            RealState.Clear();
             RealState.Destroy();
             RealState = null;
 
@@ -215,7 +213,7 @@ namespace SpiceSharp.Simulations
         protected bool Iterate(int maxIterations)
         {
             var state = RealState;
-            var matrix = state.Matrix;
+            var solver = state.Solver;
             bool pass = false;
             int iterno = 0;
 
@@ -251,7 +249,7 @@ namespace SpiceSharp.Simulations
                 // Preorder matrix
                 if (!state.Sparse.HasFlag(RealState.SparseStates.DidPreorder))
                 {
-                    matrix.Preorder();
+                    solver.PreorderModifiedNodalAnalysis(Math.Abs);
                     state.Sparse |= RealState.SparseStates.DidPreorder;
                 }
                 if (state.Init == RealState.InitializationStates.InitJunction || state.Init == RealState.InitializationStates.InitTransient)
@@ -263,7 +261,8 @@ namespace SpiceSharp.Simulations
                 if (state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
-                    matrix.Reorder(state.DiagonalGmin);
+                    // TODO: Add diagonal elements
+                    solver.OrderAndFactor();
                     Statistics.ReorderTime.Stop();
                     state.Sparse &= ~RealState.SparseStates.ShouldReorder;
                 }
@@ -271,20 +270,21 @@ namespace SpiceSharp.Simulations
                 {
                     // Decompose
                     Statistics.DecompositionTime.Start();
-                    matrix.Factor(state.DiagonalGmin);
+                    // TODO: Add diagonal elements
+                    solver.Factor();
                     Statistics.DecompositionTime.Stop();
                 }
 
-                // Solve the equation
-                Statistics.SolveTime.Start();
-                matrix.Solve(state.Rhs, state.Rhs);
-                Statistics.SolveTime.Stop();
-
-                // The result is now stored in the RHS vector, let's move it to the current solution vector
+                // The current solution becomes the old solution
                 state.StoreSolution();
 
+                // Solve the equation
+                Statistics.SolveTime.Start();
+                solver.Solve(state.Solution);
+                Statistics.SolveTime.Stop();
+
                 // Reset ground nodes
-                state.Rhs[0] = 0.0;
+                solver.GetRhsElement(0).Value = 0.0;
                 state.Solution[0] = 0.0;
                 state.OldSolution[0] = 0.0;
 
@@ -350,13 +350,12 @@ namespace SpiceSharp.Simulations
         protected void Load()
         {
             var state = RealState;
-            var nodes = Circuit.Nodes;
 
             // Start the stopwatch
             Statistics.LoadTime.Start();
 
             // Clear rhs and matrix
-            state.Clear();
+            state.Solver.Clear();
 
             // Load all devices
             foreach (var behavior in LoadBehaviors)
@@ -378,11 +377,14 @@ namespace SpiceSharp.Simulations
             var circuit = Circuit;
             var state = RealState;
             var nodes = circuit.Nodes;
+            var solver = state.Solver;
 
             // Clear the current solution
-            for (int i = 0; i < state.Solution.Length; i++)
+            var element = solver.FirstInReorderedRhs();
+            while (element != null)
             {
-                state.Rhs[i] = 0.0;
+                element.Value = 0.0;
+                element = element.Next;
             }
 
             // Go over all nodes
@@ -391,14 +393,20 @@ namespace SpiceSharp.Simulations
                 var node = nodes[i];
                 if (nodes.NodeSets.ContainsKey(node.Name))
                 {
-                    node.Diagonal = state.Matrix.GetElement(node.Index, node.Index);
+                    node.Diagonal = solver.GetMatrixElement(node.Index, node.Index);
+
+                    // Avoid creating a sparse element if it is not needed
+                    if (!nodes.NodeSets[node.Name].Equals(0.0))
+                        solver.GetRhsElement(node.Index).Value = nodes.NodeSets[node.Name];
                     state.HadNodeSet = true;
-                    state.Rhs[node.Index] = nodes.NodeSets[node.Name];
                 }
                 if (nodes.InitialConditions.ContainsKey(node.Name))
                 {
-                    node.Diagonal = state.Matrix.GetElement(node.Index, node.Index);
-                    state.Rhs[node.Index] = nodes.InitialConditions[node.Name];
+                    node.Diagonal = solver.GetMatrixElement(node.Index, node.Index);
+
+                    // Avoid creating a sparse element if it is not needed
+                    if (!nodes.InitialConditions[node.Name].Equals(0.0))
+                        solver.GetRhsElement(node.Index).Value = nodes.InitialConditions[node.Name];
                 }
             }
 
@@ -415,7 +423,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="e">Arguments</param>
-        protected void LoadNodesets(object sender, LoadStateEventArgs e)
+        protected void LoadNodeSets(object sender, LoadStateEventArgs e)
         {
             var state = RealState;
             var nodes = Circuit.Nodes;
@@ -430,14 +438,16 @@ namespace SpiceSharp.Simulations
                     if (nodes.NodeSets.ContainsKey(node.Name))
                     {
                         double ns = nodes.NodeSets[node.Name];
-                        if (ZeroNoncurRow(state.Matrix, nodes, node.Index))
+                        if (ZeroNoncurrentRow(state.Solver, nodes, node.Index))
                         {
-                            state.Rhs[node.Index] = 1.0e10 * ns;
+                            if (!ns.Equals(0.0))
+                                state.Solver.GetRhsElement(node.Index).Value = 1.0e10 * ns;
                             node.Diagonal.Value = 1.0e10;
                         }
                         else
                         {
-                            state.Rhs[node.Index] = ns;
+                            if (!ns.Equals(0.0))
+                                state.Solver.GetRhsElement(node.Index).Value = ns;
                             node.Diagonal.Value = 1.0;
                         }
                     }
@@ -448,23 +458,28 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Reset the row to 0.0 and return true if the row is a current equation
         /// </summary>
-        /// <param name="matrix">The matrix</param>
-        /// <param name="nodes">The list of nodes</param>
-        /// <param name="rownum">The row number</param>
+        /// <param name="solver">Solver</param>
+        /// <param name="nodes">List of nodes</param>
+        /// <param name="rowIndex">Row number</param>
         /// <returns></returns>
-        protected static bool ZeroNoncurRow(Matrix<double> matrix, Nodes nodes, int rownum)
+        protected static bool ZeroNoncurrentRow(SparseLinearSystem<double> solver, Nodes nodes, int rowIndex)
         {
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
+            if (nodes == null)
+                throw new ArgumentNullException(nameof(nodes));
+
             bool currents = false;
             for (int n = 0; n < nodes.Count; n++)
             {
                 var node = nodes[n];
-                MatrixElement<double> x = matrix.FindElement(rownum, node.Index);
-                if (x != null && x.Element.Value != 0.0)
+                MatrixElement<double> x = solver.FindMatrixElement(rowIndex, node.Index);
+                if (x != null && !x.Value.Equals(0.0))
                 {
                     if (node.UnknownType == Node.NodeType.Current)
                         currents = true;
                     else
-                        x.Element.Value = 0.0;
+                        x.Value = 0.0;
                 }
             }
             return currents;

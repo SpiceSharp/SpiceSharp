@@ -1,8 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Sparse;
 
 namespace SpiceSharp.Simulations
 {
@@ -83,7 +83,7 @@ namespace SpiceSharp.Simulations
             StatePool = new StatePool(Method);
             foreach (var behavior in TransientBehaviors)
             {
-                behavior.GetMatrixPointers(RealState.Matrix);
+                behavior.GetEquationPointers(RealState.Solver);
                 behavior.CreateStates(StatePool);
             }
             StatePool.BuildStates();
@@ -127,7 +127,7 @@ namespace SpiceSharp.Simulations
         protected bool TranIterate(int maxIterations)
         {
             var state = RealState;
-            var matrix = state.Matrix;
+            var solver = state.Solver;
             bool pass = false;
             int iterno = 0;
 
@@ -166,7 +166,7 @@ namespace SpiceSharp.Simulations
                 // Preorder matrix
                 if (!state.Sparse.HasFlag(RealState.SparseStates.DidPreorder))
                 {
-                    matrix.Preorder();
+                    solver.PreorderModifiedNodalAnalysis(Math.Abs);
                     state.Sparse |= RealState.SparseStates.DidPreorder;
                 }
                 if (state.Init == RealState.InitializationStates.InitJunction || state.Init == RealState.InitializationStates.InitTransient)
@@ -178,7 +178,8 @@ namespace SpiceSharp.Simulations
                 if (state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
-                    matrix.Reorder(state.DiagonalGmin);
+                    // TODO: Add diagGmin to diagonal elements
+                    solver.OrderAndFactor();
                     Statistics.ReorderTime.Stop();
                     state.Sparse &= ~RealState.SparseStates.ShouldReorder;
                 }
@@ -186,20 +187,26 @@ namespace SpiceSharp.Simulations
                 {
                     // Decompose
                     Statistics.DecompositionTime.Start();
-                    matrix.Factor(state.DiagonalGmin);
+                    // TODO: Add diagGmin to diagonal elements
+                    bool success = solver.Factor();
                     Statistics.DecompositionTime.Stop();
+
+                    if (!success)
+                    {
+                        state.Sparse |= RealState.SparseStates.ShouldReorder;
+                        continue;
+                    }
                 }
+
+                // The current solution becomes the old solution
+                state.StoreSolution();
 
                 // Solve the equation
                 Statistics.SolveTime.Start();
-                matrix.Solve(state.Rhs, state.Rhs);
+                solver.Solve(state.Solution);
                 Statistics.SolveTime.Stop();
 
-                // The result is now stored in the RHS vector, let's move it to the current solution vector
-                state.StoreSolution();
-
                 // Reset ground nodes
-                state.Rhs[0] = 0.0;
                 state.Solution[0] = 0.0;
                 state.OldSolution[0] = 0.0;
 

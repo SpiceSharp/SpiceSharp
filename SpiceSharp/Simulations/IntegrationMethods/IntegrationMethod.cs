@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Sparse;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -75,12 +75,12 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the old solutions
         /// </summary>
-        public History<RealSolution> Solutions { get; } = null;
+        public History<Vector<double>> Solutions { get; } = null;
 
         /// <summary>
         /// Gets the prediction for the next timestep
         /// </summary>
-        public RealSolution Prediction { get; protected set; } = null;
+        public Vector<double> Prediction { get; protected set; } = null;
 
         /// <summary>
         /// The first order derivative of any variable that is
@@ -119,7 +119,7 @@ namespace SpiceSharp.IntegrationMethods
             DeltaOld = new ArrayHistory<double>(maxOrder + 2);
 
             // Allocate history of solutions
-            Solutions = new ArrayHistory<RealSolution>(maxOrder + 1);
+            Solutions = new ArrayHistory<Vector<double>>(maxOrder + 1);
 
             // Create configuration if necessary
             Parameters.Add(configuration ?? new IntegrationParameters());
@@ -139,7 +139,7 @@ namespace SpiceSharp.IntegrationMethods
             DeltaOld = new ArrayHistory<double>(maxOrder + 2);
 
             // Allocate history of solutions
-            Solutions = new ArrayHistory<RealSolution>(maxOrder + 1);
+            Solutions = new ArrayHistory<Vector<double>>(maxOrder + 1);
 
             // Create configuration
             Parameters.Add(new IntegrationParameters());
@@ -149,7 +149,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Save a solution for future integrations
         /// </summary>
         /// <param name="solution">The solution</param>
-        public void SaveSolution(RealSolution solution)
+        public void SaveSolution(Vector<double> solution)
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));
@@ -158,8 +158,8 @@ namespace SpiceSharp.IntegrationMethods
             if (Solutions[0] == null)
             {
                 // No solutions yet, so allocate vectors
-                Solutions.Clear((int index) => new RealSolution(solution.Length));
-                Prediction = new RealSolution(solution.Length);
+                Solutions.Clear((int index) => new DenseVector<double>(solution.Length));
+                Prediction = new DenseVector<double>(solution.Length);
                 solution.CopyTo(Solutions[0]);
             }
             else
@@ -183,7 +183,7 @@ namespace SpiceSharp.IntegrationMethods
             Order = 1;
             Prediction = null;
             DeltaOld.Clear(0.0);
-            Solutions.Clear((RealSolution)null);
+            Solutions.Clear((Vector<double>)null);
 
             // Get parameters
             BaseParameters = Parameters.Get<IntegrationParameters>();
@@ -337,7 +337,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="history">The history</param>
         /// <param name="index">The index of the state to be used</param>
         /// <returns></returns>
-        public abstract void Integrate(History<RealSolution> history, int index);
+        public abstract void Integrate(History<Vector<double>> history, int index);
 
         /// <summary>
         /// Do truncation for all nodes
@@ -382,6 +382,6 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="history">The history of states</param>
         /// <param name="index">Index</param>
         /// <param name="timestep">Timestep</param>
-        public abstract void LocalTruncateError(History<RealSolution> history, int index, ref double timestep);
+        public abstract void LocalTruncateError(History<Vector<double>> history, int index, ref double timestep);
     }
 }

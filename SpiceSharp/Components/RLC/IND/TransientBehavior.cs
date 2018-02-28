@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Sparse;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Behaviors;
@@ -27,7 +27,8 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Nodes
         /// </summary>
         int BranchEq;
-        protected Element<double> BranchBranchPtr { get; private set; }
+        protected MatrixElement<double> BranchBranchPtr { get; private set; }
+        protected VectorElement<double> BranchPtr { get; private set; }
         StateDerivative flux;
 
         /// <summary>
@@ -76,17 +77,18 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets matrix pointer
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix<double> matrix)
+        /// <param name="solver">Matrix</param>
+        public override void GetEquationPointers(Solver<double> solver)
         {
-			if (matrix == null)
-				throw new ArgumentNullException(nameof(matrix));
+			if (solver == null)
+				throw new ArgumentNullException(nameof(solver));
 
             // Get current equation
             BranchEq = load.BranchEq;
+            BranchPtr = solver.GetRhsElement(BranchEq);
 
             // Get matrix pointers
-            BranchBranchPtr = matrix.GetElement(BranchEq, BranchEq);
+            BranchBranchPtr = solver.GetMatrixElement(BranchEq, BranchEq);
         }
 
         /// <summary>
@@ -148,8 +150,8 @@ namespace SpiceSharp.Components.InductorBehaviors
 
             // Finally load the Y-matrix
             flux.Integrate();
-            state.Rhs[BranchEq] += flux.RhsCurrent();
-            BranchBranchPtr.Sub(flux.Jacobian(bp.Inductance));
+            BranchPtr.Value += flux.RhsCurrent();
+            BranchBranchPtr.Value -= flux.Jacobian(bp.Inductance);
         }
 
         /// <summary>

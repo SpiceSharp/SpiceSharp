@@ -88,7 +88,6 @@ namespace SpiceSharp.Simulations
             base.Execute();
 
             var exportargs = new ExportDataEventArgs(RealState);
-            var circuit = Circuit;
 
             // Setup the state
             var state = RealState;

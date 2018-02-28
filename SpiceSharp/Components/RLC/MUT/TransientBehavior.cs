@@ -1,5 +1,5 @@
 ﻿using System;
-using SpiceSharp.Sparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
 
@@ -26,8 +26,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// Nodes
         /// </summary>
         int BranchEq1, BranchEq2;
-        protected Element<double> Branch1Branch2 { get; private set; }
-        protected Element<double> Branch2Branch1 { get; private set; }
+        protected MatrixElement<double> Branch1Branch2 { get; private set; }
+        protected MatrixElement<double> Branch2Branch1 { get; private set; }
 
         /// <summary>
         /// Conductance
@@ -94,19 +94,19 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix<double> matrix)
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Solver<double> solver)
         {
-			if (matrix == null)
-				throw new ArgumentNullException(nameof(matrix));
+			if (solver == null)
+				throw new ArgumentNullException(nameof(solver));
 
             // Get extra equations
             BranchEq1 = load1.BranchEq;
             BranchEq2 = load2.BranchEq;
 
             // Get matrix pointers
-            Branch1Branch2 = matrix.GetElement(BranchEq1, BranchEq2);
-            Branch2Branch1 = matrix.GetElement(BranchEq2, BranchEq1);
+            Branch1Branch2 = solver.GetMatrixElement(BranchEq1, BranchEq2);
+            Branch2Branch1 = solver.GetMatrixElement(BranchEq2, BranchEq1);
         }
 
         /// <summary>
@@ -132,8 +132,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             // Load Y-matrix
-            Branch1Branch2.Sub(Cond);
-            Branch2Branch1.Sub(Cond);
+            Branch1Branch2.Value -= Cond;
+            Branch2Branch1.Value -= Cond;
         }
     }
 }

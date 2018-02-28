@@ -2,7 +2,9 @@
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Algebra;
 using System;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
@@ -44,6 +46,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode;
+        VectorElement<double> posPtr, negPtr;
 
         /// <summary>
         /// Constructor
@@ -107,6 +110,20 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         }
 
         /// <summary>
+        /// Get the matrix elements
+        /// </summary>
+        /// <param name="nodes"></param>
+        /// <param name="solver"></param>
+        public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
+        {
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
+
+            posPtr = solver.GetRhsElement(posNode);
+            negPtr = solver.GetRhsElement(negNode);
+        }
+
+        /// <summary>
         /// Execute behavior
         /// </summary>
         /// <param name="simulation">Base simulation</param>
@@ -138,8 +155,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 value = bp.DCValue * state.SourceFactor;
             }
 
-            state.Rhs[posNode] += value;
-            state.Rhs[negNode] -= value;
+            posPtr.Value += value;
+            negPtr.Value -= value;
             Current = value;
         }
     }

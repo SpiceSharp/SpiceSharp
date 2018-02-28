@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Sparse;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
@@ -68,9 +67,9 @@ namespace SpiceSharp.Simulations
             FrequencySweep = FrequencyConfiguration.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
 
             FrequencyBehaviors = SetupBehaviors<FrequencyBehavior>();
-            var matrix = ComplexState.Matrix;
+            var solver = ComplexState.Solver;
             foreach (var behavior in FrequencyBehaviors)
-                behavior.GetMatrixPointers(matrix);
+                behavior.GetEquationPointers(solver);
         }
 
         /// <summary>
@@ -82,6 +81,7 @@ namespace SpiceSharp.Simulations
 
             // Initialize the state
             ComplexState.Initialize(Circuit.Nodes);
+            ComplexState.Sparse |= ComplexState.SparseStates.ACShouldReorder;
         }
 
         /// <summary>
@@ -96,7 +96,6 @@ namespace SpiceSharp.Simulations
             FrequencyBehaviors = null;
 
             // Remove the state
-            ComplexState.Clear();
             ComplexState.Destroy();
             ComplexState = null;
 
@@ -113,46 +112,35 @@ namespace SpiceSharp.Simulations
         protected void ACIterate()
         {
             var cstate = ComplexState;
-            var matrix = cstate.Matrix;
+            var solver = cstate.Solver;
 
             retry:
             cstate.IsConvergent = true;
 
             // Load AC
-            cstate.Clear();
+            cstate.Solver.Clear();
             foreach (var behavior in FrequencyBehaviors)
                 behavior.Load(this);
 
             if (cstate.Sparse.HasFlag(ComplexState.SparseStates.ACShouldReorder))
             {
-                var error = matrix.Reorder();
+                solver.OrderAndFactor();
                 cstate.Sparse &= ~ComplexState.SparseStates.ACShouldReorder;
-                if (error != SparseError.Okay)
-                    throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(cstate.Matrix, "AC"));
             }
             else
             {
-                var error = matrix.Factor();
-                if (error != 0)
+                if (!solver.Factor())
                 {
-                    if (error == SparseError.Singular)
-                    {
-                        cstate.Sparse |= ComplexState.SparseStates.ACShouldReorder;
-                        goto retry;
-                    }
-                    throw new CircuitException("Sparse matrix exception: " + SparseUtilities.ErrorMessage(cstate.Matrix, "AC"));
+                    cstate.Sparse |= ComplexState.SparseStates.ACShouldReorder;
+                    goto retry;
                 }
             }
 
             // Solve
-            matrix.Solve(cstate.Rhs, cstate.Rhs);
+            solver.Solve(cstate.Solution);
 
             // Reset values
-            cstate.Rhs[0] = 0.0;
-            cstate.Rhs[0] = 0.0;
-
-            // Store them in the solution
-            cstate.StoreSolution();
+            cstate.Solution[0] = 0.0;
         }
     }
 }

@@ -2,7 +2,7 @@
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.Attributes;
-using SpiceSharp.Sparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
 
@@ -49,29 +49,32 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public int CollectorPrimeNode { get; private set; }
         public int BasePrimeNode { get; private set; }
         public int EmitterPrimeNode { get; private set; }
-        protected Element<double> CollectorCollectorPrimePtr { get; private set; }
-        protected Element<double> BaseBasePrimePtr { get; private set; }
-        protected Element<double> EmitterEmitterPrimePtr { get; private set; }
-        protected Element<double> CollectorPrimeCollectorPtr { get; private set; }
-        protected Element<double> CollectorPrimeBasePrimePtr { get; private set; }
-        protected Element<double> CollectorPrimeEmitterPrimePtr { get; private set; }
-        protected Element<double> BasePrimeBasePtr { get; private set; }
-        protected Element<double> BasePrimeCollectorPrimePtr { get; private set; }
-        protected Element<double> BasePrimeEmitterPrimePtr { get; private set; }
-        protected Element<double> EmitterPrimeEmitterPtr { get; private set; }
-        protected Element<double> EmitterPrimeCollectorPrimePtr { get; private set; }
-        protected Element<double> EmitterPrimeBasePrimePtr { get; private set; }
-        protected Element<double> CollectorCollectorPtr { get; private set; }
-        protected Element<double> BaseBasePtr { get; private set; }
-        protected Element<double> EmitterEmitterPtr { get; private set; }
-        protected Element<double> CollectorPrimeCollectorPrimePtr { get; private set; }
-        protected Element<double> BasePrimeBasePrimePtr { get; private set; }
-        protected Element<double> EmitterPrimeEmitterPrimePtr { get; private set; }
-        protected Element<double> SubstrateSubstratePtr { get; private set; }
-        protected Element<double> CollectorPrimeSubstratePtr { get; private set; }
-        protected Element<double> SubstrateCollectorPrimePtr { get; private set; }
-        protected Element<double> BaseCollectorPrimePtr { get; private set; }
-        protected Element<double> CollectorPrimeBasePtr { get; private set; }
+        protected MatrixElement<double> CollectorCollectorPrimePtr { get; private set; }
+        protected MatrixElement<double> BaseBasePrimePtr { get; private set; }
+        protected MatrixElement<double> EmitterEmitterPrimePtr { get; private set; }
+        protected MatrixElement<double> CollectorPrimeCollectorPtr { get; private set; }
+        protected MatrixElement<double> CollectorPrimeBasePrimePtr { get; private set; }
+        protected MatrixElement<double> CollectorPrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement<double> BasePrimeBasePtr { get; private set; }
+        protected MatrixElement<double> BasePrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement<double> BasePrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement<double> EmitterPrimeEmitterPtr { get; private set; }
+        protected MatrixElement<double> EmitterPrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement<double> EmitterPrimeBasePrimePtr { get; private set; }
+        protected MatrixElement<double> CollectorCollectorPtr { get; private set; }
+        protected MatrixElement<double> BaseBasePtr { get; private set; }
+        protected MatrixElement<double> EmitterEmitterPtr { get; private set; }
+        protected MatrixElement<double> CollectorPrimeCollectorPrimePtr { get; private set; }
+        protected MatrixElement<double> BasePrimeBasePrimePtr { get; private set; }
+        protected MatrixElement<double> EmitterPrimeEmitterPrimePtr { get; private set; }
+        protected MatrixElement<double> SubstrateSubstratePtr { get; private set; }
+        protected MatrixElement<double> CollectorPrimeSubstratePtr { get; private set; }
+        protected MatrixElement<double> SubstrateCollectorPrimePtr { get; private set; }
+        protected MatrixElement<double> BaseCollectorPrimePtr { get; private set; }
+        protected MatrixElement<double> CollectorPrimeBasePtr { get; private set; }
+        protected VectorElement<double> CollectorPrimePtr { get; private set; }
+        protected VectorElement<double> BasePrimePtr { get; private set; }
+        protected VectorElement<double> EmitterPrimePtr { get; private set; }
 
         /// <summary>
         /// Shared parameters
@@ -133,13 +136,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets matrix pointers
         /// </summary>
         /// <param name="nodes">Nodes</param>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
 
             // Add a series collector node if necessary
             if (mbp.CollectorResistance.Value > 0)
@@ -159,30 +162,35 @@ namespace SpiceSharp.Components.BipolarBehaviors
             else
                 EmitterPrimeNode = emitterNode;
 
-            // Get matrix pointers
-            CollectorCollectorPrimePtr = matrix.GetElement(collectorNode, CollectorPrimeNode);
-            BaseBasePrimePtr = matrix.GetElement(baseNode, BasePrimeNode);
-            EmitterEmitterPrimePtr = matrix.GetElement(emitterNode, EmitterPrimeNode);
-            CollectorPrimeCollectorPtr = matrix.GetElement(CollectorPrimeNode, collectorNode);
-            CollectorPrimeBasePrimePtr = matrix.GetElement(CollectorPrimeNode, BasePrimeNode);
-            CollectorPrimeEmitterPrimePtr = matrix.GetElement(CollectorPrimeNode, EmitterPrimeNode);
-            BasePrimeBasePtr = matrix.GetElement(BasePrimeNode, baseNode);
-            BasePrimeCollectorPrimePtr = matrix.GetElement(BasePrimeNode, CollectorPrimeNode);
-            BasePrimeEmitterPrimePtr = matrix.GetElement(BasePrimeNode, EmitterPrimeNode);
-            EmitterPrimeEmitterPtr = matrix.GetElement(EmitterPrimeNode, emitterNode);
-            EmitterPrimeCollectorPrimePtr = matrix.GetElement(EmitterPrimeNode, CollectorPrimeNode);
-            EmitterPrimeBasePrimePtr = matrix.GetElement(EmitterPrimeNode, BasePrimeNode);
-            CollectorCollectorPtr = matrix.GetElement(collectorNode, collectorNode);
-            BaseBasePtr = matrix.GetElement(baseNode, baseNode);
-            EmitterEmitterPtr = matrix.GetElement(emitterNode, emitterNode);
-            CollectorPrimeCollectorPrimePtr = matrix.GetElement(CollectorPrimeNode, CollectorPrimeNode);
-            BasePrimeBasePrimePtr = matrix.GetElement(BasePrimeNode, BasePrimeNode);
-            EmitterPrimeEmitterPrimePtr = matrix.GetElement(EmitterPrimeNode, EmitterPrimeNode);
-            SubstrateSubstratePtr = matrix.GetElement(substrateNode, substrateNode);
-            CollectorPrimeSubstratePtr = matrix.GetElement(CollectorPrimeNode, substrateNode);
-            SubstrateCollectorPrimePtr = matrix.GetElement(substrateNode, CollectorPrimeNode);
-            BaseCollectorPrimePtr = matrix.GetElement(baseNode, CollectorPrimeNode);
-            CollectorPrimeBasePtr = matrix.GetElement(CollectorPrimeNode, baseNode);
+            // Get solver pointers
+            CollectorCollectorPrimePtr = solver.GetMatrixElement(collectorNode, CollectorPrimeNode);
+            BaseBasePrimePtr = solver.GetMatrixElement(baseNode, BasePrimeNode);
+            EmitterEmitterPrimePtr = solver.GetMatrixElement(emitterNode, EmitterPrimeNode);
+            CollectorPrimeCollectorPtr = solver.GetMatrixElement(CollectorPrimeNode, collectorNode);
+            CollectorPrimeBasePrimePtr = solver.GetMatrixElement(CollectorPrimeNode, BasePrimeNode);
+            CollectorPrimeEmitterPrimePtr = solver.GetMatrixElement(CollectorPrimeNode, EmitterPrimeNode);
+            BasePrimeBasePtr = solver.GetMatrixElement(BasePrimeNode, baseNode);
+            BasePrimeCollectorPrimePtr = solver.GetMatrixElement(BasePrimeNode, CollectorPrimeNode);
+            BasePrimeEmitterPrimePtr = solver.GetMatrixElement(BasePrimeNode, EmitterPrimeNode);
+            EmitterPrimeEmitterPtr = solver.GetMatrixElement(EmitterPrimeNode, emitterNode);
+            EmitterPrimeCollectorPrimePtr = solver.GetMatrixElement(EmitterPrimeNode, CollectorPrimeNode);
+            EmitterPrimeBasePrimePtr = solver.GetMatrixElement(EmitterPrimeNode, BasePrimeNode);
+            CollectorCollectorPtr = solver.GetMatrixElement(collectorNode, collectorNode);
+            BaseBasePtr = solver.GetMatrixElement(baseNode, baseNode);
+            EmitterEmitterPtr = solver.GetMatrixElement(emitterNode, emitterNode);
+            CollectorPrimeCollectorPrimePtr = solver.GetMatrixElement(CollectorPrimeNode, CollectorPrimeNode);
+            BasePrimeBasePrimePtr = solver.GetMatrixElement(BasePrimeNode, BasePrimeNode);
+            EmitterPrimeEmitterPrimePtr = solver.GetMatrixElement(EmitterPrimeNode, EmitterPrimeNode);
+            SubstrateSubstratePtr = solver.GetMatrixElement(substrateNode, substrateNode);
+            CollectorPrimeSubstratePtr = solver.GetMatrixElement(CollectorPrimeNode, substrateNode);
+            SubstrateCollectorPrimePtr = solver.GetMatrixElement(substrateNode, CollectorPrimeNode);
+            BaseCollectorPrimePtr = solver.GetMatrixElement(baseNode, CollectorPrimeNode);
+            CollectorPrimeBasePtr = solver.GetMatrixElement(CollectorPrimeNode, baseNode);
+
+            // Get RHS pointers
+            CollectorPrimePtr = solver.GetRhsElement(CollectorPrimeNode);
+            BasePrimePtr = solver.GetRhsElement(BasePrimeNode);
+            EmitterPrimePtr = solver.GetRhsElement(EmitterPrimeNode);
         }
         
         /// <summary>
@@ -397,29 +405,29 @@ namespace SpiceSharp.Components.BipolarBehaviors
             // Load current excitation vector
             ceqbe = mbp.BipolarType * (cc + cb - vbe * (gm + go + gpi) + vbc * go);
             ceqbc = mbp.BipolarType * (-cc + vbe * (gm + go) - vbc * (gmu + go));
-            state.Rhs[CollectorPrimeNode] += (ceqbc);
-            state.Rhs[BasePrimeNode] += (-ceqbe - ceqbc);
-            state.Rhs[EmitterPrimeNode] += (ceqbe);
+            CollectorPrimePtr.Value += ceqbc;
+            BasePrimePtr.Value += (-ceqbe - ceqbc);
+            EmitterPrimePtr.Value += ceqbe;
 
             // Load y matrix
-            CollectorCollectorPtr.Add(gcpr);
-            BaseBasePtr.Add(gx);
-            EmitterEmitterPtr.Add(gepr);
-            CollectorPrimeCollectorPrimePtr.Add(gmu + go + gcpr);
-            BasePrimeBasePrimePtr.Add(gx + gpi + gmu);
-            EmitterPrimeEmitterPrimePtr.Add(gpi + gepr + gm + go);
-            CollectorCollectorPrimePtr.Add(-gcpr);
-            BaseBasePrimePtr.Add(-gx);
-            EmitterEmitterPrimePtr.Add(-gepr);
-            CollectorPrimeCollectorPtr.Add(-gcpr);
-            CollectorPrimeBasePrimePtr.Add(-gmu + gm);
-            CollectorPrimeEmitterPrimePtr.Add(-gm - go);
-            BasePrimeBasePtr.Add(-gx);
-            BasePrimeCollectorPrimePtr.Add(-gmu);
-            BasePrimeEmitterPrimePtr.Add(-gpi);
-            EmitterPrimeEmitterPtr.Add(-gepr);
-            EmitterPrimeCollectorPrimePtr.Add(-go);
-            EmitterPrimeBasePrimePtr.Add(-gpi - gm);
+            CollectorCollectorPtr.Value += gcpr;
+            BaseBasePtr.Value += gx;
+            EmitterEmitterPtr.Value += gepr;
+            CollectorPrimeCollectorPrimePtr.Value += gmu + go + gcpr;
+            BasePrimeBasePrimePtr.Value += gx + gpi + gmu;
+            EmitterPrimeEmitterPrimePtr.Value += gpi + gepr + gm + go;
+            CollectorCollectorPrimePtr.Value += -gcpr;
+            BaseBasePrimePtr.Value += -gx;
+            EmitterEmitterPrimePtr.Value += -gepr;
+            CollectorPrimeCollectorPtr.Value += -gcpr;
+            CollectorPrimeBasePrimePtr.Value += -gmu + gm;
+            CollectorPrimeEmitterPrimePtr.Value += -gm - go;
+            BasePrimeBasePtr.Value += -gx;
+            BasePrimeCollectorPrimePtr.Value += -gmu;
+            BasePrimeEmitterPrimePtr.Value += -gpi;
+            EmitterPrimeEmitterPtr.Value += -gepr;
+            EmitterPrimeCollectorPrimePtr.Value += -go;
+            EmitterPrimeBasePrimePtr.Value += -gpi - gm;
         }
 
         /// <summary>

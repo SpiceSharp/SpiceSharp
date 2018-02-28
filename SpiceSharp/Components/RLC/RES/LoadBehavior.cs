@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
-using SpiceSharp.Sparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System;
@@ -43,10 +43,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Nodes
         /// </summary>
         int PosNode, NegNode;
-        protected Element<double> PosPosPtr { get; private set; }
-        protected Element<double> NegNegPtr { get; private set; }
-        protected Element<double> PosNegPtr { get; private set; }
-        protected Element<double> NegPosPtr { get; private set; }
+        protected MatrixElement<double> PosPosPtr { get; private set; }
+        protected MatrixElement<double> NegNegPtr { get; private set; }
+        protected MatrixElement<double> PosNegPtr { get; private set; }
+        protected MatrixElement<double> NegPosPtr { get; private set; }
 
         /// <summary>
         /// Conductance
@@ -116,21 +116,21 @@ namespace SpiceSharp.Components.ResistorBehaviors
             PosNode = pins[0];
             NegNode = pins[1];
         }
-        
+
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
         {
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
 
             // Get matrix elements
-            PosPosPtr = matrix.GetElement(PosNode, PosNode);
-            NegNegPtr = matrix.GetElement(NegNode, NegNode);
-            PosNegPtr = matrix.GetElement(PosNode, NegNode);
-            NegPosPtr = matrix.GetElement(NegNode, PosNode);
+            PosPosPtr = solver.GetMatrixElement(PosNode, PosNode);
+            NegNegPtr = solver.GetMatrixElement(NegNode, NegNode);
+            PosNegPtr = solver.GetMatrixElement(PosNode, NegNode);
+            NegPosPtr = solver.GetMatrixElement(NegNode, PosNode);
         }
         
         /// <summary>
@@ -151,10 +151,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="simulation">Base simulation</param>
         public override void Load(BaseSimulation simulation)
         {
-            PosPosPtr.Add(Conductance);
-            NegNegPtr.Add(Conductance);
-            PosNegPtr.Sub(Conductance);
-            NegPosPtr.Sub(Conductance);
+            PosPosPtr.Value += Conductance;
+            NegNegPtr.Value += Conductance;
+            PosNegPtr.Value -= Conductance;
+            NegPosPtr.Value -= Conductance;
         }
     }
 }

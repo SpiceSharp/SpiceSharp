@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Sparse;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
@@ -21,10 +21,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode, contPosourceNode, contNegateNode;
-        protected Element<Complex> PosControlPosPtr { get; private set; }
-        protected Element<Complex> PosControlNegPtr { get; private set; }
-        protected Element<Complex> NegControlPosPtr { get; private set; }
-        protected Element<Complex> NegControlNegPtr { get; private set; }
+        protected MatrixElement<Complex> PosControlPosPtr { get; private set; }
+        protected MatrixElement<Complex> PosControlNegPtr { get; private set; }
+        protected MatrixElement<Complex> NegControlPosPtr { get; private set; }
+        protected MatrixElement<Complex> NegControlNegPtr { get; private set; }
 
         /// <summary>
         /// Device methods and properties
@@ -94,16 +94,17 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix<Complex> matrix)
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Solver<Complex> solver)
         {
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
 
-            PosControlPosPtr = matrix.GetElement(posNode, contPosourceNode);
-            PosControlNegPtr = matrix.GetElement(posNode, contNegateNode);
-            NegControlPosPtr = matrix.GetElement(negNode, contPosourceNode);
-            NegControlNegPtr = matrix.GetElement(negNode, contNegateNode);
+            // Get matrix pointers
+            PosControlPosPtr = solver.GetMatrixElement(posNode, contPosourceNode);
+            PosControlNegPtr = solver.GetMatrixElement(posNode, contNegateNode);
+            NegControlPosPtr = solver.GetMatrixElement(negNode, contPosourceNode);
+            NegControlNegPtr = solver.GetMatrixElement(negNode, contNegateNode);
         }
         
         /// <summary>
@@ -127,10 +128,11 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            PosControlPosPtr.Add(bp.Coefficient.Value);
-            PosControlNegPtr.Sub(bp.Coefficient.Value);
-            NegControlPosPtr.Sub(bp.Coefficient.Value);
-            NegControlNegPtr.Add(bp.Coefficient.Value);
+            // Load Y-matrix
+            PosControlPosPtr.Value += bp.Coefficient.Value;
+            PosControlNegPtr.Value -= bp.Coefficient.Value;
+            NegControlPosPtr.Value -= bp.Coefficient.Value;
+            NegControlNegPtr.Value += bp.Coefficient.Value;
         }
     }
 }

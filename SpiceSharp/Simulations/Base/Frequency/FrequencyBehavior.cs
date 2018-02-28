@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Sparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
@@ -38,16 +38,10 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <summary>
-        /// Gets matrix pointers
+        /// Gets equation pointers
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public virtual void GetMatrixPointers(Matrix<Complex> matrix)
-        {
-			if (matrix == null)
-				throw new ArgumentNullException(nameof(matrix));
-
-            // No matrix pointers by default
-        }
+        /// <param name="solver">Solver</param>
+        public abstract void GetEquationPointers(Solver<Complex> solver);
 
         /// <summary>
         /// Load the Y-matrix and Rhs-vector for AC analysis

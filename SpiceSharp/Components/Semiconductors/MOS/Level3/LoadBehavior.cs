@@ -1,7 +1,7 @@
 ﻿using System;
 using SpiceSharp.Circuits;
 using SpiceSharp.Attributes;
-using SpiceSharp.Sparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
 
@@ -61,28 +61,31 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public int DrainNodePrime { get; protected set; }
         [PropertyName("snodeprime"), PropertyInfo("Number of protected source node")]
         public int SourceNodePrime { get; protected set; }
-        protected Element<double> DrainDrainPtr { get; private set; }
-        protected Element<double> GateGatePtr { get; private set; }
-        protected Element<double> SourceSourcePtr { get; private set; }
-        protected Element<double> BulkBulkPtr { get; private set; }
-        protected Element<double> DrainPrimeDrainPrimePtr { get; private set; }
-        protected Element<double> SourcePrimeSourcePrimePtr { get; private set; }
-        protected Element<double> DrainDrainPrimePtr { get; private set; }
-        protected Element<double> GateBulkPtr { get; private set; }
-        protected Element<double> GateDrainPrimePtr { get; private set; }
-        protected Element<double> GateSourcePrimePtr { get; private set; }
-        protected Element<double> SourceSourcePrimePtr { get; private set; }
-        protected Element<double> BulkDrainPrimePtr { get; private set; }
-        protected Element<double> BulkSourcePrimePtr { get; private set; }
-        protected Element<double> DrainPrimeSourcePrimePtr { get; private set; }
-        protected Element<double> DrainPrimeDrainPtr { get; private set; }
-        protected Element<double> BulkGatePtr { get; private set; }
-        protected Element<double> DrainPrimeGatePtr { get; private set; }
-        protected Element<double> SourcePrimeGatePtr { get; private set; }
-        protected Element<double> SourcePrimeSourcePtr { get; private set; }
-        protected Element<double> DrainPrimeBulkPtr { get; private set; }
-        protected Element<double> SourcePrimeBulkPtr { get; private set; }
-        protected Element<double> SourcePrimeDrainPrimePtr { get; private set; }
+        protected MatrixElement<double> DrainDrainPtr { get; private set; }
+        protected MatrixElement<double> GateGatePtr { get; private set; }
+        protected MatrixElement<double> SourceSourcePtr { get; private set; }
+        protected MatrixElement<double> BulkBulkPtr { get; private set; }
+        protected MatrixElement<double> DrainPrimeDrainPrimePtr { get; private set; }
+        protected MatrixElement<double> SourcePrimeSourcePrimePtr { get; private set; }
+        protected MatrixElement<double> DrainDrainPrimePtr { get; private set; }
+        protected MatrixElement<double> GateBulkPtr { get; private set; }
+        protected MatrixElement<double> GateDrainPrimePtr { get; private set; }
+        protected MatrixElement<double> GateSourcePrimePtr { get; private set; }
+        protected MatrixElement<double> SourceSourcePrimePtr { get; private set; }
+        protected MatrixElement<double> BulkDrainPrimePtr { get; private set; }
+        protected MatrixElement<double> BulkSourcePrimePtr { get; private set; }
+        protected MatrixElement<double> DrainPrimeSourcePrimePtr { get; private set; }
+        protected MatrixElement<double> DrainPrimeDrainPtr { get; private set; }
+        protected MatrixElement<double> BulkGatePtr { get; private set; }
+        protected MatrixElement<double> DrainPrimeGatePtr { get; private set; }
+        protected MatrixElement<double> SourcePrimeGatePtr { get; private set; }
+        protected MatrixElement<double> SourcePrimeSourcePtr { get; private set; }
+        protected MatrixElement<double> DrainPrimeBulkPtr { get; private set; }
+        protected MatrixElement<double> SourcePrimeBulkPtr { get; private set; }
+        protected MatrixElement<double> SourcePrimeDrainPrimePtr { get; private set; }
+        protected VectorElement<double> BulkPtr { get; private set; }
+        protected VectorElement<double> DrainPrimePtr { get; private set; }
+        protected VectorElement<double> SourcePrimePtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -133,13 +136,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// Gets matrix pointers
         /// </summary>
         /// <param name="nodes">Nodes</param>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Nodes nodes, Matrix<double> matrix)
+        /// <param name="solver">Matrix</param>
+        public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
 
             // Add a series drain node if necessary
             if (mbp.DrainResistance != 0 || (mbp.SheetResistance != 0 && bp.DrainSquares != 0))
@@ -154,28 +157,33 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 SourceNodePrime = sourceNode;
 
             // Get matrix elements
-            DrainDrainPtr = matrix.GetElement(drainNode, drainNode);
-            GateGatePtr = matrix.GetElement(gateNode, gateNode);
-            SourceSourcePtr = matrix.GetElement(sourceNode, sourceNode);
-            BulkBulkPtr = matrix.GetElement(bulkNode, bulkNode);
-            DrainPrimeDrainPrimePtr = matrix.GetElement(DrainNodePrime, DrainNodePrime);
-            SourcePrimeSourcePrimePtr = matrix.GetElement(SourceNodePrime, SourceNodePrime);
-            DrainDrainPrimePtr = matrix.GetElement(drainNode, DrainNodePrime);
-            GateBulkPtr = matrix.GetElement(gateNode, bulkNode);
-            GateDrainPrimePtr = matrix.GetElement(gateNode, DrainNodePrime);
-            GateSourcePrimePtr = matrix.GetElement(gateNode, SourceNodePrime);
-            SourceSourcePrimePtr = matrix.GetElement(sourceNode, SourceNodePrime);
-            BulkDrainPrimePtr = matrix.GetElement(bulkNode, DrainNodePrime);
-            BulkSourcePrimePtr = matrix.GetElement(bulkNode, SourceNodePrime);
-            DrainPrimeSourcePrimePtr = matrix.GetElement(DrainNodePrime, SourceNodePrime);
-            DrainPrimeDrainPtr = matrix.GetElement(DrainNodePrime, drainNode);
-            BulkGatePtr = matrix.GetElement(bulkNode, gateNode);
-            DrainPrimeGatePtr = matrix.GetElement(DrainNodePrime, gateNode);
-            SourcePrimeGatePtr = matrix.GetElement(SourceNodePrime, gateNode);
-            SourcePrimeSourcePtr = matrix.GetElement(SourceNodePrime, sourceNode);
-            DrainPrimeBulkPtr = matrix.GetElement(DrainNodePrime, bulkNode);
-            SourcePrimeBulkPtr = matrix.GetElement(SourceNodePrime, bulkNode);
-            SourcePrimeDrainPrimePtr = matrix.GetElement(SourceNodePrime, DrainNodePrime);
+            DrainDrainPtr = solver.GetMatrixElement(drainNode, drainNode);
+            GateGatePtr = solver.GetMatrixElement(gateNode, gateNode);
+            SourceSourcePtr = solver.GetMatrixElement(sourceNode, sourceNode);
+            BulkBulkPtr = solver.GetMatrixElement(bulkNode, bulkNode);
+            DrainPrimeDrainPrimePtr = solver.GetMatrixElement(DrainNodePrime, DrainNodePrime);
+            SourcePrimeSourcePrimePtr = solver.GetMatrixElement(SourceNodePrime, SourceNodePrime);
+            DrainDrainPrimePtr = solver.GetMatrixElement(drainNode, DrainNodePrime);
+            GateBulkPtr = solver.GetMatrixElement(gateNode, bulkNode);
+            GateDrainPrimePtr = solver.GetMatrixElement(gateNode, DrainNodePrime);
+            GateSourcePrimePtr = solver.GetMatrixElement(gateNode, SourceNodePrime);
+            SourceSourcePrimePtr = solver.GetMatrixElement(sourceNode, SourceNodePrime);
+            BulkDrainPrimePtr = solver.GetMatrixElement(bulkNode, DrainNodePrime);
+            BulkSourcePrimePtr = solver.GetMatrixElement(bulkNode, SourceNodePrime);
+            DrainPrimeSourcePrimePtr = solver.GetMatrixElement(DrainNodePrime, SourceNodePrime);
+            DrainPrimeDrainPtr = solver.GetMatrixElement(DrainNodePrime, drainNode);
+            BulkGatePtr = solver.GetMatrixElement(bulkNode, gateNode);
+            DrainPrimeGatePtr = solver.GetMatrixElement(DrainNodePrime, gateNode);
+            SourcePrimeGatePtr = solver.GetMatrixElement(SourceNodePrime, gateNode);
+            SourcePrimeSourcePtr = solver.GetMatrixElement(SourceNodePrime, sourceNode);
+            DrainPrimeBulkPtr = solver.GetMatrixElement(DrainNodePrime, bulkNode);
+            SourcePrimeBulkPtr = solver.GetMatrixElement(SourceNodePrime, bulkNode);
+            SourcePrimeDrainPrimePtr = solver.GetMatrixElement(SourceNodePrime, DrainNodePrime);
+
+            // Get rhs elements
+            BulkPtr = solver.GetRhsElement(bulkNode);
+            DrainPrimePtr = solver.GetRhsElement(DrainNodePrime);
+            SourcePrimePtr = solver.GetRhsElement(SourceNodePrime);
         }
 
         /// <summary>
@@ -784,31 +792,28 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 xrev = 1;
                 cdreq = -(mbp.MosfetType) * (cdrain - CondDS * (-vds) - Transconductance * vgd - TransconductanceBS * vbd);
             }
+            BulkPtr.Value -= (ceqbs + ceqbd);
+            DrainPrimePtr.Value += (ceqbd - cdreq);
+            SourcePrimePtr.Value += cdreq + ceqbs;
 
-            state.Rhs[bulkNode] -= (ceqbs + ceqbd);
-            state.Rhs[DrainNodePrime] += (ceqbd - cdreq);
-            state.Rhs[SourceNodePrime] += cdreq + ceqbs;
-
-            /* 
-			 * load y matrix
-			 */
-            DrainDrainPtr.Add(temp.DrainConductance);
-            SourceSourcePtr.Add(temp.SourceConductance);
-            BulkBulkPtr.Add(CondBD + CondBS);
-            DrainPrimeDrainPrimePtr.Add(temp.DrainConductance + CondDS + CondBD + xrev * (Transconductance + TransconductanceBS));
-            SourcePrimeSourcePrimePtr.Add(temp.SourceConductance + CondDS + CondBS + xnrm * (Transconductance + TransconductanceBS));
-            DrainDrainPrimePtr.Add(-temp.DrainConductance);
-            SourceSourcePrimePtr.Add(-temp.SourceConductance);
-            BulkDrainPrimePtr.Sub(CondBD);
-            BulkSourcePrimePtr.Sub(CondBS);
-            DrainPrimeDrainPtr.Add(-temp.DrainConductance);
-            DrainPrimeGatePtr.Add((xnrm - xrev) * Transconductance);
-            DrainPrimeBulkPtr.Add(-CondBD + (xnrm - xrev) * TransconductanceBS);
-            DrainPrimeSourcePrimePtr.Add(-CondDS - xnrm * (Transconductance + TransconductanceBS));
-            SourcePrimeGatePtr.Add(-(xnrm - xrev) * Transconductance);
-            SourcePrimeSourcePtr.Add(-temp.SourceConductance);
-            SourcePrimeBulkPtr.Add(-CondBS - (xnrm - xrev) * TransconductanceBS);
-            SourcePrimeDrainPrimePtr.Add(-CondDS - xrev * (Transconductance + TransconductanceBS));
+            // Load Y-matrix
+            DrainDrainPtr.Value += temp.DrainConductance;
+            SourceSourcePtr.Value += temp.SourceConductance;
+            BulkBulkPtr.Value += CondBD + CondBS;
+            DrainPrimeDrainPrimePtr.Value += temp.DrainConductance + CondDS + CondBD + xrev * (Transconductance + TransconductanceBS);
+            SourcePrimeSourcePrimePtr.Value += temp.SourceConductance + CondDS + CondBS + xnrm * (Transconductance + TransconductanceBS);
+            DrainDrainPrimePtr.Value += -temp.DrainConductance;
+            SourceSourcePrimePtr.Value += -temp.SourceConductance;
+            BulkDrainPrimePtr.Value -= CondBD;
+            BulkSourcePrimePtr.Value -= CondBS;
+            DrainPrimeDrainPtr.Value += -temp.DrainConductance;
+            DrainPrimeGatePtr.Value += (xnrm - xrev) * Transconductance;
+            DrainPrimeBulkPtr.Value += -CondBD + (xnrm - xrev) * TransconductanceBS;
+            DrainPrimeSourcePrimePtr.Value += -CondDS - xnrm * (Transconductance + TransconductanceBS);
+            SourcePrimeGatePtr.Value += -(xnrm - xrev) * Transconductance;
+            SourcePrimeSourcePtr.Value += -temp.SourceConductance;
+            SourcePrimeBulkPtr.Value += -CondBS - (xnrm - xrev) * TransconductanceBS;
+            SourcePrimeDrainPrimePtr.Value += -CondDS - xrev * (Transconductance + TransconductanceBS);
         }
 
         /// <summary>

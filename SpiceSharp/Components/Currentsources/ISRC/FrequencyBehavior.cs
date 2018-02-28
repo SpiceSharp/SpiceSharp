@@ -3,6 +3,7 @@ using System.Numerics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
@@ -21,6 +22,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// </summary>
         int posNode, negNode;
         Complex ac;
+        protected VectorElement<Complex> PosPtr { get; private set; }
+        protected VectorElement<Complex> NegPtr { get; private set; }
 
         /// <summary>
         /// Device methods and properties
@@ -95,6 +98,19 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         }
 
         /// <summary>
+        /// Get equation pointers
+        /// </summary>
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Solver<Complex> solver)
+        {
+            if (solver == null)
+                throw new ArgumentNullException(nameof(solver));
+
+            PosPtr = solver.GetRhsElement(posNode);
+            NegPtr = solver.GetRhsElement(negNode);
+        }
+
+        /// <summary>
         /// Execute behavior for AC analysis
         /// </summary>
         /// <param name="simulation">Frequency-based simulation</param>
@@ -103,9 +119,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.ComplexState;
-            state.Rhs[posNode] += ac;
-            state.Rhs[negNode] -= ac;
+            PosPtr.Value += ac;
+            NegPtr.Value -= ac;
         }
     }
 }

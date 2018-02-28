@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Sparse;
+using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
 
@@ -21,10 +21,10 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// Nodes
         /// </summary>
         int posNode, negNode;
-        protected Element<Complex> PosPosPtr { get; private set; }
-        protected Element<Complex> NegPosPtr { get; private set; }
-        protected Element<Complex> PosNegPtr { get; private set; }
-        protected Element<Complex> NegNegPtr { get; private set; }
+        protected MatrixElement<Complex> PosPosPtr { get; private set; }
+        protected MatrixElement<Complex> NegPosPtr { get; private set; }
+        protected MatrixElement<Complex> PosNegPtr { get; private set; }
+        protected MatrixElement<Complex> NegNegPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -63,16 +63,16 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
-        /// <param name="matrix">Matrix</param>
-        public override void GetMatrixPointers(Matrix<Complex> matrix)
+        /// <param name="solver">Solver</param>
+        public override void GetEquationPointers(Solver<Complex> solver)
         {
-			if (matrix == null)
-				throw new ArgumentNullException(nameof(matrix));
+			if (solver == null)
+				throw new ArgumentNullException(nameof(solver));
 
-            PosPosPtr = matrix.GetElement(posNode, posNode);
-            PosNegPtr = matrix.GetElement(posNode, negNode);
-            NegPosPtr = matrix.GetElement(negNode, posNode);
-            NegNegPtr = matrix.GetElement(negNode, negNode);
+            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
+            PosNegPtr = solver.GetMatrixElement(posNode, negNode);
+            NegPosPtr = solver.GetMatrixElement(negNode, posNode);
+            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
         }
 
         /// <summary>
@@ -103,10 +103,10 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             g_now = current_state != false ? modelload.OnConductance : modelload.OffConductance;
 
             // Load the Y-matrix
-            PosPosPtr.Add(g_now);
-            PosNegPtr.Sub(g_now);
-            NegPosPtr.Sub(g_now);
-            NegNegPtr.Add(g_now);
+            PosPosPtr.Value += g_now;
+            PosNegPtr.Value -= g_now;
+            NegPosPtr.Value -= g_now;
+            NegNegPtr.Value += g_now;
         }
     }
 }
