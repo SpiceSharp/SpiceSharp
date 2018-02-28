@@ -150,7 +150,7 @@ namespace SpiceSharp.Algebra
                 intermediate[i] = temp;
             }
 
-            // Unscrable
+            // Unscramble
             Column.Unscramble(intermediate, solution);
         }
 

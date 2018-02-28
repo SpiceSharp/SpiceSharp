@@ -26,6 +26,8 @@ namespace SpiceSharp.Algebra.Solve
                 throw new ArgumentNullException(nameof(matrix));
             if (markowitz == null)
                 throw new ArgumentNullException(nameof(markowitz));
+            if (step < 1)
+                throw new ArgumentException("Invalid elimination step");
 
             int minMarkowitzProduct = int.MaxValue;
             MatrixElement<T> chosen = null;

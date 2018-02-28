@@ -45,7 +45,7 @@ namespace SpiceSharp.Algebra
 
             // Get the diagonal
             element = Matrix.GetDiagonalElement(1);
-            if (element.Value.Equals(0))
+            if (element.Value.Equals(0.0))
                 return false;
 
             // pivot = 1 / pivot
