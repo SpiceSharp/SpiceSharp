@@ -7,7 +7,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharpTest.Models
 {
     [TestClass]
-    public class MOS1Test : Framework
+    public class MOS1Tests : Framework
     {
         /// <summary>
         /// Create a MOSFET
@@ -35,7 +35,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void MOS1_DC()
+        public void When_MOS1DC_Expect_Spice3f5Reference()
         {
             /*
              * Mosfet biased by voltage sources
@@ -69,7 +69,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void MOS1_AC()
+        public void When_MOS1CommonSourceAmplifierSmallSignal_Expect_Spice3f5Reference()
         {
             /*
              * Simple common source amplifier
@@ -108,7 +108,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void MOS1_Transient()
+        public void When_MOS1SwitchTransient_Expect_Spice3f5Reference()
         {
             // Create circuit
             Circuit ckt = new Circuit();
@@ -135,7 +135,7 @@ namespace SpiceSharpTest.Models
         }
 
         [TestMethod]
-        public void MOS1_Noise()
+        public void When_MOS1CommonSourceAmplifierNoise_Expect_Spice3f5Reference()
         {
             // Create circuit
             Circuit ckt = new Circuit();

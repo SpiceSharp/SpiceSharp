@@ -60,13 +60,13 @@
     <Compile Include="Models\Framework.cs" />
     <Compile Include="Models\Semiconductors\Bipolar\BJTTests.cs" />
     <Compile Include="Models\Semiconductors\DIO\DiodeTests.cs" />
-    <Compile Include="Models\Semiconductors\Mosfet\Level1\MOS1Test.cs" />
-    <Compile Include="Models\Semiconductors\Mosfet\Level2\MOS2Test.cs" />
-    <Compile Include="Models\Semiconductors\Mosfet\Level3\MOS3Test.cs" />
+    <Compile Include="Models\Semiconductors\Mosfet\Level1\MOS1Tests.cs" />
+    <Compile Include="Models\Semiconductors\Mosfet\Level2\MOS2Tests.cs" />
     <Compile Include="Algebra\NewSparseMatrixTest.cs" />
     <Compile Include="Algebra\NewSparseSolveTest.cs" />
     <Compile Include="Algebra\NewSparseVectorTest.cs" />
     <Compile Include="Algebra\SolveFramework.cs" />
+    <Compile Include="Models\Semiconductors\Mosfet\Level3\MOS3Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Algebra\SparseFactorTest.cs" />
     <Compile Include="Utils\AssertExtensions.cs" />
