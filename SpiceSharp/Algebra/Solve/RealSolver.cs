@@ -9,6 +9,12 @@ namespace SpiceSharp.Algebra
     public class RealSolver : Solver<double>
     {
         /// <summary>
+        /// Private variables
+        /// </summary>
+        double[] intermediate;
+        MatrixElement<double>[] dest;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public RealSolver()
@@ -36,6 +42,26 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
+        /// Fix the number of equations and variables
+        /// </summary>
+        public override void FixEquations()
+        {
+            base.FixEquations();
+            intermediate = new double[Order + 1];
+            dest = new MatrixElement<double>[Order + 1];
+        }
+
+        /// <summary>
+        /// Unfix the number of equations and variables
+        /// </summary>
+        public override void UnfixEquations()
+        {
+            base.UnfixEquations();
+            intermediate = null;
+            dest = null;
+        }
+
+        /// <summary>
         /// Factor the matrix
         /// Assumes that pivoting has been done
         /// </summary>
@@ -53,9 +79,6 @@ namespace SpiceSharp.Algebra
             // pivot = 1 / pivot
             element.Value = 1.0 / element.Value;
 
-            // TODO: maybe we should cache this
-            MatrixElement<double>[] dest = new MatrixElement<double>[Matrix.Size + 1];
-            
             // Start factorization
             double mult;
             for (int step = 2; step <= Matrix.Size; step++)
@@ -110,9 +133,6 @@ namespace SpiceSharp.Algebra
             if (!IsFactored)
                 throw new SparseException("Solver is not yet factored");
 
-            // TODO: Maybe we should cache intermediate
-            var intermediate = new double[Order + 1];
-
             // Scramble
             var rhsElement = Rhs.First;
             int index = 0;
@@ -123,6 +143,8 @@ namespace SpiceSharp.Algebra
                 intermediate[index++] = rhsElement.Value;
                 rhsElement = rhsElement.Next;
             }
+            while (index <= Order)
+                intermediate[index++] = 0.0;
 
             // Forward substitution
             for (int i = 1; i <= Matrix.Size; i++)
@@ -178,10 +200,10 @@ namespace SpiceSharp.Algebra
             if (!IsFactored)
                 throw new SparseException("Solver is not yet factored");
 
-            // TODO: Maybe we should cache intermediate
             // Scramble
-            var intermediate = new double[Matrix.Size + 1];
             var rhsElement = Rhs.First;
+            for (int i = 0; i <= Order; i++)
+                intermediate[i] = 0.0;
             while (rhsElement != null)
             {
                 int newIndex = Column[Row.Reverse(rhsElement.Index)];
