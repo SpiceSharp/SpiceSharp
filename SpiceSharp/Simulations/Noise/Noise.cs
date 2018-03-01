@@ -115,10 +115,6 @@ namespace SpiceSharp.Simulations
             int posOutNode = noiseconfig.Output != null ? Circuit.Nodes[noiseconfig.Output].Index : 0;
             int negOutNode = noiseconfig.OutputRef != null ? Circuit.Nodes[noiseconfig.OutputRef].Index : 0;
 
-            // Check the voltage or current source
-            // TODO: Note used? Check this!
-            // var source = FindInputSource(noiseconfig.Input);
-            
             // Initialize
             nstate.Reset(FrequencySweep.Initial);
             cstate.Laplace = 0;
@@ -154,35 +150,6 @@ namespace SpiceSharp.Simulations
                 // Export the data
                 Export(exportargs);
             }
-        }
-
-        /// <summary>
-        /// Find the input source used for calculating the input noise
-        /// </summary>
-        /// <param name="name">Name</param>
-        /// <returns></returns>
-        Entity FindInputSource(Identifier name)
-        {
-            if (name == null)
-                throw new CircuitException("{0}: No input source specified".FormatString(Name));
-
-            Entity source = Circuit.Objects[name];
-            if (source is VoltageSource vsource)
-            {
-                var ac = vsource.ParameterSets.Get<Components.VoltagesourceBehaviors.FrequencyParameters>();
-                if (!ac.ACMagnitude.Given || ac.ACMagnitude == 0.0)
-                    throw new CircuitException("{0}: Noise input source {1} has no AC input".FormatString(Name, vsource.Name));
-            }
-            else if (source is CurrentSource isource)
-            {
-                var ac = isource.ParameterSets.Get<Components.CurrentsourceBehaviors.FrequencyParameters>();
-                if (!ac.ACMagnitude.Given || ac.ACMagnitude == 0.0)
-                    throw new CircuitException("{0}: Noise input source {1} has not AC input".FormatString(Name, isource.Name));
-            }
-            else
-                throw new CircuitException("{0}: No input source".FormatString(Name));
-
-            return source;
         }
 
         /// <summary>
