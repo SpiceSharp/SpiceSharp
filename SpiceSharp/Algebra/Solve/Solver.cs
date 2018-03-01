@@ -20,6 +20,11 @@ namespace SpiceSharp.Algebra
         public bool NeedsReordering { get; set; }
 
         /// <summary>
+        /// Gets whether or not the solver is factored
+        /// </summary>
+        public bool IsFactored { get; protected set; }
+
+        /// <summary>
         /// Gets the pivot strategy used
         /// </summary>
         public PivotStrategy<T> Strategy { get; }
@@ -102,6 +107,15 @@ namespace SpiceSharp.Algebra
             var result = Matrix.GetElement(row, column);
             Fillins++;
             return result;
+        }
+
+        /// <summary>
+        /// Clear the linear equations
+        /// </summary>
+        public override void Clear()
+        {
+            base.Clear();
+            IsFactored = false;
         }
     }
 }

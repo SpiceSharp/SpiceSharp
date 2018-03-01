@@ -41,6 +41,8 @@ namespace SpiceSharp.Algebra
         /// </summary>
         public override bool Factor()
         {
+            if (!IsFixed)
+                FixEquations();
             MatrixElement<Complex> element, column;
 
             // Get the diagonal
@@ -86,9 +88,14 @@ namespace SpiceSharp.Algebra
                 // Check for a singular matrix
                 element = Matrix.GetDiagonalElement(step);
                 if (element == null || element.Value.Equals(0.0))
+                {
+                    IsFactored = false;
                     return false;
+                }
                 element.Value = Inverse(element.Value);
             }
+
+            IsFactored = true;
             return true;
         }
 
@@ -100,6 +107,8 @@ namespace SpiceSharp.Algebra
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));
+            if (!IsFactored)
+                throw new SparseException("Solver is not factored yet");
 
             // TODO: Maybe we should cache intermediate
             // Scramble
@@ -162,6 +171,8 @@ namespace SpiceSharp.Algebra
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));
+            if (!IsFactored)
+                throw new SparseException("Solver is not factored yet");
 
             // TODO: Maybe we should cache intermediate
             // Scramble
@@ -218,6 +229,9 @@ namespace SpiceSharp.Algebra
         /// </summary>
         public override void OrderAndFactor()
         {
+            if (!IsFixed)
+                FixEquations();
+
             int step = 1;
             if (!NeedsReordering)
             {
@@ -236,7 +250,10 @@ namespace SpiceSharp.Algebra
 
                 // Done!
                 if (!NeedsReordering)
+                {
+                    IsFactored = true;
                     return;
+                }
             }
 
             // Setup for reordering
@@ -255,6 +272,9 @@ namespace SpiceSharp.Algebra
                 // Elimination
                 Elimination(pivot);
             }
+
+            // Flag the solver as factored
+            IsFactored = true;
         }
 
         /// <summary>

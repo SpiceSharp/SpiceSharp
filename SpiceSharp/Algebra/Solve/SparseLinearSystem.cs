@@ -13,7 +13,12 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Gets the order of the matrix (matrix size)
         /// </summary>
-        public int Order { get => Matrix.Size; }
+        public int Order { get; private set; }
+
+        /// <summary>
+        /// Gets whether or not the number of equations and variables is fixed
+        /// </summary>
+        public bool IsFixed { get; private set; }
 
         /// <summary>
         /// Gets the row translation
@@ -55,6 +60,16 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
+        /// Fix the number of equations and variables
+        /// </summary>
+        public virtual void FixEquations() => IsFixed = true;
+
+        /// <summary>
+        /// Unfix the number of equations and variables
+        /// </summary>
+        public virtual void UnfixEquations() => IsFixed = false;
+
+        /// <summary>
         /// Get matrix element
         /// </summary>
         /// <param name="row">Row</param>
@@ -64,6 +79,12 @@ namespace SpiceSharp.Algebra
         {
             row = Row[row];
             column = Column[column];
+            if (IsFixed)
+            {
+                if (row > Order || column > Order)
+                    throw new SparseException("Linear system is fixed");
+            }
+            Order = Math.Max(Order, Math.Max(row, column));
             return Matrix.GetElement(row, column);
         }
 
@@ -89,6 +110,12 @@ namespace SpiceSharp.Algebra
         public VectorElement<T> GetRhsElement(int index)
         {
             index = Row[index];
+            if (IsFixed)
+            {
+                if (index > Order)
+                    throw new SparseException("Linear system is fixed");
+            }
+            Order = Math.Max(index, Order);
             return Rhs.GetElement(index);
         }
 

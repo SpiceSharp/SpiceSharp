@@ -41,6 +41,8 @@ namespace SpiceSharp.Algebra
         /// </summary>
         public override bool Factor()
         {
+            if (!IsFixed)
+                FixEquations();
             MatrixElement<double> element, column;
 
             // Get the diagonal
@@ -86,9 +88,14 @@ namespace SpiceSharp.Algebra
                 // Check for a singular matrix
                 element = Matrix.GetDiagonalElement(step);
                 if (element == null || element.Value.Equals(0.0))
+                {
+                    IsFactored = false;
                     return false;
+                }
                 element.Value = 1.0 / element.Value;
             }
+
+            IsFactored = true;
             return true;
         }
 
@@ -100,14 +107,20 @@ namespace SpiceSharp.Algebra
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));
+            if (!IsFactored)
+                throw new SparseException("Solver is not yet factored");
 
             // TODO: Maybe we should cache intermediate
+            var intermediate = new double[Order + 1];
+
             // Scramble
-            var intermediate = new double[Matrix.Size + 1];
             var rhsElement = Rhs.First;
+            int index = 0;
             while (rhsElement != null)
             {
-                intermediate[rhsElement.Index] = rhsElement.Value;
+                while (index < rhsElement.Index)
+                    intermediate[index++] = 0.0;
+                intermediate[index++] = rhsElement.Value;
                 rhsElement = rhsElement.Next;
             }
 
@@ -162,6 +175,8 @@ namespace SpiceSharp.Algebra
         {
             if (solution == null)
                 throw new ArgumentNullException(nameof(solution));
+            if (!IsFactored)
+                throw new SparseException("Solver is not yet factored");
 
             // TODO: Maybe we should cache intermediate
             // Scramble
@@ -219,6 +234,9 @@ namespace SpiceSharp.Algebra
         /// </summary>
         public override void OrderAndFactor()
         {
+            if (!IsFixed)
+                FixEquations();
+
             int step = 1;
             if (!NeedsReordering)
             {
@@ -237,7 +255,10 @@ namespace SpiceSharp.Algebra
 
                 // Done!
                 if (!NeedsReordering)
+                {
+                    IsFactored = true;
                     return;
+                }
             }
 
             // Setup for reordering
@@ -256,6 +277,9 @@ namespace SpiceSharp.Algebra
                 // Elimination
                 Elimination(pivot);
             }
+
+            // Flag the solver a sfactored
+            IsFactored = true;
         }
 
         /// <summary>
