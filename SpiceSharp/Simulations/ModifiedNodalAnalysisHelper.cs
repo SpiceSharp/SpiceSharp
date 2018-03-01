@@ -82,6 +82,26 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Apply a gmin to the diagonal elements
+        /// </summary>
+        /// <param name="solver">Solver</param>
+        /// <param name="gmin">Conductance</param>
+        public static void ApplyDiagonalGmin(this Solver<double> solver, double gmin)
+        {
+            // Skip if not necessary
+            if (gmin <= 0.0)
+                return;
+
+            // Add to the diagonal
+            for (int i = 1; i <= solver.Order; i++)
+            {
+                var diagonal = solver.ReorderedDiagonal(i);
+                if (diagonal != null)
+                    diagonal.Value += gmin;
+            }
+        }
+
+        /// <summary>
         /// Count the number of twins
         /// </summary>
         /// <param name="solver">Solver</param>

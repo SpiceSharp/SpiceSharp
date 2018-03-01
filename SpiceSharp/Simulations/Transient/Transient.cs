@@ -182,7 +182,7 @@ namespace SpiceSharp.Simulations
                         // Try to solve the new point
                         if (Method.SavedTime == 0.0)
                             state.Init = RealState.InitializationStates.InitTransient;
-                        bool converged = TranIterate(timeConfig.TranMaxIterations);
+                        bool converged = TimeIterate(timeConfig.TranMaxIterations);
                         Statistics.TimePoints++;
 
                         // Spice copies the states the first time, we're not

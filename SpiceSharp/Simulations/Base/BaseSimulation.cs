@@ -261,7 +261,7 @@ namespace SpiceSharp.Simulations
                 if (state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
-                    // TODO: Add diagonal elements
+                    solver.ApplyDiagonalGmin(state.DiagonalGmin);
                     solver.OrderAndFactor();
                     Statistics.ReorderTime.Stop();
                     state.Sparse &= ~RealState.SparseStates.ShouldReorder;
@@ -270,9 +270,15 @@ namespace SpiceSharp.Simulations
                 {
                     // Decompose
                     Statistics.DecompositionTime.Start();
-                    // TODO: Add diagonal elements
-                    solver.Factor();
+                    solver.ApplyDiagonalGmin(state.DiagonalGmin);
+                    bool success = solver.Factor();
                     Statistics.DecompositionTime.Stop();
+
+                    if (!success)
+                    {
+                        state.Sparse |= RealState.SparseStates.ShouldReorder;
+                        continue;
+                    }
                 }
 
                 // The current solution becomes the old solution

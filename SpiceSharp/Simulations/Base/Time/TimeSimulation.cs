@@ -124,7 +124,7 @@ namespace SpiceSharp.Simulations
         /// Iterate for time-domain analysis
         /// </summary>
         /// <param name="maxIterations">Maximum iterations</param>
-        protected bool TranIterate(int maxIterations)
+        protected bool TimeIterate(int maxIterations)
         {
             var state = RealState;
             var solver = state.Solver;
@@ -151,9 +151,7 @@ namespace SpiceSharp.Simulations
                 try
                 {
                     // Load the Y-matrix and Rhs-vector for DC and transients
-                    Load();
-                    foreach (var behavior in TransientBehaviors)
-                        behavior.Transient(this);
+                    TimeLoad();
                     iterno++;
                 }
                 catch (CircuitException)
@@ -178,7 +176,7 @@ namespace SpiceSharp.Simulations
                 if (state.Sparse.HasFlag(RealState.SparseStates.ShouldReorder))
                 {
                     Statistics.ReorderTime.Start();
-                    // TODO: Add diagGmin to diagonal elements
+                    solver.ApplyDiagonalGmin(state.DiagonalGmin);
                     solver.OrderAndFactor();
                     Statistics.ReorderTime.Stop();
                     state.Sparse &= ~RealState.SparseStates.ShouldReorder;
@@ -187,7 +185,7 @@ namespace SpiceSharp.Simulations
                 {
                     // Decompose
                     Statistics.DecompositionTime.Start();
-                    // TODO: Add diagGmin to diagonal elements
+                    solver.ApplyDiagonalGmin(state.DiagonalGmin);
                     bool success = solver.Factor();
                     Statistics.DecompositionTime.Stop();
 
@@ -264,6 +262,29 @@ namespace SpiceSharp.Simulations
                         throw new CircuitException("Could not find flag");
                 }
             }
+        }
+
+        /// <summary>
+        /// Load the circuit with the load behaviors
+        /// </summary>
+        protected void TimeLoad()
+        {
+            var state = RealState;
+
+            // Start the stopwatch
+            Statistics.LoadTime.Start();
+
+            // Clear rhs and matrix
+            state.Solver.Clear();
+
+            // Load all devices
+            foreach (var behavior in LoadBehaviors)
+                behavior.Load(this);
+            foreach (var behavior in TransientBehaviors)
+                behavior.Transient(this);
+
+            // Keep statistics
+            Statistics.LoadTime.Stop();
         }
     }
 }
