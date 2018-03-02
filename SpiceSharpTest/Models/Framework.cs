@@ -114,6 +114,45 @@ namespace SpiceSharpTest.Models
         }
 
         /// <summary>
+        /// Perform a test for DC analysis
+        /// </summary>
+        /// <param name="sim">Simulation</param>
+        /// <param name="ckt">Circuit</param>
+        /// <param name="exports">Exports</param>
+        /// <param name="references">References</param>
+        protected void AnalyzeDC(DC sim, Circuit ckt, IEnumerable<Export<double>> exports, IEnumerable<Func<double, double>> references)
+        {
+            int index = 0;
+            sim.OnExportSimulationData += (object sender, ExportDataEventArgs data) =>
+            {
+                var export_it = exports.GetEnumerator();
+                var references_it = references.GetEnumerator();
+
+                while (export_it.MoveNext() && references_it.MoveNext())
+                {
+                    double actual = export_it.Current.Value;
+                    double expected = references_it.Current(sim.Sweeps[0].CurrentValue);
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
+
+                    try
+                    {
+                        Assert.AreEqual(expected, actual, tol);
+                    }
+                    catch (Exception ex)
+                    {
+                        string[] sweeps = new string[sim.Sweeps.Count];
+                        for (int k = 0; k < sim.Sweeps.Count; k++)
+                            sweeps[k] += $"{sim.Sweeps[k].Parameter}={sim.Sweeps[k].CurrentValue}";
+                        string msg = ex.Message + " at " + string.Join(" ", sweeps);
+                        throw new Exception(msg, ex);
+                    }
+                }
+                index++;
+            };
+            sim.Run(ckt);
+        }
+
+        /// <summary>
         /// Perform a test for AC analysis
         /// </summary>
         /// <param name="sim">Simulation</param>

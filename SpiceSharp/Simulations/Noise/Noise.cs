@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Numerics;
-using SpiceSharp.Diagnostics;
-using SpiceSharp.Circuits;
-using SpiceSharp.Components;
 using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Simulations
@@ -179,18 +176,6 @@ namespace SpiceSharp.Simulations
 
             solver.SolveTransposed(ComplexState.Solution);
             ComplexState.Solution[0] = 0.0;
-        }
-
-        /// <summary>
-        /// Create an export for the total input density
-        /// </summary>
-        /// <param name="input">True if the noise density has to be input-referred</param>
-        /// <returns></returns>
-        public Func<RealState, double> CreateNoiseDensityExport(bool input)
-        {
-            if (input)
-                return (RealState state) => NoiseState.OutputNoiseDensity * NoiseState.GainInverseSquared;
-            return (RealState state) => NoiseState.OutputNoiseDensity;
         }
     }
 }
