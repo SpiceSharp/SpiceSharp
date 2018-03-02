@@ -26,15 +26,15 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Flag for using the previous state or not
         /// </summary>
-        public bool UseOldState { get; set; } = false;
+        public bool UseOldState { get; set; }
 
         /// <summary>
         /// The current state
         /// </summary>
-        public bool CurrentState { get; protected set; } = false;
+        public bool CurrentState { get; protected set; }
 
         /// <summary>
-        /// The current conductance
+        /// Gets the current conductance
         /// </summary>
         public double Cond { get; protected set; }
 

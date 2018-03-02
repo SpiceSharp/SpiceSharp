@@ -69,6 +69,8 @@
     <Compile Include="Algebra\NewSparseVectorTest.cs" />
     <Compile Include="Algebra\SolveFramework.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level3\MOS3Tests.cs" />
+    <Compile Include="Models\Switches\CSW\CurrentSwitchTests.cs" />
+    <Compile Include="Models\Switches\VSW\VoltageSwitchTests.cs" />
     <Compile Include="Models\Voltagesources\CCVS\CurrentControlledVoltageSourceTests.cs" />
     <Compile Include="Models\Voltagesources\VCVS\VoltageControlledVoltageSourceTests.cs" />
     <Compile Include="Models\Voltagesources\VSRC\VoltageSourceTests.cs" />
@@ -88,6 +90,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

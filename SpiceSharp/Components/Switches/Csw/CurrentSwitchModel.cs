@@ -13,9 +13,6 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the model</param>
         public CurrentSwitchModel(Identifier name) : base(name)
         {
-            // CurrentSwitch has a priority of -1, so this needs to be even earlier
-            Priority = -2;
-
             // Add parameters
             ParameterSets.Add(new ModelBaseParameters());
 

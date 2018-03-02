@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
     /// <summary>
     /// General behavior for a <see cref="CurrentSwitch"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior
+    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors
@@ -48,17 +48,6 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             return (state.Solution[posNode] - state.Solution[negNode]) *
             (state.Solution[posNode] - state.Solution[negNode]) * Cond;
         }
-        public double Cond { get; internal set; }
-
-        /// <summary>
-        /// Nodes
-        /// </summary>
-        int posNode, negNode;
-        public int ControllingBranch { get; private set; }
-        protected MatrixElement<double> PosPosPtr { get; private set; }
-        protected MatrixElement<double> NegPosPtr { get; private set; }
-        protected MatrixElement<double> PosNegPtr { get; private set; }
-        protected MatrixElement<double> NegNegPtr { get; private set; }
 
         /// <summary>
         /// Gets or sets the old state of the switch
@@ -74,6 +63,21 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// Gets the current state of the switch
         /// </summary>
         public bool CurrentState { get; protected set; }
+
+        /// <summary>
+        /// Gets the current conductance
+        /// </summary>
+        public double Cond { get; protected set; }
+
+        /// <summary>
+        /// Nodes
+        /// </summary>
+        int posNode, negNode;
+        public int ControllingBranch { get; private set; }
+        protected MatrixElement<double> PosPosPtr { get; private set; }
+        protected MatrixElement<double> NegPosPtr { get; private set; }
+        protected MatrixElement<double> PosNegPtr { get; private set; }
+        protected MatrixElement<double> NegNegPtr { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -123,7 +127,10 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
+            // Get extra equations
             ControllingBranch = vsrcload.BranchEq;
+
+            // Get matrix pointers
             PosPosPtr = solver.GetMatrixElement(posNode, posNode);
             PosNegPtr = solver.GetMatrixElement(posNode, negNode);
             NegPosPtr = solver.GetMatrixElement(negNode, posNode);
@@ -191,10 +198,14 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
 
                 // Store the current state
                 CurrentState = current_state;
+
+                // If the state changed, ensure one more iteration
+                if (current_state != previous_state)
+                    state.IsConvergent = false;
             }
 
             // Get the current conduction
-            g_now = current_state != false ? (modelload.OnConductance) : (modelload.OffConductance);
+            g_now = current_state == true ? modelload.OnConductance : modelload.OffConductance;
             Cond = g_now;
 
             // Load the Y-matrix
