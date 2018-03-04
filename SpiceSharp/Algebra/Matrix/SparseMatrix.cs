@@ -221,6 +221,10 @@ namespace SpiceSharp.Algebra
             rows[row1] = rows[row2];
             rows[row2] = tmpRow;
 
+            // Reset the diagonal elements
+            diagonal[row1] = null;
+            diagonal[row2] = null;
+
             // Swap the elements from left to right
             while (row1Element != null || row2Element != null)
             {
@@ -294,6 +298,10 @@ namespace SpiceSharp.Algebra
             var tmpColumn = columns[column1];
             columns[column1] = columns[column2];
             columns[column2] = tmpColumn;
+
+            // Reset the diagonals
+            diagonal[column1] = null;
+            diagonal[column2] = null;
 
             // Swap the elements from left to right
             while (column1Element != null || column2Element != null)

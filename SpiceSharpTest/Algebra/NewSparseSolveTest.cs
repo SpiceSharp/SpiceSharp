@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Algebra;
+﻿using System.Numerics;
+using SpiceSharp.Algebra;
 using SpiceSharp.Algebra.Solve;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -150,6 +151,69 @@ namespace SpiceSharpTest.Sparse
 
             // This should run without throwing an exception
             solver.OrderAndFactor();
+        }
+
+        [TestMethod]
+        public void When_ExampleComplexMatrix1_Expect_MatlabReference()
+        {
+            // Build the example matrix
+            Complex[][] matrix =
+            {
+                new Complex[] { 0, 0, 0, 0, 1, 0, 1, 0 },
+                new Complex[] { 0, 0, 0, 0, -1, 1, 0, 0 },
+                new Complex[] { 0, 0, new Complex(0.0, 0.000628318530717959), 0, 0, 0, -1, 1 },
+                new Complex[] { 0, 0, 0, 0.001, 0, 0, 0, -1 },
+                new Complex[] { 1, -1, 0, 0, 0, 0, 0, 0 },
+                new Complex[] { 0, 1, 0, 0, 0, 0, 0, 0 },
+                new Complex[] { 1, 0, -1, 0, 0, 0, 0, 0 },
+                new Complex[] { 0, 0, 1, -1, 0, 0, 0, new Complex(0.0, -1.5707963267949) }
+            };
+            Complex[] rhs = { 0, 0, 0, 0, 0, 24.0 };
+            Complex[] reference =
+            {
+                new Complex(24, 0),
+                new Complex(24, 0),
+                new Complex(24, 0),
+                new Complex(23.999940782519708, -0.037699018824477),
+                new Complex(-0.023999940782520, -0.015041945718407),
+                new Complex(-0.023999940782520, -0.015041945718407),
+                new Complex(0.023999940782520, 0.015041945718407),
+                new Complex(0.023999940782520, -0.000037699018824)
+            };
+
+            // build the matrix
+            ComplexSolver solver = new ComplexSolver();
+            for (int r = 0; r < matrix.Length; r++)
+            {
+                for (int c = 0; c < matrix[r].Length; c++)
+                {
+                    if (!matrix[r][c].Equals(Complex.Zero))
+                        solver.GetMatrixElement(r + 1, c + 1).Value = matrix[r][c];
+                }
+            }
+
+            // Add some zero elements
+            solver.GetMatrixElement(7, 7);
+            solver.GetRhsElement(5);
+
+            // Build the Rhs vector
+            for (int r = 0; r < rhs.Length; r++)
+            {
+                if (!rhs[r].Equals(Complex.Zero))
+                    solver.GetRhsElement(r + 1).Value = rhs[r];
+            }
+
+            // Solver
+            solver.OrderAndFactor();
+            var solution = new DenseVector<Complex>(solver.Order);
+            solver.Solve(solution);
+
+            // Check!
+            for (int r = 0; r < reference.Length; r++)
+            {
+                Assert.AreEqual(reference[r].Real, solution[r + 1].Real, 1e-12);
+                Assert.AreEqual(reference[r].Imaginary, solution[r + 1].Imaginary, 1e-12);
+            }
         }
     }
 }

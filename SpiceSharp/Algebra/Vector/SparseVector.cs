@@ -343,7 +343,7 @@ namespace SpiceSharp.Algebra
             StringBuilder sb = new StringBuilder();
             sb.Append("[");
             var element = First;
-            for (int i = 1; i < Length; i++)
+            for (int i = 1; i <= Length; i++)
             {
                 if (element.Index < i)
                     element = element.Next;

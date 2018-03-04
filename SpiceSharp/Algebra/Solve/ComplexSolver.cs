@@ -77,7 +77,7 @@ namespace SpiceSharp.Algebra
                 return false;
 
             // pivot = 1 / pivot
-            element.Value = Inverse(element.Value);
+            element.Value = 1.0 / element.Value; // Inverse(element.Value);
 
             // Start factorization
             Complex mult;
@@ -312,7 +312,7 @@ namespace SpiceSharp.Algebra
             // Test for zero pivot
             if (pivot.Value.Equals(0.0))
                 throw new SparseException("Matrix is singular");
-            pivot.Value = Inverse(pivot.Value);
+            pivot.Value = 1.0 / pivot.Value; // Inverse(pivot.Value);
 
             var upper = pivot.Right;
             while (upper != null)
