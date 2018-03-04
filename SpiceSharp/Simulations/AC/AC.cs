@@ -7,13 +7,13 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Frequency-domain analysis (AC analysis)
     /// </summary>
-    public class AC : FrequencySimulation
+    public class Ac : FrequencySimulation
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
-        public AC(string name) : base(name)
+        public Ac(string name) : base(name)
         {
         }
 
@@ -22,7 +22,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="frequencySweep">Frequency sweep</param>
-        public AC(Identifier name, Sweep<double> frequencySweep) : base(name, frequencySweep)
+        public Ac(Identifier name, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
         }
 
@@ -43,7 +43,7 @@ namespace SpiceSharp.Simulations
             cstate.Laplace = 0.0;
             state.Domain = RealState.DomainType.Frequency;
             state.Gmin = baseconfig.Gmin;
-            Op(baseconfig.DCMaxIterations);
+            Op(baseconfig.DcMaxIterations);
 
             // Load all in order to calculate the AC info for all devices
             foreach (var behavior in LoadBehaviors)
@@ -63,7 +63,7 @@ namespace SpiceSharp.Simulations
                 cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
 
                 // Solve
-                ACIterate();
+                AcIterate();
 
                 // Export the timepoint
                 Export(exportargs);

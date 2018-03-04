@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters bp;
+        BaseParameters _bp;
 
         /// <summary>
         /// Methods
@@ -28,20 +28,20 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return QCap.Derivative * (state.Solution[posNode] - state.Solution[negNode]);
+            return QCap.Derivative * (state.Solution[_posNode] - state.Solution[_negNode]);
         }
         [PropertyName("v"), PropertyInfo("Voltage")]
         public double GetVoltage(RealState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[posNode] - state.Solution[negNode];
+            return state.Solution[_posNode] - state.Solution[_negNode];
         }
 
         /// <summary>
         /// Nodes and states
         /// </summary>
-        int posNode, negNode;
+        int _posNode, _negNode;
         protected MatrixElement<double> PosPosPtr { get; private set; }
         protected MatrixElement<double> NegNegPtr { get; private set; }
         protected MatrixElement<double> PosNegPtr { get; private set; }
@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
         }
         
         /// <summary>
@@ -79,8 +79,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -105,31 +105,31 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Get matrix elements
-            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
-            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
-            NegPosPtr = solver.GetMatrixElement(negNode, posNode);
-            PosNegPtr = solver.GetMatrixElement(posNode, negNode);
+            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
+            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
+            NegPosPtr = solver.GetMatrixElement(_negNode, _posNode);
+            PosNegPtr = solver.GetMatrixElement(_posNode, _negNode);
 
             // Get rhs elements
-            PosPtr = solver.GetRhsElement(posNode);
-            NegPtr = solver.GetRhsElement(negNode);
+            PosPtr = solver.GetRhsElement(_posNode);
+            NegPtr = solver.GetRhsElement(_negNode);
         }
 
         /// <summary>
         /// Calculate the state for DC
         /// </summary>
         /// <param name="simulation"></param>
-        public override void GetDCState(TimeSimulation simulation)
+        public override void GetDcState(TimeSimulation simulation)
         {
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
             // Calculate the state for DC
             var sol = simulation.RealState.Solution;
-            if (bp.InitialCondition.Given)
-                QCap.Current = bp.InitialCondition;
+            if (_bp.InitialCondition.Given)
+                QCap.Current = _bp.InitialCondition;
             else
-                QCap.Current = bp.Capacitance * (sol[posNode] - sol[negNode]);
+                QCap.Current = _bp.Capacitance * (sol[_posNode] - sol[_negNode]);
         }
         
         /// <summary>
@@ -153,12 +153,12 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double vcap = state.Solution[posNode] - state.Solution[negNode];
+            double vcap = state.Solution[_posNode] - state.Solution[_negNode];
 
             // Integrate
-            QCap.Current = bp.Capacitance * vcap;
+            QCap.Current = _bp.Capacitance * vcap;
             QCap.Integrate();
-            double geq = QCap.Jacobian(bp.Capacitance);
+            double geq = QCap.Jacobian(_bp.Capacitance);
             double ceq = QCap.RhsCurrent();
 
             // Load matrix

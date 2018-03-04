@@ -15,11 +15,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        LoadBehavior load;
-        TemperatureBehavior temp;
-        ModelTemperatureBehavior modeltemp;
-        BaseParameters bp;
-        ModelBaseParameters mbp;
+        LoadBehavior _load;
+        TemperatureBehavior _temp;
+        ModelTemperatureBehavior _modeltemp;
+        BaseParameters _bp;
+        ModelBaseParameters _mbp;
 
         /// <summary>
         /// Diode capacitance
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, posPrimeNode;
+        int _posNode, _negNode, _posPrimeNode;
         protected MatrixElement<double> PosPosPrimePtr { get; private set; }
         protected MatrixElement<double> NegPosPrimePtr { get; private set; }
         protected MatrixElement<double> PosPrimePosPtr { get; private set; }
@@ -64,13 +64,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
-            mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>("entity");
-            temp = provider.GetBehavior<TemperatureBehavior>("entity");
-            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _temp = provider.GetBehavior<TemperatureBehavior>("entity");
+            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
         
         /// <summary>
@@ -97,8 +97,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -111,20 +111,20 @@ namespace SpiceSharp.Components.DiodeBehaviors
 				throw new ArgumentNullException(nameof(solver));
 
             // Get extra nodes
-            posPrimeNode = load.PosPrimeNode;
+            _posPrimeNode = _load.PosPrimeNode;
 
             // Get matrix elements
-            PosPosPrimePtr = solver.GetMatrixElement(posNode, posPrimeNode);
-            NegPosPrimePtr = solver.GetMatrixElement(negNode, posPrimeNode);
-            PosPrimePosPtr = solver.GetMatrixElement(posPrimeNode, posNode);
-            PosPrimeNegPtr = solver.GetMatrixElement(posPrimeNode, negNode);
-            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
-            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
-            PosPrimePosPrimePtr = solver.GetMatrixElement(posPrimeNode, posPrimeNode);
+            PosPosPrimePtr = solver.GetMatrixElement(_posNode, _posPrimeNode);
+            NegPosPrimePtr = solver.GetMatrixElement(_negNode, _posPrimeNode);
+            PosPrimePosPtr = solver.GetMatrixElement(_posPrimeNode, _posNode);
+            PosPrimeNegPtr = solver.GetMatrixElement(_posPrimeNode, _negNode);
+            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
+            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
+            PosPrimePosPrimePtr = solver.GetMatrixElement(_posPrimeNode, _posPrimeNode);
 
             // Get RHS elements
-            PosPrimePtr = solver.GetRhsElement(posPrimeNode);
-            NegPtr = solver.GetRhsElement(negNode);
+            PosPrimePtr = solver.GetRhsElement(_posPrimeNode);
+            NegPtr = solver.GetRhsElement(_negNode);
         }
 
         /// <summary>
@@ -143,31 +143,31 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Calculate the state values
         /// </summary>
         /// <param name="simulation">Simulation</param>
-        public override void GetDCState(TimeSimulation simulation)
+        public override void GetDcState(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
             double arg, sarg, capd;
-            double vd = state.Solution[posPrimeNode] - state.Solution[negNode];
+            double vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
 
             // charge storage elements
-            double czero = temp.TempJunctionCap * bp.Area;
-            if (vd < temp.TempDepletionCap)
+            double czero = _temp.TempJunctionCap * _bp.Area;
+            if (vd < _temp.TempDepletionCap)
             {
-                arg = 1 - vd / mbp.JunctionPotential;
-                sarg = Math.Exp(-mbp.GradingCoefficient * Math.Log(arg));
-                CapCharge.Current = mbp.TransitTime * load.Current + mbp.JunctionPotential * czero * (1 - arg * sarg) / (1 -
-                        mbp.GradingCoefficient);
-                capd = mbp.TransitTime * load.Conduct + czero * sarg;
+                arg = 1 - vd / _mbp.JunctionPotential;
+                sarg = Math.Exp(-_mbp.GradingCoefficient * Math.Log(arg));
+                CapCharge.Current = _mbp.TransitTime * _load.Current + _mbp.JunctionPotential * czero * (1 - arg * sarg) / (1 -
+                        _mbp.GradingCoefficient);
+                capd = _mbp.TransitTime * _load.Conduct + czero * sarg;
             }
             else
             {
-                double czof2 = czero / modeltemp.F2;
-                CapCharge.Current = mbp.TransitTime * load.Current + czero * temp.TempFactor1 + czof2 * (modeltemp.F3 * (vd -
-                    temp.TempDepletionCap) + (mbp.GradingCoefficient / (mbp.JunctionPotential + mbp.JunctionPotential)) * (vd * vd - temp.TempDepletionCap * temp.TempDepletionCap));
-                capd = mbp.TransitTime * load.Conduct + czof2 * (modeltemp.F3 + mbp.GradingCoefficient * vd / mbp.JunctionPotential);
+                double czof2 = czero / _modeltemp.F2;
+                CapCharge.Current = _mbp.TransitTime * _load.Current + czero * _temp.TempFactor1 + czof2 * (_modeltemp.F3 * (vd -
+                    _temp.TempDepletionCap) + (_mbp.GradingCoefficient / (_mbp.JunctionPotential + _mbp.JunctionPotential)) * (vd * vd - _temp.TempDepletionCap * _temp.TempDepletionCap));
+                capd = _mbp.TransitTime * _load.Conduct + czof2 * (_modeltemp.F3 + _mbp.GradingCoefficient * vd / _mbp.JunctionPotential);
             }
             Capacitance = capd;
         }
@@ -182,10 +182,10 @@ namespace SpiceSharp.Components.DiodeBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double vd = state.Solution[posPrimeNode] - state.Solution[negNode];
+            double vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
 
             // This is the same calculation
-            GetDCState(simulation);
+            GetDcState(simulation);
 
             // Integrate
             CapCharge.Integrate();
@@ -193,7 +193,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             double ceq = CapCharge.RhsCurrent(geq, vd);
 
             // Store the current
-            Current = load.Current + CapCharge.Derivative;
+            Current = _load.Current + CapCharge.Derivative;
 
             // Load Rhs vector
             NegPtr.Value += ceq;

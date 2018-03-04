@@ -13,12 +13,12 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        LoadBehavior load;
+        LoadBehavior _load;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int _posNode, _negNode;
 
         /// <summary>
         /// Gets resistor noise sources
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>("entity");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
         }
         
         /// <summary>
@@ -53,8 +53,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         public override void ConnectNoise()
         {
-            ResistorNoise.Setup(posNode, negNode);
+            ResistorNoise.Setup(_posNode, _negNode);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="simulation">Noise simulation</param>
         public override void Noise(Noise simulation)
         {
-            ResistorNoise.Generators[0].SetCoefficients(load.Conductance);
+            ResistorNoise.Generators[0].SetCoefficients(_load.Conductance);
             ResistorNoise.Evaluate(simulation);
         }
     }

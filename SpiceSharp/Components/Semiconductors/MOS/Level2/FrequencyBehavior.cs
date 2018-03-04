@@ -14,25 +14,25 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters bp;
-        ModelBaseParameters mbp;
-        LoadBehavior load;
-        TemperatureBehavior temp;
-        ModelTemperatureBehavior modeltemp;
+        BaseParameters _bp;
+        ModelBaseParameters _mbp;
+        LoadBehavior _load;
+        TemperatureBehavior _temp;
+        ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Shared variables
         /// </summary>
-        public double CapGS { get; protected set; }
-        public double CapGD { get; protected set; }
-        public double CapGB { get; protected set; }
-        public double CapBD { get; protected set; }
-        public double CapBS { get; protected set; }
+        public double CapGs { get; protected set; }
+        public double CapGd { get; protected set; }
+        public double CapGb { get; protected set; }
+        public double CapBd { get; protected set; }
+        public double CapBs { get; protected set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int drainNode, gateNode, sourceNode, bulkNode, drainNodePrime, sourceNodePrime;
+        int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
         protected MatrixElement<Complex> DrainDrainPtr { get; private set; }
         protected MatrixElement<Complex> GateGatePtr { get; private set; }
         protected MatrixElement<Complex> SourceSourcePtr { get; private set; }
@@ -72,13 +72,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
-            mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            temp = provider.GetBehavior<TemperatureBehavior>("entity");
-            load = provider.GetBehavior<LoadBehavior>("entity");
-            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            _temp = provider.GetBehavior<TemperatureBehavior>("entity");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>
@@ -91,10 +91,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            drainNode = pins[0];
-            gateNode = pins[1];
-            sourceNode = pins[2];
-            bulkNode = pins[3];
+            _drainNode = pins[0];
+            _gateNode = pins[1];
+            _sourceNode = pins[2];
+            _bulkNode = pins[3];
         }
 
         /// <summary>
@@ -107,32 +107,32 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				throw new ArgumentNullException(nameof(solver));
 
             // Get extra equations
-            sourceNodePrime = load.SourceNodePrime;
-            drainNodePrime = load.DrainNodePrime;
+            _sourceNodePrime = _load.SourceNodePrime;
+            _drainNodePrime = _load.DrainNodePrime;
 
             // Get matrix elements
-            DrainDrainPtr = solver.GetMatrixElement(drainNode, drainNode);
-            GateGatePtr = solver.GetMatrixElement(gateNode, gateNode);
-            SourceSourcePtr = solver.GetMatrixElement(sourceNode, sourceNode);
-            BulkBulkPtr = solver.GetMatrixElement(bulkNode, bulkNode);
-            DrainPrimeDrainPrimePtr = solver.GetMatrixElement(drainNodePrime, drainNodePrime);
-            SourcePrimeSourcePrimePtr = solver.GetMatrixElement(sourceNodePrime, sourceNodePrime);
-            DrainDrainPrimePtr = solver.GetMatrixElement(drainNode, drainNodePrime);
-            GateBulkPtr = solver.GetMatrixElement(gateNode, bulkNode);
-            GateDrainPrimePtr = solver.GetMatrixElement(gateNode, drainNodePrime);
-            GateSourcePrimePtr = solver.GetMatrixElement(gateNode, sourceNodePrime);
-            SourceSourcePrimePtr = solver.GetMatrixElement(sourceNode, sourceNodePrime);
-            BulkDrainPrimePtr = solver.GetMatrixElement(bulkNode, drainNodePrime);
-            BulkSourcePrimePtr = solver.GetMatrixElement(bulkNode, sourceNodePrime);
-            DrainPrimeSourcePrimePtr = solver.GetMatrixElement(drainNodePrime, sourceNodePrime);
-            DrainPrimeDrainPtr = solver.GetMatrixElement(drainNodePrime, drainNode);
-            BulkGatePtr = solver.GetMatrixElement(bulkNode, gateNode);
-            DrainPrimeGatePtr = solver.GetMatrixElement(drainNodePrime, gateNode);
-            SourcePrimeGatePtr = solver.GetMatrixElement(sourceNodePrime, gateNode);
-            SourcePrimeSourcePtr = solver.GetMatrixElement(sourceNodePrime, sourceNode);
-            DrainPrimeBulkPtr = solver.GetMatrixElement(drainNodePrime, bulkNode);
-            SourcePrimeBulkPtr = solver.GetMatrixElement(sourceNodePrime, bulkNode);
-            SourcePrimeDrainPrimePtr = solver.GetMatrixElement(sourceNodePrime, drainNodePrime);
+            DrainDrainPtr = solver.GetMatrixElement(_drainNode, _drainNode);
+            GateGatePtr = solver.GetMatrixElement(_gateNode, _gateNode);
+            SourceSourcePtr = solver.GetMatrixElement(_sourceNode, _sourceNode);
+            BulkBulkPtr = solver.GetMatrixElement(_bulkNode, _bulkNode);
+            DrainPrimeDrainPrimePtr = solver.GetMatrixElement(_drainNodePrime, _drainNodePrime);
+            SourcePrimeSourcePrimePtr = solver.GetMatrixElement(_sourceNodePrime, _sourceNodePrime);
+            DrainDrainPrimePtr = solver.GetMatrixElement(_drainNode, _drainNodePrime);
+            GateBulkPtr = solver.GetMatrixElement(_gateNode, _bulkNode);
+            GateDrainPrimePtr = solver.GetMatrixElement(_gateNode, _drainNodePrime);
+            GateSourcePrimePtr = solver.GetMatrixElement(_gateNode, _sourceNodePrime);
+            SourceSourcePrimePtr = solver.GetMatrixElement(_sourceNode, _sourceNodePrime);
+            BulkDrainPrimePtr = solver.GetMatrixElement(_bulkNode, _drainNodePrime);
+            BulkSourcePrimePtr = solver.GetMatrixElement(_bulkNode, _sourceNodePrime);
+            DrainPrimeSourcePrimePtr = solver.GetMatrixElement(_drainNodePrime, _sourceNodePrime);
+            DrainPrimeDrainPtr = solver.GetMatrixElement(_drainNodePrime, _drainNode);
+            BulkGatePtr = solver.GetMatrixElement(_bulkNode, _gateNode);
+            DrainPrimeGatePtr = solver.GetMatrixElement(_drainNodePrime, _gateNode);
+            SourcePrimeGatePtr = solver.GetMatrixElement(_sourceNodePrime, _gateNode);
+            SourcePrimeSourcePtr = solver.GetMatrixElement(_sourceNodePrime, _sourceNode);
+            DrainPrimeBulkPtr = solver.GetMatrixElement(_drainNodePrime, _bulkNode);
+            SourcePrimeBulkPtr = solver.GetMatrixElement(_sourceNodePrime, _bulkNode);
+            SourcePrimeDrainPrimePtr = solver.GetMatrixElement(_sourceNodePrime, _drainNodePrime);
         }
 
         /// <summary>
@@ -174,19 +174,19 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            double EffectiveLength,
-                OxideCap, vgs, vbs, vbd, vgd, von,
+            double effectiveLength,
+                oxideCap, vgs, vbs, vbd, vgd, von,
                 vdsat, sargsw;
 
-            vbs = load.VoltageBS;
-            vbd = load.VoltageBD;
-            vgs = load.VoltageGS;
-            vgd = load.VoltageGS - load.VoltageDS;
-            von = mbp.MosfetType * load.Von;
-            vdsat = mbp.MosfetType * load.SaturationVoltageDS;
+            vbs = _load.VoltageBs;
+            vbd = _load.VoltageBd;
+            vgs = _load.VoltageGs;
+            vgd = _load.VoltageGs - _load.VoltageDs;
+            von = _mbp.MosfetType * _load.Von;
+            vdsat = _mbp.MosfetType * _load.SaturationVoltageDs;
 
-            EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
-            OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
+            effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
 
             /* 
             * now we do the hard part of the bulk - drain and bulk - source
@@ -202,9 +202,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             * 
             * .. bulk - drain and bulk - source depletion capacitances
             */
-            if (vbs < temp.TempDepletionCap)
+            if (vbs < _temp.TempDepletionCap)
             {
-                double arg = 1 - vbs / temp.TempBulkPotential, sarg;
+                double arg = 1 - vbs / _temp.TempBulkPotential, sarg;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -212,49 +212,49 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJunctionBotGradingCoefficient.Value == mbp.BulkJunctionSideGradingCoefficient)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value == _mbp.BulkJunctionSideGradingCoefficient)
                 {
-                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
-                        sarg = sargsw = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
+                        sarg = sargsw = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
                 }
                 else
                 {
-                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
+                        sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
+                        sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 // NOSQRT
-                CapBS = temp.CapBS * sarg + temp.CapBSSidewall * sargsw;
+                CapBs = _temp.CapBs * sarg + _temp.CapBsSidewall * sargsw;
             }
             else
             {
-                CapBS = temp.F2S + temp.F3S * vbs;
+                CapBs = _temp.F2S + _temp.F3S * vbs;
             }
 
-            if (vbd < temp.TempDepletionCap)
+            if (vbd < _temp.TempDepletionCap)
             {
-                double arg = 1 - vbd / temp.TempBulkPotential, sarg;
+                double arg = 1 - vbd / _temp.TempBulkPotential, sarg;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -262,56 +262,56 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJunctionBotGradingCoefficient.Value == .5 && mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5 && _mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 }
                 else
                 {
-                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
+                        sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
+                        sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 /* NOSQRT */
-                CapBD = temp.CapBD * sarg + temp.CapBDSidewall * sargsw;
+                CapBd = _temp.CapBd * sarg + _temp.CapBdSidewall * sargsw;
             }
             else
             {
-                CapBD = temp.F2D + vbd * temp.F3D;
+                CapBd = _temp.F2D + vbd * _temp.F3D;
             }
 
             /* 
              * calculate meyer's capacitors
              */
             double icapgs, icapgd, icapgb;
-            if (load.Mode > 0)
+            if (_load.Mode > 0)
             {
                 Transistor.MeyerCharges(vgs, vgd, von, vdsat,
-                    out icapgs, out icapgd, out icapgb, temp.TempPhi, OxideCap);
+                    out icapgs, out icapgd, out icapgb, _temp.TempPhi, oxideCap);
             }
             else
             {
                 Transistor.MeyerCharges(vgd, vgs, von, vdsat,
-                    out icapgd, out icapgs, out icapgb, temp.TempPhi, OxideCap);
+                    out icapgd, out icapgs, out icapgb, _temp.TempPhi, oxideCap);
             }
-            CapGS = icapgs;
-            CapGD = icapgd;
-            CapGB = icapgb;
+            CapGs = icapgs;
+            CapGd = icapgd;
+            CapGb = icapgb;
         }
 
         /// <summary>
@@ -325,10 +325,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 
             var cstate = simulation.ComplexState;
             int xnrm, xrev;
-            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap, capgs, capgd, capgb, xgs, xgd, xgb, xbd,
+            double effectiveLength, gateSourceOverlapCap, gateDrainOverlapCap, gateBulkOverlapCap, capgs, capgd, capgb, xgs, xgd, xgb, xbd,
                 xbs;
 
-            if (load.Mode < 0)
+            if (_load.Mode < 0)
             {
                 xnrm = 0;
                 xrev = 1;
@@ -340,42 +340,42 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             }
 
             // Meyer's model parameters
-            EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
-            GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;
-            GateDrainOverlapCap = mbp.GateDrainOverlapCapFactor * bp.Width;
-            GateBulkOverlapCap = mbp.GateBulkOverlapCapFactor * EffectiveLength;
-            capgs = CapGS + CapGS + GateSourceOverlapCap;
-            capgd = CapGD + CapGD + GateDrainOverlapCap;
-            capgb = CapGB + CapGB + GateBulkOverlapCap;
+            effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
+            gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
+            gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
+            capgs = CapGs + CapGs + gateSourceOverlapCap;
+            capgd = CapGd + CapGd + gateDrainOverlapCap;
+            capgb = CapGb + CapGb + gateBulkOverlapCap;
             xgs = capgs * cstate.Laplace.Imaginary;
             xgd = capgd * cstate.Laplace.Imaginary;
             xgb = capgb * cstate.Laplace.Imaginary;
-            xbd = CapBD * cstate.Laplace.Imaginary;
-            xbs = CapBS * cstate.Laplace.Imaginary;
+            xbd = CapBd * cstate.Laplace.Imaginary;
+            xbs = CapBs * cstate.Laplace.Imaginary;
 
             // Load Y-matrix
             GateGatePtr.Value += new Complex(0.0, xgd + xgs + xgb);
-            BulkBulkPtr.Value += new Complex(load.CondBD + load.CondBS, xgb + xbd + xbs);
-            DrainPrimeDrainPrimePtr.Value += new Complex(temp.DrainConductance + load.CondDS + load.CondBD + xrev * (load.Transconductance + load.TransconductanceBS), xgd + xbd);
-            SourcePrimeSourcePrimePtr.Value += new Complex(temp.SourceConductance + load.CondDS + load.CondBS + xnrm * (load.Transconductance + load.TransconductanceBS), xgs + xbs);
+            BulkBulkPtr.Value += new Complex(_load.CondBd + _load.CondBs, xgb + xbd + xbs);
+            DrainPrimeDrainPrimePtr.Value += new Complex(_temp.DrainConductance + _load.CondDs + _load.CondBd + xrev * (_load.Transconductance + _load.TransconductanceBs), xgd + xbd);
+            SourcePrimeSourcePrimePtr.Value += new Complex(_temp.SourceConductance + _load.CondDs + _load.CondBs + xnrm * (_load.Transconductance + _load.TransconductanceBs), xgs + xbs);
             GateBulkPtr.Value -= new Complex(0.0, xgb);
             GateDrainPrimePtr.Value -= new Complex(0.0, xgd);
             GateSourcePrimePtr.Value -= new Complex(0.0, xgs);
             BulkGatePtr.Value -= new Complex(0.0, xgb);
-            BulkDrainPrimePtr.Value -= new Complex(load.CondBD, xbd);
-            BulkSourcePrimePtr.Value -= new Complex(load.CondBS, xbs);
-            DrainPrimeGatePtr.Value += new Complex((xnrm - xrev) * load.Transconductance, -xgd);
-            DrainPrimeBulkPtr.Value += new Complex(-load.CondBD + (xnrm - xrev) * load.TransconductanceBS, -xbd);
-            SourcePrimeGatePtr.Value -= new Complex((xnrm - xrev) * load.Transconductance, xgs);
-            SourcePrimeBulkPtr.Value -= new Complex(load.CondBS + (xnrm - xrev) * load.TransconductanceBS, xbs);
-            DrainDrainPtr.Value += (Complex)temp.DrainConductance;
-            SourceSourcePtr.Value += (Complex)temp.SourceConductance;
-            DrainDrainPrimePtr.Value -= temp.DrainConductance;
-            SourceSourcePrimePtr.Value -= temp.SourceConductance;
-            DrainPrimeDrainPtr.Value -= temp.DrainConductance;
-            DrainPrimeSourcePrimePtr.Value -= load.CondDS + xnrm * (load.Transconductance + load.TransconductanceBS);
-            SourcePrimeSourcePtr.Value -= temp.SourceConductance;
-            SourcePrimeDrainPrimePtr.Value -= load.CondDS + xrev * (load.Transconductance + load.TransconductanceBS);
+            BulkDrainPrimePtr.Value -= new Complex(_load.CondBd, xbd);
+            BulkSourcePrimePtr.Value -= new Complex(_load.CondBs, xbs);
+            DrainPrimeGatePtr.Value += new Complex((xnrm - xrev) * _load.Transconductance, -xgd);
+            DrainPrimeBulkPtr.Value += new Complex(-_load.CondBd + (xnrm - xrev) * _load.TransconductanceBs, -xbd);
+            SourcePrimeGatePtr.Value -= new Complex((xnrm - xrev) * _load.Transconductance, xgs);
+            SourcePrimeBulkPtr.Value -= new Complex(_load.CondBs + (xnrm - xrev) * _load.TransconductanceBs, xbs);
+            DrainDrainPtr.Value += (Complex)_temp.DrainConductance;
+            SourceSourcePtr.Value += (Complex)_temp.SourceConductance;
+            DrainDrainPrimePtr.Value -= _temp.DrainConductance;
+            SourceSourcePrimePtr.Value -= _temp.SourceConductance;
+            DrainPrimeDrainPtr.Value -= _temp.DrainConductance;
+            DrainPrimeSourcePrimePtr.Value -= _load.CondDs + xnrm * (_load.Transconductance + _load.TransconductanceBs);
+            SourcePrimeSourcePtr.Value -= _temp.SourceConductance;
+            SourcePrimeDrainPrimePtr.Value -= _load.CondDs + xrev * (_load.Transconductance + _load.TransconductanceBs);
         }
     }
 }

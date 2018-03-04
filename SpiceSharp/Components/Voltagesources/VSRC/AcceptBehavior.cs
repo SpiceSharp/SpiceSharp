@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters bp;
+        BaseParameters _bp;
 
         /// <summary>
         /// Constructor
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <param name="simulation">Time-based simulation</param>
         public override void Accept(TimeSimulation simulation)
         {
-            bp.Waveform?.Accept(simulation);
+            _bp.Waveform?.Accept(simulation);
         }
     }
 }

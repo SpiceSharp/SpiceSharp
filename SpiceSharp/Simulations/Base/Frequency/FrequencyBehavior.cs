@@ -21,7 +21,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="propertyName">Property name</param>
         /// <returns></returns>
-        public virtual Func<ComplexState, Complex> CreateACExport(string propertyName)
+        public virtual Func<ComplexState, Complex> CreateAcExport(string propertyName)
         {
             return CreateExport<ComplexState, Complex>(propertyName);
         }

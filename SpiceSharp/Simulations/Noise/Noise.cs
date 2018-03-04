@@ -116,10 +116,10 @@ namespace SpiceSharp.Simulations
             nstate.Reset(FrequencySweep.Initial);
             cstate.Laplace = 0;
             state.Domain = RealState.DomainType.Frequency;
-            state.UseIC = false;
-            state.UseDC = true;
-            Op(baseconfig.DCMaxIterations);
-            state.Sparse |= RealState.SparseStates.ACShouldReorder;
+            state.UseIc = false;
+            state.UseDc = true;
+            Op(baseconfig.DcMaxIterations);
+            state.Sparse |= RealState.SparseStates.AcShouldReorder;
 
             // Connect noise sources
             foreach (var behavior in NoiseBehaviors)
@@ -130,7 +130,7 @@ namespace SpiceSharp.Simulations
             {
                 nstate.Frequency = freq;
                 cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);
-                ACIterate();
+                AcIterate();
 
                 Complex val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
                 nstate.GainInverseSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);

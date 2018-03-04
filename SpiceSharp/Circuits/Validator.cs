@@ -16,11 +16,11 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        bool HasSource;
-        bool HasGround;
-        List<Tuple<Component, int, int>> voltageDriven = new List<Tuple<Component, int, int>>();
-        Dictionary<int, int> connectedGroups = new Dictionary<int, int>();
-        int cgroup;
+        bool _hasSource;
+        bool _hasGround;
+        List<Tuple<Component, int, int>> _voltageDriven = new List<Tuple<Component, int, int>>();
+        Dictionary<int, int> _connectedGroups = new Dictionary<int, int>();
+        int _cgroup;
         
         /// <summary>
         /// Validate a circuit
@@ -37,22 +37,22 @@ namespace SpiceSharp.Circuits
                 o.Setup(circuit);
 
             // Initialize
-            HasSource = false;
-            voltageDriven.Clear();
-            connectedGroups.Clear();
-            connectedGroups.Add(0, 0);
-            cgroup = 1;
+            _hasSource = false;
+            _voltageDriven.Clear();
+            _connectedGroups.Clear();
+            _connectedGroups.Add(0, 0);
+            _cgroup = 1;
 
             // Check all objects
             foreach (var c in circuit.Objects)
                 CheckEntity(c);
 
             // Check if a voltage source is available
-            if (!HasSource)
+            if (!_hasSource)
                 throw new CircuitException("No independent source found");
 
             // Check if a circuit has ground
-            if (!HasGround)
+            if (!_hasGround)
                 throw new CircuitException("No ground found");
 
             // Check if a voltage driver is closing a loop
@@ -94,7 +94,7 @@ namespace SpiceSharp.Circuits
 
                     // Check for a connection to ground
                     if (index == 0)
-                        HasGround = true;
+                        _hasGround = true;
 
                     // Check for short-circuited devices
                     if (n < 0)
@@ -111,8 +111,8 @@ namespace SpiceSharp.Circuits
 
                     // Group indices
                     nodes[i] = index;
-                    if (!connectedGroups.ContainsKey(index))
-                        connectedGroups.Add(index, cgroup++);
+                    if (!_connectedGroups.ContainsKey(index))
+                        _connectedGroups.Add(index, _cgroup++);
                 }
                 if (isShortcircuit)
                     throw new CircuitException("{0}: All pins are short-circuited".FormatString(icc.Name));
@@ -124,11 +124,11 @@ namespace SpiceSharp.Circuits
                 {
                     // Voltage driven nodes are checked for voltage loops
                     if (attr is VoltageDriverAttribute vd)
-                        voltageDriven.Add(new Tuple<Component, int, int>(icc, nodes[vd.Positive], nodes[vd.Negative]));
+                        _voltageDriven.Add(new Tuple<Component, int, int>(icc, nodes[vd.Positive], nodes[vd.Negative]));
 
                     // At least one source needs to be available
                     if (attr is IndependentSourceAttribute)
-                        HasSource = true;
+                        _hasSource = true;
 
                     if (attr is ConnectedAttribute conn)
                     {
@@ -154,7 +154,7 @@ namespace SpiceSharp.Circuits
             int index = 1;
             Dictionary<int, int> map = new Dictionary<int, int>();
             map.Add(0, 0);
-            foreach (var vd in voltageDriven)
+            foreach (var vd in _voltageDriven)
             {
                 if (vd.Item2 != 0)
                 {
@@ -169,10 +169,10 @@ namespace SpiceSharp.Circuits
             }
 
             // Determine the rank of the matrix
-            RealSolver solver = new RealSolver(Math.Max(voltageDriven.Count, map.Count));
-            for (int i = 0; i < voltageDriven.Count; i++)
+            RealSolver solver = new RealSolver(Math.Max(_voltageDriven.Count, map.Count));
+            for (int i = 0; i < _voltageDriven.Count; i++)
             {
-                var pins = voltageDriven[i];
+                var pins = _voltageDriven[i];
                 solver.GetMatrixElement(i + 1, map[pins.Item2]).Value += 1.0;
                 solver.GetMatrixElement(i + 1, map[pins.Item3]).Value += 1.0;
             }
@@ -188,10 +188,10 @@ namespace SpiceSharp.Circuits
                  * the matrix is not solvable for those nodes. This means that there are
                  * voltage sources driving nodes in such a way that they cannot be solved.
                  */
-                if (exception.Index <= voltageDriven.Count)
+                if (exception.Index <= _voltageDriven.Count)
                 {
                     var indices = solver.InternalToExternal(new Tuple<int, int>(exception.Index, exception.Index));
-                    return voltageDriven[indices.Item1 - 1].Item1;
+                    return _voltageDriven[indices.Item1 - 1].Item1;
                 }
             }
             return null;
@@ -225,25 +225,25 @@ namespace SpiceSharp.Circuits
                 return;
 
             int groupa, groupb;
-            bool hasa = connectedGroups.TryGetValue(a, out groupa);
-            bool hasb = connectedGroups.TryGetValue(b, out groupb);
+            bool hasa = _connectedGroups.TryGetValue(a, out groupa);
+            bool hasb = _connectedGroups.TryGetValue(b, out groupb);
 
             if (hasa && hasb)
             {
                 // Connect the two groups to that of the minimum group
                 int newgroup = Math.Min(groupa, groupb);
                 int oldgroup = Math.Max(groupa, groupb);
-                int[] keys = connectedGroups.Keys.ToArray();
+                int[] keys = _connectedGroups.Keys.ToArray();
                 foreach (var key in keys)
                 {
-                    if (connectedGroups[key] == oldgroup)
-                        connectedGroups[key] = newgroup;
+                    if (_connectedGroups[key] == oldgroup)
+                        _connectedGroups[key] = newgroup;
                 }
             }
             else if (hasa)
-                connectedGroups.Add(b, groupa);
+                _connectedGroups.Add(b, groupa);
             else if (hasb)
-                connectedGroups.Add(a, groupb);
+                _connectedGroups.Add(a, groupb);
         }
 
         /// <summary>
@@ -254,9 +254,9 @@ namespace SpiceSharp.Circuits
         {
             HashSet<int> unconnected = new HashSet<int>();
 
-            foreach (var key in connectedGroups.Keys)
+            foreach (var key in _connectedGroups.Keys)
             {
-                if (connectedGroups[key] != 0)
+                if (_connectedGroups[key] != 0)
                     unconnected.Add(key);
             }
 

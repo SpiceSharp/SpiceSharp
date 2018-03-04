@@ -15,9 +15,9 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Private variable
         /// </summary>
-        int[] extToInt;
-        int[] intToExt;
-        int allocated;
+        int[] _extToInt;
+        int[] _intToExt;
+        int _allocated;
 
         /// <summary>
         /// Gets the current length of the translation vector
@@ -30,14 +30,14 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="size">Number</param>
         public Translation(int size)
         {
-            extToInt = new int[size + 1];
-            intToExt = new int[size + 1];
+            _extToInt = new int[size + 1];
+            _intToExt = new int[size + 1];
             for (int i = 1; i <= size; i++)
             {
-                extToInt[i] = i;
-                intToExt[i] = i;
+                _extToInt[i] = i;
+                _intToExt[i] = i;
             }
-            allocated = size;
+            _allocated = size;
         }
 
         /// <summary>
@@ -60,9 +60,9 @@ namespace SpiceSharp.Algebra.Solve
                 // Zero is mapped to zero
                 if (index == 0)
                     return 0;
-                if (index > allocated)
+                if (index > _allocated)
                     ExpandTranslation(index);
-                return extToInt[index];
+                return _extToInt[index];
             }
         }
 
@@ -75,9 +75,9 @@ namespace SpiceSharp.Algebra.Solve
         {
             if (index == 0)
                 return 0;
-            if (index > allocated)
+            if (index > _allocated)
                 ExpandTranslation(index);
-            return intToExt[index];
+            return _intToExt[index];
         }
 
         /// <summary>
@@ -91,13 +91,13 @@ namespace SpiceSharp.Algebra.Solve
                 ExpandTranslation(Math.Max(index1, index2));
 
             // Get the matching external indices
-            var tmp = intToExt[index1];
-            intToExt[index1] = intToExt[index2];
-            intToExt[index2] = tmp;
+            var tmp = _intToExt[index1];
+            _intToExt[index1] = _intToExt[index2];
+            _intToExt[index2] = tmp;
 
             // Update the external indices
-            extToInt[intToExt[index1]] = index1;
-            extToInt[intToExt[index2]] = index2;
+            _extToInt[_intToExt[index1]] = index1;
+            _extToInt[_intToExt[index2]] = index2;
         }
 
         /// <summary>
@@ -116,11 +116,11 @@ namespace SpiceSharp.Algebra.Solve
                 throw new ArgumentException("Length of inputs does not match");
 
             // Expand translation vectors if necessary
-            if (allocated < source.Length || allocated < target.Length)
+            if (_allocated < source.Length || _allocated < target.Length)
                 ExpandTranslation(Math.Max(source.Length, target.Length));
 
-            for (int i = 1; i < extToInt.Length; i++)
-                target[extToInt[i]] = source[i];
+            for (int i = 1; i < _extToInt.Length; i++)
+                target[_extToInt[i]] = source[i];
         }
 
         /// <summary>
@@ -140,11 +140,11 @@ namespace SpiceSharp.Algebra.Solve
                 throw new ArgumentException("Length of inputs does not match");
 
             // Expand translation vectors if necessary
-            if (allocated < source.Length || allocated < target.Length)
+            if (_allocated < source.Length || _allocated < target.Length)
                 ExpandTranslation(Math.Max(source.Length - 1, target.Length));
 
             for (int i = 1; i < source.Length; i++)
-                target[intToExt[i]] = source[i];
+                target[_intToExt[i]] = source[i];
         }
 
         /// <summary>
@@ -154,22 +154,22 @@ namespace SpiceSharp.Algebra.Solve
         void ExpandTranslation(int newLength)
         {
             // No need to reallocate vector
-            if (newLength <= allocated)
+            if (newLength <= _allocated)
             {
                 Length = newLength;
                 return;
             }
 
             // Reallocate
-            int oldAllocated = allocated;
-            allocated = Math.Max(newLength, (int)(allocated * ExpansionFactor));
+            int oldAllocated = _allocated;
+            _allocated = Math.Max(newLength, (int)(_allocated * ExpansionFactor));
 
-            Array.Resize(ref extToInt, allocated + 1);
-            Array.Resize(ref intToExt, allocated + 1);
-            for (int i = oldAllocated + 1; i <= allocated; i++)
+            Array.Resize(ref _extToInt, _allocated + 1);
+            Array.Resize(ref _intToExt, _allocated + 1);
+            for (int i = oldAllocated + 1; i <= _allocated; i++)
             {
-                extToInt[i] = i;
-                intToExt[i] = i;
+                _extToInt[i] = i;
+                _intToExt[i] = i;
             }
             Length = newLength;
         }

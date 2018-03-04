@@ -34,15 +34,15 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// The current point
         /// </summary>
-        NodeHistoryPoint currentPoint;
+        NodeHistoryPoint _currentPoint;
 
         /// <summary>
         /// Gets or sets the current point
         /// </summary>
         public override T Current
         {
-            get => currentPoint.Value;
-            set => currentPoint.Value = value;
+            get => _currentPoint.Value;
+            set => _currentPoint.Value = value;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace SpiceSharp.IntegrationMethods
             get
             {
                 // Find the matching node
-                var point = currentPoint;
+                var point = _currentPoint;
                 for (int i = 0; i < index; i++)
                     point = point.Previous;
                 return point.Value;
@@ -143,7 +143,7 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         public override void Cycle()
         {
-            currentPoint = currentPoint.Next;
+            _currentPoint = _currentPoint.Next;
         }
 
         /// <summary>
@@ -152,8 +152,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="newValue">New value</param>
         public override void Store(T newValue)
         {
-            currentPoint = currentPoint.Next;
-            currentPoint.Value = newValue;
+            _currentPoint = _currentPoint.Next;
+            _currentPoint.Value = newValue;
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <param name="value"></param>
         public override void Clear(T value)
         {
-            var current = currentPoint;
+            var current = _currentPoint;
             for (int i = 0; i < Length; i++)
             {
                 current.Value = value;
@@ -179,7 +179,7 @@ namespace SpiceSharp.IntegrationMethods
             if (generator == null)
                 throw new ArgumentNullException(nameof(generator));
 
-            var current = currentPoint;
+            var current = _currentPoint;
             for (int i = 0; i < Length; i++)
             {
                 current.Value = generator(i);
@@ -194,7 +194,7 @@ namespace SpiceSharp.IntegrationMethods
         {
             get
             {
-                var current = currentPoint;
+                var current = _currentPoint;
                 for (int i = 0; i < Length; i++)
                 {
                     yield return current.Value;

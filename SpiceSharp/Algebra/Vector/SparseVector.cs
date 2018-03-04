@@ -49,18 +49,18 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Gets the first element in the vector
         /// </summary>
-        public VectorElement<T> First { get => firstInVector; }
+        public VectorElement<T> First { get => _firstInVector; }
 
         /// <summary>
         /// Gets the last element in the vector
         /// </summary>
-        public VectorElement<T> Last { get => lastInVector; }
+        public VectorElement<T> Last { get => _lastInVector; }
 
         /// <summary>
         /// Private variables
         /// </summary>
-        SparseVectorElement<T> firstInVector, lastInVector;
-        VectorElement<T> trashCan;
+        SparseVectorElement<T> _firstInVector, _lastInVector;
+        VectorElement<T> _trashCan;
 
         /// <summary>
         /// Constructor
@@ -68,7 +68,7 @@ namespace SpiceSharp.Algebra
         public SparseVector()
             : base(1)
         {
-            trashCan = new SparseVectorElement<T>(0);
+            _trashCan = new SparseVectorElement<T>(0);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace SpiceSharp.Algebra
         public SparseVector(int length)
             : base(length)
         {
-            trashCan = new SparseVectorElement<T>(0);
+            _trashCan = new SparseVectorElement<T>(0);
         }
 
         /// <summary>
@@ -91,14 +91,14 @@ namespace SpiceSharp.Algebra
             if (index < 0)
                 throw new ArgumentException("Invalid index {0}".FormatString(index));
             if (index == 0)
-                return trashCan;
+                return _trashCan;
 
             // Expand the vector if it is necessary
             if (index > Length)
                 Length = index;
 
             // Find the element
-            SparseVectorElement<T> element = firstInVector, lastElement = null;
+            SparseVectorElement<T> element = _firstInVector, lastElement = null;
             while (element != null)
             {
                 if (element.Index > index)
@@ -114,14 +114,14 @@ namespace SpiceSharp.Algebra
 
             // Update links for last element
             if (lastElement == null)
-                firstInVector = result;
+                _firstInVector = result;
             else
                 lastElement.NextInVector = result;
             result.PreviousInVector = lastElement;
 
             // Update links for next element
             if (element == null)
-                lastInVector = result;
+                _lastInVector = result;
             else
                 element.PreviousInVector = result;
             result.NextInVector = element;
@@ -140,10 +140,10 @@ namespace SpiceSharp.Algebra
             if (index > Length)
                 return null;
             if (index == 0)
-                return trashCan;
+                return _trashCan;
 
             // Find the element
-            var element = firstInVector;
+            var element = _firstInVector;
             while (element != null)
             {
                 if (element.Index == index)
@@ -163,11 +163,11 @@ namespace SpiceSharp.Algebra
         {
             // Update surrounding links
             if (element.PreviousInVector == null)
-                firstInVector = element.NextInVector;
+                _firstInVector = element.NextInVector;
             else
                 element.PreviousInVector.NextInVector = element.NextInVector;
             if (element.NextInVector == null)
-                lastInVector = element.PreviousInVector;
+                _lastInVector = element.PreviousInVector;
             else
                 element.NextInVector.PreviousInVector = element.PreviousInVector;
         }
@@ -194,7 +194,7 @@ namespace SpiceSharp.Algebra
             SparseVectorElement<T> first = null, second = null;
 
             // Find first element
-            var element = firstInVector;
+            var element = _firstInVector;
             while (element != null)
             {
                 if (element.Index == index1)
@@ -249,7 +249,7 @@ namespace SpiceSharp.Algebra
 
                 // We now have the element below the insertion point
                 if (element.PreviousInVector == null)
-                    firstInVector = second;
+                    _firstInVector = second;
                 else
                     element.PreviousInVector.NextInVector = second;
                 second.PreviousInVector = element.PreviousInVector;
@@ -274,7 +274,7 @@ namespace SpiceSharp.Algebra
 
                 // We now have the first element above the insertion point
                 if (element.NextInVector == null)
-                    lastInVector = first;
+                    _lastInVector = first;
                 else
                     element.NextInVector.PreviousInVector = first;
                 first.NextInVector = element.NextInVector;
@@ -289,11 +289,11 @@ namespace SpiceSharp.Algebra
                 {
                     // Correct surrounding links
                     if (first.PreviousInVector == null)
-                        firstInVector = second;
+                        _firstInVector = second;
                     else
                         first.PreviousInVector.NextInVector = second;
                     if (second.NextInVector == null)
-                        lastInVector = first;
+                        _lastInVector = first;
                     else
                         second.NextInVector.PreviousInVector = first;
 
@@ -309,12 +309,12 @@ namespace SpiceSharp.Algebra
                 {
                     // Swap surrounding links
                     if (first.PreviousInVector == null)
-                        firstInVector = second;
+                        _firstInVector = second;
                     else
                         first.PreviousInVector.NextInVector = second;
                     first.NextInVector.PreviousInVector = second;
                     if (second.NextInVector == null)
-                        lastInVector = first;
+                        _lastInVector = first;
                     else
                         second.NextInVector.PreviousInVector = first;
                     second.PreviousInVector.NextInVector = first;

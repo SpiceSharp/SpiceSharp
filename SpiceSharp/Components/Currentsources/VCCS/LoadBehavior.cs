@@ -15,12 +15,12 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// <summary>
         /// Necessary parameters and behaviors
         /// </summary>
-        BaseParameters bp;
+        BaseParameters _bp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, contPosourceNode, contNegateNode;
+        int _posNode, _negNode, _contPosourceNode, _contNegateNode;
         protected MatrixElement<double> PosControlPosPtr { get; private set; }
         protected MatrixElement<double> PosControlNegPtr { get; private set; }
         protected MatrixElement<double> NegControlPosPtr { get; private set; }
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
             
-            return state.Solution[posNode] - state.Solution[negNode];
+            return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Current")]
         public double GetCurrent(RealState state)
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[posNode] - state.Solution[negNode]) * bp.Coefficient;
+            return (state.Solution[_posNode] - state.Solution[_negNode]) * _bp.Coefficient;
         }
         [PropertyName("p"), PropertyInfo("Power")]
         public double GetPower(RealState state)
@@ -51,8 +51,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            double v = state.Solution[posNode] - state.Solution[negNode];
-            return v * v * bp.Coefficient;
+            double v = state.Solution[_posNode] - state.Solution[_negNode];
+            return v * v * _bp.Coefficient;
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
         }
 
         /// <summary>
@@ -102,10 +102,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
-            contPosourceNode = pins[2];
-            contNegateNode = pins[3];
+            _posNode = pins[0];
+            _negNode = pins[1];
+            _contPosourceNode = pins[2];
+            _contNegateNode = pins[3];
         }
 
         /// <summary>
@@ -117,10 +117,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
-            PosControlPosPtr = solver.GetMatrixElement(posNode, contPosourceNode);
-            PosControlNegPtr = solver.GetMatrixElement(posNode, contNegateNode);
-            NegControlPosPtr = solver.GetMatrixElement(negNode, contPosourceNode);
-            NegControlNegPtr = solver.GetMatrixElement(negNode, contNegateNode);
+            PosControlPosPtr = solver.GetMatrixElement(_posNode, _contPosourceNode);
+            PosControlNegPtr = solver.GetMatrixElement(_posNode, _contNegateNode);
+            NegControlPosPtr = solver.GetMatrixElement(_negNode, _contPosourceNode);
+            NegControlNegPtr = solver.GetMatrixElement(_negNode, _contNegateNode);
         }
 
         /// <summary>
@@ -141,10 +141,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
         /// <param name="simulation">Base simulation</param>
         public override void Load(BaseSimulation simulation)
         {
-            PosControlPosPtr.Value += bp.Coefficient;
-            PosControlNegPtr.Value -= bp.Coefficient;
-            NegControlPosPtr.Value -= bp.Coefficient;
-            NegControlNegPtr.Value += bp.Coefficient;
+            PosControlPosPtr.Value += _bp.Coefficient;
+            PosControlNegPtr.Value -= _bp.Coefficient;
+            NegControlPosPtr.Value -= _bp.Coefficient;
+            NegControlNegPtr.Value += _bp.Coefficient;
         }
     }
 }

@@ -12,12 +12,12 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Nodes in the collection
         /// </summary>
-        List<int> nodes = new List<int>();
+        List<int> _nodes = new List<int>();
 
         /// <summary>
         /// Gets number of nodes
         /// </summary>
-        public int Count => nodes.Count;
+        public int Count => _nodes.Count;
 
         /// <summary>
         /// Gets node
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <returns></returns>
         public int this[int index]
         {
-            get => nodes[index];
+            get => _nodes[index];
         }
 
         /// <summary>
@@ -39,19 +39,19 @@ namespace SpiceSharp.Components.NoiseSources
                 throw new ArgumentNullException(nameof(nodes));
 
             foreach (var node in nodes)
-                this.nodes.Add(node);
+                this._nodes.Add(node);
         }
 
         /// <summary>
         /// Gets enumerator
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<int> GetEnumerator() => nodes.GetEnumerator();
+        public IEnumerator<int> GetEnumerator() => _nodes.GetEnumerator();
 
         /// <summary>
         /// Gets enumerator
         /// </summary>
         /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator() => nodes.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _nodes.GetEnumerator();
     }
 }

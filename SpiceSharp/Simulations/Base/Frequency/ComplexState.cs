@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
             /// Indicates that the matrix should be reordered for AC analysis
             /// </summary>
             /// <remarks>Pivoting is necessary to minimize numerical errors and to factorize a matrix using LU decomposition.</remarks>
-            ACShouldReorder = 0x10
+            AcShouldReorder = 0x10
         }
 
         /// <summary>

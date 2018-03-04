@@ -46,7 +46,7 @@ namespace SpiceSharp.Simulations
             // 1) First try transient analysis
             var behavior = eb.Get<FrequencyBehavior>();
             if (behavior != null)
-                stateExtractor = behavior.CreateACExport(PropertyName);
+                stateExtractor = behavior.CreateAcExport(PropertyName);
 
             // Create the extractor
             if (stateExtractor != null)

@@ -4,9 +4,9 @@ using SpiceSharp.Attributes;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Configuration for a <see cref="DC"/>
+    /// Configuration for a <see cref="Dc"/>
     /// </summary>
-    public class DCConfiguration : ParameterSet
+    public class DcConfiguration : ParameterSet
     {
         /// <summary>
         /// Gets the list of sweeps that need to be executed

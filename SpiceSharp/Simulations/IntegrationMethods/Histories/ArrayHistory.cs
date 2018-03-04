@@ -14,8 +14,8 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         public override T Current
         {
-            get => history[0];
-            set => history[0] = value;
+            get => _history[0];
+            set => _history[0] = value;
         }
 
         /// <summary>
@@ -29,14 +29,14 @@ namespace SpiceSharp.IntegrationMethods
             {
                 if (index < 0 || index >= Length)
                     throw new ArgumentException("Invalid index {0}".FormatString(index));
-                return history[index];
+                return _history[index];
             }
         }
         
         /// <summary>
         /// Timesteps in history
         /// </summary>
-        T[] history;
+        T[] _history;
 
         /// <summary>
         /// Constructor
@@ -45,7 +45,7 @@ namespace SpiceSharp.IntegrationMethods
         public ArrayHistory(int length)
             : base(length)
         {
-            history = new T[length];
+            _history = new T[length];
         }
 
         /// <summary>
@@ -56,9 +56,9 @@ namespace SpiceSharp.IntegrationMethods
         public ArrayHistory(int length, T defaultValue)
             : base(length)
         {
-            history = new T[length];
+            _history = new T[length];
             for (int i = 0; i < length; i++)
-                history[i] = defaultValue;
+                _history[i] = defaultValue;
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace SpiceSharp.IntegrationMethods
                 throw new ArgumentNullException(nameof(generator));
 
             for (int i = 0; i < length; i++)
-                history[i] = generator(i);
+                _history[i] = generator(i);
         }
 
         /// <summary>
@@ -81,10 +81,10 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         public override void Cycle()
         {
-            T tmp = history[Length - 1];
+            T tmp = _history[Length - 1];
             for (int i = Length - 1; i > 0; i--)
-                history[i] = history[i - 1];
-            history[0] = tmp;
+                _history[i] = _history[i - 1];
+            _history[0] = tmp;
         }
 
         /// <summary>
@@ -95,8 +95,8 @@ namespace SpiceSharp.IntegrationMethods
         {
             // Shift the history
             for (int i = Length - 1; i > 0; i--)
-                history[i] = history[i - 1];
-            history[0] = newValue;
+                _history[i] = _history[i - 1];
+            _history[0] = newValue;
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace SpiceSharp.IntegrationMethods
         public override void Clear(T value)
         {
             for (int i = 0; i < Length; i++)
-                history[i] = value;
+                _history[i] = value;
         }
 
         /// <summary>
@@ -119,12 +119,12 @@ namespace SpiceSharp.IntegrationMethods
                 throw new ArgumentNullException(nameof(generator));
 
             for (int i = 0; i < Length; i++)
-                history[i] = generator(i);
+                _history[i] = generator(i);
         }
 
         /// <summary>
         /// Gets enumerable version
         /// </summary>
-        protected override IEnumerable<T> Points => history;
+        protected override IEnumerable<T> Points => _history;
     }
 }

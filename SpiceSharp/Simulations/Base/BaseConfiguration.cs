@@ -49,6 +49,6 @@
         /// <summary>
         /// Number of iterations for DC simulation
         /// </summary>
-        public int DCMaxIterations { get; set; } = 100;
+        public int DcMaxIterations { get; set; } = 100;
     }
 }

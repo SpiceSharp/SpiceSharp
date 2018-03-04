@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters bp;
+        BaseParameters _bp;
 
         /// <summary>
         /// Gets voltage across the voltage source
@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[posNode] - state.Solution[negNode]);
+            return (state.Solution[_posNode] - state.Solution[_negNode]);
         }
         [PropertyName("p"), PropertyInfo("Power supplied by the source")]
         public double GetP(RealState state)
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[posNode] - state.Solution[posNode]) * -Current;
+            return (state.Solution[_posNode] - state.Solution[_posNode]) * -Current;
         }
         [PropertyName("c"), PropertyName("i"), PropertyInfo("Current through current source")]
         public double Current { get; protected set; }
@@ -45,8 +45,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
-        VectorElement<double> posPtr, negPtr;
+        int _posNode, _negNode;
+        VectorElement<double> _posPtr, _negPtr;
 
         /// <summary>
         /// Constructor
@@ -82,13 +82,13 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
 
             // Give some warnings if no value is given
-            if (!bp.DCValue.Given)
+            if (!_bp.DcValue.Given)
             {
                 // no DC value - either have a transient value or none
-                if (bp.Waveform != null)
+                if (_bp.Waveform != null)
                     CircuitWarning.Warning(this, "{0} has no DC value, transient time 0 value used".FormatString(Name));
                 else
                     CircuitWarning.Warning(this, "{0} has no value, DC 0 assumed".FormatString(Name));
@@ -105,8 +105,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -119,8 +119,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
-            posPtr = solver.GetRhsElement(posNode);
-            negPtr = solver.GetRhsElement(negNode);
+            _posPtr = solver.GetRhsElement(_posNode);
+            _negPtr = solver.GetRhsElement(_negNode);
         }
 
         /// <summary>
@@ -144,19 +144,19 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                     time = tsim.Method.Time;
 
                 // Use the waveform if possible
-                if (bp.Waveform != null)
-                    value = bp.Waveform.At(time);
+                if (_bp.Waveform != null)
+                    value = _bp.Waveform.At(time);
                 else
-                    value = bp.DCValue * state.SourceFactor;
+                    value = _bp.DcValue * state.SourceFactor;
             }
             else
             {
                 // AC or DC analysis use the DC value
-                value = bp.DCValue * state.SourceFactor;
+                value = _bp.DcValue * state.SourceFactor;
             }
 
-            posPtr.Value += value;
-            negPtr.Value -= value;
+            _posPtr.Value += value;
+            _negPtr.Value -= value;
             Current = value;
         }
     }

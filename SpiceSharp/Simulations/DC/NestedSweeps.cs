@@ -18,18 +18,18 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public SweepInstance this[int index]
         {
-            get => instances[index];
+            get => _instances[index];
         }
 
         /// <summary>
         /// Gets the amount of nested sweeps
         /// </summary>
-        public int Count { get => instances.Count; }
+        public int Count { get => _instances.Count; }
 
         /// <summary>
         /// Private variables
         /// </summary>
-        List<SweepInstance> instances = new List<SweepInstance>();
+        List<SweepInstance> _instances = new List<SweepInstance>();
 
         /// <summary>
         /// Constructor
@@ -50,7 +50,7 @@ namespace SpiceSharp.Simulations
         /// <param name="sweep">Sweep</param>
         void Add(SweepConfiguration sweep)
         {
-            instances.Add(new SweepInstance(sweep.ComponentName, sweep.Start, sweep.Stop, sweep.Step));
+            _instances.Add(new SweepInstance(sweep.ComponentName, sweep.Start, sweep.Stop, sweep.Step));
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public void Clear()
         {
-            instances.Clear();
+            _instances.Clear();
         }
     }
 }

@@ -28,20 +28,20 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// <summary>
         /// Gets the Markowitz row counts
         /// </summary>
-        public int RowCount(int row) => markowitzRow[row];
-        int[] markowitzRow;
+        public int RowCount(int row) => _markowitzRow[row];
+        int[] _markowitzRow;
 
         /// <summary>
         /// Gets the Markowitz column counts
         /// </summary>
-        public int ColumnCount(int column) => markowitzColumn[column];
-        int[] markowitzColumn;
+        public int ColumnCount(int column) => _markowitzColumn[column];
+        int[] _markowitzColumn;
 
         /// <summary>
         /// Gets the Markowitz products
         /// </summary>
-        public int Product(int index) => markowitzProduct[index];
-        int[] markowitzProduct;
+        public int Product(int index) => _markowitzProduct[index];
+        int[] _markowitzProduct;
 
         /// <summary>
         /// Gets the number of singletons
@@ -108,9 +108,9 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
                 throw new ArgumentNullException(nameof(matrix));
 
             // Allocate arrays
-            markowitzRow = new int[matrix.Size + 1];
-            markowitzColumn = new int[matrix.Size + 1];
-            markowitzProduct = new int[matrix.Size + 2];
+            _markowitzRow = new int[matrix.Size + 1];
+            _markowitzColumn = new int[matrix.Size + 1];
+            _markowitzProduct = new int[matrix.Size + 2];
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
                 if (rhsElement != null && rhsElement.Index == i)
                     count++;
                 
-                markowitzRow[i] = Math.Min(count, MaxMarkowitzCount);
+                _markowitzRow[i] = Math.Min(count, MaxMarkowitzCount);
             }
             
             // Generate Markowitz column count
@@ -162,7 +162,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
                     count++;
                     element = element.Below;
                 }
-                markowitzColumn[i] = Math.Min(count, MaxMarkowitzCount);
+                _markowitzColumn[i] = Math.Min(count, MaxMarkowitzCount);
             }
         }
 
@@ -178,8 +178,8 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
             for (int i = step; i <= size; i++)
             {
                 // UpdateMarkowitzProduct(i);
-                markowitzProduct[i] = markowitzRow[i] * markowitzColumn[i];
-                if (markowitzProduct[i] == 0)
+                _markowitzProduct[i] = _markowitzRow[i] * _markowitzColumn[i];
+                if (_markowitzProduct[i] == 0)
                     Singletons++;
             }
         }
@@ -198,7 +198,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
             Magnitude = magnitude;
 
             // Initialize Markowitz row, column and product vectors if necessary
-            if (markowitzRow == null || markowitzRow.Length != matrix.Size + 1)
+            if (_markowitzRow == null || _markowitzRow.Length != matrix.Size + 1)
                 Initialize(matrix);
 
             Count(matrix, rhs, step);
@@ -215,7 +215,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         public override void MovePivot(SparseMatrix<T> matrix, SparseVector<T> rhs, MatrixElement<T> pivot, int step)
         {
             // If we haven't setup, just skip
-            if (markowitzProduct == null)
+            if (_markowitzProduct == null)
                 return;
             if (pivot == null)
                 throw new ArgumentNullException(nameof(pivot));
@@ -224,28 +224,28 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
             int column = pivot.Column;
 
             // Decrease singletons if we are using one as a pivot!
-            if (markowitzRow[row] == 0 || markowitzColumn[column] == 0)
+            if (_markowitzRow[row] == 0 || _markowitzColumn[column] == 0)
                 Singletons--;
 
             // Exchange rows
             if (pivot.Row != step)
             {
                 // Swap row Markowitz numbers
-                int tmp = markowitzRow[row];
-                markowitzRow[row] = markowitzRow[step];
-                markowitzRow[step] = tmp;
+                int tmp = _markowitzRow[row];
+                _markowitzRow[row] = _markowitzRow[step];
+                _markowitzRow[step] = tmp;
 
                 // Update the Markowitz product
-                int oldProduct = markowitzProduct[row];
-                markowitzProduct[row] = markowitzRow[row] * markowitzColumn[row];
+                int oldProduct = _markowitzProduct[row];
+                _markowitzProduct[row] = _markowitzRow[row] * _markowitzColumn[row];
                 if (oldProduct == 0)
                 {
-                    if (markowitzProduct[row] != 0)
+                    if (_markowitzProduct[row] != 0)
                         Singletons--;
                 }
                 else
                 {
-                    if (markowitzProduct[row] == 0)
+                    if (_markowitzProduct[row] == 0)
                         Singletons++;
                 }
             }
@@ -254,21 +254,21 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
             if (column != step)
             {
                 // Swap column Markowitz numbers
-                int tmp = markowitzColumn[column];
-                markowitzColumn[column] = markowitzColumn[step];
-                markowitzColumn[step] = tmp;
+                int tmp = _markowitzColumn[column];
+                _markowitzColumn[column] = _markowitzColumn[step];
+                _markowitzColumn[step] = tmp;
 
                 // Update the Markowitz product
-                int oldProduct = markowitzProduct[column];
-                markowitzProduct[column] = markowitzRow[column] * markowitzColumn[column];
+                int oldProduct = _markowitzProduct[column];
+                _markowitzProduct[column] = _markowitzRow[column] * _markowitzColumn[column];
                 if (oldProduct == 0)
                 {
-                    if (markowitzProduct[column] != 0)
+                    if (_markowitzProduct[column] != 0)
                         Singletons--;
                 }
                 else
                 {
-                    if (markowitzProduct[column] == 0)
+                    if (_markowitzProduct[column] == 0)
                         Singletons++;
                 }
             }
@@ -283,7 +283,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         public override void Update(SparseMatrix<T> matrix, MatrixElement<T> pivot, int step)
         {
             // If we haven't setup, just skip
-            if (markowitzProduct == null)
+            if (_markowitzProduct == null)
                 return;
             if (pivot == null)
                 throw new ArgumentNullException(nameof(pivot));
@@ -294,11 +294,11 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
                 int row = column.Row;
                 
                 // Update the Markowitz product
-                markowitzProduct[row] -= markowitzColumn[row];
-                --markowitzRow[row];
+                _markowitzProduct[row] -= _markowitzColumn[row];
+                --_markowitzRow[row];
 
                 // If we reached 0, then the row just turned to a singleton row
-                if (markowitzRow[row] == 0)
+                if (_markowitzRow[row] == 0)
                     Singletons++;
             }
 
@@ -308,12 +308,12 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
                 int column = row.Column;
                 
                 // Update the Markowitz product
-                markowitzProduct[column] -= markowitzRow[column];
-                --markowitzColumn[column];
+                _markowitzProduct[column] -= _markowitzRow[column];
+                --_markowitzColumn[column];
 
                 // If we reached 0, then the column just turned to a singleton column
                 // This only adds a singleton if the row wasn't detected as a singleton row first
-                if (markowitzColumn[column] == 0 && markowitzRow[column] != 0)
+                if (_markowitzColumn[column] == 0 && _markowitzRow[column] != 0)
                     Singletons++;
             }
         }

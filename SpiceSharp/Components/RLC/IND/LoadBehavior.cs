@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int _posNode, _negNode;
         public int BranchEq { get; protected set; }
         
         /// <summary>
@@ -40,10 +40,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             switch (propertyName)
             {
-                case "v": return (RealState state) => state.Solution[posNode] - state.Solution[negNode];
+                case "v": return (RealState state) => state.Solution[_posNode] - state.Solution[_negNode];
                 case "i":
                 case "c": return (RealState state) => state.Solution[BranchEq];
-                case "p": return (RealState state) => (state.Solution[posNode] - state.Solution[negNode]) * state.Solution[BranchEq];
+                case "p": return (RealState state) => (state.Solution[_posNode] - state.Solution[_negNode]) * state.Solution[BranchEq];
                 default: return null;
             }
         }
@@ -67,8 +67,8 @@ namespace SpiceSharp.Components.InductorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -87,10 +87,10 @@ namespace SpiceSharp.Components.InductorBehaviors
             BranchEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
 
             // Get matrix pointers
-            PosBranchPtr = solver.GetMatrixElement(posNode, BranchEq);
-            NegBranchPtr = solver.GetMatrixElement(negNode, BranchEq);
-            BranchNegPtr = solver.GetMatrixElement(BranchEq, negNode);
-            BranchPosPtr = solver.GetMatrixElement(BranchEq, posNode);
+            PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);
+            NegBranchPtr = solver.GetMatrixElement(_negNode, BranchEq);
+            BranchNegPtr = solver.GetMatrixElement(BranchEq, _negNode);
+            BranchPosPtr = solver.GetMatrixElement(BranchEq, _posNode);
         }
 
         /// <summary>

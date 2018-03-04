@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters bp;
+        BaseParameters _bp;
 
         /// <summary>
         /// Device methods and properties
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[posNode] - state.Solution[negNode]) * -state.Solution[BranchEq];
+            return (state.Solution[_posNode] - state.Solution[_negNode]) * -state.Solution[BranchEq];
         }
         [PropertyName("v"), PropertyInfo("Instantaneous voltage")]
         public double Voltage { get; protected set; }
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int _posNode, _negNode;
         public int BranchEq { get; protected set; }
         protected MatrixElement<double> PosBranchPtr { get; private set; }
         protected MatrixElement<double> NegBranchPtr { get; private set; }
@@ -68,16 +68,16 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
 
             // Setup the waveform
-            bp.Waveform?.Setup();
+            _bp.Waveform?.Setup();
 
             // Calculate the voltage source's complex value
-            if (!bp.DCValue.Given)
+            if (!_bp.DcValue.Given)
             {
                 // No DC value: either have a transient value or none
-                if (bp.Waveform != null)
+                if (_bp.Waveform != null)
                     CircuitWarning.Warning(this, "{0}: No DC value, transient time 0 value used".FormatString(Name));
                 else
                     CircuitWarning.Warning(this, "{0}: No value, DC 0 assumed".FormatString(Name));
@@ -111,8 +111,8 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -129,10 +129,10 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             BranchEq = nodes.Create(Name?.Grow("#branch"), Node.NodeType.Current).Index;
 
             // Get matrix elements
-            PosBranchPtr = solver.GetMatrixElement(posNode, BranchEq);
-            BranchPosPtr = solver.GetMatrixElement(BranchEq, posNode);
-            NegBranchPtr = solver.GetMatrixElement(negNode, BranchEq);
-            BranchNegPtr = solver.GetMatrixElement(BranchEq, negNode);
+            PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);
+            BranchPosPtr = solver.GetMatrixElement(BranchEq, _posNode);
+            NegBranchPtr = solver.GetMatrixElement(_negNode, BranchEq);
+            BranchNegPtr = solver.GetMatrixElement(BranchEq, _negNode);
 
             // Get rhs elements
             BranchPtr = solver.GetRhsElement(BranchEq);
@@ -173,14 +173,14 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                     time = tsim.Method.Time;
 
                 // Use the waveform if possible
-                if (bp.Waveform != null)
-                    value = bp.Waveform.At(time);
+                if (_bp.Waveform != null)
+                    value = _bp.Waveform.At(time);
                 else
-                    value = bp.DCValue * state.SourceFactor;
+                    value = _bp.DcValue * state.SourceFactor;
             }
             else
             {
-                value = bp.DCValue * state.SourceFactor;
+                value = _bp.DcValue * state.SourceFactor;
             }
             BranchPtr.Value += value;
         }

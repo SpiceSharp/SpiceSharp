@@ -14,8 +14,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters bp;
-        InductorBehaviors.LoadBehavior load1, load2;
+        BaseParameters _bp;
+        InductorBehaviors.LoadBehavior _load1, _load2;
 
         /// <summary>
         /// Matrix elements
@@ -44,16 +44,16 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
             var bp1 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor1");
             var bp2 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor2");
 
             // Get behaviors
-            load1 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor1");
-            load2 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor2");
+            _load1 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor1");
+            _load2 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor2");
 
             // Calculate coupling factor
-            Factor = bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);
+            Factor = _bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);
         }
 
         /// <summary>
@@ -66,12 +66,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(solver));
 
             // Get extra equations
-            int INDbrEq1 = load1.BranchEq;
-            int INDbrEq2 = load2.BranchEq;
+            int inDbrEq1 = _load1.BranchEq;
+            int inDbrEq2 = _load2.BranchEq;
 
             // Get matrix equations
-            Branch1Branch2Ptr = solver.GetMatrixElement(INDbrEq1, INDbrEq2);
-            Branch2Branch1Ptr = solver.GetMatrixElement(INDbrEq2, INDbrEq1);
+            Branch1Branch2Ptr = solver.GetMatrixElement(inDbrEq1, inDbrEq2);
+            Branch2Branch1Ptr = solver.GetMatrixElement(inDbrEq2, inDbrEq1);
         }
 
         /// <summary>

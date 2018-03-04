@@ -39,7 +39,7 @@ namespace Sandbox
             ckt.Objects["v1"].ParameterSets.SetProperty("acmag", 24.0);
 
             // Create the simulation, exports and references
-            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1, 1e3, 30));
+            Ac ac = new Ac("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1, 1e3, 30));
             Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
 
             ac.OnExportSimulationData += (sender, args) =>

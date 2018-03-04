@@ -13,8 +13,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Necessary parameters and behaviors
         /// </summary>
-        ModelBaseParameters mbp;
-        BaseParameters bp;
+        ModelBaseParameters _mbp;
+        BaseParameters _bp;
 
         /// <summary>
         /// Constructor
@@ -32,9 +32,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
-            if (!bp.Capacitance.Given)
-                mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            if (!_bp.Capacitance.Given)
+                _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
         }
 
         /// <summary>
@@ -46,18 +46,18 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            if (!bp.Capacitance.Given)
+            if (!_bp.Capacitance.Given)
             {
-                if (mbp == null)
+                if (_mbp == null)
                     throw new CircuitException("No model specified");
 
-                double width = bp.Width.Given ? bp.Width.Value : mbp.DefaultWidth.Value;
-                bp.Capacitance.Value = mbp.JunctionCap *
-                    (width - mbp.Narrow) *
-                    (bp.Length - mbp.Narrow) +
-                    mbp.JunctionCapSidewall * 2 * (
-                    (bp.Length - mbp.Narrow) +
-                    (width - mbp.Narrow));
+                double width = _bp.Width.Given ? _bp.Width.Value : _mbp.DefaultWidth.Value;
+                _bp.Capacitance.Value = _mbp.JunctionCap *
+                    (width - _mbp.Narrow) *
+                    (_bp.Length - _mbp.Narrow) +
+                    _mbp.JunctionCapSidewall * 2 * (
+                    (_bp.Length - _mbp.Narrow) +
+                    (width - _mbp.Narrow));
             }
         }
     }

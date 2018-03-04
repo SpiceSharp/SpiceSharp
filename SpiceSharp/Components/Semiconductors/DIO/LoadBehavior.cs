@@ -16,15 +16,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        ModelTemperatureBehavior modeltemp;
-        TemperatureBehavior temp;
-        BaseParameters bp;
-        ModelBaseParameters mbp;
+        ModelTemperatureBehavior _modeltemp;
+        TemperatureBehavior _temp;
+        BaseParameters _bp;
+        ModelBaseParameters _mbp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int _posNode, _negNode;
         public int PosPrimeNode { get; private set; }
         protected MatrixElement<double> PosPosPrimePtr { get; private set; }
         protected MatrixElement<double> NegPosPrimePtr { get; private set; }
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[posNode] - state.Solution[negNode];
+            return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [PropertyName("i"), PropertyName("id"), PropertyInfo("Current through the diode")]
         public double Current { get; protected set; }
@@ -57,7 +57,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return (state.Solution[posNode] - state.Solution[negNode]) * -Current;
+            return (state.Solution[_posNode] - state.Solution[_negNode]) * -Current;
         }
 
         /// <summary>
@@ -76,12 +76,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
-            mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            temp = provider.GetBehavior<TemperatureBehavior>("entity");
-            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            _temp = provider.GetBehavior<TemperatureBehavior>("entity");
+            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -111,22 +111,22 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Create
-            if (mbp.Resistance > 0)
+            if (_mbp.Resistance > 0)
                 PosPrimeNode = nodes.Create(Name.Grow("#pos")).Index;
             else
-                PosPrimeNode = posNode;
+                PosPrimeNode = _posNode;
 
             // Get matrix elements
-            PosPosPrimePtr = solver.GetMatrixElement(posNode, PosPrimeNode);
-            NegPosPrimePtr = solver.GetMatrixElement(negNode, PosPrimeNode);
-            PosPrimePosPtr = solver.GetMatrixElement(PosPrimeNode, posNode);
-            PosPrimeNegPtr = solver.GetMatrixElement(PosPrimeNode, negNode);
-            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
-            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
+            PosPosPrimePtr = solver.GetMatrixElement(_posNode, PosPrimeNode);
+            NegPosPrimePtr = solver.GetMatrixElement(_negNode, PosPrimeNode);
+            PosPrimePosPtr = solver.GetMatrixElement(PosPrimeNode, _posNode);
+            PosPrimeNegPtr = solver.GetMatrixElement(PosPrimeNode, _negNode);
+            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
+            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
             PosPrimePosPrimePtr = solver.GetMatrixElement(PosPrimeNode, PosPrimeNode);
             
             // Get RHS elements
-            NegPtr = solver.GetRhsElement(negNode);
+            NegPtr = solver.GetRhsElement(_negNode);
             PosPrimePtr = solver.GetRhsElement(PosPrimeNode);
         }
 
@@ -154,45 +154,45 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            bool Check;
+            bool check;
             double csat, gspr, vt, vte, vd, vdtemp, evd, cd, gd, arg, evrev, cdeq;
 
             /* 
              * this routine loads diodes for dc and transient analyses.
              */
-            csat = temp.TempSaturationCurrent * bp.Area;
-            gspr = modeltemp.Conductance * bp.Area;
-            vt = Circuit.KOverQ * bp.Temperature;
-            vte = mbp.EmissionCoefficient * vt;
+            csat = _temp.TempSaturationCurrent * _bp.Area;
+            gspr = _modeltemp.Conductance * _bp.Area;
+            vt = Circuit.KOverQ * _bp.Temperature;
+            vte = _mbp.EmissionCoefficient * vt;
 
             // Initialization
-            Check = false;
+            check = false;
             if (state.Init == RealState.InitializationStates.InitJunction)
             {
-                if (bp.Off)
+                if (_bp.Off)
                     vd = 0.0;
                 else
-                    vd = temp.TempVCritical;
+                    vd = _temp.TempVCritical;
             }
-            else if (state.Init == RealState.InitializationStates.InitFix && bp.Off)
+            else if (state.Init == RealState.InitializationStates.InitFix && _bp.Off)
             {
                 vd = 0.0;
             }
             else
             {
                 // Get voltage over the diode (without series resistance)
-                vd = state.Solution[PosPrimeNode] - state.Solution[negNode];
+                vd = state.Solution[PosPrimeNode] - state.Solution[_negNode];
 
                 // limit new junction voltage
-                if ((mbp.BreakdownVoltage.Given) && (vd < Math.Min(0, -temp.TempBreakdownVoltage + 10 * vte)))
+                if ((_mbp.BreakdownVoltage.Given) && (vd < Math.Min(0, -_temp.TempBreakdownVoltage + 10 * vte)))
                 {
-                    vdtemp = -(vd + temp.TempBreakdownVoltage);
-                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(InternalVoltage + temp.TempBreakdownVoltage), vte, temp.TempVCritical, ref Check);
-                    vd = -(vdtemp + temp.TempBreakdownVoltage);
+                    vdtemp = -(vd + _temp.TempBreakdownVoltage);
+                    vdtemp = Semiconductor.LimitJunction(vdtemp, -(InternalVoltage + _temp.TempBreakdownVoltage), vte, _temp.TempVCritical, ref check);
+                    vd = -(vdtemp + _temp.TempBreakdownVoltage);
                 }
                 else
                 {
-                    vd = Semiconductor.LimitJunction(vd, InternalVoltage, vte, temp.TempVCritical, ref Check);
+                    vd = Semiconductor.LimitJunction(vd, InternalVoltage, vte, _temp.TempVCritical, ref check);
                 }
             }
 
@@ -204,7 +204,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 cd = csat * (evd - 1) + state.Gmin * vd;
                 gd = csat * evd / vte + state.Gmin;
             }
-            else if (!mbp.BreakdownVoltage.Given || vd >= -temp.TempBreakdownVoltage)
+            else if (!_mbp.BreakdownVoltage.Given || vd >= -_temp.TempBreakdownVoltage)
             {
                 // Reverse bias
                 arg = 3 * vte / (vd * Math.E);
@@ -215,15 +215,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
             else
             {
                 // Reverse breakdown
-                evrev = Math.Exp(-(temp.TempBreakdownVoltage + vd) / vte);
+                evrev = Math.Exp(-(_temp.TempBreakdownVoltage + vd) / vte);
                 cd = -csat * evrev + state.Gmin * vd;
                 gd = csat * evrev / vte + state.Gmin;
             }
 
             // Check convergence
-            if ((state.Init != RealState.InitializationStates.InitFix) || !bp.Off)
+            if ((state.Init != RealState.InitializationStates.InitFix) || !_bp.Off)
             {
-                if (Check)
+                if (check)
                     state.IsConvergent = false;
             }
 
@@ -260,7 +260,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var state = simulation.RealState;
             var config = simulation.BaseConfiguration;
             double delvd, cdhat, cd;
-            double vd = state.Solution[PosPrimeNode] - state.Solution[negNode];
+            double vd = state.Solution[PosPrimeNode] - state.Solution[_negNode];
 
             delvd = vd - InternalVoltage;
             cdhat = Current + Conduct * delvd;

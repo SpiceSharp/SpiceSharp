@@ -100,27 +100,27 @@ namespace SpiceSharp.Simulations
             double delta = Math.Min(timeConfig.FinalTime / 50.0, timeConfig.Step) / 10.0;
 
             // Initialize before starting the simulation
-            state.UseIC = timeConfig.UseIC;
+            state.UseIc = timeConfig.UseIc;
             state.Domain = RealState.DomainType.Time;
             state.Gmin = baseConfig.Gmin;
 
             // Use node initial conditions if device initial conditions are not used
-            if (!timeConfig.UseIC)
+            if (!timeConfig.UseIc)
                 OnLoad += LoadInitialConditions;
 
             // Calculate the operating point
-            Op(baseConfig.DCMaxIterations);
+            Op(baseConfig.DcMaxIterations);
             Statistics.TimePoints++;
             Method.DeltaOld.Clear(timeConfig.MaxStep);
             Method.Delta = delta;
             Method.SaveDelta = timeConfig.FinalTime / 50.0;
 
             // Stop calculating a DC solution
-            state.UseIC = false;
-            state.UseDC = false;
+            state.UseIc = false;
+            state.UseDc = false;
             foreach (var behavior in TransientBehaviors)
-                behavior.GetDCState(this);
-            StatePool.ClearDC();
+                behavior.GetDcState(this);
+            StatePool.ClearDc();
             OnLoad -= LoadInitialConditions;
 
             // Start our statistics

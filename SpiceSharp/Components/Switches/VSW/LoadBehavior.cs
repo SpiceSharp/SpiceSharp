@@ -14,9 +14,9 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters bp;
-        ModelLoadBehavior modelload;
-        ModelBaseParameters mbp;
+        BaseParameters _bp;
+        ModelLoadBehavior _modelload;
+        ModelBaseParameters _mbp;
 
         /// <summary>
         /// Gets or sets the previous state
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, contPosourceNode, contNegateNode;
+        int _posNode, _negNode, _contPosourceNode, _contNegateNode;
         protected MatrixElement<double> PosPosPtr { get; private set; }
         protected MatrixElement<double> NegPosPtr { get; private set; }
         protected MatrixElement<double> PosNegPtr { get; private set; }
@@ -63,11 +63,11 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
-            mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            modelload = provider.GetBehavior<ModelLoadBehavior>("model");
+            _modelload = provider.GetBehavior<ModelLoadBehavior>("model");
         }
 
         /// <summary>
@@ -80,10 +80,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
-            contPosourceNode = pins[2];
-            contNegateNode = pins[3];
+            _posNode = pins[0];
+            _negNode = pins[1];
+            _contPosourceNode = pins[2];
+            _contNegateNode = pins[3];
         }
 
         /// <summary>
@@ -96,10 +96,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
-            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
-            PosNegPtr = solver.GetMatrixElement(posNode, negNode);
-            NegPosPtr = solver.GetMatrixElement(negNode, posNode);
-            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
+            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
+            PosNegPtr = solver.GetMatrixElement(_posNode, _negNode);
+            NegPosPtr = solver.GetMatrixElement(_negNode, _posNode);
+            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
         }
         
         /// <summary>
@@ -122,59 +122,59 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            double g_now;
-            double v_ctrl;
-            bool previous_state;
-            bool current_state = false;
+            double gNow;
+            double vCtrl;
+            bool previousState;
+            bool currentState = false;
             var state = simulation.RealState;
 
             if (state.Init == RealState.InitializationStates.InitFix || state.Init == RealState.InitializationStates.InitJunction)
             {
-                if (bp.ZeroState)
+                if (_bp.ZeroState)
                 {
                     // Switch specified "on"
                     CurrentState = true;
-                    current_state = true;
+                    currentState = true;
                 }
                 else
                 {
                     // Switch specified "off"
                     CurrentState = false;
-                    current_state = false;
+                    currentState = false;
                 }
             }
             else
             {
                 if (UseOldState)
-                    previous_state = OldState;
+                    previousState = OldState;
                 else
-                    previous_state = CurrentState;
-                v_ctrl = state.Solution[contPosourceNode] - state.Solution[contNegateNode];
+                    previousState = CurrentState;
+                vCtrl = state.Solution[_contPosourceNode] - state.Solution[_contNegateNode];
 
                 // Calculate the current state
-                if (v_ctrl > (mbp.Threshold + mbp.Hysteresis))
-                    current_state = true;
-                else if (v_ctrl < (mbp.Threshold - mbp.Hysteresis))
-                    current_state = false;
+                if (vCtrl > (_mbp.Threshold + _mbp.Hysteresis))
+                    currentState = true;
+                else if (vCtrl < (_mbp.Threshold - _mbp.Hysteresis))
+                    currentState = false;
                 else
-                    current_state = previous_state;
+                    currentState = previousState;
 
                 // Store the current state
-                CurrentState = current_state;
+                CurrentState = currentState;
 
                 // If the state changed, ensure one more iteration
-                if (current_state != previous_state)
+                if (currentState != previousState)
                     state.IsConvergent = false;
             }
 
-            g_now = current_state == true ? modelload.OnConductance : modelload.OffConductance;
-            Cond = g_now;
+            gNow = currentState == true ? _modelload.OnConductance : _modelload.OffConductance;
+            Cond = gNow;
 
             // Load the Y-matrix
-            PosPosPtr.Value += g_now;
-            PosNegPtr.Value -= g_now;
-            NegPosPtr.Value -= g_now;
-            NegNegPtr.Value += g_now;
+            PosPosPtr.Value += gNow;
+            PosNegPtr.Value -= gNow;
+            NegPosPtr.Value -= gNow;
+            NegNegPtr.Value += gNow;
         }
 
     }

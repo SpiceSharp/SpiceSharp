@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[posNode] - state.Solution[negNode];
+            return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [PropertyName("i"), PropertyInfo("Current")]
         public Complex GetCurrent(ComplexState state)
@@ -29,8 +29,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            var voltage = state.Solution[posNode] - state.Solution[negNode];
-            return voltage * load.Conductance;
+            var voltage = state.Solution[_posNode] - state.Solution[_negNode];
+            return voltage * _load.Conductance;
         }
         [PropertyName("p"), PropertyInfo("Power")]
         public Complex GetPower(ComplexState state)
@@ -38,19 +38,19 @@ namespace SpiceSharp.Components.ResistorBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            var voltage = state.Solution[posNode] - state.Solution[negNode];
-            return voltage * Complex.Conjugate(voltage) * load.Conductance;
+            var voltage = state.Solution[_posNode] - state.Solution[_negNode];
+            return voltage * Complex.Conjugate(voltage) * _load.Conductance;
         }
 
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        LoadBehavior load;
+        LoadBehavior _load;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int _posNode, _negNode;
         protected MatrixElement<Complex> PosPosPtr { get; private set; }
         protected MatrixElement<Complex> NegNegPtr { get; private set; }
         protected MatrixElement<Complex> PosNegPtr { get; private set; }
@@ -72,7 +72,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>("entity");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
         }
 
         /// <summary>
@@ -85,10 +85,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Get matrix pointers
-            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
-            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
-            PosNegPtr = solver.GetMatrixElement(posNode, negNode);
-            NegPosPtr = solver.GetMatrixElement(negNode, posNode);
+            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
+            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
+            PosNegPtr = solver.GetMatrixElement(_posNode, _negNode);
+            NegPosPtr = solver.GetMatrixElement(_negNode, _posNode);
         }
 
         /// <summary>
@@ -113,8 +113,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -127,10 +127,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             // Load Y-matrix
-            PosPosPtr.Value += load.Conductance;
-            NegNegPtr.Value += load.Conductance;
-            PosNegPtr.Value -= load.Conductance;
-            NegPosPtr.Value -= load.Conductance;
+            PosPosPtr.Value += _load.Conductance;
+            NegNegPtr.Value += _load.Conductance;
+            PosNegPtr.Value -= _load.Conductance;
+            NegPosPtr.Value -= _load.Conductance;
         }
     }
 }

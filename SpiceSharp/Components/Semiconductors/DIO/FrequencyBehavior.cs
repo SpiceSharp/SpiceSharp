@@ -15,16 +15,16 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters bp;
-        ModelBaseParameters mbp;
-        LoadBehavior load;
-        TemperatureBehavior temp;
-        ModelTemperatureBehavior modeltemp;
+        BaseParameters _bp;
+        ModelBaseParameters _mbp;
+        LoadBehavior _load;
+        TemperatureBehavior _temp;
+        ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, posPrimeNode;
+        int _posNode, _negNode, _posPrimeNode;
         protected MatrixElement<Complex> PosPosPrimePtr { get; private set; }
         protected MatrixElement<Complex> NegPosPrimePtr { get; private set; }
         protected MatrixElement<Complex> PosPrimePosPtr { get; private set; }
@@ -43,14 +43,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[posPrimeNode] - state.Solution[negNode];
+            return state.Solution[_posPrimeNode] - state.Solution[_negNode];
         }
         [PropertyName("v"), PropertyInfo("Voltage across the diode")]
         public Complex GetVoltage(ComplexState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[posNode] - state.Solution[negNode];
+            return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [PropertyName("i"), PropertyName("id"), PropertyInfo("Current through the diode")]
         public Complex GetCurrent(ComplexState state)
@@ -58,8 +58,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            Complex geq = Capacitance * state.Laplace + load.Conduct;
-            Complex voltage = state.Solution[posPrimeNode] - state.Solution[negNode];
+            Complex geq = Capacitance * state.Laplace + _load.Conduct;
+            Complex voltage = state.Solution[_posPrimeNode] - state.Solution[_negNode];
             return voltage * geq;
         }
         [PropertyName("p"), PropertyName("pd"), PropertyInfo("Power")]
@@ -68,9 +68,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            Complex geq = Capacitance * state.Laplace + load.Conduct;
-            Complex current = (state.Solution[posPrimeNode] - state.Solution[negNode]) * geq;
-            Complex voltage = (state.Solution[posNode] - state.Solution[negNode]);
+            Complex geq = Capacitance * state.Laplace + _load.Conduct;
+            Complex current = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) * geq;
+            Complex voltage = (state.Solution[_posNode] - state.Solution[_negNode]);
             return voltage * -Complex.Conjugate(current);
         }
 
@@ -90,13 +90,13 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
-            mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>("entity");
-            temp = provider.GetBehavior<TemperatureBehavior>("entity");
-            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _temp = provider.GetBehavior<TemperatureBehavior>("entity");
+            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
         
         /// <summary>
@@ -109,8 +109,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -123,16 +123,16 @@ namespace SpiceSharp.Components.DiodeBehaviors
 				throw new ArgumentNullException(nameof(solver));
 
             // Get node
-            posPrimeNode = load.PosPrimeNode;
+            _posPrimeNode = _load.PosPrimeNode;
 
             // Get matrix pointers
-            PosPosPrimePtr = solver.GetMatrixElement(posNode, posPrimeNode);
-            NegPosPrimePtr = solver.GetMatrixElement(negNode, posPrimeNode);
-            PosPrimePosPtr = solver.GetMatrixElement(posPrimeNode, posNode);
-            PosPrimeNegPtr = solver.GetMatrixElement(posPrimeNode, negNode);
-            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
-            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
-            PosPrimePosPrimePtr = solver.GetMatrixElement(posPrimeNode, posPrimeNode);
+            PosPosPrimePtr = solver.GetMatrixElement(_posNode, _posPrimeNode);
+            NegPosPrimePtr = solver.GetMatrixElement(_negNode, _posPrimeNode);
+            PosPrimePosPtr = solver.GetMatrixElement(_posPrimeNode, _posNode);
+            PosPrimeNegPtr = solver.GetMatrixElement(_posPrimeNode, _negNode);
+            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
+            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
+            PosPrimePosPrimePtr = solver.GetMatrixElement(_posPrimeNode, _posPrimeNode);
         }
 
         /// <summary>
@@ -160,20 +160,20 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             var state = simulation.RealState;
             double arg, czero, sarg, capd, czof2;
-            double vd = state.Solution[posPrimeNode] - state.Solution[negNode];
+            double vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
 
             // charge storage elements
-            czero = temp.TempJunctionCap * bp.Area;
-            if (vd < temp.TempDepletionCap)
+            czero = _temp.TempJunctionCap * _bp.Area;
+            if (vd < _temp.TempDepletionCap)
             {
-                arg = 1 - vd / mbp.JunctionPotential;
-                sarg = Math.Exp(-mbp.GradingCoefficient * Math.Log(arg));
-                capd = mbp.TransitTime * load.Conduct + czero * sarg;
+                arg = 1 - vd / _mbp.JunctionPotential;
+                sarg = Math.Exp(-_mbp.GradingCoefficient * Math.Log(arg));
+                capd = _mbp.TransitTime * _load.Conduct + czero * sarg;
             }
             else
             {
-                czof2 = czero / modeltemp.F2;
-                capd = mbp.TransitTime * load.Conduct + czof2 * (modeltemp.F3 + mbp.GradingCoefficient * vd / mbp.JunctionPotential);
+                czof2 = czero / _modeltemp.F2;
+                capd = _mbp.TransitTime * _load.Conduct + czof2 * (_modeltemp.F3 + _mbp.GradingCoefficient * vd / _mbp.JunctionPotential);
             }
             Capacitance = capd;
         }
@@ -190,8 +190,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var state = simulation.ComplexState;
             double gspr, geq, xceq;
 
-            gspr = modeltemp.Conductance * bp.Area;
-            geq = load.Conduct;
+            gspr = _modeltemp.Conductance * _bp.Area;
+            geq = _load.Conduct;
             xceq = Capacitance * state.Laplace.Imaginary;
 
             // Load Y-matrix

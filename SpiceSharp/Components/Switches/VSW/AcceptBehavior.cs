@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        LoadBehavior load;
+        LoadBehavior _load;
 
         /// <summary>
         /// Constructor
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>("entity");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
         }
 
         /// <summary>
@@ -40,10 +40,10 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         public override void Accept(TimeSimulation simulation)
         {
             // Flag the load behavior to use our old state
-            load.UseOldState = true;
+            _load.UseOldState = true;
 
             // Copy the current state to the old state
-            load.OldState = load.CurrentState;
+            _load.OldState = _load.CurrentState;
         }
     }
 }

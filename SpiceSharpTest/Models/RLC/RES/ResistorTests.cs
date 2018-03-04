@@ -37,7 +37,7 @@ namespace SpiceSharpTest.Models
             var ckt = CreateResistorDcCircuit(10, 1000);
 
             // Create simulation, exports and references
-            OP op = new OP("op");
+            Op op = new Op("op");
             Export<double>[] exports = new Export<double>[1];
             exports[0] = new RealPropertyExport(op, "R1", "i");
             double[] references = { 0.01 };
@@ -58,7 +58,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["V1"].ParameterSets.SetProperty("acmag", 1.0);
 
             // Create simulation, exports and references
-            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.LinearSweep(1.0, 10001, 10));
+            Ac ac = new Ac("ac", new SpiceSharp.Simulations.Sweeps.LinearSweep(1.0, 10001, 10));
             Export<Complex>[] exports = { new ComplexPropertyExport(ac, "R1", "i") };
             Func<double, Complex>[] references = { (double f) => 1e-3 };
             AnalyzeAC(ac, ckt, exports, references);
@@ -95,7 +95,7 @@ namespace SpiceSharpTest.Models
             var ckt = CreateVoltageDividerResistorDcCircuit(100, 3, 1);
 
             // Create simulation, exports and references
-            OP op = new OP("op");
+            Op op = new Op("op");
             Export<double>[] exports = { new RealPropertyExport(op, "R2", "v") };
             double[] references = { 100 * 1 / (3 + 1) };
 
@@ -135,7 +135,7 @@ namespace SpiceSharpTest.Models
             var ckt = CreateParallelResistorsDcCircuit(dc, r1, r2);
 
             // Create simulation, exports and references
-            OP op = new OP("op");
+            Op op = new Op("op");
             Export<double>[] exports = { new RealPropertyExport(op, "R1", "i"), new RealPropertyExport(op, "R2", "i") };
             double[] references = { dc / r1, dc / r2 };
 

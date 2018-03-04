@@ -11,7 +11,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private extractor
         /// </summary>
-        Func<T> myExtractor;
+        Func<T> _myExtractor;
 
         /// <summary>
         /// Constructor
@@ -20,7 +20,7 @@ namespace SpiceSharp.Simulations
         public GenericExport(Simulation simulation, Func<T> extractor)
             : base(simulation)
         {
-            myExtractor = extractor;
+            _myExtractor = extractor;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations
         /// <param name="e">Arguments</param>
         protected override void Initialize(object sender, InitializeSimulationEventArgs e)
         {
-            Extractor = myExtractor;
+            Extractor = _myExtractor;
         }
     }
 }

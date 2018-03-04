@@ -172,7 +172,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// <param name="newVoltage">New voltage</param>
         /// <param name="oldVoltage">Old voltage</param>
         /// <returns></returns>
-        public static double LimitVoltageDS(double newVoltage, double oldVoltage)
+        public static double LimitVoltageDs(double newVoltage, double oldVoltage)
         {
             if (oldVoltage >= 3.5)
             {
@@ -209,12 +209,12 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// <param name="vgd">Gate-drain voltage</param>
         /// <param name="von">Von</param>
         /// <param name="vdsat">Saturation voltage</param>
-        /// <param name="capGS">Gate-source capacitance</param>
-        /// <param name="capGD">Gate-drain capacitance</param>
-        /// <param name="capGB">Gate-bulk capacitance</param>
+        /// <param name="capGs">Gate-source capacitance</param>
+        /// <param name="capGd">Gate-drain capacitance</param>
+        /// <param name="capGb">Gate-bulk capacitance</param>
         /// <param name="phi">Phi</param>
         /// <param name="cox">Cox</param>
-        public static void MeyerCharges(double vgs, double vgd, double von, double vdsat, out double capGS, out double capGD, out double capGB, double phi, double cox)
+        public static void MeyerCharges(double vgs, double vgd, double von, double vdsat, out double capGs, out double capGd, out double capGb, double phi, double cox)
         {
             double vds;
             double vddif;
@@ -225,39 +225,39 @@ namespace SpiceSharp.Components.MosfetBehaviors
             vgst = vgs - von;
             if (vgst <= -phi)
             {
-                capGB = cox / 2;
-                capGS = 0;
-                capGD = 0;
+                capGb = cox / 2;
+                capGs = 0;
+                capGd = 0;
             }
             else if (vgst <= -phi / 2)
             {
-                capGB = -vgst * cox / (2 * phi);
-                capGS = 0;
-                capGD = 0;
+                capGb = -vgst * cox / (2 * phi);
+                capGs = 0;
+                capGd = 0;
             }
             else if (vgst <= 0)
             {
-                capGB = -vgst * cox / (2 * phi);
-                capGS = vgst * cox / (1.5 * phi) + cox / 3;
-                capGD = 0;
+                capGb = -vgst * cox / (2 * phi);
+                capGs = vgst * cox / (1.5 * phi) + cox / 3;
+                capGd = 0;
             }
             else
             {
                 vds = vgs - vgd;
                 if (vdsat <= vds)
                 {
-                    capGS = cox / 3;
-                    capGD = 0;
-                    capGB = 0;
+                    capGs = cox / 3;
+                    capGd = 0;
+                    capGb = 0;
                 }
                 else
                 {
                     vddif = 2.0 * vdsat - vds;
                     vddif1 = vdsat - vds/*-1.0e-12*/;
                     vddif2 = vddif * vddif;
-                    capGD = cox * (1.0 - vdsat * vdsat / vddif2) / 3;
-                    capGS = cox * (1.0 - vddif1 * vddif1 / vddif2) / 3;
-                    capGB = 0;
+                    capGd = cox * (1.0 - vdsat * vdsat / vddif2) / 3;
+                    capGs = cox * (1.0 - vddif1 * vddif1 / vddif2) / 3;
+                    capGb = 0;
                 }
             }
         }

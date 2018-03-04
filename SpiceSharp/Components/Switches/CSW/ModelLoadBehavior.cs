@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        ModelBaseParameters mbp;
+        ModelBaseParameters _mbp;
 
         /// <summary>
         /// Conductance while on
@@ -52,7 +52,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            mbp = provider.GetParameterSet<ModelBaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>("entity");
         }
 
         /// <summary>
@@ -61,8 +61,8 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <param name="simulation">Base simulation</param>
         public override void Load(BaseSimulation simulation)
         {
-            OnConductance = 1.0 / mbp.OnResistance;
-            OffConductance = 1.0 / mbp.OffResistance;
+            OnConductance = 1.0 / _mbp.OnResistance;
+            OffConductance = 1.0 / _mbp.OffResistance;
         }
     }
 }

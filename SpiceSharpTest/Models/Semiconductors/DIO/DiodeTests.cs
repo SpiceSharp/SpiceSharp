@@ -48,7 +48,7 @@ namespace SpiceSharpTest.Models
                 );
 
             // Create simulation
-            DC dc = new DC("DC", "V1", -1.0, 1.0, 10e-3);
+            Dc dc = new Dc("DC", "V1", -1.0, 1.0, 10e-3);
 
             // Create exports
             Export<double>[] exports = { new RealPropertyExport(dc, "V1", "i") };
@@ -79,7 +79,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["V1"].ParameterSets.SetProperty("acmag", 1.0);
 
             // Create simulation
-            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1e3, 10e6, 5));
+            Ac ac = new Ac("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1e3, 10e6, 5));
 
             // Create exports
             Export<Complex>[] exports = { new ComplexPropertyExport(ac, "V1", "i") };

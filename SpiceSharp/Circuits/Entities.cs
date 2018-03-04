@@ -14,20 +14,20 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        Dictionary<Identifier, Entity> objects = new Dictionary<Identifier, Entity>();
-        List<Entity> ordered = new List<Entity>();
+        Dictionary<Identifier, Entity> _objects = new Dictionary<Identifier, Entity>();
+        List<Entity> _ordered = new List<Entity>();
 
         /// <summary>
         /// Gets whether or not the list is already ordered
         /// </summary>
-        bool isOrdered;
+        bool _isOrdered;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public EntityCollection()
         {
-            isOrdered = false;
+            _isOrdered = false;
         }
 
         /// <summary>
@@ -36,21 +36,21 @@ namespace SpiceSharp.Circuits
         /// <param id="path">The path of the object</param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
-        public Entity this[Identifier id] => objects[id];
+        public Entity this[Identifier id] => _objects[id];
         
         /// <summary>
         /// The amount of circuit objects
         /// </summary>
-        public int Count => objects.Count;
+        public int Count => _objects.Count;
 
         /// <summary>
         /// Clear all circuit objects
         /// </summary>
         public void Clear()
         {
-            objects.Clear();
-            ordered.Clear();
-            isOrdered = false;
+            _objects.Clear();
+            _ordered.Clear();
+            _isOrdered = false;
         }
 
         /// <summary>
@@ -65,10 +65,10 @@ namespace SpiceSharp.Circuits
             {
                 if (c == null)
                     throw new CircuitException("No entity specified");
-                if (objects.ContainsKey(c.Name))
+                if (_objects.ContainsKey(c.Name))
                     throw new CircuitException("A component with the id {0} already exists".FormatString(c.Name));
-                objects.Add(c.Name, c);
-                isOrdered = false;
+                _objects.Add(c.Name, c);
+                _isOrdered = false;
             }
         }
 
@@ -84,7 +84,7 @@ namespace SpiceSharp.Circuits
             {
                 if (id == null)
                     throw new CircuitException("No identifier specified");
-                objects.Remove(id);
+                _objects.Remove(id);
 
                 // Note: Removing objects does not interfere with the order!
             }
@@ -96,7 +96,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param id="id">A list of names. If there are multiple names, the first names will refer to a subcircuit</param>
         /// <returns></returns>
-        public bool Contains(Identifier id) => objects.ContainsKey(id);
+        public bool Contains(Identifier id) => _objects.ContainsKey(id);
 
         /// <summary>
         /// Gets a circuit object
@@ -104,7 +104,7 @@ namespace SpiceSharp.Circuits
         /// <param id="id">Identifier</param>
         /// <param id="obj"></param>
         /// <returns></returns>
-        public bool TryGetEntity(Identifier id, out Entity obj) => objects.TryGetValue(id, out obj);
+        public bool TryGetEntity(Identifier id, out Entity obj) => _objects.TryGetValue(id, out obj);
 
         /// <summary>
         /// Gets all objects of a specific type
@@ -114,7 +114,7 @@ namespace SpiceSharp.Circuits
         public Entity[] ByType(Type type)
         {
             List<Entity> result = new List<Entity>();
-            foreach (var c in objects.Values)
+            foreach (var c in _objects.Values)
             {
                 if (c.GetType() == type)
                     result.Add(c);
@@ -128,18 +128,18 @@ namespace SpiceSharp.Circuits
         /// </summary>
         public void BuildOrderedComponentList()
         {
-            if (isOrdered)
+            if (_isOrdered)
                 return;
 
             // Initialize
-            ordered.Clear();
+            _ordered.Clear();
             HashSet<Entity> added = new HashSet<Entity>();
 
             // Build our list
-            foreach (var c in objects.Values)
+            foreach (var c in _objects.Values)
             {
                 // Add the object to the ordered list
-                ordered.Add(c);
+                _ordered.Add(c);
                 added.Add(c);
 
                 // Automatically add models to the ordered list
@@ -149,28 +149,28 @@ namespace SpiceSharp.Circuits
                     if (model != null && !added.Contains(model))
                     {
                         added.Add(model);
-                        ordered.Add(model);
+                        _ordered.Add(model);
                     }
                 }
             }
 
             // Sort the list based on priority
-            ordered.Sort((Entity a, Entity b) => {
+            _ordered.Sort((Entity a, Entity b) => {
                 return b.Priority.CompareTo(a.Priority);
             });
-            isOrdered = true;
+            _isOrdered = true;
         }
 
         /// <summary>
         /// Gets enumerator
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<Entity> GetEnumerator() => ordered.GetEnumerator();
+        public IEnumerator<Entity> GetEnumerator() => _ordered.GetEnumerator();
 
         /// <summary>
         /// Gets enumerator
         /// </summary>
         /// <returns></returns>
-        IEnumerator IEnumerable.GetEnumerator() => ordered.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _ordered.GetEnumerator();
     }
 }

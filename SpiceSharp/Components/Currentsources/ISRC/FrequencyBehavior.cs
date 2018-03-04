@@ -15,13 +15,13 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        FrequencyParameters ap;
+        FrequencyParameters _ap;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
-        Complex ac;
+        int _posNode, _negNode;
+        Complex _ac;
         protected VectorElement<Complex> PosPtr { get; private set; }
         protected VectorElement<Complex> NegPtr { get; private set; }
 
@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-            return state.Solution[posNode] - state.Solution[negNode];
+            return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(ComplexState state)
@@ -41,8 +41,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.Solution[posNode] - state.Solution[negNode];
-            return -v * Complex.Conjugate(ac);
+            Complex v = state.Solution[_posNode] - state.Solution[_negNode];
+            return -v * Complex.Conjugate(_ac);
         }
 
         /// <summary>
@@ -56,13 +56,13 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// </summary>
         /// <param name="propertyName">Property name</param>
         /// <returns></returns>
-        public override Func<ComplexState, Complex> CreateACExport(string propertyName)
+        public override Func<ComplexState, Complex> CreateAcExport(string propertyName)
         {
             switch (propertyName)
             {
                 case "i":
-                case "c": return (ComplexState state) => ac;
-                default: return base.CreateACExport(propertyName);
+                case "c": return (ComplexState state) => _ac;
+                default: return base.CreateAcExport(propertyName);
             }
         }
 
@@ -76,11 +76,11 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            ap = provider.GetParameterSet<FrequencyParameters>("entity");
+            _ap = provider.GetParameterSet<FrequencyParameters>("entity");
 
             // Calculate the AC vector
-            double radians = ap.ACPhase * Math.PI / 180.0;
-            ac = new Complex(ap.ACMagnitude * Math.Cos(radians), ap.ACMagnitude * Math.Sin(radians));
+            double radians = _ap.AcPhase * Math.PI / 180.0;
+            _ac = new Complex(_ap.AcMagnitude * Math.Cos(radians), _ap.AcMagnitude * Math.Sin(radians));
         }
         
         /// <summary>
@@ -93,8 +93,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -106,8 +106,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));
 
-            PosPtr = solver.GetRhsElement(posNode);
-            NegPtr = solver.GetRhsElement(negNode);
+            PosPtr = solver.GetRhsElement(_posNode);
+            NegPtr = solver.GetRhsElement(_negNode);
         }
 
         /// <summary>
@@ -119,8 +119,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            PosPtr.Value += ac;
-            NegPtr.Value -= ac;
+            PosPtr.Value += _ac;
+            NegPtr.Value -= _ac;
         }
     }
 }

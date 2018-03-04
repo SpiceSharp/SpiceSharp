@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        LoadBehavior load;
+        LoadBehavior _load;
 
         /// <summary>
         /// Constructor
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>("entity");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
         }
 
         /// <summary>
@@ -40,10 +40,10 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         public override void Accept(TimeSimulation simulation)
         {
             // Flag the load behavior to use our previous state
-            load.UseOldState = true;
+            _load.UseOldState = true;
 
             // Store the last state
-            load.OldState = load.CurrentState;
+            _load.OldState = _load.CurrentState;
         }
     }
 }

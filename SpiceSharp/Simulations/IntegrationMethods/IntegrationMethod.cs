@@ -91,13 +91,13 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the last time point that was accepted
         /// </summary>
-        public double SavedTime { get { return savetime; } }
+        public double SavedTime { get { return _savetime; } }
         
         /// <summary>
         /// Private variables
         /// </summary>
-        double savetime = double.NaN;
-        Collection<TransientBehavior> transientBehaviors;
+        double _savetime = double.NaN;
+        Collection<TransientBehavior> _transientBehaviors;
 
         /// <summary>
         /// Event called when the timestep needs to be truncated
@@ -178,7 +178,7 @@ namespace SpiceSharp.IntegrationMethods
         {
             // Initialize variables
             Time = 0.0;
-            savetime = 0.0;
+            _savetime = 0.0;
             Delta = 0.0;
             Order = 1;
             Prediction = null;
@@ -189,7 +189,7 @@ namespace SpiceSharp.IntegrationMethods
             BaseParameters = Parameters.Get<IntegrationParameters>();
 
             // Register default truncation methods
-            transientBehaviors = behaviors;
+            _transientBehaviors = behaviors;
             if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerDevice))
                 Truncate += TruncateDevices;
             if (BaseParameters.TruncationMethod.HasFlag(IntegrationParameters.TruncationMethods.PerNode))
@@ -246,7 +246,7 @@ namespace SpiceSharp.IntegrationMethods
                 throw new CircuitException("Invalid time step");
 
             OldDelta = Delta;
-            savetime = Time;
+            _savetime = Time;
             Time += Delta;
             DeltaOld.Current = Delta;
         }
@@ -254,7 +254,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Roll back the time to the last advanced time and reset the order to 1
         /// </summary>
-        public void Rollback() => Time = savetime;
+        public void Rollback() => Time = _savetime;
 
         /// <summary>
         /// Go back to order 1
@@ -276,7 +276,7 @@ namespace SpiceSharp.IntegrationMethods
             // Update all the variables
             Delta = delta;
             DeltaOld.Current = delta;
-            Time = savetime + delta;
+            Time = _savetime + delta;
 
             // Cut the integration order
             Order = 1;
@@ -359,7 +359,7 @@ namespace SpiceSharp.IntegrationMethods
                 throw new ArgumentNullException(nameof(args));
 
             double timetmp = double.PositiveInfinity;
-            foreach (var behavior in transientBehaviors)
+            foreach (var behavior in _transientBehaviors)
                 behavior.Truncate(ref timetmp);
             args.Delta = timetmp;
         }

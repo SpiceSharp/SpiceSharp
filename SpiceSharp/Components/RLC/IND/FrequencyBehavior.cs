@@ -14,13 +14,13 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters bp;
-        LoadBehavior load;
+        BaseParameters _bp;
+        LoadBehavior _load;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, branchEq;
+        int _posNode, _negNode, _branchEq;
         protected MatrixElement<Complex> PosBranchPtr { get; private set; }
         protected MatrixElement<Complex> NegBranchPtr { get; private set; }
         protected MatrixElement<Complex> BranchNegPtr { get; private set; }
@@ -43,10 +43,10 @@ namespace SpiceSharp.Components.InductorBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>("entity");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
         }
 
         /// <summary>
@@ -59,8 +59,8 @@ namespace SpiceSharp.Components.InductorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -73,14 +73,14 @@ namespace SpiceSharp.Components.InductorBehaviors
 				throw new ArgumentNullException(nameof(solver));
 
             // Get current equation
-            branchEq = load.BranchEq;
+            _branchEq = _load.BranchEq;
 
             // Get matrix pointers
-            PosBranchPtr = solver.GetMatrixElement(posNode, branchEq);
-            NegBranchPtr = solver.GetMatrixElement(negNode, branchEq);
-            BranchNegPtr = solver.GetMatrixElement(branchEq, negNode);
-            BranchPosPtr = solver.GetMatrixElement(branchEq, posNode);
-            BranchBranchPtr = solver.GetMatrixElement(branchEq, branchEq);
+            PosBranchPtr = solver.GetMatrixElement(_posNode, _branchEq);
+            NegBranchPtr = solver.GetMatrixElement(_negNode, _branchEq);
+            BranchNegPtr = solver.GetMatrixElement(_branchEq, _negNode);
+            BranchPosPtr = solver.GetMatrixElement(_branchEq, _posNode);
+            BranchBranchPtr = solver.GetMatrixElement(_branchEq, _branchEq);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace SpiceSharp.Components.InductorBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.ComplexState;
-            Complex val = state.Laplace * bp.Inductance.Value;
+            Complex val = state.Laplace * _bp.Inductance.Value;
 
             PosBranchPtr.Value += 1.0;
             NegBranchPtr.Value -= 1.0;

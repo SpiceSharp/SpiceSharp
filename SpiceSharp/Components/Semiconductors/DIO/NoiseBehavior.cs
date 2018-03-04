@@ -13,15 +13,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        LoadBehavior load;
-        BaseParameters bp;
-        ModelNoiseParameters mnp;
-        ModelTemperatureBehavior modeltemp;
+        LoadBehavior _load;
+        BaseParameters _bp;
+        ModelNoiseParameters _mnp;
+        ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, posPrimeNode;
+        int _posNode, _negNode, _posPrimeNode;
 
         /// <summary>
         /// Noise sources by their index
@@ -54,12 +54,12 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
-            mnp = provider.GetParameterSet<ModelNoiseParameters>("model");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _mnp = provider.GetParameterSet<ModelNoiseParameters>("model");
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>("entity");
-            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>
@@ -68,10 +68,10 @@ namespace SpiceSharp.Components.DiodeBehaviors
         public override void ConnectNoise()
         {
             // Get extra equations
-            posPrimeNode = load.PosPrimeNode;
+            _posPrimeNode = _load.PosPrimeNode;
 
             // Connect noise sources
-            DiodeNoise.Setup(posNode, posPrimeNode, negNode);
+            DiodeNoise.Setup(_posNode, _posPrimeNode, _negNode);
         }
         
         /// <summary>
@@ -84,8 +84,8 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -99,10 +99,10 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var noise = simulation.NoiseState;
 
             // Set noise parameters
-            DiodeNoise.Generators[RsNoise].SetCoefficients(modeltemp.Conductance * bp.Area);
-            DiodeNoise.Generators[IdNoise].SetCoefficients(load.Current);
-            DiodeNoise.Generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent 
-                * Math.Log(Math.Max(Math.Abs(load.Current), 1e-38))) / noise.Frequency);
+            DiodeNoise.Generators[RsNoise].SetCoefficients(_modeltemp.Conductance * _bp.Area);
+            DiodeNoise.Generators[IdNoise].SetCoefficients(_load.Current);
+            DiodeNoise.Generators[FlickerNoise].SetCoefficients(_mnp.FlickerNoiseCoefficient * Math.Exp(_mnp.FlickerNoiseExponent 
+                * Math.Log(Math.Max(Math.Abs(_load.Current), 1e-38))) / noise.Frequency);
 
             // Evaluate noise
             DiodeNoise.Evaluate(simulation);

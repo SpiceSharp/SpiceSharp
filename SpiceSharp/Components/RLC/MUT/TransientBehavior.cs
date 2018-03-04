@@ -13,9 +13,9 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters bp;
-        InductorBehaviors.LoadBehavior load1, load2;
-        InductorBehaviors.TransientBehavior tran1, tran2;
+        BaseParameters _bp;
+        InductorBehaviors.LoadBehavior _load1, _load2;
+        InductorBehaviors.TransientBehavior _tran1, _tran2;
 
         /// <summary>
         /// The factor
@@ -25,7 +25,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int BranchEq1, BranchEq2;
+        int _branchEq1, _branchEq2;
         protected MatrixElement<double> Branch1Branch2 { get; private set; }
         protected MatrixElement<double> Branch2Branch1 { get; private set; }
 
@@ -50,22 +50,22 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
             var bp1 = provider.GetParameterSet<Components.InductorBehaviors.BaseParameters>("inductor1");
             var bp2 = provider.GetParameterSet<Components.InductorBehaviors.BaseParameters>("inductor2");
 
             // Get behaviors
-            load1 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor1");
-            load2 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor2");
-            tran1 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
-            tran2 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor2");
+            _load1 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor1");
+            _load2 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor2");
+            _tran1 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
+            _tran2 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor2");
 
             // Calculate coupling factor
-            Factor = bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);
+            Factor = _bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);
 
             // Register events for modifying the flux through the inductors
-            tran1.UpdateFlux += UpdateFlux1;
-            tran2.UpdateFlux += UpdateFlux2;
+            _tran1.UpdateFlux += UpdateFlux1;
+            _tran2.UpdateFlux += UpdateFlux2;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         void UpdateFlux2(object sender, InductorBehaviors.UpdateFluxEventArgs args)
         {
             var state = args.State;
-            args.Flux.Current += Factor * state.Solution[load1.BranchEq];
+            args.Flux.Current += Factor * state.Solution[_load1.BranchEq];
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         {
             var state = args.State;
             Cond = args.Flux.Jacobian(Factor);
-            args.Flux.Current += Factor * state.Solution[load2.BranchEq];
+            args.Flux.Current += Factor * state.Solution[_load2.BranchEq];
         }
 
         /// <summary>
@@ -101,12 +101,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 				throw new ArgumentNullException(nameof(solver));
 
             // Get extra equations
-            BranchEq1 = load1.BranchEq;
-            BranchEq2 = load2.BranchEq;
+            _branchEq1 = _load1.BranchEq;
+            _branchEq2 = _load2.BranchEq;
 
             // Get matrix pointers
-            Branch1Branch2 = solver.GetMatrixElement(BranchEq1, BranchEq2);
-            Branch2Branch1 = solver.GetMatrixElement(BranchEq2, BranchEq1);
+            Branch1Branch2 = solver.GetMatrixElement(_branchEq1, _branchEq2);
+            Branch2Branch1 = solver.GetMatrixElement(_branchEq2, _branchEq1);
         }
 
         /// <summary>
@@ -118,8 +118,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             Branch2Branch1 = null;
 
             // Remove events
-            tran1.UpdateFlux -= UpdateFlux1;
-            tran2.UpdateFlux -= UpdateFlux2;
+            _tran1.UpdateFlux -= UpdateFlux1;
+            _tran2.UpdateFlux -= UpdateFlux2;
         }
 
         /// <summary>

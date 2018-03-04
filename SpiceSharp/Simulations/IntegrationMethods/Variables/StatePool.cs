@@ -88,7 +88,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Clear all states for DC
         /// </summary>
-        public void ClearDC()
+        public void ClearDc()
         {
             // Copy current values to all other states
             var current = History.Current;

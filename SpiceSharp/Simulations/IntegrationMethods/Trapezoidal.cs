@@ -16,7 +16,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Private variables
         /// </summary>
-        double[] ag = new double[2];
+        double[] _ag = new double[2];
 
         /// <summary>
         /// Constructor
@@ -42,9 +42,9 @@ namespace SpiceSharp.IntegrationMethods
         {
             base.Initialize(behaviors);
 
-            ag = new double[MaxOrder];
+            _ag = new double[MaxOrder];
             for (int i = 0; i < MaxOrder; i++)
-                ag[i] = 0.0;
+                _ag[i] = 0.0;
         }
 
         /// <summary>
@@ -66,11 +66,11 @@ namespace SpiceSharp.IntegrationMethods
             switch (Order)
             {
                 case 1:
-                    current[derivativeIndex] = ag[0] * current[index] + ag[1] * previous[index];
+                    current[derivativeIndex] = _ag[0] * current[index] + _ag[1] * previous[index];
                     break;
 
                 case 2:
-                    current[derivativeIndex] = -previous[derivativeIndex] * ag[1] + ag[0] * (current[index] - previous[index]);
+                    current[derivativeIndex] = -previous[derivativeIndex] * _ag[1] + _ag[0] * (current[index] - previous[index]);
                     break;
 
                 default:
@@ -200,13 +200,13 @@ namespace SpiceSharp.IntegrationMethods
             switch (Order)
             {
                 case 1:
-                    ag[0] = 1.0 / Delta;
-                    ag[1] = -1.0 / Delta;
+                    _ag[0] = 1.0 / Delta;
+                    _ag[1] = -1.0 / Delta;
                     break;
 
                 case 2:
-                    ag[0] = 1.0 / Delta / (1.0 - 0.5);
-                    ag[1] = 0.5 / (1.0 - 0.5);
+                    _ag[0] = 1.0 / Delta / (1.0 - 0.5);
+                    _ag[1] = 0.5 / (1.0 - 0.5);
                     break;
 
                 default:
@@ -214,7 +214,7 @@ namespace SpiceSharp.IntegrationMethods
             }
 
             // Store the derivative w.r.t. the current timestep
-            Slope = ag[0];
+            Slope = _ag[0];
         }
 
         /// <summary>

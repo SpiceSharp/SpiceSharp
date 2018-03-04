@@ -132,7 +132,7 @@ namespace SpiceSharp.Simulations
             int iterno = 0;
 
             // Ignore operating condition point, just use the solution as-is
-            if (state.UseIC && state.Domain == RealState.DomainType.Time)
+            if (state.UseIc && state.Domain == RealState.DomainType.Time)
             {
                 state.StoreSolution();
 
@@ -223,7 +223,7 @@ namespace SpiceSharp.Simulations
                 switch (state.Init)
                 {
                     case RealState.InitializationStates.InitFloat:
-                        if (state.UseDC && state.HadNodeSet)
+                        if (state.UseDc && state.HadNodeSet)
                         {
                             if (pass)
                                 state.IsConvergent = false;

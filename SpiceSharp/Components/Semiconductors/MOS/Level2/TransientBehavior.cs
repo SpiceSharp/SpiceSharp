@@ -14,16 +14,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters bp;
-        ModelBaseParameters mbp;
-        LoadBehavior load;
-        TemperatureBehavior temp;
-        ModelTemperatureBehavior modeltemp;
+        BaseParameters _bp;
+        ModelBaseParameters _mbp;
+        LoadBehavior _load;
+        TemperatureBehavior _temp;
+        ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int drainNode, gateNode, sourceNode, bulkNode, drainNodePrime, sourceNodePrime;
+        int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
         protected MatrixElement<double> DrainDrainPtr { get; private set; }
         protected MatrixElement<double> GateGatePtr { get; private set; }
         protected MatrixElement<double> SourceSourcePtr { get; private set; }
@@ -54,23 +54,23 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Shared variables
         /// </summary>
-        public double CapBS { get; protected set; }
-        public double CapBD { get; protected set; }
+        public double CapBs { get; protected set; }
+        public double CapBd { get; protected set; }
 
         /// <summary>
         /// Constants
         /// </summary>
-        protected StateHistory VoltageBS { get; private set; }
-        protected StateHistory VoltageGS { get; private set; }
-        protected StateHistory VoltageDS { get; private set; }
-        protected StateHistory CapGS { get; private set; }
-        protected StateHistory CapGD { get; private set; }
-        protected StateHistory CapGB { get; private set; }
-        protected StateDerivative ChargeGS { get; private set; }
-        protected StateDerivative ChargeGD { get; private set; }
-        protected StateDerivative ChargeGB { get; private set; }
-        protected StateDerivative ChargeBD { get; private set; }
-        protected StateDerivative ChargeBS { get; private set; }
+        protected StateHistory VoltageBs { get; private set; }
+        protected StateHistory VoltageGs { get; private set; }
+        protected StateHistory VoltageDs { get; private set; }
+        protected StateHistory CapGs { get; private set; }
+        protected StateHistory CapGd { get; private set; }
+        protected StateHistory CapGb { get; private set; }
+        protected StateDerivative ChargeGs { get; private set; }
+        protected StateDerivative ChargeGd { get; private set; }
+        protected StateDerivative ChargeGb { get; private set; }
+        protected StateDerivative ChargeBd { get; private set; }
+        protected StateDerivative ChargeBs { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -88,13 +88,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
-            mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            temp = provider.GetBehavior<TemperatureBehavior>("entity");
-            load = provider.GetBehavior<LoadBehavior>("entity");
-            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            _temp = provider.GetBehavior<TemperatureBehavior>("entity");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>
@@ -107,10 +107,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            drainNode = pins[0];
-            gateNode = pins[1];
-            sourceNode = pins[2];
-            bulkNode = pins[3];
+            _drainNode = pins[0];
+            _gateNode = pins[1];
+            _sourceNode = pins[2];
+            _bulkNode = pins[3];
         }
 
         /// <summary>
@@ -123,38 +123,38 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 throw new ArgumentNullException(nameof(solver));
 
             // Get extra equations
-            sourceNodePrime = load.SourceNodePrime;
-            drainNodePrime = load.DrainNodePrime;
+            _sourceNodePrime = _load.SourceNodePrime;
+            _drainNodePrime = _load.DrainNodePrime;
 
             // Get matrix elements
-            DrainDrainPtr = solver.GetMatrixElement(drainNode, drainNode);
-            GateGatePtr = solver.GetMatrixElement(gateNode, gateNode);
-            SourceSourcePtr = solver.GetMatrixElement(sourceNode, sourceNode);
-            BulkBulkPtr = solver.GetMatrixElement(bulkNode, bulkNode);
-            DrainPrimeDrainPrimePtr = solver.GetMatrixElement(drainNodePrime, drainNodePrime);
-            SourcePrimeSourcePrimePtr = solver.GetMatrixElement(sourceNodePrime, sourceNodePrime);
-            DrainDrainPrimePtr = solver.GetMatrixElement(drainNode, drainNodePrime);
-            GateBulkPtr = solver.GetMatrixElement(gateNode, bulkNode);
-            GateDrainPrimePtr = solver.GetMatrixElement(gateNode, drainNodePrime);
-            GateSourcePrimePtr = solver.GetMatrixElement(gateNode, sourceNodePrime);
-            SourceSourcePrimePtr = solver.GetMatrixElement(sourceNode, sourceNodePrime);
-            BulkDrainPrimePtr = solver.GetMatrixElement(bulkNode, drainNodePrime);
-            BulkSourcePrimePtr = solver.GetMatrixElement(bulkNode, sourceNodePrime);
-            DrainPrimeSourcePrimePtr = solver.GetMatrixElement(drainNodePrime, sourceNodePrime);
-            DrainPrimeDrainPtr = solver.GetMatrixElement(drainNodePrime, drainNode);
-            BulkGatePtr = solver.GetMatrixElement(bulkNode, gateNode);
-            DrainPrimeGatePtr = solver.GetMatrixElement(drainNodePrime, gateNode);
-            SourcePrimeGatePtr = solver.GetMatrixElement(sourceNodePrime, gateNode);
-            SourcePrimeSourcePtr = solver.GetMatrixElement(sourceNodePrime, sourceNode);
-            DrainPrimeBulkPtr = solver.GetMatrixElement(drainNodePrime, bulkNode);
-            SourcePrimeBulkPtr = solver.GetMatrixElement(sourceNodePrime, bulkNode);
-            SourcePrimeDrainPrimePtr = solver.GetMatrixElement(sourceNodePrime, drainNodePrime);
+            DrainDrainPtr = solver.GetMatrixElement(_drainNode, _drainNode);
+            GateGatePtr = solver.GetMatrixElement(_gateNode, _gateNode);
+            SourceSourcePtr = solver.GetMatrixElement(_sourceNode, _sourceNode);
+            BulkBulkPtr = solver.GetMatrixElement(_bulkNode, _bulkNode);
+            DrainPrimeDrainPrimePtr = solver.GetMatrixElement(_drainNodePrime, _drainNodePrime);
+            SourcePrimeSourcePrimePtr = solver.GetMatrixElement(_sourceNodePrime, _sourceNodePrime);
+            DrainDrainPrimePtr = solver.GetMatrixElement(_drainNode, _drainNodePrime);
+            GateBulkPtr = solver.GetMatrixElement(_gateNode, _bulkNode);
+            GateDrainPrimePtr = solver.GetMatrixElement(_gateNode, _drainNodePrime);
+            GateSourcePrimePtr = solver.GetMatrixElement(_gateNode, _sourceNodePrime);
+            SourceSourcePrimePtr = solver.GetMatrixElement(_sourceNode, _sourceNodePrime);
+            BulkDrainPrimePtr = solver.GetMatrixElement(_bulkNode, _drainNodePrime);
+            BulkSourcePrimePtr = solver.GetMatrixElement(_bulkNode, _sourceNodePrime);
+            DrainPrimeSourcePrimePtr = solver.GetMatrixElement(_drainNodePrime, _sourceNodePrime);
+            DrainPrimeDrainPtr = solver.GetMatrixElement(_drainNodePrime, _drainNode);
+            BulkGatePtr = solver.GetMatrixElement(_bulkNode, _gateNode);
+            DrainPrimeGatePtr = solver.GetMatrixElement(_drainNodePrime, _gateNode);
+            SourcePrimeGatePtr = solver.GetMatrixElement(_sourceNodePrime, _gateNode);
+            SourcePrimeSourcePtr = solver.GetMatrixElement(_sourceNodePrime, _sourceNode);
+            DrainPrimeBulkPtr = solver.GetMatrixElement(_drainNodePrime, _bulkNode);
+            SourcePrimeBulkPtr = solver.GetMatrixElement(_sourceNodePrime, _bulkNode);
+            SourcePrimeDrainPrimePtr = solver.GetMatrixElement(_sourceNodePrime, _drainNodePrime);
 
             // Get rhs elements
-            GatePtr = solver.GetRhsElement(gateNode);
-            BulkPtr = solver.GetRhsElement(bulkNode);
-            DrainPrimePtr = solver.GetRhsElement(drainNodePrime);
-            SourcePrimePtr = solver.GetRhsElement(sourceNodePrime);
+            GatePtr = solver.GetRhsElement(_gateNode);
+            BulkPtr = solver.GetRhsElement(_bulkNode);
+            DrainPrimePtr = solver.GetRhsElement(_drainNodePrime);
+            SourcePrimePtr = solver.GetRhsElement(_sourceNodePrime);
         }
 
         /// <summary>
@@ -196,49 +196,49 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 			if (states == null)
 				throw new ArgumentNullException(nameof(states));
 
-            VoltageBS = states.CreateHistory();
-            VoltageGS = states.CreateHistory();
-            VoltageDS = states.CreateHistory();
-            CapGS = states.CreateHistory();
-            CapGD = states.CreateHistory();
-            CapGB = states.CreateHistory();
-            ChargeGS = states.CreateDerivative();
-            ChargeGD = states.CreateDerivative();
-            ChargeGB = states.CreateDerivative();
-            ChargeBD = states.CreateDerivative();
-            ChargeBS = states.CreateDerivative();
+            VoltageBs = states.CreateHistory();
+            VoltageGs = states.CreateHistory();
+            VoltageDs = states.CreateHistory();
+            CapGs = states.CreateHistory();
+            CapGd = states.CreateHistory();
+            CapGb = states.CreateHistory();
+            ChargeGs = states.CreateDerivative();
+            ChargeGd = states.CreateDerivative();
+            ChargeGb = states.CreateDerivative();
+            ChargeBd = states.CreateDerivative();
+            ChargeBs = states.CreateDerivative();
         }
 
         /// <summary>
         /// Calculate initial states
         /// </summary>
         /// <param name="simulation">Simulation</param>
-        public override void GetDCState(TimeSimulation simulation)
+        public override void GetDcState(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
-                OxideCap, vgs, vbs, vbd, vgb, vgd, von,
+            double effectiveLength, gateSourceOverlapCap, gateDrainOverlapCap, gateBulkOverlapCap,
+                oxideCap, vgs, vbs, vbd, vgb, vgd, von,
                 vdsat, sargsw, capgs = 0.0, capgd = 0.0, capgb = 0.0;
 
-            vbs = load.VoltageBS;
-            vbd = load.VoltageBD;
-            vgs = load.VoltageGS;
-            vgd = load.VoltageGS - load.VoltageDS;
-            vgb = load.VoltageGS - load.VoltageBS;
-            von = mbp.MosfetType * load.Von;
-            vdsat = mbp.MosfetType * load.SaturationVoltageDS;
+            vbs = _load.VoltageBs;
+            vbd = _load.VoltageBd;
+            vgs = _load.VoltageGs;
+            vgd = _load.VoltageGs - _load.VoltageDs;
+            vgb = _load.VoltageGs - _load.VoltageBs;
+            von = _mbp.MosfetType * _load.Von;
+            vdsat = _mbp.MosfetType * _load.SaturationVoltageDs;
 
-            VoltageDS.Current = load.VoltageDS;
-            VoltageBS.Current = vbs;
-            VoltageGS.Current = vgs;
+            VoltageDs.Current = _load.VoltageDs;
+            VoltageBs.Current = vbs;
+            VoltageGs.Current = vgs;
 
-            EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
-            GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;
-            GateDrainOverlapCap = mbp.GateDrainOverlapCapFactor * bp.Width;
-            GateBulkOverlapCap = mbp.GateBulkOverlapCapFactor * EffectiveLength;
-            OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
+            effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
+            gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
+            gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
+            oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
 
             /* 
             * now we do the hard part of the bulk - drain and bulk - source
@@ -254,9 +254,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             * 
             * .. bulk - drain and bulk - source depletion capacitances
             */
-            if (vbs < temp.TempDepletionCap)
+            if (vbs < _temp.TempDepletionCap)
             {
-                double arg = 1 - vbs / temp.TempBulkPotential, sarg;
+                double arg = 1 - vbs / _temp.TempBulkPotential, sarg;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -264,50 +264,50 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJunctionBotGradingCoefficient.Value == mbp.BulkJunctionSideGradingCoefficient)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value == _mbp.BulkJunctionSideGradingCoefficient)
                 {
-                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
-                        sarg = sargsw = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
+                        sarg = sargsw = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
                 }
                 else
                 {
-                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
+                        sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
+                        sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 // NOSQRT
-                ChargeBS.Current = temp.TempBulkPotential * (temp.CapBS * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.CapBSSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                ChargeBs.Current = _temp.TempBulkPotential * (_temp.CapBs * (1 - arg * sarg) / (1 - _mbp.BulkJunctionBotGradingCoefficient) +
+                    _temp.CapBsSidewall * (1 - arg * sargsw) / (1 - _mbp.BulkJunctionSideGradingCoefficient));
             }
             else
             {
-                ChargeBS.Current = temp.F4S + vbs * (temp.F2S + vbs * (temp.F3S / 2));
+                ChargeBs.Current = _temp.F4S + vbs * (_temp.F2S + vbs * (_temp.F3S / 2));
             }
 
-            if (vbd < temp.TempDepletionCap)
+            if (vbd < _temp.TempDepletionCap)
             {
-                double arg = 1 - vbd / temp.TempBulkPotential, sarg;
+                double arg = 1 - vbd / _temp.TempBulkPotential, sarg;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -315,66 +315,66 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJunctionBotGradingCoefficient.Value == .5 && mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5 && _mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 }
                 else
                 {
-                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
+                        sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
+                        sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 /* NOSQRT */
-                ChargeBD.Current = temp.TempBulkPotential * (temp.CapBD * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.CapBDSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
+                ChargeBd.Current = _temp.TempBulkPotential * (_temp.CapBd * (1 - arg * sarg) / (1 - _mbp.BulkJunctionBotGradingCoefficient) +
+                    _temp.CapBdSidewall * (1 - arg * sargsw) / (1 - _mbp.BulkJunctionSideGradingCoefficient));
             }
             else
             {
-                ChargeBD.Current = temp.F4D + vbd * (temp.F2D + vbd * temp.F3D / 2);
+                ChargeBd.Current = _temp.F4D + vbd * (_temp.F2D + vbd * _temp.F3D / 2);
             }
 
             /* 
              * calculate meyer's capacitors
              */
             double icapgs, icapgd, icapgb;
-            if (load.Mode > 0)
+            if (_load.Mode > 0)
             {
                 Transistor.MeyerCharges(vgs, vgd, von, vdsat,
-                    out icapgs, out icapgd, out icapgb, temp.TempPhi, OxideCap);
+                    out icapgs, out icapgd, out icapgb, _temp.TempPhi, oxideCap);
             }
             else
             {
                 Transistor.MeyerCharges(vgd, vgs, von, vdsat,
-                    out icapgd, out icapgs, out icapgb, temp.TempPhi, OxideCap);
+                    out icapgd, out icapgs, out icapgb, _temp.TempPhi, oxideCap);
             }
-            CapGS.Current = icapgs;
-            CapGD.Current = icapgd;
-            CapGB.Current = icapgb;
+            CapGs.Current = icapgs;
+            CapGd.Current = icapgd;
+            CapGb.Current = icapgb;
 
-            capgs = 2 * CapGS.Current + GateSourceOverlapCap;
-            capgd = 2 * CapGD.Current + GateDrainOverlapCap;
-            capgb = 2 * CapGB.Current + GateBulkOverlapCap;
+            capgs = 2 * CapGs.Current + gateSourceOverlapCap;
+            capgd = 2 * CapGd.Current + gateDrainOverlapCap;
+            capgb = 2 * CapGb.Current + gateBulkOverlapCap;
 
             /* TRANOP */
-            ChargeGS.Current = capgs * vgs;
-            ChargeGD.Current = capgd * vgd;
-            ChargeGB.Current = capgb * vgb;
+            ChargeGs.Current = capgs * vgs;
+            ChargeGd.Current = capgd * vgd;
+            ChargeGb.Current = capgb * vgb;
         }
 
         /// <summary>
@@ -387,34 +387,34 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double EffectiveLength, GateSourceOverlapCap, GateDrainOverlapCap, GateBulkOverlapCap,
-                OxideCap, vgs, vbs, vbd, vgb, vgd, von,
+            double effectiveLength, gateSourceOverlapCap, gateDrainOverlapCap, gateBulkOverlapCap,
+                oxideCap, vgs, vbs, vbd, vgb, vgd, von,
                 vdsat, sargsw, vgs1, vgd1, vgb1, capgs = 0.0, capgd = 0.0, capgb = 0.0, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs,
                 ceqbd;
 
-            vbs = load.VoltageBS;
-            vbd = load.VoltageBD;
-            vgs = load.VoltageGS;
-            vgd = load.VoltageGS - load.VoltageDS;
-            vgb = load.VoltageGS - load.VoltageBS;
-            von = mbp.MosfetType * load.Von;
-            vdsat = mbp.MosfetType * load.SaturationVoltageDS;
+            vbs = _load.VoltageBs;
+            vbd = _load.VoltageBd;
+            vgs = _load.VoltageGs;
+            vgd = _load.VoltageGs - _load.VoltageDs;
+            vgb = _load.VoltageGs - _load.VoltageBs;
+            von = _mbp.MosfetType * _load.Von;
+            vdsat = _mbp.MosfetType * _load.SaturationVoltageDs;
 
-            VoltageDS.Current = load.VoltageDS;
-            VoltageBS.Current = vbs;
-            VoltageGS.Current = vgs;
+            VoltageDs.Current = _load.VoltageDs;
+            VoltageBs.Current = vbs;
+            VoltageGs.Current = vgs;
 
-            double Gbd = 0.0;
-            double Cbd = 0.0;
-            double Cd = 0.0;
-            double Gbs = 0.0;
-            double Cbs = 0.0;
+            double gbd = 0.0;
+            double cbd = 0.0;
+            double cd = 0.0;
+            double gbs = 0.0;
+            double cbs = 0.0;
 
-            EffectiveLength = bp.Length - 2 * mbp.LateralDiffusion;
-            GateSourceOverlapCap = mbp.GateSourceOverlapCapFactor * bp.Width;
-            GateDrainOverlapCap = mbp.GateDrainOverlapCapFactor * bp.Width;
-            GateBulkOverlapCap = mbp.GateBulkOverlapCapFactor * EffectiveLength;
-            OxideCap = modeltemp.OxideCapFactor * EffectiveLength * bp.Width;
+            effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
+            gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
+            gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
+            oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
 
             /* 
             * now we do the hard part of the bulk - drain and bulk - source
@@ -430,9 +430,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             * 
             * .. bulk - drain and bulk - source depletion capacitances
             */
-            if (vbs < temp.TempDepletionCap)
+            if (vbs < _temp.TempDepletionCap)
             {
-                double arg = 1 - vbs / temp.TempBulkPotential, sarg;
+                double arg = 1 - vbs / _temp.TempBulkPotential, sarg;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -440,52 +440,52 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJunctionBotGradingCoefficient.Value == mbp.BulkJunctionSideGradingCoefficient)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value == _mbp.BulkJunctionSideGradingCoefficient)
                 {
-                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
-                        sarg = sargsw = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
+                        sarg = sargsw = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
                 }
                 else
                 {
-                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
+                        sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
+                        sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 // NOSQRT
-                ChargeBS.Current = temp.TempBulkPotential * (temp.CapBS * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.CapBSSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
-                CapBS = temp.CapBS * sarg + temp.CapBSSidewall * sargsw;
+                ChargeBs.Current = _temp.TempBulkPotential * (_temp.CapBs * (1 - arg * sarg) / (1 - _mbp.BulkJunctionBotGradingCoefficient) +
+                    _temp.CapBsSidewall * (1 - arg * sargsw) / (1 - _mbp.BulkJunctionSideGradingCoefficient));
+                CapBs = _temp.CapBs * sarg + _temp.CapBsSidewall * sargsw;
             }
             else
             {
-                ChargeBS.Current = temp.F4S + vbs * (temp.F2S + vbs * (temp.F3S / 2));
-                CapBS = temp.F2S + temp.F3S * vbs;
+                ChargeBs.Current = _temp.F4S + vbs * (_temp.F2S + vbs * (_temp.F3S / 2));
+                CapBs = _temp.F2S + _temp.F3S * vbs;
             }
 
-            if (vbd < temp.TempDepletionCap)
+            if (vbd < _temp.TempDepletionCap)
             {
-                double arg = 1 - vbd / temp.TempBulkPotential, sarg;
+                double arg = 1 - vbd / _temp.TempBulkPotential, sarg;
                 /* 
                 * the following block looks somewhat long and messy, 
                 * but since most users use the default grading
@@ -493,40 +493,40 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (mbp.BulkJunctionBotGradingCoefficient.Value == .5 && mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5 && _mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 }
                 else
                 {
-                    if (mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sarg = Math.Exp(-mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
+                        sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
                     else
                     {
                         /* NOSQRT */
-                        sargsw = Math.Exp(-mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
+                        sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
                     }
                 }
                 /* NOSQRT */
-                ChargeBD.Current = temp.TempBulkPotential * (temp.CapBD * (1 - arg * sarg) / (1 - mbp.BulkJunctionBotGradingCoefficient) +
-                    temp.CapBDSidewall * (1 - arg * sargsw) / (1 - mbp.BulkJunctionSideGradingCoefficient));
-                CapBD = temp.CapBD * sarg + temp.CapBDSidewall * sargsw;
+                ChargeBd.Current = _temp.TempBulkPotential * (_temp.CapBd * (1 - arg * sarg) / (1 - _mbp.BulkJunctionBotGradingCoefficient) +
+                    _temp.CapBdSidewall * (1 - arg * sargsw) / (1 - _mbp.BulkJunctionSideGradingCoefficient));
+                CapBd = _temp.CapBd * sarg + _temp.CapBdSidewall * sargsw;
             }
             else
             {
-                ChargeBD.Current = temp.F4D + vbd * (temp.F2D + vbd * temp.F3D / 2);
-                CapBD = temp.F2D + vbd * temp.F3D;
+                ChargeBd.Current = _temp.F4D + vbd * (_temp.F2D + vbd * _temp.F3D / 2);
+                CapBd = _temp.F2D + vbd * _temp.F3D;
             }
 
             /* (above only excludes tranop, since we're only at this
@@ -538,89 +538,89 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             */
 
             // integrate the capacitors and save results
-            ChargeBD.Integrate();
-            Gbd += ChargeBD.Jacobian(CapBD);
-            Cbd += ChargeBD.Derivative;
-            Cd -= ChargeBD.Derivative;
-            ChargeBS.Integrate();
-            Gbs += ChargeBS.Jacobian(CapBS);
-            Cbs += ChargeBS.Derivative;
+            ChargeBd.Integrate();
+            gbd += ChargeBd.Jacobian(CapBd);
+            cbd += ChargeBd.Derivative;
+            cd -= ChargeBd.Derivative;
+            ChargeBs.Integrate();
+            gbs += ChargeBs.Jacobian(CapBs);
+            cbs += ChargeBs.Derivative;
 
             /* 
              * calculate meyer's capacitors
              */
             double icapgs, icapgd, icapgb;
-            if (load.Mode > 0)
+            if (_load.Mode > 0)
             {
                 Transistor.MeyerCharges(vgs, vgd, von, vdsat,
-                    out icapgs, out icapgd, out icapgb, temp.TempPhi, OxideCap);
+                    out icapgs, out icapgd, out icapgb, _temp.TempPhi, oxideCap);
             }
             else
             {
                 Transistor.MeyerCharges(vgd, vgs, von, vdsat,
-                    out icapgd, out icapgs, out icapgb, temp.TempPhi, OxideCap);
+                    out icapgd, out icapgs, out icapgb, _temp.TempPhi, oxideCap);
             }
-            CapGS.Current = icapgs;
-            CapGD.Current = icapgd;
-            CapGB.Current = icapgb;
+            CapGs.Current = icapgs;
+            CapGd.Current = icapgd;
+            CapGb.Current = icapgb;
 
-            vgs1 = VoltageGS[1];
-            vgd1 = vgs1 - VoltageDS[1];
-            vgb1 = vgs1 - VoltageBS[1];
-            capgs = CapGS.Current + CapGS[1] + GateSourceOverlapCap;
-            capgd = CapGD.Current + CapGD[1] + GateDrainOverlapCap;
-            capgb = CapGB.Current + CapGB[1] + GateBulkOverlapCap;
+            vgs1 = VoltageGs[1];
+            vgd1 = vgs1 - VoltageDs[1];
+            vgb1 = vgs1 - VoltageBs[1];
+            capgs = CapGs.Current + CapGs[1] + gateSourceOverlapCap;
+            capgd = CapGd.Current + CapGd[1] + gateDrainOverlapCap;
+            capgb = CapGb.Current + CapGb[1] + gateBulkOverlapCap;
 
             /* 
             * store small - signal parameters (for meyer's model)
             * all parameters already stored, so done...
             */
 
-            ChargeGS.Current = (vgs - vgs1) * capgs + ChargeGS[1];
-            ChargeGD.Current = (vgd - vgd1) * capgd + ChargeGD[1];
-            ChargeGB.Current = (vgb - vgb1) * capgb + ChargeGB[1];
+            ChargeGs.Current = (vgs - vgs1) * capgs + ChargeGs[1];
+            ChargeGd.Current = (vgd - vgd1) * capgd + ChargeGd[1];
+            ChargeGb.Current = (vgb - vgb1) * capgb + ChargeGb[1];
 
             /* 
              * calculate equivalent conductances and currents for
              * meyer"s capacitors
              */
-            ChargeGS.Integrate();
-            gcgs = ChargeGS.Jacobian(capgs);
-            ceqgs = ChargeGS.RhsCurrent(gcgs, vgs);
-            ChargeGD.Integrate();
-            gcgd = ChargeGD.Jacobian(capgd);
-            ceqgd = ChargeGD.RhsCurrent(gcgd, vgd);
-            ChargeGB.Integrate();
-            gcgb = ChargeGB.Jacobian(capgb);
-            ceqgb = ChargeGB.RhsCurrent(gcgb, vgb);
+            ChargeGs.Integrate();
+            gcgs = ChargeGs.Jacobian(capgs);
+            ceqgs = ChargeGs.RhsCurrent(gcgs, vgs);
+            ChargeGd.Integrate();
+            gcgd = ChargeGd.Jacobian(capgd);
+            ceqgd = ChargeGd.RhsCurrent(gcgd, vgd);
+            ChargeGb.Integrate();
+            gcgb = ChargeGb.Jacobian(capgb);
+            ceqgb = ChargeGb.RhsCurrent(gcgb, vgb);
 
             /* 
 			* store charge storage info for meyer's cap in lx table
 			*/
 
             // Load current vector
-            ceqbs = mbp.MosfetType * (Cbs - (Gbs - state.Gmin) * vbs);
-            ceqbd = mbp.MosfetType * (Cbd - (Gbd - state.Gmin) * vbd);
-            GatePtr.Value -= (mbp.MosfetType * (ceqgs + ceqgb + ceqgd));
-            BulkPtr.Value -= (ceqbs + ceqbd - mbp.MosfetType * ceqgb);
-            DrainPrimePtr.Value += (ceqbd + mbp.MosfetType * ceqgd);
-            SourcePrimePtr.Value += ceqbs + mbp.MosfetType * ceqgs;
+            ceqbs = _mbp.MosfetType * (cbs - (gbs - state.Gmin) * vbs);
+            ceqbd = _mbp.MosfetType * (cbd - (gbd - state.Gmin) * vbd);
+            GatePtr.Value -= (_mbp.MosfetType * (ceqgs + ceqgb + ceqgd));
+            BulkPtr.Value -= (ceqbs + ceqbd - _mbp.MosfetType * ceqgb);
+            DrainPrimePtr.Value += (ceqbd + _mbp.MosfetType * ceqgd);
+            SourcePrimePtr.Value += ceqbs + _mbp.MosfetType * ceqgs;
 
             // load Y-matrix
             GateGatePtr.Value += gcgd + gcgs + gcgb;
-            BulkBulkPtr.Value += Gbd + Gbs + gcgb;
-            DrainPrimeDrainPrimePtr.Value += Gbd + gcgd;
-            SourcePrimeSourcePrimePtr.Value += Gbs + gcgs;
+            BulkBulkPtr.Value += gbd + gbs + gcgb;
+            DrainPrimeDrainPrimePtr.Value += gbd + gcgd;
+            SourcePrimeSourcePrimePtr.Value += gbs + gcgs;
             GateBulkPtr.Value -= gcgb;
             GateDrainPrimePtr.Value -= gcgd;
             GateSourcePrimePtr.Value -= gcgs;
             BulkGatePtr.Value -= gcgb;
-            BulkDrainPrimePtr.Value -= Gbd;
-            BulkSourcePrimePtr.Value -= Gbs;
+            BulkDrainPrimePtr.Value -= gbd;
+            BulkSourcePrimePtr.Value -= gbs;
             DrainPrimeGatePtr.Value += -gcgd;
-            DrainPrimeBulkPtr.Value += -Gbd;
+            DrainPrimeBulkPtr.Value += -gbd;
             SourcePrimeGatePtr.Value += -gcgs;
-            SourcePrimeBulkPtr.Value += -Gbs;
+            SourcePrimeBulkPtr.Value += -gbs;
         }
 
         /// <summary>
@@ -629,9 +629,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <param name="timestep">Timestep</param>
         public override void Truncate(ref double timestep)
         {
-            ChargeGS.LocalTruncationError(ref timestep);
-            ChargeGD.LocalTruncationError(ref timestep);
-            ChargeGB.LocalTruncationError(ref timestep);
+            ChargeGs.LocalTruncationError(ref timestep);
+            ChargeGd.LocalTruncationError(ref timestep);
+            ChargeGb.LocalTruncationError(ref timestep);
         }
     }
 }

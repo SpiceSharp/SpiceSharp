@@ -13,12 +13,12 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Behaviors indexed by the entity that created them
         /// </summary>
-        Dictionary<Identifier, EntityBehaviorDictionary> entityBehaviors = new Dictionary<Identifier, EntityBehaviorDictionary>();
+        Dictionary<Identifier, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<Identifier, EntityBehaviorDictionary>();
 
         /// <summary>
         /// Lists of behaviors
         /// </summary>
-        Dictionary<Type, List<Behavior>> behaviors = new Dictionary<Type, List<Behavior>>();
+        Dictionary<Type, List<Behavior>> _behaviors = new Dictionary<Type, List<Behavior>>();
 
         /// <summary>
         /// Add a behavior to the collection
@@ -28,20 +28,20 @@ namespace SpiceSharp.Behaviors
         public void Add(Identifier creator, Behavior behavior)
         {
             EntityBehaviorDictionary eb;
-            if (!entityBehaviors.TryGetValue(creator, out eb))
+            if (!_entityBehaviors.TryGetValue(creator, out eb))
             {
                 eb = new EntityBehaviorDictionary(creator);
-                entityBehaviors.Add(creator, eb);
+                _entityBehaviors.Add(creator, eb);
             }
             eb.Register(behavior);
 
             // Store in the behavior list
             Type basetype = behavior.GetType().BaseType;
             List<Behavior> list;
-            if (!behaviors.TryGetValue(basetype, out list))
+            if (!_behaviors.TryGetValue(basetype, out list))
             {
                 list = new List<Behavior>();
-                behaviors.Add(basetype, list);
+                _behaviors.Add(basetype, list);
             }
             list.Add(behavior);
         }
@@ -53,7 +53,7 @@ namespace SpiceSharp.Behaviors
         /// <returns></returns>
         public Collection<T> GetBehaviorList<T>() where T : Behavior
         {
-            if (behaviors.TryGetValue(typeof(T), out List<Behavior> list))
+            if (_behaviors.TryGetValue(typeof(T), out List<Behavior> list))
                 return new Collection<T>(list.ConvertAll((Behavior b) => (T)b));
             return new Collection<T>();
         }
@@ -65,7 +65,7 @@ namespace SpiceSharp.Behaviors
         /// <returns></returns>
         public EntityBehaviorDictionary GetEntityBehaviors(Identifier name)
         {
-            if (entityBehaviors.TryGetValue(name, out EntityBehaviorDictionary result))
+            if (_entityBehaviors.TryGetValue(name, out EntityBehaviorDictionary result))
                 return result;
             return null;
         }

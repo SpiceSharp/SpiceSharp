@@ -14,13 +14,13 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        LoadBehavior load;
-        ModelLoadBehavior modelload;
+        LoadBehavior _load;
+        ModelLoadBehavior _modelload;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int _posNode, _negNode;
         protected MatrixElement<Complex> PosPosPtr { get; private set; }
         protected MatrixElement<Complex> NegPosPtr { get; private set; }
         protected MatrixElement<Complex> PosNegPtr { get; private set; }
@@ -42,8 +42,8 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>("entity");
-            modelload = provider.GetBehavior<ModelLoadBehavior>("model");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _modelload = provider.GetBehavior<ModelLoadBehavior>("model");
         }
         
         /// <summary>
@@ -56,8 +56,8 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -69,10 +69,10 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
 			if (solver == null)
 				throw new ArgumentNullException(nameof(solver));
 
-            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
-            PosNegPtr = solver.GetMatrixElement(posNode, negNode);
-            NegPosPtr = solver.GetMatrixElement(negNode, posNode);
-            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
+            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
+            PosNegPtr = solver.GetMatrixElement(_posNode, _negNode);
+            NegPosPtr = solver.GetMatrixElement(_negNode, _posNode);
+            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
         }
 
         /// <summary>
@@ -95,18 +95,18 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            bool current_state;
-            double g_now;
+            bool currentState;
+            double gNow;
 
             // Get the current state
-            current_state = load.CurrentState;
-            g_now = current_state != false ? modelload.OnConductance : modelload.OffConductance;
+            currentState = _load.CurrentState;
+            gNow = currentState != false ? _modelload.OnConductance : _modelload.OffConductance;
 
             // Load the Y-matrix
-            PosPosPtr.Value += g_now;
-            PosNegPtr.Value -= g_now;
-            NegPosPtr.Value -= g_now;
-            NegNegPtr.Value += g_now;
+            PosPosPtr.Value += gNow;
+            PosNegPtr.Value -= gNow;
+            NegPosPtr.Value -= gNow;
+            NegNegPtr.Value += gNow;
         }
     }
 }

@@ -81,7 +81,7 @@ namespace SpiceSharp.Simulations
 
             // Initialize the state
             ComplexState.Initialize(Circuit.Nodes);
-            ComplexState.Sparse |= ComplexState.SparseStates.ACShouldReorder;
+            ComplexState.Sparse |= ComplexState.SparseStates.AcShouldReorder;
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Calculate the AC solution
         /// </summary>
-        protected void ACIterate()
+        protected void AcIterate()
         {
             var cstate = ComplexState;
             var solver = cstate.Solver;
@@ -122,16 +122,16 @@ namespace SpiceSharp.Simulations
             foreach (var behavior in FrequencyBehaviors)
                 behavior.Load(this);
 
-            if (cstate.Sparse.HasFlag(ComplexState.SparseStates.ACShouldReorder))
+            if (cstate.Sparse.HasFlag(ComplexState.SparseStates.AcShouldReorder))
             {
                 solver.OrderAndFactor();
-                cstate.Sparse &= ~ComplexState.SparseStates.ACShouldReorder;
+                cstate.Sparse &= ~ComplexState.SparseStates.AcShouldReorder;
             }
             else
             {
                 if (!solver.Factor())
                 {
-                    cstate.Sparse |= ComplexState.SparseStates.ACShouldReorder;
+                    cstate.Sparse |= ComplexState.SparseStates.AcShouldReorder;
                     goto retry;
                 }
             }

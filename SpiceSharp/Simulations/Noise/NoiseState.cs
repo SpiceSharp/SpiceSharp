@@ -10,34 +10,34 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        double gainSquareInverted, currentFrequency, lastFrequency, logLastFrequency, deltaFrequency, deltaLogFrequency, logFrequency;
+        double _gainSquareInverted, _currentFrequency, _lastFrequency, _logLastFrequency, _deltaFrequency, _deltaLogFrequency, _logFrequency;
 
         /// <summary>
         /// Current frequency point
         /// </summary>
         public double Frequency
         {
-            get => currentFrequency;
+            get => _currentFrequency;
             set
             {
                 // Shift current frequency to last frequency
-                lastFrequency = currentFrequency;
-                logLastFrequency = logFrequency;
+                _lastFrequency = _currentFrequency;
+                _logLastFrequency = _logFrequency;
 
                 // Update new values
-                currentFrequency = value;
-                logFrequency = Math.Log(Math.Max(currentFrequency, 1e-38));
+                _currentFrequency = value;
+                _logFrequency = Math.Log(Math.Max(_currentFrequency, 1e-38));
 
                 // Delta
-                deltaFrequency = currentFrequency - lastFrequency;
-                deltaLogFrequency = logFrequency - logLastFrequency;
+                _deltaFrequency = _currentFrequency - _lastFrequency;
+                _deltaLogFrequency = _logFrequency - _logLastFrequency;
             }
         }
 
         /// <summary>
         /// Gets the frequency step
         /// </summary>
-        public double DeltaFrequency { get => deltaFrequency; }
+        public double DeltaFrequency { get => _deltaFrequency; }
 
         /// <summary>
         /// Output referred noise
@@ -59,10 +59,10 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public double GainInverseSquared
         {
-            get => gainSquareInverted;
+            get => _gainSquareInverted;
             set
             {
-                gainSquareInverted = value;
+                _gainSquareInverted = value;
                 LogInverseGain = Math.Log(value);
             }
         }
@@ -79,8 +79,8 @@ namespace SpiceSharp.Simulations
         public void Reset(double frequency)
         {
             // Set the current and last frequency
-            currentFrequency = frequency;
-            lastFrequency = frequency;
+            _currentFrequency = frequency;
+            _lastFrequency = frequency;
 
             // Reset integrated noise
             OutputNoise = 0;
@@ -101,17 +101,17 @@ namespace SpiceSharp.Simulations
         /// <returns></returns>
         public double Integrate(double noiseDensity, double logNoiseDensity, double lastLogNoiseDensity)
         {
-            double exponent = (logNoiseDensity - lastLogNoiseDensity) / deltaLogFrequency;
+            double exponent = (logNoiseDensity - lastLogNoiseDensity) / _deltaLogFrequency;
             if (Math.Abs(exponent) < 1e-10)
-                return noiseDensity * deltaFrequency;
+                return noiseDensity * _deltaFrequency;
             else
             {
-                double a = Math.Exp(logNoiseDensity - exponent * logFrequency);
+                double a = Math.Exp(logNoiseDensity - exponent * _logFrequency);
                 exponent += 1.0;
                 if (Math.Abs(exponent) < 1e-10)
-                    return a * (logFrequency - logLastFrequency);
+                    return a * (_logFrequency - _logLastFrequency);
                 else
-                    return a * (Math.Exp(exponent * logFrequency) - Math.Exp(exponent * logLastFrequency)) / exponent;
+                    return a * (Math.Exp(exponent * _logFrequency) - Math.Exp(exponent * _logLastFrequency)) / exponent;
             }
         }
     }

@@ -14,8 +14,8 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters bp;
-        LoadBehavior load;
+        BaseParameters _bp;
+        LoadBehavior _load;
         
         /// <summary>
         /// An event called when the flux can be updated
@@ -26,10 +26,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int BranchEq;
+        int _branchEq;
         protected MatrixElement<double> BranchBranchPtr { get; private set; }
         protected VectorElement<double> BranchPtr { get; private set; }
-        StateDerivative flux;
+        StateDerivative _flux;
 
         /// <summary>
         /// Constructor
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             switch (propertyName)
             {
-                case "flux": return (RealState state) => flux.Current;
+                case "flux": return (RealState state) => _flux.Current;
                 default: return null;
             }
         }
@@ -61,10 +61,10 @@ namespace SpiceSharp.Components.InductorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>("entity");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
 
             // Clear all events
             if (UpdateFlux != null)
@@ -84,11 +84,11 @@ namespace SpiceSharp.Components.InductorBehaviors
 				throw new ArgumentNullException(nameof(solver));
 
             // Get current equation
-            BranchEq = load.BranchEq;
-            BranchPtr = solver.GetRhsElement(BranchEq);
+            _branchEq = _load.BranchEq;
+            BranchPtr = solver.GetRhsElement(_branchEq);
 
             // Get matrix pointers
-            BranchBranchPtr = solver.GetMatrixElement(BranchEq, BranchEq);
+            BranchBranchPtr = solver.GetMatrixElement(_branchEq, _branchEq);
         }
 
         /// <summary>
@@ -108,23 +108,23 @@ namespace SpiceSharp.Components.InductorBehaviors
 			if (states == null)
 				throw new ArgumentNullException(nameof(states));
 
-            flux = states.CreateDerivative();
+            _flux = states.CreateDerivative();
         }
 
         /// <summary>
         /// Calculate DC states
         /// </summary>
         /// <param name="simulation">Time-based simulation</param>
-        public override void GetDCState(TimeSimulation simulation)
+        public override void GetDcState(TimeSimulation simulation)
         {
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
             // Get the current through
-            if (bp.InitialCondition.Given)
-                flux.Current = bp.InitialCondition * bp.Inductance;
+            if (_bp.InitialCondition.Given)
+                _flux.Current = _bp.InitialCondition * _bp.Inductance;
             else
-                flux.Current = simulation.RealState.Solution[BranchEq] * bp.Inductance;
+                _flux.Current = simulation.RealState.Solution[_branchEq] * _bp.Inductance;
         }
 
         /// <summary>
@@ -139,19 +139,19 @@ namespace SpiceSharp.Components.InductorBehaviors
             var state = simulation.RealState;
 
             // Initialize
-            flux.Current = bp.Inductance * state.Solution[BranchEq];
+            _flux.Current = _bp.Inductance * state.Solution[_branchEq];
             
             // Allow alterations of the flux
             if (UpdateFlux != null)
             {
-                UpdateFluxEventArgs args = new UpdateFluxEventArgs(bp.Inductance, state.Solution[BranchEq], flux, state);
+                UpdateFluxEventArgs args = new UpdateFluxEventArgs(_bp.Inductance, state.Solution[_branchEq], _flux, state);
                 UpdateFlux.Invoke(this, args);
             }
 
             // Finally load the Y-matrix
-            flux.Integrate();
-            BranchPtr.Value += flux.RhsCurrent();
-            BranchBranchPtr.Value -= flux.Jacobian(bp.Inductance);
+            _flux.Integrate();
+            BranchPtr.Value += _flux.RhsCurrent();
+            BranchBranchPtr.Value -= _flux.Jacobian(_bp.Inductance);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="timestep">Timestep</param>
         public override void Truncate(ref double timestep)
         {
-            flux.LocalTruncationError(ref timestep);
+            _flux.LocalTruncationError(ref timestep);
         }
     }
 }

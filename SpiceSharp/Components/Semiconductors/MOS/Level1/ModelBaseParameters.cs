@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         }
         public Parameter NominalTemperature { get; } = new Parameter();
         [PropertyName("vto"), PropertyName("vt0"), PropertyInfo("Threshold voltage")]
-        public Parameter VT0 { get; } = new Parameter();
+        public Parameter Vt0 { get; } = new Parameter();
         [PropertyName("kp"), PropertyInfo("Transconductance parameter")]
         public Parameter Transconductance { get; } = new Parameter(2e-5);
         [PropertyName("gamma"), PropertyInfo("Bulk threshold parameter")]
@@ -32,9 +32,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         [PropertyName("rs"), PropertyInfo("Source ohmic resistance")]
         public Parameter SourceResistance { get; } = new Parameter();
         [PropertyName("cbd"), PropertyInfo("B-D junction capacitance")]
-        public Parameter CapBD { get; } = new Parameter();
+        public Parameter CapBd { get; } = new Parameter();
         [PropertyName("cbs"), PropertyInfo("B-S junction capacitance")]
-        public Parameter CapBS { get; } = new Parameter();
+        public Parameter CapBs { get; } = new Parameter();
         [PropertyName("is"), PropertyInfo("Bulk junction sat. current")]
         public Parameter JunctionSatCur { get; } = new Parameter(1e-14);
         [PropertyName("pb"), PropertyInfo("Bulk junction potential")]

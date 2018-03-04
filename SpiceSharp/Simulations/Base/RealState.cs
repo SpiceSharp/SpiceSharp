@@ -66,7 +66,7 @@ namespace SpiceSharp.Simulations
             /// Indicates that the matrix should be reordered for AC analysis
             /// </summary>
             /// <remarks>Pivoting is necessary to minimize numerical errors and to factorize a matrix using LU decomposition.</remarks>
-            ACShouldReorder = 0x10
+            AcShouldReorder = 0x10
         }
 
         /// <summary>
@@ -104,14 +104,14 @@ namespace SpiceSharp.Simulations
         /// Gets or sets the flag for ignoring time-related effects
         /// If true, each device should assume the circuit is in rest
         /// </summary>
-        public bool UseDC { get; set; }
+        public bool UseDc { get; set; }
 
         /// <summary>
         /// Gets or sets the flag for using initial conditions
         /// If true, the operating point will not be calculated, and initial 
         /// conditions will be used instead.
         /// </summary>
-        public bool UseIC { get; set; } = false;
+        public bool UseIc { get; set; } = false;
 
         /// <summary>
         /// The current Gmin parameter
@@ -181,8 +181,8 @@ namespace SpiceSharp.Simulations
             Sparse = SparseStates.ShouldReorder;
             Domain = DomainType.None;
             DiagonalGmin = 0;
-            UseDC = true;
-            UseIC = false;
+            UseDc = true;
+            UseIc = false;
 
             base.Initialize(nodes);
         }

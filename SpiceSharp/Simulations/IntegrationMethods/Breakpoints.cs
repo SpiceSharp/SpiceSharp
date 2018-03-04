@@ -26,7 +26,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<double> bps = new List<double>() { 0.0, double.PositiveInfinity };
+        private List<double> _bps = new List<double>() { 0.0, double.PositiveInfinity };
 
         /// <summary>
         /// Constructor
@@ -41,16 +41,16 @@ namespace SpiceSharp.IntegrationMethods
         public void SetBreakpoint(double timePoint)
         {
             // Insert
-            for (int i = 0; i < bps.Count; i++)
+            for (int i = 0; i < _bps.Count; i++)
             {
                 // Same breakpoint, return without setting it
-                if (Math.Abs(bps[i] - timePoint) <= MinBreak)
+                if (Math.Abs(_bps[i] - timePoint) <= MinBreak)
                     return;
 
                 // Check if we need to insert the breakpoint here
-                if (timePoint < bps[i])
+                if (timePoint < _bps[i])
                 {
-                    bps.Insert(i, timePoint);
+                    _bps.Insert(i, timePoint);
                     if (i == 0)
                     {
                         First = timePoint;
@@ -59,15 +59,15 @@ namespace SpiceSharp.IntegrationMethods
                     }
                     else
                     {
-                        First = bps[0];
-                        Delta = bps[1] - First;
+                        First = _bps[0];
+                        Delta = _bps[1] - First;
                         return;
                     }
                 }
             }
 
             // Since we got here, it just needs to be added to the end
-            bps.Add(timePoint);
+            _bps.Add(timePoint);
         }
 
         /// <summary>
@@ -76,17 +76,17 @@ namespace SpiceSharp.IntegrationMethods
         public void ClearBreakpoint()
         {
             // Remove the first item
-            if (bps.Count > 2)
-                bps.RemoveAt(0);
+            if (_bps.Count > 2)
+                _bps.RemoveAt(0);
             else
             {
-                bps[0] = bps[1];
-                bps[1] = double.PositiveInfinity;
+                _bps[0] = _bps[1];
+                _bps[1] = double.PositiveInfinity;
             }
 
             // Calculate the first breakpoint and the maximum delta
-            First = bps[0];
-            Delta = bps[1] - First;
+            First = _bps[0];
+            Delta = _bps[1] - First;
         }
 
         /// <summary>
@@ -94,9 +94,9 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         public void Clear()
         {
-            bps.Clear();
-            bps.Add(0.0);
-            bps.Add(double.PositiveInfinity);
+            _bps.Clear();
+            _bps.Add(0.0);
+            _bps.Add(double.PositiveInfinity);
             First = 0.0;
             Delta = double.PositiveInfinity;
         }

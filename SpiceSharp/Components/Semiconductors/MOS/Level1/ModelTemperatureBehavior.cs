@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        ModelBaseParameters mbp;
+        ModelBaseParameters _mbp;
 
         /// <summary>
         /// Extra variables
@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            mbp = provider.GetParameterSet<ModelBaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>("entity");
         }
 
         /// <summary>
@@ -55,67 +55,67 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             double kt1, arg1, fermis, wkfng, fermig, wkfngs, vfb = 0.0;
 
             /* perform model defaulting */
-            if (!mbp.NominalTemperature.Given)
-                mbp.NominalTemperature.Value = simulation.RealState.NominalTemperature;
+            if (!_mbp.NominalTemperature.Given)
+                _mbp.NominalTemperature.Value = simulation.RealState.NominalTemperature;
 
-            Fact1 = mbp.NominalTemperature / Circuit.ReferenceTemperature;
-            VtNominal = mbp.NominalTemperature * Circuit.KOverQ;
-            kt1 = Circuit.Boltzmann * mbp.NominalTemperature;
-            EgFet1 = 1.16 - (7.02e-4 * mbp.NominalTemperature * mbp.NominalTemperature) / (mbp.NominalTemperature + 1108);
+            Fact1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
+            VtNominal = _mbp.NominalTemperature * Circuit.KOverQ;
+            kt1 = Circuit.Boltzmann * _mbp.NominalTemperature;
+            EgFet1 = 1.16 - (7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature) / (_mbp.NominalTemperature + 1108);
             arg1 = -EgFet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
             PbFactor1 = -2 * VtNominal * (1.5 * Math.Log(Fact1) + Circuit.Charge * arg1);
 
             /* now model parameter preprocessing */
 
-            if (!mbp.OxideThickness.Given || mbp.OxideThickness.Value == 0)
+            if (!_mbp.OxideThickness.Given || _mbp.OxideThickness.Value == 0)
             {
                 OxideCapFactor = 0;
             }
             else
             {
-                OxideCapFactor = 3.9 * 8.854214871e-12 / mbp.OxideThickness;
-                if (!mbp.Transconductance.Given)
+                OxideCapFactor = 3.9 * 8.854214871e-12 / _mbp.OxideThickness;
+                if (!_mbp.Transconductance.Given)
                 {
-                    if (!mbp.SurfaceMobility.Given)
+                    if (!_mbp.SurfaceMobility.Given)
                     {
-                        mbp.SurfaceMobility.Value = 600;
+                        _mbp.SurfaceMobility.Value = 600;
                     }
-                    mbp.Transconductance.Value = mbp.SurfaceMobility * OxideCapFactor * 1e-4;
+                    _mbp.Transconductance.Value = _mbp.SurfaceMobility * OxideCapFactor * 1e-4;
                 }
-                if (mbp.SubstrateDoping.Given)
+                if (_mbp.SubstrateDoping.Given)
                 {
-                    if (mbp.SubstrateDoping * 1e6 > 1.45e16)
+                    if (_mbp.SubstrateDoping * 1e6 > 1.45e16)
                     {
-                        if (!mbp.Phi.Given)
+                        if (!_mbp.Phi.Given)
                         {
-                            mbp.Phi.Value = 2 * VtNominal * Math.Log(mbp.SubstrateDoping * 1e6 / 1.45e16);
-                            mbp.Phi.Value = Math.Max(.1, mbp.Phi);
+                            _mbp.Phi.Value = 2 * VtNominal * Math.Log(_mbp.SubstrateDoping * 1e6 / 1.45e16);
+                            _mbp.Phi.Value = Math.Max(.1, _mbp.Phi);
                         }
-                        fermis = mbp.MosfetType * .5 * mbp.Phi;
+                        fermis = _mbp.MosfetType * .5 * _mbp.Phi;
                         wkfng = 3.2;
-                        if (!mbp.GateType.Given)
-                            mbp.GateType.Value = 1;
-                        if (mbp.GateType != 0)
+                        if (!_mbp.GateType.Given)
+                            _mbp.GateType.Value = 1;
+                        if (_mbp.GateType != 0)
                         {
-                            fermig = mbp.MosfetType * mbp.GateType * .5 * EgFet1;
+                            fermig = _mbp.MosfetType * _mbp.GateType * .5 * EgFet1;
                             wkfng = 3.25 + .5 * EgFet1 - fermig;
                         }
                         wkfngs = wkfng - (3.25 + .5 * EgFet1 + fermis);
-                        if (!mbp.Gamma.Given)
+                        if (!_mbp.Gamma.Given)
                         {
-                            mbp.Gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.Charge * mbp.SubstrateDoping * 1e6) / OxideCapFactor;
+                            _mbp.Gamma.Value = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Circuit.Charge * _mbp.SubstrateDoping * 1e6) / OxideCapFactor;
                         }
-                        if (!mbp.VT0.Given)
+                        if (!_mbp.Vt0.Given)
                         {
-                            if (!mbp.SurfaceStateDensity.Given)
-                                mbp.SurfaceStateDensity.Value = 0;
-                            vfb = wkfngs - mbp.SurfaceStateDensity * 1e4 * Circuit.Charge / OxideCapFactor;
-                            mbp.VT0.Value = vfb + mbp.MosfetType * (mbp.Gamma * Math.Sqrt(mbp.Phi) + mbp.Phi);
+                            if (!_mbp.SurfaceStateDensity.Given)
+                                _mbp.SurfaceStateDensity.Value = 0;
+                            vfb = wkfngs - _mbp.SurfaceStateDensity * 1e4 * Circuit.Charge / OxideCapFactor;
+                            _mbp.Vt0.Value = vfb + _mbp.MosfetType * (_mbp.Gamma * Math.Sqrt(_mbp.Phi) + _mbp.Phi);
                         }
                     }
                     else
                     {
-                        mbp.SubstrateDoping.Value = 0;
+                        _mbp.SubstrateDoping.Value = 0;
                         throw new CircuitException("{0}: Nsub < Ni".FormatString(Name));
                     }
                 }

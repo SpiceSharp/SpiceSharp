@@ -15,14 +15,14 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters bp;
-        LoadBehavior load;
-        VoltagesourceBehaviors.LoadBehavior vsrcload;
+        BaseParameters _bp;
+        LoadBehavior _load;
+        VoltagesourceBehaviors.LoadBehavior _vsrcload;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, branchEq, contBranchEq;
+        int _posNode, _negNode, _branchEq, _contBranchEq;
         protected MatrixElement<Complex> PosBranchPtr { get; private set; }
         protected MatrixElement<Complex> NegBranchPtr { get; private set; }
         protected MatrixElement<Complex> BranchPosPtr { get; private set; }
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[posNode] - state.Solution[negNode];
+            return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Complex current")]
         public Complex GetCurrent(ComplexState state)
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[branchEq];
+            return state.Solution[_branchEq];
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(ComplexState state)
@@ -51,8 +51,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.Solution[posNode] - state.Solution[negNode];
-            Complex i = state.Solution[branchEq];
+            Complex v = state.Solution[_posNode] - state.Solution[_negNode];
+            Complex i = state.Solution[_branchEq];
             return -v * Complex.Conjugate(i);
         }
 
@@ -72,11 +72,11 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>("entity");
-            vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>("control");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>("control");
         }
 
         /// <summary>
@@ -89,8 +89,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -103,15 +103,15 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(solver));
 
             // Get extra nodes
-            contBranchEq = vsrcload.BranchEq;
-            branchEq = load.BranchEq;
+            _contBranchEq = _vsrcload.BranchEq;
+            _branchEq = _load.BranchEq;
 
             // Get matrix pointers
-            PosBranchPtr = solver.GetMatrixElement(posNode, branchEq);
-            NegBranchPtr = solver.GetMatrixElement(negNode, branchEq);
-            BranchPosPtr = solver.GetMatrixElement(branchEq, posNode);
-            BranchNegPtr = solver.GetMatrixElement(branchEq, negNode);
-            BranchControlBranchPtr = solver.GetMatrixElement(branchEq, contBranchEq);
+            PosBranchPtr = solver.GetMatrixElement(_posNode, _branchEq);
+            NegBranchPtr = solver.GetMatrixElement(_negNode, _branchEq);
+            BranchPosPtr = solver.GetMatrixElement(_branchEq, _posNode);
+            BranchNegPtr = solver.GetMatrixElement(_branchEq, _negNode);
+            BranchControlBranchPtr = solver.GetMatrixElement(_branchEq, _contBranchEq);
         }
         
         /// <summary>
@@ -140,7 +140,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
             BranchPosPtr.Value += 1.0;
             NegBranchPtr.Value -= 1.0;
             BranchNegPtr.Value -= 1.0;
-            BranchControlBranchPtr.Value -= bp.Coefficient.Value;
+            BranchControlBranchPtr.Value -= _bp.Coefficient.Value;
         }
     }
 }

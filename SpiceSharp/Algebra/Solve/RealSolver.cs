@@ -13,8 +13,8 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Private variables
         /// </summary>
-        double[] intermediate;
-        MatrixElement<double>[] dest;
+        double[] _intermediate;
+        MatrixElement<double>[] _dest;
 
         /// <summary>
         /// Constructor
@@ -49,8 +49,8 @@ namespace SpiceSharp.Algebra
         public override void FixEquations()
         {
             base.FixEquations();
-            intermediate = new double[Order + 1];
-            dest = new MatrixElement<double>[Order + 1];
+            _intermediate = new double[Order + 1];
+            _dest = new MatrixElement<double>[Order + 1];
         }
 
         /// <summary>
@@ -59,8 +59,8 @@ namespace SpiceSharp.Algebra
         public override void UnfixEquations()
         {
             base.UnfixEquations();
-            intermediate = null;
-            dest = null;
+            _intermediate = null;
+            _dest = null;
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace SpiceSharp.Algebra
                 element = Matrix.GetFirstInColumn(step);
                 while (element != null)
                 {
-                    dest[element.Row] = element;
+                    _dest[element.Row] = element;
                     element = element.Below;
                 }
 
@@ -100,12 +100,12 @@ namespace SpiceSharp.Algebra
                     element = Matrix.GetDiagonalElement(column.Row);
 
                     // Mult = dest[row] / pivot
-                    mult = dest[column.Row].Value * element.Value;
-                    dest[column.Row].Value = mult;
+                    mult = _dest[column.Row].Value * element.Value;
+                    _dest[column.Row].Value = mult;
                     while ((element = element.Below) != null)
                     {
                         // dest[element.Row] -= mult * element
-                        dest[element.Row].Value -= mult * element.Value;
+                        _dest[element.Row].Value -= mult * element.Value;
                     }
                     column = column.Below;
                 }
@@ -141,17 +141,17 @@ namespace SpiceSharp.Algebra
             while (rhsElement != null)
             {
                 while (index < rhsElement.Index)
-                    intermediate[index++] = 0.0;
-                intermediate[index++] = rhsElement.Value;
+                    _intermediate[index++] = 0.0;
+                _intermediate[index++] = rhsElement.Value;
                 rhsElement = rhsElement.Next;
             }
             while (index <= Order)
-                intermediate[index++] = 0.0;
+                _intermediate[index++] = 0.0;
 
             // Forward substitution
             for (int i = 1; i <= Matrix.Size; i++)
             {
-                double temp = intermediate[i];
+                double temp = _intermediate[i];
 
                 // This step of the substitution is skipped if temp == 0.0
                 if (!temp.Equals(0.0))
@@ -160,12 +160,12 @@ namespace SpiceSharp.Algebra
 
                     // temp = temp / pivot
                     temp *= pivot.Value;
-                    intermediate[i] = temp;
+                    _intermediate[i] = temp;
                     var element = pivot.Below;
                     while (element != null)
                     {
                         // intermediate[row] -= temp * element
-                        intermediate[element.Row] -= temp * element.Value;
+                        _intermediate[element.Row] -= temp * element.Value;
                         element = element.Below;
                     }
                 }
@@ -174,21 +174,21 @@ namespace SpiceSharp.Algebra
             // Backward substitution
             for (int i = Matrix.Size; i > 0; i--)
             {
-                double temp = intermediate[i];
+                double temp = _intermediate[i];
                 var pivot = Matrix.GetDiagonalElement(i);
                 var element = pivot.Right;
 
                 while (element != null)
                 {
                     // temp -= element * intermediate[column]
-                    temp -= element.Value * intermediate[element.Column];
+                    temp -= element.Value * _intermediate[element.Column];
                     element = element.Right;
                 }
-                intermediate[i] = temp;
+                _intermediate[i] = temp;
             }
 
             // Unscramble
-            Column.Unscramble(intermediate, solution);
+            Column.Unscramble(_intermediate, solution);
         }
 
         /// <summary>
@@ -205,18 +205,18 @@ namespace SpiceSharp.Algebra
             // Scramble
             var rhsElement = Rhs.First;
             for (int i = 0; i <= Order; i++)
-                intermediate[i] = 0.0;
+                _intermediate[i] = 0.0;
             while (rhsElement != null)
             {
                 int newIndex = Column[Row.Reverse(rhsElement.Index)];
-                intermediate[newIndex] = rhsElement.Value;
+                _intermediate[newIndex] = rhsElement.Value;
                 rhsElement = rhsElement.Next;
             }
 
             // Forward elimination
             for (int i = 1; i <= Matrix.Size; i++)
             {
-                double temp = intermediate[i];
+                double temp = _intermediate[i];
 
                 // This step of the elimination is skipped if temp equals 0
                 if (!temp.Equals(0.0))
@@ -225,7 +225,7 @@ namespace SpiceSharp.Algebra
                     while (element != null)
                     {
                         // intermediate[col] -= temp * element
-                        intermediate[element.Column] -= temp * element.Value;
+                        _intermediate[element.Column] -= temp * element.Value;
                         element = element.Right;
                     }
                 }
@@ -234,23 +234,23 @@ namespace SpiceSharp.Algebra
             // Backward substitution
             for (int i = Matrix.Size; i > 0; i--)
             {
-                double temp = intermediate[i];
+                double temp = _intermediate[i];
 
                 var pivot = Matrix.GetDiagonalElement(i);
                 var element = pivot.Below;
                 while (element != null)
                 {
                     // temp -= intermediate[element.row] * element
-                    temp -= intermediate[element.Row] * element.Value;
+                    temp -= _intermediate[element.Row] * element.Value;
                     element = element.Below;
                 }
 
                 // intermediate = temp / pivot
-                intermediate[i] = temp * pivot.Value;
+                _intermediate[i] = temp * pivot.Value;
             }
 
             // Unscramble
-            Row.Unscramble(intermediate, solution);
+            Row.Unscramble(_intermediate, solution);
         }
 
         /// <summary>

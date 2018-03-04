@@ -15,10 +15,10 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters bp;
-        ModelLoadBehavior modelload;
-        VoltagesourceBehaviors.LoadBehavior vsrcload;
-        ModelBaseParameters mbp;
+        BaseParameters _bp;
+        ModelLoadBehavior _modelload;
+        VoltagesourceBehaviors.LoadBehavior _vsrcload;
+        ModelBaseParameters _mbp;
 
         /// <summary>
         /// Methods
@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[posNode] - state.Solution[negNode];
+            return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [PropertyName("i"), PropertyInfo("Switch current")]
         public double GetCurrent(RealState state)
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[posNode] - state.Solution[negNode]) * Cond;
+            return (state.Solution[_posNode] - state.Solution[_negNode]) * Cond;
         }
         [PropertyName("p"), PropertyInfo("Instantaneous power")]
         public double GetPower(RealState state)
@@ -45,8 +45,8 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[posNode] - state.Solution[negNode]) *
-            (state.Solution[posNode] - state.Solution[negNode]) * Cond;
+            return (state.Solution[_posNode] - state.Solution[_negNode]) *
+            (state.Solution[_posNode] - state.Solution[_negNode]) * Cond;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int _posNode, _negNode;
         public int ControllingBranch { get; private set; }
         protected MatrixElement<double> PosPosPtr { get; private set; }
         protected MatrixElement<double> NegPosPtr { get; private set; }
@@ -95,12 +95,12 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
-            mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
 
             // Get behaviors
-            modelload = provider.GetBehavior<ModelLoadBehavior>("model");
-            vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>("control");
+            _modelload = provider.GetBehavior<ModelLoadBehavior>("model");
+            _vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>("control");
         }
 
         /// <summary>
@@ -113,8 +113,8 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -128,13 +128,13 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Get extra equations
-            ControllingBranch = vsrcload.BranchEq;
+            ControllingBranch = _vsrcload.BranchEq;
 
             // Get matrix pointers
-            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
-            PosNegPtr = solver.GetMatrixElement(posNode, negNode);
-            NegPosPtr = solver.GetMatrixElement(negNode, posNode);
-            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
+            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
+            PosNegPtr = solver.GetMatrixElement(_posNode, _negNode);
+            NegPosPtr = solver.GetMatrixElement(_negNode, _posNode);
+            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
         }
         
         /// <summary>
@@ -157,62 +157,62 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            double g_now;
-            double i_ctrl;
-            bool previous_state;
-            bool current_state = false;
+            double gNow;
+            double iCtrl;
+            bool previousState;
+            bool currentState = false;
             var state = simulation.RealState;
 
             // decide the state of the switch
             if (state.Init == RealState.InitializationStates.InitFix || state.Init == RealState.InitializationStates.InitJunction)
             {
-                if (bp.ZeroState)
+                if (_bp.ZeroState)
                 {
                     // Switch specified "on"
                     CurrentState = true;
-                    current_state = true;
+                    currentState = true;
                 }
                 else
                 {
                     // Switch specified "off"
                     CurrentState = false;
-                    current_state = false;
+                    currentState = false;
                 }
             }
             else
             {
                 // Get the previous state
                 if (UseOldState)
-                    previous_state = OldState;
+                    previousState = OldState;
                 else
-                    previous_state = CurrentState;
-                i_ctrl = state.Solution[ControllingBranch];
+                    previousState = CurrentState;
+                iCtrl = state.Solution[ControllingBranch];
 
                 // Calculate the current state
-                if (i_ctrl > (mbp.Threshold + mbp.Hysteresis))
-                    current_state = true;
-                else if (i_ctrl < (mbp.Threshold - mbp.Hysteresis))
-                    current_state = false;
+                if (iCtrl > (_mbp.Threshold + _mbp.Hysteresis))
+                    currentState = true;
+                else if (iCtrl < (_mbp.Threshold - _mbp.Hysteresis))
+                    currentState = false;
                 else
-                    current_state = previous_state;
+                    currentState = previousState;
 
                 // Store the current state
-                CurrentState = current_state;
+                CurrentState = currentState;
 
                 // If the state changed, ensure one more iteration
-                if (current_state != previous_state)
+                if (currentState != previousState)
                     state.IsConvergent = false;
             }
 
             // Get the current conduction
-            g_now = current_state == true ? modelload.OnConductance : modelload.OffConductance;
-            Cond = g_now;
+            gNow = currentState == true ? _modelload.OnConductance : _modelload.OffConductance;
+            Cond = gNow;
 
             // Load the Y-matrix
-            PosPosPtr.Value += g_now;
-            PosNegPtr.Value -= g_now;
-            NegPosPtr.Value -= g_now;
-            NegNegPtr.Value += g_now;
+            PosPosPtr.Value += gNow;
+            PosNegPtr.Value -= gNow;
+            NegPosPtr.Value -= gNow;
+            NegNegPtr.Value += gNow;
         }
     }
 }

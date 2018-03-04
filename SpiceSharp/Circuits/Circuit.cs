@@ -17,7 +17,7 @@ namespace SpiceSharp
         public const double Boltzmann = 1.3806226e-23;
         public const double ReferenceTemperature = 300.15; // 27degC
         public const double Root2 = 1.4142135623730951;
-        public const double VT0 = Boltzmann * (27.0 + CelsiusKelvin) / Charge;
+        public const double Vt0 = Boltzmann * (27.0 + CelsiusKelvin) / Charge;
         public const double KOverQ = Boltzmann / Charge;
 
         /// <summary>

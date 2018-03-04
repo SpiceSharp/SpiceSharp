@@ -39,13 +39,13 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (double.IsNaN(maxstep))
+                if (double.IsNaN(_maxstep))
                     return (FinalTime - InitTime) / 50.0;
-                return maxstep;
+                return _maxstep;
             }
-            set { maxstep = value; }
+            set { _maxstep = value; }
         }
-        double maxstep = double.NaN;
+        double _maxstep = double.NaN;
 
         /// <summary>
         /// Gets the minimum timestep allowed
@@ -61,7 +61,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Use initial conditions
         /// </summary>
-        public bool UseIC { get; set; } = false;
+        public bool UseIc { get; set; } = false;
 
         /// <summary>
         /// Constructor

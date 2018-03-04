@@ -14,13 +14,13 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        Identifier[] connections;
-        int[] indices;
+        Identifier[] _connections;
+        int[] _indices;
 
         /// <summary>
         /// Gets the number of nodes
         /// </summary>
-        public virtual int PinCount => connections.Length;
+        public virtual int PinCount => _connections.Length;
 
         /// <summary>
         /// Constructor
@@ -32,13 +32,13 @@ namespace SpiceSharp.Components
             // Initialize
             if (nodeCount > 0)
             {
-                connections = new Identifier[nodeCount];
-                indices = new int[nodeCount];
+                _connections = new Identifier[nodeCount];
+                _indices = new int[nodeCount];
             }
             else
             {
-                connections = null;
-                indices = null;
+                _connections = null;
+                _indices = null;
             }
         }
 
@@ -55,13 +55,13 @@ namespace SpiceSharp.Components
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
-            if (nodes.Length != connections.Length)
-                throw new CircuitException("{0}: Node count mismatch. {1} given, {2} expected.".FormatString(Name, nodes.Length, connections.Length));
+            if (nodes.Length != _connections.Length)
+                throw new CircuitException("{0}: Node count mismatch. {1} given, {2} expected.".FormatString(Name, nodes.Length, _connections.Length));
             for (int i = 0; i < nodes.Length; i++)
             {
                 if (nodes[i] == null)
                     throw new ArgumentNullException("node " + (i + 1));
-                connections[i] = nodes[i];
+                _connections[i] = nodes[i];
             }
         }
 
@@ -78,7 +78,7 @@ namespace SpiceSharp.Components
             // Extra functionality for behaviors that can be connected
             if (behavior is IConnectedBehavior cb)
             {
-                cb.Connect(indices);
+                cb.Connect(_indices);
             }
             return behavior;
         }
@@ -111,9 +111,9 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         public virtual Identifier GetNode(int index)
         {
-            if (index < 0 || index >= connections.Length)
+            if (index < 0 || index >= _connections.Length)
                 throw new CircuitException("Invalid node {0}".FormatString(index));
-            return connections[index];
+            return _connections[index];
         }
 
         /// <summary>
@@ -123,9 +123,9 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         public virtual int GetNodeIndex(int index)
         {
-            if (index < 0 || index >= connections.Length)
+            if (index < 0 || index >= _connections.Length)
                 throw new CircuitException("Invalid node {0}".FormatString(index));
-            return indices[index];
+            return _indices[index];
         }
 
         /// <summary>
@@ -139,11 +139,11 @@ namespace SpiceSharp.Components
                 throw new ArgumentNullException(nameof(circuit));
 
             // Map connected nodes
-            Node[] nodes = new Node[connections.Length];
-            for (int i = 0; i < connections.Length; i++)
+            Node[] nodes = new Node[_connections.Length];
+            for (int i = 0; i < _connections.Length; i++)
             {
-                nodes[i] = circuit.Nodes.Map(connections[i]);
-                indices[i] = nodes[i].Index;
+                nodes[i] = circuit.Nodes.Map(_connections[i]);
+                _indices[i] = nodes[i].Index;
             }
 
             // Return all nodes

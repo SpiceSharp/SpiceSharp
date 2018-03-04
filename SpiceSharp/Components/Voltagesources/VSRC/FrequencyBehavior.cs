@@ -15,12 +15,12 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// AC excitation vector
         /// </summary>
-        public Complex AC { get; protected set; }
+        public Complex Ac { get; protected set; }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, branchEq;
+        int _posNode, _negNode, _branchEq;
 
         /// <summary>
         /// Matrix elements
@@ -35,13 +35,13 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// Device methods and properties
         /// </summary>
         [PropertyName("v"), PropertyInfo("Complex voltage")]
-        public Complex Voltage => AC;
+        public Complex Voltage => Ac;
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Complex current")]
         public Complex GetCurrent(ComplexState state)
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-            return state.Solution[branchEq];
+            return state.Solution[_branchEq];
         }
         [PropertyName("p"), PropertyInfo("Complex power")]
         public Complex GetPower(ComplexState state)
@@ -49,8 +49,8 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            Complex v = state.Solution[posNode] - state.Solution[negNode];
-            Complex i = state.Solution[branchEq];
+            Complex v = state.Solution[_posNode] - state.Solution[_negNode];
+            Complex i = state.Solution[_branchEq];
             return -v * Complex.Conjugate(i);
         }
 
@@ -73,12 +73,12 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             var ap = provider.GetParameterSet<FrequencyParameters>("entity");
 
             // Calculate AC vector
-            double radians = ap.ACPhase * Math.PI / 180.0;
-            AC = new Complex(ap.ACMagnitude * Math.Cos(radians), ap.ACMagnitude * Math.Sin(radians));
+            double radians = ap.AcPhase * Math.PI / 180.0;
+            Ac = new Complex(ap.AcMagnitude * Math.Cos(radians), ap.AcMagnitude * Math.Sin(radians));
 
             // Get behaviors
             var load = provider.GetBehavior<LoadBehavior>("entity");
-            branchEq = load.BranchEq;
+            _branchEq = load.BranchEq;
         }
         
         /// <summary>
@@ -91,8 +91,8 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -105,13 +105,13 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 				throw new ArgumentNullException(nameof(solver));
 
             // Get matrix elements
-            PosBranchPtr = solver.GetMatrixElement(posNode, branchEq);
-            BranchPosPtr = solver.GetMatrixElement(branchEq, posNode);
-            NegBranchPtr = solver.GetMatrixElement(negNode, branchEq);
-            BranchNegPtr = solver.GetMatrixElement(branchEq, negNode);
+            PosBranchPtr = solver.GetMatrixElement(_posNode, _branchEq);
+            BranchPosPtr = solver.GetMatrixElement(_branchEq, _posNode);
+            NegBranchPtr = solver.GetMatrixElement(_negNode, _branchEq);
+            BranchNegPtr = solver.GetMatrixElement(_branchEq, _negNode);
 
             // Get rhs elements
-            BranchPtr = solver.GetRhsElement(branchEq);
+            BranchPtr = solver.GetRhsElement(_branchEq);
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             BranchNegPtr.Value -= 1.0;
 
             // Load Rhs-vector
-            BranchPtr.Value += AC;
+            BranchPtr.Value += Ac;
         }
     }
 }

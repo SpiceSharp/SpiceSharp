@@ -5,13 +5,13 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Operating Point analysis
     /// </summary>
-    public class OP : BaseSimulation
+    public class Op : BaseSimulation
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
-        public OP(Identifier name) : base(name)
+        public Op(Identifier name) : base(name)
         {
         }
 
@@ -23,12 +23,12 @@ namespace SpiceSharp.Simulations
             // Setup the state
             var state = RealState;
             var baseconfig = BaseConfiguration;
-            state.UseIC = false; // UseIC is only used in transient simulations
-            state.UseDC = true;
+            state.UseIc = false; // UseIC is only used in transient simulations
+            state.UseDc = true;
             state.Domain = RealState.DomainType.None;
             state.Gmin = baseconfig.Gmin;
 
-            Op(baseconfig.DCMaxIterations);
+            Op(baseconfig.DcMaxIterations);
 
             var exportargs = new ExportDataEventArgs(RealState);
             Export(exportargs);

@@ -24,7 +24,7 @@ namespace SpiceSharpTest.Models
                 new Capacitor("C1", "OUT", "0", 1e-6));
 
             // Create simulation
-            OP op = new OP("op");
+            Op op = new Op("op");
 
             // Create exports
             Export<double>[] exports = new Export<double>[1];
@@ -85,7 +85,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["V1"].ParameterSets.SetProperty("acmag", 1.0);
 
             // Create simulation
-            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(0.1, 1.0e6, 10));
+            Ac ac = new Ac("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(0.1, 1.0e6, 10));
 
             // Create exports
             Export<Complex>[] exports = { new ComplexPropertyExport(ac, "C1", "v") };

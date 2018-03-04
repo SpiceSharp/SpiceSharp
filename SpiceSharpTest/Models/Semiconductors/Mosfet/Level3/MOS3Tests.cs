@@ -60,7 +60,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["M1"].ParameterSets.SetProperty("l", 1e-6);
 
             // Create simulation
-            DC dc = new DC("dc", new SweepConfiguration[] {
+            Dc dc = new Dc("dc", new SweepConfiguration[] {
                 new SweepConfiguration("V2", 0, 1.8, 0.3),
                 new SweepConfiguration("V1", 0, 1.8, 0.3)
             });
@@ -99,7 +99,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["M1"].ParameterSets.SetProperty("l", 1e-6);
 
             // Create simulation
-            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 5));
+            Ac ac = new Ac("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(10, 10e9, 5));
 
             // Create exports
             Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };

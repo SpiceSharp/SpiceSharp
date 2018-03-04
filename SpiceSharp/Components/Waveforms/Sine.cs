@@ -26,7 +26,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        double vo, va, freq, td, theta;
+        double _vo, _va, _freq, _td, _theta;
 
         /// <summary>
         /// Constructor
@@ -70,11 +70,11 @@ namespace SpiceSharp.Components
         /// </summary>
         public override void Setup()
         {
-            vo = Offset;
-            va = Amplitude;
-            freq = Frequency;
-            td = Delay;
-            theta = Theta;
+            _vo = Offset;
+            _va = Amplitude;
+            _freq = Frequency;
+            _td = Delay;
+            _theta = Theta;
         }
 
         /// <summary>
@@ -84,21 +84,21 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         public override double At(double time)
         {
-            time -= td;
+            time -= _td;
 
             // Calculate sine wave result (no offset)
             double result = 0.0;
             if (time <= 0.0)
                 result = 0.0;
             else
-                result = va * Math.Sin(freq * time * 2.0 * Math.PI);
+                result = _va * Math.Sin(_freq * time * 2.0 * Math.PI);
 
             // Modify with theta
             if (Theta.Given)
-                result *= Math.Exp(-(time - td) / theta);
+                result *= Math.Exp(-(time - _td) / _theta);
 
             // Return result (with offset)
-            return vo + result;
+            return _vo + result;
         }
 
         /// <summary>

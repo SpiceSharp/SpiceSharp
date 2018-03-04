@@ -12,9 +12,9 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        List<Node> nodes = new List<Node>();
-        Dictionary<Identifier, Node> map = new Dictionary<Identifier, Node>();
-        bool locked;
+        List<Node> _nodes = new List<Node>();
+        Dictionary<Identifier, Node> _map = new Dictionary<Identifier, Node>();
+        bool _locked;
 
         /// <summary>
         /// The initial conditions
@@ -40,11 +40,11 @@ namespace SpiceSharp.Circuits
         {
             // Setup the ground node
             Ground = new Node(new Identifier("0"), 0);
-            map.Add(Ground.Name, Ground);
-            map.Add(new Identifier("GND"), Ground);
+            _map.Add(Ground.Name, Ground);
+            _map.Add(new Identifier("GND"), Ground);
 
             // Unlock
-            locked = false;
+            _locked = false;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace SpiceSharp.Circuits
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
         public Node this[Identifier id]
         {
-            get => map[id];
+            get => _map[id];
         }
 
         /// <summary>
@@ -63,12 +63,12 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param id="index"></param>
         /// <returns></returns>
-        public Node this[int index] => nodes[index];
+        public Node this[int index] => _nodes[index];
 
         /// <summary>
         /// Gets the node count
         /// </summary>
-        public int Count => nodes.Count;
+        public int Count => _nodes.Count;
 
         /// <summary>
         /// Map a node in the circuit
@@ -78,16 +78,16 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         public Node Map(Identifier id, Node.NodeType type)
         {
-            if (locked)
+            if (_locked)
                 throw new CircuitException("Nodes are locked, mapping is not allowed anymore");
 
             // Check the node
-            if (map.ContainsKey(id))
-                return map[id];
+            if (_map.ContainsKey(id))
+                return _map[id];
 
-            var node = new Node(id, type, nodes.Count + 1);
-            nodes.Add(node);
-            map.Add(id, node);
+            var node = new Node(id, type, _nodes.Count + 1);
+            _nodes.Add(node);
+            _map.Add(id, node);
             return node;
         }
 
@@ -106,9 +106,9 @@ namespace SpiceSharp.Circuits
         /// <returns></returns>
         public Node Create(Identifier id, Node.NodeType type)
         {
-            int index = nodes.Count + 1;
+            int index = _nodes.Count + 1;
             var node = new Node(id, type, index);
-            nodes.Add(node);
+            _nodes.Add(node);
             return node;
         }
 
@@ -124,7 +124,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param id="id">Identifier</param>
         /// <returns></returns>
-        public bool Contains(Identifier id) => map.ContainsKey(id);
+        public bool Contains(Identifier id) => _map.ContainsKey(id);
 
         /// <summary>
         /// Try to get a node
@@ -132,14 +132,14 @@ namespace SpiceSharp.Circuits
         /// <param name="id">Identifier</param>
         /// <param name="node">Node</param>
         /// <returns></returns>
-        public bool TryGetNode(Identifier id, out Node node) => map.TryGetValue(id, out node);
+        public bool TryGetNode(Identifier id, out Node node) => _map.TryGetValue(id, out node);
 
         /// <summary>
         /// Avoid changing to the internal structure by locking the node list
         /// </summary>
         public void Lock()
         {
-            locked = true;
+            _locked = true;
         }
 
         /// <summary>
@@ -147,15 +147,15 @@ namespace SpiceSharp.Circuits
         /// </summary>
         public void Clear()
         {
-            nodes.Clear();
+            _nodes.Clear();
 
             // Setup ground node
-            map.Clear();
-            map.Add(Ground.Name, Ground);
-            map.Add(new Identifier("GND"), Ground);
+            _map.Clear();
+            _map.Add(Ground.Name, Ground);
+            _map.Add(new Identifier("GND"), Ground);
 
             // Unlock
-            locked = false;
+            _locked = false;
         }
 
         /// <summary>
@@ -168,11 +168,11 @@ namespace SpiceSharp.Circuits
             var cloned = new Nodes();
 
             // Copy node list and map
-            foreach (var node in nodes)
+            foreach (var node in _nodes)
             {
                 var clonedNode = (Node)node.Clone();
-                cloned.nodes.Add(clonedNode);
-                cloned.map.Add(clonedNode.Name, clonedNode);
+                cloned._nodes.Add(clonedNode);
+                cloned._map.Add(clonedNode.Name, clonedNode);
             }
 
             // Clone initial conditions and nodesets

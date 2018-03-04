@@ -32,7 +32,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        double v1, v2, td, tr, tf, pw, per;
+        double _v1, _v2, _td, _tr, _tf, _pw, _per;
 
         /// <summary>
         /// Constructor
@@ -67,17 +67,17 @@ namespace SpiceSharp.Components
         /// </summary>
         public override void Setup()
         {
-            v1 = InitialValue;
-            v2 = PulsedValue;
-            td = Delay;
-            tr = RiseTime;
-            tf = FallTime;
-            pw = PulseWidth;
-            per = Period;
+            _v1 = InitialValue;
+            _v2 = PulsedValue;
+            _td = Delay;
+            _tr = RiseTime;
+            _tf = FallTime;
+            _pw = PulseWidth;
+            _per = Period;
 
             // Some checks
-            if (per <= tr + pw + tf)
-                throw new CircuitException("Invalid pulse specification: Period {0} is too small".FormatString(per));
+            if (_per <= _tr + _pw + _tf)
+                throw new CircuitException("Invalid pulse specification: Period {0} is too small".FormatString(_per));
         }
 
         /// <summary>
@@ -90,20 +90,20 @@ namespace SpiceSharp.Components
             double basetime = 0.0;
 
             // Get a relative time variable
-            time -= td;
-            if (time > per)
+            time -= _td;
+            if (time > _per)
             {
-                basetime = per * Math.Floor(time / per);
+                basetime = _per * Math.Floor(time / _per);
                 time -= basetime;
             }
 
-            if (time <= 0.0 || time >= tr + pw + tf)
-                return v1;
-            if (time >= tr && time <= tr + pw)
-                return v2;
-            if (time > 0 && time < tr)
-                return v1 + (v2 - v1) * time / tr;
-            return v2 + (v1 - v2) * (time - tr - pw) / tf;
+            if (time <= 0.0 || time >= _tr + _pw + _tf)
+                return _v1;
+            if (time >= _tr && time <= _tr + _pw)
+                return _v2;
+            if (time > 0 && time < _tr)
+                return _v1 + (_v2 - _v1) * time / _tr;
+            return _v2 + (_v1 - _v2) * (time - _tr - _pw) / _tf;
         }
 
         /// <summary>
@@ -126,47 +126,47 @@ namespace SpiceSharp.Components
                 return;
 
             // Find the time relative to the first period
-            double time = method.Time - td;
+            double time = method.Time - _td;
             double basetime = 0.0;
-            if (time >= per)
+            if (time >= _per)
             {
-                basetime = per * Math.Floor(time / per);
+                basetime = _per * Math.Floor(time / _per);
                 time -= basetime;
             }
-            double tol = 1e-7 * pw;
+            double tol = 1e-7 * _pw;
 
             // Are we at the start of a breakpoint?
-            if (time <= 0 || time >= tr + pw + tf)
+            if (time <= 0 || time >= _tr + _pw + _tf)
             {
                 if (Math.Abs(time - 0) <= tol)
-                    breaks.SetBreakpoint(basetime + tr + td);
-                else if (Math.Abs(tr + pw + tf - time) <= tol)
-                    breaks.SetBreakpoint(basetime + per + td);
-                else if ((time <= -td))
-                    breaks.SetBreakpoint(basetime + td);
-                else if (Math.Abs(per - time) <= tol)
-                    breaks.SetBreakpoint(basetime + td + tr + per);
+                    breaks.SetBreakpoint(basetime + _tr + _td);
+                else if (Math.Abs(_tr + _pw + _tf - time) <= tol)
+                    breaks.SetBreakpoint(basetime + _per + _td);
+                else if ((time <= -_td))
+                    breaks.SetBreakpoint(basetime + _td);
+                else if (Math.Abs(_per - time) <= tol)
+                    breaks.SetBreakpoint(basetime + _td + _tr + _per);
             }
-            else if (time >= tr && time <= tr + pw)
+            else if (time >= _tr && time <= _tr + _pw)
             {
-                if (Math.Abs(time - tr) <= tol)
-                    breaks.SetBreakpoint(basetime + td + tr + pw);
-                else if (Math.Abs(tr + pw - time) <= tol)
-                    breaks.SetBreakpoint(basetime + td + tr + pw + tf);
+                if (Math.Abs(time - _tr) <= tol)
+                    breaks.SetBreakpoint(basetime + _td + _tr + _pw);
+                else if (Math.Abs(_tr + _pw - time) <= tol)
+                    breaks.SetBreakpoint(basetime + _td + _tr + _pw + _tf);
             }
-            else if (time > 0 && time < tr)
+            else if (time > 0 && time < _tr)
             {
                 if (Math.Abs(time - 0) <= tol)
-                    breaks.SetBreakpoint(basetime + td + tr);
-                else if (Math.Abs(time - tr) <= tol)
-                    breaks.SetBreakpoint(basetime + td + tr + pw);
+                    breaks.SetBreakpoint(basetime + _td + _tr);
+                else if (Math.Abs(time - _tr) <= tol)
+                    breaks.SetBreakpoint(basetime + _td + _tr + _pw);
             }
             else
             {
-                if (Math.Abs(tr + pw - time) <= tol)
-                    breaks.SetBreakpoint(basetime + td + tr + pw + tf);
-                else if (Math.Abs(tr + pw + tf - time) <= tol)
-                    breaks.SetBreakpoint(basetime + td + per);
+                if (Math.Abs(_tr + _pw - time) <= tol)
+                    breaks.SetBreakpoint(basetime + _td + _tr + _pw + _tf);
+                else if (Math.Abs(_tr + _pw + _tf - time) <= tol)
+                    breaks.SetBreakpoint(basetime + _td + _per);
             }
         }
     }

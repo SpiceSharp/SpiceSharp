@@ -15,8 +15,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters bp;
-        VoltagesourceBehaviors.LoadBehavior vsrcload;
+        BaseParameters _bp;
+        VoltagesourceBehaviors.LoadBehavior _vsrcload;
 
         /// <summary>
         /// Device methods and properties
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[posNode] - state.Solution[negNode];
+            return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [PropertyName("p"), PropertyInfo("Power")]
         public double GetPower(RealState state)
@@ -43,13 +43,13 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
 
-            return state.Solution[BranchEq] * (state.Solution[posNode] - state.Solution[negNode]);
+            return state.Solution[BranchEq] * (state.Solution[_posNode] - state.Solution[_negNode]);
         }
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode, contBranchEq;
+        int _posNode, _negNode, _contBranchEq;
         public int BranchEq { get; private set; }
         protected MatrixElement<double> PosBranchPtr { get; private set; }
         protected MatrixElement<double> NegBranchPtr { get; private set; }
@@ -91,10 +91,10 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
 
             // Get behaviors
-            vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>("control");
+            _vsrcload = provider.GetBehavior<VoltagesourceBehaviors.LoadBehavior>("control");
         }
 
         /// <summary>
@@ -107,8 +107,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -124,15 +124,15 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Create/get nodes
-            contBranchEq = vsrcload.BranchEq;
+            _contBranchEq = _vsrcload.BranchEq;
             BranchEq = nodes.Create(Name.Grow("#branch"), Node.NodeType.Current).Index;
 
             // Get matrix pointers
-            PosBranchPtr = solver.GetMatrixElement(posNode, BranchEq);
-            NegBranchPtr = solver.GetMatrixElement(negNode, BranchEq);
-            BranchPosPtr = solver.GetMatrixElement(BranchEq, posNode);
-            BranchNegPtr = solver.GetMatrixElement(BranchEq, negNode);
-            BranchControlBranchPtr = solver.GetMatrixElement(BranchEq, contBranchEq);
+            PosBranchPtr = solver.GetMatrixElement(_posNode, BranchEq);
+            NegBranchPtr = solver.GetMatrixElement(_negNode, BranchEq);
+            BranchPosPtr = solver.GetMatrixElement(BranchEq, _posNode);
+            BranchNegPtr = solver.GetMatrixElement(BranchEq, _negNode);
+            BranchControlBranchPtr = solver.GetMatrixElement(BranchEq, _contBranchEq);
         }
         
         /// <summary>
@@ -157,7 +157,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
             BranchPosPtr.Value += 1.0;
             NegBranchPtr.Value -= 1.0;
             BranchNegPtr.Value -= 1.0;
-            BranchControlBranchPtr.Value -= bp.Coefficient;
+            BranchControlBranchPtr.Value -= _bp.Coefficient;
         }
     }
 }

@@ -46,7 +46,7 @@ namespace SpiceSharpTest.Models
                 );
 
             // Create the simulation, exports and references
-            DC dc = new DC("DC", "V1", -3, 3, 10e-3);
+            Dc dc = new Dc("DC", "V1", -3, 3, 10e-3);
             Export<double>[] exports = { new RealVoltageExport(dc, "out") };
             double[][] references =
             {

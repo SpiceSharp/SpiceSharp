@@ -20,20 +20,20 @@ namespace SpiceSharp.Algebra
             {
                 if (index < 0 || index > Length)
                     throw new ArgumentException("Invalid index {0}".FormatString(index));
-                return values[index];
+                return _values[index];
             }
             set
             {
                 if (index < 0 || index > Length)
                     throw new ArgumentException("Invalid index {0}".FormatString(index));
-                values[index] = value;
+                _values[index] = value;
             }
         }
 
         /// <summary>
         /// Values
         /// </summary>
-        T[] values;
+        T[] _values;
 
         /// <summary>
         /// Constructor
@@ -44,7 +44,7 @@ namespace SpiceSharp.Algebra
         {
             if (length < 0 && length > int.MaxValue - 1)
                 throw new ArgumentException("Invalid length {0}".FormatString(length));
-            values = new T[length + 1];
+            _values = new T[length + 1];
         }
 
         /// <summary>
@@ -55,9 +55,9 @@ namespace SpiceSharp.Algebra
             : base(values?.Length - 1 ?? 0)
         {
             if (values == null)
-                this.values = new T[1];
+                this._values = new T[1];
             else
-                this.values = (T[])values.Clone();
+                this._values = (T[])values.Clone();
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace SpiceSharp.Algebra
             if (vector.Length != Length)
                 throw new SparseException("Vector lengths do not match");
             for (int i = 0; i < Length; i++)
-                vector.values[i] = values[i];
+                vector._values[i] = _values[i];
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace SpiceSharp.Algebra
             if (vector.Length != Length)
                 throw new SparseException("Vector lengths do not match");
             for (int i = 0; i < Length; i++)
-                values[i] = vector.values[i];
+                _values[i] = vector._values[i];
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace SpiceSharp.Algebra
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("[");
             for (int i = 1; i <= Length; i++)
-                sb.AppendLine(values[i].ToString());
+                sb.AppendLine(_values[i].ToString());
             sb.AppendLine("]");
             return sb.ToString();
         }
@@ -113,7 +113,7 @@ namespace SpiceSharp.Algebra
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("[");
             for (int i = 1; i <= Length; i++)
-                sb.AppendLine(values[i].ToString(format, formatProvider));
+                sb.AppendLine(_values[i].ToString(format, formatProvider));
             sb.AppendLine("]");
             return sb.ToString();
         }

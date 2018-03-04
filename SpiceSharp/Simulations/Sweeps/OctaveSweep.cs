@@ -22,7 +22,7 @@ namespace SpiceSharp.Simulations.Sweeps
                     yield return Current;
 
                     // Go to the next point
-                    Current = Current * freqDelta;
+                    Current = Current * _freqDelta;
                 }
             }
         }
@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations.Sweeps
         /// <summary>
         /// Multiplication factor
         /// </summary>
-        double freqDelta;
+        double _freqDelta;
 
         /// <summary>
         /// Constructor
@@ -45,8 +45,8 @@ namespace SpiceSharp.Simulations.Sweeps
 
             Initial = initial;
             Final = final;
-            freqDelta = Math.Exp(Math.Log(2.0) / steps);
-            Count = (int)Math.Floor(Math.Log(final / initial) / Math.Log(freqDelta) + 0.25) + 1;
+            _freqDelta = Math.Exp(Math.Log(2.0) / steps);
+            Count = (int)Math.Floor(Math.Log(final / initial) / Math.Log(_freqDelta) + 0.25) + 1;
         }
     }
 }

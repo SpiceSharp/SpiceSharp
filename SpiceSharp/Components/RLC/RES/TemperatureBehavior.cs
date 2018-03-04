@@ -13,8 +13,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Necessary parameters
         /// </summary>
-        ModelBaseParameters mbp;
-        BaseParameters bp;
+        ModelBaseParameters _mbp;
+        BaseParameters _bp;
 
         /// <summary>
         /// Gets the default conductance for this model
@@ -37,9 +37,9 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
-            if (!bp.Resistance.Given)
-                mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            if (!_bp.Resistance.Given)
+                _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
         }
         
         /// <summary>
@@ -53,34 +53,34 @@ namespace SpiceSharp.Components.ResistorBehaviors
 
             double factor;
             double difference;
-            double RESresist = bp.Resistance;
+            double reSresist = _bp.Resistance;
 
             // Default Value Processing for Resistor Instance
-            if (!bp.Temperature.Given)
-                bp.Temperature.Value = simulation.RealState.Temperature;
-            if (!bp.Width.Given)
-                bp.Width.Value = mbp?.DefaultWidth ?? 0.0;
+            if (!_bp.Temperature.Given)
+                _bp.Temperature.Value = simulation.RealState.Temperature;
+            if (!_bp.Width.Given)
+                _bp.Width.Value = _mbp?.DefaultWidth ?? 0.0;
 
-            if (mbp != null)
+            if (_mbp != null)
             {
-                if (mbp.SheetResistance.Given && (mbp.SheetResistance != 0) && (bp.Length != 0))
-                    RESresist = mbp.SheetResistance * (bp.Length - mbp.Narrow) / (bp.Width - mbp.Narrow);
+                if (_mbp.SheetResistance.Given && (_mbp.SheetResistance != 0) && (_bp.Length != 0))
+                    reSresist = _mbp.SheetResistance * (_bp.Length - _mbp.Narrow) / (_bp.Width - _mbp.Narrow);
                 else
                 {
                     CircuitWarning.Warning(this, "{0}: resistance=0, set to 1000".FormatString(Name));
-                    RESresist = 1000;
+                    reSresist = 1000;
                 }
 
-                difference = bp.Temperature - mbp.NominalTemperature;
-                factor = 1.0 + (mbp.TemperatureCoefficient1) * difference + (mbp.TemperatureCoefficient2) * difference * difference;
+                difference = _bp.Temperature - _mbp.NominalTemperature;
+                factor = 1.0 + (_mbp.TemperatureCoefficient1) * difference + (_mbp.TemperatureCoefficient2) * difference * difference;
             }
             else
             {
-                difference = bp.Temperature - 300.15;
+                difference = _bp.Temperature - 300.15;
                 factor = 1.0;
             }
 
-            Conductance = 1.0 / (RESresist * factor);
+            Conductance = 1.0 / (reSresist * factor);
         }
     }
 }

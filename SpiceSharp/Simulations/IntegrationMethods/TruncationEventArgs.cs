@@ -15,10 +15,10 @@ namespace SpiceSharp.IntegrationMethods
         /// </summary>
         public double Delta
         {
-            get => Math.Min(2.0 * CurrentDelta, delta);
-            set => delta = Math.Min(value, delta);
+            get => Math.Min(2.0 * CurrentDelta, _delta);
+            set => _delta = Math.Min(value, _delta);
         }
-        double delta;
+        double _delta;
 
         /// <summary>
         /// Gets the current timestep
@@ -39,7 +39,7 @@ namespace SpiceSharp.IntegrationMethods
         {
             Simulation = simulation;
             CurrentDelta = currentDelta;
-            delta = double.PositiveInfinity;
+            _delta = double.PositiveInfinity;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Private variables
         /// </summary>
-        int[] pins;
+        int[] _pins;
 
         /// <summary>
         /// Constructor
@@ -52,7 +52,7 @@ namespace SpiceSharp.Components.NoiseSources
         protected NoiseGenerator(string name, params int[] pins)
         {
             Name = name;
-            this.pins = pins;
+            this._pins = pins;
             Nodes = null;
         }
 
@@ -67,11 +67,11 @@ namespace SpiceSharp.Components.NoiseSources
 
             // Get the nodes
             int[] mapped = new int[nodes.Length];
-            for (int i = 0; i < pins.Length; i++)
+            for (int i = 0; i < _pins.Length; i++)
             {
-                if (pins[i] >= nodes.Length)
-                    throw new CircuitException("Not enough pins to find node {0}".FormatString(pins[i]));
-                mapped[i] = nodes[pins[i]];
+                if (_pins[i] >= nodes.Length)
+                    throw new CircuitException("Not enough pins to find node {0}".FormatString(_pins[i]));
+                mapped[i] = nodes[_pins[i]];
             }
             Nodes = new NodeCollection(mapped);
         }

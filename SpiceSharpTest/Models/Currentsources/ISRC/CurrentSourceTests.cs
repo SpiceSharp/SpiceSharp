@@ -34,7 +34,7 @@ namespace SpiceSharpTest.Models
             var ckt = CreateResistorCircuit(10, 1.0e3);
 
             // Create simulation, exports and references
-            OP op = new OP("op");
+            Op op = new Op("op");
             Export<double>[] exports = new Export<double>[2];
             exports[0] = new RealPropertyExport(op, "I1", "v");
             exports[1] = new RealPropertyExport(op, "R1", "i");
@@ -84,7 +84,7 @@ namespace SpiceSharpTest.Models
             int resistanceInOhms = 10;
             int resistorCount = 500;
             var ckt = CreateResistorsInSeriesCircuit(resistorCount, currentInAmp, resistanceInOhms);
-            OP op = new OP("op");
+            Op op = new Op("op");
 
             // Create exports
             List<Export<double>> exports = new List<Export<double>>();

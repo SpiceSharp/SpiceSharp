@@ -12,12 +12,12 @@ namespace SpiceSharp.Diagnostics
         /// <summary>
         /// Gets a list of all warnings
         /// </summary>
-        public static ReadOnlyCollection<string> Warnings { get => warnings.AsReadOnly(); }
+        public static ReadOnlyCollection<string> Warnings { get => _warnings.AsReadOnly(); }
 
         /// <summary>
         /// All warnings
         /// </summary>
-        static List<string> warnings = new List<string>();
+        static List<string> _warnings = new List<string>();
 
         /// <summary>
         /// The event called when a warning is added
@@ -31,7 +31,7 @@ namespace SpiceSharp.Diagnostics
         public static void Warning(object sender, string message)
         {
             WarningEventArgs arg = new WarningEventArgs(message);
-            warnings.Add(message);
+            _warnings.Add(message);
             WarningGenerated?.Invoke(sender, arg);
         }
     }

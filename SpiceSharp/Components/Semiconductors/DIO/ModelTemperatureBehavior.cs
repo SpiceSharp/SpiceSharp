@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        ModelBaseParameters mbp;
+        ModelBaseParameters _mbp;
 
         /// <summary>
         /// Conductance
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            mbp = provider.GetParameterSet<ModelBaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>("entity");
         }
 
         /// <summary>
@@ -58,41 +58,41 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            if (!mbp.NominalTemperature.Given)
+            if (!_mbp.NominalTemperature.Given)
             {
-                mbp.NominalTemperature.Value = simulation.RealState.NominalTemperature;
+                _mbp.NominalTemperature.Value = simulation.RealState.NominalTemperature;
             }
-            VtNominal = Circuit.KOverQ * mbp.NominalTemperature;
+            VtNominal = Circuit.KOverQ * _mbp.NominalTemperature;
 
             // limit grading coeff to max of 0.9
-            if (mbp.GradingCoefficient > 0.9)
+            if (_mbp.GradingCoefficient > 0.9)
             {
-                mbp.GradingCoefficient.Value = 0.9;
+                _mbp.GradingCoefficient.Value = 0.9;
                 CircuitWarning.Warning(this, "{0}: grading coefficient too large, limited to 0.9".FormatString(Name));
             }
 
             // limit activation energy to min of 0.1
-            if (mbp.ActivationEnergy < 0.1)
+            if (_mbp.ActivationEnergy < 0.1)
             {
-                mbp.ActivationEnergy.Value = 0.1;
+                _mbp.ActivationEnergy.Value = 0.1;
                 CircuitWarning.Warning(this, "{0}: activation energy too small, limited to 0.1".FormatString(Name));
             }
 
             // limit depletion cap coeff to max of .95
-            if (mbp.DepletionCapCoefficient > 0.95)
+            if (_mbp.DepletionCapCoefficient > 0.95)
             {
-                mbp.DepletionCapCoefficient.Value = 0.95;
+                _mbp.DepletionCapCoefficient.Value = 0.95;
                 CircuitWarning.Warning(this, "{0}: coefficient Fc too large, limited to 0.95".FormatString(Name));
             }
 
-            if (mbp.Resistance > 0)
-                Conductance = 1 / mbp.Resistance;
+            if (_mbp.Resistance > 0)
+                Conductance = 1 / _mbp.Resistance;
             else
                 Conductance = 0;
-            Xfc = Math.Log(1 - mbp.DepletionCapCoefficient);
+            Xfc = Math.Log(1 - _mbp.DepletionCapCoefficient);
 
-            F2 = Math.Exp((1 + mbp.GradingCoefficient) * Xfc);
-            F3 = 1 - mbp.DepletionCapCoefficient * (1 + mbp.GradingCoefficient);
+            F2 = Math.Exp((1 + _mbp.GradingCoefficient) * Xfc);
+            F3 = 1 - _mbp.DepletionCapCoefficient * (1 + _mbp.GradingCoefficient);
         }
     }
 }

@@ -8,12 +8,12 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// DC sweep analysis
     /// </summary>
-    public class DC : BaseSimulation
+    public class Dc : BaseSimulation
     {
         /// <summary>
         /// Gets the currently active DC configuration
         /// </summary>
-        public DCConfiguration DCConfiguration { get; protected set; }
+        public DcConfiguration DcConfiguration { get; protected set; }
 
         /// <summary>
         /// Gets the currently active sweeps
@@ -29,7 +29,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">The simulation name</param>
-        public DC(Identifier name) : base(name)
+        public Dc(Identifier name) : base(name)
         {
         }
 
@@ -41,9 +41,9 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The starting value</param>
         /// <param name="stop">The stopping value</param>
         /// <param name="step">The step value</param>
-        public DC(Identifier name, Identifier source, double start, double stop, double step) : base(name)
+        public Dc(Identifier name, Identifier source, double start, double stop, double step) : base(name)
         {
-            var config = new DCConfiguration();
+            var config = new DcConfiguration();
             SweepConfiguration s = new SweepConfiguration(source, start, stop, step);
             config.Sweeps.Add(s);
             ParameterSets.Add(config);
@@ -54,12 +54,12 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="sweeps">Sweeps</param>
-        public DC(Identifier name, IEnumerable<SweepConfiguration> sweeps) : base(name)
+        public Dc(Identifier name, IEnumerable<SweepConfiguration> sweeps) : base(name)
         {
             if (sweeps == null)
                 throw new ArgumentNullException(nameof(sweeps));
 
-            var dcconfig = new DCConfiguration();
+            var dcconfig = new DcConfiguration();
             foreach (var sweep in sweeps)
                 dcconfig.Sweeps.Add(sweep);
             ParameterSets.Add(dcconfig);
@@ -73,10 +73,10 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get DC configuration
-            DCConfiguration = ParameterSets.Get<DCConfiguration>();
+            DcConfiguration = ParameterSets.Get<DcConfiguration>();
 
             // Get sweeps
-            Sweeps = new NestedSweeps(DCConfiguration.Sweeps);
+            Sweeps = new NestedSweeps(DcConfiguration.Sweeps);
         }
 
         /// <summary>
@@ -91,11 +91,11 @@ namespace SpiceSharp.Simulations
 
             // Setup the state
             var state = RealState;
-            var dcconfig = DCConfiguration;
+            var dcconfig = DcConfiguration;
             var baseconfig = BaseConfiguration;
             state.Init = RealState.InitializationStates.InitJunction;
-            state.UseIC = false; // UseIC is only used in transient simulations
-            state.UseDC = true;
+            state.UseIc = false; // UseIC is only used in transient simulations
+            state.UseDc = true;
             state.Domain = RealState.DomainType.None;
             state.Gmin = baseconfig.Gmin;
 
@@ -115,9 +115,9 @@ namespace SpiceSharp.Simulations
 
                 // Get the parameter and save it for restoring later
                 if (component is VoltageSource vsrc)
-                    swept[i] = vsrc.ParameterSets.Get<Components.VoltagesourceBehaviors.BaseParameters>().DCValue;
+                    swept[i] = vsrc.ParameterSets.Get<Components.VoltagesourceBehaviors.BaseParameters>().DcValue;
                 else if (component is CurrentSource isrc)
-                    swept[i] = isrc.ParameterSets.Get<Components.CurrentsourceBehaviors.BaseParameters>().DCValue;
+                    swept[i] = isrc.ParameterSets.Get<Components.CurrentsourceBehaviors.BaseParameters>().DcValue;
                 else
                     throw new CircuitException("Invalid sweep object");
                 original[i] = (Parameter)swept[i].Clone();
@@ -142,7 +142,7 @@ namespace SpiceSharp.Simulations
                 {
                     IterationFailedEventArgs args = new IterationFailedEventArgs();
                     IterationFailed?.Invoke(this, args);
-                    Op(baseconfig.DCMaxIterations);
+                    Op(baseconfig.DcMaxIterations);
                 }
 
                 // Export data
@@ -175,7 +175,7 @@ namespace SpiceSharp.Simulations
             Sweeps = null;
 
             // Clear configuration
-            DCConfiguration = null;
+            DcConfiguration = null;
             base.Unsetup();
         }
     }

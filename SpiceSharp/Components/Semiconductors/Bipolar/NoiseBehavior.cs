@@ -13,10 +13,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters bp;
-        LoadBehavior load;
-        ModelNoiseParameters mnp;
-        ModelTemperatureBehavior modeltemp;
+        BaseParameters _bp;
+        LoadBehavior _load;
+        ModelNoiseParameters _mnp;
+        ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Noise sources by their index
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int collectorNode, baseNode, emitterNode, substrateNode, colPrimeNode, basePrimeNode, emitPrimeNode;
+        int _collectorNode, _baseNode, _emitterNode, _substrateNode, _colPrimeNode, _basePrimeNode, _emitPrimeNode;
 
         /// <summary>
         /// Constructor
@@ -61,12 +61,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
-            mnp = provider.GetParameterSet<ModelNoiseParameters>("model");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _mnp = provider.GetParameterSet<ModelNoiseParameters>("model");
 
             // Get behaviors
-            load = provider.GetBehavior<LoadBehavior>("entity");
-            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>
@@ -79,10 +79,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            collectorNode = pins[0];
-            baseNode = pins[1];
-            emitterNode = pins[2];
-            substrateNode = pins[3];
+            _collectorNode = pins[0];
+            _baseNode = pins[1];
+            _emitterNode = pins[2];
+            _substrateNode = pins[3];
         }
 
         /// <summary>
@@ -91,13 +91,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
         public override void ConnectNoise()
         {
             // Get extra nodes
-            colPrimeNode = load.CollectorPrimeNode;
-            basePrimeNode = load.BasePrimeNode;
-            emitPrimeNode = load.EmitterPrimeNode;
+            _colPrimeNode = _load.CollectorPrimeNode;
+            _basePrimeNode = _load.BasePrimeNode;
+            _emitPrimeNode = _load.EmitterPrimeNode;
 
             // Connect noise
-            BipolarJunctionTransistorNoise.Setup(collectorNode, baseNode, emitterNode, substrateNode,
-                colPrimeNode, basePrimeNode, emitPrimeNode);
+            BipolarJunctionTransistorNoise.Setup(_collectorNode, _baseNode, _emitterNode, _substrateNode,
+                _colPrimeNode, _basePrimeNode, _emitPrimeNode);
         }
 
         /// <summary>
@@ -113,13 +113,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var generators = BipolarJunctionTransistorNoise.Generators;
 
             // Set noise parameters
-            generators[RcNoise].SetCoefficients(modeltemp.CollectorConduct * bp.Area);
-            generators[RbNoise].SetCoefficients(load.ConductanceX);
-            generators[ReNoise].SetCoefficients(modeltemp.EmitterConduct * bp.Area);
-            generators[IcNoise].SetCoefficients(load.CollectorCurrent);
-            generators[IbNoise].SetCoefficients(load.BaseCurrent);
-            generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent 
-                * Math.Log(Math.Max(Math.Abs(load.BaseCurrent), 1e-38))) / noise.Frequency);
+            generators[RcNoise].SetCoefficients(_modeltemp.CollectorConduct * _bp.Area);
+            generators[RbNoise].SetCoefficients(_load.ConductanceX);
+            generators[ReNoise].SetCoefficients(_modeltemp.EmitterConduct * _bp.Area);
+            generators[IcNoise].SetCoefficients(_load.CollectorCurrent);
+            generators[IbNoise].SetCoefficients(_load.BaseCurrent);
+            generators[FlickerNoise].SetCoefficients(_mnp.FlickerNoiseCoefficient * Math.Exp(_mnp.FlickerNoiseExponent 
+                * Math.Log(Math.Max(Math.Abs(_load.BaseCurrent), 1e-38))) / noise.Frequency);
 
             // Evaluate all noise sources
             BipolarJunctionTransistorNoise.Evaluate(simulation);

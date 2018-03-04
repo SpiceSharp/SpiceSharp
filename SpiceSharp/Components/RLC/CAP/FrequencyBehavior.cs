@@ -15,12 +15,12 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Necessary paramters and behaviors
         /// </summary>
-        BaseParameters bp;
+        BaseParameters _bp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int posNode, negNode;
+        int _posNode, _negNode;
         protected MatrixElement<Complex> PosPosPtr { get; private set; }
         protected MatrixElement<Complex> NegNegPtr { get; private set; }
         protected MatrixElement<Complex> PosNegPtr { get; private set; }
@@ -31,23 +31,23 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return state.Solution[posNode] - state.Solution[negNode];
+            return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [PropertyName("i"), PropertyName("c"), PropertyInfo("Capacitor current")]
         public Complex GetCurrent(ComplexState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            Complex conductance = state.Laplace * bp.Capacitance.Value;
-            return (state.Solution[posNode] - state.Solution[negNode]) * conductance;
+            Complex conductance = state.Laplace * _bp.Capacitance.Value;
+            return (state.Solution[_posNode] - state.Solution[_negNode]) * conductance;
         }
         [PropertyName("p"), PropertyInfo("Capacitor power")]
         public Complex GetPower(ComplexState state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            Complex conductance = state.Laplace * bp.Capacitance.Value;
-            Complex voltage = state.Solution[posNode] - state.Solution[negNode];
+            Complex conductance = state.Laplace * _bp.Capacitance.Value;
+            Complex voltage = state.Solution[_posNode] - state.Solution[_negNode];
             return voltage * Complex.Conjugate(voltage * conductance);
         }
 
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
         }
         
         /// <summary>
@@ -80,8 +80,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
-            posNode = pins[0];
-            negNode = pins[1];
+            _posNode = pins[0];
+            _negNode = pins[1];
         }
 
         /// <summary>
@@ -94,10 +94,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 				throw new ArgumentNullException(nameof(solver));
 
             // Get matrix pointers
-            PosPosPtr = solver.GetMatrixElement(posNode, posNode);
-            NegNegPtr = solver.GetMatrixElement(negNode, negNode);
-            NegPosPtr = solver.GetMatrixElement(negNode, posNode);
-            PosNegPtr = solver.GetMatrixElement(posNode, negNode);
+            PosPosPtr = solver.GetMatrixElement(_posNode, _posNode);
+            NegNegPtr = solver.GetMatrixElement(_negNode, _negNode);
+            NegPosPtr = solver.GetMatrixElement(_negNode, _posNode);
+            PosNegPtr = solver.GetMatrixElement(_posNode, _negNode);
         }
         
         /// <summary>
@@ -110,7 +110,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.ComplexState;
-            var val = state.Laplace * bp.Capacitance.Value;
+            var val = state.Laplace * _bp.Capacitance.Value;
 
             // Load the Y-matrix
             PosPosPtr.Value += val;

@@ -13,17 +13,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters bp;
-        ModelBaseParameters mbp;
-        ModelNoiseParameters mnp;
-        LoadBehavior load;
-        TemperatureBehavior temp;
-        ModelTemperatureBehavior modeltemp;
+        BaseParameters _bp;
+        ModelBaseParameters _mbp;
+        ModelNoiseParameters _mnp;
+        LoadBehavior _load;
+        TemperatureBehavior _temp;
+        ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int drainNode, gateNode, sourceNode, bulkNode, drainNodePrime, sourceNodePrime;
+        int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
 
         /// <summary>
         /// Noise generators by their index
@@ -59,14 +59,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            bp = provider.GetParameterSet<BaseParameters>("entity");
-            mbp = provider.GetParameterSet<ModelBaseParameters>("model");
-            mnp = provider.GetParameterSet<ModelNoiseParameters>("model");
+            _bp = provider.GetParameterSet<BaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>("model");
+            _mnp = provider.GetParameterSet<ModelNoiseParameters>("model");
 
             // Get behaviors
-            temp = provider.GetBehavior<TemperatureBehavior>("entity");
-            load = provider.GetBehavior<LoadBehavior>("entity");
-            modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
+            _temp = provider.GetBehavior<TemperatureBehavior>("entity");
+            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _modeltemp = provider.GetBehavior<ModelTemperatureBehavior>("model");
         }
 
         /// <summary>
@@ -79,10 +79,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
                 throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
-            drainNode = pins[0];
-            gateNode = pins[1];
-            sourceNode = pins[2];
-            bulkNode = pins[3];
+            _drainNode = pins[0];
+            _gateNode = pins[1];
+            _sourceNode = pins[2];
+            _bulkNode = pins[3];
         }
 
         /// <summary>
@@ -91,11 +91,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         public override void ConnectNoise()
         {
             // Get extra equations
-            drainNodePrime = load.DrainNodePrime;
-            sourceNodePrime = load.SourceNodePrime;
+            _drainNodePrime = _load.DrainNodePrime;
+            _sourceNodePrime = _load.SourceNodePrime;
 
             // Connect noise sources
-            Mosfet3Noise.Setup(drainNode, gateNode, sourceNode, bulkNode, drainNodePrime, sourceNodePrime);
+            Mosfet3Noise.Setup(_drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime);
         }
 
         /// <summary>
@@ -110,12 +110,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             var noise = simulation.NoiseState;
 
             // Set noise parameters
-            Mosfet3Noise.Generators[RdNoise].SetCoefficients(temp.DrainConductance);
-            Mosfet3Noise.Generators[RsNoise].SetCoefficients(temp.SourceConductance);
-            Mosfet3Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(load.Transconductance));
-            Mosfet3Noise.Generators[FlickerNoise].SetCoefficients(mnp.FlickerNoiseCoefficient * Math.Exp(mnp.FlickerNoiseExponent 
-                * Math.Log(Math.Max(Math.Abs(load.DrainCurrent), 1e-38))) / (bp.Width * (bp.Length - 2 * mbp.LateralDiffusion) 
-                * modeltemp.OxideCapFactor * modeltemp.OxideCapFactor) / noise.Frequency);
+            Mosfet3Noise.Generators[RdNoise].SetCoefficients(_temp.DrainConductance);
+            Mosfet3Noise.Generators[RsNoise].SetCoefficients(_temp.SourceConductance);
+            Mosfet3Noise.Generators[IdNoise].SetCoefficients(2.0 / 3.0 * Math.Abs(_load.Transconductance));
+            Mosfet3Noise.Generators[FlickerNoise].SetCoefficients(_mnp.FlickerNoiseCoefficient * Math.Exp(_mnp.FlickerNoiseExponent 
+                * Math.Log(Math.Max(Math.Abs(_load.DrainCurrent), 1e-38))) / (_bp.Width * (_bp.Length - 2 * _mbp.LateralDiffusion) 
+                * _modeltemp.OxideCapFactor * _modeltemp.OxideCapFactor) / noise.Frequency);
 
             // Evaluate noise sources
             Mosfet3Noise.Evaluate(simulation);

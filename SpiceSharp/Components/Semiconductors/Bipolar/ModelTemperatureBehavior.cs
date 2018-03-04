@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        ModelBaseParameters mbp;
+        ModelBaseParameters _mbp;
 
         /// <summary>
         /// Shared parameters
@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [PropertyName("emitterconduct"), PropertyInfo("Emitter conductance")]
         public double EmitterConduct { get; internal set; }
         [PropertyName("transtimevbcfact"), PropertyInfo("Transit time VBC factor")]
-        public double TransitTimeVoltageBCFactor { get; internal set; }
+        public double TransitTimeVoltageBcFactor { get; internal set; }
         [PropertyName("excessphasefactor"), PropertyInfo("Excess phase fact.")]
         public double ExcessPhaseFactor { get; internal set; }
         
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            mbp = provider.GetParameterSet<ModelBaseParameters>("entity");
+            _mbp = provider.GetParameterSet<ModelBaseParameters>("entity");
         }
 
         /// <summary>
@@ -72,26 +72,26 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            if (!mbp.NominalTemperature.Given)
-                mbp.NominalTemperature.Value = simulation.RealState.NominalTemperature;
-            Factor1 = mbp.NominalTemperature / Circuit.ReferenceTemperature;
+            if (!_mbp.NominalTemperature.Given)
+                _mbp.NominalTemperature.Value = simulation.RealState.NominalTemperature;
+            Factor1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
 
-            if (!mbp.LeakBECurrent.Given)
+            if (!_mbp.LeakBeCurrent.Given)
             {
-                if (mbp.C2.Given)
-                    mbp.LeakBECurrent.Value = mbp.C2 * mbp.SatCur;
+                if (_mbp.C2.Given)
+                    _mbp.LeakBeCurrent.Value = _mbp.C2 * _mbp.SatCur;
                 else
-                    mbp.LeakBECurrent.Value = 0;
+                    _mbp.LeakBeCurrent.Value = 0;
             }
-            if (!mbp.LeakBCCurrent.Given)
+            if (!_mbp.LeakBcCurrent.Given)
             {
-                if (mbp.C4.Given)
-                    mbp.LeakBCCurrent.Value = mbp.C4 * mbp.SatCur;
+                if (_mbp.C4.Given)
+                    _mbp.LeakBcCurrent.Value = _mbp.C4 * _mbp.SatCur;
                 else
-                    mbp.LeakBCCurrent.Value = 0;
+                    _mbp.LeakBcCurrent.Value = 0;
             }
-            if (!mbp.MinimumBaseResistance.Given)
-                mbp.MinimumBaseResistance.Value = mbp.BaseResist;
+            if (!_mbp.MinimumBaseResistance.Given)
+                _mbp.MinimumBaseResistance.Value = _mbp.BaseResist;
 
             /* 
 			 * COMPATABILITY WARNING!
@@ -105,52 +105,52 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			 * leakage saturation current).   TQ  6/29/84
 			 */
 
-            if (mbp.EarlyVoltageForward.Given && mbp.EarlyVoltageForward != 0)
-                InverseEarlyVoltForward = 1 / mbp.EarlyVoltageForward;
+            if (_mbp.EarlyVoltageForward.Given && _mbp.EarlyVoltageForward != 0)
+                InverseEarlyVoltForward = 1 / _mbp.EarlyVoltageForward;
             else
                 InverseEarlyVoltForward = 0;
-            if (mbp.RollOffForward.Given && mbp.RollOffForward != 0)
-                InverseRollOffForward = 1 / mbp.RollOffForward;
+            if (_mbp.RollOffForward.Given && _mbp.RollOffForward != 0)
+                InverseRollOffForward = 1 / _mbp.RollOffForward;
             else
                 InverseRollOffForward = 0;
-            if (mbp.EarlyVoltageReverse.Given && mbp.EarlyVoltageReverse != 0)
-                InverseEarlyVoltReverse = 1 / mbp.EarlyVoltageReverse;
+            if (_mbp.EarlyVoltageReverse.Given && _mbp.EarlyVoltageReverse != 0)
+                InverseEarlyVoltReverse = 1 / _mbp.EarlyVoltageReverse;
             else
                 InverseEarlyVoltReverse = 0;
-            if (mbp.RollOffReverse.Given && mbp.RollOffReverse != 0)
-                InverseRollOffReverse = 1 / mbp.RollOffReverse;
+            if (_mbp.RollOffReverse.Given && _mbp.RollOffReverse != 0)
+                InverseRollOffReverse = 1 / _mbp.RollOffReverse;
             else
                 InverseRollOffReverse = 0;
-            if (mbp.CollectorResistance.Given && mbp.CollectorResistance != 0)
-                CollectorConduct = 1 / mbp.CollectorResistance;
+            if (_mbp.CollectorResistance.Given && _mbp.CollectorResistance != 0)
+                CollectorConduct = 1 / _mbp.CollectorResistance;
             else
                 CollectorConduct = 0;
-            if (mbp.EmitterResistance.Given && mbp.EmitterResistance != 0)
-                EmitterConduct = 1 / mbp.EmitterResistance;
+            if (_mbp.EmitterResistance.Given && _mbp.EmitterResistance != 0)
+                EmitterConduct = 1 / _mbp.EmitterResistance;
             else
                 EmitterConduct = 0;
-            if (mbp.TransitTimeForwardVoltageBC.Given && mbp.TransitTimeForwardVoltageBC != 0)
-                TransitTimeVoltageBCFactor = 1 / (mbp.TransitTimeForwardVoltageBC * 1.44);
+            if (_mbp.TransitTimeForwardVoltageBc.Given && _mbp.TransitTimeForwardVoltageBc != 0)
+                TransitTimeVoltageBcFactor = 1 / (_mbp.TransitTimeForwardVoltageBc * 1.44);
             else
-                TransitTimeVoltageBCFactor = 0;
-            ExcessPhaseFactor = (mbp.ExcessPhase / (180.0 / Math.PI)) * mbp.TransitTimeForward;
-            if (mbp.DepletionCapCoefficient.Given)
+                TransitTimeVoltageBcFactor = 0;
+            ExcessPhaseFactor = (_mbp.ExcessPhase / (180.0 / Math.PI)) * _mbp.TransitTimeForward;
+            if (_mbp.DepletionCapCoefficient.Given)
             {
-                if (mbp.DepletionCapCoefficient > 0.9999)
+                if (_mbp.DepletionCapCoefficient > 0.9999)
                 {
-                    mbp.DepletionCapCoefficient.Value = 0.9999;
+                    _mbp.DepletionCapCoefficient.Value = 0.9999;
                     throw new CircuitException("BJT model {0}, parameter fc limited to 0.9999".FormatString(Name));
                 }
             }
             else
             {
-                mbp.DepletionCapCoefficient.Value = .5;
+                _mbp.DepletionCapCoefficient.Value = .5;
             }
-            Xfc = Math.Log(1 - mbp.DepletionCapCoefficient);
-            F2 = Math.Exp((1 + mbp.JunctionExpBE) * Xfc);
-            F3 = 1 - mbp.DepletionCapCoefficient * (1 + mbp.JunctionExpBE);
-            F6 = Math.Exp((1 + mbp.JunctionExpBC) * Xfc);
-            F7 = 1 - mbp.DepletionCapCoefficient * (1 + mbp.JunctionExpBC);
+            Xfc = Math.Log(1 - _mbp.DepletionCapCoefficient);
+            F2 = Math.Exp((1 + _mbp.JunctionExpBe) * Xfc);
+            F3 = 1 - _mbp.DepletionCapCoefficient * (1 + _mbp.JunctionExpBe);
+            F6 = Math.Exp((1 + _mbp.JunctionExpBc) * Xfc);
+            F7 = 1 - _mbp.DepletionCapCoefficient * (1 + _mbp.JunctionExpBc);
         }
     }
 }
