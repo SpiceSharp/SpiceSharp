@@ -11,7 +11,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// <summary>
         /// Constants
         /// </summary>
-        const int TiesMultiplier = 5;
+        private const int TiesMultiplier = 5;
 
         /// <summary>
         /// Find the pivot on the diagonal

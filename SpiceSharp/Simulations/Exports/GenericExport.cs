@@ -11,7 +11,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private extractor
         /// </summary>
-        Func<T> _myExtractor;
+        private Func<T> _myExtractor;
 
         /// <summary>
         /// Constructor

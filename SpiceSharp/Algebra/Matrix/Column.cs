@@ -6,7 +6,7 @@ namespace SpiceSharp.Algebra.Matrix
     /// Column class
     /// </summary>
     /// <typeparam name="T">Base type</typeparam>
-    class Column<T> where T : IFormattable
+    internal class Column<T> where T : IFormattable
     {
         /// <summary>
         /// Gets the first element in the column

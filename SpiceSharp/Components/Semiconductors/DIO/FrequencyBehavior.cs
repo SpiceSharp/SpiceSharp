@@ -15,16 +15,16 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters _bp;
-        ModelBaseParameters _mbp;
-        LoadBehavior _load;
-        TemperatureBehavior _temp;
-        ModelTemperatureBehavior _modeltemp;
+        private BaseParameters _bp;
+        private ModelBaseParameters _mbp;
+        private LoadBehavior _load;
+        private TemperatureBehavior _temp;
+        private ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode, _posPrimeNode;
+        private int _posNode, _negNode, _posPrimeNode;
         protected MatrixElement<Complex> PosPosPrimePtr { get; private set; }
         protected MatrixElement<Complex> NegPosPrimePtr { get; private set; }
         protected MatrixElement<Complex> PosPrimePosPtr { get; private set; }

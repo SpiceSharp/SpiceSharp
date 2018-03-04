@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode;
+        private int _posNode, _negNode;
         public int BranchEq { get; protected set; }
         
         /// <summary>

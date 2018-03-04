@@ -12,8 +12,8 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Constants
         /// </summary>
-        const int InitialSize = 4;
-        const float ExpansionFactor = 1.5f;
+        private const int InitialSize = 4;
+        private const float ExpansionFactor = 1.5f;
 
         /// <summary>
         /// Gets or sets the value
@@ -59,8 +59,8 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Private variables
         /// </summary>
-        SparseVectorElement<T> _firstInVector, _lastInVector;
-        VectorElement<T> _trashCan;
+        private SparseVectorElement<T> _firstInVector, _lastInVector;
+        private VectorElement<T> _trashCan;
 
         /// <summary>
         /// Constructor
@@ -159,7 +159,7 @@ namespace SpiceSharp.Algebra
         /// Remove an element
         /// </summary>
         /// <param name="element">Element</param>
-        void Remove(SparseVectorElement<T> element)
+        private void Remove(SparseVectorElement<T> element)
         {
             // Update surrounding links
             if (element.PreviousInVector == null)
@@ -225,7 +225,7 @@ namespace SpiceSharp.Algebra
         /// <param name="second"></param>
         /// <param name="index1"></param>
         /// <param name="index2"></param>
-        void Swap(SparseVectorElement<T> first, SparseVectorElement<T> second, int index1, int index2)
+        private void Swap(SparseVectorElement<T> first, SparseVectorElement<T> second, int index1, int index2)
         {
             // Nothing to do
             if (first == null && second == null)

@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters _bp;
+        private BaseParameters _bp;
 
         /// <summary>
         /// Gets voltage across the voltage source
@@ -45,8 +45,8 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode;
-        VectorElement<double> _posPtr, _negPtr;
+        private int _posNode, _negNode;
+        private VectorElement<double> _posPtr, _negPtr;
 
         /// <summary>
         /// Constructor

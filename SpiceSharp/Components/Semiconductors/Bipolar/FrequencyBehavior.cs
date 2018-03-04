@@ -15,16 +15,16 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters _bp;
-        LoadBehavior _load;
-        TemperatureBehavior _temp;
-        ModelBaseParameters _mbp;
-        ModelTemperatureBehavior _modeltemp;
-        
+        private BaseParameters _bp;
+        private LoadBehavior _load;
+        private TemperatureBehavior _temp;
+        private ModelBaseParameters _mbp;
+        private ModelTemperatureBehavior _modeltemp;
+
         /// <summary>
         /// Nodes
         /// </summary>
-        int _collectorNode, _baseNode, _emitterNode, _substrateNode, _colPrimeNode, _basePrimeNode, _emitPrimeNode;
+        private int _collectorNode, _baseNode, _emitterNode, _substrateNode, _colPrimeNode, _basePrimeNode, _emitPrimeNode;
         protected MatrixElement<Complex> CollectorCollectorPrimePtr { get; private set; }
         protected MatrixElement<Complex> BaseBasePrimePtr { get; private set; }
         protected MatrixElement<Complex> EmitterEmitterPrimePtr { get; private set; }

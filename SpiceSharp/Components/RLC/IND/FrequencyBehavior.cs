@@ -14,13 +14,13 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters _bp;
-        LoadBehavior _load;
+        private BaseParameters _bp;
+        private LoadBehavior _load;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode, _branchEq;
+        private int _posNode, _negNode, _branchEq;
         protected MatrixElement<Complex> PosBranchPtr { get; private set; }
         protected MatrixElement<Complex> NegBranchPtr { get; private set; }
         protected MatrixElement<Complex> BranchNegPtr { get; private set; }

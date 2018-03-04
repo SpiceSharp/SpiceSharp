@@ -15,14 +15,15 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Necessary parameters and behaviors
         /// </summary>
-        BaseParameters _bp;
-        VoltagesourceBehaviors.LoadBehavior _vsrcload;
+        private BaseParameters _bp;
+        private VoltagesourceBehaviors.LoadBehavior _vsrcload;
 
         /// <summary>
         /// Nodes
         /// </summary>
         public int ControlBranchEq { get; protected set; }
-        int _posNode, _negNode;
+
+        private int _posNode, _negNode;
         protected MatrixElement<double> PosControlBranchPtr { get; private set; }
         protected MatrixElement<double> NegControlBranchPtr { get; private set; }
 

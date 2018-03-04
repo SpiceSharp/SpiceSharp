@@ -34,7 +34,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// The current point
         /// </summary>
-        NodeHistoryPoint _currentPoint;
+        private NodeHistoryPoint _currentPoint;
 
         /// <summary>
         /// Gets or sets the current point

@@ -15,13 +15,13 @@ namespace SpiceSharp.Components.VoltageControlledVoltagesourceBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters _bp;
-        LoadBehavior _load;
+        private BaseParameters _bp;
+        private LoadBehavior _load;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode, _contPosourceNode, _contNegateNode, _branchEq;
+        private int _posNode, _negNode, _contPosourceNode, _contNegateNode, _branchEq;
         protected MatrixElement<Complex> PosBranchPtr { get; private set; }
         protected MatrixElement<Complex> NegBranchPtr { get; private set; }
         protected MatrixElement<Complex> BranchPosPtr { get; private set; }

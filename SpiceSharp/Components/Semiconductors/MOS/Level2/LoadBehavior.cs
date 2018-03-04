@@ -15,16 +15,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters _bp;
-        ModelBaseParameters _mbp;
-        TemperatureBehavior _temp;
-        ModelTemperatureBehavior _modeltemp;
+        private BaseParameters _bp;
+        private ModelBaseParameters _mbp;
+        private TemperatureBehavior _temp;
+        private ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Some signs used in the model
         /// </summary>
-        static double[] _sig1 = { 1.0, -1.0, 1.0, -1.0 };
-        static double[] _sig2 = { 1.0, 1.0, -1.0, -1.0 };
+        private static double[] _sig1 = { 1.0, -1.0, 1.0, -1.0 };
+        private static double[] _sig2 = { 1.0, 1.0, -1.0, -1.0 };
 
         /// <summary>
         /// Shared parameters
@@ -62,7 +62,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// <summary>
         /// Nodes
         /// </summary>
-        int _drainNode, _gateNode, _sourceNode, _bulkNode;
+        private int _drainNode, _gateNode, _sourceNode, _bulkNode;
         [PropertyName("dnodeprime"), PropertyInfo("Number of protected drain node")]
         public int DrainNodePrime { get; private set; }
         [PropertyName("snodeprime"), PropertyInfo("Number of protected source node")]

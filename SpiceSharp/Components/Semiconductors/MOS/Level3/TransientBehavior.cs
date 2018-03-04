@@ -15,16 +15,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters _bp;
-        ModelBaseParameters _mbp;
-        TemperatureBehavior _temp;
-        LoadBehavior _load;
-        ModelTemperatureBehavior _modeltemp;
+        private BaseParameters _bp;
+        private ModelBaseParameters _mbp;
+        private TemperatureBehavior _temp;
+        private LoadBehavior _load;
+        private ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+        private int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
         protected MatrixElement<double> DrainDrainPtr { get; private set; }
         protected MatrixElement<double> GateGatePtr { get; private set; }
         protected MatrixElement<double> SourceSourcePtr { get; private set; }
@@ -55,17 +55,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// States
         /// </summary>
-        StateHistory _vgs;
-        StateHistory _vds;
-        StateHistory _vbs;
-        StateHistory _capgs;
-        StateHistory _capgd;
-        StateHistory _capgb;
-        StateDerivative _qgs;
-        StateDerivative _qgd;
-        StateDerivative _qgb;
-        StateDerivative _qbd;
-        StateDerivative _qbs;
+        private StateHistory _vgs;
+        private StateHistory _vds;
+        private StateHistory _vbs;
+        private StateHistory _capgs;
+        private StateHistory _capgd;
+        private StateHistory _capgb;
+        private StateDerivative _qgs;
+        private StateDerivative _qgd;
+        private StateDerivative _qgb;
+        private StateDerivative _qbd;
+        private StateDerivative _qbs;
 
         /// <summary>
         /// Shared parameters

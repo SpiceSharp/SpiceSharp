@@ -16,8 +16,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Necessary parameters and behaviors
         /// </summary>
-        BaseParameters _bp;
-        VoltagesourceBehaviors.LoadBehavior _vsrcload;
+        private BaseParameters _bp;
+        private VoltagesourceBehaviors.LoadBehavior _vsrcload;
 
         /// <summary>
         /// Device methods and properties 
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode, _contBranch;
+        private int _posNode, _negNode, _contBranch;
         protected MatrixElement<Complex> PosControlBranchPtr { get; private set; }
         protected MatrixElement<Complex> NegControlBranchPtr { get; private set; }
 

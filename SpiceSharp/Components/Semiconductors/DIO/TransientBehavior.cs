@@ -15,11 +15,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        LoadBehavior _load;
-        TemperatureBehavior _temp;
-        ModelTemperatureBehavior _modeltemp;
-        BaseParameters _bp;
-        ModelBaseParameters _mbp;
+        private LoadBehavior _load;
+        private TemperatureBehavior _temp;
+        private ModelTemperatureBehavior _modeltemp;
+        private BaseParameters _bp;
+        private ModelBaseParameters _mbp;
 
         /// <summary>
         /// Diode capacitance
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode, _posPrimeNode;
+        private int _posNode, _negNode, _posPrimeNode;
         protected MatrixElement<double> PosPosPrimePtr { get; private set; }
         protected MatrixElement<double> NegPosPrimePtr { get; private set; }
         protected MatrixElement<double> PosPrimePosPtr { get; private set; }

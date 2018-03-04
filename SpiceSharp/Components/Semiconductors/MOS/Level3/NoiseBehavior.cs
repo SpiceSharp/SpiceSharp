@@ -13,25 +13,25 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters _bp;
-        ModelBaseParameters _mbp;
-        ModelNoiseParameters _mnp;
-        LoadBehavior _load;
-        TemperatureBehavior _temp;
-        ModelTemperatureBehavior _modeltemp;
+        private BaseParameters _bp;
+        private ModelBaseParameters _mbp;
+        private ModelNoiseParameters _mnp;
+        private LoadBehavior _load;
+        private TemperatureBehavior _temp;
+        private ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+        private int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
 
         /// <summary>
         /// Noise generators by their index
         /// </summary>
-        const int RdNoise = 0;
-        const int RsNoise = 1;
-        const int IdNoise = 2;
-        const int FlickerNoise = 3;
+        private const int RdNoise = 0;
+        private const int RsNoise = 1;
+        private const int IdNoise = 2;
+        private const int FlickerNoise = 3;
 
         /// <summary>
         /// Noise generators

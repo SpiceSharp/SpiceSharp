@@ -29,7 +29,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        List<SweepInstance> _instances = new List<SweepInstance>();
+        private List<SweepInstance> _instances = new List<SweepInstance>();
 
         /// <summary>
         /// Constructor
@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
         /// Add a sweep
         /// </summary>
         /// <param name="sweep">Sweep</param>
-        void Add(SweepConfiguration sweep)
+        private void Add(SweepConfiguration sweep)
         {
             _instances.Add(new SweepInstance(sweep.ComponentName, sweep.Start, sweep.Stop, sweep.Step));
         }

@@ -18,7 +18,8 @@ namespace SpiceSharp.IntegrationMethods
             get => Math.Min(2.0 * CurrentDelta, _delta);
             set => _delta = Math.Min(value, _delta);
         }
-        double _delta;
+
+        private double _delta;
 
         /// <summary>
         /// Gets the current timestep

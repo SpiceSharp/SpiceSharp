@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Nodes in the collection
         /// </summary>
-        List<int> _nodes = new List<int>();
+        private List<int> _nodes = new List<int>();
 
         /// <summary>
         /// Gets number of nodes

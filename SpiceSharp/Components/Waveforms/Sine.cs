@@ -26,7 +26,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        double _vo, _va, _freq, _td, _theta;
+        private double _vo, _va, _freq, _td, _theta;
 
         /// <summary>
         /// Constructor

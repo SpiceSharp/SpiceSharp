@@ -10,14 +10,14 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Constants
         /// </summary>
-        const float ExpansionFactor = 1.5f;
+        private const float ExpansionFactor = 1.5f;
 
         /// <summary>
         /// Private variable
         /// </summary>
-        int[] _extToInt;
-        int[] _intToExt;
-        int _allocated;
+        private int[] _extToInt;
+        private int[] _intToExt;
+        private int _allocated;
 
         /// <summary>
         /// Gets the current length of the translation vector
@@ -151,7 +151,7 @@ namespace SpiceSharp.Algebra.Solve
         /// Expand translation
         /// </summary>
         /// <param name="newLength">New length</param>
-        void ExpandTranslation(int newLength)
+        private void ExpandTranslation(int newLength)
         {
             // No need to reallocate vector
             if (newLength <= _allocated)

@@ -13,12 +13,12 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        LoadBehavior _load;
+        private LoadBehavior _load;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode;
+        private int _posNode, _negNode;
 
         /// <summary>
         /// Gets resistor noise sources

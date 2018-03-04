@@ -13,12 +13,12 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Behaviors indexed by the entity that created them
         /// </summary>
-        Dictionary<Identifier, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<Identifier, EntityBehaviorDictionary>();
+        private Dictionary<Identifier, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<Identifier, EntityBehaviorDictionary>();
 
         /// <summary>
         /// Lists of behaviors
         /// </summary>
-        Dictionary<Type, List<Behavior>> _behaviors = new Dictionary<Type, List<Behavior>>();
+        private Dictionary<Type, List<Behavior>> _behaviors = new Dictionary<Type, List<Behavior>>();
 
         /// <summary>
         /// Add a behavior to the collection

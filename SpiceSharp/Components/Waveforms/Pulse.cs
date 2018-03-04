@@ -32,7 +32,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        double _v1, _v2, _td, _tr, _tf, _pw, _per;
+        private double _v1, _v2, _td, _tr, _tf, _pw, _per;
 
         /// <summary>
         /// Constructor

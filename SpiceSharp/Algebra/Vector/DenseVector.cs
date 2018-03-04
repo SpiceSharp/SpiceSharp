@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 
+// ReSharper disable once CheckNamespace
 namespace SpiceSharp.Algebra
 {
     /// <summary>
@@ -33,7 +34,7 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Values
         /// </summary>
-        T[] _values;
+        private T[] _values;
 
         /// <summary>
         /// Constructor
@@ -55,9 +56,9 @@ namespace SpiceSharp.Algebra
             : base(values?.Length - 1 ?? 0)
         {
             if (values == null)
-                this._values = new T[1];
+                _values = new T[1];
             else
-                this._values = (T[])values.Clone();
+                _values = (T[])values.Clone();
         }
 
         /// <summary>

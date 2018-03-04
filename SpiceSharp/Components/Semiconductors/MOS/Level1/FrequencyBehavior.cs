@@ -14,11 +14,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters _bp;
-        ModelBaseParameters _mbp;
-        TemperatureBehavior _temp;
-        LoadBehavior _load;
-        ModelTemperatureBehavior _modeltemp;
+        private BaseParameters _bp;
+        private ModelBaseParameters _mbp;
+        private TemperatureBehavior _temp;
+        private LoadBehavior _load;
+        private ModelTemperatureBehavior _modeltemp;
 
         public double CapGs { get; protected set; }
         public double CapGd { get; protected set; }
@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Nodes
         /// </summary>
-        int _drainNode, _gateNode, _sourceNode, _bulkNode, _sourceNodePrime, _drainNodePrime;
+        private int _drainNode, _gateNode, _sourceNode, _bulkNode, _sourceNodePrime, _drainNodePrime;
         protected MatrixElement<Complex> DrainDrainPtr { get; private set; }
         protected MatrixElement<Complex> GateGatePtr { get; private set; }
         protected MatrixElement<Complex> SourceSourcePtr { get; private set; }

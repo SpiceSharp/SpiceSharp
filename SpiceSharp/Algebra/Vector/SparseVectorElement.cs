@@ -7,7 +7,7 @@ namespace SpiceSharp.Algebra
     /// </summary>
     /// <typeparam name="T">Base type</typeparam>
     [Serializable]
-    class SparseVectorElement<T> : VectorElement<T> where T : IFormattable
+    internal class SparseVectorElement<T> : VectorElement<T> where T : IFormattable
     {
         /// <summary>
         /// Gets or sets the index

@@ -17,7 +17,7 @@ namespace SpiceSharp.Diagnostics
         /// <summary>
         /// All warnings
         /// </summary>
-        static List<string> _warnings = new List<string>();
+        private static List<string> _warnings = new List<string>();
 
         /// <summary>
         /// The event called when a warning is added

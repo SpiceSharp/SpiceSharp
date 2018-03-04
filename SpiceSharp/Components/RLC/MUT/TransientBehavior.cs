@@ -13,9 +13,9 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters _bp;
-        InductorBehaviors.LoadBehavior _load1, _load2;
-        InductorBehaviors.TransientBehavior _tran1, _tran2;
+        private BaseParameters _bp;
+        private InductorBehaviors.LoadBehavior _load1, _load2;
+        private InductorBehaviors.TransientBehavior _tran1, _tran2;
 
         /// <summary>
         /// The factor
@@ -25,7 +25,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int _branchEq1, _branchEq2;
+        private int _branchEq1, _branchEq2;
         protected MatrixElement<double> Branch1Branch2 { get; private set; }
         protected MatrixElement<double> Branch2Branch1 { get; private set; }
 
@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="args">Arguments</param>
-        void UpdateFlux2(object sender, InductorBehaviors.UpdateFluxEventArgs args)
+        private void UpdateFlux2(object sender, InductorBehaviors.UpdateFluxEventArgs args)
         {
             var state = args.State;
             args.Flux.Current += Factor * state.Solution[_load1.BranchEq];
@@ -84,7 +84,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="args">Arguments</param>
-        void UpdateFlux1(object sender, InductorBehaviors.UpdateFluxEventArgs args)
+        private void UpdateFlux1(object sender, InductorBehaviors.UpdateFluxEventArgs args)
         {
             var state = args.State;
             Cond = args.Flux.Jacobian(Factor);

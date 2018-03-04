@@ -15,10 +15,10 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters _bp;
-        ModelLoadBehavior _modelload;
-        VoltagesourceBehaviors.LoadBehavior _vsrcload;
-        ModelBaseParameters _mbp;
+        private BaseParameters _bp;
+        private ModelLoadBehavior _modelload;
+        private VoltagesourceBehaviors.LoadBehavior _vsrcload;
+        private ModelBaseParameters _mbp;
 
         /// <summary>
         /// Methods
@@ -72,7 +72,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode;
+        private int _posNode, _negNode;
         public int ControllingBranch { get; private set; }
         protected MatrixElement<double> PosPosPtr { get; private set; }
         protected MatrixElement<double> NegPosPtr { get; private set; }

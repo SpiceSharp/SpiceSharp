@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Generators
         /// </summary>
-        List<NoiseGenerator> _generators = new List<NoiseGenerator>();
+        private List<NoiseGenerator> _generators = new List<NoiseGenerator>();
 
         /// <summary>
         /// Gets a noise generator

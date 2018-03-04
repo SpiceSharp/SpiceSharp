@@ -158,7 +158,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="posDrive">The positive driving node</param>
         /// <param name="negDrive">The negative driving node</param>
-        void NzIterate(int posDrive, int negDrive)
+        private void NzIterate(int posDrive, int negDrive)
         {
             var solver = ComplexState.Solver;
 

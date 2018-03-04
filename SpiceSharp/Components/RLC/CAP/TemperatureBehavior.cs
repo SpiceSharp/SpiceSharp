@@ -13,8 +13,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Necessary parameters and behaviors
         /// </summary>
-        ModelBaseParameters _mbp;
-        BaseParameters _bp;
+        private ModelBaseParameters _mbp;
+        private BaseParameters _bp;
 
         /// <summary>
         /// Constructor

@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        ModelBaseParameters _mbp;
+        private ModelBaseParameters _mbp;
 
         /// <summary>
         /// Shared parameters

@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        LoadBehavior _load;
+        private LoadBehavior _load;
 
         /// <summary>
         /// Constructor

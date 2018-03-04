@@ -14,8 +14,8 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Private variables
         /// </summary>
-        Complex[] _intermediate;
-        MatrixElement<Complex>[] _dest;
+        private Complex[] _intermediate;
+        private MatrixElement<Complex>[] _dest;
 
         /// <summary>
         /// Constructor
@@ -309,7 +309,7 @@ namespace SpiceSharp.Algebra
         /// Eliminate a row
         /// </summary>
         /// <param name="pivot">Current pivot</param>
-        void Elimination(MatrixElement<Complex> pivot)
+        private void Elimination(MatrixElement<Complex> pivot)
         {
             // Test for zero pivot
             if (pivot.Value.Equals(0.0))
@@ -335,7 +335,7 @@ namespace SpiceSharp.Algebra
 
                     // Test to see if the desired element was not found, if not, create fill-in
                     if (sub == null || sub.Row > row)
-                        sub = base.CreateFillin(row, upper.Column);
+                        sub = CreateFillin(row, upper.Column);
 
                     // element -= upper * lower
                     sub.Value -= upper.Value * lower.Value;
@@ -351,14 +351,14 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="value">Value</param>
         /// <returns></returns>
-        static double Magnitude(Complex value) => Math.Abs(value.Real) + Math.Abs(value.Imaginary);
+        private static double Magnitude(Complex value) => Math.Abs(value.Real) + Math.Abs(value.Imaginary);
 
         /// <summary>
         /// Calculate inverse of a complex number
         /// </summary>
         /// <param name="value">Value</param>
         /// <returns></returns>
-        static Complex Inverse(Complex value)
+        private static Complex Inverse(Complex value)
         {
             double real, imaginary;
             double r;

@@ -92,12 +92,12 @@ namespace SpiceSharp.IntegrationMethods
         /// Gets the last time point that was accepted
         /// </summary>
         public double SavedTime { get { return _savetime; } }
-        
+
         /// <summary>
         /// Private variables
         /// </summary>
-        double _savetime = double.NaN;
-        Collection<TransientBehavior> _transientBehaviors;
+        private double _savetime = double.NaN;
+        private Collection<TransientBehavior> _transientBehaviors;
 
         /// <summary>
         /// Event called when the timestep needs to be truncated

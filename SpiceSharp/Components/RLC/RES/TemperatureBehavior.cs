@@ -13,8 +13,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Necessary parameters
         /// </summary>
-        ModelBaseParameters _mbp;
-        BaseParameters _bp;
+        private ModelBaseParameters _mbp;
+        private BaseParameters _bp;
 
         /// <summary>
         /// Gets the default conductance for this model

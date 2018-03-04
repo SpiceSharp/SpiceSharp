@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode, _branchEq;
+        private int _posNode, _negNode, _branchEq;
 
         /// <summary>
         /// Matrix elements

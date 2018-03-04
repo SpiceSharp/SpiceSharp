@@ -43,12 +43,12 @@ namespace SpiceSharp
         /// <summary>
         /// Gets the hash value
         /// </summary>
-        readonly int _hash;
+        private readonly int _hash;
 
         /// <summary>
         /// The path of the identifier
         /// </summary>
-        string[] _idPath;
+        private string[] _idPath;
 
         /// <summary>
         /// Constructor

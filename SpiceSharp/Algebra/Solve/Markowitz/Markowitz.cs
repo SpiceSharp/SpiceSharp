@@ -23,25 +23,28 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// The maximum Markowitz count that will not result in Int32 overflow when squared
         /// Markowitz counts are capped at this quantity
         /// </summary>
-        const int MaxMarkowitzCount = 46340;
+        private const int MaxMarkowitzCount = 46340;
 
         /// <summary>
         /// Gets the Markowitz row counts
         /// </summary>
         public int RowCount(int row) => _markowitzRow[row];
-        int[] _markowitzRow;
+
+        private int[] _markowitzRow;
 
         /// <summary>
         /// Gets the Markowitz column counts
         /// </summary>
         public int ColumnCount(int column) => _markowitzColumn[column];
-        int[] _markowitzColumn;
+
+        private int[] _markowitzColumn;
 
         /// <summary>
         /// Gets the Markowitz products
         /// </summary>
         public int Product(int index) => _markowitzProduct[index];
-        int[] _markowitzProduct;
+
+        private int[] _markowitzProduct;
 
         /// <summary>
         /// Gets the number of singletons
@@ -119,7 +122,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Right-hand side</param>
         /// <param name="step">Step</param>
-        void Count(SparseMatrix<T> matrix, SparseVector<T> rhs, int step)
+        private void Count(SparseMatrix<T> matrix, SparseVector<T> rhs, int step)
         {
             MatrixElement<T> element;
 
@@ -171,7 +174,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// </summary>
         /// <param name="matrix">Matrix</param>
         /// <param name="step">Step</param>
-        void Products(SparseMatrix<T> matrix, int step)
+        private void Products(SparseMatrix<T> matrix, int step)
         {
             Singletons = 0;
             var size = matrix.Size;
@@ -190,6 +193,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Rhs</param>
         /// <param name="step">Step</param>
+        /// <param name="magnitude">Magnitude method</param>
         public override void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int step, Func<T, double> magnitude)
         {
             if (matrix == null)

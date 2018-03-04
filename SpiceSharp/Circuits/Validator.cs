@@ -16,11 +16,11 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        bool _hasSource;
-        bool _hasGround;
-        List<Tuple<Component, int, int>> _voltageDriven = new List<Tuple<Component, int, int>>();
-        Dictionary<int, int> _connectedGroups = new Dictionary<int, int>();
-        int _cgroup;
+        private bool _hasSource;
+        private bool _hasGround;
+        private List<Tuple<Component, int, int>> _voltageDriven = new List<Tuple<Component, int, int>>();
+        private Dictionary<int, int> _connectedGroups = new Dictionary<int, int>();
+        private int _cgroup;
         
         /// <summary>
         /// Validate a circuit
@@ -79,7 +79,7 @@ namespace SpiceSharp.Circuits
         /// Deal with a component
         /// </summary>
         /// <param name="c">The circuit object</param>
-        void CheckEntity(Entity c)
+        private void CheckEntity(Entity c)
         {
             // Circuit components
             if (c is Component icc)
@@ -148,7 +148,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Find a voltage driver that closes a voltage drive loop
         /// </summary>
-        Component FindVoltageDriveLoop()
+        private Component FindVoltageDriveLoop()
         {
             // Remove the ground node and make a map for reducing the matrix complexity
             int index = 1;
@@ -201,7 +201,7 @@ namespace SpiceSharp.Circuits
         /// Add connected nodes that will be used to find floating nodes
         /// </summary>
         /// <param name="nodes"></param>
-        void AddConnections(int[] nodes)
+        private void AddConnections(int[] nodes)
         {
             if (nodes == null || nodes.Length == 0)
                 return;
@@ -219,7 +219,7 @@ namespace SpiceSharp.Circuits
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        void AddConnection(int a, int b)
+        private void AddConnection(int a, int b)
         {
             if (a == b)
                 return;
@@ -250,7 +250,7 @@ namespace SpiceSharp.Circuits
         /// Find a node that has no path to ground anywhere (open-circuited)
         /// </summary>
         /// <returns></returns>
-        HashSet<int> FindFloatingNodes()
+        private HashSet<int> FindFloatingNodes()
         {
             HashSet<int> unconnected = new HashSet<int>();
 

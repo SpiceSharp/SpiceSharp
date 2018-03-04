@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        ModelBaseParameters _mbp;
+        private ModelBaseParameters _mbp;
 
         /// <summary>
         /// Conductance while on

@@ -16,7 +16,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Private variables
         /// </summary>
-        double[] _ag = new double[2];
+        private double[] _ag = new double[2];
 
         /// <summary>
         /// Constructor

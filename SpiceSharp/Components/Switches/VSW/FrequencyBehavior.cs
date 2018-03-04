@@ -14,13 +14,13 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        LoadBehavior _load;
-        ModelLoadBehavior _modelload;
+        private LoadBehavior _load;
+        private ModelLoadBehavior _modelload;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode;
+        private int _posNode, _negNode;
         protected MatrixElement<Complex> PosPosPtr { get; private set; }
         protected MatrixElement<Complex> NegPosPtr { get; private set; }
         protected MatrixElement<Complex> PosNegPtr { get; private set; }

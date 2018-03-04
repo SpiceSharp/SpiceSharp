@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Private variables
         /// </summary>
-        int[] _pins;
+        private int[] _pins;
 
         /// <summary>
         /// Constructor

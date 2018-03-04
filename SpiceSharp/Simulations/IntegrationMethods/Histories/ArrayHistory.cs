@@ -32,11 +32,11 @@ namespace SpiceSharp.IntegrationMethods
                 return _history[index];
             }
         }
-        
+
         /// <summary>
         /// Timesteps in history
         /// </summary>
-        T[] _history;
+        private T[] _history;
 
         /// <summary>
         /// Constructor

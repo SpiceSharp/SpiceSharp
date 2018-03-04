@@ -45,12 +45,12 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        LoadBehavior _load;
+        private LoadBehavior _load;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode;
+        private int _posNode, _negNode;
         protected MatrixElement<Complex> PosPosPtr { get; private set; }
         protected MatrixElement<Complex> NegNegPtr { get; private set; }
         protected MatrixElement<Complex> PosNegPtr { get; private set; }

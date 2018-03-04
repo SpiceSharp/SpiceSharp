@@ -45,7 +45,8 @@ namespace SpiceSharp.Simulations
             }
             set { _maxstep = value; }
         }
-        double _maxstep = double.NaN;
+
+        private double _maxstep = double.NaN;
 
         /// <summary>
         /// Gets the minimum timestep allowed

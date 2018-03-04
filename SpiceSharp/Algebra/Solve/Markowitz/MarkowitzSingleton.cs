@@ -30,10 +30,8 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
             if (markowitz.Singletons == 0)
                 return null;
 
-            int index = matrix.Size + 1;
-
             // Find the first valid singleton we can use
-            int singletons = 0;
+            int singletons = 0, index;
             for (index = step; index <= matrix.Size; index++)
             {
                 // Not a singleton, let's skip this one...
@@ -56,7 +54,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
                  */
 
                 // Find the singleton element
-                MatrixElement<T> chosen = null;
+                MatrixElement<T> chosen;
                 if (markowitz.ColumnCount(index) == 0)
                 {
                     // The last element in the column is the singleton element!

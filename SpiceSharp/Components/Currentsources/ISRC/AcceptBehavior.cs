@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters _bp;
+        private BaseParameters _bp;
 
         /// <summary>
         /// Constructor

@@ -11,13 +11,14 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// <summary>
         /// Constants
         /// </summary>
-        const int TiesMultiplier = 5;
+        private const int TiesMultiplier = 5;
 
         /// <summary>
         /// Search the entire matrix for a suitable pivot
         /// In order to preserve sparsity, Markowitz counts are used to find the largest valid
         /// pivot with the smallest number of elements.
         /// </summary>
+        /// <param name="markowitz">Markowitz object</param>
         /// <param name="matrix">Matrix</param>
         /// <param name="step">Step</param>
         /// <returns></returns>
@@ -106,7 +107,7 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
 
             // Singular matrix
             // If we can't find it while searching the entire matrix, then we definitely have a singular matrix...
-            if (largestElement == null || largestElement.Equals(0.0))
+            if (largestElement == null || largestElement.Value.Equals(0.0))
                 throw new SingularException(step);
             return largestElement;
         }

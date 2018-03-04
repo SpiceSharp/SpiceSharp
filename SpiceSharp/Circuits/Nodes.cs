@@ -12,9 +12,9 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        List<Node> _nodes = new List<Node>();
-        Dictionary<Identifier, Node> _map = new Dictionary<Identifier, Node>();
-        bool _locked;
+        private List<Node> _nodes = new List<Node>();
+        private Dictionary<Identifier, Node> _map = new Dictionary<Identifier, Node>();
+        private bool _locked;
 
         /// <summary>
         /// The initial conditions

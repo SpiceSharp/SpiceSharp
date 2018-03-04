@@ -14,8 +14,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters _bp;
-        InductorBehaviors.LoadBehavior _load1, _load2;
+        private BaseParameters _bp;
+        private InductorBehaviors.LoadBehavior _load1, _load2;
 
         /// <summary>
         /// Matrix elements

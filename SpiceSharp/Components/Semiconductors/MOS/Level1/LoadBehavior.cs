@@ -15,14 +15,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters _bp;
-        TemperatureBehavior _temp;
-        ModelBaseParameters _mbp;
+        private BaseParameters _bp;
+        private TemperatureBehavior _temp;
+        private ModelBaseParameters _mbp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int _drainNode, _gateNode, _sourceNode, _bulkNode;
+        private int _drainNode, _gateNode, _sourceNode, _bulkNode;
         public int DrainNodePrime { get; protected set; }
         public int SourceNodePrime { get; protected set; }
 

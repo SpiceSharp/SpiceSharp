@@ -10,8 +10,8 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Available behaviors and parameters
         /// </summary>
-        Dictionary<string, ParameterSetDictionary> _parameterSets = new Dictionary<string, ParameterSetDictionary>();
-        Dictionary<string, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>();
+        private Dictionary<string, ParameterSetDictionary> _parameterSets = new Dictionary<string, ParameterSetDictionary>();
+        private Dictionary<string, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>();
 
         /// <summary>
         /// Available number of parameter collections

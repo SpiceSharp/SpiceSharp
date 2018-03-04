@@ -14,8 +14,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        Identifier[] _connections;
-        int[] _indices;
+        private Identifier[] _connections;
+        private int[] _indices;
 
         /// <summary>
         /// Gets the number of nodes

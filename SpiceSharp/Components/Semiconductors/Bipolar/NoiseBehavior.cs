@@ -13,20 +13,20 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters _bp;
-        LoadBehavior _load;
-        ModelNoiseParameters _mnp;
-        ModelTemperatureBehavior _modeltemp;
+        private BaseParameters _bp;
+        private LoadBehavior _load;
+        private ModelNoiseParameters _mnp;
+        private ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Noise sources by their index
         /// </summary>
-        const int RcNoise = 0;
-        const int RbNoise = 1;
-        const int ReNoise = 2;
-        const int IcNoise = 3;
-        const int IbNoise = 4;
-        const int FlickerNoise = 5;
+        private const int RcNoise = 0;
+        private const int RbNoise = 1;
+        private const int ReNoise = 2;
+        private const int IcNoise = 3;
+        private const int IbNoise = 4;
+        private const int FlickerNoise = 5;
 
         /// <summary>
         /// Noise generators
@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int _collectorNode, _baseNode, _emitterNode, _substrateNode, _colPrimeNode, _basePrimeNode, _emitPrimeNode;
+        private int _collectorNode, _baseNode, _emitterNode, _substrateNode, _colPrimeNode, _basePrimeNode, _emitPrimeNode;
 
         /// <summary>
         /// Constructor

@@ -14,8 +14,8 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters _bp;
-        LoadBehavior _load;
+        private BaseParameters _bp;
+        private LoadBehavior _load;
         
         /// <summary>
         /// An event called when the flux can be updated
@@ -26,10 +26,11 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int _branchEq;
+        private int _branchEq;
         protected MatrixElement<double> BranchBranchPtr { get; private set; }
         protected VectorElement<double> BranchPtr { get; private set; }
-        StateDerivative _flux;
+
+        private StateDerivative _flux;
 
         /// <summary>
         /// Constructor

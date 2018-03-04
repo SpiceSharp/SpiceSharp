@@ -109,7 +109,7 @@ namespace SpiceSharp.Simulations
         /// <param name="twin1">First twin element</param>
         /// <param name="twin2">Second twin element</param>
         /// <returns></returns>
-        static int CountTwins<T>(Solver<T> solver, int column, ref MatrixElement<T> twin1, ref MatrixElement<T> twin2, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
+        private static int CountTwins<T>(Solver<T> solver, int column, ref MatrixElement<T> twin1, ref MatrixElement<T> twin2, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
             int row, twins = 0;
             MatrixElement<T> cTwin1, cTwin2;

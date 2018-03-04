@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        BaseParameters _bp;
+        private BaseParameters _bp;
 
         /// <summary>
         /// Methods
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Nodes and states
         /// </summary>
-        int _posNode, _negNode;
+        private int _posNode, _negNode;
         protected MatrixElement<double> PosPosPtr { get; private set; }
         protected MatrixElement<double> NegNegPtr { get; private set; }
         protected MatrixElement<double> PosNegPtr { get; private set; }

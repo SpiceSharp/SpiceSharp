@@ -2,6 +2,7 @@
 using System.Text;
 using SpiceSharp.Algebra.Solve;
 
+// ReSharper disable once CheckNamespace
 namespace SpiceSharp.Algebra
 {
     /// <summary>

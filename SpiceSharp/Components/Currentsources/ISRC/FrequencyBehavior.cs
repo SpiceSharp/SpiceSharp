@@ -15,13 +15,13 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// <summary>
         /// Necessary behaviors and parameters
         /// </summary>
-        FrequencyParameters _ap;
+        private FrequencyParameters _ap;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode;
-        Complex _ac;
+        private int _posNode, _negNode;
+        private Complex _ac;
         protected VectorElement<Complex> PosPtr { get; private set; }
         protected VectorElement<Complex> NegPtr { get; private set; }
 

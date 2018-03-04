@@ -14,9 +14,9 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        BaseParameters _bp;
-        ModelLoadBehavior _modelload;
-        ModelBaseParameters _mbp;
+        private BaseParameters _bp;
+        private ModelLoadBehavior _modelload;
+        private ModelBaseParameters _mbp;
 
         /// <summary>
         /// Gets or sets the previous state
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode, _contPosourceNode, _contNegateNode;
+        private int _posNode, _negNode, _contPosourceNode, _contNegateNode;
         protected MatrixElement<double> PosPosPtr { get; private set; }
         protected MatrixElement<double> NegPosPtr { get; private set; }
         protected MatrixElement<double> PosNegPtr { get; private set; }

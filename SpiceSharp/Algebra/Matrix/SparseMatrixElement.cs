@@ -7,7 +7,7 @@ namespace SpiceSharp.Algebra.Matrix
     /// Used by <see cref="SparseMatrix{T}"/> to store values
     /// </summary>
     /// <typeparam name="T">Base type</typeparam>
-    class SparseMatrixElement<T> : MatrixElement<T> where T : IFormattable
+    internal class SparseMatrixElement<T> : MatrixElement<T> where T : IFormattable
     {
         /// <summary>
         /// Gets or sets the row index

@@ -13,8 +13,8 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Private variables
         /// </summary>
-        double[] _intermediate;
-        MatrixElement<double>[] _dest;
+        private double[] _intermediate;
+        private MatrixElement<double>[] _dest;
 
         /// <summary>
         /// Constructor
@@ -310,7 +310,7 @@ namespace SpiceSharp.Algebra
         /// Eliminate a row
         /// </summary>
         /// <param name="pivot">Current pivot</param>
-        void Elimination(MatrixElement<double> pivot)
+        private void Elimination(MatrixElement<double> pivot)
         {
             // Test for zero pivot
             if (pivot.Value.Equals(0.0))
@@ -336,7 +336,7 @@ namespace SpiceSharp.Algebra
 
                     // Test to see if the desired element was not found, if not, create fill-in
                     if (sub == null || sub.Row > row)
-                        sub = base.CreateFillin(row, upper.Column);
+                        sub = CreateFillin(row, upper.Column);
 
                     // element -= upper * lower
                     sub.Value -= upper.Value * lower.Value;

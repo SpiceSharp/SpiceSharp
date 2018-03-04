@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode;
+        private int _posNode, _negNode;
         protected MatrixElement<double> PosPosPtr { get; private set; }
         protected MatrixElement<double> NegNegPtr { get; private set; }
         protected MatrixElement<double> PosNegPtr { get; private set; }

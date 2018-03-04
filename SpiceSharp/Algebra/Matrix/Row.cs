@@ -6,7 +6,7 @@ namespace SpiceSharp.Algebra.Matrix
     /// A class keeping track of a linked list of matrix elements
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    class Row<T> where T : IFormattable
+    internal class Row<T> where T : IFormattable
     {
         /// <summary>
         /// Gets the first element in the row

@@ -13,22 +13,22 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        LoadBehavior _load;
-        BaseParameters _bp;
-        ModelNoiseParameters _mnp;
-        ModelTemperatureBehavior _modeltemp;
+        private LoadBehavior _load;
+        private BaseParameters _bp;
+        private ModelNoiseParameters _mnp;
+        private ModelTemperatureBehavior _modeltemp;
 
         /// <summary>
         /// Nodes
         /// </summary>
-        int _posNode, _negNode, _posPrimeNode;
+        private int _posNode, _negNode, _posPrimeNode;
 
         /// <summary>
         /// Noise sources by their index
         /// </summary>
-        const int RsNoise = 0;
-        const int IdNoise = 1;
-        const int FlickerNoise = 2;
+        private const int RsNoise = 0;
+        private const int IdNoise = 1;
+        private const int FlickerNoise = 2;
 
         /// <summary>
         /// Noise generators
