@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Algebra
+namespace SpiceSharp.Algebra.Vector
 {
     /// <summary>
     /// Sparse vector element

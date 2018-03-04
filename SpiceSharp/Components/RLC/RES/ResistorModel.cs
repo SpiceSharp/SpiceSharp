@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Components.ResistorBehaviors;
+﻿using SpiceSharp.Components.ResistorBehaviors;
 
 namespace SpiceSharp.Components
 {

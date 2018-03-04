@@ -1,6 +1,5 @@
 ﻿using System;
 using SpiceSharp.Circuits;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
 using System.Reflection;

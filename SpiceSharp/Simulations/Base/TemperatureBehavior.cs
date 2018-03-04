@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SpiceSharp.Circuits;
 using SpiceSharp.Diagnostics;

@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Circuits;
-
-namespace SpiceSharp.Simulations
+﻿namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Operating Point analysis

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using SpiceSharp.Algebra.Vector;
 
 namespace SpiceSharp.Algebra
 {
@@ -9,12 +10,6 @@ namespace SpiceSharp.Algebra
     [Serializable]
     public class SparseVector<T> : Vector<T>, IFormattable where T : IFormattable, IEquatable<T>
     {
-        /// <summary>
-        /// Constants
-        /// </summary>
-        private const int InitialSize = 4;
-        private const float ExpansionFactor = 1.5f;
-
         /// <summary>
         /// Gets or sets the value
         /// </summary>
