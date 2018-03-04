@@ -22,6 +22,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">Matrix</param>
         /// <param name="rhs">Rhs</param>
         /// <param name="step">Step</param>
+        /// <param name="magnitude">Magnitude method</param>
         public abstract void Setup(SparseMatrix<T> matrix, SparseVector<T> rhs, int step, Func<T, double> magnitude);
 
         /// <summary>

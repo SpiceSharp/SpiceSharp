@@ -31,19 +31,18 @@ namespace Sandbox
             ckt.Objects.Add(
                 new VoltageSource("v1", "net2", "net1", 0),
                 new VoltageSource("v2", "net1", "0", 24),
-                new Inductor(new Identifier("x1", "l1"), "net2", "net3", 0),
+                new Inductor(new Identifier("x1", "l1"), "net2", "net3", 100e-3),
                 new Capacitor(new Identifier("x1", "c1"), "net3", "0", 100e-6),
                 new Inductor("l2", "net3", "out", 250e-3),
                 new Resistor("rload", "out", "0", 1e3)
                 );
-            ckt.Objects["v2"].ParameterSets.SetProperty("acmag", 24.0);
+            ckt.Objects["v1"].ParameterSets.SetProperty("acmag", 24.0);
 
             // Create the simulation, exports and references
-            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1, 1e6, 30));
+            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1, 1e3, 30));
             Export<Complex>[] exports = { new ComplexVoltageExport(ac, "net3") };
 
-            int index = 0;
-            ac.OnExportSimulationData += (object sender, ExportDataEventArgs args) =>
+            ac.OnExportSimulationData += (sender, args) =>
             {
                 double frequency = args.Frequency;
                 double amplitude = exports[0].Value.Magnitude;

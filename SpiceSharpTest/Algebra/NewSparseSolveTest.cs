@@ -2,6 +2,7 @@
 using SpiceSharp.Algebra;
 using SpiceSharp.Algebra.Solve;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SpiceSharp.Algebra.Solve.Markowitz;
 
 namespace SpiceSharpTest.Sparse
 {

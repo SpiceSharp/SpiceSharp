@@ -29,7 +29,6 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         protected MatrixElement<Complex> NegBranchPtr { get; private set; }
         protected MatrixElement<Complex> BranchPosPtr { get; private set; }
         protected MatrixElement<Complex> BranchNegPtr { get; private set; }
-        protected MatrixElement<Complex> BranchBranchPtr { get; private set; }
         protected VectorElement<Complex> BranchPtr { get; private set; }
 
         /// <summary>

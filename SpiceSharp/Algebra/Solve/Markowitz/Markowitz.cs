@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace SpiceSharp.Algebra.Solve
+namespace SpiceSharp.Algebra.Solve.Markowitz
 {
     /// <summary>
     /// Markowitz

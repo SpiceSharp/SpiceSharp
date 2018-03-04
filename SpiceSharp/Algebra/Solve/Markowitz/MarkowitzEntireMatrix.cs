@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Algebra.Solve
+namespace SpiceSharp.Algebra.Solve.Markowitz
 {
     /// <summary>
     /// A pivot strategy that can be used for any generic type
