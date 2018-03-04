@@ -1,4 +1,5 @@
-﻿namespace SpiceSharp.Algebra.Matrix
+﻿// ReSharper disable once CheckNamespace
+namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// Base class for matrices

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Algebra
+namespace SpiceSharp.Algebra.Matrix
 {
     /// <summary>
     /// Element in a matrix

@@ -2,6 +2,7 @@
 using System.Text;
 using SpiceSharp.Algebra.Matrix;
 
+// ReSharper disable once CheckNamespace
 namespace SpiceSharp.Algebra
 {
     /// <summary>
@@ -14,17 +15,17 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Constants
         /// </summary>
-        const int InitialSize = 4;
-        const float ExpansionFactor = 1.5f;
+        private const int InitialSize = 4;
+        private const float ExpansionFactor = 1.5f;
 
         /// <summary>
         /// Private variables
         /// </summary>
-        Row<T>[] rows;
-        Column<T>[] columns;
-        SparseMatrixElement<T>[] diagonal;
-        SparseMatrixElement<T> trashCan;
-        int allocatedSize;
+        private Row<T>[] _rows;
+        private Column<T>[] _columns;
+        private SparseMatrixElement<T>[] _diagonal;
+        private readonly SparseMatrixElement<T> _trashCan;
+        private int _allocatedSize;
 
         /// <summary>
         /// Gets or sets an element
@@ -65,21 +66,21 @@ namespace SpiceSharp.Algebra
         public SparseMatrix()
             : base(1)
         {
-            allocatedSize = InitialSize;
+            _allocatedSize = InitialSize;
 
             // Allocate rows
-            rows = new Row<T>[InitialSize + 1];
+            _rows = new Row<T>[InitialSize + 1];
             for (int i = 1; i <= InitialSize; i++)
-                rows[i] = new Row<T>();
+                _rows[i] = new Row<T>();
 
             // Allocate columns
-            columns = new Column<T>[InitialSize + 1];
+            _columns = new Column<T>[InitialSize + 1];
             for (int i = 1; i <= InitialSize; i++)
-                columns[i] = new Column<T>();
+                _columns[i] = new Column<T>();
 
             // Other
-            diagonal = new SparseMatrixElement<T>[InitialSize + 1];
-            trashCan = new SparseMatrixElement<T>(0, 0);
+            _diagonal = new SparseMatrixElement<T>[InitialSize + 1];
+            _trashCan = new SparseMatrixElement<T>(0, 0);
         }
 
         /// <summary>
@@ -89,21 +90,21 @@ namespace SpiceSharp.Algebra
         public SparseMatrix(int size)
             : base(size)
         {
-            allocatedSize = Math.Max(InitialSize, size);
+            _allocatedSize = Math.Max(InitialSize, size);
 
             // Allocate rows
-            rows = new Row<T>[allocatedSize + 1];
-            for (int i = 1; i <= allocatedSize; i++)
-                rows[i] = new Row<T>();
+            _rows = new Row<T>[_allocatedSize + 1];
+            for (int i = 1; i <= _allocatedSize; i++)
+                _rows[i] = new Row<T>();
 
             // Allocate columns
-            columns = new Column<T>[allocatedSize + 1];
-            for (int i = 1; i <= allocatedSize; i++)
-                columns[i] = new Column<T>();
+            _columns = new Column<T>[_allocatedSize + 1];
+            for (int i = 1; i <= _allocatedSize; i++)
+                _columns[i] = new Column<T>();
 
             // Other
-            diagonal = new SparseMatrixElement<T>[allocatedSize + 1];
-            trashCan = new SparseMatrixElement<T>(0, 0);
+            _diagonal = new SparseMatrixElement<T>[_allocatedSize + 1];
+            _trashCan = new SparseMatrixElement<T>(0, 0);
         }
 
         /// <summary>
@@ -118,22 +119,22 @@ namespace SpiceSharp.Algebra
             if (row < 0 || column < 0)
                 throw new ArgumentException("Invalid indices ({0}, {1})".FormatString(row, column));
             if (row == 0 || column == 0)
-                return trashCan;
+                return _trashCan;
 
             // Expand our matrix if it is necessary!
             if (row > Size || column > Size)
                 ExpandMatrix(Math.Max(row, column));
 
             // Quick access to diagonals
-            if (row == column && diagonal[row] != null)
-                return diagonal[row];
+            if (row == column && _diagonal[row] != null)
+                return _diagonal[row];
 
             SparseMatrixElement<T> element;
-            if (!rows[row].CreateGetElement(row, column, out element))
+            if (!_rows[row].CreateGetElement(row, column, out element))
             {
-                columns[column].Insert(element);
+                _columns[column].Insert(element);
                 if (row == column)
-                    diagonal[row] = element;
+                    _diagonal[row] = element;
             }
 
             return element;
@@ -144,7 +145,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
-        public MatrixElement<T> GetDiagonalElement(int index) => diagonal[index];
+        public MatrixElement<T> GetDiagonalElement(int index) => _diagonal[index];
         
         /// <summary>
         /// Find an element
@@ -160,10 +161,10 @@ namespace SpiceSharp.Algebra
             if (row > Size || column > Size)
                 return null;
             if (row == 0 || column == 0)
-                return trashCan;
+                return _trashCan;
 
             // Find the element
-            return rows[row].Find(column);
+            return _rows[row].Find(column);
         }
 
         /// <summary>
@@ -171,28 +172,28 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="row">Row</param>
         /// <returns></returns>
-        public MatrixElement<T> GetFirstInRow(int row) => rows[row].FirstInRow;
+        public MatrixElement<T> GetFirstInRow(int row) => _rows[row].FirstInRow;
 
         /// <summary>
         /// Gets the last element in a row
         /// </summary>
         /// <param name="row">Row</param>
         /// <returns></returns>
-        public MatrixElement<T> GetLastInRow(int row) => rows[row].LastInRow;
+        public MatrixElement<T> GetLastInRow(int row) => _rows[row].LastInRow;
 
         /// <summary>
         /// Gets the first element in a column
         /// </summary>
         /// <param name="column">Column</param>
         /// <returns></returns>
-        public MatrixElement<T> GetFirstInColumn(int column) => columns[column].FirstInColumn;
+        public MatrixElement<T> GetFirstInColumn(int column) => _columns[column].FirstInColumn;
 
         /// <summary>
         /// Gets the last element in a column
         /// </summary>
         /// <param name="column">Column</param>
         /// <returns></returns>
-        public MatrixElement<T> GetLastInColumn(int column) => columns[column].LastInColumn;
+        public MatrixElement<T> GetLastInColumn(int column) => _columns[column].LastInColumn;
 
         /// <summary>
         /// Swap rows in the matrix
@@ -213,58 +214,58 @@ namespace SpiceSharp.Algebra
             }
 
             // Get the two elements
-            SparseMatrixElement<T> row1Element = rows[row1].FirstInRow;
-            SparseMatrixElement<T> row2Element = rows[row2].FirstInRow;
+            SparseMatrixElement<T> row1Element = _rows[row1].FirstInRow;
+            SparseMatrixElement<T> row2Element = _rows[row2].FirstInRow;
 
             // Swap the two rows
-            var tmpRow = rows[row1];
-            rows[row1] = rows[row2];
-            rows[row2] = tmpRow;
+            var tmpRow = _rows[row1];
+            _rows[row1] = _rows[row2];
+            _rows[row2] = tmpRow;
 
             // Reset the diagonal elements
-            diagonal[row1] = null;
-            diagonal[row2] = null;
+            _diagonal[row1] = null;
+            _diagonal[row2] = null;
 
             // Swap the elements from left to right
             while (row1Element != null || row2Element != null)
             {
                 if (row2Element == null)
                 {
-                    columns[row1Element.Column].Swap(row1Element, null, row1, row2);
+                    _columns[row1Element.Column].Swap(row1Element, null, row1, row2);
                     if (row1Element.Column == row2)
-                        diagonal[row1Element.Column] = row1Element;
+                        _diagonal[row1Element.Column] = row1Element;
                     row1Element = row1Element.NextInRow;
                 }
                 else if (row1Element == null)
                 {
-                    columns[row2Element.Column].Swap(null, row2Element, row1, row2);
+                    _columns[row2Element.Column].Swap(null, row2Element, row1, row2);
                     if (row2Element.Column == row1)
-                        diagonal[row2Element.Column] = row2Element;
+                        _diagonal[row2Element.Column] = row2Element;
                     row2Element = row2Element.NextInRow;
                 }
                 else if (row1Element.Column < row2Element.Column)
                 {
-                    columns[row1Element.Column].Swap(row1Element, null, row1, row2);
+                    _columns[row1Element.Column].Swap(row1Element, null, row1, row2);
                     if (row1Element.Column == row2)
-                        diagonal[row1Element.Column] = row1Element;
+                        _diagonal[row1Element.Column] = row1Element;
                     row1Element = row1Element.NextInRow;
                 }
                 else if (row2Element.Column < row1Element.Column)
                 {
-                    columns[row2Element.Column].Swap(null, row2Element, row1, row2);
+                    _columns[row2Element.Column].Swap(null, row2Element, row1, row2);
                     if (row2Element.Column == row1)
-                        diagonal[row2Element.Column] = row2Element;
+                        _diagonal[row2Element.Column] = row2Element;
                     row2Element = row2Element.NextInRow;
                 }
                 else
                 {
-                    columns[row1Element.Column].Swap(row1Element, row2Element, row1, row2);
+                    _columns[row1Element.Column].Swap(row1Element, row2Element, row1, row2);
 
                     // Update diagonals
                     if (row1Element.Column == row2)
-                        diagonal[row1Element.Column] = row1Element;
+                        _diagonal[row1Element.Column] = row1Element;
                     else if (row2Element.Column == row1)
-                        diagonal[row2Element.Column] = row2Element;
+                        _diagonal[row2Element.Column] = row2Element;
 
                     row1Element = row1Element.NextInRow;
                     row2Element = row2Element.NextInRow;
@@ -291,95 +292,95 @@ namespace SpiceSharp.Algebra
             }
 
             // Get the two elements
-            SparseMatrixElement<T> column1Element = columns[column1].FirstInColumn;
-            SparseMatrixElement<T> column2Element = columns[column2].FirstInColumn;
+            SparseMatrixElement<T> column1Element = _columns[column1].FirstInColumn;
+            SparseMatrixElement<T> column2Element = _columns[column2].FirstInColumn;
 
             // Swap the two rows
-            var tmpColumn = columns[column1];
-            columns[column1] = columns[column2];
-            columns[column2] = tmpColumn;
+            var tmpColumn = _columns[column1];
+            _columns[column1] = _columns[column2];
+            _columns[column2] = tmpColumn;
 
             // Reset the diagonals
-            diagonal[column1] = null;
-            diagonal[column2] = null;
+            _diagonal[column1] = null;
+            _diagonal[column2] = null;
 
             // Swap the elements from left to right
             while (column1Element != null || column2Element != null)
             {
                 if (column2Element == null)
                 {
-                    rows[column1Element.Row].Swap(column1Element, null, column1, column2);
+                    _rows[column1Element.Row].Swap(column1Element, null, column1, column2);
                     if (column1Element.Row == column2)
-                        diagonal[column1Element.Row] = column1Element;
+                        _diagonal[column1Element.Row] = column1Element;
                     column1Element = column1Element.NextInColumn;
                 }
                 else if (column1Element == null)
                 {
-                    rows[column2Element.Row].Swap(null, column2Element, column1, column2);
+                    _rows[column2Element.Row].Swap(null, column2Element, column1, column2);
                     if (column2Element.Row == column1)
-                        diagonal[column2Element.Row] = column2Element;
+                        _diagonal[column2Element.Row] = column2Element;
                     column2Element = column2Element.NextInColumn;
                 }
                 else if (column1Element.Row < column2Element.Row)
                 {
-                    rows[column1Element.Row].Swap(column1Element, null, column1, column2);
+                    _rows[column1Element.Row].Swap(column1Element, null, column1, column2);
                     if (column1Element.Row == column2)
-                        diagonal[column1Element.Row] = column1Element;
+                        _diagonal[column1Element.Row] = column1Element;
                     column1Element = column1Element.NextInColumn;
                 }
                 else if (column2Element.Row < column1Element.Row)
                 {
-                    rows[column2Element.Row].Swap(null, column2Element, column1, column2);
+                    _rows[column2Element.Row].Swap(null, column2Element, column1, column2);
                     if (column2Element.Row == column1)
-                        diagonal[column2Element.Row] = column2Element;
+                        _diagonal[column2Element.Row] = column2Element;
                     column2Element = column2Element.NextInColumn;
                 }
                 else
                 {
-                    rows[column1Element.Row].Swap(column1Element, column2Element, column1, column2);
+                    _rows[column1Element.Row].Swap(column1Element, column2Element, column1, column2);
 
                     // Update diagonal
                     if (column1Element.Row == column2)
-                        diagonal[column1Element.Row] = column1Element;
+                        _diagonal[column1Element.Row] = column1Element;
                     if (column2Element.Row == column1)
-                        diagonal[column2Element.Row] = column2Element;
+                        _diagonal[column2Element.Row] = column2Element;
 
                     column1Element = column1Element.NextInColumn;
                     column2Element = column2Element.NextInColumn;
                 }
             }
         }
-        
+
         /// <summary>
         /// Expand matrix
         /// </summary>
         /// <param name="newSize">New supported matrix size</param>
-        void ExpandMatrix(int newSize)
+        private void ExpandMatrix(int newSize)
         {
             // Current size
             Size = newSize;
 
             // No need to allocate new vectors
-            if (newSize <= allocatedSize)
+            if (newSize <= _allocatedSize)
                 return;
-            int oldAllocatedSize = allocatedSize;
+            int oldAllocatedSize = _allocatedSize;
 
             // Allocate some extra space if necessary
-            newSize = Math.Max(newSize, (int)(allocatedSize * ExpansionFactor));
+            newSize = Math.Max(newSize, (int)(_allocatedSize * ExpansionFactor));
 
             // Resize rows
-            Array.Resize(ref rows, newSize + 1);
+            Array.Resize(ref _rows, newSize + 1);
             for (int i = oldAllocatedSize + 1; i <= newSize; i++)
-                rows[i] = new Row<T>();
+                _rows[i] = new Row<T>();
 
             // Resize columns
-            Array.Resize(ref columns, newSize + 1);
+            Array.Resize(ref _columns, newSize + 1);
             for (int i = oldAllocatedSize + 1; i <= newSize; i++)
-                columns[i] = new Column<T>();
+                _columns[i] = new Column<T>();
 
             // Other
-            Array.Resize(ref diagonal, newSize + 1);
-            allocatedSize = newSize;
+            Array.Resize(ref _diagonal, newSize + 1);
+            _allocatedSize = newSize;
         }
         
         /// <summary>
@@ -407,7 +408,7 @@ namespace SpiceSharp.Algebra
                 // Initialize
                 displayData[r - 1] = new string[Size];
 
-                var element = rows[r].FirstInRow;
+                var element = _rows[r].FirstInRow;
                 for (int c = 1; c <= Size; c++)
                 {
                     // Go to the next element if necessary

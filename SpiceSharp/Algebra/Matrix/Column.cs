@@ -132,8 +132,10 @@ namespace SpiceSharp.Algebra.Matrix
         /// Swap two elements in the column, <paramref name="first"/> and <paramref name="rowFirst"/> are supposed to come first in the column.
         /// Does not update row pointers!
         /// </summary>
-        /// <param name="first">First</param>
-        /// <param name="second">Second</param>
+        /// <param name="first">First matrix element</param>
+        /// <param name="second">Second matrix element</param>
+        /// <param name="rowFirst">First row</param>
+        /// <param name="rowSecond">Second row</param>
         public void Swap(SparseMatrixElement<T> first, SparseMatrixElement<T> second, int rowFirst, int rowSecond)
         {
             if (first == null && second == null)

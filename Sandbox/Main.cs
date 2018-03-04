@@ -40,7 +40,7 @@ namespace Sandbox
 
             // Create the simulation, exports and references
             AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1, 1e3, 30));
-            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "net3") };
+            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
 
             ac.OnExportSimulationData += (sender, args) =>
             {
