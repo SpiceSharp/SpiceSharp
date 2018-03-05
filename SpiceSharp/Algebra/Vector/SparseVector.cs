@@ -44,18 +44,18 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Gets the first element in the vector
         /// </summary>
-        public VectorElement<T> First { get => _firstInVector; }
+        public VectorElement<T> First => _firstInVector;
 
         /// <summary>
         /// Gets the last element in the vector
         /// </summary>
-        public VectorElement<T> Last { get => _lastInVector; }
+        public VectorElement<T> Last => _lastInVector;
 
         /// <summary>
         /// Private variables
         /// </summary>
         private SparseVectorElement<T> _firstInVector, _lastInVector;
-        private VectorElement<T> _trashCan;
+        private readonly VectorElement<T> _trashCan;
 
         /// <summary>
         /// Constructor
@@ -342,10 +342,7 @@ namespace SpiceSharp.Algebra
             {
                 if (element.Index < i)
                     element = element.Next;
-                if (element.Index == i)
-                    sb.AppendLine(element.Value.ToString());
-                else
-                    sb.AppendLine("...");
+                sb.AppendLine(element.Index == i ? element.Value.ToString() : "...");
             }
             sb.Append("]");
             return sb.ToString();
@@ -366,10 +363,7 @@ namespace SpiceSharp.Algebra
             {
                 if (element.Index < i)
                     element = element.Next;
-                if (element.Index == i)
-                    sb.AppendLine(element.Value.ToString(format, formatProvider));
-                else
-                    sb.AppendLine("...");
+                sb.AppendLine(element.Index == i ? element.Value.ToString(format, formatProvider) : "...");
             }
             sb.Append("]");
             return sb.ToString();

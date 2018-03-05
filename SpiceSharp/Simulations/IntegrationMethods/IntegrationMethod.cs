@@ -91,7 +91,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the last time point that was accepted
         /// </summary>
-        public double SavedTime { get { return _savetime; } }
+        public double SavedTime => _savetime;
 
         /// <summary>
         /// Private variables
@@ -206,7 +206,7 @@ namespace SpiceSharp.IntegrationMethods
         public void Resume()
         {
             // Are we at a breakpoint, or indistinguishably close?
-            if (Time == Breaks.First || Breaks.First - Time <= DeltaMin)
+            if (Time.Equals(Breaks.First) || Breaks.First - Time <= DeltaMin)
             {
                 // First timepoint after a breakpoint: cut integration order
                 Order = 1;
@@ -216,7 +216,7 @@ namespace SpiceSharp.IntegrationMethods
                 Delta = Math.Min(Delta, 0.1 * mt);
 
                 // Spice will divide the delta by 10 in the first step
-                if (SavedTime == 0.0)
+                if (SavedTime.Equals(0.0))
                     Delta /= 10.0;
 
                 // But we don't want to go below delmin for no reason

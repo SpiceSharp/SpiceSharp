@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the frequency step
         /// </summary>
-        public double DeltaFrequency { get => _deltaFrequency; }
+        public double DeltaFrequency => _deltaFrequency;
 
         /// <summary>
         /// Output referred noise

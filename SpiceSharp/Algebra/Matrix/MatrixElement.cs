@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
 namespace SpiceSharp.Algebra
@@ -14,11 +13,6 @@ namespace SpiceSharp.Algebra
         /// Gets or sets the value of the element
         /// </summary>
         public T Value { get; set; }
-
-        /// <summary>
-        /// Test for zero
-        /// </summary>
-        public bool IsZero { get => EqualityComparer<T>.Default.Equals(Value, default); }
 
         /// <summary>
         /// Gets the row of the element

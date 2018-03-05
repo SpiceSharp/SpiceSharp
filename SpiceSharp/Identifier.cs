@@ -27,12 +27,12 @@ namespace SpiceSharp
         /// <summary>
         /// Gets the full path of the circuit object
         /// </summary>
-        public IEnumerable<string> Elements { get => _idPath; }
+        public IEnumerable<string> Elements => _idPath;
 
         /// <summary>
         /// Gets the number of elements in the path
         /// </summary>
-        public int PathCount { get => _idPath.Length; }
+        public int PathCount => _idPath.Length;
 
         /// <summary>
         /// Gets the local name of the circuit object
@@ -48,7 +48,7 @@ namespace SpiceSharp
         /// <summary>
         /// The path of the identifier
         /// </summary>
-        private string[] _idPath;
+        private readonly string[] _idPath;
 
         /// <summary>
         /// Constructor
@@ -75,8 +75,8 @@ namespace SpiceSharp
 
             // Compute a hash code
             _hash = 1;
-            for (int i = 0; i < path.Length; i++)
-                _hash = _hash * Prime + path[i].GetHashCode();
+            foreach (var part in path)
+                _hash = _hash * Prime + part.GetHashCode();
         }
 
         /// <summary>

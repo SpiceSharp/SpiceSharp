@@ -29,18 +29,12 @@
         /// </summary>
         /// <param name="index">Steps to go back in history</param>
         /// <returns></returns>
-        public double this[int index]
-        {
-            get => Source.History[index][StateIndex];
-        }
+        public double this[int index] => Source.History[index][StateIndex];
 
         /// <summary>
         /// Gets the timesteps in history
         /// </summary>
-        public ReadOnlyHistory<double> Timesteps
-        {
-            get => new ReadOnlyHistory<double>(Source.Method.DeltaOld);
-        }
+        public ReadOnlyHistory<double> Timesteps => new ReadOnlyHistory<double>(Source.Method.DeltaOld);
 
         /// <summary>
         /// Constructor

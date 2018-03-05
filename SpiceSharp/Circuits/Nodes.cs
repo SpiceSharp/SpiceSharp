@@ -13,8 +13,8 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<Node> _nodes = new List<Node>();
-        private Dictionary<Identifier, Node> _map = new Dictionary<Identifier, Node>();
+        private readonly List<Node> _nodes = new List<Node>();
+        private readonly Dictionary<Identifier, Node> _map = new Dictionary<Identifier, Node>();
         private bool _locked;
 
         /// <summary>
@@ -54,10 +54,7 @@ namespace SpiceSharp.Circuits
         /// <param name="id">Identifier</param>
         /// <returns></returns>
         [SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
-        public Node this[Identifier id]
-        {
-            get => _map[id];
-        }
+        public Node this[Identifier id] => _map[id];
 
         /// <summary>
         /// Find a node by index

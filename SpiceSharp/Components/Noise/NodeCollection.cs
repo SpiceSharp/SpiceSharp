@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Nodes in the collection
         /// </summary>
-        private List<int> _nodes = new List<int>();
+        private readonly List<int> _nodes = new List<int>();
 
         /// <summary>
         /// Gets number of nodes
@@ -24,10 +24,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
-        public int this[int index]
-        {
-            get => _nodes[index];
-        }
+        public int this[int index] => _nodes[index];
 
         /// <summary>
         /// Constructor

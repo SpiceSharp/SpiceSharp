@@ -13,20 +13,17 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
-        public SweepInstance this[int index]
-        {
-            get => _instances[index];
-        }
+        public SweepInstance this[int index] => _instances[index];
 
         /// <summary>
         /// Gets the amount of nested sweeps
         /// </summary>
-        public int Count { get => _instances.Count; }
+        public int Count => _instances.Count;
 
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<SweepInstance> _instances = new List<SweepInstance>();
+        private readonly List<SweepInstance> _instances = new List<SweepInstance>();
 
         /// <summary>
         /// Constructor

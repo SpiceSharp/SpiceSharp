@@ -10,7 +10,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets if the export is currently valid
         /// </summary>
-        public bool IsValid { get => Extractor != null; }
+        public bool IsValid => Extractor != null;
 
         /// <summary>
         /// The extractor used to 

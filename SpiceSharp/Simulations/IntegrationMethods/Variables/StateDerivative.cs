@@ -8,11 +8,8 @@
         /// <summary>
         /// Gets the current derivative
         /// </summary>
-        public double Derivative
-        {
-            get => Source.History.Current[StateIndex + 1];
-        }
-        
+        public double Derivative => Source.History.Current[StateIndex + 1];
+
         /// <summary>
         /// Constructor
         /// This constructor should not be used, except for in the <see cref="StatePool"/> class.

@@ -14,20 +14,14 @@
         /// <summary>
         /// Gets the current value
         /// </summary>
-        public T Current
-        {
-            get => History.Current;
-        }
+        public T Current => History.Current;
 
         /// <summary>
         /// Gets a value in history
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns></returns>
-        public T this[int index]
-        {
-            get => History[index];
-        }
+        public T this[int index] => History[index];
 
         /// <summary>
         /// Constructor

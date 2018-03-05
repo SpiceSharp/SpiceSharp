@@ -10,28 +10,30 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Available behaviors and parameters
         /// </summary>
-        private Dictionary<string, ParameterSetDictionary> _parameterSets = new Dictionary<string, ParameterSetDictionary>();
-        private Dictionary<string, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>();
+        private readonly Dictionary<string, ParameterSetDictionary> _parameterSets = new Dictionary<string, ParameterSetDictionary>();
+        private readonly Dictionary<string, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<string, EntityBehaviorDictionary>();
 
         /// <summary>
         /// Available number of parameter collections
         /// </summary>
-        public int ParametersCount { get => _parameterSets.Count; }
+        public int ParametersCount => _parameterSets.Count;
 
         /// <summary>
         /// Available number of entity behaviors
         /// </summary>
-        public int BehaviorsCount { get => _entityBehaviors.Count; }
+        public int BehaviorsCount => _entityBehaviors.Count;
 
         /// <summary>
         /// Add a collection of parameters
         /// </summary>
+        /// <param name="name">Name</param>
         /// <param name="pc">Parameter collection</param>
         public void Add(string name, ParameterSetDictionary pc) => _parameterSets.Add(name, pc);
 
         /// <summary>
         /// Add entity behaviors
         /// </summary>
+        /// <param name="name">Name</param>
         /// <param name="behaviors">Entity behaviors</param>
         public void Add(string name, EntityBehaviorDictionary behaviors) => _entityBehaviors.Add(name, behaviors);
         

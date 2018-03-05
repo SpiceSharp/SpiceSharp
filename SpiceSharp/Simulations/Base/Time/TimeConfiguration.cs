@@ -43,7 +43,7 @@ namespace SpiceSharp.Simulations
                     return (FinalTime - InitTime) / 50.0;
                 return _maxstep;
             }
-            set { _maxstep = value; }
+            set => _maxstep = value;
         }
 
         private double _maxstep = double.NaN;
@@ -52,7 +52,7 @@ namespace SpiceSharp.Simulations
         /// Gets the minimum timestep allowed
         /// </summary>
         [PropertyName("deltamin"), PropertyInfo("The minimum delta for breakpoints")]
-        public double DeltaMin { get { return 1e-13 * MaxStep; } }
+        public double DeltaMin => 1e-13 * MaxStep;
 
         /// <summary>
         /// Maximum number of iterations for each time point
