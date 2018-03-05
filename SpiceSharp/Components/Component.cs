@@ -14,8 +14,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Private variables
         /// </summary>
-        private Identifier[] _connections;
-        private int[] _indices;
+        private readonly Identifier[] _connections;
+        private readonly int[] _indices;
 
         /// <summary>
         /// Gets the number of nodes
@@ -26,6 +26,7 @@ namespace SpiceSharp.Components
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the component</param>
+        /// <param name="nodeCount">Node count</param>
         protected Component(Identifier name, int nodeCount)
             : base(name)
         {

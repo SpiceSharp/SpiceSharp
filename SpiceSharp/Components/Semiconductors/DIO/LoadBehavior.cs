@@ -112,10 +112,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Create
-            if (_mbp.Resistance > 0)
-                PosPrimeNode = nodes.Create(Name.Grow("#pos")).Index;
-            else
-                PosPrimeNode = _posNode;
+            PosPrimeNode = _mbp.Resistance > 0 ? nodes.Create(Name.Grow("#pos")).Index : _posNode;
 
             // Get matrix elements
             PosPosPrimePtr = solver.GetMatrixElement(_posNode, PosPrimeNode);
@@ -155,25 +152,22 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            bool check;
-            double csat, gspr, vt, vte, vd, vdtemp, evd, cd, gd, arg, evrev, cdeq;
+            double vd;
+            double cd, gd;
 
             /* 
              * this routine loads diodes for dc and transient analyses.
              */
-            csat = _temp.TempSaturationCurrent * _bp.Area;
-            gspr = _modeltemp.Conductance * _bp.Area;
-            vt = Circuit.KOverQ * _bp.Temperature;
-            vte = _mbp.EmissionCoefficient * vt;
+            var csat = _temp.TempSaturationCurrent * _bp.Area;
+            var gspr = _modeltemp.Conductance * _bp.Area;
+            var vt = Circuit.KOverQ * _bp.Temperature;
+            var vte = _mbp.EmissionCoefficient * vt;
 
             // Initialization
-            check = false;
+            var check = false;
             if (state.Init == RealState.InitializationStates.InitJunction)
             {
-                if (_bp.Off)
-                    vd = 0.0;
-                else
-                    vd = _temp.TempVCritical;
+                vd = _bp.Off ? 0.0 : _temp.TempVCritical;
             }
             else if (state.Init == RealState.InitializationStates.InitFix && _bp.Off)
             {
@@ -187,7 +181,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 // limit new junction voltage
                 if (_mbp.BreakdownVoltage.Given && vd < Math.Min(0, -_temp.TempBreakdownVoltage + 10 * vte))
                 {
-                    vdtemp = -(vd + _temp.TempBreakdownVoltage);
+                    var vdtemp = -(vd + _temp.TempBreakdownVoltage);
                     vdtemp = Semiconductor.LimitJunction(vdtemp, -(InternalVoltage + _temp.TempBreakdownVoltage), vte, _temp.TempVCritical, ref check);
                     vd = -(vdtemp + _temp.TempBreakdownVoltage);
                 }
@@ -201,14 +195,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if (vd >= -3 * vte)
             {
                 // Forward bias
-                evd = Math.Exp(vd / vte);
+                var evd = Math.Exp(vd / vte);
                 cd = csat * (evd - 1) + state.Gmin * vd;
                 gd = csat * evd / vte + state.Gmin;
             }
             else if (!_mbp.BreakdownVoltage.Given || vd >= -_temp.TempBreakdownVoltage)
             {
                 // Reverse bias
-                arg = 3 * vte / (vd * Math.E);
+                var arg = 3 * vte / (vd * Math.E);
                 arg = arg * arg * arg;
                 cd = -csat * (1 + arg) + state.Gmin * vd;
                 gd = csat * 3 * arg / vd + state.Gmin;
@@ -216,7 +210,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             else
             {
                 // Reverse breakdown
-                evrev = Math.Exp(-(_temp.TempBreakdownVoltage + vd) / vte);
+                var evrev = Math.Exp(-(_temp.TempBreakdownVoltage + vd) / vte);
                 cd = -csat * evrev + state.Gmin * vd;
                 gd = csat * evrev / vte + state.Gmin;
             }
@@ -234,7 +228,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             Conduct = gd;
 
             // Load Rhs vector
-            cdeq = cd - gd * vd;
+            var cdeq = cd - gd * vd;
             NegPtr.Value += cdeq;
             PosPrimePtr.Value -= cdeq;
 
@@ -260,12 +254,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             var state = simulation.RealState;
             var config = simulation.BaseConfiguration;
-            double delvd, cdhat, cd;
             double vd = state.Solution[PosPrimeNode] - state.Solution[_negNode];
 
-            delvd = vd - InternalVoltage;
-            cdhat = Current + Conduct * delvd;
-            cd = Current;
+            var delvd = vd - InternalVoltage;
+            var cdhat = Current + Conduct * delvd;
+            var cd = Current;
 
             // check convergence
             double tol = config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(cd)) + config.AbsoluteTolerance;

@@ -66,33 +66,31 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            double vt, fact2, egfet, arg, pbfact, ratlog, ratio1, factlog, factor, bfactor, pbo, gmaold, gmanew;
-
             if (!_bp.Temperature.Given)
                 _bp.Temperature.Value = simulation.RealState.Temperature;
-            vt = _bp.Temperature * Circuit.KOverQ;
-            fact2 = _bp.Temperature / Circuit.ReferenceTemperature;
-            egfet = 1.16 - 7.02e-4 * _bp.Temperature * _bp.Temperature / (_bp.Temperature + 1108);
-            arg = -egfet / (2 * Circuit.Boltzmann * _bp.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
-                 Circuit.ReferenceTemperature));
-            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
+            var vt = _bp.Temperature * Circuit.KOverQ;
+            var fact2 = _bp.Temperature / Circuit.ReferenceTemperature;
+            var egfet = 1.16 - 7.02e-4 * _bp.Temperature * _bp.Temperature / (_bp.Temperature + 1108);
+            var arg = -egfet / (2 * Circuit.Boltzmann * _bp.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
+                                                                                                                Circuit.ReferenceTemperature));
+            var pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
 
-            ratlog = Math.Log(_bp.Temperature / _mbp.NominalTemperature);
-            ratio1 = _bp.Temperature / _mbp.NominalTemperature - 1;
-            factlog = ratio1 * _mbp.EnergyGap / vt + _mbp.TempExpIs * ratlog;
-            factor = Math.Exp(factlog);
+            var ratlog = Math.Log(_bp.Temperature / _mbp.NominalTemperature);
+            var ratio1 = _bp.Temperature / _mbp.NominalTemperature - 1;
+            var factlog = ratio1 * _mbp.EnergyGap / vt + _mbp.TempExpIs * ratlog;
+            var factor = Math.Exp(factlog);
             TempSaturationCurrent = _mbp.SatCur * factor;
-            bfactor = Math.Exp(ratlog * _mbp.BetaExponent);
+            var bfactor = Math.Exp(ratlog * _mbp.BetaExponent);
             TempBetaForward = _mbp.BetaF * bfactor;
             TempBetaReverse = _mbp.BetaR * bfactor;
             TempBeLeakageCurrent = _mbp.LeakBeCurrent * Math.Exp(factlog / _mbp.LeakBeEmissionCoefficient) / bfactor;
             TempBcLeakageCurrent = _mbp.LeakBcCurrent * Math.Exp(factlog / _mbp.LeakBcEmissionCoefficient) / bfactor;
 
-            pbo = (_mbp.PotentialBe - pbfact) / _modeltemp.Factor1;
-            gmaold = (_mbp.PotentialBe - pbo) / pbo;
+            var pbo = (_mbp.PotentialBe - pbfact) / _modeltemp.Factor1;
+            var gmaold = (_mbp.PotentialBe - pbo) / pbo;
             TempBeCap = _mbp.DepletionCapBe / (1 + _mbp.JunctionExpBe * (4e-4 * (_mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
             TempBePotential = fact2 * pbo + pbfact;
-            gmanew = (TempBePotential - pbo) / pbo;
+            var gmanew = (TempBePotential - pbo) / pbo;
             TempBeCap *= 1 + _mbp.JunctionExpBe * (4e-4 * (_bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
             pbo = (_mbp.PotentialBc - pbfact) / _modeltemp.Factor1;

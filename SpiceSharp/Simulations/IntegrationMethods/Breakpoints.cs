@@ -26,7 +26,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<double> _bps = new List<double> { 0.0, double.PositiveInfinity };
+        private readonly List<double> _bps = new List<double> { 0.0, double.PositiveInfinity };
 
         /// <summary>
         /// Wrapper for CKTsetBreak in cktsetbk.c

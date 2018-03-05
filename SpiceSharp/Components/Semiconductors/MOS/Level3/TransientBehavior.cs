@@ -222,25 +222,23 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            double effectiveLength,
-                oxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
-                sargsw, capgs = 0.0, capgd = 0.0, capgb = 0.0;
+            double sargsw, capgs = 0.0, capgd = 0.0, capgb = 0.0;
 
-            vbs = _load.VoltageBs;
-            vgs = _load.VoltageGs;
-            vds = _load.VoltageDs;
-            vbd = vbs - vds;
-            vgd = vgs - vds;
-            vgb = vgs - vbs;
-            von = _mbp.MosfetType * _load.Von;
-            vdsat = _mbp.MosfetType * _load.SaturationVoltageDs;
+            var vbs = _load.VoltageBs;
+            var vgs = _load.VoltageGs;
+            var vds = _load.VoltageDs;
+            var vbd = vbs - vds;
+            var vgd = vgs - vds;
+            var vgb = vgs - vbs;
+            var von = _mbp.MosfetType * _load.Von;
+            var vdsat = _mbp.MosfetType * _load.SaturationVoltageDs;
 
             _vgs.Current = vgs;
             _vbs.Current = vbs;
             _vds.Current = vds;
 
-            effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
-            oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
+            var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            var oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
 
             /* 
             * now we do the hard part of the bulk - drain and bulk - source
@@ -396,18 +394,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            double effectiveLength, gateSourceOverlapCap, gateDrainOverlapCap, gateBulkOverlapCap,
-                oxideCap, vgs, vds, vbs, vbd, vgb, vgd, von, vdsat,
-                sargsw, vgs1, vgd1, vgb1, capgs, capgd, capgb, gcgs, ceqgs, gcgd, ceqgd, gcgb, ceqgb, ceqbs, ceqbd;
+            double sargsw;
 
-            vbs = _load.VoltageBs;
-            vbd = _load.VoltageBd;
-            vgs = _load.VoltageGs;
-            vds = _load.VoltageDs;
-            vgd = _load.VoltageGs - _load.VoltageDs;
-            vgb = _load.VoltageGs - _load.VoltageBs;
-            von = _mbp.MosfetType * _load.Von;
-            vdsat = _mbp.MosfetType * _load.SaturationVoltageDs;
+            var vbs = _load.VoltageBs;
+            var vbd = _load.VoltageBd;
+            var vgs = _load.VoltageGs;
+            var vds = _load.VoltageDs;
+            var vgd = _load.VoltageGs - _load.VoltageDs;
+            var vgb = _load.VoltageGs - _load.VoltageBs;
+            var von = _mbp.MosfetType * _load.Von;
+            var vdsat = _mbp.MosfetType * _load.SaturationVoltageDs;
 
             _vds.Current = vds;
             _vbs.Current = vbs;
@@ -418,11 +414,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             double gbs = 0.0;
             double cbs = 0.0;
 
-            effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
-            gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
-            gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
-            gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
-            oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
+            var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            var gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
+            var gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
+            var gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
+            var oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
 
             /* 
             * now we do the hard part of the bulk - drain and bulk - source
@@ -581,12 +577,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             _capgd.Current = icapgd;
             _capgb.Current = icapgb;
 
-            vgs1 = _vgs[1];
-            vgd1 = vgs1 - _vds[1];
-            vgb1 = vgs1 - _vbs[1];
-            capgs = _capgs.Current + _capgs[1] + gateSourceOverlapCap;
-            capgd = _capgd.Current + _capgd[1] + gateDrainOverlapCap;
-            capgb = _capgb.Current + _capgb[1] + gateBulkOverlapCap;
+            var vgs1 = _vgs[1];
+            var vgd1 = vgs1 - _vds[1];
+            var vgb1 = vgs1 - _vbs[1];
+            var capgs = _capgs.Current + _capgs[1] + gateSourceOverlapCap;
+            var capgd = _capgd.Current + _capgd[1] + gateDrainOverlapCap;
+            var capgb = _capgb.Current + _capgb[1] + gateBulkOverlapCap;
 
             _qgs.Current = (vgs - vgs1) * capgs + _qgs[1];
             _qgd.Current = (vgd - vgd1) * capgd + _qgd[1];
@@ -597,18 +593,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
              * meyer"s capacitors
              */
             _qgs.Integrate();
-            gcgs = _qgs.Jacobian(capgs);
-            ceqgs = _qgs.RhsCurrent(gcgs, vgs);
+            var gcgs = _qgs.Jacobian(capgs);
+            var ceqgs = _qgs.RhsCurrent(gcgs, vgs);
             _qgd.Integrate();
-            gcgd = _qgd.Jacobian(capgd);
-            ceqgd = _qgd.RhsCurrent(gcgd, vgd);
+            var gcgd = _qgd.Jacobian(capgd);
+            var ceqgd = _qgd.RhsCurrent(gcgd, vgd);
             _qgb.Integrate();
-            gcgb = _qgb.Jacobian(capgb);
-            ceqgb = _qgb.RhsCurrent(gcgb, vgb);
+            var gcgb = _qgb.Jacobian(capgb);
+            var ceqgb = _qgb.RhsCurrent(gcgb, vgb);
 
             // Load current vector
-            ceqbs = _mbp.MosfetType * (cbs - gbs * vbs);
-            ceqbd = _mbp.MosfetType * (cbd - gbd * vbd);
+            var ceqbs = _mbp.MosfetType * (cbs - gbs * vbs);
+            var ceqbd = _mbp.MosfetType * (cbd - gbd * vbd);
             GatePtr.Value -= _mbp.MosfetType * (ceqgs + ceqgb + ceqgd);
             BulkPtr.Value -= ceqbs + ceqbd - _mbp.MosfetType * ceqgb;
             DrainPrimePtr.Value += ceqbd + _mbp.MosfetType * ceqgd;

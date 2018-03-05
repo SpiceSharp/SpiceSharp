@@ -12,12 +12,12 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
         /// <summary>
         /// Gets the relative pivot threshold
         /// </summary>
-        public double RelativePivotThreshold { get; private set; } = 1e-3;
+        public double RelativePivotThreshold { get; set; } = 1e-3;
 
         /// <summary>
         /// Gets the absolute pivot threshold
         /// </summary>
-        public double AbsolutePivotThreshold { get; private set; } = 0;
+        public double AbsolutePivotThreshold { get; set; } = 0;
 
         /// <summary>
         /// The maximum Markowitz count that will not result in Int32 overflow when squared

@@ -123,9 +123,6 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            double gNow;
-            double vCtrl;
-            bool previousState;
             bool currentState;
             var state = simulation.RealState;
 
@@ -146,11 +143,8 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             }
             else
             {
-                if (UseOldState)
-                    previousState = OldState;
-                else
-                    previousState = CurrentState;
-                vCtrl = state.Solution[_contPosourceNode] - state.Solution[_contNegateNode];
+                var previousState = UseOldState ? OldState : CurrentState;
+                var vCtrl = state.Solution[_contPosourceNode] - state.Solution[_contNegateNode];
 
                 // Calculate the current state
                 if (vCtrl > _mbp.Threshold + _mbp.Hysteresis)
@@ -168,7 +162,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
                     state.IsConvergent = false;
             }
 
-            gNow = currentState ? _modelload.OnConductance : _modelload.OffConductance;
+            var gNow = currentState ? _modelload.OnConductance : _modelload.OffConductance;
             Cond = gNow;
 
             // Load the Y-matrix

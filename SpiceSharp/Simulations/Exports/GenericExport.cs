@@ -11,12 +11,13 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private extractor
         /// </summary>
-        private Func<T> _myExtractor;
+        private readonly Func<T> _myExtractor;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="simulation">Simulation</param>
+        /// <param name="extractor">Method extracting the property</param>
         public GenericExport(Simulation simulation, Func<T> extractor)
             : base(simulation)
         {

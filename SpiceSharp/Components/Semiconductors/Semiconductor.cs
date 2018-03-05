@@ -15,15 +15,15 @@ namespace SpiceSharp.Components.Semiconductors
         /// <param name="oldVoltage">Old voltage</param>
         /// <param name="thermalVoltage">Thermal voltage</param>
         /// <param name="criticalVoltage">Critical voltage</param>
+        /// <param name="limited">Limited flag</param>
         /// <returns></returns>
         public static double LimitJunction(double newVoltage, double oldVoltage, double thermalVoltage, double criticalVoltage, ref bool limited)
         {
-            double arg;
             if (newVoltage > criticalVoltage && Math.Abs(newVoltage - oldVoltage) > thermalVoltage + thermalVoltage)
             {
                 if (oldVoltage > 0)
                 {
-                    arg = 1 + (newVoltage - oldVoltage) / thermalVoltage;
+                    var arg = 1 + (newVoltage - oldVoltage) / thermalVoltage;
                     if (arg > 0)
                         newVoltage = oldVoltage + thermalVoltage * Math.Log(arg);
                     else

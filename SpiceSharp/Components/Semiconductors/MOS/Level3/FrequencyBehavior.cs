@@ -175,20 +175,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            double effectiveLength,
-                oxideCap, vgs, vds, vbs, vbd, vgd, von, vdsat,
-                sargsw;
+            double sargsw;
 
-            vbs = _load.VoltageBs;
-            vbd = _load.VoltageBd;
-            vgs = _load.VoltageGs;
-            vds = _load.VoltageDs;
-            vgd = vgs - vds;
-            von = _mbp.MosfetType * _load.Von;
-            vdsat = _mbp.MosfetType * _load.SaturationVoltageDs;
+            var vbs = _load.VoltageBs;
+            var vbd = _load.VoltageBd;
+            var vgs = _load.VoltageGs;
+            var vds = _load.VoltageDs;
+            var vgd = vgs - vds;
+            var von = _mbp.MosfetType * _load.Von;
+            var vdsat = _mbp.MosfetType * _load.SaturationVoltageDs;
 
-            effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
-            oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
+            var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            var oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
 
             /* 
             * now we do the hard part of the bulk - drain and bulk - source
@@ -343,8 +341,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 
             var cstate = simulation.ComplexState;
             int xnrm, xrev;
-            double effectiveLength, gateSourceOverlapCap, gateDrainOverlapCap, gateBulkOverlapCap, capgs, capgd, capgb, xgs, xgd, xgb, xbd,
-                xbs;
 
             if (_load.Mode < 0)
             {
@@ -358,20 +354,20 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             }
 
             // Charge oriented model parameters
-            effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
-            gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
-            gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
-            gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
+            var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            var gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
+            var gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
+            var gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
 
             // Meyer"s model parameters
-            capgs = CapGs + CapGs + gateSourceOverlapCap;
-            capgd = CapGd + CapGd + gateDrainOverlapCap;
-            capgb = CapGb + CapGb + gateBulkOverlapCap;
-            xgs = capgs * cstate.Laplace.Imaginary;
-            xgd = capgd * cstate.Laplace.Imaginary;
-            xgb = capgb * cstate.Laplace.Imaginary;
-            xbd = CapBd * cstate.Laplace.Imaginary;
-            xbs = CapBs * cstate.Laplace.Imaginary;
+            var capgs = CapGs + CapGs + gateSourceOverlapCap;
+            var capgd = CapGd + CapGd + gateDrainOverlapCap;
+            var capgb = CapGb + CapGb + gateBulkOverlapCap;
+            var xgs = capgs * cstate.Laplace.Imaginary;
+            var xgd = capgd * cstate.Laplace.Imaginary;
+            var xgb = capgb * cstate.Laplace.Imaginary;
+            var xbd = CapBd * cstate.Laplace.Imaginary;
+            var xbs = CapBs * cstate.Laplace.Imaginary;
 
             // Load Y-matrix
             GateGatePtr.Value += new Complex(0.0, xgd + xgs + xgb);

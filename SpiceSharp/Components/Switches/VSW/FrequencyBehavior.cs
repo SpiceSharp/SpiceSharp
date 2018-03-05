@@ -96,10 +96,8 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            double gNow;
-
             // Get the current state
-            gNow = _load.CurrentState ? _modelload.OnConductance : _modelload.OffConductance;
+            var gNow = _load.CurrentState ? _modelload.OnConductance : _modelload.OffConductance;
 
             // Load Y-matrix
             PosPosPtr.Value += gNow;

@@ -55,7 +55,7 @@ namespace SpiceSharp.Algebra
         /// Constructor
         /// </summary>
         /// <param name="size">Size</param>
-        public SparseLinearSystem(int size)
+        protected SparseLinearSystem(int size)
         {
             Matrix = new SparseMatrix<T>(size);
             Rhs = new SparseVector<T>(size);

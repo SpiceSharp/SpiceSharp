@@ -18,8 +18,8 @@ namespace SpiceSharp.Circuits
         /// </summary>
         private bool _hasSource;
         private bool _hasGround;
-        private List<Tuple<Component, int, int>> _voltageDriven = new List<Tuple<Component, int, int>>();
-        private Dictionary<int, int> _connectedGroups = new Dictionary<int, int>();
+        private readonly List<Tuple<Component, int, int>> _voltageDriven = new List<Tuple<Component, int, int>>();
+        private readonly Dictionary<int, int> _connectedGroups = new Dictionary<int, int>();
         private int _cgroup;
         
         /// <summary>
@@ -152,8 +152,7 @@ namespace SpiceSharp.Circuits
         {
             // Remove the ground node and make a map for reducing the matrix complexity
             int index = 1;
-            Dictionary<int, int> map = new Dictionary<int, int>();
-            map.Add(0, 0);
+            Dictionary<int, int> map = new Dictionary<int, int> {{0, 0}};
             foreach (var vd in _voltageDriven)
             {
                 if (vd.Item2 != 0)
@@ -224,9 +223,8 @@ namespace SpiceSharp.Circuits
             if (a == b)
                 return;
 
-            int groupa, groupb;
-            bool hasa = _connectedGroups.TryGetValue(a, out groupa);
-            bool hasb = _connectedGroups.TryGetValue(b, out groupb);
+            bool hasa = _connectedGroups.TryGetValue(a, out var groupa);
+            bool hasb = _connectedGroups.TryGetValue(b, out var groupb);
 
             if (hasa && hasb)
             {

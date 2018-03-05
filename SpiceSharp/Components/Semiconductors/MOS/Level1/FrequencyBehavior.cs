@@ -337,8 +337,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             var cstate = simulation.ComplexState;
             int xnrm, xrev;
-            double effectiveLength, gateSourceOverlapCap, gateDrainOverlapCap, gateBulkOverlapCap, capgs, capgd, capgb, xgs, xgd, xgb, xbd,
-                xbs;
 
             if (_load.Mode < 0)
             {
@@ -352,18 +350,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             }
 
             // Meyer's model parameters
-            effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
-            gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
-            gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
-            gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
-            capgs = CapGs + CapGs + gateSourceOverlapCap;
-            capgd = CapGd + CapGd + gateDrainOverlapCap;
-            capgb = CapGb + CapGb + gateBulkOverlapCap;
-            xgs = capgs * cstate.Laplace.Imaginary;
-            xgd = capgd * cstate.Laplace.Imaginary;
-            xgb = capgb * cstate.Laplace.Imaginary;
-            xbd = CapBd * cstate.Laplace.Imaginary;
-            xbs = CapBs * cstate.Laplace.Imaginary;
+            var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            var gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
+            var gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
+            var gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
+            var capgs = CapGs + CapGs + gateSourceOverlapCap;
+            var capgd = CapGd + CapGd + gateDrainOverlapCap;
+            var capgb = CapGb + CapGb + gateBulkOverlapCap;
+            var xgs = capgs * cstate.Laplace.Imaginary;
+            var xgd = capgd * cstate.Laplace.Imaginary;
+            var xgb = capgb * cstate.Laplace.Imaginary;
+            var xbd = CapBd * cstate.Laplace.Imaginary;
+            var xbs = CapBs * cstate.Laplace.Imaginary;
 
             // Load Y-matrix
             GateGatePtr.Value += new Complex(0.0, xgd + xgs + xgb);

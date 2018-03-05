@@ -43,16 +43,10 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// <returns></returns>
         public static double LimitFet(double newVoltage, double oldVoltage, double threshold)
         {
-            double vtsthi;
-            double vtstlo;
-            double vtox;
-            double delv;
-            double vtemp;
-
-            vtsthi = Math.Abs(2 * (oldVoltage - threshold)) + 2;
-            vtstlo = vtsthi / 2 + 2;
-            vtox = threshold + 3.5;
-            delv = newVoltage - oldVoltage;
+            var vtsthi = Math.Abs(2 * (oldVoltage - threshold)) + 2;
+            var vtstlo = vtsthi / 2 + 2;
+            var vtox = threshold + 3.5;
+            var delv = newVoltage - oldVoltage;
 
             if (oldVoltage >= threshold)
             {
@@ -85,16 +79,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
                 else
                 {
                     /* middle region */
-                    if (delv <= 0)
-                    {
-                        /* decreasing */
-                        newVoltage = Math.Max(newVoltage, threshold - .5);
-                    }
-                    else
-                    {
-                        /* increasing */
-                        newVoltage = Math.Min(newVoltage, threshold + 4);
-                    }
+                    newVoltage = delv <= 0 ? Math.Max(newVoltage, threshold - .5) : Math.Min(newVoltage, threshold + 4);
                 }
             }
             else
@@ -109,7 +94,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
                 }
                 else
                 {
-                    vtemp = threshold + .5;
+                    var vtemp = threshold + .5;
                     if (newVoltage <= vtemp)
                     {
                         if (delv > vtstlo)
@@ -137,13 +122,11 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// <returns></returns>
         public static double LimitJunction(double newVoltage, double oldVoltage, double thermalVoltage, double criticalVoltage, out int check)
         {
-            double arg;
-
             if (newVoltage > criticalVoltage && Math.Abs(newVoltage - oldVoltage) > thermalVoltage + thermalVoltage)
             {
                 if (oldVoltage > 0)
                 {
-                    arg = 1 + (newVoltage - oldVoltage) / thermalVoltage;
+                    var arg = 1 + (newVoltage - oldVoltage) / thermalVoltage;
                     if (arg > 0)
                     {
                         newVoltage = oldVoltage + thermalVoltage * Math.Log(arg);
@@ -190,14 +173,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
             }
             else
             {
-                if (newVoltage > oldVoltage)
-                {
-                    newVoltage = Math.Min(newVoltage, 4);
-                }
-                else
-                {
-                    newVoltage = Math.Max(newVoltage, -.5);
-                }
+                newVoltage = newVoltage > oldVoltage ? Math.Min(newVoltage, 4) : Math.Max(newVoltage, -.5);
             }
             return newVoltage;
         }
@@ -216,13 +192,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// <param name="cox">Cox</param>
         public static void MeyerCharges(double vgs, double vgd, double von, double vdsat, out double capGs, out double capGd, out double capGb, double phi, double cox)
         {
-            double vds;
-            double vddif;
-            double vddif1;
-            double vddif2;
-            double vgst;
-
-            vgst = vgs - von;
+            var vgst = vgs - von;
             if (vgst <= -phi)
             {
                 capGb = cox / 2;
@@ -243,7 +213,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
             }
             else
             {
-                vds = vgs - vgd;
+                var vds = vgs - vgd;
                 if (vdsat <= vds)
                 {
                     capGs = cox / 3;
@@ -252,9 +222,9 @@ namespace SpiceSharp.Components.MosfetBehaviors
                 }
                 else
                 {
-                    vddif = 2.0 * vdsat - vds;
-                    vddif1 = vdsat - vds/*-1.0e-12*/;
-                    vddif2 = vddif * vddif;
+                    var vddif = 2.0 * vdsat - vds;
+                    var vddif1 = vdsat - vds;
+                    var vddif2 = vddif * vddif;
                     capGd = cox * (1.0 - vdsat * vdsat / vddif2) / 3;
                     capGs = cox * (1.0 - vddif1 * vddif1 / vddif2) / 3;
                     capGb = 0;

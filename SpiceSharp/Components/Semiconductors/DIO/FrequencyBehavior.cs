@@ -160,20 +160,20 @@ namespace SpiceSharp.Components.DiodeBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double arg, czero, sarg, capd, czof2;
+            double capd;
             double vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
 
             // charge storage elements
-            czero = _temp.TempJunctionCap * _bp.Area;
+            var czero = _temp.TempJunctionCap * _bp.Area;
             if (vd < _temp.TempDepletionCap)
             {
-                arg = 1 - vd / _mbp.JunctionPotential;
-                sarg = Math.Exp(-_mbp.GradingCoefficient * Math.Log(arg));
+                var arg = 1 - vd / _mbp.JunctionPotential;
+                var sarg = Math.Exp(-_mbp.GradingCoefficient * Math.Log(arg));
                 capd = _mbp.TransitTime * _load.Conduct + czero * sarg;
             }
             else
             {
-                czof2 = czero / _modeltemp.F2;
+                var czof2 = czero / _modeltemp.F2;
                 capd = _mbp.TransitTime * _load.Conduct + czof2 * (_modeltemp.F3 + _mbp.GradingCoefficient * vd / _mbp.JunctionPotential);
             }
             Capacitance = capd;
@@ -189,11 +189,10 @@ namespace SpiceSharp.Components.DiodeBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.ComplexState;
-            double gspr, geq, xceq;
 
-            gspr = _modeltemp.Conductance * _bp.Area;
-            geq = _load.Conduct;
-            xceq = Capacitance * state.Laplace.Imaginary;
+            var gspr = _modeltemp.Conductance * _bp.Area;
+            var geq = _load.Conduct;
+            var xceq = Capacitance * state.Laplace.Imaginary;
 
             // Load Y-matrix
             PosPosPtr.Value += gspr;

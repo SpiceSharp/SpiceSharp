@@ -35,7 +35,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Timesteps in history
         /// </summary>
-        private T[] _history;
+        private readonly T[] _history;
 
         /// <summary>
         /// Constructor

@@ -13,6 +13,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <typeparam name="T">Base type</typeparam>
         /// <param name="solver">Solver</param>
+        /// <param name="magnitude">Magnitude method</param>
         public static void PreorderModifiedNodalAnalysis<T>(this Solver<T> solver, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
             /*
@@ -38,10 +39,11 @@ namespace SpiceSharp.Simulations
              */
             MatrixElement<T> twin1 = null, twin2 = null;
             int start = 1;
-            bool swapped, anotherPassNeeded;
+            bool anotherPassNeeded;
 
             do
             {
+                bool swapped;
                 anotherPassNeeded = swapped = false;
 
                 // Search for zero diagonals with lone twins. 
@@ -108,22 +110,22 @@ namespace SpiceSharp.Simulations
         /// <param name="column">Column</param>
         /// <param name="twin1">First twin element</param>
         /// <param name="twin2">Second twin element</param>
+        /// <param name="magnitude">Magnitude method</param>
         /// <returns></returns>
         private static int CountTwins<T>(Solver<T> solver, int column, ref MatrixElement<T> twin1, ref MatrixElement<T> twin2, Func<T, double> magnitude) where T : IFormattable, IEquatable<T>
         {
-            int row, twins = 0;
-            MatrixElement<T> cTwin1, cTwin2;
+            int twins = 0;
 
             // Begin `CountTwins'. 
 
-            cTwin1 = solver.FirstInReorderedColumn(column);
+            var cTwin1 = solver.FirstInReorderedColumn(column);
             while (cTwin1 != null)
             {
                 // if (Math.Abs(pTwin1.Element.Magnitude) == 1.0)
                 if (magnitude(cTwin1.Value).Equals(1.0))
                 {
-                    row = cTwin1.Row;
-                    cTwin2 = solver.FirstInReorderedColumn(row);
+                    var row = cTwin1.Row;
+                    var cTwin2 = solver.FirstInReorderedColumn(row);
                     while (cTwin2 != null && cTwin2.Row != column)
                         cTwin2 = cTwin2.Below;
                     if (cTwin2 != null && magnitude(cTwin2.Value).Equals(1.0))

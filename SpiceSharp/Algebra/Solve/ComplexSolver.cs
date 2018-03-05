@@ -71,10 +71,9 @@ namespace SpiceSharp.Algebra
         {
             if (!IsFixed)
                 FixEquations();
-            MatrixElement<Complex> element, column;
 
             // Get the diagonal
-            element = Matrix.GetDiagonalElement(1);
+            var element = Matrix.GetDiagonalElement(1);
             if (element.Value.Equals(0.0))
                 return false;
 
@@ -82,7 +81,6 @@ namespace SpiceSharp.Algebra
             element.Value = 1.0 / element.Value; // Inverse(element.Value);
 
             // Start factorization
-            Complex mult;
             for (int step = 2; step <= Matrix.Size; step++)
             {
                 // Scatter
@@ -94,13 +92,13 @@ namespace SpiceSharp.Algebra
                 }
 
                 // Update column
-                column = Matrix.GetFirstInColumn(step);
+                var column = Matrix.GetFirstInColumn(step);
                 while (column.Row < step)
                 {
                     element = Matrix.GetDiagonalElement(column.Row);
 
                     // Mult = dest[row] / pivot
-                    mult = _dest[column.Row].Value * element.Value;
+                    var mult = _dest[column.Row].Value * element.Value;
                     _dest[column.Row].Value = mult;
                     while ((element = element.Below) != null)
                     {

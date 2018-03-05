@@ -96,12 +96,9 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            bool currentState;
-            double gNow;
-
             // Get the current state
-            currentState = _load.CurrentState;
-            gNow = currentState ? _modelload.OnConductance : _modelload.OffConductance;
+            var currentState = _load.CurrentState;
+            var gNow = currentState ? _modelload.OnConductance : _modelload.OffConductance;
 
             // Load the Y-matrix
             PosPosPtr.Value += gNow;

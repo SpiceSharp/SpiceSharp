@@ -33,7 +33,7 @@ namespace SpiceSharp.Simulations.Sweeps
         /// <summary>
         /// Multiplication factor
         /// </summary>
-        private double _freqDelta;
+        private readonly double _freqDelta;
 
         /// <summary>
         /// Constructor

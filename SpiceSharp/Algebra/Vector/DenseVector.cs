@@ -34,7 +34,7 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Values
         /// </summary>
-        private T[] _values;
+        private readonly T[] _values;
 
         /// <summary>
         /// Constructor

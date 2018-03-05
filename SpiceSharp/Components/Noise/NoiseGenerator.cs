@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Private variables
         /// </summary>
-        private int[] _pins;
+        private readonly int[] _pins;
 
         /// <summary>
         /// Constructor
@@ -101,7 +101,7 @@ namespace SpiceSharp.Components.NoiseSources
             double lnNdens = Math.Log(Math.Max(Noise, 1e-38));
 
             // Initialize the integrated noise if we just started
-            if (noise.DeltaFrequency == 0.0)
+            if (noise.DeltaFrequency.Equals(0.0))
             {
                 LogNoise = lnNdens;
                 TotalOutputNoise = 0.0;

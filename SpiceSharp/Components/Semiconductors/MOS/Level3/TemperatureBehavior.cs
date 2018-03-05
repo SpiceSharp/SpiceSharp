@@ -118,7 +118,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double vt, ratio, fact2, kt, egfet, arg, pbfact, ratio4, phio, pbo, gmaold, capfact, gmanew, czbd, czbdsw, sarg, sargsw, czbs,
+            double czbd, czbdsw,
+                czbs,
                 czbssw;
 
             /* perform the parameter defaulting */
@@ -127,17 +128,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             {
                 _bp.Temperature.Value = state.Temperature;
             }
-            vt = _bp.Temperature * Circuit.KOverQ;
-            ratio = _bp.Temperature / _mbp.NominalTemperature;
-            fact2 = _bp.Temperature / Circuit.ReferenceTemperature;
-            kt = _bp.Temperature * Circuit.Boltzmann;
-            egfet = 1.16 - 7.02e-4 * _bp.Temperature * _bp.Temperature / (_bp.Temperature + 1108);
-            arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
-            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
+            var vt = _bp.Temperature * Circuit.KOverQ;
+            var ratio = _bp.Temperature / _mbp.NominalTemperature;
+            var fact2 = _bp.Temperature / Circuit.ReferenceTemperature;
+            var kt = _bp.Temperature * Circuit.Boltzmann;
+            var egfet = 1.16 - 7.02e-4 * _bp.Temperature * _bp.Temperature / (_bp.Temperature + 1108);
+            var arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
+            var pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
 
             if (_mbp.DrainResistance.Given)
             {
-                if (_mbp.DrainResistance != 0)
+                if (!_mbp.DrainResistance.Value.Equals(0.0))
                 {
                     DrainConductance = 1 / _mbp.DrainResistance;
                 }
@@ -148,7 +149,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             }
             else if (_mbp.SheetResistance.Given)
             {
-                if (_mbp.SheetResistance != 0)
+                if (!_mbp.SheetResistance.Value.Equals(0.0))
                 {
                     DrainConductance = 1 / (_mbp.SheetResistance * _bp.DrainSquares);
                 }
@@ -163,7 +164,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             }
             if (_mbp.SourceResistance.Given)
             {
-                if (_mbp.SourceResistance != 0)
+                if (!_mbp.SourceResistance.Value.Equals(0.0))
                 {
                     SourceConductance = 1 / _mbp.SourceResistance;
                 }
@@ -174,7 +175,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             }
             else if (_mbp.SheetResistance.Given)
             {
-                if (_mbp.SheetResistance != 0)
+                if (!_mbp.SheetResistance.Value.Equals(0.0))
                 {
                     SourceConductance = 1 / (_mbp.SheetResistance * _bp.SourceSquares);
                 }
@@ -190,26 +191,26 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 
             if (_bp.Length - 2 * _mbp.LateralDiffusion <= 0)
                 throw new CircuitException("{0}: effective channel length less than zero".FormatString(Name));
-            ratio4 = ratio * Math.Sqrt(ratio);
+            var ratio4 = ratio * Math.Sqrt(ratio);
             TempTransconductance = _mbp.Transconductance / ratio4;
             TempSurfaceMobility = _mbp.SurfaceMobility / ratio4;
-            phio = (_mbp.Phi - _modeltemp.PbFactor1) / _modeltemp.Fact1;
+            var phio = (_mbp.Phi - _modeltemp.PbFactor1) / _modeltemp.Fact1;
             TempPhi = fact2 * phio + pbfact;
             TempVoltageBi = _mbp.Vt0 - _mbp.MosfetType * (_mbp.Gamma * Math.Sqrt(_mbp.Phi)) + .5 * (_modeltemp.EgFet1 - egfet) +
                 _mbp.MosfetType * .5 * (TempPhi - _mbp.Phi);
             TempVt0 = TempVoltageBi + _mbp.MosfetType * _mbp.Gamma * Math.Sqrt(TempPhi);
             TempSaturationCurrent = _mbp.JunctionSatCur * Math.Exp(-egfet / vt + _modeltemp.EgFet1 / _modeltemp.VtNominal);
             TempSaturationCurrentDensity = _mbp.JunctionSatCurDensity * Math.Exp(-egfet / vt + _modeltemp.EgFet1 / _modeltemp.VtNominal);
-            pbo = (_mbp.BulkJunctionPotential - _modeltemp.PbFactor1) / _modeltemp.Fact1;
-            gmaold = (_mbp.BulkJunctionPotential - pbo) / pbo;
-            capfact = 1 / (1 + _mbp.BulkJunctionBotGradingCoefficient * (4e-4 * (_mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
+            var pbo = (_mbp.BulkJunctionPotential - _modeltemp.PbFactor1) / _modeltemp.Fact1;
+            var gmaold = (_mbp.BulkJunctionPotential - pbo) / pbo;
+            var capfact = 1 / (1 + _mbp.BulkJunctionBotGradingCoefficient * (4e-4 * (_mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
             TempCapBd = _mbp.CapBd * capfact;
             TempCapBs = _mbp.CapBs * capfact;
             TempJunctionCap = _mbp.BulkCapFactor * capfact;
             capfact = 1 / (1 + _mbp.BulkJunctionSideGradingCoefficient * (4e-4 * (_mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
             TempJunctionCapSidewall = _mbp.SidewallCapFactor * capfact;
             TempBulkPotential = fact2 * pbo + pbfact;
-            gmanew = (TempBulkPotential - pbo) / pbo;
+            var gmanew = (TempBulkPotential - pbo) / pbo;
             capfact = 1 + _mbp.BulkJunctionBotGradingCoefficient * (4e-4 * (_bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
             TempCapBd *= capfact;
             TempCapBs *= capfact;
@@ -218,7 +219,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             TempJunctionCapSidewall *= capfact;
             TempDepletionCap = _mbp.ForwardCapDepletionCoefficient * TempBulkPotential;
 
-            if (_mbp.JunctionSatCurDensity.Value == 0 || _bp.DrainArea.Value == 0 || _bp.SourceArea.Value == 0)
+            if (_mbp.JunctionSatCurDensity.Value <= 0 || _bp.DrainArea.Value <= 0 || _bp.SourceArea.Value <= 0)
             {
                 SourceVCritical = DrainVCritical = vt * Math.Log(vt / (Circuit.Root2 * _mbp.JunctionSatCur));
             }
@@ -251,8 +252,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 czbdsw = 0;
             }
             arg = 1 - _mbp.ForwardCapDepletionCoefficient;
-            sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
-            sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
+            var sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
+            var sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
             CapBd = czbd;
             CapBdSidewall = czbdsw;
             F2D = czbd * (1 - _mbp.ForwardCapDepletionCoefficient * (1 + _mbp.BulkJunctionBotGradingCoefficient)) * sarg / arg + czbdsw * (1 -

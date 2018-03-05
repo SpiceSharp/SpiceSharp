@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets resistor noise sources
         /// </summary>
-        public ComponentNoise ResistorNoise { get; private set; } = new ComponentNoise(new NoiseThermal("thermal", 0, 1));
+        public ComponentNoise ResistorNoise { get; } = new ComponentNoise(new NoiseThermal("thermal", 0, 1));
 
         /// <summary>
         /// Constructor

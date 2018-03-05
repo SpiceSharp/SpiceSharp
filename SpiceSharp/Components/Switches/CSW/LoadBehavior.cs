@@ -158,9 +158,6 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            double gNow;
-            double iCtrl;
-            bool previousState;
             bool currentState;
             var state = simulation.RealState;
 
@@ -183,11 +180,12 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             else
             {
                 // Get the previous state
+                bool previousState;
                 if (UseOldState)
                     previousState = OldState;
                 else
                     previousState = CurrentState;
-                iCtrl = state.Solution[ControllingBranch];
+                var iCtrl = state.Solution[ControllingBranch];
 
                 // Calculate the current state
                 if (iCtrl > _mbp.Threshold + _mbp.Hysteresis)
@@ -206,7 +204,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             }
 
             // Get the current conduction
-            gNow = currentState ? _modelload.OnConductance : _modelload.OffConductance;
+            var gNow = currentState ? _modelload.OnConductance : _modelload.OffConductance;
             Cond = gNow;
 
             // Load the Y-matrix

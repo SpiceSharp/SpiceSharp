@@ -146,22 +146,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(solver));
 
             // Add a series collector node if necessary
-            if (_mbp.CollectorResistance.Value > 0)
-                CollectorPrimeNode = nodes.Create(Name.Grow("#col")).Index;
-            else
-                CollectorPrimeNode = _collectorNode;
+            CollectorPrimeNode = _mbp.CollectorResistance.Value > 0 ? nodes.Create(Name.Grow("#col")).Index : _collectorNode;
 
             // Add a series base node if necessary
-            if (_mbp.BaseResist.Value > 0)
-                BasePrimeNode = nodes.Create(Name.Grow("#base")).Index;
-            else
-                BasePrimeNode = _baseNode;
+            BasePrimeNode = _mbp.BaseResist.Value > 0 ? nodes.Create(Name.Grow("#base")).Index : _baseNode;
 
             // Add a series emitter node if necessary
-            if (_mbp.EmitterResistance.Value > 0)
-                EmitterPrimeNode = nodes.Create(Name.Grow("#emit")).Index;
-            else
-                EmitterPrimeNode = _emitterNode;
+            EmitterPrimeNode = _mbp.EmitterResistance.Value > 0 ? nodes.Create(Name.Grow("#emit")).Index : _emitterNode;
 
             // Get solver pointers
             CollectorCollectorPrimePtr = solver.GetMatrixElement(_collectorNode, CollectorPrimeNode);
@@ -235,34 +226,34 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double vt;
-            double csat, rbpr, rbpi, gcpr, gepr, oik, c2, vte, oikr, c4, vtc, xjrb, vbe, vbc;
-            double vce;
-            double vtn, evbe, gben, evben, cben, evbc, gbcn, evbcn, cbcn, q1, q2, arg, sqarg, cc, cex,
-                gex, arg1, arg2, cb, gx, gpi, gmu, go, gm;
-            double ceqbe, ceqbc;
+            double vbe;
+            double vbc;
+            double gben;
+            double cben;
+            double gbcn;
+            double cbcn;
 
-            vt = _bp.Temperature * Circuit.KOverQ;
+            var vt = _bp.Temperature * Circuit.KOverQ;
 
             // DC model parameters
-            csat = _temp.TempSaturationCurrent * _bp.Area;
-            rbpr = _mbp.MinimumBaseResistance / _bp.Area;
-            rbpi = _mbp.BaseResist / _bp.Area - rbpr;
-            gcpr = _modeltemp.CollectorConduct * _bp.Area;
-            gepr = _modeltemp.EmitterConduct * _bp.Area;
-            oik = _modeltemp.InverseRollOffForward / _bp.Area;
-            c2 = _temp.TempBeLeakageCurrent * _bp.Area;
-            vte = _mbp.LeakBeEmissionCoefficient * vt;
-            oikr = _modeltemp.InverseRollOffReverse / _bp.Area;
-            c4 = _temp.TempBcLeakageCurrent * _bp.Area;
-            vtc = _mbp.LeakBcEmissionCoefficient * vt;
-            xjrb = _mbp.BaseCurrentHalfResist * _bp.Area;
+            var csat = _temp.TempSaturationCurrent * _bp.Area;
+            var rbpr = _mbp.MinimumBaseResistance / _bp.Area;
+            var rbpi = _mbp.BaseResist / _bp.Area - rbpr;
+            var gcpr = _modeltemp.CollectorConduct * _bp.Area;
+            var gepr = _modeltemp.EmitterConduct * _bp.Area;
+            var oik = _modeltemp.InverseRollOffForward / _bp.Area;
+            var c2 = _temp.TempBeLeakageCurrent * _bp.Area;
+            var vte = _mbp.LeakBeEmissionCoefficient * vt;
+            var oikr = _modeltemp.InverseRollOffReverse / _bp.Area;
+            var c4 = _temp.TempBcLeakageCurrent * _bp.Area;
+            var vtc = _mbp.LeakBcEmissionCoefficient * vt;
+            var xjrb = _mbp.BaseCurrentHalfResist * _bp.Area;
 
             // Initialization
             if (state.Init == RealState.InitializationStates.InitJunction && state.Domain == RealState.DomainType.Time && state.UseDc && state.UseIc)
             {
                 vbe = _mbp.BipolarType * _bp.InitialVoltageBe;
-                vce = _mbp.BipolarType * _bp.InitialVoltageCe;
+                var vce = _mbp.BipolarType * _bp.InitialVoltageCe;
                 vbc = vbe - vce;
             }
             else if (state.Init == RealState.InitializationStates.InitJunction && !_bp.Off)
@@ -290,10 +281,10 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
 
             // Determine dc current and derivitives
-            vtn = vt * _mbp.EmissionCoefficientForward;
+            var vtn = vt * _mbp.EmissionCoefficientForward;
             if (vbe > -5 * vtn)
             {
-                evbe = Math.Exp(vbe / vtn);
+                var evbe = Math.Exp(vbe / vtn);
                 CurrentBe = csat * (evbe - 1) + state.Gmin * vbe;
                 CondBe = csat * evbe / vtn + state.Gmin;
                 if (c2.Equals(0)) // Avoid Exp()
@@ -303,7 +294,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 }
                 else
                 {
-                    evben = Math.Exp(vbe / vte);
+                    var evben = Math.Exp(vbe / vte);
                     cben = c2 * (evben - 1);
                     gben = c2 * evben / vte;
                 }
@@ -319,7 +310,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             vtn = vt * _mbp.EmissionCoefficientReverse;
             if (vbc > -5 * vtn)
             {
-                evbc = Math.Exp(vbc / vtn);
+                var evbc = Math.Exp(vbc / vtn);
                 CurrentBc = csat * (evbc - 1) + state.Gmin * vbc;
                 CondBc = csat * evbc / vtn + state.Gmin;
                 if (c4.Equals(0)) // Avoid Exp()
@@ -329,7 +320,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 }
                 else
                 {
-                    evbcn = Math.Exp(vbc / vtc);
+                    var evbcn = Math.Exp(vbc / vtc);
                     cbcn = c4 * (evbcn - 1);
                     gbcn = c4 * evbcn / vtc;
                 }
@@ -343,7 +334,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
 
             // Determine base charge terms
-            q1 = 1 / (1 - _modeltemp.InverseEarlyVoltForward * vbc - _modeltemp.InverseEarlyVoltReverse * vbe);
+            var q1 = 1 / (1 - _modeltemp.InverseEarlyVoltForward * vbc - _modeltemp.InverseEarlyVoltReverse * vbe);
             if (oik.Equals(0) && oikr.Equals(0)) // Avoid computations
             {
                 BaseCharge = q1;
@@ -352,9 +343,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                q2 = oik * CurrentBe + oikr * CurrentBc;
-                arg = Math.Max(0, 1 + 4 * q2);
-                sqarg = 1;
+                var q2 = oik * CurrentBe + oikr * CurrentBc;
+                var arg = Math.Max(0, 1 + 4 * q2);
+                double sqarg = 1;
                 if (!arg.Equals(0)) // Avoid Sqrt()
                     sqarg = Math.Sqrt(arg);
                 BaseCharge = q1 * (1 + sqarg) / 2;
@@ -371,27 +362,27 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 BaseCharge = BaseCharge
             };
             ExcessPhaseCalculation?.Invoke(this, ep);
-            cc = ep.CollectorCurrent;
-            cex = ep.ExcessPhaseCurrent;
-            gex = ep.ExcessPhaseConduct;
+            var cc = ep.CollectorCurrent;
+            var cex = ep.ExcessPhaseCurrent;
+            var gex = ep.ExcessPhaseConduct;
 
             // Determine dc incremental conductances
             cc = cc + (cex - CurrentBc) / BaseCharge - CurrentBc / _temp.TempBetaReverse - cbcn;
-            cb = CurrentBe / _temp.TempBetaForward + cben + CurrentBc / _temp.TempBetaReverse + cbcn;
-            gx = rbpr + rbpi / BaseCharge;
+            var cb = CurrentBe / _temp.TempBetaForward + cben + CurrentBc / _temp.TempBetaReverse + cbcn;
+            var gx = rbpr + rbpi / BaseCharge;
             if (!xjrb.Equals(0)) // Avoid calculations
             {
-                arg1 = Math.Max(cb / xjrb, 1e-9);
-                arg2 = (-1 + Math.Sqrt(1 + 14.59025 * arg1)) / 2.4317 / Math.Sqrt(arg1);
+                var arg1 = Math.Max(cb / xjrb, 1e-9);
+                var arg2 = (-1 + Math.Sqrt(1 + 14.59025 * arg1)) / 2.4317 / Math.Sqrt(arg1);
                 arg1 = Math.Tan(arg2);
                 gx = rbpr + 3 * rbpi * (arg1 - arg2) / arg2 / arg1 / arg1;
             }
             if (!gx.Equals(0)) // Do not divide by 0
                 gx = 1 / gx;
-            gpi = CondBe / _temp.TempBetaForward + gben;
-            gmu = CondBc / _temp.TempBetaReverse + gbcn;
-            go = (CondBc + (cex - CurrentBc) * Dqbdvc / BaseCharge) / BaseCharge;
-            gm = (gex - (cex - CurrentBc) * Dqbdve / BaseCharge) / BaseCharge - go;
+            var gpi = CondBe / _temp.TempBetaForward + gben;
+            var gmu = CondBc / _temp.TempBetaReverse + gbcn;
+            var go = (CondBc + (cex - CurrentBc) * Dqbdvc / BaseCharge) / BaseCharge;
+            var gm = (gex - (cex - CurrentBc) * Dqbdve / BaseCharge) / BaseCharge - go;
 
             VoltageBe = vbe;
             VoltageBc = vbc;
@@ -404,8 +395,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
             ConductanceX = gx;
 
             // Load current excitation vector
-            ceqbe = _mbp.BipolarType * (cc + cb - vbe * (gm + go + gpi) + vbc * go);
-            ceqbc = _mbp.BipolarType * (-cc + vbe * (gm + go) - vbc * (gmu + go));
+            var ceqbe = _mbp.BipolarType * (cc + cb - vbe * (gm + go + gpi) + vbc * go);
+            var ceqbc = _mbp.BipolarType * (-cc + vbe * (gm + go) - vbc * (gmu + go));
             CollectorPrimePtr.Value += ceqbc;
             BasePrimePtr.Value += -ceqbe - ceqbc;
             EmitterPrimePtr.Value += ceqbe;
@@ -444,16 +435,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var state = simulation.RealState;
             var config = simulation.BaseConfiguration;
 
-            double vbe, vbc, delvbe, delvbc, cchat, cbhat, cc, cb;
-
-            vbe = _mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitterPrimeNode]);
-            vbc = _mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
-            delvbe = vbe - VoltageBe;
-            delvbc = vbc - VoltageBe;
-            cchat = CollectorCurrent + (Transconductance + OutputConductance) * delvbe - (OutputConductance + ConductanceMu) * delvbc;
-            cbhat = BaseCurrent + ConductancePi * delvbe + ConductanceMu * delvbc;
-            cc = CollectorCurrent;
-            cb = BaseCurrent;
+            var vbe = _mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[EmitterPrimeNode]);
+            var vbc = _mbp.BipolarType * (state.Solution[BasePrimeNode] - state.Solution[CollectorPrimeNode]);
+            var delvbe = vbe - VoltageBe;
+            var delvbc = vbc - VoltageBe;
+            var cchat = CollectorCurrent + (Transconductance + OutputConductance) * delvbe - (OutputConductance + ConductanceMu) * delvbc;
+            var cbhat = BaseCurrent + ConductancePi * delvbe + ConductanceMu * delvbc;
+            var cc = CollectorCurrent;
+            var cb = BaseCurrent;
 
             // Check convergence
             double tol = config.RelativeTolerance * Math.Max(Math.Abs(cchat), Math.Abs(cc)) + config.AbsoluteTolerance;

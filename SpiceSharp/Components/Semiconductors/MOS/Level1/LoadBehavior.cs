@@ -220,13 +220,14 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double vt, effectiveLength, drainSatCur, sourceSatCur, beta,
-                vgs, vds, vbs, vbd, vgd, vgdo, von, evbs, evbd, ceqbs, ceqbd,
-                vdsat, cdrain, cdreq;
-            int check, xnrm, xrev;
+            double drainSatCur, sourceSatCur,
+                vgs, vds, vbs, vbd, vgd;
+            double von;
+            double vdsat, cdrain, cdreq;
+            int xnrm, xrev;
 
-            vt = Circuit.KOverQ * _bp.Temperature;
-            check = 1;
+            var vt = Circuit.KOverQ * _bp.Temperature;
+            var check = 1;
 
             /* DETAILPROF */
 
@@ -234,7 +235,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 			 * pre - computed, but for historical reasons are still done
 			 * here.  They may be moved at the expense of instance size
 			 */
-            effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
             
             // This is how Spice 3f5 implements it... There may be better ways to check for 0.0
             if (_temp.TempSaturationCurrentDensity.Equals(0) || _bp.DrainArea.Value.Equals(0) || _bp.SourceArea.Value.Equals(0))
@@ -248,7 +249,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 sourceSatCur = _temp.TempSaturationCurrentDensity * _bp.SourceArea;
             }
 
-            beta = _temp.TempTransconductance * _bp.Width / effectiveLength;
+            var beta = _temp.TempTransconductance * _bp.Width / effectiveLength;
             /* 
 			 * ok - now to do the start - up operations
 			 * 
@@ -269,7 +270,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 /* now some common crunching for some more useful quantities */
                 vbd = vbs - vds;
                 vgd = vgs - vds;
-                vgdo = VoltageGs - VoltageDs;
+                var vgdo = VoltageGs - VoltageDs;
                 von = _mbp.MosfetType * Von;
 
                 /* 
@@ -351,7 +352,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             }
             else
             {
-                evbs = Math.Exp(Math.Min(Transistor.MaximumExponentArgument, vbs / vt));
+                var evbs = Math.Exp(Math.Min(Transistor.MaximumExponentArgument, vbs / vt));
                 CondBs = sourceSatCur * evbs / vt + state.Gmin;
                 BsCurrent = sourceSatCur * (evbs - 1);
             }
@@ -363,7 +364,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             }
             else
             {
-                evbd = Math.Exp(Math.Min(Transistor.MaximumExponentArgument, vbd / vt));
+                var evbd = Math.Exp(Math.Min(Transistor.MaximumExponentArgument, vbd / vt));
                 CondBd = drainSatCur * evbd / vt + state.Gmin;
                 BdCurrent = drainSatCur * (evbd - 1);
             }
@@ -395,9 +396,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 				 * it is obvious that they can be made global 
 				 */
                 double arg;
-                double betap;
                 double sarg;
-                double vgst;
 
                 if ((Mode > 0 ? vbs : vbd) <= 0)
                 {
@@ -410,7 +409,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                     sarg = Math.Max(0, sarg);
                 }
                 von = _temp.TempVoltageBi * _mbp.MosfetType + _mbp.Gamma * sarg;
-                vgst = (Mode > 0 ? vgs : vgd) - von;
+                var vgst = (Mode > 0 ? vgs : vgd) - von;
                 vdsat = Math.Max(vgst, 0);
                 if (sarg <= 0)
                 {
@@ -435,7 +434,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                     /* 
 					 * saturation region
 					 */
-                    betap = beta * (1 + _mbp.Lambda * (vds * Mode));
+                    var betap = beta * (1 + _mbp.Lambda * (vds * Mode));
                     if (vgst <= vds * Mode)
                     {
                         cdrain = betap * vgst * vgst * .5;
@@ -471,7 +470,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             /* 
 			 * check convergence
 			 */
-            if (!_bp.Off || !(state.Init == RealState.InitializationStates.InitFix))
+            if (!_bp.Off || state.Init != RealState.InitializationStates.InitFix)
             {
                 if (check == 1)
                     state.IsConvergent = false;
@@ -488,8 +487,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             /* 
 			 * load current vector
 			 */
-            ceqbs = _mbp.MosfetType * (BsCurrent - (CondBs - state.Gmin) * vbs);
-            ceqbd = _mbp.MosfetType * (BdCurrent - (CondBd - state.Gmin) * vbd);
+            var ceqbs = _mbp.MosfetType * (BsCurrent - (CondBs - state.Gmin) * vbs);
+            var ceqbd = _mbp.MosfetType * (BdCurrent - (CondBd - state.Gmin) * vbd);
             if (Mode >= 0)
             {
                 xnrm = 1;
@@ -541,19 +540,19 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             var state = simulation.RealState;
             var config = simulation.BaseConfiguration;
 
-            double vbs, vgs, vds, vbd, vgd, vgdo, delvbs, delvbd, delvgs, delvds, delvgd, cdhat, cbhat;
+            double cdhat;
 
-            vbs = _mbp.MosfetType * (state.Solution[_bulkNode] - state.Solution[SourceNodePrime]);
-            vgs = _mbp.MosfetType * (state.Solution[_gateNode] - state.Solution[SourceNodePrime]);
-            vds = _mbp.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
-            vbd = vbs - vds;
-            vgd = vgs - vds;
-            vgdo = VoltageGs - VoltageDs;
-            delvbs = vbs - VoltageBs;
-            delvbd = vbd - VoltageBd;
-            delvgs = vgs - VoltageGs;
-            delvds = vds - VoltageDs;
-            delvgd = vgd - vgdo;
+            var vbs = _mbp.MosfetType * (state.Solution[_bulkNode] - state.Solution[SourceNodePrime]);
+            var vgs = _mbp.MosfetType * (state.Solution[_gateNode] - state.Solution[SourceNodePrime]);
+            var vds = _mbp.MosfetType * (state.Solution[DrainNodePrime] - state.Solution[SourceNodePrime]);
+            var vbd = vbs - vds;
+            var vgd = vgs - vds;
+            var vgdo = VoltageGs - VoltageDs;
+            var delvbs = vbs - VoltageBs;
+            var delvbd = vbd - VoltageBd;
+            var delvgs = vgs - VoltageGs;
+            var delvds = vds - VoltageDs;
+            var delvgd = vgd - vgdo;
 
             // these are needed for convergence testing
             // NOTE: Cd does not include contributions for transient simulations... Should check for a way to include them!
@@ -567,7 +566,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 cdhat = DrainCurrent - (CondBd - TransconductanceBs) * delvbd -
                     Transconductance * delvgd + CondDs * delvds;
             }
-            cbhat = BsCurrent + BdCurrent + CondBd * delvbd + CondBs * delvbs;
+            var cbhat = BsCurrent + BdCurrent + CondBd * delvbd + CondBs * delvbs;
 
             /*
              *  check convergence

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Behaviors
 {
@@ -13,12 +14,12 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Behaviors indexed by the entity that created them
         /// </summary>
-        private Dictionary<Identifier, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<Identifier, EntityBehaviorDictionary>();
+        private readonly Dictionary<Identifier, EntityBehaviorDictionary> _entityBehaviors = new Dictionary<Identifier, EntityBehaviorDictionary>();
 
         /// <summary>
         /// Lists of behaviors
         /// </summary>
-        private Dictionary<Type, List<Behavior>> _behaviors = new Dictionary<Type, List<Behavior>>();
+        private readonly Dictionary<Type, List<Behavior>> _behaviors = new Dictionary<Type, List<Behavior>>();
 
         /// <summary>
         /// Add a behavior to the collection
@@ -27,8 +28,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="behavior">Created behavior</param>
         public void Add(Identifier creator, Behavior behavior)
         {
-            EntityBehaviorDictionary eb;
-            if (!_entityBehaviors.TryGetValue(creator, out eb))
+            if (!_entityBehaviors.TryGetValue(creator, out var eb))
             {
                 eb = new EntityBehaviorDictionary(creator);
                 _entityBehaviors.Add(creator, eb);
@@ -36,9 +36,8 @@ namespace SpiceSharp.Behaviors
             eb.Register(behavior);
 
             // Store in the behavior list
-            Type basetype = behavior.GetType().BaseType;
-            List<Behavior> list;
-            if (!_behaviors.TryGetValue(basetype, out list))
+            Type basetype = behavior.GetType().BaseType ?? throw new CircuitException("Invalid behavior");
+            if (!_behaviors.TryGetValue(basetype, out var list))
             {
                 list = new List<Behavior>();
                 _behaviors.Add(basetype, list);

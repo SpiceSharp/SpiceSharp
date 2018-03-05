@@ -89,7 +89,6 @@ namespace SpiceSharp.IntegrationMethods
                 throw new ArgumentNullException(nameof(simulation));
 
             // Predict a solution
-            double a, b;
             switch (Order)
             {
                 case 1:
@@ -103,8 +102,8 @@ namespace SpiceSharp.IntegrationMethods
 
                 case 2:
                     // Adams-Bashforth method (second order for variable timesteps)
-                    b = -DeltaOld[0] / (2.0 * DeltaOld[1]);
-                    a = 1 - b;
+                    var b = -DeltaOld[0] / (2.0 * DeltaOld[1]);
+                    var a = 1 - b;
                     for (int i = 1; i <= Solutions[0].Length; i++)
                     {
                         double dd0 = (Solutions[0][i] - Solutions[1][i]) / DeltaOld[1];
