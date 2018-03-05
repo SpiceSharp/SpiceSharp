@@ -1,10 +1,10 @@
-﻿using SpiceSharp.Algebra;
-using SpiceSharp.Simulations;
-using SpiceSharp.Attributes;
-using SpiceSharp.Diagnostics;
-using SpiceSharp.Behaviors;
-using System;
+﻿using System;
 using System.Numerics;
+using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
 {

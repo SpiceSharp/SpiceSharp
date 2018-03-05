@@ -70,7 +70,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Build the arrays for all history points
         /// </summary>
-        public void BuildStates() => History.Clear((int index) => new DenseVector<double>(Size));
+        public void BuildStates() => History.Clear(index => new DenseVector<double>(Size));
 
         /// <summary>
         /// Integrate a state variable

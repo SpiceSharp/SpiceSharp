@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
-using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations;
+using LoadBehavior = SpiceSharp.Components.InductorBehaviors.LoadBehavior;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
@@ -15,7 +16,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// Necessary behaviors
         /// </summary>
         private BaseParameters _bp;
-        private InductorBehaviors.LoadBehavior _load1, _load2;
+        private LoadBehavior _load1, _load2;
 
         /// <summary>
         /// Matrix elements
@@ -49,8 +50,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
             var bp2 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor2");
 
             // Get behaviors
-            _load1 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor1");
-            _load2 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor2");
+            _load1 = provider.GetBehavior<LoadBehavior>("inductor1");
+            _load2 = provider.GetBehavior<LoadBehavior>("inductor2");
 
             // Calculate coupling factor
             Factor = _bp.Coupling * Math.Sqrt(bp1.Inductance * bp2.Inductance);

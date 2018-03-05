@@ -7,7 +7,7 @@ namespace SpiceSharp.Attributes
     /// be applied to a <see cref="Components.Component"/> to check for the existence of at
     /// least one independent source.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class)]
     public sealed class IndependentSourceAttribute : Attribute
     {
     }

@@ -1,7 +1,10 @@
 ﻿using System;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.MutualInductanceBehaviors;
+using SpiceSharp.Diagnostics;
+using FrequencyBehavior = SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior;
+using TransientBehavior = SpiceSharp.Components.MutualInductanceBehaviors.TransientBehavior;
 
 namespace SpiceSharp.Components
 {
@@ -85,7 +88,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="pool">Behaviors</param>
         /// <returns></returns>
-        protected override Behaviors.SetupDataProvider BuildSetupDataProvider(Behaviors.BehaviorPool pool)
+        protected override SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
         {
             // Base execution (will add entity behaviors and parameters for this mutual inductance)
             var data = base.BuildSetupDataProvider(pool);

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.Components;
-using SpiceSharp.Diagnostics;
 using System.Linq;
 using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
+using SpiceSharp.Components;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Circuits
 {
@@ -134,7 +134,7 @@ namespace SpiceSharp.Circuits
                     {
                         // Add connection between pins
                         if (conn.Pin1 >= 0 && conn.Pin2 >= 0)
-                            AddConnections(new int[] { nodes[conn.Pin1], nodes[conn.Pin2] });
+                            AddConnections(new[] { nodes[conn.Pin1], nodes[conn.Pin2] });
                         hasconnections = true;
                     }
                 }

@@ -73,7 +73,7 @@ namespace SpiceSharp.IntegrationMethods
             NodeHistoryPoint current = first;
             for (int i = 1; i < length; i++)
             {
-                current.Next = new NodeHistoryPoint()
+                current.Next = new NodeHistoryPoint
                 {
                     Previous = current
                 };
@@ -96,7 +96,7 @@ namespace SpiceSharp.IntegrationMethods
             NodeHistoryPoint current = first;
             for (int i = 1; i < length; i++)
             {
-                current.Next = new NodeHistoryPoint()
+                current.Next = new NodeHistoryPoint
                 {
                     Previous = current,
                     Value = defaultValue
@@ -119,14 +119,14 @@ namespace SpiceSharp.IntegrationMethods
                 throw new ArgumentNullException(nameof(generator));
 
             // Create a cycle
-            NodeHistoryPoint first = new NodeHistoryPoint()
+            NodeHistoryPoint first = new NodeHistoryPoint
             {
                 Value = generator(0)
             };
             NodeHistoryPoint current = first;
             for (int i = 1; i < length; i++)
             {
-                current.Next = new NodeHistoryPoint()
+                current.Next = new NodeHistoryPoint
                 {
                     Previous = current,
                     Value = generator(i)

@@ -38,7 +38,7 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The starting value</param>
         /// <param name="stop">The stopping value</param>
         /// <param name="step">The step value</param>
-        public SweepConfiguration(Identifier name, double start, double stop, double step) : base()
+        public SweepConfiguration(Identifier name, double start, double stop, double step)
         {
             ComponentName = name;
             Start = start;

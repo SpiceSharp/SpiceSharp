@@ -1,12 +1,12 @@
-﻿using SpiceSharp.Components.VoltageSwitchBehaviors;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Components.VoltageSwitchBehaviors;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// A voltage-controlled switch
     /// </summary>
-    [Pin(0, "S+"), Pin(1, "S-"), Pin(2, "SC+"), Pin(3, "SC-"), ConnectedAttribute(0, 1)]
+    [Pin(0, "S+"), Pin(1, "S-"), Pin(2, "SC+"), Pin(3, "SC-"), Connected(0, 1)]
     public class VoltageSwitch : Component
     {
         /// <summary>

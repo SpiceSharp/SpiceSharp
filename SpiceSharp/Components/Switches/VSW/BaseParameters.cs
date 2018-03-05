@@ -18,6 +18,6 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
         /// <summary>
         /// Gets the default state
         /// </summary>
-        public bool ZeroState { get; set; } = false;
+        public bool ZeroState { get; set; }
     }
 }

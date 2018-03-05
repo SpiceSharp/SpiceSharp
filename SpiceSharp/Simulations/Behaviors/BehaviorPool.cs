@@ -54,7 +54,7 @@ namespace SpiceSharp.Behaviors
         public Collection<T> GetBehaviorList<T>() where T : Behavior
         {
             if (_behaviors.TryGetValue(typeof(T), out List<Behavior> list))
-                return new Collection<T>(list.ConvertAll((Behavior b) => (T)b));
+                return new Collection<T>(list.ConvertAll(b => (T)b));
             return new Collection<T>();
         }
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using SpiceSharp.Diagnostics;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.IntegrationMethods
 {
@@ -40,27 +40,27 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the current order
         /// </summary>
-        public int Order { get; protected set; } = 0;
+        public int Order { get; protected set; }
 
         /// <summary>
         /// Gets the current time
         /// </summary>
-        public double Time { get; protected set; } = 0.0;
+        public double Time { get; protected set; }
 
         /// <summary>
         /// Gets or sets the current timestep
         /// </summary>
-        public double Delta { get; set; } = 0.0;
+        public double Delta { get; set; }
 
         /// <summary>
         /// Gets or sets the saved timestep
         /// </summary>
-        public double SaveDelta { get; set; } = 0.0;
+        public double SaveDelta { get; set; }
 
         /// <summary>
         /// Gets or sets the old timestep
         /// </summary>
-        public double OldDelta { get; set; } = 0.0;
+        public double OldDelta { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum delta timestep
@@ -75,12 +75,12 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the old solutions
         /// </summary>
-        public History<Vector<double>> Solutions { get; } = null;
+        public History<Vector<double>> Solutions { get; }
 
         /// <summary>
         /// Gets the prediction for the next timestep
         /// </summary>
-        public Vector<double> Prediction { get; protected set; } = null;
+        public Vector<double> Prediction { get; protected set; }
 
         /// <summary>
         /// The first order derivative of any variable that is
@@ -158,7 +158,7 @@ namespace SpiceSharp.IntegrationMethods
             if (Solutions[0] == null)
             {
                 // No solutions yet, so allocate vectors
-                Solutions.Clear((int index) => new DenseVector<double>(solution.Length));
+                Solutions.Clear(index => new DenseVector<double>(solution.Length));
                 Prediction = new DenseVector<double>(solution.Length);
                 solution.CopyTo(Solutions[0]);
             }

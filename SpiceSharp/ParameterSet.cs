@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp
@@ -80,8 +80,8 @@ namespace SpiceSharp
         {
             // Get the property by name
             var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public)
-                .Where((MemberInfo mi) => mi.IsDefined(typeof(PropertyNameAttribute)))
-                .Where((MemberInfo mi) =>
+                .Where(mi => mi.IsDefined(typeof(PropertyNameAttribute)))
+                .Where(mi =>
                 {
                     foreach (var sn in mi.GetCustomAttributes<PropertyNameAttribute>())
                     {
@@ -137,8 +137,8 @@ namespace SpiceSharp
         {
             // Get the property by name
             var members = GetType().GetMembers(BindingFlags.Instance | BindingFlags.Public)
-                .Where((MemberInfo mi) => mi.IsDefined(typeof(PropertyNameAttribute)))
-                .Where((MemberInfo mi) =>
+                .Where(mi => mi.IsDefined(typeof(PropertyNameAttribute)))
+                .Where(mi =>
                 {
                     foreach (var sn in mi.GetCustomAttributes<PropertyNameAttribute>())
                     {
@@ -169,7 +169,7 @@ namespace SpiceSharp
                         var paraminfo = mi.GetParameters();
                         if (paraminfo.Length == 1)
                         {
-                            mi.Invoke(this, new object[] { value });
+                            mi.Invoke(this, new[] { value });
                             isset = true;
                         }
                     }

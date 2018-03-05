@@ -1,7 +1,7 @@
 ﻿using System;
-using SpiceSharp.Diagnostics;
-using SpiceSharp.Circuits;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components
 {
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components
         /// Connect the component in the circuit
         /// </summary>
         /// <param name="nodes"></param>
-        public virtual void Connect(params Identifier[] nodes)
+        public void Connect(params Identifier[] nodes)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));

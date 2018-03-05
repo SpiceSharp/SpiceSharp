@@ -1,8 +1,8 @@
 ﻿using System;
-using SpiceSharp.Simulations;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
-using SpiceSharp.Algebra;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.VoltageSwitchBehaviors
 {

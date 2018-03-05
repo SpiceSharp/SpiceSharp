@@ -1,9 +1,10 @@
 ﻿using System;
-using SpiceSharp.Attributes;
 using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
-using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Components.BipolarBehaviors
 {
@@ -127,7 +128,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
-                throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
+                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             _collectorNode = pins[0];
             _baseNode = pins[1];
             _emitterNode = pins[2];
@@ -239,14 +240,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, arg, arg2,
-                xms, xtf, ovtf, xjtf, argtf, tmp, sarg, f1, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
+            double arg;
+            double sarg, f1, f2, f3;
 
             double cbe = _load.CurrentBe;
             double cbc = _load.CurrentBc;
-            double gbe = _load.CondBe;
             double qb = _load.BaseCharge;
-            double dqbdve = _load.Dqbdve;
 
             double vbe = _load.VoltageBe;
             double vbc = _load.VoltageBc;
@@ -256,28 +255,27 @@ namespace SpiceSharp.Components.BipolarBehaviors
             StateExcessPhaseCurrentBc.Current = _load.CurrentBe / _load.BaseCharge;
 
             // Charge storage elements
-            tf = _mbp.TransitTimeForward;
-            tr = _mbp.TransitTimeReverse;
-            czbe = _temp.TempBeCap * _bp.Area;
-            pe = _temp.TempBePotential;
-            xme = _mbp.JunctionExpBe;
-            cdis = _mbp.BaseFractionBcCap;
-            ctot = _temp.TempBcCap * _bp.Area;
-            czbc = ctot * cdis;
-            czbx = ctot - czbc;
-            pc = _temp.TempBcPotential;
-            xmc = _mbp.JunctionExpBc;
-            fcpe = _temp.TempDepletionCap;
-            czcs = _mbp.CapCs * _bp.Area;
-            ps = _mbp.PotentialSubstrate;
-            xms = _mbp.ExponentialSubstrate;
-            xtf = _mbp.TransitTimeBiasCoefficientForward;
-            ovtf = _modeltemp.TransitTimeVoltageBcFactor;
-            xjtf = _mbp.TransitTimeHighCurrentForward * _bp.Area;
+            double tf = _mbp.TransitTimeForward;
+            double tr = _mbp.TransitTimeReverse;
+            var czbe = _temp.TempBeCap * _bp.Area;
+            var pe = _temp.TempBePotential;
+            double xme = _mbp.JunctionExpBe;
+            double cdis = _mbp.BaseFractionBcCap;
+            var ctot = _temp.TempBcCap * _bp.Area;
+            var czbc = ctot * cdis;
+            var czbx = ctot - czbc;
+            var pc = _temp.TempBcPotential;
+            double xmc = _mbp.JunctionExpBc;
+            var fcpe = _temp.TempDepletionCap;
+            var czcs = _mbp.CapCs * _bp.Area;
+            double ps = _mbp.PotentialSubstrate;
+            double xms = _mbp.ExponentialSubstrate;
+            double xtf = _mbp.TransitTimeBiasCoefficientForward;
+            var ovtf = _modeltemp.TransitTimeVoltageBcFactor;
+            var xjtf = _mbp.TransitTimeHighCurrentForward * _bp.Area;
             if (!tf.Equals(0) && vbe > 0) // Avoid computations
             {
-                argtf = 0;
-                arg2 = 0;
+                double argtf = 0;
                 if (!xtf.Equals(0)) // Avoid computations
                 {
                     argtf = xtf;
@@ -285,16 +283,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
                     {
                         argtf = argtf * Math.Exp(vbc * ovtf);
                     }
-                    arg2 = argtf;
+
                     if (!xjtf.Equals(0)) // Avoid computations
                     {
-                        tmp = cbe / (cbe + xjtf);
+                        var tmp = cbe / (cbe + xjtf);
                         argtf = argtf * tmp * tmp;
-                        arg2 = argtf * (3 - tmp - tmp);
                     }
                 }
                 cbe = cbe * (1 + argtf) / qb;
-                gbe = (gbe * (1 + arg2) - cbe * dqbdve) / qb;
             }
             if (vbe < fcpe)
             {
@@ -307,11 +303,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 f1 = _temp.TempFactor1;
                 f2 = _modeltemp.F2;
                 f3 = _modeltemp.F3;
-                czbef2 = czbe / f2;
+                var czbef2 = czbe / f2;
                 StateChargeBe.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
                      fcpe * fcpe));
             }
-            fcpc = _temp.TempFactor4;
+            var fcpc = _temp.TempFactor4;
             f1 = _temp.TempFactor5;
             f2 = _modeltemp.F6;
             f3 = _modeltemp.F7;
@@ -323,7 +319,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                czbcf2 = czbc / f2;
+                var czbcf2 = czbc / f2;
                 StateChargeBc.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
                      fcpc * fcpc));
             }
@@ -335,7 +331,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                czbxf2 = czbx / f2;
+                var czbxf2 = czbx / f2;
                 StateChargeBx.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
             }
             if (vcs < 0)

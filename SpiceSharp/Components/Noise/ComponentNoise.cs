@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.Simulations;
 using SpiceSharp.Components.NoiseSources;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {

@@ -1,7 +1,8 @@
 ﻿using System;
-using SpiceSharp.Components.NoiseSources;
-using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Components.NoiseSources;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level3
 {
@@ -78,7 +79,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
-                throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
+                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             _drainNode = pins[0];
             _gateNode = pins[1];
             _sourceNode = pins[2];

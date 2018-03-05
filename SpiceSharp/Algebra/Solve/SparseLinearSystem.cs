@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 using SpiceSharp.Algebra.Solve;
 
@@ -232,7 +233,7 @@ namespace SpiceSharp.Algebra
         /// <returns></returns>
         public override string ToString()
         {
-            return ToString(null, System.Globalization.CultureInfo.CurrentCulture);
+            return ToString(null, CultureInfo.CurrentCulture);
         }
 
         /// <summary>

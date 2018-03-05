@@ -1,6 +1,6 @@
 ﻿using System;
-using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CurrentsourceBehaviors
 {

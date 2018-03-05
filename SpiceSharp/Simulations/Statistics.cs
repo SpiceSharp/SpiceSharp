@@ -11,7 +11,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the total number of iterations
         /// </summary>
-        public int Iterations { get; set; } = 0;
+        public int Iterations { get; set; }
 
         /// <summary>
         /// The total time spent solving equations
@@ -41,12 +41,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the number of timepoints calculated
         /// </summary>
-        public int TimePoints { get; set; } = 0;
+        public int TimePoints { get; set; }
 
         /// <summary>
         /// Gets or sets the total number of transient iterations
         /// </summary>
-        public int TransientIterations { get; set; } = 0;
+        public int TransientIterations { get; set; }
 
         /// <summary>
         /// The total time spent executing transient simulations
@@ -56,17 +56,17 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the total solving time during transient simulations
         /// </summary>
-        public TimeSpan TransientSolveTime { get; set; } = new TimeSpan();
+        public TimeSpan TransientSolveTime { get; set; }
 
         /// <summary>
         /// Gets the number of accepted timepoints
         /// </summary>
-        public int Accepted { get; set; } = 0;
+        public int Accepted { get; set; }
 
         /// <summary>
         /// Gets the number of rejected timepoints
         /// </summary>
-        public int Rejected { get; set; } = 0;
+        public int Rejected { get; set; }
 
         /// <summary>
         /// Clear the statistics

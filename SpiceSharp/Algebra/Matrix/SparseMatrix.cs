@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 using SpiceSharp.Algebra.Matrix;
 
@@ -389,7 +390,7 @@ namespace SpiceSharp.Algebra
         /// <returns></returns>
         public override string ToString()
         {
-            return ToString(null, System.Globalization.CultureInfo.CurrentCulture.NumberFormat);
+            return ToString(null, CultureInfo.CurrentCulture.NumberFormat);
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System;
-using SpiceSharp.Simulations;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.NoiseSources
 {
@@ -52,7 +52,7 @@ namespace SpiceSharp.Components.NoiseSources
         protected NoiseGenerator(string name, params int[] pins)
         {
             Name = name;
-            this._pins = pins;
+            _pins = pins;
             Nodes = null;
         }
 

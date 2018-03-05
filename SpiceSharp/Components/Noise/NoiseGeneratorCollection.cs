@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.NoiseSources
                 throw new ArgumentNullException(nameof(generators));
 
             foreach (var generator in generators)
-                this._generators.Add(generator);
+                _generators.Add(generator);
         }
 
         /// <summary>

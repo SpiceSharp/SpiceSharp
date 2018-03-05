@@ -16,7 +16,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Gets the first breakpoint
         /// </summary>
-        public double First { get; private set; } = 0.0;
+        public double First { get; private set; }
 
         /// <summary>
         /// Gets the delta set by the first two breakpoints
@@ -26,12 +26,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Private variables
         /// </summary>
-        private List<double> _bps = new List<double>() { 0.0, double.PositiveInfinity };
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public Breakpoints() { }
+        private List<double> _bps = new List<double> { 0.0, double.PositiveInfinity };
 
         /// <summary>
         /// Wrapper for CKTsetBreak in cktsetbk.c
@@ -57,12 +52,10 @@ namespace SpiceSharp.IntegrationMethods
                         Delta = First - timePoint;
                         return;
                     }
-                    else
-                    {
-                        First = _bps[0];
-                        Delta = _bps[1] - First;
-                        return;
-                    }
+
+                    First = _bps[0];
+                    Delta = _bps[1] - First;
+                    return;
                 }
             }
 

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
-using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CurrentSwitchBehaviors
 {
@@ -55,7 +56,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
-                throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
+                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
             _posNode = pins[0];
             _negNode = pins[1];
         }
@@ -100,7 +101,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
 
             // Get the current state
             currentState = _load.CurrentState;
-            gNow = currentState != false ? _modelload.OnConductance : _modelload.OffConductance;
+            gNow = currentState ? _modelload.OnConductance : _modelload.OffConductance;
 
             // Load the Y-matrix
             PosPosPtr.Value += gNow;

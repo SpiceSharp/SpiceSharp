@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Components;
+using SpiceSharp.Components.VoltagesourceBehaviors;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Simulations
 {
@@ -18,7 +19,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the currently active sweeps
         /// </summary>
-        public NestedSweeps Sweeps { get; protected set; } = null;
+        public NestedSweeps Sweeps { get; protected set; }
 
         /// <summary>
         /// Event that is called when normal iteration failed
@@ -115,7 +116,7 @@ namespace SpiceSharp.Simulations
 
                 // Get the parameter and save it for restoring later
                 if (component is VoltageSource vsrc)
-                    swept[i] = vsrc.ParameterSets.Get<Components.VoltagesourceBehaviors.BaseParameters>().DcValue;
+                    swept[i] = vsrc.ParameterSets.Get<BaseParameters>().DcValue;
                 else if (component is CurrentSource isrc)
                     swept[i] = isrc.ParameterSets.Get<Components.CurrentsourceBehaviors.BaseParameters>().DcValue;
                 else

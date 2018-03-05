@@ -1,7 +1,7 @@
 ﻿using System;
-using SpiceSharp.Simulations;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Algebra;
+using SpiceSharp.IntegrationMethods;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {

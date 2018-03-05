@@ -1,8 +1,8 @@
-﻿using SpiceSharp.Algebra;
-using SpiceSharp.Simulations;
-using SpiceSharp.IntegrationMethods;
+﻿using System;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
-using System;
+using SpiceSharp.IntegrationMethods;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.InductorBehaviors
 {
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             switch (propertyName)
             {
-                case "flux": return (RealState state) => _flux.Current;
+                case "flux": return state => _flux.Current;
                 default: return null;
             }
         }

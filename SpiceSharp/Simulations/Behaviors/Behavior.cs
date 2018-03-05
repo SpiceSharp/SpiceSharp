@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Reflection;
+using SpiceSharp.Attributes;
 using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
-using SpiceSharp.Attributes;
-using System.Reflection;
 
 namespace SpiceSharp.Behaviors
 {
@@ -117,7 +117,6 @@ namespace SpiceSharp.Behaviors
                         if (name.Name == property)
                         {
                             found = true;
-                            continue;
                         }
                     }
                     if (!found)
@@ -125,7 +124,7 @@ namespace SpiceSharp.Behaviors
 
                     // Return the getter!
                     var getmethod = (Func<TResult>)pi.GetGetMethod().CreateDelegate(typeof(Func<TResult>), this);
-                    return (T state) => getmethod();
+                    return state => getmethod();
                 }
             }
 

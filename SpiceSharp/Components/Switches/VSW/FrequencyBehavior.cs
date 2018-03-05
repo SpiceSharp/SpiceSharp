@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
-using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.VoltageSwitchBehaviors
 {
@@ -55,7 +56,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
-                throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
+                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             _posNode = pins[0];
             _negNode = pins[1];
         }
@@ -98,7 +99,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             double gNow;
 
             // Get the current state
-            gNow = _load.CurrentState == true ? _modelload.OnConductance : _modelload.OffConductance;
+            gNow = _load.CurrentState ? _modelload.OnConductance : _modelload.OffConductance;
 
             // Load Y-matrix
             PosPosPtr.Value += gNow;

@@ -1,7 +1,10 @@
 ﻿using System;
 using SpiceSharp.Attributes;
-using SpiceSharp.Diagnostics;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors;
+using SpiceSharp.Diagnostics;
+using FrequencyBehavior = SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior;
+using LoadBehavior = SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior;
 
 namespace SpiceSharp.Components
 {
@@ -102,7 +105,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="pool">Behavior pool</param>
         /// <returns></returns>
-        protected override Behaviors.SetupDataProvider BuildSetupDataProvider(Behaviors.BehaviorPool pool)
+        protected override SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
         {
             if (pool == null)
                 throw new ArgumentNullException(nameof(pool));

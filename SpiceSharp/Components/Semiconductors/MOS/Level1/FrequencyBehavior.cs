@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
-using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
@@ -87,7 +88,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
-                throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
+                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             _drainNode = pins[0];
             _gateNode = pins[1];
             _sourceNode = pins[2];
@@ -211,9 +212,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                  * Math.Exp(Math.Log()) we use this special case code to buy time.
                  * (as much as 10% of total job time!)
                  */
-                if (_mbp.BulkJunctionBotGradingCoefficient.Value == _mbp.BulkJunctionSideGradingCoefficient.Value)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(_mbp.BulkJunctionSideGradingCoefficient.Value))
                 {
-                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
                     {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     }
@@ -224,7 +225,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 }
                 else
                 {
-                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
@@ -233,7 +234,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                         /* NOSQRT */
                         sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
@@ -264,13 +265,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5 && _mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5) && _mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 }
                 else
                 {
-                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
@@ -279,7 +280,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                         /* NOSQRT */
                         sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
@@ -379,8 +380,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             DrainPrimeBulkPtr.Value += new Complex(-_load.CondBd + (xnrm - xrev) * _load.TransconductanceBs, -xbd);
             SourcePrimeGatePtr.Value -= new Complex((xnrm - xrev) * _load.Transconductance, xgs);
             SourcePrimeBulkPtr.Value -= new Complex(_load.CondBs + (xnrm - xrev) * _load.TransconductanceBs, xbs);
-            DrainDrainPtr.Value += (Complex)_temp.DrainConductance;
-            SourceSourcePtr.Value += (Complex)_temp.SourceConductance;
+            DrainDrainPtr.Value += _temp.DrainConductance;
+            SourceSourcePtr.Value += _temp.SourceConductance;
             DrainDrainPrimePtr.Value -= _temp.DrainConductance;
             SourceSourcePrimePtr.Value -= _temp.SourceConductance;
             DrainPrimeDrainPtr.Value -= _temp.DrainConductance;

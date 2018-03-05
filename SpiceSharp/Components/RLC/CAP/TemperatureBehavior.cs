@@ -1,6 +1,6 @@
 ﻿using System;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CapacitorBehaviors

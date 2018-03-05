@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using SpiceSharp.Circuits;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Circuits;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Simulations
 {

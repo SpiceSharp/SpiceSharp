@@ -1,6 +1,6 @@
 ﻿using System;
-using SpiceSharp.Circuits;
 using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 
 namespace SpiceSharp.Simulations
 {
@@ -83,7 +83,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Extra conductance that is added to all nodes to ground to aid convergence
         /// </summary>
-        public double DiagonalGmin { get; set; } = 0;
+        public double DiagonalGmin { get; set; }
 
         /// <summary>
         /// Gets or sets the initialization flag
@@ -111,7 +111,7 @@ namespace SpiceSharp.Simulations
         /// If true, the operating point will not be calculated, and initial 
         /// conditions will be used instead.
         /// </summary>
-        public bool UseIc { get; set; } = false;
+        public bool UseIc { get; set; }
 
         /// <summary>
         /// The current Gmin parameter
@@ -156,12 +156,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the real solution vector
         /// </summary>
-        public Vector<double> Solution { get; private set; } = null;
+        public Vector<double> Solution { get; private set; }
 
         /// <summary>
         /// Gets the old solution
         /// </summary>
-        public Vector<double> OldSolution { get; private set; } = null;
+        public Vector<double> OldSolution { get; private set; }
 
         /// <summary>
         /// Initialize the state

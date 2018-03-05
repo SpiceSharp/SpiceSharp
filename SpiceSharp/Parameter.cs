@@ -43,7 +43,7 @@ namespace SpiceSharp
         /// <returns></returns>
         public object Clone()
         {
-            var clone = new Parameter()
+            var clone = new Parameter
             {
                 Given = Given,
                 Value = Value

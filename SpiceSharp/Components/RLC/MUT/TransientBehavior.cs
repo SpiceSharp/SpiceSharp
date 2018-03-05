@@ -1,7 +1,9 @@
 ﻿using System;
 using SpiceSharp.Algebra;
-using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Components.InductorBehaviors;
+using SpiceSharp.Simulations;
+using LoadBehavior = SpiceSharp.Components.InductorBehaviors.LoadBehavior;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
@@ -14,7 +16,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// Necessary behaviors
         /// </summary>
         private BaseParameters _bp;
-        private InductorBehaviors.LoadBehavior _load1, _load2;
+        private LoadBehavior _load1, _load2;
         private InductorBehaviors.TransientBehavior _tran1, _tran2;
 
         /// <summary>
@@ -51,12 +53,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
 
             // Get parameters
             _bp = provider.GetParameterSet<BaseParameters>("entity");
-            var bp1 = provider.GetParameterSet<Components.InductorBehaviors.BaseParameters>("inductor1");
-            var bp2 = provider.GetParameterSet<Components.InductorBehaviors.BaseParameters>("inductor2");
+            var bp1 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor1");
+            var bp2 = provider.GetParameterSet<InductorBehaviors.BaseParameters>("inductor2");
 
             // Get behaviors
-            _load1 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor1");
-            _load2 = provider.GetBehavior<InductorBehaviors.LoadBehavior>("inductor2");
+            _load1 = provider.GetBehavior<LoadBehavior>("inductor1");
+            _load2 = provider.GetBehavior<LoadBehavior>("inductor2");
             _tran1 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor1");
             _tran2 = provider.GetBehavior<InductorBehaviors.TransientBehavior>("inductor2");
 
@@ -73,7 +75,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="args">Arguments</param>
-        private void UpdateFlux2(object sender, InductorBehaviors.UpdateFluxEventArgs args)
+        private void UpdateFlux2(object sender, UpdateFluxEventArgs args)
         {
             var state = args.State;
             args.Flux.Current += Factor * state.Solution[_load1.BranchEq];
@@ -84,7 +86,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="args">Arguments</param>
-        private void UpdateFlux1(object sender, InductorBehaviors.UpdateFluxEventArgs args)
+        private void UpdateFlux1(object sender, UpdateFluxEventArgs args)
         {
             var state = args.State;
             Cond = args.Flux.Jacobian(Factor);

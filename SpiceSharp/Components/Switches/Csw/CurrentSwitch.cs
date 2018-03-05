@@ -1,5 +1,8 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentSwitchBehaviors;
+using FrequencyBehavior = SpiceSharp.Components.CurrentSwitchBehaviors.FrequencyBehavior;
+using LoadBehavior = SpiceSharp.Components.CurrentSwitchBehaviors.LoadBehavior;
 
 namespace SpiceSharp.Components
 {
@@ -96,7 +99,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="pool">Behaviors</param>
         /// <returns></returns>
-        protected override Behaviors.SetupDataProvider BuildSetupDataProvider(Behaviors.BehaviorPool pool)
+        protected override SetupDataProvider BuildSetupDataProvider(BehaviorPool pool)
         {
             var provider = base.BuildSetupDataProvider(pool);
 

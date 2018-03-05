@@ -1,10 +1,11 @@
 ﻿using System;
+using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components.Semiconductors;
-using SpiceSharp.Attributes;
-using SpiceSharp.Algebra;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
-using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Components.BipolarBehaviors
 {
@@ -125,7 +126,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
-                throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
+                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             _collectorNode = pins[0];
             _baseNode = pins[1];
             _emitterNode = pins[2];
@@ -362,7 +363,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
 
             // Excess phase calculation
-            ExcessPhaseEventArgs ep = new ExcessPhaseEventArgs()
+            ExcessPhaseEventArgs ep = new ExcessPhaseEventArgs
             {
                 CollectorCurrent = 0.0,
                 ExcessPhaseCurrent = CurrentBe,

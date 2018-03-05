@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Circuits
@@ -50,9 +51,9 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Gets a node by identifier
         /// </summary>
-        /// <param id="id">Identifier</param>
+        /// <param name="id">Identifier</param>
         /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
+        [SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
         public Node this[Identifier id]
         {
             get => _map[id];
@@ -61,7 +62,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Find a node by index
         /// </summary>
-        /// <param id="index"></param>
+        /// <param name="index"></param>
         /// <returns></returns>
         public Node this[int index] => _nodes[index];
 
@@ -73,8 +74,8 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Map a node in the circuit
         /// </summary>
-        /// <param id="id">Identifier</param>
-        /// <param id="type">Type</param>
+        /// <param name="id">Identifier</param>
+        /// <param name="type">Type</param>
         /// <returns></returns>
         public Node Map(Identifier id, Node.NodeType type)
         {
@@ -122,7 +123,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Check if a node exists
         /// </summary>
-        /// <param id="id">Identifier</param>
+        /// <param name="id">Identifier</param>
         /// <returns></returns>
         public bool Contains(Identifier id) => _map.ContainsKey(id);
 

@@ -1,10 +1,10 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Simulations;
-using SpiceSharp.Diagnostics;
-using SpiceSharp.Attributes;
+﻿using System;
 using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using System;
+using SpiceSharp.Circuits;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.VoltagesourceBehaviors
 {
@@ -95,7 +95,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             switch (propertyName)
             {
                 case "i": return GetCurrent;
-                case "v": return (RealState state) => Voltage;
+                case "v": return state => Voltage;
                 case "p": return GetPower;
                 default: return null;
             }

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Numerics;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Algebra;
-using SpiceSharp.Simulations;
 using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.BipolarBehaviors
 {
@@ -97,7 +98,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
-                throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
+                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             _collectorNode = pins[0];
             _baseNode = pins[1];
             _emitterNode = pins[2];
@@ -184,14 +185,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            double tf, tr, czbe, pe, xme, cdis, ctot, czbc, czbx, pc, xmc, fcpe, czcs, ps, xms, xtf, ovtf, xjtf;
-            double arg, sarg, argtf, arg2, arg3, tmp, f2, f3, czbef2, fcpc, czbcf2, czbxf2;
+            double arg, sarg;
+            double f2, f3;
 
             // Get voltages
             var state = simulation.RealState;
             double vbe = _load.VoltageBe;
             double vbc = _load.VoltageBc;
-            double vbx = vbx = _mbp.BipolarType * (state.Solution[_baseNode] - state.Solution[_colPrimeNode]);
+            double vbx = _mbp.BipolarType * (state.Solution[_baseNode] - state.Solution[_colPrimeNode]);
             double vcs = _mbp.BipolarType * (state.Solution[_substrateNode] - state.Solution[_colPrimeNode]);
 
             // Get shared parameters
@@ -203,29 +204,29 @@ namespace SpiceSharp.Components.BipolarBehaviors
             double dqbdvc = _load.Dqbdvc;
 
             // Charge storage elements
-            tf = _mbp.TransitTimeForward;
-            tr = _mbp.TransitTimeReverse;
-            czbe = _temp.TempBeCap * _bp.Area;
-            pe = _temp.TempBePotential;
-            xme = _mbp.JunctionExpBe;
-            cdis = _mbp.BaseFractionBcCap;
-            ctot = _temp.TempBcCap * _bp.Area;
-            czbc = ctot * cdis;
-            czbx = ctot - czbc;
-            pc = _temp.TempBcPotential;
-            xmc = _mbp.JunctionExpBc;
-            fcpe = _temp.TempDepletionCap;
-            czcs = _mbp.CapCs * _bp.Area;
-            ps = _mbp.PotentialSubstrate;
-            xms = _mbp.ExponentialSubstrate;
-            xtf = _mbp.TransitTimeBiasCoefficientForward;
-            ovtf = _modeltemp.TransitTimeVoltageBcFactor;
-            xjtf = _mbp.TransitTimeHighCurrentForward * _bp.Area;
+            double tf = _mbp.TransitTimeForward;
+            double tr = _mbp.TransitTimeReverse;
+            var czbe = _temp.TempBeCap * _bp.Area;
+            var pe = _temp.TempBePotential;
+            double xme = _mbp.JunctionExpBe;
+            double cdis = _mbp.BaseFractionBcCap;
+            var ctot = _temp.TempBcCap * _bp.Area;
+            var czbc = ctot * cdis;
+            var czbx = ctot - czbc;
+            var pc = _temp.TempBcPotential;
+            double xmc = _mbp.JunctionExpBc;
+            var fcpe = _temp.TempDepletionCap;
+            var czcs = _mbp.CapCs * _bp.Area;
+            double ps = _mbp.PotentialSubstrate;
+            double xms = _mbp.ExponentialSubstrate;
+            double xtf = _mbp.TransitTimeBiasCoefficientForward;
+            var ovtf = _modeltemp.TransitTimeVoltageBcFactor;
+            var xjtf = _mbp.TransitTimeHighCurrentForward * _bp.Area;
             if (!tf.Equals(0) && vbe > 0) // Avoid computations
             {
-                argtf = 0;
-                arg2 = 0;
-                arg3 = 0;
+                double argtf = 0;
+                double arg2 = 0;
+                double arg3 = 0;
                 if (!xtf.Equals(0)) // Avoid computations
                 {
                     argtf = xtf;
@@ -236,7 +237,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                     arg2 = argtf;
                     if (!xjtf.Equals(0)) // Avoid computations
                     {
-                        tmp = cbe / (cbe + xjtf);
+                        var tmp = cbe / (cbe + xjtf);
                         argtf = argtf * tmp * tmp;
                         arg2 = argtf * (3 - tmp - tmp);
                     }
@@ -256,11 +257,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 f2 = _modeltemp.F2;
                 f3 = _modeltemp.F3;
-                czbef2 = czbe / f2;
+                var czbef2 = czbe / f2;
                 CapBe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
             }
 
-            fcpc = _temp.TempFactor4;
+            var fcpc = _temp.TempFactor4;
             f2 = _modeltemp.F6;
             f3 = _modeltemp.F7;
             if (vbc < fcpc)
@@ -271,7 +272,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                czbcf2 = czbc / f2;
+                var czbcf2 = czbc / f2;
                 CapBc = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
             }
             if (vbx < fcpc)
@@ -282,7 +283,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             }
             else
             {
-                czbxf2 = czbx / f2;
+                var czbxf2 = czbx / f2;
                 CapBx = czbxf2 * (f3 + xmc * vbx / pc);
             }
             if (vcs < 0)
@@ -307,16 +308,13 @@ namespace SpiceSharp.Components.BipolarBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var cstate = simulation.ComplexState;
-            double gcpr, gepr, gpi, gmu, go, td, gx;
-            Complex gm, xcpi, xcmu, xcbx, xccs, xcmcb;
-
-            gcpr = _modeltemp.CollectorConduct * _bp.Area;
-            gepr = _modeltemp.EmitterConduct * _bp.Area;
-            gpi = _load.ConductancePi;
-            gmu = _load.ConductanceMu;
-            gm = _load.Transconductance;
-            go = _load.OutputConductance;
-            td = _modeltemp.ExcessPhaseFactor;
+            var gcpr = _modeltemp.CollectorConduct * _bp.Area;
+            var gepr = _modeltemp.EmitterConduct * _bp.Area;
+            var gpi = _load.ConductancePi;
+            var gmu = _load.ConductanceMu;
+            Complex gm = _load.Transconductance;
+            var go = _load.OutputConductance;
+            var td = _modeltemp.ExcessPhaseFactor;
             if (!td.Equals(0)) // Avoid computations
             {
                 Complex arg = td * cstate.Laplace;
@@ -325,12 +323,12 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 gm = gm * Complex.Exp(-arg);
                 gm = gm - go;
             }
-            gx = _load.ConductanceX;
-            xcpi = CapBe * cstate.Laplace;
-            xcmu = CapBc * cstate.Laplace;
-            xcbx = CapBx * cstate.Laplace;
-            xccs = CapCs * cstate.Laplace;
-            xcmcb = CondCb * cstate.Laplace;
+            var gx = _load.ConductanceX;
+            var xcpi = CapBe * cstate.Laplace;
+            var xcmu = CapBc * cstate.Laplace;
+            var xcbx = CapBx * cstate.Laplace;
+            var xccs = CapCs * cstate.Laplace;
+            var xcmcb = CondCb * cstate.Laplace;
 
             CollectorCollectorPtr.Value += gcpr;
             BaseBasePtr.Value += gx + xcbx;

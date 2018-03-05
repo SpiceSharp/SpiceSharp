@@ -1,8 +1,9 @@
-﻿using SpiceSharp.Algebra;
-using SpiceSharp.Simulations;
-using SpiceSharp.Circuits;
+﻿using System;
+using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
-using System;
+using SpiceSharp.Circuits;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.InductorBehaviors
 {
@@ -40,10 +41,10 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             switch (propertyName)
             {
-                case "v": return (RealState state) => state.Solution[_posNode] - state.Solution[_negNode];
+                case "v": return state => state.Solution[_posNode] - state.Solution[_negNode];
                 case "i":
-                case "c": return (RealState state) => state.Solution[BranchEq];
-                case "p": return (RealState state) => (state.Solution[_posNode] - state.Solution[_negNode]) * state.Solution[BranchEq];
+                case "c": return state => state.Solution[BranchEq];
+                case "p": return state => (state.Solution[_posNode] - state.Solution[_negNode]) * state.Solution[BranchEq];
                 default: return null;
             }
         }
@@ -66,7 +67,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 2)
-                throw new Diagnostics.CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
+                throw new CircuitException("Pin count mismatch: 2 pins expected, {0} given".FormatString(pins.Length));
             _posNode = pins[0];
             _negNode = pins[1];
         }

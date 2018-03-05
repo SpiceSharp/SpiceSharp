@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 
@@ -14,8 +15,8 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Private variables
         /// </summary>
-        private Dictionary<Identifier, Entity> _objects = new Dictionary<Identifier, Entity>();
-        private List<Entity> _ordered = new List<Entity>();
+        private readonly Dictionary<Identifier, Entity> _objects = new Dictionary<Identifier, Entity>();
+        private readonly List<Entity> _ordered = new List<Entity>();
 
         /// <summary>
         /// Gets whether or not the list is already ordered
@@ -31,11 +32,11 @@ namespace SpiceSharp.Circuits
         }
 
         /// <summary>
-        /// Search for an object by path
+        /// Search for an object by id
         /// </summary>
-        /// <param id="path">The path of the object</param>
+        /// <param name="id">ID</param>
         /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
+        [SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
         public Entity this[Identifier id] => _objects[id];
         
         /// <summary>
@@ -56,7 +57,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Add one or more circuit objects
         /// </summary>
-        /// <param id="cs">The objects that need to be added</param>
+        /// <param name="cs">The objects that need to be added</param>
         public void Add(params Entity[] cs)
         {
             if (cs == null)
@@ -75,7 +76,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Remove specific circuit objects from the collection
         /// </summary>
-        /// <param id="names">Names of the objects that need to be deleted</param>
+        /// <param name="ids">Names of the objects that need to be deleted</param>
         public void Remove(params Identifier[] ids)
         {
             if (ids == null)
@@ -94,22 +95,22 @@ namespace SpiceSharp.Circuits
         /// Check if a component exists
         /// Multiple names can be specified, in which case the first names will refer to subcircuits
         /// </summary>
-        /// <param id="id">A list of names. If there are multiple names, the first names will refer to a subcircuit</param>
+        /// <param name="id">A list of names. If there are multiple names, the first names will refer to a subcircuit</param>
         /// <returns></returns>
         public bool Contains(Identifier id) => _objects.ContainsKey(id);
 
         /// <summary>
         /// Gets a circuit object
         /// </summary>
-        /// <param id="id">Identifier</param>
-        /// <param id="obj"></param>
+        /// <param name="id">Identifier</param>
+        /// <param name="obj"></param>
         /// <returns></returns>
         public bool TryGetEntity(Identifier id, out Entity obj) => _objects.TryGetValue(id, out obj);
 
         /// <summary>
         /// Gets all objects of a specific type
         /// </summary>
-        /// <param id="type">The type of objects you wish to find</param>
+        /// <param name="type">The type of objects you wish to find</param>
         /// <returns></returns>
         public Entity[] ByType(Type type)
         {
@@ -155,9 +156,7 @@ namespace SpiceSharp.Circuits
             }
 
             // Sort the list based on priority
-            _ordered.Sort((Entity a, Entity b) => {
-                return b.Priority.CompareTo(a.Priority);
-            });
+            _ordered.Sort((a, b) => b.Priority.CompareTo(a.Priority));
             _isOrdered = true;
         }
 

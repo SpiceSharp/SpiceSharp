@@ -1,6 +1,6 @@
 ﻿using System;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.ResistorBehaviors
@@ -52,8 +52,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             double factor;
-            double difference;
-            double reSresist = _bp.Resistance;
+            double resist = _bp.Resistance;
 
             // Default Value Processing for Resistor Instance
             if (!_bp.Temperature.Given)
@@ -63,24 +62,23 @@ namespace SpiceSharp.Components.ResistorBehaviors
 
             if (_mbp != null)
             {
-                if (_mbp.SheetResistance.Given && (_mbp.SheetResistance != 0) && (_bp.Length != 0))
-                    reSresist = _mbp.SheetResistance * (_bp.Length - _mbp.Narrow) / (_bp.Width - _mbp.Narrow);
+                if (_mbp.SheetResistance.Given && _mbp.SheetResistance > 0 && _bp.Length > 0)
+                    resist = _mbp.SheetResistance * (_bp.Length - _mbp.Narrow) / (_bp.Width - _mbp.Narrow);
                 else
                 {
                     CircuitWarning.Warning(this, "{0}: resistance=0, set to 1000".FormatString(Name));
-                    reSresist = 1000;
+                    resist = 1000;
                 }
 
-                difference = _bp.Temperature - _mbp.NominalTemperature;
-                factor = 1.0 + (_mbp.TemperatureCoefficient1) * difference + (_mbp.TemperatureCoefficient2) * difference * difference;
+                var difference = _bp.Temperature - _mbp.NominalTemperature;
+                factor = 1.0 + _mbp.TemperatureCoefficient1 * difference + _mbp.TemperatureCoefficient2 * difference * difference;
             }
             else
             {
-                difference = _bp.Temperature - 300.15;
                 factor = 1.0;
             }
 
-            Conductance = 1.0 / (reSresist * factor);
+            Conductance = 1.0 / (resist * factor);
         }
     }
 }

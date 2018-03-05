@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Numerics;
 using SpiceSharp.Algebra;
-using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level2
 {
@@ -90,7 +91,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
-                throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
+                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             _drainNode = pins[0];
             _gateNode = pins[1];
             _sourceNode = pins[2];
@@ -174,19 +175,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            double effectiveLength,
-                oxideCap, vgs, vbs, vbd, vgd, von,
-                vdsat, sargsw;
+            double sargsw;
 
-            vbs = _load.VoltageBs;
-            vbd = _load.VoltageBd;
-            vgs = _load.VoltageGs;
-            vgd = _load.VoltageGs - _load.VoltageDs;
-            von = _mbp.MosfetType * _load.Von;
-            vdsat = _mbp.MosfetType * _load.SaturationVoltageDs;
+            var vbs = _load.VoltageBs;
+            var vbd = _load.VoltageBd;
+            var vgs = _load.VoltageGs;
+            var vgd = _load.VoltageGs - _load.VoltageDs;
+            var von = _mbp.MosfetType * _load.Von;
+            var vdsat = _mbp.MosfetType * _load.SaturationVoltageDs;
 
-            effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
-            oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
+            var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            var oxideCap = _modeltemp.OxideCapFactor * effectiveLength * _bp.Width;
 
             /* 
             * now we do the hard part of the bulk - drain and bulk - source
@@ -212,9 +211,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (_mbp.BulkJunctionBotGradingCoefficient.Value == _mbp.BulkJunctionSideGradingCoefficient)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(_mbp.BulkJunctionSideGradingCoefficient))
                 {
-                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
                     {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     }
@@ -225,7 +224,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 }
                 else
                 {
-                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
@@ -234,7 +233,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                         /* NOSQRT */
                         sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
@@ -262,13 +261,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5 && _mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5) && _mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 }
                 else
                 {
-                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
@@ -277,7 +276,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                         /* NOSQRT */
                         sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
@@ -325,8 +324,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
 
             var cstate = simulation.ComplexState;
             int xnrm, xrev;
-            double effectiveLength, gateSourceOverlapCap, gateDrainOverlapCap, gateBulkOverlapCap, capgs, capgd, capgb, xgs, xgd, xgb, xbd,
-                xbs;
 
             if (_load.Mode < 0)
             {
@@ -340,18 +337,18 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             }
 
             // Meyer's model parameters
-            effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
-            gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
-            gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
-            gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
-            capgs = CapGs + CapGs + gateSourceOverlapCap;
-            capgd = CapGd + CapGd + gateDrainOverlapCap;
-            capgb = CapGb + CapGb + gateBulkOverlapCap;
-            xgs = capgs * cstate.Laplace.Imaginary;
-            xgd = capgd * cstate.Laplace.Imaginary;
-            xgb = capgb * cstate.Laplace.Imaginary;
-            xbd = CapBd * cstate.Laplace.Imaginary;
-            xbs = CapBs * cstate.Laplace.Imaginary;
+            var effectiveLength = _bp.Length - 2 * _mbp.LateralDiffusion;
+            var gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
+            var gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
+            var gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
+            var capgs = CapGs + CapGs + gateSourceOverlapCap;
+            var capgd = CapGd + CapGd + gateDrainOverlapCap;
+            var capgb = CapGb + CapGb + gateBulkOverlapCap;
+            var xgs = capgs * cstate.Laplace.Imaginary;
+            var xgd = capgd * cstate.Laplace.Imaginary;
+            var xgb = capgb * cstate.Laplace.Imaginary;
+            var xbd = CapBd * cstate.Laplace.Imaginary;
+            var xbs = CapBs * cstate.Laplace.Imaginary;
 
             // Load Y-matrix
             GateGatePtr.Value += new Complex(0.0, xgd + xgs + xgb);
@@ -368,8 +365,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             DrainPrimeBulkPtr.Value += new Complex(-_load.CondBd + (xnrm - xrev) * _load.TransconductanceBs, -xbd);
             SourcePrimeGatePtr.Value -= new Complex((xnrm - xrev) * _load.Transconductance, xgs);
             SourcePrimeBulkPtr.Value -= new Complex(_load.CondBs + (xnrm - xrev) * _load.TransconductanceBs, xbs);
-            DrainDrainPtr.Value += (Complex)_temp.DrainConductance;
-            SourceSourcePtr.Value += (Complex)_temp.SourceConductance;
+            DrainDrainPtr.Value += _temp.DrainConductance;
+            SourceSourcePtr.Value += _temp.SourceConductance;
             DrainDrainPrimePtr.Value -= _temp.DrainConductance;
             SourceSourcePrimePtr.Value -= _temp.SourceConductance;
             DrainPrimeDrainPtr.Value -= _temp.DrainConductance;

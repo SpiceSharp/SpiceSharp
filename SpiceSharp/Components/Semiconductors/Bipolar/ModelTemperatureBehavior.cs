@@ -1,7 +1,7 @@
 ﻿using System;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.BipolarBehaviors

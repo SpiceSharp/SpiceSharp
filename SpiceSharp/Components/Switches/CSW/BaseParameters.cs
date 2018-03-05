@@ -18,6 +18,6 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// <summary>
         /// The initial state
         /// </summary>
-        public bool ZeroState { get; set; } = false;
+        public bool ZeroState { get; set; }
     }
 }

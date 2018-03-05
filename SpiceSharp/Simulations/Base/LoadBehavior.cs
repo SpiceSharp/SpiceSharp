@@ -1,5 +1,5 @@
-﻿using SpiceSharp.Circuits;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
+using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors

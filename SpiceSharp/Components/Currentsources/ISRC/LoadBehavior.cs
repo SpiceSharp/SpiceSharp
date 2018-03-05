@@ -1,10 +1,10 @@
-﻿using SpiceSharp.Diagnostics;
-using SpiceSharp.Simulations;
+﻿using System;
+using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Algebra;
-using System;
 using SpiceSharp.Circuits;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CurrentsourceBehaviors
 {
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 case "v": return GetV;
                 case "p": return GetP;
                 case "i":
-                case "c": return (RealState state) => Current;
+                case "c": return state => Current;
                 default: return null;
             }
         }
@@ -88,10 +88,10 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
             if (!_bp.DcValue.Given)
             {
                 // no DC value - either have a transient value or none
-                if (_bp.Waveform != null)
-                    CircuitWarning.Warning(this, "{0} has no DC value, transient time 0 value used".FormatString(Name));
-                else
-                    CircuitWarning.Warning(this, "{0} has no value, DC 0 assumed".FormatString(Name));
+                CircuitWarning.Warning(this,
+                    _bp.Waveform != null
+                        ? "{0} has no DC value, transient time 0 value used".FormatString(Name)
+                        : "{0} has no value, DC 0 assumed".FormatString(Name));
             }
         }
         
@@ -133,9 +133,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
                 throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-
-            double value = 0.0;
-            double time = 0.0;
+            double value, time = 0.0;
 
             // Time domain analysis
             if (state.Domain == RealState.DomainType.Time)

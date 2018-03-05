@@ -1,9 +1,10 @@
 ﻿using System;
-using SpiceSharp.Attributes;
-using SpiceSharp.Simulations;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.IntegrationMethods;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
@@ -109,7 +110,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             if (pins == null)
                 throw new ArgumentNullException(nameof(pins));
             if (pins.Length != 4)
-                throw new Diagnostics.CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
+                throw new CircuitException("Pin count mismatch: 4 pins expected, {0} given".FormatString(pins.Length));
             _drainNode = pins[0];
             _gateNode = pins[1];
             _sourceNode = pins[2];
@@ -223,7 +224,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 				throw new ArgumentNullException(nameof(simulation));
 
             double arg, sarg, sargsw;
-            double capgs, capgd, capgb;
 
             // Get voltages
             double vbd = _load.VoltageBd;
@@ -242,20 +242,20 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             if (vbs < _temp.TempDepletionCap)
             {
                 arg = 1 - vbs / _temp.TempBulkPotential;
-                if (_mbp.BulkJunctionBotGradingCoefficient.Value == _mbp.BulkJunctionSideGradingCoefficient.Value)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(_mbp.BulkJunctionSideGradingCoefficient.Value))
                 {
-                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     else
                         sarg = sargsw = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                 }
                 else
                 {
-                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
                         sarg = 1 / Math.Sqrt(arg);
                     else
                         sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
-                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                         sargsw = 1 / Math.Sqrt(arg);
                     else
                         sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
@@ -269,15 +269,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             if (vbd < _temp.TempDepletionCap)
             {
                 arg = 1 - vbd / _temp.TempBulkPotential;
-                if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5 && _mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5) && _mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 else
                 {
-                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
                         sarg = 1 / Math.Sqrt(arg);
                     else
                         sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
-                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                         sargsw = 1 / Math.Sqrt(arg);
                     else
                         sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
@@ -307,9 +307,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             CapGs.Current = icapgs;
             CapGd.Current = icapgd;
             CapGb.Current = icapgb;
-            capgs = 2 * CapGs.Current + gateSourceOverlapCap;
-            capgd = 2 * CapGd.Current + gateDrainOverlapCap;
-            capgb = 2 * CapGb.Current + gateBulkOverlapCap;
+            var capgs = 2 * CapGs.Current + gateSourceOverlapCap;
+            var capgd = 2 * CapGd.Current + gateDrainOverlapCap;
+            var capgb = 2 * CapGb.Current + gateBulkOverlapCap;
 
             /* TRANOP only */
             ChargeGs.Current = vgs * capgs;
@@ -331,9 +331,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 			if (simulation == null)
 				throw new ArgumentNullException(nameof(simulation));
 
-            var state = simulation.RealState;
             double arg, sarg, sargsw;
-            double vgs1, vgd1, vgb1, capgs, capgd, capgb;
 
             // Get voltages
             double vbd = _load.VoltageBd;
@@ -351,7 +349,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             double gbd = 0.0;
             double cbd = 0.0;
-            double cd = 0.0;
             double gbs = 0.0;
             double cbs = 0.0;
 
@@ -388,9 +385,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                  * Math.Exp(Math.Log()) we use this special case code to buy time.
                  * (as much as 10% of total job time!)
                  */
-                if (_mbp.BulkJunctionBotGradingCoefficient.Value == _mbp.BulkJunctionSideGradingCoefficient.Value)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(_mbp.BulkJunctionSideGradingCoefficient.Value))
                 {
-                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
                     {
                         sarg = sargsw = 1 / Math.Sqrt(arg);
                     }
@@ -401,7 +398,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 }
                 else
                 {
-                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
@@ -410,7 +407,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                         /* NOSQRT */
                         sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
@@ -445,13 +442,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 * Math.Exp(Math.Log()) we use this special case code to buy time.
                 * (as much as 10% of total job time!)
                 */
-                if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5 && _mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5) && _mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                 {
                     sarg = sargsw = 1 / Math.Sqrt(arg);
                 }
                 else
                 {
-                    if (_mbp.BulkJunctionBotGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionBotGradingCoefficient.Value.Equals(0.5))
                     {
                         sarg = 1 / Math.Sqrt(arg);
                     }
@@ -460,7 +457,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                         /* NOSQRT */
                         sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
                     }
-                    if (_mbp.BulkJunctionSideGradingCoefficient.Value == .5)
+                    if (_mbp.BulkJunctionSideGradingCoefficient.Value.Equals(0.5))
                     {
                         sargsw = 1 / Math.Sqrt(arg);
                     }
@@ -485,7 +482,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             ChargeBd.Integrate();
             gbd += ChargeBd.Jacobian(CapBd);
             cbd += ChargeBd.Derivative;
-            cd -= ChargeBd.Derivative;
             // NOTE: The derivative of Qbd should be added to Cd (drain current). Figure out a way later.
             ChargeBs.Integrate();
             gbs += ChargeBs.Jacobian(CapBs);
@@ -517,12 +513,12 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             CapGs.Current = icapgs;
             CapGd.Current = icapgd;
             CapGb.Current = icapgb;
-            vgs1 = VoltageGs[1];
-            vgd1 = vgs1 - VoltageDs[1];
-            vgb1 = vgs1 - VoltageBs[1];
-            capgs = CapGs.Current + CapGs[1] + gateSourceOverlapCap;
-            capgd = CapGd.Current + CapGd[1] + gateDrainOverlapCap;
-            capgb = CapGb.Current + CapGb[1] + gateBulkOverlapCap;
+            var vgs1 = VoltageGs[1];
+            var vgd1 = vgs1 - VoltageDs[1];
+            var vgb1 = vgs1 - VoltageBs[1];
+            var capgs = CapGs.Current + CapGs[1] + gateSourceOverlapCap;
+            var capgd = CapGd.Current + CapGd[1] + gateDrainOverlapCap;
+            var capgb = CapGb.Current + CapGb[1] + gateBulkOverlapCap;
 
             ChargeGs.Current = (vgs - vgs1) * capgs + ChargeGs[1];
             ChargeGd.Current = (vgd - vgd1) * capgd + ChargeGd[1];

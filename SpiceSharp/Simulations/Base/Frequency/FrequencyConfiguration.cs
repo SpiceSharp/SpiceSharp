@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Simulations
+﻿using SpiceSharp.Simulations.Sweeps;
+
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Parameters for a <see cref="FrequencySimulation"/>
@@ -21,7 +23,7 @@
         public FrequencyConfiguration()
         {
             // Default frequency-sweep
-            FrequencySweep = new Sweeps.DecadeSweep(1, 100, 10);
+            FrequencySweep = new DecadeSweep(1, 100, 10);
         }
 
         /// <summary>

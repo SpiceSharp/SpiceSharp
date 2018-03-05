@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using SpiceSharp.Behaviors;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.IntegrationMethods;
 
 namespace SpiceSharp.Simulations
 {

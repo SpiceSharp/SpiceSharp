@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.NoiseSources
                 throw new ArgumentNullException(nameof(nodes));
 
             foreach (var node in nodes)
-                this._nodes.Add(node);
+                _nodes.Add(node);
         }
 
         /// <summary>

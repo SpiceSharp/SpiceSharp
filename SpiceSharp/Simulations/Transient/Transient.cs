@@ -208,12 +208,10 @@ namespace SpiceSharp.Simulations
                                 // goto nextTime;
                                 break;
                             }
-                            else
-                            {
-                                Statistics.Rejected++;
-                                var data = new TimestepCutEventArgs(Circuit, Method.Delta, TimestepCutEventArgs.TimestepCutReason.Truncation);
-                                TimestepCut?.Invoke(this, data);
-                            }
+
+                            Statistics.Rejected++;
+                            var data = new TimestepCutEventArgs(Circuit, Method.Delta, TimestepCutEventArgs.TimestepCutReason.Truncation);
+                            TimestepCut?.Invoke(this, data);
                         }
 
                         if (Method.Delta <= timeConfig.DeltaMin)

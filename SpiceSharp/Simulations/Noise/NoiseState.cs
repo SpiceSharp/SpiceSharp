@@ -42,12 +42,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Output referred noise
         /// </summary>
-        public double OutputNoise { get; set; } = 0.0;
+        public double OutputNoise { get; set; }
 
         /// <summary>
         /// Input referred noise
         /// </summary>
-        public double InputNoise { get; set; } = 0.0;
+        public double InputNoise { get; set; }
 
         /// <summary>
         /// Output noise density
@@ -70,7 +70,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the logarithm of the gain squared
         /// </summary>
-        public double LogInverseGain { get; private set; } = 0.0;
+        public double LogInverseGain { get; private set; }
 
         /// <summary>
         /// Reset frequency
@@ -104,15 +104,11 @@ namespace SpiceSharp.Simulations
             double exponent = (logNoiseDensity - lastLogNoiseDensity) / _deltaLogFrequency;
             if (Math.Abs(exponent) < 1e-10)
                 return noiseDensity * _deltaFrequency;
-            else
-            {
-                double a = Math.Exp(logNoiseDensity - exponent * _logFrequency);
-                exponent += 1.0;
-                if (Math.Abs(exponent) < 1e-10)
-                    return a * (_logFrequency - _logLastFrequency);
-                else
-                    return a * (Math.Exp(exponent * _logFrequency) - Math.Exp(exponent * _logLastFrequency)) / exponent;
-            }
+            double a = Math.Exp(logNoiseDensity - exponent * _logFrequency);
+            exponent += 1.0;
+            if (Math.Abs(exponent) < 1e-10)
+                return a * (_logFrequency - _logLastFrequency);
+            return a * (Math.Exp(exponent * _logFrequency) - Math.Exp(exponent * _logLastFrequency)) / exponent;
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Attributes;
-using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {

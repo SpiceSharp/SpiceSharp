@@ -1,7 +1,7 @@
 ﻿using System;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
-using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Components.DiodeBehaviors
 {
@@ -60,28 +60,28 @@ namespace SpiceSharp.Components.DiodeBehaviors
             if (simulation == null)
                 throw new ArgumentNullException(nameof(simulation));
 
-            double vt, fact2, egfet, arg, pbfact, egfet1, arg1, fact1, pbfact1, pbo, gmaold, gmanew, vte, cbv, xbv, tol, iter, xcbv = 0.0;
+            double xcbv = 0.0;
 
             // loop through all the instances
             if (!_bp.Temperature.Given)
                 _bp.Temperature.Value = simulation.RealState.Temperature;
-            vt = Circuit.KOverQ * _bp.Temperature;
+            var vt = Circuit.KOverQ * _bp.Temperature;
 
             // this part gets really ugly - I won't even try to explain these equations
-            fact2 = _bp.Temperature / Circuit.ReferenceTemperature;
-            egfet = 1.16 - (7.02e-4 * _bp.Temperature * _bp.Temperature) / (_bp.Temperature + 1108);
-            arg = -egfet / (2 * Circuit.Boltzmann * _bp.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
-                Circuit.ReferenceTemperature));
-            pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
-            egfet1 = 1.16 - (7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature) / (_mbp.NominalTemperature + 1108);
-            arg1 = -egfet1 / (Circuit.Boltzmann * 2 * _mbp.NominalTemperature) + 1.1150877 / (2 * Circuit.Boltzmann * Circuit.ReferenceTemperature);
-            fact1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
-            pbfact1 = -2 * _modeltemp.VtNominal * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
-            pbo = (_mbp.JunctionPotential - pbfact1) / fact1;
-            gmaold = (_mbp.JunctionPotential - pbo) / pbo;
+            var fact2 = _bp.Temperature / Circuit.ReferenceTemperature;
+            var egfet = 1.16 - (7.02e-4 * _bp.Temperature * _bp.Temperature) / (_bp.Temperature + 1108);
+            var arg = -egfet / (2 * Circuit.Boltzmann * _bp.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
+                                                                                                                Circuit.ReferenceTemperature));
+            var pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
+            var egfet1 = 1.16 - (7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature) / (_mbp.NominalTemperature + 1108);
+            var arg1 = -egfet1 / (Circuit.Boltzmann * 2 * _mbp.NominalTemperature) + 1.1150877 / (2 * Circuit.Boltzmann * Circuit.ReferenceTemperature);
+            var fact1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
+            var pbfact1 = -2 * _modeltemp.VtNominal * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
+            var pbo = (_mbp.JunctionPotential - pbfact1) / fact1;
+            var gmaold = (_mbp.JunctionPotential - pbo) / pbo;
             TempJunctionCap = _mbp.JunctionCap / (1 + _mbp.GradingCoefficient * (400e-6 * (_mbp.NominalTemperature - Circuit.ReferenceTemperature) - gmaold));
             TempJunctionPot = pbfact + fact2 * pbo;
-            gmanew = (TempJunctionPot - pbo) / pbo;
+            var gmanew = (TempJunctionPot - pbo) / pbo;
             TempJunctionCap *= 1 + _mbp.GradingCoefficient * (400e-6 * (_bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
             TempSaturationCurrent = _mbp.SaturationCurrent * Math.Exp(((_bp.Temperature / _mbp.NominalTemperature) - 1) * _mbp.ActivationEnergy /
@@ -94,13 +94,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
             TempDepletionCap = _mbp.DepletionCapCoefficient * TempJunctionPot;
 
             // and Vcrit
-            vte = _mbp.EmissionCoefficient * vt;
+            var vte = _mbp.EmissionCoefficient * vt;
             TempVCritical = vte * Math.Log(vte / (Circuit.Root2 * TempSaturationCurrent));
 
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
             if (_mbp.BreakdownVoltage.Given)
             {
-                cbv = _mbp.BreakdownCurrent;
+                double cbv = _mbp.BreakdownCurrent;
+                double xbv;
                 if (cbv < TempSaturationCurrent * _mbp.BreakdownVoltage / vt)
                 {
                     cbv = TempSaturationCurrent * _mbp.BreakdownVoltage / vt;
@@ -109,9 +110,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 }
                 else
                 {
-                    tol = simulation.BaseConfiguration.RelativeTolerance * cbv;
+                    var tol = simulation.BaseConfiguration.RelativeTolerance * cbv;
                     xbv = _mbp.BreakdownVoltage - vt * Math.Log(1 + cbv / TempSaturationCurrent);
-                    iter = 0;
+                    int iter;
                     for (iter = 0; iter < 25; iter++)
                     {
                         xbv = _mbp.BreakdownVoltage - vt * Math.Log(cbv / TempSaturationCurrent + 1 - xbv / vt);
