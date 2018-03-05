@@ -39,6 +39,8 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         /// <param name="inductance">Inductor</param>
         /// <param name="current">Current</param>
+        /// <param name="flux">Flux</param>
+        /// <param name="state">State</param>
         public UpdateFluxEventArgs(double inductance, double current, StateDerivative flux, RealState state)
         {
             if (flux == null)

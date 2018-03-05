@@ -121,6 +121,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
+        /// <param name="nodes">Nodes</param>
         /// <param name="solver">Solver</param>
         public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
         {

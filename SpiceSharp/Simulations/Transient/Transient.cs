@@ -180,7 +180,7 @@ namespace SpiceSharp.Simulations
                         Method.Predict(this);
 
                         // Try to solve the new point
-                        if (Method.SavedTime == 0.0)
+                        if (Method.SavedTime.Equals(0.0))
                             state.Init = RealState.InitializationStates.InitTransient;
                         bool converged = TimeIterate(timeConfig.TranMaxIterations);
                         Statistics.TimePoints++;
@@ -197,20 +197,20 @@ namespace SpiceSharp.Simulations
                             Method.Delta /= 8.0;
                             Method.CutOrder();
 
-                            var data = new TimestepCutEventArgs(Circuit, Method.Delta / 8.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
+                            var data = new TimestepCutEventArgs(Method.Delta / 8.0, TimestepCutEventArgs.TimestepCutReason.Convergence);
                             TimestepCut?.Invoke(this, data);
                         }
                         else
                         {
                             // Do not check the first time point
-                            if (Method.SavedTime == 0.0 || Method.LteControl(this))
+                            if (Method.SavedTime.Equals(0.0) || Method.LteControl(this))
                             {
                                 // goto nextTime;
                                 break;
                             }
 
                             Statistics.Rejected++;
-                            var data = new TimestepCutEventArgs(Circuit, Method.Delta, TimestepCutEventArgs.TimestepCutReason.Truncation);
+                            var data = new TimestepCutEventArgs(Method.Delta, TimestepCutEventArgs.TimestepCutReason.Truncation);
                             TimestepCut?.Invoke(this, data);
                         }
 

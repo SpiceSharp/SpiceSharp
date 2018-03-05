@@ -17,11 +17,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Gets the circuit
-        /// </summary>
-        public Circuit Circuit { get; }
-
-        /// <summary>
         /// The new timestep that will be tried
         /// </summary>
         public double NewDelta { get; }
@@ -34,11 +29,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="circuit"></param>
-        /// <param name="newDelta"></param>
-        public TimestepCutEventArgs(Circuit circuit, double newDelta, TimestepCutReason reason)
+        /// <param name="newDelta">New timestep</param>
+        /// <param name="reason">Reason for cutting the timestep</param>
+        public TimestepCutEventArgs(double newDelta, TimestepCutReason reason)
         {
-            Circuit = circuit;
             NewDelta = newDelta;
             Reason = reason;
         }

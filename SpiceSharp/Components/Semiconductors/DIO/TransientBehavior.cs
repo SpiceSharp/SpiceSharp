@@ -150,15 +150,15 @@ namespace SpiceSharp.Components.DiodeBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             var state = simulation.RealState;
-            double arg, sarg, capd;
+            double capd;
             double vd = state.Solution[_posPrimeNode] - state.Solution[_negNode];
 
             // charge storage elements
             double czero = _temp.TempJunctionCap * _bp.Area;
             if (vd < _temp.TempDepletionCap)
             {
-                arg = 1 - vd / _mbp.JunctionPotential;
-                sarg = Math.Exp(-_mbp.GradingCoefficient * Math.Log(arg));
+                var arg = 1 - vd / _mbp.JunctionPotential;
+                var sarg = Math.Exp(-_mbp.GradingCoefficient * Math.Log(arg));
                 CapCharge.Current = _mbp.TransitTime * _load.Current + _mbp.JunctionPotential * czero * (1 - arg * sarg) / (1 -
                         _mbp.GradingCoefficient);
                 capd = _mbp.TransitTime * _load.Conduct + czero * sarg;

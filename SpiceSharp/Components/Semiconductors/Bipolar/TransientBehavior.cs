@@ -552,8 +552,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             if (args == null)
                 throw new ArgumentNullException(nameof(args));
-            
-            double arg1, arg2, denom, arg3;
+
             double td = _modeltemp.ExcessPhaseFactor;
             if (td.Equals(0))
             {
@@ -570,11 +569,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             double delta = StateExcessPhaseCurrentBc.Timesteps[0];
             double prevdelta = StateExcessPhaseCurrentBc.Timesteps[1];
-            arg1 = delta / td;
-            arg2 = 3 * arg1;
+            var arg1 = delta / td;
+            var arg2 = 3 * arg1;
             arg1 = arg2 * arg1;
-            denom = 1 + arg1 + arg2;
-            arg3 = arg1 / denom;
+            var denom = 1 + arg1 + arg2;
+            var arg3 = arg1 / denom;
             /* Still need a place for this...
             if (state.Init == State.InitFlags.InitTransient)
             {

@@ -83,7 +83,7 @@ namespace SpiceSharp
                 throw new ArgumentNullException(nameof(key));
 
             Type currentType = key;
-            while (currentType != BaseClass)
+            while (currentType != null && currentType != BaseClass)
             {
                 Dictionary.Add(currentType, value);
                 currentType = currentType.BaseType;

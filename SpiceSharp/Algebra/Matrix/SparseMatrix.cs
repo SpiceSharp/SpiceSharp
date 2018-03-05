@@ -130,8 +130,7 @@ namespace SpiceSharp.Algebra
             if (row == column && _diagonal[row] != null)
                 return _diagonal[row];
 
-            SparseMatrixElement<T> element;
-            if (!_rows[row].CreateGetElement(row, column, out element))
+            if (!_rows[row].CreateGetElement(row, column, out var element))
             {
                 _columns[column].Insert(element);
                 if (row == column)

@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Behaviors
 {
@@ -33,7 +34,7 @@ namespace SpiceSharp.Behaviors
 
             // Get types
             Type mytype = behavior.GetType();
-            Type basetype = mytype.BaseType;
+            Type basetype = mytype.BaseType ?? throw new CircuitException("Invalid behavior");
 
             // Register types
             Dictionary[mytype] = behavior;

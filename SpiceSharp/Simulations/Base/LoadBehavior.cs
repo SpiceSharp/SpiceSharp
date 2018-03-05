@@ -18,6 +18,7 @@ namespace SpiceSharp.Behaviors
         /// <summary>
         /// Setup the behavior for usage with a solver
         /// </summary>
+        /// <param name="nodes">Nodes</param>
         /// <param name="solver">Solver</param>
         public abstract void GetEquationPointers(Nodes nodes, Solver<double> solver);
 

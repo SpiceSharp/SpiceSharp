@@ -180,11 +180,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             else
             {
                 // Get the previous state
-                bool previousState;
-                if (UseOldState)
-                    previousState = OldState;
-                else
-                    previousState = CurrentState;
+                var previousState = UseOldState ? OldState : CurrentState;
                 var iCtrl = state.Solution[ControllingBranch];
 
                 // Calculate the current state

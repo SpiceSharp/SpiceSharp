@@ -41,9 +41,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="n">Steps</param>
+        /// <param name="parameter">The parameter</param>
         /// <param name="start">Initial value</param>
         /// <param name="stop">Final value</param>
+        /// <param name="step">Step value</param>
         public SweepInstance(Identifier parameter, double start, double stop, double step)
         {
             Parameter = parameter;

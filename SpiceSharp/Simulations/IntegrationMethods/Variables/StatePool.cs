@@ -81,7 +81,8 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Truncate timestep
         /// </summary>
-        /// <param name="index"></param>
+        /// <param name="index">index</param>
+        /// <param name="timestep">Time step</param>
         public void LocalTruncationError(int index, ref double timestep) => Method.LocalTruncateError(History, index, ref timestep);
 
         /// <summary>

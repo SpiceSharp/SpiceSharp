@@ -9,6 +9,8 @@ namespace SpiceSharp.Components.NoiseSources
     /// </summary>
     public class NoiseThermal : NoiseGenerator
     {
+        public int Node2 { get; }
+
         /// <summary>
         /// Gets or sets the gain of the thermal noise
         /// The noise is 4 * k * T * G
@@ -19,7 +21,12 @@ namespace SpiceSharp.Components.NoiseSources
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the noise source</param>
-        public NoiseThermal(string name, int node1, int node2) : base(name, node1, node2) { }
+        /// <param name="node1">Node 1</param>
+        /// <param name="node2">Node 2</param>
+        public NoiseThermal(string name, int node1, int node2) : base(name, node1, node2)
+        {
+            Node2 = node2;
+        }
 
         /// <summary>
         /// Set the parameters for the thermal noise

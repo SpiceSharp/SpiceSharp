@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using SpiceSharp.Attributes;
-using SpiceSharp.Circuits;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors

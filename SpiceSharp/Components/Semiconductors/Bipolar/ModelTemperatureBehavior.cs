@@ -105,31 +105,31 @@ namespace SpiceSharp.Components.BipolarBehaviors
 			 * leakage saturation current).   TQ  6/29/84
 			 */
 
-            if (_mbp.EarlyVoltageForward.Given && _mbp.EarlyVoltageForward != 0)
+            if (_mbp.EarlyVoltageForward.Given && !_mbp.EarlyVoltageForward.Value.Equals(0.0))
                 InverseEarlyVoltForward = 1 / _mbp.EarlyVoltageForward;
             else
                 InverseEarlyVoltForward = 0;
-            if (_mbp.RollOffForward.Given && _mbp.RollOffForward != 0)
+            if (_mbp.RollOffForward.Given && !_mbp.RollOffForward.Value.Equals(0.0))
                 InverseRollOffForward = 1 / _mbp.RollOffForward;
             else
                 InverseRollOffForward = 0;
-            if (_mbp.EarlyVoltageReverse.Given && _mbp.EarlyVoltageReverse != 0)
+            if (_mbp.EarlyVoltageReverse.Given && !_mbp.EarlyVoltageReverse.Value.Equals(0.0))
                 InverseEarlyVoltReverse = 1 / _mbp.EarlyVoltageReverse;
             else
                 InverseEarlyVoltReverse = 0;
-            if (_mbp.RollOffReverse.Given && _mbp.RollOffReverse != 0)
+            if (_mbp.RollOffReverse.Given && !_mbp.RollOffReverse.Value.Equals(0.0))
                 InverseRollOffReverse = 1 / _mbp.RollOffReverse;
             else
                 InverseRollOffReverse = 0;
-            if (_mbp.CollectorResistance.Given && _mbp.CollectorResistance != 0)
+            if (_mbp.CollectorResistance.Given && !_mbp.CollectorResistance.Value.Equals(0.0))
                 CollectorConduct = 1 / _mbp.CollectorResistance;
             else
                 CollectorConduct = 0;
-            if (_mbp.EmitterResistance.Given && _mbp.EmitterResistance != 0)
+            if (_mbp.EmitterResistance.Given && !_mbp.EmitterResistance.Value.Equals(0.0))
                 EmitterConduct = 1 / _mbp.EmitterResistance;
             else
                 EmitterConduct = 0;
-            if (_mbp.TransitTimeForwardVoltageBc.Given && _mbp.TransitTimeForwardVoltageBc != 0)
+            if (_mbp.TransitTimeForwardVoltageBc.Given && !_mbp.TransitTimeForwardVoltageBc.Value.Equals(0.0))
                 TransitTimeVoltageBcFactor = 1 / (_mbp.TransitTimeForwardVoltageBc * 1.44);
             else
                 TransitTimeVoltageBcFactor = 0;
