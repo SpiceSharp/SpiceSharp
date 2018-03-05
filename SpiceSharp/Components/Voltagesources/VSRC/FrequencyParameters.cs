@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
             if (ac == null)
                 throw new ArgumentNullException(nameof(ac));
 
-            switch (ac?.Length ?? -1)
+            switch (ac.Length)
             {
                 case 2: AcPhase.Set(ac[1]); goto case 1;
                 case 1: AcMagnitude.Set(ac[0]); break;

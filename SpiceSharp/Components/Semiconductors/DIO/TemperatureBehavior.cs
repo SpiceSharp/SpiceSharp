@@ -69,11 +69,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             // this part gets really ugly - I won't even try to explain these equations
             var fact2 = _bp.Temperature / Circuit.ReferenceTemperature;
-            var egfet = 1.16 - (7.02e-4 * _bp.Temperature * _bp.Temperature) / (_bp.Temperature + 1108);
+            var egfet = 1.16 - 7.02e-4 * _bp.Temperature * _bp.Temperature / (_bp.Temperature + 1108);
             var arg = -egfet / (2 * Circuit.Boltzmann * _bp.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
                                                                                                                 Circuit.ReferenceTemperature));
             var pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
-            var egfet1 = 1.16 - (7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature) / (_mbp.NominalTemperature + 1108);
+            var egfet1 = 1.16 - 7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature / (_mbp.NominalTemperature + 1108);
             var arg1 = -egfet1 / (Circuit.Boltzmann * 2 * _mbp.NominalTemperature) + 1.1150877 / (2 * Circuit.Boltzmann * Circuit.ReferenceTemperature);
             var fact1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
             var pbfact1 = -2 * _modeltemp.VtNominal * (1.5 * Math.Log(fact1) + Circuit.Charge * arg1);
@@ -84,7 +84,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             var gmanew = (TempJunctionPot - pbo) / pbo;
             TempJunctionCap *= 1 + _mbp.GradingCoefficient * (400e-6 * (_bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
 
-            TempSaturationCurrent = _mbp.SaturationCurrent * Math.Exp(((_bp.Temperature / _mbp.NominalTemperature) - 1) * _mbp.ActivationEnergy /
+            TempSaturationCurrent = _mbp.SaturationCurrent * Math.Exp((_bp.Temperature / _mbp.NominalTemperature - 1) * _mbp.ActivationEnergy /
                 (_mbp.EmissionCoefficient * vt) + _mbp.SaturationCurrentExp / _mbp.EmissionCoefficient * Math.Log(_bp.Temperature / _mbp.NominalTemperature));
 
             // the defintion of f1, just recompute after temperature adjusting all the variables used in it

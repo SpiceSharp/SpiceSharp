@@ -565,7 +565,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
 
             // Load Y-matrix
             GateGatePtr.Value += gcgd + gcgs + gcgb;
-            BulkBulkPtr.Value += (gbd + gbs + gcgb);
+            BulkBulkPtr.Value += gbd + gbs + gcgb;
             DrainPrimeDrainPrimePtr.Value += gbd + gcgd;
             SourcePrimeSourcePrimePtr.Value += gbs + gcgs;
             GateBulkPtr.Value -= gcgb;

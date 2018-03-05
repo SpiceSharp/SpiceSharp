@@ -304,7 +304,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 f2 = _modeltemp.F2;
                 f3 = _modeltemp.F3;
                 var czbef2 = czbe / f2;
-                StateChargeBe.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
+                StateChargeBe.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + xme / (pe + pe) * (vbe * vbe -
                      fcpe * fcpe));
             }
             var fcpc = _temp.TempFactor4;
@@ -320,7 +320,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             else
             {
                 var czbcf2 = czbc / f2;
-                StateChargeBc.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
+                StateChargeBc.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + xmc / (pc + pc) * (vbc * vbc -
                      fcpc * fcpc));
             }
             if (vbx < fcpc)
@@ -332,7 +332,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             else
             {
                 var czbxf2 = czbx / f2;
-                StateChargeBx.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
+                StateChargeBx.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + xmc / (pc + pc) * (vbx * vbx - fcpc * fcpc));
             }
             if (vcs < 0)
             {
@@ -439,7 +439,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 f2 = _modeltemp.F2;
                 f3 = _modeltemp.F3;
                 czbef2 = czbe / f2;
-                StateChargeBe.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + (xme / (pe + pe)) * (vbe * vbe -
+                StateChargeBe.Current = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + xme / (pe + pe) * (vbe * vbe -
                      fcpe * fcpe));
                 CapBe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
             }
@@ -457,7 +457,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             else
             {
                 czbcf2 = czbc / f2;
-                StateChargeBc.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + (xmc / (pc + pc)) * (vbc * vbc -
+                StateChargeBc.Current = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + xmc / (pc + pc) * (vbc * vbc -
                      fcpc * fcpc));
                 CapBc = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
             }
@@ -471,7 +471,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             else
             {
                 czbxf2 = czbx / f2;
-                StateChargeBx.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + (xmc / (pc + pc)) * (vbx * vbx - fcpc * fcpc));
+                StateChargeBx.Current = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + xmc / (pc + pc) * (vbx * vbx - fcpc * fcpc));
                 CapBx = czbxf2 * (f3 + xmc * vbx / pc);
             }
             if (vcs < 0)
@@ -505,15 +505,15 @@ namespace SpiceSharp.Components.BipolarBehaviors
             // Load current excitation vector
             double ceqcs = _mbp.BipolarType * (StateChargeCs.Derivative - vcs * gccs);
             double ceqbx = _mbp.BipolarType * (StateChargeBx.Derivative - vbx * geqbx);
-            double ceqbe = _mbp.BipolarType * (cc + cb - vbe * gpi + vbc * (-geqcb));
+            double ceqbe = _mbp.BipolarType * (cc + cb - vbe * gpi + vbc * -geqcb);
             double ceqbc = _mbp.BipolarType * (-cc + - vbc * gmu);
 
             // Load Rhs-vector
             BasePtr.Value += -ceqbx;
-            CollectorPrimePtr.Value += (ceqcs + ceqbx + ceqbc);
+            CollectorPrimePtr.Value += ceqcs + ceqbx + ceqbc;
             BasePrimePtr.Value += -ceqbe - ceqbc;
-            EmitterPrimePtr.Value += (ceqbe);
-            SubstratePtr.Value += (-ceqcs);
+            EmitterPrimePtr.Value += ceqbe;
+            SubstratePtr.Value += -ceqcs;
 
             // Load Y-matrix
             BaseBasePtr.Value += geqbx;

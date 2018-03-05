@@ -206,7 +206,7 @@ namespace SpiceSharp.IntegrationMethods
         public void Resume()
         {
             // Are we at a breakpoint, or indistinguishably close?
-            if ((Time == Breaks.First) || (Breaks.First - Time) <= DeltaMin)
+            if (Time == Breaks.First || Breaks.First - Time <= DeltaMin)
             {
                 // First timepoint after a breakpoint: cut integration order
                 Order = 1;

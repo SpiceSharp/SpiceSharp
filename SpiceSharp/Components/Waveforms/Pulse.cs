@@ -87,13 +87,11 @@ namespace SpiceSharp.Components
         /// <returns></returns>
         public override double At(double time)
         {
-            double basetime = 0.0;
-
             // Get a relative time variable
             time -= _td;
             if (time > _per)
             {
-                basetime = _per * Math.Floor(time / _per);
+                var basetime = _per * Math.Floor(time / _per);
                 time -= basetime;
             }
 
@@ -142,7 +140,7 @@ namespace SpiceSharp.Components
                     breaks.SetBreakpoint(basetime + _tr + _td);
                 else if (Math.Abs(_tr + _pw + _tf - time) <= tol)
                     breaks.SetBreakpoint(basetime + _per + _td);
-                else if ((time <= -_td))
+                else if (time <= -_td)
                     breaks.SetBreakpoint(basetime + _td);
                 else if (Math.Abs(_per - time) <= tol)
                     breaks.SetBreakpoint(basetime + _td + _tr + _per);

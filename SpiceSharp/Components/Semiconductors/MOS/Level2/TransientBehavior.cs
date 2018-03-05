@@ -600,9 +600,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             // Load current vector
             ceqbs = _mbp.MosfetType * (cbs - (gbs - state.Gmin) * vbs);
             ceqbd = _mbp.MosfetType * (cbd - (gbd - state.Gmin) * vbd);
-            GatePtr.Value -= (_mbp.MosfetType * (ceqgs + ceqgb + ceqgd));
-            BulkPtr.Value -= (ceqbs + ceqbd - _mbp.MosfetType * ceqgb);
-            DrainPrimePtr.Value += (ceqbd + _mbp.MosfetType * ceqgd);
+            GatePtr.Value -= _mbp.MosfetType * (ceqgs + ceqgb + ceqgd);
+            BulkPtr.Value -= ceqbs + ceqbd - _mbp.MosfetType * ceqgb;
+            DrainPrimePtr.Value += ceqbd + _mbp.MosfetType * ceqgd;
             SourcePrimePtr.Value += ceqbs + _mbp.MosfetType * ceqgs;
 
             // load Y-matrix

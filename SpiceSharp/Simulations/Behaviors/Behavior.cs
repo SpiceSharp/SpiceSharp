@@ -12,11 +12,6 @@ namespace SpiceSharp.Behaviors
     public abstract class Behavior
     {
         /// <summary>
-        /// The component the behavior acts upon
-        /// </summary>
-        protected Entity Component { get; private set; }
-        
-        /// <summary>
         /// Gets the name of the behavior
         /// </summary>
         public Identifier Name { get; }

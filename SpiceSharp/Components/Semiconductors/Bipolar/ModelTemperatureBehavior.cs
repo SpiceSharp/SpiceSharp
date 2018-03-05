@@ -133,7 +133,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 TransitTimeVoltageBcFactor = 1 / (_mbp.TransitTimeForwardVoltageBc * 1.44);
             else
                 TransitTimeVoltageBcFactor = 0;
-            ExcessPhaseFactor = (_mbp.ExcessPhase / (180.0 / Math.PI)) * _mbp.TransitTimeForward;
+            ExcessPhaseFactor = _mbp.ExcessPhase / (180.0 / Math.PI) * _mbp.TransitTimeForward;
             if (_mbp.DepletionCapCoefficient.Given)
             {
                 if (_mbp.DepletionCapCoefficient > 0.9999)

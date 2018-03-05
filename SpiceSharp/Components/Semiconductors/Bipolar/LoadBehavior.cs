@@ -270,7 +270,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 vbe = _temp.TempVCritical;
                 vbc = 0;
             }
-            else if (state.Init == RealState.InitializationStates.InitJunction || (state.Init == RealState.InitializationStates.InitFix && _bp.Off))
+            else if (state.Init == RealState.InitializationStates.InitJunction || state.Init == RealState.InitializationStates.InitFix && _bp.Off)
             {
                 vbe = 0;
                 vbc = 0;
@@ -407,7 +407,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             ceqbe = _mbp.BipolarType * (cc + cb - vbe * (gm + go + gpi) + vbc * go);
             ceqbc = _mbp.BipolarType * (-cc + vbe * (gm + go) - vbc * (gmu + go));
             CollectorPrimePtr.Value += ceqbc;
-            BasePrimePtr.Value += (-ceqbe - ceqbc);
+            BasePrimePtr.Value += -ceqbe - ceqbc;
             EmitterPrimePtr.Value += ceqbe;
 
             // Load y matrix

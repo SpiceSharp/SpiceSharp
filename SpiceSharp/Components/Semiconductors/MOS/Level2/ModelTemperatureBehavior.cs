@@ -61,7 +61,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             Factor1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
             VtNominal = _mbp.NominalTemperature * Circuit.KOverQ;
             kt1 = Circuit.Boltzmann * _mbp.NominalTemperature;
-            EgFet1 = 1.16 - (7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature) / (_mbp.NominalTemperature + 1108);
+            EgFet1 = 1.16 - 7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature / (_mbp.NominalTemperature + 1108);
             arg1 = -EgFet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
             PbFactor1 = -2 * VtNominal * (1.5 * Math.Log(Factor1) + Circuit.Charge * arg1);
 

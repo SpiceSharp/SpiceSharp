@@ -56,7 +56,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
                     (width - _mbp.Narrow) *
                     (_bp.Length - _mbp.Narrow) +
                     _mbp.JunctionCapSidewall * 2 * (
-                    (_bp.Length - _mbp.Narrow) +
+                    _bp.Length - _mbp.Narrow +
                     (width - _mbp.Narrow));
             }
         }

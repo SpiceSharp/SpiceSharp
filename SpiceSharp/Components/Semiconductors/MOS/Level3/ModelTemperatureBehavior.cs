@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             Fact1 = _mbp.NominalTemperature / Circuit.ReferenceTemperature;
             VtNominal = _mbp.NominalTemperature * Circuit.KOverQ;
             kt1 = Circuit.Boltzmann * _mbp.NominalTemperature;
-            EgFet1 = 1.16 - (7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature) / (_mbp.NominalTemperature + 1108);
+            EgFet1 = 1.16 - 7.02e-4 * _mbp.NominalTemperature * _mbp.NominalTemperature / (_mbp.NominalTemperature + 1108);
             arg1 = -EgFet1 / (kt1 + kt1) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
             PbFactor1 = -2 * VtNominal * (1.5 * Math.Log(Fact1) + Circuit.Charge * arg1);
 
@@ -90,7 +90,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     wkfng = 3.2;
                     if (!_mbp.GateType.Given)
                         _mbp.GateType.Value = 1;
-                    if (_mbp.GateType != 0)
+                    if (!_mbp.GateType.Value.Equals(0.0))
                     {
                         fermig = _mbp.MosfetType * _mbp.GateType * .5 * EgFet1;
                         wkfng = 3.25 + .5 * EgFet1 - fermig;
@@ -108,10 +108,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                         vfb = wkfngs - _mbp.SurfaceStateDensity * 1e4 * Circuit.Charge / OxideCapFactor;
                         _mbp.Vt0.Value = vfb + _mbp.MosfetType * (_mbp.Gamma * Math.Sqrt(_mbp.Phi) + _mbp.Phi);
                     }
-                    else
-                    {
-                        vfb = _mbp.Vt0 - _mbp.MosfetType * (_mbp.Gamma * Math.Sqrt(_mbp.Phi) + _mbp.Phi);
-                    }
+
                     Alpha = (Transistor.EpsilonSilicon + Transistor.EpsilonSilicon) / (Circuit.Charge * _mbp.SubstrateDoping * 1e6 /* (cm**3 / m**3) */);
                     CoefficientDepletionLayerWidth = Math.Sqrt(Alpha);
                 }

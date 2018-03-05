@@ -362,8 +362,8 @@ namespace SpiceSharp.Algebra
         {
             double real, imaginary;
             double r;
-            if ((value.Real >= value.Imaginary && value.Real > -value.Imaginary) ||
-                (value.Real < value.Imaginary && value.Real <= -value.Imaginary))
+            if (value.Real >= value.Imaginary && value.Real > -value.Imaginary ||
+                value.Real < value.Imaginary && value.Real <= -value.Imaginary)
             {
                 r = value.Imaginary / value.Real;
                 real = 1.0 / (value.Real + r * value.Imaginary);

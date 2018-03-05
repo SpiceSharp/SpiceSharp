@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.Semiconductors
         public static double LimitJunction(double newVoltage, double oldVoltage, double thermalVoltage, double criticalVoltage, ref bool limited)
         {
             double arg;
-            if ((newVoltage > criticalVoltage) && (Math.Abs(newVoltage - oldVoltage) > (thermalVoltage + thermalVoltage)))
+            if (newVoltage > criticalVoltage && Math.Abs(newVoltage - oldVoltage) > thermalVoltage + thermalVoltage)
             {
                 if (oldVoltage > 0)
                 {

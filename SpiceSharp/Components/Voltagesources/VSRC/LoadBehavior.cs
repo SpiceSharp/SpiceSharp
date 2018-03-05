@@ -49,7 +49,6 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         protected MatrixElement<double> NegBranchPtr { get; private set; }
         protected MatrixElement<double> BranchPosPtr { get; private set; }
         protected MatrixElement<double> BranchNegPtr { get; private set; }
-        protected MatrixElement<double> BranchBranchPtr { get; private set; }
         protected VectorElement<double> BranchPtr { get; private set; }
 
         /// <summary>
@@ -118,6 +117,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
         /// <summary>
         /// Gets matrix pointers
         /// </summary>
+        /// <param name="nodes">Nodes</param>
         /// <param name="solver">Solver</param>
         public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
         {
@@ -160,7 +160,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
 
             var state = simulation.RealState;
             double time = 0.0;
-            double value = 0.0;
+            double value;
 
             PosBranchPtr.Value += 1;
             BranchPosPtr.Value += 1;

@@ -161,7 +161,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
             double gNow;
             double iCtrl;
             bool previousState;
-            bool currentState = false;
+            bool currentState;
             var state = simulation.RealState;
 
             // decide the state of the switch
@@ -190,9 +190,9 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
                 iCtrl = state.Solution[ControllingBranch];
 
                 // Calculate the current state
-                if (iCtrl > (_mbp.Threshold + _mbp.Hysteresis))
+                if (iCtrl > _mbp.Threshold + _mbp.Hysteresis)
                     currentState = true;
-                else if (iCtrl < (_mbp.Threshold - _mbp.Hysteresis))
+                else if (iCtrl < _mbp.Threshold - _mbp.Hysteresis)
                     currentState = false;
                 else
                     currentState = previousState;

@@ -167,7 +167,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             {
                 double czof2 = czero / _modeltemp.F2;
                 CapCharge.Current = _mbp.TransitTime * _load.Current + czero * _temp.TempFactor1 + czof2 * (_modeltemp.F3 * (vd -
-                    _temp.TempDepletionCap) + (_mbp.GradingCoefficient / (_mbp.JunctionPotential + _mbp.JunctionPotential)) * (vd * vd - _temp.TempDepletionCap * _temp.TempDepletionCap));
+                    _temp.TempDepletionCap) + _mbp.GradingCoefficient / (_mbp.JunctionPotential + _mbp.JunctionPotential) * (vd * vd - _temp.TempDepletionCap * _temp.TempDepletionCap));
                 capd = _mbp.TransitTime * _load.Conduct + czof2 * (_modeltemp.F3 + _mbp.GradingCoefficient * vd / _mbp.JunctionPotential);
             }
             Capacitance = capd;

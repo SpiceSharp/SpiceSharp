@@ -185,7 +185,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 vd = state.Solution[PosPrimeNode] - state.Solution[_negNode];
 
                 // limit new junction voltage
-                if ((_mbp.BreakdownVoltage.Given) && (vd < Math.Min(0, -_temp.TempBreakdownVoltage + 10 * vte)))
+                if (_mbp.BreakdownVoltage.Given && vd < Math.Min(0, -_temp.TempBreakdownVoltage + 10 * vte))
                 {
                     vdtemp = -(vd + _temp.TempBreakdownVoltage);
                     vdtemp = Semiconductor.LimitJunction(vdtemp, -(InternalVoltage + _temp.TempBreakdownVoltage), vte, _temp.TempVCritical, ref check);
@@ -222,7 +222,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             }
 
             // Check convergence
-            if ((state.Init != RealState.InitializationStates.InitFix) || !_bp.Off)
+            if (state.Init != RealState.InitializationStates.InitFix || !_bp.Off)
             {
                 if (check)
                     state.IsConvergent = false;

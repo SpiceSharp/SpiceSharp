@@ -364,9 +364,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
 
             // Meyer"s model parameters
-            capgs = (CapGs + CapGs + gateSourceOverlapCap);
-            capgd = (CapGd + CapGd + gateDrainOverlapCap);
-            capgb = (CapGb + CapGb + gateBulkOverlapCap);
+            capgs = CapGs + CapGs + gateSourceOverlapCap;
+            capgd = CapGd + CapGd + gateDrainOverlapCap;
+            capgb = CapGb + CapGb + gateBulkOverlapCap;
             xgs = capgs * cstate.Laplace.Imaginary;
             xgd = capgd * cstate.Laplace.Imaginary;
             xgb = capgb * cstate.Laplace.Imaginary;

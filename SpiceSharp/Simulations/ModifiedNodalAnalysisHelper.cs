@@ -56,7 +56,7 @@ namespace SpiceSharp.Simulations
                             solver.MovePivot(twin2, j);
                             swapped = true;
                         }
-                        else if ((twins > 1) && !anotherPassNeeded)
+                        else if (twins > 1 && !anotherPassNeeded)
                         {
                             anotherPassNeeded = true;
                             start = j;
@@ -67,7 +67,7 @@ namespace SpiceSharp.Simulations
                 // All lone twins are gone, look for zero diagonals with multiple twins. 
                 if (anotherPassNeeded)
                 {
-                    for (int j = start; !swapped && (j <= solver.Order); j++)
+                    for (int j = start; !swapped && j <= solver.Order; j++)
                     {
                         if (solver.ReorderedDiagonal(j) == null)
                         {
@@ -124,9 +124,9 @@ namespace SpiceSharp.Simulations
                 {
                     row = cTwin1.Row;
                     cTwin2 = solver.FirstInReorderedColumn(row);
-                    while ((cTwin2 != null) && (cTwin2.Row != column))
+                    while (cTwin2 != null && cTwin2.Row != column)
                         cTwin2 = cTwin2.Below;
-                    if ((cTwin2 != null) && magnitude(cTwin2.Value).Equals(1.0))
+                    if (cTwin2 != null && magnitude(cTwin2.Value).Equals(1.0))
                     {
                         // Found symmetric twins. 
                         if (++twins >= 2) return twins;

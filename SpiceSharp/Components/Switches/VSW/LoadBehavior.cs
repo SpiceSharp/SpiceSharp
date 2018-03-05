@@ -126,7 +126,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
             double gNow;
             double vCtrl;
             bool previousState;
-            bool currentState = false;
+            bool currentState;
             var state = simulation.RealState;
 
             if (state.Init == RealState.InitializationStates.InitFix || state.Init == RealState.InitializationStates.InitJunction)
@@ -153,9 +153,9 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
                 vCtrl = state.Solution[_contPosourceNode] - state.Solution[_contNegateNode];
 
                 // Calculate the current state
-                if (vCtrl > (_mbp.Threshold + _mbp.Hysteresis))
+                if (vCtrl > _mbp.Threshold + _mbp.Hysteresis)
                     currentState = true;
-                else if (vCtrl < (_mbp.Threshold - _mbp.Hysteresis))
+                else if (vCtrl < _mbp.Threshold - _mbp.Hysteresis)
                     currentState = false;
                 else
                     currentState = previousState;

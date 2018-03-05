@@ -293,11 +293,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 }
                 if (vds >= 0)
                 {
-                    vbs = Transistor.LimitJunction(vbs, VoltageBs, vt, _temp.SourceVCritical, ref check);
+                    vbs = Transistor.LimitJunction(vbs, VoltageBs, vt, _temp.SourceVCritical, out check);
                 }
                 else
                 {
-                    vbd = Transistor.LimitJunction(vbd, VoltageBd, vt, _temp.DrainVCritical, ref check);
+                    vbd = Transistor.LimitJunction(vbd, VoltageBd, vt, _temp.DrainVCritical, out check);
                     vbs = vbd + vds;
                 }
             }

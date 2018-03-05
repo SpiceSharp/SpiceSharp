@@ -68,8 +68,8 @@ namespace SpiceSharp.Algebra.Solve.Markowitz
 
                     // test to see if the element is acceptable as a pivot candidate
                     if (product <= minMarkowitzProduct
-                        && (magnitude > markowitz.RelativePivotThreshold * largest)
-                        && (magnitude > markowitz.AbsolutePivotThreshold))
+                        && magnitude > markowitz.RelativePivotThreshold * largest
+                        && magnitude > markowitz.AbsolutePivotThreshold)
                     {
                         // Test to see if the element has the lowest Markowitz product yet found,
                         // or whether it is tied with an element found earlier

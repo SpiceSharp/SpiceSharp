@@ -71,7 +71,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             Complex geq = Capacitance * state.Laplace + _load.Conduct;
             Complex current = (state.Solution[_posPrimeNode] - state.Solution[_negNode]) * geq;
-            Complex voltage = (state.Solution[_posNode] - state.Solution[_negNode]);
+            Complex voltage = state.Solution[_posNode] - state.Solution[_negNode];
             return voltage * -Complex.Conjugate(current);
         }
 

@@ -50,6 +50,7 @@ namespace SpiceSharp.IntegrationMethods
         /// <summary>
         /// Integrate a variable at a specific index
         /// </summary>
+        /// <param name="history">History</param>
         /// <param name="index">Index</param>
         /// <returns></returns>
         public override void Integrate(History<Vector<double>> history, int index)
@@ -136,7 +137,7 @@ namespace SpiceSharp.IntegrationMethods
             double tol, diff, tmp;
             double timetemp = Double.PositiveInfinity;
             var nodes = simulation.Circuit.Nodes;
-            int index = 0;
+            int index;
 
             // In my opinion, the original Spice method is kind of bugged and can be much better...
             switch (Order)
@@ -151,7 +152,9 @@ namespace SpiceSharp.IntegrationMethods
 
                         // Milne's estimate for the second-order derivative using a Forward Euler predictor and Backward Euler corrector
                         diff = state.Solution[index] - Prediction[index];
-                        if (diff != 0.0)
+
+                        // Avoid division by zero
+                        if (!diff.Equals(0.0))
                         {
                             tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * BaseParameters.LteRelativeTolerance + BaseParameters.LteAbsoluteTolerance;
                             tmp = DeltaOld[0] * Math.Sqrt(Math.Abs(2.0 * BaseParameters.TruncationTolerance * tol / diff));
@@ -173,7 +176,8 @@ namespace SpiceSharp.IntegrationMethods
                         double deriv = DeltaOld[1] / DeltaOld[0];
                         deriv = diff * 4.0 / (1 + deriv * deriv);
 
-                        if (deriv != 0.0)
+                        // Avoid division by zero
+                        if (!deriv.Equals(0.0))
                         {
                             tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(Prediction[index])) * BaseParameters.LteRelativeTolerance + BaseParameters.LteAbsoluteTolerance;
                             tmp = DeltaOld[0] * Math.Pow(Math.Abs(12.0 * BaseParameters.TruncationTolerance * tol / deriv), 1.0 / 3.0);

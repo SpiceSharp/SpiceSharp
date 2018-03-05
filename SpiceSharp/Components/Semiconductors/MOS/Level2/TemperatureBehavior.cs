@@ -125,7 +125,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             ratio = _bp.Temperature / _mbp.NominalTemperature;
             fact2 = _bp.Temperature / Circuit.ReferenceTemperature;
             kt = _bp.Temperature * Circuit.Boltzmann;
-            egfet = 1.16 - (7.02e-4 * _bp.Temperature * _bp.Temperature) / (_bp.Temperature + 1108);
+            egfet = 1.16 - 7.02e-4 * _bp.Temperature * _bp.Temperature / (_bp.Temperature + 1108);
             arg = -egfet / (kt + kt) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature + Circuit.ReferenceTemperature));
             pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);
 
@@ -204,15 +204,15 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             TempJunctionCapSidewall = _mbp.SidewallCapFactor * capfact;
             TempBulkPotential = fact2 * pbo + pbfact;
             gmanew = (TempBulkPotential - pbo) / pbo;
-            capfact = (1 + _mbp.BulkJunctionBotGradingCoefficient * (4e-4 * (_bp.Temperature - Circuit.ReferenceTemperature) - gmanew));
+            capfact = 1 + _mbp.BulkJunctionBotGradingCoefficient * (4e-4 * (_bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
             TempCapBd *= capfact;
             TempCapBs *= capfact;
             TempJunctionCap *= capfact;
-            capfact = (1 + _mbp.BulkJunctionSideGradingCoefficient * (4e-4 * (_bp.Temperature - Circuit.ReferenceTemperature) - gmanew));
+            capfact = 1 + _mbp.BulkJunctionSideGradingCoefficient * (4e-4 * (_bp.Temperature - Circuit.ReferenceTemperature) - gmanew);
             TempJunctionCapSidewall *= capfact;
             TempDepletionCap = _mbp.ForwardCapDepletionCoefficient * TempBulkPotential;
 
-            if ((TempSaturationCurrentDensity == 0) || (_bp.DrainArea.Value == 0) || (_bp.SourceArea.Value == 0))
+            if (TempSaturationCurrentDensity == 0 || _bp.DrainArea.Value == 0 || _bp.SourceArea.Value == 0)
             {
                 SourceVCritical = DrainVCritical = vt * Math.Log(vt / (Circuit.Root2 * TempSaturationCurrent));
             }
@@ -245,8 +245,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 czbdsw = 0;
             }
             arg = 1 - _mbp.ForwardCapDepletionCoefficient;
-            sarg = Math.Exp((-_mbp.BulkJunctionBotGradingCoefficient) * Math.Log(arg));
-            sargsw = Math.Exp((-_mbp.BulkJunctionSideGradingCoefficient) * Math.Log(arg));
+            sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
+            sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
             CapBd = czbd;
             CapBdSidewall = czbdsw;
             F2D = czbd * (1 - _mbp.ForwardCapDepletionCoefficient * (1 + _mbp.BulkJunctionBotGradingCoefficient)) * sarg / arg + czbdsw * (1 -
@@ -279,8 +279,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 czbssw = 0;
             }
             arg = 1 - _mbp.ForwardCapDepletionCoefficient;
-            sarg = Math.Exp((-_mbp.BulkJunctionBotGradingCoefficient) * Math.Log(arg));
-            sargsw = Math.Exp((-_mbp.BulkJunctionSideGradingCoefficient) * Math.Log(arg));
+            sarg = Math.Exp(-_mbp.BulkJunctionBotGradingCoefficient * Math.Log(arg));
+            sargsw = Math.Exp(-_mbp.BulkJunctionSideGradingCoefficient * Math.Log(arg));
             CapBs = czbs;
             CapBsSidewall = czbssw;
             F2S = czbs * (1 - _mbp.ForwardCapDepletionCoefficient * (1 + _mbp.BulkJunctionBotGradingCoefficient)) * sarg / arg + czbssw * (1 -

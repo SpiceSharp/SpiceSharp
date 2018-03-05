@@ -123,7 +123,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
                     }
                 }
             }
-            return (newVoltage);
+            return newVoltage;
         }
 
         /// <summary>
@@ -135,11 +135,11 @@ namespace SpiceSharp.Components.MosfetBehaviors
         /// <param name="criticalVoltage">Critical voltage</param>
         /// <param name="check">Checking variable</param>
         /// <returns></returns>
-        public static double LimitJunction(double newVoltage, double oldVoltage, double thermalVoltage, double criticalVoltage, ref int check)
+        public static double LimitJunction(double newVoltage, double oldVoltage, double thermalVoltage, double criticalVoltage, out int check)
         {
             double arg;
 
-            if ((newVoltage > criticalVoltage) && (Math.Abs(newVoltage - oldVoltage) > (thermalVoltage + thermalVoltage)))
+            if (newVoltage > criticalVoltage && Math.Abs(newVoltage - oldVoltage) > thermalVoltage + thermalVoltage)
             {
                 if (oldVoltage > 0)
                 {
@@ -163,7 +163,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
             {
                 check = 0;
             }
-            return (newVoltage);
+            return newVoltage;
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
             {
                 if (newVoltage > oldVoltage)
                 {
-                    newVoltage = Math.Min(newVoltage, (3 * oldVoltage) + 2);
+                    newVoltage = Math.Min(newVoltage, 3 * oldVoltage + 2);
                 }
                 else
                 {
@@ -199,7 +199,7 @@ namespace SpiceSharp.Components.MosfetBehaviors
                     newVoltage = Math.Max(newVoltage, -.5);
                 }
             }
-            return (newVoltage);
+            return newVoltage;
         }
 
         /// <summary>

@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
 
-            return (state.Solution[_posNode] - state.Solution[_negNode]);
+            return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [PropertyName("p"), PropertyInfo("Power supplied by the source")]
         public double GetP(RealState state)

@@ -87,7 +87,7 @@ namespace SpiceSharp.Components
             time -= _td;
 
             // Calculate sine wave result (no offset)
-            double result = 0.0;
+            double result;
             if (time <= 0.0)
                 result = 0.0;
             else

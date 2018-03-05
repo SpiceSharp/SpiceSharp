@@ -72,7 +72,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 _bp.Temperature.Value = simulation.RealState.Temperature;
             vt = _bp.Temperature * Circuit.KOverQ;
             fact2 = _bp.Temperature / Circuit.ReferenceTemperature;
-            egfet = 1.16 - (7.02e-4 * _bp.Temperature * _bp.Temperature) / (_bp.Temperature + 1108);
+            egfet = 1.16 - 7.02e-4 * _bp.Temperature * _bp.Temperature / (_bp.Temperature + 1108);
             arg = -egfet / (2 * Circuit.Boltzmann * _bp.Temperature) + 1.1150877 / (Circuit.Boltzmann * (Circuit.ReferenceTemperature +
                  Circuit.ReferenceTemperature));
             pbfact = -2 * vt * (1.5 * Math.Log(fact2) + Circuit.Charge * arg);

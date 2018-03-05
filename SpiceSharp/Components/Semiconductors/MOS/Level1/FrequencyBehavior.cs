@@ -356,9 +356,9 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             gateSourceOverlapCap = _mbp.GateSourceOverlapCapFactor * _bp.Width;
             gateDrainOverlapCap = _mbp.GateDrainOverlapCapFactor * _bp.Width;
             gateBulkOverlapCap = _mbp.GateBulkOverlapCapFactor * effectiveLength;
-            capgs = (CapGs + CapGs + gateSourceOverlapCap);
-            capgd = (CapGd + CapGd + gateDrainOverlapCap);
-            capgb = (CapGb + CapGb + gateBulkOverlapCap);
+            capgs = CapGs + CapGs + gateSourceOverlapCap;
+            capgd = CapGd + CapGd + gateDrainOverlapCap;
+            capgb = CapGb + CapGb + gateBulkOverlapCap;
             xgs = capgs * cstate.Laplace.Imaginary;
             xgd = capgd * cstate.Laplace.Imaginary;
             xgb = capgb * cstate.Laplace.Imaginary;
