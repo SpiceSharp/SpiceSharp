@@ -61,7 +61,7 @@ namespace SpiceSharpTest.Models
             // Create simulation, exports and references
             Transient tran = new Transient("tran", 1e-8, 10e-6);
             Export<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
-            Func<double, double>[] references = { (double t) => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
+            Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
 
             // Run
             AnalyzeTransient(tran, ckt, exports, references);
@@ -91,7 +91,7 @@ namespace SpiceSharpTest.Models
             Export<Complex>[] exports = { new ComplexPropertyExport(ac, "C1", "v") };
 
             // Create references
-            Func<double, Complex>[] references = { (double f) => 1.0 / new Complex(1.0, resistance * capacitance * 2 * Math.PI * f) };
+            Func<double, Complex>[] references = { f => 1.0 / new Complex(1.0, resistance * capacitance * 2 * Math.PI * f) };
 
             // Run test
             AnalyzeAC(ac, ckt, exports, references);

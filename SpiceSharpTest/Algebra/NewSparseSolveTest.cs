@@ -66,10 +66,10 @@ namespace SpiceSharpTest.Sparse
             // Build the matrix that should be solvable using only the singleton pivoting strategy
             double[][] matrix =
             {
-                new double[] {    1,    0.5,   0,      0 },
-                new double[] { -0.5,      5,   4,      0 },
-                new double[] {    0,      3,   2,    0.1 },
-                new double[] {    0,      0,  -0.01,   3 }
+                new[] {    1,    0.5,   0,      0 },
+                new[] { -0.5,      5,   4,      0 },
+                new[] {    0,      3,   2,    0.1 },
+                new[] {    0,      0,  -0.01,   3 }
             };
             double[] rhs = { 0, 0, 0, 0 };
             for (int r = 0; r < matrix.Length; r++)
@@ -99,10 +99,10 @@ namespace SpiceSharpTest.Sparse
             // Build the matrix that should be solvable using only the singleton pivoting strategy
             double[][] matrix =
             {
-                new double[] {    1,    0.5,   0,      0 },
+                new[] {    1,    0.5,   0,      0 },
                 new double[] {    0,      5,   4,      0 },
                 new double[] {    0,      3,   2,      0 },
-                new double[] {    0,      0,  -0.01,   3 }
+                new[] {    0,      0,  -0.01,   3 }
             };
             double[] rhs = { 1, 0, 0, 0 };
             for (int r = 0; r < matrix.Length; r++)
@@ -132,10 +132,10 @@ namespace SpiceSharpTest.Sparse
             // Build the matrix that should be solvable using only the singleton pivoting strategy
             double[][] matrix =
             {
-                new double[] {    1,    0.5,      0,  2 },
+                new[] {    1,    0.5,      0,  2 },
                 new double[] {    2,      5,      4,  3 },
                 new double[] {    0,      3,      2,  0 },
-                new double[] {    4,    1.8,  -0.01,  8 }
+                new[] {    4,    1.8,  -0.01,  8 }
             };
             double[] rhs = { 1, 2, 3, 4 };
             for (int r = 0; r < matrix.Length; r++)
@@ -161,12 +161,12 @@ namespace SpiceSharpTest.Sparse
             {
                 new Complex[] { 0, 0, 0, 0, 1, 0, 1, 0 },
                 new Complex[] { 0, 0, 0, 0, -1, 1, 0, 0 },
-                new Complex[] { 0, 0, new Complex(0.0, 0.000628318530717959), 0, 0, 0, -1, 1 },
+                new[] { 0, 0, new Complex(0.0, 0.000628318530717959), 0, 0, 0, -1, 1 },
                 new Complex[] { 0, 0, 0, 0.001, 0, 0, 0, -1 },
                 new Complex[] { 1, -1, 0, 0, 0, 0, 0, 0 },
                 new Complex[] { 0, 1, 0, 0, 0, 0, 0, 0 },
                 new Complex[] { 1, 0, -1, 0, 0, 0, 0, 0 },
-                new Complex[] { 0, 0, 1, -1, 0, 0, 0, new Complex(0.0, -1.5707963267949) }
+                new[] { 0, 0, 1, -1, 0, 0, 0, new Complex(0.0, -1.5707963267949) }
             };
             Complex[] rhs = { 0, 0, 0, 0, 0, 24.0 };
             Complex[] reference =

@@ -60,7 +60,7 @@ namespace SpiceSharpTest.Models
             // Create simulation, exports and references
             Ac ac = new Ac("ac", new SpiceSharp.Simulations.Sweeps.LinearSweep(1.0, 10001, 10));
             Export<Complex>[] exports = { new ComplexPropertyExport(ac, "R1", "i") };
-            Func<double, Complex>[] references = { (double f) => 1e-3 };
+            Func<double, Complex>[] references = { f => 1e-3 };
             AnalyzeAC(ac, ckt, exports, references);
         }
 
@@ -97,7 +97,7 @@ namespace SpiceSharpTest.Models
             // Create simulation, exports and references
             Op op = new Op("op");
             Export<double>[] exports = { new RealPropertyExport(op, "R2", "v") };
-            double[] references = { 100 * 1 / (3 + 1) };
+            double[] references = { 100.0 * 1.0 / (3.0 + 1.0) };
 
             // Run
             AnalyzeOp(op, ckt, exports, references);

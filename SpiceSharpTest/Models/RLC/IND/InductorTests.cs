@@ -61,7 +61,7 @@ namespace SpiceSharpTest.Models
             exports[0] = new ComplexVoltageExport(ac, "OUT");
 
             // Create references
-            Func<double, Complex>[] references = { (double f) => 1.0 / new Complex(1.0, inductance / resistance * 2 * Math.PI * f) };
+            Func<double, Complex>[] references = { f => 1.0 / new Complex(1.0, inductance / resistance * 2 * Math.PI * f) };
 
             // Run test
             AnalyzeAC(ac, ckt, exports, references);
@@ -102,7 +102,7 @@ namespace SpiceSharpTest.Models
             // Create reference function
             double amplitude = Math.Sqrt(inductance / capacitance) * initialCurrent;
             double omega = 1.0 / Math.Sqrt(inductance * capacitance);
-            Func<double, double>[] references = { (double t) => -amplitude * Math.Sin(omega * t) };
+            Func<double, double>[] references = { t => -amplitude * Math.Sin(omega * t) };
 
             // Run test
             AnalyzeTransient(tran, ckt, exports, references);

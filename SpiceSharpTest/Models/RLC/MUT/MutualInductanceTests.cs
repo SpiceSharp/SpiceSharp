@@ -48,11 +48,11 @@ namespace SpiceSharpTest.Models
             double a = l1 * l2 - mut * mut;
             double b = r1 * l2 + r2 * l1;
             double c = r1 * r2;
-            double D = Math.Sqrt(b * b - 4 * a * c);
-            double invtau1 = (-b + D) / (2.0 * a);
-            double invtau2 = (-b - D) / (2.0 * a);
+            double discriminant = Math.Sqrt(b * b - 4 * a * c);
+            double invtau1 = (-b + discriminant) / (2.0 * a);
+            double invtau2 = (-b - discriminant) / (2.0 * a);
             double factor = mut * r2 / a / (invtau1 - invtau2);
-            Func<double, double>[] references = {  (double t) => factor * (Math.Exp(t * invtau1) - Math.Exp(t * invtau2)) };
+            Func<double, double>[] references = {  t => factor * (Math.Exp(t * invtau1) - Math.Exp(t * invtau2)) };
 
             // Increase the allowed threshold
             // It should also be verfied that the error decreases if the maximum timestep is decreased
@@ -96,7 +96,7 @@ namespace SpiceSharpTest.Models
             double c = r1 * r2;
             double num = mut * r2;
             Func<double, Complex>[] references = {
-                (double f) =>
+                f =>
                 {
                     Complex s = new Complex(0.0, 2.0 * Math.PI * f);
                     Complex denom = (a * s + b) * s + c;

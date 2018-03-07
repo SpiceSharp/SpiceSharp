@@ -14,7 +14,7 @@ namespace SpiceSharpTest.Sparse
         /// <returns></returns>
         protected Solver<double> ReadMtxFile(string filename)
         {
-            Solver<double> result = null;
+            Solver<double> result;
 
             using (StreamReader sr = new StreamReader(filename))
             {
@@ -22,7 +22,7 @@ namespace SpiceSharpTest.Sparse
                 sr.ReadLine();
 
                 // The second line tells us the dimensions
-                string line = sr.ReadLine();
+                string line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
                 var match = Regex.Match(line, @"^(?<rows>\d+)\s+(?<columns>\d+)\s+(\d+)");
                 int size = int.Parse(match.Groups["rows"].Value);
                 if (int.Parse(match.Groups["columns"].Value) != size)
@@ -33,7 +33,11 @@ namespace SpiceSharpTest.Sparse
                 // All subsequent lines are of the format [row] [column] [value]
                 while (!sr.EndOfStream)
                 {
+                    // Read the next line
                     line = sr.ReadLine();
+                    if (line == null)
+                        break;
+
                     match = Regex.Match(line, @"^(?<row>\d+)\s+(?<column>\d+)\s+(?<value>.*)\s*$");
                     if (!match.Success)
                         throw new Exception("Could not recognize file");

@@ -11,15 +11,15 @@ namespace SpiceSharpTest.Sparse
         {
             double[][] matrixElements =
             {
-                new double[] { 1.0, 1.0, 1.0 },
-                new double[] { 2.0, 3.0, 5.0 },
-                new double[] { 4.0, 6.0, 8.0 }
+                new[] { 1.0, 1.0, 1.0 },
+                new[] { 2.0, 3.0, 5.0 },
+                new[] { 4.0, 6.0, 8.0 }
             };
             double[][] expected =
             {
-                new double[] { 1.0, 1.0, 1.0 },
-                new double[] { 2.0, 1.0, 3.0 },
-                new double[] { 4.0, 2.0, -0.5 }
+                new[] { 1.0, 1.0, 1.0 },
+                new[] { 2.0, 1.0, 3.0 },
+                new[] { 4.0, 2.0, -0.5 }
             };
 
             // Create matrix

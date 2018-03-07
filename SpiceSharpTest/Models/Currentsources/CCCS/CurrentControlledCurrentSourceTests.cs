@@ -28,7 +28,7 @@ namespace SpiceSharpTest.Models
             // Make the simulation, exports and references
             Dc dc = new Dc("DC", "I1", -10.0, 10.0, 1e-3);
             Export<double>[] exports = { new RealVoltageExport(dc, "out"), new RealPropertyExport(dc, "R1", "i") };
-            Func<double, double>[] references = { (double sweep) => sweep * gain * resistance, (double sweep) => sweep * gain };
+            Func<double, double>[] references = { sweep => sweep * gain * resistance, sweep => sweep * gain };
             AnalyzeDC(dc, ckt, exports, references);
         }
 
@@ -52,7 +52,7 @@ namespace SpiceSharpTest.Models
             // Make the simulation, exports and references
             Ac ac = new Ac("AC", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1, 1e4, 3));
             Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out"), new ComplexPropertyExport(ac, "R1", "i") };
-            Func<double, Complex>[] references = { (double freq) => magnitude * gain * resistance, (double freq) => magnitude * gain };
+            Func<double, Complex>[] references = { freq => magnitude * gain * resistance, freq => magnitude * gain };
             AnalyzeAC(ac, ckt, exports, references);
         }
     }
