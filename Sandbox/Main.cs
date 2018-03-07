@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Numerics;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using SpiceSharp;
 using SpiceSharp.Circuits;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
 
 namespace Sandbox
 {
@@ -31,7 +29,7 @@ namespace Sandbox
             ckt.Objects.Add(
                 new VoltageSource("v1", "net2", "net1", 0),
                 new VoltageSource("v2", "net1", "0", 24),
-                new Inductor(new Identifier("x1", "l1"), "net2", "net3", 100e-3),
+                new Inductor(new Identifier("x1", "l1"), "net2", "net3", 0),
                 new Capacitor(new Identifier("x1", "c1"), "net3", "0", 100e-6),
                 new Inductor("l2", "net3", "out", 250e-3),
                 new Resistor("rload", "out", "0", 1e3)
