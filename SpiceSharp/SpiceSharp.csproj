@@ -278,7 +278,7 @@
     <Compile Include="Components\RLC\CAP\CapacitorModel.cs" />
     <Compile Include="Components\RLC\RES\Resistor.cs" />
     <Compile Include="Components\RLC\RES\ResistorModel.cs" />
-    <Compile Include="Components\Voltagesources\VSRC\Voltagesource.cs" />
+    <Compile Include="Components\Voltagesources\VSRC\VoltageSource.cs" />
     <Compile Include="Components\Waveforms\Waveform.cs" />
     <Compile Include="Diagnostics\CircuitException.cs" />
     <Compile Include="Diagnostics\CircuitWarning.cs" />
