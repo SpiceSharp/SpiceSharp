@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Numerics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.Sweeps;
@@ -8,10 +8,10 @@ using SpiceSharp.Components;
 
 namespace SpiceSharpTest.Models
 {
-    [TestClass]
+    [TestFixture]
     public class VoltageControlledVoltageSourceTests : Framework
     {
-        [TestMethod]
+        [Test]
         public void When_VCVSDC_Expect_Reference()
         {
             double gain = 12.0;
@@ -30,7 +30,7 @@ namespace SpiceSharpTest.Models
             AnalyzeDC(dc, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_VCVSSmallSignal_Expect_Reference()
         {
             double magnitude = 0.9;

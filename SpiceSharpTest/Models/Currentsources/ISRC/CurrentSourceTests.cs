@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
 
 namespace SpiceSharpTest.Models
 {
-    [TestClass]
+    [TestFixture]
     public class CurrentSourceTests : Framework
     {
         /// <summary>
@@ -22,7 +22,7 @@ namespace SpiceSharpTest.Models
             return ckt;
         }
 
-        [TestMethod]
+        [Test]
         public void When_CurrentSource_ResistorOperatingPoint_Expect_Reference()
         {
             /*
@@ -71,7 +71,7 @@ namespace SpiceSharpTest.Models
             return ckt;
         }
 
-        [TestMethod]
+        [Test]
         public void When_CurrentSource_ResistorsInSeriesOperatingPoint_Expect_Reference()
         {
             /*

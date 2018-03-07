@@ -1,23 +1,22 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharpTest.Validation
 {
-    [TestClass]
+    [TestFixture]
     public class ValidatorTests
     {
-        [TestMethod]
-        [ExpectedException(typeof(CircuitException))]
+        [Test]
         public void When_GroundNameInvalid_Expect_Exception()
         {
             // Verifies that CircuitException is thrown during Check when circuit has a ground node called "GND"
             var ckt = CreateCircuit("gnd");
-            ckt.Validate();
+            Assert.Throws<CircuitException>(() => ckt.Validate());
         }
 
-        [TestMethod]
+        [Test]
         public void When_GroundNameValid_Expect_NoException()
         {
             // Verifies that CircuitException is not thrown during Check when circuit has a ground node called "gnd"
@@ -25,7 +24,7 @@ namespace SpiceSharpTest.Validation
             ckt.Validate();
         }
 
-        [TestMethod]
+        [Test]
         public void When_GroundNameZero_Expect_NoException()
         {
             // Verifies that CircuitException is not thrown during Check when circuit has a ground node called "0"
@@ -48,8 +47,7 @@ namespace SpiceSharpTest.Validation
             return ckt;
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CircuitException), "Voltage source loop has been allowed")]
+        [Test]
         public void When_VoltageLoop_Expect_CircuitException()
         {
             Circuit ckt = new Circuit();
@@ -58,11 +56,10 @@ namespace SpiceSharpTest.Validation
                 new VoltageSource("V2", "B", "A", 1.0),
                 new VoltageSource("V3", "B", "A", 1.0)
                 );
-            ckt.Validate();
+            Assert.Throws<CircuitException>(() => ckt.Validate());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CircuitException), "Voltage source loop has been allowed")]
+        [Test]
         public void When_VoltageLoop2_Expect_CircuitException()
         {
             Circuit ckt = new Circuit();
@@ -78,11 +75,10 @@ namespace SpiceSharpTest.Validation
                 new VoltageSource("V9", "H", "I", 1.0),
                 new VoltageSource("V10", "I", "0", 1.0)
                 );
-            ckt.Validate();
+            Assert.Throws<CircuitException>(() => ckt.Validate());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CircuitException), "Floating node not detected")]
+        [Test]
         public void When_FloatingNode_Expect_CircuitException()
         {
             Circuit ckt = new Circuit();
@@ -91,11 +87,10 @@ namespace SpiceSharpTest.Validation
                 new Capacitor("C1", "in", "out", 1e-12),
                 new Capacitor("C2", "out", "gnd", 1e-12)
                 );
-            ckt.Validate();
+            Assert.Throws<CircuitException>(() => ckt.Validate());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CircuitException), "Floating node not detected")]
+        [Test]
         public void When_FloatingNode2_Expect_CircuitException()
         {
             Circuit ckt = new Circuit();
@@ -104,7 +99,7 @@ namespace SpiceSharpTest.Validation
                 new VoltageControlledVoltageSource("E1", "out", "gnd", "in", "gnd", 2.0),
                 new VoltageControlledVoltageSource("E2", "out2", "gnd", "out", "gnd", 1.0)
                 );
-            ckt.Validate();
+            Assert.Throws<CircuitException>(() => ckt.Validate());
         }
     }
 }

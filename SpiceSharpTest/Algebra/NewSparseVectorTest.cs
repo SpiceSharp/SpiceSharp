@@ -1,13 +1,12 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
 
 namespace SpiceSharpTest.Sparse
 {
-    [TestClass]
+    [TestFixture]
     public class SparseVectorTest
     {
-        [TestMethod]
+        [Test]
         public void When_SwappingVectorElements_Expect_Reference()
         {
             // Test swapping of elements in all possible combinations

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Numerics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
 {
-    [TestClass]
+    [TestFixture]
     public class CapacitorTests : Framework
     {
-        [TestMethod]
+        [Test]
         public void When_Capacitor_LowpassRCOperatingPoint_Expect_Reference()
         {
             /*
@@ -37,7 +37,7 @@ namespace SpiceSharpTest.Models
             AnalyzeOp(op, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_Capacitor_LowpassRCTransient_Expect_Reference()
         {
             /*
@@ -67,7 +67,7 @@ namespace SpiceSharpTest.Models
             AnalyzeTransient(tran, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_Capacitor_LowpassRCSmallSignal_Expect_Reference()
         {
             /*

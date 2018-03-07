@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Numerics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
 {
-    [TestClass]
+    [TestFixture]
     public class CurrentControlledCurrentSourceTests : Framework
     {
-        [TestMethod]
+        [Test]
         public void When_CCCSDC_Expect_Reference()
         {
             double gain = 0.85;
@@ -32,7 +32,7 @@ namespace SpiceSharpTest.Models
             AnalyzeDC(dc, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_CCCSSmallSignal_Expect_Reference()
         {
             double magnitude = 0.6;

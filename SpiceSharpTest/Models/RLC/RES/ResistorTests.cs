@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System;
 using System.Numerics;
 using SpiceSharp;
@@ -7,7 +7,7 @@ using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
 {
-    [TestClass]
+    [TestFixture]
     public class ResistorTests : Framework
     {
         /// <summary>
@@ -26,7 +26,7 @@ namespace SpiceSharpTest.Models
             return ckt;
         }
 
-        [TestMethod]
+        [Test]
         public void When_ResistorOperatingPoint_Expect_Reference()
         {
             /*
@@ -46,7 +46,7 @@ namespace SpiceSharpTest.Models
             AnalyzeOp(op, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_ResistorDividerSmallSignal_Expect_Reference()
         {
             /*
@@ -83,7 +83,7 @@ namespace SpiceSharpTest.Models
             return ckt;
         }
 
-        [TestMethod]
+        [Test]
         public void When_ResistorDividerOperatingPoint_Expect_Reference()
         {
             /*
@@ -121,7 +121,7 @@ namespace SpiceSharpTest.Models
             return ckt;
         }
 
-        [TestMethod]
+        [Test]
         public void When_ResistorParallelOperatingPoint_Expect_Reference()
         {
             /*

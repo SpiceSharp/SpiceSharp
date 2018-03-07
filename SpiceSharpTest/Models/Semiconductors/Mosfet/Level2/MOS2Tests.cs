@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
@@ -10,7 +10,7 @@ namespace SpiceSharpTest.Models
     /// Taken from https://ecee.colorado.edu/~bart/book/book/chapter7/ch7_5.htm
     /// .MODEL NFET NMOS (LEVEL=2 L=1u W=1u VTO=-1.44 KP=8.64E-6 NSUB = 1E17 TOX = 20n)
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class MOS2Tests : Framework
     {
         /// <summary>
@@ -38,7 +38,7 @@ namespace SpiceSharpTest.Models
             return mos;
         }
 
-        [TestMethod]
+        [Test]
         public void When_MOS2DC_Expect_Spice3f5Reference()
         {
             /*
@@ -73,7 +73,7 @@ namespace SpiceSharpTest.Models
             AnalyzeDC(dc, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_MOS2CommonSourceAmplifierSmallSignal_Expect_Spice3f5Reference()
         {
             /*
@@ -114,7 +114,7 @@ namespace SpiceSharpTest.Models
             AnalyzeAC(ac, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_MOS2SwitchTransient_Expect_Spice3f5Reference()
         {
             /*
@@ -148,7 +148,7 @@ namespace SpiceSharpTest.Models
             AnalyzeTransient(tran, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_MOS2CommonSourceAmplifierNoise_Expect_Spice3f5Reference()
         {
             // Create circuit

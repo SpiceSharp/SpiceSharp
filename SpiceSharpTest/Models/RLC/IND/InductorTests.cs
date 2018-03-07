@@ -3,14 +3,14 @@ using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace SpiceSharpTest.Models
 {
-    [TestClass]
+    [TestFixture]
     public class InductorTests : Framework
     {
-        [TestMethod]
+        [Test]
         public void When_Inductor_LowpassRLOperatingPoint_Expect_Reference()
         {
             /*
@@ -37,7 +37,7 @@ namespace SpiceSharpTest.Models
             AnalyzeOp(op, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_Inductor_LowpassRLSmallSignal_Expect_Reference()
         {
             /*
@@ -67,7 +67,7 @@ namespace SpiceSharpTest.Models
             AnalyzeAC(ac, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_Inductor_LCTankTransient_Expect_Reference()
         {
             /*

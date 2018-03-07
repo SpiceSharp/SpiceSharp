@@ -1,12 +1,12 @@
 ﻿using System.Numerics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
 
 namespace SpiceSharpTest.Models
 {
-    [TestClass]
+    [TestFixture]
     public class BJTTests : Framework
     {
         /// <summary>
@@ -34,7 +34,7 @@ namespace SpiceSharpTest.Models
             return bjt;
         }
 
-        [TestMethod]
+        [Test]
         public void When_BJTDC_Expect_Spice3f5Reference()
         {
             /*
@@ -80,7 +80,7 @@ namespace SpiceSharpTest.Models
             AnalyzeDC(dc, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_BJTSmallSignal_Expect_Spice3f5Reference()
         {
             // Build circuit
@@ -124,7 +124,7 @@ namespace SpiceSharpTest.Models
             AnalyzeAC(ac, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_BJTTransient_Expect_Spice3f5Reference()
         {
             /*
@@ -166,7 +166,7 @@ namespace SpiceSharpTest.Models
         }
 
         /*
-        [TestMethod]
+        [Test]
         public void Emitter_Follower_DC()
         {
             // A test for BJT transistor (model mjd44h11) acting in an emitter-follower transistor circuit.

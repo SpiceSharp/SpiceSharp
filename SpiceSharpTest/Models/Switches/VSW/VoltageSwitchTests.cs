@@ -1,12 +1,12 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
 {
-    [TestClass]
+    [TestFixture]
     public class VoltageSwitchTests : Framework
     {
         /// <summary>
@@ -30,7 +30,7 @@ namespace SpiceSharpTest.Models
             return vsw;
         }
 
-        [TestMethod]
+        [Test]
         public void When_VSWSwitchDC_Expect_Spice3f5Reference()
         {
             // NOTE: The hysteresis is chosen such that it does not switch on the same point as a sweep. If that happens, then the smallest

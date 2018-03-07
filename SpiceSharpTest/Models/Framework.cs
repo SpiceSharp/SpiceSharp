@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace SpiceSharpTest.Models
 {

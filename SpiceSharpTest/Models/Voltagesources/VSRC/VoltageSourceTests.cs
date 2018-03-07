@@ -1,15 +1,15 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models.Voltagesources.VSRC
 {
-    [TestClass]
+    [TestFixture]
     public class VoltageSourceTests : Framework
     {
-        [TestMethod]
+        [Test]
         public void When_VoltageSourceSeries_Expect_Reference()
         {
             double[] voltages = { 1.0, 1.5, 2.8, 3.9, 0.5, -0.1, -0.5 };

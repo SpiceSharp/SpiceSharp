@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Numerics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.Sweeps;
@@ -8,10 +8,10 @@ using SpiceSharp.Components;
 
 namespace SpiceSharpTest.Models
 {
-    [TestClass]
+    [TestFixture]
     public class CurrentControlledVoltageSourceTests : Framework
     {
-        [TestMethod]
+        [Test]
         public void When_CCVSDC_Expect_Reference()
         {
             double transimpedance = 12.0;
@@ -31,7 +31,7 @@ namespace SpiceSharpTest.Models
             AnalyzeDC(dc, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_CCVSSmallSignal_Expect_Reference()
         {
             double magnitude = 0.9;

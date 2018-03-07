@@ -1,12 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
 
 namespace SpiceSharpTest.Sparse
 {
-    [TestClass]
+    [TestFixture]
     public class SparseMatrixTest
     {
-        [TestMethod]
+        [Test]
         public void When_BuildingMatrix_Expect_CorrectLinks()
         {
             int size = 20;
@@ -75,7 +75,7 @@ namespace SpiceSharpTest.Sparse
             }
         }
 
-        [TestMethod]
+        [Test]
         public void When_SwappingRows_Expect_Reference()
         {
             // Build the matrix
@@ -126,7 +126,7 @@ namespace SpiceSharpTest.Sparse
             }
         }
 
-        [TestMethod]
+        [Test]
         public void When_SwappingColumns_Expect_Reference()
         {
             // Build the matrix

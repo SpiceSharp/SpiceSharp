@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Numerics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
 {
-    [TestClass]
+    [TestFixture]
     public class MutualInductanceTests : Framework
     {
-        [TestMethod]
+        [Test]
         public void When_MutualInductanceTransient_Expect_Reference()
         {
             /*
@@ -62,7 +62,7 @@ namespace SpiceSharpTest.Models
             AnalyzeTransient(tran, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_MutualInductanceSmallSignal_Expect_Reference()
         {
             // Create circuit

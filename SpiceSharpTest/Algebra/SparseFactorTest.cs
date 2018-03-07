@@ -1,13 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
-using System;
 
 namespace SpiceSharpTest.Sparse
 {
-    [TestClass]
+    [TestFixture]
     public class SparseFactorTest
     {
-        [TestMethod]
+        [Test]
         public void When_Factoring_Expect_Reference()
         {
             double[][] matrixElements =

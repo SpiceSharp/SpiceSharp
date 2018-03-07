@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System;
 using System.Numerics;
 using SpiceSharp;
@@ -12,7 +12,7 @@ namespace SpiceSharpTest.Models
     /// M1 2 1 4x 4x DMOS L = 1u W = 1u
     /// .MODEL DMOS PMOS(VTO= -0.7 KP= 3.8E+1 THETA = .25 VMAX= 3.5E5 LEVEL= 3)
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public class MOS3Tests : Framework
     {
         /// <summary>
@@ -41,7 +41,7 @@ namespace SpiceSharpTest.Models
             return mos;
         }
 
-        [TestMethod]
+        [Test]
         public void When_MOS3DC_Expect_Spice3f5Reference()
         {
             /*
@@ -76,7 +76,7 @@ namespace SpiceSharpTest.Models
             AnalyzeDC(dc, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_MOS3CommonSourceAmplifierSmallSignal_Expect_Spice3f5Reference()
         {
             /*
@@ -117,7 +117,7 @@ namespace SpiceSharpTest.Models
             AnalyzeAC(ac, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_MOS3SwitchTransient_Expect_Spice3f5Reference()
         {
             // Create circuit
@@ -147,7 +147,7 @@ namespace SpiceSharpTest.Models
             AnalyzeTransient(tran, ckt, exports, references);
         }
         
-        [TestMethod]
+        [Test]
         public void When_MOS3CommonSourceAmplifierNoise_Expect_Spice3f5Reference()
         {
             // Create circuit

@@ -1,28 +1,27 @@
-﻿using System.Numerics;
+﻿using System.IO;
+using System.Numerics;
+using NUnit.Framework;
 using SpiceSharp.Algebra;
-using SpiceSharp.Algebra.Solve;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SpiceSharp.Algebra.Solve.Markowitz;
 
 namespace SpiceSharpTest.Sparse
 {
-    [TestClass]
+    [TestFixture]
     public class SparseSolveTest : SolveFramework
     {
-        [TestMethod]
+        [Test]
         public void When_BigMatrix_Expect_NoException()
         {
             /*
              * Test factoring a big matrix
              */
-
-            var solver = ReadMtxFile("Algebra/Matrices/fidapm05.mtx");
+            var solver = ReadMtxFile(Path.Combine(TestContext.CurrentContext.TestDirectory, @"Algebra\Matrices\fidapm05.mtx"));
 
             // Order and factor this larger matrix
             solver.OrderAndFactor();
         }
 
-        [TestMethod]
+        [Test]
         public void When_SingletonPivoting_Expect_NoException()
         {
             // Build the solver with only the singleton pivoting
@@ -55,7 +54,7 @@ namespace SpiceSharpTest.Sparse
             solver.OrderAndFactor();
         }
 
-        [TestMethod]
+        [Test]
         public void When_QuickDiagonalPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
@@ -88,7 +87,7 @@ namespace SpiceSharpTest.Sparse
             solver.OrderAndFactor();
         }
 
-        [TestMethod]
+        [Test]
         public void When_DiagonalPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
@@ -121,7 +120,7 @@ namespace SpiceSharpTest.Sparse
             solver.OrderAndFactor();
         }
 
-        [TestMethod]
+        [Test]
         public void When_EntireMatrixPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
@@ -154,7 +153,7 @@ namespace SpiceSharpTest.Sparse
             solver.OrderAndFactor();
         }
 
-        [TestMethod]
+        [Test]
         public void When_ExampleComplexMatrix1_Expect_MatlabReference()
         {
             // Build the example matrix

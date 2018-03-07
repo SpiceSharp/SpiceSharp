@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.IO;
-using System.Threading.Tasks;
 using SpiceSharp.Algebra;
-using SpiceSharp.Algebra.Solve;
 
 namespace SpiceSharpTest.Sparse
 {

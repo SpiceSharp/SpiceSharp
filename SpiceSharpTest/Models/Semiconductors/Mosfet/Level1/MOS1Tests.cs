@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
@@ -6,7 +6,7 @@ using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
 {
-    [TestClass]
+    [TestFixture]
     public class MOS1Tests : Framework
     {
         /// <summary>
@@ -34,7 +34,7 @@ namespace SpiceSharpTest.Models
             return mos;
         }
 
-        [TestMethod]
+        [Test]
         public void When_MOS1DC_Expect_Spice3f5Reference()
         {
             /*
@@ -68,7 +68,7 @@ namespace SpiceSharpTest.Models
             AnalyzeDC(dc, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_MOS1CommonSourceAmplifierSmallSignal_Expect_Spice3f5Reference()
         {
             /*
@@ -107,7 +107,7 @@ namespace SpiceSharpTest.Models
             AnalyzeAC(ac, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_MOS1SwitchTransient_Expect_Spice3f5Reference()
         {
             // Create circuit
@@ -134,7 +134,7 @@ namespace SpiceSharpTest.Models
             AnalyzeTransient(tran, ckt, exports, references);
         }
 
-        [TestMethod]
+        [Test]
         public void When_MOS1CommonSourceAmplifierNoise_Expect_Spice3f5Reference()
         {
             // Create circuit
