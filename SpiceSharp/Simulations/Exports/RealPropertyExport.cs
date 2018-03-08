@@ -46,7 +46,7 @@ namespace SpiceSharp.Simulations
 
             // Get the necessary behavior in order:
             // 1) First try transient analysis
-            Behavior behavior = eb.Get<TransientBehavior>();
+            Behavior behavior = eb.Get<BaseTransientBehavior>();
             if (behavior != null)
                 stateExtractor = behavior.CreateExport(PropertyName);
 

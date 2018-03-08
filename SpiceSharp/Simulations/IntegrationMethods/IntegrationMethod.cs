@@ -97,7 +97,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Private variables
         /// </summary>
         private double _savetime = double.NaN;
-        private Collection<TransientBehavior> _transientBehaviors;
+        private Collection<BaseTransientBehavior> _transientBehaviors;
 
         /// <summary>
         /// Event called when the timestep needs to be truncated
@@ -174,7 +174,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Initialize/reset the integration method
         /// </summary>
         /// <param name="behaviors">Truncation behaviors</param>
-        public virtual void Initialize(Collection<TransientBehavior> behaviors)
+        public virtual void Initialize(Collection<BaseTransientBehavior> behaviors)
         {
             // Initialize variables
             Time = 0.0;

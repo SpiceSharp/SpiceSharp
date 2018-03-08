@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="MutualInductance"/>
     /// </summary>
-    public class TransientBehavior : Behaviors.TransientBehavior
+    public class TransientBehavior : Behaviors.BaseTransientBehavior
     {
         /// <summary>
         /// Necessary behaviors

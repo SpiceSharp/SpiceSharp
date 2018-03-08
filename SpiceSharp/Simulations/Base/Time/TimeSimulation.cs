@@ -29,7 +29,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Time-domain behaviors
         /// </summary>
-        protected Collection<TransientBehavior> TransientBehaviors { get; private set; }
+        protected Collection<BaseTransientBehavior> TransientBehaviors { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -77,7 +77,7 @@ namespace SpiceSharp.Simulations
             var config = ParameterSets.Get<TimeConfiguration>() ?? throw new CircuitException("{0}: No time configuration".FormatString(Name));
             TimeConfiguration = config;
             Method = config.Method ?? throw new CircuitException("{0}: No integration method specified".FormatString(Name));
-            TransientBehaviors = SetupBehaviors<TransientBehavior>();
+            TransientBehaviors = SetupBehaviors<BaseTransientBehavior>();
 
             // Setup the state pool and register states
             StatePool = new StatePool(Method);

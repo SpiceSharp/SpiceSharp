@@ -38,7 +38,7 @@ namespace SpiceSharp.IntegrationMethods
         /// Initialize the trapezoidal integration method
         /// </summary>
         /// <param name="behaviors">Truncation behaviors</param>
-        public override void Initialize(Collection<TransientBehavior> behaviors)
+        public override void Initialize(Collection<BaseTransientBehavior> behaviors)
         {
             base.Initialize(behaviors);
 

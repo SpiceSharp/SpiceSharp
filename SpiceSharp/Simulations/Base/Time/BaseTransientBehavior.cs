@@ -8,13 +8,13 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Transient behavior
     /// </summary>
-    public abstract class TransientBehavior : Behavior
+    public abstract class BaseTransientBehavior : Behavior
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        protected TransientBehavior(Identifier name) : base(name) { }
+        protected BaseTransientBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Register states

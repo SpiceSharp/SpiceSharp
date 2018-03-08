@@ -297,7 +297,7 @@
     <Compile Include="Simulations\Transient\AcceptBehavior.cs" />
     <Compile Include="Simulations\Transient\TimeStepCutEventArgs.cs" />
     <Compile Include="Simulations\Transient\Transient.cs" />
-    <Compile Include="Simulations\Base\Time\TransientBehavior.cs" />
+    <Compile Include="Simulations\Base\Time\BaseTransientBehavior.cs" />
     <Compile Include="Simulations\Transient\TruncateBehavior.cs" />
     <Compile Include="TypeDictionary.cs" />
     <Compile Include="Utility.cs" />
