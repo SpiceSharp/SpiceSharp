@@ -294,7 +294,7 @@
     <Compile Include="Simulations\Sweeps\LinearSweep.cs" />
     <Compile Include="Simulations\Sweeps\OctaveSweep.cs" />
     <Compile Include="Simulations\Sweeps\Sweep.cs" />
-    <Compile Include="Simulations\Transient\AcceptBehavior.cs" />
+    <Compile Include="Simulations\Transient\BaseAcceptBehavior.cs" />
     <Compile Include="Simulations\Transient\TimeStepCutEventArgs.cs" />
     <Compile Include="Simulations\Transient\Transient.cs" />
     <Compile Include="Simulations\Base\Time\BaseTransientBehavior.cs" />

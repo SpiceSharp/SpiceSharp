@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
     /// <summary>
     /// Accept behavior for a <see cref="VoltageSource"/>
     /// </summary>
-    public class AcceptBehavior : Behaviors.AcceptBehavior
+    public class AcceptBehavior : Behaviors.BaseAcceptBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

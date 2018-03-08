@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
     /// <summary>
     /// Accept behavior for a <see cref="CurrentSource"/>
     /// </summary>
-    public class AcceptBehavior : Behaviors.AcceptBehavior
+    public class AcceptBehavior : Behaviors.BaseAcceptBehavior
     {
         /// <summary>
         /// Necessary behaviors

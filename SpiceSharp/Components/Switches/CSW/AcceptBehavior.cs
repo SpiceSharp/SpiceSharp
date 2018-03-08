@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
     /// <summary>
     /// Accept behavior for a <see cref="CurrentSwitch"/>
     /// </summary>
-    public class AcceptBehavior : Behaviors.AcceptBehavior
+    public class AcceptBehavior : Behaviors.BaseAcceptBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

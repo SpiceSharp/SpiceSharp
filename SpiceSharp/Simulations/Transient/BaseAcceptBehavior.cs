@@ -5,13 +5,13 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Behavior for accepting a timepoint
     /// </summary>
-    public abstract class AcceptBehavior : Behavior
+    public abstract class BaseAcceptBehavior : Behavior
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        protected AcceptBehavior(Identifier name) : base(name) { }
+        protected BaseAcceptBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Accept the current timepoint

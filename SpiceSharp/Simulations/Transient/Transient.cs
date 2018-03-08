@@ -18,7 +18,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Behaviors for accepting a timepoint
         /// </summary>
-        protected Collection<AcceptBehavior> AcceptBehaviors { get; private set; }
+        protected Collection<BaseAcceptBehavior> AcceptBehaviors { get; private set; }
 
         /// <summary>
         /// Behaviors for truncating the timestep
@@ -62,7 +62,7 @@ namespace SpiceSharp.Simulations
             base.Setup();
 
             // Get behaviors and configurations
-            AcceptBehaviors = SetupBehaviors<AcceptBehavior>();
+            AcceptBehaviors = SetupBehaviors<BaseAcceptBehavior>();
             TruncateBehaviors = SetupBehaviors<TruncateBehavior>();
         }
 
