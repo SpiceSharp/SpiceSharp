@@ -218,7 +218,7 @@
     <Compile Include="Simulations\ModifiedNodalAnalysisHelper.cs" />
     <Compile Include="Simulations\Noise\NoiseBehavior.cs" />
     <Compile Include="Simulations\Base\BaseLoadBehavior.cs" />
-    <Compile Include="Simulations\Base\Frequency\FrequencyBehavior.cs" />
+    <Compile Include="Simulations\Base\Frequency\BaseFrequencyBehavior.cs" />
     <Compile Include="Simulations\Behaviors\Behavior.cs" />
     <Compile Include="Components\Semiconductors\DIO\LoadBehavior.cs" />
     <Compile Include="Components\Currentsources\ISRC\LoadBehavior.cs" />

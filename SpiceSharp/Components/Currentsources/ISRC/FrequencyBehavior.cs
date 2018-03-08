@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
     /// <summary>
     /// Behavior of a currentsource in AC analysis
     /// </summary>
-    public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : Behaviors.BaseFrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

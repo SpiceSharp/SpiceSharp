@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentsourceBehaviors
     /// <summary>
     /// AC behavior for a <see cref="VoltageControlledCurrentSource"/>
     /// </summary>
-    public class FrequencyBehavior : Behaviors.FrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : Behaviors.BaseFrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors

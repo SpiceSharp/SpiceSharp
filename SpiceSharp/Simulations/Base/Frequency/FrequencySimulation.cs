@@ -17,7 +17,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        protected Collection<FrequencyBehavior> FrequencyBehaviors { get; private set; }
+        protected Collection<BaseFrequencyBehavior> FrequencyBehaviors { get; private set; }
 
         /// <summary>
         /// Gets the complex state
@@ -66,7 +66,7 @@ namespace SpiceSharp.Simulations
             FrequencyConfiguration = ParameterSets.Get<FrequencyConfiguration>() ?? throw new CircuitException("No frequency configuration found");
             FrequencySweep = FrequencyConfiguration.FrequencySweep ?? throw new CircuitException("No frequency sweep found");
 
-            FrequencyBehaviors = SetupBehaviors<FrequencyBehavior>();
+            FrequencyBehaviors = SetupBehaviors<BaseFrequencyBehavior>();
             var solver = ComplexState.Solver;
             foreach (var behavior in FrequencyBehaviors)
                 behavior.GetEquationPointers(solver);

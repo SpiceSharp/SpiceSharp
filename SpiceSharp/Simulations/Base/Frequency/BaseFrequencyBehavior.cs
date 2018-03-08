@@ -8,13 +8,13 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// AC behavior for circuit objects
     /// </summary>
-    public abstract class FrequencyBehavior : Behavior
+    public abstract class BaseFrequencyBehavior : Behavior
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name</param>
-        protected FrequencyBehavior(Identifier name) : base(name) { }
+        protected BaseFrequencyBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Create an export method for AC analysis
