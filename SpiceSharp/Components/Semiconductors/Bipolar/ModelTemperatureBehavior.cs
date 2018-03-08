@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="BipolarJunctionTransistorModel"/>
     /// </summary>
-    public class ModelTemperatureBehavior : Behaviors.TemperatureBehavior
+    public class ModelTemperatureBehavior : BaseTemperatureBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

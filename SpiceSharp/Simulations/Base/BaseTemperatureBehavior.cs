@@ -5,13 +5,13 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Temperature-dependent behavior for circuit objects
     /// </summary>
-    public abstract class TemperatureBehavior : Behavior
+    public abstract class BaseTemperatureBehavior : Behavior
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the behavior</param>
-        protected TemperatureBehavior(Identifier name) : base(name)
+        protected BaseTemperatureBehavior(Identifier name) : base(name)
         {
         }
 

@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="Capacitor"/>
     /// </summary>
-    public class TemperatureBehavior : Behaviors.TemperatureBehavior
+    public class TemperatureBehavior : BaseTemperatureBehavior
     {
         /// <summary>
         /// Necessary parameters and behaviors

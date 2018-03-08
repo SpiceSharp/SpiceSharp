@@ -61,7 +61,7 @@ namespace SpiceSharp.Simulations
             // 3) Thirdly, check temperature behavior
             if (stateExtractor == null)
             {
-                behavior = eb.Get<TemperatureBehavior>();
+                behavior = eb.Get<BaseTemperatureBehavior>();
                 if (behavior != null)
                     stateExtractor = behavior.CreateExport(PropertyName);
             }

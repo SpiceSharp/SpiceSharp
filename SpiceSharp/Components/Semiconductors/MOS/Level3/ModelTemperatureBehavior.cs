@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
     /// <summary>
     /// Temperature behavior for a <see cref="Components.Model"/>
     /// </summary>
-    public class ModelTemperatureBehavior : Behaviors.TemperatureBehavior
+    public class ModelTemperatureBehavior : BaseTemperatureBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

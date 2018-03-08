@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// <summary>
     /// Temperature behavior for a <see cref="Resistor"/>
     /// </summary>
-    public class TemperatureBehavior : Behaviors.TemperatureBehavior
+    public class TemperatureBehavior : BaseTemperatureBehavior
     {
         /// <summary>
         /// Necessary parameters
