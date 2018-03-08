@@ -3,7 +3,6 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors;
 using SpiceSharp.Diagnostics;
-using FrequencyBehavior = SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior;
 
 namespace SpiceSharp.Components
 {

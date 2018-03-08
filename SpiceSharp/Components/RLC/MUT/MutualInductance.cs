@@ -3,8 +3,6 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.MutualInductanceBehaviors;
 using SpiceSharp.Diagnostics;
-using FrequencyBehavior = SpiceSharp.Components.MutualInductanceBehaviors.FrequencyBehavior;
-using TransientBehavior = SpiceSharp.Components.MutualInductanceBehaviors.TransientBehavior;
 
 namespace SpiceSharp.Components
 {

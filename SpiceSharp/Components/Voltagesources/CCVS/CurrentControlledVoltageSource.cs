@@ -2,8 +2,6 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors;
 using SpiceSharp.Diagnostics;
-using FrequencyBehavior = SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.FrequencyBehavior;
-using LoadBehavior = SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors.LoadBehavior;
 
 namespace SpiceSharp.Components
 {
