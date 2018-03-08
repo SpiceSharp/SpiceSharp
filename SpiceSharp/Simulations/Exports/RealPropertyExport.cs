@@ -53,7 +53,7 @@ namespace SpiceSharp.Simulations
             // 2) Second, try the load behavior
             if (stateExtractor == null)
             {
-                behavior = eb.Get<LoadBehavior>();
+                behavior = eb.Get<BaseLoadBehavior>();
                 if (behavior != null)
                     stateExtractor = behavior.CreateExport(PropertyName);
             }

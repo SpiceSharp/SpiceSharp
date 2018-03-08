@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// General behavior for <see cref="Diode"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
+    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors

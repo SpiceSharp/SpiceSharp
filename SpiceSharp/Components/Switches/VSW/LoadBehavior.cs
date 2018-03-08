@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
     /// <summary>
     /// Load behavior for a <see cref="VoltageSwitch"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
+    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors

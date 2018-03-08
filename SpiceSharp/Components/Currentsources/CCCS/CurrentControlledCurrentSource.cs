@@ -4,7 +4,6 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors;
 using SpiceSharp.Diagnostics;
 using FrequencyBehavior = SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.FrequencyBehavior;
-using LoadBehavior = SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.LoadBehavior;
 
 namespace SpiceSharp.Components
 {

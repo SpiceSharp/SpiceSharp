@@ -15,7 +15,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Necessary behaviors and configurations
         /// </summary>
-        protected Collection<LoadBehavior> LoadBehaviors { get; private set; }
+        protected Collection<BaseLoadBehavior> LoadBehaviors { get; private set; }
         protected Collection<TemperatureBehavior> TemperatureBehaviors { get; private set; }
         protected Collection<InitialConditionBehavior> InitialConditionBehaviors { get; private set; }
 
@@ -76,7 +76,7 @@ namespace SpiceSharp.Simulations
             // Setup behaviors, configurations and states
             BaseConfiguration = ParameterSets.Get<BaseConfiguration>();
             TemperatureBehaviors = SetupBehaviors<TemperatureBehavior>();
-            LoadBehaviors = SetupBehaviors<LoadBehavior>();
+            LoadBehaviors = SetupBehaviors<BaseLoadBehavior>();
             InitialConditionBehaviors = SetupBehaviors<InitialConditionBehavior>();
 
             // Setup the load behaviors

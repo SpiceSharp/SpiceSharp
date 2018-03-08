@@ -81,7 +81,7 @@ namespace SpiceSharp
         /// Specify the parameter
         /// </summary>
         /// <param name="value"></param>
-        public void Set(double value)
+        public virtual void Set(double value)
         {
             Value = value;
             Given = true;

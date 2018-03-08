@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
     /// <summary>
     /// Load behavior for a <see cref="CurrentSwitchModel"/>
     /// </summary>
-    public class ModelLoadBehavior : Behaviors.LoadBehavior
+    public class ModelLoadBehavior : BaseLoadBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

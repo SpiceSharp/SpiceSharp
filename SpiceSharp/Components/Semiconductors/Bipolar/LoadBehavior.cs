@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// General behavior for <see cref="BipolarJunctionTransistor"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
+    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors

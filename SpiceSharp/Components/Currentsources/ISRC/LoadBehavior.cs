@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
     /// <summary>
     /// General behavior for a <see cref="CurrentSource"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
+    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

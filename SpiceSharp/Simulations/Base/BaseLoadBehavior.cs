@@ -7,13 +7,13 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// General behavior for a circuit object
     /// </summary>
-    public abstract class LoadBehavior : Behavior
+    public abstract class BaseLoadBehavior : Behavior
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        protected LoadBehavior(Identifier name) : base(name) { }
+        protected BaseLoadBehavior(Identifier name) : base(name) { }
 
         /// <summary>
         /// Setup the behavior for usage with a solver

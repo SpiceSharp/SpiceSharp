@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// <summary>
     /// Load behavior for a <see cref="Inductor"/>
     /// </summary>
-    public class LoadBehavior : Behaviors.LoadBehavior, IConnectedBehavior
+    public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Nodes
