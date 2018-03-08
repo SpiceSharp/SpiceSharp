@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Behaviors for truncating the timestep
         /// </summary>
-        protected Collection<TruncateBehavior> TruncateBehaviors { get; private set; }
+        protected Collection<BaseTruncateBehavior> TruncateBehaviors { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -63,7 +63,7 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors and configurations
             AcceptBehaviors = SetupBehaviors<BaseAcceptBehavior>();
-            TruncateBehaviors = SetupBehaviors<TruncateBehavior>();
+            TruncateBehaviors = SetupBehaviors<BaseTruncateBehavior>();
         }
 
         /// <summary>

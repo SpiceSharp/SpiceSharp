@@ -205,7 +205,7 @@
     <Compile Include="Simulations\Behaviors\EntityBehaviors.cs" />
     <Compile Include="Simulations\Base\BaseTemperatureBehavior.cs" />
     <Compile Include="Simulations\Base\Frequency\FrequencySimulation.cs" />
-    <Compile Include="Simulations\Base\InitialConditionBehavior.cs" />
+    <Compile Include="Simulations\Base\BaseInitialConditionBehavior.cs" />
     <Compile Include="Simulations\InitializeSimulationEventArgs.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\ArrayHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\NodeHistory.cs" />
@@ -298,7 +298,7 @@
     <Compile Include="Simulations\Transient\TimeStepCutEventArgs.cs" />
     <Compile Include="Simulations\Transient\Transient.cs" />
     <Compile Include="Simulations\Base\Time\BaseTransientBehavior.cs" />
-    <Compile Include="Simulations\Transient\TruncateBehavior.cs" />
+    <Compile Include="Simulations\Transient\BaseTruncateBehavior.cs" />
     <Compile Include="TypeDictionary.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
