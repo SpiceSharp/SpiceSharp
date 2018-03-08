@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// <summary>
     /// AC behavior for <see cref="Inductor"/>
     /// </summary>
-    public class FrequencyBehavior : Behaviors.BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors

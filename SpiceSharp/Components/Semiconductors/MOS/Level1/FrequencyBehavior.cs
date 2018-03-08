@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
     /// <summary>
     /// AC behavior for a <see cref="Mosfet1"/>
     /// </summary>
-    public class FrequencyBehavior : Behaviors.BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

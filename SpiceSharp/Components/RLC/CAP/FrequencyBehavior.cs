@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
     /// <summary>
     /// AC behavior for <see cref="Capacitor"/>
     /// </summary>
-    public class FrequencyBehavior : Behaviors.BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary paramters and behaviors

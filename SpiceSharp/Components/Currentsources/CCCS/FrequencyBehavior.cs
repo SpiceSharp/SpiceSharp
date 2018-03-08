@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
     /// <summary>
     /// Frequency behavior for <see cref="CurrentControlledCurrentSource"/>
     /// </summary>
-    public class FrequencyBehavior : Behaviors.BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary parameters and behaviors

@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
     /// <summary>
     /// AC behavior for a <see cref="CurrentSwitch"/>
     /// </summary>
-    public class FrequencyBehavior : Behaviors.BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors

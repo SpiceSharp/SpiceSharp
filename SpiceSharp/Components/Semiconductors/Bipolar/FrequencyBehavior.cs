@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// AC behavior for <see cref="BipolarJunctionTransistor"/>
     /// </summary>
-    public class FrequencyBehavior : Behaviors.BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors

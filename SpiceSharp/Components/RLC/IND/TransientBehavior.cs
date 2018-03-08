@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// <summary>
     /// General behaviour for a <see cref="Inductor"/>
     /// </summary>
-    public class TransientBehavior : Behaviors.BaseTransientBehavior
+    public class TransientBehavior : BaseTransientBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

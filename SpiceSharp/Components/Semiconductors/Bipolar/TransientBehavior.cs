@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="BipolarJunctionTransistor"/>
     /// </summary>
-    public class TransientBehavior : Behaviors.BaseTransientBehavior, IConnectedBehavior
+    public class TransientBehavior : BaseTransientBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

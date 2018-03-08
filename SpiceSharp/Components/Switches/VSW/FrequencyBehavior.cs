@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.VoltageSwitchBehaviors
     /// <summary>
     /// AC behavior for <see cref="VoltageSwitch"/>
     /// </summary>
-    public class FrequencyBehavior : Behaviors.BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors

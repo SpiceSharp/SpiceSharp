@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
     /// <summary>
     /// General behavior for <see cref="Capacitor"/>
     /// </summary>
-    public class TransientBehavior : Behaviors.BaseTransientBehavior, IConnectedBehavior
+    public class TransientBehavior : BaseTransientBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// <summary>
     /// Transient behavior for a <see cref="Diode"/>
     /// </summary>
-    public class TransientBehavior : Behaviors.BaseTransientBehavior, IConnectedBehavior
+    public class TransientBehavior : BaseTransientBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

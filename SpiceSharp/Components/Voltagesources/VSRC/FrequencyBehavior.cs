@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.VoltagesourceBehaviors
     /// <summary>
     /// AC behavior for <see cref="VoltageSource"/>
     /// </summary>
-    public class FrequencyBehavior : Behaviors.BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// AC excitation vector

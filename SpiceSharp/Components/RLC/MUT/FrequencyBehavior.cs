@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     /// <summary>
     /// AC behavior for <see cref="MutualInductance"/>
     /// </summary>
-    public class FrequencyBehavior : Behaviors.BaseFrequencyBehavior
+    public class FrequencyBehavior : BaseFrequencyBehavior
     {
         /// <summary>
         /// Necessary behaviors

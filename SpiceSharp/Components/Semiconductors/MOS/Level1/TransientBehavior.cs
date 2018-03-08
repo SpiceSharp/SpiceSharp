@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
     /// <summary>
     /// Transient behavior for a <see cref="Mosfet1"/>
     /// </summary>
-    public class TransientBehavior : Behaviors.BaseTransientBehavior, IConnectedBehavior
+    public class TransientBehavior : BaseTransientBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Necessary behaviors and parameters

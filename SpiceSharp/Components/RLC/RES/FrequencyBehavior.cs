@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// <summary>
     /// AC behavior for <see cref="Resistor"/>
     /// </summary>
-    public class FrequencyBehavior : Behaviors.BaseFrequencyBehavior, IConnectedBehavior
+    public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
         /// Parameters
