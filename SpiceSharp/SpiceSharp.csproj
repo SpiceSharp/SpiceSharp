@@ -152,7 +152,7 @@
     <Compile Include="Components\Voltagesources\VSRC\FrequencyParameters.cs" />
     <Compile Include="Components\Voltagesources\VSRC\BaseParameters.cs" />
     <Compile Include="ParameterSet.cs" />
-    <Compile Include="ParameterSetCollection.cs" />
+    <Compile Include="ParameterSetDictionary.cs" />
     <Compile Include="Components\RLC\CAP\FrequencyBehavior.cs" />
     <Compile Include="Components\RLC\CAP\TemperatureBehavior.cs" />
     <Compile Include="Components\RLC\CAP\TransientBehavior.cs" />

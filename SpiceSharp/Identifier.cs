@@ -15,11 +15,6 @@ namespace SpiceSharp
         public static string Separator { get; set; } = ".";
 
         /// <summary>
-        /// Gets or sets case insensitivity
-        /// </summary>
-        public static bool CaseInsensitive { get; set; } = false;
-
-        /// <summary>
         /// Used for hashing
         /// </summary>
         protected const int Prime = 31;
@@ -62,13 +57,6 @@ namespace SpiceSharp
             // Check inputs
             if (path.Length == 0)
                 throw new CircuitException("Empty path");
-
-            // Fix case if necessary
-            if (CaseInsensitive)
-            {
-                for (int i = 0; i < path.Length; i++)
-                    path[i] = path[i].ToUpperInvariant();
-            }
 
             _idPath = path;
             Name = path[path.Length - 1];
