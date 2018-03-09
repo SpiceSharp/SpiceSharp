@@ -13,6 +13,7 @@ SpiceSharp is available as a **NuGet Package**.
 [![NuGet Badge](https://buildstats.info/nuget/spicesharpparser)](https://www.nuget.org/packages/SpiceSharpParser/) SpiceSharp Parser
 
 [![Build status](https://ci.appveyor.com/api/projects/status/hhg89ejd795ykmvh?svg=true)](https://ci.appveyor.com/project/svenboulanger/spicesharp)
+[![Build Status](https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=development)](https://travis-ci.org/SpiceSharp/SpiceSharp)
 
 You can find the API documentation here:<br />
 SpiceSharp: https://svenboulanger.github.io/SpiceSharp/coreapi/api/index.html<br />
