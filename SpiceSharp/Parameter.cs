@@ -41,7 +41,7 @@ namespace SpiceSharp
         /// Clone the parameter
         /// </summary>
         /// <returns></returns>
-        public object Clone()
+        public virtual object Clone()
         {
             var clone = new Parameter
             {
@@ -54,8 +54,8 @@ namespace SpiceSharp
         /// <summary>
         /// Copy the parameter from another parameter
         /// </summary>
-        /// <param name="source"></param>
-        public void CopyFrom(Parameter source)
+        /// <param name="source">Copy from other parameters</param>
+        public virtual void CopyFrom(Parameter source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -67,8 +67,8 @@ namespace SpiceSharp
         /// <summary>
         /// Copy the parameter to another parameter
         /// </summary>
-        /// <param name="target"></param>
-        public void CopyTo(Parameter target)
+        /// <param name="target">Target parameter</param>
+        public virtual void CopyTo(Parameter target)
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));

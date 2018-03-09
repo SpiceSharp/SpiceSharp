@@ -58,10 +58,17 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
+        /// Run the simulation
+        /// </summary>
+        /// <param name="circuit">Circuit</param>
+        public void Run(Circuit circuit) => Run(circuit, null);
+
+        /// <summary>
         /// Run the simulation using a circuit
         /// </summary>
         /// <param name="circuit">Circuit</param>
-        public virtual void Run(Circuit circuit)
+        /// <param name="controller">Simulation flow controller</param>
+        public virtual void Run(Circuit circuit, SimulationFlowController controller)
         {
             // Store the circuit
             Circuit = circuit ?? throw new ArgumentNullException(nameof(circuit));
@@ -72,7 +79,17 @@ namespace SpiceSharp.Simulations
             InitializeSimulationExport?.Invoke(this, initArgs);
 
             // Execute the simulation
-            Execute();
+            if (controller != null)
+            {
+                controller.Initialize(this);
+                do
+                {
+                    Execute();
+                } while (controller.Continue(this));
+                controller.Finalize(this);
+            }
+            else
+               Execute();
 
             // Finalize the simulation
             var finalArgs = new FinalizeSimulationEventArgs();

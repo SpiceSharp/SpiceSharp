@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.Components;
-using SpiceSharp.Components.VoltagesourceBehaviors;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Simulations
@@ -25,6 +24,11 @@ namespace SpiceSharp.Simulations
         /// Event that is called when normal iteration failed
         /// </summary>
         public event EventHandler<IterationFailedEventArgs> IterationFailed;
+
+        /// <summary>
+        /// Event that is called when a parameter is searched for sweeping
+        /// </summary>
+        public event EventHandler<DcParameterSearchEventArgs> OnParameterSearch; 
 
         /// <summary>
         /// Constructor
@@ -110,17 +114,27 @@ namespace SpiceSharp.Simulations
             {
                 // Get the component to be swept
                 var sweep = Sweeps[i];
-                if (!Circuit.Objects.Contains(sweep.Parameter))
-                    throw new CircuitException("Could not find source {0}".FormatString(sweep.Parameter));
-                var component = Circuit.Objects[sweep.Parameter];
 
-                // Get the parameter and save it for restoring later
-                if (component is VoltageSource vsrc)
-                    swept[i] = vsrc.ParameterSets.Get<BaseParameters>().DcValue;
-                else if (component is CurrentSource isrc)
-                    swept[i] = isrc.ParameterSets.Get<Components.CurrentsourceBehaviors.BaseParameters>().DcValue;
+                // Try finding the parameter to sweep
+                var args = new DcParameterSearchEventArgs(sweep.Parameter);
+                OnParameterSearch?.Invoke(this, args);
+                if (args.Result != null)
+                    swept[i] = args.Result;
                 else
-                    throw new CircuitException("Invalid sweep object");
+                {
+                    if (!Circuit.Objects.Contains(sweep.Parameter))
+                        throw new CircuitException("Could not find source {0}".FormatString(sweep.Parameter));
+                    var component = Circuit.Objects[sweep.Parameter];
+
+                    // Get the parameter and save it for restoring later
+                    if (component is VoltageSource vsrc)
+                        swept[i] = vsrc.ParameterSets.Get<Components.VoltagesourceBehaviors.BaseParameters>().DcValue;
+                    else if (component is CurrentSource isrc)
+                        swept[i] = isrc.ParameterSets.Get<Components.CurrentsourceBehaviors.BaseParameters>().DcValue;
+                    else
+                        throw new CircuitException("Invalid sweep object");
+                }
+
                 original[i] = (Parameter)swept[i].Clone();
                 swept[i].Set(sweep.Initial);
             }

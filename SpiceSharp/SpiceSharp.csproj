@@ -125,6 +125,7 @@
     <Compile Include="Simulations\Behaviors\BehaviorFactory.cs" />
     <Compile Include="Simulations\Behaviors\SetupDataProvider.cs" />
     <Compile Include="Simulations\DC\DCConfiguration.cs" />
+    <Compile Include="Simulations\DC\DcParameterSearchEventArgs.cs" />
     <Compile Include="Simulations\DC\IterationFailedEventArgs.cs" />
     <Compile Include="Simulations\DC\NestedSweeps.cs" />
     <Compile Include="Simulations\DC\Sweep.cs" />
@@ -270,6 +271,7 @@
     <Compile Include="Circuits\Node.cs" />
     <Compile Include="Simulations\Base\RealState.cs" />
     <Compile Include="Simulations\Noise\NoiseState.cs" />
+    <Compile Include="Simulations\SimulationFlowController.cs" />
     <Compile Include="Simulations\State.cs" />
     <Compile Include="Simulations\StateCollection.cs" />
     <Compile Include="Simulations\Statistics.cs" />
