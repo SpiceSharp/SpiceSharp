@@ -58,6 +58,19 @@ namespace SpiceSharp.Simulations
                 throw new CircuitException("Simulation {0} does not simulate in the complex plain".FormatString(_simulation));
             }
         }
+
+        /// <summary>
+        /// Gets the current sweep value if the simulation is a <see cref="Dc"/> analysis
+        /// </summary>
+        public double SweepValue
+        {
+            get
+            {
+                if (_simulation is Dc dc && dc.Sweeps.Count > 0)
+                    return dc.Sweeps[dc.Sweeps.Count - 1].CurrentValue;
+                throw new CircuitException("Simulation {0} is not a DC analysis".FormatString(_simulation));
+            }
+        }
         
         /// <summary>
         /// Constructor
