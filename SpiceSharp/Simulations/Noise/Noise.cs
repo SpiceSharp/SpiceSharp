@@ -106,7 +106,7 @@ namespace SpiceSharp.Simulations
 
             var noiseconfig = NoiseConfiguration;
             var baseconfig = BaseConfiguration;
-            var exportargs = new ExportDataEventArgs(RealState, ComplexState);
+            var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
             int posOutNode = noiseconfig.Output != null ? Circuit.Nodes[noiseconfig.Output].Index : 0;

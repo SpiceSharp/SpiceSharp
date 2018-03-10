@@ -51,7 +51,7 @@ namespace SpiceSharp.Simulations
                 behavior.InitializeParameters(this);
 
             // Export operating point if requested
-            var exportargs = new ExportDataEventArgs(RealState, ComplexState);
+            var exportargs = new ExportDataEventArgs(this);
             if (freqconfig.KeepOpInfo)
                 Export(exportargs);
 

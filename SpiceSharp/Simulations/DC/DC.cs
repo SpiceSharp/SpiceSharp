@@ -92,7 +92,7 @@ namespace SpiceSharp.Simulations
             // Base
             base.Execute();
 
-            var exportargs = new ExportDataEventArgs(RealState);
+            var exportargs = new ExportDataEventArgs(this);
 
             // Setup the state
             var state = RealState;
