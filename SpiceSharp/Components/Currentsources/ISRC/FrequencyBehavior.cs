@@ -57,13 +57,13 @@ namespace SpiceSharp.Components.CurrentsourceBehaviors
         /// </summary>
         /// <param name="propertyName">Property name</param>
         /// <returns></returns>
-        public override Func<ComplexState, Complex> CreateAcExport(string propertyName)
+        public override Func<Complex> CreateAcExport(Simulation simulation, string propertyName)
         {
             switch (propertyName)
             {
                 case "i":
-                case "c": return state => _ac;
-                default: return base.CreateAcExport(propertyName);
+                case "c": return () => _ac;
+                default: return base.CreateAcExport(simulation, propertyName);
             }
         }
 

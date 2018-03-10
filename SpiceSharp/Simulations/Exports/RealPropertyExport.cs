@@ -42,35 +42,27 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(e));
 
             var eb = e.Behaviors.GetEntityBehaviors(EntityName);
-            Func<RealState, double> stateExtractor = null;
 
             // Get the necessary behavior in order:
             // 1) First try transient analysis
             Behavior behavior = eb.Get<BaseTransientBehavior>();
             if (behavior != null)
-                stateExtractor = behavior.CreateExport(PropertyName);
+                Extractor = behavior.CreateExport(Simulation, PropertyName);
 
             // 2) Second, try the load behavior
-            if (stateExtractor == null)
+            if (Extractor == null)
             {
                 behavior = eb.Get<BaseLoadBehavior>();
                 if (behavior != null)
-                    stateExtractor = behavior.CreateExport(PropertyName);
+                    Extractor = behavior.CreateExport(Simulation, PropertyName);
             }
 
             // 3) Thirdly, check temperature behavior
-            if (stateExtractor == null)
+            if (Extractor == null)
             {
                 behavior = eb.Get<BaseTemperatureBehavior>();
                 if (behavior != null)
-                    stateExtractor = behavior.CreateExport(PropertyName);
-            }
-
-            // Create the extractor
-            if (stateExtractor != null)
-            {
-                var state = Simulation.States.Get<RealState>();
-                Extractor = () => stateExtractor(state);
+                    Extractor = behavior.CreateExport(Simulation, PropertyName);
             }
         }
     }

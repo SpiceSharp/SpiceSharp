@@ -67,17 +67,23 @@ namespace SpiceSharp.Components.CurrentControlledVoltagesourceBehaviors
         /// <summary>
         /// Create export method
         /// </summary>
+        /// <param name="simulation">Simulation</param>
         /// <param name="propertyName">Property</param>
         /// <returns></returns>
-        public override Func<RealState, double> CreateExport(string propertyName)
+        public override Func<double> CreateExport(Simulation simulation, string propertyName)
         {
+            // Get the state
+            var state = simulation?.States.Get<RealState>();
+            if (state == null)
+                return null;
+
             // Avoid reflection for common components
             switch (propertyName)
             {
-                case "v": return GetVoltage;
+                case "v": return () => GetVoltage(state);
                 case "i":
-                case "c": return GetCurrent;
-                case "p": return GetPower;
+                case "c": return () => GetCurrent(state);
+                case "p": return () => GetPower(state);
                 default: return null;
             }
         }

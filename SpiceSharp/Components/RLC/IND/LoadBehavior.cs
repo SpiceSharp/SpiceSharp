@@ -35,16 +35,22 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Create export method
         /// </summary>
+        /// <param name="simulation">Simulation</param>
         /// <param name="propertyName">Property</param>
         /// <returns></returns>
-        public override Func<RealState, double> CreateExport(string propertyName)
+        public override Func<double> CreateExport(Simulation simulation, string propertyName)
         {
+            // Get the state
+            var state = simulation?.States.Get<RealState>();
+            if (state == null)
+                return null;
+
             switch (propertyName)
             {
-                case "v": return state => state.Solution[_posNode] - state.Solution[_negNode];
+                case "v": return () => state.Solution[_posNode] - state.Solution[_negNode];
                 case "i":
-                case "c": return state => state.Solution[BranchEq];
-                case "p": return state => (state.Solution[_posNode] - state.Solution[_negNode]) * state.Solution[BranchEq];
+                case "c": return () => state.Solution[BranchEq];
+                case "p": return () => (state.Solution[_posNode] - state.Solution[_negNode]) * state.Solution[BranchEq];
                 default: return null;
             }
         }

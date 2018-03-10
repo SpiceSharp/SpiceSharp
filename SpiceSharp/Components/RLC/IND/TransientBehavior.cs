@@ -41,13 +41,14 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Create export method
         /// </summary>
+        /// <param name="simulation">Simulation</param>
         /// <param name="propertyName">Property</param>
         /// <returns></returns>
-        public override Func<RealState, double> CreateExport(string propertyName)
+        public override Func<double> CreateExport(Simulation simulation, string propertyName)
         {
             switch (propertyName)
             {
-                case "flux": return state => _flux.Current;
+                case "flux": return () => _flux.Current;
                 default: return null;
             }
         }

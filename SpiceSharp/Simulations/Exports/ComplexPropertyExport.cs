@@ -40,20 +40,12 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentNullException(nameof(e));
 
             var eb = e.Behaviors.GetEntityBehaviors(EntityName);
-            Func<ComplexState, Complex> stateExtractor = null;
 
             // Get the necessary behavior in order:
             // 1) First try transient analysis
             var behavior = eb.Get<BaseFrequencyBehavior>();
             if (behavior != null)
-                stateExtractor = behavior.CreateAcExport(PropertyName);
-
-            // Create the extractor
-            if (stateExtractor != null)
-            {
-                var state = Simulation.States.Get<ComplexState>();
-                Extractor = () => stateExtractor(state);
-            }
+                Extractor = behavior.CreateAcExport(Simulation, PropertyName);
         }
     }
 }
