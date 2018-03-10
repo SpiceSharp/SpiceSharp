@@ -24,7 +24,7 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "OUT", "0", 1.0e3));
 
             // Create simulation
-            Op op = new Op("op");
+            OP op = new OP("op");
 
             // Create exports
             Export<double>[] exports = new Export<double>[1];
@@ -54,7 +54,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["V1"].ParameterSets.SetProperty("acmag", 1.0);
 
             // Create simulation
-            Ac ac = new Ac("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(0.1, 1e6, 10));
+            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(0.1, 1e6, 10));
 
             // Create exports
             Export<Complex>[] exports = new Export<Complex>[1];

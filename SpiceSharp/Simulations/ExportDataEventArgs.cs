@@ -60,14 +60,14 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Gets the current sweep value if the simulation is a <see cref="Dc"/> analysis
+        /// Gets the current sweep value if the simulation is a <see cref="DC"/> analysis
         /// </summary>
         public double SweepValue
         {
             get
             {
-                if (_simulation is Dc dc && dc.Sweeps.Count > 0)
-                    return dc.Sweeps[dc.Sweeps.Count - 1].CurrentValue;
+                if (_simulation is DC dc && dc.Sweeps.Count > 0)
+                    return dc.Sweeps.Top.CurrentValue;
                 throw new CircuitException("Simulation {0} is not a DC analysis".FormatString(_simulation));
             }
         }

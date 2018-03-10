@@ -4,7 +4,7 @@ using SpiceSharp.Attributes;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Configuration for a <see cref="Dc"/>
+    /// Configuration for a <see cref="DC"/>
     /// </summary>
     public class DcConfiguration : ParameterSet
     {

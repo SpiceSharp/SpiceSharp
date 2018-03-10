@@ -83,7 +83,7 @@ namespace SpiceSharpTest.Models
             ckt.Objects["V1"].ParameterSets.SetProperty("acmag", 1.0);
 
             // Create simulation
-            Ac ac = new Ac("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1, 1e8, 10));
+            AC ac = new AC("ac", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1, 1e8, 10));
 
             // Create exports
             Export<Complex>[] exports = new Export<Complex>[1];

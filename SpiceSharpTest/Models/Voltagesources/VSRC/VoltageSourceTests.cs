@@ -23,7 +23,7 @@ namespace SpiceSharpTest.Models.Voltagesources.VSRC
             }
 
             // Build the simulation, exports and references
-            Op op = new Op("OP");
+            OP op = new OP("OP");
             Export<double>[] exports = { new RealVoltageExport(op, $"{voltages.Length}") };
             double[] references = { sum };
             AnalyzeOp(op, ckt, exports, references);

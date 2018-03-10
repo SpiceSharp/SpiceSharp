@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// DC sweep analysis
     /// </summary>
-    public class Dc : BaseSimulation
+    public class DC : BaseSimulation
     {
         /// <summary>
         /// Gets the currently active DC configuration
@@ -34,7 +34,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name">The simulation name</param>
-        public Dc(Identifier name) : base(name)
+        public DC(Identifier name) : base(name)
         {
         }
 
@@ -46,7 +46,7 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The starting value</param>
         /// <param name="stop">The stopping value</param>
         /// <param name="step">The step value</param>
-        public Dc(Identifier name, Identifier source, double start, double stop, double step) : base(name)
+        public DC(Identifier name, Identifier source, double start, double stop, double step) : base(name)
         {
             var config = new DcConfiguration();
             SweepConfiguration s = new SweepConfiguration(source, start, stop, step);
@@ -59,7 +59,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="sweeps">Sweeps</param>
-        public Dc(Identifier name, IEnumerable<SweepConfiguration> sweeps) : base(name)
+        public DC(Identifier name, IEnumerable<SweepConfiguration> sweeps) : base(name)
         {
             if (sweeps == null)
                 throw new ArgumentNullException(nameof(sweeps));

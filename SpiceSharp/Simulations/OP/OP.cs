@@ -3,13 +3,13 @@
     /// <summary>
     /// Operating Point analysis
     /// </summary>
-    public class Op : BaseSimulation
+    public class OP : BaseSimulation
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
-        public Op(Identifier name) : base(name)
+        public OP(Identifier name) : base(name)
         {
         }
 

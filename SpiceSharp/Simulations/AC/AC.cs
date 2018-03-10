@@ -6,13 +6,13 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Frequency-domain analysis (AC analysis)
     /// </summary>
-    public class Ac : FrequencySimulation
+    public class AC : FrequencySimulation
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">The name of the simulation</param>
-        public Ac(string name) : base(name)
+        public AC(string name) : base(name)
         {
         }
 
@@ -21,7 +21,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="frequencySweep">Frequency sweep</param>
-        public Ac(Identifier name, Sweep<double> frequencySweep) : base(name, frequencySweep)
+        public AC(Identifier name, Sweep<double> frequencySweep) : base(name, frequencySweep)
         {
         }
 

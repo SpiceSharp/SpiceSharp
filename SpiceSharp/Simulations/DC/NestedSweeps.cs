@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SpiceSharp.Simulations
 {
@@ -19,6 +20,11 @@ namespace SpiceSharp.Simulations
         /// Gets the amount of nested sweeps
         /// </summary>
         public int Count => _instances.Count;
+
+        /// <summary>
+        /// Get the top-most sweep
+        /// </summary>
+        public SweepInstance Top => _instances.Last();
 
         /// <summary>
         /// Private variables
