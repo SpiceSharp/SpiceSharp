@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
     public class TemperatureBehavior : BaseTemperatureBehavior
     {
         /// <summary>
-        /// Necessary parameters
+        /// Necessary parameters and behaviors
         /// </summary>
         private ModelBaseParameters _mbp;
         private BaseParameters _bp;
@@ -78,6 +78,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 factor = 1.0;
             }
 
+            if (resist < 1e-12)
+                resist = 1e-12;
             Conductance = 1.0 / (resist * factor);
         }
     }

@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Necessary behaviors
         /// </summary>
-        private LoadBehavior _load;
+        private TemperatureBehavior _temp;
 
         /// <summary>
         /// Nodes
@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get behaviors
-            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _temp = provider.GetBehavior<TemperatureBehavior>("entity");
         }
         
         /// <summary>
@@ -72,7 +72,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="simulation">Noise simulation</param>
         public override void Noise(Noise simulation)
         {
-            ResistorNoise.Generators[0].SetCoefficients(_load.Conductance);
+            ResistorNoise.Generators[0].SetCoefficients(_temp.Conductance);
             ResistorNoise.Evaluate(simulation);
         }
     }

@@ -18,6 +18,8 @@
         /// </summary>
         protected override void Execute()
         {
+            base.Execute();
+
             // Setup the state
             var state = RealState;
             var baseconfig = BaseConfiguration;

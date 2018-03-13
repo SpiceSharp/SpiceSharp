@@ -14,6 +14,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
     public class FrequencyBehavior : BaseFrequencyBehavior, IConnectedBehavior
     {
         /// <summary>
+        /// Necessary behaviors and parameters
+        /// </summary>
+        private TemperatureBehavior _temp;
+
+        /// <summary>
         /// Parameters
         /// </summary>
         [PropertyName("v"), PropertyInfo("Voltage")]
@@ -21,7 +26,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
 			if (state == null)
 				throw new ArgumentNullException(nameof(state));
-
             return state.Solution[_posNode] - state.Solution[_negNode];
         }
         [PropertyName("i"), PropertyInfo("Current")]
@@ -31,7 +35,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             var voltage = state.Solution[_posNode] - state.Solution[_negNode];
-            return voltage * _load.Conductance;
+            return voltage * _temp.Conductance;
         }
         [PropertyName("p"), PropertyInfo("Power")]
         public Complex GetPower(ComplexState state)
@@ -40,13 +44,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             var voltage = state.Solution[_posNode] - state.Solution[_negNode];
-            return voltage * Complex.Conjugate(voltage) * _load.Conductance;
+            return voltage * Complex.Conjugate(voltage) * _temp.Conductance;
         }
-
-        /// <summary>
-        /// Necessary behaviors
-        /// </summary>
-        private LoadBehavior _load;
 
         /// <summary>
         /// Nodes
@@ -73,7 +72,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get behaviors
-            _load = provider.GetBehavior<LoadBehavior>("entity");
+            _temp = provider.GetBehavior<TemperatureBehavior>("entity");
         }
 
         /// <summary>
@@ -128,10 +127,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(simulation));
 
             // Load Y-matrix
-            PosPosPtr.Value += _load.Conductance;
-            NegNegPtr.Value += _load.Conductance;
-            PosNegPtr.Value -= _load.Conductance;
-            NegPosPtr.Value -= _load.Conductance;
+            double conductance = _temp.Conductance;
+            PosPosPtr.Value += conductance;
+            NegNegPtr.Value += conductance;
+            PosNegPtr.Value -= conductance;
+            NegPosPtr.Value -= conductance;
         }
     }
 }

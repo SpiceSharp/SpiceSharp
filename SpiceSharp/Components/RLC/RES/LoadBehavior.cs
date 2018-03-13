@@ -14,6 +14,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
     public class LoadBehavior : BaseLoadBehavior, IConnectedBehavior
     {
         /// <summary>
+        /// Necessary parameters and behaviors
+        /// </summary>
+        private TemperatureBehavior _temp;
+
+        /// <summary>
         /// Parameters
         /// </summary>
         [PropertyName("v"), PropertyInfo("Voltage")]
@@ -28,7 +33,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            return (state.Solution[_posNode] - state.Solution[_negNode]) * Conductance;
+            return (state.Solution[_posNode] - state.Solution[_negNode]) * _temp.Conductance;
         }
         [PropertyName("p"), PropertyInfo("Power")]
         public double GetPower(RealState state)
@@ -37,7 +42,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(state));
 
             double v = state.Solution[_posNode] - state.Solution[_negNode];
-            return v * v * Conductance;
+            return v * v * _temp.Conductance;
         }
 
         /// <summary>
@@ -48,11 +53,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         protected MatrixElement<double> NegNegPtr { get; private set; }
         protected MatrixElement<double> PosNegPtr { get; private set; }
         protected MatrixElement<double> NegPosPtr { get; private set; }
-
-        /// <summary>
-        /// Conductance
-        /// </summary>
-        public double Conductance { get; protected set; }
 
         /// <summary>
         /// Constructor
@@ -93,23 +93,9 @@ namespace SpiceSharp.Components.ResistorBehaviors
 				throw new ArgumentNullException(nameof(provider));
 
             // Get parameters
-            var p = provider.GetParameterSet<BaseParameters>("entity");
-
-            // Depending on whether or not the resistance is given, get behaviors
-            if (!p.Resistance.Given)
-            {
-                var temp = provider.GetBehavior<TemperatureBehavior>("entity");
-                Conductance = temp.Conductance;
-            }
-            else
-            {
-                if (p.Resistance.Value < 1e-12)
-                    Conductance = 1e12;
-                else
-                    Conductance = 1.0 / p.Resistance.Value;
-            }
+            _temp = provider.GetBehavior<TemperatureBehavior>("entity");
         }
-        
+
         /// <summary>
         /// Connect the behavior to nodes
         /// </summary>
@@ -159,10 +145,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="simulation">Base simulation</param>
         public override void Load(BaseSimulation simulation)
         {
-            PosPosPtr.Value += Conductance;
-            NegNegPtr.Value += Conductance;
-            PosNegPtr.Value -= Conductance;
-            NegPosPtr.Value -= Conductance;
+            double conductance = _temp.Conductance;
+            PosPosPtr.Value += conductance;
+            NegNegPtr.Value += conductance;
+            PosNegPtr.Value -= conductance;
+            NegPosPtr.Value -= conductance;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace SpiceSharpTest.Models
                 new VoltageControlledCurrentSource("G1", "0", "out", "in", "0", transconductance),
                 new Resistor("R1", "out", "0", resistance)
                 );
-            ckt.Objects["V1"].ParameterSets.SetProperty("acmag", magnitude);
+            ckt.Objects["V1"].ParameterSets.SetParameter("acmag", magnitude);
 
             // Make the simulation, exports and references
             AC ac = new AC("AC", new SpiceSharp.Simulations.Sweeps.DecadeSweep(1, 1e4, 3));
