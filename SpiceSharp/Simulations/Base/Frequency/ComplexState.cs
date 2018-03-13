@@ -80,7 +80,7 @@ namespace SpiceSharp.Simulations
         /// Initialize circuit
         /// </summary>
         /// <param name="nodes">Nodes</param>
-        public override void Initialize(Nodes nodes)
+        public override void Initialize(NodeMap nodes)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));

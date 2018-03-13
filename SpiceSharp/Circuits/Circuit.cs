@@ -22,7 +22,7 @@ namespace SpiceSharp
         /// <summary>
         /// Gets the nodes in the circuit
         /// </summary>
-        public Nodes Nodes { get; } = new Nodes();
+        public NodeMap Nodes { get; } = new NodeMap();
 
         /// <summary>
         /// Gets a collection of all circuit objects

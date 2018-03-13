@@ -45,6 +45,11 @@ namespace SpiceSharp.Simulations
         public event EventHandler<LoadStateEventArgs> OnLoad;
 
         /// <summary>
+        /// Private variables
+        /// </summary>
+        private LoadStateEventArgs _realStateLoadArgs;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
@@ -81,6 +86,7 @@ namespace SpiceSharp.Simulations
 
             // Setup the load behaviors
             RealState = States.Get<RealState>();
+            _realStateLoadArgs = new LoadStateEventArgs(RealState);
             foreach (var behavior in LoadBehaviors)
                 behavior.GetEquationPointers(Circuit.Nodes, RealState.Solver);
             RealState.Initialize(Circuit.Nodes);
@@ -121,6 +127,7 @@ namespace SpiceSharp.Simulations
             // Clear the state
             RealState.Destroy();
             RealState = null;
+            _realStateLoadArgs = null;
 
             // Remove behavior and configuration references
             LoadBehaviors.Clear();
@@ -367,8 +374,7 @@ namespace SpiceSharp.Simulations
                 behavior.Load(this);
 
             // Call events
-            var args = new LoadStateEventArgs(RealState);
-            OnLoad?.Invoke(this, args);
+            OnLoad?.Invoke(this, _realStateLoadArgs);
 
             // Keep statistics
             Statistics.LoadTime.Stop();
@@ -467,7 +473,7 @@ namespace SpiceSharp.Simulations
         /// <param name="nodes">List of nodes</param>
         /// <param name="rowIndex">Row number</param>
         /// <returns></returns>
-        protected static bool ZeroNoncurrentRow(SparseLinearSystem<double> solver, Nodes nodes, int rowIndex)
+        protected static bool ZeroNoncurrentRow(SparseLinearSystem<double> solver, NodeMap nodes, int rowIndex)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));

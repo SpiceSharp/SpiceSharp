@@ -123,7 +123,7 @@ namespace SpiceSharp.Components.CurrentSwitchBehaviors
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
+        public override void GetEquationPointers(NodeMap nodes, Solver<double> solver)
         {
             if (solver == null)
                 throw new ArgumentNullException(nameof(solver));

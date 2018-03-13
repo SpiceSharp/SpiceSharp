@@ -64,7 +64,7 @@ namespace SpiceSharp.Circuits
 
         /// <summary>
         /// Constructor
-        /// Used by <see cref="Nodes"/>
+        /// Used by <see cref="NodeMap"/>
         /// </summary>
         /// <param name="name">Name</param>
         /// <param name="type">Unknown type</param>

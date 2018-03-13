@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ConnectedAttribute.cs" />
-    <Compile Include="Attributes\IndependentSource.cs" />
+    <Compile Include="Attributes\IndependentSourceAttribute.cs" />
     <Compile Include="Attributes\VoltageDriverAttribute.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\Currentsources\CCCS\BaseParameters.cs" />
@@ -138,7 +138,6 @@
     <Compile Include="Simulations\Exports\OutputNoiseDensityExport.cs" />
     <Compile Include="Simulations\Exports\RealPropertyExport.cs" />
     <Compile Include="Simulations\Exports\RealVoltageExport.cs" />
-    <Compile Include="Simulations\FinalizeSimulationEventArgs.cs" />
     <Compile Include="Components\Currentsources\CCCS\CurrentControlledCurrentSource.cs" />
     <Compile Include="Components\Currentsources\CCCS\FrequencyBehavior.cs" />
     <Compile Include="Components\Currentsources\CCCS\LoadBehavior.cs" />
@@ -207,7 +206,6 @@
     <Compile Include="Simulations\Base\BaseTemperatureBehavior.cs" />
     <Compile Include="Simulations\Base\Frequency\FrequencySimulation.cs" />
     <Compile Include="Simulations\Base\BaseInitialConditionBehavior.cs" />
-    <Compile Include="Simulations\InitializeSimulationEventArgs.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\ArrayHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\NodeHistory.cs" />
     <Compile Include="Simulations\IntegrationMethods\Histories\ReadOnlyHistory.cs" />
@@ -266,7 +264,7 @@
     <Compile Include="Simulations\IntegrationMethods\Trapezoidal.cs" />
     <Compile Include="Attributes\PropertyInfoAttribute.cs" />
     <Compile Include="Attributes\ParameterNameAttribute.cs" />
-    <Compile Include="Circuits\Entities.cs" />
+    <Compile Include="Circuits\EntityCollection.cs" />
     <Compile Include="Circuits\Circuit.cs" />
     <Compile Include="Circuits\Node.cs" />
     <Compile Include="Simulations\Base\RealState.cs" />
@@ -275,7 +273,7 @@
     <Compile Include="Simulations\State.cs" />
     <Compile Include="Simulations\StateCollection.cs" />
     <Compile Include="Simulations\Statistics.cs" />
-    <Compile Include="Circuits\Nodes.cs" />
+    <Compile Include="Circuits\NodeMap.cs" />
     <Compile Include="Components\RLC\CAP\Capacitor.cs" />
     <Compile Include="Components\RLC\CAP\CapacitorModel.cs" />
     <Compile Include="Components\RLC\RES\Resistor.cs" />

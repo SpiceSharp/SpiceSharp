@@ -20,7 +20,7 @@ namespace SpiceSharp.Behaviors
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="solver">Solver</param>
-        public abstract void GetEquationPointers(Nodes nodes, Solver<double> solver);
+        public abstract void GetEquationPointers(NodeMap nodes, Solver<double> solver);
 
         /// <summary>
         /// Load the Y-matrix and Rhs-vector

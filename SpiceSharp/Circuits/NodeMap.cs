@@ -8,7 +8,7 @@ namespace SpiceSharp.Circuits
     /// <summary>
     /// Contains and manages circuit nodes.
     /// </summary>
-    public class Nodes : ICloneable
+    public class NodeMap : ICloneable
     {
         /// <summary>
         /// Private variables
@@ -37,7 +37,7 @@ namespace SpiceSharp.Circuits
         /// <summary>
         /// Constructor
         /// </summary>
-        public Nodes()
+        public NodeMap()
         {
             // Setup the ground node
             Ground = new Node(new Identifier("0"), 0);
@@ -163,7 +163,7 @@ namespace SpiceSharp.Circuits
         public object Clone()
         {
             // Create a new object
-            var cloned = new Nodes();
+            var cloned = new NodeMap();
 
             // Copy node list and map
             foreach (var node in _nodes)

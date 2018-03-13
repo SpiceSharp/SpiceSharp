@@ -83,7 +83,7 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         /// <param name="nodes">Nodes</param>
         /// <param name="solver">Solver</param>
-        public override void GetEquationPointers(Nodes nodes, Solver<double> solver)
+        public override void GetEquationPointers(NodeMap nodes, Solver<double> solver)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));

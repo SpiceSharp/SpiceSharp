@@ -16,7 +16,7 @@ namespace SpiceSharp.Simulations
         /// Initialize
         /// </summary>
         /// <param name="nodes">The circuit</param>
-        public virtual void Initialize(Nodes nodes)
+        public virtual void Initialize(NodeMap nodes)
         {
             Initialized = true;
         }

@@ -27,7 +27,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event that is called for initializing simulation data exports
         /// </summary>
-        public event EventHandler<InitializeSimulationEventArgs> InitializeSimulationExport;
+        public event EventHandler<EventArgs> InitializeSimulationExport;
 
         /// <summary>
         /// Event that is called when new simulation data is available
@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event that is called for finalizing simulation data exports
         /// </summary>
-        public event EventHandler<FinalizeSimulationEventArgs> FinalizeSimulationExport;
+        public event EventHandler<EventArgs> FinalizeSimulationExport;
 
         /// <summary>
         /// Gets the name of the simulation
@@ -75,8 +75,7 @@ namespace SpiceSharp.Simulations
 
             // Setup the simulation
             Setup();
-            var initArgs = new InitializeSimulationEventArgs(Behaviors);
-            InitializeSimulationExport?.Invoke(this, initArgs);
+            InitializeSimulationExport?.Invoke(this, EventArgs.Empty);
 
             // Execute the simulation
             if (controller != null)
@@ -92,9 +91,10 @@ namespace SpiceSharp.Simulations
                Execute();
 
             // Finalize the simulation
-            var finalArgs = new FinalizeSimulationEventArgs();
-            FinalizeSimulationExport?.Invoke(this, finalArgs);
+            FinalizeSimulationExport?.Invoke(this, EventArgs.Empty);
             Unsetup();
+
+            // Clear the circuit
             Circuit = null;
         }
 
