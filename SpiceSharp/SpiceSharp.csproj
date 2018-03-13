@@ -126,9 +126,8 @@
     <Compile Include="Simulations\Behaviors\SetupDataProvider.cs" />
     <Compile Include="Simulations\DC\DCConfiguration.cs" />
     <Compile Include="Simulations\DC\DcParameterSearchEventArgs.cs" />
-    <Compile Include="Simulations\DC\IterationFailedEventArgs.cs" />
     <Compile Include="Simulations\DC\NestedSweeps.cs" />
-    <Compile Include="Simulations\DC\Sweep.cs" />
+    <Compile Include="Simulations\DC\SweepConfiguration.cs" />
     <Compile Include="Simulations\DC\SweepInstance.cs" />
     <Compile Include="Simulations\Exports\ComplexPropertyExport.cs" />
     <Compile Include="Simulations\Exports\ComplexVoltageExport.cs" />
@@ -202,7 +201,7 @@
     <Compile Include="Parameter.cs" />
     <Compile Include="Simulations\Base\BaseSimulation.cs" />
     <Compile Include="Simulations\Behaviors\BehaviorPool.cs" />
-    <Compile Include="Simulations\Behaviors\EntityBehaviors.cs" />
+    <Compile Include="Simulations\Behaviors\EntityBehaviorDictionary.cs" />
     <Compile Include="Simulations\Base\BaseTemperatureBehavior.cs" />
     <Compile Include="Simulations\Base\Frequency\FrequencySimulation.cs" />
     <Compile Include="Simulations\Base\BaseInitialConditionBehavior.cs" />
@@ -271,7 +270,7 @@
     <Compile Include="Simulations\Noise\NoiseState.cs" />
     <Compile Include="Simulations\SimulationFlowController.cs" />
     <Compile Include="Simulations\State.cs" />
-    <Compile Include="Simulations\StateCollection.cs" />
+    <Compile Include="Simulations\StateDictionary.cs" />
     <Compile Include="Simulations\Statistics.cs" />
     <Compile Include="Circuits\NodeMap.cs" />
     <Compile Include="Components\RLC\CAP\Capacitor.cs" />

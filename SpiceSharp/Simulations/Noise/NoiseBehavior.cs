@@ -5,7 +5,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Behavior for noise analysis
     /// </summary>
-    public abstract class NoiseBehavior: Behavior
+    public abstract class NoiseBehavior : Behavior
     {
         /// <summary>
         /// Constructor

@@ -23,12 +23,12 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Event that is called when normal iteration failed
         /// </summary>
-        public event EventHandler<IterationFailedEventArgs> IterationFailed;
+        public event EventHandler<EventArgs> IterationFailed;
 
         /// <summary>
         /// Event that is called when a parameter is searched for sweeping
         /// </summary>
-        public event EventHandler<DcParameterSearchEventArgs> OnParameterSearch; 
+        public event EventHandler<DCParameterSearchEventArgs> OnParameterSearch; 
 
         /// <summary>
         /// Constructor
@@ -116,7 +116,7 @@ namespace SpiceSharp.Simulations
                 var sweep = Sweeps[i];
 
                 // Try finding the parameter to sweep
-                var args = new DcParameterSearchEventArgs(sweep.Parameter);
+                var args = new DCParameterSearchEventArgs(sweep.Parameter);
                 OnParameterSearch?.Invoke(this, args);
                 if (args.Result != null)
                     swept[i] = args.Result;
@@ -155,8 +155,7 @@ namespace SpiceSharp.Simulations
                 // Calculate the solution
                 if (!Iterate(dcconfig.SweepMaxIterations))
                 {
-                    IterationFailedEventArgs args = new IterationFailedEventArgs();
-                    IterationFailed?.Invoke(this, args);
+                    IterationFailed?.Invoke(this, EventArgs.Empty);
                     Op(baseconfig.DcMaxIterations);
                 }
 

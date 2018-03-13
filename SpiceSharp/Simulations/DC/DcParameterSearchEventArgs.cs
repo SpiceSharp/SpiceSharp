@@ -5,7 +5,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// Event arguments for searching a parameter used as a sweep in DC analysis
     /// </summary>
-    public class DcParameterSearchEventArgs : EventArgs
+    public class DCParameterSearchEventArgs : EventArgs
     {
         /// <summary>
         /// Gets the name of the parameter
@@ -21,7 +21,7 @@ namespace SpiceSharp.Simulations
         /// Constructor
         /// </summary>
         /// <param name="name"></param>
-        public DcParameterSearchEventArgs(Identifier name)
+        public DCParameterSearchEventArgs(Identifier name)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }

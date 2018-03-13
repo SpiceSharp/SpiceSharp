@@ -49,7 +49,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="e">Arguments</param>
-        protected override void Initialize(object sender, InitializeSimulationEventArgs e)
+        protected override void Initialize(object sender, EventArgs e)
         {
             // Create our extractor!
             var state = Simulation.States.Get<RealState>();

@@ -36,12 +36,12 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="sender">Sender</param>
         /// <param name="e">Arguments</param>
-        protected override void Initialize(object sender, InitializeSimulationEventArgs e)
+        protected override void Initialize(object sender, EventArgs e)
         {
             if (e == null)
                 throw new ArgumentNullException(nameof(e));
-
-            var eb = e.Behaviors.GetEntityBehaviors(EntityName);
+            var simulation = (Simulation) sender;
+            var eb = simulation.Behaviors.GetEntityBehaviors(EntityName);
 
             // Get the necessary behavior in order:
             // 1) First try transient analysis

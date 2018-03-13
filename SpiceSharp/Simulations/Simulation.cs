@@ -5,7 +5,7 @@ using SpiceSharp.Behaviors;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A class that can perform a simulation using a <see cref="Circuit"/>.
+    /// A class that can perform a simulation using a <see cref="SpiceSharp.Circuit"/>.
     /// </summary>
     public abstract class Simulation
     {
